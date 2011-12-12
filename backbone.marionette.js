@@ -19,6 +19,20 @@ Backbone.Marionette = (function(Backbone, _){
 
   _.extend(Marionette.RegionManager.prototype, Backbone.Events, {
     show: function(view){
+      var oldView = this.currentView;
+      this.currentView = view;
+
+      this.closeView(oldView);
+      this.openView(view);
+    },
+
+    closeView: function(view){
+      if (view && view.close){
+        view.close();
+      }
+    },
+
+    openView: function(view){
       view.render();
       this.el.html(view.el);
     }

@@ -40,7 +40,7 @@ MyApp.MyRegion = Backbone.Marionette.Region.extend({
 (function(MyApp, Backbone){
 
   // a view to render into the region
-  SomeView = Backbone.View.extend({
+  var SomeView = Backbone.View.extend({
     render: function(){
       $(this.el).html("some content");
     },

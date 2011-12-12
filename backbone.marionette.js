@@ -49,6 +49,7 @@ Backbone.Marionette = (function(Backbone, _){
 
   Marionette.Application = function(){
     this.initializers = [];
+    this.vent = _.extend({}, Backbone.Events);
   };
 
   _.extend(Marionette.Application.prototype, Backbone.Events, {

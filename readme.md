@@ -12,6 +12,57 @@ to be a lightweigt and flexible library of tools that you can use when you want
 to. Like Backbone.js itself, you're not required to use all of 
 Backbone.Marionette just because you want to use some of it.
 
+## An Example
+
+A quick and dirty example to show how to build an app using Marionette.
+
+````
+// define the application
+MyApp = new Backbone.Marionette.Application();
+
+// add a region to the app
+MyApp.MyRegion = Backbone.Marionette.Region.extend({
+  el: "#my-region"
+});
+
+// define some functionality for the app
+(function(MyApp, Backbone){
+
+  // a view to render into the region
+  SomeView = Backbone.View.extend({
+    render: function(){
+      $(this.el).html("some content");
+    },
+
+    doSomething: function(){
+      // the applicaiton has an event aggregator on instantiation
+      // call out to the event aggregator to raise an event
+      MyApp.vent.trigger("something:happened");
+    }
+  });
+
+  // an initializer to run this functional area 
+  // when the app starts up
+  MyApp.addInitializer(function(){
+    var someView = new SomeView();
+    this.MyRegion.show(someView);
+    someView.doSomething();
+  });
+
+})(MyApp, Backbone);
+
+// calling start will run all of the initializers
+// this can be done from your JS file directly, or
+// from a script block in your HTML
+MyApp.start();
+````
+
+## Pre-Alpha Project
+
+This project is still under initial development. The documentation is terrible
+and the API will change drastically as it's being fleshed out for it's first 
+few production apps. Use at your own risk.
+
 ## Legal Mumbo Jumbo (MIT License)
 
 Copyright (c) 2011 Derick Bailey, Muted Solutions, LLC

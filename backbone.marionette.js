@@ -9,8 +9,11 @@
 Backbone.Marionette = (function(Backbone, _){
   var Marionette = {};
 
+  // Region Manager
+  // --------------
+
   Marionette.RegionManager = function(options){
-    options || (options = {});
+    this.options = options || (options = {});
     if (!this.el){
       throw new Error("An 'el' must be specified");
     }
@@ -37,6 +40,26 @@ Backbone.Marionette = (function(Backbone, _){
       this.el.html(view.el);
       if (view.onShow){
         view.onShow();
+      }
+    }
+  });
+
+  // Composite Application
+  // ---------------------
+
+  Marionette.Application = function(){
+    this.initializers = [];
+  };
+
+  _.extend(Marionette.Application.prototype, Backbone.Events, {
+    addInitializer: function(initializer){
+      this.initializers.push(initializer);
+    },
+
+    start: function(options){
+      for(var i=0; i<this.initializers.length; i++){
+        var initializer = this.initializers[i];
+        initializer(options);
       }
     }
   });

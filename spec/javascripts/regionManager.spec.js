@@ -16,6 +16,10 @@ describe("region manager", function(){
     var MyView = Backbone.View.extend({
       render: function(){
         $(this.el).html("some content");
+      },
+
+      onShow: function(){
+        $(this.el).addClass("onShowClass");
       }
     });
 
@@ -38,6 +42,10 @@ describe("region manager", function(){
     it("should append the rendered HTML to the manager's 'el'", function(){
       expect(myRegion.el).toHaveHtml(view.el);
     });
+
+    it("shoudl call 'onShow' after the rendered HTML has been added to the DOM", function(){
+      expect($(view.el)).toHaveClass("onShowClass");
+    })
   });
 
   describe("when a view is already shown and showing another", function(){

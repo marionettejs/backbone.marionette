@@ -35,6 +35,9 @@ Backbone.Marionette = (function(Backbone, _){
     openView: function(view){
       view.render();
       this.el.html(view.el);
+      if (view.onShow){
+        view.onShow();
+      }
     }
   });
 

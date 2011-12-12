@@ -12,6 +12,17 @@ to be a lightweigt and flexible library of tools that you can use when you want
 to. Like Backbone.js itself, you're not required to use all of 
 Backbone.Marionette just because you want to use some of it.
 
+## Runtime Requirements
+
+Backbone.Marionette is built and tested with the following libraries:
+
+* Underscore.js v1.2.3
+* Backbone.js v0.5.3
+* jQuery v1.7.1
+
+You may not need to be up to date with these exact versions. However, there is
+no guarantee that the code will work correctly if you are not.
+
 ## An Example
 
 A quick and dirty example to show how to build an app using Marionette.
@@ -56,6 +67,16 @@ MyApp.MyRegion = Backbone.Marionette.Region.extend({
 // from a script block in your HTML
 MyApp.start();
 ````
+
+## Test Suite Requirements
+
+Backbone.Marionette is also tested with the Jasmine JavaScript test utility,
+using the Jasmine Ruby gem. 
+
+To get the test suite up and running, you need a Ruby installation with the 
+latest RubyGems. Install the 'bundler' gem and then run 'bunle install' from 
+the project's root folder. Then run `rake jasmine` to run the test suite, and
+load up http://localhost:8888 to see the test suite in action.
 
 ## Pre-Alpha Project
 

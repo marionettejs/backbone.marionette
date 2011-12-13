@@ -47,9 +47,10 @@ Backbone.Marionette = (function(Backbone, _){
   // Composite Application
   // ---------------------
 
-  Marionette.Application = function(){
+  Marionette.Application = function(options){
     this.initializers = [];
     this.vent = _.extend({}, Backbone.Events);
+    _.extend(this, options);
   };
 
   _.extend(Marionette.Application.prototype, Backbone.Events, {
@@ -97,6 +98,7 @@ Backbone.Marionette = (function(Backbone, _){
 
   // allow these objects to be extended, for inheritance
   Marionette.RegionManager.extend = extend;
+  Marionette.Application.extend = extend;
 
   return Marionette;
 })(Backbone, _);

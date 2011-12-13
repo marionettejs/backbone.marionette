@@ -29,7 +29,10 @@ A quick and dirty example to show how to build an app using Marionette.
 
 ````
 // define the application
-MyApp = new Backbone.Marionette.Application();
+// options we pass in are copied on to the instance
+MyApp = new Backbone.Marionette.Application({
+  someOption: "some value";
+});
 
 // add a region to the app
 MyApp.MyRegion = Backbone.Marionette.Region.extend({
@@ -42,7 +45,10 @@ MyApp.MyRegion = Backbone.Marionette.Region.extend({
   // a view to render into the region
   var SomeView = Backbone.View.extend({
     render: function(){
-      $(this.el).html("some content");
+
+      // get "someOption" from the app, since we
+      // passed it into the app initializer, above
+      $(this.el).html(MyApp.someOption);
     },
 
     doSomething: function(){

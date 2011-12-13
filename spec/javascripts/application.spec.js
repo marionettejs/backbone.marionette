@@ -31,4 +31,18 @@ describe("marionette application", function(){
     });
   });
 
+  describe("when instantiating an app with options specified", function(){
+    var MyApp;
+
+    beforeEach(function(){
+      MyApp = new Backbone.Marionette.Application({
+        someOption: "some value"
+      });
+    });
+
+    it("should merge those options into the app", function(){
+      expect(MyApp.someOption).toEqual("some value");
+    });
+  });
+
 });

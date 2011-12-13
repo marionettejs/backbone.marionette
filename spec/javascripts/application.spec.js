@@ -2,7 +2,7 @@ describe("marionette application", function(){
 
   describe("when registering an initializer and starting the application", function(){
     var MyModule, MyApp;
-    var options = {};
+    var someOptions = {};
 
     beforeEach(function(){
       MyApp = new Backbone.Marionette.Application();
@@ -21,15 +21,15 @@ describe("marionette application", function(){
 
       spyOn(MyApp, "trigger").andCallThrough();
 
-      MyApp.start(options);
+      MyApp.start(someOptions);
     });
 
     it("should notify me before initialization starts", function(){
-      expect(MyApp.trigger).toHaveBeenCalledWith("initialize:before");
+      expect(MyApp.trigger).toHaveBeenCalledWith("initialize:before", someOptions);
     });
 
     it("should notify me after initialization", function(){
-      expect(MyApp.trigger).toHaveBeenCalledWith("initialize:after");
+      expect(MyApp.trigger).toHaveBeenCalledWith("initialize:after", someOptions);
     });
 
     it("should call the initializer", function(){
@@ -37,7 +37,7 @@ describe("marionette application", function(){
     });
 
     it("should pass the options through to the initializer", function(){
-      expect(MyModule.options).toEqual(options);
+      expect(MyModule.options).toEqual(someOptions);
     });
   });
 

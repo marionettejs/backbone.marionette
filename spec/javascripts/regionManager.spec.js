@@ -8,6 +8,31 @@ describe("region manager", function(){
     });
   });
 
+  describe("when adding regions to an app, and starting the app", function(){
+    var MyApp = new Backbone.Marionette.Application();
+
+    var myRegion = Backbone.Marionette.RegionManager.extend({
+      el: "#region"
+    });
+
+    var myRegion2 = Backbone.Marionette.RegionManager.extend({
+      el: "#region"
+    });
+
+    beforeEach(function(){
+      setFixtures("<div id='region'></div>");
+
+      MyApp.addRegions({MyRegion: myRegion, anotherRegion, myRegion2});
+
+      MyApp.start();
+    });
+    
+    it("should initialize the regions", function(){
+      expect(MyApp.MyRegion).not.toBeUndefined();
+      expect(MyApp.anotherRegion).not.toBeUndefined();
+    });
+  });
+
   describe("when showing a view", function(){
     var MyRegion = Backbone.Marionette.RegionManager.extend({
       el: "#region"

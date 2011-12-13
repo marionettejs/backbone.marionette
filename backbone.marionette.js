@@ -63,6 +63,26 @@ Backbone.Marionette = (function(Backbone, _){
         var initializer = this.initializers[i];
         initializer(options);
       }
+    },
+
+    addRegions: function(regions){
+      if (!this.regions){
+        this.regions = {};
+        this.addInitializer(_.bind(this.initializeRegions, this));
+      }
+      _.extend(this.regions, regions);
+    },
+
+    initializeRegions: function(){
+      if (!this.regions){
+        return;
+      }
+
+      for(var region in this.regions){
+        if (this.regions.hasOwnProperty(region)){
+          this[region] = new this.regions[region]();
+        }
+      }
     }
   });
 

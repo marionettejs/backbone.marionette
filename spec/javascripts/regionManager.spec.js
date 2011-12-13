@@ -22,7 +22,7 @@ describe("region manager", function(){
     beforeEach(function(){
       setFixtures("<div id='region'></div>");
 
-      MyApp.addRegions({MyRegion: myRegion, anotherRegion, myRegion2});
+      MyApp.addRegions({MyRegion: myRegion, anotherRegion: myRegion2});
 
       MyApp.start();
     });

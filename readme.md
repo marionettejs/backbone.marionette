@@ -35,9 +35,10 @@ MyApp = new Backbone.Marionette.Application({
 });
 
 // add a region to the app
-MyApp.MyRegion = Backbone.Marionette.Region.extend({
+myRegion = Backbone.Marionette.Region.extend({
   el: "#my-region"
 });
+MyApp.addRegion(myRegion: MyRegion);
 
 // define some functionality for the app
 (function(MyApp, Backbone){
@@ -62,7 +63,7 @@ MyApp.MyRegion = Backbone.Marionette.Region.extend({
   // when the app starts up
   MyApp.addInitializer(function(){
     var someView = new SomeView();
-    this.MyRegion.show(someView);
+    MyApp.myRegion.show(someView);
     someView.doSomething();
   });
 

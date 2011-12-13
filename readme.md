@@ -1,4 +1,4 @@
-Make your Backbone.js apps dance, with a composite application architecture!
+Make your Backbone.js apps dance with a composite application architecture!
 
 ## Backbone.Marionette
 

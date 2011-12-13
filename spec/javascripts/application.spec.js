@@ -19,7 +19,17 @@ describe("marionette application", function(){
         return module
       })(MyApp);
 
+      spyOn(MyApp, "trigger").andCallThrough();
+
       MyApp.start(options);
+    });
+
+    it("should notify me before initialization starts", function(){
+      expect(MyApp.trigger).toHaveBeenCalledWith("initialize:before");
+    });
+
+    it("should notify me after initialization", function(){
+      expect(MyApp.trigger).toHaveBeenCalledWith("initialize:after");
     });
 
     it("should call the initializer", function(){

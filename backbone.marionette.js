@@ -59,10 +59,12 @@ Backbone.Marionette = (function(Backbone, _){
     },
 
     start: function(options){
+      this.trigger("initialize:before");
       for(var i=0; i<this.initializers.length; i++){
         var initializer = this.initializers[i];
         initializer(options);
       }
+      this.trigger("initialize:after");
     },
 
     addRegions: function(regions){

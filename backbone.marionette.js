@@ -12,6 +12,8 @@ Backbone.Marionette = (function(Backbone, _){
   // Region Manager
   // --------------
 
+  // Manage the visual regions of your composite application. See
+  // http://lostechies.com/derickbailey/2011/12/12/composite-js-apps-regions-and-region-managers/
   Marionette.RegionManager = function(options){
     this.options = options || (options = {});
     if (!this.el){
@@ -21,21 +23,27 @@ Backbone.Marionette = (function(Backbone, _){
   };
 
   _.extend(Marionette.RegionManager.prototype, Backbone.Events, {
+
+    // Displays a backbone view instance inside of the region.
+    // Handles calling the `render` method for you. Reads content
+    // directly from the `el` attribute. Also calls an optional
+    // `onShow` and `close` method on your view, just after showing
+    // or just before closing the view, respectively.
     show: function(view){
       var oldView = this.currentView;
       this.currentView = view;
 
-      this.closeView(oldView);
-      this.openView(view);
+      this._closeView(oldView);
+      this._openView(view);
     },
 
-    closeView: function(view){
+    _closeView: function(view){
       if (view && view.close){
         view.close();
       }
     },
 
-    openView: function(view){
+    _openView: function(view){
       view.render();
       this.el.html(view.el);
       if (view.onShow){
@@ -47,6 +55,9 @@ Backbone.Marionette = (function(Backbone, _){
   // Composite Application
   // ---------------------
 
+  // Contain and manage the composite application as a whole.
+  // Stores and starts up `RegionManager` objects, includes an
+  // event aggregator as `app.vent`
   Marionette.Application = function(options){
     this.initializers = [];
     this.vent = _.extend({}, Backbone.Events);
@@ -58,6 +69,9 @@ Backbone.Marionette = (function(Backbone, _){
       this.initializers.push(initializer);
     },
 
+    // kick off all of the application's processes.
+    // initializes all of the regions that have been added
+    // to the app, and runs all of the initializer functions
     start: function(options){
       this.trigger("initialize:before", options);
       for(var i=0; i<this.initializers.length; i++){
@@ -67,10 +81,14 @@ Backbone.Marionette = (function(Backbone, _){
       this.trigger("initialize:after", options);
     },
 
+    // Add region managers to your app. 
+    // Accepts a hash of named strings or RegionManager objects
+    // addRegions({something: "#someRegion"})
+    // addRegions{{something: RegionManager.extend({el: "#someRegion"}) });
     addRegions: function(regions){
       if (!this.regions){
         this.regions = {};
-        this.addInitializer(_.bind(this.initializeRegions, this));
+        this.addInitializer(_.bind(this._initializeRegions, this));
       }
 
       var appRegions = this.regions;
@@ -91,7 +109,7 @@ Backbone.Marionette = (function(Backbone, _){
       }
     },
 
-    initializeRegions: function(){
+    _initializeRegions: function(){
       if (!this.regions){
         return;
       }
@@ -103,6 +121,9 @@ Backbone.Marionette = (function(Backbone, _){
       }
     }
   });
+
+  // Helpers
+  // -------
 
   // The 'inherits' and 'extend' functions are taken directly from:
   // Backbone.js 0.5.3
@@ -133,8 +154,6 @@ Backbone.Marionette = (function(Backbone, _){
     return child;
   };
 
-
-  // allow these objects to be extended, for inheritance
   Marionette.RegionManager.extend = extend;
   Marionette.Application.extend = extend;
 

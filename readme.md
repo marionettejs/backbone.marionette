@@ -12,16 +12,163 @@ to be a lightweigt and flexible library of tools that you can use when you want
 to. Like Backbone.js itself, you're not required to use all of 
 Backbone.Marionette just because you want to use some of it.
 
-## Runtime Requirements
+## Annotated Source Code
 
-Backbone.Marionette is built and tested with the following libraries:
+For a good time, call.. err... read through [the annotated source code](http://derickbailey.github.com/backbone.marionette/docs/backbone.marionette.html).
 
-* Underscore.js v1.2.3
-* Backbone.js v0.5.3
-* jQuery v1.7.1
+## Marionette's Pieces
 
-You may not need to be up to date with these exact versions. However, there is
-no guarantee that the code will work correctly if you are not.
+There are only a few pieces to the marionette at this point:
+
+* **Backbone.Marionette.Application**
+* **Backbone.Marionette.RegionManager**: Manage visual regions of your application, including display and removal of content
+* **app.vent**: Every instance of `Application` comes with a `.vent` property, an event aggregator
+
+Both `Application` and `RegionManager` use the `extend` syntax and functionality
+from Backbone, allowing you to define new versions of these objects with custom
+functionality.
+
+## Building A Marionette Application
+
+This is the hub of your composite application. It organizes, initializes and
+coordinate the various pieces of your app. It also provides a starting point
+for you to call into, from your HTML script block or from your JavaScript files
+directly if you prefer to go that route.
+
+The `Application` is meant to be instantiate directly, although you can extend
+it to add your own functionality.
+
+````
+MyApp = new Backbone.Marionette.Application();
+````
+
+### Region Managers
+
+Regions can be added to the application by calling the `addRegions` method on
+your application instance. This method expects a single hash parameter, with
+named regions and either jQuery selectors or `RegionManager` objects. You may
+call this method as many times as you like, and it will continue adding regions
+to the app. If you specify the same name twice, last one in wins.
+
+````
+MyApp.addRegions({
+  mainRegion: "#main-content",
+  navigationRegion: "#navigation"
+});
+
+var FooterRegion = Backbone.Marionette.RegionManager.extend({
+  el: "#footer"
+});
+
+MyApp.addRegions({footerRegion: FooterRegion});
+````
+
+Note that if you define your own `RegionManager` object, you must provide an
+`el` for it. If you don't, you will receive an runtime exception saying that
+an `el` is required.
+
+Additionally, when you pass a `RegionManager` directly into to the `addRegions`
+method, you must specify the constructor function for your region manager, not
+an instance of it.
+
+### Adding Initializers
+
+Your application needs to do useful things, like displaying content in your
+regions, starting up your routers, and more. To accomplish these tasks and
+ensure that your `Application` is fully configured, you can add initializer
+callbacks to the application.
+
+````
+MyApp.addInitializer(function(options){
+  // do useful stuff here
+  var myView = new MyView({
+    model: options.someModel
+  });
+  MyApp.mainRegion.show(myView);
+});
+
+MyApp.addInitializer(function(options){
+  new MyAppRouter();
+  Backbone.history.start();
+});
+````
+
+These callbacks will be executed when you start your application. The `options`
+parameters is passed through the `start` method (see below).
+
+### Application Events
+
+The `Application` object raises a few events during it's lifecycle. These events
+can be used to do additional processing of your application. For example, you
+may want to pre-process some data just before initialization happens. Or you may
+want to wait until your entire application is initialized to start the
+`Backbone.history`.
+
+The two events that are currently triggerd, are:
+
+* **"initialize:before"**: fired just before the initializers kick off
+* **"initialize:after"**: fires just after the initializers have finished
+
+````
+MyApp.bind("initialize:before", function(options){
+  options.moreData = "Yo dawg, I heard you like options so I put some options in your options!"
+});
+
+MyApp.bind("initialize:after", function(options){
+  if (Backbone.history){
+    Backbone.history.start();
+  }
+});
+````
+
+The `options` parameter is passed through the `start` method of the application
+object (see below).
+
+### Event Aggregator
+
+An event aggregator is an application level pub/sub mechanism that allows various
+pieces of an otherwise segmented and disconnected system to communicate with
+each other. Backbone.Marionette provides an event aggregator with each 
+application instance: `MyApp.vent`.
+
+You can use this event aggregator to communicate between various modules of your
+application, ensuring correct decoupling while also facilitating functionality
+that needs more than one of your application's modules.
+
+````
+(function(MyApp){
+
+  MyApp.bind("some:event", function(){
+    alert("Some event was fired!!!!");
+  });
+  
+})(MyApp);
+
+MyApp.trigger("some:event");
+````
+
+For a more detailed discussion and example of using an event aggregator with
+Backbone applications, see the blog post: [References, Routing, and The Event
+Aggregator: Coordinating Views In Backbone.js](http://lostechies.com/derickbailey/2011/07/19/references-routing-and-the-event-aggregator-coordinating-views-in-backbone-js/)
+
+### Starting An Application
+
+Once you have your application configured, you can kick everything off by 
+calling: `MyApp.start(options)`.
+
+This function takes a single optional parameter. This parameter will be passed
+to each of your initializer functions, as well as the initialize events. This
+allows you to provide extra configuration for various parts of your app, at
+initialization/start of the app, instead of just at definition.
+
+````
+var options = {
+  something: "some value",
+  another: "#some-selector"
+};
+
+MyApp.start(options);
+````
 
 ## An Example
 
@@ -75,7 +222,18 @@ MyApp.addRegion(myRegion: MyRegion);
 MyApp.start();
 ````
 
-## Test Suite Requirements
+## Requirements
+
+Backbone.Marionette is built and tested with the following libraries:
+
+* Underscore.js v1.2.3
+* Backbone.js v0.5.3
+* jQuery v1.7.1
+
+You may not need to be up to date with these exact versions. However, there is
+no guarantee that the code will work correctly if you are not.
+
+### Test Suite Requirements
 
 Backbone.Marionette is also tested with the Jasmine JavaScript test utility,
 using the Jasmine Ruby gem. 
@@ -85,11 +243,17 @@ latest RubyGems. Install the 'bundler' gem and then run 'bunle install' from
 the project's root folder. Then run `rake jasmine` to run the test suite, and
 load up http://localhost:8888 to see the test suite in action.
 
-## Pre-Alpha Project
+### Annotated Source Code Generation
 
-This project is still under initial development. The documentation is terrible
-and the API will change drastically as it's being fleshed out for it's first 
-few production apps. Use at your own risk.
+I'm using [Docco](http://jashkenas.github.com/docco/) to generate the annotated source code.
+
+## Release Notes
+
+### v0.1
+
+* Initial release
+* Created documentation
+* Generated annotated source code
 
 ## Legal Mumbo Jumbo (MIT License)
 

@@ -8,7 +8,7 @@ describe("region manager", function(){
     });
   });
 
-  describe("when adding regions to an app, and starting the app", function(){
+  describe("when adding region objects to an app, and starting the app", function(){
     var MyApp = new Backbone.Marionette.Application();
 
     var myRegion = Backbone.Marionette.RegionManager.extend({
@@ -16,13 +16,32 @@ describe("region manager", function(){
     });
 
     var myRegion2 = Backbone.Marionette.RegionManager.extend({
-      el: "#region"
+      el: "#region2"
     });
 
     beforeEach(function(){
       setFixtures("<div id='region'></div>");
+      setFixtures("<div id='region2'></div>");
 
       MyApp.addRegions({MyRegion: myRegion, anotherRegion: myRegion2});
+
+      MyApp.start();
+    });
+    
+    it("should initialize the regions", function(){
+      expect(MyApp.MyRegion).not.toBeUndefined();
+      expect(MyApp.anotherRegion).not.toBeUndefined();
+    });
+  });
+
+  describe("when adding region selectors to an app, and starting the app", function(){
+    var MyApp = new Backbone.Marionette.Application();
+
+    beforeEach(function(){
+      setFixtures("<div id='region'></div>");
+      setFixtures("<div id='region2'></div>");
+
+      MyApp.addRegions({MyRegion: "#region", anotherRegion: "region2"});
 
       MyApp.start();
     });

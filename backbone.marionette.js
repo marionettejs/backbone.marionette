@@ -72,7 +72,23 @@ Backbone.Marionette = (function(Backbone, _){
         this.regions = {};
         this.addInitializer(_.bind(this.initializeRegions, this));
       }
-      _.extend(this.regions, regions);
+
+      var appRegions = this.regions;
+
+      for(var region in regions){
+        if (regions.hasOwnProperty(region)){
+          regionValue = regions[region];
+    
+          if (typeof regionValue === "string"){
+            appRegions[region] = Marionette.RegionManager.extend({
+              el: regionValue
+            });
+          } else {
+            appRegions[region] = regionValue
+          }
+
+        }
+      }
     },
 
     initializeRegions: function(){

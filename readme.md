@@ -142,13 +142,13 @@ that needs more than one of your application's modules.
 ````
 (function(MyApp){
 
-  MyApp.bind("some:event", function(){
+  MyApp.vent.bind("some:event", function(){
     alert("Some event was fired!!!!");
   });
   
 })(MyApp);
 
-MyApp.trigger("some:event");
+MyApp.vent.trigger("some:event");
 ````
 
 For a more detailed discussion and example of using an event aggregator with

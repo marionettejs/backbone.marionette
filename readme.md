@@ -249,7 +249,7 @@ I'm using [Docco](http://jashkenas.github.com/docco/) to generate the annotated 
 
 ## Release Notes
 
-### v0.1
+### v0.1.0
 
 * Initial release
 * Created documentation

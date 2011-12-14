@@ -34,10 +34,18 @@ functionality.
 
 ## Building A Marionette Application
 
-This is the hub of your composite application. It organizes, initializes and
-coordinate the various pieces of your app. It also provides a starting point
-for you to call into, from your HTML script block or from your JavaScript files
-directly if you prefer to go that route.
+In spite of the few pieces (or perhaps, because of?), you can build a number of
+very interesting things out of Marionette, easily. Each of these peices can be
+used individually or combined in different ways, to produce a very powerful and
+flexibile system.
+
+### Marionette Applications
+
+The `Backbone.Marionette.Application` object is the hub of your composite 
+application. It organizes, initializes and coordinate the various pieces of your
+app. It also provides a starting point for you to call into, from your HTML 
+script block or from your JavaScript files directly if you prefer to go that 
+route.
 
 The `Application` is meant to be instantiate directly, although you can extend
 it to add your own functionality.

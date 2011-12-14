@@ -6,7 +6,7 @@
 // Documentation and Full License Available at:
 // http://github.com/derickbailey/backbone.marionette
 
-Backbone.Marionette = (function(Backbone, _){
+Backbone.Marionette = (function(Backbone, _, $){
   var Marionette = {};
 
   Marionette.version = "0.1.0";
@@ -160,4 +160,4 @@ Backbone.Marionette = (function(Backbone, _){
   Marionette.Application.extend = extend;
 
   return Marionette;
-})(Backbone, _);
+})(Backbone, _, jQuery);

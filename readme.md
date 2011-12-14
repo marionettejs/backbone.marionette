@@ -12,7 +12,11 @@ to be a lightweigt and flexible library of tools that you can use when you want
 to. Like Backbone.js itself, you're not required to use all of 
 Backbone.Marionette just because you want to use some of it.
 
-## Annotated Source Code
+## Download And Annotated Source Code
+
+You can download the raw source code above. For the development version, grab
+"backbone.marionette.js". For the production version, grab
+"backbone.marionette.min.js".
 
 For a good time, call.. err... read through [the annotated source code](http://derickbailey.github.com/backbone.marionette/docs/backbone.marionette.html).
 

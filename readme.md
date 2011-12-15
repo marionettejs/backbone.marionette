@@ -191,7 +191,7 @@ http://bbclonemail.heroku.com
 
 And you can find the source code at:
 
-http://github.com/derickbailey/bblconemail
+http://github.com/derickbailey/bbclonemail
 
 ### Quick & Dirty Sample
 

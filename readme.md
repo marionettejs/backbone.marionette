@@ -184,7 +184,19 @@ MyApp.start(options);
 
 ## An Example
 
-A quick and dirty example to show how to build an app using Marionette.
+There's a working sample application available, called BBCloneMail. You can see
+it in action, at:
+
+http://bbclonemail.heroku.com
+
+And you can find the source code at:
+
+http://github.com/derickbailey/bblconemail
+
+### Quick & Dirty Sample
+
+Here's a quick and dirty example to show how to use some of the pieces of
+Marionette:
 
 ````
 // define the application

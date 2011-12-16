@@ -243,7 +243,9 @@ MyApp.addRegion(myRegion: MyRegion);
 // calling start will run all of the initializers
 // this can be done from your JS file directly, or
 // from a script block in your HTML
-MyApp.start();
+$(function(){
+  MyApp.start();
+});
 ````
 
 ## Requirements

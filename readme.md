@@ -35,7 +35,7 @@ functionality.
 ## Building A Marionette Application
 
 In spite of the few pieces (or perhaps, because of?), you can build a number of
-very interesting things out of Marionette, easily. Each of these peices can be
+very interesting things out of Marionette, easily. Each of these pieces can be
 used individually or combined in different ways, to produce a very powerful and
 flexibile system.
 
@@ -50,9 +50,9 @@ route.
 The `Application` is meant to be instantiate directly, although you can extend
 it to add your own functionality.
 
-````
+```js
 MyApp = new Backbone.Marionette.Application();
-````
+```
 
 ### Region Managers
 
@@ -62,7 +62,7 @@ named regions and either jQuery selectors or `RegionManager` objects. You may
 call this method as many times as you like, and it will continue adding regions
 to the app. If you specify the same name twice, last one in wins.
 
-````
+```js
 MyApp.addRegions({
   mainRegion: "#main-content",
   navigationRegion: "#navigation"
@@ -73,7 +73,7 @@ var FooterRegion = Backbone.Marionette.RegionManager.extend({
 });
 
 MyApp.addRegions({footerRegion: FooterRegion});
-````
+```
 
 Note that if you define your own `RegionManager` object, you must provide an
 `el` for it. If you don't, you will receive an runtime exception saying that
@@ -90,7 +90,7 @@ regions, starting up your routers, and more. To accomplish these tasks and
 ensure that your `Application` is fully configured, you can add initializer
 callbacks to the application.
 
-````
+```js
 MyApp.addInitializer(function(options){
   // do useful stuff here
   var myView = new MyView({
@@ -103,25 +103,25 @@ MyApp.addInitializer(function(options){
   new MyAppRouter();
   Backbone.history.start();
 });
-````
+```
 
 These callbacks will be executed when you start your application. The `options`
 parameters is passed through the `start` method (see below).
 
 ### Application Events
 
-The `Application` object raises a few events during it's lifecycle. These events
+The `Application` object raises a few events during its lifecycle. These events
 can be used to do additional processing of your application. For example, you
 may want to pre-process some data just before initialization happens. Or you may
 want to wait until your entire application is initialized to start the
 `Backbone.history`.
 
-The two events that are currently triggerd, are:
+The two events that are currently triggered, are:
 
 * **"initialize:before"**: fired just before the initializers kick off
 * **"initialize:after"**: fires just after the initializers have finished
 
-````
+```js
 MyApp.bind("initialize:before", function(options){
   options.moreData = "Yo dawg, I heard you like options so I put some options in your options!"
 });
@@ -131,7 +131,7 @@ MyApp.bind("initialize:after", function(options){
     Backbone.history.start();
   }
 });
-````
+```
 
 The `options` parameter is passed through the `start` method of the application
 object (see below).
@@ -147,7 +147,7 @@ You can use this event aggregator to communicate between various modules of your
 application, ensuring correct decoupling while also facilitating functionality
 that needs more than one of your application's modules.
 
-````
+```js
 (function(MyApp){
 
   MyApp.vent.bind("some:event", function(){
@@ -157,7 +157,7 @@ that needs more than one of your application's modules.
 })(MyApp);
 
 MyApp.vent.trigger("some:event");
-````
+```
 
 For a more detailed discussion and example of using an event aggregator with
 Backbone applications, see the blog post: [References, Routing, and The Event
@@ -173,14 +173,14 @@ to each of your initializer functions, as well as the initialize events. This
 allows you to provide extra configuration for various parts of your app, at
 initialization/start of the app, instead of just at definition.
 
-````
+```js
 var options = {
   something: "some value",
   another: "#some-selector"
 };
 
 MyApp.start(options);
-````
+```
 
 ## An Example
 
@@ -198,7 +198,7 @@ http://github.com/derickbailey/bbclonemail
 Here's a quick and dirty example to show how to use some of the pieces of
 Marionette:
 
-````
+```js
 // define the application
 // options we pass in are copied on to the instance
 MyApp = new Backbone.Marionette.Application({
@@ -246,7 +246,7 @@ MyApp.addRegion(myRegion: MyRegion);
 $(function(){
   MyApp.start();
 });
-````
+```
 
 ## Requirements
 

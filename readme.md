@@ -182,7 +182,7 @@ var options = {
 MyApp.start(options);
 ```
 
-## An Example
+## Backbone.Marionette Example Apps
 
 There are several sample apps available.
 

@@ -184,14 +184,36 @@ MyApp.start(options);
 
 ## An Example
 
-There's a working sample application available, called BBCloneMail. You can see
-it in action, at:
+There are several sample apps available.
+
+### BBCloneMail
+
+I'm building a medium sized app to demonstrate Backbone.Marionette. It's a simple
+clone of a GMail like interface, with email and contact management. There is no
+back end for data, currently. The sample app does run on top of Ruby and
+Sinatra, but all the data is hard coded into the HTML/JavaScript right now.
+
+You can find BBCloneMail online at:
 
 http://bbclonemail.heroku.com
 
 And you can find the source code at:
 
 http://github.com/derickbailey/bbclonemail
+
+### Steve Gentile' Contact Manager
+
+Steve Gentile is building two versions of the same contact manager app. One of
+them runs on NodeJS as a back-end, and the other runs on ASP.NET MVC as the
+back-end.
+
+The NodeJS version is here:
+
+https://github.com/sgentile/BackboneNodeContacts
+
+And the ASP.NET MVC version is here:
+
+https://github.com/sgentile/BackboneContacts
 
 ### Quick & Dirty Sample
 

@@ -1,4 +1,4 @@
-describe("item view", function(){
+describe("item view rendering", function(){
   var Model = Backbone.Model.extend();
 
   var Collection = Backbone.Collection.extend({

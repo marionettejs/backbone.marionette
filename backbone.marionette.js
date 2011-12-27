@@ -100,6 +100,41 @@ Backbone.Marionette = (function(Backbone, _, $){
     }
   });
 
+  // BindTo: Event Binding
+  // ---------------------
+  
+  // BindTo facilitates the binding and unbinding of events
+  // from objects that extend `Backbone.Events`. It makes
+  // unbinding events, even with anonymous callback functions,
+  // easy. 
+  //
+  // Thanks to Johnny Oshika and ThoughtBot for this code.
+  // http://stackoverflow.com/questions/7567404/backbone-js-repopulate-or-recreate-the-view/7607853#7607853
+  // https://workshops.thoughtbot.com/backbone-js-on-rails
+  Marionette.BindTo = {
+    bindings: [],
+
+    // Store the event binding in array so it can be unbound
+    // easily, at a later point in time.
+    bindTo: function (obj, eventName, callback, context) {
+      obj.bind(eventName, callback, context);
+      this.bindings.push({ 
+        obj: obj, 
+        eventName: eventName, 
+        callback: callback, 
+        context: context 
+      });
+    },
+
+    // Unbind all of the events that we have stored.
+    unbindAll: function () {
+      _.each(this.bindings, function (binding) {
+        binding.obj.unbind(binding.eventName, binding.callback);
+      });
+      this.bindings = [];
+    }
+  };
+
   // Composite Application
   // ---------------------
 

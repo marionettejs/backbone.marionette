@@ -1,4 +1,4 @@
-// Backbone.Marionette v0.1.0
+// Backbone.Marionette v0.2.0
 //
 // Copyright (C)2011 Derick Bailey, Muted Solutions, LLC
 // Distributed Under MIT License
@@ -9,7 +9,7 @@
 Backbone.Marionette = (function(Backbone, _, $){
   var Marionette = {};
 
-  Marionette.version = "0.1.0";
+  Marionette.version = "0.2.0";
 
   // Region Manager
   // --------------

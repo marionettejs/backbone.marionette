@@ -380,7 +380,15 @@ var handler = {
 binder.bind(model, "change:foo", handler.doIt);
 ```
 
-Unbind all events:
+You can optionally specify a 4th parameter as the context in which the callback
+method for the event will be executed:
+
+```js
+binder.bind(model, "change:foo", someCallback, someContext);
+```
+
+You can call `unbindAll` to unbind all events that were bound with the
+`bindTo` method:
 
 ```js
 binder.unbindAll();

@@ -15,6 +15,13 @@ describe("item view rendering", function(){
   var EventedView = Backbone.Marionette.ItemView.extend({
     initialize: function(){
       this.bindTo(this.model, "change:foo", this.modelChange);
+      this.bindTo(this.collection, "foo", this.collectionChange);
+    },
+
+    modelChange: function(){
+    },
+
+    collectionChange: function(){
     }
   });
 
@@ -69,14 +76,7 @@ describe("item view rendering", function(){
     beforeEach(function(){
       view = new ItemView({
         template: "#collectionItemTemplate",
-        collection: new Collection([,
-          {
-            foo: "bar"
-          },
-          {
-            foo: "baz"
-          }
-        ])
+        collection: new Collection([ { foo: "bar" }, { foo: "baz" } ])
       });
 
       spyOn(view, "serializeData").andCallThrough();
@@ -101,14 +101,7 @@ describe("item view rendering", function(){
       view = new ItemView({
         template: "#itemTemplate",
         model: new Model({foo: "bar"}),
-        collection: new Collection([,
-          {
-            foo: "bar"
-          },
-          {
-            foo: "baz"
-          }
-        ])
+        collection: new Collection([ { foo: "bar" }, { foo: "baz" } ])
       });
 
       spyOn(view, "serializeData").andCallThrough();
@@ -133,7 +126,7 @@ describe("item view rendering", function(){
       view = new ItemView({
         template: "#itemTemplate",
         model: new Model({foo: "bar"}),
-        collection: new Collection([, { foo: "bar" }, { foo: "baz" } ])
+        collection: new Collection([ { foo: "bar" }, { foo: "baz" } ])
       });
 
       spyOn(view, "unbind").andCallThrough();

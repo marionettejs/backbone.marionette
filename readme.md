@@ -76,6 +76,8 @@ An `ItemView` is a view that represents a single item. That item may be a
 will be treated as a single item. That means a collection will not be iterated
 over. Instead it will have `.toJSON()` calls on it like a single model.
 
+##### ItemView template
+
 Item views should be configured with a template. The `template` attribute should
 be either a valid jQuery selector, or a function that returns a valid jQuery
 selector:
@@ -90,9 +92,127 @@ AnotherView = Backbone.Marionette.ItemView.extend({
     return $("#some-template")
   }
 });
+
+new SomeItemView({
+  template: "#some-template"
+});
+```
+
+##### ItemView serializeData
+
+Item views will serialize a model or collection, by default, by
+calling `.toJSON` on either the model or collection. If both a model
+and collection are attached to an item view, the model will be used
+as the data source. The results of the data serialization will be passed to the template
+that is rendered. 
+
+If the serialization is a model, the results are passed in directly:
+
+```js
+var myModel = new MyModel({foo: "bar"});
+
+new MyItemView({
+  template: "#myItemTemplate",
+  model: myModel
+});
+
+MyItemView.render();
+```
+
+```html
+<script id="myItemTemplate" type="template">
+  Foo is: <%= foo %>
+</script>
+```
+
+If the serialization is a collection, the results are passed in as an 
+`items` array:
+
+```js
+var myCollection = new MyCollection([{foo: "bar"}, {foo: "baz"}]);
+
+new MyItemView({
+  template: "#myCollectionTemplate",
+  collection: myCollection
+});
+
+MyItemView.render();
+```
+
+```html
+<script id="myCollectionTemplate" type="template">
+  <% _.each(items, function(item){ %>
+    Foo is: <%= foo %>
+  <% }); %>
+</script>
+```
+
+If you need custom serialization for your data, you can provide a
+`serializeData` method on your view. It must return a valid JSON
+object, as if you had called `.toJSON` on a model or collection.
+
+```js
+Backbone.Marionette.ItemView.extend({
+  serializeData: function(){
+    return {
+      "some attribute": "some value"
+    }
+  }
+});
+```
+
+##### ItemView events
+
+ItemView extends `Marionette.BindTo`. It is recommended that you use
+the `bindTo` method to bind model and collection events. 
+
+```js
+MyView = Backbone.Marionette.ItemView.extend({
+  initialize: function(){
+    this.bindTo(this.model, "change:foo", this.modelChanged);
+    this.bindTo(this.collection, "add", this.modelAdded);
+  },
+
+  modelChanged: function(model, value){
+  },
+
+  modelAdded: function(model){
+  }
+});
+```
+
+The context (`this`) will automatically be set to the view. You can
+optionally set the context by passing in the context object as the
+4th parameter of `bindTo`.
+
+##### ItemView close
+
+ItemView implements a `close` method, which is called by the region
+managers automatically. As part of the implementation, the following
+are performed:
+
+* unbind all `bindTo` events
+* unbind all custom view events
+* unbind all DOM events
+* remove `this.el` from teh DOM
+* call an `onClose` event on the view, if one is provided
+
+By providing an `onClose` event in your view definition, you can
+run custom code for your view that is fired after your view has been
+closed and cleaned up. This lets you handle any additional clean up
+code without having to override the `close` method.
+
+```js
+Backbone.Marionette.ItemView.extend({
+  onClose: function(){
+    // custom cleanup or closing code, here
+  }
+});
 ```
 
 #### Collection View
+
+Not yet implemented.
 
 ### Region Managers
 

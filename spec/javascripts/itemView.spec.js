@@ -119,4 +119,23 @@ describe("item view rendering", function(){
       expect($(view.el)).not.toHaveText(/baz/);
     });
   });
+
+  describe("when closing an item view", function(){
+    it("should unbind all model events for the view", function(){
+      fail
+    });
+
+    it("should unbind all collection events for the view", function(){
+      fail
+    });
+
+    it("should unbind any listener to custom view events", function(){
+      fail
+    });
+
+    it("should remove the view's EL from the DOM", function(){
+      fail
+    });
+  });
+
 });

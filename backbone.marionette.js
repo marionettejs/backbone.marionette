@@ -182,10 +182,8 @@ Backbone.Marionette = (function(Backbone, _, $){
     var templateData;
 
     if (_.isFunction(template)){
-      console.log("template is function");
       templateData = template.call(this);
     } else {
-      console.log("template is not function");
       templateData = $(template);
     }
 

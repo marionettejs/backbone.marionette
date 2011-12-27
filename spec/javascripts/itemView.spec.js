@@ -12,6 +12,12 @@ describe("item view rendering", function(){
     onRender: function(){}
   });
 
+  var CustomRenderView = Backbone.Marionette.ItemView.extend({
+    renderTemplate: function(template, data){
+      return "<foo>custom</foo>";
+    }
+  });
+
   var EventedView = Backbone.Marionette.ItemView.extend({
     template: "#emptyTemplate",
 
@@ -27,6 +33,19 @@ describe("item view rendering", function(){
 
   beforeEach(function(){
     loadFixtures("itemTemplate.html", "collectionItemTemplate.html", "emptyTemplate.html");
+  });
+
+  describe("when overriding the `renderTemplate` method", function(){
+    var view;
+
+    beforeEach(function(){
+      view = new CustomRenderView({});
+      view.render();
+    });
+
+    it("should render the view with the overridden method", function(){
+      expect($(view.el)).toHaveHtml("<foo>custom</foo");
+    });
   });
 
   describe("after rendering", function(){

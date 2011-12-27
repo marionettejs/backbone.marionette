@@ -210,8 +210,9 @@ Backbone.Marionette = (function(Backbone, _, $){
   
   // Retrieve the template from the call's context. The
   // `template` attribute can either be a function that
-  // returns a string, or a string directly. The string
-  // value must be a valid jQuery selector.  
+  // returns a jQuery object, or a jQuery selector string 
+  // directly. The string value must be a valid jQuery 
+  // selector.  
   var getTemplate = function(){
     var template = this.template;
     var templateData;

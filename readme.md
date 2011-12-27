@@ -24,9 +24,12 @@ For a good time, call.. err... read through [the annotated source code](http://d
 
 There are only a few pieces to the marionette at this point:
 
-* **Backbone.Marionette.Application**
+* **Backbone.Marionette.Application**: An application object that starts your app via initializers, and more
+* **Backbone.Marionette.ItemView**: A view that renders a single item
+* **Backbone.Marionette.CollectionView**: A view that iterates over a collection, and renders individual `ItemView` instances for each model
 * **Backbone.Marionette.RegionManager**: Manage visual regions of your application, including display and removal of content
-* **app.vent**: Every instance of `Application` comes with a `.vent` property, an event aggregator
+* **Backbone.Marionette.BindTo**: An event binding manager, to facilitate binding and unbinding of events
+* **Application.vent**: Every instance of `Application` comes with a `.vent` property, an event aggregator
 
 Both `Application` and `RegionManager` use the `extend` syntax and functionality
 from Backbone, allowing you to define new versions of these objects with custom
@@ -53,6 +56,43 @@ it to add your own functionality.
 ```js
 MyApp = new Backbone.Marionette.Application();
 ```
+
+### Item And Collection Views
+
+The majority of the views that I write have a few things in common: rendering with
+a given template engine, storing references to model or collection events, and
+unbinding / removing DOM elements when closing the view. 
+
+To reduce the amount of code that I have to repeat in my projects, I've built
+the `ItemView` and `CollectionView` that I typically use in to Marionette. These
+two objects provide a set of default behaviors that I use most of the time, while
+providing enough touch points to easily customize a view. Of course, any of the
+methods on these views can be overridden in your own view definitions, as well.
+
+#### Item View
+
+An `ItemView` is a view that represents a single item. That item may be a 
+`Backbone.Model` or may be a `Backbone.Collection`. Whichever it is, though, it
+will be treated as a single item. That means a collection will not be iterated
+over. Instead it will have `.toJSON()` calls on it like a single model.
+
+Item views should be configured with a template. The `template` attribute should
+be either a valid jQuery selector, or a function that returns a valid jQuery
+selector:
+
+```js
+MyView = Backbone.Marionette.ItemView.extend({
+  template: "#some-template"
+});
+
+AnotherView = Backbone.Marionette.ItemView.extend({
+  template: function(){
+    return $("#some-template")
+  }
+});
+```
+
+#### Collection View
 
 ### Region Managers
 
@@ -162,6 +202,30 @@ MyApp.vent.trigger("some:event");
 For a more detailed discussion and example of using an event aggregator with
 Backbone applications, see the blog post: [References, Routing, and The Event
 Aggregator: Coordinating Views In Backbone.js](http://lostechies.com/derickbailey/2011/07/19/references-routing-and-the-event-aggregator-coordinating-views-in-backbone-js/)
+
+### Event Binding With BindTo
+
+The `BindTo` object provides event binding management and facilitates simple
+event binding and unbinding for any object that extends from `Backbone.Events`.
+
+Bind an event:
+
+```js
+var binder = _.extend({}, Backbone.Marionette.BindTo);
+
+var model = new MyModel();
+
+var handler = {
+  doIt: function(){}
+}
+binder.bind(model, "change:foo", handler.doIt);
+```
+
+Unbind all events:
+
+```js
+binder.unbindAll();
+```
 
 ### Starting An Application
 

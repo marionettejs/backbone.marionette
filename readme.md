@@ -73,8 +73,47 @@ methods on these views can be overridden in your own view definitions, as well.
 
 An `ItemView` is a view that represents a single item. That item may be a 
 `Backbone.Model` or may be a `Backbone.Collection`. Whichever it is, though, it
-will be treated as a single item. That means a collection will not be iterated
-over. Instead it will have `.toJSON()` calls on it like a single model.
+will be treated as a single item. 
+
+##### ItemView render
+
+An item view has a `render` method built in to it. By default it uses
+underscore.js templates.
+
+The default implementation will use a template that you specify (see
+below) and serialize the model or collection for you (see below).
+
+You can provide a custom implementation of a method called
+`renderTemplate` to change template engines. For example, if you want
+to use jQuery templates, you can do this:
+
+```js
+Backbone.Marionette.ItemView.extend({
+  renderTemplate: function(template, data){
+    return $(template).tmpl(data);
+  }
+});
+```
+
+The `template` parameter is the HTML contents of the template that
+was specified in the view (see below).
+
+The `data` parameter is the serialized data for either the model or
+the collection of the view (see below).
+
+After the view has been rendered, a `onRender` method will be called.
+You can implement this in your view to provide custom code for dealing
+with the view's `el` after it has been rendered:
+
+```js
+Backbone.Marionette.ItemView.extend({
+  onRender: function(){
+    // manipulate the `el` here. it's already
+    // been rendered, and is full of the view's
+    // HTML, ready to go.
+  }
+});
+```
 
 ##### ItemView template
 

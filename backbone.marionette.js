@@ -90,7 +90,7 @@ Backbone.Marionette = (function(Backbone, _, $){
     render: function(){
       var template = getTemplate.call(this);
       var data = this.serializeData();
-      var html = _.template(template, data);
+      var html = this.renderTemplate(template, data);
 
       $(this.el).html(html);
 
@@ -99,6 +99,16 @@ Backbone.Marionette = (function(Backbone, _, $){
       }
     },
 
+    // Default implementation uses underscore.js templates. Override
+    // this method to use your own templating engine.
+    renderTemplate: function(template, data){
+      return _.template(template, data);
+    },
+
+    // Default `close` implementation, for removing a view from the
+    // DOM and unbinding it. Region managers will call this method
+    // for you. You can specify an `onClose` method in your view to
+    // add custom code that is called after the view is closed.
     close: function(){
       this.unbindAll();
       this.unbind();

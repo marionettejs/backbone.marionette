@@ -54,6 +54,52 @@ Backbone.Marionette = (function(Backbone, _, $){
     }
   });
 
+  // Item View
+  // ---------
+  
+  // A single item view implementation that contains code for rendering
+  // with underscore.js templates, serializing the view's model or collection,
+  // and calling several methods on extended views, such as `onRender`.
+  Marionette.ItemView = Backbone.View.extend({
+
+    // Serialize the model or collection for the view. If a model is
+    // found, `.toJSON()` is called. If a collection is found, `.toJSON()`
+    // is also called, but is used to populate an `items` array in the
+    // resulting data. If both are found, defaults to the model. 
+    // You can override the `serializeData` method in your own view 
+    // definition, to provide custom serialization for your view's data.
+    serializeData: function(){
+      var data;
+      if (this.collection) { 
+        data = {};
+        data.items = this.collection.toJSON(); 
+      }
+      if (this.model) { data = this.model.toJSON(); }
+      return data;
+    },
+
+    // Either provide a `template: "#foo"` selector in the view
+    // definition, or provide it at instantiation: `new
+    // MyView({ template: "#foo" });`.
+    template: function(){
+      return $(this.options.template);
+    },
+
+    // Render the view, defaulting to underscore.js templates.
+    // You can override this in your view definition.
+    render: function(){
+      var template = getTemplate.call(this);
+      var data = this.serializeData();
+      var html = _.template(template, data);
+
+      $(this.el).html(html);
+
+      if (this.onRender){
+        this.onRender();
+      }
+    }
+  });
+
   // Composite Application
   // ---------------------
 
@@ -123,6 +169,28 @@ Backbone.Marionette = (function(Backbone, _, $){
       }
     }
   });
+
+  // Helpers
+  // -------
+  
+  // Retrieve the template from the call's context. The
+  // `template` attribute can either be a function that
+  // returns a string, or a string directly. The string
+  // value must be a valid jQuery selector.  
+  var getTemplate = function(){
+    var template = this.template;
+    var templateData;
+
+    if (_.isFunction(template)){
+      console.log("template is function");
+      templateData = template.call(this);
+    } else {
+      console.log("template is not function");
+      templateData = $(template);
+    }
+
+    return templateData.html();
+  }
 
   // Copy the `extend` function used by Backbone's classes
   var extend = Backbone.View.extend;

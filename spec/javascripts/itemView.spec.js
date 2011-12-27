@@ -12,6 +12,12 @@ describe("item view rendering", function(){
     onRender: function(){}
   });
 
+  var EventedView = Backbone.Marionette.ItemView.extend({
+    initialize: function(){
+      this.bindTo(this.model, "change:foo", this.modelChange);
+    }
+  });
+
   beforeEach(function(){
     loadFixtures("itemTemplate.html", "collectionItemTemplate.html", "emptyTemplate.html");
   });
@@ -121,8 +127,23 @@ describe("item view rendering", function(){
   });
 
   describe("when closing an item view", function(){
+    var view;
+
+    beforeEach(function(){
+      view = new ItemView({
+        template: "#itemTemplate",
+        model: new Model({foo: "bar"}),
+        collection: new Collection([, { foo: "bar" }, { foo: "baz" } ])
+      });
+
+      spyOn(view, "unbind").andCallThrough();
+
+      view.render();
+      view.close();
+    });
+
     it("should unbind all model events for the view", function(){
-      fail
+      
     });
 
     it("should unbind all collection events for the view", function(){

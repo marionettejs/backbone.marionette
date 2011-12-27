@@ -2,16 +2,16 @@ describe("bind to", function(){
   var Model = Backbone.Model.extend({});
 
   describe("when binding an event", function(){
-    var handler = {
+    var eventHandler = {
       doIt: function(){}
     }
-    spyOn(handler, "doIt");
+    spyOn(eventHandler, "doIt");
     var binder = _.extend({}, Backbone.Marionette.BindTo);
     var model;
 
     beforeEach(function(){
       model = new Model();
-      binder.bindTo(model, "change:foo", handler.doIt);
+      binder.bindTo(model, "change:foo", eventHandler.doIt);
     });
 
     it("should store the bound object", function(){
@@ -23,7 +23,29 @@ describe("bind to", function(){
     });
 
     it("should store the callback function", function(){
-      expect(binder.bindings[0].callback).toBe(handler.doIt);
+      expect(binder.bindings[0].callback).toBe(eventHandler.doIt);
+    });
+
+  });
+
+  describe("when binding an event with a specified context", function(){
+    var contextHandler = {
+      doIt: function(){}
+    }
+    var contextBinder = _.extend({}, Backbone.Marionette.BindTo);
+    var contextModel;
+
+    beforeEach(function(){
+      contextModel = new Model();
+      contextBinder.bindTo(contextModel, "change:foo", contextHandler.doIt, contextHandler);
+    });
+
+    afterEach(function(){
+      contextBinder.unbindAll();
+    });
+
+    it("should store the specified context", function(){
+      expect(contextBinder.bindings[0].context).toBe(contextHandler);
     });
 
   });

@@ -112,12 +112,14 @@ Backbone.Marionette = (function(Backbone, _, $){
   // http://stackoverflow.com/questions/7567404/backbone-js-repopulate-or-recreate-the-view/7607853#7607853
   // https://workshops.thoughtbot.com/backbone-js-on-rails
   Marionette.BindTo = {
-    bindings: [],
-
     // Store the event binding in array so it can be unbound
     // easily, at a later point in time.
     bindTo: function (obj, eventName, callback, context) {
+      context = context || this;
       obj.bind(eventName, callback, context);
+
+      if (!this.bindings) this.bindings = [];
+
       this.bindings.push({ 
         obj: obj, 
         eventName: eventName, 
@@ -131,6 +133,7 @@ Backbone.Marionette = (function(Backbone, _, $){
       _.each(this.bindings, function (binding) {
         binding.obj.unbind(binding.eventName, binding.callback);
       });
+
       this.bindings = [];
     }
   };

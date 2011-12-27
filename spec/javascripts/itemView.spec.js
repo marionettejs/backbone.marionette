@@ -13,15 +13,15 @@ describe("item view rendering", function(){
   });
 
   var EventedView = Backbone.Marionette.ItemView.extend({
-    initialize: function(){
-      this.bindTo(this.model, "change:foo", this.modelChange);
-      this.bindTo(this.collection, "foo", this.collectionChange);
-    },
+    template: "#emptyTemplate",
 
     modelChange: function(){
     },
 
     collectionChange: function(){
+    },
+
+    onClose: function(){
     }
   });
 
@@ -121,34 +121,53 @@ describe("item view rendering", function(){
 
   describe("when closing an item view", function(){
     var view;
+    var model;
+    var collection;
 
     beforeEach(function(){
-      view = new ItemView({
+      model = new Model();
+      collection = new Collection();
+      view = new EventedView({
         template: "#itemTemplate",
-        model: new Model({foo: "bar"}),
-        collection: new Collection([ { foo: "bar" }, { foo: "baz" } ])
+        model: model,
+        collection: collection
       });
+      view.render();
 
       spyOn(view, "unbind").andCallThrough();
+      spyOn(view, "remove").andCallThrough();
+      spyOn(view, "unbindAll").andCallThrough();
+      spyOn(view, "modelChange").andCallThrough();
+      spyOn(view, "collectionChange").andCallThrough();
+      spyOn(view, "onClose").andCallThrough();
 
-      view.render();
+      view.bindTo(model, "change:foo", view.modelChange);
+      view.bindTo(collection, "foo", view.collectionChange);
+
       view.close();
+
+      model.set({foo: "bar"});
+      collection.trigger("foo");
     });
 
-    it("should unbind all model events for the view", function(){
-      
+    it("should unbind model events for the view", function(){
+      expect(view.modelChange).not.toHaveBeenCalled();
     });
 
     it("should unbind all collection events for the view", function(){
-      fail
+      expect(view.collectionChange).not.toHaveBeenCalled();
     });
 
     it("should unbind any listener to custom view events", function(){
-      fail
+      expect(view.unbind).toHaveBeenCalled();
     });
 
     it("should remove the view's EL from the DOM", function(){
-      fail
+      expect(view.remove).toHaveBeenCalled();
+    });
+
+    it("should call `onClose` if provided", function(){
+      expect(view.onClose).toHaveBeenCalled();
     });
   });
 

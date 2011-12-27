@@ -97,6 +97,16 @@ Backbone.Marionette = (function(Backbone, _, $){
       if (this.onRender){
         this.onRender();
       }
+    },
+
+    close: function(){
+      this.unbindAll();
+      this.unbind();
+      this.remove();
+
+      if (this.onClose){
+        this.onClose();
+      }
     }
   });
 
@@ -233,6 +243,9 @@ Backbone.Marionette = (function(Backbone, _, $){
   var extend = Backbone.View.extend;
   Marionette.RegionManager.extend = extend;
   Marionette.Application.extend = extend;
+
+  // Copy the features of `BindTo` on to the views
+  _.extend(Marionette.ItemView.prototype, Marionette.BindTo);
 
   return Marionette;
 })(Backbone, _, jQuery);

@@ -231,7 +231,7 @@ Backbone.Marionette = (function(Backbone, _, $){
   // event aggregator as `app.vent`
   Marionette.Application = function(options){
     this.initializers = [];
-    this.vent = _.extend({}, Backbone.Events);
+    this.vent = _.extend({}, Backbone.Events, Marionette.BindTo);
     _.extend(this, options);
   };
 

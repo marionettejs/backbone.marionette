@@ -178,7 +178,7 @@ Additionally, when you pass a `RegionManager` directly into to the `addRegions`
 method, you must specify the constructor function for your region manager, not
 an instance of it.
 
-## Item View
+## Marionette.ItemView
 
 An `ItemView` is a view that represents a single item. That item may be a 
 `Backbone.Model` or may be a `Backbone.Collection`. Whichever it is, though, it
@@ -429,7 +429,7 @@ Backbone.Marionette.CollectionView.extend({
 });
 ```
 
-## Event Binding With BindTo
+## Marionette.BindTo
 
 The `BindTo` object provides event binding management and facilitates simple
 event binding and unbinding for any object that extends from `Backbone.Events`.

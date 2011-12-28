@@ -15,6 +15,14 @@ describe("collection view", function(){
     itemView: ItemView
   });
   
+  var PrependHtmlView = Backbone.Marionette.CollectionView.extend({
+    itemView: ItemView,
+
+    appendHtml: function(el, html){
+      el.prepend(html);
+    }
+  });
+  
   describe("when rendering a collection view", function(){
     var collection = new Collection([{foo: "bar"}, {foo: "baz"}]);
     var collectionView;
@@ -35,6 +43,25 @@ describe("collection view", function(){
 
     it("should append the html for each itemView", function(){
       expect($(collectionView.el)).toHaveHtml("<span>bar</span><span>baz</span>");
+    });
+  });
+
+  describe("when override appendHtml", function(){
+    var collection = new Collection([{foo: "bar"}, {foo: "baz"}]);
+    var collectionView;
+
+    beforeEach(function(){
+      collectionView = new PrependHtmlView({
+        collection: collection
+      });
+
+      spyOn(collectionView, "renderItem").andCallThrough();
+
+      collectionView.render();
+    });
+
+    it("should append via the overridden method", function(){
+      expect($(collectionView.el)).toHaveHtml("<span>baz</span><span>bar</span>");
     });
   });
 

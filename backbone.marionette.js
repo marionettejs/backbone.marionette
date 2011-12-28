@@ -157,6 +157,23 @@ Backbone.Marionette = (function(Backbone, _, $){
       return view.el;
     },
 
+    // Handle cleanup and other closing needs for
+    // the collection of views.
+    close: function(){
+      view.unbind();
+      view.remove();
+
+      if (this.children){
+        _.each(this.children, function(childView){
+          childView.close();
+        });
+      }
+
+      if (this.onClose){
+        this.onClose();
+      }
+    },
+
     // Store references to all of the child `itemView`
     // instances so they can be managed and cleaned up, later.
     storeChild: function(view){

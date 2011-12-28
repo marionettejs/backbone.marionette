@@ -15,6 +15,16 @@ describe("collection view", function(){
     itemView: ItemView
   });
   
+  var EventedView = Backbone.Marionette.CollectionView.extend({
+    itemView: ItemView,
+
+    someCallback: function(){
+    },
+
+    onClose: function(){
+    }
+  });
+  
   var PrependHtmlView = Backbone.Marionette.CollectionView.extend({
     itemView: ItemView,
 
@@ -69,4 +79,51 @@ describe("collection view", function(){
     });
   });
 
+  describe("when closing a collection view", function(){
+    var collectionView;
+    var collection;
+    var childView;
+
+    beforeEach(function(){
+      collection = new Collection([{foo: "bar"}, {foo: "baz"}]);
+      view = new EventedView({
+        template: "#itemTemplate",
+        collection: collection
+      });
+      view.render();
+
+      childView = view.children[0];
+
+      view.bindTo(collection, "foo", view.collectionChange);
+
+      spyOn(childView, "close");
+      spyOn(view, "unbind").andCallThrough();
+      spyOn(view, "remove").andCallThrough();
+      spyOn(view, "someCallback").andCallThrough();
+      spyOn(view, "close").andCallThrough();
+      spyOn(view, "onClose").andCallThrough();
+
+      view.close();
+    });
+
+    it("should close all of the child views", function(){
+      expect(childView.close).toHaveBeenCalled();
+    });
+
+    it("should unbind all collection events for the view", function(){
+      expect(view.someCallback).not.toHaveBeenCalled();
+    });
+
+    it("should unbind any listener to custom view events", function(){
+      expect(view.unbind).toHaveBeenCalled();
+    });
+
+    it("should remove the view's EL from the DOM", function(){
+      expect(view.remove).toHaveBeenCalled();
+    });
+
+    it("should call `onClose` if provided", function(){
+      expect(view.onClose).toHaveBeenCalled();
+    });
+  });
 });

@@ -31,9 +31,9 @@ There are only a few pieces to the marionette at this point:
 * **Backbone.Marionette.BindTo**: An event binding manager, to facilitate binding and unbinding of events
 * **Application.vent**: Every instance of `Application` comes with a `.vent` property, an event aggregator
 
-Both `Application` and `RegionManager` use the `extend` syntax and functionality
-from Backbone, allowing you to define new versions of these objects with custom
-functionality.
+The `Application`, `RegionManager`, `ItemView` and `CollectionView` use the 
+`extend` syntax and functionality from Backbone, allowing you to define new 
+versions of these objects with custom behavior.
 
 ## Marionette.Application
 

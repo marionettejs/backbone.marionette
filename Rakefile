@@ -10,4 +10,13 @@ end
 desc "Build the annotated source HTML"
 task :docco do
   `docco backbone.marionette.js`
+  `git add -A`
+  `git stash`
+  `git checkout gh-pages`
+  `rm -rdf docs`
+  `git add -A`
+  `git stash pop`
+  `git commit -am 'updating docs'`
+  `git push origin gh-pages`
+  `git checkout master`
 end

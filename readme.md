@@ -178,25 +178,13 @@ Additionally, when you pass a `RegionManager` directly into to the `addRegions`
 method, you must specify the constructor function for your region manager, not
 an instance of it.
 
-## Item And Collection Views
-
-The majority of the views that I write have a few things in common: rendering with
-a given template engine, storing references to model or collection events, and
-unbinding / removing DOM elements when closing the view. 
-
-To reduce the amount of code that I have to repeat in my projects, I've built
-the `ItemView` and `CollectionView` that I typically use in to Marionette. These
-two objects provide a set of default behaviors that I use most of the time, while
-providing enough touch points to easily customize a view. Of course, any of the
-methods on these views can be overridden in your own view definitions, as well.
-
-### Item View
+## Item View
 
 An `ItemView` is a view that represents a single item. That item may be a 
 `Backbone.Model` or may be a `Backbone.Collection`. Whichever it is, though, it
 will be treated as a single item. 
 
-#### ItemView render
+### ItemView render
 
 An item view has a `render` method built in to it. By default it uses
 underscore.js templates.
@@ -236,7 +224,7 @@ Backbone.Marionette.ItemView.extend({
 });
 ```
 
-#### ItemView template
+### ItemView template
 
 Item views should be configured with a template. The `template` attribute should
 be either a valid jQuery selector, or a function that returns a valid jQuery
@@ -258,7 +246,7 @@ new SomeItemView({
 });
 ```
 
-#### ItemView serializeData
+### ItemView serializeData
 
 Item views will serialize a model or collection, by default, by
 calling `.toJSON` on either the model or collection. If both a model
@@ -321,7 +309,7 @@ Backbone.Marionette.ItemView.extend({
 });
 ```
 
-#### ItemView events
+### ItemView events
 
 ItemView extends `Marionette.BindTo`. It is recommended that you use
 the `bindTo` method to bind model and collection events. 
@@ -345,7 +333,7 @@ The context (`this`) will automatically be set to the view. You can
 optionally set the context by passing in the context object as the
 4th parameter of `bindTo`.
 
-#### ItemView close
+### ItemView close
 
 ItemView implements a `close` method, which is called by the region
 managers automatically. As part of the implementation, the following
@@ -370,7 +358,7 @@ Backbone.Marionette.ItemView.extend({
 });
 ```
 
-### Collection View
+## Collection View
 
 Not yet implemented.
 

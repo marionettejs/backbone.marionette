@@ -35,14 +35,7 @@ Both `Application` and `RegionManager` use the `extend` syntax and functionality
 from Backbone, allowing you to define new versions of these objects with custom
 functionality.
 
-## Building A Marionette Application
-
-In spite of the few pieces (or perhaps, because of?), you can build a number of
-very interesting things out of Marionette, easily. Each of these pieces can be
-used individually or combined in different ways, to produce a very powerful and
-flexibile system.
-
-### Marionette Applications
+## Marionette.Application
 
 The `Backbone.Marionette.Application` object is the hub of your composite 
 application. It organizes, initializes and coordinate the various pieces of your
@@ -56,231 +49,6 @@ it to add your own functionality.
 ```js
 MyApp = new Backbone.Marionette.Application();
 ```
-
-### Item And Collection Views
-
-The majority of the views that I write have a few things in common: rendering with
-a given template engine, storing references to model or collection events, and
-unbinding / removing DOM elements when closing the view. 
-
-To reduce the amount of code that I have to repeat in my projects, I've built
-the `ItemView` and `CollectionView` that I typically use in to Marionette. These
-two objects provide a set of default behaviors that I use most of the time, while
-providing enough touch points to easily customize a view. Of course, any of the
-methods on these views can be overridden in your own view definitions, as well.
-
-#### Item View
-
-An `ItemView` is a view that represents a single item. That item may be a 
-`Backbone.Model` or may be a `Backbone.Collection`. Whichever it is, though, it
-will be treated as a single item. 
-
-##### ItemView render
-
-An item view has a `render` method built in to it. By default it uses
-underscore.js templates.
-
-The default implementation will use a template that you specify (see
-below) and serialize the model or collection for you (see below).
-
-You can provide a custom implementation of a method called
-`renderTemplate` to change template engines. For example, if you want
-to use jQuery templates, you can do this:
-
-```js
-Backbone.Marionette.ItemView.extend({
-  renderTemplate: function(template, data){
-    return $(template).tmpl(data);
-  }
-});
-```
-
-The `template` parameter is the HTML contents of the template that
-was specified in the view (see below).
-
-The `data` parameter is the serialized data for either the model or
-the collection of the view (see below).
-
-After the view has been rendered, a `onRender` method will be called.
-You can implement this in your view to provide custom code for dealing
-with the view's `el` after it has been rendered:
-
-```js
-Backbone.Marionette.ItemView.extend({
-  onRender: function(){
-    // manipulate the `el` here. it's already
-    // been rendered, and is full of the view's
-    // HTML, ready to go.
-  }
-});
-```
-
-##### ItemView template
-
-Item views should be configured with a template. The `template` attribute should
-be either a valid jQuery selector, or a function that returns a valid jQuery
-selector:
-
-```js
-MyView = Backbone.Marionette.ItemView.extend({
-  template: "#some-template"
-});
-
-AnotherView = Backbone.Marionette.ItemView.extend({
-  template: function(){
-    return $("#some-template")
-  }
-});
-
-new SomeItemView({
-  template: "#some-template"
-});
-```
-
-##### ItemView serializeData
-
-Item views will serialize a model or collection, by default, by
-calling `.toJSON` on either the model or collection. If both a model
-and collection are attached to an item view, the model will be used
-as the data source. The results of the data serialization will be passed to the template
-that is rendered. 
-
-If the serialization is a model, the results are passed in directly:
-
-```js
-var myModel = new MyModel({foo: "bar"});
-
-new MyItemView({
-  template: "#myItemTemplate",
-  model: myModel
-});
-
-MyItemView.render();
-```
-
-```html
-<script id="myItemTemplate" type="template">
-  Foo is: <%= foo %>
-</script>
-```
-
-If the serialization is a collection, the results are passed in as an 
-`items` array:
-
-```js
-var myCollection = new MyCollection([{foo: "bar"}, {foo: "baz"}]);
-
-new MyItemView({
-  template: "#myCollectionTemplate",
-  collection: myCollection
-});
-
-MyItemView.render();
-```
-
-```html
-<script id="myCollectionTemplate" type="template">
-  <% _.each(items, function(item){ %>
-    Foo is: <%= foo %>
-  <% }); %>
-</script>
-```
-
-If you need custom serialization for your data, you can provide a
-`serializeData` method on your view. It must return a valid JSON
-object, as if you had called `.toJSON` on a model or collection.
-
-```js
-Backbone.Marionette.ItemView.extend({
-  serializeData: function(){
-    return {
-      "some attribute": "some value"
-    }
-  }
-});
-```
-
-##### ItemView events
-
-ItemView extends `Marionette.BindTo`. It is recommended that you use
-the `bindTo` method to bind model and collection events. 
-
-```js
-MyView = Backbone.Marionette.ItemView.extend({
-  initialize: function(){
-    this.bindTo(this.model, "change:foo", this.modelChanged);
-    this.bindTo(this.collection, "add", this.modelAdded);
-  },
-
-  modelChanged: function(model, value){
-  },
-
-  modelAdded: function(model){
-  }
-});
-```
-
-The context (`this`) will automatically be set to the view. You can
-optionally set the context by passing in the context object as the
-4th parameter of `bindTo`.
-
-##### ItemView close
-
-ItemView implements a `close` method, which is called by the region
-managers automatically. As part of the implementation, the following
-are performed:
-
-* unbind all `bindTo` events
-* unbind all custom view events
-* unbind all DOM events
-* remove `this.el` from teh DOM
-* call an `onClose` event on the view, if one is provided
-
-By providing an `onClose` event in your view definition, you can
-run custom code for your view that is fired after your view has been
-closed and cleaned up. This lets you handle any additional clean up
-code without having to override the `close` method.
-
-```js
-Backbone.Marionette.ItemView.extend({
-  onClose: function(){
-    // custom cleanup or closing code, here
-  }
-});
-```
-
-#### Collection View
-
-Not yet implemented.
-
-### Region Managers
-
-Regions can be added to the application by calling the `addRegions` method on
-your application instance. This method expects a single hash parameter, with
-named regions and either jQuery selectors or `RegionManager` objects. You may
-call this method as many times as you like, and it will continue adding regions
-to the app. If you specify the same name twice, last one in wins.
-
-```js
-MyApp.addRegions({
-  mainRegion: "#main-content",
-  navigationRegion: "#navigation"
-});
-
-var FooterRegion = Backbone.Marionette.RegionManager.extend({
-  el: "#footer"
-});
-
-MyApp.addRegions({footerRegion: FooterRegion});
-```
-
-Note that if you define your own `RegionManager` object, you must provide an
-`el` for it. If you don't, you will receive an runtime exception saying that
-an `el` is required.
-
-Additionally, when you pass a `RegionManager` directly into to the `addRegions`
-method, you must specify the constructor function for your region manager, not
-an instance of it.
 
 ### Adding Initializers
 
@@ -362,7 +130,251 @@ For a more detailed discussion and example of using an event aggregator with
 Backbone applications, see the blog post: [References, Routing, and The Event
 Aggregator: Coordinating Views In Backbone.js](http://lostechies.com/derickbailey/2011/07/19/references-routing-and-the-event-aggregator-coordinating-views-in-backbone-js/)
 
-### Event Binding With BindTo
+### Starting An Application
+
+Once you have your application configured, you can kick everything off by 
+calling: `MyApp.start(options)`.
+
+This function takes a single optional parameter. This parameter will be passed
+to each of your initializer functions, as well as the initialize events. This
+allows you to provide extra configuration for various parts of your app, at
+initialization/start of the app, instead of just at definition.
+
+```js
+var options = {
+  something: "some value",
+  another: "#some-selector"
+};
+
+MyApp.start(options);
+```
+
+## Marionette.RegionManager
+
+Regions can be added to the application by calling the `addRegions` method on
+your application instance. This method expects a single hash parameter, with
+named regions and either jQuery selectors or `RegionManager` objects. You may
+call this method as many times as you like, and it will continue adding regions
+to the app. If you specify the same name twice, last one in wins.
+
+```js
+MyApp.addRegions({
+  mainRegion: "#main-content",
+  navigationRegion: "#navigation"
+});
+
+var FooterRegion = Backbone.Marionette.RegionManager.extend({
+  el: "#footer"
+});
+
+MyApp.addRegions({footerRegion: FooterRegion});
+```
+
+Note that if you define your own `RegionManager` object, you must provide an
+`el` for it. If you don't, you will receive an runtime exception saying that
+an `el` is required.
+
+Additionally, when you pass a `RegionManager` directly into to the `addRegions`
+method, you must specify the constructor function for your region manager, not
+an instance of it.
+
+## Item And Collection Views
+
+The majority of the views that I write have a few things in common: rendering with
+a given template engine, storing references to model or collection events, and
+unbinding / removing DOM elements when closing the view. 
+
+To reduce the amount of code that I have to repeat in my projects, I've built
+the `ItemView` and `CollectionView` that I typically use in to Marionette. These
+two objects provide a set of default behaviors that I use most of the time, while
+providing enough touch points to easily customize a view. Of course, any of the
+methods on these views can be overridden in your own view definitions, as well.
+
+### Item View
+
+An `ItemView` is a view that represents a single item. That item may be a 
+`Backbone.Model` or may be a `Backbone.Collection`. Whichever it is, though, it
+will be treated as a single item. 
+
+#### ItemView render
+
+An item view has a `render` method built in to it. By default it uses
+underscore.js templates.
+
+The default implementation will use a template that you specify (see
+below) and serialize the model or collection for you (see below).
+
+You can provide a custom implementation of a method called
+`renderTemplate` to change template engines. For example, if you want
+to use jQuery templates, you can do this:
+
+```js
+Backbone.Marionette.ItemView.extend({
+  renderTemplate: function(template, data){
+    return $(template).tmpl(data);
+  }
+});
+```
+
+The `template` parameter is the HTML contents of the template that
+was specified in the view (see below).
+
+The `data` parameter is the serialized data for either the model or
+the collection of the view (see below).
+
+After the view has been rendered, a `onRender` method will be called.
+You can implement this in your view to provide custom code for dealing
+with the view's `el` after it has been rendered:
+
+```js
+Backbone.Marionette.ItemView.extend({
+  onRender: function(){
+    // manipulate the `el` here. it's already
+    // been rendered, and is full of the view's
+    // HTML, ready to go.
+  }
+});
+```
+
+#### ItemView template
+
+Item views should be configured with a template. The `template` attribute should
+be either a valid jQuery selector, or a function that returns a valid jQuery
+selector:
+
+```js
+MyView = Backbone.Marionette.ItemView.extend({
+  template: "#some-template"
+});
+
+AnotherView = Backbone.Marionette.ItemView.extend({
+  template: function(){
+    return $("#some-template")
+  }
+});
+
+new SomeItemView({
+  template: "#some-template"
+});
+```
+
+#### ItemView serializeData
+
+Item views will serialize a model or collection, by default, by
+calling `.toJSON` on either the model or collection. If both a model
+and collection are attached to an item view, the model will be used
+as the data source. The results of the data serialization will be passed to the template
+that is rendered. 
+
+If the serialization is a model, the results are passed in directly:
+
+```js
+var myModel = new MyModel({foo: "bar"});
+
+new MyItemView({
+  template: "#myItemTemplate",
+  model: myModel
+});
+
+MyItemView.render();
+```
+
+```html
+<script id="myItemTemplate" type="template">
+  Foo is: <%= foo %>
+</script>
+```
+
+If the serialization is a collection, the results are passed in as an 
+`items` array:
+
+```js
+var myCollection = new MyCollection([{foo: "bar"}, {foo: "baz"}]);
+
+new MyItemView({
+  template: "#myCollectionTemplate",
+  collection: myCollection
+});
+
+MyItemView.render();
+```
+
+```html
+<script id="myCollectionTemplate" type="template">
+  <% _.each(items, function(item){ %>
+    Foo is: <%= foo %>
+  <% }); %>
+</script>
+```
+
+If you need custom serialization for your data, you can provide a
+`serializeData` method on your view. It must return a valid JSON
+object, as if you had called `.toJSON` on a model or collection.
+
+```js
+Backbone.Marionette.ItemView.extend({
+  serializeData: function(){
+    return {
+      "some attribute": "some value"
+    }
+  }
+});
+```
+
+#### ItemView events
+
+ItemView extends `Marionette.BindTo`. It is recommended that you use
+the `bindTo` method to bind model and collection events. 
+
+```js
+MyView = Backbone.Marionette.ItemView.extend({
+  initialize: function(){
+    this.bindTo(this.model, "change:foo", this.modelChanged);
+    this.bindTo(this.collection, "add", this.modelAdded);
+  },
+
+  modelChanged: function(model, value){
+  },
+
+  modelAdded: function(model){
+  }
+});
+```
+
+The context (`this`) will automatically be set to the view. You can
+optionally set the context by passing in the context object as the
+4th parameter of `bindTo`.
+
+#### ItemView close
+
+ItemView implements a `close` method, which is called by the region
+managers automatically. As part of the implementation, the following
+are performed:
+
+* unbind all `bindTo` events
+* unbind all custom view events
+* unbind all DOM events
+* remove `this.el` from teh DOM
+* call an `onClose` event on the view, if one is provided
+
+By providing an `onClose` event in your view definition, you can
+run custom code for your view that is fired after your view has been
+closed and cleaned up. This lets you handle any additional clean up
+code without having to override the `close` method.
+
+```js
+Backbone.Marionette.ItemView.extend({
+  onClose: function(){
+    // custom cleanup or closing code, here
+  }
+});
+```
+
+### Collection View
+
+Not yet implemented.
+
+## Event Binding With BindTo
 
 The `BindTo` object provides event binding management and facilitates simple
 event binding and unbinding for any object that extends from `Backbone.Events`.
@@ -392,25 +404,6 @@ You can call `unbindAll` to unbind all events that were bound with the
 
 ```js
 binder.unbindAll();
-```
-
-### Starting An Application
-
-Once you have your application configured, you can kick everything off by 
-calling: `MyApp.start(options)`.
-
-This function takes a single optional parameter. This parameter will be passed
-to each of your initializer functions, as well as the initialize events. This
-allows you to provide extra configuration for various parts of your app, at
-initialization/start of the app, instead of just at definition.
-
-```js
-var options = {
-  something: "some value",
-  another: "#some-selector"
-};
-
-MyApp.start(options);
 ```
 
 ## Backbone.Marionette Example Apps

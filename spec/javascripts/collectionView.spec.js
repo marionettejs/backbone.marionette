@@ -44,6 +44,10 @@ describe("collection view", function(){
     it("should append the html for each itemView", function(){
       expect($(collectionView.el)).toHaveHtml("<span>bar</span><span>baz</span>");
     });
+
+    it("should reference each of the rendered view items", function(){
+      expect(collectionView.children.length).toBe(2);
+    });
   });
 
   describe("when override appendHtml", function(){

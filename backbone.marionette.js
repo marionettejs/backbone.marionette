@@ -153,7 +153,17 @@ Backbone.Marionette = (function(Backbone, _, $){
         model: item
       });
       view.render();
+      this.storeChild(view);
       return view.el;
+    },
+
+    // Store references to all of the child `itemView`
+    // instances so they can be managed and cleaned up, later.
+    storeChild: function(view){
+      if (!this.children){
+        this.children = [];
+      }
+      this.children.push(view);
     }
   });
 
@@ -293,6 +303,7 @@ Backbone.Marionette = (function(Backbone, _, $){
 
   // Copy the features of `BindTo` on to the views
   _.extend(Marionette.ItemView.prototype, Marionette.BindTo);
+  _.extend(Marionette.CollectionView.prototype, Marionette.BindTo);
 
   return Marionette;
 })(Backbone, _, jQuery);

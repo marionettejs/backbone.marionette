@@ -1,5 +1,15 @@
 describe("collection view", function(){
-  it("is a placeholder... need to implement the CollectionView", function(){
-    fail
+  var ItemView = Backbone.Marionette.ItemView.extend({
   });
+
+  var CollectionView = Backbone.Marionette.CollectionView.extend({
+    itemView: ItemView
+  });
+  
+  describe("when rendering a collection view", function(){
+    it("should render the specified itemView for each item", function(){
+      fail
+    });
+  });
+
 });

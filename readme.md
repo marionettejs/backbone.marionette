@@ -103,6 +103,25 @@ MyApp.bind("initialize:after", function(options){
 The `options` parameter is passed through the `start` method of the application
 object (see below).
 
+### Starting An Application
+
+Once you have your application configured, you can kick everything off by 
+calling: `MyApp.start(options)`.
+
+This function takes a single optional parameter. This parameter will be passed
+to each of your initializer functions, as well as the initialize events. This
+allows you to provide extra configuration for various parts of your app, at
+initialization/start of the app, instead of just at definition.
+
+```js
+var options = {
+  something: "some value",
+  another: "#some-selector"
+};
+
+MyApp.start(options);
+```
+
 ### Event Aggregator
 
 An event aggregator is an application level pub/sub mechanism that allows various
@@ -129,25 +148,6 @@ MyApp.vent.trigger("some:event");
 For a more detailed discussion and example of using an event aggregator with
 Backbone applications, see the blog post: [References, Routing, and The Event
 Aggregator: Coordinating Views In Backbone.js](http://lostechies.com/derickbailey/2011/07/19/references-routing-and-the-event-aggregator-coordinating-views-in-backbone-js/)
-
-### Starting An Application
-
-Once you have your application configured, you can kick everything off by 
-calling: `MyApp.start(options)`.
-
-This function takes a single optional parameter. This parameter will be passed
-to each of your initializer functions, as well as the initialize events. This
-allows you to provide extra configuration for various parts of your app, at
-initialization/start of the app, instead of just at definition.
-
-```js
-var options = {
-  something: "some value",
-  another: "#some-selector"
-};
-
-MyApp.start(options);
-```
 
 ## Marionette.RegionManager
 

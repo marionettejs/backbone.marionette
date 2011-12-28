@@ -576,6 +576,13 @@ I'm using [Docco](http://jashkenas.github.com/docco/) to generate the annotated 
 
 ## Release Notes
 
+### v0.2.0
+
+* Added `ItemView`
+* Added `CollectionView`
+* Added `BindTo`
+* Simplified the way `extend` is pulled from Backbone
+
 ### v0.1.0
 
 * Initial release

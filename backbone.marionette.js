@@ -102,7 +102,7 @@ Backbone.Marionette = (function(Backbone, _, $){
     // Default implementation uses underscore.js templates. Override
     // this method to use your own templating engine.
     renderTemplate: function(template, data){
-      return _.template(template, data);
+      return _.template(template.html(), data);
     },
 
     // Default `close` implementation, for removing a view from the
@@ -311,7 +311,7 @@ Backbone.Marionette = (function(Backbone, _, $){
       templateData = $(template);
     }
 
-    return templateData.html();
+    return templateData;
   }
 
   // Copy the `extend` function used by Backbone's classes

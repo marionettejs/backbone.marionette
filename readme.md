@@ -199,13 +199,13 @@ to use jQuery templates, you can do this:
 ```js
 Backbone.Marionette.ItemView.extend({
   renderTemplate: function(template, data){
-    return $(template).tmpl(data);
+    return template.tmpl(data);
   }
 });
 ```
 
-The `template` parameter is the HTML contents of the template that
-was specified in the view (see below).
+The `template` parameter is a jQuery object with the contents of the 
+template that was specified in the view (see below).
 
 The `data` parameter is the serialized data for either the model or
 the collection of the view (see below).

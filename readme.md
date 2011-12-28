@@ -403,6 +403,32 @@ Backbone.Marionette.CollectionView.extend({
 });
 ```
 
+### CollectionView close
+
+CollectionView implements a `close` method, which is called by the 
+region managers automatically. As part of the implementation, the 
+following are performed:
+
+* unbind all `bindTo` events
+* unbind all custom view events
+* unbind all DOM events
+* unbind all item views that were rendered
+* remove `this.el` from teh DOM
+* call an `onClose` event on the view, if one is provided
+
+By providing an `onClose` event in your view definition, you can
+run custom code for your view that is fired after your view has been
+closed and cleaned up. This lets you handle any additional clean up
+code without having to override the `close` method.
+
+```js
+Backbone.Marionette.CollectionView.extend({
+  onClose: function(){
+    // custom cleanup or closing code, here
+  }
+});
+```
+
 ## Event Binding With BindTo
 
 The `BindTo` object provides event binding management and facilitates simple

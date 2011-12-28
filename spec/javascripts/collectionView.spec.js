@@ -98,6 +98,7 @@ describe("collection view", function(){
 
       spyOn(childView, "close");
       spyOn(view, "unbind").andCallThrough();
+      spyOn(view, "unbindAll").andCallThrough();
       spyOn(view, "remove").andCallThrough();
       spyOn(view, "someCallback").andCallThrough();
       spyOn(view, "close").andCallThrough();
@@ -108,6 +109,10 @@ describe("collection view", function(){
 
     it("should close all of the child views", function(){
       expect(childView.close).toHaveBeenCalled();
+    });
+
+    it("should unbind all the bindTo events", function(){
+      expect(view.unbindAll).toHaveBeenCalled();
     });
 
     it("should unbind all collection events for the view", function(){

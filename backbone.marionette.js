@@ -160,8 +160,9 @@ Backbone.Marionette = (function(Backbone, _, $){
     // Handle cleanup and other closing needs for
     // the collection of views.
     close: function(){
-      view.unbind();
-      view.remove();
+      this.unbind();
+      this.unbindAll();
+      this.remove();
 
       if (this.children){
         _.each(this.children, function(childView){

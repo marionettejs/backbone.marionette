@@ -126,15 +126,28 @@ Backbone.Marionette = (function(Backbone, _, $){
   // A view that iterates over a Backbone.Collection
   // and renders an individual ItemView for each model.
   Marionette.CollectionView = Backbone.View.extend({
+    // Loop through all of the items and render 
+    // each of them with the specified `itemView`.
     render: function(){
       var self = this;
       var el = $(this.el);
       this.collection.each(function(item){
         var html = self.renderItem(item);
-        el.append(html);
+        self.appendHtml(el, html);
       });
     },
 
+    // Append the HTML to the collection's `el`.
+    // Override this method to do something other
+    // then `.append`.
+    appendHtml: function(el, html){
+      el.append(html);
+    },
+
+    // Render the individual item by instantiating
+    // a specifid `itemView`. Override this method
+    // to provide custom item rendering for each
+    // item in the collection.
     renderItem: function(item){
       var view = new this.itemView({
         model: item

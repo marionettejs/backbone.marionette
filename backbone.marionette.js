@@ -120,6 +120,30 @@ Backbone.Marionette = (function(Backbone, _, $){
     }
   });
 
+  // Collection View
+  // ---------------
+
+  // A view that iterates over a Backbone.Collection
+  // and renders an individual ItemView for each model.
+  Marionette.CollectionView = Backbone.View.extend({
+    render: function(){
+      var self = this;
+      var el = $(this.el);
+      this.collection.each(function(item){
+        var html = self.renderItem(item);
+        el.append(html);
+      });
+    },
+
+    renderItem: function(item){
+      var view = new this.itemView({
+        model: item
+      });
+      view.render();
+      return view.el;
+    }
+  });
+
   // BindTo: Event Binding
   // ---------------------
   

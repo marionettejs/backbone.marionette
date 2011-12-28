@@ -319,9 +319,10 @@ Backbone.Marionette = (function(Backbone, _, $){
   Marionette.RegionManager.extend = extend;
   Marionette.Application.extend = extend;
 
-  // Copy the features of `BindTo` on to the views
+  // Copy the features of `BindTo` on to these objects
   _.extend(Marionette.ItemView.prototype, Marionette.BindTo);
   _.extend(Marionette.CollectionView.prototype, Marionette.BindTo);
+  _.extend(Marionette.Application.prototype, Marionette.BindTo);
 
   return Marionette;
 })(Backbone, _, jQuery);

@@ -337,6 +337,7 @@ Backbone.Marionette = (function(Backbone, _, $){
       var template = this.templates[templateId];
       if (!template){
         template = this.loadTemplate(templateId);
+        this.templates[templateId] = template;
       }
       return template;
     },
@@ -344,6 +345,24 @@ Backbone.Marionette = (function(Backbone, _, $){
     // Load a template from the DOM.
     loadTemplate: function(templateId){
       return $(templateId);
+    },
+
+    // Clear templates from the cache. If no arguments
+    // are specified, clears all templates:
+    // `clear()`
+    //
+    // If arguments are specified, clears each of the 
+    // specified templates from the cache:
+    // `clear("#t1", "#t2", "...")`
+    clear: function(){
+      var length = arguments.length;
+      if (length > 1){
+        for(var i=0; i<length; i++){
+          delete this.templates[arguments[i]];
+        }
+      } else {
+        this.templates = {};
+      }
     }
   }
 

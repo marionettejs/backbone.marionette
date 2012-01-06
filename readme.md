@@ -29,6 +29,7 @@ There are only a few pieces to the marionette at this point:
 * **Backbone.Marionette.CollectionView**: A view that iterates over a collection, and renders individual `ItemView` instances for each model
 * **Backbone.Marionette.RegionManager**: Manage visual regions of your application, including display and removal of content
 * **Backbone.Marionette.BindTo**: An event binding manager, to facilitate binding and unbinding of events
+* **Backbone.Marionette.TemplateManager**: Cache templates that are stored in `<script>` blocks, for faster subsequent access
 * **Application.vent**: Every instance of `Application` comes with a `.vent` property, an event aggregator
 
 The `Application`, `RegionManager`, `ItemView` and `CollectionView` use the 

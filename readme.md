@@ -380,6 +380,13 @@ Backbone.Marionette.CollectionView.extend({
 });
 ```
 
+### CollectionView: Add / Remove Items
+
+The collection view binds to the "add" and "remove" events of the
+collection that is specified. It will render any model that is
+added to the collection and add to the DOM automatically. It will
+also close any view for a model that is removed from the collection.
+
 ### CollectionView's appendHtml
 
 By default the collection view will call jQuery's `.append` to

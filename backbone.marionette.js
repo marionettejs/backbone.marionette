@@ -61,6 +61,12 @@ Backbone.Marionette = (function(Backbone, _, $){
   // with underscore.js templates, serializing the view's model or collection,
   // and calling several methods on extended views, such as `onRender`.
   Marionette.ItemView = Backbone.View.extend({
+    constructor: function(){
+      var args = slice.call(arguments);
+      Backbone.View.prototype.constructor.apply(this, args);
+
+      this.el = $(this.el);
+    },
 
     // Serialize the model or collection for the view. If a model is
     // found, `.toJSON()` is called. If a collection is found, `.toJSON()`
@@ -92,11 +98,12 @@ Backbone.Marionette = (function(Backbone, _, $){
       var data = this.serializeData();
       var html = this.renderTemplate(template, data);
 
-      $(this.el).html(html);
+      this.el.html(html);
 
       if (this.onRender){
         this.onRender();
       }
+
     },
 
     // Default implementation uses underscore.js templates. Override
@@ -126,15 +133,38 @@ Backbone.Marionette = (function(Backbone, _, $){
   // A view that iterates over a Backbone.Collection
   // and renders an individual ItemView for each model.
   Marionette.CollectionView = Backbone.View.extend({
+    constructor: function(){
+      var args = slice.call(arguments);
+      Backbone.View.prototype.constructor.apply(this, arguments);
+
+      this.el = $(this.el);
+
+      _.bindAll(this, "addChildView");
+      this.collection.bind("add", this.addChildView, this);
+      this.collection.bind("remove", this.removeChildView, this);
+    },
+
     // Loop through all of the items and render 
     // each of them with the specified `itemView`.
     render: function(){
       var self = this;
-      var el = $(this.el);
-      this.collection.each(function(item){
-        var html = self.renderItem(item);
-        self.appendHtml(el, html);
-      });
+      this.collection.each(this.addChildView);
+    },
+
+    // Render the child item's view and add it to the
+    // HTML for the collection view.
+    addChildView: function(item){
+      var html = this.renderItem(item);
+      this.appendHtml(this.el, html);
+    },
+
+    // Remove the child view and close it
+    removeChildView: function(item){
+      var view = this.children[item.cid];
+      if (view){
+        view.close();
+        delete this.children[item.cid];
+      }
     },
 
     // Append the HTML to the collection's `el`.
@@ -157,6 +187,15 @@ Backbone.Marionette = (function(Backbone, _, $){
       return view.el;
     },
 
+    // Store references to all of the child `itemView`
+    // instances so they can be managed and cleaned up, later.
+    storeChild: function(view){
+      if (!this.children){
+        this.children = {};
+      }
+      this.children[view.model.cid] = view;
+    },
+    
     // Handle cleanup and other closing needs for
     // the collection of views.
     close: function(){
@@ -173,15 +212,6 @@ Backbone.Marionette = (function(Backbone, _, $){
       if (this.onClose){
         this.onClose();
       }
-    },
-
-    // Store references to all of the child `itemView`
-    // instances so they can be managed and cleaned up, later.
-    storeChild: function(view){
-      if (!this.children){
-        this.children = [];
-      }
-      this.children.push(view);
     }
   });
 
@@ -193,9 +223,8 @@ Backbone.Marionette = (function(Backbone, _, $){
   // unbinding events, even with anonymous callback functions,
   // easy. 
   //
-  // Thanks to Johnny Oshika and ThoughtBot for this code.
+  // Thanks to Johnny Oshika for this code.
   // http://stackoverflow.com/questions/7567404/backbone-js-repopulate-or-recreate-the-view/7607853#7607853
-  // https://workshops.thoughtbot.com/backbone-js-on-rails
   Marionette.BindTo = {
     // Store the event binding in array so it can be unbound
     // easily, at a later point in time.
@@ -295,6 +324,9 @@ Backbone.Marionette = (function(Backbone, _, $){
 
   // Helpers
   // -------
+
+  // For slicing `arguments` in functions
+  var slice = Array.prototype.slice;
   
   // Retrieve the template from the call's context. The
   // `template` attribute can either be a function that

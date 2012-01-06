@@ -6,8 +6,9 @@ describe("collection view", function(){
   });
 
   var ItemView = Backbone.Marionette.ItemView.extend({
+    tagName: "span",
     render: function(){
-      this.el = "<span>" + this.model.get("foo") + "</span>";
+      this.el.html(this.model.get("foo"));
     }
   });
 
@@ -56,7 +57,34 @@ describe("collection view", function(){
     });
 
     it("should reference each of the rendered view items", function(){
-      expect(collectionView.children.length).toBe(2);
+      expect(_.size(collectionView.children)).toBe(2);
+    });
+  });
+
+  describe("when a model is added to the collection", function(){
+    var collectionView;
+    var collection;
+    var childView;
+    var model;
+
+    beforeEach(function(){
+      collection = new Collection();
+      view = new CollectionView({
+        itemView: ItemView,
+        collection: collection
+      });
+      view.render();
+
+      model = new Model({foo: "bar"});
+      collection.add(model);
+    });
+
+    it("should add the model to the list", function(){
+      expect(_.size(view.children)).toBe(1);
+    });
+
+    it("should render the model in to the DOM", function(){
+      expect($(view.el)).toHaveText("bar");
     });
   });
 
@@ -79,10 +107,43 @@ describe("collection view", function(){
     });
   });
 
+  describe("when a model is removed from the collection", function(){
+    var collectionView;
+    var collection;
+    var childView;
+    var model;
+
+    beforeEach(function(){
+      model = new Model({foo: "bar"});
+      collection = new Collection();
+      collection.add(model);
+
+      view = new CollectionView({
+        itemView: ItemView,
+        collection: collection
+      });
+      view.render();
+
+      childView = view.children[model.cid];
+      spyOn(childView, "close").andCallThrough();
+
+      collection.remove(model);
+    });
+
+    it("should close the model's view", function(){
+      expect(childView.close).toHaveBeenCalled();
+    });
+
+    it("should remove the model-view's HTML", function(){
+      expect($(view.el).children().length).toBe(0);
+    });
+  });
+
   describe("when closing a collection view", function(){
     var collectionView;
     var collection;
     var childView;
+    var childModel;
 
     beforeEach(function(){
       collection = new Collection([{foo: "bar"}, {foo: "baz"}]);
@@ -92,7 +153,9 @@ describe("collection view", function(){
       });
       view.render();
 
-      childView = view.children[0];
+
+      childModel = collection.at(0);
+      childView = view.children[childModel.cid];
 
       view.bindTo(collection, "foo", view.collectionChange);
 

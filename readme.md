@@ -1,6 +1,6 @@
 Make your Backbone.js apps dance with a composite application architecture!
 
-## Backbone.Marionette
+# Backbone.Marionette
 
 Backbone.Marionette is a composite application libarary for Backbone.js that
 aims to simplify the construction of large scale JavaScript application through
@@ -20,7 +20,7 @@ You can download the raw source code above. For the development version, grab
 
 For a good time, call.. err... read through [the annotated source code](http://derickbailey.github.com/backbone.marionette/docs/backbone.marionette.html).
 
-## Marionette's Pieces
+# Marionette's Pieces
 
 There are only a few pieces to the marionette at this point:
 
@@ -462,11 +462,102 @@ You can call `unbindAll` to unbind all events that were bound with the
 binder.unbindAll();
 ```
 
-## Backbone.Marionette Example Apps
+# Backbone.Marionette.TemplateManager
+
+The `TemplateManager` provides a cache for retrieving templates
+from <script> blocks in your HTML. This will improve
+the speed of subsequent calls to get a template.
+
+## Basic Usage
+
+To use the `TemplateManager`, call it directly. It is not
+instantiated like other Marionette objects.
+
+## Get A Template
+
+Templates are retrieved by CSS-selector `id`, by default:
+
+```js
+Backbone.Marionette.TemplateManager.get("#my-template");
+```
+
+Making multiple calls to get the same template will retrieve the
+template from the cache on subsequence calls:
+
+```js
+Backbone.Marionette.TemplateManager.get("#my-template");
+Backbone.Marionette.TemplateManager.get("#my-template");
+Backbone.Marionette.TemplateManager.get("#my-template");
+```
+
+## Override Template Retrieval
+
+The default template retrieval is to select the template contents
+from the DOM using jQuery. If you wish to change the way this
+works, you can override the `loadTemplate` method on the
+`TemplateManager` object.
+
+For example, if you want to load templates asychronously from the
+server, instead of from the DOM, you could replace `loadTemplate`
+with a function like this:
+
+```js
+Backbone.Marionette.TemplateManager.loadtemplate = function(templateId){
+  $.get(templateId + ".html", function(template){
+    // store the template in the cache.
+    this.templates[templateId] = template;
+  });
+}
+```
+
+This will use jQuery to asynchronously retrieve the template from
+the server, and then store the retrieved template in the template
+manager's cache (be sure to use the `templateId` parameter as the 
+key for the cache).
+
+## Clear Items From cache
+
+You can clear one or more, or all items from the cache using the
+`clear` method. Clearing a template from the cache will force it
+to re-load from the DOM (or from the overriden `loadTemplate`
+function) the next time it is retrieved.
+
+If you do not specify any parameters, all items will be cleared
+from the cache:
+
+```js
+Backbone.Marionette.TemplateManager.get("#my-template");
+Backbone.Marionette.TemplateManager.get("#this-template");
+Backbone.Marionette.TemplateManager.get("#that-template");
+
+// clear all templates from the cache
+Backbone.Marionette.TemplateManager.clear()
+```
+
+If you specify one or more parameters, these parameters are assumed
+to be the `templateId` used for loading / caching:
+
+```js
+Backbone.Marionette.TemplateManager.get("#my-template");
+Backbone.Marionette.TemplateManager.get("#this-template");
+Backbone.Marionette.TemplateManager.get("#that-template");
+
+// clear 2 of 3 templates from the cache
+Backbone.Marionette.TemplateManager.clear("#my-template", "#this-template")
+```
+
+## Built In To ItemView
+
+If you're using `Marionette.ItemView`, you don't need to manually
+call the `TemplateManager`. Just specify the `template` attribute
+of your view as a jQuery selector, and the `ItemView` will use 
+the template manager by default.
+
+# Backbone.Marionette Example Apps
 
 There are several sample apps available.
 
-### BBCloneMail
+## BBCloneMail
 
 I'm building a medium sized app to demonstrate Backbone.Marionette. It's a simple
 clone of a GMail like interface, with email and contact management. There is no
@@ -481,7 +572,7 @@ And you can find the source code at:
 
 http://github.com/derickbailey/bbclonemail
 
-### Steve Gentile' Contact Manager
+## Steve Gentile' Contact Manager
 
 Steve Gentile is building two versions of the same contact manager app. One of
 them runs on NodeJS as a back-end, and the other runs on ASP.NET MVC as the
@@ -495,7 +586,7 @@ And the ASP.NET MVC version is here:
 
 https://github.com/sgentile/BackboneContacts
 
-### Quick & Dirty Sample
+## Quick & Dirty Sample
 
 Here's a quick and dirty example to show how to use some of the pieces of
 Marionette:
@@ -550,7 +641,7 @@ $(function(){
 });
 ```
 
-## Requirements
+# Requirements
 
 Backbone.Marionette is built and tested with the following libraries:
 
@@ -561,7 +652,7 @@ Backbone.Marionette is built and tested with the following libraries:
 You may not need to be up to date with these exact versions. However, there is
 no guarantee that the code will work correctly if you are not.
 
-### Test Suite Requirements
+## Test Suite Requirements
 
 Backbone.Marionette is also tested with the Jasmine JavaScript test utility,
 using the Jasmine Ruby gem. 
@@ -571,26 +662,33 @@ latest RubyGems. Install the 'bundler' gem and then run 'bunle install' from
 the project's root folder. Then run `rake jasmine` to run the test suite, and
 load up http://localhost:8888 to see the test suite in action.
 
-### Annotated Source Code Generation
+## Annotated Source Code Generation
 
 I'm using [Docco](http://jashkenas.github.com/docco/) to generate the annotated source code.
 
-## Release Notes
+# Release Notes
 
-### v0.2.0
+## v0.2.1
+
+* Added `TemplateManager` to cache templates
+* CollectionView binds to add/remove and updates rendering appropriately
+* ItemView uses `TemplateManager` for template retrieval
+* ItemView and CollectionView set `this.el = $(this.el)` in constructor
+
+## v0.2.0
 
 * Added `ItemView`
 * Added `CollectionView`
 * Added `BindTo`
 * Simplified the way `extend` is pulled from Backbone
 
-### v0.1.0
+## v0.1.0
 
 * Initial release
 * Created documentation
 * Generated annotated source code
 
-## Legal Mumbo Jumbo (MIT License)
+# Legal Mumbo Jumbo (MIT License)
 
 Copyright (c) 2011 Derick Bailey, Muted Solutions, LLC
 

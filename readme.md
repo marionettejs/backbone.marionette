@@ -472,7 +472,7 @@ binder.unbindAll();
 # Backbone.Marionette.TemplateManager
 
 The `TemplateManager` provides a cache for retrieving templates
-from <script> blocks in your HTML. This will improve
+from script blocks in your HTML. This will improve
 the speed of subsequent calls to get a template.
 
 ## Basic Usage

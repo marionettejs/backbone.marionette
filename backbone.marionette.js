@@ -1,4 +1,4 @@
-// Backbone.Marionette v0.2.0
+// Backbone.Marionette v0.2.1
 //
 // Copyright (C)2011 Derick Bailey, Muted Solutions, LLC
 // Distributed Under MIT License
@@ -9,7 +9,7 @@
 Backbone.Marionette = (function(Backbone, _, $){
   var Marionette = {};
 
-  Marionette.version = "0.2.0";
+  Marionette.version = "0.2.1";
 
   // Region Manager
   // --------------
@@ -322,6 +322,31 @@ Backbone.Marionette = (function(Backbone, _, $){
     }
   });
 
+  // Template Manager
+  // ----------------
+  
+  // Manage templates stored in `<script>` blocks,
+  // caching them for faster access.
+  Marionette.TemplateManager = {
+    templates: {},
+
+    // Get the specified template by id. Either
+    // retrieves the cached version, or loads it
+    // from the DOM.
+    get: function(templateId){
+      var template = this.templates[templateId];
+      if (!template){
+        template = this.loadTemplate(templateId);
+      }
+      return template;
+    },
+
+    // Load a template from the DOM.
+    loadTemplate: function(templateId){
+      return $(templateId);
+    }
+  }
+
   // Helpers
   // -------
 
@@ -340,7 +365,7 @@ Backbone.Marionette = (function(Backbone, _, $){
     if (_.isFunction(template)){
       templateData = template.call(this);
     } else {
-      templateData = $(template);
+      templateData = Marionette.TemplateManager.get(template);
     }
 
     return templateData;

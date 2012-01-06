@@ -94,7 +94,7 @@ Backbone.Marionette = (function(Backbone, _, $){
     // Render the view, defaulting to underscore.js templates.
     // You can override this in your view definition.
     render: function(){
-      var template = getTemplate.call(this);
+      var template = this.getTemplate();
       var data = this.serializeData();
       var html = this.renderTemplate(template, data);
 
@@ -358,18 +358,23 @@ Backbone.Marionette = (function(Backbone, _, $){
   // returns a jQuery object, or a jQuery selector string 
   // directly. The string value must be a valid jQuery 
   // selector.  
-  var getTemplate = function(){
-    var template = this.template;
-    var templateData;
+  var templateMixin = {
+    getTemplate: function(){
+      var template = this.template;
+      var templateData;
 
-    if (_.isFunction(template)){
-      templateData = template.call(this);
-    } else {
-      templateData = Marionette.TemplateManager.get(template);
+      if (_.isFunction(template)){
+        templateData = template.call(this);
+      } else {
+        templateData = Marionette.TemplateManager.get(template);
+      }
+
+      return templateData;
     }
-
-    return templateData;
   }
+  // Copy the 'getTemplate' function on to the views
+  _.extend(Marionette.ItemView.prototype, templateMixin);
+  _.extend(Marionette.CollectionView.prototype, templateMixin);
 
   // Copy the `extend` function used by Backbone's classes
   var extend = Backbone.View.extend;

@@ -482,7 +482,7 @@ instantiated like other Marionette objects.
 
 ## Get A Template
 
-Templates are retrieved by CSS-selector `id`, by default:
+Templates are retrieved by jQuery selector, by default:
 
 ```js
 Backbone.Marionette.TemplateManager.get("#my-template");

@@ -509,10 +509,11 @@ server, instead of from the DOM, you could replace `loadTemplate`
 with a function like this:
 
 ```js
-Backbone.Marionette.TemplateManager.loadtemplate = function(templateId){
+Backbone.Marionette.TemplateManager.loadTemplate = function(templateId){
+  var that = this;
   $.get(templateId + ".html", function(template){
     // store the template in the cache.
-    this.templates[templateId] = template;
+    that.templates[templateId] = template;
   });
 }
 ```

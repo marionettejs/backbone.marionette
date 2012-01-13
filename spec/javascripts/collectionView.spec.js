@@ -145,6 +145,8 @@ describe("collection view", function(){
     var childModel;
 
     beforeEach(function(){
+      spyOn(EventedView.prototype, "removeChildView").andCallThrough();
+
       collection = new Collection([{foo: "bar"}, {foo: "baz"}]);
       collectionView = new EventedView({
         template: "#itemTemplate",
@@ -169,6 +171,7 @@ describe("collection view", function(){
       collectionView.close();
 
       collection.trigger("foo");
+      collection.remove(childModel);
     });
 
     it("should close all of the child views", function(){
@@ -181,6 +184,7 @@ describe("collection view", function(){
 
     it("should unbind all collection events for the view", function(){
       expect(collectionView.someCallback).not.toHaveBeenCalled();
+      expect(collectionView.removeChildView).not.toHaveBeenCalled();
     });
 
     it("should unbind any listener to custom view events", function(){

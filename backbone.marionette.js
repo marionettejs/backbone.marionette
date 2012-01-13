@@ -140,8 +140,8 @@ Backbone.Marionette = (function(Backbone, _, $){
       this.el = $(this.el);
 
       _.bindAll(this, "addChildView");
-      this.collection.bind("add", this.addChildView, this);
-      this.collection.bind("remove", this.removeChildView, this);
+      this.bindTo(this.collection, "add", this.addChildView, this);
+      this.bindTo(this.collection, "remove", this.removeChildView, this);
     },
 
     // Loop through all of the items and render 

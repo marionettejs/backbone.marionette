@@ -676,6 +676,12 @@ I'm using [Docco](http://jashkenas.github.com/docco/) to generate the annotated 
 
 # Release Notes
 
+## v0.2.2
+
+* Fixed binding events in the collection view to use `bindTo` (#6)
+* Updated specs for collection view
+* Documentation fixes (#7)
+
 ## v0.2.1
 
 * Added `TemplateManager` to cache templates

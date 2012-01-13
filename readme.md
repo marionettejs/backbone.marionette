@@ -452,14 +452,14 @@ var model = new MyModel();
 var handler = {
   doIt: function(){}
 }
-binder.bind(model, "change:foo", handler.doIt);
+binder.bindTo(model, "change:foo", handler.doIt);
 ```
 
 You can optionally specify a 4th parameter as the context in which the callback
 method for the event will be executed:
 
 ```js
-binder.bind(model, "change:foo", someCallback, someContext);
+binder.bindTo(model, "change:foo", someCallback, someContext);
 ```
 
 You can call `unbindAll` to unbind all events that were bound with the
@@ -607,10 +607,10 @@ MyApp = new Backbone.Marionette.Application({
 });
 
 // add a region to the app
-myRegion = Backbone.Marionette.Region.extend({
+myRegion = Backbone.Marionette.RegionManager.extend({
   el: "#my-region"
 });
-MyApp.addRegion(myRegion: MyRegion);
+MyApp.addRegions({ myRegion: MyRegion });
 
 // define some functionality for the app
 (function(MyApp, Backbone){

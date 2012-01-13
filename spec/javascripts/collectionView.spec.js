@@ -64,27 +64,26 @@ describe("collection view", function(){
   describe("when a model is added to the collection", function(){
     var collectionView;
     var collection;
-    var childView;
     var model;
 
     beforeEach(function(){
       collection = new Collection();
-      view = new CollectionView({
+      collectionView = new CollectionView({
         itemView: ItemView,
         collection: collection
       });
-      view.render();
+      collectionView.render();
 
       model = new Model({foo: "bar"});
       collection.add(model);
     });
 
     it("should add the model to the list", function(){
-      expect(_.size(view.children)).toBe(1);
+      expect(_.size(collectionView.children)).toBe(1);
     });
 
     it("should render the model in to the DOM", function(){
-      expect($(view.el)).toHaveText("bar");
+      expect($(collectionView.el)).toHaveText("bar");
     });
   });
 
@@ -118,13 +117,13 @@ describe("collection view", function(){
       collection = new Collection();
       collection.add(model);
 
-      view = new CollectionView({
+      collectionView = new CollectionView({
         itemView: ItemView,
         collection: collection
       });
-      view.render();
+      collectionView.render();
 
-      childView = view.children[model.cid];
+      childView = collectionView.children[model.cid];
       spyOn(childView, "close").andCallThrough();
 
       collection.remove(model);
@@ -135,7 +134,7 @@ describe("collection view", function(){
     });
 
     it("should remove the model-view's HTML", function(){
-      expect($(view.el).children().length).toBe(0);
+      expect($(collectionView.el).children().length).toBe(0);
     });
   });
 
@@ -147,27 +146,29 @@ describe("collection view", function(){
 
     beforeEach(function(){
       collection = new Collection([{foo: "bar"}, {foo: "baz"}]);
-      view = new EventedView({
+      collectionView = new EventedView({
         template: "#itemTemplate",
         collection: collection
       });
-      view.render();
+      collectionView.render();
 
 
       childModel = collection.at(0);
-      childView = view.children[childModel.cid];
+      childView = collectionView.children[childModel.cid];
 
-      view.bindTo(collection, "foo", view.collectionChange);
+      collectionView.bindTo(collection, "foo", collectionView.someCallback);
 
       spyOn(childView, "close");
-      spyOn(view, "unbind").andCallThrough();
-      spyOn(view, "unbindAll").andCallThrough();
-      spyOn(view, "remove").andCallThrough();
-      spyOn(view, "someCallback").andCallThrough();
-      spyOn(view, "close").andCallThrough();
-      spyOn(view, "onClose").andCallThrough();
+      spyOn(collectionView, "unbind").andCallThrough();
+      spyOn(collectionView, "unbindAll").andCallThrough();
+      spyOn(collectionView, "remove").andCallThrough();
+      spyOn(collectionView, "someCallback").andCallThrough();
+      spyOn(collectionView, "close").andCallThrough();
+      spyOn(collectionView, "onClose").andCallThrough();
 
-      view.close();
+      collectionView.close();
+
+      collection.trigger("foo");
     });
 
     it("should close all of the child views", function(){
@@ -175,23 +176,23 @@ describe("collection view", function(){
     });
 
     it("should unbind all the bindTo events", function(){
-      expect(view.unbindAll).toHaveBeenCalled();
+      expect(collectionView.unbindAll).toHaveBeenCalled();
     });
 
     it("should unbind all collection events for the view", function(){
-      expect(view.someCallback).not.toHaveBeenCalled();
+      expect(collectionView.someCallback).not.toHaveBeenCalled();
     });
 
     it("should unbind any listener to custom view events", function(){
-      expect(view.unbind).toHaveBeenCalled();
+      expect(collectionView.unbind).toHaveBeenCalled();
     });
 
     it("should remove the view's EL from the DOM", function(){
-      expect(view.remove).toHaveBeenCalled();
+      expect(collectionView.remove).toHaveBeenCalled();
     });
 
     it("should call `onClose` if provided", function(){
-      expect(view.onClose).toHaveBeenCalled();
+      expect(collectionView.onClose).toHaveBeenCalled();
     });
   });
 });

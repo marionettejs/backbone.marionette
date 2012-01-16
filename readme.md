@@ -676,6 +676,11 @@ I'm using [Docco](http://jashkenas.github.com/docco/) to generate the annotated 
 
 # Release Notes
 
+## v0.2.3
+
+* Fixed global variable leaks
+* Removed declared, but unused variables
+
 ## v0.2.2
 
 * Fixed binding events in the collection view to use `bindTo` (#6)

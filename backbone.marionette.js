@@ -134,7 +134,6 @@ Backbone.Marionette = (function(Backbone, _, $){
   // and renders an individual ItemView for each model.
   Marionette.CollectionView = Backbone.View.extend({
     constructor: function(){
-      var args = slice.call(arguments);
       Backbone.View.prototype.constructor.apply(this, arguments);
 
       this.el = $(this.el);
@@ -147,7 +146,6 @@ Backbone.Marionette = (function(Backbone, _, $){
     // Loop through all of the items and render 
     // each of them with the specified `itemView`.
     render: function(){
-      var self = this;
       this.collection.each(this.addChildView);
     },
 
@@ -295,14 +293,14 @@ Backbone.Marionette = (function(Backbone, _, $){
 
       for(var region in regions){
         if (regions.hasOwnProperty(region)){
-          regionValue = regions[region];
+          var regionValue = regions[region];
     
           if (typeof regionValue === "string"){
             appRegions[region] = Marionette.RegionManager.extend({
               el: regionValue
             });
           } else {
-            appRegions[region] = regionValue
+            appRegions[region] = regionValue;
           }
 
         }
@@ -364,7 +362,7 @@ Backbone.Marionette = (function(Backbone, _, $){
         this.templates = {};
       }
     }
-  }
+  };
 
   // Helpers
   // -------
@@ -390,7 +388,7 @@ Backbone.Marionette = (function(Backbone, _, $){
 
       return templateData;
     }
-  }
+  };
   // Copy the 'getTemplate' function on to the views
   _.extend(Marionette.ItemView.prototype, templateMixin);
   _.extend(Marionette.CollectionView.prototype, templateMixin);

@@ -104,6 +104,7 @@ Backbone.Marionette = (function(Backbone, _, $){
         this.onRender();
       }
 
+      return this;
     },
 
     // Default implementation uses underscore.js templates. Override

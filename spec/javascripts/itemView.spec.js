@@ -50,17 +50,22 @@ describe("item view rendering", function(){
 
   describe("after rendering", function(){
     var view;
+    var renderResult;
 
     beforeEach(function(){
       view = new OnRenderView({});
       
-      spyOn(view, "onRender");
+      spyOn(view, "onRender").andCallThrough();
 
-      view.render();
+      renderResult = view.render();
     });
 
     it("should call an `onRender` method on the view", function(){
       expect(view.onRender).toHaveBeenCalled();
+    });
+
+    it("should return the view", function(){
+      expect(renderResult).toBe(view);
     });
   });
 

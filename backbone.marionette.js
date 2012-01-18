@@ -147,6 +147,9 @@ Backbone.Marionette = (function(Backbone, _, $){
     // each of them with the specified `itemView`.
     render: function(){
       this.collection.each(this.addChildView);
+      if (this.onRender){
+        this.onRender();
+      }
     },
 
     // Render the child item's view and add it to the

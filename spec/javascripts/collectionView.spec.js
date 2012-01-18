@@ -13,7 +13,9 @@ describe("collection view", function(){
   });
 
   var CollectionView = Backbone.Marionette.CollectionView.extend({
-    itemView: ItemView
+    itemView: ItemView,
+
+    onRender: function(){}
   });
   
   var EventedView = Backbone.Marionette.CollectionView.extend({
@@ -44,6 +46,7 @@ describe("collection view", function(){
       });
 
       spyOn(collectionView, "renderItem").andCallThrough();
+      spyOn(collectionView, "onRender").andCallThrough();
 
       collectionView.render();
     });
@@ -58,6 +61,10 @@ describe("collection view", function(){
 
     it("should reference each of the rendered view items", function(){
       expect(_.size(collectionView.children)).toBe(2);
+    });
+
+    it("should call 'onRender' after rendering", function(){
+      expect(collectionView.onRender).toHaveBeenCalled();
     });
   });
 

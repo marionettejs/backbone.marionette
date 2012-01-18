@@ -366,6 +366,10 @@ specified collection, render each of them using a specified `itemView`,
 then append the results of the item view's `el` to the collection view's
 `el`.
 
+After the view has been rendered, a `onRender` method will be called.
+You can implement this in your view to provide custom code for dealing
+with the view's `el` after it has been rendered:
+
 ### CollectionView's itemView
 
 Specify an `itemView` in your collection view definition. This must be
@@ -675,6 +679,11 @@ load up http://localhost:8888 to see the test suite in action.
 I'm using [Docco](http://jashkenas.github.com/docco/) to generate the annotated source code.
 
 # Release Notes
+
+## v0.2.4
+
+* Return `this` (the view itself) from `ItemView` and `CollectionView` `render` method
+* Call `onRender` after the `CollectionView` has rendered itself
 
 ## v0.2.3
 

@@ -150,6 +150,7 @@ Backbone.Marionette = (function(Backbone, _, $){
       if (this.onRender){
         this.onRender();
       }
+      return this;
     },
 
     // Render the child item's view and add it to the

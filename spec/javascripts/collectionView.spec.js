@@ -39,6 +39,7 @@ describe("collection view", function(){
   describe("when rendering a collection view", function(){
     var collection = new Collection([{foo: "bar"}, {foo: "baz"}]);
     var collectionView;
+    var renderResult;
 
     beforeEach(function(){
       collectionView = new CollectionView({
@@ -48,7 +49,7 @@ describe("collection view", function(){
       spyOn(collectionView, "renderItem").andCallThrough();
       spyOn(collectionView, "onRender").andCallThrough();
 
-      collectionView.render();
+      renderResult = collectionView.render();
     });
 
     it("should render the specified itemView for each item", function(){
@@ -65,6 +66,10 @@ describe("collection view", function(){
 
     it("should call 'onRender' after rendering", function(){
       expect(collectionView.onRender).toHaveBeenCalled();
+    });
+
+    it("should return the view after rendering", function(){
+      expect(renderResult).toBe(collectionView);
     });
   });
 

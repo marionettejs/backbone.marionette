@@ -728,6 +728,7 @@ I'm using [Docco](http://jashkenas.github.com/docco/) to generate the annotated 
 ## v0.2.5
 
 * Added `AppRouter`, to reduce boilerplate routers down to simple configuration
+* Now works with either jQuery, Zepto, or enter.js
 
 ## v0.2.4
 

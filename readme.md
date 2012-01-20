@@ -184,13 +184,13 @@ myObj = {
   }
 };
 
-new MyRoter({
+new MyRouter({
   controller: myObj
 });
 ```
 
-The object that is used as a controller has no requirements, other than it will contain methods that 
-you specify in your `appRoutes`. 
+The object that is used as the `controller` has no requirements, other than it will 
+contain the methods that you specified in the `appRoutes`.
 
 It is reocmmended that you divide your controller objects in to smaller peices of related functionality
 and have multiple routers / controllers, instead of just one giant router and controller.

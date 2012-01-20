@@ -458,4 +458,4 @@ Backbone.Marionette = (function(Backbone, _, $){
   _.extend(Marionette.Application.prototype, Marionette.BindTo);
 
   return Marionette;
-})(Backbone, _, jQuery);
+})(Backbone, _, window.jQuery || window.Zepto || window.ender);

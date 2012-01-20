@@ -725,6 +725,10 @@ I'm using [Docco](http://jashkenas.github.com/docco/) to generate the annotated 
 
 # Release Notes
 
+## v0.2.5
+
+* Added `AppRouter`, to reduce boilerplate routers down to simple configuration
+
 ## v0.2.4
 
 * Return `this` (the view itself) from `ItemView` and `CollectionView` `render` method

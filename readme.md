@@ -292,6 +292,8 @@ new SomeItemView({
 });
 ```
 
+If no template is specified, an error will be throwing saying so.
+
 ### ItemView serializeData
 
 Item views will serialize a model or collection, by default, by
@@ -759,6 +761,7 @@ I'm using [Docco](http://jashkenas.github.com/docco/) to generate the annotated 
 * Added `AppRouter`, to reduce boilerplate routers down to simple configuration
 * `CollectionView` can be treated as a composite view, rendering an `model` and a `collection` of models
 * Now works with either jQuery, Zepto, or enter.js
+* `ItemView` will throw an error is no template is specified
 
 ## v0.2.4
 

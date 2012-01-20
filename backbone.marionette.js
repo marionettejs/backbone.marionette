@@ -113,6 +113,12 @@ Backbone.Marionette = (function(Backbone, _, $){
     // Default implementation uses underscore.js templates. Override
     // this method to use your own templating engine.
     renderTemplate: function(template, data){
+      if (!template || template.length === 0){
+        var err = new Error("A template must be specified");
+        err.name = "NoTemplateError";
+        throw err;
+      }
+
       return _.template(template.html(), data);
     },
 
@@ -130,12 +136,6 @@ Backbone.Marionette = (function(Backbone, _, $){
         templateData = template.call(this);
       } else {
         templateData = Marionette.TemplateManager.get(template);
-      }
-
-      if (!templateData || templateData.length === 0){
-        var err = new Error("A template must be specified");
-        err.name = "NoTemplateError";
-        throw err;
       }
 
       return templateData;
@@ -163,6 +163,7 @@ Backbone.Marionette = (function(Backbone, _, $){
   // and renders an individual ItemView for each model.
   Marionette.CollectionView = Backbone.View.extend({
     itemView: Marionette.ItemView,
+    modelView: Marionette.ItemView,
 
     constructor: function(){
       Backbone.View.prototype.constructor.apply(this, arguments);
@@ -191,13 +192,13 @@ Backbone.Marionette = (function(Backbone, _, $){
     // a treeview.
     renderModel: function(){
       if (this.model){
-        var itemView = new Marionette.ItemView({
+        var itemView = new this.modelView({
           model: this.model,
           template: this.template
         });
         itemView.render();
 
-        this.el.append(itemView.el.html());
+        this.el.append(itemView.el);
       }
     },
 

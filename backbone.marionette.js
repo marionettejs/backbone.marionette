@@ -255,6 +255,56 @@ Backbone.Marionette = (function(Backbone, _, $){
     }
   };
 
+  // AppRouter
+  // ---------
+
+  // Reduce the boilerplate code of handling route events
+  // and then calling a single method on another object.
+  // Have your routers configured to call the method on
+  // your object, directly.
+  //
+  // Configure an AppRouter with `appRoutes`.
+  //
+  // App routers can only take one `controller` object. 
+  // It is reocmmended that you divide your controller
+  // objects in to smaller peices of related functionality
+  // and have multiple routers / controllers, instead of
+  // just one giant router and controller.
+  //
+  // You can also add standard routes to an AppRouter.
+  
+  Marionette.AppRouter = Backbone.Router.extend({
+
+    constructor: function(options){
+      Backbone.Router.prototype.constructor.call(this, options);
+
+      if (this.appRoutes){
+        this.processAppRoutes(options.controller, this.appRoutes);
+      }
+    },
+
+    processAppRoutes: function(app, appRoutes){
+      var method, methodName;
+      var route, routesLength;
+      var routes = [];
+      var router = this;
+
+      for(route in appRoutes){
+        routes.unshift([route, appRoutes[route]]);
+      }
+
+      routesLength = routes.length;
+      for (var i = 0; i < routesLength; i++){
+        route = routes[i][0];
+        methodName = routes[i][1];
+        method = app[methodName];
+        router.route(route, methodName, method);
+      }
+    }
+
+  });
+
+
   // Composite Application
   // ---------------------
 

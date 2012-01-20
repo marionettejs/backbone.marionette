@@ -55,4 +55,29 @@ describe("app router", function(){
     });
   });
 
+  describe("when a standard route is defined and fired", function(){
+    var Router = Backbone.Marionette.AppRouter.extend({
+      routes: {
+        "m3": "standardRoute"
+      },
+
+      standardRoute: function(){
+      }
+    });
+
+    var router;
+
+    beforeEach(function(){
+      router = new Router();
+
+      spyOn(router, "standardRoute");
+
+      router.navigate("m3", true);
+    });
+
+    it("should fire the route callback", function(){
+      expect(router.standardRoute).toHaveBeenCalled();
+    });
+  });
+
 });

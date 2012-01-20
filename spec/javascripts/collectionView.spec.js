@@ -35,6 +35,10 @@ describe("collection view", function(){
       el.prepend(html);
     }
   });
+
+  var CompositeView = Backbone.Marionette.CollectionView.extend({
+    template: "#composite-template"
+  });
   
   describe("when rendering a collection view", function(){
     var collection = new Collection([{foo: "bar"}, {foo: "baz"}]);
@@ -115,6 +119,34 @@ describe("collection view", function(){
 
     it("should append via the overridden method", function(){
       expect($(collectionView.el)).toHaveHtml("<span>baz</span><span>bar</span>");
+    });
+  });
+
+  describe("when a collection view has a model and a template", function(){
+    var compositeView;
+    var model, collection;
+
+    beforeEach(function(){
+      loadFixtures("compositeTemplate.html");
+
+      model = new Model({foo: "bar"});
+      collection = new Collection();
+      collection.add(model);
+
+      compositeView = new CompositeView({
+        model: model,
+        collection: collection
+      });
+
+      compositeView.render();
+    });
+
+    it("should render the template with the model", function(){
+      expect(compositeView.el).toHaveHtml(/composite bar/);
+    });
+
+    it("should render the collection's items", function(){
+      expect(compositeView.el).toHaveHtml(/item bar/);
     });
   });
 

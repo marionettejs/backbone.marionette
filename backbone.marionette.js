@@ -134,6 +134,8 @@ Backbone.Marionette = (function(Backbone, _, $){
   // A view that iterates over a Backbone.Collection
   // and renders an individual ItemView for each model.
   Marionette.CollectionView = Backbone.View.extend({
+    itemView: Marionette.ItemView,
+
     constructor: function(){
       Backbone.View.prototype.constructor.apply(this, arguments);
 
@@ -147,11 +149,28 @@ Backbone.Marionette = (function(Backbone, _, $){
     // Loop through all of the items and render 
     // each of them with the specified `itemView`.
     render: function(){
+      this.renderModel();
+
       this.collection.each(this.addChildView);
       if (this.onRender){
         this.onRender();
       }
       return this;
+    },
+
+    // Render an individual model, if we have one, as
+    // part of a composite view (branch / leaf). For example:
+    // a treeview.
+    renderModel: function(){
+      if (this.model){
+        var itemView = new Marionette.ItemView({
+          model: this.model,
+          template: this.template
+        });
+        itemView.render();
+
+        this.el.append(itemView.el.html());
+      }
     },
 
     // Render the child item's view and add it to the

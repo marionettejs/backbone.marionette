@@ -37,6 +37,7 @@ describe("collection view", function(){
   });
 
   var CompositeView = Backbone.Marionette.CollectionView.extend({
+    itemView: ItemView,
     template: "#composite-template"
   });
   
@@ -124,17 +125,17 @@ describe("collection view", function(){
 
   describe("when a collection view has a model and a template", function(){
     var compositeView;
-    var model, collection;
 
     beforeEach(function(){
       loadFixtures("compositeTemplate.html");
 
-      model = new Model({foo: "bar"});
+      var m1 = new Model({foo: "bar"});
+      var m2 = new Model({foo: "baz"});
       collection = new Collection();
-      collection.add(model);
+      collection.add(m2);
 
       compositeView = new CompositeView({
-        model: model,
+        model: m1,
         collection: collection
       });
 
@@ -142,11 +143,11 @@ describe("collection view", function(){
     });
 
     it("should render the template with the model", function(){
-      expect(compositeView.el).toHaveHtml(/composite bar/);
+      expect(compositeView.el).toHaveText(/composite bar/);
     });
 
     it("should render the collection's items", function(){
-      expect(compositeView.el).toHaveHtml(/item bar/);
+      expect(compositeView.el).toHaveText(/baz/);
     });
   });
 

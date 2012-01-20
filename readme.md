@@ -22,9 +22,10 @@ For a good time, call.. err... read through [the annotated source code](http://d
 
 # Marionette's Pieces
 
-There are only a few pieces to the marionette at this point:
+These are the strings that you can pull to make your puppet dance:
 
 * **Backbone.Marionette.Application**: An application object that starts your app via initializers, and more
+* **Backbone.Marionette.AppRouter**: Reduce your routers to nothing more then configuration
 * **Backbone.Marionette.ItemView**: A view that renders a single item
 * **Backbone.Marionette.CollectionView**: A view that iterates over a collection, and renders individual `ItemView` instances for each model
 * **Backbone.Marionette.RegionManager**: Manage visual regions of your application, including display and removal of content
@@ -149,6 +150,50 @@ MyApp.vent.trigger("some:event");
 For a more detailed discussion and example of using an event aggregator with
 Backbone applications, see the blog post: [References, Routing, and The Event
 Aggregator: Coordinating Views In Backbone.js](http://lostechies.com/derickbailey/2011/07/19/references-routing-and-the-event-aggregator-coordinating-views-in-backbone-js/)
+
+## Marionette.AppRouter
+
+Reduce the boilerplate code of handling route events and then calling a single method on another object.
+Have your routers configured to call the method on your object, directly.
+
+### Configure Routes
+
+Configure an AppRouter with `appRoutes`. The route definition is passed on to Backbones standard routing
+handlers. This means that you define routes like you normally would. Instead of providing a callback
+method that exists on the router, though, you provide a callback method that exists on the `controller`
+that you specify for the router instance (see below).
+
+```js
+MyRouter = Backbone.Marionette.AppRouter.extend({
+  appRoutes: {
+    "some/route": "someMethod"
+  }
+});
+```
+
+You can also add standard routes to an AppRouter, with methods on the router.
+
+### Specify A Controller
+
+App routers can only take one `controller` object as a parameter to the contructor.
+
+```js
+myObj = {
+  someMethod: function(){
+    // do stuff
+  }
+};
+
+new MyRoter({
+  controller: myObj
+});
+```
+
+The object that is used as a controller has no requirements, other than it will contain methods that 
+you specify in your `appRoutes`. 
+
+It is reocmmended that you divide your controller objects in to smaller peices of related functionality
+and have multiple routers / controllers, instead of just one giant router and controller.
 
 ## Marionette.RegionManager
 

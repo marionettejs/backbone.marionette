@@ -9,3 +9,12 @@ beforeEach(function() {
     }
   });
 });
+
+var startRouters = function(){
+  try{
+    Backbone.history.start();
+  }
+  catch(x){
+    Backbone.history.loadUrl();
+  }
+}

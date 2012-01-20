@@ -1,7 +1,4 @@
 describe("app router", function(){
-  // work around for not being able to stop history
-  new (Backbone.Router.extend({ routes: {"noOp": "noOp"}, noOp: function(){} }))();
-  Backbone.history.start();
 
   describe("when a route fires", function(){
     var Router = Backbone.Marionette.AppRouter.extend({
@@ -20,6 +17,7 @@ describe("app router", function(){
       var router = new Router({
         controller: controller
       });
+      startRouters();
 
       router.navigate("m1", true);
     });
@@ -46,6 +44,7 @@ describe("app router", function(){
       var router = new Router({
         controller: controller
       });
+      startRouters();
 
       router.navigate("m2/1", true);
     });
@@ -61,22 +60,22 @@ describe("app router", function(){
         "m3": "standardRoute"
       },
 
-      standardRoute: function(){
-      }
+      standardRoute: function(){}
     });
 
     var router;
 
     beforeEach(function(){
-      router = new Router();
+      spyOn(Router.prototype, "standardRoute").andCallThrough();
 
-      spyOn(router, "standardRoute");
+      router = new Router();
+      startRouters();
 
       router.navigate("m3", true);
     });
 
     it("should fire the route callback", function(){
-      expect(router.standardRoute).toHaveBeenCalled();
+      expect(Router.prototype.standardRoute).toHaveBeenCalled();
     });
   });
 

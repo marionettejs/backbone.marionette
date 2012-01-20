@@ -301,7 +301,6 @@ Backbone.Marionette = (function(Backbone, _, $){
         router.route(route, methodName, method);
       }
     }
-
   });
 
 

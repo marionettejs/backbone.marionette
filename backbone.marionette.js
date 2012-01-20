@@ -19,7 +19,9 @@ Backbone.Marionette = (function(Backbone, _, $){
   Marionette.RegionManager = function(options){
     this.options = options || (options = {});
     if (!this.el){
-      throw new Error("An 'el' must be specified");
+      var err = new Error("An 'el' must be specified");
+      err.name = "NoElError";
+      throw err;
     }
     this.el = $(this.el);
   };
@@ -66,6 +68,7 @@ Backbone.Marionette = (function(Backbone, _, $){
       Backbone.View.prototype.constructor.apply(this, args);
 
       this.el = $(this.el);
+      _.bindAll(this, "render");
     },
 
     // Serialize the model or collection for the view. If a model is
@@ -113,6 +116,31 @@ Backbone.Marionette = (function(Backbone, _, $){
       return _.template(template.html(), data);
     },
 
+    // Retrieve the template from the call's context. The
+    // `template` attribute can either be a function that
+    // returns a jQuery object, or a jQuery selector string 
+    // directly. The string value must be a valid jQuery 
+    // selector.  
+    getTemplate: function(){
+      var template = this.template;
+  
+      var templateData;
+
+      if (_.isFunction(template)){
+        templateData = template.call(this);
+      } else {
+        templateData = Marionette.TemplateManager.get(template);
+      }
+
+      if (!templateData || templateData.length === 0){
+        var err = new Error("A template must be specified");
+        err.name = "NoTemplateError";
+        throw err;
+      }
+
+      return templateData;
+    },
+
     // Default `close` implementation, for removing a view from the
     // DOM and unbinding it. Region managers will call this method
     // for you. You can specify an `onClose` method in your view to
@@ -141,7 +169,7 @@ Backbone.Marionette = (function(Backbone, _, $){
 
       this.el = $(this.el);
 
-      _.bindAll(this, "addChildView");
+      _.bindAll(this, "addChildView", "render");
       this.bindTo(this.collection, "add", this.addChildView, this);
       this.bindTo(this.collection, "remove", this.removeChildView, this);
     },
@@ -443,29 +471,6 @@ Backbone.Marionette = (function(Backbone, _, $){
   // For slicing `arguments` in functions
   var slice = Array.prototype.slice;
   
-  // Retrieve the template from the call's context. The
-  // `template` attribute can either be a function that
-  // returns a jQuery object, or a jQuery selector string 
-  // directly. The string value must be a valid jQuery 
-  // selector.  
-  var templateMixin = {
-    getTemplate: function(){
-      var template = this.template;
-      var templateData;
-
-      if (_.isFunction(template)){
-        templateData = template.call(this);
-      } else {
-        templateData = Marionette.TemplateManager.get(template);
-      }
-
-      return templateData;
-    }
-  };
-  // Copy the 'getTemplate' function on to the views
-  _.extend(Marionette.ItemView.prototype, templateMixin);
-  _.extend(Marionette.CollectionView.prototype, templateMixin);
-
   // Copy the `extend` function used by Backbone's classes
   var extend = Backbone.View.extend;
   Marionette.RegionManager.extend = extend;

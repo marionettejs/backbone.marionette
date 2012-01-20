@@ -35,6 +35,18 @@ describe("item view rendering", function(){
     loadFixtures("itemTemplate.html", "collectionItemTemplate.html", "emptyTemplate.html");
   });
 
+  describe("when no template is specified for the view", function(){
+    var view;
+
+    beforeEach(function(){
+      view = new Backbone.Marionette.ItemView();
+    });
+
+    it("should raise an error", function(){
+      expect(view.render).toThrow("A template must be specified");
+    });
+  });
+
   describe("when overriding the `renderTemplate` method", function(){
     var view;
 

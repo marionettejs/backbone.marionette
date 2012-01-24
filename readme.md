@@ -74,8 +74,12 @@ MyApp.addInitializer(function(options){
 });
 ```
 
-These callbacks will be executed when you start your application. The `options`
-parameters is passed through the `start` method (see below).
+These callbacks will be executed when you start your application,
+and are bound to the application object as the context for
+the callback. In other words, `this` is the `MyApp` object, inside
+of the initializer function.
+
+The `options` parameters is passed from the `start` method (see below).
 
 ### Application Events
 
@@ -755,6 +759,10 @@ load up http://localhost:8888 to see the test suite in action.
 I'm using [Docco](http://jashkenas.github.com/docco/) to generate the annotated source code.
 
 # Release Notes
+
+## v0.2.6
+
+* Bind the context (`this`) of application initializer functions to the application object
 
 ## v0.2.5
 

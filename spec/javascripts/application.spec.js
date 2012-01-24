@@ -11,6 +11,7 @@ describe("marionette application", function(){
         var module = {};
         module.initializer = function(options){
           module.options = options;
+          module.context = this;
         };
 
         spyOn(module, "initializer").andCallThrough();
@@ -38,6 +39,10 @@ describe("marionette application", function(){
 
     it("should pass the options through to the initializer", function(){
       expect(MyModule.options).toEqual(someOptions);
+    });
+
+    it("should run the initializer with the context of the app object", function(){
+      expect(MyModule.context).toEqual(MyApp);
     });
   });
 

@@ -376,7 +376,7 @@ Backbone.Marionette = (function(Backbone, _, $){
       this.trigger("initialize:before", options);
       for(var i=0; i<this.initializers.length; i++){
         var initializer = this.initializers[i];
-        initializer(options);
+        initializer.call(this, options);
       }
       this.trigger("initialize:after", options);
     },

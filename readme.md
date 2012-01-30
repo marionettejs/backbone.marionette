@@ -201,18 +201,40 @@ and have multiple routers / controllers, instead of just one giant router and co
 
 ## Marionette.RegionManager
 
+Region managers provide a consistent way to manage your views and
+show / close them in your application. They use a jQuery selector
+to show your views in the correct place. They also call extra
+methods on your views, to facilitate additional functionality.
+
+### Basic Usage: `addRegions`
+
 Regions can be added to the application by calling the `addRegions` method on
 your application instance. This method expects a single hash parameter, with
 named regions and either jQuery selectors or `RegionManager` objects. You may
 call this method as many times as you like, and it will continue adding regions
-to the app. If you specify the same name twice, last one in wins.
+to the app. 
 
 ```js
 MyApp.addRegions({
   mainRegion: "#main-content",
   navigationRegion: "#navigation"
 });
+```
 
+If you specify the same name twice, last one in wins.
+
+### Defining A Custom Region Manager
+
+You can define a custom region manager by extending from
+`RegionManager`. This allows you to create new functionality,
+or provide a base set of functionality for your app.
+
+Once you define a region manager type, you can still call the
+`addRegions` method. Specify the region manager type as the
+value - not an instance of it, but the actual constructor
+function.
+
+```js
 var FooterRegion = Backbone.Marionette.RegionManager.extend({
   el: "#footer"
 });
@@ -224,9 +246,22 @@ Note that if you define your own `RegionManager` object, you must provide an
 `el` for it. If you don't, you will receive an runtime exception saying that
 an `el` is required.
 
-Additionally, when you pass a `RegionManager` directly into to the `addRegions`
-method, you must specify the constructor function for your region manager, not
-an instance of it.
+### Instantiate Your Own Region Manager
+
+There may be times when you want to add a region manager to your
+application after your app is up and running. To do this, you'll
+need to extend from `RegionManager` as shown above and then use
+that constructor function on your own:
+
+```js
+var SomeRegion = Backbone.Marionette.RegionManager.extend({
+  el: "#some-div"
+});
+
+MyApp.someRegion = new SomeRegion();
+
+MyApp.someRegion.show(someView);
+```
 
 ## Marionette.ItemView
 

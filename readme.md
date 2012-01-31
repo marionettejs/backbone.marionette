@@ -768,16 +768,21 @@ $(function(){
 });
 ```
 
-# Requirements
+# Compatibility And Requirements
 
-Backbone.Marionette is built and tested with the following libraries:
+Backbone.Marionette currently works with the following versions of these 
+libraries:
 
-* Underscore.js v1.2.3
-* Backbone.js v0.5.3
+* Backbone v0.5.3 and v0.9.0
+* Underscore v1.2.3 and v1.3.1
 * jQuery v1.7.1
 
-You may not need to be up to date with these exact versions. However, there is
-no guarantee that the code will work correctly if you are not.
+While support for Zepto and Enderjs has been added, it is not officially
+tested against these libraries at this time.
+
+Marionette has not been tested against any other versions of these
+libraries. You may or may not have success if you use a version other
+than what it listed here.
 
 ## Test Suite Requirements
 
@@ -794,6 +799,13 @@ load up http://localhost:8888 to see the test suite in action.
 I'm using [Docco](http://jashkenas.github.com/docco/) to generate the annotated source code.
 
 # Release Notes
+
+## v0.3.0
+
+* **BREAKING:** `view.el` for `ItemView` and `CollectionView` is no longer a jQuery selector object. Use `view.$el` instead
+* **BREAKING:** `regionManger.el` is no longer a jQuery selector object. Use `regionManager.$el` instead
+* Updated to use Backbone v0.9.0
+* Updated to use Underscore v1.3.1
 
 ## v0.2.6
 

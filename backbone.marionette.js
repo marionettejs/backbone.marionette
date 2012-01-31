@@ -162,7 +162,6 @@ Backbone.Marionette = (function(Backbone, _, $){
   // A view that iterates over a Backbone.Collection
   // and renders an individual ItemView for each model.
   Marionette.CollectionView = Backbone.View.extend({
-    itemView: Marionette.ItemView,
     modelView: Marionette.ItemView,
 
     constructor: function(){
@@ -192,13 +191,13 @@ Backbone.Marionette = (function(Backbone, _, $){
     // a treeview.
     renderModel: function(){
       if (this.model){
-        var itemView = new this.modelView({
+        var modelView = new this.modelView({
           model: this.model,
           template: this.template
         });
-        itemView.render();
+        modelView.render();
 
-        this.$el.append(itemView.el);
+        this.$el.append(modelView.el);
       }
     },
 
@@ -230,6 +229,12 @@ Backbone.Marionette = (function(Backbone, _, $){
     // to provide custom item rendering for each
     // item in the collection.
     renderItem: function(item){
+      if (!this.itemView){
+      var err = new Error("An `itemView` must be specified");
+      err.name = "NoItemViewError";
+      throw err;
+      }
+
       var view = new this.itemView({
         model: item
       });

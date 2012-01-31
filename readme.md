@@ -806,6 +806,8 @@ I'm using [Docco](http://jashkenas.github.com/docco/) to generate the annotated 
 * **BREAKING:** `regionManger.el` is no longer a jQuery selector object. Use `regionManager.$el` instead
 * Updated to use Backbone v0.9.0
 * Updated to use Underscore v1.3.1
+* Removed default `itemView` from the `CollectionView` definition
+* `CollectionView` now explicitly checks for an `itemView` defined on it, and throws an error if it's not found
 
 ## v0.2.6
 

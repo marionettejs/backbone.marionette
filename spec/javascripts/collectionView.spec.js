@@ -40,6 +40,24 @@ describe("collection view", function(){
     itemView: ItemView,
     template: "#composite-template"
   });
+
+  var NoItemView = Backbone.Marionette.CollectionView.extend({
+  });
+
+  describe("when rendering a collection view with not `itemView` specified", function(){
+    var collectionView;
+
+    beforeEach(function(){
+      var collection = new Collection([{foo: "bar"}, {foo: "baz"}]);
+      collectionView = new NoItemView({
+        collection: collection
+      });
+    });
+
+    it("should throw an error saying there's not item view", function(){
+      expect(collectionView.render).toThrow("An `itemView` must be specified");
+    });
+  });
   
   describe("when rendering a collection view", function(){
     var collection = new Collection([{foo: "bar"}, {foo: "baz"}]);

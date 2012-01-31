@@ -23,7 +23,7 @@ Backbone.Marionette = (function(Backbone, _, $){
       err.name = "NoElError";
       throw err;
     }
-    this.el = $(this.el);
+    this.el = this.$el || $(this.el);
   };
 
   _.extend(Marionette.RegionManager.prototype, Backbone.Events, {
@@ -67,7 +67,7 @@ Backbone.Marionette = (function(Backbone, _, $){
       var args = slice.call(arguments);
       Backbone.View.prototype.constructor.apply(this, args);
 
-      this.el = $(this.el);
+      this.el = this.$el || $(this.el);
       _.bindAll(this, "render");
     },
 
@@ -168,7 +168,7 @@ Backbone.Marionette = (function(Backbone, _, $){
     constructor: function(){
       Backbone.View.prototype.constructor.apply(this, arguments);
 
-      this.el = $(this.el);
+      this.el = this.$el || $(this.el);
 
       _.bindAll(this, "addChildView", "render");
       this.bindTo(this.collection, "add", this.addChildView, this);
@@ -281,7 +281,8 @@ Backbone.Marionette = (function(Backbone, _, $){
     // easily, at a later point in time.
     bindTo: function (obj, eventName, callback, context) {
       context = context || this;
-      obj.bind(eventName, callback, context);
+      var bind = obj.on || obj.bind;
+      bind(eventName, callback, context);
 
       if (!this.bindings) this.bindings = [];
 
@@ -296,7 +297,8 @@ Backbone.Marionette = (function(Backbone, _, $){
     // Unbind all of the events that we have stored.
     unbindAll: function () {
       _.each(this.bindings, function (binding) {
-        binding.obj.unbind(binding.eventName, binding.callback);
+        var unbind = binding.obj.off || binding.obj.unbind;
+        unbind(binding.eventName, binding.callback);
       });
 
       this.bindings = [];

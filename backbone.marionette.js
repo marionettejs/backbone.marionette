@@ -67,7 +67,7 @@ Backbone.Marionette = (function(Backbone, _, $){
       var args = slice.call(arguments);
       Backbone.View.prototype.constructor.apply(this, args);
 
-      this.$el && (this.$el = $(this.el));
+      this.$el || (this.$el = $(this.el));
       _.bindAll(this, "render");
     },
 
@@ -168,7 +168,7 @@ Backbone.Marionette = (function(Backbone, _, $){
     constructor: function(){
       Backbone.View.prototype.constructor.apply(this, arguments);
 
-      this.$el && (this.$el = $(this.el));
+      this.$el || (this.$el = $(this.el));
 
       _.bindAll(this, "addChildView", "render");
       this.bindTo(this.collection, "add", this.addChildView, this);

@@ -88,7 +88,7 @@ describe("region manager", function(){
     });
 
     it("shoudl call 'onShow' after the rendered HTML has been added to the DOM", function(){
-      expect(view.$el).toHaveClass("onShowClass");
+      expect($(view.el)).toHaveClass("onShowClass");
     })
   });
 
@@ -99,7 +99,7 @@ describe("region manager", function(){
 
     var MyView = Backbone.View.extend({
       render: function(){
-        this.$el.html("some content");
+        $(this.el).html("some content");
       },
 
       close: function(){

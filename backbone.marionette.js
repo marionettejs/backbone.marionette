@@ -281,8 +281,7 @@ Backbone.Marionette = (function(Backbone, _, $){
     // easily, at a later point in time.
     bindTo: function (obj, eventName, callback, context) {
       context = context || this;
-      var bind = obj.on || obj.bind;
-      bind.call(obj, eventName, callback, context);
+      obj.on(eventName, callback, context);
 
       if (!this.bindings) this.bindings = [];
 
@@ -297,9 +296,7 @@ Backbone.Marionette = (function(Backbone, _, $){
     // Unbind all of the events that we have stored.
     unbindAll: function () {
       _.each(this.bindings, function (binding) {
-        var obj = binding.obj;
-        var unbind = obj.off || obj.unbind;
-        unbind.call(obj, binding.eventName, binding.callback);
+        binding.obj.off(binding.eventName, binding.callback);
       });
 
       this.bindings = [];
@@ -484,6 +481,15 @@ Backbone.Marionette = (function(Backbone, _, $){
   _.extend(Marionette.ItemView.prototype, Marionette.BindTo);
   _.extend(Marionette.CollectionView.prototype, Marionette.BindTo);
   _.extend(Marionette.Application.prototype, Marionette.BindTo);
+
+  // Backward compatibility w/ Backbone v0.5.x
+  if (!Backbone.Events.on){
+    var constructs = [Backbone.Events, Backbone.View.prototype, Backbone.Model.prototype, Backbone.Collection.prototype, Backbone.Router.prototype];
+    _.each(constructs, function(construct){
+      construct.on = Backbone.Events.bind;
+      construct.off = Backbone.Events.unbind;
+    });
+  }
 
   return Marionette;
 })(Backbone, _, window.jQuery || window.Zepto || window.ender);

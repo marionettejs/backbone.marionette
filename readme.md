@@ -429,7 +429,7 @@ are performed:
 * unbind all `bindTo` events
 * unbind all custom view events
 * unbind all DOM events
-* remove `this.el` from teh DOM
+* remove `this.el` from the DOM
 * call an `onClose` event on the view, if one is provided
 
 By providing an `onClose` event in your view definition, you can
@@ -469,6 +469,9 @@ Backbone.Marionette.CollectionView.extend({
   itemView: MyItemView
 });
 ```
+
+If you do not specify an `itemView`, an exception will be thrown
+stating that you must specify an `itemView`.
 
 ### CollectionView: Add / Remove Items
 
@@ -540,7 +543,7 @@ following are performed:
 * unbind all custom view events
 * unbind all DOM events
 * unbind all item views that were rendered
-* remove `this.el` from teh DOM
+* remove `this.el` from the DOM
 * call an `onClose` event on the view, if one is provided
 
 By providing an `onClose` event in your view definition, you can
@@ -740,7 +743,7 @@ MyApp.addRegions({ myRegion: MyRegion });
 
       // get "someOption" from the app, since we
       // passed it into the app initializer, above
-      $(this.el).html(MyApp.someOption);
+      this.$el.html(MyApp.someOption);
     },
 
     doSomething: function(){

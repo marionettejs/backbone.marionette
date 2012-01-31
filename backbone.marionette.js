@@ -67,7 +67,7 @@ Backbone.Marionette = (function(Backbone, _, $){
       var args = slice.call(arguments);
       Backbone.View.prototype.constructor.apply(this, args);
 
-      this.$el || (this.$el = $(this.el));
+      setupEl(this);
       _.bindAll(this, "render");
     },
 
@@ -168,7 +168,7 @@ Backbone.Marionette = (function(Backbone, _, $){
     constructor: function(){
       Backbone.View.prototype.constructor.apply(this, arguments);
 
-      this.$el || (this.$el = $(this.el));
+      setupEl(this);
 
       _.bindAll(this, "addChildView", "render");
       this.bindTo(this.collection, "add", this.addChildView, this);
@@ -483,12 +483,19 @@ Backbone.Marionette = (function(Backbone, _, $){
   _.extend(Marionette.Application.prototype, Marionette.BindTo);
 
   // Backward compatibility w/ Backbone v0.5.x
+  // for events: `on` === `bind`, `off` === `unbind`
   if (!Backbone.Events.on){
     var constructs = [Backbone.Events, Backbone.View.prototype, Backbone.Model.prototype, Backbone.Collection.prototype, Backbone.Router.prototype];
     _.each(constructs, function(construct){
       construct.on = Backbone.Events.bind;
       construct.off = Backbone.Events.unbind;
     });
+  }
+
+  // Backward compatibility w/ Backbone v0.5.x
+  // for `view.$el`
+  var setupEl = function(view){
+    view.$el || (view.$el = $(view.el));
   }
 
   return Marionette;

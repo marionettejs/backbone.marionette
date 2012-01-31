@@ -8,7 +8,7 @@ describe("collection view", function(){
   var ItemView = Backbone.Marionette.ItemView.extend({
     tagName: "span",
     render: function(){
-      this.el.html(this.model.get("foo"));
+      this.$el.html(this.model.get("foo"));
     }
   });
 
@@ -62,7 +62,7 @@ describe("collection view", function(){
     });
 
     it("should append the html for each itemView", function(){
-      expect($(collectionView.el)).toHaveHtml("<span>bar</span><span>baz</span>");
+      expect($(collectionView.$el)).toHaveHtml("<span>bar</span><span>baz</span>");
     });
 
     it("should reference each of the rendered view items", function(){
@@ -100,7 +100,7 @@ describe("collection view", function(){
     });
 
     it("should render the model in to the DOM", function(){
-      expect($(collectionView.el)).toHaveText("bar");
+      expect($(collectionView.$el)).toHaveText("bar");
     });
   });
 
@@ -119,7 +119,7 @@ describe("collection view", function(){
     });
 
     it("should append via the overridden method", function(){
-      expect($(collectionView.el)).toHaveHtml("<span>baz</span><span>bar</span>");
+      expect($(collectionView.$el)).toHaveHtml("<span>baz</span><span>bar</span>");
     });
   });
 
@@ -143,11 +143,11 @@ describe("collection view", function(){
     });
 
     it("should render the template with the model", function(){
-      expect(compositeView.el).toHaveText(/composite bar/);
+      expect(compositeView.$el).toHaveText(/composite bar/);
     });
 
     it("should render the collection's items", function(){
-      expect(compositeView.el).toHaveText(/baz/);
+      expect(compositeView.$el).toHaveText(/baz/);
     });
   });
 
@@ -179,7 +179,7 @@ describe("collection view", function(){
     });
 
     it("should remove the model-view's HTML", function(){
-      expect($(collectionView.el).children().length).toBe(0);
+      expect($(collectionView.$el).children().length).toBe(0);
     });
   });
 

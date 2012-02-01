@@ -366,6 +366,17 @@ Backbone.Marionette = (function(Backbone, _, $){
   Marionette.Application = function(options){
     this.initializers = [];
     this.vent = _.extend({}, Backbone.Events, Marionette.BindTo);
+    this.vent.backboneTrigger = this.vent.trigger;
+
+    // Override `Backbone.Events.trigger` so that a check is 
+    // made for an event callback before to event is fired.
+    this.vent.trigger = function (event, data) {
+      if (!this._callbacks[event]) {
+        throw new Error('Attempted to trigger an event for which there is no callback');
+      }
+      this.backboneTrigger(event, data);
+    };
+
     _.extend(this, options);
   };
 

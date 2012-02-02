@@ -371,8 +371,8 @@ Backbone.Marionette = (function(Backbone, _, $){
     // Override `Backbone.Events.trigger` so that a check is 
     // made for an event callback before to event is fired.
     this.vent.trigger = function (event, data) {
-      if (!this._callbacks[event]) {
-        throw new Error('Attempted to trigger an event for which there is no callback');
+      if (!this._callbacks || !this._callbacks[event]) {
+        throw new Error('Attempted to trigger application event \'' + event + '\', however there is no associated callback.');
       }
       this.backboneTrigger(event, data);
     };

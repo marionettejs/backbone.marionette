@@ -206,7 +206,7 @@ show / close them in your application. They use a jQuery selector
 to show your views in the correct place. They also call extra
 methods on your views, to facilitate additional functionality.
 
-### Basic Usage: `addRegions`
+### Basic Usage
 
 Regions can be added to the application by calling the `addRegions` method on
 your application instance. This method expects a single hash parameter, with
@@ -220,6 +220,10 @@ MyApp.addRegions({
   navigationRegion: "#navigation"
 });
 ```
+
+As soon as you call `addRegions`, your region managers are available on your
+app object. In the above, example `MyApp.mainRegion` and `MyApp.navigationRegion`
+would be available for use immediately.
 
 If you specify the same name twice, last one in wins.
 
@@ -802,6 +806,10 @@ load up http://localhost:8888 to see the test suite in action.
 I'm using [Docco](http://jashkenas.github.com/docco/) to generate the annotated source code.
 
 # Release Notes
+
+## v0.3.1
+
+* Make region managers initialize immediately when calling `app.addRegions`
 
 ## v0.3.0
 

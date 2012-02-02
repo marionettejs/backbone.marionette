@@ -8,7 +8,7 @@ describe("region manager", function(){
     });
   });
 
-  describe("when adding region objects to an app, and starting the app", function(){
+  describe("when adding region objects to an app", function(){
     var MyApp = new Backbone.Marionette.Application();
 
     var myRegion = Backbone.Marionette.RegionManager.extend({
@@ -24,11 +24,9 @@ describe("region manager", function(){
       setFixtures("<div id='region2'></div>");
 
       MyApp.addRegions({MyRegion: myRegion, anotherRegion: myRegion2});
-
-      MyApp.start();
     });
     
-    it("should initialize the regions", function(){
+    it("should initialize the regions, immediately", function(){
       expect(MyApp.MyRegion).not.toBeUndefined();
       expect(MyApp.anotherRegion).not.toBeUndefined();
     });

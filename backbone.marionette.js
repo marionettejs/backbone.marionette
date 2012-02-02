@@ -1,4 +1,4 @@
-// Backbone.Marionette v0.3.0
+// Backbone.Marionette v0.3.1
 //
 // Copyright (C)2011 Derick Bailey, Muted Solutions, LLC
 // Distributed Under MIT License
@@ -9,7 +9,7 @@
 Backbone.Marionette = (function(Backbone, _, $){
   var Marionette = {};
 
-  Marionette.version = "0.3.0";
+  Marionette.version = "0.3.1";
 
   // Region Manager
   // --------------
@@ -391,37 +391,21 @@ Backbone.Marionette = (function(Backbone, _, $){
     // addRegions({something: "#someRegion"})
     // addRegions{{something: RegionManager.extend({el: "#someRegion"}) });
     addRegions: function(regions){
-      if (!this.regions){
-        this.regions = {};
-        this.addInitializer(_.bind(this._initializeRegions, this));
-      }
-
-      var appRegions = this.regions;
+      var regionValue, regionObj;
 
       for(var region in regions){
         if (regions.hasOwnProperty(region)){
-          var regionValue = regions[region];
+          regionValue = regions[region];
     
           if (typeof regionValue === "string"){
-            appRegions[region] = Marionette.RegionManager.extend({
+            regionObj = Marionette.RegionManager.extend({
               el: regionValue
             });
           } else {
-            appRegions[region] = regionValue;
+            regionObj = regionValue;
           }
 
-        }
-      }
-    },
-
-    _initializeRegions: function(){
-      if (!this.regions){
-        return;
-      }
-
-      for(var region in this.regions){
-        if (this.regions.hasOwnProperty(region)){
-          this[region] = new this.regions[region]();
+          this[region] = new regionObj();
         }
       }
     }

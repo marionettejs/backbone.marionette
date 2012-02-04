@@ -367,11 +367,16 @@ Backbone.Marionette = (function(Backbone, _, $){
   };
 
   _.extend(Marionette.Callbacks.prototype, {
+    // Add an initializer to be called later
     add: function(callback){
       this.callbacks.push(callback);
       this.isStarted && this.runCallbacks();
     },
 
+    // Run all registered initializers in an async-friendly
+    // manner. Additional initializers can be added while this
+    // is running and they will be picked up and executed after
+    // the current ones.
     run: function(context){
       var callback = this.callbacks.pop();
       while (callback || this.callbacks.length > 0){
@@ -380,11 +385,12 @@ Backbone.Marionette = (function(Backbone, _, $){
       }
     },
 
+    // Set an options object that is passed to all of the
+    // callback methods.
     setOptions: function(options){
       this.callbackOptions = options;
     }
   });
-
 
   // Composite Application
   // ---------------------

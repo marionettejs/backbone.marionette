@@ -95,10 +95,11 @@ may want to pre-process some data just before initialization happens. Or you may
 want to wait until your entire application is initialized to start the
 `Backbone.history`.
 
-The two events that are currently triggered, are:
+The events that are currently triggered, are:
 
 * **"initialize:before"**: fired just before the initializers kick off
 * **"initialize:after"**: fires just after the initializers have finished
+* **"start"**: fires after all initializers and after the initializer events
 
 ```js
 MyApp.bind("initialize:before", function(options){
@@ -866,6 +867,7 @@ I'm using [Docco](http://jashkenas.github.com/docco/) to generate the annotated 
 * Added `Marionette.Callbacks` to manage a collection of callbacks in an async-friendly way
 * Guarantee the execution of app initializer functions, even if they are added after the app 
 has been started.
+* App triggers "start" event after initializers and initializer events
 
 ## v0.3.1
 

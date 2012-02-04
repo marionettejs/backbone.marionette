@@ -466,15 +466,17 @@ Backbone.Marionette = (function(Backbone, _, $){
     get: function(templateId){
       var template = this.templates[templateId];
       if (!template){
-        template = this.loadTemplate(templateId);
-        this.templates[templateId] = template;
+        this.loadTemplate(templateId, function(tmpl){
+          this.templates[templateId] = tmpl;
+          template = tmpl;
+        });
       }
       return template;
     },
 
     // Load a template from the DOM.
-    loadTemplate: function(templateId){
-      return $(templateId);
+    loadTemplate: function(templateId, callback){
+      callback.call(this, $(templateId));
     },
 
     // Clear templates from the cache. If no arguments

@@ -77,4 +77,28 @@ describe("marionette application", function(){
     });
   });
 
+  describe("when specifying an on start callback, and starting the app", function(){
+    var started, options, onStartOptions;
+
+    beforeEach(function(){
+      var MyApp = new Backbone.Marionette.Application();
+      options = {};
+
+      MyApp.on("start", function(opts){
+        started = true;
+        onStartOptions = opts;
+      });
+
+      MyApp.start(options);
+    });
+
+    it("should run the onStart callback", function(){
+      expect(started).toBeTruthy();
+    });
+
+    it("should pass the startup option to the callback", function(){
+      expect(onStartOptions).toBe(options);
+    });
+  });
+
 });

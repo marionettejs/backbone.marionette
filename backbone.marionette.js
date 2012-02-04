@@ -417,6 +417,8 @@ Backbone.Marionette = (function(Backbone, _, $){
       this.trigger("initialize:before", options);
       this.initCallbacks.run(this);
       this.trigger("initialize:after", options);
+
+      this.trigger("start", options);
     },
 
     // Add region managers to your app. 

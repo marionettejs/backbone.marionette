@@ -46,6 +46,23 @@ describe("marionette application", function(){
     });
   });
 
+  describe("when an app has been started, and registering another initializer", function(){
+    var MyApp, initialized;
+
+    beforeEach(function(){
+      MyApp = new Backbone.Marionette.Application();
+      MyApp.start();
+
+      MyApp.addInitializer(function(){
+        initialized = true;
+      });
+    });
+
+    it("should run the initializer immediately", function(){
+      expect(initialized).toBeTruthy();
+    });
+  });
+
   describe("when instantiating an app with options specified", function(){
     var MyApp;
 

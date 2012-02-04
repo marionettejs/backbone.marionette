@@ -370,19 +370,32 @@ Backbone.Marionette = (function(Backbone, _, $){
   };
 
   _.extend(Marionette.Application.prototype, Backbone.Events, {
+    // Add an initializer that is either run at when the `start`
+    // method is called, or run immediately if added after `start`
+    // has already been called.
     addInitializer: function(initializer){
       this.initializers.push(initializer);
+      this.isStarted && this._callInitializers(this.initializerOptions);
+    },
+
+    // Internal method to execute initializers.
+    _callInitializers: function(options){
+      var initializer = this.initializers.pop();
+      while (initializer || this.initializers.length > 0){
+        initializer && initializer.call(this, options);
+        initializer = this.initializers.pop();
+      }
     },
 
     // kick off all of the application's processes.
     // initializes all of the regions that have been added
     // to the app, and runs all of the initializer functions
     start: function(options){
+      this.isStarted = true;
+      this.initializerOptions = options;
+
       this.trigger("initialize:before", options);
-      for(var i=0; i<this.initializers.length; i++){
-        var initializer = this.initializers[i];
-        initializer.call(this, options);
-      }
+      this._callInitializers(options);
       this.trigger("initialize:after", options);
     },
 

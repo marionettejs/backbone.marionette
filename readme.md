@@ -31,6 +31,7 @@ These are the strings that you can pull to make your puppet dance:
 * **Backbone.Marionette.RegionManager**: Manage visual regions of your application, including display and removal of content
 * **Backbone.Marionette.BindTo**: An event binding manager, to facilitate binding and unbinding of events
 * **Backbone.Marionette.TemplateManager**: Cache templates that are stored in `<script>` blocks, for faster subsequent access
+* **Backbone.Marionette.Callbacks**: Manage a collection of callback methods, and execute them as needed
 * **Application.vent**: Every instance of `Application` comes with a `.vent` property, an event aggregator
 
 The `Application`, `RegionManager`, `ItemView` and `CollectionView` use the 
@@ -80,6 +81,11 @@ the callback. In other words, `this` is the `MyApp` object, inside
 of the initializer function.
 
 The `options` parameters is passed from the `start` method (see below).
+
+Initializer callbacks are guaranteed to run, no matter when you
+add them to the app object. If you add them before the app is
+started, they will run when the `start` method is called. If you
+add them after the app is started, they will run immediately.
 
 ### Application Events
 
@@ -687,6 +693,54 @@ call the `TemplateManager`. Just specify the `template` attribute
 of your view as a jQuery selector, and the `ItemView` will use 
 the template manager by default.
 
+# Backbone.Marionette.Callbacks
+
+The `Callbacks` object assists in managing a collection of callback
+methods, and executing them, in an async-safe manner.
+
+## Basic Usage
+
+There are only three methods: 
+* `add`
+* `run`
+* `setOptions`
+
+The `add` method adds a new callback to be executed later. 
+
+The `setOptions` method stores an options object that is then
+passed to the callbacks when they are executed.
+
+The `run` method executes all current callbacks in, using the
+specified context for each of the callbacks, and supplying the
+provided options to the callbacks.
+
+```js
+var callbacks = new Backbone.Marionette.Callbacks();
+
+callbacks.add(function(options){
+  alert("I'm a callback with " + options.value + "!");
+});
+
+callbacks.setOptions({value: "options"});
+
+callbacks.run(someContext);
+```
+
+This example will display an alert box that says "I'm a callback
+with options!". The executing context for each of the callback
+methods has been set to the `someContext` object, which can be
+any valid JavaScript object.
+
+## Advanced / Async Use
+
+The `Callbacks` executes each callback in an async-friendly 
+manner, and can be used to facilitate async callbacks. 
+The `Marionette.Application` object uses `Callbacks`
+to manage initializers (see above). 
+
+It can also be used to guarantee callback execution in an event
+driven scenario, much like the application initializers.
+
 # Backbone.Marionette Example Apps
 
 There are several sample apps available.
@@ -806,6 +860,12 @@ load up http://localhost:8888 to see the test suite in action.
 I'm using [Docco](http://jashkenas.github.com/docco/) to generate the annotated source code.
 
 # Release Notes
+
+## v0.3.2
+
+* Added `Marionette.Callbacks` to manage a collection of callbacks in an async-friendly way
+* Guarantee the execution of app initializer functions, even if they are added after the app 
+has been started.
 
 ## v0.3.1
 

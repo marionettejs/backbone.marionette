@@ -355,6 +355,35 @@ Backbone.Marionette = (function(Backbone, _, $){
       }
     }
   });
+  
+  // Callbacks
+  // ---------
+
+  // A simple way of managing a collection of callbacks
+  // and executing them at a later point in time.
+  Marionette.Callbacks = function(){
+    this.callbacks = [];
+    this.callbackOptions = {};
+  };
+
+  _.extend(Marionette.Callbacks.prototype, {
+    add: function(callback){
+      this.callbacks.push(callback);
+      this.isStarted && this.runCallbacks();
+    },
+
+    run: function(context){
+      var callback = this.callbacks.pop();
+      while (callback || this.callbacks.length > 0){
+        callback && callback.call(context, this.callbackOptions);
+        callback = this.callbacks.pop();
+      }
+    },
+
+    setOptions: function(options){
+      this.callbackOptions = options;
+    }
+  });
 
 
   // Composite Application
@@ -364,7 +393,7 @@ Backbone.Marionette = (function(Backbone, _, $){
   // Stores and starts up `RegionManager` objects, includes an
   // event aggregator as `app.vent`
   Marionette.Application = function(options){
-    this.initializers = [];
+    this.initCallbacks = new Marionette.Callbacks();
     this.vent = _.extend({}, Backbone.Events, Marionette.BindTo);
     _.extend(this, options);
   };
@@ -374,17 +403,8 @@ Backbone.Marionette = (function(Backbone, _, $){
     // method is called, or run immediately if added after `start`
     // has already been called.
     addInitializer: function(initializer){
-      this.initializers.push(initializer);
-      this.isStarted && this._callInitializers(this.initializerOptions);
-    },
-
-    // Internal method to execute initializers.
-    _callInitializers: function(options){
-      var initializer = this.initializers.pop();
-      while (initializer || this.initializers.length > 0){
-        initializer && initializer.call(this, options);
-        initializer = this.initializers.pop();
-      }
+      this.initCallbacks.add(initializer);
+      this.isStarted && this.initCallbacks.run(this);
     },
 
     // kick off all of the application's processes.
@@ -392,10 +412,10 @@ Backbone.Marionette = (function(Backbone, _, $){
     // to the app, and runs all of the initializer functions
     start: function(options){
       this.isStarted = true;
-      this.initializerOptions = options;
+      this.initCallbacks.setOptions(options);
 
       this.trigger("initialize:before", options);
-      this._callInitializers(options);
+      this.initCallbacks.run(this);
       this.trigger("initialize:after", options);
     },
 

@@ -471,10 +471,10 @@ Backbone.Marionette = (function(Backbone, _, $){
         var that = this;
         template = this.loadTemplate(templateId, function(template){
           this.templates[templateId] = template;
-          callback.call(that, template);
+          callback && callback.call(that, template);
         });
       } else {
-        callback.call(this, template);
+        callback && callback.call(this, template);
       }
     },
 

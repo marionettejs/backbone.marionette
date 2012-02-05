@@ -712,6 +712,7 @@ methods, and executing them, in an async-safe manner.
 ### Basic Usage
 
 There are only three methods: 
+
 * `add`
 * `run`
 * `setOptions`

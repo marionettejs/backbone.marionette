@@ -602,18 +602,18 @@ You can call `unbindAll` to unbind all events that were bound with the
 binder.unbindAll();
 ```
 
-# Backbone.Marionette.TemplateManager
+## Backbone.Marionette.TemplateManager
 
 The `TemplateManager` provides a cache for retrieving templates
 from script blocks in your HTML. This will improve
 the speed of subsequent calls to get a template.
 
-## Basic Usage
+### Basic Usage
 
 To use the `TemplateManager`, call it directly. It is not
 instantiated like other Marionette objects.
 
-## Get A Template
+### Get A Template
 
 Templates are retrieved by jQuery selector, by default, and
 handed back to you via a callback method:
@@ -635,7 +635,7 @@ Backbone.Marionette.TemplateManager.get("#my-template", function(tmpl){c = tmpl}
 a === b === c; // => true
 ```
 
-## Override Template Retrieval
+### Override Template Retrieval
 
 The default template retrieval is to select the template contents
 from the DOM using jQuery. If you wish to change the way this
@@ -659,7 +659,7 @@ This will use jQuery to asynchronously retrieve the template from
 the server, and then store the retrieved template in the template
 manager's cache.
 
-## Clear Items From cache
+### Clear Items From cache
 
 You can clear one or more, or all items from the cache using the
 `clear` method. Clearing a template from the cache will force it
@@ -690,19 +690,19 @@ Backbone.Marionette.TemplateManager.get("#that-template");
 Backbone.Marionette.TemplateManager.clear("#my-template", "#this-template")
 ```
 
-## Built In To ItemView
+### Built In To ItemView
 
 If you're using `Marionette.ItemView`, you don't need to manually
 call the `TemplateManager`. Just specify the `template` attribute
 of your view as a jQuery selector, and the `ItemView` will use 
 the template manager by default.
 
-# Backbone.Marionette.Callbacks
+## Backbone.Marionette.Callbacks
 
 The `Callbacks` object assists in managing a collection of callback
 methods, and executing them, in an async-safe manner.
 
-## Basic Usage
+### Basic Usage
 
 There are only three methods: 
 * `add`
@@ -735,7 +735,7 @@ with options!". The executing context for each of the callback
 methods has been set to the `someContext` object, which can be
 any valid JavaScript object.
 
-## Advanced / Async Use
+### Advanced / Async Use
 
 The `Callbacks` executes each callback in an async-friendly 
 manner, and can be used to facilitate async callbacks. 
@@ -745,11 +745,11 @@ to manage initializers (see above).
 It can also be used to guarantee callback execution in an event
 driven scenario, much like the application initializers.
 
-# Backbone.Marionette Example Apps
+## Backbone.Marionette Example Apps
 
 There are several sample apps available.
 
-## BBCloneMail
+### BBCloneMail
 
 I'm building a medium sized app to demonstrate Backbone.Marionette. It's a simple
 clone of a GMail like interface, with email and contact management. There is no
@@ -764,7 +764,7 @@ And you can find the source code at:
 
 http://github.com/derickbailey/bbclonemail
 
-## Steve Gentile' Contact Manager
+### Steve Gentile' Contact Manager
 
 Steve Gentile is building two versions of the same contact manager app. One of
 them runs on NodeJS as a back-end, and the other runs on ASP.NET MVC as the
@@ -778,7 +778,7 @@ And the ASP.NET MVC version is here:
 
 https://github.com/sgentile/BackboneContacts
 
-## Quick & Dirty Sample
+### Quick & Dirty Sample
 
 Here's a quick and dirty example to show how to use some of the pieces of
 Marionette:
@@ -833,7 +833,7 @@ $(function(){
 });
 ```
 
-# Compatibility And Requirements
+## Compatibility And Requirements
 
 Backbone.Marionette currently works with the following versions of these 
 libraries:
@@ -849,7 +849,7 @@ Marionette has not been tested against any other versions of these
 libraries. You may or may not have success if you use a version other
 than what it listed here.
 
-## Test Suite Requirements
+### Test Suite Requirements
 
 Backbone.Marionette is also tested with the Jasmine JavaScript test utility,
 using the Jasmine Ruby gem. 
@@ -859,13 +859,13 @@ latest RubyGems. Install the 'bundler' gem and then run 'bunle install' from
 the project's root folder. Then run `rake jasmine` to run the test suite, and
 load up http://localhost:8888 to see the test suite in action.
 
-## Annotated Source Code Generation
+### Annotated Source Code Generation
 
 I'm using [Docco](http://jashkenas.github.com/docco/) to generate the annotated source code.
 
-# Release Notes
+## Release Notes
 
-## v0.4.0
+### v0.4.0
 
 * **BREAKING:** Rewrote the template manager to be async-template loading friendly
 * **BREAKING:** Dropping support for Backbone v0.5.3 and below
@@ -875,11 +875,11 @@ has been started.
 * App triggers "start" event after initializers and initializer events
 * Updated to Backbone v0.9.1
 
-## v0.3.1
+### v0.3.1
 
 * Make region managers initialize immediately when calling `app.addRegions`
 
-## v0.3.0
+### v0.3.0
 
 * **BREAKING:** `view.el` for `ItemView` and `CollectionView` is no longer a jQuery selector object. Use `view.$el` instead
 * **BREAKING:** `regionManger.el` is no longer a jQuery selector object. Use `regionManager.$el` instead
@@ -888,54 +888,54 @@ has been started.
 * Removed default `itemView` from the `CollectionView` definition
 * `CollectionView` now explicitly checks for an `itemView` defined on it, and throws an error if it's not found
 
-## v0.2.6
+### v0.2.6
 
 * Bind the context (`this`) of application initializer functions to the application object
 
-## v0.2.5
+### v0.2.5
 
 * Added `AppRouter`, to reduce boilerplate routers down to simple configuration
 * `CollectionView` can be treated as a composite view, rendering an `model` and a `collection` of models
 * Now works with either jQuery, Zepto, or enter.js
 * `ItemView` will throw an error is no template is specified
 
-## v0.2.4
+### v0.2.4
 
 * Return `this` (the view itself) from `ItemView` and `CollectionView` `render` method
 * Call `onRender` after the `CollectionView` has rendered itself
 
-## v0.2.3
+### v0.2.3
 
 * Fixed global variable leaks
 * Removed declared, but unused variables
 
-## v0.2.2
+### v0.2.2
 
 * Fixed binding events in the collection view to use `bindTo` (#6)
 * Updated specs for collection view
 * Documentation fixes (#7)
 
-## v0.2.1
+### v0.2.1
 
 * Added `TemplateManager` to cache templates
 * CollectionView binds to add/remove and updates rendering appropriately
 * ItemView uses `TemplateManager` for template retrieval
 * ItemView and CollectionView set `this.el = $(this.el)` in constructor
 
-## v0.2.0
+### v0.2.0
 
 * Added `ItemView`
 * Added `CollectionView`
 * Added `BindTo`
 * Simplified the way `extend` is pulled from Backbone
 
-## v0.1.0
+### v0.1.0
 
 * Initial release
 * Created documentation
 * Generated annotated source code
 
-# Legal Mumbo Jumbo (MIT License)
+## Legal Mumbo Jumbo (MIT License)
 
 Copyright (c) 2011 Derick Bailey, Muted Solutions, LLC
 

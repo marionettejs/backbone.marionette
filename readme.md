@@ -12,7 +12,7 @@ to be a lightweigt and flexible library of tools that you can use when you want
 to. Like Backbone.js itself, you're not required to use all of 
 Backbone.Marionette just because you want to use some of it.
 
-## Download And Annotated Source Code
+### Download And Annotated Source Code
 
 You can download the raw source code above. For the development version, grab
 "backbone.marionette.js". For the production version, grab
@@ -20,7 +20,7 @@ You can download the raw source code above. For the development version, grab
 
 For a good time, call.. err... read through [the annotated source code](http://derickbailey.github.com/backbone.marionette/docs/backbone.marionette.html).
 
-# Marionette's Pieces
+## Marionette's Pieces
 
 These are the strings that you can pull to make your puppet dance:
 
@@ -38,7 +38,7 @@ The `Application`, `RegionManager`, `ItemView` and `CollectionView` use the
 `extend` syntax and functionality from Backbone, allowing you to define new 
 versions of these objects with custom behavior.
 
-## Marionette.Application
+### Marionette.Application
 
 The `Backbone.Marionette.Application` object is the hub of your composite 
 application. It organizes, initializes and coordinate the various pieces of your
@@ -53,7 +53,7 @@ it to add your own functionality.
 MyApp = new Backbone.Marionette.Application();
 ```
 
-### Adding Initializers
+#### Adding Initializers
 
 Your application needs to do useful things, like displaying content in your
 regions, starting up your routers, and more. To accomplish these tasks and
@@ -87,7 +87,7 @@ add them to the app object. If you add them before the app is
 started, they will run when the `start` method is called. If you
 add them after the app is started, they will run immediately.
 
-### Application Events
+#### Application Event;
 
 The `Application` object raises a few events during its lifecycle. These events
 can be used to do additional processing of your application. For example, you
@@ -116,7 +116,7 @@ MyApp.bind("initialize:after", function(options){
 The `options` parameter is passed through the `start` method of the application
 object (see below).
 
-### Starting An Application
+#### Starting An Application
 
 Once you have your application configured, you can kick everything off by 
 calling: `MyApp.start(options)`.
@@ -135,7 +135,7 @@ var options = {
 MyApp.start(options);
 ```
 
-### Event Aggregator
+#### Event Aggregator
 
 An event aggregator is an application level pub/sub mechanism that allows various
 pieces of an otherwise segmented and disconnected system to communicate with
@@ -162,12 +162,12 @@ For a more detailed discussion and example of using an event aggregator with
 Backbone applications, see the blog post: [References, Routing, and The Event
 Aggregator: Coordinating Views In Backbone.js](http://lostechies.com/derickbailey/2011/07/19/references-routing-and-the-event-aggregator-coordinating-views-in-backbone-js/)
 
-## Marionette.AppRouter
+### Marionette.AppRouter
 
 Reduce the boilerplate code of handling route events and then calling a single method on another object.
 Have your routers configured to call the method on your object, directly.
 
-### Configure Routes
+#### Configure Routes
 
 Configure an AppRouter with `appRoutes`. The route definition is passed on to Backbones standard routing
 handlers. This means that you define routes like you normally would. Instead of providing a callback
@@ -184,7 +184,7 @@ MyRouter = Backbone.Marionette.AppRouter.extend({
 
 You can also add standard routes to an AppRouter, with methods on the router.
 
-### Specify A Controller
+#### Specify A Controller
 
 App routers can only take one `controller` object as a parameter to the contructor.
 
@@ -206,14 +206,14 @@ contain the methods that you specified in the `appRoutes`.
 It is reocmmended that you divide your controller objects in to smaller peices of related functionality
 and have multiple routers / controllers, instead of just one giant router and controller.
 
-## Marionette.RegionManager
+### Marionette.RegionManager
 
 Region managers provide a consistent way to manage your views and
 show / close them in your application. They use a jQuery selector
 to show your views in the correct place. They also call extra
 methods on your views, to facilitate additional functionality.
 
-### Basic Usage
+#### Basic Usage
 
 Regions can be added to the application by calling the `addRegions` method on
 your application instance. This method expects a single hash parameter, with
@@ -234,7 +234,7 @@ would be available for use immediately.
 
 If you specify the same name twice, last one in wins.
 
-### Defining A Custom Region Manager
+#### Defining A Custom Region Manager
 
 You can define a custom region manager by extending from
 `RegionManager`. This allows you to create new functionality,
@@ -257,7 +257,7 @@ Note that if you define your own `RegionManager` object, you must provide an
 `el` for it. If you don't, you will receive an runtime exception saying that
 an `el` is required.
 
-### Instantiate Your Own Region Manager
+#### Instantiate Your Own Region Manager
 
 There may be times when you want to add a region manager to your
 application after your app is up and running. To do this, you'll
@@ -274,13 +274,13 @@ MyApp.someRegion = new SomeRegion();
 MyApp.someRegion.show(someView);
 ```
 
-## Marionette.ItemView
+### Marionette.ItemView
 
 An `ItemView` is a view that represents a single item. That item may be a 
 `Backbone.Model` or may be a `Backbone.Collection`. Whichever it is, though, it
 will be treated as a single item. 
 
-### ItemView render
+#### ItemView render
 
 An item view has a `render` method built in to it. By default it uses
 underscore.js templates.
@@ -320,7 +320,7 @@ Backbone.Marionette.ItemView.extend({
 });
 ```
 
-### ItemView template
+#### ItemView template
 
 Item views should be configured with a template. The `template` attribute should
 be either a valid jQuery selector, or a function that returns a valid jQuery
@@ -344,7 +344,7 @@ new SomeItemView({
 
 If no template is specified, an error will be throwing saying so.
 
-### ItemView serializeData
+#### ItemView serializeData
 
 Item views will serialize a model or collection, by default, by
 calling `.toJSON` on either the model or collection. If both a model
@@ -407,7 +407,7 @@ Backbone.Marionette.ItemView.extend({
 });
 ```
 
-### ItemView events
+#### ItemView events
 
 ItemView extends `Marionette.BindTo`. It is recommended that you use
 the `bindTo` method to bind model and collection events. 
@@ -431,7 +431,7 @@ The context (`this`) will automatically be set to the view. You can
 optionally set the context by passing in the context object as the
 4th parameter of `bindTo`.
 
-### ItemView close
+#### ItemView close
 
 ItemView implements a `close` method, which is called by the region
 managers automatically. As part of the implementation, the following
@@ -456,7 +456,7 @@ Backbone.Marionette.ItemView.extend({
 });
 ```
 
-## Marionette.CollectionView
+### Marionette.CollectionView
 
 The `CollectionView` will loop through all of the models in the
 specified collection, render each of them using a specified `itemView`,
@@ -467,7 +467,7 @@ After the view has been rendered, a `onRender` method will be called.
 You can implement this in your view to provide custom code for dealing
 with the view's `el` after it has been rendered:
 
-### CollectionView's itemView
+#### CollectionView's itemView
 
 Specify an `itemView` in your collection view definition. This must be
 a Backbone view object definition (not instance). It can be any 
@@ -484,14 +484,14 @@ Backbone.Marionette.CollectionView.extend({
 If you do not specify an `itemView`, an exception will be thrown
 stating that you must specify an `itemView`.
 
-### CollectionView: Add / Remove Items
+#### CollectionView: Add / Remove Items
 
 The collection view binds to the "add" and "remove" events of the
 collection that is specified. It will render any model that is
 added to the collection and add to the DOM automatically. It will
 also close any view for a model that is removed from the collection.
 
-### CollectionView's appendHtml
+#### CollectionView's appendHtml
 
 By default the collection view will call jQuery's `.append` to
 move the HTML contents from the item view instance in to the collection
@@ -515,7 +515,7 @@ Backbone.Marionette.CollectionView.extend({
 });
 ```
 
-### Composite View
+#### Composite View
 
 A `CollectionView` can be work as a composite view for scenarios
 where it should represent both a branch and leaf in a tree structure.
@@ -544,7 +544,7 @@ new CompositeView({
 });
 ```
 
-### CollectionView close
+#### CollectionView close
 
 CollectionView implements a `close` method, which is called by the 
 region managers automatically. As part of the implementation, the 
@@ -570,7 +570,7 @@ Backbone.Marionette.CollectionView.extend({
 });
 ```
 
-## Marionette.BindTo
+### Marionette.BindTo
 
 The `BindTo` object provides event binding management and facilitates simple
 event binding and unbinding for any object that extends from `Backbone.Events`.
@@ -602,18 +602,18 @@ You can call `unbindAll` to unbind all events that were bound with the
 binder.unbindAll();
 ```
 
-## Backbone.Marionette.TemplateManager
+### Backbone.Marionette.TemplateManager
 
 The `TemplateManager` provides a cache for retrieving templates
 from script blocks in your HTML. This will improve
 the speed of subsequent calls to get a template.
 
-### Basic Usage
+#### Basic Usage
 
 To use the `TemplateManager`, call it directly. It is not
 instantiated like other Marionette objects.
 
-### Get A Template
+#### Get A Template
 
 Templates are retrieved by jQuery selector, by default, and
 handed back to you via a callback method:
@@ -635,7 +635,7 @@ Backbone.Marionette.TemplateManager.get("#my-template", function(tmpl){c = tmpl}
 a === b === c; // => true
 ```
 
-### Override Template Retrieval
+#### Override Template Retrieval
 
 The default template retrieval is to select the template contents
 from the DOM using jQuery. If you wish to change the way this
@@ -659,7 +659,7 @@ This will use jQuery to asynchronously retrieve the template from
 the server, and then store the retrieved template in the template
 manager's cache.
 
-### Clear Items From cache
+#### Clear Items From cache
 
 You can clear one or more, or all items from the cache using the
 `clear` method. Clearing a template from the cache will force it
@@ -690,19 +690,19 @@ Backbone.Marionette.TemplateManager.get("#that-template");
 Backbone.Marionette.TemplateManager.clear("#my-template", "#this-template")
 ```
 
-### Built In To ItemView
+#### Built In To ItemView
 
 If you're using `Marionette.ItemView`, you don't need to manually
 call the `TemplateManager`. Just specify the `template` attribute
 of your view as a jQuery selector, and the `ItemView` will use 
 the template manager by default.
 
-## Backbone.Marionette.Callbacks
+### Backbone.Marionette.Callbacks
 
 The `Callbacks` object assists in managing a collection of callback
 methods, and executing them, in an async-safe manner.
 
-### Basic Usage
+#### Basic Usage
 
 There are only three methods: 
 * `add`
@@ -735,7 +735,7 @@ with options!". The executing context for each of the callback
 methods has been set to the `someContext` object, which can be
 any valid JavaScript object.
 
-### Advanced / Async Use
+#### Advanced / Async Use
 
 The `Callbacks` executes each callback in an async-friendly 
 manner, and can be used to facilitate async callbacks. 

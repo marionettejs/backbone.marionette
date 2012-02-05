@@ -1,4 +1,7 @@
 describe("app router", function(){
+  afterEach(function(){
+    window.location.hash = "";
+  });
 
   describe("when a route fires", function(){
     var Router = Backbone.Marionette.AppRouter.extend({

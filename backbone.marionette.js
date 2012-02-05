@@ -467,14 +467,14 @@ Backbone.Marionette = (function(Backbone, _, $){
     // from the DOM.
     get: function(templateId, callback){
       var template = this.templates[templateId];
-      if (!template){
+      if (template){
+        callback && callback.call(this, template);
+      } else {
         var that = this;
         template = this.loadTemplate(templateId, function(template){
           this.templates[templateId] = template;
           callback && callback.call(that, template);
         });
-      } else {
-        callback && callback.call(this, template);
       }
     },
 

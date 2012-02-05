@@ -615,19 +615,24 @@ instantiated like other Marionette objects.
 
 ## Get A Template
 
-Templates are retrieved by jQuery selector, by default:
+Templates are retrieved by jQuery selector, by default, and
+handed back to you via a callback method:
 
 ```js
-Backbone.Marionette.TemplateManager.get("#my-template");
+Backbone.Marionette.TemplateManager.get("#my-template", function(template){
+ // use the template here
+});
 ```
 
 Making multiple calls to get the same template will retrieve the
 template from the cache on subsequence calls:
 
 ```js
-Backbone.Marionette.TemplateManager.get("#my-template");
-Backbone.Marionette.TemplateManager.get("#my-template");
-Backbone.Marionette.TemplateManager.get("#my-template");
+var a, b, c;
+Backbone.Marionette.TemplateManager.get("#my-template", function(tmpl){a = tmpl});
+Backbone.Marionette.TemplateManager.get("#my-template", function(tmpl){b = tmpl});
+Backbone.Marionette.TemplateManager.get("#my-template", function(tmpl){c = tmpl});
+a === b === c; // => true
 ```
 
 ## Override Template Retrieval
@@ -645,16 +650,14 @@ with a function like this:
 Backbone.Marionette.TemplateManager.loadTemplate = function(templateId, callback){
   var that = this;
   $.get(templateId + ".html", function(template){
-    // store the template in the cache.
-    that.templates[templateId] = template;
+    callback.call(this, template);
   });
 }
 ```
 
 This will use jQuery to asynchronously retrieve the template from
 the server, and then store the retrieved template in the template
-manager's cache (be sure to use the `templateId` parameter as the 
-key for the cache).
+manager's cache.
 
 ## Clear Items From cache
 
@@ -835,8 +838,8 @@ $(function(){
 Backbone.Marionette currently works with the following versions of these 
 libraries:
 
-* Backbone v0.5.3 and v0.9.0
-* Underscore v1.2.3 and v1.3.1
+* Backbone v0.9.1
+* Underscore v1.3.1
 * jQuery v1.7.1
 
 While support for Zepto and Enderjs has been added, it is not officially
@@ -862,12 +865,14 @@ I'm using [Docco](http://jashkenas.github.com/docco/) to generate the annotated 
 
 # Release Notes
 
-## v0.3.2
+## v0.4.0
 
 * Added `Marionette.Callbacks` to manage a collection of callbacks in an async-friendly way
 * Guarantee the execution of app initializer functions, even if they are added after the app 
 has been started.
 * App triggers "start" event after initializers and initializer events
+* Rewrote the template manager to be async-template loading friendly
+* Officially dropping support for Backbone v0.5.3 and below
 
 ## v0.3.1
 

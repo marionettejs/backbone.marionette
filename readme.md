@@ -865,6 +865,10 @@ I'm using [Docco](http://jashkenas.github.com/docco/) to generate the annotated 
 
 ## Release Notes
 
+### v0.4.1
+
+* Minor fix to context of template manager callback, to fix issue w/ async template loading
+
 ### v0.4.0
 
 * **BREAKING:** Rewrote the template manager to be async-template loading friendly

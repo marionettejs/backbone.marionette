@@ -1,4 +1,4 @@
-// Backbone.Marionette v0.4.0
+// Backbone.Marionette v0.4.1
 //
 // Copyright (C)2011 Derick Bailey, Muted Solutions, LLC
 // Distributed Under MIT License
@@ -9,7 +9,7 @@
 Backbone.Marionette = (function(Backbone, _, $){
   var Marionette = {};
 
-  Marionette.version = "0.4.0";
+  Marionette.version = "0.4.1";
 
   // Region Manager
   // --------------
@@ -469,7 +469,7 @@ Backbone.Marionette = (function(Backbone, _, $){
       } else {
         var that = this;
         template = this.loadTemplate(templateId, function(template){
-          this.templates[templateId] = template;
+          that.templates[templateId] = template;
           callback && callback.call(that, template);
         });
       }

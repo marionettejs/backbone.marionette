@@ -867,12 +867,13 @@ I'm using [Docco](http://jashkenas.github.com/docco/) to generate the annotated 
 
 ## v0.4.0
 
+* **BREAKING:** Rewrote the template manager to be async-template loading friendly
 * Added `Marionette.Callbacks` to manage a collection of callbacks in an async-friendly way
 * Guarantee the execution of app initializer functions, even if they are added after the app 
 has been started.
 * App triggers "start" event after initializers and initializer events
-* Rewrote the template manager to be async-template loading friendly
-* Officially dropping support for Backbone v0.5.3 and below
+* Updated to Backbone v0.9.1
+* Dropping support for Backbone v0.5.3 and below
 
 ## v0.3.1
 

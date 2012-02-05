@@ -97,15 +97,18 @@ Backbone.Marionette = (function(Backbone, _, $){
     // Render the view, defaulting to underscore.js templates.
     // You can override this in your view definition.
     render: function(){
-      var template = this.getTemplate();
+      var that = this;
       var data = this.serializeData();
-      var html = this.renderTemplate(template, data);
 
-      this.$el.html(html);
+      this.getTemplate(function(template){
+        var html = that.renderTemplate(template, data);
 
-      if (this.onRender){
-        this.onRender();
-      }
+        that.$el.html(html);
+
+        if (that.onRender){
+          that.onRender();
+        }
+      });
 
       return this;
     },
@@ -127,18 +130,17 @@ Backbone.Marionette = (function(Backbone, _, $){
     // returns a jQuery object, or a jQuery selector string 
     // directly. The string value must be a valid jQuery 
     // selector.  
-    getTemplate: function(){
+    getTemplate: function(callback){
       var template = this.template;
   
       var templateData;
 
       if (_.isFunction(template)){
         templateData = template.call(this);
+        callback.call(this, templateData);
       } else {
-        templateData = Marionette.TemplateManager.get(template);
+        templateData = Marionette.TemplateManager.get(template, callback);
       }
-
-      return templateData;
     },
 
     // Default `close` implementation, for removing a view from the
@@ -463,15 +465,17 @@ Backbone.Marionette = (function(Backbone, _, $){
     // Get the specified template by id. Either
     // retrieves the cached version, or loads it
     // from the DOM.
-    get: function(templateId){
+    get: function(templateId, callback){
       var template = this.templates[templateId];
       if (!template){
-        this.loadTemplate(templateId, function(tmpl){
-          this.templates[templateId] = tmpl;
-          template = tmpl;
+        var that = this;
+        template = this.loadTemplate(templateId, function(template){
+          this.templates[templateId] = template;
+          callback.call(that, template);
         });
+      } else {
+        callback.call(this, template);
       }
-      return template;
     },
 
     // Load a template from the DOM.

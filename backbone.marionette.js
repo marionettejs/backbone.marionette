@@ -364,13 +364,13 @@ Backbone.Marionette = (function(Backbone, _, $){
   };
 
   _.extend(Marionette.Callbacks.prototype, {
-    // Add an initializer to be called later
+    // Add a callback
     add: function(callback){
       this.callbacks.push(callback);
     },
 
-    // Run all registered initializers in an async-friendly
-    // manner. Additional initializers can be added while this
+    // Run all registered callbacks in an async-friendly
+    // manner. Additional callbacks can be added while this
     // is running and they will be picked up and executed after
     // the current ones.
     run: function(context){

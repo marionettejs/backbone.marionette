@@ -3,9 +3,11 @@ Make your Backbone.js apps dance with a composite application architecture!
 # Backbone.Marionette
 
 Backbone.Marionette is a composite application library for Backbone.js that
-aims to simplify the construction of large scale JavaScript application through
-common design and implementation patterns found in composite application
-architectures, such as Microsoft's "Prism" framework. 
+aims to simplify the construction of large scale JavaScript applications. It is
+largely a collection of common design and implementation patterns found in 
+the applications that I (Derick Bailey) have been building with Backbone, and
+includes various peices inspired by composite application architectures, 
+such as Microsoft's "Prism" framework. 
 
 Unlike other composite application frameworks, Backbone.Marionette is designed 
 to be a lightweigt and flexible library of tools that you can use when you want 

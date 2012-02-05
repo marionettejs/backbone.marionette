@@ -17,7 +17,7 @@ Backbone.Marionette = (function(Backbone, _, $){
   // Manage the visual regions of your composite application. See
   // http://lostechies.com/derickbailey/2011/12/12/composite-js-apps-regions-and-region-managers/
   Marionette.RegionManager = function(options){
-    this.options = options || (options = {});
+    this.options = options || {};
     if (!this.el){
       var err = new Error("An 'el' must be specified");
       err.name = "NoElError";
@@ -132,13 +132,11 @@ Backbone.Marionette = (function(Backbone, _, $){
     getTemplate: function(callback){
       var template = this.template;
   
-      var templateData;
-
       if (_.isFunction(template)){
-        templateData = template.call(this);
+        var templateData = template.call(this);
         callback.call(this, templateData);
       } else {
-        templateData = Marionette.TemplateManager.get(template, callback);
+        Marionette.TemplateManager.get(template, callback);
       }
     },
 
@@ -369,7 +367,6 @@ Backbone.Marionette = (function(Backbone, _, $){
     // Add an initializer to be called later
     add: function(callback){
       this.callbacks.push(callback);
-      this.isStarted && this.runCallbacks();
     },
 
     // Run all registered initializers in an async-friendly
@@ -468,7 +465,7 @@ Backbone.Marionette = (function(Backbone, _, $){
         callback && callback.call(this, template);
       } else {
         var that = this;
-        template = this.loadTemplate(templateId, function(template){
+        this.loadTemplate(templateId, function(template){
           that.templates[templateId] = template;
           callback && callback.call(that, template);
         });

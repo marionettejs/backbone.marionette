@@ -9,7 +9,7 @@ the applications that I (Derick Bailey) have been building with Backbone, and
 includes various peices inspired by composite application architectures, 
 such as Microsoft's "Prism" framework. 
 
-Unlike other composite application frameworks, Backbone.Marionette is designed 
+Backbone.Marionette is designed 
 to be a lightweigt and flexible library of tools that you can use when you want 
 to. Like Backbone.js itself, you're not required to use all of 
 Backbone.Marionette just because you want to use some of it.

@@ -380,7 +380,7 @@ Backbone.Marionette = (function(Backbone, _, $){
     add: function(callback){
       var that = this;
       $.when(this.promise).then(function(){
-        callback(that.callbackOptions);
+        callback.call(that.context, that.callbackOptions);
       });
     },
 
@@ -389,6 +389,7 @@ Backbone.Marionette = (function(Backbone, _, $){
     // is running and they will be picked up and executed after
     // the current ones.
     run: function(context){
+      this.context = context;
       this.deferred.resolve();
     },
 

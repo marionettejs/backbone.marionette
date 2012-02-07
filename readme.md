@@ -346,7 +346,23 @@ must return a jQuery deferred object from the `render` method:
 ```js
 DeferredView = Backbone.View.extend({
   render: function(){
-    // return ????
+    var that = this;
+    var data = this.serializeData();
+    var dfd = jQuery.Deferred();
+
+    this.getTemplate(function(template){
+      var html = that.renderTemplate(template, data);
+
+      that.$el.html(html);
+
+      if (that.onRender){
+        that.onRender();
+      }
+
+      dfd.resolve();
+    });
+
+    return dfd.promise();
   }
 });
 

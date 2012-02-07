@@ -43,7 +43,27 @@ describe("template manager", function(){
     });
   });
 
-  describe("when clearing specified templates from the cache", function(){
+  describe("when clearing a single template from the cache", function(){
+    beforeEach(function(){
+      setFixtures("<script id='t4' type='template'>t4</script><script id='t5' type='template'>t5</script><script id='t6' type='template'>t6</script>");
+      Backbone.Marionette.TemplateManager.get("#t4");
+      Backbone.Marionette.TemplateManager.get("#t5");
+      Backbone.Marionette.TemplateManager.get("#t6");
+
+      Backbone.Marionette.TemplateManager.clear("#t4");
+    });
+    
+    it("should clear the specified templates cache", function(){
+      expect(Backbone.Marionette.TemplateManager.templates["#t4"]).toBeUndefined();
+    });
+
+    it("should not clear other templates from the cache", function(){
+      expect(Backbone.Marionette.TemplateManager.templates["#t5"]).not.toBeUndefined();
+      expect(Backbone.Marionette.TemplateManager.templates["#t6"]).not.toBeUndefined();
+    });
+  });
+
+  describe("when clearing multiple templates from the cache", function(){
     beforeEach(function(){
       setFixtures("<script id='t4' type='template'>t4</script><script id='t5' type='template'>t5</script><script id='t6' type='template'>t6</script>");
       Backbone.Marionette.TemplateManager.get("#t4");

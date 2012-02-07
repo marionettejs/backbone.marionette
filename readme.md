@@ -956,6 +956,7 @@ I'm using [Docco](http://jashkenas.github.com/docco/) to generate the annotated 
 
 #### v0.4.2
 
+* Fixed template manager's `clear` so it properly clears a single template, when only one is specified
 * Refactored the `RegionManager` code to support several new features
 * Region managers now support returning a jQuery deferred object from a view's `render` method
 * Region managers now have a `close` method that you can call to close the current view

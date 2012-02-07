@@ -496,7 +496,7 @@ Backbone.Marionette = (function(Backbone, _, $){
     // `clear("#t1", "#t2", "...")`
     clear: function(){
       var length = arguments.length;
-      if (length > 1){
+      if (length > 0){
         for(var i=0; i<length; i++){
           delete this.templates[arguments[i]];
         }

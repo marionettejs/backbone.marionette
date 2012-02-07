@@ -65,7 +65,7 @@ describe("region manager", function(){
       }
     });
 
-    var myRegion, view, showEvent;
+    var myRegion, view, showEvent, showContext;
 
     beforeEach(function(){
       setFixtures("<div id='region'></div>");
@@ -74,7 +74,10 @@ describe("region manager", function(){
       spyOn(view, "render").andCallThrough();
 
       myRegion = new MyRegion();
-      myRegion.on("view:show", function(){showEvent = true});
+      myRegion.on("view:show", function(){
+        showEvent = true;
+        showContext = this;
+      });
 
       myRegion.show(view);
     });
@@ -93,6 +96,10 @@ describe("region manager", function(){
 
     it("should trigger an show event", function(){
       expect(showEvent).toBeTruthy();
+    });
+
+    it("should set 'this' to the manager, from the show event", function(){
+      expect(showContext).toBe(myRegion);
     });
   });
 
@@ -148,7 +155,7 @@ describe("region manager", function(){
       }
     });
 
-    var myRegion, view, closed;
+    var myRegion, view, closed, closedContext;
 
     beforeEach(function(){
       setFixtures("<div id='region'></div>");
@@ -156,7 +163,10 @@ describe("region manager", function(){
       view = new MyView();
       spyOn(view, "close");
       myRegion = new MyRegion();
-      myRegion.on("view:closed", function(){closed = true});
+      myRegion.on("view:closed", function(){
+        closed = true;
+        closedContext = this;
+      });
       myRegion.show(view);
 
       myRegion.close();
@@ -164,6 +174,10 @@ describe("region manager", function(){
 
     it("should trigger a close event", function(){
       expect(closed).toBeTruthy();
+    });
+
+    it("should set 'this' to the manager, from the close event", function(){
+      expect(closedContext).toBe(myRegion);
     });
 
     it("should call 'close' on the already show view", function(){

@@ -367,7 +367,8 @@ Backbone.Marionette = (function(Backbone, _, $){
   // ---------
 
   // A simple way of managing a collection of callbacks
-  // and executing them at a later point in time.
+  // and executing them at a later point in time, using jQuery's
+  // `Deferred` object.
   Marionette.Callbacks = function(){
     this.deferred = $.Deferred();
     this.promise = this.deferred.promise();
@@ -376,7 +377,10 @@ Backbone.Marionette = (function(Backbone, _, $){
   };
 
   _.extend(Marionette.Callbacks.prototype, {
-    // Add a callback
+    
+    // Add a callback to be executed. Callbacks added here are
+    // guaranteed to execute, even if they are added after the 
+    // `run` method is called.
     add: function(callback){
       var that = this;
       $.when(this.promise).then(function(){
@@ -384,10 +388,9 @@ Backbone.Marionette = (function(Backbone, _, $){
       });
     },
 
-    // Run all registered callbacks in an async-friendly
-    // manner. Additional callbacks can be added while this
-    // is running and they will be picked up and executed after
-    // the current ones.
+    // Run all registered callbacks with the context specified. 
+    // Additional callbacks can be added after this has been run 
+    // and they will still be executed.
     run: function(context){
       this.context = context;
       this.deferred.resolve();

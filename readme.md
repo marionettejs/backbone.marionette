@@ -972,13 +972,14 @@ I'm using [Docco](http://jashkenas.github.com/docco/) to generate the annotated 
 
 #### v0.4.2
 
+* Refactored `Callbacks` object to use a jQuery Deferred instead of my own code
 * Fixed template manager's `clear` so it properly clears a single template, when only one is specified
 * Refactored the `RegionManager` code to support several new features
-* Region managers now support returning a jQuery deferred object from a view's `render` method
-* Region managers now have a `close` method that you can call to close the current view
-* Region managers now trigger a "view:show" and "view:close" event
-* Region managers correctly remove reference to previous views, allowing garbage collection of the view
-* Region managers now support the `bindTo` and `unbindAll` methods, for binding/unbinding region manager events
+  * now support returning a jQuery deferred object from a view's `render` method
+  * now have a `close` method that you can call to close the current view
+  * now trigger a "view:show" and "view:close" event
+  * correctly remove reference to previous views, allowing garbage collection of the view
+  * now support the `bindTo` and `unbindAll` methods, for binding/unbinding region manager events
 
 #### v0.4.1
 

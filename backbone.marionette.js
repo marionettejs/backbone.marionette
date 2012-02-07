@@ -48,11 +48,13 @@ Backbone.Marionette = (function(Backbone, _, $){
     },
 
     _openView: function(view){
-      view.render();
-      this.$el.html(view.el);
-      if (view.onShow){
-        view.onShow();
-      }
+      var that = this;
+      $.when(view.render()).then(function () {
+        that.$el.html(view.el);
+        if (view.onShow) {
+          view.onShow();
+        }
+      });
     }
   });
 

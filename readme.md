@@ -220,7 +220,7 @@ show / close them in your application. They use a jQuery selector
 to show your views in the correct place. They also call extra
 methods on your views, to facilitate additional functionality.
 
-### Basic Usage
+### Defining A Region
 
 Regions can be added to the application by calling the `addRegions` method on
 your application instance. This method expects a single hash parameter, with
@@ -239,7 +239,60 @@ As soon as you call `addRegions`, your region managers are available on your
 app object. In the above, example `MyApp.mainRegion` and `MyApp.navigationRegion`
 would be available for use immediately.
 
-If you specify the same name twice, last one in wins.
+If you specify the same region name twice, last one in wins.
+
+### Basic Usage
+
+Once a region manager has been defined, you can call the `show`
+and `close` methods on it to render and display a view, and then
+to close that view:
+
+```js
+var myView = new MyView();
+
+// render and display the view
+MyApp.mainRegion.show(myView);
+
+// closes the current view
+MyApp.mainRegion.close();
+```
+
+If you replace the current view with a new view by calling `show`,
+it will automatically close the previous view.
+
+```js
+// show the first view
+var myView = new MyView();
+MyApp.mainRegion.show(myView);
+
+// replace view with another. the
+// `close` method is called for you
+var anotherView = new AnotherView();
+MyApp.mainRegion.show(anotherView);
+```
+
+### Region Manager Events
+
+A region manager will raise a few events during it's showing and
+closing of views:
+
+* "view:show" - when the view has been rendered and displayed
+* "view:closed" - when the view has been closed
+
+You can bind to these events and add code that needs to run with
+your region manager, opening and closing views.
+
+```js
+MyApp.mainRegion.on("view:show", function(view){
+  // manipulate the `view` or do something extra
+  // with the region manager via `this`
+});
+
+MyApp.mainRegion.on("view:closed", function(view){
+  // manipulate the `view` or do something extra
+  // with the region manager via `this`
+});
+```
 
 ### Defining A Custom Region Manager
 

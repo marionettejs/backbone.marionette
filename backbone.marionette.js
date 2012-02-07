@@ -1,4 +1,4 @@
-// Backbone.Marionette v0.4.2
+// Backbone.Marionette v0.4.3
 //
 // Copyright (C)2011 Derick Bailey, Muted Solutions, LLC
 // Distributed Under MIT License
@@ -9,7 +9,7 @@
 Backbone.Marionette = (function(Backbone, _, $){
   var Marionette = {};
 
-  Marionette.version = "0.4.2";
+  Marionette.version = "0.4.3";
 
   // Region Manager
   // --------------
@@ -23,7 +23,6 @@ Backbone.Marionette = (function(Backbone, _, $){
       err.name = "NoElError";
       throw err;
     }
-    this.$el = $(this.el);
   };
 
   _.extend(Marionette.RegionManager.prototype, Backbone.Events, {
@@ -34,10 +33,17 @@ Backbone.Marionette = (function(Backbone, _, $){
     // `onShow` and `close` method on your view, just after showing
     // or just before closing the view, respectively.
     show: function(view){
+      this.ensureEl();
       this.close();
       this.open(view);
 
       this.currentView = view;
+    },
+
+    ensureEl: function(){
+      if (!this.$el || this.$el.length == 0){
+        this.$el = $(this.el);
+      }
     },
 
     // Internal method to render and display a view. Not meant 

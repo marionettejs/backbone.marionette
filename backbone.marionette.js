@@ -44,13 +44,13 @@ Backbone.Marionette = (function(Backbone, _, $){
     // to be called from any external code.
     open: function(view){
       var that = this;
+
       $.when(view.render()).then(function () {
         that.$el.html(view.el);
-        if (view.onShow) {
-          view.onShow();
-        }
+        view.onShow && view.onShow();
         that.trigger("view:show", view);
       });
+
     },
 
     // Close the current view, if there is one. If there is no
@@ -521,6 +521,7 @@ Backbone.Marionette = (function(Backbone, _, $){
   _.extend(Marionette.ItemView.prototype, Marionette.BindTo);
   _.extend(Marionette.CollectionView.prototype, Marionette.BindTo);
   _.extend(Marionette.Application.prototype, Marionette.BindTo);
+  _.extend(Marionette.RegionManager.prototype, Marionette.BindTo);
 
   return Marionette;
 })(Backbone, _, window.jQuery || window.Zepto || window.ender);

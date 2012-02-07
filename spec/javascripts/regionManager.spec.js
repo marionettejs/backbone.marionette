@@ -65,7 +65,7 @@ describe("region manager", function(){
       }
     });
 
-    var myRegion, view;
+    var myRegion, view, showEvent;
 
     beforeEach(function(){
       setFixtures("<div id='region'></div>");
@@ -74,6 +74,8 @@ describe("region manager", function(){
       spyOn(view, "render").andCallThrough();
 
       myRegion = new MyRegion();
+      myRegion.on("view:show", function(){showEvent = true});
+
       myRegion.show(view);
     });
 
@@ -88,6 +90,10 @@ describe("region manager", function(){
     it("shoudl call 'onShow' after the rendered HTML has been added to the DOM", function(){
       expect($(view.el)).toHaveClass("onShowClass");
     })
+
+    it("should trigger an show event", function(){
+      expect(showEvent).toBeTruthy();
+    });
   });
 
   describe("when a view is already shown and showing another", function(){
@@ -121,6 +127,51 @@ describe("region manager", function(){
 
     it("should call 'close' on the already open view", function(){
       expect(view1.close).toHaveBeenCalled();
+    });
+
+    it("should reference the new view as the current view", function(){
+      expect(myRegion.currentView).toBe(view2);
+    });
+  });
+
+  describe("when closing the current view", function(){
+    var MyRegion = Backbone.Marionette.RegionManager.extend({
+      el: "#region"
+    });
+
+    var MyView = Backbone.View.extend({
+      render: function(){
+        $(this.el).html("some content");
+      },
+
+      close: function(){
+      }
+    });
+
+    var myRegion, view, closed;
+
+    beforeEach(function(){
+      setFixtures("<div id='region'></div>");
+
+      view = new MyView();
+      spyOn(view, "close");
+      myRegion = new MyRegion();
+      myRegion.on("view:closed", function(){closed = true});
+      myRegion.show(view);
+
+      myRegion.close();
+    });
+
+    it("should trigger a close event", function(){
+      expect(closed).toBeTruthy();
+    });
+
+    it("should call 'close' on the already show view", function(){
+      expect(view.close).toHaveBeenCalled();
+    });
+
+    it("should delete the current view reference", function(){
+      expect(myRegion.currentView).toBeUndefined();
     });
   });
 

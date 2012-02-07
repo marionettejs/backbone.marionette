@@ -34,27 +34,35 @@ Backbone.Marionette = (function(Backbone, _, $){
     // `onShow` and `close` method on your view, just after showing
     // or just before closing the view, respectively.
     show: function(view){
-      var oldView = this.currentView;
+      this.close();
+      this.open(view);
+
       this.currentView = view;
-
-      this._closeView(oldView);
-      this._openView(view);
     },
 
-    _closeView: function(view){
-      if (view && view.close){
-        view.close();
-      }
-    },
-
-    _openView: function(view){
+    // Internal method to render and display a view. Not meant 
+    // to be called from any external code.
+    open: function(view){
       var that = this;
       $.when(view.render()).then(function () {
         that.$el.html(view.el);
         if (view.onShow) {
           view.onShow();
         }
+        that.trigger("view:show", view);
       });
+    },
+
+    // Close the current view, if there is one. If there is no
+    // current view, it does nothing and returns immediately.
+    close: function(){
+      var view = this.currentView;
+      if (!view){ return; }
+
+      view.close && view.close();
+      this.trigger("view:closed", view);
+
+      delete this.currentView;
     }
   });
 

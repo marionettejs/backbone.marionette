@@ -383,7 +383,7 @@ Backbone.Marionette = (function(Backbone, _, $){
     // `run` method is called.
     add: function(callback){
       var that = this;
-      $.when(this.promise).then(function(){
+      this.promise.then(function(){
         callback.call(that.context, that.callbackOptions);
       });
     },

@@ -421,14 +421,12 @@ Backbone.Marionette = (function(Backbone, _, $){
     // has already been called.
     addInitializer: function(initializer){
       this.initCallbacks.add(initializer);
-      this.isStarted && this.initCallbacks.run(this);
     },
 
     // kick off all of the application's processes.
     // initializes all of the regions that have been added
     // to the app, and runs all of the initializer functions
     start: function(options){
-      this.isStarted = true;
       this.initCallbacks.setOptions(options);
 
       this.trigger("initialize:before", options);

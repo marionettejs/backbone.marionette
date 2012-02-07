@@ -372,8 +372,6 @@ Backbone.Marionette = (function(Backbone, _, $){
   Marionette.Callbacks = function(){
     this.deferred = $.Deferred();
     this.promise = this.deferred.promise();
-    this.callbacks = [];
-    this.callbackOptions = {};
   };
 
   _.extend(Marionette.Callbacks.prototype, {

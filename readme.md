@@ -811,9 +811,6 @@ There are only three methods:
 
 The `add` method adds a new callback to be executed later. 
 
-The `setOptions` method stores an options object that is then
-passed to the callbacks when they are executed.
-
 The `run` method executes all current callbacks in, using the
 specified context for each of the callbacks, and supplying the
 provided options to the callbacks.
@@ -825,9 +822,7 @@ callbacks.add(function(options){
   alert("I'm a callback with " + options.value + "!");
 });
 
-callbacks.setOptions({value: "options"});
-
-callbacks.run(someContext);
+callbacks.run(someContext, {value: "options"});
 ```
 
 This example will display an alert box that says "I'm a callback
@@ -972,6 +967,7 @@ I'm using [Docco](http://jashkenas.github.com/docco/) to generate the annotated 
 
 #### v0.4.2
 
+* **BREAKING:** Removed the `setOptions` method from the `Callbacks` object
 * Refactored `Callbacks` object to use a jQuery Deferred instead of my own code
 * Fixed template manager's `clear` so it properly clears a single template, when only one is specified
 * Refactored the `RegionManager` code to support several new features

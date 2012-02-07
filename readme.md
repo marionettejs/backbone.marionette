@@ -334,6 +334,29 @@ MyApp.someRegion = new SomeRegion();
 MyApp.someRegion.show(someView);
 ```
 
+### jQuery Deferred And Asynchronous Template Loading
+
+The region manager `show` method takes advantage of jQuery's
+deferred cababilities, allowing for some very advanced techniques
+to be used for rendering views.
+
+To use a deferred, a view that is shown via a region manager
+must return a jQuery deferred object from the `render` method:
+
+```js
+DeferredView = Backbone.View.extend({
+  render: function(){
+    // return ????
+  }
+});
+
+var view = new DeferredView();
+MyApp.mainRegion.show(view);
+```
+
+The region manager will wait until the deferred object is resolved
+before it attached the view's `el` to the DOM and displays it.
+
 ## Marionette.ItemView
 
 An `ItemView` is a view that represents a single item. That item may be a 
@@ -930,6 +953,13 @@ load up http://localhost:8888 to see the test suite in action.
 I'm using [Docco](http://jashkenas.github.com/docco/) to generate the annotated source code.
 
 ## Release Notes
+
+#### v0.4.2
+
+* Refactored the `RegionManager` code to support several new features
+* Region managers now support returning a jQuery deferred object from a view's `render` method
+* Region managers now have a `close` method that you can call to close the current view
+* Region managers now trigger a "view:show" and "view:close" event
 
 #### v0.4.1
 

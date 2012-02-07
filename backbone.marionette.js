@@ -382,24 +382,16 @@ Backbone.Marionette = (function(Backbone, _, $){
     // guaranteed to execute, even if they are added after the 
     // `run` method is called.
     add: function(callback){
-      var that = this;
-      this.promise.then(function(){
-        callback.call(that.context, that.callbackOptions);
+      this.promise.done(function(context, options){
+        callback.call(context, options);
       });
     },
 
     // Run all registered callbacks with the context specified. 
     // Additional callbacks can be added after this has been run 
     // and they will still be executed.
-    run: function(context){
-      this.context = context;
-      this.deferred.resolve();
-    },
-
-    // Set an options object that is passed to all of the
-    // callback methods.
-    setOptions: function(options){
-      this.callbackOptions = options;
+    run: function(context, options){
+      this.deferred.resolve(context, options);
     }
   });
 
@@ -427,10 +419,8 @@ Backbone.Marionette = (function(Backbone, _, $){
     // initializes all of the regions that have been added
     // to the app, and runs all of the initializer functions
     start: function(options){
-      this.initCallbacks.setOptions(options);
-
       this.trigger("initialize:before", options);
-      this.initCallbacks.run(this);
+      this.initCallbacks.run(this, options);
       this.trigger("initialize:after", options);
 
       this.trigger("start", options);

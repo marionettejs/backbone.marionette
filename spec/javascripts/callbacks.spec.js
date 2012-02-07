@@ -1,20 +1,26 @@
 describe("callbacks", function(){
 
   describe("when registering callbacks and running them", function(){
-    var wasCalled, secondCall;
+    var wasCalled, secondCall, 
+        options, specifiedOptions, 
+        context, specifiedContext;
 
     beforeEach(function(){
       var callbacks = new Backbone.Marionette.Callbacks();
+      specifiedOptions = {};
+      specifiedContext = {};
 
-      callbacks.add(function(){
+      callbacks.add(function(opts){
         wasCalled = true;
+        options = opts;
+        context = this;
       });
 
       callbacks.add(function(){
         secondCall = true;
       });
 
-      callbacks.run();
+      callbacks.run(specifiedContext, specifiedOptions);
     });
 
     it("should execute the first", function(){
@@ -23,6 +29,14 @@ describe("callbacks", function(){
 
     it("should execute the second", function(){
       expect(secondCall).toBeTruthy();
+    });
+
+    it("should pass the options along", function(){
+      expect(options).toBe(specifiedOptions);
+    });
+
+    it("should execute in the specified context", function(){
+      expect(context).toBe(specifiedContext);
     });
   });
 

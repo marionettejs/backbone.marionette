@@ -369,6 +369,8 @@ Backbone.Marionette = (function(Backbone, _, $){
   // A simple way of managing a collection of callbacks
   // and executing them at a later point in time.
   Marionette.Callbacks = function(){
+    this.deferred = $.Deferred();
+    this.promise = this.deferred.promise();
     this.callbacks = [];
     this.callbackOptions = {};
   };
@@ -376,7 +378,10 @@ Backbone.Marionette = (function(Backbone, _, $){
   _.extend(Marionette.Callbacks.prototype, {
     // Add a callback
     add: function(callback){
-      this.callbacks.push(callback);
+      var that = this;
+      $.when(this.promise).then(function(){
+        callback(that.callbackOptions);
+      });
     },
 
     // Run all registered callbacks in an async-friendly
@@ -384,11 +389,7 @@ Backbone.Marionette = (function(Backbone, _, $){
     // is running and they will be picked up and executed after
     // the current ones.
     run: function(context){
-      var callback = this.callbacks.pop();
-      while (callback || this.callbacks.length > 0){
-        callback && callback.call(context, this.callbackOptions);
-        callback = this.callbacks.pop();
-      }
+      this.deferred.resolve();
     },
 
     // Set an options object that is passed to all of the

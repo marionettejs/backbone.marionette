@@ -44,7 +44,7 @@ describe("collection view", function(){
   var NoItemView = Backbone.Marionette.CollectionView.extend({
   });
 
-  describe("when rendering a collection view with not `itemView` specified", function(){
+  describe("when rendering a collection view with no `itemView` specified", function(){
     var collectionView;
 
     beforeEach(function(){
@@ -119,53 +119,6 @@ describe("collection view", function(){
 
     it("should render the model in to the DOM", function(){
       expect($(collectionView.$el)).toHaveText("bar");
-    });
-  });
-
-  describe("when override appendHtml", function(){
-    var collection = new Collection([{foo: "bar"}, {foo: "baz"}]);
-    var collectionView;
-
-    beforeEach(function(){
-      collectionView = new PrependHtmlView({
-        collection: collection
-      });
-
-      spyOn(collectionView, "renderItem").andCallThrough();
-
-      collectionView.render();
-    });
-
-    it("should append via the overridden method", function(){
-      expect($(collectionView.$el)).toHaveHtml("<span>baz</span><span>bar</span>");
-    });
-  });
-
-  describe("when a collection view has a model and a template", function(){
-    var compositeView;
-
-    beforeEach(function(){
-      loadFixtures("compositeTemplate.html");
-
-      var m1 = new Model({foo: "bar"});
-      var m2 = new Model({foo: "baz"});
-      collection = new Collection();
-      collection.add(m2);
-
-      compositeView = new CompositeView({
-        model: m1,
-        collection: collection
-      });
-
-      compositeView.render();
-    });
-
-    it("should render the template with the model", function(){
-      expect(compositeView.$el).toHaveText(/composite bar/);
-    });
-
-    it("should render the collection's items", function(){
-      expect(compositeView.$el).toHaveText(/baz/);
     });
   });
 
@@ -262,4 +215,52 @@ describe("collection view", function(){
       expect(collectionView.onClose).toHaveBeenCalled();
     });
   });
+
+  describe("when override appendHtml", function(){
+    var collection = new Collection([{foo: "bar"}, {foo: "baz"}]);
+    var collectionView;
+
+    beforeEach(function(){
+      collectionView = new PrependHtmlView({
+        collection: collection
+      });
+
+      spyOn(collectionView, "renderItem").andCallThrough();
+
+      collectionView.render();
+    });
+
+    it("should append via the overridden method", function(){
+      expect($(collectionView.$el)).toHaveHtml("<span>baz</span><span>bar</span>");
+    });
+  });
+
+  describe("when a collection view has a model and a template", function(){
+    var compositeView;
+
+    beforeEach(function(){
+      loadFixtures("compositeTemplate.html");
+
+      var m1 = new Model({foo: "bar"});
+      var m2 = new Model({foo: "baz"});
+      collection = new Collection();
+      collection.add(m2);
+
+      compositeView = new CompositeView({
+        model: m1,
+        collection: collection
+      });
+
+      compositeView.render();
+    });
+
+    it("should render the template with the model", function(){
+      expect(compositeView.$el).toHaveText(/composite bar/);
+    });
+
+    it("should render the collection's items", function(){
+      expect(compositeView.$el).toHaveText(/baz/);
+    });
+  });
+
 });

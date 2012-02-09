@@ -84,7 +84,14 @@ Backbone.Marionette = (function(Backbone, _, $){
       Backbone.View.prototype.constructor.apply(this, args);
 
       _.bindAll(this, "render");
-  
+
+      this.initialEvents();
+    },
+
+    // Configured the initial events that the item view 
+    // binds to. Override this method to prevent the initial
+    // events, or to add your own initial events.
+    initialEvents: function(){
       if (this.model){
         this.bindTo(this.model, "change", this.render, this);
       } else if (this.collection){
@@ -189,6 +196,13 @@ Backbone.Marionette = (function(Backbone, _, $){
       Backbone.View.prototype.constructor.apply(this, arguments);
 
       _.bindAll(this, "addChildView", "render");
+      this.initialEvents();
+    },
+
+    // Configured the initial events that the collection view 
+    // binds to. Override this method to prevent the initial
+    // events, or to add your own initial events.
+    initialEvents: function(){
       this.bindTo(this.collection, "add", this.addChildView, this);
       this.bindTo(this.collection, "remove", this.removeChildView, this);
       this.bindTo(this.collection, "reset", this.reRender, this);

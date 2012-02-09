@@ -81,6 +81,31 @@ describe("item view rendering", function(){
     });
   });
 
+  describe("when an item view's model is changed", function(){
+    var view;
+
+    beforeEach(function(){
+      var model = new Model({});
+
+      view = new ItemView({ 
+        template: "#itemTemplate",
+        model: model
+      });
+
+      spyOn(view, "serializeData").andCallThrough();
+
+      model.set({foo: "bar"});
+    });
+
+    it("should serialize the model", function(){
+      expect(view.serializeData).toHaveBeenCalled();
+    });
+
+    it("should render the template with the serialized model", function(){
+      expect($(view.el)).toHaveText(/bar/);
+    });
+  });
+
   describe("when an item view has a model and is rendered", function(){
     var view;
 
@@ -118,6 +143,31 @@ describe("item view rendering", function(){
       spyOn(view, "serializeData").andCallThrough();
 
       view.render();
+    });
+
+    it("should serialize the collection", function(){
+      expect(view.serializeData).toHaveBeenCalled();
+    });
+
+    it("should render the template with the serialized collection", function(){
+      expect($(view.el)).toHaveText(/bar/);
+      expect($(view.el)).toHaveText(/baz/);
+    });
+  });
+
+  describe("when an item view's collection is reset", function(){
+    var view;
+
+    beforeEach(function(){
+      var collection = new Collection();
+      view = new ItemView({
+        template: "#collectionItemTemplate",
+        collection: collection
+      });
+
+      spyOn(view, "serializeData").andCallThrough();
+
+      collection.reset([ { foo: "bar" }, { foo: "baz" } ]);
     });
 
     it("should serialize the collection", function(){

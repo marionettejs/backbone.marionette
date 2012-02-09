@@ -96,6 +96,48 @@ describe("collection view", function(){
     });
   });
 
+  describe("when a collection is reset after the view is loaded", function(){
+    var collection;
+    var collectionView;
+    var renderResult;
+
+    beforeEach(function(){
+      collection = new Collection();
+
+      collectionView = new CollectionView({
+        collection: collection
+      });
+
+      spyOn(collectionView, "renderItem").andCallThrough();
+      spyOn(collectionView, "onRender").andCallThrough();
+
+      renderResult = collectionView.render();
+
+      collection.reset([{foo: "bar"}, {foo: "baz"}]);
+    });
+
+    it("should render the specified itemView for each item", function(){
+      expect(collectionView.renderItem.callCount).toBe(2);
+    });
+
+    it("should append the html for each itemView", function(){
+      expect($(collectionView.$el)).toHaveHtml("<span>bar</span><span>baz</span>");
+    });
+
+    it("should reference each of the rendered view items", function(){
+      expect(_.size(collectionView.children)).toBe(2);
+    });
+
+    it("should call 'onRender' after rendering", function(){
+      expect(collectionView.onRender).toHaveBeenCalled();
+    });
+
+    it("should return the view after rendering", function(){
+      expect(renderResult).toBe(collectionView);
+    });
+
+  });
+
   describe("when a model is added to the collection", function(){
     var collectionView;
     var collection;

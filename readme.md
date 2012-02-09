@@ -583,12 +583,19 @@ Backbone.Marionette.CollectionView.extend({
 If you do not specify an `itemView`, an exception will be thrown
 stating that you must specify an `itemView`.
 
-### CollectionView: Add / Remove Items
+### CollectionView: Automatic Rendering
 
-The collection view binds to the "add" and "remove" events of the
-collection that is specified. It will render any model that is
-added to the collection and add to the DOM automatically. It will
-also close any view for a model that is removed from the collection.
+The collection view binds to the "add", "remove" and "reset" events of the
+collection that is specified. 
+
+When the collection for the view is "reset", the view will call `render` on
+itself and re-render the entire collection.
+
+When a model is added to the collection, the collection view will render that
+one model in to the collection of item views.
+
+When a model is removed from a collection (or destroyed / deleted), the collection
+view will close and remove that model's item view.
 
 ### CollectionView's appendHtml
 
@@ -964,6 +971,10 @@ load up http://localhost:8888 to see the test suite in action.
 I'm using [Docco](http://jashkenas.github.com/docco/) to generate the annotated source code.
 
 ## Release Notes
+
+#### v0.4.4
+
+* Collection view automatically renders itself when the view's collection is "reset"
 
 #### v0.4.3
 

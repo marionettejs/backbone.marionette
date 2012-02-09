@@ -974,7 +974,9 @@ I'm using [Docco](http://jashkenas.github.com/docco/) to generate the annotated 
 
 #### v0.4.4
 
-* Collection view automatically renders itself when the view's collection is "reset"
+* CollectionView renders itself when the view's collection "reset" event is fired
+* ItemView renders itself when the view's model "change" event is fired
+* ItemView renders itself when the view's collection "reset" event is fired
 
 #### v0.4.3
 

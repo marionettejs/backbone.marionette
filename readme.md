@@ -588,7 +588,7 @@ stating that you must specify an `itemView`.
 The collection view binds to the "add", "remove" and "reset" events of the
 collection that is specified. 
 
-When the collection for the view is "reset", the view will call `render` on
+When the collection for the view is "reset", the view will call `reRender` on
 itself and re-render the entire collection.
 
 When a model is added to the collection, the collection view will render that
@@ -596,6 +596,12 @@ one model in to the collection of item views.
 
 When a model is removed from a collection (or destroyed / deleted), the collection
 view will close and remove that model's item view.
+
+### CollectionView: Re-render Collection
+
+If you need to re-render the entire collection, you can call the
+`view.reRender` method. This method takes care of closing all of
+the child views that may have previously been opened.
 
 ### CollectionView's appendHtml
 
@@ -971,6 +977,13 @@ load up http://localhost:8888 to see the test suite in action.
 I'm using [Docco](http://jashkenas.github.com/docco/) to generate the annotated source code.
 
 ## Release Notes
+
+### v0.4.5
+
+* CollectionView closes existing child views before re-rendering itself, when "reset" 
+event of collection is triggered
+* CollectionView now has "initialEvents" method which configures it's initial events
+* ItemView now has "initialEvents" method which configures it's initial events
 
 #### v0.4.4
 

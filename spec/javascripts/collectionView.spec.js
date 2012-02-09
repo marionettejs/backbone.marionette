@@ -110,10 +110,15 @@ describe("collection view", function(){
 
       spyOn(collectionView, "renderItem").andCallThrough();
       spyOn(collectionView, "onRender").andCallThrough();
+      spyOn(collectionView, "closeChildren").andCallThrough();
 
       renderResult = collectionView.render();
 
       collection.reset([{foo: "bar"}, {foo: "baz"}]);
+    });
+
+    it("should close all open child views", function(){
+      expect(collectionView.closeChildren).toHaveBeenCalled();
     });
 
     it("should render the specified itemView for each item", function(){

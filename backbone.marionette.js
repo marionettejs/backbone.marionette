@@ -191,7 +191,14 @@ Backbone.Marionette = (function(Backbone, _, $){
       _.bindAll(this, "addChildView", "render");
       this.bindTo(this.collection, "add", this.addChildView, this);
       this.bindTo(this.collection, "remove", this.removeChildView, this);
-      this.bindTo(this.collection, "reset", this.render, this);
+      this.bindTo(this.collection, "reset", this.reRender, this);
+    },
+
+    // Re-rendering the collection view involves closing any
+    // existing child views before rendering again.
+    reRender: function(){
+      this.closeChildren();
+      this.render();
     },
 
     // Loop through all of the items and render 
@@ -279,14 +286,18 @@ Backbone.Marionette = (function(Backbone, _, $){
       this.unbindAll();
       this.remove();
 
+      this.closeChildren();
+
+      if (this.onClose){
+        this.onClose();
+      }
+    },
+
+    closeChildren: function(){
       if (this.children){
         _.each(this.children, function(childView){
           childView.close();
         });
-      }
-
-      if (this.onClose){
-        this.onClose();
       }
     }
   });

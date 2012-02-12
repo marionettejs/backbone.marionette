@@ -408,8 +408,7 @@ Backbone.Marionette = (function(Backbone, _, $){
   // and executing them at a later point in time, using jQuery's
   // `Deferred` object.
   Marionette.Callbacks = function(){
-    this.deferred = $.Deferred();
-    this.promise = this.deferred.promise();
+    this.callbacks = $.Callbacks("once memory");
   };
 
   _.extend(Marionette.Callbacks.prototype, {
@@ -418,16 +417,14 @@ Backbone.Marionette = (function(Backbone, _, $){
     // guaranteed to execute, even if they are added after the 
     // `run` method is called.
     add: function(callback){
-      this.promise.done(function(context, options){
-        callback.call(context, options);
-      });
+      this.callbacks.add(callback);
     },
 
     // Run all registered callbacks with the context specified. 
     // Additional callbacks can be added after this has been run 
     // and they will still be executed.
     run: function(context, options){
-      this.deferred.resolve(context, options);
+      this.callbacks.fireWith(context, [options]);
     }
   });
 

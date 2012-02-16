@@ -377,7 +377,11 @@ Backbone.Marionette = (function(Backbone, _, $){
       Backbone.Router.prototype.constructor.call(this, options);
 
       if (this.appRoutes){
-        this.processAppRoutes(options.controller, this.appRoutes);
+        var controller = this.controller;
+        if (options && options.controller) {
+          controller = options.controller;
+        }
+        this.processAppRoutes(controller, this.appRoutes);
       }
     },
 

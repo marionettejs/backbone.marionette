@@ -25,7 +25,33 @@ describe("app router", function(){
       router.navigate("m1", true);
     });
 
-    it("should call the configured method on the specified controller", function(){
+    it("should call the configured method on the controller passed in the constructor", function(){
+      expect(controller.method1).toHaveBeenCalled();
+    });
+  });
+
+  describe("when a route fires", function(){
+    var controller = {
+      method1: function(){},
+    }
+
+    var Router = Backbone.Marionette.AppRouter.extend({
+      controller: controller
+    , appRoutes: {
+        "m1": "method1"
+      }
+    });
+
+    beforeEach(function(){
+      spyOn(controller, "method1");
+
+      var router = new Router();
+      startRouters();
+
+      router.navigate("m1", true);
+    });
+
+    it("should call the configured method on the controller defined in the prototype", function(){
       expect(controller.method1).toHaveBeenCalled();
     });
   });

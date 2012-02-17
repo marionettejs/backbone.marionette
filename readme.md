@@ -1045,12 +1045,12 @@ I'm using [Docco](http://jashkenas.github.com/docco/) to generate the annotated 
 
 ## Release Notes
 
-### v0.4.6
+#### v0.4.6
 
 * AppRouter can have it's `controller` specified directly in the router definition or in the construction function call
 * Extracted `Marionette.EventAggregator` out in to it's own explicit object
 
-### v0.4.5
+#### v0.4.5
 
 * CollectionView closes existing child views before re-rendering itself, when "reset" 
 event of collection is triggered

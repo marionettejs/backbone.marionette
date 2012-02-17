@@ -385,7 +385,7 @@ Backbone.Marionette = (function(Backbone, _, $){
       }
     },
 
-    processAppRoutes: function(app, appRoutes){
+    processAppRoutes: function(controller, appRoutes){
       var method, methodName;
       var route, routesLength;
       var routes = [];
@@ -399,7 +399,7 @@ Backbone.Marionette = (function(Backbone, _, $){
       for (var i = 0; i < routesLength; i++){
         route = routes[i][0];
         methodName = routes[i][1];
-        method = app[methodName];
+        method = controller[methodName];
         router.route(route, methodName, method);
       }
     }

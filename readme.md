@@ -754,7 +754,7 @@ Aggregator: Coordinating Views In Backbone.js](http://lostechies.com/derickbaile
 The `BindTo` object provides event binding management and facilitates simple
 event binding and unbinding for any object that extends from `Backbone.Events`.
 
-Bind an event:
+### Bind Events
 
 ```js
 var binder = _.extend({}, Backbone.Marionette.BindTo);
@@ -774,12 +774,16 @@ method for the event will be executed:
 binder.bindTo(model, "change:foo", someCallback, someContext);
 ```
 
+### Unbind All Events
+
 You can call `unbindAll` to unbind all events that were bound with the
 `bindTo` method:
 
 ```js
 binder.unbindAll();
 ```
+
+This even works with in-line callback functions.
 
 ## Backbone.Marionette.TemplateManager
 

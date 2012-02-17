@@ -36,8 +36,8 @@ describe("app router", function(){
     }
 
     var Router = Backbone.Marionette.AppRouter.extend({
-      controller: controller
-    , appRoutes: {
+      controller: controller,
+      appRoutes: {
         "m1": "method1"
       }
     });

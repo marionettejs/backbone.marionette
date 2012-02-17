@@ -435,6 +435,23 @@ Backbone.Marionette = (function(Backbone, _, $){
     }
   });
 
+  // Event Aggregator
+  // ----------------
+
+  // A pub-sub object that can be used to decouple various parts
+  // of an application through event-driven architecture.
+  Marionette.EventAggregator = function(options){
+    _.extend(this, options);
+  };
+
+  _.extend(Marionette.EventAggregator.prototype, Backbone.Events, Marionette.BindTo, {
+    // Assumes the event aggregator itself is the 
+    // object being bound to.
+    bindTo: function(eventName, callback, context){
+      Marionette.BindTo.bindTo.call(this, this, eventName, callback, context);
+    }
+  });
+
   // Composite Application
   // ---------------------
 
@@ -443,7 +460,7 @@ Backbone.Marionette = (function(Backbone, _, $){
   // event aggregator as `app.vent`
   Marionette.Application = function(options){
     this.initCallbacks = new Marionette.Callbacks();
-    this.vent = _.extend({}, Backbone.Events, Marionette.BindTo);
+    this.vent = new Marionette.EventAggregator();
     _.extend(this, options);
   };
 

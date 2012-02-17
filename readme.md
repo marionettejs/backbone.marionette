@@ -183,19 +183,32 @@ You can also add standard routes to an AppRouter, with methods on the router.
 
 ### Specify A Controller
 
-App routers can only take one `controller` object as a parameter to the contructor.
+App routers can only use one `controller` object. You can either specify this
+directly in the router definition:
+
+```js
+someController = {
+  someMethod: function(){ /*...*/ }
+};
+
+Backbone.Marionette.AppRouter.extend({
+  controller: someController
+});
+```
+
+Or in a parameter to the contructor:
 
 ```js
 myObj = {
-  someMethod: function(){
-    // do stuff
-  }
+  someMethod: function(){ /*...*/ }
 };
 
 new MyRouter({
   controller: myObj
 });
 ```
+
+Or
 
 The object that is used as the `controller` has no requirements, other than it will 
 contain the methods that you specified in the `appRoutes`.
@@ -1031,6 +1044,11 @@ load up http://localhost:8888 to see the test suite in action.
 I'm using [Docco](http://jashkenas.github.com/docco/) to generate the annotated source code.
 
 ## Release Notes
+
+### v0.4.6
+
+* AppRouter can have it's `controller` specified directly in the router definition or in the construction function call
+* Extracted `Marionette.EventAggregator` out in to it's own explicit object
 
 ### v0.4.5
 

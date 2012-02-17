@@ -58,7 +58,20 @@ describe("collection view", function(){
       expect(collectionView.render).toThrow("An `itemView` must be specified");
     });
   });
-  
+
+  describe("when rendering a collection view with no collection specified", function(){
+    var collectionView;
+
+    beforeEach(function(){
+      collectionView = new CollectionView();
+    });
+
+    it("should create an empty collection", function(){
+      expect(collectionView.collection).toBeTruthy();
+      expect(collectionView.collection.length).toEqual(0);
+    });
+  });
+
   describe("when rendering a collection view", function(){
     var collection = new Collection([{foo: "bar"}, {foo: "baz"}]);
     var collectionView;

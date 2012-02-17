@@ -192,7 +192,15 @@ Backbone.Marionette = (function(Backbone, _, $){
   Marionette.CollectionView = Backbone.View.extend({
     modelView: Marionette.ItemView,
 
-    constructor: function(){
+    constructor: function(options){
+      // Create a default collection if none specified.
+      if (!options) {
+        options = {};
+        [].push.apply(arguments, [options]);
+      }
+      if (!options.collection) {
+        options.collection = new Backbone.Collection();
+      }
       Backbone.View.prototype.constructor.apply(this, arguments);
 
       _.bindAll(this, "addChildView", "render");

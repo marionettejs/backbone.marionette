@@ -36,7 +36,7 @@ These are the strings that you can pull to make your puppet dance:
 * **Backbone.Marionette.ItemView**: A view that renders a single item
 * **Backbone.Marionette.CollectionView**: A view that iterates over a collection, and renders individual `ItemView` instances for each model
 * **Backbone.Marionette.RegionManager**: Manage visual regions of your application, including display and removal of content
-* **Backbone.Marionette.EventAggregator: An extension of Backbone.Events, to be used as an event-driven or pub-sub tool
+* **Backbone.Marionette.EventAggregator**: An extension of Backbone.Events, to be used as an event-driven or pub-sub tool
 * **Backbone.Marionette.BindTo**: An event binding manager, to facilitate binding and unbinding of events
 * **Backbone.Marionette.TemplateManager**: Cache templates that are stored in `<script>` blocks, for faster subsequent access
 * **Backbone.Marionette.Callbacks**: Manage a collection of callback methods, and execute them as needed

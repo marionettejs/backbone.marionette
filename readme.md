@@ -223,7 +223,7 @@ show / close them in your application. They use a jQuery selector
 to show your views in the correct place. They also call extra
 methods on your views, to facilitate additional functionality.
 
-### Defining A Region
+### Defining An Application Region
 
 Regions can be added to the application by calling the `addRegions` method on
 your application instance. This method expects a single hash parameter, with
@@ -243,6 +243,17 @@ app object. In the above, example `MyApp.mainRegion` and `MyApp.navigationRegion
 would be available for use immediately.
 
 If you specify the same region name twice, last one in wins.
+
+### Initialize A Region Manager With An `el`
+
+You can specify an `el` for the region manager to manage at the time
+that the region manager is instantiated:
+
+```js
+var mgr = new Backbone.Marionette.RegionManager({
+  el: "#someElement"
+});
+```
 
 ### Basic Usage
 
@@ -1048,6 +1059,10 @@ load up http://localhost:8888 to see the test suite in action.
 I'm using [Docco](http://jashkenas.github.com/docco/) to generate the annotated source code.
 
 ## Release Notes
+
+#### v0.4.7
+
+* Allow `RegionManager` to be instantiated with an `el` specified in the options
 
 #### v0.4.6
 

@@ -372,14 +372,14 @@ addRegions{{something: RegionManager.extend({el: "#someRegion"}) });</p>        
           <span class="nx">regionValue</span> <span class="o">=</span> <span class="nx">regions</span><span class="p">[</span><span class="nx">region</span><span class="p">];</span>
     
           <span class="k">if</span> <span class="p">(</span><span class="k">typeof</span> <span class="nx">regionValue</span> <span class="o">===</span> <span class="s2">&quot;string&quot;</span><span class="p">){</span>
-            <span class="nx">regionObj</span> <span class="o">=</span> <span class="nx">Marionette</span><span class="p">.</span><span class="nx">RegionManager</span><span class="p">.</span><span class="nx">extend</span><span class="p">({</span>
+            <span class="nx">regionObj</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Marionette</span><span class="p">.</span><span class="nx">RegionManager</span><span class="p">({</span>
               <span class="nx">el</span><span class="o">:</span> <span class="nx">regionValue</span>
             <span class="p">});</span>
           <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
-            <span class="nx">regionObj</span> <span class="o">=</span> <span class="nx">regionValue</span><span class="p">;</span>
+            <span class="nx">regionObj</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">regionValue</span><span class="p">;</span>
           <span class="p">}</span>
 
-          <span class="k">this</span><span class="p">[</span><span class="nx">region</span><span class="p">]</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">regionObj</span><span class="p">();</span>
+          <span class="k">this</span><span class="p">[</span><span class="nx">region</span><span class="p">]</span> <span class="o">=</span> <span class="nx">regionObj</span><span class="p">;</span>
         <span class="p">}</span>
       <span class="p">}</span>
     <span class="p">}</span>

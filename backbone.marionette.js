@@ -18,6 +18,11 @@ Backbone.Marionette = (function(Backbone, _, $){
   // http://lostechies.com/derickbailey/2011/12/12/composite-js-apps-regions-and-region-managers/
   Marionette.RegionManager = function(options){
     this.options = options || {};
+
+    if (this.options.el){
+      this.el = options.el;
+    }
+
     if (!this.el){
       var err = new Error("An 'el' must be specified");
       err.name = "NoElError";

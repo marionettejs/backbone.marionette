@@ -189,4 +189,19 @@ describe("region manager", function(){
     });
   });
 
+  describe("when initializing a region manager and passing an 'el' option", function(){
+    var manager, el;
+
+    beforeEach(function(){
+      el = "#foo";
+      manager = new Backbone.Marionette.RegionManager({
+        el: el
+      });
+    });
+
+    it("should manage the specified el", function(){
+      expect(manager.el).toBe(el);
+    });
+  });
+
 });

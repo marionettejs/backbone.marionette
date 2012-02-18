@@ -500,14 +500,14 @@ Backbone.Marionette = (function(Backbone, _, $){
           regionValue = regions[region];
     
           if (typeof regionValue === "string"){
-            regionObj = Marionette.RegionManager.extend({
+            regionObj = new Marionette.RegionManager({
               el: regionValue
             });
           } else {
-            regionObj = regionValue;
+            regionObj = new regionValue;
           }
 
-          this[region] = new regionObj();
+          this[region] = regionObj;
         }
       }
     }

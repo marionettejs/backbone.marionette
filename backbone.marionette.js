@@ -42,7 +42,7 @@ Backbone.Marionette = (function(Backbone, _, $){
       this.close();
       this.open(view);
 
-      this.currentView = view;
+      return this.currentView = view;
     },
 
     ensureEl: function(){
@@ -61,7 +61,6 @@ Backbone.Marionette = (function(Backbone, _, $){
         view.onShow && view.onShow();
         that.trigger("view:show", view);
       });
-
     },
 
     // Close the current view, if there is one. If there is no

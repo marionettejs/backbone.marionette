@@ -101,6 +101,10 @@ describe("region manager", function(){
     it("should set 'this' to the manager, from the show event", function(){
       expect(showContext).toBe(myRegion);
     });
+
+    it("should return the view for chainability", function(){
+      expect(myRegion.show(view).$el).toBeTruthy();
+    });
   });
 
   describe("when a view is already shown and showing another", function(){

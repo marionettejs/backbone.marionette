@@ -1060,6 +1060,10 @@ I'm using [Docco](http://jashkenas.github.com/docco/) to generate the annotated 
 
 ## Release Notes
 
+#### v0.4.8
+
+* Don't re-render an ItemView when the view's model "change" event is triggered
+
 #### v0.4.7
 
 * Allow `RegionManager` to be instantiated with an `el` specified in the options

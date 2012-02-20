@@ -97,9 +97,7 @@ Backbone.Marionette = (function(Backbone, _, $){
     // binds to. Override this method to prevent the initial
     // events, or to add your own initial events.
     initialEvents: function(){
-      if (this.model){
-        this.bindTo(this.model, "change", this.render, this);
-      } else if (this.collection){
+      if (this.collection){
         this.bindTo(this.collection, "reset", this.render, this);
       }
     },

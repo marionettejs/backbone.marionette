@@ -81,31 +81,6 @@ describe("item view rendering", function(){
     });
   });
 
-  describe("when an item view's model is changed", function(){
-    var view;
-
-    beforeEach(function(){
-      var model = new Model({});
-
-      view = new ItemView({ 
-        template: "#itemTemplate",
-        model: model
-      });
-
-      spyOn(view, "serializeData").andCallThrough();
-
-      model.set({foo: "bar"});
-    });
-
-    it("should serialize the model", function(){
-      expect(view.serializeData).toHaveBeenCalled();
-    });
-
-    it("should render the template with the serialized model", function(){
-      expect($(view.el)).toHaveText(/bar/);
-    });
-  });
-
   describe("when an item view has a model and is rendered", function(){
     var view;
 

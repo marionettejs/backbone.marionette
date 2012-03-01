@@ -214,10 +214,10 @@ http://lostechies.com/derickbailey/2011/12/12/composite-js-apps-regions-and-regi
 Handles calling the <code>render</code> method for you. Reads content
 directly from the <code>el</code> attribute. Also calls an optional
 <code>onShow</code> and <code>close</code> method on your view, just after showing
-or just before closing the view, respectively.</p>             </td>             <td class="code">               <div class="highlight"><pre>    <span class="nx">show</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">view</span><span class="p">){</span>
+or just before closing the view, respectively.</p>             </td>             <td class="code">               <div class="highlight"><pre>    <span class="nx">show</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">view</span><span class="p">,</span> <span class="nx">appendMethod</span><span class="p">){</span>
       <span class="k">this</span><span class="p">.</span><span class="nx">ensureEl</span><span class="p">();</span>
       <span class="k">this</span><span class="p">.</span><span class="nx">close</span><span class="p">();</span>
-      <span class="k">this</span><span class="p">.</span><span class="nx">open</span><span class="p">(</span><span class="nx">view</span><span class="p">);</span>
+      <span class="k">this</span><span class="p">.</span><span class="nx">open</span><span class="p">(</span><span class="nx">view</span><span class="p">,</span> <span class="nx">appendMethod</span><span class="p">);</span>
 
       <span class="k">this</span><span class="p">.</span><span class="nx">currentView</span> <span class="o">=</span> <span class="nx">view</span><span class="p">;</span>
     <span class="p">},</span>
@@ -227,11 +227,12 @@ or just before closing the view, respectively.</p>             </td>            
         <span class="k">this</span><span class="p">.</span><span class="nx">$el</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">el</span><span class="p">);</span>
       <span class="p">}</span>
     <span class="p">},</span></pre></div>             </td>           </tr>                               <tr id="section-28">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-28">&#182;</a>               </div>               <p>Internal method to render and display a view. Not meant 
-to be called from any external code.</p>             </td>             <td class="code">               <div class="highlight"><pre>    <span class="nx">open</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">view</span><span class="p">){</span>
+to be called from any external code.</p>             </td>             <td class="code">               <div class="highlight"><pre>    <span class="nx">open</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">view</span><span class="p">,</span> <span class="nx">appendMethod</span><span class="p">){</span>
       <span class="kd">var</span> <span class="nx">that</span> <span class="o">=</span> <span class="k">this</span><span class="p">;</span>
+      <span class="nx">appendMethod</span> <span class="o">=</span> <span class="nx">appendMethod</span> <span class="o">||</span> <span class="s2">&quot;html&quot;</span><span class="p">;</span>
 
       <span class="nx">$</span><span class="p">.</span><span class="nx">when</span><span class="p">(</span><span class="nx">view</span><span class="p">.</span><span class="nx">render</span><span class="p">()).</span><span class="nx">then</span><span class="p">(</span><span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
-        <span class="nx">that</span><span class="p">.</span><span class="nx">$el</span><span class="p">.</span><span class="nx">html</span><span class="p">(</span><span class="nx">view</span><span class="p">.</span><span class="nx">el</span><span class="p">);</span>
+        <span class="nx">that</span><span class="p">.</span><span class="nx">$el</span><span class="p">[</span><span class="nx">appendMethod</span><span class="p">](</span><span class="nx">view</span><span class="p">.</span><span class="nx">el</span><span class="p">);</span>
         <span class="nx">view</span><span class="p">.</span><span class="nx">onShow</span> <span class="o">&amp;&amp;</span> <span class="nx">view</span><span class="p">.</span><span class="nx">onShow</span><span class="p">();</span>
         <span class="nx">that</span><span class="p">.</span><span class="nx">trigger</span><span class="p">(</span><span class="s2">&quot;view:show&quot;</span><span class="p">,</span> <span class="nx">view</span><span class="p">);</span>
       <span class="p">});</span>

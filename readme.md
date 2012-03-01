@@ -287,6 +287,27 @@ var anotherView = new AnotherView();
 MyApp.mainRegion.show(anotherView);
 ```
 
+### Set How View's `el` Is Attached
+
+You can specify a second parameter to the `show` method,
+which will be used to determine how the HTML from the view's
+`el` is attached to the DOM region that is being managed.
+
+The options include any valid jQuery DOM object method, such
+as `html`, `text`, `append`, etc.
+
+```js
+MyApp.mainRegion,show(myView, "append");
+```
+
+This example will use jQuery's `$.append` function to append
+the new view to the current HTML.
+
+**WARNING**: Be careful when using this feature, as the view
+you are replacing may not be managed / closed correctly as a
+result. This can cause unexpected behavior, memory leaks or
+other problems. **Use At Your Own Risk**
+
 ### Attach Existing View
 
 There are some scenarios where it's desirable to attach an existing
@@ -1203,6 +1224,7 @@ I'm using [Docco](http://jashkenas.github.com/docco/) to generate the annotated 
 * Added `CompositeView` for managing leaf-branch/composite model structures
 * Added `CompositeRegion` for managing nested views and nested region managers
 * Added `attachView` method to `RegionManager` to attach existing view without rendering / replacing
+* Specify how to attach HTML to DOM in region manager's `show` method
 
 #### v0.4.8
 

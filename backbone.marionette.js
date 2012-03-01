@@ -293,10 +293,10 @@ Backbone.Marionette = (function(Backbone, _, $){
     // directly from the `el` attribute. Also calls an optional
     // `onShow` and `close` method on your view, just after showing
     // or just before closing the view, respectively.
-    show: function(view){
+    show: function(view, appendMethod){
       this.ensureEl();
       this.close();
-      this.open(view);
+      this.open(view, appendMethod);
 
       this.currentView = view;
     },
@@ -309,11 +309,12 @@ Backbone.Marionette = (function(Backbone, _, $){
 
     // Internal method to render and display a view. Not meant 
     // to be called from any external code.
-    open: function(view){
+    open: function(view, appendMethod){
       var that = this;
+      appendMethod = appendMethod || "html";
 
       $.when(view.render()).then(function () {
-        that.$el.html(view.el);
+        that.$el[appendMethod](view.el);
         view.onShow && view.onShow();
         that.trigger("view:show", view);
       });

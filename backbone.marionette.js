@@ -11,72 +11,6 @@ Backbone.Marionette = (function(Backbone, _, $){
 
   Marionette.version = "0.4.9";
 
-  // Region Manager
-  // --------------
-
-  // Manage the visual regions of your composite application. See
-  // http://lostechies.com/derickbailey/2011/12/12/composite-js-apps-regions-and-region-managers/
-  Marionette.RegionManager = function(options){
-    this.options = options || {};
-
-    if (this.options.el){
-      this.el = options.el;
-    }
-
-    if (!this.el){
-      var err = new Error("An 'el' must be specified");
-      err.name = "NoElError";
-      throw err;
-    }
-  };
-
-  _.extend(Marionette.RegionManager.prototype, Backbone.Events, {
-
-    // Displays a backbone view instance inside of the region.
-    // Handles calling the `render` method for you. Reads content
-    // directly from the `el` attribute. Also calls an optional
-    // `onShow` and `close` method on your view, just after showing
-    // or just before closing the view, respectively.
-    show: function(view){
-      this.ensureEl();
-      this.close();
-      this.open(view);
-
-      this.currentView = view;
-    },
-
-    ensureEl: function(){
-      if (!this.$el || this.$el.length == 0){
-        this.$el = $(this.el);
-      }
-    },
-
-    // Internal method to render and display a view. Not meant 
-    // to be called from any external code.
-    open: function(view){
-      var that = this;
-
-      $.when(view.render()).then(function () {
-        that.$el.html(view.el);
-        view.onShow && view.onShow();
-        that.trigger("view:show", view);
-      });
-
-    },
-
-    // Close the current view, if there is one. If there is no
-    // current view, it does nothing and returns immediately.
-    close: function(){
-      var view = this.currentView;
-      if (!view){ return; }
-
-      view.close && view.close();
-      this.trigger("view:closed", view);
-
-      delete this.currentView;
-    }
-  });
-
   // Item View
   // ---------
   
@@ -332,6 +266,116 @@ Backbone.Marionette = (function(Backbone, _, $){
       }
     },
 
+  });
+
+  // Region Manager
+  // --------------
+
+  // Manage the visual regions of your composite application. See
+  // http://lostechies.com/derickbailey/2011/12/12/composite-js-apps-regions-and-region-managers/
+  Marionette.RegionManager = function(options){
+    this.options = options || {};
+
+    if (this.options.el){
+      this.el = options.el;
+    }
+
+    if (!this.el){
+      var err = new Error("An 'el' must be specified");
+      err.name = "NoElError";
+      throw err;
+    }
+  };
+
+  _.extend(Marionette.RegionManager.prototype, Backbone.Events, {
+
+    // Displays a backbone view instance inside of the region.
+    // Handles calling the `render` method for you. Reads content
+    // directly from the `el` attribute. Also calls an optional
+    // `onShow` and `close` method on your view, just after showing
+    // or just before closing the view, respectively.
+    show: function(view){
+      this.ensureEl();
+      this.close();
+      this.open(view);
+
+      this.currentView = view;
+    },
+
+    ensureEl: function(){
+      if (!this.$el || this.$el.length == 0){
+        this.$el = $(this.el);
+      }
+    },
+
+    // Internal method to render and display a view. Not meant 
+    // to be called from any external code.
+    open: function(view){
+      var that = this;
+
+      $.when(view.render()).then(function () {
+        that.$el.html(view.el);
+        view.onShow && view.onShow();
+        that.trigger("view:show", view);
+      });
+
+    },
+
+    // Close the current view, if there is one. If there is no
+    // current view, it does nothing and returns immediately.
+    close: function(){
+      var view = this.currentView;
+      if (!view){ return; }
+
+      view.close && view.close();
+      this.trigger("view:closed", view);
+
+      delete this.currentView;
+    }
+  });
+
+  // Composite Region
+  // ----------------
+
+  // A specialized view type that renders an area of HTML and then
+  // attaches `RegionManager` instances to the specified `regions`.
+  // Used for composite view management and sub-application areas.
+  Marionette.CompositeRegion = Marionette.ItemView.extend({
+    constructor: function () {
+      Backbone.Marionette.ItemView.call(this, arguments);
+      this.regionManagers = {};
+      this.vent = new Backbone.Marionette.EventAggregator();
+    },
+
+    render: function () {
+      Backbone.Marionette.ItemView.prototype.render.call(this, arguments);
+      this.initializeRegions();
+    },
+
+    close: function () {
+      Backbone.Marionette.ItemView.prototype.close.call(this, arguments);
+      this.closeRegions();
+    },
+
+    initializeRegions: function () {
+      var that = this;
+      _.each(this.regions, function (selector, name) {
+        var regionManager = new Backbone.Marionette.RegionManager({
+            el: selector
+        });
+        that.regionManagers[name] = regionManager;
+        that[name] = regionManager;
+      });
+    },
+
+    closeRegions: function () {
+      var that = this;
+      _.each(this.regionManagers, function (manager, name) {
+        manager.close();
+        delete that[name];
+      });
+      delete this.regionManagers;
+    }
   });
 
   // BindTo: Event Binding

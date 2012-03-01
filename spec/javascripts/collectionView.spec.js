@@ -36,11 +36,6 @@ describe("collection view", function(){
     }
   });
 
-  var CompositeView = Backbone.Marionette.CollectionView.extend({
-    itemView: ItemView,
-    template: "#composite-template"
-  });
-
   var NoItemView = Backbone.Marionette.CollectionView.extend({
   });
 
@@ -281,33 +276,4 @@ describe("collection view", function(){
       expect($(collectionView.$el)).toHaveHtml("<span>baz</span><span>bar</span>");
     });
   });
-
-  describe("when a collection view has a model and a template", function(){
-    var compositeView;
-
-    beforeEach(function(){
-      loadFixtures("compositeTemplate.html");
-
-      var m1 = new Model({foo: "bar"});
-      var m2 = new Model({foo: "baz"});
-      collection = new Collection();
-      collection.add(m2);
-
-      compositeView = new CompositeView({
-        model: m1,
-        collection: collection
-      });
-
-      compositeView.render();
-    });
-
-    it("should render the template with the model", function(){
-      expect(compositeView.$el).toHaveText(/composite bar/);
-    });
-
-    it("should render the collection's items", function(){
-      expect(compositeView.$el).toHaveText(/baz/);
-    });
-  });
-
 });

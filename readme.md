@@ -641,35 +641,6 @@ Backbone.Marionette.CollectionView.extend({
 });
 ```
 
-### Composite View
-
-A `CollectionView` can be work as a composite view for scenarios
-where it should represent both a branch and leaf in a tree structure.
-
-For example, if you're rendering a treeview control, you may want
-to render a collection view with a model and template so that it
-will show a parent item with children in the tree.
-
-You can specify a `modelView` to use for the model. If you don't
-specify one, it will default to the `Marionette.ItemView`.
-
-```js
-LeafView = Backbone.Marionette.ItemView.extend({
-  template: "leaf-template"
-});
-
-CompositeView = Backbone.Marionette.CollectionView.extend({
-  template: "leaf-template"
-  modelView: LeafView,
-  itemView: LeafView
-});
-
-new CompositeView({
-  model: someModel,
-  collection: someCollection
-});
-```
-
 ### CollectionView close
 
 CollectionView implements a `close` method, which is called by the 
@@ -695,6 +666,36 @@ Backbone.Marionette.CollectionView.extend({
   }
 });
 ```
+
+## Marionette.CompositeView
+
+A `CompositeView` extends from CollectionView to be used as a composite view for scenarios
+where it should represent both a branch and leaf in a tree structure.
+
+For example, if you're rendering a treeview control, you may want
+to render a collection view with a model and template so that it
+will show a parent item with children in the tree.
+
+You can specify a `modelView` to use for the model. If you don't
+specify one, it will default to the `Marionette.ItemView`.
+
+```js
+LeafView = Backbone.Marionette.ItemView.extend({
+  template: "leaf-template"
+});
+
+CompositeView = Backbone.Marionette.CompositeView.extend({
+  template: "leaf-template"
+  modelView: LeafView,
+  itemView: LeafView
+});
+
+new CompositeView({
+  model: someModel,
+  collection: someCollection
+});
+```
+
 ## Marionette.EventAggregator
 
 An event aggregator is an application level pub/sub mechanism that allows various
@@ -1059,6 +1060,10 @@ load up http://localhost:8888 to see the test suite in action.
 I'm using [Docco](http://jashkenas.github.com/docco/) to generate the annotated source code.
 
 ## Release Notes
+
+#### v0.5.0
+
+* **BREAKING:** Extraced `CompositeView` out of the collection view.
 
 #### v0.4.8
 

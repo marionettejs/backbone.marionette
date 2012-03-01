@@ -1,4 +1,4 @@
-// Backbone.Marionette v0.4.8
+// Backbone.Marionette v0.4.9
 //
 // Copyright (C)2011 Derick Bailey, Muted Solutions, LLC
 // Distributed Under MIT License
@@ -9,7 +9,7 @@
 Backbone.Marionette = (function(Backbone, _, $){
   var Marionette = {};
 
-  Marionette.version = "0.4.8";
+  Marionette.version = "0.4.9";
 
   // Region Manager
   // --------------
@@ -193,8 +193,6 @@ Backbone.Marionette = (function(Backbone, _, $){
   // A view that iterates over a Backbone.Collection
   // and renders an individual ItemView for each model.
   Marionette.CollectionView = Backbone.View.extend({
-    modelView: Marionette.ItemView,
-
     constructor: function(){
       Backbone.View.prototype.constructor.apply(this, arguments);
 
@@ -221,28 +219,11 @@ Backbone.Marionette = (function(Backbone, _, $){
     // Loop through all of the items and render 
     // each of them with the specified `itemView`.
     render: function(){
-      this.renderModel();
-
       this.collection.each(this.addChildView);
       if (this.onRender){
         this.onRender();
       }
       return this;
-    },
-
-    // Render an individual model, if we have one, as
-    // part of a composite view (branch / leaf). For example:
-    // a treeview.
-    renderModel: function(){
-      if (this.model){
-        var modelView = new this.modelView({
-          model: this.model,
-          template: this.template
-        });
-        modelView.render();
-
-        this.$el.append(modelView.el);
-      }
     },
 
     // Render the child item's view and add it to the
@@ -317,6 +298,40 @@ Backbone.Marionette = (function(Backbone, _, $){
         });
       }
     }
+  });
+
+  // Composite View
+  // --------------
+
+  // Used for rendering a branch-leaf, hierarchical structure.
+  // Extends directly from CollectionView and also renders an
+  // an item view as `modelView`, for the top leaf
+  Marionette.CompositeView = Marionette.CollectionView.extend({
+    modelView: Marionette.ItemView,
+
+    render: function(){
+      Marionette.CollectionView.prototype.render.call(this, arguments);
+      this.renderModel();
+    },
+
+    // Render an individual model, if we have one, as
+    // part of a composite view (branch / leaf). For example:
+    // a treeview.
+    renderModel: function(){
+      if (this.modelViewRendered){ return; }
+      this.modelViewRendered = true;
+
+      if (this.template){
+        var modelView = new this.modelView({
+          model: this.model,
+          template: this.template
+        });
+        modelView.render();
+
+        this.$el.append(modelView.el);
+      }
+    },
+
   });
 
   // BindTo: Event Binding

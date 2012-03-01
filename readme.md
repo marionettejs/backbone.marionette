@@ -389,6 +389,86 @@ MyApp.mainRegion.show(view);
 The region manager will wait until the deferred object is resolved
 before it attached the view's `el` to the DOM and displays it.
 
+## Marionette.CompositeRegion
+
+A `CompositeRegion` is a specialized hybrid between an `ItemView` and
+a collection of `RegionManager` objects, used for rendering composite-view
+and sub-application areas of the screen, where multiple region managers need
+to be attached to dynamically rendered HTML.
+
+The `CompositeRegion` extends directly from `ItemView` and adds the ability
+to specify `regions` which become `RegionManager` instances that are attached
+to the composite region.
+
+### Basic Usage
+
+```html
+<script id="composite-template" type="text/template">
+  <section>
+    <navigation id="menu">...</navigation>
+    <article id="content">...</navigation>
+  </section>
+</script>
+```
+
+```js
+CompositeView = Backbone.Marionette.CompositeRegion.extend({
+  template: "#composite-template",
+
+  regions: {
+    menu: "#menu",
+    content: "#content"
+  }
+});
+
+var compositeRegion = new CompositeRegion();
+compositeRegion.render();
+```
+
+Once you've rendered the composite region, you now have direct access
+to all of the specified regions as region managers.
+
+```js
+compositeRegion.menu.show(new MenuView());
+
+compositeRegion.content.show(new MainContentView());
+```
+
+### Nested Views
+
+Since the `CompositeRegion` extends directly from `ItemView`, it
+has all of the core functionality of an item view. This includes
+the methods necessary to be shown within an existing region manager.
+
+```js
+MyApp = new Backbone.Marionette.Application();
+MyApp.addRegions({
+  mainRegion: "#main"
+});
+
+var compositeRegion = new CompositeRegion();
+MyApp.mainRegion.show(compositeRegion);
+
+compositeRegion.show(new MenuView());
+```
+
+You can nest composite regions in to region managers as deeply as you want.
+This provides for a well organized, nested view structure.
+
+### Closing A CompositeRegion
+
+When you are finished with a composite region, you can call the
+`close` method on it. This will ensure that all of the region managers
+within the composite region are closed correctly, which in turn
+ensures all of the views shown within the regions are closed correctly.
+
+If you are showing a composite region within a parent region manager,
+replacing the composite region with another view or another composite
+region will close the current one, the same it will close a view.
+
+All of this ensures that composite regions and the views that they
+contain are cleaned up correctly.
+
 ## Marionette.ItemView
 
 An `ItemView` is a view that represents a single item. That item may be a 

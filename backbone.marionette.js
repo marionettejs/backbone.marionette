@@ -331,6 +331,14 @@ Backbone.Marionette = (function(Backbone, _, $){
       this.trigger("view:closed", view);
 
       delete this.currentView;
+    },
+
+    // Attach an existing view to the region manager. This 
+    // will not call `render` or `onShow` for the new view, 
+    // and will not replace the current HTML for the `el`
+    // of the region manager.
+    attachView: function(view){
+      this.currentView = view;
     }
   });
 

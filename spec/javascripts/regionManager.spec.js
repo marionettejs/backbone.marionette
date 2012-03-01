@@ -204,4 +204,57 @@ describe("region manager", function(){
     });
   });
 
+  describe("when initializing a region manager with an existing view", function(){
+    var manager, view;
+
+    beforeEach(function(){
+      view = new (Backbone.View.extend({ onShow: function(){} }))();
+
+      spyOn(view, "render");
+      spyOn(view, "onShow");
+
+      manager = new Backbone.Marionette.RegionManager({
+        el: "#foo",
+        currentView: view
+      });
+    });
+
+    it("should not render the view", function(){
+      expect(view.render).not.toHaveBeenCalled();
+    });
+
+    it("should not `show` the view", function(){
+      expect(view.onShow).not.toHaveBeenCalled();
+    });
+  });
+
+  describe("when attaching an existing view to a region manager", function(){
+    var manager, view;
+
+    beforeEach(function(){
+      setFixtures("<div id='foo'>bar</div>");
+      view = new (Backbone.View.extend({onShow: function(){}}))();
+
+      spyOn(view, "render");
+      spyOn(view, "onShow");
+
+      manager = new Backbone.Marionette.RegionManager({
+        el: "#foo"
+      });
+
+      manager.attachView(view);
+    });
+
+    it("should not render the view", function(){
+      expect(view.render).not.toHaveBeenCalled();
+    });
+
+    it("should not `show` the view", function(){
+      expect(view.onShow).not.toHaveBeenCalled();
+    });
+
+    it("should not replace the existing html", function(){
+      expect($(manager.el).text()).toBe("bar");
+    })
+  });
 });

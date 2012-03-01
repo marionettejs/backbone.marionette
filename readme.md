@@ -19,9 +19,9 @@ Backbone.Marionette just because you want to use some of it.
 You can download the raw source code above, fork the repository or
 use these links:
 
-Development: [backbone.marionette.js](https://raw.github.com/derickbailey/backbone.marionette/master/backbone.marionette.js) 14.53K file size (4.77K gzipped)
+Development: [backbone.marionette.js](https://raw.github.com/derickbailey/backbone.marionette/master/backbone.marionette.js) 16.22K file size (5.15K gzipped)
 
-Production: [backbone.marionette.min.js](https://raw.github.com/derickbailey/backbone.marionette/master/backbone.marionette.min.js) 5.21K file size (1.78K gzipped)
+Production: [backbone.marionette.min.js](https://raw.github.com/derickbailey/backbone.marionette/master/backbone.marionette.min.js) 6K file size (1.9K gzipped)
 
 ## Annotated Source Code
 

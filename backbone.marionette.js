@@ -264,8 +264,7 @@ Backbone.Marionette = (function(Backbone, _, $){
 
         this.$el.append(modelView.el);
       }
-    },
-
+    }
   });
 
   // Region Manager

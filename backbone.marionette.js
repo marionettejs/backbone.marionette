@@ -244,8 +244,8 @@ Backbone.Marionette = (function(Backbone, _, $){
     modelView: Marionette.ItemView,
 
     render: function(){
-      Marionette.CollectionView.prototype.render.call(this, arguments);
       this.renderModel();
+      Marionette.CollectionView.prototype.render.call(this, arguments);
     },
 
     // Render an individual model, if we have one, as

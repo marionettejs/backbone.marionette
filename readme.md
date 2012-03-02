@@ -1221,6 +1221,7 @@ I'm using [Docco](http://jashkenas.github.com/docco/) to generate the annotated 
 #### v0.5.1
 
 * Controller methods fired from an `AppRouter` are now called with `this` set to the controller, instead of the router
+* Fixed a bug in the CompositeView where the list wouldn't render when passing in a populated collection
 
 #### v0.5.0
 

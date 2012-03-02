@@ -4,6 +4,8 @@ describe("app router", function(){
   });
 
   describe("when a route fires", function(){
+    var context;
+
     var Router = Backbone.Marionette.AppRouter.extend({
       appRoutes: {
         "m1": "method1"
@@ -11,11 +13,13 @@ describe("app router", function(){
     });
 
     var controller = {
-      method1: function(){},
+      method1: function(){
+        context = this;
+      },
     }
 
     beforeEach(function(){
-      spyOn(controller, "method1");
+      spyOn(controller, "method1").andCallThrough();
 
       var router = new Router({
         controller: controller
@@ -27,6 +31,10 @@ describe("app router", function(){
 
     it("should call the configured method on the controller passed in the constructor", function(){
       expect(controller.method1).toHaveBeenCalled();
+    });
+
+    it("should execute the controller method with the context of the controller", function(){
+      expect(context).toBe(controller);
     });
   });
 

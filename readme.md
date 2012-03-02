@@ -1218,6 +1218,10 @@ I'm using [Docco](http://jashkenas.github.com/docco/) to generate the annotated 
 
 ## Release Notes
 
+#### v0.5.1
+
+* Controller methods fired from an `AppRouter` are now called with `this` set to the controller, instead of the router
+
 #### v0.5.0
 
 * **BREAKING:** Extraced `CompositeView` out of the collection view

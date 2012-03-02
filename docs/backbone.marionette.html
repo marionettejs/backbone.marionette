@@ -177,8 +177,8 @@ an item view as <code>modelView</code>, for the top leaf</p>             </td>  
     <span class="nx">modelView</span><span class="o">:</span> <span class="nx">Marionette</span><span class="p">.</span><span class="nx">ItemView</span><span class="p">,</span>
 
     <span class="nx">render</span><span class="o">:</span> <span class="kd">function</span><span class="p">(){</span>
-      <span class="nx">Marionette</span><span class="p">.</span><span class="nx">CollectionView</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">render</span><span class="p">.</span><span class="nx">call</span><span class="p">(</span><span class="k">this</span><span class="p">,</span> <span class="nx">arguments</span><span class="p">);</span>
       <span class="k">this</span><span class="p">.</span><span class="nx">renderModel</span><span class="p">();</span>
+      <span class="nx">Marionette</span><span class="p">.</span><span class="nx">CollectionView</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">render</span><span class="p">.</span><span class="nx">call</span><span class="p">(</span><span class="k">this</span><span class="p">,</span> <span class="nx">arguments</span><span class="p">);</span>
     <span class="p">},</span></pre></div>             </td>           </tr>                               <tr id="section-24">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-24">&#182;</a>               </div>               <p>Render an individual model, if we have one, as
 part of a composite view (branch / leaf). For example:
 a treeview.</p>             </td>             <td class="code">               <div class="highlight"><pre>    <span class="nx">renderModel</span><span class="o">:</span> <span class="kd">function</span><span class="p">(){</span>

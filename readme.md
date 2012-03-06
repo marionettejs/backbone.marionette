@@ -36,8 +36,8 @@ These are the strings that you can pull to make your puppet dance:
 * **Backbone.Marionette.ItemView**: A view that renders a single item
 * **Backbone.Marionette.CollectionView**: A view that iterates over a collection, and renders individual `ItemView` instances for each model
 * **Backbone.Marionette.CompositeView**: A collection view and item view, for rendering leaf-branch/composite model hierarchies
+* **Backbone.Marionette.LayoutManager**: A view that renders a layout and creates region managers to manage areas within it
 * **Backbone.Marionette.RegionManager**: Manage visual regions of your application, including display and removal of content
-* **Backbone.Marionette.CompositeRegion**: A composite view manager, renders an item view and attaches specified region managers to the resulting HTML
 * **Backbone.Marionette.EventAggregator**: An extension of Backbone.Events, to be used as an event-driven or pub-sub tool
 * **Backbone.Marionette.BindTo**: An event binding manager, to facilitate binding and unbinding of events
 * **Backbone.Marionette.TemplateManager**: Cache templates that are stored in `<script>` blocks, for faster subsequent access
@@ -450,21 +450,26 @@ MyApp.mainRegion.show(view);
 The region manager will wait until the deferred object is resolved
 before it attached the view's `el` to the DOM and displays it.
 
-## Marionette.CompositeRegion
+## Marionette.LayoutManager
 
-A `CompositeRegion` is a specialized hybrid between an `ItemView` and
-a collection of `RegionManager` objects, used for rendering composite-view
-and sub-application areas of the screen, where multiple region managers need
+Formerly known as `CompositeRegion`. 
+
+A `LayoutManager` is a specialized hybrid between an `ItemView` and
+a collection of `RegionManager` objects, used for rendering an application
+layout with multiple sub-regions to be managed by specified region managers.
+
+A layout manager can also be used as a composite-view to aggregate multiple
+views and sub-application areas of the screen where multiple region managers need
 to be attached to dynamically rendered HTML.
 
-The `CompositeRegion` extends directly from `ItemView` and adds the ability
+The `LayoutManager` extends directly from `ItemView` and adds the ability
 to specify `regions` which become `RegionManager` instances that are attached
-to the composite region.
+to the layout.
 
 ### Basic Usage
 
 ```html
-<script id="composite-template" type="text/template">
+<script id="layout-template" type="text/template">
   <section>
     <navigation id="menu">...</navigation>
     <article id="content">...</navigation>
@@ -473,8 +478,8 @@ to the composite region.
 ```
 
 ```js
-CompositeView = Backbone.Marionette.CompositeRegion.extend({
-  template: "#composite-template",
+AppLayout = Backbone.Marionette.LayoutManager.extend({
+  template: "#layout-template",
 
   regions: {
     menu: "#menu",
@@ -482,22 +487,22 @@ CompositeView = Backbone.Marionette.CompositeRegion.extend({
   }
 });
 
-var compositeRegion = new CompositeRegion();
-compositeRegion.render();
+var layout = new AppLayout();
+layout.render();
 ```
 
-Once you've rendered the composite region, you now have direct access
+Once you've rendered the layout, you now have direct access
 to all of the specified regions as region managers.
 
 ```js
-compositeRegion.menu.show(new MenuView());
+layout.menu.show(new MenuView());
 
-compositeRegion.content.show(new MainContentView());
+layout.content.show(new MainContentView());
 ```
 
-### Nested Views
+### Nested Layouts And Views
 
-Since the `CompositeRegion` extends directly from `ItemView`, it
+Since the `LayoutManager` extends directly from `ItemView`, it
 has all of the core functionality of an item view. This includes
 the methods necessary to be shown within an existing region manager.
 
@@ -507,41 +512,41 @@ MyApp.addRegions({
   mainRegion: "#main"
 });
 
-var compositeRegion = new CompositeRegion();
-MyApp.mainRegion.show(compositeRegion);
+var layout = new AppLayout();
+MyApp.mainRegion.show(layout);
 
-compositeRegion.show(new MenuView());
+layout.show(new MenuView());
 ```
 
-You can nest composite regions in to region managers as deeply as you want.
+You can nest layouts into region managers as deeply as you want.
 This provides for a well organized, nested view structure.
 
-### Closing A CompositeRegion
+### Closing A Layout Manager
 
-When you are finished with a composite region, you can call the
+When you are finished with a layout, you can call the
 `close` method on it. This will ensure that all of the region managers
-within the composite region are closed correctly, which in turn
+within the layout are closed correctly, which in turn
 ensures all of the views shown within the regions are closed correctly.
 
-If you are showing a composite region within a parent region manager,
-replacing the composite region with another view or another composite
-region will close the current one, the same it will close a view.
+If you are showing a layout within a parent region manager, replacing 
+the layout with another view or another layout will close the current 
+one, the same it will close a view.
 
-All of this ensures that composite regions and the views that they
+All of this ensures that layouts and the views that they
 contain are cleaned up correctly.
 
 ### Event Aggregator
 
-It's common to use a `CompositeRegion` to represent a sub-application in a
+It's common to use a `LayoutManager` to represent a sub-application in a
 larger overall application. Often the components of the sub-application need
-to communicate with each other, without allowing the other parts of the larger
-application in on the communication. To facilitate this, the composite region
+to communicate with each other without allowing the other parts of the larger
+application in on the communication. To facilitate this, the layout manager
 includes an event aggregator, `vent`.
 
 ```js
-var compReg = new MyCompositeRegion();
+var layout = new MyAppLayout();
 
-compRegion.vent.trigger("stuff:was:done");
+layout.vent.trigger("stuff:was:done");
 ```
 
 ## Marionette.ItemView
@@ -1220,7 +1225,9 @@ I'm using [Docco](http://jashkenas.github.com/docco/) to generate the annotated 
 
 #### v0.5.2
 
-* Bug fix for correctly initializing view with options, within CompositeRegion.
+* **BREAKING:** Renamed `CompositeRegion` to `LayoutManager`
+* Aliased CompsiteRegion to LayoutManager for backwards compatibility
+* Bug fix for correctly initializing LayoutManager with specified options in constructor
 
 #### v0.5.1
 

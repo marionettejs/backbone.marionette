@@ -1218,6 +1218,10 @@ I'm using [Docco](http://jashkenas.github.com/docco/) to generate the annotated 
 
 ## Release Notes
 
+#### v0.5.2
+
+* Bug fix for correctly initializing view with options, within CompositeRegion.
+
 #### v0.5.1
 
 * Controller methods fired from an `AppRouter` are now called with `this` set to the controller, instead of the router

@@ -82,7 +82,8 @@ Backbone.Marionette = (function(Backbone, _, $){
     // this method to use your own templating engine.
     renderTemplate: function(template, data){
       if (!template || template.length === 0){
-        var err = new Error("A template must be specified");
+        var msg = "A template must be specified";
+        var err = new Error(msg);
         err.name = "NoTemplateError";
         throw err;
       }

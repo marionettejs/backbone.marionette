@@ -1,4 +1,4 @@
-// Backbone.Marionette v0.5.2
+// Backbone.Marionette v0.6.0
 //
 // Copyright (C)2011 Derick Bailey, Muted Solutions, LLC
 // Distributed Under MIT License
@@ -9,7 +9,7 @@
 Backbone.Marionette = (function(Backbone, _, $){
   var Marionette = {};
 
-  Marionette.version = "0.5.2";
+  Marionette.version = "0.6.0";
 
   // Item View
   // ---------
@@ -343,8 +343,8 @@ Backbone.Marionette = (function(Backbone, _, $){
     }
   });
 
-  // Layout Manager
-  // ----------------
+  // Layout
+  // ------
 
   // Formerly known as Composite Region.
   //
@@ -354,7 +354,7 @@ Backbone.Marionette = (function(Backbone, _, $){
   // A specialized view type that renders an area of HTML and then
   // attaches `RegionManager` instances to the specified `regions`.
   // Used for composite view management and sub-application areas.
-  Marionette.LayoutManager = Marionette.ItemView.extend({
+  Marionette.Layout = Marionette.ItemView.extend({
     constructor: function () {
       Backbone.Marionette.ItemView.apply(this, arguments);
       this.regionManagers = {};
@@ -391,12 +391,6 @@ Backbone.Marionette = (function(Backbone, _, $){
       delete this.regionManagers;
     }
   });
-
-  // Composite Region
-  // ----------------
-
-  // Alias to `LayoutManager` for backward compatibility.
-  Marionette.CompositeRegion = Marionette.LayoutManager;
 
   // AppRouter
   // ---------

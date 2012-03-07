@@ -1,5 +1,5 @@
 describe("layout manager", function(){
-  var LayoutManager = Backbone.Marionette.CompositeRegion.extend({
+  var LayoutManager = Backbone.Marionette.Layout.extend({
     template: "#layout-manager-template",
     regions: {
       regionOne: "#region-one",

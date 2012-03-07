@@ -52,13 +52,6 @@ Backbone.Marionette = (function(Backbone, _, $){
       return data;
     },
 
-    // Either provide a `template: "#foo"` selector in the view
-    // definition, or provide it at instantiation: `new
-    // MyView({ template: "#foo" });`.
-    template: function(){
-      return $(this.options.template);
-    },
-
     // Render the view, defaulting to underscore.js templates.
     // You can override this in your view definition.
     render: function(){
@@ -97,14 +90,13 @@ Backbone.Marionette = (function(Backbone, _, $){
     // directly. The string value must be a valid jQuery 
     // selector.  
     getTemplate: function(callback){
-      var template = this.template;
+      var template = this.template || this.options.template;
   
       if (_.isFunction(template)){
-        var templateData = template.call(this);
-        callback.call(this, templateData);
-      } else {
-        Marionette.TemplateManager.get(template, callback);
+        template  = template.call(this);
       }
+
+      Marionette.TemplateManager.get(template, callback);
     },
 
     // Default `close` implementation, for removing a view from the

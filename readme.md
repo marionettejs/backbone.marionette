@@ -297,7 +297,7 @@ The options include any valid jQuery DOM object method, such
 as `html`, `text`, `append`, etc.
 
 ```js
-MyApp.mainRegion,show(myView, "append");
+MyApp.mainRegion.show(myView, "append");
 ```
 
 This example will use jQuery's `$.append` function to append

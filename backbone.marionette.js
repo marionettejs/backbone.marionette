@@ -361,8 +361,8 @@ Backbone.Marionette = (function(Backbone, _, $){
     },
 
     close: function () {
-      Backbone.Marionette.ItemView.prototype.close.call(this, arguments);
       this.closeRegions();
+      Backbone.Marionette.ItemView.prototype.close.call(this, arguments);
     },
 
     initializeRegions: function () {

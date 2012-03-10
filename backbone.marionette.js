@@ -352,7 +352,7 @@ Backbone.Marionette = (function(Backbone, _, $){
     constructor: function () {
       this.vent = new Backbone.Marionette.EventAggregator();
       Backbone.Marionette.ItemView.apply(this, arguments);
-      this.regionManagers = {};
+      this.regions = {};
     },
 
     render: function () {
@@ -371,18 +371,18 @@ Backbone.Marionette = (function(Backbone, _, $){
         var regionManager = new Backbone.Marionette.Region({
             el: this.$(selector)
         });
-        that.regionManagers[name] = regionManager;
+        that.regions[name] = regionManager;
         that[name] = regionManager;
       });
     },
 
     closeRegions: function () {
       var that = this;
-      _.each(this.regionManagers, function (manager, name) {
+      _.each(this.regions, function (manager, name) {
         manager.close();
         delete that[name];
       });
-      delete this.regionManagers;
+      delete this.regions;
     }
   });
 

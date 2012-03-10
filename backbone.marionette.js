@@ -266,7 +266,7 @@ Backbone.Marionette = (function(Backbone, _, $){
 
   // Manage the visual regions of your composite application. See
   // http://lostechies.com/derickbailey/2011/12/12/composite-js-apps-regions-and-region-managers/
-  Marionette.RegionManager = function(options){
+  Marionette.Region = function(options){
     this.options = options || {};
 
     if (this.options.el){
@@ -280,7 +280,7 @@ Backbone.Marionette = (function(Backbone, _, $){
     }
   };
 
-  _.extend(Marionette.RegionManager.prototype, Backbone.Events, {
+  _.extend(Marionette.Region.prototype, Backbone.Events, {
 
     // Displays a backbone view instance inside of the region.
     // Handles calling the `render` method for you. Reads content
@@ -346,7 +346,7 @@ Backbone.Marionette = (function(Backbone, _, $){
   // multiple regions within an application or sub-application.
   //
   // A specialized view type that renders an area of HTML and then
-  // attaches `RegionManager` instances to the specified `regions`.
+  // attaches `Region` instances to the specified `regions`.
   // Used for composite view management and sub-application areas.
   Marionette.Layout = Marionette.ItemView.extend({
     constructor: function () {
@@ -368,7 +368,7 @@ Backbone.Marionette = (function(Backbone, _, $){
     initializeRegions: function () {
       var that = this;
       _.each(this.regions, function (selector, name) {
-        var regionManager = new Backbone.Marionette.RegionManager({
+        var regionManager = new Backbone.Marionette.Region({
             el: this.$(selector)
         });
         that.regionManagers[name] = regionManager;
@@ -526,7 +526,7 @@ Backbone.Marionette = (function(Backbone, _, $){
   // ---------------------
 
   // Contain and manage the composite application as a whole.
-  // Stores and starts up `RegionManager` objects, includes an
+  // Stores and starts up `Region` objects, includes an
   // event aggregator as `app.vent`
   Marionette.Application = function(options){
     this.initCallbacks = new Marionette.Callbacks();
@@ -554,9 +554,9 @@ Backbone.Marionette = (function(Backbone, _, $){
     },
 
     // Add region managers to your app. 
-    // Accepts a hash of named strings or RegionManager objects
+    // Accepts a hash of named strings or Region objects
     // addRegions({something: "#someRegion"})
-    // addRegions{{something: RegionManager.extend({el: "#someRegion"}) });
+    // addRegions{{something: Region.extend({el: "#someRegion"}) });
     addRegions: function(regions){
       var regionValue, regionObj;
 
@@ -565,7 +565,7 @@ Backbone.Marionette = (function(Backbone, _, $){
           regionValue = regions[region];
     
           if (typeof regionValue === "string"){
-            regionObj = new Marionette.RegionManager({
+            regionObj = new Marionette.Region({
               el: regionValue
             });
           } else {
@@ -634,14 +634,14 @@ Backbone.Marionette = (function(Backbone, _, $){
   
   // Copy the `extend` function used by Backbone's classes
   var extend = Backbone.View.extend;
-  Marionette.RegionManager.extend = extend;
+  Marionette.Region.extend = extend;
   Marionette.Application.extend = extend;
 
   // Copy the features of `BindTo` on to these objects
   _.extend(Marionette.ItemView.prototype, Marionette.BindTo);
   _.extend(Marionette.CollectionView.prototype, Marionette.BindTo);
   _.extend(Marionette.Application.prototype, Marionette.BindTo);
-  _.extend(Marionette.RegionManager.prototype, Marionette.BindTo);
+  _.extend(Marionette.Region.prototype, Marionette.BindTo);
 
   return Marionette;
 })(Backbone, _, window.jQuery || window.Zepto || window.ender);

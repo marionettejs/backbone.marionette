@@ -1,4 +1,4 @@
-describe("layout manager", function(){
+describe("layout", function(){
   var LayoutManager = Backbone.Marionette.Layout.extend({
     template: "#layout-manager-template",
     regions: {

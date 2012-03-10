@@ -1,9 +1,9 @@
-describe("region manager", function(){
+describe("region", function(){
 
   describe("when creating a new region manager and no configuration has been provided", function(){
     it("should throw an exception saying an 'el' is required", function(){
       expect(
-        Backbone.Marionette.RegionManager.extend({})
+        Backbone.Marionette.Region.extend({})
       ).toThrow("An 'el' must be specified");
     });
   });
@@ -11,11 +11,11 @@ describe("region manager", function(){
   describe("when adding region objects to an app", function(){
     var MyApp = new Backbone.Marionette.Application();
 
-    var myRegion = Backbone.Marionette.RegionManager.extend({
+    var myRegion = Backbone.Marionette.Region.extend({
       el: "#region"
     });
 
-    var myRegion2 = Backbone.Marionette.RegionManager.extend({
+    var myRegion2 = Backbone.Marionette.Region.extend({
       el: "#region2"
     });
 
@@ -51,7 +51,7 @@ describe("region manager", function(){
   });
 
   describe("when showing a view", function(){
-    var MyRegion = Backbone.Marionette.RegionManager.extend({
+    var MyRegion = Backbone.Marionette.Region.extend({
       el: "#region"
     });
 
@@ -104,7 +104,7 @@ describe("region manager", function(){
   });
 
   describe("when a view is already shown and showing another", function(){
-    var MyRegion = Backbone.Marionette.RegionManager.extend({
+    var MyRegion = Backbone.Marionette.Region.extend({
       el: "#region"
     });
 
@@ -142,7 +142,7 @@ describe("region manager", function(){
   });
 
   describe("when closing the current view", function(){
-    var MyRegion = Backbone.Marionette.RegionManager.extend({
+    var MyRegion = Backbone.Marionette.Region.extend({
       el: "#region"
     });
 
@@ -194,7 +194,7 @@ describe("region manager", function(){
 
     beforeEach(function(){
       el = "#foo";
-      manager = new Backbone.Marionette.RegionManager({
+      manager = new Backbone.Marionette.Region({
         el: el
       });
     });
@@ -213,7 +213,7 @@ describe("region manager", function(){
       spyOn(view, "render");
       spyOn(view, "onShow");
 
-      manager = new Backbone.Marionette.RegionManager({
+      manager = new Backbone.Marionette.Region({
         el: "#foo",
         currentView: view
       });
@@ -238,7 +238,7 @@ describe("region manager", function(){
       spyOn(view, "render");
       spyOn(view, "onShow");
 
-      manager = new Backbone.Marionette.RegionManager({
+      manager = new Backbone.Marionette.Region({
         el: "#foo"
       });
 

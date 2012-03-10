@@ -57,12 +57,32 @@ describe("layout", function(){
   });
 
   describe("when showing via a region manager", function(){
+    var region, layout, regionOne, r1el;
+
+    beforeEach(function(){
+      setFixtures("<div id='mgr'></div>");
+      loadFixtures("layoutManagerTemplate.html");
+
+      region = new Backbone.Marionette.Region({
+        el: "#mgr"
+      });
+
+      layout = new LayoutManager();
+      layout.onRender = function(){
+        regionOne = this.regionOne;
+        regionOne.ensureEl();
+        r1el = regionOne.$el;
+      };
+
+      region.show(layout);
+    });
+
     it("should make the regions available in `onRender`", function(){
-      throw "not yet implemented";
+      expect(regionOne).not.toBeUndefined();
     });
 
     it("the regions should find their elements in `onRender`", function(){
-      throw "not yet implemented";
+      expect(r1el.length).toBe(1);
     });
   });
 

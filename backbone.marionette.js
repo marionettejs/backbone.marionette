@@ -356,9 +356,10 @@ Backbone.Marionette = (function(Backbone, _, $){
   // Used for composite view management and sub-application areas.
   Marionette.LayoutManager = Marionette.ItemView.extend({
     constructor: function () {
+      this.vent = new Backbone.Marionette.EventAggregator();
       Backbone.Marionette.ItemView.apply(this, arguments);
       this.regionManagers = {};
-      this.vent = new Backbone.Marionette.EventAggregator();
+      
     },
 
     render: function () {

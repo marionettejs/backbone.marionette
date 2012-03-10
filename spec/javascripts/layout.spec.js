@@ -7,7 +7,7 @@ describe("layout", function(){
     }
   });
 
-  describe("after rendering", function(){
+  describe("on rendering", function(){
     var layoutManager;
 
     beforeEach(function(){
@@ -53,6 +53,16 @@ describe("layout", function(){
     it("should delete the region managers", function(){
       expect(layoutManager.regionOne).toBeUndefined();
       expect(layoutManager.regionTwo).toBeUndefined();
+    });
+  });
+
+  describe("when showing via a region manager", function(){
+    it("should make the regions available in `onRender`", function(){
+      throw "not yet implemented";
+    });
+
+    it("the regions should find their elements in `onRender`", function(){
+      throw "not yet implemented";
     });
   });
 

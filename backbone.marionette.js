@@ -44,11 +44,12 @@ Backbone.Marionette = (function(Backbone, _, $){
     // definition, to provide custom serialization for your view's data.
     serializeData: function(){
       var data;
-      if (this.collection) { 
-        data = {};
-        data.items = this.collection.toJSON(); 
-      }
+
       if (this.model) { data = this.model.toJSON(); }
+      else if (this.collection) {
+        data = { items: this.collection.toJSON() };
+      }
+
       return data;
     },
 

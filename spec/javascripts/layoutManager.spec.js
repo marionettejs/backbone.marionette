@@ -20,6 +20,12 @@ describe("layout manager", function(){
       expect(layoutManager.regionOne).not.toBeUndefined();
       expect(layoutManager.regionTwo).not.toBeUndefined();
     });
+
+    it("should find the region scoped within the rendered template", function(){
+      layoutManager.regionOne.ensureEl();
+      var el = layoutManager.$("#region-one");
+      expect(layoutManager.regionOne.$el[0]).toEqual(el[0]);
+    });
   });
 
   describe("when closing", function(){

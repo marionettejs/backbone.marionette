@@ -289,6 +289,7 @@ Backbone.Marionette = (function(Backbone, _, $){
     // or just before closing the view, respectively.
     show: function(view, appendMethod){
       this.ensureEl();
+
       this.close();
       this.open(view, appendMethod);
 
@@ -352,7 +353,6 @@ Backbone.Marionette = (function(Backbone, _, $){
       this.vent = new Backbone.Marionette.EventAggregator();
       Backbone.Marionette.ItemView.apply(this, arguments);
       this.regionManagers = {};
-      
     },
 
     render: function () {
@@ -369,7 +369,7 @@ Backbone.Marionette = (function(Backbone, _, $){
       var that = this;
       _.each(this.regions, function (selector, name) {
         var regionManager = new Backbone.Marionette.RegionManager({
-            el: selector
+            el: this.$(selector)
         });
         that.regionManagers[name] = regionManager;
         that[name] = regionManager;

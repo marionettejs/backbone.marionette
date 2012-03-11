@@ -62,13 +62,14 @@ Backbone.Marionette = (function(Backbone, _, $){
       var deferredRender = $.Deferred();
       var renderItem = function(template){
         var html = that.renderTemplate(template, data);
-
         that.$el.html(html);
-
-        that.onRender && that.onRender();
-        that.trigger("item:rendered", that);
         deferredRender.resolve();
       }
+
+      deferredRender.done(function(){
+        that.onRender && that.onRender();
+        that.trigger("item:rendered", that);
+      });
 
       var templateRetrieval = this.getTemplate();
       templateRetrieval.done(renderItem);
@@ -151,10 +152,24 @@ Backbone.Marionette = (function(Backbone, _, $){
     // Loop through all of the items and render 
     // each of them with the specified `itemView`.
     render: function(){
-      this.collection.each(this.addChildView);
-      this.onRender && this.onRender();
-      this.trigger("collection:rendered", this);
-      return this;
+      var that = this;
+      var deferredRender = $.Deferred();
+      var promises = [];
+
+      this.collection.each(function(item){
+        promises.push(that.addChildView(item));
+      });
+
+      deferredRender.done(function(){
+        this.onRender && this.onRender();
+        this.trigger("collection:rendered", this);
+      });
+
+      $.when(promises).then(function(){
+        deferredRender.resolveWith(that);
+      });
+
+      return deferredRender;
     },
 
     // Render the child item's view and add it to the

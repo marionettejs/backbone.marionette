@@ -57,7 +57,7 @@ describe("collection view", function(){
   describe("when rendering a collection view", function(){
     var collection = new Collection([{foo: "bar"}, {foo: "baz"}]);
     var collectionView;
-    var renderResult;
+    var deferredResolved;
 
     beforeEach(function(){
       collectionView = new CollectionView({
@@ -68,7 +68,9 @@ describe("collection view", function(){
       spyOn(collectionView, "onRender").andCallThrough();
       spyOn(collectionView, "trigger").andCallThrough();
 
-      renderResult = collectionView.render();
+      var deferred = collectionView.render();
+
+      deferred.done(function(){ deferredResolved = true });
     });
 
     it("should render the specified itemView for each item", function(){
@@ -91,15 +93,14 @@ describe("collection view", function(){
       expect(collectionView.trigger).toHaveBeenCalledWith("collection:rendered", collectionView);
     });
 
-    it("should return the view after rendering", function(){
-      expect(renderResult).toBe(collectionView);
+    it("should resolve the deferred object that it returned", function(){
+      expect(deferredResolved).toBe(true);
     });
   });
 
   describe("when a collection is reset after the view is loaded", function(){
     var collection;
     var collectionView;
-    var renderResult;
 
     beforeEach(function(){
       collection = new Collection();
@@ -112,7 +113,7 @@ describe("collection view", function(){
       spyOn(collectionView, "onRender").andCallThrough();
       spyOn(collectionView, "closeChildren").andCallThrough();
 
-      renderResult = collectionView.render();
+      collectionView.render();
 
       collection.reset([{foo: "bar"}, {foo: "baz"}]);
     });
@@ -136,11 +137,6 @@ describe("collection view", function(){
     it("should call 'onRender' after rendering", function(){
       expect(collectionView.onRender).toHaveBeenCalled();
     });
-
-    it("should return the view after rendering", function(){
-      expect(renderResult).toBe(collectionView);
-    });
-
   });
 
   describe("when a model is added to the collection", function(){

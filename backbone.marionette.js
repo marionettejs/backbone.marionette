@@ -65,7 +65,7 @@ Backbone.Marionette = (function(Backbone, _, $){
         that.$el.html(html);
 
         that.onRender && that.onRender();
-        that.trigger("view:rendered", that);
+        that.trigger("item:rendered", that);
       });
 
       return this;
@@ -147,9 +147,8 @@ Backbone.Marionette = (function(Backbone, _, $){
     // each of them with the specified `itemView`.
     render: function(){
       this.collection.each(this.addChildView);
-      if (this.onRender){
-        this.onRender();
-      }
+      this.onRender && this.onRender();
+      this.trigger("collection:rendered", this);
       return this;
     },
 
@@ -247,7 +246,7 @@ Backbone.Marionette = (function(Backbone, _, $){
         template: this.template
       });
 
-      this.bindTo(this.renderedModelView, "view:rendered", function(view){
+      this.bindTo(this.renderedModelView, "item:rendered", function(view){
         that.$el.html(view.el);
         that.trigger("composite:model:rendered");
         that.renderCollection();

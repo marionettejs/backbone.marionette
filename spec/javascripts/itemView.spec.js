@@ -77,8 +77,8 @@ describe("item view", function(){
       expect(view.onRender).toHaveBeenCalled();
     });
 
-    it("should trigger a 'view:rendered' event", function(){
-      expect(view.trigger).toHaveBeenCalledWith("view:rendered", view);
+    it("should trigger a rendered event", function(){
+      expect(view.trigger).toHaveBeenCalledWith("item:rendered", view);
     });
 
     it("should return the view", function(){

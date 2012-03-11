@@ -66,6 +66,7 @@ describe("collection view", function(){
 
       spyOn(collectionView, "renderItem").andCallThrough();
       spyOn(collectionView, "onRender").andCallThrough();
+      spyOn(collectionView, "trigger").andCallThrough();
 
       renderResult = collectionView.render();
     });
@@ -84,6 +85,10 @@ describe("collection view", function(){
 
     it("should call 'onRender' after rendering", function(){
       expect(collectionView.onRender).toHaveBeenCalled();
+    });
+
+    it("should trigger a 'rendered' event", function(){
+      expect(collectionView.trigger).toHaveBeenCalledWith("collection:rendered", collectionView);
     });
 
     it("should return the view after rendering", function(){

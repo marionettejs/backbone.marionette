@@ -1294,18 +1294,22 @@ I'm using [Docco](http://jashkenas.github.com/docco/) to generate the annotated 
 * **BREAKING:** Renamed `LayoutManager` to `Layout`
 * **BREAKING:** Renamed `RegionManager` to `Region`
 * **BREAKING:** Renamed `TemplateManager` to `TemplateCache`
-* **CompositeView:**
-  * Will only render the collection once. You can call `renderCollection` explicitly to re-render the entire collection
-  * Will only render the model view once. You can call `renderModel` explicitly to re-render the model
-  * Correctly close and dispose of the model view
-* **Layout:**
+* **Layout**
   * `.vent` attribute available in `initializer` method
   * Ensures that regions select the `$el` within the Layout's `$el` instead of globally on the page
   * Initialize the regions before the layout, allowing access to the regions in the `onRender` method of the layout
   * Close the Layout's regions before closing the layout itself
-* ItemView 
+* **CompositeView**
+  * Will only render the collection once. You can call `renderCollection` explicitly to re-render the entire collection
+  * Will only render the model view once. You can call `renderModel` explicitly to re-render the model
+  * Correctly close and dispose of the model view
+  * Triggers various events during rendering of model view and collection view
+  * Calls 'onRender' method of composite view, if it exists
+* **ItemView**
   * Optimization to only call `.toJSON` on either model or collection, not both
-  * Trigger "view:rendered" method after rendering (in addition to calling onRender method of the view)
+  * Trigger "item:rendered" method after rendering (in addition to calling onRender method of the view)
+* **CollectionView**
+  * Trigger "collection:rendered" method after rendering (in addition to calling onRender method)
 
 #### v0.5.2
 

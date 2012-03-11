@@ -900,6 +900,26 @@ new CompositeView({
 });
 ```
 
+### Model And Collection Rendering
+
+The model and collection views for a composite will only be
+rendered once, under normal circumstances. 
+
+* If you need to explicitly re-render the model's view, you must
+call `.renderModel()`
+* If you need to explicitly re-render the collection's views, you
+must call `.rendercollection()`
+
+There are some scenarios where a collection will will render / 
+re-render all or part of it's collection of models, as well.
+
+* When the collection's "reset" event is fired, it will 
+re-render the entire list
+* When the collection has a model added to it (the "add" event 
+is fired), it will render that one item to the rendered list
+* When the collection has a model removed (the "remove" event 
+is fired), it will remove that one item from the rendered list
+
 ### Events And Callbacks
 
 During the course of rendering a composite, several events will
@@ -1310,6 +1330,7 @@ I'm using [Docco](http://jashkenas.github.com/docco/) to generate the annotated 
   * Trigger "item:rendered" method after rendering (in addition to calling onRender method of the view)
 * **CollectionView**
   * Trigger "collection:rendered" method after rendering (in addition to calling onRender method)
+* Large updates to the readme/documentation
 
 #### v0.5.2
 

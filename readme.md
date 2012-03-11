@@ -597,7 +597,7 @@ Backbone.Marionette.ItemView.extend({
 });
 ```
 
-A "view:rendered" event will also be fired. This allows you to
+An "item:rendered" event will also be fired. This allows you to
 add more than one callback to execute after the view is rendered,
 and allows parent views and other parts of the application to
 know that the view was rendered.
@@ -607,7 +607,7 @@ MyView = Backbone.Marionette.ItemVIew.extend({...});
 
 var myView = new MyView();
 
-myView.on("view:rendered", function(){
+myView.on("item:rendered", function(){
   alert("the view was rendered!");
 });
 ```
@@ -755,9 +755,34 @@ specified collection, render each of them using a specified `itemView`,
 then append the results of the item view's `el` to the collection view's
 `el`.
 
+### Events And Callbacks
+
 After the view has been rendered, a `onRender` method will be called.
 You can implement this in your view to provide custom code for dealing
 with the view's `el` after it has been rendered:
+
+```js
+Backbone.Marionette.CollectionView.extend({
+  onRender: function(){
+    // do stuff here
+  }
+});
+```
+
+A "collection:rendered" event will also be fired. This allows you to
+add more than one callback to execute after the view is rendered,
+and allows parent views and other parts of the application to
+know that the view was rendered.
+
+```js
+MyView = Backbone.Marionette.CollectionView.extend({...});
+
+var myView = new MyView();
+
+myView.on("collection:rendered", function(){
+  alert("the collection view was rendered!");
+});
+```
 
 ### CollectionView's itemView
 
@@ -872,6 +897,28 @@ CompositeView = Backbone.Marionette.CompositeView.extend({
 new CompositeView({
   model: someModel,
   collection: someCollection
+});
+```
+
+### Events And Callbacks
+
+During the course of rendering a composite, several events will
+be triggered:
+
+* "composite:item:rendered" - after the `modelView` has been rendered
+* "composite:collection:rendered" - after the collection of models has been rendered
+* "composite:rendered" - after everything has been rendered
+
+Additionally, after the composite view has been rendered, an 
+`onRender` method will be called. You can implement this in 
+your view to provide custom code for dealing with the view's 
+`el` after it has been rendered:
+
+```js
+Backbone.Marionette.CompositeView.extend({
+  onRender: function(){
+    // do stuff here
+  }
 });
 ```
 

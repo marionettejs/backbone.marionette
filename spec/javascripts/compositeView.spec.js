@@ -21,7 +21,9 @@ describe("composite view", function(){
 
   var CompositeView = Backbone.Marionette.CompositeView.extend({
     itemView: ItemView,
-    template: "#composite-template"
+    template: "#composite-template",
+
+    onRender: function(){}
   });
 
   var CompositeViewNoModel = Backbone.Marionette.CompositeView.extend({
@@ -154,6 +156,7 @@ describe("composite view", function(){
       });
 
       spyOn(compositeView, "trigger").andCallThrough();
+      spyOn(compositeView, "onRender").andCallThrough();
 
       compositeView.render();
     });
@@ -174,6 +177,10 @@ describe("composite view", function(){
       expect(order[0]).toBe(compositeView.renderedModelView);
       expect(order[1]).toBe(compositeView.collection);
       expect(order[2]).toBe(compositeView);
+    });
+
+    it("should call 'onRender'", function(){
+      expect(compositeView.onRender).toHaveBeenCalled();
     });
   });
 

@@ -101,7 +101,7 @@ Backbone.Marionette = (function(Backbone, _, $){
     },
 
     // Default `close` implementation, for removing a view from the
-    // DOM and unbinding it. Region managers will call this method
+    // DOM and unbinding it. Regions will call this method
     // for you. You can specify an `onClose` method in your view to
     // add custom code that is called after the view is closed.
     close: function(){
@@ -261,8 +261,8 @@ Backbone.Marionette = (function(Backbone, _, $){
     }
   });
 
-  // Region Manager
-  // --------------
+  // Region 
+  // ------
 
   // Manage the visual regions of your composite application. See
   // http://lostechies.com/derickbailey/2011/12/12/composite-js-apps-regions-and-region-managers/
@@ -332,10 +332,10 @@ Backbone.Marionette = (function(Backbone, _, $){
       delete this.currentView;
     },
 
-    // Attach an existing view to the region manager. This 
+    // Attach an existing view to the region. This 
     // will not call `render` or `onShow` for the new view, 
     // and will not replace the current HTML for the `el`
-    // of the region manager.
+    // of the region.
     attachView: function(view){
       this.currentView = view;
     }
@@ -561,7 +561,7 @@ Backbone.Marionette = (function(Backbone, _, $){
       this.trigger("start", options);
     },
 
-    // Add region managers to your app. 
+    // Add regions to your app. 
     // Accepts a hash of named strings or Region objects
     // addRegions({something: "#someRegion"})
     // addRegions{{something: Region.extend({el: "#someRegion"}) });

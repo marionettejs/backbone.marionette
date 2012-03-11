@@ -246,7 +246,7 @@ Backbone.Marionette = (function(Backbone, _, $){
         template: this.template
       });
       this.renderedModelView.render();
-      this.$el.append(this.renderedModelView.el);
+      this.$el.html(this.renderedModelView.el);
 
       this.renderCollection();
       this.render = function(){

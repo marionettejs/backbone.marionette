@@ -35,6 +35,15 @@ describe("composite view", function(){
     template: "#composite-template"
   });
 
+  describe("when rendering a composite view", function(){
+    it("should guarantee rendering of the model before rendering the collection", function(){
+      throw "not sure how to implement this";
+      // this needs to handle async template loading where the
+      // model view is guaranteed to have it's template loading
+      // and have the model view rendered, before the collection
+      // of items is rendered
+    });
+  });
 
   describe("when a composite view has a template without a model", function(){
     var compositeView;
@@ -121,6 +130,20 @@ describe("composite view", function(){
 
     it("should not re-render the collection's items", function(){
       expect(compositeRenderSpy.callCount).toBe(1);
+    });
+  });
+
+  describe("when closing a composite view", function(){
+    it("should close the model view", function(){
+      throw "not yet implemented";
+    });
+
+    it("should delete the model view", function(){
+      throw "not yet implemented";
+    });
+
+    it("should close the collection of views", function(){
+      throw "not yet implemented";
     });
   });
 

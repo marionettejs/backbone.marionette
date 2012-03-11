@@ -642,8 +642,8 @@ Backbone.Marionette = (function(Backbone, _, $){
     }
   });
 
-  // Template Manager
-  // ----------------
+  // Template Cache
+  // --------------
   
   // Manage templates stored in `<script>` blocks,
   // caching them for faster access.

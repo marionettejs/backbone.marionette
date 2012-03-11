@@ -563,6 +563,19 @@ underscore.js templates.
 The default implementation will use a template that you specify (see
 below) and serialize the model or collection for you (see below).
 
+The `render` method will return a jQuery deferred object, allowing
+you to know when the view rendering is complete.
+
+```js
+MyView = Backbone.Marionette.ItemView.extend({...});
+
+new MyView().render().done(function(){
+  // the view is done rendering. do stuff here
+});
+```
+
+### Customizing ItemView.render
+
 You can provide a custom implementation of a method called
 `renderTemplate` to change template engines. For example, if you want
 to use jQuery templates, you can do this:
@@ -581,7 +594,7 @@ template that was specified in the view (see below).
 The `data` parameter is the serialized data for either the model or
 the collection of the view (see below).
 
-#### Events And Callback methods
+### Events And Callback methods
 
 After the view has been rendered, a `onRender` method will be called.
 You can implement this in your view to provide custom code for dealing
@@ -699,7 +712,7 @@ Backbone.Marionette.ItemView.extend({
 });
 ```
 
-### ItemView events
+### Binding To ItemView Events
 
 ItemView extends `Marionette.BindTo`. It is recommended that you use
 the `bindTo` method to bind model and collection events. 
@@ -781,6 +794,25 @@ var myView = new MyView();
 
 myView.on("collection:rendered", function(){
   alert("the collection view was rendered!");
+});
+```
+
+### CollectionView render
+
+The `render` method of the collection view is responsible for
+rendering the entire collection. It loops through each of the
+items in the collection and renders them individually as an
+`itemView`.
+
+The `render` method returns a jQuery deferred object, allowing
+you to know when the rendering completes. This deferred object
+is resolved after all of the child views have been rendered.
+
+```js
+MyCollectionView = Backbone.Marionette.CollectionView.extend({...});
+
+new MyCollectionView().render().done(function(){
+  // all of the children are now rendered. do stuff here.
 });
 ```
 
@@ -1334,6 +1366,7 @@ I'm using [Docco](http://jashkenas.github.com/docco/) to generate the annotated 
   * Trigger "item:rendered" method after rendering (in addition to calling onRender method of the view)
 
 * **CollectionView**
+  * **BREAKING:** `CollectionView.render` no longer returns the view itself, now returns a jQuery deferred object
   * Trigger "collection:rendered" method after rendering (in addition to calling onRender method)
 
 * Large updates to the readme/documentation

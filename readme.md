@@ -581,6 +581,8 @@ template that was specified in the view (see below).
 The `data` parameter is the serialized data for either the model or
 the collection of the view (see below).
 
+#### Events And Callback methods
+
 After the view has been rendered, a `onRender` method will be called.
 You can implement this in your view to provide custom code for dealing
 with the view's `el` after it has been rendered:
@@ -592,6 +594,21 @@ Backbone.Marionette.ItemView.extend({
     // been rendered, and is full of the view's
     // HTML, ready to go.
   }
+});
+```
+
+A "view:rendered" event will also be fired. This allows you to
+add more than one callback to execute after the view is rendered,
+and allows parent views and other parts of the application to
+know that the view was rendered.
+
+```js
+MyView = Backbone.Marionette.ItemVIew.extend({...});
+
+var myView = new MyView();
+
+myView.on("view:rendered", function(){
+  alert("the view was rendered!");
 });
 ```
 
@@ -1239,7 +1256,9 @@ I'm using [Docco](http://jashkenas.github.com/docco/) to generate the annotated 
   * Ensures that regions select the `$el` within the Layout's `$el` instead of globally on the page
   * Initialize the regions before the layout, allowing access to the regions in the `onRender` method of the layout
   * Close the Layout's regions before closing the layout itself
-* ItemView optimization to only call `.toJSON` on either model or collection, not both
+* ItemView 
+  * Optimization to only call `.toJSON` on either model or collection, not both
+  * Trigger "view:rendered" method after rendering (in addition to calling onRender method of the view)
 
 #### v0.5.2
 

@@ -58,13 +58,7 @@ Backbone.Marionette = (function(Backbone, _, $){
     render: function(){
       var that = this;
       var data = this.serializeData();
-
       var deferredRender = $.Deferred();
-      var renderItem = function(template){
-        var html = that.renderTemplate(template, data);
-        that.$el.html(html);
-        deferredRender.resolve();
-      }
 
       deferredRender.done(function(){
         that.onRender && that.onRender();
@@ -72,7 +66,12 @@ Backbone.Marionette = (function(Backbone, _, $){
       });
 
       var templateRetrieval = this.getTemplate();
-      templateRetrieval.done(renderItem);
+
+      $.when(templateRetrieval).then(function(template){
+        var html = that.renderTemplate(template, data);
+        that.$el.html(html);
+        deferredRender.resolve();
+      });
 
       return deferredRender;
     },
@@ -266,14 +265,17 @@ Backbone.Marionette = (function(Backbone, _, $){
         template: this.template
       });
 
-      this.bindTo(this.renderedModelView, "item:rendered", function(view){
-        that.$el.html(view.el);
-        that.trigger("composite:model:rendered");
-        that.renderCollection();
-        that.trigger("composite:rendered");
-      });
+      var modelIsRendered = this.renderedModelView.render();
 
-      this.renderedModelView.render();
+      $.when(modelIsRendered).then(function(){
+        that.$el.html(that.renderedModelView.el);
+        that.trigger("composite:model:rendered");
+
+        var collectionIsRendered = that.renderCollection();
+        $.when(collectionIsRendered).then(function(){
+          that.trigger("composite:rendered");
+        });
+      });
 
       this.render = function(){
         this.renderModel();
@@ -282,8 +284,11 @@ Backbone.Marionette = (function(Backbone, _, $){
 
     // Render the collection for the composite view
     renderCollection: function(){
-      Marionette.CollectionView.prototype.render.apply(this, arguments);
-      this.trigger("composite:collection:rendered");
+      var collectionDeferred = Marionette.CollectionView.prototype.render.apply(this, arguments);
+      collectionDeferred.done(function(){
+        this.trigger("composite:collection:rendered");
+      });
+      return collectionDeferred;
     },
 
     // Render an individual model, if we have one, as

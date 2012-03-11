@@ -241,31 +241,31 @@ Backbone.Marionette = (function(Backbone, _, $){
     // this again will tell the model's view to re-render itself
     // but the collection will not re-render.
     render: function(){
-      this.renderModel();
-      Marionette.CollectionView.prototype.render.apply(this, arguments);
+      this.renderedModelView = new this.modelView({
+        model: this.model,
+        template: this.template
+      });
+      this.renderedModelView.render();
+      this.$el.append(this.renderedModelView.el);
+
+      this.renderCollection();
       this.render = function(){
-        this.reRenderModel();
+        this.renderModel();
       }
+    },
+
+    // Render the collection for the composite view
+    renderCollection: function(){
+      Marionette.CollectionView.prototype.render.apply(this, arguments);
     },
 
     // Render an individual model, if we have one, as
     // part of a composite view (branch / leaf). For example:
     // a treeview.
     renderModel: function(){
-      if (this.template){
-        this.renderedModelView = new this.modelView({
-          model: this.model,
-          template: this.template
-        });
+      if (this.renderedModelView){
         this.renderedModelView.render();
-
-        this.$el.append(this.renderedModelView.el);
       }
-    },
-
-    // Re-render the model without replacing the model's outer `el`
-    reRenderModel: function(){
-      this.renderedModelView.render();
     },
 
     // Ensure we close things correctly

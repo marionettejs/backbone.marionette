@@ -269,9 +269,7 @@ Backbone.Marionette = (function(Backbone, _, $){
   Marionette.Region = function(options){
     this.options = options || {};
 
-    if (this.options.el){
-      this.el = options.el;
-    }
+    _.extend(this, options);
 
     if (!this.el){
       var err = new Error("An 'el' must be specified");
@@ -298,8 +296,14 @@ Backbone.Marionette = (function(Backbone, _, $){
 
     ensureEl: function(){
       if (!this.$el || this.$el.length == 0){
-        this.$el = $(this.el);
+        this.$el = this.getEl(this.el);
       }
+    },
+
+    // Override this method to change how the region finds the
+    // DOM element that it manages. Return a jQuery selector object.
+    getEl: function(selector){
+        return $(selector);
     },
 
     // Internal method to render and display a view. Not meant 
@@ -369,7 +373,11 @@ Backbone.Marionette = (function(Backbone, _, $){
       var that = this;
       _.each(this.regions, function (selector, name) {
         var regionManager = new Backbone.Marionette.Region({
-            el: this.$(selector)
+            el: selector,
+
+            getEl: function(selector){
+              return that.$(selector);
+            }
         });
         that.regionManagers[name] = regionManager;
         that[name] = regionManager;

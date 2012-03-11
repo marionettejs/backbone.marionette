@@ -2,8 +2,8 @@ describe("layout", function(){
   var LayoutManager = Backbone.Marionette.Layout.extend({
     template: "#layout-manager-template",
     regions: {
-      regionOne: "#region-one",
-      regionTwo: "#region-two"
+      regionOne: "#regionOne",
+      regionTwo: "#regionTwo"
     }
   });
 
@@ -23,7 +23,7 @@ describe("layout", function(){
 
     it("should find the region scoped within the rendered template", function(){
       layoutManager.regionOne.ensureEl();
-      var el = layoutManager.$("#region-one");
+      var el = layoutManager.$("#regionOne");
       expect(layoutManager.regionOne.$el[0]).toEqual(el[0]);
     });
   });

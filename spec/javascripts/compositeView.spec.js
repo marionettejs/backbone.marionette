@@ -92,42 +92,10 @@ describe("composite view", function(){
     });
   });
 
-  describe("when re-rendering a composite view", function(){
-    var compositeView, compositeRenderSpy;
-
-    beforeEach(function(){
-      loadFixtures("compositeTemplate.html");
-
-      var m1 = new Model({foo: "bar"});
-      var m2 = new Model({foo: "baz"});
-      collection = new Collection();
-      collection.add(m2);
-
-      compositeView = new CompositeModelView({
-        model: m1,
-        collection: collection
-      });
-
-      spyOn(ModelView.prototype, "render").andCallThrough();
-      spyOn(compositeView, "render").andCallThrough();
-      compositeRenderSpy = compositeView.render;
-
-      compositeView.render();
-      compositeView.reRender();
-    });
-
-    it("should re-render the template view", function(){
-      expect(ModelView.prototype.render.callCount).toBe(2);
-    });
-
-    it("should not re-render the collection's items", function(){
-      expect(compositeRenderSpy.callCount).toBe(1);
-    });
-  });
-
   describe("when rendering a composite view", function(){
     var compositeView;
     var order;
+    var deferredResolved;
 
     beforeEach(function(){
       order = [];
@@ -158,7 +126,11 @@ describe("composite view", function(){
       spyOn(compositeView, "trigger").andCallThrough();
       spyOn(compositeView, "onRender").andCallThrough();
 
-      compositeView.render();
+      var deferred = compositeView.render();
+      
+      deferred.done(function(){
+        deferredResolved = true;
+      });
     });
 
     it("should trigger a rendered event for the model view", function(){
@@ -181,6 +153,43 @@ describe("composite view", function(){
 
     it("should call 'onRender'", function(){
       expect(compositeView.onRender).toHaveBeenCalled();
+    });
+
+    it("should resolve the rendering deferred", function(){
+      expect(deferredResolved).toBeTruthy();
+    });
+  });
+
+  describe("when re-rendering a composite view", function(){
+    var compositeView, compositeRenderSpy;
+
+    beforeEach(function(){
+      loadFixtures("compositeTemplate.html");
+
+      var m1 = new Model({foo: "bar"});
+      var m2 = new Model({foo: "baz"});
+      collection = new Collection();
+      collection.add(m2);
+
+      compositeView = new CompositeModelView({
+        model: m1,
+        collection: collection
+      });
+
+      spyOn(ModelView.prototype, "render").andCallThrough();
+      spyOn(compositeView, "render").andCallThrough();
+      compositeRenderSpy = compositeView.render;
+
+      compositeView.render();
+      compositeView.reRender();
+    });
+
+    it("should re-render the template view", function(){
+      expect(ModelView.prototype.render.callCount).toBe(2);
+    });
+
+    it("should not re-render the collection's items", function(){
+      expect(compositeRenderSpy.callCount).toBe(1);
     });
   });
 

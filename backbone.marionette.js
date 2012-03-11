@@ -259,13 +259,14 @@ Backbone.Marionette = (function(Backbone, _, $){
     // but the collection will not re-render.
     render: function(){
       var that = this;
+      var compositeRendered = $.Deferred();
 
       this.renderedModelView = new this.modelView({
         model: this.model,
         template: this.template
       });
 
-      var modelIsRendered = this.renderedModelView.render();
+      var modelIsRendered = this.renderModel();
 
       $.when(modelIsRendered).then(function(){
         that.$el.html(that.renderedModelView.el);
@@ -273,13 +274,19 @@ Backbone.Marionette = (function(Backbone, _, $){
 
         var collectionIsRendered = that.renderCollection();
         $.when(collectionIsRendered).then(function(){
-          that.trigger("composite:rendered");
+          compositeRendered.resolve();
         });
       });
 
+      compositeRendered.done(function(){
+        that.trigger("composite:rendered");
+      });
+
       this.render = function(){
-        this.renderModel();
+        return this.renderModel();
       }
+
+      return compositeRendered;
     },
 
     // Render the collection for the composite view
@@ -296,7 +303,7 @@ Backbone.Marionette = (function(Backbone, _, $){
     // a treeview.
     renderModel: function(){
       if (this.renderedModelView){
-        this.renderedModelView.render();
+        return this.renderedModelView.render();
       }
     },
 

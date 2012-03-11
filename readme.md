@@ -932,6 +932,20 @@ new CompositeView({
 });
 ```
 
+### Composite Render
+
+A composite view returns a jQuery deferred object from the
+`render` method. This allows you to know when the rendering for
+the entire composite structure has been completed.
+
+```js
+MyComp = Backbone.Marionette.CompositeView.extend({...});
+
+myComp = new MyComp().render().done(function(){
+  // the entire composite is now rendered. do stuff here
+});
+```
+
 ### Model And Collection Rendering
 
 The model and collection views for a composite will only be
@@ -1354,6 +1368,7 @@ I'm using [Docco](http://jashkenas.github.com/docco/) to generate the annotated 
   * Close the Layout's regions before closing the layout itself
 
 * **CompositeView**
+  * **BREAKING:** `CompositeView.render` no longer returns the view itself, now returns a jQuery deffered object
   * Will only render the collection once. You can call `renderCollection` explicitly to re-render the entire collection
   * Will only render the model view once. You can call `renderModel` explicitly to re-render the model
   * Correctly close and dispose of the model view
@@ -1370,6 +1385,7 @@ I'm using [Docco](http://jashkenas.github.com/docco/) to generate the annotated 
   * Trigger "collection:rendered" method after rendering (in addition to calling onRender method)
 
 * Large updates to the readme/documentation
+* Heavy use of `jQuery.Deferred()` and `jQuery.when/then` to better support asynchronous templates and rendering
 
 #### v0.5.2
 

@@ -114,8 +114,8 @@ describe("composite view", function(){
       compositeView.reRender();
     });
 
-    it("should not re-render the template view", function(){
-      expect(ModelView.prototype.render.callCount).toBe(1);
+    it("should re-render the template view", function(){
+      expect(ModelView.prototype.render.callCount).toBe(2);
     });
 
     it("should re-render the collection's items", function(){

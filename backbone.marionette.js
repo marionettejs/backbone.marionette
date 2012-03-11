@@ -97,7 +97,7 @@ Backbone.Marionette = (function(Backbone, _, $){
         template  = template.call(this);
       }
 
-      Marionette.TemplateManager.get(template, callback);
+      Marionette.TemplateCache.get(template, callback);
     },
 
     // Default `close` implementation, for removing a view from the
@@ -608,7 +608,7 @@ Backbone.Marionette = (function(Backbone, _, $){
   
   // Manage templates stored in `<script>` blocks,
   // caching them for faster access.
-  Marionette.TemplateManager = {
+  Marionette.TemplateCache = {
     templates: {},
 
     // Get the specified template by id. Either

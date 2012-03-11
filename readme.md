@@ -40,7 +40,7 @@ These are the strings that you can pull to make your puppet dance:
 * **Backbone.Marionette.Region**: Manage visual regions of your application, including display and removal of content
 * **Backbone.Marionette.EventAggregator**: An extension of Backbone.Events, to be used as an event-driven or pub-sub tool
 * **Backbone.Marionette.BindTo**: An event binding manager, to facilitate binding and unbinding of events
-* **Backbone.Marionette.TemplateManager**: Cache templates that are stored in `<script>` blocks, for faster subsequent access
+* **Backbone.Marionette.TemplateCache**: Cache templates that are stored in `<script>` blocks, for faster subsequent access
 * **Backbone.Marionette.Callbacks**: Manage a collection of callback methods, and execute them as needed
 
 The `Application`, `Region`, `ItemView` and `CollectionView` use the 
@@ -959,15 +959,17 @@ binder.unbindAll();
 
 This even works with in-line callback functions.
 
-## Backbone.Marionette.TemplateManager
+## Backbone.Marionette.TemplateCache
 
-The `TemplateManager` provides a cache for retrieving templates
+Formerly known as `TemplateManager`
+
+The `TemplateCache` provides a cache for retrieving templates
 from script blocks in your HTML. This will improve
 the speed of subsequent calls to get a template.
 
 ### Basic Usage
 
-To use the `TemplateManager`, call it directly. It is not
+To use the `TemplateCache`, call it directly. It is not
 instantiated like other Marionette objects.
 
 ### Get A Template
@@ -976,7 +978,7 @@ Templates are retrieved by jQuery selector, by default, and
 handed back to you via a callback method:
 
 ```js
-Backbone.Marionette.TemplateManager.get("#my-template", function(template){
+Backbone.Marionette.TemplateCache.get("#my-template", function(template){
  // use the template here
 });
 ```
@@ -986,9 +988,9 @@ template from the cache on subsequence calls:
 
 ```js
 var a, b, c;
-Backbone.Marionette.TemplateManager.get("#my-template", function(tmpl){a = tmpl});
-Backbone.Marionette.TemplateManager.get("#my-template", function(tmpl){b = tmpl});
-Backbone.Marionette.TemplateManager.get("#my-template", function(tmpl){c = tmpl});
+Backbone.Marionette.TemplateCache.get("#my-template", function(tmpl){a = tmpl});
+Backbone.Marionette.TemplateCache.get("#my-template", function(tmpl){b = tmpl});
+Backbone.Marionette.TemplateCache.get("#my-template", function(tmpl){c = tmpl});
 a === b === c; // => true
 ```
 
@@ -997,14 +999,14 @@ a === b === c; // => true
 The default template retrieval is to select the template contents
 from the DOM using jQuery. If you wish to change the way this
 works, you can override the `loadTemplate` method on the
-`TemplateManager` object.
+`TemplateCache` object.
 
 For example, if you want to load templates asychronously from the
 server, instead of from the DOM, you could replace `loadTemplate`
 with a function like this:
 
 ```js
-Backbone.Marionette.TemplateManager.loadTemplate = function(templateId, callback){
+Backbone.Marionette.TemplateCache.loadTemplate = function(templateId, callback){
   var that = this;
   $.get(templateId + ".html", function(template){
     callback.call(this, template);
@@ -1027,30 +1029,30 @@ If you do not specify any parameters, all items will be cleared
 from the cache:
 
 ```js
-Backbone.Marionette.TemplateManager.get("#my-template");
-Backbone.Marionette.TemplateManager.get("#this-template");
-Backbone.Marionette.TemplateManager.get("#that-template");
+Backbone.Marionette.TemplateCache.get("#my-template");
+Backbone.Marionette.TemplateCache.get("#this-template");
+Backbone.Marionette.TemplateCache.get("#that-template");
 
 // clear all templates from the cache
-Backbone.Marionette.TemplateManager.clear()
+Backbone.Marionette.TemplateCache.clear()
 ```
 
 If you specify one or more parameters, these parameters are assumed
 to be the `templateId` used for loading / caching:
 
 ```js
-Backbone.Marionette.TemplateManager.get("#my-template");
-Backbone.Marionette.TemplateManager.get("#this-template");
-Backbone.Marionette.TemplateManager.get("#that-template");
+Backbone.Marionette.TemplateCache.get("#my-template");
+Backbone.Marionette.TemplateCache.get("#this-template");
+Backbone.Marionette.TemplateCache.get("#that-template");
 
 // clear 2 of 3 templates from the cache
-Backbone.Marionette.TemplateManager.clear("#my-template", "#this-template")
+Backbone.Marionette.TemplateCache.clear("#my-template", "#this-template")
 ```
 
 ### Built In To ItemView
 
 If you're using `Marionette.ItemView`, you don't need to manually
-call the `TemplateManager`. Just specify the `template` attribute
+call the `TemplateCache`. Just specify the `template` attribute
 of your view as a jQuery selector, and the `ItemView` will use 
 the template manager by default.
 
@@ -1227,9 +1229,10 @@ I'm using [Docco](http://jashkenas.github.com/docco/) to generate the annotated 
 
 * **BREAKING:** Renamed `LayoutManager` to `Layout`
 * **BREAKING:** Renamed `RegionManager` to `Region`
+* **BREAKING:** Renamed `TemplateManager` to `TemplateCache`
 * CompositeView:
-  * Will only render the collection once. You can call `renderCollection` explicitly to re-render entire collection
-  * Will only render the model view once. You can call `renderModel` explicitly to re-render it
+  * Will only render the collection once. You can call `renderCollection` explicitly to re-render the entire collection
+  * Will only render the model view once. You can call `renderModel` explicitly to re-render the model
 * Layout:
   * `.vent` attribute available in `initializer` method
   * Ensures that regions select the `$el` within the Layout's `$el` instead of globally on the page

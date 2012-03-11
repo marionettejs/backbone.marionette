@@ -662,8 +662,7 @@ Backbone.Marionette = (function(Backbone, _, $){
         templateRetrieval.resolve(cachedTemplate);
       } else {
 
-        var templateLoaded = this.loadTemplate(templateId);
-        $.when(templateLoaded).then(function(template){
+        this.loadTemplate(templateId, function(template){
           that.templates[templateId] = template;
           templateRetrieval.resolve(template);
         });
@@ -676,8 +675,9 @@ Backbone.Marionette = (function(Backbone, _, $){
     // Load a template from the DOM, by default. Override
     // this method to provide your own template retrieval,
     // such as asynchronous loading from a server.
-    loadTemplate: function(templateId){
-      return $(templateId);
+    loadTemplate: function(templateId, callback){
+      var template = $(templateId);
+      callback.call(this, template);
     },
 
     // Clear templates from the cache. If no arguments

@@ -1104,8 +1104,8 @@ instantiated like other Marionette objects.
 
 ### Get A Template
 
-Templates are retrieved by jQuery selector, by default, and
-handed back to you via a callback method:
+Templates are retrieved using a jQuery selector by default, and 
+are handed back to you via a callback method:
 
 ```js
 Backbone.Marionette.TemplateCache.get("#my-template", function(template){
@@ -1131,22 +1131,44 @@ from the DOM using jQuery. If you wish to change the way this
 works, you can override the `loadTemplate` method on the
 `TemplateCache` object.
 
+```js
+Backbone.Marionette.TemplateCache.loadTemplate = function(templateId, callback){
+  // load your template here, returning it or a deferred
+  // object that resolves with the template as the only param
+}
+```
+
 For example, if you want to load templates asychronously from the
-server, instead of from the DOM, you could replace `loadTemplate`
-with a function like this:
+server, instead of from the DOM, you could replace 
+`loadTemplate` function.
+
+If a "template.html" file exists on the server, with this in it:
+
+```html
+<script id="my-template" type="text/template">
+  <div>some template stuff</div>
+</script>
+```
+
+Then the `loadTemplate` implementation may look like this:
 
 ```js
 Backbone.Marionette.TemplateCache.loadTemplate = function(templateId, callback){
   var that = this;
-  $.get(templateId + ".html", function(template){
-    callback.call(this, template);
+  var url = templateId + ".html";
+
+  $.get(url, function(templateHtml){
+    var template = $(tmplateHtml).find(templateId);
+    callback(template);
   });
 }
 ```
 
 This will use jQuery to asynchronously retrieve the template from
-the server, and then store the retrieved template in the template
-manager's cache.
+the server. When the `get` completes, the callback function will
+select the template from the resulting HTML and then call the
+`callback` function to send it in to the template cache and allow
+it to be used for rendering.
 
 ### Clear Items From cache
 

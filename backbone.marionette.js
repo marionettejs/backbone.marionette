@@ -59,16 +59,21 @@ Backbone.Marionette = (function(Backbone, _, $){
       var that = this;
       var data = this.serializeData();
 
-      this.getTemplate(function(template){
+      var deferredRender = $.Deferred();
+      var renderItem = function(template){
         var html = that.renderTemplate(template, data);
 
         that.$el.html(html);
 
         that.onRender && that.onRender();
         that.trigger("item:rendered", that);
-      });
+        deferredRender.resolve();
+      }
 
-      return this;
+      var templateRetrieval = this.getTemplate();
+      templateRetrieval.done(renderItem);
+
+      return deferredRender;
     },
 
     // Default implementation uses underscore.js templates. Override
@@ -89,14 +94,14 @@ Backbone.Marionette = (function(Backbone, _, $){
     // returns a jQuery object, or a jQuery selector string 
     // directly. The string value must be a valid jQuery 
     // selector.  
-    getTemplate: function(callback){
+    getTemplate: function(){
       var template = this.template || this.options.template;
   
       if (_.isFunction(template)){
         template  = template.call(this);
       }
 
-      Marionette.TemplateCache.get(template, callback);
+      return Marionette.TemplateCache.get(template);
     },
 
     // Default `close` implementation, for removing a view from the
@@ -621,20 +626,32 @@ Backbone.Marionette = (function(Backbone, _, $){
     // Get the specified template by id. Either
     // retrieves the cached version, or loads it
     // from the DOM.
-    get: function(templateId, callback){
+    get: function(templateId){
+      var templateRetrieval = $.Deferred();
+
       var template = this.templates[templateId];
-      if (template){
-        callback && callback.call(this, template);
+      var that = this;
+
+      var cachedTemplate = that.templates[templateId];
+      if (cachedTemplate){
+
+        templateRetrieval.resolve(cachedTemplate);
+
       } else {
-        var that = this;
+
         this.loadTemplate(templateId, function(template){
           that.templates[templateId] = template;
-          callback && callback.call(that, template);
+          templateRetrieval.resolve(template);
         });
+
       }
+
+      return templateRetrieval;
     },
 
-    // Load a template from the DOM.
+    // Load a template from the DOM, by default. Override
+    // this method to provide your own template retrieval,
+    // such as asynchronous loading from a server.
     loadTemplate: function(templateId, callback){
       callback.call(this, $(templateId));
     },

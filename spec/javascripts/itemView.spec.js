@@ -63,6 +63,7 @@ describe("item view", function(){
   describe("after rendering", function(){
     var view;
     var renderResult;
+    var deferredDone;
 
     beforeEach(function(){
       view = new OnRenderView({});
@@ -70,7 +71,8 @@ describe("item view", function(){
       spyOn(view, "onRender").andCallThrough();
       spyOn(view, "trigger").andCallThrough();
 
-      renderResult = view.render();
+      var deferred = view.render();
+      deferred.done(function(){deferredDone = true; });
     });
 
     it("should call an `onRender` method on the view", function(){
@@ -81,8 +83,8 @@ describe("item view", function(){
       expect(view.trigger).toHaveBeenCalledWith("item:rendered", view);
     });
 
-    it("should return the view", function(){
-      expect(renderResult).toBe(view);
+    it("should resolve the returned deferred object", function(){
+      expect(deferredDone).toBe(true);
     });
   });
 

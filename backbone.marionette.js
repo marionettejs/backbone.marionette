@@ -55,7 +55,7 @@ Backbone.Marionette = (function(Backbone, _, $){
 
     // Render the view, defaulting to underscore.js templates.
     // You can override this in your view definition.
-    render: function(){
+    render: function(callback){
       var that = this;
       var data = this.serializeData();
 
@@ -64,9 +64,8 @@ Backbone.Marionette = (function(Backbone, _, $){
 
         that.$el.html(html);
 
-        if (that.onRender){
-          that.onRender();
-        }
+        that.onRender && that.onRender();
+        that.trigger("view:rendered", that);
       });
 
       return this;
@@ -245,10 +244,12 @@ Backbone.Marionette = (function(Backbone, _, $){
         model: this.model,
         template: this.template
       });
-      this.renderedModelView.render();
-      this.$el.html(this.renderedModelView.el);
 
-      this.renderCollection();
+      this.renderedModelView.render(function(){
+        this.$el.html(this.renderedModelView.el);
+        this.renderCollection();
+      });
+
       this.render = function(){
         this.renderModel();
       }

@@ -1,4 +1,4 @@
-describe("item view rendering", function(){
+describe("item view", function(){
   var Model = Backbone.Model.extend();
 
   var Collection = Backbone.Collection.extend({
@@ -68,12 +68,17 @@ describe("item view rendering", function(){
       view = new OnRenderView({});
       
       spyOn(view, "onRender").andCallThrough();
+      spyOn(view, "trigger").andCallThrough();
 
       renderResult = view.render();
     });
 
     it("should call an `onRender` method on the view", function(){
       expect(view.onRender).toHaveBeenCalled();
+    });
+
+    it("should trigger a 'view:rendered' event", function(){
+      expect(view.trigger).toHaveBeenCalledWith("view:rendered", view);
     });
 
     it("should return the view", function(){

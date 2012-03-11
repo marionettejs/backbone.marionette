@@ -155,8 +155,15 @@ Backbone.Marionette = (function(Backbone, _, $){
       var deferredRender = $.Deferred();
       var promises = [];
 
+      if (!this.itemView){
+        var err = new Error("An `itemView` must be specified");
+        err.name = "NoItemViewError";
+        throw err;
+      }
+
       this.collection.each(function(item){
-        promises.push(that.addChildView(item));
+        var promise = that.addChildView(item)
+        promises.push(promise);
       });
 
       deferredRender.done(function(){
@@ -174,8 +181,14 @@ Backbone.Marionette = (function(Backbone, _, $){
     // Render the child item's view and add it to the
     // HTML for the collection view.
     addChildView: function(item){
-      var html = this.renderItem(item);
-      this.appendHtml(this.$el, html);
+      var view = new this.itemView({
+        model: item
+      });
+
+      var promise = view.render();
+      this.storeChild(view);
+      this.appendHtml(this.$el, view.$el);
+      return promise;
     },
 
     // Remove the child view and close it
@@ -192,25 +205,6 @@ Backbone.Marionette = (function(Backbone, _, $){
     // then `.append`.
     appendHtml: function(el, html){
       el.append(html);
-    },
-
-    // Render the individual item by instantiating
-    // a specifid `itemView`. Override this method
-    // to provide custom item rendering for each
-    // item in the collection.
-    renderItem: function(item){
-      if (!this.itemView){
-      var err = new Error("An `itemView` must be specified");
-      err.name = "NoItemViewError";
-      throw err;
-      }
-
-      var view = new this.itemView({
-        model: item
-      });
-      view.render();
-      this.storeChild(view);
-      return view.el;
     },
 
     // Store references to all of the child `itemView`

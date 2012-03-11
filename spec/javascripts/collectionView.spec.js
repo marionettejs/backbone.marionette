@@ -64,17 +64,12 @@ describe("collection view", function(){
         collection: collection
       });
 
-      spyOn(collectionView, "renderItem").andCallThrough();
       spyOn(collectionView, "onRender").andCallThrough();
       spyOn(collectionView, "trigger").andCallThrough();
 
       var deferred = collectionView.render();
 
       deferred.done(function(){ deferredResolved = true });
-    });
-
-    it("should render the specified itemView for each item", function(){
-      expect(collectionView.renderItem.callCount).toBe(2);
     });
 
     it("should append the html for each itemView", function(){
@@ -109,7 +104,6 @@ describe("collection view", function(){
         collection: collection
       });
 
-      spyOn(collectionView, "renderItem").andCallThrough();
       spyOn(collectionView, "onRender").andCallThrough();
       spyOn(collectionView, "closeChildren").andCallThrough();
 
@@ -120,10 +114,6 @@ describe("collection view", function(){
 
     it("should close all open child views", function(){
       expect(collectionView.closeChildren).toHaveBeenCalled();
-    });
-
-    it("should render the specified itemView for each item", function(){
-      expect(collectionView.renderItem.callCount).toBe(2);
     });
 
     it("should append the html for each itemView", function(){
@@ -267,8 +257,6 @@ describe("collection view", function(){
       collectionView = new PrependHtmlView({
         collection: collection
       });
-
-      spyOn(collectionView, "renderItem").andCallThrough();
 
       collectionView.render();
     });

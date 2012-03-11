@@ -36,14 +36,14 @@ These are the strings that you can pull to make your puppet dance:
 * **Backbone.Marionette.ItemView**: A view that renders a single item
 * **Backbone.Marionette.CollectionView**: A view that iterates over a collection, and renders individual `ItemView` instances for each model
 * **Backbone.Marionette.CompositeView**: A collection view and item view, for rendering leaf-branch/composite model hierarchies
-* **Backbone.Marionette.LayoutManager**: A view that renders a layout and creates region managers to manage areas within it
-* **Backbone.Marionette.RegionManager**: Manage visual regions of your application, including display and removal of content
+* **Backbone.Marionette.Layout**: A view that renders a layout and creates region managers to manage areas within it
+* **Backbone.Marionette.Region**: Manage visual regions of your application, including display and removal of content
 * **Backbone.Marionette.EventAggregator**: An extension of Backbone.Events, to be used as an event-driven or pub-sub tool
 * **Backbone.Marionette.BindTo**: An event binding manager, to facilitate binding and unbinding of events
 * **Backbone.Marionette.TemplateManager**: Cache templates that are stored in `<script>` blocks, for faster subsequent access
 * **Backbone.Marionette.Callbacks**: Manage a collection of callback methods, and execute them as needed
 
-The `Application`, `RegionManager`, `ItemView` and `CollectionView` use the 
+The `Application`, `Region`, `ItemView` and `CollectionView` use the 
 `extend` syntax and functionality from Backbone, allowing you to define new 
 versions of these objects with custom behavior.
 
@@ -218,7 +218,7 @@ contain the methods that you specified in the `appRoutes`.
 It is reocmmended that you divide your controller objects in to smaller peices of related functionality
 and have multiple routers / controllers, instead of just one giant router and controller.
 
-## Marionette.RegionManager
+## Marionette.Region
 
 Region managers provide a consistent way to manage your views and
 show / close them in your application. They use a jQuery selector
@@ -229,7 +229,7 @@ methods on your views, to facilitate additional functionality.
 
 Regions can be added to the application by calling the `addRegions` method on
 your application instance. This method expects a single hash parameter, with
-named regions and either jQuery selectors or `RegionManager` objects. You may
+named regions and either jQuery selectors or `Region` objects. You may
 call this method as many times as you like, and it will continue adding regions
 to the app. 
 
@@ -246,13 +246,13 @@ would be available for use immediately.
 
 If you specify the same region name twice, last one in wins.
 
-### Initialize A Region Manager With An `el`
+### Initialize A Region With An `el`
 
 You can specify an `el` for the region manager to manage at the time
 that the region manager is instantiated:
 
 ```js
-var mgr = new Backbone.Marionette.RegionManager({
+var mgr = new Backbone.Marionette.Region({
   el: "#someElement"
 });
 ```
@@ -328,13 +328,13 @@ var myView = new MyView({
   el: $("#existing-view-stuff")
 });
 
-var manager = new Backbone.Marionette.RegionManager({
+var manager = new Backbone.Marionette.Region({
   el: "#content",
   currentView: myView
 });
 ```
 
-#### Call `attachView` On Region Manager
+#### Call `attachView` On Region 
 
 ```js
 MyApp.addRegions({
@@ -348,7 +348,7 @@ var myView = new MyView({
 MyApp.someRegion.attachView(myView);
 ```
 
-### Region Manager Events
+### Region Events
 
 A region manager will raise a few events during it's showing and
 closing of views:
@@ -371,10 +371,10 @@ MyApp.mainRegion.on("view:closed", function(view){
 });
 ```
 
-### Defining A Custom Region Manager
+### Defining A Custom Region 
 
 You can define a custom region manager by extending from
-`RegionManager`. This allows you to create new functionality,
+`Region`. This allows you to create new functionality,
 or provide a base set of functionality for your app.
 
 Once you define a region manager type, you can still call the
@@ -383,26 +383,26 @@ value - not an instance of it, but the actual constructor
 function.
 
 ```js
-var FooterRegion = Backbone.Marionette.RegionManager.extend({
+var FooterRegion = Backbone.Marionette.Region.extend({
   el: "#footer"
 });
 
 MyApp.addRegions({footerRegion: FooterRegion});
 ```
 
-Note that if you define your own `RegionManager` object, you must provide an
+Note that if you define your own `Region` object, you must provide an
 `el` for it. If you don't, you will receive an runtime exception saying that
 an `el` is required.
 
-### Instantiate Your Own Region Manager
+### Instantiate Your Own Region 
 
 There may be times when you want to add a region manager to your
 application after your app is up and running. To do this, you'll
-need to extend from `RegionManager` as shown above and then use
+need to extend from `Region` as shown above and then use
 that constructor function on your own:
 
 ```js
-var SomeRegion = Backbone.Marionette.RegionManager.extend({
+var SomeRegion = Backbone.Marionette.Region.extend({
   el: "#some-div"
 });
 
@@ -450,20 +450,20 @@ MyApp.mainRegion.show(view);
 The region manager will wait until the deferred object is resolved
 before it attached the view's `el` to the DOM and displays it.
 
-## Marionette.LayoutManager
+## Marionette.Layout
 
 Formerly known as `CompositeRegion`. 
 
-A `LayoutManager` is a specialized hybrid between an `ItemView` and
-a collection of `RegionManager` objects, used for rendering an application
+A `Layout` is a specialized hybrid between an `ItemView` and
+a collection of `Region` objects, used for rendering an application
 layout with multiple sub-regions to be managed by specified region managers.
 
 A layout manager can also be used as a composite-view to aggregate multiple
 views and sub-application areas of the screen where multiple region managers need
 to be attached to dynamically rendered HTML.
 
-The `LayoutManager` extends directly from `ItemView` and adds the ability
-to specify `regions` which become `RegionManager` instances that are attached
+The `Layout` extends directly from `ItemView` and adds the ability
+to specify `regions` which become `Region` instances that are attached
 to the layout.
 
 ### Basic Usage
@@ -478,7 +478,7 @@ to the layout.
 ```
 
 ```js
-AppLayout = Backbone.Marionette.LayoutManager.extend({
+AppLayout = Backbone.Marionette.Layout.extend({
   template: "#layout-template",
 
   regions: {
@@ -502,7 +502,7 @@ layout.content.show(new MainContentView());
 
 ### Nested Layouts And Views
 
-Since the `LayoutManager` extends directly from `ItemView`, it
+Since the `Layout` extends directly from `ItemView`, it
 has all of the core functionality of an item view. This includes
 the methods necessary to be shown within an existing region manager.
 
@@ -521,7 +521,7 @@ layout.show(new MenuView());
 You can nest layouts into region managers as deeply as you want.
 This provides for a well organized, nested view structure.
 
-### Closing A Layout Manager
+### Closing A Layout 
 
 When you are finished with a layout, you can call the
 `close` method on it. This will ensure that all of the region managers
@@ -537,7 +537,7 @@ contain are cleaned up correctly.
 
 ### Event Aggregator
 
-It's common to use a `LayoutManager` to represent a sub-application in a
+It's common to use a `Layout` to represent a sub-application in a
 larger overall application. Often the components of the sub-application need
 to communicate with each other without allowing the other parts of the larger
 application in on the communication. To facilitate this, the layout manager

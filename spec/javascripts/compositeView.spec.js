@@ -134,16 +134,41 @@ describe("composite view", function(){
   });
 
   describe("when closing a composite view", function(){
+    var compositeView, compositeModelCloseSpy;
+
+    beforeEach(function(){
+      loadFixtures("compositeTemplate.html");
+
+      var m1 = new Model({foo: "bar"});
+      var m2 = new Model({foo: "baz"});
+      collection = new Collection();
+      collection.add(m2);
+
+      compositeView = new CompositeModelView({
+        model: m1,
+        collection: collection
+      });
+
+      spyOn(CompositeModelView.prototype, "close").andCallThrough();
+
+      compositeView.render();
+
+      spyOn(compositeView.renderedModelView, "close");
+      compositeModelCloseSpy = compositeView.renderedModelView.close;
+      
+      compositeView.close();
+    });
+
     it("should close the model view", function(){
-      throw "need to write the test. the code is in place already";
+      expect(compositeModelCloseSpy.callCount).toBe(1);
     });
 
     it("should delete the model view", function(){
-      throw "need to write the test. the code is in place already";
+      expect(compositeView.renderedModelView).toBeUndefined();
     });
 
     it("should close the collection of views", function(){
-      throw "need to write the test. the code is in place already";
+      expect(CompositeModelView.prototype.close.callCount).toBe(1);
     });
   });
 

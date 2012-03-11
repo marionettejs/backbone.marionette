@@ -55,7 +55,7 @@ Backbone.Marionette = (function(Backbone, _, $){
 
     // Render the view, defaulting to underscore.js templates.
     // You can override this in your view definition.
-    render: function(callback){
+    render: function(){
       var that = this;
       var data = this.serializeData();
 
@@ -240,15 +240,21 @@ Backbone.Marionette = (function(Backbone, _, $){
     // this again will tell the model's view to re-render itself
     // but the collection will not re-render.
     render: function(){
+      var that = this;
+
       this.renderedModelView = new this.modelView({
         model: this.model,
         template: this.template
       });
 
-      this.renderedModelView.render(function(){
-        this.$el.html(this.renderedModelView.el);
-        this.renderCollection();
+      this.bindTo(this.renderedModelView, "view:rendered", function(view){
+        that.$el.html(view.el);
+        that.trigger("composite:model:rendered");
+        that.renderCollection();
+        that.trigger("composite:rendered");
       });
+
+      this.renderedModelView.render();
 
       this.render = function(){
         this.renderModel();
@@ -258,6 +264,7 @@ Backbone.Marionette = (function(Backbone, _, $){
     // Render the collection for the composite view
     renderCollection: function(){
       Marionette.CollectionView.prototype.render.apply(this, arguments);
+      this.trigger("composite:collection:rendered");
     },
 
     // Render an individual model, if we have one, as

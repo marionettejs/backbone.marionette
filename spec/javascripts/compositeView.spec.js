@@ -35,16 +35,6 @@ describe("composite view", function(){
     template: "#composite-template"
   });
 
-  describe("when rendering a composite view", function(){
-    it("should guarantee rendering of the model before rendering the collection", function(){
-      throw "not sure how to implement this";
-      // this needs to handle async template loading where the
-      // model view is guaranteed to have it's template loading
-      // and have the model view rendered, before the collection
-      // of items is rendered
-    });
-  });
-
   describe("when a composite view has a template without a model", function(){
     var compositeView;
 
@@ -130,6 +120,60 @@ describe("composite view", function(){
 
     it("should not re-render the collection's items", function(){
       expect(compositeRenderSpy.callCount).toBe(1);
+    });
+  });
+
+  describe("when rendering a composite view", function(){
+    var compositeView;
+    var order;
+
+    beforeEach(function(){
+      order = [];
+      loadFixtures("compositeTemplate.html");
+
+      var m1 = new Model({foo: "bar"});
+      var m2 = new Model({foo: "baz"});
+      var collection = new Collection();
+      collection.add(m2);
+
+      compositeView = new CompositeView({
+        model: m1,
+        collection: collection
+      });
+
+      compositeView.on("composite:model:rendered", function(){
+        order.push(compositeView.renderedModelView);
+      });
+
+      compositeView.on("composite:collection:rendered", function(){
+        order.push(compositeView.collection);
+      });
+
+      compositeView.on("composite:rendered", function(){
+        order.push(compositeView);
+      });
+
+      spyOn(compositeView, "trigger").andCallThrough();
+
+      compositeView.render();
+    });
+
+    it("should trigger a rendered event for the model view", function(){
+      expect(compositeView.trigger).toHaveBeenCalledWith("composite:model:rendered");
+    });
+
+    it("should trigger a rendered event for the collection", function(){
+      expect(compositeView.trigger).toHaveBeenCalledWith("composite:collection:rendered");
+    });
+
+    it("should trigger a rendered event for the composite view", function(){
+      expect(compositeView.trigger).toHaveBeenCalledWith("composite:rendered");
+    });
+
+    it("should guarantee rendering of the model before rendering the collection", function(){
+      expect(order[0]).toBe(compositeView.renderedModelView);
+      expect(order[1]).toBe(compositeView.collection);
+      expect(order[2]).toBe(compositeView);
     });
   });
 

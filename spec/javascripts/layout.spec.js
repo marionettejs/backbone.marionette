@@ -9,11 +9,14 @@ describe("layout", function(){
 
   describe("on rendering", function(){
     var layoutManager;
+    var deferredResolved;
 
     beforeEach(function(){
       loadFixtures("layoutManagerTemplate.html");
       layoutManager = new LayoutManager();
-      layoutManager.render();
+      var deferred = layoutManager.render();
+
+      deferred.done(function(){deferredResolved = true;});
     });
 
     it("should instantiate the specified region managers", function(){
@@ -25,6 +28,10 @@ describe("layout", function(){
       layoutManager.regionOne.ensureEl();
       var el = layoutManager.$("#regionOne");
       expect(layoutManager.regionOne.$el[0]).toEqual(el[0]);
+    });
+
+    it("should resolve the render's deferred", function(){
+      expect(deferredResolved).toBeTruthy();
     });
   });
 

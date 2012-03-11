@@ -1362,7 +1362,8 @@ I'm using [Docco](http://jashkenas.github.com/docco/) to generate the annotated 
 * **BREAKING:** Renamed `TemplateManager` to `TemplateCache`
 
 * **Layout**
-  * `.vent` attribute available in `initializer` method
+  * **BREAKING:** `Layout.render` no longer returns the view itself, now returns a jQuery deferred object
+  * The `.vent` attribute is now available in the `initializer` method
   * Ensures that regions select the `$el` within the Layout's `$el` instead of globally on the page
   * Initialize the regions before the layout, allowing access to the regions in the `onRender` method of the layout
   * Close the Layout's regions before closing the layout itself

@@ -1230,10 +1230,11 @@ I'm using [Docco](http://jashkenas.github.com/docco/) to generate the annotated 
 * **BREAKING:** Renamed `LayoutManager` to `Layout`
 * **BREAKING:** Renamed `RegionManager` to `Region`
 * **BREAKING:** Renamed `TemplateManager` to `TemplateCache`
-* CompositeView:
+* **CompositeView:**
   * Will only render the collection once. You can call `renderCollection` explicitly to re-render the entire collection
   * Will only render the model view once. You can call `renderModel` explicitly to re-render the model
-* Layout:
+  * Correctly close and dispose of the model view
+* **Layout:**
   * `.vent` attribute available in `initializer` method
   * Ensures that regions select the `$el` within the Layout's `$el` instead of globally on the page
   * Initialize the regions before the layout, allowing access to the regions in the `onRender` method of the layout

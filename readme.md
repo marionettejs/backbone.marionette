@@ -1252,7 +1252,7 @@ to manage initializers (see above).
 It can also be used to guarantee callback execution in an event
 driven scenario, much like the application initializers.
 
-## Backbone.Marionette Example Apps
+## Backbone.Marionette Sample Apps
 
 There are several sample apps available.
 
@@ -1284,61 +1284,6 @@ https://github.com/sgentile/BackboneNodeContacts
 And the ASP.NET MVC version is here:
 
 https://github.com/sgentile/BackboneContacts
-
-### Quick & Dirty Sample
-
-Here's a quick and dirty example to show how to use some of the pieces of
-Marionette:
-
-```js
-// define the application
-// options we pass in are copied on to the instance
-MyApp = new Backbone.Marionette.Application({
-  someOption: "some value";
-});
-
-// add a region to the app
-myRegion = Backbone.Marionette.RegionManager.extend({
-  el: "#my-region"
-});
-MyApp.addRegions({ myRegion: MyRegion });
-
-// define some functionality for the app
-(function(MyApp, Backbone){
-
-  // a view to render into the region
-  var SomeView = Backbone.View.extend({
-    render: function(){
-
-      // get "someOption" from the app, since we
-      // passed it into the app initializer, above
-      this.$el.html(MyApp.someOption);
-    },
-
-    doSomething: function(){
-      // the applicaiton has an event aggregator on instantiation
-      // call out to the event aggregator to raise an event
-      MyApp.vent.trigger("something:happened");
-    }
-  });
-
-  // an initializer to run this functional area 
-  // when the app starts up
-  MyApp.addInitializer(function(){
-    var someView = new SomeView();
-    MyApp.myRegion.show(someView);
-    someView.doSomething();
-  });
-
-})(MyApp, Backbone);
-
-// calling start will run all of the initializers
-// this can be done from your JS file directly, or
-// from a script block in your HTML
-$(function(){
-  MyApp.start();
-});
-```
 
 ## Compatibility And Requirements
 

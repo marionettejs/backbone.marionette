@@ -135,15 +135,15 @@ describe("composite view", function(){
 
   describe("when closing a composite view", function(){
     it("should close the model view", function(){
-      throw "not yet implemented";
+      throw "need to write the test. the code is in place already";
     });
 
     it("should delete the model view", function(){
-      throw "not yet implemented";
+      throw "need to write the test. the code is in place already";
     });
 
     it("should close the collection of views", function(){
-      throw "not yet implemented";
+      throw "need to write the test. the code is in place already";
     });
   });
 

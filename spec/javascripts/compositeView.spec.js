@@ -188,14 +188,36 @@ describe("composite view", function(){
       expect(ModelView.prototype.render.callCount).toBe(2);
     });
 
-    it("should not re-render the collection's items", function(){
-      expect(compositeRenderSpy.callCount).toBe(1);
+    it("should re-render the collection's items", function(){
+      expect(compositeRenderSpy.callCount).toBe(2);
     });
   });
 
   describe("when rendering a composite view with an empty collection and then resetting the collection", function(){
-    it("should render the collection items", function(){
-      throw "not working... need to write test to prove failure, then fix";
+    var compositeView;
+
+    beforeEach(function(){
+      loadFixtures("compositeRerender.html");
+
+      var m1 = new Model({foo: "bar"});
+      var collection = new Collection();
+      compositeView = new CompositeView({
+        model: m1,
+        collection: collection
+      });
+
+      compositeView.render();
+
+      var m2 = new Model({foo: "baz"});
+      collection.reset([m2]);
+    });
+
+    it("should render the template with the model", function(){
+      expect(compositeView.$el).toHaveText(/composite bar/);
+    });
+
+    it("should render the collection's items", function(){
+      expect(compositeView.$el).toHaveText(/baz/);
     });
   });
 

@@ -73,7 +73,7 @@ Backbone.Marionette = (function(Backbone, _, $){
         deferredRender.resolve();
       });
 
-      return deferredRender;
+      return deferredRender.promise();
     },
 
     // Default implementation uses underscore.js templates. Override
@@ -175,7 +175,7 @@ Backbone.Marionette = (function(Backbone, _, $){
         deferredRender.resolveWith(that);
       });
 
-      return deferredRender;
+      return deferredRender.promise();
     },
 
     // Render the child item's view and add it to the
@@ -280,7 +280,7 @@ Backbone.Marionette = (function(Backbone, _, $){
         that.trigger("composite:rendered");
       });
 
-      return compositeRendered;
+      return compositeRendered.promise();
     },
 
     // Render the collection for the composite view
@@ -289,7 +289,7 @@ Backbone.Marionette = (function(Backbone, _, $){
       collectionDeferred.done(function(){
         this.trigger("composite:collection:rendered");
       });
-      return collectionDeferred;
+      return collectionDeferred.promise();
     },
 
     // Render an individual model, if we have one, as
@@ -663,7 +663,7 @@ Backbone.Marionette = (function(Backbone, _, $){
 
       }
 
-      return templateRetrieval;
+      return templateRetrieval.promise();
     },
 
     // Load a template from the DOM, by default. Override

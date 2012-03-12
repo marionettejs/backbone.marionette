@@ -19,9 +19,9 @@ Backbone.Marionette just because you want to use some of it.
 You can download the raw source code above, fork the repository or
 use these links:
 
-Development: [backbone.marionette.js](https://raw.github.com/derickbailey/backbone.marionette/master/backbone.marionette.js) 21.22 file size (5.54K gzipped)
+Development: [backbone.marionette.js](https://raw.github.com/derickbailey/backbone.marionette/master/backbone.marionette.js) 21.3 file size (5.54K gzipped)
 
-Production: [backbone.marionette.min.js](https://raw.github.com/derickbailey/backbone.marionette/master/backbone.marionette.min.js) 6.79K file size (2.1K gzipped)
+Production: [backbone.marionette.min.js](https://raw.github.com/derickbailey/backbone.marionette/master/backbone.marionette.min.js) 6.82K file size (2.1K gzipped)
 
 ## Annotated Source Code
 
@@ -948,23 +948,18 @@ myComp = new MyComp().render().done(function(){
 
 ### Model And Collection Rendering
 
-The model and collection views for a composite will only be
-rendered once, under normal circumstances. 
+The model and collection for the composite view will re-render
+themselves under the following conditions:
 
-* If you need to explicitly re-render the model's view, you must
-call `.renderModel()`
-* If you need to explicitly re-render the collection's views, you
-must call `.rendercollection()`
+* When the collection's "reset" event is fired, it will re-render the entire list
+* When the collection has a model added to it (the "add" event is fired), it will render that one item to the rendered list
+* When the collection has a model removed (the "remove" event is fired), it will remove that one item from the rendered list
 
-There are some scenarios where a collection will will render / 
-re-render all or part of it's collection of models, as well.
+You can also manually re-render either or both of them:
 
-* When the collection's "reset" event is fired, it will 
-re-render the entire list
-* When the collection has a model added to it (the "add" event 
-is fired), it will render that one item to the rendered list
-* When the collection has a model removed (the "remove" event 
-is fired), it will remove that one item from the rendered list
+* If you want to re-render everything, call the `.render()` method
+* If you want to re-render the model's view, you can call `.renderModel()`
+* If you want to re-render the collection's views, you can call `.rendercollection()`
 
 ### Events And Callbacks
 
@@ -1322,7 +1317,13 @@ I'm using [Docco](http://jashkenas.github.com/docco/) to generate the annotated 
 
 ## Release Notes
 
-### v0.6.0
+### v0.6.1
+
+* Fixed the composite view so that it renders the collection correctly when the collection is "reset"
+* Fixed the composite view so that it re-renders correctly
+* Fixed various deferred usages to only return promises, instead of the full deferred object
+
+#### v0.6.0
 
 * **BREAKING:** Renamed `LayoutManager` to `Layout`
 * **BREAKING:** Renamed `RegionManager` to `Region`

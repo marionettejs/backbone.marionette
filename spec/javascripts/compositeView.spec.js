@@ -193,6 +193,12 @@ describe("composite view", function(){
     });
   });
 
+  describe("when rendering a composite view with an empty collection and then resetting the collection", function(){
+    it("should render the collection items", function(){
+      throw "not working... need to write test to prove failure, then fix";
+    });
+  });
+
   describe("when closing a composite view", function(){
     var compositeView, compositeModelCloseSpy;
 

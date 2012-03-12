@@ -221,6 +221,39 @@ describe("composite view", function(){
     });
   });
 
+  describe("when rendering a composite with a collection and then resetting the collection", function(){
+    var compositeView;
+
+    beforeEach(function(){
+      loadFixtures("compositeRerender.html");
+
+      var m1 = new Model({foo: "bar"});
+      var m2 = new Model({foo: "baz"});
+      var collection = new Collection([m2]);
+
+      compositeView = new CompositeView({
+        model: m1,
+        collection: collection
+      });
+
+      compositeView.render();
+
+      var m3 = new Model({foo: "quux"});
+      var m4 = new Model({foo: "widget"});
+      collection.reset([m3, m4]);
+    });
+
+    it("should render the template with the model", function(){
+      expect(compositeView.$el).toHaveText(/composite bar/);
+    });
+
+    it("should render the collection's items", function(){
+      expect(compositeView.$el).not.toHaveText(/baz/);
+      expect(compositeView.$el).toHaveText(/quux/);
+      expect(compositeView.$el).toHaveText(/widget/);
+    });
+  });
+
   describe("when closing a composite view", function(){
     var compositeView, compositeModelCloseSpy;
 

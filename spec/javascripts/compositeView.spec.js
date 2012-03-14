@@ -178,6 +178,7 @@ describe("composite view", function(){
 
       spyOn(ModelView.prototype, "render").andCallThrough();
       spyOn(compositeView, "render").andCallThrough();
+      spyOn(compositeView, "closeChildren").andCallThrough();
       compositeRenderSpy = compositeView.render;
 
       compositeView.render();
@@ -186,6 +187,50 @@ describe("composite view", function(){
 
     it("should re-render the template view", function(){
       expect(ModelView.prototype.render.callCount).toBe(2);
+    });
+
+    it("should close all of the child collection item views", function(){
+      expect(compositeView.closeChildren).toHaveBeenCalled;
+      expect(compositeView.closeChildren.callCount).toBe(1);
+    });
+
+    it("should re-render the collection's items", function(){
+      expect(compositeRenderSpy.callCount).toBe(2);
+    });
+  });
+
+  describe("when rendering a composite view twice", function(){
+    var compositeView, compositeRenderSpy;
+
+    beforeEach(function(){
+      loadFixtures("compositeTemplate.html");
+
+      var m1 = new Model({foo: "bar"});
+      var m2 = new Model({foo: "baz"});
+      collection = new Collection();
+      collection.add(m2);
+
+      compositeView = new CompositeModelView({
+        model: m1,
+        collection: collection
+      });
+
+      spyOn(ModelView.prototype, "render").andCallThrough();
+      spyOn(compositeView, "render").andCallThrough();
+      spyOn(compositeView, "closeChildren").andCallThrough();
+      compositeRenderSpy = compositeView.render;
+
+      compositeView.render();
+      compositeView.render();
+    });
+
+    it("should re-render the template view", function(){
+      expect(ModelView.prototype.render.callCount).toBe(2);
+    });
+
+    it("should close all of the child collection item views", function(){
+      expect(compositeView.closeChildren).toHaveBeenCalled;
+      expect(compositeView.closeChildren.callCount).toBe(1);
     });
 
     it("should re-render the collection's items", function(){

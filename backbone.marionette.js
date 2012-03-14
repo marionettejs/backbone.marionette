@@ -145,7 +145,7 @@ Backbone.Marionette = (function(Backbone, _, $){
     // existing child views before rendering again.
     reRender: function(){
       this.closeChildren();
-      this.render();
+      return this.render();
     },
 
     // Loop through all of the items and render 

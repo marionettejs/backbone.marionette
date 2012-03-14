@@ -643,6 +643,7 @@ Backbone.Marionette = (function(Backbone, _, $){
   // caching them for faster access.
   Marionette.TemplateCache = {
     templates: {},
+    loaders: {},
 
     // Get the specified template by id. Either
     // retrieves the cached version, or loads it
@@ -655,11 +656,18 @@ Backbone.Marionette = (function(Backbone, _, $){
       if (cachedTemplate){
         templateRetrieval.resolve(cachedTemplate);
       } else {
+        var loader = this.loaders[templateId];
+        if(loader) {
+          templateRetrieval = loader;
+        } else {
+          this.loaders[templateId] = templateRetrieval;
 
-        this.loadTemplate(templateId, function(template){
-          that.templates[templateId] = template;
-          templateRetrieval.resolve(template);
-        });
+          this.loadTemplate(templateId, function(template){
+            delete that.loaders[templateId];
+            that.templates[templateId] = template;
+            templateRetrieval.resolve(template);
+          });
+        }
 
       }
 

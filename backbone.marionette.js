@@ -440,7 +440,7 @@ Backbone.Marionette = (function(Backbone, _, $){
         manager.close();
         delete that[name];
       });
-      delete this.regionManagers;
+      this.regionManagers = {};
     }
   });
 

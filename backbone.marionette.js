@@ -138,14 +138,7 @@ Backbone.Marionette = (function(Backbone, _, $){
     initialEvents: function(){
       this.bindTo(this.collection, "add", this.addChildView, this);
       this.bindTo(this.collection, "remove", this.removeChildView, this);
-      this.bindTo(this.collection, "reset", this.reRender, this);
-    },
-
-    // Re-rendering the collection view involves closing any
-    // existing child views before rendering again.
-    reRender: function(){
-      this.closeChildren();
-      return this.render();
+      this.bindTo(this.collection, "reset", this.render, this);
     },
 
     // Loop through all of the items and render 
@@ -154,6 +147,8 @@ Backbone.Marionette = (function(Backbone, _, $){
       var that = this;
       var deferredRender = $.Deferred();
       var promises = [];
+
+      this.closeChildren();
 
       if (!this.itemView){
         var err = new Error("An `itemView` must be specified");

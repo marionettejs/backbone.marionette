@@ -838,7 +838,7 @@ stating that you must specify an `itemView`.
 The collection view binds to the "add", "remove" and "reset" events of the
 collection that is specified. 
 
-When the collection for the view is "reset", the view will call `reRender` on
+When the collection for the view is "reset", the view will call `render` on
 itself and re-render the entire collection.
 
 When a model is added to the collection, the collection view will render that
@@ -850,7 +850,7 @@ view will close and remove that model's item view.
 ### CollectionView: Re-render Collection
 
 If you need to re-render the entire collection, you can call the
-`view.reRender` method. This method takes care of closing all of
+`view.render` method. This method takes care of closing all of
 the child views that may have previously been opened.
 
 ### CollectionView's appendHtml
@@ -1320,7 +1320,8 @@ I'm using [Docco](http://jashkenas.github.com/docco/) to generate the annotated 
 
 ### v0.6.2
 
-* **BREAKING**: The `TemplateCache.get` method now returns a plain string instead of a jQuery selector object
+* **BREAKING:** The `CollectionView` no longer has a `reRender` method. Call `render` instead
+* **BREAKING:** The `TemplateCache.get` method now returns a plain string instead of a jQuery selector object
 * Fixed a bug with closing and then re-using a Layout with defined regions
 * Fixed a potential race condition for loading / caching templates where a template would be loaded multiple times instead of just once
 

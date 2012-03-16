@@ -229,7 +229,7 @@ describe("composite view", function(){
     });
 
     it("should close all of the child collection item views", function(){
-      expect(compositeView.closeChildren).toHaveBeenCalled;
+      expect(compositeView.closeChildren).toHaveBeenCalled();
       expect(compositeView.closeChildren.callCount).toBe(1);
     });
 

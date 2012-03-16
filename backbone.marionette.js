@@ -86,7 +86,7 @@ Backbone.Marionette = (function(Backbone, _, $){
         throw err;
       }
 
-      return _.template(template.html(), data);
+      return _.template(template, data);
     },
 
     // Retrieve the template from the call's context. The
@@ -678,7 +678,7 @@ Backbone.Marionette = (function(Backbone, _, $){
     // this method to provide your own template retrieval,
     // such as asynchronous loading from a server.
     loadTemplate: function(templateId, callback){
-      var template = $(templateId);
+      var template = $(templateId).html();
       callback.call(this, template);
     },
 

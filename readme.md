@@ -1100,7 +1100,8 @@ instantiated like other Marionette objects.
 ### Get A Template
 
 Templates are retrieved using a jQuery selector by default, and 
-are handed back to you via a callback method:
+are handed back to you via a callback method. The template is returned
+as a plain string.
 
 ```js
 Backbone.Marionette.TemplateCache.get("#my-template", function(template){
@@ -1319,6 +1320,7 @@ I'm using [Docco](http://jashkenas.github.com/docco/) to generate the annotated 
 
 ### v0.6.2
 
+* **BREAKING**: The `TemplateCache.get` method now returns a plain string instead of a jQuery selector object
 * Fixed a bug with closing and then re-using a Layout with defined regions
 * Fixed a potential race condition for loading / caching templates where a template would be loaded multiple times instead of just once
 

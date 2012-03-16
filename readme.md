@@ -6,11 +6,11 @@ Backbone.Marionette is a composite application library for Backbone.js that
 aims to simplify the construction of large scale JavaScript applications. It is
 largely a collection of common design and implementation patterns found in 
 the applications that I (Derick Bailey) have been building with Backbone, and
-includes various peices inspired by composite application architectures, 
+includes various pieces inspired by composite application architectures, 
 such as Microsoft's "Prism" framework. 
 
 Backbone.Marionette is designed 
-to be a lightweigt and flexible library of tools that you can use when you want 
+to be a lightweight and flexible library of tools that you can use when you want 
 to. Like Backbone.js itself, you're not required to use all of 
 Backbone.Marionette just because you want to use some of it.
 
@@ -102,7 +102,7 @@ may want to pre-process some data just before initialization happens. Or you may
 want to wait until your entire application is initialized to start the
 `Backbone.history`.
 
-The events that are currently triggered, are:
+The events that are currently triggered are:
 
 * **"initialize:before"**: fired just before the initializers kick off
 * **"initialize:after"**: fires just after the initializers have finished
@@ -166,7 +166,7 @@ MyApp.vent.trigger("some:event");
 ```
 
 For a more detailed discussion and example of using an event aggregator with
-Backbone applications, see the blog post: [References, Routing, and The Event
+Backbone applications see the blog post: [References, Routing, and The Event
 Aggregator: Coordinating Views In Backbone.js](http://lostechies.com/derickbailey/2011/07/19/references-routing-and-the-event-aggregator-coordinating-views-in-backbone-js/)
 
 ## Marionette.AppRouter
@@ -193,7 +193,7 @@ You can also add standard routes to an AppRouter, with methods on the router.
 
 ### Specify A Controller
 
-App routers can only take one `controller` object as a parameter to the contructor.
+App routers can only take one `controller` object as a parameter to the constructor.
 
 ```js
 myObj = {
@@ -210,7 +210,7 @@ new MyRouter({
 The object that is used as the `controller` has no requirements, other than it will 
 contain the methods that you specified in the `appRoutes`.
 
-It is reocmmended that you divide your controller objects in to smaller peices of related functionality
+It is recommended that you divide your controller objects in to smaller pieces of related functionality
 and have multiple routers / controllers, instead of just one giant router and controller.
 
 ## Marionette.RegionManager
@@ -273,7 +273,7 @@ MyApp.mainRegion.show(anotherView);
 
 ### Region Manager Events
 
-A region manager will raise a few events during it's showing and
+A region manager will raise a few events during its showing and
 closing of views:
 
 * "view:show" - when the view has been rendered and displayed
@@ -314,7 +314,7 @@ MyApp.addRegions({footerRegion: FooterRegion});
 ```
 
 Note that if you define your own `RegionManager` object, you must provide an
-`el` for it. If you don't, you will receive an runtime exception saying that
+`el` for it. If you don't, you will receive a runtime exception saying that
 an `el` is required.
 
 ### Instantiate Your Own Region Manager
@@ -337,7 +337,7 @@ MyApp.someRegion.show(someView);
 ### jQuery Deferred And Asynchronous Template Loading
 
 The region manager `show` method takes advantage of jQuery's
-deferred cababilities, allowing for some very advanced techniques
+deferred capabilities, allowing for some very advanced techniques
 to be used for rendering views.
 
 To use a deferred, a view that is shown via a region manager
@@ -405,7 +405,7 @@ template that was specified in the view (see below).
 The `data` parameter is the serialized data for either the model or
 the collection of the view (see below).
 
-After the view has been rendered, a `onRender` method will be called.
+After the view has been rendered, an `onRender` method will be called.
 You can implement this in your view to provide custom code for dealing
 with the view's `el` after it has been rendered:
 
@@ -562,7 +562,7 @@ specified collection, render each of them using a specified `itemView`,
 then append the results of the item view's `el` to the collection view's
 `el`.
 
-After the view has been rendered, a `onRender` method will be called.
+After the view has been rendered, an `onRender` method will be called.
 You can implement this in your view to provide custom code for dealing
 with the view's `el` after it has been rendered:
 
@@ -754,7 +754,7 @@ from the DOM using jQuery. If you wish to change the way this
 works, you can override the `loadTemplate` method on the
 `TemplateManager` object.
 
-For example, if you want to load templates asychronously from the
+For example, if you want to load templates asynchronously from the
 server, instead of from the DOM, you could replace `loadTemplate`
 with a function like this:
 
@@ -775,7 +775,7 @@ manager's cache.
 
 You can clear one or more, or all items from the cache using the
 `clear` method. Clearing a template from the cache will force it
-to re-load from the DOM (or from the overriden `loadTemplate`
+to re-load from the DOM (or from the overridden `loadTemplate`
 function) the next time it is retrieved.
 
 If you do not specify any parameters, all items will be cleared
@@ -860,7 +860,7 @@ There are several sample apps available.
 ### BBCloneMail
 
 I'm building a medium sized app to demonstrate Backbone.Marionette. It's a simple
-clone of a GMail like interface, with email and contact management. There is no
+clone of a Gmail like interface, with email and contact management. There is no
 back end for data, currently. The sample app does run on top of Ruby and
 Sinatra, but all the data is hard coded into the HTML/JavaScript right now.
 
@@ -917,7 +917,7 @@ MyApp.addRegions({ myRegion: MyRegion });
     },
 
     doSomething: function(){
-      // the applicaiton has an event aggregator on instantiation
+      // the application has an event aggregator on instantiation
       // call out to the event aggregator to raise an event
       MyApp.vent.trigger("something:happened");
     }
@@ -968,7 +968,7 @@ Backbone.Marionette is also tested with the Jasmine JavaScript test utility,
 using the Jasmine Ruby gem. 
 
 To get the test suite up and running, you need a Ruby installation with the 
-latest RubyGems. Install the 'bundler' gem and then run 'bunle install' from 
+latest RubyGems. Install the 'bundler' gem and then run 'bundle install' from 
 the project's root folder. Then run `rake jasmine` to run the test suite, and
 load up http://localhost:8888 to see the test suite in action.
 
@@ -982,8 +982,8 @@ I'm using [Docco](http://jashkenas.github.com/docco/) to generate the annotated 
 
 * CollectionView closes existing child views before re-rendering itself, when "reset" 
 event of collection is triggered
-* CollectionView now has "initialEvents" method which configures it's initial events
-* ItemView now has "initialEvents" method which configures it's initial events
+* CollectionView now has "initialEvents" method which configures its initial events
+* ItemView now has "initialEvents" method which configures its initial events
 
 #### v0.4.4
 
@@ -1001,8 +1001,8 @@ event of collection is triggered
 * Refactored `Callbacks` object to use a jQuery Deferred instead of my own code
 * Fixed template manager's `clear` so it properly clears a single template, when only one is specified
 * Refactored the `RegionManager` code to support several new features
-  * now support returning a jQuery deferred object from a view's `render` method
-  * now have a `close` method that you can call to close the current view
+  * now supports returning a jQuery deferred object from a view’s `render` method
+  * now has a `close` method that you can call to close the current view
   * now trigger a "view:show" and "view:close" event
   * correctly remove reference to previous views, allowing garbage collection of the view
   * now support the `bindTo` and `unbindAll` methods, for binding/unbinding region manager events

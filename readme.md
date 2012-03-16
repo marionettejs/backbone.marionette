@@ -1317,7 +1317,12 @@ I'm using [Docco](http://jashkenas.github.com/docco/) to generate the annotated 
 
 ## Release Notes
 
-### v0.6.1
+### v0.6.2
+
+* Fixed a bug with closing and then re-using a Layout with defined regions
+* Fixed a potential race condition for loading / caching templates where a template would be loaded multiple times instead of just once
+
+#### v0.6.1
 
 * Fixed the composite view so that it renders the collection correctly when the collection is "reset"
 * Fixed the composite view so that it re-renders correctly

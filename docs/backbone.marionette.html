@@ -1,4 +1,4 @@
-<!DOCTYPE html>  <html> <head>   <title>backbone.marionette.js</title>   <meta http-equiv="content-type" content="text/html; charset=UTF-8">   <link rel="stylesheet" media="all" href="docco.css" /> </head> <body>   <div id="container">     <div id="background"></div>          <table cellpadding="0" cellspacing="0">       <thead>         <tr>           <th class="docs">             <h1>               backbone.marionette.js             </h1>           </th>           <th class="code">           </th>         </tr>       </thead>       <tbody>                               <tr id="section-1">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-1">&#182;</a>               </div>               <p>Backbone.Marionette v0.6.2</p>
+<!DOCTYPE html>  <html> <head>   <title>backbone.marionette.js</title>   <meta http-equiv="content-type" content="text/html; charset=UTF-8">   <link rel="stylesheet" media="all" href="docco.css" /> </head> <body>   <div id="container">     <div id="background"></div>          <table cellpadding="0" cellspacing="0">       <thead>         <tr>           <th class="docs">             <h1>               backbone.marionette.js             </h1>           </th>           <th class="code">           </th>         </tr>       </thead>       <tbody>                               <tr id="section-1">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-1">&#182;</a>               </div>               <p>Backbone.Marionette v0.6.3</p>
 
 <p>Copyright (C)2011 Derick Bailey, Muted Solutions, LLC
 Distributed Under MIT License</p>
@@ -7,7 +7,7 @@ Distributed Under MIT License</p>
 http://github.com/derickbailey/backbone.marionette</p>             </td>             <td class="code">               <div class="highlight"><pre><span class="nx">Backbone</span><span class="p">.</span><span class="nx">Marionette</span> <span class="o">=</span> <span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">Backbone</span><span class="p">,</span> <span class="nx">_</span><span class="p">,</span> <span class="nx">$</span><span class="p">){</span>
   <span class="kd">var</span> <span class="nx">Marionette</span> <span class="o">=</span> <span class="p">{};</span>
 
-  <span class="nx">Marionette</span><span class="p">.</span><span class="nx">version</span> <span class="o">=</span> <span class="s2">&quot;0.6.2&quot;</span><span class="p">;</span></pre></div>             </td>           </tr>                               <tr id="section-2">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-2">&#182;</a>               </div>               <h2>Item View</h2>             </td>             <td class="code">               <div class="highlight"><pre>  </pre></div>             </td>           </tr>                               <tr id="section-3">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-3">&#182;</a>               </div>               <p>A single item view implementation that contains code for rendering
+  <span class="nx">Marionette</span><span class="p">.</span><span class="nx">version</span> <span class="o">=</span> <span class="s2">&quot;0.6.3&quot;</span><span class="p">;</span></pre></div>             </td>           </tr>                               <tr id="section-2">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-2">&#182;</a>               </div>               <h2>Item View</h2>             </td>             <td class="code">               <div class="highlight"><pre>  </pre></div>             </td>           </tr>                               <tr id="section-3">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-3">&#182;</a>               </div>               <p>A single item view implementation that contains code for rendering
 with underscore.js templates, serializing the view's model or collection,
 and calling several methods on extended views, such as <code>onRender</code>.</p>             </td>             <td class="code">               <div class="highlight"><pre>  <span class="nx">Marionette</span><span class="p">.</span><span class="nx">ItemView</span> <span class="o">=</span> <span class="nx">Backbone</span><span class="p">.</span><span class="nx">View</span><span class="p">.</span><span class="nx">extend</span><span class="p">({</span>
     <span class="nx">constructor</span><span class="o">:</span> <span class="kd">function</span><span class="p">(){</span>
@@ -42,6 +42,9 @@ You can override this in your view definition.</p>             </td>            
       <span class="kd">var</span> <span class="nx">that</span> <span class="o">=</span> <span class="k">this</span><span class="p">;</span>
       <span class="kd">var</span> <span class="nx">data</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">serializeData</span><span class="p">();</span>
       <span class="kd">var</span> <span class="nx">deferredRender</span> <span class="o">=</span> <span class="nx">$</span><span class="p">.</span><span class="nx">Deferred</span><span class="p">();</span>
+
+      <span class="k">this</span><span class="p">.</span><span class="nx">beforeRender</span> <span class="o">&amp;&amp;</span> <span class="k">this</span><span class="p">.</span><span class="nx">beforeRender</span><span class="p">();</span>
+      <span class="k">this</span><span class="p">.</span><span class="nx">trigger</span><span class="p">(</span><span class="s2">&quot;item:before:render&quot;</span><span class="p">,</span> <span class="nx">that</span><span class="p">);</span>
 
       <span class="nx">deferredRender</span><span class="p">.</span><span class="nx">done</span><span class="p">(</span><span class="kd">function</span><span class="p">(){</span>
         <span class="nx">that</span><span class="p">.</span><span class="nx">onRender</span> <span class="o">&amp;&amp;</span> <span class="nx">that</span><span class="p">.</span><span class="nx">onRender</span><span class="p">();</span>
@@ -83,13 +86,15 @@ selector.  </p>             </td>             <td class="code">               <d
 DOM and unbinding it. Regions will call this method
 for you. You can specify an <code>onClose</code> method in your view to
 add custom code that is called after the view is closed.</p>             </td>             <td class="code">               <div class="highlight"><pre>    <span class="nx">close</span><span class="o">:</span> <span class="kd">function</span><span class="p">(){</span>
+      <span class="k">this</span><span class="p">.</span><span class="nx">trigger</span><span class="p">(</span><span class="s1">&#39;item:before:close&#39;</span><span class="p">);</span>
+      <span class="k">this</span><span class="p">.</span><span class="nx">beforeClose</span> <span class="o">&amp;&amp;</span> <span class="k">this</span><span class="p">.</span><span class="nx">beforeClose</span><span class="p">();</span>
+
       <span class="k">this</span><span class="p">.</span><span class="nx">unbindAll</span><span class="p">();</span>
       <span class="k">this</span><span class="p">.</span><span class="nx">unbind</span><span class="p">();</span>
       <span class="k">this</span><span class="p">.</span><span class="nx">remove</span><span class="p">();</span>
 
-      <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">onClose</span><span class="p">){</span>
-        <span class="k">this</span><span class="p">.</span><span class="nx">onClose</span><span class="p">();</span>
-      <span class="p">}</span>
+      <span class="k">this</span><span class="p">.</span><span class="nx">onClose</span> <span class="o">&amp;&amp;</span> <span class="k">this</span><span class="p">.</span><span class="nx">onClose</span><span class="p">();</span>
+      <span class="k">this</span><span class="p">.</span><span class="nx">trigger</span><span class="p">(</span><span class="s1">&#39;item:closed&#39;</span><span class="p">);</span>
     <span class="p">}</span>
   <span class="p">});</span></pre></div>             </td>           </tr>                               <tr id="section-10">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-10">&#182;</a>               </div>               <h2>Collection View</h2>             </td>             <td class="code">               <div class="highlight"><pre></pre></div>             </td>           </tr>                               <tr id="section-11">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-11">&#182;</a>               </div>               <p>A view that iterates over a Backbone.Collection
 and renders an individual ItemView for each model.</p>             </td>             <td class="code">               <div class="highlight"><pre>  <span class="nx">Marionette</span><span class="p">.</span><span class="nx">CollectionView</span> <span class="o">=</span> <span class="nx">Backbone</span><span class="p">.</span><span class="nx">View</span><span class="p">.</span><span class="nx">extend</span><span class="p">({</span>
@@ -109,6 +114,9 @@ each of them with the specified <code>itemView</code>.</p>             </td>    
       <span class="kd">var</span> <span class="nx">that</span> <span class="o">=</span> <span class="k">this</span><span class="p">;</span>
       <span class="kd">var</span> <span class="nx">deferredRender</span> <span class="o">=</span> <span class="nx">$</span><span class="p">.</span><span class="nx">Deferred</span><span class="p">();</span>
       <span class="kd">var</span> <span class="nx">promises</span> <span class="o">=</span> <span class="p">[];</span>
+
+      <span class="k">this</span><span class="p">.</span><span class="nx">beforeRender</span> <span class="o">&amp;&amp;</span> <span class="k">this</span><span class="p">.</span><span class="nx">beforeRender</span><span class="p">();</span>
+      <span class="k">this</span><span class="p">.</span><span class="nx">trigger</span><span class="p">(</span><span class="s2">&quot;collection:before:render&quot;</span><span class="p">,</span> <span class="k">this</span><span class="p">);</span>
 
       <span class="k">this</span><span class="p">.</span><span class="nx">closeChildren</span><span class="p">();</span>
 
@@ -167,15 +175,18 @@ instances so they can be managed and cleaned up, later.</p>             </td>   
     <span class="p">},</span>
     </pre></div>             </td>           </tr>                               <tr id="section-18">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-18">&#182;</a>               </div>               <p>Handle cleanup and other closing needs for
 the collection of views.</p>             </td>             <td class="code">               <div class="highlight"><pre>    <span class="nx">close</span><span class="o">:</span> <span class="kd">function</span><span class="p">(){</span>
+      <span class="k">this</span><span class="p">.</span><span class="nx">beforeClose</span> <span class="o">&amp;&amp;</span> <span class="k">this</span><span class="p">.</span><span class="nx">beforeClose</span><span class="p">();</span>
+      <span class="k">this</span><span class="p">.</span><span class="nx">trigger</span><span class="p">(</span><span class="s2">&quot;collection:before:close&quot;</span><span class="p">);</span>
+
       <span class="k">this</span><span class="p">.</span><span class="nx">unbind</span><span class="p">();</span>
       <span class="k">this</span><span class="p">.</span><span class="nx">unbindAll</span><span class="p">();</span>
-      <span class="k">this</span><span class="p">.</span><span class="nx">remove</span><span class="p">();</span>
 
       <span class="k">this</span><span class="p">.</span><span class="nx">closeChildren</span><span class="p">();</span>
 
-      <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">onClose</span><span class="p">){</span>
-        <span class="k">this</span><span class="p">.</span><span class="nx">onClose</span><span class="p">();</span>
-      <span class="p">}</span>
+      <span class="k">this</span><span class="p">.</span><span class="nx">remove</span><span class="p">();</span>
+
+      <span class="k">this</span><span class="p">.</span><span class="nx">onClose</span> <span class="o">&amp;&amp;</span> <span class="k">this</span><span class="p">.</span><span class="nx">onClose</span><span class="p">();</span>
+      <span class="k">this</span><span class="p">.</span><span class="nx">trigger</span><span class="p">(</span><span class="s2">&quot;collection:closed&quot;</span><span class="p">);</span>
     <span class="p">},</span>
 
     <span class="nx">closeChildren</span><span class="o">:</span> <span class="kd">function</span><span class="p">(){</span>

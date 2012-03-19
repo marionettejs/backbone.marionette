@@ -183,8 +183,9 @@ Backbone.Marionette = (function(Backbone, _, $){
 
     // Render the child item's view and add it to the
     // HTML for the collection view.
-    addChildView: function(item){
+    addChildView: function(item, collection, options){
       var that = this;
+      options || (options = {});
 
       var view = new this.itemView({
         model: item
@@ -193,7 +194,7 @@ Backbone.Marionette = (function(Backbone, _, $){
 
       var promise = view.render();
       $.when(promise).then(function(){
-        that.appendHtml(that.$el, view.$el);
+        that.appendHtml(that.$el, view.$el, options);
       });
       
       return promise;

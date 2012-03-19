@@ -594,7 +594,13 @@ template that was specified in the view (see below).
 The `data` parameter is the serialized data for either the model or
 the collection of the view (see below).
 
-### Events And Callback methods
+### Callback Methods
+
+There are several callback methods that are called
+for an ItemView. These methods are intended to be handled within
+the view definition, directly.
+
+#### beforeRender callback
 
 Before an ItemView is rendered a `beforeRender` method will be called
 on the view.
@@ -606,6 +612,8 @@ Backbone.Marionette.ItemView.extend({
   }
 });
 ```
+
+#### onRender callback
 
 After the view has been rendered, a `onRender` method will be called.
 You can implement this in your view to provide custom code for dealing
@@ -621,10 +629,48 @@ Backbone.Marionette.ItemView.extend({
 });
 ```
 
-An "item:rendered" event will also be fired. This allows you to
-add more than one callback to execute after the view is rendered,
-and allows parent views and other parts of the application to
-know that the view was rendered.
+#### beforeClose callback
+
+A `beforeClose` method will be called on the view, just prior
+to closing it:
+
+```js
+Backbone.Marionette.ItemView.extend({
+  beforeClose: function(){
+    // manipulate the `el` here. it's already
+    // been rendered, and is full of the view's
+    // HTML, ready to go.
+  }
+});
+```
+
+#### onClose callback
+
+### View Events
+
+There are several events that are triggers by an `ItemView`, which
+allow code outside of a view to respond to what's happening with
+the view.
+
+### "item:before:render" event
+
+An "item:before:render" event will be triggered just before the
+view is rendered
+
+```js
+MyView = Backbone.Marionette.ItemVIew.extend({...});
+
+var myView = new MyView();
+
+myView.on("item:before:render", function(){
+  alert("the view is about to be rendered");
+});
+```
+
+#### "item:rendered" event
+
+An "item:rendered" event will be triggered just after the view 
+has been rendered.
 
 ```js
 MyView = Backbone.Marionette.ItemVIew.extend({...});
@@ -634,6 +680,42 @@ var myView = new MyView();
 myView.on("item:rendered", function(){
   alert("the view was rendered!");
 });
+```
+
+#### "item:before:close" event
+
+An "item:before:close" event will be triggered just prior to the
+view closing itself. This event fires when the `close` method of
+the view is called.
+
+```js
+MyView = Backbone.Marionette.ItemVIew.extend({...});
+
+var myView = new MyView();
+
+myView.on("item:before:close", function(){
+  alert("the view is about to be closed");
+});
+
+myView.close();
+```
+
+#### "item:closed" event
+
+An "item:closed" event will be triggered just after the
+view closes. This event fires when the `close` method of
+the view is called.
+
+```js
+MyView = Backbone.Marionette.ItemVIew.extend({...});
+
+var myView = new MyView();
+
+myView.on("item:closed", function(){
+  alert("the view is closed");
+});
+
+myView.close();
 ```
 
 ### ItemView template
@@ -1331,7 +1413,11 @@ I'm using [Docco](http://jashkenas.github.com/docco/) to generate the annotated 
 
 ### v.6.3
 
-* The `ItemView` now calls a `beforeRender` and `beforeClose` method on the view, if it exists
+* `ItemView` changes
+  * Calls a `beforeRender` and `beforeClose` method on the view, if it exists
+  * Triggers a `item:before:render` event, just prior to rendering
+  * Triggers a `item:before:close` and `item:closed` events, around the view's `close` method
+* The `CollectionView` and `CompositeView` now close child views before closing itself
 
 ### v0.6.2
 

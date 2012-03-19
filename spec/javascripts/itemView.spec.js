@@ -84,6 +84,10 @@ describe("item view", function(){
       expect(view.onRender).toHaveBeenCalled();
     });
 
+    it("should trigger a before:render event", function(){
+      expect(view.trigger).toHaveBeenCalledWith("item:before:render", view);
+    });
+
     it("should trigger a rendered event", function(){
       expect(view.trigger).toHaveBeenCalledWith("item:rendered", view);
     });
@@ -214,6 +218,7 @@ describe("item view", function(){
       spyOn(view, "collectionChange").andCallThrough();
       spyOn(view, "beforeClose").andCallThrough();
       spyOn(view, "onClose").andCallThrough();
+      spyOn(view, "trigger").andCallThrough();
 
       view.bindTo(model, "change:foo", view.modelChange);
       view.bindTo(collection, "foo", view.collectionChange);
@@ -238,6 +243,14 @@ describe("item view", function(){
 
     it("should remove the view's EL from the DOM", function(){
       expect(view.remove).toHaveBeenCalled();
+    });
+
+    it("should trigger 'item:before:close'", function(){
+      expect(view.trigger).toHaveBeenCalledWith("item:before:close");
+    });
+
+    it("should trigger 'item:closed", function(){
+      expect(view.trigger).toHaveBeenCalledWith("item:closed");
     });
 
     it("should call `beforeClose` if provided", function(){

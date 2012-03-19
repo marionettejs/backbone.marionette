@@ -61,6 +61,7 @@ Backbone.Marionette = (function(Backbone, _, $){
       var deferredRender = $.Deferred();
 
       this.beforeRender && this.beforeRender();
+      this.trigger("item:before:render", that);
 
       deferredRender.done(function(){
         that.onRender && that.onRender();
@@ -111,6 +112,7 @@ Backbone.Marionette = (function(Backbone, _, $){
     // for you. You can specify an `onClose` method in your view to
     // add custom code that is called after the view is closed.
     close: function(){
+      this.trigger('item:before:close');
       this.beforeClose && this.beforeClose();
 
       this.unbindAll();
@@ -118,6 +120,7 @@ Backbone.Marionette = (function(Backbone, _, $){
       this.remove();
 
       this.onClose && this.onClose();
+      this.trigger('item:closed');
     }
   });
 

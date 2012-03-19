@@ -153,6 +153,9 @@ Backbone.Marionette = (function(Backbone, _, $){
       var deferredRender = $.Deferred();
       var promises = [];
 
+      this.beforeRender && this.beforeRender();
+      this.trigger("collection:before:render", this);
+
       this.closeChildren();
 
       if (!this.itemView){
@@ -224,6 +227,9 @@ Backbone.Marionette = (function(Backbone, _, $){
     // Handle cleanup and other closing needs for
     // the collection of views.
     close: function(){
+      this.beforeClose && this.beforeClose();
+      this.trigger("collection:before:close");
+
       this.unbind();
       this.unbindAll();
 
@@ -231,9 +237,8 @@ Backbone.Marionette = (function(Backbone, _, $){
 
       this.remove();
 
-      if (this.onClose){
-        this.onClose();
-      }
+      this.onClose && this.onClose();
+      this.trigger("collection:closed");
     },
 
     closeChildren: function(){

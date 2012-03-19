@@ -1417,6 +1417,10 @@ I'm using [Docco](http://jashkenas.github.com/docco/) to generate the annotated 
   * Calls a `beforeRender` and `beforeClose` method on the view, if it exists
   * Triggers a `item:before:render` event, just prior to rendering
   * Triggers a `item:before:close` and `item:closed` events, around the view's `close` method
+* `CollectionView` changes
+  * Calls a `beforeRender` and `beforeClose` method on the view, if it exists
+  * Triggers a `collection:before:render` event before rendering
+  * Triggers a `collection:before:close` and `collection:closed` event, surrounding closing of the view
 * The `CollectionView` and `CompositeView` now close child views before closing itself
 
 ### v0.6.2

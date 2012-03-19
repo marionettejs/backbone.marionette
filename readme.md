@@ -861,7 +861,27 @@ specified collection, render each of them using a specified `itemView`,
 then append the results of the item view's `el` to the collection view's
 `el`.
 
-### Events And Callbacks
+### Callback Methods
+
+There are several callback methods that can be provided on a
+`CollectionView`. If they are found, they will be called by the
+view's base methods. These callback methods are intended to be
+handled within the view definition directly.
+
+#### beforeRender callback
+
+A `beforeRender` callback will be called just prior to rendering
+the collection view.
+
+```js
+Backbone.Marionette.CollectionView.extend({
+  beforeRender: function(){
+    // do stuff here
+  }
+});
+```
+
+#### onRender callback
 
 After the view has been rendered, a `onRender` method will be called.
 You can implement this in your view to provide custom code for dealing
@@ -874,6 +894,54 @@ Backbone.Marionette.CollectionView.extend({
   }
 });
 ```
+
+#### beforeClose callback
+
+This method is called just before closing the view.
+
+```js
+Backbone.Marionette.CollectionView.extend({
+  beforeClose: function(){
+    // do stuff here
+  }
+});
+```
+
+#### onClose callback
+
+This method is called just after closing the view.
+
+```js
+Backbone.Marionette.CollectionView.extend({
+  onClose: function(){
+    // do stuff here
+  }
+});
+```
+
+### CollectionView Events
+
+There are several events that will be triggered during the life
+of a collection view. These are intended to be handled from code
+external to the view.
+
+#### "collection:before:render" event
+
+Triggers just prior to the view being rendered
+
+```js
+MyView = Backbone.Marionette.CollectionView.extend({...});
+
+var myView = new MyView();
+
+myView.on("collection:before:render", function(){
+  alert("the collection view is about to be rendered");
+});
+
+myView.render();
+```
+
+#### "collection:rendered" event
 
 A "collection:rendered" event will also be fired. This allows you to
 add more than one callback to execute after the view is rendered,
@@ -888,6 +956,40 @@ var myView = new MyView();
 myView.on("collection:rendered", function(){
   alert("the collection view was rendered!");
 });
+
+myView.render();
+```
+
+#### "collection:before:close" event
+
+Triggered just before closing the view.
+
+```js
+MyView = Backbone.Marionette.CollectionView.extend({...});
+
+var myView = new MyView();
+
+myView.on("collection:before:close", function(){
+  alert("the collection view is about to be closed");
+});
+
+myView.close();
+```
+
+#### "collection:closed" event
+
+Triggered just after closing the view.
+
+```js
+MyView = Backbone.Marionette.CollectionView.extend({...});
+
+var myView = new MyView();
+
+myView.on("collection:closed", function(){
+  alert("the collection view is now closed");
+});
+
+myView.close();
 ```
 
 ### CollectionView render

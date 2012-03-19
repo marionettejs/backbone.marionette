@@ -221,9 +221,10 @@ Backbone.Marionette = (function(Backbone, _, $){
     close: function(){
       this.unbind();
       this.unbindAll();
-      this.remove();
 
       this.closeChildren();
+
+      this.remove();
 
       if (this.onClose){
         this.onClose();

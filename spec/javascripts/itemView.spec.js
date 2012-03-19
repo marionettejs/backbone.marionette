@@ -9,6 +9,7 @@ describe("item view", function(){
 
   var OnRenderView = Backbone.Marionette.ItemView.extend({
     template: "#emptyTemplate",
+    beforeRender: function(){},
     onRender: function(){}
   });
 
@@ -21,14 +22,13 @@ describe("item view", function(){
   var EventedView = Backbone.Marionette.ItemView.extend({
     template: "#emptyTemplate",
 
-    modelChange: function(){
-    },
+    modelChange: function(){ },
 
-    collectionChange: function(){
-    },
+    collectionChange: function(){ },
 
-    onClose: function(){
-    }
+    beforeClose: function(){},
+
+    onClose: function(){ }
   });
 
   beforeEach(function(){
@@ -60,7 +60,7 @@ describe("item view", function(){
     });
   });
 
-  describe("after rendering", function(){
+  describe("when rendering", function(){
     var view;
     var renderResult;
     var deferredDone;
@@ -68,11 +68,16 @@ describe("item view", function(){
     beforeEach(function(){
       view = new OnRenderView({});
       
+      spyOn(view, "beforeRender").andCallThrough();
       spyOn(view, "onRender").andCallThrough();
       spyOn(view, "trigger").andCallThrough();
 
       var deferred = view.render();
       deferred.done(function(){deferredDone = true; });
+    });
+
+    it("should call a `beforeRender` method on the view", function(){
+      expect(view.beforeRender).toHaveBeenCalled();
     });
 
     it("should call an `onRender` method on the view", function(){
@@ -207,6 +212,7 @@ describe("item view", function(){
       spyOn(view, "unbindAll").andCallThrough();
       spyOn(view, "modelChange").andCallThrough();
       spyOn(view, "collectionChange").andCallThrough();
+      spyOn(view, "beforeClose").andCallThrough();
       spyOn(view, "onClose").andCallThrough();
 
       view.bindTo(model, "change:foo", view.modelChange);
@@ -232,6 +238,10 @@ describe("item view", function(){
 
     it("should remove the view's EL from the DOM", function(){
       expect(view.remove).toHaveBeenCalled();
+    });
+
+    it("should call `beforeClose` if provided", function(){
+      expect(view.beforeClose).toHaveBeenCalled();
     });
 
     it("should call `onClose` if provided", function(){

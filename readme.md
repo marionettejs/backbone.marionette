@@ -596,6 +596,17 @@ the collection of the view (see below).
 
 ### Events And Callback methods
 
+Before an ItemView is rendered a `beforeRender` method will be called
+on the view.
+
+```js
+Backbone.Marionette.ItemView.extend({
+  beforeRender: function(){
+    // set up final bits just before rendering the view's `el`
+  }
+});
+```
+
 After the view has been rendered, a `onRender` method will be called.
 You can implement this in your view to provide custom code for dealing
 with the view's `el` after it has been rendered:
@@ -1318,6 +1329,10 @@ I'm using [Docco](http://jashkenas.github.com/docco/) to generate the annotated 
 
 ## Release Notes
 
+### v.6.3
+
+* The `ItemView` now calls a `beforeRender` and `beforeClose` method on the view, if it exists
+
 ### v0.6.2
 
 * **BREAKING:** The `CollectionView` no longer has a `reRender` method. Call `render` instead
@@ -1325,13 +1340,13 @@ I'm using [Docco](http://jashkenas.github.com/docco/) to generate the annotated 
 * Fixed a bug with closing and then re-using a Layout with defined regions
 * Fixed a potential race condition for loading / caching templates where a template would be loaded multiple times instead of just once
 
-#### v0.6.1
+### v0.6.1
 
 * Fixed the composite view so that it renders the collection correctly when the collection is "reset"
 * Fixed the composite view so that it re-renders correctly
 * Fixed various deferred usages to only return promises, instead of the full deferred object
 
-#### v0.6.0
+### v0.6.0
 
 * **BREAKING:** Renamed `LayoutManager` to `Layout`
 * **BREAKING:** Renamed `RegionManager` to `Region`

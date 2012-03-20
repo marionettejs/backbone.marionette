@@ -185,16 +185,17 @@ Backbone.Marionette = (function(Backbone, _, $){
     // HTML for the collection view.
     addChildView: function(item, collection, options){
       var that = this;
-      options || (options = {});
 
       var view = new this.itemView({
         model: item
       });
       this.storeChild(view);
 
+      var index = options ? options.index : _.keys(this.children).length - 1;
+
       var promise = view.render();
       $.when(promise).then(function(){
-        that.appendHtml(that.$el, view.$el, options);
+        that.appendHtml(that.$el, view.$el, index);
       });
       
       return promise;

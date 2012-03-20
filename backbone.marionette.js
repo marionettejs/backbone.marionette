@@ -190,10 +190,10 @@ Backbone.Marionette = (function(Backbone, _, $){
         model: item
       });
       this.storeChild(view);
-
+      var index = item.collection.indexOf(item);
       var promise = view.render();
       $.when(promise).then(function(){
-        that.appendHtml(that.$el, view.$el);
+        that.appendHtml(that.$el, view.$el, index);
       });
       
       return promise;

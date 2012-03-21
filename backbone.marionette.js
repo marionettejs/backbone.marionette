@@ -164,8 +164,11 @@ Backbone.Marionette = (function(Backbone, _, $){
         throw err;
       }
 
+      var options = { index: 0 };
+
       this.collection.each(function(item){
-        var promise = that.addChildView(item)
+        var promise = that.addChildView(item, this.collection, options);
+        options.index++;
         promises.push(promise);
       });
 
@@ -191,8 +194,7 @@ Backbone.Marionette = (function(Backbone, _, $){
       });
       this.storeChild(view);
 
-      var index = options ? options.index : _.keys(this.children).length - 1;
-
+      var index = options.index;
       var promise = view.render();
       $.when(promise).then(function(){
         that.appendHtml(that.$el, view.$el, index);

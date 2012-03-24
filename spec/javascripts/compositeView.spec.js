@@ -323,20 +323,6 @@ describe("composite view", function(){
     model: Model
   });
   
-  var Node = Backbone.Model.extend({
-    initialize: function(){
-      var nodes = this.get("nodes");
-      if (nodes){
-        this.nodes = new NodeCollection(nodes);
-        this.unset("nodes");
-      }
-    }
-  });
-
-  var NodeCollection = Backbone.Model.extend({
-    model: Node
-  });
-
   var ItemView = Backbone.Marionette.ItemView.extend({
     tagName: "span",
     render: function(){
@@ -351,9 +337,27 @@ describe("composite view", function(){
     }
   });
 
+  var Node = Backbone.Model.extend({
+    initialize: function(){
+      var nodes = this.get("nodes");
+      if (nodes){
+        this.nodes = new NodeCollection(nodes);
+        this.unset("nodes");
+      }
+    }
+  });
+
+  var NodeCollection = Backbone.Collection.extend({
+    model: Node
+  });
+
   var TreeView = Backbone.Marionette.CompositeView.extend({
     tagName: "ul",
-    template: "#recursive-composite-template"
+    template: "#recursive-composite-template",
+
+    initialize: function(){
+      this.collection = this.model.nodes;
+    }
   });
 
   var CompositeView = Backbone.Marionette.CompositeView.extend({

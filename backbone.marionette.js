@@ -272,7 +272,7 @@ Backbone.Marionette = (function(Backbone, _, $){
     // `this.itemView` or Marionette.CompositeView if no `itemView`
     // has been defined
     getItemView: function(){
-      return this.itemView || Marionette.CompositeView;
+      return this.itemView || this.constructor;
     },
 
     // Renders the model once, and the collection once. Calling

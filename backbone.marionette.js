@@ -314,9 +314,6 @@ Backbone.Marionette = (function(Backbone, _, $){
     // a treeview.
     renderModel: function(){
       this.renderedModelView = new this.modelView({
-        tagName: this.tagName,
-        id: this.id,
-        attributes: this.attributes,
         model: this.model,
         template: this.template
       });

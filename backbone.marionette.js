@@ -261,17 +261,26 @@ Backbone.Marionette = (function(Backbone, _, $){
   Marionette.CompositeView = Marionette.CollectionView.extend({
     modelView: Marionette.ItemView,
 
+    constructor: function(options){
+      Marionette.CollectionView.apply(this, arguments);
+
+      this.itemView = this.getItemView();
+    },
+
+    // Retrieve the `itemView` to be used when rendering each of
+    // the items in the collection. The default is to return
+    // `this.itemView` or Marionette.CompositeView if no `itemView`
+    // has been defined
+    getItemView: function(){
+      return this.itemView || Marionette.CompositeView;
+    },
+
     // Renders the model once, and the collection once. Calling
     // this again will tell the model's view to re-render itself
     // but the collection will not re-render.
     render: function(){
       var that = this;
       var compositeRendered = $.Deferred();
-
-      this.renderedModelView = new this.modelView({
-        model: this.model,
-        template: this.template
-      });
 
       var modelIsRendered = this.renderModel();
       $.when(modelIsRendered).then(function(){
@@ -304,9 +313,15 @@ Backbone.Marionette = (function(Backbone, _, $){
     // part of a composite view (branch / leaf). For example:
     // a treeview.
     renderModel: function(){
-      if (this.renderedModelView){
-        return this.renderedModelView.render();
-      }
+      this.renderedModelView = new this.modelView({
+        tagName: this.tagName,
+        id: this.id,
+        attributes: this.attributes,
+        model: this.model,
+        template: this.template
+      });
+
+      return this.renderedModelView.render();
     },
 
     // Ensure we close things correctly

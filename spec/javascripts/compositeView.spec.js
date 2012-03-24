@@ -1,41 +1,4 @@
 describe("composite view", function(){
-  var Model = Backbone.Model.extend({});
-
-  var Collection = Backbone.Collection.extend({
-    model: Model
-  });
-  
-  var ItemView = Backbone.Marionette.ItemView.extend({
-    tagName: "span",
-    render: function(){
-      this.$el.html(this.model.get("foo"));
-    }
-  });
-
-  var ModelView = Backbone.Marionette.ItemView.extend({
-    tagName: "span",
-    render: function(){
-      this.$el.html(this.model.get("foo"));
-    }
-  });
-
-  var CompositeView = Backbone.Marionette.CompositeView.extend({
-    itemView: ItemView,
-    template: "#composite-template",
-
-    onRender: function(){}
-  });
-
-  var CompositeViewNoModel = Backbone.Marionette.CompositeView.extend({
-    itemView: ItemView,
-    template: "#composite-template-no-model"
-  });
-
-  var CompositeModelView = Backbone.Marionette.CompositeView.extend({
-    modelView: ModelView,
-    itemView: ItemView,
-    template: "#composite-template"
-  });
 
   describe("when a composite view has a template without a model", function(){
     var compositeView;
@@ -283,6 +246,38 @@ describe("composite view", function(){
     });
   });
 
+  describe("when workign with a composite and recursive model", function(){
+    var treeView;
+
+    beforeEach(function(){
+      loadFixtures("recursiveCompositeTemplate.html");
+
+      var data = {
+        name: "level 1",
+        nodes: [
+          {
+            name: "level 2"
+          }
+        ]
+      };
+
+      var node = new Node(data);
+      treeView = new TreeView({
+        model: node
+      });
+
+      treeView.render();
+    });
+
+    it("should render the template with the model", function(){
+      expect(treeView.$el).toHaveText(/composite bar/);
+    });
+
+    it("should render the collection's items", function(){
+      expect(treeView.$el).toHaveText(/baz/);
+    });
+  });
+
   describe("when closing a composite view", function(){
     var compositeView, compositeModelCloseSpy;
 
@@ -320,6 +315,63 @@ describe("composite view", function(){
     it("should close the collection of views", function(){
       expect(CompositeModelView.prototype.close.callCount).toBe(1);
     });
+  });
+
+  var Model = Backbone.Model.extend({});
+
+  var Collection = Backbone.Collection.extend({
+    model: Model
+  });
+  
+  var Node = Backbone.Model.extend({
+    initialize: function(){
+      var nodes = this.get("nodes");
+      if (nodes){
+        this.nodes = new NodeCollection(nodes);
+        this.unset("nodes");
+      }
+    }
+  });
+
+  var NodeCollection = Backbone.Model.extend({
+    model: Node
+  });
+
+  var ItemView = Backbone.Marionette.ItemView.extend({
+    tagName: "span",
+    render: function(){
+      this.$el.html(this.model.get("foo"));
+    }
+  });
+
+  var ModelView = Backbone.Marionette.ItemView.extend({
+    tagName: "span",
+    render: function(){
+      this.$el.html(this.model.get("foo"));
+    }
+  });
+
+  var TreeView = Backbone.Marionette.CompositeView.extend({
+    tagName: "ul",
+    template: "#recursive-composite-template"
+  });
+
+  var CompositeView = Backbone.Marionette.CompositeView.extend({
+    itemView: ItemView,
+    template: "#composite-template",
+
+    onRender: function(){}
+  });
+
+  var CompositeViewNoModel = Backbone.Marionette.CompositeView.extend({
+    itemView: ItemView,
+    template: "#composite-template-no-model"
+  });
+
+  var CompositeModelView = Backbone.Marionette.CompositeView.extend({
+    modelView: ModelView,
+    itemView: ItemView,
+    template: "#composite-template"
   });
 
 });

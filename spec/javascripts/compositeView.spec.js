@@ -227,6 +227,29 @@ describe("composite view", function(){
     });
   });
 
+  describe("when rendering a composite view without a collection", function(){
+    var compositeView;
+
+    beforeEach(function(){
+      loadFixtures("compositeRerender.html");
+
+      var m1 = new Model({foo: "bar"});
+      compositeView = new CompositeView({
+        model: m1
+      });
+
+      compositeView.render();
+    });
+
+    it("should render the template with the model", function(){
+      expect(compositeView.$el).toHaveText(/composite bar/);
+    });
+
+    it("should not render the collection's items", function(){
+      expect(compositeView.$el).not.toHaveText(/baz/);
+    });
+  });
+
   describe("when rendering a composite with a collection and then resetting the collection", function(){
     var compositeView;
 

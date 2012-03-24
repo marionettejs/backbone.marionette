@@ -141,9 +141,11 @@ Backbone.Marionette = (function(Backbone, _, $){
     // binds to. Override this method to prevent the initial
     // events, or to add your own initial events.
     initialEvents: function(){
-      this.bindTo(this.collection, "add", this.addChildView, this);
-      this.bindTo(this.collection, "remove", this.removeChildView, this);
-      this.bindTo(this.collection, "reset", this.render, this);
+      if (this.collection){
+        this.bindTo(this.collection, "add", this.addChildView, this);
+        this.bindTo(this.collection, "remove", this.removeChildView, this);
+        this.bindTo(this.collection, "reset", this.render, this);
+      }
     },
 
     // Loop through all of the items and render 
@@ -164,7 +166,7 @@ Backbone.Marionette = (function(Backbone, _, $){
         throw err;
       }
 
-      this.collection.each(function(item){
+      this.collection && this.collection.each(function(item){
         var promise = that.addChildView(item)
         promises.push(promise);
       });

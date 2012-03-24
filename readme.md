@@ -1513,7 +1513,11 @@ I'm using [Docco](http://jashkenas.github.com/docco/) to generate the annotated 
 
 ## Release Notes
 
-### v.6.3
+### v0.6.4
+
+* CollectionView and CompositeView can render without a collection
+
+### v0.6.3
 
 * `ItemView` changes
   * Calls a `beforeRender` and `beforeClose` method on the view, if it exists

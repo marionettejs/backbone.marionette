@@ -104,6 +104,32 @@ describe("collection view", function(){
     });
   });
 
+  describe("when rendering a collection view without a collection", function(){
+    var collectionView;
+    var deferredResolved;
+
+    beforeEach(function(){
+      collectionView = new CollectionView({
+      });
+
+      spyOn(collectionView, "onRender").andCallThrough();
+      spyOn(collectionView, "beforeRender").andCallThrough();
+      spyOn(collectionView, "trigger").andCallThrough();
+
+      var deferred = collectionView.render();
+
+      deferred.done(function(){ deferredResolved = true });
+    });
+
+    it("should not append any html", function(){
+      expect($(collectionView.$el)).not.toHaveHtml("<span>bar</span><span>baz</span>");
+    });
+
+    it("should not reference any view items", function(){
+      expect(_.size(collectionView.children)).toBe(0);
+    });
+  });
+
   describe("when a collection is reset after the view is loaded", function(){
     var collection;
     var collectionView;

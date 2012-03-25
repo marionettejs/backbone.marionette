@@ -183,9 +183,7 @@ Backbone.Marionette = (function(Backbone, _, $){
     addChildView: function(item){
       var that = this;
 
-      var view = new this.itemView({
-        model: item
-      });
+      var view = this.buildItemView(item);
       this.storeChild(view);
 
       var promise = view.render();
@@ -194,6 +192,14 @@ Backbone.Marionette = (function(Backbone, _, $){
       });
       
       return promise;
+    },
+
+    // Build an `itemView` for every model in the collection. 
+    buildItemView: function(item){
+      var view = new this.itemView({
+        model: item
+      });
+      return view;
     },
 
     // Remove the child view and close it

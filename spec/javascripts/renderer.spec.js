@@ -48,7 +48,11 @@ describe("renderer", function(){
   });
 
   describe("when no template is provided", function(){
-    var render = Backbone.Marionette.Renderer.render; 
+    var render;
+
+    beforeEach(function(){
+      render = _.bind(Backbone.Marionette.Renderer.render, Backbone.Marionette.Renderer);
+    });
 
     it("should raise an error", function(){
       expect(render).toThrow("A template must be specified");
@@ -76,7 +80,7 @@ describe("renderer", function(){
     });
 
     it("should render the view with the overridden method", function(){
-      expect($(view.el)).toHaveHtml("<foo>custom</foo");
+      expect(result).toHaveText("custom");
     });
   });
 

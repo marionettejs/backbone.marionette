@@ -283,7 +283,7 @@ describe("composite view", function(){
     });
 
     it("should render all the levels of the nested object", function(){
-      expect(treeView.$el).toHaveText("need to think about how / when to append the nested to the outer, so a wrapper template with header and footer can be used");
+      expect(treeView.$el).toHaveText(/level 3/);
     });
   });
 

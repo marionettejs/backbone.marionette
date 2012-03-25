@@ -11,16 +11,45 @@ Backbone.Marionette = (function(Backbone, _, $){
 
   Marionette.version = "0.6.4";
 
+  // Marionette.View
+  // ---------------
+
+  // The core view type that other Marionette views extend from.
+  Marionette.View = Backbone.View.extend({
+    // Get the template or template id/selector for this view
+    // instance. You can set a `template` attribute in the view
+    // definition or pass a `template: "whatever"` parameter in
+    // to the constructor options. 
+    getTemplate: function(){
+      var template;
+
+      // Get the template from `this.options.template` or
+      // `this.template`. The `options` takes precedence.
+      if (this.options && this.options.template){
+        template = this.options.template;
+      } else {
+        template = this.template;
+      }
+
+      // check if it's a function and execute it, if it is
+      if (_.isFunction(template)){
+        template  = template.call(this);
+      }
+
+      return template;
+    }
+  });
+
   // Item View
   // ---------
   
   // A single item view implementation that contains code for rendering
   // with underscore.js templates, serializing the view's model or collection,
   // and calling several methods on extended views, such as `onRender`.
-  Marionette.ItemView = Backbone.View.extend({
+  Marionette.ItemView = Marionette.View.extend({
     constructor: function(){
       var args = slice.call(arguments);
-      Backbone.View.prototype.constructor.apply(this, args);
+      Marionette.View.prototype.constructor.apply(this, args);
 
       _.bindAll(this, "render");
 
@@ -73,29 +102,6 @@ Backbone.Marionette = (function(Backbone, _, $){
       return asyncRender;
     },
 
-    // Get the template or template id/selector for this view
-    // instance. You can set a `template` attribute in the view
-    // definition or pass a `template: "whatever"` parameter in
-    // to the constructor options. 
-    getTemplate: function(){
-      var template;
-
-      // Get the template from `this.options.template` or
-      // `this.template`. The `options` takes precedence.
-      if (this.options && this.options.template){
-        template = this.options.template;
-      } else {
-        template = this.template;
-      }
-
-      // check if it's a function and execute it, if it is
-      if (_.isFunction(template)){
-        template  = template.call(this);
-      }
-
-      return template;
-    },
-
     // Default `close` implementation, for removing a view from the
     // DOM and unbinding it. Regions will call this method
     // for you. You can specify an `onClose` method in your view to
@@ -118,9 +124,9 @@ Backbone.Marionette = (function(Backbone, _, $){
 
   // A view that iterates over a Backbone.Collection
   // and renders an individual ItemView for each model.
-  Marionette.CollectionView = Backbone.View.extend({
+  Marionette.CollectionView = Marionette.View.extend({
     constructor: function(){
-      Backbone.View.prototype.constructor.apply(this, arguments);
+      Marionette.View.prototype.constructor.apply(this, arguments);
 
       _.bindAll(this, "addChildView", "render");
       this.initialEvents();
@@ -305,31 +311,7 @@ Backbone.Marionette = (function(Backbone, _, $){
       }
 
       var template = this.getTemplate();
-
       return Marionette.Renderer.render(template, data);
-    },
-
-    // Get the template or template id/selector for this view
-    // instance. You can set a `template` attribute in the view
-    // definition or pass a `template: "whatever"` parameter in
-    // to the constructor options. 
-    getTemplate: function(){
-      var template;
-
-      // Get the template from `this.options.template` or
-      // `this.template`. The `options` takes precedence.
-      if (this.options && this.options.template){
-        template = this.options.template;
-      } else {
-        template = this.template;
-      }
-
-      // check if it's a function and execute it, if it is
-      if (_.isFunction(template)){
-        template  = template.call(this);
-      }
-
-      return template;
     }
   });
 
@@ -771,7 +753,7 @@ Backbone.Marionette = (function(Backbone, _, $){
   var slice = Array.prototype.slice;
   
   // Copy the `extend` function used by Backbone's classes
-  var extend = Backbone.View.extend;
+  var extend = Marionette.View.extend;
   Marionette.Region.extend = extend;
   Marionette.Application.extend = extend;
 

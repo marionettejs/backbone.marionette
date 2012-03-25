@@ -33,6 +33,7 @@ These are the strings that you can pull to make your puppet dance:
 
 * **Backbone.Marionette.Application**: An application object that starts your app via initializers, and more
 * **Backbone.Marionette.AppRouter**: Reduce your routers to nothing more then configuration
+* **Backbone.Marionette.View**: The core View type that other Marionette views extend from
 * **Backbone.Marionette.ItemView**: A view that renders a single item
 * **Backbone.Marionette.CollectionView**: A view that iterates over a collection, and renders individual `ItemView` instances for each model
 * **Backbone.Marionette.CompositeView**: A collection view and item view, for rendering leaf-branch/composite model hierarchies
@@ -1546,6 +1547,7 @@ I'm using [Docco](http://jashkenas.github.com/docco/) to generate the annotated 
 
 ### v0.7.0
 
+* Added `Marionette.View` object, to contain a few basic parts of every Marionette view
 * Added `Marionette.Renderer` object, to handle template rendering
 * Moved a handful of methods out of `ItemView` and in to `Renderer`
 

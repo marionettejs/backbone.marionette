@@ -1539,6 +1539,11 @@ latest RubyGems. Install the 'bundler' gem and then run 'bunle install' from
 the project's root folder. Then run `rake jasmine` to run the test suite, and
 load up http://localhost:8888 to see the test suite in action.
 
+## Tools Used
+
+I use a number of tools to build, test and maintain Marionette, including
+but not limited to:
+
 ### Formatted Documentation
 
 I'm using [DocumentUp.com](http://documentup.com) to

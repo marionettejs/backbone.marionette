@@ -1539,6 +1539,12 @@ latest RubyGems. Install the 'bundler' gem and then run 'bunle install' from
 the project's root folder. Then run `rake jasmine` to run the test suite, and
 load up http://localhost:8888 to see the test suite in action.
 
+### Formatted Documentation
+
+I'm using [DocumentUp.com](http://documentup.com) to
+format the  readme / documentation at 
+http://derickbailey.github.com/backbone.marionette
+
 ### Annotated Source Code
 
 I'm using [Docco](http://jashkenas.github.com/docco/) to generate the annotated source code.

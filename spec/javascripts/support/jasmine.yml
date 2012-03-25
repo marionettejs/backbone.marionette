@@ -12,7 +12,7 @@
 #
 src_files:
     - public/javascripts/json2.js
-    - public/javascripts/jquery-1.7.1.js
+    - public/javascripts/jquery.js
     - public/javascripts/underscore.js
     - public/javascripts/backbone.js
     - backbone.marionette.js

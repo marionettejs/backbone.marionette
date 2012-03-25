@@ -1518,9 +1518,9 @@ documentation of Backbone.Marionette.
 Backbone.Marionette currently works with the following versions of these 
 libraries:
 
-* Backbone v0.9.1
+* Backbone v0.9.2
 * Underscore v1.3.1
-* jQuery v1.7.1
+* jQuery v1.7.2
 
 While support for Zepto and Enderjs has been added, it is not officially
 tested against these libraries at this time.
@@ -1550,6 +1550,8 @@ I'm using [Docco](http://jashkenas.github.com/docco/) to generate the annotated 
 * Added `Marionette.View` object, to contain a few basic parts of every Marionette view
 * Added `Marionette.Renderer` object, to handle template rendering
 * Moved a handful of methods out of `ItemView` and in to `Renderer`
+* Updated to Backbone v0.9.2
+* Updated to jQuery v1.7.2
 
 ### v0.6.4
 

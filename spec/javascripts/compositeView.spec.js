@@ -256,7 +256,12 @@ describe("composite view", function(){
         name: "level 1",
         nodes: [
           {
-            name: "level 2"
+            name: "level 2",
+            nodes: [
+              {
+                name: "level 3"
+              }
+            ]
           }
         ]
       };
@@ -275,6 +280,10 @@ describe("composite view", function(){
 
     it("should render the collection's items", function(){
       expect(treeView.$el).toHaveText(/level 2/);
+    });
+
+    it("should render all the levels of the nested object", function(){
+      expect(treeView.$el).toHaveText("fail");
     });
   });
 

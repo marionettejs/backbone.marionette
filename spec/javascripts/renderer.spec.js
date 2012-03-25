@@ -47,4 +47,12 @@ describe("renderer", function(){
     });
   });
 
+  describe("when no template is provided", function(){
+    var render = Backbone.Marionette.Renderer.render; 
+
+    it("should raise an error", function(){
+      expect(render).toThrow("A template must be specified");
+    });
+  });
+
 });

@@ -40,6 +40,7 @@ These are the strings that you can pull to make your puppet dance:
 * **Backbone.Marionette.Region**: Manage visual regions of your application, including display and removal of content
 * **Backbone.Marionette.EventAggregator**: An extension of Backbone.Events, to be used as an event-driven or pub-sub tool
 * **Backbone.Marionette.BindTo**: An event binding manager, to facilitate binding and unbinding of events
+* **Backbone.Marionette.Renderer**: Render templates with or without data, in a consistent and common manner
 * **Backbone.Marionette.TemplateCache**: Cache templates that are stored in `<script>` blocks, for faster subsequent access
 * **Backbone.Marionette.Callbacks**: Manage a collection of callback methods, and execute them as needed
 
@@ -557,42 +558,41 @@ will be treated as a single item.
 
 ### ItemView render
 
-An item view has a `render` method built in to it. By default it uses
-underscore.js templates.
+An item view has a `render` method built in to it, and uses the
+`Renderer` object to do the actual rendering.
 
-The default implementation will use a template that you specify (see
-below) and serialize the model or collection for you (see below).
+The `render` function of the item view will return a jQuery 
+`promise` object.
 
-The `render` method will return a jQuery deferred object, allowing
-you to know when the view rendering is complete.
+You should provide a `template` attribute on the item view, which
+will be either a jQuery selector:
 
 ```js
-MyView = Backbone.Marionette.ItemView.extend({...});
+MyView = Backbone.Marionette.ItemView.extend({
+  template: "#some-template"
+});
 
 new MyView().render().done(function(){
   // the view is done rendering. do stuff here
 });
 ```
-
-### Customizing ItemView.render
-
-You can provide a custom implementation of a method called
-`renderTemplate` to change template engines. For example, if you want
-to use jQuery templates, you can do this:
+or a function that returns a jQuery selector:
 
 ```js
-Backbone.Marionette.ItemView.extend({
-  renderTemplate: function(template, data){
-    return template.tmpl(data);
+MyView = Backbone.Marionette.ItemView.extend({
+  template: function(){
+    if (this.model.get("foo")){
+      return "#some-template";
+    } else {
+      return "#a-different-template";
+    }
   }
 });
+
+new MyView().render().done(function(){
+  // the view is done rendering. do stuff here
+});
 ```
-
-The `template` parameter is a jQuery object with the contents of the 
-template that was specified in the view (see below).
-
-The `data` parameter is the serialized data for either the model or
-the collection of the view (see below).
 
 ### Callback Methods
 
@@ -645,6 +645,16 @@ Backbone.Marionette.ItemView.extend({
 ```
 
 #### onClose callback
+
+An `onClose` method will be called on the view, after closing it.
+
+```js
+Backbone.Marionette.ItemView.extend({
+  onClose: function(){
+    // custom closing and cleanup goes here
+  }
+});
+```
 
 ### View Events
 
@@ -717,30 +727,6 @@ myView.on("item:closed", function(){
 
 myView.close();
 ```
-
-### ItemView template
-
-Item views should be configured with a template. The `template` attribute should
-be either a valid jQuery selector, or a function that returns a valid jQuery
-selector:
-
-```js
-MyView = Backbone.Marionette.ItemView.extend({
-  template: "#some-template"
-});
-
-AnotherView = Backbone.Marionette.ItemView.extend({
-  template: function(){
-    return $("#some-template")
-  }
-});
-
-new SomeItemView({
-  template: "#some-template"
-});
-```
-
-If no template is specified, an error will be throwing saying so.
 
 ### ItemView serializeData
 
@@ -1279,6 +1265,51 @@ binder.unbindAll();
 
 This even works with in-line callback functions.
 
+## Backbone.Marionette.Renderer
+
+The `Renderer` object was extracted from the `ItemView` rendering
+process, in order to create a consistent and re-usable method of
+rendering a template with or without data.
+
+### Basic Usage
+
+The basic usage of the `Renderer` is to call the `render` method.
+This method returns a jQuery `promise` object, which will provide
+the HTML that was rendered when it resolves.
+
+```js
+var template = "#some-template";
+var data = {foo: "bar"};
+var render = Backbone.Marionette.Renderer.render(template, data);
+
+render.done(function(html){
+  // do something with the HTML here
+});
+```
+
+### Custom Template Selection And Rendering
+
+By default, the renderer will take a jQuery selector object as
+the first parameter, and a JSON data object as the optional
+second parameter. It then uses the `TemplateCache` to load the
+template by the specified selector, and renders the template with
+the data provided (if any) using Underscore.js templates.
+
+If you wish to override the way the template is loaded, see
+the `TemplateCache` object. 
+
+If you wish to override the template engine used, change the 
+`renderTemplate` method to work however you want:
+
+```js
+Backbone.Marionette.Renderer.renderTemplate = function(template, data){
+  return $(template).tmpl(data);
+});
+```
+
+This implementation will replace the default Underscore.js 
+rendering with jQuery templates rendering.
+
 ## Backbone.Marionette.TemplateCache
 
 Formerly known as `TemplateManager`
@@ -1512,6 +1543,11 @@ load up http://localhost:8888 to see the test suite in action.
 I'm using [Docco](http://jashkenas.github.com/docco/) to generate the annotated source code.
 
 ## Release Notes
+
+### v0.7.0
+
+* Added `Marionette.Renderer` object, to handle template rendering
+* Moved a handful of methods out of `ItemView` and in to `Renderer`
 
 ### v0.6.4
 

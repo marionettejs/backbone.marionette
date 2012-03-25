@@ -35,19 +35,6 @@ describe("item view", function(){
     loadFixtures("itemTemplate.html", "collectionItemTemplate.html", "emptyTemplate.html");
   });
 
-  describe("when overriding the `renderTemplate` method", function(){
-    var view;
-
-    beforeEach(function(){
-      view = new CustomRenderView({});
-      view.render();
-    });
-
-    it("should render the view with the overridden method", function(){
-      expect($(view.el)).toHaveHtml("<foo>custom</foo");
-    });
-  });
-
   describe("when rendering", function(){
     var view;
     var renderResult;

@@ -55,4 +55,29 @@ describe("renderer", function(){
     });
   });
 
+  describe("when overriding the `renderTemplate` method", function(){
+    var oldRender, result;
+
+    beforeEach(function(){
+      oldRender = Backbone.Marionette.Renderer.renderTemplate;
+
+      Backbone.Marionette.Renderer.renderTemplate = function(template, data){
+        return "<foo>custom</foo>";
+      };
+
+      var promise = Backbone.Marionette.Renderer.render("", {});
+      promise.done(function(html){
+        result = $(html);
+      });
+    });
+
+    afterEach(function(){
+      Backbone.Marionette.Renderer.renderTemplate = oldRender;
+    });
+
+    it("should render the view with the overridden method", function(){
+      expect($(view.el)).toHaveHtml("<foo>custom</foo");
+    });
+  });
+
 });

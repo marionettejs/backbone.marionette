@@ -745,7 +745,6 @@ Backbone.Marionette = (function(Backbone, _, $){
     // Default implementation uses underscore.js templates. Override
     // this method to use your own templating engine.
     renderTemplate: function(template, data){
-      data = data || {};
       var html = _.template(template, data);
       return html;
     }

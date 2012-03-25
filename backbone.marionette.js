@@ -758,8 +758,7 @@ Backbone.Marionette = (function(Backbone, _, $){
   Marionette.Application.extend = extend;
 
   // Copy the features of `BindTo` on to these objects
-  _.extend(Marionette.ItemView.prototype, Marionette.BindTo);
-  _.extend(Marionette.CollectionView.prototype, Marionette.BindTo);
+  _.extend(Marionette.View.prototype, Marionette.BindTo);
   _.extend(Marionette.Application.prototype, Marionette.BindTo);
   _.extend(Marionette.Region.prototype, Marionette.BindTo);
 

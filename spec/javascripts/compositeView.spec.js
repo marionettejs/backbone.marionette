@@ -270,11 +270,11 @@ describe("composite view", function(){
     });
 
     it("should render the template with the model", function(){
-      expect(treeView.$el).toHaveText(/composite bar/);
+      expect(treeView.$el).toHaveText(/level 1/);
     });
 
     it("should render the collection's items", function(){
-      expect(treeView.$el).toHaveText(/baz/);
+      expect(treeView.$el).toHaveText(/level 2/);
     });
   });
 

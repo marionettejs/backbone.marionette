@@ -58,53 +58,42 @@ Backbone.Marionette = (function(Backbone, _, $){
     render: function(){
       var that = this;
       var data = this.serializeData();
-      var deferredRender = $.Deferred();
+      var template = this.getTemplate();
 
       this.beforeRender && this.beforeRender();
       this.trigger("item:before:render", that);
 
-      deferredRender.done(function(){
+      var asyncRender = Marionette.Renderer.render(this.template, data);
+      asyncRender.done(function(html){
+        that.$el.html(html);
         that.onRender && that.onRender();
         that.trigger("item:rendered", that);
       });
 
-      var templateRetrieval = this.getTemplate();
-
-      $.when(templateRetrieval).then(function(template){
-        var html = that.renderTemplate(template, data);
-        that.$el.html(html);
-        deferredRender.resolve();
-      });
-
-      return deferredRender.promise();
+      return asyncRender;
     },
 
-    // Default implementation uses underscore.js templates. Override
-    // this method to use your own templating engine.
-    renderTemplate: function(template, data){
-      if (!template || template.length === 0){
-        var msg = "A template must be specified";
-        var err = new Error(msg);
-        err.name = "NoTemplateError";
-        throw err;
+    // Get the template or template id/selector for this view
+    // instance. You can set a `template` attribute in the view
+    // definition or pass a `template: "whatever"` parameter in
+    // to the constructor options. 
+    getTemplate: function(){
+      var template;
+
+      // Get the template from `this.options.template` or
+      // `this.template`. The `options` takes precedence.
+      if (this.options && this.options.template){
+        template = this.options.template;
+      } else {
+        template = this.template;
       }
 
-      return _.template(template, data);
-    },
-
-    // Retrieve the template from the call's context. The
-    // `template` attribute can either be a function that
-    // returns a jQuery object, or a jQuery selector string 
-    // directly. The string value must be a valid jQuery 
-    // selector.  
-    getTemplate: function(){
-      var template = this.template || this.options.template;
-  
+      // check if it's a function and execute it, if it is
       if (_.isFunction(template)){
         template  = template.call(this);
       }
 
-      return Marionette.TemplateCache.get(template);
+      return template;
     },
 
     // Default `close` implementation, for removing a view from the
@@ -516,6 +505,62 @@ Backbone.Marionette = (function(Backbone, _, $){
     }
   });
   
+  // Composite Application
+  // ---------------------
+
+  // Contain and manage the composite application as a whole.
+  // Stores and starts up `Region` objects, includes an
+  // event aggregator as `app.vent`
+  Marionette.Application = function(options){
+    this.initCallbacks = new Marionette.Callbacks();
+    this.vent = new Marionette.EventAggregator();
+    _.extend(this, options);
+  };
+
+  _.extend(Marionette.Application.prototype, Backbone.Events, {
+    // Add an initializer that is either run at when the `start`
+    // method is called, or run immediately if added after `start`
+    // has already been called.
+    addInitializer: function(initializer){
+      this.initCallbacks.add(initializer);
+    },
+
+    // kick off all of the application's processes.
+    // initializes all of the regions that have been added
+    // to the app, and runs all of the initializer functions
+    start: function(options){
+      this.trigger("initialize:before", options);
+      this.initCallbacks.run(this, options);
+      this.trigger("initialize:after", options);
+
+      this.trigger("start", options);
+    },
+
+    // Add regions to your app. 
+    // Accepts a hash of named strings or Region objects
+    // addRegions({something: "#someRegion"})
+    // addRegions{{something: Region.extend({el: "#someRegion"}) });
+    addRegions: function(regions){
+      var regionValue, regionObj;
+
+      for(var region in regions){
+        if (regions.hasOwnProperty(region)){
+          regionValue = regions[region];
+    
+          if (typeof regionValue === "string"){
+            regionObj = new Marionette.Region({
+              el: regionValue
+            });
+          } else {
+            regionObj = new regionValue;
+          }
+
+          this[region] = regionObj;
+        }
+      }
+    }
+  });
+
   // BindTo: Event Binding
   // ---------------------
   
@@ -600,62 +645,6 @@ Backbone.Marionette = (function(Backbone, _, $){
     }
   });
 
-  // Composite Application
-  // ---------------------
-
-  // Contain and manage the composite application as a whole.
-  // Stores and starts up `Region` objects, includes an
-  // event aggregator as `app.vent`
-  Marionette.Application = function(options){
-    this.initCallbacks = new Marionette.Callbacks();
-    this.vent = new Marionette.EventAggregator();
-    _.extend(this, options);
-  };
-
-  _.extend(Marionette.Application.prototype, Backbone.Events, {
-    // Add an initializer that is either run at when the `start`
-    // method is called, or run immediately if added after `start`
-    // has already been called.
-    addInitializer: function(initializer){
-      this.initCallbacks.add(initializer);
-    },
-
-    // kick off all of the application's processes.
-    // initializes all of the regions that have been added
-    // to the app, and runs all of the initializer functions
-    start: function(options){
-      this.trigger("initialize:before", options);
-      this.initCallbacks.run(this, options);
-      this.trigger("initialize:after", options);
-
-      this.trigger("start", options);
-    },
-
-    // Add regions to your app. 
-    // Accepts a hash of named strings or Region objects
-    // addRegions({something: "#someRegion"})
-    // addRegions{{something: Region.extend({el: "#someRegion"}) });
-    addRegions: function(regions){
-      var regionValue, regionObj;
-
-      for(var region in regions){
-        if (regions.hasOwnProperty(region)){
-          regionValue = regions[region];
-    
-          if (typeof regionValue === "string"){
-            regionObj = new Marionette.Region({
-              el: regionValue
-            });
-          } else {
-            regionObj = new regionValue;
-          }
-
-          this[region] = regionObj;
-        }
-      }
-    }
-  });
-
   // Template Cache
   // --------------
   
@@ -720,6 +709,46 @@ Backbone.Marionette = (function(Backbone, _, $){
       }
     }
   };
+
+  // Renderer
+  // --------
+  
+  // Render a template with data by passing in the template
+  // selector and the data to render.
+  Marionette.Renderer = {
+
+    // Render a template with data. The `template` parameter is
+    // passed to the `TemplateCache` object to retrieve the
+    // actual template. Override this method to provide your own
+    // custom rendering and template handling for all of Marionette.
+    render: function(template, data){
+      var that = this;
+      var asyncRender = $.Deferred();
+
+      var templateRetrieval = Marionette.TemplateCache.get(template);
+
+      $.when(templateRetrieval).then(function(template){
+        var html = that.renderTemplate(template, data);
+        asyncRender.resolve(html);
+      });
+
+      return asyncRender.promise();
+    },
+
+    // Default implementation uses underscore.js templates. Override
+    // this method to use your own templating engine.
+    renderTemplate: function(template, data){
+      if (!template || template.length === 0){
+        var msg = "A template must be specified";
+        var err = new Error(msg);
+        err.name = "NoTemplateError";
+        throw err;
+      }
+
+      return _.template(template, data);
+    }
+
+  }
 
   // Helpers
   // -------

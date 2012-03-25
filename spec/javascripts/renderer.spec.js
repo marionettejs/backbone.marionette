@@ -6,9 +6,11 @@ describe("renderer", function(){
 
     beforeEach(function(){
       loadFixtures("rendererTemplate.html");
-      result = Backbone.Marionette.Renderer.render(templateSelector);
-
-      spyOn(Backbone.Marionette.TemplateCache, "get");
+      spyOn(Backbone.Marionette.TemplateCache, "get").andCallThrough();
+      var promise = Backbone.Marionette.Renderer.render(templateSelector);
+      promise.done(function(html){
+        result = $(html);
+      });
     });
 
     it("should retrieve the template from the cache", function(){

@@ -63,7 +63,7 @@ Backbone.Marionette = (function(Backbone, _, $){
       this.beforeRender && this.beforeRender();
       this.trigger("item:before:render", that);
 
-      var asyncRender = Marionette.Renderer.render(this.template, data);
+      var asyncRender = Marionette.Renderer.render(template, data);
       asyncRender.done(function(html){
         that.$el.html(html);
         that.onRender && that.onRender();

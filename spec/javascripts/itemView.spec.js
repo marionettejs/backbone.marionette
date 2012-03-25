@@ -76,6 +76,8 @@ describe("item view", function(){
     var view;
 
     beforeEach(function(){
+      loadFixtures("itemTemplate.html");
+
       view = new ItemView({
         template: "#itemTemplate",
         model: new Model({

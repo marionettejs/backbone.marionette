@@ -139,9 +139,9 @@ describe("composite view", function(){
         collection: collection
       });
 
-      spyOn(ModelView.prototype, "render").andCallThrough();
       spyOn(compositeView, "render").andCallThrough();
       spyOn(compositeView, "closeChildren").andCallThrough();
+      spyOn(Backbone.Marionette.Renderer, "render");
       compositeRenderSpy = compositeView.render;
 
       compositeView.render();
@@ -149,7 +149,7 @@ describe("composite view", function(){
     });
 
     it("should re-render the template view", function(){
-      expect(ModelView.prototype.render.callCount).toBe(2);
+      expect(Backbone.Marionette.Renderer.render.callCount).toBe(2);
     });
 
     it("should close all of the child collection item views", function(){
@@ -298,14 +298,7 @@ describe("composite view", function(){
 
       compositeView.render();
 
-      spyOn(compositeView.renderedModelView, "close");
-      compositeModelCloseSpy = compositeView.renderedModelView.close;
-      
       compositeView.close();
-    });
-
-    it("should close the model view", function(){
-      expect(compositeModelCloseSpy.callCount).toBe(1);
     });
 
     it("should delete the model view", function(){
@@ -324,13 +317,6 @@ describe("composite view", function(){
   });
   
   var ItemView = Backbone.Marionette.ItemView.extend({
-    tagName: "span",
-    render: function(){
-      this.$el.html(this.model.get("foo"));
-    }
-  });
-
-  var ModelView = Backbone.Marionette.ItemView.extend({
     tagName: "span",
     render: function(){
       this.$el.html(this.model.get("foo"));
@@ -373,7 +359,6 @@ describe("composite view", function(){
   });
 
   var CompositeModelView = Backbone.Marionette.CompositeView.extend({
-    modelView: ModelView,
     itemView: ItemView,
     template: "#composite-template"
   });

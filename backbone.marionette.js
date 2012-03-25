@@ -57,8 +57,8 @@ Backbone.Marionette = (function(Backbone, _, $){
     // You can override this in your view definition.
     render: function(){
       var that = this;
-      var data = this.serializeData();
       var template = this.getTemplate();
+      var data = this.serializeData();
 
       this.beforeRender && this.beforeRender();
       this.trigger("item:before:render", that);
@@ -248,11 +248,8 @@ Backbone.Marionette = (function(Backbone, _, $){
   // Extends directly from CollectionView and also renders an
   // an item view as `modelView`, for the top leaf
   Marionette.CompositeView = Marionette.CollectionView.extend({
-    modelView: Marionette.ItemView,
-
     constructor: function(options){
       Marionette.CollectionView.apply(this, arguments);
-
       this.itemView = this.getItemView();
     },
 
@@ -272,8 +269,8 @@ Backbone.Marionette = (function(Backbone, _, $){
       var compositeRendered = $.Deferred();
 
       var modelIsRendered = this.renderModel();
-      $.when(modelIsRendered).then(function(){
-        that.$el.html(that.renderedModelView.el);
+      $.when(modelIsRendered).then(function(html){
+        that.$el.html(html);
         that.trigger("composite:model:rendered");
 
         var collectionIsRendered = that.renderCollection();
@@ -302,21 +299,37 @@ Backbone.Marionette = (function(Backbone, _, $){
     // part of a composite view (branch / leaf). For example:
     // a treeview.
     renderModel: function(){
-      this.renderedModelView = new this.modelView({
-        model: this.model,
-        template: this.template
-      });
+      var data = {};
+      if (this.model){
+        data = this.model.toJSON();
+      }
 
-      return this.renderedModelView.render();
+      var template = this.getTemplate();
+
+      return Marionette.Renderer.render(template, data);
     },
 
-    // Ensure we close things correctly
-    close: function(){
-        Marionette.CollectionView.prototype.close.apply(this, arguments);
-        if (this.renderedModelView){
-          this.renderedModelView.close && this.renderedModelView.close();
-          delete this.renderedModelView;
-        }
+    // Get the template or template id/selector for this view
+    // instance. You can set a `template` attribute in the view
+    // definition or pass a `template: "whatever"` parameter in
+    // to the constructor options. 
+    getTemplate: function(){
+      var template;
+
+      // Get the template from `this.options.template` or
+      // `this.template`. The `options` takes precedence.
+      if (this.options && this.options.template){
+        template = this.options.template;
+      } else {
+        template = this.template;
+      }
+
+      // check if it's a function and execute it, if it is
+      if (_.isFunction(template)){
+        template  = template.call(this);
+      }
+
+      return template;
     }
   });
 

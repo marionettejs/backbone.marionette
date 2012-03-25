@@ -179,7 +179,9 @@ describe("item view", function(){
     var collection;
 
     beforeEach(function(){
-      model = new Model();
+      loadFixtures("itemTemplate.html");
+
+      model = new Model({foo: "bar"});
       collection = new Collection();
       view = new EventedView({
         template: "#itemTemplate",

@@ -1562,6 +1562,11 @@ Marionette has not been tested against any other versions of these
 libraries. You may or may not have success if you use a version other
 than what it listed here.
 
+## Tools Used
+
+I use a number of tools to build, test and maintain Marionette, including
+but not limited to:
+
 ### Test Suite
 
 Backbone.Marionette is also tested with the Jasmine JavaScript test utility,
@@ -1571,11 +1576,6 @@ To get the test suite up and running, you need a Ruby installation with the
 latest RubyGems. Install the 'bundler' gem and then run 'bunle install' from 
 the project's root folder. Then run `rake jasmine` to run the test suite, and
 load up http://localhost:8888 to see the test suite in action.
-
-## Tools Used
-
-I use a number of tools to build, test and maintain Marionette, including
-but not limited to:
 
 ### Formatted Documentation
 

@@ -701,7 +701,7 @@ myView.on("item:before:render", function(){
 });
 ```
 
-#### "item:rendered" event
+#### "render" / "item:rendered" event
 
 An "item:rendered" event will be triggered just after the view 
 has been rendered.
@@ -712,6 +712,10 @@ MyView = Backbone.Marionette.ItemVIew.extend({...});
 var myView = new MyView();
 
 myView.on("item:rendered", function(){
+  alert("the view was rendered!");
+});
+
+myView.on("render", function(){
   alert("the view was rendered!");
 });
 ```
@@ -951,7 +955,7 @@ myView.on("collection:before:render", function(){
 myView.render();
 ```
 
-#### "collection:rendered" event
+#### "render" / "collection:rendered" event
 
 A "collection:rendered" event will also be fired. This allows you to
 add more than one callback to execute after the view is rendered,
@@ -962,6 +966,10 @@ know that the view was rendered.
 MyView = Backbone.Marionette.CollectionView.extend({...});
 
 var myView = new MyView();
+
+myView.on("render", function(){
+  alert("the collection view was rendered!");
+});
 
 myView.on("collection:rendered", function(){
   alert("the collection view was rendered!");
@@ -1206,7 +1214,7 @@ be triggered:
 
 * "composite:item:rendered" - after the `modelView` has been rendered
 * "composite:collection:rendered" - after the collection of models has been rendered
-* "composite:rendered" - after everything has been rendered
+* "render" / "composite:rendered" - after everything has been rendered
 
 Additionally, after the composite view has been rendered, an 
 `onRender` method will be called. You can implement this in 

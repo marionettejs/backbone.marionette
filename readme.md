@@ -1561,7 +1561,9 @@ I'm using [Docco](http://jashkenas.github.com/docco/) to generate the annotated 
 * Added `Marionette.View` object, to contain a few basic parts of every Marionette view
 * Added `Marionette.Renderer` object, to handle template rendering
 * Moved a handful of methods out of `ItemView` and in to `Renderer`
-* `CollectionView` now has a `buildItemView` method to build each item's view
+* `CollectionView` changes: 
+  * Now has a `buildItemView` method to build each item's view
+  * Renamed `removeChildView` to `removeItemView` to make the language consistent
 * Updated to Backbone v0.9.2
 * Updated to jQuery v1.7.2
 

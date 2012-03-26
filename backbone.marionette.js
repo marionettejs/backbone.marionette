@@ -138,7 +138,7 @@ Backbone.Marionette = (function(Backbone, _, $){
     initialEvents: function(){
       if (this.collection){
         this.bindTo(this.collection, "add", this.addChildView, this);
-        this.bindTo(this.collection, "remove", this.removeChildView, this);
+        this.bindTo(this.collection, "remove", this.removeItemView, this);
         this.bindTo(this.collection, "reset", this.render, this);
       }
     },
@@ -203,7 +203,7 @@ Backbone.Marionette = (function(Backbone, _, $){
     },
 
     // Remove the child view and close it
-    removeChildView: function(item){
+    removeItemView: function(item){
       var view = this.children[item.cid];
       if (view){
         view.close();

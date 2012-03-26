@@ -149,20 +149,14 @@ Backbone.Marionette = (function(Backbone, _, $){
       var that = this;
       var deferredRender = $.Deferred();
       var promises = [];
+      var itemView = this.getItemView();
 
       this.beforeRender && this.beforeRender();
       this.trigger("collection:before:render", this);
 
       this.closeChildren();
-
-      if (!this.itemView){
-        var err = new Error("An `itemView` must be specified");
-        err.name = "NoItemViewError";
-        throw err;
-      }
-
       this.collection && this.collection.each(function(item){
-        var promise = that.addChildView(item)
+        var promise = that.addChildView(item, itemView);
         promises.push(promise);
       });
 
@@ -178,12 +172,27 @@ Backbone.Marionette = (function(Backbone, _, $){
       return deferredRender.promise();
     },
 
+    // Retrieve the itemView type, either from `this.options.itemView`
+    // or from the `itemView` in the object definition. The "options"
+    // takes precedence.
+    getItemView: function(){
+      var itemView = this.options.itemView || this.itemView;
+
+      if (!itemView){
+        var err = new Error("An `itemView` must be specified");
+        err.name = "NoItemViewError";
+        throw err;
+      }
+
+      return itemView;
+    },
+
     // Render the child item's view and add it to the
     // HTML for the collection view.
-    addChildView: function(item){
+    addChildView: function(item, itemView){
       var that = this;
 
-      var view = this.buildItemView(item);
+      var view = this.buildItemView(item, itemView);
       this.storeChild(view);
 
       var promise = view.render();
@@ -195,7 +204,7 @@ Backbone.Marionette = (function(Backbone, _, $){
     },
 
     // Build an `itemView` for every model in the collection. 
-    buildItemView: function(item){
+    buildItemView: function(item, itemView){
       var view = new this.itemView({
         model: item
       });

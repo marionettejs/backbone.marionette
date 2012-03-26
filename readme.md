@@ -1012,6 +1012,17 @@ Backbone.Marionette.CollectionView.extend({
 });
 ```
 
+Alternatively, you can specify an `itemView` in the options for
+the constructor:
+
+```js
+MyCollectionView = Backbone.Marionette.CollectionView.extend({...});
+
+new MyCollectionView({
+  itemView: MyItemView
+});
+```
+
 If you do not specify an `itemView`, an exception will be thrown
 stating that you must specify an `itemView`.
 
@@ -1562,7 +1573,8 @@ I'm using [Docco](http://jashkenas.github.com/docco/) to generate the annotated 
 * Added `Marionette.Renderer` object, to handle template rendering
 * Moved a handful of methods out of `ItemView` and in to `Renderer`
 * `CollectionView` changes: 
-  * Now has a `buildItemView` method to build each item's view
+  * Extracted `getItemView` method to retrieve the `itemView` type, either from `this.itemView` or `this.options.itemView`
+  * Extracted `buildItemView` method to build each item's view
   * Renamed `removeChildView` to `removeItemView` to make the language consistent
 * Updated to Backbone v0.9.2
 * Updated to jQuery v1.7.2

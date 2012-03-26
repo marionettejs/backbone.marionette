@@ -1098,25 +1098,20 @@ Backbone.Marionette.CollectionView.extend({
 
 ## Marionette.CompositeView
 
-A `CompositeView` extends from CollectionView to be used as a composite view for scenarios
-where it should represent both a branch and leaf in a tree structure.
+A `CompositeView` extends from CollectionView to be used as a 
+composite view for scenarios where it should represent both a 
+branch and leaf in a tree structure.
 
-For example, if you're rendering a treeview control, you may want
-to render a collection view with a model and template so that it
-will show a parent item with children in the tree.
+For example, if you're rendering a treeview control, you may 
+want to render a collection view with a model and template so 
+that it will show a parent item with children in the tree.
 
 You can specify a `modelView` to use for the model. If you don't
 specify one, it will default to the `Marionette.ItemView`.
 
 ```js
-LeafView = Backbone.Marionette.ItemView.extend({
-  template: "leaf-template"
-});
-
 CompositeView = Backbone.Marionette.CompositeView.extend({
-  template: "leaf-template"
-  modelView: LeafView,
-  itemView: LeafView
+  template: "leaf-branch-template"
 });
 
 new CompositeView({
@@ -1136,6 +1131,35 @@ MyComp = Backbone.Marionette.CompositeView.extend({...});
 
 myComp = new MyComp().render().done(function(){
   // the entire composite is now rendered. do stuff here
+});
+```
+
+### Composite Model Template
+
+When a `CompositeView` is rendered, the `model` will be rendered
+with the `template` that the view is configured with. You can
+override the template by passing it in as a constructor option:
+
+```js
+new MyComp({
+  template: "#some-template"
+});
+```
+
+### Recursive By Default
+
+The default rendering mode for a `CompositeView` assumes a
+hierarchical, recursive structure. If you configure a composite
+view without specifying an `itemView`, you'll get the same
+composite view type rendered for each item in the collection. If
+you need to override this, you can specify a `itemView` in the
+composite view's definition:
+
+```js
+var ItemView = Backbone.Marionette.ItemView.extend({});
+
+var CompView = Backbone.Marionette.CompositeView.extend({
+  itemView: ItemView
 });
 ```
 
@@ -1569,15 +1593,18 @@ I'm using [Docco](http://jashkenas.github.com/docco/) to generate the annotated 
 
 ### v0.7.0
 
+* **BREAKING**: The `renderTemplate` method has moved from the `ItemView` prototype on to the `Renderer` object
 * Added `Marionette.View` object, to contain a few basic parts of every Marionette view
 * Added `Marionette.Renderer` object, to handle template rendering
-* Moved a handful of methods out of `ItemView` and in to `Renderer`
 * `CollectionView` changes: 
   * Extracted `getItemView` method to retrieve the `itemView` type, either from `this.itemView` or `this.options.itemView`
   * Extracted `buildItemView` method to build each item's view
   * Renamed `removeChildView` to `removeItemView` to make the language consistent
   * Triggers "item:added" event after each item has been added
   * Triggers "item:removed" event after an item has been removed
+* `CompositeView` changes:
+  * No longer takes a `modelView`. Now directly renders the `template` specified
+  * Defaults to a recurive structure, where `itemView` is the current composite view type
 * Added common "render" event to all the view types
 * Updated to Backbone v0.9.2
 * Updated to jQuery v1.7.2

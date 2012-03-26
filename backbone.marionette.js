@@ -393,9 +393,9 @@ Backbone.Marionette = (function(Backbone, _, $){
       $.when(view.render()).then(function () {
         that.$el[appendMethod](view.el);
         view.onShow && view.onShow();
+        view.trigger("show");
         that.trigger("view:show", view);
       });
-
     },
 
     // Close the current view, if there is one. If there is no

@@ -373,6 +373,29 @@ MyApp.mainRegion.on("view:closed", function(view){
 });
 ```
 
+### View Callbacks And Events For Regions
+
+
+The region manager will call an `onShow` method on the view
+that was displayed. It will also trigger a "show" event
+from the view:
+
+```js
+MyView = Backbone.View.extend({
+  onShow: function(){
+    // the view has been shown
+  }
+});
+
+view = new MyView();
+
+view.on("show", function(){
+  // the view has been shown.
+});
+
+MyApp.mainRegion.show(view);
+```
+
 ### Defining A Custom Region 
 
 You can define a custom region manager by extending from
@@ -1604,6 +1627,7 @@ I'm using [Docco](http://jashkenas.github.com/docco/) to generate the annotated 
 * `CompositeView` changes:
   * No longer takes a `modelView`. Now directly renders the `template` specified
   * Defaults to a recurive structure, where `itemView` is the current composite view type
+* A `Region` will trigger a `show` event from any view that it shows
 * Added common "render" event to all the view types
 * Updated to Backbone v0.9.2
 * Updated to jQuery v1.7.2

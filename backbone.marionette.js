@@ -210,12 +210,12 @@ Backbone.Marionette = (function(Backbone, _, $){
       this.storeChild(view);
       this.trigger("item:added", view);
 
-      var promise = view.render();
-      $.when(promise).then(function(){
-        that.appendHtml(that.$el, view.$el);
+      var viewRendered = view.render();
+      $.when(viewRendered).then(function(){
+        that.appendHtml(that, view);
       });
       
-      return promise;
+      return viewRendered;
     },
 
     // Build an `itemView` for every model in the collection. 
@@ -239,8 +239,8 @@ Backbone.Marionette = (function(Backbone, _, $){
     // Append the HTML to the collection's `el`.
     // Override this method to do something other
     // then `.append`.
-    appendHtml: function(el, html){
-      el.append(html);
+    appendHtml: function(collectionView, itemView){
+      collectionView.$el.append(itemView.el);
     },
 
     // Store references to all of the child `itemView`

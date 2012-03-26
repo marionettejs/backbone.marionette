@@ -33,8 +33,8 @@ describe("collection view", function(){
   var PrependHtmlView = Backbone.Marionette.CollectionView.extend({
     itemView: ItemView,
 
-    appendHtml: function(el, html){
-      el.prepend(html);
+    appendHtml: function(collectionView, itemView){
+      collectionView.$el.prepend(itemView.el);
     }
   });
 

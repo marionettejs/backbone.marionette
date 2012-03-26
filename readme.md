@@ -1576,6 +1576,9 @@ I'm using [Docco](http://jashkenas.github.com/docco/) to generate the annotated 
   * Extracted `getItemView` method to retrieve the `itemView` type, either from `this.itemView` or `this.options.itemView`
   * Extracted `buildItemView` method to build each item's view
   * Renamed `removeChildView` to `removeItemView` to make the language consistent
+  * Triggers "item:added" event after each item has been added
+  * Triggers "item:removed" event after an item has been removed
+* Added common "render" event to all the view types
 * Updated to Backbone v0.9.2
 * Updated to jQuery v1.7.2
 

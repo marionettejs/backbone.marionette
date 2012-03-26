@@ -206,8 +206,8 @@ Backbone.Marionette = (function(Backbone, _, $){
     },
 
     // Build an `itemView` for every model in the collection. 
-    buildItemView: function(item, itemView){
-      var view = new this.itemView({
+    buildItemView: function(item, ItemView){
+      var view = new ItemView({
         model: item
       });
       return view;

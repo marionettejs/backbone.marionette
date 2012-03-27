@@ -1618,6 +1618,13 @@ http://derickbailey.github.com/backbone.marionette
 
 I'm using [Docco](http://jashkenas.github.com/docco/) to generate the annotated source code.
 
+## Support Marionette
+
+If you find Marionette to be useful, consider supporting it by
+sending a donation.
+
+[![Donate](https://www.paypalobjects.com/en_US/i/btn/btn_donate_SM.gif)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=7SJHYWJ487SF4)
+
 ## Release Notes
 
 ### v0.7.0

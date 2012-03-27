@@ -10,11 +10,11 @@ includes various pieces inspired by composite application architectures,
 such as Microsoft's "Prism" framework. 
 
 Backbone.Marionette is designed 
-to be a lightweigt and flexible library of tools that you can use when you want 
+to be a lightweight and flexible library of tools that you can use when you want 
 to. Like Backbone.js itself, you're not required to use all of 
 Backbone.Marionette just because you want to use some of it.
 
-## Downloads And Source Code
+## Downloads & Source Code
 
 You can download the raw source code above, fork the repository or
 use these links:
@@ -103,7 +103,7 @@ add them to the app object. If you add them before the app is
 started, they will run when the `start` method is called. If you
 add them after the app is started, they will run immediately.
 
-### Application Event;
+### Application Event
 
 The `Application` object raises a few events during its lifecycle. These events
 can be used to do additional processing of your application. For example, you

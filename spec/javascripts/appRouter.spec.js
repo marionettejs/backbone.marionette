@@ -24,9 +24,13 @@ describe("app router", function(){
       var router = new Router({
         controller: controller
       });
-      startRouters();
+      Backbone.history.start();
 
       router.navigate("m1", true);
+    });
+
+    afterEach(function(){
+      Backbone.history.stop();
     });
 
     it("should call the configured method on the controller passed in the constructor", function(){
@@ -54,9 +58,13 @@ describe("app router", function(){
       spyOn(controller, "method1");
 
       var router = new Router();
-      startRouters();
+      Backbone.history.start();
 
       router.navigate("m1", true);
+    });
+
+    afterEach(function(){
+      Backbone.history.stop();
     });
 
     it("should call the configured method on the controller defined in the prototype", function(){
@@ -81,9 +89,13 @@ describe("app router", function(){
       var router = new Router({
         controller: controller
       });
-      startRouters();
+      Backbone.history.start();
 
       router.navigate("m2/1", true);
+    });
+
+    afterEach(function(){
+      Backbone.history.stop();
     });
 
     it("should call the configured method with parameters", function(){
@@ -106,9 +118,13 @@ describe("app router", function(){
       spyOn(Router.prototype, "standardRoute").andCallThrough();
 
       router = new Router();
-      startRouters();
+      Backbone.history.start();
 
       router.navigate("m3", true);
+    });
+
+    afterEach(function(){
+      Backbone.history.stop();
     });
 
     it("should fire the route callback", function(){

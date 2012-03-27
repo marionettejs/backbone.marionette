@@ -1634,6 +1634,7 @@ I'm using [Docco](http://jashkenas.github.com/docco/) to generate the annotated 
 * **BREAKING**: The `appendHtml` method of the `CollectionView` now takes `collectionView, itemView` as the arguments, instead of `el, html`
 * Added `Marionette.View` object, to contain a few basic parts of every Marionette view
 * Added `Marionette.Renderer` object, to handle template rendering
+* Views correctly trigger the "close" events before unbinding event subscribers
 * Additional `CollectionView` changes: 
   * Extracted `getItemView` method to retrieve the `itemView` type, either from `this.itemView` or `this.options.itemView`
   * Extracted `buildItemView` method to build each item's view

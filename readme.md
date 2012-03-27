@@ -27,6 +27,13 @@ Production: [backbone.marionette.min.js](https://raw.github.com/derickbailey/bac
 
 For a good time, call.. err... read through [the annotated source code](http://derickbailey.github.com/backbone.marionette/docs/backbone.marionette.html).
 
+## Support Marionette
+
+If you find Marionette to be useful, consider supporting it by
+sending a donation.
+
+[![Donate](https://www.paypalobjects.com/en_US/i/btn/btn_donate_SM.gif)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=7SJHYWJ487SF4)
+
 ## Marionette's Pieces
 
 These are the strings that you can pull to make your puppet dance:

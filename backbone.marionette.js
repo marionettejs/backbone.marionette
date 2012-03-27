@@ -164,8 +164,11 @@ Backbone.Marionette = (function(Backbone, _, $){
         throw err;
       }
 
+      var options = { index: 0 };
+
       this.collection.each(function(item){
-        var promise = that.addChildView(item)
+        var promise = that.addChildView(item, this.collection, options);
+        options.index++;
         promises.push(promise);
       });
 
@@ -183,7 +186,7 @@ Backbone.Marionette = (function(Backbone, _, $){
 
     // Render the child item's view and add it to the
     // HTML for the collection view.
-    addChildView: function(item){
+    addChildView: function(item, collection, options){
       var that = this;
 
       var view = new this.itemView({
@@ -191,9 +194,10 @@ Backbone.Marionette = (function(Backbone, _, $){
       });
       this.storeChild(view);
 
+      var index = options.index;
       var promise = view.render();
       $.when(promise).then(function(){
-        that.appendHtml(that.$el, view.$el);
+        that.appendHtml(that.$el, view.$el, index);
       });
       
       return promise;

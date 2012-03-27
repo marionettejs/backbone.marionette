@@ -25,7 +25,8 @@ Production: [backbone.marionette.min.js](https://raw.github.com/derickbailey/bac
 
 ## Annotated Source Code
 
-For a good time, call.. err... read through [the annotated source code](http://derickbailey.github.com/backbone.marionette/docs/backbone.marionette.html).
+You can read [the annotated source code](http://derickbailey.github.com/backbone.marionette/docs/backbone.marionette.html)
+for all the detail of how Marionette works, and advice on which methods to override when.
 
 ## Support Marionette
 

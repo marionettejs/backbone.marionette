@@ -101,21 +101,23 @@ Backbone.Marionette = (function(Backbone, _, $){
     // You can override this in your view definition.
     render: function(){
       var that = this;
+
+      var deferredRender = $.Deferred();
       var template = this.getTemplateSelector();
-      var data = this.serializeData();
+      var deferredData = this.serializeData();
 
       this.beforeRender && this.beforeRender();
       this.trigger("item:before:render", that);
 
-      var deferredRender = $.Deferred();
-
-      var asyncRender = Marionette.Renderer.render(template, data);
-      $.when(asyncRender).then(function(html){
-        that.$el.html(html);
-        that.onRender && that.onRender();
-        that.trigger("item:rendered", that);
-        that.trigger("render", that);
-        deferredRender.resolve();
+      $.when(deferredData).then(function(data) {
+        var asyncRender = Marionette.Renderer.render(template, data);
+        $.when(asyncRender).then(function(html){
+          that.$el.html(html);
+          that.onRender && that.onRender();
+          that.trigger("item:rendered", that);
+          that.trigger("render", that);
+          deferredRender.resolve();
+        });
       });
 
       return deferredRender.promise();

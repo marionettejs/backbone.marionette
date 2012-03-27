@@ -99,6 +99,41 @@ describe("item view", function(){
     });
   });
 
+  describe("when an item view has asynchronous data and is rendered", function(){
+    var view;
+
+    beforeEach(function(){
+      loadFixtures("itemTemplate.html");
+
+      view = new ItemView({
+        template: "#itemTemplate",
+        serializeData: function() {
+          var that = this;
+          var deferred = $.Deferred();
+          setTimeout(function() {
+            deferred.resolve(that.model.toJSON());
+          }, 100);
+          return deferred.promise();
+        },
+        model: new Model({
+          foo: "bar"
+        })
+      });
+
+      spyOn(view, "serializeData").andCallThrough();
+
+      view.render();
+    });
+
+    it("should serialize the model", function(){
+      expect(view.serializeData).toHaveBeenCalled();
+    });
+
+    it("should render the template with the serialized model", function(){
+      expect($(view.el)).toHaveText(/bar/);
+    });
+  });
+
   describe("when an item view has a collection and is rendered", function(){
     var view;
 

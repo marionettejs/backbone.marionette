@@ -9,10 +9,10 @@ the applications that I (Derick Bailey) have been building with Backbone, and
 includes various peices inspired by composite application architectures, 
 such as Microsoft's "Prism" framework. 
 
-Backbone.Marionette is designed 
-to be a lightweigt and flexible library of tools that you can use when you want 
-to. Like Backbone.js itself, you're not required to use all of 
-Backbone.Marionette just because you want to use some of it.
+Backbone.Marionette is designed to be a lightweigt and flexible library of 
+tools that you can use when you want to. Like Backbone.js itself, you're not 
+required to use all of Backbone.Marionette just because you want to use some 
+of it.
 
 ## Downloads And Source Code
 
@@ -26,6 +26,13 @@ Production: [backbone.marionette.min.js](https://raw.github.com/derickbailey/bac
 ## Annotated Source Code
 
 For a good time, call.. err... read through [the annotated source code](http://derickbailey.github.com/backbone.marionette/docs/backbone.marionette.html).
+
+## Support Marionette
+
+If you find Marionette to be useful, consider supporting it by
+sending a donation.
+
+[![Donate](https://www.paypalobjects.com/en_US/i/btn/btn_donate_SM.gif)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=7SJHYWJ487SF4)
 
 ## Marionette's Pieces
 
@@ -1847,10 +1854,3 @@ Permission is hereby granted, free of charge, to any person obtaining a copy of 
 The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-
-## Support Marionette
-
-If you find Marionette to be useful, consider supporting it by
-sending a donation.
-
-[![Donate](https://www.paypalobjects.com/en_US/i/btn/btn_donate_SM.gif)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=7SJHYWJ487SF4)

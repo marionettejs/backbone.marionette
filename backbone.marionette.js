@@ -47,11 +47,11 @@ Backbone.Marionette = (function(Backbone, _, $){
       this.beforeClose && this.beforeClose();
 
       this.unbindAll();
-      this.unbind();
       this.remove();
 
       this.onClose && this.onClose();
       this.trigger('close');
+      this.unbind();
     }
   });
 

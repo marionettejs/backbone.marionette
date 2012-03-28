@@ -1622,7 +1622,8 @@ but not limited to:
 
 The [Anvil.js](https://github.com/arobson/anvil.js) project is used
 to generate the builds for Backbone.Marionette. You can run the
-`build.sh` file from a terminal, after install anvil.
+`build.sh` file from a terminal, or the `build.cmd` file for Windows 
+users, after installing anvil.
 
 ### Test Suite
 

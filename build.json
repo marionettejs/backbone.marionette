@@ -7,7 +7,6 @@
 	"uglify": {},
 	"gzip": {},
   "wrap": {
-    "prefix-file": "LICENSE",
     "suffix": ";"
   }
 }

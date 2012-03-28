@@ -15,7 +15,7 @@ src_files:
     - public/javascripts/jquery.js
     - public/javascripts/underscore.js
     - public/javascripts/backbone.js
-    - lib/backbone.marionette.js
+    - src/backbone.marionette.js
 
 # stylesheets
 #

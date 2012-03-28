@@ -19,9 +19,21 @@ of it.
 You can download the raw source code above, fork the repository or
 use these links:
 
-Development: [backbone.marionette.js](https://raw.github.com/derickbailey/backbone.marionette/master/backbone.marionette.js) 21.79 file size (5.61K gzipped)
+### Standard Builds
 
-Production: [backbone.marionette.min.js](https://raw.github.com/derickbailey/backbone.marionette/master/backbone.marionette.min.js) 7.21K file size (2.16K gzipped)
+Development: [backbone.marionette.js](https://raw.github.com/derickbailey/backbone.marionette/master/lib/backbone.marionette.js)
+
+Production: [backbone.marionette.min.js](https://raw.github.com/derickbailey/backbone.marionette/master/lib/backbone.marionette.min.js)
+
+GZipped: [backbone.marionette.min.js](https://raw.github.com/derickbailey/backbone.marionette/master/lib/backbone.marionette.min.gz.js)
+
+### RequireJS (AMD) Builds
+
+Development: [backbone.marionette.js](https://raw.github.com/derickbailey/backbone.marionette/master/lib/amd/backbone.marionette.js)
+
+Production: [backbone.marionette.min.js](https://raw.github.com/derickbailey/backbone.marionette/master/lib/amd/backbone.marionette.min.js)
+
+GZipped: [backbone.marionette.min.js](https://raw.github.com/derickbailey/backbone.marionette/master/lib/amd/backbone.marionette.min.gz.js)
 
 ## Annotated Source Code
 
@@ -1601,10 +1613,16 @@ Marionette has not been tested against any other versions of these
 libraries. You may or may not have success if you use a version other
 than what it listed here.
 
-## Tools Used
+## Build Tools Used
 
 I use a number of tools to build, test and maintain Marionette, including
 but not limited to:
+
+### Anvil.js
+
+The [Anvil.js](https://github.com/arobson/anvil.js) project is used
+to generate the builds for Backbone.Marionette. You can run the
+`build.sh` file from a terminal, after install anvil.
 
 ### Test Suite
 
@@ -1648,6 +1666,8 @@ I'm using [Docco](http://jashkenas.github.com/docco/) to generate the annotated 
 * Added common "render" event to all the view types
 * Updated to Backbone v0.9.2
 * Updated to jQuery v1.7.2
+* AMD / RequireJS compliant version is provided
+* Now using [Anvil.js](https://github.com/arobson/anvil.js) for builds
 
 ### v0.6.4
 

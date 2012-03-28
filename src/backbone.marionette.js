@@ -303,7 +303,6 @@ Backbone.Marionette = (function(Backbone, _, $){
 
       var modelIsRendered = this.renderModel();
       $.when(modelIsRendered).then(function(html){
-        console.log("the html is", html);
         that.$el.html(html);
         that.trigger("composite:model:rendered");
         that.trigger("render");

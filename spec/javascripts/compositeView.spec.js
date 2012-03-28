@@ -322,13 +322,19 @@ describe("composite view", function(){
   describe("when rendering a composite view with no model, using a template to create a grid", function(){
     // A Grid Row
     var GridRow = Backbone.Marionette.ItemView.extend({
-        template: "#row-template",
-        tagName: "tr"
+        tagName: "tr",
+        template: "#row-template"
     });
 
     // The grid view
     var GridView = Backbone.Marionette.CompositeView.extend({
-        template: "#grid-template"
+        tagName: "table",
+        template: "#grid-template",
+        itemView: GridRow,
+
+        appendHtml: function(cv, iv){
+          cv.$("tbody").append(iv.el);
+        }
     });
 
     var User = Backbone.Model.extend({});
@@ -343,31 +349,32 @@ describe("composite view", function(){
       loadFixtures("gridTemplates.html");
 
       var userData = [
-          {
-              username: "dbailey",
-              fullname: "Derick Bailey"
-          },
-          {
-              username: "jbob",
-              fullname: "Joe Bob"
-          },
-          {
-              username: "fbar",
-              fullname: "Foo Bar"
-          }
+        {
+          username: "dbailey",
+          fullname: "Derick Bailey"
+        },
+        {
+          username: "jbob",
+        fullname: "Joe Bob"
+        },
+        {
+          username: "fbar",
+        fullname: "Foo Bar"
+        }
       ];
-          
+
       var userList = new UserCollection(userData);
 
       gridView = new GridView({
-          collection: userList
+        tagName: "table",
+        collection: userList
       });
 
       gridView.render();
     });
 
     it("should render the table", function(){
-      expect(gridView.$el[0].outerHTML).toHaveText(/table/);
+      expect(gridView.$("th").length).not.toBe(0);
     });
 
     it("should render the users", function(){

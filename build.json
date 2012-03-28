@@ -1,0 +1,13 @@
+{
+	"source": "src",
+	"output": "",
+	"spec": "spec",
+	"ext": "ext",
+	"lint": {},
+	"uglify": {},
+	"gzip": {},
+  "wrap": {
+    "prefix": "Backbone.Marionette = (function($, _, Backbone){",
+    "suffix": "return marionette; })(jQuery, _, Backbone);"
+  }
+}

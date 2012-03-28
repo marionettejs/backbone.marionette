@@ -1,0 +1,13 @@
+{
+	"source": "src",
+	"output": "lib",
+	"spec": "spec",
+	"ext": "ext",
+	"lint": {},
+	"uglify": {},
+	"gzip": {},
+  "wrap": {
+    "prefix": "define(['jquery', 'underscore', 'backbone'], function($, _, Backbone){",
+    "suffix": "return marionette; });"
+  }
+}

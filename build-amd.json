@@ -1,6 +1,6 @@
 {
 	"source": "src",
-	"output": "./",
+	"output": "lib/amd",
 	"spec": "spec",
 	"ext": "ext",
 	"lint": {},

@@ -1,6 +1,6 @@
 {
 	"source": "src",
-	"output": "./",
+	"output": "lib",
 	"spec": "spec",
 	"ext": "ext",
 	"lint": {},

@@ -8,8 +8,7 @@ describe("composite view", function(){
 
       var m1 = new Model({foo: "bar"});
       var m2 = new Model({foo: "baz"});
-      collection = new Collection();
-      collection.add(m2);
+      collection = new Collection([m1, m2]);
 
       compositeView = new CompositeViewNoModel({
         collection: collection
@@ -23,6 +22,7 @@ describe("composite view", function(){
     });
 
     it("should render the collection's items", function(){
+      expect(compositeView.$el).toHaveText(/bar/);
       expect(compositeView.$el).toHaveText(/baz/);
     });
   });

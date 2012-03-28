@@ -16,8 +16,11 @@ of it.
 
 ## Downloads & Source Code
 
-You can download the raw source code from the `src` folder above, fork the repository or
-use these links:
+You can download the raw source code from the `src` folder above, or grab one of the
+many builds from the `lib` folder. 
+
+To get the latest stable release, use these links which point to the 'master' branch's
+builds:
 
 ### Standard Builds
 

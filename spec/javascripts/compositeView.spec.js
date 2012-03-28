@@ -319,6 +319,65 @@ describe("composite view", function(){
     });
   });
 
+  describe("when rendering a composite view with no model, using a template to create a grid", function(){
+    // A Grid Row
+    var GridRow = Backbone.Marionette.ItemView.extend({
+        template: "#row-template",
+        tagName: "tr"
+    });
+
+    // The grid view
+    var GridView = Backbone.Marionette.CompositeView.extend({
+        template: "#grid-template"
+    });
+
+    var User = Backbone.Model.extend({});
+
+    var UserCollection = Backbone.Collection.extend({
+        model: User
+    });
+
+    var gridView;
+
+    beforeEach(function(){
+      loadFixtures("gridTemplates.html");
+
+      var userData = [
+          {
+              username: "dbailey",
+              fullname: "Derick Bailey"
+          },
+          {
+              username: "jbob",
+              fullname: "Joe Bob"
+          },
+          {
+              username: "fbar",
+              fullname: "Foo Bar"
+          }
+      ];
+          
+      var userList = new UserCollection(userData);
+
+      gridView = new GridView({
+          collection: userList
+      });
+
+      gridView.render();
+    });
+
+    it("should render the table", function(){
+      expect(gridView.$el[0].outerHTML).toHaveText(/table/);
+    });
+
+    it("should render the users", function(){
+      var body = gridView.$("tbody");
+      expect(body).toHaveText(/dbailey/);
+      expect(body).toHaveText(/jbob/);
+      expect(body).toHaveText(/fbar/);
+    });
+  });
+
   var Model = Backbone.Model.extend({});
 
   var Collection = Backbone.Collection.extend({

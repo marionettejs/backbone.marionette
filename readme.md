@@ -16,7 +16,7 @@ of it.
 
 ## Downloads & Source Code
 
-You can download the raw source code above, fork the repository or
+You can download the raw source code from the `src` folder above, fork the repository or
 use these links:
 
 ### Standard Builds

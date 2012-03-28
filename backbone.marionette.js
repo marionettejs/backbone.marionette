@@ -1,10 +1,3 @@
-// Backbone.Marionette v0.7.0
-//
-// Copyright (C)2011 Derick Bailey, Muted Solutions, LLC
-// Distributed Under MIT License
-//
-// Documentation and Full License Available at:
-// http://github.com/derickbailey/backbone.marionette
 Backbone.Marionette = (function(Backbone, _, $){
   var Marionette = {};
 
@@ -792,3 +785,5 @@ Backbone.Marionette = (function(Backbone, _, $){
 
   return Marionette;
 })(Backbone, _, window.jQuery || window.Zepto || window.ender);
+
+;

@@ -1,6 +1,6 @@
 {
 	"source": "src",
-	"output": "lib",
+	"output": "./",
 	"spec": "spec",
 	"ext": "ext",
 	"lint": {},
@@ -8,6 +8,6 @@
 	"gzip": {},
   "wrap": {
     "prefix": "define(['jquery', 'underscore', 'backbone'], function($, _, Backbone){",
-    "suffix": "return marionette; });"
+    "suffix": "return Backbone.Marionette; });"
   }
 }

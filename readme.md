@@ -1398,9 +1398,56 @@ Backbone.Marionette.Renderer.renderTemplate = function(template, data){
 This implementation will replace the default Underscore.js 
 rendering with jQuery templates rendering.
 
-## Backbone.Marionette.TemplateCache
+### Pre-Loaded Templates With RequireJS
 
-Formerly known as `TemplateManager`
+It's common for developers to use RequireJS to pre-load the entire
+template that is needed. When the template is pre-loaded like this,
+the use of a jQuery selector is not needed. 
+
+If you wish to replace the entire rendering process, based on the 
+assumption that you will always pre-load the entire template for 
+your view, it can be done by replacing the `render` method on the 
+`Renderer` object:
+
+```js
+Backbone.Marionette.Renderer.render = function(template, data){
+  return _.template(template, data);
+};
+```
+
+This will skip the `TemplateCache` usage entirely, and all of the
+other code that is usually run, and return the compiled template
+immediately.
+
+### Caching Pre-Compiled Templates
+
+There's a performance hit in replacing the entire `render`
+function of the `Renderer` object as shown in the example
+above. You should only have to compile a template once, and you should
+be caching the pre-compiled template after that.
+
+To accomplish this, avoid replacing the `render` function. Instead
+use a combination of the `renderTemplate` function and the
+`TemplateCache.loadTemplate` function.
+
+```js
+Backbone.Marionette.TemplateCache.loadTemplate(template, callback){
+  // pre-compile the template and store that in the cache.
+  var compiledTemplate = _.template(template);
+  callback.call(this, compiledTemplate);
+};
+
+Backbone.Marionette.Renderer.renderTemplate = function(template, data){
+  // because `template` is the pre-compiled template object,
+  // we only need to execute the template with the data
+  return template(data);
+}
+```
+
+For more information about the `TemplateCache.loadTemplate` function,
+see the next section of the documentation.
+
+## Backbone.Marionette.TemplateCache
 
 The `TemplateCache` provides a cache for retrieving templates
 from script blocks in your HTML. This will improve

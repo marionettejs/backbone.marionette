@@ -1697,6 +1697,10 @@ I'm using [Docco](http://jashkenas.github.com/docco/) to generate the annotated 
 
 ## Release Notes
 
+### v0.7.1
+
+* Underscore templates are cached as pre-compiled templates, instead of re-compiling them on every render
+
 ### v0.7.0
 
 * **BREAKING**: The `renderTemplate` method has moved from the `ItemView` prototype on to the `Renderer` object

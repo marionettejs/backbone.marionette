@@ -59,24 +59,22 @@ describe("renderer", function(){
     });
   });
 
-  describe("when overriding the `renderTemplate` method", function(){
+  describe("when overriding the `render` method", function(){
     var oldRender, result;
 
     beforeEach(function(){
-      oldRender = Backbone.Marionette.Renderer.renderTemplate;
+      oldRender = Backbone.Marionette.Renderer.render;
 
-      Backbone.Marionette.Renderer.renderTemplate = function(template, data){
+      Backbone.Marionette.Renderer.render = function(template, data){
         return "<foo>custom</foo>";
       };
 
-      var promise = Backbone.Marionette.Renderer.render("", {});
-      promise.done(function(html){
-        result = $(html);
-      });
+      result = Backbone.Marionette.Renderer.render("", {});
+      result = $(result);
     });
 
     afterEach(function(){
-      Backbone.Marionette.Renderer.renderTemplate = oldRender;
+      Backbone.Marionette.Renderer.render = oldRender;
     });
 
     it("should render the view with the overridden method", function(){

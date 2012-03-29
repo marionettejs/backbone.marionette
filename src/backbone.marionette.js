@@ -712,6 +712,16 @@ Backbone.Marionette = (function(Backbone, _, $){
     // such as asynchronous loading from a server.
     loadTemplate: function(templateId, callback){
       var template = $(templateId).html();
+
+      if (!template || template.length === 0){
+        var msg = "A template must be specified";
+        var err = new Error(msg);
+        err.name = "NoTemplateError";
+        throw err;
+      }
+
+      template = _.template(template);
+
       callback.call(this, template);
     },
 
@@ -762,14 +772,7 @@ Backbone.Marionette = (function(Backbone, _, $){
     // Default implementation uses underscore.js templates. Override
     // this method to use your own templating engine.
     renderTemplate: function(template, data){
-      if (!template || template.length === 0){
-        var msg = "A template must be specified";
-        var err = new Error(msg);
-        err.name = "NoTemplateError";
-        throw err;
-      }
-
-      var html = _.template(template, data);
+      var html = template(data);
       return html;
     }
 

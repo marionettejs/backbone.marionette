@@ -6,7 +6,7 @@
 	"lint": {},
 	"uglify": {},
 	"gzip": {},
-  "wrap": {
-    "suffix": ";"
+  "finalize": {
+    "header-file": "src/license.txt"
   }
 }

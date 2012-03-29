@@ -7,7 +7,10 @@
 	"uglify": {},
 	"gzip": {},
   "wrap": {
-    "prefix": "define(['jquery', 'underscore', 'backbone'], function($, _, Backbone){",
-    "suffix": "return Backbone.Marionette; });"
+    "prefix-file": "src/amd-header.txt",
+    "suffix-file": "src/amd-footer.txt"
+  },
+  "finalize": {
+    "header-file": "src/license.txt"
   }
 }

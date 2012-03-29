@@ -1,10 +1,3 @@
-// Backbone.Marionette v0.7.0
-//
-// Copyright (C)2011 Derick Bailey, Muted Solutions, LLC
-// Distributed Under MIT License
-//
-// Documentation and Full License Available at:
-// http://github.com/derickbailey/backbone.marionette
 Backbone.Marionette = (function(Backbone, _, $){
   var Marionette = {};
 
@@ -713,8 +706,9 @@ Backbone.Marionette = (function(Backbone, _, $){
     loadTemplate: function(templateId, callback){
       var template = $(templateId).html();
 
+      // Make sure we have a template before trying to compile it
       if (!template || template.length === 0){
-        var msg = "A template must be specified";
+        var msg = "Could not find template: '" + templateId + "'";
         var err = new Error(msg);
         err.name = "NoTemplateError";
         throw err;

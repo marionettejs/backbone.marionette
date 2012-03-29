@@ -55,7 +55,7 @@ describe("renderer", function(){
     });
 
     it("should raise an error", function(){
-      expect(render).toThrow("A template must be specified");
+      expect(render).toThrow("Could not find template: 'undefined'");
     });
   });
 

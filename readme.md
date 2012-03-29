@@ -1700,6 +1700,9 @@ I'm using [Docco](http://jashkenas.github.com/docco/) to generate the annotated 
 ### v0.7.1
 
 * Underscore templates are cached as pre-compiled templates, instead of re-compiling them on every render
+* Updating AMD support to also work with CommonJS / NodeJS
+* Correctiong Anvi.js build to include header / license info for all output files
+* Pass JSLint with no warnings (run w/ Anvil.js build process)
 
 ### v0.7.0
 

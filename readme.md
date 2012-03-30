@@ -9,7 +9,7 @@ the applications that I (Derick Bailey) have been building with Backbone, and
 includes various pieces inspired by composite application architectures, 
 such as Microsoft's "Prism" framework. 
 
-Backbone.Marionette is designed to be a lightweigt and flexible library of 
+Backbone.Marionette is designed to be a lightweight and flexible library of 
 tools that you can use when you want to. Like Backbone.js itself, you're not 
 required to use all of Backbone.Marionette just because you want to use some 
 of it.
@@ -80,7 +80,7 @@ app. It also provides a starting point for you to call into, from your HTML
 script block or from your JavaScript files directly if you prefer to go that 
 route.
 
-The `Application` is meant to be instantiate directly, although you can extend
+The `Application` is meant to be instantiated directly, although you can extend
 it to add your own functionality.
 
 ```js
@@ -171,7 +171,7 @@ MyApp.start(options);
 
 ### app.vent: Event Aggregator
 
-Every application instances comes with an instance of `Marionette.EventAggregator` 
+Every application instance comes with an instance of `Marionette.EventAggregator` 
 called `app.vent`.
 
 ```js
@@ -193,7 +193,7 @@ Have your routers configured to call the method on your object, directly.
 
 ### Configure Routes
 
-Configure an AppRouter with `appRoutes`. The route definition is passed on to Backbones standard routing
+Configure an AppRouter with `appRoutes`. The route definition is passed on to Backbone's standard routing
 handlers. This means that you define routes like you normally would. Instead of providing a callback
 method that exists on the router, though, you provide a callback method that exists on the `controller`
 that you specify for the router instance (see below).
@@ -240,7 +240,7 @@ Or
 The object that is used as the `controller` has no requirements, other than it will 
 contain the methods that you specified in the `appRoutes`.
 
-It is reocmmended that you divide your controller objects in to smaller peices of related functionality
+It is reocmmended that you divide your controller objects into smaller peices of related functionality
 and have multiple routers / controllers, instead of just one giant router and controller.
 
 ## Marionette.Region
@@ -248,7 +248,7 @@ and have multiple routers / controllers, instead of just one giant router and co
 Region managers provide a consistent way to manage your views and
 show / close them in your application. They use a jQuery selector
 to show your views in the correct place. They also call extra
-methods on your views, to facilitate additional functionality.
+methods on your views to facilitate additional functionality.
 
 ### Defining An Application Region
 
@@ -269,7 +269,7 @@ As soon as you call `addRegions`, your region managers are available on your
 app object. In the above, example `MyApp.mainRegion` and `MyApp.navigationRegion`
 would be available for use immediately.
 
-If you specify the same region name twice, last one in wins.
+If you specify the same region name twice, the last one in wins.
 
 ### Initialize A Region With An `el`
 

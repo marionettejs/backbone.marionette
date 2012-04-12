@@ -1,5 +1,5 @@
 {
-	"source": "src",
+	"source": "src/*.js",
 	"output": "lib",
 	"spec": "spec",
 	"ext": "ext",
@@ -7,6 +7,6 @@
 	"uglify": {},
 	"gzip": {},
   "finalize": {
-    "header-file": "src/license.txt"
+    "header-file": "support/license.txt"
   }
 }

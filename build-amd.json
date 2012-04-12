@@ -7,10 +7,10 @@
 	"uglify": {},
 	"gzip": {},
   "wrap": {
-    "prefix-file": "src/amd-header.txt",
-    "suffix-file": "src/amd-footer.txt"
+    "prefix-file": "support/amd-header.txt",
+    "suffix-file": "support/amd-footer.txt"
   },
   "finalize": {
-    "header-file": "src/license.txt"
+    "header-file": "support/license.txt"
   }
 }

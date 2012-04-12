@@ -1,5 +1,5 @@
 {
-	"source": "src/*.js",
+	"source": "src",
 	"output": "lib",
 	"spec": "spec",
 	"ext": "ext",

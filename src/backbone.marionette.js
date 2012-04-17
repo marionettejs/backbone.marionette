@@ -103,14 +103,13 @@ Backbone.Marionette = (function(Backbone, _, $){
       var that = this;
 
       var deferredRender = $.Deferred();
-      var template = this.getTemplateSelector();
       var deferredData = this.serializeData();
 
       this.beforeRender && this.beforeRender();
       this.trigger("item:before:render", that);
 
       $.when(deferredData).then(function(data) {
-        var asyncRender = Marionette.Renderer.render(template, data);
+        var asyncRender = that.renderHtml(data);
         $.when(asyncRender).then(function(html){
           that.$el.html(html);
           that.onRender && that.onRender();
@@ -121,6 +120,11 @@ Backbone.Marionette = (function(Backbone, _, $){
       });
 
       return deferredRender.promise();
+    },
+
+    renderHtml: function(data) {
+      var template = this.getTemplateSelector();
+      return Marionette.Renderer.render(template, data);
     },
 
     // Override the default close event to add a few

@@ -1237,7 +1237,7 @@ You can also manually re-render either or both of them:
 
 * If you want to re-render everything, call the `.render()` method
 * If you want to re-render the model's view, you can call `.renderModel()`
-* If you want to re-render the collection's views, you can call `.rendercollection()`
+* If you want to re-render the collection's views, you can call `.renderCollection()`
 
 ### Events And Callbacks
 
@@ -1690,7 +1690,7 @@ Backbone.Marionette is also tested with the Jasmine JavaScript test utility,
 using the Jasmine Ruby gem. 
 
 To get the test suite up and running, you need a Ruby installation with the 
-latest RubyGems. Install the 'bundler' gem and then run 'bunle install' from 
+latest RubyGems. Install the 'bundler' gem and then run 'bundle install' from 
 the project's root folder. Then run `rake jasmine` to run the test suite, and
 load up http://localhost:8888 to see the test suite in action.
 

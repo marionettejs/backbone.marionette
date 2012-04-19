@@ -447,13 +447,22 @@ that constructor function on your own:
 
 ```js
 var SomeRegion = Backbone.Marionette.Region.extend({
-  el: "#some-div"
+  el: "#some-div",
+
+  initialize: function(options){
+    // your init code, here
+  }
 });
 
 MyApp.someRegion = new SomeRegion();
 
 MyApp.someRegion.show(someView);
 ```
+
+You can optionally add an `initialize` function to your Region
+definition as shown in this example. It receives the `options`
+that were passed to the constructor of the Region, similar to
+a Backbone.View.
 
 ### jQuery Deferred And Asynchronous Template Loading
 
@@ -1695,6 +1704,7 @@ I'm using [Docco](http://jashkenas.github.com/docco/) to generate the annotated 
 
 ### v0.7.1
 
+* Region now supports an `initialize` function
 * CollectionView correctly defers until all children are rendered
 * Underscore templates are cached as pre-compiled templates, instead of re-compiling them on every render
 * Updating AMD support to also work with CommonJS / NodeJS

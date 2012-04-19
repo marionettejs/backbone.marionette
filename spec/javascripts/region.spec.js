@@ -257,4 +257,26 @@ describe("region", function(){
       expect($(manager.el).text()).toBe("bar");
     })
   });
+
+  describe("when creating a region instance with an initialize method", function(){
+    var Manager, actualOptions, expectedOptions;
+
+    beforeEach(function(){
+      expectedOptions = {foo: "bar"};
+      Manager = Backbone.Marionette.Region.extend({
+        el: "#foo",
+        initialize: function(options){ }
+      });
+
+      spyOn(Manager.prototype, "initialize").andCallThrough();
+
+      new Manager({
+        foo: "bar"
+      });
+    });
+
+    it("should call the initialize method with the options from the constructor", function(){
+      expect(Manager.prototype.initialize).toHaveBeenCalledWith(expectedOptions);
+    });
+  });
 });

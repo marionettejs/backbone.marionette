@@ -355,6 +355,10 @@ Backbone.Marionette = (function(Backbone, _, $){
       err.name = "NoElError";
       throw err;
     }
+
+    if (this.initialize){
+      this.initialize.apply(this, arguments);
+    }
   };
 
   _.extend(Marionette.Region.prototype, Backbone.Events, {

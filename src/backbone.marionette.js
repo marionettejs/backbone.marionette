@@ -624,6 +624,25 @@ Backbone.Marionette = (function(Backbone, _, $){
       });
     },
 
+    // Unbind the callback from obj for an event and context.
+    unbindFrom: function (obj, eventName, callback, context) {
+      context = context || this;
+      var bindings = {};
+      for (var i = 0; i < this.bindings.length; i++) {
+        var binding = this.bindings[i];
+        if (binding.obj === obj && binding.eventName === eventName && binding.callback === callback && binding.context === context) {
+          bindings[i] = binding;
+        }
+      }
+      for (var index in bindings) {
+        if (bindings.hasOwnProperty(index)) {
+          var binding = bindings[index];
+          binding.obj.off(binding.eventName, binding.callback, binding.context);
+          this.bindings.splice(index, 1);
+        }
+      }
+    },
+
     // Unbind all of the events that we have stored.
     unbindAll: function () {
       _.each(this.bindings, function (binding) {
@@ -678,6 +697,10 @@ Backbone.Marionette = (function(Backbone, _, $){
     // object being bound to.
     bindTo: function(eventName, callback, context){
       Marionette.BindTo.bindTo.call(this, this, eventName, callback, context);
+    },
+
+    unbindFrom: function(eventName, callback, context){
+      Marionette.BindTo.unbindFrom.call(this, this, eventName, callback, context);
     }
   });
 

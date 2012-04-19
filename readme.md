@@ -1704,6 +1704,7 @@ I'm using [Docco](http://jashkenas.github.com/docco/) to generate the annotated 
 
 ### v0.7.1
 
+* ItemView now has a `renderHtml` method that can be overriden to render the item view's data
 * Region now supports an `initialize` function
 * CollectionView correctly defers until all children are rendered
 * Underscore templates are cached as pre-compiled templates, instead of re-compiling them on every render

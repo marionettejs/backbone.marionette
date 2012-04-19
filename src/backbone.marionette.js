@@ -102,7 +102,9 @@ Backbone.Marionette = (function(Backbone, _, $){
       this.trigger("item:before:render", that);
 
       $.when(deferredData).then(function(data) {
+
         var asyncRender = that.renderHtml(data);
+
         $.when(asyncRender).then(function(html){
           that.$el.html(html);
           if (that.onRender) { that.onRender(); }
@@ -110,11 +112,15 @@ Backbone.Marionette = (function(Backbone, _, $){
           that.trigger("render", that);
           deferredRender.resolve();
         });
+
       });
 
       return deferredRender.promise();
     },
 
+    // Render the data for this item view in to some HTML.
+    // Override this method to replace the specific way in
+    // which an item view has it's data rendered in to html.
     renderHtml: function(data) {
       var template = this.getTemplateSelector();
       return Marionette.Renderer.render(template, data);

@@ -1695,6 +1695,7 @@ I'm using [Docco](http://jashkenas.github.com/docco/) to generate the annotated 
 
 ### v0.7.1
 
+* CollectionView correctly defers until all children are rendered
 * Underscore templates are cached as pre-compiled templates, instead of re-compiling them on every render
 * Updating AMD support to also work with CommonJS / NodeJS
 * Correctiong Anvi.js build to include header / license info for all output files

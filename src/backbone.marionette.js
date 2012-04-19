@@ -180,7 +180,7 @@ Backbone.Marionette = (function(Backbone, _, $){
         this.trigger("collection:rendered", this);
       });
 
-      $.when(promises).then(function(){
+      $.when.apply(this, promises).then(function(){
         deferredRender.resolveWith(that);
       });
 

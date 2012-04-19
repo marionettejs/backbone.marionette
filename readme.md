@@ -1157,7 +1157,8 @@ Backbone.Marionette.CollectionView.extend({
 
 A `CompositeView` extends from CollectionView to be used as a 
 composite view for scenarios where it should represent both a 
-branch and leaf in a tree structure.
+branch and leaf in a tree structure, or for scenarios where a
+collection needs to be rendered within a wrapper template.
 
 For example, if you're rendering a treeview control, you may 
 want to render a collection view with a model and template so 
@@ -1168,7 +1169,7 @@ specify one, it will default to the `Marionette.ItemView`.
 
 ```js
 CompositeView = Backbone.Marionette.CompositeView.extend({
-  template: "leaf-branch-template"
+  template: "#leaf-branch-template"
 });
 
 new CompositeView({
@@ -1176,6 +1177,9 @@ new CompositeView({
   collection: someCollection
 });
 ```
+
+For more examples, see my blog post on 
+[using the composite view](http://lostechies.com/derickbailey/2012/04/05/composite-views-tree-structures-tables-and-more/)
 
 ### Composite Render
 
@@ -1705,11 +1709,11 @@ I'm using [Docco](http://jashkenas.github.com/docco/) to generate the annotated 
 ### v0.7.1
 
 * ItemView now has a `renderHtml` method that can be overriden to render the item view's data
-* Region now supports an `initialize` function
+* Region now supports an `initialize` function when extending a region to your own object type
 * CollectionView correctly defers until all children are rendered
 * Underscore templates are cached as pre-compiled templates, instead of re-compiling them on every render
 * Updating AMD support to also work with CommonJS / NodeJS
-* Correctiong Anvi.js build to include header / license info for all output files
+* Correctiong build to include header / license info for all output files
 * Pass JSLint with no warnings (run w/ Anvil.js build process)
 * Removed GZip release files, as they were broken anyways
 

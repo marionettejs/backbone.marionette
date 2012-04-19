@@ -5,8 +5,13 @@
 	"ext": "ext",
 	"lint": {},
 	"uglify": {},
-	"gzip": {},
+  "name": {
+    "amd.js": "amd/backbone.marionette.js",
+    "amd.min.js": "amd/backbone.marionette.min.js",
+    "browser.js": "backbone.marionette.js",
+    "browser.min.js": "backbone.marionette.min.js"
+  },
   "finalize": {
-    "header-file": "support/license.txt"
+    "header-file": "license.txt"
   }
 }

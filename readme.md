@@ -28,15 +28,11 @@ Development: [backbone.marionette.js](https://raw.github.com/derickbailey/backbo
 
 Production: [backbone.marionette.min.js](https://raw.github.com/derickbailey/backbone.marionette/master/lib/backbone.marionette.min.js)
 
-GZipped: [backbone.marionette.min.js](https://raw.github.com/derickbailey/backbone.marionette/master/lib/backbone.marionette.min.gz.js)
-
 ### RequireJS (AMD) Builds
 
 Development: [backbone.marionette.js](https://raw.github.com/derickbailey/backbone.marionette/master/lib/amd/backbone.marionette.js)
 
 Production: [backbone.marionette.min.js](https://raw.github.com/derickbailey/backbone.marionette/master/lib/amd/backbone.marionette.min.js)
-
-GZipped: [backbone.marionette.min.js](https://raw.github.com/derickbailey/backbone.marionette/master/lib/amd/backbone.marionette.min.gz.js)
 
 ## Annotated Source Code
 
@@ -1703,6 +1699,7 @@ I'm using [Docco](http://jashkenas.github.com/docco/) to generate the annotated 
 * Updating AMD support to also work with CommonJS / NodeJS
 * Correctiong Anvi.js build to include header / license info for all output files
 * Pass JSLint with no warnings (run w/ Anvil.js build process)
+* Removed GZip release files, as they were broken anyways
 
 ### v0.7.0
 

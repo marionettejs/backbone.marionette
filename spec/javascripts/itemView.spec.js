@@ -13,6 +13,19 @@ describe("item view", function(){
     onRender: function(){}
   });
 
+  var AsyncOnRenderView = Backbone.Marionette.ItemView.extend({
+    template: "#emptyTemplate",
+    asyncCallback: function(){},
+    onRender: function() {
+      var that = this;
+      var deferred = $.Deferred();
+      setTimeout(function() {
+        deferred.resolve(that.asyncCallback());
+      }, 200);
+      return deferred.promise();
+    }
+  });
+
   var CustomRenderView = Backbone.Marionette.ItemView.extend({
     renderTemplate: function(template, data){
       return "<foo>custom</foo>";
@@ -131,6 +144,22 @@ describe("item view", function(){
 
     it("should render the template with the serialized model", function(){
       expect($(view.el)).toHaveText(/bar/);
+    });
+  });
+
+  describe("when an item view has an asynchronous onRender and is rendered", function(){
+    var view;
+
+    beforeEach(function(){
+      loadFixtures("emptyTemplate.html");
+      view = new AsyncOnRenderView();
+      spyOn(view, "asyncCallback").andCallThrough();
+    });
+
+    it("should delay until onRender resolves", function(){
+      $.when(view.render()).then(function(){
+        expect(view.asyncCallback).toHaveBeenCalled();
+      });
     });
   });
 

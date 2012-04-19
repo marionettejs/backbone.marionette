@@ -70,7 +70,39 @@ describe("bind to", function(){
     });
   });
 
-  describe("when unbinding", function(){
+  describe("when unbinding an event", function(){
+    var handler = {
+      doIt: function(){},
+      dontDoIt: function(){}
+    }
+    var binder = _.extend({}, Backbone.Marionette.BindTo);
+    var model;
+
+    beforeEach(function(){
+      spyOn(handler, "doIt");
+      spyOn(handler, "dontDoIt");
+      model = new Model();
+      binder.bindTo(model, "change:foo", handler.doIt);
+      binder.bindTo(model, "change:foo", handler.dontDoIt);
+
+      binder.unbindFrom(model, "change:foo", handler.dontDoIt);
+      model.set({foo: "bar"});
+    });
+
+    it("should unbind the registered events for the given callback", function(){
+      expect(handler.doIt).toHaveBeenCalled();
+      expect(handler.dontDoIt).not.toHaveBeenCalled();
+    });
+
+    it("should remove the binding from the list of registered events", function(){
+      var bindings = _.filter(binder.bindings, function(binding) {
+        return binding.obj === model && binding.eventName === "change:foo" && binding.callback === handler.dontDoIt;
+      });
+      expect(bindings.length).toBe(0);
+    });
+  });
+
+  describe("when unbinding all events", function(){
     var handler = {
       doIt: function(){}
     }

@@ -733,9 +733,17 @@ Backbone.Marionette = (function(Backbone, _, $){
         throw err;
       }
 
-      template = _.template(template);
+      template = this.compileTemplate(template);
 
       callback.call(this, template);
+    },
+
+    // Pre-compile the template before caching it. Override
+    // this method if you do not need to pre-compile a template
+    // (JST / RequireJS for example) or if you want to change
+    // the template engine used (Handebars, etc).
+    compileTemplate: function(rawTemplate){
+      return _.template(rawTemplate);
     },
 
     // Clear templates from the cache. If no arguments

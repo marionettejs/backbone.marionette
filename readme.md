@@ -1706,6 +1706,10 @@ I'm using [Docco](http://jashkenas.github.com/docco/) to generate the annotated 
 
 ## Release Notes
 
+### v0.7.2
+
+* Extracted `compileTemplate` method in TemplateCache for clarity and easier modification
+
 ### v0.7.1
 
 * ItemView now has a `renderHtml` method that can be overriden to render the item view's data

@@ -1709,6 +1709,7 @@ I'm using [Docco](http://jashkenas.github.com/docco/) to generate the annotated 
 ### v0.7.2
 
 * Extracted `compileTemplate` method in TemplateCache for clarity and easier modification
+* ItemView will wait until `onRender` has completed before triggering other rendered events
 
 ### v0.7.1
 

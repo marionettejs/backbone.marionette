@@ -2,16 +2,16 @@ describe("bind to", function(){
   var Model = Backbone.Model.extend({});
 
   describe("when binding an event", function(){
+    var binding, binder, model;
+
     var eventHandler = {
       doIt: function(){}
     }
-    spyOn(eventHandler, "doIt");
-    var binder = _.extend({}, Backbone.Marionette.BindTo);
-    var model;
 
     beforeEach(function(){
+      binder = _.extend({}, Backbone.Marionette.BindTo);
       model = new Model();
-      binder.bindTo(model, "change:foo", eventHandler.doIt);
+      binding = binder.bindTo(model, "change:foo", eventHandler.doIt);
     });
 
     it("should store the bound object", function(){
@@ -24,6 +24,10 @@ describe("bind to", function(){
 
     it("should store the callback function", function(){
       expect(binder.bindings[0].callback).toBe(eventHandler.doIt);
+    });
+
+    it("should return a binding object for the bound event", function(){
+      expect(binding).toBe(binder.bindings[0]);
     });
 
   });
@@ -83,6 +87,34 @@ describe("bind to", function(){
       binder.bindTo(model, "change:foo", handler.doIt);
 
       binder.unbindAll();
+      model.set({foo: "bar"});
+    });
+
+    it("should unbind all registered events", function(){
+      expect(handler.doIt).not.toHaveBeenCalled();
+    });
+
+    it("should empty the list of registered events", function(){
+      expect(binder.bindings.length).toBe(0);
+    });
+  });
+
+  describe("when unbinding from a binding object", function(){
+    var handler = {
+      doIt: function(){}
+    }
+
+    var binder;
+    var model;
+    var binding;
+
+    beforeEach(function(){
+      binder = _.extend({}, Backbone.Marionette.BindTo);
+      spyOn(handler, "doIt");
+      model = new Model();
+      binding = binder.bindTo(model, "change:foo", handler.doIt);
+
+      binder.unbindFrom(binding);
       model.set({foo: "bar"});
     });
 

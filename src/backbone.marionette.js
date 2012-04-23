@@ -619,18 +619,36 @@ Backbone.Marionette = (function(Backbone, _, $){
 
       if (!this.bindings) { this.bindings = []; }
 
-      this.bindings.push({ 
+      var binding = { 
         obj: obj, 
         eventName: eventName, 
         callback: callback, 
         context: context 
-      });
+      }
+
+      this.bindings.push(binding);
+
+      return binding;
+    },
+
+    // Unbind from a single binding object. Binding objects are
+    // returned from the `bindTo` method call. Optionally pass in
+    // the index of the binding, if you know it. The index must be
+    // exact, as this is used to remove the binding.
+    unbindFrom: function(binding, index){
+      binding.obj.off(binding.eventName, binding.callback);
+      if (!index){
+        index = _.indexOf(this.bindings, binding);
+      }
+      Array.remove(this.bindings, index);
     },
 
     // Unbind all of the events that we have stored.
     unbindAll: function () {
-      _.each(this.bindings, function (binding) {
-        binding.obj.off(binding.eventName, binding.callback);
+      var that = this;
+
+      _.each(this.bindings, function (binding, index) {
+        that.unbindFrom(binding, index);
       });
 
       this.bindings = [];
@@ -819,6 +837,15 @@ Backbone.Marionette = (function(Backbone, _, $){
   _.extend(Marionette.View.prototype, Marionette.BindTo);
   _.extend(Marionette.Application.prototype, Marionette.BindTo);
   _.extend(Marionette.Region.prototype, Marionette.BindTo);
+
+  // Array Remove - By John Resig (MIT Licensed)
+  if (!Array.remove){
+    Array.remove = function(array, from, to) {
+      var rest = array.slice((to || from) + 1 || array.length);
+      array.length = from < 0 ? array.length + from : from;
+      return array.push.apply(array, rest);
+    };
+  }
 
   return Marionette;
 })(Backbone, _, window.jQuery || window.Zepto || window.ender);

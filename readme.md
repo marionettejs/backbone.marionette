@@ -1734,6 +1734,9 @@ I'm using [Docco](http://jashkenas.github.com/docco/) to generate the annotated 
 
 * Extracted `compileTemplate` method in TemplateCache for clarity and easier modification
 * ItemView will wait until `onRender` has completed before triggering other rendered events
+* Region now supports an `onShow` method, when defining a custom region
+* Moved the default `serializeData` method to the base Marionette.View
+* CompositeView now calls the `serializeData` method to get the model's data for the view
 * `BindTo` changes:
   * The `bindTo` method returns a "binding" object so that it can be unbound easily
   * Now has an `unbindFrom` method that will unbind a binding object

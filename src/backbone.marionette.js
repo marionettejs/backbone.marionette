@@ -344,9 +344,7 @@ Backbone.Marionette = (function(Backbone, _, $){
     // a treeview.
     renderModel: function(){
       var data = {};
-      if (this.model){
-        data = this.model.toJSON();
-      }
+      data = this.serializeData();
 
       var template = this.getTemplateSelector();
       return Marionette.Renderer.render(template, data);

@@ -1710,6 +1710,9 @@ I'm using [Docco](http://jashkenas.github.com/docco/) to generate the annotated 
 
 * Extracted `compileTemplate` method in TemplateCache for clarity and easier modification
 * ItemView will wait until `onRender` has completed before triggering other rendered events
+* `BindTo` changes:
+  * The `bindTo` method returns a "binding" object so that it can be unbound easily
+  * Now has an `unbindFrom` method that will unbind a binding object
 
 ### v0.7.1
 

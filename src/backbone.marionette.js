@@ -107,10 +107,13 @@ Backbone.Marionette = (function(Backbone, _, $){
 
         $.when(asyncRender).then(function(html){
           that.$el.html(html);
-          if (that.onRender) { that.onRender(); }
-          that.trigger("item:rendered", that);
-          that.trigger("render", that);
-          deferredRender.resolve();
+          var onRenderPromise = {};
+          if (that.onRender) { onRenderPromise = that.onRender(); }
+          $.when(onRenderPromise).then(function() {
+            that.trigger("item:rendered", that);
+            that.trigger("render", that);
+            deferredRender.resolve();
+          });
         });
 
       });

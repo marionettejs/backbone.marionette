@@ -32,6 +32,23 @@ Backbone.Marionette = (function(Backbone, _, $){
       return template;
     },
 
+    // Serialize the model or collection for the view. If a model is
+    // found, `.toJSON()` is called. If a collection is found, `.toJSON()`
+    // is also called, but is used to populate an `items` array in the
+    // resulting data. If both are found, defaults to the model. 
+    // You can override the `serializeData` method in your own view 
+    // definition, to provide custom serialization for your view's data.
+    serializeData: function(){
+      var data;
+
+      if (this.model) { data = this.model.toJSON(); }
+      else if (this.collection) {
+        data = { items: this.collection.toJSON() };
+      }
+
+      return data;
+    },
+
     // Default `close` implementation, for removing a view from the
     // DOM and unbinding it. Regions will call this method
     // for you. You can specify an `onClose` method in your view to
@@ -71,23 +88,6 @@ Backbone.Marionette = (function(Backbone, _, $){
       if (this.collection){
         this.bindTo(this.collection, "reset", this.render, this);
       }
-    },
-
-    // Serialize the model or collection for the view. If a model is
-    // found, `.toJSON()` is called. If a collection is found, `.toJSON()`
-    // is also called, but is used to populate an `items` array in the
-    // resulting data. If both are found, defaults to the model. 
-    // You can override the `serializeData` method in your own view 
-    // definition, to provide custom serialization for your view's data.
-    serializeData: function(){
-      var data;
-
-      if (this.model) { data = this.model.toJSON(); }
-      else if (this.collection) {
-        data = { items: this.collection.toJSON() };
-      }
-
-      return data;
     },
 
     // Render the view, defaulting to underscore.js templates.

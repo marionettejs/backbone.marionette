@@ -231,7 +231,6 @@ describe("collection view", function(){
     var childModel;
 
     beforeEach(function(){
-      spyOn(EventedView.prototype, "removeItemView").andCallThrough();
 
       collection = new Collection([{foo: "bar"}, {foo: "baz"}]);
       collectionView = new EventedView({
@@ -246,7 +245,8 @@ describe("collection view", function(){
 
       collectionView.bindTo(collection, "foo", collectionView.someCallback);
 
-      spyOn(childView, "close");
+      spyOn(childView, "close").andCallThrough();
+      spyOn(collectionView, "removeItemView").andCallThrough();
       spyOn(collectionView, "unbind").andCallThrough();
       spyOn(collectionView, "unbindAll").andCallThrough();
       spyOn(collectionView, "remove").andCallThrough();

@@ -632,14 +632,10 @@ Backbone.Marionette = (function(Backbone, _, $){
     },
 
     // Unbind from a single binding object. Binding objects are
-    // returned from the `bindTo` method call. Optionally pass in
-    // the index of the binding, if you know it. The index must be
-    // exact, as this is used to remove the binding.
-    unbindFrom: function(binding, index){
+    // returned from the `bindTo` method call. 
+    unbindFrom: function(binding){
       binding.obj.off(binding.eventName, binding.callback);
-      if (!index){
-        index = _.indexOf(this.bindings, binding);
-      }
+      var index = _.indexOf(this.bindings, binding);
       Array.remove(this.bindings, index);
     },
 
@@ -648,7 +644,7 @@ Backbone.Marionette = (function(Backbone, _, $){
       var that = this;
 
       _.each(this.bindings, function (binding, index) {
-        that.unbindFrom(binding, index);
+        that.unbindFrom(binding);
       });
 
       this.bindings = [];

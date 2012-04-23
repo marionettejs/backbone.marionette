@@ -21,7 +21,7 @@ describe("item view", function(){
       var deferred = $.Deferred();
       setTimeout(function() {
         deferred.resolve(that.asyncCallback());
-      }, 200);
+      }, 0);
       return deferred.promise();
     }
   });
@@ -148,17 +148,21 @@ describe("item view", function(){
   });
 
   describe("when an item view has an asynchronous onRender and is rendered", function(){
-    var view;
+    var view, promise, callbackSpy;
 
     beforeEach(function(){
       loadFixtures("emptyTemplate.html");
       view = new AsyncOnRenderView();
-      spyOn(view, "asyncCallback").andCallThrough();
+      callbackSpy = spyOn(view, "asyncCallback").andCallThrough();
+      promise = view.render();
     });
 
     it("should delay until onRender resolves", function(){
-      $.when(view.render()).then(function(){
-        expect(view.asyncCallback).toHaveBeenCalled();
+      waits(0);
+      runs(function(){
+        $.when(promise).then(function(){
+          expect(callbackSpy).toHaveBeenCalled();
+        });
       });
     });
   });

@@ -52,7 +52,9 @@ describe("region", function(){
 
   describe("when showing a view", function(){
     var MyRegion = Backbone.Marionette.Region.extend({
-      el: "#region"
+      el: "#region",
+
+      onShow: function(){}
     });
 
     var MyView = Backbone.View.extend({
@@ -74,6 +76,8 @@ describe("region", function(){
       spyOn(view, "render").andCallThrough();
 
       myRegion = new MyRegion();
+      spyOn(myRegion, "onShow");
+
       myRegion.on("view:show", function(){
         showEvent = true;
         showContext = this;
@@ -90,11 +94,15 @@ describe("region", function(){
       expect(myRegion.$el).toHaveHtml(view.el);
     });
 
-    it("shoudl call 'onShow' after the rendered HTML has been added to the DOM", function(){
+    it("shoudl call 'onShow' for the view, after the rendered HTML has been added to the DOM", function(){
       expect($(view.el)).toHaveClass("onShowClass");
     })
 
-    it("should trigger an show event", function(){
+    it("shoudl call 'onShow' for the region, after the rendered HTML has been added to the DOM", function(){
+      expect(myRegion.onShow).toHaveBeenCalled();
+    })
+
+    it("should trigger a show event for the view", function(){
       expect(showEvent).toBeTruthy();
     });
 

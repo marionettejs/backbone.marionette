@@ -369,12 +369,13 @@ var myView = new MyView({
 MyApp.someRegion.attachView(myView);
 ```
 
-### Region Events
+### Region Events And Callbacks
 
 A region manager will raise a few events during it's showing and
 closing of views:
 
 * "view:show" - when the view has been rendered and displayed
+* "onShow" - called on the region when the view has been rendered
 * "view:closed" - when the view has been closed
 
 You can bind to these events and add code that needs to run with
@@ -389,6 +390,14 @@ MyApp.mainRegion.on("view:show", function(view){
 MyApp.mainRegion.on("view:closed", function(view){
   // manipulate the `view` or do something extra
   // with the region manager via `this`
+});
+
+MyRegion = Backbone.Marionette.Region.extend({
+  // ...
+
+  onShow: function(view){
+    // the `view` has been shown
+  }
 });
 ```
 

@@ -411,6 +411,7 @@ Backbone.Marionette = (function(Backbone, _, $){
       $.when(view.render()).then(function () {
         that.$el[appendMethod](view.el);
         if (view.onShow) { view.onShow(); }
+        if (that.onShow) { that.onShow(view); }
         view.trigger("show");
         that.trigger("view:show", view);
       });

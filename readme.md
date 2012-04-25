@@ -403,7 +403,6 @@ MyRegion = Backbone.Marionette.Region.extend({
 
 ### View Callbacks And Events For Regions
 
-
 The region manager will call an `onShow` method on the view
 that was displayed. It will also trigger a "show" event
 from the view:
@@ -511,6 +510,96 @@ MyApp.mainRegion.show(view);
 
 The region manager will wait until the deferred object is resolved
 before it attached the view's `el` to the DOM and displays it.
+
+## Marionette.View
+
+Marionette has a base `Marionette.View` type that other views extend from.
+This base view provides some common and core functionality for
+other views to take advantage of.
+
+### View.serializeData
+
+The `serializeData` method will serialize a view's model or
+collection - with precedence given to collections. That is,
+if you have both a collection and a model in a view, calling
+the `serializeData` method will return the serialized
+collection.
+
+### View.templateHelpers
+
+There are times when a view's template needs to have some
+logic in it, and the view engine itself will not provide an
+easy way to accomplish this. For example, Underscore templates
+do not provide a helper method mechanism while Handlebars
+templates do.
+
+A `templateHelpers` attribute can be applied to any View object
+that uses the `serializeData` method - including ItemViews,
+Layouts and CompositeViews. When this attribute is present,
+it's contents will be mixed in to the data object that comes
+back from the `serializeData` method for you. This will 
+allow you to create helper methods that can be called from
+within your templates.
+
+#### Basic Example
+
+```html
+<script id="my-template" type="text/html">
+  I think that <%= showMessage() %>
+</script>
+```
+
+```js
+MyView = Backbone.Marionette.ItemView.extend({
+  template: "#my-template",
+
+  templateHelpers: {
+    showMessage: function(){
+      return this.name + " is the coolest!"
+    }
+  }
+
+});
+
+model = new Backbone.Model({name: "Backbone.Marionette"});
+view = new MyView();
+view.render(); //=> "I think that Backbone.Marionette is the coolest!";
+```
+
+#### Accessing Data Within The Helpers
+
+In order to access data from within the helper methods, you
+need to prefix the data you need with `this`. Doing that will
+give you all of the methods and attributes of the serialized
+data object, including the other helper methods.
+
+```js
+templateHelpers: {
+  something: function(){
+    return "Do stuff with " + this.name + " because it's awesome.";
+  }
+}
+```
+
+#### Object Or Function As `templateHelpers`
+
+You can specify an object literal (as shown above), a reference
+to an object literal, or a function as the `templateHelpers`. 
+
+If you specify a function, the function will be invoked 
+with the current view instance as the context of the 
+function. The function must return an object that can be
+mixed in to the data for the view.
+
+```js
+Backbone.Marionette.ItemView.extend({
+  templateHelpers: function(){
+    return {
+      foo: function(){ /* ... */ }
+    }
+  }
+});
+```
 
 ## Marionette.Layout
 

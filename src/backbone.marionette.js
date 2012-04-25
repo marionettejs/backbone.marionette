@@ -41,12 +41,30 @@ Backbone.Marionette = (function(Backbone, _, $){
     serializeData: function(){
       var data;
 
-      if (this.model) { data = this.model.toJSON(); }
+      if (this.model) { 
+        data = this.model.toJSON(); 
+      }
       else if (this.collection) {
         data = { items: this.collection.toJSON() };
       }
 
+      data = this.mixinTemplateHelpers(data);
+
       return data;
+    },
+
+    // Mix in template helper methods. Looks for a
+    // `templateHelpers` attribute, which can either be an
+    // object literal, or a function that returns an object
+    // literal. All methods and attributes from this object
+    // are copies to the object passed in.
+    mixinTemplateHelpers: function(target){
+      target = target || {};
+      var templateHelpers = this.templateHelpers;
+      if (_.isFunction(templateHelpers)){
+        templateHelpers = templateHelpers.call(this);
+      }
+      return _.extend(target, templateHelpers);
     },
 
     // Default `close` implementation, for removing a view from the

@@ -14,7 +14,7 @@ tools that you can use when you want to. Like Backbone.js itself, you're not
 required to use all of Backbone.Marionette just because you want to use some 
 of it.
 
-## Downloads & Source Code
+## Source Code And Downloads
 
 You can download the raw source code from the `src` folder above, or grab one of the
 many builds from the `lib` folder. 
@@ -34,17 +34,65 @@ Development: [backbone.marionette.js](https://raw.github.com/derickbailey/backbo
 
 Production: [backbone.marionette.min.js](https://raw.github.com/derickbailey/backbone.marionette/master/lib/amd/backbone.marionette.min.js)
 
-## Annotated Source Code
+## Documentation
 
-You can read [the annotated source code](http://derickbailey.github.com/backbone.marionette/docs/backbone.marionette.html)
-for all the detail of how Marionette works, and advice on which methods to override when.
+This readme represents the majority of documentation for Marionette.
+However, this file has become quite large and can be difficult
+to wade through. There's a better version of it available, though.
 
-## Support Marionette
+[View the formatted readme](http://derickbailey.github.com/backbone.marionette/)
 
-If you find Marionette to be useful, consider supporting it by
-sending a donation.
+### Annotated Source Code
+
+In addition to this readme, I've commented the source code quite
+heavily and run it through Docco as part of my build process.
+This produces a nicely formatted, annotated source code as documenation
+file.
+
+You can read the annotated for all the detail of how Marionette works, and advice on which methods to override when.
+
+[View the annotated source code](http://derickbailey.github.com/backbone.marionette/docs/backbone.marionette.html)
+
+### DerickBailey.LosTechies.com
+
+Lastly, I blog about Marionette on a regular basis, at my
+LosTechies.com blog.
+
+[View DerickBailey.LosTechies.com](http://derickbailey.lostechies.com)
+
+## Support And Get Support For Marionette
+
+There are many ways to support Marionette, ranging from
+submitting bugs and patches, to helping answer questions in
+the issue list and on StackOverflow, to providing financial
+support for maintaining Marionette.
+
+### Help With Code And Questions
+
+If you're interested in helping with code and questions, please
+see the issues list and stack overflow tag here:
+
+* [Github Issues](./issues)
+* [StackOverflow Tag](http://stackoverflow.com/questions/tagged/backbone.marionette)
+
+If you have an idea to improve Marionette or want to report
+a bug, please use the issues list.
+
+### Financial Support
+
+I understand that not everyone can offer assitance with code,
+but submissions, and answer questions. That's fine. Everyone has
+their own strengths. 
+
+If you're using Marionette and you're finding that it is
+saving you as much time and effort as I believe it does, then
+please consider financial support for the project. 
 
 [![Donate](https://www.paypalobjects.com/en_US/i/btn/btn_donate_SM.gif)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=7SJHYWJ487SF4)
+
+(You would be surprised at how little financial support is given,
+in spite of the financial savings that a framework like this
+creates.)
 
 ## Marionette's Pieces
 

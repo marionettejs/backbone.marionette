@@ -72,7 +72,7 @@ support for maintaining Marionette.
 If you're interested in helping with code and questions, please
 see the issues list and stack overflow tag here:
 
-* [Github Issues](issues)
+* [Github Issues](//github.com/derickbailey/backbone.marionette/issues)
 * [StackOverflow Tag](http://stackoverflow.com/questions/tagged/backbone.marionette)
 
 If you have an idea to improve Marionette or want to report

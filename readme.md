@@ -81,7 +81,7 @@ a bug, please use the issues list.
 ### Financial Support
 
 I understand that not everyone can offer assitance with code,
-but submissions, and answer questions. That's fine. Everyone has
+bug submissions, and answer questions. That's fine. Everyone has
 their own strengths. 
 
 If you're using Marionette and you're finding that it is

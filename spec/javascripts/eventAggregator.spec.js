@@ -40,4 +40,24 @@ describe("event aggregator", function(){
     });
   });
 
+  describe("when unbinding from a binding object", function(){
+    var vent, handlerCalled;
+
+    beforeEach(function(){
+      var vent = new Backbone.Marionette.EventAggregator();
+
+      binding = vent.bindTo("foo", function(){
+        handlerCalled = true;
+      });
+
+      vent.unbindFrom(binding);
+
+      vent.trigger("foo");
+    });
+
+    it("should not fire any handlers", function(){
+      expect(handlerCalled).toBeUndefined();
+    });
+  });
+
 });

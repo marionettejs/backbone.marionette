@@ -1819,6 +1819,11 @@ I'm using [Docco](http://jashkenas.github.com/docco/) to generate the annotated 
 
 ## Release Notes
 
+### v0.7.3
+
+* The `bindTo` method on the `EventAggregator` now returns a binding configuration object
+* Automatic mixing in of `templateMethods` as template / view helper methods, in views that use the `serializeData` function
+
 ### v0.7.2
 
 * Extracted `compileTemplate` method in TemplateCache for clarity and easier modification
@@ -1864,11 +1869,11 @@ I'm using [Docco](http://jashkenas.github.com/docco/) to generate the annotated 
 * AMD / RequireJS compliant version is provided
 * Now using [Anvil.js](https://github.com/arobson/anvil.js) for builds
 
-### v0.6.4
+#### v0.6.4
 
 * CollectionView and CompositeView can render without a collection
 
-### v0.6.3
+#### v0.6.3
 
 * `ItemView` changes
   * Calls a `beforeRender` and `beforeClose` method on the view, if it exists
@@ -1880,20 +1885,20 @@ I'm using [Docco](http://jashkenas.github.com/docco/) to generate the annotated 
   * Triggers a `collection:before:close` and `collection:closed` event, surrounding closing of the view
 * The `CollectionView` and `CompositeView` now close child views before closing itself
 
-### v0.6.2
+#### v0.6.2
 
 * **BREAKING:** The `CollectionView` no longer has a `reRender` method. Call `render` instead
 * **BREAKING:** The `TemplateCache.get` method now returns a plain string instead of a jQuery selector object
 * Fixed a bug with closing and then re-using a Layout with defined regions
 * Fixed a potential race condition for loading / caching templates where a template would be loaded multiple times instead of just once
 
-### v0.6.1
+#### v0.6.1
 
 * Fixed the composite view so that it renders the collection correctly when the collection is "reset"
 * Fixed the composite view so that it re-renders correctly
 * Fixed various deferred usages to only return promises, instead of the full deferred object
 
-### v0.6.0
+#### v0.6.0
 
 * **BREAKING:** Renamed `LayoutManager` to `Layout`
 * **BREAKING:** Renamed `RegionManager` to `Region`

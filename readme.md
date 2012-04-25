@@ -40,7 +40,7 @@ This readme represents the majority of documentation for Marionette.
 However, this file has become quite large and can be difficult
 to wade through. There's a better version of it available, though.
 
-[View the formatted readme](http://derickbailey.github.com/backbone.marionette/)
+##### [View the formatted readme](http://derickbailey.github.com/backbone.marionette/)
 
 ### Annotated Source Code
 
@@ -51,14 +51,14 @@ file.
 
 You can read the annotated for all the detail of how Marionette works, and advice on which methods to override when.
 
-[View the annotated source code](http://derickbailey.github.com/backbone.marionette/docs/backbone.marionette.html)
+##### [View the annotated source code](http://derickbailey.github.com/backbone.marionette/docs/backbone.marionette.html)
 
 ### DerickBailey.LosTechies.com
 
 Lastly, I blog about Marionette on a regular basis, at my
 LosTechies.com blog.
 
-[View DerickBailey.LosTechies.com](http://derickbailey.lostechies.com)
+##### [View DerickBailey.LosTechies.com](http://derickbailey.lostechies.com)
 
 ## Support And Get Support For Marionette
 
@@ -72,7 +72,7 @@ support for maintaining Marionette.
 If you're interested in helping with code and questions, please
 see the issues list and stack overflow tag here:
 
-* [Github Issues](./issues)
+* [Github Issues](issues)
 * [StackOverflow Tag](http://stackoverflow.com/questions/tagged/backbone.marionette)
 
 If you have an idea to improve Marionette or want to report

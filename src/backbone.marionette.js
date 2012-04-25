@@ -693,7 +693,7 @@ Backbone.Marionette = (function(Backbone, _, $){
     // Assumes the event aggregator itself is the 
     // object being bound to.
     bindTo: function(eventName, callback, context){
-      Marionette.BindTo.bindTo.call(this, this, eventName, callback, context);
+      return Marionette.BindTo.bindTo.call(this, this, eventName, callback, context);
     }
   });
 

@@ -3,6 +3,23 @@ describe("app router", function(){
     window.location.hash = "";
   });
 
+  describe("when a route is configured with a method that does not exist on the controller", function(){
+    var Router = Backbone.Marionette.AppRouter.extend({
+      appRoutes: {
+        "m1": "doesNotExist"
+      }
+    });
+
+    var controller = {}
+
+    it("should throw an error saying the method does not exist", function(){
+      var expectedMessage = "Method 'doesNotExist' was not found on the controller";
+      expect(function(){
+        new Router({controller: controller});
+      }).toThrow(expectedMessage);
+    });
+  });
+
   describe("when a route fires", function(){
     var context;
 

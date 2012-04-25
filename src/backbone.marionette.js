@@ -555,7 +555,16 @@ Backbone.Marionette = (function(Backbone, _, $){
       for (i = 0; i < routesLength; i++){
         route = routes[i][0];
         methodName = routes[i][1];
-        method = _.bind(controller[methodName], controller);
+        method = controller[methodName];
+
+        if (!method){
+          var msg = "Method '" + methodName + "' was not found on the controller";
+          var err = new Error(msg);
+          err.name = "NoMethodError";
+          throw err;
+        }
+
+        method = _.bind(method, controller);
         router.route(route, methodName, method);
       }
     }

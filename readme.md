@@ -1823,6 +1823,7 @@ I'm using [Docco](http://jashkenas.github.com/docco/) to generate the annotated 
 
 * The `bindTo` method on the `EventAggregator` now returns a binding configuration object
 * Automatic mixing in of `templateMethods` as template / view helper methods, in views that use the `serializeData` function
+* A friendlier error message will be thrown from an appRouter if a route is configured with a method that does not exist on the controller
 
 ### v0.7.2
 

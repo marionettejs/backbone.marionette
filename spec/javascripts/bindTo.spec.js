@@ -74,7 +74,7 @@ describe("bind to", function(){
     });
   });
 
-  describe("when unbinding", function(){
+  describe("when unbinding and then triggering", function(){
     var handler = {
       doIt: function(){}
     }
@@ -90,9 +90,9 @@ describe("bind to", function(){
       model.set({foo: "bar"});
     });
 
-    it("should unbind all registered events", function(){
+    it("should not tigger the handler", function(){
       expect(handler.doIt).not.toHaveBeenCalled();
-    });
+    })
 
     it("should empty the list of registered events", function(){
       expect(binder.bindings.length).toBe(0);

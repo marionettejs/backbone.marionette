@@ -1,7 +1,7 @@
 Backbone.Marionette = (function(Backbone, _, $){
   var Marionette = {};
 
-  Marionette.version = "0.7.3";
+  Marionette.version = "0.7.4";
 
   // Marionette.View
   // ---------------
@@ -661,8 +661,7 @@ Backbone.Marionette = (function(Backbone, _, $){
     // returned from the `bindTo` method call. 
     unbindFrom: function(binding){
       binding.obj.off(binding.eventName, binding.callback);
-      var index = _.indexOf(this.bindings, binding);
-      Array.remove(this.bindings, index);
+      this.bindings = _.reject(this.bindings, function(bind){return bind === binding});
     },
 
     // Unbind all of the events that we have stored.
@@ -671,12 +670,10 @@ Backbone.Marionette = (function(Backbone, _, $){
 
       // The `unbindFrom` call removes elements from the array
       // while it is being iterated, so clone it first.
-      var bindings = _.map(this.bindings, _.identity)
+      var bindings = _.map(this.bindings, _.identity);
       _.each(bindings, function (binding, index) {
         that.unbindFrom(binding);
       });
-
-      this.bindings = [];
     }
   };
 
@@ -862,15 +859,6 @@ Backbone.Marionette = (function(Backbone, _, $){
   _.extend(Marionette.View.prototype, Marionette.BindTo);
   _.extend(Marionette.Application.prototype, Marionette.BindTo);
   _.extend(Marionette.Region.prototype, Marionette.BindTo);
-
-  // Array Remove - By John Resig (MIT Licensed)
-  if (!Array.remove){
-    Array.remove = function(array, from, to) {
-      var rest = array.slice((to || from) + 1 || array.length);
-      array.length = from < 0 ? array.length + from : from;
-      return array.push.apply(array, rest);
-    };
-  }
 
   return Marionette;
 })(Backbone, _, window.jQuery || window.Zepto || window.ender);

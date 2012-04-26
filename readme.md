@@ -1867,6 +1867,10 @@ I'm using [Docco](http://jashkenas.github.com/docco/) to generate the annotated 
 
 ## Release Notes
 
+### v0.7.4
+
+* Fixed issue with `unbindAll` in BindTo, that was skipping some items
+
 ### v0.7.3
 
 * The `bindTo` method on the `EventAggregator` now returns a binding configuration object

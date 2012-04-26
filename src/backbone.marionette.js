@@ -669,7 +669,10 @@ Backbone.Marionette = (function(Backbone, _, $){
     unbindAll: function () {
       var that = this;
 
-      _.each(this.bindings, function (binding, index) {
+      // The `unbindFrom` call removes elements from the array
+      // while it is being iterated, so clone it first.
+      var bindings = _.map(this.bindings, _.identity)
+      _.each(bindings, function (binding, index) {
         that.unbindFrom(binding);
       });
 

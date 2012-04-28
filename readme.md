@@ -866,7 +866,7 @@ An "item:before:render" event will be triggered just before the
 view is rendered
 
 ```js
-MyView = Backbone.Marionette.ItemVIew.extend({...});
+MyView = Backbone.Marionette.ItemView.extend({...});
 
 var myView = new MyView();
 
@@ -881,7 +881,7 @@ An "item:rendered" event will be triggered just after the view
 has been rendered.
 
 ```js
-MyView = Backbone.Marionette.ItemVIew.extend({...});
+MyView = Backbone.Marionette.ItemView.extend({...});
 
 var myView = new MyView();
 
@@ -901,7 +901,7 @@ view closing itself. This event fires when the `close` method of
 the view is called.
 
 ```js
-MyView = Backbone.Marionette.ItemVIew.extend({...});
+MyView = Backbone.Marionette.ItemView.extend({...});
 
 var myView = new MyView();
 
@@ -919,7 +919,7 @@ view closes. This event fires when the `close` method of
 the view is called.
 
 ```js
-MyView = Backbone.Marionette.ItemVIew.extend({...});
+MyView = Backbone.Marionette.ItemView.extend({...});
 
 var myView = new MyView();
 

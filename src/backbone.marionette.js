@@ -518,7 +518,7 @@ Backbone.Marionette = (function(Backbone, _, $){
   // Configure an AppRouter with `appRoutes`.
   //
   // App routers can only take one `controller` object. 
-  // It is reocmmended that you divide your controller
+  // It is recommended that you divide your controller
   // objects in to smaller peices of related functionality
   // and have multiple routers / controllers, instead of
   // just one giant router and controller.

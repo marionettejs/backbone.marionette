@@ -114,24 +114,30 @@ Backbone.Marionette = (function(Backbone, _, $){
       var that = this;
 
       var deferredRender = $.Deferred();
-      var deferredData = this.serializeData();
+      
+      var beforeRenderPromise = {};
+      if (this.beforeRender) { beforeRenderPromise = this.beforeRender(); }
+      $.when(beforeRenderPromise).then(function() {
 
-      if (this.beforeRender) { this.beforeRender(); }
-      this.trigger("item:before:render", that);
+        var deferredData = that.serializeData();
 
-      $.when(deferredData).then(function(data) {
+        that.trigger("item:before:render", that);
 
-        var asyncRender = that.renderHtml(data);
+        $.when(deferredData).then(function(data) {
 
-        $.when(asyncRender).then(function(html){
-          that.$el.html(html);
-          var onRenderPromise = {};
-          if (that.onRender) { onRenderPromise = that.onRender(); }
-          $.when(onRenderPromise).then(function() {
-            that.trigger("item:rendered", that);
-            that.trigger("render", that);
-            deferredRender.resolve();
+          var asyncRender = that.renderHtml(data);
+
+          $.when(asyncRender).then(function(html){
+            that.$el.html(html);
+            var onRenderPromise = {};
+            if (that.onRender) { onRenderPromise = that.onRender(); }
+            $.when(onRenderPromise).then(function() {
+              that.trigger("item:rendered", that);
+              that.trigger("render", that);
+              deferredRender.resolve();
+            });
           });
+
         });
 
       });

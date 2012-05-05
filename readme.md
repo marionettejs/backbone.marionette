@@ -100,7 +100,7 @@ These are the strings that you can pull to make your puppet dance:
 
 * **Backbone.Marionette.Application**: An application object that starts your app via initializers, and more
 * **Backbone.Marionette.AppRouter**: Reduce your routers to nothing more then configuration
-* **Backbone.Marionette.View**: The core View type that other Marionette views extend from
+* **Backbone.Marionette.View**: The base View type that other Marionette views extend from (not intended to be used directly)
 * **Backbone.Marionette.ItemView**: A view that renders a single item
 * **Backbone.Marionette.CollectionView**: A view that iterates over a collection, and renders individual `ItemView` instances for each model
 * **Backbone.Marionette.CompositeView**: A collection view and item view, for rendering leaf-branch/composite model hierarchies
@@ -564,6 +564,11 @@ before it attached the view's `el` to the DOM and displays it.
 Marionette has a base `Marionette.View` type that other views extend from.
 This base view provides some common and core functionality for
 other views to take advantage of.
+
+**Note:** The `Marionette.View` type is not intended to be 
+used directly. It exists as a base view for other view types
+to be extended from, and to provide a common location for
+behaviors that are shared across all views.
 
 ### View.serializeData
 

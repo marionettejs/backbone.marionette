@@ -1867,6 +1867,11 @@ I'm using [Docco](http://jashkenas.github.com/docco/) to generate the annotated 
 
 ## Release Notes
 
+### v0.7.5
+
+* The `onBefore` method of ItemView can now return a deferred object
+* Code cleanup for rendering methods
+
 ### v0.7.4
 
 * Fixed issue with `unbindAll` in BindTo, that was skipping some items

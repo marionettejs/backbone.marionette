@@ -114,33 +114,33 @@ Backbone.Marionette = (function(Backbone, _, $){
       var that = this;
 
       var deferredRender = $.Deferred();
-      
-      var beforeRenderPromise = {};
-      if (this.beforeRender) { beforeRenderPromise = this.beforeRender(); }
-      $.when(beforeRenderPromise).then(function() {
 
-        var deferredData = that.serializeData();
-
+      var beforeRenderDone = function() {
+        that.trigger("before:render", that);
         that.trigger("item:before:render", that);
 
-        $.when(deferredData).then(function(data) {
+        var deferredData = that.serializeData();
+        $.when(deferredData).then(dataSerialized);
+      } 
 
-          var asyncRender = that.renderHtml(data);
+      var dataSerialized = function(data){
+        var asyncRender = that.renderHtml(data);
+        $.when(asyncRender).then(templateRendered);
+      }
 
-          $.when(asyncRender).then(function(html){
-            that.$el.html(html);
-            var onRenderPromise = {};
-            if (that.onRender) { onRenderPromise = that.onRender(); }
-            $.when(onRenderPromise).then(function() {
-              that.trigger("item:rendered", that);
-              that.trigger("render", that);
-              deferredRender.resolve();
-            });
-          });
+      var templateRendered = function(html){
+        that.$el.html(html);
+        callPromise(that.onRender, onRenderDone, that);
+      }
 
-        });
+      var onRenderDone = function(){
+        that.trigger("render", that);
+        that.trigger("item:rendered", that);
 
-      });
+        deferredRender.resolve();
+      }
+
+      callPromise(this.beforeRender, beforeRenderDone, this);
 
       return deferredRender.promise();
     },
@@ -865,6 +865,18 @@ Backbone.Marionette = (function(Backbone, _, $){
   _.extend(Marionette.View.prototype, Marionette.BindTo);
   _.extend(Marionette.Application.prototype, Marionette.BindTo);
   _.extend(Marionette.Region.prototype, Marionette.BindTo);
+
+  // A simple wrapper method for deferring a callback until 
+  // after another method has been called, passing the
+  // results of the first method to the second. Uses jQuery's
+  // deferred / promise objects, and $.when/then to make it
+  // work.
+  var callPromise = function(fn, callback, context){
+    var promise;
+    if (fn) { promise = fn.call(context); }
+    $.when(promise).then(callback);
+  }
+
 
   return Marionette;
 })(Backbone, _, window.jQuery || window.Zepto || window.ender);

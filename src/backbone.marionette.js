@@ -130,7 +130,7 @@ Backbone.Marionette = (function(Backbone, _, $){
 
       var templateRendered = function(html){
         that.$el.html(html);
-        callPromise(that.onRender, onRenderDone, that);
+        callDeferredMethod(that.onRender, onRenderDone, that);
       }
 
       var onRenderDone = function(){
@@ -140,7 +140,7 @@ Backbone.Marionette = (function(Backbone, _, $){
         deferredRender.resolve();
       }
 
-      callPromise(this.beforeRender, beforeRenderDone, this);
+      callDeferredMethod(this.beforeRender, beforeRenderDone, this);
 
       return deferredRender.promise();
     },
@@ -488,6 +488,12 @@ Backbone.Marionette = (function(Backbone, _, $){
       Backbone.Marionette.ItemView.prototype.close.call(this, arguments);
     },
 
+    // Initialize the regions that have been defined in a
+    // `regions` attribute on this layout. The key of the
+    // hash becomes an attribute on the layout object directly.
+    // For example: `regions: { menu: ".menu-container" }`
+    // will product a `layout.menu` object which is a region
+    // that controls the `.menu-container` DOM element.
     initializeRegions: function () {
       var that = this;
       _.each(this.regions, function (selector, name) {
@@ -503,6 +509,9 @@ Backbone.Marionette = (function(Backbone, _, $){
       });
     },
 
+    // Close all of the regions that have been opened by
+    // this layout. This method is called when the layout
+    // itself is closed.
     closeRegions: function () {
       var that = this;
       _.each(this.regionManagers, function (manager, name) {
@@ -871,7 +880,7 @@ Backbone.Marionette = (function(Backbone, _, $){
   // results of the first method to the second. Uses jQuery's
   // deferred / promise objects, and $.when/then to make it
   // work.
-  var callPromise = function(fn, callback, context){
+  var callDeferredMethod = function(fn, callback, context){
     var promise;
     if (fn) { promise = fn.call(context); }
     $.when(promise).then(callback);

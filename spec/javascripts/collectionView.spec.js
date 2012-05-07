@@ -316,4 +316,41 @@ describe("collection view", function(){
       expect($(collectionView.$el)).toHaveHtml("<span>baz</span><span>bar</span>");
     });
   });
+
+  describe("when a child view triggers an event", function(){
+    var model = new Model({foo: "bar"});
+    var collection = new Collection([model]);
+    var collectionView;
+    var childView;
+    var triggeringView;
+    var eventArgs;
+
+    beforeEach(function(){
+      collectionView = new PrependHtmlView({
+        collection: collection
+      });
+
+      collectionView.render();
+      collectionView.on("itemview:some:event", function(){
+        eventArgs = Array.prototype.slice.call(arguments);
+      });
+
+      spyOn(collectionView, "trigger").andCallThrough();
+      childView = collectionView.children[model.cid];
+      childView.trigger("some:event", "test", model);
+    });
+
+    it("should bubble up through the parent collection view", function(){
+      expect(collectionView.trigger).toHaveBeenCalledWith("itemview:some:event", childView, "test", model);
+    });
+
+    it("should provide the child view that triggered the event as the first parameter", function(){
+      expect(eventArgs[0]).toBe(childView);
+    });
+
+    it("should forward all other arguments in order", function(){
+      expect(eventArgs[1]).toBe("test");
+      expect(eventArgs[2]).toBe(model);
+    });
+  });
 });

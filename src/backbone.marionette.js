@@ -142,7 +142,8 @@ Backbone.Marionette = (function(Backbone, _, $){
 
       callDeferredMethod(this.beforeRender, beforeRenderDone, this);
 
-      return deferredRender.promise();
+      this.deferredRender = deferredRender.promise();
+      return this.deferredRender;
     },
 
     // Render the data for this item view in to some HTML.
@@ -157,7 +158,11 @@ Backbone.Marionette = (function(Backbone, _, $){
     // more events that are triggered.
     close: function(){
       this.trigger('item:before:close');
-      Marionette.View.prototype.close.apply(this, arguments);
+      var that = this,
+          args = arguments;
+      $.when(this.deferredRender).then(function() {
+        Marionette.View.prototype.close.apply(that, args);
+      });
       this.trigger('item:closed');
     }
   });

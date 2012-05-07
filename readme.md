@@ -1189,6 +1189,49 @@ myView.on("collection:closed", function(){
 myView.close();
 ```
 
+#### "itemview:\*" event bubbling from child views
+
+When an item view within a collection view triggers an
+event, that event will bubble up through the parent 
+collection view, with "itemview:" prepended to the event
+name. 
+
+That is, if a child view triggers "do:something", the 
+parent collection view will then trigger "itemview:do:something".
+
+```js
+// set up basic collection
+var myModel = new MyModel();
+var myColelction = new MyCollection();
+myCollection.add(myModel);
+
+// get the collection view in place
+colView = new CollectionView({
+  collection: myCollection
+});
+colView.render();
+
+// bind to the collection view's events that were bubbled
+// from the child view
+colView.on("itemview:do:something", function(childView, msg){
+  alert("I said, '" + msg + "'");
+});
+
+// hack, to get the child view and trigger from it
+var childView = colView.children[myModel.cid];
+childView.trigger("do:something", "do something!");
+```
+
+The result of this will be an alert box that says 
+"I said, 'do something!'". 
+
+Also note that you would not normally grab a reference to
+the child view the way this is showing. I'm merely using
+that hack as a way to demonstrate the event bubbling. 
+Normally, you would have your item view listening to DOM
+events or model change events, and then triggering an event
+of it's own based on that.
+
 ### CollectionView render
 
 The `render` method of the collection view is responsible for
@@ -1871,6 +1914,10 @@ http://derickbailey.github.com/backbone.marionette
 I'm using [Docco](http://jashkenas.github.com/docco/) to generate the annotated source code.
 
 ## Release Notes
+
+### v0.7.6
+
+* An `itemView` instance as part of a Collection View or Composite View, will have it's events bubbled up through the parent view, prepended with "itemview:" as the event name
 
 ### v0.7.5
 

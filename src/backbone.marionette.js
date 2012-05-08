@@ -1,7 +1,7 @@
 Backbone.Marionette = (function(Backbone, _, $){
   var Marionette = {};
 
-  Marionette.version = "0.8.0";
+  Marionette.version = "0.8.1";
 
   // Marionette.View
   // ---------------
@@ -665,6 +665,11 @@ Backbone.Marionette = (function(Backbone, _, $){
       var length = moduleNames.length;
       for(var i = 0; i < length; i++){
 
+        // only run the module definition if this is the
+        // last module in the chaing: "Foo.Bar.Baz" only 
+        // runs the module definition for the "Baz" module
+        var defineModule = (i === length-1);
+
         // Get the module name, and check if it exists on
         // the current parent already
         moduleName = moduleNames[i];
@@ -674,8 +679,9 @@ Backbone.Marionette = (function(Backbone, _, $){
           // Create the module
           module = new Marionette.Application();
 
-          // And build the module definition
-          if (moduleDefinition){
+          // Build the module definition if this is the last
+          // module specified in the . chain
+          if (defineModule && moduleDefinition){
             moduleOverride = moduleDefinition(module, this, Backbone, Marionette, jQuery, _);
             // Override it if necessary
             if (moduleOverride){

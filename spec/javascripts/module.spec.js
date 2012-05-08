@@ -41,7 +41,7 @@ describe("application modules", function(){
       });
     });
 
-    describe("and th parent module does not exist", function(){
+    describe("and the parent module does not exist", function(){
       beforeEach(function(){
         MyApp = new Backbone.Marionette.Application();
         lastModule = MyApp.module("Parent.Child");
@@ -57,6 +57,32 @@ describe("application modules", function(){
 
       it("should return the last sub-module in the list", function(){
         expect(lastModule).toBe(MyApp.Parent.Child);
+      });
+    });
+
+    describe("and a module definition callback is provided", function(){
+      var moduleCallCount;
+      
+      beforeEach(function(){
+        moduleCallCount = 0;
+
+        MyApp = new Backbone.Marionette.Application();
+        lastModule = MyApp.module("Parent.Child", function(module){
+          module.defined = true;
+          moduleCallCount += 1;
+        });
+      });
+
+      it("should only run the module definition once", function(){
+        expect(moduleCallCount).toBe(1);
+      });
+
+      it("should not call the module definition for the parent module", function(){
+        expect(MyApp.Parent.defined).toBeUndefined();
+      });
+
+      it("should call the module definition for the last module specified", function(){
+        expect(MyApp.Parent.Child.defined).toBe(true);
       });
     });
   });

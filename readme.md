@@ -2067,6 +2067,10 @@ I'm using [Docco](http://jashkenas.github.com/docco/) to generate the annotated 
 
 ## Release Notes
 
+### v0.8.1
+
+* Module definition functions will only be applied to the last module in the . chain
+
 ### v0.8.0
 
 * Added modules and sub-modules through the Application object

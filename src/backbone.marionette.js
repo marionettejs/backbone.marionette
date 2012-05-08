@@ -650,6 +650,43 @@ Backbone.Marionette = (function(Backbone, _, $){
           this[region] = regionObj;
         }
       }
+    },
+
+    // Add modules to the application, providing direct
+    // access to your applicaiton object, Backbone, 
+    // Marionette, jQuery and Underscore as parameters 
+    // to a callback function.
+    module: function(moduleNames, moduleDefinition){
+      var moduleName, module;
+      var parentModule = this;
+      var moduleNames = moduleNames.split(".");
+
+      // Loop through all the parts of the module definition
+      var length = moduleNames.length;
+      for(var i = 0; i < length; i++){
+
+        // Get the module name, and check if it exists on
+        // the current parent already
+        moduleName = moduleNames[i];
+        module = parentModule[moduleName];
+
+        if (!module){ 
+          // Create the module on the parent
+          module = new Marionette.Application();
+          parentModule[moduleName] = module;
+
+          // And build the module definition
+          if (moduleDefinition){
+            moduleDefinition(module, this, Backbone, Marionette, jQuery, _);
+          }
+        }
+
+        // Reset the parent module so that the next child
+        // in the list will be added to the correct parent
+        parentModule = module;
+      }
+
+      return module;
     }
   });
 

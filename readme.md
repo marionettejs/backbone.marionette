@@ -16,8 +16,8 @@ of it.
 
 ## Source Code And Downloads
 
-You can download the raw source code from the `src` folder above, or grab one of the
-many builds from the `lib` folder. 
+You can download the raw source code from the "src" folder above, or grab one of the
+many builds from the "lib" folder. 
 
 To get the latest stable release, use these links which point to the 'master' branch's
 builds:
@@ -308,8 +308,8 @@ MyApp.module("MyModule", function(MyModule, MyApp, Backbone, Marionette, $, _){
   }
 });
 
-console.log(MyApp.MyModule.someData); // => "public data"
-MyApp.MyModule.someFunction(); // => "public data"
+console.log(MyApp.MyModule.someData); //=> public data
+MyApp.MyModule.someFunction(); //=> public data
 ```
 
 ### Defining Sub-Modules With . Notation

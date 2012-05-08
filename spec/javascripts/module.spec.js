@@ -61,6 +61,21 @@ describe("application modules", function(){
     });
   });
 
+  describe("when speicfyin a module on an existing module", function(){
+    var MyApp, MyModule, SubModule;
+
+    beforeEach(function(){
+      MyApp = new Backbone.Marionette.Application();
+
+      MyApp.module("MyModule");
+      MyApp.MyModule.module("SubModule");
+    });
+
+    it("should add the sub-module", function(){
+      expect(MyApp.MyModule.SubModule).not.toBeUndefined();
+    })
+  });
+
   describe("when specifying the same module twice", function(){
     var MyApp, MyModule;
 

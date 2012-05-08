@@ -99,6 +99,7 @@ creates.)
 These are the strings that you can pull to make your puppet dance:
 
 * **Backbone.Marionette.Application**: An application object that starts your app via initializers, and more
+* **Backbone.Marionette.Application.module**: Create modules and sub-modules within the application
 * **Backbone.Marionette.AppRouter**: Reduce your routers to nothing more then configuration
 * **Backbone.Marionette.View**: The base View type that other Marionette views extend from (not intended to be used directly)
 * **Backbone.Marionette.ItemView**: A view that renders a single item
@@ -229,6 +230,157 @@ MyApp.vent.trigger("foo"); // => alert box "bar"
 ```
 
 See the `Marionette.EventAggregator` documentation below, for more details.
+
+## Marionette.Application.module
+
+Marionette allows you to define a module within your application,
+including sub-modules hanging from that module.
+
+This is useful for creating modular, encapsulated applications
+that are be split apart in to multiple files.
+
+By default, every module that you define and add to your 
+application, including sub-modules, is a new `Application`
+object instance. This allows you to have unlimited
+sub-modules and nesting. It also means you have all of the
+features and functionality of an `Application` object for
+each module.
+
+### Basic Usage
+
+A module is defined directly from an Application object, 
+and created another Application object as the specified
+name:
+
+```js
+var MyApp = new Backbone.Marionette.Application();
+
+var myModule = MyApp.module("MyModule");
+
+MyApp.MyModule; // => a new Marionette.Application object
+
+myModule === MyApp.MyModule; // => true
+```
+
+If you specify the same module name more than once, the
+first instance of the module will be retained and a new
+instance will not be created.
+
+### Module Definitions
+
+You can specify a callback function to provide a definition
+for the module. Module definitions are invoked immediately
+on calling `module` method. 
+
+The module definition callback will receive 6 parameters:
+
+* The module itself
+* The Parent module or Application object
+* Backbone
+* Backbone.Marionette
+* jQuery
+* Underscore
+
+You can add functions and data directly to your module to make
+them publicly accessible. You can also add private functions
+and data by using locally scoped variables.
+
+```js
+MyApp.module("MyModule", function(MyModule, MyApp, Backbone, Marionette, $, _){
+
+  // Private Data And Functions
+  // --------------------------
+
+  var myData = "this is private data";
+ 
+  var myFunction = function(){
+    console.log(myData);
+  }
+
+
+  // Public Data And Functions
+  // -------------------------
+
+  MyModule.someData = "public data";
+
+  MyModule.someFunction = function(){
+    console.log(MyModule.someData);
+  }
+});
+
+console.log(MyApp.MyModule.someData); // => "public data"
+MyApp.MyModule.someFunction(); // => "public data"
+```
+
+### Defining Sub-Modules With . Notation
+
+Sub-modules can be defined in a number of ways. 
+
+You can define a module, and then later use that module 
+to define sub-modules:
+
+```js
+MyModule = MyApp.module("MyModule");
+MyModule.module("SubModule");
+
+MyApp.MyModule.SubModule; // => a valid module object
+```
+
+Or you can define an entire hierarchy of modules and 
+sub-modules all at once:
+
+```js
+MyApp.module("Parent.Child.GrandChild");
+
+MyApp.Parent.Child.GrandChild; // => a valid module object
+```
+
+When defining sub-modules using the dot-notation, the 
+parent modules do not need to exist. They will be created
+for you if they don't exist. If they do exist, though, the
+existing module will be used instead of creating a new one.
+
+### Starting A Sub-Module
+
+As each module is an `Application` object instance, 
+initializer functions can be registerd on your modules. There
+is no automatic starting of these modules, though. If you
+wish to use the module's initializer functions, you must
+manually call the module's start method.
+
+```js
+MyApp.module("MyModule", function(MyModule){
+
+  MyModule.addInitializer(function(){
+    console.log("I'm a module initializer!");
+  });
+
+});
+
+MyApp.MyModule.start(); // => "I'm a module initializer!"
+```
+
+### Custom Module Objects
+
+If you want to override the module object with your own
+object, you can do that by returning an object from the
+module definition:
+
+```js
+MyApp.module("MyModule", function(){
+  var customModule = {};
+
+
+  return customModule;
+});
+
+MyApp.MyModule; // => the 'customModule' object
+```
+
+**Note:** When you override a module with a custom object, 
+you will not be able to add sub-modules to it using the 
+`module` fuction, as this function will not exist on your
+module (unless you add it yourself).
 
 ## Marionette.AppRouter
 
@@ -1914,6 +2066,10 @@ http://derickbailey.github.com/backbone.marionette
 I'm using [Docco](http://jashkenas.github.com/docco/) to generate the annotated source code.
 
 ## Release Notes
+
+### v0.8.0
+
+* Added modules and sub-modules through the Application object
 
 ### v0.7.6
 

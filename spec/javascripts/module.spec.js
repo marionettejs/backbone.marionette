@@ -131,4 +131,21 @@ describe("application modules", function(){
     });
   });
 
+  describe("when returning an object from the module definition", function(){
+    var MyApp, MyModule;
+
+    beforeEach(function(){
+      MyModule = {};
+      MyApp = new Backbone.Marionette.Application();
+
+      MyApp.module("CustomModule", function(myapp){
+        return MyModule;
+      });
+    });
+
+    it("should use the returned object as the module", function(){
+      expect(MyApp.CustomModule).toBe(MyModule);
+    });
+  });
+
 });

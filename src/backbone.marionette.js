@@ -657,7 +657,7 @@ Backbone.Marionette = (function(Backbone, _, $){
     // Marionette, jQuery and Underscore as parameters 
     // to a callback function.
     module: function(moduleNames, moduleDefinition){
-      var moduleName, module;
+      var moduleName, module, moduleOverride;
       var parentModule = this;
       var moduleNames = moduleNames.split(".");
 
@@ -671,14 +671,20 @@ Backbone.Marionette = (function(Backbone, _, $){
         module = parentModule[moduleName];
 
         if (!module){ 
-          // Create the module on the parent
+          // Create the module
           module = new Marionette.Application();
-          parentModule[moduleName] = module;
 
           // And build the module definition
           if (moduleDefinition){
-            moduleDefinition(module, this, Backbone, Marionette, jQuery, _);
+            moduleOverride = moduleDefinition(module, this, Backbone, Marionette, jQuery, _);
+            // Override it if necessary
+            if (moduleOverride){
+              module = moduleOverride;
+            }
           }
+          
+          // And attach it to the parent module
+          parentModule[moduleName] = module;
         }
 
         // Reset the parent module so that the next child

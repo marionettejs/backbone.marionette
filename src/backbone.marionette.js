@@ -269,10 +269,17 @@ Backbone.Marionette = (function(Backbone, _, $){
     },
 
     // Build an `itemView` for every model in the collection. 
+    // To support CompositeViews, retrieve the collection from the model.
     buildItemView: function(item, ItemView){
-      var view = new ItemView({
+      var view_options = {
         model: item
-      });
+      };
+      
+      if (typeof item.collection !== 'undefined') {
+      	view_options.collection = item.collection;
+      };
+      
+      var view = new ItemView(view_options);
       return view;
     },
 

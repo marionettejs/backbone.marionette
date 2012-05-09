@@ -42,6 +42,17 @@ to wade through. There's a better version of it available, though.
 
 ##### [View the formatted readme](http://derickbailey.github.com/backbone.marionette/)
 
+### The Marionette Wiki
+
+A wiki is an important aspect of a thriving community, as it provides
+a place for the community to contribute ideas, examples, answer
+frequently asked questions, and more. If you're looking for
+community-driven information, examples that go beyond the
+dry technical documentation, or want to contribute your own
+ideas and examples to the community, please see the wiki page.
+
+##### [View The Marionette Wiki](https://github.com/derickbailey/backbone.marionette/wiki)
+
 ### Annotated Source Code
 
 In addition to this readme, I've commented the source code quite

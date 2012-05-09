@@ -33,6 +33,46 @@ describe("view event triggers", function(){
     });
   });
 
+  describe('when triggers and standard events are both configured', function(){
+    var View = Backbone.Marionette.ItemView.extend({
+      triggers: {
+        "click .foo": "do:foo"
+      },
+
+      events: {
+        "click .bar": "whateverClicked"
+      },
+
+      render: function(){
+        this.$el.html("<button class='foo'></button><a href='#' class='bar'>asdf</a>");
+      },
+
+      whateverClicked: function(){
+      }
+    });
+
+    var view;
+
+    beforeEach(function(){
+      view = new View();
+      view.render();
+
+      spyOn(view, "trigger").andCallThrough();
+      spyOn(view, "whateverClicked").andCallThrough();
+
+      view.$(".foo").trigger("click");
+      view.$(".bar").trigger("click");
+    });
+
+    it("should fire the trigger", function(){
+      expect(view.trigger).toHaveBeenCalledWith("do:foo");
+    });
+
+    it('should fire the standard event', function(){
+      expect(view.whateverClicked).toHaveBeenCalled();
+    });
+  });
+
   describe("when triggers are configured with a function", function(){
     var View = Backbone.Marionette.ItemView.extend({
       triggers: function(){

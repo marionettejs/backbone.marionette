@@ -733,6 +733,54 @@ used directly. It exists as a base view for other view types
 to be extended from, and to provide a common location for
 behaviors that are shared across all views.
 
+### View.triggers
+
+Views can define a set of `triggers` as a hash, which will 
+convert a DOM event in to a `view.trigger` event.
+
+The left side of the hash is a standard Backbone.View DOM
+event configuration, while the right side of the hash is the
+view event that you want to trigger from the view.
+
+```js
+MyView = Backbone.Marionette.ItemView.extend({
+  // ...
+
+  triggers: {
+    "click .do-something": "something:do:it"
+  }
+});
+
+view = new MyView();
+view.render();
+
+view.on("something:do:it", function(){
+  alert("I DID IT!");
+});
+
+// "click" the 'do-something' DOM element to 
+// demonstrate the DOM event conversion
+view.$(".do-something").trigger("click");
+```
+
+The result of this is an alert box that says, "I DID IT!"
+
+You can also specify the `triggers` as a function that 
+returns a hash of trigger configurations
+
+```js
+Backbone.Marionette.CompositeView.extend({
+  triggers: function(){
+    return {
+      "click .that-thing": "that:i:sent:you"
+    };
+  }
+});
+```
+
+Triggers work with all View types that extend from the base
+Marionette.View.
+
 ### View.serializeData
 
 The `serializeData` method will serialize a view's model or
@@ -2077,6 +2125,10 @@ http://derickbailey.github.com/backbone.marionette
 I'm using [Docco](http://jashkenas.github.com/docco/) to generate the annotated source code.
 
 ## Release Notes
+
+### v0.8.2
+
+* Views now have the ability to define `triggers` which will convert a DOM event in to a `view.trigger` event
 
 ### v0.8.1
 

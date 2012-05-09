@@ -284,7 +284,7 @@ Or
 The object that is used as the `controller` has no requirements, other than it will 
 contain the methods that you specified in the `appRoutes`.
 
-It is reocmmended that you divide your controller objects into smaller peices of related functionality
+It is recommended that you divide your controller objects into smaller pieces of related functionality
 and have multiple routers / controllers, instead of just one giant router and controller.
 
 ## Marionette.Region

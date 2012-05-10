@@ -118,6 +118,11 @@ Backbone.Marionette = (function(Backbone, _, $){
       if (this.onClose) { this.onClose(); }
       this.trigger('close');
       this.unbind();
+      this.closed = true;
+    },
+    
+    isClosed: function(){
+    	return this.closed;
     }
   });
 
@@ -167,7 +172,11 @@ Backbone.Marionette = (function(Backbone, _, $){
       }
 
       var templateRendered = function(html){
-        that.$el.html(html);
+        if (that.isClosed && that.isClosed()) {
+          deferredRender.resolve();
+          return;
+        }
+    	that.$el.html(html);
         callDeferredMethod(that.onRender, onRenderDone, that);
       }
 
@@ -300,6 +309,9 @@ Backbone.Marionette = (function(Backbone, _, $){
 
       var viewRendered = view.render();
       $.when(viewRendered).then(function(){
+        if (view.isClosed && view.isClosed()) {
+          return;
+        }
         that.appendHtml(that, view);
       });
       

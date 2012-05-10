@@ -1860,7 +1860,7 @@ use a combination of the `renderTemplate` function and the
 `TemplateCache.loadTemplate` function.
 
 ```js
-Backbone.Marionette.TemplateCache.loadTemplate(template, callback){
+Backbone.Marionette.TemplateCache.loadTemplate = function(template, callback){
   // pre-compile the template and store that in the cache.
   var compiledTemplate = _.template(template);
   callback.call(this, compiledTemplate);

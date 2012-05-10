@@ -8,11 +8,6 @@ Backbone.Marionette = (function(Backbone, _, $){
 
   // The core view type that other Marionette views extend from.
   Marionette.View = Backbone.View.extend({
-    constructor: function(){
-      Backbone.View.prototype.constructor.apply(this, arguments);
-      this.configureTriggers();
-    },
-
     // Get the template or template id/selector for this view
     // instance. You can set a `template` attribute in the view
     // definition or pass a `template: "whatever"` parameter in
@@ -96,8 +91,18 @@ Backbone.Marionette = (function(Backbone, _, $){
 
       });
 
-      // Delegate the events to the DOM
-      this.delegateEvents(triggerEvents);
+      return triggerEvents;
+    },
+
+    delegateEvents: function(events){
+      events = events || this.events;
+      if (_.isFunction(events)){ events = events.call(this)}
+
+      var combinedEvents = {};
+      var triggers = this.configureTriggers();
+      _.extend(combinedEvents, events, triggers);
+
+      Backbone.View.prototype.delegateEvents.call(this, combinedEvents);
     },
 
     // Default `close` implementation, for removing a view from the

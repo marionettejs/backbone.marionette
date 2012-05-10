@@ -48,17 +48,17 @@ describe("view event triggers", function(){
       },
 
       whateverClicked: function(){
+        this.itWasClicked = true;
       }
     });
 
-    var view;
+    var view, clickSpy;
 
     beforeEach(function(){
       view = new View();
       view.render();
 
       spyOn(view, "trigger").andCallThrough();
-      spyOn(view, "whateverClicked").andCallThrough();
 
       view.$(".foo").trigger("click");
       view.$(".bar").trigger("click");
@@ -69,7 +69,7 @@ describe("view event triggers", function(){
     });
 
     it('should fire the standard event', function(){
-      expect(view.whateverClicked).toHaveBeenCalled();
+      expect(view.itWasClicked).toBe(true);
     });
   });
 

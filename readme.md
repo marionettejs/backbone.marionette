@@ -109,20 +109,20 @@ creates.)
 
 These are the strings that you can pull to make your puppet dance:
 
-* **Backbone.Marionette.Application**: An application object that starts your app via initializers, and more
-* **Backbone.Marionette.Application.module**: Create modules and sub-modules within the application
-* **Backbone.Marionette.AppRouter**: Reduce your routers to nothing more then configuration
-* **Backbone.Marionette.View**: The base View type that other Marionette views extend from (not intended to be used directly)
-* **Backbone.Marionette.ItemView**: A view that renders a single item
-* **Backbone.Marionette.CollectionView**: A view that iterates over a collection, and renders individual `ItemView` instances for each model
-* **Backbone.Marionette.CompositeView**: A collection view and item view, for rendering leaf-branch/composite model hierarchies
-* **Backbone.Marionette.Layout**: A view that renders a layout and creates region managers to manage areas within it
-* **Backbone.Marionette.Region**: Manage visual regions of your application, including display and removal of content
-* **Backbone.Marionette.EventAggregator**: An extension of Backbone.Events, to be used as an event-driven or pub-sub tool
-* **Backbone.Marionette.BindTo**: An event binding manager, to facilitate binding and unbinding of events
-* **Backbone.Marionette.Renderer**: Render templates with or without data, in a consistent and common manner
-* **Backbone.Marionette.TemplateCache**: Cache templates that are stored in `<script>` blocks, for faster subsequent access
-* **Backbone.Marionette.Callbacks**: Manage a collection of callback methods, and execute them as needed
+* [**Backbone.Marionette.Application**](#marionetteapplication): An application object that starts your app via initializers, and more
+* [**Backbone.Marionette.Application.module**](#marionetteapplicationmodule): Create modules and sub-modules within the application
+* [**Backbone.Marionette.AppRouter**](#marionetteapprouter): Reduce your routers to nothing more then configuration
+* [**Backbone.Marionette.View**](#marionetteview): The base View type that other Marionette views extend from (not intended to be used directly)
+* [**Backbone.Marionette.ItemView**](#marionetteitemview): A view that renders a single item
+* [**Backbone.Marionette.CollectionView**](#marionettecollectionview): A view that iterates over a collection, and renders individual `ItemView` instances for each model
+* [**Backbone.Marionette.CompositeView**](#marionettecompositeview): A collection view and item view, for rendering leaf-branch/composite model hierarchies
+* [**Backbone.Marionette.Layout**](#marionettelayout): A view that renders a layout and creates region managers to manage areas within it
+* [**Backbone.Marionette.Region**](#marionetteregion): Manage visual regions of your application, including display and removal of content
+* [**Backbone.Marionette.EventAggregator**](#marionetteeventaggregator): An extension of Backbone.Events, to be used as an event-driven or pub-sub tool
+* [**Backbone.Marionette.BindTo**](#marionettebindto): An event binding manager, to facilitate binding and unbinding of events
+* [**Backbone.Marionette.Renderer**](#marionetterenderer): Render templates with or without data, in a consistent and common manner
+* [**Backbone.Marionette.TemplateCache**](#marionettetemplatecache): Cache templates that are stored in `<script>` blocks, for faster subsequent access
+* [**Backbone.Marionette.Callbacks**](#marionettecallbacks): Manage a collection of callback methods, and execute them as needed
 
 The `Application`, `Region`, `ItemView` and `CollectionView` use the 
 `extend` syntax and functionality from Backbone, allowing you to define new 

@@ -309,4 +309,66 @@ describe("item view", function(){
     });
   });
 
+  describe("when a view with a checkbox is bound to re-render on the 'change:done' event of the model", function(){
+    describe("and rendering the view, then changing the checkbox from unchecked, to checked, and back to unchecked", function(){
+      var View = Backbone.Marionette.ItemView.extend({
+        template: "#item-with-checkbox",
+
+        initialize: function(){
+          this.bindTo(this.model, "change:done", this.doneChanged, this);
+        },
+
+        events: {
+          "change #chk": "changeClicked"
+        },
+
+        changeClicked: function(e){
+          var chk = $(e.currentTarget);
+          var checkedAttr = chk.attr("checked");
+          var checked = !!checkedAttr;
+
+          console.log("checked was changed to:", checked);
+          this.model.set({done: checked});
+        },
+
+        doneChanged: function(){
+          console.log("about to re-render the view");
+
+          this.render();
+        }
+      });
+
+      var view, model, chk;
+
+      beforeEach(function(){
+        loadFixtures("itemWithCheckbox.html");
+
+        model = new Backbone.Model({
+          done: false
+        });
+
+        view = new View({
+          model: model
+        });
+
+        spyOn(view, "render").andCallThrough();
+        view.render();
+
+        chk = view.$("#chk");
+
+        console.log('changing from false to true');
+        chk.attr("checked", "checked");
+        chk.trigger('change');
+
+        console.log('changing from true to false');
+        chk.removeAttr("checked");
+        chk.trigger('change');
+      });
+
+      it("should render the view 3 times total", function(){
+        expect(view.render.callCount).toBe(3);
+      });
+    });
+  });
+
 });

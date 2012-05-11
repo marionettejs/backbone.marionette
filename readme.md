@@ -120,9 +120,9 @@ These are the strings that you can pull to make your puppet dance:
 * [**Backbone.Marionette.Region**](#marionetteregion): Manage visual regions of your application, including display and removal of content
 * [**Backbone.Marionette.EventAggregator**](#marionetteeventaggregator): An extension of Backbone.Events, to be used as an event-driven or pub-sub tool
 * [**Backbone.Marionette.BindTo**](#marionettebindto): An event binding manager, to facilitate binding and unbinding of events
-* [**Backbone.Marionette.Renderer**](#marionetterenderer): Render templates with or without data, in a consistent and common manner
-* [**Backbone.Marionette.TemplateCache**](#marionettetemplatecache): Cache templates that are stored in `<script>` blocks, for faster subsequent access
-* [**Backbone.Marionette.Callbacks**](#marionettecallbacks): Manage a collection of callback methods, and execute them as needed
+* [**Backbone.Marionette.Renderer**](#backbonemarionetterenderer): Render templates with or without data, in a consistent and common manner
+* [**Backbone.Marionette.TemplateCache**](#backbonemarionettetemplatecache): Cache templates that are stored in `<script>` blocks, for faster subsequent access
+* [**Backbone.Marionette.Callbacks**](#backbonemarionettecallbacks): Manage a collection of callback methods, and execute them as needed
 
 The `Application`, `Region`, `ItemView` and `CollectionView` use the 
 `extend` syntax and functionality from Backbone, allowing you to define new 

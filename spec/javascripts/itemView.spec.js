@@ -312,11 +312,11 @@ describe("item view", function(){
   describe("when a view with a checkbox is bound to re-render on the 'change:done' event of the model", function(){
     describe("and rendering the view, then changing the checkbox from unchecked, to checked, and back to unchecked", function(){
 
-      var View = Backbone.View.extend({
+      var View = Backbone.Marionette.ItemView.extend({
         template: "#item-with-checkbox",
 
-        initialize: function(){
-          this.model.on("change:done", this.doneChanged, this);
+        setupHandler: function(){
+          this.bindTo(this.model, "change:done", this.render, this);
         },
 
         events: {
@@ -327,31 +327,11 @@ describe("item view", function(){
           var chk = $(e.currentTarget);
           var checkedAttr = chk.attr("checked");
           var checked = !!checkedAttr;
-
-          console.log("checked was changed to:", checked);
           this.model.set({done: checked});
-        },
-
-        doneChanged: function(){
-          console.log("about to re-render the view");
-
-          // If you comment out 'this.render()' right here, you'll
-          // see the correct number of change events from the
-          // checkbox being changed. If you re-render the view when
-          // the checkbox is changed, by uncommenting 'this.render()'
-          // right here, then you'll only see the first change
-          // event from the checkbox being changed.
-
-          this.render();
-        },
-
-        render: function(){
-          console.log("--------RENDER-------");
-          this.$el.html("<input type='checkbox' id='chk'>");
         }
       });
 
-      var view, model, chk;
+      var view, spy, model, chk;
 
       beforeEach(function(){
         loadFixtures("itemWithCheckbox.html");
@@ -364,22 +344,22 @@ describe("item view", function(){
           model: model
         });
 
-        spyOn(view, "render").andCallThrough();
+        spy = spyOn(view, "render").andCallThrough();
+
+        view.setupHandler();
         view.render();
 
         chk = view.$("#chk");
-
-        console.log('changing from false to true');
         chk.attr("checked", "checked");
         chk.trigger('change');
 
-        console.log('changing from true to false');
+        chk = view.$("#chk");
         chk.removeAttr("checked");
         chk.trigger('change');
       });
 
       it("should render the view 3 times total", function(){
-        expect(view.render.callCount).toBe(3);
+        expect(spy.callCount).toBe(3);
       });
     });
 

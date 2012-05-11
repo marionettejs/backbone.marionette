@@ -149,7 +149,6 @@ Backbone.Marionette = (function(Backbone, _, $){
     // Render the view, defaulting to underscore.js templates.
     // You can override this in your view definition.
     render: function(){
-      console.log("rendering the view...");
       var that = this;
 
       var deferredRender = $.Deferred();
@@ -175,9 +174,6 @@ Backbone.Marionette = (function(Backbone, _, $){
       var onRenderDone = function(){
         that.trigger("render", that);
         that.trigger("item:rendered", that);
-
-        console.log('render done');
-        console.log(' ');
 
         deferredRender.resolve();
       }

@@ -311,11 +311,12 @@ describe("item view", function(){
 
   describe("when a view with a checkbox is bound to re-render on the 'change:done' event of the model", function(){
     describe("and rendering the view, then changing the checkbox from unchecked, to checked, and back to unchecked", function(){
-      var View = Backbone.Marionette.ItemView.extend({
+
+      var View = Backbone.View.extend({
         template: "#item-with-checkbox",
 
         initialize: function(){
-          this.bindTo(this.model, "change:done", this.doneChanged, this);
+          this.model.on("change:done", this.doneChanged, this);
         },
 
         events: {
@@ -342,6 +343,11 @@ describe("item view", function(){
           // event from the checkbox being changed.
 
           this.render();
+        },
+
+        render: function(){
+          console.log("--------RENDER-------");
+          this.$el.html("<input type='checkbox' id='chk'>");
         }
       });
 
@@ -376,6 +382,7 @@ describe("item view", function(){
         expect(view.render.callCount).toBe(3);
       });
     });
+
   });
 
 });

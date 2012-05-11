@@ -334,6 +334,13 @@ describe("item view", function(){
         doneChanged: function(){
           console.log("about to re-render the view");
 
+          // If you comment out 'this.render()' right here, you'll
+          // see the correct number of change events from the
+          // checkbox being changed. If you re-render the view when
+          // the checkbox is changed, by uncommenting 'this.render()'
+          // right here, then you'll only see the first change
+          // event from the checkbox being changed.
+
           this.render();
         }
       });

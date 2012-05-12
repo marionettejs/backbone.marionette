@@ -2172,7 +2172,7 @@ I'm using [Docco](http://jashkenas.github.com/docco/) to generate the annotated 
 #### Additional Changelogs
 
 For older change logs and release notes, see the
-[changelog](./changelog.md) file.
+[changelog](https://github.com/derickbailey/backbone.marionette/blob/master/changelog.md) file.
 
 ## Legal Mumbo Jumbo (MIT License)
 

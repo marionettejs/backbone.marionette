@@ -34,6 +34,15 @@ Development: [backbone.marionette.js](https://raw.github.com/derickbailey/backbo
 
 Production: [backbone.marionette.min.js](https://raw.github.com/derickbailey/backbone.marionette/master/lib/amd/backbone.marionette.min.js)
 
+### Available Packages
+
+Marionette is unofficially available from various package
+management systems, such as RubyGems, Node Package Manager,
+Nuget, etc. These packages are maintained by the community
+and are not part of the core Backbone.Marionette code.
+
+[Available Packages](https://github.com/derickbailey/backbone.marionette/wiki/Available-packages)
+
 ## Documentation
 
 This readme represents the majority of documentation for Marionette.

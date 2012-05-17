@@ -172,6 +172,32 @@ describe("application modules", function(){
     });
   });
 
+  describe("when specifying the same module, with a definition, more than once", function(){
+    var MyApp, myModule;
+
+    beforeEach(function(){
+      MyApp = new Backbone.Marionette.Application();
+
+      myModule = MyApp.module("MyModule", function(MyModule){
+        MyModule.definition1 = true;
+      });
+
+      MyApp.module("MyModule", function(MyModule){
+        MyModule.definition2 = true;
+      });
+    });
+
+    it("should re-use the same module for all definitions", function(){
+      expect(myModule).toBe(MyApp.MyModule);
+    });
+
+    it("should allow each definition to modify the resulting module", function(){
+      expect(MyApp.MyModule.definition1).toBe(true);
+      expect(MyApp.MyModule.definition2).toBe(true);
+    });
+
+  });
+
   describe("when returning an object from the module definition", function(){
     var MyApp, MyModule;
 

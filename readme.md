@@ -402,6 +402,48 @@ you will not be able to add sub-modules to it using the
 `module` fuction, as this function will not exist on your
 module (unless you add it yourself).
 
+### Splitting A Module Definition Apart
+
+Sometimes a module gets to be too long for a single file. In
+this case, you can split a module definition across multiple
+files:
+
+```js
+MyApp.module("MyModule", function(MyModule){
+  MyModule.definition1 = true;
+});
+
+MyApp.module("MyModule", function(MyModule){
+  MyModule.definition2 = true;
+});
+
+MyApp.MyModule.definition1; //=> true
+MyApp.MyModule.definition2; //=> true
+```
+
+Note that if you return a custom module from your module 
+definitions, the last module definition to return, wins.
+
+```js
+MyApp.module("MyModule", function(MyModule){
+  a = {};
+
+  a.foo = "bar";
+
+  return a;
+});
+
+MyApp.module("MyModule", function(MyModule){
+  b = {};
+
+  b.foo = "I'm overriding you!";
+
+  return b;
+});
+
+MyApp.MyModule.foo; //=> "I'm overriding you!"
+```
+
 ## Marionette.AppRouter
 
 Reduce the boilerplate code of handling route events and then calling a single method on another object.
@@ -2101,6 +2143,10 @@ http://derickbailey.github.com/backbone.marionette
 I'm using [Docco](http://jashkenas.github.com/docco/) to generate the annotated source code.
 
 ## Release Notes
+
+### v0.8.3
+
+* Module definitions can be split across multiple files and/or multiple calls to define the module
 
 ### v0.8.2
 

@@ -187,7 +187,7 @@ on calling `module` method.
 The module definition callback will receive 6 parameters:
 
 * The module itself
-* The Parent module or Application object
+* The Parent module or Application object that `.module` was called from
 * Backbone
 * Backbone.Marionette
 * jQuery

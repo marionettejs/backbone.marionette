@@ -149,6 +149,10 @@ I'm using [Docco](http://jashkenas.github.com/docco/) to generate the annotated 
 
 ## Release Notes
 
+### v0.8.4
+
+* Fixed: A call to `.module` will correctly pass the `Application` instance from which `.module` was called, as the second parameter of the module definition function
+
 ### v0.8.3
 
 * Module definitions can be split across multiple files and/or multiple calls to define the module

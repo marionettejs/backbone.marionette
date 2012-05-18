@@ -925,6 +925,7 @@ Backbone.Marionette = (function(Backbone, _, $){
     module: function(moduleNames, moduleDefinition){
       var moduleName, module, moduleOverride;
       var parentModule = this;
+      var parentApp = this;
       var moduleNames = moduleNames.split(".");
 
       // Loop through all the parts of the module definition
@@ -947,7 +948,7 @@ Backbone.Marionette = (function(Backbone, _, $){
         // is supplied, and if we're at the last segment
         // of the "Module.Name" chain.
         if (isLastModuleInChain && moduleDefinition){
-          moduleOverride = moduleDefinition(module, parentModule, Backbone, Marionette, jQuery, _);
+          moduleOverride = moduleDefinition(module, parentApp, Backbone, Marionette, jQuery, _);
           // If we have a module override, use it instead.
           if (moduleOverride){
             module = moduleOverride;

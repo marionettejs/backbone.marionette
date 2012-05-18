@@ -215,4 +215,21 @@ describe("application modules", function(){
     });
   });
 
+  describe("when creating a sub-module with the . notation, the second parameter should be the object from which .module was called", function(){
+    var MyApp, MyModule;
+
+    beforeEach(function(){
+      MyModule = {};
+      MyApp = new Backbone.Marionette.Application();
+
+      MyApp.module("CustomModule.SubModule", function(CustomModule, MyApp){
+        MyModule = MyApp;
+      });
+    });
+
+    it("should use the returned object as the module", function(){
+      expect(MyModule).toBe(MyApp);
+    });
+  });
+
 });

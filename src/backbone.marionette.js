@@ -174,6 +174,7 @@ Backbone.Marionette = (function(Backbone, _, $){
       var onRenderDone = function(){
         that.trigger("render", that);
         that.trigger("item:rendered", that);
+        that.delegateEvents()
 
         deferredRender.resolve();
       }
@@ -181,6 +182,10 @@ Backbone.Marionette = (function(Backbone, _, $){
       callDeferredMethod(this.beforeRender, beforeRenderDone, this);
 
       return deferredRender.promise();
+    },
+
+    onClose: function() {
+      this.undelegateEvents();
     },
 
     // Render the data for this item view in to some HTML.

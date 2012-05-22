@@ -12,7 +12,7 @@ These are the strings that you can pull to make your puppet dance:
 
 * [**Backbone.Marionette.Application**](#marionetteapplication): An application object that starts your app via initializers, and more
 * [**Backbone.Marionette.Application.module**](#marionetteapplicationmodule): Create modules and sub-modules within the application
-* [**Backbone.Marionette.AppRouter**](#marionetteapprouter): Reduce your routers to nothing more then configuration
+* [**Backbone.Marionette.AppRouter**](#marionetteapprouter): Reduce your routers to nothing more than configuration
 * [**Backbone.Marionette.View**](#marionetteview): The base View type that other Marionette views extend from (not intended to be used directly)
 * [**Backbone.Marionette.ItemView**](#marionetteitemview): A view that renders a single item
 * [**Backbone.Marionette.CollectionView**](#marionettecollectionview): A view that iterates over a collection, and renders individual `ItemView` instances for each model
@@ -32,7 +32,7 @@ versions of these objects with custom behavior.
 ## Marionette.Application
 
 The `Backbone.Marionette.Application` object is the hub of your composite 
-application. It organizes, initializes and coordinate the various pieces of your
+application. It organizes, initializes and coordinates the various pieces of your
 app. It also provides a starting point for you to call into, from your HTML 
 script block or from your JavaScript files directly if you prefer to go that 
 route.
@@ -161,7 +161,7 @@ each module.
 ### Basic Usage
 
 A module is defined directly from an Application object, 
-and created another Application object as the specified
+and creates another Application object with the specified
 name:
 
 ```js
@@ -416,7 +416,7 @@ MyApp.addRegions({
 ```
 
 As soon as you call `addRegions`, your region managers are available on your
-app object. In the above, example `MyApp.mainRegion` and `MyApp.navigationRegion`
+app object. In the above example `MyApp.mainRegion` and `MyApp.navigationRegion`
 would be available for use immediately.
 
 If you specify the same region name twice, the last one in wins.
@@ -525,7 +525,7 @@ MyApp.someRegion.attachView(myView);
 
 ### Region Events And Callbacks
 
-A region manager will raise a few events during it's showing and
+A region manager will raise a few events during its showing and
 closing of views:
 
 * "view:show" - when the view has been rendered and displayed
@@ -1019,7 +1019,7 @@ There are several events that are triggers by an `ItemView`, which
 allow code outside of a view to respond to what's happening with
 the view.
 
-### "item:before:render" event
+#### "item:before:render" event
 
 An "item:before:render" event will be triggered just before the
 view is rendered
@@ -1868,7 +1868,7 @@ Backbone.Marionette.TemplateCache.loadTemplate = function(templateId, callback){
 ```
 
 For example, if you want to load templates asychronously from the
-server, instead of from the DOM, you could replace 
+server, instead of from the DOM, you could replace the
 `loadTemplate` function.
 
 If a "template.html" file exists on the server, with this in it:

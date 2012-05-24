@@ -1,5 +1,5 @@
 This is the primary documentation for the Marionette API. Here, you'll find detailed
-discussion of the individual peices of Marionette, the basics of how to use them, 
+discussion of the individual pieces of Marionette, the basics of how to use them, 
 and how to customize them to work in manners that fit your applicaton's needs.
 
 Please note that this is document is rather dry - it's meant to be a reference for

@@ -149,7 +149,7 @@ I'm using [Docco](http://jashkenas.github.com/docco/) to generate the annotated 
 
 ## Release Notes
 
-### v0.8.5
+### v0.9.0-pre
 
 * ** BREAKING CHANGES ** Region
   * Removed the ability to send a second parameter to a regions' "show" method
@@ -157,6 +157,9 @@ I'm using [Docco](http://jashkenas.github.com/docco/) to generate the annotated 
 
 * ** BREAKING CHANGES ** Layout
   * Regions specified within a layout are now available immediately after creating a layout instance
+
+* ** BREAKING CHANGES: ** Modules
+  * Modules no longer allow you to return a custom module object from the module definition function
 
 * BindTo:
   * The unbinding of an event now considers the `context` parameter when unbinding, allowing multiple handers to be bound to the same event from the same object, and unbinding only one of them

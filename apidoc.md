@@ -272,28 +272,6 @@ MyApp.module("MyModule", function(MyModule){
 MyApp.MyModule.start(); // => "I'm a module initializer!"
 ```
 
-### Custom Module Objects
-
-If you want to override the module object with your own
-object, you can do that by returning an object from the
-module definition:
-
-```js
-MyApp.module("MyModule", function(){
-  var customModule = {};
-
-
-  return customModule;
-});
-
-MyApp.MyModule; // => the 'customModule' object
-```
-
-**Note:** When you override a module with a custom object, 
-you will not be able to add sub-modules to it using the 
-`module` fuction, as this function will not exist on your
-module (unless you add it yourself).
-
 ### Splitting A Module Definition Apart
 
 Sometimes a module gets to be too long for a single file. In

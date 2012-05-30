@@ -950,11 +950,7 @@ Backbone.Marionette = (function(Backbone, _, $){
         // is supplied, and if we're at the last segment
         // of the "Module.Name" chain.
         if (isLastModuleInChain && moduleDefinition){
-          moduleOverride = moduleDefinition(module, parentApp, Backbone, Marionette, jQuery, _);
-          // If we have a module override, use it instead.
-          if (moduleOverride){
-            module = moduleOverride;
-          }
+          moduleDefinition(module, parentApp, Backbone, Marionette, jQuery, _);
         }
 
         // If the defined module is not what we are

@@ -199,19 +199,19 @@ describe("application modules", function(){
   });
 
   describe("when returning an object from the module definition", function(){
-    var MyApp, MyModule;
+    var MyApp, MyModule, CustomModule;
 
     beforeEach(function(){
       MyModule = {};
       MyApp = new Backbone.Marionette.Application();
 
-      MyApp.module("CustomModule", function(myapp){
+      CustomModule = MyApp.module("CustomModule", function(myapp){
         return MyModule;
       });
     });
 
-    it("should use the returned object as the module", function(){
-      expect(MyApp.CustomModule).toBe(MyModule);
+    it("should not do anything with the returned object", function(){
+      expect(MyApp.CustomModule).toBe(CustomModule);
     });
   });
 

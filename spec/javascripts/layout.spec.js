@@ -7,6 +7,20 @@ describe("layout", function(){
     }
   });
 
+  describe("on instantiation", function(){
+    var layoutManager;
+
+    beforeEach(function(){
+      layoutManager = new LayoutManager();
+    });
+
+    it("should instantiate the specified region managers", function(){
+      expect(layoutManager).toHaveOwnProperty("regionOne");
+      expect(layoutManager).toHaveOwnProperty("regionTwo");
+    });
+
+  });
+
   describe("on rendering", function(){
     var layoutManager;
     var deferredResolved;
@@ -17,11 +31,6 @@ describe("layout", function(){
       var deferred = layoutManager.render();
 
       deferred.done(function(){deferredResolved = true;});
-    });
-
-    it("should instantiate the specified region managers", function(){
-      expect(layoutManager.regionOne).not.toBeUndefined();
-      expect(layoutManager.regionTwo).not.toBeUndefined();
     });
 
     it("should find the region scoped within the rendered template", function(){

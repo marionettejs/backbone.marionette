@@ -818,8 +818,6 @@ Backbone.Marionette.ItemView.extend({
 
 ## Marionette.Layout
 
-Formerly known as `CompositeRegion`. 
-
 A `Layout` is a specialized hybrid between an `ItemView` and
 a collection of `Region` objects, used for rendering an application
 layout with multiple sub-regions to be managed by specified region managers.
@@ -828,11 +826,14 @@ A layout manager can also be used as a composite-view to aggregate multiple
 views and sub-application areas of the screen where multiple region managers need
 to be attached to dynamically rendered HTML.
 
+For a more in-depth discussion on Layouts, see the blog post
+[Manage Layouts And Nested Views With Backbone.Marionette](http://lostechies.com/derickbailey/2012/03/22/managing-layouts-and-nested-views-with-backbone-marionette/)
+
+### Basic Usage
+
 The `Layout` extends directly from `ItemView` and adds the ability
 to specify `regions` which become `Region` instances that are attached
 to the layout.
-
-### Basic Usage
 
 ```html
 <script id="layout-template" type="text/template">
@@ -865,6 +866,21 @@ layout.menu.show(new MenuView());
 
 layout.content.show(new MainContentView());
 ```
+
+### Region Availability
+
+Any defined regions within a layout will be available to the
+layout or any calling code immediately after instantiating the
+layout. This allows a layout to be attached to an existing 
+DOM element in an HTML page, without the need to call a render
+method or anything else, to create the regions.
+
+However, a region will only be able to populate itself if the
+layout has access to the elements specified within the region
+definitions. That is, if your view has not yet rendered, your
+regions may not be able to find the element that you've
+specified for them to manage. In that scenario, using the
+region will result in no changes to the DOM.
 
 ### Nested Layouts And Views
 

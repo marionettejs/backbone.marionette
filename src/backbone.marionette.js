@@ -515,8 +515,6 @@ Backbone.Marionette = (function(Backbone, _, $){
   // Layout
   // ------
 
-  // Formerly known as Composite Region.
-  //
   // Used for managing application layouts, nested layouts and
   // multiple regions within an application or sub-application.
   //
@@ -527,14 +525,10 @@ Backbone.Marionette = (function(Backbone, _, $){
     constructor: function () {
       this.vent = new Backbone.Marionette.EventAggregator();
       Backbone.Marionette.ItemView.apply(this, arguments);
-      this.regionManagers = {};
-    },
-
-    render: function () {
       this.initializeRegions();
-      return Backbone.Marionette.ItemView.prototype.render.call(this, arguments);
     },
 
+    // Handle closing regions, and then close the view itself.
     close: function () {
       this.closeRegions();
       Backbone.Marionette.ItemView.prototype.close.call(this, arguments);
@@ -547,18 +541,24 @@ Backbone.Marionette = (function(Backbone, _, $){
     // will product a `layout.menu` object which is a region
     // that controls the `.menu-container` DOM element.
     initializeRegions: function () {
+      if (!this.regionManagers){
+        this.regionManagers = {};
+      }
+
       var that = this;
       _.each(this.regions, function (selector, name) {
+
         var regionManager = new Backbone.Marionette.Region({
             el: selector,
-
             getEl: function(selector){
               return that.$(selector);
             }
         });
+
         that.regionManagers[name] = regionManager;
         that[name] = regionManager;
       });
+
     },
 
     // Close all of the regions that have been opened by

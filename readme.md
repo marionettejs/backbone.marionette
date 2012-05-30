@@ -153,7 +153,9 @@ I'm using [Docco](http://jashkenas.github.com/docco/) to generate the annotated 
 
 * ** BREAKING CHANGES ** Region
   * Removed the ability to send a second parameter to a regions' "show" method
-  * Changed the implementation of `Region` to allow easier overriding of how the new view is added to the DOM.
+  * Changed the implementation of `Region` to allow easier overriding of how the new view is added to the DOM
+* ** BREAKING CHANGES ** Layout
+  * Regions specified within a layout are now available immediately after creating a layout instance
 
 ### v0.8.4
 

@@ -127,32 +127,92 @@ describe("bind to", function(){
     });
   });
 
-  describe("when two bindTo objects are bound to the same object, same event, same callback, and unbinding one of them", function(){
-    var handler = {
-      doIt: function(){}
-    }
+  describe("when two bindTo objects are bound to the same object, same event, same callback, ", function(){
 
-    var binder1, binder2;
-    var binding1, binding2;
-    var model;
+    describe("same context, and unbinding one of them", function(){
+      var handler = {
+        doIt: function(){}
+      }
 
-    beforeEach(function(){
-      spyOn(handler, "doIt");
+      var binder1, binder2;
+      var binding1, binding2;
+      var model;
 
-      binder1 = _.extend({}, Backbone.Marionette.BindTo);
-      binder2 = _.extend({}, Backbone.Marionette.BindTo);
+      beforeEach(function(){
+        spyOn(handler, "doIt");
 
-      model = new Model();
-      binding1 = binder1.bindTo(model, "change:foo", handler.doIt);
-      binding2 = binder2.bindTo(model, "change:foo", handler.doIt);
+        binder1 = _.extend({}, Backbone.Marionette.BindTo);
+        binder2 = _.extend({}, Backbone.Marionette.BindTo);
 
-      binder1.unbindFrom(binding1);
-      model.set({foo: "bar"});
+        model = new Model();
+        binding1 = binder1.bindTo(model, "change:foo", handler.doIt, handler);
+        binding2 = binder2.bindTo(model, "change:foo", handler.doIt, handler);
+
+        binder1.unbindFrom(binding1);
+        model.set({foo: "bar"});
+      });
+
+      it("should not unbind the other", function(){
+        expect(handler.doIt.callCount).toBe(0);
+      });
     });
 
-    it("should not unbind the other", function(){
-      expect(handler.doIt.callCount).toBe(1);
+    describe("no context (default context of the bindTo object itself), and unbinding one of them", function(){
+      var handler = {
+        doIt: function(){}
+      }
+
+      var binder1, binder2;
+      var binding1, binding2;
+      var model;
+
+      beforeEach(function(){
+        spyOn(handler, "doIt");
+
+        binder1 = _.extend({}, Backbone.Marionette.BindTo);
+        binder2 = _.extend({}, Backbone.Marionette.BindTo);
+
+        model = new Model();
+        binding1 = binder1.bindTo(model, "change:foo", handler.doIt);
+        binding2 = binder2.bindTo(model, "change:foo", handler.doIt);
+
+        binder1.unbindFrom(binding1);
+        model.set({foo: "bar"});
+      });
+
+      it("should not unbind the other", function(){
+        expect(handler.doIt.callCount).toBe(1);
+      });
     });
+
+    describe("different context, and unbinding one of them", function(){
+      var handler = {
+        doIt: function(){}
+      }
+
+      var binder1, binder2;
+      var binding1, binding2;
+      var model;
+
+      beforeEach(function(){
+        spyOn(handler, "doIt");
+
+        binder1 = _.extend({}, Backbone.Marionette.BindTo);
+        binder2 = _.extend({}, Backbone.Marionette.BindTo);
+
+        model = new Model();
+        binding1 = binder1.bindTo(model, "change:foo", handler.doIt, binder1);
+        binding2 = binder2.bindTo(model, "change:foo", handler.doIt, binder2);
+
+        binder1.unbindFrom(binding1);
+        model.set({foo: "bar"});
+      });
+
+      it("should not unbind the other", function(){
+        expect(handler.doIt.callCount).toBe(1);
+      });
+    });
+
   });
 
 });

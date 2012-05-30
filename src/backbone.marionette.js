@@ -727,7 +727,7 @@ Backbone.Marionette = (function(Backbone, _, $){
     // Unbind from a single binding object. Binding objects are
     // returned from the `bindTo` method call. 
     unbindFrom: function(binding){
-      binding.obj.off(binding.eventName, binding.callback);
+      binding.obj.off(binding.eventName, binding.callback, binding.context);
       this.bindings = _.reject(this.bindings, function(bind){return bind === binding});
     },
 

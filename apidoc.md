@@ -464,24 +464,32 @@ MyApp.mainRegion.show(anotherView);
 
 ### Set How View's `el` Is Attached
 
-You can specify a second parameter to the `show` method,
-which will be used to determine how the HTML from the view's
-`el` is attached to the DOM region that is being managed.
+If you need to change how the view is attached to the DOM when
+showing a view via a region, override the `open` method of the
+region. This method receives one parameter - the view to show.
 
-The options include any valid jQuery DOM object method, such
-as `html`, `text`, `append`, etc.
+The default implementation of `open` is:
 
 ```js
-MyApp.mainRegion.show(myView, "append");
+Marionette.Region.prototype.open = function(view){
+  this.$el.html(view.el);
+}
 ```
 
-This example will use jQuery's `$.append` function to append
-the new view to the current HTML.
+This will replace the contents of the region with the view's
+`el` / content. You can change to this be anything you wish,
+though, facilitating transition effects and more.
 
-**WARNING**: Be careful when using this feature, as the view
-you are replacing may not be managed / closed correctly as a
-result. This can cause unexpected behavior, memory leaks or
-other problems. **Use At Your Own Risk**
+```js
+Marionette.Region.prototype.open = function(view){
+  this.$el.hide();
+  this.$el.html(view.el);
+  this.$el.slideDown("fast");
+}
+```
+
+This example will cause a view to slide down from the top
+of the region, instead of just appearing in place.
 
 ### Attach Existing View
 

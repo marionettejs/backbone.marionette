@@ -149,6 +149,12 @@ I'm using [Docco](http://jashkenas.github.com/docco/) to generate the annotated 
 
 ## Release Notes
 
+### v0.8.5
+
+* ** BREAKING CHANGES ** Region
+  * Removed the ability to send a second parameter to a regions' "show" method
+  * Changed the implementation of `Region` to allow easier overriding of how the new view is added to the DOM.
+
 ### v0.8.4
 
 * Fixed: A call to `.module` will correctly pass the `Application` instance from which `.module` was called, as the second parameter of the module definition function

@@ -453,11 +453,22 @@ Backbone.Marionette = (function(Backbone, _, $){
     // directly from the `el` attribute. Also calls an optional
     // `onShow` and `close` method on your view, just after showing
     // or just before closing the view, respectively.
-    show: function(view, appendMethod){
-      this.ensureEl();
+    show: function(view){
+      var that = this;
 
+      this.ensureEl();
       this.close();
-      this.open(view, appendMethod);
+
+      // Wait for the view to finish rendering
+      $.when(view.render()).then(function () {
+        that.open(view);
+
+        if (view.onShow) { view.onShow(); }
+        view.trigger("show");
+
+        if (that.onShow) { that.onShow(view); }
+        that.trigger("view:show", view);
+      });
 
       this.currentView = view;
     },
@@ -474,19 +485,10 @@ Backbone.Marionette = (function(Backbone, _, $){
         return $(selector);
     },
 
-    // Internal method to render and display a view. Not meant 
-    // to be called from any external code.
-    open: function(view, appendMethod){
-      var that = this;
-      appendMethod = appendMethod || "html";
-
-      $.when(view.render()).then(function () {
-        that.$el[appendMethod](view.el);
-        if (view.onShow) { view.onShow(); }
-        if (that.onShow) { that.onShow(view); }
-        view.trigger("show");
-        that.trigger("view:show", view);
-      });
+    // Override this method to change how the new view is
+    // appended to the `$el` that the region is managing
+    open: function(view){
+        this.$el.html(view.el);
     },
 
     // Close the current view, if there is one. If there is no

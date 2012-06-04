@@ -1,7 +1,7 @@
 Backbone.Marionette = (function(Backbone, _, $){
   var Marionette = {};
 
-  Marionette.version = "0.8.4";
+  Marionette.version = "0.9.0-pre";
 
   // Marionette.View
   // ---------------

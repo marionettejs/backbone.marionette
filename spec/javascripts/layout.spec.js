@@ -108,21 +108,27 @@ describe("layout", function(){
     beforeEach(function(){
       loadFixtures("layoutManagerTemplate.html");
 
-      view = new Backbone.View();
       layout = new LayoutManager();
       layout.render();
+      region = layout.regionOne;
 
+      view = new Backbone.View();
+      view.close = function(){};
       layout.regionOne.show(view);
 
-      region = layout.regionOne;
       spyOn(region, "close").andCallThrough();
+      spyOn(view, "close").andCallThrough();
 
       layout.render();
       layout.regionOne.show(view);
     });
 
-    it("should close the regions and associated views", function(){
+    it("should close the view from the region", function(){
       expect(region.close.callCount).toBe(2);
+    });
+
+    it("should close the regions", function(){
+      expect(view.close.callCount).toBe(1);
     });
 
     it("should re-bind the regions to the newly rendered elements", function(){

@@ -528,9 +528,23 @@ Backbone.Marionette = (function(Backbone, _, $){
       this.initializeRegions();
     },
 
+    render: function(){
+      var result = Marionette.ItemView.prototype.render.apply(this, arguments);
+
+      this.render = function(){
+        this.closeRegions();
+        this.reInitializeRegions();
+        var result = Marionette.ItemView.prototype.render.apply(this, arguments);
+        return result;
+      }
+
+      return result;
+    },
+
     // Handle closing regions, and then close the view itself.
     close: function () {
       this.closeRegions();
+      this.destroyRegions();
       Backbone.Marionette.ItemView.prototype.close.call(this, arguments);
     },
 
@@ -561,6 +575,14 @@ Backbone.Marionette = (function(Backbone, _, $){
 
     },
 
+    // Re-initialize all of the regions by updating the `el` that
+    // they point to
+    reInitializeRegions: function(){
+      _.each(this.regionManagers, function(region){
+        delete region.$el;
+      });
+    },
+
     // Close all of the regions that have been opened by
     // this layout. This method is called when the layout
     // itself is closed.
@@ -568,6 +590,14 @@ Backbone.Marionette = (function(Backbone, _, $){
       var that = this;
       _.each(this.regionManagers, function (manager, name) {
         manager.close();
+      });
+    },
+
+    // Destroys all of the regions by removing references
+    // from the Layout
+    destroyRegions: function(){
+      var that = this;
+      _.each(this.regionManagers, function (manager, name) {
         delete that[name];
       });
       this.regionManagers = {};

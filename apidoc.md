@@ -1641,7 +1641,7 @@ var CompView = Backbone.Marionette.CompositeView.extend({
 The model and collection for the composite view will re-render
 themselves under the following conditions:
 
-* When the collection's "reset" event is fired, it will re-render the entire list
+* When the collection's "reset" event is fired, it will only re-render the collection within the composite, and not the wrapper template
 * When the collection has a model added to it (the "add" event is fired), it will render that one item to the rendered list
 * When the collection has a model removed (the "remove" event is fired), it will remove that one item from the rendered list
 

@@ -13,6 +13,9 @@
   * Modules allow you to pass in any arbirary arguments, after the module definition function, and they will be supplied to the module definition function
   * The `this` argument in a module definition function is now the module itself
 
+* CompositeView:
+  * **BREAKING** When a CompositeView's collection is reset, only the collection will be re-rendered. It will no longe re-render the composite's template/model, just the collection.
+
 * BindTo:
   * The unbinding of an event now considers the `context` parameter when unbinding, allowing multiple handers to be bound to the same event from the same object, and unbinding only one of them
 

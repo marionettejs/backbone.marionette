@@ -983,7 +983,20 @@ Backbone.Marionette = (function(Backbone, _, $){
         // is supplied, and if we're at the last segment
         // of the "Module.Name" chain.
         if (isLastModuleInChain && moduleDefinition){
-          moduleDefinition(module, parentApp, Backbone, Marionette, jQuery, _);
+          // get the custom args passed in after the module definition and
+          // get rid of the module name and definition function
+          var customArgs = slice.apply(arguments);
+          customArgs.shift();
+          customArgs.shift();
+          
+          // final arguments list for the module definition
+          var argsArray = [module, parentApp, Backbone, Marionette, jQuery, _, customArgs];
+
+          // flatten the nested array
+          var args = _.flatten(argsArray);
+
+          // ensure the module definition's `this` is the module itself
+          moduleDefinition.apply(module, args);
         }
 
         // If the defined module is not what we are

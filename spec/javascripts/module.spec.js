@@ -120,14 +120,19 @@ describe("application modules", function(){
   });
 
   describe("when providing a callback function as a module definition", function(){
-    var MyApp, moduleArgs;
+    var MyApp, moduleArgs, thisArg;
 
     beforeEach(function(){
       MyApp = new Backbone.Marionette.Application();
 
       MyApp.module("MyModule", function(){
         moduleArgs = arguments;
+        thisArg = this;
       });
+    });
+
+    it("should run the module definition in the context of the module", function(){
+      expect(thisArg).toBe(MyApp.MyModule);
     });
 
     it("should pass the module object as the first parameter", function(){

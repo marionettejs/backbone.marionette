@@ -863,7 +863,7 @@ Backbone.Marionette = (function(Backbone, _, $){
 
       // Load the template asynchronously
       this.deferred = $.Deferred();
-      this.loadTemplate(function(template){
+      this.loadTemplate(this.templateId, function(template){
         that.template = template;
         that.deferred.resolve(template);
       });
@@ -874,11 +874,11 @@ Backbone.Marionette = (function(Backbone, _, $){
     // Load a template from the DOM, by default. Override
     // this method to provide your own template retrieval,
     // such as asynchronous loading from a server.
-    loadTemplate: function(callback){
-      var template = $(this.templateId).html();
+    loadTemplate: function(templateId, callback){
+      var template = $(templateId).html();
 
       if (!template || template.length === 0){
-        var msg = "Could not find template: '" + this.templateId + "'";
+        var msg = "Could not find template: '" + templateId + "'";
         var err = new Error(msg);
         err.name = "NoTemplateError";
         throw err;
@@ -898,7 +898,9 @@ Backbone.Marionette = (function(Backbone, _, $){
     }
   });
 
-  // TemplateCache object methods
+  // TemplateCache object-level methods. Manage the template
+  // caches from these method calls instead of creating 
+  // your own TemplateCache instances
   _.extend(Marionette.TemplateCache, {
     templateCaches: {},
 

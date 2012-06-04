@@ -102,4 +102,33 @@ describe("layout", function(){
     });
   });
 
+  describe("when re-rendering an already rendered layout", function(){
+    var region, layout, view;
+
+    beforeEach(function(){
+      loadFixtures("layoutManagerTemplate.html");
+
+      view = new Backbone.View();
+      layout = new LayoutManager();
+      layout.render();
+
+      layout.regionOne.show(view);
+
+      region = layout.regionOne;
+      spyOn(region, "close").andCallThrough();
+
+      layout.render();
+      layout.regionOne.show(view);
+    });
+
+    it("should close the regions and associated views", function(){
+      expect(region.close.callCount).toBe(2);
+    });
+
+    it("should re-bind the regions to the newly rendered elements", function(){
+      var regionEl = layout.$("#regionOne");
+      expect(region.$el[0]).toBe(regionEl[0]);
+    });
+  });
+
 });

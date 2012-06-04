@@ -1,4 +1,4 @@
-### v0.9.0-pre
+### v0.9.0-pre [view commit logs](https://github.com/derickbailey/backbone.marionette/compare/v0.8.4...dev)
 
 * Region:
   * **BREAKING** Removed the ability to send a second parameter to a regions' "show" method
@@ -24,23 +24,23 @@
 * BindTo:
   * The unbinding of an event now considers the `context` parameter when unbinding, allowing multiple handers to be bound to the same event from the same object, and unbinding only one of them
 
-### v0.8.4
+### v0.8.4 [view commit logs](https://github.com/derickbailey/backbone.marionette/compare/v0.8.3...v0.8.4)
 
 * Fixed: A call to `.module` will correctly pass the `Application` instance from which `.module` was called, as the second parameter of the module definition function
 
-### v0.8.3
+### v0.8.3 [view commit logs](https://github.com/derickbailey/backbone.marionette/compare/v0.8.2...v0.8.3)
 
 * Module definitions can be split across multiple files and/or multiple calls to define the module
 
-### v0.8.2
+### v0.8.2 [view commit logs](https://github.com/derickbailey/backbone.marionette/compare/v0.8.1...v0.8.2)
 
 * Views now have the ability to define `triggers` which will convert a DOM event in to a `view.trigger` event
 
-### v0.8.1
+### v0.8.1 [view commit logs](https://github.com/derickbailey/backbone.marionette/compare/v0.8.0...v0.8.1)
 
 * Module definition functions will only be applied to the last module in the . chain
 
-### v0.8.0
+### v0.8.0 [view commit logs](https://github.com/derickbailey/backbone.marionette/compare/v0.7.6...v0.8.0)
 
 * Added modules and sub-modules through the Application object
 

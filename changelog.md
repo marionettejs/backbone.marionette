@@ -1,13 +1,14 @@
 ### v0.9.0-pre
 
-* ** BREAKING CHANGES ** Region
+* **BREAKING** Region
   * Removed the ability to send a second parameter to a regions' "show" method
   * Changed the implementation of `Region` to allow easier overriding of how the new view is added to the DOM
 
-* ** BREAKING CHANGES ** Layout
+* **BREAKING** Layout
   * Regions specified within a layout are now available immediately after creating a layout instance
+  * Re-rendering a layout will close all regions and reset them to the new DOM elements that were rendered
 
-* ** BREAKING CHANGES: ** Modules
+* **BREAKING** Modules
   * Modules no longer allow you to return a custom module object from the module definition function
 
 * BindTo:

@@ -531,9 +531,12 @@ Backbone.Marionette = (function(Backbone, _, $){
     render: function(){
       var result = Marionette.ItemView.prototype.render.apply(this, arguments);
 
+      // Rewrite this function to handle re-rendering and
+      // re-initializing the `el` for each region
       this.render = function(){
         this.closeRegions();
         this.reInitializeRegions();
+
         var result = Marionette.ItemView.prototype.render.apply(this, arguments);
         return result;
       }

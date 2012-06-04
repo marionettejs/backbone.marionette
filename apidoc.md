@@ -860,6 +860,40 @@ regions may not be able to find the element that you've
 specified for them to manage. In that scenario, using the
 region will result in no changes to the DOM.
 
+### Re-Rendering A Layout
+
+A layout can be rendered as many times as needed, but renders
+after the first one behave differently than the initial render.
+
+The first time a layout is rendered, nothing special happens. It just
+delegates to the `ItemView` prototype to do the render. After the
+first render has happened, though, the render function is modified to
+account for re-rendering with regions in the layout.
+
+After the first render, all subsequent renders will force every
+region to close by calling the `close` method on them. This will
+force every view in the region, and sub-views if any, to be closed
+as well. Once the regions have been closed, the regions will be
+reset so that they are no longer referencing the element of the previous
+layout render. 
+
+Then after the Layout is finished re-rendering itself,
+showing a view in the layout's regions will cause the regions to attach
+themselves to the new elements in the layout.
+
+#### Avoid Re-Rendering The Entire Layout
+
+There are times when re-rendering the entire layout is necessary. However,
+due to the behavior described above, this can cuase a large amount of
+work to be needed in order to fully restore the layout and all of the
+views that the layout is displaying.
+
+Therefore, it is suggested that you avoid re-rendering the entire
+layout unless absolutely necessary. Instead, if you are binding the
+layout's template to a model and need to update portions of the layout,
+you should listen to the model's "change" events and only update the
+neccesary DOM elements.
+
 ### Nested Layouts And Views
 
 Since the `Layout` extends directly from `ItemView`, it

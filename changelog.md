@@ -1,15 +1,17 @@
 ### v0.9.0-pre
 
-* **BREAKING** Region
-  * Removed the ability to send a second parameter to a regions' "show" method
-  * Changed the implementation of `Region` to allow easier overriding of how the new view is added to the DOM
+* Region:
+  * **BREAKING** Removed the ability to send a second parameter to a regions' "show" method
+  * **BREAKING** Changed the implementation of `Region` to allow easier overriding of how the new view is added to the DOM
 
-* **BREAKING** Layout
-  * Regions specified within a layout are now available immediately after creating a layout instance
-  * Re-rendering a layout will close all regions and reset them to the new DOM elements that were rendered
+* Layout:
+  * **BREAKING** Regions specified within a layout are now available immediately after creating a layout instance
+  * **BREAKING** Re-rendering a layout will close all regions and reset them to the new DOM elements that were rendered
 
-* **BREAKING** Modules
-  * Modules no longer allow you to return a custom module object from the module definition function
+*  Modules:
+  * **BREAKING** Modules no longer allow you to return a custom module object from the module definition function
+  * Modules allow you to pass in any arbirary arguments, after the module definition function, and they will be supplied to the module definition function
+  * The `this` argument in a module definition function is now the module itself
 
 * BindTo:
   * The unbinding of an event now considers the `context` parameter when unbinding, allowing multiple handers to be bound to the same event from the same object, and unbinding only one of them

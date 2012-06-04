@@ -187,11 +187,12 @@ on calling `module` method.
 The module definition callback will receive 6 parameters:
 
 * The module itself
-* The Parent module or Application object that `.module` was called from
+* The Parent module, or Application object that `.module` was called from
 * Backbone
 * Backbone.Marionette
 * jQuery
 * Underscore
+* Any custom arguments
 
 You can add functions and data directly to your module to make
 them publicly accessible. You can also add private functions
@@ -222,6 +223,33 @@ MyApp.module("MyModule", function(MyModule, MyApp, Backbone, Marionette, $, _){
 
 console.log(MyApp.MyModule.someData); //=> public data
 MyApp.MyModule.someFunction(); //=> public data
+```
+
+### The Module's `this` Argument
+
+The module's `this` argument is set to the module itself.
+
+```js
+MyApp.module("Foo", function(Foo){
+  this === Foo; //=> true
+});
+```
+
+### Custom Arguments
+
+You can provide any number of custom arguments to your module, after the
+module definition function. This will allow you to import 3rd party
+libraries, and other resources that you want to have locally scoped to
+your module.
+
+```js
+MyApp.module("MyModule", function(MyModule, MyApp, Backbone, Marionette, $, _, Lib1, Lib2, LibEtc){
+
+  // Lib1 === LibraryNumber1;
+  // Lib2 === LibraryNumber2;
+  // LibEtc === LibraryNumberEtc;
+
+}, LibraryNumber1, LibraryNumber2, LibraryNumberEtc);
 ```
 
 ### Defining Sub-Modules With . Notation

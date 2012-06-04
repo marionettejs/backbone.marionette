@@ -377,7 +377,7 @@ Backbone.Marionette = (function(Backbone, _, $){
       if (this.collection){
         this.bindTo(this.collection, "add", this.addChildView, this);
         this.bindTo(this.collection, "remove", this.removeItemView, this);
-        this.bindTo(this.collection, "reset", this.render, this);
+        this.bindTo(this.collection, "reset", this.renderCollection, this);
       }
     },
 

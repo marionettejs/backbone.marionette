@@ -650,6 +650,9 @@ Backbone.Marionette = (function(Backbone, _, $){
       }
     },
 
+    // Internal method to process the `appRoutes` for the
+    // router, and turn them in to routes that trigger the
+    // specified method on the specified `controller`.
     processAppRoutes: function(controller, appRoutes){
       var method, methodName;
       var route, routesLength, i;
@@ -840,48 +843,42 @@ Backbone.Marionette = (function(Backbone, _, $){
   
   // Manage templates stored in `<script>` blocks,
   // caching them for faster access.
-  Marionette.TemplateCache = {
-    templates: {},
-    loaders: {},
+  Marionette.TemplateCache = function(templateId){
+    this.templateId = templateId;
+  };
 
-    // Get the specified template by id. Either
-    // retrieves the cached version, or loads it
-    // from the DOM.
-    get: function(templateId){
+  // TemplateCache instance methods, allowing each
+  // template cache object to manage it's own state
+  // and know whether or not it has been loaded
+  _.extend(Marionette.TemplateCache.prototype, {
+
+    // Internal method to load the template asynchronously.
+    load: function(){
       var that = this;
-      var templateRetrieval = $.Deferred();
-      var cachedTemplate = this.templates[templateId];
 
-      if (cachedTemplate){
-        templateRetrieval.resolve(cachedTemplate);
-      } else {
-        var loader = this.loaders[templateId];
-        if(loader) {
-          templateRetrieval = loader;
-        } else {
-          this.loaders[templateId] = templateRetrieval;
-
-          this.loadTemplate(templateId, function(template){
-            delete that.loaders[templateId];
-            that.templates[templateId] = template;
-            templateRetrieval.resolve(template);
-          });
-        }
-
+      // Guard clause to prevent loading this template more than once
+      if (this.deferred){
+        return this.deferred.promise();
       }
 
-      return templateRetrieval.promise();
-    },
+      // Load the template asynchronously
+      this.deferred = $.Deferred();
+      this.loadTemplate(function(template){
+        that.template = template;
+        that.deferred.resolve(template);
+      });
 
+      return this.deferred.promise();
+    },
+    
     // Load a template from the DOM, by default. Override
     // this method to provide your own template retrieval,
     // such as asynchronous loading from a server.
-    loadTemplate: function(templateId, callback){
-      var template = $(templateId).html();
+    loadTemplate: function(callback){
+      var template = $(this.templateId).html();
 
-      // Make sure we have a template before trying to compile it
       if (!template || template.length === 0){
-        var msg = "Could not find template: '" + templateId + "'";
+        var msg = "Could not find template: '" + this.templateId + "'";
         var err = new Error(msg);
         err.name = "NoTemplateError";
         throw err;
@@ -898,6 +895,26 @@ Backbone.Marionette = (function(Backbone, _, $){
     // the template engine used (Handebars, etc).
     compileTemplate: function(rawTemplate){
       return _.template(rawTemplate);
+    }
+  });
+
+  // TemplateCache object methods
+  _.extend(Marionette.TemplateCache, {
+    templateCaches: {},
+
+    // Get the specified template by id. Either
+    // retrieves the cached version, or loads it
+    // from the DOM.
+    get: function(templateId){
+      var that = this;
+      var cachedTemplate = this.templateCaches[templateId];
+
+      if (!cachedTemplate){
+        cachedTemplate = new Marionette.TemplateCache(templateId);
+        this.templateCaches[templateId] = cachedTemplate;
+      }
+
+      return cachedTemplate.load();
     },
 
     // Clear templates from the cache. If no arguments
@@ -913,13 +930,13 @@ Backbone.Marionette = (function(Backbone, _, $){
 
       if (length > 0){
         for(i=0; i<length; i++){
-          delete this.templates[arguments[i]];
+          delete this.templateCaches[arguments[i]];
         }
       } else {
-        this.templates = {};
+        this.templateCaches = {};
       }
     }
-  };
+  });
 
   // Renderer
   // --------

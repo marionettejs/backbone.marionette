@@ -4,29 +4,35 @@ describe("template cache", function(){
     beforeEach(function(){
       setFixtures("<script id='t1' type='template'>t1</script>");
 
-      spyOn(Backbone.Marionette.TemplateCache, "loadTemplate").andCallThrough();
+      spyOn(Backbone.Marionette.TemplateCache.prototype, "loadTemplate").andCallThrough();
 
       Backbone.Marionette.TemplateCache.get("#t1");
     });
     
     it("should load from the DOM", function(){
-      expect(Backbone.Marionette.TemplateCache.loadTemplate).toHaveBeenCalled();
+      expect(Backbone.Marionette.TemplateCache.prototype.loadTemplate).toHaveBeenCalled();
     });
   });
 
   describe("when loading a template more than once", function(){
+    var templateCache;
+
     beforeEach(function(){
+      Backbone.Marionette.TemplateCache.clear();
+
       setFixtures("<script id='t2' type='template'>t2</script>");
 
-      spyOn(Backbone.Marionette.TemplateCache, "loadTemplate").andCallThrough();
-
       Backbone.Marionette.TemplateCache.get("#t2");
+      templateCache = Backbone.Marionette.TemplateCache.templateCaches["#t2"];
+      spyOn(templateCache, "loadTemplate").andCallThrough();
+
       Backbone.Marionette.TemplateCache.get("#t2");
       Backbone.Marionette.TemplateCache.get("#t2");
     });
     
     it("should load from the DOM once", function(){
-      expect(Backbone.Marionette.TemplateCache.loadTemplate.callCount).toBe(1);
+      expect(templateCache.loadTemplate).not.toHaveBeenCalled();
+      expect(templateCache.loadTemplate.callCount).toBe(0);
     });
   });
 
@@ -39,7 +45,7 @@ describe("template cache", function(){
     });
     
     it("should clear the cache", function(){
-      expect(_.size(Backbone.Marionette.TemplateCache.templates)).toBe(0);
+      expect(_.size(Backbone.Marionette.TemplateCache.templateCaches)).toBe(0);
     });
   });
 
@@ -54,12 +60,12 @@ describe("template cache", function(){
     });
     
     it("should clear the specified templates cache", function(){
-      expect(Backbone.Marionette.TemplateCache.templates["#t4"]).toBeUndefined();
+      expect(Backbone.Marionette.TemplateCache.templateCaches["#t4"]).toBeUndefined();
     });
 
     it("should not clear other templates from the cache", function(){
-      expect(Backbone.Marionette.TemplateCache.templates["#t5"]).not.toBeUndefined();
-      expect(Backbone.Marionette.TemplateCache.templates["#t6"]).not.toBeUndefined();
+      expect(Backbone.Marionette.TemplateCache.templateCaches["#t5"]).not.toBeUndefined();
+      expect(Backbone.Marionette.TemplateCache.templateCaches["#t6"]).not.toBeUndefined();
     });
   });
 
@@ -74,12 +80,12 @@ describe("template cache", function(){
     });
     
     it("should clear the specified templates cache", function(){
-      expect(Backbone.Marionette.TemplateCache.templates["#t4"]).toBeUndefined();
-      expect(Backbone.Marionette.TemplateCache.templates["#t5"]).toBeUndefined();
+      expect(Backbone.Marionette.TemplateCache.templateCaches["#t4"]).toBeUndefined();
+      expect(Backbone.Marionette.TemplateCache.templateCaches["#t5"]).toBeUndefined();
     });
 
     it("should not clear other templates from the cache", function(){
-      expect(Backbone.Marionette.TemplateCache.templates["#t6"]).not.toBeUndefined();
+      expect(Backbone.Marionette.TemplateCache.templateCaches["#t6"]).not.toBeUndefined();
     });
   });
 });

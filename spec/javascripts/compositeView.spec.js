@@ -230,13 +230,15 @@ describe("composite view", function(){
 
       compositeView.render();
 
+      spyOn(compositeView, "renderModel").andCallThrough();
+
       var m3 = new Model({foo: "quux"});
       var m4 = new Model({foo: "widget"});
       collection.reset([m3, m4]);
     });
 
-    it("should render the template with the model", function(){
-      expect(compositeView.$el).toHaveText(/composite bar/);
+    it("should not re-render the template with the model", function(){
+      expect(compositeView.renderModel).not.toHaveBeenCalled();
     });
 
     it("should render the collection's items", function(){

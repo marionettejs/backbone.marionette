@@ -1834,55 +1834,6 @@ Backbone.Marionette.Renderer.renderTemplate = function(template, data){
 This implementation will replace the default Underscore.js 
 rendering with jQuery templates rendering.
 
-### Pre-Loaded Templates With RequireJS
-
-It's common for developers to use RequireJS to pre-load the entire
-template that is needed. When the template is pre-loaded like this,
-the use of a jQuery selector is not needed. 
-
-If you wish to replace the entire rendering process, based on the 
-assumption that you will always pre-load the entire template for 
-your view, it can be done by replacing the `render` method on the 
-`Renderer` object:
-
-```js
-Backbone.Marionette.Renderer.render = function(template, data){
-  return _.template(template, data);
-};
-```
-
-This will skip the `TemplateCache` usage entirely, and all of the
-other code that is usually run, and return the compiled template
-immediately.
-
-### Caching Pre-Compiled Templates
-
-There's a performance hit in replacing the entire `render`
-function of the `Renderer` object as shown in the example
-above. You should only have to compile a template once, and you should
-be caching the pre-compiled template after that.
-
-To accomplish this, avoid replacing the `render` function. Instead
-use a combination of the `renderTemplate` function and the
-`TemplateCache.loadTemplate` function.
-
-```js
-Backbone.Marionette.TemplateCache.loadTemplate = function(template, callback){
-  // pre-compile the template and store that in the cache.
-  var compiledTemplate = _.template(template);
-  callback.call(this, compiledTemplate);
-};
-
-Backbone.Marionette.Renderer.renderTemplate = function(template, data){
-  // because `template` is the pre-compiled template object,
-  // we only need to execute the template with the data
-  return template(data);
-}
-```
-
-For more information about the `TemplateCache.loadTemplate` function,
-see the next section of the documentation.
-
 ## Backbone.Marionette.TemplateCache
 
 The `TemplateCache` provides a cache for retrieving templates
@@ -1891,31 +1842,19 @@ the speed of subsequent calls to get a template.
 
 ### Basic Usage
 
-To use the `TemplateCache`, call it directly. It is not
-instantiated like other Marionette objects.
-
-### Get A Template
-
-Templates are retrieved using a jQuery selector by default, and 
-are handed back to you via a callback method. The template is returned
-as a plain string.
+To use the `TemplateCache`, call the `get` method on TemplateCache directly.
+Internally, instances of the TemplateCache type will be created and stored
+but you do not have to manually create these instances yourself.
 
 ```js
-Backbone.Marionette.TemplateCache.get("#my-template", function(template){
+var promise = Backbone.Marionette.TemplateCache.get("#my-template");
+promise.done(function(template){
  // use the template here
 });
 ```
 
 Making multiple calls to get the same template will retrieve the
-template from the cache on subsequence calls:
-
-```js
-var a, b, c;
-Backbone.Marionette.TemplateCache.get("#my-template", function(tmpl){a = tmpl});
-Backbone.Marionette.TemplateCache.get("#my-template", function(tmpl){b = tmpl});
-Backbone.Marionette.TemplateCache.get("#my-template", function(tmpl){c = tmpl});
-a === b === c; // => true
-```
+template from the cache on subsequence calls.
 
 ### Override Template Retrieval
 
@@ -1925,9 +1864,13 @@ works, you can override the `loadTemplate` method on the
 `TemplateCache` object.
 
 ```js
-Backbone.Marionette.TemplateCache.loadTemplate = function(templateId, callback){
+Backbone.Marionette.TemplateCache.prototype.loadTemplate = function(templateId, callback){
   // load your template here, returning it or a deferred
   // object that resolves with the template as the only param
+  var myTemplate = ...;
+
+  // send the template back
+  callback(myTemplate);
 }
 ```
 

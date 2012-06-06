@@ -12,6 +12,12 @@ describe("collection view", function(){
     }
   });
 
+  var EmptyView = Backbone.Marionette.ItemView.extend({
+    tagName: "span",
+    className: "isempty",
+    render: function(){}
+  });
+
   var CollectionView = Backbone.Marionette.CollectionView.extend({
     itemView: ItemView,
 
@@ -36,6 +42,11 @@ describe("collection view", function(){
     appendHtml: function(collectionView, itemView){
       collectionView.$el.prepend(itemView.el);
     }
+  });
+
+  var EmptyCollectionView = Backbone.Marionette.CollectionView.extend({
+    itemView: ItemView,
+    emptyView: EmptyView
   });
 
   var NoItemView = Backbone.Marionette.CollectionView.extend({
@@ -127,6 +138,29 @@ describe("collection view", function(){
 
     it("should not reference any view items", function(){
       expect(_.size(collectionView.children)).toBe(0);
+    });
+  });
+
+  describe("when rendering a collection view with an empty collection", function(){
+    var collectionView;
+
+    beforeEach(function(){
+      var collection = new Collection();
+      collectionView = new EmptyCollectionView({
+        collection: collection
+      });
+
+      var deferred = collectionView.render();
+
+      deferred.done(function(){ deferredResolved = true });
+    });
+
+    it("should append the html for each emptyView", function(){
+      expect($(collectionView.$el)).toHaveHtml("<span class=\"isempty\"></span>");
+    });
+
+    it("should reference each of the rendered view items", function(){
+      expect(_.size(collectionView.children)).toBe(1);
     });
   });
 

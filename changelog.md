@@ -1,5 +1,7 @@
 ### v0.9.0-pre [view commit logs](https://github.com/derickbailey/backbone.marionette/compare/v0.8.4...dev)
 
+* Split the single src/backbone.marionette.js file into multiple files for easier maintenance
+
 * Renderer:
   * **BREAKING** Removed the `renderHtml` method
   * Rendering a pre-compiled template function is now much easier - just override the `Renderer.render` method.

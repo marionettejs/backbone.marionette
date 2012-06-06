@@ -1913,7 +1913,7 @@ call the `TemplateCache`. Just specify the `template` attribute
 of your view as a jQuery selector, and the `ItemView` will use 
 the template manager by default.
 
-## Backbone.Marionette.Callbacks
+## Marionette.Callbacks
 
 The `Callbacks` object assists in managing a collection of callback
 methods, and executing them, in an async-safe manner.
@@ -1939,13 +1939,13 @@ callbacks.add(function(options){
   alert("I'm a callback with " + options.value + "!");
 });
 
-callbacks.run(someContext, {value: "options"});
+callbacks.run({value: "options"}, someContext);
 ```
 
 This example will display an alert box that says "I'm a callback
 with options!". The executing context for each of the callback
-methods has been set to the `someContext` object, which can be
-any valid JavaScript object.
+methods has been set to the `someContext` object, which is an optional
+parameter that can be any valid JavaScript object.
 
 ### Advanced / Async Use
 

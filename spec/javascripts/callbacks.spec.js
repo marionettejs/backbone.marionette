@@ -20,7 +20,7 @@ describe("callbacks", function(){
         secondCall = true;
       });
 
-      callbacks.run(specifiedContext, specifiedOptions);
+      callbacks.run(specifiedOptions, specifiedContext);
     });
 
     it("should execute the first", function(){

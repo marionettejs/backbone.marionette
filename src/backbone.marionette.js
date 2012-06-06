@@ -701,7 +701,7 @@ Backbone.Marionette = (function(Backbone, _, $){
     // to the app, and runs all of the initializer functions
     start: function(options){
       this.trigger("initialize:before", options);
-      this.initCallbacks.run(this, options);
+      this.initCallbacks.run(options, this);
       this.trigger("initialize:after", options);
 
       this.trigger("start", options);
@@ -814,7 +814,7 @@ Backbone.Marionette = (function(Backbone, _, $){
     // Run all registered callbacks with the context specified. 
     // Additional callbacks can be added after this has been run 
     // and they will still be executed.
-    run: function(context, options){
+    run: function(options, context){
       this.deferred.resolve(context, options);
     }
   });

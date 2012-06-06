@@ -19,7 +19,7 @@
   * **BREAKING** Re-rendering a layout will close all regions and reset them to the new DOM elements that were rendered
   * **BREAKING** Layouts no longer have a `.vent` event aggregator hanging off them
 
-*  Modules:
+* Modules:
   * **BREAKING** Modules must be defined on an instance of a Marionette.Application, and cannot be defined from another module directly
   * **BREAKING** Modules no longer allow you to return a custom module object from the module definition function
   * **BREAKING** Modules no longer allow you to add initializers to them
@@ -35,6 +35,9 @@
   * **BREAKING** Moved TemplateCache to object instances instead of single object literal
   * **BREAKING** Moved the `loadTemplate` and `compileTemplate` to `TemplateCache.prototype`
   * **BREAKING** `TemplateCache.get` no longer accepts a callback method. It always returns jQuery promise
+
+* Callbacks:
+  * **BREAKING** Switched the order of parameters for the `run` method to `args, context`
 
 * BindTo:
   * The unbinding of an event now considers the `context` parameter when unbinding, allowing multiple handers to be bound to the same event from the same object, and unbinding only one of them

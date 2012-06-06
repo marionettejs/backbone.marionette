@@ -2,10 +2,13 @@
 
 * Renderer:
   * **BREAKING** Removed the `renderHtml` method
-  * Rendering a pre-compiled template function is now much easier.
+  * Rendering a pre-compiled template function is now much easier - just override the `Renderer.render` method.
+
+* Marionette.View:
+  * **BREAKING** Renamed the `getTemplateSelector` method to `getTemplate`
 
 * ItemView:
-  * **BREAKING** The `template` attribute no longer allows you to specify a function that returns a jQuery selector
+  * **BREAKING** The `template` attribute no longer allows you to specify a function that returns a jQuery selector. Override `getTemplate` to do this.
 
 * Region:
   * **BREAKING** Removed the ability to send a second parameter to a regions' "show" method

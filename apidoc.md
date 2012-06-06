@@ -762,6 +762,28 @@ back from the `serializeData` method for you. This will
 allow you to create helper methods that can be called from
 within your templates.
 
+### Change Which Template Is Rendered For A View
+
+There may be some cases where you need to change the template that is
+used for a view, based on some simple logic such as the value of a
+specific attribute in the view's model. To do this, you can provide
+a `getTemplate` function on your views and use this to return the
+template that you need.
+
+```js
+MyView = Backbone.Marionette.ItemView.extend({
+  getTemplate: function(){
+    if (this.model.get("foo")){
+      return "#some-template";
+    } else {
+      return "#a-different-template";
+    }
+  }
+});
+```
+
+This applies to all view types.
+
 #### Basic Example
 
 ```html
@@ -997,28 +1019,6 @@ new MyView().render().done(function(){
   // the view is done rendering. do stuff here
 });
 ```
-
-## Change Which Template Is Rendered For A View
-
-There may be some cases where you need to change the template that is
-used for a view, based on some simple logic such as the value of a
-specific attribute in the view's model. To do this, you can provide
-a `getTemplate` function on your views and use this to return the
-template that you need.
-
-```js
-MyView = Backbone.Marionette.ItemView.extend({
-  getTemplate: function(){
-    if (this.model.get("foo")){
-      return "#some-template";
-    } else {
-      return "#a-different-template";
-    }
-  }
-});
-```
-
-This applies to all view types, not just ItemView.
 
 ### Callback Methods
 

@@ -17,9 +17,14 @@
 * Layout:
   * **BREAKING** Regions specified within a layout are now available immediately after creating a layout instance
   * **BREAKING** Re-rendering a layout will close all regions and reset them to the new DOM elements that were rendered
+  * **BREAKING** Layouts no longer have a `.vent` event aggregator hanging off them
 
 *  Modules:
+  * **BREAKING** Modules must be defined on an instance of a Marionette.Application, and cannot be defined from another module directly
   * **BREAKING** Modules no longer allow you to return a custom module object from the module definition function
+  * **BREAKING** Modules no longer allow you to add initializers to them
+  * **BREAKING** Modules no longer have a `.vent` event aggregator hanging off them
+  * Extracted `Marionette.Module` in to it's own constructor function to be used as modules, instead of Marionette.Application
   * Modules allow you to pass in any arbirary arguments, after the module definition function, and they will be supplied to the module definition function
   * The `this` argument in a module definition function is now the module itself
 

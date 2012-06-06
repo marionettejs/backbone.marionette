@@ -146,22 +146,16 @@ See the `Marionette.EventAggregator` documentation below, for more details.
 ## Marionette.Application.module
 
 Marionette allows you to define a module within your application,
-including sub-modules hanging from that module.
+including sub-modules hanging from that module. This is useful for creating 
+modular, encapsulated applications that are be split apart in to multiple 
+files.
 
-This is useful for creating modular, encapsulated applications
-that are be split apart in to multiple files.
-
-By default, every module that you define and add to your 
-application, including sub-modules, is a new `Application`
-object instance. This allows you to have unlimited
-sub-modules and nesting. It also means you have all of the
-features and functionality of an `Application` object for
-each module.
+Marionette's module allow you to have unlimited sub-modules hanging off
+your application, and serve as an event aggregator in themselves.
 
 ### Basic Usage
 
-A module is defined directly from an Application object, 
-and created another Application object as the specified
+A module is defined directly from an Application object as the specified
 name:
 
 ```js
@@ -177,6 +171,24 @@ myModule === MyApp.MyModule; // => true
 If you specify the same module name more than once, the
 first instance of the module will be retained and a new
 instance will not be created.
+
+### Defining Sub-Modules With . Notation
+
+Sub-modules or child modules can be defined as a hierarchy of modules and 
+sub-modules all at once:
+
+```js
+MyApp.module("Parent.Child.GrandChild");
+
+MyApp.Parent; // => a valid module object
+MyApp.Parent.Child; // => a valid module object
+MyApp.Parent.Child.GrandChild; // => a valid module object
+```
+
+When defining sub-modules using the dot-notation, the 
+parent modules do not need to exist. They will be created
+for you if they don't exist. If they do exist, though, the
+existing module will be used instead of creating a new one.
 
 ### Module Definitions
 
@@ -250,54 +262,6 @@ MyApp.module("MyModule", function(MyModule, MyApp, Backbone, Marionette, $, _, L
   // LibEtc === LibraryNumberEtc;
 
 }, LibraryNumber1, LibraryNumber2, LibraryNumberEtc);
-```
-
-### Defining Sub-Modules With . Notation
-
-Sub-modules can be defined in a number of ways. 
-
-You can define a module, and then later use that module 
-to define sub-modules:
-
-```js
-MyModule = MyApp.module("MyModule");
-MyModule.module("SubModule");
-
-MyApp.MyModule.SubModule; // => a valid module object
-```
-
-Or you can define an entire hierarchy of modules and 
-sub-modules all at once:
-
-```js
-MyApp.module("Parent.Child.GrandChild");
-
-MyApp.Parent.Child.GrandChild; // => a valid module object
-```
-
-When defining sub-modules using the dot-notation, the 
-parent modules do not need to exist. They will be created
-for you if they don't exist. If they do exist, though, the
-existing module will be used instead of creating a new one.
-
-### Starting A Sub-Module
-
-As each module is an `Application` object instance, 
-initializer functions can be registerd on your modules. There
-is no automatic starting of these modules, though. If you
-wish to use the module's initializer functions, you must
-manually call the module's start method.
-
-```js
-MyApp.module("MyModule", function(MyModule){
-
-  MyModule.addInitializer(function(){
-    console.log("I'm a module initializer!");
-  });
-
-});
-
-MyApp.MyModule.start(); // => "I'm a module initializer!"
 ```
 
 ### Splitting A Module Definition Apart

@@ -523,7 +523,6 @@ Backbone.Marionette = (function(Backbone, _, $){
   // Used for composite view management and sub-application areas.
   Marionette.Layout = Marionette.ItemView.extend({
     constructor: function () {
-      this.vent = new Backbone.Marionette.EventAggregator();
       Backbone.Marionette.ItemView.apply(this, arguments);
       this.initializeRegions();
     },
@@ -730,6 +729,12 @@ Backbone.Marionette = (function(Backbone, _, $){
           this[region] = regionObj;
         }
       }
+    },
+
+    // Create a module, attached to the application
+    module: function(){
+      // see the Marionette.Module object for more information
+      return Marionette.Module.create.apply(this, arguments);
     }
   });
 
@@ -957,23 +962,26 @@ Backbone.Marionette = (function(Backbone, _, $){
     }
   };
 
-  // Modules
-  // -------
+  // Module
+  // ------
+  
+  // A simple module system, used to create privacy and encapsulation in
+  // Marionette applications
+  Marionette.Module = function(){};
 
-  // The "Modules" object builds modules on an
-  // object that it is attached to. It should not be
-  // used on it's own, but should be attached to
-  // another object that will define modules.
-  Marionette.Modules = {
+  // Extend the Module prototype with events / bindTo, so that the module
+  // can be used as an event aggregator or pub/sub.
+  _.extend(Marionette.Module.prototype, Backbone.Events, Marionette.BindTo);
 
-    // Add modules to the application, providing direct
-    // access to your applicaiton object, Backbone, 
-    // Marionette, jQuery and Underscore as parameters 
-    // to a callback function.
-    module: function(moduleNames, moduleDefinition){
+  // Function level methods to create modules
+  _.extend(Marionette.Module, {
+
+    // Create a module, hanging off 'this' as the parent object. This
+    // method must be called with .apply or .create
+    create: function(moduleNames, moduleDefinition){
       var moduleName, module, moduleOverride;
+      var parentObject = this;
       var parentModule = this;
-      var parentApp = this;
       var moduleNames = moduleNames.split(".");
 
       // Loop through all the parts of the module definition
@@ -988,7 +996,7 @@ Backbone.Marionette = (function(Backbone, _, $){
 
         // Create a new module if we don't have one already
         if (!module){ 
-          module = new Marionette.Application();
+          module = new Marionette.Module();
         }
 
         // Check to see if we need to run the definition
@@ -1003,7 +1011,7 @@ Backbone.Marionette = (function(Backbone, _, $){
           customArgs.shift();
           
           // final arguments list for the module definition
-          var argsArray = [module, parentApp, Backbone, Marionette, jQuery, _, customArgs];
+          var argsArray = [module, parentObject, Backbone, Marionette, jQuery, _, customArgs];
 
           // flatten the nested array
           var args = _.flatten(argsArray);
@@ -1026,7 +1034,7 @@ Backbone.Marionette = (function(Backbone, _, $){
       // Return the last module in the definition chain
       return module;
     }
-  };
+  });
 
   // Helpers
   // -------
@@ -1038,9 +1046,6 @@ Backbone.Marionette = (function(Backbone, _, $){
   var extend = Marionette.View.extend;
   Marionette.Region.extend = extend;
   Marionette.Application.extend = extend;
-
-  // Copy the `modules` feature on to the `Application` object
-  Marionette.Application.prototype.module = Marionette.Modules.module;
 
   // Copy the features of `BindTo` on to these objects
   _.extend(Marionette.View.prototype, Marionette.BindTo);

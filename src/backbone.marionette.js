@@ -539,6 +539,10 @@ Backbone.Marionette = (function(Backbone, _, $){
       this.initializeRegions();
     },
 
+    // Layout's render will use the existing region objects the
+    // first time it is called. Subsequent calls will close the
+    // views that the regions are showing and then reset the `el`
+    // for the regions to the newly rendered DOM elements.
     render: function(){
       var result = Marionette.ItemView.prototype.render.apply(this, arguments);
 
@@ -1074,7 +1078,6 @@ Backbone.Marionette = (function(Backbone, _, $){
     if (fn) { promise = fn.call(context); }
     $.when(promise).then(callback);
   }
-
 
   return Marionette;
 })(Backbone, _, window.jQuery || window.Zepto || window.ender);

@@ -52,7 +52,7 @@ describe("collection view", function(){
     });
 
     it("should throw an error saying there's not item view", function(){
-      expect(collectionView.render).toThrow("An `itemView` must be specified");
+      expect(function(){collectionView.render()}).toThrow("An `itemView` must be specified");
     });
   });
   

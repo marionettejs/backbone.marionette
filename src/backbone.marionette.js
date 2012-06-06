@@ -8,12 +8,12 @@ Backbone.Marionette = (function(Backbone, _, $){
 
   // The core view type that other Marionette views extend from.
   Marionette.View = Backbone.View.extend({
-    // Get the template or template id/selector for this view
+
+    // Get the template for this view
     // instance. You can set a `template` attribute in the view
     // definition or pass a `template: "whatever"` parameter in
-    // to the constructor options. The `template` can also be
-    // a function that returns a selector string.
-    getTemplateSelector: function(){
+    // to the constructor options. 
+    getTemplate: function(){
       var template;
 
       // Get the template from `this.options.template` or
@@ -22,11 +22,6 @@ Backbone.Marionette = (function(Backbone, _, $){
         template = this.options.template;
       } else {
         template = this.template;
-      }
-
-      // check if it's a function and execute it, if it is
-      if (_.isFunction(template)){
-        template  = template.call(this);
       }
 
       return template;
@@ -129,11 +124,7 @@ Backbone.Marionette = (function(Backbone, _, $){
   // and calling several methods on extended views, such as `onRender`.
   Marionette.ItemView = Marionette.View.extend({
     constructor: function(){
-      var args = slice.call(arguments);
-      Marionette.View.prototype.constructor.apply(this, args);
-
-      _.bindAll(this, "render");
-
+      Marionette.View.prototype.constructor.apply(this, arguments);
       this.initialEvents();
     },
 
@@ -187,7 +178,7 @@ Backbone.Marionette = (function(Backbone, _, $){
     // Override this method to replace the specific way in
     // which an item view has it's data rendered in to html.
     renderHtml: function(data) {
-      var template = this.getTemplateSelector();
+      var template = this.getTemplate();
       return Marionette.Renderer.render(template, data);
     },
 
@@ -208,8 +199,6 @@ Backbone.Marionette = (function(Backbone, _, $){
   Marionette.CollectionView = Marionette.View.extend({
     constructor: function(){
       Marionette.View.prototype.constructor.apply(this, arguments);
-
-      _.bindAll(this, "addItemView", "render");
       this.initialEvents();
     },
 
@@ -431,7 +420,7 @@ Backbone.Marionette = (function(Backbone, _, $){
       var data = {};
       data = this.serializeData();
 
-      var template = this.getTemplateSelector();
+      var template = this.getTemplate();
       return Marionette.Renderer.render(template, data);
     }
   });
@@ -953,29 +942,19 @@ Backbone.Marionette = (function(Backbone, _, $){
 
     // Render a template with data. The `template` parameter is
     // passed to the `TemplateCache` object to retrieve the
-    // actual template. Override this method to provide your own
+    // template function. Override this method to provide your own
     // custom rendering and template handling for all of Marionette.
     render: function(template, data){
-      var that = this;
       var asyncRender = $.Deferred();
 
       var templateRetrieval = Marionette.TemplateCache.get(template);
-
-      $.when(templateRetrieval).then(function(template){
-        var html = that.renderTemplate(template, data);
+      $.when(templateRetrieval).then(function(templateFunc){
+        var html = templateFunc(data);
         asyncRender.resolve(html);
       });
 
       return asyncRender.promise();
-    },
-
-    // Default implementation uses underscore.js templates. Override
-    // this method to use your own templating engine.
-    renderTemplate: function(template, data){
-      var html = template(data);
-      return html;
     }
-
   };
 
   // Modules

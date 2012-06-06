@@ -7,48 +7,17 @@ describe("item view", function(){
 
   var ItemView = Backbone.Marionette.ItemView.extend({});
 
-  var OnRenderView = Backbone.Marionette.ItemView.extend({
-    template: "#emptyTemplate",
-    beforeRender: function(){},
-    onRender: function(){}
-  });
-
-  var AsyncOnRenderView = Backbone.Marionette.ItemView.extend({
-    template: "#emptyTemplate",
-    asyncCallback: function(){},
-    onRender: function() {
-      var that = this;
-      var deferred = $.Deferred();
-      setTimeout(function() {
-        deferred.resolve(that.asyncCallback());
-      }, 0);
-      return deferred.promise();
-    }
-  });
-
-  var CustomRenderView = Backbone.Marionette.ItemView.extend({
-    renderTemplate: function(template, data){
-      return "<foo>custom</foo>";
-    }
-  });
-
-  var EventedView = Backbone.Marionette.ItemView.extend({
-    template: "#emptyTemplate",
-
-    modelChange: function(){ },
-
-    collectionChange: function(){ },
-
-    beforeClose: function(){},
-
-    onClose: function(){ }
-  });
-
   beforeEach(function(){
     loadFixtures("itemTemplate.html", "collectionItemTemplate.html", "emptyTemplate.html");
   });
 
   describe("when rendering", function(){
+    var OnRenderView = Backbone.Marionette.ItemView.extend({
+      template: "#emptyTemplate",
+      beforeRender: function(){},
+      onRender: function(){}
+    });
+
     var view;
     var renderResult;
     var deferredDone;
@@ -148,6 +117,19 @@ describe("item view", function(){
   });
 
   describe("when an item view has an asynchronous onRender and is rendered", function(){
+    var AsyncOnRenderView = Backbone.Marionette.ItemView.extend({
+      template: "#emptyTemplate",
+      asyncCallback: function(){},
+      onRender: function() {
+        var that = this;
+        var deferred = $.Deferred();
+        setTimeout(function() {
+          deferred.resolve(that.asyncCallback());
+        }, 0);
+        return deferred.promise();
+      }
+    });
+
     var view, promise, callbackSpy;
 
     beforeEach(function(){
@@ -242,6 +224,18 @@ describe("item view", function(){
   });
 
   describe("when closing an item view", function(){
+    var EventedView = Backbone.Marionette.ItemView.extend({
+      template: "#emptyTemplate",
+
+      modelChange: function(){ },
+
+      collectionChange: function(){ },
+
+      beforeClose: function(){},
+
+      onClose: function(){ }
+    });
+
     var view;
     var model;
     var collection;

@@ -1,5 +1,12 @@
 ### v0.9.0-pre [view commit logs](https://github.com/derickbailey/backbone.marionette/compare/v0.8.4...dev)
 
+* Renderer:
+  * **BREAKING** Removed the `renderHtml` method
+  * Rendering a pre-compiled template function is now much easier.
+
+* ItemView:
+  * **BREAKING** The `template` attribute no longer allows you to specify a function that returns a jQuery selector
+
 * Region:
   * **BREAKING** Removed the ability to send a second parameter to a regions' "show" method
   * **BREAKING** Changed the implementation of `Region` to allow easier overriding of how the new view is added to the DOM

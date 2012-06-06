@@ -33,6 +33,7 @@ Marionette.CollectionView = Marionette.View.extend({
     var deferredRender = $.Deferred();
     var promises = [];
     var ItemView = this.getItemView();
+    var EmptyView = this.options.emptyView || this.emptyView;
 
     if (this.beforeRender) { this.beforeRender(); }
     this.trigger("collection:before:render", this);
@@ -40,10 +41,15 @@ Marionette.CollectionView = Marionette.View.extend({
     this.closeChildren();
 
     if (this.collection) {
-      this.collection.each(function(item){
-        var promise = that.addItemView(item, ItemView);
+      if (this.collection.length === 0 && EmptyView) {
+        var promise = this.addItemView(new Backbone.Model(), EmptyView);
         promises.push(promise);
-      });
+      } else {
+        this.collection.each(function(item){
+          var promise = that.addItemView(item, ItemView);
+          promises.push(promise);
+        });
+      }
     }
 
     deferredRender.done(function(){

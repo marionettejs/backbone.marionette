@@ -2,24 +2,36 @@
 
 * Split the single src/backbone.marionette.js file into multiple files for easier maintenance
 
-* Renderer:
-  * **BREAKING** Removed the `renderHtml` method
-  * Rendering a pre-compiled template function is now much easier - just override the `Renderer.render` method.
-
 * Marionette.View:
   * **BREAKING** Renamed the `getTemplateSelector` method to `getTemplate`
 
 * ItemView:
   * **BREAKING** The `template` attribute no longer allows you to specify a function that returns a jQuery selector. Override `getTemplate` to do this.
 
-* Region:
-  * **BREAKING** Removed the ability to send a second parameter to a regions' "show" method
-  * **BREAKING** Changed the implementation of `Region` to allow easier overriding of how the new view is added to the DOM
+* CollectionView:
+  * Now supports optional `emptyView` attribute, to specify what view to render when no items exist in the collection
+
+* CompositeView:
+  * **BREAKING** When a CompositeView's collection is reset, only the collection will be re-rendered. It will no longe re-render the composite's template/model, just the collection.
+  * Now supports optional `emptyView` attribute, to specify what view to render when no items exist in the collection
 
 * Layout:
   * **BREAKING** Regions specified within a layout are now available immediately after creating a layout instance
   * **BREAKING** Re-rendering a layout will close all regions and reset them to the new DOM elements that were rendered
   * **BREAKING** Layouts no longer have a `.vent` event aggregator hanging off them
+
+* Region:
+  * **BREAKING** Removed the ability to send a second parameter to a regions' "show" method
+  * **BREAKING** Changed the implementation of `Region` to allow easier overriding of how the new view is added to the DOM
+
+* TemplateCache:
+  * **BREAKING** Moved TemplateCache to object instances instead of single object literal
+  * **BREAKING** Moved the `loadTemplate` and `compileTemplate` to `TemplateCache.prototype`
+  * **BREAKING** `TemplateCache.get` no longer accepts a callback method. It always returns jQuery promise
+
+* Renderer:
+  * **BREAKING** Removed the `renderHtml` method
+  * Rendering a pre-compiled template function is now much easier - just override the `Renderer.render` method.
 
 * Modules:
   * **BREAKING** Modules must be defined on an instance of a Marionette.Application, and cannot be defined from another module directly
@@ -29,14 +41,6 @@
   * Extracted `Marionette.Module` in to it's own constructor function to be used as modules, instead of Marionette.Application
   * Modules allow you to pass in any arbirary arguments, after the module definition function, and they will be supplied to the module definition function
   * The `this` argument in a module definition function is now the module itself
-
-* CompositeView:
-  * **BREAKING** When a CompositeView's collection is reset, only the collection will be re-rendered. It will no longe re-render the composite's template/model, just the collection.
-
-* TemplateCache:
-  * **BREAKING** Moved TemplateCache to object instances instead of single object literal
-  * **BREAKING** Moved the `loadTemplate` and `compileTemplate` to `TemplateCache.prototype`
-  * **BREAKING** `TemplateCache.get` no longer accepts a callback method. It always returns jQuery promise
 
 * Callbacks:
   * **BREAKING** Switched the order of parameters for the `run` method to `args, context`

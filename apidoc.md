@@ -1241,6 +1241,55 @@ specified collection, render each of them using a specified `itemView`,
 then append the results of the item view's `el` to the collection view's
 `el`.
 
+### CollectionView's `itemView`
+
+Specify an `itemView` in your collection view definition. This must be
+a Backbone view object definition (not instance). It can be any 
+`Backbone.View` or be derived from `Marionette.ItemView`.
+
+```js
+MyItemView = Backbone.Marionette.ItemView.extend({});
+
+Backbone.Marionette.CollectionView.extend({
+  itemView: MyItemView
+});
+```
+
+Alternatively, you can specify an `itemView` in the options for
+the constructor:
+
+```js
+MyCollectionView = Backbone.Marionette.CollectionView.extend({...});
+
+new MyCollectionView({
+  itemView: MyItemView
+});
+```
+
+If you do not specify an `itemView`, an exception will be thrown
+stating that you must specify an `itemView`.
+
+### CollectionView's `emptyView`
+
+When a collection has no items, and you need to render a view other than
+the list of itemViews, you can specify an `emptyView` attribute on your
+collection view.
+
+```js
+NoItemsView = Backbone.Marionette.ItemView.extend({
+  template: "#show-no-items-message-template"
+});
+
+Backbone.Marionette.CollectionView.extend({
+  // ...
+
+  emptyView: NoItemsView
+});
+```
+
+This will render the `emptyView` and display the message that needs to
+be displayed when there are no items.
+
 ### Callback Methods
 
 There are several callback methods that can be provided on a
@@ -1437,34 +1486,6 @@ new MyCollectionView().render().done(function(){
   // all of the children are now rendered. do stuff here.
 });
 ```
-
-### CollectionView's itemView
-
-Specify an `itemView` in your collection view definition. This must be
-a Backbone view object definition (not instance). It can be any 
-`Backbone.View` or be derived from `Marionette.ItemView`.
-
-```js
-MyItemView = Backbone.Marionette.ItemView.extend({});
-
-Backbone.Marionette.CollectionView.extend({
-  itemView: MyItemView
-});
-```
-
-Alternatively, you can specify an `itemView` in the options for
-the constructor:
-
-```js
-MyCollectionView = Backbone.Marionette.CollectionView.extend({...});
-
-new MyCollectionView({
-  itemView: MyItemView
-});
-```
-
-If you do not specify an `itemView`, an exception will be thrown
-stating that you must specify an `itemView`.
 
 ### CollectionView: Automatic Rendering
 

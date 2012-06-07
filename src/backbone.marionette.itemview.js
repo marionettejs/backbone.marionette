@@ -11,6 +11,8 @@ Marionette.ItemView = (function(Mariontte, _){
     constructor: function(){
       Marionette.View.prototype.constructor.apply(this, arguments);
       this.initialEvents();
+
+      this.renderer = new ItemViewRendering(this);
     },
 
     // Configured the initial events that the item view 
@@ -25,8 +27,7 @@ Marionette.ItemView = (function(Mariontte, _){
     // Render the view, defaulting to underscore.js templates.
     // You can override this in your view definition.
     render: function(){
-      var renderer = new ItemViewRendering(this);
-      return renderer.render();
+      return this.renderer.render();
     },
 
     // Override the default close event to add a few

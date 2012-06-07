@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+
+    <!-- Provide a title.  This will be shown on the generated chart -->
+    <title>Marionette Test Suite</title>
+
+    <script type="text/javascript" src="JSLitmus.js"></script>
+    <script type="text/javascript" src="../../public/javascripts/jquery.js"></script>
+    <script type="text/javascript" src="../../public/javascripts/underscore.js"></script>
+    <script type="text/javascript" src="../../public/javascripts/backbone.js"></script>
+    <script type="text/javascript" src="../../lib/backbone.marionette.min.js"></script>
+    <script type="text/javascript">
+      var ItemView = Backbone.Marionette.ItemView.extend({
+        template: "#item-template"
+      });
+
+      var view = new ItemView();
+      JSLitmus.test('Render ItemView', function() {
+          view.render();
+      });
+    </script>
+
+    <script id="item-template" type="text/html">
+      a template to render!!!
+    </script>
+  </head>
+
+  <body>
+    <p>Basic performance tests for <a href="http://github.com/derickbailey/backbone.marionette">Backbone.Marionette</a></p>
+    <div id="test_element" style="overflow:hidden; width: 1px; height:1px;"></div>
+  </body>
+</html>
+

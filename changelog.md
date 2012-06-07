@@ -7,6 +7,7 @@
 
 * ItemView:
   * **BREAKING** The `template` attribute no longer allows you to specify a function that returns a jQuery selector. Override `getTemplate` to do this.
+  * Pulled the ItemView's `render` method implementation out in to it's own object so the ItemView and rendering logic can be more easily understood
 
 * CollectionView:
   * Now supports optional `emptyView` attribute, to specify what view to render when no items exist in the collection

@@ -29,14 +29,6 @@ Marionette.ItemView = (function(Mariontte, _){
       return renderer.render();
     },
 
-    // Render the data for this item view in to some HTML.
-    // Override this method to replace the specific way in
-    // which an item view has it's data rendered in to html.
-    renderHtml: function(data) {
-      var template = this.getTemplate();
-      return Marionette.Renderer.render(template, data);
-    },
-
     // Override the default close event to add a few
     // more events that are triggered.
     close: function(){
@@ -81,11 +73,19 @@ Marionette.ItemView = (function(Mariontte, _){
     // actual render process for the template and data
     dataSerialized: function(data){
       var that = this;
-      var renderHtml = this.view.renderHtml(data);
+      var renderHtml = this.renderHtml(data);
 
       $.when(renderHtml).then(function(html){
         that.templateRendered(html);
       });
+    },
+    
+    // Render the data for this item view in to some HTML.
+    // Override this method to replace the specific way in
+    // which an item view has it's data rendered in to html.
+    renderHtml: function(data) {
+      var template = this.view.getTemplate();
+      return Marionette.Renderer.render(template, data);
     },
 
     // Runs after the template has been rendered. Calls the

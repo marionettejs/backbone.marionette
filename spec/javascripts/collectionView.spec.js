@@ -261,6 +261,7 @@ describe("collection view", function(){
         template: "#itemTemplate",
         collection: collection
       });
+      collectionView.someItemViewCallback = function(){};
       collectionView.render();
 
 
@@ -268,6 +269,7 @@ describe("collection view", function(){
       childView = collectionView.children[childModel.cid];
 
       collectionView.bindTo(collection, "foo", collectionView.someCallback);
+      collectionView.bindTo(collectionView, "item:foo", collectionView.someItemViewCallback);
 
       spyOn(childView, "close").andCallThrough();
       spyOn(collectionView, "removeItemView").andCallThrough();
@@ -275,12 +277,15 @@ describe("collection view", function(){
       spyOn(collectionView, "unbindAll").andCallThrough();
       spyOn(collectionView, "remove").andCallThrough();
       spyOn(collectionView, "someCallback").andCallThrough();
+      spyOn(collectionView, "someItemViewCallback").andCallThrough();
       spyOn(collectionView, "close").andCallThrough();
       spyOn(collectionView, "onClose").andCallThrough();
       spyOn(collectionView, "beforeClose").andCallThrough();
       spyOn(collectionView, "trigger").andCallThrough();
 
       collectionView.close();
+
+      childView.trigger("foo");
 
       collection.trigger("foo");
       collection.remove(childModel);
@@ -296,7 +301,18 @@ describe("collection view", function(){
 
     it("should unbind all collection events for the view", function(){
       expect(collectionView.someCallback).not.toHaveBeenCalled();
-      expect(collectionView.removeItemView).not.toHaveBeenCalled();
+    });
+
+    it("should unbind all item-view events for the view", function(){
+      expect(collectionView.someItemViewCallback).not.toHaveBeenCalled();
+    });
+
+    it("should not retain any references to its children", function(){
+      expect(_.size(collectionView.children)).toBe(0);
+    });
+
+    it("should not retain any bindings to its children", function(){
+      expect(_.size(collectionView.bindings)).toBe(0);
     });
 
     it("should unbind any listener to custom view events", function(){
@@ -375,6 +391,70 @@ describe("collection view", function(){
     it("should forward all other arguments in order", function(){
       expect(eventArgs[1]).toBe("test");
       expect(eventArgs[2]).toBe(model);
+    });
+  });
+
+  describe("when a child view is removed from a collection view", function(){
+    var model;
+    var collection;
+    var collectionView;
+    var childView;
+
+    beforeEach(function(){
+      model = new Model({foo: "bar"});
+      collection = new Collection([model]);
+
+      collectionView = new EventedView({
+        template: "#itemTemplate",
+        collection: collection
+      });
+
+      collectionView.render();
+
+      childView = collectionView.children[model.cid];
+      collection.remove(model)
+    });
+
+    it("should not retain any bindings to this view", function(){
+      expect(_.any(collectionView.bindings, function(binding) {
+        return binding.obj === childView;
+      })).toBe(false);
+    });
+
+    it("should not retain any references to this view", function(){
+      expect(_.size(collectionView.children)).toBe(0);
+    });
+  });
+
+  describe("when the collection of a collection view is resetted", function(){
+    var model;
+    var collection;
+    var collectionView;
+    var childView;
+
+    beforeEach(function(){
+      model = new Model({foo: "bar"});
+      collection = new Collection([model]);
+
+      collectionView = new EventedView({
+        template: "#itemTemplate",
+        collection: collection
+      });
+
+      collectionView.render();
+
+      childView = collectionView.children[model.cid];
+      collection.reset();
+    });
+
+    it("should not retain any references to the previous views", function(){
+      expect(_.size(collectionView.children)).toBe(0);
+    });
+
+    it("should not retain any bindings to the previous views", function(){
+      expect(_.any(collectionView.bindings, function(binding) {
+        return binding.obj === childView;
+      })).toBe(false);
     });
   });
 });

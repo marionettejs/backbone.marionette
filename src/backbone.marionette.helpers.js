@@ -22,6 +22,6 @@ _.extend(Marionette.Region.prototype, Marionette.BindTo);
 var callDeferredMethod = function(fn, callback, context){
   var promise;
   if (fn) { promise = fn.call(context); }
-  $.when(promise).then(callback);
+  $.when(promise).then(_.bind(callback, context));
 }
 

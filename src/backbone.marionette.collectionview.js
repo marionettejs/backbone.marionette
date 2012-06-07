@@ -151,6 +151,8 @@ Marionette.CollectionView = Marionette.View.extend({
     this.trigger("collection:closed");
   },
 
+  // Close the child views that this collection view
+  // is holding on to, if any
   closeChildren: function(){
     if (this.children){
       _.each(this.children, function(childView){

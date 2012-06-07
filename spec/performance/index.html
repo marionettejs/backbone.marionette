@@ -16,9 +16,14 @@
         template: "#item-template"
       });
 
+      JSLitmus.test('Render New ItemView', function() {
+        var view = new ItemView();
+        view.render();
+      });
+
       var view = new ItemView();
-      JSLitmus.test('Render ItemView', function() {
-          view.render();
+      JSLitmus.test('Re-render Same ItemView', function() {
+        view.render();
       });
     </script>
 

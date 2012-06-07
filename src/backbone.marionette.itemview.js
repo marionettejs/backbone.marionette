@@ -51,13 +51,13 @@ Marionette.ItemView = (function(Mariontte, _){
     // Run the rendering process, call `beforeRender` on the view
     render: function(){
       this.deferredRender = $.Deferred();
-      callDeferredMethod(this.view.beforeRender, this.beforeRenderDone, this.view);
+      callDeferredMethod(this.view.beforeRender, this.serializeData, this.view);
       return this.deferredRender;
     },
 
     // Called after the `beforeRender` method has been run. Triggers
     // events on teh view, and serializes data
-    beforeRenderDone: function() {
+    serializeData: function() {
       var that = this;
 
       this.view.trigger("before:render", this.view);
@@ -65,13 +65,13 @@ Marionette.ItemView = (function(Mariontte, _){
 
       var serializeData = this.view.serializeData()
       $.when(serializeData).then(function(data){
-        that.dataSerialized(data);
+        that.renderTemplateAndData(data);
       });
     },
 
     // Called after data serialization has finished. Runs the
     // actual render process for the template and data
-    dataSerialized: function(data){
+    renderTemplateAndData: function(data){
       var that = this;
       var renderHtml = this.renderHtml(data);
 
@@ -92,12 +92,12 @@ Marionette.ItemView = (function(Mariontte, _){
     // `onRender` method on the view.
     templateRendered: function(html){
       this.view.$el.html(html);
-      callDeferredMethod(this.view.onRender, this.onRenderDone, this.view);
+      callDeferredMethod(this.view.onRender, this.renderDone, this.view);
     },
 
     // Runs after the `onRender` method, triggers some events on
     // the view and resolves the deferred render promise.
-    onRenderDone: function(){
+    renderDone: function(){
       this.view.trigger("render", this.view);
       this.view.trigger("item:rendered", this.view);
       this.deferredRender.resolve();

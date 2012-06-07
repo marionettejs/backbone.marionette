@@ -283,7 +283,7 @@ Backbone.Marionette = (function(Backbone, _, $){
       var that = this;
 
       var view = this.buildItemView(item, ItemView);
-      this.bindTo(view, "all", function(){
+      var childBinding = this.bindTo(view, "all", function(){
 
         // get the args, prepend the event name
         // with "itemview:" and insert the child view
@@ -294,6 +294,8 @@ Backbone.Marionette = (function(Backbone, _, $){
 
         that.trigger.apply(that, args);
       });
+      this.childBindings = this.childBindings || {};
+      this.childBindings[view.cid] = childBinding;
 
       this.storeChild(view);
       this.trigger("item:added", view);
@@ -318,6 +320,11 @@ Backbone.Marionette = (function(Backbone, _, $){
     removeItemView: function(item){
       var view = this.children[item.cid];
       if (view){
+    	var childBinding = this.childBindings[view.cid];
+    	if (childBinding) {
+    	  this.unbindFrom(childBinding);
+    	  delete this.childBindings[view.cid];
+    	}
         view.close();
         delete this.children[item.cid];
       }
@@ -350,9 +357,10 @@ Backbone.Marionette = (function(Backbone, _, $){
     },
 
     closeChildren: function(){
+      var that = this;
       if (this.children){
-        _.each(this.children, function(childView){
-          childView.close();
+        _.each(_.clone(this.children), function(childView){
+          that.removeItemView(childView.model);
         });
       }
     }

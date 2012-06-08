@@ -9,7 +9,9 @@
     "amd.js": "amd/backbone.marionette.js",
     "amd.min.js": "amd/backbone.marionette.min.js",
     "browser.js": "backbone.marionette.js",
-    "browser.min.js": "backbone.marionette.min.js"
+    "browser.min.js": "backbone.marionette.min.js",
+    "async.js": "backbone.marionette.async.js",
+    "async.min.js": "backbone.marionette.async.min.js"
   },
   "finalize": {
     "header-file": "license.txt"

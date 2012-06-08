@@ -2,7 +2,7 @@
 // --------------------
 
 // provides async rendering for collection views
-Backbone.Marionette.Async.CollectionView = {
+Marionette.Async.CollectionView = {
   render: function(){
     var that = this;
     var deferredRender = $.Deferred();

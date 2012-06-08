@@ -7,10 +7,8 @@ describe("renderer", function(){
     beforeEach(function(){
       loadFixtures("rendererTemplate.html");
       spyOn(Backbone.Marionette.TemplateCache, "get").andCallThrough();
-      var promise = Backbone.Marionette.Renderer.render(templateSelector);
-      promise.done(function(html){
-        result = $(html);
-      });
+      var html = Backbone.Marionette.Renderer.render(templateSelector);
+      result = $(html);
     });
 
     it("should retrieve the template from the cache", function(){
@@ -31,11 +29,8 @@ describe("renderer", function(){
       spyOn(Backbone.Marionette.TemplateCache, "get").andCallThrough();
 
       var data = {foo: "bar"}
-      var promise = Backbone.Marionette.Renderer.render(templateSelector, data);
-
-      promise.done(function(html){
-        result = $(html);
-      });
+      var html = Backbone.Marionette.Renderer.render(templateSelector, data);
+      result = $(html);
     });
 
     it("should retrieve the template from the cache", function(){

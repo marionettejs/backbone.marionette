@@ -604,45 +604,6 @@ definition as shown in this example. It receives the `options`
 that were passed to the constructor of the Region, similar to
 a Backbone.View.
 
-### jQuery Deferred And Asynchronous Template Loading
-
-The region manager `show` method takes advantage of jQuery's
-deferred cababilities, allowing for some very advanced techniques
-to be used for rendering views.
-
-To use a deferred, a view that is shown via a region manager
-must return a jQuery deferred object from the `render` method:
-
-```js
-DeferredView = Backbone.View.extend({
-  render: function(){
-    var that = this;
-    var data = this.serializeData();
-    var dfd = jQuery.Deferred();
-
-    this.getTemplate(function(template){
-      var html = that.renderTemplate(template, data);
-
-      that.$el.html(html);
-
-      if (that.onRender){
-        that.onRender();
-      }
-
-      dfd.resolve();
-    });
-
-    return dfd.promise();
-  }
-});
-
-var view = new DeferredView();
-MyApp.mainRegion.show(view);
-```
-
-The region manager will wait until the deferred object is resolved
-before it attached the view's `el` to the DOM and displays it.
-
 ## Marionette.View
 
 Marionette has a base `Marionette.View` type that other views extend from.
@@ -1475,10 +1436,6 @@ rendering the entire collection. It loops through each of the
 items in the collection and renders them individually as an
 `itemView`.
 
-The `render` method returns a jQuery deferred object, allowing
-you to know when the rendering completes. This deferred object
-is resolved after all of the child views have been rendered.
-
 ```js
 MyCollectionView = Backbone.Marionette.CollectionView.extend({...});
 
@@ -1582,20 +1539,6 @@ new CompositeView({
 
 For more examples, see my blog post on 
 [using the composite view](http://lostechies.com/derickbailey/2012/04/05/composite-views-tree-structures-tables-and-more/)
-
-### Composite Render
-
-A composite view returns a jQuery deferred object from the
-`render` method. This allows you to know when the rendering for
-the entire composite structure has been completed.
-
-```js
-MyComp = Backbone.Marionette.CompositeView.extend({...});
-
-myComp = new MyComp().render().done(function(){
-  // the entire composite is now rendered. do stuff here
-});
-```
 
 ### Composite Model Template
 
@@ -1816,13 +1759,39 @@ If you wish to override the template engine used, change the
 `renderTemplate` method to work however you want:
 
 ```js
-Backbone.Marionette.Renderer.renderTemplate = function(template, data){
+Backbone.Marionette.Renderer.render = function(template, data){
   return $(template).tmpl(data);
 });
 ```
 
 This implementation will replace the default Underscore.js 
 rendering with jQuery templates rendering.
+
+### Using Pre-compiled Templates
+
+You can easily replace the standard template rendering functionality
+with a pre-compiled template, such as those provided by the JST or TPL
+plugins for AMD/RequireJS. 
+
+To do this, just override the `render` method to return your executed 
+template with the data.
+
+```js
+Backbone.Marionette.Renderer.render = function(template, data){
+  return template(data);
+});
+```
+
+Then you can specify the pre-compiled template function as your view's
+`template` attribute:
+
+```js
+var myPrecompiledTemplate = _.template("<div>some template</div>");
+
+Backbone.Marionette.ItemView.extend({
+  template: myPrecompiledTemplate
+});
+```
 
 ## Backbone.Marionette.TemplateCache
 
@@ -1854,47 +1823,15 @@ works, you can override the `loadTemplate` method on the
 `TemplateCache` object.
 
 ```js
-Backbone.Marionette.TemplateCache.prototype.loadTemplate = function(templateId, callback){
-  // load your template here, returning it or a deferred
-  // object that resolves with the template as the only param
-  var myTemplate = ...;
+Backbone.Marionette.TemplateCache.prototype.loadTemplate = function(templateId){
+  // load your template here, returning a compiled template or function
+  // that returns the rendered HTML
+  var myTemplate = compileMyTemplate("some template");
 
   // send the template back
-  callback(myTemplate);
+  return myTemplate;
 }
 ```
-
-For example, if you want to load templates asychronously from the
-server, instead of from the DOM, you could replace 
-`loadTemplate` function.
-
-If a "template.html" file exists on the server, with this in it:
-
-```html
-<script id="my-template" type="text/template">
-  <div>some template stuff</div>
-</script>
-```
-
-Then the `loadTemplate` implementation may look like this:
-
-```js
-Backbone.Marionette.TemplateCache.loadTemplate = function(templateId, callback){
-  var that = this;
-  var url = templateId + ".html";
-
-  $.get(url, function(templateHtml){
-    var template = $(tmplateHtml).find(templateId);
-    callback(template);
-  });
-}
-```
-
-This will use jQuery to asynchronously retrieve the template from
-the server. When the `get` completes, the callback function will
-select the template from the resulting HTML and then call the
-`callback` function to send it in to the template cache and allow
-it to be used for rendering.
 
 ### Clear Items From cache
 
@@ -1926,13 +1863,6 @@ Backbone.Marionette.TemplateCache.get("#that-template");
 // clear 2 of 3 templates from the cache
 Backbone.Marionette.TemplateCache.clear("#my-template", "#this-template")
 ```
-
-### Built In To ItemView
-
-If you're using `Marionette.ItemView`, you don't need to manually
-call the `TemplateCache`. Just specify the `template` attribute
-of your view as a jQuery selector, and the `ItemView` will use 
-the template manager by default.
 
 ## Marionette.Callbacks
 

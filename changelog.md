@@ -1,6 +1,13 @@
 ### v0.9.0-pre [view commit logs](https://github.com/derickbailey/backbone.marionette/compare/v0.8.4...dev)
 
+* **BREAKING** Async Support Removed From Core Marionette
+  * Marionette no longer supports asynchronous / deferred rendering in any view, by default
+  * Async / deferred rendering are now provided via `backbone.marionette.async.js` add-on
+
 * Split the single src/backbone.marionette.js file into multiple files for easier maintenance
+
+* Marionette.Async:
+  * Added `Marionette.Async` add-on which provides support for rendering and retrieving templates asynchronously
 
 * Marionette.View:
   * **BREAKING** Renamed the `getTemplateSelector` method to `getTemplate`
@@ -8,19 +15,22 @@
 * ItemView:
   * **BREAKING** The `template` attribute no longer allows you to specify a function that returns a jQuery selector. Override `getTemplate` to do this.
   * **BREAKING** The `renderHtml` method has been removed from the ItemView
-  * Pulled the ItemView's `render` method implementation out in to it's own object so the ItemView and rendering logic can be more easily understood
+  * **BREAKING** Async support removed
 
 * CollectionView:
   * Now supports optional `emptyView` attribute, to specify what view to render when no items exist in the collection
+  * **BREAKING** Async support removed
 
 * CompositeView:
   * **BREAKING** When a CompositeView's collection is reset, only the collection will be re-rendered. It will no longe re-render the composite's template/model, just the collection.
   * Now supports optional `emptyView` attribute, to specify what view to render when no items exist in the collection
+  * **BREAKING** Async support removed
 
 * Layout:
   * **BREAKING** Regions specified within a layout are now available immediately after creating a layout instance
   * **BREAKING** Re-rendering a layout will close all regions and reset them to the new DOM elements that were rendered
   * **BREAKING** Layouts no longer have a `.vent` event aggregator hanging off them
+  * **BREAKING** Async support removed
 
 * Region:
   * **BREAKING** Removed the ability to send a second parameter to a regions' "show" method

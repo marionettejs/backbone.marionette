@@ -32,6 +32,7 @@ src_files:
     - src/backbone.marionette.bindto.js
     - src/backbone.marionette.eventaggregator.js
     - src/backbone.marionette.helpers.js
+    - src/async/backbone.marionette.async.js
     - src/async/backbone.marionette.*.js
 
 # stylesheets

@@ -81,9 +81,7 @@ describe("collection view", function(){
       spyOn(collectionView, "beforeRender").andCallThrough();
       spyOn(collectionView, "trigger").andCallThrough();
 
-      var deferred = collectionView.render();
-
-      deferred.done(function(){ deferredResolved = true });
+      collectionView.render();
     });
 
     it("should append the html for each itemView", function(){
@@ -109,10 +107,6 @@ describe("collection view", function(){
     it("should trigger a 'rendered' event", function(){
       expect(collectionView.trigger).toHaveBeenCalledWith("collection:rendered", collectionView);
     });
-
-    it("should resolve the deferred object that it returned", function(){
-      expect(deferredResolved).toBe(true);
-    });
   });
 
   describe("when rendering a collection view without a collection", function(){
@@ -127,9 +121,7 @@ describe("collection view", function(){
       spyOn(collectionView, "beforeRender").andCallThrough();
       spyOn(collectionView, "trigger").andCallThrough();
 
-      var deferred = collectionView.render();
-
-      deferred.done(function(){ deferredResolved = true });
+      collectionView.render();
     });
 
     it("should not append any html", function(){
@@ -150,12 +142,10 @@ describe("collection view", function(){
         collection: collection
       });
 
-      var deferred = collectionView.render();
-
-      deferred.done(function(){ deferredResolved = true });
+      collectionView.render();
     });
 
-    it("should append the html for each emptyView", function(){
+    it("should append the html for the emptyView", function(){
       expect($(collectionView.$el)).toHaveHtml("<span class=\"isempty\"></span>");
     });
 

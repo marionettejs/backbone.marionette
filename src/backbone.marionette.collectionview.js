@@ -30,8 +30,6 @@ Marionette.CollectionView = Marionette.View.extend({
   // each of them with the specified `itemView`.
   render: function(){
     var that = this;
-    var deferredRender = $.Deferred();
-    var promises = [];
     var ItemView = this.getItemView();
     var EmptyView = this.options.emptyView || this.emptyView;
 
@@ -42,26 +40,16 @@ Marionette.CollectionView = Marionette.View.extend({
 
     if (this.collection) {
       if (this.collection.length === 0 && EmptyView) {
-        var promise = this.addItemView(new Backbone.Model(), EmptyView);
-        promises.push(promise);
+        this.addItemView(new Backbone.Model(), EmptyView);
       } else {
         this.collection.each(function(item){
-          var promise = that.addItemView(item, ItemView);
-          promises.push(promise);
+          that.addItemView(item, ItemView);
         });
       }
     }
 
-    deferredRender.done(function(){
-      if (this.onRender) { this.onRender(); }
-      this.trigger("collection:rendered", this);
-    });
-
-    $.when.apply(this, promises).then(function(){
-      deferredRender.resolveWith(that);
-    });
-
-    return deferredRender.promise();
+    if (this.onRender) { this.onRender(); }
+    this.trigger("collection:rendered", this);
   },
 
   // Retrieve the itemView type, either from `this.options.itemView`
@@ -98,14 +86,11 @@ Marionette.CollectionView = Marionette.View.extend({
     });
 
     this.storeChild(view);
+
+    view.render();
+    this.appendHtml(this, view);
+
     this.trigger("item:added", view);
-
-    var viewRendered = view.render();
-    $.when(viewRendered).then(function(){
-      that.appendHtml(that, view);
-    });
-
-    return viewRendered;
   },
 
   // Build an `itemView` for every model in the collection. 

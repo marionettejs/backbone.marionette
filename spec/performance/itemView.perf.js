@@ -1,9 +1,76 @@
-// Basic ItemView rendering performance
-(function(){
-  var ItemView = Backbone.Marionette.ItemView.extend({
-    template: "#item-template"
+var model = new Backbone.Model({
+  foo: "bar",
+  bar: "baz",
+  stuff: "lots of stuff goes here.",
+  moreStuff: "lots more stuff goes here, too"
+});
+
+var ItemView = Backbone.Marionette.ItemView.extend({
+  template: "#item-template"
+});
+
+var View = Backbone.View.extend({
+  initialize: function(options){
+    this.template = options.template
+  },
+
+  render: function(){
+    var data = {};
+    if (this.model){
+      data = this.model.toJSON();
+    }
+    var html = this.template(data);
+    this.$el.html(html);
+  }
+});
+
+var ItemViewWithModel = Backbone.Marionette.ItemView.extend({
+  template: "#item-with-data-template"
+});
+
+$(function(){
+  var template = _.template($("#item-template").html());
+  var templateWithData = _.template($("#item-with-data-template").html());
+
+  // -------------------------------------
+  // Basic ItemView vs Backbone.View tests
+  // -------------------------------------
+  JSLitmus.test('Render New ItemView', function() {
+    var view = new ItemView();
+    view.render();
   });
 
+  JSLitmus.test('Render New Backbone.View', function() {
+    var view = new View({
+      template: template
+    });
+    view.render();
+  });
+
+  // --------------------------------------------
+  // ItemView vs Backbone.View, with model, tests
+  // --------------------------------------------
+  JSLitmus.test('Rendering An ItemView With A Model', function(){
+    var view = new ItemViewWithModel({
+      model: model
+    });
+
+    view.render();
+  });
+
+  (function(){
+    JSLitmus.test('Rendering A Backbone.View With A Model', function(){
+      var view = new View({
+        template: templateWithData,
+        model: model
+      });
+      view.render();
+    });
+  })();
+
+  // -------------------------------------------------
+  // ItemView vs Backbone.View, re-rendering same view
+  // -------------------------------------------------
   (function(){
     var view = new ItemView();
     JSLitmus.test('Re-render Same ItemView', function() {
@@ -11,50 +78,13 @@
     });
   })();
 
-  JSLitmus.test('Render New ItemView', function() {
-    var view = new ItemView();
-    view.render();
-  });
-})();
-
-// ItemView vs Backbone.View rendering data performance
-$(function(){
-  var View = Backbone.View.extend({
-    initialize: function(options){
-      this.template = options.template
-    },
-
-    render: function(){
-      var html = this.template(this.model.toJSON());
-      this.$el.html(html);
-    }
-  });
-
-  var ItemView = Backbone.Marionette.ItemView.extend({
-    template: "#item-with-data-template"
-  });
-
-  var model = new Backbone.Model({
-    foo: "bar",
-    bar: "baz",
-    stuff: "lots of stuff goes here.",
-    moreStuff: "lots more stuff goes here, too"
-  });
-
-  JSLitmus.test('Rendering An ItemView With A Model', function(){
-    var view = new ItemView({
-      model: model
-    });
-
-    view.render();
-  });
-
-  var template = _.template($("#item-with-data-template").html());
-  JSLitmus.test('Rendering A Backbone.View With A Model', function(){
+  (function(){
     var view = new View({
-      template: template,
-      model: model
+      template: template
     });
-    view.render();
-  });
+    JSLitmus.test('Re-render Same Backbone.View', function() {
+      view.render();
+    });
+  })();
+
 });

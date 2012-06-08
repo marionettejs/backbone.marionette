@@ -35,12 +35,12 @@ $(function(){
   // -------------------------------------
   // Basic ItemView vs Backbone.View tests
   // -------------------------------------
-  JSLitmus.test('Render New ItemView', function() {
+  JSLitmus.test('ItemView :: Render New ItemView', function() {
     var view = new ItemView();
     view.render();
   });
 
-  JSLitmus.test('Render New Backbone.View', function() {
+  JSLitmus.test('ItemView :: Render New Backbone.View', function() {
     var view = new View({
       template: template
     });
@@ -50,7 +50,7 @@ $(function(){
   // --------------------------------------------
   // ItemView vs Backbone.View, with model, tests
   // --------------------------------------------
-  JSLitmus.test('Rendering An ItemView With A Model', function(){
+  JSLitmus.test('ItemView :: Rendering An ItemView With A Model', function(){
     var view = new ItemViewWithModel({
       model: model
     });
@@ -59,7 +59,7 @@ $(function(){
   });
 
   (function(){
-    JSLitmus.test('Rendering A Backbone.View With A Model', function(){
+    JSLitmus.test('ItemView :: Rendering A Backbone.View With A Model', function(){
       var view = new View({
         template: templateWithData,
         model: model
@@ -73,7 +73,7 @@ $(function(){
   // -------------------------------------------------
   (function(){
     var view = new ItemView();
-    JSLitmus.test('Re-render Same ItemView', function() {
+    JSLitmus.test('ItemView :: Re-render Same ItemView', function() {
       view.render();
     });
   })();
@@ -82,7 +82,7 @@ $(function(){
     var view = new View({
       template: template
     });
-    JSLitmus.test('Re-render Same Backbone.View', function() {
+    JSLitmus.test('ItemView :: Re-render Same Backbone.View', function() {
       view.render();
     });
   })();

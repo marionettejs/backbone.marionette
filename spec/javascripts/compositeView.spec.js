@@ -89,11 +89,7 @@ describe("composite view", function(){
       spyOn(compositeView, "trigger").andCallThrough();
       spyOn(compositeView, "onRender").andCallThrough();
 
-      var deferred = compositeView.render();
-      
-      deferred.done(function(){
-        deferredResolved = true;
-      });
+      compositeView.render();
     });
 
     it("should trigger a rendered event for the model view", function(){
@@ -116,10 +112,6 @@ describe("composite view", function(){
 
     it("should call 'onRender'", function(){
       expect(compositeView.onRender).toHaveBeenCalled();
-    });
-
-    it("should resolve the rendering deferred", function(){
-      expect(deferredResolved).toBeTruthy();
     });
   });
 

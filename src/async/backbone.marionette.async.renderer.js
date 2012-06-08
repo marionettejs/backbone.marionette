@@ -1,9 +1,9 @@
 // Async Renderer
-// --------
+// --------------
 
 // Render a template with data by passing in the template
 // selector and the data to render. Do it all asynchronously.
-Backbone.Marionette.Renderer = {
+Backbone.Marionette.Async.Renderer = {
 
   // Render a template with data. The `template` parameter is
   // passed to the `TemplateCache` object to retrieve the

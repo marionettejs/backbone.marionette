@@ -3,14 +3,14 @@
 
 // Manage templates stored in `<script>` blocks,
 // caching them for faster access.
-Marionette.TemplateCache = function(templateId){
+Marionette.Async.TemplateCache = function(templateId){
   this.templateId = templateId;
 };
 
 // TemplateCache object-level methods. Manage the template
 // caches from these method calls instead of creating 
 // your own TemplateCache instances
-_.extend(Marionette.TemplateCache, {
+_.extend(Marionette.Async.TemplateCache, {
   templateCaches: {},
 
   // Get the specified template by id. Either
@@ -52,7 +52,7 @@ _.extend(Marionette.TemplateCache, {
 // TemplateCache instance methods, allowing each
 // template cache object to manage it's own state
 // and know whether or not it has been loaded
-_.extend(Marionette.TemplateCache.prototype, {
+_.extend(Marionette.Async.TemplateCache.prototype, {
 
   // Internal method to load the template asynchronously.
   load: function(){

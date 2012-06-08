@@ -28,19 +28,13 @@ describe("layout", function(){
     beforeEach(function(){
       loadFixtures("layoutManagerTemplate.html");
       layoutManager = new LayoutManager();
-      var deferred = layoutManager.render();
-
-      deferred.done(function(){deferredResolved = true;});
+      layoutManager.render();
     });
 
     it("should find the region scoped within the rendered template", function(){
       layoutManager.regionOne.ensureEl();
       var el = layoutManager.$("#regionOne");
       expect(layoutManager.regionOne.$el[0]).toEqual(el[0]);
-    });
-
-    it("should resolve the render's deferred", function(){
-      expect(deferredResolved).toBeTruthy();
     });
   });
 

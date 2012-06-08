@@ -1,5 +1,5 @@
-// Template Cache
-// --------------
+// Async Template Cache
+// --------------------
 
 // Manage templates stored in `<script>` blocks,
 // caching them for faster access.
@@ -59,21 +59,24 @@ _.extend(Marionette.TemplateCache.prototype, {
     var that = this;
 
     // Guard clause to prevent loading this template more than once
-    if (this.compiledTemplate){
-      return this.compiledTemplate;
+    if (this.deferred){
+      return this.deferred.promise();
     }
 
-    // Load the template and compile it
-    var template = this.loadTemplate(this.templateId);
-    this.compiledTemplate = this.compileTemplate(template);
+    // Load the template asynchronously
+    this.deferred = $.Deferred();
+    this.loadTemplate(this.templateId, function(template){
+      that.template = template;
+      that.deferred.resolve(template);
+    });
 
-    return this.compiledTemplate;
+    return this.deferred.promise();
   },
 
   // Load a template from the DOM, by default. Override
   // this method to provide your own template retrieval,
   // such as asynchronous loading from a server.
-  loadTemplate: function(templateId){
+  loadTemplate: function(templateId, callback){
     var template = $(templateId).html();
 
     if (!template || template.length === 0){
@@ -83,7 +86,9 @@ _.extend(Marionette.TemplateCache.prototype, {
       throw err;
     }
 
-    return template;
+    template = this.compileTemplate(template);
+
+    callback.call(this, template);
   },
 
   // Pre-compile the template before caching it. Override

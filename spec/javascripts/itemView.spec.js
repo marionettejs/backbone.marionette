@@ -29,8 +29,7 @@ describe("item view", function(){
       spyOn(view, "onRender").andCallThrough();
       spyOn(view, "trigger").andCallThrough();
 
-      var deferred = view.render();
-      deferred.done(function(){deferredDone = true; });
+      view.render();
     });
 
     it("should call a `beforeRender` method on the view", function(){
@@ -47,10 +46,6 @@ describe("item view", function(){
 
     it("should trigger a rendered event", function(){
       expect(view.trigger).toHaveBeenCalledWith("item:rendered", view);
-    });
-
-    it("should resolve the returned deferred object", function(){
-      expect(deferredDone).toBe(true);
     });
   });
 

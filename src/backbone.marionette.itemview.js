@@ -20,48 +20,23 @@ Marionette.ItemView =  Marionette.View.extend({
   },
 
   // Render the view, defaulting to underscore.js templates.
-  // You can override this in your view definition.
+  // You can override this in your view definition to provide
+  // a very specific rendering for your view. In general, though,
+  // you should override the `Marionette.Renderer` object to
+  // change how Marionette renders views.
   render: function(){
-    var that = this;
+    if (this.beforeRender){ this.beforeRender(); }
+    this.trigger("before:render", this);
+    this.trigger("item:before:render", this);
 
-    var deferredRender = $.Deferred();
-
-    var beforeRenderDone = function() {
-      that.trigger("before:render", that);
-      that.trigger("item:before:render", that);
-
-      var deferredData = that.serializeData();
-      $.when(deferredData).then(dataSerialized);
-    } 
-
-    var dataSerialized = function(data){
-      var asyncRender = that.renderHtml(data);
-      $.when(asyncRender).then(templateRendered);
-    }
-
-    var templateRendered = function(html){
-      that.$el.html(html);
-      callDeferredMethod(that.onRender, onRenderDone, that);
-    }
-
-    var onRenderDone = function(){
-      that.trigger("render", that);
-      that.trigger("item:rendered", that);
-
-      deferredRender.resolve();
-    }
-
-    callDeferredMethod(this.beforeRender, beforeRenderDone, this);
-
-    return deferredRender.promise();
-  },
-
-  // Render the data for this item view in to some HTML.
-  // Override this method to replace the specific way in
-  // which an item view has it's data rendered in to html.
-  renderHtml: function(data) {
+    var data = this.serializeData();
     var template = this.getTemplate();
-    return Marionette.Renderer.render(template, data);
+    var html = Marionette.Renderer.render(template, data);
+    this.$el.html(html);
+
+    if (this.onRender){ this.onRender(); }
+    this.trigger("render", this);
+    this.trigger("item:rendered", this);
   },
 
   // Override the default close event to add a few

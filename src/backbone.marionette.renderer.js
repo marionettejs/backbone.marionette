@@ -10,15 +10,9 @@ Marionette.Renderer = {
   // template function. Override this method to provide your own
   // custom rendering and template handling for all of Marionette.
   render: function(template, data){
-    var asyncRender = $.Deferred();
-
-    var templateRetrieval = Marionette.TemplateCache.get(template);
-    $.when(templateRetrieval).then(function(templateFunc){
-      var html = templateFunc(data);
-      asyncRender.resolve(html);
-    });
-
-    return asyncRender.promise();
+    var templateFunc = Marionette.TemplateCache.get(template);
+    var html = templateFunc(data);
+    return html;
   }
 };
 

@@ -4,31 +4,28 @@
     <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 
     <!-- Provide a title.  This will be shown on the generated chart -->
-    <title>Marionette Test Suite</title>
+    <title>Marionette Performance Test Suite</title>
 
     <script type="text/javascript" src="JSLitmus.js"></script>
     <script type="text/javascript" src="../../public/javascripts/jquery.js"></script>
     <script type="text/javascript" src="../../public/javascripts/underscore.js"></script>
     <script type="text/javascript" src="../../public/javascripts/backbone.js"></script>
     <script type="text/javascript" src="../../lib/backbone.marionette.min.js"></script>
-    <script type="text/javascript">
-      var ItemView = Backbone.Marionette.ItemView.extend({
-        template: "#item-template"
-      });
-
-      JSLitmus.test('Render New ItemView', function() {
-        var view = new ItemView();
-        view.render();
-      });
-
-      var view = new ItemView();
-      JSLitmus.test('Re-render Same ItemView', function() {
-        view.render();
-      });
-    </script>
+    <script type="text/javascript" src="itemView.perf.js"></script>
 
     <script id="item-template" type="text/html">
       a template to render!!!
+    </script>
+
+    <script id="item-with-data-template" type="text/html">
+      <div>
+        <div><h3><%= foo %></h3></div>
+        <ul>
+          <li><%= bar %></li>
+          <li><%= stuff %></li>
+        </ul>
+        <div><%= moreStuff %></div>
+      </div>
     </script>
   </head>
 

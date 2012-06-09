@@ -35,6 +35,7 @@
 * Region:
   * **BREAKING** Removed the ability to send a second parameter to a regions' "show" method
   * **BREAKING** Changed the implementation of `Region` to allow easier overriding of how the new view is added to the DOM
+  * **BREAKING** Async support removed
 
 * TemplateCache:
   * **BREAKING** Moved TemplateCache to object instances instead of single object literal

@@ -11,6 +11,7 @@
 
 * Marionette.View:
   * **BREAKING** Renamed the `getTemplateSelector` method to `getTemplate`
+  * Call `unbindAll` to unbind all bound events, later in the close process, so the `close` event can be listened to
 
 * ItemView:
   * **BREAKING** The `template` attribute no longer allows you to specify a function that returns a jQuery selector. Override `getTemplate` to do this.

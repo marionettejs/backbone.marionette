@@ -1285,6 +1285,20 @@ Backbone.Marionette.CollectionView.extend({
 });
 ```
 
+#### onItemAdded callback
+
+This callback function allows you to know when an item / item view
+instance has been added to the collection view. It provides access to
+the view instance for the item that was added.
+
+```js
+Backbone.Marionette.CollectionView.extend({
+  onItemAdded: function(itemView){
+    // work with the itemView instance, here
+  }
+});
+```
+
 #### beforeClose callback
 
 This method is called just before closing the view.

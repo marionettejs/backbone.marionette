@@ -16,7 +16,9 @@ src_files:
     - public/javascripts/underscore.js
     - public/javascripts/backbone.js
     - src/backbone.marionette.js
+    - src/async/async.js
     - spec/javascripts/support/marionette.support.js
+    - src/backbone.marionette.bindto.js
     - src/backbone.marionette.view.js
     - src/backbone.marionette.itemview.js
     - src/backbone.marionette.collectionview.js
@@ -29,10 +31,8 @@ src_files:
     - src/backbone.marionette.templatecache.js
     - src/backbone.marionette.renderer.js
     - src/backbone.marionette.callbacks.js
-    - src/backbone.marionette.bindto.js
     - src/backbone.marionette.eventaggregator.js
     - src/backbone.marionette.helpers.js
-    - src/async/async.js
     - src/async/backbone.marionette.*.js
 
 # stylesheets

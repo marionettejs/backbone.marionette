@@ -18,13 +18,14 @@
   * **BREAKING** Async support removed
 
 * CollectionView:
-  * Now supports optional `emptyView` attribute, to specify what view to render when no items exist in the collection
   * **BREAKING** Async support removed
+  * Now supports optional `emptyView` attribute, to specify what view to render when no items exist in the collection
+  * Fixed a memory leak for closed item views
 
 * CompositeView:
   * **BREAKING** When a CompositeView's collection is reset, only the collection will be re-rendered. It will no longe re-render the composite's template/model, just the collection.
-  * Now supports optional `emptyView` attribute, to specify what view to render when no items exist in the collection
   * **BREAKING** Async support removed
+  * Now supports optional `emptyView` attribute, to specify what view to render when no items exist in the collection
 
 * Layout:
   * **BREAKING** Regions specified within a layout are now available immediately after creating a layout instance

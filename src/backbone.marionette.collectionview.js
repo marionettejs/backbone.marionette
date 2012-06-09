@@ -73,7 +73,7 @@ Marionette.CollectionView = Marionette.View.extend({
     var that = this;
 
     var view = this.buildItemView(item, ItemView);
-    this.bindTo(view, "all", function(){
+    var childBinding = this.bindTo(view, "all", function(){
 
       // get the args, prepend the event name
       // with "itemview:" and insert the child view
@@ -84,6 +84,8 @@ Marionette.CollectionView = Marionette.View.extend({
 
       that.trigger.apply(that, args);
     });
+    this.childBindings = this.childBindings || {};
+    this.childBindings[view.cid] = childBinding;
 
     this.storeChild(view);
 
@@ -105,6 +107,11 @@ Marionette.CollectionView = Marionette.View.extend({
   removeItemView: function(item){
     var view = this.children[item.cid];
     if (view){
+      var childBinding = this.childBindings[view.cid];
+      if (childBinding) {
+        this.unbindFrom(childBinding);
+        delete this.childBindings[view.cid];
+      }
       view.close();
       delete this.children[item.cid];
     }
@@ -139,9 +146,10 @@ Marionette.CollectionView = Marionette.View.extend({
   // Close the child views that this collection view
   // is holding on to, if any
   closeChildren: function(){
+    var that = this;
     if (this.children){
-      _.each(this.children, function(childView){
-        childView.close();
+      _.each(_.clone(this.children), function(childView){
+        that.removeItemView(childView.model);
       });
     }
   }

@@ -18,7 +18,9 @@ describe("collection view", function(){
 
     beforeRender: function(){},
 
-    onRender: function(){}
+    onRender: function(){},
+
+    onItemAdded: function(view){}
   });
 
   var EmptyView = Backbone.Marionette.ItemView.extend({
@@ -79,6 +81,7 @@ describe("collection view", function(){
       });
 
       spyOn(collectionView, "onRender").andCallThrough();
+      spyOn(collectionView, "onItemAdded").andCallThrough();
       spyOn(collectionView, "beforeRender").andCallThrough();
       spyOn(collectionView, "trigger").andCallThrough();
 
@@ -107,6 +110,18 @@ describe("collection view", function(){
 
     it("should trigger a 'rendered' event", function(){
       expect(collectionView.trigger).toHaveBeenCalledWith("collection:rendered", collectionView);
+    });
+
+    it("should call `onItemAdded` for each itemView instance", function(){
+      var views = _.values(collectionView.children);
+      var v1 = views[0];
+      var v2 = views[1];
+      expect(collectionView.onItemAdded).toHaveBeenCalledWith(v1);
+      expect(collectionView.onItemAdded).toHaveBeenCalledWith(v2);
+    });
+
+    it("should call `onItemAdded` for all itemView instances", function(){
+      expect(collectionView.onItemAdded.callCount).toBe(2);
     });
   });
 
@@ -216,10 +231,6 @@ describe("collection view", function(){
 
     it("should render the model in to the DOM", function(){
       expect($(collectionView.$el)).toHaveText("bar");
-    });
-
-    it("should call the 'onRender' method of the child view", function(){
-      expect(ItemView.prototype.onRender).toHaveBeenCalled();
     });
   });
 
@@ -481,7 +492,6 @@ describe("collection view", function(){
 
     beforeEach(function(){
       spyOn(ItemView.prototype, "onShow").andCallThrough();
-      spyOn(ItemView.prototype, "onRender");
 
       m1 = new Model();
       m2 = new Model();
@@ -496,10 +506,6 @@ describe("collection view", function(){
 
       col.add(m2);
       view = colView.children[m2.cid];
-    });
-
-    it("should call the 'onRender' method of the child view", function(){
-      expect(ItemView.prototype.onRender).toHaveBeenCalled();
     });
 
     it("should call the 'onShow' method of the child view", function(){

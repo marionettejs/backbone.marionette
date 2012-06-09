@@ -18,6 +18,7 @@ Backbone.Marionette.Async = (function(Backbone, Marionette, _, $){
 // import "backbone.marionette.async.itemView.js"
 // import "backbone.marionette.async.collectionview.js"
 // import "backbone.marionette.async.compositeview.js"
+// import "backbone.marionette.async.region.js"
 // import "backbone.marionette.async.renderer.js"
 // import "backbone.marionette.async.templatecache.js"
 

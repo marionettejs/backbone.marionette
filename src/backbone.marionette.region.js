@@ -32,16 +32,14 @@ _.extend(Marionette.Region.prototype, Backbone.Events, {
     this.ensureEl();
     this.close();
 
-    // Wait for the view to finish rendering
-    $.when(view.render()).then(function () {
-      that.open(view);
+    view.render();
+    this.open(view);
 
-      if (view.onShow) { view.onShow(); }
-      view.trigger("show");
+    if (view.onShow) { view.onShow(); }
+    view.trigger("show");
 
-      if (that.onShow) { that.onShow(view); }
-      that.trigger("view:show", view);
-    });
+    if (this.onShow) { this.onShow(view); }
+    this.trigger("view:show", view);
 
     this.currentView = view;
   },

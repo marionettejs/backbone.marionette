@@ -14,8 +14,9 @@ _.extend(Marionette.Callbacks.prototype, {
   // Add a callback to be executed. Callbacks added here are
   // guaranteed to execute, even if they are added after the 
   // `run` method is called.
-  add: function(callback){
+  add: function(callback, contextOverride){
     this.promise.done(function(context, options){
+      if (contextOverride){ context = contextOverride; }
       callback.call(context, options);
     });
   },

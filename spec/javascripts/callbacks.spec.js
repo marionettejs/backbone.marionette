@@ -65,4 +65,22 @@ describe("callbacks", function(){
     });
   });
 
+  describe("when registering a callback with a specific context, and running the callbacks", function(){
+    var cb, context, runContext;
+
+    beforeEach(function(){
+      context = {};
+      cb = function(){ runContext = this; }
+
+      var callbacks = new Backbone.Marionette.Callbacks();
+      callbacks.add(cb, context);
+
+      callbacks.run();
+    });
+
+    it("should run the callback with the specified context", function(){
+      expect(runContext).toBe(context);
+    });
+  });
+
 });

@@ -3,6 +3,10 @@
 
 // The core view type that other Marionette views extend from.
 Marionette.View = Backbone.View.extend({
+  constructor: function(){
+    Backbone.View.prototype.constructor.apply(this, arguments);
+    this.bindTo(this, "show", this.onShowCalled, this);
+  },
 
   // Get the template for this view
   // instance. You can set a `template` attribute in the view
@@ -96,6 +100,9 @@ Marionette.View = Backbone.View.extend({
 
     Backbone.View.prototype.delegateEvents.call(this, combinedEvents);
   },
+
+  // Internal method, handles the `show` event.
+  onShowCalled: function(){},
 
   // Default `close` implementation, for removing a view from the
   // DOM and unbinding it. Regions will call this method

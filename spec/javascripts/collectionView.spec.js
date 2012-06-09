@@ -9,13 +9,8 @@ describe("collection view", function(){
     tagName: "span",
     render: function(){
       this.$el.html(this.model.get("foo"));
-    }
-  });
-
-  var EmptyView = Backbone.Marionette.ItemView.extend({
-    tagName: "span",
-    className: "isempty",
-    render: function(){}
+    },
+    onRender: function(){}
   });
 
   var CollectionView = Backbone.Marionette.CollectionView.extend({
@@ -25,7 +20,13 @@ describe("collection view", function(){
 
     onRender: function(){}
   });
-  
+
+  var EmptyView = Backbone.Marionette.ItemView.extend({
+    tagName: "span",
+    className: "isempty",
+    render: function(){}
+  });
+
   var EventedView = Backbone.Marionette.CollectionView.extend({
     itemView: ItemView,
 
@@ -49,10 +50,10 @@ describe("collection view", function(){
     emptyView: EmptyView
   });
 
-  var NoItemView = Backbone.Marionette.CollectionView.extend({
-  });
-
   describe("when rendering a collection view with no `itemView` specified", function(){
+    var NoItemView = Backbone.Marionette.CollectionView.extend({
+    });
+
     var collectionView;
 
     beforeEach(function(){
@@ -196,6 +197,8 @@ describe("collection view", function(){
     var model;
 
     beforeEach(function(){
+      spyOn(ItemView.prototype, "onRender");
+
       collection = new Collection();
       collectionView = new CollectionView({
         itemView: ItemView,
@@ -213,6 +216,10 @@ describe("collection view", function(){
 
     it("should render the model in to the DOM", function(){
       expect($(collectionView.$el)).toHaveText("bar");
+    });
+
+    it("should call the 'onRender' method of the child view", function(){
+      expect(ItemView.prototype.onRender).toHaveBeenCalled();
     });
   });
 
@@ -426,7 +433,7 @@ describe("collection view", function(){
     });
   });
 
-  describe("when the collection of a collection view is resetted", function(){
+  describe("when the collection of a collection view is reset", function(){
     var model;
     var collection;
     var collectionView;
@@ -455,6 +462,52 @@ describe("collection view", function(){
       expect(_.any(collectionView.bindings, function(binding) {
         return binding.obj === childView;
       })).toBe(false);
+    });
+  });
+
+  describe("when a child view is added to a collection view, after the collection view has been shown", function(){
+    var m1, m2, col, view, viewOnShowContext;
+
+    var ItemView = Backbone.Marionette.ItemView.extend({
+      onShow: function(){ viewOnShowContext = this; },
+      onRender: function(){},
+      render: function(){}
+    });
+
+    var ColView = Backbone.Marionette.CollectionView.extend({
+      itemView: ItemView,
+      onShow: function(){}
+    });
+
+    beforeEach(function(){
+      spyOn(ItemView.prototype, "onShow").andCallThrough();
+      spyOn(ItemView.prototype, "onRender");
+
+      m1 = new Model();
+      m2 = new Model();
+      col = new Collection([m1]);
+      var colView = new ColView({
+        collection: col
+      });
+
+      colView.render();
+      colView.onShow();
+      colView.trigger("show");
+
+      col.add(m2);
+      view = colView.children[m2.cid];
+    });
+
+    it("should call the 'onRender' method of the child view", function(){
+      expect(ItemView.prototype.onRender).toHaveBeenCalled();
+    });
+
+    it("should call the 'onShow' method of the child view", function(){
+      expect(ItemView.prototype.onShow).toHaveBeenCalled();
+    });
+
+    it("should call the child's 'onShow' method with itself as the context", function(){
+      expect(viewOnShowContext).toBe(view);
     });
   });
 });

@@ -64,10 +64,33 @@ for the project.
 
 ## Documentation And Support
 
-The primary documentation has been moved in to a separate file [apidoc.md](https://github.com/derickbailey/backbone.marionette/blob/master/apidoc.md), in order to reduce the
-file size and prevent rendering and formatting errors.
+The primary documentation is split up in to multiple files, due to the size
+of the over-all documentation. You can find these files in the 
+[/docs](https://github.com/derickbailey/backbone.marionette/tree/dev/docs) folder, or use the links below to get straight to the
+documentation for each peice of Marionette.
 
-##### [View the documentation](https://github.com/derickbailey/backbone.marionette/blob/master/apidoc.md)
+### Marionette's Pieces
+
+These are the strings that you can pull to make your puppet dance:
+
+* [**Backbone.Marionette.Application**](#marionetteapplication): An application object that starts your app via initializers, and more
+* [**Backbone.Marionette.Application.module**](#marionetteapplicationmodule): Create modules and sub-modules within the application
+* [**Backbone.Marionette.AppRouter**](#marionetteapprouter): Reduce your routers to nothing more then configuration
+* [**Backbone.Marionette.View**](#marionetteview): The base View type that other Marionette views extend from (not intended to be used directly)
+* [**Backbone.Marionette.ItemView**](#marionetteitemview): A view that renders a single item
+* [**Backbone.Marionette.CollectionView**](#marionettecollectionview): A view that iterates over a collection, and renders individual `ItemView` instances for each model
+* [**Backbone.Marionette.CompositeView**](#marionettecompositeview): A collection view and item view, for rendering leaf-branch/composite model hierarchies
+* [**Backbone.Marionette.Layout**](#marionettelayout): A view that renders a layout and creates region managers to manage areas within it
+* [**Backbone.Marionette.Region**](#marionetteregion): Manage visual regions of your application, including display and removal of content
+* [**Backbone.Marionette.EventAggregator**](#marionetteeventaggregator): An extension of Backbone.Events, to be used as an event-driven or pub-sub tool
+* [**Backbone.Marionette.BindTo**](#marionettebindto): An event binding manager, to facilitate binding and unbinding of events
+* [**Backbone.Marionette.Renderer**](#backbonemarionetterenderer): Render templates with or without data, in a consistent and common manner
+* [**Backbone.Marionette.TemplateCache**](#backbonemarionettetemplatecache): Cache templates that are stored in `<script>` blocks, for faster subsequent access
+* [**Backbone.Marionette.Callbacks**](#backbonemarionettecallbacks): Manage a collection of callback methods, and execute them as needed
+
+Please note that this is document is rather dry - it's meant to be a reference for
+those that just need a reference. If you're looking for an introduction and/or 
+examples on how to get started, please see [the Wiki](https://github.com/derickbailey/backbone.marionette/wiki).
 
 ### The Marionette Wiki
 

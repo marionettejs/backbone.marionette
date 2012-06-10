@@ -73,7 +73,6 @@ describe("collection view", function(){
   describe("when rendering a collection view", function(){
     var collection = new Collection([{foo: "bar"}, {foo: "baz"}]);
     var collectionView;
-    var deferredResolved;
 
     beforeEach(function(){
       collectionView = new CollectionView({
@@ -125,9 +124,33 @@ describe("collection view", function(){
     });
   });
 
+  describe("when rendering and an 'itemViewOptions' is provided", function(){
+    var CollectionView = Backbone.Marionette.CollectionView.extend({
+      itemView: ItemView,
+      itemViewOptions: {
+        foo: "bar"
+      }
+    });
+
+    var collection = new Collection([{foo: "bar"}]);
+    var collectionView, view;
+
+    beforeEach(function(){
+      collectionView = new CollectionView({
+        collection: collection
+      });
+
+      collectionView.render();
+      view = _.values(collectionView.children)[0];
+    });
+
+    it("should pass the options to every view instance", function(){
+      expect(view.options.hasOwnProperty("foo")).toBe(true);
+    });
+  });
+
   describe("when rendering a collection view without a collection", function(){
     var collectionView;
-    var deferredResolved;
 
     beforeEach(function(){
       collectionView = new CollectionView({

@@ -1,10 +1,10 @@
-## Marionette.Renderer
+# Marionette.Renderer
 
 The `Renderer` object was extracted from the `ItemView` rendering
 process, in order to create a consistent and re-usable method of
 rendering a template with or without data.
 
-### Basic Usage
+## Basic Usage
 
 The basic usage of the `Renderer` is to call the `render` method.
 This method returns a jQuery `promise` object, which will provide
@@ -20,7 +20,7 @@ render.done(function(html){
 });
 ```
 
-### Custom Template Selection And Rendering
+## Custom Template Selection And Rendering
 
 By default, the renderer will take a jQuery selector object as
 the first parameter, and a JSON data object as the optional
@@ -43,7 +43,7 @@ Backbone.Marionette.Renderer.render = function(template, data){
 This implementation will replace the default Underscore.js 
 rendering with jQuery templates rendering.
 
-### Using Pre-compiled Templates
+## Using Pre-compiled Templates
 
 You can easily replace the standard template rendering functionality
 with a pre-compiled template, such as those provided by the JST or TPL

@@ -1,4 +1,4 @@
-## Marionette.CompositeView
+# Marionette.CompositeView
 
 A `CompositeView` extends from CollectionView to be used as a 
 composite view for scenarios where it should represent both a 
@@ -26,7 +26,7 @@ new CompositeView({
 For more examples, see my blog post on 
 [using the composite view](http://lostechies.com/derickbailey/2012/04/05/composite-views-tree-structures-tables-and-more/)
 
-### Composite Model Template
+## Composite Model Template
 
 When a `CompositeView` is rendered, the `model` will be rendered
 with the `template` that the view is configured with. You can
@@ -38,7 +38,7 @@ new MyComp({
 });
 ```
 
-### Recursive By Default
+## Recursive By Default
 
 The default rendering mode for a `CompositeView` assumes a
 hierarchical, recursive structure. If you configure a composite
@@ -55,7 +55,7 @@ var CompView = Backbone.Marionette.CompositeView.extend({
 });
 ```
 
-### Model And Collection Rendering
+## Model And Collection Rendering
 
 The model and collection for the composite view will re-render
 themselves under the following conditions:
@@ -70,7 +70,7 @@ You can also manually re-render either or both of them:
 * If you want to re-render the model's view, you can call `.renderModel()`
 * If you want to re-render the collection's views, you can call `.renderCollection()`
 
-### Events And Callbacks
+## Events And Callbacks
 
 During the course of rendering a composite, several events will
 be triggered:

@@ -1,10 +1,10 @@
-## Marionette.TemplateCache
+# Marionette.TemplateCache
 
 The `TemplateCache` provides a cache for retrieving templates
 from script blocks in your HTML. This will improve
 the speed of subsequent calls to get a template.
 
-### Basic Usage
+## Basic Usage
 
 To use the `TemplateCache`, call the `get` method on TemplateCache directly.
 Internally, instances of the TemplateCache type will be created and stored
@@ -20,7 +20,7 @@ promise.done(function(template){
 Making multiple calls to get the same template will retrieve the
 template from the cache on subsequence calls.
 
-### Override Template Retrieval
+## Override Template Retrieval
 
 The default template retrieval is to select the template contents
 from the DOM using jQuery. If you wish to change the way this
@@ -38,7 +38,7 @@ Backbone.Marionette.TemplateCache.prototype.loadTemplate = function(templateId){
 }
 ```
 
-### Clear Items From cache
+## Clear Items From cache
 
 You can clear one or more, or all items from the cache using the
 `clear` method. Clearing a template from the cache will force it

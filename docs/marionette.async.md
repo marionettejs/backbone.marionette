@@ -1,4 +1,4 @@
-## Marionette.Async
+# Marionette.Async
 
 Add async / deferred rendering and template loading to Backbone.Marionette
 
@@ -12,7 +12,7 @@ Development: [backbone.marionette.async.js](https://raw.github.com/derickbailey/
 
 Production: [backbone.marionette.async.min.js](https://raw.github.com/derickbailey/backbone.marionette/master/lib/backbone.marionette.async.min.js)
 
-### AMD/RequireJS Support
+## AMD/RequireJS Support
 
 Note that there is no AMD/RequireJS build for Marionette.Async. 
 AMD/RequireJS are asynchronous by definition: **A**synchronous 

@@ -1,10 +1,10 @@
-## Marionette.ItemView
+# Marionette.ItemView
 
 An `ItemView` is a view that represents a single item. That item may be a 
 `Backbone.Model` or may be a `Backbone.Collection`. Whichever it is, though, it
 will be treated as a single item. 
 
-### ItemView render
+## ItemView render
 
 An item view has a `render` method built in to it, and uses the
 `Renderer` object to do the actual rendering.
@@ -25,13 +25,13 @@ new MyView().render().done(function(){
 });
 ```
 
-### Callback Methods
+## Callback Methods
 
 There are several callback methods that are called
 for an ItemView. These methods are intended to be handled within
 the view definition, directly.
 
-#### beforeRender callback
+### beforeRender callback
 
 Before an ItemView is rendered a `beforeRender` method will be called
 on the view.
@@ -44,7 +44,7 @@ Backbone.Marionette.ItemView.extend({
 });
 ```
 
-#### onRender callback
+### onRender callback
 
 After the view has been rendered, a `onRender` method will be called.
 You can implement this in your view to provide custom code for dealing
@@ -60,7 +60,7 @@ Backbone.Marionette.ItemView.extend({
 });
 ```
 
-#### beforeClose callback
+### beforeClose callback
 
 A `beforeClose` method will be called on the view, just prior
 to closing it:
@@ -75,7 +75,7 @@ Backbone.Marionette.ItemView.extend({
 });
 ```
 
-#### onClose callback
+### onClose callback
 
 An `onClose` method will be called on the view, after closing it.
 
@@ -87,13 +87,13 @@ Backbone.Marionette.ItemView.extend({
 });
 ```
 
-### View Events
+## View Events
 
 There are several events that are triggers by an `ItemView`, which
 allow code outside of a view to respond to what's happening with
 the view.
 
-### "item:before:render" event
+## "item:before:render" event
 
 An "item:before:render" event will be triggered just before the
 view is rendered
@@ -108,7 +108,7 @@ myView.on("item:before:render", function(){
 });
 ```
 
-#### "render" / "item:rendered" event
+### "render" / "item:rendered" event
 
 An "item:rendered" event will be triggered just after the view 
 has been rendered.
@@ -127,7 +127,7 @@ myView.on("render", function(){
 });
 ```
 
-#### "item:before:close" event
+### "item:before:close" event
 
 An "item:before:close" event will be triggered just prior to the
 view closing itself. This event fires when the `close` method of
@@ -145,7 +145,7 @@ myView.on("item:before:close", function(){
 myView.close();
 ```
 
-#### "item:closed" event
+### "item:closed" event
 
 An "item:closed" event will be triggered just after the
 view closes. This event fires when the `close` method of
@@ -163,7 +163,7 @@ myView.on("item:closed", function(){
 myView.close();
 ```
 
-### ItemView serializeData
+## ItemView serializeData
 
 Item views will serialize a model or collection, by default, by
 calling `.toJSON` on either the model or collection. If both a model
@@ -226,7 +226,7 @@ Backbone.Marionette.ItemView.extend({
 });
 ```
 
-### Binding To ItemView Events
+## Binding To ItemView Events
 
 ItemView extends `Marionette.BindTo`. It is recommended that you use
 the `bindTo` method to bind model and collection events. 
@@ -250,7 +250,7 @@ The context (`this`) will automatically be set to the view. You can
 optionally set the context by passing in the context object as the
 4th parameter of `bindTo`.
 
-### ItemView close
+## ItemView close
 
 ItemView implements a `close` method, which is called by the region
 managers automatically. As part of the implementation, the following

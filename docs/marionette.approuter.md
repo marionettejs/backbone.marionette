@@ -1,9 +1,9 @@
-## Marionette.AppRouter
+# Marionette.AppRouter
 
 Reduce the boilerplate code of handling route events and then calling a single method on another object.
 Have your routers configured to call the method on your object, directly.
 
-### Configure Routes
+## Configure Routes
 
 Configure an AppRouter with `appRoutes`. The route definition is passed on to Backbone's standard routing
 handlers. This means that you define routes like you normally would. Instead of providing a callback
@@ -20,7 +20,7 @@ MyRouter = Backbone.Marionette.AppRouter.extend({
 
 You can also add standard routes to an AppRouter, with methods on the router.
 
-### Specify A Controller
+## Specify A Controller
 
 App routers can only use one `controller` object. You can either specify this
 directly in the router definition:

@@ -1,4 +1,4 @@
-## Marionette.Application.module
+# Marionette.Application.module
 
 Marionette allows you to define a module within your application,
 including sub-modules hanging from that module. This is useful for creating 
@@ -8,7 +8,7 @@ files.
 Marionette's module allow you to have unlimited sub-modules hanging off
 your application, and serve as an event aggregator in themselves.
 
-### Basic Usage
+## Basic Usage
 
 A module is defined directly from an Application object as the specified
 name:
@@ -27,7 +27,7 @@ If you specify the same module name more than once, the
 first instance of the module will be retained and a new
 instance will not be created.
 
-### Defining Sub-Modules With . Notation
+## Defining Sub-Modules With . Notation
 
 Sub-modules or child modules can be defined as a hierarchy of modules and 
 sub-modules all at once:
@@ -45,7 +45,7 @@ parent modules do not need to exist. They will be created
 for you if they don't exist. If they do exist, though, the
 existing module will be used instead of creating a new one.
 
-### Module Definitions
+## Module Definitions
 
 You can specify a callback function to provide a definition
 for the module. Module definitions are invoked immediately
@@ -92,7 +92,7 @@ console.log(MyApp.MyModule.someData); //=> public data
 MyApp.MyModule.someFunction(); //=> public data
 ```
 
-### The Module's `this` Argument
+## The Module's `this` Argument
 
 The module's `this` argument is set to the module itself.
 
@@ -102,7 +102,7 @@ MyApp.module("Foo", function(Foo){
 });
 ```
 
-### Custom Arguments
+## Custom Arguments
 
 You can provide any number of custom arguments to your module, after the
 module definition function. This will allow you to import 3rd party
@@ -119,7 +119,7 @@ MyApp.module("MyModule", function(MyModule, MyApp, Backbone, Marionette, $, _, L
 }, LibraryNumber1, LibraryNumber2, LibraryNumberEtc);
 ```
 
-### Splitting A Module Definition Apart
+## Splitting A Module Definition Apart
 
 Sometimes a module gets to be too long for a single file. In
 this case, you can split a module definition across multiple

@@ -1,4 +1,4 @@
-## Marionette.Application
+# Marionette.Application
 
 The `Backbone.Marionette.Application` object is the hub of your composite 
 application. It organizes, initializes and coordinate the various pieces of your
@@ -13,7 +13,7 @@ it to add your own functionality.
 MyApp = new Backbone.Marionette.Application();
 ```
 
-### Adding Initializers
+## Adding Initializers
 
 Your application needs to do useful things, like displaying content in your
 regions, starting up your routers, and more. To accomplish these tasks and
@@ -47,7 +47,7 @@ add them to the app object. If you add them before the app is
 started, they will run when the `start` method is called. If you
 add them after the app is started, they will run immediately.
 
-### Application Event
+## Application Event
 
 The `Application` object raises a few events during its lifecycle. These events
 can be used to do additional processing of your application. For example, you
@@ -76,7 +76,7 @@ MyApp.bind("initialize:after", function(options){
 The `options` parameter is passed through the `start` method of the application
 object (see below).
 
-### Starting An Application
+## Starting An Application
 
 Once you have your application configured, you can kick everything off by 
 calling: `MyApp.start(options)`.
@@ -95,7 +95,7 @@ var options = {
 MyApp.start(options);
 ```
 
-### app.vent: Event Aggregator
+## app.vent: Event Aggregator
 
 Every application instance comes with an instance of `Marionette.EventAggregator` 
 called `app.vent`.

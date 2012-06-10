@@ -1,4 +1,4 @@
-## Marionette.View
+# Marionette.View
 
 Marionette has a base `Marionette.View` type that other views extend from.
 This base view provides some common and core functionality for
@@ -9,7 +9,7 @@ used directly. It exists as a base view for other view types
 to be extended from, and to provide a common location for
 behaviors that are shared across all views.
 
-### View.triggers
+## View.triggers
 
 Views can define a set of `triggers` as a hash, which will 
 convert a DOM event in to a `view.trigger` event.
@@ -57,7 +57,7 @@ Backbone.Marionette.CompositeView.extend({
 Triggers work with all View types that extend from the base
 Marionette.View.
 
-### View.serializeData
+## View.serializeData
 
 The `serializeData` method will serialize a view's model or
 collection - with precedence given to collections. That is,
@@ -65,7 +65,7 @@ if you have both a collection and a model in a view, calling
 the `serializeData` method will return the serialized
 collection.
 
-### View.templateHelpers
+## View.templateHelpers
 
 There are times when a view's template needs to have some
 logic in it, and the view engine itself will not provide an
@@ -81,7 +81,7 @@ back from the `serializeData` method for you. This will
 allow you to create helper methods that can be called from
 within your templates.
 
-### Change Which Template Is Rendered For A View
+## Change Which Template Is Rendered For A View
 
 There may be some cases where you need to change the template that is
 used for a view, based on some simple logic such as the value of a
@@ -103,7 +103,7 @@ MyView = Backbone.Marionette.ItemView.extend({
 
 This applies to all view types.
 
-#### Basic Example
+### Basic Example
 
 ```html
 <script id="my-template" type="text/html">
@@ -128,7 +128,7 @@ view = new MyView();
 view.render(); //=> "I think that Backbone.Marionette is the coolest!";
 ```
 
-#### Accessing Data Within The Helpers
+### Accessing Data Within The Helpers
 
 In order to access data from within the helper methods, you
 need to prefix the data you need with `this`. Doing that will
@@ -143,7 +143,7 @@ templateHelpers: {
 }
 ```
 
-#### Object Or Function As `templateHelpers`
+### Object Or Function As `templateHelpers`
 
 You can specify an object literal (as shown above), a reference
 to an object literal, or a function as the `templateHelpers`. 

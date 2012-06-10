@@ -1,4 +1,4 @@
-## Marionette.Callbacks
+# Marionette.Callbacks
 
 The `Callbacks` object assists in managing a collection of callback
 methods, and executing them, in an async-safe manner.
@@ -14,7 +14,7 @@ The `run` method executes all current callbacks in, using the
 specified context for each of the callbacks, and supplying the
 provided options to the callbacks.
 
-### Basic Usage
+## Basic Usage
 
 ```js
 var callbacks = new Backbone.Marionette.Callbacks();
@@ -31,7 +31,7 @@ with options!". The executing context for each of the callback
 methods has been set to the `someContext` object, which is an optional
 parameter that can be any valid JavaScript object.
 
-### Specify Context Per-Callback
+## Specify Context Per-Callback
 
 You can optionally specify the context that you want each callback to be
 executed with, when adding a callback:
@@ -53,7 +53,7 @@ callbacks.run({value: "options"}, someContext);
 This will run the specified callback with the `myContext` object set as
 `this` in the callback, instead of `someContext`.
 
-### Advanced / Async Use
+## Advanced / Async Use
 
 The `Callbacks` executes each callback in an async-friendly 
 manner, and can be used to facilitate async callbacks. 

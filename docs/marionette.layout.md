@@ -1,4 +1,4 @@
-## Marionette.Layout
+# Marionette.Layout
 
 A `Layout` is a specialized hybrid between an `ItemView` and
 a collection of `Region` objects, used for rendering an application
@@ -11,7 +11,7 @@ to be attached to dynamically rendered HTML.
 For a more in-depth discussion on Layouts, see the blog post
 [Manage Layouts And Nested Views With Backbone.Marionette](http://lostechies.com/derickbailey/2012/03/22/managing-layouts-and-nested-views-with-backbone-marionette/)
 
-### Basic Usage
+## Basic Usage
 
 The `Layout` extends directly from `ItemView` and adds the ability
 to specify `regions` which become `Region` instances that are attached
@@ -49,7 +49,7 @@ layout.menu.show(new MenuView());
 layout.content.show(new MainContentView());
 ```
 
-### Region Availability
+## Region Availability
 
 Any defined regions within a layout will be available to the
 layout or any calling code immediately after instantiating the
@@ -64,7 +64,7 @@ regions may not be able to find the element that you've
 specified for them to manage. In that scenario, using the
 region will result in no changes to the DOM.
 
-### Re-Rendering A Layout
+## Re-Rendering A Layout
 
 A layout can be rendered as many times as needed, but renders
 after the first one behave differently than the initial render.
@@ -85,7 +85,7 @@ Then after the Layout is finished re-rendering itself,
 showing a view in the layout's regions will cause the regions to attach
 themselves to the new elements in the layout.
 
-#### Avoid Re-Rendering The Entire Layout
+### Avoid Re-Rendering The Entire Layout
 
 There are times when re-rendering the entire layout is necessary. However,
 due to the behavior described above, this can cuase a large amount of
@@ -98,7 +98,7 @@ layout's template to a model and need to update portions of the layout,
 you should listen to the model's "change" events and only update the
 neccesary DOM elements.
 
-### Nested Layouts And Views
+## Nested Layouts And Views
 
 Since the `Layout` extends directly from `ItemView`, it
 has all of the core functionality of an item view. This includes
@@ -119,7 +119,7 @@ layout.show(new MenuView());
 You can nest layouts into region managers as deeply as you want.
 This provides for a well organized, nested view structure.
 
-### Closing A Layout 
+## Closing A Layout 
 
 When you are finished with a layout, you can call the
 `close` method on it. This will ensure that all of the region managers

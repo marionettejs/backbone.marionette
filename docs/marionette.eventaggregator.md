@@ -1,10 +1,10 @@
-## Marionette.EventAggregator
+# Marionette.EventAggregator
 
 An event aggregator is an application level pub/sub mechanism that allows various
 pieces of an otherwise segmented and disconnected system to communicate with
 each other. 
 
-### Basic Usage
+## Basic Usage
 
 Backbone.Marionette provides an event aggregator with each application instance: 
 `MyApp.vent`. You can also instantiate your own event aggregator:
@@ -21,7 +21,7 @@ myVent = new Backbone.Marionette.EventAggregator({foo: "bar"});
 myVent.foo // => "bar"
 ```
 
-### BindTo
+## BindTo
 
 The `EventAggregator` extends from the `BindTo` object (see below) to easily track
 and unbind all event callbacks, including inline callback functions. 
@@ -42,7 +42,7 @@ vent.unbindAll();
 vent.trigger("foo"); // => nothing. all events have been unbound.
 ```
 
-### Decoupling With An Event-Driven Architecture
+## Decoupling With An Event-Driven Architecture
 
 You can use an event aggregator to communicate between various modules of your
 application, ensuring correct decoupling while also facilitating functionality

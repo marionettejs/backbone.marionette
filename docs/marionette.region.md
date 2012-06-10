@@ -1,11 +1,11 @@
-## Marionette.Region
+# Marionette.Region
 
 Region managers provide a consistent way to manage your views and
 show / close them in your application. They use a jQuery selector
 to show your views in the correct place. They also call extra
 methods on your views to facilitate additional functionality.
 
-### Defining An Application Region
+## Defining An Application Region
 
 Regions can be added to the application by calling the `addRegions` method on
 your application instance. This method expects a single hash parameter, with
@@ -26,7 +26,7 @@ would be available for use immediately.
 
 If you specify the same region name twice, the last one in wins.
 
-### Initialize A Region With An `el`
+## Initialize A Region With An `el`
 
 You can specify an `el` for the region manager to manage at the time
 that the region manager is instantiated:
@@ -37,7 +37,7 @@ var mgr = new Backbone.Marionette.Region({
 });
 ```
 
-### Basic Usage
+## Basic Usage
 
 Once a region manager has been defined, you can call the `show`
 and `close` methods on it to render and display a view, and then
@@ -67,7 +67,7 @@ var anotherView = new AnotherView();
 MyApp.mainRegion.show(anotherView);
 ```
 
-### Set How View's `el` Is Attached
+## Set How View's `el` Is Attached
 
 If you need to change how the view is attached to the DOM when
 showing a view via a region, override the `open` method of the
@@ -96,7 +96,7 @@ Marionette.Region.prototype.open = function(view){
 This example will cause a view to slide down from the top
 of the region, instead of just appearing in place.
 
-### Attach Existing View
+## Attach Existing View
 
 There are some scenarios where it's desirable to attach an existing
 view to a region manager, without rendering or showing the view, and
@@ -109,7 +109,7 @@ There are two ways to accomplish this:
 * set the `currentView` in the region manager's constructor
 * call `attachView` on the region manager instance
 
-#### Set `currentView` On Initialization
+### Set `currentView` On Initialization
 
 ```js
 var myView = new MyView({
@@ -122,7 +122,7 @@ var manager = new Backbone.Marionette.Region({
 });
 ```
 
-#### Call `attachView` On Region 
+### Call `attachView` On Region 
 
 ```js
 MyApp.addRegions({
@@ -136,7 +136,7 @@ var myView = new MyView({
 MyApp.someRegion.attachView(myView);
 ```
 
-### Region Events And Callbacks
+## Region Events And Callbacks
 
 A region manager will raise a few events during it's showing and
 closing of views:
@@ -168,7 +168,7 @@ MyRegion = Backbone.Marionette.Region.extend({
 });
 ```
 
-### View Callbacks And Events For Regions
+## View Callbacks And Events For Regions
 
 The region manager will call an `onShow` method on the view
 that was displayed. It will also trigger a "show" event
@@ -190,7 +190,7 @@ view.on("show", function(){
 MyApp.mainRegion.show(view);
 ```
 
-### Defining A Custom Region 
+## Defining A Custom Region 
 
 You can define a custom region manager by extending from
 `Region`. This allows you to create new functionality,
@@ -213,7 +213,7 @@ Note that if you define your own `Region` object, you must provide an
 `el` for it. If you don't, you will receive an runtime exception saying that
 an `el` is required.
 
-### Instantiate Your Own Region 
+## Instantiate Your Own Region 
 
 There may be times when you want to add a region manager to your
 application after your app is up and running. To do this, you'll

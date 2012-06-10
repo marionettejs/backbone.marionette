@@ -1,9 +1,9 @@
-## Marionette.BindTo
+# Marionette.BindTo
 
 The `BindTo` object provides event binding management and facilitates simple
 event binding and unbinding for any object that extends from `Backbone.Events`.
 
-### Bind Events
+## Bind Events
 
 ```js
 var binder = _.extend({}, Backbone.Marionette.BindTo);
@@ -23,7 +23,7 @@ method for the event will be executed:
 binder.bindTo(model, "change:foo", someCallback, someContext);
 ```
 
-### Unbind A Single Event
+## Unbind A Single Event
 
 When you call `bindTo`, it returns a "binding" object that can be
 used to unbind from a single event with the `unbindFrom` method:
@@ -38,7 +38,7 @@ binder.unbindFrom(binding);
 This will unbind the event that was configured with the binding
 object, and remove it from the BindTo bindings.
 
-### Unbind All Events
+## Unbind All Events
 
 You can call `unbindAll` to unbind all events that were bound with the
 `bindTo` method:

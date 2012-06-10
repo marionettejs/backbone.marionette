@@ -60,3 +60,8 @@ _.extend(Marionette.Application.prototype, Backbone.Events, {
   }
 });
 
+// Copy the `extend` function used by Backbone's classes
+Marionette.Application.extend = Backbone.View.extend;
+
+// Copy the features of `BindTo`
+_.extend(Marionette.Application.prototype, Marionette.BindTo);

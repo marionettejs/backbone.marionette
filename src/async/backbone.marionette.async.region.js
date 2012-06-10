@@ -3,7 +3,7 @@
 
 // Show a view that is rendered asynchronously, waiting for the view
 // to be rendered before swaping it in.
-Marionette.Async.Region = {
+Async.Region = {
   show: function(view){
     var that = this;
 

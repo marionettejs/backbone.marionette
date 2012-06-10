@@ -1,6 +1,7 @@
 Backbone.Marionette = (function(Backbone, _, $){
   var Marionette = {};
 
+// import "backbone.marionette.bindto.js"
 // import "backbone.marionette.view.js"
 // import "backbone.marionette.itemview.js"
 // import "backbone.marionette.collectionview.js"
@@ -13,7 +14,6 @@ Backbone.Marionette = (function(Backbone, _, $){
 // import "backbone.marionette.templatecache.js"
 // import "backbone.marionette.renderer.js"
 // import "backbone.marionette.callbacks.js"
-// import "backbone.marionette.bindto.js"
 // import "backbone.marionette.eventaggregator.js"
 // import "backbone.marionette.helpers.js"
 

@@ -120,3 +120,5 @@ Marionette.View = Backbone.View.extend({
   }
 });
 
+// Copy the features of `BindTo`
+_.extend(Marionette.View.prototype, Marionette.BindTo);

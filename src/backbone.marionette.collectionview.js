@@ -93,8 +93,7 @@ Marionette.CollectionView = Marionette.View.extend({
     this.trigger("item:added", view);
 
     // Render it and show it
-    view.render();
-    this.appendHtml(this, view);
+    var renderResult = this.renderItemView(view);
 
     // Forward all child item view events through the parent,
     // prepending "itemview:" to the event name
@@ -110,6 +109,14 @@ Marionette.CollectionView = Marionette.View.extend({
     // them when removing / closing the child view
     this.childBindings = this.childBindings || {};
     this.childBindings[view.cid] = childBinding;
+    
+    return renderResult;
+  },
+  
+  // render the item view
+  renderItemView: function(view) {
+    view.render();
+    this.appendHtml(this, view);
   },
 
   // Build an `itemView` for every model in the collection. 

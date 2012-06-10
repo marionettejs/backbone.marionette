@@ -33,6 +33,35 @@ new MyCollectionView({
 If you do not specify an `itemView`, an exception will be thrown
 stating that you must specify an `itemView`.
 
+### CollectionView's `itemViewOptions`
+
+There may be scenarios where you need to pass data from your parent
+collection view in to each of the itemView instances. To do this, provide
+a `itemViewOptions` definition on your collection view as an object
+literal. This will be passed to the constructor of your itemView as part
+of the `options`.
+
+```js
+ItemView = Backbone.Marionette.ItemView({
+  initialize: function(options){
+    console.log(options.foo); // => "bar"
+  }
+});
+
+CollectionView = Backbone.Marionette.CollectionView({
+  itemView: ItemView,
+
+  itemViewOptions: {
+    foo: "bar"
+  } 
+});
+```
+
+You can also specify the `itemViewOptions` as a function, if you need to
+calculate the values to return at runtime. The function must return an
+object, and the attributes of the object will be copied to the itemView
+instance' options.
+
 ### CollectionView's `emptyView`
 
 When a collection has no items, and you need to render a view other than

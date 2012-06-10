@@ -20,7 +20,7 @@ describe("collection view", function(){
 
     onRender: function(){},
 
-    onItemAdded: function(view){}
+    onItemAdded: function(view, index){}
   });
 
   var EmptyView = Backbone.Marionette.ItemView.extend({
@@ -115,8 +115,8 @@ describe("collection view", function(){
       var views = _.values(collectionView.children);
       var v1 = views[0];
       var v2 = views[1];
-      expect(collectionView.onItemAdded).toHaveBeenCalledWith(v1);
-      expect(collectionView.onItemAdded).toHaveBeenCalledWith(v2);
+      expect(collectionView.onItemAdded).toHaveBeenCalledWith(v1, 0);
+      expect(collectionView.onItemAdded).toHaveBeenCalledWith(v2, 1);
     });
 
     it("should call `onItemAdded` for all itemView instances", function(){

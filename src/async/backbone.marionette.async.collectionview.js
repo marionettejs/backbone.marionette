@@ -38,31 +38,13 @@ Marionette.Async.CollectionView = {
 
     return deferredRender.promise();
   },
-
-  addItemView: function(item, ItemView){
+  
+  renderItemView: function(view) {
     var that = this;
-
-    var view = this.buildItemView(item, ItemView);
-    this.bindTo(view, "all", function(){
-
-      // get the args, prepend the event name
-      // with "itemview:" and insert the child view
-      // as the first event arg (after the event name)
-      var args = slice.call(arguments);
-      args[0] = "itemview:" + args[0];
-      args.splice(1, 0, view);
-
-      that.trigger.apply(that, args);
-    });
-
-    this.storeChild(view);
-    this.trigger("item:added", view);
-
-    var viewRendered = view.render();
+	var viewRendered = view.render();
     $.when(viewRendered).then(function(){
       that.appendHtml(that, view);
     });
-
     return viewRendered;
-  },
+  }
 }

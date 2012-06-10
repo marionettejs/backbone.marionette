@@ -2,7 +2,7 @@
 // --------------------
 
 // provides async rendering for collection views
-Marionette.Async.CollectionView = {
+Async.CollectionView = {
   render: function(){
     var that = this;
     var deferredRender = $.Deferred();

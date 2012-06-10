@@ -1,2 +1,2 @@
 Marionette = Backbone.Marionette;
-Marionette.Async = {};
+Async = Marionette.Async;

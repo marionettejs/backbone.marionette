@@ -5,7 +5,7 @@
 // assumes template loading, data serialization, `beforRender`, and
 // `onRender` functions are all asynchronous, using `jQuery.Deferred()`
 // and `jQuery.when(...).then(...)` to manage async calls.
-Marionette.Async.ItemView = {
+Async.ItemView = {
   render: function(){
     var that = this;
 

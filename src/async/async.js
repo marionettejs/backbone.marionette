@@ -8,10 +8,12 @@ Backbone.Marionette.Async = (function(Backbone, Marionette, _, $){
   // Configure Marionette to use the async rendering for all view types
   var Async = {
     init: function(){
-      Marionette.Renderer = Marionette.Async.Renderer;
-      _.extend(Marionette.ItemView.prototype, Marionette.Async.ItemView);
-      _.extend(Marionette.CollectionView.prototype, Marionette.Async.CollectionView);
-      _.extend(Marionette.CompositeView.prototype, Marionette.Async.CompositeView);
+      Marionette.TemplateCache = Async.TemplateCache;
+      Marionette.Renderer = Async.Renderer;
+      _.extend(Marionette.ItemView.prototype, Async.ItemView);
+      _.extend(Marionette.CollectionView.prototype, Async.CollectionView);
+      _.extend(Marionette.CompositeView.prototype, Async.CompositeView);
+      _.extend(Marionette.Region.prototype, Async.Region);
     }
   };
 
@@ -21,6 +23,8 @@ Backbone.Marionette.Async = (function(Backbone, Marionette, _, $){
 // import "backbone.marionette.async.region.js"
 // import "backbone.marionette.async.renderer.js"
 // import "backbone.marionette.async.templatecache.js"
-
+// import "async.init.js"
+// import "../backbone.marionette.helpers.js"
+  
   return Async;
 })(Backbone, Backbone.Marionette, _, window.jQuery || window.Zepto || window.ender);

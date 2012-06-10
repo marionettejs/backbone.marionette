@@ -1,7 +1,7 @@
 // Async Composite View
 // --------------------
 
-Marionette.Async.CompositeView = {
+Async.CompositeView = {
   // Renders the model once, and the collection once. Calling
   // this again will tell the model's view to re-render itself
   // but the collection will not re-render.

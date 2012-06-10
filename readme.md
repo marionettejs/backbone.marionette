@@ -68,7 +68,7 @@ for the project.
 
 The primary documentation is split up in to multiple files, due to the size
 of the over-all documentation. You can find these files in the 
-[/docs](https://github.com/derickbailey/backbone.marionette/tree/dev/docs) folder, or use the links below to get straight to the
+[/docs](https://github.com/derickbailey/backbone.marionette/tree/master/docs) folder, or use the links below to get straight to the
 documentation for each peice of Marionette.
 
 ### Marionette's Pieces

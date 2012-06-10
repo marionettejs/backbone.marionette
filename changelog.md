@@ -29,8 +29,7 @@
 * CompositeView:
   * **BREAKING** When a CompositeView's collection is reset, only the collection will be re-rendered. It will no longe re-render the composite's template/model, just the collection.
   * **BREAKING** Async support removed
-  * Now supports optional `emptyView` attribute, to specify what view to render when no items exist in the collection
-  * ItemView is now guaranteed to have it's "onShow" method called, when rendering the collection and when adding a new item to the collection / rendering the new item view
+  * (see change list for `CollectionView`)
 
 * Layout:
   * **BREAKING** Regions specified within a layout are now available immediately after creating a layout instance

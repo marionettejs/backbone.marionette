@@ -1,4 +1,2 @@
-/*
- * Initializes the async-modules.
- */
+// Initialize the async-modules
 Async.init();

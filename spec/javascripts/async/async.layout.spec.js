@@ -1,4 +1,4 @@
-describe("layout", function(){
+describe("async layout", function(){
   var LayoutManager = Backbone.Marionette.Layout.extend({
     template: "#layout-manager-template",
     regions: {

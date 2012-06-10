@@ -23,8 +23,8 @@ Backbone.Marionette.Async = (function(Backbone, Marionette, _, $){
 // import "backbone.marionette.async.region.js"
 // import "backbone.marionette.async.renderer.js"
 // import "backbone.marionette.async.templatecache.js"
+// import "backbone.marionette.async.helpers.js"
 // import "async.init.js"
-// import "../backbone.marionette.helpers.js"
   
   return Async;
 })(Backbone, Backbone.Marionette, _, window.jQuery || window.Zepto || window.ender);

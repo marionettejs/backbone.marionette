@@ -24,23 +24,23 @@ builds:
 
 ### Standard Builds
 
-Development: [backbone.marionette.js](https://raw.github.com/derickbailey/backbone.marionette/master/lib/backbone.marionette.js)
+* Development: [backbone.marionette.js](https://raw.github.com/derickbailey/backbone.marionette/master/lib/backbone.marionette.js)
 
-Production: [backbone.marionette.min.js](https://raw.github.com/derickbailey/backbone.marionette/master/lib/backbone.marionette.min.js)
+* Production: [backbone.marionette.min.js](https://raw.github.com/derickbailey/backbone.marionette/master/lib/backbone.marionette.min.js)
 
 ### RequireJS (AMD) Builds
 
-Development: [backbone.marionette.js](https://raw.github.com/derickbailey/backbone.marionette/master/lib/amd/backbone.marionette.js)
+* Development: [backbone.marionette.js](https://raw.github.com/derickbailey/backbone.marionette/master/lib/amd/backbone.marionette.js)
 
-Production: [backbone.marionette.min.js](https://raw.github.com/derickbailey/backbone.marionette/master/lib/amd/backbone.marionette.min.js)
+* Production: [backbone.marionette.min.js](https://raw.github.com/derickbailey/backbone.marionette/master/lib/amd/backbone.marionette.min.js)
 
 ### Marionette.Async Add-on
 
-Development: [backbone.marionette.async.js](https://raw.github.com/derickbailey/backbone.marionette/master/lib/backbone.marionette.async.js)
+* Development: [backbone.marionette.async.js](https://raw.github.com/derickbailey/backbone.marionette/master/lib/backbone.marionette.async.js)
 
-Production: [backbone.marionette.async.min.js](https://raw.github.com/derickbailey/backbone.marionette/master/lib/backbone.marionette.async.min.js)
+* Production: [backbone.marionette.async.min.js](https://raw.github.com/derickbailey/backbone.marionette/master/lib/backbone.marionette.async.min.js)
 
-See the [async.md](https://github.com/derickbailey/backbone.marionette/blob/master/async.md)
+See the [async.md](https://github.com/derickbailey/backbone.marionette/blob/master/docs/async.md)
 documentation for more information.
 
 ### Available Packages
@@ -73,20 +73,20 @@ documentation for each peice of Marionette.
 
 These are the strings that you can pull to make your puppet dance:
 
-* [**Backbone.Marionette.Application**](#marionetteapplication): An application object that starts your app via initializers, and more
-* [**Backbone.Marionette.Application.module**](#marionetteapplicationmodule): Create modules and sub-modules within the application
-* [**Backbone.Marionette.AppRouter**](#marionetteapprouter): Reduce your routers to nothing more then configuration
-* [**Backbone.Marionette.View**](#marionetteview): The base View type that other Marionette views extend from (not intended to be used directly)
-* [**Backbone.Marionette.ItemView**](#marionetteitemview): A view that renders a single item
-* [**Backbone.Marionette.CollectionView**](#marionettecollectionview): A view that iterates over a collection, and renders individual `ItemView` instances for each model
-* [**Backbone.Marionette.CompositeView**](#marionettecompositeview): A collection view and item view, for rendering leaf-branch/composite model hierarchies
-* [**Backbone.Marionette.Layout**](#marionettelayout): A view that renders a layout and creates region managers to manage areas within it
-* [**Backbone.Marionette.Region**](#marionetteregion): Manage visual regions of your application, including display and removal of content
-* [**Backbone.Marionette.EventAggregator**](#marionetteeventaggregator): An extension of Backbone.Events, to be used as an event-driven or pub-sub tool
-* [**Backbone.Marionette.BindTo**](#marionettebindto): An event binding manager, to facilitate binding and unbinding of events
-* [**Backbone.Marionette.Renderer**](#backbonemarionetterenderer): Render templates with or without data, in a consistent and common manner
-* [**Backbone.Marionette.TemplateCache**](#backbonemarionettetemplatecache): Cache templates that are stored in `<script>` blocks, for faster subsequent access
-* [**Backbone.Marionette.Callbacks**](#backbonemarionettecallbacks): Manage a collection of callback methods, and execute them as needed
+* [**Backbone.Marionette.Application**](https://github.com/derickbailey/backbone.marionette/blob/master/docs/marionette.application.md): An application object that starts your app via initializers, and more
+* [**Backbone.Marionette.Application.module**](https://github.com/derickbailey/backbone.marionette/blob/master/docs/marionette.application.module.md): Create modules and sub-modules within the application
+* [**Backbone.Marionette.AppRouter**](https://github.com/derickbailey/backbone.marionette/blob/master/docs/marionette.approuter.md): Reduce your routers to nothing more then configuration
+* [**Backbone.Marionette.View**](https://github.com/derickbailey/backbone.marionette/blob/master/docs/marionette.view.md): The base View type that other Marionette views extend from (not intended to be used directly)
+* [**Backbone.Marionette.ItemView**](https://github.com/derickbailey/backbone.marionette/blob/master/docs/marionette.itemview.md): A view that renders a single item
+* [**Backbone.Marionette.CollectionView**](https://github.com/derickbailey/backbone.marionette/blob/master/docs/marionette.collectionview.md): A view that iterates over a collection, and renders individual `ItemView` instances for each model
+* [**Backbone.Marionette.CompositeView**](https://github.com/derickbailey/backbone.marionette/blob/master/docs/marionette.compositeview.md): A collection view and item view, for rendering leaf-branch/composite model hierarchies
+* [**Backbone.Marionette.Region**](https://github.com/derickbailey/backbone.marionette/blob/master/docs/marionette.region.md): Manage visual regions of your application, including display and removal of content
+* [**Backbone.Marionette.Layout**](https://github.com/derickbailey/backbone.marionette/blob/master/docs/marionette.layout.md): A view that renders a layout and creates region managers to manage areas within it
+* [**Backbone.Marionette.EventAggregator**](https://github.com/derickbailey/backbone.marionette/blob/master/docs/marionette.eventaggregator.md): An extension of Backbone.Events, to be used as an event-driven or pub-sub tool
+* [**Backbone.Marionette.BindTo**](https://github.com/derickbailey/backbone.marionette/blob/master/docs/marionette.bindto.md): An event binding manager, to facilitate binding and unbinding of events
+* [**Backbone.Marionette.Renderer**](https://github.com/derickbailey/backbone.marionette/blob/master/docs/marionette.renderer.md): Render templates with or without data, in a consistent and common manner
+* [**Backbone.Marionette.TemplateCache**](https://github.com/derickbailey/backbone.marionette/blob/master/docs/marionette.templatecache.md): Cache templates that are stored in `<script>` blocks, for faster subsequent access
+* [**Backbone.Marionette.Callbacks**](https://github.com/derickbailey/backbone.marionette/blob/master/docs/marionette.callbacks.md): Manage a collection of callback methods, and execute them as needed
 
 Please note that this is document is rather dry - it's meant to be a reference for
 those that just need a reference. If you're looking for an introduction and/or 
@@ -139,10 +139,10 @@ removed from Marionette directly due to performance problems and overhead
 incurred. To get async support in Marionette, then, you need to download and
 include the the `backbone.marionette.async.js` or `async.min` file in 
 your project. See the above download links and the the 
-[async.md](https://github.com/derickbailey/backbone.marionette/blob/master/async.md)
+[async.md](https://github.com/derickbailey/backbone.marionette/blob/master/docs/async.md)
 documentation for more information.
 
-##### [View The Async Documentation](https://github.com/derickbailey/backbone.marionette/blob/master/async.md)
+##### [View The Async Documentation](https://github.com/derickbailey/backbone.marionette/blob/master/docs/async.md)
 
 ## Compatibility And Requirements
 

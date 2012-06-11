@@ -566,4 +566,30 @@ describe("collection view", function(){
       expect(viewOnShowContext).toBe(view);
     });
   });
+  
+  describe("when a model is added to a sorted collection", function(){
+    var collectionView;
+    var collection;
+
+    beforeEach(function(){
+      collection = new Collection(null, {
+        comparator: function(model) {
+          return model.get("index");
+        }
+      });
+      collection.add({index: 1, foo: "firstAdded"});
+      collectionView = new CollectionView({
+        itemView: ItemView,
+        collection: collection
+      });
+      collectionView.render();
+      
+      collection.add({index: 0, foo: "secondAdded"});
+    });
+
+    it("should render the model 'secondAdded' before the model 'firstAdded' in to the DOM", function(){
+      expect($(collectionView.$el.children().get(0))).toHaveText("secondAdded");
+      expect($(collectionView.$el.children().get(1))).toHaveText("firstAdded");
+    });
+  });
 });

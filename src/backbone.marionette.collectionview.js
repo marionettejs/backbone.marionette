@@ -47,7 +47,7 @@ Marionette.CollectionView = Marionette.View.extend({
 
     if (this.collection) {
       if (this.collection.length === 0 && EmptyView) {
-        this.addItemView(new Backbone.Model(), EmptyView);
+        this.addItemView(new Backbone.Model(), EmptyView, 0);
       } else {
         this.collection.each(function(item, index){
           that.addItemView(item, ItemView, index);
@@ -142,11 +142,17 @@ Marionette.CollectionView = Marionette.View.extend({
     this.trigger("item:removed", view);
   },
 
-  // Append the HTML to the collection's `el`.
+  // Append the HTML to the collection's `el` at the given index.
   // Override this method to do something other
   // then `.append`.
   appendHtml: function(collectionView, itemView, index){
-    collectionView.$el.append(itemView.el);
+    var childrenContainer = collectionView.$el;
+    var children = childrenContainer.children();
+    if (children.size() === index) {
+      childrenContainer.append(itemView.el);
+    } else {
+      childrenContainer.children().eq(index).before(itemView.el);
+    }
   },
 
   // Store references to all of the child `itemView`

@@ -6,6 +6,7 @@
 Marionette.CollectionView = Marionette.View.extend({
   constructor: function(){
     Marionette.View.prototype.constructor.apply(this, arguments);
+    this.initChildViewStorage();
     this.initialEvents();
     this.onShowCallbacks = new Marionette.Callbacks();
   },
@@ -152,10 +153,13 @@ Marionette.CollectionView = Marionette.View.extend({
   // Store references to all of the child `itemView`
   // instances so they can be managed and cleaned up, later.
   storeChild: function(view){
-    if (!this.children){
-      this.children = {};
-    }
     this.children[view.model.cid] = view;
+  },
+
+  // Internal method to set up the `children` object for
+  // storing all of the child views
+  initChildViewStorage: function(){
+    this.children = {};
   },
 
   // Handle cleanup and other closing needs for

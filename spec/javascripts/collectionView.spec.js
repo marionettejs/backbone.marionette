@@ -195,7 +195,7 @@ describe("collection view", function(){
     });
 
     it("should not reference any view items", function(){
-      expect(collectionView.children).toBeUndefined();
+      expect(_.size(collectionView.children)).toBe(0);
     });
   });
 

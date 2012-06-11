@@ -5,9 +5,11 @@
 // Extends directly from CollectionView and also renders an
 // an item view as `modelView`, for the top leaf
 Marionette.CompositeView = Marionette.CollectionView.extend({
+  
   constructor: function(options){
     Marionette.CollectionView.apply(this, arguments);
     this.itemView = this.getItemView();
+    this.childrenContainer = this.make("div");
   },
 
   // Configured the initial events that the composite view 
@@ -40,6 +42,7 @@ Marionette.CompositeView = Marionette.CollectionView.extend({
     this.trigger("composite:model:rendered");
     this.trigger("render");
 
+    this.$el.append(this.childrenContainer);
     this.renderCollection();
     this.trigger("composite:rendered");
   },

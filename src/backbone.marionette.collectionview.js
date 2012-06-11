@@ -146,7 +146,7 @@ Marionette.CollectionView = Marionette.View.extend({
   // Override this method to do something other
   // then `.append`.
   appendHtml: function(collectionView, itemView, index){
-    var childrenContainer = collectionView.$el;
+    var childrenContainer = $(collectionView.childrenContainer || collectionView.el);
     var children = childrenContainer.children();
     if (children.size() === index) {
       childrenContainer.append(itemView.el);

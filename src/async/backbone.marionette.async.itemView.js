@@ -6,6 +6,9 @@
 // `onRender` functions are all asynchronous, using `jQuery.Deferred()`
 // and `jQuery.when(...).then(...)` to manage async calls.
 Async.ItemView = {
+  // Consider overriding 'renderData' if you want to keep the
+  // render-events being triggered but change the way your data
+  // is being rendered.
   render: function(){
     var that = this;
 
@@ -20,13 +23,11 @@ Async.ItemView = {
     } 
 
     var dataSerialized = function(data){
-      var template = that.getTemplate();
-      var asyncRender = Marionette.Renderer.render(template, data);
+      var asyncRender = that.renderData(data);
       $.when(asyncRender).then(templateRendered);
     }
 
     var templateRendered = function(html){
-      that.$el.html(html);
       callDeferredMethod(that.onRender, onRenderDone, that);
     }
 
@@ -40,5 +41,21 @@ Async.ItemView = {
     callDeferredMethod(this.beforeRender, beforeRenderDone, this);
 
     return deferredRender.promise();
+  },
+  
+  // Render the provided data using Marionette.Renderer.
+  // Override this to render the given data using a mechanism
+  // that suits your needs. 
+  // In general you should override the `Marionette.Renderer` 
+  // object to change how Marionette renders views.
+  // Return a deferred object when performing custom async rendering.
+  renderData: function(data) {
+    var template = this.getTemplate();
+    var asyncRender = Marionette.Renderer.render(template, data);
+    var that = this;
+    $.when(asyncRender).then(function(html) {
+      that.$el.html(html);
+    });
+    return asyncRender;
   }
 };

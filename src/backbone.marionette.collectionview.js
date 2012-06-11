@@ -82,11 +82,6 @@ Marionette.CollectionView = Marionette.View.extend({
 
     var view = this.buildItemView(item, ItemView);
 
-    // call onShow for child item views
-    if (view.onShow){
-      this.onShowCallbacks.add(view.onShow, view);
-    }
-
     // Store the child view itself so we can properly 
     // remove and/or close it later
     this.storeChild(view);
@@ -95,6 +90,11 @@ Marionette.CollectionView = Marionette.View.extend({
 
     // Render it and show it
     var renderResult = this.renderItemView(view);
+
+    // call onShow for child item views
+    if (view.onShow){
+      this.onShowCallbacks.add(view.onShow, view);
+    }
 
     // Forward all child item view events through the parent,
     // prepending "itemview:" to the event name

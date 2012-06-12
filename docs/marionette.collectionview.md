@@ -245,7 +245,7 @@ parent collection view will then trigger "itemview:do:something".
 ```js
 // set up basic collection
 var myModel = new MyModel();
-var myColelction = new MyCollection();
+var myCollection = new MyCollection();
 myCollection.add(myModel);
 
 // get the collection view in place

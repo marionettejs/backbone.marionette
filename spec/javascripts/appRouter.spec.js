@@ -59,6 +59,52 @@ describe("app router", function(){
     });
   });
 
+  describe("when a second route fires from a controller instance", function(){
+    var context, controller;
+
+    var Router = Backbone.Marionette.AppRouter.extend({
+      appRoutes: {
+        "m1": "method1",
+        "m2": "method2"
+      }
+    });
+
+    var Controller = function(){
+      return {
+        method1: function(){},
+
+        method2: function(){
+          context = this;
+        }
+      };
+    }
+
+    beforeEach(function(){
+      controller = new Controller();
+      spyOn(controller, "method2").andCallThrough();
+
+      var router = new Router({
+        controller: controller
+      });
+      Backbone.history.start();
+
+      router.navigate("m1", true);
+      router.navigate("m2", true);
+    });
+
+    afterEach(function(){
+      Backbone.history.stop();
+    });
+
+    it("should call the configured method on the controller passed in the constructor", function(){
+      expect(controller.method2).toHaveBeenCalled();
+    });
+
+    it("should execute the controller method with the context of the controller", function(){
+      expect(context).toBe(controller);
+    });
+  });
+
   describe("when a route fires with parameters", function(){
     var Router = Backbone.Marionette.AppRouter.extend({
       appRoutes: {

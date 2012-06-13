@@ -1,4 +1,4 @@
-### v0.9.0-pre [view commit logs](https://github.com/derickbailey/backbone.marionette/compare/v0.8.4...dev)
+### v0.9.0-pre [view commit logs](https://github.com/derickbailey/backbone.marionette/compare/v0.8.4...v0.9.0)
 
 * **BREAKING** Async Support Removed From Core Marionette
   * Marionette no longer supports asynchronous / deferred rendering in any view, by default

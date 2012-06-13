@@ -83,12 +83,17 @@ describe("collection view", function(){
       spyOn(collectionView, "onItemAdded").andCallThrough();
       spyOn(collectionView, "beforeRender").andCallThrough();
       spyOn(collectionView, "trigger").andCallThrough();
+      spyOn(collectionView, "appendHtml").andCallThrough();
 
       collectionView.render();
     });
 
     it("should append the html for each itemView", function(){
       expect($(collectionView.$el)).toHaveHtml("<span>bar</span><span>baz</span>");
+    });
+
+    it("should provide the index for each itemView, when appending", function(){
+      expect(collectionView.appendHtml.calls[0].args[2]).toBe(0);
     });
 
     it("should reference each of the rendered view items", function(){
@@ -271,6 +276,8 @@ describe("collection view", function(){
       });
       collectionView.render();
 
+      spyOn(collectionView, "appendHtml").andCallThrough();
+
       model = new Model({foo: "bar"});
       collection.add(model);
     });
@@ -282,6 +289,11 @@ describe("collection view", function(){
     it("should render the model in to the DOM", function(){
       expect($(collectionView.$el)).toHaveText("bar");
     });
+
+    it("should provide the index for each itemView, when appending", function(){
+      expect(collectionView.appendHtml.calls[0].args[2]).toBe(0);
+    });
+
   });
 
   describe("when a model is removed from the collection", function(){

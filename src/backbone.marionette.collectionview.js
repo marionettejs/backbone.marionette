@@ -23,9 +23,9 @@ Marionette.CollectionView = Marionette.View.extend({
   },
 
   // Handle a child item added to the collection
-  addChildView: function(item){
+  addChildView: function(item, collection, options){
     var ItemView = this.getItemView();
-    return this.addItemView(item, ItemView);
+    return this.addItemView(item, ItemView, options.index);
   },
 
   // Override from `Marionette.View` to guarantee the `onShow` method
@@ -48,10 +48,10 @@ Marionette.CollectionView = Marionette.View.extend({
 
     if (this.collection) {
       if (this.collection.length === 0 && EmptyView) {
-        this.addItemView(new Backbone.Model(), EmptyView);
+        this.addItemView(new Backbone.Model(), EmptyView, 0);
       } else {
-        this.collection.each(function(item){
-          that.addItemView(item, ItemView);
+        this.collection.each(function(item, index){
+          that.addItemView(item, ItemView, index);
         });
       }
     }
@@ -77,7 +77,7 @@ Marionette.CollectionView = Marionette.View.extend({
 
   // Render the child item's view and add it to the
   // HTML for the collection view.
-  addItemView: function(item, ItemView){
+  addItemView: function(item, ItemView, index){
     var that = this;
 
     var view = this.buildItemView(item, ItemView);
@@ -89,7 +89,7 @@ Marionette.CollectionView = Marionette.View.extend({
     this.trigger("item:added", view);
 
     // Render it and show it
-    var renderResult = this.renderItemView(view);
+    var renderResult = this.renderItemView(view, index);
 
     // call onShow for child item views
     if (view.onShow){
@@ -115,9 +115,9 @@ Marionette.CollectionView = Marionette.View.extend({
   },
   
   // render the item view
-  renderItemView: function(view) {
+  renderItemView: function(view, index) {
     view.render();
-    this.appendHtml(this, view);
+    this.appendHtml(this, view, index);
   },
 
   // Build an `itemView` for every model in the collection. 
@@ -146,7 +146,7 @@ Marionette.CollectionView = Marionette.View.extend({
   // Append the HTML to the collection's `el`.
   // Override this method to do something other
   // then `.append`.
-  appendHtml: function(collectionView, itemView){
+  appendHtml: function(collectionView, itemView, index){
     collectionView.$el.append(itemView.el);
   },
 

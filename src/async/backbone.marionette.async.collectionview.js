@@ -17,11 +17,11 @@ Async.CollectionView = {
 
     if (this.collection) {
       if (this.collection.length === 0 && EmptyView) {
-        var promise = this.addItemView(new Backbone.Model(), EmptyView);
+        var promise = this.addItemView(new Backbone.Model(), EmptyView, 0);
         promises.push(promise);
       } else {
-        this.collection.each(function(item){
-          var promise = that.addItemView(item, ItemView);
+        this.collection.each(function(item, index){
+          var promise = that.addItemView(item, ItemView, index);
           promises.push(promise);
         });
       }
@@ -39,11 +39,11 @@ Async.CollectionView = {
     return deferredRender.promise();
   },
   
-  renderItemView: function(view) {
+  renderItemView: function(view, index) {
     var that = this;
     var viewRendered = view.render();
     $.when(viewRendered).then(function(){
-      that.appendHtml(that, view);
+      that.appendHtml(that, view, index);
     });
     return viewRendered;
   }

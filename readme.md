@@ -42,7 +42,7 @@ builds:
 
 * Production: [backbone.marionette.async.min.js](https://raw.github.com/derickbailey/backbone.marionette/master/lib/backbone.marionette.async.min.js)
 
-See the [async.md](https://github.com/derickbailey/backbone.marionette/blob/master/docs/async.md)
+See the [async.md](https://github.com/derickbailey/backbone.marionette/blob/master/docs/marionette.async.md)
 documentation for more information.
 
 ### Available Packages
@@ -141,10 +141,10 @@ removed from Marionette directly due to performance problems and overhead
 incurred. To get async support in Marionette, then, you need to download and
 include the the `backbone.marionette.async.js` or `async.min` file in 
 your project. See the above download links and the the 
-[async.md](https://github.com/derickbailey/backbone.marionette/blob/master/docs/async.md)
+[async.md](https://github.com/derickbailey/backbone.marionette/blob/master/docs/marionette.async.md)
 documentation for more information.
 
-##### [View The Async Documentation](https://github.com/derickbailey/backbone.marionette/blob/master/docs/async.md)
+##### [View The Async Documentation](https://github.com/derickbailey/backbone.marionette/blob/master/docs/marionette.async.md)
 
 ## Compatibility And Requirements
 

@@ -41,7 +41,7 @@ Async.CollectionView = {
   
   renderItemView: function(view) {
     var that = this;
-	var viewRendered = view.render();
+    var viewRendered = view.render();
     $.when(viewRendered).then(function(){
       that.appendHtml(that, view);
     });

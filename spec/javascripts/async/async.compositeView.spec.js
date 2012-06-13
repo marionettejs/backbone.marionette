@@ -2,7 +2,7 @@ describe("async composite view", function(){
 
   beforeEach(function(){
     this.collectionRender = Backbone.Marionette.CollectionView.prototype.render;
-    this.collectionAddItemView = Backbone.Marionette.CollectionView.prototype.addItemView;
+    this.collectionRenderItemView = Backbone.Marionette.CollectionView.prototype.renderItemView;
 
     this.compositeRender = Backbone.Marionette.CompositeView.prototype.render;
     this.compositeRenderCollection = Backbone.Marionette.CompositeView.prototype.renderCollection;
@@ -14,7 +14,7 @@ describe("async composite view", function(){
 
   afterEach(function(){
     Backbone.Marionette.CollectionView.prototype.render = this.collectionRender;
-    Backbone.Marionette.CollectionView.prototype.addItemView = this.collectionAddItemView;
+    Backbone.Marionette.CollectionView.prototype.renderItemView = this.collectionRenderItemView;
 
     Backbone.Marionette.CompositeView.prototype.render = this.compositeRender;
     Backbone.Marionette.CompositeView.prototype.renderCollection = this.compositeRenderCollection

@@ -1,7 +1,7 @@
 describe("async collection view", function(){
   beforeEach(function(){
     this.render = Backbone.Marionette.CollectionView.prototype.render;
-    this.addItemView = Backbone.Marionette.CollectionView.prototype.addItemView;
+    this.renderItemView = Backbone.Marionette.CollectionView.prototype.renderItemView;
 
     // replace the standard render with an async render
     _.extend(Backbone.Marionette.CollectionView.prototype, Backbone.Marionette.Async.CollectionView);
@@ -9,7 +9,7 @@ describe("async collection view", function(){
 
   afterEach(function(){
     Backbone.Marionette.CollectionView.prototype.render = this.render;
-    Backbone.Marionette.CollectionView.prototype.addItemView = this.addItemView;
+    Backbone.Marionette.CollectionView.prototype.renderItemView = this.renderItemView;
   });
 
   describe("when rendering a collection view", function(){

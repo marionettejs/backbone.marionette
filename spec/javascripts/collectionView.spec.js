@@ -20,7 +20,7 @@ describe("collection view", function(){
 
     onRender: function(){},
 
-    onItemAdded: function(view){}
+    onItemAdded: function(view, index){}
   });
 
   var EmptyView = Backbone.Marionette.ItemView.extend({
@@ -115,8 +115,8 @@ describe("collection view", function(){
       var views = _.values(collectionView.children);
       var v1 = views[0];
       var v2 = views[1];
-      expect(collectionView.onItemAdded).toHaveBeenCalledWith(v1);
-      expect(collectionView.onItemAdded).toHaveBeenCalledWith(v2);
+      expect(collectionView.onItemAdded).toHaveBeenCalledWith(v1, 0);
+      expect(collectionView.onItemAdded).toHaveBeenCalledWith(v2, 1);
     });
 
     it("should call `onItemAdded` for all itemView instances", function(){
@@ -564,6 +564,32 @@ describe("collection view", function(){
 
     it("should call the child's 'onShow' method with itself as the context", function(){
       expect(viewOnShowContext).toBe(view);
+    });
+  });
+  
+  describe("when a model is added to a sorted collection", function(){
+    var collectionView;
+    var collection;
+
+    beforeEach(function(){
+      collection = new Collection(null, {
+        comparator: function(model) {
+          return model.get("index");
+        }
+      });
+      collection.add({index: 1, foo: "firstAdded"});
+      collectionView = new CollectionView({
+        itemView: ItemView,
+        collection: collection
+      });
+      collectionView.render();
+      
+      collection.add({index: 0, foo: "secondAdded"});
+    });
+
+    it("should render the model 'secondAdded' before the model 'firstAdded' in to the DOM", function(){
+      expect($(collectionView.$el.children().get(0))).toHaveText("secondAdded");
+      expect($(collectionView.$el.children().get(1))).toHaveText("firstAdded");
     });
   });
 });

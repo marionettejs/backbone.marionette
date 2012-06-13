@@ -25,6 +25,7 @@
   * ItemView is now guaranteed to have it's "onRender" and "onShow" methods called, when rendering the collection and when adding a new item to the collection / rendering the new item view
   * Calls an `onItemAdded` method when adding an item/item view, just prior to rendering the item view
   * Can now specify an `itemViewOptions` object literal on your collection view definition, and the data will be passed to each itemView instance as part of the itemView's options
+  * The `appendHtml` method receives a third argument of the itemView's "index" for sorted collections
 
 * CompositeView:
   * **BREAKING** When a CompositeView's collection is reset, only the collection will be re-rendered. It will no longe re-render the composite's template/model, just the collection.

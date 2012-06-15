@@ -137,27 +137,3 @@ MyApp.module("MyModule", function(MyModule){
 MyApp.MyModule.definition1; //=> true
 MyApp.MyModule.definition2; //=> true
 ```
-
-Note that if you return a custom module from your module 
-definitions, the last module definition to return, wins.
-
-```js
-MyApp.module("MyModule", function(MyModule){
-  a = {};
-
-  a.foo = "bar";
-
-  return a;
-});
-
-MyApp.module("MyModule", function(MyModule){
-  b = {};
-
-  b.foo = "I'm overriding you!";
-
-  return b;
-});
-
-MyApp.MyModule.foo; //=> "I'm overriding you!"
-```
-

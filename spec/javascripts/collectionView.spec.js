@@ -23,12 +23,6 @@ describe("collection view", function(){
     onItemAdded: function(view){}
   });
 
-  var EmptyView = Backbone.Marionette.ItemView.extend({
-    tagName: "span",
-    className: "isempty",
-    render: function(){}
-  });
-
   var EventedView = Backbone.Marionette.CollectionView.extend({
     itemView: ItemView,
 
@@ -45,11 +39,6 @@ describe("collection view", function(){
     appendHtml: function(collectionView, itemView){
       collectionView.$el.prepend(itemView.el);
     }
-  });
-
-  var EmptyCollectionView = Backbone.Marionette.CollectionView.extend({
-    itemView: ItemView,
-    emptyView: EmptyView
   });
 
   describe("when rendering a collection view with no `itemView` specified", function(){
@@ -204,25 +193,67 @@ describe("collection view", function(){
     });
   });
 
-  describe("when rendering a collection view with an empty collection", function(){
-    var collectionView;
+  describe("emptyView", function(){
 
-    beforeEach(function(){
-      var collection = new Collection();
-      collectionView = new EmptyCollectionView({
-        collection: collection
+    var EmptyView = Backbone.Marionette.ItemView.extend({
+      tagName: "span",
+      className: "isempty",
+      render: function(){}
+    });
+
+    var EmptyCollectionView = Backbone.Marionette.CollectionView.extend({
+      itemView: ItemView,
+      emptyView: EmptyView
+    });
+
+
+    describe("when rendering a collection view with an empty collection", function(){
+
+      var collectionView;
+
+      beforeEach(function(){
+        var collection = new Collection();
+        collectionView = new EmptyCollectionView({
+          collection: collection
+        });
+
+        collectionView.render();
       });
 
-      collectionView.render();
+      it("should append the html for the emptyView", function(){
+        expect($(collectionView.$el)).toHaveHtml("<span class=\"isempty\"></span>");
+      });
+
+      it("should reference each of the rendered view items", function(){
+        expect(_.size(collectionView.children)).toBe(1);
+      });
     });
 
-    it("should append the html for the emptyView", function(){
-      expect($(collectionView.$el)).toHaveHtml("<span class=\"isempty\"></span>");
+    describe("when the emptyView has been rendered for an empty collection, then adding an item to the collection", function(){
+      var collectionView, closeSpy;
+
+      beforeEach(function(){
+        var collection = new Collection();
+        collectionView = new EmptyCollectionView({
+          collection: collection
+        });
+
+        collectionView.render();
+
+        closeSpy = spyOn(EmptyView.prototype, "close");
+
+        collection.add({foo: "wut"});
+      });
+
+      it("should close the emptyView", function(){
+        expect(closeSpy).toHaveBeenCalled();
+      });
+
+      it("should show the new item", function(){
+        expect(collectionView.$el).toHaveText(/wut/);
+      });
     });
 
-    it("should reference each of the rendered view items", function(){
-      expect(_.size(collectionView.children)).toBe(1);
-    });
   });
 
   describe("when a collection is reset after the view is loaded", function(){

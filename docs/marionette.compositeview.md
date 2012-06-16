@@ -38,6 +38,67 @@ new MyComp({
 });
 ```
 
+## CompositeView's appendHtml
+
+By default the composite view uses the same `appendHtml` method that the
+collection view provides. This means the view will call jQuery's `.append` 
+to move the HTML contents from the item view instance in to the collection
+view's `el`. 
+
+This isn't very useful with a composite view, though, and you should
+override this to append the HTML to the correct DOM element.
+
+For example, if you are building a table view, and want to append each
+item from the collection in to the `<tbody>` of the table, you might
+do this with a template:
+
+```html
+<script id="table-template" type="text/html">
+  <table>
+    <thead>
+      <tr>
+        <th>Some Column</th>
+        <th>Another Column</th>
+        <th>Still More</th>
+      </tr>
+    </thead>
+
+    <!-- want to insert collection items, here
+    <tbody></tbody>
+
+    <tfoot>
+      <tr>
+        <td colspan="3">some footer information</td>
+      </tr>
+    </tfoot>
+  </table>
+</script>
+```
+
+and you might do this with the CompositeView, and an ItemView for each
+item in the collection:
+
+```js
+RowView = Backbone.Marionette.ItemView.extend({
+  tagName: "tr",
+  template: "#row-template"
+});
+
+TableView = Backbone.Marionette.CollectionView.extend({
+  itemView: RowView,
+
+  appendHtml: function(collectionView, itemView, index){
+    collectionView.$("tbody").append(itemView.el);
+  }
+});
+```
+
+For more information on the parameters of this method, see the
+[CollectionView's documentation](https://github.com/derickbailey/backbone.marionette/blob/master/docs/marionette.collectionview.md).
+
+For more examples of how a CompositeView can be used, see [my blog post
+on composite views](http://lostechies.com/derickbailey/2012/04/05/composite-views-tree-structures-tables-and-more/)
+
 ## Recursive By Default
 
 The default rendering mode for a `CompositeView` assumes a

@@ -63,7 +63,7 @@ do this with a template:
       </tr>
     </thead>
 
-    <!-- want to insert collection items, here
+    <!-- want to insert collection items, here -->
     <tbody></tbody>
 
     <tfoot>

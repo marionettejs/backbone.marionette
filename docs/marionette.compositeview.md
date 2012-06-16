@@ -53,6 +53,12 @@ item from the collection in to the `<tbody>` of the table, you might
 do this with a template:
 
 ```html
+<script id="row-template" type="text/html">
+  <td><%= someData %></td>
+  <td><%= moreData %></td>
+  <td><%= stuff %></td>
+</script>
+
 <script id="table-template" type="text/html">
   <table>
     <thead>
@@ -86,6 +92,8 @@ RowView = Backbone.Marionette.ItemView.extend({
 
 TableView = Backbone.Marionette.CollectionView.extend({
   itemView: RowView,
+
+  template: "#table-template",
 
   appendHtml: function(collectionView, itemView, index){
     collectionView.$("tbody").append(itemView.el);

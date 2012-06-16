@@ -7,29 +7,19 @@ Async.CollectionView = {
     var that = this;
     var deferredRender = $.Deferred();
     var promises = [];
-    var ItemView = this.getItemView();
-    var EmptyView = this.options.emptyView || this.emptyView;
 
-    if (this.beforeRender) { this.beforeRender(); }
-    this.trigger("collection:before:render", this);
+    this.triggerBeforeRender();
 
     this.closeChildren();
 
-    if (this.collection) {
-      if (this.collection.length === 0 && EmptyView) {
-        var promise = this.addItemView(new Backbone.Model(), EmptyView, 0);
-        promises.push(promise);
-      } else {
-        this.collection.each(function(item, index){
-          var promise = that.addItemView(item, ItemView, index);
-          promises.push(promise);
-        });
-      }
+    if (this.collection && this.collection.length > 0) {
+      this.showCollection(promises);
+    } else {
+      this.showEmptyView(promises);
     }
 
     deferredRender.done(function(){
-      if (this.onRender) { this.onRender(); }
-      this.trigger("collection:rendered", this);
+      that.triggerRendered();
     });
 
     $.when.apply(this, promises).then(function(){
@@ -37,6 +27,30 @@ Async.CollectionView = {
     });
 
     return deferredRender.promise();
+  },
+  
+  // Internal method to loop through each item in the
+  // collection view and show it
+  showCollection: function(promises){
+    var that = this;
+    var ItemView = this.getItemView();
+    this.collection.each(function(item, index){
+      var promise = that.addItemView(item, ItemView, index);
+      promises.push(promise);
+    });
+  },
+
+  // Internal method to show an empty view in place of
+  // a collection of item views, when the collection is
+  // empty
+  showEmptyView: function(promises){
+    var EmptyView = this.options.emptyView || this.emptyView;
+    if (EmptyView){
+      this.showingEmptyView = true;
+      var model = new Backbone.Model();
+      var promise = this.addItemView(model, EmptyView, 0);
+      promises.push(promise);
+    }
   },
   
   renderItemView: function(view, index) {

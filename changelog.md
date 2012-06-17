@@ -1,6 +1,7 @@
 ### v0.9.1 [view commit logs](https://github.com/derickbailey/backbone.marionette/compare/v0.9.0...v0.9.1)
 
 * CollectionView and CompositeView properly close their `emptyView` instance when an item is added to the view's collection
+* CollectionView and CompositeView will show their `emptyView` after the last item has been removed from the collection
 
 ### v0.9.0 [view commit logs](https://github.com/derickbailey/backbone.marionette/compare/v0.8.4...v0.9.0)
 

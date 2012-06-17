@@ -177,6 +177,11 @@ Marionette.CollectionView = Marionette.View.extend({
       view.close();
       delete this.children[item.cid];
     }
+
+    if (this.collection.length === 0){
+      this.showEmptyView();
+    }
+
     this.trigger("item:removed", view);
   },
 

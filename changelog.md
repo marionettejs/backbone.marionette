@@ -1,3 +1,8 @@
+### v0.9.x [view commit logs](https://github.com/derickbailey/backbone.marionette/compare/v0.9.1...dev)
+
+* CompositeView
+  * Added `itemViewContainer` to specify which element children / itemView instances should be appended to
+
 ### v0.9.1 [view commit logs](https://github.com/derickbailey/backbone.marionette/compare/v0.9.0...v0.9.1)
 
 * CollectionView and CompositeView properly close their `emptyView` instance when an item is added to the view's collection

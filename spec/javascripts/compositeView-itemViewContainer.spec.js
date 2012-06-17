@@ -74,4 +74,10 @@ describe("composite view - itemViewContainer", function(){
     });
   });
 
+  describe("when re-rendering a composite view with an `itemViewContainer`", function(){
+    it("should reset the view's $itemViewContainer cache", function(){
+      throw new Error("Not yet implemented");
+    });
+  });
+
 });

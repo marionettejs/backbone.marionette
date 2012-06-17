@@ -10,7 +10,12 @@ beforeEach(function() {
 
     toHaveOwnProperty: function(propertyName){
       return this.actual.hasOwnProperty(propertyName);
-    }
+    },
 
+    toContainHtml: function(html) {
+      var actualHtml = this.actual.html();
+      var expectedHtml = jasmine.JQuery.browserTagCaseIndependentHtml(html);
+      return (actualHtml.indexOf(expectedHtml)>=0);
+    }
   });
 });

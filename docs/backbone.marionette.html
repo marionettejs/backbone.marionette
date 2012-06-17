@@ -279,6 +279,11 @@ them when removing / closing the child view</p>             </td>             <t
       <span class="nx">view</span><span class="p">.</span><span class="nx">close</span><span class="p">();</span>
       <span class="k">delete</span> <span class="k">this</span><span class="p">.</span><span class="nx">children</span><span class="p">[</span><span class="nx">item</span><span class="p">.</span><span class="nx">cid</span><span class="p">];</span>
     <span class="p">}</span>
+
+    <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">collection</span><span class="p">.</span><span class="nx">length</span> <span class="o">===</span> <span class="mi">0</span><span class="p">){</span>
+      <span class="k">this</span><span class="p">.</span><span class="nx">showEmptyView</span><span class="p">();</span>
+    <span class="p">}</span>
+
     <span class="k">this</span><span class="p">.</span><span class="nx">trigger</span><span class="p">(</span><span class="s2">&quot;item:removed&quot;</span><span class="p">,</span> <span class="nx">view</span><span class="p">);</span>
   <span class="p">},</span></pre></div>             </td>           </tr>                               <tr id="section-47">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-47">&#182;</a>               </div>               <p>Append the HTML to the collection's <code>el</code>.
 Override this method to do something other

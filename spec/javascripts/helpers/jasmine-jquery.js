@@ -204,12 +204,6 @@ jasmine.JQuery.matchersClass = {};
       return this.actual.html() == jasmine.JQuery.browserTagCaseIndependentHtml(html);
     },
 
-    toContainHtml: function(html) {
-      var actualHtml = this.actual.html();
-      var expectedHtml = jasmine.JQuery.browserTagCaseIndependentHtml(html);
-      return (actualHtml.indexOf(expectedHtml)>=0);
-    },
-
     toHaveText: function(text) {
       var trimmedText = $.trim(this.actual.text());
       if (text && jQuery.isFunction(text.test)) {

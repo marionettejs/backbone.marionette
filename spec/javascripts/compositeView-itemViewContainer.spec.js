@@ -70,7 +70,6 @@ describe("composite view - itemViewContainer", function(){
     });
 
     it("should render the items in to the composite view directly", function(){
-      console.log(compositeView.$el[0].outerHTML);
       expect(compositeView.$el).toContainHtml("<ul></ul>");
     });
   });

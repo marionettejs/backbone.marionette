@@ -37,6 +37,5 @@ Async.CompositeView = {
       this.trigger("composite:collection:rendered");
     });
     return collectionDeferred.promise();
-  },
-
+  }
 }

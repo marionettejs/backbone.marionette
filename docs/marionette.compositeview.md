@@ -26,7 +26,7 @@ new CompositeView({
 For more examples, see my blog post on 
 [using the composite view](http://lostechies.com/derickbailey/2012/04/05/composite-views-tree-structures-tables-and-more/)
 
-## Composite Model Template
+## Composite Model `template`
 
 When a `CompositeView` is rendered, the `model` will be rendered
 with the `template` that the view is configured with. You can
@@ -38,15 +38,15 @@ new MyComp({
 });
 ```
 
-## CompositeView's appendHtml
+## CompositeView's `itemViewContainer`
 
 By default the composite view uses the same `appendHtml` method that the
 collection view provides. This means the view will call jQuery's `.append` 
 to move the HTML contents from the item view instance in to the collection
 view's `el`. 
 
-This isn't very useful with a composite view, though, and you should
-override this to append the HTML to the correct DOM element.
+This is typically not very useful as a composite view will usually render
+a container DOM element in which the item views should be placed.
 
 For example, if you are building a table view, and want to append each
 item from the collection in to the `<tbody>` of the table, you might
@@ -81,8 +81,9 @@ do this with a template:
 </script>
 ```
 
-and you might do this with the CompositeView, and an ItemView for each
-item in the collection:
+To get your itemView instances to render within the `<tbody>` of this
+table structure, specify an `itemViewContainer` in your composite view,
+like this:
 
 ```js
 RowView = Backbone.Marionette.ItemView.extend({
@@ -90,6 +91,30 @@ RowView = Backbone.Marionette.ItemView.extend({
   template: "#row-template"
 });
 
+TableView = Backbone.Marionette.CollectionView.extend({
+  itemView: RowView,
+
+  // specify a jQuery selector to put the itemView instances in to
+  itemViewContainer: "tbody",
+
+  template: "#table-template"
+});
+```
+
+This will put all of the `itemView` instances in to the `<tbody>` tag of
+the composite view's rendered template, correctly producing the table
+structure.
+
+## CompositeView's `appendHtml`
+
+
+Sometimes the `itemViewContainer` configuration is insuficient for
+specifying where the itemView instance should be placed. If this is the
+case, you can override the `appendHtml` method with your own implementation.
+
+For example:
+
+```js
 TableView = Backbone.Marionette.CollectionView.extend({
   itemView: RowView,
 
@@ -103,9 +128,6 @@ TableView = Backbone.Marionette.CollectionView.extend({
 
 For more information on the parameters of this method, see the
 [CollectionView's documentation](https://github.com/derickbailey/backbone.marionette/blob/master/docs/marionette.collectionview.md).
-
-For more examples of how a CompositeView can be used, see [my blog post
-on composite views](http://lostechies.com/derickbailey/2012/04/05/composite-views-tree-structures-tables-and-more/)
 
 ## Recursive By Default
 

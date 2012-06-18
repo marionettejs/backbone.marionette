@@ -35,6 +35,8 @@ Marionette.CompositeView = Marionette.CollectionView.extend({
   render: function(){
     var that = this;
 
+    this.resetItemViewContainer();
+
     var html = this.renderModel();
     this.$el.html(html);
     this.trigger("composite:model:rendered");
@@ -85,6 +87,13 @@ Marionette.CompositeView = Marionette.CollectionView.extend({
       containerView.$itemViewContainer = container;
     }
     return container;
+  },
+
+  // Internal method to reset the `$itemViewContainer` on render
+  resetItemViewContainer: function(){
+    if (this.$itemViewContainer){
+      delete this.$itemViewContainer;
+    }
   }
 });
 

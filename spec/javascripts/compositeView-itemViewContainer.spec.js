@@ -35,7 +35,13 @@ describe("composite view - itemViewContainer", function(){
         collection: collection
       });
 
+      spyOn(compositeView, "resetItemViewContainer").andCallThrough();
+
       compositeView.render();
+    });
+
+    it("should reset any existing itemViewContainer", function(){
+      expect(compositeView.resetItemViewContainer).toHaveBeenCalled();
     });
 
     it("should render the items in to the specified container", function(){
@@ -71,12 +77,6 @@ describe("composite view - itemViewContainer", function(){
 
     it("should render the items in to the composite view directly", function(){
       expect(compositeView.$el).toContainHtml("<ul></ul>");
-    });
-  });
-
-  describe("when re-rendering a composite view with an `itemViewContainer`", function(){
-    it("should reset the view's $itemViewContainer cache", function(){
-      throw new Error("Not yet implemented");
     });
   });
 

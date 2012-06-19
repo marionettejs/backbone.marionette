@@ -32,7 +32,7 @@ If you wish to override the way the template is loaded, see
 the `TemplateCache` object. 
 
 If you wish to override the template engine used, change the 
-`renderTemplate` method to work however you want:
+`render` method to work however you want:
 
 ```js
 Backbone.Marionette.Renderer.render = function(template, data){

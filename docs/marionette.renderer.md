@@ -7,17 +7,15 @@ rendering a template with or without data.
 ## Basic Usage
 
 The basic usage of the `Renderer` is to call the `render` method.
-This method returns a jQuery `promise` object, which will provide
-the HTML that was rendered when it resolves.
+This method returns a string containing the result of applying the 
+template using the `data` object as the context.
 
 ```js
 var template = "#some-template";
 var data = {foo: "bar"};
-var render = Backbone.Marionette.Renderer.render(template, data);
+var html = Backbone.Marionette.Renderer.render(template, data);
 
-render.done(function(html){
-  // do something with the HTML here
-});
+// do something with the HTML here
 ```
 
 ## Custom Template Selection And Rendering
@@ -42,6 +40,17 @@ Backbone.Marionette.Renderer.render = function(template, data){
 
 This implementation will replace the default Underscore.js 
 rendering with jQuery templates rendering.
+
+If you override the `render` method and wish to use the 
+`TemplateCache` mechanism, remember to include the code necessary to 
+fetch the template from the cache in your `render` method:
+
+```js
+Backbone.Marionette.Renderer.render = function(template, data){
+  var template = Marionette.TemplateCache.get(template);
+  // Do something with the template here
+};
+```
 
 ## Using Pre-compiled Templates
 

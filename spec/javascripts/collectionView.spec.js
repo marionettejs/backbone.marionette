@@ -98,11 +98,19 @@ describe("collection view", function(){
     });
 
     it("should trigger a 'before:render' event", function(){
+      expect(collectionView.trigger).toHaveBeenCalledWith("before:render", collectionView);
+    });
+    
+    it("should trigger a 'collection:before:render' event", function(){
       expect(collectionView.trigger).toHaveBeenCalledWith("collection:before:render", collectionView);
     });
 
-    it("should trigger a 'rendered' event", function(){
+    it("should trigger a 'collection:rendered' event", function(){
       expect(collectionView.trigger).toHaveBeenCalledWith("collection:rendered", collectionView);
+    });
+    
+    it("should trigger a 'render' event", function(){
+      expect(collectionView.trigger).toHaveBeenCalledWith("render", collectionView);
     });
 
     it("should call `onItemAdded` for each itemView instance", function(){

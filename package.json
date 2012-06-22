@@ -1,0 +1,9 @@
+{
+  "amd": { },
+  "volo": {
+    "url": "https://raw.github.com/derickbailey/backbone.marionette/{version}/lib/amd/backbone.marionette.js",
+    "dependencies": {
+      "backbone": "backbone"
+    }
+  }
+}

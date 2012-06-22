@@ -6,6 +6,7 @@
 Async.Region = {
   show: function(view){
     var that = this;
+    var asyncShow = $.Deferred();
 
     this.ensureEl();
     this.close();
@@ -19,8 +20,11 @@ Async.Region = {
 
       if (that.onShow) { that.onShow(view); }
       that.trigger("view:show", view);
+      
+      asyncShow.resolve();
     });
 
     this.currentView = view;
+    return asyncShow.promise();
   }
 };

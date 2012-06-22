@@ -1,7 +1,19 @@
-### v0.9.x [view commit logs](https://github.com/derickbailey/backbone.marionette/compare/v0.9.1...dev)
+### v0.9.2 [view commit logs](https://github.com/derickbailey/backbone.marionette/compare/v0.9.1...v0.9.2)
 
 * CompositeView
   * Added `itemViewContainer` to specify which element children / itemView instances should be appended to
+
+* CollectionView
+  * Now triggers "before:render" and "render" events
+
+* Region
+  * Returns a deferred/promise from the `show` method, with Marionette.Async
+
+* Fixed bug in template cache for Marionette.Async
+
+* Marionette can now be installed with [Volo](https://github.com/volojs/volo)
+
+
 
 ### v0.9.1 [view commit logs](https://github.com/derickbailey/backbone.marionette/compare/v0.9.0...v0.9.1)
 

@@ -39,6 +39,7 @@ Marionette.CollectionView = Marionette.View.extend({
   // and events
   triggerBeforeRender: function(){
     if (this.beforeRender) { this.beforeRender(); }
+    this.trigger("before:render", this);
     this.trigger("collection:before:render", this);
   },
 
@@ -46,6 +47,7 @@ Marionette.CollectionView = Marionette.View.extend({
   // events
   triggerRendered: function(){
     if (this.onRender) { this.onRender(); }
+    this.trigger("render", this);
     this.trigger("collection:rendered", this);
   },
 

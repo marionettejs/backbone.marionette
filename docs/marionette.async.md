@@ -142,7 +142,7 @@ Backbone.Marionette.TemplateCache.loadTemplate = function(templateId, callback){
   var url = templateId + ".html";
 
   $.get(url, function(templateHtml){
-    var template = $(tmplateHtml).find(templateId);
+    var template = $(templateHtml).find(templateId);
     callback(template);
   });
 }

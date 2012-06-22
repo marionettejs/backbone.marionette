@@ -64,7 +64,7 @@ for the project.
 
 [![Donate](https://www.paypalobjects.com/en_US/i/btn/btn_donate_SM.gif)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=7SJHYWJ487SF4)
 
-## Documentation And Support
+## Documentation
 
 The primary documentation is split up in to multiple files, due to the size
 of the over-all documentation. You can find these files in the 
@@ -116,23 +116,31 @@ You can read the annotated for all the detail of how Marionette works, and advic
 
 ##### [View the annotated source code](http://derickbailey.github.com/backbone.marionette/docs/backbone.marionette.html)
 
+### Help With Code And Questions, Join The Mailing List
+
+#### [Github Issues](//github.com/derickbailey/backbone.marionette/issues)
+
+Report issues with Marionette, and submit pull requests to fix problems,
+and discuss features that contributors would like to add.
+
+#### [StackOverflow Tag](http://stackoverflow.com/questions/tagged/backbone.marionette)
+
+Ask questions about using Marionette in specific scenarios, with
+specific features. Questions on StackOverflow often turn in to blog posts
+or wiki entries.
+
+#### [Google Group Mailing List](https://groups.google.com/forum/#!forum/backbone-marionette)
+
+Get announcements for new releases, share your projects and ideas that are
+using Marionette, and join in open-ended discussion that does not fit in
+to the Github issues list or StackOverflow Q&A.
+
 ### DerickBailey.LosTechies.com
 
 Lastly, I blog about Marionette on a regular basis, at my
 LosTechies.com blog.
 
 ##### [View DerickBailey.LosTechies.com](http://derickbailey.lostechies.com)
-
-### Help With Code And Questions
-
-If you're interested in helping with code and questions, please
-see the issues list and stack overflow tag here:
-
-* [Github Issues](//github.com/derickbailey/backbone.marionette/issues)
-* [StackOverflow Tag](http://stackoverflow.com/questions/tagged/backbone.marionette)
-
-If you have an idea to improve Marionette or want to report
-a bug, please use the issues list.
 
 ### Async / Deferred Rendering Support
 

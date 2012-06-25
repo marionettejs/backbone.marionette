@@ -124,7 +124,10 @@ MyView = Backbone.Marionette.ItemView.extend({
 });
 
 model = new Backbone.Model({name: "Backbone.Marionette"});
-view = new MyView();
+view = new MyView({
+  model: model
+});
+
 view.render(); //=> "I think that Backbone.Marionette is the coolest!";
 ```
 

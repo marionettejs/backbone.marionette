@@ -80,7 +80,7 @@ Marionette.CompositeView = Marionette.CollectionView.extend({
       container = containerView.$itemViewContainer;
     } else {
       if (containerView.itemViewContainer){
-        container = containerView.$(containerView.itemViewContainer);
+        container = containerView.$(_.result(containerView, "itemViewContainer"));
       } else {
         container = containerView.$el;
       }

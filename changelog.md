@@ -4,6 +4,8 @@
   * Cleaned up the method to get / cache the `itemViewContainer`
   * Allow `itemViewContainer` to be a function that return a jQuery selector string
 
+* View `render` methods all return `this` in the standard Marionette views (the async views still return a deferred object).
+
 ### v0.9.2 [view commit logs](https://github.com/derickbailey/backbone.marionette/compare/v0.9.1...v0.9.2)
 
 * CompositeView

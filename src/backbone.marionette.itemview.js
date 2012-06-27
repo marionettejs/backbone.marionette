@@ -37,6 +37,7 @@ Marionette.ItemView =  Marionette.View.extend({
     if (this.onRender){ this.onRender(); }
     this.trigger("render", this);
     this.trigger("item:rendered", this);
+    return this;
   },
 
   // Override the default close event to add a few

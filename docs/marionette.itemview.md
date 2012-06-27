@@ -9,9 +9,6 @@ will be treated as a single item.
 An item view has a `render` method built in to it, and uses the
 `Renderer` object to do the actual rendering.
 
-The `render` function of the item view will return a jQuery 
-`promise` object.
-
 You should provide a `template` attribute on the item view, which
 will be either a jQuery selector:
 
@@ -20,9 +17,7 @@ MyView = Backbone.Marionette.ItemView.extend({
   template: "#some-template"
 });
 
-new MyView().render().done(function(){
-  // the view is done rendering. do stuff here
-});
+new MyView().render();
 ```
 
 ## Callback Methods

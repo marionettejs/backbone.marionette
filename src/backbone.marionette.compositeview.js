@@ -44,6 +44,7 @@ Marionette.CompositeView = Marionette.CollectionView.extend({
 
     this.renderCollection();
     this.trigger("composite:rendered");
+    return this;
   },
 
   // Render the collection for the composite view

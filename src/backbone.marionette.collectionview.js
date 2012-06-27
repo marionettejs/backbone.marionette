@@ -65,6 +65,7 @@ Marionette.CollectionView = Marionette.View.extend({
     }
 
     this.triggerRendered();
+    return this;
   },
 
   // Internal method to loop through each item in the

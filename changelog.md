@@ -1,3 +1,9 @@
+### v0.9.3 [view commit logs](https://github.com/derickbailey/backbone.marionette/compare/v0.9.2...v0.9.3)
+
+* CompositeView
+  * Cleaned up the method to get / cache the `itemViewContainer`
+  * Allow `itemViewContainer` to be a function that return a jQuery selector string
+
 ### v0.9.2 [view commit logs](https://github.com/derickbailey/backbone.marionette/compare/v0.9.1...v0.9.2)
 
 * CompositeView

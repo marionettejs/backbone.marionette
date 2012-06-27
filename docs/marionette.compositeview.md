@@ -105,6 +105,25 @@ This will put all of the `itemView` instances in to the `<tbody>` tag of
 the composite view's rendered template, correctly producing the table
 structure.
 
+Alternatively, you can specify a function as the `itemViewContainer`. This
+function needs to return a jQuery selector string, or a jQuery selector
+object.
+
+```js
+TableView = Backbone.Marionette.CollectionView.extend({
+  // ...
+
+  itemViewContainer: function(){
+    return "#tbody"
+  }
+});
+```
+
+Using a function allows for logic to be used for the selector. However,
+only one value can be returned. Upon returning the first value, it will
+be cached and that value will be used for the remainder of that view
+instance' lifecycle.
+
 ## CompositeView's `appendHtml`
 
 

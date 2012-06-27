@@ -88,7 +88,7 @@ themselves to the new elements in the layout.
 ### Avoid Re-Rendering The Entire Layout
 
 There are times when re-rendering the entire layout is necessary. However,
-due to the behavior described above, this can cuase a large amount of
+due to the behavior described above, this can cause a large amount of
 work to be needed in order to fully restore the layout and all of the
 views that the layout is displaying.
 

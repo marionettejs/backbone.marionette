@@ -131,11 +131,6 @@ Marionette.CollectionView = Marionette.View.extend({
     // Render it and show it
     var renderResult = this.renderItemView(view, index);
 
-    // call onShow for child item views
-    if (view.onShow){
-      this.onShowCallbacks.add(view.onShow, view);
-    }
-
     // Forward all child item view events through the parent,
     // prepending "itemview:" to the event name
     var childBinding = this.bindTo(view, "all", function(){
@@ -158,6 +153,11 @@ Marionette.CollectionView = Marionette.View.extend({
   renderItemView: function(view, index) {
     view.render();
     this.appendHtml(this, view, index);
+    
+    // call onShow for child item views
+    if (view.onShow){
+      this.onShowCallbacks.add(view.onShow, view);
+    }
   },
 
   // Build an `itemView` for every model in the collection. 

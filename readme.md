@@ -52,7 +52,7 @@ management systems, such as RubyGems, Node Package Manager,
 Nuget, etc. These packages are maintained by the community
 and are not part of the core Backbone.Marionette code.
 
-[Available Packages](https://github.com/derickbailey/backbone.marionette/wiki/Available-packages)
+##### [Available Packages](https://github.com/derickbailey/backbone.marionette/wiki/Available-packages)
 
 ## Donations
 
@@ -63,6 +63,44 @@ effort as I believe it does, then please consider financial support
 for the project. 
 
 [![Donate](https://www.paypalobjects.com/en_US/i/btn/btn_donate_SM.gif)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=7SJHYWJ487SF4)
+
+## Help With Code And Questions, Join The Mailing List
+
+##### [Github Issues](//github.com/derickbailey/backbone.marionette/issues)
+
+Report issues with Marionette, and submit pull requests to fix problems,
+and discuss features that contributors would like to add.
+
+##### [StackOverflow Tag](http://stackoverflow.com/questions/tagged/backbone.marionette)
+
+Ask questions about using Marionette in specific scenarios, with
+specific features. Questions on StackOverflow often turn in to blog posts
+or wiki entries.
+
+##### [Google Group Mailing List](https://groups.google.com/forum/#!forum/backbone-marionette)
+
+Get announcements for new releases, share your projects and ideas that are
+using Marionette, and join in open-ended discussion that does not fit in
+to the Github issues list or StackOverflow Q&A.
+
+### DerickBailey.LosTechies.com
+
+Lastly, I blog about Marionette on a regular basis, at my
+LosTechies.com blog.
+
+##### [View DerickBailey.LosTechies.com](http://derickbailey.lostechies.com)
+
+### Async / Deferred Rendering Support
+
+Support for asynchronously rendering views, loading templates, etc has been
+removed from Marionette directly due to performance problems and overhead
+incurred. To get async support in Marionette, then, you need to download and
+include the the `backbone.marionette.async.js` or `async.min` file in 
+your project. See the above download links and the the 
+[async.md](https://github.com/derickbailey/backbone.marionette/blob/master/docs/marionette.async.md)
+documentation for more information.
+
+##### [View The Async Documentation](https://github.com/derickbailey/backbone.marionette/blob/master/docs/marionette.async.md)
 
 ## Documentation
 
@@ -115,44 +153,6 @@ file.
 You can read the annotated for all the detail of how Marionette works, and advice on which methods to override when.
 
 ##### [View the annotated source code](http://derickbailey.github.com/backbone.marionette/docs/backbone.marionette.html)
-
-### Help With Code And Questions, Join The Mailing List
-
-#### [Github Issues](//github.com/derickbailey/backbone.marionette/issues)
-
-Report issues with Marionette, and submit pull requests to fix problems,
-and discuss features that contributors would like to add.
-
-#### [StackOverflow Tag](http://stackoverflow.com/questions/tagged/backbone.marionette)
-
-Ask questions about using Marionette in specific scenarios, with
-specific features. Questions on StackOverflow often turn in to blog posts
-or wiki entries.
-
-#### [Google Group Mailing List](https://groups.google.com/forum/#!forum/backbone-marionette)
-
-Get announcements for new releases, share your projects and ideas that are
-using Marionette, and join in open-ended discussion that does not fit in
-to the Github issues list or StackOverflow Q&A.
-
-### DerickBailey.LosTechies.com
-
-Lastly, I blog about Marionette on a regular basis, at my
-LosTechies.com blog.
-
-##### [View DerickBailey.LosTechies.com](http://derickbailey.lostechies.com)
-
-### Async / Deferred Rendering Support
-
-Support for asynchronously rendering views, loading templates, etc has been
-removed from Marionette directly due to performance problems and overhead
-incurred. To get async support in Marionette, then, you need to download and
-include the the `backbone.marionette.async.js` or `async.min` file in 
-your project. See the above download links and the the 
-[async.md](https://github.com/derickbailey/backbone.marionette/blob/master/docs/marionette.async.md)
-documentation for more information.
-
-##### [View The Async Documentation](https://github.com/derickbailey/backbone.marionette/blob/master/docs/marionette.async.md)
 
 ## Compatibility And Requirements
 

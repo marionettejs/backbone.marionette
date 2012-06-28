@@ -11,6 +11,7 @@ Async.CollectionView = {
     this.triggerBeforeRender();
 
     this.closeChildren();
+    delete this._waitingForRender;
 
     if (this.collection && this.collection.length > 0) {
       promises = this.showCollection();

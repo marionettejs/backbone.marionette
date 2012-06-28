@@ -9,6 +9,7 @@ Marionette.CollectionView = Marionette.View.extend({
     this.initChildViewStorage();
     this.initialEvents();
     this.onShowCallbacks = new Marionette.Callbacks();
+    this._waitingForRender = true;
   },
 
   // Configured the initial events that the collection view 
@@ -24,6 +25,9 @@ Marionette.CollectionView = Marionette.View.extend({
 
   // Handle a child item added to the collection
   addChildView: function(item, collection, options){
+    if (this._waitingForRender) {
+      return;
+    }
     this.closeEmptyView();
     var ItemView = this.getItemView();
     return this.addItemView(item, ItemView, options.index);
@@ -57,6 +61,7 @@ Marionette.CollectionView = Marionette.View.extend({
   render: function(){
     this.triggerBeforeRender();
     this.closeChildren();
+    delete this._waitingForRender;
 
     if (this.collection && this.collection.length > 0) {
       this.showCollection();

@@ -79,5 +79,35 @@ describe("composite view - itemViewContainer", function(){
       expect(compositeView.$el).toContainHtml("<ul></ul>");
     });
   });
+  
+  describe("when adding a model to a collection of a composite view with an `itemViewContainer` specified before it has been rendered", function(){
+    var CompositeView = Backbone.Marionette.CompositeView.extend({
+      itemView: ItemView,
+      itemViewContainer: "ul",
+      template: "#composite-child-container-template"
+    });
+
+    var compositeView;
+    
+    beforeEach(function(){
+      order = [];
+      loadFixtures("compositeChildContainerTemplate.html");
+
+      var m1 = new Model({foo: "bar"});
+      var collection = new Collection();
+
+      compositeView = new CompositeView({
+        collection: collection
+      });
+      
+      spyOn(compositeView.itemView.prototype, "render").andCallThrough();
+      
+      collection.add(m1);
+    });
+
+    it("should not render the item view as the itemViewContainer may not yet be available", function(){
+      expect(compositeView.itemView.prototype.render).not.toHaveBeenCalled();
+    });
+  });
 
 });

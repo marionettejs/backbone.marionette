@@ -641,4 +641,32 @@ describe("collection view", function(){
       expect(viewOnShowContext).toBe(view);
     });
   });
+  
+  describe("when a model is added to the collection of a collection view before the view has been rendered", function(){
+    var m1, col;
+
+    var ItemView = Backbone.Marionette.ItemView.extend({
+      render: function(){}
+    });
+
+    var ColView = Backbone.Marionette.CollectionView.extend({
+      itemView: ItemView
+    });
+
+    beforeEach(function(){
+      spyOn(ItemView.prototype, "render").andCallThrough();
+
+      m1 = new Model();
+      col = new Collection();
+      new ColView({
+        collection: col
+      });
+
+      col.add(m1);
+    });
+
+    it("should not append child views", function(){
+      expect(ItemView.prototype.render).not.toHaveBeenCalled();
+    });
+  });
 });

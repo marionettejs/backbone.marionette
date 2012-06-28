@@ -12,7 +12,7 @@ Async.Region = {
     this.close();
 
     // Wait for the view to finish rendering
-    $.when(view.render()).then(function () {
+    $.when(view.render()).done(function () {
       that.open(view);
 
       if (view.onShow) { view.onShow(); }
@@ -22,6 +22,8 @@ Async.Region = {
       that.trigger("view:show", view);
       
       asyncShow.resolve();
+    }).fail(function() {
+      asyncShow.reject();
     });
 
     this.currentView = view;

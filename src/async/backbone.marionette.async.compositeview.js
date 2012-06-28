@@ -12,7 +12,7 @@ Async.CompositeView = {
     this.resetItemViewContainer();
 
     var modelIsRendered = this.renderModel();
-    $.when(modelIsRendered).then(function(html){
+    $.when(modelIsRendered).done(function(html){
       that.$el.html(html);
       that.trigger("composite:model:rendered");
       that.trigger("render");
@@ -21,6 +21,8 @@ Async.CompositeView = {
       $.when(collectionIsRendered).then(function(){
         compositeRendered.resolve();
       });
+    }).fail(function() {
+      compositeRendered.reject();
     });
 
     compositeRendered.done(function(){

@@ -64,41 +64,6 @@ for the project.
 
 [![Donate](https://www.paypalobjects.com/en_US/i/btn/btn_donate_SM.gif)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=7SJHYWJ487SF4)
 
-## Help Is Just A Click Away
-
-### [Google Group Mailing List](https://groups.google.com/forum/#!forum/backbone-marionette)
-
-Get announcements for new releases, share your projects and ideas that are
-using Marionette, and join in open-ended discussion that does not fit in
-to the Github issues list or StackOverflow Q&A.
-
-**For help with syntax, specific questions on how to implement a feature
-using Marionette, and other Q&A items, use StackOverflow.**
-
-### [StackOverflow](http://stackoverflow.com/questions/tagged/backbone.marionette)
-
-Ask questions about using Marionette in specific scenarios, with
-specific features. For example, help with syntax, understanding how a feature works and
-how to override that feature to do what you need or how to organize the
-different view types to work best with your applications needs.
-
-Questions on StackOverflow often turn in to blog posts and wiki entries.
-
-### [Github Issues](//github.com/derickbailey/backbone.marionette/issues)
-
-Report issues with Marionette, submit pull requests to fix problems, or to
-create summarized and documented feature requests (preferably with pull
-requests that implement the feature).
-
-**Please don't ask questions or seek help in the issues list.** There are
-other, better channels for seeking assistance, like StackOverflow and the
-Google Groups mailing list.
-
-### [DerickBailey.LosTechies.com](http://derickbailey.lostechies.com)
-
-Lastly, I blog about Marionette on a regular basis, at my
-LosTechies.com blog.
-
 ## Documentation
 
 The primary documentation is split up in to multiple files, due to the size
@@ -162,6 +127,41 @@ file.
 You can read the annotated for all the detail of how Marionette works, and advice on which methods to override when.
 
 ##### [View the annotated source code](http://derickbailey.github.com/backbone.marionette/docs/backbone.marionette.html)
+
+## Help Is Just A Click Away
+
+### [Google Group Mailing List](https://groups.google.com/forum/#!forum/backbone-marionette)
+
+Get announcements for new releases, share your projects and ideas that are
+using Marionette, and join in open-ended discussion that does not fit in
+to the Github issues list or StackOverflow Q&A.
+
+**For help with syntax, specific questions on how to implement a feature
+using Marionette, and other Q&A items, use StackOverflow.**
+
+### [StackOverflow](http://stackoverflow.com/questions/tagged/backbone.marionette)
+
+Ask questions about using Marionette in specific scenarios, with
+specific features. For example, help with syntax, understanding how a feature works and
+how to override that feature to do what you need or how to organize the
+different view types to work best with your applications needs.
+
+Questions on StackOverflow often turn in to blog posts and wiki entries.
+
+### [Github Issues](//github.com/derickbailey/backbone.marionette/issues)
+
+Report issues with Marionette, submit pull requests to fix problems, or to
+create summarized and documented feature requests (preferably with pull
+requests that implement the feature).
+
+**Please don't ask questions or seek help in the issues list.** There are
+other, better channels for seeking assistance, like StackOverflow and the
+Google Groups mailing list.
+
+### [DerickBailey.LosTechies.com](http://derickbailey.lostechies.com)
+
+Lastly, I blog about Marionette on a regular basis, at my
+LosTechies.com blog.
 
 ## Compatibility And Requirements
 

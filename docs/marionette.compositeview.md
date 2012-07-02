@@ -91,7 +91,7 @@ RowView = Backbone.Marionette.ItemView.extend({
   template: "#row-template"
 });
 
-TableView = Backbone.Marionette.CollectionView.extend({
+TableView = Backbone.Marionette.CompositeView.extend({
   itemView: RowView,
 
   // specify a jQuery selector to put the itemView instances in to
@@ -110,7 +110,7 @@ function needs to return a jQuery selector string, or a jQuery selector
 object.
 
 ```js
-TableView = Backbone.Marionette.CollectionView.extend({
+TableView = Backbone.Marionette.CompositeView.extend({
   // ...
 
   itemViewContainer: function(){
@@ -134,7 +134,7 @@ case, you can override the `appendHtml` method with your own implementation.
 For example:
 
 ```js
-TableView = Backbone.Marionette.CollectionView.extend({
+TableView = Backbone.Marionette.CompositeView.extend({
   itemView: RowView,
 
   template: "#table-template",

@@ -11,7 +11,7 @@ Marionette.CollectionView = Marionette.View.extend({
     this.onShowCallbacks = new Marionette.Callbacks();
   },
 
-  // Configured the initial events that the collection view 
+  // Configured the initial events that the collection view
   // binds to. Override this method to prevent the initial
   // events, or to add your own initial events.
   initialEvents: function(){
@@ -122,7 +122,7 @@ Marionette.CollectionView = Marionette.View.extend({
 
     var view = this.buildItemView(item, ItemView);
 
-    // Store the child view itself so we can properly 
+    // Store the child view itself so we can properly
     // remove and/or close it later
     this.storeChild(view);
     if (this.onItemAdded){ this.onItemAdded(view); }
@@ -150,17 +150,17 @@ Marionette.CollectionView = Marionette.View.extend({
     // them when removing / closing the child view
     this.childBindings = this.childBindings || {};
     this.childBindings[view.cid] = childBinding;
-    
+
     return renderResult;
   },
-  
+
   // render the item view
   renderItemView: function(view, index) {
     view.render();
     this.appendHtml(this, view, index);
   },
 
-  // Build an `itemView` for every model in the collection. 
+  // Build an `itemView` for every model in the collection.
   buildItemView: function(item, ItemView){
     var itemViewOptions = _.result(this, "itemViewOptions");
     var options = _.extend({model: item}, itemViewOptions);
@@ -181,7 +181,7 @@ Marionette.CollectionView = Marionette.View.extend({
       delete this.children[item.cid];
     }
 
-    if (this.collection.length === 0){
+    if (this.collection && this.collection.length === 0){
       this.showEmptyView();
     }
 

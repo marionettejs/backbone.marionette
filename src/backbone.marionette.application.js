@@ -53,6 +53,14 @@ _.extend(Marionette.Application.prototype, Backbone.Events, {
     }
   },
 
+  // Removes a region from your app.
+  // Accepts the regions name
+  // removeRegion('myRegion')
+  removeRegion: function(region) {
+    this[region].close();
+    delete this[region]
+  },
+
   // Create a module, attached to the application
   module: function(){
     // see the Marionette.Module object for more information

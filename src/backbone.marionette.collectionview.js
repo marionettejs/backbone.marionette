@@ -56,8 +56,9 @@ Marionette.CollectionView = Marionette.View.extend({
   // the collection view.
   render: function(){
     this.triggerBeforeRender();
+    this.closeEmptyView();
     this.closeChildren();
-
+    
     if (this.collection && this.collection.length > 0) {
       this.showCollection();
     } else {
@@ -94,7 +95,7 @@ Marionette.CollectionView = Marionette.View.extend({
   // if one exists. Called when a collection view has been
   // rendered empty, and then an item is added to the collection.
   closeEmptyView: function(){
-    if (this.showingEmptyView){
+    if (EmptyView && !this.showingEmptyView){
       this.closeChildren();
       delete this.showingEmptyView;
     }

@@ -26,12 +26,10 @@ _.extend(Marionette.Module.prototype, Backbone.Events, Marionette.BindTo, {
 // Function level methods to create modules
 _.extend(Marionette.Module, {
 
-  // Create a module, hanging off 'this' as the parent object. This
-  // method must be called with .apply or .create
-  create: function(moduleNames, moduleDefinition){
+  // Create a module, hanging off the app parameter as the parent object. 
+  create: function(app, moduleNames, moduleDefinition){
     var moduleName, module, moduleOverride;
-    var parentObject = this;
-    var parentModule = this;
+    var parentModule = app;
     var moduleNames = moduleNames.split(".");
 
     // Loop through all the parts of the module definition
@@ -47,7 +45,7 @@ _.extend(Marionette.Module, {
       // Create a new module if we don't have one already
       if (!module){ 
         module = new Marionette.Module();
-        parentObject.addInitializer(function(){
+        app.addInitializer(function(){
           module.start();
         });
       }
@@ -62,9 +60,10 @@ _.extend(Marionette.Module, {
         var customArgs = slice.apply(arguments);
         customArgs.shift();
         customArgs.shift();
+        customArgs.shift();
 
         // final arguments list for the module definition
-        var argsArray = [module, parentObject, Backbone, Marionette, jQuery, _, customArgs];
+        var argsArray = [module, app, Backbone, Marionette, jQuery, _, customArgs];
 
         // flatten the nested array
         var args = _.flatten(argsArray);

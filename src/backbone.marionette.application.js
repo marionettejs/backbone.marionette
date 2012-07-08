@@ -54,9 +54,14 @@ _.extend(Marionette.Application.prototype, Backbone.Events, {
   },
 
   // Create a module, attached to the application
-  module: function(){
+  module: function(moduleNames, moduleDefinition){
+    // slice the args, and add this application object as the
+    // first argument of the array
+    var args = slice.call(arguments);
+    args.unshift(this);
+
     // see the Marionette.Module object for more information
-    return Marionette.Module.create.apply(this, arguments);
+    return Marionette.Module.create.apply(this, args);
   }
 });
 

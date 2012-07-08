@@ -3,11 +3,25 @@
 
 // A simple module system, used to create privacy and encapsulation in
 // Marionette applications
-Marionette.Module = function(){};
+Marionette.Module = function(){
+  this._initializerCallbacks = new Marionette.Callbacks();
+};
 
 // Extend the Module prototype with events / bindTo, so that the module
 // can be used as an event aggregator or pub/sub.
-_.extend(Marionette.Module.prototype, Backbone.Events, Marionette.BindTo);
+_.extend(Marionette.Module.prototype, Backbone.Events, Marionette.BindTo, {
+
+  // Initializer for a specific module. Initializers are run when the
+  // module's `start` method is called.
+  addInitializer: function(callback){
+    this._initializerCallbacks.add(callback);
+  },
+
+  // Start the module, and run all of it's initializers
+  start: function(options){
+    this._initializerCallbacks.run(options, this);
+  }
+});
 
 // Function level methods to create modules
 _.extend(Marionette.Module, {
@@ -33,6 +47,9 @@ _.extend(Marionette.Module, {
       // Create a new module if we don't have one already
       if (!module){ 
         module = new Marionette.Module();
+        parentObject.addInitializer(function(){
+          module.start();
+        });
       }
 
       // Check to see if we need to run the definition

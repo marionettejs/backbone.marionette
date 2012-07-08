@@ -242,4 +242,45 @@ describe("application modules", function(){
     });
   });
 
+  describe("when providing a module initializer and starting the app", function(){
+    var MyApp, myModule;
+
+    beforeEach(function(){
+      MyApp = new Backbone.Marionette.Application();
+
+      myModule = MyApp.module("MyModule");
+      spyOn(myModule, "start");
+
+      MyApp.start();
+    });
+
+    it("should start the module", function(){
+      expect(myModule.start).toHaveBeenCalled();
+    });
+
+  });
+
+  describe("when starting a module", function(){
+    var MyApp, myModule, initializerRun;
+
+    beforeEach(function(){
+      MyApp = new Backbone.Marionette.Application();
+
+      MyApp.module("MyModule", function(MyMod){
+
+        MyMod.addInitializer(function(){
+          initializerRun = true;
+        });
+
+      });
+
+      MyApp.start();
+    });
+
+    it("should run the module initializers", function(){
+      expect(initializerRun).toBe(true);
+    });
+
+  });
+
 });

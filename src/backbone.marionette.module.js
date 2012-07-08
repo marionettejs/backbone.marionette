@@ -3,8 +3,15 @@
 
 // A simple module system, used to create privacy and encapsulation in
 // Marionette applications
-Marionette.Module = function(){
+Marionette.Module = function(moduleName, app, customArgs){
+  this.moduleName = moduleName;
+
   this._initializerCallbacks = new Marionette.Callbacks();
+
+  this._config = {};
+  this._config.app = app;
+  this._config.customArgs = customArgs;
+  this._config.definitions = [];
 };
 
 // Extend the Module prototype with events / bindTo, so that the module
@@ -19,7 +26,40 @@ _.extend(Marionette.Module.prototype, Backbone.Events, Marionette.BindTo, {
 
   // Start the module, and run all of it's initializers
   start: function(options){
+    this._define();
+    // run the initializers
     this._initializerCallbacks.run(options, this);
+  },
+
+  // Configure the module with a definition function and any custom args
+  // that are to be passed in to the definition function
+  addDefinition: function(moduleDefinition){
+    this._config.definitions.push(moduleDefinition);
+  },
+
+  // Internal method: run the module definition function with the correct
+  // arguments
+  _define: function(){
+    if (this._config.definitions.length === 0) { return; }
+
+    // build the correct list of arguments for the module definition
+    var args = _.flatten([
+      this, 
+      this._config.app, 
+      Backbone, 
+      Marionette, 
+      $, _, 
+      this._config.customArgs
+    ]);
+
+    // run the module definition function with the correct args
+    var definitionCount = this._config.definitions.length-1;
+    for(var i=0; i <= definitionCount; i++){
+
+      var definition = this._config.definitions[i];
+      definition.apply(this, args);
+
+    }
   }
 });
 
@@ -28,48 +68,36 @@ _.extend(Marionette.Module, {
 
   // Create a module, hanging off the app parameter as the parent object. 
   create: function(app, moduleNames, moduleDefinition){
-    var moduleName, module, moduleOverride;
     var parentModule = app;
     var moduleNames = moduleNames.split(".");
 
+    // get the custom args passed in after the module definition and
+    // get rid of the module name and definition function
+    var customArgs = slice.apply(arguments);
+    customArgs.splice(0, 3);
+
     // Loop through all the parts of the module definition
     var length = moduleNames.length;
-    for(var i = 0; i < length; i++){
+    _.each(moduleNames, function(moduleName, i){
       var isLastModuleInChain = (i === length-1);
 
       // Get the module name, and check if it exists on
       // the current parent already
-      moduleName = moduleNames[i];
-      module = parentModule[moduleName];
+      var module = parentModule[moduleName];
 
       // Create a new module if we don't have one already
       if (!module){ 
-        module = new Marionette.Module();
+        module = new Marionette.Module(moduleName, app, customArgs);
+        // start the module when the app starts
         app.addInitializer(function(){
           module.start();
         });
       }
 
-      // Check to see if we need to run the definition
-      // for the module. Only run the definition if one
-      // is supplied, and if we're at the last segment
-      // of the "Module.Name" chain.
+      // If this is the final object in the chain, define
+      // this module with the function & extra args supplied
       if (isLastModuleInChain && moduleDefinition){
-        // get the custom args passed in after the module definition and
-        // get rid of the module name and definition function
-        var customArgs = slice.apply(arguments);
-        customArgs.shift();
-        customArgs.shift();
-        customArgs.shift();
-
-        // final arguments list for the module definition
-        var argsArray = [module, app, Backbone, Marionette, jQuery, _, customArgs];
-
-        // flatten the nested array
-        var args = _.flatten(argsArray);
-
-        // ensure the module definition's `this` is the module itself
-        moduleDefinition.apply(module, args);
+        module.addDefinition(moduleDefinition);
       }
 
       // If the defined module is not what we are
@@ -81,9 +109,9 @@ _.extend(Marionette.Module, {
       // Reset the parent module so that the next child
       // in the list will be added to the correct parent
       parentModule = module;
-    }
+    });
 
     // Return the last module in the definition chain
-    return module;
+    return parentModule;
   }
 });

@@ -5,6 +5,8 @@ describe("application modules", function(){
     beforeEach(function(){
       MyApp = new Backbone.Marionette.Application();
       myModule = MyApp.module("MyModule");
+
+      MyApp.start();
     });
 
     it("should add an object of that name to the app", function(){
@@ -26,6 +28,8 @@ describe("application modules", function(){
         parentModule = MyApp.Parent;
 
         lastModule = MyApp.module("Parent.Child");
+
+        MyApp.start();
       });
 
       it("should not replace the parent module", function(){
@@ -45,6 +49,8 @@ describe("application modules", function(){
       beforeEach(function(){
         MyApp = new Backbone.Marionette.Application();
         lastModule = MyApp.module("Parent.Child");
+
+        MyApp.start();
       });
 
       it("should create the parent module on the application", function(){
@@ -61,29 +67,25 @@ describe("application modules", function(){
     });
 
     describe("and a module definition callback is provided", function(){
-      var moduleCallCount;
+      var definition;
       
       beforeEach(function(){
-        moduleCallCount = 0;
+        definition = jasmine.createSpy();
 
         MyApp = new Backbone.Marionette.Application();
-        lastModule = MyApp.module("Parent.Child", function(module){
-          module.defined = true;
-          moduleCallCount += 1;
-        });
-      });
+        lastModule = MyApp.module("Parent.Child", definition);
 
-      it("should only run the module definition once", function(){
-        expect(moduleCallCount).toBe(1);
-      });
-
-      it("should not call the module definition for the parent module", function(){
-        expect(MyApp.Parent.defined).toBeUndefined();
+        MyApp.start();
       });
 
       it("should call the module definition for the last module specified", function(){
-        expect(MyApp.Parent.Child.defined).toBe(true);
+        expect(definition).toHaveBeenCalled();
       });
+
+      it("should only run the module definition once", function(){
+        expect(definition.callCount).toBe(1);
+      });
+
     });
   });
 
@@ -97,6 +99,8 @@ describe("application modules", function(){
       MyModule = MyApp.MyModule;
 
       MyApp.module("MyModule");
+
+      MyApp.start();
     });
 
     it("should only create the module one", function(){
@@ -104,16 +108,72 @@ describe("application modules", function(){
     });
   });
 
-  describe("when providing a callback function as a module definition", function(){
+  describe("when starting the app that owns the module", function(){
+    var MyApp, myModule;
+
+    beforeEach(function(){
+      MyApp = new Backbone.Marionette.Application();
+
+      myModule = MyApp.module("MyModule");
+      spyOn(myModule, "start");
+
+      MyApp.start();
+    });
+
+    it("should start the module", function(){
+      expect(myModule.start).toHaveBeenCalled();
+    });
+
+  });
+
+  describe("when starting a module", function(){
+    var MyApp, myModule, initializer;
+
+    beforeEach(function(){
+      initializer = jasmine.createSpy();
+
+      MyApp = new Backbone.Marionette.Application();
+      MyApp.module("MyModule", function(MyMod){
+        MyMod.addInitializer(initializer);
+      });
+
+      MyApp.start();
+    });
+
+    it("should run the module initializers", function(){
+      expect(initializer).toHaveBeenCalled();
+    });
+  });
+
+  describe("when providing a module definition and not starting the module", function(){
+    var MyApp, definitionFunction
+
+    beforeEach(function(){
+      MyApp = new Backbone.Marionette.Application();
+
+      definitionFunction = jasmine.createSpy();
+
+      MyApp.module("MyModule", definitionFunction);
+    });
+
+    it("should not run the definition function", function(){
+      expect(definitionFunction).not.toHaveBeenCalled();
+    });
+
+  });
+
+  describe("when providing a module definition and starting the module", function(){
     var MyApp, moduleArgs, thisArg;
 
     beforeEach(function(){
       MyApp = new Backbone.Marionette.Application();
 
-      MyApp.module("MyModule", function(){
+      module = MyApp.module("MyModule", function(){
         moduleArgs = arguments;
         thisArg = this;
       });
+
+      module.start();
     });
 
     it("should run the module definition in the context of the module", function(){
@@ -145,7 +205,7 @@ describe("application modules", function(){
     });
   });
 
-  describe("when attaching a method to the module parameter, in the module definition", function(){
+  describe("when attaching a method to the module parameter in the module definition", function(){
     var MyApp, myFunc;
 
     beforeEach(function(){
@@ -155,6 +215,8 @@ describe("application modules", function(){
       MyApp.module("MyModule", function(myapp){
         myapp.someFunc = myFunc;
       });
+
+      MyApp.start();
     });
 
     it("should make that method publicly available on the module", function(){
@@ -175,14 +237,19 @@ describe("application modules", function(){
       MyApp.module("MyModule", function(MyModule){
         MyModule.definition2 = true;
       });
+
+      MyApp.start();
     });
 
     it("should re-use the same module for all definitions", function(){
       expect(myModule).toBe(MyApp.MyModule);
     });
 
-    it("should allow each definition to modify the resulting module", function(){
+    it("should allow the first definition to modify the resulting module", function(){
       expect(MyApp.MyModule.definition1).toBe(true);
+    });
+
+    it("should allow the second definition to modify the resulting module", function(){
       expect(MyApp.MyModule.definition2).toBe(true);
     });
 
@@ -198,6 +265,8 @@ describe("application modules", function(){
       CustomModule = MyApp.module("CustomModule", function(myapp){
         return MyModule;
       });
+
+      MyApp.start();
     });
 
     it("should not do anything with the returned object", function(){
@@ -215,6 +284,8 @@ describe("application modules", function(){
       MyApp.module("CustomModule.SubModule", function(CustomModule, MyApp){
         MyModule = MyApp;
       });
+
+      MyApp.start();
     });
 
     it("should use the returned object as the module", function(){
@@ -234,53 +305,14 @@ describe("application modules", function(){
         r1 = P1Arg;
         r2 = P2Arg;
       }, p1, p2);
+
+      MyApp.start();
     });
 
     it("should pass those arguments to the function definition", function(){
       expect(r1).toBe(p1);
       expect(r2).toBe(p2);
     });
-  });
-
-  describe("when providing a module initializer and starting the app", function(){
-    var MyApp, myModule;
-
-    beforeEach(function(){
-      MyApp = new Backbone.Marionette.Application();
-
-      myModule = MyApp.module("MyModule");
-      spyOn(myModule, "start");
-
-      MyApp.start();
-    });
-
-    it("should start the module", function(){
-      expect(myModule.start).toHaveBeenCalled();
-    });
-
-  });
-
-  describe("when starting a module", function(){
-    var MyApp, myModule, initializerRun;
-
-    beforeEach(function(){
-      MyApp = new Backbone.Marionette.Application();
-
-      MyApp.module("MyModule", function(MyMod){
-
-        MyMod.addInitializer(function(){
-          initializerRun = true;
-        });
-
-      });
-
-      MyApp.start();
-    });
-
-    it("should run the module initializers", function(){
-      expect(initializerRun).toBe(true);
-    });
-
   });
 
 });

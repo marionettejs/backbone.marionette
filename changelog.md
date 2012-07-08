@@ -1,3 +1,11 @@
+### v0.9.4-pre [view commit logs](https://github.com/derickbailey/backbone.marionette/compare/v0.9.3...dev)
+
+* Modules
+  * Modules now have `addInitializer` method and can be started with `start`
+  * Modules are automatically started when Marionette.Application `start` method is called
+  * Changed the API of `Module.create` to be more clear and explicit about `app` parameter
+  * Defer module definition until module is started
+
 ### v0.9.3 [view commit logs](https://github.com/derickbailey/backbone.marionette/compare/v0.9.2...v0.9.3)
 
 * CompositeView
@@ -20,8 +28,6 @@
 * Fixed bug in template cache for Marionette.Async
 
 * Marionette can now be installed with [Volo](https://github.com/volojs/volo)
-
-
 
 ### v0.9.1 [view commit logs](https://github.com/derickbailey/backbone.marionette/compare/v0.9.0...v0.9.1)
 

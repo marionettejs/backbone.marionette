@@ -5,6 +5,7 @@
   * Modules are automatically started when Marionette.Application `start` method is called
   * Changed the API of `Module.create` to be more clear and explicit about `app` parameter
   * Defer module definition until module is started
+  * App.start sends options to module initializers
 
 ### v0.9.3 [view commit logs](https://github.com/derickbailey/backbone.marionette/compare/v0.9.2...v0.9.3)
 

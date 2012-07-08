@@ -109,7 +109,7 @@ describe("application modules", function(){
   });
 
   describe("when starting the app that owns the module", function(){
-    var MyApp, myModule;
+    var MyApp, myModule, options;
 
     beforeEach(function(){
       MyApp = new Backbone.Marionette.Application();
@@ -117,11 +117,16 @@ describe("application modules", function(){
       myModule = MyApp.module("MyModule");
       spyOn(myModule, "start");
 
-      MyApp.start();
+      options = {};
+      MyApp.start(options);
     });
 
     it("should start the module", function(){
       expect(myModule.start).toHaveBeenCalled();
+    });
+
+    it("should pass the options along to the module initializer", function(){
+      expect(myModule.start.mostRecentCall.args[0]).toBe(options);
     });
 
   });

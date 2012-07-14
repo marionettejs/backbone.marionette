@@ -202,4 +202,16 @@ Backbone.Marionette.CompositeView.extend({
 });
 ```
 
+## Organizing ui elements
+
+Similar to ItemView, you can organize the ui elements inside the
+CompositeView by specifying them in the "ui" hash. It should be
+noted that the elements that can be accessed via this hash are
+the elements that are directly rendered by the composite view
+template, not those belonging to the collection.
+
+The ui elements will be accessible as soon as the composite view
+template is rendered and before the collection is rendered,
+which means you can access them in the beforeRender method.
+
 

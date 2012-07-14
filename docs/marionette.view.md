@@ -88,13 +88,13 @@ to retrieve their data or manipulate them. For example you have a
 certain div element you need to show/hide based on some state,
 or other ui element that you wish to set a css class to it.
 Instead of having jQuery selectors hanging around in the view's code
-you can define a "ui" hash that contains a mapping between the
+you can define a `ui` hash that contains a mapping between the
 ui element's name and its jQuery selector. Afterwards you can simply
-access it via this.ui.<element name>.
+access it via `this.ui.elementName`.
 See ItemView documentation for examples.
 
-This functionality is provided via the bindUIElements method.
-Since a View doesn't have a render method, then if you directly extend
+This functionality is provided via the `bindUIElements` method.
+Since View doesn't have implement the render method, then if you directly extend
 from View you will need to invoke this method from your render method.
 In ItemView and CompositeView this is already taken care of.
 

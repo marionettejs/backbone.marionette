@@ -271,12 +271,12 @@ Backbone.Marionette.ItemView.extend({
 ```
 ## Organizing ui elements
 
-As documented in View, you can specify a "ui" hash in your view that
+As documented in View, you can specify a `ui` hash in your view that
 maps between a ui element's name and its jQuery selector, similar to
 how regions are organized. This is especially useful if you access the
 same ui element more than once in your view's code, so instead of
 duplicating the selector you can simply reference it by
-this.ui.<elementName>:
+`this.ui.elementName`:
 
 ```js
 Backbone.Marionette.ItemView.extend({
@@ -287,7 +287,7 @@ Backbone.Marionette.ItemView.extend({
   },
 
   onRender: function() {
-    if (this.model.get('selected') === true) {
+    if (this.model.get('selected')) {
       this.ui.checkbox.addClass('checked');
     }
   }

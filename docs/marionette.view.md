@@ -94,7 +94,7 @@ access it via `this.ui.elementName`.
 See ItemView documentation for examples.
 
 This functionality is provided via the `bindUIElements` method.
-Since View doesn't have implement the render method, then if you directly extend
+Since View doesn't implement the render method, then if you directly extend
 from View you will need to invoke this method from your render method.
 In ItemView and CompositeView this is already taken care of.
 

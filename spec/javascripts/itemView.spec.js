@@ -375,7 +375,6 @@ describe("item view", function(){
           done: false
         });
 
-        debugger;
         view = new View({
           model: model
         });
@@ -388,7 +387,7 @@ describe("item view", function(){
         expect(view.ui.checkbox.attr("type")).toEqual("checkbox");
       });
 
-      it("should return an empty jQuery object if the it cannot be found", function() {
+      it("should return an empty jQuery object if it cannot be found", function() {
         expect(view.ui.unfoundElement.length).toEqual(0);
       });
 

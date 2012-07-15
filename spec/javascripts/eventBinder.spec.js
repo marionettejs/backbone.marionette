@@ -1,5 +1,5 @@
-describe("bind to", function(){
-  var Model = Backbone.Model.extend({});
+describe("event binder", function(){
+  var Model = Backbone.Model;
 
   describe("when binding an event", function(){
     var binding, binder, model;
@@ -9,25 +9,25 @@ describe("bind to", function(){
     }
 
     beforeEach(function(){
-      binder = _.extend({}, Backbone.Marionette.BindTo);
+      binder = new Marionette.EventBinder();
       model = new Model();
       binding = binder.bindTo(model, "change:foo", eventHandler.doIt);
     });
 
     it("should store the bound object", function(){
-      expect(binder.bindings[0].obj).toBe(model);
+      expect(binder._eventBindings[0].obj).toBe(model);
     });
 
     it("should store the event name", function(){
-      expect(binder.bindings[0].eventName).toBe("change:foo");
+      expect(binder._eventBindings[0].eventName).toBe("change:foo");
     });
 
     it("should store the callback function", function(){
-      expect(binder.bindings[0].callback).toBe(eventHandler.doIt);
+      expect(binder._eventBindings[0].callback).toBe(eventHandler.doIt);
     });
 
     it("should return a binding object for the bound event", function(){
-      expect(binding).toBe(binder.bindings[0]);
+      expect(binding).toBe(binder._eventBindings[0]);
     });
 
   });
@@ -36,7 +36,7 @@ describe("bind to", function(){
     var contextHandler = {
       doIt: function(){}
     }
-    var contextBinder = _.extend({}, Backbone.Marionette.BindTo);
+    var contextBinder = new Marionette.EventBinder();
     var contextModel;
 
     beforeEach(function(){
@@ -49,7 +49,7 @@ describe("bind to", function(){
     });
 
     it("should store the specified context", function(){
-      expect(contextBinder.bindings[0].context).toBe(contextHandler);
+      expect(contextBinder._eventBindings[0].context).toBe(contextHandler);
     });
 
   });
@@ -58,7 +58,7 @@ describe("bind to", function(){
     var handler = {
       doIt: function(){}
     }
-    var binder = _.extend({}, Backbone.Marionette.BindTo);
+    var binder = new Marionette.EventBinder();
     var model;
 
     beforeEach(function(){
@@ -78,7 +78,7 @@ describe("bind to", function(){
     var handler = {
       doIt: function(){}
     }
-    var binder = _.extend({}, Backbone.Marionette.BindTo);
+    var binder = new Marionette.EventBinder();
     var model;
 
     beforeEach(function(){
@@ -95,7 +95,7 @@ describe("bind to", function(){
     })
 
     it("should empty the list of registered events", function(){
-      expect(binder.bindings.length).toBe(0);
+      expect(binder._eventBindings.length).toBe(0);
     });
   });
 
@@ -109,7 +109,7 @@ describe("bind to", function(){
     var binding;
 
     beforeEach(function(){
-      binder = _.extend({}, Backbone.Marionette.BindTo);
+      binder = new Marionette.EventBinder();
       spyOn(handler, "doIt");
       model = new Model();
       binding = binder.bindTo(model, "change:foo", handler.doIt);
@@ -123,7 +123,7 @@ describe("bind to", function(){
     });
 
     it("should empty the list of registered events", function(){
-      expect(binder.bindings.length).toBe(0);
+      expect(binder._eventBindings.length).toBe(0);
     });
   });
 
@@ -141,8 +141,8 @@ describe("bind to", function(){
       beforeEach(function(){
         spyOn(handler, "doIt");
 
-        binder1 = _.extend({}, Backbone.Marionette.BindTo);
-        binder2 = _.extend({}, Backbone.Marionette.BindTo);
+        binder1 = new Marionette.EventBinder();
+        binder2 = new Marionette.EventBinder();
 
         model = new Model();
         binding1 = binder1.bindTo(model, "change:foo", handler.doIt, handler);
@@ -169,8 +169,8 @@ describe("bind to", function(){
       beforeEach(function(){
         spyOn(handler, "doIt");
 
-        binder1 = _.extend({}, Backbone.Marionette.BindTo);
-        binder2 = _.extend({}, Backbone.Marionette.BindTo);
+        binder1 = new Marionette.EventBinder();
+        binder2 = new Marionette.EventBinder();
 
         model = new Model();
         binding1 = binder1.bindTo(model, "change:foo", handler.doIt);
@@ -197,8 +197,8 @@ describe("bind to", function(){
       beforeEach(function(){
         spyOn(handler, "doIt");
 
-        binder1 = _.extend({}, Backbone.Marionette.BindTo);
-        binder2 = _.extend({}, Backbone.Marionette.BindTo);
+        binder1 = new Marionette.EventBinder();
+        binder2 = new Marionette.EventBinder();
 
         model = new Model();
         binding1 = binder1.bindTo(model, "change:foo", handler.doIt, binder1);

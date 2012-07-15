@@ -85,7 +85,7 @@ These are the strings that you can pull to make your puppet dance:
 * [**Backbone.Marionette.Region**](https://github.com/derickbailey/backbone.marionette/blob/master/docs/marionette.region.md): Manage visual regions of your application, including display and removal of content
 * [**Backbone.Marionette.Layout**](https://github.com/derickbailey/backbone.marionette/blob/master/docs/marionette.layout.md): A view that renders a layout and creates region managers to manage areas within it
 * [**Backbone.Marionette.EventAggregator**](https://github.com/derickbailey/backbone.marionette/blob/master/docs/marionette.eventaggregator.md): An extension of Backbone.Events, to be used as an event-driven or pub-sub tool
-* [**Backbone.Marionette.BindTo**](https://github.com/derickbailey/backbone.marionette/blob/master/docs/marionette.bindto.md): An event binding manager, to facilitate binding and unbinding of events
+* [**Backbone.Marionette.EventBinder**](https://github.com/derickbailey/backbone.marionette/blob/master/docs/marionette.eventbinder.md): An event binding manager, to facilitate binding and unbinding of events
 * [**Backbone.Marionette.Renderer**](https://github.com/derickbailey/backbone.marionette/blob/master/docs/marionette.renderer.md): Render templates with or without data, in a consistent and common manner
 * [**Backbone.Marionette.TemplateCache**](https://github.com/derickbailey/backbone.marionette/blob/master/docs/marionette.templatecache.md): Cache templates that are stored in `<script>` blocks, for faster subsequent access
 * [**Backbone.Marionette.Callbacks**](https://github.com/derickbailey/backbone.marionette/blob/master/docs/marionette.callbacks.md): Manage a collection of callback methods, and execute them as needed

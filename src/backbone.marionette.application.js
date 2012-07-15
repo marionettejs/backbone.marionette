@@ -7,7 +7,9 @@
 Marionette.Application = function(options){
   this.initCallbacks = new Marionette.Callbacks();
   this.vent = new Marionette.EventAggregator();
-  _.extend(this, options);
+
+  var eventBinder = new Marionette.EventBinder();
+  _.extend(this, eventBinder, options);
 };
 
 _.extend(Marionette.Application.prototype, Backbone.Events, {
@@ -75,6 +77,3 @@ _.extend(Marionette.Application.prototype, Backbone.Events, {
 
 // Copy the `extend` function used by Backbone's classes
 Marionette.Application.extend = Backbone.View.extend;
-
-// Copy the features of `BindTo`
-_.extend(Marionette.Application.prototype, Marionette.BindTo);

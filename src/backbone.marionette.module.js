@@ -12,11 +12,14 @@ Marionette.Module = function(moduleName, app, customArgs){
   this._config.app = app;
   this._config.customArgs = customArgs;
   this._config.definitions = [];
+
+  var eventBinder = new Marionette.EventBinder();
+  _.extend(this, eventBinder);
 };
 
 // Extend the Module prototype with events / bindTo, so that the module
 // can be used as an event aggregator or pub/sub.
-_.extend(Marionette.Module.prototype, Backbone.Events, Marionette.BindTo, {
+_.extend(Marionette.Module.prototype, Backbone.Events, {
 
   // Initializer for a specific module. Initializers are run when the
   // module's `start` method is called.

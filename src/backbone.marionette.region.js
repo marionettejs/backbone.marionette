@@ -6,7 +6,8 @@
 Marionette.Region = function(options){
   this.options = options || {};
 
-  _.extend(this, options);
+  var eventBinder = new Marionette.EventBinder();
+  _.extend(this, eventBinder, options);
 
   if (!this.el){
     var err = new Error("An 'el' must be specified");
@@ -85,6 +86,3 @@ _.extend(Marionette.Region.prototype, Backbone.Events, {
 
 // Copy the `extend` function used by Backbone's classes
 Marionette.Region.extend = Backbone.View.extend;
-
-// Copy the features of `BindTo`
-_.extend(Marionette.Region.prototype, Marionette.BindTo);

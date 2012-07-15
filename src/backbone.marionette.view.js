@@ -5,6 +5,10 @@
 Marionette.View = Backbone.View.extend({
   constructor: function(){
     Backbone.View.prototype.constructor.apply(this, arguments);
+
+    var eventBinder = new Marionette.EventBinder();
+    _.extend(this, eventBinder);
+
     this.bindTo(this, "show", this.onShowCalled, this);
   },
 
@@ -142,5 +146,3 @@ Marionette.View = Backbone.View.extend({
 
 });
 
-// Copy the features of `BindTo`
-_.extend(Marionette.View.prototype, Marionette.BindTo);

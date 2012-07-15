@@ -1,12 +1,14 @@
-# Marionette.BindTo
+# Marionette.EventBinder
 
-The `BindTo` object provides event binding management and facilitates simple
-event binding and unbinding for any object that extends from `Backbone.Events`.
+The `EventBinder` object provides event binding management for related
+events, across any number of objects that trigger the events. This allows
+events to be grouped together and unbound with a single call during the 
+clean-up of an object that is bound to the events.
 
 ## Bind Events
 
 ```js
-var binder = _.extend({}, Backbone.Marionette.BindTo);
+var binder = new Backbone.Marionette.EventBinder();
 
 var model = new MyModel();
 
@@ -36,7 +38,7 @@ binder.unbindFrom(binding);
 ```
 
 This will unbind the event that was configured with the binding
-object, and remove it from the BindTo bindings.
+object, and remove it from the EventBinder bindings.
 
 ## Unbind All Events
 

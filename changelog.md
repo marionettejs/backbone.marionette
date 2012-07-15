@@ -1,12 +1,17 @@
 ### v0.9.4-pre [view commit logs](https://github.com/derickbailey/backbone.marionette/compare/v0.9.3...dev)
 
+* BindTo -> EventBindings
+  * **BREAKING:** Renamed `Marionette.BindTo` to `Marionette.EventBindings` and made it a constructor function instead of an object literal
+
 * Modules
-  * Modules now have `addInitializer` method and can be started with `start`
+  * **BREAKING:** Changed the API of `Module.create` to be more clear and explicit about `app` parameter
+  * **BREAKING:** Defer module definition until module is started
+  * Modules now have `addInitializer` method to add initializers
+  * Modules can be started (run the initializers) with `start` method
   * Modules are automatically started when Marionette.Application `start` method is called
-  * Changed the API of `Module.create` to be more clear and explicit about `app` parameter
-  * Defer module definition until module is started
   * App.start sends options to module initializers
-  * Modules can be defined (or loaded from external source) afer app is started, and modules will auto-start
+  * Modules that are defined (or loaded from external source) afer app is started will auto-start by default
+  * Can specify a module is not started with the app, to prevent the module from being started when app.start is called
 
 * CollectionView
   * Correctly handles non-existent collection and removing child item views that were added manually

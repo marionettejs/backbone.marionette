@@ -5,16 +5,45 @@ Make your Backbone.js apps dance with a composite application architecture!
 ## About Marionette
 
 Backbone.Marionette is a composite application library for Backbone.js that
-aims to simplify the construction of large scale JavaScript applications. It is
-a collection of common design and implementation patterns found in 
-the applications that I (Derick Bailey) have been building with Backbone, and
-includes various pieces inspired by composite application architectures, 
+aims to simplify the construction of large scale JavaScript applications. 
+It is a collection of common design and implementation patterns found in 
+the applications that I (Derick Bailey) have been building with Backbone, 
+and includes various pieces inspired by composite application architectures, 
 such as Microsoft's "Prism" framework. 
 
-Backbone.Marionette is designed to be a lightweight and flexible library of 
-tools that you can use when you want to. Like Backbone.js itself, you're not 
-required to use all of Backbone.Marionette just because you want to use some 
-of it.
+### App Architecture On Backbone's Building Blocks
+
+Backbone provides a great set of building blocks for our JavaScript
+applications. It gives us the core constructs that are needed to build
+small apps, organize jQuery DOM events, or create single page apps that
+support mobile devices and large scale enterprise needs. But Backbone is
+not a complete framework. It's a set of building blocks. It leaves
+much of the application design, architecture and scalability to the 
+developer, including memory management, view management, and more.
+
+Marionette brings an application architecture to Backbone, along with
+built in view management and memory management. It's designed to be a 
+lightweight and flexible library of tools that sits on top of Backbone, 
+providing a framework for building scalable application.
+
+Like Backbone itself, you're not required to use all of Marionette just 
+because you want to use some of it. You can pick and choose which features 
+you want to use, when. This allows you to work with other Backbone 
+frameworks and plugins very easily. It also means that you are not required
+to engage in an all-or-nothing migration to begin using Marionette.
+
+### Key Benefits
+
+* Sensible defaults, such as using Underscore templates for view rendering
+* Easy to modify to make it work with your applicaton's specific needs
+* Reduce boilerplate for views, with specialized view types
+* Composite your application's visuals at runtime, with `Region` and `Layout`
+* Nested views and layouts within visual regions
+* Memory management and zombie killing built in to views, regions and layouts
+* Built-in event clean up with the `EventBinder`
+* Event-driven architecture with the `EventAggregator`
+* Flexible, "as-needed" architecture allowing you to pick and choose what you need
+* And much, much more
 
 ## Source Code And Downloads
 

@@ -72,8 +72,10 @@ Marionette.CollectionView = Marionette.View.extend({
   // collection view and show it
   showCollection: function(){
     var that = this;
-    var ItemView = this.getItemView();
+
     this.closeEmptyView();
+
+    var ItemView = this.getItemView();
     this.collection.each(function(item, index){
       that.addItemView(item, ItemView, index);
     });

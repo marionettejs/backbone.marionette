@@ -37,9 +37,10 @@ to engage in an all-or-nothing migration to begin using Marionette.
 * Sensible defaults, such as using Underscore templates for view rendering
 * Easy to modify to make it work with your applicaton's specific needs
 * Reduce boilerplate for views, with specialized view types
-* Composite your application's visuals at runtime, with `Region` and `Layout`
+* Build on a modular architecture with an `Application` and modules that attach to it
+* Compose your application's visuals at runtime, with `Region` and `Layout`
 * Nested views and layouts within visual regions
-* Memory management and zombie killing built in to views, regions and layouts
+* Built-in memory management and zombie killing in views, regions and layouts
 * Built-in event clean up with the `EventBinder`
 * Event-driven architecture with the `EventAggregator`
 * Flexible, "as-needed" architecture allowing you to pick and choose what you need

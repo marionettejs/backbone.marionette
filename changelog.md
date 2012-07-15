@@ -14,6 +14,9 @@
 * Application
   * Added a `removeRegion` method to close / remove regions, as a counter-function to the `addRegions` method
 
+* Marionette.View (all views / base view)
+  * Can specify a set of `ui` elements that are cached jQuery selectors
+
 ### v0.9.3 [view commit logs](https://github.com/derickbailey/backbone.marionette/compare/v0.9.2...v0.9.3)
 
 * CompositeView

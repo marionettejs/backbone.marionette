@@ -81,6 +81,23 @@ back from the `serializeData` method for you. This will
 allow you to create helper methods that can be called from
 within your templates.
 
+## View.bindUIElements
+
+In several cases you need to access ui elements inside the view
+to retrieve their data or manipulate them. For example you have a
+certain div element you need to show/hide based on some state,
+or other ui element that you wish to set a css class to it.
+Instead of having jQuery selectors hanging around in the view's code
+you can define a `ui` hash that contains a mapping between the
+ui element's name and its jQuery selector. Afterwards you can simply
+access it via `this.ui.elementName`.
+See ItemView documentation for examples.
+
+This functionality is provided via the `bindUIElements` method.
+Since View doesn't implement the render method, then if you directly extend
+from View you will need to invoke this method from your render method.
+In ItemView and CompositeView this is already taken care of.
+
 ## Change Which Template Is Rendered For A View
 
 There may be some cases where you need to change the template that is

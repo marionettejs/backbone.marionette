@@ -33,6 +33,7 @@ Marionette.ItemView =  Marionette.View.extend({
     var template = this.getTemplate();
     var html = Marionette.Renderer.render(template, data);
     this.$el.html(html);
+    this.bindUIElements();
 
     if (this.onRender){ this.onRender(); }
     this.trigger("render", this);

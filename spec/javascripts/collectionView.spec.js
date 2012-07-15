@@ -248,7 +248,7 @@ describe("collection view", function(){
       var collectionView, closeSpy;
 
       beforeEach(function () {
-        var collection = new Collection();
+        var collection = new Backbone.Collection();
         collectionView = new EmptyCollectionView({
           collection: collection
         });

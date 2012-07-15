@@ -56,6 +56,7 @@ Marionette.CollectionView = Marionette.View.extend({
   // the collection view.
   render: function(){
     this.triggerBeforeRender();
+    this.closeEmptyView();
     this.closeChildren();
 
     if (this.collection && this.collection.length > 0) {
@@ -72,9 +73,6 @@ Marionette.CollectionView = Marionette.View.extend({
   // collection view and show it
   showCollection: function(){
     var that = this;
-
-    this.closeEmptyView();
-
     var ItemView = this.getItemView();
     this.collection.each(function(item, index){
       that.addItemView(item, ItemView, index);

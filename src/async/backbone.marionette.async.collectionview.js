@@ -10,6 +10,7 @@ Async.CollectionView = {
 
     this.triggerBeforeRender();
 
+    this.closeEmptyView();
     this.closeChildren();
 
     if (this.collection && this.collection.length > 0) {
@@ -35,8 +36,6 @@ Async.CollectionView = {
   showCollection: function(){
     var that = this;
     var promises = [];
-
-    this.closeEmptyView();
 
     var ItemView = this.getItemView();
     this.collection.each(function(item, index){

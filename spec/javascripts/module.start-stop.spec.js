@@ -144,7 +144,7 @@ describe("module start and stop", function(){
         MyApp.start(options);
 
         myModule = MyApp.module("MyModule", {
-          autoStart: false, 
+          startWithApp: false, 
           define: function(mod){
             mod.started = true;
 

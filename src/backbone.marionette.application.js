@@ -69,7 +69,7 @@ _.extend(Marionette.Application.prototype, Backbone.Events, {
     args.unshift(this);
 
     // see the Marionette.Module object for more information
-    return Marionette.Module.create.apply(this, args);
+    return Marionette.Module.create.apply(Marionette.Module, args);
   }
 });
 

@@ -68,6 +68,7 @@ _.extend(Marionette.Module, {
 
   // Create a module, hanging off the app parameter as the parent object. 
   create: function(app, moduleNames, moduleDefinition){
+    var that = this;
     var parentModule = app;
     var moduleNames = moduleNames.split(".");
 
@@ -92,16 +93,7 @@ _.extend(Marionette.Module, {
       // the last module in a "parent.child.grandchild" hierarchy of
       // module names
       if (isLastModuleInChain ){
-
-        // add the module definition
-        if (moduleDefinition){
-          module.addDefinition(moduleDefinition);
-        }
-
-        // start the module when the app starts
-        app.addInitializer(function(options){
-          module.start(options);
-        });
+        that._createModuleDefinition(module, moduleDefinition, app);
       }
 
       // If the defined module is not what we are
@@ -117,5 +109,47 @@ _.extend(Marionette.Module, {
 
     // Return the last module in the definition chain
     return parentModule;
+  },
+
+  _createModuleDefinition: function(module, moduleDefinition, app){
+    var moduleOptions = this._getModuleDefinitionOptions(moduleDefinition);
+    
+    // add the module definition
+    if (moduleOptions.definition){
+      module.addDefinition(moduleOptions.definition);
+    }
+
+    if (moduleOptions.startWithApp){
+      // start the module when the app starts
+      app.addInitializer(function(options){
+        module.start(options);
+      });
+    }
+  },
+
+  _getModuleDefinitionOptions: function(moduleDefinition){
+    // default to starting the module with the app
+    var options = { startWithApp: true };
+
+    // short circuit if we don't have a module definition
+    if (!moduleDefinition){ return options; }
+
+    if (_.isFunction(moduleDefinition)){
+      // if the definition is a function, assign it directly
+      // and use the defaults
+      options.definition = moduleDefinition;
+
+    } else {
+
+      // the definition is an object. grab the "define" attribute
+      // and the "startWithApp" attribute, as set the options
+      // appropriately
+      options.definition = moduleDefinition.define;
+      if (moduleDefinition.hasOwnProperty("startWithApp")){
+        options.startWithApp = moduleDefinition.startWithApp;
+      }
+    }
+
+    return options;
   }
 });

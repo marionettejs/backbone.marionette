@@ -287,4 +287,31 @@ describe("region", function(){
       expect(Manager.prototype.initialize).toHaveBeenCalledWith(expectedOptions);
     });
   });
+
+  describe("when removing a region", function(){
+    var MyApp = new Backbone.Marionette.Application();
+
+    var myRegion = Backbone.Marionette.Region.extend({
+      el: "#region"
+    });
+
+    var myRegion2 = Backbone.Marionette.Region.extend({
+      el: "#region2"
+    });
+
+    beforeEach(function(){
+      setFixtures("<div id='region'></div>");
+      setFixtures("<div id='region2'></div>");
+
+      MyApp.addRegions({MyRegion: myRegion, anotherRegion: myRegion2});
+      MyApp.removeRegion('MyRegion')
+    });
+
+    it("should be removed from the app", function(){
+      expect(MyApp.MyRegion).not.toBeDefined()
+    })
+    it("should call 'close' of the region", function(){
+      expect(MyApp.MyRegion.close).toHaveBeenCalled()
+    })
+  })
 });

@@ -112,4 +112,26 @@ MyApp.vent.trigger("foo"); // => alert box "bar"
 
 See the `Marionette.EventAggregator` documentation below, for more details.
 
+## Regions And The Application Object
 
+Marionette's `Region` objects can be directly added to an application by
+calling the `addRegions` method:
+
+```js
+MyApp.addRegions({
+  someRegion: "#some-div",
+  anotherRegion: "#another-div"
+});
+```
+
+Regions can also be removed with the `removeRegion` method, passing in 
+the name of the region to remove as a string value:
+
+```js
+MyApp.removeRegion('someRegion');
+```
+
+Removing a region will properly close it before removing it from the
+application object.
+
+For more information on regions, see [the region documentation](./marionette.region.md)

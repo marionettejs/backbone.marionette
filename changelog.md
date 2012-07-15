@@ -11,6 +11,9 @@
   * Correctly handles non-existent collection and removing child item views that were added manually
   * Corrected showing empty view and closing empty view when resetting collection and adding items
 
+* Application
+  * Added a `removeRegion` method to close / remove regions, as a counter-function to the `addRegions` method
+
 ### v0.9.3 [view commit logs](https://github.com/derickbailey/backbone.marionette/compare/v0.9.2...v0.9.3)
 
 * CompositeView

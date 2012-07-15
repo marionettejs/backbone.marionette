@@ -289,21 +289,20 @@ describe("region", function(){
   });
 
   describe("when removing a region", function(){
-    var MyApp = new Backbone.Marionette.Application();
-
-    var myRegion = Backbone.Marionette.Region.extend({
-      el: "#region"
-    });
-
-    var myRegion2 = Backbone.Marionette.Region.extend({
-      el: "#region2"
-    });
+    var MyApp, region;
 
     beforeEach(function(){
-      setFixtures("<div id='region'></div>");
-      setFixtures("<div id='region2'></div>");
+      setFixtures("<div id='region'></div><div id='region2'></div>");
 
-      MyApp.addRegions({MyRegion: myRegion, anotherRegion: myRegion2});
+      MyApp = new Backbone.Marionette.Application();
+      MyApp.addRegions({
+        MyRegion: "#region", 
+        anotherRegion: "#region2"
+      });
+
+      region = MyApp.MyRegion;
+      spyOn(region, "close");
+
       MyApp.removeRegion('MyRegion')
     });
 
@@ -311,7 +310,7 @@ describe("region", function(){
       expect(MyApp.MyRegion).not.toBeDefined()
     })
     it("should call 'close' of the region", function(){
-      expect(MyApp.MyRegion.close).toHaveBeenCalled()
+      expect(region.close).toHaveBeenCalled()
     })
   })
 });

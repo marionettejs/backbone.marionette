@@ -81,23 +81,27 @@ _.extend(Marionette.Module, {
     _.each(moduleNames, function(moduleName, i){
       var isLastModuleInChain = (i === length-1);
 
-      // Get the module name, and check if it exists on
-      // the current parent already
+      // Get an existing module of this name if we have one
       var module = parentModule[moduleName];
-
-      // Create a new module if we don't have one already
       if (!module){ 
+        // Create a new module if we don't
         module = new Marionette.Module(moduleName, app, customArgs);
+      }
+
+      // Only add a module definition and initializer when this is
+      // the last module in a "parent.child.grandchild" hierarchy of
+      // module names
+      if (isLastModuleInChain ){
+
+        // add the module definition
+        if (moduleDefinition){
+          module.addDefinition(moduleDefinition);
+        }
+
         // start the module when the app starts
         app.addInitializer(function(options){
           module.start(options);
         });
-      }
-
-      // If this is the final object in the chain, define
-      // this module with the function & extra args supplied
-      if (isLastModuleInChain && moduleDefinition){
-        module.addDefinition(moduleDefinition);
       }
 
       // If the defined module is not what we are

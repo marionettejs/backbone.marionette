@@ -6,6 +6,7 @@
   * Changed the API of `Module.create` to be more clear and explicit about `app` parameter
   * Defer module definition until module is started
   * App.start sends options to module initializers
+  * Modules can be defined (or loaded from external source) afer app is started, and modules will auto-start
 
 * CollectionView
   * Correctly handles non-existent collection and removing child item views that were added manually

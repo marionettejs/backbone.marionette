@@ -314,28 +314,6 @@ describe("composite view", function(){
   });
 
   describe("when rendering a composite view with no model, using a template to create a grid", function(){
-    // A Grid Row
-    var GridRow = Backbone.Marionette.ItemView.extend({
-        tagName: "tr",
-        template: "#row-template"
-    });
-
-    // The grid view
-    var GridView = Backbone.Marionette.CompositeView.extend({
-        tagName: "table",
-        template: "#grid-template",
-        itemView: GridRow,
-
-        appendHtml: function(cv, iv){
-          cv.$("tbody").append(iv.el);
-        }
-    });
-
-    var User = Backbone.Model.extend({});
-
-    var UserCollection = Backbone.Collection.extend({
-        model: User
-    });
 
     var gridView;
 
@@ -379,18 +357,107 @@ describe("composite view", function(){
     });
   });
 
+  describe("when a composite view has a ui elements hash", function() {
+
+    var gridView, headersModel;
+
+    beforeEach(function() {
+      loadFixtures("uiBindingTemplate.html");
+
+      var userData = [
+        {
+          username: "dbailey",
+          fullname: "Derick Bailey"
+        },
+        {
+          username: "jbob",
+          fullname: "Joe Bob"
+        }
+      ];
+
+      headersModel = new Backbone.Model({
+        userHeader: "Username",
+        nameHeader: "Full name"
+      });
+
+      var userList = new UserCollection(userData);
+
+      gridView = new GridViewWithUIBindings({
+        tagName: "table",
+        model: headersModel,
+        collection: userList
+      });
+
+      // We don't render the view here since we need more fine-tuned control on when the view is rendered,
+      // specifically in the test that asserts the composite view template elements are accessible before
+      // the collection is rendered.
+    });
+
+    describe("after the whole composite view finished rendering", function() {
+
+      beforeEach(function() {
+        gridView.render();
+      });
+
+      describe("accessing a ui element that belongs to the model template", function() {
+
+        it("should return its jQuery selector if it can be found", function() {
+          expect(gridView.ui.headersRow.find("th:first-child")).toHaveText("Username");
+        });
+
+        it("should return an empty jQuery object if it cannot be found", function() {
+          expect(gridView.ui.unfoundElement.length).toEqual(0);
+        });
+
+        it("should return an up-to-date selector on subsequent renders", function() {
+          // asserting state before subsequent render
+          expect(gridView.ui.headersRow.find("th:first-child")).toHaveText("Username");
+
+          headersModel.set("userHeader", "User");
+          gridView.render();
+
+          expect(gridView.ui.headersRow.find("th:first-child")).toHaveText("User");
+        });
+
+      });
+
+      describe("accessing a ui element that belongs to the collection", function() {
+
+        // This test makes it clear that not allowing access to the collection elements is a design decision
+        // and not a bug.
+        it("should return an empty jQuery object", function() {
+          expect(gridView.ui.itemRows.length).toEqual(0);
+        });
+
+      });
+
+    });
+
+    describe("after the model finished rendering, but before the collection rendered", function() {
+
+      describe("accessing a ui element that belongs to the model template", function() {
+
+        // this test enforces that ui elements should be accessible as soon as their html was inserted
+        // to the DOM
+        it("should return its jQuery selector", function() {
+          gridView.beforeRender = function() {
+            expect(gridView.ui.headersRow.find("th:first-child").text()).toEqual("Username");
+          };
+
+          gridView.render();
+        })
+
+      });
+
+    });
+
+  });
+
+  // Models
+
   var Model = Backbone.Model.extend({});
 
-  var Collection = Backbone.Collection.extend({
-    model: Model
-  });
-  
-  var ItemView = Backbone.Marionette.ItemView.extend({
-    tagName: "span",
-    render: function(){
-      this.$el.html(this.model.get("foo"));
-    }
-  });
+  var User = Backbone.Model.extend({});
 
   var Node = Backbone.Model.extend({
     initialize: function(){
@@ -402,8 +469,27 @@ describe("composite view", function(){
     }
   });
 
+  // Collections
+
+  var Collection = Backbone.Collection.extend({
+    model: Model
+  });
+
+  var UserCollection = Backbone.Collection.extend({
+    model: User
+  });
+
   var NodeCollection = Backbone.Collection.extend({
     model: Node
+  });
+
+  // Views
+
+  var ItemView = Backbone.Marionette.ItemView.extend({
+    tagName: "span",
+    render: function(){
+      this.$el.html(this.model.get("foo"));
+    }
   });
 
   var TreeView = Backbone.Marionette.CompositeView.extend({
@@ -412,6 +498,33 @@ describe("composite view", function(){
 
     initialize: function(){
       this.collection = this.model.nodes;
+    }
+  });
+
+  // A Grid Row
+  var GridRow = Backbone.Marionette.ItemView.extend({
+    tagName: "tr",
+    template: "#row-template"
+  });
+
+  // The grid view
+  var GridView = Backbone.Marionette.CompositeView.extend({
+    tagName: "table",
+    template: "#grid-template",
+    itemView: GridRow,
+
+    appendHtml: function(cv, iv){
+      cv.$("tbody").append(iv.el);
+    }
+  });
+
+  GridViewWithUIBindings = GridView.extend({
+    template: "#ui-binding-template",
+
+    ui: {
+      headersRow: "thead tr",
+      unfoundElement: "#unfound",
+      itemRows: "tbody tr"
     }
   });
 

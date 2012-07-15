@@ -21,7 +21,7 @@ to the layout.
 <script id="layout-template" type="text/template">
   <section>
     <navigation id="menu">...</navigation>
-    <article id="content">...</navigation>
+    <article id="content">...</article>
   </section>
 </script>
 ```

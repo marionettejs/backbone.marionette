@@ -181,7 +181,7 @@ Marionette.CollectionView = Marionette.View.extend({
       delete this.children[item.cid];
     }
 
-    if (this.collection.length === 0){
+    if (!this.collection || this.collection.length === 0){
       this.showEmptyView();
     }
 

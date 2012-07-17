@@ -27,7 +27,6 @@ _.extend(Marionette.Region.prototype, Backbone.Events, {
   // `onShow` and `close` method on your view, just after showing
   // or just before closing the view, respectively.
   show: function(view){
-    var that = this;
 
     this.ensureEl();
     this.close();

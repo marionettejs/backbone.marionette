@@ -18,8 +18,27 @@ describe("module start", function(){
       expect(initializer).toHaveBeenCalled();
     });
 
+  });
+
+  describe("when starting a module that has sub-modules", function(){
+    var MyApp, mod1, mod2, mod3;
+
+    beforeEach(function(){
+      MyApp = new Backbone.Marionette.Application();
+
+      mod1 = MyApp.module("Mod1");
+      mod2 = MyApp.module("Mod1.Mod2");
+      mod3 = MyApp.module("Mod1.Mod3");
+
+      spyOn(mod2, "start");
+      spyOn(mod3, "start");
+
+      mod1.start();
+    });
+
     it("should start all sub-modules", function(){
-      throw "not yet implemented";
+      expect(mod2.start).toHaveBeenCalled();
+      expect(mod3.start).toHaveBeenCalled();
     });
   });
 

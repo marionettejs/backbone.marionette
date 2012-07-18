@@ -32,6 +32,13 @@ _.extend(Marionette.Module.prototype, Backbone.Events, {
     this._define();
     // run the initializers
     this._initializerCallbacks.run(options, this);
+
+    // start the sub-modules
+    if (this.modules){
+      _.each(this.modules, function(mod){
+        mod.start();
+      });
+    }
   },
 
   // Configure the module with a definition function and any custom args
@@ -88,8 +95,13 @@ _.extend(Marionette.Module, {
       // Get an existing module of this name if we have one
       var module = parentModule[moduleName];
       if (!module){ 
-        // Create a new module if we don't
+        // Create a new module if we don't have one
         module = new Marionette.Module(moduleName, app, customArgs);
+        parentModule[moduleName] = module;
+
+        // store the module on the parent
+        if (!parentModule.modules){ parentModule.modules = {}; }
+        parentModule.modules[moduleName] = module;
       }
 
       // Only add a module definition and initializer when this is
@@ -97,12 +109,6 @@ _.extend(Marionette.Module, {
       // module names
       if (isLastModuleInChain ){
         that._createModuleDefinition(module, moduleDefinition, app);
-      }
-
-      // If the defined module is not what we are
-      // currently storing as the module, replace it
-      if (parentModule[moduleName] !== module){
-        parentModule[moduleName] = module;
       }
 
       // Reset the parent module so that the next child

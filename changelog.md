@@ -12,6 +12,7 @@
   * App.start sends options to module initializers
   * Modules that are defined (or loaded from external source) afer app is started will auto-start by default
   * Can specify a module is not started with the app, to prevent the module from being started when app.start is called
+  * Calling `start` on a module will start all of the sub-modules for that module
 
 * CollectionView
   * Correctly handles non-existent collection and removing child item views that were added manually

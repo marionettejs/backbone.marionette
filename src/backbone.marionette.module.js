@@ -45,6 +45,7 @@ _.extend(Marionette.Module.prototype, Backbone.Events, {
   start: function(options){
     this._runModuleDefinition();
     this._initializerCallbacks.run(options, this);
+    this._isInitialized = true;
 
     // start the sub-modules
     if (this.modules){
@@ -57,6 +58,10 @@ _.extend(Marionette.Module.prototype, Backbone.Events, {
   // Stop this module by running its finalizers and then stop all of
   // the sub-modules for this module
   stop: function(){
+    // if we are not initialized, don't bother finalizing
+    if (!this._isInitialized){ return; }
+    this._isInitialized = false;
+
     this._finalizerCallbacks.run();
     // stop the sub-modules
     _.each(this.modules, function(mod){ mod.stop(); });

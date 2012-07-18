@@ -41,12 +41,32 @@ describe("module stop", function(){
   });
 
   describe("when stopping a module that has not been started", function(){
+    var mod1, mod2, mod3;
+
+    beforeEach(function(){
+      mod1 = App.module("Mod1", function(Mod1){
+        Mod1.addFinalizer(function(){
+          Mod1.isDead = true;
+        });
+      });
+
+      mod2 = App.module("Mod1.Mod2");
+      mod3 = App.module("Mod1.Mod3");
+
+      spyOn(mod2, "stop");
+      spyOn(mod3, "stop");
+
+      // this module has not been started
+      mod1.stop();
+    });
+
     it("should not run any finalizers", function(){
-      throw "not yet implemented";
+      expect(mod1.isDead).toBeUndefined();
     });
 
     it("should not stop sub-modules", function(){
-      throw "not yet implemented";
+      expect(mod2.stop).not.toHaveBeenCalled();
+      expect(mod3.stop).not.toHaveBeenCalled();
     });
   });
 

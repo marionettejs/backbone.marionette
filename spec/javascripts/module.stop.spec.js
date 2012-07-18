@@ -9,9 +9,9 @@ describe("module stop", function(){
     var mod1, mod2, mod3;
 
     beforeEach(function(){
-      var mod1 = App.module("Mod1", function(Mod){
-        mod.addFinalizer(function(){
-          mod1.isDead = true;
+      mod1 = App.module("Mod1", function(Mod1){
+        Mod1.addFinalizer(function(){
+          Mod1.isDead = true;
         });
       });
 
@@ -21,6 +21,7 @@ describe("module stop", function(){
       spyOn(mod2, "stop");
       spyOn(mod3, "stop");
 
+      mod1.start();
       mod1.stop();
     });
 

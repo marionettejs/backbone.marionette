@@ -6,13 +6,20 @@
 Marionette.Module = function(moduleName, app, customArgs){
   this.moduleName = moduleName;
 
-  this._initializerCallbacks = new Marionette.Callbacks();
+  // store sub-modules
+  this.modules = {};
 
+  // callbacks for initializers and finalizers
+  this._initializerCallbacks = new Marionette.Callbacks();
+  this._finalizerCallbacks = new Marionette.Callbacks();
+
+  // store the configuration for this module
   this._config = {};
   this._config.app = app;
   this._config.customArgs = customArgs;
   this._config.definitions = [];
 
+  // extend this module with an event binder
   var eventBinder = new Marionette.EventBinder();
   _.extend(this, eventBinder);
 };
@@ -27,10 +34,16 @@ _.extend(Marionette.Module.prototype, Backbone.Events, {
     this._initializerCallbacks.add(callback);
   },
 
+  // Finalizers are run when a module is stopped. They are used to teardown
+  // and finalize any variables, references, events and other code that the
+  // module had set up.
+  addFinalizer: function(callback){
+    this._finalizerCallbacks.add(callback);
+  },
+
   // Start the module, and run all of it's initializers
   start: function(options){
-    this._define();
-    // run the initializers
+    this._runModuleDefinition();
     this._initializerCallbacks.run(options, this);
 
     // start the sub-modules
@@ -41,6 +54,14 @@ _.extend(Marionette.Module.prototype, Backbone.Events, {
     }
   },
 
+  // Stop this module by running its finalizers and then stop all of
+  // the sub-modules for this module
+  stop: function(){
+    this._finalizerCallbacks.run();
+    // stop the sub-modules
+    _.each(this.modules, function(mod){ mod.stop(); });
+  },
+
   // Configure the module with a definition function and any custom args
   // that are to be passed in to the definition function
   addDefinition: function(moduleDefinition){
@@ -49,7 +70,7 @@ _.extend(Marionette.Module.prototype, Backbone.Events, {
 
   // Internal method: run the module definition function with the correct
   // arguments
-  _define: function(){
+  _runModuleDefinition: function(){
     if (this._config.definitions.length === 0) { return; }
 
     // build the correct list of arguments for the module definition

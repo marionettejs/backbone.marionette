@@ -70,20 +70,4 @@ describe("module stop", function(){
     });
   });
 
-  describe("when telling a module to remove when it has stopped, and stopping the module", function(){
-    it("should remove the module from the parent module or application", function(){
-      throw "not yet implemented";
-    });
-  });
-
-  describe("when stopping a sub-module from the parent module, by name", function(){
-    it("should stop the specified sub-module", function(){
-      throw "not yet implemented";
-    });
-
-    it("should not stop the parent module", function(){
-      throw "not yet implemented";
-    });
-  });
-
 });

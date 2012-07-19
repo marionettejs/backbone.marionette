@@ -7,6 +7,7 @@
 Marionette.Application = function(options){
   this.initCallbacks = new Marionette.Callbacks();
   this.vent = new Marionette.EventAggregator();
+  this.submodules = {};
 
   var eventBinder = new Marionette.EventBinder();
   _.extend(this, eventBinder, options);

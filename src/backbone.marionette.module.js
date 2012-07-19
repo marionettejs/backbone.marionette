@@ -7,7 +7,7 @@ Marionette.Module = function(moduleName, app, customArgs){
   this.moduleName = moduleName;
 
   // store sub-modules
-  this.modules = {};
+  this.submodules = {};
 
   // callbacks for initializers and finalizers
   this._initializerCallbacks = new Marionette.Callbacks();
@@ -48,8 +48,8 @@ _.extend(Marionette.Module.prototype, Backbone.Events, {
     this._isInitialized = true;
 
     // start the sub-modules
-    if (this.modules){
-      _.each(this.modules, function(mod){
+    if (this.submodules){
+      _.each(this.submodules, function(mod){
         mod.start();
       });
     }
@@ -64,7 +64,7 @@ _.extend(Marionette.Module.prototype, Backbone.Events, {
 
     this._finalizerCallbacks.run();
     // stop the sub-modules
-    _.each(this.modules, function(mod){ mod.stop(); });
+    _.each(this.submodules, function(mod){ mod.stop(); });
   },
 
   // Configure the module with a definition function and any custom args
@@ -124,10 +124,8 @@ _.extend(Marionette.Module, {
         // Create a new module if we don't have one
         module = new Marionette.Module(moduleName, app, customArgs);
         parentModule[moduleName] = module;
-
         // store the module on the parent
-        if (!parentModule.modules){ parentModule.modules = {}; }
-        parentModule.modules[moduleName] = module;
+        parentModule.submodules[moduleName] = module;
       }
 
       // Only add a module definition and initializer when this is

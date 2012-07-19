@@ -80,7 +80,7 @@ Marionette.View = Backbone.View.extend({
       triggerEvents[key] = function(e){
         if (e && e.preventDefault){ e.preventDefault(); }
         if (e && e.stopPropagation){ e.stopPropagation(); }
-        that.trigger(value);
+        that.trigger(value, e);
       }
 
     });

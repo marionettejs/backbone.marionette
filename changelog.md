@@ -14,9 +14,10 @@
   * Can specify a module is not started with the app, to prevent the module from being started when app.start is called
   * Calling `start` on a module will start all of the sub-modules for that module
 
-* CollectionView
+* CollectionView/CompositeView
   * Correctly handles non-existent collection and removing child item views that were added manually
   * Corrected showing empty view and closing empty view when resetting collection and adding items
+  * Fixed bug to prevent showing the empty view more than once when rendering the collection view
 
 * Application
   * Added a `removeRegion` method to close / remove regions, as a counter-function to the `addRegions` method

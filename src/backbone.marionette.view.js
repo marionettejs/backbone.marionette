@@ -115,6 +115,21 @@ Marionette.View = Backbone.View.extend({
     this.trigger('close');
     this.unbindAll();
     this.unbind();
+  },
+
+  // Method that helps the user to dispatch events like focus what
+  // depends on DOM ready state when appending a element.
+  appendTo: function(target){
+    var that = this;
+    this.$el.appendTo(target);
+    function checkIt(){
+      if(that.$el.parent()({
+        that.trigger('DOMContentLoaded');
+        return;
+      }
+      setTimeout(arguments.callee, 50);
+    }
+    setTimeout(checkIt(), 50);
   }
 });
 

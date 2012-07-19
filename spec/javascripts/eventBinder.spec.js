@@ -130,30 +130,29 @@ describe("event binder", function(){
   describe("when two bindTo objects are bound to the same object, same event, same callback, ", function(){
 
     describe("same context, and unbinding one of them", function(){
-      var handler = {
-        doIt: function(){}
-      }
-
+      var handler;
       var binder1, binder2;
       var binding1, binding2;
       var model;
+      var context;
 
       beforeEach(function(){
-        spyOn(handler, "doIt");
+        context = {};
+        handler = jasmine.createSpy();
 
         binder1 = new Marionette.EventBinder();
         binder2 = new Marionette.EventBinder();
 
         model = new Model();
-        binding1 = binder1.bindTo(model, "change:foo", handler.doIt, handler);
-        binding2 = binder2.bindTo(model, "change:foo", handler.doIt, handler);
+        binding1 = binder1.bindTo(model, "change:foo", handler, context);
+        binding2 = binder2.bindTo(model, "change:foo", handler, context);
 
         binder1.unbindFrom(binding1);
         model.set({foo: "bar"});
       });
 
-      it("should not unbind the other", function(){
-        expect(handler.doIt.callCount).toBe(0);
+      it("should unbind both", function(){
+        expect(handler.callCount).toBe(0);
       });
     });
 

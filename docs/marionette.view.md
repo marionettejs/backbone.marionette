@@ -183,3 +183,26 @@ Backbone.Marionette.ItemView.extend({
 });
 ```
 
+
+## Change Which Template Is Rendered For A View
+
+There may be some cases where you need to change the template that is
+used for a view, based on some simple logic such as the value of a
+specific attribute in the view's model. To do this, you can provide
+a `getTemplate` function on your views and use this to return the
+template that you need.
+
+```js
+MyView = Backbone.Marionette.ItemView.extend({
+  getTemplate: function(){
+    if (this.model.get("foo")){
+      return "#some-template";
+    } else {
+      return "#a-different-template";
+    }
+  }
+});
+```
+
+This applies to all view types.
+

@@ -132,3 +132,15 @@ one, the same it will close a view.
 
 All of this ensures that layouts and the views that they
 contain are cleaned up correctly.
+
+## Custom Region Class
+
+If you have the need to replace the `Region` with a region class of
+your own implementation, you can specify an alternate class to use
+with the `regionClass` propery of the `Layout`.
+
+```js
+MyLayout = Backbone.Marionette.Layout.extend({
+  regionClass: SomeCustomRegion 
+});
+```

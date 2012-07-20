@@ -123,7 +123,7 @@ Marionette.View = Backbone.View.extend({
     var that = this;
     this.$el.appendTo(target);
     function checkIt(){
-      if(that.$el.parent()({
+      if(that.$el.parent()){
         that.trigger('DOMContentLoaded');
         return;
       }

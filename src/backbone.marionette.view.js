@@ -78,9 +78,7 @@ Marionette.View = Backbone.View.extend({
     _.each(triggers, function(value, key){
 
       triggerEvents[key] = function(e){
-        if (e && e.preventDefault){ e.preventDefault(); }
-        if (e && e.stopPropagation){ e.stopPropagation(); }
-        that.trigger(value);
+        that.trigger(value, e);
       }
 
     });
@@ -117,6 +115,35 @@ Marionette.View = Backbone.View.extend({
     this.trigger('close');
     this.unbindAll();
     this.unbind();
+  },
+
+  // Method that helps the user to dispatch events like focus what
+  // depends on DOM ready state when appending a element.
+  appendTo: function(target){
+    var that = this;
+    this.$el.appendTo(target);
+    function checkIt(){
+      if(!that.$el.parentsUntil('body') || !$.isReady){
+        setTimeout(arguments.callee, 50);
+        return;
+      }
+      that.trigger('DOMContentLoaded');
+    }
+    setTimeout(checkIt, 50);
+  }
+  // Method that helps the user to dispatch events like focus what
+  // depends on DOM ready state when appending a element.
+  appendTo: function(target){
+    var that = this;
+    this.$el.appendTo(target);
+    function checkIt(){
+      if(that.$el.parent()){
+        that.trigger('DOMContentLoaded');
+        return;
+      }
+      setTimeout(arguments.callee, 50);
+    }
+    setTimeout(checkIt(), 50);
   }
 });
 

@@ -144,3 +144,25 @@ MyLayout = Backbone.Marionette.Layout.extend({
   regionClass: SomeCustomRegion 
 });
 ```
+
+You can also specify custom `Region` classes for each `region`:
+
+```js
+AppLayout = Backbone.Marionette.Layout.extend({
+  template: "#layout-template",
+
+  regionClass: SomeDefaultCustomRegion,
+
+  regions: {
+    menu: {
+      selector: "#menu",
+      regionClass: CustomRegionClassReference
+    },
+    content: {
+      selector: "#content",
+      regionClass: CustomRegionClass2Reference
+    }
+  }
+});
+```
+

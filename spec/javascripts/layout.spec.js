@@ -7,6 +7,14 @@ describe("layout", function(){
     }
   });
 
+  var CustomRegion = function() { 
+    this.customRegion = true;  
+  };
+  
+  var LayoutManagerCustomRegion = LayoutManager.extend({
+    regionClass: CustomRegion
+  });
+
   describe("on instantiation", function(){
     var layoutManager;
 
@@ -17,6 +25,13 @@ describe("layout", function(){
     it("should instantiate the specified region managers", function(){
       expect(layoutManager).toHaveOwnProperty("regionOne");
       expect(layoutManager).toHaveOwnProperty("regionTwo");
+    });
+
+    it("should instantiate custom region managers if specified", function() {
+      var layoutManagerCustomRegion = new LayoutManagerCustomRegion();
+      expect(layoutManagerCustomRegion).toHaveOwnProperty("regionOne");
+      expect(layoutManagerCustomRegion.regionOne).toBeTypeOf('object');
+      expect(layoutManagerCustomRegion.regionOne.customRegion).toEqual(true);
     });
 
   });

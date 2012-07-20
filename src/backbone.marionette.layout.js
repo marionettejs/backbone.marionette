@@ -10,6 +10,9 @@
 Marionette.Layout = Marionette.ItemView.extend({
   constructor: function () {
     Backbone.Marionette.ItemView.apply(this, arguments);
+    if (typeof this.regionClass === 'undefined') {
+      this.regionClass = Backbone.Marionette.Region; 
+    }
     this.initializeRegions();
   },
 
@@ -54,7 +57,7 @@ Marionette.Layout = Marionette.ItemView.extend({
     var that = this;
     _.each(this.regions, function (selector, name) {
 
-      var regionManager = new Backbone.Marionette.Region({
+      var regionManager = new that.regionClass({
         el: selector,
           getEl: function(selector){
             return that.$(selector);

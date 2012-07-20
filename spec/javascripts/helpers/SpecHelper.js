@@ -16,6 +16,10 @@ beforeEach(function() {
       var actualHtml = this.actual.html();
       var expectedHtml = jasmine.JQuery.browserTagCaseIndependentHtml(html);
       return (actualHtml.indexOf(expectedHtml)>=0);
+    },
+
+    toBeInstanceOf: function(object) {
+      return this.actual instanceof object; 
     }
   });
 });

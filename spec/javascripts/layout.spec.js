@@ -7,12 +7,38 @@ describe("layout", function(){
     }
   });
 
-  var CustomRegion = function() { 
-    this.customRegion = true;  
+  var CustomRegion1 = function() { 
+  };
+
+  var CustomRegion2 = function() {
   };
   
   var LayoutManagerCustomRegion = LayoutManager.extend({
-    regionClass: CustomRegion
+    regionClass: CustomRegion1,
+    regions: {
+      regionOne: {
+        selector: '#regionOne',
+        regionClass: CustomRegion1
+      },
+      regionTwo: {
+        selector: '#regionTwo',
+        regionClass: CustomRegion2
+      },
+      regionThree: {
+        selector: '#regionThree'
+      },
+      regionFour: '#regionFour'
+    }
+  });
+  
+  var LayoutManagerNoDefaultRegion = LayoutManager.extend({
+    regions: {
+      regionOne: {
+        selector: '#regionOne',
+        regionClass: CustomRegion1
+      },
+      regionTwo: '#regionTwo'
+    } 
   });
 
   describe("on instantiation", function(){
@@ -27,13 +53,37 @@ describe("layout", function(){
       expect(layoutManager).toHaveOwnProperty("regionTwo");
     });
 
-    it("should instantiate custom region managers if specified", function() {
+
+  });
+
+  describe("on instantiation with custom region managers", function() {
+    var layoutManager;
+
+    beforeEach(function() {
+      layoutManager = new LayoutManagerCustomRegion 
+    });
+  
+    it("should instantiate the default regionManager if specified", function() {
       var layoutManagerCustomRegion = new LayoutManagerCustomRegion();
-      expect(layoutManagerCustomRegion).toHaveOwnProperty("regionOne");
-      expect(layoutManagerCustomRegion.regionOne).toBeTypeOf('object');
-      expect(layoutManagerCustomRegion.regionOne.customRegion).toEqual(true);
+      expect(layoutManagerCustomRegion).toHaveOwnProperty("regionThree");
+      expect(layoutManagerCustomRegion.regionThree).toBeInstanceOf(CustomRegion1);
+      expect(layoutManagerCustomRegion).toHaveOwnProperty("regionThree");
+      expect(layoutManagerCustomRegion.regionThree).toBeInstanceOf(CustomRegion1);
     });
 
+    it("should instantiate specific regions with custom regions if speficied", function() {
+      var layoutManagerCustomRegion = new LayoutManagerCustomRegion(); 
+      expect(layoutManagerCustomRegion).toHaveOwnProperty("regionOne");
+      expect(layoutManagerCustomRegion.regionOne).toBeInstanceOf(CustomRegion1);
+      expect(layoutManagerCustomRegion).toHaveOwnProperty("regionTwo");
+      expect(layoutManagerCustomRegion.regionTwo).toBeInstanceOf(CustomRegion2);
+    });
+
+    it("should instantiate marionette regions is no regionClass is specified", function() {
+      var layoutManagerNoDefault = new LayoutManagerNoDefaultRegion();
+      expect(layoutManagerNoDefault).toHaveOwnProperty("regionTwo");
+      expect(layoutManagerNoDefault.regionTwo).toBeInstanceOf(Backbone.Marionette.Region);
+    });
   });
 
   describe("on rendering", function(){

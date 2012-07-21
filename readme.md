@@ -158,6 +158,13 @@ You can read the annotated for all the detail of how Marionette works, and advic
 
 ##### [View the annotated source code](http://derickbailey.github.com/backbone.marionette/docs/backbone.marionette.html)
 
+## How To Contribute
+
+If you would like to contribute to Marionette's source code, please read
+the [guidelines for pull requests and contributions](https://github.com/derickbailey/backbone.marionette/wiki/Guidelines-for-pull-requests-and-contributions).
+Following these guidelines will help make your contributions easier to
+bring in to the next release.
+
 ## Help Is Just A Click Away
 
 ### [Google Group Mailing List](https://groups.google.com/forum/#!forum/backbone-marionette)

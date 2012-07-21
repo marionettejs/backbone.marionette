@@ -131,4 +131,31 @@ describe("layout", function(){
     });
   });
 
+  describe("when re-rendering a closed layout", function(){
+    var region, layout, view;
+
+    beforeEach(function(){
+      loadFixtures("layoutManagerTemplate.html");
+
+      layout = new LayoutManager();
+      layout.render();
+      region = layout.regionOne;
+
+      view = new Backbone.View();
+      view.close = function(){};
+      layout.regionOne.show(view);
+      layout.close();
+
+      spyOn(region, "close").andCallThrough();
+      spyOn(view, "close").andCallThrough();
+
+      layout.render();
+    });
+
+    it("should re-initialize the regions to the newly rendered elements", function(){
+      expect(layout).toHaveOwnProperty("regionOne");
+      expect(layout).toHaveOwnProperty("regionTwo");
+    });
+  });
+
 });

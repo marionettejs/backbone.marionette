@@ -10,6 +10,9 @@
 Marionette.Layout = Marionette.ItemView.extend({
   constructor: function () {
     Backbone.Marionette.ItemView.apply(this, arguments);
+    if (typeof this.regionClass === 'undefined') {
+      this.regionClass = Backbone.Marionette.Region; 
+    }
     this.initializeRegions();
   },
 
@@ -52,9 +55,18 @@ Marionette.Layout = Marionette.ItemView.extend({
     }
 
     var that = this;
-    _.each(this.regions, function (selector, name) {
+    _.each(this.regions, function (region, name) {
+      if (    typeof region != 'string' 
+           && typeof region.selector != 'string' ) {
+        throw new Exception('Region must be specified as a selector ' +
+                            'string or an object with selector property');
+      }
 
-      var regionManager = new Backbone.Marionette.Region({
+      selector = typeof region === 'string' ? region : region.selector;
+      var regionClass = typeof region.regionClass === 'undefined' 
+        ? that.regionClass : region.regionClass 
+      
+      var regionManager = new regionClass({
         el: selector,
           getEl: function(selector){
             return that.$(selector);

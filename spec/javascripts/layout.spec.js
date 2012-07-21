@@ -14,15 +14,15 @@ describe("layout", function(){
   };
   
   var LayoutManagerCustomRegion = LayoutManager.extend({
-    regionClass: CustomRegion1,
+    regionType: CustomRegion1,
     regions: {
       regionOne: {
         selector: '#regionOne',
-        regionClass: CustomRegion1
+        regionType: CustomRegion1
       },
       regionTwo: {
         selector: '#regionTwo',
-        regionClass: CustomRegion2
+        regionType: CustomRegion2
       },
       regionThree: {
         selector: '#regionThree'
@@ -35,7 +35,7 @@ describe("layout", function(){
     regions: {
       regionOne: {
         selector: '#regionOne',
-        regionClass: CustomRegion1
+        regionType: CustomRegion1
       },
       regionTwo: '#regionTwo'
     } 
@@ -79,7 +79,7 @@ describe("layout", function(){
       expect(layoutManagerCustomRegion.regionTwo).toBeInstanceOf(CustomRegion2);
     });
 
-    it("should instantiate marionette regions is no regionClass is specified", function() {
+    it("should instantiate marionette regions is no regionType is specified", function() {
       var layoutManagerNoDefault = new LayoutManagerNoDefaultRegion();
       expect(layoutManagerNoDefault).toHaveOwnProperty("regionTwo");
       expect(layoutManagerNoDefault.regionTwo).toBeInstanceOf(Backbone.Marionette.Region);

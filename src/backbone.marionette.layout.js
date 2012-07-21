@@ -8,11 +8,10 @@
 // attaches `Region` instances to the specified `regions`.
 // Used for composite view management and sub-application areas.
 Marionette.Layout = Marionette.ItemView.extend({
+  regionType: Backbone.Marionette.Region,
+
   constructor: function () {
     Backbone.Marionette.ItemView.apply(this, arguments);
-    if (typeof this.regionClass === 'undefined') {
-      this.regionClass = Backbone.Marionette.Region; 
-    }
     this.initializeRegions();
   },
 
@@ -63,10 +62,10 @@ Marionette.Layout = Marionette.ItemView.extend({
       }
 
       selector = typeof region === 'string' ? region : region.selector;
-      var regionClass = typeof region.regionClass === 'undefined' 
-        ? that.regionClass : region.regionClass 
+      var regionType = typeof region.regionType === 'undefined' 
+        ? that.regionType : region.regionType 
       
-      var regionManager = new regionClass({
+      var regionManager = new regionType({
         el: selector,
           getEl: function(selector){
             return that.$(selector);

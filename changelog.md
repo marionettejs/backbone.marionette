@@ -27,6 +27,7 @@
 
 * Layout
   * An already closed layout can be re-rendered, and the regions will regenerate
+  * Allow a custom region type to be specified for all regions, as well as per-region instance
 
 ### v0.9.3 [view commit logs](https://github.com/derickbailey/backbone.marionette/compare/v0.9.2...v0.9.3)
 

@@ -27,6 +27,97 @@ If you specify the same module name more than once, the
 first instance of the module will be retained and a new
 instance will not be created.
 
+## Starting And Stopping Modules
+
+Modules can be started and stopped independently of the application and
+of each other. This allows them to be loaded asynchronously, and also allows
+them to be shut down when they are no longer needed. This also facilitates
+easier unit testing of modules in isolation as you can start only the
+module that you need in your tests.
+
+### Starting Modules
+
+Starting a module is done in one of two ways:
+
+1. Automatically with the parent application's `.start()` method
+2. Manually call the `.start()` method on the module
+
+In this example, the module will be started automatically with the parent
+application object's `start` call:
+
+```js
+MyApp = new Backbone.Marionette.Application();
+
+MyApp.module("Foo", function(){
+
+  // module code goes here
+
+});
+
+MyApp.start();
+```
+
+Note that modules loaded and defined after the `app.start()` call will still
+be started automatically.
+
+If you wish to manually start a module instead of having the application
+start it, you can tell the module definition not to start with the app:
+
+```js
+var fooModule = MyApp.module("Foo", {
+  startWithApp: false,
+
+  define: function(){
+    // module code goes here
+  }
+});
+
+// later, start the module
+fooModule.start();
+```
+
+Note the use of an object literal instead of just a function to define
+the module, and the presence of the `startWithApp` attribute, to tell it
+not to start with the application.
+
+Then to start the module, the module's `start` method is manually called.
+You can also grab a reference to the module at a later point in time, to
+start it:
+
+```js
+MyApp.module("Foo", {
+  startWithApp: false,
+  define: function(){ /*...*/ }
+});
+
+// start the module by getting a reference to it first
+MyApp.module("Foo").start();
+```
+
+### Stopping Modules
+
+A module can be stopped, or shut down, to clear memory and resources when
+the module is no longer needed. This is done with the `stop` method
+on modules.
+
+```js
+MyApp.module("Foo").stop();
+```
+
+Modules are not automatically stopped by the application. If you wish to 
+stop one, you must call the `stop` method on it. The exception to this is
+that stopping a parent module will stop all of it's sub-modules.
+
+```js
+MyApp.module("Foo.Bar.Baz");
+
+MyApp.module("Foo").stop();
+```
+
+This call to `stop` causes the `Bar` and `Baz` modules to both be stopped
+as they are sub-modules of `Foo`. For more information on defining
+sub-modules, see the next section: "Defining Sub-Modules With . Notation".
+
 ## Defining Sub-Modules With . Notation
 
 Sub-modules or child modules can be defined as a hierarchy of modules and 
@@ -91,6 +182,41 @@ MyApp.module("MyModule", function(MyModule, MyApp, Backbone, Marionette, $, _){
 console.log(MyApp.MyModule.someData); //=> public data
 MyApp.MyModule.someFunction(); //=> public data
 ```
+
+### Module Initializers
+
+Modules have initializers, similarly to `Application` objects. A module's
+initializers are run when the module is started.
+
+```js
+MyApp.module("Foo", function(Foo){
+
+  Foo.addInitializer(function(){
+    // initialize and start the module's running code, here.
+  });
+
+});
+```
+
+Any way of starting this module will cause it's initializers to run. You
+can have as many initializers for a module as you wish.
+
+### Module Finalizers
+
+Modules also have finalizers that are run when a module is stopped.
+
+```js
+MyApp.module("Foo", function(Foo){
+
+  Foo.addFinalizer(function(){
+    // tear down, shut down and clean up the module, here
+  });
+
+});
+```
+
+Calling the `stop` method on the module will run all that module's 
+finalizers. A module can have as many finalizers as you wish.
 
 ## The Module's `this` Argument
 

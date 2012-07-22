@@ -1,4 +1,9 @@
-### v0.9.4-pre [view commit logs](https://github.com/derickbailey/backbone.marionette/compare/v0.9.3...dev)
+### v0.9.5 [view commit logs](https://github.com/derickbailey/backbone.marionette/compare/v0.9.4...v0.9.5)
+
+* Layout
+  * Fixed a typo / bug in default Region type used for layouts
+
+### v0.9.4 [view commit logs](https://github.com/derickbailey/backbone.marionette/compare/v0.9.3...v0.9.5)
 
 * BindTo -> EventBindings
   * **BREAKING:** Renamed `Marionette.BindTo` to `Marionette.EventBindings` and made it a constructor function instead of an object literal

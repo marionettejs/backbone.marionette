@@ -8,7 +8,7 @@
 // attaches `Region` instances to the specified `regions`.
 // Used for composite view management and sub-application areas.
 Marionette.Layout = Marionette.ItemView.extend({
-  regionType: Backbone.Marionette.Region,
+  regionType: Marionette.Region,
 
   constructor: function () {
     Backbone.Marionette.ItemView.apply(this, arguments);

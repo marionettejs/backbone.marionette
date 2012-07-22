@@ -59,6 +59,34 @@ describe("module start", function(){
 
   });
 
+  describe("when splitting a module definition, one of them is set to not start with the app, and starting the app", function(){
+    var MyApp, firstfunc, secondfunc;
+
+    beforeEach(function(){
+      MyApp = new Backbone.Marionette.Application();
+
+      firstfunc = jasmine.createSpy();
+      secondfunc = jasmine.createSpy();
+
+      MyApp.module("MyModule", {
+        startWithApp: false,
+        define: firstfunc
+      });
+      MyApp.module("MyModule", secondfunc);
+
+      MyApp.start();
+    });
+
+    it("should not run the first definition function", function(){
+      expect(firstfunc).not.toHaveBeenCalled();
+    });
+
+    it("should not run the second definition function", function(){
+      expect(secondfunc).not.toHaveBeenCalled();
+    });
+
+  });
+
   describe("when providing a module definition and starting the module", function(){
     var MyApp, moduleArgs, thisArg;
 

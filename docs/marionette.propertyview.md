@@ -6,7 +6,7 @@ avoids the need to have a template for rendering `CollectionView` items.
 You need to provide a `property` attribute when extending the view, which is passed to `Model.get` during rendering:
 
 ```js
-var MyView = Backbone.Marionette.ItemView.extend({
+var MyView = Backbone.Marionette.PropertyView.extend({
   property: "foo",
   className: "item",
   tagName: "li"

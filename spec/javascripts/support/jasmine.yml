@@ -21,6 +21,7 @@ src_files:
     - src/backbone.marionette.eventbinder.js
     - src/backbone.marionette.view.js
     - src/backbone.marionette.itemview.js
+    - src/backbone.marionette.propertyview.js
     - src/backbone.marionette.collectionview.js
     - src/backbone.marionette.compositeview.js
     - src/backbone.marionette.region.js

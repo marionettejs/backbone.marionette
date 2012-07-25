@@ -20,18 +20,13 @@ Marionette.ItemView =  Marionette.View.extend({
   },
 
   // Render the view, defaulting to underscore.js templates.
-  // You can override this in your view definition to provide
-  // a very specific rendering for your view. In general, though,
-  // you should override the `Marionette.Renderer` object to
-  // change how Marionette renders views.
   render: function(){
     if (this.beforeRender){ this.beforeRender(); }
     this.trigger("before:render", this);
     this.trigger("item:before:render", this);
 
-    var data = this.serializeData();
-    var template = this.getTemplate();
-    var html = Marionette.Renderer.render(template, data);
+    var html = this.generateHtml();
+
     this.$el.html(html);
     this.bindUIElements();
 
@@ -39,6 +34,17 @@ Marionette.ItemView =  Marionette.View.extend({
     this.trigger("render", this);
     this.trigger("item:rendered", this);
     return this;
+  },
+
+  // Generates the actual HTML for this view.
+  // You can override this in your view definition to provide
+  // a very specific rendering for your view. In general, though,
+  // you should override the `Marionette.Renderer` object to
+  // change how Marionette renders views.
+  generateHtml: function() {
+    var data = this.serializeData();
+    var template = this.getTemplate();
+    return Marionette.Renderer.render(template, data);
   },
 
   // Override the default close event to add a few

@@ -4,6 +4,7 @@ Backbone.Marionette = (function(Backbone, _, $){
 // import "backbone.marionette.eventbinder.js"
 // import "backbone.marionette.view.js"
 // import "backbone.marionette.itemview.js"
+// import "backbone.marionette.propertyview.js"
 // import "backbone.marionette.collectionview.js"
 // import "backbone.marionette.compositeview.js"
 // import "backbone.marionette.region.js"

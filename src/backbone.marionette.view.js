@@ -116,6 +116,7 @@ Marionette.View = Backbone.View.extend({
     if (this.beforeClose) { this.beforeClose(); }
 
     this.remove();
+    this.closed = true;
 
     if (this.onClose) { this.onClose(); }
     this.trigger('close');

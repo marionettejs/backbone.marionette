@@ -5,9 +5,14 @@ describe("async collection view", function(){
     this.renderItemView = Backbone.Marionette.CollectionView.prototype.renderItemView;
     this.showCollection = Backbone.Marionette.CollectionView.prototype.showCollection;
     this.showEmptyView = Backbone.Marionette.CollectionView.prototype.showEmptyView;
+    
+    this.itemViewRender = Backbone.Marionette.ItemView.prototype.render;
+
 
     // replace the standard render with an async render
     _.extend(Backbone.Marionette.CollectionView.prototype, Backbone.Marionette.Async.CollectionView);
+    // replace the standard item render with an async render
+    _.extend(Backbone.Marionette.ItemView.prototype, Backbone.Marionette.Async.ItemView);
   });
 
   afterEach(function(){
@@ -15,6 +20,7 @@ describe("async collection view", function(){
     Backbone.Marionette.CollectionView.prototype.renderItemView = this.renderItemView;
     Backbone.Marionette.CollectionView.prototype.showCollection = this.showCollection;
     Backbone.Marionette.CollectionView.prototype.showEmptyView = this.showEmptyView;
+    Backbone.Marionette.ItemView.prototype.render = this.itemViewRender;
   });
 
   describe("when rendering a collection view", function(){
@@ -258,6 +264,61 @@ describe("async collection view", function(){
       });
     });
 
+  });
+  
+  describe("when a model is added to the collection and removed immediately afterwards", function(){
+    var render = Backbone.Marionette.Renderer.render;
+    
+    var Model = Backbone.Model.extend({});
+
+    var Collection = Backbone.Collection.extend({
+      model: Model
+    });
+
+    var ItemView = Backbone.Marionette.ItemView.extend({
+      tagName: "span",
+      template: "fooTemplate"
+    });
+
+    var CollectionView = Backbone.Marionette.CollectionView.extend({
+      itemView: ItemView
+    });
+
+    var collectionView;
+    var collection;
+    var renderDeferred;
+
+    beforeEach(function(){
+      renderDeferred = $.Deferred();
+      Backbone.Marionette.Renderer.render = function() {
+        return renderDeferred.promise();
+      };
+      collection = new Collection();
+      collectionView = new CollectionView({
+        itemView: ItemView,
+        collection: collection
+      });
+      collectionView.render();
+
+      spyOn(collectionView, "appendHtml").andCallThrough();
+    });
+    
+    afterEach(function() {
+      Backbone.Marionette.Renderer.render = render;
+    });
+
+    it("its markup should not be appended to the DOM when some asynchronous processing takes longer", function(){
+      expect(_.size(collectionView.children)).toBe(0);
+      collection.add({foo: "bar"});
+      expect(_.size(collectionView.children)).toBe(1);
+      collection.remove(collection.at(0));
+      expect(_.size(collectionView.children)).toBe(0);
+      
+      // resolve after removal
+      renderDeferred.resolve("bar");
+      
+      expect(collectionView.appendHtml).not.toHaveBeenCalled();
+    });
   });
 
 });

@@ -1,3 +1,8 @@
+### v0.9.6 [view commit logs](https://github.com/derickbailey/backbone.marionette/compare/v0.9.5...v0.9.6)
+
+* All Marionette Views
+  * Fixed bug that prevented `bindTo` function and other `EventBinder` functions from being available in `initialize` method of views
+
 ### v0.9.5 [view commit logs](https://github.com/derickbailey/backbone.marionette/compare/v0.9.4...v0.9.5)
 
 * Layout

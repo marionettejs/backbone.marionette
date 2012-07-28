@@ -20,6 +20,34 @@ describe("module start", function(){
 
   });
 
+  describe("when splitting a module defininition in to two parts and starting the module", function(){
+    var initializer, definition;
+
+    beforeEach(function(){
+      initializer = jasmine.createSpy();
+      definition = jasmine.createSpy();
+
+      var MyApp = new Backbone.Marionette.Application();
+
+      MyApp.module("MyModule", function(MyMod){
+        MyMod.addInitializer(initializer);
+      });
+
+      MyApp.module("MyModule", definition);
+
+      MyApp.module("MyModule").start();
+    });
+
+    it("should run the module initializers once", function(){
+      expect(initializer.callCount).toBe(1);
+    });
+
+    it("should run the definition functions only once", function(){
+      expect(definition.callCount).toBe(1);
+    });
+
+  });
+
   describe("when starting a module that has sub-modules", function(){
     var MyApp, mod1, mod2, mod3;
 
@@ -55,6 +83,34 @@ describe("module start", function(){
 
     it("should not run the definition function", function(){
       expect(definitionFunction).not.toHaveBeenCalled();
+    });
+
+  });
+
+  describe("when splitting a module definition, one of them is set to not start with the app, and starting the app", function(){
+    var MyApp, firstfunc, secondfunc;
+
+    beforeEach(function(){
+      MyApp = new Backbone.Marionette.Application();
+
+      firstfunc = jasmine.createSpy();
+      secondfunc = jasmine.createSpy();
+
+      MyApp.module("MyModule", {
+        startWithApp: false,
+        define: firstfunc
+      });
+      MyApp.module("MyModule", secondfunc);
+
+      MyApp.start();
+    });
+
+    it("should not run the first definition function", function(){
+      expect(firstfunc).not.toHaveBeenCalled();
+    });
+
+    it("should not run the second definition function", function(){
+      expect(secondfunc).not.toHaveBeenCalled();
     });
 
   });

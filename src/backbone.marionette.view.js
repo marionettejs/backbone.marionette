@@ -4,10 +4,10 @@
 // The core view type that other Marionette views extend from.
 Marionette.View = Backbone.View.extend({
   constructor: function(){
-    Backbone.View.prototype.constructor.apply(this, arguments);
-
     var eventBinder = new Marionette.EventBinder();
     _.extend(this, eventBinder);
+
+    Backbone.View.prototype.constructor.apply(this, arguments);
 
     this.bindTo(this, "show", this.onShowCalled, this);
   },

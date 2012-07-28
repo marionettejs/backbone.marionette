@@ -21,7 +21,7 @@ MyRouter = Backbone.Marionette.AppRouter.extend({
   routes : {
 	"some/otherRoute" : "someOtherMethod"
   },
-  someOtherMehod : function(){
+  someOtherMethod : function(){
 	// do something here.
   }
   

@@ -259,5 +259,48 @@ describe("async collection view", function(){
     });
 
   });
+  
+  describe("when a child view is added to a collection view, after the collection view has been shown", function(){
+    var m1, col, colView, deferredRender;
+
+    var ItemView = Backbone.Marionette.ItemView.extend({
+      onShow: function(){ viewOnShowContext = this; },
+      render: function(){
+        return deferredRender.promise();
+      }
+    });
+
+    var ColView = Backbone.Marionette.CollectionView.extend({
+      itemView: ItemView,
+      onShow: function(){}
+    });
+
+    beforeEach(function(){
+      spyOn(ItemView.prototype, "onShow").andCallThrough();
+
+      m1 = new Backbone.Model();
+      col = new Backbone.Collection();
+      colView = new ColView({
+        collection: col
+      });
+    });
+
+    it("should call the 'onShow' method of the child view after the child view has been rendered", function(){
+      deferredRender = $.Deferred();
+      
+      colView.render();
+      colView.onShow();
+      colView.trigger("show");
+
+      col.add(m1);
+      view = colView.children[m1.cid];
+      
+      expect(ItemView.prototype.onShow).not.toHaveBeenCalled();
+      
+      deferredRender.resolve();
+      
+      expect(ItemView.prototype.onShow).toHaveBeenCalled();
+    });
+  });
 
 });

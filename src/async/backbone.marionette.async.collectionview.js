@@ -65,6 +65,10 @@ Async.CollectionView = {
     var viewRendered = view.render();
     $.when(viewRendered).then(function(){
       that.appendHtml(that, view, index);
+      // call onShow for child item views
+      if (view.onShow){
+        that.onShowCallbacks.add(view.onShow, view);
+      }
     });
     return viewRendered;
   }

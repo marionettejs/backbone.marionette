@@ -43,6 +43,9 @@ _.extend(Marionette.Module.prototype, Backbone.Events, {
 
   // Start the module, and run all of it's initializers
   start: function(options){
+    // Prevent re-start the module
+    if (this._isInitialized){ return; }
+
     this._runModuleDefinition();
     this._initializerCallbacks.run(options, this);
     this._isInitialized = true;

@@ -53,7 +53,7 @@ _.extend(Marionette.Module.prototype, Backbone.Events, {
     // start the sub-modules
     if (this.submodules){
       _.each(this.submodules, function(mod){
-        mod.start();
+        mod.start(options);
       });
     }
   },

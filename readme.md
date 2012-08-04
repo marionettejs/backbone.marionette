@@ -98,9 +98,7 @@ for the project.
 
 ### Donate via GitTip
 
-<iframe style="border: 0; margin: 0; padding: 0;"
-        src="https://www.gittip.com/derickbailey/widget.html" 
-        width="48pt" height="20pt"></iframe>
+[GitTip](https://www.gittip.com/derickbailey)
 
 ## Documentation
 

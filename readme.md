@@ -92,7 +92,15 @@ Marionette and you're finding that it is saving you as much time and
 effort as I believe it does, then please consider financial support 
 for the project. 
 
+### Donate via PayPal 
+
 [![Donate](https://www.paypalobjects.com/en_US/i/btn/btn_donate_SM.gif)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=7SJHYWJ487SF4)
+
+### Donate via GitTip
+
+<iframe style="border: 0; margin: 0; padding: 0;"
+        src="https://www.gittip.com/derickbailey/widget.html" 
+        width="48pt" height="20pt"></iframe>
 
 ## Documentation
 

@@ -3,6 +3,9 @@
 * Modules
   * Fixed a bug to ensure modules are only started once, no matter how many definitions the module is split in to
 
+* View Templates
+  * Better support for pre-compiled templates - can specify a function as the `template` setting for a view, and the function will be run as the template, directly.
+
 ### v0.9.6 [view commit logs](https://github.com/derickbailey/backbone.marionette/compare/v0.9.5...v0.9.6)
 
 * All Marionette Views

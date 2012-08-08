@@ -18,6 +18,24 @@ var html = Backbone.Marionette.Renderer.render(template, data);
 // do something with the HTML here
 ```
 
+## Pre-compiled Templates
+
+If the `template` parameter of the `render` function is itself a function,
+the renderer treats this as a pre-compiled template and does not try to
+compile it again. This allows any view that supports a `template` parameter
+to specify a pre-compiled template function as the `template` setting.
+
+```js
+var myTemplate = _.template("<div>foo</div>");
+Backbone.Marionette.ItemView.extend({
+  template: myTemplate
+});
+```
+
+The template function does not have to be any specific template engine. It
+only needs to be a function that returns valid HTML as a string from the
+`data` parameter passed to the function.
+
 ## Custom Template Selection And Rendering
 
 By default, the renderer will take a jQuery selector object as

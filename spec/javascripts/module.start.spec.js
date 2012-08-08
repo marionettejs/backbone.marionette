@@ -115,7 +115,7 @@ describe("module start", function(){
 
   });
 
-  describe("when splitting a module definition, one of them is set to not start with the app, and starting the app", function(){
+  xdescribe("when splitting a module definition, one of them is set to not start with the app, and starting the app", function(){
     var MyApp, firstfunc, secondfunc;
 
     beforeEach(function(){

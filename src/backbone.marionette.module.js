@@ -9,9 +9,7 @@ Marionette.Module = function(moduleName, app, customArgs){
   // store sub-modules
   this.submodules = {};
 
-  // callbacks for initializers and finalizers
-  this._initializerCallbacks = new Marionette.Callbacks();
-  this._finalizerCallbacks = new Marionette.Callbacks();
+  this._setupInitializersAndFinalizers();
 
   // store the configuration for this module
   this._config = {};
@@ -65,7 +63,11 @@ _.extend(Marionette.Module.prototype, Backbone.Events, {
     if (!this._isInitialized){ return; }
     this._isInitialized = false;
 
+    // run the finalizers
     this._finalizerCallbacks.run();
+    // then reset the initializers and finalizers
+    this._setupInitializersAndFinalizers();
+
     // stop the sub-modules
     _.each(this.submodules, function(mod){ mod.stop(); });
   },
@@ -99,6 +101,14 @@ _.extend(Marionette.Module.prototype, Backbone.Events, {
       definition.apply(this, args);
 
     }
+  },
+
+  // Internal method: set up new copies of initializers and finalizers.
+  // Calling this method will wipe out all existing initializers and
+  // finalizers.
+  _setupInitializersAndFinalizers: function(){
+    this._initializerCallbacks = new Marionette.Callbacks();
+    this._finalizerCallbacks = new Marionette.Callbacks();
   }
 });
 

@@ -1,3 +1,8 @@
+### v0.9.8 [view commit logs](https://github.com/derickbailey/backbone.marionette/compare/v0.9.7...v0.9.8)
+
+* Modules
+  * Fixed a bug that ensures modules will start and stop the correct number of times, instead of always stopping immediately after they have been stopped once
+
 ### v0.9.7 [view commit logs](https://github.com/derickbailey/backbone.marionette/compare/v0.9.6...v0.9.7)
 
 * Modules

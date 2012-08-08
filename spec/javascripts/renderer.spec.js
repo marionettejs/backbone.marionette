@@ -77,4 +77,12 @@ describe("renderer", function(){
     });
   });
 
+  describe("when providing a precompiled template", function(){
+    it("should use the provided template function", function(){
+      var templateFunction = _.template('<%= foo %>');
+      var result = Backbone.Marionette.Renderer.render(templateFunction,{foo : 'bar'});
+      expect(result).toEqual("bar");
+    });
+  });
+
 });

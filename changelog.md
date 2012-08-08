@@ -1,3 +1,8 @@
+### v0.9.7 [view commit logs](https://github.com/derickbailey/backbone.marionette/compare/v0.9.6...v0.9.7)
+
+* Modules
+  * Fixed a bug to ensure modules are only started once, no matter how many definitions the module is split in to
+
 ### v0.9.6 [view commit logs](https://github.com/derickbailey/backbone.marionette/compare/v0.9.5...v0.9.6)
 
 * All Marionette Views

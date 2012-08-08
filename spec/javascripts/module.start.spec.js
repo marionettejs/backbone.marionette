@@ -48,6 +48,34 @@ describe("module start", function(){
 
   });
 
+  describe("when splitting a module defininition in to two parts and starting the app", function(){
+    var initializer, definition;
+
+    beforeEach(function(){
+      initializer = jasmine.createSpy();
+      definition = jasmine.createSpy();
+
+      var MyApp = new Backbone.Marionette.Application();
+
+      MyApp.module("MyModule", function(MyMod){
+        MyMod.addInitializer(initializer);
+      });
+
+      MyApp.module("MyModule", definition);
+
+      MyApp.start();
+    });
+
+    it("should run the module initializers once", function(){
+      expect(initializer.callCount).toBe(1);
+    });
+
+    it("should run the definition functions only once", function(){
+      expect(definition.callCount).toBe(1);
+    });
+
+  });
+
   describe("when starting a module that has sub-modules", function(){
     var MyApp, mod1, mod2, mod3;
 

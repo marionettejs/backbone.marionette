@@ -119,7 +119,7 @@ _.extend(Marionette.Module, {
   create: function(app, moduleNames, moduleDefinition){
     var that = this;
     var parentModule = app;
-    var moduleNames = moduleNames.split(".");
+    moduleNames = moduleNames.split(".");
 
     // get the custom args passed in after the module definition and
     // get rid of the module name and definition function

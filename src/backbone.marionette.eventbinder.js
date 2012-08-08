@@ -24,7 +24,7 @@ _.extend(Marionette.EventBinder.prototype, {
       eventName: eventName, 
       callback: callback, 
       context: context 
-    }
+    };
 
     this._eventBindings.push(binding);
 
@@ -35,7 +35,7 @@ _.extend(Marionette.EventBinder.prototype, {
   // returned from the `bindTo` method call. 
   unbindFrom: function(binding){
     binding.obj.off(binding.eventName, binding.callback, binding.context);
-    this._eventBindings = _.reject(this._eventBindings, function(bind){return bind === binding});
+    this._eventBindings = _.reject(this._eventBindings, function(bind){return bind === binding;});
   },
 
   // Unbind all of the events that we have stored.

@@ -168,31 +168,6 @@ describe("item view", function(){
     });
   });
 
-  describe("when an item view's collection is reset", function(){
-    var view;
-
-    beforeEach(function(){
-      var collection = new Collection();
-      view = new ItemView({
-        template: "#collectionItemTemplate",
-        collection: collection
-      });
-
-      spyOn(view, "serializeData").andCallThrough();
-
-      collection.reset([ { foo: "bar" }, { foo: "baz" } ]);
-    });
-
-    it("should serialize the collection", function(){
-      expect(view.serializeData).toHaveBeenCalled();
-    });
-
-    it("should render the template with the serialized collection", function(){
-      expect($(view.el)).toHaveText(/bar/);
-      expect($(view.el)).toHaveText(/baz/);
-    });
-  });
-
   describe("when an item view has a model and collection, and is rendered", function(){
     var view;
 

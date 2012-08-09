@@ -1,3 +1,8 @@
+### v0.9.10 [view commit logs](https://github.com/derickbailey/backbone.marionette/compare/v0.9.9...v0.9.10)
+
+* ItemView and Layout
+  * **BREAKING:** Removed the default implementation of `initialEvents`, so that a collection "reset" event won't cause the ItemView or Layout to re-render
+
 ### v0.9.9 [view commit logs](https://github.com/derickbailey/backbone.marionette/compare/v0.9.8...v0.9.9)
 
 * Regions

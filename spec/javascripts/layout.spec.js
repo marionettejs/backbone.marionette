@@ -175,15 +175,15 @@ describe("layout", function(){
       view.close = function(){};
       layout.regionOne.show(view);
 
-      spyOn(region, "close").andCallThrough();
+      spyOn(region, "reset").andCallThrough();
       spyOn(view, "close").andCallThrough();
 
       layout.render();
       layout.regionOne.show(view);
     });
 
-    it("should close the view from the region", function(){
-      expect(region.close.callCount).toBe(2);
+    it("should reset the regions", function(){
+      expect(region.reset.callCount).toBe(1);
     });
 
     it("should close the regions", function(){

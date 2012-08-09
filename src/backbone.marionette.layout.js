@@ -85,7 +85,7 @@ Marionette.Layout = Marionette.ItemView.extend({
       this.initializeRegions();
     } else {
       _.each(this.regionManagers, function(region){
-        delete region.$el;
+        region.reset();
       });
     }
   },

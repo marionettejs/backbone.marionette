@@ -85,7 +85,7 @@ Marionette.View = Backbone.View.extend({
         if (e && e.preventDefault){ e.preventDefault(); }
         if (e && e.stopPropagation){ e.stopPropagation(); }
         that.trigger(value);
-      }
+      };
 
     });
 
@@ -96,7 +96,7 @@ Marionette.View = Backbone.View.extend({
   // to handle the `triggers` configuration
   delegateEvents: function(events){
     events = events || this.events;
-    if (_.isFunction(events)){ events = events.call(this)}
+    if (_.isFunction(events)){ events = events.call(this); }
 
     var combinedEvents = {};
     var triggers = this.configureTriggers();

@@ -313,4 +313,31 @@ describe("region", function(){
       expect(region.close).toHaveBeenCalled()
     })
   })
+
+  describe("when resetting a region", function(){
+    var region;
+
+    beforeEach(function(){
+      setFixtures("<div id='region'></div>");
+
+      region = new Backbone.Marionette.Region({
+        el: "#region"
+      });
+
+      spyOn(region, "close");
+
+      region.ensureEl();
+
+      region.reset();
+    });
+
+    it("should not hold on to the region's previous `el`", function(){
+      expect(region.$el).not.toExist();
+    });
+
+    it("should close any existing view", function(){
+      expect(region.close).toHaveBeenCalled();
+    });
+
+  });
 });

@@ -80,6 +80,15 @@ _.extend(Marionette.Region.prototype, Backbone.Events, {
   // of the region.
   attachView: function(view){
     this.currentView = view;
+  },
+
+  // Reset the region by closing any existing view and
+  // clearing out the cached `$el`. The next time a view
+  // is shown via this region, the region will re-query the
+  // DOM for the region's `el`.
+  reset: function(){
+    this.close();
+    delete this.$el;
   }
 });
 

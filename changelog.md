@@ -1,3 +1,8 @@
+### v0.9.9 [view commit logs](https://github.com/derickbailey/backbone.marionette/compare/v0.9.8...v0.9.9)
+
+* Regions
+  * Added a `reset` method to regions, which closes the open view and deletes the region's cached `el`
+
 ### v0.9.8 [view commit logs](https://github.com/derickbailey/backbone.marionette/compare/v0.9.7...v0.9.8)
 
 * Modules

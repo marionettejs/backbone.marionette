@@ -67,6 +67,20 @@ var anotherView = new AnotherView();
 MyApp.mainRegion.show(anotherView);
 ```
 
+## `reset` A Region
+
+A region can be `reset` at any time. This will close any existing view
+that is being displayed, and delete the cached `el`. The next time the
+region is used to show a view, the region's `el` will be queried from
+the DOM.
+
+```js
+myRegion.reset();
+```
+
+This is useful for scenarios where a region is re-used across view
+instances, or in unit testing.
+
 ## Set How View's `el` Is Attached
 
 If you need to change how the view is attached to the DOM when

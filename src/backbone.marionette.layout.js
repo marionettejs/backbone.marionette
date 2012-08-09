@@ -30,7 +30,7 @@ Marionette.Layout = Marionette.ItemView.extend({
 
       var result = Marionette.ItemView.prototype.render.apply(this, arguments);
       return result;
-    }
+    };
 
     return result;
   },
@@ -63,7 +63,7 @@ Marionette.Layout = Marionette.ItemView.extend({
 
       selector = typeof region === 'string' ? region : region.selector;
       var regionType = typeof region.regionType === 'undefined' 
-        ? that.regionType : region.regionType 
+        ? that.regionType : region.regionType;
       
       var regionManager = new regionType({
         el: selector,

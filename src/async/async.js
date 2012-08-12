@@ -17,14 +17,14 @@ Backbone.Marionette.Async = (function(Backbone, Marionette, _, $){
     }
   };
 
-// import "backbone.marionette.async.itemView.js"
-// import "backbone.marionette.async.collectionview.js"
-// import "backbone.marionette.async.compositeview.js"
-// import "backbone.marionette.async.region.js"
-// import "backbone.marionette.async.renderer.js"
-// import "backbone.marionette.async.templatecache.js"
-// import "backbone.marionette.async.helpers.js"
-// import "async.init.js"
+//= backbone.marionette.async.itemView.js
+//= backbone.marionette.async.collectionview.js
+//= backbone.marionette.async.compositeview.js
+//= backbone.marionette.async.region.js
+//= backbone.marionette.async.renderer.js
+//= backbone.marionette.async.templatecache.js
+//= backbone.marionette.async.helpers.js
+//= async.init.js
   
   return Async;
 })(Backbone, Backbone.Marionette, _, window.jQuery || window.Zepto || window.ender);

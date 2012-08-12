@@ -232,11 +232,11 @@ than what it listed here.
 I use a number of tools to build, test and maintain Marionette, including
 but not limited to:
 
-### Anvil.js
+### Grunt
 
-The [Anvil.js](https://github.com/arobson/anvil.js) project is used
+The [Grunt](https://github.com/cowboy/grunt) project is used
 to generate the builds for Backbone.Marionette. You can run the
-`build.sh` file from a terminal, or the `build.cmd` file for Windows 
+`build` file from a Linux/OSX terminal, or the `build.cmd` file for Windows 
 users, after installing anvil.
 
 ### Test Suite

@@ -34,6 +34,7 @@ to engage in an all-or-nothing migration to begin using Marionette.
 
 ### Key Benefits
 
+* Scale applications out with modular, event driven architecture
 * Sensible defaults, such as using Underscore templates for view rendering
 * Easy to modify to make it work with your applicaton's specific needs
 * Reduce boilerplate for views, with specialized view types
@@ -45,6 +46,22 @@ to engage in an all-or-nothing migration to begin using Marionette.
 * Event-driven architecture with the `EventAggregator`
 * Flexible, "as-needed" architecture allowing you to pick and choose what you need
 * And much, much more
+
+## Donations
+
+Marionette needs your support, but not everyone can offer assitance 
+with code, bug submissions, and answering questions. If you're using 
+Marionette and you're finding that it is saving you as much time and 
+effort as I believe it does, then please consider financial support 
+for the project. 
+
+### Donate via PayPal 
+
+[![Donate](https://www.paypalobjects.com/en_US/i/btn/btn_donate_SM.gif)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=7SJHYWJ487SF4)
+
+### Donate via GitTip
+
+[GitTip](https://www.gittip.com/derickbailey)
 
 ## Source Code And Downloads
 
@@ -83,22 +100,6 @@ Nuget, etc. These packages are maintained by the community
 and are not part of the core Backbone.Marionette code.
 
 ##### [Available Packages](https://github.com/derickbailey/backbone.marionette/wiki/Available-packages)
-
-## Donations
-
-Marionette needs your support, but not everyone can offer assitance 
-with code, bug submissions, and answering questions. If you're using 
-Marionette and you're finding that it is saving you as much time and 
-effort as I believe it does, then please consider financial support 
-for the project. 
-
-### Donate via PayPal 
-
-[![Donate](https://www.paypalobjects.com/en_US/i/btn/btn_donate_SM.gif)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=7SJHYWJ487SF4)
-
-### Donate via GitTip
-
-[GitTip](https://www.gittip.com/derickbailey)
 
 ## Documentation
 
@@ -237,7 +238,7 @@ but not limited to:
 The [Grunt](https://github.com/cowboy/grunt) project is used
 to generate the builds for Backbone.Marionette. You can run the
 `build` file from a Linux/OSX terminal, or the `build.cmd` file for Windows 
-users, after installing anvil.
+users, after installing grunt with NPM / NodeJS.
 
 ### Test Suite
 

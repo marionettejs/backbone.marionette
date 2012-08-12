@@ -14,7 +14,7 @@
   } 
 }(this, function ($, _, Backbone) {
 
-  // import "backbone.marionette.js"
+  //= backbone.marionette.js
   return Backbone.Marionette; 
 
 }));

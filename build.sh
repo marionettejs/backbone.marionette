@@ -5,4 +5,4 @@ if [ -a ./src/.DS_Store ]
     rm ./src/.DS_Store
 fi
 
-anvil -b build.json
+grunt

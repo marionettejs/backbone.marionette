@@ -1,1 +1,1 @@
-anvil -b build.json
+grunt

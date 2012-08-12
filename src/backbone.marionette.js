@@ -1,21 +1,21 @@
 Backbone.Marionette = (function(Backbone, _, $){
   var Marionette = {};
 
-// import "backbone.marionette.eventbinder.js"
-// import "backbone.marionette.view.js"
-// import "backbone.marionette.itemview.js"
-// import "backbone.marionette.collectionview.js"
-// import "backbone.marionette.compositeview.js"
-// import "backbone.marionette.region.js"
-// import "backbone.marionette.layout.js"
-// import "backbone.marionette.application.js"
-// import "backbone.marionette.approuter.js"
-// import "backbone.marionette.module.js"
-// import "backbone.marionette.templatecache.js"
-// import "backbone.marionette.renderer.js"
-// import "backbone.marionette.callbacks.js"
-// import "backbone.marionette.eventaggregator.js"
-// import "backbone.marionette.helpers.js"
+//= backbone.marionette.eventbinder.js
+//= backbone.marionette.view.js
+//= backbone.marionette.itemview.js
+//= backbone.marionette.collectionview.js
+//= backbone.marionette.compositeview.js
+//= backbone.marionette.region.js
+//= backbone.marionette.layout.js
+//= backbone.marionette.application.js
+//= backbone.marionette.approuter.js
+//= backbone.marionette.module.js
+//= backbone.marionette.templatecache.js
+//= backbone.marionette.renderer.js
+//= backbone.marionette.callbacks.js
+//= backbone.marionette.eventaggregator.js
+//= backbone.marionette.helpers.js
 
   return Marionette;
 })(Backbone, _, window.jQuery || window.Zepto || window.ender);

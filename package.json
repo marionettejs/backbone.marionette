@@ -1,9 +1,19 @@
 {
+  "name": "Backbone.Marionette",
+  "version": "0.0.0",
+
+  "dependencies": {
+    "grunt": "*",
+    "grunt-rigger": "*"
+  },
+
   "amd": { },
+
   "volo": {
     "url": "https://raw.github.com/derickbailey/backbone.marionette/v{version}/lib/amd/backbone.marionette.js",
     "dependencies": {
       "backbone": "backbone"
     }
   }
+
 }

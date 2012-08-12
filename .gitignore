@@ -4,3 +4,5 @@
 *.orig
 tmp/
 ext/
+node_modules/
+npm-debug.log

@@ -61,7 +61,7 @@ Marionette.Layout = Marionette.ItemView.extend({
                             'string or an object with selector property');
       }
 
-      selector = typeof region === 'string' ? region : region.selector;
+      var selector = typeof region === 'string' ? region : region.selector;
       var regionType = typeof region.regionType === 'undefined' 
         ? that.regionType : region.regionType;
       

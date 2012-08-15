@@ -23,7 +23,7 @@ myVent.foo // => "bar"
 
 ## BindTo
 
-The `EventAggregator` extends from the `BindTo` object (see below) to easily track
+The `EventAggregator` extends from the [`EventBinder`](Marionette.EventBinder) object to easily track
 and unbind all event callbacks, including inline callback functions. 
 
 The `bindTo` method, though, has been proxied to only take 3 arguments. It assumes

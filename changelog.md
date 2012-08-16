@@ -1,3 +1,11 @@
+### v0.9.11 [view commit logs](https://github.com/derickbailey/backbone.marionette/compare/v0.9.10...v0.9.11)
+
+* JamJS Support
+  * Updated the `package.json` file with more detail and support for [JamJS](http://jamjs.org/).
+
+* Layout
+  * Fixed a global variable leak
+
 ### v0.9.10 [view commit logs](https://github.com/derickbailey/backbone.marionette/compare/v0.9.9...v0.9.10)
 
 * ItemView and Layout

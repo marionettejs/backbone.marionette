@@ -17,6 +17,9 @@ _.extend(Marionette.TemplateCache, {
   // retrieves the cached version, or loads it
   // from the DOM.
   get: function(templateId){
+    if (typeof templateId == "function"){
+      return $.Deferred().resolve(templateId);
+    }
     var that = this;
     var cachedTemplate = this.templateCaches[templateId];
 

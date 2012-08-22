@@ -2,7 +2,7 @@
 // --------------
 
 // An asynchronous rendering method for the `ItemView`. This method
-// assumes template loading, data serialization, `beforRender`, and
+// assumes template loading, data serialization, `beforeRender`, and
 // `onRender` functions are all asynchronous, using `jQuery.Deferred()`
 // and `jQuery.when(...).then(...)` to manage async calls.
 Async.ItemView = {

@@ -51,4 +51,6 @@ binder.unbindAll();
 
 This even works with in-line callback functions.
 
+## When To Use EventBinder vs `on` Handlers
 
+See the wiki: [When to use the EventBinder](https://github.com/derickbailey/backbone.marionette/wiki/When-to-use-the-EventBinder)

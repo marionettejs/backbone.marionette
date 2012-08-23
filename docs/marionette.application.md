@@ -62,11 +62,11 @@ The events that are currently triggered, are:
 * **"start"**: fires after all initializers and after the initializer events
 
 ```js
-MyApp.bind("initialize:before", function(options){
+MyApp.on("initialize:before", function(options){
   options.moreData = "Yo dawg, I heard you like options so I put some options in your options!"
 });
 
-MyApp.bind("initialize:after", function(options){
+MyApp.on("initialize:after", function(options){
   if (Backbone.history){
     Backbone.history.start();
   }

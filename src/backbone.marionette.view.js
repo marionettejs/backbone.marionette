@@ -7,10 +7,10 @@ Marionette.View = Backbone.View.extend({
     var eventBinder = new Marionette.EventBinder();
     _.extend(this, eventBinder);
 
-    Backbone.View.prototype.constructor.apply(this, arguments);
-
     this.bindBackboneEntityTo(this.model, this.modelEvents);
     this.bindBackboneEntityTo(this.collection, this.collectionEvents);
+
+    Backbone.View.prototype.constructor.apply(this, arguments);
 
     this.bindTo(this, "show", this.onShowCalled, this);
   },

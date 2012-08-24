@@ -57,6 +57,30 @@ Backbone.Marionette.CompositeView.extend({
 Triggers work with all View types that extend from the base
 Marionette.View.
 
+## View.modelEvents and View.collectionEvents
+
+Similar to the `events` hash, views can specify a configuration
+hash for collections and models. The left side is the event on
+the model or collection, and the right side is the name of the
+method on the view.
+
+```js
+Backbone.Marionette.CompositeView.extend({
+  modelEvents: {
+    "change:name": "nameChanged" // equivilent to view.bindTo(view.model, "change:name", view.nameChanged, view)
+  },
+
+  collectionEvents: {
+    "add": "itemAdded" // equivilent to view.bindTo(view.collection, "add", collection.itemAdded, view)
+  }
+})
+```
+
+These will use the memory safe `bindTo`, and will set the context
+(the value of `this`) in the handler to be the view. Events are
+bound at the time of instanciation, and an exception will be thrown
+if the handlers on the view do not exist.
+
 ## View.serializeData
 
 The `serializeData` method will serialize a view's model or

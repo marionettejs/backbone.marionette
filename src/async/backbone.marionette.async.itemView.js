@@ -27,6 +27,7 @@ Async.ItemView = {
 
     var templateRendered = function(html){
       that.$el.html(html);
+      that.bindUIElements();
       callDeferredMethod(that.onRender, onRenderDone, that);
     }
 

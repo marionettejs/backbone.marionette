@@ -14,7 +14,7 @@ module.exports = function(grunt) {
     },
 
     lint: {
-      files: ['src/backbone.marionette.js']
+      files: ['src/backbone.marionette.*.js']
     },
 
     rig: {
@@ -25,10 +25,6 @@ module.exports = function(grunt) {
       amd: {
         src: ['<banner:meta.banner>', 'src/amd.js'],
         dest: 'lib/amd/backbone.marionette.js'
-      },
-      async: {
-        src: ['<banner:meta.banner>', 'src/async/async.js'],
-        dest: 'lib/backbone.marionette.async.js'
       }
     },
 
@@ -40,10 +36,6 @@ module.exports = function(grunt) {
       amd: {
         src: ['<banner:meta.banner>', '<config:rig.amd.dest>'],
         dest: 'lib/amd/backbone.marionette.min.js'
-      },
-      async: {
-        src: ['<banner:meta.banner>', '<config:rig.async.dest>'],
-        dest: 'lib/backbone.marionette.async.min.js'
       }
     },
 

@@ -85,12 +85,9 @@ builds:
 
 ### Marionette.Async Add-on
 
-* Development: [backbone.marionette.async.js](https://raw.github.com/derickbailey/backbone.marionette/master/lib/backbone.marionette.async.js)
-
-* Production: [backbone.marionette.async.min.js](https://raw.github.com/derickbailey/backbone.marionette/master/lib/backbone.marionette.async.min.js)
-
-See the [async.md](https://github.com/derickbailey/backbone.marionette/blob/master/docs/marionette.async.md)
-documentation for more information.
+Marionette.Async has officially been removed from the core Marionette
+repository. See the [Marionette.Async repository](https://github.com/derickbailey/backbone.marionette.async)
+for downloads, documentation, and more information.
 
 ### Available Packages
 
@@ -130,18 +127,6 @@ These are the strings that you can pull to make your puppet dance:
 Please note that this is document is rather dry - it's meant to be a reference for
 those that just need a reference. If you're looking for an introduction and/or 
 examples on how to get started, please see [the Wiki](https://github.com/derickbailey/backbone.marionette/wiki).
-
-### Async / Deferred Rendering Support
-
-Support for asynchronously rendering views, loading templates, etc has been
-removed from Marionette directly due to performance problems and overhead
-incurred. To get async support in Marionette, then, you need to download and
-include the the `backbone.marionette.async.js` or `async.min` file in 
-your project. See the above download links and the the 
-[async.md](https://github.com/derickbailey/backbone.marionette/blob/master/docs/marionette.async.md)
-documentation for more information.
-
-##### [View The Async Documentation](https://github.com/derickbailey/backbone.marionette/blob/master/docs/marionette.async.md)
 
 ### The Wiki: Sample Apps, Tutorials, And Much More
 

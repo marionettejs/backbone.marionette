@@ -1,3 +1,9 @@
+### v0.9.12 [view commit logs](https://github.com/derickbailey/backbone.marionette/compare/v0.9.11...v0.9.12)
+
+* Moved [Marionette.Async](https://github.com/derickbailey/backbone.marionette.async) to it's own repository
+* De-linted source code
+* Corrected throwing an "Exception" to throwing an "Error"
+
 ### v0.9.11 [view commit logs](https://github.com/derickbailey/backbone.marionette/compare/v0.9.10...v0.9.11)
 
 * JamJS Support

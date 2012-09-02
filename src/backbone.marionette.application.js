@@ -37,18 +37,18 @@ _.extend(Marionette.Application.prototype, Backbone.Events, {
   // addRegions({something: "#someRegion"})
   // addRegions{{something: Region.extend({el: "#someRegion"}) });
   addRegions: function(regions){
-    var regionValue, regionObj, region;
+    var RegionValue, regionObj, region;
 
     for(region in regions){
       if (regions.hasOwnProperty(region)){
-        regionValue = regions[region];
+        RegionValue = regions[region];
 
-        if (typeof regionValue === "string"){
+        if (typeof RegionValue === "string"){
           regionObj = new Marionette.Region({
-            el: regionValue
+            el: RegionValue
           });
         } else {
-          regionObj = new regionValue();
+          regionObj = new RegionValue();
         }
 
         this[region] = regionObj;

@@ -16,7 +16,6 @@ src_files:
     - public/javascripts/underscore.js
     - public/javascripts/backbone.js
     - src/backbone.marionette.js
-    - src/async/async.js
     - spec/javascripts/support/marionette.support.js
     - src/backbone.marionette.eventbinder.js
     - src/backbone.marionette.view.js

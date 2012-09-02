@@ -1,7 +1,7 @@
 {
   "name": "Backbone.Marionette",
   "description": "Make your Backbone.js apps dance with a composite application architecture!",
-  "version": "0.9.11",
+  "version": "0.9.12",
   "homepage": "https://github.com/derickbailey/backbone.marionette",
   "keywords": [
     "backbone",

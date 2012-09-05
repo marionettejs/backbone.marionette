@@ -146,7 +146,7 @@ TableView = Backbone.Marionette.CompositeView.extend({
 ```
 
 For more information on the parameters of this method, see the
-[CollectionView's documentation](https://github.com/derickbailey/backbone.marionette/blob/master/docs/marionette.collectionview.md).
+[CollectionView's documentation](https://github.com/marionettejs/backbone.marionette/blob/master/docs/marionette.collectionview.md).
 
 ## Recursive By Default
 

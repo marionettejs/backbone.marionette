@@ -47,22 +47,6 @@ to engage in an all-or-nothing migration to begin using Marionette.
 * Flexible, "as-needed" architecture allowing you to pick and choose what you need
 * And much, much more
 
-## Donations
-
-Marionette needs your support, but not everyone can offer assitance 
-with code, bug submissions, and answering questions. If you're using 
-Marionette and you're finding that it is saving you as much time and 
-effort as I believe it does, then please consider financial support 
-for the project. 
-
-### Donate via PayPal 
-
-[![Donate](https://www.paypalobjects.com/en_US/i/btn/btn_donate_SM.gif)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=7SJHYWJ487SF4)
-
-### Donate via GitTip
-
-[GitTip](https://www.gittip.com/derickbailey)
-
 ## Source Code And Downloads
 
 You can download the raw source code from the "src" folder above, or grab one of the
@@ -150,6 +134,22 @@ You can read the annotated for all the detail of how Marionette works, and advic
 
 ##### [View the annotated source code](http://marionettejs.github.com/backbone.marionette/docs/backbone.marionette.html)
 
+## Donations
+
+Marionette needs your support, but not everyone can offer assitance 
+with code, bug submissions, and answering questions. If you're using 
+Marionette and you're finding that it is saving you as much time and 
+effort as I believe it does, then please consider financial support 
+for the project. 
+
+### Donate via PayPal 
+
+[![Donate](https://www.paypalobjects.com/en_US/i/btn/btn_donate_SM.gif)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=7SJHYWJ487SF4)
+
+### Donate via GitTip
+
+[GitTip](https://www.gittip.com/derickbailey)
+
 ## How To Contribute
 
 If you would like to contribute to Marionette's source code, please read
@@ -158,6 +158,10 @@ Following these guidelines will help make your contributions easier to
 bring in to the next release.
 
 ## Help Is Just A Click Away
+
+### #Marionette on FreeNode.net IRC
+
+Join the `#marionette` channel on [FreeNode.net](http://freenode.net) to ask questions and get help.
 
 ### [Google Group Mailing List](https://groups.google.com/forum/#!forum/backbone-marionette)
 

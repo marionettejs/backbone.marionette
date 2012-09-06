@@ -210,12 +210,18 @@ libraries:
 * Underscore v1.3.3
 * jQuery v1.7.2
 
-While support for Zepto and Enderjs has been added, it is not officially
-tested against these libraries at this time.
-
 Marionette has not been tested against any other versions of these
 libraries. You may or may not have success if you use a version other
 than what it listed here.
+
+While support for Zepto and Enderjs has been added, it is not officially
+tested against these libraries at this time.
+
+Marionette makes use of jQuery's [Deferred](http://api.jquery.com/category/deferred-object/)
+objects and, as such, will need supported methods in replacement libraries.
+Zepto users can use @Mumakil's [Standalone-Deferred](https://github.com/Mumakil/Standalone-Deferred)
+or @sudhirj's [simply-deferred](https://github.com/sudhirj/simply-deferred).
+Enderjs users, please let us know of how you solve any compatibility issues.
 
 ## Build Tools Used
 

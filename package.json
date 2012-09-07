@@ -18,6 +18,10 @@
     }
   ],
 
+  "scripts"         : {
+    "test" : "grunt jasmine"
+  },
+
   "author": {
     "name": "Derick Bailey",
     "email": "derickbailey@gmail.com",
@@ -37,6 +41,7 @@
 
   "dependencies": {
     "grunt": "*",
+    "grunt-jasmine-runner": "latest",
     "grunt-rigger": "*"
   },
 

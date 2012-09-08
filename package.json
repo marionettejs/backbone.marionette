@@ -39,7 +39,7 @@
 
   "github": "https://github.com/derickbailey/backbone.marionette",
 
-  "dependencies": {
+  "devDependencies": {
     "grunt": "*",
     "grunt-jasmine-runner": "latest",
     "grunt-rigger": "*"

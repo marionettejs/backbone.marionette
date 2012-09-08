@@ -10,7 +10,7 @@ Marionette.CompositeView = Marionette.CollectionView.extend({
     this.itemView = this.getItemView();
   },
 
-  // Configured the initial events that the composite view 
+  // Configured the initial events that the composite view
   // binds to. Override this method to prevent the initial
   // events, or to add your own initial events.
   initialEvents: function(){
@@ -26,7 +26,21 @@ Marionette.CompositeView = Marionette.CollectionView.extend({
   // `this.itemView` or Marionette.CompositeView if no `itemView`
   // has been defined
   getItemView: function(){
-    return this.itemView || this.constructor;
+    var itemView = this.options.itemView || this.itemView || this.constructor;
+
+    // @todo this is a weak check. make sure item view is a function and
+    // doesn't extend from backbone.view
+    if (_.isFunction(itemView)) {
+      itemView = itemView.call(this, item);
+    }
+
+    if (!itemView){
+      var err = new Error("An `itemView` must be specified");
+      err.name = "NoItemViewError";
+      throw err;
+    }
+
+    return itemView;
   },
 
   // Renders the model once, and the collection once. Calling

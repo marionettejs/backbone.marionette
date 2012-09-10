@@ -108,12 +108,6 @@ Marionette.CollectionView = Marionette.View.extend({
   getItemView: function(item){
     var itemView = this.options.itemView || this.itemView;
 
-    // @todo this is a weak check. make sure item view is a function and
-    // doesn't extend from backbone.view
-    if (_.isFunction(itemView)) {
-      itemView = itemView.call(this, item);
-    }
-
     if (!itemView){
       var err = new Error("An `itemView` must be specified");
       err.name = "NoItemViewError";

@@ -23,7 +23,7 @@ myVent.foo // => "bar"
 
 ## BindTo
 
-The `EventAggregator` extends from the [`EventBinder`](Marionette.EventBinder) object to easily track
+The `EventAggregator` extends from the [`EventBinder`](./marionette.eventbinder.md) object to easily track
 and unbind all event callbacks, including inline callback functions. 
 
 The `bindTo` method, though, has been proxied to only take 3 arguments. It assumes
@@ -60,6 +60,4 @@ vent.trigger("some:event");
 
 For a more detailed discussion and example of using an event aggregator with
 Backbone applications, see the blog post: [References, Routing, and The Event
-Aggregator: Coordinating Views In Backbone.js](http://lostechies.com/derickbailey/2011/07/19/references-routing-and-the-event-aggregator-coordinating-views-in-backbone-js/)
-
-
+Aggregator: Coordinating Views In Backbone.js](http://lostechies.com/derickbailey/2011/07/19/references-routing-and-the-event-aggregator-coordinating-views-in-backbone-js/).

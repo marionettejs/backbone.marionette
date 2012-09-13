@@ -25,9 +25,13 @@ Marionette.ItemView =  Marionette.View.extend({
 
     var data = this.serializeData();
     var template = this.getTemplate();
-    if (this.preTemplateRender) this.preTemplateRender();
+    if (this.preTemplateRender) {
+      this.preTemplateRender();
+    }
     var html = Marionette.Renderer.render(template, data);
-    if (this.postTemplateRender) this.postTemplateRender();
+    if (this.postTemplateRender) {
+      this.postTemplateRender();
+    }
     this.$el.html(html);
     this.bindUIElements();
 

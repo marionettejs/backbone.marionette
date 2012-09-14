@@ -144,5 +144,11 @@ Marionette.View = Backbone.View.extend({
     });
   }
 
+},{
+  augment : function(view) {
+    if (view.augment) {
+      return view.augment(this);
+    }
+  }
 });
 

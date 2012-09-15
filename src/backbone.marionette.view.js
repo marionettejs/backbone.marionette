@@ -150,12 +150,15 @@ Marionette.View = Backbone.View.extend({
 
   // This method is used to bind a backbone "entity" (collection/model) to methods on the view.
   bindBackboneEntityTo: function(entity, bindings){
-    if (!entity || !bindings) { return }
+    if (!entity || !bindings) { return; }
 
     var view = this;
     _.each(bindings, function(methodName, evt){
+
       var method = view[methodName];
-      if(!method) throw new Error("View method '"+ methodName +"' was configured as an event handler, but does not exist.");
+      if(!method) {
+        throw new Error("View method '"+ methodName +"' was configured as an event handler, but does not exist.");
+      }
 
       view.bindTo(entity, evt, method, view);
     });

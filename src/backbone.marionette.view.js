@@ -3,14 +3,15 @@
 
 // The core view type that other Marionette views extend from.
 Marionette.View = Backbone.View.extend({
+
   constructor: function(){
     var eventBinder = new Marionette.EventBinder();
     _.extend(this, eventBinder);
 
+    Backbone.View.prototype.constructor.apply(this, arguments);
+
     this.bindBackboneEntityTo(this.model, this.modelEvents);
     this.bindBackboneEntityTo(this.collection, this.collectionEvents);
-
-    Backbone.View.prototype.constructor.apply(this, arguments);
 
     this.bindTo(this, "show", this.onShowCalled, this);
   },
@@ -154,7 +155,7 @@ Marionette.View = Backbone.View.extend({
     var view = this;
     _.each(bindings, function(methodName, evt){
       var method = view[methodName];
-      if(!method) throw new Error("method '"+ methodName +"' does not exist");
+      if(!method) throw new Error("View method '"+ methodName +"' was configured as an event handler, but does not exist.");
 
       view.bindTo(entity, evt, method, view);
     });

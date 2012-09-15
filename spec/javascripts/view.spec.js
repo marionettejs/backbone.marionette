@@ -1,4 +1,5 @@
 describe("base view", function(){
+
   describe("when initializing a view", function(){
     var fooHandler;
 
@@ -25,7 +26,7 @@ describe("base view", function(){
     });
   });
 
-  describe("a view with event configuration", function(){
+  describe("when a view has valid model and collection event configuration", function(){
     var view;
 
     var View = Backbone.Marionette.View.extend({
@@ -33,7 +34,7 @@ describe("base view", function(){
       collectionEvents: { 'collection-event': 'collectionEventHandler' },
 
       modelEventHandler: jasmine.createSpy("model event handler"),
-      collectionEventHandler: jasmine.createSpy("Collection event handler")
+      collectionEventHandler: jasmine.createSpy("collection event handler")
     });
 
     beforeEach(function(){
@@ -53,16 +54,23 @@ describe("base view", function(){
       expect(view.collectionEventHandler).toHaveBeenCalled();
     });
 
-    it("should error when method doesn't exist", function(){
-      var BadView = Backbone.Marionette.View.extend({
-        modelEvents: { "foo": "does not exist" }
-      });
+  });
 
-      var instanciateBadView = function(){
-        new BadView({ model: {} })
+  describe("when a view has model event config with a specified handler method that doesn't exist", function(){
+    var getBadViewInstance;
+
+    var View = Backbone.Marionette.View.extend({
+      modelEvents: { "foo": "does not exist" }
+    });
+
+    beforeEach(function(){
+      getBadViewInstance = function(){
+        new View({ model: {} })
       }
+    });
 
-      expect(instanciateBadView).toThrow("method 'does not exist' does not exist");
+    it("should error when method doesn't exist", function(){
+      expect(getBadViewInstance).toThrow("View method 'does not exist' was configured as an event handler, but does not exist.");
     });
   });
 });

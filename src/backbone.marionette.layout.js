@@ -11,8 +11,8 @@ Marionette.Layout = Marionette.ItemView.extend({
   regionType: Marionette.Region,
 
   constructor: function () {
-    Backbone.Marionette.ItemView.apply(this, arguments);
     this.initializeRegions();
+    Backbone.Marionette.ItemView.apply(this, arguments);
   },
 
   // Layout's render will use the existing region objects the

@@ -19,7 +19,8 @@
   ],
 
   "scripts"         : {
-    "test" : "grunt jasmine"
+    "test" : "grunt jasmine",
+    "start" : "grunt jasmine-server"
   },
 
   "author": {

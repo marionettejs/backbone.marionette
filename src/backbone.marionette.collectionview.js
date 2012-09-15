@@ -213,8 +213,8 @@ Marionette.CollectionView = Marionette.View.extend({
   close: function(){
     this.trigger("collection:before:close");
     this.closeChildren();
-    Marionette.View.prototype.close.apply(this, arguments);
     this.trigger("collection:closed");
+    Marionette.View.prototype.close.apply(this, arguments);
   },
 
   // Close the child views that this collection view

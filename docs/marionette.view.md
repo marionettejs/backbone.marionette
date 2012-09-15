@@ -66,13 +66,19 @@ method on the view.
 
 ```js
 Backbone.Marionette.CompositeView.extend({
+
   modelEvents: {
     "change:name": "nameChanged" // equivilent to view.bindTo(view.model, "change:name", view.nameChanged, view)
   },
 
   collectionEvents: {
     "add": "itemAdded" // equivilent to view.bindTo(view.collection, "add", collection.itemAdded, view)
-  }
+  },
+
+  // ... event handler methods
+  nameChanged: function(){ /* ... */ },
+  itemAdded: function(){ /* ... */ },
+
 })
 ```
 

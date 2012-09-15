@@ -1,3 +1,21 @@
+### v0.9.13 [view commit logs](https://github.com/marionettejs/backbone.marionette/compare/v0.9.12...v0.9.13)
+
+* CollectionView
+  * Fixed bug that prevented "collection:closed" event from being triggered
+  * Allow different item view to be rendered for each item in collection by overriding `getItemView` method
+
+* CompositeView
+  * Allow different item view to be rendered for each item in collection by overriding `getItemView` method
+
+* Layout
+  * Regions are initialized before prototype constructor, or `initialize` function are called
+
+* All Views
+  * Adds declarative event binding for models and collections. See [Marionette.View documentation](https://github.com/marionettejs/backbone.marionette/blob/master/docs/marionette.view.md) for more information.
+
+* Build and test
+  * Removed all dependencies on Ruby, in favor of NodeJS and Grunt
+
 ### v0.9.12 [view commit logs](https://github.com/marionettejs/backbone.marionette/compare/v0.9.11...v0.9.12)
 
 * Moved [Marionette.Async](https://github.com/marionettejs/backbone.marionette.async) to it's own repository

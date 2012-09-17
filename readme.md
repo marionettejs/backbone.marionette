@@ -2,7 +2,7 @@
 
 Make your Backbone.js apps dance with a composite application architecture!
 
-[![Build Status](https://secure.travis-ci.org/marionettejs/backbone.marionette.png)](http://travis-ci.org/marionettejs/backbone.marionette)
+[![Build Status](https://secure.travis-ci.org/marionettejs/backbone.marionette.png?branch=master)](http://travis-ci.org/marionettejs/backbone.marionette)
 
 
 ## About Marionette

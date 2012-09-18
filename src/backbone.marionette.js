@@ -1,6 +1,8 @@
 
-Backbone.Marionette = (function(Backbone, _, $){
-  var Marionette = {};
+Marionette = Backbone.Marionette = (function(Backbone, _, $){
+  var Marionette = {
+    augment : {}
+  };
 
 //= backbone.marionette.eventbinder.js
 //= backbone.marionette.view.js
@@ -8,7 +10,8 @@ Backbone.Marionette = (function(Backbone, _, $){
 //= backbone.marionette.collectionview.js
 //= backbone.marionette.compositeview.js
 //= backbone.marionette.region.js
-//= backbone.marionette.regionmanager.js
+//= backbone.marionette.augment.regionmanager.js
+//= backbone.marionette.augment.inlineregions.js
 //= backbone.marionette.layout.js
 //= backbone.marionette.application.js
 //= backbone.marionette.approuter.js

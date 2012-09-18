@@ -76,7 +76,7 @@ _.extend(Marionette.Module.prototype, Backbone.Events, {
   // Configure the module with a definition function and any custom args
   // that are to be passed in to the definition function
   addDefinition: function(moduleDefinition){
-    this._runModuleDefinition(moduleDefinition)
+    this._runModuleDefinition(moduleDefinition);
   },
 
   // Internal method: run the module definition function with the correct

@@ -29,10 +29,10 @@ Marionette.ItemView =  Marionette.View.extend({
       this.preTemplateRender();
     }
     var html = Marionette.Renderer.render(template, data);
+    this.$el.html(html);
     if (this.postTemplateRender) {
       this.postTemplateRender();
     }
-    this.$el.html(html);
     this.bindUIElements();
 
     if (this.onRender){ this.onRender(); }

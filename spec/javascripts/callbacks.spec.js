@@ -83,4 +83,24 @@ describe("callbacks", function(){
     });
   });
 
+  describe("when resetting callbacks and re-running them", function(){
+    var cb, context, runContext;
+
+    beforeEach(function(){
+      var callbacks = new Backbone.Marionette.Callbacks();
+
+      cb = jasmine.createSpy();
+      callbacks.add(cb);
+
+      callbacks.run();
+      callbacks.reset();
+
+      callbacks.run();
+    });
+
+    it("should run the callbacks again", function(){
+      expect(cb.callCount).toBe(2);
+    });
+  });
+
 });

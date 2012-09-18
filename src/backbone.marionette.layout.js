@@ -8,5 +8,5 @@
 // attaches `Region` instances to the specified `regions`.
 // Used for composite view management and sub-application areas.
 
-Marionette.Layout = Marionette.ItemView.augment(Marionette.RegionManager);
+Marionette.Layout = Marionette.ItemView.augment(Marionette.augment.RegionManager);
 

@@ -5,8 +5,8 @@
 // and executing them at a later point in time, using jQuery's
 // `Deferred` object.
 Marionette.Callbacks = function(){
-  this.deferred = $.Deferred();
-  this.promise = this.deferred.promise();
+  this._deferred = $.Deferred();
+  this._callbacks = [];
 };
 
 _.extend(Marionette.Callbacks.prototype, {
@@ -15,7 +15,9 @@ _.extend(Marionette.Callbacks.prototype, {
   // guaranteed to execute, even if they are added after the 
   // `run` method is called.
   add: function(callback, contextOverride){
-    this.promise.done(function(context, options){
+    this._callbacks.push({cb: callback, ctx: contextOverride});
+
+    this._deferred.done(function(context, options){
       if (contextOverride){ context = contextOverride; }
       callback.call(context, options);
     });
@@ -25,7 +27,17 @@ _.extend(Marionette.Callbacks.prototype, {
   // Additional callbacks can be added after this has been run 
   // and they will still be executed.
   run: function(options, context){
-    this.deferred.resolve(context, options);
+    this._deferred.resolve(context, options);
+  },
+
+  // Resets the list of callbacks to be run, allowing the same list
+  // to be run multiple times - whenever the `run` method is called.
+  reset: function(){
+    var that = this;
+    this._deferred = $.Deferred();
+    _.each(this._callbacks, function(cb){
+      that.add(cb.cb, cb.ctx);
+    });
   }
 });
 

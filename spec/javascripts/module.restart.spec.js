@@ -1,10 +1,16 @@
 describe("module restart", function(){
+  "use strict";
 
   describe("when starting and stopping a module twice", function(){
     var MyApp, myModule, initializer, finalizer;
 
     beforeEach(function(){
-      initializer = jasmine.createSpy();
+      initializer = function(){
+        if (!initializer.callCount){
+          initializer.callCount = 0;
+        }
+        initializer.callCount += 1;
+      };
       finalizer = jasmine.createSpy();
 
       MyApp = new Backbone.Marionette.Application();
@@ -15,6 +21,7 @@ describe("module restart", function(){
 
       myModule.start();
       myModule.stop();
+
       myModule.start();
       myModule.stop();
     });
@@ -30,7 +37,7 @@ describe("module restart", function(){
   });
 
   describe("when defining the module multiple times, starting twice, and stopping once", function(){
-    var MyApp, mod, initializer, finalizer;
+    var MyApp, myModule, initializer, finalizer;
     
     beforeEach(function(){
       initializer = jasmine.createSpy();

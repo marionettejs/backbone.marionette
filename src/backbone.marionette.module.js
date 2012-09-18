@@ -44,7 +44,6 @@ _.extend(Marionette.Module.prototype, Backbone.Events, {
     // Prevent re-start the module
     if (this._isInitialized){ return; }
 
-    this._runModuleDefinition();
     this._initializerCallbacks.run(options, this);
     this._isInitialized = true;
 
@@ -65,8 +64,10 @@ _.extend(Marionette.Module.prototype, Backbone.Events, {
 
     // run the finalizers
     this._finalizerCallbacks.run();
-    // then reset the initializers and finalizers
-    this._setupInitializersAndFinalizers();
+
+    // reset the initializers and finalizers
+    this._initializerCallbacks.reset();
+    this._finalizerCallbacks.reset();
 
     // stop the sub-modules
     _.each(this.submodules, function(mod){ mod.stop(); });
@@ -75,13 +76,13 @@ _.extend(Marionette.Module.prototype, Backbone.Events, {
   // Configure the module with a definition function and any custom args
   // that are to be passed in to the definition function
   addDefinition: function(moduleDefinition){
-    this._config.definitions.push(moduleDefinition);
+    this._runModuleDefinition(moduleDefinition)
   },
 
   // Internal method: run the module definition function with the correct
   // arguments
-  _runModuleDefinition: function(){
-    if (this._config.definitions.length === 0) { return; }
+  _runModuleDefinition: function(definition){
+    if (!definition){ return; }
 
     // build the correct list of arguments for the module definition
     var args = _.flatten([
@@ -93,14 +94,7 @@ _.extend(Marionette.Module.prototype, Backbone.Events, {
       this._config.customArgs
     ]);
 
-    // run the module definition function with the correct args
-    var definitionCount = this._config.definitions.length-1;
-    for(var i=0; i <= definitionCount; i++){
-
-      var definition = this._config.definitions[i];
-      definition.apply(this, args);
-
-    }
+    definition.apply(this, args);
   },
 
   // Internal method: set up new copies of initializers and finalizers.

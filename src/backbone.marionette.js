@@ -11,7 +11,6 @@ Marionette = Backbone.Marionette = (function(Backbone, _, $){
 //= backbone.marionette.compositeview.js
 //= backbone.marionette.region.js
 //= backbone.marionette.augment.regionmanager.js
-//= backbone.marionette.augment.inlineregions.js
 //= backbone.marionette.layout.js
 //= backbone.marionette.application.js
 //= backbone.marionette.approuter.js

@@ -58,9 +58,21 @@ CollectionView = Backbone.Marionette.CollectionView({
 ```
 
 You can also specify the `itemViewOptions` as a function, if you need to
-calculate the values to return at runtime. The function must return an
-object, and the attributes of the object will be copied to the itemView
-instance' options.
+calculate the values to return at runtime. The model will be passed into
+the function should you need access to it when calculating
+`itemViewOptions`. The function must return an object, and the attributes 
+of the object will be copied to the itemView instance' options.
+
+```js
+CollectionView = Backbone.Marionette.CollectionView({
+  itemViewOptions: function(model) {
+    // do some calculations based on the model
+    return {
+      foo: "bar"
+    }   
+  }  
+});
+```
 
 ## CollectionView's `emptyView`
 

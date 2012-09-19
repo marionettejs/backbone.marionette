@@ -1,3 +1,14 @@
+### v0.10.0 [view commit logs](https://github.com/marionettejs/backbone.marionette/compare/v0.9.13...v0.10.0)
+
+* Modules
+  * **BREAKING:** Changed the module implementation so that the module definition function is executed immediately and only once, not every time you call `start`
+
+* CollectionView
+  * Allow `itemViewOptions` to be a function, which recieves the `item` as an argument
+
+* Callbacks
+  * Added `reset` method to reset the list of callbacks and allow them to be run again, when needed
+
 ### v0.9.13 [view commit logs](https://github.com/marionettejs/backbone.marionette/compare/v0.9.12...v0.9.13)
 
 * CollectionView

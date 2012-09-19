@@ -221,54 +221,6 @@ Backbone.Marionette.ItemView.extend({
 });
 ```
 
-## Binding To ItemView Events
-
-ItemView extends `Marionette.BindTo`. It is recommended that you use
-the `bindTo` method to bind model and collection events. 
-
-```js
-MyView = Backbone.Marionette.ItemView.extend({
-  initialize: function(){
-    this.bindTo(this.model, "change:foo", this.modelChanged);
-    this.bindTo(this.collection, "add", this.modelAdded);
-  },
-
-  modelChanged: function(model, value){
-  },
-
-  modelAdded: function(model){
-  }
-});
-```
-
-The context (`this`) will automatically be set to the view. You can
-optionally set the context by passing in the context object as the
-4th parameter of `bindTo`.
-
-## ItemView close
-
-ItemView implements a `close` method, which is called by the region
-managers automatically. As part of the implementation, the following
-are performed:
-
-* unbind all `bindTo` events
-* unbind all custom view events
-* unbind all DOM events
-* remove `this.el` from the DOM
-* call an `onClose` event on the view, if one is provided
-
-By providing an `onClose` event in your view definition, you can
-run custom code for your view that is fired after your view has been
-closed and cleaned up. This lets you handle any additional clean up
-code without having to override the `close` method.
-
-```js
-Backbone.Marionette.ItemView.extend({
-  onClose: function(){
-    // custom cleanup or closing code, here
-  }
-});
-```
 ## Organizing ui elements
 
 As documented in View, you can specify a `ui` hash in your view that

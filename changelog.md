@@ -2,6 +2,7 @@
 
 * Modules
   * **BREAKING:** Changed the module implementation so that the module definition function is executed immediately and only once, not every time you call `start`
+  * **BREAKING:** When stopping a module, sub-modules will be stopped / finalized before parent modules (depth-first hierarchy traversal)
 
 * CollectionView
   * Allow `itemViewOptions` to be a function, which recieves the `item` as an argument

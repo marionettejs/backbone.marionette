@@ -137,20 +137,22 @@ describe("collection view", function(){
   describe("when rendering and an 'itemViewOptions' is provided as a function", function(){
     var CollectionView = Backbone.Marionette.CollectionView.extend({
       itemView: ItemView,
-      itemViewOptions: function(){
+      itemViewOptions: function(model){
         return {
           foo: "bar"
         };
       }
     });
 
-    var collection = new Backbone.Collection([{foo: "bar"}]);
+    var collection = new Backbone.Collection([{foo: "bar"},{foo: "baz"}]);
     var collectionView, view;
+
 
     beforeEach(function(){
       collectionView = new CollectionView({
         collection: collection
       });
+      spyOn(collectionView, 'itemViewOptions').andCallThrough();
 
       collectionView.render();
       view = _.values(collectionView.children)[0];
@@ -158,6 +160,11 @@ describe("collection view", function(){
 
     it("should pass the options to every view instance", function(){
       expect(view.options.hasOwnProperty("foo")).toBe(true);
+    });
+    
+    it("should pass the model when calling 'itemViewOptions'", function() {
+      expect(collectionView.itemViewOptions).toHaveBeenCalledWith(collection.at(0)); 
+      expect(collectionView.itemViewOptions).toHaveBeenCalledWith(collection.at(1)); 
     });
   });
 

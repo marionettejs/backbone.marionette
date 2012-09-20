@@ -181,8 +181,8 @@ _.extend(Marionette.Module, {
   },
 
   _getModuleOptions: function(parentModule, moduleDefinition){
-    var parentAutoStart = true;
-    var childAutoStart = undefined;
+    var parentAutoStart = true,
+        childAutoStart;
 
     // get the parent auto-start option, if its a module
     // this defaults to "true" (above) is the parent is anything

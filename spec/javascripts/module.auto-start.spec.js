@@ -31,7 +31,7 @@ describe("module auto-start with the app.start", function(){
       MyApp = new Backbone.Marionette.Application();
 
       MyApp.module("MyModule", {
-        startWithApp: false,
+        startWithParent: false,
         define: function(Mod){
           Mod.addInitializer(moduleStart);
         }
@@ -81,7 +81,7 @@ describe("module auto-start with the app.start", function(){
       MyApp.start(options);
 
       myModule = MyApp.module("MyModule", {
-        startWithApp: false, 
+        startWithParent: false, 
         define: function(mod){
           mod.defined = true;
 
@@ -113,7 +113,7 @@ describe("module auto-start with the app.start", function(){
         MyApp = new Backbone.Marionette.Application();
 
         MyApp.module("MyModule", {
-          startWithApp: false,
+          startWithParent: false,
           define: function(Mod){
             Mod.addInitializer(moduleStart);
           }

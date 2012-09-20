@@ -88,12 +88,12 @@ _.extend(Marionette.Module.prototype, Backbone.Events, {
 
     // build the correct list of arguments for the module definition
     var args = _.flatten([
-      this, 
-      this.config.app, 
-      Backbone, 
-      Marionette, 
-      $, _, 
-      this.config.customArgs
+                         this, 
+                         this.config.app, 
+                         Backbone, 
+                         Marionette, 
+                         $, _, 
+                         this.config.customArgs
     ]);
 
     definition.apply(this, args);
@@ -127,17 +127,17 @@ _.extend(Marionette.Module, {
     _.each(moduleNames, function(moduleName, i){
       var isLastModuleInChain = (i === length-1);
       var module = that._getModuleDefinition(parentModule, moduleName, app, customArgs);
-      var moduleOptions = that._getModuleOptions(parentModule, moduleDefinition);
+      module.config.options = that._getModuleOptions(parentModule, moduleDefinition);
 
       // if it's the first module in the chain, configure it
       // for auto-start, as specified by the options
-      that._configureAutoStart(app, module, moduleOptions);
+      that._configureAutoStart(app, module);
 
       // Only add a module definition and initializer when this is
       // the last module in a "parent.child.grandchild" hierarchy of
       // module names
-      if (isLastModuleInChain && moduleOptions.hasDefinition){
-        module.addDefinition(moduleOptions.definition);
+      if (isLastModuleInChain && module.config.options.hasDefinition){
+        module.addDefinition(module.config.options.definition);
       }
 
       // Reset the parent module so that the next child
@@ -149,51 +149,51 @@ _.extend(Marionette.Module, {
     return parentModule;
   },
 
-  _configureAutoStart: function(app, module, moduleOptions){
-      // Only add the initializer if it's the first module, and
-      // if it is set to auto-start, and if it has not yet been added
-      if (moduleOptions.startWithApp && !module.config.autoStartConfigured){
-        // start the module when the app starts
-        app.addInitializer(function(options){
-          module.start(options);
-        });
-      }
+  _configureAutoStart: function(app, module){
+    // Only add the initializer if it's the first module, and
+    // if it is set to auto-start, and if it has not yet been added
+    if (module.config.options.startWithParent && !module.config.autoStartConfigured){
+      // start the module when the app starts
+      app.addInitializer(function(options){
+        module.start(options);
+      });
+    }
 
-      // prevent this module from being configured for
-      // auto start again. the first time the module
-      // is defined, determines it's auto-start
-      module.config.autoStartConfigured = true;
+    // prevent this module from being configured for
+    // auto start again. the first time the module
+    // is defined, determines it's auto-start
+    module.config.autoStartConfigured = true;
   },
 
   _getModuleDefinition: function(parentModule, moduleName, app, customArgs){
-      // Get an existing module of this name if we have one
-      var module = parentModule[moduleName];
+    // Get an existing module of this name if we have one
+    var module = parentModule[moduleName];
 
-      if (!module){ 
-        // Create a new module if we don't have one
-        module = new Marionette.Module(moduleName, app, customArgs);
-        parentModule[moduleName] = module;
-        // store the module on the parent
-        parentModule.submodules[moduleName] = module;
-      }
+    if (!module){ 
+      // Create a new module if we don't have one
+      module = new Marionette.Module(moduleName, app, customArgs);
+      parentModule[moduleName] = module;
+      // store the module on the parent
+      parentModule.submodules[moduleName] = module;
+    }
 
-      return module;
+    return module;
   },
 
   _getModuleOptions: function(parentModule, moduleDefinition){
-    var parentAutoStart = true,
-        childAutoStart;
+    var parentAutoStart = true, childAutoStart;
 
     // get the parent auto-start option, if its a module
     // this defaults to "true" (above) is the parent is anything
     // else - such as Marionette.Application for top level module
     if (parentModule instanceof Marionette.Module){
-      parentAutoStart = parentModule.config.startWithApp;
+      parentAutoStart = parentModule.config.options.startWithParent;
+      console.log(parentAutoStart);
     }
 
     // default to starting the module with the app
     var options = { 
-      startWithApp: parentAutoStart,
+      startWithParent: parentAutoStart,
       hasDefinition: !!moduleDefinition
     };
 
@@ -208,11 +208,11 @@ _.extend(Marionette.Module, {
     } else {
 
       // the definition is an object. grab the "define" attribute
-      // and the "startWithApp" attribute, as set the options
+      // and the "startWithParent" attribute, as set the options
       // appropriately
       options.definition = moduleDefinition.define;
-      if (moduleDefinition.hasOwnProperty("startWithApp")){
-        options.startWithApp = moduleDefinition.startWithApp;
+      if (moduleDefinition.hasOwnProperty("startWithParent")){
+        options.startWithParent = moduleDefinition.startWithParent;
       }
     }
 

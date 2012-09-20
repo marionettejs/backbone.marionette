@@ -125,7 +125,7 @@ describe("module start", function(){
       secondfunc = jasmine.createSpy();
 
       MyApp.module("MyModule", {
-        startWithApp: false,
+        startWithParent: false,
         define: firstfunc
       });
       MyApp.module("MyModule", secondfunc);

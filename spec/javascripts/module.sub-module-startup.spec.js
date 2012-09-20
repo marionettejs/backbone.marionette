@@ -25,6 +25,32 @@ describe("module start", function(){
       });
     });
 
+    describe("when a sub-module overrides the parent auto-start", function(){
+      var subModuleStart;
+
+      beforeEach(function(){
+        subModuleStart = jasmine.createSpy("submodule start");
+        var App = new Marionette.Application();
+
+        App.module("Parent", {
+          startWithApp: false
+        });
+
+        App.module("Parent.Child", {
+          startWithApp: true,
+          define: function(Child){
+            Child.addInitializer(subModuleStart);
+          }
+        });
+
+        App.start();
+      });
+
+      it("should start the sub-module", function(){
+        expect(subModuleStart).toHaveBeenCalled();
+      });
+    });
+
   });
 
 });

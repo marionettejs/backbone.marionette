@@ -1,7 +1,9 @@
 ### v0.10.0 [view commit logs](https://github.com/marionettejs/backbone.marionette/compare/v0.9.13...v0.10.0)
 
 * Modules
-  * **BREAKING:** Changed the module implementation so that the module definition function is executed immediately and only once, not every time you call `start`
+  * **BREAKING:** Module definition functions are executed immediately and only once, not every time you call `start`
+  * **BREAKING:** Sub-modules default `startWithApp` to the parent module's setting (or `true` for top-level modules)
+  * **BREAKING:** Sub-modules are now dependent on parent modules to start with the app.
   * **BREAKING:** When stopping a module, sub-modules will be stopped / finalized before parent modules (depth-first hierarchy traversal)
 
 * CollectionView

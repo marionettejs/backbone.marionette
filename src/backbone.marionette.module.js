@@ -125,16 +125,12 @@ _.extend(Marionette.Module, {
     var length = moduleNames.length;
     _.each(moduleNames, function(moduleName, i){
       var isLastModuleInChain = (i === length-1);
-      var isFirstModuleInChain = (i === 0);
-
       var module = that._getModuleDefinition(parentModule, moduleName, app, customArgs);
-      var moduleOptions = that._getModuleOptions(moduleDefinition);
+      var moduleOptions = that._getModuleOptions(parentModule, moduleDefinition);
 
       // if it's the first module in the chain, configure it
       // for auto-start, as specified by the options
-      if (isFirstModuleInChain){
-        that._configureAutoStart(app, module, moduleOptions);
-      }
+      that._configureAutoStart(app, module, moduleOptions);
 
       // Only add a module definition and initializer when this is
       // the last module in a "parent.child.grandchild" hierarchy of
@@ -183,10 +179,20 @@ _.extend(Marionette.Module, {
       return module;
   },
 
-  _getModuleOptions: function(moduleDefinition){
+  _getModuleOptions: function(parentModule, moduleDefinition){
+    var parentAutoStart = true;
+    var childAutoStart = undefined;
+
+    // get the parent auto-start option, if its a module
+    // this defaults to "true" (above) is the parent is anything
+    // else - such as Marionette.Application for top level module
+    if (parentModule instanceof Marionette.Module){
+      parentAutoStart = parentModule.config.startWithApp;
+    }
+
     // default to starting the module with the app
     var options = { 
-      startWithApp: true,
+      startWithApp: parentAutoStart,
       hasDefinition: !!moduleDefinition
     };
 

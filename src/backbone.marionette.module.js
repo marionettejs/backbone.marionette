@@ -127,9 +127,8 @@ _.extend(Marionette.Module, {
       var isLastModuleInChain = (i === length-1);
       var isFirstModuleInChain = (i === 0);
 
-      // get the options and build the module definition
-      var moduleOptions = that._getModuleDefinitionOptions(moduleDefinition);
       var module = that._getModuleDefinition(parentModule, moduleName, app, customArgs);
+      var moduleOptions = that._getModuleOptions(moduleDefinition);
 
       // if it's the first module in the chain, configure it
       // for auto-start, as specified by the options
@@ -140,7 +139,7 @@ _.extend(Marionette.Module, {
       // Only add a module definition and initializer when this is
       // the last module in a "parent.child.grandchild" hierarchy of
       // module names
-      if (isLastModuleInChain && moduleOptions.definition){
+      if (isLastModuleInChain && moduleOptions.hasDefinition){
         module.addDefinition(moduleOptions.definition);
       }
 
@@ -184,9 +183,12 @@ _.extend(Marionette.Module, {
       return module;
   },
 
-  _getModuleDefinitionOptions: function(moduleDefinition){
+  _getModuleOptions: function(moduleDefinition){
     // default to starting the module with the app
-    var options = { startWithApp: true };
+    var options = { 
+      startWithApp: true,
+      hasDefinition: !!moduleDefinition
+    };
 
     // short circuit if we don't have a module definition
     if (!moduleDefinition){ return options; }

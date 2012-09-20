@@ -23,6 +23,28 @@ describe("module auto-start with the app.start", function(){
 
   });
 
+  describe("when a module is set not to start with the app, and starting the app", function(){
+    var MyApp, MyModule, moduleStart;
+
+    beforeEach(function(){
+      moduleStart = jasmine.createSpy("module start");
+      MyApp = new Backbone.Marionette.Application();
+
+      MyApp.module("MyModule", {
+        startWithApp: false,
+        define: function(Mod){
+          Mod.addInitializer(moduleStart);
+        }
+      });
+
+      MyApp.start();
+    });
+
+    it("should not start the module when the app starts", function(){
+      expect(moduleStart).not.toHaveBeenCalled();
+    });
+  });
+
   describe("when loading a module after the app has been started", function(){
     var MyApp, myModule, options;
 
@@ -79,6 +101,36 @@ describe("module auto-start with the app.start", function(){
     it("should not run the module initializer", function(){
       expect(myModule.capturedOptions).not.toBeDefined();
     });
+  });
+
+  describe("given a module is configured to not start with app", function(){
+
+    describe("when defining the module twice, and retrieving the module by name (without a new definition)", function(){
+      var MyApp, MyModule, moduleStart;
+
+      beforeEach(function(){
+        moduleStart = jasmine.createSpy("module start");
+        MyApp = new Backbone.Marionette.Application();
+
+        MyApp.module("MyModule", {
+          startWithApp: false,
+          define: function(Mod){
+            Mod.addInitializer(moduleStart);
+          }
+        });
+
+        MyApp.module("MyModule", function(){});
+
+        MyModule = MyApp.module("MyModule");
+
+        MyApp.start();
+      });
+
+      it("should not start the module when the app starts", function(){
+        expect(moduleStart).not.toHaveBeenCalled();
+      });
+    });
+
   });
 
 });

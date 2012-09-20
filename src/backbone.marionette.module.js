@@ -44,15 +44,16 @@ _.extend(Marionette.Module.prototype, Backbone.Events, {
     // Prevent re-start the module
     if (this._isInitialized){ return; }
 
-    this._initializerCallbacks.run(options, this);
-    this._isInitialized = true;
-
-    // start the sub-modules
+    // start the sub-modules (depth-first hierarchy)
     if (this.submodules){
       _.each(this.submodules, function(mod){
         mod.start(options);
       });
     }
+
+    // run the callbacks to "start" the current module
+    this._initializerCallbacks.run(options, this);
+    this._isInitialized = true;
   },
 
   // Stop this module by running its finalizers and then stop all of

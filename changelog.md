@@ -2,8 +2,9 @@
 
 * Modules
   * **BREAKING:** Module definition functions are executed immediately and only once, not every time you call `start`
-  * **BREAKING:** Sub-modules default `startWithApp` to the parent module's setting (or `true` for top-level modules)
-  * **BREAKING:** Sub-modules default to relying on the parent module to start them. This can be overridden by specifying `startWithApp: true` in module config.
+  * **BREAKING:** Renamed `startWithApp` to `startWithParent` in module definitions
+  * **BREAKING:** Sub-modules default `startWithParent` to the parent module's setting (or `true` for top-level modules)
+  * **BREAKING:** Sub-modules default to relying on the parent module to start them. This can be overridden by specifying `startWithParent: true` in module config.
   * **BREAKING:** When starting a module, sub-modules will be started / initialized before parent modules (depth-first hierarchy traversal)
   * **BREAKING:** When stopping a module, sub-modules will be stopped / finalized before parent modules (depth-first hierarchy traversal)
 

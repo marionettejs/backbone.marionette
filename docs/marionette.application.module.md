@@ -67,7 +67,7 @@ start it, you can tell the module definition not to start with the app:
 
 ```js
 var fooModule = MyApp.module("Foo", {
-  startWithApp: false,
+  startWithParent: false,
 
   define: function(){
     // module code goes here
@@ -79,7 +79,7 @@ fooModule.start();
 ```
 
 Note the use of an object literal instead of just a function to define
-the module, and the presence of the `startWithApp` attribute, to tell it
+the module, and the presence of the `startWithParent` attribute, to tell it
 not to start with the application.
 
 Then to start the module, the module's `start` method is manually called.
@@ -88,7 +88,7 @@ start it:
 
 ```js
 MyApp.module("Foo", {
-  startWithApp: false,
+  startWithParent: false,
   define: function(){ /*...*/ }
 });
 
@@ -98,12 +98,12 @@ MyApp.module("Foo").start();
 
 ### Auto-start Of Sub-Modules
 
-Submodules default to the `startWithApp` setting that a parent module
+Submodules default to the `startWithParent` setting that a parent module
 has defined.
 
 ```js
 MyApp.module("Foo", {
-  startWithApp: false,
+  startWithParent: false,
   define: function(){ /*...*/ }
 });
 
@@ -120,12 +120,12 @@ A sub-module can override this behavior, though.
 
 ```js
 MyApp.module("Foo", {
-  startWithApp: false,
+  startWithParent: false,
   define: function(){ /*...*/ }
 });
 
 MyApp.module("Foo.Bar", {
-  startWithApp: true,
+  startWithParent: true,
   define: function(){...}
 })
 
@@ -141,7 +141,7 @@ child module can specify not to.
 MyApp.module("Foo", function(){ /*...*/ });
 
 MyApp.module("Foo.Bar", {
-  startWithApp: false,
+  startWithParent: false,
   define: function(){...}
 })
 

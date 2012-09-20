@@ -1,16 +1,21 @@
 describe("module start", function(){
 
-  describe("given a parent module is set to not start with the app", function(){
+  describe("when a top level module specifies it should load with the parent app", function(){
 
-    describe("when a sub-module does not specify a startup option", function(){
-      var subModuleStart;
+    describe("and a sub-module is set to load with the parent module", function(){
+      var moduleStart, subModuleStart;
 
       beforeEach(function(){
+        moduleStart = jasmine.createSpy("module start");
         subModuleStart = jasmine.createSpy("submodule start");
+
         var App = new Marionette.Application();
 
         App.module("Parent", {
-          startWithParent: false
+          startWithParent: true,
+          define: function(Parent){
+            Parent.addInitializer(moduleStart);
+          }
         });
 
         App.module("Parent.Child", function(Child){
@@ -20,49 +25,30 @@ describe("module start", function(){
         App.start();
       });
 
-      it("should default to the parent module's option", function(){
-        expect(subModuleStart).not.toHaveBeenCalled();
-      });
-    });
-
-    describe("when a sub-module overrides the parent auto-start", function(){
-      var subModuleStart;
-
-      beforeEach(function(){
-        subModuleStart = jasmine.createSpy("submodule start");
-        var App = new Marionette.Application();
-
-        App.module("Parent", {
-          startWithParent: false
-        });
-
-        App.module("Parent.Child", {
-          startWithParent: true,
-          define: function(Child){
-            Child.addInitializer(subModuleStart);
-          }
-        });
-
-        App.start();
+      it("should start the parent module with the app", function(){
+        expect(moduleStart).toHaveBeenCalled();
       });
 
-      it("should start the sub-module", function(){
+      it("should start with the sub-module with the parent", function(){
         expect(subModuleStart).toHaveBeenCalled();
       });
     });
 
-  });
-
-  describe("given a parent module is set to start with the app", function(){
-
-    describe("when a sub-module overrides the parent auto-start", function(){
-      var subModuleStart;
+    describe("and a sub-module is set to NOT load with the parent module", function(){
+      var moduleStart, subModuleStart;
 
       beforeEach(function(){
+        moduleStart = jasmine.createSpy("module start");
         subModuleStart = jasmine.createSpy("submodule start");
+
         var App = new Marionette.Application();
 
-        App.module("Parent", function(){});
+        App.module("Parent", {
+          startWithParent: true,
+          define: function(Parent){
+            Parent.addInitializer(moduleStart);
+          }
+        });
 
         App.module("Parent.Child", {
           startWithParent: false,
@@ -74,7 +60,11 @@ describe("module start", function(){
         App.start();
       });
 
-      it("should not start the sub-module", function(){
+      it("should start the parent module with the app", function(){
+        expect(moduleStart).toHaveBeenCalled();
+      });
+
+      it("should NOT start with the sub-module with the parent", function(){
         expect(subModuleStart).not.toHaveBeenCalled();
       });
     });

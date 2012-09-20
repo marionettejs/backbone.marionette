@@ -45,11 +45,11 @@ _.extend(Marionette.Module.prototype, Backbone.Events, {
     if (this._isInitialized){ return; }
 
     // start the sub-modules (depth-first hierarchy)
-    if (this.submodules){
-      _.each(this.submodules, function(mod){
+    _.each(this.submodules, function(mod){
+      if (mod.config.options.startWithParent){
         mod.start(options);
-      });
-    }
+      }
+    });
 
     // run the callbacks to "start" the current module
     this._initializerCallbacks.run(options, this);
@@ -88,12 +88,12 @@ _.extend(Marionette.Module.prototype, Backbone.Events, {
 
     // build the correct list of arguments for the module definition
     var args = _.flatten([
-                         this, 
-                         this.config.app, 
-                         Backbone, 
-                         Marionette, 
-                         $, _, 
-                         this.config.customArgs
+      this, 
+      this.config.app, 
+      Backbone, 
+      Marionette, 
+      $, _, 
+      this.config.customArgs
     ]);
 
     definition.apply(this, args);
@@ -126,12 +126,16 @@ _.extend(Marionette.Module, {
     var length = moduleNames.length;
     _.each(moduleNames, function(moduleName, i){
       var isLastModuleInChain = (i === length-1);
+      var isFirstModuleInChain = (i === 0);
+
       var module = that._getModuleDefinition(parentModule, moduleName, app, customArgs);
       module.config.options = that._getModuleOptions(parentModule, moduleDefinition);
 
       // if it's the first module in the chain, configure it
       // for auto-start, as specified by the options
-      that._configureAutoStart(app, module);
+      if (isFirstModuleInChain){
+        that._configureAutoStart(app, module);
+      }
 
       // Only add a module definition and initializer when this is
       // the last module in a "parent.child.grandchild" hierarchy of
@@ -181,24 +185,14 @@ _.extend(Marionette.Module, {
   },
 
   _getModuleOptions: function(parentModule, moduleDefinition){
-    var parentAutoStart = true, childAutoStart;
-
-    // get the parent auto-start option, if its a module
-    // this defaults to "true" (above) is the parent is anything
-    // else - such as Marionette.Application for top level module
-    if (parentModule instanceof Marionette.Module){
-      parentAutoStart = parentModule.config.options.startWithParent;
-      console.log(parentAutoStart);
-    }
-
     // default to starting the module with the app
     var options = { 
-      startWithParent: parentAutoStart,
+      startWithParent: true,
       hasDefinition: !!moduleDefinition
     };
 
     // short circuit if we don't have a module definition
-    if (!moduleDefinition){ return options; }
+    if (!options.hasDefinition){ return options; }
 
     if (_.isFunction(moduleDefinition)){
       // if the definition is a function, assign it directly
@@ -207,10 +201,13 @@ _.extend(Marionette.Module, {
 
     } else {
 
-      // the definition is an object. grab the "define" attribute
-      // and the "startWithParent" attribute, as set the options
-      // appropriately
+      // the definition is an object. 
+
+      // grab the "define" attribute
+      options.hasDefinition = !!moduleDefinition.define;
       options.definition = moduleDefinition.define;
+      
+      // grab the "startWithParent" attribute if one exists
       if (moduleDefinition.hasOwnProperty("startWithParent")){
         options.startWithParent = moduleDefinition.startWithParent;
       }

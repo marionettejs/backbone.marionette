@@ -60,6 +60,8 @@ MyApp.start();
 Note that modules loaded and defined after the `app.start()` call will still
 be started automatically.
 
+### Preventing Auto-Start Of Modules
+
 If you wish to manually start a module instead of having the application
 start it, you can tell the module definition not to start with the app:
 
@@ -93,6 +95,61 @@ MyApp.module("Foo", {
 // start the module by getting a reference to it first
 MyApp.module("Foo").start();
 ```
+
+### Auto-start Of Sub-Modules
+
+Submodules default to the `startWithApp` setting that a parent module
+has defined.
+
+```js
+MyApp.module("Foo", {
+  startWithApp: false,
+  define: function(){ /*...*/ }
+});
+
+MyApp.module("Foo.Bar", function(){...});
+
+MyApp.start();
+```
+
+In this example, the "Foo.Bar" module will not be started with the call to
+`MyApp.start()` because the parent module, "Foo", has specified not to start
+with the app.
+
+A sub-module can override this behavior, though.
+
+```js
+MyApp.module("Foo", {
+  startWithApp: false,
+  define: function(){ /*...*/ }
+});
+
+MyApp.module("Foo.Bar", {
+  startWithApp: true,
+  define: function(){...}
+})
+
+MyApp.start();
+```
+
+Now the sub-module "Foo.Bar" will be started with the call to `MyApp.start()`.
+
+The inverse is also true. If a parent module starts with the app, then a
+child module can specify not to.
+
+```js
+MyApp.module("Foo", function(){ /*...*/ });
+
+MyApp.module("Foo.Bar", {
+  startWithApp: false,
+  define: function(){...}
+})
+
+MyApp.start();
+```
+
+In this example, the sub-module "Foo.Bar" will not be started when the
+parent module is started. "Foo.Bar" must be started manually.
 
 ### Stopping Modules
 

@@ -39,7 +39,7 @@ module that you need in your tests.
 
 Starting a module is done in one of two ways:
 
-1. Automatically with the parent application's `.start()` method
+1. Automatically with the parent module (or Application) `.start()` method
 2. Manually call the `.start()` method on the module
 
 In this example, the module will be started automatically with the parent
@@ -63,7 +63,7 @@ be started automatically.
 ### Preventing Auto-Start Of Modules
 
 If you wish to manually start a module instead of having the application
-start it, you can tell the module definition not to start with the app:
+start it, you can tell the module definition not to start with the parent:
 
 ```js
 var fooModule = MyApp.module("Foo", {
@@ -74,15 +74,18 @@ var fooModule = MyApp.module("Foo", {
   }
 });
 
+// start the app without starting the module
+MyApp.start();
+
 // later, start the module
 fooModule.start();
 ```
 
 Note the use of an object literal instead of just a function to define
 the module, and the presence of the `startWithParent` attribute, to tell it
-not to start with the application.
+not to start with the application. Then to start the module, the module's 
+`start` method is manually called.
 
-Then to start the module, the module's `start` method is manually called.
 You can also grab a reference to the module at a later point in time, to
 start it:
 
@@ -96,66 +99,56 @@ MyApp.module("Foo", {
 MyApp.module("Foo").start();
 ```
 
-### Auto-start Of Sub-Modules
+### Starting Sub-Modules With Parent
 
-Submodules default to the `startWithParent` setting that a parent module
-has defined.
+Starting of sub-modules is done in a depth-first hierarchy traversal. 
+That is, a hierarchy of `Foo.Bar.Baz` will start `Baz` first, then `Bar`,
+and finally `Foo.
+
+Submodules default to starting with their parent module. 
 
 ```js
-MyApp.module("Foo", {
-  startWithParent: false,
-  define: function(){ /*...*/ }
-});
-
+MyApp.module("Foo", function(){...});
 MyApp.module("Foo.Bar", function(){...});
 
 MyApp.start();
 ```
 
-In this example, the "Foo.Bar" module will not be started with the call to
-`MyApp.start()` because the parent module, "Foo", has specified not to start
+In this example, the "Foo.Bar" module will be started with the call to
+`MyApp.start()` because the parent module, "Foo" is set to start
 with the app.
 
-A sub-module can override this behavior, though.
+A sub-module can override this behavior by setting it's `startWithParent`
+to false. This prevents it from being started by the parent's `start` call.
 
 ```js
-MyApp.module("Foo", {
-  startWithParent: false,
-  define: function(){ /*...*/ }
-});
+MyApp.module("Foo", define: function(){...});
 
 MyApp.module("Foo.Bar", {
   startWithParent: true,
   define: function(){...}
 })
 
-MyApp.start();
+MyApp.start(); 
 ```
 
-Now the sub-module "Foo.Bar" will be started with the call to `MyApp.start()`.
+Now the module "Foo" will be started, but the sub-module "Foo.Bar" will
+not be started.
 
-The inverse is also true. If a parent module starts with the app, then a
-child module can specify not to.
+A sub-module can still be started manually, with this configuration:
 
 ```js
-MyApp.module("Foo", function(){ /*...*/ });
-
-MyApp.module("Foo.Bar", {
-  startWithParent: false,
-  define: function(){...}
-})
-
-MyApp.start();
+MyApp.module("Foo.Bar").start();
 ```
-
-In this example, the sub-module "Foo.Bar" will not be started when the
-parent module is started. "Foo.Bar" must be started manually.
 
 ### Stopping Modules
 
 A module can be stopped, or shut down, to clear memory and resources when
-the module is no longer needed. This is done with the `stop` method
-on modules.
+the module is no longer needed. Like starting of modules, stopping is done
+in a depth-first hierarchy traversal. That is, a hierarchy of modules like
+`Foo.Bar.Baz` will stop `Baz` first, then `Bar`, and finally `Foo`.
+
+To stop a module and it's children, call the `stop()` method of a module.
 
 ```js
 MyApp.module("Foo").stop();
@@ -173,7 +166,7 @@ MyApp.module("Foo").stop();
 
 This call to `stop` causes the `Bar` and `Baz` modules to both be stopped
 as they are sub-modules of `Foo`. For more information on defining
-sub-modules, see the next section: "Defining Sub-Modules With . Notation".
+sub-modules, see the section "Defining Sub-Modules With . Notation".
 
 ## Defining Sub-Modules With . Notation
 

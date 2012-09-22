@@ -186,4 +186,23 @@ describe("module start", function(){
     });
   });
 
+  describe("when adding a module initializer outside of the module definition function and starting the app", function(){
+    var initializer;
+
+    beforeEach(function(){
+      var MyApp = new Marionette.Application();
+      var module = MyApp.module("MyModule");
+
+      initializer = jasmine.createSpy("module initializer");
+      module.addInitializer(initializer);
+
+      MyApp.start();
+    });
+
+    it("should run the initializer", function(){
+      expect(initializer).toHaveBeenCalled();
+    });
+
+  });
+
 });

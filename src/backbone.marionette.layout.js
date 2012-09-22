@@ -9,6 +9,8 @@
 // Used for composite view management and sub-application areas.
 Marionette.Layout = Marionette.ItemView.extend({
   regionType: Marionette.Region,
+  
+  firstRender: true,
 
   constructor: function () {
     this.initializeRegions();
@@ -20,18 +22,16 @@ Marionette.Layout = Marionette.ItemView.extend({
   // views that the regions are showing and then reset the `el`
   // for the regions to the newly rendered DOM elements.
   render: function(){
-    var result = Marionette.ItemView.prototype.render.apply(this, arguments);
-
-    // Rewrite this function to handle re-rendering and
+    // If this is not the first render call, then we need to 
     // re-initializing the `el` for each region
-    this.render = function(){
+    if (!this.firstRender){
       this.closeRegions();
       this.reInitializeRegions();
+    } else {
+      this.firstRender = false;
+    }
 
-      var result = Marionette.ItemView.prototype.render.apply(this, arguments);
-      return result;
-    };
-
+    var result = Marionette.ItemView.prototype.render.apply(this, arguments);
     return result;
   },
 

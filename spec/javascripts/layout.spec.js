@@ -4,6 +4,11 @@ describe("layout", function(){
     regions: {
       regionOne: "#regionOne",
       regionTwo: "#regionTwo"
+    },
+    initialize: function() {
+      if (this.model) {
+        this.bindTo(this.model, 'change', this.render);
+      }
     }
   });
 
@@ -167,7 +172,9 @@ describe("layout", function(){
     beforeEach(function(){
       loadFixtures("layoutManagerTemplate.html");
 
-      layout = new LayoutManager();
+      layout = new LayoutManager({
+        model: new Backbone.Model()
+      });
       layout.render();
       region = layout.regionOne;
 
@@ -193,6 +200,15 @@ describe("layout", function(){
     it("should re-bind the regions to the newly rendered elements", function(){
       var regionEl = layout.$("#regionOne");
       expect(region.$el[0]).toBe(regionEl[0]);
+    });
+
+    it("should re-bind the regions correctly when the view's `render` function is bound to an event in the `initialize` function", function(){
+      layout.onRender = function() {
+        this.regionOne.show(view);
+      };
+
+      layout.model.trigger('change');
+      expect(layout.$("#regionOne")).not.toBeEmpty();
     });
   });
 

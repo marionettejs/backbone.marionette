@@ -70,4 +70,25 @@ describe("module stop", function(){
     });
   });
 
+  describe("when adding a module finalizer outside of the module definition function and stopping the module", function(){
+    var finalizer;
+
+    beforeEach(function(){
+      var MyApp = new Marionette.Application();
+      var module = MyApp.module("MyModule");
+
+      finalizer = jasmine.createSpy("module finalizer");
+      module.addFinalizer(finalizer);
+
+      MyApp.start();
+      module.stop();
+    });
+
+    it("should run the finalizer", function(){
+      expect(finalizer).toHaveBeenCalled();
+    });
+
+  });
+
+
 });

@@ -1,3 +1,8 @@
+### v0.10.1 [view commit logs](https://github.com/marionettejs/backbone.marionette/compare/v0.10.0...v0.10.1)
+
+* Modules
+  * Fixed a bug when defining modules in reverse order, that prevented `startWithParent` from working correctly
+
 ### v0.10.0 [view commit logs](https://github.com/marionettejs/backbone.marionette/compare/v0.9.13...v0.10.0)
 
 * Modules

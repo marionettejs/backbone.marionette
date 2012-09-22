@@ -34,8 +34,10 @@ _.extend(Marionette.Callbacks.prototype, {
   // to be run multiple times - whenever the `run` method is called.
   reset: function(){
     var that = this;
+    var callbacks = this._callbacks;
     this._deferred = $.Deferred();
-    _.each(this._callbacks, function(cb){
+    this._callbacks = [];
+    _.each(callbacks, function(cb){
       that.add(cb.cb, cb.ctx);
     });
   }

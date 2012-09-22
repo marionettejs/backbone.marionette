@@ -84,7 +84,7 @@ describe("callbacks", function(){
   });
 
   describe("when resetting callbacks and re-running them", function(){
-    var cb, context, runContext;
+    var cb, numCallbacks;
 
     beforeEach(function(){
       var callbacks = new Backbone.Marionette.Callbacks();
@@ -96,10 +96,16 @@ describe("callbacks", function(){
       callbacks.reset();
 
       callbacks.run();
+
+      numCallbacks = callbacks._callbacks.length;
     });
 
     it("should run the callbacks again", function(){
       expect(cb.callCount).toBe(2);
+    });
+
+    it("should not duplicate the callbacks", function() {
+      expect(numCallbacks).toBe(1);
     });
   });
 

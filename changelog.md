@@ -1,3 +1,8 @@
+### v0.10.2 [view commit logs](https://github.com/marionettejs/backbone.marionette/compare/v0.10.1...v0.10.2)
+
+* Callbacks
+  * Fixed a bug that caused callbacks to fire multiple times after calling `reset`
+
 ### v0.10.1 [view commit logs](https://github.com/marionettejs/backbone.marionette/compare/v0.10.0...v0.10.1)
 
 * Modules

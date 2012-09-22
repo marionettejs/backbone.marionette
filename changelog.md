@@ -3,6 +3,9 @@
 * Callbacks
   * Fixed a bug that caused callbacks to fire multiple times after calling `reset`
 
+* Layout
+  * Fixed a bug that prevented the regions from being re-initialized correctly, when using `render` as a callback method for an event
+
 ### v0.10.1 [view commit logs](https://github.com/marionettejs/backbone.marionette/compare/v0.10.0...v0.10.1)
 
 * Modules

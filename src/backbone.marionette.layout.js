@@ -10,8 +10,8 @@
 Marionette.Layout = Marionette.ItemView.extend({
   regionType: Marionette.Region,
   
-  firstRender: true,
-
+  // Ensure the regions are avialable when the `initialize` method
+  // is called.
   constructor: function () {
     this.initializeRegions();
     Backbone.Marionette.ItemView.apply(this, arguments);
@@ -24,11 +24,11 @@ Marionette.Layout = Marionette.ItemView.extend({
   render: function(){
     // If this is not the first render call, then we need to 
     // re-initializing the `el` for each region
-    if (!this.firstRender){
+    if (!this._firstRender){
       this.closeRegions();
       this.reInitializeRegions();
     } else {
-      this.firstRender = false;
+      this._firstRender = false;
     }
 
     var result = Marionette.ItemView.prototype.render.apply(this, arguments);

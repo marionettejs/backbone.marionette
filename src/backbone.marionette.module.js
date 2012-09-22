@@ -126,14 +126,13 @@ _.extend(Marionette.Module, {
     var length = moduleNames.length;
     _.each(moduleNames, function(moduleName, i){
       var isLastModuleInChain = (i === length-1);
-      var isFirstModuleInChain = (i === 0);
 
       var module = that._getModuleDefinition(parentModule, moduleName, app, customArgs);
       module.config.options = that._getModuleOptions(parentModule, moduleDefinition);
 
       // if it's the first module in the chain, configure it
       // for auto-start, as specified by the options
-      if (isFirstModuleInChain){
+      if (isLastModuleInChain){
         that._configureAutoStart(app, module);
       }
 

@@ -176,11 +176,11 @@ describe("module start", function(){
     it("should pass Marionette as the fourth parameter", function(){
       expect(moduleArgs[3]).toBe(Backbone.Marionette);
     });
-    
+
     it("should pass jQuery as the fifth parameter", function(){
       expect(moduleArgs[4]).toBe(jQuery);
     });
-    
+
     it("should pass underscore as the sixth parameter", function(){
       expect(moduleArgs[5]).toBe(_);
     });
@@ -204,5 +204,38 @@ describe("module start", function(){
     });
 
   });
+  describe("when setting up a hierarchy of modules in reverse order and a child module is set not to start with parent and module initializer outside of the module definition function and starting the app", function(){
+    var moduleAInitializer, moduleBInitializer;
 
+    beforeEach(function(){
+      var MyApp = new Marionette.Application(),
+          ModuleA, ModuleB;
+
+      ModuleB = MyApp.module("ModuleA.ModuleB", {
+        startWithParent: false
+      });
+
+      moduleBInitializer = jasmine.createSpy("module b initializer");
+      ModuleB.addInitializer(moduleBInitializer);
+
+      ModuleA = MyApp.module("ModuleA");
+
+      moduleAInitializer = jasmine.createSpy("module a initializer");
+      ModuleA.addInitializer(function() {
+        moduleAInitializer();
+        ModuleB.start();
+      });
+
+      MyApp.start();
+    });
+
+    it("should run the module b initializer", function(){
+      expect(moduleBInitializer).toHaveBeenCalled();
+    });
+
+    it("should run the module a initializer", function(){
+      expect(moduleAInitializer).toHaveBeenCalled();
+    });
+
+  });
 });

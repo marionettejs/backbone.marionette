@@ -2,7 +2,7 @@
   "name": "Backbone.Marionette",
   "description": "Make your Backbone.js apps dance with a composite application architecture!",
   "version": "0.10.0",
-  "homepage": "https://github.com/derickbailey/backbone.marionette",
+  "homepage": "https://github.com/marionettejs/backbone.marionette",
   "keywords": [
     "backbone",
     "plugin",
@@ -14,7 +14,7 @@
   "licenses": [
     {
       "type": "MIT",
-      "url": "https://github.com/derickbailey/backbone.marionette/blob/master/license.txt"
+      "url": "https://github.com/marionettejs/backbone.marionette/blob/master/license.txt"
     }
   ],
 
@@ -30,15 +30,15 @@
   },
 
   "bugs": {
-    "web": "https://github.com/derickbailey/backbone.marionette/issues"
+    "web": "https://github.com/marionettejs/backbone.marionette/issues"
   },
 
   "repository": {
     "type": "git",
-    "url": "https://github.com/derickbailey/backbone.marionette.git"
+    "url": "https://github.com/marionettejs/backbone.marionette.git"
   },
 
-  "github": "https://github.com/derickbailey/backbone.marionette",
+  "github": "https://github.com/marionettejs/backbone.marionette",
 
   "devDependencies": {
     "grunt": "*",
@@ -47,7 +47,7 @@
   },
 
   "volo": {
-    "url": "https://raw.github.com/derickbailey/backbone.marionette/v{version}/lib/amd/backbone.marionette.js",
+    "url": "https://raw.github.com/marionettejs/backbone.marionette/v{version}/lib/amd/backbone.marionette.js",
     "dependencies": {
       "backbone": "backbone"
     }

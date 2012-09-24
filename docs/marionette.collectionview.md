@@ -33,6 +33,18 @@ new MyCollectionView({
 If you do not specify an `itemView`, an exception will be thrown
 stating that you must specify an `itemView`.
 
+If you need a view specific to your model, you can override 
+`getItemView`:
+
+```js
+Backbone.Marionette.CollectionView.extend({
+  getItemView: function(item) {
+    // some logic to calculate which view to return
+    return someItemSpecificView;
+  }
+})
+```
+
 ## CollectionView's `itemViewOptions`
 
 There may be scenarios where you need to pass data from your parent

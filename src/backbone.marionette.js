@@ -18,4 +18,4 @@ Backbone.Marionette = (function(Backbone, _, $){
 //= backbone.marionette.helpers.js
 
   return Marionette;
-})(Backbone, _, window.jQuery || window.Zepto || window.ender);
+})(Backbone, _, $ || window.jQuery || window.Zepto || window.ender);

@@ -66,7 +66,7 @@ _.extend(Marionette.Region.prototype, Backbone.Events, {
   // current view, it does nothing and returns immediately.
   close: function(){
     var view = this.currentView;
-    if (!view){ return; }
+    if (!view || view.isClosed){ return; }
 
     if (view.close) { view.close(); }
     this.trigger("view:closed", view);

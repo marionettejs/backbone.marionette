@@ -1,3 +1,17 @@
+### v0.11.0 [view commit logs](https://github.com/marionettejs/backbone.marionette/compare/v0.10.2...dev)
+
+* CompositeView
+  * **BREAKING:** CompositeView will only render a model in to it's template, instead of a model or collection. It will still render the collection as itemView instances.
+
+* View / ItemView / CompositeView
+  * Removed the `serializeData` method and added directly to `ItemView` and `CompositeView` as needed
+
+* CollectionView / CompositeView
+  * Cleaned up the `getItemViewContainer` code, and improved the error that is thrown when the specified container element is not found
+
+* Misc
+  * jQuery ($) support now works from global `$` or `window.jQuery`
+
 ### v0.10.2 [view commit logs](https://github.com/marionettejs/backbone.marionette/compare/v0.10.1...v0.10.2)
 
 * Callbacks

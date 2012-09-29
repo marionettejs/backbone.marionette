@@ -3,8 +3,11 @@
 * CompositeView
   * **BREAKING:** CompositeView will only render a model in to it's template, instead of a model or collection. It will still render the collection as itemView instances.
 
+* All Views
+  * **BREAKING:** Calling `close` on a view multiple times will only close the view once. Subsequent calls will exit the close method with no operation occuring.
+
 * View / ItemView / CompositeView
-  * Removed the `serializeData` method and added directly to `ItemView` and `CompositeView` as needed
+  * Removed the `serializeData` method from `View` and added directly to `ItemView` and `CompositeView` as needed
 
 * CollectionView / CompositeView
   * Cleaned up the `getItemViewContainer` code, and improved the error that is thrown when the specified container element is not found

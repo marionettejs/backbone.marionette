@@ -484,7 +484,6 @@ describe("collection view", function(){
 
       spyOn(childView, "close").andCallThrough();
       spyOn(collectionView, "removeItemView").andCallThrough();
-      spyOn(collectionView, "unbind").andCallThrough();
       spyOn(collectionView, "unbindAll").andCallThrough();
       spyOn(collectionView, "remove").andCallThrough();
       spyOn(collectionView, "someCallback").andCallThrough();
@@ -529,7 +528,7 @@ describe("collection view", function(){
     });
 
     it("should unbind any listener to custom view events", function(){
-      expect(collectionView.unbind).toHaveBeenCalled();
+      expect(collectionView.unbindAll).toHaveBeenCalled();
     });
 
     it("should remove the view's EL from the DOM", function(){

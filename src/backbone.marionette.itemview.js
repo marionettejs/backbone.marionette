@@ -58,9 +58,17 @@ Marionette.ItemView =  Marionette.View.extend({
 
   // Override the default close event to add a few
   // more events that are triggered.
-  close: function(){
-    this.trigger('item:before:close');
-    Marionette.View.prototype.close.apply(this, arguments);
-    this.trigger('item:closed');
+  close: function(cb){
+    Marionette.View.prototype.close.call(this, function(close){
+      this.trigger('item:before:close');
+
+      if (cb){
+        cb.call(this, close);
+      } else {
+        close();
+      }
+
+      this.trigger('item:closed');
+    });
   }
 });

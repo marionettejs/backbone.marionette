@@ -170,13 +170,13 @@ describe("region", function(){
       myRegion = new MyRegion();
 
       spyOn(view1, "close").andCallThrough();
-    });
 
-    it("shouldn't call 'close' on an already closed view", function(){
       myRegion.show(view1);
       view1.close();
       myRegion.show(view2);
+    });
 
+    it("shouldn't call 'close' on an already closed view", function(){
       expect(view1.close.callCount).toEqual(1);
     });
   });

@@ -40,14 +40,12 @@ _.extend(Marionette.EventBinder.prototype, {
 
   // Unbind all of the events that we have stored.
   unbindAll: function () {
-    var that = this;
-
     // The `unbindFrom` call removes elements from the array
     // while it is being iterated, so clone it first.
     var bindings = _.map(this._eventBindings, _.identity);
-    _.each(bindings, function (binding, index) {
-      that.unbindFrom(binding);
-    });
+    var unbind = _.bind(this.unbindFrom, this);
+
+    _.each(bindings, unbind);
   }
 });
 

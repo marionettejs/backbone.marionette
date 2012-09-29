@@ -36,11 +36,15 @@ Marionette.Layout = Marionette.ItemView.extend({
   },
 
   // Handle closing regions, and then close the view itself.
-  close: function () {
+  close: function (cb) {
     Marionette.ItemView.prototype.close.call(this, function(close){
       this.closeRegions();
       this.destroyRegions();
-      close();
+      if (cb){
+        cb.call(this, close);
+      } else {
+        close();
+      }
     });
   },
 

@@ -3,7 +3,7 @@
 
 // A simple module system, used to create privacy and encapsulation in
 // Marionette applications
-Marionette.Module = function(moduleName, app, customArgs){
+Marionette.Module = function(moduleName, app){
   this.moduleName = moduleName;
 
   // store sub-modules
@@ -14,8 +14,6 @@ Marionette.Module = function(moduleName, app, customArgs){
   // store the configuration for this module
   this.config = {};
   this.config.app = app;
-  this.config.customArgs = customArgs;
-  this.config.definitions = [];
 
   // extend this module with an event binder
   var eventBinder = new Marionette.EventBinder();
@@ -77,13 +75,13 @@ _.extend(Marionette.Module.prototype, Backbone.Events, {
 
   // Configure the module with a definition function and any custom args
   // that are to be passed in to the definition function
-  addDefinition: function(moduleDefinition){
-    this._runModuleDefinition(moduleDefinition);
+  addDefinition: function(moduleDefinition, customArgs){
+    this._runModuleDefinition(moduleDefinition, customArgs);
   },
 
   // Internal method: run the module definition function with the correct
   // arguments
-  _runModuleDefinition: function(definition){
+  _runModuleDefinition: function(definition, customArgs){
     if (!definition){ return; }
 
     // build the correct list of arguments for the module definition
@@ -93,7 +91,7 @@ _.extend(Marionette.Module.prototype, Backbone.Events, {
       Backbone, 
       Marionette, 
       $, _, 
-      this.config.customArgs
+      customArgs
     ]);
 
     definition.apply(this, args);
@@ -127,7 +125,7 @@ _.extend(Marionette.Module, {
     _.each(moduleNames, function(moduleName, i){
       var isLastModuleInChain = (i === length-1);
 
-      var module = that._getModuleDefinition(parentModule, moduleName, app, customArgs);
+      var module = that._getModuleDefinition(parentModule, moduleName, app);
       module.config.options = that._getModuleOptions(parentModule, moduleDefinition);
 
       // if it's the first module in the chain, configure it
@@ -140,7 +138,7 @@ _.extend(Marionette.Module, {
       // the last module in a "parent.child.grandchild" hierarchy of
       // module names
       if (isLastModuleInChain && module.config.options.hasDefinition){
-        module.addDefinition(module.config.options.definition);
+        module.addDefinition(module.config.options.definition, customArgs);
       }
 
       // Reset the parent module so that the next child
@@ -168,13 +166,13 @@ _.extend(Marionette.Module, {
     module.config.autoStartConfigured = true;
   },
 
-  _getModuleDefinition: function(parentModule, moduleName, app, customArgs){
+  _getModuleDefinition: function(parentModule, moduleName, app){
     // Get an existing module of this name if we have one
     var module = parentModule[moduleName];
 
     if (!module){ 
       // Create a new module if we don't have one
-      module = new Marionette.Module(moduleName, app, customArgs);
+      module = new Marionette.Module(moduleName, app);
       parentModule[moduleName] = module;
       // store the module on the parent
       parentModule.submodules[moduleName] = module;

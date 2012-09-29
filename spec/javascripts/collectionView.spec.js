@@ -560,7 +560,7 @@ describe("collection view", function(){
       });
     });
 
-    describe("when closing a collection view twice", function(){
+    describe("when closing a collection view multiple times", function(){
       var beforeCloseCount, closedCount;
 
       beforeEach(function(){

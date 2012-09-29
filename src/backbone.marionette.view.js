@@ -34,27 +34,6 @@ Marionette.View = Backbone.View.extend({
     return template;
   },
 
-  // Serialize the model or collection for the view. If a model is
-  // found, `.toJSON()` is called. If a collection is found, `.toJSON()`
-  // is also called, but is used to populate an `items` array in the
-  // resulting data. If both are found, defaults to the model.
-  // You can override the `serializeData` method in your own view
-  // definition, to provide custom serialization for your view's data.
-  serializeData: function(){
-    var data;
-
-    if (this.model) {
-      data = this.model.toJSON();
-    }
-    else if (this.collection) {
-      data = { items: this.collection.toJSON() };
-    }
-
-    data = this.mixinTemplateHelpers(data);
-
-    return data;
-  },
-
   // Mix in template helper methods. Looks for a
   // `templateHelpers` attribute, which can either be an
   // object literal, or a function that returns an object
@@ -116,15 +95,38 @@ Marionette.View = Backbone.View.extend({
   // DOM and unbinding it. Regions will call this method
   // for you. You can specify an `onClose` method in your view to
   // add custom code that is called after the view is closed.
-  close: function(){
-    if (this.beforeClose) { this.beforeClose(); }
+  //
+  // When overriding in sub-types, the `cb` parameter is a callback
+  // that receives the `close` inner method. The `View.prototype.close`
+  // method should be called like this:
+  //
+  // ```js
+  // close: function(){
+  //   Backbone.Marionette.View.prototype.close.call(this, function(close){
+  //     // pre-close code goes here
+  //     close(); // close the view
+  //     // post-close code goes here
+  //   });
+  // }
+  // ```
+  close: function(cb){
+    if (this.isClosed) { return; }
 
-    this.remove();
+    var close = _.bind(function(){
+      if (this.beforeClose) { this.beforeClose(); }
+      this.remove();
+      if (this.onClose) { this.onClose(); }
+      this.trigger('close');
+      this.unbindAll();
+    }, this);
 
-    if (this.onClose) { this.onClose(); }
-    this.trigger('close');
-    this.unbindAll();
-    this.unbind();
+    if (_.isFunction(cb)){
+      cb.call(this, close);
+    } else {
+      close();
+    }
+
+    this.isClosed = true;
   },
 
   // This method binds the elements specified in the "ui" hash inside the view's code with

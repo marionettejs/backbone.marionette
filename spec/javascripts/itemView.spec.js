@@ -193,7 +193,7 @@ describe("item view", function(){
     });
   });
 
-  describe("when closing an item view", function(){
+  describe("closing an item view", function(){
     var EventedView = Backbone.Marionette.ItemView.extend({
       template: "#emptyTemplate",
 
@@ -233,44 +233,91 @@ describe("item view", function(){
 
       view.bindTo(model, "change:foo", view.modelChange);
       view.bindTo(collection, "foo", view.collectionChange);
-
-      view.close();
-
-      model.set({foo: "bar"});
-      collection.trigger("foo");
     });
 
-    it("should unbind model events for the view", function(){
-      expect(view.modelChange).not.toHaveBeenCalled();
+    describe("when closing an item view", function(){
+
+      beforeEach(function(){
+        view.close();
+
+        model.set({foo: "bar"});
+        collection.trigger("foo");
+      });
+
+      it("should unbind model events for the view", function(){
+        expect(view.modelChange).not.toHaveBeenCalled();
+      });
+
+      it("should unbind all collection events for the view", function(){
+        expect(view.collectionChange).not.toHaveBeenCalled();
+      });
+
+      it("should unbind any listener to custom view events", function(){
+        expect(view.unbindAll).toHaveBeenCalled();
+      });
+
+      it("should remove the view's EL from the DOM", function(){
+        expect(view.remove).toHaveBeenCalled();
+      });
+
+      it("should trigger 'item:before:close'", function(){
+        expect(view.trigger).toHaveBeenCalledWith("item:before:close");
+      });
+
+      it("should trigger 'item:closed", function(){
+        expect(view.trigger).toHaveBeenCalledWith("item:closed");
+      });
+
+      it("should call `beforeClose` if provided", function(){
+        expect(view.beforeClose).toHaveBeenCalled();
+      });
+
+      it("should call `onClose` if provided", function(){
+        expect(view.onClose).toHaveBeenCalled();
+      });
     });
 
-    it("should unbind all collection events for the view", function(){
-      expect(view.collectionChange).not.toHaveBeenCalled();
+    describe("when closing an item view multiple times", function(){
+      var beforeCloseCount, closedCount;
+
+      beforeEach(function(){
+        beforeCloseCount = 0;
+        closedCount = 0;
+
+        view.on("item:before:close", function(){beforeCloseCount+=1;});
+        view.on("item:closed", function(){closedCount+=1;});
+
+        view.close();
+        view.close();
+        view.close();
+        view.close();
+      });
+
+      it("should unbind any listener to custom view events once", function(){
+        expect(view.unbindAll.callCount).toBe(1);
+      });
+
+      it("should remove the view's EL from the DOM once", function(){
+        expect(view.remove.callCount).toBe(1);
+      });
+
+      it("should trigger 'item:before:close' once", function(){
+        expect(beforeCloseCount).toBe(1);
+      });
+
+      it("should trigger 'item:closed' once", function(){
+        expect(closedCount).toBe(1);
+      });
+
+      it("should call `beforeClose` once", function(){
+        expect(view.beforeClose.callCount).toBe(1);
+      });
+
+      it("should call `onClose` once", function(){
+        expect(view.onClose.callCount).toBe(1);
+      });
     });
 
-    it("should unbind any listener to custom view events", function(){
-      expect(view.unbind).toHaveBeenCalled();
-    });
-
-    it("should remove the view's EL from the DOM", function(){
-      expect(view.remove).toHaveBeenCalled();
-    });
-
-    it("should trigger 'item:before:close'", function(){
-      expect(view.trigger).toHaveBeenCalledWith("item:before:close");
-    });
-
-    it("should trigger 'item:closed", function(){
-      expect(view.trigger).toHaveBeenCalledWith("item:closed");
-    });
-
-    it("should call `beforeClose` if provided", function(){
-      expect(view.beforeClose).toHaveBeenCalled();
-    });
-
-    it("should call `onClose` if provided", function(){
-      expect(view.onClose).toHaveBeenCalled();
-    });
   });
 
   describe("when a view with a checkbox is bound to re-render on the 'change:done' event of the model", function(){

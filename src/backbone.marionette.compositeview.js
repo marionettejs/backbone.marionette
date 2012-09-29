@@ -37,6 +37,21 @@ Marionette.CompositeView = Marionette.CollectionView.extend({
     return itemView;
   },
 
+  // Serialize the collection for the view. 
+  // You can override the `serializeData` method in your own view
+  // definition, to provide custom serialization for your view's data.
+  serializeData: function(){
+    var data = {};
+
+    if (this.model){
+      data = this.model.toJSON();
+    }
+
+    data = this.mixinTemplateHelpers(data);
+
+    return data;
+  },
+
   // Renders the model once, and the collection once. Calling
   // this again will tell the model's view to re-render itself
   // but the collection will not re-render.
@@ -87,23 +102,25 @@ Marionette.CompositeView = Marionette.CollectionView.extend({
   // Internal method to ensure an `$itemViewContainer` exists, for the
   // `appendHtml` method to use.
   getItemViewContainer: function(containerView){
-    var container;
     if ("$itemViewContainer" in containerView){
-      container = containerView.$itemViewContainer;
-    } else {
-      if (containerView.itemViewContainer){
-        container = containerView.$(_.result(containerView, "itemViewContainer"));
-
-        if (container.length <= 0) {
-          var err = new Error("Missing `itemViewContainer`");
-          err.name = "ItemViewContainerMissingError";
-          throw err;
-        }
-      } else {
-        container = containerView.$el;
-      }
-      containerView.$itemViewContainer = container;
+      return containerView.$itemViewContainer;
     }
+
+    var container;
+    if (containerView.itemViewContainer){
+
+      container = containerView.$(_.result(containerView, "itemViewContainer"));
+      if (container.length <= 0) {
+        var err = new Error("The specified `itemViewContainer` was not found: " + containerView.itemViewContainer);
+        err.name = "ItemViewContainerMissingError";
+        throw err;
+      }
+
+    } else {
+      container = containerView.$el;
+    }
+
+    containerView.$itemViewContainer = container;
     return container;
   },
 

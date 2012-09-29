@@ -34,7 +34,7 @@ The context (`this`) will automatically be set to the view. You can
 optionally set the context by passing in the context object as the
 4th parameter of `bindTo`.
 
-## ItemView close
+## View close
 
 View implements a `close` method, which is called by the region
 managers automatically. As part of the implementation, the following
@@ -51,10 +51,34 @@ run custom code for your view that is fired after your view has been
 closed and cleaned up. This lets you handle any additional clean up
 code without having to override the `close` method.
 
+When overriding in sub-types, the `cb` parameter is a callback
+that receives the `close` inner method. The `View.prototype.close`
+method should be called like this:
+
 ```js
 Backbone.Marionette.ItemView.extend({
-  onClose: function(){
-    // custom cleanup or closing code, here
+
+  // ...
+
+  close: function(cb){
+    // any code here will always be run when the view's `close` method is called
+
+    Backbone.Marionette.View.prototype.close.call(this, function(close){
+      // code in here will only be run if the view is not already closed
+
+      // run any pre-close code here
+      
+      // close it, allowing other views to extend from this one with the 
+      // same pattern of a callback function
+      if (cb){
+        cb.call(this, close);
+      } else {
+        close();
+      }
+
+      // run any post-close code here
+    });
+
   }
 });
 ```

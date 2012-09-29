@@ -78,7 +78,7 @@ describe("composite view - itemViewContainer", function(){
     });
 
     it("should throw an error", function(){
-      expect(function(){compositeView.render()}).toThrow("Missing `itemViewContainer`");
+      expect(function(){compositeView.render()}).toThrow("The specified `itemViewContainer` was not found: #missing-container");
     });
   });
 

@@ -13,6 +13,27 @@ Marionette.ItemView =  Marionette.View.extend({
     }
   },
 
+  // Serialize the model or collection for the view. If a model is
+  // found, `.toJSON()` is called. If a collection is found, `.toJSON()`
+  // is also called, but is used to populate an `items` array in the
+  // resulting data. If both are found, defaults to the model.
+  // You can override the `serializeData` method in your own view
+  // definition, to provide custom serialization for your view's data.
+  serializeData: function(){
+    var data;
+
+    if (this.model) {
+      data = this.model.toJSON();
+    }
+    else if (this.collection) {
+      data = { items: this.collection.toJSON() };
+    }
+
+    data = this.mixinTemplateHelpers(data);
+
+    return data;
+  },
+
   // Render the view, defaulting to underscore.js templates.
   // You can override this in your view definition to provide
   // a very specific rendering for your view. In general, though,

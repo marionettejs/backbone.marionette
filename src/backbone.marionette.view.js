@@ -34,27 +34,6 @@ Marionette.View = Backbone.View.extend({
     return template;
   },
 
-  // Serialize the model or collection for the view. If a model is
-  // found, `.toJSON()` is called. If a collection is found, `.toJSON()`
-  // is also called, but is used to populate an `items` array in the
-  // resulting data. If both are found, defaults to the model.
-  // You can override the `serializeData` method in your own view
-  // definition, to provide custom serialization for your view's data.
-  serializeData: function(){
-    var data;
-
-    if (this.model) {
-      data = this.model.toJSON();
-    }
-    else if (this.collection) {
-      data = { items: this.collection.toJSON() };
-    }
-
-    data = this.mixinTemplateHelpers(data);
-
-    return data;
-  },
-
   // Mix in template helper methods. Looks for a
   // `templateHelpers` attribute, which can either be an
   // object literal, or a function that returns an object

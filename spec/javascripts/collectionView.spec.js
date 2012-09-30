@@ -448,7 +448,8 @@ describe("collection view", function(){
     });
   });
 
-  describe("when closing a collection view", function(){
+  describe("closing a collection view", function(){
+
     var EventedView = Backbone.Marionette.CollectionView.extend({
       itemView: ItemView,
 
@@ -484,7 +485,6 @@ describe("collection view", function(){
 
       spyOn(childView, "close").andCallThrough();
       spyOn(collectionView, "removeItemView").andCallThrough();
-      spyOn(collectionView, "unbind").andCallThrough();
       spyOn(collectionView, "unbindAll").andCallThrough();
       spyOn(collectionView, "remove").andCallThrough();
       spyOn(collectionView, "someCallback").andCallThrough();
@@ -495,66 +495,120 @@ describe("collection view", function(){
       spyOn(collectionView, "trigger").andCallThrough();
       
       collectionView.bind('collection:closed', closeHandler);
-
-      collectionView.close();
-
-      childView.trigger("foo");
-
-      collection.trigger("foo");
-      collection.remove(childModel);
     });
 
-    it("should close all of the child views", function(){
-      expect(childView.close).toHaveBeenCalled();
+    describe("when closing a collection view", function(){
+      beforeEach(function(){
+        collectionView.close();
+
+        childView.trigger("foo");
+
+        collection.trigger("foo");
+        collection.remove(childModel);
+      });
+
+      it("should close all of the child views", function(){
+        expect(childView.close).toHaveBeenCalled();
+      });
+
+      it("should unbind all the bindTo events", function(){
+        expect(collectionView.unbindAll).toHaveBeenCalled();
+      });
+
+      it("should unbind all collection events for the view", function(){
+        expect(collectionView.someCallback).not.toHaveBeenCalled();
+      });
+
+      it("should unbind all item-view events for the view", function(){
+        expect(collectionView.someItemViewCallback).not.toHaveBeenCalled();
+      });
+
+      it("should not retain any references to its children", function(){
+        expect(_.size(collectionView.children)).toBe(0);
+      });
+
+      it("should not retain any bindings to its children", function(){
+        expect(_.size(collectionView._eventBindings)).toBe(0);
+      });
+
+      it("should unbind any listener to custom view events", function(){
+        expect(collectionView.unbindAll).toHaveBeenCalled();
+      });
+
+      it("should remove the view's EL from the DOM", function(){
+        expect(collectionView.remove).toHaveBeenCalled();
+      });
+
+      it("should call `onClose` if provided", function(){
+        expect(collectionView.onClose).toHaveBeenCalled();
+      });
+
+      it("should call `beforeClose` if provided", function(){
+        expect(collectionView.beforeClose).toHaveBeenCalled();
+      });
+
+      it("should trigger a 'before:close' event", function(){
+        expect(collectionView.trigger).toHaveBeenCalledWith("collection:before:close");
+      });
+
+      it("should trigger a 'closed", function(){
+        expect(collectionView.trigger).toHaveBeenCalledWith("collection:closed");
+      });
+
+      it("should call the handlers add to the closed event", function(){
+        expect(closeHandler).wasCalled();
+      });
     });
 
-    it("should unbind all the bindTo events", function(){
-      expect(collectionView.unbindAll).toHaveBeenCalled();
+    describe("when closing a collection view multiple times", function(){
+      var beforeCloseCount, closedCount;
+
+      beforeEach(function(){
+        beforeCloseCount = 0;
+        closedCount = 0;
+
+        collectionView.on("collection:before:close", function(){beforeCloseCount+=1;});
+        collectionView.on("collection:closed", function(){closedCount+=1;});
+
+        collectionView.close();
+        collectionView.close();
+        collectionView.close();
+        collectionView.close();
+      });
+
+      it("should close all of the child views once", function(){
+        expect(childView.close.callCount).toBe(1);
+      });
+
+      it("should unbind all the bindTo events once", function(){
+        expect(collectionView.unbindAll.callCount).toBe(1);
+      });
+
+      it("should remove the view's EL from the DOM once", function(){
+        expect(collectionView.remove.callCount).toBe(1);
+      });
+
+      it("should call `onClose` once", function(){
+        expect(collectionView.onClose.callCount).toBe(1);
+      });
+
+      it("should call `beforeClose` close once", function(){
+        expect(collectionView.beforeClose.callCount).toBe(1);
+      });
+
+      it("should trigger a 'before:close' event once", function(){
+        expect(beforeCloseCount).toBe(1);
+      });
+
+      it("should trigger a 'closed' event once", function(){
+        expect(closedCount).toBe(1));
+      });
+
+      it("should call the handlers added to the closed event once", function(){
+        expect(closeHandler.callCount).toBe(1);
+      });
     });
 
-    it("should unbind all collection events for the view", function(){
-      expect(collectionView.someCallback).not.toHaveBeenCalled();
-    });
-
-    it("should unbind all item-view events for the view", function(){
-      expect(collectionView.someItemViewCallback).not.toHaveBeenCalled();
-    });
-
-    it("should not retain any references to its children", function(){
-      expect(_.size(collectionView.children)).toBe(0);
-    });
-
-    it("should not retain any bindings to its children", function(){
-      expect(_.size(collectionView._eventBindings)).toBe(0);
-    });
-
-    it("should unbind any listener to custom view events", function(){
-      expect(collectionView.unbind).toHaveBeenCalled();
-    });
-
-    it("should remove the view's EL from the DOM", function(){
-      expect(collectionView.remove).toHaveBeenCalled();
-    });
-
-    it("should call `onClose` if provided", function(){
-      expect(collectionView.onClose).toHaveBeenCalled();
-    });
-
-    it("should call `beforeClose` if provided", function(){
-      expect(collectionView.beforeClose).toHaveBeenCalled();
-    });
-
-    it("should trigger a 'before:close' event", function(){
-      expect(collectionView.trigger).toHaveBeenCalledWith("collection:before:close");
-    });
-
-    it("should trigger a 'closed", function(){
-      expect(collectionView.trigger).toHaveBeenCalledWith("collection:closed");
-    });
-
-    it("should call the handlers add to the closed event", function(){
-      expect(closeHandler).wasCalled();
-    });
   });
 
   describe("when override appendHtml", function(){

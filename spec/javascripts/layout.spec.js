@@ -108,32 +108,53 @@ describe("layout", function(){
     });
   });
 
-  describe("when closing", function(){
-    var layoutManager, regionOne, regionTwo;
+  describe("closing a layout", function(){
+      var layoutManager, regionOne, regionTwo;
 
-    beforeEach(function(){
-      loadFixtures("layoutManagerTemplate.html");
-      layoutManager = new LayoutManager();
-      layoutManager.render();
+      beforeEach(function(){
+        loadFixtures("layoutManagerTemplate.html");
+        layoutManager = new LayoutManager();
+        layoutManager.render();
 
-      regionOne = layoutManager.regionOne;
-      regionTwo = layoutManager.regionTwo;
+        regionOne = layoutManager.regionOne;
+        regionTwo = layoutManager.regionTwo;
 
-      spyOn(regionOne, "close").andCallThrough();
-      spyOn(regionTwo, "close").andCallThrough();
+        spyOn(regionOne, "close").andCallThrough();
+        spyOn(regionTwo, "close").andCallThrough();
 
-      layoutManager.close();
+      });
+
+    describe("when closing", function(){
+      beforeEach(function(){
+        layoutManager.close();
+      });
+
+      it("should close the region managers", function(){
+        expect(regionOne.close).toHaveBeenCalled();
+        expect(regionTwo.close).toHaveBeenCalled();
+      });
+
+      it("should delete the region managers", function(){
+        expect(layoutManager.regionOne).toBeUndefined();
+        expect(layoutManager.regionTwo).toBeUndefined();
+      });
     });
 
-    it("should close the region managers", function(){
-      expect(regionOne.close).toHaveBeenCalled();
-      expect(regionTwo.close).toHaveBeenCalled();
+    describe("when closing multiple times", function(){
+      beforeEach(function(){
+        layoutManager.close();
+        layoutManager.close();
+        layoutManager.close();
+        layoutManager.close();
+      });
+
+      it("should close the region managers once", function(){
+        expect(regionOne.close.callCount).toBe(1);
+        expect(regionTwo.close.callCount).toBe(1);
+      });
+
     });
 
-    it("should delete the region managers", function(){
-      expect(layoutManager.regionOne).toBeUndefined();
-      expect(layoutManager.regionTwo).toBeUndefined();
-    });
   });
 
   describe("when showing via a region manager", function(){

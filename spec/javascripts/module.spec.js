@@ -196,11 +196,12 @@ describe("application modules", function(){
   });
 
   describe("when providing arguments after the function definition", function(){
-    var MyApp, r1, r2, p1, p2;
+    var MyApp, r1, r2, r3, p1, p2, p3;
 
     beforeEach(function(){
       p1 = {};
       p2 = {};
+      p3 = {};
       MyApp = new Backbone.Marionette.Application();
 
       var mod = MyApp.module("FooModule", function(Foo, MyApp, Backbone, Marionette, $, _, P1Arg, P2Arg){
@@ -208,12 +209,20 @@ describe("application modules", function(){
         r2 = P2Arg;
       }, p1, p2);
 
+      MyApp.module("FooModule", function(Foo, MyApp, Backbone, Marionette, $, _, P3Arg){
+        r3 = P3Arg;
+      }, p3);
+
       mod.start();
     });
 
-    it("should pass those arguments to the function definition", function(){
+    it("should pass those arguments to the first definition", function(){
       expect(r1).toBe(p1);
       expect(r2).toBe(p2);
+    });
+
+    it("should pass those arguments to the second definition", function(){
+      expect(r3).toBe(p3);
     });
   });
 

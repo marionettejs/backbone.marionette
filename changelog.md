@@ -1,9 +1,5 @@
 ### v0.11.0 [view commit logs](https://github.com/marionettejs/backbone.marionette/compare/v0.10.2...dev)
 
-* Dependencies
-  * Updated to Underscore.js v1.4.1
-  * Updated to jQuery v1.8.2
-
 * triggerMethod
   * Added `Marionette.triggerMethod` method to trigger an event and call the corresponding method. For example, `view.triggetMethod("before:render")` will trigger the "before:render" event and call the `onBeforeRender` method.
 
@@ -23,6 +19,8 @@
 
 * Misc
   * jQuery ($) support now works from global `$` or `window.jQuery`
+  * Updated to Underscore.js v1.4.1
+  * Updated to jQuery v1.8.2
 
 ### v0.10.2 [view commit logs](https://github.com/marionettejs/backbone.marionette/compare/v0.10.1...v0.10.2)
 

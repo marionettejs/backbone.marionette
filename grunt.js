@@ -50,6 +50,7 @@ module.exports = function(grunt) {
         'src/async/async.js',
         'spec/javascripts/support/marionette.support.js',
         'src/backbone.marionette.eventbinder.js',
+        'src/backbone.marionette.triggerevent.js',
         'src/backbone.marionette.view.js',
         'src/backbone.marionette.itemview.js',
         'src/backbone.marionette.collectionview.js',

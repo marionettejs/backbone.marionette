@@ -65,4 +65,37 @@ describe("trigger event and method name", function(){
 
   });
 
+  describe("when triggering an event and no handler method exists", function(){
+    beforeEach(function(){
+      view.on("do:something", eventHandler);
+      view.triggerMethod("do:something", 1, 2, 3);
+    });
+
+    it("should trigger the event with the args", function(){
+      expect(eventHandler.mostRecentCall.args.length).toBe(3);
+    });
+
+    it("should not call a method named with each segment of the event name capitalized", function(){
+      expect(methodHandler).not.toHaveBeenCalled();
+    });
+
+  });
+
+  describe("when triggering an event and the attribute for that event is not a function", function(){
+    beforeEach(function(){
+      view.onDoSomething = "bar";
+      view.on("do:something", eventHandler);
+      view.triggerMethod("do:something", 1, 2, 3);
+    });
+
+    it("should trigger the event with the args", function(){
+      expect(eventHandler.mostRecentCall.args.length).toBe(3);
+    });
+
+    it("should not call a method named with each segment of the event name capitalized", function(){
+      expect(methodHandler).not.toHaveBeenCalled();
+    });
+
+  });
+
 });

@@ -19,7 +19,7 @@ Marionette.triggerMethod = function(){
 
   this.trigger.apply(this, arguments);
 
-  if (this[methodName]){
+  if (_.isFunction(this[methodName])){
     args.shift();
     this[methodName].apply(this, args);
   }

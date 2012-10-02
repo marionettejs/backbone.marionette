@@ -93,21 +93,21 @@ describe("composite view", function(){
     });
 
     it("should trigger a rendered event for the model view", function(){
-      //expect(compositeView.trigger).toHaveBeenCalledWith("composite:model:rendered");
+      expect(compositeView.trigger).toHaveBeenCalledWith("composite:model:rendered");
     });
 
     it("should trigger a rendered event for the collection", function(){
-      //expect(compositeView.trigger).toHaveBeenCalledWith("composite:collection:rendered");
+      expect(compositeView.trigger).toHaveBeenCalledWith("composite:collection:rendered");
     });
 
     it("should trigger a rendered event for the composite view", function(){
-      //expect(compositeView.trigger).toHaveBeenCalledWith("composite:rendered");
+      expect(compositeView.trigger).toHaveBeenCalledWith("composite:rendered");
     });
 
     it("should guarantee rendering of the model before rendering the collection", function(){
-      // expect(order[0]).toBe(compositeView.renderedModelView);
-      // expect(order[1]).toBe(compositeView.collection);
-      // expect(order[2]).toBe(compositeView);
+      expect(order[0]).toBe(compositeView.renderedModelView);
+      expect(order[1]).toBe(compositeView.collection);
+      expect(order[2]).toBe(compositeView);
     });
 
     it("should call 'onRender'", function(){

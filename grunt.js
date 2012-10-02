@@ -11,16 +11,16 @@ module.exports = function(grunt) {
       banner: '// Backbone.Marionette, v<%= meta.version %>\n' +
         '// Copyright (c)<%= grunt.template.today("yyyy") %> Derick Bailey, Muted Solutions, LLC.\n' + 
         '// Distributed under MIT license\n' + 
-        '// http://github.com/derickbailey/backbone.marionette'
+        '// http://github.com/marionettejs/backbone.marionette'
     },
 
     lint: {
-      files: ['src/backbone.marionette.*.js']
+      files: ['src/marionette.*.js']
     },
 
     rig: {
       build: {
-        src: ['<banner:meta.banner>', 'src/backbone.marionette.js'],
+        src: ['<banner:meta.banner>', 'src/marionette.js'],
         dest: 'lib/backbone.marionette.js'
       },
       amd: {

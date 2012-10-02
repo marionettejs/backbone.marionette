@@ -113,7 +113,8 @@ These are the strings that you can pull to make your puppet dance:
 
 The following have been extracted in to separate plugins:
 
-* [**Backbone.Marionette.EventBinder**](https://github.com/marionettejs/backbone.eventbinder): An event binding manager, to facilitate binding and unbinding of events
+* [**Backbone.EventBinder**](https://github.com/marionettejs/backbone.eventbinder): An event binding manager, to facilitate binding and unbinding of events
+* [**Backbone.Wreqr.EventAggregator**](https://github.com/marionettejs/backbone.wreqr): An event aggregator, to facilitate pub/sub and event architecture. Part of a suite of messaging based patterns
 
 Please note that this is documentation is rather dry - it's meant to be a reference for
 those that just need a reference. If you're looking for an introduction and/or 

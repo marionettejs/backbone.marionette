@@ -3,6 +3,9 @@
 * Backbone.EventBinder
   * **BREAKING:** Marionette's EventBinder has been extracted to the Backbone.EventBinder repository and plugin. You must include this file in your app, available at https://github.com/marionettejs/backbone.eventbinder
 
+* Backbone.Wreqr
+  * **BREAKING:** Marionette's EventAggregator has been extracted to the Backbone.Wreqr repository and plugin. You must include this file in your app, available at https://github.com/marionettejs/backbone.wreqr
+
 * All Views
   * **BREAKING:** `beforeRender` method is now `onBeforeRender`
   * **BREAKING:** `beforeClose` method is now `onBeforeClose`

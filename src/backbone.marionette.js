@@ -1,6 +1,7 @@
 Backbone.Marionette = (function(Backbone, _, $){
   var Marionette = {};
 
+//= backbone.marionette.triggerMethod.js
 //= backbone.marionette.eventbinder.js
 //= backbone.marionette.view.js
 //= backbone.marionette.itemview.js

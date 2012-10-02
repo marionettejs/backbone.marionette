@@ -210,8 +210,8 @@ Backbone.Marionette currently works with the following versions of these
 libraries:
 
 * Backbone v0.9.2
-* Underscore v1.3.3
-* jQuery v1.7.2
+* Underscore v1.4.1
+* jQuery v1.8.2
 
 Marionette has not been tested against any other versions of these
 libraries. You may or may not have success if you use a version other

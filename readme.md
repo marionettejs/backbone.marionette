@@ -99,6 +99,7 @@ These are the strings that you can pull to make your puppet dance:
 * [**Backbone.Marionette.Application**](https://github.com/marionettejs/backbone.marionette/blob/master/docs/marionette.application.md): An application object that starts your app via initializers, and more
 * [**Backbone.Marionette.Application.module**](https://github.com/marionettejs/backbone.marionette/blob/master/docs/marionette.application.module.md): Create modules and sub-modules within the application
 * [**Backbone.Marionette.AppRouter**](https://github.com/marionettejs/backbone.marionette/blob/master/docs/marionette.approuter.md): Reduce your routers to nothing more than configuration
+* [**Backbone.Marionette.triggerMethod**](https://github.com/marionettejs/backbone.marionette/blob/master/docs/marionette.triggermethod.md): Trigger an event with a corresponding method call
 * [**Backbone.Marionette.View**](https://github.com/marionettejs/backbone.marionette/blob/master/docs/marionette.view.md): The base View type that other Marionette views extend from (not intended to be used directly)
 * [**Backbone.Marionette.ItemView**](https://github.com/marionettejs/backbone.marionette/blob/master/docs/marionette.itemview.md): A view that renders a single item
 * [**Backbone.Marionette.CollectionView**](https://github.com/marionettejs/backbone.marionette/blob/master/docs/marionette.collectionview.md): A view that iterates over a collection, and renders individual `ItemView` instances for each model
@@ -106,12 +107,15 @@ These are the strings that you can pull to make your puppet dance:
 * [**Backbone.Marionette.Region**](https://github.com/marionettejs/backbone.marionette/blob/master/docs/marionette.region.md): Manage visual regions of your application, including display and removal of content
 * [**Backbone.Marionette.Layout**](https://github.com/marionettejs/backbone.marionette/blob/master/docs/marionette.layout.md): A view that renders a layout and creates region managers to manage areas within it
 * [**Backbone.Marionette.EventAggregator**](https://github.com/marionettejs/backbone.marionette/blob/master/docs/marionette.eventaggregator.md): An extension of Backbone.Events, to be used as an event-driven or pub-sub tool
-* [**Backbone.Marionette.EventBinder**](https://github.com/marionettejs/backbone.marionette/blob/master/docs/marionette.eventbinder.md): An event binding manager, to facilitate binding and unbinding of events
 * [**Backbone.Marionette.Renderer**](https://github.com/marionettejs/backbone.marionette/blob/master/docs/marionette.renderer.md): Render templates with or without data, in a consistent and common manner
 * [**Backbone.Marionette.TemplateCache**](https://github.com/marionettejs/backbone.marionette/blob/master/docs/marionette.templatecache.md): Cache templates that are stored in `<script>` blocks, for faster subsequent access
 * [**Backbone.Marionette.Callbacks**](https://github.com/marionettejs/backbone.marionette/blob/master/docs/marionette.callbacks.md): Manage a collection of callback methods, and execute them as needed
 
-Please note that this is document is rather dry - it's meant to be a reference for
+The following have been extracted in to separate plugins:
+
+* [**Backbone.Marionette.EventBinder**](https://github.com/marionettejs/backbone.eventbinder): An event binding manager, to facilitate binding and unbinding of events
+
+Please note that this is documentation is rather dry - it's meant to be a reference for
 those that just need a reference. If you're looking for an introduction and/or 
 examples on how to get started, please see [the Wiki](https://github.com/marionettejs/backbone.marionette/wiki).
 

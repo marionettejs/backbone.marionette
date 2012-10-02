@@ -41,8 +41,8 @@ Marionette.ItemView =  Marionette.View.extend({
   // change how Marionette renders views.
   render: function(){
     if (this.beforeRender){ this.beforeRender(); }
-    this.trigger("before:render", this);
-    this.trigger("item:before:render", this);
+    this.triggerMethod("before:render", this);
+    this.triggerMethod("item:before:render", this);
 
     var data = this.serializeData();
     var template = this.getTemplate();
@@ -51,16 +51,16 @@ Marionette.ItemView =  Marionette.View.extend({
     this.bindUIElements();
 
     if (this.onRender){ this.onRender(); }
-    this.trigger("render", this);
-    this.trigger("item:rendered", this);
+    this.triggerMethod("render", this);
+    this.triggerMethod("item:rendered", this);
     return this;
   },
 
   // Override the default close event to add a few
   // more events that are triggered.
   close: function(){
-    this.trigger('item:before:close');
+    this.triggerMethod('item:before:close');
     Marionette.View.prototype.close.apply(this, arguments);
-    this.trigger('item:closed');
+    this.triggerMethod('item:closed');
   }
 });

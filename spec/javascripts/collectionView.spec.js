@@ -14,7 +14,7 @@ describe("collection view", function(){
   var CollectionView = Backbone.Marionette.CollectionView.extend({
     itemView: ItemView,
 
-    beforeRender: function(){},
+    onBeforeRender: function(){},
 
     onRender: function(){},
 
@@ -53,7 +53,7 @@ describe("collection view", function(){
 
       spyOn(collectionView, "onRender").andCallThrough();
       spyOn(collectionView, "onItemAdded").andCallThrough();
-      spyOn(collectionView, "beforeRender").andCallThrough();
+      spyOn(collectionView, "onBeforeRender").andCallThrough();
       spyOn(collectionView, "trigger").andCallThrough();
       spyOn(collectionView, "appendHtml").andCallThrough();
 
@@ -72,8 +72,8 @@ describe("collection view", function(){
       expect(_.size(collectionView.children)).toBe(2);
     });
 
-    it("should call 'beforeRender' before rendering", function(){
-      expect(collectionView.beforeRender).toHaveBeenCalled();
+    it("should call 'onBeforeRender' before rendering", function(){
+      expect(collectionView.onBeforeRender).toHaveBeenCalled();
     });
 
     it("should call 'onRender' after rendering", function(){
@@ -176,7 +176,7 @@ describe("collection view", function(){
       });
 
       spyOn(collectionView, "onRender").andCallThrough();
-      spyOn(collectionView, "beforeRender").andCallThrough();
+      spyOn(collectionView, "onBeforeRender").andCallThrough();
       spyOn(collectionView, "trigger").andCallThrough();
 
       collectionView.render();
@@ -454,7 +454,7 @@ describe("collection view", function(){
 
       someCallback: function(){ },
 
-      beforeClose: function(){},
+      onBeforeClose: function(){},
 
       onClose: function(){ }
     });
@@ -491,7 +491,7 @@ describe("collection view", function(){
       spyOn(collectionView, "someItemViewCallback").andCallThrough();
       spyOn(collectionView, "close").andCallThrough();
       spyOn(collectionView, "onClose").andCallThrough();
-      spyOn(collectionView, "beforeClose").andCallThrough();
+      spyOn(collectionView, "onBeforeClose").andCallThrough();
       spyOn(collectionView, "trigger").andCallThrough();
       
       collectionView.bind('collection:closed', closeHandler);
@@ -540,8 +540,8 @@ describe("collection view", function(){
       expect(collectionView.onClose).toHaveBeenCalled();
     });
 
-    it("should call `beforeClose` if provided", function(){
-      expect(collectionView.beforeClose).toHaveBeenCalled();
+    it("should call `onBeforeClose` if provided", function(){
+      expect(collectionView.onBeforeClose).toHaveBeenCalled();
     });
 
     it("should trigger a 'before:close' event", function(){

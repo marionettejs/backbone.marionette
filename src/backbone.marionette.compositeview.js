@@ -62,21 +62,24 @@ Marionette.CompositeView = Marionette.CollectionView.extend({
 
     var html = this.renderModel();
     this.$el.html(html);
-    // the ui bindings is done here and not at the end of render since they should be
+
+    // the ui bindings is done here and not at the end of render since they 
+    // will not be available until after the model is rendered, but should be
     // available before the collection is rendered.
     this.bindUIElements();
-    this.trigger("composite:model:rendered");
-    this.trigger("render");
+
+    this.triggerMethod("composite:model:rendered");
+    this.triggerMethod("render");
 
     this.renderCollection();
-    this.trigger("composite:rendered");
+    this.triggerMethod("composite:rendered");
     return this;
   },
 
   // Render the collection for the composite view
   renderCollection: function(){
     Marionette.CollectionView.prototype.render.apply(this, arguments);
-    this.trigger("composite:collection:rendered");
+    this.triggerMethod("composite:collection:rendered");
   },
 
   // Render an individual model, if we have one, as

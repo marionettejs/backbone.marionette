@@ -2,8 +2,7 @@ describe("trigger event and method name", function(){
   var view, eventHandler, methodHandler;
 
   beforeEach(function(){
-    view = new Backbone.View();
-    new Marionette.TriggerEvent(view);
+    view = new Marionette.View();
 
     eventHandler = jasmine.createSpy("event handler");
     methodHandler = jasmine.createSpy("method handler");
@@ -15,7 +14,7 @@ describe("trigger event and method name", function(){
       view.onSomething = methodHandler;
       view.on("something", eventHandler);
 
-      view.trigger("something");
+      view.triggerMethod("something");
     });
 
     it("should trigger the event", function(){
@@ -34,7 +33,7 @@ describe("trigger event and method name", function(){
       view.onSomething = methodHandler;
       view.on("something", eventHandler);
 
-      view.trigger("something", 1, 2, 3);
+      view.triggerMethod("something", 1, 2, 3);
     });
 
     it("should trigger the event with the args", function(){
@@ -53,7 +52,7 @@ describe("trigger event and method name", function(){
       view.onDoSomething = methodHandler;
       view.on("do:something", eventHandler);
 
-      view.trigger("do:something", 1, 2, 3);
+      view.triggerMethod("do:something", 1, 2, 3);
     });
 
     it("should trigger the event with the args", function(){

@@ -46,6 +46,7 @@ module.exports = function(grunt) {
         'public/javascripts/json2.js',
         'public/javascripts/underscore.js',
         'public/javascripts/backbone.js',
+        'public/javascripts/backbone.eventbinder.js',
         'src/backbone.marionette.js',
         'src/async/async.js',
         'spec/javascripts/support/marionette.support.js',

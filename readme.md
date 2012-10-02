@@ -209,9 +209,10 @@ documentation of Backbone.Marionette.
 Backbone.Marionette currently works with the following versions of these 
 libraries:
 
-* Backbone v0.9.2
-* Underscore v1.4.1
 * jQuery v1.8.2
+* Underscore v1.4.1
+* Backbone v0.9.2
+* Backbone.EventBinder v0.0.0
 
 Marionette has not been tested against any other versions of these
 libraries. You may or may not have success if you use a version other

@@ -8,6 +8,9 @@
   * **BREAKING:** `beforeClose` method is now `onBeforeClose`
   * All view events are now triggered with `triggerMethod`, calling their corresponding method on the view if it exists
 
+* EventBinder
+  * **BREAKING:** Marionette's EventBinder has been extracted to the Backbone.EventBinder repository and plugin. You must include this file in your app, available at https://github.com/marionettejs/backbone.eventbinder
+
 * CompositeView
   * **BREAKING:** CompositeView will only render a model in to it's template, instead of a model or collection. It will still render the collection as itemView instances.
 

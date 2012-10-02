@@ -641,7 +641,8 @@ describe("collection view", function(){
     });
 
     it("should not retain any bindings to this view", function(){
-      expect(_.any(collectionView.bindings, function(binding) {
+      var bindings = collectionView.bindings || {};
+      expect(_.any(bindings, function(binding) {
         return binding.obj === childView;
       })).toBe(false);
     });
@@ -677,7 +678,8 @@ describe("collection view", function(){
     });
 
     it("should not retain any bindings to the previous views", function(){
-      expect(_.any(collectionView.bindings, function(binding) {
+      var bindings = collectionView.bindings || {};
+      expect(_.any(bindings, function(binding) {
         return binding.obj === childView;
       })).toBe(false);
     });

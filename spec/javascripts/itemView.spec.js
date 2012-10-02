@@ -14,7 +14,7 @@ describe("item view", function(){
   describe("when rendering", function(){
     var OnRenderView = Backbone.Marionette.ItemView.extend({
       template: "#emptyTemplate",
-      beforeRender: function(){},
+      onBeforeRender: function(){},
       onRender: function(){}
     });
 
@@ -25,15 +25,15 @@ describe("item view", function(){
     beforeEach(function(){
       view = new OnRenderView({});
       
-      spyOn(view, "beforeRender").andCallThrough();
+      spyOn(view, "onBeforeRender").andCallThrough();
       spyOn(view, "onRender").andCallThrough();
       spyOn(view, "trigger").andCallThrough();
 
       view.render();
     });
 
-    it("should call a `beforeRender` method on the view", function(){
-      expect(view.beforeRender).toHaveBeenCalled();
+    it("should call a `onBeforeRender` method on the view", function(){
+      expect(view.onBeforeRender).toHaveBeenCalled();
     });
 
     it("should call an `onRender` method on the view", function(){
@@ -201,7 +201,7 @@ describe("item view", function(){
 
       collectionChange: function(){ },
 
-      beforeClose: function(){},
+      onBeforeClose: function(){},
 
       onClose: function(){ }
     });
@@ -227,7 +227,7 @@ describe("item view", function(){
       spyOn(view, "unbindAll").andCallThrough();
       spyOn(view, "modelChange").andCallThrough();
       spyOn(view, "collectionChange").andCallThrough();
-      spyOn(view, "beforeClose").andCallThrough();
+      spyOn(view, "onBeforeClose").andCallThrough();
       spyOn(view, "onClose").andCallThrough();
       spyOn(view, "trigger").andCallThrough();
 
@@ -264,8 +264,8 @@ describe("item view", function(){
       expect(view.trigger).toHaveBeenCalledWith("item:closed");
     });
 
-    it("should call `beforeClose` if provided", function(){
-      expect(view.beforeClose).toHaveBeenCalled();
+    it("should call `onBeforeClose` if provided", function(){
+      expect(view.onBeforeClose).toHaveBeenCalled();
     });
 
     it("should call `onClose` if provided", function(){

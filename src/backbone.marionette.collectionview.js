@@ -38,17 +38,15 @@ Marionette.CollectionView = Marionette.View.extend({
   // Internal method to trigger the before render callbacks
   // and events
   triggerBeforeRender: function(){
-    if (this.beforeRender) { this.beforeRender(); }
-    this.trigger("before:render", this);
-    this.trigger("collection:before:render", this);
+    this.triggerMethod("before:render", this);
+    this.triggerMethod("collection:before:render", this);
   },
 
   // Internal method to trigger the rendered callbacks and
   // events
   triggerRendered: function(){
-    if (this.onRender) { this.onRender(); }
-    this.trigger("render", this);
-    this.trigger("collection:rendered", this);
+    this.triggerMethod("render", this);
+    this.triggerMethod("collection:rendered", this);
   },
 
   // Render the collection of items. Override this method to
@@ -127,8 +125,7 @@ Marionette.CollectionView = Marionette.View.extend({
     // Store the child view itself so we can properly
     // remove and/or close it later
     this.storeChild(view);
-    if (this.onItemAdded){ this.onItemAdded(view); }
-    this.trigger("item:added", view);
+    this.triggerMethod("item:added", view);
 
     // Render it and show it
     var renderResult = this.renderItemView(view, index);
@@ -145,7 +142,7 @@ Marionette.CollectionView = Marionette.View.extend({
       args[0] = "itemview:" + args[0];
       args.splice(1, 0, view);
 
-      that.trigger.apply(that, args);
+      that.triggerMethod.apply(that, args);
     });
 
     // Store all child event bindings so we can unbind
@@ -194,7 +191,7 @@ Marionette.CollectionView = Marionette.View.extend({
       this.showEmptyView();
     }
 
-    this.trigger("item:removed", view);
+    this.triggerMethod("item:removed", view);
   },
 
   // Append the HTML to the collection's `el`.
@@ -219,9 +216,9 @@ Marionette.CollectionView = Marionette.View.extend({
   // Handle cleanup and other closing needs for
   // the collection of views.
   close: function(){
-    this.trigger("collection:before:close");
+    this.triggerMethod("collection:before:close");
     this.closeChildren();
-    this.trigger("collection:closed");
+    this.triggerMethod("collection:closed");
     Marionette.View.prototype.close.apply(this, arguments);
   },
 

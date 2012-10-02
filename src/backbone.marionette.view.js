@@ -16,6 +16,10 @@ Marionette.View = Backbone.View.extend({
     this.bindTo(this, "show", this.onShowCalled, this);
   },
 
+  // import the "triggerMethod" to trigger events with corresponding
+  // methods if the method exists 
+  triggerMethod: Marionette.triggerMethod,
+
   // Get the template for this view
   // instance. You can set a `template` attribute in the view
   // definition or pass a `template: "whatever"` parameter in
@@ -97,15 +101,13 @@ Marionette.View = Backbone.View.extend({
   // add custom code that is called after the view is closed.
   close: function(){
     if (this.isClosed) { return; }
-    if (this.beforeClose) { this.beforeClose(); }
+    this.triggerMethod("before:close");
 
     this.remove();
-
-    if (this.onClose) { this.onClose(); }
-    this.trigger('close');
     this.unbindAll();
     this.unbind();
 
+    this.triggerMethod("close");
     this.isClosed = true;
   },
 

@@ -1,5 +1,13 @@
 ### v0.11.0 [view commit logs](https://github.com/marionettejs/backbone.marionette/compare/v0.10.2...dev)
 
+* triggerMethod
+  * Added `Marionette.triggerMethod` method to trigger an event and call the corresponding method. For example, `view.triggetMethod("before:render")` will trigger the "before:render" event and call the `onBeforeRender` method.
+
+* All Views
+  * **BREAKING:** `beforeRender` method is now `onBeforeRender`
+  * **BREAKING:** `beforeClose` method is now `onBeforeClose`
+  * All view events are now triggered with `triggerMethod`, calling their corresponding method on the view if it exists
+
 * CompositeView
   * **BREAKING:** CompositeView will only render a model in to it's template, instead of a model or collection. It will still render the collection as itemView instances.
 

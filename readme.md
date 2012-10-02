@@ -50,6 +50,30 @@ to engage in an all-or-nothing migration to begin using Marionette.
 * Flexible, "as-needed" architecture allowing you to pick and choose what you need
 * And much, much more
 
+## Compatibility And Requirements
+
+Backbone.Marionette currently works with the following versions of these 
+libraries:
+
+* [jQuery](http://jquery.com) v1.8.2
+* [Underscore](http://underscorejs.org) v1.4.1
+* [Backbone](http://backbonejs.org) v0.9.2
+* [Backbone.EventBinder](https://github.com/marionettejs/backbone.eventbinder) v0.0.0
+* [Backbone.Wreqr](https://github.com/marionettejs/backbone.wreqr) v0.0.0
+
+Marionette has not been tested against any other versions of these
+libraries. You may or may not have success if you use a version other
+than what it listed here.
+
+While support for Zepto and Enderjs has been added, it is not officially
+tested against these libraries at this time.
+
+Marionette makes use of jQuery's [Deferred](http://api.jquery.com/category/deferred-object/)
+objects and, as such, will need supported methods in replacement libraries.
+Zepto users can use @Mumakil's [Standalone-Deferred](https://github.com/Mumakil/Standalone-Deferred)
+or @sudhirj's [simply-deferred](https://github.com/sudhirj/simply-deferred).
+Enderjs users, please let us know of how you solve any compatibility issues.
+
 ## Source Code And Downloads
 
 You can download the raw source code from the "src" folder above, or grab one of the
@@ -203,34 +227,6 @@ Google Groups mailing list.
 
 Lastly, I blog about Marionette on a regular basis, at my
 LosTechies.com blog.
-
-## Compatibility And Requirements
-
-Theses libraries are required for the use, development, testing and
-documentation of Backbone.Marionette.
-
-### Runtime Requirements
-
-Backbone.Marionette currently works with the following versions of these 
-libraries:
-
-* jQuery v1.8.2
-* Underscore v1.4.1
-* Backbone v0.9.2
-* Backbone.EventBinder v0.0.0
-
-Marionette has not been tested against any other versions of these
-libraries. You may or may not have success if you use a version other
-than what it listed here.
-
-While support for Zepto and Enderjs has been added, it is not officially
-tested against these libraries at this time.
-
-Marionette makes use of jQuery's [Deferred](http://api.jquery.com/category/deferred-object/)
-objects and, as such, will need supported methods in replacement libraries.
-Zepto users can use @Mumakil's [Standalone-Deferred](https://github.com/Mumakil/Standalone-Deferred)
-or @sudhirj's [simply-deferred](https://github.com/sudhirj/simply-deferred).
-Enderjs users, please let us know of how you solve any compatibility issues.
 
 ## Release Notes
 

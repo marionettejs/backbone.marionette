@@ -1,19 +1,21 @@
 describe("trigger event and method name", function(){
+  var view, eventHandler, methodHandler;
+
+  beforeEach(function(){
+    view = new Backbone.View();
+    new Marionette.TriggerEvent(view);
+
+    eventHandler = jasmine.createSpy("event handler");
+    methodHandler = jasmine.createSpy("method handler");
+  });
 
   describe("when triggering an event", function(){
-    var eventHandler, methodHandler;
 
     beforeEach(function(){
-      var view = new Backbone.View();
-      var te = new Marionette.TriggerEvent(view);
-
-      eventHandler = jasmine.createSpy("event handler");
-      methodHandler = jasmine.createSpy("method handler");
-
       view.onSomething = methodHandler;
       view.on("something", eventHandler);
 
-      te.trigger("something");
+      view.trigger("something");
     });
 
     it("should trigger the event", function(){
@@ -27,19 +29,12 @@ describe("trigger event and method name", function(){
   });
 
   describe("when triggering an event with arguments", function(){
-    var eventHandler, methodHandler;
 
     beforeEach(function(){
-      var view = new Backbone.View();
-      var te = new Marionette.TriggerEvent(view);
-
-      eventHandler = jasmine.createSpy("event handler");
-      methodHandler = jasmine.createSpy("method handler");
-
       view.onSomething = methodHandler;
       view.on("something", eventHandler);
 
-      te.trigger("something", 1, 2, 3);
+      view.trigger("something", 1, 2, 3);
     });
 
     it("should trigger the event with the args", function(){
@@ -53,19 +48,12 @@ describe("trigger event and method name", function(){
   });
 
   describe("when triggering an event with : separated name", function(){
-    var eventHandler, methodHandler;
 
     beforeEach(function(){
-      var view = new Backbone.View();
-      var te = new Marionette.TriggerEvent(view);
-
-      eventHandler = jasmine.createSpy("event handler");
-      methodHandler = jasmine.createSpy("method handler");
-
       view.onDoSomething = methodHandler;
       view.on("do:something", eventHandler);
 
-      te.trigger("do:something", 1, 2, 3);
+      view.trigger("do:something", 1, 2, 3);
     });
 
     it("should trigger the event with the args", function(){

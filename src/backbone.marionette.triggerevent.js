@@ -1,11 +1,14 @@
 Marionette.TriggerEvent = function(source){
-  this._source = source;
+  source.trigger = _.bind(this.triggerMethod, source, source);
 }
 
 _.extend(Marionette.TriggerEvent.prototype, {
 
-  trigger: function(){
-    var eventName = arguments[0];
+  triggerMethod: function(){
+    var args = Array.prototype.slice.apply(arguments);
+    var source = args.shift();
+
+    var eventName = args[0];
     var segments = eventName.split(":");
     var segment, capLetter, methodName = "on";
 
@@ -15,11 +18,10 @@ _.extend(Marionette.TriggerEvent.prototype, {
       methodName += capLetter + segment.slice(1);
     }
 
-    var args = Array.prototype.slice.apply(arguments);
-    args.pop();
+    Backbone.Events.trigger.apply(source, args);
 
-    this._source.trigger.apply(this._source, arguments);
-    this._source[methodName].apply(this._source, args);
+    args.pop();
+    source[methodName].apply(source, args);
   }
 
 });

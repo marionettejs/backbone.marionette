@@ -20,6 +20,10 @@
 
 * Application
   * Application regions can now be specified as a jQuery selector string, a region type, or an object literal with a selector and type: `{selector: "#foo", regionType: MyCustomRegion}`
+  * added `.commands` as instance of Backbone.Wreqr.Commands, to facilitate command execution
+  * added `.execute` method for direct command execution
+  * added `.reqres` as instance of Backbone.Wreqr.RequestResponse, to facilitate request/response execution
+  * added `.request` method for direct requesting of a response
 
 * triggerMethod
   * Added `Marionette.triggerMethod` method to trigger an event and call the corresponding method. For example, `view.triggetMethod("before:render")` will trigger the "before:render" event and call the `onBeforeRender` method.

@@ -37,6 +37,8 @@ Marionette.Layout = Marionette.ItemView.extend({
 
   // Handle closing regions, and then close the view itself.
   close: function () {
+    if (this.isClosed){ return; }
+
     this.closeRegions();
     this.destroyRegions();
     Backbone.Marionette.ItemView.prototype.close.call(this, arguments);

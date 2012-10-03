@@ -14,6 +14,9 @@
 * CompositeView
   * **BREAKING:** CompositeView will only render a model in to it's template, instead of a model or collection. It will still render the collection as itemView instances.
 
+* Modules
+  * **BREAKING:** Split module definitions can now receive custom args per module definition, instead of sharing / replacing them across all definitions
+
 * triggerMethod
   * Added `Marionette.triggerMethod` method to trigger an event and call the corresponding method. For example, `view.triggetMethod("before:render")` will trigger the "before:render" event and call the `onBeforeRender` method.
 

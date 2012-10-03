@@ -7,6 +7,8 @@
 Marionette.Application = function(options){
   this.initCallbacks = new Marionette.Callbacks();
   this.vent = new Marionette.EventAggregator();
+  this.commands = new Backbone.Wreqr.Commands();
+  this.reqres = new Backbone.Wreqr.RequestResponse();
   this.submodules = {};
 
   var eventBinder = new Marionette.EventBinder();
@@ -14,6 +16,16 @@ Marionette.Application = function(options){
 };
 
 _.extend(Marionette.Application.prototype, Backbone.Events, {
+  // Command execution, facilitated by Backbone.Wreqr.Commands
+  execute: function(){
+    this.commands.execute.apply(this.commands, arguments);
+  },
+
+  // Request/response, facilitated by Backbone.Wreqr.RequestResponse
+  request: function(){
+    return this.reqres.request.apply(this.reqres, arguments);
+  },
+
   // Add an initializer that is either run at when the `start`
   // method is called, or run immediately if added after `start`
   // has already been called.

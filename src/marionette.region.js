@@ -1,16 +1,24 @@
 // Region 
 // ------
-
+//
 // Manage the visual regions of your composite application. See
 // http://lostechies.com/derickbailey/2011/12/12/composite-js-apps-regions-and-region-managers/
+
 Marionette.Region = function(options){
   this.options = options || {};
+
+  var el = this.options.el;
+  delete this.options.el;
 
   var eventBinder = new Marionette.EventBinder();
   _.extend(this, eventBinder, options);
 
+  if (el){
+    this.el = el;
+  }
+
   if (!this.el){
-    var err = new Error("An 'el' must be specified");
+    var err = new Error("An 'el' must be specified for a region.");
     err.name = "NoElError";
     throw err;
   }
@@ -19,6 +27,76 @@ Marionette.Region = function(options){
     this.initialize.apply(this, arguments);
   }
 };
+
+
+// Region Type methods
+// -------------------
+
+_.extend(Marionette.Region, {
+
+  // Build an instance of a region by passing in a configuration object
+  // and a default region type to use if none is specified in the config.
+  //
+  // The config object should either be a string as a jQuery DOM selector,
+  // a Region type directly, or an object literal that specifies both
+  // a selector and regionType:
+  //
+  // ```js
+  // {
+  //   selector: "#foo",
+  //   regionType: MyCustomRegion
+  // }
+  // ```
+  //
+  buildRegion: function(regionConfig, defaultRegionType){
+    var regionIsString = (typeof regionConfig === "string");
+    var regionSelectorIsString = (typeof regionConfig.selector === "string");
+    var regionTypeIsUndefined = (typeof regionConfig.regionType === "undefined");
+    var regionIsType = (typeof regionConfig === "function");
+
+    if (!regionIsType && !regionIsString && !regionSelectorIsString) {
+      throw new Error("Region must be specified as a Region type, a selector string or an object with selector property");
+    }
+
+    var selector, RegionType;
+   
+    // get the selector for the region
+    
+    if (regionIsString) {
+      selector = regionConfig;
+    } 
+
+    if (regionConfig.selector) {
+      selector = regionConfig.selector;
+    }
+
+    // get the type for the region
+    
+    if (regionIsType){
+      RegionType = regionConfig;
+    }
+
+    if (!regionIsType && regionTypeIsUndefined) {
+      RegionType = defaultRegionType;
+    }
+
+    if (regionConfig.regionType) {
+      RegionType = regionConfig.regionType;
+    }
+    
+    // build the region instance
+
+    var regionManager = new RegionType({
+      el: selector
+    });
+
+    return regionManager;
+  }
+
+});
+
+// Region Instance Methods
+// -----------------------
 
 _.extend(Marionette.Region.prototype, Backbone.Events, {
 

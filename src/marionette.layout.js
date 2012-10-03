@@ -57,34 +57,11 @@ Marionette.Layout = Marionette.ItemView.extend({
 
     var that = this;
     _.each(this.regions, function (region, name) {
-      var regionIsString = (typeof region === "string");
-      var regionSelectorIsString = (typeof region.selector === "string");
-      var regionTypeIsUndefined = (typeof region.regionType === "undefined");
 
-      if (!regionIsString && !regionSelectorIsString) {
-        throw new Error("Region must be specified as a selector string or an object with selector property");
-      }
-
-      var selector, RegionType;
-     
-      if (regionIsString) {
-        selector = region;
-      } else {
-        selector = region.selector;
-      }
-
-      if (regionTypeIsUndefined){
-        RegionType = that.regionType;
-      } else {
-        RegionType = region.regionType;
-      }
-      
-      var regionManager = new RegionType({
-        el: selector,
-          getEl: function(selector){
-            return that.$(selector);
-          }
-      });
+      var regionManager = Marionette.Region.buildRegion(region, that.regionType);
+      regionManager.getEl = function(selector){
+        return that.$(selector);
+      };
 
       that.regionManagers[name] = regionManager;
       that[name] = regionManager;

@@ -18,6 +18,9 @@
 * Modules
   * **BREAKING:** Split module definitions can now receive custom args per module definition, instead of sharing / replacing them across all definitions
 
+* Application
+  * Application regions can now be specified as a jQuery selector string, a region type, or an object literal with a selector and type: `{selector: "#foo", regionType: MyCustomRegion}`
+
 * triggerMethod
   * Added `Marionette.triggerMethod` method to trigger an event and call the corresponding method. For example, `view.triggetMethod("before:render")` will trigger the "before:render" event and call the `onBeforeRender` method.
 

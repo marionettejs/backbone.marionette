@@ -115,7 +115,15 @@ See the `Marionette.EventAggregator` documentation below, for more details.
 ## Regions And The Application Object
 
 Marionette's `Region` objects can be directly added to an application by
-calling the `addRegions` method:
+calling the `addRegions` method.
+
+There are three syntax forms for adding a region to an application object.
+
+### jQuery Selector
+
+The first is to specify a jQuery selector as the value of the region
+definition. This will create an instance of a Marionette.Region directly,
+and assign it to the selector:
 
 ```js
 MyApp.addRegions({
@@ -123,6 +131,46 @@ MyApp.addRegions({
   anotherRegion: "#another-div"
 });
 ```
+
+### Custom Region Type
+
+The second is to specify a custom region type, where the region type has
+already specified a selector:
+
+```js
+MyCustomRegion = Marionette.Region.extend({
+  el: "#foo"
+});
+
+MyApp.addRegions({
+  someRegion: MyCustomRegion
+});
+```
+
+### Custom Region Type And Selector
+
+The third method is to specify a custom region type, and a jQuery selector
+for this region instance, using an object literal:
+
+```js
+MyCustomRegion = Marionette.Region.extend({});
+
+MyApp.addRegions({
+
+  someRegion: {
+    selector: "#foo",
+    regionType: MyCustomRegion
+  },
+
+  anotherRegion: {
+    selector: "#bar",
+    regionType: MyCustomRegion
+  }
+
+});
+```
+
+### Removing Regions
 
 Regions can also be removed with the `removeRegion` method, passing in 
 the name of the region to remove as a string value:

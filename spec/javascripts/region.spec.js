@@ -4,49 +4,7 @@ describe("region", function(){
     it("should throw an exception saying an 'el' is required", function(){
       expect(
         Backbone.Marionette.Region.extend({})
-      ).toThrow("An 'el' must be specified");
-    });
-  });
-
-  describe("when adding region objects to an app", function(){
-    var MyApp = new Backbone.Marionette.Application();
-
-    var myRegion = Backbone.Marionette.Region.extend({
-      el: "#region"
-    });
-
-    var myRegion2 = Backbone.Marionette.Region.extend({
-      el: "#region2"
-    });
-
-    beforeEach(function(){
-      setFixtures("<div id='region'></div>");
-      setFixtures("<div id='region2'></div>");
-
-      MyApp.addRegions({MyRegion: myRegion, anotherRegion: myRegion2});
-    });
-    
-    it("should initialize the regions, immediately", function(){
-      expect(MyApp.MyRegion).not.toBeUndefined();
-      expect(MyApp.anotherRegion).not.toBeUndefined();
-    });
-  });
-
-  describe("when adding region selectors to an app, and starting the app", function(){
-    var MyApp = new Backbone.Marionette.Application();
-
-    beforeEach(function(){
-      setFixtures("<div id='region'></div>");
-      setFixtures("<div id='region2'></div>");
-
-      MyApp.addRegions({MyRegion: "#region", anotherRegion: "region2"});
-
-      MyApp.start();
-    });
-    
-    it("should initialize the regions", function(){
-      expect(MyApp.MyRegion).not.toBeUndefined();
-      expect(MyApp.anotherRegion).not.toBeUndefined();
+      ).toThrow("An 'el' must be specified for a region.");
     });
   });
 

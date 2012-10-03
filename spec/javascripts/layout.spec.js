@@ -19,24 +19,6 @@ describe("layout", function(){
   var CustomRegion2 = function() {
   };
   
-  var LayoutManagerCustomRegion = LayoutManager.extend({
-    regionType: CustomRegion1,
-    regions: {
-      regionOne: {
-        selector: '#regionOne',
-        regionType: CustomRegion1
-      },
-      regionTwo: {
-        selector: '#regionTwo',
-        regionType: CustomRegion2
-      },
-      regionThree: {
-        selector: '#regionThree'
-      },
-      regionFour: '#regionFour'
-    }
-  });
-  
   var LayoutManagerNoDefaultRegion = LayoutManager.extend({
     regions: {
       regionOne: {
@@ -62,6 +44,24 @@ describe("layout", function(){
   });
 
   describe("on instantiation with custom region managers", function() {
+    var LayoutManagerCustomRegion = LayoutManager.extend({
+      regionType: CustomRegion1,
+      regions: {
+        regionOne: {
+          selector: '#regionOne',
+          regionType: CustomRegion1
+        },
+        regionTwo: {
+          selector: '#regionTwo',
+          regionType: CustomRegion2
+        },
+        regionThree: {
+          selector: '#regionThree'
+        },
+        regionFour: '#regionFour'
+      }
+    });
+  
     var layoutManager;
 
     beforeEach(function() {

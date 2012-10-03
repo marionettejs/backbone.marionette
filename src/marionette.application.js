@@ -37,23 +37,11 @@ _.extend(Marionette.Application.prototype, Backbone.Events, {
   // addRegions({something: "#someRegion"})
   // addRegions{{something: Region.extend({el: "#someRegion"}) });
   addRegions: function(regions){
-    var RegionValue, regionObj, region;
-
-    for(region in regions){
-      if (regions.hasOwnProperty(region)){
-        RegionValue = regions[region];
-
-        if (typeof RegionValue === "string"){
-          regionObj = new Marionette.Region({
-            el: RegionValue
-          });
-        } else {
-          regionObj = new RegionValue();
-        }
-
-        this[region] = regionObj;
-      }
-    }
+    var that = this;
+    _.each(regions, function (region, name) {
+      var regionManager = Marionette.Region.buildRegion(region, Marionette.Region);
+      that[name] = regionManager;
+    });
   },
 
   // Removes a region from your app.

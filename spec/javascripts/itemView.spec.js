@@ -222,7 +222,6 @@ describe("item view", function(){
       });
       view.render();
 
-      spyOn(view, "unbind").andCallThrough();
       spyOn(view, "remove").andCallThrough();
       spyOn(view, "unbindAll").andCallThrough();
       spyOn(view, "modelChange").andCallThrough();
@@ -249,7 +248,7 @@ describe("item view", function(){
     });
 
     it("should unbind any listener to custom view events", function(){
-      expect(view.unbind).toHaveBeenCalled();
+      expect(view.unbindAll).toHaveBeenCalled();
     });
 
     it("should remove the view's EL from the DOM", function(){

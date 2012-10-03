@@ -56,7 +56,7 @@ Marionette.CompositeView = Marionette.CollectionView.extend({
   // this again will tell the model's view to re-render itself
   // but the collection will not re-render.
   render: function(){
-    var that = this;
+    this.isClosed = false;
 
     this.resetItemViewContainer();
 

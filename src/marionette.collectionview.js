@@ -53,6 +53,8 @@ Marionette.CollectionView = Marionette.View.extend({
   // provide your own implementation of a render function for
   // the collection view.
   render: function(){
+    this.isClosed = false;
+
     this.triggerBeforeRender();
     this.closeEmptyView();
     this.closeChildren();

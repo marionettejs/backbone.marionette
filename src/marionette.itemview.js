@@ -40,7 +40,8 @@ Marionette.ItemView =  Marionette.View.extend({
   // you should override the `Marionette.Renderer` object to
   // change how Marionette renders views.
   render: function(){
-    if (this.beforeRender){ this.beforeRender(); }
+    this.isClosed = false;
+
     this.triggerMethod("before:render", this);
     this.triggerMethod("item:before:render", this);
 
@@ -50,9 +51,9 @@ Marionette.ItemView =  Marionette.View.extend({
     this.$el.html(html);
     this.bindUIElements();
 
-    if (this.onRender){ this.onRender(); }
     this.triggerMethod("render", this);
     this.triggerMethod("item:rendered", this);
+
     return this;
   },
 

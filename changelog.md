@@ -10,6 +10,7 @@
   * **BREAKING:** `beforeRender` method is now `onBeforeRender`
   * **BREAKING:** `beforeClose` method is now `onBeforeClose`
   * All view events are now triggered with `triggerMethod`, calling their corresponding method on the view if it exists
+  * All views now have an `isClosed` attribute on them, which is set to `true` when calling the `close()` method and reset to `false` when calling the `render()` method
 
 * CompositeView
   * **BREAKING:** CompositeView will only render a model in to it's template, instead of a model or collection. It will still render the collection as itemView instances.

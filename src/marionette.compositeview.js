@@ -112,7 +112,8 @@ Marionette.CompositeView = Marionette.CollectionView.extend({
     var container;
     if (containerView.itemViewContainer){
 
-      container = containerView.$(_.result(containerView, "itemViewContainer"));
+      var selector = _.result(containerView, "itemViewContainer");
+      container = containerView.$(selector);
       if (container.length <= 0) {
         var err = new Error("The specified `itemViewContainer` was not found: " + containerView.itemViewContainer);
         err.name = "ItemViewContainerMissingError";

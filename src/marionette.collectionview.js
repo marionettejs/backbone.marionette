@@ -5,8 +5,8 @@
 // and renders an individual ItemView for each model.
 Marionette.CollectionView = Marionette.View.extend({
   constructor: function(){
-    Marionette.View.prototype.constructor.apply(this, arguments);
     this.initChildViewStorage();
+    Marionette.View.prototype.constructor.apply(this, arguments);
     this.initialEvents();
     this.onShowCallbacks = new Marionette.Callbacks();
   },

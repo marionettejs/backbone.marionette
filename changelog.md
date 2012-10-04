@@ -33,6 +33,7 @@
 
 * CollectionView / CompositeView
   * Cleaned up the `getItemViewContainer` code, and improved the error that is thrown when the specified container element is not found
+  * Can attach existing view instance w/ existing DOM element as child of collection view / composite view, in parent's `initialize` function
 
 * Misc
   * jQuery ($) support now works from global `$` or `window.jQuery`

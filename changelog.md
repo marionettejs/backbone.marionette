@@ -18,6 +18,7 @@
 * CollectionView / CompositeView
   * Cleaned up the `getItemViewContainer` code, and improved the error that is thrown when the specified container element is not found
   * Can attach existing view instance w/ existing DOM element as child of collection view / composite view, in parent's `initialize` function
+  * Fixed a bug where an undefined `this.options` would prevent child views from being rendered, trying to find the index of the view
 
 * Layout
   * Allow a Layout to be defined without `regions`, using Underscore v1.4.x

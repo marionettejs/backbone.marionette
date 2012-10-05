@@ -15,6 +15,16 @@
 * CompositeView
   * **BREAKING:** CompositeView will only render a model in to it's template, instead of a model or collection. It will still render the collection as itemView instances.
 
+* CollectionView / CompositeView
+  * Cleaned up the `getItemViewContainer` code, and improved the error that is thrown when the specified container element is not found
+  * Can attach existing view instance w/ existing DOM element as child of collection view / composite view, in parent's `initialize` function
+
+* Layout
+  * Allow a Layout to be defined without `regions`, using Underscore v1.4.x
+
+* View / ItemView / CompositeView
+  * Removed the `serializeData` method and added directly to `ItemView` and `CompositeView` as needed
+
 * Modules
   * **BREAKING:** Split module definitions can now receive custom args per module definition, instead of sharing / replacing them across all definitions
 
@@ -27,13 +37,6 @@
 
 * triggerMethod
   * Added `Marionette.triggerMethod` method to trigger an event and call the corresponding method. For example, `view.triggetMethod("before:render")` will trigger the "before:render" event and call the `onBeforeRender` method.
-
-* View / ItemView / CompositeView
-  * Removed the `serializeData` method and added directly to `ItemView` and `CompositeView` as needed
-
-* CollectionView / CompositeView
-  * Cleaned up the `getItemViewContainer` code, and improved the error that is thrown when the specified container element is not found
-  * Can attach existing view instance w/ existing DOM element as child of collection view / composite view, in parent's `initialize` function
 
 * Misc
   * jQuery ($) support now works from global `$` or `window.jQuery`

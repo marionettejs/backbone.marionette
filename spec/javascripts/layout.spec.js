@@ -43,6 +43,20 @@ describe("layout", function(){
 
   });
 
+  describe("on instantiation with no regions defined", function(){
+    var NoRegions = Marionette.Layout.extend({});
+    var layoutManager;
+
+    function init(){
+      layoutManager = new NoRegions();
+    };
+
+    it("should instantiate the specified region managers", function(){
+      expect(init).not.toThrow();
+    });
+
+  });
+
   describe("on instantiation with custom region managers", function() {
     var LayoutManagerCustomRegion = LayoutManager.extend({
       regionType: CustomRegion1,

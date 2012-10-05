@@ -56,7 +56,8 @@ Marionette.Layout = Marionette.ItemView.extend({
     }
 
     var that = this;
-    _.each(this.regions, function (region, name) {
+    var regions = this.regions || {};
+    _.each(regions, function (region, name) {
 
       var regionManager = Marionette.Region.buildRegion(region, that.regionType);
       regionManager.getEl = function(selector){

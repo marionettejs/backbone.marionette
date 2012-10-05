@@ -2,7 +2,7 @@
 
 Marionette allows you to define a module within your application,
 including sub-modules hanging from that module. This is useful for creating 
-modular, encapsulated applications that are be split apart in to multiple 
+modular, encapsulated applications that are split apart in to multiple 
 files.
 
 Marionette's module allow you to have unlimited sub-modules hanging off

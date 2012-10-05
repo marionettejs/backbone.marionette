@@ -26,7 +26,15 @@ Marionette.CollectionView = Marionette.View.extend({
   addChildView: function(item, collection, options){
     this.closeEmptyView();
     var ItemView = this.getItemView(item);
-    return this.addItemView(item, ItemView, options.index);
+
+    var index;
+    if(options && options.index){
+      index = options.index;
+    } else {
+      index = 0;
+    }
+
+    return this.addItemView(item, ItemView, index);
   },
 
   // Override from `Marionette.View` to guarantee the `onShow` method

@@ -42,7 +42,6 @@
 * Misc
   * jQuery ($) support now works from global `$` or `window.jQuery`
   * Updated to Underscore.js v1.4.1
-  * Updated to Underscore.js v1.4.1
   * Updated to jQuery v1.8.2
 
 ### v0.10.2 [view commit logs](https://github.com/marionettejs/backbone.marionette/compare/v0.10.1...v0.10.2)

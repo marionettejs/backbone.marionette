@@ -1,4 +1,4 @@
-Backbone.Marionette = (function(Backbone, _, $){
+Backbone.Marionette = Marionette = (function(Backbone, _, $){
   var Marionette = {};
 
 //= marionette.triggerMethod.js

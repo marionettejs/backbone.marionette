@@ -12,10 +12,13 @@
   * **BREAKING:** The `render` method for all Marionette views is bound to the view instance
   * All view events are now triggered with `triggerMethod`, calling their corresponding method on the view if it exists
   * All views now have an `isClosed` attribute on them, which is set to `true` when calling the `close()` method and reset to `false` when calling the `render()` method
-  * EventBinder is now attached to the views as an `eventBinder` attribute, with methods from the event binder attached to the view directly
+  * EventBinder is now attached to the views with the `Marionette.addEventBinder` method call
 
 * CompositeView
   * **BREAKING:** CompositeView will only render a model in to it's template, instead of a model or collection. It will still render the collection as itemView instances.
+
+* Modules
+  * **BREAKING:** Split module definitions can now receive custom args per module definition, instead of sharing / replacing them across all definitions
 
 * CollectionView / CompositeView
   * Cleaned up the `getItemViewContainer` code, and improved the error that is thrown when the specified container element is not found
@@ -28,9 +31,6 @@
 * View / ItemView / CompositeView
   * Removed the `serializeData` method and added directly to `ItemView` and `CompositeView` as needed
 
-* Modules
-  * **BREAKING:** Split module definitions can now receive custom args per module definition, instead of sharing / replacing them across all definitions
-
 * Application
   * Application regions can now be specified as a jQuery selector string, a region type, or an object literal with a selector and type: `{selector: "#foo", regionType: MyCustomRegion}`
   * added `.commands` as instance of Backbone.Wreqr.Commands, to facilitate command execution
@@ -38,8 +38,11 @@
   * added `.reqres` as instance of Backbone.Wreqr.RequestResponse, to facilitate request/response execution
   * added `.request` method for direct requesting of a response
 
-* triggerMethod
+* Marionette.triggerMethod
   * Added `Marionette.triggerMethod` method to trigger an event and call the corresponding method. For example, `view.triggetMethod("before:render")` will trigger the "before:render" event and call the `onBeforeRender` method.
+
+* Marionette.addEventBinder
+  * Added `Marionette.addEventBinder` method to add all of the Backbone.Wreqr.EventBinder methods to a specified target object
 
 * Misc
   * jQuery ($) support now works from global `$` or `window.jQuery`

@@ -16,8 +16,7 @@ Marionette.Module = function(moduleName, app){
   this.config.app = app;
 
   // extend this module with an event binder
-  var eventBinder = new Marionette.EventBinder();
-  _.extend(this, eventBinder);
+  Marionette.addEventBinder(this);
 };
 
 // Extend the Module prototype with events / bindTo, so that the module

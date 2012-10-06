@@ -10,8 +10,7 @@ Marionette.Region = function(options){
   var el = this.options.el;
   delete this.options.el;
 
-  var eventBinder = new Marionette.EventBinder();
-  _.extend(this, eventBinder, options);
+  Marionette.addEventBinder(this);
 
   if (el){
     this.el = el;

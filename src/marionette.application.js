@@ -11,8 +11,9 @@ Marionette.Application = function(options){
   this.reqres = new Backbone.Wreqr.RequestResponse();
   this.submodules = {};
 
-  var eventBinder = new Marionette.EventBinder();
-  _.extend(this, eventBinder, options);
+  _.extend(this, options);
+
+  Marionette.addEventBinder(this);
 };
 
 _.extend(Marionette.Application.prototype, Backbone.Events, {

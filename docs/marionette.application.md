@@ -110,7 +110,7 @@ MyApp.vent.on("foo", function(){
 MyApp.vent.trigger("foo"); // => alert box "bar"
 ```
 
-See the `Marionette.EventAggregator` documentation below, for more details.
+See the [`Marionette.EventAggregator`](./marionette.eventaggregator.md) documentation for more details.
 
 ## Regions And The Application Object
 

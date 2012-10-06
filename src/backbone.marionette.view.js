@@ -148,7 +148,7 @@ Marionette.View = Backbone.View.extend({
   augment : function(/* augments... */) {
     var self = this;
     for (var i = 0; i < arguments.length; i++) {
-      var aug = arguments[0];
+      var aug = arguments[i];
       if (aug.augment) {
         self = aug.augment(self);
       }

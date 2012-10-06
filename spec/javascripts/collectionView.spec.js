@@ -524,7 +524,7 @@ describe("collection view", function(){
     });
 
     it("should not retain any bindings to its children", function(){
-      expect(_.size(collectionView._eventBindings)).toBe(0);
+      expect(_.size(collectionView.eventBinder._eventBindings)).toBe(0);
     });
 
     it("should unbind any listener to custom view events", function(){

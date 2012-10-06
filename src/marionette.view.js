@@ -5,8 +5,8 @@
 Marionette.View = Backbone.View.extend({
 
   constructor: function(){
-    var eventBinder = new Marionette.EventBinder();
-    _.extend(this, eventBinder);
+    _.bindAll(this, "render");
+    this._configureEventBinder();
 
     Backbone.View.prototype.constructor.apply(this, arguments);
 
@@ -19,6 +19,20 @@ Marionette.View = Backbone.View.extend({
   // import the "triggerMethod" to trigger events with corresponding
   // methods if the method exists 
   triggerMethod: Marionette.triggerMethod,
+
+  // Internal method. Add the EventBinder methods to the view directly,
+  // but keep them bound to the EventBinder instance so they work properly.
+  // This allows the event binder's implementation to vary independently
+  // of it being attached to the view... for example the internal structure
+  // used to store the events can change without worry about it interfering
+  // with Marionette's views.
+  _configureEventBinder: function(){
+    var eventBinder = new Marionette.EventBinder();
+    this.eventBinder = eventBinder;
+    this.bindTo = _.bind(eventBinder.bindTo, eventBinder);
+    this.unbindFrom = _.bind(eventBinder.unbindFrom, eventBinder);
+    this.unbindAll = _.bind(eventBinder.unbindAll, eventBinder);
+  },
 
   // Get the template for this view
   // instance. You can set a `template` attribute in the view

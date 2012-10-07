@@ -1,4 +1,4 @@
-### v0.11.0 [view commit logs](https://github.com/marionettejs/backbone.marionette/compare/v0.10.2...dev)
+### v1.0.0-beta1 [view commit logs](https://github.com/marionettejs/backbone.marionette/compare/v0.10.2...dev)
 
 * Backbone.EventBinder
   * **BREAKING:** Marionette's EventBinder has been extracted to the Backbone.EventBinder repository and plugin. You must include this file in your app, available at https://github.com/marionettejs/backbone.eventbinder

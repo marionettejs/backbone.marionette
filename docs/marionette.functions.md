@@ -1,0 +1,42 @@
+# Marionette functions
+
+Marionette provides a set of utility / helper functions that are used to
+facilitate common behaviors throughout the framework. These functions may
+be useful to those that are building on top of Marionette, as the provide
+a way to get the same behaviors and conventions from your own code.
+
+## Marionette.triggerMethod
+
+Trigger an event and a corresponding method on the target object.
+
+When an event is triggered, the first letter of each section of the 
+event name is capitalized, and the word "on" is tagged on to the front 
+of it. Examples:
+
+* `triggerMethod("render")` fires the "onRender" function
+* `triggerMethod("before:close")` fires the "onBeforeClose" function
+
+All arguments that are passed to the triggerMethod call are passed along to both the event and the method, with the exception of the event name not being passed to the corresponding method.
+
+`triggerMethod("foo", bar)` will call `onFoo: function(bar){...})`
+
+## Marionette.addEventBinder
+
+Add a [Backbone.EventBinder](https://github.com/marionettejs/backbone.eventbinder)
+instance to any target object. This method attaches an `eventBinder` to
+the target object, and then copies the necessary methods to the target
+while maintaining the event binder in it's own object. 
+
+```js
+myObj = {};
+
+Marionette.addEventBinder(myObj);
+
+myObj.bindTo(aModel, "foo", function(){...});
+```
+
+This allows the event binder's implementation to vary independently
+of it being attached to the view. For example, the internal structure
+used to store the events can change without worry about it interfering
+with Marionette's views.
+

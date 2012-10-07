@@ -78,4 +78,4 @@ _.extend(Marionette.Application.prototype, Backbone.Events, {
 });
 
 // Copy the `extend` function used by Backbone's classes
-Marionette.Application.extend = Backbone.View.extend;
+Marionette.Application.extend = Marionette.extend;

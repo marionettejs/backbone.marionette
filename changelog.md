@@ -45,6 +45,7 @@
   * Added `Marionette.addEventBinder` method to add all of the Backbone.Wreqr.EventBinder methods to a specified target object
 
 * Misc
+  * Added `Marionette.extend` as alias to Backbone's `extend` method for more consistent use
   * jQuery ($) support now works from global `$` or `window.jQuery`
   * Updated to Underscore.js v1.4.1
   * Updated to jQuery v1.8.2

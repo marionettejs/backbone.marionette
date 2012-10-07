@@ -50,6 +50,7 @@ module.exports = function(grunt) {
         'public/javascripts/backbone.wreqr.js',
         'src/marionette.js',
         'spec/javascripts/support/marionette.support.js',
+        'src/marionette.helpers.js',
         'src/marionette.triggermethod.js',
         'src/marionette.eventbinder.js',
         'src/marionette.view.js',
@@ -64,8 +65,7 @@ module.exports = function(grunt) {
         'src/marionette.templatecache.js',
         'src/marionette.renderer.js',
         'src/marionette.callbacks.js',
-        'src/marionette.eventaggregator.js',
-        'src/marionette.helpers.js'
+        'src/marionette.eventaggregator.js'
       ],
       helpers : 'spec/javascripts/helpers/*.js',
       specs : 'spec/javascripts/**/*.spec.js'

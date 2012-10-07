@@ -170,4 +170,4 @@ _.extend(Marionette.Region.prototype, Backbone.Events, {
 });
 
 // Copy the `extend` function used by Backbone's classes
-Marionette.Region.extend = Backbone.View.extend;
+Marionette.Region.extend = Marionette.extend;

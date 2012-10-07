@@ -1,6 +1,7 @@
 Backbone.Marionette = Marionette = (function(Backbone, _, $){
   var Marionette = {};
 
+//= marionette.helpers.js
 //= marionette.triggerMethod.js
 //= marionette.eventbinder.js
 //= marionette.view.js
@@ -16,7 +17,6 @@ Backbone.Marionette = Marionette = (function(Backbone, _, $){
 //= marionette.renderer.js
 //= marionette.callbacks.js
 //= marionette.eventaggregator.js
-//= marionette.helpers.js
 
   return Marionette;
 })(Backbone, _, $ || window.jQuery || window.Zepto || window.ender);

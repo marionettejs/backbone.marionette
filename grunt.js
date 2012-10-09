@@ -21,21 +21,7 @@ module.exports = function(grunt) {
         ' * Includes Wreqr\n' +
         ' * https://github.com/marionettejs/backbone.wreqr/\n' +
         ' * Includes EventBinder\n' +
-        ' * https://github.com/marionettejs/backbone.eventbinder\n' +
-        ' */',
-      banner_backbone_underscore :
-        '<%= meta.banner_core %>\n' +
-        '/*!\n' +
-        ' * Includes Backbone\n' +
-        ' * http://backbonejs.org/\n' +
-        ' * Includes underscore\n' +
-        ' * http://underscore.org/\n' +
-        ' */',
-      banner_backbone_underscore_jquery :
-        '<%= meta.banner_backbone_underscore %>\n' +
-        '/*!\n' +
-        ' * Includes jQuery\n' +
-        ' * http://www.jQuery.com/\n' +
+        ' * https://github.com/marionettejs/backbone.eventbinder/\n' +
         ' */'
     },
 
@@ -51,27 +37,6 @@ module.exports = function(grunt) {
           'lib/backbone.marionette.js'
         ],
         dest : 'lib/bundles/marionette.core.js'
-      },
-      backbone_underscore : {
-        src : [
-          'public/javascripts/underscore.js',
-          'public/javascripts/backbone.js',
-          'public/javascripts/backbone.eventbinder.js',
-          'public/javascripts/backbone.wreqr.js',
-          'lib/backbone.marionette.js'
-        ],
-        dest : 'lib/bundles/marionette.backbone_underscore.js'
-      },
-      backbone_underscore_jquery : {
-        src : [
-          'public/javascripts/jquery.js',
-          'public/javascripts/underscore.js',
-          'public/javascripts/backbone.js',
-          'public/javascripts/backbone.eventbinder.js',
-          'public/javascripts/backbone.wreqr.js',
-          'lib/backbone.marionette.js'
-        ],
-        dest : 'lib/bundles/marionette.backbone_underscore_jquery.js'
       }
     },
 
@@ -100,20 +65,6 @@ module.exports = function(grunt) {
           '<config:concat.core.dest>'
         ],
         dest: 'lib/bundles/marionette.core.min.js'
-      },
-      bundle_backbone_underscore: {
-        src: [
-          '<banner:meta.banner_backbone_underscore>',
-          '<config:concat.backbone_underscore.dest>'
-        ],
-        dest: 'lib/bundles/marionette.backbone_underscore.min.js'
-      },
-      bundle_backbone_underscore_jquery: {
-        src: [
-          '<banner:meta.banner_backbone_underscore_jquery>',
-          '<config:concat.backbone_underscore_jquery.dest>'
-        ],
-        dest: 'lib/bundles/marionette.backbone_underscore_jquery.min.js'
       },
       amd: {
         src: [

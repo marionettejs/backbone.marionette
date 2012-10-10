@@ -3,11 +3,15 @@
 
 // The core view type that other Marionette views extend from.
 Marionette.View = Backbone.View.extend({
+
   constructor: function(){
     var eventBinder = new Marionette.EventBinder();
     _.extend(this, eventBinder);
 
     Backbone.View.prototype.constructor.apply(this, arguments);
+
+    this.bindBackboneEntityTo(this.model, this.modelEvents);
+    this.bindBackboneEntityTo(this.collection, this.collectionEvents);
 
     this.bindTo(this, "show", this.onShowCalled, this);
   },
@@ -15,7 +19,7 @@ Marionette.View = Backbone.View.extend({
   // Get the template for this view
   // instance. You can set a `template` attribute in the view
   // definition or pass a `template: "whatever"` parameter in
-  // to the constructor options. 
+  // to the constructor options.
   getTemplate: function(){
     var template;
 
@@ -33,14 +37,14 @@ Marionette.View = Backbone.View.extend({
   // Serialize the model or collection for the view. If a model is
   // found, `.toJSON()` is called. If a collection is found, `.toJSON()`
   // is also called, but is used to populate an `items` array in the
-  // resulting data. If both are found, defaults to the model. 
-  // You can override the `serializeData` method in your own view 
+  // resulting data. If both are found, defaults to the model.
+  // You can override the `serializeData` method in your own view
   // definition, to provide custom serialization for your view's data.
   serializeData: function(){
     var data;
 
-    if (this.model) { 
-      data = this.model.toJSON(); 
+    if (this.model) {
+      data = this.model.toJSON();
     }
     else if (this.collection) {
       data = { items: this.collection.toJSON() };
@@ -142,9 +146,23 @@ Marionette.View = Backbone.View.extend({
       var selector = that.uiBindings[key];
       that.ui[key] = that.$(selector);
     });
-  }
+  },
 
-},{
+  // This method is used to bind a backbone "entity" (collection/model) to methods on the view.
+  bindBackboneEntityTo: function(entity, bindings){
+    if (!entity || !bindings) { return; }
+
+    var view = this;
+    _.each(bindings, function(methodName, evt){
+
+      var method = view[methodName];
+      if(!method) {
+        throw new Error("View method '"+ methodName +"' was configured as an event handler, but does not exist.");
+      }
+
+      view.bindTo(entity, evt, method, view);
+    });
+  },{
   augment : function(/* augments... */) {
     var self = this;
     for (var i = 0; i < arguments.length; i++) {
@@ -156,9 +174,3 @@ Marionette.View = Backbone.View.extend({
     return self;
   }
 });
-
-
-
-
-
-

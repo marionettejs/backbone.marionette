@@ -226,32 +226,6 @@ Zepto users can use @Mumakil's [Standalone-Deferred](https://github.com/Mumakil/
 or @sudhirj's [simply-deferred](https://github.com/sudhirj/simply-deferred).
 Enderjs users, please let us know of how you solve any compatibility issues.
 
-## Build Tools Used
-
-I use a number of tools to build, test and maintain Marionette, including
-but not limited to:
-
-### Grunt
-
-The [Grunt](https://github.com/cowboy/grunt) project is used
-to generate the builds for Backbone.Marionette. You can run the
-`build` file from a Linux/OSX terminal, or the `build.cmd` file for Windows 
-users, after installing grunt with NPM / NodeJS.
-
-### Test Suite
-
-Backbone.Marionette is also tested with the Jasmine JavaScript test utility,
-using the Jasmine Ruby gem. 
-
-To get the test suite up and running, you need a Ruby installation with the 
-latest RubyGems. Install the 'bundler' gem and then run 'bundle install' from 
-the project's root folder. Then run `rake jasmine` to run the test suite, and
-load up http://localhost:8888 to see the test suite in action.
-
-### Annotated Source Code
-
-I'm using [Docco](http://jashkenas.github.com/docco/) to generate the annotated source code.
-
 ## Release Notes
 
 For change logs and release notes, see the
@@ -259,7 +233,7 @@ For change logs and release notes, see the
 
 ## Legal Mumbo Jumbo (MIT License)
 
-Copyright (c) 2012 Derick Bailey, Muted Solutions, LLC
+Copyright (c) 2012 Derick Bailey; Muted Solutions, LLC
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
 

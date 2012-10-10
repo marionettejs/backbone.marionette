@@ -456,6 +456,7 @@ describe("collection view", function(){
     var collection;
     var childView;
     var childModel;
+    var closeHandler = jasmine.createSpy();
 
     beforeEach(function(){
 
@@ -485,6 +486,8 @@ describe("collection view", function(){
       spyOn(collectionView, "onClose").andCallThrough();
       spyOn(collectionView, "beforeClose").andCallThrough();
       spyOn(collectionView, "trigger").andCallThrough();
+      
+      collectionView.bind('collection:closed', closeHandler);
 
       collectionView.close();
 
@@ -540,6 +543,10 @@ describe("collection view", function(){
 
     it("should trigger a 'closed", function(){
       expect(collectionView.trigger).toHaveBeenCalledWith("collection:closed");
+    });
+
+    it("should call the handlers add to the closed event", function(){
+      expect(closeHandler).wasCalled();
     });
   });
 

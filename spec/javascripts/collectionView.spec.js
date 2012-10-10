@@ -168,6 +168,31 @@ describe("collection view", function(){
     });
   });
 
+  describe("when rendering and an 'itemViewOptions' is provided at construction time", function(){
+    var CollectionView = Backbone.Marionette.CollectionView.extend({
+      itemView: ItemView
+    });
+
+    var collection = new Backbone.Collection([{foo: "bar"}]);
+    var collectionView, view;
+
+    beforeEach(function(){
+      collectionView = new CollectionView({
+        collection: collection,
+        itemViewOptions: {
+          foo: "bar"
+        }
+      });
+
+      collectionView.render();
+      view = _.values(collectionView.children)[0];
+    });
+
+    it("should pass the options to every view instance", function(){
+      expect(view.options.hasOwnProperty("foo")).toBe(true);
+    });
+  });
+
   describe("when rendering a collection view without a collection", function(){
     var collectionView;
 

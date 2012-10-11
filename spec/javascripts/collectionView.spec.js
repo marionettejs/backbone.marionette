@@ -618,6 +618,45 @@ describe("collection view", function(){
     });
   });
 
+  describe("when a child view triggers default events", function(){
+    var model = new Backbone.Model({foo: "bar"});
+    var collection = new Backbone.Collection([model]);
+    var collectionView;
+    var eventNames = [];
+
+    beforeEach(function(){
+      collectionView = new CollectionView({
+        itemView: Backbone.Marionette.ItemView.extend({
+            template: function() { return '<%= foo %>'; }
+        }),
+        collection: collection
+      });
+
+      collectionView.on("all", function(){
+        var eventName = arguments[0];
+
+        eventNames.push(eventName);
+      });
+
+      collectionView.render();
+    });
+
+    it("should bubble up through the parent collection view", function(){
+      expect(eventNames).toBeDefined();
+      expect(eventNames).toEqual([
+          'before:render',
+          'collection:before:render',
+          'item:added',
+          'itemview:before:render',
+          'itemview:item:before:render',
+          'itemview:render',
+          'itemview:item:rendered',
+          'render',
+          'collection:rendered'
+      ]);
+    });
+  });
+
   describe("when a child view is removed from a collection view", function(){
     var model;
     var collection;

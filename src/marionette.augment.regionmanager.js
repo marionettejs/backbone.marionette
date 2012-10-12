@@ -13,8 +13,8 @@ Marionette.augment.RegionManager = {
       regionType: Marionette.Region,
 
       constructor: function () {
-        View.prototype.constructor.apply(this, arguments);
         this.initializeRegions();
+        View.prototype.constructor.apply(this, arguments);
       },
 
       // Layout's render will use the existing region objects the
@@ -22,18 +22,14 @@ Marionette.augment.RegionManager = {
       // views that the regions are showing and then reset the `el`
       // for the regions to the newly rendered DOM elements.
       render: function(){
-        var result = View.prototype.render.apply(this, arguments);
-
-        // Rewrite this function to handle re-rendering and
+        // If this is not the first render call, then we need to
         // re-initializing the `el` for each region
-        this.render = this._reRender;
-
-        return result;
-      },
-
-      _reRender: function() {
-        this.closeRegions();
-        this.reInitializeRegions();
+        if (!this._firstRender){
+          this.closeRegions();
+          this.reInitializeRegions();
+        } else {
+          this._firstRender = false;
+        }
 
         var result = View.prototype.render.apply(this, arguments);
         return result;
@@ -41,6 +37,8 @@ Marionette.augment.RegionManager = {
 
       // Handle closing regions, and then close the view itself.
       close: function () {
+        if (this.isClosed){ return; }
+
         this.closeRegions();
         this.destroyRegions();
         View.prototype.close.call(this, arguments);
@@ -58,35 +56,13 @@ Marionette.augment.RegionManager = {
         }
 
         var that = this;
-        _.each(this.regions, function (region, name) {
-          var regionIsString = (typeof region === "string");
-          var regionSelectorIsString = (typeof region.selector === "string");
-          var regionTypeIsUndefined = (typeof region.regionType === "undefined");
+        var regions = this.regions || {};
+        _.each(regions, function (region, name) {
 
-          if (!regionIsString && !regionSelectorIsString) {
-            throw new Error("Region must be specified as a selector string or an object with selector property");
-          }
-
-          var selector, RegionType;
-
-          if (regionIsString) {
-            selector = region;
-          } else {
-            selector = region.selector;
-          }
-
-          if (regionTypeIsUndefined){
-            RegionType = that.regionType;
-          } else {
-            RegionType = region.regionType;
-          }
-
-          var regionManager = new RegionType({
-            el: selector,
-            getEl: function(selector){
-              return that.$(selector);
-            }
-          });
+          var regionManager = Marionette.Region.buildRegion(region, that.regionType);
+          regionManager.getEl = function(selector){
+            return that.$(selector);
+          };
 
           that.regionManagers[name] = regionManager;
           that[name] = regionManager;

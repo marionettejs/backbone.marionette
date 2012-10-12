@@ -146,7 +146,8 @@ Marionette.View = Backbone.View.extend({
 
       view.bindTo(entity, evt, method, view);
     });
-  },{
+  }
+},{
   augment : function(/* augments... */) {
     var self = this;
     for (var i = 0; i < arguments.length; i++) {

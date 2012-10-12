@@ -1,5 +1,7 @@
 Backbone.Marionette = Marionette = (function(Backbone, _, $){
-  var Marionette = {};
+  var Marionette = {
+    augment : {}
+  };
 
 //= marionette.helpers.js
 //= marionette.triggerMethod.js
@@ -9,6 +11,7 @@ Backbone.Marionette = Marionette = (function(Backbone, _, $){
 //= marionette.collectionview.js
 //= marionette.compositeview.js
 //= marionette.region.js
+//= marionette.augment.regionmanager.js
 //= marionette.layout.js
 //= marionette.application.js
 //= marionette.approuter.js

@@ -93,7 +93,7 @@ module.exports = function(grunt) {
         'src/marionette.collectionview.js',
         'src/marionette.compositeview.js',
         'src/marionette.region.js',
-        'src/backbone.marionette.augment.regionmanager.js',
+        'src/marionette.augment.regionmanager.js',
         'src/marionette.layout.js',
         'src/marionette.application.js',
         'src/marionette.approuter.js',

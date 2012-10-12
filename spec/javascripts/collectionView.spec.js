@@ -14,7 +14,7 @@ describe("collection view", function(){
   var CollectionView = Backbone.Marionette.CollectionView.extend({
     itemView: ItemView,
 
-    beforeRender: function(){},
+    onBeforeRender: function(){},
 
     onRender: function(){},
 
@@ -53,7 +53,7 @@ describe("collection view", function(){
 
       spyOn(collectionView, "onRender").andCallThrough();
       spyOn(collectionView, "onItemAdded").andCallThrough();
-      spyOn(collectionView, "beforeRender").andCallThrough();
+      spyOn(collectionView, "onBeforeRender").andCallThrough();
       spyOn(collectionView, "trigger").andCallThrough();
       spyOn(collectionView, "appendHtml").andCallThrough();
 
@@ -72,8 +72,8 @@ describe("collection view", function(){
       expect(_.size(collectionView.children)).toBe(2);
     });
 
-    it("should call 'beforeRender' before rendering", function(){
-      expect(collectionView.beforeRender).toHaveBeenCalled();
+    it("should call 'onBeforeRender' before rendering", function(){
+      expect(collectionView.onBeforeRender).toHaveBeenCalled();
     });
 
     it("should call 'onRender' after rendering", function(){
@@ -137,20 +137,22 @@ describe("collection view", function(){
   describe("when rendering and an 'itemViewOptions' is provided as a function", function(){
     var CollectionView = Backbone.Marionette.CollectionView.extend({
       itemView: ItemView,
-      itemViewOptions: function(){
+      itemViewOptions: function(model){
         return {
           foo: "bar"
         };
       }
     });
 
-    var collection = new Backbone.Collection([{foo: "bar"}]);
+    var collection = new Backbone.Collection([{foo: "bar"},{foo: "baz"}]);
     var collectionView, view;
+
 
     beforeEach(function(){
       collectionView = new CollectionView({
         collection: collection
       });
+      spyOn(collectionView, 'itemViewOptions').andCallThrough();
 
       collectionView.render();
       view = _.values(collectionView.children)[0];
@@ -158,6 +160,11 @@ describe("collection view", function(){
 
     it("should pass the options to every view instance", function(){
       expect(view.options.hasOwnProperty("foo")).toBe(true);
+    });
+    
+    it("should pass the model when calling 'itemViewOptions'", function() {
+      expect(collectionView.itemViewOptions).toHaveBeenCalledWith(collection.at(0)); 
+      expect(collectionView.itemViewOptions).toHaveBeenCalledWith(collection.at(1)); 
     });
   });
 
@@ -169,7 +176,7 @@ describe("collection view", function(){
       });
 
       spyOn(collectionView, "onRender").andCallThrough();
-      spyOn(collectionView, "beforeRender").andCallThrough();
+      spyOn(collectionView, "onBeforeRender").andCallThrough();
       spyOn(collectionView, "trigger").andCallThrough();
 
       collectionView.render();
@@ -447,7 +454,7 @@ describe("collection view", function(){
 
       someCallback: function(){ },
 
-      beforeClose: function(){},
+      onBeforeClose: function(){},
 
       onClose: function(){ }
     });
@@ -477,14 +484,13 @@ describe("collection view", function(){
 
       spyOn(childView, "close").andCallThrough();
       spyOn(collectionView, "removeItemView").andCallThrough();
-      spyOn(collectionView, "unbind").andCallThrough();
       spyOn(collectionView, "unbindAll").andCallThrough();
       spyOn(collectionView, "remove").andCallThrough();
       spyOn(collectionView, "someCallback").andCallThrough();
       spyOn(collectionView, "someItemViewCallback").andCallThrough();
       spyOn(collectionView, "close").andCallThrough();
       spyOn(collectionView, "onClose").andCallThrough();
-      spyOn(collectionView, "beforeClose").andCallThrough();
+      spyOn(collectionView, "onBeforeClose").andCallThrough();
       spyOn(collectionView, "trigger").andCallThrough();
       
       collectionView.bind('collection:closed', closeHandler);
@@ -518,11 +524,11 @@ describe("collection view", function(){
     });
 
     it("should not retain any bindings to its children", function(){
-      expect(_.size(collectionView._eventBindings)).toBe(0);
+      expect(_.size(collectionView.eventBinder._eventBindings)).toBe(0);
     });
 
     it("should unbind any listener to custom view events", function(){
-      expect(collectionView.unbind).toHaveBeenCalled();
+      expect(collectionView.unbindAll).toHaveBeenCalled();
     });
 
     it("should remove the view's EL from the DOM", function(){
@@ -533,8 +539,8 @@ describe("collection view", function(){
       expect(collectionView.onClose).toHaveBeenCalled();
     });
 
-    it("should call `beforeClose` if provided", function(){
-      expect(collectionView.beforeClose).toHaveBeenCalled();
+    it("should call `onBeforeClose` if provided", function(){
+      expect(collectionView.onBeforeClose).toHaveBeenCalled();
     });
 
     it("should trigger a 'before:close' event", function(){
@@ -634,7 +640,8 @@ describe("collection view", function(){
     });
 
     it("should not retain any bindings to this view", function(){
-      expect(_.any(collectionView.bindings, function(binding) {
+      var bindings = collectionView.bindings || {};
+      expect(_.any(bindings, function(binding) {
         return binding.obj === childView;
       })).toBe(false);
     });
@@ -670,7 +677,8 @@ describe("collection view", function(){
     });
 
     it("should not retain any bindings to the previous views", function(){
-      expect(_.any(collectionView.bindings, function(binding) {
+      var bindings = collectionView.bindings || {};
+      expect(_.any(bindings, function(binding) {
         return binding.obj === childView;
       })).toBe(false);
     });

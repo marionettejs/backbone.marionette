@@ -2,7 +2,7 @@
 
 Make your Backbone.js apps dance with a composite application architecture!
 
-[![Build Status](https://secure.travis-ci.org/marionettejs/backbone.marionette.png)](http://travis-ci.org/marionettejs/backbone.marionette)
+[![Build Status](https://secure.travis-ci.org/marionettejs/backbone.marionette.png?branch=master)](http://travis-ci.org/marionettejs/backbone.marionette)
 
 
 ## About Marionette
@@ -49,6 +49,30 @@ to engage in an all-or-nothing migration to begin using Marionette.
 * Event-driven architecture with the `EventAggregator`
 * Flexible, "as-needed" architecture allowing you to pick and choose what you need
 * And much, much more
+
+## Compatibility And Requirements
+
+Backbone.Marionette currently works with the following versions of these 
+libraries:
+
+* [jQuery](http://jquery.com) v1.8.2
+* [Underscore](http://underscorejs.org) v1.4.1
+* [Backbone](http://backbonejs.org) v0.9.2
+* [Backbone.EventBinder](https://github.com/marionettejs/backbone.eventbinder) v0.0.0
+* [Backbone.Wreqr](https://github.com/marionettejs/backbone.wreqr) v0.0.0
+
+Marionette has not been tested against any other versions of these
+libraries. You may or may not have success if you use a version other
+than what it listed here.
+
+While support for Zepto and Enderjs has been added, it is not officially
+tested against these libraries at this time.
+
+Marionette makes use of jQuery's [Deferred](http://api.jquery.com/category/deferred-object/)
+objects and, as such, will need supported methods in replacement libraries.
+Zepto users can use @Mumakil's [Standalone-Deferred](https://github.com/Mumakil/Standalone-Deferred)
+or @sudhirj's [simply-deferred](https://github.com/sudhirj/simply-deferred).
+Enderjs users, please let us know of how you solve any compatibility issues.
 
 ## Source Code And Downloads
 
@@ -97,7 +121,7 @@ documentation for each peice of Marionette.
 These are the strings that you can pull to make your puppet dance:
 
 * [**Backbone.Marionette.Application**](https://github.com/marionettejs/backbone.marionette/blob/master/docs/marionette.application.md): An application object that starts your app via initializers, and more
-* [**Backbone.Marionette.Application.module**](https://github.com/marionettejs/backbone.marionette/blob/master/docs/marionette.application.module.md): Create modules and sub-modules within the application
+* [**Backbone.Marionette.Module**](https://github.com/marionettejs/backbone.marionette/blob/master/docs/marionette.application.module.md): Create modules and sub-modules within the application
 * [**Backbone.Marionette.AppRouter**](https://github.com/marionettejs/backbone.marionette/blob/master/docs/marionette.approuter.md): Reduce your routers to nothing more than configuration
 * [**Backbone.Marionette.View**](https://github.com/marionettejs/backbone.marionette/blob/master/docs/marionette.view.md): The base View type that other Marionette views extend from (not intended to be used directly)
 * [**Backbone.Marionette.ItemView**](https://github.com/marionettejs/backbone.marionette/blob/master/docs/marionette.itemview.md): A view that renders a single item
@@ -106,12 +130,21 @@ These are the strings that you can pull to make your puppet dance:
 * [**Backbone.Marionette.Region**](https://github.com/marionettejs/backbone.marionette/blob/master/docs/marionette.region.md): Manage visual regions of your application, including display and removal of content
 * [**Backbone.Marionette.Layout**](https://github.com/marionettejs/backbone.marionette/blob/master/docs/marionette.layout.md): A view that renders a layout and creates region managers to manage areas within it
 * [**Backbone.Marionette.EventAggregator**](https://github.com/marionettejs/backbone.marionette/blob/master/docs/marionette.eventaggregator.md): An extension of Backbone.Events, to be used as an event-driven or pub-sub tool
-* [**Backbone.Marionette.EventBinder**](https://github.com/marionettejs/backbone.marionette/blob/master/docs/marionette.eventbinder.md): An event binding manager, to facilitate binding and unbinding of events
+* [**Backbone.Marionette.Commands**](https://github.com/marionettejs/backbone.marionette/blob/master/docs/marionette.commands.md): An extension of Backbone.Wreqr.Commands, a simple command execution framework
+* [**Backbone.Marionette.RequestResponse**](https://github.com/marionettejs/backbone.marionette/blob/master/docs/marionette.requestresponse.md): An extension of Backbone.Wreqr.RequestResponse, a simple request/response framework
 * [**Backbone.Marionette.Renderer**](https://github.com/marionettejs/backbone.marionette/blob/master/docs/marionette.renderer.md): Render templates with or without data, in a consistent and common manner
 * [**Backbone.Marionette.TemplateCache**](https://github.com/marionettejs/backbone.marionette/blob/master/docs/marionette.templatecache.md): Cache templates that are stored in `<script>` blocks, for faster subsequent access
 * [**Backbone.Marionette.Callbacks**](https://github.com/marionettejs/backbone.marionette/blob/master/docs/marionette.callbacks.md): Manage a collection of callback methods, and execute them as needed
+* [**Backbone.Marionette.functions**](https://github.com/marionettejs/backbone.marionette/blob/master/docs/marionette.functions.md): A suite of helper functions and utilities for implementing common Marionette behavior in your objects
 
-Please note that this is document is rather dry - it's meant to be a reference for
+The following have been extracted in to separate plugins:
+
+* [**Backbone.EventBinder**](https://github.com/marionettejs/backbone.eventbinder): An event binding manager, to facilitate binding and unbinding of events
+* [**Backbone.Wreqr.EventAggregator**](https://github.com/marionettejs/backbone.wreqr): An event aggregator, to facilitate pub/sub and event architecture. Part of a suite of messaging based patterns
+* [**Backbone.Wreqr.Commands**](https://github.com/marionettejs/backbone.wreqr): A simple command execution system
+* [**Backbone.Wreqr.RequestResponse**](https://github.com/marionettejs/backbone.wreqr): A simple request/response system
+
+Please note that this is documentation is rather dry - it's meant to be a reference for
 those that just need a reference. If you're looking for an introduction and/or 
 examples on how to get started, please see [the Wiki](https://github.com/marionettejs/backbone.marionette/wiki).
 
@@ -198,33 +231,6 @@ Google Groups mailing list.
 
 Lastly, I blog about Marionette on a regular basis, at my
 LosTechies.com blog.
-
-## Compatibility And Requirements
-
-Theses libraries are required for the use, development, testing and
-documentation of Backbone.Marionette.
-
-### Runtime Requirements
-
-Backbone.Marionette currently works with the following versions of these 
-libraries:
-
-* Backbone v0.9.2
-* Underscore v1.3.3
-* jQuery v1.7.2
-
-Marionette has not been tested against any other versions of these
-libraries. You may or may not have success if you use a version other
-than what it listed here.
-
-While support for Zepto and Enderjs has been added, it is not officially
-tested against these libraries at this time.
-
-Marionette makes use of jQuery's [Deferred](http://api.jquery.com/category/deferred-object/)
-objects and, as such, will need supported methods in replacement libraries.
-Zepto users can use @Mumakil's [Standalone-Deferred](https://github.com/Mumakil/Standalone-Deferred)
-or @sudhirj's [simply-deferred](https://github.com/sudhirj/simply-deferred).
-Enderjs users, please let us know of how you solve any compatibility issues.
 
 ## Release Notes
 

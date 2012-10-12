@@ -7,13 +7,26 @@
 Marionette.Application = function(options){
   this.initCallbacks = new Marionette.Callbacks();
   this.vent = new Marionette.EventAggregator();
+  this.commands = new Backbone.Wreqr.Commands();
+  this.reqres = new Backbone.Wreqr.RequestResponse();
   this.submodules = {};
 
-  var eventBinder = new Marionette.EventBinder();
-  _.extend(this, eventBinder, options);
+  _.extend(this, options);
+
+  Marionette.addEventBinder(this);
 };
 
 _.extend(Marionette.Application.prototype, Backbone.Events, {
+  // Command execution, facilitated by Backbone.Wreqr.Commands
+  execute: function(){
+    this.commands.execute.apply(this.commands, arguments);
+  },
+
+  // Request/response, facilitated by Backbone.Wreqr.RequestResponse
+  request: function(){
+    return this.reqres.request.apply(this.reqres, arguments);
+  },
+
   // Add an initializer that is either run at when the `start`
   // method is called, or run immediately if added after `start`
   // has already been called.
@@ -37,23 +50,11 @@ _.extend(Marionette.Application.prototype, Backbone.Events, {
   // addRegions({something: "#someRegion"})
   // addRegions{{something: Region.extend({el: "#someRegion"}) });
   addRegions: function(regions){
-    var RegionValue, regionObj, region;
-
-    for(region in regions){
-      if (regions.hasOwnProperty(region)){
-        RegionValue = regions[region];
-
-        if (typeof RegionValue === "string"){
-          regionObj = new Marionette.Region({
-            el: RegionValue
-          });
-        } else {
-          regionObj = new RegionValue();
-        }
-
-        this[region] = regionObj;
-      }
-    }
+    var that = this;
+    _.each(regions, function (region, name) {
+      var regionManager = Marionette.Region.buildRegion(region, Marionette.Region);
+      that[name] = regionManager;
+    });
   },
 
   // Removes a region from your app.
@@ -77,4 +78,4 @@ _.extend(Marionette.Application.prototype, Backbone.Events, {
 });
 
 // Copy the `extend` function used by Backbone's classes
-Marionette.Application.extend = Backbone.View.extend;
+Marionette.Application.extend = Marionette.extend;

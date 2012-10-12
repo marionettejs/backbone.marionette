@@ -33,6 +33,18 @@ new MyCollectionView({
 If you do not specify an `itemView`, an exception will be thrown
 stating that you must specify an `itemView`.
 
+If you need a view specific to your model, you can override 
+`getItemView`:
+
+```js
+Backbone.Marionette.CollectionView.extend({
+  getItemView: function(item) {
+    // some logic to calculate which view to return
+    return someItemSpecificView;
+  }
+})
+```
+
 ## CollectionView's `itemViewOptions`
 
 There may be scenarios where you need to pass data from your parent
@@ -58,9 +70,21 @@ CollectionView = Backbone.Marionette.CollectionView({
 ```
 
 You can also specify the `itemViewOptions` as a function, if you need to
-calculate the values to return at runtime. The function must return an
-object, and the attributes of the object will be copied to the itemView
-instance' options.
+calculate the values to return at runtime. The model will be passed into
+the function should you need access to it when calculating
+`itemViewOptions`. The function must return an object, and the attributes 
+of the object will be copied to the itemView instance' options.
+
+```js
+CollectionView = Backbone.Marionette.CollectionView({
+  itemViewOptions: function(model) {
+    // do some calculations based on the model
+    return {
+      foo: "bar"
+    }   
+  }  
+});
+```
 
 ## CollectionView's `emptyView`
 

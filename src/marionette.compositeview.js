@@ -37,31 +37,49 @@ Marionette.CompositeView = Marionette.CollectionView.extend({
     return itemView;
   },
 
+  // Serialize the collection for the view. 
+  // You can override the `serializeData` method in your own view
+  // definition, to provide custom serialization for your view's data.
+  serializeData: function(){
+    var data = {};
+
+    if (this.model){
+      data = this.model.toJSON();
+    }
+
+    data = this.mixinTemplateHelpers(data);
+
+    return data;
+  },
+
   // Renders the model once, and the collection once. Calling
   // this again will tell the model's view to re-render itself
   // but the collection will not re-render.
   render: function(){
-    var that = this;
+    this.isClosed = false;
 
     this.resetItemViewContainer();
 
     var html = this.renderModel();
     this.$el.html(html);
-    // the ui bindings is done here and not at the end of render since they should be
+
+    // the ui bindings is done here and not at the end of render since they 
+    // will not be available until after the model is rendered, but should be
     // available before the collection is rendered.
     this.bindUIElements();
-    this.trigger("composite:model:rendered");
-    this.trigger("render");
+
+    this.triggerMethod("composite:model:rendered");
+    this.triggerMethod("render");
 
     this.renderCollection();
-    this.trigger("composite:rendered");
+    this.triggerMethod("composite:rendered");
     return this;
   },
 
   // Render the collection for the composite view
   renderCollection: function(){
     Marionette.CollectionView.prototype.render.apply(this, arguments);
-    this.trigger("composite:collection:rendered");
+    this.triggerMethod("composite:collection:rendered");
   },
 
   // Render an individual model, if we have one, as
@@ -87,23 +105,26 @@ Marionette.CompositeView = Marionette.CollectionView.extend({
   // Internal method to ensure an `$itemViewContainer` exists, for the
   // `appendHtml` method to use.
   getItemViewContainer: function(containerView){
-    var container;
     if ("$itemViewContainer" in containerView){
-      container = containerView.$itemViewContainer;
-    } else {
-      if (containerView.itemViewContainer){
-        container = containerView.$(_.result(containerView, "itemViewContainer"));
-
-        if (container.length <= 0) {
-          var err = new Error("Missing `itemViewContainer`");
-          err.name = "ItemViewContainerMissingError";
-          throw err;
-        }
-      } else {
-        container = containerView.$el;
-      }
-      containerView.$itemViewContainer = container;
+      return containerView.$itemViewContainer;
     }
+
+    var container;
+    if (containerView.itemViewContainer){
+
+      var selector = _.result(containerView, "itemViewContainer");
+      container = containerView.$(selector);
+      if (container.length <= 0) {
+        var err = new Error("The specified `itemViewContainer` was not found: " + containerView.itemViewContainer);
+        err.name = "ItemViewContainerMissingError";
+        throw err;
+      }
+
+    } else {
+      container = containerView.$el;
+    }
+
+    containerView.$itemViewContainer = container;
     return container;
   },
 

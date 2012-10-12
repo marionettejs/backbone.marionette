@@ -2,7 +2,7 @@
 
 Marionette allows you to define a module within your application,
 including sub-modules hanging from that module. This is useful for creating 
-modular, encapsulated applications that are be split apart in to multiple 
+modular, encapsulated applications that are split apart in to multiple 
 files.
 
 Marionette's module allow you to have unlimited sub-modules hanging off
@@ -39,7 +39,7 @@ module that you need in your tests.
 
 Starting a module is done in one of two ways:
 
-1. Automatically with the parent application's `.start()` method
+1. Automatically with the parent module (or Application) `.start()` method
 2. Manually call the `.start()` method on the module
 
 In this example, the module will be started automatically with the parent
@@ -60,33 +60,38 @@ MyApp.start();
 Note that modules loaded and defined after the `app.start()` call will still
 be started automatically.
 
+### Preventing Auto-Start Of Modules
+
 If you wish to manually start a module instead of having the application
-start it, you can tell the module definition not to start with the app:
+start it, you can tell the module definition not to start with the parent:
 
 ```js
 var fooModule = MyApp.module("Foo", {
-  startWithApp: false,
+  startWithParent: false,
 
   define: function(){
     // module code goes here
   }
 });
 
+// start the app without starting the module
+MyApp.start();
+
 // later, start the module
 fooModule.start();
 ```
 
 Note the use of an object literal instead of just a function to define
-the module, and the presence of the `startWithApp` attribute, to tell it
-not to start with the application.
+the module, and the presence of the `startWithParent` attribute, to tell it
+not to start with the application. Then to start the module, the module's 
+`start` method is manually called.
 
-Then to start the module, the module's `start` method is manually called.
 You can also grab a reference to the module at a later point in time, to
 start it:
 
 ```js
 MyApp.module("Foo", {
-  startWithApp: false,
+  startWithParent: false,
   define: function(){ /*...*/ }
 });
 
@@ -94,11 +99,56 @@ MyApp.module("Foo", {
 MyApp.module("Foo").start();
 ```
 
+### Starting Sub-Modules With Parent
+
+Starting of sub-modules is done in a depth-first hierarchy traversal. 
+That is, a hierarchy of `Foo.Bar.Baz` will start `Baz` first, then `Bar`,
+and finally `Foo.
+
+Submodules default to starting with their parent module. 
+
+```js
+MyApp.module("Foo", function(){...});
+MyApp.module("Foo.Bar", function(){...});
+
+MyApp.start();
+```
+
+In this example, the "Foo.Bar" module will be started with the call to
+`MyApp.start()` because the parent module, "Foo" is set to start
+with the app.
+
+A sub-module can override this behavior by setting it's `startWithParent`
+to false. This prevents it from being started by the parent's `start` call.
+
+```js
+MyApp.module("Foo", define: function(){...});
+
+MyApp.module("Foo.Bar", {
+  startWithParent: true,
+  define: function(){...}
+})
+
+MyApp.start(); 
+```
+
+Now the module "Foo" will be started, but the sub-module "Foo.Bar" will
+not be started.
+
+A sub-module can still be started manually, with this configuration:
+
+```js
+MyApp.module("Foo.Bar").start();
+```
+
 ### Stopping Modules
 
 A module can be stopped, or shut down, to clear memory and resources when
-the module is no longer needed. This is done with the `stop` method
-on modules.
+the module is no longer needed. Like starting of modules, stopping is done
+in a depth-first hierarchy traversal. That is, a hierarchy of modules like
+`Foo.Bar.Baz` will stop `Baz` first, then `Bar`, and finally `Foo`.
+
+To stop a module and it's children, call the `stop()` method of a module.
 
 ```js
 MyApp.module("Foo").stop();
@@ -116,7 +166,7 @@ MyApp.module("Foo").stop();
 
 This call to `stop` causes the `Bar` and `Baz` modules to both be stopped
 as they are sub-modules of `Foo`. For more information on defining
-sub-modules, see the next section: "Defining Sub-Modules With . Notation".
+sub-modules, see the section "Defining Sub-Modules With . Notation".
 
 ## Defining Sub-Modules With . Notation
 

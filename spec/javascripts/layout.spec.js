@@ -1,9 +1,15 @@
 describe("layout", function(){
+
   var LayoutManager = Backbone.Marionette.Layout.extend({
     template: "#layout-manager-template",
     regions: {
       regionOne: "#regionOne",
       regionTwo: "#regionTwo"
+    },
+    initialize: function() {
+      if (this.model) {
+        this.bindTo(this.model, 'change', this.render);
+      }
     }
   });
 
@@ -12,24 +18,6 @@ describe("layout", function(){
 
   var CustomRegion2 = function() {
   };
-  
-  var LayoutManagerCustomRegion = LayoutManager.extend({
-    regionType: CustomRegion1,
-    regions: {
-      regionOne: {
-        selector: '#regionOne',
-        regionType: CustomRegion1
-      },
-      regionTwo: {
-        selector: '#regionTwo',
-        regionType: CustomRegion2
-      },
-      regionThree: {
-        selector: '#regionThree'
-      },
-      regionFour: '#regionFour'
-    }
-  });
   
   var LayoutManagerNoDefaultRegion = LayoutManager.extend({
     regions: {
@@ -53,10 +41,41 @@ describe("layout", function(){
       expect(layoutManager).toHaveOwnProperty("regionTwo");
     });
 
+  });
+
+  describe("on instantiation with no regions defined", function(){
+    var NoRegions = Marionette.Layout.extend({});
+    var layoutManager;
+
+    function init(){
+      layoutManager = new NoRegions();
+    };
+
+    it("should instantiate the specified region managers", function(){
+      expect(init).not.toThrow();
+    });
 
   });
 
   describe("on instantiation with custom region managers", function() {
+    var LayoutManagerCustomRegion = LayoutManager.extend({
+      regionType: CustomRegion1,
+      regions: {
+        regionOne: {
+          selector: '#regionOne',
+          regionType: CustomRegion1
+        },
+        regionTwo: {
+          selector: '#regionTwo',
+          regionType: CustomRegion2
+        },
+        regionThree: {
+          selector: '#regionThree'
+        },
+        regionFour: '#regionFour'
+      }
+    });
+  
     var layoutManager;
 
     beforeEach(function() {
@@ -167,7 +186,9 @@ describe("layout", function(){
     beforeEach(function(){
       loadFixtures("layoutManagerTemplate.html");
 
-      layout = new LayoutManager();
+      layout = new LayoutManager({
+        model: new Backbone.Model()
+      });
       layout.render();
       region = layout.regionOne;
 
@@ -194,6 +215,21 @@ describe("layout", function(){
       var regionEl = layout.$("#regionOne");
       expect(region.$el[0]).toBe(regionEl[0]);
     });
+
+    describe("and the view's `render` function is bound to an event in the `initialize` function", function(){
+      beforeEach(function(){
+        layout.onRender = function() {
+          this.regionOne.show(view);
+        };
+
+        layout.model.trigger('change');
+      });
+
+      it("should re-bind the regions correctly", function(){
+        expect(layout.$("#regionOne")).not.toBeEmpty();
+      });
+    });
+
   });
 
   describe("when re-rendering a closed layout", function(){

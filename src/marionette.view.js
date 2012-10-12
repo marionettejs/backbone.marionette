@@ -5,8 +5,8 @@
 Marionette.View = Backbone.View.extend({
 
   constructor: function(){
-    var eventBinder = new Marionette.EventBinder();
-    _.extend(this, eventBinder);
+    _.bindAll(this, "render");
+    Marionette.addEventBinder(this);
 
     Backbone.View.prototype.constructor.apply(this, arguments);
 
@@ -15,6 +15,10 @@ Marionette.View = Backbone.View.extend({
 
     this.bindTo(this, "show", this.onShowCalled, this);
   },
+
+  // import the "triggerMethod" to trigger events with corresponding
+  // methods if the method exists 
+  triggerMethod: Marionette.triggerMethod,
 
   // Get the template for this view
   // instance. You can set a `template` attribute in the view
@@ -32,27 +36,6 @@ Marionette.View = Backbone.View.extend({
     }
 
     return template;
-  },
-
-  // Serialize the model or collection for the view. If a model is
-  // found, `.toJSON()` is called. If a collection is found, `.toJSON()`
-  // is also called, but is used to populate an `items` array in the
-  // resulting data. If both are found, defaults to the model.
-  // You can override the `serializeData` method in your own view
-  // definition, to provide custom serialization for your view's data.
-  serializeData: function(){
-    var data;
-
-    if (this.model) {
-      data = this.model.toJSON();
-    }
-    else if (this.collection) {
-      data = { items: this.collection.toJSON() };
-    }
-
-    data = this.mixinTemplateHelpers(data);
-
-    return data;
   },
 
   // Mix in template helper methods. Looks for a
@@ -117,14 +100,15 @@ Marionette.View = Backbone.View.extend({
   // for you. You can specify an `onClose` method in your view to
   // add custom code that is called after the view is closed.
   close: function(){
-    if (this.beforeClose) { this.beforeClose(); }
+    if (this.isClosed) { return; }
+
+    this.triggerMethod("before:close");
 
     this.remove();
-
-    if (this.onClose) { this.onClose(); }
-    this.trigger('close');
     this.unbindAll();
-    this.unbind();
+
+    this.triggerMethod("close");
+    this.isClosed = true;
   },
 
   // This method binds the elements specified in the "ui" hash inside the view's code with

@@ -1,3 +1,87 @@
+### v1.0.0-beta1 [view commit logs](https://github.com/marionettejs/backbone.marionette/compare/v0.10.2...v1.0.0-beta1)
+
+* Backbone.EventBinder
+  * **BREAKING:** Marionette's EventBinder has been extracted to the Backbone.EventBinder repository and plugin. You must include this file in your app, available at https://github.com/marionettejs/backbone.eventbinder
+
+* Backbone.Wreqr
+  * **BREAKING:** Marionette's EventAggregator has been extracted to the Backbone.Wreqr repository and plugin. You must include this file in your app, available at https://github.com/marionettejs/backbone.wreqr
+
+* All Views
+  * **BREAKING:** `beforeRender` method is now `onBeforeRender`
+  * **BREAKING:** `beforeClose` method is now `onBeforeClose`
+  * **BREAKING:** The `render` method for all Marionette views is bound to the view instance
+  * All view events are now triggered with `triggerMethod`, calling their corresponding method on the view if it exists
+  * All views now have an `isClosed` attribute on them, which is set to `true` when calling the `close()` method and reset to `false` when calling the `render()` method
+  * EventBinder is now attached to the views with the `Marionette.addEventBinder` method call
+
+* CompositeView
+  * **BREAKING:** CompositeView will only render a model in to it's template, instead of a model or collection. It will still render the collection as itemView instances.
+
+* Modules
+  * **BREAKING:** Split module definitions can now receive custom args per module definition, instead of sharing / replacing them across all definitions
+
+* CollectionView / CompositeView
+  * Cleaned up the `getItemViewContainer` code, and improved the error that is thrown when the specified container element is not found
+  * Can attach existing view instance w/ existing DOM element as child of collection view / composite view, in parent's `initialize` function
+  * Fixed a bug where an undefined `this.options` would prevent child views from being rendered, trying to find the index of the view
+
+* Layout
+  * Allow a Layout to be defined without `regions`, using Underscore v1.4.x
+
+* View / ItemView / CompositeView
+  * Removed the `serializeData` method and added directly to `ItemView` and `CompositeView` as needed
+
+* Application
+  * Application regions can now be specified as a jQuery selector string, a region type, or an object literal with a selector and type: `{selector: "#foo", regionType: MyCustomRegion}`
+  * added `.commands` as instance of Backbone.Wreqr.Commands, to facilitate command execution
+  * added `.execute` method for direct command execution
+  * added `.reqres` as instance of Backbone.Wreqr.RequestResponse, to facilitate request/response execution
+  * added `.request` method for direct requesting of a response
+
+* Marionette.triggerMethod
+  * Added `Marionette.triggerMethod` method to trigger an event and call the corresponding method. For example, `view.triggetMethod("before:render")` will trigger the "before:render" event and call the `onBeforeRender` method.
+
+* Marionette.addEventBinder
+  * Added `Marionette.addEventBinder` method to add all of the Backbone.Wreqr.EventBinder methods to a specified target object
+
+* Misc
+  * Added `Marionette.extend` as alias to Backbone's `extend` method for more consistent use
+  * jQuery ($) support now works from global `$` or `window.jQuery`
+  * Updated to Underscore.js v1.4.1
+  * Updated to jQuery v1.8.2
+
+### v0.10.2 [view commit logs](https://github.com/marionettejs/backbone.marionette/compare/v0.10.1...v0.10.2)
+
+* Callbacks
+  * Fixed a bug that caused callbacks to fire multiple times after calling `reset`
+
+* Layout
+  * Fixed a bug that prevented the regions from being re-initialized correctly, when using `render` as a callback method for an event
+
+### v0.10.1 [view commit logs](https://github.com/marionettejs/backbone.marionette/compare/v0.10.0...v0.10.1)
+
+* Modules
+  * Fixed a bug when defining modules in reverse order, that prevented `startWithParent` from working correctly
+
+### v0.10.0 [view commit logs](https://github.com/marionettejs/backbone.marionette/compare/v0.9.13...v0.10.0)
+
+* Modules
+  * **BREAKING:** Module definition functions are executed immediately and only once, not every time you call `start`
+  * **BREAKING:** Renamed `startWithApp` to `startWithParent` in module definitions
+  * **BREAKING:** Sub-modules rely on the parent module to start them, by default, but can be started manually
+  * **BREAKING:** Sub-modules default to starting with their parent module start
+  * **BREAKING:** Specifying `startWithParent: false` for a sub-module will prevent the module from being started when the parent starts
+  * **BREAKING:** Specifying `startWithParent: false` for a top-level module will prevent the module from being started when the parent `Application` starts
+  * **BREAKING:** When starting a module, sub-modules will be started / initialized before parent modules (depth-first hierarchy traversal)
+  * **BREAKING:** When stopping a module, sub-modules will be stopped / finalized before parent modules (depth-first hierarchy traversal)
+  * Fixed: retrieving a module by name (`var foo = MyApp.module("Foo");`) will not change the module's definition or `startWithParent` setting
+
+* CollectionView
+  * Allow `itemViewOptions` to be a function, which recieves the `item` as an argument
+
+* Callbacks
+  * Added `reset` method to reset the list of callbacks and allow them to be run again, when needed
+
 ### v0.9.13 [view commit logs](https://github.com/marionettejs/backbone.marionette/compare/v0.9.12...v0.9.13)
 
 * CollectionView

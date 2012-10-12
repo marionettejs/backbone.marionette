@@ -6,21 +6,43 @@ module.exports = function(grunt) {
 
   // Project configuration.
   grunt.initConfig({
+    pkg: '<json:package.json>',
     meta: {
-      version: '0.9.13',
-      banner: '// Backbone.Marionette, v<%= meta.version %>\n' +
-        '// Copyright (c)<%= grunt.template.today("yyyy") %> Derick Bailey, Muted Solutions, LLC.\n' + 
-        '// Distributed under MIT license\n' + 
-        '// http://github.com/derickbailey/backbone.marionette'
+      version: '<%= pkg.version %>',
+      banner: '/*!\n' +
+              ' * Backbone.Marionette, v<%= meta.version %>\n' +
+              ' * Copyright (c)<%= grunt.template.today("yyyy") %> Derick Bailey, Muted Solutions, LLC.\n' +
+              ' * Distributed under MIT license\n' +
+              ' * http://github.com/marionettejs/backbone.marionette\n' +
+              '*/',
+      banner_core :
+        '<%= meta.banner %>\n' +
+        '/*!\n' +
+        ' * Includes Wreqr\n' +
+        ' * https://github.com/marionettejs/backbone.wreqr/\n' +
+        ' * Includes EventBinder\n' +
+        ' * https://github.com/marionettejs/backbone.eventbinder/\n' +
+        ' */'
     },
 
     lint: {
-      files: ['src/backbone.marionette.*.js']
+      files: ['src/marionette.*.js']
+    },
+
+    concat: {
+      core : {
+        src : [
+          'public/javascripts/backbone.eventbinder.js',
+          'public/javascripts/backbone.wreqr.js',
+          'lib/backbone.marionette.js'
+        ],
+        dest : 'lib/bundles/marionette.core.js'
+      }
     },
 
     rig: {
       build: {
-        src: ['<banner:meta.banner>', 'src/backbone.marionette.js'],
+        src: ['<banner:meta.banner>', 'src/marionette.js'],
         dest: 'lib/backbone.marionette.js'
       },
       amd: {
@@ -31,11 +53,24 @@ module.exports = function(grunt) {
 
     min: {
       standard: {
-        src: ['<banner:meta.banner>', '<config:rig.build.dest>'],
+        src: [
+          '<banner:meta.banner>',
+          '<config:rig.build.dest>'
+        ],
         dest: 'lib/backbone.marionette.min.js'
       },
+      bundle_core: {
+        src: [
+          '<banner:meta.banner_core>',
+          '<config:concat.core.dest>'
+        ],
+        dest: 'lib/bundles/marionette.core.min.js'
+      },
       amd: {
-        src: ['<banner:meta.banner>', '<config:rig.amd.dest>'],
+        src: [
+          '<banner:meta.banner>',
+          '<config:rig.amd.dest>'
+        ],
         dest: 'lib/amd/backbone.marionette.min.js'
       }
     },
@@ -46,25 +81,27 @@ module.exports = function(grunt) {
         'public/javascripts/json2.js',
         'public/javascripts/underscore.js',
         'public/javascripts/backbone.js',
-        'src/backbone.marionette.js',
-        'src/async/async.js',
+        'public/javascripts/backbone.eventbinder.js',
+        'public/javascripts/backbone.wreqr.js',
+        'src/marionette.js',
         'spec/javascripts/support/marionette.support.js',
-        'src/backbone.marionette.eventbinder.js',
-        'src/backbone.marionette.view.js',
-        'src/backbone.marionette.itemview.js',
-        'src/backbone.marionette.collectionview.js',
-        'src/backbone.marionette.compositeview.js',
-        'src/backbone.marionette.region.js',
+        'src/marionette.helpers.js',
+        'src/marionette.triggermethod.js',
+        'src/marionette.eventbinder.js',
+        'src/marionette.view.js',
+        'src/marionette.itemview.js',
+        'src/marionette.collectionview.js',
+        'src/marionette.compositeview.js',
+        'src/marionette.region.js',
         'src/backbone.marionette.augment.regionmanager.js',
-        'src/backbone.marionette.layout.js',
-        'src/backbone.marionette.application.js',
-        'src/backbone.marionette.approuter.js',
-        'src/backbone.marionette.module.js',
-        'src/backbone.marionette.templatecache.js',
-        'src/backbone.marionette.renderer.js',
-        'src/backbone.marionette.callbacks.js',
-        'src/backbone.marionette.eventaggregator.js',
-        'src/backbone.marionette.helpers.js'
+        'src/marionette.layout.js',
+        'src/marionette.application.js',
+        'src/marionette.approuter.js',
+        'src/marionette.module.js',
+        'src/marionette.templatecache.js',
+        'src/marionette.renderer.js',
+        'src/marionette.callbacks.js',
+        'src/marionette.eventaggregator.js'
       ],
       helpers : 'spec/javascripts/helpers/*.js',
       specs : 'spec/javascripts/**/*.spec.js'
@@ -101,6 +138,6 @@ module.exports = function(grunt) {
   });
 
   // Default task.
-  grunt.registerTask('default', 'lint rig min');
+  grunt.registerTask('default', 'lint rig concat min');
 
 };

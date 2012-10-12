@@ -4,6 +4,9 @@ An event aggregator is an application level pub/sub mechanism that allows variou
 pieces of an otherwise segmented and disconnected system to communicate with
 each other. 
 
+Facilitated by [Backbone.Wreqr](https://github.com/marionettejs/backbone.wreqr)'s
+EventAggregator object.
+
 ## Basic Usage
 
 Backbone.Marionette provides an event aggregator with each application instance: 

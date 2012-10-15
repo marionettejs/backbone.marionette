@@ -45,7 +45,7 @@ Backbone.Marionette.AppRouter.extend({
 });
 ```
 
-Or in a parameter to the contructor:
+Or in a parameter to the constructor:
 
 ```js
 myObj = {

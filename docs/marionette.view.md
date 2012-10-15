@@ -118,7 +118,7 @@ method on the view.
 Backbone.Marionette.CompositeView.extend({
 
   modelEvents: {
-    "change:name": "nameChanged" // equivilent to view.bindTo(view.model, "change:name", view.nameChanged, view)
+    "change:name": "nameChanged" // equivalent to view.bindTo(view.model, "change:name", view.nameChanged, view)
   },
 
   collectionEvents: {

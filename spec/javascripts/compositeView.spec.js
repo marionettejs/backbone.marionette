@@ -112,6 +112,7 @@ describe("composite view", function(){
 
     it("should call 'onRender'", function(){
       expect(compositeView.onRender).toHaveBeenCalled();
+      expect(compositeView.onRender.callCount).toBe(1);
     });
   });
 

@@ -98,4 +98,45 @@ describe("trigger event and method name", function(){
 
   });
 
+  describe("triggering events through a child view", function(){
+    var ResultView = Backbone.Marionette.ItemView.extend({
+        template : "#aTemplate",
+        events : {
+          "click" : "onAddToSelection"
+        },
+        onAddToSelection : function(e) {
+          console.log("add %o to selection", this.model);
+          this.triggerMethod("add:selection", this.model);
+        }
+    });
+
+    var ResultsView =  Backbone.Marionette.CompositeView.extend({
+        template: "#aTemplate",
+        itemView : ResultView
+    });
+
+    var cv;
+
+    beforeEach(function(){
+      setFixtures("<script type='text/html' id='aTemplate'><div>foo</div></script>");
+
+      var c = new Backbone.Collection([{a: "b"}, {a: "c"}]);
+      cv = new ResultsView({
+        collection: c
+      });
+
+      cv.onItemviewAddSelection = jasmine.createSpy();
+
+      cv.render();
+
+      var childView = cv.children[c.at(0).cid];
+      childView.$el.click();
+    });
+
+    it("should fire the event method once", function(){
+      expect(cv.onItemviewAddSelection.callCount).toBe(1);
+    });
+
+  });
+
 });

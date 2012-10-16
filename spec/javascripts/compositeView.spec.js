@@ -112,8 +112,11 @@ describe("composite view", function(){
 
     it("should call 'onRender'", function(){
       expect(compositeView.onRender).toHaveBeenCalled();
-      expect(compositeView.onRender.callCount).toBe(1);
     });
+
+    it("should only call 'onRender' once", function(){
+      expect(compositeView.onRender.callCount).toBe(1);
+    })
   });
 
   describe("when rendering a composite view twice", function(){

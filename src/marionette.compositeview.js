@@ -69,7 +69,6 @@ Marionette.CompositeView = Marionette.CollectionView.extend({
     this.bindUIElements();
 
     this.triggerMethod("composite:model:rendered");
-    this.triggerMethod("render");
 
     this.renderCollection();
     this.triggerMethod("composite:rendered");

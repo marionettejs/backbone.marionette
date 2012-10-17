@@ -105,7 +105,6 @@ describe("trigger event and method name", function(){
           "click" : "onAddToSelection"
         },
         onAddToSelection : function(e) {
-          console.log("add %o to selection", this.model);
           this.triggerMethod("add:selection", this.model);
         }
     });

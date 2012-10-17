@@ -1,3 +1,12 @@
+### v1.0.0-beta2 [view commit logs](https://github.com/marionettejs/backbone.marionette/compare/v1.0.0-beta1...dev)
+
+* CollectionView
+  * Fixed bug where adding an item to a collection would not allow the CollectionView to propagate the itemView's events
+  * Allow `itemViewOptions` to be specified in CollectionView constructor options
+
+* AMD Wrapper
+  * Fixed AMD wrapper to specify Backbone.Wreqr and Backbone.EventBinder
+
 ### v1.0.0-beta1 [view commit logs](https://github.com/marionettejs/backbone.marionette/compare/v0.10.2...v1.0.0-beta1)
 
 * Backbone.EventBinder

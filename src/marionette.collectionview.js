@@ -137,14 +137,6 @@ Marionette.CollectionView = Marionette.View.extend({
     this.storeChild(view);
     this.triggerMethod("item:added", view);
 
-    // Render it and show it
-    var renderResult = this.renderItemView(view, index);
-
-    // call onShow for child item views
-    if (view.onShow){
-      this.onShowCallbacks.add(view.onShow, view);
-    }
-
     // Forward all child item view events through the parent,
     // prepending "itemview:" to the event name
     var childBinding = this.bindTo(view, "all", function(){
@@ -159,6 +151,14 @@ Marionette.CollectionView = Marionette.View.extend({
     // them when removing / closing the child view
     this.childBindings = this.childBindings || {};
     this.childBindings[view.cid] = childBinding;
+
+    // Render it and show it
+    var renderResult = this.renderItemView(view, index);
+
+    // call onShow for child item views
+    if (view.onShow){
+      this.onShowCallbacks.add(view.onShow, view);
+    }
 
     return renderResult;
   },

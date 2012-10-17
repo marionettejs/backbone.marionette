@@ -90,7 +90,7 @@ module.exports = function(grunt) {
         'public/javascripts/backbone.js',
         'public/javascripts/backbone.eventbinder.js',
         'public/javascripts/backbone.wreqr.js',
-        'src/build/marionette.js',
+        'src/build/marionette.core.js',
         'spec/javascripts/support/marionette.support.js',
         'src/marionette.helpers.js',
         'src/marionette.triggermethod.js',

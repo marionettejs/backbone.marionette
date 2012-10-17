@@ -9,7 +9,7 @@
 
   } else if (typeof define === 'function' && define.amd) {
 
-    define(['jquery', 'underscore', 'backbone', 'backbone.wreqr', 'backbone.eventbinder'], factory);
+    define(['jquery', 'underscore', 'backbone'], factory);
 
   } 
 }(this, function ($, _, Backbone) {

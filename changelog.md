@@ -10,6 +10,10 @@
 * AMD Wrapper
   * Fixed AMD wrapper to specify Backbone.Wreqr and Backbone.EventBinder
 
+* Build / downloads
+  * The standard and AMD versions of `backbone.marionette.js` and `backbone.marionette.min.js` include all dependencies (EventBinder, Wreqr)
+  * The "core" versions of `backbone.marionette.js` and `backbone.marionette.min.js` do not include any dependencies (EventBinder, Wreqr)
+
 ### v1.0.0-beta1 [view commit logs](https://github.com/marionettejs/backbone.marionette/compare/v0.10.2...v1.0.0-beta1)
 
 * Backbone.EventBinder

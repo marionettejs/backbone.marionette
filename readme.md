@@ -76,23 +76,10 @@ Enderjs users, please let us know of how you solve any compatibility issues.
 
 ## Source Code And Downloads
 
-You can download the raw source code from the "src" folder above, or grab one of the
-many builds from the "lib" folder. 
+Please see the downloads section on the website for the latest downloads and
+links to files.
 
-To get the latest stable release, use these links which point to the 'master' branch's
-builds:
-
-### Standard Builds
-
-* Development: [backbone.marionette.js](https://raw.github.com/marionettejs/backbone.marionette/master/lib/backbone.marionette.js)
-
-* Production: [backbone.marionette.min.js](https://raw.github.com/marionettejs/backbone.marionette/master/lib/backbone.marionette.min.js)
-
-### RequireJS (AMD) Builds
-
-* Development: [backbone.marionette.js](https://raw.github.com/marionettejs/backbone.marionette/master/lib/amd/backbone.marionette.js)
-
-* Production: [backbone.marionette.min.js](https://raw.github.com/marionettejs/backbone.marionette/master/lib/amd/backbone.marionette.min.js)
+http://marionettejs.com#downloads
 
 ### Marionette.Async Add-on
 

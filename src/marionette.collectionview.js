@@ -4,11 +4,15 @@
 // A view that iterates over a Backbone.Collection
 // and renders an individual ItemView for each model.
 Marionette.CollectionView = Marionette.View.extend({
-  constructor: function(){
+  constructor: function(options){
     this.initChildViewStorage();
     Marionette.View.prototype.constructor.apply(this, arguments);
     this.initialEvents();
     this.onShowCallbacks = new Marionette.Callbacks();
+
+    if (options && options.itemViewOptions) {
+      this.itemViewOptions = options.itemViewOptions;
+    }
   },
 
   // Configured the initial events that the collection view

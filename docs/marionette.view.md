@@ -145,22 +145,6 @@ if you have both a collection and a model in a view, calling
 the `serializeData` method will return the serialized
 collection.
 
-## View.templateHelpers
-
-There are times when a view's template needs to have some
-logic in it, and the view engine itself will not provide an
-easy way to accomplish this. For example, Underscore templates
-do not provide a helper method mechanism while Handlebars
-templates do.
-
-A `templateHelpers` attribute can be applied to any View object
-that uses the `serializeData` method - including ItemViews,
-Layouts and CompositeViews. When this attribute is present,
-it's contents will be mixed in to the data object that comes
-back from the `serializeData` method for you. This will 
-allow you to create helper methods that can be called from
-within your templates.
-
 ## View.bindUIElements
 
 In several cases you need to access ui elements inside the view
@@ -178,27 +162,21 @@ Since View doesn't implement the render method, then if you directly extend
 from View you will need to invoke this method from your render method.
 In ItemView and CompositeView this is already taken care of.
 
-## Change Which Template Is Rendered For A View
+## View.templateHelpers
 
-There may be some cases where you need to change the template that is
-used for a view, based on some simple logic such as the value of a
-specific attribute in the view's model. To do this, you can provide
-a `getTemplate` function on your views and use this to return the
-template that you need.
+There are times when a view's template needs to have some
+logic in it, and the view engine itself will not provide an
+easy way to accomplish this. For example, Underscore templates
+do not provide a helper method mechanism while Handlebars
+templates do.
 
-```js
-MyView = Backbone.Marionette.ItemView.extend({
-  getTemplate: function(){
-    if (this.model.get("foo")){
-      return "#some-template";
-    } else {
-      return "#a-different-template";
-    }
-  }
-});
-```
-
-This applies to all view types.
+A `templateHelpers` attribute can be applied to any View object
+that uses the `serializeData` method - including ItemViews,
+Layouts and CompositeViews. When this attribute is present,
+it's contents will be mixed in to the data object that comes
+back from the `serializeData` method for you. This will 
+allow you to create helper methods that can be called from
+within your templates.
 
 ### Basic Example
 
@@ -262,4 +240,26 @@ Backbone.Marionette.ItemView.extend({
   }
 });
 ```
+
+## Change Which Template Is Rendered For A View
+
+There may be some cases where you need to change the template that is
+used for a view, based on some simple logic such as the value of a
+specific attribute in the view's model. To do this, you can provide
+a `getTemplate` function on your views and use this to return the
+template that you need.
+
+```js
+MyView = Backbone.Marionette.ItemView.extend({
+  getTemplate: function(){
+    if (this.model.get("foo")){
+      return "#some-template";
+    } else {
+      return "#a-different-template";
+    }
+  }
+});
+```
+
+This applies to all view types.
 

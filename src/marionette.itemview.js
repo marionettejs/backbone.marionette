@@ -20,7 +20,7 @@ Marionette.ItemView =  Marionette.View.extend({
   // You can override the `serializeData` method in your own view
   // definition, to provide custom serialization for your view's data.
   serializeData: function(){
-    var data;
+    var data = {};
 
     if (this.model) {
       data = this.model.toJSON();
@@ -28,8 +28,6 @@ Marionette.ItemView =  Marionette.View.extend({
     else if (this.collection) {
       data = { items: this.collection.toJSON() };
     }
-
-    data = this.mixinTemplateHelpers(data);
 
     return data;
   },
@@ -46,6 +44,8 @@ Marionette.ItemView =  Marionette.View.extend({
     this.triggerMethod("item:before:render", this);
 
     var data = this.serializeData();
+    data = this.mixinTemplateHelpers(data);
+
     var template = this.getTemplate();
     var html = Marionette.Renderer.render(template, data);
     this.$el.html(html);

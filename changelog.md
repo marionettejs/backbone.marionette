@@ -15,6 +15,9 @@
 * Application
   * The events triggered from the Application object instance are now triggered with corresponding "on{EventName}" method calls
 
+* Backbone.EventBinder
+  * Updated to v0.1.0 of Backbone.EventBinder, allowing for jQuery/DOM events to be handled within the EventBinder instances / `bindTo` methods
+
 * AMD Wrapper
   * The "core" AMD wrapper specifies Backbone.Wreqr and Backbone.EventBinder
   * The "standard" AMD wrapper does not specify Backbone.Wreqr / EventBinder, as these are built in

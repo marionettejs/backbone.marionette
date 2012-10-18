@@ -76,10 +76,12 @@ Enderjs users, please let us know of how you solve any compatibility issues.
 
 ## Source Code And Downloads
 
-Please see the downloads section on the website for the latest downloads and
-links to files.
+You can download the latest builds directly from the "lib" folder above.  
+For more information about the files in this folder, or to obtain an archive
+containing all Marionette dependencies (including Underscore, Backbone, etc),
+please see [the downloads section on the website](http://marionettejs.com#downloads).
 
-http://marionettejs.com#downloads
+#### [http://marionettejs.com#downloads](http://marionettejs.com#downloads)
 
 ### Marionette.Async Add-on
 

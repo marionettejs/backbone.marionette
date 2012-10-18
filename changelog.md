@@ -3,6 +3,11 @@
 * templateHelpers
   * **BREAKING:** Changed when the templateHelpers is mixed in to the data for a view, so that it is no longer dependent on the `serializeData` implementation
 
+* Region
+  * **BREAKING:** Changed "view:show" event to "show"
+  * **BREAKING:** Changed "view:closed" event to "close"
+  * All region events and events that the triggers from a view are now triggered via Marionette.triggerMethod.
+
 * CollectionView
   * Fixed bug where adding an item to a collection would not allow the CollectionView to propagate the itemView's events
   * Allow `itemViewOptions` to be specified in CollectionView constructor options

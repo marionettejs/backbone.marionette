@@ -155,20 +155,20 @@ MyApp.someRegion.attachView(myView);
 A region manager will raise a few events during it's showing and
 closing of views:
 
-* "view:show" - when the view has been rendered and displayed
-* "onShow" - called on the region when the view has been rendered
-* "view:closed" - when the view has been closed
+* "show" / `onShow` - called on the view instance when the view has been rendered and displayed
+* "show" / `onShow` - called on the region isntance when the view has been rendered and displayed
+* "close" / `onClose` - when the view has been closed
 
 You can bind to these events and add code that needs to run with
 your region manager, opening and closing views.
 
 ```js
-MyApp.mainRegion.on("view:show", function(view){
+MyApp.mainRegion.on("show", function(view){
   // manipulate the `view` or do something extra
   // with the region manager via `this`
 });
 
-MyApp.mainRegion.on("view:closed", function(view){
+MyApp.mainRegion.on("closed", function(view){
   // manipulate the `view` or do something extra
   // with the region manager via `this`
 });
@@ -178,6 +178,12 @@ MyRegion = Backbone.Marionette.Region.extend({
 
   onShow: function(view){
     // the `view` has been shown
+  }
+});
+
+MyView = Marionette.ItemView.extend({
+  onShow: function(){
+    // called when the view has been shown
   }
 });
 ```

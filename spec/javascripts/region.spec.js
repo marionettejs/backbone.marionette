@@ -36,7 +36,7 @@ describe("region", function(){
       myRegion = new MyRegion();
       spyOn(myRegion, "onShow");
 
-      myRegion.on("view:show", function(){
+      myRegion.on("show", function(){
         showEvent = true;
         showContext = this;
       });
@@ -161,7 +161,7 @@ describe("region", function(){
       view = new MyView();
       spyOn(view, "close");
       myRegion = new MyRegion();
-      myRegion.on("view:closed", function(){
+      myRegion.on("close", function(){
         closed = true;
         closedContext = this;
       });

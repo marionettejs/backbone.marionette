@@ -7,8 +7,12 @@
   * Fixed bug where adding an item to a collection would not allow the CollectionView to propagate the itemView's events
   * Allow `itemViewOptions` to be specified in CollectionView constructor options
 
+* Application
+  * The events triggered from the Application object instance are now triggered with corresponding "on{EventName}" method calls
+
 * AMD Wrapper
-  * Fixed AMD wrapper to specify Backbone.Wreqr and Backbone.EventBinder
+  * The "core" AMD wrapper specifies Backbone.Wreqr and Backbone.EventBinder
+  * The "standard" AMD wrapper does not specify Backbone.Wreqr / EventBinder, as these are built in
 
 * Build / downloads
   * The standard and AMD versions of `backbone.marionette.js` and `backbone.marionette.min.js` include all dependencies (EventBinder, Wreqr)

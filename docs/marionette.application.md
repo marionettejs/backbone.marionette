@@ -49,7 +49,8 @@ add them after the app is started, they will run immediately.
 
 ## Application Event
 
-The `Application` object raises a few events during its lifecycle. These events
+The `Application` object raises a few events during its lifecycle, using the
+[Marionette.triggerMethod](./marionette.functions.md) function. These events
 can be used to do additional processing of your application. For example, you
 may want to pre-process some data just before initialization happens. Or you may
 want to wait until your entire application is initialized to start the
@@ -57,9 +58,9 @@ want to wait until your entire application is initialized to start the
 
 The events that are currently triggered, are:
 
-* **"initialize:before"**: fired just before the initializers kick off
-* **"initialize:after"**: fires just after the initializers have finished
-* **"start"**: fires after all initializers and after the initializer events
+* **"initialize:before" / `onInitializeBefore` **: fired just before the initializers kick off
+* **"initialize:after" / `onInitializeAfter` **: fires just after the initializers have finished
+* **"start" / `onStart`**: fires after all initializers and after the initializer events
 
 ```js
 MyApp.on("initialize:before", function(options){

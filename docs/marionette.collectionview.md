@@ -182,28 +182,32 @@ Backbone.Marionette.CollectionView.extend({
 ## CollectionView Events
 
 There are several events that will be triggered during the life
-of a collection view. These are intended to be handled from code
-external to the view.
+of a collection view. Each of these events is called with the
+[Marionette.triggerMethod](./marionette.functions.md) function,
+which calls a corresponding "on{EventName}" method on the
+view instance.
 
-### "collection:before:render" event
+### "before:render" / onBeforeRender event
 
-Triggers just prior to the view being rendered
+
+Triggers just prior to the view being rendered. Also triggered as 
+"collection:before:render" / `onCollectionBeforeRender`.
 
 ```js
 MyView = Backbone.Marionette.CollectionView.extend({...});
 
 var myView = new MyView();
 
-myView.on("collection:before:render", function(){
+myView.on("before:render", function(){
   alert("the collection view is about to be rendered");
 });
 
 myView.render();
 ```
 
-### "render" / "collection:rendered" event
+### "render" / onRender event
 
-A "collection:rendered" event will also be fired. This allows you to
+A "collection:rendered" / `onCollectionRendered` event will also be fired. This allows you to
 add more than one callback to execute after the view is rendered,
 and allows parent views and other parts of the application to
 know that the view was rendered.
@@ -224,9 +228,10 @@ myView.on("collection:rendered", function(){
 myView.render();
 ```
 
-### "collection:before:close" event
+### "before:close" / onBeforeClose event
 
-Triggered just before closing the view.
+Triggered just before closing the view. A "collection:before:close" /
+`onCollectionBeforeClose` event will also be fired
 
 ```js
 MyView = Backbone.Marionette.CollectionView.extend({...});
@@ -240,9 +245,10 @@ myView.on("collection:before:close", function(){
 myView.close();
 ```
 
-### "collection:closed" event
+### "closed" / "collection:closed" event
 
-Triggered just after closing the view.
+Triggered just after closing the view, both with corresponding
+method calls.
 
 ```js
 MyView = Backbone.Marionette.CollectionView.extend({...});
@@ -254,6 +260,30 @@ myView.on("collection:closed", function(){
 });
 
 myView.close();
+```
+
+### "item:added" / onItemAdded
+
+Triggered just after creating a new itemView instance for an
+item that was added to the collection, but before the
+view is rendered and added to the DOM.
+
+```js
+cv.on("item:added", function(viewInstance){
+  // ...
+});
+```
+
+### "item:removed" / onItemRemoved
+
+Triggered after an itemView instance has been closed and
+removed, when it's item was deleted or removed from the
+collection.
+
+```js
+cv.on("item:removed", function(viewInstance){
+  // ...
+});
 ```
 
 ### "itemview:\*" event bubbling from child views
@@ -388,5 +418,3 @@ Backbone.Marionette.CollectionView.extend({
   }
 });
 ```
-
-

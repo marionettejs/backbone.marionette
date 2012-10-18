@@ -58,7 +58,7 @@ libraries:
 * [jQuery](http://jquery.com) v1.8.2
 * [Underscore](http://underscorejs.org) v1.4.1
 * [Backbone](http://backbonejs.org) v0.9.2
-* [Backbone.EventBinder](https://github.com/marionettejs/backbone.eventbinder) v0.0.0
+* [Backbone.EventBinder](https://github.com/marionettejs/backbone.eventbinder) v0.1.0
 * [Backbone.Wreqr](https://github.com/marionettejs/backbone.wreqr) v0.0.0
 
 Marionette has not been tested against any other versions of these

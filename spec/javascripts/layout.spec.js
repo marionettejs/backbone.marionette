@@ -196,19 +196,14 @@ describe("layout", function(){
       view.close = function(){};
       layout.regionOne.show(view);
 
-      spyOn(region, "reset").andCallThrough();
-      spyOn(view, "close").andCallThrough();
+      spyOn(layout, "closeRegions").andCallThrough();
 
       layout.render();
       layout.regionOne.show(view);
     });
 
-    it("should reset the regions", function(){
-      expect(region.reset.callCount).toBe(1);
-    });
-
     it("should close the regions", function(){
-      expect(view.close.callCount).toBe(1);
+      expect(layout.closeRegions.callCount).toBe(1);
     });
 
     it("should re-bind the regions to the newly rendered elements", function(){

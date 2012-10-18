@@ -170,13 +170,11 @@ easy way to accomplish this. For example, Underscore templates
 do not provide a helper method mechanism while Handlebars
 templates do.
 
-A `templateHelpers` attribute can be applied to any View object
-that uses the `serializeData` method - including ItemViews,
-Layouts and CompositeViews. When this attribute is present,
-it's contents will be mixed in to the data object that comes
-back from the `serializeData` method for you. This will 
-allow you to create helper methods that can be called from
-within your templates.
+A `templateHelpers` attribute can be applied to any View object that
+renders a template. When this attribute is present, it's contents 
+will be mixed in to the data object that comes back from the 
+`serializeData` method. This will allow you to create helper methods 
+that can be called from within your templates.
 
 ### Basic Example
 

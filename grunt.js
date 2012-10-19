@@ -54,7 +54,7 @@ module.exports = function(grunt) {
           '<banner:meta.core_banner>',
           '<config:rig.core_build.dest>'
         ],
-        dest: 'lib/core/marionette.min.js'
+        dest: 'lib/core/backbone.marionette.min.js'
       },
 
       core_amd: {

@@ -1,4 +1,4 @@
-### v1.0.0-beta2 [view commit logs](https://github.com/marionettejs/backbone.marionette/compare/v1.0.0-beta1...dev)
+### v1.0.0-beta2 [view commit logs](https://github.com/marionettejs/backbone.marionette/compare/v1.0.0-beta1...v1.0.0-beta2)
 
 * templateHelpers
   * **BREAKING:** Changed when the templateHelpers is mixed in to the data for a view, so that it is no longer dependent on the `serializeData` implementation

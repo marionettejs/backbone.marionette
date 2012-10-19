@@ -8,15 +8,16 @@
   * **BREAKING:** Changed "view:closed" event to "close"
   * All region events and events that the triggers from a view are now triggered via Marionette.triggerMethod.
 
+* Marionette.EventAggregator
+  * **BREAKING:** The `bindTo` method no longer assumes you are binding to the EventAggregator instance. You must specify the object that is triggering the event: `ea.bindto(ea, "event", callback, context)`
+  * Marionette.EventAggregator combines Backbone.Wreqr.EventAggregator with Backbone.EventBinder, allowing the event aggregator to act as it's own event binder
+
 * CollectionView
   * Fixed bug where adding an item to a collection would not allow the CollectionView to propagate the itemView's events
   * Allow `itemViewOptions` to be specified in CollectionView constructor options
 
 * Application
   * The events triggered from the Application object instance are now triggered with corresponding "on{EventName}" method calls
-
-* Marionette.EventAggregator
-  * Marionette.EventAggregator combines Backbone.Wreqr.EventAggregator with Backbone.EventBinder, allowing the event aggregator to act as it's own event binder
 
 * Backbone.EventBinder
   * Updated to v0.1.0 of Backbone.EventBinder, allowing for jQuery/DOM events to be handled within the EventBinder instances / `bindTo` methods

@@ -12,7 +12,7 @@ It combines an EventBinder in to the EventAggregator instance.
 
 ## Basic Usage
 
-Backbone.Marionette provides an event aggregator with each application instance: 
+Marionette provides an event aggregator with each application instance: 
 `MyApp.vent`. You can also instantiate your own event aggregator:
 
 ```js
@@ -33,7 +33,7 @@ The `EventAggregator` mixes in an [EventBinder](./marionette.eventbinder.md) obj
 and unbind all event callbacks, including inline callback functions. 
 
 ```js
-vent = new Backbone.Marionette.EventAggregator();
+vent = new Marionette.EventAggregator();
 
 vent.bindTo(vent, "foo", function(){
   alert("bar");
@@ -51,7 +51,7 @@ application, ensuring correct decoupling while also facilitating functionality
 that needs more than one of your application's modules.
 
 ```js
-var vent = new Backbone.Marionette.EventAggregator();
+var vent = new Marionette.EventAggregator();
 
 vent.on("some:event", function(){
   alert("Some event was fired!!!!");

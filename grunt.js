@@ -95,6 +95,7 @@ module.exports = function(grunt) {
         'src/marionette.helpers.js',
         'src/marionette.triggermethod.js',
         'src/marionette.eventbinder.js',
+        'src/marionette.eventaggregator.js',
         'src/marionette.view.js',
         'src/marionette.itemview.js',
         'src/marionette.collectionview.js',
@@ -106,8 +107,7 @@ module.exports = function(grunt) {
         'src/marionette.module.js',
         'src/marionette.templatecache.js',
         'src/marionette.renderer.js',
-        'src/marionette.callbacks.js',
-        'src/marionette.eventaggregator.js'
+        'src/marionette.callbacks.js'
       ],
       helpers : 'spec/javascripts/helpers/*.js',
       specs : 'spec/javascripts/**/*.spec.js'

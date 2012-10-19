@@ -15,6 +15,9 @@
 * Application
   * The events triggered from the Application object instance are now triggered with corresponding "on{EventName}" method calls
 
+* Marionette.EventAggregator
+  * Marionette.EventAggregator combines Backbone.Wreqr.EventAggregator with Backbone.EventBinder, allowing the event aggregator to act as it's own event binder
+
 * Backbone.EventBinder
   * Updated to v0.1.0 of Backbone.EventBinder, allowing for jQuery/DOM events to be handled within the EventBinder instances / `bindTo` methods
 

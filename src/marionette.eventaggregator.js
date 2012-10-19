@@ -3,5 +3,13 @@
 // A pub-sub object that can be used to decouple various parts
 // of an application through event-driven architecture.
 //
-// https://github.com/marionettejs/backbone.wreqr
-Marionette.EventAggregator = Backbone.Wreqr.EventAggregator;
+// Extends [Backbone.Wreqr.EventAggregator](https://github.com/marionettejs/backbone.wreqr)
+// and mixes in an EventBinder from [Backbone.EventBinder](https://github.com/marionettejs/backbone.eventbinder).
+Marionette.EventAggregator = Backbone.Wreqr.EventAggregator.extend({
+
+  constructor: function(){
+    Marionette.addEventBinder(this);
+    Backbone.Wreqr.EventAggregator.prototype.constructor.apply(this, arguments);
+  }
+
+});

@@ -25,7 +25,7 @@ describe("region", function(){
       }
     });
 
-    var myRegion, view, showEvent, showContext;
+    var myRegion, view, showEvent, showContext, showViewPassed;
 
     beforeEach(function(){
       setFixtures("<div id='region'></div>");
@@ -36,7 +36,8 @@ describe("region", function(){
       myRegion = new MyRegion();
       spyOn(myRegion, "onShow");
 
-      myRegion.on("show", function(){
+      myRegion.on("show", function(v){
+        showViewPassed = v === view;
         showEvent = true;
         showContext = this;
       });
@@ -62,6 +63,10 @@ describe("region", function(){
 
     it("should trigger a show event for the view", function(){
       expect(showEvent).toBeTruthy();
+    });
+
+    it("should pass the shown view as an argument for the show event", function(){
+      expect(showViewPassed).toBeTruthy();
     });
 
     it("should set 'this' to the manager, from the show event", function(){

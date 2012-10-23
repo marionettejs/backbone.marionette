@@ -9,6 +9,20 @@ used directly. It exists as a base view for other view types
 to be extended from, and to provide a common location for
 behaviors that are shared across all views.
 
+## Documentation Index
+
+* [Binding To View Events](#binding-to-view-events)
+* [ItemView close](#itemview-close)
+* [View.triggers](#viewtriggers)
+* [View.modelEvents and View.collectionEvents](#viewmodelevents-and-viewcollectionevents)
+* [View.serializeData](#viewserializedata)
+* [View.bindUIElements](#viewbinduielements)
+* [View.templateHelpers](#viewtemplatehelpers)
+  * [Basic Example](#basic-example)
+  * [Accessing Data Within The Helpers](#accessing-data-within-the-helpers)
+  * [Object Or Function As `templateHelpers`](#object-or-function-as-templatehelpers)
+* [Change Which Template Is Rendered For A View](#change-which-template-is-rendered-for-a-view)
+
 ## Binding To View Events
 
 Marionette.View extends `Marionette.BindTo`. It is recommended that you use

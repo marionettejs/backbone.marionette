@@ -4,6 +4,13 @@ The `Renderer` object was extracted from the `ItemView` rendering
 process, in order to create a consistent and re-usable method of
 rendering a template with or without data.
 
+## Documentation Index
+
+* [Basic Usage](#basic-usage)
+* [Pre-compiled Templates](#pre-compiled-templates)
+* [Custom Template Selection And Rendering](#custom-template-selection-and-rendering)
+* [Using Pre-compiled Templates](#using-pre-compiled-templates)
+
 ## Basic Usage
 
 The basic usage of the `Renderer` is to call the `render` method.

@@ -10,6 +10,12 @@ EventAggregator object and
 [Backbone.EventBinder](https://github.com/marionettejs/backbone.eventbinder).
 It combines an EventBinder in to the EventAggregator instance.
 
+## Documentation Index
+
+* [Basic Usage](#basic-usage)
+* [BindTo](#bindto)
+* [Decoupling With An Event-Driven Architecture](#decoupling-with-an-event-driven-architecture)
+
 ## Basic Usage
 
 Marionette provides an event aggregator with each application instance: 

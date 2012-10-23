@@ -4,6 +4,18 @@ An `ItemView` is a view that represents a single item. That item may be a
 `Backbone.Model` or may be a `Backbone.Collection`. Whichever it is, though, it
 will be treated as a single item. 
 
+## Documentation Index
+
+* [ItemView render](#itemview-render)
+* [Events and Callback Methods](#events-and-callback-methods)
+  * ["before:render" / onBeforeRender event](#beforerender--onbeforerender-event)
+  * ["render" / onRender event](#render--onrender-event)
+  * ["before:close" / onBeforeClose event](#beforeclose--onbeforeclose-event)
+  * ["close" / onClose event](#close--onclose-event)
+* [ItemView serializeData](#itemview-serializedata)
+* [Organizing ui elements](#organizing-ui-elements)
+* [modelEvents and collectionEvents](#modelevents-and-collectionevents)
+
 ## ItemView render
 
 An item view has a `render` method built in to it, and uses the

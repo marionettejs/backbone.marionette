@@ -10,6 +10,12 @@ scenario.
 Facilitated by [Backbone.Wreqr](https://github.com/marionettejs/backbone.wreqr)'s 
 Commands object.
 
+## Documentation Index
+
+* [Register A Command](#register-a-command)
+* [Execute A Command](#execute-a-command)
+* [Remove / Replace Commands](#remove--replace-commands)
+
 ## Register A Command
 
 To register a command, call `App.commands.register` and provide a name for

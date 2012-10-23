@@ -5,6 +5,13 @@ events, across any number of objects that trigger the events. This allows
 events to be grouped together and unbound with a single call during the 
 clean-up of an object that is bound to the events.
 
+## Documentation Index
+
+* [Bind Events](#bind-events)
+* [Unbind A Single Event](#unbind-a-single-event)
+* [Unbind All Events](#unbind-all-events)
+* [When To Use EventBinder vs `on` Handlers](#when-to-use-eventbinder-vs-on-handlers)
+
 ## Bind Events
 
 ```js

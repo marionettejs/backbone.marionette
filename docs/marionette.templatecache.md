@@ -4,6 +4,12 @@ The `TemplateCache` provides a cache for retrieving templates
 from script blocks in your HTML. This will improve
 the speed of subsequent calls to get a template.
 
+## Documentation Index
+
+* [Basic Usage](#basic-usage)
+* [Override Template Retrieval](#override-template-retrieval)
+* [Clear Items From cache](#clear-items-from-cache)
+
 ## Basic Usage
 
 To use the `TemplateCache`, call the `get` method on TemplateCache directly.

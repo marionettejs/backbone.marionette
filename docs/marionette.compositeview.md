@@ -26,6 +26,17 @@ new CompositeView({
 For more examples, see my blog post on 
 [using the composite view](http://lostechies.com/derickbailey/2012/04/05/composite-views-tree-structures-tables-and-more/)
 
+## Documentation Index
+
+* [Composite Model `template`](#composite-model-template)
+* [CompositeView's `itemViewContainer`](#compositeviews-itemviewcontainer)
+* [CompositeView's `appendHtml`](#compositeviews-appendhtml)
+* [Recursive By Default](#recursive-by-default)
+* [Model And Collection Rendering](#model-and-collection-rendering)
+* [Events And Callbacks](#events-and-callbacks)
+* [Organizing ui elements](#organizing-ui-elements)
+* [modelEvents and collectionEvents](#modelevents-and-collectionevents)
+
 ## Composite Model `template`
 
 When a `CompositeView` is rendered, the `model` will be rendered

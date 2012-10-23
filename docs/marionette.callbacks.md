@@ -14,6 +14,12 @@ The `run` method executes all current callbacks in, using the
 specified context for each of the callbacks, and supplying the
 provided options to the callbacks.
 
+## Documentation Index
+
+* [Basic Usage](#basic-usage)
+* [Specify Context Per-Callback](#specify-context-per-callback)
+* [Advanced / Async Use](#advanced--async-use)
+
 ## Basic Usage
 
 ```js

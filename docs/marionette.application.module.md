@@ -8,6 +8,22 @@ files.
 Marionette's module allow you to have unlimited sub-modules hanging off
 your application, and serve as an event aggregator in themselves.
 
+## Documentation Index
+
+* [Basic Usage](#basic-usage)
+* [Starting And Stopping Modules](#starting-and-stopping-modules)
+  * [Starting Modules](#starting-modules)
+  * [Preventing Auto-Start Of Modules](#preventing-auto-start-of-modules)
+  * [Starting Sub-Modules With Parent](#starting-sub-modules-with-parent)
+  * [Stopping Modules](#stopping-modules)
+* [Defining Sub-Modules With . Notation](#defining-sub-modules-with--notation)
+* [Module Definitions](#module-definitions)
+  * [Module Initializers](#module-initializers)
+  * [Module Finalizers](#module-finalizers)
+* [The Module's `this` Argument](#the-modules-this-argument)
+* [Custom Arguments](#custom-arguments)
+* [Splitting A Module Definition Apart](#splitting-a-module-definition-apart)
+
 ## Basic Usage
 
 A module is defined directly from an Application object as the specified

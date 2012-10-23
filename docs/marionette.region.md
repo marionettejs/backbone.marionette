@@ -10,7 +10,7 @@ methods on your views to facilitate additional functionality.
 * [Defining An Application Region](#defining-an-application-region)
 * [Initialize A Region With An `el`](#initialize-a-region-with-an-el)
 * [Basic Use](#basic-use)
-* [Reset A Region](#reset-a-region)
+* [`reset` A Region](#reset-a-region)
 * [Set How View's `el` Is Attached](#set-how-views-el-is-attached)
 * [Attach Existing View](#attach-existing-view)
   * [Set `currentView` On Initialization](#set-currentview-on-initialization)

@@ -5,6 +5,31 @@ specified collection, render each of them using a specified `itemView`,
 then append the results of the item view's `el` to the collection view's
 `el`.
 
+## Documentation Index
+
+* [CollectionView's `itemView`](#collectionviews-itemview)
+* [CollectionView's `itemViewOptions`](#collectionviews-itemviewoptions)
+* [CollectionView's `emptyView`](#collectionviews-emptyview)
+* [Callback Methods](#callback-methods)
+  * [beforeRender callback](#beforerender-callback)
+  * [onRender callback](#onrender-callback)
+  * [onItemAdded callback](#onitemadded-callback)
+  * [beforeClose callback](#beforeclose-callback)
+  * [onClose callback](#onclose-callback)
+* [CollectionView Events](#collectionview-events)
+  * ["before:render" / onBeforeRender event](#beforerender--onbeforerender-event)
+  * ["render" / onRender event](#render--onrender-event)
+  * ["before:close" / onBeforeClose event](#beforeclose--onbeforeclose-event)
+  * ["closed" / "collection:closed" event](#closed--collectionclosed-event)
+  * ["item:added" / onItemAdded](#itemadded--onitemadded)
+  * ["item:removed" / onItemRemoved](#itemremoved--onitemremoved)
+  * ["itemview:\*" event bubbling from child views](#itemview-event-bubbling-from-child-views)
+* [CollectionView render](#collectionview-render)
+* [CollectionView: Automatic Rendering](#collectionview-automatic-rendering)
+* [CollectionView: Re-render Collection](#collectionview-re-render-collection)
+* [CollectionView's appendHtml](#collectionviews-appendhtml)
+* [CollectionView close](#collectionview-close)
+
 ## CollectionView's `itemView`
 
 Specify an `itemView` in your collection view definition. This must be

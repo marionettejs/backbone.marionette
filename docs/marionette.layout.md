@@ -11,6 +11,16 @@ to be attached to dynamically rendered HTML.
 For a more in-depth discussion on Layouts, see the blog post
 [Manage Layouts And Nested Views With Backbone.Marionette](http://lostechies.com/derickbailey/2012/03/22/managing-layouts-and-nested-views-with-backbone-marionette/)
 
+## Documentation Index
+
+* [Basic Usage](#basic-usage)
+* [Region Availability](#region-availability)
+* [Re-Rendering A Layout](#re-rendering-a-layout)
+  * [Avoid Re-Rendering The Entire Layout](#avoid-re-rendering-the-entire-layout)
+* [Nested Layouts And Views](#nested-layouts-and-views)
+* [Closing A Layout](#closing-a-layout)
+* [Custom Region Type](#custom-region-type)
+
 ## Basic Usage
 
 The `Layout` extends directly from `ItemView` and adds the ability

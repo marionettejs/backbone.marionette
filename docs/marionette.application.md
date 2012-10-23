@@ -13,6 +13,18 @@ it to add your own functionality.
 MyApp = new Backbone.Marionette.Application();
 ```
 
+## Documentation Index
+
+* [Adding Initializers](#adding-initializers)
+* [Application Event](#application-event)
+* [Starting An Application](#starting-an-application)
+* [app.vent: Event Aggregator](#appvent-event-aggregator)
+* [Regions And The Application Object](#regions-and-the-application-object)
+  * [jQuery Selector](#jquery-selector)
+  * [Custom Region Type](#custom-region-type)
+  * [Custom Region Type And Selector](#custom-region-type-and-selector)
+  * [Removing Regions](#removing-regions)
+
 ## Adding Initializers
 
 Your application needs to do useful things, like displaying content in your

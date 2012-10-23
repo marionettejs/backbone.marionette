@@ -5,6 +5,12 @@ facilitate common behaviors throughout the framework. These functions may
 be useful to those that are building on top of Marionette, as the provide
 a way to get the same behaviors and conventions from your own code.
 
+## Documentation Index
+
+* [Marionette.triggerMethod](#marionettetriggermethod)
+* [Marionette.addEventBinder](#marionetteaddeventbinder)
+* [Marionette.extend](#marionetteextend)
+
 ## Marionette.triggerMethod
 
 Trigger an event and a corresponding method on the target object.

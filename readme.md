@@ -178,7 +178,7 @@ for the project.
 ## How To Contribute
 
 If you would like to contribute to Marionette's source code, please read
-the [guidelines for pull requests and contributions](https://github.com/marionettejs/backbone.marionette/wiki/Guidelines-for-pull-requests-and-contributions).
+the [guidelines for pull requests and contributions](https://github.com/marionettejs/backbone.marionette/blob/master/CONTRIBUTING.md).
 Following these guidelines will help make your contributions easier to
 bring in to the next release.
 

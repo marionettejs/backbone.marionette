@@ -28,7 +28,6 @@ For more examples, see my blog post on
 
 ## Documentation Index
 
-* [Documentation Index](#documentation-index)
 * [Composite Model `template`](#composite-model-template)
 * [CompositeView's `itemViewContainer`](#compositeviews-itemviewcontainer)
 * [CompositeView's `appendHtml`](#compositeviews-appendhtml)

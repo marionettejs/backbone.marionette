@@ -3,6 +3,11 @@
 Reduce the boilerplate code of handling route events and then calling a single method on another object.
 Have your routers configured to call the method on your object, directly.
 
+## Documentation Index
+
+* [Configure Routes](#configure-routes)
+* [Specify A Controller](#specify-a-controller)
+
 ## Configure Routes
 
 Configure an AppRouter with `appRoutes`. The route definition is passed on to Backbone's standard routing

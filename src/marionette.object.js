@@ -7,8 +7,6 @@
 //
 // Includes an `EventBinder` built in to it
 Marionette.Object = function(options){
-  Marionette.addEventBinder(this);
-
   if (_.isFunction(this.initialize)){
     this.initialize(options);
   }
@@ -19,6 +17,6 @@ Marionette.Object.extend = Marionette.extend;
 // Object Methods
 // --------------
 
-_.extend(Marionette.Object.prototype, Backbone.Events, {
+_.extend(Marionette.Object.prototype, Backbone.Events);
 
-});
+Marionette.Object.augment = Backbone.Model.augment;

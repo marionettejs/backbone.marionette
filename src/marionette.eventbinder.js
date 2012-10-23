@@ -2,7 +2,17 @@
 // -----------
 // Import the event binder from it's new home
 // https://github.com/marionettejs/backbone.eventbinder
-Marionette.EventBinder = Backbone.EventBinder;
+Marionette.EventBinder = Backbone.EventBinder.extend({
+
+  augment: function(target){
+    var eventBinder = new Marionette.EventBinder();
+    target.eventBinder = eventBinder;
+    target.bindTo = _.bind(eventBinder.bindTo, eventBinder);
+    target.unbindFrom = _.bind(eventBinder.unbindFrom, eventBinder);
+    target.unbindAll = _.bind(eventBinder.unbindAll, eventBinder);
+  }
+  
+});
 
 // Add the EventBinder methods to the view directly,
 // but keep them bound to the EventBinder instance so they work properly.

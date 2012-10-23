@@ -1,3 +1,8 @@
+### v1.0.0-beta3 [view commit logs](https://github.com/marionettejs/backbone.marionette/compare/v1.0.0-beta2...v1.0.0-beta3)
+
+* Region
+  * Fixed "show" method so that it includes the view instance being shown, again
+
 ### v1.0.0-beta2 [view commit logs](https://github.com/marionettejs/backbone.marionette/compare/v1.0.0-beta1...v1.0.0-beta2)
 
 * templateHelpers

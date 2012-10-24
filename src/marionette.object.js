@@ -10,6 +10,8 @@ Marionette.Object = function(options){
   if (_.isFunction(this.initialize)){
     this.initialize(options);
   }
+
+  Marionette.addEventBinder(this);
 };
 
 Marionette.Object.extend = Marionette.extend;
@@ -18,5 +20,3 @@ Marionette.Object.extend = Marionette.extend;
 // --------------
 
 _.extend(Marionette.Object.prototype, Backbone.Events);
-
-Marionette.Object.augment = Backbone.Model.augment;

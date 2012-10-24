@@ -2,7 +2,7 @@ describe("marionette object", function(){
 
   describe("when creating an object", function(){
 
-    var Controller = Marionette.Controller.extend({
+    var Object = Marionette.Object.extend({
       initialize: jasmine.createSpy("initialize method")
     });
 
@@ -10,7 +10,7 @@ describe("marionette object", function(){
 
     beforeEach(function(){
       options = {};
-      object = new Controller(options);
+      object = new Object(options);
     });
 
     it("should have an event aggregator built in to it", function(){

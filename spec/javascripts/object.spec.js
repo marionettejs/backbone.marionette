@@ -6,11 +6,20 @@ describe("marionette object", function(){
       initialize: jasmine.createSpy("initialize method")
     });
 
-    var object, options;
+    var object, options, handler;
 
     beforeEach(function(){
       options = {};
       object = new Object(options);
+
+      handler = jasmine.createSpy("foo handler");
+      object.on("foo", handler);
+
+      object.trigger("foo", options);
+    });
+
+    it("should support triggering events", function(){
+      expect(handler).toHaveBeenCalledWith(options);
     });
 
     it("should have an event aggregator built in to it", function(){
@@ -25,6 +34,7 @@ describe("marionette object", function(){
     it("should pass constructor options to the initialize function", function(){
       expect(object.initialize.mostRecentCall.args[0]).toBe(options);
     });
+
   });
 
 });

@@ -19,4 +19,5 @@ Marionette.Object.extend = Marionette.extend;
 // Object Methods
 // --------------
 
+// Ensure it can trigger events with Backbone.Events
 _.extend(Marionette.Object.prototype, Backbone.Events);

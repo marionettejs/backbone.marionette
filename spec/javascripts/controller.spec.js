@@ -35,6 +35,22 @@ describe("marionette controller", function(){
       expect(controller.initialize.mostRecentCall.args[0]).toBe(options);
     });
 
+    it("should maintain a reference to the options", function(){
+      expect(controller.options).toBe(options);
+    });
+
+  });
+
+  describe("when no options argument is supplied to the constructor", function(){
+    var controller;
+
+    beforeEach(function(){
+      controller = new Marionette.Controller();
+    });
+
+    it("should provide an empty object as the options", function(){
+      expect(_.isObject(controller.options)).toBe(true);
+    });
   });
 
 });

@@ -1,4 +1,5 @@
 describe("template helper methods", function(){
+  "use strict";
 
   describe("composite view", function(){
 

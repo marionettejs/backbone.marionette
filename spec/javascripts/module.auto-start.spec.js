@@ -1,4 +1,5 @@
 describe("module auto-start with the app.start", function(){
+  "use strict";
 
   describe("when starting the app that owns the module", function(){
     var MyApp, myModule, options;

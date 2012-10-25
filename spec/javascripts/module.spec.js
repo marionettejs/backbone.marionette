@@ -1,4 +1,5 @@
 describe("application modules", function(){
+  "use strict";
 
   describe("when specifying a module on an application", function(){
     var MyApp, myModule;

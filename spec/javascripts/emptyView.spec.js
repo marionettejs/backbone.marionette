@@ -1,4 +1,6 @@
 describe("collectionview - emptyView", function(){
+  "use strict";
+
   var ItemView = Backbone.Marionette.ItemView.extend({
     tagName: "span",
     render: function(){

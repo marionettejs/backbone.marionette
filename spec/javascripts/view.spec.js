@@ -1,4 +1,5 @@
 describe("base view", function(){
+  "use strict";
 
   describe("when initializing a view", function(){
     var fooHandler;

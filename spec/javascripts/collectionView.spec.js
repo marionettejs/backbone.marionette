@@ -1,4 +1,5 @@
 describe("collection view", function(){
+  "use strict";
 
   // Shared View Definitions
   // -----------------------

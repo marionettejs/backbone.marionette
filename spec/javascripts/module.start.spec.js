@@ -1,4 +1,5 @@
 describe("module start", function(){
+  "use strict";
 
   describe("when starting a module", function(){
     var MyApp, myModule, initializer;

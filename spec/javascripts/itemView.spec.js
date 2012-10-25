@@ -1,4 +1,6 @@
 describe("item view", function(){
+  "use strict";
+
   var Model = Backbone.Model.extend();
 
   var Collection = Backbone.Collection.extend({

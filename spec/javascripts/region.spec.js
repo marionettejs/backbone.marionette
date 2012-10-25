@@ -1,4 +1,5 @@
 describe("region", function(){
+  "use strict";
 
   describe("when creating a new region manager and no configuration has been provided", function(){
     it("should throw an exception saying an 'el' is required", function(){

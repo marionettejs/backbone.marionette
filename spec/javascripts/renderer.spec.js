@@ -1,4 +1,5 @@
 describe("renderer", function(){
+  "use strict";
 
   describe("when given a template id to render", function(){
     var templateSelector = "#renderer-template";

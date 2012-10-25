@@ -1,4 +1,5 @@
 describe("event aggregator", function(){
+  "use strict";
 
   describe("when creating an event aggregator instance", function(){
     var ea;

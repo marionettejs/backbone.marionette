@@ -1,4 +1,5 @@
 describe("pre-compiled template rendering", function(){
+  "use strict";
 
   describe("when rendering views with pre-compiled template functions", function(){
     var templateFunc = _.template("<div>pre-compiled</div>");

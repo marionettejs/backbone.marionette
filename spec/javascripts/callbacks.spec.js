@@ -1,4 +1,5 @@
 describe("callbacks", function(){
+  "use strict";
 
   describe("when registering callbacks and running them", function(){
     var wasCalled, secondCall, 

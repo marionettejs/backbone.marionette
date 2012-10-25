@@ -1,4 +1,5 @@
 describe("view event triggers", function(){
+  "use strict";
 
   describe("when DOM events are configured to trigger a view event, and the DOM events are fired", function(){
     var View = Backbone.Marionette.ItemView.extend({

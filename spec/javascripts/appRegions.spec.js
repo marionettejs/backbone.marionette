@@ -1,4 +1,5 @@
 describe("application regions", function(){
+  "use strict";
 
   describe("when adding region selectors to an app, and starting the app", function(){
     var MyApp = new Backbone.Marionette.Application();

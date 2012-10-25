@@ -1,14 +1,20 @@
 describe("composite view", function(){
+  "use strict";
 
   describe("when a composite view has a template without a model", function(){
     var compositeView;
+
+    var CompositeViewNoModel = Backbone.Marionette.CompositeView.extend({
+      itemView: ItemView,
+      template: "#composite-template-no-model"
+    });
 
     beforeEach(function(){
       loadFixtures("compositeTemplate-noModel.html");
 
       var m1 = new Model({foo: "bar"});
       var m2 = new Model({foo: "baz"});
-      collection = new Collection([m1, m2]);
+      var collection = new Collection([m1, m2]);
 
       compositeView = new CompositeViewNoModel({
         collection: collection
@@ -537,11 +543,6 @@ describe("composite view", function(){
     template: "#composite-template",
 
     onRender: function(){}
-  });
-
-  var CompositeViewNoModel = Backbone.Marionette.CompositeView.extend({
-    itemView: ItemView,
-    template: "#composite-template-no-model"
   });
 
   var CompositeModelView = Backbone.Marionette.CompositeView.extend({

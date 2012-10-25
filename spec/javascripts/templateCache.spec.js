@@ -1,4 +1,5 @@
 describe("template cache", function(){
+  "use strict";
 
   describe("when loading a template for the first time", function(){
     beforeEach(function(){

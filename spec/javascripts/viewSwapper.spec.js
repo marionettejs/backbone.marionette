@@ -54,4 +54,10 @@ describe("view swapper", function(){
 
   });
 
+  describe("when a view has already been rendered, and it triggers a configured event", function(){
+    it("should swap to view configured for that event", function(){
+      throw "not yet implemented";
+    });
+  });
+
 });

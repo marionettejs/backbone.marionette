@@ -8,6 +8,7 @@ a way to get the same behaviors and conventions from your own code.
 ## Documentation Index
 
 * [Marionette.addEventBinder](#marionetteaddeventbinder)
+* [Marionette.createObject](#marionettecreateobject)
 * [Marionette.extend](#marionetteextend)
 * [Marionette.getOption](#marionetteextend)
 * [Marionette.triggerMethod](#marionettetriggermethod)
@@ -59,6 +60,34 @@ var Bar = Foo.extend({
 // Create an instance of Bar
 var b = new Bar();
 ```
+
+## Marionette.createObject
+
+Marionette provides a method called `Marionette.createObject`. This method
+is a simple wrapper around / shim for a native `Object.create`, allowing
+simple prototypal inheritance for various purposes. 
+
+There is an intended limitation of only allowing the first parameter for the 
+[Object.create](https://developer.mozilla.org/en-US/docs/JavaScript/Reference/Global_Objects/Object/create)
+method. Since ES "properties" cannot be back-filled in to old versions,
+the second parameter is not supported.
+
+### CAVEAT EMPTOR
+
+This method is not intended to be a polyfill or shim used outside of
+Marionette. Use at your own risk.
+
+If you need a true polyfill or shim for older browser support, we recommend
+you include one of the following in your project:
+
+* [Modernizr](http://modernizr.com/)
+* [cujojs/poly](https://github.com/cujojs/poly)
+* [ES5-Shim](https://github.com/kriskowal/es5-shim)
+* Any other proper shim / polyfill for backward compatibility
+
+Be sure to include your preferred shim / polyfill BEFORE any other script
+files in your app. This will ensure Marionette uses
+your polyfill instead of the built in `Marionette.createObject`.
 
 ## Marionette.getOption
 

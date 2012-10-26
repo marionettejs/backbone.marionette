@@ -9,7 +9,7 @@ Marionette.ViewSwapper = Marionette.View.extend({
   constructor: function(options){
     this.views = options.views;
     this._swapperViews = {};
-    this._setupViewEvents();
+    this._currentViewBindings = new Marionette.EventBinder();
     Marionette.View.prototype.constructor.apply(this, arguments);
   },
 
@@ -17,7 +17,7 @@ Marionette.ViewSwapper = Marionette.View.extend({
   // will render the `initialView` that was configured.
   render: function(){
     if (!this.currentView){
-      this.currentView = this._getInitialView();
+      this._swapView(this.initialView);
     }
 
     this.currentView.render();
@@ -31,16 +31,6 @@ Marionette.ViewSwapper = Marionette.View.extend({
     });
     this._swapperViews = {};
     Marionette.View.prototype.close.apply(this, arguments);
-  },
-
-  // get the view to start with, by looking up the
-  // view by the `initialView` name
-  _getInitialView: function(){
-    var viewName;
-
-    viewName = this.initialView;
-
-    return this._getView(viewName);
   },
 
   // Get a view by name, throwing an exception if the view instance
@@ -88,14 +78,21 @@ Marionette.ViewSwapper = Marionette.View.extend({
 
   // Set up the event handlers for the individual views, so that the
   // swapping can happen when a view event is triggered
-  _setupViewEvents: function(){
+  _setupViewEvents: function(viewName, view){
+    if (!this.swapOn || !this.swapOn[viewName]){ return; }
     var that = this;
-    _.each(this.swapOn, function(config, viewName){
-      var view = that.views[viewName];
-      _.each(config, function(targetView, eventName){
-        var swapFunc = _.bind(that._swapView, that, targetView);
-        view.on(eventName, swapFunc);
+
+    // close the previous view's event bindings
+    this._currentViewBindings.unbindAll();
+
+    // set up the new view's event bindings
+    _.each(this.swapOn[viewName], function(targetViewName, eventName){
+
+      that._currentViewBindings.bindTo(view, eventName, function(){
+        that._swapView(targetViewName);
+        that.render();
       });
+
     });
   },
 
@@ -106,8 +103,8 @@ Marionette.ViewSwapper = Marionette.View.extend({
     }
 
     var view = this._getView(viewName);
+    this._setupViewEvents(viewName, view);
 
     this.currentView = view;
-    this.render();
   }
 });

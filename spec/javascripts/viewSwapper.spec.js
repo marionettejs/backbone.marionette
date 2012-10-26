@@ -194,6 +194,51 @@ describe("view swapper", function(){
 
   });
 
+  describe("when a view that is not the current view triggers a configured event", function(){
+
+    var ViewSwapper = Marionette.ViewSwapper.extend({
+      initialView: "firstView",
+      
+      swapOn: {
+        firstView: {
+          "foo:bar": "secondView"
+        },
+        secondView: {
+          "switch:back": "thirdView"
+        },
+        thirdView: {
+          "more:stuff": "secondView"
+        }
+      }
+    });
+
+    var swapper, v1, v2, v3, html;
+
+    beforeEach(function(){
+      v1 = new Backbone.Marionette.View();
+      v2 = new Backbone.Marionette.View();
+      v3 = new Backbone.Marionette.View();
+
+      swapper = new ViewSwapper({
+        views: {
+          firstView: v1,
+          secondView: v2,
+          thirdView: v3
+        }
+      });
+
+      swapper.render();
+      html = swapper.$el.html();
+
+      v3.trigger("more:stuff");
+    });
+
+    it("should not switch to the configured target view for that event", function(){
+      expect(html).toEqual(swapper.$el.html());
+    });
+
+  });
+
   describe("when closing the swapper", function(){
 
     var ViewSwapper = Marionette.ViewSwapper.extend({

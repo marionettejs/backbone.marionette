@@ -39,7 +39,7 @@ describe("template helper methods", function(){
       });
 
       beforeEach(function(){
-        view = new View();
+        var view = new View();
         view.render();
       });
 

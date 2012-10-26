@@ -89,7 +89,7 @@ describe("region", function(){
       }
     });
 
-    var myRegion, view;
+    var myRegion, view1, view2;
 
     beforeEach(function(){
       setFixtures("<div id='region'></div>");
@@ -124,7 +124,7 @@ describe("region", function(){
       }
     });
 
-    var myRegion, view;
+    var myRegion, view1, view2;
 
     beforeEach(function(){
       setFixtures("<div id='region'></div>");

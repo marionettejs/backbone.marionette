@@ -1,4 +1,5 @@
 describe("view swapper", function(){
+  "use strict";
 
   describe("when a view swapper has an initial view configured", function(){
     var ViewSwapper = Marionette.ViewSwapper.extend({
@@ -34,6 +35,7 @@ describe("view swapper", function(){
     });
 
     describe("and rendering the swapper without that view available", function(){
+      var swapper;
 
       beforeEach(function(){
         view = new Backbone.View();

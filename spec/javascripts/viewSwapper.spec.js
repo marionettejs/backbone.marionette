@@ -180,6 +180,7 @@ describe("view swapper", function(){
 
     it("should show the first view, again", function(){
       expect(swapper.$el[0].children[0]).toHaveHtml(view.$el.html());
+      console.log(swapper.$el);
     });
 
     it("should hide the second view", function(){

@@ -48,7 +48,7 @@ Marionette.ViewSwapper = Marionette.View.extend({
   // Decorate the configured view with information that the view swapper
   // needs, to keep track of the view's current state.
   _buildSwapperView: function(originalView){
-    var swapperView = Object.create(originalView);
+    var swapperView = Marionette.createObject(originalView);
     _.extend(swapperView, {
       
       // Prevent the underlying view from being rendered more than once
@@ -62,6 +62,7 @@ Marionette.ViewSwapper = Marionette.View.extend({
       }
 
     });
+
     return swapperView;
   },
 

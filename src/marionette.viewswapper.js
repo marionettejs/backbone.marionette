@@ -93,7 +93,7 @@ Marionette.ViewSwapper = Marionette.View.extend({
     _.each(this.swapOn, function(config, viewName){
       var view = that.views[viewName];
       _.each(config, function(targetView, eventName){
-        var swapFunc = that._swapView.bind(that, targetView);
+        var swapFunc = _.bind(that._swapView, that, targetView);
         view.on(eventName, swapFunc);
       });
     });

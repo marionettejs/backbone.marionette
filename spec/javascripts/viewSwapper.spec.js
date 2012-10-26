@@ -35,7 +35,7 @@ describe("view swapper", function(){
     });
 
     describe("and rendering the swapper without that view available", function(){
-      var swapper;
+      var swapper, view;
 
       beforeEach(function(){
         view = new Backbone.View();
@@ -181,7 +181,7 @@ describe("view swapper", function(){
     });
 
     it("should show the first view, again", function(){
-      expect(swapper.$el[0].children[0]).toHaveHtml(view.$el.html());
+      expect(swapper.$el[0].children[0]).toHaveHtml(v1.$el.html());
     });
 
     it("should hide the second view", function(){

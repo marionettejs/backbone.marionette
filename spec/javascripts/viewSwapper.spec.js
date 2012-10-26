@@ -180,7 +180,6 @@ describe("view swapper", function(){
 
     it("should show the first view, again", function(){
       expect(swapper.$el[0].children[0]).toHaveHtml(view.$el.html());
-      console.log(swapper.$el);
     });
 
     it("should hide the second view", function(){
@@ -189,6 +188,14 @@ describe("view swapper", function(){
 
     it("should not close the second view", function(){
       expect(v2.close).not.toHaveBeenCalled();
+    });
+
+  });
+
+  describe("when closing the swapper", function(){
+
+    it("should close all of the views that are configured for it", function(){
+      throw "not yet implemented";
     });
 
   });

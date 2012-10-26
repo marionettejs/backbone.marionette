@@ -13,6 +13,26 @@ Marionette.ViewSwapper = Marionette.View.extend({
     Marionette.View.prototype.constructor.apply(this, arguments);
   },
 
+  // Render the current view. If no current view is set, it
+  // will render the `initialView` that was configured.
+  render: function(){
+    if (!this.currentView){
+      this.currentView = this._getInitialView();
+    }
+
+    this.currentView.render();
+    this.$el.append(this.currentView.el);
+    this.currentView.$el.show();
+  },
+
+  close: function(){
+    _.each(this.views, function(view, name){
+      view.close();
+    });
+    this._swapperViews = {};
+    Marionette.View.prototype.close.apply(this, arguments);
+  },
+
   // get the view to start with, by looking up the
   // view by the `initialView` name
   _getInitialView: function(){
@@ -89,17 +109,5 @@ Marionette.ViewSwapper = Marionette.View.extend({
 
     this.currentView = view;
     this.render();
-  },
-
-  // Render the current view. If no current view is set, it
-  // will render the `initialView` that was configured.
-  render: function(){
-    if (!this.currentView){
-      this.currentView = this._getInitialView();
-    }
-
-    this.currentView.render();
-    this.$el.append(this.currentView.el);
-    this.currentView.$el.show();
   }
 });

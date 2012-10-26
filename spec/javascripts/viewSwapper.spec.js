@@ -194,8 +194,43 @@ describe("view swapper", function(){
 
   describe("when closing the swapper", function(){
 
-    it("should close all of the views that are configured for it", function(){
-      throw "not yet implemented";
+    var ViewSwapper = Marionette.ViewSwapper.extend({
+      initialView: "firstView",
+      
+      swapOn: {
+        firstView: {
+          "foo:bar": "secondView"
+        },
+        secondView: {
+          "switch:back": "firstView"
+        }
+      }
+    });
+
+    var swapper, v1, v2;
+
+    beforeEach(function(){
+      v1 = new Backbone.Marionette.View();
+      v2 = new Backbone.Marionette.View();
+
+      swapper = new ViewSwapper({
+        views: {
+          firstView: v1,
+          secondView: v2
+        }
+      });
+
+      spyOn(swapper, "close").andCallThrough();
+      spyOn(v1, "close").andCallThrough();
+      spyOn(v2, "close").andCallThrough();
+
+      swapper.render();
+      swapper.close();
+    });
+
+    it("should close all of the views that are configured in the swapper", function(){
+      expect(v1.close).toHaveBeenCalled();
+      expect(v2.close).toHaveBeenCalled();
     });
 
   });

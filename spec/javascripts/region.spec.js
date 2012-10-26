@@ -1,4 +1,5 @@
 describe("region", function(){
+  "use strict";
 
   describe("when creating a new region manager and no configuration has been provided", function(){
     it("should throw an exception saying an 'el' is required", function(){
@@ -88,7 +89,7 @@ describe("region", function(){
       }
     });
 
-    var myRegion, view;
+    var myRegion, view1, view2;
 
     beforeEach(function(){
       setFixtures("<div id='region'></div>");
@@ -123,7 +124,7 @@ describe("region", function(){
       }
     });
 
-    var myRegion, view;
+    var myRegion, view1, view2;
 
     beforeEach(function(){
       setFixtures("<div id='region'></div>");

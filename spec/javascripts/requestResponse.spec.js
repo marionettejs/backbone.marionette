@@ -1,4 +1,5 @@
 describe("application request/response", function(){
+  "use strict";
 
   describe("when creating an instance of an Application", function(){
     var App;

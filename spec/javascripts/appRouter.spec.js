@@ -1,4 +1,6 @@
 describe("app router", function(){
+  "use strict";
+
   afterEach(function(){
     window.location.hash = "";
   });

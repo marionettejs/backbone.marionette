@@ -1,4 +1,6 @@
 describe("module stop", function(){
+  "use strict";
+
   var App;
 
   beforeEach(function(){

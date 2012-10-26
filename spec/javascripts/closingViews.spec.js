@@ -1,4 +1,5 @@
 describe("closing views", function(){
+  "use strict";
 
   describe("when closing a Marionette.View multiple times", function(){
     var View = Marionette.View.extend({});

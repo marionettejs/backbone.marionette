@@ -1,14 +1,27 @@
 describe("composite view", function(){
+  "use strict";
 
   describe("when a composite view has a template without a model", function(){
     var compositeView;
+
+    var ItemView = Backbone.Marionette.ItemView.extend({
+      tagName: "span",
+      render: function(){
+        this.$el.html(this.model.get("foo"));
+      }
+    });
+
+    var CompositeViewNoModel = Backbone.Marionette.CompositeView.extend({
+      itemView: ItemView,
+      template: "#composite-template-no-model"
+    });
 
     beforeEach(function(){
       loadFixtures("compositeTemplate-noModel.html");
 
       var m1 = new Model({foo: "bar"});
       var m2 = new Model({foo: "baz"});
-      collection = new Collection([m1, m2]);
+      var collection = new Collection([m1, m2]);
 
       compositeView = new CompositeViewNoModel({
         collection: collection
@@ -30,12 +43,26 @@ describe("composite view", function(){
   describe("when a composite view has a model and a template", function(){
     var compositeView;
 
+    var ItemView = Backbone.Marionette.ItemView.extend({
+      tagName: "span",
+      render: function(){
+        this.$el.html(this.model.get("foo"));
+      }
+    });
+
+    var CompositeView = Backbone.Marionette.CompositeView.extend({
+      itemView: ItemView,
+      template: "#composite-template",
+
+      onRender: function(){}
+    });
+
     beforeEach(function(){
       loadFixtures("compositeTemplate.html");
 
       var m1 = new Model({foo: "bar"});
       var m2 = new Model({foo: "baz"});
-      collection = new Collection();
+      var collection = new Collection();
       collection.add(m2);
 
       compositeView = new CompositeView({
@@ -56,9 +83,21 @@ describe("composite view", function(){
   });
 
   describe("when rendering a composite view", function(){
-    var compositeView;
-    var order;
-    var deferredResolved;
+    var compositeView, order, deferredResolved;
+
+    var ItemView = Backbone.Marionette.ItemView.extend({
+      tagName: "span",
+      render: function(){
+        this.$el.html(this.model.get("foo"));
+      }
+    });
+
+    var CompositeView = Backbone.Marionette.CompositeView.extend({
+      itemView: ItemView,
+      template: "#composite-template",
+
+      onRender: function(){}
+    });
 
     beforeEach(function(){
       order = [];
@@ -122,12 +161,24 @@ describe("composite view", function(){
   describe("when rendering a composite view twice", function(){
     var compositeView, compositeRenderSpy;
 
+    var ItemView = Backbone.Marionette.ItemView.extend({
+      tagName: "span",
+      render: function(){
+        this.$el.html(this.model.get("foo"));
+      }
+    });
+
+    var CompositeModelView = Backbone.Marionette.CompositeView.extend({
+      itemView: ItemView,
+      template: "#composite-template"
+    });
+
     beforeEach(function(){
       loadFixtures("compositeTemplate.html");
 
       var m1 = new Model({foo: "bar"});
       var m2 = new Model({foo: "baz"});
-      collection = new Collection();
+      var collection = new Collection();
       collection.add(m2);
 
       compositeView = new CompositeModelView({
@@ -161,6 +212,20 @@ describe("composite view", function(){
   describe("when rendering a composite view with an empty collection and then resetting the collection", function(){
     var compositeView;
 
+    var ItemView = Backbone.Marionette.ItemView.extend({
+      tagName: "span",
+      render: function(){
+        this.$el.html(this.model.get("foo"));
+      }
+    });
+
+    var CompositeView = Backbone.Marionette.CompositeView.extend({
+      itemView: ItemView,
+      template: "#composite-template",
+
+      onRender: function(){}
+    });
+
     beforeEach(function(){
       loadFixtures("compositeRerender.html");
 
@@ -189,6 +254,20 @@ describe("composite view", function(){
   describe("when rendering a composite view without a collection", function(){
     var compositeView;
 
+    var ItemView = Backbone.Marionette.ItemView.extend({
+      tagName: "span",
+      render: function(){
+        this.$el.html(this.model.get("foo"));
+      }
+    });
+
+    var CompositeView = Backbone.Marionette.CompositeView.extend({
+      itemView: ItemView,
+      template: "#composite-template",
+
+      onRender: function(){}
+    });
+
     beforeEach(function(){
       loadFixtures("compositeRerender.html");
 
@@ -211,6 +290,20 @@ describe("composite view", function(){
 
   describe("when rendering a composite with a collection and then resetting the collection", function(){
     var compositeView;
+
+    var ItemView = Backbone.Marionette.ItemView.extend({
+      tagName: "span",
+      render: function(){
+        this.$el.html(this.model.get("foo"));
+      }
+    });
+
+    var CompositeView = Backbone.Marionette.CompositeView.extend({
+      itemView: ItemView,
+      template: "#composite-template",
+
+      onRender: function(){}
+    });
 
     beforeEach(function(){
       loadFixtures("compositeRerender.html");
@@ -288,12 +381,24 @@ describe("composite view", function(){
   describe("when closing a composite view", function(){
     var compositeView, compositeModelCloseSpy;
 
+    var ItemView = Backbone.Marionette.ItemView.extend({
+      tagName: "span",
+      render: function(){
+        this.$el.html(this.model.get("foo"));
+      }
+    });
+
+    var CompositeModelView = Backbone.Marionette.CompositeView.extend({
+      itemView: ItemView,
+      template: "#composite-template"
+    });
+
     beforeEach(function(){
       loadFixtures("compositeTemplate.html");
 
       var m1 = new Model({foo: "bar"});
       var m2 = new Model({foo: "baz"});
-      collection = new Collection();
+      var collection = new Collection();
       collection.add(m2);
 
       compositeView = new CompositeModelView({
@@ -320,6 +425,23 @@ describe("composite view", function(){
   describe("when rendering a composite view with no model, using a template to create a grid", function(){
 
     var gridView;
+
+    // A Grid Row
+    var GridRow = Backbone.Marionette.ItemView.extend({
+      tagName: "tr",
+      template: "#row-template"
+    });
+
+    // The grid view
+    var GridView = Backbone.Marionette.CompositeView.extend({
+      tagName: "table",
+      template: "#grid-template",
+      itemView: GridRow,
+
+      appendHtml: function(cv, iv){
+        cv.$("tbody").append(iv.el);
+      }
+    });
 
     beforeEach(function(){
       loadFixtures("gridTemplates.html");
@@ -364,6 +486,33 @@ describe("composite view", function(){
   describe("when a composite view has a ui elements hash", function() {
 
     var gridView, headersModel;
+
+    // A Grid Row
+    var GridRow = Backbone.Marionette.ItemView.extend({
+      tagName: "tr",
+      template: "#row-template"
+    });
+
+    // The grid view
+    var GridView = Backbone.Marionette.CompositeView.extend({
+      tagName: "table",
+      template: "#grid-template",
+      itemView: GridRow,
+
+      appendHtml: function(cv, iv){
+        cv.$("tbody").append(iv.el);
+      }
+    });
+
+    var GridViewWithUIBindings = GridView.extend({
+      template: "#ui-binding-template",
+
+      ui: {
+        headersRow: "thead tr",
+        unfoundElement: "#unfound",
+        itemRows: "tbody tr"
+      }
+    });
 
     beforeEach(function() {
       loadFixtures("uiBindingTemplate.html");
@@ -489,13 +638,6 @@ describe("composite view", function(){
 
   // Views
 
-  var ItemView = Backbone.Marionette.ItemView.extend({
-    tagName: "span",
-    render: function(){
-      this.$el.html(this.model.get("foo"));
-    }
-  });
-
   var TreeView = Backbone.Marionette.CompositeView.extend({
     tagName: "ul",
     template: "#recursive-composite-template",
@@ -503,50 +645,6 @@ describe("composite view", function(){
     initialize: function(){
       this.collection = this.model.nodes;
     }
-  });
-
-  // A Grid Row
-  var GridRow = Backbone.Marionette.ItemView.extend({
-    tagName: "tr",
-    template: "#row-template"
-  });
-
-  // The grid view
-  var GridView = Backbone.Marionette.CompositeView.extend({
-    tagName: "table",
-    template: "#grid-template",
-    itemView: GridRow,
-
-    appendHtml: function(cv, iv){
-      cv.$("tbody").append(iv.el);
-    }
-  });
-
-  GridViewWithUIBindings = GridView.extend({
-    template: "#ui-binding-template",
-
-    ui: {
-      headersRow: "thead tr",
-      unfoundElement: "#unfound",
-      itemRows: "tbody tr"
-    }
-  });
-
-  var CompositeView = Backbone.Marionette.CompositeView.extend({
-    itemView: ItemView,
-    template: "#composite-template",
-
-    onRender: function(){}
-  });
-
-  var CompositeViewNoModel = Backbone.Marionette.CompositeView.extend({
-    itemView: ItemView,
-    template: "#composite-template-no-model"
-  });
-
-  var CompositeModelView = Backbone.Marionette.CompositeView.extend({
-    itemView: ItemView,
-    template: "#composite-template"
   });
 
 });

@@ -1,4 +1,5 @@
 describe("module start", function(){
+  "use strict";
 
   describe("when a top level module specifies it should load with the parent app", function(){
 

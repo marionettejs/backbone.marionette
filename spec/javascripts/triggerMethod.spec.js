@@ -1,4 +1,6 @@
 describe("trigger event and method name", function(){
+  "use strict";
+
   var view, eventHandler, methodHandler;
 
   beforeEach(function(){

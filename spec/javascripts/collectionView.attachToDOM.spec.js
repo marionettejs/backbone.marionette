@@ -1,4 +1,5 @@
 describe("attaching collection view to existing DOM structure", function(){
+  "use strict";
 
   describe("when initializing a collection view", function(){
 

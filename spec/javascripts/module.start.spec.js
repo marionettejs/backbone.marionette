@@ -1,4 +1,5 @@
 describe("module start", function(){
+  "use strict";
 
   describe("when starting a module", function(){
     var MyApp, myModule, initializer;
@@ -149,7 +150,7 @@ describe("module start", function(){
     beforeEach(function(){
       MyApp = new Backbone.Marionette.Application();
 
-      module = MyApp.module("MyModule", function(){
+      var module = MyApp.module("MyModule", function(){
         moduleArgs = arguments;
         thisArg = this;
       });

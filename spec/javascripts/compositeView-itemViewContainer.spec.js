@@ -1,4 +1,6 @@
 describe("composite view - itemViewContainer", function(){
+  "use strict";
+
   var Model = Backbone.Model.extend({});
 
   var Collection = Backbone.Collection.extend({

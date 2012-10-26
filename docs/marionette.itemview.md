@@ -78,7 +78,7 @@ method has been called. Also triggered as "item:before:close" /
 
 ```js
 Backbone.Marionette.ItemView.extend({
-  beforeClose: function(){
+  onBeforeClose: function(){
     // manipulate the `el` here. it's already
     // been rendered, and is full of the view's
     // HTML, ready to go.

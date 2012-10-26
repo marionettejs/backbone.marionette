@@ -11,10 +11,10 @@ then append the results of the item view's `el` to the collection view's
 * [CollectionView's `itemViewOptions`](#collectionviews-itemviewoptions)
 * [CollectionView's `emptyView`](#collectionviews-emptyview)
 * [Callback Methods](#callback-methods)
-  * [beforeRender callback](#beforerender-callback)
+  * [onBeforeRender callback](#beforerender-callback)
   * [onRender callback](#onrender-callback)
   * [onItemAdded callback](#onitemadded-callback)
-  * [beforeClose callback](#beforeclose-callback)
+  * [onBeforeClose callback](#beforeclose-callback)
   * [onClose callback](#onclose-callback)
 * [CollectionView Events](#collectionview-events)
   * ["before:render" / onBeforeRender event](#beforerender--onbeforerender-event)
@@ -139,14 +139,14 @@ There are several callback methods that can be provided on a
 view's base methods. These callback methods are intended to be
 handled within the view definition directly.
 
-### beforeRender callback
+### onBeforeRender callback
 
-A `beforeRender` callback will be called just prior to rendering
+A `onBeforeRender` callback will be called just prior to rendering
 the collection view.
 
 ```js
 Backbone.Marionette.CollectionView.extend({
-  beforeRender: function(){
+  onBeforeRender: function(){
     // do stuff here
   }
 });
@@ -180,13 +180,13 @@ Backbone.Marionette.CollectionView.extend({
 });
 ```
 
-### beforeClose callback
+### onBeforeClose callback
 
 This method is called just before closing the view.
 
 ```js
 Backbone.Marionette.CollectionView.extend({
-  beforeClose: function(){
+  onBeforeClose: function(){
     // do stuff here
   }
 });

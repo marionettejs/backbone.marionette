@@ -224,7 +224,7 @@ template, not those belonging to the collection.
 
 The ui elements will be accessible as soon as the composite view
 template is rendered (and before the collection is rendered),
-which means you can even access them in the `beforeRender` method.
+which means you can even access them in the `onBeforeRender` method.
 
 ## modelEvents and collectionEvents
 

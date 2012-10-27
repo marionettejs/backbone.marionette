@@ -25,10 +25,23 @@ Marionette.ViewSwapper = Marionette.View.extend({
     }
 
     this.currentView.render();
-    this.$el.append(this.currentView.el);
-    this.currentView.$el.show();
+    this.$el.append(this.currentView.$el);
+    this.showView(this.currentView);
   },
 
+  // Show a view that is being swapped in. Override this method to
+  // set up your own custom fade in / show method
+  showView: function(view){
+    view.$el.show();
+  },
+
+  // Hide a view that is being swapped out. Override this method to
+  // set up your own custom fade out / hide method
+  hideView: function(view){
+    view.$el.hide();
+  },
+
+  // Ensure the views that were configured for this view swapper get closed
   close: function(){
     _.each(this.views, function(view, name){
       view.close();
@@ -103,7 +116,7 @@ Marionette.ViewSwapper = Marionette.View.extend({
   // Do the swapping of the views to the new view, by name
   _swapView: function(viewName){
     if (this.currentView){
-      this.currentView.$el.hide();
+      this.hideView(this.currentView);
     }
 
     var view = this._getView(viewName);

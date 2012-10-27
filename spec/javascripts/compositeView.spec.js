@@ -485,7 +485,7 @@ describe("composite view", function(){
 
   describe("when a composite view has a ui elements hash", function() {
 
-    var gridView, headersModel;
+    var called, gridView, headersModel;
 
     // A Grid Row
     var GridRow = Backbone.Marionette.ItemView.extend({
@@ -590,9 +590,8 @@ describe("composite view", function(){
 
       describe("accessing a ui element that belongs to the model template", function() {
 
-        // this test enforces that ui elements should be accessible as soon as their html was inserted
-        // to the DOM
-        it("should return its jQuery selector", function() {
+        beforeEach(function(){
+
           gridView.onBeforeRender = function() {
             expect(gridView.ui.headersRow.find("th:first-child").text()).toEqual("Username");
             called = true;
@@ -600,6 +599,12 @@ describe("composite view", function(){
           spyOn(gridView, "onBeforeRender").andCallThrough();
 
           gridView.render();
+
+        });
+
+        // this test enforces that ui elements should be accessible as soon as their html was inserted
+        // to the DOM
+        it("should return its jQuery selector", function() {
           expect(gridView.onBeforeRender).toHaveBeenCalled();
         })
 

@@ -33,34 +33,6 @@ of it being attached to the view. For example, the internal structure
 used to store the events can change without worry about it interfering
 with Marionette's views.
 
-## Marionette.extend
-
-Backbone's `extend` function is a useful utility to have, and is used in
-various places in Marionette. To make the use of this method more consistent,
-Backbone's `extend` has been aliased to `Marionette.extend`. This allows
-you to get the extend functionality for your object without having to
-decide if you want to use Backbone.View or Backbone.Model or another
-Backbone object to grab the method from.
-
-```js
-var Foo = function(){};
-
-// use Marionette.extend to make Foo extendable, just like other
-// Backbone and Marionette objects
-Foo.extend = Marionette.extend;
-
-// Now Foo can be extended to create a new type, with methods
-var Bar = Foo.extend({
-
-  someMethod: function(){ ... }
-
-  // ...
-});
-
-// Create an instance of Bar
-var b = new Bar();
-```
-
 ## Marionette.createObject
 
 Marionette provides a method called `Marionette.createObject`. This method
@@ -88,6 +60,34 @@ you include one of the following in your project:
 Be sure to include your preferred shim / polyfill BEFORE any other script
 files in your app. This will ensure Marionette uses
 your polyfill instead of the built in `Marionette.createObject`.
+
+## Marionette.extend
+
+Backbone's `extend` function is a useful utility to have, and is used in
+various places in Marionette. To make the use of this method more consistent,
+Backbone's `extend` has been aliased to `Marionette.extend`. This allows
+you to get the extend functionality for your object without having to
+decide if you want to use Backbone.View or Backbone.Model or another
+Backbone object to grab the method from.
+
+```js
+var Foo = function(){};
+
+// use Marionette.extend to make Foo extendable, just like other
+// Backbone and Marionette objects
+Foo.extend = Marionette.extend;
+
+// Now Foo can be extended to create a new type, with methods
+var Bar = Foo.extend({
+
+  someMethod: function(){ ... }
+
+  // ...
+});
+
+// Create an instance of Bar
+var b = new Bar();
+```
 
 ## Marionette.getOption
 

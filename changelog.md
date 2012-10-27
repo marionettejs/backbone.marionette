@@ -1,3 +1,8 @@
+### v1.0.0-beta4 [view commit logs](https://github.com/marionettejs/backbone.marionette/compare/v1.0.0-beta3...v1.0.0-beta4)
+
+* Controller
+  * Added a very basic `Marionette.Controller` object, and basic documentation for it
+
 ### v1.0.0-beta3 [view commit logs](https://github.com/marionettejs/backbone.marionette/compare/v1.0.0-beta2...v1.0.0-beta3)
 
 * Region

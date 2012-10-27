@@ -2,9 +2,11 @@ Backbone.Marionette = Marionette = (function(Backbone, _, $){
   var Marionette = {};
 
 //= ../marionette.helpers.js
+//= ../marionette.createObject.js
 //= ../marionette.triggerMethod.js
 //= ../marionette.eventbinder.js
 //= ../marionette.eventaggregator.js
+//= ../marionette.controller.js
 //= ../marionette.view.js
 //= ../marionette.itemview.js
 //= ../marionette.collectionview.js

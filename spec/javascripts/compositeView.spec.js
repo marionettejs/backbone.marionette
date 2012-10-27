@@ -593,11 +593,14 @@ describe("composite view", function(){
         // this test enforces that ui elements should be accessible as soon as their html was inserted
         // to the DOM
         it("should return its jQuery selector", function() {
-          gridView.beforeRender = function() {
+          gridView.onBeforeRender = function() {
             expect(gridView.ui.headersRow.find("th:first-child").text()).toEqual("Username");
+            called = true;
           };
+          spyOn(gridView, "onBeforeRender").andCallThrough();
 
           gridView.render();
+          expect(gridView.onBeforeRender).toHaveBeenCalled();
         })
 
       });

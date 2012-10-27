@@ -6,8 +6,6 @@ describe("pre-compiled template rendering", function(){
 
     var View = Backbone.Marionette.ItemView.extend({
       template: templateFunc,
-      beforeRender: function(){},
-      onRender: function(){}
     });
 
     var view;

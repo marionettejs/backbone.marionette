@@ -3,6 +3,9 @@
 * Controller
   * Added a very basic `Marionette.Controller` object, and basic documentation for it
 
+* Marionette.getOption
+  * Added a convience method to get an object's options either from the object directly, or from it's `this.options`, with `this.options` taking precedence
+
 ### v1.0.0-beta3 [view commit logs](https://github.com/marionettejs/backbone.marionette/compare/v1.0.0-beta2...v1.0.0-beta3)
 
 * Region

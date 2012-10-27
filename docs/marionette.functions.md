@@ -7,24 +7,10 @@ a way to get the same behaviors and conventions from your own code.
 
 ## Documentation Index
 
-* [Marionette.triggerMethod](#marionettetriggermethod)
 * [Marionette.addEventBinder](#marionetteaddeventbinder)
 * [Marionette.extend](#marionetteextend)
-
-## Marionette.triggerMethod
-
-Trigger an event and a corresponding method on the target object.
-
-When an event is triggered, the first letter of each section of the 
-event name is capitalized, and the word "on" is tagged on to the front 
-of it. Examples:
-
-* `triggerMethod("render")` fires the "onRender" function
-* `triggerMethod("before:close")` fires the "onBeforeClose" function
-
-All arguments that are passed to the triggerMethod call are passed along to both the event and the method, with the exception of the event name not being passed to the corresponding method.
-
-`triggerMethod("foo", bar)` will call `onFoo: function(bar){...})`
+* [Marionette.getOption](#marionetteextend)
+* [Marionette.triggerMethod](#marionettetriggermethod)
 
 ## Marionette.addEventBinder
 
@@ -73,3 +59,42 @@ var Bar = Foo.extend({
 // Create an instance of Bar
 var b = new Bar();
 ```
+
+## Marionette.getOption
+
+Retrieve an object's attribute either directly from the object, or from
+the object's `this.options`, with `this.options` taking precedence.
+
+```js
+var M = Backbone.Model.extend({
+  foo: "bar",
+
+  initialize: function(){
+    var f = Marionette.getOption(this, "foo");
+    console.log(f);
+  }
+});
+
+new M(); // => "bar"
+
+new M({}, { foo: "quux" }); // => "quux"
+```
+
+This is useful when building an object that can have configuration set
+in either the object definition or the object's constructor options.
+
+## Marionette.triggerMethod
+
+Trigger an event and a corresponding method on the target object.
+
+When an event is triggered, the first letter of each section of the 
+event name is capitalized, and the word "on" is tagged on to the front 
+of it. Examples:
+
+* `triggerMethod("render")` fires the "onRender" function
+* `triggerMethod("before:close")` fires the "onBeforeClose" function
+
+All arguments that are passed to the triggerMethod call are passed along to both the event and the method, with the exception of the event name not being passed to the corresponding method.
+
+`triggerMethod("foo", bar)` will call `onFoo: function(bar){...})`
+

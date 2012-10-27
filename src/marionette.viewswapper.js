@@ -7,10 +7,14 @@
 
 Marionette.ViewSwapper = Marionette.View.extend({
   constructor: function(options){
-    this.views = options.views;
     this._swapperViews = {};
     this._currentViewBindings = new Marionette.EventBinder();
+
     Marionette.View.prototype.constructor.apply(this, arguments);
+
+    this.views = Marionette.getOption(this, "views");
+    this.swapOn = Marionette.getOption(this, "swapOn");
+    this.initialView = Marionette.getOption(this, "initialView");
   },
 
   // Render the current view. If no current view is set, it

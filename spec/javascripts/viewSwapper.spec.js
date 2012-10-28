@@ -291,7 +291,7 @@ describe("view swapper", function(){
 
   });
 
-  describe("and configuring 'swapper' in the 'swapOn' settings, to switch to other views", function(){
+  describe("when configuring 'swapper' in the 'swapOn' settings, to switch to other views", function(){
 
     var ViewSwapper = Marionette.ViewSwapper.extend({
       initialView: "firstView",
@@ -324,6 +324,44 @@ describe("view swapper", function(){
 
     it("should swap to the specified view when the swapper triggers an event", function(){
       expect(swapper._swapView).toHaveBeenCalledWith("secondView");
+    });
+
+  });
+
+  describe("when the swapper triggers the same event twice", function(){
+
+    var ViewSwapper = Marionette.ViewSwapper.extend({
+      initialView: "firstView",
+      
+      swapOn: {
+        swapper: {
+          "some:event": "secondView"
+        }
+      }
+    });
+
+    var swapper, v1, v2;
+
+    beforeEach(function(){
+      v1 = new Marionette.View();
+      v2 = new Marionette.View();
+
+      swapper = new ViewSwapper({
+        views: {
+          firstView: v1,
+          secondView: v2
+        }
+      });
+
+      swapper.render();
+
+      spyOn(swapper, "render").andCallThrough();
+      swapper.trigger("some:event");
+      swapper.trigger("some:event");
+    });
+
+    it("should only swap to the target view once", function(){
+      expect(swapper.render.callCount).toBe(1);
     });
 
   });

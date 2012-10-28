@@ -38,6 +38,7 @@ Marionette.ViewSwapper = Marionette.View.extend({
       // trigger show/onShow on the previous view
       if (this.currentView){
         Marionette.triggerMethod.call(this.currentView, "show");
+        Marionette.triggerMethod.call(this, "swap:in", this.currentView);
       }
     }, this);
 
@@ -184,8 +185,9 @@ Marionette.ViewSwapper = Marionette.View.extend({
       // trigger hide/onHide on the previous view
       if (this.currentView){
         Marionette.triggerMethod.call(this.currentView, "hide");
+        Marionette.triggerMethod.call(this, "swap:out", this.currentView);
       }
-      
+
       // get the next view, configure it's events and render it
       this._setupViewEvents(viewName, view);
       this.currentView = view;

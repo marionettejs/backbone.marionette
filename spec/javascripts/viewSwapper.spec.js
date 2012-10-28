@@ -70,11 +70,13 @@ describe("view swapper", function(){
   });
 
   describe("when a view has already been rendered, and it triggers a configured event", function(){
-    var swapper, v1, v2, showHandler, hideHandler;
+    var swapper, v1, v2, showHandler, hideHandler, swapInHandler, swapOutHandler;
 
     beforeEach(function(){
       showHandler = jasmine.createSpy("show handler");
       hideHandler = jasmine.createSpy("hide handler");
+      swapInHandler = jasmine.createSpy("swap in handler");
+      swapOutHandler = jasmine.createSpy("swap out handler");
 
       v1 = new Marionette.View();
       v1.onHide = hideHandler;
@@ -104,6 +106,12 @@ describe("view swapper", function(){
 
       swapper.render();
 
+      swapper.onSwapOut = swapOutHandler;
+      swapper.on("swap:out", swapOutHandler);
+
+      swapper.onSwapIn = swapInHandler;
+      swapper.on("swap:in", swapInHandler);
+
       v1.trigger("foo:bar");
     });
 
@@ -130,6 +138,15 @@ describe("view swapper", function(){
     it("should trigger a hide event for the previous view", function(){
       expect(hideHandler.callCount).toBe(2);
     });
+
+    it("should trigger on:swap:out for the previous view", function(){
+      expect(swapOutHandler.callCount).toBe(2);
+    });
+
+    it("should trigger on:swap:in for the target view", function(){
+      expect(swapInHandler.callCount).toBe(2);
+    });
+
   });
 
   describe("when swapping to a view that does not exist", function(){

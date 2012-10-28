@@ -61,6 +61,11 @@ event, the displayView will be displayed.
 
 The ViewSwapper will trigger the following events and callback methods:
 
+* swap:in/onSwapIn : triggered when a view is swapped in, includes the view view instance as a parameter
+* swap:out/onSwapOut : triggered when a view is swapped out, includes the view view instance as a parameter
+
+The ViewSwapper will also trigger these events on the sub-views that it swaps in / out:
+
 * render/onRender: triggered on a sub-view that is being rendered for display. only triggers one per view
 * show/onShow: triggered on a sub-view that has been swapped in and shown in the DOM
 * hide/onHide: triggered on a sub-view that has been swapped out and removed from the DOM

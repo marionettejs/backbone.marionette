@@ -267,7 +267,9 @@ describe("view swapper", function(){
         }
       });
 
-      spyOn(swapper, "close").andCallThrough();
+      spyOn(swapper._currentViewBindings, "unbindAll").andCallThrough();
+      spyOn(swapper._swapperBindings, "unbindAll").andCallThrough();
+
       spyOn(v1, "close").andCallThrough();
       spyOn(v2, "close").andCallThrough();
 
@@ -278,6 +280,14 @@ describe("view swapper", function(){
     it("should close all of the views that are configured in the swapper", function(){
       expect(v1.close).toHaveBeenCalled();
       expect(v2.close).toHaveBeenCalled();
+    });
+
+    it("should unbind all view events", function(){
+      expect(swapper._currentViewBindings.unbindAll).toHaveBeenCalled();
+    });
+
+    it("should unbind the swapper events", function(){
+      expect(swapper._swapperBindings.unbindAll).toHaveBeenCalled();
     });
 
   });

@@ -48,6 +48,7 @@ describe("view swapper", function(){
           swapper = new ViewSwapper({
             views: { }
           });
+          swapper.render();
         }
         expect(run).toThrow("Cannot show view in ViewSwapper. View 'someView' not found.");
       });

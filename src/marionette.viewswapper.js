@@ -18,13 +18,18 @@ Marionette.ViewSwapper = Marionette.View.extend({
     this.initialView = Marionette.getOption(this, "initialView");
 
     this._setupViewEvents("swapper", this, this._swapperBindings);
-
-    this._setupInitialView();
   },
 
   // Render the current view. If no current view is set, it
   // will render the `initialView` that was configured.
   render: function(){
+    // set up the initial view to display, on first render
+    if (!this.currentView){
+      var initialViewName = Marionette.getOption(this, "initialView");
+      this._swapView(initialViewName);
+    }
+
+    // render and show the new view
     this.currentView.render();
     this.$el.append(this.currentView.$el);
     this.showView(this.currentView);
@@ -58,13 +63,6 @@ Marionette.ViewSwapper = Marionette.View.extend({
 
     // Close the base view that we extended from
     Marionette.View.prototype.close.apply(this, arguments);
-  },
-
-  // Set up the initial view to display, when the ViewSwapper instance
-  // is first created
-  _setupInitialView: function(){
-    var initialViewName = Marionette.getOption(this, "initialView");
-    this._swapView(initialViewName);
   },
 
   // Get a view by name, throwing an exception if the view instance
@@ -141,7 +139,6 @@ Marionette.ViewSwapper = Marionette.View.extend({
 
       bindings.bindTo(view, eventName, function(){
         that._swapView(targetViewName);
-        that.render();
       });
 
     });
@@ -154,9 +151,11 @@ Marionette.ViewSwapper = Marionette.View.extend({
     // the new view, when called
     var done = _.bind(function(){
 
+      // get the next view, configure it's events and render it
       var view = this._getView(viewName);
       this._setupViewEvents(viewName, view);
       this.currentView = view;
+      this.render();
 
     }, this);
 

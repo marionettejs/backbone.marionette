@@ -104,7 +104,7 @@ Marionette.ViewSwapper = Marionette.View.extend({
       }
 
       // Found the view, so build a Decorator around it
-      swapperView = this._buildSwapperView(originalView);
+      swapperView = this._buildSwapperView(originalView, viewName);
       this._swapperViews[viewName] = swapperView;
     }
 
@@ -113,9 +113,12 @@ Marionette.ViewSwapper = Marionette.View.extend({
 
   // Decorate the configured view with information that the view swapper
   // needs, to keep track of the view's current state.
-  _buildSwapperView: function(originalView){
+  _buildSwapperView: function(originalView, viewName){
     var swapperView = Marionette.createObject(originalView);
     _.extend(swapperView, {
+
+      viewName: viewName,
+      originalView: originalView,
       
       // Prevent the underlying view from being rendered more than once
       render: function(){

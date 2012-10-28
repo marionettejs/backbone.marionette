@@ -32,13 +32,24 @@ Marionette.ViewSwapper = Marionette.View.extend({
     // render and show the new view
     this.currentView.render();
     this.$el.append(this.currentView.$el);
-    this.showView(this.currentView);
+
+    // setup a callback for the showView call to recieve
+    var done = _.bind(function(){
+      // trigger show/onShow on the previous view
+      if (this.currentView){
+        Marionette.triggerMethod.call(this.currentView, "show");
+      }
+    }, this);
+
+    // show the view, passing it the done callback
+    this.showView(this.currentView, done);
   },
 
   // Show a view that is being swapped in. Override this method to
   // set up your own custom fade in / show method
-  showView: function(view){
+  showView: function(view, done){
     view.$el.show();
+    done();
   },
 
   // Hide a view that is being swapped out. Override this method to
@@ -170,6 +181,11 @@ Marionette.ViewSwapper = Marionette.View.extend({
     // the new view, when called
     var done = _.bind(function(){
 
+      // trigger hide/onHide on the previous view
+      if (this.currentView){
+        Marionette.triggerMethod.call(this.currentView, "hide");
+      }
+      
       // get the next view, configure it's events and render it
       this._setupViewEvents(viewName, view);
       this.currentView = view;

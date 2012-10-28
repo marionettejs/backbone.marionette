@@ -70,11 +70,19 @@ describe("view swapper", function(){
   });
 
   describe("when a view has already been rendered, and it triggers a configured event", function(){
-    var swapper, v1, v2;
+    var swapper, v1, v2, showHandler, hideHandler;
 
     beforeEach(function(){
+      showHandler = jasmine.createSpy("show handler");
+      hideHandler = jasmine.createSpy("hide handler");
+
       v1 = new Marionette.View();
+      v1.onHide = hideHandler;
+      v1.on("hide", hideHandler);
+
       v2 = new Marionette.View();
+      v2.onShow = showHandler;
+      v2.on("show", showHandler);
 
       spyOn(v1, "close").andCallThrough();
       spyOn(v2, "render").andCallThrough();
@@ -113,6 +121,14 @@ describe("view swapper", function(){
 
     it("should not close the previous view", function(){
       expect(v1.close).not.toHaveBeenCalled();
+    });
+
+    it("should trigger a show event for the target view", function(){
+      expect(showHandler.callCount).toBe(2)
+    });
+
+    it("should trigger a hide event for the previous view", function(){
+      expect(hideHandler.callCount).toBe(2);
     });
   });
 

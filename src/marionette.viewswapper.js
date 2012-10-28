@@ -107,11 +107,23 @@ Marionette.ViewSwapper = Marionette.View.extend({
       
       // Prevent the underlying view from being rendered more than once
       render: function(){
+        var value;
+
         if (this._hasBeenRendered){
           return this;
         } else {
+
+          // prevent any more rendering
           this._hasBeenRendered = true;
-          return originalView.render.apply(originalView, arguments);
+
+          // do the render
+          value = originalView.render.apply(originalView, arguments);
+
+          // trigger render/onRender
+          Marionette.triggerMethod.call(this, "render");
+          
+          // return whatever was sent back to us
+          return value;
         }
       }
 

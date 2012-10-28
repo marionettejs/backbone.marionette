@@ -9,10 +9,14 @@ describe("view swapper", function(){
     });
 
     describe("and rendering the swapper with that view available", function(){
-      var swapper, view;
+      var swapper, view, handler;
 
       beforeEach(function(){
+        handler = jasmine.createSpy("render handler");
+
         view = new Backbone.View();
+        view.onRender = jasmine.createSpy("onRender");
+        view.on("render", handler);
         spyOn(view, "render");
 
         swapper = new ViewSwapper({
@@ -30,6 +34,14 @@ describe("view swapper", function(){
 
       it("should show the initial view in the view swapper", function(){
         expect(swapper.$el).toHaveHtml(view.$el);
+      });
+
+      it("should trigger an onRender method on the initial view", function(){
+        expect(view.onRender).toHaveBeenCalled();
+      });
+
+      it("should trigger a 'render' event on the initial view", function(){
+        expect(handler).toHaveBeenCalled();
       });
 
     });

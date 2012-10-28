@@ -26,4 +26,4 @@ Marionette.getOption = function(target, optionName){
   }
 
   return value;
-}
+};

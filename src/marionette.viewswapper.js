@@ -60,7 +60,7 @@ Marionette.ViewSwapper = Marionette.View.extend({
       originalView = this.views[viewName];
 
       if (!originalView){
-        var error = Error("Cannot show view in ViewSwapper. View '" + viewName + "' not found.");
+        var error = new Error("Cannot show view in ViewSwapper. View '" + viewName + "' not found.");
         error.name = "ViewNotFoundError";
         throw error;
       }

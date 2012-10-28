@@ -22,8 +22,11 @@ Marionette.ViewSwapper = Marionette.View.extend({
   // Render the current view. If no current view is set, it
   // will render the `initialView` that was configured.
   render: function(){
+    var initialView;
+
     if (!this.currentView){
-      this._swapView(this.initialView);
+      initialView = Marionette.getOption(this, "initialView");
+      this._swapView(initialView);
     }
 
     this.currentView.render();
@@ -55,14 +58,20 @@ Marionette.ViewSwapper = Marionette.View.extend({
   // Get a view by name, throwing an exception if the view instance
   // is not found.
   _getView: function(viewName){
-    var originalView;
+    var originalView, error;
     var swapperView = this._swapperViews[viewName];
+
+    if (viewName === "swapper"){
+      error = new Error("Cannot display 'swapper' as a view.");
+      error.name = "InvalidViewName";
+      throw error;
+    }
 
     if (!swapperView){
       originalView = this.views[viewName];
 
       if (!originalView){
-        var error = new Error("Cannot show view in ViewSwapper. View '" + viewName + "' not found.");
+        error = new Error("Cannot show view in ViewSwapper. View '" + viewName + "' not found.");
         error.name = "ViewNotFoundError";
         throw error;
       }

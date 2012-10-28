@@ -320,23 +320,48 @@ describe("view swapper", function(){
   });
 
   describe("when setting 'swapper' as the 'initialView'", function(){
+
+    var ViewSwapper = Marionette.ViewSwapper.extend({
+      initialView: "swapper"
+    });
+
+    function run(){
+      var swapper = new ViewSwapper();
+      swapper.render();
+    }
+
     it("should throw an error saying swapper can't be used as view", function(){
-      throw "not yet implemented";
+      expect(run).toThrow("Cannot display 'swapper' as a view.");
     });
   });
 
   describe("and setting 'swapper' as the target of a 'swapOn' event", function(){
+    var ViewSwapper = Marionette.ViewSwapper.extend({
+      initialView: "first",
+
+      swapOn: {
+        first: {
+          "foo": "swapper"
+        }
+      }
+
+    });
+
+    function run(){
+      var v1 = new Marionette.View();
+      var swapper = new ViewSwapper({
+        views: {
+          first: v1
+        }
+      });
+
+      swapper.render();
+      v1.trigger("foo");
+    }
+
     it("should throw an error saying swapper can't be used as a view", function(){
-      throw "not yet implemented";
+      expect(run).toThrow("Cannot display 'swapper' as a view.");
     });
-  });
-
-  describe("when configuring swapOn event with '*' for the view name", function(){
-
-    it("should swap to the target view when any child view triggers that event", function(){
-      throw "not yet implemented";
-    });
-
   });
 
 });

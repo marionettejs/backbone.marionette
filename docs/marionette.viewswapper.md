@@ -11,6 +11,7 @@ in place of any standard Backbone.View or Marionette view instance.
 
 * [Basic Use](#basic-use)
 * [Configuring View Swapping With `swapOn`](#configuring-view-swapping-with-swapon)
+* [Swapping With Events From The ViewSwapper Instance](#swapping-with-events-from-the-viewswapper-instance)
 * [Configuring View Instances with `views`](#configuring-view-instances-with-views)
 * [Configuring The Initial View](#configuring-the-initial-view)
 * [Custom Show And Hide Animations When Swapping](#cusom-show-and-hide-animations-when-swapping)
@@ -95,6 +96,26 @@ displayView: {
 When the `displayView` view is shown, the view swapper will listen for an
 event named "swap:edit". When this event is triggered, the view swapper
 will swap out the `displayView` instance for the `editView` instance.
+
+## Swapping With Events From The ViewSwapper Instance
+
+The ViewSwapper instance can also be configured to trigger events and
+cause view swaps to happen. To do this, use the special view name "swapper"
+in the `swapOn` configuration:
+
+```js
+swapOn: {
+  swapper: {
+    "some:event": "anotherView",
+    "event:two": "thatView"
+  }
+}
+```
+
+The view name "swapper" is reserved for the ViewSwapper instance itself
+and cannot be used for another view instance. It also cannot be used as
+the `initialView` or as a target view to swap to. If the "swapper" name
+is used in either of these cases, an exception will be thrown.
 
 ## Configuring View Instances with `views`
 

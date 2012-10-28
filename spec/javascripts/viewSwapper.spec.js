@@ -41,14 +41,14 @@ describe("view swapper", function(){
         view = new Backbone.View();
         spyOn(view, "render");
 
-        swapper = new ViewSwapper({
-          views: { }
-        });
-
       });
 
       it("should throw an error saying the view is not available", function(){
-        function run(){ swapper.render(); }
+        function run(){ 
+          swapper = new ViewSwapper({
+            views: { }
+          });
+        }
         expect(run).toThrow("Cannot show view in ViewSwapper. View 'someView' not found.");
       });
       
@@ -57,26 +57,24 @@ describe("view swapper", function(){
   });
 
   describe("when a view has already been rendered, and it triggers a configured event", function(){
-    var ViewSwapper = Marionette.ViewSwapper.extend({
-      initialView: "firstView",
-      
-      swapOn: {
-        firstView: {
-          "foo:bar": "secondView"
-        }
-      }
-    });
-
     var swapper, v1, v2;
 
     beforeEach(function(){
-      v1 = new Backbone.Marionette.View();
-      v2 = new Backbone.View();
+      v1 = new Marionette.View();
+      v2 = new Marionette.View();
 
       spyOn(v1, "close").andCallThrough();
       spyOn(v2, "render").andCallThrough();
 
-      swapper = new ViewSwapper({
+      swapper = new Marionette.ViewSwapper({
+        initialView: "firstView",
+        
+        swapOn: {
+          firstView: {
+            "foo:bar": "secondView"
+          }
+        },
+
         views: {
           firstView: v1,
           secondView: v2

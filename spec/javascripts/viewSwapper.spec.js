@@ -282,35 +282,61 @@ describe("view swapper", function(){
 
   });
 
+  describe("and configuring 'swapper' in the 'swapOn' settings, to switch to other views", function(){
+
+    var ViewSwapper = Marionette.ViewSwapper.extend({
+      initialView: "firstView",
+      
+      swapOn: {
+        swapper: {
+          "some:event": "secondView"
+        }
+      }
+    });
+
+    var swapper, v1, v2;
+
+    beforeEach(function(){
+      v1 = new Marionette.View();
+      v2 = new Marionette.View();
+
+      swapper = new ViewSwapper({
+        views: {
+          firstView: v1,
+          secondView: v2
+        }
+      });
+
+      spyOn(swapper, "_swapView").andCallThrough();
+
+      swapper.render();
+      swapper.trigger("some:event");
+    });
+
+    it("should swap to the specified view when the swapper triggers an event", function(){
+      expect(swapper._swapView).toHaveBeenCalledWith("secondView");
+    });
+
+  });
+
+  describe("when setting 'swapper' as the 'initialView'", function(){
+    it("should throw an error saying swapper can't be used as view", function(){
+      throw "not yet implemented";
+    });
+  });
+
+  describe("and setting 'swapper' as the target of a 'swapOn' event", function(){
+    it("should throw an error saying swapper can't be used as a view", function(){
+      throw "not yet implemented";
+    });
+  });
+
   describe("when configuring swapOn event with '*' for the view name", function(){
 
     it("should swap to the target view when any child view triggers that event", function(){
       throw "not yet implemented";
     });
 
-  });
-
-  describe("when configuring swapOn event with 'swapper' for the view name", function(){
-
-    describe("and setting 'swapper' as the 'initialView'", function(){
-      it("should throw an error saying swapper can't be used as view", function(){
-        throw "not yet implemented";
-      });
-    });
-
-    describe("and setting 'swapper' as the target of a 'swapOn' event", function(){
-      it("should throw an error saying swapper can't be used as a view", function(){
-        throw "not yet implemented";
-      });
-    });
-
-    describe("and configuring 'swapper' in the 'swapOn' settings, to switch to other views", function(){
-
-      it("should swap to the specified view when the swapper triggers an event", function(){
-        throw "not yet implemented";
-      });
-
-    });
   });
 
 });

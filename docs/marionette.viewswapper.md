@@ -10,6 +10,7 @@ in place of any standard Backbone.View or Marionette view instance.
 ## Documentation Index
 
 * [Basic Use](#basic-use)
+* [Events And Callback Methodsl](#events-and-callback-methods)
 * [Configuring View Swapping With `swapOn`](#configuring-view-swapping-with-swapon)
 * [Swapping With Events From The ViewSwapper Instance](#swapping-with-events-from-the-viewswapper-instance)
 * [Configuring View Instances with `views`](#configuring-view-instances-with-views)
@@ -55,6 +56,14 @@ new AddEditView({
 When displayView triggers the "swap:edit" event, the editView will be 
 displayed in place. Similarly, when editView triggers the "swap:display" 
 event, the displayView will be displayed.
+
+## Events And Callback Methods
+
+The ViewSwapper will trigger the following events and callback methods:
+
+* render/onRender: triggered on a sub-view that is being rendered for display. only triggers one per view
+* show/onShow: triggered on a sub-view that has been swapped in and shown in the DOM
+* hide/onHide: triggered on a sub-view that has been swapped out and removed from the DOM
 
 ## Configuring View Swapping With `swapOn`
 
@@ -183,14 +192,22 @@ var FadingViewSwapper = Marionette.ViewSwapper.extend({
   // ...
 
   // provide custom function to show the view being swapped in
-  showView: function(view){
-    view.$el.fadeIn("fast");
+  showView: function(view, done){
+    view.$el.fadeIn("fast", function(){
+      done();
+    });
   },
 
   // provide custom function to hide the view being swapped out
-  hideView: function(view){
-    view.$el.fadeOut("fast");
+  hideView: function(view, done){
+    view.$el.fadeOut("fast", function(){
+      done();
+    });
   }
 
 });
 ```
+
+Note the `done` parameter of both of these methods, and the execution of
+this parameter as a callback function. The `done` callback must be executed
+or the ViewSwapper will not properly transition to the desired state.

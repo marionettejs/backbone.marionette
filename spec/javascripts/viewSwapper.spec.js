@@ -282,4 +282,35 @@ describe("view swapper", function(){
 
   });
 
+  describe("when configuring swapOn event with '*' for the view name", function(){
+
+    it("should swap to the target view when any child view triggers that event", function(){
+      throw "not yet implemented";
+    });
+
+  });
+
+  describe("when configuring swapOn event with 'swapper' for the view name", function(){
+
+    describe("and setting 'swapper' as the 'initialView'", function(){
+      it("should throw an error saying swapper can't be used as view", function(){
+        throw "not yet implemented";
+      });
+    });
+
+    describe("and setting 'swapper' as the target of a 'swapOn' event", function(){
+      it("should throw an error saying swapper can't be used as a view", function(){
+        throw "not yet implemented";
+      });
+    });
+
+    describe("and configuring 'swapper' in the 'swapOn' settings, to switch to other views", function(){
+
+      it("should swap to the specified view when the swapper triggers an event", function(){
+        throw "not yet implemented";
+      });
+
+    });
+  });
+
 });

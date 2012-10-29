@@ -134,7 +134,16 @@ Marionette.CollectionView = Marionette.View.extend({
   addItemView: function(item, ItemView, index){
     var that = this;
 
-    var view = this.buildItemView(item, ItemView);
+    // get the itemViewOptions if any were specified
+    var itemViewOptions;
+    if (_.isFunction(this.itemViewOptions)){
+      itemViewOptions = this.itemViewOptions(item);
+    } else {
+      itemViewOptions = this.itemViewOptions;
+    }
+
+    // build the view 
+    var view = this.buildItemView(item, ItemView, itemViewOptions);
 
     // Store the child view itself so we can properly
     // remove and/or close it later
@@ -174,15 +183,7 @@ Marionette.CollectionView = Marionette.View.extend({
   },
 
   // Build an `itemView` for every model in the collection.
-  buildItemView: function(item, ItemView){
-    var itemViewOptions;
-
-    if (_.isFunction(this.itemViewOptions)){
-      itemViewOptions = this.itemViewOptions(item);
-    } else {
-      itemViewOptions = this.itemViewOptions;
-    }
-
+  buildItemView: function(item, ItemView, itemViewOptions){
     var options = _.extend({model: item}, itemViewOptions);
     var view = new ItemView(options);
     return view;

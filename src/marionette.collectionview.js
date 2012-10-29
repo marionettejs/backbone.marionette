@@ -134,11 +134,20 @@ Marionette.CollectionView = Marionette.View.extend({
   addItemView: function(item, ItemView, index){
     var that = this;
 
-    var view = this.buildItemView(item, ItemView);
+    // get the itemViewOptions if any were specified
+    var itemViewOptions;
+    if (_.isFunction(this.itemViewOptions)){
+      itemViewOptions = this.itemViewOptions(item);
+    } else {
+      itemViewOptions = this.itemViewOptions;
+    }
+
+    // build the view 
+    var view = this.buildItemView(item, ItemView, itemViewOptions);
 
     // Store the child view itself so we can properly
     // remove and/or close it later
-    this.storeChild(view);
+    this.storeChild(item, view);
     this.triggerMethod("item:added", view);
 
     // Forward all child item view events through the parent,
@@ -174,17 +183,9 @@ Marionette.CollectionView = Marionette.View.extend({
   },
 
   // Build an `itemView` for every model in the collection.
-  buildItemView: function(item, ItemView){
-    var itemViewOptions;
-
-    if (_.isFunction(this.itemViewOptions)){
-      itemViewOptions = this.itemViewOptions(item);
-    } else {
-      itemViewOptions = this.itemViewOptions;
-    }
-
+  buildItemView: function(item, ItemViewType, itemViewOptions){
     var options = _.extend({model: item}, itemViewOptions);
-    var view = new ItemView(options);
+    var view = new ItemViewType(options);
     return view;
   },
 
@@ -217,8 +218,8 @@ Marionette.CollectionView = Marionette.View.extend({
 
   // Store references to all of the child `itemView`
   // instances so they can be managed and cleaned up, later.
-  storeChild: function(view){
-    this.children[view.model.cid] = view;
+  storeChild: function(item, view){
+    this.children[item.cid] = view;
   },
 
   // Internal method to set up the `children` object for

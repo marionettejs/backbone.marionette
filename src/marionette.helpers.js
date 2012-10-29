@@ -4,6 +4,9 @@
 // For slicing `arguments` in functions
 var slice = Array.prototype.slice;
 
+// Marionette.extend
+// -----------------
+
 // Borrow the Backbone `extend` method so we can use it as needed
 Marionette.extend = Backbone.Model.extend;
 
@@ -23,4 +26,4 @@ Marionette.getOption = function(target, optionName){
   }
 
   return value;
-}
+};

@@ -10,6 +10,7 @@ then append the results of the item view's `el` to the collection view's
 * [CollectionView's `itemView`](#collectionviews-itemview)
 * [CollectionView's `itemViewOptions`](#collectionviews-itemviewoptions)
 * [CollectionView's `emptyView`](#collectionviews-emptyview)
+* [CollectionView's `buildItemView`](#collectionviews-builditemview)
 * [Callback Methods](#callback-methods)
   * [onBeforeRender callback](#beforerender-callback)
   * [onRender callback](#onrender-callback)
@@ -131,6 +132,24 @@ Backbone.Marionette.CollectionView.extend({
 
 This will render the `emptyView` and display the message that needs to
 be displayed when there are no items.
+
+## CollectionView's `buildItemView`
+
+When a custom view instance needs to be created for the `itemView` that
+represents an item, override the `buildItemView` method. This method
+takes three parameters and returns a view instance to be used as the
+item view.
+
+```js
+buildItemView: function(item, ItemViewType, itemViewOptions){
+  // build the final list of options for the item view type
+  var options = _.extend({model: item}, itemViewOptions);
+  // create the item view instance
+  var view = new ItemViewType(options);
+  // return it
+  return view;
+},
+```
 
 ## Callback Methods
 

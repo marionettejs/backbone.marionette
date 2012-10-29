@@ -147,7 +147,7 @@ Marionette.CollectionView = Marionette.View.extend({
 
     // Store the child view itself so we can properly
     // remove and/or close it later
-    this.storeChild(view);
+    this.storeChild(item, view);
     this.triggerMethod("item:added", view);
 
     // Forward all child item view events through the parent,
@@ -218,8 +218,8 @@ Marionette.CollectionView = Marionette.View.extend({
 
   // Store references to all of the child `itemView`
   // instances so they can be managed and cleaned up, later.
-  storeChild: function(view){
-    this.children[view.model.cid] = view;
+  storeChild: function(item, view){
+    this.children[item.cid] = view;
   },
 
   // Internal method to set up the `children` object for

@@ -1,5 +1,8 @@
 ### v1.0.0-beta4 [view commit logs](https://github.com/marionettejs/backbone.marionette/compare/v1.0.0-beta3...v1.0.0-beta4)
 
+* CollectionView / CompositeView
+  * **BREAKING:** Changed when the `itemViewOptions` gets called, in order to simplify the `buildItemView` method and make it easier to override
+
 * Controller
   * Added a very basic `Marionette.Controller` object, and basic documentation for it
 

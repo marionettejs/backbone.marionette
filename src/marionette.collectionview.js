@@ -183,9 +183,9 @@ Marionette.CollectionView = Marionette.View.extend({
   },
 
   // Build an `itemView` for every model in the collection.
-  buildItemView: function(item, ItemView, itemViewOptions){
+  buildItemView: function(item, ItemViewType, itemViewOptions){
     var options = _.extend({model: item}, itemViewOptions);
-    var view = new ItemView(options);
+    var view = new ItemViewType(options);
     return view;
   },
 

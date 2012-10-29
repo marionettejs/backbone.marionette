@@ -18,13 +18,13 @@ Commands object.
 
 ## Register A Command
 
-To register a command, call `App.commands.register` and provide a name for
+To register a command, call `App.commands.addHandler` and provide a name for
 the command to handle, and a callback method.
 
 ```js
 var App = new Marionette.Application();
 
-App.commands.register("foo", function(bar){
+App.commands.addHandler("foo", function(bar){
   console.log(bar);
 });
 ```

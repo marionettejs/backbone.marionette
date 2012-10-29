@@ -18,13 +18,13 @@ RequestResponse object.
 
 ## Register A Request Handler
 
-To register a command, call `App.reqres.register` and provide a name for
+To register a command, call `App.reqres.addHandler` and provide a name for
 the command to handle, and a callback method.
 
 ```js
 var App = new Marionette.Application();
 
-App.reqres.register("foo", function(bar){
+App.reqres.addHandler("foo", function(bar){
   return bar + "-quux";
 });
 ```

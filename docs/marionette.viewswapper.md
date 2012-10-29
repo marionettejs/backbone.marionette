@@ -16,6 +16,7 @@ in place of any standard Backbone.View or Marionette view instance.
 * [Configuring View Instances with `views`](#configuring-view-instances-with-views)
 * [Configuring The Initial View](#configuring-the-initial-view)
 * [Custom Show And Hide Animations When Swapping](#cusom-show-and-hide-animations-when-swapping)
+* [ViewSwapper vs Layout And Region](#viewswapper-vs-layout-and-region)
 
 ## Basic Use
 
@@ -223,3 +224,43 @@ var FadingViewSwapper = Marionette.ViewSwapper.extend({
 Note the `done` parameter of both of these methods, and the execution of
 this parameter as a callback function. The `done` callback must be executed
 or the ViewSwapper will not properly transition to the desired state.
+
+## ViewSwapper vs Layout and Region
+
+There certainly is a lot of overlap between this idea and a Layout w/ a 
+single Region. The reduction in boilerplate code and the more specialized 
+use case give it value that is separate form a Layout, though. Often the 
+significant different between one object and another is semantics. This 
+is evident in the "commands" vs "request/response" methods from Wreqr. 
+It's also evident in a "proxy" vs "decorator" design pattern 
+implementation. But semantics are important. And semantics also tend to 
+lead down diverging paths and more meaningful differences. 
+
+One of the differences between a Layout and a ViewSwapper is the region 
+and parent template - there isn't one for the view swapper. The 
+ViewSwapper itself is just an empty tag that manages the display of other 
+views inside of it - no need for a region to get involved because there's 
+no need to select an element in which the sub-views get displayed.
+
+Another difference is in the behavior of a Region vs the ViewSwapper. 
+Regions will force-ably close your view when displaying the next one. The 
+ViewSwapper on the other-hand, only hides the previously shown view. This 
+allows the views to be very quickly swapped back and forth, without 
+having to re-render and re-attach the view's DOM events. 
+
+What this really comes down to, is semantics again. The semantics for a 
+region are that you have a DOM element which will display an unknown 
+number of views, at an unknown number of times, for an unknown set of 
+reasons. It exists to make it easy to move between pages of your 
+Single-Page-Application, to move between applications and sub-applications, 
+etc. The semantics for a ViewSwapper are different in that it is intended 
+to be used when you have a known set of conditions that need to display a 
+known set of views, in a very limited capacity. 
+
+The same effect can be accomplished with a Layout and Region. But the 
+amount of code that you have to write increases and becomes significantly 
+more complex when using a Layout and Region. The ViewSwapper provides a 
+configuration-oriented mechanism that facilitate different scenarios, 
+such as building a Tab widget, an Add/Edit view, enabling Add/Edit within 
+a CollectionView or CompositeView, quickly and easily building a 
+"Loading..." screen, and more.

@@ -19,7 +19,6 @@ Backbone.Marionette = Marionette = (function(Backbone, _, $){
 //= ../marionette.collectionview.js
 //= ../marionette.compositeview.js
 //= ../marionette.layout.js
-//= ../marionette.viewswapper.js
 
 //= ../marionette.approuter.js
 //= ../marionette.application.js

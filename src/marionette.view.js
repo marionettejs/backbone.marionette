@@ -17,7 +17,7 @@ Marionette.View = Backbone.View.extend({
   },
 
   // import the "triggerMethod" to trigger events with corresponding
-  // methods if the method exists 
+  // methods if the method exists
   triggerMethod: Marionette.triggerMethod,
 
   // Get the template for this view
@@ -70,7 +70,7 @@ Marionette.View = Backbone.View.extend({
       triggerEvents[key] = function(e){
         if (e && e.preventDefault){ e.preventDefault(); }
         if (e && e.stopPropagation){ e.stopPropagation(); }
-        that.trigger(value);
+        that.trigger(value, e);
       };
 
     });

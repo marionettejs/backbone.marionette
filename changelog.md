@@ -4,6 +4,9 @@
   * **BREAKING:** Changed when the `itemViewOptions` gets called, in order to simplify the `buildItemView` method and make it easier to override
   * **BREAKING:** The `storeChild` method now requires an instance of the item being rendered, as well as the view that was rendered for it
 
+* CompositeView / templateHelpers
+  * **BREAKING:** Fixed the `CompositeView` so that `serializeData` is no longer responsible for mixing in the `templateHelpers`
+
 * Controller
   * Added a very basic `Marionette.Controller` object, and basic documentation for it
 

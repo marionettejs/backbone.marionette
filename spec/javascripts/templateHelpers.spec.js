@@ -4,17 +4,21 @@ describe("template helper methods", function(){
   describe("composite view", function(){
 
     describe("when rendering with no model or collection and a templateHelpers is found", function(){
+      var data;
+
       var View = Backbone.Marionette.CompositeView.extend({
         templateHelpers: {
           foo: function(){}
+        },
+
+        template: function(d){
+          data = d;
         }
       });
 
-      var data;
-
       beforeEach(function(){
         var view = new View();
-        data = view.serializeData();
+        view.render();
       });
 
       it('should include the template helpers in the data object', function(){

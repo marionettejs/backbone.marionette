@@ -47,8 +47,6 @@ Marionette.CompositeView = Marionette.CollectionView.extend({
       data = this.model.toJSON();
     }
 
-    data = this.mixinTemplateHelpers(data);
-
     return data;
   },
 
@@ -87,6 +85,7 @@ Marionette.CompositeView = Marionette.CollectionView.extend({
   renderModel: function(){
     var data = {};
     data = this.serializeData();
+    data = this.mixinTemplateHelpers(data);
 
     var template = this.getTemplate();
     return Marionette.Renderer.render(template, data);

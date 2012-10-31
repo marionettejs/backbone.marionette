@@ -7,14 +7,9 @@
 Marionette.Region = function(options){
   this.options = options || {};
 
-  var el = this.options.el;
-  delete this.options.el;
-
   Marionette.addEventBinder(this);
 
-  if (el){
-    this.el = el;
-  }
+  this.el = Marionette.getOption(this, "el");
 
   if (!this.el){
     var err = new Error("An 'el' must be specified for a region.");

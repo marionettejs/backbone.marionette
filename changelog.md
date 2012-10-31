@@ -9,6 +9,7 @@
 
 * Marionette.getOption
   * Added a convience method to get an object's options either from the object directly, or from it's `this.options`, with `this.options` taking precedence
+  * Converted use of `this.options` to use `Marionette.getOption` through most of the code
 
 * Marionette.createObject
   * Added a convience method to create an object that inherits from another, as a wrapper / shim around `Object.create`

@@ -26,7 +26,7 @@ Marionette.CompositeView = Marionette.CollectionView.extend({
   // `this.itemView` or Marionette.CompositeView if no `itemView`
   // has been defined
   getItemView: function(item){
-    var itemView = this.options.itemView || this.itemView || this.constructor;
+    var itemView = Marionette.getOption(this, "itemView") || this.constructor;
 
     if (!itemView){
       var err = new Error("An `itemView` must be specified");

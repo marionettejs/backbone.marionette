@@ -96,7 +96,8 @@ Marionette.CollectionView = Marionette.View.extend({
   // a collection of item views, when the collection is
   // empty
   showEmptyView: function(){
-    var EmptyView = this.options.emptyView || this.emptyView;
+    var EmptyView = Marionette.getOption(this, "emptyView");
+
     if (EmptyView && !this._showingEmptyView){
       this._showingEmptyView = true;
       var model = new Backbone.Model();
@@ -118,7 +119,7 @@ Marionette.CollectionView = Marionette.View.extend({
   // or from the `itemView` in the object definition. The "options"
   // takes precedence.
   getItemView: function(item){
-    var itemView = this.options.itemView || this.itemView;
+    var itemView = Marionette.getOption(this, "itemView");
 
     if (!itemView){
       var err = new Error("An `itemView` must be specified");

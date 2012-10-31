@@ -25,17 +25,7 @@ Marionette.View = Backbone.View.extend({
   // definition or pass a `template: "whatever"` parameter in
   // to the constructor options.
   getTemplate: function(){
-    var template;
-
-    // Get the template from `this.options.template` or
-    // `this.template`. The `options` takes precedence.
-    if (this.options && this.options.template){
-      template = this.options.template;
-    } else {
-      template = this.template;
-    }
-
-    return template;
+    return Marionette.getOption(this, "template");
   },
 
   // Mix in template helper methods. Looks for a

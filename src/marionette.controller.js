@@ -7,11 +7,11 @@
 Marionette.Controller = function(options){
   this.options = options || {};
 
+  Marionette.addEventBinder(this);
+
   if (_.isFunction(this.initialize)){
     this.initialize(options);
   }
-
-  Marionette.addEventBinder(this);
 };
 
 Marionette.Controller.extend = Marionette.extend;

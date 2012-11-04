@@ -73,6 +73,11 @@ _.extend(Marionette.Application.prototype, Backbone.Events, {
 
     // see the Marionette.Module object for more information
     return Marionette.Module.create.apply(Marionette.Module, args);
+  },
+
+  // Create a module, attached to the application, which doesn't start with it by default
+  lazyModule: function(moduleNames, moduleDefinition) {
+    return this.module(moduleNames, {startWithParent: false, define: moduleDefinition})
   }
 });
 

@@ -168,11 +168,11 @@ MyApp.someRegion.attachView(myView);
 
 ## Region Events And Callbacks
 
-A region manager will raise a few events during it's showing and
+A region manager will raise a few events during its showing and
 closing of views:
 
 * "show" / `onShow` - called on the view instance when the view has been rendered and displayed
-* "show" / `onShow` - called on the region isntance when the view has been rendered and displayed
+* "show" / `onShow` - called on the region instance when the view has been rendered and displayed
 * "close" / `onClose` - when the view has been closed
 
 You can bind to these events and add code that needs to run with
@@ -267,7 +267,7 @@ MyApp.addRegions({
 
 Note that a region must have an element to attach itself to. If you
 do not specify a selector when attaching the region instance to your
-Application or Layout, the region must provide an `el` either in it's
+Application or Layout, the region must provide an `el` either in its
 definition or constructor options.
 
 ### Instantiate Your Own Region 

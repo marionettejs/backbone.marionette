@@ -104,9 +104,9 @@ describe("module auto-start with the app.start", function(){
     });
   });
 
-  describe("given a module is configured to not start with app", function(){
+  describe("given a module is configured to not start with app, once", function(){
 
-    describe("when defining the module twice, and retrieving the module by name (without a new definition)", function(){
+    describe("when defining the module a second time, then retrieving the module by name (without a new definition)", function(){
       var MyApp, MyModule, moduleStart;
 
       beforeEach(function(){

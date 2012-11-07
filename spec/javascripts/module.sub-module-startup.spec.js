@@ -39,15 +39,15 @@ describe("module start", function(){
       var moduleStart, subModuleStart;
 
       beforeEach(function(){
-        moduleStart = jasmine.createSpy("module start");
-        subModuleStart = jasmine.createSpy("submodule start");
+        moduleStart = jasmine.createSpy("top module start");
+        subModuleStart = jasmine.createSpy("sub module start");
 
         var App = new Marionette.Application();
 
         App.module("Parent", {
           startWithParent: true,
-          define: function(Parent){
-            Parent.addInitializer(moduleStart);
+          define: function(mod){
+            mod.addInitializer(moduleStart);
           }
         });
 

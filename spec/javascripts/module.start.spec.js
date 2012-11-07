@@ -116,20 +116,25 @@ describe("module start", function(){
 
   });
 
-  xdescribe("when splitting a module definition, one of them is set to not start with the app, and starting the app", function(){
+  describe("when splitting a module definition, one of them is set to not start with the app, and starting the app", function(){
     var MyApp, firstfunc, secondfunc;
 
     beforeEach(function(){
       MyApp = new Backbone.Marionette.Application();
 
-      firstfunc = jasmine.createSpy();
-      secondfunc = jasmine.createSpy();
+      firstfunc = jasmine.createSpy("first initializer");
+      secondfunc = jasmine.createSpy("second initializer");
+
+      MyApp.module("MyModule", function(mod){
+        mod.addInitializer(secondfunc);
+      });
 
       MyApp.module("MyModule", {
         startWithParent: false,
-        define: firstfunc
+        define: function(mod){
+          mod.addInitializer(firstfunc);
+        }
       });
-      MyApp.module("MyModule", secondfunc);
 
       MyApp.start();
     });

@@ -123,21 +123,27 @@ _.extend(Marionette.Module, {
     var length = moduleNames.length;
     _.each(moduleNames, function(moduleName, i){
       var isLastModuleInChain = (i === length-1);
-
+      var isFirstModuleInChain = (i === 0);
       var module = that._getModuleDefinition(parentModule, moduleName, app);
-      module.config.options = that._getModuleOptions(parentModule, moduleDefinition);
 
-      // if it's the first module in the chain, configure it
-      // for auto-start, as specified by the options
+      // if this is the last module in the chain, then set up
+      // all of the module options from the configuration
       if (isLastModuleInChain){
-        that._configureAutoStart(app, module);
+        module.config.options = that._getModuleOptions(module, parentModule, moduleDefinition);
+
+        // Only add a module definition and initializer when this is the last 
+        // module in a "parent.child.grandchild" hierarchy of module names and
+        // when the module call has a definition function supplied
+        if (module.config.options.hasDefinition){
+          module.addDefinition(module.config.options.definition, customArgs);
+        }
       }
 
-      // Only add a module definition and initializer when this is
-      // the last module in a "parent.child.grandchild" hierarchy of
-      // module names
-      if (isLastModuleInChain && module.config.options.hasDefinition){
-        module.addDefinition(module.config.options.definition, customArgs);
+      // if it's a top level module, and this is the only
+      // module in the chain, then this one gets configured
+      // to start with the parent app.
+      if (isFirstModuleInChain && isLastModuleInChain ){
+        that._configureStartWithApp(app, module);
       }
 
       // Reset the parent module so that the next child
@@ -149,20 +155,26 @@ _.extend(Marionette.Module, {
     return parentModule;
   },
 
-  _configureAutoStart: function(app, module){
-    // Only add the initializer if it's the first module, and
-    // if it is set to auto-start, and if it has not yet been added
-    if (module.config.options.startWithParent && !module.config.autoStartConfigured){
-      // start the module when the app starts
-      app.addInitializer(function(options){
-        module.start(options);
-      });
+  // Only add the initializer if it is set to start with parent (the app), 
+  // and if it has not yet been added
+  _configureStartWithApp: function(app, module){
+    // skip this if we have already configured the module to start w/ the app
+    if (module.config.startWithAppIsConfigured){
+      return;
     }
+      
+    // start the module when the app starts
+    app.addInitializer(function(options){
+      // but only if the module is configured to start w/ parent
+      if (module.config.options.startWithParent){
+        module.start(options);
+      }
+    });
 
     // prevent this module from being configured for
     // auto start again. the first time the module
     // is defined, determines it's auto-start
-    module.config.autoStartConfigured = true;
+    module.config.startWithAppIsConfigured = true;
   },
 
   _getModuleDefinition: function(parentModule, moduleName, app){
@@ -180,10 +192,16 @@ _.extend(Marionette.Module, {
     return module;
   },
 
-  _getModuleOptions: function(parentModule, moduleDefinition){
-    // default to starting the module with the app
+  _getModuleOptions: function(module, parentModule, moduleDefinition){
+    // default to starting the module with it's parent to whatever the
+    var startWithParent = true;
+    if (module.config.options && !module.config.options.startWithParent){
+      startWithParent = false;
+    }
+
+    // set up initial options for the module
     var options = { 
-      startWithParent: true,
+      startWithParent: startWithParent,
       hasDefinition: !!moduleDefinition
     };
 

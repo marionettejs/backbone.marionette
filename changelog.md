@@ -1,3 +1,8 @@
+### v1.0.0-beta5 [view commit logs](https://github.com/marionettejs/backbone.marionette/compare/v1.0.0-beta4...v1.0.0-beta5)
+
+* Modules
+  * Fixed the `startWithParent` option so that you only have to specify `startWithParent: false` once, no matter how many files the module definition is split in to
+
 ### v1.0.0-beta4 [view commit logs](https://github.com/marionettejs/backbone.marionette/compare/v1.0.0-beta3...v1.0.0-beta4)
 
 * CollectionView / CompositeView

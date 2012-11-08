@@ -1,3 +1,9 @@
+### v1.0.0-beta6 [view commit logs](https://github.com/marionettejs/backbone.marionette/compare/v1.0.0-beta5...dev)
+
+* Controller
+  * Added a default `close` method to unbind all events on the controller instance and controller event binder
+  * Trigger a "close"/onClose event/method when closing
+
 ### v1.0.0-beta5 [view commit logs](https://github.com/marionettejs/backbone.marionette/compare/v1.0.0-beta4...v1.0.0-beta5)
 
 * Modules

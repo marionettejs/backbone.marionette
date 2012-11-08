@@ -7,6 +7,7 @@ and coordination of other objects, views, and more.
 ## Documentation Index
 
 * [Basic Use](#basic-use)
+* [Closing A Controller](#closing-a-controller)
 * [On The Name 'Controller'](#on-the-name-controller)
 
 ## Basic Use
@@ -42,6 +43,39 @@ c.bindTo(c, "stuff:done", function(stuff){
 
 // do some stuff
 c.doStuff();
+```
+
+## Closing A Controller
+
+Each Controller instance has a built in `close` method that handles
+unbinding all of the events that are directly attached to the controller
+instance, as well as those that are bound using the EventBinder from
+the controller.
+
+The `close` method will trigger a "close" event and corresdponding
+`onClose` method call:
+
+```js
+// define a controller with an onClose method
+var MyController = Marionette.Controller.extend({
+
+  onClose: function(){
+    // put custom code here, to close this controller
+  }
+
+})
+
+// create a new controller instance
+var contr = new MyController();
+
+// add some event handlers
+contr.on("close", function(){ ... });
+contr.bindTo(something, "bar", function(){...});
+
+// close the controller: unbind all of the
+// event handlers, trigger the "close" event and 
+// call the onClose method
+controller.close();
 ```
 
 ## On The Name 'Controller'

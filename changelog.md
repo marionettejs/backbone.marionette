@@ -4,6 +4,9 @@
   * Added a default `close` method to unbind all events on the controller instance and controller event binder
   * Trigger a "close"/onClose event/method when closing
 
+* Modules
+  * Fixed an issue with grand-child modules being defined with a non-existent direct parent, and starting the top level parent directly
+
 ### v1.0.0-beta5 [view commit logs](https://github.com/marionettejs/backbone.marionette/compare/v1.0.0-beta4...v1.0.0-beta5)
 
 * Modules

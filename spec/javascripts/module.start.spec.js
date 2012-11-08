@@ -210,6 +210,7 @@ describe("module start", function(){
     });
 
   });
+
   describe("when setting up a hierarchy of modules in reverse order and a child module is set not to start with parent and module initializer outside of the module definition function and starting the app", function(){
     var moduleAInitializer, moduleBInitializer;
 

@@ -6,23 +6,26 @@ describe("app router", function(){
   });
 
   describe("when a route is configured with a method that does not exist on the controller", function(){
+    var expectedMessage = "Method 'doesNotExist' was not found on the controller";
+
     var Router = Backbone.Marionette.AppRouter.extend({
       appRoutes: {
         "m1": "doesNotExist"
       }
     });
 
-    var controller = {}
+    var controller = {};
+
+    function run(){
+      new Router({controller: controller});
+    }
 
     it("should throw an error saying the method does not exist", function(){
-      var expectedMessage = "Method 'doesNotExist' was not found on the controller";
-      expect(function(){
-        new Router({controller: controller});
-      }).toThrow(expectedMessage);
+      expect(run).toThrow(expectedMessage);
     });
   });
 
-  describe("when a route fires", function(){
+  describe("when a controller is passed through the constructor and a route fires", function(){
     var context;
 
     var Router = Backbone.Marionette.AppRouter.extend({
@@ -43,6 +46,45 @@ describe("app router", function(){
       var router = new Router({
         controller: controller
       });
+      Backbone.history.start();
+
+      router.navigate("m1", true);
+    });
+
+    afterEach(function(){
+      Backbone.history.stop();
+    });
+
+    it("should call the configured method on the controller passed in the constructor", function(){
+      expect(controller.method1).toHaveBeenCalled();
+    });
+
+    it("should execute the controller method with the context of the controller", function(){
+      expect(context).toBe(controller);
+    });
+  });
+
+  describe("when a controller is provided in the router definition and a route fires", function(){
+    var context;
+
+    var controller = {
+      method1: function(){
+        context = this;
+      },
+    }
+
+    var Router = Backbone.Marionette.AppRouter.extend({
+      appRoutes: {
+        "m1": "method1"
+      },
+
+      controller: controller
+    });
+
+    beforeEach(function(){
+      spyOn(controller, "method1").andCallThrough();
+
+      var router = new Router();
       Backbone.history.start();
 
       router.navigate("m1", true);

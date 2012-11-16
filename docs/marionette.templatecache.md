@@ -7,8 +7,10 @@ the speed of subsequent calls to get a template.
 ## Documentation Index
 
 * [Basic Usage](#basic-usage)
-* [Override Template Retrieval](#override-template-retrieval)
 * [Clear Items From cache](#clear-items-from-cache)
+* [Customizing Template Access](#customizing-template-access)
+* [Override Template Retrieval](#override-template-retrieval)
+* [Override Template Compilation](#override-template-compilation)
 
 ## Basic Usage
 

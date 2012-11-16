@@ -21,6 +21,6 @@ Marionette.triggerMethod = function(){
 
   if (_.isFunction(this[methodName])){
     args.shift();
-    this[methodName].apply(this, args);
+    return this[methodName].apply(this, args);
   }
 };

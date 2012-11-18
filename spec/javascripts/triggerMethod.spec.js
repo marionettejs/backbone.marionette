@@ -11,12 +11,14 @@ describe("trigger event and method name", function(){
   });
 
   describe("when triggering an event", function(){
+    var returnVal;
 
     beforeEach(function(){
+      methodHandler.andReturn("return val");
       view.onSomething = methodHandler;
       view.on("something", eventHandler);
 
-      view.triggerMethod("something");
+      returnVal = view.triggerMethod("something");
     });
 
     it("should trigger the event", function(){
@@ -27,6 +29,9 @@ describe("trigger event and method name", function(){
       expect(methodHandler).toHaveBeenCalled();
     });
 
+    it("returns the value returned by the on{Event} method", function(){
+      expect(returnVal).toBe("return val");
+    })
   });
 
   describe("when triggering an event with arguments", function(){

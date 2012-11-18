@@ -2,13 +2,26 @@ describe("application modules", function(){
   "use strict";
 
   describe("when specifying a module on an application", function(){
-    var MyApp, myModule;
+    var MyApp, myModule, initializeBefore, initializeAfter;
 
     beforeEach(function(){
+      initializeBefore = jasmine.createSpy("before handler");
+      initializeAfter = jasmine.createSpy("after handler");
+
       MyApp = new Backbone.Marionette.Application();
       myModule = MyApp.module("MyModule");
+      myModule.on("initialize:before", initializeBefore);
+      myModule.on("initialize:after", initializeAfter);
 
       myModule.start();
+    });
+
+    it("should notify me before initialization starts", function(){
+      expect(initializeBefore).toHaveBeenCalled();
+    });
+
+    it("should notify me after initialization", function(){
+      expect(initializeAfter).toHaveBeenCalled();
     });
 
     it("should add an object of that name to the app", function(){
@@ -70,7 +83,7 @@ describe("application modules", function(){
 
     describe("and a module definition callback is provided", function(){
       var definition;
-      
+
       beforeEach(function(){
         definition = jasmine.createSpy();
 

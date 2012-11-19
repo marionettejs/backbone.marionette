@@ -9,6 +9,7 @@ Marionette.CollectionView = Marionette.View.extend({
     Marionette.View.prototype.constructor.apply(this, arguments);
     this.initialEvents();
     this.onShowCallbacks = new Marionette.Callbacks();
+    this.bindBackboneEntityTo(this.collection, this.collectionEvents);
 
     if (options && options.itemViewOptions) {
       this.itemViewOptions = options.itemViewOptions;

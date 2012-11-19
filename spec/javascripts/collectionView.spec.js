@@ -701,4 +701,29 @@ describe("collection view", function(){
     });
   });
 
+  describe("when a collection view has valid collection event configuration", function(){
+    var IV = Marionette.ItemView.extend({
+      template: function(){},
+    });
+
+    var view;
+
+    var View = Backbone.Marionette.CollectionView.extend({
+      collectionEvents: { 'collection-event': 'collectionEventHandler' },
+      collectionEventHandler: jasmine.createSpy("collection event handler")
+    });
+
+    beforeEach(function(){
+      view = new View({
+        itemView: IV,
+        collection: new Backbone.Collection()
+      });
+    });
+
+    it("should wire up collection events", function(){
+      view.collection.trigger("collection-event");
+      expect(view.collectionEventHandler).toHaveBeenCalled();
+    });
+  });
+
 });

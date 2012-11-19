@@ -3,6 +3,7 @@
 * Controller
   * Added a default `close` method to unbind all events on the controller instance and controller event binder
   * Trigger a "close"/onClose event/method when closing
+  * Fixed initialize method so `options` parameter is always a valid object
 
 * Modules
   * Fixed an issue with grand-child modules being defined with a non-existent direct parent, and starting the top level parent directly

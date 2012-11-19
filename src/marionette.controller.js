@@ -11,7 +11,7 @@ Marionette.Controller = function(options){
   Marionette.addEventBinder(this);
 
   if (_.isFunction(this.initialize)){
-    this.initialize(options);
+    this.initialize(this.options);
   }
 };
 

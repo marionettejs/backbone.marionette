@@ -44,12 +44,20 @@ describe("marionette controller", function(){
   describe("when no options argument is supplied to the constructor", function(){
     var controller;
 
+    var Controller = Marionette.Controller.extend({
+      initialize: jasmine.createSpy("initialize")
+    });
+
     beforeEach(function(){
-      controller = new Marionette.Controller();
+      controller = new Controller();
     });
 
     it("should provide an empty object as the options", function(){
       expect(_.isObject(controller.options)).toBe(true);
+    });
+
+    it("should provide the empty object as the options to initialize", function(){
+      expect(controller.initialize.mostRecentCall.args[0]).toBe(controller.options);
     });
   });
 

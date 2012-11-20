@@ -11,7 +11,7 @@ describe("attaching collection view to existing DOM structure", function(){
           model: m
         });
 
-        this.storeChild(v);
+        this.children.add(v);
       }
     });
 
@@ -24,7 +24,7 @@ describe("attaching collection view to existing DOM structure", function(){
     });
 
     it("should be able to store a new child view that was attached to an existing DOM element", function(){
-      expect(_.size(cv.children)).toBe(1);
+      expect(cv.children.length).toBe(1);
     });
 
   });

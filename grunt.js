@@ -88,6 +88,7 @@ module.exports = function(grunt) {
         'public/javascripts/json2.js',
         'public/javascripts/underscore.js',
         'public/javascripts/backbone.js',
+        'public/javascripts/backbone.babysitter.js',
         'public/javascripts/backbone.augment.js',
         'public/javascripts/backbone.eventbinder.js',
         'public/javascripts/backbone.wreqr.js',

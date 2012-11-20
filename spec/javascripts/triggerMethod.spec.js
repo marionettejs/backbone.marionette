@@ -135,7 +135,7 @@ describe("trigger event and method name", function(){
 
       cv.render();
 
-      var childView = cv.children[c.at(0).cid];
+      var childView = cv.children.findByModel(c.at(0));
       childView.$el.click();
     });
 

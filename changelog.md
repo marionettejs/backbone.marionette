@@ -1,6 +1,7 @@
 ### v1.0.0-beta6 [view commit logs](https://github.com/marionettejs/backbone.marionette/compare/v1.0.0-beta5...dev)
 
 * CollectionView / CompositeView
+  * **BREAKING:** The `.children` attribute, used to store child views, is no longer an object literal. It is now an instance of `Backbone.ChildViewContainer` from Backbone.BabySitter
   * Updated to use [Backbone.BabySitter](https://github.com/marionettejs/backbone.babysitter) to store and manage child views
 
 * Controller

@@ -52,14 +52,14 @@ to engage in an all-or-nothing migration to begin using Marionette.
 
 ## Compatibility And Requirements
 
-Backbone.Marionette currently works with the following versions of these 
-libraries:
+Backbone.Marionette currently works with the following libraries:
 
 * [jQuery](http://jquery.com) v1.8.2
-* [Underscore](http://underscorejs.org) v1.4.1
+* [Underscore](http://underscorejs.org) v1.4.2
 * [Backbone](http://backbonejs.org) v0.9.2
-* [Backbone.EventBinder](https://github.com/marionettejs/backbone.eventbinder) v0.1.0
-* [Backbone.Wreqr](https://github.com/marionettejs/backbone.wreqr) v0.0.0
+* [Backbone.EventBinder](https://github.com/marionettejs/backbone.eventbinder)
+* [Backbone.Wreqr](https://github.com/marionettejs/backbone.wreqr) 
+* [Backbone.BabySitter](https://github.com/marionettejs/backbone.babysitter)
 
 Marionette has not been tested against any other versions of these
 libraries. You may or may not have success if you use a version other

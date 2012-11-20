@@ -18,6 +18,8 @@ module.exports = function(grunt) {
       banner :
         '<%= meta.core_banner %>\n' +
         '/*!\n' +
+        ' * Includes BabySitter\n' +
+        ' * https://github.com/marionettejs/backbone.babysitter/\n' +
         ' * Includes Wreqr\n' +
         ' * https://github.com/marionettejs/backbone.wreqr/\n' +
         ' * Includes EventBinder\n' +

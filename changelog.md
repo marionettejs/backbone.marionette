@@ -1,5 +1,8 @@
 ### v1.0.0-beta6 [view commit logs](https://github.com/marionettejs/backbone.marionette/compare/v1.0.0-beta5...dev)
 
+* CollectionView / CompositeView
+  * Updated to use [Backbone.BabySitter](https://github.com/marionettejs/backbone.babysitter) to store and manage child views
+
 * Controller
   * Added a default `close` method to unbind all events on the controller instance and controller event binder
   * Trigger a "close"/onClose event/method when closing

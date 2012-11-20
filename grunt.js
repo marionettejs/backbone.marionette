@@ -18,6 +18,8 @@ module.exports = function(grunt) {
       banner :
         '<%= meta.core_banner %>\n' +
         '/*!\n' +
+        ' * Includes BabySitter\n' +
+        ' * https://github.com/marionettejs/backbone.babysitter/\n' +
         ' * Includes Wreqr\n' +
         ' * https://github.com/marionettejs/backbone.wreqr/\n' +
         ' * Includes EventBinder\n' +
@@ -88,6 +90,7 @@ module.exports = function(grunt) {
         'public/javascripts/json2.js',
         'public/javascripts/underscore.js',
         'public/javascripts/backbone.js',
+        'public/javascripts/backbone.babysitter.js',
         'public/javascripts/backbone.augment.js',
         'public/javascripts/backbone.eventbinder.js',
         'public/javascripts/backbone.wreqr.js',

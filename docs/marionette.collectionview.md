@@ -29,6 +29,7 @@ then append the results of the item view's `el` to the collection view's
 * [CollectionView: Automatic Rendering](#collectionview-automatic-rendering)
 * [CollectionView: Re-render Collection](#collectionview-re-render-collection)
 * [CollectionView's appendHtml](#collectionviews-appendhtml)
+* [CollectionView's children](#collectionviews-children)
 * [CollectionView close](#collectionview-close)
 
 ## CollectionView's `itemView`
@@ -436,6 +437,35 @@ The third parameter, `index`, is the index of the
 model that this itemView instance represents, in the collection 
 that the model came from. This is useful for sorting a collection
 and displaying the sorted list in the correct order on the screen.
+
+## CollectionView's children
+
+The CollectionView uses [Backbone.BabySitter](https://github.com/marionettejs/backbone.babysitter)
+to store and manage it's child views. This allows you to easily access
+the views within the collection view, iterate them, find them by
+a given indexer such as the view's model or collection, and more.
+
+```js
+var cv = new Marionette.CollectionView({
+  collection: someCollection
+});
+
+cv.render();
+
+
+// retrieve a view by model
+var v = cv.children.findByModel(someModel);
+
+// iterate over all of the views and process them
+cv.children.each(function(view){
+
+  // process the `view` here
+
+});
+```
+
+For more information on the available features and functionality of
+the `.children`, see the [Backbone.BabySitter documentation](https://github.com/marionettejs/backbone.babysitter).
 
 ## CollectionView close
 

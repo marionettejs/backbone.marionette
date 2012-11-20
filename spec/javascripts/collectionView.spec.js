@@ -98,9 +98,8 @@ describe("collection view", function(){
     });
 
     it("should call `onItemAdded` for each itemView instance", function(){
-      var views = _.values(collectionView.children);
-      var v1 = views[0];
-      var v2 = views[1];
+      var v1 = collectionView.children.findByIndex(0);
+      var v2 = collectionView.children.findByIndex(1);
       expect(collectionView.onItemAdded).toHaveBeenCalledWith(v1);
       expect(collectionView.onItemAdded).toHaveBeenCalledWith(v2);
     });
@@ -127,7 +126,7 @@ describe("collection view", function(){
       });
 
       collectionView.render();
-      view = _.values(collectionView.children)[0];
+      view = collectionView.children.findByIndex(0);
     });
 
     it("should pass the options to every view instance", function(){
@@ -156,7 +155,7 @@ describe("collection view", function(){
       spyOn(collectionView, 'itemViewOptions').andCallThrough();
 
       collectionView.render();
-      view = _.values(collectionView.children)[0];
+      view = collectionView.children.findByIndex(0);
     });
 
     it("should pass the options to every view instance", function(){
@@ -186,7 +185,7 @@ describe("collection view", function(){
       });
 
       collectionView.render();
-      view = _.values(collectionView.children)[0];
+      view = _.values(collectionView.children._views)[0];
     });
 
     it("should pass the options to every view instance", function(){
@@ -213,7 +212,7 @@ describe("collection view", function(){
     });
 
     it("should not reference any view items", function(){
-      expect(_.size(collectionView.children)).toBe(0);
+      expect(collectionView.children.length).toBe(0);
     });
   });
 
@@ -312,7 +311,7 @@ describe("collection view", function(){
       collectionView = new CollectionView({});
       collectionView.render();
 
-      childView = collectionView.children[model.cid];
+      childView = collectionView.children.findByIndex(0);
       spyOn(childView, "close").andCallThrough();
       spyOn(EmptyView.prototype, "render");
 
@@ -345,7 +344,7 @@ describe("collection view", function(){
       });
       collectionView.render();
 
-      childView = collectionView.children[model.cid];
+      childView = collectionView.children.findByIndex(0);
       spyOn(childView, "close").andCallThrough();
 
       collection.remove(model);
@@ -389,7 +388,7 @@ describe("collection view", function(){
 
 
       childModel = collection.at(0);
-      childView = collectionView.children[childModel.cid];
+      childView = collectionView.children.findByIndex(0);
 
       collectionView.bindTo(collection, "foo", collectionView.someCallback);
       collectionView.bindTo(collectionView, "item:foo", collectionView.someItemViewCallback);
@@ -512,7 +511,7 @@ describe("collection view", function(){
       });
 
       spyOn(collectionView, "trigger").andCallThrough();
-      childView = collectionView.children[model.cid];
+      childView = collectionView.children.findByIndex(0);
       childView.trigger("some:event", "test", model);
     });
 
@@ -664,7 +663,7 @@ describe("collection view", function(){
       colView.trigger("show");
 
       col.add(m2);
-      view = colView.children[m2.cid];
+      view = colView.children.findByModel(m2);
     });
 
     it("should call the 'onShow' method of the child view", function(){
@@ -693,7 +692,7 @@ describe("collection view", function(){
 
       cv.render();
 
-      iv = cv.children[c.at(0).cid];
+      iv = cv.children.findByModel(c.at(0));
     });
     
     it("should use the specified itemView for each item", function(){

@@ -1,3 +1,17 @@
+### v1.0.0-beta6 [view commit logs](https://github.com/marionettejs/backbone.marionette/compare/v1.0.0-beta5...dev)
+
+* CollectionView / CompositeView
+  * **BREAKING:** The `.children` attribute, used to store child views, is no longer an object literal. It is now an instance of `Backbone.ChildViewContainer` from Backbone.BabySitter
+  * Updated to use [Backbone.BabySitter](https://github.com/marionettejs/backbone.babysitter) to store and manage child views
+
+* Controller
+  * Added a default `close` method to unbind all events on the controller instance and controller event binder
+  * Trigger a "close"/onClose event/method when closing
+  * Fixed initialize method so `options` parameter is always a valid object
+
+* Modules
+  * Fixed an issue with grand-child modules being defined with a non-existent direct parent, and starting the top level parent directly
+
 ### v1.0.0-beta5 [view commit logs](https://github.com/marionettejs/backbone.marionette/compare/v1.0.0-beta4...v1.0.0-beta5)
 
 * Modules

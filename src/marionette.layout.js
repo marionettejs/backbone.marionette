@@ -36,6 +36,14 @@ Marionette.Layout = Marionette.ItemView.extend({
     }
 
     var result = Marionette.ItemView.prototype.render.apply(this, arguments);
+
+    // inject regions into template
+    var that = this;
+    _.each(this.regionManagers, function(region){
+      if (region.currentView) {
+        that.$el.find(region.el).html(region.currentView.$el);
+      }
+    });
     return result;
   },
 

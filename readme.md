@@ -225,7 +225,7 @@ LosTechies.com blog.
 ## Release Notes
 
 For change logs and release notes, see the
-[changelog](https://github.com/marionettejs/backbone.babysitter/blob/master/CHANGELOG.md) file.
+[changelog](https://github.com/marionettejs/backbone.marionette/blob/master/changelog.md) file.
 
 ## Legal Mumbo Jumbo (MIT License)
 

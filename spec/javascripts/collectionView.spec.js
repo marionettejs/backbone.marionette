@@ -287,6 +287,33 @@ describe("collection view", function(){
 
   });
 
+  describe("when an itemView is appended to the collection's EL", function(){
+    var collectionView;
+    var collection;
+    var model;
+
+    beforeEach(function(){
+      collection = new Backbone.Collection([{foo : "Luke"}, {foo : "Anakin"}]);
+      collectionView = new CollectionView({
+        itemView: ItemView,
+        collection: collection
+      }).render();
+
+      model = new Backbone.Model({foo: "Yoda"});
+    });
+
+    it("should append the model in the correct index in the collection's DOM", function(){
+      collection.add(model, {at : 1});
+      expect(collectionView.$el.children().index(collectionView.children[model.cid].$el)).toBe(1);
+    });
+
+    it("should append the first model as the first child of the collection's EL (index 0)", function(){
+      collection.reset().add(model);
+      expect(collectionView.$el.children().index(collectionView.children[model.cid].$el)).toBe(0);
+    });
+
+  });
+
   describe("when providing a custom render that adds children, without a collection object to use, and removing a child", function(){
     var collectionView;
     var childView;

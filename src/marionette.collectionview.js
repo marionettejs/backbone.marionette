@@ -212,7 +212,11 @@ Marionette.CollectionView = Marionette.View.extend({
   // Override this method to do something other
   // then `.append`.
   appendHtml: function(collectionView, itemView, index){
-    collectionView.$el.append(itemView.el);
+    if (index === 0) {
+      collectionView.$el.prepend(itemView.el);
+    } else {
+      collectionView.$el.find("> " + itemView.tagName + ":nth-child(" + index + ")").after(itemView.el);
+    }
   },
 
   // Store references to all of the child `itemView`

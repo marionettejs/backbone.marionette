@@ -17,12 +17,12 @@ the speed of subsequent calls to get a template.
 To use the `TemplateCache`, call the `get` method on TemplateCache directly.
 Internally, instances of the TemplateCache type will be created and stored
 but you do not have to manually create these instances yourself. `get` will
-return a compiled template funciton.
+return a compiled template function.
 
 ```js
 var template = Backbone.Marionette.TemplateCache.get("#my-template");
 // use the template
-template({param1:'value1', paramn:'valuen'});
+template({param1:'value1', paramN:'valueN'});
 ```
 
 Making multiple calls to get the same template will retrieve the
@@ -32,8 +32,8 @@ template from the cache on subsequence calls.
 
 You can clear one or more, or all items from the cache using the
 `clear` method. Clearing a template from the cache will force it
-to re-load from the DOM (or from the overriden `loadTemplate`
-function) the next time it is retrieved.
+to re-load from the DOM (via the `loadTemplate`
+function which can be overridden, see below) the next time it is retrieved.
 
 If you do not specify any parameters, all items will be cleared
 from the cache:
@@ -66,7 +66,7 @@ still taking advantage of the template caching funcitonality, or want to customi
 how templates are stored and retreived, you will need to customize the
 `TemplateCache object`. The default operation of `TemplateCache`, is to
 retrive templates from the DOM based on the containing element's id
-attribute, and compile the html html in that element with the underscore.js
+attribute, and compile the html in that element with the underscore.js
 `template` function.
 
 ### Override Template Retrieval
@@ -92,10 +92,9 @@ Backbone.Marionette.TemplateCache.prototype.loadTemplate = function(templateId){
 
 The default template compilation passes the results from
 `loadTemplate` to the `compileTemplate` function, which returns
-an underscore.js compiled template funciton. When overrideing `compileTemplate`
+an underscore.js compiled template funciton. When overriding `compileTemplate`
 remember that it must return a function which takes an object of parameters and values
-and returns a formatted HTML string. `compileTemplate` must return a function that
-behaves the same.
+and returns a formatted HTML string.
 
 ```js
 Backbone.Marionette.TemplateCache.prototype.compileTemplate = function(rawTemplate) {
@@ -103,4 +102,5 @@ Backbone.Marionette.TemplateCache.prototype.compileTemplate = function(rawTempla
   return Handlebars.compile(rawTemplate);
 }
 ```
+
 

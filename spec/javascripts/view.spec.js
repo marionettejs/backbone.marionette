@@ -31,11 +31,13 @@ describe("base view", function(){
     var view;
 
     var View = Backbone.Marionette.View.extend({
-      modelEvents: { 'model-event': 'modelEventHandler' },
-      collectionEvents: { 'collection-event': 'collectionEventHandler' },
+      modelEvents: { 'model-event': 'modelEventHandler modelEventHandler2' },
+      collectionEvents: { 'collection-event': 'collectionEventHandler collectionEventHandler2' },
 
       modelEventHandler: jasmine.createSpy("model event handler"),
-      collectionEventHandler: jasmine.createSpy("collection event handler")
+      collectionEventHandler: jasmine.createSpy("collection event handler"),
+      modelEventHandler2: jasmine.createSpy("model event handler2"),
+      collectionEventHandler2: jasmine.createSpy("collection event handler2")
     });
 
     beforeEach(function(){
@@ -48,11 +50,13 @@ describe("base view", function(){
     it("should wire up model events", function(){
       view.model.trigger("model-event");
       expect(view.modelEventHandler).toHaveBeenCalled();
+      expect(view.modelEventHandler2).toHaveBeenCalled();
     });
 
     it("should wire up collection events", function(){
       view.collection.trigger("collection-event");
       expect(view.collectionEventHandler).toHaveBeenCalled();
+      expect(view.collectionEventHandler2).toHaveBeenCalled();
     });
 
   });
@@ -61,7 +65,7 @@ describe("base view", function(){
     var getBadViewInstance;
 
     var View = Backbone.Marionette.View.extend({
-      modelEvents: { "foo": "does not exist" }
+      modelEvents: { "foo": "does_not_exist" }
     });
 
     beforeEach(function(){
@@ -71,7 +75,7 @@ describe("base view", function(){
     });
 
     it("should error when method doesn't exist", function(){
-      expect(getBadViewInstance).toThrow("View method 'does not exist' was configured as an event handler, but does not exist.");
+      expect(getBadViewInstance).toThrow("View method 'does_not_exist' was configured as an event handler, but does not exist.");
     });
   });
 });

@@ -126,14 +126,15 @@ Marionette.View = Backbone.View.extend({
     if (!entity || !bindings) { return; }
 
     var view = this;
-    _.each(bindings, function(methodName, evt){
+    _.each(bindings, function(methods, evt){
+      _.each(methods.split(/\s+/),function(methodName) {
+        var method = view[methodName];
+        if(!method) {
+          throw new Error("View method '"+ methodName +"' was configured as an event handler, but does not exist.");
+        }
 
-      var method = view[methodName];
-      if(!method) {
-        throw new Error("View method '"+ methodName +"' was configured as an event handler, but does not exist.");
-      }
-
-      view.bindTo(entity, evt, method, view);
+        view.bindTo(entity, evt, method, view);
+      });
     });
   }
 });

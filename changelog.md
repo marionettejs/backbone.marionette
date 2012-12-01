@@ -1,4 +1,4 @@
-### v1.0.0-beta7 [view commit logs](https://github.com/marionettejs/backbone.marionette/compare/v1.0.0-beta6...dev)
+### v1.0.0-rc1 [view commit logs](https://github.com/marionettejs/backbone.marionette/compare/v1.0.0-beta6...dev)
 
 * Marionette.EventBinder
   * The context of the callback method defaults to the object w/ the `bindTo` method

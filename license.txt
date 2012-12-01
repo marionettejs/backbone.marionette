@@ -1,4 +1,4 @@
-// Backbone.Marionette v1.0.0-beta6
+// Backbone.Marionette v1.0.0-rc1
 //
 // Copyright (C)2012 Derick Bailey, Muted Solutions, LLC
 // Distributed Under MIT License

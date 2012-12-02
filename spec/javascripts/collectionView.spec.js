@@ -8,6 +8,7 @@ describe("collection view", function(){
     tagName: "span",
     render: function(){
       this.$el.html(this.model.get("foo"));
+      this.trigger('render');
     },
     onRender: function(){}
   });
@@ -256,8 +257,6 @@ describe("collection view", function(){
     var collectionView, collection, model, itemViewRender;
 
     beforeEach(function(){
-      spyOn(ItemView.prototype, "onRender");
-
       collection = new Backbone.Collection();
       collectionView = new CollectionView({
         itemView: ItemView,
@@ -289,7 +288,6 @@ describe("collection view", function(){
     it("should trigger the itemview:render event from the collectionView", function(){
       expect(itemViewRender).toHaveBeenCalled();
     });
-
   });
 
   describe("when providing a custom render that adds children, without a collection object to use, and removing a child", function(){

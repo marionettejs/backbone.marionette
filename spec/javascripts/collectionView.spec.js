@@ -46,12 +46,16 @@ describe("collection view", function(){
   
   describe("when rendering a collection view", function(){
     var collection = new Backbone.Collection([{foo: "bar"}, {foo: "baz"}]);
-    var collectionView;
+    var collectionView, itemViewRender;
 
     beforeEach(function(){
+      itemViewRender = jasmine.createSpy("itemview:render");
+
       collectionView = new CollectionView({
         collection: collection
       });
+
+      collectionView.on("itemview:render", itemViewRender);
 
       spyOn(collectionView, "onRender").andCallThrough();
       spyOn(collectionView, "onItemAdded").andCallThrough();
@@ -107,6 +111,10 @@ describe("collection view", function(){
 
     it("should call `onItemAdded` for all itemView instances", function(){
       expect(collectionView.onItemAdded.callCount).toBe(2);
+    });
+
+    it("should trigger itemview:render for each item in the collection", function(){
+      expect(itemViewRender.callCount).toBe(2);
     });
   });
 

@@ -385,4 +385,28 @@ describe("item view", function(){
 
   });
 
+  describe("when re-rendering an ItemView that is already shown", function(){
+    var View = Marionette.ItemView.extend({
+      template: function(){return "<div>foo</div>"; }
+    });
+
+    var renderUpdate;
+
+    beforeEach(function(){
+      renderUpdate = jasmine.createSpy("dom:refresh");
+
+      var view = new View();
+
+      view.on("dom:refresh", renderUpdate);
+      view.render();
+      view.triggerMethod("show");
+
+      view.render();
+    });
+
+    it("should trigger a dom:refresh event", function(){
+      expect(renderUpdate).toHaveBeenCalled();
+    });
+  });
+
 });

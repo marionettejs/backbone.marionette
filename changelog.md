@@ -7,6 +7,9 @@
   * The "item:added"/`onItemAdded` callback method are now fired after an item view has been rendered and added to it's parent collection view
   * The "itemview:" events - events that are forwarded from item views - can now have a custom prefix with the `itemViewEventPrefix` setting
 
+* ItemView
+  * Added a "dom:refresh" event/callback method that fires after a view has been rendered, placed in the DOM with a Marionette.Region, and is re-rendered
+
 ### v1.0.0-beta6 [view commit logs](https://github.com/marionettejs/backbone.marionette/compare/v1.0.0-beta5...v1.0.0-beta6)
 
 * CollectionView / CompositeView

@@ -25,6 +25,7 @@ then append the results of the item view's `el` to the collection view's
   * ["item:added" / onItemAdded](#itemadded--onitemadded)
   * ["item:removed" / onItemRemoved](#itemremoved--onitemremoved)
   * ["itemview:\*" event bubbling from child views](#itemview-event-bubbling-from-child-views)
+* [CollectionView's `itemViewEventPrefix`](#collectionviews-itemvieweventprefix)
 * [CollectionView render](#collectionview-render)
 * [CollectionView: Automatic Rendering](#collectionview-automatic-rendering)
 * [CollectionView: Re-render Collection](#collectionview-re-render-collection)
@@ -373,6 +374,31 @@ that hack as a way to demonstrate the event bubbling.
 Normally, you would have your item view listening to DOM
 events or model change events, and then triggering an event
 of it's own based on that.
+
+## CollectionView's `itemViewEventPrefix`
+
+You can customize the event prefix for events that are forwarded
+through the collection view. To do this, set the `itemViewEventPrefix`
+on the collection view.
+
+```js
+var CV = Marionette.CollectionView.extend({
+  itemViewEventPrefix: "some:prefix"
+});
+
+var c = new CV({
+  collection: myCol
+});
+
+c.on("some:prefix:render", function(){
+  // item view was rendered
+});
+
+c.render();
+```
+
+The `itemViewEventPrefix` can be provided in the view definition or
+in the constructor function call, to get a view instance.
 
 ## CollectionView render
 

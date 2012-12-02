@@ -540,6 +540,47 @@ describe("collection view", function(){
     });
   });
 
+  describe("when configuring a custom itemViewEventPrefix", function(){
+    var model = new Backbone.Model({foo: "bar"});
+    var collection = new Backbone.Collection([model]);
+    var collectionView;
+    var childView;
+    var triggeringView;
+    var eventArgs;
+
+    beforeEach(function(){
+      var CV = CollectionView.extend({
+        itemViewEventPrefix: "myPrefix"
+      });
+
+      collectionView = new CV({
+        collection: collection
+      });
+
+      collectionView.render();
+      collectionView.on("myPrefix:some:event", function(){
+        eventArgs = Array.prototype.slice.call(arguments);
+      });
+
+      spyOn(collectionView, "trigger").andCallThrough();
+      childView = collectionView.children.findByIndex(0);
+      childView.trigger("some:event", "test", model);
+    });
+
+    it("should bubble up through the parent collection view", function(){
+      expect(collectionView.trigger).toHaveBeenCalledWith("myPrefix:some:event", childView, "test", model);
+    });
+
+    it("should provide the child view that triggered the event as the first parameter", function(){
+      expect(eventArgs[0]).toBe(childView);
+    });
+
+    it("should forward all other arguments in order", function(){
+      expect(eventArgs[1]).toBe("test");
+      expect(eventArgs[2]).toBe(model);
+    });
+  });
+
   describe("when a child view triggers default events", function(){
     var model = new Backbone.Model({foo: "bar"});
     var collection = new Backbone.Collection([model]);

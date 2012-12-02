@@ -5,6 +5,7 @@
 
 * CollectionView / CompositeView
   * The "item:added"/`onItemAdded` callback method are now fired after an item view has been rendered and added to it's parent collection view
+  * The "itemview:" events - events that are forwarded from item views - can now have a custom prefix with the `itemViewEventPrefix` setting
 
 ### v1.0.0-beta6 [view commit logs](https://github.com/marionettejs/backbone.marionette/compare/v1.0.0-beta5...v1.0.0-beta6)
 

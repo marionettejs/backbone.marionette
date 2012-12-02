@@ -253,9 +253,7 @@ describe("collection view", function(){
   });
 
   describe("when a model is added to the collection", function(){
-    var collectionView;
-    var collection;
-    var model;
+    var collectionView, collection, model, itemViewRender;
 
     beforeEach(function(){
       spyOn(ItemView.prototype, "onRender");
@@ -266,6 +264,9 @@ describe("collection view", function(){
         collection: collection
       });
       collectionView.render();
+
+      itemViewRender = jasmine.createSpy("itemview:render");
+      collectionView.on("itemview:render", itemViewRender);
 
       spyOn(collectionView, "appendHtml").andCallThrough();
 
@@ -283,6 +284,10 @@ describe("collection view", function(){
 
     it("should provide the index for each itemView, when appending", function(){
       expect(collectionView.appendHtml.calls[0].args[2]).toBe(0);
+    });
+
+    it("should trigger the itemview:render event from the collectionView", function(){
+      expect(itemViewRender).toHaveBeenCalled();
     });
 
   });

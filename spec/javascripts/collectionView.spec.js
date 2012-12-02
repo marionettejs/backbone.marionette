@@ -568,11 +568,11 @@ describe("collection view", function(){
       expect(eventNames).toEqual([
           'before:render',
           'collection:before:render',
-          'item:added',
           'itemview:before:render',
           'itemview:item:before:render',
           'itemview:render',
           'itemview:item:rendered',
+          'item:added',
           'render',
           'collection:rendered'
       ]);

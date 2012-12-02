@@ -153,10 +153,12 @@ Marionette.CollectionView = Marionette.View.extend({
     // Store the child view itself so we can properly
     // remove and/or close it later
     this.children.add(view);
-    this.triggerMethod("item:added", view);
 
     // Render it and show it
     var renderResult = this.renderItemView(view, index);
+
+    // let the world know this view was added
+    this.triggerMethod("item:added", view);
 
     // call onShow for child item views
     if (view.onShow){

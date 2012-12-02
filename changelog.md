@@ -3,6 +3,9 @@
 * Marionette.EventBinder
   * The context of the callback method defaults to the object w/ the `bindTo` method
 
+* CollectionView / CompositeView
+  * The "item:added"/`onItemAdded` callback method are now fired after an item view has been rendered and added to it's parent collection view
+
 ### v1.0.0-beta6 [view commit logs](https://github.com/marionettejs/backbone.marionette/compare/v1.0.0-beta5...v1.0.0-beta6)
 
 * CollectionView / CompositeView

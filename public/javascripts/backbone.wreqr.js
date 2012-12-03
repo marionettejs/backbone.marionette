@@ -1,4 +1,4 @@
-// Backbone.Wreqr, v0.0.0
+// Backbone.Wreqr, v0.0.1
 // Copyright (c)2012 Derick Bailey, Muted Solutions, LLC.
 // Distributed under MIT license
 // http://github.com/marionettejs/backbone.wreqr
@@ -6,9 +6,16 @@ Backbone.Wreqr = (function(Backbone, Marionette, _){
   "option strict";
   var Wreqr = {};
 
+  // Handlers
+  // --------
+  // A registry of functions to call, given a name
+  
   Wreqr.Handlers = (function(Backbone, _){
     "option strict";
     
+    // Constructor
+    // -----------
+  
     var Handlers = function(){
       "use strict";
       this._handlers = {};
@@ -16,7 +23,13 @@ Backbone.Wreqr = (function(Backbone, Marionette, _){
   
     Handlers.extend = Backbone.Model.extend;
   
+    // Instance Members
+    // ----------------
+  
     _.extend(Handlers.prototype, {
+  
+      // Add a handler for the given name, with an
+      // optional context to run the handler within
       addHandler: function(name, handler, context){
         var config = {
           callback: handler,
@@ -26,6 +39,9 @@ Backbone.Wreqr = (function(Backbone, Marionette, _){
         this._handlers[name] = config;
       },
   
+      // Get the currently registered handler for
+      // the specified name. Throws an exception if
+      // no handler is found.
       getHandler: function(name){
         var config = this._handlers[name];
   
@@ -38,10 +54,12 @@ Backbone.Wreqr = (function(Backbone, Marionette, _){
         };
       },
   
+      // Remove a handler for the specified name
       removeHandler: function(name){
         delete this._handlers[name];
       },
   
+      // Remove all handlers from this registry
       removeAllHandlers: function(){
         this._handlers = {};
       }
@@ -59,8 +77,11 @@ Backbone.Wreqr = (function(Backbone, Marionette, _){
     "option strict";
   
     return Wreqr.Handlers.extend({
-      execute: function(name, args){
-        this.getHandler(name)(args);
+      execute: function(){
+        var name = arguments[0];
+        var args = Array.prototype.slice.call(arguments, 1);
+  
+        this.getHandler(name).apply(this, args);
       }
     });
   
@@ -75,8 +96,11 @@ Backbone.Wreqr = (function(Backbone, Marionette, _){
     "option strict";
   
     return Wreqr.Handlers.extend({
-      request: function(name, args){
-        return this.getHandler(name)(args);
+      request: function(){
+        var name = arguments[0];
+        var args = Array.prototype.slice.call(arguments, 1);
+  
+        return this.getHandler(name).apply(this, args);
       }
     });
   

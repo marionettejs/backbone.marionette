@@ -172,19 +172,19 @@ A region manager will raise a few events during its showing and
 closing of views:
 
 * "show" / `onShow` - called on the view instance when the view has been rendered and displayed
-* "show" / `onShow` - called on the region instance when the view has been rendered and displayed
-* "close" / `onClose` - when the view has been closed
+* "view:show" / `onShow` - called on the region instance when the view has been rendered and displayed
+* "view:closed" - when the view has been closed
 
 You can bind to these events and add code that needs to run with
 your region manager, opening and closing views.
 
 ```js
-MyApp.mainRegion.on("show", function(view){
+MyApp.mainRegion.on("view:show", function(view){
   // manipulate the `view` or do something extra
   // with the region manager via `this`
 });
 
-MyApp.mainRegion.on("closed", function(view){
+MyApp.mainRegion.on("view:closed", function(view){
   // manipulate the `view` or do something extra
   // with the region manager via `this`
 });

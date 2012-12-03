@@ -1,4 +1,4 @@
-// Backbone.EventBinder, v0.1.0
+// Backbone.EventBinder, v1.0.1
 // Copyright (c)2012 Derick Bailey, Muted Solutions, LLC.
 // Distributed under MIT license
 // http://github.com/marionettejs/backbone.eventbinder
@@ -68,6 +68,10 @@ Backbone.EventBinder = (function(Backbone, _){
   // Use whatever best logic necessary to determine the type
   // of the supplied object
   function getHandlerForObject(obj) {
+    if (_.isUndefined(obj) || _.isNull(obj)) {
+      throw new Error("Can't bindTo undefined");
+    }
+
     if (obj.jquery) { return handlerMap.jquery; }
 
     return handlerMap["default"];

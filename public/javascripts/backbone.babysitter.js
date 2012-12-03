@@ -1,4 +1,4 @@
-// Backbone.BabySitter, v0.0.3
+// Backbone.BabySitter, v0.0.4
 // Copyright (c)2012 Derick Bailey, Muted Solutions, LLC.
 // Distributed under MIT license
 // http://github.com/marionettejs/backbone.babysitter
@@ -13,12 +13,14 @@ Backbone.ChildViewContainer = (function(Backbone, _){
   // Container Constructor
   // ---------------------
 
-  var Container = function(options){
+  var Container = function(initialViews){
     this._views = {};
     this._indexByModel = {};
     this._indexByCollection = {};
     this._indexByCustom = {};
     this._updateLength();
+
+    this._addInitialViews(initialViews);
   };
 
   // Container Methods
@@ -137,18 +139,35 @@ Backbone.ChildViewContainer = (function(Backbone, _){
     // time, like `function.apply`.
     apply: function(method, args){
       var view;
+
+      // fix for IE < 9
+      args = args || [];
+
       _.each(this._views, function(view, key){
         if (_.isFunction(view[method])){
           view[method].apply(view, args);
         }
       });
+
     },
 
     // Update the `.length` attribute on this container
     _updateLength: function(){
       this.length = _.size(this._views);
-    }
+    },
 
+    // set up an initial list of views
+    _addInitialViews: function(views){
+      if (!views){ return; }
+
+      var view, i,
+          length = views.length;
+
+      for (i=0; i<length; i++){
+        view = views[i];
+        this.add(view);
+      }
+    }
   });
 
   // Borrowing this code from Backbone.Collection:
@@ -159,7 +178,7 @@ Backbone.ChildViewContainer = (function(Backbone, _){
   var methods = ['forEach', 'each', 'map', 'find', 'detect', 'filter', 
     'select', 'reject', 'every', 'all', 'some', 'any', 'include', 
     'contains', 'invoke', 'toArray', 'first', 'initial', 'rest', 
-    'last', 'without', 'isEmpty'];
+    'last', 'without', 'isEmpty', 'pluck'];
 
   _.each(methods, function(method) {
     Container.prototype[method] = function() {

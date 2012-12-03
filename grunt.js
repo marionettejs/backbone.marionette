@@ -43,10 +43,6 @@ module.exports = function(grunt) {
       build: {
         src: ['<banner:meta.banner>', 'src/build/marionette.js'],
         dest: 'lib/backbone.marionette.js'
-      },
-      amd: {
-        src: ['<banner:meta.banner>', 'src/build/amd.js'],
-        dest: 'lib/amd/backbone.marionette.js'
       }
     },
 
@@ -73,14 +69,6 @@ module.exports = function(grunt) {
           '<config:rig.build.dest>'
         ],
         dest: 'lib/backbone.marionette.min.js'
-      },
-
-      amd: {
-        src: [
-          '<banner:meta.banner>',
-          '<config:rig.amd.dest>'
-        ],
-        dest: 'lib/amd/backbone.marionette.min.js'
       }
     },
 

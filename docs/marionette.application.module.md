@@ -13,6 +13,7 @@ your application, and serve as an event aggregator in themselves.
 * [Basic Usage](#basic-usage)
 * [Starting And Stopping Modules](#starting-and-stopping-modules)
   * [Starting Modules](#starting-modules)
+  * [Start Events](#start-events)
   * [Preventing Auto-Start Of Modules](#preventing-auto-start-of-modules)
   * [Starting Sub-Modules With Parent](#starting-sub-modules-with-parent)
   * [Stopping Modules](#stopping-modules)
@@ -76,6 +77,24 @@ MyApp.start();
 
 Note that modules loaded and defined after the `app.start()` call will still
 be started automatically.
+
+### Start Events
+
+When starting a module, a "before:start" event will be triggered prior
+to any of the initializers being run. A "start" event will then be 
+triggered after they have been run.
+
+```js
+var mod = MyApp.module("MyMod");
+
+mod.on("before:start", function(){
+  // do stuff before the module is started
+});
+
+mod.on("start", function(){
+  // do stuff after the module has been started
+});
+```
 
 ### Preventing Auto-Start Of Modules
 

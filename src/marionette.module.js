@@ -57,12 +57,12 @@ _.extend(Marionette.Module.prototype, Backbone.Events, {
     });
 
     // run the callbacks to "start" the current module
-    this.triggerMethod("initialize:before", options);
+    this.triggerMethod("before:start", options);
 
     this._initializerCallbacks.run(options, this);
     this._isInitialized = true;
 
-    this.triggerMethod("initialize:after", options);
+    this.triggerMethod("start", options);
   },
 
   // Stop this module by running its finalizers and then stop all of

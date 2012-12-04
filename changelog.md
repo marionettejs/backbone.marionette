@@ -1,5 +1,11 @@
 ### v1.0.0-rc1 [view commit logs](https://github.com/marionettejs/backbone.marionette/compare/v1.0.0-beta6...dev)
 
+* Module
+  * **BREAKING:** Renamed "initialize:before" event to "before:start", for consistency
+  * **BREAKING:** Renamed "initialize:after" event to "start", for consistency
+  * Triggers a "before:stop" event/method before the module is stopped
+  * Triggers a "stop" event/method after the module has been stopped
+
 * Marionette.View
   * **BREAKING**: The `bindBackboneEntityTo` method has been removed from Marionette.View and replaced with `Marionette.bindEntityEvents` function.
 
@@ -20,10 +26,6 @@
   * The `modelEvents` and `collectionEvents` can now have a function configured as the value in the `{ "event:name": "value" }` configuration hash
   * A view that uses `bindTo` for its own "close" event will have it's close handler called correctly
   * Returning `false` from the `onBeforeClose` method will prevent the view from being closed
-
-* Module
-  * Triggers a "before:stop" event/method before the module is stopped
-  * Triggers a "stop" event/method after the module has been stopped
 
 ### v1.0.0-beta6 [view commit logs](https://github.com/marionettejs/backbone.marionette/compare/v1.0.0-beta5...v1.0.0-beta6)
 

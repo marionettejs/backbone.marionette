@@ -10,8 +10,8 @@ describe("application modules", function(){
 
       MyApp = new Backbone.Marionette.Application();
       myModule = MyApp.module("MyModule");
-      myModule.on("initialize:before", initializeBefore);
-      myModule.on("initialize:after", initializeAfter);
+      myModule.on("before:start", initializeBefore);
+      myModule.on("start", initializeAfter);
 
       myModule.start();
     });

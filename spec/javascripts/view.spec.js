@@ -125,6 +125,88 @@ describe("base view", function(){
     it("should trigger the 'close' event", function(){
       expect(close).toHaveBeenCalled();
     });
+  });
 
+  describe("when closing a view", function(){
+    var close, view;
+
+    beforeEach(function(){
+      view = new Marionette.View();
+
+      spyOn(view, "remove").andCallThrough();
+      close = jasmine.createSpy("close");
+      view.on("close", close);
+
+      view.close();
+    });
+
+    it("should trigger the close event", function(){
+      expect(close).toHaveBeenCalled();
+    });
+
+    it("should remove the view", function(){
+      expect(view.remove).toHaveBeenCalled();
+    });
+
+    it("should set the view isClosed to true", function(){
+      expect(view.isClosed).toBe(true);
+    });
+  });
+
+  describe("when closing a view and returning false from the onBeforeClose method", function(){
+    var close, view;
+
+    beforeEach(function(){
+      view = new Marionette.View();
+
+      spyOn(view, "remove").andCallThrough();
+      close = jasmine.createSpy("close");
+      view.on("close", close);
+
+      view.onBeforeClose = function(){
+        return false;
+      };
+
+      view.close();
+    });
+
+    it("should not trigger the close event", function(){
+      expect(close).not.toHaveBeenCalled();
+    });
+
+    it("should not remove the view", function(){
+      expect(view.remove).not.toHaveBeenCalled();
+    });
+
+    it("should not set the view isClosed to true", function(){
+      expect(view.isClosed).not.toBe(true);
+    });
+  });
+
+  describe("when closing a view that is already closed", function(){
+    var close, view;
+
+    beforeEach(function(){
+      view = new Marionette.View();
+      view.close();
+
+      spyOn(view, "remove").andCallThrough();
+      close = jasmine.createSpy("close");
+      view.on("close", close);
+
+      view.close();
+    });
+
+    it("should not trigger the close event", function(){
+      expect(close).not.toHaveBeenCalled();
+    });
+
+    it("should not remove the view", function(){
+      expect(view.remove).not.toHaveBeenCalled();
+    });
+
+    it("should leave isClosed as true", function(){
+      expect(view.isClosed).toBe(true);
+    });
   });
 });

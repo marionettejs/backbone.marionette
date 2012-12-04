@@ -12,7 +12,8 @@ behaviors that are shared across all views.
 ## Documentation Index
 
 * [Binding To View Events](#binding-to-view-events)
-* [ItemView close](#itemview-close)
+* [View close](#view-close)
+* [View onBeforeClose](#view-onbeforeclose)
 * [View.triggers](#viewtriggers)
 * [View.modelEvents and View.collectionEvents](#viewmodelevents-and-viewcollectionevents)
 * [View.serializeData](#viewserializedata)
@@ -48,7 +49,7 @@ The context (`this`) will automatically be set to the view. You can
 optionally set the context by passing in the context object as the
 4th parameter of `bindTo`.
 
-## ItemView close
+## View close
 
 View implements a `close` method, which is called by the region
 managers automatically. As part of the implementation, the following
@@ -58,6 +59,7 @@ are performed:
 * unbind all custom view events
 * unbind all DOM events
 * remove `this.el` from the DOM
+* call an `onBeforeClose` event on the view, if one is provided
 * call an `onClose` event on the view, if one is provided
 
 By providing an `onClose` event in your view definition, you can
@@ -71,6 +73,28 @@ Backbone.Marionette.ItemView.extend({
     // custom cleanup or closing code, here
   }
 });
+```
+
+## View onBeforeClose
+
+When closing a view, an `onBeforeClose` method will be called, if it
+has been provided. If this method returns `false`, the view will not
+be closed. Any other return value (including null or undefined) will
+allow the view to be closed.
+
+```js
+MyView = Marionette.View.extend({
+
+  onBeforeClose: function(){
+    // prevent the view from being closed
+    return false;
+  }
+
+});
+
+var v = new MyView();
+
+v.close(); // view will remain open
 ```
 
 ## View.triggers

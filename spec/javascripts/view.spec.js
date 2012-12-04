@@ -183,6 +183,36 @@ describe("base view", function(){
     });
   });
 
+  describe("when closing a view and returning undefined from the onBeforeClose method", function(){
+    var close, view;
+
+    beforeEach(function(){
+      view = new Marionette.View();
+
+      spyOn(view, "remove").andCallThrough();
+      close = jasmine.createSpy("close");
+      view.on("close", close);
+
+      view.onBeforeClose = function(){
+        return undefined;
+      };
+
+      view.close();
+    });
+
+    it("should trigger the close event", function(){
+      expect(close).toHaveBeenCalled();
+    });
+
+    it("should remove the view", function(){
+      expect(view.remove).toHaveBeenCalled();
+    });
+
+    it("should set the view isClosed to true", function(){
+      expect(view.isClosed).toBe(true);
+    });
+  });
+
   describe("when closing a view that is already closed", function(){
     var close, view;
 

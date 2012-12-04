@@ -72,6 +72,8 @@ _.extend(Marionette.Module.prototype, Backbone.Events, {
     if (!this._isInitialized){ return; }
     this._isInitialized = false;
 
+    Marionette.triggerMethod.call(this, "before:stop");
+
     // stop the sub-modules; depth-first, to make sure the
     // sub-modules are stopped / finalized before parents
     _.each(this.submodules, function(mod){ mod.stop(); });
@@ -82,6 +84,8 @@ _.extend(Marionette.Module.prototype, Backbone.Events, {
     // reset the initializers and finalizers
     this._initializerCallbacks.reset();
     this._finalizerCallbacks.reset();
+
+    Marionette.triggerMethod.call(this, "stop");
   },
 
   // Configure the module with a definition function and any custom args

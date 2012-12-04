@@ -16,6 +16,7 @@ your application, and serve as an event aggregator in themselves.
   * [Preventing Auto-Start Of Modules](#preventing-auto-start-of-modules)
   * [Starting Sub-Modules With Parent](#starting-sub-modules-with-parent)
   * [Stopping Modules](#stopping-modules)
+  * [Stop Events](#stop-events)
 * [Defining Sub-Modules With . Notation](#defining-sub-modules-with--notation)
 * [Module Definitions](#module-definitions)
   * [Module Initializers](#module-initializers)
@@ -183,6 +184,24 @@ MyApp.module("Foo").stop();
 This call to `stop` causes the `Bar` and `Baz` modules to both be stopped
 as they are sub-modules of `Foo`. For more information on defining
 sub-modules, see the section "Defining Sub-Modules With . Notation".
+
+### Stop Events
+
+When stopping a module, a "before:stop" event will be triggered prior
+to any of the finalizers being run. A "stop" event will then be triggered
+after they have been run.
+
+```js
+var mod = MyApp.module("MyMod");
+
+mod.on("before:stop", function(){
+  // do stuff before the module is stopped
+});
+
+mod.on("stop", function(){
+  // do stuff after the module has been stopped
+});
+```
 
 ## Defining Sub-Modules With . Notation
 

@@ -8,14 +8,20 @@ describe("module stop", function(){
   });
 
   describe("when stopping a module that has been started", function(){
-    var mod1, mod2, mod3;
+    var mod1, mod2, mod3, beforeStop, stop;
 
     beforeEach(function(){
+      beforeStop = jasmine.createSpy("before:stop");
+      stop = jasmine.createSpy("stop");
+
       mod1 = App.module("Mod1", function(Mod1){
         Mod1.addFinalizer(function(){
           Mod1.isDead = true;
         });
       });
+
+      mod1.on("before:stop", beforeStop);
+      mod1.on("stop", stop);
 
       mod2 = App.module("Mod1.Mod2");
       mod3 = App.module("Mod1.Mod3");
@@ -25,6 +31,14 @@ describe("module stop", function(){
 
       mod1.start();
       mod1.stop();
+    });
+
+    it("should trigger a 'before:stop' event", function(){
+      expect(beforeStop).toHaveBeenCalled();
+    });
+
+    it("should trigger a 'stop' event", function(){
+      expect(stop).toHaveBeenCalled();
     });
 
     it("should run all finalizers for the module", function(){

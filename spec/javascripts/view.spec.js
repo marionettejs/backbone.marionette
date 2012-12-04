@@ -109,4 +109,22 @@ describe("base view", function(){
       expect(getBadViewInstance).toThrow("Method 'does_not_exist' was configured as an event handler, but does not exist.");
     });
   });
+
+  describe("when using bindTo for the 'close' event on itself, and closing the view", function(){
+    var close;
+
+    beforeEach(function(){
+      close = jasmine.createSpy("close");
+      var view = new Marionette.View();
+
+      view.bindTo(view, "close", close);
+
+      view.close();
+    });
+
+    it("should trigger the 'close' event", function(){
+      expect(close).toHaveBeenCalled();
+    });
+
+  });
 });

@@ -94,10 +94,11 @@ Marionette.View = Backbone.View.extend({
     this.triggerMethod("before:close");
 
     this.remove();
-    this.unbindAll();
 
     this.triggerMethod("close");
     this.isClosed = true;
+
+    this.unbindAll();
   },
 
   // This method binds the elements specified in the "ui" hash inside the view's code with

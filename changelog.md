@@ -1,5 +1,11 @@
 ### v1.0.0-rc1 [view commit logs](https://github.com/marionettejs/backbone.marionette/compare/v1.0.0-beta6...dev)
 
+* Marionette.View
+  * **BREAKING**: The `bindBackboneEntityTo` method has been removed from Marionette.View and replaced with `Marionette.bindEntityEvents` function.
+
+* Marionette.bindEntityEvents
+  * This function has been extracted from Marionette.View, and will bind an events hash to the events from an entity (model or collection), using the supplied EventBinder object (or any object with a bindTo method)
+
 * Marionette.EventBinder
   * The context of the callback method defaults to the object w/ the `bindTo` method
 
@@ -12,6 +18,7 @@
 
 * All Views
   * The `modelEvents` and `collectionEvents` can now have a function configured as the value in the `{ "event:name": "value" }` configuration hash
+
 
 ### v1.0.0-beta6 [view commit logs](https://github.com/marionettejs/backbone.marionette/compare/v1.0.0-beta5...v1.0.0-beta6)
 

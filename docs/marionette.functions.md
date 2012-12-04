@@ -12,6 +12,7 @@ a way to get the same behaviors and conventions from your own code.
 * [Marionette.extend](#marionetteextend)
 * [Marionette.getOption](#marionetteextend)
 * [Marionette.triggerMethod](#marionettetriggermethod)
+* [Marionette.bindEntityEvent](#marionettebindentityevents)
 
 ## Marionette.addEventBinder
 
@@ -126,4 +127,38 @@ of it. Examples:
 All arguments that are passed to the triggerMethod call are passed along to both the event and the method, with the exception of the event name not being passed to the corresponding method.
 
 `triggerMethod("foo", bar)` will call `onFoo: function(bar){...})`
+
+## Marionette.bindEntityEvents
+
+This method is used to bind a backbone "entity" (collection/model) 
+to methods on a target object. 
+
+```js
+Backbone.View.extend({
+
+  modelEvents: {
+    "change:foo": "doSomething"
+  },
+
+  initialize: function(){
+    Marionette.bindEntityEvents(this, this.model, this.modelEvents);
+  },
+
+  doSomething: function(){
+    // the "change:foo" event was fired from the model
+    // respond to it appropriately, here.
+  }
+
+});
+```
+
+The first paremter, `target`, must have a `bindTo` method from the
+EventBinder object.
+
+The second parameter is the entity (Backbone.Model or Backbone.Collection)
+to bind the events from.
+
+The third parameter is a hash of { "event:name": "eventHandler" }
+configuration. Multiple handlers can be separated by a space. A
+function can be supplied instead of a string handler name. 
 

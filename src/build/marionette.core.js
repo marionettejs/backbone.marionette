@@ -7,6 +7,8 @@ Backbone.Marionette = Marionette = (function(Backbone, _, $){
 
 //= ../marionette.eventbinder.js
 //= ../marionette.eventaggregator.js
+//= ../marionette.bindEntityEvents.js
+  
 //= ../marionette.callbacks.js
 //= ../marionette.templatecache.js
 //= ../marionette.renderer.js

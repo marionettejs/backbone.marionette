@@ -10,8 +10,8 @@ Marionette.View = Backbone.View.extend({
 
     Backbone.View.prototype.constructor.apply(this, arguments);
 
-    this.bindBackboneEntityTo(this.model, this.modelEvents);
-    this.bindBackboneEntityTo(this.collection, this.collectionEvents);
+    Marionette.bindEntityEvents(this, this.model, Marionette.getOption(this, "modelEvents"));
+    Marionette.bindEntityEvents(this, this.collection, Marionette.getOption(this, "collectionEvents"));
 
     this.bindTo(this, "show", this.onShowCalled, this);
   },
@@ -118,23 +118,6 @@ Marionette.View = Backbone.View.extend({
     _.each(_.keys(this.uiBindings), function(key) {
       var selector = that.uiBindings[key];
       that.ui[key] = that.$(selector);
-    });
-  },
-
-  // This method is used to bind a backbone "entity" (collection/model) to methods on the view.
-  bindBackboneEntityTo: function(entity, bindings){
-    if (!entity || !bindings) { return; }
-
-    var view = this;
-    _.each(bindings, function(methods, evt){
-      _.each(methods.split(/\s+/),function(methodName) {
-        var method = view[methodName];
-        if(!method) {
-          throw new Error("View method '"+ methodName +"' was configured as an event handler, but does not exist.");
-        }
-
-        view.bindTo(entity, evt, method, view);
-      });
     });
   }
 });

@@ -10,6 +10,9 @@
 * ItemView
   * Added a "dom:refresh" event/callback method that fires after a view has been rendered, placed in the DOM with a Marionette.Region, and is re-rendered
 
+* All Views
+  * The `modelEvents` and `collectionEvents` can now have a function configured as the value in the `{ "event:name": "value" }` configuration hash
+
 ### v1.0.0-beta6 [view commit logs](https://github.com/marionettejs/backbone.marionette/compare/v1.0.0-beta5...v1.0.0-beta6)
 
 * CollectionView / CompositeView

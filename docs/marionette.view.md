@@ -151,6 +151,45 @@ These will use the memory safe `bindTo`, and will set the context
 bound at the time of instantiation instanciation, and an exception will be thrown
 if the handlers on the view do not exist.
 
+### Multiple Callbacks
+
+Multiple callback functions can be specified by separating them with a
+space. 
+
+```js
+Backbone.Marionette.CompositeView.extend({
+
+  modelEvents: {
+    "change:name": "nameChanged thatThing"
+  },
+
+  nameChanged: function(){ },
+
+  thatThing: function(){ },
+});
+```
+
+This works in both `modelEvents` and `collectionEvents`.
+
+### Callbacks As Function
+
+A single function can be declared directly in-line instead of specifying a
+callback via a string method name.
+
+```js
+Backbone.Marionette.CompositeView.extend({
+
+  modelEvents: {
+    "change:name": function(){
+      // handle the name changed event here
+    }
+  }
+
+});
+```
+
+This works for both `modelEvents` and `collectionEvents`.
+
 ## View.serializeData
 
 The `serializeData` method will serialize a view's model or

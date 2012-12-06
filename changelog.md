@@ -1,5 +1,7 @@
 ### v1.0.0-rc1 [view commit logs](https://github.com/marionettejs/backbone.marionette/compare/v1.0.0-beta6...dev)
 
+* Fixed IE < 9 support w/ calls to `.apply` when `arguments` was null or undefined
+
 * Module
   * **BREAKING:** Renamed "initialize:before" event to "before:start", for consistency
   * **BREAKING:** Renamed "initialize:after" event to "start", for consistency

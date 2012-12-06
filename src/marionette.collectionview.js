@@ -15,10 +15,6 @@ Marionette.CollectionView = Marionette.View.extend({
     Marionette.View.prototype.constructor.apply(this, arguments);
     this.initialEvents();
     this.onShowCallbacks = new Marionette.Callbacks();
-
-    if (options && options.itemViewOptions) {
-      this.itemViewOptions = options.itemViewOptions;
-    }
   },
 
   // Configured the initial events that the collection view
@@ -142,11 +138,9 @@ Marionette.CollectionView = Marionette.View.extend({
     var that = this;
 
     // get the itemViewOptions if any were specified
-    var itemViewOptions;
-    if (_.isFunction(this.itemViewOptions)){
-      itemViewOptions = this.itemViewOptions(item);
-    } else {
-      itemViewOptions = this.itemViewOptions;
+    var itemViewOptions = Marionette.getOption(this, "itemViewOptions");
+    if (_.isFunction(itemViewOptions)){
+      itemViewOptions = itemViewOptions(item);
     }
 
     // build the view 

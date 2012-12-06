@@ -1,4 +1,4 @@
-// Backbone.EventBinder, v1.0.1
+// Backbone.EventBinder, v1.0.2
 // Copyright (c)2012 Derick Bailey, Muted Solutions, LLC.
 // Distributed under MIT license
 // http://github.com/marionettejs/backbone.eventbinder
@@ -95,7 +95,8 @@ Backbone.EventBinder = (function(Backbone, _){
       var obj = arguments[0];
       var handlers = getHandlerForObject(obj);
 
-      var binding = handlers.bindTo.apply(this,arguments);
+      var args = Array.prototype.slice.apply(arguments);
+      var binding = handlers.bindTo.apply(this, args);
 
       this._eventBindings.push(binding);
 
@@ -105,7 +106,9 @@ Backbone.EventBinder = (function(Backbone, _){
     // Unbind from a single binding object. Binding objects are
     // returned from the `bindTo` method call. 
     unbindFrom: function(binding) {
-      handlerMap[binding.type].unbindFrom.apply(this,arguments);
+      var args = Array.prototype.slice.apply(arguments);
+      handlerMap[binding.type].unbindFrom.apply(this, args);
+
       this._eventBindings = _.reject(this._eventBindings, function(bind){return bind === binding;});
     },
 

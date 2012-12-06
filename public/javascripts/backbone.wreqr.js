@@ -1,4 +1,4 @@
-// Backbone.Wreqr, v0.0.1
+// Backbone.Wreqr, v0.1.0
 // Copyright (c)2012 Derick Bailey, Muted Solutions, LLC.
 // Distributed under MIT license
 // http://github.com/marionettejs/backbone.wreqr
@@ -50,7 +50,8 @@ Backbone.Wreqr = (function(Backbone, Marionette, _){
         }
   
         return function(){
-          return config.callback.apply(config.context, arguments);
+          var args = Array.prototype.slice.apply(arguments);
+          return config.callback.apply(config.context, args);
         };
       },
   

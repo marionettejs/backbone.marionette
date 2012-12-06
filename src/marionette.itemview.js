@@ -6,7 +6,8 @@
 // and calling several methods on extended views, such as `onRender`.
 Marionette.ItemView =  Marionette.View.extend({
   constructor: function(){
-    Marionette.View.prototype.constructor.apply(this, arguments);
+    var args = Array.prototype.slice.apply(arguments);
+    Marionette.View.prototype.constructor.apply(this, args);
 
     if (this.initialEvents){
       this.initialEvents();
@@ -86,7 +87,10 @@ Marionette.ItemView =  Marionette.View.extend({
     if (this.isClosed){ return; }
 
     this.triggerMethod('item:before:close');
-    Marionette.View.prototype.close.apply(this, arguments);
+
+    var args = Array.prototype.slice.apply(arguments);
+    Marionette.View.prototype.close.apply(this, args);
+
     this.triggerMethod('item:closed');
   }
 });

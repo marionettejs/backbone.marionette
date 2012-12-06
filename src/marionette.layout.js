@@ -15,7 +15,9 @@ Marionette.Layout = Marionette.ItemView.extend({
   constructor: function () {
     this._firstRender = true;
     this.initializeRegions();
-    Backbone.Marionette.ItemView.apply(this, arguments);
+
+    var args = Array.prototype.slice.apply(arguments);
+    Backbone.Marionette.ItemView.apply(this, args);
   },
 
   // Layout's render will use the existing region objects the
@@ -35,7 +37,9 @@ Marionette.Layout = Marionette.ItemView.extend({
       this.reInitializeRegions();
     }
 
-    var result = Marionette.ItemView.prototype.render.apply(this, arguments);
+    var args = Array.prototype.slice.apply(arguments);
+    var result = Marionette.ItemView.prototype.render.apply(this, args);
+
     return result;
   },
 
@@ -45,7 +49,9 @@ Marionette.Layout = Marionette.ItemView.extend({
 
     this.closeRegions();
     this.destroyRegions();
-    Backbone.Marionette.ItemView.prototype.close.call(this, arguments);
+
+    var args = Array.prototype.slice.apply(arguments);
+    Backbone.Marionette.ItemView.prototype.close.apply(this, args);
   },
 
   // Initialize the regions that have been defined in a

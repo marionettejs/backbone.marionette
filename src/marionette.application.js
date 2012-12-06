@@ -20,12 +20,14 @@ Marionette.Application = function(options){
 _.extend(Marionette.Application.prototype, Backbone.Events, {
   // Command execution, facilitated by Backbone.Wreqr.Commands
   execute: function(){
-    this.commands.execute.apply(this.commands, arguments);
+    var args = Array.prototype.slice.apply(arguments);
+    this.commands.execute.apply(this.commands, args);
   },
 
   // Request/response, facilitated by Backbone.Wreqr.RequestResponse
   request: function(){
-    return this.reqres.request.apply(this.reqres, arguments);
+    var args = Array.prototype.slice.apply(arguments);
+    return this.reqres.request.apply(this.reqres, args);
   },
 
   // Add an initializer that is either run at when the `start`

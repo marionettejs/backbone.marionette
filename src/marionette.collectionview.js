@@ -12,7 +12,9 @@ Marionette.CollectionView = Marionette.View.extend({
   constructor: function(options){
     this.initChildViewStorage();
 
-    Marionette.View.prototype.constructor.apply(this, arguments);
+    var args = Array.prototype.slice.apply(arguments);
+    Marionette.View.prototype.constructor.apply(this, args);
+
     this.initialEvents();
     this.onShowCallbacks = new Marionette.Callbacks();
   },
@@ -247,7 +249,9 @@ Marionette.CollectionView = Marionette.View.extend({
     this.triggerMethod("collection:before:close");
     this.closeChildren();
     this.triggerMethod("collection:closed");
-    Marionette.View.prototype.close.apply(this, arguments);
+
+    var args = Array.prototype.slice.apply(arguments);
+    Marionette.View.prototype.close.apply(this, args);
   },
 
   // Close the child views that this collection view

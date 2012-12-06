@@ -37,11 +37,12 @@ _.extend(Marionette.TemplateCache, {
   // `clear("#t1", "#t2", "...")`
   clear: function(){
     var i;
-    var length = arguments.length;
+    var args = Array.prototype.slice.apply(arguments);
+    var length = args.length;
 
     if (length > 0){
       for(i=0; i<length; i++){
-        delete this.templateCaches[arguments[i]];
+        delete this.templateCaches[args[i]];
       }
     } else {
       this.templateCaches = {};

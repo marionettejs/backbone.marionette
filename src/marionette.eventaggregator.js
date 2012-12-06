@@ -9,7 +9,9 @@ Marionette.EventAggregator = Backbone.Wreqr.EventAggregator.extend({
 
   constructor: function(){
     Marionette.addEventBinder(this);
-    Backbone.Wreqr.EventAggregator.prototype.constructor.apply(this, arguments);
+
+    var args = Array.prototype.slice.apply(arguments);
+    Backbone.Wreqr.EventAggregator.prototype.constructor.apply(this, args);
   }
 
 });

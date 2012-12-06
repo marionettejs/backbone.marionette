@@ -8,7 +8,8 @@ Marionette.View = Backbone.View.extend({
     _.bindAll(this, "render");
     Marionette.addEventBinder(this);
 
-    Backbone.View.prototype.constructor.apply(this, arguments);
+    var args = Array.prototype.slice.apply(arguments);
+    Backbone.View.prototype.constructor.apply(this, args);
 
     Marionette.bindEntityEvents(this, this.model, Marionette.getOption(this, "modelEvents"));
     Marionette.bindEntityEvents(this, this.collection, Marionette.getOption(this, "collectionEvents"));

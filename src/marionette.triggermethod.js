@@ -17,7 +17,7 @@ Marionette.triggerMethod = function(){
     methodName += capLetter + segment.slice(1);
   }
 
-  this.trigger.apply(this, arguments);
+  this.trigger.apply(this, args);
 
   if (_.isFunction(this[methodName])){
     args.shift();

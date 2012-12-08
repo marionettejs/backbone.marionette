@@ -1,4 +1,4 @@
-### v1.0.0-rc1 [view commit logs](https://github.com/marionettejs/backbone.marionette/compare/v1.0.0-beta6...dev)
+### v1.0.0-rc1 [view commit logs](https://github.com/marionettejs/backbone.marionette/compare/v1.0.0-beta6...v1.0.0-rc1)
 
 * Fixed IE < 9 support w/ calls to `.apply` when `arguments` was null or undefined
 

@@ -11,12 +11,12 @@ Marionette.CollectionView = Marionette.View.extend({
   // constructor
   constructor: function(options){
     this.initChildViewStorage();
+    this.onShowCallbacks = new Marionette.Callbacks();
 
     var args = Array.prototype.slice.apply(arguments);
     Marionette.View.prototype.constructor.apply(this, args);
 
     this.initialEvents();
-    this.onShowCallbacks = new Marionette.Callbacks();
   },
 
   // Configured the initial events that the collection view

@@ -82,6 +82,55 @@ describe("composite view", function(){
     });
   });
 
+  describe("when a composite view triggers render in initialize", function(){
+    var compositeView;
+
+    var on_show;
+
+    var EmptyView = Backbone.Marionette.ItemView.extend({
+      template: "#emptyTemplate",
+      tagName: "hr",
+      onShow: function() {
+          on_show.push("EMPTY");
+      }
+    });
+
+    var ItemView = Backbone.Marionette.ItemView.extend({
+      template: "#collectionItemTemplate",
+      tagName: "span"
+    });
+
+    var CompositeView = Backbone.Marionette.CompositeView.extend({
+      itemView: ItemView,
+      emptyView: EmptyView,
+      template: "#collection-template",
+      initialize: function() {
+        this.render();
+      },
+      onRender: function(){}
+    });
+
+    beforeEach(function(){
+      loadFixtures("collectionTemplate.html", "collectionItemTemplate.html",
+          "emptyTemplate.html");
+
+      var m1 = new Model({foo: "bar"});
+
+      compositeView = new CompositeView({
+          model: m1,
+          collection: new Collection()
+      });
+
+      on_show = [];
+
+      compositeView.trigger("show");
+    });
+
+    it("should call 'onShowCallbacks.add'", function(){
+        expect(on_show.length == 1).toBeTruthy();
+    });
+  });
+
   describe("when rendering a composite view", function(){
     var compositeView, order, deferredResolved;
 

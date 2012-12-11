@@ -15,17 +15,17 @@ module.exports = function(grunt) {
               ' // Distributed under MIT license\n' +
               ' // http://github.com/marionettejs/backbone.marionette\n',
       banner :
-        '<%= meta.core_banner %>\n' +
+        '<%= meta.core_banner %>\n\n' +
         '/*!\n' +
         ' * Includes BabySitter\n' +
         ' * https://github.com/marionettejs/backbone.babysitter/\n' +
-        ' * ' + 
+        ' *\n' + 
         ' * Includes Wreqr\n' +
         ' * https://github.com/marionettejs/backbone.wreqr/\n' +
-        ' * ' + 
+        ' *\n' + 
         ' * Includes EventBinder\n' +
         ' * https://github.com/marionettejs/backbone.eventbinder/\n' +
-        ' */'
+        ' */\n\n'
     },
 
     lint: {

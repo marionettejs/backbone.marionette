@@ -10,7 +10,6 @@ will be treated as a single item.
 * [Events and Callback Methods](#events-and-callback-methods)
   * ["before:render" / onBeforeRender event](#beforerender--onbeforerender-event)
   * ["render" / onRender event](#render--onrender-event)
-  * ["dom:refresh" / onDomRefresh event](#render--onrenderupdate-event)
   * ["before:close" / onBeforeClose event](#beforeclose--onbeforeclose-event)
   * ["close" / onClose event](#close--onclose-event)
 * [ItemView serializeData](#itemview-serializedata)
@@ -70,31 +69,6 @@ Backbone.Marionette.ItemView.extend({
   }
 });
 ```
-
-### "dom:refresh" / onDomRefresh event
-
-Triggered after the view has been rendered, has been shown in the DOM via a Marionette.Region, and has been
-re-rendered.
-
-This event / callback is useful for 
-[DOM-dependent UI plugins](http://lostechies.com/derickbailey/2012/02/20/using-jquery-plugins-and-ui-controls-with-backbone/) such as 
-[jQueryUI](http://jqueryui.com/)
- or 
-[KendoUI](http://kendoui.com)
-.
-
-```js
-Backbone.Marionette.ItemView.extend({
-  onDomRefresh: function(){
-    // manipulate the `el` here. it's already
-    // been rendered, and is full of the view's
-    // HTML, ready to go.
-  }
-});
-```
-
-For more information about integration Marionette w/ KendoUI (also applicable to jQueryUI and other UI
-widget suites), see [this blog post on KendoUI + Backbone](http://www.kendoui.com/blogs/teamblog/posts/12-11-26/backbone_and_kendo_ui_a_beautiful_combination.aspx).
 
 ### "before:close" / onBeforeClose event
 

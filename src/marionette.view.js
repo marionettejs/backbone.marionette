@@ -14,6 +14,7 @@ Marionette.View = Backbone.View.extend({
     Marionette.bindEntityEvents(this, this.model, Marionette.getOption(this, "modelEvents"));
     Marionette.bindEntityEvents(this, this.collection, Marionette.getOption(this, "collectionEvents"));
 
+    Marionette.MonitorDOMRefresh(this);
     this.bindTo(this, "show", this.onShowCalled, this);
   },
 

@@ -7,6 +7,9 @@
 * AMD build
   * Fixed the AMD build by adding Backbone.BabySitter to the AMD dependency list
 
+* All Views
+  * All views (include Marionette.View) now have a "dom:refresh" and `onDomRefresh` event / method triggered
+
 ### v1.0.0-rc1 [view commit logs](https://github.com/marionettejs/backbone.marionette/compare/v1.0.0-beta6...v1.0.0-rc1)
 
 * Fixed IE < 9 support w/ calls to `.apply` when `arguments` was null or undefined

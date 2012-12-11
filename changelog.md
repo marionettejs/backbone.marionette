@@ -1,3 +1,11 @@
+### v1.0.0-rc2 [view commit logs](https://github.com/marionettejs/backbone.marionette/compare/v1.0.0-rc1...v1.0.0-rc2)
+
+* AMD build
+  * Added Backbone.BabySitter to the AMD dependency list
+
+* CollectionView / CompositeView
+  * Fixed the `onShow` callbacks, so they can be used in the `initialize` method
+
 ### v1.0.0-rc1 [view commit logs](https://github.com/marionettejs/backbone.marionette/compare/v1.0.0-beta6...v1.0.0-rc1)
 
 * Fixed IE < 9 support w/ calls to `.apply` when `arguments` was null or undefined

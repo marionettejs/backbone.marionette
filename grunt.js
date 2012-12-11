@@ -9,19 +9,20 @@ module.exports = function(grunt) {
     pkg: '<json:package.json>',
     meta: {
       version: '<%= pkg.version %>',
-      core_banner: '/*!\n' +
-              ' * Backbone.Marionette, v<%= meta.version %>\n' +
-              ' * Copyright (c)<%= grunt.template.today("yyyy") %> Derick Bailey, Muted Solutions, LLC.\n' +
-              ' * Distributed under MIT license\n' +
-              ' * http://github.com/marionettejs/backbone.marionette\n' +
-              '*/',
+      core_banner: 
+              ' // Backbone.Marionette, v<%= meta.version %>\n' +
+              ' // Copyright (c)<%= grunt.template.today("yyyy") %> Derick Bailey, Muted Solutions, LLC.\n' +
+              ' // Distributed under MIT license\n' +
+              ' // http://github.com/marionettejs/backbone.marionette\n',
       banner :
         '<%= meta.core_banner %>\n' +
         '/*!\n' +
         ' * Includes BabySitter\n' +
         ' * https://github.com/marionettejs/backbone.babysitter/\n' +
+        ' * ' + 
         ' * Includes Wreqr\n' +
         ' * https://github.com/marionettejs/backbone.wreqr/\n' +
+        ' * ' + 
         ' * Includes EventBinder\n' +
         ' * https://github.com/marionettejs/backbone.eventbinder/\n' +
         ' */'

@@ -151,6 +151,9 @@ Marionette.CollectionView = Marionette.View.extend({
     // set up the child view event forwarding
     this.addChildViewEventForwarding(view);
 
+    // this view is about to be added
+    this.triggerMethod("before:item:added", view);
+
     // Store the child view itself so we can properly
     // remove and/or close it later
     this.children.add(view);
@@ -158,8 +161,8 @@ Marionette.CollectionView = Marionette.View.extend({
     // Render it and show it
     var renderResult = this.renderItemView(view, index);
 
-    // let the world know this view was added
-    this.triggerMethod("item:added", view);
+    // this view was added
+    this.triggerMethod("after:item:added", view);
 
     // call onShow for child item views
     if (view.onShow){

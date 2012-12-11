@@ -22,7 +22,7 @@ then append the results of the item view's `el` to the collection view's
   * ["render" / onRender event](#render--onrender-event)
   * ["before:close" / onBeforeClose event](#beforeclose--onbeforeclose-event)
   * ["closed" / "collection:closed" event](#closed--collectionclosed-event)
-  * ["item:added" / onItemAdded](#itemadded--onitemadded)
+  * ["before:item:added" / "after:item:added"](#beforeitemadded--afteritemadded)
   * ["item:removed" / onItemRemoved](#itemremoved--onitemremoved)
   * ["itemview:\*" event bubbling from child views](#itemview-event-bubbling-from-child-views)
 * [CollectionView's `itemViewEventPrefix`](#collectionviews-itemvieweventprefix)
@@ -308,14 +308,23 @@ myView.on("collection:closed", function(){
 myView.close();
 ```
 
-### "item:added" / onItemAdded
+### "before:item:added" / "after:item:added"
 
-Triggered just after creating a new itemView instance for an
-item that was added to the collection, but before the
+The "before:item:added" event and corresponding `onBeforeItemAdded`
+method are triggered just after creating a new itemView instance for 
+an item that was added to the collection, but before the
 view is rendered and added to the DOM.
 
+The "after:item:added" event and corresponding `onAfterItemAdded`
+method are triggered after rendering the view and adding it to the
+view's DOM element.
+
 ```js
-cv.on("item:added", function(viewInstance){
+cv.on("before:item:added", function(viewInstance){
+  // ...
+});
+
+cv.on("after:item:added", function(viewInstance){
   // ...
 });
 ```

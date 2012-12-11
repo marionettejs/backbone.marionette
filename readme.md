@@ -83,12 +83,6 @@ please see [the downloads section on the website](http://marionettejs.com#downlo
 
 #### [http://marionettejs.com#downloads](http://marionettejs.com#downloads)
 
-### Marionette.Async Add-on
-
-Marionette.Async has officially been removed from the core Marionette
-repository. See the [Marionette.Async repository](https://github.com/marionettejs/backbone.marionette.async)
-for downloads, documentation, and more information.
-
 ### Available Packages
 
 Marionette is unofficially available from various package

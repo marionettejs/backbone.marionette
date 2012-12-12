@@ -87,7 +87,7 @@ Marionette.View = Backbone.View.extend({
 
     Marionette.unbindEntityEvents(this, this.model, Marionette.getOption(this, "modelEvents"));
     Marionette.unbindEntityEvents(this, this.collection, Marionette.getOption(this, "collectionEvents"));
-  };
+  },
 
 
   // Internal method, handles the `show` event.

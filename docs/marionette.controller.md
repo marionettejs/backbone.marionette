@@ -52,7 +52,7 @@ unbinding all of the events that are directly attached to the controller
 instance, as well as those that are bound using the EventBinder from
 the controller.
 
-The `close` method will trigger a "close" event and corresdponding
+The `close` method will trigger a "close" event and corresponding
 `onClose` method call:
 
 ```js

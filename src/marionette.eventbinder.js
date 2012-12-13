@@ -19,7 +19,7 @@ Marionette.addEventBinder = function(target){
     // that is having the eventBinder attached to it, if no context
     // has been specified in the .bindTo call
     context = context || target;
-    eventBinder.bindTo(source, event, callback, context);
+    return eventBinder.bindTo(source, event, callback, context);
   };
 
   target.unbindFrom = _.bind(eventBinder.unbindFrom, eventBinder);

@@ -32,6 +32,30 @@ MyView = Backbone.Marionette.ItemView.extend({
 new MyView().render();
 ```
 
+.. or a function taking a single argument - the object returned by [ItemView.serializeData](#itemview-serializedata):
+
+```js
+my_template_html = '<div><%= args.name %></div>'
+MyView = Backbone.Marionette.ItemView.extend({
+  template : function(serialized_model) {
+    var name = serialized_model.name;
+    return _.template(my_template_html, {
+        name : name,
+        some_custom_attribute : some_custom_key
+    }, {variable: 'args'});
+  }
+});
+
+new MyView().render();
+```
+
+Note that using a template function allows passing custom arguments into the _.template function,
+including a third "settings" argument, as used in the example above.
+
+According to the [Underscore docs](http://underscorejs.org/#template), using the "variable" setting
+"can significantly improve the speed at which a template is able to render." Using this setting
+also requires you to read data arguments from an object, as demonstrated in the example above.
+
 ## Events and Callback Methods
 
 There are several events and callback methods that are called

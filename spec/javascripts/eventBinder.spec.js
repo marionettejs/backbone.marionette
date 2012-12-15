@@ -1,15 +1,30 @@
 describe("event binder", function(){
   describe("given an event binder has been added to an object", function(){
+    var model, obj;
+
+    beforeEach(function(){
+      model = new Backbone.Model();
+
+      obj = {};
+      Marionette.addEventBinder(obj);
+    });
+
+    it("should return a binding signature with bindTo", function(){
+      var fn = function(){};
+      binding = obj.bindTo(model, "foo", fn);
+      expect(binding).toEqual({
+        callback : fn,
+        context : obj,
+        eventName : 'foo',
+        obj : model,
+        type : 'default'
+      });
+    });
 
     describe("when binding an event with no context specified, then triggering that event", function(){
-      var obj, context;
+      var context, binding;
 
       beforeEach(function(){
-        var model = new Backbone.Model();
-
-        obj = {};
-        Marionette.addEventBinder(obj);
-
         obj.bindTo(model, "foo", function(){
           context = this;
         });
@@ -24,14 +39,10 @@ describe("event binder", function(){
     });
 
     describe("when binding an event with a context specified, then triggering that event", function(){
-      var obj, ctx, context;
+      var ctx, context;
 
       beforeEach(function(){
-        var model = new Backbone.Model();
-
-        obj = {};
         ctx = {};
-        Marionette.addEventBinder(obj);
 
         obj.bindTo(model, "foo", function(){
           context = this;

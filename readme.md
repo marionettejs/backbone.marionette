@@ -52,12 +52,11 @@ to engage in an all-or-nothing migration to begin using Marionette.
 
 ## Compatibility And Requirements
 
-Backbone.Marionette currently works with the following libraries:
+MarionetteJS currently works with the following libraries:
 
 * [jQuery](http://jquery.com) v1.8.2
-* [Underscore](http://underscorejs.org) v1.4.2
-* [Backbone](http://backbonejs.org) v0.9.2
-* [Backbone.EventBinder](https://github.com/marionettejs/backbone.eventbinder)
+* [Underscore](http://underscorejs.org) v1.4.3
+* [Backbone](http://backbonejs.org) v0.9.9
 * [Backbone.Wreqr](https://github.com/marionettejs/backbone.wreqr) 
 * [Backbone.BabySitter](https://github.com/marionettejs/backbone.babysitter)
 
@@ -73,6 +72,10 @@ objects and, as such, will need supported methods in replacement libraries.
 Zepto users can use @Mumakil's [Standalone-Deferred](https://github.com/Mumakil/Standalone-Deferred)
 or @sudhirj's [simply-deferred](https://github.com/sudhirj/simply-deferred).
 Enderjs users, please let us know of how you solve any compatibility issues.
+
+Marionette no longer relies on [Backbone.EventBinder](https://github.com/marionettejs/backbone.eventbinder).
+Backbone.Events, as of v0.9.9, supercedes this library with it's
+`listenTo` and `stopListening` methods.
 
 ## Source Code And Downloads
 

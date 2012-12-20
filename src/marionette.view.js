@@ -16,11 +16,18 @@ Marionette.View = Backbone.View.extend({
 
     Marionette.MonitorDOMRefresh(this);
     this.bindTo(this, "show", this.onShowCalled, this);
+
+    this.initialEvents();
   },
 
   // import the "triggerMethod" to trigger events with corresponding
   // methods if the method exists 
   triggerMethod: Marionette.triggerMethod,
+
+  // Override this method to prevent the initial
+  // events, or to add your own initial events.
+  // By default most views have no initial events.
+  initialEvents: function(){},
 
   // Get the template for this view
   // instance. You can set a `template` attribute in the view

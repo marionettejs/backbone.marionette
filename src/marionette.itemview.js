@@ -8,10 +8,6 @@ Marionette.ItemView =  Marionette.View.extend({
   constructor: function(){
     var args = Array.prototype.slice.apply(arguments);
     Marionette.View.prototype.constructor.apply(this, args);
-
-    if (this.initialEvents){
-      this.initialEvents();
-    }
   },
 
   // Serialize the model or collection for the view. If a model is

@@ -45,7 +45,6 @@ to engage in an all-or-nothing migration to begin using Marionette.
 * Compose your application's visuals at runtime, with `Region` and `Layout`
 * Nested views and layouts within visual regions
 * Built-in memory management and zombie killing in views, regions and layouts
-* Built-in event clean up with the `EventBinder`
 * Event-driven architecture with the `EventAggregator`
 * Flexible, "as-needed" architecture allowing you to pick and choose what you need
 * And much, much more

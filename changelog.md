@@ -1,3 +1,20 @@
+### v1.0.0-rc3 [view commit logs](https://github.com/marionettejs/backbone.marionette/compare/v1.0.0-rc2...v1.0.0-rc3)
+
+* Backbone v0.9.9
+  * **BREAKING:** Backbone v0.9.2 is no longer supported
+  * Backbone v0.9.9 is now supported
+
+* Marionette.EventBinder
+  * **BREAKING:** Backbone.EventBinder has been deprecated
+  * **BREAKING:** `bindTo` has been superceded by Backbone.Events#listenTo
+  * **BREAKING:** `unbindAll` has been superceded by Backbone.Events#stopListening
+  * **BREAKING:** `unbindFrom` has been removed
+  * Marionette.EventBinder is now available if you need to create a new event object instance
+  
+* All Views
+  * **BREAKING:** Backbone.EventBinder is no longer mixed in to views
+  * **BREAKING:** See Marionette.EventBinder changes regarding method names to use for binding / unbinding events
+
 ### v1.0.0-rc2 [view commit logs](https://github.com/marionettejs/backbone.marionette/compare/v1.0.0-rc1...v1.0.0-rc2)
 
 * CollectionView / CompositeView

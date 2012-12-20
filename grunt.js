@@ -22,9 +22,6 @@ module.exports = function(grunt) {
         ' *\n' + 
         ' * Includes Wreqr\n' +
         ' * https://github.com/marionettejs/backbone.wreqr/\n' +
-        ' *\n' + 
-        ' * Includes EventBinder\n' +
-        ' * https://github.com/marionettejs/backbone.eventbinder/\n' +
         ' */\n\n'
     },
 
@@ -81,7 +78,6 @@ module.exports = function(grunt) {
         'public/javascripts/backbone.js',
         'public/javascripts/backbone.babysitter.js',
         'public/javascripts/backbone.augment.js',
-        'public/javascripts/backbone.eventbinder.js',
         'public/javascripts/backbone.wreqr.js',
         'src/build/marionette.core.js',
         'spec/javascripts/support/marionette.support.js',

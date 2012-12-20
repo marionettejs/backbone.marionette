@@ -5,7 +5,7 @@ Marionette.EventBinder = (function(Marionette){
 
   // Define the EventBinder, add Backbone.Events to it and
   // allow it to be extended like other Backbone objects
-  function EventBinder(){};
+  function EventBinder(){}
   _.extend(EventBinder.prototype, Backbone.Events);
   EventBinder.extend = Marionette.extend;
 

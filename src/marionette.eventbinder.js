@@ -1,10 +1,4 @@
-// EventBinder
-// -----------
-// Provides an object that can be instantiated, to be used as an
-// event management object. Replaces The previous Backbone.EventBinder
-// with a version that works from Backbone.Events directly.
-
-Marionette.EventBinder = (function(Marionette){
+(function(Backbone, Marionette, _){
   // grab a reference to the original listenTo
   var listenTo = Backbone.Events.listenTo;
 
@@ -14,27 +8,8 @@ Marionette.EventBinder = (function(Marionette){
     return listenTo.call(obj, evtSource, events, _.bind(callback, context));
   }
 
-  // Define the EventBinder, add Backbone.Events to it
-  function EventBinder(){}
-
-  _.extend(EventBinder.prototype, Backbone.Events, {
-    // Override the listenTo so that we can have a version that
-    // correctly binds context
-    listenTo: function(evtSource, events, callback, context){
-      return contextBoundListenTo(this, evtSource, events, callback, context);
-    }
-  });
-
-  // Allow it to be extended
-  EventBinder.extend = Marionette.extend;
-
-  // Add the EventBinder methods to the target directly,
-  // but keep them bound to the EventBinder instance so they 
-  // work properly. This allows the event binder's implementation 
-  // to vary independently of it being attached to the view... 
-  // for example the internal structure used to store the events 
-  // can change without worry about it interfering with Marionette's 
-  // views.
+  // Fix the listenTo method on the target object, allowing the 4th
+  // context parameter to be specified
   Marionette.addEventBinder = function(target){
     // If the target is not already extending Backbone.Events,
     // then extend that on to it first
@@ -49,6 +24,5 @@ Marionette.EventBinder = (function(Marionette){
     };
   };
 
-  return EventBinder;
-})(Marionette);
+})(Backbone, Marionette, _);
 

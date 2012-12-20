@@ -15,8 +15,6 @@ Marionette.CollectionView = Marionette.View.extend({
 
     var args = Array.prototype.slice.apply(arguments);
     Marionette.View.prototype.constructor.apply(this, args);
-
-    this.initialEvents();
   },
 
   // Configured the initial events that the collection view

@@ -4,12 +4,14 @@
   * **BREAKING:** Backbone v0.9.2 is no longer supported
   * Backbone v0.9.9 is now supported
 
-* Marionette.EventBinder
-  * **BREAKING:** Backbone.EventBinder has been deprecated
-  * **BREAKING:** `bindTo` has been superceded by Backbone.Events#listenTo
-  * **BREAKING:** `unbindAll` has been superceded by Backbone.Events#stopListening
-  * **BREAKING:** `unbindFrom` has been removed
-  * Marionette.EventBinder is now available if you need to create a new event object instance
+* Backbone.EventBinder / Marionette.EventBinder
+  * **BREAKING:** Marionette.EventBinder / Backbone.EventBinder have been removed entirely.
+  * Backbone.Events supercedes the older objects
+  * Backbone.Wreqr.EventAggregator also supercedes Marionette.EventBinder
+
+* Marionette.addEventBinder
+  * **BREAKING:** This function will mix in Backbone.Events to the target object if it does not exist
+  * **BREAKING:** This function will alter the `listenTo` method of the target to accept a `context` parameter as the 4th parameter of the method
   
 * All Views
   * **BREAKING:** Backbone.EventBinder is no longer mixed in to views

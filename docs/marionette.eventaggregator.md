@@ -41,11 +41,11 @@ and unbind all event callbacks, including inline callback functions.
 ```js
 vent = new Marionette.EventAggregator();
 
-vent.bindTo(vent, "foo", function(){
+vent.listenTo(vent, "foo", function(){
   alert("bar");
 });
 
-vent.unbindAll();
+vent.stopListening();
 
 vent.trigger("foo"); // => nothing. all events have been unbound.
 ```

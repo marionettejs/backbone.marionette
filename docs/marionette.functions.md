@@ -26,7 +26,7 @@ myObj = {};
 
 Marionette.addEventBinder(myObj);
 
-myObj.bindTo(aModel, "foo", function(){...});
+myObj.listenTo(aModel, "foo", function(){...});
 ```
 
 This allows the event binder's implementation to vary independently
@@ -152,7 +152,7 @@ Backbone.View.extend({
 });
 ```
 
-The first paremter, `target`, must have a `bindTo` method from the
+The first paremter, `target`, must have a `listenTo` method from the
 EventBinder object.
 
 The second parameter is the entity (Backbone.Model or Backbone.Collection)

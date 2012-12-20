@@ -508,7 +508,7 @@ CollectionView implements a `close` method, which is called by the
 region managers automatically. As part of the implementation, the 
 following are performed:
 
-* unbind all `bindTo` events
+* unbind all `listenTo` events
 * unbind all custom view events
 * unbind all DOM events
 * unbind all item views that were rendered

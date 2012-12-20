@@ -9,13 +9,19 @@
   * Backbone.Events supercedes the older objects
   * Backbone.Wreqr.EventAggregator also supercedes Marionette.EventBinder
 
+* EventBinder -> EventAggregator
+  * **BREAKING:** Backbone.Werqr.EventAggregator largely replaces Backbone.EventBinder
+  * **BREAKING:** `bindTo` has been replaced with `listenTo`
+  * **BREAKING:** `unbindAll` has been replaced with `stopLitening`
+  * **BREAKING:** `unbindFrom` has been removed and will not be replaced
+
 * Marionette.addEventBinder
   * **BREAKING:** This function will mix in Backbone.Events to the target object if it does not exist
   * **BREAKING:** This function will alter the `listenTo` method of the target to accept a `context` parameter as the 4th parameter of the method
   
-* All Views
-  * **BREAKING:** Backbone.EventBinder is no longer mixed in to views
-  * **BREAKING:** See Marionette.EventBinder changes regarding method names to use for binding / unbinding events
+* All Views, Controller, etc
+  * **BREAKING:** Backbone.EventBinder is no longer mixed in
+  * **BREAKING:** See 'EventBinder -> EventAggregator' changes regarding method names to use for binding / unbinding events
 
 ### v1.0.0-rc2 [view commit logs](https://github.com/marionettejs/backbone.marionette/compare/v1.0.0-rc1...v1.0.0-rc2)
 

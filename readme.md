@@ -125,10 +125,13 @@ These are the strings that you can pull to make your puppet dance:
 
 The following have been extracted in to separate plugins:
 
-* [**Backbone.EventBinder**](https://github.com/marionettejs/backbone.eventbinder): An event binding manager, to facilitate binding and unbinding of events
 * [**Backbone.Wreqr.EventAggregator**](https://github.com/marionettejs/backbone.wreqr): An event aggregator, to facilitate pub/sub and event architecture. Part of a suite of messaging based patterns
 * [**Backbone.Wreqr.Commands**](https://github.com/marionettejs/backbone.wreqr): A simple command execution system
 * [**Backbone.Wreqr.RequestResponse**](https://github.com/marionettejs/backbone.wreqr): A simple request/response system
+
+The following have been deprecated w/ Backbone v0.9.9+
+
+* [**Backbone.EventBinder**](https://github.com/marionettejs/backbone.eventbinder): An event binding manager for Backbone v0.9.2, to facilitate binding and unbinding of events
 
 Please note that this is documentation is rather dry - it's meant to be a reference for
 those that just need a reference. If you're looking for an introduction and/or 

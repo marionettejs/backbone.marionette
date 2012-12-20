@@ -24,9 +24,9 @@ Marionette.CollectionView = Marionette.View.extend({
   // events, or to add your own initial events.
   initialEvents: function(){
     if (this.collection){
-      this.bindTo(this.collection, "add", this.addChildView, this);
-      this.bindTo(this.collection, "remove", this.removeItemView, this);
-      this.bindTo(this.collection, "reset", this.render, this);
+      this.listenTo(this.collection, "add", this.addChildView, this);
+      this.listenTo(this.collection, "remove", this.removeItemView, this);
+      this.listenTo(this.collection, "reset", this.render, this);
     }
   },
 
@@ -179,18 +179,13 @@ Marionette.CollectionView = Marionette.View.extend({
 
     // Forward all child item view events through the parent,
     // prepending "itemview:" to the event name
-    var childBinding = this.bindTo(view, "all", function(){
+    this.listenTo(view, "all", function(){
       var args = slice.call(arguments);
       args[0] = prefix + ":" + args[0];
       args.splice(1, 0, view);
 
-      this.triggerMethod.apply(this, args);
+      Marionette.triggerMethod.apply(this, args);
     }, this);
-
-    // Store all child event bindings so we can unbind
-    // them when removing / closing the child view
-    this._childBindings = this._childBindings || {};
-    this._childBindings[view.cid] = childBinding;
   },
 
   // render the item view
@@ -211,11 +206,7 @@ Marionette.CollectionView = Marionette.View.extend({
     var view = this.children.findByModel(item);
 
     if (view){
-      var childBinding = this._childBindings[view.cid];
-      if (childBinding) {
-        this.unbindFrom(childBinding);
-        delete this._childBindings[view.cid];
-      }
+      this.stopListening(view);
 
       if (view.close){
         view.close();

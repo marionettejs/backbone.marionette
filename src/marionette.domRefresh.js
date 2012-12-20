@@ -30,11 +30,11 @@ Marionette.MonitorDOMRefresh = (function(){
 
   // Export public API
   return function(view){
-    view.bindTo(view, "show", function(){
+    view.listenTo(view, "show", function(){
       handleShow(view);
     });
 
-    view.bindTo(view, "render", function(){
+    view.listenTo(view, "render", function(){
       handleRender(view);
     });
   };

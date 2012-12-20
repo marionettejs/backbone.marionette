@@ -9,7 +9,7 @@ describe("base view", function(){
 
       var view = Backbone.Marionette.View.extend({
         initialize: function(){
-          this.bindTo(this.model, "foo", fooHandler);
+          this.listenTo(this.model, "foo", fooHandler);
         }
       });
 
@@ -110,14 +110,14 @@ describe("base view", function(){
     });
   });
 
-  describe("when using bindTo for the 'close' event on itself, and closing the view", function(){
+  describe("when using listenTo for the 'close' event on itself, and closing the view", function(){
     var close;
 
     beforeEach(function(){
       close = jasmine.createSpy("close");
-      var view = new Marionette.View();
 
-      view.bindTo(view, "close", close);
+      var view = new Marionette.View();
+      view.listenTo(view, "close", close);
 
       view.close();
     });

@@ -14,7 +14,7 @@ describe("event aggregator", function(){
     });
   });
 
-  describe("when binding to an event with bindTo", function(){
+  describe("when binding to an event with listenTo", function(){
     var ea, callback;
 
     beforeEach(function(){
@@ -22,9 +22,9 @@ describe("event aggregator", function(){
       callback = jasmine.createSpy("event handler callback");
 
       var model = new Backbone.Model();
-      ea.bindTo(model, "foo", callback);
+      ea.listenTo(model, "foo", callback);
 
-      ea.unbindAll();
+      ea.stopListening();
       model.trigger("foo");
     });
 

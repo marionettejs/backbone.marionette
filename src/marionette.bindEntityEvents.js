@@ -4,7 +4,7 @@
 // This method is used to bind a backbone "entity" (collection/model) 
 // to methods on a target object. 
 //
-// The first paremter, `target`, must have a `bindTo` method from the
+// The first paremter, `target`, must have a `listenTo` method from the
 // EventBinder object.
 //
 // The second parameter is the entity (Backbone.Model or Backbone.Collection)
@@ -27,13 +27,13 @@ Marionette.bindEntityEvents = (function(){
         throw new Error("Method '"+ methodName +"' was configured as an event handler, but does not exist.");
       }
 
-      target.bindTo(entity, evt, method, target);
+      target.listenTo(entity, evt, method, target);
     });
   }
 
   // Bind the event to a supplied callback function
   function bindToFunction(target, entity, evt, method){
-      target.bindTo(entity, evt, method, target);
+      target.listenTo(entity, evt, method, target);
   }
 
   // Export the bindEntityEvents method

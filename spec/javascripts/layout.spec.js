@@ -9,7 +9,7 @@ describe("layout", function(){
     },
     initialize: function() {
       if (this.model) {
-        this.bindTo(this.model, 'change', this.render);
+        this.listenTo(this.model, 'change', this.render);
       }
     }
   });

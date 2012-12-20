@@ -225,15 +225,15 @@ describe("item view", function(){
       view.render();
 
       spyOn(view, "remove").andCallThrough();
-      spyOn(view, "unbindAll").andCallThrough();
+      spyOn(view, "stopListening").andCallThrough();
       spyOn(view, "modelChange").andCallThrough();
       spyOn(view, "collectionChange").andCallThrough();
       spyOn(view, "onBeforeClose").andCallThrough();
       spyOn(view, "onClose").andCallThrough();
       spyOn(view, "trigger").andCallThrough();
 
-      view.bindTo(model, "change:foo", view.modelChange);
-      view.bindTo(collection, "foo", view.collectionChange);
+      view.listenTo(model, "change:foo", view.modelChange);
+      view.listenTo(collection, "foo", view.collectionChange);
 
       view.close();
 
@@ -250,7 +250,7 @@ describe("item view", function(){
     });
 
     it("should unbind any listener to custom view events", function(){
-      expect(view.unbindAll).toHaveBeenCalled();
+      expect(view.stopListening).toHaveBeenCalled();
     });
 
     it("should remove the view's EL from the DOM", function(){
@@ -281,7 +281,7 @@ describe("item view", function(){
         template: "#item-with-checkbox",
 
         setupHandler: function(){
-          this.bindTo(this.model, "change:done", this.render, this);
+          this.listenTo(this.model, "change:done", this.render, this);
         },
 
         events: {

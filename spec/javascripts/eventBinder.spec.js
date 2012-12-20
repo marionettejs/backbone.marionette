@@ -9,23 +9,11 @@ describe("event binder", function(){
       Marionette.addEventBinder(obj);
     });
 
-    it("should return a binding signature with bindTo", function(){
-      var fn = function(){};
-      binding = obj.bindTo(model, "foo", fn);
-      expect(binding).toEqual({
-        callback : fn,
-        context : obj,
-        eventName : 'foo',
-        obj : model,
-        type : 'default'
-      });
-    });
-
     describe("when binding an event with no context specified, then triggering that event", function(){
       var context, binding;
 
       beforeEach(function(){
-        obj.bindTo(model, "foo", function(){
+        obj.listenTo(model, "foo", function(){
           context = this;
         });
 
@@ -44,7 +32,7 @@ describe("event binder", function(){
       beforeEach(function(){
         ctx = {};
 
-        obj.bindTo(model, "foo", function(){
+        obj.listenTo(model, "foo", function(){
           context = this;
         }, ctx);
 

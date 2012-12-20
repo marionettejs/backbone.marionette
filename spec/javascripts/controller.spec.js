@@ -24,7 +24,7 @@ describe("marionette controller", function(){
 
     it("should have an event aggregator built in to it", function(){
       expect(controller.eventBinder).not.toBeUndefined();
-      expect(typeof controller.bindTo).toBe("function");
+      expect(typeof controller.listenTo).toBe("function");
     });
 
     it("should support an initialize function", function(){
@@ -72,14 +72,14 @@ describe("marionette controller", function(){
       closeHandler = jasmine.createSpy("close");
       controller.on("close", closeHandler);
 
-      spyOn(controller, "unbindAll").andCallThrough();
+      spyOn(controller, "stopListening").andCallThrough();
       spyOn(controller, "unbind").andCallThrough();
 
       controller.close();
     });
 
-    it("should unbindAll events", function(){
-      expect(controller.unbindAll).toHaveBeenCalled();
+    it("should stopListening events", function(){
+      expect(controller.stopListening).toHaveBeenCalled();
     });
 
     it("should unbind events", function(){

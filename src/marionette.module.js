@@ -20,7 +20,7 @@ Marionette.Module = function(moduleName, app){
   this.triggerMethod = Marionette.triggerMethod;
 };
 
-// Extend the Module prototype with events / bindTo, so that the module
+// Extend the Module prototype with events / listenTo, so that the module
 // can be used as an event aggregator or pub/sub.
 _.extend(Marionette.Module.prototype, Backbone.Events, {
 

@@ -15,7 +15,7 @@ Marionette.View = Backbone.View.extend({
     Marionette.bindEntityEvents(this, this.collection, Marionette.getOption(this, "collectionEvents"));
 
     Marionette.MonitorDOMRefresh(this);
-    this.bindTo(this, "show", this.onShowCalled, this);
+    this.listenTo(this, "show", this.onShowCalled, this);
   },
 
   // import the "triggerMethod" to trigger events with corresponding
@@ -107,7 +107,8 @@ Marionette.View = Backbone.View.extend({
 
     this.remove();
     this.triggerMethod("close");
-    this.unbindAll();
+
+    this.stopListening();
   },
 
   // This method binds the elements specified in the "ui" hash inside the view's code with

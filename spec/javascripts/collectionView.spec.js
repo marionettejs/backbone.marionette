@@ -414,12 +414,12 @@ describe("collection view", function(){
       childModel = collection.at(0);
       childView = collectionView.children.findByIndex(0);
 
-      collectionView.bindTo(collection, "foo", collectionView.someCallback);
-      collectionView.bindTo(collectionView, "item:foo", collectionView.someItemViewCallback);
+      collectionView.listenTo(collection, "foo", collectionView.someCallback);
+      collectionView.listenTo(collectionView, "item:foo", collectionView.someItemViewCallback);
 
       spyOn(childView, "close").andCallThrough();
       spyOn(collectionView, "removeItemView").andCallThrough();
-      spyOn(collectionView, "unbindAll").andCallThrough();
+      spyOn(collectionView, "stopListening").andCallThrough();
       spyOn(collectionView, "remove").andCallThrough();
       spyOn(collectionView, "someCallback").andCallThrough();
       spyOn(collectionView, "someItemViewCallback").andCallThrough();
@@ -442,8 +442,8 @@ describe("collection view", function(){
       expect(childView.close).toHaveBeenCalled();
     });
 
-    it("should unbind all the bindTo events", function(){
-      expect(collectionView.unbindAll).toHaveBeenCalled();
+    it("should unbind all the listenTo events", function(){
+      expect(collectionView.stopListening).toHaveBeenCalled();
     });
 
     it("should unbind all collection events for the view", function(){
@@ -463,7 +463,7 @@ describe("collection view", function(){
     });
 
     it("should unbind any listener to custom view events", function(){
-      expect(collectionView.unbindAll).toHaveBeenCalled();
+      expect(collectionView.stopListening).toHaveBeenCalled();
     });
 
     it("should remove the view's EL from the DOM", function(){

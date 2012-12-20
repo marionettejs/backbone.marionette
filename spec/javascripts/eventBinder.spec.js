@@ -1,5 +1,5 @@
 describe("event binder", function(){
-  describe("given an event binder has been added to an object", function(){
+  describe("given an event binder has been added to a plain js object", function(){
     var model, obj;
 
     beforeEach(function(){

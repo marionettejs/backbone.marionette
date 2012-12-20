@@ -23,7 +23,6 @@ describe("marionette controller", function(){
     });
 
     it("should have an event aggregator built in to it", function(){
-      expect(controller.eventBinder).not.toBeUndefined();
       expect(typeof controller.listenTo).toBe("function");
     });
 

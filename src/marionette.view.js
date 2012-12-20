@@ -104,11 +104,9 @@ Marionette.View = Backbone.View.extend({
     // prevent infinite loops within "close" event handlers
     // that are trying to close other views
     this.isClosed = true;
-
-    this.remove();
     this.triggerMethod("close");
 
-    this.stopListening();
+    this.remove();
   },
 
   // This method binds the elements specified in the "ui" hash inside the view's code with

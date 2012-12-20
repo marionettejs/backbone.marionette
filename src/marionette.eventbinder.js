@@ -18,10 +18,15 @@ Marionette.EventBinder = (function(Marionette){
   // views.
   Marionette.addEventBinder = function(target){
 
+    // If the target is not already extending Backbone.Events,
+    // then extend that on to it first
+    if (!target.on && !target.off && !target.listenTo && !target.stopListening){
+      _.extend(target, Backbone.Events);
+    }
+
+    // Override the built-in listenTo method to make sure we 
+    // account for context
     target.listenTo = _.wrap(target.listenTo, function(original, source, event, callback, context){
-      // check the context of the listenTo and set it to the object
-      // that is having the eventBinder attached to it, if no context
-      // has been specified in the .listenTo call
       context = context || target;
       return original.call(target, source, event, _.bind(callback, context));
     });

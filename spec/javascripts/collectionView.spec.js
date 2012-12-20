@@ -458,10 +458,6 @@ describe("collection view", function(){
       expect(_.size(collectionView.children)).toBe(0);
     });
 
-    it("should not retain any bindings to its children", function(){
-      expect(_.size(collectionView.eventBinder._eventBindings)).toBe(0);
-    });
-
     it("should unbind any listener to custom view events", function(){
       expect(collectionView.stopListening).toHaveBeenCalled();
     });

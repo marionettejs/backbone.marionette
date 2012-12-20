@@ -1,49 +1,51 @@
 describe("event binder", function(){
-  describe("given an event binder has been added to a plain js object", function(){
-    var model, obj;
+  var model, obj;
+
+  beforeEach(function(){
+    model = new Backbone.Model();
+    obj = new Marionette.EventBinder();
+  });
+
+  describe("when binding an event with no context specified, then triggering that event", function(){
+    var context, handler;
 
     beforeEach(function(){
-      model = new Backbone.Model();
+      handler = jasmine.createSpy("context free handler");
 
-      obj = {};
-      Marionette.addEventBinder(obj);
+      obj.listenTo(model, "foo", handler);
+
+      model.trigger("foo");
     });
 
-    describe("when binding an event with no context specified, then triggering that event", function(){
-      var context, binding;
-
-      beforeEach(function(){
-        obj.listenTo(model, "foo", function(){
-          context = this;
-        });
-
-        model.trigger("foo");
-      });
-
-      it("should execute in the context of the object that has the event binder attached to it", function(){
-        expect(context).toBe(obj);
-      });
-
+    it("should execute in the context of the object that has the event binder attached to it", function(){
+      expect(handler.mostRecentCall.object).toBe(obj);
     });
 
-    describe("when binding an event with a context specified, then triggering that event", function(){
-      var ctx, context;
-
-      beforeEach(function(){
-        ctx = {};
-
-        obj.listenTo(model, "foo", function(){
-          context = this;
-        }, ctx);
-
-        model.trigger("foo");
-      });
-
-      it("should execute with the specified context", function(){
-        expect(context).toBe(ctx);
-      });
-
+    it("should execute", function(){
+      expect(handler).toHaveBeenCalled();
     });
 
   });
+
+  describe("when binding an event with a context specified, then triggering that event", function(){
+    var context, handler;
+
+    beforeEach(function(){
+      handler = jasmine.createSpy("context bound handler");
+
+      obj.listenTo(model, "foo", handler, model);
+
+      model.trigger("foo");
+    });
+
+    it("should execute in the context of the object that has the event binder attached to it", function(){
+      expect(handler.mostRecentCall.object).toBe(model);
+    });
+
+    it("should execute", function(){
+      expect(handler).toHaveBeenCalled();
+    });
+
+  });
+
 });

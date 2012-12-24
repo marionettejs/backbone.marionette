@@ -1,5 +1,8 @@
-Backbone.Marionette = Marionette = (function(Backbone, _, $){
+var Marionette = (function(Backbone, _, $){
+  "use strict";
+
   var Marionette = {};
+  Backbone.Marionette = Marionette;
 
 //= ../marionette.helpers.js
 //= ../marionette.createObject.js

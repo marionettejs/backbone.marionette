@@ -53,3 +53,19 @@ Marionette.bindEntityEvents = (function(){
     });
   };
 })();
+
+Marionette.unbindEntityEvents = (function(){
+  return function(target, entity, bindings){
+    if(!entity || !bindings) { return; }
+
+    _.each(bindings, function(methods, evt){
+        var callbacks = _.isFunction(methods) ?
+          [methods] :
+          _.map(methods.split(/s+/), function(methodName){ target[methodName] }, target);
+
+        _.each(callbacks, function(callback){
+          target.unbindFrom({type: "default", obj: entity, eventName: evt, callback: callback, context: target});
+        }, target);
+    }, target);
+  };
+})();

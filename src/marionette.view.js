@@ -11,9 +11,6 @@ Marionette.View = Backbone.View.extend({
     var args = Array.prototype.slice.apply(arguments);
     Backbone.View.prototype.constructor.apply(this, args);
 
-    Marionette.bindEntityEvents(this, this.model, Marionette.getOption(this, "modelEvents"));
-    Marionette.bindEntityEvents(this, this.collection, Marionette.getOption(this, "collectionEvents"));
-
     Marionette.MonitorDOMRefresh(this);
     this.bindTo(this, "show", this.onShowCalled, this);
   },
@@ -81,7 +78,17 @@ Marionette.View = Backbone.View.extend({
     _.extend(combinedEvents, events, triggers);
 
     Backbone.View.prototype.delegateEvents.call(this, combinedEvents);
+    Marionette.bindEntityEvents(this, this.model, Marionette.getOption(this, "modelEvents"));
+    Marionette.bindEntityEvents(this, this.collection, Marionette.getOption(this, "collectionEvents"));
   },
+
+  undelegateEvents: function(){
+    Backbone.View.prototype.undelegateEvents.call(this);
+
+    Marionette.unbindEntityEvents(this, this.model, Marionette.getOption(this, "modelEvents"));
+    Marionette.unbindEntityEvents(this, this.collection, Marionette.getOption(this, "collectionEvents"));
+  },
+
 
   // Internal method, handles the `show` event.
   onShowCalled: function(){},

@@ -99,7 +99,7 @@ and are not part of the core Backbone.Marionette code.
 The primary documentation is split up in to multiple files, due to the size
 of the over-all documentation. You can find these files in the 
 [/docs](https://github.com/marionettejs/backbone.marionette/tree/master/docs) folder, or use the links below to get straight to the
-documentation for each peice of Marionette.
+documentation for each piece of Marionette.
 
 ### Marionette's Pieces
 

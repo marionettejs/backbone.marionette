@@ -701,8 +701,11 @@ describe("collection view", function(){
 
     var ItemView = Backbone.Marionette.ItemView.extend({
       onShow: function(){ viewOnShowContext = this; },
+      onDomRefresh: function(){ },
       onRender: function(){},
-      render: function(){}
+      render: function() {
+          this.trigger("render");
+      }
     });
 
     var ColView = Backbone.Marionette.CollectionView.extend({
@@ -712,6 +715,7 @@ describe("collection view", function(){
 
     beforeEach(function(){
       spyOn(ItemView.prototype, "onShow").andCallThrough();
+      spyOn(ItemView.prototype, "onDomRefresh").andCallThrough();
 
       m1 = new Backbone.Model();
       m2 = new Backbone.Model();
@@ -734,6 +738,10 @@ describe("collection view", function(){
 
     it("should call the child's 'onShow' method with itself as the context", function(){
       expect(viewOnShowContext).toBe(view);
+    });
+
+    it("should call the child's 'onDomRefresh' method with itself as the context", function(){
+      expect(ItemView.prototype.onDomRefresh).toHaveBeenCalled();
     });
   });
 

@@ -156,4 +156,5 @@ describe("base view", function(){
       expect(view.isClosed).toBe(true);
     });
   });
+
 });

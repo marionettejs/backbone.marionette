@@ -164,11 +164,10 @@ Marionette.CollectionView = Marionette.View.extend({
     // this view was added
     this.triggerMethod("after:item:added", view);
 
-    var trigger_show = function() {
-        this.triggerMethod.call(view, "show");
-    }
     // call onShow for child item views
-    this.onShowCallbacks.add(trigger_show, this);
+    this.onShowCallbacks.add(function() {
+      this.triggerMethod.call(view, "show");
+    }, this);
 
 
     return renderResult;

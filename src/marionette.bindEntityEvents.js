@@ -14,6 +14,7 @@
 // configuration. Multiple handlers can be separated by a space. A
 // function can be supplied instead of a string handler name. 
 Marionette.bindEntityEvents = (function(){
+  "use strict";
 
   // Bind the event to handlers specified as a string of
   // handler names on the target object
@@ -40,6 +41,12 @@ Marionette.bindEntityEvents = (function(){
   return function(target, entity, bindings){
     if (!entity || !bindings) { return; }
 
+    // allow the bindings to be a function
+    if (_.isFunction(bindings)){
+      bindings = bindings.call(target);
+    }
+
+    // iterate the bindings and bind them
     _.each(bindings, function(methods, evt){
 
       // allow for a function as the handler, 

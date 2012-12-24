@@ -237,6 +237,23 @@ Backbone.Marionette.CompositeView.extend({
 
 This works for both `modelEvents` and `collectionEvents`.
 
+### Event Configuration As Function
+
+A function can be used to declare the event configuration, as long as
+that function returns a hash that fits the above configuration options.
+
+```js
+Backbone.Marionette.CompositeView.extend({
+
+  modelEvents: function(){
+    return { "change:name": "someFunc" };
+  }
+
+});
+```
+
+This works for both `modelEvents` and `collectionEvents`.
+
 ## View.serializeData
 
 The `serializeData` method will serialize a view's model or

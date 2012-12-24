@@ -72,4 +72,57 @@ describe("module start", function(){
 
   });
 
+  describe("when defining a parent and child module together, adding an initializer to the parent, and starting the app", function(){
+    var init;
+
+    beforeEach(function(){
+      init = jasmine.createSpy("initializer");
+
+      var App = new Marionette.Application();
+      App.module("Parent.Child");
+      App.module("Parent").addInitializer(init);
+
+      App.start();
+    });
+
+    it("should start the parent module", function(){
+      expect(init).toHaveBeenCalled();
+    });
+
+  });
+
+  describe("when defining a parent and child module together, and starting the app", function(){
+    var App;
+
+    beforeEach(function(){
+      App = new Marionette.Application();
+      App.module("Parent.Child");
+
+      App.start();
+    });
+
+    it("should start the parent module", function(){
+      expect(App.Parent._isInitialized).toBe(true);
+    });
+
+  });
+
+  describe("when defining a parent and child module, the parent is set not to start with the app, and starting the parent", function(){
+    var App;
+
+    beforeEach(function(){
+      App = new Marionette.Application();
+
+      App.module("Parent", {startWithParent: false});
+      App.module("Parent.Child");
+
+      App.module("Parent").start();
+    });
+
+    it("should start the child module", function(){
+      expect(App.Parent.Child._isInitialized).toBe(true);
+    });
+
+  });
+
 });

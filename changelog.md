@@ -23,6 +23,9 @@
   * **BREAKING:** Backbone.EventBinder is no longer mixed in
   * **BREAKING:** See 'EventBinder -> EventAggregator' changes regarding method names to use for binding / unbinding events
 
+* Modules
+  * Fixed a bug where a module would not be started without an explicit definition for that module (#388 & #400)
+
 ### v1.0.0-rc2 [view commit logs](https://github.com/marionettejs/backbone.marionette/compare/v1.0.0-rc1...v1.0.0-rc2)
 
 * CollectionView / CompositeView

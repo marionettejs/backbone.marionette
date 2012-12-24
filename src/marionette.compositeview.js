@@ -15,7 +15,7 @@ Marionette.CompositeView = Marionette.CollectionView.extend({
   // Configured the initial events that the composite view
   // binds to. Override this method to prevent the initial
   // events, or to add your own initial events.
-  initialEvents: function(){
+  _initialEvents: function(){
     if (this.collection){
       this.listenTo(this.collection, "add", this.addChildView, this);
       this.listenTo(this.collection, "remove", this.removeItemView, this);

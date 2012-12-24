@@ -16,13 +16,13 @@ Marionette.CollectionView = Marionette.View.extend({
     var args = Array.prototype.slice.apply(arguments);
     Marionette.View.prototype.constructor.apply(this, args);
 
-    this.initialEvents();
+    this._initialEvents();
   },
 
   // Configured the initial events that the collection view
   // binds to. Override this method to prevent the initial
   // events, or to add your own initial events.
-  initialEvents: function(){
+  _initialEvents: function(){
     if (this.collection){
       this.listenTo(this.collection, "add", this.addChildView, this);
       this.listenTo(this.collection, "remove", this.removeItemView, this);

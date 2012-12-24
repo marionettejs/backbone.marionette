@@ -119,7 +119,7 @@ Marionette.View = Backbone.View.extend({
     if (!this.uiBindings) {
       // We want to store the ui hash in uiBindings, since afterwards the values in the ui hash
       // will be overridden with jQuery selectors.
-      this.uiBindings = this.ui;
+      this.uiBindings = _.result(this, "ui");
     }
 
     // refreshing the associated selectors since they should point to the newly rendered elements.

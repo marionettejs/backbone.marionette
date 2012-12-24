@@ -28,6 +28,7 @@
 
 * All Views
   * Allow `modelEvents` and `collectionEvents` to be a function that returns a hash
+  * Allow `ui` configuration to be a function that returns a hash
 
 ### v1.0.0-rc2 [view commit logs](https://github.com/marionettejs/backbone.marionette/compare/v1.0.0-rc1...v1.0.0-rc2)
 

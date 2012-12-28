@@ -76,7 +76,7 @@
       }
 
     });
-  };
+  }
  
   // Export Public API
   Marionette.bindEntityEvents = function(target, entity, bindings){

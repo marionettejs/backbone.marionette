@@ -198,6 +198,11 @@ These will use the memory safe `listenTo`, and will set the context
 bound at the time of instantiation instanciation, and an exception will be thrown
 if the handlers on the view do not exist.
 
+The `modelEvents` and `collectionEvents` will be bound and
+unbound with the Backbone.View `delegateEvents` and `undelegateEvents`
+method calls. This allows the view to be re-used and have
+the model and collection events re-bound.
+
 ### Multiple Callbacks
 
 Multiple callback functions can be specified by separating them with a

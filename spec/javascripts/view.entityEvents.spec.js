@@ -117,4 +117,90 @@ describe("view entity events", function(){
     });
   });
 
+  describe("when undelegating events on a view", function(){
+    var view, modelHandler, collectionHandler;
+
+    beforeEach(function(){
+      modelHandler = jasmine.createSpy("model event handler");
+      collectionHandler = jasmine.createSpy("collection event handler");
+
+      var View = Marionette.View.extend({
+        modelEvents: { 
+          'model-event': 'modelEventHandler' 
+        },
+
+        collectionEvents: { 
+          'collection-event': 'collectionEventHandler' 
+        },
+
+        modelEventHandler: modelHandler,
+        collectionEventHandler: collectionHandler
+      });
+
+      var model = new Backbone.Model();
+      var collection = new Backbone.Collection();
+
+      view = new View({
+        model: model,
+        collection: collection
+      });
+
+      view.undelegateEvents();
+
+      model.trigger("model-event");
+      collection.trigger("collection-event");
+    });
+
+    it("should undelegate the model events", function(){
+      expect(modelHandler).not.toHaveBeenCalled();
+    });
+
+    it("should undelegate the collection events", function(){
+      expect(collectionHandler).not.toHaveBeenCalled();
+    });
+  });
+
+  describe("when undelegating events on a view, delegating them again, and then triggering a model event", function(){
+    var view, modelHandler, collectionHandler;
+
+    beforeEach(function(){
+      modelHandler = jasmine.createSpy("model event handler");
+      collectionHandler = jasmine.createSpy("collection event handler");
+
+      var View = Marionette.View.extend({
+        modelEvents: { 
+          'model-event': 'modelEventHandler' 
+        },
+
+        collectionEvents: { 
+          'collection-event': 'collectionEventHandler' 
+        },
+
+        modelEventHandler: modelHandler,
+        collectionEventHandler: collectionHandler
+      });
+
+      var model = new Backbone.Model();
+      var collection = new Backbone.Collection();
+
+      view = new View({
+        model: model,
+        collection: collection
+      });
+
+      view.undelegateEvents();
+      view.delegateEvents();
+
+      model.trigger("model-event");
+      collection.trigger("collection-event");
+    });
+
+    it("should fire the model event once", function(){
+      expect(modelHandler.callCount).toBe(1);
+    });
+
+    it("should fire the collection event once", function(){
+      expect(collectionHandler.callCount).toBe(1);
+    });
+  });
 });

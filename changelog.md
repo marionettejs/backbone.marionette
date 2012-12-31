@@ -28,6 +28,7 @@
   * Allow `modelEvents` and `collectionEvents` to be a function that returns a hash
   * Allow `ui` configuration to be a function that returns a hash
   * `modelEvents` and `collectionEvents` are now delegated / undelegated with Backbone.View's `.delegateEvents` and `.undelegateEvents` method calls
+  * View `triggers` now include an `args` object with `args.view`, `args.model` and `args.collection`
 
 * Modules
   * Fixed a bug where a module would not be started without an explicit definition for that module (#388 & #400)

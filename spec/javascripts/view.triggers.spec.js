@@ -1,4 +1,4 @@
-describe("view event triggers", function(){
+describe("view triggers", function(){
   "use strict";
 
   describe("when DOM events are configured to trigger a view event, and the DOM events are fired", function(){
@@ -13,24 +13,47 @@ describe("view event triggers", function(){
       }
     });
 
-    var view;
+    var view, fooHandler, whatHandler, args;
 
     beforeEach(function(){
-      view = new View();
+      view = new View({
+        model: new Backbone.Model(),
+        collection: new Backbone.Collection()
+      });
       view.render();
 
-      spyOn(view, "trigger").andCallThrough();
+      fooHandler = jasmine.createSpy("do:foo event handler");
+      whatHandler = jasmine.createSpy("what:ever event handler");
+
+      view.on("do:foo", fooHandler);
+      view.on("what:ever", whatHandler);
+
+      view.on("do:foo", function(e){
+        args = e;
+      });
 
       view.$(".foo").trigger("click");
       view.$(".bar").trigger("click");
     });
 
     it("should trigger the first view event", function(){
-      expect(view.trigger).toHaveBeenCalledWith("do:foo");
+      expect(fooHandler).toHaveBeenCalled();
     });
 
     it("should trigger the second view event", function(){
-      expect(view.trigger).toHaveBeenCalledWith("what:ever");
+      expect(whatHandler).toHaveBeenCalled();
+    });
+
+    it("should include the view in the event args", function(){
+      expect(args.view).toBe(view);
+    });
+
+    it("should include the view's model in the event args", function(){
+      expect(args.model).toBe(view.model);
+    });
+
+    it("should include the view's collection in the event args", function(){
+      expect(args.collection).toBe(view.collection);
     });
   });
 
@@ -53,20 +76,21 @@ describe("view event triggers", function(){
       }
     });
 
-    var view, clickSpy;
+    var view, clickSpy, fooHandler;
 
     beforeEach(function(){
       view = new View();
       view.render();
 
-      spyOn(view, "trigger").andCallThrough();
+      fooHandler = jasmine.createSpy("do:foo handler");
+      view.on("do:foo", fooHandler);
 
       view.$(".foo").trigger("click");
       view.$(".bar").trigger("click");
     });
 
     it("should fire the trigger", function(){
-      expect(view.trigger).toHaveBeenCalledWith("do:foo");
+      expect(fooHandler).toHaveBeenCalled();
     });
 
     it('should fire the standard event', function(){
@@ -88,24 +112,28 @@ describe("view event triggers", function(){
       }
     });
 
-    var view;
+    var view, fooHandler, whatHandler;
 
     beforeEach(function(){
       view = new View();
       view.render();
 
-      spyOn(view, "trigger").andCallThrough();
+      fooHandler = jasmine.createSpy("do:foo handler");
+      whatHandler = jasmine.createSpy("what:ever handler");
+
+      view.on("do:foo", fooHandler);
+      view.on("what:ever", whatHandler);
 
       view.$(".foo").trigger("click");
       view.$(".bar").trigger("click");
     });
 
     it("should trigger the first view event", function(){
-      expect(view.trigger).toHaveBeenCalledWith("do:foo");
+      expect(fooHandler).toHaveBeenCalled();
     });
 
     it("should trigger the second view event", function(){
-      expect(view.trigger).toHaveBeenCalledWith("what:ever");
+      expect(whatHandler).toHaveBeenCalled();
     });
   });
 

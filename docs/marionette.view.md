@@ -141,7 +141,7 @@ MyView = Backbone.Marionette.ItemView.extend({
 view = new MyView();
 view.render();
 
-view.on("something:do:it", function(){
+view.on("something:do:it", function(args){
   alert("I DID IT!");
 });
 
@@ -167,6 +167,41 @@ Backbone.Marionette.CompositeView.extend({
 
 Triggers work with all View types that extend from the base
 Marionette.View.
+
+### Trigger Handler Arguments
+
+A `trigger` event handler will receive a single argument that
+includes the following:
+
+* view
+* model
+* collection
+
+These properties of the args object come from the view that triggered
+the event.
+
+```js
+MyView = Backbone.Marionette.ItemView.extend({
+  // ...
+
+  triggers: {
+    "click .do-something": "some:event"
+  }
+});
+
+view = new MyView();
+
+view.on("some:event", function(args){
+  args.view; // => the view instance that triggered the event
+  args.model; // => the view.model, if one was set on the view
+  args.collection; // => the view.collection, if one was set on the view
+});
+```
+
+Having access to these allows more flexibility in handling events from
+multiple views. For example, a tab control or expand/collapse widget such
+as a panel bar could trigger the same event from many different views
+and be handled with a single function.
 
 ## View.modelEvents and View.collectionEvents
 

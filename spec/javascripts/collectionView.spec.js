@@ -278,7 +278,8 @@ describe("collection view", function(){
     var collectionView, collection, model, itemViewRender;
 
     beforeEach(function(){
-      collection = new Backbone.Collection();
+      collection = new Backbone.Collection({foo: 'bar'});
+
       collectionView = new CollectionView({
         itemView: ItemView,
         collection: collection
@@ -290,20 +291,20 @@ describe("collection view", function(){
 
       spyOn(collectionView, "appendHtml").andCallThrough();
 
-      model = new Backbone.Model({foo: "bar"});
+      model = new Backbone.Model({foo: "baz"});
       collection.add(model);
     });
 
     it("should add the model to the list", function(){
-      expect(_.size(collectionView.children)).toBe(1);
+      expect(_.size(collectionView.children)).toBe(2);
     });
 
     it("should render the model in to the DOM", function(){
-      expect($(collectionView.$el)).toHaveText("bar");
+      expect($(collectionView.$el)).toHaveText("barbaz");
     });
 
     it("should provide the index for each itemView, when appending", function(){
-      expect(collectionView.appendHtml.calls[0].args[2]).toBe(0);
+      expect(collectionView.appendHtml.calls[0].args[2]).toBe(1);
     });
 
     it("should trigger the itemview:render event from the collectionView", function(){

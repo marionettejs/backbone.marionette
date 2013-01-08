@@ -238,42 +238,6 @@ describe("collection view", function(){
     });
   });
 
-  describe("when a collection is reset after the view is loaded", function(){
-    var collection;
-    var collectionView;
-
-    beforeEach(function(){
-      collection = new Backbone.Collection();
-
-      collectionView = new CollectionView({
-        collection: collection
-      });
-
-      spyOn(collectionView, "onRender").andCallThrough();
-      spyOn(collectionView, "closeChildren").andCallThrough();
-
-      collectionView.render();
-
-      collection.reset([{foo: "bar"}, {foo: "baz"}]);
-    });
-
-    it("should close all open child views", function(){
-      expect(collectionView.closeChildren).toHaveBeenCalled();
-    });
-
-    it("should append the html for each itemView", function(){
-      expect($(collectionView.$el)).toHaveHtml("<span>bar</span><span>baz</span>");
-    });
-
-    it("should reference each of the rendered view items", function(){
-      expect(_.size(collectionView.children)).toBe(2);
-    });
-
-    it("should call 'onRender' after rendering", function(){
-      expect(collectionView.onRender).toHaveBeenCalled();
-    });
-  });
-
   describe("when a model is added to the collection", function(){
     var collectionView, collection, model, itemViewRender;
 

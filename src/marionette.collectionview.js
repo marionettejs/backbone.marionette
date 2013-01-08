@@ -202,10 +202,17 @@ Marionette.CollectionView = Marionette.View.extend({
     return view;
   },
 
-  // Remove the child view and close it
+  // get the child view by item it holds, and remove it
   removeItemView: function(item){
     var view = this.children.findByModel(item);
+    this.removeChildView(view);
+  },
 
+  // Remove the child view and close it
+  removeChildView: function(view){
+
+    // shut down the child view properly,
+    // including events that the collection has from it
     if (view){
       this.stopListening(view);
 
@@ -216,6 +223,8 @@ Marionette.CollectionView = Marionette.View.extend({
       this.children.remove(view);
     }
 
+    // check if we're empty now, and if we are, show the
+    // empty view
     if (!this.collection || this.collection.length === 0){
       this.showEmptyView();
     }
@@ -252,8 +261,10 @@ Marionette.CollectionView = Marionette.View.extend({
   // Close the child views that this collection view
   // is holding on to, if any
   closeChildren: function(){
-    var that = this;
-    this.children.apply("close");
+    this.children.each(function(child){
+      this.removeChildView(child);
+    }, this);
+
     // re-initialize to clean up after ourselves
     this.initChildViewStorage();
   }

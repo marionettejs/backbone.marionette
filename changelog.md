@@ -23,6 +23,10 @@
   * **BREAKING:** Backbone.EventBinder is no longer mixed in
   * **BREAKING:** See 'EventBinder -> EventAggregator' changes regarding method names to use for binding / unbinding events
 
+* CollectionView
+  * Added `removeChildView` to remove a specific view instance
+  * Fixed event handler leak for child views that have been removed
+
 * All Views
   * **BREAKING:** The `initialEvents` method has been removed. Use the `initialize` method, the `collectionEvents` or `modelEvents` configuration instead.
   * Allow `modelEvents` and `collectionEvents` to be a function that returns a hash

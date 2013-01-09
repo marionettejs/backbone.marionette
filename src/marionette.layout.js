@@ -17,7 +17,7 @@ Marionette.Layout = Marionette.ItemView.extend({
     this.initializeRegions();
 
     var args = Array.prototype.slice.apply(arguments);
-    Backbone.Marionette.ItemView.apply(this, args);
+    Marionette.ItemView.apply(this, args);
   },
 
   // Layout's render will use the existing region objects the
@@ -51,7 +51,7 @@ Marionette.Layout = Marionette.ItemView.extend({
     this.destroyRegions();
 
     var args = Array.prototype.slice.apply(arguments);
-    Backbone.Marionette.ItemView.prototype.close.apply(this, args);
+    Marionette.ItemView.prototype.close.apply(this, args);
   },
 
   // Initialize the regions that have been defined in a

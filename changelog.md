@@ -37,6 +37,7 @@
   * View `triggers` now include an `args` object with `args.view`, `args.model` and `args.collection`
 
 * Modules
+  * Added alternate syntax for specifying `startWithParent` option
   * Fixed a bug where a module would not be started without an explicit definition for that module (#388 & #400)
 
 ### v1.0.0-rc2 [view commit logs](https://github.com/marionettejs/backbone.marionette/compare/v1.0.0-rc1...v1.0.0-rc2)

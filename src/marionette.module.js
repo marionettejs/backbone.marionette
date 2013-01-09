@@ -12,10 +12,8 @@ Marionette.Module = function(moduleName, app){
   this._setupInitializersAndFinalizers();
 
   // store the configuration for this module
-  this.config = {
-    app: app,
-    startWithParent: true
-  };
+  this.app = app;
+  this.startWithParent = true;
 
   // extend this module with an event binder
   Marionette.addEventBinder(this);
@@ -48,9 +46,7 @@ _.extend(Marionette.Module.prototype, Backbone.Events, {
     _.each(this.submodules, function(mod){
       // check to see if we should start the sub-module with this parent
       var startWithParent = true;
-      if (mod.config){
-        startWithParent = mod.config.startWithParent;
-      }
+      startWithParent = mod.startWithParent;
 
       // start the sub-module
       if (startWithParent){
@@ -104,7 +100,7 @@ _.extend(Marionette.Module.prototype, Backbone.Events, {
     // build the correct list of arguments for the module definition
     var args = _.flatten([
       this,
-      this.config.app,
+      this.app,
       Backbone,
       Marionette,
       $, _,
@@ -191,18 +187,18 @@ _.extend(Marionette.Module, {
 
     // `and` the two together, ensuring a single `false` will prevent it
     // from starting with the parent
-    var tmp = module.config.startWithParent;
-    module.config.startWithParent = module.config.startWithParent && startWithParent;
+    var tmp = module.startWithParent;
+    module.startWithParent = module.startWithParent && startWithParent;
 
     // setup auto-start if needed
-    if (module.config.startWithParent && !module.config.startWithParentIsConfigured){
+    if (module.startWithParent && !module.startWithParentIsConfigured){
 
       // only configure this once
-      module.config.startWithParentIsConfigured = true;
+      module.startWithParentIsConfigured = true;
 
       // add the module initializer config
       parentModule.addInitializer(function(options){
-        if (module.config.startWithParent){
+        if (module.startWithParent){
           module.start(options);
         }
       });

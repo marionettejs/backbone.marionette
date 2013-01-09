@@ -116,39 +116,6 @@ describe("module start", function(){
 
   });
 
-  describe("when splitting a module definition, one of them is set to not start with the app, and starting the app", function(){
-    var MyApp, firstfunc, secondfunc;
-
-    beforeEach(function(){
-      MyApp = new Backbone.Marionette.Application();
-
-      firstfunc = jasmine.createSpy("first initializer");
-      secondfunc = jasmine.createSpy("second initializer");
-
-      MyApp.module("MyModule", function(mod){
-        mod.addInitializer(secondfunc);
-      });
-
-      MyApp.module("MyModule", {
-        startWithParent: false,
-        define: function(mod){
-          mod.addInitializer(firstfunc);
-        }
-      });
-
-      MyApp.start();
-    });
-
-    it("should not run the first definition function", function(){
-      expect(firstfunc).not.toHaveBeenCalled();
-    });
-
-    it("should not run the second definition function", function(){
-      expect(secondfunc).not.toHaveBeenCalled();
-    });
-
-  });
-
   describe("when providing a module definition and starting the module", function(){
     var MyApp, moduleArgs, thisArg;
 
@@ -211,38 +178,54 @@ describe("module start", function(){
 
   });
 
-  describe("when setting up a hierarchy of modules in reverse order and a child module is set not to start with parent and module initializer outside of the module definition function and starting the app", function(){
-    var moduleAInitializer, moduleBInitializer;
+  describe("when starting the app that owns the module", function(){
+    var MyApp, myModule, options;
 
     beforeEach(function(){
-      var MyApp = new Marionette.Application(),
-          ModuleA, ModuleB;
+      MyApp = new Backbone.Marionette.Application();
 
-      ModuleB = MyApp.module("ModuleA.ModuleB", {
-        startWithParent: false
-      });
+      myModule = MyApp.module("MyModule");
+      spyOn(myModule, "start");
 
-      moduleBInitializer = jasmine.createSpy("module b initializer");
-      ModuleB.addInitializer(moduleBInitializer);
-
-      ModuleA = MyApp.module("ModuleA");
-
-      moduleAInitializer = jasmine.createSpy("module a initializer");
-      ModuleA.addInitializer(function() {
-        moduleAInitializer();
-        ModuleB.start();
-      });
-
-      MyApp.start();
+      options = {};
+      MyApp.start(options);
     });
 
-    it("should run the module b initializer", function(){
-      expect(moduleBInitializer).toHaveBeenCalled();
+    it("should start the module", function(){
+      expect(myModule.start).toHaveBeenCalled();
     });
 
-    it("should run the module a initializer", function(){
-      expect(moduleAInitializer).toHaveBeenCalled();
+    it("should pass the options along to the module initializer", function(){
+      expect(myModule.start.mostRecentCall.args[0]).toBe(options);
     });
 
   });
+
+  describe("when loading a module after the app has been started", function(){
+    var MyApp, myModule, options;
+
+    beforeEach(function(){
+      options = {};
+      MyApp = new Backbone.Marionette.Application();
+      MyApp.start(options);
+
+      myModule = MyApp.module("MyModule", function(mod){
+        mod.started = true;
+
+        mod.addInitializer(function(options){
+          mod.capturedOptions = options;
+        });
+      });
+    });
+
+    it("should start the module", function(){
+      expect(myModule.started).toBe(true);
+    });
+
+    it("should pass the options along to the module initializer", function(){
+      expect(myModule.capturedOptions).toBe(options);
+    });
+
+  });
+
 });

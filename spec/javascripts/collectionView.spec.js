@@ -661,10 +661,10 @@ describe("collection view", function(){
   });
 
   describe("when a child view is added to a collection view, after the collection view has been shown", function(){
-    var m1, m2, col, view, viewOnShowContext;
+    var m1, m2, col, view;
 
     var ItemView = Backbone.Marionette.ItemView.extend({
-      onShow: function(){ viewOnShowContext = this; },
+      onShow: function(){},
       onDomRefresh: function(){ },
       onRender: function(){},
       render: function() {
@@ -693,7 +693,7 @@ describe("collection view", function(){
       colView.trigger("show");
 
       col.add(m2);
-      view = colView.children.findByModel(m2);
+      view = colView.children.findByIndex(1);
     });
 
     it("should call the 'onShow' method of the child view", function(){
@@ -701,7 +701,8 @@ describe("collection view", function(){
     });
 
     it("should call the child's 'onShow' method with itself as the context", function(){
-      expect(viewOnShowContext).toBe(view);
+      var context = ItemView.prototype.onShow.mostRecentCall.object;
+      expect(context).toBe(view);
     });
 
     it("should call the child's 'onDomRefresh' method with itself as the context", function(){

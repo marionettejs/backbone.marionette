@@ -10,8 +10,7 @@ Marionette.CollectionView = Marionette.View.extend({
 
   // constructor
   constructor: function(options){
-    this.initChildViewStorage();
-    this.onShowCallbacks = new Marionette.Callbacks();
+    this._initChildViewStorage();
 
     var args = Array.prototype.slice.apply(arguments);
     Marionette.View.prototype.constructor.apply(this, args);
@@ -48,7 +47,9 @@ Marionette.CollectionView = Marionette.View.extend({
   // Override from `Marionette.View` to guarantee the `onShow` method
   // of child views is called.
   onShowCalled: function(){
-    this.onShowCallbacks.run();
+    this.children.each(function(child){
+      Marionette.triggerMethod.call(child, "show");
+    });
   },
 
   // Internal method to trigger the before render callbacks
@@ -158,17 +159,17 @@ Marionette.CollectionView = Marionette.View.extend({
     // remove and/or close it later
     this.children.add(view);
 
+    // call the "show" method if the collection view
+    // has already been shown
+    if (this._isShown){
+      Marionette.triggerMethod.call(view, "show");
+    }
+
     // Render it and show it
     var renderResult = this.renderItemView(view, index);
 
     // this view was added
     this.triggerMethod("after:item:added", view);
-
-    // call onShow for child item views
-    this.onShowCallbacks.add(function() {
-      this.triggerMethod.call(view, "show");
-    }, this);
-
 
     return renderResult;
   },
@@ -241,7 +242,7 @@ Marionette.CollectionView = Marionette.View.extend({
 
   // Internal method to set up the `children` object for
   // storing all of the child views
-  initChildViewStorage: function(){
+  _initChildViewStorage: function(){
     this.children = new Backbone.ChildViewContainer();
   },
 
@@ -266,7 +267,7 @@ Marionette.CollectionView = Marionette.View.extend({
     }, this);
 
     // re-initialize to clean up after ourselves
-    this.initChildViewStorage();
+    this._initChildViewStorage();
   }
 });
 

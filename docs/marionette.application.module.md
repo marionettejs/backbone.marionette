@@ -102,12 +102,12 @@ If you wish to manually start a module instead of having the application
 start it, you can tell the module definition not to start with the parent:
 
 ```js
-var fooModule = MyApp.module("Foo", {
-  startWithParent: false,
+var fooModule = MyApp.module("Foo", function(){
 
-  define: function(){
-    // module code goes here
-  }
+  // prevent starting with parent
+  this.startWithParent = false;
+
+  // ... module code goes here
 });
 
 // start the app without starting the module
@@ -126,14 +126,32 @@ You can also grab a reference to the module at a later point in time, to
 start it:
 
 ```js
-MyApp.module("Foo", {
-  startWithParent: false,
-  define: function(){ /*...*/ }
+MyApp.module("Foo", function(){
+  this.startWithParent = false;
 });
 
 // start the module by getting a reference to it first
 MyApp.module("Foo").start();
 ```
+
+#### Deprecation of `startWithParent: false` setting
+
+Please note that the old syntax of using an object literal is
+now deprecated:
+
+```js
+var fooModule = MyApp.module("Foo", {
+  startWithParent: false,
+
+  define: function(){
+    // module code goes here
+  }
+});
+```
+
+This functionality will remain in tact for a while, but will be
+removed in favor of `this.startWithParent = false` for the final
+v1.0 release.
 
 ### Starting Sub-Modules With Parent
 
@@ -160,9 +178,8 @@ to false. This prevents it from being started by the parent's `start` call.
 ```js
 MyApp.module("Foo", function(){...});
 
-MyApp.module("Foo.Bar", {
-  startWithParent: false,
-  define: function(){...}
+MyApp.module("Foo.Bar", function(){
+  this.startWithParent = false;
 })
 
 MyApp.start(); 

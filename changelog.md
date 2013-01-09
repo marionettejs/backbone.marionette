@@ -27,6 +27,7 @@
   * Added `removeChildView` to remove a specific view instance
   * Fixed event handler leak for child views that have been removed
   * Changed the implementation for triggering the "show" event / "onShow" method call, to avoid memory leaks
+  * Fixed the `index` parameter for adding a model to the collection, and getting the view in to the right place
 
 * All Views
   * **BREAKING:** The `initialEvents` method has been removed. Use the `initialize` method, the `collectionEvents` or `modelEvents` configuration instead.

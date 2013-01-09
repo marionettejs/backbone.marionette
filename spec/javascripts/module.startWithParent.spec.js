@@ -1,6 +1,6 @@
 describe("module startWithParent", function(){
 
-  describe("when a module is set not to start with the app, and starting the app", function(){
+  describe("DEPRECATED: when a module is set not to start with the app, and starting the app", function(){
     var MyApp, MyModule, moduleStart;
 
     beforeEach(function(){
@@ -22,7 +22,7 @@ describe("module startWithParent", function(){
     });
   });
 
-  describe("when using alternate syntax to set a module to not startWithParent, and starting the app", function(){
+  describe("when using new syntax to set a module to not startWithParent, and starting the app", function(){
     var MyApp, MyModule, moduleStart;
 
     beforeEach(function(){
@@ -51,11 +51,9 @@ describe("module startWithParent", function(){
         moduleStart = jasmine.createSpy("module start");
         MyApp = new Backbone.Marionette.Application();
 
-        MyApp.module("MyModule", {
-          startWithParent: false,
-          define: function(Mod){
-            Mod.addInitializer(moduleStart);
-          }
+        MyApp.module("MyModule", function(Mod){
+          this.startWithParent = false;
+          Mod.addInitializer(moduleStart);
         });
 
         MyApp.module("MyModule", function(){});
@@ -80,16 +78,13 @@ describe("module startWithParent", function(){
       MyApp = new Backbone.Marionette.Application();
       MyApp.start(options);
 
-      myModule = MyApp.module("MyModule", {
-        startWithParent: false, 
-        define: function(mod){
-          mod.defined = true;
+      myModule = MyApp.module("MyModule", function(mod){
+        this.startWithParent = false;
+        mod.defined = true;
 
-          mod.addInitializer(function(options){
-            mod.capturedOptions = options;
-          });
-
-        }
+        mod.addInitializer(function(options){
+          mod.capturedOptions = options;
+        });
       });
     });
 
@@ -109,8 +104,8 @@ describe("module startWithParent", function(){
       var MyApp = new Marionette.Application(),
           ModuleA, ModuleB;
 
-      ModuleB = MyApp.module("ModuleA.ModuleB", {
-        startWithParent: false
+      ModuleB = MyApp.module("ModuleA.ModuleB", function(){
+        this.startWithParent = false;
       });
 
       moduleBInitializer = jasmine.createSpy("module b initializer");
@@ -150,11 +145,9 @@ describe("module startWithParent", function(){
         mod.addInitializer(secondfunc);
       });
 
-      MyApp.module("MyModule", {
-        startWithParent: false,
-        define: function(mod){
-          mod.addInitializer(firstfunc);
-        }
+      MyApp.module("MyModule", function(mod){
+        this.startWithParent = false;
+        mod.addInitializer(firstfunc);
       });
 
       MyApp.start();

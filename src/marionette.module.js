@@ -179,6 +179,14 @@ _.extend(Marionette.Module, {
     } else if (_.isObject(def)){
       fn = def.define;
       startWithParent = def.startWithParent;
+      
+      // --------------------------
+      // deprecation notice for {startWithParent: false }
+      // --------------------------
+
+      if (console && _.isFunction(console.warn)){
+        console.warn("WARNING: Marionette's module 'startWithParent' object literal syntax is deprecated. See the docs for more information.");
+      }
 
     // if nothing is supplied
     } else {

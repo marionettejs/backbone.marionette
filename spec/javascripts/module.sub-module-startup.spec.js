@@ -12,11 +12,9 @@ describe("module start", function(){
 
         var App = new Marionette.Application();
 
-        App.module("Parent", {
-          startWithParent: true,
-          define: function(Parent){
-            Parent.addInitializer(moduleStart);
-          }
+        App.module("Parent", function(Parent){
+          this.startWithParent = true;
+          Parent.addInitializer(moduleStart);
         });
 
         App.module("Parent.Child", function(Child){
@@ -44,18 +42,14 @@ describe("module start", function(){
 
         var App = new Marionette.Application();
 
-        App.module("Parent", {
-          startWithParent: true,
-          define: function(mod){
-            mod.addInitializer(moduleStart);
-          }
+        App.module("Parent", function(mod){
+          this.startWithParent = true;
+          mod.addInitializer(moduleStart);
         });
 
-        App.module("Parent.Child", {
-          startWithParent: false,
-          define: function(Child){
-            Child.addInitializer(subModuleStart);
-          }
+        App.module("Parent.Child", function(Child){
+          this.startWithParent = false;
+          Child.addInitializer(subModuleStart);
         });
 
         App.start();

@@ -134,10 +134,21 @@ MyApp.module("Foo", function(){
 MyApp.module("Foo").start();
 ```
 
-#### Deprecation of `startWithParent: false` setting
+#### Specifying `startWithParent: false` setting as an object literal
 
-Please note that the old syntax of using an object literal is
-now deprecated:
+There is a second way of specifying `startWithParent` in a `.module`
+call, using an object literal:
+
+```js
+var fooModule = MyApp.module("Foo", { startWithParent: false });
+```
+
+This is most useful when defining a module across multiple files and
+using a single definition to specify the `startWithParent` option.
+
+If you wish to combine the `startWithparent` object literal
+with a module definition, you can include a `define` attribute on
+the object literal, set to the module function:
 
 ```js
 var fooModule = MyApp.module("Foo", {
@@ -148,10 +159,6 @@ var fooModule = MyApp.module("Foo", {
   }
 });
 ```
-
-This functionality will remain in tact for a while, but will be
-removed in favor of `this.startWithParent = false` for the final
-v1.0 release.
 
 ### Starting Sub-Modules With Parent
 

@@ -170,27 +170,24 @@ _.extend(Marionette.Module, {
     var fn; 
     var startWithParent;
 
-    // if a function is supplied for the module definition
     if (_.isFunction(def)){
+      // if a function is supplied for the module definition
       fn = def;
       startWithParent = true;
 
-    // if an object is supplied
     } else if (_.isObject(def)){
+      // if an object is supplied
       fn = def.define;
       startWithParent = def.startWithParent;
       
-      // --------------------------
-      // deprecation notice for {startWithParent: false }
-      // --------------------------
-
-      if (console && _.isFunction(console.warn)){
-        console.warn("WARNING: Marionette's module 'startWithParent' object literal syntax is deprecated. See the docs for more information.");
-      }
-
-    // if nothing is supplied
     } else {
+      // if nothing is supplied
       startWithParent = true;
+    }
+
+    // add module definition if needed
+    if (fn){
+      module.addDefinition(fn, args);
     }
 
     // `and` the two together, ensuring a single `false` will prevent it
@@ -213,10 +210,6 @@ _.extend(Marionette.Module, {
 
     }
 
-    // add module definition if needed
-    if (fn){
-      module.addDefinition(fn, args);
-    }
   }
 });
 

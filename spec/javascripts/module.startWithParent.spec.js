@@ -1,6 +1,6 @@
 describe("module startWithParent", function(){
 
-  describe("DEPRECATED: when a module is set not to start with the app, and starting the app", function(){
+  describe("when a module is set not to start with the app, using an object literal, and starting the app", function(){
     var MyApp, MyModule, moduleStart;
 
     beforeEach(function(){
@@ -22,7 +22,7 @@ describe("module startWithParent", function(){
     });
   });
 
-  describe("when using new syntax to set a module to not startWithParent, and starting the app", function(){
+  describe("when a module is set not to start with the app, and starting the app", function(){
     var MyApp, MyModule, moduleStart;
 
     beforeEach(function(){

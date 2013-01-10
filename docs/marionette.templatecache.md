@@ -62,7 +62,7 @@ Backbone.Marionette.TemplateCache.clear("#my-template", "#this-template")
 ## Customizing Template Access
 
 If you want to use an alternate template engine while
-still taking advantage of the template caching funcitonality, or want to customize
+still taking advantage of the template caching functionality, or want to customize
 how templates are stored and retreived, you will need to customize the
 `TemplateCache object`. The default operation of `TemplateCache`, is to
 retrive templates from the DOM based on the containing element's id
@@ -92,7 +92,7 @@ Backbone.Marionette.TemplateCache.prototype.loadTemplate = function(templateId){
 
 The default template compilation passes the results from
 `loadTemplate` to the `compileTemplate` function, which returns
-an underscore.js compiled template funciton. When overriding `compileTemplate`
+an underscore.js compiled template function. When overriding `compileTemplate`
 remember that it must return a function which takes an object of parameters and values
 and returns a formatted HTML string.
 

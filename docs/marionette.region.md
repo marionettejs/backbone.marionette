@@ -260,7 +260,7 @@ var FooterRegion = Backbone.Marionette.Region.extend({
 MyApp.addRegions({
   footerRegion: {
     selector: "#footer",
-    type: FooterRegion
+    regionType: FooterRegion
   }
 });
 ```

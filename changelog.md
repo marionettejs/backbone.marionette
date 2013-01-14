@@ -1,5 +1,7 @@
 ### v1.0.0-rc3 [view commit logs](https://github.com/marionettejs/backbone.marionette/compare/v1.0.0-rc2...v1.0.0-rc3)
 
+* **IMPORTANT:** Be sure to read [the upgrade guide](https://github.com/marionettejs/backbone.marionette/blob/master/upgradeGuide.md) for upgrading from v1.0.0-rc2 to v1.0.0-rc3
+
 * Backbone v0.9.9
   * **BREAKING:** Backbone v0.9.2 is no longer supported
   * Backbone v0.9.9 is now supported

@@ -74,7 +74,8 @@ Enderjs users, please let us know of how you solve any compatibility issues.
 
 Marionette no longer relies on [Backbone.EventBinder](https://github.com/marionettejs/backbone.eventbinder).
 Backbone.Events, as of v0.9.9, supercedes this library with it's
-`listenTo` and `stopListening` methods.
+`listenTo` and `stopListening` methods. See [the upgrade guide](https://github.com/marionettejs/backbone.marionette/blob/master/upgradeGuide.md)
+for more information.
 
 ## Source Code And Downloads
 
@@ -221,10 +222,13 @@ Google Groups mailing list.
 Lastly, I blog about Marionette on a regular basis, at my
 LosTechies.com blog.
 
-## Release Notes
+## Release Notes And Upgrade Guide
 
 For change logs and release notes, see the
 [changelog](https://github.com/marionettejs/backbone.marionette/blob/master/changelog.md) file.
+
+Be sure to read [the upgrade guide](https://github.com/marionettejs/backbone.marionette/blob/master/upgradeGuide.md)
+for information on upgrading to the latest version of Marionette.
 
 ## Legal Mumbo Jumbo (MIT License)
 

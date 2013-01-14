@@ -4,6 +4,9 @@
   * **BREAKING:** Backbone v0.9.2 is no longer supported
   * Backbone v0.9.9 is now supported
 
+* Marionette.Async
+  * **BREAKING:** Marionette.Async is no longer supported
+
 * Backbone.EventBinder / Marionette.EventBinder
   * **BREAKING:** Marionette.EventBinder / Backbone.EventBinder have been removed entirely.
   * Backbone.Events supercedes the older objects

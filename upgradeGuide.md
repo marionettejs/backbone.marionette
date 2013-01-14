@@ -46,3 +46,40 @@ following changes:
 * Replace `bindTo` with `listenTo`
 * Replace `unbindAll` with `stopListening`
 * Remove calls to `unbindFrom` as this has no equivalent
+
+### Marionette.Async is no longer supported
+
+The Marionette.Async library was a mistake from the start. It advocated
+bad practices by making the View layer responsible for the knowledge
+of application workflow. I'm happy to say that it has been removed
+from Marionette and is no longer supported. 
+
+If your app currently relies on Marionette.Async, I suggest re-thinking
+the architecture before upgrading to Marionette v1.0.0-rc3 or later. Specifically,
+move any logic that deals with asynchronous calls, and workflow / process
+logic out of your views and in to a Marionette.Controller or other object
+that can properly coordinate the efforts.
+
+For example, loading a model before displaying it:
+
+```js
+Marionette.Controller.extend({
+  showById: function(id){
+    var model = new MyModel({
+      id: id
+    });
+
+    var promise = model.fetch();
+
+    $.when(promise).then(_.bind(this.showIt, this));
+  },
+
+  showIt: function(model){
+    var view = new MyView({
+      model: model
+    });
+
+    MyApp.myRegion.show(view);
+  }
+});
+```

@@ -11,7 +11,7 @@ Marionette.Renderer = {
   // custom rendering and template handling for all of Marionette.
   render: function(template, data){
     var templateFunc = typeof template === 'function' ? template : Marionette.TemplateCache.get(template);
-    var html = templateFunc(data);
+    var html = templateFunc.call(this, data);
     return html;
   }
 };

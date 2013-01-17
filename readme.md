@@ -53,9 +53,9 @@ to engage in an all-or-nothing migration to begin using Marionette.
 
 MarionetteJS currently works with the following libraries:
 
-* [jQuery](http://jquery.com) v1.8.2
+* [jQuery](http://jquery.com) v1.9.0
 * [Underscore](http://underscorejs.org) v1.4.3
-* [Backbone](http://backbonejs.org) v0.9.9
+* [Backbone](http://backbonejs.org) v0.9.10
 * [Backbone.Wreqr](https://github.com/marionettejs/backbone.wreqr) 
 * [Backbone.BabySitter](https://github.com/marionettejs/backbone.babysitter)
 

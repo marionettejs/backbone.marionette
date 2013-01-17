@@ -1,3 +1,23 @@
+## Upgrade v1.0.0-rc3 to Backbone v0.9.10 and jQuery v1.9.0
+
+This is a simple update:
+
+* Update Backbone to v0.9.10
+* Update jQuery to v1.9.0
+
+Note that there are no changes in Marionette for this minor. 
+You should not have to change any Marionette specific code 
+to update your app. You may have to change code that core 
+Backbone runs, or that jQuery runs, though. This includes 
+any core Backbone features that are included in Marionette, 
+such as the use of the `view.make` function which is no 
+longer included in Backbone.View. 
+
+For more information on what you may need to change, see
+the change logs for 
+[Backbone v0.9.10](http://backbonejs.org/#changelog)
+and the upgrade guide for [jQuery v1.9.0](http://jquery.com/upgrade-guide/1.9/)
+
 ## Upgrade from v1.0.0-rc2 to v1.0.0-rc3
 
 There are several breaking changes that occurred between v1.0.0-rc2 and

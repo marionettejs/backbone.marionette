@@ -8,7 +8,7 @@ describe("renderer", function(){
     beforeEach(function(){
       loadFixtures("rendererTemplate.html");
       spyOn(Backbone.Marionette.TemplateCache, "get").andCallThrough();
-      var html = Backbone.Marionette.Renderer.render(templateSelector);
+      var html = Backbone.Marionette.Renderer.render(templateSelector).trim();
       result = $(html);
     });
 
@@ -30,7 +30,7 @@ describe("renderer", function(){
       spyOn(Backbone.Marionette.TemplateCache, "get").andCallThrough();
 
       var data = {foo: "bar"}
-      var html = Backbone.Marionette.Renderer.render(templateSelector, data);
+      var html = Backbone.Marionette.Renderer.render(templateSelector, data).trim();
       result = $(html);
     });
 

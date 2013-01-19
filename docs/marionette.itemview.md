@@ -1,7 +1,7 @@
 # Marionette.ItemView
 
 An `ItemView` is a view that represents a single item. That item may be a 
-`Backbone.Model` or may be a `Backbone.Collection`. Whichever it is, though, it
+`Backbone.Model` or may be a `Backbone.Collection`. Whichever it is though, it
 will be treated as a single item. 
 
 ## Documentation Index
@@ -32,7 +32,7 @@ MyView = Backbone.Marionette.ItemView.extend({
 new MyView().render();
 ```
 
-.. or a function taking a single argument - the object returned by [ItemView.serializeData](#itemview-serializedata):
+.. or a function taking a single argument: the object returned by [ItemView.serializeData](#itemview-serializedata):
 
 ```js
 my_template_html = '<div><%= args.name %></div>'
@@ -186,13 +186,12 @@ Backbone.Marionette.ItemView.extend({
 });
 ```
 
-## Organizing ui elements
+## Organizing UI Elements
 
-As documented in View, you can specify a `ui` hash in your view that
-maps between a ui element's name and its jQuery selector, similar to
-how regions are organized. This is especially useful if you access the
-same ui element more than once in your view's code, so instead of
-duplicating the selector you can simply reference it by
+As documented in [Marionette.View](./marionette.view.md), you can specify a `ui` hash in your `view` that
+maps UI elements by their jQuery selectors. This is especially useful if you access the
+same UI element more than once in your view's code. Instead of
+duplicating the selector, you can simply reference it by
 `this.ui.elementName`:
 
 ```js

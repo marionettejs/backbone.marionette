@@ -260,6 +260,7 @@ describe("layout", function(){
 
     beforeEach(function(){
       loadFixtures("layoutManagerTemplate.html");
+      loadFixtures("itemTemplate.html");
 
       ChildView = Marionette.ItemView.extend({
         template: "#itemTemplate",

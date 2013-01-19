@@ -5,7 +5,7 @@ including sub-modules hanging from that module. This is useful for creating
 modular, encapsulated applications that are split apart in to multiple 
 files.
 
-Marionette's module allow you to have unlimited sub-modules hanging off
+Marionette's modules allow you to have unlimited sub-modules hanging off of
 your application, and serve as an event aggregator in themselves.
 
 ## Documentation Index

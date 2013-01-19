@@ -36,7 +36,7 @@ then append the results of the item view's `el` to the collection view's
 ## CollectionView's `itemView`
 
 Specify an `itemView` in your collection view definition. This must be
-a Backbone view object definition (not instance). It can be any 
+a Backbone view object definition, not an instance. It can be any 
 `Backbone.View` or be derived from `Marionette.ItemView`.
 
 ```js
@@ -101,7 +101,7 @@ You can also specify the `itemViewOptions` as a function, if you need to
 calculate the values to return at runtime. The model will be passed into
 the function should you need access to it when calculating
 `itemViewOptions`. The function must return an object, and the attributes 
-of the object will be copied to the itemView instance' options.
+of the object will be copied to the `itemView` instance's options.
 
 ```js
 CollectionView = Backbone.Marionette.CollectionView({
@@ -527,3 +527,4 @@ Backbone.Marionette.CollectionView.extend({
   }
 });
 ```
+

@@ -115,7 +115,7 @@ Marionette.Layout = Marionette.ItemView.extend({
     this.regionManagers = {};
   },
 
-  // Spawns views with given options
+  // Spawns views with given options specified in region definition
   spawnChildren:function(){
     var that = this;
     var regions = this.regions || {};

@@ -261,23 +261,22 @@ describe("layout", function(){
     beforeEach(function(){
       loadFixtures("layoutManagerTemplate.html");
       loadFixtures("itemTemplate.html");
-
       ChildView = Marionette.ItemView.extend({
-        template: "#itemTemplate",
-        serializeData:function(){
-          return {foo: this.options.value}
-        }
+          template: "#itemTemplate",
+          serializeData:function(){
+              return {foo: this.options.value}
+          }
       });
 
       ParentView = Marionette.Layout.extend({
-        template: "#layout-manager-template",
-        regions: {
-          child: {
-            selector: "#regionOne",
-            view: ChildView,
-            options: {value: 'secret'}
+          template: "#layout-manager-template",
+          regions: {
+              child: {
+                  selector: "#regionOne",
+                  view: ChildView,
+                  options: {value: 'secret'}
+              }
           }
-        }
       });
 
       layout = new ParentView();
@@ -289,6 +288,10 @@ describe("layout", function(){
       expect(layout.$("#regionOne").html()).toContain("secret");
     });
 
+    it("the parent should rerender the child contents on subsequent renders", function(){
+      layout.render();
+      expect(layout.$("#regionOne").html()).toContain("secret");
+    });
 
   });
 

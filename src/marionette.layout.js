@@ -18,7 +18,6 @@ Marionette.Layout = Marionette.ItemView.extend({
 
     var args = Array.prototype.slice.apply(arguments);
     Marionette.ItemView.apply(this, args);
-    this.spawnChildren();
   },
 
   // Layout's render will use the existing region objects the
@@ -26,7 +25,6 @@ Marionette.Layout = Marionette.ItemView.extend({
   // views that the regions are showing and then reset the `el`
   // for the regions to the newly rendered DOM elements.
   render: function(){
-
     if (this._firstRender){
       // if this is the first render, don't do anything to
       // reset the regions
@@ -40,7 +38,7 @@ Marionette.Layout = Marionette.ItemView.extend({
 
     var args = Array.prototype.slice.apply(arguments);
     var result = Marionette.ItemView.prototype.render.apply(this, args);
-
+    
     this.populateRegions();
 
     return result;
@@ -115,30 +113,22 @@ Marionette.Layout = Marionette.ItemView.extend({
     this.regionManagers = {};
   },
 
-  // Spawns views with given options specified in region definition
-  spawnChildren:function(){
-    var that = this;
-    var regions = this.regions || {};
-    _.each(regions, function (region, name) {
-
-      if(region.view){
-        var options = region.options || {};
-        if(_.isFunction(options)){
-          options = options.apply(that);
-        }
-        that[name].currentView = new region.view(options);
-      }
-    });
-  },
-
   // Populates regions with children views
   populateRegions:function(){
     var that = this;
-    var regions = this.regions ||{};
-    _.each(regions,function(region,name){
-      if(region.view){
-        that[name].show(that[name].currentView);
+    _.each(this.regions || {}, function(region, name){
+      if (_.isUndefined(region.view)){
+        return;
       }
+      
+      var options = region.options || {};
+      if(_.isFunction(options)){
+        options = options.apply(that);
+      }
+      
+      var view = new region.view(options);
+      that.regionManagers[name].show(view);
     });
+
   }
 });

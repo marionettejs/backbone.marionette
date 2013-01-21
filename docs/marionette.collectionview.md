@@ -451,14 +451,15 @@ move the HTML contents from the item view instance in to the collection
 view's `el`. 
 
 You can override this by specifying an `appendHtml` method in your 
-view definition. This method takes two parameters and has no return
+view definition. This method takes three parameters and has no return
 value.
 
 ```js
 Backbone.Marionette.CollectionView.extend({
 
+	// The default implementation:
   appendHtml: function(collectionView, itemView, index){
-    collectionView.$el.prepend(itemView.el);
+    collectionView.$el.append(itemView.el);
   }
 
 });

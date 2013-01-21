@@ -345,7 +345,7 @@ cv.on("item:removed", function(viewInstance){
 
 When an item view within a collection view triggers an
 event, that event will bubble up through the parent 
-collection view, with "itemview:" prepended to the event
+collection view with "itemview:" prepended to the event
 name. 
 
 That is, if a child view triggers "do:something", the 

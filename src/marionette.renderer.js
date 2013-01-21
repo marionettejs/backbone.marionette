@@ -9,7 +9,7 @@ Marionette.Renderer = {
   // passed to the `TemplateCache` object to retrieve the
   // template function. Override this method to provide your own
   // custom rendering and template handling for all of Marionette.
-  render: function(template, data){
+  render: function(template, data, view){
     var templateFunc = typeof template === 'function' ? template : Marionette.TemplateCache.get(template);
     var html = templateFunc(data);
     return html;

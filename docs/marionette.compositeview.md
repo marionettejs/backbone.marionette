@@ -24,7 +24,7 @@ new CompositeView({
 ```
 
 For more examples, see my blog post on 
-[using the composite view](http://lostechies.com/derickbailey/2012/04/05/composite-views-tree-structures-tables-and-more/)
+[using the composite view.](http://lostechies.com/derickbailey/2012/04/05/composite-views-tree-structures-tables-and-more/)
 
 ## Documentation Index
 
@@ -34,7 +34,7 @@ For more examples, see my blog post on
 * [Recursive By Default](#recursive-by-default)
 * [Model And Collection Rendering](#model-and-collection-rendering)
 * [Events And Callbacks](#events-and-callbacks)
-* [Organizing ui elements](#organizing-ui-elements)
+* [Organizing UI elements](#organizing-ui-elements)
 * [modelEvents and collectionEvents](#modelevents-and-collectionevents)
 
 ## Composite Model `template`
@@ -214,15 +214,15 @@ Backbone.Marionette.CompositeView.extend({
 });
 ```
 
-## Organizing ui elements
+## Organizing UI elements
 
-Similar to ItemView, you can organize the ui elements inside the
-CompositeView by specifying them in the `ui` hash. It should be
+Similar to ItemView, you can organize the UI elements inside the
+CompositeView by specifying them in the `UI` hash. It should be
 noted that the elements that can be accessed via this hash are
 the elements that are directly rendered by the composite view
 template, not those belonging to the collection.
 
-The ui elements will be accessible as soon as the composite view
+The UI elements will be accessible as soon as the composite view
 template is rendered (and before the collection is rendered),
 which means you can even access them in the `onBeforeRender` method.
 

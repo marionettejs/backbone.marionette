@@ -70,6 +70,9 @@ Marionette.View = Backbone.View.extend({
           collection: this.collection
         };
 
+        // Also add the domEvent, if present
+        if (e){ args.e = e; }
+
         // trigger the event
         that.triggerMethod(value, args);
       };

@@ -257,8 +257,9 @@ Marionette.CollectionView = Marionette.View.extend({
       this.removeChildView(child);
     }, this);
 
+    // commented to fix issue #429
     // re-initialize to clean up after ourselves
-    this._initChildViewStorage();
+    // this._initChildViewStorage();
   }
 });
 

@@ -119,5 +119,35 @@ describe("collectionview - emptyView", function(){
     });
   });
 
+
+  describe("when the collection is reset multiple times", function () {
+    var collectionView, collection, population = [{foo:1},{foo:2},{foo:3}];
+
+    beforeEach(function () {
+      collection = new Backbone.Collection();
+      collectionView = new EmptyCollectionView({
+        collection: collection
+      });
+    });
+
+    it("should remove all EmptyView", function () {
+      collectionView.render();        // 1st showEmptyView
+      collection.reset(population);   // 1st closeEmptyView
+      collection.reset();             // 2nd showEmptyView
+      collection.reset(population);   // 2nd closeEmptyView
+      expect(collectionView.$el).not.toContain('span.isempty')
+    });
+
+    it("should have only one emptyView open", function () {
+      collectionView.render();        // 1st showEmptyView
+      collection.reset(population);   // 1st closeEmptyView
+      collection.reset();             // 2nd closeEmptyView, showEmptyView
+      collection.reset();             // 3nd closeEmptyView, showEmptyView
+      expect(collectionView.$('span.isempty').length).toEqual(1);
+    });
+
+  });
+
+
 });
 

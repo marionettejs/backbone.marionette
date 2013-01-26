@@ -9,7 +9,7 @@
 // Used for composite view management and sub-application areas.
 Marionette.Layout = Marionette.ItemView.extend({
   regionType: Marionette.Region,
-  
+
   // Ensure the regions are avialable when the `initialize` method
   // is called.
   constructor: function () {
@@ -25,13 +25,12 @@ Marionette.Layout = Marionette.ItemView.extend({
   // views that the regions are showing and then reset the `el`
   // for the regions to the newly rendered DOM elements.
   render: function(){
-
     if (this._firstRender){
       // if this is the first render, don't do anything to
       // reset the regions
       this._firstRender = false;
     } else {
-      // If this is not the first render call, then we need to 
+      // If this is not the first render call, then we need to
       // re-initializing the `el` for each region
       this.closeRegions();
       this.reInitializeRegions();
@@ -39,6 +38,8 @@ Marionette.Layout = Marionette.ItemView.extend({
 
     var args = Array.prototype.slice.apply(arguments);
     var result = Marionette.ItemView.prototype.render.apply(this, args);
+    
+    this.populateRegions();
 
     return result;
   },
@@ -110,6 +111,24 @@ Marionette.Layout = Marionette.ItemView.extend({
       delete that[name];
     });
     this.regionManagers = {};
+  },
+
+  // Populates regions with children views
+  populateRegions:function(){
+    var that = this;
+    _.each(this.regions || {}, function(region, name){
+      if (_.isUndefined(region.view)){
+        return;
+      }
+      
+      var options = region.options || {};
+      if(_.isFunction(options)){
+        options = options.apply(that);
+      }
+      
+      var view = new region.view(options);
+      that.regionManagers[name].show(view);
+    });
+
   }
 });
-

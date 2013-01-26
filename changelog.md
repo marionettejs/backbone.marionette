@@ -8,6 +8,9 @@
 * Modules
   * Finalizers now run with the module as the `this` context
 
+* Marionette.getOption
+  * Fixed support for "falsey" values in an object's `options`
+
 * Build process
   * Fixed build process to work on case-sensitive file systems (Linux, for example)
 

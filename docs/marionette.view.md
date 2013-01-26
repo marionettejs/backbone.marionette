@@ -180,7 +180,7 @@ includes the following:
 
 The first three properties match the `view`, `model`, and `collection` properties of the view that triggered the event.
 
-The `e` property is matches the DOM event.  It can be used, for instance, to obtain the triggering element (e.target).
+The `e` property matches the DOM event.  It can be used, for instance, to obtain the triggering element (e.target).
 
 ```js
 MyView = Backbone.Marionette.ItemView.extend({

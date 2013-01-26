@@ -123,7 +123,7 @@ widget suites), see [this blog post on KendoUI + Backbone](http://www.kendoui.co
 ## View.triggers
 
 Views can define a set of `triggers` as a hash, which will 
-convert a DOM event in to a `view.trigger` event.
+convert a DOM event into a `view.triggerMethod` call.
 
 The left side of the hash is a standard Backbone.View DOM
 event configuration, while the right side of the hash is the

@@ -57,11 +57,13 @@
     "dependencies": {
       "jquery": ">=1.8.0",
       "underscore": ">=1.4.0",
-      "backbone": ">=0.9.2"
+      "backbone": ">=0.9.2",
+      "Backbone.BabySitter": ">=0.0.4",
+      "Backbone.Wreqr": ">=0.1.0"
     },
-    "main": "lib/amd/backbone.marionette.js",
+    "main": "lib/core/amd/backbone.marionette.js",
     "include": [
-      "lib/amd/backbone.marionette.js",
+      "lib/core/amd/backbone.marionette.js",
       "readme.md"
     ]
   }

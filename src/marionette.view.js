@@ -71,7 +71,7 @@ Marionette.View = Backbone.View.extend({
         };
 
         // trigger the event
-        that.trigger(value, args);
+        that.triggerMethod(value, args);
       };
 
     });

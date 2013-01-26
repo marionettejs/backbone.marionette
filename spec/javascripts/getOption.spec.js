@@ -36,6 +36,46 @@ describe("get option", function(){
 
   });
 
+  describe("when an object has the option set on the options, and it is a 'falsey' value", function(){
+    var target, value;
+
+    beforeEach(function(){
+      target = {
+        options: {
+          foo: false
+        }
+      }
+
+      value = Marionette.getOption(target, "foo");
+    });
+
+    it("should return value from the options", function(){
+      expect(value).toEqual(false);
+    });
+
+  });
+
+  describe("when an object has the option set on the options, and it is a 'undefined' value", function(){
+    var target, value;
+
+    beforeEach(function(){
+      target = {
+        options: {
+          foo: undefined
+        },
+
+        foo: "bar"
+      }
+
+      value = Marionette.getOption(target, "foo");
+    });
+
+    it("should return the object's value", function(){
+      expect(value).toEqual("bar");
+    });
+
+  });
+
   describe("when an object has the option set on both the defininition and options", function(){
     var target, value;
 

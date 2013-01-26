@@ -77,7 +77,7 @@ _.extend(Marionette.Module.prototype, Backbone.Events, {
     _.each(this.submodules, function(mod){ mod.stop(); });
 
     // run the finalizers
-    this._finalizerCallbacks.run();
+    this._finalizerCallbacks.run(undefined,this);
 
     // reset the initializers and finalizers
     this._initializerCallbacks.reset();

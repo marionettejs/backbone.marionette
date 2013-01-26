@@ -13,7 +13,7 @@ It combines an EventBinder in to the EventAggregator instance.
 ## Documentation Index
 
 * [Basic Usage](#basic-usage)
-* [BindTo](#bindto)
+* [ListenTo](#listento)
 * [Decoupling With An Event-Driven Architecture](#decoupling-with-an-event-driven-architecture)
 
 ## Basic Usage
@@ -33,7 +33,7 @@ myVent = new Marionette.EventAggregator({foo: "bar"});
 myVent.foo // => "bar"
 ```
 
-## BindTo
+## ListenTo
 
 The `EventAggregator` mixes in an [EventBinder](./marionette.eventbinder.md) object to easily track
 and unbind all event callbacks, including inline callback functions. 

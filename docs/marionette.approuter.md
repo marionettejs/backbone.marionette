@@ -10,10 +10,7 @@ Have your routers configured to call the method on your object, directly.
 
 ## Configure Routes
 
-Configure an AppRouter with `appRoutes`. The route definition is passed on to Backbone's standard routing
-handlers. This means that you define routes like you normally would. Instead of providing a callback
-method that exists on the router, though, you provide a callback method that exists on the `controller`
-that you specify for the router instance (see below).
+Configure an AppRouter with `appRoutes`. The route definition is passed on to Backbone's standard routing handlers. This means that you define routes like you normally would.  However, instead of providing a callback method that exists on the router, you provide a callback method that exists on the controller, which you specify for the router instance (see below.)
 
 ```js
 MyRouter = Backbone.Marionette.AppRouter.extend({
@@ -33,7 +30,7 @@ MyRouter = Backbone.Marionette.AppRouter.extend({
 });
 ```
 
-You can also add standard routes to an AppRouter, with methods on the router.
+You can also add standard routes to an AppRouter with methods on the router.
 
 ## Specify A Controller
 
@@ -50,7 +47,7 @@ Backbone.Marionette.AppRouter.extend({
 });
 ```
 
-Or in a parameter to the constructor:
+... or in a parameter to the constructor:
 
 ```js
 myObj = {
@@ -62,12 +59,8 @@ new MyRouter({
 });
 ```
 
-Or
-
 The object that is used as the `controller` has no requirements, other than it will 
 contain the methods that you specified in the `appRoutes`.
 
 It is recommended that you divide your controller objects into smaller pieces of related functionality
 and have multiple routers / controllers, instead of just one giant router and controller.
-
-

@@ -198,6 +198,7 @@ Marionette.CollectionView = Marionette.View.extend({
   removeItemView: function(item){
     var view = this.children.findByModel(item);
     this.removeChildView(view);
+    this.checkEmpty();
   },
 
   // Remove the child view and close it
@@ -215,13 +216,16 @@ Marionette.CollectionView = Marionette.View.extend({
       this.children.remove(view);
     }
 
+    this.triggerMethod("item:removed", view);
+  },
+
+  // helper to show the empty view if the collection is empty
+  checkEmpty: function() {
     // check if we're empty now, and if we are, show the
     // empty view
     if (!this.collection || this.collection.length === 0){
       this.showEmptyView();
     }
-
-    this.triggerMethod("item:removed", view);
   },
 
   // Append the HTML to the collection's `el`.
@@ -256,6 +260,7 @@ Marionette.CollectionView = Marionette.View.extend({
     this.children.each(function(child){
       this.removeChildView(child);
     }, this);
+    this.checkEmpty();
   }
 });
 

@@ -9,6 +9,15 @@ describe("collection view - reset", function(){
     onRender: function(){}
   });
 
+  var EmptyView = Backbone.Marionette.ItemView.extend({
+    tagName: "span",
+    render: function(){
+      this.$el.text("0 items");
+      this.trigger("render");
+    },
+    onRender: function(){}
+  });
+
   var CollectionView = Backbone.Marionette.CollectionView.extend({
     itemView: ItemView,
 
@@ -57,6 +66,41 @@ describe("collection view - reset", function(){
 
     it("should remove the event handlers for the original children", function(){
       expect(_.size(collectionView._listeners)).toBe(4);
+    });
+  });
+
+  describe("when a collection is reset with empty data after the view is loaded", function(){
+    var collection;
+    var collectionView;
+    var data;
+
+    beforeEach(function(){
+      data = [{foo: "bar"}, {foo: "baz"}];
+
+      collection = new Backbone.Collection(data);
+
+      collectionView = new CollectionView({
+        collection: collection,
+        emptyView: EmptyView
+      });
+
+      collectionView.render();
+
+      collection.reset([]);
+    });
+
+    it("should have 1 child view (empty view)", function(){
+      expect(collectionView.children.length).toBe(1);
+    });
+
+    it("should append the html for the emptyView", function(){
+      expect($(collectionView.$el)).toHaveHtml("<span>0 items</span>");
+    });
+
+    it("should not have the empty child view after resetting with data", function(){
+      collection.reset(data);
+
+      expect($(collectionView.$el)).toHaveHtml("<span>bar</span><span>baz</span>");
     });
   });
 

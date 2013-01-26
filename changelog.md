@@ -1,3 +1,16 @@
+### v1.0.0-rc4 [view commit logs](https://github.com/marionettejs/backbone.marionette/compare/v1.0.0-rc3...v1.0.0-rc4)
+
+* CollectionView / CompositeView
+  * Fixed several issues related to resetting the collection, and producing zombie "emtpy" views
+  * Fixed a bug that caused multiple emptyView instances when resetting the collection
+  * Forwarded events from child views are now called with `triggerMethod`, meaning they trigger the event and call the corresponding "onEventName" method
+
+* Modules
+  * Finalizers now run with the module as the `this` context
+
+* Build process
+  * Fixed build process to work on case-sensitive file systems (Linux, for example)
+
 ### v1.0.0-rc3 [view commit logs](https://github.com/marionettejs/backbone.marionette/compare/v1.0.0-rc2...v1.0.0-rc3)
 
 * Updated Backbone v0.9.10

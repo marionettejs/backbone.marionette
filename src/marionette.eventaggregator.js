@@ -5,13 +5,4 @@
 //
 // Extends [Backbone.Wreqr.EventAggregator](https://github.com/marionettejs/backbone.wreqr)
 // and mixes in an EventBinder from [Backbone.EventBinder](https://github.com/marionettejs/backbone.eventbinder).
-Marionette.EventAggregator = Backbone.Wreqr.EventAggregator.extend({
-
-  constructor: function(){
-    Marionette.addEventBinder(this);
-
-    var args = Array.prototype.slice.apply(arguments);
-    Backbone.Wreqr.EventAggregator.prototype.constructor.apply(this, args);
-  }
-
-});
+Marionette.EventAggregator = Backbone.Wreqr.EventAggregator;

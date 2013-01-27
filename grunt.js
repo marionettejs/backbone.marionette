@@ -84,7 +84,6 @@ module.exports = function(grunt) {
         'src/marionette.helpers.js',
         'src/marionette.createObject.js',
         'src/marionette.triggermethod.js',
-        'src/marionette.eventbinder.js',
         'src/marionette.bindEntityEvents.js',
         'src/marionette.eventaggregator.js',
         'src/marionette.controller.js',

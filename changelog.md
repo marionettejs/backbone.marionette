@@ -1,5 +1,8 @@
 ### v1.0.0-rc4 [view commit logs](https://github.com/marionettejs/backbone.marionette/compare/v1.0.0-rc3...v1.0.0-rc4)
 
+* EventBinder
+  * **BREAKING:** Removed `Marionette.addEventBinder` function.
+
 * CollectionView / CompositeView
   * Fixed several issues related to resetting the collection, and producing zombie "emtpy" views
   * Fixed a bug that caused multiple emptyView instances when resetting the collection

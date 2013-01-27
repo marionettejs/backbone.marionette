@@ -7,8 +7,6 @@
 Marionette.Region = function(options){
   this.options = options || {};
 
-  Marionette.addEventBinder(this);
-
   this.el = Marionette.getOption(this, "el");
 
   if (!this.el){

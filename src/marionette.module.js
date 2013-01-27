@@ -15,8 +15,6 @@ Marionette.Module = function(moduleName, app){
   this.app = app;
   this.startWithParent = true;
 
-  // extend this module with an event binder
-  Marionette.addEventBinder(this);
   this.triggerMethod = Marionette.triggerMethod;
 };
 

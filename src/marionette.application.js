@@ -13,7 +13,6 @@ Marionette.Application = function(options){
 
   _.extend(this, options);
 
-  Marionette.addEventBinder(this);
   this.triggerMethod = Marionette.triggerMethod;
 };
 

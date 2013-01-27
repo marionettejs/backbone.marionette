@@ -1,3 +1,28 @@
+## Upgrade to v1.0.0-rc4
+
+RC4 is mostly bug fixes and zombie killing. There are a few
+things that you need to pay attention to, though. Check the
+[changelog](https://github.com/marionettejs/backbone.marionette/blob/master/changelog.md)
+for a more complete list.
+
+### Marionette.addEventBinder Has Been Removed
+
+The method `Marionette.addEventBinder` has been removed
+entirely. If you were using this method call in your code,
+you will need to delete that line of code.
+
+The replacement for this is simply Backbone.Events, which
+has the necessary `.listenTo` and `.stopListening` methods,
+as noted in previous upgrade guide entries. 
+
+The `addEventBinder` had provided a 4th `context` parameter
+to the `.listenTo` and `.stopListening` methods, in anticipation
+of Backbone adding these in a future release. After further
+discussion and research, though, I realized that this parameter
+is not needed. Further, Backbone is not going to be adding this
+parameter any time soon. There has not been a clear need for
+it. 
+
 ## Upgrade v1.0.0-rc3 to Backbone v0.9.10 and jQuery v1.9.0
 
 This is a simple update:

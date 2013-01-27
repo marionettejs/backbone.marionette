@@ -7,32 +7,11 @@ a way to get the same behaviors and conventions from your own code.
 
 ## Documentation Index
 
-* [Marionette.addEventBinder](#marionetteaddeventbinder)
 * [Marionette.createObject](#marionettecreateobject)
 * [Marionette.extend](#marionetteextend)
 * [Marionette.getOption](#marionetteextend)
 * [Marionette.triggerMethod](#marionettetriggermethod)
 * [Marionette.bindEntityEvent](#marionettebindentityevents)
-
-## Marionette.addEventBinder
-
-Add a [Backbone.EventBinder](https://github.com/marionettejs/backbone.eventbinder)
-instance to any target object. This method attaches an `eventBinder` to
-the target object, and then copies the necessary methods to the target
-while maintaining the event binder in it's own object. 
-
-```js
-myObj = {};
-
-Marionette.addEventBinder(myObj);
-
-myObj.listenTo(aModel, "foo", function(){...});
-```
-
-This allows the event binder's implementation to vary independently
-of it being attached to the view. For example, the internal structure
-used to store the events can change without worry about it interfering
-with Marionette's views.
 
 ## Marionette.createObject
 

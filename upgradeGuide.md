@@ -5,7 +5,7 @@ things that you need to pay attention to, though. Check the
 [changelog](https://github.com/marionettejs/backbone.marionette/blob/master/changelog.md)
 for a more complete list.
 
-### Marionette.addEventBinder Has Been Removed
+### Marionette.addEventBinder Function Has Been Removed
 
 The method `Marionette.addEventBinder` has been removed
 entirely. If you were using this method call in your code,
@@ -22,6 +22,14 @@ discussion and research, though, I realized that this parameter
 is not needed. Further, Backbone is not going to be adding this
 parameter any time soon. There has not been a clear need for
 it. 
+
+### Marionette.EventAggregator Object Has Been Removed
+
+The `Marionette.EventAggregator` object did nothing more than
+import `Backbone.Wreqr.EventAggregator` in to the Marionette
+namespace. This has been removed as it added no value. Replace 
+all uses of `Marionette.EventAggregator` with 
+`Backbone.Wreqr.EventAggregator`.
 
 ## Upgrade v1.0.0-rc3 to Backbone v0.9.10 and jQuery v1.9.0
 

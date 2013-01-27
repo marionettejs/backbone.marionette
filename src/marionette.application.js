@@ -6,7 +6,7 @@
 // event aggregator as `app.vent`
 Marionette.Application = function(options){
   this.initCallbacks = new Marionette.Callbacks();
-  this.vent = new Marionette.EventAggregator();
+  this.vent = new Backbone.Wreqr.EventAggregator();
   this.commands = new Backbone.Wreqr.Commands();
   this.reqres = new Backbone.Wreqr.RequestResponse();
   this.submodules = {};

@@ -3,6 +3,9 @@
 * EventBinder
   * **BREAKING:** Removed `Marionette.addEventBinder` function.
 
+* EventAggregator
+  * **BREAKING:** Removed `Marionette.EventAggregator` object. Use `Backbone.Wreqr.EventAggregator` instead
+
 * CollectionView / CompositeView
   * Fixed several issues related to resetting the collection, and producing zombie "emtpy" views
   * Fixed a bug that caused multiple emptyView instances when resetting the collection

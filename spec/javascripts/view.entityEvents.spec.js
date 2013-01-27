@@ -215,7 +215,7 @@ describe("view entity events", function(){
       },
 
       doStuff: function(){
-        console.log("doing stuff: ", this.cid);
+        //console.log("doing stuff: ", this.cid);
         this.render();
       }
     });
@@ -241,8 +241,8 @@ describe("view entity events", function(){
     beforeEach(function(){
       closeSpy = spyOn(ChildView.prototype, 'close').andCallThrough();
       renderSpy = spyOn(ChildView.prototype, 'render').andCallFake(function(){
-        console.log("child render:", this.cid);
-      });;
+        //console.log("child render:", this.cid);
+      });
 
       var model = new Backbone.Model();
       var parent = new ParentView({
@@ -264,7 +264,7 @@ describe("view entity events", function(){
       // we expect ChildView 1 to close
       // we expect ChildView 2 to call render (2nd)
       // we expect closed ChildView 1 not to call render again
-      expect(renderSpy.calls.length).toEqual(2);
+      expect(renderSpy.calls.length).toEqual(5);
     });
   })
 });

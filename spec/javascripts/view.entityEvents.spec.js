@@ -203,4 +203,63 @@ describe("view entity events", function(){
       expect(collectionHandler.callCount).toBe(1);
     });
   });
+
+  describe("when Layout bound to modelEvent replaces region with new view",function(){
+
+    var renderSpy = jasmine.createSpy("ChildView render handler");
+
+    var ChildView = Marionette.ItemView.extend({
+      template: _.template(''),
+      modelEvents: {
+        "sync": "render"
+      },
+      render:renderSpy
+    });
+
+    var closeSpy = spyOn(ChildView.prototype, 'close').andCallThrough();
+
+    var ParentView = Marionette.Layout.extend({
+      template: _.template("<div id='child'></div>"),
+
+      regions: {
+        "child": "#child"
+      },
+
+      onRender: function () {
+        this.child.show(new ChildView({
+          model: this.model
+        }));
+      },
+
+      modelEvents: {
+        "sync": "render"
+      }
+    });
+
+    beforeEach(function(){
+      var model = new Backbone.Model();
+
+      var parent = new ParentView({
+        model: model
+      });
+
+      parent.render();
+
+      model.trigger('sync');
+    });
+
+    it("should undelegate all previous view's modelEvents", function(){
+      // let's make sure that ChildView 1 was closed (this works ok)
+      expect(closeSpy).toHaveBeenCalled(); 
+    });
+
+    it("should close the previous child view so it does not react to further events", function(){
+      // ChildView 1 when closed should not react to event
+      // we expect ChildView 1 to call render, (1st)
+      // we expect ChildView 1 to close
+      // we expect ChildView 2 to call render (2nd)
+      // we expect closed ChildView 1 not to call render again
+      expect(renderSpy.calls.length).toEqual(2);
+    });
+  })
 });

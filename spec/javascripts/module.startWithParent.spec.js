@@ -163,4 +163,75 @@ describe("module startWithParent", function(){
 
   });
 
+  describe("when configuring a parent module with the object-literal 'startWithParent' to false, adding a child module, and starting the app", function(){
+    var parentInit, childInit;
+
+    beforeEach(function(){
+      parentInit = jasmine.createSpy("parent initializer");
+      childInit = jasmine.createSpy("child initializer");
+
+      var app = new Backbone.Marionette.Application();
+
+      app.module('Parent', {
+        startWithParent: false,
+        define: function() {
+          this.addInitializer(parentInit);
+        }
+      });
+      app.module('Parent.Child', function() {
+        this.addInitializer(childInit);
+      });
+
+      // Expected: nothing is initialized
+      // What happens: Parent.Child, but not Parent is initialized
+      app.start();
+      // Expected: both Parent and Parent.Child are initialized
+      //app.Parent.start();
+
+    });
+
+    it("should not start the parent", function(){
+      expect(parentInit).not.toHaveBeenCalled();
+    });
+
+    it("should not start the child", function(){
+      expect(childInit).not.toHaveBeenCalled();
+    });
+
+  });
+
+  describe("when configuring a parent module with the object-literal 'startWithParent' to false, adding a child module, starting the app, then starting the parent", function(){
+    var parentInit, childInit;
+
+    beforeEach(function(){
+      parentInit = jasmine.createSpy("parent initializer");
+      childInit = jasmine.createSpy("child initializer");
+
+      var app = new Backbone.Marionette.Application();
+
+      app.module('Parent', {
+        startWithParent: false,
+        define: function() {
+          this.addInitializer(parentInit);
+        }
+      });
+
+      app.module('Parent.Child', function() {
+        this.addInitializer(childInit);
+      });
+
+      app.start();
+      app.Parent.start();
+    });
+
+    it("should start the parent once", function(){
+      expect(parentInit.callCount).toBe(1);
+    });
+
+    it("should start the child once", function(){
+      expect(childInit.callCount).toBe(1);
+    });
+
+  });
+
 });

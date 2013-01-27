@@ -1,9 +1,9 @@
-// Backbone.Wreqr, v0.2.0
-// Copyright (c)2012 Derick Bailey, Muted Solutions, LLC.
+// Backbone.Wreqr, v0.1.1
+// Copyright (c)2013 Derick Bailey, Muted Solutions, LLC.
 // Distributed under MIT license
 // http://github.com/marionettejs/backbone.wreqr
 Backbone.Wreqr = (function(Backbone, Marionette, _){
-  "option strict";
+  "use strict";
   var Wreqr = {};
 
   // Handlers
@@ -11,13 +11,12 @@ Backbone.Wreqr = (function(Backbone, Marionette, _){
   // A registry of functions to call, given a name
   
   Wreqr.Handlers = (function(Backbone, _){
-    "option strict";
+    "use strict";
     
     // Constructor
     // -----------
   
     var Handlers = function(){
-      "use strict";
       this._handlers = {};
     };
   
@@ -75,7 +74,7 @@ Backbone.Wreqr = (function(Backbone, Marionette, _){
   // A simple command pattern implementation. Register a command
   // handler and execute it.
   Wreqr.Commands = (function(Wreqr){
-    "option strict";
+    "use strict";
   
     return Wreqr.Handlers.extend({
       execute: function(){
@@ -94,7 +93,7 @@ Backbone.Wreqr = (function(Backbone, Marionette, _){
   // A simple request/response implementation. Register a
   // request handler, and return a response from it
   Wreqr.RequestResponse = (function(Wreqr){
-    "option strict";
+    "use strict";
   
     return Wreqr.Handlers.extend({
       request: function(){
@@ -113,32 +112,16 @@ Backbone.Wreqr = (function(Backbone, Marionette, _){
   // of an application through event-driven architecture.
   
   Wreqr.EventAggregator = (function(Backbone, _){
+    "use strict";
+    var EA = function(){};
   
-    // Grab a reference to the original listenTo
-    var listenTo = Backbone.Events.listenTo;
+    // Copy the `extend` function used by Backbone's classes
+    EA.extend = Backbone.Model.extend;
   
-    // Create a version of listenTo that allows contexting binding
-    function contextBoundListenTo(obj, evtSource, events, callback, context){
-      context = context || obj;
-      return listenTo.call(obj, evtSource, events, _.bind(callback, context));
-    }
+    // Copy the basic Backbone.Events on to the event aggregator
+    _.extend(EA.prototype, Backbone.Events);
   
-    // Define the EventAggregator
-    function EventAggregator(){}
-  
-    // Mix Backbone.Events in to it
-    _.extend(EventAggregator.prototype, Backbone.Events, {
-      // Override the listenTo so that we can have a version that
-      // correctly binds context
-      listenTo: function(evtSource, events, callback, context){
-        return contextBoundListenTo(this, evtSource, events, callback, context);
-      }
-    });
-  
-    // Allow it to be extended
-    EventAggregator.extend = Backbone.Model.extend;
-  
-    return EventAggregator;
+    return EA;
   })(Backbone, _);
   
 

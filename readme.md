@@ -39,7 +39,7 @@ to engage in an all-or-nothing migration to begin using Marionette.
 
 * Scale applications out with modular, event driven architecture
 * Sensible defaults, such as using Underscore templates for view rendering
-* Easy to modify to make it work with your applicaton's specific needs
+* Easy to modify to make it work with your application's specific needs
 * Reduce boilerplate for views, with specialized view types
 * Build on a modular architecture with an `Application` and modules that attach to it
 * Compose your application's visuals at runtime, with `Region` and `Layout`
@@ -73,7 +73,7 @@ or @sudhirj's [simply-deferred](https://github.com/sudhirj/simply-deferred).
 Enderjs users, please let us know of how you solve any compatibility issues.
 
 Marionette no longer relies on [Backbone.EventBinder](https://github.com/marionettejs/backbone.eventbinder).
-Backbone.Events, as of v0.9.9, supercedes this library with it's
+Backbone.Events, as of v0.9.9, supersedes this library with its
 `listenTo` and `stopListening` methods. See [the upgrade guide](https://github.com/marionettejs/backbone.marionette/blob/master/upgradeGuide.md)
 for more information.
 
@@ -153,7 +153,7 @@ ideas and examples to the community, please see the wiki page.
 
 In addition to this readme, I've commented the source code quite
 heavily and run it through Docco as part of my build process.
-This produces a nicely formatted, annotated source code as documenation
+This produces a nicely formatted, annotated source code as documentation
 file.
 
 You can read the annotated for all the detail of how Marionette works, and advice on which methods to override when.
@@ -162,7 +162,7 @@ You can read the annotated for all the detail of how Marionette works, and advic
 
 ## Donations
 
-Marionette needs your support, but not everyone can offer assitance 
+Marionette needs your support, but not everyone can offer assistance 
 with code, bug submissions, and answering questions. If you're using 
 Marionette and you're finding that it is saving you as much time and 
 effort as I believe it does, then please consider financial support 

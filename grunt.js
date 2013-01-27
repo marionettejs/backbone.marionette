@@ -77,7 +77,6 @@ module.exports = function(grunt) {
         'public/javascripts/underscore.js',
         'public/javascripts/backbone.js',
         'public/javascripts/backbone.babysitter.js',
-        'public/javascripts/backbone.augment.js',
         'public/javascripts/backbone.wreqr.js',
         'src/build/marionette.core.js',
         'spec/javascripts/support/marionette.support.js',

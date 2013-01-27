@@ -92,6 +92,33 @@ new M({}, { foo: "quux" }); // => "quux"
 This is useful when building an object that can have configuration set
 in either the object definition or the object's constructor options.
 
+### Falsey values
+
+The `getOption` function will return any falsey value from the `options`,
+other than `undefined`. If an object's options has an undefined value, it will
+attempt to read the value from the object directly.
+
+For example:
+
+```js
+var M = Backbone.Model.extend({
+  foo: "bar",
+
+  initialize: function(){
+    var f = Marionette.getOption(this, "foo");
+    console.log(f);
+  }
+});
+
+new M(); // => "bar"
+
+var f;
+new M({}, { foo: f }); // => "bar"
+```
+
+In this example, "bar" is returned both times because the second 
+example has an undefined value for `f`.
+
 ## Marionette.triggerMethod
 
 Trigger an event and a corresponding method on the target object.

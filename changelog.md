@@ -7,7 +7,7 @@
   * **BREAKING:** Removed `Marionette.EventAggregator` object. Use `Backbone.Wreqr.EventAggregator` instead
 
 * CollectionView / CompositeView
-  * Fixed several issues related to resetting the collection, and producing zombie "emtpy" views
+  * Fixed several issues related to resetting the collection, and producing zombie "empty" views
   * Fixed a bug that caused multiple emptyView instances when resetting the collection
   * Forwarded events from child views are now called with `triggerMethod`, meaning they trigger the event and call the corresponding "onEventName" method
 

@@ -1,6 +1,6 @@
 # Backbone.Marionette
 
-Make your Backbone.js apps dance with a composite application architecture!
+Make your Backbone.js apps dance!
 
 [![Build Status](https://secure.travis-ci.org/marionettejs/backbone.marionette.png?branch=master)](http://travis-ci.org/marionettejs/backbone.marionette)
 

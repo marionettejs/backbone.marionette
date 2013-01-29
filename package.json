@@ -1,7 +1,7 @@
 {
   "name": "Backbone.Marionette",
-  "description": "Make your Backbone.js apps dance with a composite application architecture!",
-  "version": "1.0.0-rc4",
+  "description": "Make your Backbone.js apps dance!",
+  "version": "1.0.0-rc5",
   "homepage": "https://github.com/marionettejs/backbone.marionette",
   "keywords": [
     "backbone",

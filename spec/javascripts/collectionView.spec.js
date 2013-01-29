@@ -706,7 +706,7 @@ describe("collection view", function(){
       onDomRefresh: function(){ },
       onRender: function(){},
       render: function() {
-          this.trigger("render");
+        this.trigger("render");
       }
     });
 

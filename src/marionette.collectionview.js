@@ -152,14 +152,14 @@ Marionette.CollectionView = Marionette.View.extend({
     // remove and/or close it later
     this.children.add(view);
 
+    // Render it and show it
+    this.renderItemView(view, index);
+
     // call the "show" method if the collection view
     // has already been shown
     if (this._isShown){
       Marionette.triggerMethod.call(view, "show");
     }
-
-    // Render it and show it
-    var renderResult = this.renderItemView(view, index);
 
     // this view was added
     this.triggerMethod("after:item:added", view);

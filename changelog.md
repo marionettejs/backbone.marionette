@@ -1,3 +1,8 @@
+### v1.0.0-rc5 [view commit logs](https://github.com/marionettejs/backbone.marionette/compare/v1.0.0-rc4...v1.0.0-rc5)
+
+* CollectionView / ItemView
+  * Corrected the timing on the "show" event / `onShow` callback for itemView instances that are added after the CollectionView is in the DOM
+
 ### v1.0.0-rc4 [view commit logs](https://github.com/marionettejs/backbone.marionette/compare/v1.0.0-rc3...v1.0.0-rc4)
 
 * EventBinder

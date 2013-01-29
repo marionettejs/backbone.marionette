@@ -96,6 +96,27 @@ mod.on("start", function(){
 });
 ```
 
+#### Passing Data to Start Events
+
+`.start` takes a single `options` parameter that will be passed to start events and their equivalent methods (`onStart` and `onBeforeStart`.) 
+
+```js
+var mod = MyApp.module("MyMod");
+
+mod.on("before:start", function(options){
+  // do stuff before the module is started
+});
+
+mod.on("start", function(options){
+  // do stuff after the module has been started
+});
+
+var options = {
+ // any data
+};
+mod.start(options);
+```
+
 ### Preventing Auto-Start Of Modules
 
 If you wish to manually start a module instead of having the application

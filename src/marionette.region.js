@@ -105,6 +105,12 @@ _.extend(Marionette.Region.prototype, Backbone.Events, {
 
     view.render();
     this.open(view);
+    
+    // Reinitialize $el events for view if it's rendered not for the first time.
+    // Otherwise events will be lost
+    if (view._isShown) {
+      view.delegateEvents();
+    }
 
     Marionette.triggerMethod.call(view, "show");
     Marionette.triggerMethod.call(this, "show", view);

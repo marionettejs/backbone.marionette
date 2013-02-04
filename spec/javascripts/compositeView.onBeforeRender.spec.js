@@ -15,9 +15,7 @@ describe("composite view - on before render", function(){
     });
 
     Label.Views.LabelItem = Backbone.Marionette.ItemView.extend({
-        template: function(){
-          return _.template('Title: <%= title %> - Bar : <%= bar %>');
-        },
+        template: "#itemView",
         tagName: 'li',
         className: 'list-item'
     });
@@ -25,10 +23,7 @@ describe("composite view - on before render", function(){
     Label.Views.LabelListModel = Backbone.Model.extend({});
 
     Label.Views.LabelList = Backbone.Marionette.CompositeView.extend({
-      template: function(){
-        return _.template('<div class="listing"> <h4><%= modelState %></h4> <br/> <ul id="listTag"> </ul> </div>');
-      },
-
+      template: "#compView",
       itemViewContainer: '#listTag',
 
       itemView: Label.Views.LabelItem,
@@ -39,6 +34,8 @@ describe("composite view - on before render", function(){
     });
 
     beforeEach(function(){
+      setFixtures("<script id='itemView' type='text/template'>Title: <%= title %> </script><script id='compView' type='text/template'><div class='listing'> <h4><%= modelState %></h4> <br/> <ul id='listTag'> </ul> </div></script>");
+
       var collection = new Label.Collection([{ title: 'yoddle' }, { title: 'little' }]);
       var model = new Label.Model({ modelState: 'Yoddling Tomes' });
 
@@ -51,7 +48,7 @@ describe("composite view - on before render", function(){
     });
 
     it("should call onBeforeRender before rendering the model", function(){
-      expect(view.$el).toHaveText(/Yoddling Tomes/);
+      expect(view.$el).toHaveText(/Something Different/);
     });
 
   });

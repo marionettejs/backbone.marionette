@@ -157,7 +157,7 @@ file.
 
 You can read the annotated for all the detail of how Marionette works, and advice on which methods to override when.
 
-##### [View the annotated source code](http://marionettejs.github.com/backbone.marionette/docs/backbone.marionette.html)
+##### [View the annotated source code](http://marionettejs.com/docs/backbone.marionette.html)
 
 ## Donations
 

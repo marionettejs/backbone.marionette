@@ -1,3 +1,8 @@
+### v1.0.0-rc6 [view commit logs](https://github.com/marionettejs/backbone.marionette/compare/v1.0.0-rc5...v1.0.0-rc6)
+
+* CompositeView
+  * Corrected the timing of the "before:render" event / `onBeforeRender` callback, so that it will be called before serializing the data for the model / template
+
 ### v1.0.0-rc5 [view commit logs](https://github.com/marionettejs/backbone.marionette/compare/v1.0.0-rc4...v1.0.0-rc5)
 
 * CollectionView / ItemView

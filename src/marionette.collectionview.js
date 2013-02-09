@@ -64,8 +64,16 @@ Marionette.CollectionView = Marionette.View.extend({
   // the collection view.
   render: function(){
     this.isClosed = false;
-
     this.triggerBeforeRender();
+    this._renderChildren();
+    this.triggerRendered();
+    return this;
+  },
+
+  // Internal method. Separated so that CompositeView can have
+  // more control over events being triggered, around the rendering
+  // process
+  _renderChildren: function(){
     this.closeEmptyView();
     this.closeChildren();
 
@@ -74,9 +82,6 @@ Marionette.CollectionView = Marionette.View.extend({
     } else {
       this.showEmptyView();
     }
-
-    this.triggerRendered();
-    return this;
   },
 
   // Internal method to loop through each item in the

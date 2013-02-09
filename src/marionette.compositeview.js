@@ -19,7 +19,7 @@ Marionette.CompositeView = Marionette.CollectionView.extend({
     if (this.collection){
       this.listenTo(this.collection, "add", this.addChildView, this);
       this.listenTo(this.collection, "remove", this.removeItemView, this);
-      this.listenTo(this.collection, "reset", this.renderCollection, this);
+      this.listenTo(this.collection, "reset", this._renderChildren, this);
     }
   },
 
@@ -57,22 +57,27 @@ Marionette.CompositeView = Marionette.CollectionView.extend({
   // but the collection will not re-render.
   render: function(){
     this.isClosed = false;
-
     this.resetItemViewContainer();
 
+    this.triggerBeforeRender();
     var html = this.renderModel();
     this.$el.html(html);
-
     // the ui bindings is done here and not at the end of render since they 
     // will not be available until after the model is rendered, but should be
     // available before the collection is rendered.
     this.bindUIElements();
-
     this.triggerMethod("composite:model:rendered");
 
-    this.renderCollection();
+    this._renderChildren();
+
     this.triggerMethod("composite:rendered");
+    this.triggerRendered();
     return this;
+  },
+
+  _renderChildren: function(){
+    Marionette.CollectionView.prototype._renderChildren.call(this);
+    this.triggerMethod("composite:collection:rendered");
   },
 
   // Render the collection for the composite view
@@ -80,7 +85,6 @@ Marionette.CompositeView = Marionette.CollectionView.extend({
     var args = Array.prototype.slice.apply(arguments);
     Marionette.CollectionView.prototype.render.apply(this, args);
 
-    this.triggerMethod("composite:collection:rendered");
   },
 
   // Render an individual model, if we have one, as

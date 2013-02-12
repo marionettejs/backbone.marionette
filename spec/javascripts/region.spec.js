@@ -165,7 +165,10 @@ describe("region", function(){
       setFixtures("<div id='region'></div>");
 
       view = new MyView();
+
       spyOn(view, "close");
+      spyOn(view, "remove");
+
       myRegion = new MyRegion();
       myRegion.on("close", function(){
         closed = true;
@@ -188,9 +191,40 @@ describe("region", function(){
       expect(view.close).toHaveBeenCalled();
     });
 
+    it("should not call 'remove' directly, on the view", function(){
+      expect(view.remove).not.toHaveBeenCalled();
+    });
+
     it("should delete the current view reference", function(){
       expect(myRegion.currentView).toBeUndefined();
     });
+  });
+
+  describe("when closing the current view and it does not have a 'close' method", function(){
+    var MyRegion = Backbone.Marionette.Region.extend({
+      el: "<div></div>"
+    });
+
+    var MyView = Backbone.View.extend({
+      render: function(){
+        $(this.el).html("some content");
+      }
+    });
+
+    var myRegion, view;
+
+    beforeEach(function(){
+      view = new MyView();
+      spyOn(view, "remove");
+      myRegion = new MyRegion();
+      myRegion.show(view);
+      myRegion.close();
+    });
+
+    it("should call 'remove' on the view", function(){
+      expect(view.remove).toHaveBeenCalled();
+    });
+
   });
 
   describe("when initializing a region manager and passing an 'el' option", function(){

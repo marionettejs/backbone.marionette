@@ -123,7 +123,7 @@ widget suites), see [this blog post on KendoUI + Backbone](http://www.kendoui.co
 ## View.triggers
 
 Views can define a set of `triggers` as a hash, which will 
-convert a DOM event in to a `view.trigger` event.
+convert a DOM event into a `view.triggerMethod` call.
 
 The left side of the hash is a standard Backbone.View DOM
 event configuration, while the right side of the hash is the
@@ -177,8 +177,7 @@ includes the following:
 * model
 * collection
 
-These properties of the args object come from the view that triggered
-the event.
+These properties match the `view`, `model`, and `collection` properties of the view that triggered the event.
 
 ```js
 MyView = Backbone.Marionette.ItemView.extend({
@@ -230,7 +229,7 @@ Backbone.Marionette.CompositeView.extend({
 
 These will use the memory safe `listenTo`, and will set the context
 (the value of `this`) in the handler to be the view. Events are
-bound at the time of instantiation instanciation, and an exception will be thrown
+bound at the time of instantiation instantiation, and an exception will be thrown
 if the handlers on the view do not exist.
 
 The `modelEvents` and `collectionEvents` will be bound and
@@ -279,7 +278,7 @@ This works for both `modelEvents` and `collectionEvents`.
 
 ### Event Configuration As Function
 
-A function can be used to declare the event configuration, as long as
+A function can be used to declare the event configuration as long as
 that function returns a hash that fits the above configuration options.
 
 ```js
@@ -322,13 +321,13 @@ In ItemView and CompositeView this is already taken care of.
 ## View.templateHelpers
 
 There are times when a view's template needs to have some
-logic in it, and the view engine itself will not provide an
+logic in it and the view engine itself will not provide an
 easy way to accomplish this. For example, Underscore templates
 do not provide a helper method mechanism while Handlebars
 templates do.
 
 A `templateHelpers` attribute can be applied to any View object that
-renders a template. When this attribute is present, it's contents 
+renders a template. When this attribute is present it's contents 
 will be mixed in to the data object that comes back from the 
 `serializeData` method. This will allow you to create helper methods 
 that can be called from within your templates.

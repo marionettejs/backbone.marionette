@@ -6,7 +6,6 @@ Marionette.View = Backbone.View.extend({
 
   constructor: function(){
     _.bindAll(this, "render");
-    Marionette.addEventBinder(this);
 
     var args = Array.prototype.slice.apply(arguments);
     Backbone.View.prototype.constructor.apply(this, args);
@@ -71,7 +70,7 @@ Marionette.View = Backbone.View.extend({
         };
 
         // trigger the event
-        that.trigger(value, args);
+        that.triggerMethod(value, args);
       };
 
     });

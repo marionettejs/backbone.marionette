@@ -7,32 +7,11 @@ a way to get the same behaviors and conventions from your own code.
 
 ## Documentation Index
 
-* [Marionette.addEventBinder](#marionetteaddeventbinder)
 * [Marionette.createObject](#marionettecreateobject)
 * [Marionette.extend](#marionetteextend)
 * [Marionette.getOption](#marionetteextend)
 * [Marionette.triggerMethod](#marionettetriggermethod)
 * [Marionette.bindEntityEvent](#marionettebindentityevents)
-
-## Marionette.addEventBinder
-
-Add a [Backbone.EventBinder](https://github.com/marionettejs/backbone.eventbinder)
-instance to any target object. This method attaches an `eventBinder` to
-the target object, and then copies the necessary methods to the target
-while maintaining the event binder in it's own object. 
-
-```js
-myObj = {};
-
-Marionette.addEventBinder(myObj);
-
-myObj.listenTo(aModel, "foo", function(){...});
-```
-
-This allows the event binder's implementation to vary independently
-of it being attached to the view. For example, the internal structure
-used to store the events can change without worry about it interfering
-with Marionette's views.
 
 ## Marionette.createObject
 
@@ -112,6 +91,33 @@ new M({}, { foo: "quux" }); // => "quux"
 
 This is useful when building an object that can have configuration set
 in either the object definition or the object's constructor options.
+
+### Falsey values
+
+The `getOption` function will return any falsey value from the `options`,
+other than `undefined`. If an object's options has an undefined value, it will
+attempt to read the value from the object directly.
+
+For example:
+
+```js
+var M = Backbone.Model.extend({
+  foo: "bar",
+
+  initialize: function(){
+    var f = Marionette.getOption(this, "foo");
+    console.log(f);
+  }
+});
+
+new M(); // => "bar"
+
+var f;
+new M({}, { foo: f }); // => "bar"
+```
+
+In this example, "bar" is returned both times because the second 
+example has an undefined value for `f`.
 
 ## Marionette.triggerMethod
 

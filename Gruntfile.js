@@ -69,49 +69,46 @@ module.exports = function(grunt) {
 
     jasmine : {
       test : {
-        src : [
-          'public/javascripts/jquery.js',
-          'public/javascripts/json2.js',
-          'public/javascripts/underscore.js',
-          'public/javascripts/backbone.js',
-          'public/javascripts/backbone.babysitter.js',
-          'public/javascripts/backbone.augment.js',
-          'public/javascripts/backbone.wreqr.js',
-          'src/build/marionette.core.js',
-          'spec/javascripts/support/marionette.support.js',
-          'src/marionette.helpers.js',
-          'src/marionette.createObject.js',
-          'src/marionette.triggermethod.js',
-          'src/marionette.eventbinder.js',
-          'src/marionette.bindEntityEvents.js',
-          'src/marionette.eventaggregator.js',
-          'src/marionette.controller.js',
-          'src/marionette.domRefresh.js',
-          'src/marionette.view.js',
-          'src/marionette.itemview.js',
-          'src/marionette.collectionview.js',
-          'src/marionette.compositeview.js',
-          'src/marionette.region.js',
-          'src/marionette.layout.js',
-          'src/marionette.application.js',
-          'src/marionette.approuter.js',
-          'src/marionette.module.js',
-          'src/marionette.templatecache.js',
-          'src/marionette.renderer.js',
-          'src/marionette.callbacks.js'
-        ],
+      src : [
+        'public/javascripts/jquery.js',
+        'public/javascripts/json2.js',
+        'public/javascripts/underscore.js',
+        'public/javascripts/backbone.js',
+        'public/javascripts/backbone.babysitter.js',
+        'public/javascripts/backbone.wreqr.js',
+        'src/build/marionette.core.js',
+        'spec/javascripts/support/marionette.support.js',
+        'src/marionette.helpers.js',
+        'src/marionette.createObject.js',
+        'src/marionette.triggermethod.js',
+        'src/marionette.bindEntityEvents.js',
+        'src/marionette.controller.js',
+        'src/marionette.domRefresh.js',
+        'src/marionette.view.js',
+        'src/marionette.itemview.js',
+        'src/marionette.collectionview.js',
+        'src/marionette.compositeview.js',
+        'src/marionette.region.js',
+        'src/marionette.layout.js',
+        'src/marionette.application.js',
+        'src/marionette.approuter.js',
+        'src/marionette.module.js',
+        'src/marionette.templatecache.js',
+        'src/marionette.renderer.js',
+        'src/marionette.callbacks.js'
+      ],
         options : {
-          helpers : 'spec/javascripts/helpers/*.js',
-          specs : 'spec/javascripts/**/*.spec.js'
+      helpers : 'spec/javascripts/helpers/*.js',
+      specs : 'spec/javascripts/**/*.spec.js'
         }
       }
     },
 
     jshint: {
       src : {
-        options : {
+      options: {
           jshintrc : '.jshintrc'
-        }
+      }
       }
     },
     uglify: {}

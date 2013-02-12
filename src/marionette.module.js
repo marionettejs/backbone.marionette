@@ -15,8 +15,6 @@ Marionette.Module = function(moduleName, app){
   this.app = app;
   this.startWithParent = true;
 
-  // extend this module with an event binder
-  Marionette.addEventBinder(this);
   this.triggerMethod = Marionette.triggerMethod;
 };
 
@@ -77,7 +75,7 @@ _.extend(Marionette.Module.prototype, Backbone.Events, {
     _.each(this.submodules, function(mod){ mod.stop(); });
 
     // run the finalizers
-    this._finalizerCallbacks.run();
+    this._finalizerCallbacks.run(undefined,this);
 
     // reset the initializers and finalizers
     this._initializerCallbacks.reset();

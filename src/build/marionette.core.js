@@ -6,11 +6,9 @@ var Marionette = (function(Backbone, _, $){
 
 //= ../marionette.helpers.js
 //= ../marionette.createObject.js
-//= ../marionette.triggerMethod.js
+//= ../marionette.triggermethod.js
 //= ../marionette.domRefresh.js
 
-//= ../marionette.eventbinder.js
-//= ../marionette.eventaggregator.js
 //= ../marionette.bindEntityEvents.js
   
 //= ../marionette.callbacks.js

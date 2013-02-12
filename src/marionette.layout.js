@@ -13,11 +13,11 @@ Marionette.Layout = Marionette.ItemView.extend({
   // Ensure the regions are avialable when the `initialize` method
   // is called.
   constructor: function () {
-    this._firstRender = true;
-    this.initializeRegions();
-
     var args = Array.prototype.slice.apply(arguments);
     Marionette.ItemView.apply(this, args);
+    
+    this._firstRender = true;
+    this.initializeRegions();
   },
 
   // Layout's render will use the existing region objects the
@@ -66,7 +66,7 @@ Marionette.Layout = Marionette.ItemView.extend({
     }
 
     var that = this;
-    var regions = this.regions || {};
+    var regions = _.result(this, 'regions') || {};
     _.each(regions, function (region, name) {
 
       var regionManager = Marionette.Region.buildRegion(region, that.regionType);

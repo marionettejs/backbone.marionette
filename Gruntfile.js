@@ -1,9 +1,6 @@
 /*global module:false*/
 module.exports = function(grunt) {
 
-  grunt.loadNpmTasks('grunt-rigger');
-  grunt.loadNpmTasks('grunt-jasmine-runner');
-
   // Project configuration.
   grunt.initConfig({
     pkg: '<json:package.json>',
@@ -71,72 +68,61 @@ module.exports = function(grunt) {
     },
 
     jasmine : {
-      src : [
-        'public/javascripts/jquery.js',
-        'public/javascripts/json2.js',
-        'public/javascripts/underscore.js',
-        'public/javascripts/backbone.js',
-        'public/javascripts/backbone.babysitter.js',
-        'public/javascripts/backbone.augment.js',
-        'public/javascripts/backbone.wreqr.js',
-        'src/build/marionette.core.js',
-        'spec/javascripts/support/marionette.support.js',
-        'src/marionette.helpers.js',
-        'src/marionette.createObject.js',
-        'src/marionette.triggermethod.js',
-        'src/marionette.eventbinder.js',
-        'src/marionette.bindEntityEvents.js',
-        'src/marionette.eventaggregator.js',
-        'src/marionette.controller.js',
-        'src/marionette.domRefresh.js',
-        'src/marionette.view.js',
-        'src/marionette.itemview.js',
-        'src/marionette.collectionview.js',
-        'src/marionette.compositeview.js',
-        'src/marionette.region.js',
-        'src/marionette.layout.js',
-        'src/marionette.application.js',
-        'src/marionette.approuter.js',
-        'src/marionette.module.js',
-        'src/marionette.templatecache.js',
-        'src/marionette.renderer.js',
-        'src/marionette.callbacks.js'
-      ],
-      helpers : 'spec/javascripts/helpers/*.js',
-      specs : 'spec/javascripts/**/*.spec.js'
-    },
-
-    'jasmine-server' : {
-      browser : false
+      test : {
+        src : [
+          'public/javascripts/jquery.js',
+          'public/javascripts/json2.js',
+          'public/javascripts/underscore.js',
+          'public/javascripts/backbone.js',
+          'public/javascripts/backbone.babysitter.js',
+          'public/javascripts/backbone.augment.js',
+          'public/javascripts/backbone.wreqr.js',
+          'src/build/marionette.core.js',
+          'spec/javascripts/support/marionette.support.js',
+          'src/marionette.helpers.js',
+          'src/marionette.createObject.js',
+          'src/marionette.triggermethod.js',
+          'src/marionette.eventbinder.js',
+          'src/marionette.bindEntityEvents.js',
+          'src/marionette.eventaggregator.js',
+          'src/marionette.controller.js',
+          'src/marionette.domRefresh.js',
+          'src/marionette.view.js',
+          'src/marionette.itemview.js',
+          'src/marionette.collectionview.js',
+          'src/marionette.compositeview.js',
+          'src/marionette.region.js',
+          'src/marionette.layout.js',
+          'src/marionette.application.js',
+          'src/marionette.approuter.js',
+          'src/marionette.module.js',
+          'src/marionette.templatecache.js',
+          'src/marionette.renderer.js',
+          'src/marionette.callbacks.js'
+        ],
+        options : {
+          helpers : 'spec/javascripts/helpers/*.js',
+          specs : 'spec/javascripts/**/*.spec.js'
+        }
+      }
     },
 
     jshint: {
-      options: {
-        curly: true,
-        eqeqeq: true,
-        immed: false,
-        latedef: true,
-        newcap: true,
-        noarg: true,
-        sub: true,
-        undef: true,
-        boss: true,
-        eqnull: true,
-        browser: true
-      },
-      globals: {
-        jQuery: true,
-        Backbone: true,
-        _: true,
-        Marionette: true,
-        $: true,
-        slice: true
+      src : {
+        options : {
+          jshintrc : '.jshintrc'
+        }
       }
     },
     uglify: {}
   });
 
+  grunt.loadNpmTasks('grunt-contrib-jasmine');
+  grunt.loadNpmTasks('grunt-contrib-jshint');
+
+  grunt.registerTask('test', ['jasmine'])
+
   // Default task.
-  grunt.registerTask('default', 'lint rig min');
+//  grunt.registerTask('default', 'lint rig min');
 
 };

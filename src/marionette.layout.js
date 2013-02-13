@@ -12,7 +12,7 @@ Marionette.Layout = Marionette.ItemView.extend({
   
   // Ensure the regions are avialable when the `initialize` method
   // is called.
-  constructor: function (option) {
+  constructor: function (options) {
     this._firstRender = true;
     this.initializeRegions(options || {});
     
@@ -68,7 +68,7 @@ Marionette.Layout = Marionette.ItemView.extend({
     var that = this;
     
     var regions;
-    if _.isFunction(this.regions){
+    if (_.isFunction(this.regions)) {
       regions = this.regions(options);
     } else {
       regions = this.regions || {};

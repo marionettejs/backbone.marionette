@@ -29,6 +29,18 @@ Marionette.CollectionView = Marionette.View.extend({
     }
   },
 
+  // Handle setting the collection
+  setCollection: function(newCollection){
+    // unbind to current collection
+    if (this.collection){
+      this.stopListening(this.collection);
+    }
+    // set new collection
+    this.collection = newCollection;
+    // bind to new collection
+    this._initialEvents();
+  },
+
   // Handle a child item added to the collection
   addChildView: function(item, collection, options){
     this.closeEmptyView();

@@ -12,12 +12,12 @@ Marionette.Layout = Marionette.ItemView.extend({
   
   // Ensure the regions are avialable when the `initialize` method
   // is called.
-  constructor: function () {
+  constructor: function (option) {
+    this._firstRender = true;
+    this.initializeRegions(options || {});
+    
     var args = Array.prototype.slice.apply(arguments);
     Marionette.ItemView.apply(this, args);
-    
-    this._firstRender = true;
-    this.initializeRegions();
   },
 
   // Layout's render will use the existing region objects the
@@ -60,13 +60,19 @@ Marionette.Layout = Marionette.ItemView.extend({
   // For example: `regions: { menu: ".menu-container" }`
   // will product a `layout.menu` object which is a region
   // that controls the `.menu-container` DOM element.
-  initializeRegions: function () {
+  initializeRegions: function (options) {
     if (!this.regionManagers){
       this.regionManagers = {};
     }
 
     var that = this;
-    var regions = _.result(this, 'regions') || {};
+    
+    var regions;
+    if _.isFunction(this.regions){
+      regions = this.regions(options);
+    } else {
+      regions = this.regions || {};
+    }
     _.each(regions, function (region, name) {
 
       var regionManager = Marionette.Region.buildRegion(region, that.regionType);
@@ -84,7 +90,7 @@ Marionette.Layout = Marionette.ItemView.extend({
   // they point to
   reInitializeRegions: function(){
     if (this.regionManagers && _.size(this.regionManagers)===0){
-      this.initializeRegions();
+      this.initializeRegions(this.options || {});
     } else {
       _.each(this.regionManagers, function(region){
         region.reset();

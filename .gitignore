@@ -7,3 +7,4 @@ ext/
 node_modules/
 npm-debug.log
 _SpecRunner.html
+components/

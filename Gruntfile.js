@@ -26,56 +26,58 @@ module.exports = function(grunt) {
       files: ['src/marionette.*.js']
     },
 
-    rig: {
+    preprocess: {
       core_build: {
-        src: ['<banner:meta.core_banner>', 'src/build/marionette.core.js'],
-        dest: 'lib/core/backbone.marionette.js'
+        files : {
+          'lib/core/backbone.marionette.js' : 'src/build/marionette.core.js'
+        }
       },
       core_amd: {
-        src: ['<banner:meta.core_banner>', 'src/build/amd.core.js'],
-        dest: 'lib/core/amd/backbone.marionette.js'
+        files : {
+          'lib/core/amd/backbone.marionette.js' : 'src/build/amd.core.js'
+        }
       },
-      build: {
-        src: ['<banner:meta.banner>', 'src/build/marionette.js'],
-        dest: 'lib/backbone.marionette.js'
+    },
+
+    concat : {
+      build : {
+        src : [
+          'public/javascripts/backbone.babysitter.js',
+          'public/javascripts/backbone.wreqr.js',
+          'lib/core/backbone.marionette.js',
+        ],
+        dest : 'lib/backbone.marionette.js'
       }
     },
 
-    min: {
-      core_standard: {
-        src: [
-          '<banner:meta.core_banner>',
-          '<config:rig.core_build.dest>'
-        ],
-        dest: 'lib/core/backbone.marionette.min.js'
+    uglify : {
+      amd : {
+        src : 'lib/core/amd/backbone.marionette.js',
+        dest : 'lib/core/amd/backbone.marionette.min.js',
       },
-
-      core_amd: {
-        src: [
-          '<banner:meta.core_banner>',
-          '<config:rig.core_amd.dest>'
-        ],
-        dest: 'lib/core/amd/backbone.marionette.min.js'
+      core : {
+        src : 'lib/core/backbone.marionette.js',
+        dest : 'lib/core/backbone.marionette.min.js',
+        options : {
+          sourceMap : 'lib/core/backbone.marionette.map',
+          sourceMappingURL : 'backbone.marionette.map',
+          sourceMapPrefix : 2,
+        }
       },
-
-      standard: {
-        src: [
-          '<banner:meta.banner>',
-          '<config:rig.build.dest>'
-        ],
-        dest: 'lib/backbone.marionette.min.js'
+      bundle : {
+        src : 'lib/backbone.marionette.js',
+        dest : 'lib/backbone.marionette.min.js',
+        options : {
+          sourceMap : 'lib/backbone.marionette.map',
+          sourceMappingURL : 'backbone.marionette.map',
+          sourceMapPrefix : 1
+        }
       }
     },
 
     jasmine : {
-      test : {
+      marionette : {
       src : [
-        'public/javascripts/jquery.js',
-        'public/javascripts/json2.js',
-        'public/javascripts/underscore.js',
-        'public/javascripts/backbone.js',
-        'public/javascripts/backbone.babysitter.js',
-        'public/javascripts/backbone.wreqr.js',
         'src/build/marionette.core.js',
         'spec/javascripts/support/marionette.support.js',
         'src/marionette.helpers.js',
@@ -98,28 +100,52 @@ module.exports = function(grunt) {
         'src/marionette.callbacks.js'
       ],
         options : {
-      helpers : 'spec/javascripts/helpers/*.js',
-      specs : 'spec/javascripts/**/*.spec.js'
+          template : require('grunt-template-jasmine-istanbul'),
+          helpers : 'spec/javascripts/helpers/*.js',
+          specs : 'spec/javascripts/**/*.spec.js',
+          vendor : [
+            'public/javascripts/jquery.js',
+            'public/javascripts/json2.js',
+            'public/javascripts/underscore.js',
+            'public/javascripts/backbone.js',
+            'public/javascripts/backbone.babysitter.js',
+            'public/javascripts/backbone.wreqr.js',
+          ],
+          templateOptions: {
+            coverage: 'reports/coverage.json',
+            report: 'reports/coverage'
+          }
         }
       }
     },
 
     jshint: {
-      src : {
       options: {
-          jshintrc : '.jshintrc'
-      }
+        jshintrc : '.jshintrc'
+      },
+      marionette : [ 'src/*.js' ]
+    },
+    plato: {
+      marionette : {
+        src : 'src/*.js',
+        dest : 'reports',
+        options : {
+          jshint : grunt.file.readJSON('.jshintrc')
+        }
       }
     },
-    uglify: {}
   });
 
+  grunt.loadNpmTasks('grunt-preprocess');
   grunt.loadNpmTasks('grunt-contrib-jasmine');
+  grunt.loadNpmTasks('grunt-contrib-concat');
   grunt.loadNpmTasks('grunt-contrib-jshint');
+  grunt.loadNpmTasks('grunt-contrib-uglify');
+  grunt.loadNpmTasks('grunt-plato');
 
-  grunt.registerTask('test', ['jasmine'])
+  grunt.registerTask('test', ['jshint', 'jasmine']);
 
   // Default task.
-//  grunt.registerTask('default', 'lint rig min');
+  grunt.registerTask('default', ['jshint', 'preprocess', 'concat', 'uglify']);
 
 };

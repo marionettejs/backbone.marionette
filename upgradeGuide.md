@@ -1,3 +1,8 @@
+## Upgrade to v1.0.0
+
+Please see previous upgrade guide entries and the 
+[changelog](https://github.com/marionettejs/backbone.marionette/blob/master/changelog.md).
+
 ## Upgrade to v1.0.0-rc4
 
 RC4 is mostly bug fixes and zombie killing. There are a few

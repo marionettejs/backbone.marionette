@@ -185,8 +185,8 @@ describe("collection view", function(){
     });
     
     it("should pass the model when calling 'itemViewOptions'", function() {
-      expect(collectionView.itemViewOptions).toHaveBeenCalledWith(collection.at(0)); 
-      expect(collectionView.itemViewOptions).toHaveBeenCalledWith(collection.at(1)); 
+      expect(collectionView.itemViewOptions).toHaveBeenCalledWith(collection.at(0), 0); 
+      expect(collectionView.itemViewOptions).toHaveBeenCalledWith(collection.at(1), 1); 
     });
 
     it("should pass the index when calling 'itemViewOptions'", function() {

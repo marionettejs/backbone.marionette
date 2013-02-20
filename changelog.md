@@ -58,7 +58,7 @@
 * EventBinder -> EventAggregator
   * **BREAKING:** Backbone.Werqr.EventAggregator largely replaces Backbone.EventBinder
   * **BREAKING:** `bindTo` has been replaced with `listenTo`
-  * **BREAKING:** `unbindAll` has been replaced with `stopLitening`
+  * **BREAKING:** `unbindAll` has been replaced with `stopListening`
   * **BREAKING:** `unbindFrom` has been removed and will not be replaced
 
 * Marionette.addEventBinder

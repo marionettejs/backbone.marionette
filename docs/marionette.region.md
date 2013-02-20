@@ -179,12 +179,12 @@ These events can be used to run code when your region manager
 opens and closes views.
 
 ```js
-MyApp.mainRegion.on("show", function(view){
+MyApp.mainRegion.on("view:show", function(view){
   // manipulate the `view` or do something extra
   // with the region manager via `this`
 });
 
-MyApp.mainRegion.on("closed", function(view){
+MyApp.mainRegion.on("view:closed", function(view){
   // manipulate the `view` or do something extra
   // with the region manager via `this`
 });

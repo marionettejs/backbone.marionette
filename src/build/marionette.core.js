@@ -4,29 +4,29 @@ var Marionette = (function(Backbone, _, $){
   var Marionette = {};
   Backbone.Marionette = Marionette;
 
-//= ../marionette.helpers.js
-//= ../marionette.createObject.js
-//= ../marionette.triggermethod.js
-//= ../marionette.domRefresh.js
+// @include ../marionette.helpers.js
+// @include ../marionette.createObject.js
+// @include ../marionette.triggermethod.js
+// @include ../marionette.domRefresh.js
 
-//= ../marionette.bindEntityEvents.js
-  
-//= ../marionette.callbacks.js
-//= ../marionette.controller.js
-//= ../marionette.region.js
+// @include ../marionette.bindEntityEvents.js
 
-//= ../marionette.templatecache.js
-//= ../marionette.renderer.js
+// @include ../marionette.callbacks.js
+// @include ../marionette.controller.js
+// @include ../marionette.region.js
 
-//= ../marionette.view.js
-//= ../marionette.itemview.js
-//= ../marionette.collectionview.js
-//= ../marionette.compositeview.js
-//= ../marionette.layout.js
+// @include ../marionette.templatecache.js
+// @include ../marionette.renderer.js
 
-//= ../marionette.approuter.js
-//= ../marionette.application.js
-//= ../marionette.module.js
+// @include ../marionette.view.js
+// @include ../marionette.itemview.js
+// @include ../marionette.collectionview.js
+// @include ../marionette.compositeview.js
+// @include ../marionette.layout.js
+
+// @include ../marionette.approuter.js
+// @include ../marionette.application.js
+// @include ../marionette.module.js
 
   return Marionette;
 })(Backbone, _, $ || window.jQuery || window.Zepto || window.ender);

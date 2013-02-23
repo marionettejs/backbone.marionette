@@ -16,7 +16,7 @@
   } 
 }(this, function ($, _, Backbone) {
 
-  //= marionette.core.js
+  // @include marionette.core.js
   return Backbone.Marionette; 
 
 }));

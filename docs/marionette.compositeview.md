@@ -197,7 +197,7 @@ During the course of rendering a composite, several events will
 be triggered. These events are triggered with the [Marionette.triggerMethod](./marionette.functions.md)
 function, which calls a corresponding "on{EventName}" method on the view.
 
-* "composite:item:rendered" / `onCompositeItemRendered` - after the `modelView` has been rendered
+* "composite:model:rendered" / `onCompositeModelRendered` - after the `modelView` has been rendered
 * "composite:collection:rendered" / `onCompositeCollectionRendered` - after the collection of models has been rendered
 * "render" / `onRender` and "composite:rendered" / `onCompositeRendered` - after everything has been rendered
 

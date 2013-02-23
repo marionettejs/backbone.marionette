@@ -70,8 +70,8 @@ want to wait until your entire application is initialized to start the
 
 The events that are currently triggered, are:
 
-* **"initialize:before" / `onInitializeBefore` **: fired just before the initializers kick off
-* **"initialize:after" / `onInitializeAfter` **: fires just after the initializers have finished
+* **"initialize:before" / `onInitializeBefore`**: fired just before the initializers kick off
+* **"initialize:after" / `onInitializeAfter`**: fires just after the initializers have finished
 * **"start" / `onStart`**: fires after all initializers and after the initializer events
 
 ```js

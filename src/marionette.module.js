@@ -122,7 +122,6 @@ _.extend(Marionette.Module, {
 
   // Create a module, hanging off the app parameter as the parent object.
   create: function(app, moduleNames, moduleDefinition){
-    var that = this;
     var module = app;
 
     // get the custom args passed in after the module definition and
@@ -141,9 +140,9 @@ _.extend(Marionette.Module, {
     // Loop through all the parts of the module definition
     _.each(moduleNames, function(moduleName, i){
       var parentModule = module;
-      module = that._getModule(parentModule, moduleName, app);
-      that._addModuleDefinition(parentModule, module, moduleDefinitions[i], customArgs);
-    });
+      module = this._getModule(parentModule, moduleName, app);
+      this._addModuleDefinition(parentModule, module, moduleDefinitions[i], customArgs);
+    }, this);
 
     // Return the last module in the definition chain
     return module;

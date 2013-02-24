@@ -50,7 +50,7 @@ _.extend(Marionette.Application.prototype, Backbone.Events, {
   // Add regions to your app. 
   // Accepts a hash of named strings or Region objects
   // addRegions({something: "#someRegion"})
-  // addRegions{{something: Region.extend({el: "#someRegion"}) });
+  // addRegions({something: Region.extend({el: "#someRegion"}) });
   addRegions: function(regions){
     _.each(regions, function (region, name) {
       var regionManager = Marionette.Region.buildRegion(region, Marionette.Region);

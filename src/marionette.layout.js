@@ -65,18 +65,17 @@ Marionette.Layout = Marionette.ItemView.extend({
       this.regionManagers = {};
     }
 
-    var that = this;
     var regions = this.regions || {};
     _.each(regions, function (region, name) {
+      var regionManager = Marionette.Region.buildRegion(region, this.regionType);
 
-      var regionManager = Marionette.Region.buildRegion(region, that.regionType);
-      regionManager.getEl = function(selector){
-        return that.$(selector);
-      };
+      regionManager.getEl = _.bind(function(selector) {
+        return this.$(selector);
+      }, this);
 
-      that.regionManagers[name] = regionManager;
-      that[name] = regionManager;
-    });
+      this.regionManagers[name] = regionManager;
+      this[name] = regionManager;
+    }, this);
 
   },
 
@@ -96,7 +95,6 @@ Marionette.Layout = Marionette.ItemView.extend({
   // this layout. This method is called when the layout
   // itself is closed.
   closeRegions: function () {
-    var that = this;
     _.each(this.regionManagers, function (manager, name) {
       manager.close();
     });
@@ -105,10 +103,9 @@ Marionette.Layout = Marionette.ItemView.extend({
   // Destroys all of the regions by removing references
   // from the Layout
   destroyRegions: function(){
-    var that = this;
     _.each(this.regionManagers, function (manager, name) {
-      delete that[name];
-    });
+      delete this[name];
+    }, this);
     this.regionManagers = {};
   }
 });

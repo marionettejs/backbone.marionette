@@ -45,7 +45,6 @@ Marionette.View = Backbone.View.extend({
   configureTriggers: function(){
     if (!this.triggers) { return; }
 
-    var that = this;
     var triggerEvents = {};
 
     // Allow `triggers` to be configured as a function
@@ -70,10 +69,10 @@ Marionette.View = Backbone.View.extend({
         };
 
         // trigger the event
-        that.triggerMethod(value, args);
+        this.triggerMethod(value, args);
       };
 
-    });
+    }, this);
 
     return triggerEvents;
   },
@@ -139,7 +138,6 @@ Marionette.View = Backbone.View.extend({
   bindUIElements: function(){
     if (!this.ui) { return; }
 
-    var that = this;
 
     if (!this.uiBindings) {
       // We want to store the ui hash in uiBindings, since afterwards the values in the ui hash
@@ -150,8 +148,8 @@ Marionette.View = Backbone.View.extend({
     // refreshing the associated selectors since they should point to the newly rendered elements.
     this.ui = {};
     _.each(_.keys(this.uiBindings), function(key) {
-      var selector = that.uiBindings[key];
-      that.ui[key] = that.$(selector);
-    });
+      var selector = this.uiBindings[key];
+      this.ui[key] = this.$(selector);
+    }, this);
   }
 });

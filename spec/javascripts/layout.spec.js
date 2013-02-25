@@ -110,16 +110,17 @@ describe("layout", function(){
     var options, layout;
 
     var Layout = Marionette.Layout.extend({
-      template: "<div id='foo'></div>",
+      template: "#foo",
       regions: function(opts){
         options = opts;
         return {
-          "foo": "#foo"
+          "foo": "#bar"
         };
       }
     });
 
     beforeEach(function(){
+      setFixtures("<div id='foo'><div id='bar'></div></div>");
       layout = new Layout();
       layout.render();
     });
@@ -129,8 +130,8 @@ describe("layout", function(){
     });
 
     it("should build the regions from the returns object literal", function(){
-      expect(layoutManagerNoDefault).toHaveOwnProperty("foo");
-      expect(layoutManagerNoDefault.regionTwo).toBeInstanceOf(Backbone.Marionette.Region);
+      expect(layout).toHaveOwnProperty("foo");
+      expect(layout.foo).toBeInstanceOf(Backbone.Marionette.Region);
     });
   });
 

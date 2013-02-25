@@ -106,6 +106,34 @@ describe("layout", function(){
     });
   });
 
+  describe("when regions are defined as a function", function(){
+    var options, layout;
+
+    var Layout = Marionette.Layout.extend({
+      template: "<div id='foo'></div>",
+      regions: function(opts){
+        options = opts;
+        return {
+          "foo": "#foo"
+        };
+      }
+    });
+
+    beforeEach(function(){
+      layout = new Layout();
+      layout.render();
+    });
+
+    it("should supply the layout.options to the function when calling it", function(){
+      expect(options).toBe(layout.options);
+    });
+
+    it("should build the regions from the returns object literal", function(){
+      expect(layoutManagerNoDefault).toHaveOwnProperty("foo");
+      expect(layoutManagerNoDefault.regionTwo).toBeInstanceOf(Backbone.Marionette.Region);
+    });
+  });
+
   describe("on rendering", function(){
     var layoutManager;
     var deferredResolved;

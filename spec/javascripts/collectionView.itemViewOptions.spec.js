@@ -73,13 +73,9 @@ describe("collection view - itemViewOptions", function(){
       expect(view.options.hasOwnProperty("foo")).toBe(true);
     });
 
-    it("should get the item index passed through the itemViewOptions function", function(){
-      expect(view.options.index).toBe(0);
-    });
-    
     it("should pass the model when calling 'itemViewOptions'", function() {
-      expect(collectionView.itemViewOptions).toHaveBeenCalledWith(collection.at(0)); 
-      expect(collectionView.itemViewOptions).toHaveBeenCalledWith(collection.at(1)); 
+      expect(collectionView.itemViewOptions).toHaveBeenCalledWith(collection.at(0), 0); 
+      expect(collectionView.itemViewOptions).toHaveBeenCalledWith(collection.at(1), 1); 
     });
   });
 

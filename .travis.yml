@@ -3,3 +3,5 @@ node_js:
   - "0.8"
 notifications:
   irc: "irc.freenode.net#marionette"
+before_script:
+  - npm install -g grunt-cli

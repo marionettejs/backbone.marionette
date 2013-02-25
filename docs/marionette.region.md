@@ -184,7 +184,7 @@ MyApp.mainRegion.on("show", function(view){
   // with the region manager via `this`
 });
 
-MyApp.mainRegion.on("closed", function(view){
+MyApp.mainRegion.on("close", function(view){
   // manipulate the `view` or do something extra
   // with the region manager via `this`
 });

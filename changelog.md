@@ -3,6 +3,9 @@
 * Region
   * Region will call the `close` method on a view, or the `remove` method if `close` is not found, when closing a view
 
+* CollectionView / CompositeView
+  * When specifying `itemViewOptions` as a function, an item `index` argument will be passed as the second parameter
+
 * Functions
   * Removed the `Marionette.createObject` function - it was never used by Marionette, directly
 

@@ -108,7 +108,8 @@ CollectionView = Backbone.Marionette.CollectionView({
   itemViewOptions: function(model, index) {
     // do some calculations based on the model
     return {
-      foo: "bar"
+      foo: "bar",
+      itemIndex: index
     }   
   }  
 });

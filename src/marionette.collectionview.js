@@ -138,7 +138,7 @@ Marionette.CollectionView = Marionette.View.extend({
     // get the itemViewOptions if any were specified
     var itemViewOptions = Marionette.getOption(this, "itemViewOptions");
     if (_.isFunction(itemViewOptions)){
-      itemViewOptions = itemViewOptions.call(this, item);
+      itemViewOptions = itemViewOptions.call(this, item, index);
     }
 
     // build the view 

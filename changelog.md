@@ -1,5 +1,8 @@
 ### v1.0.0 [view commit logs](https://github.com/marionettejs/backbone.marionette/compare/v1.0.0-rc6...v1.0.0)
 
+* Layout
+  * Can specify `regions` as a function that takes an `options` argument (the view's constructor options)
+
 * Region
   * Region will call the `close` method on a view, or the `remove` method if `close` is not found, when closing a view
 

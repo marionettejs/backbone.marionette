@@ -59,6 +59,31 @@ layout.menu.show(new MenuView());
 layout.content.show(new MainContentView());
 ```
 
+### Specifying Regions As A Function
+
+Regions can be specified on a Layout using a function that returns
+an object with the region definitions. The returned object follow the
+same rules for defining a region, as outlined above.
+
+```js
+Marionette.Layout.extend({
+  // ...
+
+  regions: function(options){
+    return {
+      fooRegion: "#foo-element"
+    };
+  },
+
+  // ...
+});
+```
+
+Note that the function recieves the view's `options` arguments that 
+were passed in to the view's constructor. `this.options` is not yet
+available when the regions are first initialized, so the options
+must be accessed through this parameter.
+
 ## Region Availability
 
 Any defined regions within a layout will be available to the

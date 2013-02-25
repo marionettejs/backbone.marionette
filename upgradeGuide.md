@@ -3,6 +3,17 @@
 Please see previous upgrade guide entries and the 
 [changelog](https://github.com/marionettejs/backbone.marionette/blob/master/changelog.md).
 
+### Grunt v0.4
+
+Grunt v0.4 has a significantly different architecture than previous versions. If
+you are building Marionette and/or running the specs from your local computer, you
+will need to update to the latest version of Grunt v0.4 to do so. 
+
+See the
+[getting started guide for Grunt](http://gruntjs.com/getting-started).
+
+Once you have done that, you should be able to run Grunt to get things rolling.
+
 ## Upgrade to v1.0.0-rc4
 
 RC4 is mostly bug fixes and zombie killing. There are a few

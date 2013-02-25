@@ -7,6 +7,10 @@
   * Replaced `that = this` with the `context` param of several calls to `_.each` to clean up the code
   * Removed an unused method from the CompositeView implementation
 
+* Build process
+  * Updated to Grunt v0.4.x
+  * Added code coverage and other analysis reports
+
 ### v1.0.0-rc6 [view commit logs](https://github.com/marionettejs/backbone.marionette/compare/v1.0.0-rc5...v1.0.0-rc6)
 
 * CompositeView

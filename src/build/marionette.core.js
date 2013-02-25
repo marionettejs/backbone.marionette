@@ -5,7 +5,6 @@ var Marionette = (function(Backbone, _, $){
   Backbone.Marionette = Marionette;
 
 // @include ../marionette.helpers.js
-// @include ../marionette.createObject.js
 // @include ../marionette.triggermethod.js
 // @include ../marionette.domRefresh.js
 

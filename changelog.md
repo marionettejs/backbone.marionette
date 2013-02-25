@@ -3,6 +3,9 @@
 * Region
   * Region will call the `close` method on a view, or the `remove` method if `close` is not found, when closing a view
 
+* Functions
+  * Removed the `Marionette.createObject` function - it was never used by Marionette, directly
+
 * Code Cleanup
   * Replaced `that = this` with the `context` param of several calls to `_.each` to clean up the code
   * Removed an unused method from the CompositeView implementation

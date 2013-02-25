@@ -14,6 +14,11 @@ See the
 
 Once you have done that, you should be able to run Grunt to get things rolling.
 
+### Marionette.createObject
+
+This method has been removed. It was never used by Marionette directly,
+and you should replace it's use with a proper polyfill such as Modernizr.
+
 ## Upgrade to v1.0.0-rc4
 
 RC4 is mostly bug fixes and zombie killing. There are a few

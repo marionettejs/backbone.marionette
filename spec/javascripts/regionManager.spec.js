@@ -74,33 +74,33 @@ describe("region manager", function(){
     });
   });
 
-  xdescribe("when closing the region manager", function(){
-    var region, regionManager, closeHandler, removeHandler;
+  describe("when closing the region manager", function(){
+    var region, regionManager, closeHandler, closeManagerHandler;
 
     beforeEach(function(){
-      closeHandler = jasmine.createSpy("close handler");
-      removeHandler = jasmine.createSpy("remove handler");
+      closeHandler = jasmine.createSpy("close region handler");
+      closeManagerHandler = jasmine.createSpy("close manager handler");
 
       regionManager = new Marionette.RegionManager();
       region = regionManager.addRegion("foo", "#foo");
       region.show(new Backbone.View());
 
       region.on("close", closeHandler);
-      regionManager.on("region:remove", removeHandler);
+      regionManager.on("close", closeManagerHandler);
 
-      regionManager.remove("foo");
+      regionManager.close();
     });
 
     it("should close all regions", function(){
-      throw new Error("not yet implemented");
+      expect(closeHandler).toHaveBeenCalled();
     });
 
     it("should remove all regions", function(){
-      throw new Error("not yet implemented");
+      expect(regionManager.get("foo")).toBeUndefined();
     });
 
     it("should trigger a 'close' event/method", function(){
-      throw new Error("not yet implemented");
+      expect(closeManagerHandler).toHaveBeenCalled();
     });
   });
 

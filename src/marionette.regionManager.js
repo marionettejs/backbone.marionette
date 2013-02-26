@@ -26,6 +26,22 @@ Marionette.RegionManager = Marionette.Controller.extend({
   // Remove a region by name
   remove: function(name){
     var region = this._regions[name];
+    this._remove(name, region);
+  },
+
+  // Close the region manager, all regions in the region manager, and
+  // remove them
+  close: function(){
+    _.each(this._regions, function(region, name){
+      this._remove(name, region);
+    }, this);
+
+    var args = Array.prototype.slice.call(arguments);
+    Marionette.Controller.prototype.close.apply(this, args);
+  },
+
+  // internal method to remove a region
+  _remove: function(name, region){
     region.close();
     delete this._regions[name];
     this.triggerMethod("region:remove", name, region);

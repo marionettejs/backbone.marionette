@@ -13,7 +13,7 @@ Marionette.RegionManager = Marionette.Controller.extend({
   // and return the region instance
   addRegion: function(name, definition){
     var region = Marionette.Region.buildRegion(definition, Marionette.Region);
-    this._storeRegion(name, region);
+    this._regions[name] = region;
     this.triggerMethod("region:add");
     return region;
   },
@@ -23,9 +23,12 @@ Marionette.RegionManager = Marionette.Controller.extend({
     return this._regions[name];
   },
 
-  // Internal method to store a region
-  _storeRegion: function(name, region){
-    this._regions[name] = region;
+  // Remove a region by name
+  remove: function(name){
+    var region = this._regions[name];
+    region.close();
+    delete this._regions[name];
+    this.triggerMethod("region:remove", name);
   }
 
 });

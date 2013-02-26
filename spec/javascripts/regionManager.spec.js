@@ -44,17 +44,33 @@ describe("region manager", function(){
     });
   });
 
-  xdescribe("when removing a region by name", function(){
+  describe("when removing a region by name", function(){
+    var region, regionManager, closeHandler, removeHandler;
+
+    beforeEach(function(){
+      closeHandler = jasmine.createSpy("close handler");
+      removeHandler = jasmine.createSpy("remove handler");
+
+      regionManager = new Marionette.RegionManager();
+      region = regionManager.addRegion("foo", "#foo");
+      region.show(new Backbone.View());
+
+      region.on("close", closeHandler);
+      regionManager.on("region:remove", removeHandler);
+
+      regionManager.remove("foo");
+    });
+
     it("should close the region", function(){
-      throw new Error("not yet implemented");
+      expect(closeHandler).toHaveBeenCalled();
     });
 
     it("should remove the region", function(){
-      throw new Error("not yet implemented");
+      expect(regionManager.get("foo")).toBeUndefined();
     });
 
     it("should trigger a 'region:remove' event/method", function(){
-      throw new Error("not yet implemented");
+      expect(removeHandler).toHaveBeenCalled();
     });
   });
 

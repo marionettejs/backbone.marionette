@@ -25,6 +25,25 @@ describe("region manager", function(){
     });
   });
 
+  describe("when adding a region and supplying a parent element", function(){
+    var region, regionManager, addHandler, context;
+
+    beforeEach(function(){
+      context = $("<div><div id='foo'></div><div id='bar'></div></div>");
+      regionManager = new Marionette.RegionManager();
+      region = regionManager.addRegion("foo", {
+        selector: "#foo",
+        parentEl: context
+      });
+
+      region.show(new Backbone.View());
+    });
+
+    it("should set the region's selector within the supplied jQuery selector object", function(){
+      expect(region.$el.parent()).toBe(context);
+    });
+  });
+
   xdescribe("when removing a region by name", function(){
     it("should close the region", function(){
       throw new Error("not yet implemented");

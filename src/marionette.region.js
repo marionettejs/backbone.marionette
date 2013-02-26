@@ -79,11 +79,17 @@ _.extend(Marionette.Region, {
     
     // build the region instance
 
-    var regionManager = new RegionType({
+    var region = new RegionType({
       el: selector
     });
 
-    return regionManager;
+    if (regionConfig.parentEl){
+      region.getEl = function(selector) {
+        return regionConfig.parentEl.find(selector);
+      };
+    }
+
+    return region;
   }
 
 });

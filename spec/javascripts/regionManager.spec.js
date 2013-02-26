@@ -44,6 +44,29 @@ describe("region manager", function(){
     });
   });
 
+  describe("when adding multiple regions", function(){
+    var regions, regionManager;
+
+    beforeEach(function(){
+      regionManager = new Marionette.RegionManager();
+
+      regions = regionManager.addRegions({
+        foo: "#bar",
+        baz: "#quux"
+      });
+    });
+
+    it("should add all specified regions", function(){
+      expect(regionManager.get("foo")).not.toBeUndefined();
+      expect(regionManager.get("baz")).not.toBeUndefined();
+    });
+
+    it("should return an object literal containing all named region instances", function(){
+      expect(regions.foo).toBe(regionManager.get("foo"));
+      expect(regions.baz).toBe(regionManager.get("baz"));
+    });
+  });
+
   describe("when removing a region by name", function(){
     var region, regionManager, closeHandler, removeHandler;
 

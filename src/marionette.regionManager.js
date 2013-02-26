@@ -14,7 +14,7 @@ Marionette.RegionManager = Marionette.Controller.extend({
   addRegion: function(name, definition){
     var region = Marionette.Region.buildRegion(definition, Marionette.Region);
     this._regions[name] = region;
-    this.triggerMethod("region:add");
+    this.triggerMethod("region:add", name, region);
     return region;
   },
 
@@ -28,7 +28,7 @@ Marionette.RegionManager = Marionette.Controller.extend({
     var region = this._regions[name];
     region.close();
     delete this._regions[name];
-    this.triggerMethod("region:remove", name);
+    this.triggerMethod("region:remove", name, region);
   }
 
 });

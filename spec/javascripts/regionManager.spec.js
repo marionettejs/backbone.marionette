@@ -49,17 +49,19 @@ describe("region manager", function(){
   });
 
   describe("when adding a region and supplying a parent element as a function", function(){
-    var region, regionManager, addHandler, context;
+    var region, regionManager, addHandler, context, parentElHandler, view;
 
     beforeEach(function(){
       context = $("<div><div id='foo'></div><div id='bar'></div></div>");
+      parentElHandler = jasmine.createSpy("parent el handler").andReturn(context);
       regionManager = new Marionette.RegionManager();
       region = regionManager.addRegion("foo", {
         selector: "#foo",
-        parentEl: function(){ return context; }
+        parentEl: parentElHandler
       });
 
-      region.show(new Backbone.View());
+      view = new Backbone.View();
+      region.show(view);
     });
 
     it("should set the region's selector within the supplied jQuery selector object", function(){

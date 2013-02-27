@@ -189,7 +189,6 @@ describe("layout", function(){
       layout.onRender = function(){
         regionOne = layout.regionOne;
         regionOne.ensureEl();
-        throw new Error(layout.$el.children.length + ":" + regionOne.$el.length);
       };
 
       region = new Backbone.Marionette.Region({

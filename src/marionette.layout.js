@@ -62,6 +62,9 @@ Marionette.Layout = Marionette.ItemView.extend({
   // will product a `layout.menu` object which is a region
   // that controls the `.menu-container` DOM element.
   _initializeRegions: function (options) {
+    var that = this,
+        regions;
+
     if (!this._regionManager){
       this._regionManager = new Marionette.RegionManager();
       this.listenTo(this._regionManager, "region:add", function(name, region){
@@ -69,12 +72,12 @@ Marionette.Layout = Marionette.ItemView.extend({
       });
     }
     
-    var regions;
     if (_.isFunction(this.regions)) {
       regions = this.regions(options);
     } else {
       regions = this.regions || {};
     }
+
 
     _.each(regions, function (definition, name) {
       if (typeof definition === "string"){
@@ -83,7 +86,7 @@ Marionette.Layout = Marionette.ItemView.extend({
 
       definition = _.defaults(definition, {
         parentEl: function(){ 
-          return this.$el; 
+          return that.$el; 
         }
       });
 

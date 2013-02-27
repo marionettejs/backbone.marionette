@@ -93,7 +93,7 @@ _.extend(Marionette.Region, {
       region.getEl = function(selector) {
         var parentEl = regionConfig.parentEl;
         if (_.isFunction(parentEl)){
-          parentEl = parentEl.call(this);
+          parentEl = parentEl();
         }
         return parentEl.find(selector);
       };

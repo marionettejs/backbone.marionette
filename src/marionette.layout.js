@@ -16,7 +16,7 @@ Marionette.Layout = Marionette.ItemView.extend({
     options = options || {};
 
     this._firstRender = true;
-    this.initializeRegions(options);
+    this._initializeRegions(options);
     
     Marionette.ItemView.call(this, options);
   },
@@ -61,11 +61,13 @@ Marionette.Layout = Marionette.ItemView.extend({
   // For example: `regions: { menu: ".menu-container" }`
   // will product a `layout.menu` object which is a region
   // that controls the `.menu-container` DOM element.
-  initializeRegions: function (options) {
-    if (!this.regionManagers){
-      this.regionManagers = {};
+  _initializeRegions: function (options) {
+    if (!this._regionManager){
+      this._regionManager = new Marionette.RegionManager();
+      this.listenTo(this._regionManager, "region:add", function(name, region){
+        this[name] = region;
+      });
     }
-
     
     var regions;
     if (_.isFunction(this.regions)) {
@@ -73,15 +75,19 @@ Marionette.Layout = Marionette.ItemView.extend({
     } else {
       regions = this.regions || {};
     }
-    _.each(regions, function (region, name) {
-      var regionManager = Marionette.Region.buildRegion(region, this.regionType);
 
-      regionManager.getEl = _.bind(function(selector) {
-        return this.$(selector);
-      }, this);
+    _.each(regions, function (definition, name) {
+      if (typeof definition === "string"){
+        definition = {selector: definition};
+      }
 
-      this.regionManagers[name] = regionManager;
-      this[name] = regionManager;
+      definition = _.defaults(definition, {
+        parentEl: function(){ 
+          return this.$el; 
+        }
+      });
+
+      this._regionManager.addRegion(name, definition);
     }, this);
 
   },
@@ -89,31 +95,21 @@ Marionette.Layout = Marionette.ItemView.extend({
   // Re-initialize all of the regions by updating the `el` that
   // they point to
   reInitializeRegions: function(){
-    if (this.regionManagers && _.size(this.regionManagers)===0){
-      this.initializeRegions(this.options || {});
-    } else {
-      _.each(this.regionManagers, function(region){
-        region.reset();
-      });
-    }
+    this._regionManager.each(function(region){
+      region.reset();
+    });
   },
 
   // Close all of the regions that have been opened by
   // this layout. This method is called when the layout
   // itself is closed.
   closeRegions: function () {
-    _.each(this.regionManagers, function (manager, name) {
-      manager.close();
-    });
+    this._regionManager.close();
   },
 
   // Destroys all of the regions by removing references
   // from the Layout
   destroyRegions: function(){
-    _.each(this.regionManagers, function (manager, name) {
-      delete this[name];
-    }, this);
-    this.regionManagers = {};
+    this.closeRegions();
   }
 });
-

@@ -89,8 +89,13 @@ _.extend(Marionette.Region, {
     // literal to build the region, the element will not be
     // guaranteed to be in the DOM already, and will cause problems
     if (regionConfig.parentEl){
+
       region.getEl = function(selector) {
-        return regionConfig.parentEl.find(selector);
+        var parentEl = regionConfig.parentEl;
+        if (_.isFunction(parentEl)){
+          parentEl = parentEl.call(this);
+        }
+        return parentEl.find(selector);
       };
     }
 

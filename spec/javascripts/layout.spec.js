@@ -84,19 +84,17 @@ describe("layout", function(){
     });
   
     it("should instantiate the default regionManager if specified", function() {
-      var layoutManagerCustomRegion = new LayoutManagerCustomRegion();
-      expect(layoutManagerCustomRegion).toHaveOwnProperty("regionThree");
-      expect(layoutManagerCustomRegion.regionThree).toBeInstanceOf(CustomRegion1);
-      expect(layoutManagerCustomRegion).toHaveOwnProperty("regionThree");
-      expect(layoutManagerCustomRegion.regionThree).toBeInstanceOf(CustomRegion1);
+      expect(layoutManager).toHaveOwnProperty("regionThree");
+      expect(layoutManager.regionThree).toBeInstanceOf(Marionette.Region);
+      expect(layoutManager).toHaveOwnProperty("regionThree");
+      expect(layoutManager.regionThree).toBeInstanceOf(Marionette.Region);
     });
 
     it("should instantiate specific regions with custom regions if speficied", function() {
-      var layoutManagerCustomRegion = new LayoutManagerCustomRegion(); 
-      expect(layoutManagerCustomRegion).toHaveOwnProperty("regionOne");
-      expect(layoutManagerCustomRegion.regionOne).toBeInstanceOf(CustomRegion1);
-      expect(layoutManagerCustomRegion).toHaveOwnProperty("regionTwo");
-      expect(layoutManagerCustomRegion.regionTwo).toBeInstanceOf(CustomRegion2);
+      expect(layoutManager).toHaveOwnProperty("regionOne");
+      expect(layoutManager.regionOne).toBeInstanceOf(CustomRegion1);
+      expect(layoutManager).toHaveOwnProperty("regionTwo");
+      expect(layoutManager.regionTwo).toBeInstanceOf(CustomRegion2);
     });
 
     it("should instantiate marionette regions is no regionType is specified", function() {
@@ -180,24 +178,23 @@ describe("layout", function(){
     });
   });
 
-  describe("when showing via a region manager", function(){
-    var region, layout, regionOne, r1el;
+  describe("when showing a layout via a region", function(){
+    var region, layout, regionOne;
 
     beforeEach(function(){
       setFixtures("<div id='mgr'></div>");
       loadFixtures("layoutManagerTemplate.html");
 
+      layout = new LayoutManager();
+      layout.onRender = function(){
+        regionOne = layout.regionOne;
+        regionOne.ensureEl();
+        throw new Error(layout.$el.children.length + ":" + regionOne.$el.length);
+      };
+
       region = new Backbone.Marionette.Region({
         el: "#mgr"
       });
-
-      layout = new LayoutManager();
-      layout.onRender = function(){
-        regionOne = this.regionOne;
-        regionOne.ensureEl();
-        r1el = regionOne.$el;
-      };
-
       region.show(layout);
     });
 
@@ -206,7 +203,7 @@ describe("layout", function(){
     });
 
     it("the regions should find their elements in `onRender`", function(){
-      expect(r1el.length).toBe(1);
+      expect(regionOne.$el.length).toBe(1);
     });
   });
 

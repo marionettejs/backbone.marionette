@@ -44,15 +44,20 @@ Marionette.RegionManager = (function(Marionette){
       this._remove(name, region);
     },
 
-    // Close the region manager, all regions in the region manager, and
-    // remove them
+    // Close all regions and shut down the region
+    // manager entirely
     close: function(){
+      this.closeRegions();
+      var args = Array.prototype.slice.call(arguments);
+      Marionette.Controller.prototype.close.apply(this, args);
+    },
+
+    // Close all regions in the region manager, and
+    // remove them
+    closeRegions: function(){
       _.each(this._regions, function(region, name){
         this._remove(name, region);
       }, this);
-
-      var args = Array.prototype.slice.call(arguments);
-      Marionette.Controller.prototype.close.apply(this, args);
     },
 
     // internal method to store regions

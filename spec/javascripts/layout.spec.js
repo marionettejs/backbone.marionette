@@ -222,7 +222,7 @@ describe("layout", function(){
       view.close = function(){};
       layout.regionOne.show(view);
 
-      spyOn(layout, "closeRegions").andCallThrough();
+      spyOn(layout, "_closeRegions").andCallThrough();
 
       layout.render();
       layout.regionOne.show(view);

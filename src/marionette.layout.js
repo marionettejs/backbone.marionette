@@ -15,6 +15,16 @@ Marionette.Layout = Marionette.ItemView.extend({
   constructor: function (options) {
     options = options || {};
 
+    this._regionManager = new Marionette.RegionManager();
+
+    this.listenTo(this._regionManager, "region:add", function(name, region){
+      this[name] = region;
+    });
+
+    this.listenTo(this._regionManager, "region:remove", function(name, region){
+      delete this[name];
+    });
+
     this._firstRender = true;
     this._initializeRegions(options);
     
@@ -34,8 +44,8 @@ Marionette.Layout = Marionette.ItemView.extend({
     } else {
       // If this is not the first render call, then we need to 
       // re-initializing the `el` for each region
-      this.closeRegions();
-      this.reInitializeRegions();
+      this._closeRegions();
+      this._reInitializeRegions();
     }
 
     var args = Array.prototype.slice.apply(arguments);
@@ -47,10 +57,7 @@ Marionette.Layout = Marionette.ItemView.extend({
   // Handle closing regions, and then close the view itself.
   close: function () {
     if (this.isClosed){ return; }
-
-    this.closeRegions();
-    this.destroyRegions();
-
+    this._regionManager.close();
     var args = Array.prototype.slice.apply(arguments);
     Marionette.ItemView.prototype.close.apply(this, args);
   },
@@ -62,22 +69,13 @@ Marionette.Layout = Marionette.ItemView.extend({
   // will product a `layout.menu` object which is a region
   // that controls the `.menu-container` DOM element.
   _initializeRegions: function (options) {
-    var that = this,
-        regions;
+    var that = this, regions;
 
-    if (!this._regionManager){
-      this._regionManager = new Marionette.RegionManager();
-      this.listenTo(this._regionManager, "region:add", function(name, region){
-        this[name] = region;
-      });
-    }
-    
     if (_.isFunction(this.regions)) {
       regions = this.regions(options);
     } else {
       regions = this.regions || {};
     }
-
 
     _.each(regions, function (definition, name) {
       if (typeof definition === "string"){
@@ -97,22 +95,15 @@ Marionette.Layout = Marionette.ItemView.extend({
 
   // Re-initialize all of the regions by updating the `el` that
   // they point to
-  reInitializeRegions: function(){
-    this._regionManager.each(function(region){
-      region.reset();
-    });
+  _reInitializeRegions: function(){
+    this._closeRegions();
+    this._initializeRegions();
   },
 
   // Close all of the regions that have been opened by
   // this layout. This method is called when the layout
   // itself is closed.
-  closeRegions: function () {
-    this._regionManager.close();
-  },
-
-  // Destroys all of the regions by removing references
-  // from the Layout
-  destroyRegions: function(){
-    this.closeRegions();
+  _closeRegions: function () {
+    this._regionManager.closeRegions();
   }
 });

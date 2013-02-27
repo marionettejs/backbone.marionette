@@ -122,8 +122,33 @@ describe("region manager", function(){
     });
   });
 
+  describe("when closing all regions", function(){
+    var region, regionManager, closeHandler;
+
+    beforeEach(function(){
+      closeHandler = jasmine.createSpy("close region handler");
+      closeManagerHandler = jasmine.createSpy("close manager handler");
+
+      regionManager = new Marionette.RegionManager();
+      region = regionManager.addRegion("foo", "#foo");
+      region.show(new Backbone.View());
+
+      region.on("close", closeHandler);
+
+      regionManager.closeRegions();
+    });
+
+    it("should close all regions", function(){
+      expect(closeHandler).toHaveBeenCalled();
+    });
+
+    it("should remove all regions", function(){
+      expect(regionManager.get("foo")).toBeUndefined();
+    });
+  });
+
   describe("when closing the region manager", function(){
-    var region, regionManager, closeHandler, closeManagerHandler;
+    var region, regionManager, closeManagerHandler;
 
     beforeEach(function(){
       closeHandler = jasmine.createSpy("close region handler");

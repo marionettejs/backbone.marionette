@@ -67,20 +67,11 @@ Marionette.Layout = Marionette.ItemView.extend({
       regions = this.regions || {};
     }
 
-    _.each(regions, function (definition, name) {
-      if (typeof definition === "string"){
-        definition = {selector: definition};
-      }
+    var defaults = {
+      parentEl: function(){ return that.$el; }
+    };
 
-      definition = _.defaults(definition, {
-        parentEl: function(){ 
-          return that.$el; 
-        }
-      });
-
-      this._regionManager.addRegion(name, definition);
-    }, this);
-
+    this._regionManager.addRegions(regions, defaults);
   },
 
   // Re-initialize all of the regions by updating the `el` that

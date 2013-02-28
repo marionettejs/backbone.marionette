@@ -92,6 +92,30 @@ describe("region manager", function(){
     });
   });
 
+  describe("when adding multiple regions with a defaults set", function(){
+    var regions, regionManager, parent;
+
+    beforeEach(function(){
+      regionManager = new Marionette.RegionManager();
+
+      parent = $("<div></div>")
+
+      var defaults = {
+        parentEl: parent
+      };
+
+      regions = regionManager.addRegions({
+        foo: "#bar",
+        baz: "#quux"
+      }, defaults);
+    });
+
+    it("should add all specified regions with the specified defaults", function(){
+      expect(regionManager.get("foo")).not.toBeUndefined();
+      expect(regionManager.get("baz")).not.toBeUndefined();
+    });
+  });
+
   describe("when removing a region by name", function(){
     var region, regionManager, closeHandler, removeHandler;
 

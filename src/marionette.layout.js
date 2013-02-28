@@ -15,16 +15,6 @@ Marionette.Layout = Marionette.ItemView.extend({
   constructor: function (options) {
     options = options || {};
 
-    this._regionManager = new Marionette.RegionManager();
-
-    this.listenTo(this._regionManager, "region:add", function(name, region){
-      this[name] = region;
-    });
-
-    this.listenTo(this._regionManager, "region:remove", function(name, region){
-      delete this[name];
-    });
-
     this._firstRender = true;
     this._initializeRegions(options);
     
@@ -70,6 +60,7 @@ Marionette.Layout = Marionette.ItemView.extend({
   // that controls the `.menu-container` DOM element.
   _initializeRegions: function (options) {
     var that = this, regions;
+    this._initRegionManager();
 
     if (_.isFunction(this.regions)) {
       regions = this.regions(options);
@@ -105,5 +96,17 @@ Marionette.Layout = Marionette.ItemView.extend({
   // itself is closed.
   _closeRegions: function () {
     this._regionManager.closeRegions();
+  },
+
+  _initRegionManager: function(){
+    this._regionManager = new Marionette.RegionManager();
+
+    this.listenTo(this._regionManager, "region:add", function(name, region){
+      this[name] = region;
+    });
+
+    this.listenTo(this._regionManager, "region:remove", function(name, region){
+      delete this[name];
+    });
   }
 });

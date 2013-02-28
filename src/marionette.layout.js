@@ -34,7 +34,6 @@ Marionette.Layout = Marionette.ItemView.extend({
     } else {
       // If this is not the first render call, then we need to 
       // re-initializing the `el` for each region
-      this._closeRegions();
       this._reInitializeRegions();
     }
 

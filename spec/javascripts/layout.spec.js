@@ -207,7 +207,7 @@ describe("layout", function(){
   });
 
   describe("when re-rendering an already rendered layout", function(){
-    var region, layout, view;
+    var region, layout, view, closeRegionsSpy;
 
     beforeEach(function(){
       loadFixtures("layoutManagerTemplate.html");
@@ -216,25 +216,25 @@ describe("layout", function(){
         model: new Backbone.Model()
       });
       layout.render();
-      region = layout.regionOne;
 
       view = new Backbone.View();
       view.close = function(){};
       layout.regionOne.show(view);
 
-      spyOn(layout, "_closeRegions").andCallThrough();
+      closeRegionsSpy = spyOn(layout, "_closeRegions").andCallThrough();
 
       layout.render();
       layout.regionOne.show(view);
+      region = layout.regionOne;
     });
 
     it("should close the regions", function(){
-      expect(layout.closeRegions.callCount).toBe(1);
+      expect(closeRegionsSpy.callCount).toBe(1);
     });
 
     it("should re-bind the regions to the newly rendered elements", function(){
       var regionEl = layout.$("#regionOne");
-      expect(region.$el[0]).toBe(regionEl[0]);
+      expect(region.$el.parent()).toBe(layout.$el);
     });
 
     describe("and the view's `render` function is bound to an event in the `initialize` function", function(){

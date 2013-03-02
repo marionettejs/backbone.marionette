@@ -51,14 +51,28 @@ Marionette.Layout = Marionette.ItemView.extend({
     Marionette.ItemView.prototype.close.apply(this, args);
   },
 
+  // Add a single region, by name, to the layout
+  addRegion: function(name, definition){
+    var regions = {};
+    regions[name] = definition;
+    return this.addRegions(regions)[name];
+  },
+
+  // Add multiple regions as a {name: definition, name2: def2} object literal
+  addRegions: function(regions){
+    var that = this;
+
+    var defaults = {
+      parentEl: function(){ return that.$el; }
+    };
+
+    return this._regionManager.addRegions(regions, defaults);
+  },
+
   // Initialize the regions that have been defined in a
-  // `regions` attribute on this layout. The key of the
-  // hash becomes an attribute on the layout object directly.
-  // For example: `regions: { menu: ".menu-container" }`
-  // will product a `layout.menu` object which is a region
-  // that controls the `.menu-container` DOM element.
+  // `regions` attribute on this layout. 
   _initializeRegions: function (options) {
-    var that = this, regions;
+    var regions;
     this._initRegionManager();
 
     if (_.isFunction(this.regions)) {
@@ -67,11 +81,7 @@ Marionette.Layout = Marionette.ItemView.extend({
       regions = this.regions || {};
     }
 
-    var defaults = {
-      parentEl: function(){ return that.$el; }
-    };
-
-    this._regionManager.addRegions(regions, defaults);
+    this.addRegions(regions);
   },
 
   // Re-initialize all of the regions by updating the `el` that

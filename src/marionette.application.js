@@ -5,7 +5,8 @@
 // Stores and starts up `Region` objects, includes an
 // event aggregator as `app.vent`
 Marionette.Application = function(options){
-  this.initCallbacks = new Marionette.Callbacks();
+  this._initRegionManager();
+  this._initCallbacks = new Marionette.Callbacks();
   this.vent = new Backbone.Wreqr.EventAggregator();
   this.commands = new Backbone.Wreqr.Commands();
   this.reqres = new Backbone.Wreqr.RequestResponse();
@@ -33,7 +34,7 @@ _.extend(Marionette.Application.prototype, Backbone.Events, {
   // method is called, or run immediately if added after `start`
   // has already been called.
   addInitializer: function(initializer){
-    this.initCallbacks.add(initializer);
+    this._initCallbacks.add(initializer);
   },
 
   // kick off all of the application's processes.
@@ -41,7 +42,7 @@ _.extend(Marionette.Application.prototype, Backbone.Events, {
   // to the app, and runs all of the initializer functions
   start: function(options){
     this.triggerMethod("initialize:before", options);
-    this.initCallbacks.run(options, this);
+    this._initCallbacks.run(options, this);
     this.triggerMethod("initialize:after", options);
 
     this.triggerMethod("start", options);
@@ -52,18 +53,14 @@ _.extend(Marionette.Application.prototype, Backbone.Events, {
   // addRegions({something: "#someRegion"})
   // addRegions({something: Region.extend({el: "#someRegion"}) });
   addRegions: function(regions){
-    _.each(regions, function (region, name) {
-      var regionManager = Marionette.Region.buildRegion(region, Marionette.Region);
-      this[name] = regionManager;
-    }, this);
+    return this._regionManager.addRegions(regions);
   },
 
   // Removes a region from your app.
   // Accepts the regions name
   // removeRegion('myRegion')
   removeRegion: function(region) {
-    this[region].close();
-    delete this[region];
+    this._regionManager.remove(region);
   },
 
   // Create a module, attached to the application
@@ -75,6 +72,19 @@ _.extend(Marionette.Application.prototype, Backbone.Events, {
 
     // see the Marionette.Module object for more information
     return Marionette.Module.create.apply(Marionette.Module, args);
+  },
+
+  // Internal metho to set up the region manager
+  _initRegionManager: function(){
+    this._regionManager = new Marionette.RegionManager();
+
+    this.listenTo(this._regionManager, "region:add", function(name, region){
+      this[name] = region;
+    });
+
+    this.listenTo(this._regionManager, "region:remove", function(name, region){
+      delete this[name];
+    });
   }
 });
 

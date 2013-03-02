@@ -45,8 +45,8 @@ describe("application regions", function(){
     });
     
     it("should initialize the regions, immediately", function(){
-      expect(MyApp.MyRegion).not.toBeUndefined();
-      expect(MyApp.anotherRegion).not.toBeUndefined();
+      expect(MyApp.MyRegion).toBe(myRegion);
+      expect(MyApp.anotherRegion).toBe(myRegion2);
     });
   });
 

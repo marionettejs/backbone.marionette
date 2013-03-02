@@ -21,7 +21,10 @@ Marionette.RegionManager = (function(Marionette){
           definition = { selector: definition };
         }
 
-        definition = _.defaults({}, definition, defaults);
+        if (definition.selector){
+          definition = _.defaults({}, definition, defaults);
+        }
+
         var region = this.addRegion(name, definition);
         regions[name] = region;
       }, this);
@@ -32,7 +35,18 @@ Marionette.RegionManager = (function(Marionette){
     // Add an individual region to the region manager,
     // and return the region instance
     addRegion: function(name, definition){
-      var region = Marionette.Region.buildRegion(definition, Marionette.Region);
+      var region;
+
+      var isObject = _.isObject(definition);
+      var isString = _.isString(definition);
+      var hasSelector = !!definition.selector;
+
+      if (isString || (isObject && hasSelector)){
+        region = Marionette.Region.buildRegion(definition, Marionette.Region);
+      } else {
+        region = definition;
+      }
+
       this._store(name, region);
       this.triggerMethod("region:add", name, region);
       return region;

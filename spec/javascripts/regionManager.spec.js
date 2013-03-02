@@ -29,6 +29,36 @@ describe("region manager", function(){
     });
   });
 
+  describe("when adding a region with a name and a region instance", function(){
+    var region, builtRegion, regionManager, addHandler;
+
+    beforeEach(function(){
+      addHandler = jasmine.createSpy("region:add handler");
+
+      regionManager = new Marionette.RegionManager();
+      regionManager.on("region:add", addHandler);
+
+      region = new Marionette.Region({el: "#foo"});
+      builtRegion = regionManager.addRegion("foo", region);
+    });
+
+    it("should use the supplied region", function(){
+      expect(builtRegion).toBe(region);
+    });
+
+    it("should store the region by name", function(){
+      expect(regionManager.get("foo")).toBe(region);
+    });
+
+    it("should trigger a 'region:add' event/method", function(){
+      expect(addHandler).toHaveBeenCalledWith("foo", region);
+    });
+
+    it("should increment the length", function(){
+      expect(regionManager.length).toBe(1);
+    });
+  });
+
   describe("when adding a region and supplying a parent element", function(){
     var region, regionManager, addHandler, context;
 
@@ -89,6 +119,27 @@ describe("region manager", function(){
     it("should return an object literal containing all named region instances", function(){
       expect(regions.foo).toBe(regionManager.get("foo"));
       expect(regions.baz).toBe(regionManager.get("baz"));
+    });
+  });
+
+  describe("when adding multiple regions with region instances supplied", function(){
+    var fooRegion, regions, regionManager;
+
+    beforeEach(function(){
+      fooRegion = new Marionette.Region({el: "#foo"});
+      regionManager = new Marionette.RegionManager();
+
+      regions = regionManager.addRegions({
+        foo: fooRegion
+      });
+    });
+
+    it("should add all specified regions", function(){
+      expect(regionManager.get("foo")).toBe(fooRegion);
+    });
+
+    it("should return an object literal containing all named region instances", function(){
+      expect(regions.foo).toBe(fooRegion);
     });
   });
 

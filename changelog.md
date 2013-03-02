@@ -1,7 +1,15 @@
 ### v1.0.0 [view commit logs](https://github.com/marionettejs/backbone.marionette/compare/v1.0.0-rc6...v1.0.0)
 
+* RegionManager
+  * Created new `Marionette.RegionManager` object to manage a set of regions
+
 * Layout
+  * Now uses `Marionette.RegionManager` to manage regions
+  * Now supports dynamic add / remove of regions
   * Can specify `regions` as a function that takes an `options` argument (the view's constructor options)
+
+* Application
+  * Now uses `Marionette.RegionManager` to manage regions
 
 * Region
   * Region will call the `close` method on a view, or the `remove` method if `close` is not found, when closing a view

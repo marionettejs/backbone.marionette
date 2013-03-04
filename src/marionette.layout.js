@@ -68,6 +68,7 @@ Marionette.Layout = Marionette.ItemView.extend({
     return this._buildRegions(regions);
   },
 
+  // Remove a single region from the Layout, by name
   removeRegion: function(name){
     return this.regionManager.remove(name);
   },
@@ -98,7 +99,7 @@ Marionette.Layout = Marionette.ItemView.extend({
     this.addRegions(regions);
   },
 
-  // Re-initialize all of the regions by updating the `el` that
+  // Internal method to re-initialize all of the regions by updating the `el` that
   // they point to
   _reInitializeRegions: function(){
     this.regionManager.closeRegions();
@@ -107,6 +108,8 @@ Marionette.Layout = Marionette.ItemView.extend({
     });
   },
 
+  // Internal method to initialize the region manager
+  // and all regions in it
   _initRegionManager: function(){
     this.regionManager = new Marionette.RegionManager();
 

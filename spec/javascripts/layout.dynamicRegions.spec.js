@@ -139,19 +139,19 @@ describe("layout - dynamic regions", function(){
   });
 
   describe("when removing a region from a layout", function(){
+    var Layout = Marionette.Layout.extend({
+      template: template,
+      regions: {
+        foo: "#foo"
+      }
+    });
+
     var layout, region, closeHandler, removeHandler;
 
     beforeEach(function(){
       closeHandler = jasmine.createSpy("close handler");
       removeHandler = jasmine.createSpy("remove handler");
       
-      var Layout = Marionette.Layout.extend({
-        template: template,
-        regions: {
-          foo: "#foo"
-        }
-      });
-
       layout = new Layout();
 
       layout.render();
@@ -178,13 +178,31 @@ describe("layout - dynamic regions", function(){
     });
   });
 
-  xdescribe("when removing a region and then re-rendering the layout", function(){
-    it("should not reset the region", function(){
-      throw new Error("not yet implemented");
+  describe("when removing a region and then re-rendering the layout", function(){
+    var Layout = Marionette.Layout.extend({
+      template: template,
+      regions: {
+        foo: "#foo"
+      }
+    });
+
+    var layout, region, closeHandler, removeHandler;
+
+    beforeEach(function(){
+      layout = new Layout();
+
+      layout.render();
+      layout.foo.show(new Backbone.View());
+      
+      layout.removeRegion("foo");
+      layout.render();
+
+      region = layout.foo;
     });
 
     it("should not re-attach the region to the layout", function(){
-      throw new Error("not yet implemented");
+      expect(region).toBeUndefined();
+      expect(layout.regionManager.get("foo")).toBeUndefined();
     });
   });
 

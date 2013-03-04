@@ -97,6 +97,7 @@ Marionette.CompositeView = Marionette.CollectionView.extend({
   // provide custom logic of how the child item view instances have their
   // HTML appended to the composite view instance.
   appendHtml: function(cv, iv){
+    if (this.isClosed === undefined) return;
     var $container = this.getItemViewContainer(cv);
     $container.append(iv.el);
   },

@@ -181,7 +181,7 @@ describe("region manager", function(){
       region.on("close", closeHandler);
       regionManager.on("region:remove", removeHandler);
 
-      regionManager.remove("foo");
+      regionManager.removeRegion("foo");
     });
 
     it("should close the region", function(){

@@ -58,7 +58,7 @@ Marionette.RegionManager = (function(Marionette){
     },
 
     // Remove a region by name
-    remove: function(name){
+    removeRegion: function(name){
       var region = this._regions[name];
       this._remove(name, region);
     },

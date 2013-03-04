@@ -60,7 +60,7 @@ _.extend(Marionette.Application.prototype, Backbone.Events, {
   // Accepts the regions name
   // removeRegion('myRegion')
   removeRegion: function(region) {
-    this._regionManager.remove(region);
+    this._regionManager.removeRegion(region);
   },
 
   // Create a module, attached to the application

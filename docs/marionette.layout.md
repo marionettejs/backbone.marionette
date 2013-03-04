@@ -201,3 +201,52 @@ AppLayout = Backbone.Marionette.Layout.extend({
 });
 ```
 
+## Adding And Removing Regions
+
+Regions can be added and removed as needed, in a
+Layout instance. Use the following methods:
+
+* `addRegion`
+* `addRegions`
+* `removeRegion`
+
+addRegion:
+
+```js
+var layout = new MyLayout();
+
+// ...
+
+layout.addRegion("foo", "#foo");
+layout.foo.show(new someView());
+```
+
+addRegions: 
+
+```js
+var layout = new MyLayout();
+
+// ...
+
+layout.addRegions({
+  foo: "#foo",
+  bar: "#bar"
+});
+```
+
+removeRegions:
+
+```js
+var layout = new MyLayout();
+
+// ...
+
+layout.removeRegion("foo");
+```
+
+Any region can be removed, whether it was defined
+in the `regions` attribute of the region definition,
+or added later.
+
+For more information on using these methods, see
+the `regionManager` documentation.

@@ -230,15 +230,4 @@ describe("layout - dynamic regions", function(){
       expect(closeHandler).toHaveBeenCalled();
     });
   });
-
-  xdescribe("when adding a region to a layout, closing the layout, then re-rendering the layout", function(){
-    it("should reset the region", function(){
-      throw new Error("not yet implemented");
-    });
-
-    it("should re-attach the region to the layout", function(){
-      throw new Error("not yet implemented");
-    });
-  });
-
 });

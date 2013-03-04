@@ -291,4 +291,26 @@ describe("region manager", function(){
     });
   });
 
+  describe("when iterating the region manager", function(){
+    var cb, r1, r2, r3;
+    
+    beforeEach(function(){
+      cb = jasmine.createSpy("iterator callback");
+
+      var rm = new Marionette.RegionManager();
+
+      r1 = rm.addRegion("foo", "#foo");
+      r2 = rm.addRegion("bar", "#bar");
+      r3 = rm.addRegion("baz", "#baz");
+
+      rm.each(cb);
+    });
+
+    it("should provide access to each region", function(){
+      expect(cb.calls[0].args[0]).toBe(r1);
+      expect(cb.calls[1].args[0]).toBe(r2);
+      expect(cb.calls[2].args[0]).toBe(r3);
+    });
+  });
+
 });

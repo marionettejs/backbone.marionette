@@ -93,15 +93,10 @@ Marionette.Layout = Marionette.ItemView.extend({
   // Re-initialize all of the regions by updating the `el` that
   // they point to
   _reInitializeRegions: function(){
-    this._closeRegions();
-    this._initializeRegions();
-  },
-
-  // Close all of the regions that have been opened by
-  // this layout. This method is called when the layout
-  // itself is closed.
-  _closeRegions: function () {
     this._regionManager.closeRegions();
+    this._regionManager.each(function(region){
+      region.reset();
+    });
   },
 
   _initRegionManager: function(){

@@ -114,8 +114,8 @@ Marionette.RegionManager = (function(Marionette){
 
   _.each(methods, function(method) {
     RegionManager.prototype[method] = function() {
-      var views = _.values(this._views);
-      var args = [views].concat(_.toArray(arguments));
+      var regions = _.values(this._regions);
+      var args = [regions].concat(_.toArray(arguments));
       return _[method].apply(_, args);
     };
   });

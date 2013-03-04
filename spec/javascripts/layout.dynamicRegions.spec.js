@@ -97,7 +97,7 @@ describe("layout - dynamic regions", function(){
     });
   });
 
-  xdescribe("when adding a region to a layout that already has regions defined, and re-rendering the layout", function(){
+  describe("when adding a region to a layout that already has regions defined, and re-rendering the layout", function(){
     var layout, region, view;
 
     beforeEach(function(){
@@ -122,6 +122,7 @@ describe("layout - dynamic regions", function(){
     });
 
     it("should set the parent of the region to the layout", function(){
+      region.show(new Backbone.View());
       expect(region.$el.parent()).toBe(layout.$el[0]);
     });
 

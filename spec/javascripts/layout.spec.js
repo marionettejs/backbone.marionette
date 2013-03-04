@@ -1,7 +1,7 @@
 describe("layout", function(){
   "use strict";
 
-  var LayoutManager = Backbone.Marionette.Layout.extend({
+  var Layout = Backbone.Marionette.Layout.extend({
     template: "#layout-manager-template",
     regions: {
       regionOne: "#regionOne",
@@ -20,7 +20,7 @@ describe("layout", function(){
   var CustomRegion2 = function() {
   };
   
-  var LayoutManagerNoDefaultRegion = LayoutManager.extend({
+  var LayoutNoDefaultRegion = Layout.extend({
     regions: {
       regionOne: {
         selector: '#regionOne',
@@ -34,7 +34,7 @@ describe("layout", function(){
     var layoutManager;
 
     beforeEach(function(){
-      layoutManager = new LayoutManager();
+      layoutManager = new Layout();
     });
 
     it("should instantiate the specified region managers", function(){
@@ -59,7 +59,7 @@ describe("layout", function(){
   });
 
   describe("on instantiation with custom region managers", function() {
-    var LayoutManagerCustomRegion = LayoutManager.extend({
+    var LayoutCustomRegion = Layout.extend({
       regionType: CustomRegion1,
       regions: {
         regionOne: {
@@ -80,7 +80,7 @@ describe("layout", function(){
     var layoutManager;
 
     beforeEach(function() {
-      layoutManager = new LayoutManagerCustomRegion 
+      layoutManager = new LayoutCustomRegion 
     });
   
     it("should instantiate the default regionManager if specified", function() {
@@ -98,7 +98,7 @@ describe("layout", function(){
     });
 
     it("should instantiate marionette regions is no regionType is specified", function() {
-      var layoutManagerNoDefault = new LayoutManagerNoDefaultRegion();
+      var layoutManagerNoDefault = new LayoutNoDefaultRegion();
       expect(layoutManagerNoDefault).toHaveOwnProperty("regionTwo");
       expect(layoutManagerNoDefault.regionTwo).toBeInstanceOf(Backbone.Marionette.Region);
     });
@@ -139,7 +139,7 @@ describe("layout", function(){
 
     beforeEach(function(){
       loadFixtures("layoutManagerTemplate.html");
-      layoutManager = new LayoutManager();
+      layoutManager = new Layout();
       layoutManager.render();
     });
 
@@ -155,7 +155,7 @@ describe("layout", function(){
 
     beforeEach(function(){
       loadFixtures("layoutManagerTemplate.html");
-      layoutManager = new LayoutManager();
+      layoutManager = new Layout();
       layoutManager.render();
 
       regionOne = layoutManager.regionOne;
@@ -185,7 +185,7 @@ describe("layout", function(){
       setFixtures("<div id='mgr'></div>");
       loadFixtures("layoutManagerTemplate.html");
 
-      layout = new LayoutManager();
+      layout = new Layout();
       layout.onRender = function(){
         regionOne = layout.regionOne;
         regionOne.ensureEl();
@@ -212,7 +212,7 @@ describe("layout", function(){
     beforeEach(function(){
       loadFixtures("layoutManagerTemplate.html");
 
-      layout = new LayoutManager({
+      layout = new Layout({
         model: new Backbone.Model()
       });
       layout.render();
@@ -221,7 +221,7 @@ describe("layout", function(){
       view.close = function(){};
       layout.regionOne.show(view);
 
-      closeRegionsSpy = spyOn(layout, "_closeRegions").andCallThrough();
+      closeRegionsSpy = spyOn(layout._regionManager, "closeRegions").andCallThrough();
 
       layout.render();
       layout.regionOne.show(view);
@@ -233,8 +233,7 @@ describe("layout", function(){
     });
 
     it("should re-bind the regions to the newly rendered elements", function(){
-      var regionEl = layout.$("#regionOne");
-      expect(region.$el.parent()).toBe(layout.$el);
+      expect(layout.regionOne.$el.parent()).toBe(layout.$el);
     });
 
     describe("and the view's `render` function is bound to an event in the `initialize` function", function(){
@@ -259,7 +258,7 @@ describe("layout", function(){
     beforeEach(function(){
       loadFixtures("layoutManagerTemplate.html");
 
-      layout = new LayoutManager();
+      layout = new Layout();
       layout.render();
       region = layout.regionOne;
 

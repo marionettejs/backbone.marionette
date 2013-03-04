@@ -197,6 +197,45 @@ describe("region manager", function(){
     });
   });
 
+  describe("when removing all regions", function(){
+    var region, r2, regionManager, closeHandler, closeHandler2, removeHandler;
+
+    beforeEach(function(){
+      closeHandler = jasmine.createSpy("close handler");
+      closeHandler2 = jasmine.createSpy("close handler");
+      removeHandler = jasmine.createSpy("remove handler");
+
+      regionManager = new Marionette.RegionManager();
+      region = regionManager.addRegion("foo", "#foo");
+      r2 = regionManager.addRegion("bar", "#bar");
+
+      region.show(new Backbone.View());
+      r2.show(new Backbone.View());
+
+      region.on("close", closeHandler);
+      r2.on("close", closeHandler2);
+
+      regionManager.on("region:remove", removeHandler);
+
+      regionManager.removeRegions();
+    });
+
+    it("should close the regions", function(){
+      expect(closeHandler).toHaveBeenCalled();
+      expect(closeHandler2).toHaveBeenCalled();
+    });
+
+    it("should remove the regions", function(){
+      expect(regionManager.get("foo")).toBeUndefined();
+      expect(regionManager.get("bar")).toBeUndefined();
+    });
+
+    it("should trigger a 'region:remove' event/method for each region", function(){
+      expect(removeHandler).toHaveBeenCalledWith("foo", region);
+      expect(removeHandler).toHaveBeenCalledWith("bar", r2);
+    });
+  });
+
   describe("when closing all regions", function(){
     var region, regionManager, closeHandler;
 
@@ -217,8 +256,8 @@ describe("region manager", function(){
       expect(closeHandler).toHaveBeenCalled();
     });
 
-    it("should remove all regions", function(){
-      expect(regionManager.get("foo")).toBeUndefined();
+    it("should not remove all regions", function(){
+      expect(regionManager.get("foo")).toBe(region);
     });
   });
 

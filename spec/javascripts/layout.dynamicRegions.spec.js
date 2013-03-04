@@ -61,11 +61,50 @@ describe("layout - dynamic regions", function(){
     });
   });
 
-  describe("when adding a region to a layout, and re-rendering the layout", function(){
+  xdescribe("when adding a region to a layout that does not have any regions defined, and re-rendering the layout", function(){
+    var layout, region, view, barRegion;
+
+    beforeEach(function(){
+      layout = new Marionette.Layout({
+        template: template
+      });
+
+      barRegion = layout.bar;
+
+      region = layout.addRegion("foo", "#foo");
+
+      layout.render();
+      layout.render();
+
+      var view = new Backbone.View();
+      layout.foo.show(view);
+    });
+
+    it("should keep the original regions", function(){
+      expect(layout.bar).toBe(barRegion);
+    });
+
+    it("should re-add the region to the layout after it is re-rendered", function(){
+      expect(layout.foo).toBe(region);
+    });
+
+    it("should set the parent of the region to the layout", function(){
+      expect(region.$el.parent()).toBe(layout.$el[0]);
+    });
+
+    it("should be able to show a view in the region", function(){
+      expect(layout.foo.$el.children().length).toBe(1);
+    });
+  });
+
+  xdescribe("when adding a region to a layout that already has regions defined, and re-rendering the layout", function(){
     var layout, region, view;
 
     beforeEach(function(){
       layout = new Marionette.Layout({
+        regions: {
+          bar: "#bar"
+        },
         template: template
       });
 

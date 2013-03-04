@@ -206,9 +206,28 @@ describe("layout - dynamic regions", function(){
     });
   });
 
-  xdescribe("when adding a region to a layout then closing the layout", function(){
+  describe("when adding a region to a layout then closing the layout", function(){
+    var layout, region, view, closeHandler;
+
+    beforeEach(function(){
+      closeHandler = jasmine.createSpy("add handler");
+      layout = new Marionette.Layout({
+        template: template
+      });
+
+      layout.render();
+
+      region = layout.addRegion("foo", "#foo");
+      region.on("close", closeHandler);
+
+      var view = new Backbone.View();
+      layout.foo.show(view);
+
+      layout.close();
+    });
+
     it("should close the region", function(){
-      throw new Error("not yet implemented");
+      expect(closeHandler).toHaveBeenCalled();
     });
   });
 

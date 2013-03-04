@@ -68,6 +68,10 @@ Marionette.Layout = Marionette.ItemView.extend({
     return this._buildRegions(regions);
   },
 
+  removeRegion: function(name){
+    return this._regionManager.remove(name);
+  },
+
   // internal method to build regions
   _buildRegions: function(regions){
     var that = this;
@@ -108,10 +112,12 @@ Marionette.Layout = Marionette.ItemView.extend({
 
     this.listenTo(this._regionManager, "region:add", function(name, region){
       this[name] = region;
+      this.trigger("region:add", name, region);
     });
 
     this.listenTo(this._regionManager, "region:remove", function(name, region){
       delete this[name];
+      this.trigger("region:remove", name, region);
     });
   }
 });

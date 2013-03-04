@@ -4,12 +4,15 @@ describe("layout - dynamic regions", function(){
   }
 
   describe("when adding a region to a layout, after it has been rendered", function(){
-    var layout, region, view;
+    var layout, region, view, addHandler;
 
     beforeEach(function(){
       layout = new Marionette.Layout({
         template: template
       });
+
+      addHandler = jasmine.createSpy("add handler");
+      layout.on("region:add", addHandler);
 
       layout.render();
 
@@ -29,6 +32,10 @@ describe("layout - dynamic regions", function(){
 
     it("should be able to show a view in the region", function(){
       expect(layout.foo.$el.children().length).toBe(1);
+    });
+
+    it("should trigger a region:add event", function(){
+      expect(addHandler).toHaveBeenCalledWith("foo", region);
     });
   });
 
@@ -131,14 +138,43 @@ describe("layout - dynamic regions", function(){
     });
   });
 
-  xdescribe("when removing a region from a layout", function(){
+  describe("when removing a region from a layout", function(){
+    var layout, region, closeHandler, removeHandler;
+
+    beforeEach(function(){
+      closeHandler = jasmine.createSpy("close handler");
+      removeHandler = jasmine.createSpy("remove handler");
+      
+      var Layout = Marionette.Layout.extend({
+        template: template,
+        regions: {
+          foo: "#foo"
+        }
+      });
+
+      layout = new Layout();
+
+      layout.render();
+      layout.foo.show(new Backbone.View());
+      region = layout.foo;
+
+      region.on("close", closeHandler);
+      layout.on("region:remove", removeHandler);
+
+      layout.removeRegion("foo");
+    });
 
     it("should close the region", function(){
-      throw new Error("not yet implemented");
+      expect(closeHandler).toHaveBeenCalled();
+    });
+
+    it("should trigger a region:remove event", function(){
+      expect(removeHandler).toHaveBeenCalledWith("foo", region);
     });
 
     it("should remove the region", function(){
-      throw new Error("not yet implemented");
+      expect(layout.foo).toBeUndefined();
+      expect(layout._regionManager.get("foo")).toBeUndefined();
     });
   });
 

@@ -115,4 +115,32 @@ describe("composite view - itemViewContainer", function(){
     });
   });
 
+  describe("when a collection is loaded / reset after the view is created and before it is rendered", function(){
+    var ItemView = Marionette.ItemView.extend({
+      template: _.template("test")
+    });
+
+    var ListView = Marionette.CompositeView.extend({
+      template: _.template('<table><tbody></tbody></table>'),
+      itemViewContainer: 'tbody',
+      itemView: ItemView
+    });
+
+    var view;
+
+    beforeEach(function(){
+      var collection = new Backbone.Collection();
+
+      view = new ListView({
+        collection: collection
+      });
+
+      collection.reset([{id:1}]);
+    });
+
+    it("should not render the items", function(){
+      expect(view.children.length).toBe(0);
+    });
+  });
+
 });

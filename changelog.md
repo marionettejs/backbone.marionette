@@ -17,6 +17,9 @@
 * CollectionView / CompositeView
   * When specifying `itemViewOptions` as a function, an item `index` argument will be passed as the second parameter
 
+* CompositeView
+  * Fixed a bug that caused an error when the collection was `reset` (loaded) before the view was rendered
+
 * Functions
   * Removed the `Marionette.createObject` function - it was never used by Marionette, directly
 

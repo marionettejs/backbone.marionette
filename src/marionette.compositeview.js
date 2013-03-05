@@ -56,6 +56,7 @@ Marionette.CompositeView = Marionette.CollectionView.extend({
   // this again will tell the model's view to re-render itself
   // but the collection will not re-render.
   render: function(){
+    this.isRendered = true;
     this.isClosed = false;
     this.resetItemViewContainer();
 
@@ -76,8 +77,10 @@ Marionette.CompositeView = Marionette.CollectionView.extend({
   },
 
   _renderChildren: function(){
-    Marionette.CollectionView.prototype._renderChildren.call(this);
-    this.triggerMethod("composite:collection:rendered");
+    if (this.isRendered){
+      Marionette.CollectionView.prototype._renderChildren.call(this);
+      this.triggerMethod("composite:collection:rendered");
+    }
   },
 
   // Render an individual model, if we have one, as

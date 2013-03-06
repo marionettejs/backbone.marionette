@@ -146,8 +146,8 @@ module.exports = function(grunt) {
         tasks : ['jshint', 'jasmine:marionette']
       },
       server : {
-        files : ['src/*.js', 'spec/*.js'],
-        tasks : ['jshint', 'jasmine:marionette:build']
+        files : ['src/*.js', 'spec/**/*.js'],
+        tasks : ['jasmine:marionette:build']
       }
     },
 

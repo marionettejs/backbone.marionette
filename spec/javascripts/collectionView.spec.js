@@ -615,7 +615,7 @@ describe("collection view", function(){
   });
 
   describe("when a child view is added to a collection view, after the collection view has been shown", function(){
-    var m1, m2, col, view;
+    var m1, m2, col, view, colView;
 
     var ItemView = Backbone.Marionette.ItemView.extend({
       onShow: function(){},
@@ -638,7 +638,7 @@ describe("collection view", function(){
       m1 = new Backbone.Model();
       m2 = new Backbone.Model();
       col = new Backbone.Collection([m1]);
-      var colView = new ColView({
+      colView = new ColView({
         collection: col
       });
 
@@ -659,8 +659,16 @@ describe("collection view", function(){
       expect(context).toBe(view);
     });
 
-    it("should call the child's 'onDomRefresh' method with itself as the context", function(){
+    it("should call the child's 'onDomRefresh' method if does exist in the DOM", function() {
+      $('body').append(colView.el);
+      expect(jQuery.contains(document.documentElement, view.el)).toBe(true);
       expect(ItemView.prototype.onDomRefresh).toHaveBeenCalled();
+      colView.remove();
+    });
+
+    it("should not call the child's 'onDomRefresh' method if doesn't exist in the DOM", function() {
+      expect(jQuery.contains(document.documentElement, view.el)).toBe(false);
+      expect(ItemView.prototype.onDomRefresh).not.toHaveBeenCalled();
     });
   });
 

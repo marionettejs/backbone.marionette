@@ -107,7 +107,7 @@ The default implementation of `open` is:
 
 ```js
 Marionette.Region.prototype.open = function(view){
-  this.$el.html(view.el);
+  this.$el.empty().append(view.el);
 }
 ```
 

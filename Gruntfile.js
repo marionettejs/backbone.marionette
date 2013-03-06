@@ -144,6 +144,18 @@ module.exports = function(grunt) {
       marionette : {
         files : ['src/*.js', 'spec/**/*.js'],
         tasks : ['jshint', 'jasmine:marionette']
+      },
+      server : {
+        files : ['src/*.js', 'spec/*.js'],
+        tasks : ['jshint', 'jasmine:marionette:build']
+      }
+    },
+
+    connect: {
+      server: {
+        options: {
+          port: 8888
+        }
       }
     }
   });
@@ -154,11 +166,14 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-jshint');
   grunt.loadNpmTasks('grunt-contrib-uglify');
   grunt.loadNpmTasks('grunt-contrib-watch');
+  grunt.loadNpmTasks('grunt-contrib-connect');
   grunt.loadNpmTasks('grunt-plato');
 
   grunt.registerTask('test', ['jshint', 'jasmine:marionette']);
 
-  grunt.registerTask('dev', ['test', 'watch']);
+  grunt.registerTask('dev', ['test', 'watch:marionette']);
+
+  grunt.registerTask('server', ['jasmine:marionette:build', 'connect:server', 'watch:server']);
 
   // Default task.
   grunt.registerTask('default', ['jshint', 'jasmine:coverage', 'preprocess', 'concat', 'uglify']);

@@ -52,7 +52,7 @@ callbacks.add(function(options){
 }, myContext);
 
 
-// the `someContext` context is ignore by the above callback
+// the `someContext` context is ignored by the above callback
 callbacks.run({value: "options"}, someContext);
 ```
 

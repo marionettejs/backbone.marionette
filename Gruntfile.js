@@ -3,15 +3,21 @@ module.exports = function(grunt) {
 
   // Project configuration.
   grunt.initConfig({
-    pkg: '<json:package.json>',
+    pkg: grunt.file.readJSON('package.json'),
     meta: {
       version: '<%= pkg.version %>',
       core_banner: 
-              ' // Backbone.Marionette, v<%= meta.version %>\n' +
-              ' // Copyright (c)<%= grunt.template.today("yyyy") %> Derick Bailey, Muted Solutions, LLC.\n' +
-              ' // Distributed under MIT license\n' +
-              ' // http://github.com/marionettejs/backbone.marionette\n',
-      banner :
+        '// MarionetteJS (Backbone.Marionette)\n' +
+        '// ----------------------------------\n' + 
+        '// v<%= pkg.version %>\n' +
+        '//\n' + 
+        '// Copyright (c)<%= grunt.template.today("yyyy") %> Derick Bailey, Muted Solutions, LLC.\n' +
+        '// Distributed under MIT license\n' +
+        '//\n' + 
+        '// http://marionettejs.com\n' +
+        '\n',
+
+      banner:
         '<%= meta.core_banner %>\n\n' +
         '/*!\n' +
         ' * Includes BabySitter\n' +
@@ -28,29 +34,35 @@ module.exports = function(grunt) {
 
     preprocess: {
       core_build: {
-        files : {
+        files: {
           'lib/core/backbone.marionette.js' : 'src/build/marionette.core.js'
         }
       },
       core_amd: {
-        files : {
+        files: {
           'lib/core/amd/backbone.marionette.js' : 'src/build/amd.core.js'
         }
       },
     },
 
-    concat : {
-      build : {
-        src : [
-          'public/javascripts/backbone.babysitter.js',
-          'public/javascripts/backbone.wreqr.js',
-          'lib/core/backbone.marionette.js',
-        ],
-        dest : 'lib/backbone.marionette.js'
+    concat: {
+      options: {
+        banner: "<%= meta.banner %>"
+      },
+      build: {
+        src: [
+               'public/javascripts/backbone.babysitter.js',
+               'public/javascripts/backbone.wreqr.js',
+               'lib/core/backbone.marionette.js',
+             ],
+        dest: 'lib/backbone.marionette.js'
       }
     },
 
     uglify : {
+      options: {
+        banner: "<%= meta.banner %>"
+      },
       amd : {
         src : 'lib/core/amd/backbone.marionette.js',
         dest : 'lib/core/amd/backbone.marionette.min.js',

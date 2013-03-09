@@ -31,8 +31,8 @@
     }
   ],
   "dependencies" : {
-    "jquery": "latest",
-    "backbone" : "latest"
+    "jquery": "~1.8.0 || ~1.9.0",
+    "backbone" : "~0.9.10"
   }
 }
 

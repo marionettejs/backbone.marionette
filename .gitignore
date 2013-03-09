@@ -8,3 +8,4 @@ node_modules/
 .grunt/
 npm-debug.log
 _SpecRunner.html
+components/

@@ -7,6 +7,7 @@ will be treated as a single item.
 ## Documentation Index
 
 * [ItemView render](#itemview-render)
+* [Rendering A Collection In An ItemView](#rendering-a-collection-in-an-itemview)
 * [Events and Callback Methods](#events-and-callback-methods)
   * ["before:render" / onBeforeRender event](#beforerender--onbeforerender-event)
   * ["render" / onRender event](#render--onrender-event)
@@ -55,6 +56,52 @@ including a third "settings" argument, as used in the example above.
 According to the [Underscore docs](http://underscorejs.org/#template), using the "variable" setting
 "can significantly improve the speed at which a template is able to render." Using this setting
 also requires you to read data arguments from an object, as demonstrated in the example above.
+
+## Rendering A Collection In An ItemView
+
+While the most common way to render a Backbone.Collection is to use
+a `CollectionView` or `CompositeView`, if you just need to render a 
+simple list that does not need a lot of interaction, it does not 
+always make sense to use these. A Backbone.Collection can be
+rendered with a simple ItemView, using the templates to iterate
+over an `items` array.
+
+```js
+<script id="some-template" type="text/html">
+  <ul>
+    <%= _.each(items, function(item){ %>
+    <li> item.someAttribute </li>
+    <% } %>
+  </ul>
+</script>
+```
+
+The important thing to note here, is the use of `items` as the
+variable to iterate in the `_.each` call. This will always be the
+name of the variable that contains your collection's items.
+
+Then, from JavaScript, you can define and use an ItemView with this
+template, like this:
+
+```js
+var MyItemsView = Marionette.ItemView.extend({
+  template: "#some-template"
+});
+
+var view = new MyItemsView({
+  collection: someCollection
+});
+
+// show the view via a region or calling the .render method directly
+```
+
+Rendering this view will convert the `someCollection` collection in to 
+the `items` array for your template to use.
+
+For more information on when you would want to do this, and what options
+you have for retrieving an individual item that was clicked or 
+otherwise interacted with, see the blog post on 
+[Getting The Model For A Clicked Element](http://lostechies.com/derickbailey/2011/10/11/backbone-js-getting-the-model-for-a-clicked-element/).
 
 ## Events and Callback Methods
 

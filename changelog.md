@@ -16,6 +16,7 @@
 
 * CollectionView / CompositeView
   * When specifying `itemViewOptions` as a function, an item `index` argument will be passed as the second parameter
+  * Will call the `close` or `remove` method when closing a view, with `close` method taking precedence
 
 * CompositeView
   * Fixed a bug that caused an error when the collection was `reset` (loaded) before the view was rendered

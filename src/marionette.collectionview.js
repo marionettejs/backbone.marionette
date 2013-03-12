@@ -211,9 +211,9 @@ Marionette.CollectionView = Marionette.View.extend({
     if (view){
       this.stopListening(view);
 
-      if (view.close){
-        view.close();
-      }
+      // call 'close' or 'remove', depending on which is found
+      if (view.close) { view.close(); }
+      else if (view.remove) { view.remove(); }
 
       this.children.remove(view);
     }

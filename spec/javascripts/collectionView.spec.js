@@ -405,6 +405,29 @@ describe("collection view", function(){
     });
   });
 
+  describe("when closing an itemView that does not have a 'close' method", function(){
+    var collectionView, itemView;
+
+    beforeEach(function(){
+      collectionView = new Marionette.CollectionView({
+        itemView: Backbone.View,
+        collection: new Backbone.Collection([{id: 1}])
+      });
+
+      collectionView.render();
+
+      itemView = collectionView.children.findByIndex(0);
+      spyOn(itemView, "remove").andCallThrough();
+
+      collectionView.closeChildren();
+    });
+
+    it("should call the 'remove' method", function(){
+      expect(itemView.remove).toHaveBeenCalled();
+    });
+
+  });
+
   describe("when override appendHtml", function(){
     var PrependHtmlView = Backbone.Marionette.CollectionView.extend({
       itemView: ItemView,

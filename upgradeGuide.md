@@ -1,7 +1,16 @@
 ## Upgrade to v1.0.0
 
-Please see previous upgrade guide entries and the 
+In addition to the following notes, please see previous upgrade guide entries and the 
 [changelog](https://github.com/marionettejs/backbone.marionette/blob/master/changelog.md).
+
+### Wreqr v0.2.0
+
+This update renames the `addHandler` methods to `setHandler` to help
+set the expectation that there is a single handler for any given
+command or request/response handler. When updating to Wreqr v0.2.0,
+you will need to change all calls to `addHandler` to `setHandler`. For
+more information on other changes in Wreqr, see the
+[Wreqr changelog](https://github.com/marionettejs/backbone.wreqr/blob/master/CHANGELOG.md).
 
 ### Grunt v0.4
 

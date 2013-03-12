@@ -103,10 +103,14 @@ _.extend(Marionette.Region.prototype, Backbone.Events, {
   show: function(view){
 
     this.ensureEl();
-    this.close();
 
-    view.render();
-    this.open(view);
+    if (view !== this.currentView) {
+      this.close();
+      view.render();
+      this.open(view);
+    } else {
+      view.render();
+    }
 
     Marionette.triggerMethod.call(view, "show");
     Marionette.triggerMethod.call(this, "show", view);

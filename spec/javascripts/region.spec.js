@@ -113,6 +113,51 @@ describe("region", function(){
     });
   });
 
+  describe("when a view is already shown and showing the same one", function(){
+    var MyRegion = Backbone.Marionette.Region.extend({
+      el: "#region"
+    });
+
+    var MyView = Backbone.View.extend({
+      render: function(){
+        $(this.el).html("some content");
+      },
+
+      close: function(){
+      },
+
+      open: function(){
+      }
+    });
+
+    var myRegion, view;
+
+    beforeEach(function(){
+      setFixtures("<div id='region'></div>");
+
+      view = new MyView();
+      myRegion = new MyRegion();
+      myRegion.show(view);
+
+      spyOn(view, "close");
+      spyOn(view, "open");
+      spyOn(view, "render");
+      myRegion.show(view);
+    });
+
+    it("should not call 'close' on the view", function(){
+      expect(view.close).not.toHaveBeenCalled();
+    });
+
+    it("should not call 'open' on the view", function(){
+      expect(view.open).not.toHaveBeenCalled();
+    });
+
+    it("should call 'render' on the view", function(){
+      expect(view.render).toHaveBeenCalled();
+    });
+  });
+
   describe("when a view is already closed and showing another", function(){
     var MyRegion = Backbone.Marionette.Region.extend({
       el: "#region"

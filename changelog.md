@@ -13,6 +13,7 @@
 
 * Region
   * Region will call the `close` method on a view, or the `remove` method if `close` is not found, when closing a view
+  * When calling the `show` method with the same view instance multiple times, subsequent calls will only re-render the view and not close / re-open it
 
 * CollectionView / CompositeView
   * When specifying `itemViewOptions` as a function, an item `index` argument will be passed as the second parameter

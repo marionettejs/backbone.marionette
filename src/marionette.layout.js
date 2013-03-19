@@ -10,7 +10,7 @@
 Marionette.Layout = Marionette.ItemView.extend({
   regionType: Marionette.Region,
   
-  // Ensure the regions are avialable when the `initialize` method
+  // Ensure the regions are available when the `initialize` method
   // is called.
   constructor: function (options) {
     options = options || {};

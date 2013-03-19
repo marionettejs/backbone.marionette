@@ -12,7 +12,7 @@ Marionette.RegionManager = (function(Marionette){
 
     // Add multiple regions using an object literal, where
     // each key becomes the region name, and each value is
-    // the region defintion.
+    // the region definition.
     addRegions: function(regionDefinitions, defaults){
       var regions = {};
 

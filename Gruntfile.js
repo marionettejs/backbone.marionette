@@ -154,11 +154,11 @@ module.exports = function(grunt) {
     },
     watch: {
       marionette : {
-        files : ['src/*.js', 'spec/**/*.js'],
+        files : ['src/**/*.js', 'spec/**/*.js'],
         tasks : ['jshint', 'jasmine:marionette']
       },
       server : {
-        files : ['src/*.js', 'spec/**/*.js'],
+        files : ['src/**/*.js', 'spec/**/*.js'],
         tasks : ['jasmine:marionette:build']
       }
     },

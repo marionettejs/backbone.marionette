@@ -1,8 +1,12 @@
-var Marionette = (function(Backbone, _, $){
+var Marionette = (function(global, Backbone, _){
   "use strict";
 
+  // Define and export the Marionette namespace
   var Marionette = {};
   Backbone.Marionette = Marionette;
+
+  // Get the DOM manipulator for later use
+  Marionette.$ = Backbone.$;
 
 // @include ../marionette.helpers.js
 // @include ../marionette.triggermethod.js
@@ -29,4 +33,4 @@ var Marionette = (function(Backbone, _, $){
 // @include ../marionette.module.js
 
   return Marionette;
-})(Backbone, _, $ || window.jQuery || window.Zepto || window.ender);
+})(this, Backbone, _);

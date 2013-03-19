@@ -74,7 +74,7 @@ _.extend(Marionette.TemplateCache.prototype, {
   // using a template-loader plugin as described here: 
   // https://github.com/marionettejs/backbone.marionette/wiki/Using-marionette-with-requirejs
   loadTemplate: function(templateId){
-    var template = $(templateId).html();
+    var template = Marionette.$(templateId).html();
 
     if (!template || template.length === 0){
       var msg = "Could not find template: '" + templateId + "'";

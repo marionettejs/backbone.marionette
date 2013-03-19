@@ -25,6 +25,15 @@
 * Functions
   * Removed the `Marionette.createObject` function - it was never used by Marionette, directly
 
+* jQuery
+  * Replaced direct calls to `$` with new `Marionette.$`, which is assigned to
+    `Backbone.$` for consistency w/ Backbone.
+
+* Backbone.Wreqr
+  * Updated to v0.2.0
+  * Renamed `addHandler` method to `setHandler`
+  * For more information, see the [Wreqr changelog](https://github.com/marionettejs/backbone.wreqr/blob/master/CHANGELOG.md)
+
 * Code Cleanup
   * Replaced `that = this` with the `context` param of several calls to `_.each` to clean up the code
   * Removed an unused method from the CompositeView implementation
@@ -32,11 +41,6 @@
 * Build process
   * Updated to Grunt v0.4.x
   * Added code coverage and other analysis reports
-
-* Backbone.Wreqr
-  * Updated to v0.2.0
-  * Renamed `addHandler` method to `setHandler`
-  * For more information, see the [Wreqr changelog](https://github.com/marionettejs/backbone.wreqr/blob/master/CHANGELOG.md)
 
 ### v1.0.0-rc6 [view commit logs](https://github.com/marionettejs/backbone.marionette/compare/v1.0.0-rc5...v1.0.0-rc6)
 

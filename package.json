@@ -18,8 +18,7 @@
     }
   ],
   "scripts": {
-    "test": "grunt jasmine",
-    "start": "grunt jasmine-server"
+    "start": "grunt server"
   },
   "author": {
     "name": "Derick Bailey",

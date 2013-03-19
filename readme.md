@@ -118,7 +118,9 @@ examples on how to get started, please see [the Wiki](https://github.com/marione
 
 * [**Marionette.Region**](docs/marionette.region.md): Manage visual regions of your application, including display and removal of content
 * [**Marionette.RegionManager**](docs/marionette.regionmanager.md): Manage a group of related Regions
-* [**Backbone.BabySitter**](https://github.com/marionettejs/backbone.babysitter): Manage child views for your Backbone.View (and other parents)
+* [**Marionette.Renderer**](docs/marionette.renderer.md): Render templates with or without data, in a consistent and common manner
+* [**Marionette.TemplateCache**](docs/marionette.templatecache.md): Cache templates that are stored in `<script>` blocks, for faster subsequent access
+* [&rarr;] [**Backbone.BabySitter**](https://github.com/marionettejs/backbone.babysitter): Manage child views for your Backbone.View (and other parents)
 
 **Application Infrastructure**
 
@@ -130,21 +132,19 @@ examples on how to get started, please see [the Wiki](https://github.com/marione
 
 * [**Marionette.Commands**](docs/marionette.commands.md): An extension of Backbone.Wreqr.Commands, a simple command execution framework
 * [**Marionette.RequestResponse**](docs/marionette.requestresponse.md): An extension of Backbone.Wreqr.RequestResponse, a simple request/response framework
-* [**Backbone.Wreqr.EventAggregator**](https://github.com/marionettejs/backbone.wreqr): An event aggregator, to facilitate pub/sub and event architecture. Part of a suite of messaging based patterns
-* [**Backbone.Wreqr.Commands**](https://github.com/marionettejs/backbone.wreqr): A simple command execution system
-* [**Backbone.Wreqr.RequestResponse**](https://github.com/marionettejs/backbone.wreqr): A simple request/response system
+* [&rarr;] [**Backbone.Wreqr.EventAggregator**](https://github.com/marionettejs/backbone.wreqr): An event aggregator, to facilitate pub/sub and event architecture. Part of a suite of messaging based patterns
+* [&rarr;] [**Backbone.Wreqr.Commands**](https://github.com/marionettejs/backbone.wreqr): A simple command execution system
+* [&rarr;] [**Backbone.Wreqr.RequestResponse**](https://github.com/marionettejs/backbone.wreqr): A simple request/response system
 
 **Other**
 
 * [**Marionette.AppRouter**](docs/marionette.approuter.md): Reduce your routers to nothing more than configuration
 * [**Marionette.Callbacks**](docs/marionette.callbacks.md): Manage a collection of callback methods, and execute them as needed
-* [**Marionette.Renderer**](docs/marionette.renderer.md): Render templates with or without data, in a consistent and common manner
-* [**Marionette.TemplateCache**](docs/marionette.templatecache.md): Cache templates that are stored in `<script>` blocks, for faster subsequent access
 * [**Marionette.functions**](docs/marionette.functions.md): A suite of helper functions and utilities for implementing common Marionette behavior in your objects
 
 **Deprecated Items**
 
-* [**Backbone.EventBinder**](https://github.com/marionettejs/backbone.eventbinder): Deprecated w/ Backbone v0.9.9. An event binding manager for Backbone v0.9.2, to facilitate binding and unbinding of events
+* [&rarr;] [**Backbone.EventBinder**](https://github.com/marionettejs/backbone.eventbinder): Deprecated w/ Backbone v0.9.9. An event binding manager for Backbone v0.9.2, to facilitate binding and unbinding of events
 
 ### The Wiki: Sample Apps, Tutorials, And Much More
 

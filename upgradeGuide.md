@@ -3,6 +3,13 @@
 In addition to the following notes, please see previous upgrade guide entries and the 
 [changelog](https://github.com/marionettejs/backbone.marionette/blob/master/changelog.md).
 
+### Backbone 1.0 and Underscore 1.4.4
+
+Marionette v1.0 is built and test with Backbone v1.0 and Underscore v1.4.4. You should be
+able to use Backbone v0.9.9 or v0.9.10 with Marionette 1.0, but there is no
+guarantee that everything will work as expected. Older versions of
+Backbone are not supported at all.
+
 ### Wreqr v0.2.0
 
 This update renames the `addHandler` methods to `setHandler` to help

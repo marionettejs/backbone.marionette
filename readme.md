@@ -144,7 +144,7 @@ examples on how to get started, please see [the Wiki](https://github.com/marione
 
 **Deprecated Items**
 
-* [&rarr;] [**Backbone.EventBinder**](https://github.com/marionettejs/backbone.eventbinder): Deprecated w/ Backbone v0.9.9. An event binding manager for Backbone v0.9.2, to facilitate binding and unbinding of events
+* [&rarr;] [**Backbone.EventBinder**](https://github.com/marionettejs/backbone.eventbinder): Deprecated w/ Backbone v0.9.9 and higher. An event binding manager for Backbone v0.9.2, to facilitate binding and unbinding of events
 
 ### The Wiki: Sample Apps, Tutorials, And Much More
 
@@ -162,8 +162,8 @@ ideas and examples to the community, please see the wiki page.
 MarionetteJS currently works with the following libraries:
 
 * [jQuery](http://jquery.com) v1.8.x or v1.9.x
-* [Underscore](http://underscorejs.org) v1.4.3
-* [Backbone](http://backbonejs.org) v0.9.9 or v0.9.10
+* [Underscore](http://underscorejs.org) v1.4.4
+* [Backbone](http://backbonejs.org) v1.0 is preferred. v0.9.9 and v0.9.10 should work still
 * [Backbone.Wreqr](https://github.com/marionettejs/backbone.wreqr) 
 * [Backbone.BabySitter](https://github.com/marionettejs/backbone.babysitter)
 

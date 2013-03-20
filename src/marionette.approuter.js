@@ -34,33 +34,15 @@ Marionette.AppRouter = Backbone.Router.extend({
   // router, and turn them in to routes that trigger the
   // specified method on the specified `controller`.
   processAppRoutes: function(controller, appRoutes){
-    var method, methodName;
-    var route, routesLength, i;
-    var routes = [];
-    var router = this;
+    _.each(appRoutes, function(methodName, route) {
+      var method = controller[methodName];
 
-    for(route in appRoutes){
-      if (appRoutes.hasOwnProperty(route)){
-        routes.unshift([route, appRoutes[route]]);
-      }
-    }
-
-    routesLength = routes.length;
-    for (i = 0; i < routesLength; i++){
-      route = routes[i][0];
-      methodName = routes[i][1];
-      method = controller[methodName];
-
-      if (!method){
-        var msg = "Method '" + methodName + "' was not found on the controller";
-        var err = new Error(msg);
-        err.name = "NoMethodError";
-        throw err;
+      if (!method) {
+        throw new Error("Method '" + methodName + "' was not found on the controller");
       }
 
-      method = _.bind(method, controller);
-      router.route(route, methodName, method);
-    }
+      this.route(route, methodName, _.bind(method, controller));
+    }, this);
   }
 });
 

@@ -67,7 +67,7 @@ _.extend(Marionette.Application.prototype, Backbone.Events, {
   module: function(moduleNames, moduleDefinition){
     // slice the args, and add this application object as the
     // first argument of the array
-    var args = slice.call(arguments);
+    var args = slice(arguments);
     args.unshift(this);
 
     // see the Marionette.Module object for more information

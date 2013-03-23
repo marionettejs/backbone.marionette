@@ -36,7 +36,7 @@ _.extend(Marionette.TemplateCache, {
   // `clear("#t1", "#t2", "...")`
   clear: function(){
     var i;
-    var args = Array.prototype.slice.apply(arguments);
+    var args = slice(arguments);
     var length = args.length;
 
     if (length > 0){
@@ -77,10 +77,7 @@ _.extend(Marionette.TemplateCache.prototype, {
     var template = Marionette.$(templateId).html();
 
     if (!template || template.length === 0){
-      var msg = "Could not find template: '" + templateId + "'";
-      var err = new Error(msg);
-      err.name = "NoTemplateError";
-      throw err;
+      throwError("Could not find template: '" + templateId + "'", "NoTemplateError");
     }
 
     return template;

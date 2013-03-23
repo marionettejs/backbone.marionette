@@ -6,8 +6,7 @@
 // and calling several methods on extended views, such as `onRender`.
 Marionette.ItemView =  Marionette.View.extend({
   constructor: function(){
-    var args = Array.prototype.slice.apply(arguments);
-    Marionette.View.prototype.constructor.apply(this, args);
+    Marionette.View.prototype.constructor.apply(this, slice(arguments));
   },
 
   // Serialize the model or collection for the view. If a model is
@@ -61,8 +60,7 @@ Marionette.ItemView =  Marionette.View.extend({
 
     this.triggerMethod('item:before:close');
 
-    var args = Array.prototype.slice.apply(arguments);
-    Marionette.View.prototype.close.apply(this, args);
+    Marionette.View.prototype.close.apply(this, slice(arguments));
 
     this.triggerMethod('item:closed');
   }

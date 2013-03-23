@@ -6,8 +6,7 @@
 // an item view as `modelView`, for the top leaf
 Marionette.CompositeView = Marionette.CollectionView.extend({
   constructor: function(options){
-    var args = Array.prototype.slice.apply(arguments);
-    Marionette.CollectionView.apply(this, args);
+    Marionette.CollectionView.apply(this, slice(arguments));
 
     this.itemView = this.getItemView();
   },
@@ -31,9 +30,7 @@ Marionette.CompositeView = Marionette.CollectionView.extend({
     var itemView = Marionette.getOption(this, "itemView") || this.constructor;
 
     if (!itemView){
-      var err = new Error("An `itemView` must be specified");
-      err.name = "NoItemViewError";
-      throw err;
+      throwError("An `itemView` must be specified", "NoItemViewError");
     }
 
     return itemView;
@@ -117,9 +114,7 @@ Marionette.CompositeView = Marionette.CollectionView.extend({
       var selector = _.result(containerView, "itemViewContainer");
       container = containerView.$(selector);
       if (container.length <= 0) {
-        var err = new Error("The specified `itemViewContainer` was not found: " + containerView.itemViewContainer);
-        err.name = "ItemViewContainerMissingError";
-        throw err;
+        throwError("The specified `itemViewContainer` was not found: " + containerView.itemViewContainer, "ItemViewContainerMissingError");
       }
 
     } else {

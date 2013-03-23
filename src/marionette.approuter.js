@@ -51,10 +51,7 @@ Marionette.AppRouter = Backbone.Router.extend({
       method = controller[methodName];
 
       if (!method){
-        var msg = "Method '" + methodName + "' was not found on the controller";
-        var err = new Error(msg);
-        err.name = "NoMethodError";
-        throw err;
+        throwError("Method '" + methodName + "' was not found on the controller", "NoMethodError");
       }
 
       method = _.bind(method, controller);

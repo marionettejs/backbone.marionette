@@ -26,7 +26,7 @@
 
       var method = target[methodName];
       if(!method) {
-        throw new Error("Method '"+ methodName +"' was configured as an event handler, but does not exist.");
+        throwError("Method '"+ methodName +"' was configured as an event handler, but does not exist.");
       }
 
       target.listenTo(entity, evt, method, target);

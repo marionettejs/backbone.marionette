@@ -123,9 +123,7 @@ Marionette.CollectionView = Marionette.View.extend({
     var itemView = Marionette.getOption(this, "itemView");
 
     if (!itemView){
-      var err = new Error("An `itemView` must be specified");
-      err.name = "NoItemViewError";
-      throw err;
+      throwError("An `itemView` must be specified", "NoItemViewError");
     }
 
     return itemView;

@@ -77,10 +77,7 @@ _.extend(Marionette.TemplateCache.prototype, {
     var template = $(templateId).html();
 
     if (!template || template.length === 0){
-      var msg = "Could not find template: '" + templateId + "'";
-      var err = new Error(msg);
-      err.name = "NoTemplateError";
-      throw err;
+      throwError("Could not find template: '" + templateId + "'", "NoTemplateError");
     }
 
     return template;

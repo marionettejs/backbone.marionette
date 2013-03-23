@@ -7,6 +7,12 @@ var protoSlice = Array.prototype.slice,
     return protoSlice.call(args);
   };
 
+var throwError = function(message, name) {
+  var error = new Error(message);
+  error.name = name || 'Error';
+  throw error;
+};
+
 // Marionette.extend
 // -----------------
 

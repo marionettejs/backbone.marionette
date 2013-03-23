@@ -74,7 +74,7 @@ _.extend(Marionette.Application.prototype, Backbone.Events, {
     return Marionette.Module.create.apply(Marionette.Module, args);
   },
 
-  // Internal metho to set up the region manager
+  // Internal method to set up the region manager
   _initRegionManager: function(){
     this._regionManager = new Marionette.RegionManager();
 

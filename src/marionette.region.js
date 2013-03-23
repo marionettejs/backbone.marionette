@@ -16,8 +16,7 @@ Marionette.Region = function(options){
   }
 
   if (this.initialize){
-    var args = Array.prototype.slice.apply(arguments);
-    this.initialize.apply(this, args);
+    this.initialize.apply(this, slice(arguments));
   }
 };
 

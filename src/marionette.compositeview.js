@@ -6,8 +6,7 @@
 // an item view as `modelView`, for the top leaf
 Marionette.CompositeView = Marionette.CollectionView.extend({
   constructor: function(options){
-    var args = Array.prototype.slice.apply(arguments);
-    Marionette.CollectionView.apply(this, args);
+    Marionette.CollectionView.apply(this, slice(arguments));
 
     this.itemView = this.getItemView();
   },
@@ -82,9 +81,7 @@ Marionette.CompositeView = Marionette.CollectionView.extend({
 
   // Render the collection for the composite view
   renderCollection: function(){
-    var args = Array.prototype.slice.apply(arguments);
-    Marionette.CollectionView.prototype.render.apply(this, args);
-
+    Marionette.CollectionView.prototype.render.apply(this, slice(arguments));
   },
 
   // Render an individual model, if we have one, as

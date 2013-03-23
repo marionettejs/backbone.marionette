@@ -6,7 +6,7 @@
 // `this.triggerMethod("foo:bar") will trigger the "foo:bar" event and
 // call the "onFooBar" method.
 Marionette.triggerMethod = function(){
-  var args = Array.prototype.slice.apply(arguments);
+  var args = slice(arguments);
   var eventName = args[0];
   var segments = eventName.split(":");
   var segment, capLetter, methodName = "on";

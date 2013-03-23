@@ -16,8 +16,7 @@ Marionette.Layout = Marionette.ItemView.extend({
     this._firstRender = true;
     this.initializeRegions();
 
-    var args = Array.prototype.slice.apply(arguments);
-    Marionette.ItemView.apply(this, args);
+    Marionette.ItemView.apply(this, slice(arguments));
   },
 
   // Layout's render will use the existing region objects the
@@ -37,8 +36,7 @@ Marionette.Layout = Marionette.ItemView.extend({
       this.reInitializeRegions();
     }
 
-    var args = Array.prototype.slice.apply(arguments);
-    return Marionette.ItemView.prototype.render.apply(this, args);
+    return Marionette.ItemView.prototype.render.apply(this, slice(arguments));
   },
 
   // Handle closing regions, and then close the view itself.
@@ -48,8 +46,7 @@ Marionette.Layout = Marionette.ItemView.extend({
     this.closeRegions();
     this.destroyRegions();
 
-    var args = Array.prototype.slice.apply(arguments);
-    Marionette.ItemView.prototype.close.apply(this, args);
+    Marionette.ItemView.prototype.close.apply(this, slice(arguments));
   },
 
   // Initialize the regions that have been defined in a

@@ -7,8 +7,7 @@ Marionette.View = Backbone.View.extend({
   constructor: function(){
     _.bindAll(this, "render");
 
-    var args = Array.prototype.slice.apply(arguments);
-    Backbone.View.prototype.constructor.apply(this, args);
+    Backbone.View.prototype.constructor.apply(this, slice(arguments));
 
     Marionette.MonitorDOMRefresh(this);
     this.listenTo(this, "show", this.onShowCalled, this);
@@ -101,8 +100,7 @@ Marionette.View = Backbone.View.extend({
   // Overriding Backbone.View's undelegateEvents to handle unbinding
   // the `triggers`, `modelEvents`, and `collectionEvents` config
   undelegateEvents: function(){
-    var args = Array.prototype.slice.call(arguments);
-    Backbone.View.prototype.undelegateEvents.apply(this, args);
+    Backbone.View.prototype.undelegateEvents.apply(this, slice(arguments));
 
     Marionette.unbindEntityEvents(this, this.model, Marionette.getOption(this, "modelEvents"));
     Marionette.unbindEntityEvents(this, this.collection, Marionette.getOption(this, "collectionEvents"));

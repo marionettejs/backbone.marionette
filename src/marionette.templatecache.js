@@ -36,7 +36,7 @@ _.extend(Marionette.TemplateCache, {
   // `clear("#t1", "#t2", "...")`
   clear: function(){
     var i;
-    var args = Array.prototype.slice.apply(arguments);
+    var args = slice(arguments);
     var length = args.length;
 
     if (length > 0){

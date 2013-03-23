@@ -2,7 +2,10 @@
 // -------
 
 // For slicing `arguments` in functions
-var slice = Array.prototype.slice;
+var protoSlice = Array.prototype.slice,
+  slice = function(args) {
+    return protoSlice.call(args);
+  };
 
 // Marionette.extend
 // -----------------

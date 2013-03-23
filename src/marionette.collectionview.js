@@ -87,12 +87,11 @@ Marionette.CollectionView = Marionette.View.extend({
   // Internal method to loop through each item in the
   // collection view and show it
   showCollection: function(){
-    var that = this;
     var ItemView;
     this.collection.each(function(item, index){
-      ItemView = that.getItemView(item);
-      that.addItemView(item, ItemView, index);
-    });
+      ItemView = this.getItemView(item);
+      this.addItemView(item, ItemView, index);
+    }, this);
   },
 
   // Internal method to show an empty view in place of
@@ -136,8 +135,6 @@ Marionette.CollectionView = Marionette.View.extend({
   // Render the child item's view and add it to the
   // HTML for the collection view.
   addItemView: function(item, ItemView, index){
-    var that = this;
-
     // get the itemViewOptions if any were specified
     var itemViewOptions = Marionette.getOption(this, "itemViewOptions");
     if (_.isFunction(itemViewOptions)){
@@ -195,8 +192,7 @@ Marionette.CollectionView = Marionette.View.extend({
   // Build an `itemView` for every model in the collection.
   buildItemView: function(item, ItemViewType, itemViewOptions){
     var options = _.extend({model: item}, itemViewOptions);
-    var view = new ItemViewType(options);
-    return view;
+    return new ItemViewType(options);
   },
 
   // get the child view by item it holds, and remove it

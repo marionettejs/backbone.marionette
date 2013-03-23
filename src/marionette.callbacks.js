@@ -33,13 +33,12 @@ _.extend(Marionette.Callbacks.prototype, {
   // Resets the list of callbacks to be run, allowing the same list
   // to be run multiple times - whenever the `run` method is called.
   reset: function(){
-    var that = this;
     var callbacks = this._callbacks;
     this._deferred = $.Deferred();
     this._callbacks = [];
     _.each(callbacks, function(cb){
-      that.add(cb.cb, cb.ctx);
-    });
+      this.add(cb.cb, cb.ctx);
+    }, this);
   }
 });
 

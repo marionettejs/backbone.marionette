@@ -38,9 +38,7 @@ Marionette.Layout = Marionette.ItemView.extend({
     }
 
     var args = Array.prototype.slice.apply(arguments);
-    var result = Marionette.ItemView.prototype.render.apply(this, args);
-
-    return result;
+    return Marionette.ItemView.prototype.render.apply(this, args);
   },
 
   // Handle closing regions, and then close the view itself.
@@ -96,7 +94,6 @@ Marionette.Layout = Marionette.ItemView.extend({
   // this layout. This method is called when the layout
   // itself is closed.
   closeRegions: function () {
-    var that = this;
     _.each(this.regionManagers, function (manager, name) {
       manager.close();
     });
@@ -105,10 +102,9 @@ Marionette.Layout = Marionette.ItemView.extend({
   // Destroys all of the regions by removing references
   // from the Layout
   destroyRegions: function(){
-    var that = this;
     _.each(this.regionManagers, function (manager, name) {
-      delete that[name];
-    });
+      delete this[name];
+    }, this);
     this.regionManagers = {};
   }
 });

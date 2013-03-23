@@ -17,7 +17,6 @@ _.extend(Marionette.TemplateCache, {
   // retrieves the cached version, or loads it
   // from the DOM.
   get: function(templateId){
-    var that = this;
     var cachedTemplate = this.templateCaches[templateId];
 
     if (!cachedTemplate){
@@ -57,8 +56,6 @@ _.extend(Marionette.TemplateCache.prototype, {
 
   // Internal method to load the template
   load: function(){
-    var that = this;
-
     // Guard clause to prevent loading this template more than once
     if (this.compiledTemplate){
       return this.compiledTemplate;

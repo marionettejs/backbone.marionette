@@ -139,8 +139,6 @@ Marionette.View = Backbone.View.extend({
   bindUIElements: function(){
     if (!this.ui) { return; }
 
-    var that = this;
-
     if (!this.uiBindings) {
       // We want to store the ui hash in uiBindings, since afterwards the values in the ui hash
       // will be overridden with jQuery selectors.
@@ -150,8 +148,8 @@ Marionette.View = Backbone.View.extend({
     // refreshing the associated selectors since they should point to the newly rendered elements.
     this.ui = {};
     _.each(_.keys(this.uiBindings), function(key) {
-      var selector = that.uiBindings[key];
-      that.ui[key] = that.$(selector);
-    });
+      var selector = this.uiBindings[key];
+      this.ui[key] = this.$(selector);
+    }, this);
   }
 });

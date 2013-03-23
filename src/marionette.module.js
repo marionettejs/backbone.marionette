@@ -43,11 +43,7 @@ _.extend(Marionette.Module.prototype, Backbone.Events, {
     // start the sub-modules (depth-first hierarchy)
     _.each(this.submodules, function(mod){
       // check to see if we should start the sub-module with this parent
-      var startWithParent = true;
-      startWithParent = mod.startWithParent;
-
-      // start the sub-module
-      if (startWithParent){
+      if (mod.startWithParent){
         mod.start(options);
       }
     });
@@ -122,7 +118,6 @@ _.extend(Marionette.Module, {
 
   // Create a module, hanging off the app parameter as the parent object.
   create: function(app, moduleNames, moduleDefinition){
-    var that = this;
     var module = app;
 
     // get the custom args passed in after the module definition and
@@ -141,9 +136,9 @@ _.extend(Marionette.Module, {
     // Loop through all the parts of the module definition
     _.each(moduleNames, function(moduleName, i){
       var parentModule = module;
-      module = that._getModule(parentModule, moduleName, app);
-      that._addModuleDefinition(parentModule, module, moduleDefinitions[i], customArgs);
-    });
+      module = this._getModule(parentModule, moduleName, app);
+      this._addModuleDefinition(parentModule, module, moduleDefinitions[i], customArgs);
+    }, this);
 
     // Return the last module in the definition chain
     return module;
@@ -190,7 +185,6 @@ _.extend(Marionette.Module, {
 
     // `and` the two together, ensuring a single `false` will prevent it
     // from starting with the parent
-    var tmp = module.startWithParent;
     module.startWithParent = module.startWithParent && startWithParent;
 
     // setup auto-start if needed

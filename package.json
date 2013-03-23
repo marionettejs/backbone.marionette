@@ -3,7 +3,7 @@
   "description": "Make your Backbone.js apps dance!",
   "version": "1.0.0",
   "homepage": "https://github.com/marionettejs/backbone.marionette",
-  "main": "lib/amd/backbone.marionette.js",
+  "main": "lib/core/amd/backbone.marionette.js",
   "keywords": [
     "backbone",
     "plugin",
@@ -33,6 +33,12 @@
     "url": "https://github.com/marionettejs/backbone.marionette.git"
   },
   "github": "https://github.com/marionettejs/backbone.marionette",
+  "dependencies": {
+    "jquery": "~1.8.3",
+    "Backbone.BabySitter": "git://github.com/marionettejs/backbone.babysitter",
+    "Backbone.Wreqr": "git://github.com/marionettejs/backbone.wreqr",
+    "backbone": "~0.9.10"
+  },
   "devDependencies": {
     "grunt": "~0.4.0",
     "grunt-contrib-jasmine": "~0.3.1",

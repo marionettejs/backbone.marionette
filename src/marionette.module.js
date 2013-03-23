@@ -35,7 +35,7 @@ _.extend(Marionette.Module.prototype, Backbone.Events, {
     this._finalizerCallbacks.add(callback);
   },
 
-  // Start the module, and run all of it's initializers
+  // Start the module, and run all of its initializers
   start: function(options){
     // Prevent re-starting a module that is already started
     if (this._isInitialized){ return; }

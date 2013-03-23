@@ -10,7 +10,7 @@
 //
 // App routers can only take one `controller` object. 
 // It is recommended that you divide your controller
-// objects in to smaller peices of related functionality
+// objects in to smaller pieces of related functionality
 // and have multiple routers / controllers, instead of
 // just one giant router and controller.
 //

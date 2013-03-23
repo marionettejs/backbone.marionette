@@ -35,8 +35,8 @@
   "github": "https://github.com/marionettejs/backbone.marionette",
   "dependencies": {
     "jquery": "~1.8.3",
-    "Backbone.BabySitter": "git://github.com/marionettejs/backbone.babysitter",
-    "Backbone.Wreqr": "git://github.com/marionettejs/backbone.wreqr",
+    "backbone.babysitter": "~0.0.4",
+    "backbone.wreqr": "~0.1.0"
     "backbone": "~0.9.10"
   },
   "devDependencies": {

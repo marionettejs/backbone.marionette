@@ -36,7 +36,7 @@
   "dependencies": {
     "jquery": "~1.8.3",
     "backbone.babysitter": "~0.0.4",
-    "backbone.wreqr": "~0.1.0"
+    "backbone.wreqr": "~0.1.0",
     "backbone": "~0.9.10"
   },
   "devDependencies": {

@@ -5,13 +5,13 @@
 var protoSlice = Array.prototype.slice;
 function slice(args) {
   return protoSlice.call(args);
-};
+}
 
 function throwError(message, name) {
   var error = new Error(message);
   error.name = name || 'Error';
   throw error;
-};
+}
 
 // Marionette.extend
 // -----------------

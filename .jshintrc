@@ -16,6 +16,7 @@
     "_": true,
     "Marionette": true,
     "$": true,
-    "slice": true
+    "slice": true,
+    "throwError": true
   }
 }

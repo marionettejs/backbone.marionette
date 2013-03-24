@@ -43,6 +43,8 @@ Marionette.RegionManager = (function(Marionette){
 
       if (isString || (isObject && hasSelector)){
         region = Marionette.Region.buildRegion(definition, Marionette.Region);
+      } else if (_.isFunction(definition)){
+        region = Marionette.Region.buildRegion(definition, Marionette.Region);
       } else {
         region = definition;
       }

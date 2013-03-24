@@ -25,12 +25,12 @@ describe("application regions", function(){
   describe("when adding region objects to an app", function(){
     var MyApp = new Backbone.Marionette.Application();
 
-    var myRegion = Backbone.Marionette.Region.extend({
+    var MyRegion = Backbone.Marionette.Region.extend({
       el: "#region",
       Foooooooo: "bar"
     });
 
-    var myRegion2 = Backbone.Marionette.Region.extend({
+    var MyRegion2 = Backbone.Marionette.Region.extend({
       el: "#region2"
     });
 
@@ -39,14 +39,14 @@ describe("application regions", function(){
       setFixtures("<div id='region2'></div>");
 
       MyApp.addRegions({
-        MyRegion: myRegion, 
-        anotherRegion: myRegion2
+        MyRegion: MyRegion, 
+        anotherRegion: MyRegion2
       });
     });
     
     it("should initialize the regions, immediately", function(){
-      expect(MyApp.MyRegion).toBe(myRegion);
-      expect(MyApp.anotherRegion).toBe(myRegion2);
+      expect(MyApp.MyRegion instanceof MyRegion).toBe(true);
+      expect(MyApp.anotherRegion instanceof MyRegion2).toBe(true);
     });
   });
 

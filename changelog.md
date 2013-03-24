@@ -1,3 +1,15 @@
+### v1.0.1 [view commit logs](https://github.com/marionettejs/backbone.marionette/compare/v1.0.0...v1.0.1)
+
+* AMD build: Removed `require('jQuery')` as Marionette now pulled `Backbone.$` as
+    `Marionette.$`.
+
+* Fixed RegionManager to allow region types to be specified again, not just
+  region instances.
+
+* NPM: Removed hard dependency on jQuery from the dependency list. This will
+  be pulled in by other libs, or should be pulled in manually, to get the
+  right version.
+
 ### v1.0.0 [view commit logs](https://github.com/marionettejs/backbone.marionette/compare/v1.0.0-rc6...v1.0.0)
 
 * RegionManager

@@ -12,7 +12,7 @@ then append the results of the item view's `el` to the collection view's
 * [CollectionView's `emptyView`](#collectionviews-emptyview)
 * [CollectionView's `buildItemView`](#collectionviews-builditemview)
 * [Callback Methods](#callback-methods)
-  * [onBeforeRender callback](#beforerender-callback)
+  * [onBeforeRender callback](#onbeforerender-callback)
   * [onRender callback](#onrender-callback)
   * [onItemAdded callback](#onitemadded-callback)
   * [onBeforeClose callback](#beforeclose-callback)

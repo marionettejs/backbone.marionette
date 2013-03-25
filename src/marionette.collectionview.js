@@ -183,7 +183,9 @@ Marionette.CollectionView = Marionette.View.extend({
   // render the item view
   renderItemView: function(view, index) {
     view.render();
-    this.appendHtml(this, view, index);
+    if (this.isRendered) {
+        this.appendHtml(this, view, index);
+    }
   },
 
   // Build an `itemView` for every model in the collection.

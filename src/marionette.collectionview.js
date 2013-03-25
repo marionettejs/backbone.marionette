@@ -88,6 +88,7 @@ Marionette.CollectionView = Marionette.View.extend({
       ItemView = that.getItemView(item);
       that.addItemView(item, ItemView, index);
     });
+    this.triggerMethod("collection:show", this);
   },
 
   // Internal method to show an empty view in place of
@@ -139,9 +140,9 @@ Marionette.CollectionView = Marionette.View.extend({
       itemViewOptions = itemViewOptions.call(this, item);
     }
 
-    // build the view 
+    // build the view
     var view = this.buildItemView(item, ItemView, itemViewOptions);
-    
+
     // set up the child view event forwarding
     this.addChildViewEventForwarding(view);
 

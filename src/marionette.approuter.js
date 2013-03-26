@@ -32,8 +32,11 @@ Marionette.AppRouter = Backbone.Router.extend({
   // Internal method to process the `appRoutes` for the
   // router, and turn them in to routes that trigger the
   // specified method on the specified `controller`.
-  processAppRoutes: function(controller, appRoutes){
-    _.each(appRoutes, function(methodName, route) {
+  processAppRoutes: function(controller, appRoutes) {
+    var routeNames = _.keys(appRoutes).reverse(); // Backbone requires reverted order of routes
+
+    _.each(routeNames, function(route) {
+      var methodName = appRoutes[route];
       var method = controller[methodName];
 
       if (!method) {

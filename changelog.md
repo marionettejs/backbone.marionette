@@ -1,3 +1,11 @@
+### v1.0.2 [view commit logs](https://github.com/marionettejs/backbone.marionette/compare/v1.0.1...v1.0.2)
+
+* UI Elements
+  * Fix bug to unbind them after the "close" event / `onClose` method, so the `ui` elements are available during these
+
+* AppRouter
+  * Fix bug that was reversing the order of routes, causing the wrong route to be fired in many cases
+
 ### v1.0.1 [view commit logs](https://github.com/marionettejs/backbone.marionette/compare/v1.0.0...v1.0.1)
 
 * AMD build: Removed `require('jQuery')` as Marionette now pulled `Backbone.$` as

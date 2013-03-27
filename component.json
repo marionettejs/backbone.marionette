@@ -3,7 +3,7 @@
   "description" : "Make your Backbone.js apps dance with a composite application architecture!",
   "url"         : "http://marionettejs.org",
   "main"        : "./lib/backbone.marionette.js",
-  "version"     : "1.0.1",
+  "version"     : "1.0.2",
 
   "keywords"     : [
     "backbone",
@@ -28,6 +28,10 @@
     {
       "name"  : "Matt Briggs",
       "email" : "matt@mattbriggs.net"
+    },
+    {
+      "name"  : "Ruben Vreeken",
+      "email" : "ruben.vreeken@gmail.com"
     }
   ],
   "dependencies" : {

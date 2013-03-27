@@ -241,4 +241,36 @@ describe("app router", function(){
     });
   });
 
+  describe("when routes are in the wrong order", function() {
+    var controller, router;
+
+    beforeEach(function() {
+      var PostsRouter = Backbone.Marionette.AppRouter.extend({
+        appRoutes: {
+          "posts/:id": "showPost",
+          "posts/top": "showPostsTop"
+        }
+      });
+
+      controller = {
+        showPostsTop: jasmine.createSpy("showPostsTop"),
+        showPost: jasmine.createSpy("showPost")
+      };
+
+      Backbone.history.start();
+
+      router = new PostsRouter({ controller: controller });
+      router.navigate('posts/top', true);
+    });
+
+    afterEach(function() {
+      Backbone.history.stop();
+    });
+
+    it("should fire the wrong route", function() {
+      expect(controller.showPost).toHaveBeenCalled();
+      expect(controller.showPostsTop).not.toHaveBeenCalled();
+    });
+  });
+
 });

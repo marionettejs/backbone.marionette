@@ -124,15 +124,16 @@ Marionette.View = Backbone.View.extend({
       return;
     }
 
-    // unbind UI elements
-    this.unbindUIElements();
-
     // mark as closed before doing the actual close, to
     // prevent infinite loops within "close" event handlers
     // that are trying to close other views
     this.isClosed = true;
     this.triggerMethod("close");
 
+    // unbind UI elements
+    this.unbindUIElements();
+
+    // remove the view from the DOM
     this.remove();
   },
 

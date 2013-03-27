@@ -209,4 +209,36 @@ describe("app router", function(){
     });
   });
 
+  describe("when router configured with ambiguous routes", function() {
+    var controller, router;
+
+    beforeEach(function() {
+      var PostsRouter = Backbone.Marionette.AppRouter.extend({
+        appRoutes: {
+          "posts/top": "showPostsTop",
+          "posts/:id": "showPost"
+        }
+      });
+
+      controller = {
+        showPostsTop: jasmine.createSpy("showPostsTop"),
+        showPost: jasmine.createSpy("showPost")
+      };
+
+      Backbone.history.start();
+
+      router = new PostsRouter({ controller: controller });
+      router.navigate('posts/top', true);
+    });
+
+    afterEach(function() {
+      Backbone.history.stop();
+    });
+
+    it("should take routes order into account", function() {
+      expect(controller.showPostsTop).toHaveBeenCalled();
+      expect(controller.showPost).not.toHaveBeenCalled();
+    });
+  });
+
 });

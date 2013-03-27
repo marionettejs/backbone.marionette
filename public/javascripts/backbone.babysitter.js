@@ -1,7 +1,12 @@
-// Backbone.BabySitter, v0.0.4
-// Copyright (c)2012 Derick Bailey, Muted Solutions, LLC.
+// Backbone.BabySitter
+// -------------------
+// v0.0.5
+//
+// Copyright (c)2013 Derick Bailey, Muted Solutions, LLC.
 // Distributed under MIT license
-// http://github.com/marionettejs/backbone.babysitter
+//
+// http://github.com/babysitterjs/backbone.babysitter
+
 // Backbone.ChildViewContainer
 // ---------------------------
 //

@@ -120,6 +120,7 @@ Marionette.Layout = Marionette.ItemView.extend({
 
     this.listenTo(this.regionManager, "region:remove", function(name, region){
       delete this[name];
+      delete this.regions[name];
       this.trigger("region:remove", name, region);
     });
   }

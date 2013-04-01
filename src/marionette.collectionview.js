@@ -68,7 +68,6 @@ Marionette.CollectionView = Marionette.View.extend({
       this.triggerMethod("collection:rendered", this);
     } else {
       this.showEmptyView();
-      this.triggerMethod("empty:rendered", this);
     }
   },
 

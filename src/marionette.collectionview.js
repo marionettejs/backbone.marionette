@@ -44,28 +44,14 @@ Marionette.CollectionView = Marionette.View.extend({
     });
   },
 
-  // Internal method to trigger the before render callbacks
-  // and events
-  triggerBeforeRender: function(){
-    this.triggerMethod("before:render", this);
-    this.triggerMethod("collection:before:render", this);
-  },
-
-  // Internal method to trigger the rendered callbacks and
-  // events
-  triggerRendered: function(){
-    this.triggerMethod("render", this);
-    this.triggerMethod("collection:rendered", this);
-  },
-
   // Render the collection of items. Override this method to
   // provide your own implementation of a render function for
   // the collection view.
   render: function(){
     this.isClosed = false;
-    this.triggerBeforeRender();
+    this.triggerMethod("before:render", this);
     this._renderChildren();
-    this.triggerRendered();
+    this.triggerMethod("render", this);
     return this;
   },
 
@@ -77,9 +63,12 @@ Marionette.CollectionView = Marionette.View.extend({
     this.closeChildren();
 
     if (this.collection && this.collection.length > 0) {
+      this.triggerMethod("collection:before:render", this);
       this.showCollection();
+      this.triggerMethod("collection:rendered", this);
     } else {
       this.showEmptyView();
+      this.triggerMethod("empty:rendered", this);
     }
   },
 
@@ -138,9 +127,9 @@ Marionette.CollectionView = Marionette.View.extend({
       itemViewOptions = itemViewOptions.call(this, item, index);
     }
 
-    // build the view 
+    // build the view
     var view = this.buildItemView(item, ItemView, itemViewOptions);
-    
+
     // set up the child view event forwarding
     this.addChildViewEventForwarding(view);
 

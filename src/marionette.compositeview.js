@@ -36,7 +36,7 @@ Marionette.CompositeView = Marionette.CollectionView.extend({
     return itemView;
   },
 
-  // Serialize the collection for the view. 
+  // Serialize the collection for the view.
   // You can override the `serializeData` method in your own view
   // definition, to provide custom serialization for your view's data.
   serializeData: function(){
@@ -57,10 +57,10 @@ Marionette.CompositeView = Marionette.CollectionView.extend({
     this.isClosed = false;
     this.resetItemViewContainer();
 
-    this.triggerBeforeRender();
+    this.triggerMethod("before:render", this);
     var html = this.renderModel();
     this.$el.html(html);
-    // the ui bindings is done here and not at the end of render since they 
+    // the ui bindings is done here and not at the end of render since they
     // will not be available until after the model is rendered, but should be
     // available before the collection is rendered.
     this.bindUIElements();
@@ -69,7 +69,7 @@ Marionette.CompositeView = Marionette.CollectionView.extend({
     this._renderChildren();
 
     this.triggerMethod("composite:rendered");
-    this.triggerRendered();
+    this.triggerMethod("render", this);
     return this;
   },
 

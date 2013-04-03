@@ -1,6 +1,6 @@
 # Marionette.Region
 
-Regionis provide a consistent way to manage your views and
+Regions provide a consistent way to manage your views and
 show / close them in your application. They use a jQuery selector
 to show your views in the correct place. They also call extra
 methods on your views to facilitate additional functionality.

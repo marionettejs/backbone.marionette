@@ -44,7 +44,7 @@ Marionette.ItemView =  Marionette.View.extend({
 
     var template = this.getTemplate();
     if (!template) {
-      throw "Template of " + this.toString() + " is not defined, cannot render it.";
+      throw "Cannot render the ItemView template since it's false, null or undefined.";
     }
     var html = Marionette.Renderer.render(template, data);
     this.$el.html(html);

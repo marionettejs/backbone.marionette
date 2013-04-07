@@ -90,7 +90,7 @@ Marionette.CompositeView = Marionette.CollectionView.extend({
 
     var template = this.getTemplate();
     if (!template) {
-      throw "Template of " + this.toString() + " is not defined, cannot render it.";
+      throw "Cannot render the CompositeView template since it's false, null or undefined.";
     }
     return Marionette.Renderer.render(template, data);
   },

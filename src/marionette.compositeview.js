@@ -89,6 +89,9 @@ Marionette.CompositeView = Marionette.CollectionView.extend({
     data = this.mixinTemplateHelpers(data);
 
     var template = this.getTemplate();
+    if (!template) {
+      throw "Template of " + this.toString() + " is not defined, cannot render it.";
+    }
     return Marionette.Renderer.render(template, data);
   },
 

@@ -43,6 +43,9 @@ Marionette.ItemView =  Marionette.View.extend({
     data = this.mixinTemplateHelpers(data);
 
     var template = this.getTemplate();
+    if (!template) {
+      throw "Template of " + this.toString() + " is not defined, cannot render it.";
+    }
     var html = Marionette.Renderer.render(template, data);
     this.$el.html(html);
     this.bindUIElements();

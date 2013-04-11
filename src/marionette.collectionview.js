@@ -87,10 +87,13 @@ Marionette.CollectionView = Marionette.View.extend({
   // collection view and show it
   showCollection: function(){
     var ItemView;
+    var fragment = document.createDocumentFragment();
     this.collection.each(function(item, index){
       ItemView = this.getItemView(item);
-      this.addItemView(item, ItemView, index);
+      var view = this.addItemView(item, ItemView, index, true);
+      fragment.appendChild(view.el);
     }, this);
+    this.appendFragment(this, fragment);
   },
 
   // Internal method to show an empty view in place of
@@ -131,7 +134,12 @@ Marionette.CollectionView = Marionette.View.extend({
 
   // Render the child item's view and add it to the
   // HTML for the collection view.
-  addItemView: function(item, ItemView, index){
+  // param multiple is a boolean, false by default,
+  // that indicates the awareness of multiple adding
+  // and force to not append the view element yet
+  addItemView: function(item, ItemView, index, multiple){
+    multiple = _.isUndefined(multiple) ? false : multiple;
+
     // get the itemViewOptions if any were specified
     var itemViewOptions = Marionette.getOption(this, "itemViewOptions");
     if (_.isFunction(itemViewOptions)){
@@ -154,6 +162,11 @@ Marionette.CollectionView = Marionette.View.extend({
     // Render it and show it
     this.renderItemView(view, index);
 
+    // Append the element just rendered
+    if (!multiple) {
+        this.appendHtml(this, view, index);
+    }
+
     // call the "show" method if the collection view
     // has already been shown
     if (this._isShown){
@@ -162,6 +175,8 @@ Marionette.CollectionView = Marionette.View.extend({
 
     // this view was added
     this.triggerMethod("after:item:added", view);
+
+    return view;
   },
 
   // Set up the child view event forwarding. Uses an "itemview:"
@@ -183,7 +198,6 @@ Marionette.CollectionView = Marionette.View.extend({
   // render the item view
   renderItemView: function(view, index) {
     view.render();
-    this.appendHtml(this, view, index);
   },
 
   // Build an `itemView` for every model in the collection.
@@ -230,7 +244,12 @@ Marionette.CollectionView = Marionette.View.extend({
   // Override this method to do something other
   // then `.append`.
   appendHtml: function(collectionView, itemView, index){
-    collectionView.$el.append(itemView.el);
+    collectionView.el.append(itemView.el);
+  },
+
+  // Append the fragment to the collection's el.
+  appendFragment: function(collectionView, fragment) {
+      collectionView.el.appendChild(fragment);
   },
 
   // Internal method to set up the `children` object for

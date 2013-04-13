@@ -5,10 +5,14 @@ In addition to the following notes, please see previous upgrade guide entries an
 
 ### Backbone 1.0 and Underscore 1.4.4
 
-Marionette v1.0 is built and test with Backbone v1.0 and Underscore v1.4.4. You should be
+Marionette v1.0 is built and tested with Backbone v1.0 and Underscore v1.4.4. You should be
 able to use Backbone v0.9.9 or v0.9.10 with Marionette 1.0, but there is no
 guarantee that everything will work as expected. Older versions of
 Backbone are not supported at all.
+
+As of Backbone v1.0, calling `fetch()` on a collection will not trigger the **reset** event
+by default. This will cause Marionette's [CollectionView](https://github.com/marionettejs/backbone.marionette/blob/master/docs/marionette.collectionview.md) and [CompositeView](https://github.com/marionettejs/backbone.marionette/blob/master/docs/marionette.compositeview.md) to not function
+as expected. Be sure to pass the `fetch: true` option when calling `fetch()`.
 
 ### Wreqr v0.2.0
 
@@ -102,14 +106,14 @@ and Backbone.Wreqr.
 First and foremost, with the release of Backbone v0.9.9, we are no
 longer supporting Backbone v0.9.2. There are several additions to
 v0.9.9 that have made code previously found in Marionette's pre-requisites
-obselete. This has caused a ripple effect of API changes for
+obsolete. This has caused a ripple effect of API changes for
 naming consistency in Marionette. 
 
 In order to use Marionette v1.0.0-rc3, you must upgrade to Backbone
 v0.9.9 and Underscore v1.4.3 or higher (as necessary, with Backbone
 versions).
 
-### Backbone.EventBinder is now obselete
+### Backbone.EventBinder is now obsolete
 
 With Backbone v0.9.9, the Backbone.EventBinder pre-requisite is now
 osbsolete. It will be kept around for backward compatibility with

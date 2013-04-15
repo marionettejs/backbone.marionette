@@ -189,7 +189,6 @@ You can also manually re-render either or both of them:
 
 * If you want to re-render everything, call the `.render()` method
 * If you want to re-render the model's view, you can call `.renderModel()`
-* If you want to re-render the collection's views, you can call `.renderCollection()`
 
 ## Events And Callbacks
 

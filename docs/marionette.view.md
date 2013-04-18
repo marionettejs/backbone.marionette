@@ -229,7 +229,7 @@ Backbone.Marionette.CompositeView.extend({
 
 These will use the memory safe `listenTo`, and will set the context
 (the value of `this`) in the handler to be the view. Events are
-bound at the time of instantiation instantiation, and an exception will be thrown
+bound at the time of instantiation, and an exception will be thrown
 if the handlers on the view do not exist.
 
 The `modelEvents` and `collectionEvents` will be bound and

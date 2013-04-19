@@ -125,11 +125,11 @@ _.extend(Marionette.Region.prototype, Backbone.Events, {
     } else {
       view.render();
     }
+    
+    this.currentView = view;
 
     Marionette.triggerMethod.call(view, "show");
     Marionette.triggerMethod.call(this, "show", view);
-
-    this.currentView = view;
   },
 
   ensureEl: function(){

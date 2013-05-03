@@ -208,4 +208,19 @@ describe('base view', function() {
       expect(this.view).to.be.have.property('isDestroyed', true);
     });
   });
+
+  describe("when serializing a model", function(){
+    var modelData = { foo: "bar" };
+    var model;
+    var view;
+
+    beforeEach(function(){
+      model = new Backbone.Model(modelData);
+      view = new Marionette.View();
+    });
+
+    it("should return all attributes", function(){
+      expect(view.serializeModel(model)).to.be.eql(modelData);
+    });
+  });
 });

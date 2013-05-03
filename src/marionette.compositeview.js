@@ -43,10 +43,14 @@ Marionette.CompositeView = Marionette.CollectionView.extend({
     var data = {};
 
     if (this.model){
-      data = this.model.toJSON();
+      data = this.serializeModel(this.model);
     }
 
     return data;
+  },
+
+  serializeModel: function(model){
+    return _.clone(model.attributes);
   },
 
   // Renders the model once, and the collection once. Calling

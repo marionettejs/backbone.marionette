@@ -277,4 +277,93 @@ describe('item view', function() {
       expect(this.constructorSpy).to.have.been.called;
     });
   });
+
+  describe("when serializing view data", function(){
+    beforeEach(function(){
+      this.modelData = { foo: "bar" };
+      this.collectionData = [ { foo: "bar" }, { foo: "baz" } ];
+
+      this.itemView = new Marionette.ItemView();
+      this.sinon.spy(this.itemView, "serializeModel");
+      this.sinon.spy(this.itemView, "serializeCollection");
+    });
+
+    it("should return an empty object without data", function(){
+      expect(this.itemView.serializeData()).to.deep.equal({ });
+    });
+
+    describe('and the view has a model', function() {
+      beforeEach(function() {
+        this.itemView.model = new Backbone.Model(this.modelData);
+        this.itemView.serializeData();
+      });
+
+      it("should call serializeModel", function() {
+        expect(this.itemView.serializeModel).to.have.been.calledOnce;
+      });
+
+      it('should not call serializeCollection', function() {
+        expect(this.itemView.serializeCollection).to.not.have.been.called;
+      });
+    });
+
+    describe('and the view only has a collection', function() {
+      beforeEach(function() {
+        this.itemView.collection = new Backbone.Collection(this.collectionData);
+        this.itemView.serializeData();
+      });
+
+      it("should call serializeCollection", function(){
+        expect(this.itemView.serializeCollection).to.have.been.calledOnce;
+      });
+
+      it("should not call serializeModel", function() {
+        expect(this.itemView.serializeModel).to.not.have.been.called;
+      });
+    });
+
+    describe('and the view has a collection and a model', function() {
+      beforeEach(function() {
+        this.itemView.model = new Backbone.Model(this.modelData);
+        this.itemView.collection = new Backbone.Collection(this.collectionData);
+        this.itemView.serializeData();
+      });
+
+      it("should call serializeModel", function() {
+        expect(this.itemView.serializeModel).to.have.been.calledOnce;
+      });
+
+      it('should not call serializeCollection', function() {
+        expect(this.itemView.serializeCollection).to.not.have.been.called;
+      });
+    });
+  });
+
+  describe("when serializing a collection", function(){
+    beforeEach(function(){
+      this.collectionData = [ { foo: "bar" }, { foo: "baz" } ];
+      this.itemView = new Marionette.ItemView({
+        collection: new Backbone.Collection(this.collectionData)
+      });
+    });
+
+    it("should serialize to an items attribute", function(){
+      expect(this.itemView.serializeData().items).to.be.defined;
+    });
+
+    it("should serialize all models", function(){
+      expect(this.itemView.serializeData().items).to.deep.equal(this.collectionData);
+    });
+  });
+
+  describe("has a valid inheritance chain back to Marionette.View", function(){
+    beforeEach(function(){
+      this.constructor = this.sinon.spy(Marionette, "View");
+      this.collectionView = new Marionette.ItemView();
+    });
+
+    it("calls the parent Marionette.View's constructor function on instantiation", function(){
+      expect(this.constructor).to.have.been.calledOnce;
+    });
+  });
 });

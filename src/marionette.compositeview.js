@@ -58,8 +58,8 @@ Marionette.CompositeView = Marionette.CollectionView.extend({
   serializeData: function() {
     var data = {};
 
-    if (this.model) {
-      data = this.model.toJSON();
+    if (this.model){
+      data = _.partial(this.serializeModel, this.model).apply(this, arguments);
     }
 
     return data;

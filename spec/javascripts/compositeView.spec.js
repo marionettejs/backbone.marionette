@@ -765,6 +765,29 @@ describe('composite view', function() {
     });
   });
 
+  describe("when serializing view data", function() {
+    beforeEach(function(){
+      this.modelData = { foo: "bar" };
+      this.view = new Marionette.CompositeView();
+      this.sinon.spy(this.view, "serializeModel");
+    });
+
+    it("should return an empty object without data", function(){
+      expect(this.view.serializeData()).to.deep.equal({ });
+    });
+
+    describe('and the view has a model', function() {
+      beforeEach(function() {
+        this.view.model = new Backbone.Model(this.modelData);
+        this.view.serializeData();
+      });
+
+      it("should call serializeModel", function(){
+        expect(this.view.serializeModel).to.have.been.calledOnce;
+      });
+    });
+  });
+
   describe('has a valid inheritance chain back to Marionette.CollectionView', function() {
     beforeEach(function() {
       this.constructor = this.sinon.spy(Marionette, 'CollectionView');
@@ -772,7 +795,7 @@ describe('composite view', function() {
     });
 
     it('calls the parent Marionette.CollectionViews constructor function on instantiation', function() {
-      expect(this.constructor).to.have.been.called;
+      expect(this.constructor).to.have.been.calledOnce;
     });
   });
 });

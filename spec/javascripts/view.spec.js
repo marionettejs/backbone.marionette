@@ -27,6 +27,33 @@ describe("base view", function(){
     });
   });
 
+  describe("when rendering a view", function(){
+    var render;
+    var beforeRender;
+    var isClosed;
+    beforeEach(function(){
+      render = jasmine.createSpy("render");
+      beforeRender = jasmine.createSpy("before:render");
+      var view = new Marionette.View();
+      view.listenTo(view, "render", render);
+      view.listenTo(view, "before:render", beforeRender);
+      view.render();
+      isClosed = view.isClosed;
+    });
+
+    it("should trigger render event", function(){
+      expect(render).toHaveBeenCalled();
+    });
+
+    it("should trigger before:render event", function(){
+      expect(beforeRender).toHaveBeenCalled();
+    });
+
+    it("should have isClosed property set to `false`", function(){
+      expect(isClosed).not.toBe(true);
+    });
+  });
+
   describe("when using listenTo for the 'close' event on itself, and closing the view", function(){
     var close;
 

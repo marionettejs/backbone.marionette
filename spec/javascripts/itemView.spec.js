@@ -13,6 +13,20 @@ describe("item view", function(){
     loadFixtures("itemTemplate.html", "collectionItemTemplate.html", "emptyTemplate.html");
   });
 
+  describe("when rendering without a valid template", function(){
+    var TemplatelessView = Backbone.Marionette.ItemView.extend({});
+    var view;
+    
+    beforeEach(function(){
+      view = new TemplatelessView({});
+    });
+    
+    it("should throw an exception because there was no valid template", function(){
+      expect(view.render).toThrow(new Error("Cannot render the ItemView template since it's false, null or undefined."));
+    });
+    
+  });
+
   describe("when rendering", function(){
     var OnRenderView = Backbone.Marionette.ItemView.extend({
       template: "#emptyTemplate",

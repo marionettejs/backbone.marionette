@@ -65,13 +65,29 @@
     "dependencies": {
       "underscore": ">=1.4.4",
       "backbone": ">=0.9.9",
-      "Backbone.BabySitter": ">=0.0.5",
-      "Backbone.Wreqr": ">=0.2.0"
+      "backbone.babysitter": ">=0.0.5",
+      "backbone.wreqr": ">=0.2.0"
     },
     "main": "lib/core/amd/backbone.marionette.js",
     "include": [
       "lib/core/amd/backbone.marionette.js",
       "readme.md"
     ]
-  }
+  },
+  "maintainers": [
+    {
+      "name": "Stefan Zerkalica",
+      "email": "zerkalica@gmail.com",
+      "web": "https://github.com/zerkalica"
+    },
+    {
+      "name": "Richard Mitchell",
+      "email": "richard.j.mitchell@gmail.com"
+    },
+    {
+      "name": "Joe Gornick",
+      "web": "http://joegornick.com",
+      "twitter": "https://twitter.com/jgornick"
+    }
+  ]
 }

@@ -113,7 +113,7 @@ triggers the event and a corresponding "on{EventName}" method.
 ### "before:render" / onBeforeRender event
 
 Triggered before an ItemView is rendered. Also triggered as
-"item:before:render" / `onItemBeforeRemder`.
+"item:before:render" / `onItemBeforeRender`.
 
 ```js
 Backbone.Marionette.ItemView.extend({

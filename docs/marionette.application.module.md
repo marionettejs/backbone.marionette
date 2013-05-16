@@ -200,7 +200,7 @@ In this example, the "Foo.Bar" module will be started with the call to
 `MyApp.start()` because the parent module, "Foo" is set to start
 with the app.
 
-A sub-module can override this behavior by setting it's `startWithParent`
+A sub-module can override this behavior by setting its `startWithParent`
 to false. This prevents it from being started by the parent's `start` call.
 
 ```js
@@ -229,7 +229,7 @@ the module is no longer needed. Like starting of modules, stopping is done
 in a depth-first hierarchy traversal. That is, a hierarchy of modules like
 `Foo.Bar.Baz` will stop `Baz` first, then `Bar`, and finally `Foo`.
 
-To stop a module and it's children, call the `stop()` method of a module.
+To stop a module and its children, call the `stop()` method of a module.
 
 ```js
 MyApp.module("Foo").stop();
@@ -237,7 +237,7 @@ MyApp.module("Foo").stop();
 
 Modules are not automatically stopped by the application. If you wish to 
 stop one, you must call the `stop` method on it. The exception to this is
-that stopping a parent module will stop all of it's sub-modules.
+that stopping a parent module will stop all of its sub-modules.
 
 ```js
 MyApp.module("Foo.Bar.Baz");
@@ -347,7 +347,7 @@ MyApp.module("Foo", function(Foo){
 });
 ```
 
-Any way of starting this module will cause it's initializers to run. You
+Any way of starting this module will cause its initializers to run. You
 can have as many initializers for a module as you wish.
 
 ### Module Finalizers

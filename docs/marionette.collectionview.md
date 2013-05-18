@@ -18,6 +18,7 @@ then append the results of the item view's `el` to the collection view's
   * [onClose callback](#onclose-callback)
   * [onBeforeItemAdded callback](#onbeforeitemadded-callback)
   * [onAfterItemAdded callback](#onafteritemadded-callback)
+  * [onItemRemoved callback](#onitemremoved-callback)
 * [CollectionView Events](#collectionview-events)
   * ["before:render" / onBeforeRender event](#beforerender--onbeforerender-event)
   * ["render" / onRender event](#render--onrender-event)
@@ -241,15 +242,29 @@ Backbone.Marionette.CollectionView.extend({
 });
 ```
 
+### onItemRemoved callback
+
+This callback function allows you to know when an item / item view
+instance has been deleted or removed from the
+collection.
+
+```js
+Backbone.Marionette.CollectionView.extend({
+  onItemRemoved: function(itemView){
+    // work with the itemView instance, here
+  }
+});
+```
+
 ## CollectionView Events
 
 There are several events that will be triggered during the life
 of a collection view. Each of these events is called with the
 [Marionette.triggerMethod](./marionette.functions.md) function,
 which calls a corresponding "on{EventName}" method on the
-view instance.
+view instance (see [above](#callback-methods)).
 
-### "before:render" / onBeforeRender event
+### "before:render" event
 
 
 Triggers just prior to the view being rendered. Also triggered as 
@@ -267,7 +282,7 @@ myView.on("before:render", function(){
 myView.render();
 ```
 
-### "render" / onRender event
+### "render" event
 
 A "collection:rendered" / `onCollectionRendered` event will also be fired. This allows you to
 add more than one callback to execute after the view is rendered,
@@ -290,7 +305,7 @@ myView.on("collection:rendered", function(){
 myView.render();
 ```
 
-### "before:close" / onBeforeClose event
+### "before:close" event
 
 Triggered just before closing the view. A "collection:before:close" /
 `onCollectionBeforeClose` event will also be fired
@@ -359,7 +374,7 @@ cv.on("after:item:added", function(viewInstance){
 });
 ```
 
-### "item:removed" / onItemRemoved
+### "item:removed"
 
 Triggered after an itemView instance has been closed and
 removed, when its item was deleted or removed from the

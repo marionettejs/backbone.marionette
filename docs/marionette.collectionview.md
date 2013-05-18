@@ -14,10 +14,10 @@ then append the results of the item view's `el` to the collection view's
 * [Callback Methods](#callback-methods)
   * [onBeforeRender callback](#onbeforerender-callback)
   * [onRender callback](#onrender-callback)
-  * [onBeforeItemAdded callback](#onbeforeitemadded-callback)
-  * [onAfterItemAdded callback](#onafteritemadded-callback)
   * [onBeforeClose callback](#beforeclose-callback)
   * [onClose callback](#onclose-callback)
+  * [onBeforeItemAdded callback](#onbeforeitemadded-callback)
+  * [onAfterItemAdded callback](#onafteritemadded-callback)
 * [CollectionView Events](#collectionview-events)
   * ["before:render" / onBeforeRender event](#beforerender--onbeforerender-event)
   * ["render" / onRender event](#render--onrender-event)
@@ -189,6 +189,30 @@ Backbone.Marionette.CollectionView.extend({
 });
 ```
 
+### onBeforeClose callback
+
+This method is called just before closing the view.
+
+```js
+Backbone.Marionette.CollectionView.extend({
+  onBeforeClose: function(){
+    // do stuff here
+  }
+});
+```
+
+### onClose callback
+
+This method is called just after closing the view.
+
+```js
+Backbone.Marionette.CollectionView.extend({
+  onClose: function(){
+    // do stuff here
+  }
+});
+```
+
 ### onBeforeItemAdded callback
 
 This callback function allows you to know when an item / item view
@@ -213,30 +237,6 @@ the view instance for the item that was added.
 Backbone.Marionette.CollectionView.extend({
   onAfterItemAdded: function(itemView){
     // work with the itemView instance, here
-  }
-});
-```
-
-### onBeforeClose callback
-
-This method is called just before closing the view.
-
-```js
-Backbone.Marionette.CollectionView.extend({
-  onBeforeClose: function(){
-    // do stuff here
-  }
-});
-```
-
-### onClose callback
-
-This method is called just after closing the view.
-
-```js
-Backbone.Marionette.CollectionView.extend({
-  onClose: function(){
-    // do stuff here
   }
 });
 ```

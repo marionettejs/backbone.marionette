@@ -191,8 +191,8 @@ Backbone.Marionette.CollectionView.extend({
 
 ### onBeforeItemAdded callback
 
-This callback function allows you to know before an item / item view
-instance has been added to the collection view. It provides access to
+This callback function allows you to know when an item / item view
+instance is about to be added to the collection view. It provides access to
 the view instance for the item that was added.
 
 ```js

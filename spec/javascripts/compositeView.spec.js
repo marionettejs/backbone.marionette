@@ -131,6 +131,37 @@ describe("composite view", function(){
     });
   });
 
+  describe("when rendering a composite view without a template", function(){
+    var compositeView, deferredResolved;
+
+    var ItemView = Backbone.Marionette.ItemView.extend({
+      tagName: "span",
+      render: function(){
+        this.$el.html(this.model.get("foo"));
+      }
+    });
+
+    var CompositeView = Backbone.Marionette.CompositeView.extend({
+      itemView: ItemView,
+    });
+
+    beforeEach(function(){
+      var m1 = new Model({foo: "bar"});
+      var m2 = new Model({foo: "baz"});
+      var collection = new Collection();
+      collection.add(m2);
+
+      compositeView = new CompositeView({
+        model: m1,
+        collection: collection
+      });
+    });
+
+    it("should throw an exception because there was no valid template", function(){
+      expect(compositeView.render).toThrow(new Error("Cannot render the CompositeView template since it's false, null or undefined."));
+    });
+  });
+  
   describe("when rendering a composite view", function(){
     var compositeView, order, deferredResolved;
 

@@ -1,3 +1,8 @@
+### v1.0.x [view commit logs](https://github.com/marionettejs/backbone.marionette/compare/v1.0.1...v1.0.x)
+
+* Region
+  * Re-showing a closed view now works by re-rendering and re-inserting the view in to the DOM
+
 ### v1.0.2 [view commit logs](https://github.com/marionettejs/backbone.marionette/compare/v1.0.1...v1.0.2)
 
 * UI Elements

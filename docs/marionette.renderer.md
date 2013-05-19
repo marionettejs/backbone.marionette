@@ -25,6 +25,10 @@ var html = Backbone.Marionette.Renderer.render(template, data);
 // do something with the HTML here
 ```
 
+If you pass a `template` that coerces to a falsey value, the
+`render` method will throw an exception stating that there was no
+template provided.
+
 ## Pre-compiled Templates
 
 If the `template` parameter of the `render` function is itself a function,

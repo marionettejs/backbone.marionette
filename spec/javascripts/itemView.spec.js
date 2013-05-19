@@ -22,7 +22,7 @@ describe("item view", function(){
     });
     
     it("should throw an exception because there was no valid template", function(){
-      expect(view.render).toThrow(new Error("Cannot render the ItemView template since it's false, null or undefined."));
+      expect(view.render).toThrow(new Error("Cannot render the template since it's false, null or undefined."));
     });
     
   });

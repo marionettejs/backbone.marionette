@@ -51,7 +51,7 @@ describe("renderer", function(){
     });
 
     it("should raise an error", function(){
-      expect(render).toThrow("Could not find template: 'undefined'");
+      expect(render).toThrow(new Error("Cannot render the template since it's false, null or undefined."));
     });
   });
 

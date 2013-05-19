@@ -6,6 +6,9 @@
 * ItemView
   * Deleted unneeded `constructor` function - it added nothing and didn't need to be there
 
+* Renderer / All Views
+  * The `Renderer.render` method will throw a more meaningful error if the supplied template is falsey
+
 ### v1.0.2 [view commit logs](https://github.com/marionettejs/backbone.marionette/compare/v1.0.1...v1.0.2)
 
 * UI Elements

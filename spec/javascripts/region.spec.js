@@ -140,7 +140,7 @@ describe("region", function(){
       myRegion.show(view);
 
       spyOn(view, "close");
-      spyOn(view, "open");
+      spyOn(myRegion, "open");
       spyOn(view, "render");
       myRegion.show(view);
     });
@@ -150,7 +150,48 @@ describe("region", function(){
     });
 
     it("should not call 'open' on the view", function(){
-      expect(view.open).not.toHaveBeenCalled();
+      expect(myRegion.open).not.toHaveBeenCalledWith(view);
+    });
+
+    it("should call 'render' on the view", function(){
+      expect(view.render).toHaveBeenCalled();
+    });
+  });
+
+   describe("when a view is already shown, close, and showing the same one", function(){
+    var MyRegion = Backbone.Marionette.Region.extend({
+      el: "#region"
+    });
+
+    var MyView = Backbone.Marionette.ItemView.extend({
+      render: function(){
+        $(this.el).html("some content");
+      }, 
+      open : function() {}
+    });
+
+    var myRegion, view;
+
+    beforeEach(function(){
+      setFixtures("<div id='region'></div>");
+
+      view = new MyView();
+      myRegion = new MyRegion();
+      myRegion.show(view);
+      view.close();
+
+      spyOn(view, "close");
+      spyOn(myRegion, "open");
+      spyOn(view, "render")
+      myRegion.show(view);
+    });
+
+    it("should not call 'close' on the view", function(){
+      expect(view.close).not.toHaveBeenCalled();
+    });
+
+    it("should call 'open' on the view", function(){
+      expect(myRegion.open).toHaveBeenCalledWith(view);
     });
 
     it("should call 'render' on the view", function(){

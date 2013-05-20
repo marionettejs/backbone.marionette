@@ -37,7 +37,7 @@ Once you have done that, you should be able to run Grunt to get things rolling.
 ### Marionette.createObject
 
 This method has been removed. It was never used by Marionette directly,
-and you should replace it's use with a proper polyfill such as Modernizr.
+and you should replace its use with a proper polyfill such as Modernizr.
 
 ## Upgrade to v1.0.0-rc4
 
@@ -119,7 +119,7 @@ With Backbone v0.9.9, the Backbone.EventBinder pre-requisite is now
 osbsolete. It will be kept around for backward compatibility with
 older versions of Marionette and Backbone, but it is no longer used
 by Marionette directly. Unless you have a significant investment in
-it's use, you should discontinue it's use when ugprading to Marionette
+its use, you should discontinue its use when ugprading to Marionette
 v1.0.0-rc3. 
 
 To replace the use of Backbone.EventBinder in your Marionette applications,

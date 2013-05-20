@@ -9,6 +9,9 @@
 * Renderer / All Views
   * The `Renderer.render` method will throw a more meaningful error if the supplied template is falsey
 
+* RegionManager
+  * Fixed a bug to decrement the `.length` when a region is removed
+
 ### v1.0.2 [view commit logs](https://github.com/marionettejs/backbone.marionette/compare/v1.0.1...v1.0.2)
 
 * UI Elements

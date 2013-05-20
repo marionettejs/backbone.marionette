@@ -195,6 +195,10 @@ describe("region manager", function(){
     it("should trigger a 'region:remove' event/method", function(){
       expect(removeHandler).toHaveBeenCalledWith("foo", region);
     });
+
+    it("should adjust the length of the region manager by -1", function(){
+      expect(regionManager.length).toBe(0);
+    });
   });
 
   describe("when removing all regions", function(){

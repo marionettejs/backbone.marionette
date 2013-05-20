@@ -92,15 +92,20 @@ Marionette.RegionManager = (function(Marionette){
     // internal method to store regions
     _store: function(name, region){
       this._regions[name] = region;
-      this.length = _.size(this._regions);
+      this._setLength();
     },
 
     // internal method to remove a region
     _remove: function(name, region){
       region.close();
       delete this._regions[name];
-      this.length = _.size(this._regions);
+      this._setLength();
       this.triggerMethod("region:remove", name, region);
+    },
+
+    // set the number of regions current held
+    _setLength: function(){
+      this.length = _.size(this._regions);
     }
 
   });

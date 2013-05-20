@@ -131,11 +131,11 @@ _.extend(Marionette.Region.prototype, Backbone.Events, {
     if (isDifferentView || isViewClosed) {
       this.open(view);
     }
+    
+    this.currentView = view;
 
     Marionette.triggerMethod.call(this, "show", view);
     Marionette.triggerMethod.call(view, "show");
-
-    this.currentView = view;
   },
 
   ensureEl: function(){

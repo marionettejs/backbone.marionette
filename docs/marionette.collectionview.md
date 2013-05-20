@@ -362,7 +362,7 @@ cv.on("after:item:added", function(viewInstance){
 ### "item:removed" / onItemRemoved
 
 Triggered after an itemView instance has been closed and
-removed, when it's item was deleted or removed from the
+removed, when its item was deleted or removed from the
 collection.
 
 ```js
@@ -412,7 +412,7 @@ the child view the way this is showing. I'm merely using
 that hack as a way to demonstrate the event bubbling. 
 Normally, you would have your item view listening to DOM
 events or model change events, and then triggering an event
-of it's own based on that.
+of its own based on that.
 
 ## CollectionView's `itemViewEventPrefix`
 
@@ -507,7 +507,7 @@ and displaying the sorted list in the correct order on the screen.
 ## CollectionView's children
 
 The CollectionView uses [Backbone.BabySitter](https://github.com/marionettejs/backbone.babysitter)
-to store and manage it's child views. This allows you to easily access
+to store and manage its child views. This allows you to easily access
 the views within the collection view, iterate them, find them by
 a given indexer such as the view's model or collection, and more.
 

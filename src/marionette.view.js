@@ -57,7 +57,7 @@ Marionette.View = Backbone.View.extend({
       // build the event handler function for the DOM event
       triggerEvents[key] = function(e){
 
-        // stop the event in it's tracks
+        // stop the event in its tracks
         if (e && e.preventDefault){ e.preventDefault(); }
         if (e && e.stopPropagation){ e.stopPropagation(); }
 

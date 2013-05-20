@@ -9,6 +9,9 @@
 * Renderer / All Views
   * The `Renderer.render` method will throw a more meaningful error if the supplied template is falsey
 
+* All Views
+  * Fixed a bug in the entity and collection event bindings, where `stopListening` would not unbind the event handlers
+
 * RegionManager
   * Fixed a bug to decrement the `.length` when a region is removed
 

@@ -132,8 +132,8 @@ _.extend(Marionette.Region.prototype, Backbone.Events, {
       this.open(view);
     }
 
-    Marionette.triggerMethod.call(view, "show");
     Marionette.triggerMethod.call(this, "show", view);
+    Marionette.triggerMethod.call(view, "show");
 
     this.currentView = view;
   },

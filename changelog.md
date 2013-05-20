@@ -1,4 +1,4 @@
-### v1.0.x [view commit logs](https://github.com/marionettejs/backbone.marionette/compare/v1.0.1...v1.0.x)
+### v1.0.3 [view commit logs](https://github.com/marionettejs/backbone.marionette/compare/v1.0.1...v1.0.3)
 
 * ItemView
   * Deleted unneeded `constructor` function - it added nothing and didn't need to be there

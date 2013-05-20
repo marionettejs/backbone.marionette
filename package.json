@@ -1,7 +1,7 @@
 {
   "name": "backbone.marionette",
   "description": "Make your Backbone.js apps dance!",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "homepage": "https://github.com/marionettejs/backbone.marionette",
   "main": "lib/core/amd/backbone.marionette.js",
   "keywords": [
@@ -39,7 +39,7 @@
   },
   "github": "https://github.com/marionettejs/backbone.marionette",
   "dependencies": {
-    "backbone.babysitter": "~0.0.5",
+    "backbone.babysitter": "~0.0.6",
     "backbone.wreqr": "~0.2.0",
     "backbone": "~1.0.0"
   },
@@ -65,7 +65,7 @@
     "dependencies": {
       "underscore": ">=1.4.4",
       "backbone": ">=0.9.9",
-      "backbone.babysitter": ">=0.0.5",
+      "backbone.babysitter": ">=0.0.6",
       "backbone.wreqr": ">=0.2.0"
     },
     "main": "lib/core/amd/backbone.marionette.js",

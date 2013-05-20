@@ -129,7 +129,7 @@ Triggered after the view has been rendered.
 You can implement this in your view to provide custom code for dealing
 with the view's `el` after it has been rendered.
 
-Also triggered as "item:render" / `onItemRender`.
+Also triggered as "item:rendered" / `onItemRender`.
 
 ```js
 Backbone.Marionette.ItemView.extend({
@@ -160,7 +160,7 @@ Backbone.Marionette.ItemView.extend({
 ### "close" / onClose event
 
 Triggered just after the view has been closed. Also triggered
-as "item:close" / `onItemClose`.
+as "item:closed" / `onItemClose`.
 
 ```js
 Backbone.Marionette.ItemView.extend({

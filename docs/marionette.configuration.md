@@ -22,7 +22,7 @@ library, you can directly assign these settings:
 
 ```js
 Backbone.$ = myDOMLib;
-Mariоnеtte.$ = myDOMLib;
+Marionette.$ = myDOMLib;
 ```
 
 Note that you should change both Backbone and Marionette at the same

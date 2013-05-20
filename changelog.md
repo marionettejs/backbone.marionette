@@ -2,6 +2,7 @@
 
 * Region
   * Re-showing a closed view now works by re-rendering and re-inserting the view in to the DOM
+  * Region will trigger a `show` event when showing a view (updated the code to work like the docs already said)
 
 * ItemView
   * Deleted unneeded `constructor` function - it added nothing and didn't need to be there

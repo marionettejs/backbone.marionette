@@ -14,7 +14,8 @@ then append the results of the item view's `el` to the collection view's
 * [Callback Methods](#callback-methods)
   * [onBeforeRender callback](#onbeforerender-callback)
   * [onRender callback](#onrender-callback)
-  * [onItemAdded callback](#onitemadded-callback)
+  * [onBeforeItemAdded callback](#onbeforeitemadded-callback)
+  * [onAfterItemAdded callback](#onafteritemadded-callback)
   * [onBeforeClose callback](#beforeclose-callback)
   * [onClose callback](#onclose-callback)
 * [CollectionView Events](#collectionview-events)
@@ -188,7 +189,21 @@ Backbone.Marionette.CollectionView.extend({
 });
 ```
 
-### onItemAdded callback
+### onBeforeItemAdded callback
+
+This callback function allows you to know before an item / item view
+instance has been added to the collection view. It provides access to
+the view instance for the item that was added.
+
+```js
+Backbone.Marionette.CollectionView.extend({
+  onBeforeItemAdded: function(itemView){
+    // work with the itemView instance, here
+  }
+});
+```
+
+### onAfterItemAdded callback
 
 This callback function allows you to know when an item / item view
 instance has been added to the collection view. It provides access to
@@ -196,7 +211,7 @@ the view instance for the item that was added.
 
 ```js
 Backbone.Marionette.CollectionView.extend({
-  onItemAdded: function(itemView){
+  onAfterItemAdded: function(itemView){
     // work with the itemView instance, here
   }
 });

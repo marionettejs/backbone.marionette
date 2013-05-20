@@ -56,6 +56,10 @@ module.exports = function(grunt) {
                'lib/core/backbone.marionette.js',
              ],
         dest: 'lib/backbone.marionette.js'
+      },
+      amd_banner: {
+        src: 'lib/core/amd/backbone.marionette.js',
+        dest: 'lib/core/amd/backbone.marionette.js'
       }
     },
 

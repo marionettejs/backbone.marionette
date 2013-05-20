@@ -173,5 +173,13 @@ Marionette.View = Backbone.View.extend({
     // reset the ui element to the original bindings configuration
     this.ui = this._uiBindings;
     delete this._uiBindings;
+  },
+
+  render: function(){
+    this.isClosed = false;
+    this.triggerMethod("before:render", this);
+    this.triggerMethod("render", this);
+    return this;
   }
+
 });

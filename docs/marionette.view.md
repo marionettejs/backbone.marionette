@@ -141,7 +141,7 @@ MyView = Backbone.Marionette.ItemView.extend({
 view = new MyView();
 view.render();
 
-view.on("something:do:it", function(args){
+view.on("itemview:something:do:it", function(args){
   alert("I DID IT!");
 });
 
@@ -190,7 +190,7 @@ MyView = Backbone.Marionette.ItemView.extend({
 
 view = new MyView();
 
-view.on("some:event", function(args){
+view.on("itemview:some:event", function(args){
   args.view; // => the view instance that triggered the event
   args.model; // => the view.model, if one was set on the view
   args.collection; // => the view.collection, if one was set on the view

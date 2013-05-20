@@ -145,7 +145,7 @@ rm.addRegion("foo", "#bar");
 rm.removeRegion("foo");
 ```
 
-A region will have it's `close` method called before
+A region will have its `close` method called before
 it is removed from the RegionManager instance. 
 
 ## RegionManager.removeRegions

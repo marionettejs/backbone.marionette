@@ -99,6 +99,7 @@ Marionette.RegionManager = (function(Marionette){
     _remove: function(name, region){
       region.close();
       delete this._regions[name];
+      this.length = _.size(this._regions);
       this.triggerMethod("region:remove", name, region);
     }
 

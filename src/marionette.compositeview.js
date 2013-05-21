@@ -5,11 +5,6 @@
 // Extends directly from CollectionView and also renders an
 // an item view as `modelView`, for the top leaf
 Marionette.CompositeView = Marionette.CollectionView.extend({
-  constructor: function(options){
-    Marionette.CollectionView.apply(this, slice(arguments));
-
-    this.itemView = this.getItemView();
-  },
 
   // Configured the initial events that the composite view
   // binds to. Override this method to prevent the initial

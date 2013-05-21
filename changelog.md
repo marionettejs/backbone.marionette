@@ -5,6 +5,7 @@
 
 * CompositeView
   * Added `index` parameter to method signature, to show that is is available
+  * Deleted uneeeded `constructor` function and removed call to `getItemView` as it was causing problems and was not needed in the constructor.
 
 * All Views
   * Fixed a bug in the entity and collection event bindings, where `stopListening` would not unbind the event handlers

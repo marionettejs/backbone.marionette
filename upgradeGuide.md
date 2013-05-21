@@ -12,7 +12,7 @@ Backbone are not supported at all.
 
 As of Backbone v1.0, calling `fetch()` on a collection will not trigger the **reset** event
 by default. This will cause Marionette's [CollectionView](https://github.com/marionettejs/backbone.marionette/blob/master/docs/marionette.collectionview.md) and [CompositeView](https://github.com/marionettejs/backbone.marionette/blob/master/docs/marionette.compositeview.md) to not function
-as expected. Be sure to pass the `fetch: true` option when calling `fetch()`.
+as expected. Be sure to pass the `reset: true` option when calling `fetch()`.
 
 ### Wreqr v0.2.0
 

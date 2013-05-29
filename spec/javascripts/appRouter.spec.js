@@ -273,4 +273,31 @@ describe("app router", function(){
     });
   });
 
+  describe("when an app route is added manually", function() {
+    var controller, router;
+
+    beforeEach(function() {
+      var Router = Backbone.Marionette.AppRouter.extend({});
+
+      controller = {
+        showPost: jasmine.createSpy("showPost")
+      };
+
+      Backbone.history.start();
+
+      router = new Router({ controller: controller });
+      router.appRoute("posts/:id", "showPost");
+      
+      router.navigate("posts/10", true);
+    });
+
+    afterEach(function() {
+      Backbone.history.stop();
+    });
+
+    it("should fire the route", function() {
+      expect(controller.showPost).toHaveBeenCalled();
+    });
+  });
+
 });

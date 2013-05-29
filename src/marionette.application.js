@@ -67,7 +67,7 @@ _.extend(Marionette.Application.prototype, Backbone.Events, {
   // Accepts the region name
   // getRegion('main')
   getRegion: function(region) {
-	return this._regionManager.get(region);
+    return this._regionManager.get(region);
   },
 
   // Create a module, attached to the application

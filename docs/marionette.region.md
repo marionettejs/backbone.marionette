@@ -1,9 +1,10 @@
 # Marionette.Region
 
-Regions provide a consistent way to manage your views and
-show / close them in your application. They use a jQuery selector
-to show your views in the correct place. They also call extra
-methods on your views to facilitate additional functionality.
+Regions provide consistent methods to manage, show and close 
+views in your applications and layouts. They use a jQuery selector
+to show your views in the correct place.
+
+Using the `Layout` class you can create nested regions.
 
 ## Documentation Index
 
@@ -23,7 +24,7 @@ methods on your views to facilitate additional functionality.
 
 ## Defining An Application Region
 
-Regions can be added to the application by calling the `addRegions` method on
+You can add regions to your applications by calling the `addRegions` method on
 your application instance. This method expects a single hash parameter, with
 named regions and either jQuery selectors or `Region` objects. You may
 call this method as many times as you like, and it will continue adding regions
@@ -42,6 +43,24 @@ would be available for use immediately.
 
 If you specify the same region name twice, the last one in wins.
 
+You can also add regions via `Layouts`:
+
+```js
+AppLayout = Backbone.Marionette.Layout.extend({
+  template: "#layout-template",
+
+  regions: {
+    menu: "#menu",
+    content: "#content"
+  }
+});
+var layout = new AppLayout();
+layout.render();
+layout.menu.show(new MenuView());
+layout.content.show(new MainContentView());
+```
+
+
 ## Initialize A Region With An `el`
 
 You can specify an `el` for the region to manage at the time
@@ -55,9 +74,8 @@ var mgr = new Backbone.Marionette.Region({
 
 ## Basic Use
 
-Once a region has been defined, you can call the `show`
-and `close` methods on it to render and display a view, and then
-to close that view:
+Once a region is defined, you can call its `show`
+and `close` methods to display and shut-down a view:
 
 ```js
 var myView = new MyView();
@@ -85,23 +103,22 @@ MyApp.mainRegion.show(anotherView);
 
 ## `reset` A Region
 
-A region can be `reset` at any time. This will close any existing view
-that is being displayed, and delete the cached `el`. The next time the
-region is used to show a view, the region's `el` will be queried from
+A region can be `reset` at any time. This closes any existing view
+being displayed, and deletes the cached `el`. The next time the
+region shows a view, the region's `el` is queried from
 the DOM.
 
 ```js
 myRegion.reset();
 ```
 
-This is useful for scenarios where a region is re-used across view
-instances, or in unit testing.
+This is useful when regions are re-used across view
+instances, and in unit testing.
 
 ## Set How View's `el` Is Attached
 
-If you need to change how the view is attached to the DOM when
-showing a view via a region, override the `open` method of the
-region. This method receives one parameter - the view to show.
+Override the region's `open` method to change how the view is attached
+to the DOM. This method receives one parameter - the view to show.
 
 The default implementation of `open` is:
 
@@ -111,9 +128,8 @@ Marionette.Region.prototype.open = function(view){
 }
 ```
 
-This will replace the contents of the region with the view's
-`el` / content. However, `open`'s behaviour can be overriden 
-to facilitate transition effects and more.
+This replaces the contents of the region with the view's
+`el` / content. You can override `open` for transition effects and more.
 
 ```js
 Marionette.Region.prototype.open = function(view){

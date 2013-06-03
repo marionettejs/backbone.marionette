@@ -1,18 +1,18 @@
-// Trigger an event and a corresponding method name. Examples:
+// Trigger an event and/or a corresponding method name. Examples:
 //
 // `this.triggerMethod("foo")` will trigger the "foo" event and
-// call the "onFoo" method. 
+// call the "onFoo" method.
 //
 // `this.triggerMethod("foo:bar") will trigger the "foo:bar" event and
 // call the "onFooBar" method.
 Marionette.triggerMethod = (function(){
-  
+
   // split the event name on the :
   var splitter = /(^|:)(\w)/gi;
 
   // take the event section ("section1:section2:section3")
   // and turn it in to uppercase name
-  function getEventName(match, prefix, eventName) { 
+  function getEventName(match, prefix, eventName) {
     return eventName.toUpperCase();
   }
 
@@ -22,8 +22,10 @@ Marionette.triggerMethod = (function(){
     var methodName = 'on' + event.replace(splitter, getEventName);
     var method = this[methodName];
 
-    // trigger the event
-    this.trigger.apply(this, arguments);
+    // trigger the event, if a trigger method exists
+    if( this.trigger ) {
+      this.trigger.apply(this, arguments);
+    }
 
     // call the onMethodName if it exists
     if (_.isFunction(method)) {

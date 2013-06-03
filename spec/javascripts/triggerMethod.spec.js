@@ -1,10 +1,14 @@
 describe("trigger event and method name", function(){
   "use strict";
 
-  var view, eventHandler, methodHandler;
+  var view, eventHandler, methodHandler, CustomClass, customObject;
 
   beforeEach(function(){
     view = new Marionette.View();
+
+    CustomClass = function() {
+      this.triggerMethod = Marionette.triggerMethod;
+    };
 
     eventHandler = jasmine.createSpy("event handler");
     methodHandler = jasmine.createSpy("method handler");
@@ -31,7 +35,22 @@ describe("trigger event and method name", function(){
 
     it("returns the value returned by the on{Event} method", function(){
       expect(returnVal).toBe("return val");
-    })
+    });
+
+    describe("when trigger does not exist", function() {
+
+      beforeEach(function() {
+        customObject = new CustomClass();
+      });
+
+      it("should do nothing", function() {
+        var triggerNonExistantEvent = function() {
+          customObject.triggerMethod("does:not:exist");
+        };
+
+        expect( triggerNonExistantEvent ).not.toThrow();
+      });
+    });
   });
 
   describe("when triggering an event with arguments", function(){

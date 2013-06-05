@@ -6,14 +6,14 @@
 // re-rendered.
 
 Marionette.MonitorDOMRefresh = (function(){
-  // track when the view has been rendered
+  // track when the view has been shown in the DOM,
+  // using a Marionette.Region (or by other means of triggering "show")
   function handleShow(view){
     view._isShown = true;
     triggerDOMRefresh(view);
   }
 
-  // track when the view has been shown in the DOM,
-  // using a Marionette.Region (or by other means of triggering "show")
+  // track when the view has been rendered
   function handleRender(view){
     view._isRendered = true;
     triggerDOMRefresh(view);

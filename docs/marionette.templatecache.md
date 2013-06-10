@@ -78,7 +78,7 @@ works, you can override the `loadTemplate` method on the
 
 ```js
 Backbone.Marionette.TemplateCache.prototype.loadTemplate = function(templateId){
-  // load your template here, returning a the data needed for the compileTemplate
+  // load your template here, returning the data needed for the compileTemplate
   // function. For example, you have a function that creates templates based on the
   // value of templateId
   var myTemplate = myTemplateFunc(templateId);

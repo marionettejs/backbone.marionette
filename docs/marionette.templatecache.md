@@ -65,7 +65,7 @@ If you want to use an alternate template engine while
 still taking advantage of the template caching functionality, or want to customize
 how templates are stored and retreived, you will need to customize the
 `TemplateCache object`. The default operation of `TemplateCache`, is to
-retrive templates from the DOM based on the containing element's id
+retrieve templates from the DOM based on the containing element's id
 attribute, and compile the html in that element with the underscore.js
 `template` function.
 

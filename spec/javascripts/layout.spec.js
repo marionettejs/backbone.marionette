@@ -279,4 +279,21 @@ describe("layout", function(){
     });
   });
 
+  describe("when rendering a prematurely closed layout", function(){
+    var region, layout;
+
+    beforeEach(function(){
+      loadFixtures("layoutManagerTemplate.html");
+
+      layout = new Layout();
+      layout.close();
+      layout.render();
+    });
+
+    it("should re-initialize the regions to the newly rendered elements", function(){
+      expect(layout).toHaveOwnProperty("regionOne");
+      expect(layout).toHaveOwnProperty("regionTwo");
+    });
+  });
+
 });

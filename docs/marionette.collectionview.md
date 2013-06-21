@@ -20,12 +20,12 @@ then append the results of the item view's `el` to the collection view's
   * [onAfterItemAdded callback](#onafteritemadded-callback)
   * [onItemRemoved callback](#onitemremoved-callback)
 * [CollectionView Events](#collectionview-events)
-  * ["before:render" / onBeforeRender event](#beforerender--onbeforerender-event)
-  * ["render" / onRender event](#render--onrender-event)
-  * ["before:close" / onBeforeClose event](#beforeclose--onbeforeclose-event)
+  * ["before:render" event](#beforerender-event)
+  * ["render" event](#render-event)
+  * ["before:close" event](#beforeclose-event)
   * ["closed" / "collection:closed" event](#closed--collectionclosed-event)
-  * ["before:item:added" / "after:item:added"](#beforeitemadded--afteritemadded)
-  * ["item:removed" / onItemRemoved](#itemremoved--onitemremoved)
+  * ["before:item:added" / "after:item:added" event](#beforeitemadded--afteritemadded-event)
+  * ["item:removed" event](#itemremoved-event)
   * ["itemview:\*" event bubbling from child views](#itemview-event-bubbling-from-child-views)
 * [CollectionView's `itemViewEventPrefix`](#collectionviews-itemvieweventprefix)
 * [CollectionView render](#collectionview-render)
@@ -339,7 +339,7 @@ myView.on("collection:closed", function(){
 myView.close();
 ```
 
-### "before:item:added" / "after:item:added"
+### "before:item:added" / "after:item:added" event
 
 The "before:item:added" event and corresponding `onBeforeItemAdded`
 method are triggered just after creating a new itemView instance for 
@@ -374,7 +374,7 @@ cv.on("after:item:added", function(viewInstance){
 });
 ```
 
-### "item:removed"
+### "item:removed" event
 
 Triggered after an itemView instance has been closed and
 removed, when its item was deleted or removed from the

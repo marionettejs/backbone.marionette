@@ -1,3 +1,12 @@
+### v1.0.4 [view commit logs](https://github.com/marionettejs/backbone.marionette/compare/v1.0.3...v1.0.4)
+
+* ItemView
+  * Added needed `constructor` function back - it added lots of things and needed to be there
+* CompositeView
+	* Added explicit call to CollectionView constructor to allow for inheritance overriding
+* Layout
+	* Small clarification for consistency on call to ItemView constructor
+
 ### v1.0.3 [view commit logs](https://github.com/marionettejs/backbone.marionette/compare/v1.0.1...v1.0.3)
 
 * ItemView

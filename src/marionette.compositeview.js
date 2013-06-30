@@ -5,6 +5,12 @@
 // Extends directly from CollectionView and also renders an
 // an item view as `modelView`, for the top leaf
 Marionette.CompositeView = Marionette.CollectionView.extend({
+  
+  // Setting up the inheritance chain which allows changes to 
+  // Marionette.CollectionView.prototype.constructor which allows overriding
+  constructor: function(){
+    Marionette.CollectionView.prototype.constructor.apply(this, slice(arguments));
+  },
 
   // Configured the initial events that the composite view
   // binds to. Override this method to prevent the initial

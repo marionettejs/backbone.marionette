@@ -278,5 +278,19 @@ describe("layout", function(){
       expect(layout).toHaveOwnProperty("regionTwo");
     });
   });
+  
+  describe("has a valid inheritance chain back to Marionette.View", function(){
+    
+    var constructor;
+    
+    beforeEach(function(){
+      constructor = spyOn(Marionette.View.prototype, "constructor");
+      new Marionette.Layout();
+    });
+    
+    it("calls the parent Marionette.View's constructor function on instantiation", function(){
+      expect(constructor).toHaveBeenCalled();
+    });
+  });
 
 });

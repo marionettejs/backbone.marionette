@@ -38,6 +38,18 @@
 			"email"	:	"brian@backbonerails.com"
 		}
   ],
+  "ignore": [
+    "docs",
+    "reports",
+    "spec",
+    ".gitignore",
+    ".travis.yml",
+    "build",
+    "build.cmd",
+    "CONTRIBUTING.md",
+    "changelog.md",
+    "package.json"
+  ],
   "dependencies" : {
     "jquery": "~1.8.0 || ~1.9.0",
     "backbone" : "~1.0.0"

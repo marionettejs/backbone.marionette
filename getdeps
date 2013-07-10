@@ -1,0 +1,8 @@
+echo "UPDATING MARIONETTE.JS DEPENDENCIES..."
+
+curl https://raw.github.com/douglascrockford/JSON-js/master/json2.js > public/javascripts/json2.js
+curl http://underscorejs.org/underscore.js > public/javascripts/underscore.js
+curl http://backbonejs.org/backbone.js > public/javascripts/backbone.js
+curl http://code.jquery.com/jquery.js > public/javascripts/jquery.js
+curl https://raw.github.com/marionettejs/backbone.wreqr/master/lib/backbone.wreqr.js > public/javascripts/backbone.wreqr.js
+curl https://raw.github.com/marionettejs/backbone.babysitter/master/lib/backbone.babysitter.js > public/javascripts/backbone.babysitter.js

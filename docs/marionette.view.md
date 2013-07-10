@@ -47,8 +47,14 @@ MyView = Backbone.Marionette.ItemView.extend({
 ```
 
 The context (`this`) will automatically be set to the view. You can
-optionally set the context by passing in the context object as the
-4th parameter of `listenTo`.
+optionally set the context by using `_.bind`.
+
+```js
+// Force the context of the "reconcileCollection" callback method to be the collection
+// itself, for this event handler only (does not affect any other use of the
+// "reconcileCollection" method)
+this.listenTo(this.collection, "add", _.bind(this.reconcileCollection, this.collection));
+```
 
 ## View close
 

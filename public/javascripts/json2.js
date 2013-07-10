@@ -1,6 +1,6 @@
 /*
-    http://www.JSON.org/json2.js
-    2011-10-19
+    json2.js
+    2013-05-26
 
     Public Domain.
 
@@ -159,8 +159,7 @@
 // Create a JSON object only if one does not already exist. We create the
 // methods in a closure to avoid creating global variables.
 
-var JSON;
-if (!JSON) {
+if (typeof JSON !== 'object') {
     JSON = {};
 }
 
@@ -174,7 +173,7 @@ if (!JSON) {
 
     if (typeof Date.prototype.toJSON !== 'function') {
 
-        Date.prototype.toJSON = function (key) {
+        Date.prototype.toJSON = function () {
 
             return isFinite(this.valueOf())
                 ? this.getUTCFullYear()     + '-' +
@@ -188,7 +187,7 @@ if (!JSON) {
 
         String.prototype.toJSON      =
             Number.prototype.toJSON  =
-            Boolean.prototype.toJSON = function (key) {
+            Boolean.prototype.toJSON = function () {
                 return this.valueOf();
             };
     }

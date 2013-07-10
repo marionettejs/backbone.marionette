@@ -65,7 +65,7 @@ If you want to use an alternate template engine while
 still taking advantage of the template caching functionality, or want to customize
 how templates are stored and retreived, you will need to customize the
 `TemplateCache object`. The default operation of `TemplateCache`, is to
-retrive templates from the DOM based on the containing element's id
+retrieve templates from the DOM based on the containing element's id
 attribute, and compile the html in that element with the underscore.js
 `template` function.
 
@@ -78,7 +78,7 @@ works, you can override the `loadTemplate` method on the
 
 ```js
 Backbone.Marionette.TemplateCache.prototype.loadTemplate = function(templateId){
-  // load your template here, returning a the data needed for the compileTemplate
+  // load your template here, returning the data needed for the compileTemplate
   // function. For example, you have a function that creates templates based on the
   // value of templateId
   var myTemplate = myTemplateFunc(templateId);

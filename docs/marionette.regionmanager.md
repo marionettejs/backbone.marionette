@@ -82,7 +82,7 @@ var regions = rm.addRegions({
   foo: "#bar",
   baz: {
     selector: "#quux",
-    type: MyRegionType
+    regionType: MyRegionType
   }
 });
 
@@ -106,7 +106,7 @@ pairs that will be applied to every region added.
 var rm = new Marionette.RegionManager();
 
 var defaults = {
-  type: MyRegionType
+  regionType: MyRegionType
 };
 
 var regions = {

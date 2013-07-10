@@ -1,1 +1,63 @@
-component.json
+{
+  "name"        : "backbone.marionette",
+  "description" : "Make your Backbone.js apps dance with a composite application architecture!",
+  "url"         : "http://marionettejs.org",
+  "main"        : "./lib/backbone.marionette.js",
+  "version"     : "1.0.4",
+
+  "keywords"     : [
+    "backbone",
+    "framework",
+    "client",
+    "browser",
+    "composite"
+  ],
+
+  "author": {
+    "name"  : "Derick Bailey",
+    "email" : "derickbailey@gmail.com"
+  },
+
+  "contributors" : [
+    {
+      "name"  : "Jarrod Overson",
+      "email" : "jsoverson@gmail.com"
+    },
+    {
+      "name"  : "Tony Abou-Assaleh",
+      "email" : "taa@eits.ca"
+    },
+    {
+      "name"  : "Matt Briggs",
+      "email" : "matt@mattbriggs.net"
+    },
+    {
+      "name"  : "Ruben Vreeken",
+      "email" : "ruben.vreeken@gmail.com"
+    },
+    {
+      "name"  : "Brian Mann",
+      "email" : "brian@backbonerails.com"
+    }
+  ],
+  
+  "ignore": [
+    "docs",
+    "reports",
+    "spec",
+    ".gitignore",
+    ".travis.yml",
+    "build",
+    "build.cmd",
+    "CONTRIBUTING.md",
+    "changelog.md",
+    "package.json"
+  ],
+
+  "dependencies" : {
+    "backbone.babysitter": "~0.0.6",
+    "backbone.wreqr": "~0.2.0",
+    "backbone": "~1.0.0",
+    "underscore": "~1.4.4"
+  }
+}

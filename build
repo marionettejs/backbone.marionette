@@ -1,8 +1,0 @@
-#!/bin/sh
-
-if [ -a ./src/.DS_Store ] 
-  then 
-    rm ./src/.DS_Store
-fi
-
-./node_modules/.bin/grunt

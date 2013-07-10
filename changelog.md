@@ -7,14 +7,14 @@
 * Layout
 	* Small clarification for consistency on call to ItemView constructor
 
-### v1.0.3 [view commit logs](https://github.com/marionettejs/backbone.marionette/compare/v1.0.1...v1.0.3)
+### v1.0.3 [view commit logs](https://github.com/marionettejs/backbone.marionette/compare/v1.0.2...v1.0.3)
 
 * ItemView
   * Deleted unneeded `constructor` function - it added nothing and didn't need to be there
 
 * CompositeView
-  * Added `index` parameter to method signature, to show that is is available
-  * Deleted uneeeded `constructor` function and removed call to `getItemView` as it was causing problems and was not needed in the constructor.
+  * Added `index` parameter to method signature, to show that it is available
+  * Deleted unneeded `constructor` function and removed call to `getItemView` as it was causing problems and was not needed in the constructor.
 
 * All Views
   * Fixed a bug in the entity and collection event bindings, where `stopListening` would not unbind the event handlers

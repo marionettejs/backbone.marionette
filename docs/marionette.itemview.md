@@ -69,7 +69,7 @@ over an `items` array.
 ```js
 <script id="some-template" type="text/html">
   <ul>
-    <%= _.each(items, function(item){ %>
+    <% _.each(items, function(item){ %>
     <li> item.someAttribute </li>
     <% } %>
   </ul>

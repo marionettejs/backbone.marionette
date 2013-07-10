@@ -51,8 +51,10 @@
     "package.json"
   ],
   "dependencies" : {
-    "jquery": "~1.8.0 || ~1.9.0",
-    "backbone" : "~1.0.0"
+    "backbone.babysitter": "~0.0.6",
+    "backbone.wreqr": "~0.2.0",
+    "backbone": "~1.0.0",
+    "underscore": "~1.4.4"
   }
 }
 

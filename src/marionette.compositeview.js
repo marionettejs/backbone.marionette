@@ -90,7 +90,7 @@ Marionette.CompositeView = Marionette.CollectionView.extend({
     data = this.mixinTemplateHelpers(data);
 
     var template = this.getTemplate();
-    return Marionette.Renderer.render(template, data);
+    return Marionette.Renderer.render(template, data, this);
   },
 
   // Appends the `el` of itemView instances to the specified

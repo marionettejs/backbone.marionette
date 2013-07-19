@@ -71,7 +71,7 @@ over an `items` array.
   <ul>
     <% _.each(items, function(item){ %>
     <li> item.someAttribute </li>
-    <% } %>
+    <% }) %>
   </ul>
 </script>
 ```

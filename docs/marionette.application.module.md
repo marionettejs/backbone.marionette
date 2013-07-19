@@ -138,7 +138,7 @@ MyApp.start();
 fooModule.start();
 ```
 
-Note the use of an object literal instead of just a function to define
+Note the use of a function instead of just an object literal to define
 the module, and the presence of the `startWithParent` attribute, to tell it
 not to start with the application. Then to start the module, the module's 
 `start` method is manually called.

@@ -70,6 +70,7 @@ Marionette.Layout = Marionette.ItemView.extend({
 
   // Remove a single region from the Layout, by name
   removeRegion: function(name){
+    delete this.regions[name];
     return this.regionManager.removeRegion(name);
   },
 

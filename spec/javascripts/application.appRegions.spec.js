@@ -79,4 +79,33 @@ describe("application regions", function(){
     });
   });
 
+  describe("when closing all regions in the app", function(){
+    var r1, r2; 
+
+    beforeEach(function(){
+      var app = new Backbone.Marionette.Application();
+
+      setFixtures("<div id='region'></div>");
+      setFixtures("<div id='r2'></div>");
+
+      app.addRegions({
+        myRegion: "#region",
+        r2: "#r2"
+      });
+
+      r1 = app.myRegion;
+      r2 = app.r2;
+      spyOn(r1, "close").andCallThrough();
+      spyOn(r2, "close").andCallThrough();
+
+      app.closeRegions();
+    });
+    
+
+    it("should close the regions", function(){
+      expect(r1.close).toHaveBeenCalled();
+      expect(r2.close).toHaveBeenCalled();
+    });
+  });
+
 });

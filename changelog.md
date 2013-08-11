@@ -1,3 +1,8 @@
+### v1.1 [view commit logs](https://github.com/marionettejs/backbone.marionette/compare/v1.0.4...v1.1)
+
+* Application
+  * Added `closeRegions` method to close all regions on the app instance
+
 ### v1.0.4 [view commit logs](https://github.com/marionettejs/backbone.marionette/compare/v1.0.3...v1.0.4)
 
 * ItemView

@@ -67,6 +67,13 @@ _.extend(Marionette.Application.prototype, Backbone.Events, {
   removeRegion: function(region) {
     this._regionManager.removeRegion(region);
   },
+  
+  // Provides alternative access to regions
+  // Accepts the region name
+  // getRegion('main')
+  getRegion: function(region) {
+    return this._regionManager.get(region);
+  },
 
   // Create a module, attached to the application
   module: function(moduleNames, moduleDefinition){

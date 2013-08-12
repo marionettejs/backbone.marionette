@@ -105,6 +105,11 @@ All arguments that are passed to the triggerMethod call are passed along to both
 
 `triggerMethod("foo", bar)` will call `onFoo: function(bar){...})`
 
+Note that `triggerMethod` can be called on objects that do not have
+`Backbone.Events` mixed in to them. These objects will not have a `trigger`
+method, and no attempt to call `.trigger()` will be made. The `on{Name}`
+callback methods will still be called, though.
+
 ## Marionette.bindEntityEvents
 
 This method is used to bind a backbone "entity" (collection/model) 

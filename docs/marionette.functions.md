@@ -8,7 +8,7 @@ a way to get the same behaviors and conventions from your own code.
 ## Documentation Index
 
 * [Marionette.extend](#marionetteextend)
-* [Marionette.getOption](#marionetteextend)
+* [Marionette.getOption](#marionettegetoption)
 * [Marionette.triggerMethod](#marionettetriggermethod)
 * [Marionette.bindEntityEvent](#marionettebindentityevents)
 

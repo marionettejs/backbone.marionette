@@ -1,3 +1,8 @@
+## Upgrade to v1.1.0
+
+v1.1.0 adds a few new features, but should not break any existing API or
+behavior. It should, therefore, be a drop-in replacement for v1.0.x
+
 ## Upgrade to v1.0.0
 
 In addition to the following notes, please see previous upgrade guide entries and the 

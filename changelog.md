@@ -2,6 +2,7 @@
 
 * Application
   * Added `closeRegions` method to close all regions on the app instance
+  * Added `getRegion` method to retrieve a region by name
 
 * AppRouter
   * Added `appRoute` method to create app router handlers at runtime

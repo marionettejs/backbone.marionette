@@ -1,5 +1,8 @@
 ### v1.1 [view commit logs](https://github.com/marionettejs/backbone.marionette/compare/v1.0.4...v1.1)
 
+* Layout
+  * Will properly attach regions if the layout's `close` method was called prior to `render`
+
 * Application
   * Added `closeRegions` method to close all regions on the app instance
   * Added `getRegion` method to retrieve a region by name

@@ -21,35 +21,58 @@ describe("composite view - itemViewContainer", function(){
       template: "#composite-child-container-template"
     });
 
+    var CompositeViewWithoutItemViewContainer = Backbone.Marionette.CompositeView.extend({
+      itemView: ItemView,
+      template: "#composite-child-container-template"
+    });
+
     var compositeView;
     var order;
     var deferredResolved;
+    var collection;
 
-    beforeEach(function(){
+    beforeEach(function() {
       order = [];
       loadFixtures("compositeChildContainerTemplate.html");
 
       var m1 = new Model({foo: "bar"});
       var m2 = new Model({foo: "baz"});
-      var collection = new Collection([m1, m2]);
+      collection = new Collection([m1, m2]);
+    });
 
-      compositeView = new CompositeView({
+    specCase('in the view definition', function() {
+      return new CompositeView({
         collection: collection
       });
-
-      spyOn(compositeView, "resetItemViewContainer").andCallThrough();
-
-      compositeView.render();
     });
 
-    it("should reset any existing itemViewContainer", function(){
-      expect(compositeView.resetItemViewContainer).toHaveBeenCalled();
+    specCase('in the view creation', function() {
+      return new CompositeViewWithoutItemViewContainer({
+        itemViewContainer: "ul",
+        collection: collection
+      });
     });
 
-    it("should render the items in to the specified container", function(){
-      expect(compositeView.$("ul")).toHaveText(/bar/);
-      expect(compositeView.$("ul")).toHaveText(/baz/);
-    });
+    function specCase(desc, viewCreation) {
+      describe(desc, function() {
+        beforeEach(function(){
+          compositeView = viewCreation();
+
+          spyOn(compositeView, "resetItemViewContainer").andCallThrough();
+
+          compositeView.render();
+        });
+
+        it("should reset any existing itemViewContainer", function(){
+          expect(compositeView.resetItemViewContainer).toHaveBeenCalled();
+        });
+
+        it("should render the items in to the specified container", function(){
+          expect(compositeView.$("ul")).toHaveText(/bar/);
+          expect(compositeView.$("ul")).toHaveText(/baz/);
+        });
+      });
+    }
   });
 
   describe("when rendering a collection in a composite view with a missing `itemViewContainer` specified", function(){

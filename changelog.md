@@ -3,6 +3,9 @@
 * Layout
   * Will properly attach regions if the layout's `close` method was called prior to `render`
 
+* CompositeView
+  * The `itemViewContainer` can be supplied in the constructor function options
+
 * Application
   * Added `closeRegions` method to close all regions on the app instance
   * Added `getRegion` method to retrieve a region by name

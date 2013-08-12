@@ -121,7 +121,7 @@ function needs to return a jQuery selector string, or a jQuery selector
 object.
 
 ```js
-TableView = Backbone.Marionette.CompositeView.extend({
+var TableView = Backbone.Marionette.CompositeView.extend({
   // ...
 
   itemViewContainer: function(){
@@ -134,6 +134,17 @@ Using a function allows for logic to be used for the selector. However,
 only one value can be returned. Upon returning the first value, it will
 be cached and that value will be used for the remainder of that view
 instance' lifecycle.
+
+Alternatively, the `itemViewContainer` can be supplied in the constructor
+function options:
+
+```js
+var myComp = new Marionette.CompositeView({
+  // ...,
+
+  itemViewContainer: "#tbody"
+});
+```
 
 ## CompositeView's `appendHtml`
 

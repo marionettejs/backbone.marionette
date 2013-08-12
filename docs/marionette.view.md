@@ -27,7 +27,7 @@ behaviors that are shared across all views.
 
 ## Binding To View Events
 
-Marionette.View extends `Marionette.BindTo`. It is recommended that you use
+Marionette.View extends `Backbone.View`. It is recommended that you use
 the `listenTo` method to bind model, collection, or other events from Backbone
 and Marionette objects.
 
@@ -62,12 +62,12 @@ View implements a `close` method, which is called by the region
 managers automatically. As part of the implementation, the following
 are performed:
 
-* unbind all `listenTo` events
+* call an `onBeforeClose` event on the view, if one is provided
+* call an `onClose` event on the view, if one is provided
 * unbind all custom view events
 * unbind all DOM events
 * remove `this.el` from the DOM
-* call an `onBeforeClose` event on the view, if one is provided
-* call an `onClose` event on the view, if one is provided
+* unbind all `listenTo` events
 
 By providing an `onClose` event in your view definition, you can
 run custom code for your view that is fired after your view has been
@@ -223,7 +223,7 @@ Backbone.Marionette.CompositeView.extend({
   },
 
   collectionEvents: {
-    "add": "itemAdded" // equivalent to view.listenTo(view.collection, "add", collection.itemAdded, view)
+    "add": "itemAdded" // equivalent to view.listenTo(view.collection, "add", view.itemAdded, view)
   },
 
   // ... event handler methods

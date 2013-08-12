@@ -6,6 +6,7 @@ Have your routers configured to call the method on your object, directly.
 ## Documentation Index
 
 * [Configure Routes](#configure-routes)
+* [Configure Routes In Constructor](#configure-routes-in-constructor)
 * [Add Routes At Runtime](#add-routes-at-runtime)
 * [Specify A Controller](#specify-a-controller)
 
@@ -32,6 +33,24 @@ MyRouter = Backbone.Marionette.AppRouter.extend({
 ```
 
 You can also add standard routes to an AppRouter with methods on the router.
+
+## Configure Routes In Constructor
+
+Routes can be defined through the constructor function options, as well.
+
+```js
+var MyRouter = new Marionette.AppRouter({
+  controller: myController,
+  appRoutes: {
+    "foo": "doFoo",
+    "bar/:id": "doBar"
+  }
+});
+```
+
+This allows you to create router instances without having to `.extend`
+from the AppRouter. You can just create the instance with the routes defined
+in the constructor, as shown.
 
 ## Add Routes At Runtime
 

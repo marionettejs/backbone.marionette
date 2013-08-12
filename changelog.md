@@ -6,6 +6,7 @@
 
 * AppRouter
   * Added `appRoute` method to create app router handlers at runtime
+  * Added ability to set `appRoutes` in constructor function options
 
 ### v1.0.4 [view commit logs](https://github.com/marionettejs/backbone.marionette/compare/v1.0.3...v1.0.4)
 

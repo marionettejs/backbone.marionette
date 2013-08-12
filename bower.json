@@ -56,7 +56,7 @@
 
   "dependencies" : {
     "backbone": "~1.0.0",
-    "underscore": "~1.4.4"
+    "underscore": "~1.5.1"
   },
   "devDependencies": {
     "backbone.babysitter": "~0.0.6",

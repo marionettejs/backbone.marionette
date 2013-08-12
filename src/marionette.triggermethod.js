@@ -23,7 +23,7 @@ Marionette.triggerMethod = (function(){
     var method = this[methodName];
 
     // trigger the event, if a trigger method exists
-    if( this.trigger ) {
+    if(_.isFunction(this.trigger)) {
       this.trigger.apply(this, arguments);
     }
 

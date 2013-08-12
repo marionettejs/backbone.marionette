@@ -139,16 +139,17 @@ describe("layout - dynamic regions", function(){
   });
 
   describe("when removing a region from a layout", function(){
-    var Layout = Marionette.Layout.extend({
-      template: template,
-      regions: {
-        foo: "#foo"
-      }
-    });
-
+    var Layout; 
     var layout, region, closeHandler, removeHandler;
 
     beforeEach(function(){
+      Layout = Marionette.Layout.extend({
+        template: template,
+        regions: {
+          foo: "#foo"
+        }
+      });
+
       closeHandler = jasmine.createSpy("close handler");
       removeHandler = jasmine.createSpy("remove handler");
       

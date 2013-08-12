@@ -300,4 +300,38 @@ describe("app router", function(){
     });
   });
 
+  describe("when app routes are provided in the constructor", function(){
+    var AppRouter = Marionette.AppRouter.extend({
+      appRoutes: {
+        "r1": "originalFunc"
+      }
+    });
+
+    var controller = {
+      originalFunc: jasmine.createSpy("original function"),
+      overrideFunc: jasmine.createSpy("override function")
+    };
+
+    beforeEach(function(){
+      var appRouter = new AppRouter({
+        controller: controller,
+        appRoutes: {
+          "r-const-override": "overrideFunc"
+        }
+      });
+
+      Backbone.history.start();
+      appRouter.navigate("r-const-override", true);
+    });
+
+    afterEach(function(){
+      Backbone.history.stop();
+    });
+
+    it("should override the configured routes and use the constructor param", function(){
+      expect(controller.overrideFunc).toHaveBeenCalled();
+      expect(controller.originalFunc).not.toHaveBeenCalled();
+    });
+  });
+
 });

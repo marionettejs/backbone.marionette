@@ -20,14 +20,11 @@ Marionette.AppRouter = Backbone.Router.extend({
 
   constructor: function(options){
     Backbone.Router.prototype.constructor.apply(this, slice(arguments));
-
-	if (options.appRoutes) this.appRoutes = options.appRoutes;
 	
-    this.options = options;
+    this.options = options || {};
 
-    if (this.appRoutes){
-      this.processAppRoutes(this.appRoutes);
-    }
+    var appRoutes = Marionette.getOption(this, "appRoutes");
+    this.processAppRoutes(appRoutes);
   },
 
   // Similar to route method on a Backbone Router but
@@ -47,6 +44,8 @@ Marionette.AppRouter = Backbone.Router.extend({
   // router, and turn them in to routes that trigger the
   // specified method on the specified `controller`.
   processAppRoutes: function(appRoutes) {
+    if (!appRoutes){ return; }
+
     var routeNames = _.keys(appRoutes).reverse(); // Backbone requires reverted order of routes
 
     _.each(routeNames, function(route) {

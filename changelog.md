@@ -6,6 +6,7 @@
 
 * Layout
   * Will properly attach regions if the layout's `close` method was called prior to `render`
+  * Calling `.addRegions` will correctly modify the layout instance' region list instead of the prototype's
 
 * CompositeView
   * The `itemViewContainer` can be supplied in the constructor function options

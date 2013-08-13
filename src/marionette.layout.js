@@ -65,7 +65,7 @@ Marionette.Layout = Marionette.ItemView.extend({
 
   // Add multiple regions as a {name: definition, name2: def2} object literal
   addRegions: function(regions){
-    this.regions = _.extend(this.regions || {}, regions);
+    this.regions = _.extend({}, this.regions, regions);
     return this._buildRegions(regions);
   },
 

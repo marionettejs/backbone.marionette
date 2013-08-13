@@ -5,6 +5,14 @@ specified collection, render each of them using a specified `itemView`,
 then append the results of the item view's `el` to the collection view's
 `el`.
 
+CollectionView extends directly from Marionette.View. Please see 
+[the Marionette.View documentation](marionette.view.md) 
+for more information on available features and functionality.
+
+Additionally, interactions with Marionette.Region
+will provide features such as `onShow` callbacks, etc. Please see
+[the Region documentation](marionette.region.md) for more information.
+
 ## Documentation Index
 
 * [CollectionView's `itemView`](#collectionviews-itemview)

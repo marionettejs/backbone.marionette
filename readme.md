@@ -161,8 +161,8 @@ ideas and examples to the community, please see the wiki page.
 
 MarionetteJS currently works with the following libraries:
 
-* [jQuery](http://jquery.com) v1.8.x or v1.9.x
-* [Underscore](http://underscorejs.org) v1.4.4
+* [jQuery](http://jquery.com) v1.8+
+* [Underscore](http://underscorejs.org) v1.4.4+
 * [Backbone](http://backbonejs.org) v1.0 is preferred. v0.9.9 and v0.9.10 should work still
 * [Backbone.Wreqr](https://github.com/marionettejs/backbone.wreqr) 
 * [Backbone.BabySitter](https://github.com/marionettejs/backbone.babysitter)

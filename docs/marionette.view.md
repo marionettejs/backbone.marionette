@@ -366,6 +366,21 @@ view = new MyView({
 view.render(); //=> "I think that Backbone.Marionette is the coolest!";
 ```
 
+The `templateHelpers` can also be provided as a constructor parameter
+for any Marionette view type that supports the helpers.
+
+```js
+var MyView = Marionette.ItemView.extend({
+  // ...
+});
+
+new MyView({
+  templateHelpers: {
+    doFoo: function(){ /* ... */ }
+  }
+});
+```
+
 ### Accessing Data Within The Helpers
 
 In order to access data from within the helper methods, you

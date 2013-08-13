@@ -1,7 +1,10 @@
 ## Upgrade to v1.1.0
 
 v1.1.0 adds a few new features, but should not break any existing API or
-behavior. It should, therefore, be a drop-in replacement for v1.0.x
+behavior. It should, therefore, be a drop-in replacement for v1.0.x. 
+
+Please see the [changelog](https://github.com/marionettejs/backbone.marionette/blob/master/changelog.md)
+for the complete list of what was added and fixed in this release.
 
 ## Upgrade to v1.0.0
 

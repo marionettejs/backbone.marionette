@@ -163,7 +163,7 @@ Marionette.View = Backbone.View.extend({
 
   // This method unbinds the elements specified in the "ui" hash
   unbindUIElements: function(){
-    if (!this.ui){ return; }
+    if (!this.ui || !this._uiBindings){ return; }
 
     // delete all of the existing ui bindings
     _.each(this.ui, function($el, name){

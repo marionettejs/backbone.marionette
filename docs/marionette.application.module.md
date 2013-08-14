@@ -167,7 +167,7 @@ var fooModule = MyApp.module("Foo", { startWithParent: false });
 This is most useful when defining a module across multiple files and
 using a single definition to specify the `startWithParent` option.
 
-If you wish to combine the `startWithparent` object literal
+If you wish to combine the `startWithParent` object literal
 with a module definition, you can include a `define` attribute on
 the object literal, set to the module function:
 

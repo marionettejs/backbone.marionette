@@ -83,13 +83,6 @@ describe("layout", function(){
       layoutManager = new LayoutCustomRegion 
     });
   
-    it("should instantiate the default regionManager if specified", function() {
-      expect(layoutManager).toHaveOwnProperty("regionThree");
-      expect(layoutManager.regionThree).toBeInstanceOf(Marionette.Region);
-      expect(layoutManager).toHaveOwnProperty("regionThree");
-      expect(layoutManager.regionThree).toBeInstanceOf(Marionette.Region);
-    });
-
     it("should instantiate specific regions with custom regions if speficied", function() {
       expect(layoutManager).toHaveOwnProperty("regionOne");
       expect(layoutManager.regionOne).toBeInstanceOf(CustomRegion1);
@@ -97,11 +90,19 @@ describe("layout", function(){
       expect(layoutManager.regionTwo).toBeInstanceOf(CustomRegion2);
     });
 
+    it("should instantiate the default regionManager if specified", function() {
+      expect(layoutManager).toHaveOwnProperty("regionThree");
+      expect(layoutManager.regionThree).toBeInstanceOf(CustomRegion1);
+      expect(layoutManager).toHaveOwnProperty("regionFour");
+      expect(layoutManager.regionThree).toBeInstanceOf(CustomRegion1);
+    });
+
     it("should instantiate marionette regions is no regionType is specified", function() {
       var layoutManagerNoDefault = new LayoutNoDefaultRegion();
       expect(layoutManagerNoDefault).toHaveOwnProperty("regionTwo");
       expect(layoutManagerNoDefault.regionTwo).toBeInstanceOf(Backbone.Marionette.Region);
     });
+
   });
 
   describe("when regions are defined as a function", function(){

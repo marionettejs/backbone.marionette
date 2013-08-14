@@ -60,7 +60,7 @@ Marionette.Layout = Marionette.ItemView.extend({
   addRegion: function(name, definition){
     var regions = {};
     regions[name] = definition;
-    return this.addRegions(regions)[name];
+    return this._buildRegions(regions)[name];
   },
 
   // Add multiple regions as a {name: definition, name2: def2} object literal
@@ -80,6 +80,7 @@ Marionette.Layout = Marionette.ItemView.extend({
     var that = this;
 
     var defaults = {
+      regionType: Marionette.getOption(this, "regionType"),
       parentEl: function(){ return that.$el; }
     };
 

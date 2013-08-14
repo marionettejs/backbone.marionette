@@ -33,6 +33,7 @@ describe("region", function(){
 
       view = new MyView();
       spyOn(view, "render").andCallThrough();
+      spyOn(view, "delegateEvents").andCallThrough();
 
       myRegion = new MyRegion();
       spyOn(myRegion, "onShow");
@@ -50,15 +51,19 @@ describe("region", function(){
       expect(view.render).toHaveBeenCalled();
     });
 
+    it("should not call 'delegateEvents' for a view that has not been closed", function(){
+      expect(view.delegateEvents).not.toHaveBeenCalled();
+    });
+
     it("should append the rendered HTML to the manager's 'el'", function(){
       expect(myRegion.$el).toHaveHtml(view.el);
     });
 
-    it("shoudl call 'onShow' for the view, after the rendered HTML has been added to the DOM", function(){
+    it("should call 'onShow' for the view, after the rendered HTML has been added to the DOM", function(){
       expect($(view.el)).toHaveClass("onShowClass");
     })
 
-    it("shoudl call 'onShow' for the region, after the rendered HTML has been added to the DOM", function(){
+    it("should call 'onShow' for the region, after the rendered HTML has been added to the DOM", function(){
       expect(myRegion.onShow).toHaveBeenCalled();
     })
 
@@ -142,6 +147,7 @@ describe("region", function(){
       spyOn(view, "close");
       spyOn(myRegion, "open");
       spyOn(view, "render");
+      spyOn(view, "delegateEvents");
       myRegion.show(view);
     });
 
@@ -156,6 +162,10 @@ describe("region", function(){
     it("should call 'render' on the view", function(){
       expect(view.render).toHaveBeenCalled();
     });
+
+    it("should not call 'delegateEvents' on the view", function(){
+      expect(view.delegateEvents).not.toHaveBeenCalled();
+    });
   });
 
    describe("when a view is already shown, close, and showing the same one", function(){
@@ -166,7 +176,7 @@ describe("region", function(){
     var MyView = Backbone.Marionette.ItemView.extend({
       render: function(){
         $(this.el).html("some content");
-      }, 
+      },
       open : function() {}
     });
 
@@ -182,7 +192,8 @@ describe("region", function(){
 
       spyOn(view, "close");
       spyOn(myRegion, "open");
-      spyOn(view, "render")
+      spyOn(view, "render");
+      spyOn(view, "delegateEvents");
       myRegion.show(view);
     });
 
@@ -196,6 +207,10 @@ describe("region", function(){
 
     it("should call 'render' on the view", function(){
       expect(view.render).toHaveBeenCalled();
+    });
+
+    it("should call 'delegateEvents' on the view", function(){
+      expect(view.delegateEvents).toHaveBeenCalled();
     });
   });
 
@@ -412,7 +427,7 @@ describe("region", function(){
 
       MyApp = new Backbone.Marionette.Application();
       MyApp.addRegions({
-        MyRegion: "#region", 
+        MyRegion: "#region",
         anotherRegion: "#region2"
       });
 

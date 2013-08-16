@@ -25,6 +25,8 @@ Marionette.CollectionView = Marionette.View.extend({
       this.listenTo(this.collection, "add", this.addChildView, this);
       this.listenTo(this.collection, "remove", this.removeItemView, this);
       this.listenTo(this.collection, "reset", this.render, this);
+      this.listenToOnce(this.collection, "add", this.firstElement, this);
+      this.listenTo(this.collection, "sync", this.onSync, this);
     }
   },
 
@@ -57,6 +59,19 @@ Marionette.CollectionView = Marionette.View.extend({
     this.triggerMethod("render", this);
     this.triggerMethod("collection:rendered", this);
   },
+    
+  // marks the collection as synchronised
+  onSync: function() {
+    this.collectionFetched = true
+  },
+
+  // Called once on the addition of the first element to the
+  // collection, closing the loading view and setting the 
+  // collection as fetched
+  firstElement: function() {
+    this.collectionFetched = true
+    this.closeLoadingView()
+  },
 
   // Render the collection of items. Override this method to
   // provide your own implementation of a render function for
@@ -74,12 +89,13 @@ Marionette.CollectionView = Marionette.View.extend({
   // process
   _renderChildren: function(){
     this.closeEmptyView();
+    this.closeLoadingView();
     this.closeChildren();
 
     if (this.collection && this.collection.length > 0) {
       this.showCollection();
     } else {
-      this.showEmptyView();
+        this.checkEmpty()
     }
   },
 
@@ -106,13 +122,38 @@ Marionette.CollectionView = Marionette.View.extend({
     }
   },
 
+  // Internal method to show an empty view in place of
+  // a collection of item views, when the collection is
+  // empty
+  showLoadingView: function(){
+    var LoadingView = Marionette.getOption(this, "loadingView");
+
+    if (LoadingView && !this._showingLoadingView){
+      this._showingLoadingView = true;
+      var model = new Backbone.Model();
+      this._loadingView = this.addItemView(model, LoadingView, 0);
+    }
+  },
+
   // Internal method to close an existing emptyView instance
   // if one exists. Called when a collection view has been
   // rendered empty, and then an item is added to the collection.
   closeEmptyView: function(){
     if (this._showingEmptyView){
-      this.closeChildren();
+      this._emptyView.close()
       delete this._showingEmptyView;
+      delete this._emptyView;
+    }
+  },
+
+  // Internal method to close an existing loadingView instance
+  // if one exists. Called when the collection married to the 
+  // collection view has a new item added to it
+  closeLoadingView: function(){
+    if (this._showingLoadingView){
+      this._loadingView.close()
+      delete this._showingLoadingView
+      delete this._loadingView
     }
   },
 
@@ -221,8 +262,13 @@ Marionette.CollectionView = Marionette.View.extend({
   checkEmpty: function() {
     // check if we're empty now, and if we are, show the
     // empty view
+    
     if (!this.collection || this.collection.length === 0){
-      this.showEmptyView();
+      if ( this.collectionFetched && this.collectionFetched === true ) {
+        this.showEmptyView();
+      } else {
+        this.showLoadingView()
+      }
     }
   },
 
@@ -257,7 +303,6 @@ Marionette.CollectionView = Marionette.View.extend({
     this.children.each(function(child){
       this.removeChildView(child);
     }, this);
-    this.checkEmpty();
   }
 });
 

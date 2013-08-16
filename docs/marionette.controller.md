@@ -84,13 +84,12 @@ The name `Controller` is bound to cause a bit of confusion, which is
 rather unfortunate. There was some discussion and debate about what to
 call this object, the idea that people would confuse this with an 
 MVC style controller came up a number of times. In the end, we decided
-to call this a controller anyways, as the typical use case is to control
-the workflow and process of an application and / or module. 
+to call this a controller anyway--as the typical use case is to control
+the workflow and process of an application and/or module. 
 
 But the truth is, this is a very generic, multi-purpose object that can
-serve many different roles in many different scenarios. We are always open
+serve many different roles, in many different scenarios. We are always open
 to suggestions, with good reason and discussion, on renaming objects to
-be more descriptive, less confusing, etc. If you would like to suggest a
-different name, please do so in either the mailing list or the github
-issues list.
-
+be more descriptive and less confusing. If you would like to suggest a
+different name, please do so in either the mailing list or in the Github
+Issues list.

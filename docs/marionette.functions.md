@@ -8,7 +8,7 @@ a way to get the same behaviors and conventions from your own code.
 ## Documentation Index
 
 * [Marionette.extend](#marionetteextend)
-* [Marionette.getOption](#marionetteextend)
+* [Marionette.getOption](#marionettegetoption)
 * [Marionette.triggerMethod](#marionettetriggermethod)
 * [Marionette.bindEntityEvent](#marionettebindentityevents)
 
@@ -104,6 +104,11 @@ of it. Examples:
 All arguments that are passed to the triggerMethod call are passed along to both the event and the method, with the exception of the event name not being passed to the corresponding method.
 
 `triggerMethod("foo", bar)` will call `onFoo: function(bar){...})`
+
+Note that `triggerMethod` can be called on objects that do not have
+`Backbone.Events` mixed in to them. These objects will not have a `trigger`
+method, and no attempt to call `.trigger()` will be made. The `on{Name}`
+callback methods will still be called, though.
 
 ## Marionette.bindEntityEvents
 

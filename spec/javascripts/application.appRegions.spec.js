@@ -79,4 +79,53 @@ describe("application regions", function(){
     });
   });
 
+  describe("when an app has a region", function(){
+    var app, reg1;
+
+    beforeEach(function(){
+      app = new Marionette.Application();
+      app.addRegions({
+        r1: "#region1"
+      });
+      
+    });
+
+    it("should make the region available as a named attribute", function(){
+      expect(app.r1).not.toBeUndefined();
+    });
+
+    it("should be able to retrieve the region", function(){
+      expect(app.getRegion("r1")).toBe(app.r1);
+    });
+  });
+
+  describe("when closing all regions in the app", function(){
+    var r1, r2; 
+
+    beforeEach(function(){
+      var app = new Backbone.Marionette.Application();
+
+      setFixtures("<div id='region'></div>");
+      setFixtures("<div id='r2'></div>");
+
+      app.addRegions({
+        myRegion: "#region",
+        r2: "#r2"
+      });
+
+      r1 = app.myRegion;
+      r2 = app.r2;
+      spyOn(r1, "close").andCallThrough();
+      spyOn(r2, "close").andCallThrough();
+
+      app.closeRegions();
+    });
+    
+
+    it("should close the regions", function(){
+      expect(r1.close).toHaveBeenCalled();
+      expect(r2.close).toHaveBeenCalled();
+    });
+  });
+
 });

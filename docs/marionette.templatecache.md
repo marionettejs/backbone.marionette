@@ -63,7 +63,7 @@ Backbone.Marionette.TemplateCache.clear("#my-template", "#this-template")
 
 If you want to use an alternate template engine while
 still taking advantage of the template caching functionality, or want to customize
-how templates are stored and retreived, you will need to customize the
+how templates are stored and retrieved, you will need to customize the
 `TemplateCache object`. The default operation of `TemplateCache`, is to
 retrieve templates from the DOM based on the containing element's id
 attribute, and compile the html in that element with the underscore.js

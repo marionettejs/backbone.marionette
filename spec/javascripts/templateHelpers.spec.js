@@ -114,6 +114,38 @@ describe("template helper methods", function(){
       });
     });
 
+    describe("when templateHelpers is provided to constructor options", function(){
+      var view, renderData;
+
+      var View = Backbone.Marionette.ItemView.extend({
+        template: function(data){
+          renderData = data;
+        }
+      });
+
+      beforeEach(function(){
+        var model = new Backbone.Model({bar: "baz"});
+
+        view = new View({ 
+          model: model,
+          templateHelpers:  {
+            foo: function(){
+            }
+          }
+        });
+
+        view.render();
+      });
+
+      it('should include the template helpers in the data object', function(){
+        expect(renderData.foo).not.toBeUndefined();
+      });
+
+      it('should still have the data from the model', function(){
+        expect(renderData.bar).toBe("baz");
+      });
+    });
+
   });
 
 });

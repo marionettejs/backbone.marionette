@@ -62,15 +62,15 @@ Marionette.CollectionView = Marionette.View.extend({
     
   // marks the collection as synchronised
   onSync: function() {
-    this.collectionFetched = true
+    this.collectionFetched = true;
   },
 
   // Called once on the addition of the first element to the
   // collection, closing the loading view and setting the 
   // collection as fetched
   firstElement: function() {
-    this.collectionFetched = true
-    this.closeLoadingView()
+    this.collectionFetched = true;
+    this.closeLoadingView();
   },
 
   // Render the collection of items. Override this method to
@@ -95,7 +95,7 @@ Marionette.CollectionView = Marionette.View.extend({
     if (this.collection && this.collection.length > 0) {
       this.showCollection();
     } else {
-        this.checkEmpty()
+        this.checkEmpty();
     }
   },
 
@@ -140,7 +140,7 @@ Marionette.CollectionView = Marionette.View.extend({
   // rendered empty, and then an item is added to the collection.
   closeEmptyView: function(){
     if (this._showingEmptyView){
-      this._emptyView.close()
+      this._emptyView.close();
       delete this._showingEmptyView;
       delete this._emptyView;
     }
@@ -151,9 +151,9 @@ Marionette.CollectionView = Marionette.View.extend({
   // collection view has a new item added to it
   closeLoadingView: function(){
     if (this._showingLoadingView){
-      this._loadingView.close()
-      delete this._showingLoadingView
-      delete this._loadingView
+      this._loadingView.close();
+      delete this._showingLoadingView;
+      delete this._loadingView;
     }
   },
 
@@ -267,7 +267,7 @@ Marionette.CollectionView = Marionette.View.extend({
       if ( this.collectionFetched && this.collectionFetched === true ) {
         this.showEmptyView();
       } else {
-        this.showLoadingView()
+        this.showLoadingView();
       }
     }
   },

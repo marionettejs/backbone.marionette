@@ -63,6 +63,7 @@ Marionette.CollectionView = Marionette.View.extend({
   // marks the collection as synchronised
   onSync: function() {
     this.collectionFetched = true;
+    this.checkEmpty();
   },
 
   // Called once on the addition of the first element to the
@@ -118,7 +119,7 @@ Marionette.CollectionView = Marionette.View.extend({
     if (EmptyView && !this._showingEmptyView){
       this._showingEmptyView = true;
       var model = new Backbone.Model();
-      this.addItemView(model, EmptyView, 0);
+      this._emptyView = this.addItemView(model, EmptyView, 0);
     }
   },
 
@@ -132,6 +133,8 @@ Marionette.CollectionView = Marionette.View.extend({
       this._showingLoadingView = true;
       var model = new Backbone.Model();
       this._loadingView = this.addItemView(model, LoadingView, 0);
+    } else {
+      this.showEmptyView();
     }
   },
 
@@ -140,7 +143,7 @@ Marionette.CollectionView = Marionette.View.extend({
   // rendered empty, and then an item is added to the collection.
   closeEmptyView: function(){
     if (this._showingEmptyView){
-      this._emptyView.close();
+      this.removeChildView(this._emptyView);
       delete this._showingEmptyView;
       delete this._emptyView;
     }
@@ -151,7 +154,7 @@ Marionette.CollectionView = Marionette.View.extend({
   // collection view has a new item added to it
   closeLoadingView: function(){
     if (this._showingLoadingView){
-      this._loadingView.close();
+      this.removeChildView(this._loadingView);
       delete this._showingLoadingView;
       delete this._loadingView;
     }
@@ -203,6 +206,8 @@ Marionette.CollectionView = Marionette.View.extend({
 
     // this view was added
     this.triggerMethod("after:item:added", view);
+    
+    return view;
   },
 
   // Set up the child view event forwarding. Uses an "itemview:"
@@ -265,6 +270,7 @@ Marionette.CollectionView = Marionette.View.extend({
     
     if (!this.collection || this.collection.length === 0){
       if ( this.collectionFetched && this.collectionFetched === true ) {
+        this.closeLoadingView();
         this.showEmptyView();
       } else {
         this.showLoadingView();

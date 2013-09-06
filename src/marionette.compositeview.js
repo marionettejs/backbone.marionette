@@ -21,8 +21,6 @@ Marionette.CompositeView = Marionette.CollectionView.extend({
       this.listenTo(this.collection, "remove", this.removeItemView, this);
       this.listenTo(this.collection, "reset", this._renderChildren, this);
     }
-
-    this._initialEventsBound = true;
   },
 
   // Retrieve the `itemView` to be used when rendering each of

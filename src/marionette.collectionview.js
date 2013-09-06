@@ -15,6 +15,7 @@ Marionette.CollectionView = Marionette.View.extend({
     Marionette.View.prototype.constructor.apply(this, slice(arguments));
 
     this._initialEvents();
+    this._initialEventsBound = true;
   },
 
   // Configured the initial events that the collection view
@@ -26,8 +27,6 @@ Marionette.CollectionView = Marionette.View.extend({
       this.listenTo(this.collection, "remove", this.removeItemView, this);
       this.listenTo(this.collection, "reset", this.render, this);
     }
-
-    this._initialEventsBound = true;
   },
 
   // Handle a child item added to the collection

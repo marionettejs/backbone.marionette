@@ -15,6 +15,7 @@ Marionette.CollectionView = Marionette.View.extend({
     Marionette.View.prototype.constructor.apply(this, slice(arguments));
 
     this._initialEvents();
+    this._initialEventsBound = true;
   },
 
   // Configured the initial events that the collection view
@@ -62,6 +63,10 @@ Marionette.CollectionView = Marionette.View.extend({
   // provide your own implementation of a render function for
   // the collection view.
   render: function(){
+    if(!this._initialEventsBound) {
+      this._initialEvents();
+    }
+
     this.isClosed = false;
     this.triggerBeforeRender();
     this._renderChildren();
@@ -247,6 +252,8 @@ Marionette.CollectionView = Marionette.View.extend({
     this.triggerMethod("collection:before:close");
     this.closeChildren();
     this.triggerMethod("collection:closed");
+
+    this._initialEventsBound = false;
 
     Marionette.View.prototype.close.apply(this, slice(arguments));
   },

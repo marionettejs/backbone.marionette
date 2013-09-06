@@ -711,6 +711,54 @@ describe("composite view", function(){
     });
   });
 
+  describe("when re-rendering a closed CompositeView", function() {
+    var addChildView, removeItemView, _renderChildren;
+    var view;
+
+    // Collection events spy helper.
+    var collectionEventsShouldFire = function() {
+      addChildView.reset();
+      removeItemView.reset();
+      _renderChildren.reset();
+
+      view.collection.trigger('add');
+      expect(addChildView).toHaveBeenCalled();
+
+      view.collection.trigger('remove');
+      expect(removeItemView).toHaveBeenCalled();
+
+      view.collection.trigger('reset');
+      expect(_renderChildren).toHaveBeenCalled();
+    };
+
+    beforeEach(function() {
+      // Setup Spies
+      addChildView = spyOn(Marionette.CompositeView.prototype, 'addChildView');
+      removeItemView = spyOn(Marionette.CompositeView.prototype, 'removeItemView');
+      _renderChildren = spyOn(Marionette.CompositeView.prototype, '_renderChildren').andCallThrough();
+
+      // Setup View
+      view = new Marionette.CompositeView({
+        template: '#emptyTemplate',
+        collection: new Backbone.Collection()
+      });
+
+      view.render();
+    });
+
+    it("should rebind to collection events", function() {
+      // Test that events currently work.
+      collectionEventsShouldFire();
+
+      // Close and reshow the view.
+      view.close();
+      view.render();
+
+      // Test that events work after the re-render.
+      collectionEventsShouldFire();
+    });
+  });
+
   // Models
 
   var Model = Backbone.Model.extend({});

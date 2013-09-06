@@ -726,4 +726,47 @@ describe("collection view", function(){
     });
   });
 
+  describe("when re-rendering a closed CollectionView", function() {
+    var addChildView, removeItemView, render;
+    var view;
+
+    // Collection events spy helper.
+    var collectionEventsShouldFire = function() {
+      addChildView.reset();
+      removeItemView.reset();
+      render.reset();
+
+      view.collection.trigger('add');
+      expect(addChildView).toHaveBeenCalled();
+
+      view.collection.trigger('remove');
+      expect(removeItemView).toHaveBeenCalled();
+
+      view.collection.trigger('reset');
+      expect(render).toHaveBeenCalled();
+    };
+
+    beforeEach(function() {
+      // Setup Spies
+      addChildView = spyOn(Marionette.CollectionView.prototype, 'addChildView');
+      removeItemView = spyOn(Marionette.CollectionView.prototype, 'removeItemView');
+      render = spyOn(Marionette.CollectionView.prototype, 'render').andCallThrough();
+
+      // Setup View
+      view = new Marionette.CollectionView({ collection: new Backbone.Collection() });
+      view.render();
+    });
+
+    it("should rebind to collection events", function() {
+      // Test that events currently work.
+      collectionEventsShouldFire();
+
+      // Close and reshow the view.
+      view.close();
+      view.render();
+
+      // Test that events work after the re-render.
+      collectionEventsShouldFire();
+    });
+  });
 });

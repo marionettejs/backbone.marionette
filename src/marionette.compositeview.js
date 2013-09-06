@@ -21,6 +21,8 @@ Marionette.CompositeView = Marionette.CollectionView.extend({
       this.listenTo(this.collection, "remove", this.removeItemView, this);
       this.listenTo(this.collection, "reset", this._renderChildren, this);
     }
+
+    this._initialEventsBound = true;
   },
 
   // Retrieve the `itemView` to be used when rendering each of
@@ -54,6 +56,10 @@ Marionette.CompositeView = Marionette.CollectionView.extend({
   // this again will tell the model's view to re-render itself
   // but the collection will not re-render.
   render: function(){
+    if(!this._initialEventsBound) {
+      this._initialEvents();
+    }
+
     this.isRendered = true;
     this.isClosed = false;
     this.resetItemViewContainer();

@@ -26,6 +26,8 @@ Marionette.CollectionView = Marionette.View.extend({
       this.listenTo(this.collection, "remove", this.removeItemView, this);
       this.listenTo(this.collection, "reset", this.render, this);
     }
+
+    this._initialEventsBound = true;
   },
 
   // Handle a child item added to the collection
@@ -62,6 +64,10 @@ Marionette.CollectionView = Marionette.View.extend({
   // provide your own implementation of a render function for
   // the collection view.
   render: function(){
+    if(!this._initialEventsBound) {
+      this._initialEvents();
+    }
+
     this.isClosed = false;
     this.triggerBeforeRender();
     this._renderChildren();
@@ -247,6 +253,8 @@ Marionette.CollectionView = Marionette.View.extend({
     this.triggerMethod("collection:before:close");
     this.closeChildren();
     this.triggerMethod("collection:closed");
+
+    this._initialEventsBound = false;
 
     Marionette.View.prototype.close.apply(this, slice(arguments));
   },

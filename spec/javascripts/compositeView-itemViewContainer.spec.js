@@ -166,4 +166,23 @@ describe("composite view - itemViewContainer", function(){
     });
   });
 
+  describe("using a function as the itemViewContainer", function() {
+    
+    var CompositeView = Backbone.Marionette.CompositeView.extend({
+      itemView: ItemView,
+      itemViewContainer: function  () {
+        return "#item-view-container-" + this.model.id;
+      },
+      template: _.template('<div id="item-view-container-<%= id %>"></div>')
+    });
+
+    it("should be called with the context of the view", function() {
+      var model = new Model({id: 1});
+      var collection = new Collection([new Model({foo: 1})]);      
+
+      new CompositeView({model: model, collection: collection}).render();
+    });
+
+  });
+
 });

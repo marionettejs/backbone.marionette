@@ -110,6 +110,32 @@ _.extend(Marionette.Region, {
 
 _.extend(Marionette.Region.prototype, Backbone.Events, {
 
+  // Similar to 'show' but enables switching between multiple views
+  // without closing them.
+  // Handles calling the `render` method for you. Reads content
+  // directly from the `el` attribute. Also calls an optional
+  // `onShow` and `close` method on your view, just after showing
+  // or just before closing the view, respectively.
+  // Returns the old view (if defined).
+  swap: function(view) {
+    this.ensureEl();
+
+    if (view === this.currentView) {
+      return view;
+    }
+
+    var oldView = this.currentView;
+
+    view.render();
+    this.open(view);
+    this.currentView = view;
+
+    Marionette.triggerMethod.call(this, "swap", view);
+    Marionette.triggerMethod.call(view, "show");
+
+    return oldView;
+  },
+
   // Displays a backbone view instance inside of the region.
   // Handles calling the `render` method for you. Reads content
   // directly from the `el` attribute. Also calls an optional

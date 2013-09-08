@@ -17,6 +17,7 @@ var Marionette = (function(global, Backbone, _){
 // @include ../marionette.callbacks.js
 // @include ../marionette.controller.js
 // @include ../marionette.region.js
+// @include ../marionette.transitionregion.js
 // @include ../marionette.regionManager.js
 
 // @include ../marionette.templatecache.js

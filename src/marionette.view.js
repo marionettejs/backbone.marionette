@@ -62,8 +62,9 @@ Marionette.View = Backbone.View.extend({
 
         // stop the event in it's tracks
         if (e) {
-          if (e.preventDefault && hasOptions ? value.preventDefault : true) { e.preventDefault(); }
-          if (e.stopPropagation && hasOptions ? value.stopPropagation : true) { e.stopPropagation(); }
+          var prevent, stop;
+          if ((prevent = e.preventDefault) && hasOptions ? value.preventDefault : prevent) { prevent(); }
+          if ((stop = e.stopPropagation) && hasOptions ? value.stopPropagation : stop) { stop(); }
         }
 
         // build the args for the event

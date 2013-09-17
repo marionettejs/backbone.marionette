@@ -1,3 +1,39 @@
+### v1.1 [view commit logs](https://github.com/marionettejs/backbone.marionette/compare/v1.0.4...v1.1.0)
+
+* Marionette.View / All Views
+  * Fix for `ui` bindings to not be removed from view prototype, if unrendered view is closed
+  * Template helpers can now be provided as a constructor function option
+
+* Layout
+  * Will properly attach regions if the layout's `close` method was called prior to `render`
+  * Calling `.addRegions` will correctly modify the layout instance' region list instead of the prototype's
+  * Fixed bug that prevented default `regionType` from being used
+
+* CompositeView
+  * The `itemViewContainer` can be supplied in the constructor function options
+
+* Application
+  * Added `closeRegions` method to close all regions on the app instance
+  * Added `getRegion` method to retrieve a region by name
+
+* AppRouter
+  * Added `appRoute` method to create app router handlers at runtime
+  * Added ability to set `appRoutes` in constructor function options
+
+* Marionette.triggerMethod
+  * Calls to the `Marionette.triggerMethod` can be made on objects that do not have a `trigger` method
+
+### v1.0.4 [view commit logs](https://github.com/marionettejs/backbone.marionette/compare/v1.0.3...v1.0.4)
+
+* ItemView
+  * Added needed `constructor` function back - it added lots of things and needed to be there
+
+* CompositeView
+  * Added explicit call to CollectionView constructor to allow for inheritance overriding
+
+* Layout
+  * Small clarification for consistency on call to ItemView constructor
+
 ### v1.0.3 [view commit logs](https://github.com/marionettejs/backbone.marionette/compare/v1.0.2...v1.0.3)
 
 * ItemView

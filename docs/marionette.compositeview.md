@@ -5,6 +5,16 @@ composite view for scenarios where it should represent both a
 branch and leaf in a tree structure, or for scenarios where a
 collection needs to be rendered within a wrapper template.
 
+Please see 
+[the Marionette.CollectionView documentation](marionette.collectionview.md) 
+for more information on available features and functionality.
+
+Additionally, interactions with Marionette.Region
+will provide features such as `onShow` callbacks, etc. Please see
+[the Region documentation](marionette.region.md) for more information.
+
+## Example Usage: Tree View
+
 For example, if you're rendering a treeview control, you may 
 want to render a collection view with a model and template so 
 that it will show a parent item with children in the tree.
@@ -121,7 +131,7 @@ function needs to return a jQuery selector string, or a jQuery selector
 object.
 
 ```js
-TableView = Backbone.Marionette.CompositeView.extend({
+var TableView = Backbone.Marionette.CompositeView.extend({
   // ...
 
   itemViewContainer: function(){
@@ -134,6 +144,17 @@ Using a function allows for logic to be used for the selector. However,
 only one value can be returned. Upon returning the first value, it will
 be cached and that value will be used for the remainder of that view
 instance' lifecycle.
+
+Alternatively, the `itemViewContainer` can be supplied in the constructor
+function options:
+
+```js
+var myComp = new Marionette.CompositeView({
+  // ...,
+
+  itemViewContainer: "#tbody"
+});
+```
 
 ## CompositeView's `appendHtml`
 

@@ -127,6 +127,29 @@ describe("view ui elements", function() {
 
   });
 
+  describe("when closing a view that has not been rendered", function(){
+    var View = Marionette.ItemView.extend({
+      template: function(){return "<div id='foo'></div>";},
+
+      ui: {
+        foo: "#foo"
+      }
+    });
+
+    var view1, view2;
+
+    beforeEach(function(){
+      view1 = new View();
+      view1.close();
+      view2 = new View();
+    });
+
+    it("should not affect future ui bindings", function(){
+      expect(view2.ui.foo).toBe("#foo");
+    });
+
+  });
+
   describe("when closing a view", function(){
     var View = Marionette.ItemView.extend({
       template: function(){return "<div id='foo'></div>";},

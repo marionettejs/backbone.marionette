@@ -1,20 +1,25 @@
 # Marionette.Layout
 
-A `Layout` is a hybrid of an `ItemView` and a collection of `Region` objects.
-
-They are ideal for rendering application layouts with multiple sub-regions 
+A `Layout` is a hybrid of an `ItemView` and a collection of `Region` objects. They 
+are ideal for rendering application layouts with multiple sub-regions 
 managed by specified region managers.
 
-A layout manager can also act as a composite-view to aggregate multiple
+A layout can also act as a composite-view to aggregate multiple
 views and sub-application areas of the screen allowing applications to 
 attach multiple region managers to dynamically rendered HTML.
 
 You can create complex views by nesting layout managers within `Regions`.
 
-Layouts automatically cleanup on closing. 
-
 For a more in-depth discussion on Layouts, see the blog post
 [Manage Layouts And Nested Views With Backbone.Marionette](http://lostechies.com/derickbailey/2012/03/22/managing-layouts-and-nested-views-with-backbone-marionette/)
+
+Please see 
+[the Marionette.ItemView documentation](marionette.itemview.md) 
+for more information on available features and functionality.
+
+Additionally, interactions with Marionette.Region
+will provide features such as `onShow` callbacks, etc. Please see
+[the Region documentation](marionette.region.md) for more information.
 
 ## Documentation Index
 

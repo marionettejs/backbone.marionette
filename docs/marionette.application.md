@@ -23,6 +23,7 @@ MyApp = new Backbone.Marionette.Application();
   * [jQuery Selector](#jquery-selector)
   * [Custom Region Type](#custom-region-type)
   * [Custom Region Type And Selector](#custom-region-type-and-selector)
+  * [Get Region By Name](#get-region-by-name)
   * [Removing Regions](#removing-regions)
 
 ## Adding Initializers
@@ -182,6 +183,22 @@ MyApp.addRegions({
 
 });
 ```
+
+### Get Region By Name
+
+A region can be retrieved by name, using the `getRegion` method:
+
+```js
+var app = new Marionette.Application();
+app.addRegions({ r1: "#region1" });
+
+// r1 === r1Again; true
+var r1 = app.getRegion("r1");
+var r1Again = app.r1;
+```
+
+Accessing a region by named attribute is equivalent to accessing
+it from the `getRegion` method. 
 
 ### Removing Regions
 

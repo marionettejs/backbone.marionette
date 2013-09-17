@@ -696,6 +696,20 @@ describe("composite view", function(){
     });
 
   });
+  
+  describe("has a valid inheritance chain back to Marionette.CollectionView", function(){
+    
+    var constructor;
+    
+    beforeEach(function(){
+      constructor = spyOn(Marionette.CollectionView.prototype, "constructor");
+      new Marionette.CompositeView();
+    });
+    
+    it("calls the parent Marionette.CollectionView's constructor function on instantiation", function(){
+      expect(constructor).toHaveBeenCalled();
+    });
+  });
 
   // Models
 

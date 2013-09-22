@@ -110,26 +110,58 @@ _.extend(Marionette.Region, {
 
 _.extend(Marionette.Region.prototype, Backbone.Events, {
 
-  // Displays a backbone view instance inside of the region.
+  // Similar to 'show' but enables switching between multiple views
+  // without destroying them.
   // Handles calling the `render` method for you. Reads content
   // directly from the `el` attribute. Also calls an optional
-  // `onShow` and `close` method on your view, just after showing
-  // or just before closing the view, respectively.
-  show: function(view){
+  // `onSwap` on the region, `onSwappedIn` on the new view, and
+  // `onSwappedOut` on the old view, just after rendering the view.
+  // Returns the old view (if defined).
+  swap: function(view) {
+    view.ensureViewIsIntact();
 
     this.ensureEl();
 
-    var isViewClosed = view.isClosed || _.isUndefined(view.$el);
+    if (view === this.currentView) {
+      return view;
+    }
+
+    var oldView = this.currentView;
+
+    view.render();
+    this.open(view);
+    this.currentView = view;
+
+    Marionette.triggerMethod.call(this, "swap", view);
+    Marionette.triggerMethod.call(oldView, "swapped:out", view);
+    Marionette.triggerMethod.call(view, "swapped:in");
+
+    return oldView;
+  },
+
+  // Displays a backbone view instance inside of the region.
+  // Handles calling the `render` method for you. Reads content
+  // directly from the `el` attribute. Also calls an optional
+  // `onShow` and `onDestroy` method on your view, just after showing
+  // or just before disposing the view, respectively.
+  show: function(view){
+    if (view.isDestroyed) {
+      var err = new Error("Cannot use a view that's already been destroyed.");
+      err.name = "ViewDestroyedError";
+      throw err;
+    }
+
+    this.ensureEl();
 
     var isDifferentView = view !== this.currentView;
 
     if (isDifferentView) {
-      this.close();
+      this.destroy();
     }
 
     view.render();
 
-    if (isDifferentView || isViewClosed) {
+    if (isDifferentView) {
       this.open(view);
     }
     
@@ -157,17 +189,17 @@ _.extend(Marionette.Region.prototype, Backbone.Events, {
     this.$el.empty().append(view.el);
   },
 
-  // Close the current view, if there is one. If there is no
+  // Destroy the current view, if there is one. If there is no
   // current view, it does nothing and returns immediately.
-  close: function(){
+  destroy: function(){
     var view = this.currentView;
-    if (!view || view.isClosed){ return; }
+    if (!view || view.isDestroyed){ return; }
 
-    // call 'close' or 'remove', depending on which is found
-    if (view.close) { view.close(); }
+    // call 'destroy' or 'remove', depending on which is found
+    if (view.destroy) { view.destroy(); }
     else if (view.remove) { view.remove(); }
 
-    Marionette.triggerMethod.call(this, "close");
+    Marionette.triggerMethod.call(this, "destroy");
 
     delete this.currentView;
   },
@@ -180,12 +212,12 @@ _.extend(Marionette.Region.prototype, Backbone.Events, {
     this.currentView = view;
   },
 
-  // Reset the region by closing any existing view and
+  // Reset the region by destroying any existing view and
   // clearing out the cached `$el`. The next time a view
   // is shown via this region, the region will re-query the
   // DOM for the region's `el`.
   reset: function(){
-    this.close();
+    this.destroy();
     delete this.$el;
   }
 });

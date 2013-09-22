@@ -3,7 +3,7 @@ describe("collection view", function(){
 
   // Shared View Definitions
   // -----------------------
-  
+
   var ItemView = Backbone.Marionette.ItemView.extend({
     tagName: "span",
     render: function(){
@@ -26,7 +26,7 @@ describe("collection view", function(){
 
   // Collection View Specs
   // ---------------------
-  
+
   describe("when rendering a collection view with no `itemView` specified", function(){
     var NoItemView = Backbone.Marionette.CollectionView.extend({
     });
@@ -44,7 +44,7 @@ describe("collection view", function(){
       expect(function(){collectionView.render()}).toThrow("An `itemView` must be specified");
     });
   });
-  
+
   describe("when rendering a collection view", function(){
     var collection = new Backbone.Collection([{foo: "bar"}, {foo: "baz"}]);
     var collectionView, itemViewRender;
@@ -91,7 +91,7 @@ describe("collection view", function(){
     it("should trigger a 'before:render' event", function(){
       expect(collectionView.trigger).toHaveBeenCalledWith("before:render", collectionView);
     });
-    
+
     it("should trigger a 'collection:before:render' event", function(){
       expect(collectionView.trigger).toHaveBeenCalledWith("collection:before:render", collectionView);
     });
@@ -99,7 +99,7 @@ describe("collection view", function(){
     it("should trigger a 'collection:rendered' event", function(){
       expect(collectionView.trigger).toHaveBeenCalledWith("collection:rendered", collectionView);
     });
-    
+
     it("should trigger a 'render' event", function(){
       expect(collectionView.trigger).toHaveBeenCalledWith("render", collectionView);
     });
@@ -254,14 +254,14 @@ describe("collection view", function(){
       collectionView.render();
 
       childView = collectionView.children.findByIndex(0);
-      spyOn(childView, "close").andCallThrough();
+      spyOn(childView, "destroy").andCallThrough();
       spyOn(EmptyView.prototype, "render");
 
       collectionView.removeItemView(model);
     });
 
-    it("should close the model's view", function(){
-      expect(childView.close).toHaveBeenCalled();
+    it("should destroy the model's view", function(){
+      expect(childView.destroy).toHaveBeenCalled();
     });
 
     it("should show the empty view", function(){
@@ -287,13 +287,13 @@ describe("collection view", function(){
       collectionView.render();
 
       childView = collectionView.children.findByIndex(0);
-      spyOn(childView, "close").andCallThrough();
+      spyOn(childView, "destroy").andCallThrough();
 
       collection.remove(model);
     });
 
-    it("should close the model's view", function(){
-      expect(childView.close).toHaveBeenCalled();
+    it("should destroy the model's view", function(){
+      expect(childView.destroy).toHaveBeenCalled();
     });
 
     it("should remove the model-view's HTML", function(){
@@ -301,22 +301,22 @@ describe("collection view", function(){
     });
   });
 
-  describe("when closing a collection view", function(){
+  describe("when destroying a collection view", function(){
     var EventedView = Backbone.Marionette.CollectionView.extend({
       itemView: ItemView,
 
       someCallback: function(){ },
 
-      onBeforeClose: function(){},
+      onBeforeDestroy: function(){},
 
-      onClose: function(){ }
+      onDestroy: function(){ }
     });
-  
+
     var collectionView;
     var collection;
     var childView;
     var childModel;
-    var closeHandler = jasmine.createSpy();
+    var destroyHandler = jasmine.createSpy();
 
     beforeEach(function(){
 
@@ -335,20 +335,20 @@ describe("collection view", function(){
       collectionView.listenTo(collection, "foo", collectionView.someCallback);
       collectionView.listenTo(collectionView, "item:foo", collectionView.someItemViewCallback);
 
-      spyOn(childView, "close").andCallThrough();
+      spyOn(childView, "destroy").andCallThrough();
       spyOn(collectionView, "removeItemView").andCallThrough();
       spyOn(collectionView, "stopListening").andCallThrough();
       spyOn(collectionView, "remove").andCallThrough();
       spyOn(collectionView, "someCallback").andCallThrough();
       spyOn(collectionView, "someItemViewCallback").andCallThrough();
-      spyOn(collectionView, "close").andCallThrough();
-      spyOn(collectionView, "onClose").andCallThrough();
-      spyOn(collectionView, "onBeforeClose").andCallThrough();
+      spyOn(collectionView, "destroy").andCallThrough();
+      spyOn(collectionView, "onDestroy").andCallThrough();
+      spyOn(collectionView, "onBeforeDestroy").andCallThrough();
       spyOn(collectionView, "trigger").andCallThrough();
-      
-      collectionView.bind('collection:closed', closeHandler);
 
-      collectionView.close();
+      collectionView.bind('collection:destroyed', destroyHandler);
+
+      collectionView.destroy();
 
       childView.trigger("foo");
 
@@ -356,8 +356,8 @@ describe("collection view", function(){
       collection.remove(childModel);
     });
 
-    it("should close all of the child views", function(){
-      expect(childView.close).toHaveBeenCalled();
+    it("should destroy all of the child views", function(){
+      expect(childView.destroy).toHaveBeenCalled();
     });
 
     it("should unbind all the listenTo events", function(){
@@ -384,28 +384,32 @@ describe("collection view", function(){
       expect(collectionView.remove).toHaveBeenCalled();
     });
 
-    it("should call `onClose` if provided", function(){
-      expect(collectionView.onClose).toHaveBeenCalled();
+    it("should call `onDestroy` if provided", function(){
+      expect(collectionView.onDestroy).toHaveBeenCalled();
     });
 
-    it("should call `onBeforeClose` if provided", function(){
-      expect(collectionView.onBeforeClose).toHaveBeenCalled();
+    it("should call `onBeforeDestroy` if provided", function(){
+      expect(collectionView.onBeforeDestroy).toHaveBeenCalled();
     });
 
-    it("should trigger a 'before:close' event", function(){
-      expect(collectionView.trigger).toHaveBeenCalledWith("collection:before:close");
+    it("should trigger a 'before:destroy' event", function(){
+      expect(collectionView.trigger).toHaveBeenCalledWith("collection:before:destroy");
     });
 
-    it("should trigger a 'closed", function(){
-      expect(collectionView.trigger).toHaveBeenCalledWith("collection:closed");
+    it("should trigger a 'destroyed", function(){
+      expect(collectionView.trigger).toHaveBeenCalledWith("collection:destroyed");
     });
 
-    it("should call the handlers add to the closed event", function(){
-      expect(closeHandler).wasCalled();
+    it("should call the handlers add to the destroyed event", function(){
+      expect(destroyHandler).wasCalled();
+    });
+
+    it("should throw an error saying the view's been destroyed if render is attempted again", function(){
+      expect(function(){collectionView.render()}).toThrow("Cannot use a view that's already been destroyed.");
     });
   });
 
-  describe("when closing an itemView that does not have a 'close' method", function(){
+  describe("when destroying an itemView that does not have a 'destroy' method", function(){
     var collectionView, itemView;
 
     beforeEach(function(){
@@ -419,13 +423,12 @@ describe("collection view", function(){
       itemView = collectionView.children.findByIndex(0);
       spyOn(itemView, "remove").andCallThrough();
 
-      collectionView.closeChildren();
+      collectionView.destroyChildren();
     });
 
     it("should call the 'remove' method", function(){
       expect(itemView.remove).toHaveBeenCalled();
     });
-
   });
 
   describe("when override appendHtml", function(){
@@ -706,24 +709,22 @@ describe("collection view", function(){
 
       iv = cv.children.findByModel(c.at(0));
     });
-    
+
     it("should use the specified itemView for each item", function(){
       expect(iv.MyItemView).toBe(true);
     });
   });
-  
+
   describe("has a valid inheritance chain back to Marionette.View", function(){
-    
     var constructor;
-    
+
     beforeEach(function(){
       constructor = spyOn(Marionette.View.prototype, "constructor");
       new Marionette.CollectionView();
     });
-    
+
     it("calls the parent Marionette.View's constructor function on instantiation", function(){
       expect(constructor).toHaveBeenCalled();
     });
   });
-
 });

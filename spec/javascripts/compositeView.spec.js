@@ -158,7 +158,7 @@ describe("composite view", function(){
     });
 
     it("should throw an exception because there was no valid template", function(){
-      expect(compositeView.render).toThrow(new Error("Cannot render the template since it's false, null or undefined."));
+      expect(compositeView.render).toThrow("Cannot render the template since it's false, null or undefined.");
     });
   });
   
@@ -267,7 +267,7 @@ describe("composite view", function(){
       });
 
       spyOn(compositeView, "render").andCallThrough();
-      spyOn(compositeView, "closeChildren").andCallThrough();
+      spyOn(compositeView, "destroyChildren").andCallThrough();
       spyOn(Backbone.Marionette.Renderer, "render");
       compositeRenderSpy = compositeView.render;
 
@@ -279,9 +279,9 @@ describe("composite view", function(){
       expect(Backbone.Marionette.Renderer.render.callCount).toBe(2);
     });
 
-    it("should close all of the child collection item views", function(){
-      expect(compositeView.closeChildren).toHaveBeenCalled();
-      expect(compositeView.closeChildren.callCount).toBe(2);
+    it("should destroy all of the child collection item views", function(){
+      expect(compositeView.destroyChildren).toHaveBeenCalled();
+      expect(compositeView.destroyChildren.callCount).toBe(2);
     });
 
     it("should re-render the collection's items", function(){
@@ -458,8 +458,8 @@ describe("composite view", function(){
     });
   });
 
-  describe("when closing a composite view", function(){
-    var compositeView, compositeModelCloseSpy;
+  describe("when destroying a composite view", function(){
+    var compositeView, compositeModelDestroySpy;
 
     var ItemView = Backbone.Marionette.ItemView.extend({
       tagName: "span",
@@ -486,24 +486,23 @@ describe("composite view", function(){
         collection: collection
       });
 
-      spyOn(CompositeModelView.prototype, "close").andCallThrough();
+      spyOn(CompositeModelView.prototype, "destroy").andCallThrough();
 
       compositeView.render();
 
-      compositeView.close();
+      compositeView.destroy();
     });
 
     it("should delete the model view", function(){
       expect(compositeView.renderedModelView).toBeUndefined();
     });
 
-    it("should close the collection of views", function(){
-      expect(CompositeModelView.prototype.close.callCount).toBe(1);
+    it("should destroy the collection of views", function(){
+      expect(CompositeModelView.prototype.destroy.callCount).toBe(1);
     });
   });
 
   describe("when rendering a composite view with no model, using a template to create a grid", function(){
-
     var gridView;
 
     // A Grid Row
@@ -564,7 +563,6 @@ describe("composite view", function(){
   });
 
   describe("when a composite view has a ui elements hash", function() {
-
     var called, gridView, headersModel;
 
     // A Grid Row
@@ -697,8 +695,7 @@ describe("composite view", function(){
 
   });
   
-  describe("has a valid inheritance chain back to Marionette.CollectionView", function(){
-    
+  describe("has a valid inheritance chain back to Marionette.CollectionView", function(){    
     var constructor;
     
     beforeEach(function(){

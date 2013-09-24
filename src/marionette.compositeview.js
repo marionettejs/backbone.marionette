@@ -133,10 +133,12 @@ Marionette.CompositeView = Marionette.CollectionView.extend({
 
     var container;
     var itemViewContainer = Marionette.getOption(containerView, "itemViewContainer");
-    if (itemViewContainer){
 
-      var selector = _.isFunction(itemViewContainer) ? itemViewContainer.call(containerView) : itemViewContainer;
-
+    var isItemViewContainerFunction = _.isFunction(itemViewContainer);
+    
+    if (itemViewContainer) {
+      var selector = isItemViewContainerFunction ? itemViewContainer.call(containerView) : itemViewContainer;
+      
       if (selector.charAt(0) === "@" && containerView.ui) {
         container = containerView.ui[selector.substr(4)];
       } else {
@@ -151,7 +153,10 @@ Marionette.CompositeView = Marionette.CollectionView.extend({
       container = containerView.$el;
     }
 
-    containerView.$itemViewContainer = container;
+    if (!isItemViewContainerFunction) {
+      containerView.$itemViewContainer = container;  
+    }
+    
     return container;
   },
 

@@ -137,4 +137,53 @@ describe("view triggers", function(){
     });
   });
 
+  describe("when triggers items are manually configured", function(){
+    var View = Backbone.Marionette.ItemView.extend({
+      triggers: {
+        "click .foo": {
+          event: "do:foo",
+          preventDefault: true,
+          stopPropagation: false
+        },
+        "click .bar": {
+          event: "do:bar",
+          stopPropagation: true
+        }
+      },
+
+      render: function(){
+        this.$el.html("<button class='foo'></button><a href='#' class='bar'>asdf</a>");
+      }
+    });
+
+    var view, fooEvent, barEvent;
+
+    beforeEach(function(){
+      view = new View();
+      view.render();
+
+      fooEvent = $.Event("click");
+      barEvent = $.Event("click");
+
+      spyOn(fooEvent, 'preventDefault');
+      spyOn(fooEvent, 'stopPropagation');
+
+      spyOn(barEvent, 'preventDefault');
+      spyOn(barEvent, 'stopPropagation');
+
+      view.$(".foo").trigger(fooEvent);
+      view.$(".bar").trigger(barEvent);
+    });
+
+    it("should prevent and don't stop the first view event", function(){
+      expect(fooEvent.preventDefault).toHaveBeenCalled();
+      expect(fooEvent.stopPropagation).not.toHaveBeenCalled();
+    });
+
+    it("should not prevent and stop the second view event", function(){
+      expect(barEvent.preventDefault).not.toHaveBeenCalled();
+      expect(barEvent.stopPropagation).toHaveBeenCalled();
+    });
+  });
+
 });

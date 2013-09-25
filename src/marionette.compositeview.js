@@ -119,14 +119,14 @@ Marionette.CompositeView = Marionette.CollectionView.extend({
     else {
       // If we've already rendered the main collection, just
       // append the new items directly into the element.
-      var $container = this.getItemViewContainer(this);
+      var $container = this.getItemViewContainer(this, itemView);
       $container.append(itemView.el);
     }
   },
 
   // Internal method to ensure an `$itemViewContainer` exists, for the
   // `appendHtml` method to use.
-  getItemViewContainer: function(containerView){
+  getItemViewContainer: function(containerView, itemView){
     if ("$itemViewContainer" in containerView){
       return containerView.$itemViewContainer;
     }
@@ -137,9 +137,9 @@ Marionette.CompositeView = Marionette.CollectionView.extend({
     var isItemViewContainerFunction = _.isFunction(itemViewContainer);
     
     if (itemViewContainer) {
-      var selector = isItemViewContainerFunction ? itemViewContainer.call(containerView) : itemViewContainer;
+      var selector = isItemViewContainerFunction ? itemViewContainer.call(containerView, itemView) : itemViewContainer;
       
-      if (selector.charAt(0) === "@" && containerView.ui) {
+      if (!isItemViewContainerFunction && selector.charAt(0) === "@" && containerView.ui) {
         container = containerView.ui[selector.substr(4)];
       } else {
         container = containerView.$(selector);

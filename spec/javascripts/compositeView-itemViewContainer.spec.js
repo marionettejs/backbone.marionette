@@ -184,71 +184,89 @@ describe("composite view - itemViewContainer", function(){
      var CompositeViewWithDifferentListsUsed = Backbone.Marionette.CompositeView.extend({
       itemView: ItemView,
       template: "#composite-child-container-template-with-multiple-lists",
-      itemViewContainer: function () {
-        if (this.appendToSecond) {
+      itemViewContainer: function (itemView) {
+        if (itemView.model.get("foo") === "baz") {
           return this.$("ul.second");
         }
         return this.$("ul.first");
-      },
-      buildItemView: function(item, ItemViewType, itemViewOptions) { 
-        if (item.get("foo") === "baz") {
-          this.appendToSecond = true;
-        }
-        // build the final list of options for the item view type
-        var options = _.extend({model: item}, itemViewOptions);
-        // create the item view instance
-        var view = new ItemViewType(options);
-        // return it
-        return view;
-      } 
+      }
     });
 
     var compositeView;
     var compositeViewWithjQueryObject;
     var compositeViewWithDifferentListsUsed;
+    var collection;
+    var m1 = new Model({foo: "bar"});
+    var m2 = new Model({foo: "baz"});
 
-    beforeEach(function(){
-      loadFixtures("compositeChildContainerTemplateWithMultipleLists.html");
+    describe("and function specified returns a String selector", function(){
+      beforeEach(function(){
+        loadFixtures("compositeChildContainerTemplateWithMultipleLists.html");
 
-      var m1 = new Model({foo: "bar"});
-      var m2 = new Model({foo: "baz"});
-      var collection = new Collection([m1, m2]);
+        collection = new Collection([m1, m2]);
 
-      compositeView = new CompositeView({
-        collection: collection
+        compositeView = new CompositeView({
+          collection: collection
+        });
+
+        compositeView.render();
       });
 
-      compositeView.render();
-
-      compositeViewWithjQueryObject = new CompositeViewWithjQueryObject({
-        collection: collection
+      it("should render the items in to the specified/resolved container", function(){
+        expect(compositeView.$("ul.first")).toHaveText(/bar/);
+        expect(compositeView.$("ul.first")).toHaveText(/baz/);
+        expect(compositeView.$("ul.second")).not.toHaveText(/bar/);
+        expect(compositeView.$("ul.second")).not.toHaveText(/baz/);
       });
-
-      compositeViewWithjQueryObject.render();
-
-      compositeViewWithDifferentListsUsed = new CompositeViewWithDifferentListsUsed({
-        collection: collection
-      });
-
-      compositeViewWithDifferentListsUsed.render();
     });
 
-    it("should render the items in to the specified/resolved container", function(){
-      expect(compositeView.$("ul.first")).toHaveText(/bar/);
-      expect(compositeView.$("ul.first")).toHaveText(/baz/);
-      expect(compositeView.$("ul.second")).not.toHaveText(/bar/);
-      expect(compositeView.$("ul.second")).not.toHaveText(/baz/);
+    describe("and function specified returns a Jquery object", function(){
+      beforeEach(function(){
+        loadFixtures("compositeChildContainerTemplateWithMultipleLists.html");
 
-      expect(compositeViewWithjQueryObject.$("ul.first")).toHaveText(/bar/);
-      expect(compositeViewWithjQueryObject.$("ul.first")).toHaveText(/baz/);
-      expect(compositeViewWithjQueryObject.$("ul.second")).not.toHaveText(/bar/);
-      expect(compositeViewWithjQueryObject.$("ul.second")).not.toHaveText(/baz/);
+        collection = new Collection([m1, m2]);
 
-      expect(compositeViewWithDifferentListsUsed.$("ul.first")).toHaveText(/bar/);
-      expect(compositeViewWithDifferentListsUsed.$("ul.first")).not.toHaveText(/baz/);
-      expect(compositeViewWithDifferentListsUsed.$("ul.second")).toHaveText(/baz/);
-      expect(compositeViewWithDifferentListsUsed.$("ul.second")).not.toHaveText(/bar/);
+        compositeViewWithjQueryObject = new CompositeViewWithjQueryObject({
+          collection: collection
+        });
+
+        compositeViewWithjQueryObject.render();
+      });
+
+      it("should render the items in to the specified/resolved container", function(){
+        expect(compositeViewWithjQueryObject.$("ul.first")).toHaveText(/bar/);
+        expect(compositeViewWithjQueryObject.$("ul.first")).toHaveText(/baz/);
+        expect(compositeViewWithjQueryObject.$("ul.second")).not.toHaveText(/bar/);
+        expect(compositeViewWithjQueryObject.$("ul.second")).not.toHaveText(/baz/);
+      });
     });
+
+    describe("and function's result depends on itemView", function(){
+      beforeEach(function(){
+        loadFixtures("compositeChildContainerTemplateWithMultipleLists.html");
+
+        collection = new Collection([m1, m2]);
+
+        compositeViewWithDifferentListsUsed = new CompositeViewWithDifferentListsUsed({
+          collection: collection
+        });
+
+        compositeViewWithDifferentListsUsed.render();
+      });
+
+      it("should render the items in to the specified/resolved container", function(){
+        expect(compositeViewWithDifferentListsUsed.$("ul.first")).toHaveText(/bar/);
+        expect(compositeViewWithDifferentListsUsed.$("ul.first")).not.toHaveText(/baz/);
+        expect(compositeViewWithDifferentListsUsed.$("ul.second")).toHaveText(/baz/);
+        expect(compositeViewWithDifferentListsUsed.$("ul.second")).not.toHaveText(/bar/);
+      });
+
+      it("should use itemView as an argument to itemViewContainer function", function(){
+        expect(compositeViewWithDifferentListsUsed.itemViewContainer.calls[0].args[0] instanceof ItemView).toBe(true);
+        expect(compositeViewWithDifferentListsUsed.itemViewContainer.calls[0].args[0].model.get("foo")).toBe("bar");
+      });
+    });
+
   });
 
   describe("when a collection is loaded / reset after the view is created and before it is rendered", function(){

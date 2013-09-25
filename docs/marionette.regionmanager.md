@@ -21,8 +21,8 @@ objects.
 * [RegionManager.closeRegions](#regionmanager-closeregions)
 * [RegionManager.close](#regionmanager-close)
 * [RegionManager Events](#regionmanager-events)
-  * [region:add event](#region-add-event)
-  * [region:remove event](#region-remove-event)
+  * [region:add event](#regionadd-event)
+  * [region:remove event](#regionremove-event)
 * [RegionManager Iterators](#regionmanager-iterators)
 
 ## Basic Use

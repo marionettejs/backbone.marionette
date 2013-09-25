@@ -80,7 +80,7 @@ var rm = new Marionette.RegionManager();
 
 var regions = rm.addRegions({
   foo: "#bar",
-  baz: {
+  bar: {
     selector: "#quux",
     regionType: MyRegionType
   }

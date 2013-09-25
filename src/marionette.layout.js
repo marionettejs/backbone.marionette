@@ -75,6 +75,22 @@ Marionette.Layout = Marionette.ItemView.extend({
     return this.regionManager.removeRegion(name);
   },
 
+  filterRegions: false,
+
+  $: function (selector) {  
+    var not = [];
+
+    if (!Marionette.getOption(this, 'filterRegions') || !_.size(this.regions)) {
+      return this.constructor.__super__.$.call(this, selector);
+    } 
+
+    _.each(this.regions, function(region) {
+      not.push(region + ' ' + selector);
+    });       
+
+    return this.$el.find(selector).not(not.join(','));
+  },  
+
   // internal method to build regions
   _buildRegions: function(regions){
     var that = this;

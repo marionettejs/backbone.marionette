@@ -54,12 +54,18 @@ Marionette.View = Backbone.View.extend({
     // action and stop propagation of DOM events
     _.each(triggers, function(value, key){
 
+      var hasOptions = _.isObject(value);
+      var eventName = hasOptions ? value.event : value;
+
       // build the event handler function for the DOM event
       triggerEvents[key] = function(e){
 
-        // stop the event in its tracks
-        if (e && e.preventDefault){ e.preventDefault(); }
-        if (e && e.stopPropagation){ e.stopPropagation(); }
+        // stop the event in it's tracks
+        if (e) {
+          var prevent, stop;
+          if ((prevent = e.preventDefault) && hasOptions ? value.preventDefault : prevent) { prevent(); }
+          if ((stop = e.stopPropagation) && hasOptions ? value.stopPropagation : stop) { stop(); }
+        }
 
         // build the args for the event
         var args = {
@@ -69,7 +75,7 @@ Marionette.View = Backbone.View.extend({
         };
 
         // trigger the event
-        this.triggerMethod(value, args);
+        this.triggerMethod(eventName, args);
       };
 
     }, this);

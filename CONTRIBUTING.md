@@ -51,7 +51,7 @@ following information in your bug submission:
 * Operating System / version #
 * Browser and version #
 
-Including this infomration in a submission will help
+Including this information in a submission will help
 us to test the problem and ensure that the bug is
 both reproduced and corrected on the platforms / versions
 that you are having issues with.

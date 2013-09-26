@@ -73,7 +73,7 @@ describe("collection view", function(){
     });
 
     it("should provide the index for each itemView, when appending", function(){
-      expect(collectionView.appendHtml.calls[0].args[2]).toBe(0);
+      expect(collectionView.appendHtml.calls[0].args[1]).toBe(0);
     });
 
     it("should reference each of the rendered view items", function(){
@@ -183,7 +183,7 @@ describe("collection view", function(){
     });
 
     it("should provide the index for each itemView, when appending", function(){
-      expect(collectionView.appendHtml.calls[0].args[2]).toBe(0);
+      expect(collectionView.appendHtml.calls[0].args[1]).toBe(0);
     });
 
     it("should trigger the itemview:render event from the collectionView", function(){
@@ -221,7 +221,7 @@ describe("collection view", function(){
     });
 
     it("should provide the index for each itemView, when appending", function(){
-      expect(collectionView.appendHtml.calls[0].args[2]).toBe(1);
+      expect(collectionView.appendHtml.calls[0].args[1]).toBe(1);
     });
 
     it("should trigger the itemview:render event from the collectionView", function(){
@@ -432,8 +432,8 @@ describe("collection view", function(){
     var PrependHtmlView = Backbone.Marionette.CollectionView.extend({
       itemView: ItemView,
 
-      appendHtml: function(collectionView, itemView){
-        collectionView.$el.prepend(itemView.el);
+      appendHtml: function(itemView){
+        this.$el.prepend(itemView.el);
       }
     });
 

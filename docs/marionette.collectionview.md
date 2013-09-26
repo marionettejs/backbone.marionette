@@ -511,8 +511,8 @@ value.
 Backbone.Marionette.CollectionView.extend({
 
 	// The default implementation:
-  appendHtml: function(collectionView, itemView, index){
-    collectionView.$el.append(itemView.el);
+  appendHtml: function(itemView, index){
+    this.$el.append(itemView.el);
   }
 
 });

@@ -171,8 +171,8 @@ TableView = Backbone.Marionette.CompositeView.extend({
 
   template: "#table-template",
 
-  appendHtml: function(collectionView, itemView, index){
-    collectionView.$("tbody").append(itemView.el);
+  appendHtml: function(itemView, index){
+    this.$("tbody").append(itemView.el);
   }
 });
 ```

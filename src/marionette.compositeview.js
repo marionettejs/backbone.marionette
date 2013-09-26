@@ -22,13 +22,7 @@ Marionette.CompositeView = Marionette.CollectionView.extend({
   // `this.itemView` or Marionette.CompositeView if no `itemView`
   // has been defined
   getItemView: function(item){
-    var itemView = Marionette.getOption(this, "itemView") || this.constructor;
-
-    if (!itemView){
-      throwError("An `itemView` must be specified", "NoItemViewError");
-    }
-
-    return itemView;
+    return Marionette.getOption(this, "itemView") || this.constructor;
   },
 
   // Serialize the collection for the view. 

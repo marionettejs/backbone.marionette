@@ -161,7 +161,7 @@ describe("composite view", function(){
       expect(compositeView.render).toThrow(new Error("Cannot render the template since it's false, null or undefined."));
     });
   });
-  
+
   describe("when rendering a composite view", function(){
     var compositeView, order, deferredResolved;
 
@@ -696,16 +696,16 @@ describe("composite view", function(){
     });
 
   });
-  
+
   describe("has a valid inheritance chain back to Marionette.CollectionView", function(){
-    
+
     var constructor;
-    
+
     beforeEach(function(){
       constructor = spyOn(Marionette.CollectionView.prototype, "constructor");
       new Marionette.CompositeView();
     });
-    
+
     it("calls the parent Marionette.CollectionView's constructor function on instantiation", function(){
       expect(constructor).toHaveBeenCalled();
     });

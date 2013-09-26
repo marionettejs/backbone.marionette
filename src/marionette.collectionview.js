@@ -138,9 +138,9 @@ Marionette.CollectionView = Marionette.View.extend({
       itemViewOptions = itemViewOptions.call(this, item, index);
     }
 
-    // build the view 
+    // build the view
     var view = this.buildItemView(item, ItemView, itemViewOptions);
-    
+
     // set up the child view event forwarding
     this.addChildViewEventForwarding(view);
 
@@ -183,7 +183,7 @@ Marionette.CollectionView = Marionette.View.extend({
   // render the item view
   renderItemView: function(view, index) {
     view.render();
-    this.appendHtml(this, view, index);
+    this.appendHtml(view, index);
   },
 
   // Build an `itemView` for every model in the collection.
@@ -229,8 +229,8 @@ Marionette.CollectionView = Marionette.View.extend({
   // Append the HTML to the collection's `el`.
   // Override this method to do something other
   // then `.append`.
-  appendHtml: function(collectionView, itemView, index){
-    collectionView.$el.append(itemView.el);
+  appendHtml: function(itemView, index){
+    this.$el.append(itemView.el);
   },
 
   // Internal method to set up the `children` object for

@@ -97,33 +97,33 @@ Marionette.CompositeView = Marionette.CollectionView.extend({
   // `itemViewContainer` (a jQuery selector). Override this method to
   // provide custom logic of how the child item view instances have their
   // HTML appended to the composite view instance.
-  appendHtml: function(cv, iv, index){
-    var $container = this.getItemViewContainer(cv);
+  appendHtml: function(iv, index){
+    var $container = this.getItemViewContainer();
     $container.append(iv.el);
   },
 
   // Internal method to ensure an `$itemViewContainer` exists, for the
   // `appendHtml` method to use.
-  getItemViewContainer: function(containerView){
-    if ("$itemViewContainer" in containerView){
-      return containerView.$itemViewContainer;
+  getItemViewContainer: function(){
+    if ("$itemViewContainer" in this){
+      return this.$itemViewContainer;
     }
 
     var container;
-    var itemViewContainer = Marionette.getOption(containerView, "itemViewContainer");
+    var itemViewContainer = Marionette.getOption(this, "itemViewContainer");
     if (itemViewContainer){
 
       var selector = _.isFunction(itemViewContainer) ? itemViewContainer() : itemViewContainer;
-      container = containerView.$(selector);
+      container = this.$(selector);
       if (container.length <= 0) {
-        throwError("The specified `itemViewContainer` was not found: " + containerView.itemViewContainer, "ItemViewContainerMissingError");
+        throwError("The specified `itemViewContainer` was not found: " + this.itemViewContainer, "ItemViewContainerMissingError");
       }
 
     } else {
-      container = containerView.$el;
+      container = this.$el;
     }
 
-    containerView.$itemViewContainer = container;
+    this.$itemViewContainer = container;
     return container;
   },
 

@@ -3,7 +3,7 @@ describe("collection view", function(){
 
   // Shared View Definitions
   // -----------------------
-  
+
   var ItemView = Backbone.Marionette.ItemView.extend({
     tagName: "span",
     render: function(){
@@ -26,7 +26,7 @@ describe("collection view", function(){
 
   // Collection View Specs
   // ---------------------
-  
+
   describe("when rendering a collection view with no `itemView` specified", function(){
     var NoItemView = Backbone.Marionette.CollectionView.extend({
     });
@@ -44,7 +44,7 @@ describe("collection view", function(){
       expect(function(){collectionView.render()}).toThrow("An `itemView` must be specified");
     });
   });
-  
+
   describe("when rendering a collection view", function(){
     var collection = new Backbone.Collection([{foo: "bar"}, {foo: "baz"}]);
     var collectionView, itemViewRender;
@@ -73,7 +73,7 @@ describe("collection view", function(){
     });
 
     it("should provide the index for each itemView, when appending", function(){
-      expect(collectionView.appendHtml.calls[0].args[2]).toBe(0);
+      expect(collectionView.appendHtml.calls[0].args[1]).toBe(0);
     });
 
     it("should reference each of the rendered view items", function(){
@@ -91,7 +91,7 @@ describe("collection view", function(){
     it("should trigger a 'before:render' event", function(){
       expect(collectionView.trigger).toHaveBeenCalledWith("before:render", collectionView);
     });
-    
+
     it("should trigger a 'collection:before:render' event", function(){
       expect(collectionView.trigger).toHaveBeenCalledWith("collection:before:render", collectionView);
     });
@@ -99,7 +99,7 @@ describe("collection view", function(){
     it("should trigger a 'collection:rendered' event", function(){
       expect(collectionView.trigger).toHaveBeenCalledWith("collection:rendered", collectionView);
     });
-    
+
     it("should trigger a 'render' event", function(){
       expect(collectionView.trigger).toHaveBeenCalledWith("render", collectionView);
     });
@@ -183,7 +183,7 @@ describe("collection view", function(){
     });
 
     it("should provide the index for each itemView, when appending", function(){
-      expect(collectionView.appendHtml.calls[0].args[2]).toBe(0);
+      expect(collectionView.appendHtml.calls[0].args[1]).toBe(0);
     });
 
     it("should trigger the itemview:render event from the collectionView", function(){
@@ -221,7 +221,7 @@ describe("collection view", function(){
     });
 
     it("should provide the index for each itemView, when appending", function(){
-      expect(collectionView.appendHtml.calls[0].args[2]).toBe(1);
+      expect(collectionView.appendHtml.calls[0].args[1]).toBe(1);
     });
 
     it("should trigger the itemview:render event from the collectionView", function(){
@@ -311,7 +311,7 @@ describe("collection view", function(){
 
       onClose: function(){ }
     });
-  
+
     var collectionView;
     var collection;
     var childView;
@@ -345,7 +345,7 @@ describe("collection view", function(){
       spyOn(collectionView, "onClose").andCallThrough();
       spyOn(collectionView, "onBeforeClose").andCallThrough();
       spyOn(collectionView, "trigger").andCallThrough();
-      
+
       collectionView.bind('collection:closed', closeHandler);
 
       collectionView.close();
@@ -432,8 +432,8 @@ describe("collection view", function(){
     var PrependHtmlView = Backbone.Marionette.CollectionView.extend({
       itemView: ItemView,
 
-      appendHtml: function(collectionView, itemView){
-        collectionView.$el.prepend(itemView.el);
+      appendHtml: function(itemView){
+        this.$el.prepend(itemView.el);
       }
     });
 
@@ -706,21 +706,21 @@ describe("collection view", function(){
 
       iv = cv.children.findByModel(c.at(0));
     });
-    
+
     it("should use the specified itemView for each item", function(){
       expect(iv.MyItemView).toBe(true);
     });
   });
-  
+
   describe("has a valid inheritance chain back to Marionette.View", function(){
-    
+
     var constructor;
-    
+
     beforeEach(function(){
       constructor = spyOn(Marionette.View.prototype, "constructor");
       new Marionette.CollectionView();
     });
-    
+
     it("calls the parent Marionette.View's constructor function on instantiation", function(){
       expect(constructor).toHaveBeenCalled();
     });

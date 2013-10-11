@@ -41,7 +41,7 @@
   "dependencies": {
     "backbone.babysitter": "~0.0.6",
     "backbone.wreqr": "~0.2.0",
-    "backbone": "~1.0.0"
+    "backbone": "~1.1.0"
   },
   "devDependencies": {
     "grunt": "~0.4.0",
@@ -64,7 +64,7 @@
   "jam": {
     "dependencies": {
       "underscore": ">=1.4.4",
-      "backbone": ">=0.9.9",
+      "backbone": "~1.1.0",
       "backbone.babysitter": ">=0.0.6",
       "backbone.wreqr": ">=0.2.0"
     },

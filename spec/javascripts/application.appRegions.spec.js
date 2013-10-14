@@ -78,6 +78,27 @@ describe("application regions", function(){
       expect(MyApp.MyRegion.el).toBe("#region");
     });
   });
+  
+  describe("when adding custom region types using a defaults set", function(){
+    var MyApp = new Backbone.Marionette.Application();
+    var MyRegion = Backbone.Marionette.Region.extend({});
+
+    beforeEach(function(){
+      var defaults = {
+        regionType: MyRegion
+      };
+
+      MyApp.addRegions({
+        foo: '#bar',
+        baz: '#quux'
+      }, defaults);
+    });
+
+    it("should add all regions with the specified type", function(){
+      expect(MyApp.foo).toBeInstanceOf(MyRegion);
+      expect(MyApp.baz).toBeInstanceOf(MyRegion);
+    });
+  });
 
   describe("when an app has a region", function(){
     var app, reg1;

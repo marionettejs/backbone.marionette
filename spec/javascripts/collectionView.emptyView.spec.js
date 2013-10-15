@@ -287,5 +287,89 @@ describe("collectionview - emptyView", function(){
       expect(passedInCollection).toEqual(collection);
     });
   });
+
+  describe("when rendering and an 'emptyViewOptions' is provided", function(){
+
+    var collectionView, view;
+
+    beforeEach(function(){
+      var collection = new Backbone.Collection();
+      collectionView = new EmptyCollectionView({
+        collection: collection,
+        emptyViewOptions: {
+          foo: 'bar',
+          className: 'baz',
+          tagName: 'p'
+        }
+      });
+
+      collectionView.render();
+      view = collectionView.children.findByIndex(0);
+    });
+
+    it("should pass the options to the empty view instance", function(){
+      expect(view.options.hasOwnProperty("foo")).toBe(true);
+      expect(view.options.foo).toEqual('bar');
+    });
+
+    it("overrides options of emptyView class", function(){
+      expect($(collectionView.$el)).toHaveHtml("<p class=\"baz\"></p>");
+    });
+
+  });
+
+
+  describe("when rendering and an 'emptyViewOptions' is provided as a fuction", function(){
+
+    var collectionView, view;
+
+    beforeEach(function(){
+      var collection = new Backbone.Collection();
+      collectionView = new EmptyCollectionView({
+        collection: collection,
+        emptyViewOptions: function() {
+          return {
+            foo: 'bar'
+          };
+        }
+      });
+
+      collectionView.render();
+      view = collectionView.children.findByIndex(0);
+    });
+
+    it("should pass the options to the empty view instance", function(){
+      expect(view.options.hasOwnProperty("foo")).toBe(true);
+      expect(view.options.foo).toEqual('bar');
+    });
+
+  });
+
+  describe("when rendering and both 'itemViewOptions' and 'emptyViewOptions' are provided", function(){
+
+    var collectionView, view;
+
+    beforeEach(function(){
+      var collection = new Backbone.Collection();
+      collectionView = new EmptyCollectionView({
+        collection: collection,
+        itemViewOptions: {
+          foo: 'baz'
+        },
+        emptyViewOptions: {
+          foo: 'baz'
+        }
+      });
+
+      collectionView.render();
+      view = collectionView.children.findByIndex(0);
+    });
+
+    it("passes the options to the empty view instance correctly", function(){
+      expect(view.options.foo).toEqual('baz');
+    });
+
+  });
+
 });
 

@@ -56,7 +56,7 @@ describe("collection view - reset", function(){
     });
 
     it("should remove the event handlers for the original children", function(){
-      expect(_.size(collectionView._listeners)).toBe(4);
+      expect(_.size(collectionView._listeningTo)).toBe(4);
     });
   });
 

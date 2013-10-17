@@ -57,6 +57,10 @@ Backbone.Marionette.CollectionView.extend({
 });
 ```
 
+Item views must be defined before they are referenced by the 
+`itemView` attribute in a collection view definition. Use `getItemView` 
+to lookup the definition as child views are instantiated.
+
 Alternatively, you can specify an `itemView` in the options for
 the constructor:
 

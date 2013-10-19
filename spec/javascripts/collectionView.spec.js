@@ -64,8 +64,23 @@ describe("collection view", function(){
       spyOn(collectionView, "onBeforeRender").andCallThrough();
       spyOn(collectionView, "trigger").andCallThrough();
       spyOn(collectionView, "appendHtml").andCallThrough();
+      spyOn(collectionView.$el, "append").andCallThrough();
+      spyOn(collectionView, "startBuffering").andCallThrough();
+      spyOn(collectionView, "endBuffering").andCallThrough();
 
       collectionView.render();
+    });
+
+    it("should only call $el.append once", function() {
+      expect(collectionView.$el.append.callCount).toEqual(1);
+    });
+
+    it("should only call clear render buffer once", function() {
+      expect(collectionView.endBuffering.callCount).toEqual(1);
+    });
+
+    it("should add to render buffer once for each child", function() {
+      expect(collectionView.appendHtml.callCount).toEqual(2);
     });
 
     it("should append the html for each itemView", function(){
@@ -653,7 +668,7 @@ describe("collection view", function(){
       itemView: ItemView,
       onShow: function(){}
     });
-
+    var collectionView;
     beforeEach(function(){
       spyOn(ItemView.prototype, "onShow").andCallThrough();
       spyOn(ItemView.prototype, "onDomRefresh").andCallThrough();
@@ -661,16 +676,22 @@ describe("collection view", function(){
       m1 = new Backbone.Model();
       m2 = new Backbone.Model();
       col = new Backbone.Collection([m1]);
-      var colView = new ColView({
+      collectionView = new ColView({
         collection: col
       });
 
-      colView.render();
-      colView.onShow();
-      colView.trigger("show");
+      collectionView.render();
+      collectionView.onShow();
+      collectionView.trigger("show");
+
+      spyOn(collectionView, "appendBuffer").andCallThrough();
 
       col.add(m2);
-      view = colView.children.findByIndex(1);
+      view = collectionView.children.findByIndex(1);
+    });
+
+    it("should not use the render buffer", function() {
+      expect(collectionView.appendBuffer.callCount).toEqual(0);
     });
 
     it("should call the 'onShow' method of the child view", function(){

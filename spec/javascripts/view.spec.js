@@ -157,4 +157,19 @@ describe("base view", function(){
     });
   });
 
+  describe("when serializing a model", function(){
+    var modelData = { foo: "bar" };
+    var model;
+    var view;
+
+    beforeEach(function(){
+      model = new Backbone.Model(modelData);
+      view = new Marionette.View();
+    });
+
+    it("should return all attributes", function(){
+      expect(view.serializeModel(model)).toEqual(modelData);
+    });
+  });
+
 });

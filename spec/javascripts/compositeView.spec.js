@@ -696,6 +696,27 @@ describe("composite view", function(){
     });
 
   });
+
+  describe("when serializing view data", function(){
+    var modelData = { foo: "bar" };
+    var view;
+
+    beforeEach(function(){
+      view = new Marionette.CompositeView();
+      spyOn(view, "serializeModel").andCallThrough();
+    });
+
+    it("should return an empty object without data", function(){
+      expect(view.serializeData()).toEqual({ });
+    });
+
+    it("should call serializeModel for a model", function(){
+      view.model = new Backbone.Model(modelData);
+      view.serializeData();
+
+      expect(view.serializeModel).toHaveBeenCalled();
+    });
+  });
   
   describe("has a valid inheritance chain back to Marionette.CollectionView", function(){
     

@@ -785,7 +785,7 @@ describe('composite view', function() {
     });
 
     it('calls the parent Marionette.CollectionViews constructor function on instantiation', function() {
-      expect(this.constructor).to.have.been.called;
+      expect(this.constructor).to.have.been.calledOnce;
     });
   });
 });

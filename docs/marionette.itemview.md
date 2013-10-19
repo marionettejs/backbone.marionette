@@ -176,7 +176,7 @@ Backbone.Marionette.ItemView.extend({
 ## ItemView serializeData
 
 Item views will serialize a model or collection, by default, by
-calling `.toJSON` on either the model or collection. If both a model
+calling `.toJSON` on either the model or for each model in a collection. If both a model
 and collection are attached to an item view, the model will be used
 as the data source. The results of the data serialization will be passed to the template
 that is rendered.

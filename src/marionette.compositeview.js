@@ -58,7 +58,7 @@ Marionette.CompositeView = Marionette.CollectionView.extend({
     this.isClosed = false;
     this.resetItemViewContainer();
 
-    this.triggerBeforeRender();
+    this.triggerMethod("before:render", this);
     var html = this.renderModel();
     this.$el.html(html);
     // the ui bindings is done here and not at the end of render since they
@@ -70,7 +70,7 @@ Marionette.CompositeView = Marionette.CollectionView.extend({
     this._renderChildren();
 
     this.triggerMethod("composite:rendered");
-    this.triggerRendered();
+    this.triggerMethod("render", this);
     return this;
   },
 

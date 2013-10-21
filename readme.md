@@ -27,34 +27,34 @@ developer, including memory management, view management, and more.
 Marionette brings an application architecture to Backbone, along with
 built in view management and memory management. It's designed to be a 
 lightweight and flexible library of tools that sits on top of Backbone, 
-providing a framework for building scalable application.
+providing the framework for building a scalable application.
 
 Like Backbone itself, you're not required to use all of Marionette just 
 because you want to use some of it. You can pick and choose which features 
-you want to use, when. This allows you to work with other Backbone 
-frameworks and plugins very easily. It also means that you are not required
+you want to use. This allows you to work with other Backbone 
+frameworks and plugins easily. It also means that you are not required
 to engage in an all-or-nothing migration to begin using Marionette.
 
 ### Key Benefits
 
-* Scale applications out with modular, event driven architecture
-* Sensible defaults, such as using Underscore templates for view rendering
-* Easy to modify to make it work with your application's specific needs
+* Scalable: applications are built in modules, and with event-driven architecture
+* Sensible defaults: Underscore templates are used for view rendering
+* Easily modifiable: make it work with your application's specific needs
 * Reduce boilerplate for views, with specialized view types
 * Build on a modular architecture with an `Application` and modules that attach to it
-* Compose your application's visuals at runtime, with `Region` and `Layout`
+* Compose your application's visuals at runtime, with the `Region` and `Layout` objects
 * Nested views and layouts within visual regions
-* Built-in memory management and zombie killing in views, regions and layouts
+* Built-in memory management and zombie-killing in views, regions and layouts
 * Event-driven architecture with `Backbone.Wreqr.EventAggregator`
 * Flexible, "as-needed" architecture allowing you to pick and choose what you need
 * And much, much more
 
-## Source Code And Downloads
+## Source Code and Downloads
 
 You can download the latest builds directly from the "lib" folder above.  
 For more information about the files in this folder, or to obtain an archive
-containing all Marionette dependencies (including Underscore, Backbone, etc),
-please see [the downloads section on the website](http://marionettejs.com#download).
+containing all Marionette dependencies (including Underscore, Backbone, etc.),
+please visit [the downloads section on the website](http://marionettejs.com#download).
 
 #### [MarionetteJS.com](http://marionettejs.com#download)
 
@@ -77,8 +77,8 @@ for information on upgrading to the latest version of Marionette.
 
 ## Documentation
 
-The primary documentation is split up in to multiple files, due to the size
-of the over-all documentation. You can find these files in the 
+The primary documentation is split up into multiple files, due to the size
+of the overall documentation. You can find these files in the 
 [/docs](docs) folder, or use the links below to get straight to the
 documentation for each piece of Marionette.
 
@@ -86,10 +86,10 @@ documentation for each piece of Marionette.
 
 In addition to this readme, I've commented the source code quite
 heavily and run it through Docco as part of my build process.
-This produces a nicely formatted, annotated source code as documentation
+This produces a nicely formatted, annotated source code as a documentation
 file.
 
-You can read the annotated for all the detail of how Marionette works, and advice on which methods to override when.
+You can read the annotations for all the details of how Marionette works, and advice on which methods to override.
 
 ##### [View the annotated source code](http://marionettejs.com/docs/backbone.marionette.html)
 
@@ -104,7 +104,7 @@ documentation](docs/marionette.configuration.md).
 
 These are the strings that you can pull to make your puppet dance.
 If you're looking for an introduction and/or 
-examples on how to get started, please see [the Wiki](https://github.com/marionettejs/backbone.marionette/wiki).
+examples on how to get started, please visit [the Wiki](https://github.com/marionettejs/backbone.marionette/wiki).
 
 **Views**
 
@@ -146,7 +146,7 @@ examples on how to get started, please see [the Wiki](https://github.com/marione
 
 * [&rarr;] [**Backbone.EventBinder**](https://github.com/marionettejs/backbone.eventbinder): Deprecated w/ Backbone v0.9.9 and higher. An event binding manager for Backbone v0.9.2, to facilitate binding and unbinding of events
 
-### The Wiki: Sample Apps, Tutorials, And Much More
+### The Wiki: Sample Apps, Tutorials, and Much More
 
 A wiki is an important aspect of a thriving community, as it provides
 a place for the community to contribute ideas, examples, answer
@@ -157,7 +157,7 @@ ideas and examples to the community, please see the wiki page.
 
 ##### [View The Marionette Wiki](https://github.com/marionettejs/backbone.marionette/wiki)
 
-## Compatibility And Requirements
+## Compatibility and Requirements
 
 MarionetteJS currently works with the following libraries:
 
@@ -167,12 +167,11 @@ MarionetteJS currently works with the following libraries:
 * [Backbone.Wreqr](https://github.com/marionettejs/backbone.wreqr) 
 * [Backbone.BabySitter](https://github.com/marionettejs/backbone.babysitter)
 
-Marionette has been tested against any other versions of these
-libraries in the past, but is only tested against the latest versions
-at this time. You may or may not have success if you use a version other
+Marionette has not been tested against any other versions of these
+libraries. You may or may not have success if you use a version other
 than what it listed here.
 
-While support for Zepto and Enderjs has been added, it is not officially
+While support for Zepto and EnderJS has been added, it is not officially
 tested against these libraries at this time.
 
 ### Deferred/Promise Objects
@@ -181,7 +180,7 @@ Marionette makes use of jQuery's [Deferred](http://api.jquery.com/category/defer
 objects and, as such, will need supported methods in replacement libraries.
 Zepto users can use @Mumakil's [Standalone-Deferred](https://github.com/Mumakil/Standalone-Deferred)
 or @sudhirj's [simply-deferred](https://github.com/sudhirj/simply-deferred).
-Enderjs users, please let us know of how you solve any compatibility issues.
+EnderJS users, please let us know of how you solve any compatibility issues.
 
 Marionette no longer relies on [Backbone.EventBinder](https://github.com/marionettejs/backbone.eventbinder).
 Backbone.Events, as of v0.9.9, supersedes this library with its
@@ -199,14 +198,14 @@ for the project.
 **Please see the footer of [MarionetteJS.com](http://marionettejs.com) 
 for links to donate.**
 
-## How To Contribute
+## How to Contribute
 
 If you would like to contribute to Marionette's source code, please read
 the [guidelines for pull requests and contributions](CONTRIBUTING.md).
 Following these guidelines will help make your contributions easier to
-bring in to the next release.
+bring into the next release.
 
-## Help Is Just A Click Away
+## Help is Just a Click Away
 
 ### #Marionette on FreeNode.net IRC
 

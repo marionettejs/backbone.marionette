@@ -205,5 +205,32 @@ describe("collectionview - emptyView", function(){
     });
   });
 
+  describe("when emptyView is specified with getEmptyView option", function(){
+    var OtherEmptyView = Backbone.Marionette.ItemView.extend({
+      render: function(){}
+    });
+    var CollectionView = Backbone.Marionette.CollectionView.extend({
+      itemView: ItemView,
+      getEmptyView: function() { return OtherEmptyView }
+    })
+
+    describe("when rendering a collection view with an empty collection", function(){
+
+      var collectionView;
+
+      beforeEach(function(){
+        var collection = new Backbone.Collection();
+        collectionView = new CollectionView({
+          collection: collection
+        });
+
+        collectionView.render();
+      });
+
+      it("renders other empty view instance", function() {
+        expect(collectionView.children.first()).toBeInstanceOf(OtherEmptyView);
+      });
+    });
+  });
 });
 

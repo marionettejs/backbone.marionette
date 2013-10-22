@@ -143,6 +143,18 @@ Backbone.Marionette.CollectionView.extend({
 });
 ```
 
+Or, if you need the `emptyView`'s type chosen dynamically, specify `getEmptyView`:
+
+```js
+Backbone.Marionette.CollectionView.extend({
+  // ...
+
+  getEmptyView: function() {
+    // custom logic
+    return NoItemsView;
+  }
+```
+
 This will render the `emptyView` and display the message that needs to
 be displayed when there are no items.
 

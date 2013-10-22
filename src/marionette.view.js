@@ -4,18 +4,19 @@
 // The core view type that other Marionette views extend from.
 Marionette.View = Backbone.View.extend({
 
-  constructor: function(){
+  constructor: function(options){
     _.bindAll(this, "render");
 
     var args = Array.prototype.slice.apply(arguments);
     Backbone.View.prototype.constructor.apply(this, args);
+    this.options = options;
 
     Marionette.MonitorDOMRefresh(this);
     this.listenTo(this, "show", this.onShowCalled, this);
   },
 
   // import the "triggerMethod" to trigger events with corresponding
-  // methods if the method exists 
+  // methods if the method exists
   triggerMethod: Marionette.triggerMethod,
 
   // Get the template for this view
@@ -54,12 +55,23 @@ Marionette.View = Backbone.View.extend({
     // action and stop propagation of DOM events
     _.each(triggers, function(value, key){
 
+      var hasOptions = _.isObject(value);
+      var eventName = hasOptions ? value.event : value;
+
       // build the event handler function for the DOM event
       triggerEvents[key] = function(e){
 
         // stop the event in its tracks
-        if (e && e.preventDefault){ e.preventDefault(); }
-        if (e && e.stopPropagation){ e.stopPropagation(); }
+        if (e) {
+          var prevent = e.preventDefault;
+          var stop = e.stopPropagation;
+
+          var shouldPrevent = hasOptions ? value.preventDefault : prevent;
+          var shouldStop = hasOptions ? value.stopPropagation : stop;
+
+          if (shouldPrevent && prevent) { prevent(); }
+          if (shouldStop && stop) { stop(); }
+        }
 
         // build the args for the event
         var args = {
@@ -69,7 +81,7 @@ Marionette.View = Backbone.View.extend({
         };
 
         // trigger the event
-        this.triggerMethod(value, args);
+        this.triggerMethod(eventName, args);
       };
 
     }, this);
@@ -77,7 +89,7 @@ Marionette.View = Backbone.View.extend({
     return triggerEvents;
   },
 
-  // Overriding Backbone.View's delegateEvents to handle 
+  // Overriding Backbone.View's delegateEvents to handle
   // the `triggers`, `modelEvents`, and `collectionEvents` configuration
   delegateEvents: function(events){
     this._delegateDOMEvents(events);

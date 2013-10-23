@@ -17,7 +17,7 @@ $(function(){
     el: "#test_element",
     itemView: ItemView
   });
- 
+
   var modelList10 = [];
   for(var i = 0; i<10; i++){
     modelList10.push(new Model());

@@ -7,7 +7,6 @@ Marionette.CollectionView = Marionette.View.extend({
   // used as the prefix for item view events
   // that are forwarded through the collectionview
   itemViewEventPrefix: "itemview",
-
   // constructor
   constructor: function(options){
     this._initChildViewStorage();
@@ -161,9 +160,9 @@ Marionette.CollectionView = Marionette.View.extend({
       itemViewOptions = itemViewOptions.call(this, item, index);
     }
 
-    // build the view 
+    // build the view
     var view = this.buildItemView(item, ItemView, itemViewOptions);
-    
+
     // set up the child view event forwarding
     this.addChildViewEventForwarding(view);
 
@@ -224,7 +223,6 @@ Marionette.CollectionView = Marionette.View.extend({
 
   // Remove the child view and close it
   removeChildView: function(view){
-
     // shut down the child view properly,
     // including events that the collection has from it
     if (view){

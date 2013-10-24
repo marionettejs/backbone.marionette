@@ -27,6 +27,12 @@ Marionette.View = Backbone.View.extend({
     return Marionette.getOption(this, "template");
   },
 
+  // Serialize a model by returning its attributes. Clones
+  // the attributes to allow modification.
+  serializeModel: function(model){
+    return _.clone(model.attributes);
+  },
+
   // Mix in template helper methods. Looks for a
   // `templateHelpers` attribute, which can either be an
   // object literal, or a function that returns an object

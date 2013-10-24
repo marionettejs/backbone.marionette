@@ -9,7 +9,7 @@ Marionette.View = Backbone.View.extend({
 
     var args = Array.prototype.slice.apply(arguments);
     Backbone.View.prototype.constructor.apply(this, args);
-    this.options = options;
+    this.options = options || {};
 
     Marionette.MonitorDOMRefresh(this);
     this.listenTo(this, "show", this.onShowCalled, this);

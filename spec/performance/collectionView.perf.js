@@ -17,7 +17,7 @@ $(function(){
     el: "#test_element",
     itemView: ItemView
   });
- 
+
   var modelList10 = [];
   for(var i = 0; i<10; i++){
     modelList10.push(new Model());
@@ -68,6 +68,37 @@ $(function(){
 
     c.reset(modelList1000);
   });
+
+  JSLitmus.test('CollectionView :: 10 Items To Render', function() {
+    var c = new Backbone.Collection(modelList10);
+
+    var cv = new CollectionView({
+      collection: c
+    });
+
+    cv.render();
+  });
+
+  JSLitmus.test('CollectionView :: 100 Items To Render', function() {
+    var c = new Backbone.Collection(modelList100);
+
+    var cv = new CollectionView({
+      collection: c
+    });
+
+    cv.render();
+  });
+
+  JSLitmus.test('CollectionView :: 1000 Items To Render', function() {
+    var c = new Backbone.Collection(modelList1000);
+
+    var cv = new CollectionView({
+      collection: c
+    });
+
+    cv.render();
+  });
+
 
   // --------------------------------------------
 });

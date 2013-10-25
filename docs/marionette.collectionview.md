@@ -515,9 +515,9 @@ the child views that may have previously been opened.
 
 ## CollectionView's appendHtml
 
-By default the collection view will call jQuery's `.append` to
-move the HTML contents from the item view instance in to the collection
-view's `el`.
+By default the collection view will append the HTML of each ItemView
+into the element buffer, and then call jQuery's `.append` once at the
+end to move the HTML into the collection view's `el`.
 
 You can override this by specifying an `appendHtml` method in your
 view definition. This method takes three parameters and has no return
@@ -528,7 +528,27 @@ Backbone.Marionette.CollectionView.extend({
 
 	// The default implementation:
   appendHtml: function(collectionView, itemView, index){
-    collectionView.$el.append(itemView.el);
+    if (collectionView.isBuffering) {
+      // buffering happens on reset events and initial renders
+      // in order to reduce the number of inserts into the
+      // document, which are expensive.
+      collectionView.elBuffer.appendChild(itemView.el);
+    }
+    else {
+      // If we've already rendered the main collection, just
+      // append the new items directly into the element.
+      collectionView.$el.append(itemView.el);
+    }
+  },
+
+  // Called after all children have been appended into the elBuffer
+  appendBuffer: function(collectionView, buffer) {
+    collectionView.$el.append(buffer);
+  },
+
+  // called on initialize and after appendBuffer is called
+  initRenderBuffer: function() {
+    this.elBuffer = document.createDocumentFragment();
   }
 
 });
@@ -542,6 +562,10 @@ The third parameter, `index`, is the index of the
 model that this itemView instance represents, in the collection
 that the model came from. This is useful for sorting a collection
 and displaying the sorted list in the correct order on the screen.
+
+Overrides of `appendHtml` that don't take into account the element
+buffer will work fine, but won't take advantage of the 60x performance
+increase the buffer provides.
 
 ## CollectionView's children
 

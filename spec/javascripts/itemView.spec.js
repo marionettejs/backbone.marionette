@@ -367,6 +367,66 @@ describe("item view", function(){
       expect(renderUpdate).toHaveBeenCalled();
     });
   });
+
+  describe("when serializing view data", function(){
+    var modelData = { foo: "bar" };
+    var collectionData = [ { foo: "bar" }, { foo: "baz" } ];
+    var view;
+
+    beforeEach(function(){
+      view = new ItemView();
+      spyOn(view, "serializeModel").andCallThrough();
+      spyOn(view, "serializeCollection").andCallThrough();
+    });
+
+    it("should return an empty object without data", function(){
+      expect(view.serializeData()).toEqual({ });
+    });
+
+    it("should call serializeModel for a model", function(){
+      view.model = new Backbone.Model(modelData);
+      view.serializeData();
+
+      expect(view.serializeModel).toHaveBeenCalled();
+      expect(view.serializeCollection).not.toHaveBeenCalled();
+    });
+
+    it("should call serializeCollection for a collection", function(){
+      view.collection = new Collection(collectionData);
+      view.serializeData();
+
+      expect(view.serializeCollection).toHaveBeenCalled();
+    });
+
+    it("should call serializeModel when given both a model and a collection", function(){
+      view.model = new Backbone.Model(modelData);
+      view.collection = new Collection(collectionData);
+      view.serializeData();
+
+      expect(view.serializeModel).toHaveBeenCalled();
+      expect(view.serializeCollection).not.toHaveBeenCalled();
+    });
+  });
+
+  describe("when serializing a collection", function(){
+    var collectionData;
+    var view;
+
+    beforeEach(function(){
+      collectionData = [ { foo: "bar" }, { foo: "baz" } ];
+      view = new ItemView({
+        collection: new Collection(collectionData)
+      });
+    });
+
+    it("should serialize to an items attribute", function(){
+      expect(view.serializeData().items).toBeDefined();
+    });
+
+    it("should serialize all models", function(){
+      expect(view.serializeData().items).toEqual(collectionData);
+    });
+  });
   
   describe("has a valid inheritance chain back to Marionette.View", function(){
     

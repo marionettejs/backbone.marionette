@@ -44,7 +44,7 @@ Marionette.CompositeView = Marionette.CollectionView.extend({
     var data = {};
 
     if (this.model){
-      data = this.model.toJSON();
+      data = this.serializeModel(this.model);
     }
 
     return data;

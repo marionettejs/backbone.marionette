@@ -15,6 +15,17 @@ Marionette.View = Backbone.View.extend({
     this.listenTo(this, "show", this.onShowCalled, this);
   },
 
+	// return a unique data hash for the provided domain
+	// this is used to store metadata without polluting the view root attributes
+	data: function(domain){
+		var data = this._data || (this._data = {}),
+				_data = data[domain];
+		if (!_data) {
+			_data = data[domain] = {};
+		}
+		return _data;
+	},
+
   // import the "triggerMethod" to trigger events with corresponding
   // methods if the method exists
   triggerMethod: Marionette.triggerMethod,

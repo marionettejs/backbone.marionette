@@ -17,7 +17,7 @@ Marionette.View = Backbone.View.extend({
 
   // return a unique data hash for the provided domain
   // this is used to store metadata without polluting the view root attributes
-  data: function(domain){
+  viewData: function(domain){
     var data = this._data || (this._data = {}),
         _data = data[domain];
     if (!_data) {

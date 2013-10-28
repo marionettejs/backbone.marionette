@@ -172,4 +172,34 @@ describe("base view", function(){
     });
   });
 
+
+describe("when retrieving view metadata", function(){
+   var view1, view2;
+
+   beforeEach(function(){
+     view1 = new Marionette.View();
+     view2 = new Marionette.View();
+   });
+
+   it("should initialize the data hash", function(){
+     var data = view1.viewData('foo');
+     expect(!!data).toBe(true);
+   });
+
+   it("should only create instance-scoped data", function(){
+     var data1 = view1.viewData('foo');
+     data1['test1'] = '1';
+     var data2 = view2.viewData('foo');
+     data2['test2'] = '2';
+     expect(data1.test2).toBe(undefined);
+     expect(data2.test1).toBe(undefined);
+   });
+
+   it("should return the same hash with multiple requests", function(){
+     var data1 = view1.viewData('foo');
+     data1['test1'] = '1';
+     data1 = view1.viewData('foo');
+     expect(data1.test1).toBe('1');
+   });
+ });
 });

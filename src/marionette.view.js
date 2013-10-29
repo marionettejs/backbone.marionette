@@ -5,7 +5,10 @@
 Marionette.View = Backbone.View.extend({
 
   constructor: function(options){
-    _.bindAll(this, "render");
+    var render = this.render;
+    this.render = function() {
+      return render.apply(this, arguments);
+    };
 
     var args = Array.prototype.slice.apply(arguments);
     Backbone.View.prototype.constructor.apply(this, args);
@@ -167,10 +170,10 @@ Marionette.View = Backbone.View.extend({
     this.ui = {};
 
     // bind each of the selectors
-    _.each(_.keys(bindings), function(key) {
+    for (var key in bindings) {
       var selector = bindings[key];
       this.ui[key] = this.$(selector);
-    }, this);
+    }
   },
 
   // This method unbinds the elements specified in the "ui" hash

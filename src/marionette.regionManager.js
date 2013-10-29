@@ -105,7 +105,9 @@ Marionette.RegionManager = (function(Marionette){
 
     // set the number of regions current held
     _setLength: function(){
-      this.length = _.size(this._regions);
+      var length = 0;
+      for (var key in this._regions) length++
+      this.length = length;
     }
 
   });
@@ -115,6 +117,7 @@ Marionette.RegionManager = (function(Marionette){
   //
   // Mix in methods from Underscore, for iteration, and other
   // collection related features.
+  var slice = Array.prototype.slice;
   var methods = ['forEach', 'each', 'map', 'find', 'detect', 'filter',
     'select', 'reject', 'every', 'all', 'some', 'any', 'include',
     'contains', 'invoke', 'toArray', 'first', 'initial', 'rest',
@@ -122,8 +125,11 @@ Marionette.RegionManager = (function(Marionette){
 
   _.each(methods, function(method) {
     RegionManager.prototype[method] = function() {
-      var regions = _.values(this._regions);
-      var args = [regions].concat(_.toArray(arguments));
+      var regions = [];
+      for (var name in this._regions) {
+        regions.push(this._regions[name]);
+      }
+      var args = [regions].concat(slice.call(arguments));
       return _[method].apply(_, args);
     };
   });

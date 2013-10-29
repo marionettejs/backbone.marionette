@@ -30,7 +30,7 @@ Marionette.triggerMethod = (function(){
     // call the onMethodName if it exists
     if (typeof method === "function") {
       // pass all arguments, except the event name
-      return method.apply(this, _.tail(arguments));
+      return method.apply(this, Array.prototype.slice.call(arguments, 1));
     }
   };
 

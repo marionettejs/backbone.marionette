@@ -91,8 +91,10 @@ _.extend(Marionette.Module.prototype, Backbone.Events, {
   _runModuleDefinition: function(definition, customArgs){
     if (!definition){ return; }
 
+    var args = [];
+
     // build the correct list of arguments for the module definition
-    var args = _.flatten([
+    var arr = [
       this,
       this.app,
       Backbone,
@@ -100,6 +102,16 @@ _.extend(Marionette.Module.prototype, Backbone.Events, {
       Marionette.$, _,
       customArgs
     ]);
+
+    // Flatten the list.
+    for (var i = 0, item; i < arr.length, i++) {
+      item = arr[i];
+      if (Object.prototype.toString.call(item) === '[object Array]') {
+        args.push.apply(args, item);
+      } else {
+        args.push(item);
+      }
+    }
 
     definition.apply(this, args);
   },

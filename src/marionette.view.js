@@ -35,7 +35,7 @@ Marionette.View = Backbone.View.extend({
   mixinTemplateHelpers: function(target){
     target = target || {};
     var templateHelpers = Marionette.getOption(this, "templateHelpers");
-    if (_.isFunction(templateHelpers)){
+    if (typeof templateHelpers === "function"){
       templateHelpers = templateHelpers.call(this);
     }
     return _.extend(target, templateHelpers);
@@ -55,7 +55,7 @@ Marionette.View = Backbone.View.extend({
     // action and stop propagation of DOM events
     _.each(triggers, function(value, key){
 
-      var hasOptions = _.isObject(value);
+      var hasOptions = typeof value === "object";
       var eventName = hasOptions ? value.event : value;
 
       // build the event handler function for the DOM event
@@ -100,7 +100,7 @@ Marionette.View = Backbone.View.extend({
   // internal method to delegate DOM events and triggers
   _delegateDOMEvents: function(events){
     events = events || this.events;
-    if (_.isFunction(events)){ events = events.call(this); }
+    if (typeof events === "function"){ events = events.call(this); }
 
     var combinedEvents = {};
     var triggers = this.configureTriggers();

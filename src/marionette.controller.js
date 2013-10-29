@@ -8,7 +8,7 @@ Marionette.Controller = function(options){
   this.triggerMethod = Marionette.triggerMethod;
   this.options = options || {};
 
-  if (_.isFunction(this.initialize)){
+  if (typeof this.initialize === "function"){
     this.initialize(this.options);
   }
 };

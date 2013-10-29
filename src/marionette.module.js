@@ -160,19 +160,19 @@ _.extend(Marionette.Module, {
   },
 
   _addModuleDefinition: function(parentModule, module, def, args){
-    var fn; 
+    var fn;
     var startWithParent;
 
-    if (_.isFunction(def)){
+    if (typeof def === "function"){
       // if a function is supplied for the module definition
       fn = def;
       startWithParent = true;
 
-    } else if (_.isObject(def)){
+    } else if (typeof def === "object"){
       // if an object is supplied
       fn = def.define;
       startWithParent = def.startWithParent;
-      
+
     } else {
       // if nothing is supplied
       startWithParent = true;

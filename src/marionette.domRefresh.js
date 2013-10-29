@@ -22,7 +22,7 @@ Marionette.MonitorDOMRefresh = (function(){
   // Trigger the "dom:refresh" event and corresponding "onDomRefresh" method
   function triggerDOMRefresh(view){
     if (view._isShown && view._isRendered){
-      if (_.isFunction(view.triggerMethod)){
+      if (typeof view.triggerMethod === "function"){
         view.triggerMethod("dom:refresh");
       }
     }

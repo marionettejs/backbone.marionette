@@ -130,6 +130,20 @@ describe("base view", function(){
     });
   });
 
+  describe("constructing a view with default options", function(){
+    var view = Marionette.ItemView.extend();
+
+    it("should take and store view options", function() {
+      var viewInstance = new view({"Guybrush": "Island"});
+      expect(viewInstance.options.Guybrush).toBe("Island");
+    });
+
+    it("should have an empty hash of options by default", function() {
+      var viewInstance = new view;
+      expect(typeof(viewInstance.options.Guybrush)).toBe("undefined");
+    });
+  });
+
   describe("when closing a view that is already closed", function(){
     var close, view;
 

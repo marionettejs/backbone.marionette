@@ -169,7 +169,7 @@ describe("view triggers", function(){
     });
 
     it("should stop propigation by default", function(){
-      expect(viewInstance.clicked).toBe(false);
+      expect(viewInstance.spanClicked).toBe(false);
     });
 
     it("should prevent default by default", function() {

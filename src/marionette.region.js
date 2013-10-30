@@ -118,6 +118,7 @@ _.extend(Marionette.Region.prototype, Backbone.Events, {
   show: function(view){
 
     this.ensureEl();
+    this.$el.show();
 
     var isViewClosed = view.isClosed || _.isUndefined(view.$el);
 
@@ -137,6 +138,12 @@ _.extend(Marionette.Region.prototype, Backbone.Events, {
 
     Marionette.triggerMethod.call(this, "show", view);
     Marionette.triggerMethod.call(view, "show");
+  },
+
+  // Hide region container
+  hide: function(){
+    this.ensureEl();
+    this.$el.hide();
   },
 
   ensureEl: function(){

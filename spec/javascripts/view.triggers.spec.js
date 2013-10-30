@@ -137,6 +137,46 @@ describe("view triggers", function(){
     });
   });
 
+  describe("triggers should stop propigation and events by default", function() {
+    var myView = Backbone.Marionette.ItemView.extend({
+      triggers: {
+        'click h2': "headline:clicked"
+      },
+
+      initialize: function() {
+        this.spanClicked = false;
+      },
+
+      onRender: function() {
+        var self = this;
+        this.$('span').on("click", function() {
+          self.spanClicked = true;
+        });
+      },
+
+      template: _.template("<h2><span>hi</span></h2><a href='#hash-url'>hash link</a>")
+    });
+
+    var viewInstance;
+
+    beforeEach(function(){
+      viewInstance = new myView;
+      spyOn(window, 'onhashchange');
+
+      viewInstance.render();
+      viewInstance.$('h2').click();
+      viewInstance.$('a').click();
+    });
+
+    it("should stop propigation by default", function(){
+      expect(viewInstance.clicked).toBe(false);
+    });
+
+    it("should prevent default by default", function() {
+      expect(window.onhashchange).not.toHaveBeenCalled();
+    });
+  });
+
   describe("when triggers items are manually configured", function(){
     var View = Backbone.Marionette.ItemView.extend({
       triggers: {

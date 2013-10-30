@@ -144,6 +144,19 @@ describe("base view", function(){
     });
   });
 
+  describe("should expose its options in the constructor", function() {
+    var View = Marionette.View.extend({
+       initialize: function() {
+        this.info = this.options;
+      }
+    });
+
+    it("should be able to access instance options", function() {
+      var myView = new View({name: "LeChuck"});
+      expect(myView.info.name).toBe("LeChuck");
+    });
+  });
+
   describe("when closing a view that is already closed", function(){
     var close, view;
 

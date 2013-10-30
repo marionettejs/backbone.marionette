@@ -44,8 +44,6 @@ function mergeEvents(list) {
 		};
 	});
 
-	this.__events = JSON.stringify(events);
-
 	return events;
 }
 

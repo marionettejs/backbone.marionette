@@ -16,6 +16,7 @@ behaviors that are shared across all views.
 * [View onBeforeClose](#view-onbeforeclose)
 * [View "dom:refresh" / onDomRefresh event](#view-domrefresh--ondomrefresh-event)
 * [View.triggers](#viewtriggers)
+* [View data](#view-data)
 * [View.modelEvents and View.collectionEvents](#viewmodelevents-and-viewcollectionevents)
 * [View.serializeData](#viewserializedata)
 * [View.bindUIElements](#viewbinduielements)
@@ -220,6 +221,19 @@ Having access to these allows more flexibility in handling events from
 multiple views. For example, a tab control or expand/collapse widget such
 as a panel bar could trigger the same event from many different views
 and be handled with a single function.
+
+
+## View.viewData
+
+Plugins and View extensions can use ```data``` to retrieve a domain-scoped
+hash to keep state within a View and avoid polluting the View with root-level attributes.
+The data hash will be created if it does not currently exist.
+
+```js
+  // within a View
+  var data = this.viewData('MyPlugin');
+``` 
+
 
 ## View.modelEvents and View.collectionEvents
 

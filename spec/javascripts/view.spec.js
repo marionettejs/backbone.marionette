@@ -172,4 +172,128 @@ describe("base view", function(){
     });
   });
 
+
+	describe("when retrieving view metadata", function(){
+   var view1, view2;
+
+   beforeEach(function(){
+     view1 = new Marionette.View();
+     view2 = new Marionette.View();
+   });
+
+   it("should initialize the data hash", function(){
+     var data = view1.viewData('foo');
+     expect(!!data).toBe(true);
+   });
+
+   it("should only create instance-scoped data", function(){
+     var data1 = view1.viewData('foo');
+     data1['test1'] = '1';
+     var data2 = view2.viewData('foo');
+     data2['test2'] = '2';
+     expect(data1.test2).toBe(undefined);
+     expect(data2.test1).toBe(undefined);
+   });
+
+   it("should return the same hash with multiple requests", function(){
+     var data1 = view1.viewData('foo');
+     data1['test1'] = '1';
+     data1 = view1.viewData('foo');
+     expect(data1.test1).toBe('1');
+   });
+ });
+
+	describe("when using mixins", function() {
+		var parent,
+				Parent = Marionette.View.extend({
+					events: {
+						'change .parent': 'changeParent'
+					},
+					changeParent: function() {
+						changeParentCount++;
+					}
+				}),
+				MixinAsView = Marionette.View.extend({
+					initialize: function() { mixinAsViewContext = this; mixinAsViewInitCount++; },
+					events: {
+						'change .foo': 'changeFoo'
+					},
+					changeFoo: function() {
+						changeFooCount++;
+					}
+				}),
+				MixinAsHash = {
+					initialize: function() { mixinAsHashContext = this; mixinAsHashInitCount++; },
+					events: {
+						'change .bar': 'changeBar'
+					},
+					changeBar: function() {
+						changeBarCount++;
+					}
+				},
+				mixinAsViewContext,
+				mixinAsHashContext,
+				mixinAsViewInitCount,
+				mixinAsHashInitCount,
+				changeParentCount,
+				changeFooCount,
+				changeBarCount;
+
+	  beforeEach(function(){
+	    mixinAsViewContext = undefined;
+	    mixinAsHashContext = undefined;
+		  mixinAsViewInitCount = 0;
+			mixinAsHashInitCount = 0;
+      changeFooCount = 0;
+      changeBarCount = 0;
+      changeParentCount = 0;
+	  	parent = new Parent();
+	    parent.mixin(MixinAsView, MixinAsHash);
+	  });
+	
+		it('should proxy mixin attributes to parent', function(){
+			expect(!!parent.changeFoo).toBe(true);
+			expect(!!parent.changeBar).toBe(true);
+		});
+
+		it('should initialize mixins with parent as "this"', function(){
+			expect(mixinAsViewContext).toBe(parent);
+			expect(mixinAsHashContext).toBe(parent);
+		});
+
+		it('should allow mixins to be registered multiple times', function(){
+			var changeBazCount = 0,
+					Mixin3 = {
+						events: {
+							'change .baz': 'changeBaz'
+						},
+						changeBaz: function() {
+							changeBazCount++;
+						},
+						foo: 'bar'
+					};
+			parent.mixin(Mixin3);
+			expect(mixinAsViewInitCount).toBe(1);
+			expect(mixinAsHashInitCount).toBe(1);
+			expect(parent.foo).toBe('bar');
+
+			// ensure event bindings don't get duplicated
+			var html = '<div>';
+			_.each(['foo', 'bar', 'baz', 'parent'], function(clazz) {
+				html += '<input type="text" class="' + clazz + '">';
+			});
+			html += '</div>';
+			parent.$el.html(html);
+
+			parent.$('.parent').trigger('change');
+			parent.$('.foo').trigger('change');
+			parent.$('.bar').trigger('change');
+			parent.$('.baz').trigger('change');
+
+			expect(changeFooCount).toBe(1);
+			expect(changeBarCount).toBe(1);
+			expect(changeParentCount).toBe(1);
+			expect(changeBazCount).toBe(1);
+		});
+	});
 });

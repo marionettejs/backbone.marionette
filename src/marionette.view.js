@@ -1,6 +1,52 @@
 // Marionette.View
 // ---------------
 
+var MIXIN_DOMAIN = '$mixins',
+		INITIALIZE_DOMAIN = '$initialize',
+		MODEL_EVENTS = 'modelEvents',
+		COLLECTION_EVENTS = 'collectionEvents';
+		
+// merge a list of events hashes to a single events hash
+function mergeEvents(list) {
+	if (!_.isArray(list)) {
+		return list;
+	} else if (list.length === 1) {
+		return list[0];
+	}
+
+	var events = {},
+			compositeKeys = [];
+
+	// merge all event values together
+	_.each(list, function(_events) {
+		if (_.isFunction(_events)) { _events = _events.call(this); } 
+
+		_.each(_events, function(value, key) {
+			var eventsValue = events[key];
+			if (!eventsValue) {
+				events[key] = value;
+			} else if (_.isArray(eventsValue)) {
+				eventsValue.push(value);
+			} else {
+				events[key] = [eventsValue, value];
+				compositeKeys.push(key);
+			}
+		});
+	});
+
+	// deal with any key clashes
+	_.each(compositeKeys, function(key) {
+		var fns = events[key];
+		events[key] = function() {
+			for (var i=0; i<fns.length; i++) {
+				fns[i].apply(this, arguments);
+			}
+		};
+	});
+
+	return events;
+}
+
 // The core view type that other Marionette views extend from.
 Marionette.View = Backbone.View.extend({
 
@@ -8,12 +54,61 @@ Marionette.View = Backbone.View.extend({
     _.bindAll(this, "render");
 
     var args = Array.prototype.slice.apply(arguments);
+
+		// cache init args to support mixin initialize
+		this.viewData(INITIALIZE_DOMAIN).args = args;
+
     Backbone.View.prototype.constructor.apply(this, args);
     this.options = options;
 
     Marionette.MonitorDOMRefresh(this);
     this.listenTo(this, "show", this.onShowCalled, this);
   },
+
+  // return a unique data hash for the provided domain
+  // this is used to store metadata without polluting the view root attributes
+  viewData: function(domain){
+    var data = this._data || (this._data = {}),
+        _data = data[domain];
+    if (!_data) {
+      _data = data[domain] = {};
+    }
+    return _data;
+  },
+
+	// multiple unique mixin parameters are allowed.  Each mixin can be a View class
+	// or a simple hash.  View classes will not have superclass properties mixed in.
+	// Mixin properties will not override the parent View properties.
+	// events, modelEvents, collectionEvents and initialize will also be obeyed.
+	// triggers will not be obeyed.
+	mixin: function() {
+		var mixins = arguments;
+		_.each(mixins, function(mixin) {
+			if (mixin.prototype) {
+				// allow the class object to be passed or a simple hash
+				mixin = mixin.prototype;
+			}
+			var props = _.clone(mixin);
+			if (props.initialize) {
+				props.initialize.apply(this, this.viewData(INITIALIZE_DOMAIN).args || []);
+			}
+
+			_.each(['initialize', 'events', 'triggers', MODEL_EVENTS, COLLECTION_EVENTS], function(name) {
+				if (props[name]) { delete props[name]; }
+			});
+
+			// save the mixin for event delegation
+			_.defaults(this, props);
+			var data = this.viewData(MIXIN_DOMAIN),
+					list = data.list;
+			if (!list) {
+				data.list = list = [];
+			}
+			list.push(mixin);
+		}, this);
+
+		this.delegateEvents();
+	},
 
   // import the "triggerMethod" to trigger events with corresponding
   // methods if the method exists
@@ -98,10 +193,40 @@ Marionette.View = Backbone.View.extend({
   // Overriding Backbone.View's delegateEvents to handle
   // the `triggers`, `modelEvents`, and `collectionEvents` configuration
   delegateEvents: function(events){
+    events = events || this.events;
+
+    // follow the backbone API
+    this.undelegateEvents();
+
+    var mixinEvents = this._getMixinDOMEvents();
+    mixinEvents.push(events);
+    events = mergeEvents.call(this, mixinEvents);
+ 
     this._delegateDOMEvents(events);
-    Marionette.bindEntityEvents(this, this.model, Marionette.getOption(this, "modelEvents"));
-    Marionette.bindEntityEvents(this, this.collection, Marionette.getOption(this, "collectionEvents"));
+		this._delegateEntityEvents(this);
+		this._delegateMixinEntityEvents();
   },
+
+	_getMixinDOMEvents: function() {
+		var events = [],
+				mixins = this.viewData(MIXIN_DOMAIN).list || [];
+		_.each(mixins, function(mixin) {
+			if (mixin.events) {
+				events.push(mixin.events);
+			}
+		});
+		return events;
+	},
+
+	_delegateMixinEntityEvents: function() {
+		var mixins = this.viewData(MIXIN_DOMAIN).list || [];
+		_.each(mixins, this._delegateEntityEvents, this);
+	},
+
+	_delegateEntityEvents: function(target){
+		Marionette.bindEntityEvents(this, this.model, Marionette.getOption(target, MODEL_EVENTS));
+    Marionette.bindEntityEvents(this, this.collection, Marionette.getOption(target, COLLECTION_EVENTS));
+	},
 
   // internal method to delegate DOM events and triggers
   _delegateDOMEvents: function(events){
@@ -121,9 +246,19 @@ Marionette.View = Backbone.View.extend({
     var args = Array.prototype.slice.call(arguments);
     Backbone.View.prototype.undelegateEvents.apply(this, args);
 
-    Marionette.unbindEntityEvents(this, this.model, Marionette.getOption(this, "modelEvents"));
-    Marionette.unbindEntityEvents(this, this.collection, Marionette.getOption(this, "collectionEvents"));
+		this._undelegateEntityEvents();
   },
+
+	_undelegateEntityEvents: function(){
+    Marionette.unbindEntityEvents(this, this.model, Marionette.getOption(this, MODEL_EVENTS));
+    Marionette.unbindEntityEvents(this, this.collection, Marionette.getOption(this, COLLECTION_EVENTS));
+
+		var mixins = this.viewData(MIXIN_DOMAIN).list || [];
+		_.each(mixins, function(mixin) {
+      Marionette.unbindEntityEvents(this, this.model, Marionette.getOption(mixin, MODEL_EVENTS));
+      Marionette.unbindEntityEvents(this, this.collection, Marionette.getOption(mixin, COLLECTION_EVENTS));
+		}, this);
+	},
 
   // Internal method, handles the `show` event.
   onShowCalled: function(){},

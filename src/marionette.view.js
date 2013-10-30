@@ -220,9 +220,7 @@ Marionette.View = Backbone.View.extend({
 
 	_delegateMixinEntityEvents: function() {
 		var mixins = this.viewData(MIXIN_DOMAIN).list || [];
-		_.each(mixins, function(mixin) {
-			this._delegateEntityEvents(mixin);
-		}, this);
+		_.each(mixins, this._delegateEntityEvents, this);
 	},
 
 	_delegateEntityEvents: function(target){

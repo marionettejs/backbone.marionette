@@ -101,10 +101,10 @@ _.extend(Marionette.Module.prototype, Backbone.Events, {
       Marionette,
       Marionette.$, _,
       customArgs
-    ]);
+    ];
 
     // Flatten the list.
-    for (var i = 0, item; i < arr.length, i++) {
+    for (var i = 0, item; i < arr.length; i++) {
       item = arr[i];
       if (Object.prototype.toString.call(item) === '[object Array]') {
         args.push.apply(args, item);

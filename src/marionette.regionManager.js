@@ -106,7 +106,9 @@ Marionette.RegionManager = (function(Marionette){
     // set the number of regions current held
     _setLength: function(){
       var length = 0;
-      for (var key in this._regions) length++
+      for (var key in this._regions) {
+        length++;
+      }
       this.length = length;
     }
 

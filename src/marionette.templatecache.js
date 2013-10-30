@@ -87,7 +87,7 @@ _.extend(Marionette.TemplateCache.prototype, {
   // this method if you do not need to pre-compile a template
   // (JST / RequireJS for example) or if you want to change
   // the template engine used (Handebars, etc).
-  compileTemplate: typeof _ === 'object' ? function(rawTemplate){
+  compileTemplate: (typeof _ !== 'undefined') ? function(rawTemplate){
     return _.template(rawTemplate);
   } : function() {
     throwError("You must specify 'compileTemplate' function");

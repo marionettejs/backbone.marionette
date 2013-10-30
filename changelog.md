@@ -1,7 +1,7 @@
 ### v1.2.1 [view commit logs](https://github.com/marionettejs/backbone.marionette/compare/v1.2.0...v1.2.1)
 * Views
   * fixed a bug so now view options are {} by default and not undefined.
-  * fixed a bug where the triggers preventDefault and stopPropigaton were executing in the wrong context – triggers now prevent default and stop propigation by default once more.
+  * fixed a bug where the triggers preventDefault and stopPropagation were executing in the wrong context – triggers now prevent default and stop propagation by default once more.
 
 ### v1.2.0 [view commit logs](https://github.com/marionettejs/backbone.marionette/compare/v1.1.0...v1.2.0)
 * Update Backbone to [1.1.0](https://github.com/jashkenas/backbone/compare/1.0.0...1.1.0)

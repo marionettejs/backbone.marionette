@@ -41,12 +41,13 @@ _.extend(Marionette.Module.prototype, Backbone.Events, {
     if (this._isInitialized){ return; }
 
     // start the sub-modules (depth-first hierarchy)
-    _.each(this.submodules, function(mod){
-      // check to see if we should start the sub-module with this parent
+    var mod;
+    for (var name in this.submodules) {
+      mod = this.submodules[name];
       if (mod.startWithParent){
         mod.start(options);
       }
-    });
+    }
 
     // run the callbacks to "start" the current module
     this.triggerMethod("before:start", options);
@@ -68,7 +69,11 @@ _.extend(Marionette.Module.prototype, Backbone.Events, {
 
     // stop the sub-modules; depth-first, to make sure the
     // sub-modules are stopped / finalized before parents
-    _.each(this.submodules, function(mod){ mod.stop(); });
+    var mod;
+    for (var name in this.submodules) {
+      mod = this.submodules[name];
+      mod.stop();
+    }
 
     // run the finalizers
     this._finalizerCallbacks.run(undefined,this);
@@ -146,11 +151,12 @@ _.extend(Marionette.Module, {
     moduleDefinitions[length-1] = moduleDefinition;
 
     // Loop through all the parts of the module definition
-    _.each(moduleNames, function(moduleName, i){
+    for (var i = 0, moduleName; i < moduleNames.length; i++) {
+      moduleName = moduleNames[i];
       var parentModule = module;
       module = this._getModule(parentModule, moduleName, app);
       this._addModuleDefinition(parentModule, module, moduleDefinitions[i], customArgs);
-    }, this);
+    }
 
     // Return the last module in the definition chain
     return module;

@@ -22,15 +22,15 @@
   function bindFromStrings(target, entity, evt, methods){
     var methodNames = methods.split(/\s+/);
 
-    _.each(methodNames,function(methodName) {
-
-      var method = target[methodName];
+    for (var i = 0, methodName, method; i < methodNames.length; i++) {
+      methodName = methodNames[i];
+      method = target[methodName];
       if(!method) {
         throwError("Method '"+ methodName +"' was configured as an event handler, but does not exist.");
       }
 
       target.listenTo(entity, evt, method, target);
-    });
+    }
   }
 
   // Bind the event to a supplied callback function
@@ -43,15 +43,15 @@
   function unbindFromStrings(target, entity, evt, methods){
     var methodNames = methods.split(/\s+/);
 
-    _.each(methodNames,function(methodName) {
-      var method = target[methodName];
+    for (var i = 0, method; i < methodNames.length; i++) {
+      method = target[methodNames[i]];
       target.stopListening(entity, evt, method, target);
-    });
+    }
   }
 
   // Bind the event to a supplied callback function
   function unbindToFunction(target, entity, evt, method){
-      target.stopListening(entity, evt, method, target);
+    target.stopListening(entity, evt, method, target);
   }
 
 
@@ -65,8 +65,9 @@
     }
 
     // iterate the bindings and bind them
-    _.each(bindings, function(methods, evt){
-
+    var methods;
+    for (var evt in bindings) {
+      methods = bindings[evt];
       // allow for a function as the handler,
       // or a list of event names as a string
       if (typeof methods === "function"){
@@ -74,8 +75,7 @@
       } else {
         stringCallback(target, entity, evt, methods);
       }
-
-    });
+    }
   }
 
   // Export Public API

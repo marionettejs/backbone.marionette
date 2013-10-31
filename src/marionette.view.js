@@ -57,8 +57,8 @@ Marionette.View = Backbone.View.extend({
 
     // Configure the triggers, prevent default
     // action and stop propagation of DOM events
-    _.each(triggers, function(value, key){
-
+    var _this = this;
+    var addHandler = function(key, value) {
       var hasOptions = typeof value === "object";
       var eventName = hasOptions ? value.event : value;
 
@@ -79,16 +79,18 @@ Marionette.View = Backbone.View.extend({
 
         // build the args for the event
         var args = {
-          view: this,
-          model: this.model,
-          collection: this.collection
+          view: _this,
+          model: _this.model,
+          collection: _this.collection
         };
 
         // trigger the event
-        this.triggerMethod(eventName, args);
+        _this.triggerMethod(eventName, args);
       };
-
-    }, this);
+    };
+    for (var key in triggers) {
+      addHandler(key, triggers[key]);
+    }
 
     return triggerEvents;
   },
@@ -182,9 +184,9 @@ Marionette.View = Backbone.View.extend({
     if (!this.ui || !this._uiBindings){ return; }
 
     // delete all of the existing ui bindings
-    _.each(this.ui, function($el, name){
+    for (var name in this.ui) {
       delete this.ui[name];
-    }, this);
+    }
 
     // reset the ui element to the original bindings configuration
     this.ui = this._uiBindings;

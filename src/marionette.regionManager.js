@@ -16,7 +16,9 @@ Marionette.RegionManager = (function(Marionette){
     addRegions: function(regionDefinitions, defaults){
       var regions = {};
 
-      _.each(regionDefinitions, function(definition, name){
+      var definition;
+      for (var name in regionDefinitions) {
+        definition = regionDefinitions[name];
         if (typeof definition === "string"){
           definition = { selector: definition };
         }
@@ -27,7 +29,7 @@ Marionette.RegionManager = (function(Marionette){
 
         var region = this.addRegion(name, definition);
         regions[name] = region;
-      }, this);
+      }
 
       return regions;
     },
@@ -68,17 +70,17 @@ Marionette.RegionManager = (function(Marionette){
     // Close all regions in the region manager, and
     // remove them
     removeRegions: function(){
-      _.each(this._regions, function(region, name){
-        this._remove(name, region);
-      }, this);
+      for (var name in this._regions) {
+        this._remove(name, this._regions[name]);
+      }
     },
 
     // Close all regions in the region manager, but
     // leave them attached
     closeRegions: function(){
-      _.each(this._regions, function(region, name){
-        region.close();
-      }, this);
+      for (var name in this._regions) {
+        this._regions[name].close();
+      }
     },
 
     // Close all regions and shut down the region
@@ -124,8 +126,10 @@ Marionette.RegionManager = (function(Marionette){
     'select', 'reject', 'every', 'all', 'some', 'any', 'include',
     'contains', 'invoke', 'toArray', 'first', 'initial', 'rest',
     'last', 'without', 'isEmpty', 'pluck'];
-
-  _.each(methods, function(method) {
+  var addMethod = function(method) {
+    if (!(method in _)) {
+      return;
+    }
     RegionManager.prototype[method] = function() {
       var regions = [];
       for (var name in this._regions) {
@@ -134,7 +138,10 @@ Marionette.RegionManager = (function(Marionette){
       var args = [regions].concat(slice.call(arguments));
       return _[method].apply(_, args);
     };
-  });
+  };
 
+  for (var i = 0; i < methods.length; i++) {
+    addMethod(methods[i]);
+  }
   return RegionManager;
 })(Marionette);

@@ -8,8 +8,13 @@ Marionette.View = Backbone.View.extend({
     _.bindAll(this, "render");
 
     var args = Array.prototype.slice.apply(arguments);
-    Backbone.View.prototype.constructor.apply(this, args);
+
+    // this exposes view options to the view initializer
+    // this is a backfill since backbone removed the assignment
+    // of this.options
+    // at some point however this may be removed
     this.options = options || {};
+    Backbone.View.prototype.constructor.apply(this, args);
 
     Marionette.MonitorDOMRefresh(this);
     this.listenTo(this, "show", this.onShowCalled, this);

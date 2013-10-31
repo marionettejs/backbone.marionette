@@ -5,9 +5,10 @@
 Marionette.View = Backbone.View.extend({
 
   constructor: function(options){
+    var _this = this;
     var render = this.render;
     this.render = function() {
-      return render.apply(this, arguments);
+      return render.apply(_this, arguments);
     };
 
     var args = Array.prototype.slice.apply(arguments);

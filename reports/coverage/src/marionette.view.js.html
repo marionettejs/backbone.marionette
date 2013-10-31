@@ -388,21 +388,31 @@
 187
 188
 189
-190</td><td class="line-coverage"><span class="cline-any cline-neutral">&nbsp;</span>
+190
+191
+192
+193
+194
+195</td><td class="line-coverage"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">499</span>
+<span class="cline-any cline-yes">500</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">500</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">500</span>
+<span class="cline-any cline-yes">500</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">499</span>
 <span class="cline-any cline-yes">499</span>
-<span class="cline-any cline-yes">498</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">498</span>
-<span class="cline-any cline-yes">498</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -434,7 +444,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">501</span>
+<span class="cline-any cline-yes">502</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">13</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -482,31 +492,31 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">501</span>
-<span class="cline-any cline-yes">501</span>
-<span class="cline-any cline-yes">500</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">501</span>
-<span class="cline-any cline-yes">501</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">501</span>
-<span class="cline-any cline-yes">501</span>
-<span class="cline-any cline-yes">501</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">502</span>
+<span class="cline-any cline-yes">502</span>
 <span class="cline-any cline-yes">501</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">502</span>
+<span class="cline-any cline-yes">502</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">505</span>
-<span class="cline-any cline-yes">505</span>
+<span class="cline-any cline-yes">502</span>
+<span class="cline-any cline-yes">502</span>
+<span class="cline-any cline-yes">502</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">505</span>
-<span class="cline-any cline-yes">505</span>
+<span class="cline-any cline-yes">502</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">506</span>
+<span class="cline-any cline-yes">506</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">506</span>
+<span class="cline-any cline-yes">506</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -587,8 +597,13 @@ Marionette.View = Backbone.View.extend({
     _.bindAll(this, "render");
 &nbsp;
     var args = Array.prototype.slice.apply(arguments);
-    Backbone.View.prototype.constructor.apply(this, args);
+&nbsp;
+    // this exposes view options to the view initializer
+    // this is a backfill since backbone removed the assignment
+    // of this.options
+    // at some point however this may be removed
     this.options = options || {};
+    Backbone.View.prototype.constructor.apply(this, args);
 &nbsp;
     Marionette.MonitorDOMRefresh(this);
     this.listenTo(this, "show", this.onShowCalled, this);
@@ -771,7 +786,7 @@ Marionette.View = Backbone.View.extend({
 
 </div>
 <div class="footer">
-    <div class="meta">Generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Tue Oct 29 2013 20:51:46 GMT-0400 (EDT)</div>
+    <div class="meta">Generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Thu Oct 31 2013 17:36:07 GMT-0400 (EDT)</div>
 </div>
 
 <script src="../prettify.js"></script>

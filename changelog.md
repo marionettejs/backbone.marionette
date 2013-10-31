@@ -1,3 +1,8 @@
+### v1.2.2 [view commit logs](https://github.com/marionettejs/backbone.marionette/compare/v1.2.1...v1.2.2)
+* Views
+	* Move the instantiation of ```view``` options above the ```constructor``` This allows for view options to be accessed from within the ```initialize``` method for a given ```view```
+This is needed since backbone views no longer set the view options in the constructor
+
 ### v1.2.1 [view commit logs](https://github.com/marionettejs/backbone.marionette/compare/v1.2.0...v1.2.1)
 * Views
   * fixed a bug so now view options are {} by default and not undefined.

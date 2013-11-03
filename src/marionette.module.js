@@ -186,7 +186,7 @@ _.extend(Marionette.Module, {
       fn = def;
       startWithParent = true;
 
-    } else if (typeof def === "object"){
+    } else if (def && typeof def === "object"){
       // if an object is supplied
       fn = def.define;
       startWithParent = def.startWithParent;

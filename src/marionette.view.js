@@ -59,7 +59,7 @@ Marionette.View = Backbone.View.extend({
     // action and stop propagation of DOM events
     var _this = this;
     var addHandler = function(key, value) {
-      var hasOptions = typeof value === "object";
+      var hasOptions = value && typeof value === "object";
       var eventName = hasOptions ? value.event : value;
 
       // build the event handler function for the DOM event

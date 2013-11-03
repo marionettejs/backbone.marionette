@@ -39,7 +39,7 @@ Marionette.RegionManager = (function(Marionette){
     addRegion: function(name, definition){
       var region;
 
-      var isObject = typeof definition === "object";
+      var isObject = definition && typeof definition === "object";
       var isString = typeof definition === "string";
       var hasSelector = !!definition.selector;
 

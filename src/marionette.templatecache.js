@@ -8,7 +8,7 @@ Marionette.TemplateCache = function(templateId){
 };
 
 // TemplateCache object-level methods. Manage the template
-// caches from these method calls instead of creating 
+// caches from these method calls instead of creating
 // your own TemplateCache instances
 _.extend(Marionette.TemplateCache, {
   templateCaches: {},
@@ -31,7 +31,7 @@ _.extend(Marionette.TemplateCache, {
   // are specified, clears all templates:
   // `clear()`
   //
-  // If arguments are specified, clears each of the 
+  // If arguments are specified, clears each of the
   // specified templates from the cache:
   // `clear("#t1", "#t2", "...")`
   clear: function(){
@@ -71,7 +71,7 @@ _.extend(Marionette.TemplateCache.prototype, {
   // Load a template from the DOM, by default. Override
   // this method to provide your own template retrieval
   // For asynchronous loading with AMD/RequireJS, consider
-  // using a template-loader plugin as described here: 
+  // using a template-loader plugin as described here:
   // https://github.com/marionettejs/backbone.marionette/wiki/Using-marionette-with-requirejs
   loadTemplate: function(templateId){
     var template = Marionette.$(templateId).html();
@@ -87,8 +87,10 @@ _.extend(Marionette.TemplateCache.prototype, {
   // this method if you do not need to pre-compile a template
   // (JST / RequireJS for example) or if you want to change
   // the template engine used (Handebars, etc).
-  compileTemplate: function(rawTemplate){
+  compileTemplate: (typeof _ !== 'undefined') ? function(rawTemplate){
     return _.template(rawTemplate);
+  } : function() {
+    throwError("You must specify 'compileTemplate' function");
   }
 });
 

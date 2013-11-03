@@ -5,7 +5,11 @@
 Marionette.View = Backbone.View.extend({
 
   constructor: function(options){
-    _.bindAll(this, "render");
+    var _this = this;
+    var render = this.render;
+    this.render = function() {
+      return render.apply(_this, arguments);
+    };
 
     var args = Array.prototype.slice.apply(arguments);
 
@@ -40,7 +44,7 @@ Marionette.View = Backbone.View.extend({
   mixinTemplateHelpers: function(target){
     target = target || {};
     var templateHelpers = Marionette.getOption(this, "templateHelpers");
-    if (_.isFunction(templateHelpers)){
+    if (typeof templateHelpers === "function"){
       templateHelpers = templateHelpers.call(this);
     }
     return _.extend(target, templateHelpers);
@@ -58,9 +62,9 @@ Marionette.View = Backbone.View.extend({
 
     // Configure the triggers, prevent default
     // action and stop propagation of DOM events
-    _.each(triggers, function(value, key){
-
-      var hasOptions = _.isObject(value);
+    var _this = this;
+    var addHandler = function(key, value) {
+      var hasOptions = value && typeof value === "object";
       var eventName = hasOptions ? value.event : value;
 
       // build the event handler function for the DOM event
@@ -80,16 +84,18 @@ Marionette.View = Backbone.View.extend({
 
         // build the args for the event
         var args = {
-          view: this,
-          model: this.model,
-          collection: this.collection
+          view: _this,
+          model: _this.model,
+          collection: _this.collection
         };
 
         // trigger the event
-        this.triggerMethod(eventName, args);
+        _this.triggerMethod(eventName, args);
       };
-
-    }, this);
+    };
+    for (var key in triggers) {
+      addHandler(key, triggers[key]);
+    }
 
     return triggerEvents;
   },
@@ -105,7 +111,7 @@ Marionette.View = Backbone.View.extend({
   // internal method to delegate DOM events and triggers
   _delegateDOMEvents: function(events){
     events = events || this.events;
-    if (_.isFunction(events)){ events = events.call(this); }
+    if (typeof events === "function"){ events = events.call(this); }
 
     var combinedEvents = {};
     var triggers = this.configureTriggers();
@@ -172,10 +178,10 @@ Marionette.View = Backbone.View.extend({
     this.ui = {};
 
     // bind each of the selectors
-    _.each(_.keys(bindings), function(key) {
+    for (var key in bindings) {
       var selector = bindings[key];
       this.ui[key] = this.$(selector);
-    }, this);
+    }
   },
 
   // This method unbinds the elements specified in the "ui" hash
@@ -183,9 +189,9 @@ Marionette.View = Backbone.View.extend({
     if (!this.ui || !this._uiBindings){ return; }
 
     // delete all of the existing ui bindings
-    _.each(this.ui, function($el, name){
+    for (var name in this.ui) {
       delete this.ui[name];
-    }, this);
+    }
 
     // reset the ui element to the original bindings configuration
     this.ui = this._uiBindings;

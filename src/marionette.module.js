@@ -41,12 +41,13 @@ _.extend(Marionette.Module.prototype, Backbone.Events, {
     if (this._isInitialized){ return; }
 
     // start the sub-modules (depth-first hierarchy)
-    _.each(this.submodules, function(mod){
-      // check to see if we should start the sub-module with this parent
+    var mod;
+    for (var name in this.submodules) {
+      mod = this.submodules[name];
       if (mod.startWithParent){
         mod.start(options);
       }
-    });
+    }
 
     // run the callbacks to "start" the current module
     this.triggerMethod("before:start", options);
@@ -68,7 +69,11 @@ _.extend(Marionette.Module.prototype, Backbone.Events, {
 
     // stop the sub-modules; depth-first, to make sure the
     // sub-modules are stopped / finalized before parents
-    _.each(this.submodules, function(mod){ mod.stop(); });
+    var mod;
+    for (var name in this.submodules) {
+      mod = this.submodules[name];
+      mod.stop();
+    }
 
     // run the finalizers
     this._finalizerCallbacks.run(undefined,this);
@@ -91,15 +96,27 @@ _.extend(Marionette.Module.prototype, Backbone.Events, {
   _runModuleDefinition: function(definition, customArgs){
     if (!definition){ return; }
 
+    var args = [];
+
     // build the correct list of arguments for the module definition
-    var args = _.flatten([
+    var arr = [
       this,
       this.app,
       Backbone,
       Marionette,
       Marionette.$, _,
       customArgs
-    ]);
+    ];
+
+    // Flatten the list.
+    for (var i = 0, item; i < arr.length; i++) {
+      item = arr[i];
+      if (Object.prototype.toString.call(item) === '[object Array]') {
+        args.push.apply(args, item);
+      } else {
+        args.push(item);
+      }
+    }
 
     definition.apply(this, args);
   },
@@ -134,11 +151,12 @@ _.extend(Marionette.Module, {
     moduleDefinitions[length-1] = moduleDefinition;
 
     // Loop through all the parts of the module definition
-    _.each(moduleNames, function(moduleName, i){
+    for (var i = 0, moduleName; i < moduleNames.length; i++) {
+      moduleName = moduleNames[i];
       var parentModule = module;
       module = this._getModule(parentModule, moduleName, app);
       this._addModuleDefinition(parentModule, module, moduleDefinitions[i], customArgs);
-    }, this);
+    }
 
     // Return the last module in the definition chain
     return module;
@@ -160,19 +178,19 @@ _.extend(Marionette.Module, {
   },
 
   _addModuleDefinition: function(parentModule, module, def, args){
-    var fn; 
+    var fn;
     var startWithParent;
 
-    if (_.isFunction(def)){
+    if (typeof def === "function"){
       // if a function is supplied for the module definition
       fn = def;
       startWithParent = true;
 
-    } else if (_.isObject(def)){
+    } else if (def && typeof def === "object"){
       // if an object is supplied
       fn = def.define;
       startWithParent = def.startWithParent;
-      
+
     } else {
       // if nothing is supplied
       startWithParent = true;

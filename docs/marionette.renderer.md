@@ -93,7 +93,7 @@ template with the data.
 ```js
 Backbone.Marionette.Renderer.render = function(template, data){
   return template(data);
-});
+};
 ```
 
 Then you can specify the pre-compiled template function as your view's

@@ -39,7 +39,7 @@ You can also add standard routes to an AppRouter with methods on the router.
 Routes can be defined through the constructor function options, as well.
 
 ```js
-var MyRouter = new Marionette.AppRouter({
+var MyRouter = new Marionette.AppRouter.extend({
   controller: myController,
   appRoutes: {
     "foo": "doFoo",

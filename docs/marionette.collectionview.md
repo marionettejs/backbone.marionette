@@ -162,6 +162,10 @@ Backbone.Marionette.CollectionView.extend({
 This will render the `emptyView` and display the message that needs to
 be displayed when there are no items.
 
+Note: if your emptyView will render into an itemView tag (a <tbody> for example) 
+that requires additional dom manipulation, you can easily use emptyView's onRender 
+callback to accomplish this.
+
 ## CollectionView's `buildItemView`
 
 When a custom view instance needs to be created for the `itemView` that

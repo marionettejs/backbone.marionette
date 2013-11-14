@@ -1,3 +1,7 @@
+### v1.2.3 [view commit logs](https://github.com/marionettejs/backbone.marionette/compare/v1.2.2...v1.2.3)
+* CompositeView
+  * Fixed bug where ```child views``` were being added before the initial render, thus raising errors.
+
 ### v1.2.2 [view commit logs](https://github.com/marionettejs/backbone.marionette/compare/v1.2.1...v1.2.2)
 * Views
 	* Move the instantiation of ```view``` options above the ```constructor``` This allows for view options to be accessed from within the ```initialize``` method for a given ```view```

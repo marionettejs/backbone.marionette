@@ -166,4 +166,56 @@ describe("composite view - itemViewContainer", function(){
     });
   });
 
+
+  describe("when a composite view is not yet rendered", function(){
+    var CompositeView = Backbone.Marionette.CompositeView.extend({
+      itemView: ItemView,
+      itemViewContainer: "ul",
+      template: "#composite-child-container-template"
+    });
+
+    var compositeView, collection, model1, model2;
+
+    var addModel = function() {
+      collection.add([model2]);
+    };
+
+    var removeModel = function() {
+      collection.remove([model1]);
+    };
+
+    var resetCollection = function() {
+      collection.reset([model1, model2]);
+    };
+
+    beforeEach(function() {
+      loadFixtures("compositeChildContainerTemplate.html");
+      model1 = new Model({foo: "bar"});
+      model2 = new Model({foo: "baz"});
+      collection = new Collection([model1]);
+      compositeView = new CompositeView({
+        collection: collection
+      });
+      spyOn(compositeView, "addChildView").andCallThrough();
+    });
+
+    it('should not raise any errors when item is added to collection', function() {
+      expect(addModel).not.toThrow();
+    });
+
+    it('should not call addChildView when item is added to collection', function() {
+      addModel();
+      expect(compositeView.addChildView).not.toHaveBeenCalled();
+    });
+
+    it('should not raise any errors when item is removed from collection', function() {
+      expect(removeModel).not.toThrow();
+    });
+
+    it('should not raise any errors when collection is reset', function() {
+      expect(resetCollection).not.toThrow();
+    });
+
+  });
+
 });

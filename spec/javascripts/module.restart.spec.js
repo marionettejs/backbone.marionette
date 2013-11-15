@@ -38,7 +38,7 @@ describe("module restart", function(){
 
   describe("when defining the module multiple times, starting twice, and stopping once", function(){
     var MyApp, myModule, initializer, finalizer;
-    
+
     beforeEach(function(){
       initializer = jasmine.createSpy();
       finalizer = jasmine.createSpy();
@@ -65,7 +65,7 @@ describe("module restart", function(){
 
   describe("when a module has a finalizer, starting and stopping the module, then re-starting it", function(){
     var MyApp, initializer, finalizer;
-    
+
     beforeEach(function(){
       initializer = jasmine.createSpy();
       finalizer = jasmine.createSpy();

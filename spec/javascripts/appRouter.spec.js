@@ -287,7 +287,7 @@ describe("app router", function(){
 
       router = new Router({ controller: controller });
       router.appRoute("posts/:id", "showPost");
-      
+
       router.navigate("posts/10", true);
     });
 

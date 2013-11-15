@@ -20,7 +20,7 @@ MyRouter = Backbone.Marionette.AppRouter.extend({
   appRoutes: {
     "some/route": "someMethod"
   },
-  
+
   /* standard routes can be mixed with appRoutes/Controllers above */
   routes : {
 	"some/otherRoute" : "someOtherMethod"
@@ -28,7 +28,7 @@ MyRouter = Backbone.Marionette.AppRouter.extend({
   someOtherMethod : function(){
 	// do something here.
   }
-  
+
 });
 ```
 
@@ -96,7 +96,7 @@ new MyRouter({
 });
 ```
 
-The object that is used as the `controller` has no requirements, other than it will 
+The object that is used as the `controller` has no requirements, other than it will
 contain the methods that you specified in the `appRoutes`.
 
 It is recommended that you divide your controller objects into smaller pieces of related functionality

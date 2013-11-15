@@ -5,8 +5,8 @@ specified collection, render each of them using a specified `itemView`,
 then append the results of the item view's `el` to the collection view's
 `el`.
 
-CollectionView extends directly from Marionette.View. Please see 
-[the Marionette.View documentation](marionette.view.md) 
+CollectionView extends directly from Marionette.View. Please see
+[the Marionette.View documentation](marionette.view.md)
 for more information on available features and functionality.
 
 Additionally, interactions with Marionette.Region
@@ -46,7 +46,7 @@ will provide features such as `onShow` callbacks, etc. Please see
 ## CollectionView's `itemView`
 
 Specify an `itemView` in your collection view definition. This must be
-a Backbone view object definition, not an instance. It can be any 
+a Backbone view object definition, not an instance. It can be any
 `Backbone.View` or be derived from `Marionette.ItemView`.
 
 ```js
@@ -57,8 +57,8 @@ Backbone.Marionette.CollectionView.extend({
 });
 ```
 
-Item views must be defined before they are referenced by the 
-`itemView` attribute in a collection view definition. Use `getItemView` 
+Item views must be defined before they are referenced by the
+`itemView` attribute in a collection view definition. Use `getItemView`
 to lookup the definition as child views are instantiated.
 
 Alternatively, you can specify an `itemView` in the options for
@@ -75,7 +75,7 @@ new MyCollectionView({
 If you do not specify an `itemView`, an exception will be thrown
 stating that you must specify an `itemView`.
 
-If you need a view specific to your model, you can override 
+If you need a view specific to your model, you can override
 `getItemView`:
 
 ```js
@@ -107,14 +107,14 @@ CollectionView = Backbone.Marionette.CollectionView({
 
   itemViewOptions: {
     foo: "bar"
-  } 
+  }
 });
 ```
 
 You can also specify the `itemViewOptions` as a function, if you need to
 calculate the values to return at runtime. The model will be passed into
 the function should you need access to it when calculating
-`itemViewOptions`. The function must return an object, and the attributes 
+`itemViewOptions`. The function must return an object, and the attributes
 of the object will be copied to the `itemView` instance's options.
 
 ```js
@@ -124,8 +124,8 @@ CollectionView = Backbone.Marionette.CollectionView({
     return {
       foo: "bar",
       itemIndex: index
-    }   
-  }  
+    }
+  }
 });
 ```
 
@@ -291,7 +291,7 @@ view instance (see [above](#callback-methods)).
 ### "before:render" event
 
 
-Triggers just prior to the view being rendered. Also triggered as 
+Triggers just prior to the view being rendered. Also triggered as
 "collection:before:render" / `onCollectionBeforeRender`.
 
 ```js
@@ -366,7 +366,7 @@ myView.close();
 ### "before:item:added" / "after:item:added" event
 
 The "before:item:added" event and corresponding `onBeforeItemAdded`
-method are triggered just after creating a new itemView instance for 
+method are triggered just after creating a new itemView instance for
 an item that was added to the collection, but before the
 view is rendered and added to the DOM.
 
@@ -413,11 +413,11 @@ cv.on("item:removed", function(viewInstance){
 ### "itemview:\*" event bubbling from child views
 
 When an item view within a collection view triggers an
-event, that event will bubble up through the parent 
+event, that event will bubble up through the parent
 collection view with "itemview:" prepended to the event
-name. 
+name.
 
-That is, if a child view triggers "do:something", the 
+That is, if a child view triggers "do:something", the
 parent collection view will then trigger "itemview:do:something".
 
 ```js
@@ -443,12 +443,12 @@ var childView = colView.children[myModel.cid];
 childView.trigger("do:something", "do something!");
 ```
 
-The result of this will be an alert box that says 
-"I said, 'do something!'". 
+The result of this will be an alert box that says
+"I said, 'do something!'".
 
 Also note that you would not normally grab a reference to
 the child view the way this is showing. I'm merely using
-that hack as a way to demonstrate the event bubbling. 
+that hack as a way to demonstrate the event bubbling.
 Normally, you would have your item view listening to DOM
 events or model change events, and then triggering an event
 of its own based on that.
@@ -496,7 +496,7 @@ new MyCollectionView().render().done(function(){
 ## CollectionView: Automatic Rendering
 
 The collection view binds to the "add", "remove" and "reset" events of the
-collection that is specified. 
+collection that is specified.
 
 When the collection for the view is "reset", the view will call `render` on
 itself and re-render the entire collection.
@@ -517,9 +517,9 @@ the child views that may have previously been opened.
 
 By default the collection view will call jQuery's `.append` to
 move the HTML contents from the item view instance in to the collection
-view's `el`. 
+view's `el`.
 
-You can override this by specifying an `appendHtml` method in your 
+You can override this by specifying an `appendHtml` method in your
 view definition. This method takes three parameters and has no return
 value.
 
@@ -534,12 +534,12 @@ Backbone.Marionette.CollectionView.extend({
 });
 ```
 
-The first parameter is the instance of the collection view that 
+The first parameter is the instance of the collection view that
 will receive the HTML from the second parameter, the current item
-view instance. 
+view instance.
 
 The third parameter, `index`, is the index of the
-model that this itemView instance represents, in the collection 
+model that this itemView instance represents, in the collection
 that the model came from. This is useful for sorting a collection
 and displaying the sorted list in the correct order on the screen.
 
@@ -574,8 +574,8 @@ the `.children`, see the [Backbone.BabySitter documentation](https://github.com/
 
 ## CollectionView close
 
-CollectionView implements a `close` method, which is called by the 
-region managers automatically. As part of the implementation, the 
+CollectionView implements a `close` method, which is called by the
+region managers automatically. As part of the implementation, the
 following are performed:
 
 * unbind all `listenTo` events

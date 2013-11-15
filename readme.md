@@ -8,11 +8,11 @@ Make your Backbone.js apps dance!
 ## About Marionette
 
 Backbone.Marionette is a composite application library for Backbone.js that
-aims to simplify the construction of large scale JavaScript applications. 
-It is a collection of common design and implementation patterns found in 
-the applications that I (Derick Bailey) have been building with Backbone, 
-and includes various pieces inspired by composite application architectures, 
-such as Microsoft's "Prism" framework. 
+aims to simplify the construction of large scale JavaScript applications.
+It is a collection of common design and implementation patterns found in
+the applications that I (Derick Bailey) have been building with Backbone,
+and includes various pieces inspired by composite application architectures,
+such as Microsoft's "Prism" framework.
 
 ### App Architecture On Backbone's Building Blocks
 
@@ -21,17 +21,17 @@ applications. It gives us the core constructs that are needed to build
 small apps, organize jQuery DOM events, or create single page apps that
 support mobile devices and large scale enterprise needs. But Backbone is
 not a complete framework. It's a set of building blocks. It leaves
-much of the application design, architecture and scalability to the 
+much of the application design, architecture and scalability to the
 developer, including memory management, view management, and more.
 
 Marionette brings an application architecture to Backbone, along with
-built in view management and memory management. It's designed to be a 
-lightweight and flexible library of tools that sits on top of Backbone, 
+built in view management and memory management. It's designed to be a
+lightweight and flexible library of tools that sits on top of Backbone,
 providing the framework for building a scalable application.
 
-Like Backbone itself, you're not required to use all of Marionette just 
-because you want to use some of it. You can pick and choose which features 
-you want to use. This allows you to work with other Backbone 
+Like Backbone itself, you're not required to use all of Marionette just
+because you want to use some of it. You can pick and choose which features
+you want to use. This allows you to work with other Backbone
 frameworks and plugins easily. It also means that you are not required
 to engage in an all-or-nothing migration to begin using Marionette.
 
@@ -51,7 +51,7 @@ to engage in an all-or-nothing migration to begin using Marionette.
 
 ## Source Code and Downloads
 
-You can download the latest builds directly from the "lib" folder above.  
+You can download the latest builds directly from the "lib" folder above.
 For more information about the files in this folder, or to obtain an archive
 containing all Marionette dependencies (including Underscore, Backbone, etc.),
 please visit [the downloads section on the website](http://marionettejs.com#download).
@@ -78,7 +78,7 @@ for information on upgrading to the latest version of Marionette.
 ## Documentation
 
 The primary documentation is split up into multiple files, due to the size
-of the overall documentation. You can find these files in the 
+of the overall documentation. You can find these files in the
 [/docs](docs) folder, or use the links below to get straight to the
 documentation for each piece of Marionette.
 
@@ -103,7 +103,7 @@ documentation](docs/marionette.configuration.md).
 ### Marionette's Pieces
 
 These are the strings that you can pull to make your puppet dance.
-If you're looking for an introduction and/or 
+If you're looking for an introduction and/or
 examples on how to get started, please visit [the Wiki](https://github.com/marionettejs/backbone.marionette/wiki).
 
 **Views**
@@ -164,7 +164,7 @@ MarionetteJS currently works with the following libraries:
 * [jQuery](http://jquery.com) v1.8+
 * [Underscore](http://underscorejs.org) v1.4.4+
 * [Backbone](http://backbonejs.org) v1.0 is preferred. v0.9.9 and v0.9.10 should work still
-* [Backbone.Wreqr](https://github.com/marionettejs/backbone.wreqr) 
+* [Backbone.Wreqr](https://github.com/marionettejs/backbone.wreqr)
 * [Backbone.BabySitter](https://github.com/marionettejs/backbone.babysitter)
 
 Marionette has not been tested against any other versions of these
@@ -189,13 +189,13 @@ for more information.
 
 ## Donations
 
-Marionette needs your support, but not everyone can offer assistance 
-with code, bug submissions, and answering questions. If you're using 
-Marionette and you're finding that it is saving you as much time and 
-effort as I believe it does, then please consider financial support 
-for the project. 
+Marionette needs your support, but not everyone can offer assistance
+with code, bug submissions, and answering questions. If you're using
+Marionette and you're finding that it is saving you as much time and
+effort as I believe it does, then please consider financial support
+for the project.
 
-**Please see the footer of [MarionetteJS.com](http://marionettejs.com) 
+**Please see the footer of [MarionetteJS.com](http://marionettejs.com)
 for links to donate.**
 
 ## How to Contribute

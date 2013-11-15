@@ -297,7 +297,7 @@ describe("region manager", function(){
 
   describe("when iterating the region manager", function(){
     var cb, r1, r2, r3;
-    
+
     beforeEach(function(){
       cb = jasmine.createSpy("iterator callback");
 

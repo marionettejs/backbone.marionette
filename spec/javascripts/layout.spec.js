@@ -14,12 +14,12 @@ describe("layout", function(){
     }
   });
 
-  var CustomRegion1 = function() { 
+  var CustomRegion1 = function() {
   };
 
   var CustomRegion2 = function() {
   };
-  
+
   var LayoutNoDefaultRegion = Layout.extend({
     regions: {
       regionOne: {
@@ -27,7 +27,7 @@ describe("layout", function(){
         regionType: CustomRegion1
       },
       regionTwo: '#regionTwo'
-    } 
+    }
   });
 
   describe("on instantiation", function(){
@@ -76,13 +76,13 @@ describe("layout", function(){
         regionFour: '#regionFour'
       }
     });
-  
+
     var layoutManager;
 
     beforeEach(function() {
-      layoutManager = new LayoutCustomRegion 
+      layoutManager = new LayoutCustomRegion
     });
-  
+
     it("should instantiate specific regions with custom regions if speficied", function() {
       expect(layoutManager).toHaveOwnProperty("regionOne");
       expect(layoutManager.regionOne).toBeInstanceOf(CustomRegion1);
@@ -279,16 +279,16 @@ describe("layout", function(){
       expect(layout).toHaveOwnProperty("regionTwo");
     });
   });
-  
+
   describe("has a valid inheritance chain back to Marionette.View", function(){
-    
+
     var constructor;
-    
+
     beforeEach(function(){
       constructor = spyOn(Marionette.View.prototype, "constructor");
       new Marionette.Layout();
     });
-    
+
     it("calls the parent Marionette.View's constructor function on instantiation", function(){
       expect(constructor).toHaveBeenCalled();
     });

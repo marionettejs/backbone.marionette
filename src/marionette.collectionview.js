@@ -159,8 +159,10 @@ Marionette.CollectionView = Marionette.View.extend({
   // emptyView are not forwarded
   addEmptyView: function(item, EmptyView){
 
-    // get the emptyViewOptions if any were specified
-    var emptyViewOptions = Marionette.getOption(this, "emptyViewOptions");
+    // get the emptyViewOptions, falling back to itemViewOptions
+    var emptyViewOptions = Marionette.getOption(this, "emptyViewOptions") ||
+                           Marionette.getOption(this, "itemViewOptions");
+
     if (_.isFunction(emptyViewOptions)){
       emptyViewOptions = emptyViewOptions.call(this, item, 0);
     }
@@ -205,9 +207,9 @@ Marionette.CollectionView = Marionette.View.extend({
       itemViewOptions = itemViewOptions.call(this, item, index);
     }
 
-    // build the view
+    // build the view 
     var view = this.buildItemView(item, ItemView, itemViewOptions);
-
+    
     // set up the child view event forwarding
     this.addChildViewEventForwarding(view);
 

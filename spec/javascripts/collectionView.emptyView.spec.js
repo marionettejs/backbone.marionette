@@ -354,7 +354,7 @@ describe("collectionview - emptyView", function(){
       collectionView = new EmptyCollectionView({
         collection: collection,
         itemViewOptions: {
-          foo: 'baz'
+          foo: 'bar'
         },
         emptyViewOptions: {
           foo: 'baz'
@@ -366,6 +366,29 @@ describe("collectionview - emptyView", function(){
     });
 
     it("passes the options to the empty view instance correctly", function(){
+      expect(view.options.foo).toEqual('baz');
+    });
+
+  });
+
+  describe("when rendering and only 'itemViewOptions' are provided", function(){
+
+    var collectionView, view;
+
+    beforeEach(function(){
+      var collection = new Backbone.Collection();
+      collectionView = new EmptyCollectionView({
+        collection: collection,
+        itemViewOptions: {
+          foo: 'baz'
+        }
+      });
+
+      collectionView.render();
+      view = collectionView.children.findByIndex(0);
+    });
+
+    it("passes the options to the empty view instance", function(){
       expect(view.options.foo).toEqual('baz');
     });
 

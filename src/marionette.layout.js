@@ -9,7 +9,7 @@
 // Used for composite view management and sub-application areas.
 Marionette.Layout = Marionette.ItemView.extend({
   regionType: Marionette.Region,
-  
+
   // Ensure the regions are available when the `initialize` method
   // is called.
   constructor: function (options) {
@@ -17,7 +17,7 @@ Marionette.Layout = Marionette.ItemView.extend({
 
     this._firstRender = true;
     this._initializeRegions(options);
-    
+
     Marionette.ItemView.prototype.constructor.call(this, options);
   },
 
@@ -28,7 +28,7 @@ Marionette.Layout = Marionette.ItemView.extend({
   render: function(){
 
     if (this.isClosed){
-      // a previously closed layout means we need to 
+      // a previously closed layout means we need to
       // completely re-initialize the regions
       this._initializeRegions();
     }
@@ -37,7 +37,7 @@ Marionette.Layout = Marionette.ItemView.extend({
       // reset the regions
       this._firstRender = false;
     } else if (!this.isClosed){
-      // If this is not the first render call, then we need to 
+      // If this is not the first render call, then we need to
       // re-initializing the `el` for each region
       this._reInitializeRegions();
     }
@@ -88,7 +88,7 @@ Marionette.Layout = Marionette.ItemView.extend({
   },
 
   // Internal method to initialize the regions that have been defined in a
-  // `regions` attribute on this layout. 
+  // `regions` attribute on this layout.
   _initializeRegions: function (options) {
     var regions;
     this._initRegionManager();

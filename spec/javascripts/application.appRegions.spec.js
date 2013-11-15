@@ -9,13 +9,13 @@ describe("application regions", function(){
       setFixtures("<div id='region2'></div>");
 
       MyApp.addRegions({
-        MyRegion: "#region", 
+        MyRegion: "#region",
         anotherRegion: "region2"
       });
 
       MyApp.start();
     });
-    
+
     it("should initialize the regions", function(){
       expect(MyApp.MyRegion).not.toBeUndefined();
       expect(MyApp.anotherRegion).not.toBeUndefined();
@@ -39,11 +39,11 @@ describe("application regions", function(){
       setFixtures("<div id='region2'></div>");
 
       MyApp.addRegions({
-        MyRegion: MyRegion, 
+        MyRegion: MyRegion,
         anotherRegion: MyRegion2
       });
     });
-    
+
     it("should initialize the regions, immediately", function(){
       expect(MyApp.MyRegion instanceof MyRegion).toBe(true);
       expect(MyApp.anotherRegion instanceof MyRegion2).toBe(true);
@@ -65,7 +65,7 @@ describe("application regions", function(){
         }
       });
     });
-    
+
     it("should initialize the regions, immediately", function(){
       expect(MyApp.MyRegion).not.toBeUndefined();
     });
@@ -87,7 +87,7 @@ describe("application regions", function(){
       app.addRegions({
         r1: "#region1"
       });
-      
+
     });
 
     it("should make the region available as a named attribute", function(){
@@ -100,7 +100,7 @@ describe("application regions", function(){
   });
 
   describe("when closing all regions in the app", function(){
-    var r1, r2; 
+    var r1, r2;
 
     beforeEach(function(){
       var app = new Backbone.Marionette.Application();
@@ -120,7 +120,7 @@ describe("application regions", function(){
 
       app.closeRegions();
     });
-    
+
 
     it("should close the regions", function(){
       expect(r1.close).toHaveBeenCalled();

@@ -139,7 +139,7 @@ describe("layout - dynamic regions", function(){
   });
 
   describe("when removing a region from a layout", function(){
-    var Layout; 
+    var Layout;
     var layout, region, closeHandler, removeHandler;
 
     beforeEach(function(){
@@ -152,7 +152,7 @@ describe("layout - dynamic regions", function(){
 
       closeHandler = jasmine.createSpy("close handler");
       removeHandler = jasmine.createSpy("remove handler");
-      
+
       layout = new Layout();
 
       layout.render();
@@ -194,7 +194,7 @@ describe("layout - dynamic regions", function(){
 
       layout.render();
       layout.foo.show(new Backbone.View());
-      
+
       layout.removeRegion("foo");
       layout.render();
 

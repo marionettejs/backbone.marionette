@@ -147,7 +147,8 @@ Marionette.CollectionView = Marionette.View.extend({
     var view = this.buildItemView(item, ItemView, itemViewOptions);
 
     // set up the child view event forwarding
-    this.addChildViewEventForwarding(view);
+    var prefix = Marionette.getOption(this, "itemViewEventPrefix");
+    this.addChildViewEventForwarding(view, prefix);
 
     // this view is about to be added
     this.triggerMethod("before:item:added", view);
@@ -167,22 +168,6 @@ Marionette.CollectionView = Marionette.View.extend({
 
     // this view was added
     this.triggerMethod("after:item:added", view);
-  },
-
-  // Set up the child view event forwarding. Uses an "itemview:"
-  // prefix in front of all forwarded events.
-  addChildViewEventForwarding: function(view){
-    var prefix = Marionette.getOption(this, "itemViewEventPrefix");
-
-    // Forward all child item view events through the parent,
-    // prepending "itemview:" to the event name
-    this.listenTo(view, "all", function(){
-      var args = slice(arguments);
-      args[0] = prefix + ":" + args[0];
-      args.splice(1, 0, view);
-
-      Marionette.triggerMethod.apply(this, args);
-    }, this);
   },
 
   // render the item view

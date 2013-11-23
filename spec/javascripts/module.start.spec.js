@@ -2,14 +2,20 @@ describe("module start", function(){
   "use strict";
 
   describe("when starting a module", function(){
-    var MyApp, myModule, initializer;
+    var MyApp, myModule, initializer, async_initializer;
 
     beforeEach(function(){
       initializer = jasmine.createSpy();
+      async_initializer = jasmine.createSpy().andCallFake(function(options, deferred) {
+        //deferred = new $.Deferred();
+        deferred.resolve();
+        return deferred.promise();
+      });
 
       MyApp = new Backbone.Marionette.Application();
       myModule = MyApp.module("MyModule", function(MyMod){
         MyMod.addInitializer(initializer);
+        MyMod.addAsyncInitializer(async_initializer);
       });
 
       myModule.start();
@@ -19,6 +25,21 @@ describe("module start", function(){
       expect(initializer).toHaveBeenCalled();
     });
 
+    it("should run asychronous module initializers", function(){
+      expect(async_initializer).toHaveBeenCalled();
+    });
+
+    it("should resolve ready promise when all asynchronous initializers have resolved", function(){
+      var resolved;
+
+      waitsFor(function() {
+        return myModule.ready.state() === 'resolved';
+      }, "module.ready should be resolved", 10);
+
+      runs(function() {
+        expect(myModule.ready.state()).toEqual('resolved');
+      });
+    });
   });
 
   describe("when splitting a module defininition in to two parts and starting the module", function(){

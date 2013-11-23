@@ -9,7 +9,25 @@ Marionette.Module = function(moduleName, app){
   // store sub-modules
   this.submodules = {};
 
+  //setup a deferred object for asynchronous initializers
+  this._deferReady = new $.Deferred();
+  //provide a promise other objects can use to wait for asynchronous initialization
+  //this executes handlers which are attached after initialization,
+  //and combined with $.when() allows for dependency on multiple asynchronously intialized
+  //modules before handler execution
+  //eg. $.when(module_1.ready, module_2.ready).then(function(){ /* do something */ })
+  this.ready = this._deferReady.promise();
+  //ensure that ready is triggered when module asynchronous intializers are all resolved
+  this.ready
+    .fail(function(){
+      throwError('Object initialization error. The ready promise was rejected.', 'ready-reject');
+    })
+    .done(_(function(){
+        this.triggerMethod('ready');
+    }).bind(this));
+
   this._setupInitializersAndFinalizers();
+
 
   // store the configuration for this module
   this.app = app;
@@ -26,6 +44,12 @@ _.extend(Marionette.Module.prototype, Backbone.Events, {
   // module's `start` method is called.
   addInitializer: function(callback){
     this._initializerCallbacks.add(callback);
+  },
+  // Asynchronous initializers nitializers are run when the module 
+  // `start` method is called. A ready event is triggered on the 
+  // module when all async promises have resolved.
+  addAsyncInitializer: function(callback){
+    this._initializerPromises.add(callback);
   },
 
   // Finalizers are run when a module is stopped. They are used to teardown
@@ -52,6 +76,14 @@ _.extend(Marionette.Module.prototype, Backbone.Events, {
     this.triggerMethod("before:start", options);
 
     this._initializerCallbacks.run(options, this);
+    this._initializerPromises.run(options, this)
+      .fail(_(function(err){
+        this._deferReady.reject(err);
+      }).bind(this))
+      .always(_(function(){
+        this._deferReady.resolve();
+      }).bind(this));
+
     this._isInitialized = true;
 
     this.triggerMethod("start", options);
@@ -110,7 +142,10 @@ _.extend(Marionette.Module.prototype, Backbone.Events, {
   _setupInitializersAndFinalizers: function(){
     this._initializerCallbacks = new Marionette.Callbacks();
     this._finalizerCallbacks = new Marionette.Callbacks();
+    this._initializerPromises = new Marionette.Promises();
   }
+
+  
 });
 
 // Type methods to create modules

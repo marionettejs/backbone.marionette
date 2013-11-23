@@ -245,7 +245,7 @@ describe("collection view", function(){
 
       render: function(){
         var ItemView = this.getItemView();
-        this.addItemView(model, ItemView, 0);
+        this.addItemView(this.getItemViewContainer(), model, ItemView, 0);
       }
     });
 
@@ -432,8 +432,8 @@ describe("collection view", function(){
     var PrependHtmlView = Backbone.Marionette.CollectionView.extend({
       itemView: ItemView,
 
-      appendHtml: function(collectionView, itemView){
-        collectionView.$el.prepend(itemView.el);
+      appendHtml: function($container, itemView){
+        $container.prepend(itemView.el);
       }
     });
 

@@ -175,6 +175,7 @@ describe("layout - dynamic regions", function(){
 
     it("should remove the region", function(){
       expect(layout.foo).toBeUndefined();
+      expect(layout.regions.foo).toBeUndefined();
       expect(layout.regionManager.get("foo")).toBeUndefined();
     });
   });

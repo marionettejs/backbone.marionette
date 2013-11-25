@@ -1,3 +1,7 @@
+### v1.3.0 [view commit logs](https://github.com/marionettejs/backbone.marionette/compare/v1.2.3...v1.3.0)
+* CompositeView / CollectionView
+  * Massive perf boost in rendering collection and composite views by using document fragments [jsPerf](http://jsperf.com/marionette-documentfragment-collectionview/5)
+
 ### v1.2.3 [view commit logs](https://github.com/marionettejs/backbone.marionette/compare/v1.2.2...v1.2.3)
 * CompositeView
   * Fixed bug where ```child views``` were being added before the initial render, thus raising errors.

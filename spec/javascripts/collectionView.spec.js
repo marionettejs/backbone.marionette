@@ -747,4 +747,57 @@ describe("collection view", function(){
     });
   });
 
+  describe("when a collection view is not rendered", function() {
+    var collection, cv, model1, model2;
+
+    var Model       = Backbone.Model.extend({});
+    var Collection  = Backbone.Collection.extend({model: Model});
+    var CV = Backbone.Marionette.CollectionView.extend({
+      itemView: ItemView,
+      tagName: 'ul'
+    });
+
+    var addModel = function() {
+      collection.add(model2);
+    }
+
+    function removeModel() {
+      collection.remove(model1);
+    }
+
+    function resetCollection() {
+      collection.reset([model1, model2]);
+    }
+
+    function sync() {
+      collection.trigger('sync');
+    }
+
+    beforeEach(function() {
+      model1     = new Model({monkey: "island"});
+      model2     = new Model({lechuck: "tours"});
+      collection = new Collection([model1]);
+
+      cv = new CV({
+        collection: collection
+      });
+    });
+
+    it("should not fail when adding models to an unrendered collectionView", function() {
+      expect(addModel).not.toThrow();
+    });
+
+    it("should not fail when an item is removed from an unrendered collectionView", function() {
+      expect(removeModel).not.toThrow();
+    });
+
+    it("should not fail when a collection is reset on an unrendered collectionView", function() {
+      expect(resetCollection).not.toThrow();
+    });
+
+    it("should not fail when a collection is synced on an unrendered collectionView", function() {
+      expect(sync).not.toThrow();
+    });
+  });
+
 });

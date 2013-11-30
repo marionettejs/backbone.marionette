@@ -1,3 +1,17 @@
+### v1.4.0-beta [view commit logs](https://github.com/marionettejs/backbone.marionette/compare/v1.3.0...v1.4.0beta)
+* Views
+  * adds the ability to DRY up your ```events``` and ```triggers``` hashes by cross using the ui hash from within your hash keys
+    ```coffeescript
+    ui:
+      button: '.button'
+
+    triggers:
+      'click @ui.button': 'bam'
+
+    events:
+      'click @ui.button': 'onButtonClick'
+    ```
+
 ### v1.3.0 [view commit logs](https://github.com/marionettejs/backbone.marionette/compare/v1.2.3...v1.3.0)
 * CompositeView / CollectionView
   * Massive perf boost in rendering collection and composite views by using document fragments [jsPerf](http://jsperf.com/marionette-documentfragment-collectionview/5)

@@ -106,7 +106,7 @@ describe("application regions", function(){
     });
   });
 
-  describe("when closing all regions in the app", function(){
+  describe("when destroying all regions in the app", function(){
     var r1, r2;
 
     beforeEach(function(){
@@ -122,16 +122,16 @@ describe("application regions", function(){
 
       r1 = app.myRegion;
       r2 = app.r2;
-      spyOn(r1, "close").andCallThrough();
-      spyOn(r2, "close").andCallThrough();
+      spyOn(r1, "destroy").andCallThrough();
+      spyOn(r2, "destroy").andCallThrough();
 
-      app.closeRegions();
+      app.destroyRegions();
     });
 
 
-    it("should close the regions", function(){
-      expect(r1.close).toHaveBeenCalled();
-      expect(r2.close).toHaveBeenCalled();
+    it("should destroy the regions", function(){
+      expect(r1.destroy).toHaveBeenCalled();
+      expect(r2.destroy).toHaveBeenCalled();
     });
   });
 

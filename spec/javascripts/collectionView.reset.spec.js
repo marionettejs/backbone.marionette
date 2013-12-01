@@ -32,15 +32,15 @@ describe("collection view - reset", function(){
       });
 
       spyOn(collectionView, "onRender").andCallThrough();
-      spyOn(collectionView, "closeChildren").andCallThrough();
+      spyOn(collectionView, "destroyChildren").andCallThrough();
 
       collectionView.render();
 
       collection.reset([{foo: "bar"}, {foo: "baz"}]);
     });
 
-    it("should close all open child views", function(){
-      expect(collectionView.closeChildren).toHaveBeenCalled();
+    it("should destroy all open child views", function(){
+      expect(collectionView.destroyChildren).toHaveBeenCalled();
     });
 
     it("should append the html for each childView", function(){

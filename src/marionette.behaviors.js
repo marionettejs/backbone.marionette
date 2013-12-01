@@ -21,7 +21,7 @@ Marionette.Behaviors = (function(Marionette, _) {
       'bindUIElements', 'unbindUIElements',
       'delegateEvents', 'undelegateEvents',
       'behaviorEvents', 'triggerMethod',
-      'setElement', 'close'
+      'setElement', 'destroy'
     ]);
   }
 
@@ -37,15 +37,15 @@ Marionette.Behaviors = (function(Marionette, _) {
       }, this);
     },
 
-    close: function(close, behaviors) {
+    destroy: function(destroy, behaviors) {
       var args = _.tail(arguments, 2);
-      close.apply(this, args);
+      destroy.apply(this, args);
 
       // Call close on each behavior after
       // closing down the view.
       // This unbinds event listeners
       // that behaviors have registerd for.
-      _.invoke(behaviors, 'close', args);
+      _.invoke(behaviors, 'destroy', args);
     },
 
     bindUIElements: function(bindUIElements, behaviors) {
@@ -165,7 +165,7 @@ Marionette.Behaviors = (function(Marionette, _) {
     },
 
     // wrap view internal methods so that they delegate to behaviors.
-    // For example, onClose should trigger close on all of the behaviors and then close itself.
+    // For example, onDestroy should trigger destroy on all of the behaviors and then destroy itself.
     // i.e.
     //
     // view.delegateEvents = _.partial(methods.delegateEvents, view.delegateEvents, behaviors);

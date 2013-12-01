@@ -148,27 +148,36 @@ Marionette.View = Backbone.View.extend({
   // Internal method, handles the `show` event.
   onShowCalled: function(){},
 
-  // Default `close` implementation, for removing a view from the
+  // Internal helper method to verify whether the view hasn't been destroyed
+  _ensureViewIsIntact: function() {
+    if (this.isDestroyed) {
+      var err = new Error("Cannot use a view that's already been destroyed.");
+      err.name = "ViewDestroyedError";
+      throw err;
+    }
+  },
+
+  // Default `destroy` implementation, for removing a view from the
   // DOM and unbinding it. Regions will call this method
-  // for you. You can specify an `onClose` method in your view to
-  // add custom code that is called after the view is closed.
-  close: function(){
-    if (this.isClosed) { return; }
+  // for you. You can specify an `onDestroy` method in your view to
+  // add custom code that is called after the view is destroyed.
+  destroy: function(){
+    if (this.isDestroyed) { return; }
 
     var args = Array.prototype.slice.call(arguments);
 
-    // allow the close to be stopped by returning `false`
-    // from the `onBeforeClose` method
-    var shouldClose = this.triggerMethod.apply(this, ["before:close"].concat(args));
-    if (shouldClose === false){
+    // allow the destroy to be stopped by returning `false`
+    // from the `onBeforeDestroy` method
+    var shouldDestroy = this.triggerMethod.apply(this, ["before:destroy"].concat(args));
+    if (shouldDestroy === false){
       return;
     }
 
-    // mark as closed before doing the actual close, to
-    // prevent infinite loops within "close" event handlers
-    // that are trying to close other views
-    this.isClosed = true;
-    this.triggerMethod.apply(this, ["close"].concat(args));
+    // mark as destroyed before doing the actual destroy, to
+    // prevent infinite loops within "destroy" event handlers
+    // that are trying to destroy other views
+    this.isDestroyed = true;
+    this.triggerMethod.apply(this, ["destroy"].concat(args));
 
     // unbind UI elements
     this.unbindUIElements();

@@ -37,7 +37,7 @@ Marionette.ItemView = Marionette.View.extend({
   // you should override the `Marionette.Renderer` object to
   // change how Marionette renders views.
   render: function(){
-    this.isClosed = false;
+    this._ensureViewIsIntact();
 
     this.triggerMethod("before:render", this);
 
@@ -55,15 +55,15 @@ Marionette.ItemView = Marionette.View.extend({
     return this;
   },
 
-  // Override the default close event to add a few
+  // Override the default destroy event to add a few
   // more events that are triggered.
-  close: function(){
-    if (this.isClosed){ return; }
+  destroy: function(){
+    if (this.isDestroyed){ return; }
 
-    this.triggerMethod('item:before:close');
+    this.triggerMethod('item:before:destroy');
 
-    Marionette.View.prototype.close.apply(this, arguments);
+    Marionette.View.prototype.destroy.apply(this, arguments);
 
-    this.triggerMethod('item:closed');
+    this.triggerMethod('item:destroyed');
   }
 });

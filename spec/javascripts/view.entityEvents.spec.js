@@ -205,7 +205,7 @@ describe("view entity events", function(){
   });
 
   describe("when Layout bound to modelEvent replaces region with new view",function(){
-    var closeSpy, renderSpy;
+    var destroySpy, renderSpy;
 
     var ChildView = Marionette.ItemView.extend({
       template: _.template(''),
@@ -239,7 +239,7 @@ describe("view entity events", function(){
     });
 
     beforeEach(function(){
-      closeSpy = spyOn(ChildView.prototype, 'close').andCallThrough();
+      destroySpy = spyOn(ChildView.prototype, 'destroy').andCallThrough();
       renderSpy = spyOn(ChildView.prototype, 'render').andCallFake(function(){
         //console.log("child render:", this.cid);
       });
@@ -254,16 +254,16 @@ describe("view entity events", function(){
       model.trigger('sync');
     });
 
-    it("should close the previous child view", function(){
-      expect(closeSpy).toHaveBeenCalled();
+    it("should destroy the previous child view", function(){
+      expect(destroySpy).toHaveBeenCalled(); 
     });
 
     it("should undelegate all previous view's modelEvents", function(){
-      // ChildView 1 when closed should not react to event
+      // ChildView 1 when destroyed should not react to event
       // we expect ChildView 1 to call render, (1st)
-      // we expect ChildView 1 to close
+      // we expect ChildView 1 to destroy
       // we expect ChildView 2 to call render (2nd)
-      // we expect closed ChildView 1 not to call render again
+      // we expect destroyed ChildView 1 not to call render again
       expect(renderSpy.calls.length).toEqual(5);
     });
   })

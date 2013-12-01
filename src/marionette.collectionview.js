@@ -64,7 +64,7 @@ Marionette.CollectionView = Marionette.View.extend({
 
   // Handle a child added to the collection
   onChildAdd: function(child, collection, options){
-    this.closeEmptyView();
+    this.destroyEmptyView();
     var ChildView = this.getChildView(child);
     var index = this.collection.indexOf(child);
     this.addChild(child, ChildView, index);
@@ -104,7 +104,8 @@ Marionette.CollectionView = Marionette.View.extend({
   // provide your own implementation of a render function for
   // the collection view.
   render: function(){
-    this.isClosed = false;
+    this._ensureViewIsIntact();
+
     this.triggerBeforeRender();
     this._renderChildren();
     this.triggerRendered();
@@ -117,8 +118,8 @@ Marionette.CollectionView = Marionette.View.extend({
   _renderChildren: function(){
     this.startBuffering();
 
-    this.closeEmptyView();
-    this.closeChildren();
+    this.destroyEmptyView();
+    this.destroyChildren();
 
     if (!this.isEmpty(this.collection)) {
       this.showCollection();
@@ -150,12 +151,12 @@ Marionette.CollectionView = Marionette.View.extend({
     }
   },
 
-  // Internal method to close an existing emptyView instance
+  // Internal method to destroy an existing emptyView instance
   // if one exists. Called when a collection view has been
   // rendered empty, and then a child is added to the collection.
-  closeEmptyView: function(){
+  destroyEmptyView: function(){
     if (this._showingEmptyView){
-      this.closeChildren();
+      this.destroyChildren();
       delete this._showingEmptyView;
     }
   },
@@ -191,6 +192,8 @@ Marionette.CollectionView = Marionette.View.extend({
     this.proxyChildEvents(view);
     this.triggerMethod("before:child:added", view);
 
+    // Store the child view itself so we can properly
+    // remove and/or destroy it later
     this.children.add(view);
     this.renderChildView(view, index);
 
@@ -219,12 +222,12 @@ Marionette.CollectionView = Marionette.View.extend({
     return new ChilddViewType(options);
   },
 
-  // Remove the child view and close it
+  // Remove the child view and destroy it
   removeChildView: function(view){
 
     if (view){
-      // call 'close' or 'remove', depending on which is found
-      if (view.close) { view.close(); }
+      // call 'destroy' or 'remove', depending on which is found
+      if (view.destroy) { view.destroy(); }
       else if (view.remove) { view.remove(); }
 
       this.stopListening(view);
@@ -275,20 +278,20 @@ Marionette.CollectionView = Marionette.View.extend({
     this.children = new Backbone.ChildViewContainer();
   },
 
-  // Handle cleanup and other closing needs for the collection of views.
-  close: function(){
-    if (this.isClosed){ return; }
+  // Handle cleanup and other destroying needs for the collection of views
+  destroy: function(){
+    if (this.isDestroyed){ return; }
 
-    this.triggerMethod("collection:before:close");
-    this.closeChildren();
-    this.triggerMethod("collection:closed");
+    this.triggerMethod("collection:before:destroy");
+    this.destroyChildren();
+    this.triggerMethod("collection:destroyed");
 
-    Marionette.View.prototype.close.apply(this, arguments);
+    Marionette.View.prototype.destroy.apply(this, arguments);
   },
 
-  // Close the child views that this collection view
+  // Destroy the child views that this collection view
   // is holding on to, if any
-  closeChildren: function(){
+  destroyChildren: function(){
     this.children.each(this.removeChildView, this);
     this.checkEmpty();
   },

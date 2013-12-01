@@ -127,7 +127,7 @@ describe("view ui elements", function() {
 
   });
 
-  describe("when closing a view that has not been rendered", function(){
+  describe("when destroying a view that has not been rendered", function(){
     var View = Marionette.ItemView.extend({
       template: function(){return "<div id='foo'></div>";},
 
@@ -140,7 +140,7 @@ describe("view ui elements", function() {
 
     beforeEach(function(){
       view1 = new View();
-      view1.close();
+      view1.destroy();
       view2 = new View();
     });
 
@@ -150,7 +150,7 @@ describe("view ui elements", function() {
 
   });
 
-  describe("when closing a view", function(){
+  describe("when destroying a view", function(){
     var View = Marionette.ItemView.extend({
       template: function(){return "<div id='foo'></div>";},
 
@@ -165,37 +165,11 @@ describe("view ui elements", function() {
       view = new View();
       view.render();
 
-      view.close();
+      view.destroy();
     });
 
     it("should unbind UI elements and reset them to the selector", function(){
       expect(view.ui.foo).toBe("#foo");
-    });
-
-  });
-
-  describe("when closing a view, and then re-rendering it", function(){
-    var View = Marionette.ItemView.extend({
-      template: function(){return "<div id='foo'></div>";},
-
-      ui: {
-        foo: "#foo"
-      }
-    });
-
-    var view;
-
-    beforeEach(function(){
-      view = new View();
-
-      view.render();
-      view.close();
-
-      view.render();
-    });
-
-    it("should re-bind UI elements", function(){
-      expect(view.ui.foo).toBe(view.$("#foo"));
     });
 
   });

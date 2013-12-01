@@ -315,7 +315,7 @@ describe("composite view", function(){
       });
 
       spyOn(compositeView, "render").andCallThrough();
-      spyOn(compositeView, "closeChildren").andCallThrough();
+      spyOn(compositeView, "destroyChildren").andCallThrough();
       spyOn(Backbone.Marionette.Renderer, "render");
       compositeRenderSpy = compositeView.render;
 
@@ -327,9 +327,9 @@ describe("composite view", function(){
       expect(Backbone.Marionette.Renderer.render.callCount).toBe(2);
     });
 
-    it("should close all of the child collection child views", function(){
-      expect(compositeView.closeChildren).toHaveBeenCalled();
-      expect(compositeView.closeChildren.callCount).toBe(2);
+    it("should destroy all of the child collection child views", function(){
+      expect(compositeView.destroyChildren).toHaveBeenCalled();
+      expect(compositeView.destroyChildren.callCount).toBe(2);
     });
 
     it("should re-render the collection's items", function(){
@@ -506,8 +506,8 @@ describe("composite view", function(){
     });
   });
 
-  describe("when closing a composite view", function(){
-    var compositeView, compositeModelCloseSpy;
+  describe("when destroying a composite view", function(){
+    var compositeView, compositeModelDestroySpy;
 
     var ChildView = Backbone.Marionette.ItemView.extend({
       tagName: "span",
@@ -534,19 +534,19 @@ describe("composite view", function(){
         collection: collection
       });
 
-      spyOn(CompositeModelView.prototype, "close").andCallThrough();
+      spyOn(CompositeModelView.prototype, "destroy").andCallThrough();
 
       compositeView.render();
 
-      compositeView.close();
+      compositeView.destroy();
     });
 
     it("should delete the model view", function(){
       expect(compositeView.renderedModelView).toBeUndefined();
     });
 
-    it("should close the collection of views", function(){
-      expect(CompositeModelView.prototype.close.callCount).toBe(1);
+    it("should destroy the collection of views", function(){
+      expect(CompositeModelView.prototype.destroy.callCount).toBe(1);
     });
   });
 

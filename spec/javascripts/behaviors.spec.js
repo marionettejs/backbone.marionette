@@ -277,13 +277,13 @@ describe("Behaviors", function(){
   });
 
   describe("behavior UI", function() {
-    var V, hold, spy, onShowSpy, onCloseSpy, Layout, testBehavior;
+    var V, hold, spy, onShowSpy, onDestroySpy, Layout, testBehavior;
 
     beforeEach(function() {
       hold = {};
       spy = new sinon.spy();
       onShowSpy = new sinon.spy();
-      onCloseSpy = new sinon.spy();
+      onDestroySpy = new sinon.spy();
       onDogeClickSpy = new sinon.spy();
       onCoinsClickSpy = new sinon.spy();
 
@@ -307,7 +307,7 @@ describe("Behaviors", function(){
 
         onShow: onShowSpy,
 
-        onClose: onCloseSpy,
+        onDestroy: onDestroySpy,
 
         onDogeClick: onDogeClickSpy,
 
@@ -402,21 +402,21 @@ describe("Behaviors", function(){
       });
     });
 
-    it("should call onClose", function() {
+    it("should call onDestroy", function() {
       layout = new Layout();
       layout.render();
-      layout.close();
-      expect(onCloseSpy).toHaveBeenCalled(1);
+      layout.destroy();
+      expect(onDestroySpy).toHaveBeenCalled(1);
     });
   });
 
   describe('showing a view in a layout', function() {
-    var behavior, onShowSpy, onCloseSpy, hold;
+    var behavior, onShowSpy, onDestroySpy, hold;
     beforeEach(function() {
       hold = {};
 
       onShowSpy = sinon.spy();
-      onCloseSpy = sinon.spy();
+      onDestroySpy = sinon.spy();
 
       hold.test = Marionette.Behavior.extend({
         initialize: function() {
@@ -425,7 +425,7 @@ describe("Behaviors", function(){
 
         onShow: onShowSpy,
 
-        onClose: onCloseSpy
+        onDestroy: onDestroySpy
       });
 
       var View = Marionette.ItemView.extend({
@@ -443,7 +443,7 @@ describe("Behaviors", function(){
       });
 
       region.show(view);
-      region.close();
+      region.destroy();
     });
 
     it("behavior onShow is called once", function() {
@@ -451,7 +451,7 @@ describe("Behaviors", function(){
     });
 
     it("behavior onClose is called once", function() {
-      expect(onCloseSpy).toHaveBeenCalledOnce();
+      expect(onDestroySpy).toHaveBeenCalledOnce();
     });
   });
 
@@ -476,7 +476,7 @@ describe("Behaviors", function(){
         }
       }));
 
-      v.close();
+      v.destroy();
     });
 
     it("shoud unbind listenTo on close", function() {

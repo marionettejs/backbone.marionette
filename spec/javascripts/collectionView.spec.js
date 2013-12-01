@@ -269,14 +269,14 @@ describe("collection view", function(){
       collectionView.render();
 
       childView = collectionView.children.findByIndex(0);
-      spyOn(childView, "close").andCallThrough();
+      spyOn(childView, "destroy").andCallThrough();
       spyOn(EmptyView.prototype, "render");
 
       collectionView.onChildRemove(model);
     });
 
-    it("should close the model's view", function(){
-      expect(childView.close).toHaveBeenCalled();
+    it("should destroy the model's view", function(){
+      expect(childView.destroy).toHaveBeenCalled();
     });
 
     it("should show the empty view", function(){
@@ -302,13 +302,13 @@ describe("collection view", function(){
       collectionView.render();
 
       childView = collectionView.children.findByIndex(0);
-      spyOn(childView, "close").andCallThrough();
+      spyOn(childView, "destroy").andCallThrough();
 
       collection.remove(model);
     });
 
-    it("should close the model's view", function(){
-      expect(childView.close).toHaveBeenCalled();
+    it("should destroy the model's view", function(){
+      expect(childView.destroy).toHaveBeenCalled();
     });
 
     it("should remove the model-view's HTML", function(){
@@ -316,22 +316,22 @@ describe("collection view", function(){
     });
   });
 
-  describe("when closing a collection view", function(){
+  describe("when destroying a collection view", function(){
     var EventedView = Backbone.Marionette.CollectionView.extend({
       childView: ChildView,
 
       someCallback: function(){ },
 
-      onBeforeClose: function(){},
+      onBeforeDestroy: function(){},
 
-      onClose: function(){ }
+      onDestroy: function(){ }
     });
 
     var collectionView;
     var collection;
     var childView;
     var childModel;
-    var closeHandler = jasmine.createSpy();
+    var destroyHandler = jasmine.createSpy();
 
     beforeEach(function(){
 
@@ -350,20 +350,20 @@ describe("collection view", function(){
       collectionView.listenTo(collection, "foo", collectionView.someCallback);
       collectionView.listenTo(collectionView, "item:foo", collectionView.someItemViewCallback);
 
-      spyOn(childView, "close").andCallThrough();
-      spyOn(collectionView, "onChildRemove").andCallThrough();
+      spyOn(childView, "destroy").andCallThrough();
+      spyOn(collectionView, "removeChildView").andCallThrough();
       spyOn(collectionView, "stopListening").andCallThrough();
       spyOn(collectionView, "remove").andCallThrough();
       spyOn(collectionView, "someCallback").andCallThrough();
       spyOn(collectionView, "someItemViewCallback").andCallThrough();
-      spyOn(collectionView, "close").andCallThrough();
-      spyOn(collectionView, "onClose").andCallThrough();
-      spyOn(collectionView, "onBeforeClose").andCallThrough();
+      spyOn(collectionView, "destroy").andCallThrough();
+      spyOn(collectionView, "onDestroy").andCallThrough();
+      spyOn(collectionView, "onBeforeDestroy").andCallThrough();
       spyOn(collectionView, "trigger").andCallThrough();
 
-      collectionView.bind('collection:closed', closeHandler);
+      collectionView.bind('collection:destroyed', destroyHandler);
 
-      collectionView.close();
+      collectionView.destroy();
 
       childView.trigger("foo");
 
@@ -371,8 +371,8 @@ describe("collection view", function(){
       collection.remove(childModel);
     });
 
-    it("should close all of the child views", function(){
-      expect(childView.close).toHaveBeenCalled();
+    it("should destroy all of the child views", function(){
+      expect(childView.destroy).toHaveBeenCalled();
     });
 
     it("should unbind all the listenTo events", function(){
@@ -399,28 +399,32 @@ describe("collection view", function(){
       expect(collectionView.remove).toHaveBeenCalled();
     });
 
-    it("should call `onClose` if provided", function(){
-      expect(collectionView.onClose).toHaveBeenCalled();
+    it("should call `onDestroy` if provided", function(){
+      expect(collectionView.onDestroy).toHaveBeenCalled();
     });
 
-    it("should call `onBeforeClose` if provided", function(){
-      expect(collectionView.onBeforeClose).toHaveBeenCalled();
+    it("should call `onBeforeDestroy` if provided", function(){
+      expect(collectionView.onBeforeDestroy).toHaveBeenCalled();
     });
 
-    it("should trigger a 'before:close' event", function(){
-      expect(collectionView.trigger).toHaveBeenCalledWith("collection:before:close");
+    it("should trigger a 'before:destroy' event", function(){
+      expect(collectionView.trigger).toHaveBeenCalledWith("collection:before:destroy");
     });
 
-    it("should trigger a 'closed", function(){
-      expect(collectionView.trigger).toHaveBeenCalledWith("collection:closed");
+    it("should trigger a 'destroyed", function(){
+      expect(collectionView.trigger).toHaveBeenCalledWith("collection:destroyed");
     });
 
-    it("should call the handlers add to the closed event", function(){
-      expect(closeHandler).wasCalled();
+    it("should call the handlers add to the destroyed event", function(){
+      expect(destroyHandler).wasCalled();
+    });
+
+    it("should throw an error saying the view's been destroyed if render is attempted again", function(){
+      expect(function(){collectionView.render()}).toThrow("Cannot use a view that's already been destroyed.");
     });
   });
 
-  describe("when closing an childView that does not have a 'close' method", function(){
+  describe("when destroying an childView that does not have a 'destroy' method", function(){
     var collectionView, childView;
 
     beforeEach(function(){
@@ -434,7 +438,7 @@ describe("collection view", function(){
       childView = collectionView.children.findByIndex(0);
       spyOn(childView, "remove").andCallThrough();
 
-      collectionView.closeChildren();
+      collectionView.destroyChildren();
     });
 
     it("should call the 'remove' method", function(){
@@ -565,24 +569,24 @@ describe("collection view", function(){
       });
     });
 
-    describe("close events", function(){
-      var beforeSpy, closeSpy, childBeforeSpy, childClosedSpy;
+    describe("destroy events", function(){
+      var beforeSpy, destroySpy, childBeforeSpy, childClosedSpy;
 
       beforeEach(function(){
-        beforeSpy = jasmine.createSpy("before:close spy");
-        closeSpy = jasmine.createSpy("close spy");
+        beforeSpy = jasmine.createSpy("before:destroy spy");
+        destroySpy = jasmine.createSpy("destroy spy");
 
-        collectionView.on("childview:before:close", beforeSpy);
-        collectionView.on("childview:close", closeSpy);
+        collectionView.on("childview:before:destroy", beforeSpy);
+        collectionView.on("childview:destroy", destroySpy);
 
         collectionView.render();
         childView = collectionView.children.findByIndex(0);
-        collectionView.close();
+        collectionView.destroy();
       });
 
       it("should bubble up through the parent collection view", function(){
         expect(beforeSpy).toHaveBeenCalledWith(childView);
-        expect(closeSpy).toHaveBeenCalledWith(childView);
+        expect(destroySpy).toHaveBeenCalledWith(childView);
       });
     });
   });

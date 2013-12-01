@@ -60,21 +60,21 @@ describe("marionette controller", function(){
     });
   });
 
-  describe("when closing a controller", function(){
-    var controller, closeHandler;
+  describe("when destroying a controller", function(){
+    var controller, destroyHandler;
 
     beforeEach(function(){
       controller = new (Marionette.Controller.extend({
-        onClose: jasmine.createSpy("onClose")
+        onDestroy: jasmine.createSpy("onDestroy")
       }));
 
-      closeHandler = jasmine.createSpy("close");
-      controller.on("close", closeHandler);
+      destroyHandler = jasmine.createSpy("destroy");
+      controller.on("destroy", destroyHandler);
 
       spyOn(controller, "stopListening").andCallThrough();
       spyOn(controller, "unbind").andCallThrough();
 
-      controller.close();
+      controller.destroy();
     });
 
     it("should stopListening events", function(){
@@ -85,12 +85,12 @@ describe("marionette controller", function(){
       expect(controller.unbind).toHaveBeenCalled();
     });
 
-    it("should trigger a close event", function(){
-      expect(closeHandler).toHaveBeenCalled();
+    it("should trigger a destroy event", function(){
+      expect(destroyHandler).toHaveBeenCalled();
     });
 
-    it("should call an onClose method", function(){
-      expect(controller.onClose).toHaveBeenCalled();
+    it("should call an onDestroy method", function(){
+      expect(controller.onDestroy).toHaveBeenCalled();
     });
   });
 

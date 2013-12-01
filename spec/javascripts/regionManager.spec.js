@@ -168,24 +168,24 @@ describe("region manager", function(){
   });
 
   describe("when removing a region by name", function(){
-    var region, regionManager, closeHandler, removeHandler;
+    var region, regionManager, destroyHandler, removeHandler;
 
     beforeEach(function(){
-      closeHandler = jasmine.createSpy("close handler");
+      destroyHandler = jasmine.createSpy("destroy handler");
       removeHandler = jasmine.createSpy("remove handler");
 
       regionManager = new Marionette.RegionManager();
       region = regionManager.addRegion("foo", "#foo");
       region.show(new Backbone.View());
 
-      region.on("close", closeHandler);
+      region.on("destroy", destroyHandler);
       regionManager.on("region:remove", removeHandler);
 
       regionManager.removeRegion("foo");
     });
 
-    it("should close the region", function(){
-      expect(closeHandler).toHaveBeenCalled();
+    it("should destroy the region", function(){
+      expect(destroyHandler).toHaveBeenCalled();
     });
 
     it("should remove the region", function(){
@@ -202,11 +202,11 @@ describe("region manager", function(){
   });
 
   describe("when removing all regions", function(){
-    var region, r2, regionManager, closeHandler, closeHandler2, removeHandler;
+    var region, r2, regionManager, destroyHandler, destroyHandler2, removeHandler;
 
     beforeEach(function(){
-      closeHandler = jasmine.createSpy("close handler");
-      closeHandler2 = jasmine.createSpy("close handler");
+      destroyHandler = jasmine.createSpy("destroy handler");
+      destroyHandler2 = jasmine.createSpy("destroy handler");
       removeHandler = jasmine.createSpy("remove handler");
 
       regionManager = new Marionette.RegionManager();
@@ -216,17 +216,17 @@ describe("region manager", function(){
       region.show(new Backbone.View());
       r2.show(new Backbone.View());
 
-      region.on("close", closeHandler);
-      r2.on("close", closeHandler2);
+      region.on("destroy", destroyHandler);
+      r2.on("destroy", destroyHandler2);
 
       regionManager.on("region:remove", removeHandler);
 
       regionManager.removeRegions();
     });
 
-    it("should close the regions", function(){
-      expect(closeHandler).toHaveBeenCalled();
-      expect(closeHandler2).toHaveBeenCalled();
+    it("should destroy the regions", function(){
+      expect(destroyHandler).toHaveBeenCalled();
+      expect(destroyHandler2).toHaveBeenCalled();
     });
 
     it("should remove the regions", function(){
@@ -240,24 +240,24 @@ describe("region manager", function(){
     });
   });
 
-  describe("when closing all regions", function(){
-    var region, regionManager, closeHandler;
+  describe("when destroying all regions", function(){
+    var region, regionManager, destroyHandler;
 
     beforeEach(function(){
-      closeHandler = jasmine.createSpy("close region handler");
-      closeManagerHandler = jasmine.createSpy("close manager handler");
+      destroyHandler = jasmine.createSpy("destroy region handler");
+      destroyManagerHandler = jasmine.createSpy("destroy manager handler");
 
       regionManager = new Marionette.RegionManager();
       region = regionManager.addRegion("foo", "#foo");
       region.show(new Backbone.View());
 
-      region.on("close", closeHandler);
+      region.on("destroy", destroyHandler);
 
-      regionManager.closeRegions();
+      regionManager.destroyRegions();
     });
 
-    it("should close all regions", function(){
-      expect(closeHandler).toHaveBeenCalled();
+    it("should destroy all regions", function(){
+      expect(destroyHandler).toHaveBeenCalled();
     });
 
     it("should not remove all regions", function(){
@@ -265,33 +265,33 @@ describe("region manager", function(){
     });
   });
 
-  describe("when closing the region manager", function(){
-    var region, regionManager, closeManagerHandler;
+  describe("when destroying the region manager", function(){
+    var region, regionManager, destroyManagerHandler;
 
     beforeEach(function(){
-      closeHandler = jasmine.createSpy("close region handler");
-      closeManagerHandler = jasmine.createSpy("close manager handler");
+      destroyHandler = jasmine.createSpy("destroy region handler");
+      destroyManagerHandler = jasmine.createSpy("destroy manager handler");
 
       regionManager = new Marionette.RegionManager();
       region = regionManager.addRegion("foo", "#foo");
       region.show(new Backbone.View());
 
-      region.on("close", closeHandler);
-      regionManager.on("close", closeManagerHandler);
+      region.on("destroy", destroyHandler);
+      regionManager.on("destroy", destroyManagerHandler);
 
-      regionManager.close();
+      regionManager.destroy();
     });
 
-    it("should close all regions", function(){
-      expect(closeHandler).toHaveBeenCalled();
+    it("should destroy all regions", function(){
+      expect(destroyHandler).toHaveBeenCalled();
     });
 
     it("should remove all regions", function(){
       expect(regionManager.get("foo")).toBeUndefined();
     });
 
-    it("should trigger a 'close' event/method", function(){
-      expect(closeManagerHandler).toHaveBeenCalled();
+    it("should trigger a 'destroy' event/method", function(){
+      expect(destroyManagerHandler).toHaveBeenCalled();
     });
   });
 

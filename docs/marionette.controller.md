@@ -7,7 +7,7 @@ and coordination of other objects, views, and more.
 ## Documentation Index
 
 * [Basic Use](#basic-use)
-* [Closing A Controller](#closing-a-controller)
+* [Destroying A Controller](#destroying-a-controller)
 * [On The Name 'Controller'](#on-the-name-controller)
 
 ## Basic Use
@@ -45,22 +45,22 @@ c.listenTo(c, "stuff:done", function(stuff){
 c.doStuff();
 ```
 
-## Closing A Controller
+## Destroying A Controller
 
-Each Controller instance has a built in `close` method that handles
+Each Controller instance has a built in `destroy` method that handles
 unbinding all of the events that are directly attached to the controller
 instance, as well as those that are bound using the EventBinder from
 the controller.
 
-The `close` method will trigger a "close" event and corresponding
-`onClose` method call:
+The `destroy` method will trigger a "destroy" event and corresponding
+`onDestroy` method call:
 
 ```js
-// define a controller with an onClose method
+// define a controller with an onDestroy method
 var MyController = Marionette.Controller.extend({
 
-  onClose: function(){
-    // put custom code here, to close this controller
+  onDestroy: function(){
+    // put custom code here, to destroy this controller
   }
 
 })
@@ -69,13 +69,13 @@ var MyController = Marionette.Controller.extend({
 var contr = new MyController();
 
 // add some event handlers
-contr.on("close", function(){ ... });
+contr.on("destroy", function(){ ... });
 contr.listenTo(something, "bar", function(){...});
 
-// close the controller: unbind all of the
-// event handlers, trigger the "close" event and 
-// call the onClose method
-controller.close();
+// destroy the controller: unbind all of the
+// event handlers, trigger the "destroy" event and 
+// call the onDestroy method
+controller.destroy();
 ```
 
 ## On The Name 'Controller'

@@ -12,8 +12,8 @@ behaviors that are shared across all views.
 ## Documentation Index
 
 * [Binding To View Events](#binding-to-view-events)
-* [View close](#view-close)
-* [View onBeforeClose](#view-onbeforeclose)
+* [View destroy](#view-destroy)
+* [View onBeforeDestroy](#view-onbeforedestroy)
 * [View "dom:refresh" / onDomRefresh event](#view-domrefresh--ondomrefresh-event)
 * [View.triggers](#viewtriggers)
 * [View.modelEvents and View.collectionEvents](#viewmodelevents-and-viewcollectionevents)
@@ -56,44 +56,45 @@ optionally set the context by using `_.bind`.
 this.listenTo(this.collection, "add", _.bind(this.reconcileCollection, this.collection));
 ```
 
-## View close
+## View destroy
 
-View implements a `close` method, which is called by the region
-managers automatically. As part of the implementation, the following
-are performed:
+View implements a `destroy` method, which prepares the view to be garbage collected. As
+part of the implementation, the following are performed:
 
-* call an `onBeforeClose` event on the view, if one is provided
-* call an `onClose` event on the view, if one is provided
+* call an `onBeforeDestroy` event on the view, if one is provided
+* call an `onDestroy` event on the view, if one is provided
 * unbind all custom view events
 * unbind all DOM events
 * remove `this.el` from the DOM
 * unbind all `listenTo` events
 
-By providing an `onClose` event in your view definition, you can
+**NOTE: Once a view has been `destroy`ed, it cannot be reused.**
+
+By providing an `onDestroy` event in your view definition, you can
 run custom code for your view that is fired after your view has been
-closed and cleaned up. This lets you handle any additional clean up
-code without having to override the `close` method.
+destroyed and cleaned up. This lets you handle any additional clean up
+code without having to override the `destroy` method.
 
 ```js
 Backbone.Marionette.ItemView.extend({
-  onClose: function(){
-    // custom cleanup or closing code, here
+  onDestroy: function(){
+    // custom cleanup or destroying code, here
   }
 });
 ```
 
-## View onBeforeClose
+## View onBeforeDestroy
 
-When closing a view, an `onBeforeClose` method will be called, if it
+When destroying a view, an `onBeforeDestroy` method will be called, if it
 has been provided. If this method returns `false`, the view will not
-be closed. Any other return value (including null or undefined) will
-allow the view to be closed.
+be destroyed. Any other return value (including null or undefined) will
+allow the view to be destroyed.
 
 ```js
 MyView = Marionette.View.extend({
 
-  onBeforeClose: function(){
-    // prevent the view from being closed
+  onBeforeDestroy: function(){
+    // prevent the view from being destroyed
     return false;
   }
 
@@ -101,7 +102,7 @@ MyView = Marionette.View.extend({
 
 var v = new MyView();
 
-v.close(); // view will remain open
+v.destroy(); // view will remain open
 ```
 
 ### View "dom:refresh" / onDomRefresh event

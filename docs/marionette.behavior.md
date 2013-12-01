@@ -38,7 +38,7 @@ var MyView = Marionette.ItemView.extend({
 
   warnBeforeClose: function() {
     alert("you are closing all your data is now gone!");
-    this.close();
+    this.destroy();
   },
 
   onShow: function() {
@@ -92,7 +92,7 @@ var CloseWarn = Marionette.Behavior.extend({
     alert(this.options.message);
     // every Behavior has a hook into the
     // view that it is attached to
-    this.view.close();
+    this.view.destroy();
   }
 });
 ```
@@ -223,7 +223,7 @@ The `view` is a reference to the view instance that the `behavior` is on.
 ```js
 Marionette.Behavior.extend({
 	onShow: function() {
-		this.view.close();
+		this.view.destroy();
 	}
 });
 ```

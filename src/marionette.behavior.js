@@ -32,7 +32,7 @@ Marionette.Behavior = (function(_, Backbone){
     initialize: function(){},
 
     // stopListening to behavior `onListen` events.
-    close: function() {
+    destroy: function() {
       this.stopListening();
     },
 

@@ -20,9 +20,9 @@ Marionette.Controller.extend = Marionette.extend;
 
 // Ensure it can trigger events with Backbone.Events
 _.extend(Marionette.Controller.prototype, Backbone.Events, {
-  close: function(){
+  destroy: function(){
     var args = Array.prototype.slice.call(arguments);
-    this.triggerMethod.apply(this, ["close"].concat(args));
+    this.triggerMethod.apply(this, ["destroy"].concat(args));
     this.stopListening();
     this.off();
   }

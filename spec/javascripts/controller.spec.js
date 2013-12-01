@@ -60,24 +60,24 @@ describe("marionette controller", function(){
     });
   });
 
-  describe("when closing a controller", function(){
-    var controller, closeHandler, listenToHandler;
+  describe("when destroying a controller", function(){
+    var controller, destroyHandler, listenToHandler;
 
     beforeEach(function(){
       controller = new (Marionette.Controller.extend({
-        onClose: jasmine.createSpy("onClose")
+        onDestroy: jasmine.createSpy("onDestroy")
       }));
 
-      closeHandler = jasmine.createSpy("close");
-      controller.on("close", closeHandler);
+      destroyHandler = jasmine.createSpy("destroy");
+      controller.on("destroy", destroyHandler);
 
-      listenToHandler = jasmine.createSpy("close");
-      controller.listenTo(controller ,"close", listenToHandler);
+      listenToHandler = jasmine.createSpy("destroy");
+      controller.listenTo(controller ,"destroy", listenToHandler);
 
       spyOn(controller, "stopListening").andCallThrough();
       spyOn(controller, "off").andCallThrough();
 
-      controller.close(123, "second param");
+      controller.destroy(123, "second param");
     });
 
     it("should stopListening events", function(){
@@ -88,16 +88,16 @@ describe("marionette controller", function(){
       expect(controller.off).toHaveBeenCalled();
     });
 
-    it("should stopListening after calling close", function(){
+    it("should stopListening after calling destroy", function(){
       expect(listenToHandler).toHaveBeenCalled();
     });
 
-    it("should trigger a close event with any arguments passed to close", function(){
-      expect(closeHandler).toHaveBeenCalledWith(123, "second param");
+    it("should trigger a destroy event with any arguments passed to destroy", function(){
+      expect(destroyHandler).toHaveBeenCalledWith(123, "second param");
     });
 
-    it("should call an onClose method with any arguments passed to close", function(){
-      expect(controller.onClose).toHaveBeenCalledWith(123, "second param");
+    it("should call an onDestroy method with any arguments passed to destroy", function(){
+      expect(controller.onDestroy).toHaveBeenCalledWith(123, "second param");
     });
   });
 

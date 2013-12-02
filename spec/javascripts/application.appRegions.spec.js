@@ -61,7 +61,8 @@ describe("application regions", function(){
       MyApp.addRegions({
         MyRegion: {
           selector: '#region',
-          regionType: MyRegion
+          regionType: MyRegion,
+          specialOption: true
         }
       });
     });
@@ -77,6 +78,12 @@ describe("application regions", function(){
     it("should set the specified selector", function(){
       expect(MyApp.MyRegion.el).toBe("#region");
     });
+
+    it("should pass extra options to the custom regionType", function() {
+      expect(MyApp.MyRegion).toHaveOwnProperty("options");
+      expect(MyApp.MyRegion.options).toHaveOwnProperty("specialOption");
+      expect(MyApp.MyRegion.options.specialOption).toBeTruthy();
+    });    
   });
 
   describe("when an app has a region", function(){

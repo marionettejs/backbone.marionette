@@ -62,6 +62,7 @@ _.extend(Marionette.Region, {
 
     if (regionConfig.selector) {
       selector = regionConfig.selector;
+      delete regionConfig.selector;
     }
 
     // get the type for the region
@@ -76,12 +77,17 @@ _.extend(Marionette.Region, {
 
     if (regionConfig.regionType) {
       RegionType = regionConfig.regionType;
+      delete regionConfig.regionType;
     }
 
+    if (regionIsString || regionIsType) {
+      regionConfig = {};
+    }
+
+    regionConfig.el = selector;
+
     // build the region instance
-    var region = new RegionType({
-      el: selector
-    });
+    var region = new RegionType(regionConfig);
 
     // override the `getEl` function if we have a parentEl
     // this must be overridden to ensure the selector is found

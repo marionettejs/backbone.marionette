@@ -4,7 +4,7 @@ Marionette has a base `Marionette.View` type that other views extend from.
 This base view provides some common and core functionality for
 other views to take advantage of.
 
-**Note:** The `Marionette.View` type is not intended to be 
+**Note:** The `Marionette.View` type is not intended to be
 used directly. It exists as a base view for other view types
 to be extended from, and to provide a common location for
 behaviors that are shared across all views.
@@ -16,6 +16,7 @@ behaviors that are shared across all views.
 * [View onBeforeClose](#view-onbeforeclose)
 * [View "dom:refresh" / onDomRefresh event](#view-domrefresh--ondomrefresh-event)
 * [View.triggers](#viewtriggers)
+* [View.events](#viewevents)
 * [View.modelEvents and View.collectionEvents](#viewmodelevents-and-viewcollectionevents)
 * [View.serializeData](#viewserializedata)
 * [View.bindUIElements](#viewbinduielements)
@@ -109,8 +110,8 @@ v.close(); // view will remain open
 Triggered after the view has been rendered, has been shown in the DOM via a Marionette.Region, and has been
 re-rendered.
 
-This event / callback is useful for 
-[DOM-dependent UI plugins](http://lostechies.com/derickbailey/2012/02/20/using-jquery-plugins-and-ui-controls-with-backbone/) such as 
+This event / callback is useful for
+[DOM-dependent UI plugins](http://lostechies.com/derickbailey/2012/02/20/using-jquery-plugins-and-ui-controls-with-backbone/) such as
 [jQueryUI](http://jqueryui.com/) or [KendoUI](http://kendoui.com).
 
 ```js
@@ -126,9 +127,28 @@ Backbone.Marionette.ItemView.extend({
 For more information about integration Marionette w/ KendoUI (also applicable to jQueryUI and other UI
 widget suites), see [this blog post on KendoUI + Backbone](http://www.kendoui.com/blogs/teamblog/posts/12-11-26/backbone_and_kendo_ui_a_beautiful_combination.aspx).
 
+## View.events
+Since Views extend from backbone`s view class, you gain the benifit of the [events hash](http://backbonejs.org/#View-delegateEvents).
+
+Some preprocessing sugar is added on top to add the ability to cross utilize the ```ui``` hash.
+
+```js
+MyView = Backbone.Marionette.ItemView.extend({
+  // ...
+
+  ui: {
+    "cat": ".dog"
+  },
+
+  events: {
+    "click @ui.cat": "bark" //is the same as "click .dog":
+  }
+});
+```
+
 ## View.triggers
 
-Views can define a set of `triggers` as a hash, which will 
+Views can define a set of `triggers` as a hash, which will
 convert a DOM event into a `view.triggerMethod` call.
 
 The left side of the hash is a standard Backbone.View DOM
@@ -151,7 +171,7 @@ view.on("something:do:it", function(args){
   alert("I DID IT!");
 });
 
-// "click" the 'do-something' DOM element to 
+// "click" the 'do-something' DOM element to
 // demonstrate the DOM event conversion
 view.$(".do-something").trigger("click");
 ```
@@ -171,7 +191,7 @@ Backbone.Marionette.CompositeView.extend({
 });
 ```
 
-You can also specify the `triggers` as a function that 
+You can also specify the `triggers` as a function that
 returns a hash of trigger configurations
 
 ```js
@@ -180,6 +200,19 @@ Backbone.Marionette.CompositeView.extend({
     return {
       "click .that-thing": "that:i:sent:you"
     };
+  }
+});
+```
+
+Trigger keys can be configured to cross utilize the ```ui``` hash.
+
+```js
+Backbone.Marionette.ItemView.extend({
+  ui: {
+     'monkey': '.guybrush'
+  },
+  triggers: {
+    'click @ui.monkey': 'see:LeChuck' // equivalent of "click .guybrush"
   }
 });
 ```
@@ -259,7 +292,7 @@ the model and collection events re-bound.
 ### Multiple Callbacks
 
 Multiple callback functions can be specified by separating them with a
-space. 
+space.
 
 ```js
 Backbone.Marionette.CompositeView.extend({
@@ -346,9 +379,9 @@ do not provide a helper method mechanism while Handlebars
 templates do.
 
 A `templateHelpers` attribute can be applied to any View object that
-renders a template. When this attribute is present its contents 
-will be mixed in to the data object that comes back from the 
-`serializeData` method. This will allow you to create helper methods 
+renders a template. When this attribute is present its contents
+will be mixed in to the data object that comes back from the
+`serializeData` method. This will allow you to create helper methods
 that can be called from within your templates.
 
 ### Basic Example
@@ -412,10 +445,10 @@ templateHelpers: {
 ### Object Or Function As `templateHelpers`
 
 You can specify an object literal (as shown above), a reference
-to an object literal, or a function as the `templateHelpers`. 
+to an object literal, or a function as the `templateHelpers`.
 
-If you specify a function, the function will be invoked 
-with the current view instance as the context of the 
+If you specify a function, the function will be invoked
+with the current view instance as the context of the
 function. The function must return an object that can be
 mixed in to the data for the view.
 

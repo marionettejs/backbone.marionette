@@ -1,3 +1,7 @@
+### v1.4.0 [view commit logs](https://github.com/marionettejs/backbone.marionette/compare/v1.3.0...v1.4.0)
+* Views
+  * adds the ability to use the new ```@ui.``` syntax within the events and triggers hash to prevent selector duplication
+
 ### v1.3.0 [view commit logs](https://github.com/marionettejs/backbone.marionette/compare/v1.2.3...v1.3.0)
 * CompositeView / CollectionView
   * Massive perf boost in rendering collection and composite views by using document fragments [jsPerf](http://jsperf.com/marionette-documentfragment-collectionview/5)

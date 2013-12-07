@@ -189,7 +189,7 @@ closing views:
 
 * "show" / `onShow` - Called on the view instance when the view has been rendered and displayed.
 * "show" / `onShow` - Called on the region instance when the view has been rendered and displayed.
-* "close" / `onClose` - Called when the view has been closed.
+* "close" / `onClose` - Called on the view instance when the view has been closed.
 
 These events can be used to run code when your region 
 opens and closes views.

@@ -132,6 +132,11 @@ describe("base view", function(){
 
   describe("constructing a view with default options", function(){
     var view = Marionette.ItemView.extend();
+    var presetOptions = Marionette.View.extend({
+      options: {
+        'lila': 'zoidberg'
+      }
+    });
 
     it("should take and store view options", function() {
       var viewInstance = new view({"Guybrush": "Island"});
@@ -141,6 +146,11 @@ describe("base view", function(){
     it("should have an empty hash of options by default", function() {
       var viewInstance = new view;
       expect(typeof(viewInstance.options.Guybrush)).toBe("undefined");
+    });
+
+    it("should retain options set on view class", function() {
+      var viewInstance = new presetOptions;
+      expect(viewInstance.options.lila).toBe("zoidberg");
     });
   });
 

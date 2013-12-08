@@ -125,7 +125,7 @@ describe("layout", function(){
     });
 
     it("should supply the layout.options to the function when calling it", function(){
-      expect(options).toBe(layout.options);
+      expect(options).toEqual(layout.options);
     });
 
     it("should build the regions from the returns object literal", function(){

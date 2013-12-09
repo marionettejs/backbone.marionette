@@ -1,3 +1,7 @@
+### v1.4.1 [view commit logs](https://github.com/marionettejs/backbone.marionette/compare/v1.4.0...v1.4.1)
+* Views
+  * fix for inital view class options. Now retains set options at class instantiation
+
 ### v1.4.0 [view commit logs](https://github.com/marionettejs/backbone.marionette/compare/v1.3.0...v1.4.0)
 * Views
   * adds the ability to use the new ```@ui.``` syntax within the events and triggers hash to prevent selector duplication

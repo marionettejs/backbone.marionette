@@ -13,7 +13,7 @@ Marionette.View = Backbone.View.extend({
     // this is a backfill since backbone removed the assignment
     // of this.options
     // at some point however this may be removed
-    this.options = _.extend({}, this.options, options);
+    this.options = _.extend({}, _.result(this, 'options'), _.isFunction(options) ? options.call(this) : options);
 
     // parses out the @ui DSL for events
     this.events = this.normalizeUIKeys(_.result(this, 'events'));

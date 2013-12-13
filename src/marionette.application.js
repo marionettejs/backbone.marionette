@@ -52,8 +52,8 @@ _.extend(Marionette.Application.prototype, Backbone.Events, {
   // Accepts a hash of named strings or Region objects
   // addRegions({something: "#someRegion"})
   // addRegions({something: Region.extend({el: "#someRegion"}) });
-  addRegions: function(regions){
-    return this._regionManager.addRegions(regions);
+  addRegions: function(regions, defaults){
+    return this._regionManager.addRegions(regions, defaults);
   },
 
   // Close all regions in the app, without removing them

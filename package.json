@@ -23,7 +23,8 @@
     }
   ],
   "scripts": {
-    "start": "grunt server"
+    "start": "grunt server",
+    "test": "grunt test"
   },
   "author": {
     "name": "Derick Bailey",

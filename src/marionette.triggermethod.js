@@ -3,11 +3,11 @@
 // `this.triggerMethod("foo")` will trigger the "foo" event and
 // call the "onFoo" method.
 //
-// `this.triggerMethod("foo:bar") will trigger the "foo:bar" event and
+// `this.triggerMethod("foo:bar")` will trigger the "foo:bar" event and
 // call the "onFooBar" method.
 Marionette.triggerMethod = (function(){
 
-  // split the event name on the :
+  // split the event name on the ":"
   var splitter = /(^|:)(\w)/gi;
 
   // take the event section ("section1:section2:section3")
@@ -16,7 +16,7 @@ Marionette.triggerMethod = (function(){
     return eventName.toUpperCase();
   }
 
-  // actual triggerMethod name
+  // actual triggerMethod implementation
   var triggerMethod = function(event) {
     // get the method name from the event name
     var methodName = 'on' + event.replace(splitter, getEventName);

@@ -67,7 +67,7 @@ describe("collectionview - emptyView", function(){
     });
   });
 
-  describe("when the emptyView has been rendered for an empty collection and then collection reset, recieving some values. Then adding an item to the collection", function () {
+  describe("when the emptyView has been rendered for an empty collection and then collection reset, receiving some values. Then adding an item to the collection", function () {
     var collectionView, closeSpy;
 
     beforeEach(function () {
@@ -202,6 +202,56 @@ describe("collectionview - emptyView", function(){
       collection.reset(data);
 
       expect($(collectionView.$el)).toHaveHtml("<span>bar</span><span>baz</span>");
+    });
+  });
+
+  describe("checkEmpty", function(){
+    var collectionView, closeSpy;
+
+    beforeEach(function(){
+      var collection = new Backbone.Collection();
+
+      collectionView = new EmptyCollectionView({
+        collection: collection
+      });
+
+      collectionView.render();
+    });
+
+    it("should return true when the collection is empty", function(){
+      expect(collectionView.checkEmpty()).toEqual(true);
+    });
+
+    it("should return false when the collection is not empty", function(){
+      collectionView.collection.add({ foo: "wut" });
+      expect(collectionView.checkEmpty()).toEqual(false);
+    });
+  });
+
+  describe("overriding checkEmpty with a populated collection", function(){
+    var collectionView, closeSpy;
+
+    beforeEach(function(){
+      var collection = new Backbone.Collection([{foo: "wut"}, {foo: "wat"}]);
+
+      var OverriddenCheckEmptyCollectionView = EmptyCollectionView.extend({
+        checkEmpty: function () {
+          return true;
+        }
+      });
+      collectionView = new OverriddenCheckEmptyCollectionView({
+        collection: collection
+      });
+
+      collectionView.render();
+    });
+
+    it("should append the html for the emptyView", function(){
+      expect($(collectionView.$el)).toHaveHtml("<span class=\"isempty\"></span>");
+    });
+
+    it("should reference each of the rendered view items", function(){
+      expect(_.size(collectionView.children)).toBe(1);
     });
   });
 

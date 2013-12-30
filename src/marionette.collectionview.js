@@ -76,7 +76,7 @@ Marionette.CollectionView = Marionette.View.extend({
     this.closeEmptyView();
     this.closeChildren();
 
-    if (this.collection && this.collection.length > 0) {
+    if (!this.checkEmpty()) {
       this.showCollection();
     } else {
       this.showEmptyView();
@@ -196,7 +196,9 @@ Marionette.CollectionView = Marionette.View.extend({
   removeItemView: function(item){
     var view = this.children.findByModel(item);
     this.removeChildView(view);
-    this.checkEmpty();
+    if (this.checkEmpty()){
+      this.showEmptyView();
+    }
   },
 
   // Remove the child view and close it
@@ -217,13 +219,10 @@ Marionette.CollectionView = Marionette.View.extend({
     this.triggerMethod("item:removed", view);
   },
 
-  // helper to show the empty view if the collection is empty
+  // helper to check if the collection is empty
   checkEmpty: function() {
-    // check if we're empty now, and if we are, show the
-    // empty view
-    if (!this.collection || this.collection.length === 0){
-      this.showEmptyView();
-    }
+    // check if we're empty now
+    return !this.collection || this.collection.length === 0;
   },
 
   // Append the HTML to the collection's `el`.

@@ -1,14 +1,17 @@
+## Upgrade to v.1.1.0 ~ v1.3.0
+No breaking changes have been introduced between these versions
+
 ## Upgrade to v1.1.0
 
 v1.1.0 adds a few new features, but should not break any existing API or
-behavior. It should, therefore, be a drop-in replacement for v1.0.x. 
+behavior. It should, therefore, be a drop-in replacement for v1.0.x.
 
 Please see the [changelog](https://github.com/marionettejs/backbone.marionette/blob/master/changelog.md)
 for the complete list of what was added and fixed in this release.
 
 ## Upgrade to v1.0.0
 
-In addition to the following notes, please see previous upgrade guide entries and the 
+In addition to the following notes, please see previous upgrade guide entries and the
 [changelog](https://github.com/marionettejs/backbone.marionette/blob/master/changelog.md).
 
 ### Backbone 1.0 and Underscore 1.4.4
@@ -35,7 +38,7 @@ more information on other changes in Wreqr, see the
 
 Grunt v0.4 has a significantly different architecture than previous versions. If
 you are building Marionette and/or running the specs from your local computer, you
-will need to update to the latest version of Grunt v0.4 to do so. 
+will need to update to the latest version of Grunt v0.4 to do so.
 
 See the
 [getting started guide for Grunt](http://gruntjs.com/getting-started).
@@ -62,7 +65,7 @@ you will need to delete that line of code.
 
 The replacement for this is simply Backbone.Events, which
 has the necessary `.listenTo` and `.stopListening` methods,
-as noted in previous upgrade guide entries. 
+as noted in previous upgrade guide entries.
 
 The `addEventBinder` had provided a 4th `context` parameter
 to the `.listenTo` and `.stopListening` methods, in anticipation
@@ -70,14 +73,14 @@ of Backbone adding these in a future release. After further
 discussion and research, though, I realized that this parameter
 is not needed. Further, Backbone is not going to be adding this
 parameter any time soon. There has not been a clear need for
-it. 
+it.
 
 ### Marionette.EventAggregator Object Has Been Removed
 
 The `Marionette.EventAggregator` object did nothing more than
 import `Backbone.Wreqr.EventAggregator` in to the Marionette
-namespace. This has been removed as it added no value. Replace 
-all uses of `Marionette.EventAggregator` with 
+namespace. This has been removed as it added no value. Replace
+all uses of `Marionette.EventAggregator` with
 `Backbone.Wreqr.EventAggregator`.
 
 ## Upgrade v1.0.0-rc3 to Backbone v0.9.10 and jQuery v1.9.0
@@ -87,16 +90,16 @@ This is a simple update:
 * Update Backbone to v0.9.10
 * Update jQuery to v1.9.0
 
-Note that there are no changes in Marionette for this minor. 
-You should not have to change any Marionette specific code 
-to update your app. You may have to change code that core 
-Backbone runs, or that jQuery runs, though. This includes 
-any core Backbone features that are included in Marionette, 
-such as the use of the `view.make` function which is no 
-longer included in Backbone.View. 
+Note that there are no changes in Marionette for this minor.
+You should not have to change any Marionette specific code
+to update your app. You may have to change code that core
+Backbone runs, or that jQuery runs, though. This includes
+any core Backbone features that are included in Marionette,
+such as the use of the `view.make` function which is no
+longer included in Backbone.View.
 
 For more information on what you may need to change, see
-the change logs for 
+the change logs for
 [Backbone v0.9.10](http://backbonejs.org/#changelog)
 and the upgrade guide for [jQuery v1.9.0](http://jquery.com/upgrade-guide/1.9/)
 
@@ -115,7 +118,7 @@ First and foremost, with the release of Backbone v0.9.9, we are no
 longer supporting Backbone v0.9.2. There are several additions to
 v0.9.9 that have made code previously found in Marionette's pre-requisites
 obsolete. This has caused a ripple effect of API changes for
-naming consistency in Marionette. 
+naming consistency in Marionette.
 
 In order to use Marionette v1.0.0-rc3, you must upgrade to Backbone
 v0.9.9 and Underscore v1.4.3 or higher (as necessary, with Backbone
@@ -128,10 +131,10 @@ osbsolete. It will be kept around for backward compatibility with
 older versions of Marionette and Backbone, but it is no longer used
 by Marionette directly. Unless you have a significant investment in
 its use, you should discontinue its use when ugprading to Marionette
-v1.0.0-rc3. 
+v1.0.0-rc3.
 
 To replace the use of Backbone.EventBinder in your Marionette applications,
-you have two choices: 
+you have two choices:
 
 1. Mix Backbone.Events in to your objects directly
 2. Use Backbone.Wreqr.EventAggregator
@@ -154,7 +157,7 @@ following changes:
 The Marionette.Async library was a mistake from the start. It advocated
 bad practices by making the View layer responsible for the knowledge
 of application workflow. I'm happy to say that it has been removed
-from Marionette and is no longer supported. 
+from Marionette and is no longer supported.
 
 If your app currently relies on Marionette.Async, I suggest re-thinking
 the architecture before upgrading to Marionette v1.0.0-rc3 or later. Specifically,

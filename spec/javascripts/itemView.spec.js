@@ -16,15 +16,15 @@ describe("item view", function(){
   describe("when rendering without a valid template", function(){
     var TemplatelessView = Backbone.Marionette.ItemView.extend({});
     var view;
-    
+
     beforeEach(function(){
       view = new TemplatelessView({});
     });
-    
+
     it("should throw an exception because there was no valid template", function(){
       expect(view.render).toThrow(new Error("Cannot render the template since it's false, null or undefined."));
     });
-    
+
   });
 
   describe("when rendering", function(){
@@ -40,7 +40,7 @@ describe("item view", function(){
 
     beforeEach(function(){
       view = new OnRenderView({});
-      
+
       spyOn(view, "onBeforeRender").andCallThrough();
       spyOn(view, "onRender").andCallThrough();
       spyOn(view, "trigger").andCallThrough();
@@ -367,16 +367,16 @@ describe("item view", function(){
       expect(renderUpdate).toHaveBeenCalled();
     });
   });
-  
+
   describe("has a valid inheritance chain back to Marionette.View", function(){
-    
+
     var constructor;
-    
+
     beforeEach(function(){
       constructor = spyOn(Marionette.View.prototype, "constructor");
       new Marionette.ItemView();
     });
-    
+
     it("calls the parent Marionette.View's constructor function on instantiation", function(){
       expect(constructor).toHaveBeenCalled();
     });

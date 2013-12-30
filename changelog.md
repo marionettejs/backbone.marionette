@@ -1,4 +1,39 @@
-### v1.1 [view commit logs](https://github.com/marionettejs/backbone.marionette/compare/v1.0.4...v1.1)
+### v1.4.1 [view commit logs](https://github.com/marionettejs/backbone.marionette/compare/v1.4.0...v1.4.1)
+* Views
+  * fix for inital view class options. Now retains set options at class instantiation
+
+### v1.4.0 [view commit logs](https://github.com/marionettejs/backbone.marionette/compare/v1.3.0...v1.4.0)
+* Views
+  * adds the ability to use the new ```@ui.``` syntax within the events and triggers hash to prevent selector duplication
+
+### v1.3.0 [view commit logs](https://github.com/marionettejs/backbone.marionette/compare/v1.2.3...v1.3.0)
+* CompositeView / CollectionView
+  * Massive perf boost in rendering collection and composite views by using document fragments [jsPerf](http://jsperf.com/marionette-documentfragment-collectionview/5)
+
+### v1.2.3 [view commit logs](https://github.com/marionettejs/backbone.marionette/compare/v1.2.2...v1.2.3)
+* CompositeView
+  * Fixed bug where ```child views``` were being added before the initial render, thus raising errors.
+
+### v1.2.2 [view commit logs](https://github.com/marionettejs/backbone.marionette/compare/v1.2.1...v1.2.2)
+* Views
+	* Move the instantiation of ```view``` options above the ```constructor``` This allows for view options to be accessed from within the ```initialize``` method for a given ```view```
+This is needed since backbone views no longer set the view options in the constructor
+
+### v1.2.1 [view commit logs](https://github.com/marionettejs/backbone.marionette/compare/v1.2.0...v1.2.1)
+* Views
+  * fixed a bug so now view options are {} by default and not undefined.
+  * fixed a bug where the triggers preventDefault and stopPropagation were executing in the wrong context – triggers now prevent default and stop propagation by default once more.
+
+### v1.2.0 [view commit logs](https://github.com/marionettejs/backbone.marionette/compare/v1.1.0...v1.2.0)
+* Update Backbone to [1.1.0](https://github.com/jashkenas/backbone/compare/1.0.0...1.1.0)
+
+* Views
+  * added the ability to customize the behavior of `triggers` preventDefault and stopPropagation
+
+* Collection View / CompositeView
+  * added the ability to specifiy `getEmptyView` for dynamic `emptyView` lookups
+
+### v1.1 [view commit logs](https://github.com/marionettejs/backbone.marionette/compare/v1.0.4...v1.1.0)
 
 * Marionette.View / All Views
   * Fix for `ui` bindings to not be removed from view prototype, if unrendered view is closed
@@ -191,7 +226,7 @@
 * Marionette.addEventBinder
   * **BREAKING:** This function will mix in Backbone.Events to the target object if it does not exist
   * **BREAKING:** This function will alter the `listenTo` method of the target to accept a `context` parameter as the 4th parameter of the method
-  
+
 * All Views, Controller, etc
   * **BREAKING:** Backbone.EventBinder is no longer mixed in
   * **BREAKING:** See 'EventBinder -> EventAggregator' changes regarding method names to use for binding / unbinding events
@@ -678,7 +713,7 @@
 * Added `Marionette.View` object, to contain a few basic parts of every Marionette view
 * Added `Marionette.Renderer` object, to handle template rendering
 * Views correctly trigger the "close" events before unbinding event subscribers
-* Additional `CollectionView` changes: 
+* Additional `CollectionView` changes:
   * Extracted `getItemView` method to retrieve the `itemView` type, either from `this.itemView` or `this.options.itemView`
   * Extracted `buildItemView` method to build each item's view
   * Renamed `removeChildView` to `removeItemView` to make the language consistent
@@ -791,7 +826,7 @@
 
 #### v0.4.5
 
-* CollectionView closes existing child views before re-rendering itself, when "reset" 
+* CollectionView closes existing child views before re-rendering itself, when "reset"
 event of collection is triggered
 * CollectionView now has "initialEvents" method which configures it's initial events
 * ItemView now has "initialEvents" method which configures it's initial events
@@ -827,7 +862,7 @@ event of collection is triggered
 * **BREAKING:** Rewrote the template manager to be async-template loading friendly
 * **BREAKING:** Dropping support for Backbone v0.5.3 and below
 * Added `Marionette.Callbacks` to manage a collection of callbacks in an async-friendly way
-* Guarantee the execution of app initializer functions, even if they are added after the app 
+* Guarantee the execution of app initializer functions, even if they are added after the app
 has been started.
 * App triggers "start" event after initializers and initializer events
 * Updated to Backbone v0.9.1

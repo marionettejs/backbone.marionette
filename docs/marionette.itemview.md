@@ -249,6 +249,8 @@ same UI element more than once in your view's code. Instead of
 duplicating the selector, you can simply reference it by
 `this.ui.elementName`:
 
+You can also use the ui hash values from within events and trigger keys using the ```"@ui.elementName"```: syntax
+
 ```js
 Backbone.Marionette.ItemView.extend({
   tagName: "tr",

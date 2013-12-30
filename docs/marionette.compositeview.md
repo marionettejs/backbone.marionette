@@ -163,22 +163,7 @@ Sometimes the `itemViewContainer` configuration is insuficient for
 specifying where the itemView instance should be placed. If this is the
 case, you can override the `appendHtml` method with your own implementation.
 
-For example:
-
-```js
-TableView = Backbone.Marionette.CompositeView.extend({
-  itemView: RowView,
-
-  template: "#table-template",
-
-  appendHtml: function(collectionView, itemView, index){
-    collectionView.$("tbody").append(itemView.el);
-  }
-});
-```
-
-For more information on the parameters of this method, see the
-[CollectionView's documentation](https://github.com/marionettejs/backbone.marionette/blob/master/docs/marionette.collectionview.md).
+For more information on this method, see the [CollectionView's documentation](https://github.com/marionettejs/backbone.marionette/blob/master/docs/marionette.collectionview.md).
 
 ## Recursive By Default
 

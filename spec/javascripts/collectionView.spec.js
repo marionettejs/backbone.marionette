@@ -3,7 +3,7 @@ describe("collection view", function(){
 
   // Shared View Definitions
   // -----------------------
-  
+
   var ItemView = Backbone.Marionette.ItemView.extend({
     tagName: "span",
     render: function(){
@@ -26,7 +26,7 @@ describe("collection view", function(){
 
   // Collection View Specs
   // ---------------------
-  
+
   describe("when rendering a collection view with no `itemView` specified", function(){
     var NoItemView = Backbone.Marionette.CollectionView.extend({
     });
@@ -44,7 +44,7 @@ describe("collection view", function(){
       expect(function(){collectionView.render()}).toThrow("An `itemView` must be specified");
     });
   });
-  
+
   describe("when rendering a collection view", function(){
     var collection = new Backbone.Collection([{foo: "bar"}, {foo: "baz"}]);
     var collectionView, itemViewRender;
@@ -64,8 +64,23 @@ describe("collection view", function(){
       spyOn(collectionView, "onBeforeRender").andCallThrough();
       spyOn(collectionView, "trigger").andCallThrough();
       spyOn(collectionView, "appendHtml").andCallThrough();
+      spyOn(collectionView.$el, "append").andCallThrough();
+      spyOn(collectionView, "startBuffering").andCallThrough();
+      spyOn(collectionView, "endBuffering").andCallThrough();
 
       collectionView.render();
+    });
+
+    it("should only call $el.append once", function() {
+      expect(collectionView.$el.append.callCount).toEqual(1);
+    });
+
+    it("should only call clear render buffer once", function() {
+      expect(collectionView.endBuffering.callCount).toEqual(1);
+    });
+
+    it("should add to render buffer once for each child", function() {
+      expect(collectionView.appendHtml.callCount).toEqual(2);
     });
 
     it("should append the html for each itemView", function(){
@@ -91,7 +106,7 @@ describe("collection view", function(){
     it("should trigger a 'before:render' event", function(){
       expect(collectionView.trigger).toHaveBeenCalledWith("before:render", collectionView);
     });
-    
+
     it("should trigger a 'collection:before:render' event", function(){
       expect(collectionView.trigger).toHaveBeenCalledWith("collection:before:render", collectionView);
     });
@@ -99,7 +114,7 @@ describe("collection view", function(){
     it("should trigger a 'collection:rendered' event", function(){
       expect(collectionView.trigger).toHaveBeenCalledWith("collection:rendered", collectionView);
     });
-    
+
     it("should trigger a 'render' event", function(){
       expect(collectionView.trigger).toHaveBeenCalledWith("render", collectionView);
     });
@@ -311,7 +326,7 @@ describe("collection view", function(){
 
       onClose: function(){ }
     });
-  
+
     var collectionView;
     var collection;
     var childView;
@@ -345,7 +360,7 @@ describe("collection view", function(){
       spyOn(collectionView, "onClose").andCallThrough();
       spyOn(collectionView, "onBeforeClose").andCallThrough();
       spyOn(collectionView, "trigger").andCallThrough();
-      
+
       collectionView.bind('collection:closed', closeHandler);
 
       collectionView.close();
@@ -653,7 +668,7 @@ describe("collection view", function(){
       itemView: ItemView,
       onShow: function(){}
     });
-
+    var collectionView;
     beforeEach(function(){
       spyOn(ItemView.prototype, "onShow").andCallThrough();
       spyOn(ItemView.prototype, "onDomRefresh").andCallThrough();
@@ -661,16 +676,22 @@ describe("collection view", function(){
       m1 = new Backbone.Model();
       m2 = new Backbone.Model();
       col = new Backbone.Collection([m1]);
-      var colView = new ColView({
+      collectionView = new ColView({
         collection: col
       });
 
-      colView.render();
-      colView.onShow();
-      colView.trigger("show");
+      collectionView.render();
+      collectionView.onShow();
+      collectionView.trigger("show");
+
+      spyOn(collectionView, "appendBuffer").andCallThrough();
 
       col.add(m2);
-      view = colView.children.findByIndex(1);
+      view = collectionView.children.findByIndex(1);
+    });
+
+    it("should not use the render buffer", function() {
+      expect(collectionView.appendBuffer.callCount).toEqual(0);
     });
 
     it("should call the 'onShow' method of the child view", function(){
@@ -706,23 +727,76 @@ describe("collection view", function(){
 
       iv = cv.children.findByModel(c.at(0));
     });
-    
+
     it("should use the specified itemView for each item", function(){
       expect(iv.MyItemView).toBe(true);
     });
   });
-  
+
   describe("has a valid inheritance chain back to Marionette.View", function(){
-    
+
     var constructor;
-    
+
     beforeEach(function(){
       constructor = spyOn(Marionette.View.prototype, "constructor");
       new Marionette.CollectionView();
     });
-    
+
     it("calls the parent Marionette.View's constructor function on instantiation", function(){
       expect(constructor).toHaveBeenCalled();
+    });
+  });
+
+  describe("when a collection view is not rendered", function() {
+    var collection, cv, model1, model2;
+
+    var Model       = Backbone.Model.extend({});
+    var Collection  = Backbone.Collection.extend({model: Model});
+    var CV = Backbone.Marionette.CollectionView.extend({
+      itemView: ItemView,
+      tagName: 'ul'
+    });
+
+    var addModel = function() {
+      collection.add(model2);
+    }
+
+    function removeModel() {
+      collection.remove(model1);
+    }
+
+    function resetCollection() {
+      collection.reset([model1, model2]);
+    }
+
+    function sync() {
+      collection.trigger('sync');
+    }
+
+    beforeEach(function() {
+      model1     = new Model({monkey: "island"});
+      model2     = new Model({lechuck: "tours"});
+      collection = new Collection([model1]);
+
+      cv = new CV({
+        collection: collection
+      });
+    });
+
+    it("should not fail when adding models to an unrendered collectionView", function() {
+      expect(addModel).not.toThrow();
+    });
+
+    it("should not fail when an item is removed from an unrendered collectionView", function() {
+      expect(removeModel).not.toThrow();
+    });
+
+    it("should not fail when a collection is reset on an unrendered collectionView", function() {
+      expect(resetCollection).not.toThrow();
+    });
+
+    it("should not fail when a collection is synced on an unrendered collectionView", function() {
+      expect(sync).not.toThrow();
     });
   });
 

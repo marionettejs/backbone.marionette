@@ -6,23 +6,23 @@ application. The RegionManager is intended to be
 used by other objects, to facilitate the addition,
 storage, retrieval, and removal of regions from
 that object. For examples of how it can be used,
-see the Marionette.Application and Marionette.Layout
+see the [Marionette.Application](./marionette.application.md) and [Marionette.Layout](./marionette.layout.md)
 objects.
 
 ## Documentation Index
 
-* [Basic Use](#Basic Use)
-* [RegionManager.addRegion](#regionmanager-addregion)
-* [RegionManager.addRegions](#regionmanager-addregions)
-  * [addRegions default options](#addregoins-default-options)
-* [RegionManager.get](#regionmanager-get)
-* [RegionManager.removeRegion](#regionmanager-removeregion)
-* [RegionManager.removeRegions](#regionmanager-removeregions)
-* [RegionManager.closeRegions](#regionmanager-closeregions)
-* [RegionManager.close](#regionmanager-close)
+* [Basic Use](#basic-use)
+* [RegionManager.addRegion](#regionmanageraddregion)
+* [RegionManager.addRegions](#regionmanageraddregions)
+  * [addRegions default options](#addregions-default-options)
+* [RegionManager.get](#regionmanagerget)
+* [RegionManager.removeRegion](#regionmanagerremoveregion)
+* [RegionManager.removeRegions](#regionmanagerremoveregions)
+* [RegionManager.closeRegions](#regionmanagercloseregions)
+* [RegionManager.close](#regionmanagerclose)
 * [RegionManager Events](#regionmanager-events)
-  * [region:add event](#region-add-event)
-  * [region:remove event](#region-remove-event)
+  * [region:add event](#regionadd-event)
+  * [region:remove event](#regionremove-event)
 * [RegionManager Iterators](#regionmanager-iterators)
 
 ## Basic Use
@@ -80,7 +80,7 @@ var rm = new Marionette.RegionManager();
 
 var regions = rm.addRegions({
   foo: "#bar",
-  baz: {
+  bar: {
     selector: "#quux",
     regionType: MyRegionType
   }

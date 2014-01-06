@@ -1,4 +1,4 @@
-## Upgrade to v.1.1.0 ~ v1.3.0
+## Upgrade to v.1.1.0 ~ v1.4.1
 No breaking changes have been introduced between these versions
 
 ## Upgrade to v1.1.0

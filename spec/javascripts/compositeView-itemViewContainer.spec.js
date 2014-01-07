@@ -218,4 +218,28 @@ describe("composite view - itemViewContainer", function(){
 
   });
 
+  describe("when a composite view has the `itemViewContainer` specified as a function", function() {
+
+    var CompositeView = Backbone.Marionette.CompositeView.extend({
+      itemView: ItemView,
+      template: "#composite-child-container-template"
+    });
+
+    it("calls the `itemViewContainer` in the context of the composite view", function() {
+      loadFixtures("compositeChildContainerTemplate.html");
+      var collection = new Collection([{ foo: "bar" }, { foo: "baz" }]);
+      var compositeView = new CompositeView({ collection: collection });
+      var context;
+      compositeView.itemViewContainer = function() {
+        context = this;
+        return "ul";
+      };
+
+      compositeView.render();
+
+      expect(context).toBe(compositeView);
+    });
+
+  });
+
 });

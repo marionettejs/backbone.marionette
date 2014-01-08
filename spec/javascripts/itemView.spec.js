@@ -382,4 +382,48 @@ describe("item view", function(){
     });
   });
 
+  describe("when a view set as a child with addChildViewEventForwarding triggers an event", function() {
+
+    var ContainerView = Marionette.ItemView.extend({
+      template: function(){return "<div>foo</div>"; },
+      onRender: function() {
+        this.addChildViewEventForwarding(childView, "itemview");
+      }
+    });
+    var containerView;
+    var childView;
+    var childModel = new Backbone.Model({foo: "bar"});
+    var triggeringView;
+    var eventArgs;
+
+    beforeEach(function(){
+      childView = new ItemView({
+        template: function(){return "<div>foo</div>"; },
+        model: childModel
+      });
+      containerView = new ContainerView();
+      containerView.render();
+      containerView.on("itemview:some:event", function(){
+        eventArgs = Array.prototype.slice.call(arguments);
+      });
+
+      spyOn(containerView, "trigger").andCallThrough();
+      childView.trigger("some:event", "test", childModel);
+    });
+
+    it("should bubble up through the container view", function(){
+      expect(containerView.trigger).toHaveBeenCalledWith("itemview:some:event", childView, "test", childModel);
+    });
+
+    it("should provide the child view that triggered the event as the first parameter", function(){
+      expect(eventArgs[0]).toBe(childView);
+    });
+
+    it("should forward all other arguments in order", function(){
+      expect(eventArgs[1]).toBe("test");
+      expect(eventArgs[2]).toBe(childModel);
+    });
+
+  });
+
 });

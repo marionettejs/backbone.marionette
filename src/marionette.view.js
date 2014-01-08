@@ -116,6 +116,20 @@ Marionette.View = Backbone.View.extend({
     return triggerEvents;
   },
 
+  // Provide a useful way to set up event forwarding for child views.
+  addChildViewEventForwarding: function(view, prefix){
+    
+    // Forward child item view events through the parent,
+    // prepending `prefix:` to the event name
+    this.listenTo(view, "all", function(){
+      var args = slice(arguments);
+      args[0] = prefix + ":" + args[0];
+      args.splice(1, 0, view);
+
+      Marionette.triggerMethod.apply(this, args);
+    }, this);
+  },
+
   // Overriding Backbone.View's delegateEvents to handle
   // the `triggers`, `modelEvents`, and `collectionEvents` configuration
   delegateEvents: function(events){

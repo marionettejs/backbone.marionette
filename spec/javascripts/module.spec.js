@@ -257,11 +257,11 @@ describe("application modules", function(){
       var mod = MyApp.module("FooModule", function(Foo, MyApp, Backbone, Marionette, $, _, P1Arg, P2Arg){
         r1 = P1Arg;
         r2 = P2Arg;
-      }, p1, p2);
+      }, null, p1, p2);
 
       MyApp.module("FooModule", function(Foo, MyApp, Backbone, Marionette, $, _, P3Arg){
         r3 = P3Arg;
-      }, p3);
+      }, null, p3);
 
       mod.start();
     });
@@ -274,6 +274,73 @@ describe("application modules", function(){
     it("should pass those arguments to the second definition", function(){
       expect(r3).toBe(p3);
     });
+  });
+
+  describe("when providing a custom Module class to be instantiated", function(){
+    var MyApp, r1, r2, r3, r4, r5, p1, p2, p3, p4, p5;
+
+    beforeEach(function(){
+      p1 = 'construct1';
+      p2 = 'construct2';
+      p3 = 'init1';
+      p4 = 'init2';
+      p5 = 'final2';
+
+      var myModule = Marionette.Module.extend({
+        constructor: function() {
+          this.val1 = p1;
+          this.val2 = p1;
+          Marionette.Module.prototype.constructor.apply( this, Array.prototype.slice.call(arguments) );
+        },
+        initialize: function() {
+          this.val2 = p3;
+        }
+      });
+      var myModuleTwo = myModule.extend({
+        constructor: function() {
+          this.val1 = p2;
+          this.val2 = p2;
+          myModule.prototype.constructor.apply( this, Array.prototype.slice.call(arguments) );
+        },
+        initialize: function() {
+          this.val2 = p4;
+        }
+      });
+
+      MyApp = new Backbone.Marionette.Application();
+
+      MyApp.start();
+
+      MyApp.module("FooModule", function(Foo, MyApp, Backbone, Marionette, $, _){
+        r1 = this.val1;
+        r2 = this.val2;
+      }, myModule);
+
+      MyApp.module("FooModuleTwo", function(Foo, MyApp, Backbone, Marionette, $, _){
+        r3 = this.val1;
+        r4 = this.val2;
+      }, myModuleTwo);
+
+      MyApp.module("FooModuleThree", function(Foo, MyApp, Backbone, Marionette, $, _, P5Arg){
+        this.val2 = P5Arg;
+        r5 = this.val2;
+      }, myModuleTwo, p5);
+
+    });
+
+    it("should run the constructor function of the module", function(){
+      expect(r1).toBe(p1);
+    });
+    it("should run the initialize function after the constructor", function(){
+      expect(r2).toBe(p3);
+    });
+    it("should run the earliest constructor last", function(){
+      expect(r3).toBe(p1);
+    });
+    it("should run the passed initializer after the attached `initialize` function", function(){
+      expect(r5).toBe(p5);
+    });
+
   });
 
 });

@@ -16,7 +16,14 @@ Marionette.Module = function(moduleName, app){
   this.startWithParent = true;
 
   this.triggerMethod = Marionette.triggerMethod;
+
+  if (_.isFunction(this.initialize)){
+    this.initialize(this.options);
+  }
+
 };
+
+Marionette.Module.extend = Marionette.extend;
 
 // Extend the Module prototype with events / listenTo, so that the module
 // can be used as an event aggregator or pub/sub.
@@ -117,13 +124,13 @@ _.extend(Marionette.Module.prototype, Backbone.Events, {
 _.extend(Marionette.Module, {
 
   // Create a module, hanging off the app parameter as the parent object.
-  create: function(app, moduleNames, moduleDefinition){
+  create: function(app, moduleNames, moduleDefinition, ModuleClass){
     var module = app;
 
     // get the custom args passed in after the module definition and
     // get rid of the module name and definition function
     var customArgs = slice(arguments);
-    customArgs.splice(0, 3);
+    customArgs.splice(0, 4);
 
     // split the module names and get the length
     moduleNames = moduleNames.split(".");
@@ -136,7 +143,7 @@ _.extend(Marionette.Module, {
     // Loop through all the parts of the module definition
     _.each(moduleNames, function(moduleName, i){
       var parentModule = module;
-      module = this._getModule(parentModule, moduleName, app);
+      module = this._getModule(parentModule, moduleName, app, ModuleClass);
       this._addModuleDefinition(parentModule, module, moduleDefinitions[i], customArgs);
     }, this);
 
@@ -144,13 +151,14 @@ _.extend(Marionette.Module, {
     return module;
   },
 
-  _getModule: function(parentModule, moduleName, app, def, args){
+  _getModule: function(parentModule, moduleName, app, ModuleClass){
+    ModuleClass = ModuleClass || Marionette.Module;
     // Get an existing module of this name if we have one
     var module = parentModule[moduleName];
 
     if (!module){
       // Create a new module if we don't have one
-      module = new Marionette.Module(moduleName, app);
+      module = new ModuleClass(moduleName, app);
       parentModule[moduleName] = module;
       // store the module on the parent
       parentModule.submodules[moduleName] = module;

@@ -245,7 +245,7 @@ describe("region", function(){
       }
     });
 
-    var myRegion, view, closed, closedContext;
+    var myRegion, view, closed, closedContext, closedView;
 
     beforeEach(function(){
       setFixtures("<div id='region'></div>");
@@ -256,7 +256,8 @@ describe("region", function(){
       spyOn(view, "remove");
 
       myRegion = new MyRegion();
-      myRegion.on("close", function(){
+      myRegion.on("close", function(view){
+        closedView = view;
         closed = true;
         closedContext = this;
       });
@@ -267,6 +268,10 @@ describe("region", function(){
 
     it("should trigger a close event", function(){
       expect(closed).toBeTruthy();
+    });
+
+    it("should trigger a close event with the view that's being closed", function(){
+      expect(closedView).toBe(view);
     });
 
     it("should set 'this' to the manager, from the close event", function(){

@@ -800,4 +800,24 @@ describe("collection view", function(){
     });
   });
 
+  describe("when returning the view from addItemView", function(){
+    var childView;
+
+    beforeEach(function(){
+      var model = new Backbone.Model({foo: "bar"});
+
+      var CollectionView = Backbone.Marionette.CollectionView.extend({
+        itemView: ItemView
+      });
+
+      var collectionView = new CollectionView({});
+
+      childView = collectionView.addItemView(model, ItemView, 0);
+    });
+
+    it("should return the item view for the model", function(){
+      expect(childView.$el).toHaveText("bar");
+    });
+  });
+
 });

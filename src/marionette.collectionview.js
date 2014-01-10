@@ -184,7 +184,7 @@ Marionette.CollectionView = Marionette.View.extend({
 
     // call the "show" method if the collection view
     // has already been shown
-    if (this._isShown){
+    if (this._isShown && !this.isBuffering){
       Marionette.triggerMethod.call(view, "show");
     }
 

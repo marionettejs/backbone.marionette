@@ -137,9 +137,21 @@ describe("base view", function(){
         'lila': 'zoidberg'
       }
     });
+    var presetOptionsFn = Marionette.View.extend({
+      options: function () {
+        return { 'fry': 'bender' };
+      }
+    });
 
     it("should take and store view options", function() {
       var viewInstance = new view({"Guybrush": "Island"});
+      expect(viewInstance.options.Guybrush).toBe("Island");
+    });
+
+    it("should take and store view options as a function", function() {
+      var viewInstance = new view(function(){
+        return { "Guybrush": "Island" }
+      });
       expect(viewInstance.options.Guybrush).toBe("Island");
     });
 
@@ -151,6 +163,11 @@ describe("base view", function(){
     it("should retain options set on view class", function() {
       var viewInstance = new presetOptions;
       expect(viewInstance.options.lila).toBe("zoidberg");
+    });
+
+    it("should retain options set on view class as a function", function() {
+      var viewInstance = new presetOptionsFn;
+      expect(viewInstance.options.fry).toBe("bender");
     });
   });
 

@@ -42,18 +42,14 @@ Marionette.Layout = Marionette.ItemView.extend({
       this._reInitializeRegions();
     }
 
-    var args = Array.prototype.slice.apply(arguments);
-    var result = Marionette.ItemView.prototype.render.apply(this, args);
-
-    return result;
+    return Marionette.ItemView.prototype.render.apply(this, arguments);
   },
 
   // Handle closing regions, and then close the view itself.
   close: function () {
     if (this.isClosed){ return; }
     this.regionManager.close();
-    var args = Array.prototype.slice.apply(arguments);
-    Marionette.ItemView.prototype.close.apply(this, args);
+    Marionette.ItemView.prototype.close.apply(this, arguments);
   },
 
   // Add a single region, by name, to the layout

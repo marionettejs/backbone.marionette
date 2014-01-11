@@ -9,9 +9,7 @@ Marionette.Region = function(options){
   this.el = Marionette.getOption(this, "el");
 
   if (!this.el){
-    var err = new Error("An 'el' must be specified for a region.");
-    err.name = "NoElError";
-    throw err;
+    throwError("An 'el' must be specified for a region.", "NoElError");
   }
 
   if (this.initialize){
@@ -47,7 +45,7 @@ _.extend(Marionette.Region, {
     var regionIsType = _.isFunction(regionConfig);
 
     if (!regionIsType && !regionIsString && !regionSelectorIsString) {
-      throw new Error("Region must be specified as a Region type, a selector string or an object with selector property");
+      throwError("Region must be specified as a Region type, a selector string or an object with selector property");
     }
 
     var selector, RegionType;

@@ -2,10 +2,7 @@
 // -------
 
 // For slicing `arguments` in functions
-var protoSlice = Array.prototype.slice;
-function slice(args) {
-  return protoSlice.call(args);
-}
+var slice = Array.prototype.slice;
 
 function throwError(message, name) {
   var error = new Error(message);

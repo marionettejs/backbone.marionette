@@ -134,7 +134,7 @@ _.extend(Marionette.Module, {
 
     // get the custom args passed in after the module definition and
     // get rid of the module name and definition function
-    var customArgs = slice(arguments);
+    var customArgs = slice.call(arguments);
     customArgs.splice(0, 3);
 
     // split the module names and get the length

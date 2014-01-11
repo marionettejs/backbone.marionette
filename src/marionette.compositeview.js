@@ -9,7 +9,7 @@ Marionette.CompositeView = Marionette.CollectionView.extend({
   // Setting up the inheritance chain which allows changes to
   // Marionette.CollectionView.prototype.constructor which allows overriding
   constructor: function(){
-    Marionette.CollectionView.prototype.constructor.apply(this, slice(arguments));
+    Marionette.CollectionView.prototype.constructor.apply(this, arguments);
   },
 
   // Configured the initial events that the composite view

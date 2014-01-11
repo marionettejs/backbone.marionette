@@ -12,9 +12,7 @@ Marionette.Renderer = {
   render: function(template, data){
 
     if (!template) {
-      var error = new Error("Cannot render the template since it's false, null or undefined.");
-      error.name = "TemplateNotFoundError";
-      throw error;
+      throwError("Cannot render the template since it's false, null or undefined.", "TemplateNotFoundError");
     }
 
     var templateFunc;

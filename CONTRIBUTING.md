@@ -32,6 +32,11 @@ itself is not usually sufficient. There needs to be some
 context and purpose with it, and it should be done 
 against specific branch.
 
+Try and stick to Marionette's existing coding conventions
+(just use the file your editing as a guideline).
+Installing the appropriate [EditorConfig plugin](http://editorconfig.org/#download)
+for your code editor will help with this.
+
 ## General Submission Guidelines
 
 These guidelines are generally applicable whether or not 
@@ -82,6 +87,10 @@ introduce, questions that you have related to the changes, etc.
 Without at least the first 2 items in this list, we won't 
 have any clue why you're changing the code. The first thing 
 we'll ask, then, is that you add that information.
+
+Please refrain from giving code examples in altJS langauges like
+CoffeeScript, etc. Marionette is written in plain-old JavaScript
+and is generally easier all members in the community to read.
 
 ### Create A Topic Branch For Your Work
 

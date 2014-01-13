@@ -77,13 +77,20 @@ _.extend(Marionette.Application.prototype, Backbone.Events, {
 
   // Create a module, attached to the application
   module: function(moduleNames, moduleDefinition){
+    var ModuleClass = Marionette.Module;
+
+    // Overwrite the module class if the user specifies one
+    if (moduleDefinition) {
+      ModuleClass = moduleDefinition.moduleClass || ModuleClass;
+    }
+
     // slice the args, and add this application object as the
     // first argument of the array
     var args = slice(arguments);
     args.unshift(this);
 
     // see the Marionette.Module object for more information
-    return Marionette.Module.create.apply(Marionette.Module, args);
+    return ModuleClass.create.apply(ModuleClass, args);
   },
 
   // Internal method to set up the region manager

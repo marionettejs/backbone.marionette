@@ -6,14 +6,14 @@ module.exports = function(grunt) {
     pkg: grunt.file.readJSON('package.json'),
     meta: {
       version: '<%= pkg.version %>',
-      core_banner: 
+      core_banner:
         '// MarionetteJS (Backbone.Marionette)\n' +
-        '// ----------------------------------\n' + 
+        '// ----------------------------------\n' +
         '// v<%= pkg.version %>\n' +
-        '//\n' + 
+        '//\n' +
         '// Copyright (c)<%= grunt.template.today("yyyy") %> Derick Bailey, Muted Solutions, LLC.\n' +
         '// Distributed under MIT license\n' +
-        '//\n' + 
+        '//\n' +
         '// http://marionettejs.com\n' +
         '\n',
 
@@ -22,7 +22,7 @@ module.exports = function(grunt) {
         '/*!\n' +
         ' * Includes BabySitter\n' +
         ' * https://github.com/marionettejs/backbone.babysitter/\n' +
-        ' *\n' + 
+        ' *\n' +
         ' * Includes Wreqr\n' +
         ' * https://github.com/marionettejs/backbone.wreqr/\n' +
         ' */\n\n'

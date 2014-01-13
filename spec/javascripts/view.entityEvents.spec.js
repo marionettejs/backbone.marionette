@@ -38,10 +38,10 @@ describe("view entity events", function(){
     var view;
 
     var View = Backbone.Marionette.View.extend({
-      modelEvents: { 
+      modelEvents: {
         'model-event': jasmine.createSpy("model event handler")
       },
-      collectionEvents: { 
+      collectionEvents: {
         'collection-event': jasmine.createSpy("collection event handler")
       }
     });
@@ -91,10 +91,10 @@ describe("view entity events", function(){
       collectionHandler = jasmine.createSpy("collection handler");
 
       var View = Backbone.Marionette.View.extend({
-        modelEvents: function(){ 
+        modelEvents: function(){
           return {'model-event': modelHandler};
         },
-        collectionEvents: function(){ 
+        collectionEvents: function(){
           return {'collection-event': collectionHandler};
         }
       });
@@ -125,12 +125,12 @@ describe("view entity events", function(){
       collectionHandler = jasmine.createSpy("collection event handler");
 
       var View = Marionette.View.extend({
-        modelEvents: { 
-          'model-event': 'modelEventHandler' 
+        modelEvents: {
+          'model-event': 'modelEventHandler'
         },
 
-        collectionEvents: { 
-          'collection-event': 'collectionEventHandler' 
+        collectionEvents: {
+          'collection-event': 'collectionEventHandler'
         },
 
         modelEventHandler: modelHandler,
@@ -168,12 +168,12 @@ describe("view entity events", function(){
       collectionHandler = jasmine.createSpy("collection event handler");
 
       var View = Marionette.View.extend({
-        modelEvents: { 
-          'model-event': 'modelEventHandler' 
+        modelEvents: {
+          'model-event': 'modelEventHandler'
         },
 
-        collectionEvents: { 
-          'collection-event': 'collectionEventHandler' 
+        collectionEvents: {
+          'collection-event': 'collectionEventHandler'
         },
 
         modelEventHandler: modelHandler,
@@ -255,7 +255,7 @@ describe("view entity events", function(){
     });
 
     it("should close the previous child view", function(){
-      expect(closeSpy).toHaveBeenCalled(); 
+      expect(closeSpy).toHaveBeenCalled();
     });
 
     it("should undelegate all previous view's modelEvents", function(){

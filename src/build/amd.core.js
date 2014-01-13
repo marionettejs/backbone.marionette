@@ -12,10 +12,10 @@
 
     define(['underscore', 'backbone', 'backbone.wreqr', 'backbone.babysitter'], factory);
 
-  } 
+  }
 }(this, function (_, Backbone) {
 
   // @include marionette.core.js
-  return Backbone.Marionette; 
+  return Backbone.Marionette;
 
 }));

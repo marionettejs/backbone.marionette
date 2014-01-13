@@ -2,8 +2,8 @@ describe("callbacks", function(){
   "use strict";
 
   describe("when registering callbacks and running them", function(){
-    var wasCalled, secondCall, 
-        options, specifiedOptions, 
+    var wasCalled, secondCall,
+        options, specifiedOptions,
         context, specifiedContext;
 
     beforeEach(function(){

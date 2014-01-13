@@ -74,8 +74,8 @@ describe("collection view - itemViewOptions", function(){
     });
 
     it("should pass the model when calling 'itemViewOptions'", function() {
-      expect(collectionView.itemViewOptions).toHaveBeenCalledWith(collection.at(0), 0); 
-      expect(collectionView.itemViewOptions).toHaveBeenCalledWith(collection.at(1), 1); 
+      expect(collectionView.itemViewOptions).toHaveBeenCalledWith(collection.at(0), 0);
+      expect(collectionView.itemViewOptions).toHaveBeenCalledWith(collection.at(1), 1);
     });
   });
 

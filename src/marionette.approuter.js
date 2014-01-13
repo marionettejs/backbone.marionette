@@ -8,7 +8,7 @@
 //
 // Configure an AppRouter with `appRoutes`.
 //
-// App routers can only take one `controller` object. 
+// App routers can only take one `controller` object.
 // It is recommended that you divide your controller
 // objects in to smaller pieces of related functionality
 // and have multiple routers / controllers, instead of
@@ -20,7 +20,7 @@ Marionette.AppRouter = Backbone.Router.extend({
 
   constructor: function(options){
     Backbone.Router.prototype.constructor.apply(this, slice(arguments));
-	
+
     this.options = options || {};
 
     var appRoutes = Marionette.getOption(this, "appRoutes");

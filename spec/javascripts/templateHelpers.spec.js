@@ -126,7 +126,7 @@ describe("template helper methods", function(){
       beforeEach(function(){
         var model = new Backbone.Model({bar: "baz"});
 
-        view = new View({ 
+        view = new View({
           model: model,
           templateHelpers:  {
             foo: function(){

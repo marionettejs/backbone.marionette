@@ -166,7 +166,7 @@ describe("region", function(){
     var MyView = Backbone.Marionette.ItemView.extend({
       render: function(){
         $(this.el).html("some content");
-      }, 
+      },
       open : function() {}
     });
 
@@ -417,7 +417,7 @@ describe("region", function(){
 
       MyApp = new Backbone.Marionette.Application();
       MyApp.addRegions({
-        MyRegion: "#region", 
+        MyRegion: "#region",
         anotherRegion: "#region2"
       });
 

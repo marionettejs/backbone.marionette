@@ -19,7 +19,7 @@ beforeEach(function() {
     },
 
     toBeInstanceOf: function(object) {
-      return this.actual instanceof object; 
+      return this.actual instanceof object;
     }
   });
 });

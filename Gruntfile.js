@@ -93,7 +93,11 @@ module.exports = function(grunt) {
 
     jasmine : {
       options : {
-        helpers : 'spec/javascripts/helpers/*.js',
+        helpers : [
+          'bower_components/sinonjs/sinon.js',
+          'bower_components/jasmine-sinon/lib/jasmine-sinon.js',
+          'spec/javascripts/helpers/*.js'
+        ],
         specs : 'spec/javascripts/**/*.spec.js',
         vendor : [
           'public/javascripts/jquery.js',

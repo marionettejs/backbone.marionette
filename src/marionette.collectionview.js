@@ -190,6 +190,8 @@ Marionette.CollectionView = Marionette.View.extend({
 
     // this view was added
     this.triggerMethod("after:item:added", view);
+
+    return view;
   },
 
   // Set up the child view event forwarding. Uses an "itemview:"

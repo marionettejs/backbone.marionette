@@ -679,6 +679,7 @@ describe("collection view", function(){
       collectionView = new ColView({
         collection: col
       });
+      $("body").append(collectionView.el);
 
       collectionView.render();
       collectionView.onShow();
@@ -688,6 +689,10 @@ describe("collection view", function(){
 
       col.add(m2);
       view = collectionView.children.findByIndex(1);
+    });
+
+    afterEach(function(){
+      collectionView.remove();
     });
 
     it("should not use the render buffer", function() {

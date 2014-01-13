@@ -349,18 +349,23 @@ describe("item view", function(){
       template: function(){return "<div>foo</div>"; }
     });
 
-    var renderUpdate;
+    var renderUpdate, view;
 
     beforeEach(function(){
       renderUpdate = jasmine.createSpy("dom:refresh");
 
-      var view = new View();
+      view = new View();
+      $("body").append(view.el);
 
       view.on("dom:refresh", renderUpdate);
       view.render();
       view.triggerMethod("show");
 
       view.render();
+    });
+
+    afterEach(function(){
+      view.remove();
     });
 
     it("should trigger a dom:refresh event", function(){

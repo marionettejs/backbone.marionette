@@ -738,6 +738,61 @@ describe("collection view", function(){
     });
   });
 
+  describe("calling itemEvents via an itemEvents method", function() {
+    var renderCalled;
+
+    var CV = Marionette.CollectionView.extend({
+      itemView: ItemView,
+      itemEvents: function() {
+        return {
+          "render": function() {
+            renderCalled = true;
+          }
+        }
+      }
+    });
+
+    beforeEach(function() {
+      renderCalled = false;
+      var cv = new CV({
+        collection: (new Backbone.Collection([{}]))
+      });
+
+      cv.render();
+    });
+
+    it("should call the associated itemEvent when defined when itemEvents is a method", function() {
+      expect(renderCalled).toBe(true);
+    });
+  });
+
+  describe("calling itemEvents via the itemEvents hash", function(){
+    var renderCalled;
+
+    var CV = Marionette.CollectionView.extend({
+      itemView: ItemView,
+      itemEvents: {
+        "render": function() {
+          renderCalled = true;
+        }
+      }
+    });
+
+    beforeEach(function() {
+      renderCalled = false;
+
+      var cv = new CV({
+        collection: (new Backbone.Collection([{}]))
+      });
+
+      cv.render();
+    });
+
+    it("should call the associated itemEvent when defined", function() {
+      expect(renderCalled).toBe(true);
+    });
+  });
+
   describe("has a valid inheritance chain back to Marionette.View", function(){
 
     var constructor;

@@ -1,3 +1,7 @@
+### v1.5.1 [view commit logs](https://github.com/marionettejs/backbone.marionette/compare/v1.5.0...v1.5.1)
+  * CollectionView/CompositeView
+    * Fix bug where `show` and `onDomRefresh` was not called on `itemViews` in certain [conditions](https://github.com/marionettejs/backbone.marionette/pull/866)
+
 ### v1.5.0 [view commit logs](https://github.com/marionettejs/backbone.marionette/compare/v1.4.1...v1.5.0)
   * Views
     * View `options` can now be a [function](https://github.com/marionettejs/backbone.marionette/pull/819)

@@ -125,6 +125,14 @@ _.extend(Marionette.Region.prototype, Backbone.Events, {
 
     if (isDifferentView) {
       this.close();
+
+      if (
+        this.currentView &&
+        !_.isUndefined(this.currentView.isClosed) &&
+        !this.currentView.isClosed
+      ) {
+        return;
+      }
     }
 
     view.render();
@@ -164,8 +172,17 @@ _.extend(Marionette.Region.prototype, Backbone.Events, {
     if (!view || view.isClosed){ return; }
 
     // call 'close' or 'remove', depending on which is found
-    if (view.close) { view.close(); }
-    else if (view.remove) { view.remove(); }
+    if (view.close) {
+      view.close();
+
+      // if close is prevented
+      if (
+        !_.isUndefined(view.isClosed) &&
+        !view.isClosed
+      ) {
+        return;
+      }
+    } else if (view.remove) { view.remove(); }
 
     Marionette.triggerMethod.call(this, "close");
 

@@ -286,6 +286,48 @@ describe("region", function(){
     });
   });
 
+  describe("when a view is already show, show another view, and the current view prevents the close", function() {
+    var MyRegion = Backbone.Marionette.Region.extend({
+      el: "<div></div>"
+    });
+
+    var MyView = Backbone.Marionette.View.extend({
+      onBeforeClose: function() {
+        return false;
+      }
+    });
+
+    var region, view1, view2;
+
+    beforeEach(function() {
+      region = new MyRegion();
+      view1 = new MyView();
+      view2 = new MyView();
+
+      spyOn(view1, "onBeforeClose").andCallThrough();
+      spyOn(view2, "render").andCallThrough();
+
+      region.show(view1);
+      region.show(view2);
+    });
+
+    it("should not close the current view", function() {
+      expect(view1.isClosed).toBe(false);
+    });
+
+    it("should call not call 'render' on the second view", function() {
+      expect(view2.render).not.toHaveBeenCalled();
+    });
+
+    it("should call 'onBeforeClose' on the current view", function() {
+      expect(view1.onBeforeClose).toHaveBeenCalled();
+    });
+
+    it("should reference the first view as the current view", function(){
+      expect(region.currentView).toBe(view1);
+    });
+  });
+
   describe("when closing the current view and it does not have a 'close' method", function(){
     var MyRegion = Backbone.Marionette.Region.extend({
       el: "<div></div>"

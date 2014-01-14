@@ -811,10 +811,10 @@ describe("collection view", function(){
     var isBuffering, iv, cv, collection, cvInstance;
 
     iv = Marionette.ItemView.extend({
-        template: _.template("<div>hi mom</div>"),
-        onShow: function() {
-          isBuffering = cvInstance.isBuffering;
-        }
+      template: _.template("<div>hi mom</div>"),
+      onShow: function() {
+        isBuffering = cvInstance.isBuffering;
+      }
     });
 
     cv = Marionette.CollectionView.extend({
@@ -833,8 +833,28 @@ describe("collection view", function(){
     });
 
     it("collectionView should not be buffering after reset on itemView show", function() {
+      isBuffering = void 0;
       collection.reset([{}]);
       expect(isBuffering).toBe(false);
+    });
+
+    describe("item view show events", function () {
+      var showCalled;
+      beforeEach(function () {
+        showCalled = false;
+        iv.prototype.onShow = function () { showCalled = true; };
+      });
+
+      it("collectionView should trigger the show events when the buffer is inserted and the view has been shown", function () {
+        collection.reset([{}]);
+        expect(showCalled).toEqual(true);
+      });
+
+      it("collectionView should not trigger the show events if the view has not been shown", function () {
+        cvInstance = new cv({collection: collection});
+        cvInstance.render();
+        expect(showCalled).toEqual(false);
+      });
     });
   });
 

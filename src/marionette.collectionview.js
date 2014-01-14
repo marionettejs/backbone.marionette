@@ -203,11 +203,28 @@ Marionette.CollectionView = Marionette.View.extend({
     // prepending "itemview:" to the event name
     this.listenTo(view, "all", function(){
       var args = slice(arguments);
-      args[0] = prefix + ":" + args[0];
+      var rootEvent = args[0];
+      var itemEvents = this.getItemEvents();
+
+      args[0] = prefix + ":" + rootEvent;
       args.splice(1, 0, view);
+
+      // call collectionView itemEvent if defined
+      if (typeof itemEvents !== "undefined" && _.isFunction(itemEvents[rootEvent])) {
+        itemEvents[rootEvent].apply(this, args);
+      }
 
       Marionette.triggerMethod.apply(this, args);
     }, this);
+  },
+
+  // returns the value of itemEvents depending on if a function
+  getItemEvents: function() {
+    if (_.isFunction(this.itemEvents)) {
+      return this.itemEvents.call(this);
+    }
+
+    return this.itemEvents;
   },
 
   // render the item view

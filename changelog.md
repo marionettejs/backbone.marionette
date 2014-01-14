@@ -1,3 +1,29 @@
+### v1.5.0 [view commit logs](https://github.com/marionettejs/backbone.marionette/compare/v1.4.1...v1.5.0)
+  * Views
+    * View `options` can now be a [function](https://github.com/marionettejs/backbone.marionette/pull/819)
+    * `onDomRefresh` is now only called when said `view` is in the [DOM](https://github.com/marionettejs/backbone.marionette/pull/855)
+
+  *CollectionView/CompositeView
+    * `itemViewContainer` is now called with the correct [context](https://github.com/marionettejs/backbone.marionette/pull/841)
+    * Fix bug where reseting a `collection` within a `collectionView` would cause `onShow` and `onDomRefresh` to be called [incorrectly](https://github.com/marionettejs/backbone.marionette/pull/849) on the itemViews.
+    * `addItemView` now returns the `view` that was [added](https://github.com/marionettejs/backbone.marionette/pull/851)
+    * You can now specify an `itemEvents` hash or method which allows you to capture all bubbling itemEvents without having to [manually set bindings](https://github.com/marionettejs/backbone.marionette/pull/861).
+
+    ```js
+    itemEvents: {
+      "render": function() {
+        console.log("an itemView has been rendered");
+      }
+    }
+    ```
+
+  * Regions
+    * Region `close` event now passes the `view` being closed with the [event](https://github.com/marionettejs/backbone.marionette/pull/834).
+
+  * General
+    * Updated bower ignore folder
+    * Added an editor config file
+
 ### v1.4.1 [view commit logs](https://github.com/marionettejs/backbone.marionette/compare/v1.4.0...v1.4.1)
 * Views
   * fix for inital view class options. Now retains set options at class instantiation

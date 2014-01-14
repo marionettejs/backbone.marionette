@@ -9,3 +9,4 @@ node_modules/
 npm-debug.log
 _SpecRunner.html
 bower_components/
+.idea

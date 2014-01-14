@@ -22,7 +22,8 @@ Marionette.CollectionView = Marionette.View.extend({
   // it's much more performant to insert elements into a document
   // fragment and then insert that document fragment into the page
   initRenderBuffer: function() {
-    this.elBuffer  = document.createDocumentFragment();
+    this.elBuffer = document.createDocumentFragment();
+    this._bufferedChildren = [];
   },
 
   startBuffering: function() {
@@ -31,9 +32,19 @@ Marionette.CollectionView = Marionette.View.extend({
   },
 
   endBuffering: function() {
-    this.appendBuffer(this, this.elBuffer);
-    this.initRenderBuffer();
     this.isBuffering = false;
+    this.appendBuffer(this, this.elBuffer);
+    this._triggerShowBufferedChildren();
+    this.initRenderBuffer();
+  },
+
+  _triggerShowBufferedChildren: function () {
+    if (this._isShown) {
+      _.each(this._bufferedChildren, function (child) {
+        Marionette.triggerMethod.call(child, "show");
+      });
+      this._bufferedChildren = [];
+    }
   },
 
   // Configured the initial events that the collection view
@@ -287,6 +298,7 @@ Marionette.CollectionView = Marionette.View.extend({
       // in order to reduce the number of inserts into the
       // document, which are expensive.
       collectionView.elBuffer.appendChild(itemView.el);
+      collectionView._bufferedChildren.push(itemView);
     }
     else {
       // If we've already rendered the main collection, just

@@ -417,7 +417,7 @@ describe("composite view", function(){
     });
   });
 
-  describe("when workign with a composite and recursive model", function(){
+  describe("when working with a composite and recursive model", function(){
     var treeView;
 
     beforeEach(function(){

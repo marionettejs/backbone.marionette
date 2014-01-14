@@ -113,6 +113,7 @@ Marionette.CompositeView = Marionette.CollectionView.extend({
   appendHtml: function(compositeView, itemView, index){
     if (compositeView.isBuffering) {
       compositeView.elBuffer.appendChild(itemView.el);
+      compositeView._bufferedChildren.push(itemView);
     }
     else {
       // If we've already rendered the main collection, just

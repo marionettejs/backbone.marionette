@@ -215,6 +215,10 @@ describe("composite view", function(){
       expect(compositeView.trigger).toHaveBeenCalledWith("composite:model:rendered");
     });
 
+    it("should trigger a before:render event for the collection", function(){
+      expect(compositeView.trigger).toHaveBeenCalledWith("composite:collection:before:render");
+    });
+
     it("should trigger a rendered event for the collection", function(){
       expect(compositeView.trigger).toHaveBeenCalledWith("composite:collection:rendered");
     });

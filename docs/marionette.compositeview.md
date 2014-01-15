@@ -203,6 +203,7 @@ be triggered. These events are triggered with the [Marionette.triggerMethod](./m
 function, which calls a corresponding "on{EventName}" method on the view.
 
 * "composite:model:rendered" / `onCompositeModelRendered` - after the `modelView` has been rendered
+* "composite:collection:before:render" / `onCompositeCollectionBeforeRender` - before the collection of models is rendered
 * "composite:collection:rendered" / `onCompositeCollectionRendered` - after the collection of models has been rendered
 * "render" / `onRender` and "composite:rendered" / `onCompositeRendered` - after everything has been rendered
 

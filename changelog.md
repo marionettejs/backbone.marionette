@@ -7,7 +7,7 @@
     * View `options` can now be a [function](https://github.com/marionettejs/backbone.marionette/pull/819)
     * `onDomRefresh` is now only called when said `view` is in the [DOM](https://github.com/marionettejs/backbone.marionette/pull/855)
 
-  *CollectionView/CompositeView
+  * CollectionView/CompositeView
     * `itemViewContainer` is now called with the correct [context](https://github.com/marionettejs/backbone.marionette/pull/841)
     * Fix bug where reseting a `collection` within a `collectionView` would cause `onShow` and `onDomRefresh` to be called [incorrectly](https://github.com/marionettejs/backbone.marionette/pull/849) on the itemViews.
     * `addItemView` now returns the `view` that was [added](https://github.com/marionettejs/backbone.marionette/pull/851)

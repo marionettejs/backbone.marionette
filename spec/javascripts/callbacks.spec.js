@@ -8,6 +8,7 @@ describe("callbacks", function(){
 
     beforeEach(function(){
       var callbacks = new Backbone.Marionette.Callbacks();
+
       specifiedOptions = {};
       specifiedContext = {};
 

@@ -38,7 +38,7 @@ describe("app router", function(){
       method1: function(){
         context = this;
       },
-    }
+    };
 
     beforeEach(function(){
       spyOn(controller, "method1").andCallThrough();
@@ -71,7 +71,7 @@ describe("app router", function(){
       method1: function(){
         context = this;
       },
-    }
+    };
 
     var Router = Backbone.Marionette.AppRouter.extend({
       appRoutes: {
@@ -121,7 +121,7 @@ describe("app router", function(){
           context = this;
         }
       };
-    }
+    };
 
     beforeEach(function(){
       controller = new Controller();

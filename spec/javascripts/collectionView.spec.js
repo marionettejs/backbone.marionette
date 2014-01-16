@@ -669,6 +669,7 @@ describe("collection view", function(){
       onShow: function(){}
     });
     var collectionView;
+
     beforeEach(function(){
       spyOn(ItemView.prototype, "onShow").andCallThrough();
       spyOn(ItemView.prototype, "onDomRefresh").andCallThrough();
@@ -794,7 +795,6 @@ describe("collection view", function(){
   });
 
   describe("has a valid inheritance chain back to Marionette.View", function(){
-
     var constructor;
 
     beforeEach(function(){

@@ -84,7 +84,7 @@ Backbone.Marionette.CollectionView.extend({
     // some logic to calculate which view to return
     return someItemSpecificView;
   }
-})
+});
 ```
 
 ## CollectionView's `itemViewOptions`
@@ -161,6 +161,18 @@ Backbone.Marionette.CollectionView.extend({
 
 This will render the `emptyView` and display the message that needs to
 be displayed when there are no items.
+
+If you want to control when the empty view is rendered, you can override
+`isEmpty`:
+
+```js
+Backbone.Marionette.CollectionView.extend({
+  isEmpty: function(collection) {
+    // some logic to calculate if the view should be rendered as empty
+    return someBoolean;
+  }
+});
+```
 
 ## CollectionView's `buildItemView`
 

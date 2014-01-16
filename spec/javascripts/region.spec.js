@@ -26,10 +26,11 @@ describe("region", function(){
       }
     });
 
-    var myRegion, view, showEvent, showContext, showViewPassed;
+    var myRegion, view, showSpy;
 
     beforeEach(function(){
       setFixtures("<div id='region'></div>");
+      showSpy = sinon.spy();
 
       view = new MyView();
       spyOn(view, "render").andCallThrough();
@@ -37,11 +38,7 @@ describe("region", function(){
       myRegion = new MyRegion();
       spyOn(myRegion, "onShow");
 
-      myRegion.on("show", function(v){
-        showViewPassed = v === view;
-        showEvent = true;
-        showContext = this;
-      });
+      myRegion.on("show", showSpy);
 
       myRegion.show(view);
     });
@@ -63,15 +60,15 @@ describe("region", function(){
     })
 
     it("should trigger a show event for the view", function(){
-      expect(showEvent).toBeTruthy();
+      expect(showSpy).toHaveBeenCalled();
     });
 
     it("should pass the shown view as an argument for the show event", function(){
-      expect(showViewPassed).toBeTruthy();
+      expect(showSpy).toHaveBeenCalledWith(view);
     });
 
     it("should set 'this' to the manager, from the show event", function(){
-      expect(showContext).toBe(myRegion);
+      expect(showSpy).toHaveBeenCalledOn(myRegion);
     });
   });
 
@@ -245,10 +242,11 @@ describe("region", function(){
       }
     });
 
-    var myRegion, view, closed, closedContext, closedView;
+    var myRegion, view, closedSpy;
 
     beforeEach(function(){
       setFixtures("<div id='region'></div>");
+      closedSpy = sinon.spy();
 
       view = new MyView();
 
@@ -256,26 +254,22 @@ describe("region", function(){
       spyOn(view, "remove");
 
       myRegion = new MyRegion();
-      myRegion.on("close", function(view){
-        closedView = view;
-        closed = true;
-        closedContext = this;
-      });
+      myRegion.on("close", closedSpy);
       myRegion.show(view);
 
       myRegion.close();
     });
 
     it("should trigger a close event", function(){
-      expect(closed).toBeTruthy();
+      expect(closedSpy).toHaveBeenCalled();
     });
 
     it("should trigger a close event with the view that's being closed", function(){
-      expect(closedView).toBe(view);
+      expect(closedSpy).toHaveBeenCalledWith(view);
     });
 
     it("should set 'this' to the manager, from the close event", function(){
-      expect(closedContext).toBe(myRegion);
+      expect(closedSpy).toHaveBeenCalledOn(myRegion);
     });
 
     it("should call 'close' on the already show view", function(){

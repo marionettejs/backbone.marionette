@@ -671,8 +671,8 @@ describe("collection view", function(){
     var collectionView;
 
     beforeEach(function(){
-      spyOn(ItemView.prototype, "onShow").andCallThrough();
-      spyOn(ItemView.prototype, "onDomRefresh").andCallThrough();
+      sinon.spy(ItemView.prototype, "onShow");
+      sinon.spy(ItemView.prototype, "onDomRefresh");
 
       m1 = new Backbone.Model();
       m2 = new Backbone.Model();
@@ -686,18 +686,20 @@ describe("collection view", function(){
       collectionView.onShow();
       collectionView.trigger("show");
 
-      spyOn(collectionView, "appendBuffer").andCallThrough();
+      sinon.spy(collectionView, "appendBuffer");
 
       col.add(m2);
       view = collectionView.children.findByIndex(1);
     });
 
-    afterEach(function(){
-      collectionView.remove();
+
+    afterEach(function() {
+      ItemView.prototype.onShow.restore();
+      ItemView.prototype.onDomRefresh.restore();
     });
 
     it("should not use the render buffer", function() {
-      expect(collectionView.appendBuffer.callCount).toEqual(0);
+      expect(collectionView.appendBuffer).not.toHaveBeenCalled();
     });
 
     it("should call the 'onShow' method of the child view", function(){
@@ -705,8 +707,7 @@ describe("collection view", function(){
     });
 
     it("should call the child's 'onShow' method with itself as the context", function(){
-      var context = ItemView.prototype.onShow.mostRecentCall.object;
-      expect(context).toBe(view);
+      expect(ItemView.prototype.onShow).toHaveBeenCalledOn(view);
     });
 
     it("should call the child's 'onDomRefresh' method with itself as the context", function(){

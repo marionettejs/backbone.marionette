@@ -26,7 +26,6 @@ describe("app router", function(){
   });
 
   describe("when a controller is passed through the constructor and a route fires", function(){
-    var context;
 
     var Router = Backbone.Marionette.AppRouter.extend({
       appRoutes: {
@@ -35,14 +34,10 @@ describe("app router", function(){
     });
 
     var controller = {
-      method1: function(){
-        context = this;
-      },
+      method1: sinon.spy()
     };
 
     beforeEach(function(){
-      spyOn(controller, "method1").andCallThrough();
-
       var router = new Router({
         controller: controller
       });
@@ -60,17 +55,13 @@ describe("app router", function(){
     });
 
     it("should execute the controller method with the context of the controller", function(){
-      expect(context).toBe(controller);
+      expect(controller.method1).toHaveBeenCalledOn(controller);
     });
   });
 
   describe("when a controller is provided in the router definition and a route fires", function(){
-    var context;
-
     var controller = {
-      method1: function(){
-        context = this;
-      },
+      method1: sinon.spy()
     };
 
     var Router = Backbone.Marionette.AppRouter.extend({
@@ -82,8 +73,6 @@ describe("app router", function(){
     });
 
     beforeEach(function(){
-      spyOn(controller, "method1").andCallThrough();
-
       var router = new Router();
       Backbone.history.start();
 
@@ -99,12 +88,12 @@ describe("app router", function(){
     });
 
     it("should execute the controller method with the context of the controller", function(){
-      expect(context).toBe(controller);
+      expect(controller.method1).toHaveBeenCalledOn(controller);
     });
   });
 
   describe("when a second route fires from a controller instance", function(){
-    var context, controller;
+    var controller;
 
     var Router = Backbone.Marionette.AppRouter.extend({
       appRoutes: {
@@ -116,16 +105,12 @@ describe("app router", function(){
     var Controller = function(){
       return {
         method1: function(){},
-
-        method2: function(){
-          context = this;
-        }
+        method2: sinon.spy()
       };
     };
 
     beforeEach(function(){
       controller = new Controller();
-      spyOn(controller, "method2").andCallThrough();
 
       var router = new Router({
         controller: controller
@@ -145,7 +130,7 @@ describe("app router", function(){
     });
 
     it("should execute the controller method with the context of the controller", function(){
-      expect(context).toBe(controller);
+      expect(controller.method2).toHaveBeenCalledOn(controller);
     });
   });
 

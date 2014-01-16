@@ -10,12 +10,9 @@ describe("marionette application", function(){
 
       MyModule = (function(MyApp){
         var module = {};
-        module.initializer = function(options){
-          module.options = options;
-          module.context = this;
-        };
+        module.initializer = function(options){};
 
-        spyOn(module, "initializer").andCallThrough();
+        sinon.spy(module, "initializer");
         MyApp.addInitializer(module.initializer);
 
         return module
@@ -24,6 +21,10 @@ describe("marionette application", function(){
       spyOn(MyApp, "trigger").andCallThrough();
 
       MyApp.start(someOptions);
+    });
+
+    afterEach(function() {
+      MyModule.initializer.restore();
     });
 
     it("should notify me before initialization starts", function(){
@@ -39,11 +40,11 @@ describe("marionette application", function(){
     });
 
     it("should pass the options through to the initializer", function(){
-      expect(MyModule.options).toEqual(someOptions);
+      expect(MyModule.initializer).toHaveBeenCalledWith(someOptions);
     });
 
     it("should run the initializer with the context of the app object", function(){
-      expect(MyModule.context).toEqual(MyApp);
+      expect(MyModule.initializer).toHaveBeenCalledOn(MyApp);
     });
   });
 

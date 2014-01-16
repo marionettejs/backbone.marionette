@@ -219,7 +219,7 @@ describe("composite view - itemViewContainer", function(){
   });
 
   describe("when a composite view has the `itemViewContainer` specified as a function", function() {
-    var compositeView, context;
+    var compositeView;
 
     var CompositeView = Backbone.Marionette.CompositeView.extend({
       itemView: ItemView,
@@ -227,19 +227,13 @@ describe("composite view - itemViewContainer", function(){
     });
 
     beforeEach(function() {
-      loadFixtures("compositeChildContainerTemplate.html");
-      var collection = new Collection([{ foo: "bar" }, { foo: "baz" }]);
-      compositeView = new CompositeView({ collection: collection });
-      compositeView.itemViewContainer = function() {
-        context = this;
-        return "ul";
-      };
-
+      compositeView = new CompositeView();
+      compositeView.itemViewContainer = sinon.stub().returns('ul');
       compositeView.render();
     });
 
     it("calls the `itemViewContainer` in the context of the composite view", function() {
-      expect(context).toBe(compositeView);
+      expect(compositeView.itemViewContainer).toHaveBeenCalledOn(compositeView);
     });
 
   });

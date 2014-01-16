@@ -1,7 +1,7 @@
 {
   "name"        : "backbone.marionette",
   "description" : "Make your Backbone.js apps dance with a composite application architecture!",
-  "url"         : "http://marionettejs.org",
+  "homepage"    : "http://marionettejs.org",
   "main"        : ["./lib/backbone.marionette.js", "./lib/core/amd/backbone.marionette.js"],
   "version"     : "1.5.1",
 
@@ -18,40 +18,21 @@
     "email" : "derickbailey@gmail.com"
   },
 
-  "contributors" : [
-    {
-      "name"  : "Jarrod Overson",
-      "email" : "jsoverson@gmail.com"
-    },
-    {
-      "name"  : "Tony Abou-Assaleh",
-      "email" : "taa@eits.ca"
-    },
-    {
-      "name"  : "Matt Briggs",
-      "email" : "matt@mattbriggs.net"
-    },
-    {
-      "name"  : "Ruben Vreeken",
-      "email" : "ruben.vreeken@gmail.com"
-    },
-    {
-      "name"  : "Brian Mann",
-      "email" : "brian@backbonerails.com"
-    }
-  ],
-
   "ignore": [
     "docs",
     "reports",
     "spec",
     ".gitignore",
     ".travis.yml",
+    ".editorconfig",
+    ".jshintc",
     "build",
     "build.cmd",
+    "Gruntfile.js",
     "CONTRIBUTING.md",
-    "changelog.md",
-    "package.json"
+    "package.json",
+    "addrem",
+    "getdeps"
   ],
 
   "dependencies" : {

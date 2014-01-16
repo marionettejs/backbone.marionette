@@ -34,7 +34,7 @@ describe("collectionview - emptyView", function(){
     });
 
     it("should append the html for the emptyView", function(){
-      expect($(collectionView.$el)).toHaveHtml("<span class=\"isempty\"></span>");
+      expect(collectionView.$el).toHaveHtml("<span class=\"isempty\"></span>");
     });
 
     it("should reference each of the rendered view items", function(){
@@ -67,7 +67,7 @@ describe("collectionview - emptyView", function(){
     });
   });
 
-  describe("when the emptyView has been rendered for an empty collection and then collection reset, recieving some values. Then adding an item to the collection", function () {
+  describe("when the emptyView has been rendered for an empty collection and then collection reset, receiving some values. Then adding an item to the collection", function () {
     var collectionView, closeSpy;
 
     beforeEach(function () {
@@ -91,7 +91,7 @@ describe("collectionview - emptyView", function(){
     });
 
     it("should show all three items without empty view", function () {
-      expect($(collectionView.$el)).toHaveHtml("<span>bar</span><span>baz</span><span>wut</span>");
+      expect(collectionView.$el).toHaveHtml("<span>bar</span><span>baz</span><span>wut</span>");
     });
   });
 
@@ -111,7 +111,7 @@ describe("collectionview - emptyView", function(){
     });
 
     it("should append the html for the emptyView", function(){
-      expect($(collectionView.$el)).toHaveHtml("<span class=\"isempty\"></span>");
+      expect(collectionView.$el).toHaveHtml("<span class=\"isempty\"></span>");
     });
 
     it("should reference each of the rendered view items", function(){
@@ -195,13 +195,13 @@ describe("collectionview - emptyView", function(){
     });
 
     it("should append the html for the emptyView", function(){
-      expect($(collectionView.$el)).toHaveHtml("<span>0 items</span>");
+      expect(collectionView.$el).toHaveHtml("<span>0 items</span>");
     });
 
     it("should not have the empty child view after resetting with data", function(){
       collection.reset(data);
 
-      expect($(collectionView.$el)).toHaveHtml("<span>bar</span><span>baz</span>");
+      expect(collectionView.$el).toHaveHtml("<span>bar</span><span>baz</span>");
     });
   });
 

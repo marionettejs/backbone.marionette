@@ -5,7 +5,7 @@ This base view provides some common and core functionality for
 other views to take advantage of.
 
 **Note:** The `Marionette.View` type is not intended to be
-used directly. It exists as a base view for other view types
+used directly. It exists as a base view for other view typesb
 to be extended from, and to provide a common location for
 behaviors that are shared across all views.
 
@@ -128,7 +128,7 @@ For more information about integration Marionette w/ KendoUI (also applicable to
 widget suites), see [this blog post on KendoUI + Backbone](http://www.kendoui.com/blogs/teamblog/posts/12-11-26/backbone_and_kendo_ui_a_beautiful_combination.aspx).
 
 ## View.events
-Since Views extend from backbone`s view class, you gain the benifit of the [events hash](http://backbonejs.org/#View-delegateEvents).
+Since Views extend from backbone`s view class, you gain the benefits of the [events hash](http://backbonejs.org/#View-delegateEvents).
 
 Some preprocessing sugar is added on top to add the ability to cross utilize the ```ui``` hash.
 

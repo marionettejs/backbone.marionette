@@ -5,7 +5,7 @@ This base view provides some common and core functionality for
 other views to take advantage of.
 
 **Note:** The `Marionette.View` type is not intended to be
-used directly. It exists as a base view for other view typesb
+used directly. It exists as a base view for other view types
 to be extended from, and to provide a common location for
 behaviors that are shared across all views.
 

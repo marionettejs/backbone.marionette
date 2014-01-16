@@ -117,45 +117,41 @@ describe("module start", function(){
   });
 
   describe("when providing a module definition and starting the module", function(){
-    var MyApp, moduleArgs, thisArg;
+    var MyApp, spy;
 
     beforeEach(function(){
+      spy   = sinon.spy();
       MyApp = new Backbone.Marionette.Application();
-
-      var module = MyApp.module("MyModule", function(){
-        moduleArgs = arguments;
-        thisArg = this;
-      });
-
+      var module = MyApp.module("MyModule", spy);
       module.start();
     });
 
     it("should run the module definition in the context of the module", function(){
-      expect(thisArg).toBe(MyApp.MyModule);
+      expect(spy).toHaveBeenCalledOn(MyApp.MyModule);
     });
 
     it("should pass the module object as the first parameter", function(){
-      expect(moduleArgs[0]).toBe(MyApp.MyModule);
+      expect(spy).toHaveBeenCalledWith(MyApp.MyModule);
     });
 
     it("should pass the application object as the second parameter", function(){
-      expect(moduleArgs[1]).toBe(MyApp);
+      expect(spy.args[0][1]).toBe(MyApp);
     });
 
     it("should pass Backbone as the third parameter", function(){
-      expect(moduleArgs[2]).toBe(Backbone);
+      expect(spy.args[0][2]).toBe(Backbone);
     });
 
     it("should pass Marionette as the fourth parameter", function(){
-      expect(moduleArgs[3]).toBe(Backbone.Marionette);
+      expect(spy.args[0][3]).toBe(Backbone.Marionette);
     });
 
     it("should pass jQuery as the fifth parameter", function(){
-      expect(moduleArgs[4]).toBe(jQuery);
+      expect(spy.args[0][4]).toBe(jQuery);
     });
 
     it("should pass underscore as the sixth parameter", function(){
-      expect(moduleArgs[5]).toBe(_);
+      expect(spy.args[0][5]).toBe(_);
     });
   });
 
@@ -202,28 +198,26 @@ describe("module start", function(){
   });
 
   describe("when loading a module after the app has been started", function(){
-    var MyApp, myModule, options;
+    var MyApp, myModule, options, moduleSpy, initializerSpy;
 
     beforeEach(function(){
-      options = {};
+      moduleSpy      = sinon.spy();
+      initializerSpy = sinon.spy();
+      options        = {};
+
       MyApp = new Backbone.Marionette.Application();
       MyApp.start(options);
 
-      myModule = MyApp.module("MyModule", function(mod){
-        mod.started = true;
-
-        mod.addInitializer(function(options){
-          mod.capturedOptions = options;
-        });
-      });
+      myModule = MyApp.module("MyModule", moduleSpy);
+      myModule.addInitializer(initializerSpy);
     });
 
     it("should start the module", function(){
-      expect(myModule.started).toBe(true);
+      expect(moduleSpy).toHaveBeenCalled();
     });
 
     it("should pass the options along to the module initializer", function(){
-      expect(myModule.capturedOptions).toBe(options);
+      expect(initializerSpy).toHaveBeenCalledWith(options);
     });
 
   });

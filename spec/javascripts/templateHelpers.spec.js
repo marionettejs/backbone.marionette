@@ -80,47 +80,41 @@ describe("template helper methods", function(){
     });
 
     describe("when rendering and a templateHelpers is found as a function", function(){
-      var view, renderData, context;
+      var view;
 
       var View = Backbone.Marionette.ItemView.extend({
-        template: function(data){
-          renderData = data;
-        },
-
-        templateHelpers: function(){
-          context = this;
-          return {
-            foo: function(){}
-          }
-        }
+        template: function() {},
+        templateHelpers: function() {}
       });
 
       beforeEach(function(){
         var model = new Backbone.Model({bar: "baz"});
         view = new View({ model:model });
+        sinon.spy(view, "template")
+        sinon.stub(view, "templateHelpers").returns({ foo: function(){} })
         view.render();
       });
 
       it('should include the template helpers in the data object', function(){
-        expect(renderData.foo).not.toBeUndefined();
+        var firstArg = view.template.args[0][0];
+        expect(firstArg.foo).not.toBeUndefined();
       });
 
       it('should still have the data from the model', function(){
-        expect(renderData.bar).toBe("baz");
+        var firstArg = view.template.args[0][0];
+        expect(firstArg.bar).toBe("baz");
       });
 
       it('should maintain the view as the context for the templateHelpers function', function(){
-        expect(context).toBe(view);
+        expect(view.templateHelpers).toHaveBeenCalledOn(view);
       });
     });
 
     describe("when templateHelpers is provided to constructor options", function(){
-      var view, renderData;
+      var view;
 
       var View = Backbone.Marionette.ItemView.extend({
-        template: function(data){
-          renderData = data;
-        }
+        template: function() {}
       });
 
       beforeEach(function(){
@@ -128,21 +122,23 @@ describe("template helper methods", function(){
 
         view = new View({
           model: model,
-          templateHelpers:  {
-            foo: function(){
-            }
+          templateHelpers: {
+            foo: function() { }
           }
         });
 
+        sinon.spy(view, 'template');
         view.render();
       });
 
       it('should include the template helpers in the data object', function(){
-        expect(renderData.foo).not.toBeUndefined();
+        var firstArg = view.template.args[0][0];
+        expect(firstArg.foo).not.toBeUndefined();
       });
 
       it('should still have the data from the model', function(){
-        expect(renderData.bar).toBe("baz");
+        var firstArg = view.template.args[0][0];
+        expect(firstArg.bar).toBe("baz");
       });
     });
 

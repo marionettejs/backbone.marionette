@@ -8,18 +8,15 @@ describe("module stop", function(){
   });
 
   describe("when stopping a module that has been started", function(){
-    var mod1, mod2, mod3, beforeStop, stop, isMod1;
+    var mod1, mod2, mod3, beforeStop, stop, isMod1, finalizerSpy;
 
     beforeEach(function(){
       beforeStop = jasmine.createSpy("before:stop");
       stop = jasmine.createSpy("stop");
-			isMod1 = jasmine.createSpy("isMod1");
+			finalizerSpy = sinon.spy();
 
       mod1 = App.module("Mod1", function(Mod1){
-        Mod1.addFinalizer(function(){
-          Mod1.isDead = true;
-					isMod1(this);
-        });
+        Mod1.addFinalizer(finalizerSpy);
       });
 
       mod1.on("before:stop", beforeStop);
@@ -44,11 +41,11 @@ describe("module stop", function(){
     });
 
     it("should run all finalizers for the module", function(){
-      expect(mod1.isDead).toBe(true);
+      expect(finalizerSpy).toHaveBeenCalled();
     });
 
     it("should run all finalizers for the module in the context of the module", function(){
-			expect(isMod1).toHaveBeenCalledWith(mod1);
+			expect(finalizerSpy).toHaveBeenCalledOn(mod1);
     });
 
     it("should stop all sub-modules", function(){
@@ -63,13 +60,12 @@ describe("module stop", function(){
   });
 
   describe("when stopping a module that has not been started", function(){
-    var mod1, mod2, mod3;
+    var mod1, mod2, mod3, finalizerSpy;
 
     beforeEach(function(){
+      finalizerSpy = sinon.spy();
       mod1 = App.module("Mod1", function(Mod1){
-        Mod1.addFinalizer(function(){
-          Mod1.isDead = true;
-        });
+        Mod1.addFinalizer(finalizerSpy);
       });
 
       mod2 = App.module("Mod1.Mod2");
@@ -83,7 +79,7 @@ describe("module stop", function(){
     });
 
     it("should not run any finalizers", function(){
-      expect(mod1.isDead).toBeUndefined();
+      expect(finalizerSpy).not.toHaveBeenCalled();
     });
 
     it("should not stop sub-modules", function(){
@@ -111,6 +107,5 @@ describe("module stop", function(){
     });
 
   });
-
 
 });

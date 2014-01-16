@@ -4,4 +4,5 @@ node_js:
 notifications:
   irc: "irc.freenode.net#marionette"
 before_script:
-  - npm install -g grunt-cli
+  - npm install -g grunt-cli bower
+  - bower install

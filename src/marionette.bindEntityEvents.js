@@ -17,6 +17,29 @@
 (function(Marionette){
   "use strict";
 
+  // Wrap a callback to check if the scoped view is open first
+  function wrapCallbackForOpenViews(method){
+    // If it's not a function, pass through quietly so listenTo and
+    // stopListening can throw their appropriate errors
+    if(!_.isFunction(method)){
+      return method;
+    }
+
+    // Return cached copy if available
+    if(method._marionetteWrappedForOpenViews){
+      return method._marionetteWrappedForOpenViews;
+    }
+
+    // Create wrapped and cached method
+    return method._marionetteWrappedForOpenViews = function(){
+      if(this.isDestroyed){
+        return;
+      }
+
+      return method.apply(this, arguments);
+    };
+  }
+
   // Bind the event to handlers specified as a string of
   // handler names on the target object
   function bindFromStrings(target, entity, evt, methods){
@@ -29,13 +52,13 @@
         throwError("Method '"+ methodName +"' was configured as an event handler, but does not exist.");
       }
 
-      target.listenTo(entity, evt, method, target);
+      target.listenTo(entity, evt, wrapCallbackForOpenViews(method), target);
     });
   }
 
   // Bind the event to a supplied callback function
   function bindToFunction(target, entity, evt, method){
-      target.listenTo(entity, evt, method, target);
+    target.listenTo(entity, evt, wrapCallbackForOpenViews(method), target);
   }
 
   // Bind the event to handlers specified as a string of
@@ -45,16 +68,15 @@
 
     _.each(methodNames,function(methodName) {
       var method = target[methodName];
-      target.stopListening(entity, evt, method, target);
+      target.stopListening(entity, evt, wrapCallbackForOpenViews(method), target);
     });
   }
 
   // Bind the event to a supplied callback function
   function unbindToFunction(target, entity, evt, method){
-      target.stopListening(entity, evt, method, target);
+    target.stopListening(entity, evt, wrapCallbackForOpenViews(method), target);
   }
 
-  
   // generic looping function
   function iterateEvents(target, entity, bindings, functionCallback, stringCallback){
     if (!entity || !bindings) { return; }

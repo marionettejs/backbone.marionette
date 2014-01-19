@@ -214,6 +214,9 @@ describe("view entity events", function(){
         "sync": "doStuff"
       },
 
+      // This callback is only called until the view is destroyed. After the
+      // Layout destroys the view, it will not be called again, meaning render
+      // will not be called a second time
       doStuff: function(){
         //console.log("doing stuff: ", this.cid);
         this.render();
@@ -248,10 +251,10 @@ describe("view entity events", function(){
       var parent = new ParentView({
         model: model
       });
-      parent.render();
+      parent.render(); // renderSpy.length now === 1
 
-      model.trigger('sync');
-      model.trigger('sync');
+      model.trigger('sync'); // renderSpy.length now === 2
+      model.trigger('sync'); // renderSpy.length now === 3
     });
 
     it("should destroy the previous child view", function(){
@@ -264,7 +267,37 @@ describe("view entity events", function(){
       // we expect ChildView 1 to destroy
       // we expect ChildView 2 to call render (2nd)
       // we expect destroyed ChildView 1 not to call render again
-      expect(renderSpy.calls.length).toEqual(5);
+      expect(renderSpy.calls.length).toEqual(3);
     });
   })
+
+  describe("when view model events are fired after view is destroyed",function(){
+    var View, model, view, modelHandler;
+
+    modelHandler = jasmine.createSpy("model event handler");
+
+    View = Backbone.Marionette.View.extend({
+      modelEvents: { "change:example": "modelEventHandler" },
+      modelEventHandler: modelHandler
+    });
+
+    beforeEach(function(){
+      model = new Backbone.Model({
+        example: 1
+      });
+      model.on( "change:example" , function() {
+        view.destroy();
+      } );
+
+      view = new View({
+        model: model
+      });
+
+      model.set("example", 2);
+    });
+
+    it("should not have called the modelEventHandler", function(){
+      expect(modelHandler).not.toHaveBeenCalled();
+    });
+  });
 });

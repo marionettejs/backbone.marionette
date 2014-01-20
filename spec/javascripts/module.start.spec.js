@@ -222,4 +222,121 @@ describe("module start", function(){
 
   });
 
+  describe("when passing a custom module class in the object literal", function(){
+    var MyApp, MyModule, moduleStart, customModule, initializer;
+
+    beforeEach(function(){
+
+      MyApp = new Backbone.Marionette.Application();
+      initializer = sinon.spy();
+      customModule = Backbone.Marionette.Module.extend( { initialize: initializer } );
+
+      MyApp.module("MyModule", {
+        startWithParent: false,
+        moduleClass: customModule
+      });
+
+      MyApp.start();
+    });
+
+    it("should run the initialize function once", function(){
+      expect(initializer).toHaveBeenCalledOnce;
+    });
+  });
+
+  describe("when passing an extended custom module class in the object literal", function(){
+    var MyApp, MyModule, moduleStart,
+        customModule, customModuleTwo,
+        initializer, initializerTwo,
+        p1, p2, r1, r2;
+
+    beforeEach(function(){
+
+      p1 = 'val1';
+      p2 = 'val2';
+
+      MyApp = new Backbone.Marionette.Application();
+      initializer = sinon.spy();
+      initializerTwo = sinon.spy();
+      customModule = Backbone.Marionette.Module.extend({
+        initialize: initializer,
+        val1: p1,
+        val2: p1
+      });
+      customModuleTwo = customModule.extend({
+        initialize: initializerTwo,
+        val1: p2
+      });
+
+      MyApp.module("MyModule", {
+        startWithParent: false,
+        moduleClass: customModuleTwo,
+        define: function() {
+          r1 = this.val1;
+          r2 = this.val2;
+        }
+      });
+
+      MyApp.start();
+    });
+
+    it("should only run the latest initialize function once, and not the prototype initialize", function(){
+      expect(initializer).not.toHaveBeenCalled();
+      expect(initializerTwo).toHaveBeenCalledOnce;
+    });
+
+    it("should extend properties correctly", function() {
+      expect(r1).toBe(p2);
+      expect(r2).toBe(p1);
+    });
+
+  });
+
+  describe("when passing an initialize function as an option when calling `Application.module`", function(){
+    var MyApp, MyModule, moduleStart, initializer;
+
+    beforeEach(function(){
+
+      MyApp = new Backbone.Marionette.Application();
+      initializer = sinon.spy();
+
+      MyApp.module("MyModule", {
+        initialize: initializer
+      });
+
+      MyApp.start();
+    });
+
+    it("should run the initialize function once", function(){
+      expect(initializer).toHaveBeenCalledOnce;
+    });
+
+  });
+
+  describe("when passing an arbitrary set of arguments to `Application.module`", function(){
+    var MyApp, MyModule, moduleStart, initializer, options;
+
+    beforeEach(function(){
+
+      MyApp = new Backbone.Marionette.Application();
+      initializer = sinon.spy();
+
+      options = {
+        startWithParent: false,
+        p1: 'testValueOne',
+        p2: 'testValueTwo',
+        initialize: initializer
+      };
+
+      MyApp.module("MyModule", options);
+
+      MyApp.start();
+    });
+
+    it("should pass them to the initialize function", function(){
+      expect(initializer).toHaveBeenCalledWithExactly(options);
+    });
+
+  });
+
 });

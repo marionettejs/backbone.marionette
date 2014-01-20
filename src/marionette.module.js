@@ -3,8 +3,10 @@
 
 // A simple module system, used to create privacy and encapsulation in
 // Marionette applications
-Marionette.Module = function(moduleName, app){
+Marionette.Module = function(moduleName, app, options){
   this.moduleName = moduleName;
+  this.options = _.extend({}, this.options, options);
+  this.initialize = options.initialize || this.initialize;
 
   // store sub-modules
   this.submodules = {};
@@ -16,11 +18,21 @@ Marionette.Module = function(moduleName, app){
   this.startWithParent = true;
 
   this.triggerMethod = Marionette.triggerMethod;
+
+  if (_.isFunction(this.initialize)){
+    this.initialize(this.options);
+  }
 };
+
+Marionette.Module.extend = Marionette.extend;
 
 // Extend the Module prototype with events / listenTo, so that the module
 // can be used as an event aggregator or pub/sub.
 _.extend(Marionette.Module.prototype, Backbone.Events, {
+
+  // Initialize is an empty function by default. Override it with your own
+  // initialization logic when extending Marionette.Module.
+  initialize: function(){},
 
   // Initializer for a specific module. Initializers are run when the
   // module's `start` method is called.
@@ -136,7 +148,7 @@ _.extend(Marionette.Module, {
     // Loop through all the parts of the module definition
     _.each(moduleNames, function(moduleName, i){
       var parentModule = module;
-      module = this._getModule(parentModule, moduleName, app);
+      module = this._getModule(parentModule, moduleName, app, moduleDefinition);
       this._addModuleDefinition(parentModule, module, moduleDefinitions[i], customArgs);
     }, this);
 
@@ -145,12 +157,18 @@ _.extend(Marionette.Module, {
   },
 
   _getModule: function(parentModule, moduleName, app, def, args){
+    var ModuleClass = Marionette.Module;
+    var options = _.extend({}, def);
+    if (def) {
+      ModuleClass = def.moduleClass || ModuleClass;
+    }
+
     // Get an existing module of this name if we have one
     var module = parentModule[moduleName];
 
     if (!module){
       // Create a new module if we don't have one
-      module = new Marionette.Module(moduleName, app);
+      module = new ModuleClass(moduleName, app, options);
       parentModule[moduleName] = module;
       // store the module on the parent
       parentModule.submodules[moduleName] = module;

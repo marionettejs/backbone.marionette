@@ -22,9 +22,11 @@ your application, and serve as an event aggregator in themselves.
 * [Module Definitions](#module-definitions)
   * [Module Initializers](#module-initializers)
   * [Module Finalizers](#module-finalizers)
+  * [Initialize function](#initialize-function)
 * [The Module's `this` Argument](#the-modules-this-argument)
 * [Custom Arguments](#custom-arguments)
 * [Splitting A Module Definition Apart](#splitting-a-module-definition-apart)
+* [Extending Modules](#extending-modules)
 
 ## Basic Usage
 
@@ -332,6 +334,8 @@ console.log(MyApp.MyModule.someData); //=> public data
 MyApp.MyModule.someFunction(); //=> public data
 ```
 
+
+
 ### Module Initializers
 
 Modules have initializers, similarly to `Application` objects. A module's
@@ -366,6 +370,35 @@ MyApp.module("Foo", function(Foo){
 
 Calling the `stop` method on the module will run all that module's 
 finalizers. A module can have as many finalizers as you wish.
+
+### Initialize Function
+
+Modules have an `initialize` function which is distinct from its collection of initializers. `initialize` is immediately called when the Module is invoked, unlike initializers, which are only called once the module is started. You can think of the `initialize` function as an extension of the constructor.
+
+```js
+MyApp.module("Foo", {
+  startWithParent: false,
+  initialize: function( options ) {
+    // This code is immediately executed
+    this.someProperty = 'someValue';
+  },
+  define: function() {
+    // This code is not executed until the Module has started
+    console.log( this.someProperty ); // Logs 'someValue' once the module is started
+  }
+});
+```
+
+The `initialize` function is passed a single argument, which is the object literal definition of the module itself. This allows you to pass arbitrary values to it.
+
+```js
+MyApp.module("Foo", {
+  initialize: function( options ) {
+    console.log( options.someVar ); // Logs 'someString'
+  },
+  someVar: 'someString'
+});
+```
 
 ## The Module's `this` Argument
 
@@ -412,3 +445,26 @@ MyApp.module("MyModule", function(MyModule){
 MyApp.MyModule.definition1; //=> true
 MyApp.MyModule.definition2; //=> true
 ```
+
+## Extending Modules
+
+Modules can be extended. This allows you to make custom Modules to include in your Application.
+
+```
+var CustomModule = Marionette.Module.extend({
+  constructor: function() {
+    // Configure your module
+  }
+});
+```
+
+When attaching a Module to your Application you can specify what class to use with the parameter `moduleClass`.
+
+```
+MyApp.module("Foo", {
+  moduleClass: CustomModule,
+  define: function() {} // You can still use the definition function on custom modules
+});
+```
+
+When `moduleClass` is omitted, Marionette will default to instantiating a new `Marionette.Module`.

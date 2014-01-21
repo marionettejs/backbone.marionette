@@ -795,6 +795,52 @@ describe("collection view", function(){
     });
   });
 
+  describe("calling itemEvents via the itemEvents hash with a string of the function name", function(){
+    var someFn;
+
+    var CV = Marionette.CollectionView.extend({
+      itemView: ItemView,
+      itemEvents: {
+        "render": "someFn"
+      }
+    });
+
+    beforeEach(function() {
+      someFn = sinon.spy();
+      CV.prototype.someFn = someFn;
+      var cv = new CV({
+        collection: (new Backbone.Collection([{}]))
+      });
+
+      cv.render();
+    });
+
+    it("should call the associated itemEvent function when defined", function() {
+      expect(someFn).toHaveBeenCalledOnce();
+    });
+  });
+
+  describe("calling itemEvents via the itemEvents hash with a string of a nonexistent function name", function(){
+
+    var CV = Marionette.CollectionView.extend({
+      itemView: ItemView,
+      itemEvents: {
+        "render": "nonexistentFn"
+      }
+    });
+
+    beforeEach(function() {
+      var cv = new CV({
+        collection: (new Backbone.Collection([{}]))
+      });
+      cv.render();
+    });
+
+    it("should not break", function() {
+      // Intentionally left blank
+    });
+  });
+
   describe("has a valid inheritance chain back to Marionette.View", function(){
     var constructor;
 

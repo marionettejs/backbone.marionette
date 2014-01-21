@@ -467,13 +467,14 @@ events or model change events, and then triggering an event
 of its own based on that.
 
 ## CollectionView's `itemEvents`
-You can specify an `itemEvents` hash or method which allows you to capture all bubbling itemEvents without having to manually set bindings.
+You can specify an `itemEvents` hash or method which allows you to capture all bubbling itemEvents without having to manually set bindings. The keys of the hash can either be a function or a string that is the name of a method on the collection view.
 
 ```js
 itemEvents: {
   "render": function() {
     console.log("an itemView has been rendered");
-  }
+  },
+  "onItemClose": "someFn" // where the collection view has a method `someFn`
 }
 ```
 

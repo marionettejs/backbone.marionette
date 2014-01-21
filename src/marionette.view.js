@@ -27,6 +27,10 @@ Marionette.View = Backbone.View.extend({
   // methods if the method exists
   triggerMethod: Marionette.triggerMethod,
 
+  // Imports the "normalizeMethods" to transform hashes of
+  // events=>function references/names to a hash of events=>function references
+  normalizeMethods: Marionette.normalizeMethods,
+
   // Get the template for this view
   // instance. You can set a `template` attribute in the view
   // definition or pass a `template: "whatever"` parameter in

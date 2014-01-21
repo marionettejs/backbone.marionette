@@ -214,7 +214,7 @@ Marionette.CollectionView = Marionette.View.extend({
     this.listenTo(view, "all", function(){
       var args = slice(arguments);
       var rootEvent = args[0];
-      var itemEvents = this.getItemEvents();
+      var itemEvents = this.normalizeMethods(this.getItemEvents());
 
       args[0] = prefix + ":" + rootEvent;
       args.splice(1, 0, view);

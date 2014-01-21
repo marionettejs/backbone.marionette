@@ -144,3 +144,25 @@ The third parameter is a hash of { "event:name": "eventHandler" }
 configuration. Multiple handlers can be separated by a space. A
 function can be supplied instead of a string handler name. 
 
+## Marionette.normalizeEvents
+
+Receives a hash of event names and functions and/or function names, and returns the
+same hash with the function names replaced with the function references themselves.
+
+```
+var View = Marionette.ItemView.extend({
+
+  initialize: function() {
+    this.someFn = function() {};
+    this.someOtherFn = function() {};
+    var hash = {
+      eventOne: "someFn", // This will become a reference to `this.someFn`
+      eventTwo: this.someOtherFn
+    };
+    this.normalizedHash = Marionette.normalizeMethods(hash, this);
+  }
+
+});
+```
+
+The first parameter is the hash to normalize. The second parameter is the context; the object to search for methods on.

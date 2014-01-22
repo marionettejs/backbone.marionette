@@ -18,6 +18,7 @@ will provide features such as `onShow` callbacks, etc. Please see
 * [CollectionView's `itemView`](#collectionviews-itemview)
 * [CollectionView's `itemViewOptions`](#collectionviews-itemviewoptions)
 * [CollectionView's `emptyView`](#collectionviews-emptyview)
+* [CollectionView's `loadingView`](#collectionviews-loadingview)
 * [CollectionView's `buildItemView`](#collectionviews-builditemview)
 * [Callback Methods](#callback-methods)
   * [onBeforeRender callback](#onbeforerender-callback)
@@ -172,6 +173,21 @@ Backbone.Marionette.CollectionView.extend({
     // some logic to calculate if the view should be rendered as empty
     return someBoolean;
   }
+
+## CollectionView's `loadingView`
+
+When a collection is fetching elements you might want to indicate
+that. To do it you can specify `loadingView` attribute on your collection view.
+
+```js
+var LoadingView = Backbone.Marionette.ItemView.extend({
+  template: "#show-spinner-template"
+});
+
+Backbone.Marionette.CollectionView.extend({
+  // ...
+
+  loadingView: LoadingView
 });
 ```
 
@@ -657,4 +673,3 @@ Backbone.Marionette.CollectionView.extend({
   }
 });
 ```
-

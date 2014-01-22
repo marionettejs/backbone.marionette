@@ -55,12 +55,16 @@ Marionette.CollectionView = Marionette.View.extend({
       this.listenTo(this.collection, "add", this.addChildView, this);
       this.listenTo(this.collection, "remove", this.removeItemView, this);
       this.listenTo(this.collection, "reset", this.render, this);
+      this.listenTo(this.collection, "request", this.showLoadingView, this);
+      this.listenTo(this.collection, "sync", this.closeLoadingView, this);
     }
   },
 
   // Handle a child item added to the collection
   addChildView: function(item, collection, options){
     this.closeEmptyView();
+    this.closeLoadingView();
+
     var ItemView = this.getItemView(item);
     var index = this.collection.indexOf(item);
     this.addItemView(item, ItemView, index);
@@ -106,6 +110,8 @@ Marionette.CollectionView = Marionette.View.extend({
     this.startBuffering();
 
     this.closeEmptyView();
+    this.closeLoadingView();
+
     this.closeChildren();
 
     if (!this.isEmpty(this.collection)) {
@@ -150,9 +156,38 @@ Marionette.CollectionView = Marionette.View.extend({
     }
   },
 
+  // Internal method to show an loading view in place of
+  // a collection of item views, when the collection is
+  // fetching from remote server
+  showLoadingView: function(){
+    var LoadingView = this.getLoadingView();
+
+    if (LoadingView && !this._showingLoadingView){
+      this._showingLoadingView = true;
+      this.closeChildren();
+      this.closeEmptyView();
+      var model = new Backbone.Model();
+      this.addItemView(model, LoadingView, 0);
+    }
+  },
+
+  // Internal method to close an existing loadingView instance
+  // if one exists.
+  closeLoadingView: function(){
+    if (this._showingLoadingView){
+      delete this._showingLoadingView;
+      this.closeChildren();
+    }
+  },
+
   // Retrieve the empty view type
   getEmptyView: function(){
     return Marionette.getOption(this, "emptyView");
+  },
+
+  // Retrieve the empty view type
+  getLoadingView: function(){
+    return Marionette.getOption(this, "loadingView");
   },
 
   // Retrieve the itemView type, either from `this.options.itemView`
@@ -338,4 +373,3 @@ Marionette.CollectionView = Marionette.View.extend({
     this.checkEmpty();
   }
 });
-

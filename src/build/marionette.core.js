@@ -28,6 +28,9 @@ var Marionette = (function(global, Backbone, _){
 // @include ../marionette.compositeview.js
 // @include ../marionette.layout.js
 
+// @include ../marionette.behavior.js
+// @include ../marionette.behaviors.js
+
 // @include ../marionette.approuter.js
 // @include ../marionette.application.js
 // @include ../marionette.module.js

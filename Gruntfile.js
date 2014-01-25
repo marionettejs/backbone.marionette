@@ -142,6 +142,8 @@ module.exports = function(grunt) {
           'src/marionette.controller.js',
           'src/marionette.domRefresh.js',
           'src/marionette.view.js',
+          'src/marionette.behaviors.js',
+          'src/marionette.behavior.js',
           'src/marionette.itemview.js',
           'src/marionette.collectionview.js',
           'src/marionette.compositeview.js',

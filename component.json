@@ -29,9 +29,9 @@
     "web": "http://derickbailey.lostechies.com"
   },
   "dependencies": {
-    "marionettejs/backbone.babysitter": "0.0.6",
-    "marionettejs/backbone.wreqr": "0.2.0",
-    "jashkenas/backbone": "1.1.0"
+    "marionettejs/backbone.babysitter": "*",
+    "marionettejs/backbone.wreqr": "*",
+    "jashkenas/backbone": "*"
   },
   "scripts": [
     "lib/core/amd/backbone.marionette.js" 

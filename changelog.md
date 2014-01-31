@@ -1,3 +1,22 @@
+### v1.6.0 [view commit logs](https://github.com/marionettejs/backbone.marionette/compare/v1.5.1...v1.6.0)
+  * CompositeView
+    * add a `composite:collection:before:render` event
+
+  * CollectionView
+    * `checkEmpty` can now be overridden
+
+  * Modules
+    * `Modules` can now be created using the extend method, and then attached to an [Application](https://github.com/marionettejs/backbone.marionette/blob/master/docs/marionette.application.module.md#extending-modules).
+
+  * General
+    * add a component.json file
+    * update bower.json
+    * add AMD build in bower.json
+
+  * Tests
+    * general clean up
+    * add sinon.js for test spys
+
 ### v1.5.1 [view commit logs](https://github.com/marionettejs/backbone.marionette/compare/v1.5.0...v1.5.1)
   * CollectionView/CompositeView
     * Fix bug where `show` and `onDomRefresh` was not called on `itemViews` in certain [conditions](https://github.com/marionettejs/backbone.marionette/pull/866)

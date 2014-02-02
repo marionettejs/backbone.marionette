@@ -379,12 +379,13 @@ Modules have an `initialize` function which is distinct from its collection of i
 MyApp.module("Foo", {
   startWithParent: false,
   initialize: function( options ) {
-    // This code is immediately executed
     this.someProperty = 'someValue';
   },
-  define: function() {
-    // This code is not executed until the Module has started
-    console.log( this.someProperty ); // Logs 'someValue' once the module is started
+  // You can still set a define function
+  define: function( Foo ) {
+    console.log( this.someProperty ); // Logs 'someValue'
+    // You can also still add initializers, which are called once the module is started
+    Foo.addInitializer(function() {});
   }
 });
 ```
@@ -397,6 +398,15 @@ MyApp.module("Foo", {
     console.log( options.someVar ); // Logs 'someString'
   },
   someVar: 'someString'
+});
+```
+
+The initialize function is distinct from the `define` function. The primary difference between the two is that `initialize` is on the prototype chain, whereas `define` is not. What this means is that `initialize` can be inherited.
+
+```js
+var CustomModule = Marionette.Module.extend({
+  define: function() {},    // This is not inherited and will never be called
+  initialize: function() {} // This, on the other hand, will be inherited
 });
 ```
 

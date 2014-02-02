@@ -189,7 +189,7 @@ _.extend(Marionette.Module, {
     } else if (_.isObject(def)){
       // if an object is supplied
       fn = def.define;
-      startWithParent = def.startWithParent;
+      startWithParent = (typeof def.startWithParent !== 'undefined') ? def.startWithParent : true;
 
     } else {
       // if nothing is supplied

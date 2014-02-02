@@ -1,6 +1,60 @@
 describe("module start", function(){
   "use strict";
 
+  describe("when starting an application with a module definition", function(){
+    var MyApp, myModule, start;
+
+    beforeEach(function(){
+
+      MyApp = new Backbone.Marionette.Application();
+      myModule = MyApp.module("MyModule");
+      start = sinon.stub( myModule, "start" );
+
+      MyApp.start();
+    });
+
+    it("the module should start with it", function(){
+      expect(start).toHaveBeenCalled();
+    });
+
+  });
+
+  describe("when starting an application with a module defined with a function", function(){
+    var MyApp, myModule, start;
+
+    beforeEach(function(){
+
+      MyApp = new Backbone.Marionette.Application();
+      myModule = MyApp.module("MyModule", function() {});
+      start = sinon.stub( myModule, "start" );
+
+      MyApp.start();
+    });
+
+    it("the module should start with it", function(){
+      expect(start).toHaveBeenCalled();
+    });
+
+  });
+
+  describe("when starting an application with a module defined with an object literal", function(){
+    var MyApp, myModule, start;
+
+    beforeEach(function(){
+
+      MyApp = new Backbone.Marionette.Application();
+      myModule = MyApp.module("MyModule", {});
+      start = sinon.stub( myModule, "start" );
+
+      MyApp.start();
+    });
+
+    it("the module should start with it", function(){
+      expect(start).toHaveBeenCalled();
+    });
+
+  });
+
   describe("when starting a module", function(){
     var MyApp, myModule, initializer;
 

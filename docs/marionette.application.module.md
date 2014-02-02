@@ -59,7 +59,8 @@ module that you need in your tests.
 
 Starting a module is done in one of two ways:
 
-1. Automatically with the parent module (or Application) `.start()` method
+1. Automatically with the parent module (or Application) `.start()` method. This is the
+default behavior
 2. Manually call the `.start()` method on the module
 
 In this example, the module will be started automatically with the parent
@@ -121,8 +122,9 @@ mod.start(options);
 
 ### Preventing Auto-Start Of Modules
 
+The default behavior of modules is that they start with the application.
 If you wish to manually start a module instead of having the application
-start it, you can tell the module definition not to start with the parent:
+start it, you can do so with the `startWithParent` property:
 
 ```js
 var fooModule = MyApp.module("Foo", function(){

@@ -1,3 +1,11 @@
+### v1.6.2 [view commit logs](https://github.com/marionettejs/backbone.marionette/compare/v1.6.1...v1.6.2)
+  * CollectionView/CompositeView
+    * allow `itemEvents` to use string based method names [PR 875](https://github.com/marionettejs/backbone.marionette/pull/875)
+  * Modules
+	* update module initialize to include moduleName and app [PR 898](https://github.com/marionettejs/backbone.marionette/pull/898)
+  * General
+  	* significantly improve module documentation [PR 897](https://github.com/marionettejs/backbone.marionette/pull/897)
+  	
 ### v1.6.1 [view commit logs](https://github.com/marionettejs/backbone.marionette/compare/v1.6.0...v1.6.1)
   * Modules
     * Fix a bug where a module would not start by default when defined as an object literal

@@ -1,4 +1,4 @@
-### v1.6.0 [view commit logs](https://github.com/marionettejs/backbone.marionette/compare/v1.6.0...v1.6.1)
+### v1.6.1 [view commit logs](https://github.com/marionettejs/backbone.marionette/compare/v1.6.0...v1.6.1)
   * Modules
     * Fix a bug where a module would not start by default when defined as an object literal
 

@@ -246,7 +246,7 @@ LosTechies.com blog.
 
 ## Legal Mumbo Jumbo (MIT License)
 
-Copyright (c) 2012 Derick Bailey; Muted Solutions, LLC
+Copyright (c) 2012-2014 Derick Bailey; Muted Solutions, LLC
 
 Distributed under [MIT license](http://mutedsolutions.mit-license.org/).
 

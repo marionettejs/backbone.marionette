@@ -1,6 +1,10 @@
 /*global module:false*/
 module.exports = function(grunt) {
 
+  require('load-grunt-tasks')(grunt, {
+    pattern: ['grunt-*', '!grunt-template-jasmine-istanbul']
+  });
+
   // Project configuration.
   grunt.initConfig({
     pkg: grunt.file.readJSON('package.json'),
@@ -179,15 +183,6 @@ module.exports = function(grunt) {
       }
     }
   });
-
-  grunt.loadNpmTasks('grunt-preprocess');
-  grunt.loadNpmTasks('grunt-contrib-jasmine');
-  grunt.loadNpmTasks('grunt-contrib-concat');
-  grunt.loadNpmTasks('grunt-contrib-jshint');
-  grunt.loadNpmTasks('grunt-contrib-uglify');
-  grunt.loadNpmTasks('grunt-contrib-watch');
-  grunt.loadNpmTasks('grunt-contrib-connect');
-  grunt.loadNpmTasks('grunt-plato');
 
   grunt.registerTask('test', ['jshint', 'jasmine:marionette']);
 

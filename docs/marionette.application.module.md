@@ -211,7 +211,7 @@ The initialize function is only available through the object literal definition 
 ```js
 MyApp.module("Foo", {
   startWithParent: false,
-  initialize: function( options ) {
+  initialize: function( options, moduleName, app ) {
     this.someProperty = 'someValue';
   },
   // You can still set a define function
@@ -221,11 +221,14 @@ MyApp.module("Foo", {
 });
 ```
 
-The `initialize` function is passed a single argument, which is the object literal definition of the Module itself. This allows you to pass arbitrary values to your Module.
+The `initialize` function is passed three arguments.
+  * The object literal definition of the Module itself (which allows you to pass arbitrary values to your Module)
+  * The moduleName
+  * The app.
 
 ```js
 MyApp.module("Foo", {
-  initialize: function( options ) {
+  initialize: function( options, moduleName, app ) {
     console.log( options.someVar ); // Logs 'someString'
   },
   someVar: 'someString'

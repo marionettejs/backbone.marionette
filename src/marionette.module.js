@@ -20,7 +20,7 @@ Marionette.Module = function(moduleName, app, options){
   this.triggerMethod = Marionette.triggerMethod;
 
   if (_.isFunction(this.initialize)){
-    this.initialize(this.options);
+    this.initialize(this.options, moduleName, app);
   }
 };
 

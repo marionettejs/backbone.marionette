@@ -1,85 +1,315 @@
 # Marionette.Application.module
 
-Marionette allows you to define a module within your application,
-including sub-modules hanging from that module. This is useful for creating 
-modular, encapsulated applications that are split apart in to multiple 
-files.
-
-Marionette's modules allow you to have unlimited sub-modules hanging off of
-your application, and serve as an event aggregator in themselves.
+Marionette Modules allow you to create modular encapsulated logic.
+They can be used to split apart large applications into multiple files,
+and to build individual components of your app.
 
 ## Documentation Index
 
 * [Basic Usage](#basic-usage)
-* [Starting And Stopping Modules](#starting-and-stopping-modules)
-  * [Starting Modules](#starting-modules)
+* [Module Definitions](#module-definitions)
+  * [Callback Function Definition](#callback-function-definition)
+  * [Object Literal Definition](#object-literal-definition)
+* [Defining Sub-Modules](#defining-sub-modules)
+* [Starting and Stopping Modules](#starting-and-stopping-modules)
+* [Starting Modules](#starting-modules)
+  * [Module Initializers](#module-initializers)
   * [Start Events](#start-events)
   * [Preventing Auto-Start Of Modules](#preventing-auto-start-of-modules)
   * [Starting Sub-Modules With Parent](#starting-sub-modules-with-parent)
-  * [Stopping Modules](#stopping-modules)
-  * [Stop Events](#stop-events)
-* [Defining Sub-Modules With . Notation](#defining-sub-modules-with--notation)
-* [Module Definitions](#module-definitions)
-  * [Module Initializers](#module-initializers)
+* [Stopping Modules](#stopping-modules)
   * [Module Finalizers](#module-finalizers)
-  * [Initialize function](#initialize-function)
-* [The Module's `this` Argument](#the-modules-this-argument)
-* [Custom Arguments](#custom-arguments)
-* [Splitting A Module Definition Apart](#splitting-a-module-definition-apart)
-* [Extending Modules](#extending-modules)
+  * [Stop Events](#stop-events)
 
 ## Basic Usage
 
-A module is defined directly from an Application object as the specified
-name:
+A module is defined directly from an Application object. To create a module all
+you need to do is give it a name.
 
 ```js
 var MyApp = new Backbone.Marionette.Application();
 
+// Creates a new module named "MyModule"
 var myModule = MyApp.module("MyModule");
 
-MyApp.MyModule; // => a new Marionette.Application object
+MyApp.MyModule; // => a new Marionette.Module object
 
 myModule === MyApp.MyModule; // => true
 ```
 
-If you specify the same module name more than once, the
-first instance of the module will be retained and a new
-instance will not be created.
+Modules cannot be overwritten once they are created. Subsequent
+calls to `module` with the same name argument will not create
+a new module, but instead return the already-created instance.
+
+```js
+var MyApp = new Backbone.Marionette.Application();
+
+// Instantiates a new Marionette.Module
+var myModule = MyApp.module("MyModule");
+
+// Returns the module you just created
+var theSameModule = MyApp.module("MyModule");
+
+```
+
+## Module Definitions
+
+You can provide a definition for your module when you instantiate it.
+Definitions can either be a callback function or an object literal.
+
+### Callback Function Definition
+
+The callback function definition will be invoked immediately on calling
+the `module` method. 
+
+It will receive 6 parameters, in this order:
+
+* The module itself
+* The parent module or Application object that `.module` was called from
+* Backbone
+* Backbone.Marionette
+* jQuery
+* Underscore
+* Any custom arguments
+
+Within the callback you can attach both private and public
+functions and data directly to your module.
+
+```js
+MyApp.module("MyModule", function(MyModule, MyApp, Backbone, Marionette, $, _){
+
+  // The context of the function is also the module itself
+  this === MyModule; // => true
+
+  // Private Data And Functions
+  // --------------------------
+
+  var myData = "this is private data";
+ 
+  var myFunction = function(){
+    console.log(myData);
+  }
+
+
+  // Public Data And Functions
+  // -------------------------
+
+  MyModule.someData = "public data";
+
+  MyModule.someFunction = function(){
+    console.log(MyModule.someData);
+  }
+});
+
+console.log(MyApp.MyModule.someData); //=> public data
+MyApp.MyModule.someFunction(); //=> public data
+```
+
+#### Additional Arguments
+
+You can provide additional arguments to the definition
+function, allowing you to import 3rd party libraries
+and other resources that you want to have locally scoped to
+your module.
+
+Pass the additional arguments after the
+definition itself in the call to `module`.
+
+```js
+MyApp.module("MyModule", function(MyModule, MyApp, Backbone, Marionette, $, _, Lib1, Lib2, LibEtc){
+
+  // Lib1 === LibraryNumber1;
+  // Lib2 === LibraryNumber2;
+  // LibEtc === LibraryNumberEtc;
+
+}, LibraryNumber1, LibraryNumber2, LibraryNumberEtc);
+```
+
+#### Splitting A Module Definition Apart
+
+Sometimes a module definition can become quite long. You can split
+apart the definition by making subsequent calls to the `module`
+function.
+
+This can used to split the definition of your module
+across multiple files.
+
+```js
+MyApp.module("MyModule", function(MyModule){
+  MyModule.definition1 = true;
+});
+
+// The following could be in a separate file
+MyApp.module("MyModule", function(MyModule){
+  MyModule.definition2 = true;
+});
+
+MyApp.MyModule.definition1; //=> true
+MyApp.MyModule.definition2; //=> true
+```
+
+### Object Literal Definition
+
+The object literal definition of a module allows for more flexibility
+than the callback method. It allows you to, for instance, specify
+a custom class for your module.
+
+Through the object literal definition you can still set a definition
+function through the `define` property.
+
+```js
+MyApp.module("MyModule", {
+  define: function(MyModule, MyApp, Backbone, Marionette, $, _) {
+    // Define your module here
+  }
+});
+```
+
+#### Specifying a Custom Module Class
+
+One of the more useful features of the object literal definition is specifying a custom
+module class. You can make a new class using the extend function.
+
+```
+var CustomModule = Marionette.Module.extend({
+  // Custom module properties
+});
+
+MyApp.module("Foo", {
+  moduleClass: CustomModule,
+  define: function() {} // You can still use the definition function on custom modules
+});
+```
+
+When `moduleClass` is omitted Marionette will default to instantiating a new `Marionette.Module`.
+
+#### Custom Module Classes
+
+The extend function of a Module is identical to the extend functions on other Backbone and Marionette classes.
+
+A particularly important property when creating a new Module class is the `constructor` function, which for Modules
+receives three arguments:
+
+* The Module name
+* The Application
+* The entire object literal definition of the Module
+
+```
+var CustomModule = Marionette.Module.extend({
+  constructor: function( moduleName, app, options ) {
+    // Configure your Module
+  }
+});
+```
+
+#### Initialize Function
+
+Modules have an `initialize` function which is immediately called when the Module is invoked. You can think of the `initialize` function as an extension of the constructor.
+
+The initialize function is only available through the object literal definition of a Module.
+
+```js
+MyApp.module("Foo", {
+  startWithParent: false,
+  initialize: function( options ) {
+    this.someProperty = 'someValue';
+  },
+  // You can still set a define function
+  define: function( Foo ) {
+    console.log( this.someProperty ); // Logs 'someValue'
+  }
+});
+```
+
+The `initialize` function is passed a single argument, which is the object literal definition of the Module itself. This allows you to pass arbitrary values to your Module.
+
+```js
+MyApp.module("Foo", {
+  initialize: function( options ) {
+    console.log( options.someVar ); // Logs 'someString'
+  },
+  someVar: 'someString'
+});
+```
+
+The initialize function is distinct from the `define` function. The primary difference between the two is that `initialize` is on the prototype chain, whereas `define` is not. What this means is that `initialize` can be inherited.
+
+```js
+var CustomModule = Marionette.Module.extend({
+  define: function() {},    // This is not inherited and will never be called
+  initialize: function() {} // This, on the other hand, will be inherited
+});
+```
+
+## Defining Sub-Modules
+
+Sub-Modules (or 'child' Modules) can be defined in a single call by passing
+a period-separated list of Modules to be created.
+
+```js
+MyApp.module("Parent.Child.GrandChild");
+
+MyApp.Parent; // => a valid module object
+MyApp.Parent.Child; // => a valid module object
+MyApp.Parent.Child.GrandChild; // => a valid module object
+```
+
+When defining sub-modules using the dot-notation, the 
+parent modules do not need to exist; they'll be created for you. If a parent
+has already been instantiated then that instance will be used.
 
 ## Starting And Stopping Modules
 
 Modules can be started and stopped independently of the application and
 of each other. This allows them to be loaded asynchronously, and also allows
-them to be shut down when they are no longer needed. This also facilitates
-easier unit testing of modules in isolation as you can start only the
+them to be shut down when they are no longer needed.
+
+This also facilitates unit testing of modules as you can start only the
 module that you need in your tests.
 
-### Starting Modules
+## Starting Modules
 
-Starting a module is done in one of two ways:
+Modules will, by default, start with the parent application. They also have a
+`.start` function that can be used to start a stopped module, or a module that's
+been configured to start independently from its parent.
 
-1. Automatically with the parent module (or Application) `.start()` method. This is the
-default behavior
-2. Manually call the `.start()` method on the module
-
-In this example, the module will be started automatically with the parent
-application object's `start` call:
+In this example, the module will exhibit the default behavior and start automatically
+with the parent application object's `start` call:
 
 ```js
 MyApp = new Backbone.Marionette.Application();
 
 MyApp.module("Foo", function(){
-
   // module code goes here
-
 });
 
 MyApp.start();
 ```
 
-Note that modules loaded and defined after the `app.start()` call will still
-be started automatically.
+Note that modules loaded after the `MyApp.start()` call will be
+immediately started.
+
+### Module Initializers
+
+Modules, like `Application` objects, can be configured to have initializers. And just like
+an Application's initializers, module's initializers are run anytime that
+the module is started. Further, there is no limit to the number of initializers it can have. 
+
+Initializers can be added in the module's definition function.
+
+```js
+MyApp.module("Foo", function(Foo){
+
+  Foo.addInitializer(function(){
+    // Do things once the module has started
+  });
+
+  Foo.addInitializer(function(){
+    // You can have more than one initializer
+  });
+
+});
+```
 
 ### Start Events
 
@@ -123,8 +353,8 @@ mod.start(options);
 ### Preventing Auto-Start Of Modules
 
 The default behavior of modules is that they start with the application.
-If you wish to manually start a module instead of having the application
-start it, you can do so with the `startWithParent` property:
+If you wish to manually start a module instead, you can change this behavior
+with the `startWithParent` property.
 
 ```js
 var fooModule = MyApp.module("Foo", function(){
@@ -142,56 +372,23 @@ MyApp.start();
 fooModule.start();
 ```
 
-Note the use of a function instead of just an object literal to define
-the module, and the presence of the `startWithParent` attribute, to tell it
-not to start with the application. Then to start the module, the module's 
-`start` method is manually called.
-
-You can also grab a reference to the module at a later point in time, to
-start it:
-
-```js
-MyApp.module("Foo", function(){
-  this.startWithParent = false;
-});
-
-// start the module by getting a reference to it first
-MyApp.module("Foo").start();
-```
-
-#### Specifying `startWithParent: false` setting as an object literal
-
-There is a second way of specifying `startWithParent` in a `.module`
-call, using an object literal:
-
-```js
-var fooModule = MyApp.module("Foo", { startWithParent: false });
-```
-
-This is most useful when defining a module across multiple files and
-using a single definition to specify the `startWithParent` option.
-
-If you wish to combine the `startWithParent` object literal
-with a module definition, you can include a `define` attribute on
-the object literal, set to the module function:
+The same behavior can be accomplished with the object literal definition:
 
 ```js
 var fooModule = MyApp.module("Foo", {
-  startWithParent: false,
-
-  define: function(){
-    // module code goes here
-  }
+  startWithParent: false
 });
 ```
 
+When splitting a module across multiple files, it is recommended that you set
+`startWithParent` to be false.
+
 ### Starting Sub-Modules With Parent
 
-Starting of sub-modules is done in a depth-first hierarchy traversal. 
+As you might expect, submodules default to starting with their parent module. 
+ The starting of sub-modules is done in a depth-first hierarchy traversal. 
 That is, a hierarchy of `Foo.Bar.Baz` will start `Baz` first, then `Bar`,
-and finally `Foo.
-
-Submodules default to starting with their parent module. 
+and finally `Foo`.
 
 ```js
 MyApp.module("Foo", function(){...});
@@ -201,7 +398,7 @@ MyApp.start();
 ```
 
 In this example, the "Foo.Bar" module will be started with the call to
-`MyApp.start()` because the parent module, "Foo" is set to start
+`MyApp.start()` because the parent module, "Foo" is (by default) set to start
 with the app.
 
 A sub-module can override this behavior by setting its `startWithParent`
@@ -226,22 +423,22 @@ A sub-module can still be started manually, with this configuration:
 MyApp.module("Foo.Bar").start();
 ```
 
-### Stopping Modules
+## Stopping Modules
 
 A module can be stopped, or shut down, to clear memory and resources when
-the module is no longer needed. Like starting of modules, stopping is done
+the module is no longer needed. Like the starting of modules, stopping is done
 in a depth-first hierarchy traversal. That is, a hierarchy of modules like
 `Foo.Bar.Baz` will stop `Baz` first, then `Bar`, and finally `Foo`.
 
-To stop a module and its children, call the `stop()` method of a module.
+To stop a module and its children, call the `stop` method of a module.
 
 ```js
 MyApp.module("Foo").stop();
 ```
 
 Modules are not automatically stopped by the application. If you wish to 
-stop one, you must call the `stop` method on it. The exception to this is
-that stopping a parent module will stop all of its sub-modules.
+stop one you must call the `stop` method on it, or stop its parent module.
+When you stop any parent module, all of its children will be stopped as well.
 
 ```js
 MyApp.module("Foo.Bar.Baz");
@@ -251,7 +448,27 @@ MyApp.module("Foo").stop();
 
 This call to `stop` causes the `Bar` and `Baz` modules to both be stopped
 as they are sub-modules of `Foo`. For more information on defining
-sub-modules, see the section "Defining Sub-Modules With . Notation".
+sub-modules, see the section "Defining Sub-Modules".
+
+### Module Finalizers
+
+Modules also have finalizers that work in an opposite manner to
+initializers: they are called whenever a module is stopped via the `stop` method.
+You can have as many finalizers as you'd like.
+
+```js
+MyApp.module("Foo", function(Foo){
+
+  Foo.addFinalizer(function(){
+    // Tear down, shut down and clean up the module in here
+  });
+
+  Foo.addFinalizer(function(){
+    // Do more things
+  });
+
+});
+```
 
 ### Stop Events
 
@@ -270,213 +487,3 @@ mod.on("stop", function(){
   // do stuff after the module has been stopped
 });
 ```
-
-## Defining Sub-Modules With . Notation
-
-Sub-modules or child modules can be defined as a hierarchy of modules and 
-sub-modules all at once:
-
-```js
-MyApp.module("Parent.Child.GrandChild");
-
-MyApp.Parent; // => a valid module object
-MyApp.Parent.Child; // => a valid module object
-MyApp.Parent.Child.GrandChild; // => a valid module object
-```
-
-When defining sub-modules using the dot-notation, the 
-parent modules do not need to exist. They will be created
-for you if they don't exist. If they do exist, though, the
-existing module will be used instead of creating a new one.
-
-## Module Definitions
-
-You can specify a callback function to provide a definition
-for the module. Module definitions are invoked immediately
-on calling `module` method. 
-
-The module definition callback will receive 6 parameters:
-
-* The module itself
-* The Parent module, or Application object that `.module` was called from
-* Backbone
-* Backbone.Marionette
-* jQuery
-* Underscore
-* Any custom arguments
-
-You can add functions and data directly to your module to make
-them publicly accessible. You can also add private functions
-and data by using locally scoped variables.
-
-```js
-MyApp.module("MyModule", function(MyModule, MyApp, Backbone, Marionette, $, _){
-
-  // Private Data And Functions
-  // --------------------------
-
-  var myData = "this is private data";
- 
-  var myFunction = function(){
-    console.log(myData);
-  }
-
-
-  // Public Data And Functions
-  // -------------------------
-
-  MyModule.someData = "public data";
-
-  MyModule.someFunction = function(){
-    console.log(MyModule.someData);
-  }
-});
-
-console.log(MyApp.MyModule.someData); //=> public data
-MyApp.MyModule.someFunction(); //=> public data
-```
-
-
-
-### Module Initializers
-
-Modules have initializers, similarly to `Application` objects. A module's
-initializers are run when the module is started.
-
-```js
-MyApp.module("Foo", function(Foo){
-
-  Foo.addInitializer(function(){
-    // initialize and start the module's running code, here.
-  });
-
-});
-```
-
-Any way of starting this module will cause its initializers to run. You
-can have as many initializers for a module as you wish.
-
-### Module Finalizers
-
-Modules also have finalizers that are run when a module is stopped.
-
-```js
-MyApp.module("Foo", function(Foo){
-
-  Foo.addFinalizer(function(){
-    // tear down, shut down and clean up the module, here
-  });
-
-});
-```
-
-Calling the `stop` method on the module will run all that module's 
-finalizers. A module can have as many finalizers as you wish.
-
-### Initialize Function
-
-Modules have an `initialize` function which is distinct from its collection of initializers. `initialize` is immediately called when the Module is invoked, unlike initializers, which are only called once the module is started. You can think of the `initialize` function as an extension of the constructor.
-
-```js
-MyApp.module("Foo", {
-  startWithParent: false,
-  initialize: function( options ) {
-    this.someProperty = 'someValue';
-  },
-  // You can still set a define function
-  define: function( Foo ) {
-    console.log( this.someProperty ); // Logs 'someValue'
-    // You can also still add initializers, which are called once the module is started
-    Foo.addInitializer(function() {});
-  }
-});
-```
-
-The `initialize` function is passed a single argument, which is the object literal definition of the module itself. This allows you to pass arbitrary values to it.
-
-```js
-MyApp.module("Foo", {
-  initialize: function( options ) {
-    console.log( options.someVar ); // Logs 'someString'
-  },
-  someVar: 'someString'
-});
-```
-
-The initialize function is distinct from the `define` function. The primary difference between the two is that `initialize` is on the prototype chain, whereas `define` is not. What this means is that `initialize` can be inherited.
-
-```js
-var CustomModule = Marionette.Module.extend({
-  define: function() {},    // This is not inherited and will never be called
-  initialize: function() {} // This, on the other hand, will be inherited
-});
-```
-
-## The Module's `this` Argument
-
-The module's `this` argument is set to the module itself.
-
-```js
-MyApp.module("Foo", function(Foo){
-  this === Foo; //=> true
-});
-```
-
-## Custom Arguments
-
-You can provide any number of custom arguments to your module, after the
-module definition function. This will allow you to import 3rd party
-libraries, and other resources that you want to have locally scoped to
-your module.
-
-```js
-MyApp.module("MyModule", function(MyModule, MyApp, Backbone, Marionette, $, _, Lib1, Lib2, LibEtc){
-
-  // Lib1 === LibraryNumber1;
-  // Lib2 === LibraryNumber2;
-  // LibEtc === LibraryNumberEtc;
-
-}, LibraryNumber1, LibraryNumber2, LibraryNumberEtc);
-```
-
-## Splitting A Module Definition Apart
-
-Sometimes a module gets to be too long for a single file. In
-this case, you can split a module definition across multiple
-files:
-
-```js
-MyApp.module("MyModule", function(MyModule){
-  MyModule.definition1 = true;
-});
-
-MyApp.module("MyModule", function(MyModule){
-  MyModule.definition2 = true;
-});
-
-MyApp.MyModule.definition1; //=> true
-MyApp.MyModule.definition2; //=> true
-```
-
-## Extending Modules
-
-Modules can be extended. This allows you to make custom Modules to include in your Application.
-
-```
-var CustomModule = Marionette.Module.extend({
-  constructor: function() {
-    // Configure your module
-  }
-});
-```
-
-When attaching a Module to your Application you can specify what class to use with the parameter `moduleClass`.
-
-```
-MyApp.module("Foo", {
-  moduleClass: CustomModule,
-  define: function() {} // You can still use the definition function on custom modules
-});
-```
-
-When `moduleClass` is omitted, Marionette will default to instantiating a new `Marionette.Module`.

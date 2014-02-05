@@ -32,7 +32,7 @@
     "web": "http://derickbailey.lostechies.com"
   },
   "bugs": {
-    "web": "https://github.com/marionettejs/backbone.marionette/issues"
+    "url": "https://github.com/marionettejs/backbone.marionette/issues"
   },
   "repository": {
     "type": "git",

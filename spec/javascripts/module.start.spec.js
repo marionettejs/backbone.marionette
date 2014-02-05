@@ -368,11 +368,12 @@ describe("module start", function(){
   });
 
   describe("when passing an arbitrary set of arguments to `Application.module`", function(){
-    var MyApp, MyModule, moduleStart, initializer, options;
+    var MyApp, MyModule, moduleStart, initializer, options, moduleName;
 
     beforeEach(function(){
 
       MyApp = new Backbone.Marionette.Application();
+      moduleName = "MyModule";
       initializer = sinon.spy();
 
       options = {
@@ -382,13 +383,13 @@ describe("module start", function(){
         initialize: initializer
       };
 
-      MyApp.module("MyModule", options);
+      MyApp.module(moduleName, options);
 
       MyApp.start();
     });
 
     it("should pass them to the initialize function", function(){
-      expect(initializer).toHaveBeenCalledWithExactly(options);
+      expect(initializer).toHaveBeenCalledWithExactly(options, moduleName, MyApp);
     });
 
   });

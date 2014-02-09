@@ -157,11 +157,8 @@ _.extend(Marionette.Module, {
   },
 
   _getModule: function(parentModule, moduleName, app, def, args){
-    var ModuleClass = Marionette.Module;
     var options = _.extend({}, def);
-    if (def) {
-      ModuleClass = def.moduleClass || ModuleClass;
-    }
+    var ModuleClass = this.getClass(def);
 
     // Get an existing module of this name if we have one
     var module = parentModule[moduleName];
@@ -175,6 +172,20 @@ _.extend(Marionette.Module, {
     }
 
     return module;
+  },
+
+  getClass: function(moduleDefinition) {
+    var ModuleClass = Marionette.Module;
+
+    if (!moduleDefinition) {
+      return ModuleClass;
+    }
+
+    if (moduleDefinition.prototype instanceof ModuleClass) {
+      return moduleDefinition;
+    }
+
+    return moduleDefinition.moduleClass || ModuleClass;
   },
 
   _addModuleDefinition: function(parentModule, module, def, args){

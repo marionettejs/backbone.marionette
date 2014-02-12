@@ -90,26 +90,14 @@ Marionette.CollectionView = Marionette.View.extend({
     });
   },
 
-  // trigger the before render callbacks and events
-  triggerBeforeRender: function() {
-    this.triggerMethod('before:render', this);
-    this.triggerMethod('collection:before:render', this);
-  },
-
-  // trigger the rendered callbacks and events
-  triggerRendered: function() {
-    this.triggerMethod('render', this);
-    this.triggerMethod('collection:rendered', this);
-  },
-
   // Render children views. Override this method to
   // provide your own implementation of a render function for
   // the collection view.
   render: function() {
     this._ensureViewIsIntact();
-    this.triggerBeforeRender();
+    this.triggerMethod('before:render', this);
     this._renderChildren();
-    this.triggerRendered();
+    this.triggerMethod('render', this);
     return this;
   },
 
@@ -123,7 +111,9 @@ Marionette.CollectionView = Marionette.View.extend({
     this.destroyChildren();
 
     if (!this.isEmpty(this.collection)) {
+      this.triggerMethod('collection:before:render', this);
       this.showCollection();
+      this.triggerMethod('collection:rendered', this);
     } else {
       this.showEmptyView();
     }

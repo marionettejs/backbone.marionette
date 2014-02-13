@@ -61,12 +61,22 @@ Backbone's Router, but has all the same semantics and behavior of the `appRoutes
 configuration.
 
 ```js
-var MyRouter = Marionette.AppRouter.extend({
-
-});
+var MyRouter = Marionette.AppRouter.extend({});
 
 var router = new MyRouter();
 router.appRoute("/foo", "fooThat");
+```
+Also you can specify a controller with the multiple routes at runtime with method
+`processAppRoutes`. However, In this case the current controller of `AppRouter` will not change.
+
+```js
+var MyRouter = Marionette.AppRouter.extend({});
+
+var router = new MyRouter();
+router.processAppRoutes(myController, {
+  "foo": "doFoo",
+  "bar/:id": "doBar"
+});
 ```
 
 ## Specify A Controller

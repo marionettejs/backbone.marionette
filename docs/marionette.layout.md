@@ -182,7 +182,7 @@ contain are cleaned up correctly.
 
 If you have the need to replace the `Region` with a region class of
 your own implementation, you can specify an alternate class to use
-with the `regionType` propery of the `Layout`.
+with the `regionType` property of the `Layout`.
 
 ```js
 MyLayout = Backbone.Marionette.Layout.extend({

@@ -200,7 +200,7 @@ _.extend(Marionette.Module, {
     } else if (_.isObject(def)){
       // if an object is supplied
       fn = def.define;
-      startWithParent = (typeof def.startWithParent !== 'undefined') ? def.startWithParent : true;
+      startWithParent = !_.isUndefined(def.startWithParent) ? def.startWithParent : true;
 
     } else {
       // if nothing is supplied

@@ -120,8 +120,7 @@ triggers the event and a corresponding "on{EventName}" method.
 
 ### "before:render" / onBeforeRender event
 
-Triggered before an ItemView is rendered. Also triggered as
-"item:before:render" / `onItemBeforeRender`.
+Triggered before an ItemView is rendered.
 
 ```js
 Backbone.Marionette.ItemView.extend({
@@ -137,8 +136,6 @@ Triggered after the view has been rendered.
 You can implement this in your view to provide custom code for dealing
 with the view's `el` after it has been rendered.
 
-Also triggered as "item:rendered" / `onItemRender`.
-
 ```js
 Backbone.Marionette.ItemView.extend({
   onRender: function(){
@@ -152,8 +149,7 @@ Backbone.Marionette.ItemView.extend({
 ### "before:close" / onBeforeClose event
 
 Triggered just prior to closing the view, when the view's `close()`
-method has been called. Also triggered as "item:before:close" /
-`onItemBeforeClose`.
+method has been called.
 
 ```js
 Backbone.Marionette.ItemView.extend({
@@ -167,8 +163,7 @@ Backbone.Marionette.ItemView.extend({
 
 ### "close" / onClose event
 
-Triggered just after the view has been closed. Also triggered
-as "item:closed" / `onItemClose`.
+Triggered just after the view has been closed.
 
 ```js
 Backbone.Marionette.ItemView.extend({

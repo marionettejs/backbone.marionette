@@ -40,7 +40,6 @@ Marionette.ItemView = Marionette.View.extend({
     this.isClosed = false;
 
     this.triggerMethod("before:render", this);
-    this.triggerMethod("item:before:render", this);
 
     var data = this.serializeData();
     data = this.mixinTemplateHelpers(data);
@@ -52,7 +51,6 @@ Marionette.ItemView = Marionette.View.extend({
     this.bindUIElements();
 
     this.triggerMethod("render", this);
-    this.triggerMethod("item:rendered", this);
 
     return this;
   },

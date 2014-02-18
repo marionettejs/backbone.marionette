@@ -389,7 +389,7 @@ describe("module start", function(){
     });
 
     it("should pass them to the initialize function", function(){
-      expect(initializer).toHaveBeenCalledWithExactly(options, moduleName, MyApp);
+      expect(initializer).toHaveBeenCalledWithExactly(moduleName, MyApp, options);
     });
 
   });

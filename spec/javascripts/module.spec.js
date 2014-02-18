@@ -105,7 +105,7 @@ describe("application modules", function(){
           });
 
           it('initialize function is called with arguments', function() {
-            expect(initializeSpy).toHaveBeenCalledWith(options, "Mod", app);
+            expect(initializeSpy).toHaveBeenCalledWith("Mod", app, options);
           });
 
           it("prototype properties are defined", function() {
@@ -167,7 +167,7 @@ describe("application modules", function(){
             // this is a weird side effect of ModuleClass being treated as the define function
             // e.g. app.module('Mod', ModuleClass)
             var defOptions = _.extend({}, ModuleClass);
-            expect(initializeSpy).toHaveBeenCalledWith(defOptions, "Mod", app);
+            expect(initializeSpy).toHaveBeenCalledWith("Mod", app, defOptions);
           });
 
           it("prototype properties", function() {

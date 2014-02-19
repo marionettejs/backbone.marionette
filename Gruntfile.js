@@ -31,6 +31,15 @@ module.exports = function(grunt) {
         ' * https://github.com/marionettejs/backbone.wreqr/\n' +
         ' */\n\n'
     },
+    assets: {
+      babysitter:   'bower_components/backbone.babysitter/lib/backbone.babysitter.js',
+      underscore:   'bower_components/underscore/underscore.js',
+      backbone:     'bower_components/backbone/backbone.js',
+      jquery:       'bower_components/jquery/dist/jquery.js',
+      sinon:        'bower_components/sinonjs/sinon.js',
+      jasmineSinon: 'bower_components/jasmine-sinon/lib/jasmine-sinon.js',
+      wreqr:        'bower_components/backbone.wreqr/lib/backbone.wreqr.js'
+    },
 
     lint: {
       files: ['src/marionette.*.js']

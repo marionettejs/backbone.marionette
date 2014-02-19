@@ -294,7 +294,7 @@ Marionette.CollectionView = Marionette.View.extend({
 
   // Append the HTML to the collection's `el`.
   // Override this method to do something other
-  // then `.append`.
+  // than `.append`.
   appendHtml: function(collectionView, itemView, index){
     if (collectionView.isBuffering) {
       // buffering happens on reset events and initial renders

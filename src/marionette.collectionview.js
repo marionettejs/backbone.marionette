@@ -240,7 +240,7 @@ Marionette.CollectionView = Marionette.View.extend({
   // render the item view
   renderItemView: function(view, index) {
     view.render();
-    this.appendHtml(this, view, index);
+    this.appendHtml(view, index);
   },
 
   // Build an `itemView` for every model in the collection.
@@ -293,19 +293,19 @@ Marionette.CollectionView = Marionette.View.extend({
 
   // Append the HTML to the collection's `el`.
   // Override this method to do something other
-  // than `.append`.
-  appendHtml: function(collectionView, itemView, index){
-    if (collectionView.isBuffering) {
+  // then `.append`.
+  appendHtml: function(itemView, index){
+    if (this.isBuffering) {
       // buffering happens on reset events and initial renders
       // in order to reduce the number of inserts into the
       // document, which are expensive.
-      collectionView.elBuffer.appendChild(itemView.el);
-      collectionView._bufferedChildren.push(itemView);
+      this.elBuffer.appendChild(itemView.el);
+      this._bufferedChildren.push(itemView);
     }
     else {
       // If we've already rendered the main collection, just
       // append the new items directly into the element.
-      collectionView.$el.append(itemView.el);
+      this.$el.append(itemView.el);
     }
   },
 

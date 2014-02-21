@@ -29,13 +29,13 @@
         throwError("Method '"+ methodName +"' was configured as an event handler, but does not exist.");
       }
 
-      target.listenTo(entity, evt, method, target);
+      target.listenTo(entity, evt, method);
     });
   }
 
   // Bind the event to a supplied callback function
   function bindToFunction(target, entity, evt, method){
-      target.listenTo(entity, evt, method, target);
+      target.listenTo(entity, evt, method);
   }
 
   // Bind the event to handlers specified as a string of
@@ -45,13 +45,13 @@
 
     _.each(methodNames,function(methodName) {
       var method = target[methodName];
-      target.stopListening(entity, evt, method, target);
+      target.stopListening(entity, evt, method);
     });
   }
 
   // Bind the event to a supplied callback function
   function unbindToFunction(target, entity, evt, method){
-      target.stopListening(entity, evt, method, target);
+      target.stopListening(entity, evt, method);
   }
 
 

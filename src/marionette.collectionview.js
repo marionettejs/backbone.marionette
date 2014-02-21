@@ -51,9 +51,9 @@ Marionette.CollectionView = Marionette.View.extend({
   // binds to.
   _initialEvents: function(){
     if (this.collection){
-      this.listenTo(this.collection, "add", this.addChildView, this);
-      this.listenTo(this.collection, "remove", this.removeItemView, this);
-      this.listenTo(this.collection, "reset", this.render, this);
+      this.listenTo(this.collection, "add", this.addChildView);
+      this.listenTo(this.collection, "remove", this.removeItemView);
+      this.listenTo(this.collection, "reset", this.render);
     }
   },
 

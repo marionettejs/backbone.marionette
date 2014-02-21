@@ -522,8 +522,8 @@ describe("composite view", function(){
       template: "#grid-template",
       itemView: GridRow,
 
-      appendHtml: function(cv, iv){
-        cv.$("tbody").append(iv.el);
+      appendHtml: function(iv){
+        this.$("tbody").append(iv.el);
       }
     });
 

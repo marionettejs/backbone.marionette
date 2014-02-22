@@ -33,6 +33,9 @@ Marionette.CollectionView = Marionette.View.extend({
 
   endBuffering: function() {
     this.isBuffering = false;
+    if (!this._bufferedChildren.length) {
+      return;
+    }
     this.appendBuffer(this, this.elBuffer);
     this._triggerShowBufferedChildren();
     this.initRenderBuffer();

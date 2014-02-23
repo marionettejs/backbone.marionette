@@ -216,5 +216,19 @@ Marionette.View = Backbone.View.extend({
     // reset the ui element to the original bindings configuration
     this.ui = this._uiBindings;
     delete this._uiBindings;
+  },
+
+  mergeClassName: function() {
+    var classNames = _.map(arguments, function(className) {
+      return _.isFunction(className) ? className.call(this) : className;
+    }, this);
+
+    return _.uniq(classNames).join(' ');
+  },
+
+  extendClassName: function() {
+    _.each(arguments, function(prototype){
+      this.className = _.partial(prototype.mergeClassName, prototype.className, this.className);
+    }, this);
   }
 });

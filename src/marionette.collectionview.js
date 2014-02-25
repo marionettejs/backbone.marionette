@@ -221,7 +221,8 @@ Marionette.CollectionView = Marionette.View.extend({
 
       // call collectionView itemEvent if defined
       if (typeof itemEvents !== "undefined" && _.isFunction(itemEvents[rootEvent])) {
-        itemEvents[rootEvent].apply(this, args);
+        // pass all arguments, except the event name
+        itemEvents[rootEvent].apply(this, _.tail(args));
       }
 
       Marionette.triggerMethod.apply(this, args);

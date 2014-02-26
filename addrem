@@ -1,3 +1,0 @@
-#!/bin/sh
-git remote add $1 git://github.com/$1/backbone.marionette
-git fetch $1

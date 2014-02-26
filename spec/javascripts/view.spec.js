@@ -211,4 +211,75 @@ describe("base view", function(){
     });
   });
 
+
+  describe("when extending className", function() {
+    var ChildView, ParentView, GrandView, childView, parentView, grandView;
+
+    describe("when ancestors extend their className", function() {
+      beforeEach(function() {
+        GrandView = Marionette.View.extend({
+          className: 'grand',
+          constructor: function() {
+            this.extendClassName(GrandView.prototype);
+            Marionette.View.apply(this, arguments);
+          }
+        });
+
+        ParentView = GrandView.extend({
+          className: 'parent',
+          constructor: function() {
+            this.extendClassName(ParentView.prototype);
+            GrandView.apply(this, arguments);
+          }
+        });
+
+        ChildView = ParentView.extend({
+          className: 'child'
+        });
+
+        grandView = new GrandView();
+        parentView = new ParentView();
+        childView = new ChildView();
+      });
+
+      it('grand parent has its own className', function() {
+        expect(grandView.className()).toBe('grand');
+      });
+
+      it('parent has it and grands className', function() {
+        expect(parentView.className()).toBe('grand parent');
+      });
+
+      it('child has its ancestors classNames', function() {
+        expect(childView.className()).toBe('grand parent child');
+      });
+    });
+    describe("when child extends ancestors classNames", function() {
+      beforeEach(function() {
+        GrandView = Marionette.View.extend({
+          className: 'grand'
+        });
+
+        ParentView = GrandView.extend({
+          className: 'parent'
+        });
+
+        ChildView = ParentView.extend({
+          className: 'child',
+          initialize: function() {
+            this.extendClassName(ParentView.prototype, GrandView.prototype);
+          }
+        });
+
+        grandView = new GrandView();
+        parentView = new ParentView();
+        childView = new ChildView();
+      });
+
+      it('child has its ancestors classNames', function() {
+        expect(childView.className()).toBe('grand parent child');
+      });
+
+    });
+  });
 });

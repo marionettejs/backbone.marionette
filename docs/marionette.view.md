@@ -101,23 +101,28 @@ are performed:
 * remove `this.el` from the DOM
 * unbind all `listenTo` events
 
-By providing an `onClose` event in your view definition, you can
+By providing an `onClose` method in your view definition, you can
 run custom code for your view that is fired after your view has been
-closed and cleaned up. This lets you handle any additional clean up
-code without having to override the `close` method.
+closed and cleaned up. The `onClose` method will be passed any arguments
+that `close` was invoked with. This lets you handle any additional clean
+up code without having to override the `close` method.
 
 ```js
-Backbone.Marionette.ItemView.extend({
-  onClose: function(){
+MyView = Backbone.Marionette.ItemView.extend({
+  onClose: function(arg1, arg2){
     // custom cleanup or closing code, here
   }
 });
+
+var v = new MyView();
+v.close(arg1, arg2);
 ```
 
 ## View onBeforeClose
 
 When closing a view, an `onBeforeClose` method will be called, if it
-has been provided. If this method returns `false`, the view will not
+has been provided. It will be passed any arguments that `close` was
+invoked with. If this method returns `false`, the view will not
 be closed. Any other return value (including null or undefined) will
 allow the view to be closed.
 

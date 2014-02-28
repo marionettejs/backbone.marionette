@@ -64,7 +64,7 @@ Marionette.View = Backbone.View.extend({
       var pattern = /@ui.[a-zA-Z_$0-9]*/g;
       if (v.match(pattern)) {
         hash[v.replace(pattern, function(r) {
-          return _this.ui[r.slice(4)];
+          return _.result(_this, "ui")[r.slice(4)];
         })] = hash[v];
         delete hash[v];
       }

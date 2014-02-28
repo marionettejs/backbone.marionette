@@ -31,6 +31,15 @@ module.exports = function(grunt) {
         ' * https://github.com/marionettejs/backbone.wreqr/\n' +
         ' */\n\n'
     },
+    assets: {
+      babysitter:   'bower_components/backbone.babysitter/lib/backbone.babysitter.js',
+      underscore:   'bower_components/underscore/underscore.js',
+      backbone:     'bower_components/backbone/backbone.js',
+      jquery:       'bower_components/jquery/dist/jquery.js',
+      sinon:        'bower_components/sinonjs/sinon.js',
+      jasmineSinon: 'bower_components/jasmine-sinon/lib/jasmine-sinon.js',
+      wreqr:        'bower_components/backbone.wreqr/lib/backbone.wreqr.js'
+    },
 
     lint: {
       files: ['src/marionette.*.js']
@@ -55,9 +64,9 @@ module.exports = function(grunt) {
       },
       build: {
         src: [
-               'public/javascripts/backbone.babysitter.js',
-               'public/javascripts/backbone.wreqr.js',
-               'lib/core/backbone.marionette.js',
+                '<%= assets.babysitter %>',
+                '<%= assets.wreqr %>',
+                'lib/core/backbone.marionette.js',
              ],
         dest: 'lib/backbone.marionette.js'
       },
@@ -98,18 +107,17 @@ module.exports = function(grunt) {
     jasmine : {
       options : {
         helpers : [
-          'bower_components/sinonjs/sinon.js',
-          'bower_components/jasmine-sinon/lib/jasmine-sinon.js',
+          '<%= assets.sinon %>',
+          '<%= assets.jasmineSinon %>',
           'spec/javascripts/helpers/*.js'
         ],
         specs : 'spec/javascripts/**/*.spec.js',
         vendor : [
-          'public/javascripts/jquery.js',
-          'public/javascripts/json2.js',
-          'public/javascripts/underscore.js',
-          'public/javascripts/backbone.js',
-          'public/javascripts/backbone.babysitter.js',
-          'public/javascripts/backbone.wreqr.js',
+          '<%= assets.jquery %>',
+          '<%= assets.underscore %>',
+          '<%= assets.backbone %>',
+          '<%= assets.babysitter %>',
+          '<%= assets.wreqr %>',
         ],
       },
       coverage : {

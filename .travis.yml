@@ -6,5 +6,4 @@ notifications:
 before_install:
   - npm config set ca ""
 before_script:
-  - npm install -g grunt-cli bower
-  - bower install
+  - npm run-script bower

@@ -19,8 +19,8 @@
 Marionette.AppRouter = Backbone.Router.extend({
 
   constructor: function(options){
-    Backbone.Router.prototype.constructor.apply(this, slice(arguments));
-
+    Backbone.Router.prototype.constructor.apply(this, arguments);
+	
     this.options = options || {};
 
     var appRoutes = Marionette.getOption(this, "appRoutes");
@@ -56,7 +56,7 @@ Marionette.AppRouter = Backbone.Router.extend({
     var method = controller[methodName];
 
     if (!method) {
-      throw new Error("Method '" + methodName + "' was not found on the controller");
+      throwError("Method '" + methodName + "' was not found on the controller");
     }
 
     this.route(route, methodName, _.bind(method, controller));

@@ -39,10 +39,10 @@ _.extend(Marionette.Region, {
   // ```
   //
   buildRegion: function(regionConfig, defaultRegionType){
-    var regionIsString = (typeof regionConfig === "string");
-    var regionSelectorIsString = (typeof regionConfig.selector === "string");
-    var regionTypeIsUndefined = (typeof regionConfig.regionType === "undefined");
-    var regionIsType = (typeof regionConfig === "function");
+    var regionIsString = _.isString(regionConfig);
+    var regionSelectorIsString = _.isString(regionConfig.selector);
+    var regionTypeIsUndefined = _.isUndefined(regionConfig.regionType);
+    var regionIsType = _.isFunction(regionConfig);
 
     if (!regionIsType && !regionIsString && !regionSelectorIsString) {
       throwError("Region must be specified as a Region type, a selector string or an object with selector property");

@@ -55,17 +55,20 @@ Marionette.View = Backbone.View.extend({
   // a given key for triggers and events
   // swaps the @ui with the associated selector
   normalizeUIKeys: function(hash) {
+    var _this = this;
     if (typeof(hash) === "undefined") {
       return;
     }
 
     _.each(_.keys(hash), function(v) {
-      var split = v.split("@ui.");
-      if (split.length === 2) {
-        hash[split[0]+this.ui[split[1]]] = hash[v];
+      var pattern = /@ui.[a-zA-Z_$0-9]*/g;
+      if (v.match(pattern)) {
+        hash[v.replace(pattern, function(r) {
+          return _this.ui[r.slice(4)];
+        })] = hash[v];
         delete hash[v];
       }
-    }, this);
+    });
 
     return hash;
   },

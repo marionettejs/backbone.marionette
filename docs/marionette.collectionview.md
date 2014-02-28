@@ -16,9 +16,14 @@ will provide features such as `onShow` callbacks, etc. Please see
 ## Documentation Index
 
 * [CollectionView's `itemView`](#collectionviews-itemview)
-* [CollectionView's `itemViewOptions`](#collectionviews-itemviewoptions)
+  * [CollectionView's `getItemView`](#collectionviews-getitemview)
+  * [CollectionView's `itemViewOptions`](#collectionviews-itemviewoptions)
+  * [CollectionView's `itemViewEventPrefix`](#collectionviews-itemvieweventprefix)
+  * [CollectionView's `itemEvents`](#collectionviews-itemevents)
+  * [CollectionView's `buildItemView`](#collectionviews-builditemview)
+  * [CollectionView's `addItemView`](#collectionviews-additemview)
 * [CollectionView's `emptyView`](#collectionviews-emptyview)
-* [CollectionView's `buildItemView`](#collectionviews-builditemview)
+  * [CollectionView's `getEmptyView`](#collectionviews-getemptyview)
 * [Callback Methods](#callback-methods)
   * [onBeforeRender callback](#onbeforerender-callback)
   * [onRender callback](#onrender-callback)
@@ -35,8 +40,6 @@ will provide features such as `onShow` callbacks, etc. Please see
   * ["before:item:added" / "after:item:added" event](#beforeitemadded--afteritemadded-event)
   * ["item:removed" event](#itemremoved-event)
   * ["itemview:\*" event bubbling from child views](#itemview-event-bubbling-from-child-views)
-* [CollectionView's `itemViewEventPrefix`](#collectionviews-itemvieweventprefix)
-* [CollectionView's `itemEvents`](#collectionviews-itemevents)
 * [CollectionView render](#collectionview-render)
 * [CollectionView: Automatic Rendering](#collectionview-automatic-rendering)
 * [CollectionView: Re-render Collection](#collectionview-re-render-collection)
@@ -76,8 +79,9 @@ new MyCollectionView({
 If you do not specify an `itemView`, an exception will be thrown
 stating that you must specify an `itemView`.
 
-If you need a view specific to your model, you can override
-`getItemView`:
+### CollectionView's `getItemView`
+The value returned by this method is the `ItemView` class that will be instantiated when a `Model` needs to be initially rendered.
+This method also gives you the ability to customize per `Model` `ItemViews`.
 
 ```js
 Backbone.Marionette.CollectionView.extend({
@@ -88,7 +92,7 @@ Backbone.Marionette.CollectionView.extend({
 });
 ```
 
-## CollectionView's `itemViewOptions`
+### CollectionView's `itemViewOptions`
 
 There may be scenarios where you need to pass data from your parent
 collection view in to each of the itemView instances. To do this, provide
@@ -130,6 +134,87 @@ CollectionView = Backbone.Marionette.CollectionView({
 });
 ```
 
+### CollectionView's `itemViewEventPrefix`
+
+You can customize the event prefix for events that are forwarded
+through the collection view. To do this, set the `itemViewEventPrefix`
+on the collection view.
+
+```js
+var CV = Marionette.CollectionView.extend({
+  itemViewEventPrefix: "some:prefix"
+});
+
+var c = new CV({
+  collection: myCol
+});
+
+c.on("some:prefix:render", function(){
+  // item view was rendered
+});
+
+c.render();
+```
+
+The `itemViewEventPrefix` can be provided in the view definition or
+in the constructor function call, to get a view instance.
+
+### CollectionView's `itemEvents`
+You can specify an `itemEvents` hash or method which allows you to capture all bubbling itemEvents without having to manually set bindings. The keys of the hash can either be a function or a string that is the name of a method on the collection view.
+
+```js
+itemEvents: {
+  "render": function() {
+    console.log("an itemView has been rendered");
+  },
+  "onItemClose": "someFn" // where the collection view has a method `someFn`
+}
+```
+
+You can also use a method for `itemEvents` that returns a hash.
+
+```js
+itemEvents: function() {
+  return {
+    "render": function() {
+      console.log("an itemView has been rendered");
+    }
+  }
+}
+```
+
+### CollectionView's `buildItemView`
+
+When a custom view instance needs to be created for the `itemView` that
+represents an item, override the `buildItemView` method. This method
+takes three parameters and returns a view instance to be used as the
+item view.
+
+```js
+buildItemView: function(item, ItemViewType, itemViewOptions){
+  // build the final list of options for the item view type
+  var options = _.extend({model: item}, itemViewOptions);
+  // create the item view instance
+  var view = new ItemViewType(options);
+  // return it
+  return view;
+},
+```
+
+### CollectionView's `addItemView`
+
+The `addItemView` method is responsible for rendering the `itemViews` and adding them to the HTML for the `collectionView` instance. It is also responsible for triggering the events per `ItemView`. In most cases you should not override this method. However if you do want to short circut this method, it can be accomplished via the following.
+
+```js
+Backbone.Marionette.CollectionView.extend({
+  addItemView: function(item, ItemView, index){
+    if (item.shouldBeShown()) {
+      Backbone.Marionette.CollectionView.prototype.addItemView.apply(this, arguments);
+    }
+  }
+});
+```
+
 ## CollectionView's `emptyView`
 
 When a collection has no items, and you need to render a view other than
@@ -148,7 +233,9 @@ Backbone.Marionette.CollectionView.extend({
 });
 ```
 
-Or, if you need the `emptyView`'s type chosen dynamically, specify `getEmptyView`:
+### CollectionView's `getEmptyView`
+
+If you need the `emptyView`'s type chosen dynamically, specify `getEmptyView`:
 
 ```js
 Backbone.Marionette.CollectionView.extend({
@@ -173,24 +260,6 @@ Backbone.Marionette.CollectionView.extend({
     return someBoolean;
   }
 });
-```
-
-## CollectionView's `buildItemView`
-
-When a custom view instance needs to be created for the `itemView` that
-represents an item, override the `buildItemView` method. This method
-takes three parameters and returns a view instance to be used as the
-item view.
-
-```js
-buildItemView: function(item, ItemViewType, itemViewOptions){
-  // build the final list of options for the item view type
-  var options = _.extend({model: item}, itemViewOptions);
-  // create the item view instance
-  var view = new ItemViewType(options);
-  // return it
-  return view;
-},
 ```
 
 ## Callback Methods
@@ -466,55 +535,6 @@ Normally, you would have your item view listening to DOM
 events or model change events, and then triggering an event
 of its own based on that.
 
-## CollectionView's `itemEvents`
-You can specify an `itemEvents` hash or method which allows you to capture all bubbling itemEvents without having to manually set bindings. The keys of the hash can either be a function or a string that is the name of a method on the collection view.
-
-```js
-itemEvents: {
-  "render": function() {
-    console.log("an itemView has been rendered");
-  },
-  "onItemClose": "someFn" // where the collection view has a method `someFn`
-}
-```
-
-You can also use a method for `itemEvents` that returns a hash.
-
-```js
-itemEvents: function() {
-  return {
-    "render": function() {
-      console.log("an itemView has been rendered");
-    }
-  }
-}
-```
-
-## CollectionView's `itemViewEventPrefix`
-
-You can customize the event prefix for events that are forwarded
-through the collection view. To do this, set the `itemViewEventPrefix`
-on the collection view.
-
-```js
-var CV = Marionette.CollectionView.extend({
-  itemViewEventPrefix: "some:prefix"
-});
-
-var c = new CV({
-  collection: myCol
-});
-
-c.on("some:prefix:render", function(){
-  // item view was rendered
-});
-
-c.render();
-```
-
-The `itemViewEventPrefix` can be provided in the view definition or
-in the constructor function call, to get a view instance.
-
 ## CollectionView render
 
 The `render` method of the collection view is responsible for
@@ -658,4 +678,3 @@ Backbone.Marionette.CollectionView.extend({
   }
 });
 ```
-

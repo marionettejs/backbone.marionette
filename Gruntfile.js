@@ -64,9 +64,9 @@ module.exports = function(grunt) {
       },
       build: {
         src: [
-               'public/javascripts/backbone.babysitter.js',
-               'public/javascripts/backbone.wreqr.js',
-               'lib/core/backbone.marionette.js',
+                '<%= assets.babysitter %>',
+                '<%= assets.wreqr %>',
+                'lib/core/backbone.marionette.js',
              ],
         dest: 'lib/backbone.marionette.js'
       },
@@ -107,18 +107,17 @@ module.exports = function(grunt) {
     jasmine : {
       options : {
         helpers : [
-          'bower_components/sinonjs/sinon.js',
-          'bower_components/jasmine-sinon/lib/jasmine-sinon.js',
+          '<%= assets.sinon %>',
+          '<%= assets.jasmineSinon %>',
           'spec/javascripts/helpers/*.js'
         ],
         specs : 'spec/javascripts/**/*.spec.js',
         vendor : [
-          'public/javascripts/jquery.js',
-          'public/javascripts/json2.js',
-          'public/javascripts/underscore.js',
-          'public/javascripts/backbone.js',
-          'public/javascripts/backbone.babysitter.js',
-          'public/javascripts/backbone.wreqr.js',
+          '<%= assets.jquery %>',
+          '<%= assets.underscore %>',
+          '<%= assets.backbone %>',
+          '<%= assets.babysitter %>',
+          '<%= assets.wreqr %>',
         ],
       },
       coverage : {

@@ -135,6 +135,8 @@ describe("app router", function(){
   });
 
   describe("when a route fires with parameters", function(){
+
+    var spy;
     var Router = Backbone.Marionette.AppRouter.extend({
       appRoutes: {
         "m2/:id": "withParam"
@@ -142,11 +144,11 @@ describe("app router", function(){
     });
 
     var controller = {
-      withParam: function(id){}
-    }
+      withParam: function(id) {}
+    };
 
     beforeEach(function(){
-      spyOn(controller, "withParam");
+      spy = sinon.stub( controller, "withParam" );
 
       var router = new Router({
         controller: controller
@@ -157,11 +159,12 @@ describe("app router", function(){
     });
 
     afterEach(function(){
+      controller.withParam.restore();
       Backbone.history.stop();
     });
 
     it("should call the configured method with parameters", function(){
-      expect(controller.withParam).toHaveBeenCalledWith("1");
+      expect(spy).toHaveBeenAlwaysCalledWith("1");
     });
   });
 

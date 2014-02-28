@@ -134,7 +134,7 @@ _.extend(Marionette.Module, {
 
     // get the custom args passed in after the module definition and
     // get rid of the module name and definition function
-    var customArgs = slice(arguments);
+    var customArgs = slice.call(arguments);
     customArgs.splice(0, 3);
 
     // split the module names and get the length
@@ -157,11 +157,8 @@ _.extend(Marionette.Module, {
   },
 
   _getModule: function(parentModule, moduleName, app, def, args){
-    var ModuleClass = Marionette.Module;
     var options = _.extend({}, def);
-    if (def) {
-      ModuleClass = def.moduleClass || ModuleClass;
-    }
+    var ModuleClass = this.getClass(def);
 
     // Get an existing module of this name if we have one
     var module = parentModule[moduleName];
@@ -177,6 +174,20 @@ _.extend(Marionette.Module, {
     return module;
   },
 
+  getClass: function(moduleDefinition) {
+    var ModuleClass = Marionette.Module;
+
+    if (!moduleDefinition) {
+      return ModuleClass;
+    }
+
+    if (moduleDefinition.prototype instanceof ModuleClass) {
+      return moduleDefinition;
+    }
+
+    return moduleDefinition.moduleClass || ModuleClass;
+  },
+
   _addModuleDefinition: function(parentModule, module, def, args){
     var fn;
     var startWithParent;
@@ -189,7 +200,7 @@ _.extend(Marionette.Module, {
     } else if (_.isObject(def)){
       // if an object is supplied
       fn = def.define;
-      startWithParent = (typeof def.startWithParent !== 'undefined') ? def.startWithParent : true;
+      startWithParent = !_.isUndefined(def.startWithParent) ? def.startWithParent : true;
 
     } else {
       // if nothing is supplied

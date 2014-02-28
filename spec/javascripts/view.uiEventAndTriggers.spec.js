@@ -2,7 +2,7 @@ describe("view ui event trigger configuration", function(){
   "use strict";
 
   describe("@ui syntax within events and triggers", function() {
-    var view, view2, fooHandler, attackHandler;
+    var view, view2, fooHandler, attackHandler, tapHandler;
 
     var View = Backbone.Marionette.ItemView.extend({
       ui: {
@@ -15,7 +15,12 @@ describe("view ui event trigger configuration", function(){
       },
 
       events: {
-        "click @ui.bar": "attack"
+        "click @ui.bar": "attack",
+        "click div:not(@ui.bar)": "tapper"
+      },
+
+      tapper: function() {
+        tapHandler();
       },
 
       attack: function() {
@@ -23,7 +28,7 @@ describe("view ui event trigger configuration", function(){
       },
 
       render: function(){
-        this.$el.html("<button class='foo'></button><div id='tap'></div>");
+        this.$el.html("<button class='foo'></button><div id='tap'></div><div class='lap'></div>");
       }
     });
 
@@ -61,7 +66,7 @@ describe("view ui event trigger configuration", function(){
 
       fooHandler = jasmine.createSpy("do:foo event handler");
       attackHandler = jasmine.createSpy("attack handler");
-
+      tapHandler = jasmine.createSpy("tap handler");
       spyOn(view, "attack").andCallThrough();
       view.on("do:foo", fooHandler);
       view2.on("do:foo", fooHandler);
@@ -70,6 +75,11 @@ describe("view ui event trigger configuration", function(){
     it("should correctly trigger an event", function(){
       view.$(".foo").trigger("click");
       expect(fooHandler).toHaveBeenCalled();
+    });
+
+    it("should correctly trigger a complex event", function(){
+      view.$(".lap").trigger("click");
+      expect(tapHandler).toHaveBeenCalled();
     });
 
     it("should correctly call an event", function(){

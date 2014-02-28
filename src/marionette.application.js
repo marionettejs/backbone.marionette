@@ -77,12 +77,9 @@ _.extend(Marionette.Application.prototype, Backbone.Events, {
 
   // Create a module, attached to the application
   module: function(moduleNames, moduleDefinition){
-    var ModuleClass = Marionette.Module;
 
     // Overwrite the module class if the user specifies one
-    if (moduleDefinition) {
-      ModuleClass = moduleDefinition.moduleClass || ModuleClass;
-    }
+    var ModuleClass = Marionette.Module.getClass(moduleDefinition);
 
     // slice the args, and add this application object as the
     // first argument of the array

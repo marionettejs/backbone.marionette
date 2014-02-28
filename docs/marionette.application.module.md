@@ -10,6 +10,7 @@ and to build individual components of your app.
 * [Module Definitions](#module-definitions)
   * [Callback Function Definition](#callback-function-definition)
   * [Object Literal Definition](#object-literal-definition)
+* [Module Classes](#module-classes)
 * [Defining Sub-Modules](#defining-sub-modules)
 * [Starting and Stopping Modules](#starting-and-stopping-modules)
 * [Starting Modules](#starting-modules)
@@ -183,25 +184,6 @@ MyApp.module("Foo", {
 
 When `moduleClass` is omitted Marionette will default to instantiating a new `Marionette.Module`.
 
-#### Custom Module Classes
-
-The extend function of a Module is identical to the extend functions on other Backbone and Marionette classes.
-
-A particularly important property when creating a new Module class is the `constructor` function, which for Modules
-receives three arguments:
-
-* The Module name
-* The Application
-* The entire object literal definition of the Module
-
-```
-var CustomModule = Marionette.Module.extend({
-  constructor: function( moduleName, app, options ) {
-    // Configure your Module
-  }
-});
-```
-
 #### Initialize Function
 
 Modules have an `initialize` function which is immediately called when the Module is invoked. You can think of the `initialize` function as an extension of the constructor.
@@ -243,6 +225,35 @@ var CustomModule = Marionette.Module.extend({
   initialize: function() {} // This, on the other hand, will be inherited
 });
 ```
+
+## Module Classes
+
+Module classes can be used as an alternative to the define pattern.
+
+The extend function of a Module is identical to the extend functions on other Backbone and Marionette classes. This allows module lifecyle events like `onStart` and `onStop` to be called directly.
+
+```
+var FooModule = Marionette.Module.extend({
+  startWithParent: false,
+
+  constructor: function(moduleName, app, options) {
+  },
+
+  initialize: function(options, app, moduleName) {
+  },
+
+  onStart: function(options) {
+  },
+
+  onStop: function(options) {
+  },
+});
+
+MyApp.module("Foo", FooModule);
+```
+
+If all of the module's functionality is defined inside its class, then the class can be passed in directly. `MyApp.module("Foo", FooModule)`
+
 
 ## Defining Sub-Modules
 

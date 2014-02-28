@@ -1,23 +1,23 @@
 {
-  "name"        : "backbone.marionette",
-  "description" : "Make your Backbone.js apps dance with a composite application architecture!",
-  "homepage"    : "http://marionettejs.org",
-  "main"        : ["./lib/backbone.marionette.js", "./lib/core/amd/backbone.marionette.js"],
-  "version"     : "1.6.2",
-
-  "keywords"     : [
+  "name": "backbone.marionette",
+  "description": "Make your Backbone.js apps dance with a composite application architecture!",
+  "homepage": "http://marionettejs.org",
+  "main": [
+    "./lib/backbone.marionette.js",
+    "./lib/core/amd/backbone.marionette.js"
+  ],
+  "version": "1.6.2",
+  "keywords": [
     "backbone",
     "framework",
     "client",
     "browser",
     "composite"
   ],
-
   "author": {
-    "name"  : "Derick Bailey",
-    "email" : "derickbailey@gmail.com"
+    "name": "Derick Bailey",
+    "email": "derickbailey@gmail.com"
   },
-
   "ignore": [
     "docs",
     "reports",
@@ -34,15 +34,13 @@
     "addrem",
     "getdeps"
   ],
-
-  "dependencies" : {
+  "dependencies": {
     "backbone": "1.0.0 - 1.1.2",
     "underscore": "1.4.4 - 1.6.0",
     "backbone.babysitter": "~0.1.0",
     "backbone.wreqr": "~1.0.0",
     "jquery": "1.8.0 - 1.11.0"
   },
-
   "devDependencies": {
     "sinonjs": "1.7.3",
     "jasmine-sinon": "0.3.1"

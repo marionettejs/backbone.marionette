@@ -6,7 +6,7 @@
     "./lib/backbone.marionette.js",
     "./lib/core/amd/backbone.marionette.js"
   ],
-  "version": "1.6.2",
+  "version": "1.6.3",
   "keywords": [
     "backbone",
     "framework",

@@ -1,3 +1,42 @@
+### v1.6.3 [view commit logs](https://github.com/marionettejs/backbone.marionette/compare/v1.6.2...v1.6.3)
+  * Improvements
+    * Enable more direct module instantiation on `Marionette.App`.
+      ```js
+        var ItemModule = Marionette.Module.extend({
+          startWithParent: false,
+          initialize: function(options) {},  
+          onStart: function() {}
+        });
+
+        // ...
+
+        this.app.module('Items', ItemModule);
+      ```
+    * `ui` hash interpolation now supports a functional `ui` hash.
+
+      ```js
+        ui: function() {
+          return {
+            "click @ui.foo": "attack"
+          }
+        }
+      ```
+  * Fixes
+    * Fix `@ui` interpolation for handling complex selectors.
+
+      ```js
+        {
+          "click div:not(@ui.bar)": "tapper"
+        }
+      ```
+    * Bump `backbone.babysitter` and `backbone.wreqr` versions.
+  * General
+    * Improve readme docs for `CollectionView`, `AppRouter` and `ItemView`.
+    * Handle THE [npm self sign cert problem](http://blog.npmjs.org/post/78085451721/npms-self-signed-certificate-is-no-more)
+    * Replace unneeded argument slicing.
+    * Normalize error throwing to use internal `throwError` helper method.
+    * Use `_` type checks for non performant code to improve readability and consistency.
+
 ### v1.6.2 [view commit logs](https://github.com/marionettejs/backbone.marionette/compare/v1.6.1...v1.6.2)
   * CollectionView/CompositeView
     * allow `itemEvents` to use string based method names [PR 875](https://github.com/marionettejs/backbone.marionette/pull/875)
@@ -5,7 +44,7 @@
 	* update module initialize to include moduleName and app [PR 898](https://github.com/marionettejs/backbone.marionette/pull/898)
   * General
   	* significantly improve module documentation [PR 897](https://github.com/marionettejs/backbone.marionette/pull/897)
-  	
+
 ### v1.6.1 [view commit logs](https://github.com/marionettejs/backbone.marionette/compare/v1.6.0...v1.6.1)
   * Modules
     * Fix a bug where a module would not start by default when defined as an object literal

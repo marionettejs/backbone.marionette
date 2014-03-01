@@ -10,14 +10,14 @@ describe("collection view - reset", function(){
   });
 
   var CollectionView = Backbone.Marionette.CollectionView.extend({
-    itemView: ItemView,
+    childView: ItemView,
 
     onBeforeRender: function(){},
 
     onRender: function(){},
 
-    onBeforeItemAdded: function(view){},
-    onAfterItemAdded: function(view){}
+    onBeforeChildAdded: function(view){},
+    onAfterChildAdded: function(view){}
   });
 
   describe("when a collection is reset after the view is loaded", function(){
@@ -43,7 +43,7 @@ describe("collection view - reset", function(){
       expect(collectionView.closeChildren).toHaveBeenCalled();
     });
 
-    it("should append the html for each itemView", function(){
+    it("should append the html for each childView", function(){
       expect($(collectionView.$el)).toHaveHtml("<span>bar</span><span>baz</span>");
     });
 

@@ -1,4 +1,4 @@
-describe("collection view - itemViewOptions", function(){
+describe("collection view - childViewOptions", function(){
 
   var ItemView = Backbone.Marionette.ItemView.extend({
     tagName: "span",
@@ -10,20 +10,20 @@ describe("collection view - itemViewOptions", function(){
   });
 
   var CollectionView = Backbone.Marionette.CollectionView.extend({
-    itemView: ItemView,
+    childView: ItemView,
 
     onBeforeRender: function(){},
 
     onRender: function(){},
 
-    onBeforeItemAdded: function(view){},
-    onAfterItemAdded: function(view){}
+    onBeforeChildAdded: function(view){},
+    onAfterChildAdded: function(view){}
   });
 
-  describe("when rendering and an 'itemViewOptions' is provided", function(){
+  describe("when rendering and a 'childViewOptions' is provided", function(){
     var CollectionView = Backbone.Marionette.CollectionView.extend({
-      itemView: ItemView,
-      itemViewOptions: {
+      childView: ItemView,
+      childViewOptions: {
         foo: "bar"
       }
     });
@@ -45,10 +45,10 @@ describe("collection view - itemViewOptions", function(){
     });
   });
 
-  describe("when rendering and an 'itemViewOptions' is provided as a function", function(){
+  describe("when rendering and a 'childViewOptions' is provided as a function", function(){
     var CollectionView = Backbone.Marionette.CollectionView.extend({
-      itemView: ItemView,
-      itemViewOptions: function(model, index){
+      childView: ItemView,
+      childViewOptions: function(model, index){
         return {
           foo: "bar",
           index: index
@@ -63,7 +63,7 @@ describe("collection view - itemViewOptions", function(){
       collectionView = new CollectionView({
         collection: collection
       });
-      spyOn(collectionView, 'itemViewOptions').andCallThrough();
+      spyOn(collectionView, 'childViewOptions').andCallThrough();
 
       collectionView.render();
       view = collectionView.children.findByIndex(0);
@@ -73,15 +73,15 @@ describe("collection view - itemViewOptions", function(){
       expect(view.options.hasOwnProperty("foo")).toBe(true);
     });
 
-    it("should pass the model when calling 'itemViewOptions'", function() {
-      expect(collectionView.itemViewOptions).toHaveBeenCalledWith(collection.at(0), 0);
-      expect(collectionView.itemViewOptions).toHaveBeenCalledWith(collection.at(1), 1);
+    it("should pass the model when calling 'childViewOptions'", function() {
+      expect(collectionView.childViewOptions).toHaveBeenCalledWith(collection.at(0), 0);
+      expect(collectionView.childViewOptions).toHaveBeenCalledWith(collection.at(1), 1);
     });
   });
 
-  describe("when rendering and an 'itemViewOptions' is provided at construction time", function(){
+  describe("when rendering and a 'childViewOptions' is provided at construction time", function(){
     var CollectionView = Backbone.Marionette.CollectionView.extend({
-      itemView: ItemView
+      childView: ItemView
     });
 
     var collection = new Backbone.Collection([{foo: "bar"}]);
@@ -90,7 +90,7 @@ describe("collection view - itemViewOptions", function(){
     beforeEach(function(){
       collectionView = new CollectionView({
         collection: collection,
-        itemViewOptions: {
+        childViewOptions: {
           foo: "bar"
         }
       });

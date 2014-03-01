@@ -137,7 +137,7 @@ describe("trigger event and method name", function(){
 
     var ResultsView =  Backbone.Marionette.CompositeView.extend({
         template: "#aTemplate",
-        itemView : ResultView
+        childView : ResultView
     });
 
     var cv;
@@ -150,7 +150,7 @@ describe("trigger event and method name", function(){
         collection: c
       });
 
-      cv.onItemviewAddSelection = jasmine.createSpy();
+      cv.onChildviewAddSelection = jasmine.createSpy();
 
       cv.render();
 
@@ -159,7 +159,7 @@ describe("trigger event and method name", function(){
     });
 
     it("should fire the event method once", function(){
-      expect(cv.onItemviewAddSelection.callCount).toBe(1);
+      expect(cv.onChildviewAddSelection.callCount).toBe(1);
     });
 
   });

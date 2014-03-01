@@ -1,4 +1,4 @@
-describe("composite view - itemViewContainer", function(){
+describe("composite view - childViewContainer", function(){
   "use strict";
 
   var Model = Backbone.Model.extend({});
@@ -14,10 +14,10 @@ describe("composite view - itemViewContainer", function(){
     }
   });
 
-  describe("when rendering a collection in a composite view with an `itemViewContainer` specified", function(){
+  describe("when rendering a collection in a composite view with a `childViewContainer` specified", function(){
     var CompositeView = Backbone.Marionette.CompositeView.extend({
-      itemView: ItemView,
-      itemViewContainer: "ul",
+      childView: ItemView,
+      childViewContainer: "ul",
       template: "#composite-child-container-template",
       ui: {
         list: "ul"
@@ -25,7 +25,7 @@ describe("composite view - itemViewContainer", function(){
     });
 
     var CompositeViewWithoutItemViewContainer = Backbone.Marionette.CompositeView.extend({
-      itemView: ItemView,
+      childView: ItemView,
       template: "#composite-child-container-template"
     });
 
@@ -51,14 +51,14 @@ describe("composite view - itemViewContainer", function(){
 
     specCase('in the view creation', function() {
       return new CompositeViewWithoutItemViewContainer({
-        itemViewContainer: "ul",
+        childViewContainer: "ul",
         collection: collection
       });
     });
 
     specCase('with a @ui element', function() {
       return new CompositeView({
-        itemViewContainer: "@ui.list",
+        childViewContainer: "@ui.list",
         collection: collection
       });
     });
@@ -68,13 +68,13 @@ describe("composite view - itemViewContainer", function(){
         beforeEach(function(){
           compositeView = viewCreation();
 
-          spyOn(compositeView, "resetItemViewContainer").andCallThrough();
+          spyOn(compositeView, "resetChildViewContainer").andCallThrough();
 
           compositeView.render();
         });
 
-        it("should reset any existing itemViewContainer", function(){
-          expect(compositeView.resetItemViewContainer).toHaveBeenCalled();
+        it("should reset any existing childViewContainer", function(){
+          expect(compositeView.resetChildViewContainer).toHaveBeenCalled();
         });
 
         it("should render the items in to the specified container", function(){
@@ -85,10 +85,10 @@ describe("composite view - itemViewContainer", function(){
     }
   });
 
-  describe("when rendering a collection in a composite view with a missing `itemViewContainer` specified", function(){
+  describe("when rendering a collection in a composite view with a missing `childViewContainer` specified", function(){
     var CompositeView = Backbone.Marionette.CompositeView.extend({
-      itemView: ItemView,
-      itemViewContainer: '#missing-container',
+      childView: ItemView,
+      childViewContainer: '#missing-container',
       template: "#composite-child-container-template"
     });
 
@@ -108,35 +108,35 @@ describe("composite view - itemViewContainer", function(){
         collection: collection
       });
 
-      spyOn(compositeView, "resetItemViewContainer").andCallThrough();
+      spyOn(compositeView, "resetChildViewContainer").andCallThrough();
 
     });
 
     it("should throw an error", function(){
-      expect(function(){compositeView.render()}).toThrow("The specified `itemViewContainer` was not found: #missing-container");
+      expect(function(){compositeView.render()}).toThrow("The specified `childViewContainer` was not found: #missing-container");
     });
 
     describe("and referencing the @ui hash", function() {
 
       beforeEach(function() {
         CompositeView = Backbone.Marionette.CompositeView.extend({
-          itemView: ItemView,
-          itemViewContainer: '@ui.missing-container',
+          childView: ItemView,
+          childViewContainer: '@ui.missing-container',
           template: "#composite-child-container-template"
         });
       });
 
       it("should still throw an error", function(){
-        expect(function(){compositeView.render()}).toThrow("The specified `itemViewContainer` was not found: #missing-container");
+        expect(function(){compositeView.render()}).toThrow("The specified `childViewContainer` was not found: #missing-container");
       });
     });
 
   });
 
 
-  describe("when rendering a collection in a composite view without an `itemViewContainer` specified", function(){
+  describe("when rendering a collection in a composite view without a `childViewContainer` specified", function(){
     var CompositeView = Backbone.Marionette.CompositeView.extend({
-      itemView: ItemView,
+      childView: ItemView,
       template: "#composite-child-container-template"
     });
 
@@ -171,8 +171,8 @@ describe("composite view - itemViewContainer", function(){
 
     var ListView = Marionette.CompositeView.extend({
       template: _.template('<table><tbody></tbody></table>'),
-      itemViewContainer: 'tbody',
-      itemView: ItemView
+      childViewContainer: 'tbody',
+      childView: ItemView
     });
 
     var view;
@@ -195,8 +195,8 @@ describe("composite view - itemViewContainer", function(){
 
   describe("when a composite view is not yet rendered", function(){
     var CompositeView = Backbone.Marionette.CompositeView.extend({
-      itemView: ItemView,
-      itemViewContainer: "ul",
+      childView: ItemView,
+      childViewContainer: "ul",
       template: "#composite-child-container-template"
     });
 
@@ -222,16 +222,16 @@ describe("composite view - itemViewContainer", function(){
       compositeView = new CompositeView({
         collection: collection
       });
-      spyOn(compositeView, "addChildView").andCallThrough();
+      spyOn(compositeView, "onChildAdd").andCallThrough();
     });
 
     it('should not raise any errors when item is added to collection', function() {
       expect(addModel).not.toThrow();
     });
 
-    it('should not call addChildView when item is added to collection', function() {
+    it('should not call onChildAdd when item is added to collection', function() {
       addModel();
-      expect(compositeView.addChildView).not.toHaveBeenCalled();
+      expect(compositeView.onChildAdd).not.toHaveBeenCalled();
     });
 
     it('should not raise any errors when item is removed from collection', function() {
@@ -244,22 +244,22 @@ describe("composite view - itemViewContainer", function(){
 
   });
 
-  describe("when a composite view has the `itemViewContainer` specified as a function", function() {
+  describe("when a composite view has the `childViewContainer` specified as a function", function() {
     var compositeView;
 
     var CompositeView = Backbone.Marionette.CompositeView.extend({
-      itemView: ItemView,
+      childView: ItemView,
       template: "#composite-child-container-template"
     });
 
     beforeEach(function() {
       compositeView = new CompositeView();
-      compositeView.itemViewContainer = sinon.stub().returns('ul');
+      compositeView.childViewContainer = sinon.stub().returns('ul');
       compositeView.render();
     });
 
-    it("calls the `itemViewContainer` in the context of the composite view", function() {
-      expect(compositeView.itemViewContainer).toHaveBeenCalledOn(compositeView);
+    it("calls the `childViewContainer` in the context of the composite view", function() {
+      expect(compositeView.childViewContainer).toHaveBeenCalledOn(compositeView);
     });
 
   });

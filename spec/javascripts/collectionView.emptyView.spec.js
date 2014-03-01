@@ -16,7 +16,7 @@ describe("collectionview - emptyView", function(){
   });
 
   var EmptyCollectionView = Backbone.Marionette.CollectionView.extend({
-    itemView: ItemView,
+    childView: ItemView,
     emptyView: EmptyView
   });
 
@@ -163,7 +163,7 @@ describe("collectionview - emptyView", function(){
     });
 
     var CollectionView = Backbone.Marionette.CollectionView.extend({
-      itemView: ItemView,
+      childView: ItemView,
     });
 
     var EmptyView = Backbone.Marionette.ItemView.extend({
@@ -210,7 +210,7 @@ describe("collectionview - emptyView", function(){
       render: function(){}
     });
     var CollectionView = Backbone.Marionette.CollectionView.extend({
-      itemView: ItemView,
+      childView: ItemView,
       getEmptyView: function() { return OtherEmptyView }
     })
 

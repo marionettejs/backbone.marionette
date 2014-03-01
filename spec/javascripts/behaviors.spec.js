@@ -375,7 +375,7 @@ describe("Behaviors", function(){
 
       beforeEach(function() {
         CollectionView = Marionette.CollectionView.extend({
-          itemView: V
+          childView: V
         });
 
         collection     = new Backbone.Collection([{}]);

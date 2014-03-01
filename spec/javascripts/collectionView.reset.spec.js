@@ -10,14 +10,14 @@ describe("collection view - reset", function(){
   });
 
   var CollectionView = Backbone.Marionette.CollectionView.extend({
-    itemView: ItemView,
+    childView: ItemView,
 
     onBeforeRender: function(){},
 
     onRender: function(){},
 
-    onBeforeItemAdded: function(view){},
-    onAfterItemAdded: function(view){}
+    onBeforeChildAdded: function(view){},
+    onAfterChildAdded: function(view){}
   });
 
   describe("when a collection is reset after the view is loaded", function(){

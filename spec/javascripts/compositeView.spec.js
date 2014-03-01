@@ -1,6 +1,50 @@
 describe("composite view", function(){
   "use strict";
 
+
+  // Models
+
+  var Model = Backbone.Model.extend({});
+
+  var User = Backbone.Model.extend({});
+
+  var Node = Backbone.Model.extend({
+    initialize: function(){
+      var nodes = this.get("nodes");
+      if (nodes){
+        this.nodes = new NodeCollection(nodes);
+        this.unset("nodes");
+      }
+    }
+  });
+
+  // Collections
+
+  var Collection = Backbone.Collection.extend({
+    model: Model
+  });
+
+  var UserCollection = Backbone.Collection.extend({
+    model: User
+  });
+
+  var NodeCollection = Backbone.Collection.extend({
+    model: Node
+  });
+
+  // Views
+
+  var TreeView = Backbone.Marionette.CompositeView.extend({
+    tagName: "ul",
+    template: "#recursive-composite-template",
+
+    initialize: function(){
+      this.collection = this.model.nodes;
+    }
+  });
+
+
+
   describe("when a composite view has a template without a model", function(){
     var compositeView;
 
@@ -12,7 +56,7 @@ describe("composite view", function(){
     });
 
     var CompositeViewNoModel = Backbone.Marionette.CompositeView.extend({
-      itemView: ItemView,
+      childView: ItemView,
       template: "#composite-template-no-model"
     });
 
@@ -51,7 +95,7 @@ describe("composite view", function(){
     });
 
     var CompositeView = Backbone.Marionette.CompositeView.extend({
-      itemView: ItemView,
+      childView: ItemView,
       template: "#composite-template",
 
       onRender: function(){}
@@ -101,7 +145,7 @@ describe("composite view", function(){
     });
 
     var CompositeView = Backbone.Marionette.CompositeView.extend({
-      itemView: ItemView,
+      childView: ItemView,
       emptyView: EmptyView,
       template: "#collection-template",
       initialize: function() {
@@ -142,7 +186,7 @@ describe("composite view", function(){
     });
 
     var CompositeView = Backbone.Marionette.CompositeView.extend({
-      itemView: ItemView,
+      childView: ItemView,
     });
 
     beforeEach(function(){
@@ -173,7 +217,7 @@ describe("composite view", function(){
     });
 
     var CompositeView = Backbone.Marionette.CompositeView.extend({
-      itemView: ItemView,
+      childView: ItemView,
       template: "#composite-template",
 
       onRender: function(){}
@@ -253,7 +297,7 @@ describe("composite view", function(){
     });
 
     var CompositeModelView = Backbone.Marionette.CompositeView.extend({
-      itemView: ItemView,
+      childView: ItemView,
       template: "#composite-template"
     });
 
@@ -304,7 +348,7 @@ describe("composite view", function(){
     });
 
     var CompositeView = Backbone.Marionette.CompositeView.extend({
-      itemView: ItemView,
+      childView: ItemView,
       template: "#composite-template",
 
       onRender: function(){}
@@ -346,7 +390,7 @@ describe("composite view", function(){
     });
 
     var CompositeView = Backbone.Marionette.CompositeView.extend({
-      itemView: ItemView,
+      childView: ItemView,
       template: "#composite-template",
 
       onRender: function(){}
@@ -383,7 +427,7 @@ describe("composite view", function(){
     });
 
     var CompositeView = Backbone.Marionette.CompositeView.extend({
-      itemView: ItemView,
+      childView: ItemView,
       template: "#composite-template",
 
       onRender: function(){}
@@ -473,7 +517,7 @@ describe("composite view", function(){
     });
 
     var CompositeModelView = Backbone.Marionette.CompositeView.extend({
-      itemView: ItemView,
+      childView: ItemView,
       template: "#composite-template"
     });
 
@@ -520,7 +564,7 @@ describe("composite view", function(){
     var GridView = Backbone.Marionette.CompositeView.extend({
       tagName: "table",
       template: "#grid-template",
-      itemView: GridRow,
+      childView: GridRow,
 
       appendHtml: function(iv){
         this.$("tbody").append(iv.el);
@@ -581,7 +625,7 @@ describe("composite view", function(){
     var GridView = Backbone.Marionette.CompositeView.extend({
       tagName: "table",
       template: "#grid-template",
-      itemView: GridRow,
+      childView: GridRow,
 
       appendHtml: function(cv, iv){
         cv.$("tbody").append(iv.el);
@@ -713,47 +757,6 @@ describe("composite view", function(){
     it("calls the parent Marionette.CollectionView's constructor function on instantiation", function(){
       expect(constructor).toHaveBeenCalled();
     });
-  });
-
-  // Models
-
-  var Model = Backbone.Model.extend({});
-
-  var User = Backbone.Model.extend({});
-
-  var Node = Backbone.Model.extend({
-    initialize: function(){
-      var nodes = this.get("nodes");
-      if (nodes){
-        this.nodes = new NodeCollection(nodes);
-        this.unset("nodes");
-      }
-    }
-  });
-
-  // Collections
-
-  var Collection = Backbone.Collection.extend({
-    model: Model
-  });
-
-  var UserCollection = Backbone.Collection.extend({
-    model: User
-  });
-
-  var NodeCollection = Backbone.Collection.extend({
-    model: Node
-  });
-
-  // Views
-
-  var TreeView = Backbone.Marionette.CompositeView.extend({
-    tagName: "ul",
-    template: "#recursive-composite-template",
-
-    initialize: function(){
-      this.collection = this.model.nodes;
-    }
   });
 
 });

@@ -3,7 +3,7 @@
 
 // Used for rendering a branch-leaf, hierarchical structure.
 // Extends directly from CollectionView and also renders an
-// an item view as `modelView`, for the top leaf
+// a child view as `modelView`, for the top leaf
 Marionette.CompositeView = Marionette.CollectionView.extend({
 
   // Setting up the inheritance chain which allows changes to
@@ -18,29 +18,29 @@ Marionette.CompositeView = Marionette.CollectionView.extend({
   _initialEvents: function(){
 
     // Bind only after composite view is rendered to avoid adding child views
-    // to nonexistent itemViewContainer
+    // to nonexistent childViewContainer
     this.once('render', function () {
       if (this.collection){
         this.listenTo(this.collection, "add", this.addChildView);
-        this.listenTo(this.collection, "remove", this.removeItemView);
+        this.listenTo(this.collection, "remove", this.onChildRemove);
         this.listenTo(this.collection, "reset", this._renderChildren);
       }
     });
 
   },
 
-  // Retrieve the `itemView` to be used when rendering each of
+  // Retrieve the `childView` to be used when rendering each of
   // the items in the collection. The default is to return
-  // `this.itemView` or Marionette.CompositeView if no `itemView`
+  // `this.childView` or Marionette.CompositeView if no `childView`
   // has been defined
-  getItemView: function(item){
-    var itemView = Marionette.getOption(this, "itemView") || this.constructor;
+  getChildView: function(child){
+    var childView = Marionette.getOption(this, "childView") || this.constructor;
 
-    if (!itemView){
-      throwError("An `itemView` must be specified", "NoItemViewError");
+    if (!childView){
+      throwError("A `childView` must be specified", "NoChildViewError");
     }
 
-    return itemView;
+    return childView;
   },
 
   // Serialize the collection for the view.
@@ -62,7 +62,7 @@ Marionette.CompositeView = Marionette.CollectionView.extend({
   render: function(){
     this.isRendered = true;
     this.isClosed = false;
-    this.resetItemViewContainer();
+    this.resetChildViewContainer();
 
     this.triggerBeforeRender();
     var html = this.renderModel();
@@ -103,39 +103,39 @@ Marionette.CompositeView = Marionette.CollectionView.extend({
 
   // You might need to override this if you've overridden appendHtml
   appendBuffer: function(compositeView, buffer) {
-    var $container = this.getItemViewContainer(compositeView);
+    var $container = this.getChildViewContainer(compositeView);
     $container.append(buffer);
   },
 
-  // Appends the `el` of itemView instances to the specified
-  // `itemViewContainer` (a jQuery selector). Override this method to
-  // provide custom logic of how the child item view instances have their
+  // Appends the `el` of childView instances to the specified
+  // `childViewContainer` (a jQuery selector). Override this method to
+  // provide custom logic of how the child view instances have their
   // HTML appended to the composite view instance.
-  appendHtml: function(compositeView, itemView, index){
+  appendHtml: function(compositeView, childView, index){
     if (compositeView.isBuffering) {
-      compositeView.elBuffer.appendChild(itemView.el);
-      compositeView._bufferedChildren.push(itemView);
+      compositeView.elBuffer.appendChild(childView.el);
+      compositeView._bufferedChildren.push(childView);
     }
     else {
       // If we've already rendered the main collection, just
       // append the new items directly into the element.
-      var $container = this.getItemViewContainer(compositeView);
-      $container.append(itemView.el);
+      var $container = this.getChildViewContainer(compositeView);
+      $container.append(childView.el);
     }
   },
 
-  // Internal method to ensure an `$itemViewContainer` exists, for the
+  // Internal method to ensure an `$childViewContainer` exists, for the
   // `appendHtml` method to use.
-  getItemViewContainer: function(containerView){
-    if ("$itemViewContainer" in containerView){
-      return containerView.$itemViewContainer;
+  getChildViewContainer: function(containerView){
+    if ("$childViewContainer" in containerView){
+      return containerView.$childViewContainer;
     }
 
     var container;
-    var itemViewContainer = Marionette.getOption(containerView, "itemViewContainer");
-    if (itemViewContainer){
+    var childViewContainer = Marionette.getOption(containerView, "childViewContainer");
+    if (childViewContainer){
 
-      var selector = _.isFunction(itemViewContainer) ? itemViewContainer.call(containerView) : itemViewContainer;
+      var selector = _.isFunction(childViewContainer) ? childViewContainer.call(containerView) : childViewContainer;
 
       if (selector.charAt(0) === "@" && containerView.ui) {
         container = containerView.ui[selector.substr(4)];
@@ -144,21 +144,21 @@ Marionette.CompositeView = Marionette.CollectionView.extend({
       }
 
       if (container.length <= 0) {
-        throwError("The specified `itemViewContainer` was not found: " + containerView.itemViewContainer, "ItemViewContainerMissingError");
+        throwError("The specified `childViewContainer` was not found: " + containerView.childViewContainer, "ChildViewContainerMissingError");
       }
 
     } else {
       container = containerView.$el;
     }
 
-    containerView.$itemViewContainer = container;
+    containerView.$childViewContainer = container;
     return container;
   },
 
-  // Internal method to reset the `$itemViewContainer` on render
-  resetItemViewContainer: function(){
-    if (this.$itemViewContainer){
-      delete this.$itemViewContainer;
+  // Internal method to reset the `$childViewContainer` on render
+  resetChildViewContainer: function(){
+    if (this.$childViewContainer){
+      delete this.$childViewContainer;
     }
   }
 });

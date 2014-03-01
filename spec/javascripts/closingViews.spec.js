@@ -89,7 +89,7 @@ describe("closing views", function(){
     });
 
     var CollectionView = Marionette.CollectionView.extend({
-      itemView: ItemView
+      childView: ItemView
     });
     var view;
 
@@ -134,7 +134,7 @@ describe("closing views", function(){
 
     var CompositeView = Marionette.CompositeView.extend({
       template: function(){},
-      itemView: ItemView
+      childView: ItemView
     });
     var view;
 

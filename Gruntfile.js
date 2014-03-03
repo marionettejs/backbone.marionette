@@ -119,6 +119,7 @@ module.exports = function(grunt) {
           '<%= assets.babysitter %>',
           '<%= assets.wreqr %>',
         ],
+        keepRunner: true
       },
       coverage : {
         src : '<%= jasmine.marionette.src %>',

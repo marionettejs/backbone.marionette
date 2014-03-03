@@ -1,5 +1,6 @@
 /*global module:false*/
 module.exports = function(grunt) {
+  var exec = require('child_process').exec
 
   require('load-grunt-tasks')(grunt, {
     pattern: ['grunt-*', '!grunt-template-jasmine-istanbul']
@@ -191,6 +192,10 @@ module.exports = function(grunt) {
         }
       }
     }
+  });
+
+  grunt.registerTask('clean', 'remove build files and reports', function() {
+    exec('git checkout reports lib');
   });
 
   grunt.registerTask('test', ['jshint', 'jasmine:marionette']);

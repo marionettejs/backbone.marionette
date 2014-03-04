@@ -192,7 +192,7 @@ _.extend(Marionette.Module, {
     var fn;
     var startWithParent;
 
-    if (_.isFunction(def)){
+    if (_.isFunction(def) && !(def.prototype instanceof Marionette.Module)){
       // if a function is supplied for the module definition
       fn = def;
       startWithParent = true;

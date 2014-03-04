@@ -18,10 +18,12 @@ describe("application modules", function(){
 
     it("should notify me before initialization starts", function(){
       expect(initializeBefore).toHaveBeenCalled();
+      expect(initializeBefore.callCount).toBe(1);
     });
 
     it("should notify me after initialization", function(){
       expect(initializeAfter).toHaveBeenCalled();
+      expect(initializeAfter.callCount).toBe(1);
     });
 
     it("should add an object of that name to the app", function(){
@@ -51,10 +53,12 @@ describe("application modules", function(){
 
     it("should notify me before initialization starts", function(){
       expect(initializeBefore).toHaveBeenCalled();
+      expect(initializeBefore.callCount).toBe(1);
     });
 
     it("should notify me after initialization", function(){
       expect(initializeAfter).toHaveBeenCalled();
+      expect(initializeAfter.callCount).toBe(1);
     });
 
     it("should add an object of that name to the app", function(){
@@ -66,14 +70,16 @@ describe("application modules", function(){
     });
   });
   describe("when specifying a module on an application with options object", function(){
-    var MyApp, ModuleClass, myModule, initializeBefore, initializeAfter;
+    var MyApp, ModuleClass, myModule, initializer, initializeBefore, initializeAfter;
 
     beforeEach(function(){
+      initializer = jasmine.createSpy("initialize handler");
       initializeBefore = jasmine.createSpy("before handler");
       initializeAfter = jasmine.createSpy("after handler");
 
       MyApp = new Backbone.Marionette.Application();
       ModuleClass = Backbone.Marionette.Module.extend({
+          initialize: initializer,
           onBeforeStart: initializeBefore,
           onStart: initializeAfter
       });
@@ -82,12 +88,19 @@ describe("application modules", function(){
       myModule.start();
     });
 
+    it("should run the initialize function one time", function(){
+      expect(initializer).toHaveBeenCalled();
+      expect(initializer.callCount).toBe(1);
+    });
+
     it("should notify me before initialization starts", function(){
       expect(initializeBefore).toHaveBeenCalled();
+      expect(initializeBefore.callCount).toBe(1);
     });
 
     it("should notify me after initialization", function(){
       expect(initializeAfter).toHaveBeenCalled();
+      expect(initializeAfter.callCount).toBe(1);
     });
 
     it("should add an object of that name to the app", function(){
@@ -100,14 +113,16 @@ describe("application modules", function(){
   });
 
   describe("when specifying a module on an application with a module class", function(){
-    var MyApp, ModuleClass, myModule, initializeBefore, initializeAfter;
+    var MyApp, ModuleClass, myModule, initializer, initializeBefore, initializeAfter;
 
     beforeEach(function(){
+      initializer = jasmine.createSpy("initialize");
       initializeBefore = jasmine.createSpy("before handler");
       initializeAfter = jasmine.createSpy("after handler");
 
       MyApp = new Backbone.Marionette.Application();
       ModuleClass = Backbone.Marionette.Module.extend({
+          initialize: initializer,
           onBeforeStart: initializeBefore,
           onStart: initializeAfter
       });
@@ -116,12 +131,19 @@ describe("application modules", function(){
       myModule.start();
     });
 
+    it("should run the initialize function one time", function(){
+      expect(initializer).toHaveBeenCalled();
+      expect(initializer.callCount).toBe(1);
+    });
+
     it("should notify me before initialization starts", function(){
       expect(initializeBefore).toHaveBeenCalled();
+      expect(initializeBefore.callCount).toBe(1);
     });
 
     it("should notify me after initialization", function(){
       expect(initializeAfter).toHaveBeenCalled();
+      expect(initializeAfter.callCount).toBe(1);
     });
 
     it("should add an object of that name to the app", function(){

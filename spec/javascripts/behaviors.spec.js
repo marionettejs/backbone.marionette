@@ -6,42 +6,73 @@ describe("Behaviors", function(){
   });
 
   describe("behavior parsing", function() {
-    var V, Obj, V2
+    var Obj, View, Tooltip;
 
     beforeEach(function() {
+      ToolTip = sinon.spy();
       Obj = {
-        ToolTip: sinon.spy()
+        ToolTip: ToolTip
       };
+      Marionette.Behaviors.behaviorsLookup = Obj;
+    });
 
-      V = Marionette.ItemView.extend({
-        behaviors: {
+    describe("when one behavior", function() {
+      beforeEach(function() {
+        View = Marionette.ItemView.extend({
+          behaviors: {
             ToolTip: {
               position: "top"
             }
           }
+        });
+
+        new View;
       });
 
-      V2 = Marionette.ItemView.extend({
-        behaviors: {
-          ToolTip: {
-            position: "top"
+      it("should instantiate the tooltip behavior", function() {
+        expect(Obj.ToolTip).toHaveBeenCalled();
+      });
+    });
+
+    describe("when multiple behaviors", function() {
+      beforeEach(function() {
+        View = Marionette.ItemView.extend({
+          behaviors: [
+            {
+              ToolTip: {
+                position: "top"
+              }
+
+            }
+          ]
+        });
+
+        new View;
+      });
+
+      it("should instantiate the tooltip behavior", function() {
+        expect(Obj.ToolTip).toHaveBeenCalled();
+      });
+    });
+
+    describe("when behavior class is provided", function() {
+      beforeEach(function() {
+        View = Marionette.ItemView.extend({
+          behaviors: {
+            ToolTip: {
+              BehaviorClass: ToolTip,
+              position: "top"
+            }
           }
-        }
+        });
+
+        new View;
       });
 
-      Marionette.Behaviors.behaviorsLookup = Obj;
+      it("should instantiate the tooltip behavior", function() {
+        expect(Obj.ToolTip).toHaveBeenCalled();
+      });
     });
-
-    it("should instantiate the tooltip behavior", function() {
-      new V;
-      expect(Obj.ToolTip).toHaveBeenCalled();
-    });
-
-    it("should instantiate the tooltip behavior on a non ordered behavior list", function() {
-      new V2;
-      expect(Obj.ToolTip).toHaveBeenCalled();
-    });
-
   });
 
   describe("behavior initialize", function() {

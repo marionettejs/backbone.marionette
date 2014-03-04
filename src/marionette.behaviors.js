@@ -119,9 +119,29 @@ Marionette.Behaviors = (function(Marionette, _) {
       throw new Error("You must define where your behaviors are stored. See http://www.marionette.com/using-behaviors");
     },
 
-    parseBehaviors: function(view, behaviors) {
-      return _.map(behaviors, function(options, key) {
-        return new (_.result(Behaviors, "behaviorsLookup")[key])(options, view);
+    getBehaviorClass: function(options, key) {
+      if (options.BehaviorClass) {
+        return options.BehaviorClass;
+      }
+
+      return Behaviors.behaviorsLookup[key];
+    },
+
+    parseBehaviors: function(view, behaviors){
+      // if behaviors is an array
+      if (_.isArray(behaviors)) {
+        return _.map(behaviors, function(v){
+          var key     = _.keys(v)[0];
+          var options = _.values(v)[0];
+          var BehaviorClass = Behaviors.getBehaviorClass(options, key);
+          return new BehaviorClass(options, view);
+        });
+      }
+
+      // if behaviors is a flat object
+      return _.map(behaviors, function(options, key){
+        var BehaviorClass = Behaviors.getBehaviorClass(options, key);
+        return new BehaviorClass(options, view);
       });
     }
   });

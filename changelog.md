@@ -1,3 +1,7 @@
+### v1.6.4 [view commit logs](https://github.com/marionettejs/backbone.marionette/compare/v1.6.3...v1.6.4)
+  * Fixes
+    * Patches a bug that would cause modules to be initialized twice when a custom module class is passed
+
 ### v1.6.3 [view commit logs](https://github.com/marionettejs/backbone.marionette/compare/v1.6.2...v1.6.3)
   * Improvements
     * Enable more direct module instantiation on `Marionette.App`.

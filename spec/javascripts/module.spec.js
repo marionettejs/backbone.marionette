@@ -1,401 +1,523 @@
 describe("application modules", function(){
   "use strict";
+  var app;
 
-  describe("when specifying a module on an application", function(){
-    var MyApp, myModule, initializeBefore, initializeAfter;
-
-    beforeEach(function(){
-      initializeBefore = jasmine.createSpy("before handler");
-      initializeAfter = jasmine.createSpy("after handler");
-
-      MyApp = new Backbone.Marionette.Application();
-      myModule = MyApp.module("MyModule");
-      myModule.on("before:start", initializeBefore);
-      myModule.on("start", initializeAfter);
-
-      myModule.start();
-    });
-
-    it("should notify me before initialization starts", function(){
-      expect(initializeBefore).toHaveBeenCalled();
-      expect(initializeBefore.callCount).toBe(1);
-    });
-
-    it("should notify me after initialization", function(){
-      expect(initializeAfter).toHaveBeenCalled();
-      expect(initializeAfter.callCount).toBe(1);
-    });
-
-    it("should add an object of that name to the app", function(){
-      expect(MyApp.MyModule).not.toBeUndefined();
-    });
-
-    it("should return the module", function(){
-      expect(myModule).toBe(MyApp.MyModule);
-    });
+  beforeEach(function() {
+    app = new Backbone.Marionette.Application();
   });
 
-  describe("when specifying a module on an application with a define function", function(){
-    var MyApp, ModuleClass, myModule, initializeBefore, initializeAfter;
+  describe(".module", function() {
+    describe("when creating a module", function() {
 
-    beforeEach(function(){
-      initializeBefore = jasmine.createSpy("before handler");
-      initializeAfter = jasmine.createSpy("after handler");
+      var module, initializeSpy, additionalParam, defineSpy;
 
-      MyApp = new Backbone.Marionette.Application();
-      myModule = MyApp.module("MyModule", function(MyModule, MyApp) {
-          MyModule.on("before:start", initializeBefore);
-          MyModule.on("start", initializeAfter);
+      beforeEach(function() {
+        app = new Backbone.Marionette.Application();
+        initializeSpy = jasmine.createSpy();
+        defineSpy = jasmine.createSpy();
       });
 
-      myModule.start();
-    });
-
-    it("should notify me before initialization starts", function(){
-      expect(initializeBefore).toHaveBeenCalled();
-      expect(initializeBefore.callCount).toBe(1);
-    });
-
-    it("should notify me after initialization", function(){
-      expect(initializeAfter).toHaveBeenCalled();
-      expect(initializeAfter.callCount).toBe(1);
-    });
-
-    it("should add an object of that name to the app", function(){
-      expect(MyApp.MyModule).not.toBeUndefined();
-    });
-
-    it("should return the module", function(){
-      expect(myModule).toBe(MyApp.MyModule);
-    });
-  });
-  describe("when specifying a module on an application with options object", function(){
-    var MyApp, ModuleClass, myModule, initializer, initializeBefore, initializeAfter;
-
-    beforeEach(function(){
-      initializer = jasmine.createSpy("initialize handler");
-      initializeBefore = jasmine.createSpy("before handler");
-      initializeAfter = jasmine.createSpy("after handler");
-
-      MyApp = new Backbone.Marionette.Application();
-      ModuleClass = Backbone.Marionette.Module.extend({
-          initialize: initializer,
-          onBeforeStart: initializeBefore,
-          onStart: initializeAfter
-      });
-      myModule = MyApp.module("MyModule", {moduleClass: ModuleClass});
-
-      myModule.start();
-    });
-
-    it("should run the initialize function one time", function(){
-      expect(initializer).toHaveBeenCalled();
-      expect(initializer.callCount).toBe(1);
-    });
-
-    it("should notify me before initialization starts", function(){
-      expect(initializeBefore).toHaveBeenCalled();
-      expect(initializeBefore.callCount).toBe(1);
-    });
-
-    it("should notify me after initialization", function(){
-      expect(initializeAfter).toHaveBeenCalled();
-      expect(initializeAfter.callCount).toBe(1);
-    });
-
-    it("should add an object of that name to the app", function(){
-      expect(MyApp.MyModule).not.toBeUndefined();
-    });
-
-    it("should return the module", function(){
-      expect(myModule).toBe(MyApp.MyModule);
-    });
-  });
-
-  describe("when specifying a module on an application with a module class", function(){
-    var MyApp, ModuleClass, myModule, initializer, initializeBefore, initializeAfter;
-
-    beforeEach(function(){
-      initializer = jasmine.createSpy("initialize");
-      initializeBefore = jasmine.createSpy("before handler");
-      initializeAfter = jasmine.createSpy("after handler");
-
-      MyApp = new Backbone.Marionette.Application();
-      ModuleClass = Backbone.Marionette.Module.extend({
-          initialize: initializer,
-          onBeforeStart: initializeBefore,
-          onStart: initializeAfter
-      });
-      myModule = MyApp.module("MyModule", ModuleClass);
-
-      myModule.start();
-    });
-
-    it("should run the initialize function one time", function(){
-      expect(initializer).toHaveBeenCalled();
-      expect(initializer.callCount).toBe(1);
-    });
-
-    it("should notify me before initialization starts", function(){
-      expect(initializeBefore).toHaveBeenCalled();
-      expect(initializeBefore.callCount).toBe(1);
-    });
-
-    it("should notify me after initialization", function(){
-      expect(initializeAfter).toHaveBeenCalled();
-      expect(initializeAfter.callCount).toBe(1);
-    });
-
-    it("should add an object of that name to the app", function(){
-      expect(MyApp.MyModule).not.toBeUndefined();
-    });
-
-    it("should return the module", function(){
-      expect(myModule).toBe(MyApp.MyModule);
-    });
-  });
-
-  describe("when specifying sub-modules with a . notation", function(){
-    var MyApp, lastModule, parentModule, childModule;
-
-    describe("and the parent module already exists", function(){
-      beforeEach(function(){
-        MyApp = new Backbone.Marionette.Application();
-        MyApp.module("Parent");
-        parentModule = MyApp.Parent;
-
-        lastModule = MyApp.module("Parent.Child");
-
-        lastModule.start();
-      });
-
-      it("should not replace the parent module", function(){
-        expect(MyApp.Parent).toBe(parentModule);
-      });
-
-      it("should create the child module on the parent module", function(){
-        expect(MyApp.Parent.Child).not.toBeUndefined();
-      });
-
-      it("should return the last sub-module in the list", function(){
-        expect(lastModule).toBe(MyApp.Parent.Child);
-      });
-    });
-
-    describe("and the parent module does not exist", function(){
-      beforeEach(function(){
-        MyApp = new Backbone.Marionette.Application();
-        lastModule = MyApp.module("Parent.Child.GrandChild");
-
-        lastModule.start();
-      });
-
-      it("should create the parent module on the application", function(){
-        expect(MyApp.Parent).not.toBeUndefined;
-      });
-
-      it("should create the child module on the parent module", function(){
-        expect(MyApp.Parent.Child).not.toBeUndefined;
-      });
-
-      it("should create the grandchild module on the parent module", function(){
-        expect(MyApp.Parent.Child.GrandChild).not.toBeUndefined;
-      });
-
-      it("should return the last sub-module in the list", function(){
-        expect(lastModule).toBe(MyApp.Parent.Child.GrandChild);
-      });
-    });
-
-    describe("When defining a grand-child module with an un-defined child, and starting the parent directly", function(){
-      var handler;
-
-      beforeEach(function(){
-        handler = jasmine.createSpy("initializer");
-
-        MyApp = new Backbone.Marionette.Application();
-
-        MyApp.module("Parent.Child.GrandChild", function(mod){
-          mod.addInitializer(handler);
+      describe("and no params are passed in", function() {
+        beforeEach(function() {
+          module = app.module('Mod');
         });
 
-        MyApp.module("Parent").start();
+        it("should add module to the app", function(){
+          expect(module).toBe(app.Mod);
+        });
       });
 
-      it("should create the parent module on the application", function(){
-        expect(MyApp.Parent).not.toBeUndefined;
+      describe("and the define function is provided", function() {
+        beforeEach(function() {
+          additionalParam = {};
+          module = app.module('Mod', defineSpy, additionalParam);
+        });
+
+        it("it should add module to the app", function(){
+          expect(module).toBe(app.Mod);
+        });
+
+        it("the define function should be called once", function() {
+          expect(defineSpy.callCount).toBe(1);
+        });
+
+        it("the define function should be called on the module", function() {
+          expect(defineSpy.mostRecentCall.object).toBe(module);
+        });
+
+        it("the define function should be called with arguments", function() {
+          expect(defineSpy).toHaveBeenCalledWith(
+            module,
+            app,
+            Backbone,
+            Marionette,
+            Marionette.$,
+            _,
+            additionalParam
+          );
+        });
       });
 
-      it("should create the child module on the parent module", function(){
-        expect(MyApp.Parent.Child).not.toBeUndefined;
+      describe("and the options object is used", function() {
+        describe('', function() {
+          var options;
+
+          beforeEach(function() {
+            var ModuleClass = Backbone.Marionette.Module.extend({
+              initialize: initializeSpy,
+              propA: 'becomes instance property'
+            });
+
+            options = {
+              moduleClass: ModuleClass,
+              define: defineSpy,
+              propB: 'becomes options property'
+            };
+            module = app.module('Mod', options, additionalParam);
+          });
+
+          it("should add module to the app", function(){
+            expect(module).toBe(app.Mod);
+          });
+
+          it("initialize function is called", function() {
+            expect(initializeSpy).toHaveBeenCalled();
+          });
+
+          it('the define function is called', function() {
+            expect(defineSpy).toHaveBeenCalled();
+          });
+
+          it("the define function should be called on the module", function() {
+            expect(defineSpy.mostRecentCall.object).toBe(module);
+          });
+
+          it("the define function is called with arguments", function() {
+            expect(defineSpy).toHaveBeenCalledWith(
+              module,
+              app,
+              Backbone,
+              Marionette,
+              Marionette.$,
+              _,
+              additionalParam
+            );
+          });
+
+          it('initialize function is called with arguments', function() {
+            expect(initializeSpy).toHaveBeenCalledWith(options, "Mod", app);
+          });
+
+          it("prototype properties are defined", function() {
+            expect(module.propA).not.toBeUndefined();
+          });
+
+          it("options properties are defined", function() {
+            expect(module.options.propB).not.toBeUndefined();
+          });
+        });
+
+        describe("and initialize is overridden", function() {
+          var initializeOptionSpy;
+
+          beforeEach(function() {
+            initializeOptionSpy = jasmine.createSpy();
+
+            var ModuleClass = Backbone.Marionette.Module.extend({
+                initialize: initializeSpy,
+                propA: 'becomes instance property'
+            });
+
+            module = app.module('Mod', {
+              moduleClass: ModuleClass,
+              initialize: initializeOptionSpy,
+              propB: 'becomes options property'
+            });
+          });
+
+          it("initialize function is called", function() {
+            expect(initializeOptionSpy).toHaveBeenCalled();
+          });
+
+        })
       });
 
-      it("should create the grandchild module on the parent module", function(){
-        expect(MyApp.Parent.Child.GrandChild).not.toBeUndefined;
-      });
+      describe("and using a module class", function() {
+        var ModuleClass;
 
-      it("should start the grandchild module", function(){
-        expect(handler).toHaveBeenCalled();
+        beforeEach(function() {
+          ModuleClass = Backbone.Marionette.Module.extend({
+              initialize: initializeSpy,
+              propA: 'becomes instance property'
+          });
+
+          module = app.module('Mod', ModuleClass);
+        });
+
+        it("should add module to the app", function(){
+          expect(module).toBe(app.Mod);
+        });
+
+        it("the initialize function is called", function() {
+          expect(initializeSpy).toHaveBeenCalled();
+        });
+
+        it('the initialize function is called with arguments', function() {
+          // this is a weird side effect of ModuleClass being treated as the define function
+          // e.g. app.module('Mod', ModuleClass)
+          var defOptions = _.extend({}, ModuleClass);
+          expect(initializeSpy).toHaveBeenCalledWith(defOptions, "Mod", app);
+        });
+
+        it("prototype properties", function() {
+          expect(module.propA).not.toBeUndefined();
+        });
       });
     });
 
-    describe("and a module definition callback is provided", function(){
-      var definition;
+    describe("when re-calling module", function() {
+      var module;
 
-      beforeEach(function(){
-        definition = jasmine.createSpy();
-
-        MyApp = new Backbone.Marionette.Application();
-        lastModule = MyApp.module("Parent.Child", definition);
-
-        lastModule.start();
+      beforeEach(function() {
+        app = new Backbone.Marionette.Application();
       });
 
-      it("should call the module definition for the last module specified", function(){
-        expect(definition).toHaveBeenCalled();
+      describe("and no options are passed", function() {
+        var module1, module2;
+
+        beforeEach(function() {
+          module1 = app.module('Mod');
+          module2 = app.module('Mod');
+        });
+
+        it("returns the same module", function() {
+          expect(module1).toBe(module2);
+          expect(module1).toBe(app.Mod);
+        });
       });
 
-      it("should only run the module definition once", function(){
-        expect(definition.callCount).toBe(1);
+      describe("and define functions are provided", function() {
+        beforeEach(function() {
+          module = app.module('Mod', function(module, app) {
+            module.prop1 = 'first property';
+          });
+
+          module = app.module('Mod', function(module, app) {
+            module.prop2 = 'second property';
+          });
+        });
+
+        it("it sets both properties", function() {
+          expect(module.prop1).not.toBeUndefined();
+          expect(module.prop2).not.toBeUndefined();
+        });
+      });
+    });
+
+    describe("when creating a sub-module", function() {
+      var parent, child, grandChild;
+
+      describe("and the parent is already created", function() {
+        var parentDefineSpy, childDefineSpy;
+
+        beforeEach(function() {
+          parentDefineSpy = jasmine.createSpy();
+          childDefineSpy = jasmine.createSpy();
+
+          parent = app.module('parent', parentDefineSpy);
+          child = app.module('parent.child', childDefineSpy);
+        });
+
+        it("parent should remain the same", function() {
+          expect(parent).toBe(app.parent);
+        });
+
+        it("parent definition should be called once", function() {
+          expect(parentDefineSpy.callCount).toBe(1);
+        });
+
+        it("child should be created", function() {
+          expect(child).toBe(app.parent.child);
+        });
+
+        it("child definition should be called once", function() {
+          expect(childDefineSpy.callCount).toBe(1);
+        });
       });
 
+      describe("and the parent is not already created", function() {
+        var defineSpy;
+        beforeEach(function() {
+          defineSpy = jasmine.createSpy();
+          child = app.module('parent.child', defineSpy);
+        });
+
+        it("parent should be defined", function() {
+          expect(app.parent).not.toBeUndefined();
+        })
+
+        it("child should be created", function() {
+          expect(child).toBe(app.parent.child);
+        });
+
+        it("definition should be called once", function() {
+          expect(defineSpy.callCount).toBe(1);
+        })
+      });
     });
   });
 
-  describe("when specifying the same module twice", function(){
-    var MyApp, MyModule;
+  describe(".start", function() {
+    describe("when starting a module", function() {
+      var module, startSpy, beforeStartSpy, initializeSpy1, initializeSpy2;
+      beforeEach(function() {
+        startSpy = jasmine.createSpy();
+        beforeStartSpy = jasmine.createSpy();
+        initializeSpy1 = jasmine.createSpy();
+        initializeSpy2 = jasmine.createSpy();
 
-    beforeEach(function(){
-      MyApp = new Backbone.Marionette.Application();
+        module = app.module('Mod');
+        module.on('before:start', beforeStartSpy);
+        module.on('start', startSpy);
+        module.addInitializer(initializeSpy1);
+        module.addInitializer(initializeSpy2);
 
-      MyApp.module("MyModule", function(){});
-      MyModule = MyApp.MyModule;
-
-      MyApp.module("MyModule", function(){});
-    });
-
-    it("should only create the module once", function(){
-      expect(MyApp.MyModule).toBe(MyModule);
-    });
-  });
-
-  describe("when attaching a method to the module parameter in the module definition", function(){
-    var MyApp, myFunc;
-
-    beforeEach(function(){
-      myFunc = function(){};
-      MyApp = new Backbone.Marionette.Application();
-
-      var mod = MyApp.module("MyModule", function(myapp){
-        myapp.someFunc = myFunc;
+        module.start();
       });
 
-      mod.start();
-    });
-
-    it("should make that method publicly available on the module", function(){
-      expect(MyApp.MyModule.someFunc).toBe(myFunc);
-    });
-  });
-
-  describe("when specifying the same module, with a definition, more than once", function(){
-    var MyApp, myModule;
-
-    beforeEach(function(){
-      MyApp = new Backbone.Marionette.Application();
-
-      myModule = MyApp.module("MyModule", function(MyModule){
-        MyModule.definition1 = true;
+      it('triggers module before start event', function() {
+        expect(beforeStartSpy).toHaveBeenCalled();
       });
 
-      MyApp.module("MyModule", function(MyModule){
-        MyModule.definition2 = true;
+      it('triggers module start event', function() {
+        expect(startSpy).toHaveBeenCalled();
       });
 
-      myModule.start();
-    });
-
-    it("should re-use the same module for all definitions", function(){
-      expect(myModule).toBe(MyApp.MyModule);
-    });
-
-    it("should allow the first definition to modify the resulting module", function(){
-      expect(MyApp.MyModule.definition1).toBe(true);
-    });
-
-    it("should allow the second definition to modify the resulting module", function(){
-      expect(MyApp.MyModule.definition2).toBe(true);
-    });
-
-  });
-
-  describe("when returning an object from the module definition", function(){
-    var MyApp, MyModule;
-
-    beforeEach(function(){
-      MyModule = {};
-      MyApp = new Backbone.Marionette.Application();
-
-      MyModule = MyApp.module("CustomModule", function(myapp){
-        return {};
+      it('the module initializers are called', function() {
+        expect(initializeSpy1).toHaveBeenCalled();
+        expect(initializeSpy2).toHaveBeenCalled();
       });
 
-      MyModule.start();
+      it('the module is initialized', function() {
+        expect(module._isInitialized).toBe(true);
+      });
     });
 
-    it("should not do anything with the returned object", function(){
-      expect(MyApp.CustomModule).toBe(MyModule);
-    });
-  });
+    describe("when calling module start twice", function() {
+      var startSpy;
 
-  describe("when creating a sub-module with the . notation, the second parameter should be the object from which .module was called", function(){
-    var MyApp, MyModule;
-
-    beforeEach(function(){
-      MyModule = {};
-      MyApp = new Backbone.Marionette.Application();
-
-      var subMod = MyApp.module("CustomModule.SubModule", function(CustomModule, MyApp){
-        MyModule = MyApp;
+      beforeEach(function() {
+        var module = app.module('Mod');
+        startSpy = sinon.spy()
+        module.on("before:start", startSpy)
+        module.start();
+        module.start();
       });
 
-      subMod.start();
+      it("its only started once", function() {
+        expect(startSpy.callCount).toBe(1);
+      });
     });
 
-    it("should use the returned object as the module", function(){
-      expect(MyModule).toBe(MyApp);
+    describe("when starting a module with sub-modules", function() {
+      var parent, child, parentStartSpy, childStartSpy;
+
+      describe("when starting parent", function() {
+        describe("", function() {
+          beforeEach(function() {
+            parent = app.module('Parent');
+            child = app.module('Parent.Child');
+
+            childStartSpy = sinon.spy(child, 'start');
+            parentStartSpy = sinon.spy(parent, 'start');
+            parent.start();
+          });
+
+          it("parent is started", function() {
+            expect(parentStartSpy).toHaveBeenCalled();
+          })
+
+          it("child is started", function() {
+            expect(childStartSpy).toHaveBeenCalled();
+          });
+        });
+
+        describe("and child is set to not start with parent", function() {
+          beforeEach(function() {
+            parent = app.module('Parent', {startWithParent: false});
+            child = app.module('Parent.Child', {startWithParent: false});
+
+            childStartSpy = sinon.spy(child, 'start');
+            parent.start();
+          });
+
+          it('the parent is started', function() {
+            expect(parentStartSpy).toHaveBeenCalled();
+          });
+
+          it('the child is not started', function() {
+            expect(childStartSpy).not.toHaveBeenCalled();
+          });
+        });
+      });
+    });
+
+    describe("when starting app", function() {
+      var startSpy;
+
+      describe("", function() {
+        beforeEach(function() {
+          var module = app.module('Mod')
+          startSpy = sinon.spy(module, 'start');
+          app.start();
+        });
+
+        it('its module starts', function() {
+          expect(startSpy).toHaveBeenCalled();
+        });
+      });
+
+      describe("and its module is set to not start with parent", function() {
+        beforeEach(function() {
+          var module = app.module('Mod', {startWithParent: false})
+          startSpy = sinon.spy(module, 'start');
+          app.start();
+        });
+
+        it('it does not start', function() {
+          expect(startSpy).not. toHaveBeenCalled();
+        });
+      });
+    });
+
+    describe("after app is started", function() {
+
+      var module, initializeSpy;
+
+      beforeEach(function() {
+        app.start();
+        initializeSpy = jasmine.createSpy();
+
+        module = app.module('Mod')
+        module.addInitializer(initializeSpy);
+        module.start();
+      });
+
+      it("creates the module", function() {
+        expect(module).toBe(app.Mod);
+      });
+
+      it("calls the modules initializers", function() {
+        expect(initializeSpy).toHaveBeenCalled();
+      });
     });
   });
 
-  describe("when providing arguments after the function definition", function(){
-    var MyApp, r1, r2, r3, p1, p2, p3;
+  describe(".stop", function() {
 
-    beforeEach(function(){
-      p1 = {};
-      p2 = {};
-      p3 = {};
-      MyApp = new Backbone.Marionette.Application();
+    describe("when stopping a module", function() {
+      var module, beforeStopSpy, stopSpy, finalizerSpy;
 
-      var mod = MyApp.module("FooModule", function(Foo, MyApp, Backbone, Marionette, $, _, P1Arg, P2Arg){
-        r1 = P1Arg;
-        r2 = P2Arg;
-      }, p1, p2);
+      beforeEach(function() {
+        beforeStopSpy = sinon.spy();
+        stopSpy = sinon.spy();
+        finalizerSpy = sinon.spy();
 
-      MyApp.module("FooModule", function(Foo, MyApp, Backbone, Marionette, $, _, P3Arg){
-        r3 = P3Arg;
-      }, p3);
+        module = app.module('Mod');
+        module.addFinalizer(finalizerSpy);
+        module.on('before:stop', beforeStopSpy);
+        module.on('stop', stopSpy);
 
-      mod.start();
+        module.start();
+        module.stop();
+      });
+
+      it('finalizer is called', function() {
+        expect(finalizerSpy).toHaveBeenCalled();
+      });
+
+      it("before:stop event is triggered", function() {
+        expect(beforeStopSpy).toHaveBeenCalled();
+      });
+
+      it("stop event is triggered", function() {
+        expect(stopSpy).toHaveBeenCalled();
+      });
     });
 
-    it("should pass those arguments to the first definition", function(){
-      expect(r1).toBe(p1);
-      expect(r2).toBe(p2);
+    describe("when stopping a module with sub-modules", function() {
+      var module, child, beforeStopSpy, stopSpy, finalizerSpy;
+
+      beforeEach(function() {
+        beforeStopSpy = sinon.spy();
+        stopSpy = sinon.spy();
+        finalizerSpy = sinon.spy();
+
+        module = app.module('Mod');
+        child = app.module('Mod.Child');
+        child.addFinalizer(finalizerSpy);
+        child.on('before:stop', beforeStopSpy);
+        child.on('stop', stopSpy);
+        spyOn(child, 'stop').andCallThrough();
+
+        module.start();
+        module.stop();
+      });
+
+      it('its submodule stop function is invoked', function() {
+        expect(child.stop).toHaveBeenCalled();
+      })
+
+      it('its submodule finalizer is called', function() {
+        expect(finalizerSpy).toHaveBeenCalled();
+      });
+
+      it("its submodule before:stop event is triggered", function() {
+        expect(beforeStopSpy).toHaveBeenCalled();
+      });
+
+      it("its submoule stop event is triggered", function() {
+        expect(stopSpy).toHaveBeenCalled();
+      });
     });
 
-    it("should pass those arguments to the second definition", function(){
-      expect(r3).toBe(p3);
-    });
+    describe("when stopping a module before its started", function() {
+
+      var parent, child, parentFinalizerSpy, childFinalizerSpy, parentStopSpy, childStopSpy;
+
+      beforeEach(function() {
+        parentFinalizerSpy = sinon.spy();
+        childFinalizerSpy = sinon.spy();
+        parentStopSpy = sinon.spy();
+        childStopSpy = sinon.spy();
+
+        parent = app.module('Parent');
+        child = app.module('Child');
+
+        parent.on('stop', parentStopSpy);
+        child.on('stop', childStopSpy);
+
+        parent.addFinalizer(parentFinalizerSpy);
+        child.addFinalizer(childFinalizerSpy);
+
+        parent.stop();
+      });
+
+      it("the parent does not trigger a stop event", function() {
+        expect(parentFinalizerSpy).not.toHaveBeenCalled();
+      });
+
+      it("the child does not trigger a stop event", function() {
+        expect(childFinalizerSpy).not.toHaveBeenCalled();
+      });
+
+      it("the parent does not call its finalizer", function() {
+        expect(parentStopSpy).not.toHaveBeenCalled();
+      });
+
+      it("the child does not call its finalizer", function() {
+        expect(childStopSpy).not.toHaveBeenCalled();
+      });
+    })
   });
-
 });

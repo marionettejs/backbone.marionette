@@ -215,8 +215,8 @@ Backbone.Marionette.CompositeView.extend({
   triggers: {
     "click .do-something": {
       event: "something:do:it",
-      preventDefault: true,
-      stopPropagation: false // this param is optional and will default to false
+      preventDefault: true, // this param is optional and will default to true
+      stopPropagation: false
     }
   }
 });

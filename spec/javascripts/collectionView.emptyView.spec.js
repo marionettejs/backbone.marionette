@@ -247,12 +247,12 @@ describe("collectionview - emptyView", function(){
     });
 
     it("should return true when the collection is empty", function(){
-      expect(collectionView.isEmpty()).toEqual(true);
+      expect(collectionView.isEmpty(collectionView.collection)).toEqual(true);
     });
 
     it("should return false when the collection is not empty", function(){
       collectionView.collection.add({ foo: "wut" });
-      expect(collectionView.isEmpty()).toEqual(false);
+      expect(collectionView.isEmpty(collectionView.collection)).toEqual(false);
     });
   });
 

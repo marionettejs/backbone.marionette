@@ -150,8 +150,8 @@ describe("region", function(){
       expect(myRegion.open).not.toHaveBeenCalledWith(view);
     });
 
-    it("should call 'render' on the view", function(){
-      expect(view.render).toHaveBeenCalled();
+    it("should not call 'render' on the view", function(){
+      expect(view.render).not.toHaveBeenCalled();
     });
   });
 

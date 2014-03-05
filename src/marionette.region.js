@@ -126,9 +126,8 @@ _.extend(Marionette.Region.prototype, Backbone.Events, {
       this.close();
     }
 
-    view.render();
-
     if (isDifferentView || isViewClosed) {
+      view.render();
       this.open(view);
     }
 

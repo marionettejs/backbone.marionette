@@ -161,9 +161,11 @@ Marionette.View = Backbone.View.extend({
   close: function(){
     if (this.isClosed) { return; }
 
+    var args = Array.prototype.slice.call(arguments);
+
     // allow the close to be stopped by returning `false`
     // from the `onBeforeClose` method
-    var shouldClose = this.triggerMethod("before:close");
+    var shouldClose = this.triggerMethod.apply(this, ["before:close"].concat(args));
     if (shouldClose === false){
       return;
     }
@@ -172,7 +174,7 @@ Marionette.View = Backbone.View.extend({
     // prevent infinite loops within "close" event handlers
     // that are trying to close other views
     this.isClosed = true;
-    this.triggerMethod("close");
+    this.triggerMethod.apply(this, ["close"].concat(args));
 
     // unbind UI elements
     this.unbindUIElements();

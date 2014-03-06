@@ -22,7 +22,8 @@ Marionette.Controller.extend = Marionette.extend;
 _.extend(Marionette.Controller.prototype, Backbone.Events, {
   close: function(){
     this.stopListening();
-    this.triggerMethod("close");
+    var args = Array.prototype.slice.call(arguments);
+    this.triggerMethod.apply(this, ["close"].concat(args));
     this.unbind();
   }
 });

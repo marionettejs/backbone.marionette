@@ -48,17 +48,23 @@ describe("base view", function(){
     var close, view;
 
     beforeEach(function(){
-      view = new Marionette.View();
+      view = new (Marionette.View.extend({
+        onClose: jasmine.createSpy("onClose")
+      }));
 
       spyOn(view, "remove").andCallThrough();
       close = jasmine.createSpy("close");
       view.on("close", close);
 
-      view.close();
+      view.close(123, "second param");
     });
 
     it("should trigger the close event", function(){
       expect(close).toHaveBeenCalled();
+    });
+
+    it("should call an onClose method with any arguments passed to close", function(){
+      expect(view.onClose).toHaveBeenCalledWith(123, "second param");
     });
 
     it("should remove the view", function(){
@@ -114,11 +120,11 @@ describe("base view", function(){
         return undefined;
       };
 
-      view.close();
+      view.close(123, "second param");
     });
 
     it("should trigger the close event", function(){
-      expect(close).toHaveBeenCalled();
+      expect(close).toHaveBeenCalledWith(123, "second param");
     });
 
     it("should remove the view", function(){

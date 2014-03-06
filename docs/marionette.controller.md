@@ -52,30 +52,31 @@ unbinding all of the events that are directly attached to the controller
 instance, as well as those that are bound using the EventBinder from
 the controller.
 
-The `close` method will trigger a "close" event and corresponding
-`onClose` method call:
+Invoking the `close` method will trigger a "close" event and corresponding
+`onClose` method call. These calls will be passed any arguments `close`
+was invoked with.
 
 ```js
 // define a controller with an onClose method
 var MyController = Marionette.Controller.extend({
 
-  onClose: function(){
+  onClose: function(arg1, arg2){
     // put custom code here, to close this controller
   }
 
-})
+});
 
 // create a new controller instance
 var contr = new MyController();
 
 // add some event handlers
-contr.on("close", function(){ ... });
+contr.on("close", function(arg1, arg2){ ... });
 contr.listenTo(something, "bar", function(){...});
 
 // close the controller: unbind all of the
 // event handlers, trigger the "close" event and 
 // call the onClose method
-controller.close();
+controller.close(arg1, arg2);
 ```
 
 ## On The Name 'Controller'

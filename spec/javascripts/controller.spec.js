@@ -74,7 +74,7 @@ describe("marionette controller", function(){
       spyOn(controller, "stopListening").andCallThrough();
       spyOn(controller, "unbind").andCallThrough();
 
-      controller.close();
+      controller.close(123, "second param");
     });
 
     it("should stopListening events", function(){
@@ -85,12 +85,12 @@ describe("marionette controller", function(){
       expect(controller.unbind).toHaveBeenCalled();
     });
 
-    it("should trigger a close event", function(){
-      expect(closeHandler).toHaveBeenCalled();
+    it("should trigger a close event with any arguments passed to close", function(){
+      expect(closeHandler).toHaveBeenCalledWith(123, "second param");
     });
 
-    it("should call an onClose method", function(){
-      expect(controller.onClose).toHaveBeenCalled();
+    it("should call an onClose method with any arguments passed to close", function(){
+      expect(controller.onClose).toHaveBeenCalledWith(123, "second param");
     });
   });
 

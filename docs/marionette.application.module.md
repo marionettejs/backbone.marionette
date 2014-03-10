@@ -66,7 +66,7 @@ the `module` method.
 It will receive 6 parameters, in this order:
 
 * The module itself
-* The parent module or Application object that `.module` was called from
+* The Application object
 * Backbone
 * Backbone.Marionette
 * jQuery

@@ -6,6 +6,8 @@
 // and coordination of other objects, views, and more.
 Marionette.Controller = function(options){
   this.triggerMethod = Marionette.triggerMethod;
+  this.getOption = _.partial(Marionette.getOption, this);
+  this.bindEntityEvents = _.partial(Marionette.bindEntityEvents, this);
   this.options = options || {};
 
   if (_.isFunction(this.initialize)){

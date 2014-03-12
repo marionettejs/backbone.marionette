@@ -45,6 +45,10 @@ var b = new Bar();
 Retrieve an object's attribute either directly from the object, or from
 the object's `this.options`, with `this.options` taking precedence.
 
+This function is attached to `Marionette.View`, `Marionette.Application`,
+`Marionette.Controller`, and `Marionette.Module`s. You can call it without
+specifying a target.
+
 ```js
 var M = Backbone.Model.extend({
   foo: "bar",
@@ -114,6 +118,10 @@ callback methods will still be called, though.
 
 This method is used to bind a backbone "entity" (collection/model) 
 to methods on a target object. 
+
+This function is attached to `Marionette.View`, `Marionette.Application`,
+`Marionette.Controller`, and `Marionette.Module`s. You can call it without
+specifying a target.
 
 ```js
 Backbone.View.extend({

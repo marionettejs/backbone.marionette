@@ -18,6 +18,8 @@ Marionette.Module = function(moduleName, app, options){
   this.startWithParent = true;
 
   this.triggerMethod = Marionette.triggerMethod;
+  this.getOption = _.partial(Marionette.getOption, this);
+  this.bindEntityEvents = _.partial(Marionette.bindEntityEvents, this);
 
   if (_.isFunction(this.initialize)){
     this.initialize(this.options, moduleName, app);

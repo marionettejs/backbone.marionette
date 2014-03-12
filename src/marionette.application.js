@@ -15,6 +15,8 @@ Marionette.Application = function(options){
   _.extend(this, options);
 
   this.triggerMethod = Marionette.triggerMethod;
+  this.getOption = _.partial(Marionette.getOption, this);
+  this.bindEntityEvents = _.partial(Marionette.bindEntityEvents, this);
 };
 
 _.extend(Marionette.Application.prototype, Backbone.Events, {

@@ -31,6 +31,16 @@ Marionette.View = Backbone.View.extend({
   // events=>function references/names to a hash of events=>function references
   normalizeMethods: Marionette.normalizeMethods,
 
+  // Import the "getOption" method to get option from this or this.options by name
+  getOption: function(optionName) {
+    return Marionette.getOption(this, optionName);
+  },
+
+  // Import the "bindEntityEvents" to allow binding view's events to another entity
+  bindEntityEvents: function(entity, bindings) {
+    return Marionette.bindEntityEvents(this, entity, bindings);
+  },
+
   // Get the template for this view
   // instance. You can set a `template` attribute in the view
   // definition or pass a `template: "whatever"` parameter in

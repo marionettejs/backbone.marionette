@@ -51,7 +51,7 @@ describe("application modules", function(){
             app,
             Backbone,
             Marionette,
-            Marionette.$,
+            Backbone.$,
             _,
             additionalParam
           );
@@ -98,7 +98,7 @@ describe("application modules", function(){
               app,
               Backbone,
               Marionette,
-              Marionette.$,
+              Backbone.$,
               _,
               additionalParam
             );

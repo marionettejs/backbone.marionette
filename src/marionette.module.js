@@ -109,7 +109,7 @@ _.extend(Marionette.Module.prototype, Backbone.Events, {
       this.app,
       Backbone,
       Marionette,
-      Marionette.$, _,
+      Backbone.$, _,
       customArgs
     ]);
 

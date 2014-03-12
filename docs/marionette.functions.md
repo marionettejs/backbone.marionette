@@ -45,12 +45,14 @@ var b = new Bar();
 Retrieve an object's attribute either directly from the object, or from
 the object's `this.options`, with `this.options` taking precedence.
 
+This function is attached to `Marionette.View` and many other objects.
+
 ```js
 var M = Backbone.Model.extend({
   foo: "bar",
 
   initialize: function(){
-    var f = Marionette.getOption(this, "foo");
+    var f = this.getOption("foo");
     console.log(f);
   }
 });
@@ -60,7 +62,26 @@ new M(); // => "bar"
 new M({}, { foo: "quux" }); // => "quux"
 ```
 
-This is useful when building an object that can have configuration set
+### Static Version
+
+getOption can also be used statically to get a target's option.
+
+```js
+var john = {
+  firstName: 'John'
+};
+
+var jane = {
+  options: {
+    firstName: 'Jane'
+  }
+};
+
+console.log(Marionette.getOption(john, 'firstName')); // 'John'
+console.log(Marionette.getOption(jane, 'firstName')); // 'Jane'
+```
+
+The static version is useful when building an object that can have configuration set
 in either the object definition or the object's constructor options.
 
 ### Falsey values
@@ -115,6 +136,9 @@ callback methods will still be called, though.
 This method is used to bind a backbone "entity" (collection/model)
 to methods on a target object.
 
+
+This function is attached to `Marionette.View` for example to bind model events to view function handlers.
+
 ```js
 Backbone.View.extend({
 
@@ -123,7 +147,7 @@ Backbone.View.extend({
   },
 
   initialize: function(){
-    Marionette.bindEntityEvents(this, this.model, this.modelEvents);
+    this.bindEntityEvents(this.model, this.modelEvents);
   },
 
   doSomething: function(){
@@ -134,15 +158,39 @@ Backbone.View.extend({
 });
 ```
 
-The first paremter, `target`, must have a `listenTo` method from the
-EventBinder object.
-
-The second parameter is the entity (Backbone.Model or Backbone.Collection)
+The first parameter is the entity (Backbone.Model or Backbone.Collection)
 to bind the events from.
 
-The third parameter is a hash of { "event:name": "eventHandler" }
+The second parameter is a hash of { "event:name": "eventHandler" }
 configuration. Multiple handlers can be separated by a space. A
 function can be supplied instead of a string handler name.
+
+
+### Static version
+
+bindEntityEvents can also be used statically. In this case,
+it receives three arguments: target, entity, handlers hash. This is often
+used to create convenient mappings.
+
+```js
+var DogeController = Marionette.Controller.extend({
+
+  dogeEvents: {
+    'app:doge:launch': 'onLaunch'
+  },
+
+  initialize: function() {
+    Marionette.bindEntityEvents(this, DogeBus, this.dogeEvents)
+  },
+
+  onLaunch: function() {
+
+  }
+});
+```
+
+In this example, bindEntityEvents is used to attach an event bus (DogeBus) to
+an event map (dogeEvents). This is a more compact way of writing `this.listenTo` statements.
 
 ## Marionette.normalizeEvents
 

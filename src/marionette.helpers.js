@@ -22,7 +22,13 @@ Marionette.extend = Backbone.Model.extend;
 // Retrieve an object, function or other value from a target
 // object or its `options`, with `options` taking precedence.
 Marionette.getOption = function(target, optionName){
-  if (!target || !optionName){ return; }
+  if (!target){ return; }
+
+  // If only one argument was passed, use 'this' as the target.
+  if (!optionName){
+    optionName = target;
+    target = this;
+  }
   var value;
 
   if (target.options && (optionName in target.options) && (target.options[optionName] !== undefined)){

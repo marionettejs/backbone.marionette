@@ -17,8 +17,6 @@ Marionette.Module = function(moduleName, app, options){
   this.app = app;
   this.startWithParent = true;
 
-  this.triggerMethod = Marionette.triggerMethod;
-
   if (_.isFunction(this.initialize)){
     this.initialize(this.options, moduleName, app);
   }
@@ -97,6 +95,10 @@ _.extend(Marionette.Module.prototype, Backbone.Events, {
   addDefinition: function(moduleDefinition, customArgs){
     this._runModuleDefinition(moduleDefinition, customArgs);
   },
+
+  // Import `triggerMethod` to trigger events with corresponding
+  // methods if they exist.
+  triggerMethod: Marionette.triggerMethod,
 
   // Internal method: run the module definition function with the correct
   // arguments

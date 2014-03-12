@@ -18,7 +18,9 @@ Marionette.Behavior = (function(_, Backbone){
   }
 
   _.extend(Behavior.prototype, {
-    initialize: function(){}
+    initialize: function(){},
+
+    triggerMethod: Marionette.triggerMethod
   });
 
   // Borrow Backbones extend implementation

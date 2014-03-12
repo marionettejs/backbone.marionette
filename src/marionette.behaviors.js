@@ -48,11 +48,11 @@ Marionette.Behaviors = (function(Marionette, _) {
       var args = arguments;
 
       _.each(_this.behaviors, function(b) {
-        Marionette.triggerMethod.call(b, "show");
+        Marionette.triggerMethod.apply(b, ["show"].concat(arguments));
       });
 
       if (_.isFunction(onShow)) {
-        onShow.apply(view);
+        onShow.apply(view, arguments);
       }
     };
 
@@ -60,39 +60,29 @@ Marionette.Behaviors = (function(Marionette, _) {
       var args = arguments;
 
       _.each(_this.behaviors, function(b) {
-        Marionette.triggerMethod.call(b, "close");
+        Marionette.triggerMethod.apply(b, ["close"].concat(arguments));
       });
 
       if (_.isFunction(onClose)) {
-        onClose.apply(view);
+        onClose.apply(view, arguments);
       }
     };
 
     view.bindUIElements = function() {
       bindUIElements.apply(view);
-
-      _.each(_this.behaviors, function(b) {
-        bindUIElements.apply(b);
-      });
+      _.invoke(_this.behaviors, bindUIElements);
     };
 
     view.unbindUIElements = function() {
       unbindUIElements.apply(view);
-
-      _.each(_this.behaviors, function(b) {
-        unbindUIElements.apply(b);
-      });
+      _.invoke(_this.behaviors, unbindUIElements);
     };
 
     view.triggerMethod = function() {
       var args = arguments;
-      // call the views trigger method
       triggerMethod.apply(view, args);
 
-      // loop through each behavior and trigger methods
       _.each(_this.behaviors, function(b) {
-        // call triggerMethod on each behavior
-        // to proxy through any triggerMethod
         triggerMethod.apply(b, args);
       });
     };

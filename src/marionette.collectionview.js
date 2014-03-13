@@ -151,14 +151,14 @@ Marionette.CollectionView = Marionette.View.extend({
 
   // Retrieve the empty view type
   getEmptyView: function(){
-    return Marionette.getOption(this, "emptyView");
+    return this.getOption("emptyView");
   },
 
   // Retrieve the itemView type, either from `this.options.itemView`
   // or from the `itemView` in the object definition. The "options"
   // takes precedence.
   getItemView: function(item){
-    var itemView = Marionette.getOption(this, "itemView");
+    var itemView = this.getOption("itemView");
 
     if (!itemView){
       throwError("An `itemView` must be specified", "NoItemViewError");
@@ -171,7 +171,7 @@ Marionette.CollectionView = Marionette.View.extend({
   // HTML for the collection view.
   addItemView: function(item, ItemView, index){
     // get the itemViewOptions if any were specified
-    var itemViewOptions = Marionette.getOption(this, "itemViewOptions");
+    var itemViewOptions = this.getOption("itemViewOptions");
     if (_.isFunction(itemViewOptions)){
       itemViewOptions = itemViewOptions.call(this, item, index);
     }
@@ -207,7 +207,7 @@ Marionette.CollectionView = Marionette.View.extend({
   // Set up the child view event forwarding. Uses an "itemview:"
   // prefix in front of all forwarded events.
   addChildViewEventForwarding: function(view){
-    var prefix = Marionette.getOption(this, "itemViewEventPrefix");
+    var prefix = this.getOption("itemViewEventPrefix");
 
     // Forward all child item view events through the parent,
     // prepending "itemview:" to the event name

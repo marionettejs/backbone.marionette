@@ -37,5 +37,7 @@ _.extend(Marionette.Controller.prototype, Backbone.Events, {
   getOption: Marionette.getOption,
 
   // Import the "bindEntityEvents" to allow binding view's events to another entity
-  bindEntityEvents: Marionette.bindEntityEvents
+  bindEntityEvents: Marionette.bindEntityEvents,
+
+  unbindEntityEvents: Marionette.unbindEntityEvents
 });

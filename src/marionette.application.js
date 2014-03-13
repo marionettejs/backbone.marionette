@@ -105,6 +105,8 @@ _.extend(Marionette.Application.prototype, Backbone.Events, {
   // Import the "bindEntityEvents" to allow binding view's events to another entity
   bindEntityEvents: Marionette.bindEntityEvents,
 
+  unbindEntityEvents: Marionette.unbindEntityEvents,
+
   // Internal method to set up the region manager
   _initRegionManager: function(){
     this._regionManager = new Marionette.RegionManager();

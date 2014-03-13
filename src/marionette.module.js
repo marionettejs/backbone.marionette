@@ -110,6 +110,8 @@ _.extend(Marionette.Module.prototype, Backbone.Events, {
   // Import the "bindEntityEvents" to allow binding view's events to another entity
   bindEntityEvents: Marionette.bindEntityEvents,
 
+  unbindEntityEvents: Marionette.unbindEntityEvents,
+
   // Internal method: run the module definition function with the correct
   // arguments
   _runModuleDefinition: function(definition, customArgs){

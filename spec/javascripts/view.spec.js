@@ -68,6 +68,14 @@ describe("base view", function(){
     it("should set the view isDestroyed to true", function(){
       expect(view.isDestroyed).toBe(true);
     });
+
+    it("should remove the $el reference", function(){
+      expect(view.$el).not.toBeDefined();
+    });
+
+    it("should remove the el reference", function(){
+      expect(view.el).not.toBeDefined();
+    });
   });
 
   describe("when destroying a view and returning false from the onBeforeDestroy method", function(){

@@ -17,10 +17,6 @@ Marionette.Module = function(moduleName, app, options){
   this.app = app;
   this.startWithParent = true;
 
-  this.triggerMethod = Marionette.triggerMethod;
-  this.getOption = _.partial(Marionette.getOption, this);
-  this.bindEntityEvents = _.partial(Marionette.bindEntityEvents, this);
-
   if (_.isFunction(this.initialize)){
     this.initialize(this.options, moduleName, app);
   }
@@ -99,6 +95,20 @@ _.extend(Marionette.Module.prototype, Backbone.Events, {
   addDefinition: function(moduleDefinition, customArgs){
     this._runModuleDefinition(moduleDefinition, customArgs);
   },
+
+  // import the "triggerMethod" to trigger events with corresponding
+  // methods if the method exists
+  triggerMethod: Marionette.triggerMethod,
+
+  // Imports the "normalizeMethods" to transform hashes of
+  // events=>function references/names to a hash of events=>function references
+  normalizeMethods: Marionette.normalizeMethods,
+
+  // Import the "getOption" method to get option from this or this.options by name
+  getOption: Marionette.getOption,
+
+  // Import the "bindEntityEvents" to allow binding view's events to another entity
+  bindEntityEvents: Marionette.bindEntityEvents,
 
   // Internal method: run the module definition function with the correct
   // arguments

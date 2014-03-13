@@ -13,10 +13,6 @@ Marionette.Application = function(options){
   this.submodules = {};
 
   _.extend(this, options);
-
-  this.triggerMethod = Marionette.triggerMethod;
-  this.getOption = _.partial(Marionette.getOption, this);
-  this.bindEntityEvents = _.partial(Marionette.bindEntityEvents, this);
 };
 
 _.extend(Marionette.Application.prototype, Backbone.Events, {
@@ -94,6 +90,20 @@ _.extend(Marionette.Application.prototype, Backbone.Events, {
     // see the Marionette.Module object for more information
     return ModuleClass.create.apply(ModuleClass, args);
   },
+  
+  // import the "triggerMethod" to trigger events with corresponding
+  // methods if the method exists
+  triggerMethod: Marionette.triggerMethod,
+
+  // Imports the "normalizeMethods" to transform hashes of
+  // events=>function references/names to a hash of events=>function references
+  normalizeMethods: Marionette.normalizeMethods,
+
+  // Import the "getOption" method to get option from this or this.options by name
+  getOption: Marionette.getOption,
+
+  // Import the "bindEntityEvents" to allow binding view's events to another entity
+  bindEntityEvents: Marionette.bindEntityEvents,
 
   // Internal method to set up the region manager
   _initRegionManager: function(){

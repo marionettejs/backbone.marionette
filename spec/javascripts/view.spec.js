@@ -74,6 +74,14 @@ describe("base view", function(){
     it("should set the view isClosed to true", function(){
       expect(view.isClosed).toBe(true);
     });
+
+    it("should remove the $el reference", function(){
+      expect(view.$el).not.toBeDefined();
+    });
+
+    it("should remove the el reference", function(){
+      expect(view.el).not.toBeDefined();
+    });
   });
 
   describe("when closing a view and returning false from the onBeforeClose method", function(){

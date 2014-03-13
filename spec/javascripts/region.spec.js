@@ -9,6 +9,169 @@ describe("region", function(){
     });
   });
 
+
+  describe("when swapping a view", function(){
+    var MyRegion = Backbone.Marionette.Region.extend({
+      el: "#region",
+
+      onSwap: function(){}
+    });
+
+    var MyView = Backbone.Marionette.View.extend({
+      render: function(){
+        $(this.el).html("some content");
+      },
+
+      onSwappedIn: function(){
+        $(this.el).addClass("onSwapInClass");
+      }
+    });
+
+    var myRegion, view, swapEvent, swapContext, swapViewPassed;
+
+    beforeEach(function(){
+      setFixtures("<div id='region'></div>");
+
+      view = new MyView();
+      spyOn(view, "render").andCallThrough();
+
+      myRegion = new MyRegion();
+      spyOn(myRegion, "onSwap");
+
+      myRegion.on("swap", function(v){
+        swapViewPassed = v === view;
+        swapEvent = true;
+        swapContext = this;
+      });
+
+      myRegion.swap(view);
+    });
+
+    it("should render the view", function(){
+      expect(view.render).toHaveBeenCalled();
+    });
+
+    it("should append the rendered HTML to the manager's 'el'", function(){
+      expect(myRegion.$el).toHaveHtml(view.el);
+    });
+
+    it("should call 'onSwapIn' for the view, after the rendered HTML has been added to the DOM", function(){
+      expect($(view.el)).toHaveClass("onSwapInClass");
+    });
+
+    it("should call 'onSwap' for the region, after the rendered HTML has been added to the DOM", function(){
+      expect(myRegion.onSwap).toHaveBeenCalled();
+    });
+
+    it("should trigger a swap event for the view", function(){
+      expect(swapEvent).toBeTruthy();
+    });
+
+    it("should pass the swapped-in view as an argument for the swap event", function(){
+      expect(swapViewPassed).toBeTruthy();
+    });
+
+    it("should set 'this' to the manager, from the swap event", function(){
+      expect(swapContext).toBe(myRegion);
+    });
+  });
+
+  describe("when a view is already swapped-in and swapping another", function(){
+    var MyRegion = Backbone.Marionette.Region.extend({
+      el: "#region"
+    });
+
+    var MyView = Backbone.Marionette.View.extend({
+      render: function(){
+        $(this.el).html("some content");
+      },
+
+      onSwappedOut: function(){
+        $(this.el).addClass("onSwapOutClass");
+      },
+
+      destroy: function(){
+      }
+    });
+
+    var myRegion, view1, view2, swapped1, swapped2;
+
+    beforeEach(function(){
+      setFixtures("<div id='region'></div>");
+
+      view1 = new MyView();
+      view2 = new MyView();
+      myRegion = new MyRegion();
+
+      spyOn(view1, "destroy");
+
+      swapped1 = myRegion.swap(view1);
+      swapped2 = myRegion.swap(view2);
+    });
+
+    it("should never call 'destroy' on the already open view", function(){
+      expect(view1.destroy).not.toHaveBeenCalled();
+    });
+
+    it("should return undefined view as a result of the swap operation if no view has been registered", function(){
+      expect(swapped1).toBeUndefined();
+    });
+
+    it("should return the old view as a result of the swap operation", function(){
+      expect(swapped2).toEqual(view1);
+    });
+
+    it("should reference the new view as the current view", function(){
+      expect(myRegion.currentView).toBe(view2);
+    });
+    
+    it("should call 'onSwapOut' for the old view, after the new view has been added to the DOM", function(){
+      expect($(view1.el)).toHaveClass("onSwapOutClass");
+    });
+
+  });
+
+  describe("when a view is already swapped-in and swapping the same one", function(){
+    var MyRegion = Backbone.Marionette.Region.extend({
+      el: "#region"
+    });
+
+    var MyView = Backbone.Marionette.View.extend({
+      render: function(){
+        $(this.el).html("some content");
+      },
+
+      destroy: function(){
+      },
+
+      open: function(){
+      }
+    });
+
+    var myRegion, view, swapped;
+
+    beforeEach(function(){
+      setFixtures("<div id='region'></div>");
+
+      view = new MyView();
+      myRegion = new MyRegion();
+      myRegion.swap(view);
+
+      spyOn(view, "destroy");
+      spyOn(myRegion, "open");
+      spyOn(view, "render");
+      swapped = myRegion.swap(view);
+    });
+
+    it("should not call 'render' on the view", function(){
+      expect(view.render).not.toHaveBeenCalled();
+    });
+
+    it("should return the same view that was passed in as a result of the operation", function(){
+      expect(swapped).toEqual(view);
+    });
+  });
+
   describe("when showing a view", function(){
     var MyRegion = Backbone.Marionette.Region.extend({
       el: "#region",
@@ -85,7 +248,7 @@ describe("region", function(){
         $(this.el).html("some content");
       },
 
-      close: function(){
+      destroy: function(){
       }
     });
 
@@ -98,14 +261,14 @@ describe("region", function(){
       view2 = new MyView();
       myRegion = new MyRegion();
 
-      spyOn(view1, "close");
+      spyOn(view1, "destroy");
 
       myRegion.show(view1);
       myRegion.show(view2);
     });
 
-    it("should call 'close' on the already open view", function(){
-      expect(view1.close).toHaveBeenCalled();
+    it("should call 'destroy' on the already open view", function(){
+      expect(view1.destroy).toHaveBeenCalled();
     });
 
     it("should reference the new view as the current view", function(){
@@ -123,7 +286,7 @@ describe("region", function(){
         $(this.el).html("some content");
       },
 
-      close: function(){
+      destroy: function(){
       },
 
       open: function(){
@@ -139,14 +302,14 @@ describe("region", function(){
       myRegion = new MyRegion();
       myRegion.show(view);
 
-      spyOn(view, "close");
+      spyOn(view, "destroy");
       spyOn(myRegion, "open");
       spyOn(view, "render");
       myRegion.show(view);
     });
 
-    it("should not call 'close' on the view", function(){
-      expect(view.close).not.toHaveBeenCalled();
+    it("should not call 'destroy' on the view", function(){
+      expect(view.destroy).not.toHaveBeenCalled();
     });
 
     it("should not call 'open' on the view", function(){
@@ -158,7 +321,7 @@ describe("region", function(){
     });
   });
 
-   describe("when a view is already shown, close, and showing the same one", function(){
+   describe("when a view is already shown but destroyed externally", function(){
     var MyRegion = Backbone.Marionette.Region.extend({
       el: "#region"
     });
@@ -178,28 +341,29 @@ describe("region", function(){
       view = new MyView();
       myRegion = new MyRegion();
       myRegion.show(view);
-      view.close();
+      view.destroy();
 
-      spyOn(view, "close");
+      spyOn(view, "destroy");
       spyOn(myRegion, "open");
       spyOn(view, "render")
-      myRegion.show(view);
     });
 
-    it("should not call 'close' on the view", function(){
-      expect(view.close).not.toHaveBeenCalled();
+    it("should throw an error saying the view's been destroyed if a destroyed view is passed in", function(){
+      expect(function () { myRegion.show(view); }).toThrow(new Error("Cannot use a view that's already been destroyed."));
     });
 
-    it("should call 'open' on the view", function(){
-      expect(myRegion.open).toHaveBeenCalledWith(view);
+    it("should not call 'render' on the view", function(){
+      try { myRegion.show(view); } catch(ex) {}
+      expect(view.render).not.toHaveBeenCalled();
     });
 
-    it("should call 'render' on the view", function(){
-      expect(view.render).toHaveBeenCalled();
+    it("should not call 'destroy' on the view", function(){
+      try { myRegion.show(view); } catch(ex) {}
+      expect(view.destroy).not.toHaveBeenCalled();
     });
   });
 
-  describe("when a view is already closed and showing another", function(){
+  describe("when a view is already destroyed and showing another", function(){
     var MyRegion = Backbone.Marionette.Region.extend({
       el: "#region"
     });
@@ -219,19 +383,19 @@ describe("region", function(){
       view2 = new MyView();
       myRegion = new MyRegion();
 
-      spyOn(view1, "close").andCallThrough();
+      spyOn(view1, "destroy").andCallThrough();
     });
 
-    it("shouldn't call 'close' on an already closed view", function(){
+    it("shouldn't call 'destroy' on an already destroyed view", function(){
       myRegion.show(view1);
-      view1.close();
+      view1.destroy();
       myRegion.show(view2);
 
-      expect(view1.close.callCount).toEqual(1);
+      expect(view1.destroy.callCount).toEqual(1);
     });
   });
 
-  describe("when closing the current view", function(){
+  describe("when destroying the current view", function(){
     var MyRegion = Backbone.Marionette.Region.extend({
       el: "#region"
     });
@@ -241,40 +405,40 @@ describe("region", function(){
         $(this.el).html("some content");
       },
 
-      close: function(){
+      destroy: function(){
       }
     });
 
-    var myRegion, view, closed, closedContext;
+    var myRegion, view, destroyed, destroyedContext;
 
     beforeEach(function(){
       setFixtures("<div id='region'></div>");
 
       view = new MyView();
 
-      spyOn(view, "close");
+      spyOn(view, "destroy");
       spyOn(view, "remove");
 
       myRegion = new MyRegion();
-      myRegion.on("close", function(){
-        closed = true;
-        closedContext = this;
+      myRegion.on("destroy", function(){
+        destroyed = true;
+        destroyedContext = this;
       });
       myRegion.show(view);
 
-      myRegion.close();
+      myRegion.destroy();
     });
 
-    it("should trigger a close event", function(){
-      expect(closed).toBeTruthy();
+    it("should trigger a destroy event", function(){
+      expect(destroyed).toBeTruthy();
     });
 
-    it("should set 'this' to the manager, from the close event", function(){
-      expect(closedContext).toBe(myRegion);
+    it("should set 'this' to the manager, from the destroy event", function(){
+      expect(destroyedContext).toBe(myRegion);
     });
 
-    it("should call 'close' on the already show view", function(){
-      expect(view.close).toHaveBeenCalled();
+    it("should call 'destroy' on the already show view", function(){
+      expect(view.destroy).toHaveBeenCalled();
     });
 
     it("should not call 'remove' directly, on the view", function(){
@@ -286,7 +450,7 @@ describe("region", function(){
     });
   });
 
-  describe("when closing the current view and it does not have a 'close' method", function(){
+  describe("when destroying the current view and it does not have a 'destroy' method", function(){
     var MyRegion = Backbone.Marionette.Region.extend({
       el: "<div></div>"
     });
@@ -304,7 +468,7 @@ describe("region", function(){
       spyOn(view, "remove");
       myRegion = new MyRegion();
       myRegion.show(view);
-      myRegion.close();
+      myRegion.destroy();
     });
 
     it("should call 'remove' on the view", function(){
@@ -417,7 +581,7 @@ describe("region", function(){
       });
 
       region = MyApp.MyRegion;
-      spyOn(region, "close");
+      spyOn(region, "destroy");
 
       MyApp.removeRegion('MyRegion')
     });
@@ -425,8 +589,8 @@ describe("region", function(){
     it("should be removed from the app", function(){
       expect(MyApp.MyRegion).not.toBeDefined()
     })
-    it("should call 'close' of the region", function(){
-      expect(region.close).toHaveBeenCalled()
+    it("should call 'destroy' of the region", function(){
+      expect(region.destroy).toHaveBeenCalled()
     })
   })
 
@@ -440,7 +604,7 @@ describe("region", function(){
         el: "#region"
       });
 
-      spyOn(region, "close");
+      spyOn(region, "destroy");
 
       region.ensureEl();
 
@@ -451,8 +615,8 @@ describe("region", function(){
       expect(region.$el).not.toExist();
     });
 
-    it("should close any existing view", function(){
-      expect(region.close).toHaveBeenCalled();
+    it("should destroy any existing view", function(){
+      expect(region.destroy).toHaveBeenCalled();
     });
 
   });

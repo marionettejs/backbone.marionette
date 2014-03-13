@@ -18,8 +18,8 @@ objects.
 * [RegionManager.get](#regionmanager-get)
 * [RegionManager.removeRegion](#regionmanager-removeregion)
 * [RegionManager.removeRegions](#regionmanager-removeregions)
-* [RegionManager.closeRegions](#regionmanager-closeregions)
-* [RegionManager.close](#regionmanager-close)
+* [RegionManager.destroyRegions](#regionmanager-destroyregions)
+* [RegionManager.destroy](#regionmanager-destroy)
 * [RegionManager Events](#regionmanager-events)
   * [region:add event](#regionadd-event)
   * [region:remove event](#regionremove-event)
@@ -145,7 +145,7 @@ rm.addRegion("foo", "#bar");
 rm.removeRegion("foo");
 ```
 
-A region will have its `close` method called before
+A region will have its `destroy` method called before
 it is removed from the RegionManager instance. 
 
 ## RegionManager.removeRegions
@@ -165,12 +165,12 @@ rm.addRegions({
 rm.removeRegions();
 ```
 
-This will close all regions, and remove them.
+This will destroy all regions, and remove them.
 
-## RegionManager.closeRegions
+## RegionManager.destroyRegions
 
-You can quickly close all regions from the RegionManager
-instance by calling the `closeRegions` method.
+You can quickly destroy all regions from the RegionManager
+instance by calling the `destroyRegions` method.
 
 ```js
 var rm = new Marionette.RegionManager();
@@ -180,16 +180,16 @@ rm.addRegions({
   baz: "#baz"
 });
 
-rm.closeRegions();
+rm.destroyRegions();
 ```
 
-This will close the regions without removing them
+This will destroy the regions without removing them
 from the RegionManager instance.
 
-## RegionManager.close
+## RegionManager.destroy
 
-A RegionManager instance can be closed entirely by
-calling the `close` method. This will both close
+A RegionManager instance can be destroyed entirely by
+calling the `destroy` method. This will both destroy
 and remove all regions from the RegionManager instance.
 
 ```js
@@ -200,7 +200,7 @@ rm.addRegions({
   baz: "#baz"
 });
 
-rm.close();
+rm.destroy();
 ```
 
 ## RegionManager Events

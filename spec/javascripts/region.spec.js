@@ -155,7 +155,7 @@ describe("region", function(){
     });
   });
 
-   describe("when a view is already shown, close, and showing the same one", function(){
+  describe("when a view is already shown, close, and showing the same one", function(){
     var MyRegion = Backbone.Marionette.Region.extend({
       el: "#region"
     });

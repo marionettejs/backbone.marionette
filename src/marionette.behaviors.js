@@ -1,113 +1,103 @@
 Marionette.Behaviors = (function(Marionette, _) {
+
   function Behaviors(view) {
-    // lookup view behaviors from behaviors array or object
     this.behaviors = Behaviors.parseBehaviors(view, view.behaviors);
 
-    var bindUIElements    = view.bindUIElements;
-    var unbindUIElements  = view.unbindUIElements;
+    Behaviors.wrap(view, this.behaviors, [
+      'bindUIElements', 'unbindUIElements',
+      'delegateEvents', 'undelegateEvents',
+      'onShow', 'onClose',
+      'behaviorEvents', 'triggerMethod'
+    ]);
+  }
 
-    var triggerMethod     = view.triggerMethod;
-    var undelegateEvents  = view.undelegateEvents;
-    var delegateEvents    = view.delegateEvents;
+  var methods = {
+    onShow: function(onShow, behaviors) {
+      var args = _.tail(arguments, 2);
 
-    // onShow and onClose are special cases because they are dispatched
-    // via marionette.region and marionette.triggerMethod without
-    // going through the view. Due to this fact we have to create
-    // a fake handler method for the view to handle to behavior proxy
-    var onShow            = view.onShow;
-    var onClose           = view.onClose;
+      _.each(behaviors, function(b) {
+        Marionette.triggerMethod.apply(b, ["show"].concat(args));
+      });
 
-    var _this = this;
+      if (_.isFunction(onShow)) {
+        onShow.apply(this, args);
+      }
+    },
 
-    view.behaviorEvents = function() {
-      var behaviors = {};
+    onClose: function(onClose, behaviors){
+      var args = _.tail(arguments, 2);
 
-      // mix down all of the behaviors events into
-      // a single hash of events
-      _.each(_this.behaviors, function(b, i) {
+      _.each(behaviors, function(b) {
+        Marionette.triggerMethod.apply(b, ["close"].concat(args));
+      });
+
+      if (_.isFunction(onClose)) {
+        onClose.apply(this, args);
+      }
+    },
+
+    bindUIElements: function(bindUIElements, behaviors) {
+      bindUIElements.apply(this);
+      _.invoke(behaviors, bindUIElements);
+    },
+
+    unbindUIElements: function(unbindUIElements, behaviors) {
+      unbindUIElements.apply(this);
+      _.invoke(behaviors, unbindUIElements);
+    },
+
+    triggerMethod: function(triggerMethod, behaviors) {
+      var args = _.tail(arguments, 2);
+      triggerMethod.apply(this, args);
+
+      _.each(behaviors, function(b) {
+        triggerMethod.apply(b, args);
+      });
+    },
+
+    delegateEvents: function(delegateEvents, behaviors) {
+      var args = _.tail(arguments, 2);
+      delegateEvents.apply(this, args);
+
+      _.each(behaviors, function(b){
+        Marionette.bindEntityEvents(this, this.model, Marionette.getOption(b, "modelEvents"));
+        Marionette.bindEntityEvents(this, this.collection, Marionette.getOption(b, "collectionEvents"));
+      }, this);
+    },
+
+    undelegateEvents: function(undelegateEvents, behaviors) {
+      var args = _.tail(arguments, 2);
+      undelegateEvents.apply(this, args);
+
+      _.each(behaviors, function(b) {
+        Marionette.unbindEntityEvents(this, this.model, Marionette.getOption(b, "modelEvents"));
+        Marionette.unbindEntityEvents(this, this.collection, Marionette.getOption(b, "collectionEvents"));
+      }, this);
+    },
+
+    behaviorEvents: function(behaviorEvents, behaviors) {
+      var _behaviorsEvents = {};
+
+      _.each(behaviors, function(b, i) {
         var behaviorEvents = _.result(b, 'events') || {};
         var _events = {};
 
         _.each(_.keys(behaviorEvents), function(key) {
-          // append white-space at the end of each key
-          // to prevent behavior key collisions
-          //
-          // this is relying on the fact that
-          // "click .foo" === "click .foo "
-          // from within the backbone event context
-          _events[key + (new Array(i+1)).join(" ")] = behaviorEvents[key];
+          // append white-space at the end of each key to prevent behavior key collisions
+          // this is relying on the fact backbone events considers "click .foo" the same  "click .foo "
+          var whitespace = (new Array(i+1)).join(" ");
+          _events[key + whitespace] = behaviorEvents[key];
         });
 
-        behaviors = _.extend(behaviors, _events);
+        _behaviorsEvents = _.extend(_behaviorsEvents, _events);
       });
 
-      return behaviors;
-    };
+      return _behaviorsEvents;
+    }
+ };
 
-    view.onShow = function() {
-      var args = arguments;
-
-      _.each(_this.behaviors, function(b) {
-        Marionette.triggerMethod.apply(b, ["show"].concat(arguments));
-      });
-
-      if (_.isFunction(onShow)) {
-        onShow.apply(view, arguments);
-      }
-    };
-
-    view.onClose = function(){
-      var args = arguments;
-
-      _.each(_this.behaviors, function(b) {
-        Marionette.triggerMethod.apply(b, ["close"].concat(arguments));
-      });
-
-      if (_.isFunction(onClose)) {
-        onClose.apply(view, arguments);
-      }
-    };
-
-    view.bindUIElements = function() {
-      bindUIElements.apply(view);
-      _.invoke(_this.behaviors, bindUIElements);
-    };
-
-    view.unbindUIElements = function() {
-      unbindUIElements.apply(view);
-      _.invoke(_this.behaviors, unbindUIElements);
-    };
-
-    view.triggerMethod = function() {
-      var args = arguments;
-      triggerMethod.apply(view, args);
-
-      _.each(_this.behaviors, function(b) {
-        triggerMethod.apply(b, args);
-      });
-    };
-
-    view.delegateEvents = function() {
-      delegateEvents.apply(view, arguments);
-
-      _.each(_this.behaviors, function(b){
-        Marionette.bindEntityEvents(view, view.model, Marionette.getOption(b, "modelEvents"));
-        Marionette.bindEntityEvents(view, view.collection, Marionette.getOption(b, "collectionEvents"));
-      });
-    };
-
-    view.undelegateEvents = function() {
-      undelegateEvents.apply(view, arguments);
-
-      _.each(_this.behaviors, function(b) {
-        Marionette.unbindEntityEvents(view, view.model, Marionette.getOption(b, "modelEvents"));
-        Marionette.unbindEntityEvents(view, view.collection, Marionette.getOption(b, "collectionEvents"));
-      });
-    };
-  }
-
-  // Behavior class level method definitions
   _.extend(Behaviors, {
+
     // placeholder method to be extended by the user
     // should define the object that stores the behaviors
     // i.e.
@@ -142,6 +132,17 @@ Marionette.Behaviors = (function(Marionette, _) {
       return _.map(behaviors, function(options, key){
         var BehaviorClass = Behaviors.getBehaviorClass(options, key);
         return new BehaviorClass(options, view);
+      });
+    },
+
+    // wrap view internal methods so that they delegate to behaviors.
+    // For example, onClose should trigger close on all of the behaviors and then close itself.
+    // i.e.
+    //
+    // view.delegateEvents = _.partial(methods.delegateEvents, view.delegateEvents, behaviors);
+    wrap: function(view, behaviors, methodNames) {
+      _.each(methodNames, function(methodName) {
+        view[methodName] = _.partial(methods[methodName], view[methodName], behaviors);
       });
     }
   });

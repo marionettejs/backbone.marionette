@@ -26,19 +26,25 @@ describe("region", function(){
       }
     });
 
-    var myRegion, view, showSpy;
+    var myRegion, view, showSpy, regionBeforeShowSpy, viewBeforeShowSpy, openSpy;
 
     beforeEach(function(){
       setFixtures("<div id='region'></div>");
       showSpy = sinon.spy();
+      regionBeforeShowSpy = sinon.spy();
+      viewBeforeShowSpy = sinon.spy();
 
       view = new MyView();
       spyOn(view, "render").andCallThrough();
 
       myRegion = new MyRegion();
       spyOn(myRegion, "onShow");
+      openSpy = sinon.spy(myRegion, "open");
 
       myRegion.on("show", showSpy);
+      myRegion.on("before:show", regionBeforeShowSpy);
+
+      view.on("before:show", viewBeforeShowSpy);
 
       myRegion.show(view);
     });
@@ -49,6 +55,10 @@ describe("region", function(){
 
     it("should append the rendered HTML to the manager's 'el'", function(){
       expect(myRegion.$el).toHaveHtml(view.el);
+    });
+
+    it("should call region open", function() {
+      expect(openSpy).toHaveBeenCalled();
     });
 
     it("shoudl call 'onShow' for the view, after the rendered HTML has been added to the DOM", function(){
@@ -63,12 +73,78 @@ describe("region", function(){
       expect(showSpy).toHaveBeenCalled();
     });
 
+    it("should trigger a before show event for the region", function() {
+      expect(regionBeforeShowSpy).toHaveBeenCalled();
+    });
+
+    it("should trigger a before show event for the view", function() {
+      expect(viewBeforeShowSpy).toHaveBeenCalled();
+    });
+
+    it("should trigger a before show before open is called", function() {
+      expect(regionBeforeShowSpy.calledBefore(openSpy)).toBe(true);
+    });
+
     it("should pass the shown view as an argument for the show event", function(){
       expect(showSpy).toHaveBeenCalledWith(view);
     });
 
     it("should set 'this' to the manager, from the show event", function(){
       expect(showSpy).toHaveBeenCalledOn(myRegion);
+    });
+  });
+
+  describe("when showing nested views", function() {
+    var MyRegion, Layout, SubView, SubView, region,
+        openSpy, innerRegionBeforeShowSpy, innerRegionShowSpy;
+
+    MyRegion = Backbone.Marionette.Region.extend({
+      el: "#region"
+    });
+
+    Layout = Backbone.Marionette.Layout.extend({
+      regions: {
+        subRegion: 'sub-region'
+      },
+
+      render: function(){
+        $(this.el).html("some content");
+      },
+
+      onBeforeShow: function() {
+        this.subRegion.show(new SubView());
+      }
+    });
+
+    SubView = Backbone.Marionette.ItemView.extend({
+      render: function(){
+        $(this.el).html("some content");
+      },
+
+      initialize: function() {
+        innerRegionBeforeShowSpy = sinon.spy();
+        innerRegionShowSpy = sinon.spy();
+        this.on("before:show", innerRegionBeforeShowSpy);
+        this.on("show", innerRegionShowSpy);
+      }
+    });
+
+    beforeEach(function() {
+      region = new MyRegion();
+      openSpy = sinon.spy(region, 'open');
+      region.show(new Layout());
+    });
+
+    it("should call inner region before:show before region open", function() {
+      expect(innerRegionBeforeShowSpy.calledBefore(openSpy)).toBe(true);
+    });
+
+    it("should call inner region show before region open", function() {
+      expect(innerRegionShowSpy.calledBefore(openSpy)).toBe(true);
+    });
+
+    it("should call inner region before:show before inner region show", function() {
+      expect(innerRegionBeforeShowSpy.calledBefore(innerRegionShowSpy)).toBe(true);
     });
   });
 

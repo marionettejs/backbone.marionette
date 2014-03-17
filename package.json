@@ -40,22 +40,22 @@
   },
   "github": "https://github.com/marionettejs/backbone.marionette",
   "dependencies": {
-    "backbone.babysitter": "~0.1.0",
-    "backbone.wreqr": "~1.0.0",
+    "backbone.babysitter": "^0.1.0",
+    "backbone.wreqr": "^1.0.0",
     "backbone": "1.0.0 - 1.1.2",
     "underscore": "1.4.4 - 1.6.0"
   },
   "devDependencies": {
     "grunt": "0.4.2",
-    "grunt-contrib-jasmine": "~0.4.2",
-    "grunt-contrib-jshint": "~0.1.1",
+    "grunt-contrib-jasmine": "^0.4.2",
+    "grunt-contrib-jshint": "^0.1.1",
     "grunt-plato": "~0.1.4",
     "grunt-preprocess": "git://github.com/onehealth/grunt-preprocess.git#grunt-0.4.0",
-    "grunt-contrib-uglify": "~0.2.0",
-    "grunt-contrib-concat": "~0.1.2",
+    "grunt-contrib-uglify": "^0.2.0",
+    "grunt-contrib-concat": "^0.1.2",
     "grunt-template-jasmine-istanbul": "~0.1.1",
-    "grunt-contrib-watch": "~0.2.0",
-    "grunt-contrib-connect": "~0.1.2",
+    "grunt-contrib-watch": "^0.2.0",
+    "grunt-contrib-connect": "^0.1.2",
     "load-grunt-tasks": "0.3.0",
     "bower": "1.2.8",
     "grunt-cli": "0.1.13"
@@ -70,8 +70,8 @@
     "dependencies": {
       "underscore": "1.4.4 - 1.6.0",
       "backbone": "1.0.0 - 1.1.2",
-      "backbone.babysitter": "~0.1.0",
-      "backbone.wreqr": "~1.0.0"
+      "backbone.babysitter": "^0.1.0",
+      "backbone.wreqr": "^1.0.0"
     },
     "main": "lib/core/amd/backbone.marionette.js",
     "include": [

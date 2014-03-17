@@ -1,7 +1,7 @@
 describe("region", function(){
   "use strict";
 
-  describe("when creating a new region manager and no configuration has been provided", function(){
+  describe("when creating a new region and no configuration has been provided", function(){
     it("should throw an exception saying an 'el' is required", function(){
       expect(
         Backbone.Marionette.Region.extend({})
@@ -155,7 +155,7 @@ describe("region", function(){
     });
   });
 
-   describe("when a view is already shown, close, and showing the same one", function(){
+  describe("when a view is already shown, close, and showing the same one", function(){
     var MyRegion = Backbone.Marionette.Region.extend({
       el: "#region"
     });
@@ -217,13 +217,13 @@ describe("region", function(){
       myRegion = new MyRegion();
 
       spyOn(view1, "close").andCallThrough();
-    });
 
-    it("shouldn't call 'close' on an already closed view", function(){
       myRegion.show(view1);
       view1.close();
       myRegion.show(view2);
+    });
 
+    it("shouldn't call 'close' on an already closed view", function(){
       expect(view1.close.callCount).toEqual(1);
     });
   });
@@ -312,31 +312,35 @@ describe("region", function(){
 
   });
 
-  describe("when initializing a region manager and passing an 'el' option", function(){
-    var manager, el;
+  describe("when initializing a region and passing an 'el' option", function(){
+    var region, el;
 
     beforeEach(function(){
       el = "#foo";
-      manager = new Backbone.Marionette.Region({
+      region = new Backbone.Marionette.Region({
         el: el
       });
     });
 
     it("should manage the specified el", function(){
-      expect(manager.el).toBe(el);
+      expect(region.el).toBe(el);
     });
   });
 
-  describe("when initializing a region manager with an existing view", function(){
-    var manager, view;
+  describe("when initializing a region with an existing view", function(){
+    var region, view, View;
 
     beforeEach(function(){
-      view = new (Backbone.View.extend({ onShow: function(){} }))();
+      View = Backbone.View.extend({
+        onShow: function(){}
+      });
+
+      view = new View();
 
       spyOn(view, "render");
       spyOn(view, "onShow");
 
-      manager = new Backbone.Marionette.Region({
+      region = new Backbone.Marionette.Region({
         el: "#foo",
         currentView: view
       });
@@ -351,21 +355,26 @@ describe("region", function(){
     });
   });
 
-  describe("when attaching an existing view to a region manager", function(){
-    var manager, view;
+  describe("when attaching an existing view to a region", function(){
+    var region, view, View;
 
     beforeEach(function(){
       setFixtures("<div id='foo'>bar</div>");
-      view = new (Backbone.View.extend({onShow: function(){}}))();
+
+      View = Backbone.View.extend({
+        onShow: function(){}
+      });
+
+      view = new View();
 
       spyOn(view, "render");
       spyOn(view, "onShow");
 
-      manager = new Backbone.Marionette.Region({
+      region = new Backbone.Marionette.Region({
         el: "#foo"
       });
 
-      manager.attachView(view);
+      region.attachView(view);
     });
 
     it("should not render the view", function(){
@@ -377,29 +386,29 @@ describe("region", function(){
     });
 
     it("should not replace the existing html", function(){
-      expect($(manager.el).text()).toBe("bar");
+      expect($(region.el).text()).toBe("bar");
     })
   });
 
   describe("when creating a region instance with an initialize method", function(){
-    var Manager, actualOptions, expectedOptions;
+    var Region, actualOptions, expectedOptions;
 
     beforeEach(function(){
       expectedOptions = {foo: "bar"};
-      Manager = Backbone.Marionette.Region.extend({
+      Region = Backbone.Marionette.Region.extend({
         el: "#foo",
         initialize: function(options){ }
       });
 
-      spyOn(Manager.prototype, "initialize").andCallThrough();
+      spyOn(Region.prototype, "initialize").andCallThrough();
 
-      new Manager({
+      new Region({
         foo: "bar"
       });
     });
 
     it("should call the initialize method with the options from the constructor", function(){
-      expect(Manager.prototype.initialize).toHaveBeenCalledWith(expectedOptions);
+      expect(Region.prototype.initialize).toHaveBeenCalledWith(expectedOptions);
     });
   });
 

@@ -442,7 +442,8 @@ MyApp.module("Foo.Bar").start();
 A module can be stopped, or shut down, to clear memory and resources when
 the module is no longer needed. Like the starting of modules, stopping is done
 in a depth-first hierarchy traversal. That is, a hierarchy of modules like
-`Foo.Bar.Baz` will stop `Baz` first, then `Bar`, and finally `Foo`.
+`Foo.Bar.Baz` will stop `Baz` first, then `Bar`, and finally `Foo`. Also `stopListening`
+will be called to unbind all events binded using `listenTo` method.
 
 To stop a module and its children, call the `stop` method of a module.
 

@@ -20,7 +20,6 @@ Marionette.Region = function(options){
   }
 };
 
-
 // Region Type methods
 // -------------------
 
@@ -188,7 +187,12 @@ _.extend(Marionette.Region.prototype, Backbone.Events, {
   reset: function(){
     this.close();
     delete this.$el;
-  }
+  },
+
+  triggerMethod: Marionette.triggerMethod,
+
+  getOption: Marionette.getOption
+
 });
 
 // Copy the `extend` function used by Backbone's classes

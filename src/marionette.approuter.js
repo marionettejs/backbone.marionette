@@ -60,6 +60,8 @@ Marionette.AppRouter = Backbone.Router.extend({
     }
 
     this.route(route, methodName, _.bind(method, controller));
-  }
+  },
+
+  getOption: Marionette.getOption
 });
 

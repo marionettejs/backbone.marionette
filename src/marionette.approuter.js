@@ -49,7 +49,7 @@ Marionette.AppRouter = Backbone.Router.extend({
   },
 
   _getController: function(){
-    return Marionette.getOption(this, "controller");
+    return this.getOption("controller");
   },
 
   _addAppRoute: function(controller, route, methodName){

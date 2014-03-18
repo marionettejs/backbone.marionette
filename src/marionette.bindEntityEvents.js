@@ -57,8 +57,6 @@
 
   // generic looping function
   function iterateEvents(target, entity, bindings, functionCallback, stringCallback){
-    if (!entity || !bindings) { return; }
-
     // allow the bindings to be a function
     if (_.isFunction(bindings)){
       bindings = bindings.call(target);
@@ -80,11 +78,15 @@
 
   // Export Public API
   Marionette.bindEntityEvents = function(target, entity, bindings){
-    iterateEvents(target, entity, bindings, bindToFunction, bindFromStrings);
+    if(arguments.length < 2){ return; }
+    if(arguments.length < 3){ Array.prototype.unshift.call(arguments, this); }
+    iterateEvents(arguments[0], arguments[1], arguments[2], bindToFunction, bindFromStrings);
   };
 
   Marionette.unbindEntityEvents = function(target, entity, bindings){
-    iterateEvents(target, entity, bindings, unbindToFunction, unbindFromStrings);
+    if(arguments.length < 2){ return; }
+    if(arguments.length < 3){ Array.prototype.unshift.call(arguments, this); }
+    iterateEvents(arguments[0], arguments[1], arguments[2], unbindToFunction, unbindFromStrings);
   };
 
 })(Marionette);

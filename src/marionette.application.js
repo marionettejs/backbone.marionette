@@ -13,8 +13,6 @@ Marionette.Application = function(options){
   this.submodules = {};
 
   _.extend(this, options);
-
-  this.triggerMethod = Marionette.triggerMethod;
 };
 
 _.extend(Marionette.Application.prototype, Backbone.Events, {
@@ -92,6 +90,16 @@ _.extend(Marionette.Application.prototype, Backbone.Events, {
     // see the Marionette.Module object for more information
     return ModuleClass.create.apply(ModuleClass, args);
   },
+  
+  triggerMethod: Marionette.triggerMethod,
+
+  normalizeMethods: Marionette.normalizeMethods,
+
+  getOption: Marionette.getOption,
+
+  bindEntityEvents: Marionette.bindEntityEvents,
+
+  unbindEntityEvents: Marionette.unbindEntityEvents,
 
   // Internal method to set up the region manager
   _initRegionManager: function(){

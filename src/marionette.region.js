@@ -6,7 +6,7 @@
 
 Marionette.Region = function(options){
   this.options = options || {};
-  this.el = Marionette.getOption(this, "el");
+  this.el = this.getOption("el");
 
   if (!this.el){
     var err = new Error("An 'el' must be specified for a region.");
@@ -19,7 +19,6 @@ Marionette.Region = function(options){
     this.initialize.apply(this, args);
   }
 };
-
 
 // Region Type methods
 // -------------------
@@ -188,7 +187,12 @@ _.extend(Marionette.Region.prototype, Backbone.Events, {
   reset: function(){
     this.close();
     delete this.$el;
-  }
+  },
+
+  triggerMethod: Marionette.triggerMethod,
+
+  getOption: Marionette.getOption
+
 });
 
 // Copy the `extend` function used by Backbone's classes

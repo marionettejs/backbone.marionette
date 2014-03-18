@@ -2,9 +2,11 @@ describe("region", function(){
   "use strict";
 
   describe("when creating a new region manager and no configuration has been provided", function(){
+    var MyRegion;
     it("should throw an exception saying an 'el' is required", function(){
+      MyRegion = Backbone.Marionette.Region.extend({});
       expect(
-        Backbone.Marionette.Region.extend({})
+        function(){ new MyRegion }
       ).toThrow("An 'el' must be specified for a region.");
     });
   });

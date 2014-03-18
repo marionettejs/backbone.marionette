@@ -6,7 +6,7 @@
 
 Marionette.Region = function(options){
   this.options = options || {};
-  this.el = Marionette.getOption(this, "el");
+  this.el = this.getOption("el");
 
   if (!this.el){
     var err = new Error("An 'el' must be specified for a region.");

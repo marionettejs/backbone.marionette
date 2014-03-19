@@ -22,6 +22,8 @@ describe("module stop", function(){
       mod1.on("before:stop", beforeStop);
       mod1.on("stop", stop);
 
+      spyOn(mod1, "stopListening");
+
       mod2 = App.module("Mod1.Mod2");
       mod3 = App.module("Mod1.Mod3");
 
@@ -57,6 +59,9 @@ describe("module stop", function(){
       expect(App.module("Mod1")).toBe(mod1);
     });
 
+    it("should call stopListening", function(){
+      expect(mod1.stopListening).toHaveBeenCalledWith();
+    });
   });
 
   describe("when stopping a module that has not been started", function(){

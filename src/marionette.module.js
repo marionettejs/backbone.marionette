@@ -89,6 +89,8 @@ _.extend(Marionette.Module.prototype, Backbone.Events, {
     this._initializerCallbacks.reset();
     this._finalizerCallbacks.reset();
 
+    this.stopListening();
+
     Marionette.triggerMethod.call(this, "stop");
   },
 

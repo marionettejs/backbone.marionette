@@ -114,6 +114,11 @@ examples on how to get started, please visit [the Wiki](https://github.com/mario
 * [**Marionette.Layout**](docs/marionette.layout.md): A view that renders a layout and creates region managers to manage areas within it
 * [**Marionette.View**](docs/marionette.view.md): The base View type that other Marionette views extend from (not intended to be used directly)
 
+**Behaviors**
+
+* [**Marionette.Behavior**](docs/marionette.behavior.md): an encapsulated `View` interaction layer that can be mixed into any `view`, helping to DRY up your view code.
+* [**Marionette.Behaviors**](docs/marionette.behaviors.md): A helper class to glue your behaviors to your views.
+
 **View Management**
 
 * [**Marionette.Region**](docs/marionette.region.md): Manage visual regions of your application, including display and removal of content

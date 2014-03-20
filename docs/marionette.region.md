@@ -187,6 +187,8 @@ MyApp.someRegion.attachView(myView);
 A region will raise a few events when showing and
 closing views:
 
+* "before:show" / `onBeforeShow` - Called on the view instance after the view has been rendered, but before its been displayed.
+* "before:show" / `onBeforeShow` - Called on the region instance after the view has been rendered, but before its been displayed.
 * "show" / `onShow` - Called on the view instance when the view has been rendered and displayed.
 * "show" / `onShow` - Called on the region instance when the view has been rendered and displayed.
 * "close" / `onClose` - Called when the view has been closed.
@@ -195,6 +197,11 @@ These events can be used to run code when your region
 opens and closes views.
 
 ```js
+MyApp.mainRegion.on("before:show", function(view){
+  // manipulate the `view` or do something extra
+  // with the region via `this`
+});
+
 MyApp.mainRegion.on("show", function(view){
   // manipulate the `view` or do something extra
   // with the region via `this`
@@ -208,12 +215,19 @@ MyApp.mainRegion.on("close", function(view){
 MyRegion = Backbone.Marionette.Region.extend({
   // ...
 
+  onBeforeShow: function(view) {
+    // the `view` has not been shown yet
+  },
+
   onShow: function(view){
     // the `view` has been shown
   }
 });
 
 MyView = Marionette.ItemView.extend({
+  onBeforeShow: function() {
+    // called before the view has been shown
+  },
   onShow: function(){
     // called when the view has been shown
   }

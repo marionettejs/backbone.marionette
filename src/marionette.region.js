@@ -127,6 +127,8 @@ _.extend(Marionette.Region.prototype, Backbone.Events, {
     }
 
     view.render();
+    Marionette.triggerMethod.call(this, "before:show", view);
+    Marionette.triggerMethod.call(view, "before:show");
 
     if (isDifferentView || isViewClosed) {
       this.open(view);

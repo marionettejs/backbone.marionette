@@ -43,8 +43,7 @@
     "backbone.babysitter": "~0.1.0",
     "backbone.wreqr": "~1.0.0",
     "backbone": "1.0.0 - 1.1.2",
-    "underscore": "1.4.4 - 1.6.0",
-    "jquery": "1.8.0 - 1.11.0"
+    "underscore": "1.4.4 - 1.6.0"
   },
   "devDependencies": {
     "grunt": "0.4.2",

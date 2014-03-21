@@ -186,11 +186,17 @@ describe("regionManager", function(){
       region.on("close", closeHandler);
       regionManager.on("region:remove", removeHandler);
 
+      spyOn(region, "stopListening");
+
       regionManager.removeRegion("foo");
     });
 
     it("should close the region", function(){
       expect(closeHandler).toHaveBeenCalled();
+    });
+
+    it("should stopListening on the region", function() {
+      expect(region.stopListening).toHaveBeenCalledWith();
     });
 
     it("should remove the region", function(){
@@ -226,12 +232,20 @@ describe("regionManager", function(){
 
       regionManager.on("region:remove", removeHandler);
 
+      spyOn(region, "stopListening");
+      spyOn(r2, "stopListening");
+
       regionManager.removeRegions();
     });
 
     it("should close the regions", function(){
       expect(closeHandler).toHaveBeenCalled();
       expect(closeHandler2).toHaveBeenCalled();
+    });
+
+    it("should stopListening on the regions", function() {
+      expect(region.stopListening).toHaveBeenCalledWith();
+      expect(r2.stopListening).toHaveBeenCalledWith();
     });
 
     it("should remove the regions", function(){
@@ -284,11 +298,17 @@ describe("regionManager", function(){
       region.on("close", closeHandler);
       regionManager.on("close", closeManagerHandler);
 
+      spyOn(region, "stopListening");
+
       regionManager.close();
     });
 
     it("should close all regions", function(){
       expect(closeHandler).toHaveBeenCalled();
+    });
+
+    it("should stopListening on all regions", function() {
+      expect(region.stopListening).toHaveBeenCalledWith();
     });
 
     it("should remove all regions", function(){

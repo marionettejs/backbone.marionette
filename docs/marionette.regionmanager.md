@@ -146,7 +146,8 @@ rm.removeRegion("foo");
 ```
 
 A region will have its `close` method called before
-it is removed from the RegionManager instance. 
+it is removed from the RegionManager instance and
+`stopListening` is called.
 
 ## RegionManager.removeRegions
 

@@ -7,3 +7,8 @@ before_install:
   - npm config set ca ""
 before_script:
   - npm run-script bower
+addons:
+  sauce_connect:
+    username: samccone
+    access_key:
+      secure: "nSjf196zDoDKs0hpDjKmZqeDvajfKm4P1iN5la0FP/ACyFVgn/ef7aVMpNhH0ar2PbPVoGnKgcBRnMj0ZklBkcjhIO+VR7lOc3vpA7p7EA4MR9tDzOvPtT4CPwC9Dn/vbFEAMfCcHU4gr0AwYCTMoKkUvTI+WT7ih9GYJi1fsu0="

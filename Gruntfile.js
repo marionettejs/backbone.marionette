@@ -158,6 +158,16 @@ module.exports = function(grunt) {
       }
     },
 
+    simplemocha: {
+      integration: {
+        options: {
+          timeout: 60000,
+          reporter: 'spec'
+        },
+        src: ['spec/integration/**/*.spec.js']
+      }
+    },
+
     jshint: {
       options: {
         jshintrc : '.jshintrc'
@@ -193,7 +203,12 @@ module.exports = function(grunt) {
     }
   });
 
-  grunt.registerTask('test', ['jshint', 'jasmine:marionette']);
+  if (process.env.SAUCE_USERNAME && process.env.SAUCE_ACCESS_KEY) {
+    // execute integration tests only if saucelabs credentials are set
+    grunt.registerTask('test', ['jshint', 'preprocess', 'concat', 'uglify', 'jasmine:marionette', 'connect:server', 'simplemocha:integration']);
+  }else{
+    grunt.registerTask('test', ['jshint', 'jasmine:marionette']);
+  }
 
   grunt.registerTask('dev', ['test', 'watch:marionette']);
 

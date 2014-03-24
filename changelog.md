@@ -1,3 +1,8 @@
+### v1.7.1 [view commit logs](https://github.com/marionettejs/backbone.marionette/compare/v1.7.0...v1.7.1)
+
+* Fixes
+  * Enables the use of string based behavior event methods.
+
 ### v1.7.0 [view commit logs](https://github.com/marionettejs/backbone.marionette/compare/v1.6.4...v1.7.0)
 
 Version 1.7 represents a significant step in formalizing the ways to improve your `view` code though reusable `behaviors`. Say goodbye to custom mixin strategies and welcome `behaviors` into town.
@@ -5,22 +10,22 @@ Version 1.7 represents a significant step in formalizing the ways to improve you
 * Behaviors
 
     A `Behavior` is an  isolated set of DOM / user interactions interactions  that can be mixed into any `View`. `Behaviors` allow you to blackbox `View` specific interactions into portable logical chunks, keeping your `views` simple and your code DRY. **[Read the docs here.](https://github.com/marionettejs/backbone.marionette/blob/master/docs/marionette.behavior.md)**
-    
+
 * Modules
     * Call stop listening on module stop.
 
 * Events
     * add a before:show event for views and regions
-   
+
 * Docs
-    * Entire refactor of application docs. 
+    * Entire refactor of application docs.
 
 * Tests
-    * Rework the module tests to improve readability and consistency. 
+    * Rework the module tests to improve readability and consistency.
 
 * General
-    * switch from `~` to `^` for *trusted* dependencies.   
-    
+    * switch from `~` to `^` for *trusted* dependencies.
+
 ### v1.6.4 [view commit logs](https://github.com/marionettejs/backbone.marionette/compare/v1.6.3...v1.6.4)
   * Fixes
     * Patches a bug that would cause modules to be initialized twice when a custom module class is passed
@@ -31,7 +36,7 @@ Version 1.7 represents a significant step in formalizing the ways to improve you
       ```js
         var ItemModule = Marionette.Module.extend({
           startWithParent: false,
-          initialize: function(options) {},  
+          initialize: function(options) {},
           onStart: function() {}
         });
 

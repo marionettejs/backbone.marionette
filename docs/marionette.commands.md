@@ -7,7 +7,7 @@ to be explicitly coupled to the component that is performing the work.
 No response is allowed from the execution of a command. It's a "fire-and-forget"
 scenario.
 
-Facilitated by [Backbone.Wreqr](https://github.com/marionettejs/backbone.wreqr)'s 
+Facilitated by [Backbone.Wreqr](https://github.com/marionettejs/backbone.wreqr)'s
 Commands object.
 
 ## Documentation Index
@@ -43,7 +43,7 @@ App.execute("foo", "baz");
 ## Remove / Replace Commands
 
 To remove a command, call `App.commands.removeHandler` and provide the
-name of the command to remove. 
+name of the command to remove.
 
 To remove all commands, call `App.commands.removeAllHandlers()`.
 

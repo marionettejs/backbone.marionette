@@ -14,7 +14,7 @@ rendering a template with or without data.
 ## Basic Usage
 
 The basic usage of the `Renderer` is to call the `render` method.
-This method returns a string containing the result of applying the 
+This method returns a string containing the result of applying the
 template using the `data` object as the context.
 
 ```js
@@ -56,9 +56,9 @@ template by the specified selector, and renders the template with
 the data provided (if any) using Underscore.js templates.
 
 If you wish to override the way the template is loaded, see
-the `TemplateCache` object. 
+the `TemplateCache` object.
 
-If you wish to override the template engine used, change the 
+If you wish to override the template engine used, change the
 `render` method to work however you want:
 
 ```js
@@ -67,11 +67,11 @@ Backbone.Marionette.Renderer.render = function(template, data){
 });
 ```
 
-This implementation will replace the default Underscore.js 
+This implementation will replace the default Underscore.js
 rendering with jQuery templates rendering.
 
-If you override the `render` method and wish to use the 
-`TemplateCache` mechanism, remember to include the code necessary to 
+If you override the `render` method and wish to use the
+`TemplateCache` mechanism, remember to include the code necessary to
 fetch the template from the cache in your `render` method:
 
 ```js
@@ -85,9 +85,9 @@ Backbone.Marionette.Renderer.render = function(template, data){
 
 You can easily replace the standard template rendering functionality
 with a pre-compiled template, such as those provided by the JST or TPL
-plugins for AMD/RequireJS. 
+plugins for AMD/RequireJS.
 
-To do this, just override the `render` method to return your executed 
+To do this, just override the `render` method to return your executed
 template with the data.
 
 ```js
@@ -106,5 +106,3 @@ Backbone.Marionette.ItemView.extend({
   template: myPrecompiledTemplate
 });
 ```
-
-

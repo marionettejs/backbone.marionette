@@ -2,12 +2,12 @@
 
 An application level request/response system. This allows components in
 an application to request some information or work be done by another
-part of the app, but without having to be explicitly coupled to the 
+part of the app, but without having to be explicitly coupled to the
 component that is performing the work.
 
 A return response is expected when making a request.
 
-Facilitated by [Backbone.Wreqr](https://github.com/marionettejs/backbone.wreqr)'s 
+Facilitated by [Backbone.Wreqr](https://github.com/marionettejs/backbone.wreqr)'s
 RequestResponse object.
 
 ## Documentation Index
@@ -42,10 +42,10 @@ App.request("foo", "baz"); // => returns "baz-quux"
 ## Remove / Replace A Request Handler
 
 To remove a request handler, call `App.reqres.removeHandler` and provide the
-name of the request handler to remove. 
+name of the request handler to remove.
 
 To remove all request handlers, call `App.reqres.removeAllHandlers()`.
 
 To replace a request handler, simply register a new handler for an existing
-request handler name. There can be only one request handler 
+request handler name. There can be only one request handler
 for a given request name.

@@ -217,9 +217,6 @@ _.extend(Marionette.Module, {
           module.start(options);
         }
       });
-
     }
-
   }
 });
-

@@ -42,4 +42,3 @@ _.extend(Marionette.Callbacks.prototype, {
     }, this);
   }
 });
-

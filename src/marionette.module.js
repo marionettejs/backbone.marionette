@@ -246,4 +246,3 @@ _.extend(Marionette.Module, {
     });
   }
 });
-

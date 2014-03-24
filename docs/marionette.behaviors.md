@@ -4,11 +4,11 @@
 The most important part of this class is that you **MUST** override the class level `behaviorsLookup` method for things to work properly.
 
 ## Documentation Index
-* [API](#api) 
+* [API](#api)
   * [Behaviors Lookup](#behaviorsLookup)
   * [getBehaviorClass](#getBehaviorClass)
   * [behaviorClass](#behaviorClass)
-  
+
 ## API
 
 There are two class level methods that you can override on the `Behaviors` class. The rest of the class is tied to under the hood implementation details of views.
@@ -18,8 +18,8 @@ There are two class level methods that you can override on the `Behaviors` class
 This method defines where your behavior classes are stored. A simple implementation might look something like this.
 
 ```js
-Marionette.Behaviors.behaviorsLookup = function() { 
-    return window.Behaviors; 
+Marionette.Behaviors.behaviorsLookup = function() {
+    return window.Behaviors;
 }
 ```
 

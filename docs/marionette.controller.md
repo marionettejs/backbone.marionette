@@ -74,7 +74,7 @@ contr.on("close", function(arg1, arg2){ ... });
 contr.listenTo(something, "bar", function(){...});
 
 // close the controller: unbind all of the
-// event handlers, trigger the "close" event and 
+// event handlers, trigger the "close" event and
 // call the onClose method
 contr.close(arg1, arg2);
 ```
@@ -83,10 +83,10 @@ contr.close(arg1, arg2);
 
 The name `Controller` is bound to cause a bit of confusion, which is
 rather unfortunate. There was some discussion and debate about what to
-call this object, the idea that people would confuse this with an 
+call this object, the idea that people would confuse this with an
 MVC style controller came up a number of times. In the end, we decided
 to call this a controller anyway--as the typical use case is to control
-the workflow and process of an application and/or module. 
+the workflow and process of an application and/or module.
 
 But the truth is, this is a very generic, multi-purpose object that can
 serve many different roles, in many different scenarios. We are always open

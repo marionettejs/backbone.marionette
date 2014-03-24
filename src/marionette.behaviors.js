@@ -112,7 +112,7 @@ Marionette.Behaviors = (function(Marionette, _) {
 
       return _behaviorsEvents;
     }
- };
+  };
 
   _.extend(Behaviors, {
 

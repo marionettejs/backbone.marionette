@@ -1,6 +1,6 @@
 # Marionette.RegionManager
 
-Region managers provide a consistent way to manage 
+Region managers provide a consistent way to manage
 a number of Marionette.Region objects within an
 application. The RegionManager is intended to be
 used by other objects, to facilitate the addition,
@@ -60,11 +60,11 @@ var region = rm.addRegion("foo", "#bar");
 In this example, a region named "foo" will be added
 to the RegionManager instance. It is defined as a
 jQuery selector that will search for the `#bar`
-element in the DOM. 
+element in the DOM.
 
 There are a lot of other ways to define a region,
 including object literals with various options, and
-instances of Region objects. For more information 
+instances of Region objects. For more information
 on this, see the Region documentation.
 
 ## RegionManager.addRegions
@@ -91,12 +91,12 @@ regions.bar; //=> the "bar" region instance
 ```
 
 This method returns an object literal that contains
-all of the named region instances. 
+all of the named region instances.
 
 ### addRegions default options
 
 When adding multiple regions it may be useful to
-provide a set of defaults that get applied to all 
+provide a set of defaults that get applied to all
 of the regions being added. This can be done through
 the use of a `defaults` parameter. Specify this
 parameter as an object literal with `key: value`
@@ -122,7 +122,7 @@ instances of `MyRegionType`.
 
 ## RegionManager.get
 
-A region instance can be retrieved from the 
+A region instance can be retrieved from the
 RegionManager instance using the `get` method and
 passing in the name of the region.
 
@@ -233,7 +233,7 @@ rm.addRegion("foo", "#bar");
 ### region:remove event
 
 The RegionManager will trigger a "region:remove"
-event when a region is removed from the manager. 
+event when a region is removed from the manager.
 This allows you to use the region instance one last
 time, or remove the region from an object that has a
 reference to it:

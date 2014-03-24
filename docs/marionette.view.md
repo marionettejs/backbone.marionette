@@ -519,4 +519,3 @@ MyView = Backbone.Marionette.ItemView.extend({
 ```
 
 This applies to all view types.
-

@@ -125,6 +125,7 @@ describe("Behaviors", function(){
     beforeEach(function() {
       spy = sinon.spy();
       spy2 = sinon.spy();
+      spy3 = sinon.spy();
 
       Obj = {
         ToolTip: Marionette.Behavior.extend({
@@ -136,6 +137,13 @@ describe("Behaviors", function(){
           events: {
             "click": spy2
           }
+        }),
+        Hover: Marionette.Behavior.extend({
+          events: {
+            "click": "onClick"
+          },
+
+          onClick: spy3
         })
       };
 
@@ -143,7 +151,8 @@ describe("Behaviors", function(){
         template: _.template(""),
         behaviors: {
           ToolTip: {},
-          DropDown: {}
+          DropDown: {},
+          Hover: {}
         }
       });
 
@@ -157,6 +166,14 @@ describe("Behaviors", function(){
 
       expect(spy).toHaveBeenCalled();
       expect(spy2).toHaveBeenCalled();
+    });
+
+    it("should call the behaviors event when event handler is a string", function() {
+      v = new V();
+      v.render();
+      v.$el.click();
+
+      expect(spy3).toHaveBeenCalled();
     });
   });
 

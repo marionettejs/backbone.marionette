@@ -1,12 +1,12 @@
 # Marionette.CompositeView
 
-A `CompositeView` extends from `CollectionView` to be used as a 
-composite view for scenarios where it should represent both a 
+A `CompositeView` extends from `CollectionView` to be used as a
+composite view for scenarios where it should represent both a
 branch and leaf in a tree structure, or for scenarios where a
 collection needs to be rendered within a wrapper template.
 
-Please see 
-[the Marionette.CollectionView documentation](marionette.collectionview.md) 
+Please see
+[the Marionette.CollectionView documentation](marionette.collectionview.md)
 for more information on available features and functionality.
 
 Additionally, interactions with Marionette.Region
@@ -15,8 +15,8 @@ will provide features such as `onShow` callbacks, etc. Please see
 
 ## Example Usage: Tree View
 
-For example, if you're rendering a treeview control, you may 
-want to render a collection view with a model and template so 
+For example, if you're rendering a treeview control, you may
+want to render a collection view with a model and template so
 that it will show a parent item with children in the tree.
 
 You can specify a `modelView` to use for the model. If you don't
@@ -33,7 +33,7 @@ new CompositeView({
 });
 ```
 
-For more examples, see my blog post on 
+For more examples, see my blog post on
 [using the composite view.](http://lostechies.com/derickbailey/2012/04/05/composite-views-tree-structures-tables-and-more/)
 
 ## Documentation Index
@@ -62,9 +62,9 @@ new MyComp({
 ## CompositeView's `itemViewContainer`
 
 By default the composite view uses the same `appendHtml` method that the
-collection view provides. This means the view will call jQuery's `.append` 
+collection view provides. This means the view will call jQuery's `.append`
 to move the HTML contents from the item view instance in to the collection
-view's `el`. 
+view's `el`.
 
 This is typically not very useful as a composite view will usually render
 a container DOM element in which the item views should be placed.
@@ -207,9 +207,9 @@ function, which calls a corresponding "on{EventName}" method on the view.
 * "composite:collection:rendered" / `onCompositeCollectionRendered` - after the collection of models has been rendered
 * "render" / `onRender` and "composite:rendered" / `onCompositeRendered` - after everything has been rendered
 
-Additionally, after the composite view has been rendered, an 
-`onRender` method will be called. You can implement this in 
-your view to provide custom code for dealing with the view's 
+Additionally, after the composite view has been rendered, an
+`onRender` method will be called. You can implement this in
+your view to provide custom code for dealing with the view's
 `el` after it has been rendered:
 
 ```js

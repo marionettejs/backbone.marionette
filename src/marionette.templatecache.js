@@ -91,4 +91,3 @@ _.extend(Marionette.TemplateCache.prototype, {
     return _.template(rawTemplate);
   }
 });
-

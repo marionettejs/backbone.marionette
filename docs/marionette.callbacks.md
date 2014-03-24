@@ -3,12 +3,12 @@
 The `Callbacks` object assists in managing a collection of callback
 methods, and executing them, in an async-safe manner.
 
-There are only two methods: 
+There are only two methods:
 
 * `add`
 * `run`
 
-The `add` method adds a new callback to be executed later. 
+The `add` method adds a new callback to be executed later.
 
 The `run` method executes all current callbacks in, using the
 specified context for each of the callbacks, and supplying the
@@ -61,11 +61,10 @@ This will run the specified callback with the `myContext` object set as
 
 ## Advanced / Async Use
 
-The `Callbacks` executes each callback in an async-friendly 
-manner, and can be used to facilitate async callbacks. 
+The `Callbacks` executes each callback in an async-friendly
+manner, and can be used to facilitate async callbacks.
 The `Marionette.Application` object uses `Callbacks`
-to manage initializers (see above). 
+to manage initializers (see above).
 
 It can also be used to guarantee callback execution in an event
 driven scenario, much like the application initializers.
-

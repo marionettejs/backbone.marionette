@@ -658,4 +658,3 @@ Backbone.Marionette.CollectionView.extend({
   }
 });
 ```
-

@@ -337,4 +337,3 @@ Marionette.CollectionView = Marionette.View.extend({
     this.checkEmpty();
   }
 });
-

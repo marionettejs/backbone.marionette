@@ -77,7 +77,7 @@ var CloseWarn = Marionette.Behavior.extend({
 		"message": "you are closing!"
 	},
 
-	// behaviors have events that are bound to the views DOM
+	// Behaviors have events that are bound to the behavior instance
 	events: {
 		"click .close": "warnBeforeClose"
 	},

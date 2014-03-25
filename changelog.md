@@ -1,3 +1,8 @@
+### v1.7.2 [view commit logs](https://github.com/marionettejs/backbone.marionette/compare/v1.7.1...v1.7.2)
+
+* Fixes
+  * Binds behavior events to the behavior instance, as compared to the view.
+
 ### v1.7.1 [view commit logs](https://github.com/marionettejs/backbone.marionette/compare/v1.7.0...v1.7.1)
 
 * Fixes

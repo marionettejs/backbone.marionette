@@ -9,7 +9,7 @@ Version 1.7 represents a significant step in formalizing the ways to improve you
 
 * Behaviors
 
-    A `Behavior` is an  isolated set of DOM / user interactions interactions  that can be mixed into any `View`. `Behaviors` allow you to blackbox `View` specific interactions into portable logical chunks, keeping your `views` simple and your code DRY. **[Read the docs here.](https://github.com/marionettejs/backbone.marionette/blob/master/docs/marionette.behavior.md)**
+    A `Behavior` is an  isolated set of DOM / user interactions  that can be mixed into any `View`. `Behaviors` allow you to blackbox `View` specific interactions into portable logical chunks, keeping your `views` simple and your code DRY. **[Read the docs here.](https://github.com/marionettejs/backbone.marionette/blob/master/docs/marionette.behavior.md)**
 
 * Modules
     * Call stop listening on module stop.

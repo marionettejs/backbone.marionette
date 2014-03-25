@@ -171,6 +171,8 @@ describe("region manager", function(){
     var region, regionManager, closeHandler, removeHandler;
 
     beforeEach(function(){
+      setFixtures("<div id='foo'></div>");
+
       closeHandler = jasmine.createSpy("close handler");
       removeHandler = jasmine.createSpy("remove handler");
 
@@ -211,6 +213,8 @@ describe("region manager", function(){
     var region, r2, regionManager, closeHandler, closeHandler2, removeHandler;
 
     beforeEach(function(){
+      setFixtures("<div id='foo'></div><div id='bar'></div>");
+
       closeHandler = jasmine.createSpy("close handler");
       closeHandler2 = jasmine.createSpy("close handler");
       removeHandler = jasmine.createSpy("remove handler");
@@ -258,6 +262,8 @@ describe("region manager", function(){
     var region, regionManager, closeHandler;
 
     beforeEach(function(){
+      setFixtures("<div id='foo'>");
+
       closeHandler = jasmine.createSpy("close region handler");
       closeManagerHandler = jasmine.createSpy("close manager handler");
 
@@ -283,6 +289,8 @@ describe("region manager", function(){
     var region, regionManager, closeManagerHandler;
 
     beforeEach(function(){
+      setFixtures("<div id='foo'>");
+
       closeHandler = jasmine.createSpy("close region handler");
       closeManagerHandler = jasmine.createSpy("close manager handler");
 

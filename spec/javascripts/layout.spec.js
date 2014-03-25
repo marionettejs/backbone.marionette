@@ -190,7 +190,7 @@ describe("layout", function(){
 
     beforeEach(function(){
       setFixtures("<div id='mgr'></div>");
-      loadFixtures("layoutManagerTemplate.html");
+      appendLoadFixtures("layoutManagerTemplate.html");
 
       layout = new Layout();
       layout.onRender = function(){

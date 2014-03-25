@@ -124,7 +124,6 @@ Marionette.CompositeView = Marionette.CollectionView.extend({
     }
   },
 
-
   // Internal method to ensure an `$itemViewContainer` exists, for the
   // `appendHtml` method to use.
   getItemViewContainer: function(containerView){
@@ -136,8 +135,14 @@ Marionette.CompositeView = Marionette.CollectionView.extend({
     var itemViewContainer = Marionette.getOption(containerView, "itemViewContainer");
     if (itemViewContainer){
 
-      var selector = _.isFunction(itemViewContainer) ? itemViewContainer.call(this) : itemViewContainer;
-      container = containerView.$(selector);
+      var selector = _.isFunction(itemViewContainer) ? itemViewContainer.call(containerView) : itemViewContainer;
+
+      if (selector.charAt(0) === "@" && containerView.ui) {
+        container = containerView.ui[selector.substr(4)];
+      } else {
+        container = containerView.$(selector);
+      }
+
       if (container.length <= 0) {
         throwError("The specified `itemViewContainer` was not found: " + containerView.itemViewContainer, "ItemViewContainerMissingError");
       }

@@ -178,7 +178,7 @@ module.exports = function(grunt) {
     watch: {
       marionette : {
         files : ['src/**/*.js', 'spec/**/*.js'],
-        tasks : ['jshint', 'jasmine:marionette']
+        tasks : ['lint', 'jasmine:marionette']
       },
       server : {
         files : ['src/**/*.js', 'spec/**/*.js'],
@@ -192,16 +192,29 @@ module.exports = function(grunt) {
           port: 8888
         }
       }
+    },
+    lintspaces: {
+      all: {
+        src: [
+            'src/*.js',
+            'docs/*.md'
+        ],
+        options: {
+            editorconfig: '.editorconfig'
+        }
+      }
     }
   });
 
-  grunt.registerTask('test', ['jshint', 'jasmine:marionette']);
+  grunt.registerTask('lint', ['lintspaces', 'jshint']);
+
+  grunt.registerTask('test', ['lint', 'jasmine:marionette']);
 
   grunt.registerTask('dev', ['test', 'watch:marionette']);
 
   grunt.registerTask('server', ['jasmine:marionette:build', 'connect:server', 'watch:server']);
 
   // Default task.
-  grunt.registerTask('default', ['jshint', 'jasmine:coverage', 'preprocess', 'concat', 'uglify']);
+  grunt.registerTask('default', ['lint', 'jasmine:coverage', 'preprocess', 'concat', 'uglify']);
 
 };

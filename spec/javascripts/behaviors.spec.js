@@ -164,8 +164,8 @@ describe("Behaviors", function(){
       v.render();
       v.$el.click();
 
-      expect(spy).toHaveBeenCalled();
-      expect(spy2).toHaveBeenCalled();
+      expect(spy).toHaveBeenCalledOn(sinon.match.instanceOf(Marionette.Behavior));
+      expect(spy2).toHaveBeenCalledOn(sinon.match.instanceOf(Marionette.Behavior));
     });
 
     it("should call the behaviors event when event handler is a string", function() {
@@ -173,7 +173,7 @@ describe("Behaviors", function(){
       v.render();
       v.$el.click();
 
-      expect(spy3).toHaveBeenCalled();
+      expect(spy3).toHaveBeenCalled(sinon.match.instanceOf(Marionette.Behavior));
     });
   });
 

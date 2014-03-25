@@ -1,7 +1,7 @@
 # Marionette.Behavior
 
 
-A `Behavior` is an  isolated set of DOM / user interactions interactions  that can be mixed into any `View`. `Behaviors` allow you to blackbox `View` specific interactions into portable logical chunks, keeping your `views` simple and your code DRY.
+A `Behavior` is an  isolated set of DOM / user interactions that can be mixed into any `View`. `Behaviors` allow you to blackbox `View` specific interactions into portable logical chunks, keeping your `views` simple and your code DRY.
 
 ## Documentation Index
 

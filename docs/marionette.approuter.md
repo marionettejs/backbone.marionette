@@ -9,6 +9,7 @@ Have your routers configured to call the method on your object, directly.
 * [Configure Routes In Constructor](#configure-routes-in-constructor)
 * [Add Routes At Runtime](#add-routes-at-runtime)
 * [Specify A Controller](#specify-a-controller)
+* [onRoute](#onroute)
 
 ## Configure Routes
 
@@ -111,3 +112,8 @@ contain the methods that you specified in the `appRoutes`.
 
 It is recommended that you divide your controller objects into smaller pieces of related functionality
 and have multiple routers / controllers, instead of just one giant router and controller.
+
+## onRoute
+
+If it exists, AppRouters will call the `onRoute` method whenever a user navigates within your app. The
+callback receives three arguments: the name, path, and arguments of the route.

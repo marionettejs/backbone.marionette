@@ -1,11 +1,11 @@
 # Marionette.ItemView
 
-An `ItemView` is a view that represents a single item. That item may be a 
+An `ItemView` is a view that represents a single item. That item may be a
 `Backbone.Model` or may be a `Backbone.Collection`. Whichever it is though, it
-will be treated as a single item. 
+will be treated as a single item.
 
-ItemView extends directly from Marionette.View. Please see 
-[the Marionette.View documentation](marionette.view.md) 
+ItemView extends directly from Marionette.View. Please see
+[the Marionette.View documentation](marionette.view.md)
 for more information on available features and functionality.
 
 Additionally, interactions with Marionette.Region
@@ -68,8 +68,8 @@ also requires you to read data arguments from an object, as demonstrated in the 
 ## Rendering A Collection In An ItemView
 
 While the most common way to render a Backbone.Collection is to use
-a `CollectionView` or `CompositeView`, if you just need to render a 
-simple list that does not need a lot of interaction, it does not 
+a `CollectionView` or `CompositeView`, if you just need to render a
+simple list that does not need a lot of interaction, it does not
 always make sense to use these. A Backbone.Collection can be
 rendered with a simple ItemView, using the templates to iterate
 over an `items` array.
@@ -103,12 +103,12 @@ var view = new MyItemsView({
 // show the view via a region or calling the .render method directly
 ```
 
-Rendering this view will convert the `someCollection` collection in to 
+Rendering this view will convert the `someCollection` collection in to
 the `items` array for your template to use.
 
 For more information on when you would want to do this, and what options
-you have for retrieving an individual item that was clicked or 
-otherwise interacted with, see the blog post on 
+you have for retrieving an individual item that was clicked or
+otherwise interacted with, see the blog post on
 [Getting The Model For A Clicked Element](http://lostechies.com/derickbailey/2011/10/11/backbone-js-getting-the-model-for-a-clicked-element/).
 
 ## Events and Callback Methods
@@ -184,7 +184,7 @@ Item views will serialize a model or collection, by default, by
 calling `.toJSON` on either the model or collection. If both a model
 and collection are attached to an item view, the model will be used
 as the data source. The results of the data serialization will be passed to the template
-that is rendered. 
+that is rendered.
 
 If the serialization is a model, the results are passed in directly:
 
@@ -205,7 +205,7 @@ MyItemView.render();
 </script>
 ```
 
-If the serialization is a collection, the results are passed in as an 
+If the serialization is a collection, the results are passed in as an
 `items` array:
 
 ```js

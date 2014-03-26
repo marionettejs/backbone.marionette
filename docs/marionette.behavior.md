@@ -10,7 +10,7 @@ A `Behavior` is an  isolated set of DOM / user interactions that can be mixed in
 * [API](#api)
   * [Event proxy](#the-event-proxy)
   * [$](#$)
-  * [$el](#$el)
+  * [$el](#el)
   * [Defaults](#defaults)
   * [View](#view)
 
@@ -151,12 +151,12 @@ Marionette.Behavior.extend({
 	});
 ```
 
-### $el
-`$el` is a direct proxy of the views `el` cached as a jquery selector.
+### $el()
+`$el()` is convenience method to get the `$el` from the view.
 ```js
 Marionette.Behavior.extend({
 	onShow: function() {
-		this.$el.fadeOut('slow')
+		this.$el().fadeOut('slow');
 	}
 });
 ```
@@ -170,7 +170,7 @@ Marionette.Behavior.extend({
 	defaults: function() {
 		return {
 			'deepSpace': 9
-		}
+		};
 	}
 });
 ```

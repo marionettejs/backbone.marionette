@@ -324,4 +324,36 @@ describe("Behaviors", function(){
       expect(spy).toHaveBeenCalled();
     });
   });
+
+  describe("behavior $el", function() {
+
+    var spy, FakeView;
+
+    beforeEach(function() {
+      spy = sinon.spy();
+      var FakeBehavior = Marionette.Behavior.extend({
+        onRender: function() {
+          spy(this.$el());
+        }
+      });
+      Marionette.Behaviors.behaviorsLookup = {
+        FakeBehavior: FakeBehavior
+      };
+
+      FakeView = Marionette.View.extend({
+        behaviors: {
+          FakeBehavior: {}
+        }
+      });
+    });
+
+    it("proxies to the $el from the view", function() {
+      var view = new FakeView();
+
+      view.triggerMethod('render');
+
+      expect(spy).toHaveBeenCalledWith(view.$el);
+    });
+
+  });
 });

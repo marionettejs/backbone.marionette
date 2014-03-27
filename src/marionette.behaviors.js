@@ -7,11 +7,21 @@ Marionette.Behaviors = (function(Marionette, _) {
       'bindUIElements', 'unbindUIElements',
       'delegateEvents', 'undelegateEvents',
       'onShow', 'onClose',
-      'behaviorEvents', 'triggerMethod'
+      'behaviorEvents', 'triggerMethod',
+      'setElement'
     ]);
   }
 
   var methods = {
+    setElement: function(setElement, behaviors) {
+      setElement.apply(this, _.tail(arguments, 2));
+
+      // proxy behavior $el to the view's $el
+      _.each(behaviors, function(b) {
+        b.$el = this.$el;
+      }, this);
+    },
+
     onShow: function(onShow, behaviors) {
       var args = _.tail(arguments, 2);
 

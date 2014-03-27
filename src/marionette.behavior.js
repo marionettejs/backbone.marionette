@@ -9,11 +9,6 @@ Marionette.Behavior = (function(_, Backbone){
       return this.view.$.apply(this.view, arguments);
     };
 
-    // proxy behavior $el method to the view
-    this.$el = function() {
-      return this.view.$el.apply(this.view, arguments);
-    };
-
     this.initialize.apply(this, arguments);
   }
 

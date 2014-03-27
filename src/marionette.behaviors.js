@@ -87,10 +87,15 @@ Marionette.Behaviors = (function(Marionette, _) {
 
     behaviorEvents: function(behaviorEvents, behaviors) {
       var _behaviorsEvents = {};
+      var viewUI = _.result(this, 'ui');
 
       _.each(behaviors, function(b, i) {
-        var behaviorEvents = _.result(b, 'events') || {};
         var _events = {};
+        var behaviorEvents = _.result(b, 'events') || {};
+        var behaviorUI = _.result(b, 'ui');
+        var ui = _.extend({}, viewUI, behaviorUI);
+
+        behaviorEvents = Marionette.normalizeUIKeys(behaviorEvents, ui);
 
         _.each(_.keys(behaviorEvents), function(key) {
           // append white-space at the end of each key to prevent behavior key collisions

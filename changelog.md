@@ -1,3 +1,11 @@
+### v1.7.3 [view commit logs](https://github.com/marionettejs/backbone.marionette/compare/v1.7.2...v1.7.3)
+
+* Behaviors
+  * Adds the ability to use `@ui` interpolation within the events hash on a behavior.
+
+* Fixes
+  * Corrects broken view $el proxy in behaviors.
+
 ### v1.7.2 [view commit logs](https://github.com/marionettejs/backbone.marionette/compare/v1.7.1...v1.7.2)
 
 * Fixes

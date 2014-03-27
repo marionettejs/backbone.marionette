@@ -178,28 +178,51 @@ describe("Behaviors", function(){
   });
 
   describe("behavior UI", function() {
-    var V, hold, spy, onShowSpy, onCloseSpy, Layout;
+    var V, hold, spy, onShowSpy, onCloseSpy, Layout, testBehavior;
 
     beforeEach(function() {
       hold = {};
       spy = new sinon.spy();
       onShowSpy = new sinon.spy();
       onCloseSpy = new sinon.spy();
+      onDogeClickSpy = new sinon.spy();
+      onCoinsClickSpy = new sinon.spy();
+
       hold.test = Marionette.Behavior.extend({
         ui: {
-          'doge': '.doge'
+          doge: '.doge'
         },
+
+        initialize: function() {
+          testBehavior = this;
+        },
+
+        events: {
+          'click @ui.doge': 'onDogeClick',
+          'click @ui.coins': 'onCoinsClick'
+        },
+
         onRender: function() {
           spy(this.ui.doge.length);
         },
+
         onShow: onShowSpy,
-        onClose: onCloseSpy
+
+        onClose: onCloseSpy,
+
+        onDogeClick: onDogeClickSpy,
+
+        onCoinsClick: onCoinsClickSpy
+
       });
 
       Marionette.Behaviors.behaviorsLookup = hold;
 
       V = Marionette.ItemView.extend({
-        template: _.template('<div class="doge"></div>'),
+        template: _.template('<div class="doge"></div><div class="coins"></div>'),
+        ui: {
+          coins: '.coins'
+        },
         behaviors: {
           test: {}
         }
@@ -220,6 +243,22 @@ describe("Behaviors", function(){
       v = new V;
       v.render();
       expect(spy).toHaveBeenCalled(1);
+    });
+
+    it("should handle behavior ui click event", function() {
+      v = new V;
+      v.render();
+      v.$el.find('.doge').click();
+
+      expect(onDogeClickSpy).toHaveBeenCalledOn(testBehavior);
+    });
+
+    it("should handle view ui click event", function() {
+      v = new V;
+      v.render();
+      v.$el.find('.coins').click();
+
+      expect(onCoinsClickSpy).toHaveBeenCalledOn(testBehavior);
     });
 
     it("should call onShow", function() {

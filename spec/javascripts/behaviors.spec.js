@@ -113,7 +113,7 @@ describe("Behaviors", function(){
     });
 
     it("should call initialize when a behavior is created", function() {
-      var b = new Behavior;
+      var b = new Behavior({}, {});
 
       expect(b.initialize).toHaveBeenCalled();
     });
@@ -174,6 +174,35 @@ describe("Behaviors", function(){
       v.$el.click();
 
       expect(spy3).toHaveBeenCalled(sinon.match.instanceOf(Marionette.Behavior));
+    });
+  });
+
+  describe("behavior $el", function() {
+    var View, view, hold, behavior;
+
+    beforeEach(function() {
+      hold = {}
+      hold.test = Marionette.Behavior.extend({
+        initialize: function() {
+          behavior = this;
+        }
+      });
+
+      View = Marionette.ItemView.extend({
+        template: _.template(""),
+        behaviors: {
+          test: {}
+        }
+      });
+
+      Marionette.Behaviors.behaviorsLookup = hold;
+
+      view = new View;
+      view.setElement(document.createElement("doge"));
+    });
+
+    it("should proxy the views $el", function() {
+      expect(behavior.$el).toEqual(view.$el);
     });
   });
 

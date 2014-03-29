@@ -7,6 +7,7 @@
 Marionette.Callbacks = function(){
   this._deferred = Marionette.$.Deferred();
   this._callbacks = [];
+  this._callbacksPromises = [];
 };
 
 _.extend(Marionette.Callbacks.prototype, {
@@ -15,19 +16,23 @@ _.extend(Marionette.Callbacks.prototype, {
   // guaranteed to execute, even if they are added after the
   // `run` method is called.
   add: function(callback, contextOverride){
-    this._callbacks.push({cb: callback, ctx: contextOverride});
-
-    this._deferred.done(function(context, options){
+    var callbackPromise = this._deferred.then(function(context, options){
       if (contextOverride){ context = contextOverride; }
-      callback.call(context, options);
+      return callback.call(context, options);
     });
+
+    this._callbacks.push({cb: callback, ctx: contextOverride});
+    this._callbacksPromises.push(callbackPromise);
   },
 
-  // Run all registered callbacks with the context specified.
+  // Run all registered callbacks with the context specified and
+  // return promise that will be resolved when all returned promises
+  // from callbacks will be resolved.
   // Additional callbacks can be added after this has been run
   // and they will still be executed.
   run: function(options, context){
     this._deferred.resolve(context, options);
+    return $.when.apply(null, this._callbacksPromises).then($.noop);
   },
 
   // Resets the list of callbacks to be run, allowing the same list
@@ -36,6 +41,7 @@ _.extend(Marionette.Callbacks.prototype, {
     var callbacks = this._callbacks;
     this._deferred = Marionette.$.Deferred();
     this._callbacks = [];
+    this._callbacksPromises = [];
 
     _.each(callbacks, function(cb){
       this.add(cb.cb, cb.ctx);

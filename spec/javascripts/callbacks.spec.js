@@ -102,4 +102,78 @@ describe("callbacks", function(){
     });
   });
 
+  describe("when registering callbacks that return promises and running them", function() {
+    var callbacks, asyncCallback1, defer1, asyncCallback2, defer2, syncCallback, syncCallbackWithReturnedValue, result;
+
+    beforeEach(function() {
+      defer1 = new $.Deferred();
+      asyncCallback1 = sinon.spy(function() {return defer1.promise()});
+
+      defer2 = new $.Deferred();
+      asyncCallback2 = sinon.spy(function() {return defer2.promise()});
+
+      syncCallback = sinon.spy();
+      syncCallbackWithReturnedValue = sinon.spy(function() {return {foo: "bar"};});
+
+      callbacks = new Backbone.Marionette.Callbacks();
+
+      callbacks.add(asyncCallback1);
+      callbacks.add(asyncCallback2);
+      callbacks.add(syncCallback);
+      callbacks.add(syncCallbackWithReturnedValue);
+
+      result = callbacks.run();
+    });
+
+    it("should execute the 1st callback", function(){
+      expect(asyncCallback1).toHaveBeenCalled();
+    });
+
+    it("should execute the 2nd callback", function(){
+      expect(asyncCallback2).toHaveBeenCalled();
+    });
+
+    it("should execute the 3rd callback", function(){
+      expect(syncCallback).toHaveBeenCalled();
+    });
+
+    it("should execute the 4th callback", function(){
+      expect(syncCallbackWithReturnedValue).toHaveBeenCalled();
+    });
+
+    it("should return promise", function() {
+      expect(result).toBeDefined();
+      expect(result.then).toEqual(jasmine.any(Function));
+    });
+
+    it("returned promise should not be resolved", function() {
+      expect(result.state()).toBe("pending");
+    });
+
+    describe("when one async callback is resolved", function() {
+      beforeEach(function() {
+        defer1.resolve();
+      });
+
+      it("returned promise should not be resolved", function() {
+        expect(result.state()).toBe("pending");
+      });
+
+      describe("when all async callbacks are resolved", function() {
+        beforeEach(function() {
+          defer2.resolve();
+        });
+
+        it("returned promise should be resolved", function() {
+          expect(result.state()).toBe("resolved");
+        });
+
+        it("promise should be resolved without arguments", function() {
+          var spy = sinon.spy();
+          result.then(spy);
+          expect(spy).toHaveBeenCalledWith();
+        });
+      });
+    });
+  });
 });

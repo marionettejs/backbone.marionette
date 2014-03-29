@@ -76,7 +76,7 @@ contr.listenTo(something, "bar", function(){...});
 // close the controller: unbind all of the
 // event handlers, trigger the "close" event and 
 // call the onClose method
-controller.close(arg1, arg2);
+contr.close(arg1, arg2);
 ```
 
 ## On The Name 'Controller'

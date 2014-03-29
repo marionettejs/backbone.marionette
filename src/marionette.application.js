@@ -39,11 +39,17 @@ _.extend(Marionette.Application.prototype, Backbone.Events, {
   // initializes all of the regions that have been added
   // to the app, and runs all of the initializer functions
   start: function(options){
-    this.triggerMethod("initialize:before", options);
-    this._initCallbacks.run(options, this);
-    this.triggerMethod("initialize:after", options);
+    this._startPromise = this._startPromise || this._runInitCallbacksAndTriggerEvents(options);
+    return this._startPromise;
+  },
 
-    this.triggerMethod("start", options);
+  _runInitCallbacksAndTriggerEvents: function(options) {
+    this.triggerMethod("initialize:before", options);
+
+    return this._initCallbacks.run(options, this).then(_.bind(function() {
+      this.triggerMethod("initialize:after", options);
+      this.triggerMethod("start", options);
+    }, this));
   },
 
   // Add regions to your app.

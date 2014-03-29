@@ -19,6 +19,9 @@ Marionette.Module = function(moduleName, app, options){
 
   this.triggerMethod = Marionette.triggerMethod;
 
+  // store stop promise to do nothing when call stop before start
+  this._stopPromise = $.when();
+
   if (_.isFunction(this.initialize)){
     this.initialize(this.options, moduleName, app);
   }
@@ -50,48 +53,72 @@ _.extend(Marionette.Module.prototype, Backbone.Events, {
   // Start the module, and run all of its initializers
   start: function(options){
     // Prevent re-starting a module that is already started
-    if (this._isInitialized){ return; }
-
-    // start the sub-modules (depth-first hierarchy)
-    _.each(this.submodules, function(mod){
-      // check to see if we should start the sub-module with this parent
-      if (mod.startWithParent){
-        mod.start(options);
-      }
-    });
-
-    // run the callbacks to "start" the current module
-    this.triggerMethod("before:start", options);
-
-    this._initializerCallbacks.run(options, this);
-    this._isInitialized = true;
-
-    this.triggerMethod("start", options);
+    this._startPromise = this._startPromise || this._startSubmodulesAndRunInitializers(options);
+    // invalidate stop promise cache
+    this._stopPromise = null;
+    return this._startPromise;
   },
 
-  // Stop this module by running its finalizers and then stop all of
-  // the sub-modules for this module
+  _startSubmodulesAndRunInitializers: function(options) {
+    var startSubmodules = _.bind(this._startSubmodules, this, options),
+        runInitializers = _.bind(this._runInitializers, this, options);
+    return $.when(this._stopPromise).then(startSubmodules).then(runInitializers);
+  },
+
+  // start the sub-modules (depth-first hierarchy)
+  _startSubmodules: function(options) {
+    return $.when.apply(null, _.map(this.submodules, function(mod){
+      // check to see if we should start the sub-module with this parent
+      if (mod.startWithParent){
+        return mod.start(options);
+      }
+    }));
+  },
+
+  _runInitializers: function(options) {
+    this.triggerMethod("before:start", options);
+
+    // run the callbacks to "start" the current module
+    return this._initializerCallbacks.run(options, this).then(_.bind(function() {
+      this.triggerMethod("start", options);
+    }, this));
+  },
+
+  // Stop this module by stopping all of the sub-modules
+  // for this module and then run its finalizers
   stop: function(){
-    // if we are not initialized, don't bother finalizing
-    if (!this._isInitialized){ return; }
-    this._isInitialized = false;
+    this._stopPromise = this._stopPromise || this._stopSubmodulesAndRunFinalizers();
+    // invalidate start promise cache
+    this._startPromise = null;
+    return this._stopPromise;
+  },
 
-    Marionette.triggerMethod.call(this, "before:stop");
+  _stopSubmodulesAndRunFinalizers: function() {
+    var stopSubmodules = _.bind(this._stopSubmodules, this),
+        runFinalizers = _.bind(this._runFinalizers, this);
+    return $.when(this._startPromise).then(stopSubmodules).then(runFinalizers);
+  },
 
-    // stop the sub-modules; depth-first, to make sure the
-    // sub-modules are stopped / finalized before parents
-    _.each(this.submodules, function(mod){ mod.stop(); });
+  // stop the sub-modules; depth-first, to make sure the
+  // sub-modules are stopped / finalized before parents
+  _stopSubmodules: function() {
+    return $.when.apply(null, _.map(this.submodules, function(mod){
+      return mod.stop();
+    }));
+  },
 
-    // run the finalizers
-    this._finalizerCallbacks.run(undefined,this);
+  _runFinalizers: function() {
+    this.triggerMethod("before:stop");
 
-    // reset the initializers and finalizers
-    this._initializerCallbacks.reset();
-    this._finalizerCallbacks.reset();
+    // run the callbacks to "stop" the current module
+    return this._finalizerCallbacks.run(undefined, this).then(_.bind(function() {
+      this._initializerCallbacks.reset();
+      this._finalizerCallbacks.reset();
 
-    this.stopListening();
+      this.stopListening();
 
-    Marionette.triggerMethod.call(this, "stop");
+      this.triggerMethod("stop");
+    }, this));
   },
 
   // Configure the module with a definition function and any custom args
@@ -227,12 +254,10 @@ _.extend(Marionette.Module, {
       // add the module initializer config
       parentModule.addInitializer(function(options){
         if (module.startWithParent){
-          module.start(options);
+          return module.start(options);
         }
       });
-
     }
-
   }
 });
 

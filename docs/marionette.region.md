@@ -11,13 +11,16 @@ Using the `Layout` class you can create nested regions.
 * [Defining An Application Region](#defining-an-application-region)
 * [Initialize A Region With An `el`](#initialize-a-region-with-an-el)
 * [Basic Use](#basic-use)
+* [Showing a view](#showing-a-view)
+* [Reusing Views via `swap`](#reusing-views-via-swap)
 * [`reset` A Region](#reset-a-region)
 * [Set How View's `el` Is Attached](#set-how-views-el-is-attached)
 * [Attach Existing View](#attach-existing-view)
   * [Set `currentView` On Initialization](#set-currentview-on-initialization)
   * [Call `attachView` On Region](#call-attachview-on-region)
 * [Region Events And Callbacks](#region-events-and-callbacks)
-  * [View Callbacks And Events For Regions](#view-callbacks-and-events-for-regions)
+  * [Events raised during `show`](#events-raised-during-show)
+  * [Events raised during `swap`](#events-raised-during-swap)
 * [Custom Region Types](#custom-region-types)
   * [Attaching Custom Region Types](#attaching-custom-region-types)
   * [Instantiate Your Own Region](#instantiate-your-own-region)
@@ -74,6 +77,8 @@ var mgr = new Backbone.Marionette.Region({
 
 ## Basic Use
 
+### Showing a View
+
 Once a region is defined, you can call its `show`
 and `close` methods to display and shut-down a view:
 
@@ -88,7 +93,9 @@ MyApp.mainRegion.close();
 ```
 
 If you replace the current view with a new view by calling `show`,
-it will automatically close the previous view.
+it will automatically close the previous view. Also, several
+events will be triggered on the views; see
+[Region Events And Callbacks](#region-events-and-callbacks) for details.
 
 ```js
 // Show the first view.
@@ -101,7 +108,38 @@ var anotherView = new AnotherView();
 MyApp.mainRegion.show(anotherView);
 ```
 
-## `reset` A Region
+### Reusing Views via `swap`
+
+Sometimes it is inconvenient to have to rebuild a view so Marionette's 
+regions also support view `swap`ping. When `swap`ping out views, the
+last visible view will be returned so your code doesn't need to track
+it internally. Also, several events will be triggered on the views;
+see [Region Events And Callbacks](#region-events-and-callbacks) for details.
+
+```js
+// create some views
+var myView = new MyView();
+var anotherView = new AnotherView();
+
+// Show the first view.
+MyApp.mainRegion.swap(myView);
+
+// Replace the view with another.
+MyApp.mainRegion.swap(anotherView);
+
+// restore the original view without having to `new` it up again.
+var lastView = MyApp.mainRegion.swap(myView);
+
+// swap returns the last visible view when swapping out
+lastView.disableDocumentDelegates(); // sample method to illustrate usage
+
+// ...
+
+Some common examples of this include display mode vs. edit mode,
+tabs (only show the tab for the current view), a "loading" spinner
+view, etc.
+
+### `reset` A Region
 
 A region can be `reset` at any time. This closes any existing view
 being displayed, and deletes the cached `el`. The next time the
@@ -115,7 +153,7 @@ myRegion.reset();
 This is useful when regions are re-used across view
 instances, and in unit testing.
 
-## Set How View's `el` Is Attached
+### Set How View's `el` Is Attached
 
 Override the region's `open` method to change how the view is attached
 to the DOM. This method receives one parameter - the view to show.
@@ -142,7 +180,7 @@ Marionette.Region.prototype.open = function(view){
 This example will cause a view to slide down from the top
 of the region, instead of just appearing in place.
 
-## Attach Existing View
+### Attach Existing View
 
 There are some scenarios where it's desirable to attach an existing
 view to a region , without rendering or showing the view, and
@@ -155,7 +193,7 @@ There are two ways to accomplish this:
 * set the `currentView` in the region's constructor
 * call `attachView` on the region instance
 
-### Set `currentView` On Initialization
+#### Set `currentView` On Initialization
 
 ```js
 var myView = new MyView({
@@ -168,7 +206,7 @@ var region = new Backbone.Marionette.Region({
 });
 ```
 
-### Call `attachView` On Region
+#### Call `attachView` On Region
 
 ```js
 MyApp.addRegions({
@@ -184,8 +222,9 @@ MyApp.someRegion.attachView(myView);
 
 ## Region Events And Callbacks
 
-A region will raise a few events when showing and
-closing views:
+### Events raised during `show`:
+A region will raise a few events when showing
+and closing views:
 
 * "before:show" / `onBeforeShow` - Called on the view instance after the view has been rendered, but before its been displayed.
 * "before:show" / `onBeforeShow` - Called on the region instance after the view has been rendered, but before its been displayed.
@@ -234,26 +273,56 @@ MyView = Marionette.ItemView.extend({
 });
 ```
 
-### View Callbacks And Events For Regions
+### Events raised during `swap`:
+A region will raise a few events when swapping out views:
+* "swap" / `onSwap` - Called on the region instance when the view has been rendered and displayed.
+* "swapped-out" / `onSwappedOut` - Called on the old view when has been replaced by the new one.
+* "swapped-in" / `onSwappedIn` - Called on the new view when it has been rendered and displayed.
 
-The region will call an `onShow` method on the view
-that was displayed. It will also trigger a "show" event
-from the view:
+These events can be used to run code when your region 
+is swapping between views.
 
 ```js
-MyView = Backbone.View.extend({
-  onShow: function(){
-    // the view has been shown
+var MyRegion = Backbone.Marionette.Region.extend({
+  onSwap: function(view){
+    // the `view` has been swapped out
   }
 });
 
-view = new MyView();
-
-view.on("show", function(){
-  // the view has been shown.
+MyView = Marionette.ItemView.extend({
+  onSwappedIn: function(){
+    // called when the view has been added to the region
+  },
+  onSwappedOut: function(){
+    // called when the view has been replaced
+  }
 });
 
-MyApp.mainRegion.show(view);
+MyApp.mainRegion = new MyRegion();
+
+MyApp.mainRegion.on("swap", function(view){
+  // manipulate the `view` or do something extra
+  // with the region via `this`
+});
+
+var view1 = new MyView();
+var view2 = new MyView();
+
+view1.on("swapped-out", function(){
+  // the view has been swapped-out.
+});
+view2.on("swapped-in", function(){
+  // the view has been swapped-in.
+});
+
+// Triggers `swap` on the region.
+// Triggers `swapped-in` on `view1`
+MyApp.mainRegion.swap(view1);
+
+// Triggers `swap` on the region.
+// Triggers `swapped-out` on `view1`
+// Triggers `swapped-in` on `view2`
+MyApp.mainRegion.swap(view2);
 ```
 
 ## Custom Region Types

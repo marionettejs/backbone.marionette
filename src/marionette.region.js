@@ -116,13 +116,19 @@ _.extend(Marionette.Region.prototype, Backbone.Events, {
   // directly from the `el` attribute. Also calls an optional
   // `onShow` and `close` method on your view, just after showing
   // or just before closing the view, respectively.
-  show: function(view){
+  // The `preventDestroy` option can be used to prevent a view from being destroyed on show.
+  show: function(view, options){
     this.ensureEl();
 
+    var showOptions = options || {};
     var isViewClosed = view.isClosed || _.isUndefined(view.$el);
     var isDifferentView = view !== this.currentView;
+    var preventDestroy =  !!showOptions.preventDestroy;
 
-    if (isDifferentView) {
+    // only close the view if we don't want to preventDestroy and the view is different
+    var _shouldCloseView = !preventDestroy && isDifferentView;
+
+    if (_shouldCloseView) {
       this.close();
     }
 

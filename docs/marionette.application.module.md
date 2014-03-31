@@ -239,7 +239,7 @@ var FooModule = Marionette.Module.extend({
   constructor: function(moduleName, app, options) {
   },
 
-  initialize: function(options, app, moduleName) {
+  initialize: function(options, moduleName, app) {
   },
 
   onStart: function(options) {

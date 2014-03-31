@@ -110,7 +110,7 @@ MyApp.mainRegion.show(anotherView);
 
 ### Reusing Views via `swap`
 
-Sometimes it is inconvenient to have to rebuild a view so Marionette's 
+Sometimes it is inconvenient to have to rebuild a view so Marionette's
 regions also support view `swap`ping. When `swap`ping out views, the
 last visible view will be returned so your code doesn't need to track
 it internally. Also, several events will be triggered on the views;
@@ -279,7 +279,7 @@ A region will raise a few events when swapping out views:
 * "swapped-out" / `onSwappedOut` - Called on the old view when has been replaced by the new one.
 * "swapped-in" / `onSwappedIn` - Called on the new view when it has been rendered and displayed.
 
-These events can be used to run code when your region 
+These events can be used to run code when your region
 is swapping between views.
 
 ```js

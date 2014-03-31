@@ -112,15 +112,13 @@ _.extend(Marionette.Region, {
 _.extend(Marionette.Region.prototype, Backbone.Events, {
 
   // Similar to 'show' but enables switching between multiple views
-  // without destroying them.
+  // without closing them.
   // Handles calling the `render` method for you. Reads content
   // directly from the `el` attribute. Also calls an optional
   // `onSwap` on the region, `onSwappedIn` on the new view, and
   // `onSwappedOut` on the old view, just after rendering the view.
   // Returns the old view (if defined).
   swap: function(view) {
-    view.ensureViewIsIntact();
-
     this.ensureEl();
 
     if (view === this.currentView) {

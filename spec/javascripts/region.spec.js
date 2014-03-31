@@ -96,7 +96,7 @@ describe("region", function(){
       expect(showSpy).toHaveBeenCalledOn(myRegion);
     });
 
-    describe("when passing 'preventDestroy' option", function(){
+    describe("when passing 'preventClose' option", function(){
 
       var myRegion, view1, view2;
 
@@ -112,9 +112,9 @@ describe("region", function(){
         myRegion.show(view1);
       });
 
-      describe("preventDestroy: true", function(){
+      describe("preventClose: true", function(){
         beforeEach(function(){
-          myRegion.show(view2, { preventDestroy: true });
+          myRegion.show(view2, { preventClose: true });
         });
 
         it("shouldn't 'close' the old view", function(){
@@ -122,9 +122,9 @@ describe("region", function(){
         });
       });
 
-      describe("preventDestroy: false", function(){
+      describe("preventClose: false", function(){
         beforeEach(function(){
-          myRegion.show(view2, { preventDestroy: false });
+          myRegion.show(view2, { preventClose: false });
         });
 
         it("should 'close' the old view", function(){

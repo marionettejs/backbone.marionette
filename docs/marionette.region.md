@@ -92,7 +92,7 @@ MyApp.mainRegion.close();
 
 If you replace the current view with a new view by calling `show`,
 by default it will automatically close the previous view.
-You can prevent this behavior by passing `{preventDestroy: true}` in the options
+You can prevent this behavior by passing `{preventClose: true}` in the options
 parameter. Several events will also be triggered on the views; see
 [Region Events And Callbacks](#region-events-and-callbacks) for details.
 
@@ -109,13 +109,13 @@ MyApp.mainRegion.show(anotherView);
 // Replace the view with another.
 // Prevent `close` from being called
 var anotherView2 = new AnotherView();
-MyApp.mainRegion.show(anotherView2, { preventDestroy: true });
+MyApp.mainRegion.show(anotherView2, { preventClose: true });
 ```
 
-NOTE: When using `preventDestroy: true` you must be careful to cleanup your old views
+NOTE: When using `preventClose: true` you must be careful to cleanup your old views
 manually to prevent memory leaks.
 
-### `reset` A Region
+## `reset` A Region
 
 A region can be `reset` at any time. This closes any existing view
 being displayed, and deletes the cached `el`. The next time the
@@ -198,7 +198,6 @@ MyApp.someRegion.attachView(myView);
 
 ## Region Events And Callbacks
 
-### Events raised during `show`:
 A region will raise a few events when showing
 and closing views:
 

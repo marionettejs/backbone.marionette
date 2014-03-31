@@ -19,7 +19,7 @@ describe("application modules", function(){
 
       describe("and no params are passed in", function() {
         beforeEach(function() {
-          module = app.module('Mod');
+          module = app.module("Mod");
         });
 
         it("should add module to the app", function(){
@@ -30,7 +30,7 @@ describe("application modules", function(){
       describe("and the define function is provided", function() {
         beforeEach(function() {
           additionalParam = {};
-          module = app.module('Mod', defineSpy, additionalParam);
+          module = app.module("Mod", defineSpy, additionalParam);
         });
 
         it("it should add module to the app", function(){
@@ -59,21 +59,21 @@ describe("application modules", function(){
       });
 
       describe("and the options object is used", function() {
-        describe('', function() {
+        describe("", function() {
           var options;
 
           beforeEach(function() {
             var ModuleClass = Backbone.Marionette.Module.extend({
               initialize: initializeSpy,
-              propA: 'becomes instance property'
+              propA: "becomes instance property"
             });
 
             options = {
               moduleClass: ModuleClass,
               define: defineSpy,
-              propB: 'becomes options property'
+              propB: "becomes options property"
             };
-            module = app.module('Mod', options, additionalParam);
+            module = app.module("Mod", options, additionalParam);
           });
 
           it("should add module to the app", function(){
@@ -84,7 +84,7 @@ describe("application modules", function(){
             expect(initializeSpy).toHaveBeenCalled();
           });
 
-          it('the define function is called', function() {
+          it("the define function is called", function() {
             expect(defineSpy).toHaveBeenCalled();
           });
 
@@ -104,7 +104,7 @@ describe("application modules", function(){
             );
           });
 
-          it('initialize function is called with arguments', function() {
+          it("initialize function is called with arguments", function() {
             expect(initializeSpy).toHaveBeenCalledWith(options, "Mod", app);
           });
 
@@ -125,21 +125,20 @@ describe("application modules", function(){
 
             var ModuleClass = Backbone.Marionette.Module.extend({
                 initialize: initializeSpy,
-                propA: 'becomes instance property'
+                propA: "becomes instance property"
             });
 
-            module = app.module('Mod', {
+            module = app.module("Mod", {
               moduleClass: ModuleClass,
               initialize: initializeOptionSpy,
-              propB: 'becomes options property'
+              propB: "becomes options property"
             });
           });
 
           it("initialize function is called", function() {
             expect(initializeOptionSpy).toHaveBeenCalled();
           });
-
-        })
+        });
       });
 
       describe("and using a module class", function() {
@@ -148,10 +147,10 @@ describe("application modules", function(){
         beforeEach(function() {
           ModuleClass = Backbone.Marionette.Module.extend({
               initialize: initializeSpy,
-              propA: 'becomes instance property'
+              propA: "becomes instance property"
           });
 
-          module = app.module('Mod', ModuleClass);
+          module = app.module("Mod", ModuleClass);
         });
 
         it("should add module to the app", function(){
@@ -162,9 +161,9 @@ describe("application modules", function(){
           expect(initializeSpy).toHaveBeenCalled();
         });
 
-        it('the initialize function is called with arguments', function() {
+        it("the initialize function is called with arguments", function() {
           // this is a weird side effect of ModuleClass being treated as the define function
-          // e.g. app.module('Mod', ModuleClass)
+          // e.g. app.module("Mod", ModuleClass)
           var defOptions = _.extend({}, ModuleClass);
           expect(initializeSpy).toHaveBeenCalledWith(defOptions, "Mod", app);
         });
@@ -186,8 +185,8 @@ describe("application modules", function(){
         var module1, module2;
 
         beforeEach(function() {
-          module1 = app.module('Mod');
-          module2 = app.module('Mod');
+          module1 = app.module("Mod");
+          module2 = app.module("Mod");
         });
 
         it("returns the same module", function() {
@@ -198,12 +197,12 @@ describe("application modules", function(){
 
       describe("and define functions are provided", function() {
         beforeEach(function() {
-          module = app.module('Mod', function(module, app) {
-            module.prop1 = 'first property';
+          module = app.module("Mod", function(module, app) {
+            module.prop1 = "first property";
           });
 
-          module = app.module('Mod', function(module, app) {
-            module.prop2 = 'second property';
+          module = app.module("Mod", function(module, app) {
+            module.prop2 = "second property";
           });
         });
 
@@ -224,8 +223,8 @@ describe("application modules", function(){
           parentDefineSpy = jasmine.createSpy();
           childDefineSpy = jasmine.createSpy();
 
-          parent = app.module('parent', parentDefineSpy);
-          child = app.module('parent.child', childDefineSpy);
+          parent = app.module("parent", parentDefineSpy);
+          child = app.module("parent.child", childDefineSpy);
         });
 
         it("parent should remain the same", function() {
@@ -249,12 +248,12 @@ describe("application modules", function(){
         var defineSpy;
         beforeEach(function() {
           defineSpy = jasmine.createSpy();
-          child = app.module('parent.child', defineSpy);
+          child = app.module("parent.child", defineSpy);
         });
 
         it("parent should be defined", function() {
           expect(app.parent).not.toBeUndefined();
-        })
+        });
 
         it("child should be created", function() {
           expect(child).toBe(app.parent.child);
@@ -262,44 +261,109 @@ describe("application modules", function(){
 
         it("definition should be called once", function() {
           expect(defineSpy.callCount).toBe(1);
-        })
+        });
       });
     });
   });
 
   describe(".start", function() {
     describe("when starting a module", function() {
-      var module, startSpy, beforeStartSpy, initializeSpy1, initializeSpy2;
+      var module, startSpy, beforeStartSpy, initializeSpy1, initializeSpy2, result;
       beforeEach(function() {
         startSpy = jasmine.createSpy();
         beforeStartSpy = jasmine.createSpy();
         initializeSpy1 = jasmine.createSpy();
         initializeSpy2 = jasmine.createSpy();
 
-        module = app.module('Mod');
-        module.on('before:start', beforeStartSpy);
-        module.on('start', startSpy);
+        module = app.module("Mod");
+        module.on("before:start", beforeStartSpy);
+        module.on("start", startSpy);
         module.addInitializer(initializeSpy1);
         module.addInitializer(initializeSpy2);
 
-        module.start();
+        result = module.start();
       });
 
-      it('triggers module before start event', function() {
+      it("triggers module before start event", function() {
         expect(beforeStartSpy).toHaveBeenCalled();
       });
 
-      it('triggers module start event', function() {
+      it("triggers module start event", function() {
         expect(startSpy).toHaveBeenCalled();
       });
 
-      it('the module initializers are called', function() {
+      it("the module initializers are called", function() {
         expect(initializeSpy1).toHaveBeenCalled();
         expect(initializeSpy2).toHaveBeenCalled();
       });
 
-      it('the module is initialized', function() {
-        expect(module._isInitialized).toBe(true);
+      it("returns resolved promise", function() {
+        expect(result.state()).toBe("resolved");
+      });
+    });
+
+    describe("when starting a module with asyncInitializer", function() {
+      var module, startSpy, beforeStartSpy, asyncInitializeSpy, defer, initializeSpy, result;
+      beforeEach(function() {
+        defer = $.Deferred();
+        startSpy = sinon.spy();
+        beforeStartSpy = sinon.spy();
+        asyncInitializeSpy = sinon.spy(function() {return defer.promise();});
+        initializeSpy = jasmine.createSpy();
+
+        module = app.module("Mod");
+        module.on("before:start", beforeStartSpy);
+        module.on("start", startSpy);
+        module.addInitializer(asyncInitializeSpy);
+        module.addInitializer(initializeSpy);
+
+        result = module.start();
+      });
+
+      it("triggers module before start event", function() {
+        expect(beforeStartSpy).toHaveBeenCalled();
+      });
+
+      it("doesn't trigger module start event", function() {
+        expect(startSpy).not.toHaveBeenCalled();
+      });
+
+      it("the module initializers are called", function() {
+        expect(asyncInitializeSpy).toHaveBeenCalled();
+        expect(initializeSpy).toHaveBeenCalled();
+      });
+
+      it("returns unresolved promise", function() {
+        expect(result.state()).toBe("pending");
+      });
+
+      describe("when call start second time", function() {
+        var secondResult;
+        beforeEach(function() {
+          secondResult = module.start();
+        });
+
+        it("doesn't trigger module before start event second time", function() {
+          expect(beforeStartSpy).toHaveBeenCalledOnce();
+        });
+
+        it("returns the same promise", function() {
+          expect(secondResult).toBe(result);
+        });
+
+        describe("when asyncInitializer is resolved", function() {
+          beforeEach(function() {
+            defer.resolve();
+          });
+
+          it("triggers module start event", function() {
+            expect(startSpy).toHaveBeenCalled();
+          });
+
+          it("returned promise are resolved", function() {
+            expect(result.state()).toBe("resolved");
+          });
+        });
       });
     });
 
@@ -307,9 +371,9 @@ describe("application modules", function(){
       var startSpy;
 
       beforeEach(function() {
-        var module = app.module('Mod');
-        startSpy = sinon.spy()
-        module.on("before:start", startSpy)
+        var module = app.module("Mod");
+        startSpy = sinon.spy();
+        module.on("before:start", startSpy);
         module.start();
         module.start();
       });
@@ -324,39 +388,100 @@ describe("application modules", function(){
 
       describe("when starting parent", function() {
         describe("", function() {
-          beforeEach(function() {
-            parent = app.module('Parent');
-            child = app.module('Parent.Child');
+          var result;
 
-            childStartSpy = sinon.spy(child, 'start');
-            parentStartSpy = sinon.spy(parent, 'start');
-            parent.start();
+          beforeEach(function() {
+            parent = app.module("Parent");
+            child = app.module("Parent.Child");
+
+            childStartSpy = sinon.spy(child, "start");
+            parentStartSpy = sinon.spy(parent, "start");
+            result = parent.start();
           });
 
           it("parent is started", function() {
             expect(parentStartSpy).toHaveBeenCalled();
-          })
+          });
 
           it("child is started", function() {
             expect(childStartSpy).toHaveBeenCalled();
           });
+
+          it("returned promise are resolved", function() {
+            expect(result.state()).toBe("resolved");
+          });
         });
 
-        describe("and child is set to not start with parent", function() {
-          beforeEach(function() {
-            parent = app.module('Parent', {startWithParent: false});
-            child = app.module('Parent.Child', {startWithParent: false});
+        describe("and submodule starts async", function() {
+          var defer, onStartSpy, result;
 
-            childStartSpy = sinon.spy(child, 'start');
-            parent.start();
+          beforeEach(function() {
+            defer = $.Deferred();
+
+            parent = app.module("Parent");
+            child = app.module("Parent.Child");
+
+            childStartSpy = sinon.stub(child, "start", function() {return defer.promise();});
+            parentStartSpy = sinon.spy(parent, "start");
+
+            onStartSpy = sinon.spy();
+            parent.on("start", onStartSpy);
+
+            result = parent.start();
           });
 
-          it('the parent is started', function() {
+          it("parent is started", function() {
             expect(parentStartSpy).toHaveBeenCalled();
           });
 
-          it('the child is not started', function() {
+          it("child is started", function() {
+            expect(childStartSpy).toHaveBeenCalled();
+          });
+
+          it("parent's start event isn't triggered", function() {
+            expect(onStartSpy).not.toHaveBeenCalled();
+          });
+
+          it("return unresolved promise", function() {
+            expect(result.state()).toBe("pending");
+          });
+
+          describe("when submodule is started", function() {
+            beforeEach(function() {
+              defer.resolve();
+            });
+
+            it("triggers parent's start event", function() {
+              expect(onStartSpy).toHaveBeenCalled();
+            });
+
+            it("returned promise is resolved", function() {
+              expect(result.state()).toBe("resolved");
+            });
+          });
+        });
+
+        describe("and child is set to not start with parent", function() {
+          var result;
+
+          beforeEach(function() {
+            parent = app.module("Parent", {startWithParent: false});
+            child = app.module("Parent.Child", {startWithParent: false});
+
+            childStartSpy = sinon.spy(child, "start");
+            result = parent.start();
+          });
+
+          it("the parent is started", function() {
+            expect(parentStartSpy).toHaveBeenCalled();
+          });
+
+          it("the child is not started", function() {
             expect(childStartSpy).not.toHaveBeenCalled();
+          });
+
+          it("returned promise are resolved", function() {
+            expect(result.state()).toBe("resolved");
           });
         });
       });
@@ -367,24 +492,24 @@ describe("application modules", function(){
 
       describe("", function() {
         beforeEach(function() {
-          var module = app.module('Mod')
-          startSpy = sinon.spy(module, 'start');
+          var module = app.module("Mod");
+          startSpy = sinon.spy(module, "start");
           app.start();
         });
 
-        it('its module starts', function() {
+        it("its module starts", function() {
           expect(startSpy).toHaveBeenCalled();
         });
       });
 
       describe("and its module is set to not start with parent", function() {
         beforeEach(function() {
-          var module = app.module('Mod', {startWithParent: false})
-          startSpy = sinon.spy(module, 'start');
+          var module = app.module("Mod", {startWithParent: false});
+          startSpy = sinon.spy(module, "start");
           app.start();
         });
 
-        it('it does not start', function() {
+        it("it does not start", function() {
           expect(startSpy).not. toHaveBeenCalled();
         });
       });
@@ -398,7 +523,7 @@ describe("application modules", function(){
         app.start();
         initializeSpy = jasmine.createSpy();
 
-        module = app.module('Mod')
+        module = app.module("Mod");
         module.addInitializer(initializeSpy);
         module.start();
       });
@@ -416,23 +541,23 @@ describe("application modules", function(){
   describe(".stop", function() {
 
     describe("when stopping a module", function() {
-      var module, beforeStopSpy, stopSpy, finalizerSpy;
+      var module, beforeStopSpy, stopSpy, finalizerSpy, result;
 
       beforeEach(function() {
         beforeStopSpy = sinon.spy();
         stopSpy = sinon.spy();
         finalizerSpy = sinon.spy();
 
-        module = app.module('Mod');
+        module = app.module("Mod");
         module.addFinalizer(finalizerSpy);
-        module.on('before:stop', beforeStopSpy);
-        module.on('stop', stopSpy);
+        module.on("before:stop", beforeStopSpy);
+        module.on("stop", stopSpy);
 
         module.start();
-        module.stop();
+        result = module.stop();
       });
 
-      it('finalizer is called', function() {
+      it("finalizer is called", function() {
         expect(finalizerSpy).toHaveBeenCalled();
       });
 
@@ -443,32 +568,36 @@ describe("application modules", function(){
       it("stop event is triggered", function() {
         expect(stopSpy).toHaveBeenCalled();
       });
+
+      it("returned promise are resolved", function() {
+        expect(result.state()).toBe("resolved");
+      });
     });
 
     describe("when stopping a module with sub-modules", function() {
-      var module, child, beforeStopSpy, stopSpy, finalizerSpy;
+      var module, child, beforeStopSpy, stopSpy, finalizerSpy, result;
 
       beforeEach(function() {
         beforeStopSpy = sinon.spy();
         stopSpy = sinon.spy();
         finalizerSpy = sinon.spy();
 
-        module = app.module('Mod');
-        child = app.module('Mod.Child');
+        module = app.module("Mod");
+        child = app.module("Mod.Child");
         child.addFinalizer(finalizerSpy);
-        child.on('before:stop', beforeStopSpy);
-        child.on('stop', stopSpy);
-        spyOn(child, 'stop').andCallThrough();
+        child.on("before:stop", beforeStopSpy);
+        child.on("stop", stopSpy);
+        spyOn(child, "stop").andCallThrough();
 
         module.start();
-        module.stop();
+        result = module.stop();
       });
 
-      it('its submodule stop function is invoked', function() {
+      it("its submodule stop function is invoked", function() {
         expect(child.stop).toHaveBeenCalled();
-      })
+      });
 
-      it('its submodule finalizer is called', function() {
+      it("its submodule finalizer is called", function() {
         expect(finalizerSpy).toHaveBeenCalled();
       });
 
@@ -479,11 +608,15 @@ describe("application modules", function(){
       it("its submoule stop event is triggered", function() {
         expect(stopSpy).toHaveBeenCalled();
       });
+
+      it("returned promise are resolved", function() {
+        expect(result.state()).toBe("resolved");
+      });
     });
 
     describe("when stopping a module before its started", function() {
 
-      var parent, child, parentFinalizerSpy, childFinalizerSpy, parentStopSpy, childStopSpy;
+      var parent, child, parentFinalizerSpy, childFinalizerSpy, parentStopSpy, childStopSpy, result;
 
       beforeEach(function() {
         parentFinalizerSpy = sinon.spy();
@@ -491,16 +624,16 @@ describe("application modules", function(){
         parentStopSpy = sinon.spy();
         childStopSpy = sinon.spy();
 
-        parent = app.module('Parent');
-        child = app.module('Child');
+        parent = app.module("Parent");
+        child = app.module("Child");
 
-        parent.on('stop', parentStopSpy);
-        child.on('stop', childStopSpy);
+        parent.on("stop", parentStopSpy);
+        child.on("stop", childStopSpy);
 
         parent.addFinalizer(parentFinalizerSpy);
         child.addFinalizer(childFinalizerSpy);
 
-        parent.stop();
+        result = parent.stop();
       });
 
       it("the parent does not trigger a stop event", function() {
@@ -518,6 +651,123 @@ describe("application modules", function(){
       it("the child does not call its finalizer", function() {
         expect(childStopSpy).not.toHaveBeenCalled();
       });
-    })
+
+      it("returned promise are resolved", function() {
+        expect(result.state()).toBe("resolved");
+      });
+    });
+
+    describe("when stopping a module with asyn sub-modules, async starting and async finalizers", function() {
+      var module, child, result, asyncInitializerSpy, initializerDefer, asyncFinalizerSpy, finalizerDefer,
+          childStopDefer, onBeforeStopSpy, onStopSpy;
+
+      beforeEach(function() {
+        finalizerDefer = $.Deferred();
+        asyncFinalizerSpy = sinon.spy(function() {return finalizerDefer.promise();});
+
+        initializerDefer = $.Deferred();
+        asyncInitializerSpy = sinon.spy(function() {return initializerDefer.promise();});
+
+        module = app.module("Mod");
+        module.addInitializer(asyncInitializerSpy);
+        module.addFinalizer(asyncFinalizerSpy);
+
+        onBeforeStopSpy = sinon.spy();
+        module.on("before:stop", onBeforeStopSpy);
+
+        onStopSpy = sinon.spy();
+        module.on("stop", onStopSpy);
+
+        child = app.module("Mod.Child");
+
+        childStopDefer = $.Deferred();
+        sinon.stub(child, "stop", function() {return childStopDefer.promise();});
+
+        module.start();
+        result = module.stop();
+      });
+
+      it("doesn't stop child module", function() {
+        expect(child.stop).not.toHaveBeenCalled();
+      });
+
+      it("doesn't call finalizer", function() {
+        expect(asyncFinalizerSpy).not.toHaveBeenCalled();
+      });
+
+      it("doesn't trigger before:stop event", function() {
+        expect(onBeforeStopSpy).not.toHaveBeenCalled();
+      });
+
+      it("doesn't trigger stop event", function() {
+        expect(onStopSpy).not.toHaveBeenCalled();
+      });
+
+      it("returned promise in not resolved", function() {
+        expect(result.state()).toBe("pending");
+      });
+
+      describe("when starting is finished", function() {
+        beforeEach(function() {
+          initializerDefer.resolve();
+        });
+
+        it("stops child module", function() {
+          expect(child.stop).toHaveBeenCalled();
+        });
+
+        it("doesn't call finalizer", function() {
+          expect(asyncFinalizerSpy).not.toHaveBeenCalled();
+        });
+
+        it("doesn't trigger before:stop event", function() {
+          expect(onBeforeStopSpy).not.toHaveBeenCalled();
+        });
+
+        it("doesn't trigger stop event", function() {
+          expect(onStopSpy).not.toHaveBeenCalled();
+        });
+
+        it("returned promise in not resolved", function() {
+          expect(result.state()).toBe("pending");
+        });
+
+        describe("when child module is stopped", function() {
+          beforeEach(function() {
+            childStopDefer.resolve();
+          });
+
+          it("triggers before:stop event", function() {
+            expect(onBeforeStopSpy).toHaveBeenCalled();
+          });
+
+          it("calls finalizer", function() {
+            expect(asyncFinalizerSpy).toHaveBeenCalled();
+          });
+
+          it("doesn't trigger stop event", function() {
+            expect(onStopSpy).not.toHaveBeenCalled();
+          });
+
+          it("returned promise in not resolved", function() {
+            expect(result.state()).toBe("pending");
+          });
+
+          describe("when finalizer is finished", function() {
+            beforeEach(function() {
+              finalizerDefer.resolve();
+            });
+
+            it("triggers stop event", function() {
+              expect(onStopSpy).toHaveBeenCalled();
+            });
+
+            it("returned promise in resolved", function() {
+              expect(result.state()).toBe("resolved");
+            });
+          });
+        });
+      });
+    });
   });
 });

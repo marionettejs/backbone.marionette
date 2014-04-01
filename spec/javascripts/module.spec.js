@@ -145,32 +145,53 @@ describe("application modules", function(){
       describe("and using a module class", function() {
         var ModuleClass;
 
-        beforeEach(function() {
-          ModuleClass = Backbone.Marionette.Module.extend({
-              initialize: initializeSpy,
-              propA: 'becomes instance property'
+        describe('', function() {
+          beforeEach(function() {
+            ModuleClass = Backbone.Marionette.Module.extend({
+                initialize: initializeSpy,
+                propA: 'becomes instance property'
+            });
+
+            module = app.module('Mod', ModuleClass);
           });
 
-          module = app.module('Mod', ModuleClass);
-        });
+          it("should add module to the app", function(){
+            expect(module).toBe(app.Mod);
+          });
 
-        it("should add module to the app", function(){
-          expect(module).toBe(app.Mod);
-        });
+          it("the initialize function is called", function() {
+            expect(initializeSpy).toHaveBeenCalled();
+          });
 
-        it("the initialize function is called", function() {
-          expect(initializeSpy).toHaveBeenCalled();
-        });
+          it('the initialize function is called with arguments', function() {
+            // this is a weird side effect of ModuleClass being treated as the define function
+            // e.g. app.module('Mod', ModuleClass)
+            var defOptions = _.extend({}, ModuleClass);
+            expect(initializeSpy).toHaveBeenCalledWith(defOptions, "Mod", app);
+          });
 
-        it('the initialize function is called with arguments', function() {
-          // this is a weird side effect of ModuleClass being treated as the define function
-          // e.g. app.module('Mod', ModuleClass)
-          var defOptions = _.extend({}, ModuleClass);
-          expect(initializeSpy).toHaveBeenCalledWith(defOptions, "Mod", app);
-        });
+          it("prototype properties", function() {
+            expect(module.propA).not.toBeUndefined();
+          });
 
-        it("prototype properties", function() {
-          expect(module.propA).not.toBeUndefined();
+          it('startwithParent should be true', function() {
+            expect(module.startWithParent).toBe(true);
+          });
+        })
+        describe('and startWithParent is false', function() {
+          beforeEach(function() {
+            ModuleClass = Backbone.Marionette.Module.extend({
+                initialize: initializeSpy,
+                propA: 'becomes instance property',
+                startWithParent: false
+            });
+
+            module = app.module('Mod', ModuleClass);
+          });
+
+          it('startwithParent should be false', function() {
+            expect(module.startWithParent).toBe(false);
+          });
         });
       });
     });

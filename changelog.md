@@ -1,3 +1,13 @@
+### v1.7.4 [view commit logs](https://github.com/marionettejs/backbone.marionette/compare/v1.7.3...v1.7.4)
+
+* General
+  * Update bower dependencies to take advantage of the fact that marionette repos follow semver.
+
+* Fixes
+  * Behaviors events no longer collide with each other.
+  * Revert `stopListening` call on `stop` for modules. While this was a "fix", the docs were quite vague leading to breaking changes for many people.
+  * `startWithParent` is now respected when using a `moduleClass` property.
+
 ### v1.7.3 [view commit logs](https://github.com/marionettejs/backbone.marionette/compare/v1.7.2...v1.7.3)
 
 * Behaviors

@@ -120,12 +120,13 @@ describe("Behaviors", function(){
   });
 
   describe("behavior events", function() {
-    var V, Obj, spy, spy2;
+    var V, Obj, spy, spy2, viewSpy;
 
     beforeEach(function() {
       spy = sinon.spy();
       spy2 = sinon.spy();
       spy3 = sinon.spy();
+      viewSpy = sinon.spy();
 
       Obj = {
         ToolTip: Marionette.Behavior.extend({
@@ -149,6 +150,9 @@ describe("Behaviors", function(){
 
       V = Marionette.ItemView.extend({
         template: _.template(""),
+        events: {
+          "click": viewSpy
+        },
         behaviors: {
           ToolTip: {},
           DropDown: {},
@@ -157,23 +161,29 @@ describe("Behaviors", function(){
       });
 
       Marionette.Behaviors.behaviorsLookup = Obj;
-    });
-
-    it("should call the behaviors event", function() {
       v = new V();
       v.render();
       v.$el.click();
-
-      expect(spy).toHaveBeenCalledOn(sinon.match.instanceOf(Marionette.Behavior));
-      expect(spy2).toHaveBeenCalledOn(sinon.match.instanceOf(Marionette.Behavior));
     });
 
-    it("should call the behaviors event when event handler is a string", function() {
-      v = new V();
-      v.render();
-      v.$el.click();
+    it("should call first behaviors event", function() {
+      expect(spy).toHaveBeenCalledOnce();
+      expect(spy).toHaveBeenCalledOn(sinon.match.instanceOf(Marionette.Behavior))
+    });
 
-      expect(spy3).toHaveBeenCalled(sinon.match.instanceOf(Marionette.Behavior));
+    it("should call second behaviors event", function() {
+      expect(spy2).toHaveBeenCalledOn(sinon.match.instanceOf(Marionette.Behavior))
+      expect(spy2).toHaveBeenCalledOnce();
+    });
+
+    it("should call third behaviors event", function() {
+      expect(spy3).toHaveBeenCalledOnce();
+      expect(spy3).toHaveBeenCalledOn(sinon.match.instanceOf(Marionette.Behavior))
+    });
+
+    it("should call the view click handler", function() {
+      expect(viewSpy).toHaveBeenCalledOnce();
+      expect(viewSpy).toHaveBeenCalledOn(sinon.match.instanceOf(Marionette.View))
     });
   });
 

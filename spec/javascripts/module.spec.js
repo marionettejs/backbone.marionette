@@ -212,6 +212,45 @@ describe("application modules", function(){
           expect(module.prop2).not.toBeUndefined();
         });
       });
+
+      describe("and options object is provided", function() {
+
+        var module, aSpy, bSpy;
+
+        beforeEach(function() {
+          aSpy = sinon.spy();
+          bSpy = sinon.spy();
+
+          module = app.module('Mod', {
+            propA: 'module property a',
+            define: aSpy,
+            startWithParent: false
+          });
+
+          module = app.module('Mod', {
+            propB: 'module property b',
+            define: bSpy
+          });
+        });
+
+        it("it sets first the property", function() {
+          expect(module.options.propA).toBeDefined();
+        });
+
+        it("it does not set the second property", function() {
+          expect(module.options.propB).toBeUndefined();
+        });
+
+        it("it calls both define functions", function() {
+          expect(aSpy).toHaveBeenCalled();
+          expect(bSpy).toHaveBeenCalled();
+        });
+
+        it("startWithParent value will not be lost", function() {
+          expect(module.startWithParent).toBe(false);
+        })
+
+      });
     });
 
     describe("when creating a sub-module", function() {

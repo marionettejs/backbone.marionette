@@ -100,7 +100,8 @@ Marionette.Behaviors = (function(Marionette, _) {
         _.each(_.keys(behaviorEvents), function(key) {
           // append white-space at the end of each key to prevent behavior key collisions
           // this is relying on the fact backbone events considers "click .foo" the same  "click .foo "
-          var whitespace = (new Array(i+1)).join(" ");
+          // starts with an array of two so the first behavior has one space
+          var whitespace = (new Array(i+2)).join(" ");
           var eventKey   = key + whitespace;
           var handler    = _.isFunction(behaviorEvents[key]) ? behaviorEvents[key] : b[behaviorEvents[key]];
 

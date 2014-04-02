@@ -21,7 +21,7 @@ describe("region", function(){
         $(this.el).html("some content");
       },
 
-      onSwappedIn: function(){
+      onSwapIn: function(){
         $(this.el).addClass("onSwapInClass");
       }
     });
@@ -85,7 +85,7 @@ describe("region", function(){
         $(this.el).html("some content");
       },
 
-      onSwappedOut: function(){
+      onSwapOut: function(){
         $(this.el).addClass("onSwapOutClass");
       },
 
@@ -108,8 +108,8 @@ describe("region", function(){
       swapped2 = myRegion.swap(view2);
     });
 
-    it("should never call 'destroy' on the already open view", function(){
-      expect(view1.destroy).not.toHaveBeenCalled();
+    it("should never call 'close' on the already open view", function(){
+      expect(view1.close).not.toHaveBeenCalled();
     });
 
     it("should return undefined view as a result of the swap operation if no view has been registered", function(){
@@ -140,7 +140,7 @@ describe("region", function(){
         $(this.el).html("some content");
       },
 
-      destroy: function(){
+      close: function(){
       },
 
       open: function(){
@@ -156,7 +156,7 @@ describe("region", function(){
       myRegion = new MyRegion();
       myRegion.swap(view);
 
-      spyOn(view, "destroy");
+      spyOn(view, "close");
       spyOn(myRegion, "open");
       spyOn(view, "render");
       swapped = myRegion.swap(view);

@@ -128,12 +128,16 @@ _.extend(Marionette.Region.prototype, Backbone.Events, {
     var oldView = this.currentView;
 
     view.render();
+
+    Marionette.triggerMethod.call(this, "before:swap", view, oldView);
+    Marionette.triggerMethod.call(view, "before:swap", oldView);
+
     this.open(view);
     this.currentView = view;
 
-    Marionette.triggerMethod.call(this, "swap", view);
-    Marionette.triggerMethod.call(oldView, "swapped:out", view);
-    Marionette.triggerMethod.call(view, "swapped:in");
+    Marionette.triggerMethod.call(this, "swap", view, oldView);
+    Marionette.triggerMethod.call(oldView, "swap:out", view);
+    Marionette.triggerMethod.call(view, "swap:in", oldView);
 
     return oldView;
   },

@@ -275,53 +275,73 @@ MyView = Marionette.ItemView.extend({
 
 ### Events raised during `swap`:
 A region will raise a few events when swapping out views:
+* "before:swap" / `onBeforeSwap` - Called on the view instance after the view has been rendered, but before its been swapped.
+* "before:swap" / `onBeforeSwap` - Called on the region instance after the view has been rendered, but before its been swapped.
 * "swap" / `onSwap` - Called on the region instance when the view has been rendered and displayed.
-* "swapped-out" / `onSwappedOut` - Called on the old view when has been replaced by the new one.
-* "swapped-in" / `onSwappedIn` - Called on the new view when it has been rendered and displayed.
+* "swap-out" / `onSwapOut` - Called on the old view when has been replaced by the new one.
+* "swap-in" / `onSwapIn` - Called on the new view when it has been rendered and displayed.
 
 These events can be used to run code when your region
 is swapping between views.
 
 ```js
 var MyRegion = Backbone.Marionette.Region.extend({
-  onSwap: function(view){
-    // the `view` has been swapped out
+  onBeforeSwap: function(newView, oldView) {
+    // the `newView` has not been shown yet
+  },
+
+  onSwap: function(newView, oldView){
+    // the `oldView` has been swapped out and the `newView` is swapped in
   }
 });
 
 MyView = Marionette.ItemView.extend({
-  onSwappedIn: function(){
-    // called when the view has been added to the region
+  onBeforeSwap: function(oldView) {
+    // the `view` has not been shown yet, do something with `oldView`
   },
-  onSwappedOut: function(){
-    // called when the view has been replaced
+
+  onSwapIn: function(oldView){
+    // called when the view has been added to the region, do something with `oldView` to cleanup
+  },
+  onSwapOut: function(newView){
+    // called when the view has been replaced, do something with `newView`
   }
 });
 
 MyApp.mainRegion = new MyRegion();
 
-MyApp.mainRegion.on("swap", function(view){
-  // manipulate the `view` or do something extra
+MyApp.mainRegion.on("before:swap", function(newView, oldView){
+  // manipulate the `oldView` or `newView` or do something extra
+  // with the region via `this`
+});
+
+MyApp.mainRegion.on("swap", function(newView, oldView){
+  // manipulate the `oldView` or `newView` or do something extra
   // with the region via `this`
 });
 
 var view1 = new MyView();
 var view2 = new MyView();
 
-view1.on("swapped-out", function(){
+view1.on("swap-out", function(newView){
   // the view has been swapped-out.
 });
-view2.on("swapped-in", function(){
+
+view2.on("before:swap", function(oldView){
+  // manipulate the `oldView` or do something extra
+});
+
+view2.on("swap-in", function(oldView){
   // the view has been swapped-in.
 });
 
 // Triggers `swap` on the region.
-// Triggers `swapped-in` on `view1`
+// Triggers `swap-in` on `view1`
 MyApp.mainRegion.swap(view1);
 
 // Triggers `swap` on the region.
-// Triggers `swapped-out` on `view1`
-// Triggers `swapped-in` on `view2`
+// Triggers `swap-out` on `view1`
+// Triggers `swap-in` on `view2`
 MyApp.mainRegion.swap(view2);
 ```
 

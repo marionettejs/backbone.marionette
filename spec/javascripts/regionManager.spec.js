@@ -1,173 +1,178 @@
-describe("region manager", function(){
+describe("regionManager", function(){
 
-  describe("when adding a region with a name and selector", function(){
-    var region, regionManager, addHandler;
+  describe(".addRegion", function() {
 
-    beforeEach(function(){
-      addHandler = jasmine.createSpy("region:add handler");
+    describe("with a name and selector", function(){
+      var region, regionManager, addHandler;
 
-      regionManager = new Marionette.RegionManager();
-      regionManager.on("region:add", addHandler);
+      beforeEach(function(){
+        addHandler = jasmine.createSpy("region:add handler");
 
-      region = regionManager.addRegion("foo", "#foo");
-    });
+        regionManager = new Marionette.RegionManager();
+        regionManager.on("region:add", addHandler);
 
-    it("should create the region", function(){
-      expect(region).not.toBeUndefined();
-    });
-
-    it("should store the region by name", function(){
-      expect(regionManager.get("foo")).toBe(region);
-    });
-
-    it("should trigger a 'region:add' event/method", function(){
-      expect(addHandler).toHaveBeenCalledWith("foo", region);
-    });
-
-    it("should increment the length", function(){
-      expect(regionManager.length).toBe(1);
-    });
-  });
-
-  describe("when adding a region with a name and a region instance", function(){
-    var region, builtRegion, regionManager, addHandler;
-
-    beforeEach(function(){
-      addHandler = jasmine.createSpy("region:add handler");
-
-      regionManager = new Marionette.RegionManager();
-      regionManager.on("region:add", addHandler);
-
-      region = new Marionette.Region({el: "#foo"});
-      builtRegion = regionManager.addRegion("foo", region);
-    });
-
-    it("should use the supplied region", function(){
-      expect(builtRegion).toBe(region);
-    });
-
-    it("should store the region by name", function(){
-      expect(regionManager.get("foo")).toBe(region);
-    });
-
-    it("should trigger a 'region:add' event/method", function(){
-      expect(addHandler).toHaveBeenCalledWith("foo", region);
-    });
-
-    it("should increment the length", function(){
-      expect(regionManager.length).toBe(1);
-    });
-  });
-
-  describe("when adding a region and supplying a parent element", function(){
-    var region, regionManager, addHandler, context;
-
-    beforeEach(function(){
-      context = $("<div><div id='foo'></div><div id='bar'></div></div>");
-      regionManager = new Marionette.RegionManager();
-      region = regionManager.addRegion("foo", {
-        selector: "#foo",
-        parentEl: context
+        region = regionManager.addRegion("foo", "#foo");
       });
 
-      region.show(new Backbone.View());
-    });
-
-    it("should set the region's selector within the supplied jQuery selector object", function(){
-      expect(region.$el.parent()).toBe(context);
-    });
-  });
-
-  describe("when adding a region and supplying a parent element as a function", function(){
-    var region, regionManager, addHandler, context, parentElHandler, view;
-
-    beforeEach(function(){
-      context = $("<div><div id='foo'></div><div id='bar'></div></div>");
-      parentElHandler = jasmine.createSpy("parent el handler").andReturn(context);
-      regionManager = new Marionette.RegionManager();
-      region = regionManager.addRegion("foo", {
-        selector: "#foo",
-        parentEl: parentElHandler
+      it("should create the region", function(){
+        expect(region).not.toBeUndefined();
       });
 
-      view = new Backbone.View();
-      region.show(view);
-    });
+      it("should store the region by name", function(){
+        expect(regionManager.get("foo")).toBe(region);
+      });
 
-    it("should set the region's selector within the supplied jQuery selector object", function(){
-      expect(region.$el.parent()).toBe(context);
-    });
-  });
+      it("should trigger a 'region:add' event/method", function(){
+        expect(addHandler).toHaveBeenCalledWith("foo", region);
+      });
 
-  describe("when adding multiple regions", function(){
-    var regions, regionManager;
-
-    beforeEach(function(){
-      regionManager = new Marionette.RegionManager();
-
-      regions = regionManager.addRegions({
-        foo: "#bar",
-        baz: "#quux"
+      it("should increment the length", function(){
+        expect(regionManager.length).toBe(1);
       });
     });
 
-    it("should add all specified regions", function(){
-      expect(regionManager.get("foo")).not.toBeUndefined();
-      expect(regionManager.get("baz")).not.toBeUndefined();
-    });
+    describe("and a region instance", function(){
+      var region, builtRegion, regionManager, addHandler;
 
-    it("should return an object literal containing all named region instances", function(){
-      expect(regions.foo).toBe(regionManager.get("foo"));
-      expect(regions.baz).toBe(regionManager.get("baz"));
-    });
-  });
+      beforeEach(function(){
+        addHandler = jasmine.createSpy("region:add handler");
 
-  describe("when adding multiple regions with region instances supplied", function(){
-    var fooRegion, regions, regionManager;
+        regionManager = new Marionette.RegionManager();
+        regionManager.on("region:add", addHandler);
 
-    beforeEach(function(){
-      fooRegion = new Marionette.Region({el: "#foo"});
-      regionManager = new Marionette.RegionManager();
+        region = new Marionette.Region({el: "#foo"});
+        builtRegion = regionManager.addRegion("foo", region);
+      });
 
-      regions = regionManager.addRegions({
-        foo: fooRegion
+      it("should use the supplied region", function(){
+        expect(builtRegion).toBe(region);
+      });
+
+      it("should store the region by name", function(){
+        expect(regionManager.get("foo")).toBe(region);
+      });
+
+      it("should trigger a 'region:add' event/method", function(){
+        expect(addHandler).toHaveBeenCalledWith("foo", region);
+      });
+
+      it("should increment the length", function(){
+        expect(regionManager.length).toBe(1);
       });
     });
 
-    it("should add all specified regions", function(){
-      expect(regionManager.get("foo")).toBe(fooRegion);
+    describe("and supplying a parent element", function(){
+      var region, regionManager, addHandler, context;
+
+      beforeEach(function(){
+        context = $("<div><div id='foo'></div><div id='bar'></div></div>");
+        regionManager = new Marionette.RegionManager();
+        region = regionManager.addRegion("foo", {
+          selector: "#foo",
+          parentEl: context
+        });
+
+        region.show(new Backbone.View());
+      });
+
+      it("should set the region's selector within the supplied jQuery selector object", function(){
+        expect(region.$el.parent()).toBe(context);
+      });
     });
 
-    it("should return an object literal containing all named region instances", function(){
-      expect(regions.foo).toBe(fooRegion);
+    describe("and supplying a parent element as a function", function(){
+      var region, regionManager, addHandler, context, parentElHandler, view;
+
+      beforeEach(function(){
+        context = $("<div><div id='foo'></div><div id='bar'></div></div>");
+        parentElHandler = jasmine.createSpy("parent el handler").andReturn(context);
+        regionManager = new Marionette.RegionManager();
+        region = regionManager.addRegion("foo", {
+          selector: "#foo",
+          parentEl: parentElHandler
+        });
+
+        view = new Backbone.View();
+        region.show(view);
+      });
+
+      it("should set the region's selector within the supplied jQuery selector object", function(){
+        expect(region.$el.parent()).toBe(context);
+      });
     });
   });
 
-  describe("when adding multiple regions with a defaults set", function(){
-    var regions, regionManager, parent;
+  describe(".addRegions", function() {
+    describe("with no options", function(){
+      var regions, regionManager;
 
-    beforeEach(function(){
-      regionManager = new Marionette.RegionManager();
+      beforeEach(function(){
+        regionManager = new Marionette.RegionManager();
 
-      parent = $("<div></div>")
+        regions = regionManager.addRegions({
+          foo: "#bar",
+          baz: "#quux"
+        });
+      });
 
-      var defaults = {
-        parentEl: parent
-      };
+      it("should add all specified regions", function(){
+        expect(regionManager.get("foo")).not.toBeUndefined();
+        expect(regionManager.get("baz")).not.toBeUndefined();
+      });
 
-      regions = regionManager.addRegions({
-        foo: "#bar",
-        baz: "#quux"
-      }, defaults);
+      it("should return an object literal containing all named region instances", function(){
+        expect(regions.foo).toBe(regionManager.get("foo"));
+        expect(regions.baz).toBe(regionManager.get("baz"));
+      });
     });
 
-    it("should add all specified regions with the specified defaults", function(){
-      expect(regionManager.get("foo")).not.toBeUndefined();
-      expect(regionManager.get("baz")).not.toBeUndefined();
+    describe("with region instance", function() {
+      var fooRegion, regions, regionManager;
+
+      beforeEach(function(){
+        fooRegion = new Marionette.Region({el: "#foo"});
+        regionManager = new Marionette.RegionManager();
+
+        regions = regionManager.addRegions({
+          foo: fooRegion
+        });
+      });
+
+      it("should add all specified regions", function(){
+        expect(regionManager.get("foo")).toBe(fooRegion);
+      });
+
+      it("should return an object literal containing all named region instances", function(){
+        expect(regions.foo).toBe(fooRegion);
+      });
     });
+
+    describe("with defaults", function() {
+      var regions, regionManager, parent;
+
+      beforeEach(function(){
+        regionManager = new Marionette.RegionManager();
+
+        parent = $("<div></div>")
+
+        var defaults = {
+          parentEl: parent
+        };
+
+        regions = regionManager.addRegions({
+          foo: "#bar",
+          baz: "#quux"
+        }, defaults);
+      });
+
+      it("should add all specified regions with the specified defaults", function(){
+        expect(regionManager.get("foo")).not.toBeUndefined();
+        expect(regionManager.get("baz")).not.toBeUndefined();
+      });
+    })
   });
 
-  describe("when removing a region by name", function(){
+  describe(".removeRegion", function(){
     var region, regionManager, closeHandler, removeHandler;
 
     beforeEach(function(){
@@ -201,7 +206,7 @@ describe("region manager", function(){
     });
   });
 
-  describe("when removing all regions", function(){
+  describe(".removeRegions", function(){
     var region, r2, regionManager, closeHandler, closeHandler2, removeHandler;
 
     beforeEach(function(){
@@ -240,7 +245,7 @@ describe("region manager", function(){
     });
   });
 
-  describe("when closing all regions", function(){
+  describe(".closeRegions", function(){
     var region, regionManager, closeHandler;
 
     beforeEach(function(){
@@ -265,7 +270,7 @@ describe("region manager", function(){
     });
   });
 
-  describe("when closing the region manager", function(){
+  describe(".close", function(){
     var region, regionManager, closeManagerHandler;
 
     beforeEach(function(){

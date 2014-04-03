@@ -97,7 +97,7 @@ Marionette.RegionManager = (function(Marionette){
     // internal method to remove a region
     _remove: function(name, region){
       region.close();
-      region.triggerMethod("before:destroy", region);
+      region.triggerMethod("before:remove", region);
       delete this._regions[name];
       this._setLength();
       this.triggerMethod("region:remove", name, region);

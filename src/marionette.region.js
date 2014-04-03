@@ -5,7 +5,6 @@
 // http://lostechies.com/derickbailey/2011/12/12/composite-js-apps-regions-and-region-managers/
 
 Marionette.Region = function(options){
-  this.triggerMethod = Marionette.triggerMethod;
   this.options = options || {};
   this.el = Marionette.getOption(this, "el");
 
@@ -111,6 +110,7 @@ _.extend(Marionette.Region, {
 // -----------------------
 
 _.extend(Marionette.Region.prototype, Backbone.Events, {
+  triggerMethod: Marionette.triggerMethod,
 
   // Displays a backbone view instance inside of the region.
   // Handles calling the `render` method for you. Reads content

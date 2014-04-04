@@ -185,7 +185,6 @@ Marionette.Behavior.extend({
 	defaults: {
 			'dominion': 'invasion',
 			'doge': 'amaze'
-		}
 	}
 });
 ```

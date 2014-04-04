@@ -19,9 +19,10 @@ Marionette.Behavior = (function(_, Backbone){
   });
 
   // Borrow Backbones extend implementation
-  _.extend(Behavior, {
-    extend: Backbone.View.extend
-  });
+  // this allows us to setup a proper
+  // inheritence pattern that follow in suite
+  // with the rest of Marionette views.
+  Behavior.extend = Marionette.extend;
 
   return Behavior;
 })(_, Backbone);

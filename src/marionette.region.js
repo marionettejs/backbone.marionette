@@ -110,6 +110,7 @@ _.extend(Marionette.Region, {
 // -----------------------
 
 _.extend(Marionette.Region.prototype, Backbone.Events, {
+  triggerMethod: Marionette.triggerMethod,
 
   // Displays a backbone view instance inside of the region.
   // Handles calling the `render` method for you. Reads content
@@ -127,8 +128,8 @@ _.extend(Marionette.Region.prototype, Backbone.Events, {
     }
 
     view.render();
-    Marionette.triggerMethod.call(this, "before:show", view);
-    Marionette.triggerMethod.call(view, "before:show");
+    this.triggerMethod.call(this, "before:show", view);
+    this.triggerMethod.call(view, "before:show");
 
     if (isDifferentView || isViewClosed) {
       this.open(view);
@@ -136,8 +137,8 @@ _.extend(Marionette.Region.prototype, Backbone.Events, {
 
     this.currentView = view;
 
-    Marionette.triggerMethod.call(this, "show", view);
-    Marionette.triggerMethod.call(view, "show");
+    this.triggerMethod.call(this, "show", view);
+    this.triggerMethod.call(view, "show");
   },
 
   ensureEl: function(){
@@ -168,7 +169,7 @@ _.extend(Marionette.Region.prototype, Backbone.Events, {
     if (view.close) { view.close(); }
     else if (view.remove) { view.remove(); }
 
-    Marionette.triggerMethod.call(this, "close", view);
+    this.triggerMethod.call(this, "close", view);
 
     delete this.currentView;
   },

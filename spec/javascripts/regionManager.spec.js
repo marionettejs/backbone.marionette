@@ -173,32 +173,42 @@ describe("regionManager", function(){
   });
 
   describe(".removeRegion", function(){
-    var region, regionManager, closeHandler, removeHandler;
+    var view, region, regionManager;
 
     beforeEach(function(){
-      closeHandler = jasmine.createSpy("close handler");
-      removeHandler = jasmine.createSpy("remove handler");
-
       regionManager = new Marionette.RegionManager();
       region = regionManager.addRegion("foo", "#foo");
-      region.show(new Backbone.View());
+      spyOn(regionManager, "triggerMethod").andCallThrough();
+      spyOn(region, "triggerMethod").andCallThrough();
+      spyOn(region, "close").andCallThrough();
 
-      region.on("close", closeHandler);
-      regionManager.on("region:remove", removeHandler);
+      region.on("close", function(){
+        expect(region.triggerMethod).not.toHaveBeenCalledWith("before:remove");
+      });
 
+      view = new Backbone.View();
+      region.show(view);
       regionManager.removeRegion("foo");
     });
 
     it("should close the region", function(){
-      expect(closeHandler).toHaveBeenCalled();
+      expect(region.close).toHaveBeenCalled();
     });
 
     it("should remove the region", function(){
       expect(regionManager.get("foo")).toBeUndefined();
     });
 
+    it("should trigger a 'close' event/method on the region", function(){
+      expect(region.triggerMethod).toHaveBeenCalledWith("close", view);
+    });
+
     it("should trigger a 'region:remove' event/method", function(){
-      expect(removeHandler).toHaveBeenCalledWith("foo", region);
+      expect(regionManager.triggerMethod).toHaveBeenCalledWith("region:remove", "foo", region);
+    });
+
+    it("should trigger a 'before:remove' event/method on the region", function(){
+      expect(region.triggerMethod).toHaveBeenCalledWith("before:remove");
     });
 
     it("should adjust the length of the region manager by -1", function(){
@@ -207,31 +217,40 @@ describe("regionManager", function(){
   });
 
   describe(".removeRegions", function(){
-    var region, r2, regionManager, closeHandler, closeHandler2, removeHandler;
+    var view1, region1, close1, view2, region2, close2, regionManager;
 
     beforeEach(function(){
-      closeHandler = jasmine.createSpy("close handler");
-      closeHandler2 = jasmine.createSpy("close handler");
-      removeHandler = jasmine.createSpy("remove handler");
-
       regionManager = new Marionette.RegionManager();
-      region = regionManager.addRegion("foo", "#foo");
-      r2 = regionManager.addRegion("bar", "#bar");
+      region1 = regionManager.addRegion("foo", "#foo");
+      region2 = regionManager.addRegion("bar", "#bar");
+      view1 = new Backbone.View()
+      view2 = new Backbone.View()
+      region1.show(view1)
+      region2.show(view2)
+      spyOn(regionManager, "triggerMethod").andCallThrough();
+      spyOn(region1, "triggerMethod").andCallThrough();
+      spyOn(region2, "triggerMethod").andCallThrough();
+      spyOn(region1, "close").andCallThrough();
+      spyOn(region2, "close").andCallThrough();
 
-      region.show(new Backbone.View());
-      r2.show(new Backbone.View());
-
-      region.on("close", closeHandler);
-      r2.on("close", closeHandler2);
-
-      regionManager.on("region:remove", removeHandler);
+      region1.on("close", function(){
+        expect(region1.triggerMethod).not.toHaveBeenCalledWith("before:remove");
+      });
+      region2.on("close", function(){
+        expect(region2.triggerMethod).not.toHaveBeenCalledWith("before:remove");
+      });
 
       regionManager.removeRegions();
     });
 
-    it("should close the regions", function(){
-      expect(closeHandler).toHaveBeenCalled();
-      expect(closeHandler2).toHaveBeenCalled();
+    it("should close each region", function(){
+      expect(region1.close).toHaveBeenCalled();
+      expect(region2.close).toHaveBeenCalled();
+    });
+
+    it("should trigger a 'close' event/method on each region", function(){
+      expect(region1.triggerMethod).toHaveBeenCalledWith("close", view1);
+      expect(region2.triggerMethod).toHaveBeenCalledWith("close", view2);
     });
 
     it("should remove the regions", function(){
@@ -240,8 +259,13 @@ describe("regionManager", function(){
     });
 
     it("should trigger a 'region:remove' event/method for each region", function(){
-      expect(removeHandler).toHaveBeenCalledWith("foo", region);
-      expect(removeHandler).toHaveBeenCalledWith("bar", r2);
+      expect(regionManager.triggerMethod).toHaveBeenCalledWith("region:remove", "foo", region1);
+      expect(regionManager.triggerMethod).toHaveBeenCalledWith("region:remove", "bar", region2);
+    });
+
+    it("should trigger a 'before:remove' event/method on each region", function(){
+      expect(region1.triggerMethod).toHaveBeenCalledWith("before:remove");
+      expect(region2.triggerMethod).toHaveBeenCalledWith("before:remove");
     });
   });
 

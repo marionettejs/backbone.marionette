@@ -87,6 +87,33 @@ describe("Behaviors", function(){
       });
     });
 
+    describe("when functional behavior", function() {
+      var _this, v;
+      beforeEach(function() {
+        View = Marionette.ItemView.extend({
+          behaviors: function() {
+            _this = this;
+            return {
+              ToolTip: {
+                behaviorClass: ToolTip,
+                position: "top"
+              }
+            }
+          }
+        });
+
+        v = new View;
+      });
+
+      it("should instantiate the tooltip behavior", function() {
+        expect(Obj.ToolTip).toHaveBeenCalled();
+      });
+
+      it("should call the behaviors method with the view context", function() {
+        expect(_this).toEqual(v);
+      });
+    });
+
     describe("when behavior class is provided", function() {
       beforeEach(function() {
         View = Marionette.ItemView.extend({

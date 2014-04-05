@@ -1,7 +1,9 @@
 Marionette.Behaviors = (function(Marionette, _) {
 
   function Behaviors(view) {
-    this.behaviors = Behaviors.parseBehaviors(view, view.behaviors);
+    // Behaviors defined on a view can be a flat object literal
+    // or it can be a function that returns an object.
+    this.behaviors = Behaviors.parseBehaviors(view, _.result(view, 'behaviors'));
 
     Behaviors.wrap(view, this.behaviors, [
       'bindUIElements', 'unbindUIElements',

@@ -173,7 +173,7 @@ describe("regionManager", function(){
   });
 
   describe(".removeRegion", function(){
-    var view, region, regionManager;
+    var view, before, close, region, regionManager;
 
     beforeEach(function(){
       regionManager = new Marionette.RegionManager();
@@ -182,12 +182,10 @@ describe("regionManager", function(){
       spyOn(region, "triggerMethod").andCallThrough();
       spyOn(region, "close").andCallThrough();
 
-      region.on("close", function(){
-        expect(region.triggerMethod).not.toHaveBeenCalledWith("before:remove");
-      });
-      region.on("before:remove", function(){
+      region.on("close", close = sinon.spy());
+      region.on("before:remove", before = sinon.spy(function(){
         expect(regionManager.get("foo")).not.toBeUndefined();
-      });
+      }));
 
       view = new Backbone.View();
       region.show(view);
@@ -196,6 +194,10 @@ describe("regionManager", function(){
 
     it("should close the region", function(){
       expect(region.close).toHaveBeenCalled();
+    });
+
+    it("should trigger 'before:remove' after region close", function(){
+      expect(close.calledBefore(before)).toBeTruthy();
     });
 
     it("should remove the region", function(){
@@ -220,34 +222,28 @@ describe("regionManager", function(){
   });
 
   describe(".removeRegions", function(){
-    var view1, region1, close1, view2, region2, close2, regionManager;
+    var regionManager;
+    var view1, region1, close1, before1, view2, region2, close2, before2;
 
     beforeEach(function(){
       regionManager = new Marionette.RegionManager();
       region1 = regionManager.addRegion("foo", "#foo");
       region2 = regionManager.addRegion("bar", "#bar");
-      view1 = new Backbone.View()
-      view2 = new Backbone.View()
-      region1.show(view1)
-      region2.show(view2)
+      region1.show(view1 = new Backbone.View());
+      region2.show(view2 = new Backbone.View());
       spyOn(regionManager, "triggerMethod").andCallThrough();
       spyOn(region1, "triggerMethod").andCallThrough();
       spyOn(region2, "triggerMethod").andCallThrough();
       spyOn(region1, "close").andCallThrough();
       spyOn(region2, "close").andCallThrough();
-
-      region1.on("close", function(){
-        expect(region1.triggerMethod).not.toHaveBeenCalledWith("before:remove");
-      });
-      region2.on("close", function(){
-        expect(region2.triggerMethod).not.toHaveBeenCalledWith("before:remove");
-      });
-      region1.on("before:remove", function(){
+      region1.on("close", close1 = sinon.spy());
+      region2.on("close", close2 = sinon.spy());
+      region1.on("before:remove", before1 = sinon.spy(function(){
         expect(regionManager.get("foo")).not.toBeUndefined();
-      });
-      region2.on("before:remove", function(){
+      }));
+      region2.on("before:remove", before2 = sinon.spy(function(){
         expect(regionManager.get("bar")).not.toBeUndefined();
-      });
+      }));
 
       regionManager.removeRegions();
     });
@@ -255,6 +251,11 @@ describe("regionManager", function(){
     it("should close each region", function(){
       expect(region1.close).toHaveBeenCalled();
       expect(region2.close).toHaveBeenCalled();
+    });
+
+    it("should trigger 'before:remove' after region close", function(){
+      expect(close1.calledBefore(before1)).toBeTruthy();
+      expect(close2.calledBefore(before2)).toBeTruthy();
     });
 
     it("should trigger a 'close' event/method on each region", function(){

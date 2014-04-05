@@ -185,6 +185,9 @@ describe("regionManager", function(){
       region.on("close", function(){
         expect(region.triggerMethod).not.toHaveBeenCalledWith("before:remove");
       });
+      region.on("before:remove", function(){
+        expect(regionManager.get("foo")).not.toBeUndefined();
+      });
 
       view = new Backbone.View();
       region.show(view);
@@ -238,6 +241,12 @@ describe("regionManager", function(){
       });
       region2.on("close", function(){
         expect(region2.triggerMethod).not.toHaveBeenCalledWith("before:remove");
+      });
+      region1.on("before:remove", function(){
+        expect(regionManager.get("foo")).not.toBeUndefined();
+      });
+      region2.on("before:remove", function(){
+        expect(regionManager.get("bar")).not.toBeUndefined();
       });
 
       regionManager.removeRegions();

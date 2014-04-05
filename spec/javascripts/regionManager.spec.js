@@ -178,15 +178,13 @@ describe("regionManager", function(){
     beforeEach(function(){
       regionManager = new Marionette.RegionManager();
       region = regionManager.addRegion("foo", "#foo");
-      spyOn(regionManager, "triggerMethod").andCallThrough();
-      spyOn(region, "triggerMethod").andCallThrough();
+      sinon.spy(regionManager, "triggerMethod");
+      sinon.spy(region, "triggerMethod");
       sinon.spy(region, "close");
       region.on("before:remove", before = sinon.spy(function(){
         expect(regionManager.get("foo")).not.toBeUndefined();
       }));
-
-      view = new Backbone.View();
-      region.show(view);
+      region.show(view = new Backbone.View());
       regionManager.removeRegion("foo");
     });
 
@@ -229,9 +227,9 @@ describe("regionManager", function(){
       region2 = regionManager.addRegion("bar", "#bar");
       region1.show(view1 = new Backbone.View());
       region2.show(view2 = new Backbone.View());
-      spyOn(regionManager, "triggerMethod").andCallThrough();
-      spyOn(region1, "triggerMethod").andCallThrough();
-      spyOn(region2, "triggerMethod").andCallThrough();
+      sinon.spy(regionManager, "triggerMethod");
+      sinon.spy(region1, "triggerMethod");
+      sinon.spy(region2, "triggerMethod");
       sinon.spy(region1, "close");
       sinon.spy(region2, "close");
       region1.on("before:remove", before1 = sinon.spy(function(){
@@ -240,7 +238,6 @@ describe("regionManager", function(){
       region2.on("before:remove", before2 = sinon.spy(function(){
         expect(regionManager.get("bar")).not.toBeUndefined();
       }));
-
       regionManager.removeRegions();
     });
 

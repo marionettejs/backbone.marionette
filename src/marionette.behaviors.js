@@ -137,7 +137,8 @@ Marionette.Behaviors = (function(Marionette, _) {
       return _.isFunction(Behaviors.behaviorsLookup) ? Behaviors.behaviorsLookup.apply(this, arguments)[key] : Behaviors.behaviorsLookup[key];
     },
 
-    parseBehaviors: function(view, behaviors){
+    parseBehaviors: function(view, behaviors) {
+      _.isFunction(behaviors) && (behaviors = behaviors.call(view));
       return _.map(behaviors, function(options, key){
         var BehaviorClass = Behaviors.getBehaviorClass(options, key);
         return new BehaviorClass(options, view);

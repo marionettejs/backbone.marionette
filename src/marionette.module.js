@@ -6,17 +6,23 @@
 Marionette.Module = function(moduleName, app, options){
   this.moduleName = moduleName;
   this.options = _.extend({}, this.options, options);
+  // Allow for a user to overide the initialize
+  // for a given module instance.
   this.initialize = options.initialize || this.initialize;
 
-  // store sub-modules
+  // Set up an internal store for sub-modules.
   this.submodules = {};
 
   this._setupInitializersAndFinalizers();
 
-  // store the configuration for this module
+  // Set an internal reference to the app
+  // within a module.
   this.app = app;
+
+  // By default modules start with their parents.
   this.startWithParent = true;
 
+  // Setup a proxy to the trigger method implementation.
   this.triggerMethod = Marionette.triggerMethod;
 
   if (_.isFunction(this.initialize)){
@@ -101,6 +107,7 @@ _.extend(Marionette.Module.prototype, Backbone.Events, {
   // Internal method: run the module definition function with the correct
   // arguments
   _runModuleDefinition: function(definition, customArgs){
+    // If there is no definition short circut the method.
     if (!definition){ return; }
 
     // build the correct list of arguments for the module definition
@@ -137,7 +144,9 @@ _.extend(Marionette.Module, {
     var customArgs = slice.call(arguments);
     customArgs.splice(0, 3);
 
-    // split the module names and get the length
+    // Split the module names and get the number of submodules.
+    // i.e. an example module name of `Doge.Wow.Amaze` would
+    // then have the potential for 3 module definitions.
     moduleNames = moduleNames.split(".");
     var length = moduleNames.length;
 
@@ -174,6 +183,12 @@ _.extend(Marionette.Module, {
     return module;
   },
 
+  // ## Module Classes
+  //
+  // Module classes can be used as an alternative to the define pattern.
+  // The extend function of a Module is identical to the extend functions
+  // on other Backbone and Marionette classes.
+  // This allows module lifecyle events like `onStart` and `onStop` to be called directly.
   getClass: function(moduleDefinition) {
     var ModuleClass = Marionette.Module;
 
@@ -181,6 +196,8 @@ _.extend(Marionette.Module, {
       return ModuleClass;
     }
 
+    // If all of the module's functionality is defined inside its class,
+    // then the class can be passed in directly. `MyApp.module("Foo", FooModule)`.
     if (moduleDefinition.prototype instanceof ModuleClass) {
       return moduleDefinition;
     }

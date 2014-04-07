@@ -83,7 +83,7 @@ describe("application regions", function(){
       expect(MyApp.MyRegion).toHaveOwnProperty("options");
       expect(MyApp.MyRegion.options).toHaveOwnProperty("specialOption");
       expect(MyApp.MyRegion.options.specialOption).toBeTruthy();
-    });    
+    });
   });
 
   describe("when an app has a region", function(){

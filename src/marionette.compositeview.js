@@ -157,4 +157,3 @@ Marionette.CompositeView = Marionette.CollectionView.extend({
     }
   }
 });
-

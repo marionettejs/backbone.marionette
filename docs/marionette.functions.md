@@ -87,15 +87,15 @@ var f;
 new M({}, { foo: f }); // => "bar"
 ```
 
-In this example, "bar" is returned both times because the second 
+In this example, "bar" is returned both times because the second
 example has an undefined value for `f`.
 
 ## Marionette.triggerMethod
 
 Trigger an event and a corresponding method on the target object.
 
-When an event is triggered, the first letter of each section of the 
-event name is capitalized, and the word "on" is tagged on to the front 
+When an event is triggered, the first letter of each section of the
+event name is capitalized, and the word "on" is tagged on to the front
 of it. Examples:
 
 * `triggerMethod("render")` fires the "onRender" function
@@ -112,8 +112,8 @@ callback methods will still be called, though.
 
 ## Marionette.bindEntityEvents
 
-This method is used to bind a backbone "entity" (collection/model) 
-to methods on a target object. 
+This method is used to bind a backbone "entity" (collection/model)
+to methods on a target object.
 
 ```js
 Backbone.View.extend({
@@ -142,7 +142,7 @@ to bind the events from.
 
 The third parameter is a hash of { "event:name": "eventHandler" }
 configuration. Multiple handlers can be separated by a space. A
-function can be supplied instead of a string handler name. 
+function can be supplied instead of a string handler name.
 
 ## Marionette.normalizeEvents
 

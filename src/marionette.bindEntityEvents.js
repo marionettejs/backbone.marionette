@@ -80,10 +80,20 @@
 
   // Export Public API
   Marionette.bindEntityEvents = function(target, entity, bindings){
+    if(arguments.length === 2) {
+      bindings = entity;
+      entity = target;
+      target = this;
+    }
     iterateEvents(target, entity, bindings, bindToFunction, bindFromStrings);
   };
 
   Marionette.unbindEntityEvents = function(target, entity, bindings){
+    if(arguments.length === 2) {
+      bindings = entity;
+      entity = target;
+      target = this;
+    }
     iterateEvents(target, entity, bindings, unbindToFunction, unbindFromStrings);
   };
 

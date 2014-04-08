@@ -97,4 +97,16 @@ describe("get option", function(){
 
   });
 
+  describe("when proxying getOption", function() {
+    beforeEach(function() {
+      target = {
+        foo: "bar",
+        getOption: Marionette.getOption
+      };
+    });
+
+    it("should return that definition's option", function(){
+      expect(target.getOption('foo')).toBe("bar");
+    });
+  })
 });

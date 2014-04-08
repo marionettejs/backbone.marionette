@@ -25,13 +25,22 @@ Marionette.View = Backbone.View.extend({
     this.listenTo(this, "show", this.onShowCalled);
   },
 
-  // import the "triggerMethod" to trigger events with corresponding
-  // methods if the method exists
+  // Import `triggerMethod` to trigger events with corresponding
+  // methods if they exist.
   triggerMethod: Marionette.triggerMethod,
 
-  // Imports the "normalizeMethods" to transform hashes of
+  // Imports the `normalizeMethods` to transform hashes of
   // events=>function references/names to a hash of events=>function references
   normalizeMethods: Marionette.normalizeMethods,
+
+  // Import the `getOption` method to get option from this or this.options by name
+  getOption: Marionette.getOption,
+
+  // Import the `bindEntityEvents` to allow binding view's events to another entity
+  bindEntityEvents: Marionette.bindEntityEvents,
+
+  // Import the `unbindEntityEvents` to allow unbinding view's events from another entity
+  unbindEntityEvents: Marionette.unbindEntityEvents,
 
   // Get the template for this view
   // instance. You can set a `template` attribute in the view

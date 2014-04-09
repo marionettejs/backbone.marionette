@@ -429,4 +429,34 @@ describe("Behaviors", function(){
       expect(spy).toHaveBeenCalled();
     });
   });
+
+  describe("behavior is evented", function() {
+    var Behavior, spy, b, m;
+    beforeEach(function() {
+      spy = sinon.spy();
+      b = new Marionette.Behavior({}, {});
+      m = new Backbone.Model();
+
+      Marionette.bindEntityEvents(b, m, {
+        'change': spy
+      });
+
+      b.listenTo(m, 'bump', spy);
+    });
+
+    it("should listenTo events", function() {
+      m.trigger('bump');
+      expect(spy).toHaveBeenCalled();
+    });
+
+    it("should support bindEntityEvents", function() {
+      m.set('name', 'doge');
+      expect(spy).toHaveBeenCalled();
+    });
+
+    it("should execute in the specified context", function() {
+      m.trigger('bump');
+      expect(spy).toHaveBeenCalledOn(b);
+    });
+  });
 });

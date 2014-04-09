@@ -343,17 +343,26 @@ describe("Behaviors", function(){
   });
 
   describe("behavior model events", function() {
-    var spy, V, hold, m;
+    var modelSpy, collectionSpy, V, hold, m, testBehavior;
     beforeEach(function() {
-      spy = sinon.spy();
+      modelSpy = sinon.spy();
+      collectionSpy = sinon.spy();
+      fooChangedSpy = sinon.spy();
+
       hold = {}
+
       hold.test = Marionette.Behavior.extend({
+        initialize: function() {
+          testBehavior = this;
+        },
         modelEvents: {
-          change: spy
+          change: modelSpy,
+          "change:foo": "fooChanged"
         },
         collectionEvents: {
-          reset: spy
-        }
+          reset: collectionSpy
+        },
+        fooChanged: fooChangedSpy
       });
 
       CV = Marionette.CollectionView.extend({
@@ -382,11 +391,17 @@ describe("Behaviors", function(){
         model: m
       });
 
-      v.delegateEvents();
-
       m.set("name", "doge");
+      expect(modelSpy).toHaveBeenCalledOn(testBehavior);
+    });
 
-      expect(spy).toHaveBeenCalled();
+    it ("should proxy model events w/ string cbk", function() {
+      v = new V({
+        model: m
+      });
+
+      m.set("foo", "doge");
+      expect(fooChangedSpy).toHaveBeenCalledOn(testBehavior);
     });
 
     it ("should proxy collection events", function() {
@@ -394,11 +409,8 @@ describe("Behaviors", function(){
         collection: c
       });
 
-      v.delegateEvents();
-
       c.reset();
-
-      expect(spy).toHaveBeenCalled();
+      expect(collectionSpy).toHaveBeenCalledOn(testBehavior);
     });
 
   });

@@ -115,7 +115,7 @@ MyApp.mainRegion.show(anotherView2, { preventClose: true });
 NOTE: When using `preventClose: true` you must be careful to cleanup your old views
 manually to prevent memory leaks.
 
-## `reset` A Region
+### `reset` A Region
 
 A region can be `reset` at any time. This closes any existing view
 being displayed, and deletes the cached `el`. The next time the
@@ -198,6 +198,7 @@ MyApp.someRegion.attachView(myView);
 
 ## Region Events And Callbacks
 
+### Events raised during `show`:
 A region will raise a few events when showing
 and closing views:
 

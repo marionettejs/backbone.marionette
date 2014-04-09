@@ -132,11 +132,8 @@ examples on how to get started, please visit [the Wiki](https://github.com/mario
 * [**Marionette.Application**](docs/marionette.application.md): An application object that starts your app via initializers, and more
 * [**Marionette.Module**](docs/marionette.application.module.md): Create modules and sub-modules within the application
 * [**Marionette.Controller**](docs/marionette.controller.md): A general purpose object for controlling modules, routers, view, and implementing a mediator pattern
-
-**Object-Messaging Infrastructure**
-
-* [**Marionette.Commands**](docs/marionette.commands.md): An extension of Backbone.Wreqr.Commands, a simple command execution framework
-* [**Marionette.RequestResponse**](docs/marionette.requestresponse.md): An extension of Backbone.Wreqr.RequestResponse, a simple request/response framework
+* [**Marionette.Commands**](docs/marionette.application.md#commands): An extension of Backbone.Wreqr.Commands, a simple command execution framework
+* [**Marionette.RequestResponse**](docs/marionette.application.md#request-response): An extension of Backbone.Wreqr.RequestResponse, a simple request/response framework
 * [&rarr;] [**Backbone.Wreqr.EventAggregator**](https://github.com/marionettejs/backbone.wreqr): An event aggregator, to facilitate pub/sub and event architecture. Part of a suite of messaging based patterns
 * [&rarr;] [**Backbone.Wreqr.Commands**](https://github.com/marionettejs/backbone.wreqr): A simple command execution system
 * [&rarr;] [**Backbone.Wreqr.RequestResponse**](https://github.com/marionettejs/backbone.wreqr): A simple request/response system

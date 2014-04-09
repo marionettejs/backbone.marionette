@@ -110,23 +110,7 @@ Marionette.RegionManager = (function(Marionette){
 
   });
 
-  // Borrowing this code from Backbone.Collection:
-  // http://backbonejs.org/docs/backbone.html#section-106
-  //
-  // Mix in methods from Underscore, for iteration, and other
-  // collection related features.
-  var methods = ['forEach', 'each', 'map', 'find', 'detect', 'filter',
-    'select', 'reject', 'every', 'all', 'some', 'any', 'include',
-    'contains', 'invoke', 'toArray', 'first', 'initial', 'rest',
-    'last', 'without', 'isEmpty', 'pluck'];
-
-  _.each(methods, function(method) {
-    RegionManager.prototype[method] = function() {
-      var regions = _.values(this._regions);
-      var args = [regions].concat(_.toArray(arguments));
-      return _[method].apply(_, args);
-    };
-  });
+  Marionette.actAsCollection(RegionManager.prototype, '_regions');
 
   return RegionManager;
 })(Marionette);

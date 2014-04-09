@@ -95,6 +95,7 @@ Marionette.View = Backbone.View.extend({
 
         // build the args for the event
         var args = {
+          event: e,
           view: this,
           model: this.model,
           collection: this.collection

@@ -28,7 +28,7 @@ Marionette.Behavior = (function(_, Backbone){
     this.initialize.apply(this, arguments);
   }
 
-  _.extend(Behavior.prototype, {
+  _.extend(Behavior.prototype, Backbone.Events, {
     initialize: function(){},
 
     // Setup class level proxy for triggerMethod.

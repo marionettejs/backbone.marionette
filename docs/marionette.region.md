@@ -75,6 +75,8 @@ var mgr = new Backbone.Marionette.Region({
 
 ## Basic Use
 
+### Showing a View
+
 Once a region is defined, you can call its `show`
 and `close` methods to display and shut-down a view:
 
@@ -113,7 +115,7 @@ MyApp.mainRegion.show(anotherView2, { preventClose: true });
 NOTE: When using `preventClose: true` you must be careful to cleanup your old views
 manually to prevent memory leaks.
 
-## `reset` A Region
+### `reset` A Region
 
 A region can be `reset` at any time. This closes any existing view
 being displayed, and deletes the cached `el`. The next time the
@@ -127,7 +129,7 @@ myRegion.reset();
 This is useful when regions are re-used across view
 instances, and in unit testing.
 
-## Set How View's `el` Is Attached
+### Set How View's `el` Is Attached
 
 Override the region's `open` method to change how the view is attached
 to the DOM. This method receives one parameter - the view to show.
@@ -154,7 +156,7 @@ Marionette.Region.prototype.open = function(view){
 This example will cause a view to slide down from the top
 of the region, instead of just appearing in place.
 
-## Attach Existing View
+### Attach Existing View
 
 There are some scenarios where it's desirable to attach an existing
 view to a region , without rendering or showing the view, and
@@ -167,7 +169,7 @@ There are two ways to accomplish this:
 * set the `currentView` in the region's constructor
 * call `attachView` on the region instance
 
-### Set `currentView` On Initialization
+#### Set `currentView` On Initialization
 
 ```js
 var myView = new MyView({
@@ -180,7 +182,7 @@ var region = new Backbone.Marionette.Region({
 });
 ```
 
-### Call `attachView` On Region
+#### Call `attachView` On Region
 
 ```js
 MyApp.addRegions({
@@ -196,6 +198,7 @@ MyApp.someRegion.attachView(myView);
 
 ## Region Events And Callbacks
 
+### Events raised during `show`:
 A region will raise a few events when showing
 and closing views:
 

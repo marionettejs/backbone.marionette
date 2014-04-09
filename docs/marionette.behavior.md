@@ -9,6 +9,8 @@ A `Behavior` is an  isolated set of DOM / user interactions that can be mixed in
 * [Using Behaviors](#using)
 * [API](#api)
   * [Event proxy](#the-event-proxy)
+  * [Model Events](#model-events)
+  * [Collection Events](#model-events)
   * [$](#$)
   * [$el](#$el)
   * [Defaults](#defaults)
@@ -145,6 +147,32 @@ Marionette.Behavior.extend({
 });
 ```
 
+### Model Events
+`modelEvents` will respond to the view's model events.
+```js
+  Marionette.Behavior.extend({
+    modelEvents: {
+      "change:doge": "onDogeChange"
+    },
+
+    onDogeChange: function() {
+      // buy more doge...
+    }
+  });
+```
+
+### Collection Events
+`collectionEvents` will respond to the view's collection events.
+```js
+  Marionette.Behavior.extend({
+    collectionEvents: {
+      add: "onCollectionAdd"
+    },
+
+    onCollectionAdd: function() {
+    }
+  });
+```
 
 ### $
 `$` is a direct proxy of the views `$` lookup method.

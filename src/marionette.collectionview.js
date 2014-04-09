@@ -262,12 +262,11 @@ Marionette.CollectionView = Marionette.View.extend({
     // shut down the child view properly,
     // including events that the collection has from it
     if (view){
-      this.stopListening(view);
-
       // call 'close' or 'remove', depending on which is found
       if (view.close) { view.close(); }
       else if (view.remove) { view.remove(); }
 
+      this.stopListening(view);
       this.children.remove(view);
     }
 

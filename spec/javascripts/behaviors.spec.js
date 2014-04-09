@@ -426,5 +426,10 @@ describe("Behaviors", function(){
       m.set('name', 'doge');
       expect(spy).toHaveBeenCalled();
     });
+
+    it("should execute in the specified context", function() {
+      m.trigger('bump');
+      expect(spy).toHaveBeenCalledOn(b);
+    });
   });
 });

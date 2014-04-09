@@ -546,43 +546,109 @@ describe("collection view", function(){
     });
   });
 
-  describe("when a child view triggers default events", function(){
-    var model = new Backbone.Model({foo: "bar"});
-    var collection = new Backbone.Collection([model]);
-    var collectionView;
-    var eventNames = [];
+  describe("when a child view triggers the default", function(){
+    var model, collection, collectionView, childView;
 
     beforeEach(function(){
+      model = new Backbone.Model({ foo: "bar" });
+      collection = new Backbone.Collection([model]);
+
       collectionView = new CollectionView({
         itemView: Backbone.Marionette.ItemView.extend({
             template: function() { return '<%= foo %>'; }
         }),
         collection: collection
       });
-
-      collectionView.on("all", function(){
-        var eventName = arguments[0];
-
-        eventNames.push(eventName);
-      });
-
-      collectionView.render();
     });
 
-    it("should bubble up through the parent collection view", function(){
-      expect(eventNames).toBeDefined();
-      expect(eventNames).toEqual([
-          'before:render',
-          'collection:before:render',
-          'before:item:added',
-          'itemview:before:render',
-          'itemview:item:before:render',
-          'itemview:render',
-          'itemview:item:rendered',
-          'after:item:added',
-          'render',
-          'collection:rendered'
-      ]);
+    describe("*:before:render events", function(){
+      var beforeSpy, itemBeforeSpy;
+
+      beforeEach(function(){
+        beforeSpy = jasmine.createSpy("before:render spy");
+        itemBeforeSpy = jasmine.createSpy("item:before:render spy");
+
+        collectionView.on("itemview:before:render", beforeSpy);
+        collectionView.on("itemview:item:before:render", itemBeforeSpy);
+        
+        collectionView.render();
+        childView = collectionView.children.findByIndex(0);
+      });
+
+      it("should bubble up through the parent collection view", function(){
+        // As odd as it seems, the events are triggered with two arguments,
+        // the first being the child view which triggered the event (itemview) 
+        // and the second being the event's owner.  It just so happens to be the 
+        // same view.
+        expect(beforeSpy).toHaveBeenCalledWith(childView, childView);
+        expect(itemBeforeSpy).toHaveBeenCalledWith(childView, childView);
+      });
+    });
+
+    describe("*:render events", function(){
+      var renderSpy, itemRenderedSpy;
+
+      beforeEach(function(){
+        renderSpy = jasmine.createSpy("render spy");
+        itemRenderedSpy = jasmine.createSpy("item:rendered spy");
+
+        collectionView.on("itemview:render", renderSpy);
+        collectionView.on("itemview:item:rendered", itemRenderedSpy);
+
+        collectionView.render();
+        childView = collectionView.children.findByIndex(0);
+      });
+
+      it("should bubble up through the parent collection view", function(){
+        // As odd as it seems, the events are triggered with two arguments,
+        // the first being the child view which triggered the event (itemview) 
+        // and the second being the event's owner.  It just so happens to be the 
+        // same view.
+        expect(renderSpy).toHaveBeenCalledWith(childView, childView);
+        expect(itemRenderedSpy).toHaveBeenCalledWith(childView, childView);
+      });
+    });
+
+    describe("*:before:close events", function(){
+      var beforeSpy, itemBeforeSpy;
+
+      beforeEach(function(){
+        beforeSpy = jasmine.createSpy("before:close spy");
+        itemBeforeSpy = jasmine.createSpy("item:before:close spy");
+
+        collectionView.on("itemview:before:close", beforeSpy);
+        collectionView.on("itemview:item:before:close", itemBeforeSpy);
+        
+        collectionView.render();
+        childView = collectionView.children.findByIndex(0);
+        collectionView.close();
+      });
+
+      it("should bubble up through the parent collection view", function(){
+        expect(beforeSpy).toHaveBeenCalledWith(childView);
+        expect(itemBeforeSpy).toHaveBeenCalledWith(childView);
+      });
+    });
+
+    describe("*:close events", function(){
+      var closeSpy, itemClosedSpy;
+
+      beforeEach(function(){
+        closeSpy = jasmine.createSpy("close spy");
+        itemClosedSpy = jasmine.createSpy("item:closed spy");
+
+        collectionView.on("itemview:close", closeSpy);
+        collectionView.on("itemview:item:closed", itemClosedSpy);
+        
+        collectionView.render();
+        childView = collectionView.children.findByIndex(0);
+        collectionView.close();
+      });
+
+      it("should bubble up through the parent collection view", function(){
+        expect(closeSpy).toHaveBeenCalledWith(childView);
+        expect(itemClosedSpy).toHaveBeenCalledWith(childView);
+      });
     });
   });
 

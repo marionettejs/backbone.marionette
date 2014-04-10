@@ -561,15 +561,19 @@ describe("collection view", function(){
       });
     });
 
-    describe("*:before:render events", function(){
-      var beforeSpy, itemBeforeSpy;
+    describe("render events", function(){
+      var beforeSpy, renderSpy, itemBeforeSpy, itemRenderedSpy;
 
       beforeEach(function(){
         beforeSpy = jasmine.createSpy("before:render spy");
+        renderSpy = jasmine.createSpy("render spy");
         itemBeforeSpy = jasmine.createSpy("item:before:render spy");
-
+        itemRenderedSpy = jasmine.createSpy("item:rendered spy");
+        
         collectionView.on("itemview:before:render", beforeSpy);
+        collectionView.on("itemview:render", renderSpy);
         collectionView.on("itemview:item:before:render", itemBeforeSpy);
+        collectionView.on("itemview:item:rendered", itemRenderedSpy);
         
         collectionView.render();
         childView = collectionView.children.findByIndex(0);
@@ -581,63 +585,24 @@ describe("collection view", function(){
         // and the second being the event's owner.  It just so happens to be the 
         // same view.
         expect(beforeSpy).toHaveBeenCalledWith(childView, childView);
-        expect(itemBeforeSpy).toHaveBeenCalledWith(childView, childView);
-      });
-    });
-
-    describe("*:render events", function(){
-      var renderSpy, itemRenderedSpy;
-
-      beforeEach(function(){
-        renderSpy = jasmine.createSpy("render spy");
-        itemRenderedSpy = jasmine.createSpy("item:rendered spy");
-
-        collectionView.on("itemview:render", renderSpy);
-        collectionView.on("itemview:item:rendered", itemRenderedSpy);
-
-        collectionView.render();
-        childView = collectionView.children.findByIndex(0);
-      });
-
-      it("should bubble up through the parent collection view", function(){
-        // As odd as it seems, the events are triggered with two arguments,
-        // the first being the child view which triggered the event (itemview) 
-        // and the second being the event's owner.  It just so happens to be the 
-        // same view.
         expect(renderSpy).toHaveBeenCalledWith(childView, childView);
+        expect(itemBeforeSpy).toHaveBeenCalledWith(childView, childView);
         expect(itemRenderedSpy).toHaveBeenCalledWith(childView, childView);
       });
     });
 
-    describe("*:before:close events", function(){
-      var beforeSpy, itemBeforeSpy;
+    describe("close events", function(){
+      var beforeSpy, closeSpy, itemBeforeSpy, itemClosedSpy;
 
       beforeEach(function(){
         beforeSpy = jasmine.createSpy("before:close spy");
-        itemBeforeSpy = jasmine.createSpy("item:before:close spy");
-
-        collectionView.on("itemview:before:close", beforeSpy);
-        collectionView.on("itemview:item:before:close", itemBeforeSpy);
-        
-        collectionView.render();
-        childView = collectionView.children.findByIndex(0);
-        collectionView.close();
-      });
-
-      it("should bubble up through the parent collection view", function(){
-        expect(beforeSpy).toHaveBeenCalledWith(childView);
-        expect(itemBeforeSpy).toHaveBeenCalledWith(childView);
-      });
-    });
-
-    describe("*:close events", function(){
-      var closeSpy, itemClosedSpy;
-
-      beforeEach(function(){
         closeSpy = jasmine.createSpy("close spy");
+        itemBeforeSpy = jasmine.createSpy("item:before:close spy");
         itemClosedSpy = jasmine.createSpy("item:closed spy");
 
+        collectionView.on("itemview:before:close", beforeSpy);
         collectionView.on("itemview:close", closeSpy);
+        collectionView.on("itemview:item:before:close", itemBeforeSpy);
         collectionView.on("itemview:item:closed", itemClosedSpy);
         
         collectionView.render();
@@ -646,7 +611,9 @@ describe("collection view", function(){
       });
 
       it("should bubble up through the parent collection view", function(){
+        expect(beforeSpy).toHaveBeenCalledWith(childView);
         expect(closeSpy).toHaveBeenCalledWith(childView);
+        expect(itemBeforeSpy).toHaveBeenCalledWith(childView);
         expect(itemClosedSpy).toHaveBeenCalledWith(childView);
       });
     });

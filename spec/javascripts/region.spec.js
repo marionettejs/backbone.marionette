@@ -21,6 +21,9 @@ describe("region", function(){
         $(this.el).html("some content");
       },
 
+      close: function(){
+      },
+
       onShow: function(){
         $(this.el).addClass("onShowClass");
       }
@@ -61,11 +64,11 @@ describe("region", function(){
       expect(openSpy).toHaveBeenCalled();
     });
 
-    it("shoudl call 'onShow' for the view, after the rendered HTML has been added to the DOM", function(){
+    it("should call 'onShow' for the view, after the rendered HTML has been added to the DOM", function(){
       expect($(view.el)).toHaveClass("onShowClass");
     })
 
-    it("shoudl call 'onShow' for the region, after the rendered HTML has been added to the DOM", function(){
+    it("should call 'onShow' for the region, after the rendered HTML has been added to the DOM", function(){
       expect(myRegion.onShow).toHaveBeenCalled();
     })
 
@@ -91,6 +94,43 @@ describe("region", function(){
 
     it("should set 'this' to the manager, from the show event", function(){
       expect(showSpy).toHaveBeenCalledOn(myRegion);
+    });
+
+    describe("when passing 'preventClose' option", function(){
+
+      var myRegion, view1, view2;
+
+      beforeEach(function(){
+        setFixtures("<div id='region'></div>");
+
+        view1 = new MyView();
+        view2 = new MyView();
+        myRegion = new MyRegion();
+
+        spyOn(view1, "close").andCallThrough();
+
+        myRegion.show(view1);
+      });
+
+      describe("preventClose: true", function(){
+        beforeEach(function(){
+          myRegion.show(view2, { preventClose: true });
+        });
+
+        it("shouldn't 'close' the old view", function(){
+          expect(view1.close.callCount).toEqual(0);
+        });
+      });
+
+      describe("preventClose: false", function(){
+        beforeEach(function(){
+          myRegion.show(view2, { preventClose: false });
+        });
+
+        it("should 'close' the old view", function(){
+          expect(view1.close).toHaveBeenCalled();
+        });
+      });
     });
   });
 

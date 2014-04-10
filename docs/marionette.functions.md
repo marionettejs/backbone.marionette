@@ -11,6 +11,7 @@ a way to get the same behaviors and conventions from your own code.
 * [Marionette.getOption](#marionettegetoption)
 * [Marionette.triggerMethod](#marionettetriggermethod)
 * [Marionette.bindEntityEvent](#marionettebindentityevents)
+* [Marionette.actAsCollection](#marionetteactAsCollection)
 
 ## Marionette.extend
 
@@ -87,15 +88,15 @@ var f;
 new M({}, { foo: f }); // => "bar"
 ```
 
-In this example, "bar" is returned both times because the second 
+In this example, "bar" is returned both times because the second
 example has an undefined value for `f`.
 
 ## Marionette.triggerMethod
 
 Trigger an event and a corresponding method on the target object.
 
-When an event is triggered, the first letter of each section of the 
-event name is capitalized, and the word "on" is tagged on to the front 
+When an event is triggered, the first letter of each section of the
+event name is capitalized, and the word "on" is tagged on to the front
 of it. Examples:
 
 * `triggerMethod("render")` fires the "onRender" function
@@ -112,8 +113,8 @@ callback methods will still be called, though.
 
 ## Marionette.bindEntityEvents
 
-This method is used to bind a backbone "entity" (collection/model) 
-to methods on a target object. 
+This method is used to bind a backbone "entity" (collection/model)
+to methods on a target object.
 
 ```js
 Backbone.View.extend({
@@ -134,7 +135,7 @@ Backbone.View.extend({
 });
 ```
 
-The first paremter, `target`, must have a `listenTo` method from the
+The first parameter, `target`, must have a `listenTo` method from the
 EventBinder object.
 
 The second parameter is the entity (Backbone.Model or Backbone.Collection)
@@ -142,7 +143,7 @@ to bind the events from.
 
 The third parameter is a hash of { "event:name": "eventHandler" }
 configuration. Multiple handlers can be separated by a space. A
-function can be supplied instead of a string handler name. 
+function can be supplied instead of a string handler name.
 
 ## Marionette.normalizeEvents
 
@@ -151,7 +152,7 @@ same hash with the function names replaced with the function references themselv
 
 This function is attached to the `Marionette.View` prototype by default. To use it from non-View classes you'll need to attach it yourself.
 
-```
+```js
 var View = Marionette.ItemView.extend({
 
   initialize: function() {
@@ -166,3 +167,41 @@ var View = Marionette.ItemView.extend({
 
 });
 ```
+
+## Marionette.actAsCollection
+
+Utility function for mixing in underscore collection behavior to an object.
+
+It works by taking an object and a property field, in this example 'list',
+and appending collection functions to the object so that it can
+delegate collection calls to its list.
+
+#### Object Literal
+```js
+obj = {
+  list: [1, 2, 3]
+}
+
+Marionette.actAsCollection(obj, 'list');
+
+var double = function(v){ return v*2};
+console.log(obj.map(double)); // [2, 4, 6]
+```
+
+#### Function Prototype
+```js
+var Func = function(list) {
+  this.list = list;
+};
+
+Marionette.actAsCollection(Func.prototype, 'list');
+var func = new Func([1,2,3]);
+
+
+var double = function(v){ return v*2};
+console.log(func.map(double)); // [2, 4, 6]
+```
+
+The first parameter is the object that will delegate underscore collection methods.
+
+The second parameter is the object field that will hold the list.

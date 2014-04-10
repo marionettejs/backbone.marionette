@@ -86,8 +86,8 @@ Marionette.Behaviors = (function(Marionette, _) {
       delegateEvents.apply(this, args);
 
       _.each(behaviors, function(b){
-        Marionette.bindEntityEvents(this, this.model, Marionette.getOption(b, "modelEvents"));
-        Marionette.bindEntityEvents(this, this.collection, Marionette.getOption(b, "collectionEvents"));
+        Marionette.bindEntityEvents(b, this.model, Marionette.getOption(b, "modelEvents"));
+        Marionette.bindEntityEvents(b, this.collection, Marionette.getOption(b, "collectionEvents"));
       }, this);
     },
 

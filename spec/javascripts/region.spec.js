@@ -554,6 +554,22 @@ describe("region", function(){
     })
   })
 
+  describe("when getting a region", function () {
+    beforeEach(function () {
+      this.MyApp = new Backbone.Marionette.Application();
+      this.MyApp.addRegions({
+        MyRegion: "#region",
+        anotherRegion: "#region2"
+      });
+
+      this.region = this.MyApp.MyRegion;
+    });
+
+    it("should return the region", function () {
+      expect(this.MyApp.getRegion("MyRegion")).toBe(this.region);
+    });
+  });
+
   describe("when resetting a region", function(){
     var region;
 

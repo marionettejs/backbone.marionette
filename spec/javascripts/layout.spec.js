@@ -317,4 +317,15 @@ describe("layout", function(){
     });
   });
 
+  describe("when getting a region", function () {
+    beforeEach(function () {
+      this.layout = new Layout();
+      this.region = this.layout.regionOne;
+    });
+
+    it("should return the region", function () {
+      expect(this.layout.getRegion("regionOne")).toBe(this.region);
+    });
+  });
+
 });

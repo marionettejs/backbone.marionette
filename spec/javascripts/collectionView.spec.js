@@ -580,8 +580,8 @@ describe("collection view", function(){
           'itemview:render',
           'itemview:item:rendered',
           'after:item:added',
-          'render',
-          'collection:rendered'
+          'collection:rendered',
+          'render'
       ]);
     });
   });

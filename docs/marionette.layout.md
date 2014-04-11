@@ -30,6 +30,7 @@ will provide features such as `onShow` callbacks, etc. Please see
 * [Nested Layouts And Views](#nested-layouts-and-views)
 * [Closing A Layout](#closing-a-layout)
 * [Custom Region Type](#custom-region-type)
+* [Region Naming](#region-naming)
 
 ## Basic Usage
 
@@ -260,3 +261,31 @@ or added later.
 
 For more information on using these methods, see
 the `regionManager` documentation.
+
+## Region Naming
+
+A Layouts' Regions are attached directly to the Layout instance with the name of the region
+as the key and the region itself as the value. Because of this, you need to be careful
+to avoid conflicts with existing properties on the Layout when you name your Region.
+
+The prototype chain of Layouts is:
+
+`Backbone.View > Marionette.View > Marionette.ItemView > Marionette.Layout`
+
+Consequently, every property on each of those Classes must be avoided as Region names. The most
+common issue people run into is trying to name their Region *"attributes"*. Be aware
+that you are **not** able to do this.
+
+The following is an abbreviated list of other names that can't be used as Region names. For a more
+complete list refer to the API documentation for each Class on the prototype chain:
+
+* attributes
+* constructor
+* regionType
+* render
+* close
+* addRegion
+* addRegions
+* removeRegion
+
+*Note: this is a known issue that is flagged for being fixed in v2*

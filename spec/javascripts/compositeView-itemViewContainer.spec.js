@@ -18,7 +18,10 @@ describe("composite view - itemViewContainer", function(){
     var CompositeView = Backbone.Marionette.CompositeView.extend({
       itemView: ItemView,
       itemViewContainer: "ul",
-      template: "#composite-child-container-template"
+      template: "#composite-child-container-template",
+      ui: {
+        list: "ul"
+      }
     });
 
     var CompositeViewWithoutItemViewContainer = Backbone.Marionette.CompositeView.extend({
@@ -49,6 +52,13 @@ describe("composite view - itemViewContainer", function(){
     specCase('in the view creation', function() {
       return new CompositeViewWithoutItemViewContainer({
         itemViewContainer: "ul",
+        collection: collection
+      });
+    });
+
+    specCase('with a @ui element', function() {
+      return new CompositeView({
+        itemViewContainer: "@ui.list",
         collection: collection
       });
     });
@@ -105,6 +115,22 @@ describe("composite view - itemViewContainer", function(){
     it("should throw an error", function(){
       expect(function(){compositeView.render()}).toThrow("The specified `itemViewContainer` was not found: #missing-container");
     });
+
+    describe("and referencing the @ui hash", function() {
+
+      beforeEach(function() {
+        CompositeView = Backbone.Marionette.CompositeView.extend({
+          itemView: ItemView,
+          itemViewContainer: '@ui.missing-container',
+          template: "#composite-child-container-template"
+        });
+      });
+
+      it("should still throw an error", function(){
+        expect(function(){compositeView.render()}).toThrow("The specified `itemViewContainer` was not found: #missing-container");
+      });
+    });
+
   });
 
 

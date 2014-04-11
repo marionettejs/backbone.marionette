@@ -25,4 +25,3 @@ Marionette.Renderer = {
     return templateFunc(data);
   }
 };
-

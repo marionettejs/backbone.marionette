@@ -61,7 +61,7 @@ Definitions can either be a callback function or an object literal.
 ### Callback Function Definition
 
 The callback function definition will be invoked immediately on calling
-the `module` method. 
+the `module` method.
 
 It will receive 6 parameters, in this order:
 
@@ -86,7 +86,7 @@ MyApp.module("MyModule", function(MyModule, MyApp, Backbone, Marionette, $, _){
   // --------------------------
 
   var myData = "this is private data";
- 
+
   var myFunction = function(){
     console.log(myData);
   }
@@ -268,7 +268,7 @@ MyApp.Parent.Child; // => a valid module object
 MyApp.Parent.Child.GrandChild; // => a valid module object
 ```
 
-When defining sub-modules using the dot-notation, the 
+When defining sub-modules using the dot-notation, the
 parent modules do not need to exist; they'll be created for you. If a parent
 has already been instantiated then that instance will be used.
 
@@ -307,7 +307,7 @@ immediately started.
 
 Modules, like `Application` objects, can be configured to have initializers. And just like
 an Application's initializers, module's initializers are run anytime that
-the module is started. Further, there is no limit to the number of initializers it can have. 
+the module is started. Further, there is no limit to the number of initializers it can have.
 
 Initializers can be added in the module's definition function.
 
@@ -328,7 +328,7 @@ MyApp.module("Foo", function(Foo){
 ### Start Events
 
 When starting a module, a "before:start" event will be triggered prior
-to any of the initializers being run. A "start" event will then be 
+to any of the initializers being run. A "start" event will then be
 triggered after they have been run.
 
 ```js
@@ -345,7 +345,7 @@ mod.on("start", function(){
 
 #### Passing Data to Start Events
 
-`.start` takes a single `options` parameter that will be passed to start events and their equivalent methods (`onStart` and `onBeforeStart`.) 
+`.start` takes a single `options` parameter that will be passed to start events and their equivalent methods (`onStart` and `onBeforeStart`.)
 
 ```js
 var mod = MyApp.module("MyMod");
@@ -399,8 +399,8 @@ When splitting a module across multiple files, it is recommended that you set
 
 ### Starting Sub-Modules With Parent
 
-As you might expect, submodules default to starting with their parent module. 
- The starting of sub-modules is done in a depth-first hierarchy traversal. 
+As you might expect, submodules default to starting with their parent module.
+ The starting of sub-modules is done in a depth-first hierarchy traversal.
 That is, a hierarchy of `Foo.Bar.Baz` will start `Baz` first, then `Bar`,
 and finally `Foo`.
 
@@ -425,7 +425,7 @@ MyApp.module("Foo.Bar", function(){
   this.startWithParent = false;
 })
 
-MyApp.start(); 
+MyApp.start();
 ```
 
 Now the module "Foo" will be started, but the sub-module "Foo.Bar" will
@@ -450,7 +450,7 @@ To stop a module and its children, call the `stop` method of a module.
 MyApp.module("Foo").stop();
 ```
 
-Modules are not automatically stopped by the application. If you wish to 
+Modules are not automatically stopped by the application. If you wish to
 stop one you must call the `stop` method on it, or stop its parent module.
 When you stop any parent module, all of its children will be stopped as well.
 

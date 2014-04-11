@@ -322,4 +322,49 @@ describe("app router", function(){
     });
   });
 
+  describe('processRoutes', function () {
+    beforeEach(function () {
+      this.Controller = function(){
+        return {
+          method1: sinon.spy(),
+          method2: sinon.spy()
+        };
+      };
+
+      this.AppRouter = Backbone.Marionette.AppRouter.extend({
+        appRoutes: {
+          'm1' : 'method1',
+          'm2' : 'method2'
+        },
+        processAppRoutes: sinon.spy()
+      });
+    });
+
+    it('should process routes when options.processRoutes is not defined', function () {
+      var router = new this.AppRouter({
+        controller: new this.Controller()
+      });
+
+      expect(router.processAppRoutes).toHaveBeenCalled();
+    });
+
+    it('should process routes when options.processRoutes is set to true', function () {
+      var router = new this.AppRouter({
+        controller: new this.Controller(),
+        processRoutes: true
+      });
+
+      expect(router.processAppRoutes).toHaveBeenCalled();
+    });
+
+    it('should not process routes when options.processRoutes is set to false', function () {
+      var router = new this.AppRouter({
+        controller: new this.Controller(),
+        processRoutes: false
+      });
+
+      expect(router.processAppRoutes).not.toHaveBeenCalled();
+    });
+  });
+
 });

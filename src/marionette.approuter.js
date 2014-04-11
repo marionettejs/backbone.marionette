@@ -20,12 +20,16 @@ Marionette.AppRouter = Backbone.Router.extend({
 
   constructor: function(options){
     Backbone.Router.prototype.constructor.apply(this, arguments);
-	
+
     this.options = options || {};
 
     var appRoutes = Marionette.getOption(this, "appRoutes");
-    var controller = this._getController();
-    this.processAppRoutes(controller, appRoutes);
+    var processRoutes = Marionette.getOption(this, 'processRoutes');
+
+    if (appRoutes && (processRoutes === undefined || processRoutes) ) {
+      var controller = this._getController();
+      this.processAppRoutes(controller, appRoutes);
+    }
   },
 
   // Similar to route method on a Backbone Router but

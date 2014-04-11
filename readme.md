@@ -2,7 +2,7 @@
 
 Make your Backbone.js apps dance!
 
-[![Build Status](https://secure.travis-ci.org/marionettejs/backbone.marionette.png?branch=master)](http://travis-ci.org/marionettejs/backbone.marionette)
+[![Build Status](https://secure.travis-ci.org/marionettejs/backbone.marionette.svg?branch=master)](http://travis-ci.org/marionettejs/backbone.marionette)
 
 
 ## About Marionette

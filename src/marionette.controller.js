@@ -24,6 +24,6 @@ _.extend(Marionette.Controller.prototype, Backbone.Events, {
     this.stopListening();
     var args = Array.prototype.slice.call(arguments);
     this.triggerMethod.apply(this, ["close"].concat(args));
-    this.unbind();
+    this.off();
   }
 });

@@ -24,8 +24,9 @@ Marionette.AppRouter = Backbone.Router.extend({
     this.options = options || {};
 
     var appRoutes = Marionette.getOption(this, "appRoutes");
+    var processRoutes = Marionette.getOption(this, 'processRoutes');
 
-    if (appRoutes && (!_.has(this.options, 'processRoutes') || this.options.processRoutes)) {
+    if (appRoutes && (processRoutes === undefined || processRoutes) ) {
       var controller = this._getController();
       this.processAppRoutes(controller, appRoutes);
     }

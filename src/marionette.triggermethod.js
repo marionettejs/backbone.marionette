@@ -21,17 +21,20 @@ Marionette.triggerMethod = (function(){
     // get the method name from the event name
     var methodName = 'on' + event.replace(splitter, getEventName);
     var method = this[methodName];
+    var result;
+
+    // call the onMethodName if it exists
+    if (_.isFunction(method)) {
+      // pass all arguments, except the event name
+      result = method.apply(this, _.tail(arguments));
+    }
 
     // trigger the event, if a trigger method exists
     if(_.isFunction(this.trigger)) {
       this.trigger.apply(this, arguments);
     }
 
-    // call the onMethodName if it exists
-    if (_.isFunction(method)) {
-      // pass all arguments, except the event name
-      return method.apply(this, _.tail(arguments));
-    }
+    return result;
   };
 
   return triggerMethod;

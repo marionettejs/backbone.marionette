@@ -22,7 +22,7 @@
   function bindFromStrings(target, entity, evt, methods){
     var methodNames = methods.split(/\s+/);
 
-    _.each(methodNames,function(methodName) {
+    _.each(methodNames, function(methodName) {
 
       var method = target[methodName];
       if(!method) {
@@ -43,7 +43,7 @@
   function unbindFromStrings(target, entity, evt, methods){
     var methodNames = methods.split(/\s+/);
 
-    _.each(methodNames,function(methodName) {
+    _.each(methodNames, function(methodName) {
       var method = target[methodName];
       target.stopListening(entity, evt, method);
     });

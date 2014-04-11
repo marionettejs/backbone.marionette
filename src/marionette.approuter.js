@@ -20,12 +20,13 @@ Marionette.AppRouter = Backbone.Router.extend({
 
   constructor: function(options){
     Backbone.Router.prototype.constructor.apply(this, arguments);
-	
+
     this.options = options || {};
 
     var appRoutes = Marionette.getOption(this, "appRoutes");
     var controller = this._getController();
     this.processAppRoutes(controller, appRoutes);
+    this.on("route", this._processOnRoute, this);
   },
 
   // Similar to route method on a Backbone Router but
@@ -33,6 +34,18 @@ Marionette.AppRouter = Backbone.Router.extend({
   appRoute: function(route, methodName) {
     var controller = this._getController();
     this._addAppRoute(controller, route, methodName);
+  },
+
+  // process the route event and trigger the onRoute
+  // method call, if it exists
+  _processOnRoute: function(routeName, routeArgs){
+    // find the path that matched
+    var routePath = _.invert(this.appRoutes)[routeName];
+
+    // make sure an onRoute is there, and call it
+    if (_.isFunction(this.onRoute)){
+      this.onRoute(routeName, routePath, routeArgs);
+    }
   },
 
   // Internal method to process the `appRoutes` for the
@@ -62,4 +75,3 @@ Marionette.AppRouter = Backbone.Router.extend({
     this.route(route, methodName, _.bind(method, controller));
   }
 });
-

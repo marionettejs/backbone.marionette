@@ -469,22 +469,17 @@ describe("collection view", function(){
   });
 
   describe("when a child view triggers an event", function(){
-    var model = new Backbone.Model({foo: "bar"});
-    var collection = new Backbone.Collection([model]);
-    var collectionView;
-    var childView;
-    var triggeringView;
-    var eventArgs;
+    var model, collection, collectionView, childView, someEventSpy;
 
     beforeEach(function(){
-      collectionView = new CollectionView({
-        collection: collection
-      });
+      someEventSpy = jasmine.createSpy("some:event spy");
 
+      model = new Backbone.Model({ foo: "bar" });
+      collection = new Backbone.Collection([model]);
+
+      collectionView = new CollectionView({ collection: collection });
+      collectionView.on("itemview:some:event", someEventSpy);
       collectionView.render();
-      collectionView.on("itemview:some:event", function(){
-        eventArgs = Array.prototype.slice.call(arguments);
-      });
 
       spyOn(collectionView, "trigger").andCallThrough();
       childView = collectionView.children.findByIndex(0);
@@ -495,37 +490,27 @@ describe("collection view", function(){
       expect(collectionView.trigger).toHaveBeenCalledWith("itemview:some:event", childView, "test", model);
     });
 
-    it("should provide the child view that triggered the event as the first parameter", function(){
-      expect(eventArgs[0]).toBe(childView);
-    });
-
-    it("should forward all other arguments in order", function(){
-      expect(eventArgs[1]).toBe("test");
-      expect(eventArgs[2]).toBe(model);
+    it("should provide the child view that triggered the event, including other relevant parameters", function() {
+      expect(someEventSpy).toHaveBeenCalledWith(childView, "test", model);
     });
   });
 
   describe("when configuring a custom itemViewEventPrefix", function(){
-    var model = new Backbone.Model({foo: "bar"});
-    var collection = new Backbone.Collection([model]);
-    var collectionView;
-    var childView;
-    var triggeringView;
-    var eventArgs;
+    var model, collection, collectionView, childView, someEventSpy;
+
+    var CV = CollectionView.extend({
+      itemViewEventPrefix: "myPrefix"
+    });
 
     beforeEach(function(){
-      var CV = CollectionView.extend({
-        itemViewEventPrefix: "myPrefix"
-      });
+      someEventSpy = jasmine.createSpy("some:event spy");
 
-      collectionView = new CV({
-        collection: collection
-      });
+      model = new Backbone.Model({ foo: "bar" });
+      collection = new Backbone.Collection([model]);
 
+      collectionView = new CV({ collection: collection });
+      collectionView.on("myPrefix:some:event", someEventSpy);
       collectionView.render();
-      collectionView.on("myPrefix:some:event", function(){
-        eventArgs = Array.prototype.slice.call(arguments);
-      });
 
       spyOn(collectionView, "trigger").andCallThrough();
       childView = collectionView.children.findByIndex(0);
@@ -536,53 +521,81 @@ describe("collection view", function(){
       expect(collectionView.trigger).toHaveBeenCalledWith("myPrefix:some:event", childView, "test", model);
     });
 
-    it("should provide the child view that triggered the event as the first parameter", function(){
-      expect(eventArgs[0]).toBe(childView);
-    });
-
-    it("should forward all other arguments in order", function(){
-      expect(eventArgs[1]).toBe("test");
-      expect(eventArgs[2]).toBe(model);
+    it("should provide the child view that triggered the event, including other relevant parameters", function() {
+      expect(someEventSpy).toHaveBeenCalledWith(childView, "test", model);
     });
   });
 
-  describe("when a child view triggers default events", function(){
-    var model = new Backbone.Model({foo: "bar"});
-    var collection = new Backbone.Collection([model]);
-    var collectionView;
-    var eventNames = [];
+  describe("when a child view triggers the default", function(){
+    var model, collection, collectionView, childView;
 
     beforeEach(function(){
+      model = new Backbone.Model({ foo: "bar" });
+      collection = new Backbone.Collection([model]);
+
       collectionView = new CollectionView({
         itemView: Backbone.Marionette.ItemView.extend({
             template: function() { return '<%= foo %>'; }
         }),
         collection: collection
       });
-
-      collectionView.on("all", function(){
-        var eventName = arguments[0];
-
-        eventNames.push(eventName);
-      });
-
-      collectionView.render();
     });
 
-    it("should bubble up through the parent collection view", function(){
-      expect(eventNames).toBeDefined();
-      expect(eventNames).toEqual([
-          'before:render',
-          'collection:before:render',
-          'before:item:added',
-          'itemview:before:render',
-          'itemview:item:before:render',
-          'itemview:render',
-          'itemview:item:rendered',
-          'after:item:added',
-          'render',
-          'collection:rendered'
-      ]);
+    describe("render events", function(){
+      var beforeSpy, renderSpy, itemBeforeSpy, itemRenderedSpy;
+
+      beforeEach(function(){
+        beforeSpy = jasmine.createSpy("before:render spy");
+        renderSpy = jasmine.createSpy("render spy");
+        itemBeforeSpy = jasmine.createSpy("item:before:render spy");
+        itemRenderedSpy = jasmine.createSpy("item:rendered spy");
+        
+        collectionView.on("itemview:before:render", beforeSpy);
+        collectionView.on("itemview:render", renderSpy);
+        collectionView.on("itemview:item:before:render", itemBeforeSpy);
+        collectionView.on("itemview:item:rendered", itemRenderedSpy);
+        
+        collectionView.render();
+        childView = collectionView.children.findByIndex(0);
+      });
+
+      it("should bubble up through the parent collection view", function(){
+        // As odd as it seems, the events are triggered with two arguments,
+        // the first being the child view which triggered the event (itemview) 
+        // and the second being the event's owner.  It just so happens to be the 
+        // same view.
+        expect(beforeSpy).toHaveBeenCalledWith(childView, childView);
+        expect(renderSpy).toHaveBeenCalledWith(childView, childView);
+        expect(itemBeforeSpy).toHaveBeenCalledWith(childView, childView);
+        expect(itemRenderedSpy).toHaveBeenCalledWith(childView, childView);
+      });
+    });
+
+    describe("close events", function(){
+      var beforeSpy, closeSpy, itemBeforeSpy, itemClosedSpy;
+
+      beforeEach(function(){
+        beforeSpy = jasmine.createSpy("before:close spy");
+        closeSpy = jasmine.createSpy("close spy");
+        itemBeforeSpy = jasmine.createSpy("item:before:close spy");
+        itemClosedSpy = jasmine.createSpy("item:closed spy");
+
+        collectionView.on("itemview:before:close", beforeSpy);
+        collectionView.on("itemview:close", closeSpy);
+        collectionView.on("itemview:item:before:close", itemBeforeSpy);
+        collectionView.on("itemview:item:closed", itemClosedSpy);
+        
+        collectionView.render();
+        childView = collectionView.children.findByIndex(0);
+        collectionView.close();
+      });
+
+      it("should bubble up through the parent collection view", function(){
+        expect(beforeSpy).toHaveBeenCalledWith(childView);
+        expect(closeSpy).toHaveBeenCalledWith(childView);
+        expect(itemBeforeSpy).toHaveBeenCalledWith(childView);
+        expect(itemClosedSpy).toHaveBeenCalledWith(childView);
+      });
     });
   });
 
@@ -740,83 +753,102 @@ describe("collection view", function(){
     });
   });
 
-  describe("calling itemEvents via an itemEvents method", function() {
-    var renderCalled;
+  describe("when calling itemEvents via an itemEvents method", function() {
+    var model, collection, collectionView, childView, someEventSpy;
 
-    var CV = Marionette.CollectionView.extend({
-      itemView: ItemView,
+    var CV = CollectionView.extend({
       itemEvents: function() {
         return {
-          "render": function() {
-            renderCalled = true;
-          }
+          "some:event": "someEvent"
         }
       }
     });
 
     beforeEach(function() {
-      renderCalled = false;
-      var cv = new CV({
-        collection: (new Backbone.Collection([{}]))
-      });
+      someEventSpy = jasmine.createSpy("some:event spy");
 
-      cv.render();
+      model = new Backbone.Model({ foo: "bar" });
+      collection = new Backbone.Collection([model]);
+
+      collectionView = new CV({ collection: collection });
+      collectionView.someEvent = someEventSpy;
+      collectionView.render();
+
+      spyOn(collectionView, "trigger").andCallThrough();
+      childView = collectionView.children.findByIndex(0);
+      childView.trigger("some:event", "test", model);
     });
 
-    it("should call the associated itemEvent when defined when itemEvents is a method", function() {
-      expect(renderCalled).toBe(true);
+    it("should bubble up through the parent collection view", function() {
+      expect(collectionView.trigger).toHaveBeenCalledWith("itemview:some:event", childView, "test", model);
+    });
+
+    it("should provide the child view that triggered the event, including other relevant parameters", function() {
+      expect(someEventSpy).toHaveBeenCalledWith("itemview:some:event", childView, "test", model);
     });
   });
 
-  describe("calling itemEvents via the itemEvents hash", function(){
-    var renderCalled;
+  describe("when calling itemEvents via the itemEvents hash", function() {
+    var model, collection, collectionView, childView, onSomeEventSpy;
 
-    var CV = Marionette.CollectionView.extend({
-      itemView: ItemView,
-      itemEvents: {
-        "render": function() {
-          renderCalled = true;
+    beforeEach(function() {
+      onSomeEventSpy = jasmine.createSpy("some:event spy");
+      var CV = CollectionView.extend({
+        itemEvents: {
+          "some:event": onSomeEventSpy
         }
-      }
-    });
-
-    beforeEach(function() {
-      renderCalled = false;
-
-      var cv = new CV({
-        collection: (new Backbone.Collection([{}]))
       });
 
-      cv.render();
+      model = new Backbone.Model({ foo: "bar" });
+      collection = new Backbone.Collection([model]);
+
+      collectionView = new CV({ collection: collection });
+      collectionView.render();
+
+      spyOn(collectionView, "trigger").andCallThrough();
+      childView = collectionView.children.findByIndex(0);
+      childView.trigger("some:event", "test", model);
     });
 
-    it("should call the associated itemEvent when defined", function() {
-      expect(renderCalled).toBe(true);
+    it("should bubble up through the parent collection view", function() {
+      expect(collectionView.trigger).toHaveBeenCalledWith("itemview:some:event", childView, "test", model);
+    });
+
+    it("should provide the child view that triggered the event, including other relevant parameters", function() {
+      expect(onSomeEventSpy).toHaveBeenCalledWith("itemview:some:event", childView, "test", model);
     });
   });
 
-  describe("calling itemEvents via the itemEvents hash with a string of the function name", function(){
-    var someFn;
+  describe("when calling itemEvents via the itemEvents hash with a string of the function name", function() {
+    var model, collection, collectionView, childView, someEventSpy;
 
-    var CV = Marionette.CollectionView.extend({
-      itemView: ItemView,
+    var CV = CollectionView.extend({
       itemEvents: {
-        "render": "someFn"
+        "some:event": "someEvent"
       }
     });
 
     beforeEach(function() {
-      someFn = sinon.spy();
-      CV.prototype.someFn = someFn;
-      var cv = new CV({
-        collection: (new Backbone.Collection([{}]))
-      });
+      someEventSpy = jasmine.createSpy("some:event spy");
 
-      cv.render();
+      model = new Backbone.Model({ foo: "bar" });
+      collection = new Backbone.Collection([model]);
+
+      collectionView = new CV({ collection: collection });
+      collectionView.someEvent = someEventSpy;
+      collectionView.render();
+
+      spyOn(collectionView, "trigger").andCallThrough();
+      childView = collectionView.children.findByIndex(0);
+      childView.trigger("some:event", "test", model);
     });
 
-    it("should call the associated itemEvent function when defined", function() {
-      expect(someFn).toHaveBeenCalledOnce();
+    it("should bubble up through the parent collection view", function() {
+      expect(collectionView.trigger).toHaveBeenCalledWith("itemview:some:event", childView, "test", model);
+    });
+
+    it("should provide the child view that triggered the event, including other relevant parameters", function() {
+      expect(someEventSpy).toHaveBeenCalledWith("itemview:some:event", childView, "test", model);
     });
   });
 

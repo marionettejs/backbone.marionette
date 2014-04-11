@@ -1,9 +1,9 @@
 # Marionette.Application
 
-The `Backbone.Marionette.Application` object is the hub of your composite 
+The `Backbone.Marionette.Application` object is the hub of your composite
 application. It organizes, initializes and coordinates the various pieces of your
-app. It also provides a starting point for you to call into, from your HTML 
-script block or from your JavaScript files directly if you prefer to go that 
+app. It also provides a starting point for you to call into, from your HTML
+script block or from your JavaScript files directly if you prefer to go that
 route.
 
 The `Application` is meant to be instantiated directly, although you can extend
@@ -95,7 +95,7 @@ object (see below).
 
 ## Starting An Application
 
-Once you have your application configured, you can kick everything off by 
+Once you have your application configured, you can kick everything off by
 calling: `MyApp.start(options)`.
 
 This function takes a single optional parameter. This parameter will be passed
@@ -139,7 +139,7 @@ window.setInterval(function() {
 
 ### Request Response
 
-Request Response is a means for any component to request information from another component without being tightly coupled. An instance of Request Response is available on the Application as the `reqres` property. 
+Request Response is a means for any component to request information from another component without being tightly coupled. An instance of Request Response is available on the Application as the `reqres` property.
 
 ```js
 MyApp = new Backbone.Marionette.Application();
@@ -251,11 +251,11 @@ var r1Again = app.r1;
 ```
 
 Accessing a region by named attribute is equivalent to accessing
-it from the `getRegion` method. 
+it from the `getRegion` method.
 
 ### Removing Regions
 
-Regions can also be removed with the `removeRegion` method, passing in 
+Regions can also be removed with the `removeRegion` method, passing in
 the name of the region to remove as a string value:
 
 ```js

@@ -71,6 +71,13 @@ Marionette.Layout = Marionette.ItemView.extend({
     return this.regionManager.removeRegion(name);
   },
 
+  // Provides alternative access to regions
+  // Accepts the region name
+  // getRegion('main')
+  getRegion: function(region) {
+    return this.regionManager.get(region);
+  },
+
   // internal method to build regions
   _buildRegions: function(regions){
     var that = this;

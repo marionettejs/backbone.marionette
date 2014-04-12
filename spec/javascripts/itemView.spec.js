@@ -57,11 +57,11 @@ describe("item view", function(){
     });
 
     it("should trigger a before:render event", function(){
-      expect(view.trigger).toHaveBeenCalledWith("item:before:render", view);
+      expect(view.trigger).toHaveBeenCalledWith("before:render", view);
     });
 
     it("should trigger a rendered event", function(){
-      expect(view.trigger).toHaveBeenCalledWith("item:rendered", view);
+      expect(view.trigger).toHaveBeenCalledWith("render", view);
     });
   });
 
@@ -272,11 +272,11 @@ describe("item view", function(){
     });
 
     it("should trigger 'item:before:close'", function(){
-      expect(view.trigger).toHaveBeenCalledWith("item:before:close");
+      expect(view.trigger).toHaveBeenCalledWith("before:close");
     });
 
     it("should trigger 'item:closed", function(){
-      expect(view.trigger).toHaveBeenCalledWith("item:closed");
+      expect(view.trigger).toHaveBeenCalledWith("close");
     });
 
     it("should call `onBeforeClose` if provided", function(){

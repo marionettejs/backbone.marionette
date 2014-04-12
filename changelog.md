@@ -1,3 +1,55 @@
+### v1.8.0 [view commit logs](https://github.com/marionettejs/backbone.marionette/compare/v1.7.4...v1.8.0)
+
+  * General
+    * Update Gruntfile.
+    * The default task (`grunt`) now runs tests.
+    * `$ grunt dev` watch for watching.
+    * `$ grunt build` runs the tests and compiles.
+    * Add better inline documentation for module implementation.
+    * Add better inline behavior documentation.
+
+  * Fixes
+    * Behaviors now correctly lookup methods for `modelEvents` and `collectionEvents`.
+    * The `CollectionView` now triggers close on its children in the correct order.
+
+  * Features
+    * Add `onRoute` to the `appRouter`.
+    ```js
+      Backbone.Marionette.AppRouter.extend({
+        onRoute: function(route, params) {
+        }
+      })
+    ```
+    * `Region.show` now takes an option to prevent closing the previous view in the region. By default a region will automatically close the previous view, however you can prevent this behavior by passing `{preventDestroy: true}` in the options parameter.
+    ```js
+    myRegion.show(view2, { preventDestroy: true })
+    ```
+    * Add  a `getRegion`  method to `Layout`. This is in line with the eventual goal of not attaching regions to the root layout object.
+    * Behavior instances now extend from Backbone.Events, allowing you to use `.listenTo` and `.on`.
+
+    * Allow Behaviors to have a functional hash lookup.
+    ```js
+      Marionette.ItemView.extend({
+        behaviors: function() {
+          // “this” will refer to the view instance
+          return : {
+            BehaviorA: {}
+          }
+        }
+      })
+    ```
+    * RegionManagers now calls `stopListening` on a regions on removal.
+
+  * Refactors
+    * Abstract underscore collection method mixin into a generic helper.
+    * Use built in marionette extend for behaviors.
+
+  * Tests
+    * Add a whitespace linter to the text coverage. Trailing whitespace now causes travis.ci to fail.
+    * Add test coverage for `bindEntitiyEvents` and `unbindEntityEvents`.
+    * Test public API for the `regionManager`.
+    * Improve view trigger tests for better control when testing.
+
 ### v1.7.4 [view commit logs](https://github.com/marionettejs/backbone.marionette/compare/v1.7.3...v1.7.4)
 
 * General

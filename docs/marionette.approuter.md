@@ -53,6 +53,21 @@ This allows you to create router instances without having to `.extend`
 from the AppRouter. You can just create the instance with the routes defined
 in the constructor, as shown.
 
+You can also stop the constructor from processing `appRoutes` by setting
+`processRoutes` to false. This can be useful for avoiding cases of double
+initialization.
+
+```js
+var MyRouter = new Marionette.AppRouter({
+  controller: myController,
+  appRoutes: {
+    "foo": "doFoo",
+    "bar/:id": "doBar"
+  },
+  processRoutes: false
+});
+```
+
 ## Add Routes At Runtime
 
 In addition to setting the `appRoutes` for an AppRouter, you can add app routes

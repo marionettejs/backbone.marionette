@@ -10,6 +10,9 @@ Marionette.CompositeView = Marionette.CollectionView.extend({
 
   // Setting up the inheritance chain which allows changes to
   // Marionette.CollectionView.prototype.constructor which allows overriding
+  // option to pass '{sort: false}' to prevent the CompositeView from
+  // maintaining the sorted order of the collection.
+  // This will fallback onto appending childView's to the end.
   constructor: function() {
     Marionette.CollectionView.prototype.constructor.apply(this, arguments);
   },
@@ -26,6 +29,10 @@ Marionette.CompositeView = Marionette.CollectionView.extend({
         this.listenTo(this.collection, 'add', this.onChildAdd);
         this.listenTo(this.collection, 'remove', this.onChildRemove);
         this.listenTo(this.collection, 'reset', this._renderChildren);
+
+        if (this.sort) {
+          this.listenTo(this.collection, 'sort', this._sortViews);
+        }
       }
     });
 
@@ -109,20 +116,12 @@ Marionette.CompositeView = Marionette.CollectionView.extend({
     $container.append(buffer);
   },
 
-  // Appends the `el` of childView instances to the specified
-  // `childViewContainer` (a jQuery selector). Override this method to
-  // provide custom logic of how the child view instances have their
-  // HTML appended to the composite view instance.
-  appendHtml: function(compositeView, childView, index) {
-    if (compositeView.isBuffering) {
-      compositeView.elBuffer.appendChild(childView.el);
-      compositeView._bufferedChildren.push(childView);
-    } else {
-      // If we've already rendered the main collection, just
-      // append the new items directly into the element.
-      var $container = this.getChildViewContainer(compositeView);
-      $container.append(childView.el);
-    }
+  // Internal method. Append a view to the end of the $el.
+  // Overidden from CollectionView to ensure view is appended to
+  // childViewContainer
+  _insertAfter: function (childView) {
+    var $container = this.getChildViewContainer(this);
+    $container.append(childView.el);
   },
 
   // Internal method to ensure an `$childViewContainer` exists, for the

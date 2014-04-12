@@ -73,12 +73,12 @@
 * Fixes
   * Binds behavior events to the behavior instance, as compared to the view.
 
-### v1.7.1 [view commit logs](https://github.com/marionettejs/backbone.marionette/compare/v1.7.0...v1.7.1)
+### v1.7.1 [view commit logs](https://github.com/marionettejs/backbone.marionette/compare/v1.7...v1.7.1)
 
 * Fixes
   * Enables the use of string based behavior event methods.
 
-### v1.7.0 [view commit logs](https://github.com/marionettejs/backbone.marionette/compare/v1.6.4...v1.7.0)
+### v1.7.0 [view commit logs](https://github.com/marionettejs/backbone.marionette/compare/v1.6.4...v1.7)
 
 Version 1.7 represents a significant step in formalizing the ways to improve your `view` code though reusable `behaviors`. Say goodbye to custom mixin strategies and welcome `behaviors` into town.
 

@@ -3,7 +3,9 @@
 A `CompositeView` extends from `CollectionView` to be used as a
 composite view for scenarios where it should represent both a
 branch and leaf in a tree structure, or for scenarios where a
-collection needs to be rendered within a wrapper template.
+collection needs to be rendered within a wrapper template. By default the
+`CompositeView` will maintain a sorted collection's order
+in the DOM. This behavior can be disabled by specifying `{sort: false}` on initialize.
 
 Please see
 [the Marionette.CollectionView documentation](marionette.collectionview.md)

@@ -12,7 +12,13 @@ Marionette.CollectionView = Marionette.View.extend({
   childViewEventPrefix: 'childview',
 
   // constructor
-  constructor: function(options) {
+  // option to pass `{sort: false}` to prevent the `CollectionView` from
+  // maintaining the sorted order of the collection.
+  // This will fallback onto appending childView's to the end.
+  constructor: function(options){
+    var initOptions = options || {};
+    this.sort = _.isUndefined(initOptions.sort) ? true : initOptions.sort;
+
     this._initChildViewStorage();
 
     Marionette.View.prototype.constructor.apply(this, arguments);
@@ -61,6 +67,10 @@ Marionette.CollectionView = Marionette.View.extend({
       this.listenTo(this.collection, 'add', this.onChildAdd);
       this.listenTo(this.collection, 'remove', this.onChildRemove);
       this.listenTo(this.collection, 'reset', this.render);
+
+      if (this.sort) {
+        this.listenTo(this.collection, 'sort', this._sortViews);
+      }
     }
   },
 
@@ -101,6 +111,20 @@ Marionette.CollectionView = Marionette.View.extend({
     return this;
   },
 
+  // Internal method. This checks for any changes in the order of the collection.
+  // If the index of any view doesn't match, it will render.
+  _sortViews: function(){
+    // check for any changes in sort order of views
+    var orderChanged = this.collection.find(function(item, index){
+      var view = this.children.findByModel(item);
+      return view && view._index !== index;
+    }, this);
+
+    if (orderChanged) {
+      this.render();
+    }
+  },
+
   // Internal method. Separated so that CompositeView can have
   // more control over events being triggered, around the rendering
   // process
@@ -138,7 +162,7 @@ Marionette.CollectionView = Marionette.View.extend({
     if (EmptyView && !this._showingEmptyView) {
       this._showingEmptyView = true;
       var model = new Backbone.Model();
-      this.addChild(model, EmptyView, 0);
+      this.addChild(model, EmptyView, -1);
     }
   },
 
@@ -171,7 +195,9 @@ Marionette.CollectionView = Marionette.View.extend({
   },
 
   // Render the child's view and add it to the
-  // HTML for the collection view.
+  // HTML for the collection view at a given index.
+  // This will also update the indices of later views in the collection
+  // in order to keep the children in sync with the collection.
   addChild: function(child, ChildView, index) {
     var childViewOptions = Marionette.getOption(this, 'childViewOptions');
     if (_.isFunction(childViewOptions)) {
@@ -179,7 +205,50 @@ Marionette.CollectionView = Marionette.View.extend({
     }
 
     var view = this.buildChildView(child, ChildView, childViewOptions);
+
+    // increment indices of views after this one
+    this._updateIndices(view, true, index);
+
+    this._addChildView(view, index);
+
+    return view;
+  },
+
+  // Internal method. This decrements or increments the indices of views after the
+  // added/removed view to keep in sync with the collection.
+  _updateIndices: function(view, increment, index) {
+    if (!this.sort) {
+      return;
+    }
+
+    if (increment) {
+      // assign the index to the view
+      view._index = index;
+
+      // increment the index of views after this one
+      this.children.each(function (laterView) {
+        if (laterView._index >= view._index) {
+          laterView._index++;
+        }
+      });
+    }
+    else {
+      // decrement the index of views after this one
+      this.children.each(function (laterView) {
+        if (laterView._index >= view._index) {
+          laterView._index--;
+        }
+      });
+    }
+  },
+
+
+  // Internal Method. Add the view to children and render it at
+  // the given index.
+  _addChildView: function(view, index) {
+    // set up the child view event forwarding
     this.proxyChildEvents(view);
+
     this.triggerMethod('before:child:added', view);
 
     // Store the child view itself so we can properly
@@ -196,8 +265,6 @@ Marionette.CollectionView = Marionette.View.extend({
     }
 
     this.triggerMethod('after:child:added', view);
-
-    return view;
   },
 
   // render the child view
@@ -212,7 +279,10 @@ Marionette.CollectionView = Marionette.View.extend({
     return new ChilddViewType(options);
   },
 
-  // Remove the child view and destroy it
+  // Remove the child view and destroy it.
+  // This function also updates the indices of
+  // later views in the collection in order to keep
+  // the children in sync with the collection.
   removeChildView: function(view) {
 
     if (view) {
@@ -224,6 +294,9 @@ Marionette.CollectionView = Marionette.View.extend({
       this.stopListening(view);
       this.children.remove(view);
       this.triggerMethod('child:removed', view);
+
+      // decrement the index of views after this one
+      this._updateIndices(view, false);
     }
 
   },
@@ -257,10 +330,38 @@ Marionette.CollectionView = Marionette.View.extend({
       collectionView._bufferedChildren.push(childView);
     }
     else {
-      // If we've already rendered the main collection, just
-      // append the new items directly into the element.
-      collectionView.$el.append(childView.el);
+      // If we've already rendered the main collection, append
+      // the new child into the correct order if we need to. Otherwise
+      // append to the end.
+      if (!collectionView._insertBefore(childView, index)){
+        collectionView._insertAfter(childView);
+      }
     }
+  },
+
+  // Internal method. Check whether we need to insert the view into
+  // the correct position.
+  _insertBefore: function(childView, index) {
+    var currentView;
+    var findPosition = this.sort && (index < this.children.length - 1);
+    if (findPosition) {
+      // Find the view after this one
+      currentView = this.children.find(function (view) {
+        return view._index === index + 1;
+      });
+    }
+
+    if (currentView) {
+      currentView.$el.before(childView.el);
+      return true;
+    }
+
+    return false;
+  },
+
+  // Internal method. Append a view to the end of the $el
+  _insertAfter: function(childView) {
+    this.$el.append(childView.el);
   },
 
   // Internal method to set up the `children` object for

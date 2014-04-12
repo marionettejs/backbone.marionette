@@ -61,7 +61,7 @@ describe("marionette controller", function(){
   });
 
   describe("when closing a controller", function(){
-    var controller, closeHandler;
+    var controller, closeHandler, listenToHandler;
 
     beforeEach(function(){
       controller = new (Marionette.Controller.extend({
@@ -70,6 +70,9 @@ describe("marionette controller", function(){
 
       closeHandler = jasmine.createSpy("close");
       controller.on("close", closeHandler);
+
+      listenToHandler = jasmine.createSpy("close");
+      controller.listenTo(controller ,"close", listenToHandler);
 
       spyOn(controller, "stopListening").andCallThrough();
       spyOn(controller, "off").andCallThrough();
@@ -83,6 +86,10 @@ describe("marionette controller", function(){
 
     it("should turn off all events", function(){
       expect(controller.off).toHaveBeenCalled();
+    });
+
+    it("should stopListening after calling close", function(){
+      expect(listenToHandler).toHaveBeenCalled();
     });
 
     it("should trigger a close event with any arguments passed to close", function(){

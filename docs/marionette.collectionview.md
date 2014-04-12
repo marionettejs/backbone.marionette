@@ -3,7 +3,8 @@
 The `CollectionView` will loop through all of the models in the
 specified collection, render each of them using a specified `itemView`,
 then append the results of the item view's `el` to the collection view's
-`el`.
+`el`. By default the `CollectionView` will maintain a sorted collection's order
+in the DOM. This behavior can be disabled by specifying `{sort: false}` on initialize.
 
 CollectionView extends directly from Marionette.View. Please see
 [the Marionette.View documentation](marionette.view.md)

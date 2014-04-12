@@ -244,6 +244,47 @@ describe("collection view", function(){
     });
   });
 
+describe("when a model is added to a non-empty collection with a comparator", function(){
+    var collectionView, collection, model, itemViewRender;
+
+    beforeEach(function(){
+      collection = new Backbone.Collection([{foo: 'abar'}, {foo: 'bbar'}, {foo: 'wbar'}]);
+      collection.comparator = 'foo';
+
+      collectionView = new CollectionView({
+        itemView: ItemView,
+        collection: collection
+      });
+      collectionView.render();
+
+      itemViewRender = jasmine.createSpy("itemview:render");
+      collectionView.on("itemview:render", itemViewRender);
+
+      spyOn(collectionView, "appendHtml").andCallThrough();
+
+      model = new Backbone.Model({foo: "fbar"});
+      collection.add(model);
+    });
+
+    it("should add the model to the list", function(){
+      expect(_.size(collectionView.children)).toBe(4);
+    });
+
+    it("should have the order in the dom", function(){
+      expect($(collectionView.$el.children()[0]).text()).toBe('abar');
+      expect($(collectionView.$el.children()[1]).text()).toBe('bbar');
+      expect($(collectionView.$el.children()[2]).text()).toBe('fbar');
+      expect($(collectionView.$el.children()[3]).text()).toBe('wbar');
+    });
+
+    afterEach(function(){
+      // reset comparator
+      collection.comparator = undefined;
+    });
+
+  });
+
+
   describe("when providing a custom render that adds children, without a collection object to use, and removing a child", function(){
     var collectionView;
     var childView;

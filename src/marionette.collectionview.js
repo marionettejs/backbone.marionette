@@ -135,7 +135,7 @@ Marionette.CollectionView = Marionette.View.extend({
     if (EmptyView && !this._showingEmptyView){
       this._showingEmptyView = true;
       var model = new Backbone.Model();
-      this.addItemView(model, EmptyView, 0);
+      this.addItemView(model, EmptyView, -1);
     }
   },
 
@@ -178,6 +178,16 @@ Marionette.CollectionView = Marionette.View.extend({
 
     // build the view
     var view = this.buildItemView(item, ItemView, itemViewOptions);
+
+    // assign the index to the view
+    view.index = index;
+
+    // increment the index of views after this one
+    this.children.each(function (view) {
+      if (view.index >= index) {
+        view.index++;
+      }
+    });
 
     // set up the child view event forwarding
     this.addChildViewEventForwarding(view);
@@ -303,9 +313,20 @@ Marionette.CollectionView = Marionette.View.extend({
       this._bufferedChildren.push(itemView);
     }
     else {
-      // If we've already rendered the main collection, just
-      // append the new items directly into the element.
-      this.$el.append(itemView.el);
+      // If we've already rendered the main collection, append
+      // the new item into the correct order.
+
+      // Find the view after this one
+      var currentView = this.children.find(function (view) {
+        return view.index === index + 1;
+      });
+
+      if (currentView) {
+        currentView.$el.before(itemView.el);
+      }
+      else {
+        this.$el.append(itemView.el);
+      }
     }
   },
 

@@ -11,6 +11,8 @@ a way to get the same behaviors and conventions from your own code.
 * [Marionette.getOption](#marionettegetoption)
 * [Marionette.triggerMethod](#marionettetriggermethod)
 * [Marionette.bindEntityEvent](#marionettebindentityevents)
+* [Marionette.normalizeEvents](#marionettenormalizeevents)
+* [Marionette.normalizeUIKeys](#marionettenormalizeuikeys)
 * [Marionette.actAsCollection](#marionetteactAsCollection)
 
 ## Marionette.extend
@@ -166,6 +168,24 @@ var View = Marionette.ItemView.extend({
   }
 
 });
+```
+
+## Marionette.normalizeUIKeys
+
+This method allows you to use the `@ui.` syntax within a given key for triggers and events hashes. It
+swaps the `@ui.` reference with the associated selector.
+
+```js
+var hash = {
+  'click @ui.list': 'myCb'
+};
+
+var ui = {
+  'list': 'ul'
+};
+
+// This sets 'click @ui.list' to be 'click ul' in the newHash object
+var newHash = Marionette.normalizeUIKeys(hash, ui);
 ```
 
 ## Marionette.actAsCollection

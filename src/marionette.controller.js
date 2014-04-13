@@ -25,5 +25,8 @@ _.extend(Marionette.Controller.prototype, Backbone.Events, {
     this.triggerMethod.apply(this, ['destroy'].concat(args));
     this.stopListening();
     this.off();
-  }
+  },
+
+  // Proxy `getOption` to enable getting options from this or this.options by name.
+  getOption: Marionette.proxyGetOption
 });

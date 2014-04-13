@@ -12,6 +12,7 @@ create a new Class altogether.
 
 * [Basic Use](#basic-use)
 * [Destroying A Controller](#destroying-a-controller)
+* [getOption](#getoption)
 * [On The Name 'Controller'](#on-the-name-controller)
 
 ## Basic Use
@@ -48,6 +49,11 @@ c.listenTo(c, "stuff:done", function(stuff){
 // do some stuff
 c.doStuff();
 ```
+
+## getOption
+Retrieve an object's attribute either directly from the object, or from the object's this.options, with this.options taking precedence.
+
+More information [getOption](./marionette.functions.md)
 
 ## Destroying A Controller
 

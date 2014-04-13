@@ -111,4 +111,22 @@ describe('Marionette.unbindEntityEvents', function() {
       expect(target.stopListening).toHaveBeenCalledWith(entity, 'secondEventNameMock', target.bar);
     });
   });
+
+ describe('when unbindEntityEvents is proxied', function() {
+    beforeEach(function() {
+      target = {
+        foo: sinon.spy(),
+        bar: sinon.spy(),
+        stopListening: sinon.spy(),
+        unbindEntityEvents: Marionette.proxyUnbindEntityEvents
+      };
+
+      entity = sinon.spy();
+      target.unbindEntityEvents(entity, {'eventNameMock': target.foo});
+    });
+
+    it('should bind an event to target\'s handler', function() {
+      expect(target.stopListening).toHaveBeenCalledWith(entity, 'eventNameMock', target.foo);
+    });
+  });
 });

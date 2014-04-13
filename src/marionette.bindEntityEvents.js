@@ -90,4 +90,13 @@
     iterateEvents(target, entity, bindings, unbindToFunction, unbindFromStrings);
   };
 
+  // Proxy `bindEntityEvents`
+  Marionette.proxyBindEntityEvents = function(entity, bindings) {
+    return Marionette.bindEntityEvents(this, entity, bindings);
+  };
+
+  // Proxy `unbindEntityEvents`
+  Marionette.proxyUnbindEntityEvents = function(entity, bindings) {
+    return Marionette.unbindEntityEvents(this, entity, bindings);
+  };
 })(Marionette);

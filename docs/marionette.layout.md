@@ -28,7 +28,7 @@ will provide features such as `onShow` callbacks, etc. Please see
 * [Re-Rendering A Layout](#re-rendering-a-layout)
   * [Avoid Re-Rendering The Entire Layout](#avoid-re-rendering-the-entire-layout)
 * [Nested Layouts And Views](#nested-layouts-and-views)
-* [Closing A Layout](#closing-a-layout)
+* [Destroying A Layout](#destroying-a-layout)
 * [Custom Region Type](#custom-region-type)
 * [Region Naming](#region-naming)
 
@@ -121,9 +121,9 @@ first render has happened, though, the render function is modified to
 account for re-rendering with regions in the layout.
 
 After the first render, all subsequent renders will force every
-region to close by calling the `close` method on them. This will
-force every view in the region, and sub-views if any, to be closed
-as well. Once the regions have been closed, the regions will be
+region to destroy by calling the `destroy` method on them. This will
+force every view in the region, and sub-views if any, to be destroyed
+as well. Once the regions have been destroyed, the regions will be
 reset so that they are no longer referencing the element of the previous
 layout render.
 
@@ -165,19 +165,21 @@ layout.show(new MenuView());
 You can nest layouts into region managers as deeply as you want.
 This provides for a well organized, nested view structure.
 
-## Closing A Layout
+## Destroying A Layout
 
 When you are finished with a layout, you can call the
-`close` method on it. This will ensure that all of the region managers
-within the layout are closed correctly, which in turn
-ensures all of the views shown within the regions are closed correctly.
+`destroy` method on it. This will ensure that all of the region managers
+within the layout are destroyed correctly, which in turn
+ensures all of the views shown within the regions are destroyed correctly.
 
 If you are showing a layout within a parent region manager, replacing
-the layout with another view or another layout will close the current
-one, the same it will close a view.
+the layout with another view or another layout will destroy the current
+one, the same it will destroy a view.
 
 All of this ensures that layouts and the views that they
 contain are cleaned up correctly.
+
+**NOTE: Once a layout has been `destroy`ed, it cannot be reused.**
 
 ## Custom Region Type
 

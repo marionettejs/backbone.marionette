@@ -209,7 +209,7 @@ describe("item view", function(){
     });
   });
 
-  describe("when closing an item view", function(){
+  describe("when destroying an item view", function(){
     var EventedView = Backbone.Marionette.ItemView.extend({
       template: "#emptyTemplate",
 
@@ -217,9 +217,9 @@ describe("item view", function(){
 
       collectionChange: function(){ },
 
-      onBeforeClose: function(){},
+      onBeforeDestroy: function(){},
 
-      onClose: function(){ }
+      onDestroy: function(){ }
     });
 
     var view;
@@ -242,14 +242,14 @@ describe("item view", function(){
       spyOn(view, "stopListening").andCallThrough();
       spyOn(view, "modelChange").andCallThrough();
       spyOn(view, "collectionChange").andCallThrough();
-      spyOn(view, "onBeforeClose").andCallThrough();
-      spyOn(view, "onClose").andCallThrough();
+      spyOn(view, "onBeforeDestroy").andCallThrough();
+      spyOn(view, "onDestroy").andCallThrough();
       spyOn(view, "trigger").andCallThrough();
 
       view.listenTo(model, "change:foo", view.modelChange);
       view.listenTo(collection, "foo", view.collectionChange);
 
-      view.close();
+      view.destroy();
 
       model.set({foo: "bar"});
       collection.trigger("foo");
@@ -271,20 +271,20 @@ describe("item view", function(){
       expect(view.remove).toHaveBeenCalled();
     });
 
-    it("should trigger 'item:before:close'", function(){
-      expect(view.trigger).toHaveBeenCalledWith("before:close");
+    it("should trigger 'item:before:destroy'", function(){
+      expect(view.trigger).toHaveBeenCalledWith("before:destroy");
     });
 
-    it("should trigger 'item:closed", function(){
-      expect(view.trigger).toHaveBeenCalledWith("close");
+    it("should trigger 'item:destroyed", function(){
+      expect(view.trigger).toHaveBeenCalledWith("destroy");
     });
 
-    it("should call `onBeforeClose` if provided", function(){
-      expect(view.onBeforeClose).toHaveBeenCalled();
+    it("should call `onBeforeDestroy` if provided", function(){
+      expect(view.onBeforeDestroy).toHaveBeenCalled();
     });
 
-    it("should call `onClose` if provided", function(){
-      expect(view.onClose).toHaveBeenCalled();
+    it("should call `onDestroy` if provided", function(){
+      expect(view.onDestroy).toHaveBeenCalled();
     });
   });
 

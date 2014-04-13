@@ -54,9 +54,9 @@ _.extend(Marionette.Application.prototype, Backbone.Events, {
     return this._regionManager.addRegions(regions);
   },
 
-  // Close all regions in the app, without removing them
-  closeRegions: function(){
-    this._regionManager.closeRegions();
+  // Destroy all regions in the app, without removing them
+  destroyRegions: function(){
+    this._regionManager.destroyRegions();
   },
 
   // Removes a region from your app, by name

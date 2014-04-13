@@ -43,7 +43,7 @@ describe("collectionview - emptyView", function(){
   });
 
   describe("when the emptyView has been rendered for an empty collection, then adding an item to the collection", function(){
-    var collectionView, closeSpy;
+    var collectionView, destroySpy;
 
     beforeEach(function(){
       var collection = new Backbone.Collection();
@@ -53,13 +53,13 @@ describe("collectionview - emptyView", function(){
 
       collectionView.render();
 
-      closeSpy = spyOn(EmptyView.prototype, "close");
+      destroySpy = spyOn(EmptyView.prototype, "destroy");
 
       collection.add({foo: "wut"});
     });
 
-    it("should close the emptyView", function(){
-      expect(closeSpy).toHaveBeenCalled();
+    it("should destroy the emptyView", function(){
+      expect(destroySpy).toHaveBeenCalled();
     });
 
     it("should show the new item", function(){
@@ -67,8 +67,8 @@ describe("collectionview - emptyView", function(){
     });
   });
 
-  describe("when the emptyView has been rendered for an empty collection and then collection reset, receiving some values. Then adding an item to the collection", function () {
-    var collectionView, closeSpy;
+  describe("when the emptyView has been rendered for an empty collection and then collection reset, recieving some values. Then adding an item to the collection", function () {
+    var collectionView, destroySpy;
 
     beforeEach(function () {
       var collection = new Backbone.Collection();
@@ -78,16 +78,16 @@ describe("collectionview - emptyView", function(){
 
       collectionView.render();
 
-      closeSpy = spyOn(EmptyView.prototype, "close");
-      closeSpy.andCallThrough();
+      destroySpy = spyOn(EmptyView.prototype, "destroy");
+      destroySpy.andCallThrough();
 
       collection.reset([{ foo: "bar" }, { foo: "baz"}]);
 
       collection.add({ foo: "wut" });
     });
 
-    it("should close the emptyView", function () {
-      expect(closeSpy).toHaveBeenCalled();
+    it("should destroy the emptyView", function () {
+      expect(destroySpy).toHaveBeenCalled();
     });
 
     it("should show all three items without empty view", function () {
@@ -96,7 +96,7 @@ describe("collectionview - emptyView", function(){
   });
 
   describe("when the last item is removed from a collection", function(){
-    var collectionView, closeSpy;
+    var collectionView, destroySpy;
 
     beforeEach(function(){
       var collection = new Backbone.Collection([{foo: "wut"}]);
@@ -132,17 +132,17 @@ describe("collectionview - emptyView", function(){
 
     it("should remove all EmptyView", function () {
       collectionView.render();        // 1st showEmptyView
-      collection.reset(population);   // 1st closeEmptyView
+      collection.reset(population);   // 1st destroyEmptyView
       collection.reset();             // 2nd showEmptyView
-      collection.reset(population);   // 2nd closeEmptyView
+      collection.reset(population);   // 2nd destroyEmptyView
       expect(collectionView.$el).not.toContain('span.isempty')
     });
 
     it("should have only one emptyView open", function () {
       collectionView.render();        // 1st showEmptyView
-      collection.reset(population);   // 1st closeEmptyView
-      collection.reset();             // 2nd closeEmptyView, showEmptyView
-      collection.reset();             // 3nd closeEmptyView, showEmptyView
+      collection.reset(population);   // 1st destroyEmptyView
+      collection.reset();             // 2nd destroyEmptyView, showEmptyView
+      collection.reset();             // 3nd destroyEmptyView, showEmptyView
       expect(collectionView.$('span.isempty').length).toEqual(1);
     });
 

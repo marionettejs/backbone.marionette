@@ -1,4 +1,4 @@
-/* jshint maxlen: 143 */
+/* jshint maxlen: 143, nonew: false */
 // Marionette.Behaviors
 // --------
 
@@ -10,15 +10,15 @@
 
 Marionette.Behaviors = (function(Marionette, _) {
 
-  function Behaviors(view) {
+  function Behaviors(view, behaviors) {
     // Behaviors defined on a view can be a flat object literal
     // or it can be a function that returns an object.
-    this.behaviors = Behaviors.parseBehaviors(view, _.result(view, 'behaviors'));
+    behaviors = Behaviors.parseBehaviors(view, behaviors || _.result(view, 'behaviors'));
 
     // Wraps several of the view's methods
     // calling the methods first on each behavior
     // and then eventually calling the method on the view.
-    Behaviors.wrap(view, this.behaviors, [
+    Behaviors.wrap(view, behaviors, [
       'bindUIElements', 'unbindUIElements',
       'delegateEvents', 'undelegateEvents',
       'behaviorEvents', 'triggerMethod',
@@ -110,10 +110,10 @@ Marionette.Behaviors = (function(Marionette, _) {
 
         _.each(_.keys(behaviorEvents), function(key) {
           // Append white-space at the end of each key to prevent behavior key collisions.
-          // This is relying on the fact backbone events considers "click .foo" the same as
-          // "click .foo ". Starts with an array of two so the first behavior has one space
+          // This is relying on the fact that backbone events considers "click .foo" the same as
+          // "click .foo ".
 
-          // +2 is uses becauce new Array(1) or 0 is "" and not " "
+          // +2 is used because new Array(1) or 0 is "" and not " "
           var whitespace = (new Array(i + 2)).join(' ');
           var eventKey   = key + whitespace;
           var handler    = _.isFunction(behaviorEvents[key]) ? behaviorEvents[key] : b[behaviorEvents[key]];
@@ -130,13 +130,15 @@ Marionette.Behaviors = (function(Marionette, _) {
 
   _.extend(Behaviors, {
 
-    // placeholder method to be extended by the user
-    // should define the object that stores the behaviors
+    // Placeholder method to be extended by the user.
+    // The method should define the object that stores the behaviors.
     // i.e.
     //
+    // ```js
     // Marionette.Behaviors.behaviorsLookup: function() {
     //   return App.Behaviors
     // }
+    // ```
     behaviorsLookup: function() {
       throw new Error('You must define where your behaviors are stored.' +
         'See https://github.com/marionettejs/backbone.marionette' +
@@ -147,7 +149,7 @@ Marionette.Behaviors = (function(Marionette, _) {
     // given options and a key.
     // If a user passes in options.behaviorClass
     // default to using that. Otherwise delegate
-    // the lookup to the users behaviorsLookup implementation.
+    // the lookup to the users `behaviorsLookup` implementation.
     getBehaviorClass: function(options, key) {
       if (options.behaviorClass) {
         return options.behaviorClass;
@@ -157,21 +159,24 @@ Marionette.Behaviors = (function(Marionette, _) {
       return _.isFunction(Behaviors.behaviorsLookup) ? Behaviors.behaviorsLookup.apply(this, arguments)[key] : Behaviors.behaviorsLookup[key];
     },
 
-    // Maps over a view's behaviors. Performing
-    // a lookup on each behavior and the instantiating
-    // said behavior passing its options and view.
+    // Iterate over the behaviors object, for each behavior
+    // instantiate it and get its grouped behaviors.
     parseBehaviors: function(view, behaviors) {
-      return _.map(behaviors, function(options, key) {
+      return _.chain(behaviors).map(function(options, key) {
         var BehaviorClass = Behaviors.getBehaviorClass(options, key);
-        return new BehaviorClass(options, view);
-      });
+
+        var behavior = new BehaviorClass(options, view);
+        var nestedBehaviors = Behaviors.parseBehaviors(view, _.result(behavior, 'behaviors'));
+
+        return [behavior].concat(nestedBehaviors);
+      }).flatten().value();
     },
 
-    // wrap view internal methods so that they delegate to behaviors. For example,
-    // onDestroy should trigger destroy on all of the behaviors and then destroy itself.
+    // Wrap view internal methods so that they delegate to behaviors. For example,
+    // `onDestroy` should trigger destroy on all of the behaviors and then destroy itself.
     // i.e.
     //
-    // view.delegateEvents = _.partial(methods.delegateEvents, view.delegateEvents, behaviors);
+    // `view.delegateEvents = _.partial(methods.delegateEvents, view.delegateEvents, behaviors);`
     wrap: function(view, behaviors, methodNames) {
       _.each(methodNames, function(methodName) {
         view[methodName] = _.partial(methods[methodName], view[methodName], behaviors);

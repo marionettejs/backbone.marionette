@@ -119,4 +119,22 @@ describe('Marionette.bindEntityEvents', function() {
       expect(target.listenTo).toHaveBeenCalledWith(entity, 'secondEventNameMock', target.bar);
     });
   });
+
+  describe('when bindEntityEvents is proxied', function() {
+    beforeEach(function() {
+      target = {
+        foo: sinon.spy(),
+        bar: sinon.spy(),
+        listenTo: sinon.spy(),
+        bindEntityEvents: Marionette.proxyBindEntityEvents
+      };
+
+      entity = sinon.spy();
+      target.bindEntityEvents(entity, {'eventNameMock': target.foo});
+    });
+
+    it('should bind an event to target\'s handler', function() {
+      expect(target.listenTo).toHaveBeenCalledWith(entity, 'eventNameMock', target.foo);
+    });
+  });
 });

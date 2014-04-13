@@ -216,5 +216,14 @@ Marionette.View = Backbone.View.extend({
     // reset the ui element to the original bindings configuration
     this.ui = this._uiBindings;
     delete this._uiBindings;
-  }
+  },
+
+  // Proxy `getOption` to enable getting options from this or this.options by name.
+  getOption: Marionette.proxyGetOption,
+
+  // Proxy `unbindEntityEvents` to enable binding view's events from another entity.
+  bindEntityEvents: Marionette.proxyBindEntityEvents,
+
+  // Proxy `unbindEntityEvents` to enable unbinding view's events from another entity.
+  unbindEntityEvents: Marionette.proxyUnbindEntityEvents
 });

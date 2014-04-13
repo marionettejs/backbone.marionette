@@ -1,7 +1,7 @@
 # Marionette.Behavior
 
 
-A `Behavior` is an  isolated set of DOM / user interactions that can be mixed into any `View`. `Behaviors` allow you to blackbox `View` specific interactions into portable logical chunks, keeping your `views` simple and your code DRY.
+A `Behavior` is an  isolated set of DOM / user interactions that can be mixed into any `View` or another `Behavior`. `Behaviors` allow you to blackbox `View` specific interactions into portable logical chunks, keeping your `views` simple and your code DRY.
 
 ## Documentation Index
 
@@ -11,6 +11,7 @@ A `Behavior` is an  isolated set of DOM / user interactions that can be mixed in
   * [Event proxy](#the-event-proxy)
   * [Model Events](#model-events)
   * [Collection Events](#model-events)
+  * [Grouped Behaviors](#grouped-behaviors)
   * [$](#$)
   * [$el](#$el)
   * [Defaults](#defaults)
@@ -129,6 +130,20 @@ window.Behaviors.ToolTip = ToolTip;
 window.Behaviors.CloseWarn = CloseWarn;
 ```
 
+Note than in addition to extending a `View` with `Behavior`, a `Behavior` can itself use other behaviors. The syntax is identical to that used for a `View`:
+
+```js
+var Modal = Marionette.Behavior.extend({
+  behaviors: {
+    CloseWarn: {
+       message: "Whoa! You sure about this?"
+    }
+  }
+});
+```
+
+Nested behaviors act as if they were direct behaviors of the parent behavior's view instance.
+
 ## API
 
 ### the event proxy
@@ -170,6 +185,16 @@ Marionette.Behavior.extend({
     },
 
     onCollectionAdd: function() {
+    }
+  });
+```
+
+### Grouped Behaviors
+Then `behaviors` key allows a behavior to group multiple behaviors together.
+```js
+  Marionette.Behavior.extend({
+    behaviors: {
+      SomeBehavior: {}
     }
   });
 ```

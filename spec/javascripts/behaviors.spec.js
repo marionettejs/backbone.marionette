@@ -1,4 +1,4 @@
-/* jshint maxstatements: 13 */
+/* jshint maxstatements: 14 */
 
 describe('Behaviors', function() {
   describe('behavior lookup', function() {
@@ -628,14 +628,12 @@ describe('Behaviors', function() {
   });
 
   describe('behavior trigger calls', function() {
-    var spy, View, hold;
+    var onRenderSpy, View, hold;
     beforeEach(function() {
-      spy = sinon.spy();
+      onRenderSpy = sinon.spy();
       hold = {};
       hold.testB = Marionette.Behavior.extend({
-        onRender: function() {
-          spy();
-        }
+        onRender: onRenderSpy
       });
 
       View = Marionette.View.extend({
@@ -650,7 +648,7 @@ describe('Behaviors', function() {
     it('should call onRender when a view is rendered', function() {
       var view = new View();
       view.triggerMethod('render');
-      expect(spy).toHaveBeenCalled();
+      expect(onRenderSpy).toHaveBeenCalled();
     });
   });
 
@@ -681,6 +679,127 @@ describe('Behaviors', function() {
     it('should execute in the specified context', function() {
       model.trigger('bump');
       expect(spy).toHaveBeenCalledOn(behavior);
+    });
+  });
+
+  describe('behavior with behavior', function() {
+    var initSpy, renderSpy, childRenderSpy, entityEventSpy;
+    var viewEventSpy, childEventSpy, parentEventSpy;
+    var View, v, m, c, hold, parentBehavior, groupedBehavior;
+    beforeEach(function() {
+      initSpy = sinon.spy();
+      renderSpy = sinon.spy();
+      childRenderSpy = sinon.spy();
+      entityEventSpy = sinon.spy();
+      childEventSpy = sinon.spy();
+      parentEventSpy = sinon.spy();
+      viewEventSpy = sinon.spy();
+
+      hold = {};
+      hold.parentB = Marionette.Behavior.extend({
+        initialize: function() {
+          parentBehavior = this;
+        },
+        ui: {
+          parent: '.parent'
+        },
+        events: {
+          'click @ui.parent': parentEventSpy
+        },
+        behaviors: {
+          childB: {}
+        }
+      });
+
+      hold.childB = Marionette.Behavior.extend({
+        initialize: function() {
+          initSpy();
+          groupedBehavior = this;
+        },
+        onRender: childRenderSpy,
+        ui: {
+          child: '.child'
+        },
+        modelEvents: {
+          'change': entityEventSpy
+        },
+        collectionEvents: {
+          'sync': entityEventSpy
+        },
+        events: {
+          'click @ui.child': childEventSpy
+        },
+      });
+
+      Marionette.Behaviors.behaviorsLookup = hold;
+
+      View = Marionette.CompositeView.extend({
+        template: _.template('<div class="view"></div><div class="parent"></div><div class="child"></div>'),
+        ui: {
+          view: '.view'
+        },
+        events: {
+          'click @ui.view': viewEventSpy,
+        },
+        onRender: renderSpy,
+        behaviors: {
+          parentB: {}
+        }
+      });
+
+      m = new Backbone.Model();
+      c = new Backbone.Collection();
+      v = new View({model: m, collection: c});
+
+      spyOn(v, 'undelegateEvents').andCallThrough();
+    });
+
+    it('should call initialize on grouped behaviors', function() {
+      expect(initSpy).toHaveBeenCalled();
+    });
+
+    it('should call onRender on grouped behaviors', function() {
+      v.triggerMethod('render');
+      expect(childRenderSpy).toHaveBeenCalledOn(groupedBehavior);
+    });
+
+    it('should call onRender on the view', function() {
+      v.triggerMethod('render');
+      expect(renderSpy).toHaveBeenCalledOn(v);
+      expect(renderSpy).toHaveBeenCalledOnce();
+    });
+
+    it('should call undelegateEvents once', function() {
+      v.undelegateEvents();
+      expect(v.undelegateEvents.callCount).toBe(1);
+    });
+
+    it('should proxy modelEvents to grouped behaviors', function() {
+      m.trigger('change');
+      expect(entityEventSpy).toHaveBeenCalledOn(groupedBehavior);
+    });
+
+    it('should proxy collectionEvents to grouped behaviors', function() {
+      c.trigger('sync');
+      expect(entityEventSpy).toHaveBeenCalledOn(groupedBehavior);
+    });
+
+    it('should proxy child behavior UI events to grouped behaviors', function() {
+      v.render();
+      v.$('.child').trigger('click');
+      expect(childEventSpy).toHaveBeenCalledOn(groupedBehavior);
+    });
+
+    it('should proxy base behavior UI events to base behavior', function() {
+      v.render();
+      v.$('.parent').trigger('click');
+      expect(parentEventSpy).toHaveBeenCalledOn(parentBehavior);
+    });
+
+    it('should proxy view UI events to view', function() {
+      v.render();
+      v.$('.view').trigger('click');
+      expect(viewEventSpy).toHaveBeenCalledOn(v);
     });
   });
 });

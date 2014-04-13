@@ -21,6 +21,8 @@ behaviors that are shared across all views.
 * [View.modelEvents and View.collectionEvents](#viewmodelevents-and-viewcollectionevents)
 * [View.serializeData](#viewserializedata)
 * [View.bindUIElements](#viewbinduielements)
+* [View.getOption](#viewgetoption)
+* [View.bindEntityEvents](#viewbindentityevents)
 * [View.templateHelpers](#viewtemplatehelpers)
   * [Basic Example](#basic-example)
   * [Accessing Data Within The Helpers](#accessing-data-within-the-helpers)
@@ -388,6 +390,16 @@ This functionality is provided via the `bindUIElements` method.
 Since View doesn't implement the render method, then if you directly extend
 from View you will need to invoke this method from your render method.
 In ItemView and CompositeView this is already taken care of.
+
+## View.getOption
+Retrieve an object's attribute either directly from the object, or from the object's this.options, with this.options taking precedence.
+
+More information [getOption](./marionette.functions.md)
+
+## View.bindEntityEvents
+Helps bind a backbone "entity" to methods on a target object. bindEntityEvents is used to support `modelEvents` and `collectionEvents`.
+
+More information [bindEntityEvents](./marionette.functions.md)
 
 ## View.templateHelpers
 

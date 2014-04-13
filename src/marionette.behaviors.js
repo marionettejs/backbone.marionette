@@ -9,21 +9,27 @@
 
 Marionette.Behaviors = (function(Marionette, _) {
 
-  function Behaviors(view) {
+  function Behaviors(view, behaviors) {
     // Behaviors defined on a view can be a flat object literal
     // or it can be a function that returns an object.
-    this.behaviors = Behaviors.parseBehaviors(view, _.result(view, 'behaviors'));
+    behaviors = Behaviors.parseBehaviors(view, behaviors || _.result(view, 'behaviors'));
 
     // Wraps several of the view's methods
     // calling the methods first on each behavior
     // and then eventually calling the method on the view.
-    Behaviors.wrap(view, this.behaviors, [
+    Behaviors.wrap(view, behaviors, [
       'bindUIElements', 'unbindUIElements',
       'delegateEvents', 'undelegateEvents',
       'onShow', 'onDestroy',
       'behaviorEvents', 'triggerMethod',
       'setElement'
     ]);
+
+    _.each(behaviors, function(b) {
+      if (!_.isUndefined(_.result(b, 'behaviors'))) {
+        new Behaviors(view, _.result(b, 'behaviors'));
+      }
+    });
   }
 
   var methods = {

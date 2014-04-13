@@ -97,4 +97,19 @@ describe('get option', function() {
 
   });
 
+  describe('when proxying getOption', function() {
+    var target;
+
+    beforeEach(function() {
+      target = {
+        foo: 'bar',
+        getOption: Marionette.proxyGetOption
+      };
+    });
+
+    it('should return that definition\'s option', function(){
+      expect(target.getOption('foo')).toBe('bar');
+    });
+  });
+
 });

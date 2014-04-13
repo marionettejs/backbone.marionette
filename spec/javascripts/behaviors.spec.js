@@ -1,3 +1,5 @@
+/* jshint maxstatements: 14 */
+
 describe('Behaviors', function() {
   describe('behavior lookup', function() {
     it('should throw if behavior lookup is not defined', function() {
@@ -476,6 +478,93 @@ describe('Behaviors', function() {
     it('should execute in the specified context', function() {
       model.trigger('bump');
       expect(spy).toHaveBeenCalledOn(behavior);
+    });
+  });
+
+  describe('behavior with behavior', function() {
+    var initSpy, renderSpy, entityEventSpy, viewEventSpy;
+    var View, v, m, c, hold, parentBehavior, childBehavior;
+    beforeEach(function() {
+      initSpy = sinon.spy();
+      renderSpy = sinon.spy();
+      entityEventSpy = sinon.spy();
+      viewEventSpy = sinon.spy();
+
+      hold = {};
+      hold.parentB = Marionette.Behavior.extend({
+        initialize: function() {
+          parentBehavior = this;
+        },
+        behaviors: {
+          childB: {}
+        }
+      });
+      hold.childB = Marionette.Behavior.extend({
+        initialize: function() {
+          initSpy();
+          childBehavior = this;
+        },
+        onRender: renderSpy,
+        ui: {
+          child: '.child'
+        },
+        modelEvents: {
+          'change': entityEventSpy
+        },
+        collectionEvents: {
+          'sync': entityEventSpy
+        },
+        events: {
+          'click @ui.view': viewEventSpy,
+          'click @ui.child': viewEventSpy
+        },
+      });
+
+      Marionette.Behaviors.behaviorsLookup = hold;
+
+      View = Marionette.CompositeView.extend({
+        template: _.template('<div class="view"></div><div class="child"></div>'),
+        ui: {
+          view: '.view'
+        },
+        behaviors: {
+          parentB: {}
+        }
+      });
+
+      m = new Backbone.Model();
+      c = new Backbone.Collection();
+      v = new View({model: m, collection: c});
+      v.render();
+    });
+
+    it('should call initialize on child behavior', function() {
+      expect(initSpy).toHaveBeenCalled();
+    });
+
+    it('should call onRender on child behavior', function() {
+      v.triggerMethod('render');
+      expect(renderSpy).toHaveBeenCalledOn(childBehavior);
+    });
+
+    it('should proxy modelEvents to child behavior', function() {
+      m.trigger('change');
+      expect(entityEventSpy).toHaveBeenCalledOn(childBehavior);
+    });
+
+    it('should proxy collectionEvents to child behavior', function() {
+      c.trigger('sync');
+      expect(entityEventSpy).toHaveBeenCalledOn(childBehavior);
+    });
+
+    it('should proxy view UI events to child behavior', function() {
+      v.$('.view').trigger('click');
+      expect(viewEventSpy).toHaveBeenCalledOn(childBehavior);
+    });
+
+    it('should proxy child behavior UI events to child behavior', function() {
+      v.$('.child').trigger('click');
+      expect(viewEventSpy).toHaveBeenCalledOn(childBehavior);
     });
   });
 });

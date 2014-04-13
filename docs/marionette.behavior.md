@@ -1,7 +1,7 @@
 # Marionette.Behavior
 
 
-A `Behavior` is an  isolated set of DOM / user interactions that can be mixed into any `View`. `Behaviors` allow you to blackbox `View` specific interactions into portable logical chunks, keeping your `views` simple and your code DRY.
+A `Behavior` is an  isolated set of DOM / user interactions that can be mixed into any `View` or another `Behavior`. `Behaviors` allow you to blackbox `View` specific interactions into portable logical chunks, keeping your `views` simple and your code DRY.
 
 ## Documentation Index
 
@@ -129,6 +129,20 @@ window.Behaviors.ToolTip = ToolTip;
 window.Behaviors.CloseWarn = CloseWarn;
 ```
 
+Note than in addition to extending a `View` with `Behavior`, a `Behavior` can itself use other behaviors. The syntax is identical to that used for a `View`:
+
+```js
+var Modal = Marionette.Behavior.extend({
+  behaviors: {
+    CloseWarn: {
+       message: "Whoa! You sure about this?"
+    }
+  }
+});
+```
+
+Nested behaviors act as if they were direct behaviors of the parent behavior's view instance.
+
 ## API
 
 ### the event proxy
@@ -170,6 +184,16 @@ Marionette.Behavior.extend({
     },
 
     onCollectionAdd: function() {
+    }
+  });
+```
+
+### Nested Behaviors
+`behaviors` allows your behavior to use other behaviors.
+```js
+  Marionette.Behavior.extend({
+    behaviors: {
+      SomeBehavior: {}
     }
   });
 ```

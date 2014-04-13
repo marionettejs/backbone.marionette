@@ -9,8 +9,10 @@ a way to get the same behaviors and conventions from your own code.
 
 * [Marionette.extend](#marionetteextend)
 * [Marionette.getOption](#marionettegetoption)
+* [Marionette.proxyGetOption](#marionetteproxygetoption)
 * [Marionette.triggerMethod](#marionettetriggermethod)
 * [Marionette.bindEntityEvent](#marionettebindentityevents)
+* [Marionette.proxyBindEntityEvent](#marionetteproxybindentityevents)
 * [Marionette.normalizeEvents](#marionettenormalizeevents)
 * [Marionette.normalizeUIKeys](#marionettenormalizeuikeys)
 * [Marionette.actAsCollection](#marionetteactascollection)
@@ -93,6 +95,24 @@ new M({}, { foo: f }); // => "bar"
 In this example, "bar" is returned both times because the second
 example has an undefined value for `f`.
 
+## Marionette.proxyGetOption
+
+This method proxies `Marionette.getOption` so that it can be easily added to an instance.
+
+Say you've written your own Pagination class and you always pass options to it.
+With `proxyGetOption`, you can easily give this class the `getOption` function.
+
+```js
+_.extend(Pagination.prototype, {
+
+  getFoo: function(){
+    return this.getOption("foo");
+  },
+
+  getOption: Marionette.proxyGetOption
+});
+```
+
 ## Marionette.triggerMethod
 
 Trigger an event and a corresponding method on the target object.
@@ -146,6 +166,24 @@ to bind the events from.
 The third parameter is a hash of { "event:name": "eventHandler" }
 configuration. Multiple handlers can be separated by a space. A
 function can be supplied instead of a string handler name.
+
+## Marionette.proxyBindEntityEvents
+This method proxies `Marionette.bindEntityEvents` so that it can easily be added to an instance.
+
+Say you've written your own Pagination class and you want to easily listen to some entities events.
+With `proxyBindEntityEvents`, you can easily give this class the `bindEntityEvents` function.
+
+```js
+_.extend(Pagination.prototype, {
+
+   bindSomething: function() {
+     this.bindEntityEvents(this.something, this.somethingEvents)
+   },
+
+   bindEntityEvents: Marionette.proxyBindEntityEvents
+
+});
+```
 
 ## Marionette.normalizeEvents
 

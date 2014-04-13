@@ -36,6 +36,11 @@ Marionette.getOption = function(target, optionName) {
   return value;
 };
 
+// Proxy `Marionette.getOption`
+Marionette.proxyGetOption = function(optionName) {
+  return Marionette.getOption(this, optionName);
+};
+
 // Marionette.normalizeMethods
 // ----------------------
 

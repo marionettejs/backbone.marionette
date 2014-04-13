@@ -13,7 +13,7 @@ a way to get the same behaviors and conventions from your own code.
 * [Marionette.bindEntityEvent](#marionettebindentityevents)
 * [Marionette.normalizeEvents](#marionettenormalizeevents)
 * [Marionette.normalizeUIKeys](#marionettenormalizeuikeys)
-* [Marionette.actAsCollection](#marionetteactAsCollection)
+* [Marionette.actAsCollection](#marionetteactascollection)
 
 ## Marionette.extend
 

@@ -121,25 +121,8 @@ v.close(arg1, arg2);
 ## View onBeforeClose
 
 When closing a view, an `onBeforeClose` method will be called, if it
-has been provided. It will be passed any arguments that `close` was
-invoked with. If this method returns `false`, the view will not
-be closed. Any other return value (including null or undefined) will
-allow the view to be closed.
-
-```js
-MyView = Marionette.View.extend({
-
-  onBeforeClose: function(){
-    // prevent the view from being closed
-    return false;
-  }
-
-});
-
-var v = new MyView();
-
-v.close(); // view will remain open
-```
+has been provided, just before the view closes. It will be passed any arguments
+that `close` was invoked with.
 
 ### View "dom:refresh" / onDomRefresh event
 

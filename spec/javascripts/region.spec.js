@@ -9,6 +9,35 @@ describe("region", function(){
     });
   });
 
+  describe("when creating a new region and the 'el' does not exist in DOM", function(){
+    var MyRegion = Backbone.Marionette.Region.extend({
+      el: "#not-existed-region",
+    });
+
+    var MyView = Backbone.Marionette.View.extend({
+      render: function(){
+        $(this.el).html("some content");
+      }
+    });
+
+    var myRegion, view;
+
+    beforeEach(function(){
+      setFixtures("<div id='region'></div>");
+
+      myRegion = new MyRegion();
+    });
+
+    describe("when showing a view", function(){
+      it("should throw an exception saying an 'el' doesn't exist in DOM", function(){
+        var view = new MyView();
+        expect(function() {
+          myRegion.show(view);
+        }).toThrow("An 'el' #not-existed-region must exist in DOM");
+      });
+    });
+  });
+
   describe("when showing a view", function(){
     var MyRegion = Backbone.Marionette.Region.extend({
       el: "#region",
@@ -144,11 +173,11 @@ describe("region", function(){
 
     Layout = Backbone.Marionette.Layout.extend({
       regions: {
-        subRegion: 'sub-region'
+        subRegion: '.sub-region'
       },
 
       render: function(){
-        $(this.el).html("some content");
+        $(this.el).html("<div class='sub-region'></div><div>some content</div>");
       },
 
       onBeforeShow: function() {
@@ -170,6 +199,7 @@ describe("region", function(){
     });
 
     beforeEach(function() {
+      setFixtures("<div id='region'></div>");
       region = new MyRegion();
       openSpy = sinon.spy(region, 'open');
       region.show(new Layout());

@@ -26,7 +26,7 @@ Marionette.Module = function(moduleName, app, options){
   this.triggerMethod = Marionette.triggerMethod;
 
   if (_.isFunction(this.initialize)){
-    this.initialize(this.options, moduleName, app);
+    this.initialize(moduleName, app, this.options);
   }
 };
 
@@ -116,7 +116,7 @@ _.extend(Marionette.Module.prototype, Backbone.Events, {
       this.app,
       Backbone,
       Marionette,
-      Marionette.$, _,
+      Backbone.$, _,
       customArgs
     ]);
 

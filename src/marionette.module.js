@@ -114,9 +114,6 @@ _.extend(Marionette.Module.prototype, Backbone.Events, {
     var args = _.flatten([
       this,
       this.app,
-      Backbone,
-      Marionette,
-      Backbone.$, _,
       customArgs
     ]);
 

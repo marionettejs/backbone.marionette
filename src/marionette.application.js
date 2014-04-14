@@ -7,9 +7,10 @@
 Marionette.Application = function(options) {
   this._initRegionManager();
   this._initCallbacks = new Marionette.Callbacks();
-  this.vent = new Backbone.Wreqr.EventAggregator();
-  this.commands = new Backbone.Wreqr.Commands();
-  this.reqres = new Backbone.Wreqr.RequestResponse();
+  var globalCh = Backbone.Wreqr.radio.channel('global');
+  this.vent = globalCh.vent;
+  this.commands = globalCh.commands;
+  this.reqres = globalCh.reqres;
   this.submodules = {};
 
   _.extend(this, options);

@@ -174,6 +174,7 @@ module.exports = function(grunt) {
         }
       }
     },
+    
     lintspaces: {
       all: {
         src: [
@@ -189,10 +190,12 @@ module.exports = function(grunt) {
 
   grunt.registerTask('default', 'An alias task for running tests.', ['test']);
 
-  grunt.registerTask('test', 'Run the unit tests.', ['jshint', 'preprocess:tmp', 'jasmine:marionette', 'clean:tmp']);
+  grunt.registerTask('lint', 'Lints our sources', ['lintspaces', 'jshint']);
+
+  grunt.registerTask('test', 'Run the unit tests.', ['lint', 'preprocess:tmp', 'jasmine:marionette', 'clean:tmp']);
 
   grunt.registerTask('dev', 'Auto-lints while writing code.', ['test', 'watch:marionette']);
 
-  grunt.registerTask('build', 'Build all three versions of the library.', ['clean:lib', 'jshint', 'preprocess', 'jasmine:marionette', 'concat', 'uglify', 'clean:tmp']);
+  grunt.registerTask('build', 'Build all three versions of the library.', ['clean:lib', 'lint', 'preprocess', 'jasmine:marionette', 'concat', 'uglify', 'clean:tmp']);
 
 };

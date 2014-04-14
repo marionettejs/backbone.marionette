@@ -18,10 +18,11 @@ MyApp = new Backbone.Marionette.Application();
 * [Adding Initializers](#adding-initializers)
 * [Application Event](#application-event)
 * [Starting An Application](#starting-an-application)
-* [Messaging Systems](#messaging-systems)
+* [The Global Channel](#the-global-channel)
   * [Event Aggregator](#event-aggregator)
   * [Request Response](#request-response)
   * [Commands](#commands)
+  * [Accessing the Global Channel](#accessing-the-global-channel)
 * [Regions And The Application Object](#regions-and-the-application-object)
   * [jQuery Selector](#jquery-selector)
   * [Custom Region Type](#custom-region-type)
@@ -112,10 +113,13 @@ var options = {
 MyApp.start(options);
 ```
 
-## Messaging Systems
+## The Global Channel
 
-Application instances have an instance of all three [messaging systems](http://en.wikipedia.org/wiki/Message_passing) of `Backbone.Wreqr` attached to them. This
-section will give a brief overview of the systems; for a more in-depth look you are encouraged to read
+Marionette Applications come with a [messaging system](http://en.wikipedia.org/wiki/Message_passing) to facilitate communications within your app.
+
+The messaging system on the Application is the global channel from Backbone.Wreqr, which is actually comprised of three distinct systems.
+
+This section will give a brief overview of the systems; for a more in-depth look you are encouraged to read
 the [`Backbone.Wreqr` documentation](https://github.com/marionettejs/backbone.wreqr).
 
 ### Event Aggregator
@@ -177,6 +181,21 @@ MyApp.commands.execute("fetchData", true);
 
 // The execute function is also available directly from the application
 MyApp.execute("fetchData", true);
+```
+
+### Accessing the Global Channel
+
+To access this global channel from other objects within your app you are encouraged to get a handle of the systems
+through the Wreqr API instead of the Application instance itself.
+
+```js
+// Assuming that we're in some class within your app,
+// it is preferable to access the global channel like this:
+var globalCh = Backbone.Wreqr.radio.channel('global');
+globalCh.vent;
+
+// This is discouraged because it assumes the name of your application
+window.app.vent;
 ```
 
 ## Regions And The Application Object

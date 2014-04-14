@@ -24,9 +24,9 @@ describe("composite view - on before render", function(){
 
     Label.Views.LabelList = Backbone.Marionette.CompositeView.extend({
       template: "#compView",
-      itemViewContainer: '#listTag',
+      childViewContainer: '#listTag',
 
-      itemView: Label.Views.LabelItem,
+      childView: Label.Views.LabelItem,
 
       onBeforeRender : function() {
         this.model.set("modelState", "Something Different");

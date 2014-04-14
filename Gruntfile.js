@@ -159,7 +159,7 @@ module.exports = function(grunt) {
     watch: {
       marionette : {
         files : ['src/**/*.js', 'spec/**/*.js'],
-        tasks : ['lint', 'jasmine:marionette']
+        tasks : ['jshint', 'jasmine:marionette']
       },
       server : {
         files : ['src/**/*.js', 'spec/**/*.js'],

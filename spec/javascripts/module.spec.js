@@ -49,10 +49,6 @@ describe("application modules", function(){
           expect(defineSpy).toHaveBeenCalledWith(
             module,
             app,
-            Backbone,
-            Marionette,
-            Marionette.$,
-            _,
             additionalParam
           );
         });
@@ -96,10 +92,6 @@ describe("application modules", function(){
             expect(defineSpy).toHaveBeenCalledWith(
               module,
               app,
-              Backbone,
-              Marionette,
-              Marionette.$,
-              _,
               additionalParam
             );
           });

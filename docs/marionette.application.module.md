@@ -61,23 +61,17 @@ Definitions can either be a callback function or an object literal.
 ### Callback Function Definition
 
 The callback function definition will be invoked immediately on calling
-the `module` method.
-
-It will receive 6 parameters, in this order:
+the `module` method. It will receive the following parameters:
 
 * The module itself
 * The Application object
-* Backbone
-* Backbone.Marionette
-* jQuery
-* Underscore
 * Any custom arguments
 
 Within the callback you can attach both private and public
 functions and data directly to your module.
 
 ```js
-MyApp.module("MyModule", function(MyModule, MyApp, Backbone, Marionette, $, _){
+MyApp.module("MyModule", function(MyModule, MyApp){
 
   // The context of the function is also the module itself
   this === MyModule; // => true
@@ -117,7 +111,7 @@ Pass the additional arguments after the
 definition itself in the call to `module`.
 
 ```js
-MyApp.module("MyModule", function(MyModule, MyApp, Backbone, Marionette, $, _, Lib1, Lib2, LibEtc){
+MyApp.module("MyModule", function(MyModule, MyApp, Lib1, Lib2, LibEtc){
 
   // Lib1 === LibraryNumber1;
   // Lib2 === LibraryNumber2;
@@ -160,7 +154,7 @@ function through the `define` property.
 
 ```js
 MyApp.module("MyModule", {
-  define: function(MyModule, MyApp, Backbone, Marionette, $, _) {
+  define: function(MyModule, MyApp) {
     // Define your module here
   }
 });

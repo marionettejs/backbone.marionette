@@ -165,12 +165,7 @@ Marionette.View = Backbone.View.extend({
 
     var args = Array.prototype.slice.call(arguments);
 
-    // allow the destroy to be stopped by returning `false`
-    // from the `onBeforeDestroy` method
-    var shouldDestroy = this.triggerMethod.apply(this, ['before:destroy'].concat(args));
-    if (shouldDestroy === false) {
-      return;
-    }
+    this.triggerMethod.apply(this, ['before:destroy'].concat(args));
 
     // mark as destroyed before doing the actual destroy, to
     // prevent infinite loops within "destroy" event handlers

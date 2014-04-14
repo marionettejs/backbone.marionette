@@ -95,15 +95,15 @@ describe('base view', function() {
     });
 
     it('should not trigger the destroy event', function() {
-      expect(destroy).not.toHaveBeenCalled();
+      expect(destroy).toHaveBeenCalled();
     });
 
     it('should not remove the view', function() {
-      expect(view.remove).not.toHaveBeenCalled();
+      expect(view.remove).toHaveBeenCalled();
     });
 
     it('should not set the view isDestroyed to true', function() {
-      expect(view.isDestroyed).not.toBe(true);
+      expect(view.isDestroyed).toBe(true);
     });
   });
 

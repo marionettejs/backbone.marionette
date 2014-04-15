@@ -271,11 +271,11 @@ describe("item view", function(){
       expect(view.remove).toHaveBeenCalled();
     });
 
-    it("should trigger 'item:before:close'", function(){
+    it("should trigger 'before:close'", function(){
       expect(view.trigger).toHaveBeenCalledWith("before:close");
     });
 
-    it("should trigger 'item:closed", function(){
+    it("should trigger 'close", function(){
       expect(view.trigger).toHaveBeenCalledWith("close");
     });
 

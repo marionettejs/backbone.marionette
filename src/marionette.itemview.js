@@ -60,10 +60,7 @@ Marionette.ItemView = Marionette.View.extend({
   close: function(){
     if (this.isClosed){ return; }
 
-    this.triggerMethod('item:before:close');
-
     Marionette.View.prototype.close.apply(this, arguments);
 
-    this.triggerMethod('item:closed');
   }
 });

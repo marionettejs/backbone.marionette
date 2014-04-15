@@ -20,7 +20,9 @@ describe('collection view', function() {
     onBeforeRender: function() {},
     onRender: function() {},
     onBeforeChildAdded: function() {},
-    onAfterChildAdded: function() {}
+    onAfterChildAdded: function() {},
+    onBeforeChildRemove: function() {},
+    onChildRemoved: function() {}
   });
 
   // Collection View Specs
@@ -286,6 +288,8 @@ describe('collection view', function() {
     var collection;
     var childView;
     var model;
+    var onBeforeChildRemoveSpy;
+    var onChildRemoveSpy;
 
     beforeEach(function() {
       model = new Backbone.Model({foo: 'bar'});
@@ -302,7 +306,15 @@ describe('collection view', function() {
 
       spyOn(childView, 'destroy').andCallThrough();
 
+      onBeforeChildRemoveSpy = sinon.spy(collectionView, 'onBeforeChildRemove');
+      onChildRemoveSpy = sinon.spy(collectionView, 'onChildRemoved');
+
       collection.remove(model);
+    });
+
+    afterEach(function() {
+      onBeforeChildRemoveSpy.reset();
+      onChildRemoveSpy.reset();
     });
 
     it('should destroy the models view', function() {
@@ -312,6 +324,27 @@ describe('collection view', function() {
     it('should remove the model-views HTML', function() {
       expect($(collectionView.$el).children().length).toBe(0);
     });
+
+    it('should execute onBeforeChildRemove', function() {
+      expect(onBeforeChildRemoveSpy).toHaveBeenCalledOnce();
+    });
+
+    it('should pass the removed view to onBeforeChildRemove', function() {
+      expect(onBeforeChildRemoveSpy).toHaveBeenCalledWithExactly(childView);
+    });
+
+    it('should execute onChildRemoved', function() {
+      expect(onChildRemoveSpy).toHaveBeenCalledOnce();
+    });
+
+    it('should pass the removed view to onChildRemove', function() {
+      expect(onChildRemoveSpy).toHaveBeenCalledWithExactly(childView);
+    });
+
+    it('should execute onBeforeChildRemove before onChildRemove', function() {
+      expect(onBeforeChildRemoveSpy).toHaveBeenCalledBefore(onChildRemoveSpy);
+    });
+
   });
 
   describe('when destroying a collection view', function() {
@@ -927,7 +960,7 @@ describe('collection view', function() {
   });
 
   describe('when a collection view is not rendered', function() {
-    var collection, cv, model1, model2;
+    var collection, collectionView, model1, model2;
 
     var Model       = Backbone.Model.extend({});
     var Collection  = Backbone.Collection.extend({model: Model});
@@ -957,7 +990,7 @@ describe('collection view', function() {
       model2     = new Model({lechuck: 'tours'});
       collection = new Collection([model1]);
 
-      cv = new CollectionView({
+      collectionView = new CollectionView({
         collection: collection
       });
     });

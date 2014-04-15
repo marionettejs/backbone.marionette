@@ -267,12 +267,12 @@ describe('item view', function() {
       expect(view.remove).toHaveBeenCalled();
     });
 
-    it('should trigger "item:before:destroy"', function() {
+    it('should trigger "before:destroy"', function(){
       expect(view.trigger).toHaveBeenCalledWith('before:destroy');
     });
 
-    it('should trigger "item:destroyed"', function() {
-      expect(view.trigger).toHaveBeenCalledWith('item:destroyed');
+    it('should trigger "destroy"', function(){
+      expect(view.trigger).toHaveBeenCalledWith('destroy');
     });
 
     it('should call "onBeforeDestroy" if provided', function() {

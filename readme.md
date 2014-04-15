@@ -42,9 +42,9 @@ to engage in an all-or-nothing migration to begin using Marionette.
 * Easily modifiable: make it work with your application's specific needs
 * Reduce boilerplate for views, with specialized view types
 * Build on a modular architecture with an `Application` and modules that attach to it
-* Compose your application's visuals at runtime, with the `Region` and `Layout` objects
+* Compose your application's visuals at runtime, with the `Region` and `LayoutView` objects
 * Nested views and layouts within visual regions
-* Built-in memory management and zombie-killing in views, regions and layouts
+* Built-in memory management and zombie-killing in views, regions and layoutViews
 * Event-driven architecture with `Backbone.Wreqr.EventAggregator`
 * Flexible, "as-needed" architecture allowing you to pick and choose what you need
 * And much, much more
@@ -111,7 +111,7 @@ examples on how to get started, please visit [the Wiki](https://github.com/mario
 * [**Marionette.ItemView**](docs/marionette.itemview.md): A view that renders a single item
 * [**Marionette.CollectionView**](docs/marionette.collectionview.md): A view that iterates over a collection, and renders individual `ItemView` instances for each model
 * [**Marionette.CompositeView**](docs/marionette.compositeview.md): A collection view and item view, for rendering leaf-branch/composite model hierarchies
-* [**Marionette.Layout**](docs/marionette.layout.md): A view that renders a layout and creates region managers to manage areas within it
+* [**Marionette.LayoutView**](docs/marionette.layoutview.md): A view that renders a layout and creates region managers to manage areas within it
 * [**Marionette.View**](docs/marionette.view.md): The base View type that other Marionette views extend from (not intended to be used directly)
 
 **Behaviors**

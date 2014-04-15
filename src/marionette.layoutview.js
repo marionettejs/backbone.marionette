@@ -1,13 +1,13 @@
-// Layout
-// ------
+// LayoutView
+// ----------
 
-// Used for managing application layouts, nested layouts and
+// Used for managing application layoutViews, nested layoutViews and
 // multiple regions within an application or sub-application.
 //
 // A specialized view type that renders an area of HTML and then
 // attaches `Region` instances to the specified `regions`.
 // Used for composite view management and sub-application areas.
-Marionette.Layout = Marionette.ItemView.extend({
+Marionette.LayoutView = Marionette.ItemView.extend({
   regionType: Marionette.Region,
 
   // Ensure the regions are available when the `initialize` method
@@ -21,7 +21,7 @@ Marionette.Layout = Marionette.ItemView.extend({
     Marionette.ItemView.prototype.constructor.call(this, options);
   },
 
-  // Layout's render will use the existing region objects the
+  // LayoutView's render will use the existing region objects the
   // first time it is called. Subsequent calls will destroy the
   // views that the regions are showing and then reset the `el`
   // for the regions to the newly rendered DOM elements.
@@ -49,7 +49,7 @@ Marionette.Layout = Marionette.ItemView.extend({
     Marionette.ItemView.prototype.destroy.apply(this, arguments);
   },
 
-  // Add a single region, by name, to the layout
+  // Add a single region, by name, to the layoutView
   addRegion: function(name, definition) {
     var regions = {};
     regions[name] = definition;
@@ -62,7 +62,7 @@ Marionette.Layout = Marionette.ItemView.extend({
     return this._buildRegions(regions);
   },
 
-  // Remove a single region from the Layout, by name
+  // Remove a single region from the LayoutView, by name
   removeRegion: function(name) {
     delete this.regions[name];
     return this.regionManager.removeRegion(name);
@@ -88,7 +88,7 @@ Marionette.Layout = Marionette.ItemView.extend({
   },
 
   // Internal method to initialize the regions that have been defined in a
-  // `regions` attribute on this layout.
+  // `regions` attribute on this layoutView.
   _initializeRegions: function(options) {
     var regions;
     this._initRegionManager();

@@ -38,6 +38,7 @@ will provide features such as `onShow` callbacks, etc. Please see
   * ["before:close" event](#beforeclose-event)
   * ["closed" / "collection:closed" event](#closed--collectionclosed-event)
   * ["before:item:added" / "after:item:added" event](#beforeitemadded--afteritemadded-event)
+  * ["before:child:remove" event](#beforechildremoved-event)
   * ["item:removed" event](#itemremoved-event)
   * ["itemview:\*" event bubbling from child views](#itemview-event-bubbling-from-child-views)
 * [CollectionView render](#collectionview-render)
@@ -137,7 +138,7 @@ of the `options`.
 
 ```js
 ItemView = Backbone.Marionette.ItemView({
-  initialize: function(options){
+  initialize: function(options) {
     console.log(options.foo); // => "bar"
   }
 });
@@ -511,6 +512,17 @@ cv.on("before:item:added", function(viewInstance){
 });
 
 cv.on("after:item:added", function(viewInstance){
+  // ...
+});
+```
+
+### "before:child:removed"
+
+This is triggered after the childView instance has been
+removed from the collection, but before it has been closed.
+
+```js
+cv.on("before:child:removed", function(childView){
   // ...
 });
 ```

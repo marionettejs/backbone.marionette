@@ -60,10 +60,6 @@ Marionette.ItemView = Marionette.View.extend({
   destroy: function() {
     if (this.isDestroyed) { return; }
 
-    this.triggerMethod('item:before:destroy');
-
     Marionette.View.prototype.destroy.apply(this, arguments);
-
-    this.triggerMethod('item:destroyed');
   }
 });

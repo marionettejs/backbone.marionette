@@ -63,7 +63,7 @@ this.listenTo(this.collection, "add", _.bind(this.reconcileCollection, this.coll
 * "show" / `onShow` - Called on the view instance when the view has been rendered and displayed.
 
 This event can be used to react to when a view has been shown via a [region](marionette.region.md).
-All `views` that inherit from the base `Marionette.View` class have this functionality. `ItemView`, 'CollectionView', 'CompositeView', 'Layout'
+All `views` that inherit from the base `Marionette.View` class have this functionality. `ItemView`, 'CollectionView', 'CompositeView', 'LayoutView'
 
 ```js
 Backbone.Marionette.ItemView.extend({
@@ -76,7 +76,7 @@ Backbone.Marionette.ItemView.extend({
 A common use case for the `onShow` method is to use it to add children views.
 
 ```js
-var LayoutView = Backbone.Marionette.Layout.extend({
+var LayoutView = Backbone.Marionette.LayoutView.extend({
    regions: {
      Header: 'header',
      Section: 'section'

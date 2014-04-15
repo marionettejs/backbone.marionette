@@ -4,7 +4,7 @@ Regions provide consistent methods to manage, show and close
 views in your applications and layouts. They use a jQuery selector
 to show your views in the correct place.
 
-Using the `Layout` class you can create nested regions.
+Using the `LayoutView` class you can create nested regions.
 
 ## Documentation Index
 
@@ -44,21 +44,21 @@ would be available for use immediately.
 
 If you specify the same region name twice, the last one in wins.
 
-You can also add regions via `Layouts`:
+You can also add regions via `LayoutView`s:
 
 ```js
-AppLayout = Backbone.Marionette.Layout.extend({
-  template: "#layout-template",
+AppLayoutView = Backbone.Marionette.LayoutView.extend({
+  template: "#layout-view-template",
 
   regions: {
     menu: "#menu",
     content: "#content"
   }
 });
-var layout = new AppLayout();
-layout.render();
-layout.menu.show(new MenuView());
-layout.content.show(new MainContentView());
+var layoutView = new AppLayoutView();
+layoutView.render();
+layoutView.menu.show(new MenuView());
+layoutView.content.show(new MainContentView());
 ```
 
 
@@ -289,7 +289,7 @@ MyApp.addRegions({
 
 Note that a region must have an element to attach itself to. If you
 do not specify a selector when attaching the region instance to your
-Application or Layout, the region must provide an `el` either in its
+Application or LayoutView, the region must provide an `el` either in its
 definition or constructor options.
 
 ### Instantiate Your Own Region

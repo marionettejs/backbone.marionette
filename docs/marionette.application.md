@@ -190,7 +190,7 @@ through the Wreqr API instead of the Application instance itself.
 
 ```js
 // Assuming that we're in some class within your app,
-// it is preferablet to access the global channel like this:
+// it is preferable to access the global channel like this:
 var globalCh = Backbone.Wreqr.radio.channel('global');
 globalCh.vent;
 

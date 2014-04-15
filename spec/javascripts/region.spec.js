@@ -163,14 +163,14 @@ describe('region', function() {
   });
 
   describe('when showing nested views', function() {
-    var MyRegion, Layout, SubView, region, openSpy,
+    var MyRegion, LayoutView, SubView, region, openSpy,
       innerRegionBeforeShowSpy, innerRegionShowSpy;
 
     MyRegion = Backbone.Marionette.Region.extend({
       el: '#region'
     });
 
-    Layout = Backbone.Marionette.Layout.extend({
+    LayoutView = Backbone.Marionette.LayoutView.extend({
       regions: {
         subRegion: '.sub-region'
       },
@@ -201,7 +201,7 @@ describe('region', function() {
       setFixtures('<div id="region"></div>');
       region = new MyRegion();
       openSpy = sinon.spy(region, 'open');
-      region.show(new Layout());
+      region.show(new LayoutView());
     });
 
     it('should call inner region before:show before region open', function() {

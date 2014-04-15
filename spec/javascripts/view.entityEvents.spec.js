@@ -204,7 +204,7 @@ describe('view entity events', function() {
     });
   });
 
-  describe('when Layout bound to modelEvent replaces region with new view', function() {
+  describe('when LayoutView bound to modelEvent replaces region with new view', function() {
     var destroySpy, renderSpy;
 
     var ChildView = Marionette.ItemView.extend({
@@ -219,7 +219,7 @@ describe('view entity events', function() {
       }
     });
 
-    var ParentView = Marionette.Layout.extend({
+    var ParentView = Marionette.LayoutView.extend({
       template: _.template('<div id="child"></div>'),
 
       regions: {

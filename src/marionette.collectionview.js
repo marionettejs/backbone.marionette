@@ -216,15 +216,16 @@ Marionette.CollectionView = Marionette.View.extend({
   removeChildView: function(view) {
 
     if (view) {
+      this.triggerMethod('before:child:remove', view);
       // call 'destroy' or 'remove', depending on which is found
       if (view.destroy) { view.destroy(); }
       else if (view.remove) { view.remove(); }
 
       this.stopListening(view);
       this.children.remove(view);
+      this.triggerMethod('child:removed', view);
     }
 
-    this.triggerMethod('child:removed', view);
   },
 
   // check if the collection is empty

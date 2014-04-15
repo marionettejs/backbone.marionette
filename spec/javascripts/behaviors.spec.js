@@ -251,7 +251,7 @@ describe('Behaviors', function() {
   });
 
   describe('behavior UI', function() {
-    var View, view, hold, spy, onShowSpy, onDestroySpy, onDogeClickSpy, onCoinsClickSpy, Layout, layout, testBehavior;
+    var View, view, hold, spy, onShowSpy, onDestroySpy, onDogeClickSpy, onCoinsClickSpy, LayoutView, layoutView, testBehavior;
 
     beforeEach(function() {
       hold = {};
@@ -301,7 +301,7 @@ describe('Behaviors', function() {
         }
       });
 
-      Layout = Marionette.Layout.extend({
+      LayoutView = Marionette.LayoutView.extend({
         template: _.template('<div class="top"></div>'),
         regions: {
           topRegion: '.top'
@@ -335,16 +335,16 @@ describe('Behaviors', function() {
     });
 
     it('should call onShow', function() {
-      layout = new Layout();
-      layout.render();
+      layoutView = new LayoutView();
+      layoutView.render();
       expect(onShowSpy).toHaveBeenCalled();
     });
 
 
     it('should call onDestroy', function() {
-      layout = new Layout();
-      layout.render();
-      layout.destroy();
+      layoutView = new LayoutView();
+      layoutView.render();
+      layoutView.destroy();
       expect(onDestroySpy).toHaveBeenCalled(1);
     });
   });

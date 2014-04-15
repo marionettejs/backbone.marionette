@@ -111,33 +111,35 @@ Marionette.CompositeView = Marionette.CollectionView.extend({
   // `itemViewContainer` (a jQuery selector). Override this method to
   // provide custom logic of how the child item view instances have their
   // HTML appended to the composite view instance.
-  appendHtml: function(compositeView, itemView, index){
-    if (compositeView.isBuffering) {
-      compositeView.elBuffer.appendChild(itemView.el);
-      compositeView._bufferedChildren.push(itemView);
+  appendHtml: function(itemView, index){
+    if (this.isBuffering) {
+      this.elBuffer.appendChild(itemView.el);
+      this._bufferedChildren.push(itemView);
     }
     else {
       // If we've already rendered the main collection, just
       // append the new items directly into the element.
-      var $container = this.getItemViewContainer(compositeView);
+      var $container = this.getItemViewContainer(this, itemView);
       $container.append(itemView.el);
     }
   },
 
   // Internal method to ensure an `$itemViewContainer` exists, for the
   // `appendHtml` method to use.
-  getItemViewContainer: function(containerView){
+  getItemViewContainer: function(containerView, itemView){
     if ("$itemViewContainer" in containerView){
       return containerView.$itemViewContainer;
     }
 
     var container;
     var itemViewContainer = Marionette.getOption(containerView, "itemViewContainer");
-    if (itemViewContainer){
 
-      var selector = _.isFunction(itemViewContainer) ? itemViewContainer.call(containerView) : itemViewContainer;
-
-      if (selector.charAt(0) === "@" && containerView.ui) {
+    var isItemViewContainerFunction = _.isFunction(itemViewContainer);
+    
+    if (itemViewContainer) {
+      var selector = isItemViewContainerFunction ? itemViewContainer.call(containerView, itemView) : itemViewContainer;
+      
+      if (!isItemViewContainerFunction && selector.charAt(0) === "@" && containerView.ui) {
         container = containerView.ui[selector.substr(4)];
       } else {
         container = containerView.$(selector);
@@ -151,7 +153,10 @@ Marionette.CompositeView = Marionette.CollectionView.extend({
       container = containerView.$el;
     }
 
-    containerView.$itemViewContainer = container;
+    if (!isItemViewContainerFunction) {
+      containerView.$itemViewContainer = container;  
+    }
+    
     return container;
   },
 

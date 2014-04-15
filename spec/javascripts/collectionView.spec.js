@@ -88,7 +88,7 @@ describe("collection view", function(){
     });
 
     it("should provide the index for each itemView, when appending", function(){
-      expect(collectionView.appendHtml.calls[0].args[2]).toBe(0);
+      expect(collectionView.appendHtml.calls[0].args[1]).toBe(0);
     });
 
     it("should reference each of the rendered view items", function(){
@@ -198,7 +198,7 @@ describe("collection view", function(){
     });
 
     it("should provide the index for each itemView, when appending", function(){
-      expect(collectionView.appendHtml.calls[0].args[2]).toBe(0);
+      expect(collectionView.appendHtml.calls[0].args[1]).toBe(0);
     });
 
     it("should trigger the itemview:render event from the collectionView", function(){
@@ -236,7 +236,7 @@ describe("collection view", function(){
     });
 
     it("should provide the index for each itemView, when appending", function(){
-      expect(collectionView.appendHtml.calls[0].args[2]).toBe(1);
+      expect(collectionView.appendHtml.calls[0].args[1]).toBe(1);
     });
 
     it("should trigger the itemview:render event from the collectionView", function(){
@@ -447,8 +447,8 @@ describe("collection view", function(){
     var PrependHtmlView = Backbone.Marionette.CollectionView.extend({
       itemView: ItemView,
 
-      appendHtml: function(collectionView, itemView){
-        collectionView.$el.prepend(itemView.el);
+      appendHtml: function(itemView){
+        this.$el.prepend(itemView.el);
       }
     });
 
@@ -547,13 +547,9 @@ describe("collection view", function(){
       beforeEach(function(){
         beforeSpy = jasmine.createSpy("before:render spy");
         renderSpy = jasmine.createSpy("render spy");
-        itemBeforeSpy = jasmine.createSpy("item:before:render spy");
-        itemRenderedSpy = jasmine.createSpy("item:rendered spy");
         
         collectionView.on("itemview:before:render", beforeSpy);
         collectionView.on("itemview:render", renderSpy);
-        collectionView.on("itemview:item:before:render", itemBeforeSpy);
-        collectionView.on("itemview:item:rendered", itemRenderedSpy);
         
         collectionView.render();
         childView = collectionView.children.findByIndex(0);
@@ -566,8 +562,6 @@ describe("collection view", function(){
         // same view.
         expect(beforeSpy).toHaveBeenCalledWith(childView, childView);
         expect(renderSpy).toHaveBeenCalledWith(childView, childView);
-        expect(itemBeforeSpy).toHaveBeenCalledWith(childView, childView);
-        expect(itemRenderedSpy).toHaveBeenCalledWith(childView, childView);
       });
     });
 
@@ -577,13 +571,9 @@ describe("collection view", function(){
       beforeEach(function(){
         beforeSpy = jasmine.createSpy("before:close spy");
         closeSpy = jasmine.createSpy("close spy");
-        itemBeforeSpy = jasmine.createSpy("item:before:close spy");
-        itemClosedSpy = jasmine.createSpy("item:closed spy");
 
         collectionView.on("itemview:before:close", beforeSpy);
         collectionView.on("itemview:close", closeSpy);
-        collectionView.on("itemview:item:before:close", itemBeforeSpy);
-        collectionView.on("itemview:item:closed", itemClosedSpy);
         
         collectionView.render();
         childView = collectionView.children.findByIndex(0);
@@ -593,8 +583,6 @@ describe("collection view", function(){
       it("should bubble up through the parent collection view", function(){
         expect(beforeSpy).toHaveBeenCalledWith(childView);
         expect(closeSpy).toHaveBeenCalledWith(childView);
-        expect(itemBeforeSpy).toHaveBeenCalledWith(childView);
-        expect(itemClosedSpy).toHaveBeenCalledWith(childView);
       });
     });
   });

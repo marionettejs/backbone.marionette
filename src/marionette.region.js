@@ -150,12 +150,16 @@ _.extend(Marionette.Region.prototype, Backbone.Events, {
     if (!this.$el || this.$el.length === 0){
       this.$el = this.getEl(this.el);
     }
+
+    if (this.$el.length === 0) {
+      throwError("An 'el' " + this.el + " must exist in DOM");
+    }
   },
 
   // Override this method to change how the region finds the
   // DOM element that it manages. Return a jQuery selector object.
   getEl: function(selector){
-    return Marionette.$(selector);
+    return Backbone.$(selector);
   },
 
   // Override this method to change how the new view is

@@ -1,9 +1,9 @@
 /* jshint maxstatements: 16 */
-describe('layout', function() {
+describe('layoutView', function() {
   'use strict';
 
-  var Layout = Backbone.Marionette.Layout.extend({
-    template: '#layout-manager-template',
+  var LayoutView = Backbone.Marionette.LayoutView.extend({
+    template: '#layout-view-manager-template',
     regions: {
       regionOne: '#regionOne',
       regionTwo: '#regionTwo'
@@ -19,7 +19,7 @@ describe('layout', function() {
 
   var CustomRegion2 = Backbone.Marionette.Region.extend();
 
-  var LayoutNoDefaultRegion = Layout.extend({
+  var LayoutViewNoDefaultRegion = LayoutView.extend({
     regions: {
       regionOne: {
         selector: '#regionOne',
@@ -30,25 +30,25 @@ describe('layout', function() {
   });
 
   describe('on instantiation', function() {
-    var layoutManager;
+    var layoutViewManager;
 
     beforeEach(function() {
-      layoutManager = new Layout();
+      layoutViewManager = new LayoutView();
     });
 
     it('should instantiate the specified region managers', function() {
-      expect(layoutManager).toHaveOwnProperty('regionOne');
-      expect(layoutManager).toHaveOwnProperty('regionTwo');
+      expect(layoutViewManager).toHaveOwnProperty('regionOne');
+      expect(layoutViewManager).toHaveOwnProperty('regionTwo');
     });
 
   });
 
   describe('on instantiation with no regions defined', function() {
-    var NoRegions = Marionette.Layout.extend({});
-    var layoutManager;
+    var NoRegions = Marionette.LayoutView.extend({});
+    var layoutViewManager;
 
     function init() {
-      layoutManager = new NoRegions();
+      layoutViewManager = new NoRegions();
     }
 
     it('should instantiate the specified region managers', function() {
@@ -58,7 +58,7 @@ describe('layout', function() {
   });
 
   describe('on instantiation with custom region managers', function() {
-    var LayoutCustomRegion = Layout.extend({
+    var LayoutViewCustomRegion = LayoutView.extend({
       regionType: CustomRegion1,
       regions: {
         regionOne: {
@@ -77,44 +77,44 @@ describe('layout', function() {
       }
     });
 
-    var layoutManager;
+    var layoutViewManager;
 
     beforeEach(function() {
-      layoutManager = new LayoutCustomRegion();
+      layoutViewManager = new LayoutViewCustomRegion();
     });
 
     it('should instantiate specific regions with custom regions if speficied', function() {
-      expect(layoutManager).toHaveOwnProperty('regionOne');
-      expect(layoutManager.regionOne).toBeInstanceOf(CustomRegion1);
-      expect(layoutManager).toHaveOwnProperty('regionTwo');
-      expect(layoutManager.regionTwo).toBeInstanceOf(CustomRegion2);
+      expect(layoutViewManager).toHaveOwnProperty('regionOne');
+      expect(layoutViewManager.regionOne).toBeInstanceOf(CustomRegion1);
+      expect(layoutViewManager).toHaveOwnProperty('regionTwo');
+      expect(layoutViewManager.regionTwo).toBeInstanceOf(CustomRegion2);
     });
 
     it('should instantiate the default regionManager if specified', function() {
-      expect(layoutManager).toHaveOwnProperty('regionThree');
-      expect(layoutManager.regionThree).toBeInstanceOf(CustomRegion1);
-      expect(layoutManager).toHaveOwnProperty('regionFour');
-      expect(layoutManager.regionThree).toBeInstanceOf(CustomRegion1);
+      expect(layoutViewManager).toHaveOwnProperty('regionThree');
+      expect(layoutViewManager.regionThree).toBeInstanceOf(CustomRegion1);
+      expect(layoutViewManager).toHaveOwnProperty('regionFour');
+      expect(layoutViewManager.regionThree).toBeInstanceOf(CustomRegion1);
     });
 
     it('should instantiate marionette regions is no regionType is specified', function() {
-      var layoutManagerNoDefault = new LayoutNoDefaultRegion();
-      expect(layoutManagerNoDefault).toHaveOwnProperty('regionTwo');
-      expect(layoutManagerNoDefault.regionTwo).toBeInstanceOf(Backbone.Marionette.Region);
+      var layoutViewManagerNoDefault = new LayoutViewNoDefaultRegion();
+      expect(layoutViewManagerNoDefault).toHaveOwnProperty('regionTwo');
+      expect(layoutViewManagerNoDefault.regionTwo).toBeInstanceOf(Backbone.Marionette.Region);
     });
 
     it('should pass extra options to the custom regionType', function() {
-      expect(layoutManager.regionTwo).toHaveOwnProperty('options');
-      expect(layoutManager.regionTwo.options).toHaveOwnProperty('specialOption');
-      expect(layoutManager.regionTwo.options.specialOption).toBeTruthy();
+      expect(layoutViewManager.regionTwo).toHaveOwnProperty('options');
+      expect(layoutViewManager.regionTwo.options).toHaveOwnProperty('specialOption');
+      expect(layoutViewManager.regionTwo.options.specialOption).toBeTruthy();
     });
 
   });
 
   describe('when regions are defined as a function', function() {
-    var options, layout;
+    var options, layoutView;
 
-    var Layout = Marionette.Layout.extend({
+    var LayoutView = Marionette.LayoutView.extend({
       template: '#foo',
       regions: function(opts) {
         options = opts;
@@ -126,51 +126,51 @@ describe('layout', function() {
 
     beforeEach(function() {
       setFixtures('<div id="foo"><div id="bar"></div></div>');
-      layout = new Layout();
-      layout.render();
+      layoutView = new LayoutView();
+      layoutView.render();
     });
 
-    it('should supply the layout.options to the function when calling it', function() {
-      expect(options).toEqual(layout.options);
+    it('should supply the layoutView.options to the function when calling it', function() {
+      expect(options).toEqual(layoutView.options);
     });
 
     it('should build the regions from the returns object literal', function() {
-      expect(layout).toHaveOwnProperty('foo');
-      expect(layout.foo).toBeInstanceOf(Backbone.Marionette.Region);
+      expect(layoutView).toHaveOwnProperty('foo');
+      expect(layoutView.foo).toBeInstanceOf(Backbone.Marionette.Region);
     });
   });
 
   describe('on rendering', function() {
-    var layoutManager;
+    var layoutViewManager;
 
     beforeEach(function() {
-      loadFixtures('layoutManagerTemplate.html');
-      layoutManager = new Layout();
-      layoutManager.render();
+      loadFixtures('layoutViewManagerTemplate.html');
+      layoutViewManager = new LayoutView();
+      layoutViewManager.render();
     });
 
     it('should find the region scoped within the rendered template', function() {
-      layoutManager.regionOne.ensureEl();
-      var el = layoutManager.$('#regionOne');
-      expect(layoutManager.regionOne.$el[0]).toEqual(el[0]);
+      layoutViewManager.regionOne.ensureEl();
+      var el = layoutViewManager.$('#regionOne');
+      expect(layoutViewManager.regionOne.$el[0]).toEqual(el[0]);
     });
   });
 
   describe('when destroying', function() {
-    var layoutManager, regionOne, regionTwo;
+    var layoutViewManager, regionOne, regionTwo;
 
     beforeEach(function() {
-      loadFixtures('layoutManagerTemplate.html');
-      layoutManager = new Layout();
-      layoutManager.render();
+      loadFixtures('layoutViewManagerTemplate.html');
+      layoutViewManager = new LayoutView();
+      layoutViewManager.render();
 
-      regionOne = layoutManager.regionOne;
-      regionTwo = layoutManager.regionTwo;
+      regionOne = layoutViewManager.regionOne;
+      regionTwo = layoutViewManager.regionTwo;
 
       spyOn(regionOne, 'destroy').andCallThrough();
       spyOn(regionTwo, 'destroy').andCallThrough();
 
-      layoutManager.destroy();
+      layoutViewManager.destroy();
     });
 
     it('should destroy the region managers', function() {
@@ -179,28 +179,28 @@ describe('layout', function() {
     });
 
     it('should delete the region managers', function() {
-      expect(layoutManager.regionOne).toBeUndefined();
-      expect(layoutManager.regionTwo).toBeUndefined();
+      expect(layoutViewManager.regionOne).toBeUndefined();
+      expect(layoutViewManager.regionTwo).toBeUndefined();
     });
   });
 
-  describe('when showing a layout via a region', function() {
-    var region, layout, regionOne;
+  describe('when showing a layoutView via a region', function() {
+    var region, layoutView, regionOne;
 
     beforeEach(function() {
       setFixtures('<div id="mgr"></div>');
-      appendLoadFixtures('layoutManagerTemplate.html');
+      appendLoadFixtures('layoutViewManagerTemplate.html');
 
-      layout = new Layout();
-      layout.onRender = function() {
-        regionOne = layout.regionOne;
+      layoutView = new LayoutView();
+      layoutView.onRender = function() {
+        regionOne = layoutView.regionOne;
         regionOne.ensureEl();
       };
 
       region = new Backbone.Marionette.Region({
         el: '#mgr'
       });
-      region.show(layout);
+      region.show(layoutView);
     });
 
     it('should make the regions available in `onRender`', function() {
@@ -212,26 +212,26 @@ describe('layout', function() {
     });
   });
 
-  describe('when re-rendering an already rendered layout', function() {
-    var region, layout, view, destroyRegionsSpy;
+  describe('when re-rendering an already rendered layoutView', function() {
+    var region, layoutView, view, destroyRegionsSpy;
 
     beforeEach(function() {
-      loadFixtures('layoutManagerTemplate.html');
+      loadFixtures('layoutViewManagerTemplate.html');
 
-      layout = new Layout({
+      layoutView = new LayoutView({
         model: new Backbone.Model()
       });
-      layout.render();
+      layoutView.render();
 
       view = new Backbone.View();
       view.destroy = function() {};
-      layout.regionOne.show(view);
+      layoutView.regionOne.show(view);
 
-      destroyRegionsSpy = spyOn(layout.regionManager, 'destroyRegions').andCallThrough();
+      destroyRegionsSpy = spyOn(layoutView.regionManager, 'destroyRegions').andCallThrough();
 
-      layout.render();
-      layout.regionOne.show(view);
-      region = layout.regionOne;
+      layoutView.render();
+      layoutView.regionOne.show(view);
+      region = layoutView.regionOne;
     });
 
     it('should destroy the regions', function() {
@@ -239,58 +239,58 @@ describe('layout', function() {
     });
 
     it('should re-bind the regions to the newly rendered elements', function() {
-      expect(layout.regionOne.$el.parent()).toBe(layout.$el);
+      expect(layoutView.regionOne.$el.parent()).toBe(layoutView.$el);
     });
 
     describe('and the views "render" function is bound to an event in the "initialize" function', function() {
       beforeEach(function() {
-        layout.onRender = function() {
+        layoutView.onRender = function() {
           this.regionOne.show(view);
         };
 
-        layout.model.trigger('change');
+        layoutView.model.trigger('change');
       });
 
       it('should re-bind the regions correctly', function() {
-        expect(layout.$('#regionOne')).not.toBeEmpty();
+        expect(layoutView.$('#regionOne')).not.toBeEmpty();
       });
     });
 
   });
 
-  describe('when re-rendering a destroyed layout', function() {
-    var region, layout, view;
+  describe('when re-rendering a destroyed layoutView', function() {
+    var region, layoutView, view;
 
     beforeEach(function() {
-      loadFixtures('layoutManagerTemplate.html');
+      loadFixtures('layoutViewManagerTemplate.html');
 
-      layout = new Layout();
-      layout.render();
-      region = layout.regionOne;
+      layoutView = new LayoutView();
+      layoutView.render();
+      region = layoutView.regionOne;
 
       view = new Backbone.View();
       view.destroy = function() {};
-      layout.regionOne.show(view);
-      layout.destroy();
+      layoutView.regionOne.show(view);
+      layoutView.destroy();
 
       spyOn(region, 'destroy').andCallThrough();
       spyOn(view, 'destroy').andCallThrough();
 
-      layout.onBeforeRender = jasmine.createSpy('before render');
-      layout.onRender = jasmine.createSpy('on render');
+      layoutView.onBeforeRender = jasmine.createSpy('before render');
+      layoutView.onRender = jasmine.createSpy('on render');
     });
 
     it('should throw an error', function() {
-      expect(layout.render).toThrow('Cannot use a view thats already been destroyed.');
+      expect(layoutView.render).toThrow('Cannot use a view thats already been destroyed.');
     });
   });
 
   describe('has a valid inheritance chain back to Marionette.View', function() {
-    var constructor, layout;
+    var constructor, layoutView;
 
     beforeEach(function() {
       constructor = spyOn(Marionette.View.prototype, 'constructor');
-      layout = new Marionette.Layout();
+      layoutView = new Marionette.LayoutView();
     });
 
     it('calls the parent Marionette.Views constructor function on instantiation', function() {
@@ -300,12 +300,12 @@ describe('layout', function() {
 
   describe('when getting a region', function() {
     beforeEach(function() {
-      this.layout = new Layout();
-      this.region = this.layout.regionOne;
+      this.layoutView = new LayoutView();
+      this.region = this.layoutView.regionOne;
     });
 
     it('should return the region', function() {
-      expect(this.layout.getRegion('regionOne')).toBe(this.region);
+      expect(this.layoutView.getRegion('regionOne')).toBe(this.region);
     });
   });
 });

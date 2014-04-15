@@ -1,16 +1,16 @@
-# Marionette.Layout
+# Marionette.LayoutView
 
-A `Layout` is a hybrid of an `ItemView` and a collection of `Region` objects. They
+A `LayoutView` is a hybrid of an `ItemView` and a collection of `Region` objects. They
 are ideal for rendering application layouts with multiple sub-regions
 managed by specified region managers.
 
-A layout can also act as a composite-view to aggregate multiple
+A layoutView can also act as a composite-view to aggregate multiple
 views and sub-application areas of the screen allowing applications to
 attach multiple region managers to dynamically rendered HTML.
 
-You can create complex views by nesting layout managers within `Regions`.
+You can create complex views by nesting layoutView managers within `Regions`.
 
-For a more in-depth discussion on Layouts, see the blog post
+For a more in-depth discussion on LayoutViews, see the blog post
 [Manage Layouts And Nested Views With Backbone.Marionette](http://lostechies.com/derickbailey/2012/03/22/managing-layouts-and-nested-views-with-backbone-marionette/)
 
 Please see
@@ -25,21 +25,21 @@ will provide features such as `onShow` callbacks, etc. Please see
 
 * [Basic Usage](#basic-usage)
 * [Region Availability](#region-availability)
-* [Re-Rendering A Layout](#re-rendering-a-layout)
+* [Re-Rendering A LayoutView](#re-rendering-a-layoutview)
   * [Avoid Re-Rendering The Entire Layout](#avoid-re-rendering-the-entire-layout)
-* [Nested Layouts And Views](#nested-layouts-and-views)
-* [Closing A Layout](#closing-a-layout)
+* [Nested LayoutViews And Views](#nested-layoutviewss-and-views)
+* [Closing A LayoutView](#closing-a-layoutview)
 * [Custom Region Type](#custom-region-type)
 * [Region Naming](#region-naming)
 
 ## Basic Usage
 
-The `Layout` extends directly from `ItemView` and adds the ability
+The `LayoutView` extends directly from `ItemView` and adds the ability
 to specify `regions` which become `Region` instances that are attached
-to the layout.
+to the layoutView.
 
 ```html
-<script id="layout-template" type="text/template">
+<script id="layout-view-template" type="text/template">
   <section>
     <navigation id="menu">...</navigation>
     <article id="content">...</article>
@@ -48,8 +48,8 @@ to the layout.
 ```
 
 ```js
-AppLayout = Backbone.Marionette.Layout.extend({
-  template: "#layout-template",
+AppLayoutView = Backbone.Marionette.LayoutView.extend({
+  template: "#layout-view-template",
 
   regions: {
     menu: "#menu",
@@ -57,27 +57,27 @@ AppLayout = Backbone.Marionette.Layout.extend({
   }
 });
 
-var layout = new AppLayout();
-layout.render();
+var layoutView = new AppLayoutView();
+layoutView.render();
 ```
 
-Once you've rendered the layout, you now have direct access
+Once you've rendered the layoutView, you now have direct access
 to all of the specified regions as region managers.
 
 ```js
-layout.menu.show(new MenuView());
+layoutView.menu.show(new MenuView());
 
-layout.content.show(new MainContentView());
+layoutView.content.show(new MainContentView());
 ```
 
 ### Specifying Regions As A Function
 
-Regions can be specified on a Layout using a function that returns
+Regions can be specified on a LayoutView using a function that returns
 an object with the region definitions. The returned object follow the
 same rules for defining a region, as outlined above.
 
 ```js
-Marionette.Layout.extend({
+Marionette.LayoutView.extend({
   // ...
 
   regions: function(options){
@@ -97,56 +97,56 @@ must be accessed through this parameter.
 
 ## Region Availability
 
-Any defined regions within a layout will be available to the
-layout or any calling code immediately after instantiating the
-layout. This allows a layout to be attached to an existing
+Any defined regions within a layoutView will be available to the
+View or any calling code immediately after instantiating the
+View. This allows a View to be attached to an existing
 DOM element in an HTML page, without the need to call a render
 method or anything else, to create the regions.
 
 However, a region will only be able to populate itself if the
-layout has access to the elements specified within the region
+View has access to the elements specified within the region
 definitions. That is, if your view has not yet rendered, your
 regions may not be able to find the element that you've
 specified for them to manage. In that scenario, using the
 region will result in no changes to the DOM.
 
-## Re-Rendering A Layout
+## Re-Rendering A LayoutView
 
-A layout can be rendered as many times as needed, but renders
+A layoutView can be rendered as many times as needed, but renders
 after the first one behave differently than the initial render.
 
-The first time a layout is rendered, nothing special happens. It just
+The first time a layoutView is rendered, nothing special happens. It just
 delegates to the `ItemView` prototype to do the render. After the
 first render has happened, though, the render function is modified to
-account for re-rendering with regions in the layout.
+account for re-rendering with regions in the layoutView.
 
 After the first render, all subsequent renders will force every
 region to close by calling the `close` method on them. This will
 force every view in the region, and sub-views if any, to be closed
 as well. Once the regions have been closed, the regions will be
 reset so that they are no longer referencing the element of the previous
-layout render.
+layoutView render.
 
-Then after the Layout is finished re-rendering itself,
-showing a view in the layout's regions will cause the regions to attach
-themselves to the new elements in the layout.
+Then after the layoutView is finished re-rendering itself,
+showing a view in the layoutView's regions will cause the regions to attach
+themselves to the new elements in the layoutView.
 
-### Avoid Re-Rendering The Entire Layout
+### Avoid Re-Rendering The Entire LayoutView
 
-There are times when re-rendering the entire layout is necessary. However,
+There are times when re-rendering the entire layoutView is necessary. However,
 due to the behavior described above, this can cause a large amount of
-work to be needed in order to fully restore the layout and all of the
-views that the layout is displaying.
+work to be needed in order to fully restore the layoutView and all of the
+views that the layoutView is displaying.
 
 Therefore, it is suggested that you avoid re-rendering the entire
-layout unless absolutely necessary. Instead, if you are binding the
-layout's template to a model and need to update portions of the layout,
+layoutView unless absolutely necessary. Instead, if you are binding the
+layoutView's template to a model and need to update portions of the layoutView,
 you should listen to the model's "change" events and only update the
 neccesary DOM elements.
 
-## Nested Layouts And Views
+## Nested LayoutViews And Views
 
-Since the `Layout` extends directly from `ItemView`, it
+Since the `LayoutView` extends directly from `ItemView`, it
 has all of the core functionality of an item view. This includes
 the methods necessary to be shown within an existing region manager.
 
@@ -156,37 +156,37 @@ MyApp.addRegions({
   mainRegion: "#main"
 });
 
-var layout = new AppLayout();
-MyApp.mainRegion.show(layout);
+var layoutView = new AppLayout();
+MyApp.mainRegion.show(layoutView);
 
-layout.show(new MenuView());
+layoutView.show(new MenuView());
 ```
 
-You can nest layouts into region managers as deeply as you want.
+You can nest layoutViews into region managers as deeply as you want.
 This provides for a well organized, nested view structure.
 
-## Closing A Layout
+## Closing A LayoutView
 
-When you are finished with a layout, you can call the
+When you are finished with a layoutView, you can call the
 `close` method on it. This will ensure that all of the region managers
-within the layout are closed correctly, which in turn
+within the layoutView are closed correctly, which in turn
 ensures all of the views shown within the regions are closed correctly.
 
-If you are showing a layout within a parent region manager, replacing
-the layout with another view or another layout will close the current
+If you are showing a layoutView within a parent region manager, replacing
+the layoutView with another view or another layoutView will close the current
 one, the same it will close a view.
 
-All of this ensures that layouts and the views that they
+All of this ensures that layoutViews and the views that they
 contain are cleaned up correctly.
 
 ## Custom Region Type
 
 If you have the need to replace the `Region` with a region class of
 your own implementation, you can specify an alternate class to use
-with the `regionType` property of the `Layout`.
+with the `regionType` property of the `LayoutView`.
 
 ```js
-MyLayout = Backbone.Marionette.Layout.extend({
+MyLayoutView = Backbone.Marionette.LayoutView.extend({
   regionType: SomeCustomRegion
 });
 ```
@@ -194,8 +194,8 @@ MyLayout = Backbone.Marionette.Layout.extend({
 You can also specify custom `Region` classes for each `region`:
 
 ```js
-AppLayout = Backbone.Marionette.Layout.extend({
-  template: "#layout-template",
+AppLayoutView = Backbone.Marionette.LayoutView.extend({
+  template: "#layout-view-template",
 
   regionType: SomeDefaultCustomRegion,
 
@@ -215,7 +215,7 @@ AppLayout = Backbone.Marionette.Layout.extend({
 ## Adding And Removing Regions
 
 Regions can be added and removed as needed, in a
-Layout instance. Use the following methods:
+LayoutView instance. Use the following methods:
 
 * `addRegion`
 * `addRegions`
@@ -224,22 +224,22 @@ Layout instance. Use the following methods:
 addRegion:
 
 ```js
-var layout = new MyLayout();
+var layoutView = new MyLayoutView();
 
 // ...
 
-layout.addRegion("foo", "#foo");
-layout.foo.show(new someView());
+layoutView.addRegion("foo", "#foo");
+layoutView.foo.show(new someView());
 ```
 
 addRegions:
 
 ```js
-var layout = new MyLayout();
+var layoutView = new MyLayoutView();
 
 // ...
 
-layout.addRegions({
+layoutView.addRegions({
   foo: "#foo",
   bar: "#bar"
 });
@@ -248,11 +248,11 @@ layout.addRegions({
 removeRegions:
 
 ```js
-var layout = new MyLayout();
+var layoutView = new MyLayoutView();
 
 // ...
 
-layout.removeRegion("foo");
+layoutView.removeRegion("foo");
 ```
 
 Any region can be removed, whether it was defined
@@ -264,13 +264,13 @@ the `regionManager` documentation.
 
 ## Region Naming
 
-A Layouts' Regions are attached directly to the Layout instance with the name of the region
+A LayoutViews' Regions are attached directly to the LayoutView instance with the name of the region
 as the key and the region itself as the value. Because of this, you need to be careful
-to avoid conflicts with existing properties on the Layout when you name your Region.
+to avoid conflicts with existing properties on the LayoutView when you name your Region.
 
-The prototype chain of Layouts is:
+The prototype chain of LayoutViews is:
 
-`Backbone.View > Marionette.View > Marionette.ItemView > Marionette.Layout`
+`Backbone.View > Marionette.View > Marionette.ItemView > Marionette.LayoutView`
 
 Consequently, every property on each of those Classes must be avoided as Region names. The most
 common issue people run into is trying to name their Region *"attributes"*. Be aware

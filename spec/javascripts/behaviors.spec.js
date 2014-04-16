@@ -413,6 +413,25 @@ describe("Behaviors", function(){
       expect(collectionSpy).toHaveBeenCalledOn(testBehavior);
     });
 
+    it("should unbind model events on view undelegate", function() {
+      v = new V({
+        model: m
+      });
+
+      v.undelegateEvents();
+      m.set("foo", "doge");
+      expect(fooChangedSpy).not.toHaveBeenCalled();
+    });
+
+    it("should unbind collection events on view undelegate", function() {
+      v = new CV({
+        collection: c
+      });
+
+      v.undelegateEvents();
+      c.reset();
+      expect(collectionSpy).not.toHaveBeenCalled();
+    });
   });
 
   describe("behavior trigger calls", function() {

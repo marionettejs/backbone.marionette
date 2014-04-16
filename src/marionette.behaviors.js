@@ -96,8 +96,8 @@ Marionette.Behaviors = (function(Marionette, _) {
       undelegateEvents.apply(this, args);
 
       _.each(behaviors, function(b) {
-        Marionette.unbindEntityEvents(this, this.model, Marionette.getOption(b, "modelEvents"));
-        Marionette.unbindEntityEvents(this, this.collection, Marionette.getOption(b, "collectionEvents"));
+        Marionette.unbindEntityEvents(b, this.model, Marionette.getOption(b, "modelEvents"));
+        Marionette.unbindEntityEvents(b, this.collection, Marionette.getOption(b, "collectionEvents"));
       }, this);
     },
 

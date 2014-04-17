@@ -1,3 +1,5 @@
+/* jshint unused: false */
+
 // Helpers
 // -------
 
@@ -21,11 +23,11 @@ Marionette.extend = Backbone.Model.extend;
 
 // Retrieve an object, function or other value from a target
 // object or its `options`, with `options` taking precedence.
-Marionette.getOption = function(target, optionName){
-  if (!target || !optionName){ return; }
+Marionette.getOption = function(target, optionName) {
+  if (!target || !optionName) { return; }
   var value;
 
-  if (target.options && (optionName in target.options) && (target.options[optionName] !== undefined)){
+  if (target.options && (target.options[optionName] !== undefined)) {
     value = target.options[optionName];
   } else {
     value = target[optionName];
@@ -59,7 +61,7 @@ Marionette.normalizeMethods = function(hash) {
 // a given key for triggers and events
 // swaps the @ui with the associated selector
 Marionette.normalizeUIKeys = function(hash, ui) {
-  if (typeof(hash) === "undefined") {
+  if (typeof(hash) === 'undefined') {
     return;
   }
 

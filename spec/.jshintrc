@@ -67,7 +67,7 @@
   "laxbreak"      : false,
   "laxcomma"      : false,
   "loopfunc"      : false,
-  "maxerr"        : 10000,
+  "maxerr"        : 50,
   "multistr"      : false,
   "proto"         : false,
   "scripturl"     : false,

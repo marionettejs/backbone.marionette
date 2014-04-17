@@ -22,7 +22,7 @@ Marionette.Behaviors = (function(Marionette, _) {
       'delegateEvents', 'undelegateEvents',
       'onShow', 'onClose',
       'behaviorEvents', 'triggerMethod',
-      'setElement'
+      'setElement', 'close'
     ]);
   }
 
@@ -36,6 +36,17 @@ Marionette.Behaviors = (function(Marionette, _) {
       _.each(behaviors, function(b) {
         b.$el = this.$el;
       }, this);
+    },
+
+    close: function(close, behaviors) {
+      var args = _.tail(arguments, 2);
+      close.apply(this, args);
+
+      // Call close on each behavior after
+      // closing down the view.
+      // This unbinds event listeners
+      // that behaviors have registerd for.
+      _.invoke(behaviors, 'close', args);
     },
 
     onShow: function(onShow, behaviors) {

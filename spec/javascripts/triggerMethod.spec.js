@@ -1,12 +1,12 @@
-describe('trigger event and method name', function () {
+describe('trigger event and method name', function() {
   'use strict';
 
   var view, eventHandler, methodHandler, CustomClass, customObject;
 
-  beforeEach(function () {
+  beforeEach(function() {
     view = new Marionette.View();
 
-    CustomClass = function () {
+    CustomClass = function() {
       this.triggerMethod = Marionette.triggerMethod;
     };
 
@@ -14,10 +14,10 @@ describe('trigger event and method name', function () {
     methodHandler = jasmine.createSpy('method handler');
   });
 
-  describe('when triggering an event', function () {
+  describe('when triggering an event', function() {
     var returnVal;
 
-    beforeEach(function () {
+    beforeEach(function() {
       methodHandler.andReturn('return val');
       view.onSomething = methodHandler;
       view.on('something', eventHandler);
@@ -25,26 +25,26 @@ describe('trigger event and method name', function () {
       returnVal = view.triggerMethod('something');
     });
 
-    it('should trigger the event', function () {
+    it('should trigger the event', function() {
       expect(eventHandler).toHaveBeenCalled();
     });
 
-    it('should call a method named on{Event}', function () {
+    it('should call a method named on{Event}', function() {
       expect(methodHandler).toHaveBeenCalled();
     });
 
-    it('returns the value returned by the on{Event} method', function () {
+    it('returns the value returned by the on{Event} method', function() {
       expect(returnVal).toBe('return val');
     });
 
-    describe('when trigger does not exist', function () {
+    describe('when trigger does not exist', function() {
 
-      beforeEach(function () {
+      beforeEach(function() {
         customObject = new CustomClass();
       });
 
-      it('should do nothing', function () {
-        var triggerNonExistantEvent = function () {
+      it('should do nothing', function() {
+        var triggerNonExistantEvent = function() {
           customObject.triggerMethod('does:not:exist');
         };
 
@@ -53,84 +53,84 @@ describe('trigger event and method name', function () {
     });
   });
 
-  describe('when triggering an event with arguments', function () {
+  describe('when triggering an event with arguments', function() {
 
-    beforeEach(function () {
+    beforeEach(function() {
       view.onSomething = methodHandler;
       view.on('something', eventHandler);
 
       view.triggerMethod('something', 1, 2, 3);
     });
 
-    it('should trigger the event with the args', function () {
+    it('should trigger the event with the args', function() {
       expect(eventHandler.mostRecentCall.args.length).toBe(3);
     });
 
-    it('should call a method named on{Event} with the args', function () {
+    it('should call a method named on{Event} with the args', function() {
       expect(methodHandler.mostRecentCall.args.length).toBe(3);
     });
 
   });
 
-  describe('when triggering an event with : separated name', function () {
+  describe('when triggering an event with : separated name', function() {
 
-    beforeEach(function () {
+    beforeEach(function() {
       view.onDoSomething = methodHandler;
       view.on('do:something', eventHandler);
 
       view.triggerMethod('do:something', 1, 2, 3);
     });
 
-    it('should trigger the event with the args', function () {
+    it('should trigger the event with the args', function() {
       expect(eventHandler.mostRecentCall.args.length).toBe(3);
     });
 
-    it('should call a method named with each segment of the event name capitalized', function () {
+    it('should call a method named with each segment of the event name capitalized', function() {
       expect(methodHandler).toHaveBeenCalled();
     });
 
   });
 
-  describe('when triggering an event and no handler method exists', function () {
-    beforeEach(function () {
+  describe('when triggering an event and no handler method exists', function() {
+    beforeEach(function() {
       view.on('do:something', eventHandler);
       view.triggerMethod('do:something', 1, 2, 3);
     });
 
-    it('should trigger the event with the args', function () {
+    it('should trigger the event with the args', function() {
       expect(eventHandler.mostRecentCall.args.length).toBe(3);
     });
 
-    it('should not call a method named with each segment of the event name capitalized', function () {
+    it('should not call a method named with each segment of the event name capitalized', function() {
       expect(methodHandler).not.toHaveBeenCalled();
     });
 
   });
 
-  describe('when triggering an event and the attribute for that event is not a function', function () {
-    beforeEach(function () {
+  describe('when triggering an event and the attribute for that event is not a function', function() {
+    beforeEach(function() {
       view.onDoSomething = 'bar';
       view.on('do:something', eventHandler);
       view.triggerMethod('do:something', 1, 2, 3);
     });
 
-    it('should trigger the event with the args', function () {
+    it('should trigger the event with the args', function() {
       expect(eventHandler.mostRecentCall.args.length).toBe(3);
     });
 
-    it('should not call a method named with each segment of the event name capitalized', function () {
+    it('should not call a method named with each segment of the event name capitalized', function() {
       expect(methodHandler).not.toHaveBeenCalled();
     });
 
   });
 
-  describe('triggering events through a child view', function () {
+  describe('triggering events through a child view', function() {
     var ResultView = Backbone.Marionette.ItemView.extend({
       template : '#aTemplate',
       events : {
         'click' : 'onAddToSelection'
       },
-      onAddToSelection : function () {
+      onAddToSelection : function() {
         this.triggerMethod('add:selection', this.model);
       }
     });
@@ -142,7 +142,7 @@ describe('trigger event and method name', function () {
 
     var collectionView;
 
-    beforeEach(function () {
+    beforeEach(function() {
       setFixtures('<script type="text/html" id="aTemplate"><div>foo</div></script>');
 
       var collection = new Backbone.Collection([{ a: 'b' }, { a: 'c' }]);
@@ -158,7 +158,7 @@ describe('trigger event and method name', function () {
       childView.$el.click();
     });
 
-    it('should fire the event method once', function () {
+    it('should fire the event method once', function() {
       expect(collectionView.onChildviewAddSelection.callCount).toBe(1);
     });
 

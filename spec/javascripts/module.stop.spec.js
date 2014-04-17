@@ -1,21 +1,21 @@
-describe('module stop', function () {
+describe('module stop', function() {
   'use strict';
 
   var App;
 
-  beforeEach(function () {
+  beforeEach(function() {
     App = new Backbone.Marionette.Application();
   });
 
-  describe('when stopping a module that has been started', function () {
+  describe('when stopping a module that has been started', function() {
     var mod1, mod2, mod3, beforeStop, stop, finalizerSpy;
 
-    beforeEach(function () {
+    beforeEach(function() {
       beforeStop = jasmine.createSpy('before:stop');
       stop = jasmine.createSpy('stop');
 			finalizerSpy = sinon.spy();
 
-      mod1 = App.module('Mod1', function (Mod1) {
+      mod1 = App.module('Mod1', function(Mod1) {
         Mod1.addFinalizer(finalizerSpy);
       });
 
@@ -32,39 +32,39 @@ describe('module stop', function () {
       mod1.stop();
     });
 
-    it('should trigger a "before:stop" event', function () {
+    it('should trigger a "before:stop" event', function() {
       expect(beforeStop).toHaveBeenCalled();
     });
 
-    it('should trigger a "stop" event', function () {
+    it('should trigger a "stop" event', function() {
       expect(stop).toHaveBeenCalled();
     });
 
-    it('should run all finalizers for the module', function () {
+    it('should run all finalizers for the module', function() {
       expect(finalizerSpy).toHaveBeenCalled();
     });
 
-    it('should run all finalizers for the module in the context of the module', function () {
+    it('should run all finalizers for the module in the context of the module', function() {
 			expect(finalizerSpy).toHaveBeenCalledOn(mod1);
     });
 
-    it('should stop all sub-modules', function () {
+    it('should stop all sub-modules', function() {
       expect(mod2.stop).toHaveBeenCalled();
       expect(mod3.stop).toHaveBeenCalled();
     });
 
-    it('should not remove the module from its parent module or application', function () {
+    it('should not remove the module from its parent module or application', function() {
       expect(App.module('Mod1')).toBe(mod1);
     });
 
   });
 
-  describe('when stopping a module that has not been started', function () {
+  describe('when stopping a module that has not been started', function() {
     var mod1, mod2, mod3, finalizerSpy;
 
-    beforeEach(function () {
+    beforeEach(function() {
       finalizerSpy = sinon.spy();
-      mod1 = App.module('Mod1', function (Mod1) {
+      mod1 = App.module('Mod1', function(Mod1) {
         Mod1.addFinalizer(finalizerSpy);
       });
 
@@ -78,20 +78,20 @@ describe('module stop', function () {
       mod1.stop();
     });
 
-    it('should not run any finalizers', function () {
+    it('should not run any finalizers', function() {
       expect(finalizerSpy).not.toHaveBeenCalled();
     });
 
-    it('should not stop sub-modules', function () {
+    it('should not stop sub-modules', function() {
       expect(mod2.stop).not.toHaveBeenCalled();
       expect(mod3.stop).not.toHaveBeenCalled();
     });
   });
 
-  describe('when adding a module finalizer outside of the module definition function and stopping the module', function () {
+  describe('when adding a module finalizer outside of the module definition function and stopping the module', function() {
     var finalizer;
 
-    beforeEach(function () {
+    beforeEach(function() {
       var MyApp = new Marionette.Application();
       var module = MyApp.module('MyModule');
 
@@ -102,7 +102,7 @@ describe('module stop', function () {
       module.stop();
     });
 
-    it('should run the finalizer', function () {
+    it('should run the finalizer', function() {
       expect(finalizer).toHaveBeenCalled();
     });
 

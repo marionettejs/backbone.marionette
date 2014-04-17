@@ -1,5 +1,5 @@
 /*jshint maxstatements: 17 */
-describe('item view', function () {
+describe('item view', function() {
   'use strict';
 
   var Model = Backbone.Model.extend();
@@ -10,34 +10,34 @@ describe('item view', function () {
 
   var ItemView = Backbone.Marionette.ItemView.extend({});
 
-  beforeEach(function () {
+  beforeEach(function() {
     loadFixtures('itemTemplate.html', 'collectionItemTemplate.html', 'emptyTemplate.html');
   });
 
-  describe('when rendering without a valid template', function () {
+  describe('when rendering without a valid template', function() {
     var TemplatelessView = Backbone.Marionette.ItemView.extend({});
     var view;
 
-    beforeEach(function () {
+    beforeEach(function() {
       view = new TemplatelessView({});
     });
 
-    it('should throw an exception because there was no valid template', function () {
+    it('should throw an exception because there was no valid template', function() {
       expect(view.render).toThrow(new Error('Cannot render the template since it\'s false, null or undefined.'));
     });
 
   });
 
-  describe('when rendering', function () {
+  describe('when rendering', function() {
     var OnRenderView = Backbone.Marionette.ItemView.extend({
       template: '#emptyTemplate',
-      onBeforeRender: function () {},
-      onRender: function () {}
+      onBeforeRender: function() {},
+      onRender: function() {}
     });
 
     var view;
 
-    beforeEach(function () {
+    beforeEach(function() {
       view = new OnRenderView({});
 
       spyOn(view, 'onBeforeRender').andCallThrough();
@@ -47,27 +47,27 @@ describe('item view', function () {
       view.render();
     });
 
-    it('should call a "onBeforeRender" method on the view', function () {
+    it('should call a "onBeforeRender" method on the view', function() {
       expect(view.onBeforeRender).toHaveBeenCalled();
     });
 
-    it('should call an "onRender" method on the view', function () {
+    it('should call an "onRender" method on the view', function() {
       expect(view.onRender).toHaveBeenCalled();
     });
 
-    it('should trigger a before:render event', function () {
+    it('should trigger a before:render event', function() {
       expect(view.trigger).toHaveBeenCalledWith('before:render', view);
     });
 
-    it('should trigger a rendered event', function () {
+    it('should trigger a rendered event', function() {
       expect(view.trigger).toHaveBeenCalledWith('render', view);
     });
   });
 
-  describe('when an item view has a model and is rendered', function () {
+  describe('when an item view has a model and is rendered', function() {
     var view;
 
-    beforeEach(function () {
+    beforeEach(function() {
       loadFixtures('itemTemplate.html');
 
       view = new ItemView({
@@ -82,27 +82,27 @@ describe('item view', function () {
       view.render();
     });
 
-    it('should serialize the model', function () {
+    it('should serialize the model', function() {
       expect(view.serializeData).toHaveBeenCalled();
     });
 
-    it('should render the template with the serialized model', function () {
+    it('should render the template with the serialized model', function() {
       expect($(view.el)).toHaveText(/bar/);
     });
   });
 
-  describe('when an item view has asynchronous data and is rendered', function () {
+  describe('when an item view has asynchronous data and is rendered', function() {
     var view;
 
-    beforeEach(function () {
+    beforeEach(function() {
       loadFixtures('itemTemplate.html');
 
       view = new ItemView({
         template: '#itemTemplate',
-        serializeData: function () {
+        serializeData: function() {
           var that = this;
           var deferred = $.Deferred();
-          setTimeout(function () {
+          setTimeout(function() {
             deferred.resolve(that.model.toJSON());
           }, 100);
           return deferred.promise();
@@ -117,23 +117,23 @@ describe('item view', function () {
       view.render();
     });
 
-    it('should serialize the model', function () {
+    it('should serialize the model', function() {
       expect(view.serializeData).toHaveBeenCalled();
     });
 
-    it('should render the template with the serialized model', function () {
+    it('should render the template with the serialized model', function() {
       expect($(view.el)).toHaveText(/bar/);
     });
   });
 
-  describe('when an item view has an asynchronous onRender and is rendered', function () {
+  describe('when an item view has an asynchronous onRender and is rendered', function() {
     var AsyncOnRenderView = Backbone.Marionette.ItemView.extend({
       template: '#emptyTemplate',
-      asyncCallback: function () {},
-      onRender: function () {
+      asyncCallback: function() {},
+      onRender: function() {
         var that = this;
         var deferred = $.Deferred();
-        setTimeout(function () {
+        setTimeout(function() {
           deferred.resolve(that.asyncCallback());
         }, 0);
         return deferred.promise();
@@ -142,27 +142,27 @@ describe('item view', function () {
 
     var view, promise, callbackSpy;
 
-    beforeEach(function () {
+    beforeEach(function() {
       loadFixtures('emptyTemplate.html');
       view = new AsyncOnRenderView();
       callbackSpy = spyOn(view, 'asyncCallback').andCallThrough();
       promise = view.render();
     });
 
-    it('should delay until onRender resolves', function () {
+    it('should delay until onRender resolves', function() {
       waits(0);
-      runs(function () {
-        $.when(promise).then(function () {
+      runs(function() {
+        $.when(promise).then(function() {
           expect(callbackSpy).toHaveBeenCalled();
         });
       });
     });
   });
 
-  describe('when an item view has a collection and is rendered', function () {
+  describe('when an item view has a collection and is rendered', function() {
     var view;
 
-    beforeEach(function () {
+    beforeEach(function() {
       view = new ItemView({
         template: '#collectionItemTemplate',
         collection: new Collection([ { foo: 'bar' }, { foo: 'baz' } ])
@@ -173,20 +173,20 @@ describe('item view', function () {
       view.render();
     });
 
-    it('should serialize the collection', function () {
+    it('should serialize the collection', function() {
       expect(view.serializeData).toHaveBeenCalled();
     });
 
-    it('should render the template with the serialized collection', function () {
+    it('should render the template with the serialized collection', function() {
       expect($(view.el)).toHaveText(/bar/);
       expect($(view.el)).toHaveText(/baz/);
     });
   });
 
-  describe('when an item view has a model and collection, and is rendered', function () {
+  describe('when an item view has a model and collection, and is rendered', function() {
     var view;
 
-    beforeEach(function () {
+    beforeEach(function() {
       view = new ItemView({
         template: '#itemTemplate',
         model: new Model({foo: 'bar'}),
@@ -198,31 +198,31 @@ describe('item view', function () {
       view.render();
     });
 
-    it('should serialize the model', function () {
+    it('should serialize the model', function() {
       expect(view.serializeData).toHaveBeenCalled();
     });
 
-    it('should render the template with the serialized model', function () {
+    it('should render the template with the serialized model', function() {
       expect($(view.el)).toHaveText(/bar/);
       expect($(view.el)).not.toHaveText(/baz/);
     });
   });
 
-  describe('when destroying an item view', function () {
+  describe('when destroying an item view', function() {
     var EventedView = Backbone.Marionette.ItemView.extend({
       template: '#emptyTemplate',
 
-      modelChange: function () {},
-      collectionChange: function () {},
-      onBeforeDestroy: function () {},
-      onDestroy: function () {}
+      modelChange: function() {},
+      collectionChange: function() {},
+      onBeforeDestroy: function() {},
+      onDestroy: function() {}
     });
 
     var view;
     var model;
     var collection;
 
-    beforeEach(function () {
+    beforeEach(function() {
       loadFixtures('itemTemplate.html');
 
       model = new Model({foo: 'bar'});
@@ -251,46 +251,46 @@ describe('item view', function () {
       collection.trigger('foo');
     });
 
-    it('should unbind model events for the view', function () {
+    it('should unbind model events for the view', function() {
       expect(view.modelChange).not.toHaveBeenCalled();
     });
 
-    it('should unbind all collection events for the view', function () {
+    it('should unbind all collection events for the view', function() {
       expect(view.collectionChange).not.toHaveBeenCalled();
     });
 
-    it('should unbind any listener to custom view events', function () {
+    it('should unbind any listener to custom view events', function() {
       expect(view.stopListening).toHaveBeenCalled();
     });
 
-    it('should remove the views EL from the DOM', function () {
+    it('should remove the views EL from the DOM', function() {
       expect(view.remove).toHaveBeenCalled();
     });
 
-    it('should trigger "item:before:destroy"', function () {
+    it('should trigger "item:before:destroy"', function() {
       expect(view.trigger).toHaveBeenCalledWith('before:destroy');
     });
 
-    it('should trigger "item:destroyed"', function () {
+    it('should trigger "item:destroyed"', function() {
       expect(view.trigger).toHaveBeenCalledWith('item:destroyed');
     });
 
-    it('should call "onBeforeDestroy" if provided', function () {
+    it('should call "onBeforeDestroy" if provided', function() {
       expect(view.onBeforeDestroy).toHaveBeenCalled();
     });
 
-    it('should call "onDestroy" if provided', function () {
+    it('should call "onDestroy" if provided', function() {
       expect(view.onDestroy).toHaveBeenCalled();
     });
   });
 
-  describe('when a view with a checkbox is bound to re-render on the "change:done" event of the model', function () {
-    describe('and rendering the view, then changing the checkbox from unchecked, to checked, and back to unchecked', function () {
+  describe('when a view with a checkbox is bound to re-render on the "change:done" event of the model', function() {
+    describe('and rendering the view, then changing the checkbox from unchecked, to checked, and back to unchecked', function() {
 
       var View = Backbone.Marionette.ItemView.extend({
         template: '#item-with-checkbox',
 
-        setupHandler: function () {
+        setupHandler: function() {
           this.listenTo(this.model, 'change:done', this.render, this);
         },
 
@@ -298,7 +298,7 @@ describe('item view', function () {
           'change #chk': 'changeClicked'
         },
 
-        changeClicked: function (e) {
+        changeClicked: function(e) {
           var chk = $(e.currentTarget);
           var checkedAttr = chk.attr('checked');
           var checked = !!checkedAttr;
@@ -308,7 +308,7 @@ describe('item view', function () {
 
       var view, spy, model, chk;
 
-      beforeEach(function () {
+      beforeEach(function() {
         loadFixtures('itemWithCheckbox.html');
 
         model = new Backbone.Model({
@@ -333,21 +333,21 @@ describe('item view', function () {
         chk.trigger('change');
       });
 
-      it('should render the view 3 times total', function () {
+      it('should render the view 3 times total', function() {
         expect(spy.callCount).toBe(3);
       });
     });
 
   });
 
-  describe('when re-rendering an ItemView that is already shown', function () {
+  describe('when re-rendering an ItemView that is already shown', function() {
     var View = Marionette.ItemView.extend({
-      template: function () { return '<div>foo</div>'; }
+      template: function() { return '<div>foo</div>'; }
     });
 
     var renderUpdate, view;
 
-    beforeEach(function () {
+    beforeEach(function() {
       renderUpdate = jasmine.createSpy('dom:refresh');
 
       view = new View();
@@ -360,25 +360,25 @@ describe('item view', function () {
       view.render();
     });
 
-    afterEach(function () {
+    afterEach(function() {
       view.remove();
     });
 
-    it('should trigger a dom:refresh event', function () {
+    it('should trigger a dom:refresh event', function() {
       expect(renderUpdate).toHaveBeenCalled();
     });
   });
 
-  describe('has a valid inheritance chain back to Marionette.View', function () {
+  describe('has a valid inheritance chain back to Marionette.View', function() {
 
     var constructor, itemView;
 
-    beforeEach(function () {
+    beforeEach(function() {
       constructor = spyOn(Marionette.View.prototype, 'constructor');
       itemView = new Marionette.ItemView();
     });
 
-    it('calls the parent Marionette.Views constructor function on instantiation', function () {
+    it('calls the parent Marionette.Views constructor function on instantiation', function() {
       expect(constructor).toHaveBeenCalled();
     });
   });

@@ -1,6 +1,6 @@
-describe('view entity events', function () {
+describe('view entity events', function() {
 
-  describe('when a view has string-based model and collection event configuration', function () {
+  describe('when a view has string-based model and collection event configuration', function() {
     var view;
 
     var View = Backbone.Marionette.View.extend({
@@ -13,20 +13,20 @@ describe('view entity events', function () {
       collectionEventHandler2: jasmine.createSpy('collection event handler2')
     });
 
-    beforeEach(function () {
+    beforeEach(function() {
       view = new View({
         model: new Backbone.Model(),
         collection: new Backbone.Collection()
       });
     });
 
-    it('should wire up model events', function () {
+    it('should wire up model events', function() {
       view.model.trigger('model-event');
       expect(view.modelEventHandler).toHaveBeenCalled();
       expect(view.modelEventHandler2).toHaveBeenCalled();
     });
 
-    it('should wire up collection events', function () {
+    it('should wire up collection events', function() {
       view.collection.trigger('collection-event');
       expect(view.collectionEventHandler).toHaveBeenCalled();
       expect(view.collectionEventHandler2).toHaveBeenCalled();
@@ -34,7 +34,7 @@ describe('view entity events', function () {
 
   });
 
-  describe('when a view has function-based model and collection event configuration', function () {
+  describe('when a view has function-based model and collection event configuration', function() {
     var view;
 
     var View = Backbone.Marionette.View.extend({
@@ -46,55 +46,55 @@ describe('view entity events', function () {
       }
     });
 
-    beforeEach(function () {
+    beforeEach(function() {
       view = new View({
         model: new Backbone.Model(),
         collection: new Backbone.Collection()
       });
     });
 
-    it('should wire up model events', function () {
+    it('should wire up model events', function() {
       view.model.trigger('model-event');
       expect(view.modelEvents['model-event']).toHaveBeenCalled();
     });
 
-    it('should wire up collection events', function () {
+    it('should wire up collection events', function() {
       view.collection.trigger('collection-event');
       expect(view.collectionEvents['collection-event']).toHaveBeenCalled();
     });
 
   });
 
-  describe('when a view has model event config with a specified handler method that doesnt exist', function () {
+  describe('when a view has model event config with a specified handler method that doesnt exist', function() {
     var getBadViewInstance;
 
     var View = Backbone.Marionette.View.extend({
       modelEvents: { 'foo': 'does_not_exist' }
     });
 
-    beforeEach(function () {
-      getBadViewInstance = function () {
+    beforeEach(function() {
+      getBadViewInstance = function() {
         return new View({ model: {} });
       };
     });
 
-    it('should error when method doesnt exist', function () {
+    it('should error when method doesnt exist', function() {
       expect(getBadViewInstance).toThrow('Method "does_not_exist" was configured as an event handler, but does not exist.');
     });
   });
 
-  describe('when configuring entity events with a function', function () {
+  describe('when configuring entity events with a function', function() {
     var view, modelHandler, collectionHandler;
 
-    beforeEach(function () {
+    beforeEach(function() {
       modelHandler = jasmine.createSpy('model handler');
       collectionHandler = jasmine.createSpy('collection handler');
 
       var View = Backbone.Marionette.View.extend({
-        modelEvents: function () {
+        modelEvents: function() {
           return {'model-event': modelHandler};
         },
-        collectionEvents: function () {
+        collectionEvents: function() {
           return {'collection-event': collectionHandler};
         }
       });
@@ -108,19 +108,19 @@ describe('view entity events', function () {
       view.collection.trigger('collection-event');
     });
 
-    it('should trigger the model event', function () {
+    it('should trigger the model event', function() {
       expect(modelHandler).toHaveBeenCalled();
     });
 
-    it('should trigger the collection event', function () {
+    it('should trigger the collection event', function() {
       expect(collectionHandler).toHaveBeenCalled();
     });
   });
 
-  describe('when undelegating events on a view', function () {
+  describe('when undelegating events on a view', function() {
     var view, modelHandler, collectionHandler;
 
-    beforeEach(function () {
+    beforeEach(function() {
       modelHandler = jasmine.createSpy('model event handler');
       collectionHandler = jasmine.createSpy('collection event handler');
 
@@ -151,19 +151,19 @@ describe('view entity events', function () {
       collection.trigger('collection-event');
     });
 
-    it('should undelegate the model events', function () {
+    it('should undelegate the model events', function() {
       expect(modelHandler).not.toHaveBeenCalled();
     });
 
-    it('should undelegate the collection events', function () {
+    it('should undelegate the collection events', function() {
       expect(collectionHandler).not.toHaveBeenCalled();
     });
   });
 
-  describe('when undelegating events on a view, delegating them again, and then triggering a model event', function () {
+  describe('when undelegating events on a view, delegating them again, and then triggering a model event', function() {
     var view, modelHandler, collectionHandler;
 
-    beforeEach(function () {
+    beforeEach(function() {
       modelHandler = jasmine.createSpy('model event handler');
       collectionHandler = jasmine.createSpy('collection event handler');
 
@@ -195,16 +195,16 @@ describe('view entity events', function () {
       collection.trigger('collection-event');
     });
 
-    it('should fire the model event once', function () {
+    it('should fire the model event once', function() {
       expect(modelHandler.callCount).toBe(1);
     });
 
-    it('should fire the collection event once', function () {
+    it('should fire the collection event once', function() {
       expect(collectionHandler.callCount).toBe(1);
     });
   });
 
-  describe('when Layout bound to modelEvent replaces region with new view', function () {
+  describe('when Layout bound to modelEvent replaces region with new view', function() {
     var destroySpy, renderSpy;
 
     var ChildView = Marionette.ItemView.extend({
@@ -214,7 +214,7 @@ describe('view entity events', function () {
         'sync': 'doStuff'
       },
 
-      doStuff: function () {
+      doStuff: function() {
         //console.log('doing stuff: ', this.cid);
         this.render();
       }
@@ -227,7 +227,7 @@ describe('view entity events', function () {
         child: '#child'
       },
 
-      onRender: function () {
+      onRender: function() {
         this.child.show(new ChildView({
           model: this.model
         }));
@@ -238,9 +238,9 @@ describe('view entity events', function () {
       }
     });
 
-    beforeEach(function () {
+    beforeEach(function() {
       destroySpy = spyOn(ChildView.prototype, 'destroy').andCallThrough();
-      renderSpy = spyOn(ChildView.prototype, 'render').andCallFake(function () {
+      renderSpy = spyOn(ChildView.prototype, 'render').andCallFake(function() {
         //console.log('child render:', this.cid);
       });
 
@@ -254,11 +254,11 @@ describe('view entity events', function () {
       model.trigger('sync');
     });
 
-    it('should destroy the previous child view', function () {
+    it('should destroy the previous child view', function() {
       expect(destroySpy).toHaveBeenCalled();
     });
 
-    it('should undelegate all previous views modelEvents', function () {
+    it('should undelegate all previous views modelEvents', function() {
       // ChildView 1 when closed should not react to event
       // we expect ChildView 1 to call render, (1st)
       // we expect ChildView 1 to destroy

@@ -1,6 +1,6 @@
-describe('view ui elements', function () {
+describe('view ui elements', function() {
 
-  describe('when accessing a ui element from the hash', function () {
+  describe('when accessing a ui element from the hash', function() {
     var View = Backbone.Marionette.ItemView.extend({
       template: '#item-with-checkbox',
 
@@ -12,7 +12,7 @@ describe('view ui elements', function () {
 
     var view, model;
 
-    beforeEach(function () {
+    beforeEach(function() {
       loadFixtures('itemWithCheckbox.html');
 
       model = new Backbone.Model({
@@ -26,17 +26,17 @@ describe('view ui elements', function () {
       view.render();
     });
 
-    it('should return its jQuery selector if it can be found', function () {
+    it('should return its jQuery selector if it can be found', function() {
       expect(view.ui.checkbox.attr('type')).toEqual('checkbox');
     });
 
-    it('should return an empty jQuery object if it cannot be found', function () {
+    it('should return an empty jQuery object if it cannot be found', function() {
       expect(view.ui.unfoundElement.length).toEqual(0);
     });
 
   });
 
-  describe('when re-rendering a view with a UI element configuration', function () {
+  describe('when re-rendering a view with a UI element configuration', function() {
     var View = Backbone.Marionette.ItemView.extend({
       template: '#item-with-checkbox',
 
@@ -48,7 +48,7 @@ describe('view ui elements', function () {
 
     var view, model;
 
-    beforeEach(function () {
+    beforeEach(function() {
       loadFixtures('itemWithCheckbox.html');
 
       model = new Backbone.Model({
@@ -67,18 +67,18 @@ describe('view ui elements', function () {
       view.render();
     });
 
-    it('should return an up-to-date selector on subsequent renders', function () {
+    it('should return an up-to-date selector on subsequent renders', function() {
       expect(view.ui.checkbox.attr('checked')).toBeDefined();
     });
 
   });
 
-  describe('when the ui element is a function that returns a hash', function () {
+  describe('when the ui element is a function that returns a hash', function() {
 
     var View = Backbone.Marionette.ItemView.extend({
       template: '#item-with-checkbox',
 
-      ui: function () {
+      ui: function() {
         return {
           checkbox: '#chk',
           unfoundElement: '#not_found'
@@ -88,7 +88,7 @@ describe('view ui elements', function () {
 
     var view, model;
 
-    beforeEach(function () {
+    beforeEach(function() {
       loadFixtures('itemWithCheckbox.html');
 
       model = new Backbone.Model({
@@ -103,15 +103,15 @@ describe('view ui elements', function () {
     });
 
 
-    it('should return its jQuery selector if it can be found', function () {
+    it('should return its jQuery selector if it can be found', function() {
       expect(view.ui.checkbox.attr('type')).toEqual('checkbox');
     });
 
-    it('should return an empty jQuery object if it cannot be found', function () {
+    it('should return an empty jQuery object if it cannot be found', function() {
       expect(view.ui.unfoundElement.length).toEqual(0);
     });
 
-    it('should return an up-to-date selector on subsequent renders', function () {
+    it('should return an up-to-date selector on subsequent renders', function() {
       // asserting state before subsequent render
       expect(view.ui.checkbox.attr('checked')).toBeUndefined();
 
@@ -127,9 +127,9 @@ describe('view ui elements', function () {
 
   });
 
-  describe('when destroying a view that has not been rendered', function () {
+  describe('when destroying a view that has not been rendered', function() {
     var View = Marionette.ItemView.extend({
-      template: function () {
+      template: function() {
         return '<div id="foo"></div>';
       },
 
@@ -140,20 +140,20 @@ describe('view ui elements', function () {
 
     var view1, view2;
 
-    beforeEach(function () {
+    beforeEach(function() {
       view1 = new View();
       view1.destroy();
       view2 = new View();
     });
 
-    it('should not affect future ui bindings', function () {
+    it('should not affect future ui bindings', function() {
       expect(view2.ui.foo).toBe('#foo');
     });
   });
 
-  describe('when destroying a view', function () {
+  describe('when destroying a view', function() {
     var View = Marionette.ItemView.extend({
-      template: function () {
+      template: function() {
         return '<div id="foo"></div>';
       },
 
@@ -164,14 +164,14 @@ describe('view ui elements', function () {
 
     var view;
 
-    beforeEach(function () {
+    beforeEach(function() {
       view = new View();
       view.render();
 
       view.destroy();
     });
 
-    it('should unbind UI elements and reset them to the selector', function () {
+    it('should unbind UI elements and reset them to the selector', function() {
       expect(view.ui.foo).toBe('#foo');
     });
   });

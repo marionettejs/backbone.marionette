@@ -1,7 +1,7 @@
-describe('view ui event trigger configuration', function () {
+describe('view ui event trigger configuration', function() {
   'use strict';
 
-  describe('@ui syntax within events and triggers', function () {
+  describe('@ui syntax within events and triggers', function() {
     var view, view2, view3, fooHandler, attackHandler, tapHandler;
 
     var View = Backbone.Marionette.ItemView.extend({
@@ -19,21 +19,21 @@ describe('view ui event trigger configuration', function () {
         'click div:not(@ui.bar)': 'tapper'
       },
 
-      tapper: function () {
+      tapper: function() {
         tapHandler();
       },
 
-      attack: function () {
+      attack: function() {
         attackHandler();
       },
 
-      render: function () {
+      render: function() {
         this.$el.html('<button class="foo"></button><div id="tap"></div><div class="lap"></div>');
       }
     });
 
     var View2 = View.extend({
-      triggers: function () {
+      triggers: function() {
         return {
           'click @ui.foo': {
             event: 'do:foo',
@@ -43,9 +43,9 @@ describe('view ui event trigger configuration', function () {
         };
       },
 
-      events: function () {
+      events: function() {
         return {
-          'click @ui.bar': function () {
+          'click @ui.bar': function() {
             this.attack();
           }
         };
@@ -53,14 +53,14 @@ describe('view ui event trigger configuration', function () {
     });
 
     var View3 = View2.extend({
-      ui: function () {
+      ui: function() {
         return {
           bar: '#tap'
         };
       }
     });
 
-    beforeEach(function () {
+    beforeEach(function() {
       view = new View({
         model: new Backbone.Model()
       });
@@ -85,32 +85,32 @@ describe('view ui event trigger configuration', function () {
       view2.on('do:foo', fooHandler);
     });
 
-    it('should correctly trigger an event', function () {
+    it('should correctly trigger an event', function() {
       view.$('.foo').trigger('click');
       expect(fooHandler).toHaveBeenCalled();
     });
 
-    it('should correctly trigger a complex event', function () {
+    it('should correctly trigger a complex event', function() {
       view.$('.lap').trigger('click');
       expect(tapHandler).toHaveBeenCalled();
     });
 
-    it('should correctly call an event', function () {
+    it('should correctly call an event', function() {
       view.$('#tap').trigger('click');
       expect(attackHandler).toHaveBeenCalled();
     });
 
-    it('should correctly call an event with a functional events hash', function () {
+    it('should correctly call an event with a functional events hash', function() {
       view2.$('#tap').trigger('click');
       expect(attackHandler).toHaveBeenCalled();
     });
 
-    it('should correctly call an event with a functional triggers hash', function () {
+    it('should correctly call an event with a functional triggers hash', function() {
       view2.$('.foo').trigger('click');
       expect(fooHandler).toHaveBeenCalled();
     });
 
-    it('should correctly call an event with a functional events hash and functional ui hash', function () {/*jshint maxlen: 400 */
+    it('should correctly call an event with a functional events hash and functional ui hash', function() {
       view3.$('#tap').trigger('click');
       expect(attackHandler).toHaveBeenCalled();
     });

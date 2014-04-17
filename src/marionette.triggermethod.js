@@ -5,7 +5,7 @@
 //
 // `this.triggerMethod("foo:bar")` will trigger the "foo:bar" event and
 // call the "onFooBar" method.
-Marionette.triggerMethod = (function(){
+Marionette.triggerMethod = (function() {
 
   // split the event name on the ":"
   var splitter = /(^|:)(\w)/gi;
@@ -30,7 +30,7 @@ Marionette.triggerMethod = (function(){
     }
 
     // trigger the event, if a trigger method exists
-    if(_.isFunction(this.trigger)) {
+    if (_.isFunction(this.trigger)) {
       this.trigger.apply(this, arguments);
     }
 

@@ -41,7 +41,7 @@ module.exports = function(grunt) {
 
     clean: {
       lib: 'lib',
-      tmp: 'tmp' 
+      tmp: 'tmp'
     },
 
     preprocess: {
@@ -151,9 +151,22 @@ module.exports = function(grunt) {
 
     jshint: {
       options: {
-        jshintrc : '.jshintrc'
+        jshintrc: '.jshintrc'
       },
-      marionette : [ 'src/*.js' ]
+
+      marionette: {
+        src: [ 'src/*.js' ]
+      },
+
+      specs: {
+        options: {
+          jshintrc: 'spec/.jshintrc'
+        },
+
+        files: {
+          src: ['spec/javascripts/**.js']
+        }
+      }
     },
 
     watch: {
@@ -174,7 +187,7 @@ module.exports = function(grunt) {
         }
       }
     },
-    
+
     lintspaces: {
       all: {
         src: [

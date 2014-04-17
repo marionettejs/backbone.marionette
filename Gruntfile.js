@@ -194,7 +194,7 @@ module.exports = function(grunt) {
 
   grunt.registerTask('test', 'Run the unit tests.', ['lint', 'preprocess:tmp', 'jasmine:marionette', 'clean:tmp']);
 
-  grunt.registerTask('dev', 'Auto-lints while writing code.', ['test', 'watch:marionette']);
+  grunt.registerTask('dev', 'Auto-lints while writing code.', ['lint', 'preprocess:tmp', 'jasmine:marionette', 'watch:marionette']);
 
   grunt.registerTask('build', 'Build all three versions of the library.', ['clean:lib', 'lint', 'preprocess', 'jasmine:marionette', 'concat', 'uglify', 'clean:tmp']);
 

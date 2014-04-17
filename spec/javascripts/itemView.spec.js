@@ -1,4 +1,4 @@
-/*jshint maxstatements: 17 */
+/* jshint maxstatements: 17 */
 describe('item view', function() {
   'use strict';
 
@@ -23,7 +23,7 @@ describe('item view', function() {
     });
 
     it('should throw an exception because there was no valid template', function() {
-      expect(view.render).toThrow(new Error('Cannot render the template since it\'s false, null or undefined.'));
+      expect(view.render).toThrow(new Error('Cannot render the template since its false, null or undefined.'));
     });
 
   });
@@ -165,7 +165,7 @@ describe('item view', function() {
     beforeEach(function() {
       view = new ItemView({
         template: '#collectionItemTemplate',
-        collection: new Collection([ { foo: 'bar' }, { foo: 'baz' } ])
+        collection: new Collection([{foo: 'bar'}, {foo: 'baz'}])
       });
 
       spyOn(view, 'serializeData').andCallThrough();
@@ -190,7 +190,7 @@ describe('item view', function() {
       view = new ItemView({
         template: '#itemTemplate',
         model: new Model({foo: 'bar'}),
-        collection: new Collection([ { foo: 'bar' }, { foo: 'baz' } ])
+        collection: new Collection([{foo: 'bar'}, {foo: 'baz'}])
       });
 
       spyOn(view, 'serializeData').andCallThrough();

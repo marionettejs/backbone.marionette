@@ -1,11 +1,11 @@
-/*jshint maxparams: 9 */
+/* jshint maxparams: 9 */
 
 // Module
 // ------
 
 // A simple module system, used to create privacy and encapsulation in
 // Marionette applications
-Marionette.Module = function (moduleName, app, options) {
+Marionette.Module = function(moduleName, app, options) {
   this.moduleName = moduleName;
   this.options = _.extend({}, this.options, options);
   // Allow for a user to overide the initialize
@@ -40,28 +40,28 @@ _.extend(Marionette.Module.prototype, Backbone.Events, {
 
   // Initialize is an empty function by default. Override it with your own
   // initialization logic when extending Marionette.Module.
-  initialize: function () {},
+  initialize: function() {},
 
   // Initializer for a specific module. Initializers are run when the
   // module's `start` method is called.
-  addInitializer: function (callback) {
+  addInitializer: function(callback) {
     this._initializerCallbacks.add(callback);
   },
 
   // Finalizers are run when a module is stopped. They are used to teardown
   // and finalize any variables, references, events and other code that the
   // module had set up.
-  addFinalizer: function (callback) {
+  addFinalizer: function(callback) {
     this._finalizerCallbacks.add(callback);
   },
 
   // Start the module, and run all of its initializers
-  start: function (options) {
+  start: function(options) {
     // Prevent re-starting a module that is already started
     if (this._isInitialized) { return; }
 
     // start the sub-modules (depth-first hierarchy)
-    _.each(this.submodules, function (mod) {
+    _.each(this.submodules, function(mod) {
       // check to see if we should start the sub-module with this parent
       if (mod.startWithParent) {
         mod.start(options);
@@ -79,7 +79,7 @@ _.extend(Marionette.Module.prototype, Backbone.Events, {
 
   // Stop this module by running its finalizers and then stop all of
   // the sub-modules for this module
-  stop: function () {
+  stop: function() {
     // if we are not initialized, don't bother finalizing
     if (!this._isInitialized) { return; }
     this._isInitialized = false;
@@ -88,7 +88,7 @@ _.extend(Marionette.Module.prototype, Backbone.Events, {
 
     // stop the sub-modules; depth-first, to make sure the
     // sub-modules are stopped / finalized before parents
-    _.each(this.submodules, function (mod) { mod.stop(); });
+    _.each(this.submodules, function(mod) { mod.stop(); });
 
     // run the finalizers
     this._finalizerCallbacks.run(undefined, this);
@@ -102,13 +102,13 @@ _.extend(Marionette.Module.prototype, Backbone.Events, {
 
   // Configure the module with a definition function and any custom args
   // that are to be passed in to the definition function
-  addDefinition: function (moduleDefinition, customArgs) {
+  addDefinition: function(moduleDefinition, customArgs) {
     this._runModuleDefinition(moduleDefinition, customArgs);
   },
 
   // Internal method: run the module definition function with the correct
   // arguments
-  _runModuleDefinition: function (definition, customArgs) {
+  _runModuleDefinition: function(definition, customArgs) {
     // If there is no definition short circut the method.
     if (!definition) { return; }
 
@@ -128,7 +128,7 @@ _.extend(Marionette.Module.prototype, Backbone.Events, {
   // Internal method: set up new copies of initializers and finalizers.
   // Calling this method will wipe out all existing initializers and
   // finalizers.
-  _setupInitializersAndFinalizers: function () {
+  _setupInitializersAndFinalizers: function() {
     this._initializerCallbacks = new Marionette.Callbacks();
     this._finalizerCallbacks = new Marionette.Callbacks();
   }
@@ -138,7 +138,7 @@ _.extend(Marionette.Module.prototype, Backbone.Events, {
 _.extend(Marionette.Module, {
 
   // Create a module, hanging off the app parameter as the parent object.
-  create: function (app, moduleNames, moduleDefinition) {
+  create: function(app, moduleNames, moduleDefinition) {
     var module = app;
 
     // get the custom args passed in after the module definition and
@@ -157,7 +157,7 @@ _.extend(Marionette.Module, {
     moduleDefinitions[length - 1] = moduleDefinition;
 
     // Loop through all the parts of the module definition
-    _.each(moduleNames, function (moduleName, i) {
+    _.each(moduleNames, function(moduleName, i) {
       var parentModule = module;
       module = this._getModule(parentModule, moduleName, app, moduleDefinition);
       this._addModuleDefinition(parentModule, module, moduleDefinitions[i], customArgs);
@@ -167,7 +167,7 @@ _.extend(Marionette.Module, {
     return module;
   },
 
-  _getModule: function (parentModule, moduleName, app, def, args) {
+  _getModule: function(parentModule, moduleName, app, def, args) {
     var options = _.extend({}, def);
     var ModuleClass = this.getClass(def);
 
@@ -191,7 +191,7 @@ _.extend(Marionette.Module, {
   // The extend function of a Module is identical to the extend functions
   // on other Backbone and Marionette classes.
   // This allows module lifecyle events like `onStart` and `onStop` to be called directly.
-  getClass: function (moduleDefinition) {
+  getClass: function(moduleDefinition) {
     var ModuleClass = Marionette.Module;
 
     if (!moduleDefinition) {
@@ -210,7 +210,7 @@ _.extend(Marionette.Module, {
   // Add the module definition and add a startWithParent initializer function.
   // This is complicated because module definitions are heavily overloaded
   // and support an anonymous function, module class, or options object
-  _addModuleDefinition: function (parentModule, module, def, args) {
+  _addModuleDefinition: function(parentModule, module, def, args) {
     var fn = this._getDefine(def);
     var startWithParent = this._getStartWithParent(def, module);
 
@@ -221,7 +221,7 @@ _.extend(Marionette.Module, {
     this._addStartWithParent(parentModule, module, startWithParent);
   },
 
-  _getStartWithParent: function (def, module) {
+  _getStartWithParent: function(def, module) {
     var swp;
 
     if (_.isFunction(def) && (def.prototype instanceof Marionette.Module)) {
@@ -237,7 +237,7 @@ _.extend(Marionette.Module, {
     return true;
   },
 
-  _getDefine: function (def) {
+  _getDefine: function(def) {
     if (_.isFunction(def) && !(def.prototype instanceof Marionette.Module)) {
       return def;
     }
@@ -249,7 +249,7 @@ _.extend(Marionette.Module, {
     return null;
   },
 
-  _addStartWithParent: function (parentModule, module, startWithParent) {
+  _addStartWithParent: function(parentModule, module, startWithParent) {
     module.startWithParent = module.startWithParent && startWithParent;
 
     if (!module.startWithParent || !!module.startWithParentIsConfigured) {
@@ -258,7 +258,7 @@ _.extend(Marionette.Module, {
 
     module.startWithParentIsConfigured = true;
 
-    parentModule.addInitializer(function (options) {
+    parentModule.addInitializer(function(options) {
       if (module.startWithParent) {
         module.start(options);
       }

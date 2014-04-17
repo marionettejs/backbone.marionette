@@ -223,7 +223,7 @@ describe('app router', function() {
 
       Backbone.history.start();
 
-      router = new PostsRouter({ controller: controller });
+      router = new PostsRouter({controller: controller});
       router.navigate('posts/top', true);
     });
 
@@ -255,7 +255,7 @@ describe('app router', function() {
 
       Backbone.history.start();
 
-      router = new PostsRouter({ controller: controller });
+      router = new PostsRouter({controller: controller});
       router.navigate('posts/top', true);
     });
 
@@ -281,7 +281,7 @@ describe('app router', function() {
 
       Backbone.history.start();
 
-      router = new Router({ controller: controller });
+      router = new Router({controller: controller});
       router.appRoute('posts/:id', 'showPost');
 
       router.navigate('posts/10', true);

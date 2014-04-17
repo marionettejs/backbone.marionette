@@ -6,7 +6,7 @@
 // Behaviors allow you to blackbox View specific interactions
 // into portable logical chunks, keeping your views simple and your code DRY.
 
-Marionette.Behavior = (function (_, Backbone) {
+Marionette.Behavior = (function(_, Backbone) {
   function Behavior(options, view) {
     // Setup reference to the view.
     // this comes in handle when a behavior
@@ -19,7 +19,7 @@ Marionette.Behavior = (function (_, Backbone) {
     // proxy behavior $ method to the view
     // this is useful for doing jquery DOM lookups
     // scoped to behaviors view.
-    this.$ = function () {
+    this.$ = function() {
       return this.view.$.apply(this.view, arguments);
     };
 
@@ -29,7 +29,7 @@ Marionette.Behavior = (function (_, Backbone) {
   }
 
   _.extend(Behavior.prototype, Backbone.Events, {
-    initialize: function () {},
+    initialize: function() {},
 
     // Setup class level proxy for triggerMethod.
     triggerMethod: Marionette.triggerMethod

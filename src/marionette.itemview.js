@@ -8,7 +8,7 @@ Marionette.ItemView = Marionette.View.extend({
 
   // Setting up the inheritance chain which allows changes to
   // Marionette.View.prototype.constructor which allows overriding
-  constructor: function () {
+  constructor: function() {
     Marionette.View.prototype.constructor.apply(this, arguments);
   },
 
@@ -18,14 +18,14 @@ Marionette.ItemView = Marionette.View.extend({
   // resulting data. If both are found, defaults to the model.
   // You can override the `serializeData` method in your own view
   // definition, to provide custom serialization for your view's data.
-  serializeData: function () {
+  serializeData: function() {
     var data = {};
 
     if (this.model) {
       data = this.model.toJSON();
     }
     else if (this.collection) {
-      data = { items: this.collection.toJSON() };
+      data = {items: this.collection.toJSON()};
     }
 
     return data;
@@ -36,7 +36,7 @@ Marionette.ItemView = Marionette.View.extend({
   // a very specific rendering for your view. In general, though,
   // you should override the `Marionette.Renderer` object to
   // change how Marionette renders views.
-  render: function () {
+  render: function() {
     this._ensureViewIsIntact();
 
     this.triggerMethod('before:render', this);
@@ -57,7 +57,7 @@ Marionette.ItemView = Marionette.View.extend({
 
   // Override the default destroy event to add a few
   // more events that are triggered.
-  destroy: function () {
+  destroy: function() {
     if (this.isDestroyed) { return; }
 
     this.triggerMethod('item:before:destroy');

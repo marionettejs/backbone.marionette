@@ -98,7 +98,7 @@ describe('marionette controller', function() {
       expect(destroyHandler).toHaveBeenCalledWith(123, 'second param');
     });
 
-    it('should call an onClose method with any arguments passed to destroy', function() {
+    it('should call an onDestroy method with any arguments passed to destroy', function() {
       expect(controller.onDestroy).toHaveBeenCalledWith(123, 'second param');
     });
   });

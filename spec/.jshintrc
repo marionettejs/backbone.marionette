@@ -70,7 +70,6 @@
   "maxerr"        : 10000,
   "multistr"      : false,
   "proto"         : false,
-  "regexdash"     : false,
   "scripturl"     : false,
   "smarttabs"     : false,
   "shadow"        : false,

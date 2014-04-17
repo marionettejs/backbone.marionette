@@ -1,4 +1,4 @@
-/*jshint maxcomplexity: 10, maxstatements: 26 */
+/* jshint maxcomplexity: 10, maxstatements: 26 */
 
 // Region
 // ------
@@ -6,7 +6,7 @@
 // Manage the visual regions of your composite application. See
 // http://lostechies.com/derickbailey/2011/12/12/composite-js-apps-regions-and-region-managers/
 
-Marionette.Region = function (options) {
+Marionette.Region = function(options) {
   this.options = options || {};
   this.el = Marionette.getOption(this, 'el');
 
@@ -40,7 +40,7 @@ _.extend(Marionette.Region, {
   // }
   // ```
   //
-  buildRegion: function (regionConfig, defaultRegionType) {
+  buildRegion: function(regionConfig, defaultRegionType) {
     var regionIsString = _.isString(regionConfig);
     var regionSelectorIsString = _.isString(regionConfig.selector);
     var regionTypeIsUndefined = _.isUndefined(regionConfig.regionType);
@@ -95,7 +95,7 @@ _.extend(Marionette.Region, {
     // literal to build the region, the element will not be
     // guaranteed to be in the DOM already, and will cause problems
     if (regionConfig.parentEl) {
-      region.getEl = function (selector) {
+      region.getEl = function(selector) {
         var parentEl = regionConfig.parentEl;
         if (_.isFunction(parentEl)) {
           parentEl = parentEl();
@@ -121,7 +121,7 @@ _.extend(Marionette.Region.prototype, Backbone.Events, {
   // or just before destroying the view, respectively.
   // The `preventDestroy` option can be used to prevent a view from
   // the old view being destroyed on show.
-  show: function (view, options) {
+  show: function(view, options) {
     this.ensureEl();
 
     var showOptions = options || {};
@@ -149,7 +149,7 @@ _.extend(Marionette.Region.prototype, Backbone.Events, {
     Marionette.triggerMethod.call(view, 'show');
   },
 
-  ensureEl: function () {
+  ensureEl: function() {
     if (!this.$el || this.$el.length === 0) {
       this.$el = this.getEl(this.el);
     }
@@ -161,19 +161,19 @@ _.extend(Marionette.Region.prototype, Backbone.Events, {
 
   // Override this method to change how the region finds the
   // DOM element that it manages. Return a jQuery selector object.
-  getEl: function (selector) {
+  getEl: function(selector) {
     return Backbone.$(selector);
   },
 
   // Override this method to change how the new view is
   // appended to the `$el` that the region is managing
-  open: function (view) {
+  open: function(view) {
     this.$el.empty().append(view.el);
   },
 
   // Destroy the current view, if there is one. If there is no
   // current view, it does nothing and returns immediately.
-  destroy: function () {
+  destroy: function() {
     var view = this.currentView;
     if (!view || view.isDestroyed) { return; }
 
@@ -190,7 +190,7 @@ _.extend(Marionette.Region.prototype, Backbone.Events, {
   // will not call `render` or `onShow` for the new view,
   // and will not replace the current HTML for the `el`
   // of the region.
-  attachView: function (view) {
+  attachView: function(view) {
     this.currentView = view;
   },
 
@@ -198,7 +198,7 @@ _.extend(Marionette.Region.prototype, Backbone.Events, {
   // clearing out the cached `$el`. The next time a view
   // is shown via this region, the region will re-query the
   // DOM for the region's `el`.
-  reset: function () {
+  reset: function() {
     this.destroy();
     delete this.$el;
   }

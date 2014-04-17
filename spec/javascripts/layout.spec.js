@@ -1,4 +1,4 @@
-/*jshint maxstatements: 16 */
+/* jshint maxstatements: 16 */
 describe('layout', function() {
   'use strict';
 

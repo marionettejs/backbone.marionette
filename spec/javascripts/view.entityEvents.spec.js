@@ -4,8 +4,8 @@ describe('view entity events', function() {
     var view;
 
     var View = Backbone.Marionette.View.extend({
-      modelEvents: { 'model-event': 'modelEventHandler modelEventHandler2' },
-      collectionEvents: { 'collection-event': 'collectionEventHandler collectionEventHandler2' },
+      modelEvents: {'model-event': 'modelEventHandler modelEventHandler2'},
+      collectionEvents: {'collection-event': 'collectionEventHandler collectionEventHandler2'},
 
       modelEventHandler: jasmine.createSpy('model event handler'),
       collectionEventHandler: jasmine.createSpy('collection event handler'),
@@ -69,12 +69,12 @@ describe('view entity events', function() {
     var getBadViewInstance;
 
     var View = Backbone.Marionette.View.extend({
-      modelEvents: { 'foo': 'does_not_exist' }
+      modelEvents: {foo: 'does_not_exist'}
     });
 
     beforeEach(function() {
       getBadViewInstance = function() {
-        return new View({ model: {} });
+        return new View({model: {}});
       };
     });
 
@@ -215,7 +215,6 @@ describe('view entity events', function() {
       },
 
       doStuff: function() {
-        //console.log('doing stuff: ', this.cid);
         this.render();
       }
     });
@@ -240,9 +239,7 @@ describe('view entity events', function() {
 
     beforeEach(function() {
       destroySpy = spyOn(ChildView.prototype, 'destroy').andCallThrough();
-      renderSpy = spyOn(ChildView.prototype, 'render').andCallFake(function() {
-        //console.log('child render:', this.cid);
-      });
+      renderSpy = spyOn(ChildView.prototype, 'render').andCallFake(function() {});
 
       var model = new Backbone.Model();
       var parent = new ParentView({
@@ -259,7 +256,7 @@ describe('view entity events', function() {
     });
 
     it('should undelegate all previous views modelEvents', function() {
-      // ChildView 1 when closed should not react to event
+      // ChildView 1 when destroyed should not react to event
       // we expect ChildView 1 to call render, (1st)
       // we expect ChildView 1 to destroy
       // we expect ChildView 2 to call render (2nd)

@@ -5,7 +5,7 @@
 // in the DOM, trigger a "dom:refresh" event every time it is
 // re-rendered.
 
-Marionette.MonitorDOMRefresh = (function (documentElement) {
+Marionette.MonitorDOMRefresh = (function(documentElement) {
   // track when the view has been shown in the DOM,
   // using a Marionette.Region (or by other means of triggering "show")
   function handleShow(view) {
@@ -33,12 +33,12 @@ Marionette.MonitorDOMRefresh = (function (documentElement) {
   }
 
   // Export public API
-  return function (view) {
-    view.listenTo(view, 'show', function () {
+  return function(view) {
+    view.listenTo(view, 'show', function() {
       handleShow(view);
     });
 
-    view.listenTo(view, 'render', function () {
+    view.listenTo(view, 'render', function() {
       handleRender(view);
     });
   };

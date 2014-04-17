@@ -37,8 +37,8 @@ describe('composite view - childViewContainer', function() {
       order = [];
       loadFixtures('compositeChildContainerTemplate.html');
 
-      var m1 = new Model({ foo: 'bar' });
-      var m2 = new Model({ foo: 'baz' });
+      var m1 = new Model({foo: 'bar'});
+      var m2 = new Model({foo: 'baz'});
       collection = new Collection([ m1, m2 ]);
     });
 
@@ -111,9 +111,7 @@ describe('composite view - childViewContainer', function() {
     });
 
     it('should throw an error', function() {
-      expect(function() {
-        compositeView.render();
-      }).toThrow('The specified "childViewContainer" was not found: #missing-container');
+      expect(compositeView.render).toThrow('The specified "childViewContainer" was not found: #missing-container');
     });
 
     describe('and referencing the @ui hash', function() {
@@ -127,9 +125,7 @@ describe('composite view - childViewContainer', function() {
       });
 
       it('should still throw an error', function() {
-        expect(function() {
-          compositeView.render();
-        }).toThrow('The specified "childViewContainer" was not found: #missing-container');
+        expect(compositeView.render).toThrow('The specified "childViewContainer" was not found: #missing-container');
       });
     });
 
@@ -184,7 +180,7 @@ describe('composite view - childViewContainer', function() {
         collection: collection
       });
 
-      collection.reset([{ id: 1 }]);
+      collection.reset([{id: 1}]);
     });
 
     it('should not render the items', function() {
@@ -216,8 +212,8 @@ describe('composite view - childViewContainer', function() {
 
     beforeEach(function() {
       loadFixtures('compositeChildContainerTemplate.html');
-      model1 = new Model({ foo: 'bar' });
-      model2 = new Model({ foo: 'baz' });
+      model1 = new Model({foo: 'bar'});
+      model2 = new Model({foo: 'baz'});
       collection = new Collection([ model1 ]);
       compositeView = new CompositeView({
         collection: collection

@@ -1,28 +1,22 @@
+/* jshint maxlen: 114, nonew: false */
 // Marionette.View
 // ---------------
 
 // The core view type that other Marionette views extend from.
 Marionette.View = Backbone.View.extend({
 
-  constructor: function (options) {
+  constructor: function(options) {
     _.bindAll(this, 'render');
 
     if (_.isObject(this.behaviors)) {
-      Marionette.Behaviors(this);
+      new Marionette.Behaviors(this);
     }
 
     // this exposes view options to the view initializer
     // this is a backfill since backbone removed the assignment
     // of this.options
     // at some point however this may be removed
-    this.options = _.extend({}, _.result(this, 'options'));
-
-    if (_.isFunction(options)) {
-      this.options = _.extend(this.options, options.call(this));
-    } else {
-      this.options = _.extend(this.options, options);
-    }
-
+    this.options = _.extend({}, _.result(this, 'options'), _.isFunction(options) ? options.call(this) : options);
     // parses out the @ui DSL for events
     this.events = this.normalizeUIKeys(_.result(this, 'events'));
     Backbone.View.prototype.constructor.apply(this, arguments);
@@ -43,7 +37,7 @@ Marionette.View = Backbone.View.extend({
   // instance. You can set a `template` attribute in the view
   // definition or pass a `template: "whatever"` parameter in
   // to the constructor options.
-  getTemplate: function () {
+  getTemplate: function() {
     return Marionette.getOption(this, 'template');
   },
 
@@ -52,7 +46,7 @@ Marionette.View = Backbone.View.extend({
   // object literal, or a function that returns an object
   // literal. All methods and attributes from this object
   // are copies to the object passed in.
-  mixinTemplateHelpers: function (target) {
+  mixinTemplateHelpers: function(target) {
     target = target || {};
     var templateHelpers = Marionette.getOption(this, 'templateHelpers');
     if (_.isFunction(templateHelpers)) {
@@ -62,14 +56,14 @@ Marionette.View = Backbone.View.extend({
   },
 
 
-  normalizeUIKeys: function (hash) {
+  normalizeUIKeys: function(hash) {
     var ui = _.result(this, 'ui');
     return Marionette.normalizeUIKeys(hash, ui);
   },
 
   // Configure `triggers` to forward DOM events to view
   // events. `triggers: {"click .foo": "do:foo"}`
-  configureTriggers: function () {
+  configureTriggers: function() {
     if (!this.triggers) { return; }
 
     var triggerEvents = {};
@@ -79,13 +73,13 @@ Marionette.View = Backbone.View.extend({
 
     // Configure the triggers, prevent default
     // action and stop propagation of DOM events
-    _.each(triggers, function (value, key) {
+    _.each(triggers, function(value, key) {
 
       var hasOptions = _.isObject(value);
       var eventName = hasOptions ? value.event : value;
 
       // build the event handler function for the DOM event
-      triggerEvents[key] = function (e) {
+      triggerEvents[key] = function(e) {
 
         // stop the event in its tracks
         if (e) {
@@ -117,16 +111,14 @@ Marionette.View = Backbone.View.extend({
 
   // Overriding Backbone.View's delegateEvents to handle
   // the `triggers`, `modelEvents`, and `collectionEvents` configuration
-  delegateEvents: function (events) {
+  delegateEvents: function(events) {
     this._delegateDOMEvents(events);
-    var modelEvents = Marionette.getOption(this, 'modelEvents');
-    var collectionEvents = Marionette.getOption(this, 'collectionEvents');
-    Marionette.bindEntityEvents(this, this.model, modelEvents);
-    Marionette.bindEntityEvents(this, this.collection, collectionEvents);
+    Marionette.bindEntityEvents(this, this.model, Marionette.getOption(this, 'modelEvents'));
+    Marionette.bindEntityEvents(this, this.collection, Marionette.getOption(this, 'collectionEvents'));
   },
 
   // internal method to delegate DOM events and triggers
-  _delegateDOMEvents: function (events) {
+  _delegateDOMEvents: function(events) {
     events = events || this.events;
     if (_.isFunction(events)) { events = events.call(this); }
 
@@ -144,20 +136,18 @@ Marionette.View = Backbone.View.extend({
 
   // Overriding Backbone.View's undelegateEvents to handle unbinding
   // the `triggers`, `modelEvents`, and `collectionEvents` config
-  undelegateEvents: function () {
+  undelegateEvents: function() {
     var args = Array.prototype.slice.call(arguments);
     Backbone.View.prototype.undelegateEvents.apply(this, args);
-    var modelEvents = Marionette.getOption(this, 'modelEvents');
-    var collectionEvents = Marionette.getOption(this, 'collectionEvents');
-    Marionette.unbindEntityEvents(this, this.model, modelEvents);
-    Marionette.unbindEntityEvents(this, this.collection, collectionEvents);
+    Marionette.unbindEntityEvents(this, this.model, Marionette.getOption(this, 'modelEvents'));
+    Marionette.unbindEntityEvents(this, this.collection, Marionette.getOption(this, 'collectionEvents'));
   },
 
   // Internal method, handles the `show` event.
-  onShowCalled: function () {},
+  onShowCalled: function() {},
 
   // Internal helper method to verify whether the view hasn't been destroyed
-  _ensureViewIsIntact: function () {
+  _ensureViewIsIntact: function() {
     if (this.isDestroyed) {
       var err = new Error('Cannot use a view thats already been destroyed.');
       err.name = 'ViewDestroyedError';
@@ -169,7 +159,7 @@ Marionette.View = Backbone.View.extend({
   // DOM and unbinding it. Regions will call this method
   // for you. You can specify an `onDestroy` method in your view to
   // add custom code that is called after the view is destroyed.
-  destroy: function () {
+  destroy: function() {
     if (this.isDestroyed) { return; }
 
     var args = Array.prototype.slice.call(arguments);
@@ -196,7 +186,7 @@ Marionette.View = Backbone.View.extend({
 
   // This method binds the elements specified in the "ui" hash inside the view's code with
   // the associated jQuery selectors.
-  bindUIElements: function () {
+  bindUIElements: function() {
     if (!this.ui) { return; }
 
     // store the ui hash in _uiBindings so they can be reset later
@@ -212,18 +202,18 @@ Marionette.View = Backbone.View.extend({
     this.ui = {};
 
     // bind each of the selectors
-    _.each(_.keys(bindings), function (key) {
+    _.each(_.keys(bindings), function(key) {
       var selector = bindings[key];
       this.ui[key] = this.$(selector);
     }, this);
   },
 
   // This method unbinds the elements specified in the "ui" hash
-  unbindUIElements: function () {
+  unbindUIElements: function() {
     if (!this.ui || !this._uiBindings) { return; }
 
     // delete all of the existing ui bindings
-    _.each(this.ui, function ($el, name) {
+    _.each(this.ui, function($el, name) {
       delete this.ui[name];
     }, this);
 

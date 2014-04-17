@@ -81,9 +81,9 @@ describe('collectionview - emptyView', function() {
       destroySpy = spyOn(EmptyView.prototype, 'destroy');
       destroySpy.andCallThrough();
 
-      collection.reset([{ foo: 'bar' }, { foo: 'baz'}]);
+      collection.reset([{foo: 'bar'}, {foo: 'baz'}]);
 
-      collection.add({ foo: 'wut' });
+      collection.add({foo: 'wut'});
     });
 
     it('should destroy the emptyView', function() {
@@ -99,7 +99,7 @@ describe('collectionview - emptyView', function() {
     var collectionView;
 
     beforeEach(function() {
-      var collection = new Backbone.Collection([{ foo: 'wut' }]);
+      var collection = new Backbone.Collection([{foo: 'wut'}]);
 
       collectionView = new EmptyCollectionView({
         collection: collection
@@ -111,7 +111,7 @@ describe('collectionview - emptyView', function() {
     });
 
     it('should append the html for the emptyView', function() {
-      expect(collectionView.$el).toHaveHtml('<span class=\'isempty\'></span>');
+      expect(collectionView.$el).toHaveHtml('<span class="isempty"></span>');
     });
 
     it('should reference each of the rendered view items', function() {
@@ -121,7 +121,7 @@ describe('collectionview - emptyView', function() {
 
 
   describe('when the collection is reset multiple times', function() {
-    var collectionView, collection, population = [{ foo: 1 }, { foo: 2 }, { foo: 3 }];
+    var collectionView, collection, population = [{foo: 1}, {foo: 2}, {foo: 3}];
 
     beforeEach(function() {
       collection = new Backbone.Collection();
@@ -252,7 +252,7 @@ describe('collectionview - emptyView', function() {
     });
 
     it('should return false when the collection is not empty', function() {
-      collectionView.collection.add({ foo: 'wut' });
+      collectionView.collection.add({foo: 'wut'});
       expect(collectionView.isEmpty()).toEqual(false);
     });
   });
@@ -277,7 +277,7 @@ describe('collectionview - emptyView', function() {
     });
 
     it('should append the html for the emptyView', function() {
-      expect(collectionView.$el).toHaveHtml('<span class=\'isempty\'></span>');
+      expect(collectionView.$el).toHaveHtml('<span class="isempty"></span>');
     });
 
     it('should reference each of the rendered view items', function() {

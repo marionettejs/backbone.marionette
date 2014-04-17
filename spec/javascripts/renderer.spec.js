@@ -29,7 +29,7 @@ describe('renderer', function() {
       loadFixtures('rendererWithDataTemplate.html');
       spyOn(Backbone.Marionette.TemplateCache, 'get').andCallThrough();
 
-      var data = { foo: 'bar' };
+      var data = {foo: 'bar'};
       var html = Backbone.Marionette.Renderer.render(templateSelector, data).trim();
       result = $(html);
     });
@@ -51,7 +51,7 @@ describe('renderer', function() {
     });
 
     it('should raise an error', function() {
-      expect(render).toThrow(new Error('Cannot render the template since it\'s false, null or undefined.'));
+      expect(render).toThrow(new Error('Cannot render the template since its false, null or undefined.'));
     });
   });
 

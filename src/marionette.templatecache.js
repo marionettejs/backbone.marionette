@@ -3,7 +3,7 @@
 
 // Manage templates stored in `<script>` blocks,
 // caching them for faster access.
-Marionette.TemplateCache = function (templateId) {
+Marionette.TemplateCache = function(templateId) {
   this.templateId = templateId;
 };
 
@@ -16,7 +16,7 @@ _.extend(Marionette.TemplateCache, {
   // Get the specified template by id. Either
   // retrieves the cached version, or loads it
   // from the DOM.
-  get: function (templateId) {
+  get: function(templateId) {
     var cachedTemplate = this.templateCaches[templateId];
 
     if (!cachedTemplate) {
@@ -34,7 +34,7 @@ _.extend(Marionette.TemplateCache, {
   // If arguments are specified, clears each of the
   // specified templates from the cache:
   // `clear("#t1", "#t2", "...")`
-  clear: function () {
+  clear: function() {
     var i;
     var args = slice.call(arguments);
     var length = args.length;
@@ -55,7 +55,7 @@ _.extend(Marionette.TemplateCache, {
 _.extend(Marionette.TemplateCache.prototype, {
 
   // Internal method to load the template
-  load: function () {
+  load: function() {
     // Guard clause to prevent loading this template more than once
     if (this.compiledTemplate) {
       return this.compiledTemplate;
@@ -73,7 +73,7 @@ _.extend(Marionette.TemplateCache.prototype, {
   // For asynchronous loading with AMD/RequireJS, consider
   // using a template-loader plugin as described here:
   // https://github.com/marionettejs/backbone.marionette/wiki/Using-marionette-with-requirejs
-  loadTemplate: function (templateId) {
+  loadTemplate: function(templateId) {
     var template = Backbone.$(templateId).html();
 
     if (!template || template.length === 0) {
@@ -87,7 +87,7 @@ _.extend(Marionette.TemplateCache.prototype, {
   // this method if you do not need to pre-compile a template
   // (JST / RequireJS for example) or if you want to change
   // the template engine used (Handebars, etc).
-  compileTemplate: function (rawTemplate) {
+  compileTemplate: function(rawTemplate) {
     return _.template(rawTemplate);
   }
 });

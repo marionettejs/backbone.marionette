@@ -146,7 +146,7 @@ describe('base view', function() {
     });
     var PresetOptionsFn = Marionette.View.extend({
       options: function() {
-        return { 'fry': 'bender' };
+        return {fry: 'bender'};
       }
     });
 
@@ -157,7 +157,7 @@ describe('base view', function() {
 
     it('should take and store view options as a function', function() {
       var viewInstance = new View(function() {
-        return { 'Guybrush': 'Island' };
+        return {Guybrush: 'Island'};
       });
       expect(viewInstance.options.Guybrush).toBe('Island');
     });

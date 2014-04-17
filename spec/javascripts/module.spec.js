@@ -440,7 +440,7 @@ describe('application modules', function() {
 
       describe('and its module is set to not start with parent', function() {
         beforeEach(function() {
-          var module = app.module('Mod', { startWithParent: false });
+          var module = app.module('Mod', {startWithParent: false});
           startSpy = sinon.spy(module, 'start');
           app.start();
         });

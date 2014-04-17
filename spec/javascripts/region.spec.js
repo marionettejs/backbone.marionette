@@ -1,4 +1,4 @@
-/*jshint maxstatements: 18 */
+/* jshint maxstatements: 18 */
 describe('region', function() {
   'use strict';
 
@@ -142,7 +142,7 @@ describe('region', function() {
 
       describe('preventDestroy: true', function() {
         beforeEach(function() {
-          myRegion.show(view2, { preventDestroy: true });
+          myRegion.show(view2, {preventDestroy: true});
         });
 
         it('shouldnt "destroy" the old view', function() {
@@ -152,10 +152,10 @@ describe('region', function() {
 
       describe('preventDestroy: false', function() {
         beforeEach(function() {
-          myRegion.show(view2, { preventDestroy: false });
+          myRegion.show(view2, {preventDestroy: false});
         });
 
-        it('should "close" the old view', function() {
+        it('should "destroy" the old view', function() {
           expect(view1.destroy).toHaveBeenCalled();
         });
       });

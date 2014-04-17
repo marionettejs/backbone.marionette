@@ -1,4 +1,4 @@
-/*jshint maxstatements: 17 */
+/* jshint maxstatements: 17, maxlen: 117 */
 
 // Composite View
 // --------------
@@ -10,18 +10,18 @@ Marionette.CompositeView = Marionette.CollectionView.extend({
 
   // Setting up the inheritance chain which allows changes to
   // Marionette.CollectionView.prototype.constructor which allows overriding
-  constructor: function () {
+  constructor: function() {
     Marionette.CollectionView.prototype.constructor.apply(this, arguments);
   },
 
   // Configured the initial events that the composite view
   // binds to. Override this method to prevent the initial
   // events, or to add your own initial events.
-  _initialEvents: function () {
+  _initialEvents: function() {
 
     // Bind only after composite view is rendered to avoid adding child views
     // to nonexistent childViewContainer
-    this.once('render', function () {
+    this.once('render', function() {
       if (this.collection) {
         this.listenTo(this.collection, 'add', this.addChildView);
         this.listenTo(this.collection, 'remove', this.onChildRemove);
@@ -35,7 +35,7 @@ Marionette.CompositeView = Marionette.CollectionView.extend({
   // the items in the collection. The default is to return
   // `this.childView` or Marionette.CompositeView if no `childView`
   // has been defined
-  getChildView: function (child) {
+  getChildView: function(child) {
     var childView = Marionette.getOption(this, 'childView') || this.constructor;
 
     if (!childView) {
@@ -48,7 +48,7 @@ Marionette.CompositeView = Marionette.CollectionView.extend({
   // Serialize the collection for the view.
   // You can override the `serializeData` method in your own view
   // definition, to provide custom serialization for your view's data.
-  serializeData: function () {
+  serializeData: function() {
     var data = {};
 
     if (this.model) {
@@ -61,7 +61,7 @@ Marionette.CompositeView = Marionette.CollectionView.extend({
   // Renders the model once, and the collection once. Calling
   // this again will tell the model's view to re-render itself
   // but the collection will not re-render.
-  render: function () {
+  render: function() {
     this._ensureViewIsIntact();
     this.isRendered = true;
     this.resetChildViewContainer();
@@ -82,7 +82,7 @@ Marionette.CompositeView = Marionette.CollectionView.extend({
     return this;
   },
 
-  _renderChildren: function () {
+  _renderChildren: function() {
     if (this.isRendered) {
       this.triggerMethod('composite:collection:before:render');
       Marionette.CollectionView.prototype._renderChildren.call(this);
@@ -93,7 +93,7 @@ Marionette.CompositeView = Marionette.CollectionView.extend({
   // Render an individual model, if we have one, as
   // part of a composite view (branch / leaf). For example:
   // a treeview.
-  renderModel: function () {
+  renderModel: function() {
     var data = {};
     data = this.serializeData();
     data = this.mixinTemplateHelpers(data);
@@ -104,7 +104,7 @@ Marionette.CompositeView = Marionette.CollectionView.extend({
 
 
   // You might need to override this if you've overridden appendHtml
-  appendBuffer: function (compositeView, buffer) {
+  appendBuffer: function(compositeView, buffer) {
     var $container = this.getChildViewContainer(compositeView);
     $container.append(buffer);
   },
@@ -113,7 +113,7 @@ Marionette.CompositeView = Marionette.CollectionView.extend({
   // `childViewContainer` (a jQuery selector). Override this method to
   // provide custom logic of how the child view instances have their
   // HTML appended to the composite view instance.
-  appendHtml: function (childView, index) {
+  appendHtml: function(childView, index) {
     if (this.isBuffering) {
       this.elBuffer.appendChild(childView.el);
       this._bufferedChildren.push(childView);
@@ -127,7 +127,7 @@ Marionette.CompositeView = Marionette.CollectionView.extend({
 
   // Internal method to ensure an `$childViewContainer` exists, for the
   // `appendHtml` method to use.
-  getChildViewContainer: function (containerView) {
+  getChildViewContainer: function(containerView) {
     if ('$childViewContainer' in containerView) {
       return containerView.$childViewContainer;
     }
@@ -136,13 +136,7 @@ Marionette.CompositeView = Marionette.CollectionView.extend({
     var childViewContainer = Marionette.getOption(containerView, 'childViewContainer');
     if (childViewContainer) {
 
-      var selector;
-
-      if (_.isFunction(childViewContainer)) {
-        selector = childViewContainer.call(containerView);
-      } else {
-        selector = childViewContainer;
-      }
+      var selector = _.isFunction(childViewContainer) ? childViewContainer.call(containerView) : childViewContainer;
 
       if (selector.charAt(0) === '@' && containerView.ui) {
         container = containerView.ui[selector.substr(4)];
@@ -164,7 +158,7 @@ Marionette.CompositeView = Marionette.CollectionView.extend({
   },
 
   // Internal method to reset the `$childViewContainer` on render
-  resetChildViewContainer: function () {
+  resetChildViewContainer: function() {
     if (this.$childViewContainer) {
       delete this.$childViewContainer;
     }

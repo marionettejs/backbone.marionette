@@ -17,7 +17,7 @@ describe('collection view - childViewOptions', function() {
   });
 
   describe('when rendering and a "childViewOptions" is provided', function() {
-    var collection = new Backbone.Collection([{ foo: 'bar' }]);
+    var collection = new Backbone.Collection([{foo: 'bar'}]);
     var collectionView, view;
 
     beforeEach(function() {
@@ -45,7 +45,7 @@ describe('collection view - childViewOptions', function() {
       }
     });
 
-    var collection = new Backbone.Collection([{ foo: 'bar' }, { foo: 'baz' }]);
+    var collection = new Backbone.Collection([{foo: 'bar'}, {foo: 'baz'}]);
     var collectionView, view;
 
     beforeEach(function() {

@@ -66,7 +66,7 @@ describe('template helper methods', function() {
 
       beforeEach(function() {
         var model = new Backbone.Model({bar: 'baz'});
-        var view = new View({ model: model });
+        var view = new View({model: model});
         view.render();
       });
 
@@ -89,9 +89,9 @@ describe('template helper methods', function() {
 
       beforeEach(function() {
         var model = new Backbone.Model({bar: 'baz'});
-        view = new View({ model: model });
+        view = new View({model: model});
         sinon.spy(view, 'template');
-        sinon.stub(view, 'templateHelpers').returns({ foo: function() {} });
+        sinon.stub(view, 'templateHelpers').returns({foo: function() {}});
         view.render();
       });
 
@@ -123,7 +123,7 @@ describe('template helper methods', function() {
         view = new View({
           model: model,
           templateHelpers: {
-            foo: function() { }
+            foo: function() {}
           }
         });
 

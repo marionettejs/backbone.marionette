@@ -1,4 +1,4 @@
-/*jshint maxparams: 5 */
+/* jshint maxparams: 5 */
 
 // Marionette.bindEntityEvents & unbindEntityEvents
 // ---------------------------
@@ -16,7 +16,7 @@
 // configuration. Multiple handlers can be separated by a space. A
 // function can be supplied instead of a string handler name.
 
-(function (Marionette) {
+(function(Marionette) {
   'use strict';
 
   // Bind the event to handlers specified as a string of
@@ -24,7 +24,7 @@
   function bindFromStrings(target, entity, evt, methods) {
     var methodNames = methods.split(/\s+/);
 
-    _.each(methodNames, function (methodName) {
+    _.each(methodNames, function(methodName) {
 
       var method = target[methodName];
       if (!method) {
@@ -46,7 +46,7 @@
   function unbindFromStrings(target, entity, evt, methods) {
     var methodNames = methods.split(/\s+/);
 
-    _.each(methodNames, function (methodName) {
+    _.each(methodNames, function(methodName) {
       var method = target[methodName];
       target.stopListening(entity, evt, method);
     });
@@ -68,7 +68,7 @@
     }
 
     // iterate the bindings and bind them
-    _.each(bindings, function (methods, evt) {
+    _.each(bindings, function(methods, evt) {
 
       // allow for a function as the handler,
       // or a list of event names as a string
@@ -82,11 +82,11 @@
   }
 
   // Export Public API
-  Marionette.bindEntityEvents = function (target, entity, bindings) {
+  Marionette.bindEntityEvents = function(target, entity, bindings) {
     iterateEvents(target, entity, bindings, bindToFunction, bindFromStrings);
   };
 
-  Marionette.unbindEntityEvents = function (target, entity, bindings) {
+  Marionette.unbindEntityEvents = function(target, entity, bindings) {
     iterateEvents(target, entity, bindings, unbindToFunction, unbindFromStrings);
   };
 

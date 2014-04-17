@@ -1,4 +1,4 @@
-/*jshint unused: false */
+/* jshint unused: false */
 
 // Helpers
 // -------
@@ -23,7 +23,7 @@ Marionette.extend = Backbone.Model.extend;
 
 // Retrieve an object, function or other value from a target
 // object or its `options`, with `options` taking precedence.
-Marionette.getOption = function (target, optionName) {
+Marionette.getOption = function(target, optionName) {
   if (!target || !optionName) { return; }
   var value;
 
@@ -41,9 +41,9 @@ Marionette.getOption = function (target, optionName) {
 
 // Pass in a mapping of events => functions or function names
 // and return a mapping of events => functions
-Marionette.normalizeMethods = function (hash) {
+Marionette.normalizeMethods = function(hash) {
   var normalizedHash = {}, method;
-  _.each(hash, function (fn, name) {
+  _.each(hash, function(fn, name) {
     method = fn;
     if (!_.isFunction(method)) {
       method = this[method];
@@ -60,15 +60,15 @@ Marionette.normalizeMethods = function (hash) {
 // allows for the use of the @ui. syntax within
 // a given key for triggers and events
 // swaps the @ui with the associated selector
-Marionette.normalizeUIKeys = function (hash, ui) {
+Marionette.normalizeUIKeys = function(hash, ui) {
   if (typeof(hash) === 'undefined') {
     return;
   }
 
-  _.each(_.keys(hash), function (v) {
+  _.each(_.keys(hash), function(v) {
     var pattern = /@ui.[a-zA-Z_$0-9]*/g;
     if (v.match(pattern)) {
-      hash[v.replace(pattern, function (r) {
+      hash[v.replace(pattern, function(r) {
         return ui[r.slice(4)];
       })] = hash[v];
       delete hash[v];
@@ -82,14 +82,14 @@ Marionette.normalizeUIKeys = function (hash, ui) {
 // collection related features.
 // Borrowing this code from Backbone.Collection:
 // http://backbonejs.org/docs/backbone.html#section-106
-Marionette.actAsCollection = function (object, listProperty) {
+Marionette.actAsCollection = function(object, listProperty) {
   var methods = ['forEach', 'each', 'map', 'find', 'detect', 'filter',
     'select', 'reject', 'every', 'all', 'some', 'any', 'include',
     'contains', 'invoke', 'toArray', 'first', 'initial', 'rest',
     'last', 'without', 'isEmpty', 'pluck'];
 
-  _.each(methods, function (method) {
-    object[method] = function () {
+  _.each(methods, function(method) {
+    object[method] = function() {
       var list = _.values(_.result(this, listProperty));
       var args = [list].concat(_.toArray(arguments));
       return _[method].apply(_, args);

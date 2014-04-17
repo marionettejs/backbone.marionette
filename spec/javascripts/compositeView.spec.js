@@ -1,4 +1,4 @@
-/*jshint maxstatements: 21 */
+/* jshint maxstatements: 21 */
 describe('composite view', function() {
   'use strict';
 
@@ -61,8 +61,8 @@ describe('composite view', function() {
     beforeEach(function() {
       loadFixtures('compositeTemplate-noModel.html');
 
-      var m1 = new Model({ foo: 'bar' });
-      var m2 = new Model({ foo: 'baz' });
+      var m1 = new Model({foo: 'bar'});
+      var m2 = new Model({foo: 'baz'});
       var collection = new Collection([m1, m2]);
 
       compositeView = new CompositeViewNoModel({
@@ -200,7 +200,7 @@ describe('composite view', function() {
     });
 
     it('should throw an exception because there was no valid template', function() {
-      expect(compositeView.render).toThrow(new Error('Cannot render the template since it\'s false, null or undefined.'));
+      expect(compositeView.render).toThrow(new Error('Cannot render the template since its false, null or undefined.'));
     });
   });
 

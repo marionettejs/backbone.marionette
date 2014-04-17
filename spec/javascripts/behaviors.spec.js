@@ -1,232 +1,239 @@
-describe("Behaviors", function(){
-  describe("behavior lookup", function() {
-    it("should throw if behavior lookup is not defined", function() {
+describe('Behaviors', function () {
+  describe('behavior lookup', function () {
+    it('should throw if behavior lookup is not defined', function () {
       expect(Marionette.Behaviors.behaviorsLookup).toThrow();
     });
   });
 
-  describe("behavior parsing with a functional behavior lookup", function() {
+  describe('behavior parsing with a functional behavior lookup', function () {
     var Obj, View, Tooltip;
 
-    beforeEach(function() {
-      ToolTip = sinon.spy();
+    beforeEach(function () {
+      Tooltip = sinon.spy();
       Obj = {
-        ToolTip: ToolTip
+        Tooltip: Tooltip
       };
 
-      Marionette.Behaviors.behaviorsLookup = function(){
+      Marionette.Behaviors.behaviorsLookup = function () {
         return Obj;
       };
     });
 
-    describe("when one behavior", function() {
-      beforeEach(function() {
+    describe('when one behavior', function () {
+      var view;
+
+      beforeEach(function () {
         View = Marionette.ItemView.extend({
           behaviors: {
-            ToolTip: {
-              position: "top"
+            Tooltip: {
+              position: 'top'
             }
           }
         });
 
-        new View;
+        view = new View();
       });
 
-      it("should instantiate the tooltip behavior", function() {
-        expect(Obj.ToolTip).toHaveBeenCalled();
+      it('should instantiate the tooltip behavior', function () {
+        expect(Obj.Tooltip).toHaveBeenCalled();
       });
     });
   });
 
-  describe("behavior parsing", function() {
+  describe('behavior parsing', function () {
     var Obj, View, Tooltip;
 
-    beforeEach(function() {
-      ToolTip = sinon.spy();
+    beforeEach(function () {
+      Tooltip = sinon.spy();
       Obj = {
-        ToolTip: ToolTip
+        Tooltip: Tooltip
       };
       Marionette.Behaviors.behaviorsLookup = Obj;
     });
 
-    describe("when one behavior", function() {
-      beforeEach(function() {
+    describe('when one behavior', function () {
+      var view;
+
+      beforeEach(function () {
         View = Marionette.ItemView.extend({
           behaviors: {
-            ToolTip: {
-              position: "top"
+            Tooltip: {
+              position: 'top'
             }
           }
         });
 
-        new View;
+        view = new View();
       });
 
-      it("should instantiate the tooltip behavior", function() {
-        expect(Obj.ToolTip).toHaveBeenCalled();
+      it('should instantiate the tooltip behavior', function () {
+        expect(Obj.Tooltip).toHaveBeenCalled();
       });
     });
 
-    describe("when multiple behaviors", function() {
-      beforeEach(function() {
-        View = Marionette.ItemView.extend({
-          behaviors:
-            {
-              ToolTip: {
-                position: "top"
-              }
+    describe('when multiple behaviors', function () {
+      var view;
 
+      beforeEach(function () {
+        View = Marionette.ItemView.extend({
+          behaviors: {
+            Tooltip: {
+              position: 'top'
             }
+          }
         });
 
-        new View;
+        view = new View();
       });
 
-      it("should instantiate the tooltip behavior", function() {
-        expect(Obj.ToolTip).toHaveBeenCalled();
+      it('should instantiate the tooltip behavior', function () {
+        expect(Obj.Tooltip).toHaveBeenCalled();
       });
     });
 
-    describe("when functional behavior", function() {
-      var _this, v;
-      beforeEach(function() {
+    describe('when functional behavior', function () {
+      var _this, view;
+
+      beforeEach(function () {
         View = Marionette.ItemView.extend({
-          behaviors: function() {
+          behaviors: function () {
             _this = this;
             return {
-              ToolTip: {
-                behaviorClass: ToolTip,
-                position: "top"
+              Tooltip: {
+                behaviorClass: Tooltip,
+                position: 'top'
               }
-            }
+            };
           }
         });
 
-        v = new View;
+        view = new View();
       });
 
-      it("should instantiate the tooltip behavior", function() {
-        expect(Obj.ToolTip).toHaveBeenCalled();
+      it('should instantiate the tooltip behavior', function () {
+        expect(Obj.Tooltip).toHaveBeenCalled();
       });
 
-      it("should call the behaviors method with the view context", function() {
-        expect(_this).toEqual(v);
+      it('should call the behaviors method with the view context', function () {
+        expect(_this).toEqual(view);
       });
     });
 
-    describe("when behavior class is provided", function() {
-      beforeEach(function() {
+    describe('when behavior class is provided', function () {
+      var view;
+
+      beforeEach(function () {
         View = Marionette.ItemView.extend({
           behaviors: {
-            ToolTip: {
-              behaviorClass: ToolTip,
-              position: "top"
+            Tooltip: {
+              behaviorClass: Tooltip,
+              position: 'top'
             }
           }
         });
 
-        new View;
+        view = new View();
       });
 
-      it("should instantiate the tooltip behavior", function() {
-        expect(Obj.ToolTip).toHaveBeenCalled();
+      it('should instantiate the tooltip behavior', function () {
+        expect(Obj.Tooltip).toHaveBeenCalled();
       });
     });
   });
 
-  describe("behavior initialize", function() {
+  describe('behavior initialize', function () {
     var Behavior = Marionette.Behavior.extend({
       initialize: sinon.spy()
     });
 
-    it("should call initialize when a behavior is created", function() {
+    it('should call initialize when a behavior is created', function () {
       var b = new Behavior({}, {});
 
       expect(b.initialize).toHaveBeenCalled();
     });
   });
 
-  describe("behavior events", function() {
-    var V, Obj, spy, spy2, viewSpy;
+  describe('behavior events', function () {
+    var View, view, Obj, spy, spy2, spy3, viewSpy;
 
-    beforeEach(function() {
+    beforeEach(function () {
       spy = sinon.spy();
       spy2 = sinon.spy();
       spy3 = sinon.spy();
       viewSpy = sinon.spy();
 
       Obj = {
-        ToolTip: Marionette.Behavior.extend({
+        Tooltip: Marionette.Behavior.extend({
           events: {
-            "click": spy
+            'click': spy
           }
         }),
         DropDown: Marionette.Behavior.extend({
           events: {
-            "click": spy2
+            'click': spy2
           }
         }),
         Hover: Marionette.Behavior.extend({
           events: {
-            "click": "onClick"
+            'click': 'onClick'
           },
 
           onClick: spy3
         })
       };
 
-      V = Marionette.ItemView.extend({
-        template: _.template(""),
+      View = Marionette.ItemView.extend({
+        template: _.template(''),
         events: {
-          "click": viewSpy
+          'click': viewSpy
         },
         behaviors: {
-          ToolTip: {},
+          Tooltip: {},
           DropDown: {},
           Hover: {}
         }
       });
 
       Marionette.Behaviors.behaviorsLookup = Obj;
-      v = new V();
-      v.render();
-      v.$el.click();
+      view = new View();
+      view.render();
+      view.$el.click();
     });
 
-    it("should call first behaviors event", function() {
+    it('should call first behaviors event', function () {
       expect(spy).toHaveBeenCalledOnce();
-      expect(spy).toHaveBeenCalledOn(sinon.match.instanceOf(Marionette.Behavior))
+      expect(spy).toHaveBeenCalledOn(sinon.match.instanceOf(Marionette.Behavior));
     });
 
-    it("should call second behaviors event", function() {
-      expect(spy2).toHaveBeenCalledOn(sinon.match.instanceOf(Marionette.Behavior))
+    it('should call second behaviors event', function () {
+      expect(spy2).toHaveBeenCalledOn(sinon.match.instanceOf(Marionette.Behavior));
       expect(spy2).toHaveBeenCalledOnce();
     });
 
-    it("should call third behaviors event", function() {
+    it('should call third behaviors event', function () {
       expect(spy3).toHaveBeenCalledOnce();
-      expect(spy3).toHaveBeenCalledOn(sinon.match.instanceOf(Marionette.Behavior))
+      expect(spy3).toHaveBeenCalledOn(sinon.match.instanceOf(Marionette.Behavior));
     });
 
-    it("should call the view click handler", function() {
+    it('should call the view click handler', function () {
       expect(viewSpy).toHaveBeenCalledOnce();
-      expect(viewSpy).toHaveBeenCalledOn(sinon.match.instanceOf(Marionette.View))
+      expect(viewSpy).toHaveBeenCalledOn(sinon.match.instanceOf(Marionette.View));
     });
   });
 
-  describe("behavior $el", function() {
+  describe('behavior $el', function () {
     var View, view, hold, behavior;
 
-    beforeEach(function() {
-      hold = {}
+    beforeEach(function () {
+      hold = {};
       hold.test = Marionette.Behavior.extend({
-        initialize: function() {
+        initialize: function () {
           behavior = this;
         }
       });
 
       View = Marionette.ItemView.extend({
-        template: _.template(""),
+        template: _.template(''),
         behaviors: {
           test: {}
         }
@@ -234,19 +241,19 @@ describe("Behaviors", function(){
 
       Marionette.Behaviors.behaviorsLookup = hold;
 
-      view = new View;
-      view.setElement(document.createElement("doge"));
+      view = new View();
+      view.setElement(document.createElement('doge'));
     });
 
-    it("should proxy the views $el", function() {
+    it('should proxy the views $el', function () {
       expect(behavior.$el).toEqual(view.$el);
     });
   });
 
-  describe("behavior UI", function() {
-    var V, hold, spy, onShowSpy, onDestroySpy, Layout, testBehavior;
+  describe('behavior UI', function () {
+    var View, view, hold, spy, onShowSpy, onDestroySpy, onDogeClickSpy, onCoinsClickSpy, Layout, layout, testBehavior;
 
-    beforeEach(function() {
+    beforeEach(function () {
       hold = {};
       spy = new sinon.spy();
       onShowSpy = new sinon.spy();
@@ -259,7 +266,7 @@ describe("Behaviors", function(){
           doge: '.doge'
         },
 
-        initialize: function() {
+        initialize: function () {
           testBehavior = this;
         },
 
@@ -268,7 +275,7 @@ describe("Behaviors", function(){
           'click @ui.coins': 'onCoinsClick'
         },
 
-        onRender: function() {
+        onRender: function () {
           spy(this.ui.doge.length);
         },
 
@@ -284,7 +291,7 @@ describe("Behaviors", function(){
 
       Marionette.Behaviors.behaviorsLookup = hold;
 
-      V = Marionette.ItemView.extend({
+      View = Marionette.ItemView.extend({
         template: _.template('<div class="doge"></div><div class="coins"></div>'),
         ui: {
           coins: '.coins'
@@ -299,42 +306,42 @@ describe("Behaviors", function(){
         regions: {
           topRegion: '.top'
         },
-        onRender: function() {
-          this.topRegion.show(new V)
+        onRender: function () {
+          this.topRegion.show(new View());
         }
       });
     });
 
-    it("should set the behavior UI element", function() {
-      v = new V;
-      v.render();
+    it('should set the behavior UI element', function () {
+      view = new View();
+      view.render();
       expect(spy).toHaveBeenCalled(1);
     });
 
-    it("should handle behavior ui click event", function() {
-      v = new V;
-      v.render();
-      v.$el.find('.doge').click();
+    it('should handle behavior ui click event', function () {
+      view = new View();
+      view.render();
+      view.$el.find('.doge').click();
 
       expect(onDogeClickSpy).toHaveBeenCalledOn(testBehavior);
     });
 
-    it("should handle view ui click event", function() {
-      v = new V;
-      v.render();
-      v.$el.find('.coins').click();
+    it('should handle view ui click event', function () {
+      view = new View();
+      view.render();
+      view.$el.find('.coins').click();
 
       expect(onCoinsClickSpy).toHaveBeenCalledOn(testBehavior);
     });
 
-    it("should call onShow", function() {
+    it('should call onShow', function () {
       layout = new Layout();
       layout.render();
       expect(onShowSpy).toHaveBeenCalled();
     });
 
 
-    it("should call onDestroy", function() {
+    it('should call onDestroy', function () {
       layout = new Layout();
       layout.render();
       layout.destroy();
@@ -342,22 +349,22 @@ describe("Behaviors", function(){
     });
   });
 
-  describe("behavior model events", function() {
-    var modelSpy, collectionSpy, V, hold, m, testBehavior;
-    beforeEach(function() {
+  describe('behavior model events', function () {
+    var modelSpy, collectionSpy, fooChangedSpy, View, view, CollectionView, hold, model, testBehavior, collection;
+    beforeEach(function () {
       modelSpy = sinon.spy();
       collectionSpy = sinon.spy();
       fooChangedSpy = sinon.spy();
 
-      hold = {}
+      hold = {};
 
       hold.test = Marionette.Behavior.extend({
-        initialize: function() {
+        initialize: function () {
           testBehavior = this;
         },
         modelEvents: {
           change: modelSpy,
-          "change:foo": "fooChanged"
+          'change:foo': 'fooChanged'
         },
         collectionEvents: {
           reset: collectionSpy
@@ -365,110 +372,110 @@ describe("Behaviors", function(){
         fooChanged: fooChangedSpy
       });
 
-      CV = Marionette.CollectionView.extend({
+      CollectionView = Marionette.CollectionView.extend({
         behaviors: {
           test: {}
         }
       });
 
-      V = Marionette.ItemView.extend({
+      View = Marionette.ItemView.extend({
         behaviors: {
           test: {}
         }
       });
 
-      m = new Backbone.Model({
-        name: "tom"
+      model = new Backbone.Model({
+        name: 'tom'
       });
 
-      c = new Backbone.Collection([])
+      collection = new Backbone.Collection([]);
 
       Marionette.Behaviors.behaviorsLookup = hold;
     });
 
-    it ("should proxy model events", function() {
-      v = new V({
-        model: m
+    it('should proxy model events', function () {
+      view = new View({
+        model: model
       });
 
-      m.set("name", "doge");
+      model.set('name', 'doge');
       expect(modelSpy).toHaveBeenCalledOn(testBehavior);
     });
 
-    it ("should proxy model events w/ string cbk", function() {
-      v = new V({
-        model: m
+    it('should proxy model events w/ string cbk', function () {
+      view = new View({
+        model: model
       });
 
-      m.set("foo", "doge");
+      model.set('foo', 'doge');
       expect(fooChangedSpy).toHaveBeenCalledOn(testBehavior);
     });
 
-    it ("should proxy collection events", function() {
-      v = new CV({
-        collection: c
+    it('should proxy collection events', function () {
+      view = new CollectionView({
+        collection: collection
       });
 
-      c.reset();
+      collection.reset();
       expect(collectionSpy).toHaveBeenCalledOn(testBehavior);
     });
 
   });
 
-  describe("behavior trigger calls", function() {
-    var spy, V, hold;
-    beforeEach(function() {
+  describe('behavior trigger calls', function () {
+    var spy, View, hold;
+    beforeEach(function () {
       spy = sinon.spy();
-      hold = {}
+      hold = {};
       hold.testB = Marionette.Behavior.extend({
-        onRender: function(){
+        onRender: function () {
           spy();
         }
       });
 
-      V = Marionette.View.extend({
+      View = Marionette.View.extend({
         behaviors: {
           testB: {}
         }
       });
 
       Marionette.Behaviors.behaviorsLookup = hold;
-    })
+    });
 
-    it ("should call onRender when a view is rendered", function() {
-      var v = new V;
-      v.triggerMethod("render");
+    it('should call onRender when a view is rendered', function () {
+      var view = new View();
+      view.triggerMethod('render');
       expect(spy).toHaveBeenCalled();
     });
   });
 
-  describe("behavior is evented", function() {
-    var Behavior, spy, b, m;
-    beforeEach(function() {
+  describe('behavior is evented', function () {
+    var spy, behavior, model;
+    beforeEach(function () {
       spy = sinon.spy();
-      b = new Marionette.Behavior({}, {});
-      m = new Backbone.Model();
+      behavior = new Marionette.Behavior({}, {});
+      model = new Backbone.Model();
 
-      Marionette.bindEntityEvents(b, m, {
+      Marionette.bindEntityEvents(behavior, model, {
         'change': spy
       });
 
-      b.listenTo(m, 'bump', spy);
+      behavior.listenTo(model, 'bump', spy);
     });
 
-    it("should listenTo events", function() {
-      m.trigger('bump');
+    it('should listenTo events', function () {
+      model.trigger('bump');
       expect(spy).toHaveBeenCalled();
     });
 
-    it("should support bindEntityEvents", function() {
-      m.set('name', 'doge');
+    it('should support bindEntityEvents', function () {
+      model.set('name', 'doge');
       expect(spy).toHaveBeenCalled();
     });
 
-    it("should execute in the specified context", function() {
-      m.trigger('bump');
-      expect(spy).toHaveBeenCalledOn(b);
+    it('should execute in the specified context', function () {
+      model.trigger('bump');
+      expect(spy).toHaveBeenCalledOn(behavior);
     });
   });
 });

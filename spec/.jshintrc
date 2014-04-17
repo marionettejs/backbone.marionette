@@ -10,7 +10,23 @@
     "Backbone"           : true,
     "Marionette"         : true,
     "slice"              : true,
-    "throwError"         : true
+    "throwError"         : true,
+
+    "jasmine"            : true,
+    "describe"           : true,
+    "xdescribe"          : true,
+    "it"                 : true,
+    "xit"                : true,
+    "expect"             : true,
+    "beforeEach"         : true,
+    "afterEach"          : true,
+    "spyOn"              : true,
+    "sinon"              : true,
+    "loadFixtures"       : true,
+    "setFixtures"        : true,
+    "appendLoadFixtures" : true,
+    "waits"              : true,
+    "runs"               : true
   },
 
   "bitwise"       : true,
@@ -35,7 +51,7 @@
   "maxdepth"      : 3,
   "maxstatements" : 12,
   "maxcomplexity" : 6,
-  "maxlen"        : 100,
+  "maxlen"        : 400,
 
   "asi"           : false,
   "boss"          : false,

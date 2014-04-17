@@ -5,7 +5,7 @@ describe("region", function(){
     it("should throw an exception saying an 'el' is required", function(){
       expect(
         Backbone.Marionette.Region.extend({})
-      ).toThrow("An 'el' must be specified for a region.");
+      ).toThrow('An "el" must be specified for a region.');
     });
   });
 

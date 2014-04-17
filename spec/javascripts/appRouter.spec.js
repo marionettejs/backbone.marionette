@@ -6,7 +6,7 @@ describe("app router", function(){
   });
 
   describe("when a route is configured with a method that does not exist on the controller", function(){
-    var expectedMessage = "Method 'doesNotExist' was not found on the controller";
+    var expectedMessage = 'Method "doesNotExist" was not found on the controller';
 
     var Router = Backbone.Marionette.AppRouter.extend({
       appRoutes: {

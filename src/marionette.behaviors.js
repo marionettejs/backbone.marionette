@@ -7,7 +7,7 @@
 // **MUST** override the class level behaviorsLookup
 // method for things to work properly.
 
-Marionette.Behaviors = (function(Marionette, _) {
+Marionette.Behaviors = (function (Marionette, _) {
 
   function Behaviors(view) {
     // Behaviors defined on a view can be a flat object literal
@@ -27,22 +27,22 @@ Marionette.Behaviors = (function(Marionette, _) {
   }
 
   var methods = {
-    setElement: function(setElement, behaviors) {
+    setElement: function (setElement, behaviors) {
       setElement.apply(this, _.tail(arguments, 2));
 
       // proxy behavior $el to the view's $el.
       // This is needed because a view's $el proxy
       // is not set until after setElement is called.
-      _.each(behaviors, function(b) {
+      _.each(behaviors, function (b) {
         b.$el = this.$el;
       }, this);
     },
 
-    onShow: function(onShow, behaviors) {
+    onShow: function (onShow, behaviors) {
       var args = _.tail(arguments, 2);
 
-      _.each(behaviors, function(b) {
-        Marionette.triggerMethod.apply(b, ["show"].concat(args));
+      _.each(behaviors, function (b) {
+        Marionette.triggerMethod.apply(b, ['show'].concat(args));
       });
 
       if (_.isFunction(onShow)) {
@@ -50,11 +50,11 @@ Marionette.Behaviors = (function(Marionette, _) {
       }
     },
 
-    onDestroy: function(onDestroy, behaviors){
+    onDestroy: function (onDestroy, behaviors) {
       var args = _.tail(arguments, 2);
 
-      _.each(behaviors, function(b) {
-        Marionette.triggerMethod.apply(b, ["destroy"].concat(args));
+      _.each(behaviors, function (b) {
+        Marionette.triggerMethod.apply(b, ['destroy'].concat(args));
       });
 
       if (_.isFunction(onDestroy)) {
@@ -62,50 +62,54 @@ Marionette.Behaviors = (function(Marionette, _) {
       }
     },
 
-    bindUIElements: function(bindUIElements, behaviors) {
+    bindUIElements: function (bindUIElements, behaviors) {
       bindUIElements.apply(this);
       _.invoke(behaviors, bindUIElements);
     },
 
-    unbindUIElements: function(unbindUIElements, behaviors) {
+    unbindUIElements: function (unbindUIElements, behaviors) {
       unbindUIElements.apply(this);
       _.invoke(behaviors, unbindUIElements);
     },
 
-    triggerMethod: function(triggerMethod, behaviors) {
+    triggerMethod: function (triggerMethod, behaviors) {
       var args = _.tail(arguments, 2);
       triggerMethod.apply(this, args);
 
-      _.each(behaviors, function(b) {
+      _.each(behaviors, function (b) {
         triggerMethod.apply(b, args);
       });
     },
 
-    delegateEvents: function(delegateEvents, behaviors) {
+    delegateEvents: function (delegateEvents, behaviors) {
       var args = _.tail(arguments, 2);
       delegateEvents.apply(this, args);
 
-      _.each(behaviors, function(b){
-        Marionette.bindEntityEvents(b, this.model, Marionette.getOption(b, "modelEvents"));
-        Marionette.bindEntityEvents(b, this.collection, Marionette.getOption(b, "collectionEvents"));
+      _.each(behaviors, function (b) {
+        var modelEvents = Marionette.getOption(b, 'modelEvents');
+        var collectionEvents = Marionette.getOption(b, 'collectionEvents');
+        Marionette.bindEntityEvents(b, this.model, modelEvents);
+        Marionette.bindEntityEvents(b, this.collection, collectionEvents);
       }, this);
     },
 
-    undelegateEvents: function(undelegateEvents, behaviors) {
+    undelegateEvents: function (undelegateEvents, behaviors) {
       var args = _.tail(arguments, 2);
       undelegateEvents.apply(this, args);
 
-      _.each(behaviors, function(b) {
-        Marionette.unbindEntityEvents(this, this.model, Marionette.getOption(b, "modelEvents"));
-        Marionette.unbindEntityEvents(this, this.collection, Marionette.getOption(b, "collectionEvents"));
+      _.each(behaviors, function (b) {
+        var modelEvents = Marionette.getOption(b, 'modelEvents');
+        var collectionEvents = Marionette.getOption(b, 'collectionEvents');
+        Marionette.unbindEntityEvents(this, this.model, modelEvents);
+        Marionette.unbindEntityEvents(this, this.collection, collectionEvents);
       }, this);
     },
 
-    behaviorEvents: function(behaviorEvents, behaviors) {
+    behaviorEvents: function (behaviorEvents, behaviors) {
       var _behaviorsEvents = {};
       var viewUI = _.result(this, 'ui');
 
-      _.each(behaviors, function(b, i) {
+      _.each(behaviors, function (b, i) {
         var _events = {};
         var behaviorEvents = _.result(b, 'events') || {};
         var behaviorUI = _.result(b, 'ui');
@@ -121,15 +125,21 @@ Marionette.Behaviors = (function(Marionette, _) {
         // a user to use the @ui. syntax.
         behaviorEvents = Marionette.normalizeUIKeys(behaviorEvents, ui);
 
-        _.each(_.keys(behaviorEvents), function(key) {
-          // append white-space at the end of each key to prevent behavior key collisions
-          // this is relying on the fact backbone events considers "click .foo" the same  "click .foo "
-          // starts with an array of two so the first behavior has one space
+        _.each(_.keys(behaviorEvents), function (key) {
+          // Append white-space at the end of each key to prevent behavior key collisions.
+          // This is relying on the fact backbone events considers "click .foo" the same as
+          // "click .foo ". Starts with an array of two so the first behavior has one space
 
           // +2 is uses becauce new Array(1) or 0 is "" and not " "
-          var whitespace = (new Array(i+2)).join(" ");
+          var whitespace = (new Array(i + 2)).join(' ');
           var eventKey   = key + whitespace;
-          var handler    = _.isFunction(behaviorEvents[key]) ? behaviorEvents[key] : b[behaviorEvents[key]];
+          var handler;
+
+          if (_.isFunction(behaviorEvents[key])) {
+            handler = behaviorEvents[key];
+          } else {
+            handler = b[behaviorEvents[key]];
+          }
 
           _events[eventKey] = _.bind(handler, b);
         });
@@ -147,11 +157,13 @@ Marionette.Behaviors = (function(Marionette, _) {
     // should define the object that stores the behaviors
     // i.e.
     //
-    // Marionette.Behaviors.behaviorsLookup: function() {
+    // Marionette.Behaviors.behaviorsLookup: function () {
     //   return App.Behaviors
     // }
-    behaviorsLookup: function() {
-      throw new Error("You must define where your behaviors are stored. See https://github.com/marionettejs/backbone.marionette/blob/master/docs/marionette.behaviors.md#behaviorslookup");
+    behaviorsLookup: function () {
+      throw new Error('You must define where your behaviors are stored.' +
+        'See https://github.com/marionettejs/backbone.marionette' +
+        '/blob/master/docs/marionette.behaviors.md#behaviorslookup');
     },
 
     // Takes care of getting the behavior class
@@ -159,32 +171,36 @@ Marionette.Behaviors = (function(Marionette, _) {
     // If a user passes in options.behaviorClass
     // default to using that. Otherwise delegate
     // the lookup to the users behaviorsLookup implementation.
-    getBehaviorClass: function(options, key) {
+    getBehaviorClass: function (options, key) {
       if (options.behaviorClass) {
         return options.behaviorClass;
       }
 
       // Get behavior class can be either a flat object or a method
-      return _.isFunction(Behaviors.behaviorsLookup) ? Behaviors.behaviorsLookup.apply(this, arguments)[key] : Behaviors.behaviorsLookup[key];
+      if (_.isFunction(Behaviors.behaviorsLookup)) {
+        return Behaviors.behaviorsLookup.apply(this, arguments)[key];
+      } else {
+        return Behaviors.behaviorsLookup[key];
+      }
     },
 
     // Maps over a view's behaviors. Performing
     // a lookup on each behavior and the instantiating
     // said behavior passing its options and view.
-    parseBehaviors: function(view, behaviors){
-      return _.map(behaviors, function(options, key){
+    parseBehaviors: function (view, behaviors) {
+      return _.map(behaviors, function (options, key) {
         var BehaviorClass = Behaviors.getBehaviorClass(options, key);
         return new BehaviorClass(options, view);
       });
     },
 
-    // wrap view internal methods so that they delegate to behaviors.
-    // For example, onDestroy should trigger destroy on all of the behaviors and then destroy itself.
+    // wrap view internal methods so that they delegate to behaviors. For example,
+    // onDestroy should trigger destroy on all of the behaviors and then destroy itself.
     // i.e.
     //
     // view.delegateEvents = _.partial(methods.delegateEvents, view.delegateEvents, behaviors);
-    wrap: function(view, behaviors, methodNames) {
-      _.each(methodNames, function(methodName) {
+    wrap: function (view, behaviors, methodNames) {
+      _.each(methodNames, function (methodName) {
         view[methodName] = _.partial(methods[methodName], view[methodName], behaviors);
       });
     }

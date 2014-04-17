@@ -97,7 +97,7 @@ describe("Marionette.bindEntityEvents", function(){
         it("should throw an exception", function() {
           expect(function() {
             Marionette.bindEntityEvents(target, entity, {"eventNameMock": "notExistedMethod"});
-          }).toThrow("Method 'notExistedMethod' was configured as an event handler, but does not exist.");
+          }).toThrow('Method "notExistedMethod" was configured as an event handler, but does not exist.');
         });
       });
     });

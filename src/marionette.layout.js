@@ -12,7 +12,7 @@ Marionette.Layout = Marionette.ItemView.extend({
 
   // Ensure the regions are available when the `initialize` method
   // is called.
-  constructor: function (options) {
+  constructor: function(options) {
     options = options || {};
 
     this._firstRender = true;
@@ -25,7 +25,7 @@ Marionette.Layout = Marionette.ItemView.extend({
   // first time it is called. Subsequent calls will destroy the
   // views that the regions are showing and then reset the `el`
   // for the regions to the newly rendered DOM elements.
-  render: function(){
+  render: function() {
     this._ensureViewIsIntact();
 
     if (this._firstRender) {
@@ -42,28 +42,28 @@ Marionette.Layout = Marionette.ItemView.extend({
   },
 
   // Handle destroying regions, and then destroy the view itself.
-  destroy: function () {
-    if (this.isDestroyed){ return; }
+  destroy: function() {
+    if (this.isDestroyed) { return; }
 
     this.regionManager.destroy();
     Marionette.ItemView.prototype.destroy.apply(this, arguments);
   },
 
   // Add a single region, by name, to the layout
-  addRegion: function(name, definition){
+  addRegion: function(name, definition) {
     var regions = {};
     regions[name] = definition;
     return this._buildRegions(regions)[name];
   },
 
   // Add multiple regions as a {name: definition, name2: def2} object literal
-  addRegions: function(regions){
+  addRegions: function(regions) {
     this.regions = _.extend({}, this.regions, regions);
     return this._buildRegions(regions);
   },
 
   // Remove a single region from the Layout, by name
-  removeRegion: function(name){
+  removeRegion: function(name) {
     delete this.regions[name];
     return this.regionManager.removeRegion(name);
   },
@@ -76,12 +76,12 @@ Marionette.Layout = Marionette.ItemView.extend({
   },
 
   // internal method to build regions
-  _buildRegions: function(regions){
+  _buildRegions: function(regions) {
     var that = this;
 
     var defaults = {
-      regionType: Marionette.getOption(this, "regionType"),
-      parentEl: function(){ return that.$el; }
+      regionType: Marionette.getOption(this, 'regionType'),
+      parentEl: function() { return that.$el; }
     };
 
     return this.regionManager.addRegions(regions, defaults);
@@ -89,7 +89,7 @@ Marionette.Layout = Marionette.ItemView.extend({
 
   // Internal method to initialize the regions that have been defined in a
   // `regions` attribute on this layout.
-  _initializeRegions: function (options) {
+  _initializeRegions: function(options) {
     var regions;
     this._initRegionManager();
 
@@ -104,26 +104,26 @@ Marionette.Layout = Marionette.ItemView.extend({
 
   // Internal method to re-initialize all of the regions by updating the `el` that
   // they point to
-  _reInitializeRegions: function(){
+  _reInitializeRegions: function() {
     this.regionManager.destroyRegions();
-    this.regionManager.each(function(region){
+    this.regionManager.each(function(region) {
       region.reset();
     });
   },
 
   // Internal method to initialize the region manager
   // and all regions in it
-  _initRegionManager: function(){
+  _initRegionManager: function() {
     this.regionManager = new Marionette.RegionManager();
 
-    this.listenTo(this.regionManager, "region:add", function(name, region){
+    this.listenTo(this.regionManager, 'region:add', function(name, region) {
       this[name] = region;
-      this.trigger("region:add", name, region);
+      this.trigger('region:add', name, region);
     });
 
-    this.listenTo(this.regionManager, "region:remove", function(name, region){
+    this.listenTo(this.regionManager, 'region:remove', function(name, region) {
       delete this[name];
-      this.trigger("region:remove", name, region);
+      this.trigger('region:remove', name, region);
     });
   }
 });

@@ -18,15 +18,15 @@
 
 Marionette.AppRouter = Backbone.Router.extend({
 
-  constructor: function(options){
+  constructor: function(options) {
     Backbone.Router.prototype.constructor.apply(this, arguments);
 
     this.options = options || {};
 
-    var appRoutes = Marionette.getOption(this, "appRoutes");
+    var appRoutes = Marionette.getOption(this, 'appRoutes');
     var controller = this._getController();
     this.processAppRoutes(controller, appRoutes);
-    this.on("route", this._processOnRoute, this);
+    this.on('route', this._processOnRoute, this);
   },
 
   // Similar to route method on a Backbone Router but
@@ -38,12 +38,12 @@ Marionette.AppRouter = Backbone.Router.extend({
 
   // process the route event and trigger the onRoute
   // method call, if it exists
-  _processOnRoute: function(routeName, routeArgs){
+  _processOnRoute: function(routeName, routeArgs) {
     // find the path that matched
     var routePath = _.invert(this.appRoutes)[routeName];
 
     // make sure an onRoute is there, and call it
-    if (_.isFunction(this.onRoute)){
+    if (_.isFunction(this.onRoute)) {
       this.onRoute(routeName, routePath, routeArgs);
     }
   },
@@ -52,7 +52,7 @@ Marionette.AppRouter = Backbone.Router.extend({
   // router, and turn them in to routes that trigger the
   // specified method on the specified `controller`.
   processAppRoutes: function(controller, appRoutes) {
-    if (!appRoutes){ return; }
+    if (!appRoutes) { return; }
 
     var routeNames = _.keys(appRoutes).reverse(); // Backbone requires reverted order of routes
 
@@ -61,15 +61,15 @@ Marionette.AppRouter = Backbone.Router.extend({
     }, this);
   },
 
-  _getController: function(){
-    return Marionette.getOption(this, "controller");
+  _getController: function() {
+    return Marionette.getOption(this, 'controller');
   },
 
-  _addAppRoute: function(controller, route, methodName){
+  _addAppRoute: function(controller, route, methodName) {
     var method = controller[methodName];
 
     if (!method) {
-      throwError("Method '" + methodName + "' was not found on the controller");
+      throwError('Method "' + methodName + '" was not found on the controller');
     }
 
     this.route(route, methodName, _.bind(method, controller));

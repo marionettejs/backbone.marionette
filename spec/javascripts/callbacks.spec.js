@@ -1,11 +1,11 @@
-describe("callbacks", function(){
-  "use strict";
+describe('callbacks', function() {
+  'use strict';
 
-  describe("when registering callbacks and running them", function(){
+  describe('when registering callbacks and running them', function() {
     var specifiedOptions, specifiedContext,
         spyOne, spyTwo;
 
-    beforeEach(function(){
+    beforeEach(function() {
       spyOne = sinon.spy();
       spyTwo = sinon.spy();
       var callbacks = new Backbone.Marionette.Callbacks();
@@ -19,27 +19,27 @@ describe("callbacks", function(){
       callbacks.run(specifiedOptions, specifiedContext);
     });
 
-    it("should execute the first callback", function(){
+    it('should execute the first callback', function() {
       expect(spyOne).toHaveBeenCalled();
     });
 
-    it("should execute the second callback", function(){
+    it('should execute the second callback', function() {
       expect(spyTwo).toHaveBeenCalled();
     });
 
-    it("should pass the options along", function(){
+    it('should pass the options along', function() {
       expect(spyOne).toHaveBeenCalledWith(specifiedOptions);
     });
 
-    it("should execute in the specified context", function(){
+    it('should execute in the specified context', function() {
       expect(spyOne).toHaveBeenCalledOn(specifiedContext);
     });
   });
 
-  describe("when running with no callbacks, and then registering callbacks", function(){
+  describe('when running with no callbacks, and then registering callbacks', function() {
     var spyOne, spyTwo;
 
-    beforeEach(function(){
+    beforeEach(function() {
       spyOne = sinon.spy();
       spyTwo = sinon.spy();
       var callbacks = new Backbone.Marionette.Callbacks();
@@ -49,19 +49,19 @@ describe("callbacks", function(){
       callbacks.add(spyTwo);
     });
 
-    it("should execute the first", function(){
+    it('should execute the first', function() {
       expect(spyOne).toHaveBeenCalled();
     });
 
-    it("should execute the second", function(){
+    it('should execute the second', function() {
       expect(spyTwo).toHaveBeenCalled();
     });
   });
 
-  describe("when registering a callback with a specific context, and running the callbacks", function(){
+  describe('when registering a callback with a specific context, and running the callbacks', function() {
     var spyOne, context;
 
-    beforeEach(function(){
+    beforeEach(function() {
       spyOne  = sinon.spy();
       context = {};
 
@@ -71,15 +71,15 @@ describe("callbacks", function(){
       callbacks.run();
     });
 
-    it("should run the callback with the specified context", function(){
+    it('should run the callback with the specified context', function() {
       expect(spyOne).toHaveBeenCalledOn(context);
     });
   });
 
-  describe("when resetting callbacks and re-running them", function(){
+  describe('when resetting callbacks and re-running them', function() {
     var spy, numCallbacks;
 
-    beforeEach(function(){
+    beforeEach(function() {
       var callbacks = new Backbone.Marionette.Callbacks();
 
       spy = sinon.spy();
@@ -93,11 +93,11 @@ describe("callbacks", function(){
       numCallbacks = callbacks._callbacks.length;
     });
 
-    it("should run the callbacks again", function(){
+    it('should run the callbacks again', function() {
       expect(spy).toHaveBeenCalledTwice();
     });
 
-    it("should not duplicate the callbacks", function() {
+    it('should not duplicate the callbacks', function() {
       expect(numCallbacks).toBe(1);
     });
   });

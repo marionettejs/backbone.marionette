@@ -1,4 +1,4 @@
-(function (root, factory) {
+(function(root, factory) {
   if (typeof exports === 'object') {
 
     var underscore = require('underscore');
@@ -13,7 +13,7 @@
     define(['underscore', 'backbone', 'backbone.wreqr', 'backbone.babysitter'], factory);
 
   }
-}(this, function (_, Backbone) {
+}(this, function(_, Backbone) {
 
   // @include marionette.core.js
   return Backbone.Marionette;

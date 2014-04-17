@@ -31,6 +31,11 @@ Marionette.Behavior = (function(_, Backbone){
   _.extend(Behavior.prototype, Backbone.Events, {
     initialize: function(){},
 
+    // stopListening to behavior `onListen` events.
+    close: function() {
+      this.stopListening();
+    },
+
     // Setup class level proxy for triggerMethod.
     triggerMethod: Marionette.triggerMethod
   });

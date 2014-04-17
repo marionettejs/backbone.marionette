@@ -150,9 +150,22 @@ module.exports = function(grunt) {
 
     jshint: {
       options: {
-        jshintrc : '.jshintrc'
+        jshintrc: '.jshintrc'
       },
-      marionette : [ 'src/*.js' ]
+
+      marionette: {
+        src: [ 'src/*.js' ]
+      },
+
+      specs: {
+        options: {
+          jshintrc: 'spec/.jshintrc'
+        },
+
+        files: {
+          src: ['spec/javascripts/**.js']
+        }
+      }
     },
 
     watch: {

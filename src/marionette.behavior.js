@@ -6,14 +6,14 @@
 // Behaviors allow you to blackbox View specific interactions
 // into portable logical chunks, keeping your views simple and your code DRY.
 
-Marionette.Behavior = (function(_, Backbone){
-  function Behavior(options, view){
+Marionette.Behavior = (function(_, Backbone) {
+  function Behavior(options, view) {
     // Setup reference to the view.
     // this comes in handle when a behavior
     // wants to directly talk up the chain
     // to the view.
     this.view = view;
-    this.defaults = _.result(this, "defaults") || {};
+    this.defaults = _.result(this, 'defaults') || {};
     this.options  = _.extend({}, this.defaults, options);
 
     // proxy behavior $ method to the view
@@ -29,7 +29,7 @@ Marionette.Behavior = (function(_, Backbone){
   }
 
   _.extend(Behavior.prototype, Backbone.Events, {
-    initialize: function(){},
+    initialize: function() {},
 
     // stopListening to behavior `onListen` events.
     destroy: function() {

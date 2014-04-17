@@ -1,3 +1,4 @@
+/* jshint maxlen: 143 */
 // Marionette.Behaviors
 // --------
 
@@ -71,9 +72,9 @@ Marionette.Behaviors = (function(Marionette, _) {
       var args = _.tail(arguments, 2);
       delegateEvents.apply(this, args);
 
-      _.each(behaviors, function(b){
-        Marionette.bindEntityEvents(b, this.model, Marionette.getOption(b, "modelEvents"));
-        Marionette.bindEntityEvents(b, this.collection, Marionette.getOption(b, "collectionEvents"));
+      _.each(behaviors, function(b) {
+        Marionette.bindEntityEvents(b, this.model, Marionette.getOption(b, 'modelEvents'));
+        Marionette.bindEntityEvents(b, this.collection, Marionette.getOption(b, 'collectionEvents'));
       }, this);
     },
 
@@ -82,8 +83,8 @@ Marionette.Behaviors = (function(Marionette, _) {
       undelegateEvents.apply(this, args);
 
       _.each(behaviors, function(b) {
-        Marionette.unbindEntityEvents(b, this.model, Marionette.getOption(b, "modelEvents"));
-        Marionette.unbindEntityEvents(b, this.collection, Marionette.getOption(b, "collectionEvents"));
+        Marionette.unbindEntityEvents(b, this.model, Marionette.getOption(b, 'modelEvents'));
+        Marionette.unbindEntityEvents(b, this.collection, Marionette.getOption(b, 'collectionEvents'));
       }, this);
     },
 
@@ -108,12 +109,12 @@ Marionette.Behaviors = (function(Marionette, _) {
         behaviorEvents = Marionette.normalizeUIKeys(behaviorEvents, ui);
 
         _.each(_.keys(behaviorEvents), function(key) {
-          // append white-space at the end of each key to prevent behavior key collisions
-          // this is relying on the fact backbone events considers "click .foo" the same  "click .foo "
-          // starts with an array of two so the first behavior has one space
+          // Append white-space at the end of each key to prevent behavior key collisions.
+          // This is relying on the fact backbone events considers "click .foo" the same as
+          // "click .foo ". Starts with an array of two so the first behavior has one space
 
           // +2 is uses becauce new Array(1) or 0 is "" and not " "
-          var whitespace = (new Array(i+2)).join(" ");
+          var whitespace = (new Array(i + 2)).join(' ');
           var eventKey   = key + whitespace;
           var handler    = _.isFunction(behaviorEvents[key]) ? behaviorEvents[key] : b[behaviorEvents[key]];
 
@@ -137,7 +138,9 @@ Marionette.Behaviors = (function(Marionette, _) {
     //   return App.Behaviors
     // }
     behaviorsLookup: function() {
-      throw new Error("You must define where your behaviors are stored. See https://github.com/marionettejs/backbone.marionette/blob/master/docs/marionette.behaviors.md#behaviorslookup");
+      throw new Error('You must define where your behaviors are stored.' +
+        'See https://github.com/marionettejs/backbone.marionette' +
+        '/blob/master/docs/marionette.behaviors.md#behaviorslookup');
     },
 
     // Takes care of getting the behavior class
@@ -157,15 +160,15 @@ Marionette.Behaviors = (function(Marionette, _) {
     // Maps over a view's behaviors. Performing
     // a lookup on each behavior and the instantiating
     // said behavior passing its options and view.
-    parseBehaviors: function(view, behaviors){
-      return _.map(behaviors, function(options, key){
+    parseBehaviors: function(view, behaviors) {
+      return _.map(behaviors, function(options, key) {
         var BehaviorClass = Behaviors.getBehaviorClass(options, key);
         return new BehaviorClass(options, view);
       });
     },
 
-    // wrap view internal methods so that they delegate to behaviors.
-    // For example, onDestroy should trigger destroy on all of the behaviors and then destroy itself.
+    // wrap view internal methods so that they delegate to behaviors. For example,
+    // onDestroy should trigger destroy on all of the behaviors and then destroy itself.
     // i.e.
     //
     // view.delegateEvents = _.partial(methods.delegateEvents, view.delegateEvents, behaviors);

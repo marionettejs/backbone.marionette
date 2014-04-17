@@ -1,4 +1,3 @@
-/*jshint unused: false */
 // Collection View
 // ---------------
 

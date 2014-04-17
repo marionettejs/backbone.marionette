@@ -1,4 +1,4 @@
-/*jshint unused: false, maxstatements: 17 */
+/*jshint maxstatements: 17 */
 
 // Composite View
 // --------------

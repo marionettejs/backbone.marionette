@@ -1,4 +1,4 @@
-/*jshint maxparams: 9, unused: false */
+/*jshint maxparams: 9 */
 
 // Module
 // ------

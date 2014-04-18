@@ -1,3 +1,9 @@
+### v1.8.2 [view commit logs](https://github.com/marionettejs/backbone.marionette/compare/v1.8.0...v1.8.2)
+
+  * Fixes
+    * Behaviors now calls `stopListening` on close.
+    * Behaviors now undelegate `modelEvents` and `collectionEvents` when the parent view calls `undelegateEvents`.
+
 ### v1.8.0 [view commit logs](https://github.com/marionettejs/backbone.marionette/compare/v1.7.4...v1.8.0)
 
   * General

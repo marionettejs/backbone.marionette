@@ -29,7 +29,7 @@
   "author": {
     "name": "Derick Bailey",
     "email": "derickbailey@gmail.com",
-    "web": "http://derickbailey.lostechies.com"
+    "url": "http://derickbailey.lostechies.com"
   },
   "bugs": {
     "url": "https://github.com/marionettejs/backbone.marionette/issues"
@@ -61,40 +61,5 @@
     "grunt-cli": "0.1.13",
     "grunt-contrib-clean": "~0.5.0",
     "grunt-preprocess": "~4.0.0"
-  },
-  "volo": {
-    "url": "https://raw.github.com/marionettejs/backbone.marionette/v{version}/lib/core/amd/backbone.marionette.js",
-    "dependencies": {
-      "backbone": "backbone"
-    }
-  },
-  "jam": {
-    "dependencies": {
-      "underscore": "1.4.4 - 1.6.0",
-      "backbone": "1.0.0 - 1.1.2",
-      "backbone.babysitter": "^0.1.0",
-      "backbone.wreqr": "^1.0.0"
-    },
-    "main": "lib/core/amd/backbone.marionette.js",
-    "include": [
-      "lib/core/amd/backbone.marionette.js",
-      "readme.md"
-    ]
-  },
-  "maintainers": [
-    {
-      "name": "Stefan Zerkalica",
-      "email": "zerkalica@gmail.com",
-      "web": "https://github.com/zerkalica"
-    },
-    {
-      "name": "Richard Mitchell",
-      "email": "richard.j.mitchell@gmail.com"
-    },
-    {
-      "name": "Joe Gornick",
-      "web": "http://joegornick.com",
-      "twitter": "https://twitter.com/jgornick"
-    }
-  ]
+  }
 }

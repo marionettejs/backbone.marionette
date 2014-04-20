@@ -191,10 +191,7 @@ themselves under the following conditions:
 * When the collection has a model added to it (the "add" event is fired), it will render that one item to the rendered list
 * When the collection has a model removed (the "remove" event is fired), it will remove that one item from the rendered list
 
-You can also manually re-render either or both of them:
-
-* If you want to re-render everything, call the `.render()` method
-* If you want to re-render the model's view, you can call `.renderModel()`
+You can also manually re-render the collection by calling the `.render()` method.
 
 ## Events And Callbacks
 

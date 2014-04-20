@@ -445,7 +445,7 @@ describe('composite view', function() {
 
       compositeView.render();
 
-      spyOn(compositeView, 'renderModel').andCallThrough();
+      spyOn(compositeView, '_renderRoot').andCallThrough();
 
       var m3 = new Model({foo: 'quux'});
       var m4 = new Model({foo: 'widget'});
@@ -453,7 +453,7 @@ describe('composite view', function() {
     });
 
     it('should not re-render the template with the model', function() {
-      expect(compositeView.renderModel).not.toHaveBeenCalled();
+      expect(compositeView._renderRoot).not.toHaveBeenCalled();
     });
 
     it('should render the collections items', function() {

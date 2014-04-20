@@ -193,11 +193,6 @@ themselves under the following conditions:
 * When the collection has a model added to it (the "add" event is fired), it will render that one child into the list
 * When the collection has a model removed (the "remove" event is fired), it will remove that one child from the rendered list
 
-You can also manually re-render either or both of them:
-
-* If you want to re-render everything, call the `.render()` method
-* If you want to re-render the model's view, you can call `.renderModel()`
-
 ## Events And Callbacks
 
 During the course of rendering a composite, several events will

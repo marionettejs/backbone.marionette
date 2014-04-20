@@ -74,14 +74,8 @@ Marionette.CompositeView = Marionette.CollectionView.extend({
     this.resetChildViewContainer();
 
     this.triggerMethod('before:render', this);
-    var html = this.renderModel();
-    this.$el.html(html);
-    // the ui bindings is done here and not at the end of render since they
-    // will not be available until after the model is rendered, but should be
-    // available before the collection is rendered.
-    this.bindUIElements();
-    this.triggerMethod('composite:model:rendered');
 
+    this._renderRoot();
     this._renderChildren();
 
     this.triggerMethod('composite:rendered');
@@ -97,18 +91,23 @@ Marionette.CompositeView = Marionette.CollectionView.extend({
     }
   },
 
-  // Render an individual model, if we have one, as
-  // part of a composite view (branch / leaf). For example:
-  // a treeview.
-  renderModel: function() {
+  // Render the root template that the children
+  // views are appended to
+  _renderRoot: function() {
     var data = {};
     data = this.serializeData();
     data = this.mixinTemplateHelpers(data);
 
     var template = this.getTemplate();
-    return Marionette.Renderer.render(template, data);
-  },
+    var html = Marionette.Renderer.render(template, data);
+    this.$el.html(html);
 
+    // the ui bindings is done here and not at the end of render since they
+    // will not be available until after the model is rendered, but should be
+    // available before the collection is rendered.
+    this.bindUIElements();
+    this.triggerMethod('composite:model:rendered');
+  },
 
   // You might need to override this if you've overridden appendHtml
   appendBuffer: function(compositeView, buffer) {

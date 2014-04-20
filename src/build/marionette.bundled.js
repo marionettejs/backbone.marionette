@@ -1,20 +1,19 @@
 (function(root, factory) {
 
   if (typeof define === 'function' && define.amd) {
-    define(['exports', 'backbone', 'underscore'], function(exports, Backbone, _) {
-      factory(root, exports, Backbone, _);
+    define(['exports', 'backbone', 'underscore', 'jquery'], function(exports, Backbone, _, $) {
+      root.Marionette = factory(root, exports, Backbone, _);
     });
   } else if (typeof exports !== 'undefined') {
     var Backbone = require('backbone');
-    var Wreqr = require('backbone.wreqr');
-    var BabySitter = require('backbone.babysitter');
     var _ = require('underscore');
-    factory(root, exports, Backbone, _);
+    var $ = require('jquery');
+    factory(root, exports, Backbone, _, $);
   } else {
-    root.Marionette = factory(root, {}, root.Backbone, root._);
+    root.Marionette = factory(root, {}, root.Backbone, root._, (root.jQuery || root.Zepto || root.ender || root.$));
   }
 
-}(this, function(root, Marionette, Backbone, _) {
+}(this, function(root, Marionette, Backbone, _, $) {
   'use strict';
 
   var previousMarionette = root.Marionette;

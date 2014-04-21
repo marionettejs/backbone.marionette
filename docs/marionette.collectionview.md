@@ -81,15 +81,50 @@ stating that you must specify an `itemView`.
 
 ### CollectionView's `getItemView`
 The value returned by this method is the `ItemView` class that will be instantiated when a `Model` needs to be initially rendered.
-This method also gives you the ability to customize per `Model` `ItemViews`.
+
+This method gives you the ability to customize your `ItemView` class based on attributes of each item `Model`.
 
 ```js
-Backbone.Marionette.CollectionView.extend({
-  getItemView: function(item) {
-    // some logic to calculate which view to return
-    return someItemSpecificView;
+var FooBar = Backbone.Model.extend({
+  defaults: {
+    isFoo: false
   }
 });
+
+var FooView = Backbone.Marionette.ItemView.extend({
+  template: '#foo-template'
+});
+var BarView = Backbone.Marionette.ItemView.extend({
+  template: '#bar-template'
+});
+
+
+var MyCollectionView = Backbone.Marionette.CollectionView.extend({
+  getItemView: function(item) {
+    // Choose which view class to render,
+    // depending on the properties of the item model
+    if  (item.get('isFoo')) {
+      return FooView;
+    }
+    else {
+      return BarView;
+    }
+  }
+});
+
+var collectionView = new MyCollectionView();
+var foo = new FooBar({
+  isFoo: true
+});
+var bar = new FooBar({
+  isFoo: false
+});
+
+// Renders a FooView
+collectionView.collection.add(foo);
+
+// Renders a BarView
+collectionView.collection.add(bar);
 ```
 
 ### CollectionView's `itemViewOptions`

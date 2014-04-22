@@ -308,4 +308,27 @@ describe('layoutView', function() {
       expect(this.layoutView.getRegion('regionOne')).toBe(this.region);
     });
   });
+
+  describe('overiding default regionManager', function() {
+    var spy, layout;
+
+    beforeEach(function() {
+      spy     = sinon.spy();
+      layout  = new (Marionette.LayoutView.extend({
+        getRegionManager: function() {
+          spy.apply(this, arguments);
+          return new Marionette.RegionManager();
+        }
+      }))();
+    });
+
+    it('should call into the custom regionManager lookup', function() {
+      expect(spy).toHaveBeenCalled();
+    });
+
+    it('should call the custom regionManager with the view as the context', function() {
+      expect(spy).toHaveBeenCalledOn(layout);
+    });
+
+  });
 });

@@ -95,6 +95,23 @@ were passed in to the view's constructor. `this.options` is not yet
 available when the regions are first initialized, so the options
 must be accessed through this parameter.
 
+### Overriding the default `RegionManager`
+
+If you need the `RegionManager`'s class chosen dynamically, specify `getRegionManager`:
+
+```js
+Marionette.LayoutView.extend({
+  // ...
+
+  getRegionManager: function() {
+    // custom logic
+    return MyRegionManager;
+  }
+```
+
+This can be useful if you want to attach `LayoutView`'s regions to your own instance of
+`RegionManager`.
+
 ## Region Availability
 
 Any defined regions within a layoutView will be available to the

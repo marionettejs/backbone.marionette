@@ -111,10 +111,17 @@ Marionette.LayoutView = Marionette.ItemView.extend({
     });
   },
 
+  // Enable easy overiding of the default `RegionManager`
+  // for customized region interactions and buisness specific
+  // view logic for better control over single regions.
+  getRegionManager: function() {
+    return new Marionette.RegionManager();
+  },
+
   // Internal method to initialize the region manager
   // and all regions in it
   _initRegionManager: function() {
-    this.regionManager = new Marionette.RegionManager();
+    this.regionManager = this.getRegionManager();
 
     this.listenTo(this.regionManager, 'region:add', function(name, region) {
       this[name] = region;

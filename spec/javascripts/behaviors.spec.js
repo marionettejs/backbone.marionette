@@ -144,14 +144,47 @@ describe('Behaviors', function() {
   });
 
   describe('behavior initialize', function() {
-    var Behavior = Marionette.Behavior.extend({
-      initialize: sinon.spy()
+    var View, Behavior, Obj;
+    var behaviorOptions, viewOptions;
+
+    beforeEach(function() {
+      Behavior = Marionette.Behavior.extend({
+        initialize: sinon.spy()
+      });
+
+      Obj = {
+        Tooltip: Marionette.Behavior.extend({
+          initialize: function(options, view) {
+            behaviorOptions = options;
+            viewOptions = view.options;
+          }
+        })
+      };
+
+      View = Marionette.ItemView.extend({
+        template: _.template(''),
+        behaviors: {
+          Tooltip: {
+            position: 'left'
+          }
+        }
+      });
+
+      Marionette.Behaviors.behaviorsLookup = Obj;
     });
 
     it('should call initialize when a behavior is created', function() {
       var b = new Behavior({}, {});
-
       expect(b.initialize).toHaveBeenCalled();
+    });
+
+    it('should call initialize when a behavior is created', function() {
+      var view = new View({
+        words: 'big'
+      });
+
+      expect(viewOptions).toEqual(view.options);
+      expect(behaviorOptions).toEqual(View.prototype.behaviors.Tooltip);
     });
   });
 

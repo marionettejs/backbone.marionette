@@ -1,9 +1,13 @@
-# Backbone.Marionette
-
-Make your Backbone.js apps dance!
-
-[![Build Status](https://secure.travis-ci.org/marionettejs/backbone.marionette.svg?branch=master)](http://travis-ci.org/marionettejs/backbone.marionette)
-
+<h1 align="center">Backbone.Marionette</h1>
+<p align="center">
+  <img title="backbone marionette" src='http://marionettejs.com/downloads/marionette-gh-banner.svg' />
+</p>
+<p align="center"> Make your Backbone.js apps dance!</p>
+<p align="center">
+  <a title='Build Status' href="https://travis-ci.org/marionettejs/backbone.marionette">
+    <img src='https://secure.travis-ci.org/marionettejs/backbone.marionette.svg?branch=master' />
+  </a>
+</p>
 
 ## About Marionette
 

@@ -414,8 +414,8 @@ describe('composite view', function() {
     });
   });
 
-  describe('when rendering a composite with a collection and then resetting the collection', function() {
-    var compositeView;
+  describe('when rendering a composite with a collection', function() {
+    var compositeView, collection;
 
     var ChildView = Backbone.Marionette.ItemView.extend({
       tagName: 'span',
@@ -436,7 +436,8 @@ describe('composite view', function() {
 
       var m1 = new Model({foo: 'bar'});
       var m2 = new Model({foo: 'baz'});
-      var collection = new Collection([m2]);
+
+      collection = new Collection([m2]);
 
       compositeView = new CompositeView({
         model: m1,
@@ -446,20 +447,56 @@ describe('composite view', function() {
       compositeView.render();
 
       spyOn(compositeView, 'renderModel').andCallThrough();
-
-      var m3 = new Model({foo: 'quux'});
-      var m4 = new Model({foo: 'widget'});
-      collection.reset([m3, m4]);
     });
 
-    it('should not re-render the template with the model', function() {
-      expect(compositeView.renderModel).not.toHaveBeenCalled();
+    describe('and then resetting the collection', function() {
+      beforeEach(function() {
+        var m3 = new Model({foo: 'quux'});
+        var m4 = new Model({foo: 'widget'});
+        collection.reset([m3, m4]);
+      });
+
+      it('should not re-render the template with the model', function() {
+        expect(compositeView.renderModel).not.toHaveBeenCalled();
+      });
+
+      it('should render the collections items', function() {
+        expect(compositeView.$el).not.toHaveText(/baz/);
+        expect(compositeView.$el).toHaveText(/quux/);
+        expect(compositeView.$el).toHaveText(/widget/);
+      });
     });
 
-    it('should render the collections items', function() {
-      expect(compositeView.$el).not.toHaveText(/baz/);
-      expect(compositeView.$el).toHaveText(/quux/);
-      expect(compositeView.$el).toHaveText(/widget/);
+    describe('and then adding to the collection', function() {
+      beforeEach(function() {
+        var m3 = new Model({foo: 'quux'});
+        collection.add(m3);
+      });
+
+      it('should not re-render the template with the model', function() {
+        expect(compositeView.renderModel).not.toHaveBeenCalled();
+      });
+
+      it('should add to the collections items', function() {
+        expect(compositeView.$el).toHaveText(/bar/);
+        expect(compositeView.$el).toHaveText(/baz/);
+        expect(compositeView.$el).toHaveText(/quux/);
+      });
+    });
+
+    describe('and then removing from the collection', function() {
+      beforeEach(function() {
+        var model = collection.at(0);
+        collection.remove(model);
+      });
+
+      it('should not re-render the template with the model', function() {
+        expect(compositeView.renderModel).not.toHaveBeenCalled();
+      });
+
+      it('should remove from the collections items', function() {
+        expect(compositeView.$el).not.toHaveText(/baz/);
+      });
     });
   });
 

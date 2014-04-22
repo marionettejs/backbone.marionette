@@ -7,10 +7,6 @@ Marionette.View = Backbone.View.extend({
   constructor: function(options){
     _.bindAll(this, "render");
 
-    if (_.isObject(this.behaviors)) {
-      new Marionette.Behaviors(this);
-    }
-
     // this exposes view options to the view initializer
     // this is a backfill since backbone removed the assignment
     // of this.options
@@ -19,6 +15,11 @@ Marionette.View = Backbone.View.extend({
 
     // parses out the @ui DSL for events
     this.events = this.normalizeUIKeys(_.result(this, 'events'));
+
+    if (_.isObject(this.behaviors)) {
+      new Marionette.Behaviors(this);
+    }
+
     Backbone.View.prototype.constructor.apply(this, arguments);
 
     Marionette.MonitorDOMRefresh(this);

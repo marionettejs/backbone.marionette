@@ -8,9 +8,6 @@ var Marionette = (function(global, Backbone, _){
   var Marionette = {};
   Backbone.Marionette = Marionette;
 
-  // Get the DOM manipulator for later use
-  Marionette.$ = Backbone.$;
-
 // @include ../marionette.helpers.js
 // @include ../marionette.triggermethod.js
 // @include ../marionette.domRefresh.js

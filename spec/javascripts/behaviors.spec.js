@@ -538,11 +538,12 @@ describe('Behaviors', function() {
   });
 
   describe('behavior with behavior', function() {
-    var initSpy, renderSpy, entityEventSpy, viewEventSpy;
+    var initSpy, renderSpy, childRenderSpy, entityEventSpy, viewEventSpy;
     var View, v, m, c, hold, parentBehavior, childBehavior;
     beforeEach(function() {
       initSpy = sinon.spy();
       renderSpy = sinon.spy();
+      childRenderSpy = sinon.spy();
       entityEventSpy = sinon.spy();
       viewEventSpy = sinon.spy();
 
@@ -555,12 +556,13 @@ describe('Behaviors', function() {
           childB: {}
         }
       });
+
       hold.childB = Marionette.Behavior.extend({
         initialize: function() {
           initSpy();
           childBehavior = this;
         },
-        onRender: renderSpy,
+        onRender: childRenderSpy,
         ui: {
           child: '.child'
         },
@@ -583,6 +585,7 @@ describe('Behaviors', function() {
         ui: {
           view: '.view'
         },
+        onRender: renderSpy,
         behaviors: {
           parentB: {}
         }
@@ -591,7 +594,8 @@ describe('Behaviors', function() {
       m = new Backbone.Model();
       c = new Backbone.Collection();
       v = new View({model: m, collection: c});
-      v.render();
+
+      spyOn(v, 'undelegateEvents').andCallThrough();
     });
 
     it('should call initialize on child behavior', function() {
@@ -600,7 +604,18 @@ describe('Behaviors', function() {
 
     it('should call onRender on child behavior', function() {
       v.triggerMethod('render');
-      expect(renderSpy).toHaveBeenCalledOn(childBehavior);
+      expect(childRenderSpy).toHaveBeenCalledOn(childBehavior);
+    });
+
+    it('should call onRender on the view', function() {
+      v.triggerMethod('render');
+      expect(renderSpy).toHaveBeenCalledOn(v);
+      expect(renderSpy).toHaveBeenCalledOnce();
+    });
+
+    it('should call undelegateEvents once', function() {
+      v.undelegateEvents();
+      expect(v.undelegateEvents.callCount).toBe(1);
     });
 
     it('should proxy modelEvents to child behavior', function() {
@@ -614,11 +629,13 @@ describe('Behaviors', function() {
     });
 
     it('should proxy view UI events to child behavior', function() {
+      v.render();
       v.$('.view').trigger('click');
       expect(viewEventSpy).toHaveBeenCalledOn(childBehavior);
     });
 
     it('should proxy child behavior UI events to child behavior', function() {
+      v.render();
       v.$('.child').trigger('click');
       expect(viewEventSpy).toHaveBeenCalledOn(childBehavior);
     });

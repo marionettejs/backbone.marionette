@@ -56,16 +56,12 @@ module.exports = function(grunt) {
     },
 
     preprocess: {
-      core_build: {
+      core: {
         src: 'src/build/marionette.core.js',
         dest: 'lib/core/backbone.marionette.js'
       },
-      amd: {
-        src: 'src/build/amd.core.js',
-        dest: 'tmp/backbone.marionette.amd.js'
-      },
       bundle: {
-        src: 'src/build/marionette.bundle.js',
+        src: 'src/build/marionette.bundled.js',
         dest: 'tmp/backbone.marionette.js'
       }
     },
@@ -82,33 +78,16 @@ module.exports = function(grunt) {
         options: {
           banner: "<%= meta.banner %>"
         },
-        src: '<%= preprocess.bundle.dest %>',
+        src: [
+          '<%= assets.babysitter %>',
+          '<%= assets.wreqr %>',
+          '<%= preprocess.bundle.dest %>'
+        ],
         dest: 'lib/backbone.marionette.js'
-      },
-      amd: {
-        src: '<%= preprocess.amd.dest %>',
-        dest: 'lib/core/amd/backbone.marionette.js'
       }
     },
 
     uglify : {
-      amd : {
-        options: {
-          banner: '<%= meta.banner %>'
-        },
-        src : '<%= concat.amd.dest %>',
-        dest : 'lib/core/amd/backbone.marionette.min.js',
-      },
-      bundle: {
-        src : '<%= concat.bundle.dest %>',
-        dest : 'lib/backbone.marionette.min.js',
-        options : {
-          banner: '<%= meta.banner %>',
-          sourceMap : 'lib/backbone.marionette.map',
-          sourceMappingURL : 'backbone.marionette.map',
-          sourceMapPrefix : 2,
-        }
-      },
       core: {
         src : '<%= concat.core.dest %>',
         dest : 'lib/core/backbone.marionette.min.js',
@@ -117,6 +96,17 @@ module.exports = function(grunt) {
           sourceMap : 'lib/core/backbone.marionette.map',
           sourceMappingURL : '<%= uglify.bundle.options.sourceMappingURL %>',
           sourceMapPrefix : 1
+        }
+      },
+
+      bundle: {
+        src : '<%= concat.bundle.dest %>',
+        dest : 'lib/backbone.marionette.min.js',
+        options : {
+          banner: '<%= meta.banner %>',
+          sourceMap : 'lib/backbone.marionette.map',
+          sourceMappingURL : 'backbone.marionette.map',
+          sourceMapPrefix : 2
         }
       }
     },

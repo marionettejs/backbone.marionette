@@ -7,8 +7,6 @@
   } else if (typeof exports !== 'undefined') {
     var Backbone = require('backbone');
     var _ = require('underscore');
-    require('backbone.wreqr');
-    require('backbone.babysitter');
     factory(root, exports, Backbone, _);
   } else {
     root.Marionette = factory(root, {}, root.Backbone, root._);

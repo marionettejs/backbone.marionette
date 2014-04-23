@@ -3,7 +3,7 @@
   "description": "Make your Backbone.js apps dance!",
   "version": "1.8.8",
   "homepage": "https://github.com/marionettejs/backbone.marionette",
-  "main": "lib/core/amd/backbone.marionette.js",
+  "main": "lib/core/backbone.marionette.js",
   "keywords": [
     "backbone",
     "plugin",

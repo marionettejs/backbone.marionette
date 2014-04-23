@@ -4,7 +4,7 @@
   "homepage": "http://marionettejs.org",
   "main": [
     "./lib/backbone.marionette.js",
-    "./lib/core/amd/backbone.marionette.js"
+    "./lib/core/backbone.marionette.js"
   ],
   "version": "1.8.8",
   "keywords": [

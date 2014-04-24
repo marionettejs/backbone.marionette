@@ -162,7 +162,7 @@ Marionette.CollectionView = Marionette.View.extend({
     if (EmptyView && !this._showingEmptyView) {
       this._showingEmptyView = true;
       var model = new Backbone.Model();
-      this.addChild(model, EmptyView, -1);
+      this.addEmptyView(model, EmptyView);
     }
   },
 
@@ -179,6 +179,36 @@ Marionette.CollectionView = Marionette.View.extend({
   // Retrieve the empty view type
   getEmptyView: function() {
     return Marionette.getOption(this, 'emptyView');
+  },
+
+  // Render and show the emptyView. Similar to addChild method
+  // but "child:added" events are not fired, and the event from
+  // emptyView are not forwarded
+  addEmptyView: function(child, EmptyView){
+
+    // get the emptyViewOptions, falling back to childViewOptions
+    var emptyViewOptions = Marionette.getOption(this, 'emptyViewOptions') ||
+                          Marionette.getOption(this, 'childViewOptions');
+
+    if (_.isFunction(emptyViewOptions)){
+      emptyViewOptions = emptyViewOptions.call(this);
+    }
+
+    // build the empty view
+    var view = this.buildChildView(child, EmptyView, emptyViewOptions);
+
+    // Store the `emptyView` like a `childView` so we can properly
+    // remove and/or close it later
+    this.children.add(view);
+
+    // Render it and show it
+    this.renderChildView(view, -1);
+
+    // call the 'show' method if the collection view
+    // has already been shown
+    if (this._isShown){
+      Marionette.triggerMethod.call(view, 'show');
+    }
   },
 
   // Retrieve the childView type, either from `this.options.childView`

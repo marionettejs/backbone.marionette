@@ -24,6 +24,7 @@ will provide features such as `onShow` callbacks, etc. Please see
   * [CollectionView's `addItemView`](#collectionviews-additemview)
 * [CollectionView's `emptyView`](#collectionviews-emptyview)
   * [CollectionView's `getEmptyView`](#collectionviews-getemptyview)
+  * [CollectionView's `emptyViewOptions`](#collectionviews-emptyviewoptions)
 * [Callback Methods](#callback-methods)
   * [onBeforeRender callback](#onbeforerender-callback)
   * [onRender callback](#onrender-callback)
@@ -293,6 +294,24 @@ Backbone.Marionette.CollectionView.extend({
   isEmpty: function(collection) {
     // some logic to calculate if the view should be rendered as empty
     return someBoolean;
+```
+
+### CollectionView's `emptyViewOptions`
+
+Similar to `itemView` and `itemViewOptions`, there is an `emptyViewOptions` property that will be passed to the `emptyView` constructor. It can be provided as an object literal or as a function.
+
+```js
+EmptyView = Backbone.Marionette.ItemView({
+  initialize: function(options){
+    console.log(options.foo); // => "bar"
+  }
+});
+
+CollectionView = Backbone.Marionette.CollectionView({
+  emptyView: EmptyView,
+
+  emptyViewOptions: {
+    foo: "bar"
   }
 });
 ```

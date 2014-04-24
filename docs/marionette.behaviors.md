@@ -46,8 +46,8 @@ This method has a default implementation that is simple to override. It is respo
 
 ```js
 getBehaviorClass: function(options, key) {
-    if (options.BehaviorClass) {
-    return options.BehaviorClass;
+    if (options.behaviorClass) {
+        return options.behaviorClass;
     }
 
     return Behaviors.behaviorsLookup[key];

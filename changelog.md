@@ -1,3 +1,8 @@
+### v1.8.3 [view commit logs](https://github.com/marionettejs/backbone.marionette/compare/v1.8.2...v1.8.3)
+
+  * Fixes
+    * Behaviors now have access to the views options and events during their initialize.
+
 ### v1.8.2 [view commit logs](https://github.com/marionettejs/backbone.marionette/compare/v1.8.0...v1.8.2)
 
   * Fixes

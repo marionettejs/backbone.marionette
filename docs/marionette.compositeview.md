@@ -19,7 +19,7 @@ will provide features such as `onShow` callbacks, etc. Please see
 
 For example, if you're rendering a treeview control, you may
 want to render a collection view with a model and template so
-that it will show a parent item with children in the tree.
+that it will show a parent child with children in the tree.
 
 You can specify a `modelView` to use for the model. If you don't
 specify one, it will default to the `Marionette.ItemView`.
@@ -41,7 +41,7 @@ For more examples, see my blog post on
 ## Documentation Index
 
 * [Composite Model `template`](#composite-model-template)
-* [CompositeView's `itemViewContainer`](#compositeviews-itemviewcontainer)
+* [CompositeView's `childViewContainer`](#compositeviews-childviewcontainer)
 * [CompositeView's `appendHtml`](#compositeviews-appendhtml)
 * [Recursive By Default](#recursive-by-default)
 * [Model And Collection Rendering](#model-and-collection-rendering)
@@ -61,18 +61,18 @@ new MyComp({
 });
 ```
 
-## CompositeView's `itemViewContainer`
+## CompositeView's `childViewContainer`
 
 By default the composite view uses the same `appendHtml` method that the
 collection view provides. This means the view will call jQuery's `.append`
-to move the HTML contents from the item view instance in to the collection
+to move the HTML contents from the child view instance in to the collection
 view's `el`.
 
 This is typically not very useful as a composite view will usually render
-a container DOM element in which the item views should be placed.
+a container DOM element in which the child views should be placed.
 
 For example, if you are building a table view, and want to append each
-item from the collection in to the `<tbody>` of the table, you might
+child from the collection in to the `<tbody>` of the table, you might
 do this with a template:
 
 ```html
@@ -92,7 +92,7 @@ do this with a template:
       </tr>
     </thead>
 
-    <!-- want to insert collection items, here -->
+    <!-- want to insert collection children, here -->
     <tbody></tbody>
 
     <tfoot>
@@ -104,8 +104,8 @@ do this with a template:
 </script>
 ```
 
-To get your itemView instances to render within the `<tbody>` of this
-table structure, specify an `itemViewContainer` in your composite view,
+To get your childView instances to render within the `<tbody>` of this
+table structure, specify an `childViewContainer` in your composite view,
 like this:
 
 ```js
@@ -115,20 +115,20 @@ RowView = Backbone.Marionette.ItemView.extend({
 });
 
 TableView = Backbone.Marionette.CompositeView.extend({
-  itemView: RowView,
+  childView: RowView,
 
-  // specify a jQuery selector to put the itemView instances in to
-  itemViewContainer: "tbody",
+  // specify a jQuery selector to put the `childView` instances into
+  childViewContainer: "tbody",
 
   template: "#table-template"
 });
 ```
 
-This will put all of the `itemView` instances in to the `<tbody>` tag of
+This will put all of the `childView` instances into the `<tbody>` tag of
 the composite view's rendered template, correctly producing the table
 structure.
 
-Alternatively, you can specify a function as the `itemViewContainer`. This
+Alternatively, you can specify a function as the `childViewContainer`. This
 function needs to return a jQuery selector string, or a jQuery selector
 object.
 
@@ -136,7 +136,7 @@ object.
 var TableView = Backbone.Marionette.CompositeView.extend({
   // ...
 
-  itemViewContainer: function(){
+  childViewContainer: function(){
     return "#tbody"
   }
 });
@@ -147,22 +147,22 @@ only one value can be returned. Upon returning the first value, it will
 be cached and that value will be used for the remainder of that view
 instance' lifecycle.
 
-Alternatively, the `itemViewContainer` can be supplied in the constructor
+Alternatively, the `childViewContainer` can be supplied in the constructor
 function options:
 
 ```js
 var myComp = new Marionette.CompositeView({
   // ...,
 
-  itemViewContainer: "#tbody"
+  childViewContainer: "#tbody"
 });
 ```
 
 ## CompositeView's `appendHtml`
 
 
-Sometimes the `itemViewContainer` configuration is insuficient for
-specifying where the itemView instance should be placed. If this is the
+Sometimes the `childViewContainer` configuration is insuficient for
+specifying where the `childView` instance should be placed. If this is the
 case, you can override the `appendHtml` method with your own implementation.
 
 For more information on this method, see the [CollectionView's documentation](https://github.com/marionettejs/backbone.marionette/blob/master/docs/marionette.collectionview.md).
@@ -171,16 +171,16 @@ For more information on this method, see the [CollectionView's documentation](ht
 
 The default rendering mode for a `CompositeView` assumes a
 hierarchical, recursive structure. If you configure a composite
-view without specifying an `itemView`, you'll get the same
-composite view type rendered for each item in the collection. If
-you need to override this, you can specify a `itemView` in the
+view without specifying an `childView`, you'll get the same
+composite view type rendered for each child in the collection. If
+you need to override this, you can specify a `childView` in the
 composite view's definition:
 
 ```js
-var ItemView = Backbone.Marionette.ItemView.extend({});
+var ChildView = Backbone.Marionette.ItemView.extend({});
 
 var CompView = Backbone.Marionette.CompositeView.extend({
-  itemView: ItemView
+  childView: ChildView
 });
 ```
 
@@ -190,8 +190,8 @@ The model and collection for the composite view will re-render
 themselves under the following conditions:
 
 * When the collection's "reset" event is fired, it will only re-render the collection within the composite, and not the wrapper template
-* When the collection has a model added to it (the "add" event is fired), it will render that one item to the rendered list
-* When the collection has a model removed (the "remove" event is fired), it will remove that one item from the rendered list
+* When the collection has a model added to it (the "add" event is fired), it will render that one child into the list
+* When the collection has a model removed (the "remove" event is fired), it will remove that one child from the rendered list
 
 You can also manually re-render either or both of them:
 

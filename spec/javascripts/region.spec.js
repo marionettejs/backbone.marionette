@@ -373,11 +373,11 @@ describe('region', function() {
       destroy: function() {}
     });
 
-
-    var myRegion, view, destroyedSpy;
+    var myRegion, view, beforeDestroySpy ,destroyedSpy;
 
     beforeEach(function() {
       setFixtures('<div id="region"></div>');
+      beforeDestroySpy = sinon.spy();
       destroyedSpy = sinon.spy();
 
       view = new MyView();
@@ -386,10 +386,19 @@ describe('region', function() {
       spyOn(view, 'remove');
 
       myRegion = new MyRegion();
+      myRegion.on('before:destroy', beforeDestroySpy);
       myRegion.on('destroy', destroyedSpy);
       myRegion.show(view);
 
       myRegion.destroy();
+    });
+
+    it('should trigger a "before:destroy" event with the view thats being destroyed', function() {
+      expect(beforeDestroySpy).toHaveBeenCalledWith(view);
+    });
+
+    it('should set "this" to the manager, from the before:destroy event', function() {
+      expect(beforeDestroySpy).toHaveBeenCalledOn(myRegion);
     });
 
     it('should trigger a destroy event', function() {

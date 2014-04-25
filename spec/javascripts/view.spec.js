@@ -26,7 +26,7 @@ describe('base view', function() {
     });
   });
 
-  describe('when using listenTo for the "destroy" event on itself, and closing the view', function() {
+  describe('when using listenTo for the "destroy" event on itself, and destroying the view', function() {
     var destroy;
 
     beforeEach(function() {

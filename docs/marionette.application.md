@@ -281,7 +281,7 @@ the name of the region to remove as a string value:
 MyApp.removeRegion('someRegion');
 ```
 
-Removing a region will properly close it before removing it from the
+Removing a region will properly destroy it before removing it from the
 application object.
 
 For more information on regions, see [the region documentation](./marionette.region.md)

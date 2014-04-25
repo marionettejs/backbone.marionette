@@ -170,6 +170,8 @@ _.extend(Marionette.Region.prototype, Backbone.Events, {
     var view = this.currentView;
     if (!view || view.isClosed){ return; }
 
+    Marionette.triggerMethod.call(this, "before:close", view);
+
     // call 'close' or 'remove', depending on which is found
     if (view.close) { view.close(); }
     else if (view.remove) { view.remove(); }

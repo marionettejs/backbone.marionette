@@ -523,12 +523,12 @@ describe('Behaviors', function() {
       v.destroy();
     });
 
-    it('should unbind listenTo on close', function() {
+    it('should unbind listenTo on destroy', function() {
       model.set('klingon', 'dominion');
       expect(listenToSpy).not.toHaveBeenCalled();
     });
 
-    it('should still be bound to "on" on close', function() {
+    it('should still be bound to "on" on destroy', function() {
       v.triggerMethod('wow');
       expect(onSpy).toHaveBeenCalled();
     });

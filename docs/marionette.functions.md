@@ -102,7 +102,7 @@ event name is capitalized, and the word "on" is tagged on to the front
 of it. Examples:
 
 * `triggerMethod("render")` fires the "onRender" function
-* `triggerMethod("before:close")` fires the "onBeforeClose" function
+* `triggerMethod("before:destroy")` fires the "onBeforeDestroy" function
 
 All arguments that are passed to the triggerMethod call are passed along to both the event and the method, with the exception of the event name not being passed to the corresponding method.
 

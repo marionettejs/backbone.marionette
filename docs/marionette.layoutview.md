@@ -28,7 +28,7 @@ will provide features such as `onShow` callbacks, etc. Please see
 * [Re-Rendering A LayoutView](#re-rendering-a-layoutview)
   * [Avoid Re-Rendering The Entire Layout](#avoid-re-rendering-the-entire-layout)
 * [Nested LayoutViews And Views](#nested-layoutviewss-and-views)
-* [Closing A LayoutView](#closing-a-layoutview)
+* [Destroying A LayoutView](#destroying-a-layoutview)
 * [Custom Region Type](#custom-region-type)
 * [Region Naming](#region-naming)
 
@@ -138,9 +138,9 @@ first render has happened, though, the render function is modified to
 account for re-rendering with regions in the layoutView.
 
 After the first render, all subsequent renders will force every
-region to close by calling the `close` method on them. This will
-force every view in the region, and sub-views if any, to be closed
-as well. Once the regions have been closed, the regions will be
+region to destroy by calling the `destroy` method on them. This will
+force every view in the region, and sub-views if any, to be destroyd
+as well. Once the regions have been destroyd, the regions will be
 reset so that they are no longer referencing the element of the previous
 layoutView render.
 
@@ -182,16 +182,16 @@ layoutView.show(new MenuView());
 You can nest layoutViews into region managers as deeply as you want.
 This provides for a well organized, nested view structure.
 
-## Closing A LayoutView
+## Destroying A LayoutView
 
 When you are finished with a layoutView, you can call the
-`close` method on it. This will ensure that all of the region managers
-within the layoutView are closed correctly, which in turn
-ensures all of the views shown within the regions are closed correctly.
+`destroy` method on it. This will ensure that all of the region managers
+within the layoutView are destroyd correctly, which in turn
+ensures all of the views shown within the regions are destroyd correctly.
 
 If you are showing a layoutView within a parent region manager, replacing
-the layoutView with another view or another layoutView will close the current
-one, the same it will close a view.
+the layoutView with another view or another layoutView will destroy the current
+one, the same it will destroy a view.
 
 All of this ensures that layoutViews and the views that they
 contain are cleaned up correctly.
@@ -300,7 +300,7 @@ complete list refer to the API documentation for each Class on the prototype cha
 * constructor
 * regionType
 * render
-* close
+* destroy
 * addRegion
 * addRegions
 * removeRegion

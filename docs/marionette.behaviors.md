@@ -25,13 +25,13 @@ Marionette.Behaviors.behaviorsLookup = function() {
 
 By default the behaviors are looked up by their key value in a given views behavior hash.
 
-In this sample (using the default `getBehaviorClass` implementation) your code will expect the following behaviors to be present in `window.Behaviors.CloseWarn` and `window.Behaviors.ToolTip`
+In this sample (using the default `getBehaviorClass` implementation) your code will expect the following behaviors to be present in `window.Behaviors.DestroyWarn` and `window.Behaviors.ToolTip`
 
 ```js
 var MyView = Marionette.ItemView.extend({
 	behaviors: {
-		CloseWarn: {
-			message: "you are closing all your data is now gone!"
+		DestroyWarn: {
+			message: "you are destroying all your data is now gone!"
 		},
 		ToolTip: {
 			text: "what a nice mouse you have"

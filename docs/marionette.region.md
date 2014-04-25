@@ -1,6 +1,6 @@
 # Marionette.Region
 
-Regions provide consistent methods to manage, show and close
+Regions provide consistent methods to manage, show and destroy
 views in your applications and layouts. They use a jQuery selector
 to show your views in the correct place.
 
@@ -78,7 +78,7 @@ var mgr = new Backbone.Marionette.Region({
 ### Showing a View
 
 Once a region is defined, you can call its `show`
-and `close` methods to display and shut-down a view:
+and `destroy` methods to display and shut-down a view:
 
 ```js
 var myView = new MyView();
@@ -86,13 +86,13 @@ var myView = new MyView();
 // render and display the view
 MyApp.mainRegion.show(myView);
 
-// closes the current view
-MyApp.mainRegion.close();
+// destroys the current view
+MyApp.mainRegion.destroy();
 ```
 
 If you replace the current view with a new view by calling `show`,
-by default it will automatically close the previous view.
-You can prevent this behavior by passing `{preventClose: true}` in the options
+by default it will automatically destroy the previous view.
+You can prevent this behavior by passing `{preventDestroy: true}` in the options
 parameter. Several events will also be triggered on the views; see
 [Region Events And Callbacks](#region-events-and-callbacks) for details.
 
@@ -102,22 +102,22 @@ var myView = new MyView();
 MyApp.mainRegion.show(myView);
 
 // Replace the view with another. The
-// `close` method is called for you
+// `destroy` method is called for you
 var anotherView = new AnotherView();
 MyApp.mainRegion.show(anotherView);
 
 // Replace the view with another.
-// Prevent `close` from being called
+// Prevent `destroy` from being called
 var anotherView2 = new AnotherView();
-MyApp.mainRegion.show(anotherView2, { preventClose: true });
+MyApp.mainRegion.show(anotherView2, { preventDestroy: true });
 ```
 
-NOTE: When using `preventClose: true` you must be careful to cleanup your old views
+NOTE: When using `preventDestroy: true` you must be careful to cleanup your old views
 manually to prevent memory leaks.
 
 ### `reset` A Region
 
-A region can be `reset` at any time. This closes any existing view
+A region can be `reset` at any time. This destroys any existing view
 being displayed, and deletes the cached `el`. The next time the
 region shows a view, the region's `el` is queried from
 the DOM.
@@ -200,17 +200,17 @@ MyApp.someRegion.attachView(myView);
 
 ### Events raised during `show`:
 A region will raise a few events when showing
-and closing views:
+and destroying views:
 
 * "before:show" / `onBeforeShow` - Called on the view instance after the view has been rendered, but before its been displayed.
 * "before:show" / `onBeforeShow` - Called on the region instance after the view has been rendered, but before its been displayed.
 * "show" / `onShow` - Called on the view instance when the view has been rendered and displayed.
 * "show" / `onShow` - Called on the region instance when the view has been rendered and displayed.
 * "before:destroy" / `onBeforeDestroy` - Called on the region instance before the view has been destroyed.
-* "close" / `onClose` - Called when the view has been closed.
+* "destroy" / `onDestroy` - Called when the view has been destroyed.
 
 These events can be used to run code when your region
-opens and closes views.
+opens and destroys views.
 
 ```js
 MyApp.mainRegion.on("before:show", function(view){
@@ -223,7 +223,7 @@ MyApp.mainRegion.on("show", function(view){
   // with the region via `this`
 });
 
-MyApp.mainRegion.on("close", function(view){
+MyApp.mainRegion.on("destroy", function(view){
   // manipulate the `view` or do something extra
   // with the region via `this`
 });

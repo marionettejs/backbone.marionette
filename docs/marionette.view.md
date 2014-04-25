@@ -13,8 +13,8 @@ behaviors that are shared across all views.
 
 * [Binding To View Events](#binding-to-view-events)
 * [View onShow](#view-onshow)
-* [View close](#view-close)
-* [View onBeforeClose](#view-onbeforeclose)
+* [View destroy](#view-destroy)
+* [View onBeforeDestroy](#view-onbeforedestroy)
 * [View "dom:refresh" / onDomRefresh event](#view-domrefresh--ondomrefresh-event)
 * [View.triggers](#viewtriggers)
 * [View.events](#viewevents)
@@ -88,41 +88,41 @@ var LayoutView = Backbone.Marionette.LayoutView.extend({
 });
 ```
 
-## View close
+## View destroy
 
-View implements a `close` method, which is called by the region
+View implements a `destroy` method, which is called by the region
 managers automatically. As part of the implementation, the following
 are performed:
 
-* call an `onBeforeClose` event on the view, if one is provided
-* call an `onClose` event on the view, if one is provided
+* call an `onBeforeDestroy` event on the view, if one is provided
+* call an `onDestroy` event on the view, if one is provided
 * unbind all custom view events
 * unbind all DOM events
 * remove `this.el` from the DOM
 * unbind all `listenTo` events
 
-By providing an `onClose` method in your view definition, you can
+By providing an `onDestroy` method in your view definition, you can
 run custom code for your view that is fired after your view has been
-closed and cleaned up. The `onClose` method will be passed any arguments
-that `close` was invoked with. This lets you handle any additional clean
-up code without having to override the `close` method.
+destroyd and cleaned up. The `onDestroy` method will be passed any arguments
+that `destroy` was invoked with. This lets you handle any additional clean
+up code without having to override the `destroy` method.
 
 ```js
 MyView = Backbone.Marionette.ItemView.extend({
-  onClose: function(arg1, arg2){
-    // custom cleanup or closing code, here
+  onDestroy: function(arg1, arg2){
+    // custom cleanup or destroying code, here
   }
 });
 
 var v = new MyView();
-v.close(arg1, arg2);
+v.destroy(arg1, arg2);
 ```
 
-## View onBeforeClose
+## View onBeforeDestroy
 
-When closing a view, an `onBeforeClose` method will be called, if it
-has been provided, just before the view closes. It will be passed any arguments
-that `close` was invoked with.
+When destroying a view, an `onBeforeDestroy` method will be called, if it
+has been provided, just before the view destroys. It will be passed any arguments
+that `destroy` was invoked with.
 
 ### View "dom:refresh" / onDomRefresh event
 

@@ -28,16 +28,16 @@ will provide features such as `onShow` callbacks, etc. Please see
 * [Callback Methods](#callback-methods)
   * [onBeforeRender callback](#onbeforerender-callback)
   * [onRender callback](#onrender-callback)
-  * [onBeforeClose callback](#beforeclose-callback)
-  * [onClose callback](#onclose-callback)
+  * [onBeforeDestroy callback](#beforedestroy-callback)
+  * [onDestroy callback](#ondestroy-callback)
   * [onBeforeChildAdded callback](#onbeforechildadded-callback)
   * [onAfterChildAdded callback](#onafterchildadded-callback)
   * [onChildRemoved callback](#onchildremoved-callback)
 * [CollectionView Events](#collectionview-events)
   * ["before:render" event](#beforerender-event)
   * ["render" event](#render-event)
-  * ["before:close" event](#beforeclose-event)
-  * ["closed" / "collection:closed" event](#closed--collectionclosed-event)
+  * ["before:destroy" event](#beforedestroy-event)
+  * ["destroyed" / "collection:destroyed" event](#destroyed--collectiondestroyed-event)
   * ["before:child:added" / "after:child:added" event](#beforechildadded--afterchildadded-event)
   * ["before:child:remove" event](#beforechildremoved-event)
   * ["child:removed" event](#childremoved-event)
@@ -47,7 +47,7 @@ will provide features such as `onShow` callbacks, etc. Please see
 * [CollectionView: Re-render Collection](#collectionview-re-render-collection)
 * [CollectionView's appendHtml](#collectionviews-appendhtml)
 * [CollectionView's children](#collectionviews-children)
-* [CollectionView close](#collectionview-close)
+* [CollectionView destroy](#collectionview-destroy)
 
 ## CollectionView's `childView`
 
@@ -202,7 +202,7 @@ childEvents: {
   "render": function() {
     console.log("a childView has been rendered");
   },
-  "onChildClose": "someFn" // where the collection view has a method `someFn`
+  "onChildDestroy": "someFn" // where the collection view has a method `someFn`
 }
 ```
 
@@ -331,25 +331,25 @@ Backbone.Marionette.CollectionView.extend({
 });
 ```
 
-### onBeforeClose callback
+### onBeforeDestroy callback
 
-This method is called just before closing the view.
+This method is called just before destroying the view.
 
 ```js
 Backbone.Marionette.CollectionView.extend({
-  onBeforeClose: function(){
+  onBeforeDestroy: function(){
     // do stuff here
   }
 });
 ```
 
-### onClose callback
+### onDestroy callback
 
-This method is called just after closing the view.
+This method is called just after destroying the view.
 
 ```js
 Backbone.Marionette.CollectionView.extend({
-  onClose: function(){
+  onDestroy: function(){
     // do stuff here
   }
 });
@@ -446,26 +446,26 @@ myView.on("collection:rendered", function(){
 myView.render();
 ```
 
-### "before:close" event
+### "before:destroy" event
 
-Triggered just before closing the view. A "collection:before:close" /
-`onCollectionBeforeClose` event will also be fired
+Triggered just before destroying the view. A "collection:before:destroy" /
+`onCollectionBeforeDestroy` event will also be fired
 
 ```js
 MyView = Backbone.Marionette.CollectionView.extend({...});
 
 var myView = new MyView();
 
-myView.on("collection:before:close", function(){
-  alert("the collection view is about to be closed");
+myView.on("collection:before:destroy", function(){
+  alert("the collection view is about to be destroyed");
 });
 
-myView.close();
+myView.destroy();
 ```
 
-### "closed" / "collection:closed" event
+### "destroyed" / "collection:destroyed" event
 
-Triggered just after closing the view, both with corresponding
+Triggered just after destroying the view, both with corresponding
 method calls.
 
 ```js
@@ -473,11 +473,11 @@ MyView = Backbone.Marionette.CollectionView.extend({...});
 
 var myView = new MyView();
 
-myView.on("collection:closed", function(){
-  alert("the collection view is now closed");
+myView.on("collection:destroyed", function(){
+  alert("the collection view is now destroyed");
 });
 
-myView.close();
+myView.destroy();
 ```
 
 ### "before:child:added" / "after:child:added" event
@@ -518,7 +518,7 @@ cv.on("after:child:added", function(viewInstance){
 ### "before:child:removed"
 
 This is triggered after the childView instance has been
-removed from the collection, but before it has been closed.
+removed from the collection, but before it has been destroyed.
 
 ```js
 cv.on("before:child:removed", function(childView){
@@ -528,7 +528,7 @@ cv.on("before:child:removed", function(childView){
 
 ### "child:removed" event
 
-Triggered after a childView instance has been closed and
+Triggered after a childView instance has been destroyed and
 removed, when its child was deleted or removed from the
 collection.
 
@@ -608,12 +608,12 @@ When a model is added to the collection, the collection view will render that
 one model in to the collection of child views.
 
 When a model is removed from a collection (or destroyed / deleted), the collection
-view will close and remove that model's child view.
+view will destroy and remove that model's child view.
 
 ## CollectionView: Re-render Collection
 
 If you need to re-render the entire collection, you can call the
-`view.render` method. This method takes care of closing all of
+`view.render` method. This method takes care of destroying all of
 the child views that may have previously been opened.
 
 ## CollectionView's appendHtml
@@ -699,9 +699,9 @@ cv.children.each(function(view){
 For more information on the available features and functionality of
 the `.children`, see the [Backbone.BabySitter documentation](https://github.com/marionettejs/backbone.babysitter).
 
-## CollectionView close
+## CollectionView destroy
 
-CollectionView implements a `close` method, which is called by the
+CollectionView implements a `destroy` method, which is called by the
 region managers automatically. As part of the implementation, the
 following are performed:
 
@@ -710,17 +710,17 @@ following are performed:
 * unbind all DOM events
 * unbind all child views that were rendered
 * remove `this.el` from the DOM
-* call an `onClose` event on the view, if one is provided
+* call an `onDestroy` event on the view, if one is provided
 
-By providing an `onClose` event in your view definition, you can
+By providing an `onDestroy` event in your view definition, you can
 run custom code for your view that is fired after your view has been
-closed and cleaned up. This lets you handle any additional clean up
-code without having to override the `close` method.
+destroyed and cleaned up. This lets you handle any additional clean up
+code without having to override the `destroy` method.
 
 ```js
 Backbone.Marionette.CollectionView.extend({
-  onClose: function(){
-    // custom cleanup or closing code, here
+  onDestroy: function() {
+    // custom cleanup or destroying code, here
   }
 });
 ```

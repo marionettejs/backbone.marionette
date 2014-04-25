@@ -190,6 +190,8 @@ _.extend(Marionette.Region.prototype, Backbone.Events, {
     var view = this.currentView;
     if (!view || view.isDestroyed) { return; }
 
+    Marionette.triggerMethod.call(this, 'before:destroy', view);
+
     // call 'destroy' or 'remove', depending on which is found
     if (view.destroy) { view.destroy(); }
     else if (view.remove) { view.remove(); }

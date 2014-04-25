@@ -358,11 +358,12 @@ describe("region", function(){
       }
     });
 
-    var myRegion, view, closedSpy;
+    var myRegion, view, beforeCloseSpy, closeSpy;
 
     beforeEach(function(){
       setFixtures("<div id='region'></div>");
-      closedSpy = sinon.spy();
+      beforeCloseSpy = sinon.spy();
+      closeSpy = sinon.spy();
 
       view = new MyView();
 
@@ -370,22 +371,31 @@ describe("region", function(){
       spyOn(view, "remove");
 
       myRegion = new MyRegion();
-      myRegion.on("close", closedSpy);
+      myRegion.on("before:close", beforeCloseSpy);
+      myRegion.on("close", closeSpy);
       myRegion.show(view);
 
       myRegion.close();
     });
 
+    it("should trigger a 'before:close' event with the view that's being closed", function(){
+      expect(beforeCloseSpy).toHaveBeenCalledWith(view);
+    });
+
+    it("should set 'this' to the manager, from the before:close event", function(){
+      expect(beforeCloseSpy).toHaveBeenCalledOn(myRegion);
+    });
+
     it("should trigger a close event", function(){
-      expect(closedSpy).toHaveBeenCalled();
+      expect(closeSpy).toHaveBeenCalled();
     });
 
     it("should trigger a close event with the view that's being closed", function(){
-      expect(closedSpy).toHaveBeenCalledWith(view);
+      expect(closeSpy).toHaveBeenCalledWith(view);
     });
 
     it("should set 'this' to the manager, from the close event", function(){
-      expect(closedSpy).toHaveBeenCalledOn(myRegion);
+      expect(closeSpy).toHaveBeenCalledOn(myRegion);
     });
 
     it("should call 'close' on the already show view", function(){

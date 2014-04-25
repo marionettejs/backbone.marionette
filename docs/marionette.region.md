@@ -206,6 +206,7 @@ and closing views:
 * "before:show" / `onBeforeShow` - Called on the region instance after the view has been rendered, but before its been displayed.
 * "show" / `onShow` - Called on the view instance when the view has been rendered and displayed.
 * "show" / `onShow` - Called on the region instance when the view has been rendered and displayed.
+* "before:destroy" / `onBeforeDestroy` - Called on the region instance before the view has been destroyed.
 * "close" / `onClose` - Called when the view has been closed.
 
 These events can be used to run code when your region

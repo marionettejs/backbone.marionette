@@ -42,8 +42,8 @@ Marionette.Behaviors = (function(Marionette, _) {
       var args = _.tail(arguments, 2);
       destroy.apply(this, args);
 
-      // Call close on each behavior after
-      // closing down the view.
+      // Call destroy on each behavior after
+      // destroying the view.
       // This unbinds event listeners
       // that behaviors have registerd for.
       _.invoke(behaviors, 'destroy', args);

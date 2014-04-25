@@ -135,7 +135,7 @@ Version 1.7 represents a significant step in formalizing the ways to improve you
       ```js
         ui: function() {
           return {
-            "click @ui.foo": "attack"
+            "foo": ".foo"
           }
         }
       ```

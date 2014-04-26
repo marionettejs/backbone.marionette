@@ -1,11 +1,11 @@
 # Marionette.View
 
-Marionette has a base `Marionette.View` type that other views extend from.
+Marionette has a base `Marionette.View` class that other views extend from.
 This base view provides some common and core functionality for
 other views to take advantage of.
 
-**Note:** The `Marionette.View` type is not intended to be
-used directly. It exists as a base view for other view types
+**Note:** The `Marionette.View` class is not intended to be
+used directly. It exists as a base view for other view classes
 to be extended from, and to provide a common location for
 behaviors that are shared across all views.
 
@@ -238,7 +238,7 @@ Backbone.Marionette.ItemView.extend({
 });
 ```
 
-Triggers work with all View types that extend from the base
+Triggers work with all View classes that extend from the base
 Marionette.View.
 
 ### Trigger Handler Arguments
@@ -444,7 +444,7 @@ view.render(); //=> "I think that Backbone.Marionette is the coolest!";
 ```
 
 The `templateHelpers` can also be provided as a constructor parameter
-for any Marionette view type that supports the helpers.
+for any Marionette view class that supports the helpers.
 
 ```js
 var MyView = Marionette.ItemView.extend({
@@ -513,4 +513,4 @@ MyView = Backbone.Marionette.ItemView.extend({
 });
 ```
 
-This applies to all view types.
+This applies to all view classes.

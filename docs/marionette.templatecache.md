@@ -15,7 +15,7 @@ the speed of subsequent calls to get a template.
 ## Basic Usage
 
 To use the `TemplateCache`, call the `get` method on TemplateCache directly.
-Internally, instances of the TemplateCache type will be created and stored
+Internally, instances of the TemplateCache class will be created and stored
 but you do not have to manually create these instances yourself. `get` will
 return a compiled template function.
 

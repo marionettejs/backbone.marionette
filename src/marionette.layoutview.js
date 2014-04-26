@@ -4,11 +4,11 @@
 // Used for managing application layoutViews, nested layoutViews and
 // multiple regions within an application or sub-application.
 //
-// A specialized view type that renders an area of HTML and then
+// A specialized view class that renders an area of HTML and then
 // attaches `Region` instances to the specified `regions`.
 // Used for composite view management and sub-application areas.
 Marionette.LayoutView = Marionette.ItemView.extend({
-  regionType: Marionette.Region,
+  regionClass: Marionette.Region,
 
   // Ensure the regions are available when the `initialize` method
   // is called.
@@ -80,7 +80,7 @@ Marionette.LayoutView = Marionette.ItemView.extend({
     var that = this;
 
     var defaults = {
-      regionType: Marionette.getOption(this, 'regionType'),
+      regionClass: Marionette.getOption(this, 'regionClass'),
       parentEl: function() { return that.$el; }
     };
 

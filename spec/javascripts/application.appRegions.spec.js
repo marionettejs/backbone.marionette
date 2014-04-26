@@ -50,7 +50,7 @@ describe('application regions', function() {
     });
   });
 
-  describe('when adding custom region types to an app, with selectors', function() {
+  describe('when adding custom region classes to an app, with selectors', function() {
     var MyApp = new Backbone.Marionette.Application();
     var MyRegion = Backbone.Marionette.Region.extend({});
 
@@ -61,7 +61,7 @@ describe('application regions', function() {
       MyApp.addRegions({
         MyRegion: {
           selector: '#region',
-          regionType: MyRegion,
+          regionClass: MyRegion,
           specialOption: true
         }
       });
@@ -71,7 +71,7 @@ describe('application regions', function() {
       expect(MyApp.MyRegion).not.toBeUndefined();
     });
 
-    it('should create an instance of the specified region type', function() {
+    it('should create an instance of the specified region class', function() {
       expect(MyApp.MyRegion).toBeInstanceOf(MyRegion);
     });
 
@@ -79,7 +79,7 @@ describe('application regions', function() {
       expect(MyApp.MyRegion.el).toBe('#region');
     });
 
-    it('should pass extra options to the custom regionType', function() {
+    it('should pass extra options to the custom regionClass', function() {
       expect(MyApp.MyRegion).toHaveOwnProperty('options');
       expect(MyApp.MyRegion.options).toHaveOwnProperty('specialOption');
       expect(MyApp.MyRegion.options.specialOption).toBeTruthy();

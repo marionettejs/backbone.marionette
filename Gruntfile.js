@@ -169,7 +169,7 @@ module.exports = function(grunt) {
     watch: {
       marionette : {
         files : ['src/**/*.js', 'spec/**/*.js'],
-        tasks : ['lint', 'jasmine:marionette']
+        tasks : ['test']
       },
       server : {
         files : ['src/**/*.js', 'spec/**/*.js'],
@@ -237,9 +237,9 @@ module.exports = function(grunt) {
 
   grunt.registerTask('lint', 'Lints our sources', ['lintspaces', 'jshint']);
 
-  grunt.registerTask('dev', 'Auto-lints while writing code.', ['lint', 'unwrap', 'preprocess:bundle', 'jasmine:marionette', 'watch:marionette']);
-
   grunt.registerTask('test', 'Run the unit tests.', ['verify-bower', 'lint', 'unwrap', 'preprocess:bundle', 'jasmine:marionette']);
+
+  grunt.registerTask('dev', 'Auto-lints while writing code.', ['test', 'watch:marionette']);
 
   grunt.registerTask('build', 'Build all three versions of the library.', ['clean:lib', 'bower:install', 'unwrap', 'lint', 'preprocess', 'jasmine:marionette', 'concat', 'uglify', 'clean:tmp']);
 };

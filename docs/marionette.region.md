@@ -19,8 +19,8 @@ Using the `LayoutView` class you can create nested regions.
   * [Call `attachView` On Region](#call-attachview-on-region)
 * [Region Events And Callbacks](#region-events-and-callbacks)
   * [Events raised during `show`](#events-raised-during-show)
-* [Custom Region Types](#custom-region-types)
-  * [Attaching Custom Region Types](#attaching-custom-region-types)
+* [Custom Region Classes](#custom-region-classes)
+  * [Attaching Custom Region Classes](#attaching-custom-region-classes)
   * [Instantiate Your Own Region](#instantiate-your-own-region)
 
 ## Defining An Application Region
@@ -250,16 +250,16 @@ MyView = Marionette.ItemView.extend({
 });
 ```
 
-## Custom Region Types
+## Custom Region Classes
 
 You can define a custom region by extending from
 `Region`. This allows you to create new functionality,
 or provide a base set of functionality for your app.
 
-### Attaching Custom Region Types
+### Attaching Custom Region Classes
 
-Once you define a region type, you can attach the
-new region type by specifying the region type as the
+Once you define a region class, you can attach the
+new region class by specifying the region class as the
 value. In this case, `addRegions` expects the constructor itself, not an instance.
 
 ```js
@@ -283,7 +283,7 @@ var FooterRegion = Backbone.Marionette.Region.extend({
 MyApp.addRegions({
   footerRegion: {
     selector: "#footer",
-    regionType: FooterRegion
+    regionClass: FooterRegion
   }
 });
 ```

@@ -134,7 +134,7 @@ _.extend(Marionette.Module.prototype, Backbone.Events, {
   }
 });
 
-// Type methods to create modules
+// Class methods to create modules
 _.extend(Marionette.Module, {
 
   // Create a module, hanging off the app parameter as the parent object.

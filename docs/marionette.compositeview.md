@@ -172,7 +172,7 @@ For more information on this method, see the [CollectionView's documentation](ht
 The default rendering mode for a `CompositeView` assumes a
 hierarchical, recursive structure. If you configure a composite
 view without specifying an `childView`, you'll get the same
-composite view type rendered for each child in the collection. If
+composite view class rendered for each child in the collection. If
 you need to override this, you can specify a `childView` in the
 composite view's definition:
 

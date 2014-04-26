@@ -25,8 +25,8 @@ MyApp = new Backbone.Marionette.Application();
   * [Accessing the Global Channel](#accessing-the-global-channel)
 * [Regions And The Application Object](#regions-and-the-application-object)
   * [jQuery Selector](#jquery-selector)
-  * [Custom Region Type](#custom-region-type)
-  * [Custom Region Type And Selector](#custom-region-type-and-selector)
+  * [Custom Region Class](#custom-region-class)
+  * [Custom Region Class And Selector](#custom-region-class-and-selector)
   * [Get Region By Name](#get-region-by-name)
   * [Removing Regions](#removing-regions)
 
@@ -218,9 +218,9 @@ MyApp.addRegions({
 });
 ```
 
-### Custom Region Type
+### Custom Region Class
 
-The second is to specify a custom region type, where the region type has
+The second is to specify a custom region class, where the region class has
 already specified a selector:
 
 ```js
@@ -233,9 +233,9 @@ MyApp.addRegions({
 });
 ```
 
-### Custom Region Type And Selector
+### Custom Region Class And Selector
 
-The third method is to specify a custom region type, and a jQuery selector
+The third method is to specify a custom region class, and a jQuery selector
 for this region instance, using an object literal:
 
 ```js
@@ -245,12 +245,12 @@ MyApp.addRegions({
 
   someRegion: {
     selector: "#foo",
-    regionType: MyCustomRegion
+    regionClass: MyCustomRegion
   },
 
   anotherRegion: {
     selector: "#bar",
-    regionType: MyCustomRegion
+    regionClass: MyCustomRegion
   }
 
 });

@@ -34,7 +34,7 @@ var Foo = function(){};
 // Backbone and Marionette objects
 Foo.extend = Marionette.extend;
 
-// Now Foo can be extended to create a new type, with methods
+// Now Foo can be extended to create a new class, with methods
 var Bar = Foo.extend({
 
   someMethod: function(){ ... }

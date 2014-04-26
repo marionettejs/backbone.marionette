@@ -176,7 +176,7 @@ Marionette.CollectionView = Marionette.View.extend({
     }
   },
 
-  // Retrieve the empty view type
+  // Retrieve the empty view class
   getEmptyView: function() {
     return Marionette.getOption(this, 'emptyView');
   },
@@ -211,7 +211,7 @@ Marionette.CollectionView = Marionette.View.extend({
     }
   },
 
-  // Retrieve the childView type, either from `this.options.childView`
+  // Retrieve the childView class, either from `this.options.childView`
   // or from the `childView` in the object definition. The "options"
   // takes precedence.
   getChildView: function(child) {
@@ -304,9 +304,9 @@ Marionette.CollectionView = Marionette.View.extend({
   },
 
   // Build a `childView` for a model in the collection.
-  buildChildView: function(child, ChilddViewType, childViewOptions) {
+  buildChildView: function(child, ChildViewClass, childViewOptions) {
     var options = _.extend({model: child}, childViewOptions);
-    return new ChilddViewType(options);
+    return new ChildViewClass(options);
   },
 
   // Remove the child view and destroy it.

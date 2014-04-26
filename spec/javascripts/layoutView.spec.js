@@ -23,7 +23,7 @@ describe('layoutView', function() {
     regions: {
       regionOne: {
         selector: '#regionOne',
-        regionType: CustomRegion1
+        regionClass: CustomRegion1
       },
       regionTwo: '#regionTwo'
     }
@@ -59,15 +59,15 @@ describe('layoutView', function() {
 
   describe('on instantiation with custom region managers', function() {
     var LayoutViewCustomRegion = LayoutView.extend({
-      regionType: CustomRegion1,
+      regionClass: CustomRegion1,
       regions: {
         regionOne: {
           selector: '#regionOne',
-          regionType: CustomRegion1
+          regionClass: CustomRegion1
         },
         regionTwo: {
           selector: '#regionTwo',
-          regionType: CustomRegion2,
+          regionClass: CustomRegion2,
           specialOption: true
         },
         regionThree: {
@@ -97,13 +97,13 @@ describe('layoutView', function() {
       expect(layoutViewManager.regionThree).toBeInstanceOf(CustomRegion1);
     });
 
-    it('should instantiate marionette regions is no regionType is specified', function() {
+    it('should instantiate marionette regions is no regionClass is specified', function() {
       var layoutViewManagerNoDefault = new LayoutViewNoDefaultRegion();
       expect(layoutViewManagerNoDefault).toHaveOwnProperty('regionTwo');
       expect(layoutViewManagerNoDefault.regionTwo).toBeInstanceOf(Backbone.Marionette.Region);
     });
 
-    it('should pass extra options to the custom regionType', function() {
+    it('should pass extra options to the custom regionClass', function() {
       expect(layoutViewManager.regionTwo).toHaveOwnProperty('options');
       expect(layoutViewManager.regionTwo.options).toHaveOwnProperty('specialOption');
       expect(layoutViewManager.regionTwo.options.specialOption).toBeTruthy();

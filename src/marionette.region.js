@@ -21,37 +21,37 @@ Marionette.Region = function(options) {
 };
 
 
-// Region Type methods
+// Region Class methods
 // -------------------
 
 _.extend(Marionette.Region, {
 
   // Build an instance of a region by passing in a configuration object
-  // and a default region type to use if none is specified in the config.
+  // and a default region class to use if none is specified in the config.
   //
   // The config object should either be a string as a jQuery DOM selector,
-  // a Region type directly, or an object literal that specifies both
-  // a selector and regionType:
+  // a Region class directly, or an object literal that specifies both
+  // a selector and regionClass:
   //
   // ```js
   // {
   //   selector: "#foo",
-  //   regionType: MyCustomRegion
+  //   regionClass: MyCustomRegion
   // }
   // ```
   //
-  buildRegion: function(regionConfig, defaultRegionType) {
+  buildRegion: function(regionConfig, defaultRegionClass) {
     var regionIsString = _.isString(regionConfig);
     var regionSelectorIsString = _.isString(regionConfig.selector);
-    var regionTypeIsUndefined = _.isUndefined(regionConfig.regionType);
-    var regionIsType = _.isFunction(regionConfig);
+    var regionClassIsUndefined = _.isUndefined(regionConfig.regionClass);
+    var regionIsClass = _.isFunction(regionConfig);
 
-    if (!regionIsType && !regionIsString && !regionSelectorIsString) {
-      throwError('Region must be specified as a Region type,' +
+    if (!regionIsClass && !regionIsString && !regionSelectorIsString) {
+      throwError('Region must be specified as a Region class,' +
         'a selector string or an object with selector property');
     }
 
-    var selector, RegionType;
+    var selector, RegionClass;
 
     // get the selector for the region
 
@@ -64,29 +64,29 @@ _.extend(Marionette.Region, {
       delete regionConfig.selector;
     }
 
-    // get the type for the region
+    // get the class for the region
 
-    if (regionIsType) {
-      RegionType = regionConfig;
+    if (regionIsClass) {
+      RegionClass = regionConfig;
     }
 
-    if (!regionIsType && regionTypeIsUndefined) {
-      RegionType = defaultRegionType;
+    if (!regionIsClass && regionClassIsUndefined) {
+      RegionClass = defaultRegionClass;
     }
 
-    if (regionConfig.regionType) {
-      RegionType = regionConfig.regionType;
-      delete regionConfig.regionType;
+    if (regionConfig.regionClass) {
+      RegionClass = regionConfig.regionClass;
+      delete regionConfig.regionClass;
     }
 
-    if (regionIsString || regionIsType) {
+    if (regionIsString || regionIsClass) {
       regionConfig = {};
     }
 
     regionConfig.el = selector;
 
     // build the region instance
-    var region = new RegionType(regionConfig);
+    var region = new RegionClass(regionConfig);
 
     // override the `getEl` function if we have a parentEl
     // this must be overridden to ensure the selector is found

@@ -227,11 +227,11 @@ takes three parameters and returns a view instance to be used as the
 child view.
 
 ```js
-buildChildView: function(child, ChildViewType, childViewOptions){
-  // build the final list of options for the childView type
+buildChildView: function(child, ChildViewClass, childViewOptions){
+  // build the final list of options for the childView class
   var options = _.extend({model: child}, childViewOptions);
   // create the child view instance
-  var view = new ChildViewType(options);
+  var view = new ChildViewClass(options);
   // return it
   return view;
 },
@@ -271,7 +271,7 @@ Backbone.Marionette.CollectionView.extend({
 
 ### CollectionView's `getEmptyView`
 
-If you need the `emptyView`'s type chosen dynamically, specify `getEmptyView`:
+If you need the `emptyView`'s class chosen dynamically, specify `getEmptyView`:
 
 ```js
 Backbone.Marionette.CollectionView.extend({

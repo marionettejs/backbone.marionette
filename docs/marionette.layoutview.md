@@ -29,7 +29,7 @@ will provide features such as `onShow` callbacks, etc. Please see
   * [Avoid Re-Rendering The Entire Layout](#avoid-re-rendering-the-entire-layout)
 * [Nested LayoutViews And Views](#nested-layoutviewss-and-views)
 * [Destroying A LayoutView](#destroying-a-layoutview)
-* [Custom Region Type](#custom-region-type)
+* [Custom Region Class](#custom-region-class)
 * [Region Naming](#region-naming)
 
 ## Basic Usage
@@ -196,15 +196,15 @@ one, the same it will destroy a view.
 All of this ensures that layoutViews and the views that they
 contain are cleaned up correctly.
 
-## Custom Region Type
+## Custom Region Class
 
 If you have the need to replace the `Region` with a region class of
 your own implementation, you can specify an alternate class to use
-with the `regionType` property of the `LayoutView`.
+with the `regionClass` property of the `LayoutView`.
 
 ```js
 MyLayoutView = Backbone.Marionette.LayoutView.extend({
-  regionType: SomeCustomRegion
+  regionClass: SomeCustomRegion
 });
 ```
 
@@ -214,16 +214,16 @@ You can also specify custom `Region` classes for each `region`:
 AppLayoutView = Backbone.Marionette.LayoutView.extend({
   template: "#layout-view-template",
 
-  regionType: SomeDefaultCustomRegion,
+  regionClass: SomeDefaultCustomRegion,
 
   regions: {
     menu: {
       selector: "#menu",
-      regionType: CustomRegionTypeReference
+      regionClass: CustomRegionClassReference
     },
     content: {
       selector: "#content",
-      regionType: CustomRegionType2Reference
+      regionClass: CustomRegionClass2Reference
     }
   }
 });
@@ -298,7 +298,7 @@ complete list refer to the API documentation for each Class on the prototype cha
 
 * attributes
 * constructor
-* regionType
+* regionClass
 * render
 * destroy
 * addRegion

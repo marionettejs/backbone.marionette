@@ -2,7 +2,7 @@
 // Marionette.View
 // ---------------
 
-// The core view type that other Marionette views extend from.
+// The core view class that other Marionette views extend from.
 Marionette.View = Backbone.View.extend({
 
   constructor: function(options) {

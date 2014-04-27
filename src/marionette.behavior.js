@@ -36,8 +36,18 @@ Marionette.Behavior = (function(_, Backbone) {
       this.stopListening();
     },
 
-    // Setup class level proxy for triggerMethod.
-    triggerMethod: Marionette.triggerMethod
+    // import the `triggerMethod` to trigger events with corresponding
+    // methods if the method exists
+    triggerMethod: Marionette.triggerMethod,
+
+    // Proxy `getOption` to enable getting options from this or this.options by name.
+    getOption: Marionette.proxyGetOption,
+
+    // Proxy `unbindEntityEvents` to enable binding view's events from another entity.
+    bindEntityEvents: Marionette.proxyBindEntityEvents,
+
+    // Proxy `unbindEntityEvents` to enable unbinding view's events from another entity.
+    unbindEntityEvents: Marionette.proxyUnbindEntityEvents
   });
 
   // Borrow Backbones extend implementation

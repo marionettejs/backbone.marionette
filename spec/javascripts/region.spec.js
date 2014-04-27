@@ -4,9 +4,9 @@ describe('region', function() {
 
   describe('when creating a new region and no configuration has been provided', function() {
     it('should throw an exception saying an "el" is required', function() {
-      expect(
-        Backbone.Marionette.Region.extend({})
-      ).toThrow('An "el" must be specified for a region.');
+      expect(function () {
+        return new Backbone.Marionette.Region();
+      }).toThrow('An "el" must be specified for a region.');
     });
   });
 

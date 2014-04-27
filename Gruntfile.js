@@ -58,11 +58,27 @@ module.exports = function(grunt) {
     preprocess: {
       core: {
         src: 'src/build/marionette.core.js',
-        dest: 'lib/core/backbone.marionette.js'
+        dest: 'tmp/marionette.core.js'
       },
       bundle: {
         src: 'src/build/marionette.bundled.js',
         dest: 'tmp/backbone.marionette.js'
+      }
+    },
+
+    template: {
+      options: {
+        data: {
+          version: '<%= pkg.version %>'
+        }
+      },
+      core: {
+        src: '<%= preprocess.core.dest %>',
+        dest: 'lib/core/backbone.marionette.js'
+      },
+      bundle: {
+        src: '<%= preprocess.bundle.dest %>',
+        dest: '<%= preprocess.bundle.dest %>'
       }
     },
 
@@ -237,9 +253,9 @@ module.exports = function(grunt) {
 
   grunt.registerTask('lint', 'Lints our sources', ['lintspaces', 'jshint']);
 
-  grunt.registerTask('test', 'Run the unit tests.', ['verify-bower', 'lint', 'unwrap', 'preprocess:bundle', 'jasmine:marionette']);
+  grunt.registerTask('test', 'Run the unit tests.', ['verify-bower', 'lint', 'unwrap', 'preprocess:bundle', 'template:bundle', 'jasmine:marionette']);
 
   grunt.registerTask('dev', 'Auto-lints while writing code.', ['test', 'watch:marionette']);
 
-  grunt.registerTask('build', 'Build all three versions of the library.', ['clean:lib', 'bower:install', 'unwrap', 'lint', 'preprocess', 'jasmine:marionette', 'concat', 'uglify', 'clean:tmp']);
+  grunt.registerTask('build', 'Build all three versions of the library.', ['clean:lib', 'bower:install', 'unwrap', 'lint', 'preprocess', 'template', 'jasmine:marionette', 'concat', 'uglify', 'clean:tmp']);
 };

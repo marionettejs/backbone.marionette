@@ -19,6 +19,8 @@
 
   var previousMarionette = root.Marionette;
 
+  Marionette.VERSION = '<%= version %>';
+
   Marionette.noConflict = function() {
     root.Marionette = previousMarionette;
     return this;

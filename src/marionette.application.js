@@ -14,8 +14,6 @@ Marionette.Application = function(options) {
   this.submodules = {};
 
   _.extend(this, options);
-
-  this.triggerMethod = Marionette.triggerMethod;
 };
 
 _.extend(Marionette.Application.prototype, Backbone.Events, {
@@ -100,7 +98,11 @@ _.extend(Marionette.Application.prototype, Backbone.Events, {
     this.listenTo(this._regionManager, 'region:remove', function(name, region) {
       delete this[name];
     });
-  }
+  },
+
+  // import the `triggerMethod` to trigger events with corresponding
+  // methods if the method exists
+  triggerMethod: Marionette.triggerMethod
 });
 
 // Copy the `extend` function used by Backbone's classes

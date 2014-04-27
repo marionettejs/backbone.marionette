@@ -26,20 +26,12 @@ Marionette.View = Backbone.View.extend({
     this.listenTo(this, 'show', this.onShowCalled);
   },
 
-  // import the "triggerMethod" to trigger events with corresponding
-  // methods if the method exists
-  triggerMethod: Marionette.triggerMethod,
-
-  // Imports the "normalizeMethods" to transform hashes of
-  // events=>function references/names to a hash of events=>function references
-  normalizeMethods: Marionette.normalizeMethods,
-
   // Get the template for this view
   // instance. You can set a `template` attribute in the view
   // definition or pass a `template: "whatever"` parameter in
   // to the constructor options.
   getTemplate: function() {
-    return Marionette.getOption(this, 'template');
+    return this.getOption('template');
   },
 
   // Mix in template helper methods. Looks for a
@@ -49,7 +41,7 @@ Marionette.View = Backbone.View.extend({
   // are copies to the object passed in.
   mixinTemplateHelpers: function(target) {
     target = target || {};
-    var templateHelpers = Marionette.getOption(this, 'templateHelpers');
+    var templateHelpers = this.getOption('templateHelpers');
     if (_.isFunction(templateHelpers)) {
       templateHelpers = templateHelpers.call(this);
     }
@@ -114,8 +106,8 @@ Marionette.View = Backbone.View.extend({
   // the `triggers`, `modelEvents`, and `collectionEvents` configuration
   delegateEvents: function(events) {
     this._delegateDOMEvents(events);
-    Marionette.bindEntityEvents(this, this.model, Marionette.getOption(this, 'modelEvents'));
-    Marionette.bindEntityEvents(this, this.collection, Marionette.getOption(this, 'collectionEvents'));
+    this.bindEntityEvents(this.model, this.getOption('modelEvents'));
+    this.bindEntityEvents(this.collection, this.getOption('collectionEvents'));
   },
 
   // internal method to delegate DOM events and triggers
@@ -140,8 +132,8 @@ Marionette.View = Backbone.View.extend({
   undelegateEvents: function() {
     var args = Array.prototype.slice.call(arguments);
     Backbone.View.prototype.undelegateEvents.apply(this, args);
-    Marionette.unbindEntityEvents(this, this.model, Marionette.getOption(this, 'modelEvents'));
-    Marionette.unbindEntityEvents(this, this.collection, Marionette.getOption(this, 'collectionEvents'));
+    this.unbindEntityEvents(this.model, this.getOption('modelEvents'));
+    this.unbindEntityEvents(this.collection, this.getOption('collectionEvents'));
   },
 
   // Internal method, handles the `show` event.
@@ -217,6 +209,14 @@ Marionette.View = Backbone.View.extend({
     this.ui = this._uiBindings;
     delete this._uiBindings;
   },
+
+  // import the `triggerMethod` to trigger events with corresponding
+  // methods if the method exists
+  triggerMethod: Marionette.triggerMethod,
+
+  // Imports the "normalizeMethods" to transform hashes of
+  // events=>function references/names to a hash of events=>function references
+  normalizeMethods: Marionette.normalizeMethods,
 
   // Proxy `getOption` to enable getting options from this or this.options by name.
   getOption: Marionette.proxyGetOption,

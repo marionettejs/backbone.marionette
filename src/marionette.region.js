@@ -8,7 +8,7 @@
 
 Marionette.Region = function(options) {
   this.options = options || {};
-  this.el = Marionette.getOption(this, 'el');
+  this.el = this.getOption('el');
 
   if (!this.el) {
     throwError('An "el" must be specified for a region.', 'NoElError');
@@ -137,13 +137,8 @@ _.extend(Marionette.Region.prototype, Backbone.Events, {
 
     view.render();
 
-    Marionette.triggerMethod.call(this, 'before:show', view);
-
-    if (_.isFunction(view.triggerMethod)) {
-      view.triggerMethod('before:show');
-    } else {
-      Marionette.triggerMethod.call(view, 'before:show');
-    }
+    this.triggerMethod('before:show', view);
+    this.triggerMethod.call(view, 'before:show');
 
     if (isDifferentView) {
       this.open(view);
@@ -151,12 +146,14 @@ _.extend(Marionette.Region.prototype, Backbone.Events, {
 
     this.currentView = view;
 
-    Marionette.triggerMethod.call(this, 'show', view);
+
+    this.triggerMethod('show', view);
+    this.triggerMethod.call(view, 'show');
 
     if (_.isFunction(view.triggerMethod)) {
       view.triggerMethod('show');
     } else {
-      Marionette.triggerMethod.call(view, 'show');
+      this.triggerMethod.call(view, 'show');
     }
 
     return this;
@@ -190,13 +187,13 @@ _.extend(Marionette.Region.prototype, Backbone.Events, {
     var view = this.currentView;
     if (!view || view.isDestroyed) { return; }
 
-    Marionette.triggerMethod.call(this, 'before:destroy', view);
+    this.triggerMethod('before:destroy', view);
 
     // call 'destroy' or 'remove', depending on which is found
     if (view.destroy) { view.destroy(); }
     else if (view.remove) { view.remove(); }
 
-    Marionette.triggerMethod.call(this, 'destroy', view);
+    this.triggerMethod('destroy', view);
 
     delete this.currentView;
   },
@@ -216,7 +213,14 @@ _.extend(Marionette.Region.prototype, Backbone.Events, {
   reset: function() {
     this.destroy();
     delete this.$el;
-  }
+  },
+
+  // Proxy `getOption` to enable getting options from this or this.options by name.
+  getOption: Marionette.proxyGetOption,
+
+  // import the `triggerMethod` to trigger events with corresponding
+  // methods if the method exists
+  triggerMethod: Marionette.triggerMethod
 });
 
 // Copy the `extend` function used by Backbone's classes

@@ -23,7 +23,7 @@ Marionette.AppRouter = Backbone.Router.extend({
 
     this.options = options || {};
 
-    var appRoutes = Marionette.getOption(this, 'appRoutes');
+    var appRoutes = this.getOption('appRoutes');
     var controller = this._getController();
     this.processAppRoutes(controller, appRoutes);
     this.on('route', this._processOnRoute, this);
@@ -62,7 +62,7 @@ Marionette.AppRouter = Backbone.Router.extend({
   },
 
   _getController: function() {
-    return Marionette.getOption(this, 'controller');
+    return this.getOption('controller');
   },
 
   _addAppRoute: function(controller, route, methodName) {
@@ -73,5 +73,8 @@ Marionette.AppRouter = Backbone.Router.extend({
     }
 
     this.route(route, methodName, _.bind(method, controller));
-  }
+  },
+
+  // Proxy `getOption` to enable getting options from this or this.options by name.
+  getOption: Marionette.proxyGetOption
 });

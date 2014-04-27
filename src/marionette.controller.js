@@ -27,6 +27,11 @@ _.extend(Marionette.Controller.prototype, Backbone.Events, {
     this.off();
   },
 
+  // import the `triggerMethod` to trigger events with corresponding
+  // methods if the method exists
+  triggerMethod: Marionette.triggerMethod,
+
   // Proxy `getOption` to enable getting options from this or this.options by name.
   getOption: Marionette.proxyGetOption
+
 });

@@ -80,7 +80,7 @@ Marionette.LayoutView = Marionette.ItemView.extend({
     var that = this;
 
     var defaults = {
-      regionClass: Marionette.getOption(this, 'regionClass'),
+      regionClass: this.getOption('regionClass'),
       parentEl: function() { return that.$el; }
     };
 

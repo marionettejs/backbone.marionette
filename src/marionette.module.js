@@ -24,9 +24,6 @@ Marionette.Module = function(moduleName, app, options) {
   // By default modules start with their parents.
   this.startWithParent = true;
 
-  // Setup a proxy to the trigger method implementation.
-  this.triggerMethod = Marionette.triggerMethod;
-
   if (_.isFunction(this.initialize)) {
     this.initialize(moduleName, app, this.options);
   }
@@ -84,7 +81,7 @@ _.extend(Marionette.Module.prototype, Backbone.Events, {
     if (!this._isInitialized) { return; }
     this._isInitialized = false;
 
-    Marionette.triggerMethod.call(this, 'before:stop');
+    this.triggerMethod('before:stop');
 
     // stop the sub-modules; depth-first, to make sure the
     // sub-modules are stopped / finalized before parents
@@ -97,7 +94,7 @@ _.extend(Marionette.Module.prototype, Backbone.Events, {
     this._initializerCallbacks.reset();
     this._finalizerCallbacks.reset();
 
-    Marionette.triggerMethod.call(this, 'stop');
+    this.triggerMethod('stop');
   },
 
   // Configure the module with a definition function and any custom args
@@ -131,7 +128,11 @@ _.extend(Marionette.Module.prototype, Backbone.Events, {
   _setupInitializersAndFinalizers: function() {
     this._initializerCallbacks = new Marionette.Callbacks();
     this._finalizerCallbacks = new Marionette.Callbacks();
-  }
+  },
+
+  // import the `triggerMethod` to trigger events with corresponding
+  // methods if the method exists
+  triggerMethod: Marionette.triggerMethod
 });
 
 // Class methods to create modules

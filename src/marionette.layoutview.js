@@ -99,6 +99,22 @@ Marionette.LayoutView = Marionette.ItemView.extend({
       regions = this.regions || {};
     }
 
+    // Enable users to define `regions` as instance options.
+    //
+    // ```js
+    // new Marionette.LayoutView({
+    //   regions: {
+    //     "cat": ".doge",
+    //     "wow": {
+    //       selector: ".such",
+    //       regionClass: Coin
+    //     }
+    //   }
+    // })
+    // ```
+    //
+    _.extend(regions, this.getOption.call(options, 'regions'));
+
     this.addRegions(regions);
   },
 

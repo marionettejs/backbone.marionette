@@ -1,6 +1,10 @@
-/* jshint maxstatements: 16 */
+/* jshint maxstatements: 18 */
 describe('layoutView', function() {
   'use strict';
+
+  var template = function() {
+    return '<span class=".craft"></span><h1 id="#a-fun-game"></h1>';
+  };
 
   var LayoutView = Backbone.Marionette.LayoutView.extend({
     template: '#layout-view-manager-template',
@@ -306,6 +310,34 @@ describe('layoutView', function() {
 
     it('should return the region', function() {
       expect(this.layoutView.getRegion('regionOne')).toBe(this.region);
+    });
+  });
+
+  describe('when adding regions in a layoutViews options', function() {
+    var layoutView, CustomRegion;
+
+    beforeEach(function() {
+      CustomRegion = sinon.spy();
+      layoutView = new Backbone.Marionette.LayoutView({
+        template: template,
+        regions: {
+          war: '.craft',
+          is: {
+            regionClass: CustomRegion,
+            selector: '#a-fun-game'
+          }
+        }
+      });
+
+    });
+
+    it('should lookup and set the regions', function() {
+      expect(layoutView.getRegion('is')).toBeDefined();
+      expect(layoutView.getRegion('war')).toBeDefined();
+    });
+
+    it('should set custom region classes', function() {
+      expect(CustomRegion).toHaveBeenCalled();
     });
   });
 

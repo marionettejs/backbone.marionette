@@ -24,12 +24,15 @@ will provide features such as `onShow` callbacks, etc. Please see
 ## Documentation Index
 
 * [Basic Usage](#basic-usage)
+* [Specifying Regions As A Function](#specifying-regions-as-a-function)
+* [Overriding the default RegionManager](#overriding-the-default-regionmanager)
 * [Region Availability](#region-availability)
 * [Re-Rendering A LayoutView](#re-rendering-a-layoutview)
   * [Avoid Re-Rendering The Entire Layout](#avoid-re-rendering-the-entire-layout)
 * [Nested LayoutViews And Views](#nested-layoutviewss-and-views)
 * [Destroying A LayoutView](#destroying-a-layoutview)
 * [Custom Region Class](#custom-region-class)
+* [Adding And Removing Regions](#adding-and-removing-regions)
 * [Region Naming](#region-naming)
 
 ## Basic Usage

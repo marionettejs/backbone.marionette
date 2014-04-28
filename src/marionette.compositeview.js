@@ -26,12 +26,12 @@ Marionette.CompositeView = Marionette.CollectionView.extend({
     // to nonexistent childViewContainer
     this.once('render', function() {
       if (this.collection) {
-        this.listenTo(this.collection, 'add', this.onChildAdd);
-        this.listenTo(this.collection, 'remove', this.onChildRemove);
+        this.listenTo(this.collection, 'add', this._handleChildAdd);
+        this.listenTo(this.collection, 'remove', this._handleChildRemove);
         this.listenTo(this.collection, 'reset', this._renderChildren);
 
         if (this.sort) {
-          this.listenTo(this.collection, 'sort', this._sortViews);
+          this.listenTo(this.collection, 'sort', this._handleSort);
         }
       }
     });

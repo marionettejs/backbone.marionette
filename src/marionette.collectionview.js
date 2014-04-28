@@ -56,26 +56,28 @@ Marionette.CollectionView = Marionette.View.extend({
   // binds to.
   _initialEvents: function() {
     if (this.collection) {
-      this.listenTo(this.collection, 'add', this.onChildAdd);
-      this.listenTo(this.collection, 'remove', this.onChildRemove);
+      this.listenTo(this.collection, 'add', this._handleChildAdd);
+      this.listenTo(this.collection, 'remove', this._handleChildRemove);
       this.listenTo(this.collection, 'reset', this.render);
 
       if (this.sort) {
-        this.listenTo(this.collection, 'sort', this._sortViews);
+        this.listenTo(this.collection, 'sort', this._handleSort);
       }
     }
   },
 
+  // Internal Method
   // Handle a child added to the collection
-  onChildAdd: function(child, collection, options) {
+  _handleChildAdd: function(child, collection, options) {
     this.destroyEmptyView();
     var ChildView = this.getChildView(child);
     var index = this.collection.indexOf(child);
     this.addChild(child, ChildView, index);
   },
 
+  // Internal Method
   // get the child view by model it holds, and remove it
-  onChildRemove: function(model) {
+  _handleChildRemove: function(model) {
     var view = this.children.findByModel(model);
     this.removeChildView(view);
     this.checkEmpty();
@@ -99,7 +101,7 @@ Marionette.CollectionView = Marionette.View.extend({
 
   // Internal method. This checks for any changes in the order of the collection.
   // If the index of any view doesn't match, it will render.
-  _sortViews: function(){
+  _handleSort: function(){
     // check for any changes in sort order of views
     var orderChanged = this.collection.find(function(item, index){
       var view = this.children.findByModel(item);

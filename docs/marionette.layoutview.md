@@ -24,6 +24,7 @@ will provide features such as `onShow` callbacks, etc. Please see
 ## Documentation Index
 
 * [Basic Usage](#basic-usage)
+* [Region Options](#region-options)
 * [Specifying Regions As A Function](#specifying-regions-as-a-function)
 * [Overriding the default RegionManager](#overriding-the-default-regionmanager)
 * [Region Availability](#region-availability)
@@ -71,6 +72,23 @@ to all of the specified regions as region managers.
 layoutView.menu.show(new MenuView());
 
 layoutView.content.show(new MainContentView());
+```
+
+
+### Region Options
+
+A `LayoutView` can take a `regions` hash that allows you to specify regions per `LayoutView` instance.
+
+```js
+new Marionette.LayoutView({
+ regions: {
+   "cat": ".doge",
+   "wow": {
+     selector: ".such",
+     regionClass: Coin
+   }
+ }
+})
 ```
 
 ### Specifying Regions As A Function

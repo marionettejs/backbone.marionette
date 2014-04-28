@@ -68,7 +68,7 @@ describe('layoutView - dynamic regions', function() {
     });
   });
 
-  xdescribe('when adding a region to a layoutView that does not have any regions defined, and re-rendering the layoutView', function() {
+  describe('when adding a region to a layoutView that does not have any regions defined, and re-rendering the layoutView', function() {
     var layoutView, region, barRegion;
 
     beforeEach(function() {

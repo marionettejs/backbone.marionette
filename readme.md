@@ -251,5 +251,3 @@ LosTechies.com blog.
 Copyright (c) 2012-2014 Derick Bailey; Muted Solutions, LLC
 
 Distributed under [MIT license](http://mutedsolutions.mit-license.org/).
-
-[![bitdeli analytics](https://d2weczhvl823v0.cloudfront.net/marionettejs/backbone.marionette/trend.png)](https://bitdeli.com/free "Bitdeli Badge")

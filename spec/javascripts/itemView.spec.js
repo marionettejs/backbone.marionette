@@ -1,4 +1,3 @@
-/* jshint maxstatements: 17 */
 describe('item view', function() {
   'use strict';
 

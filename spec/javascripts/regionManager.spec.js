@@ -1,4 +1,3 @@
-/* jshint maxstatements: 15 */
 describe('regionManager', function() {
 
   describe('.addRegion', function() {

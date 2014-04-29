@@ -375,4 +375,47 @@ describe('layoutView', function() {
     });
 
   });
+
+  describe('childView get onDomRefresh from parent', function() {
+    beforeEach(function() {
+      setFixtures('<div id="james-kyle"></div>');
+      this.spy = sinon.spy();
+      this.spy2 = sinon.spy();
+
+      var ItemView = Marionette.ItemView.extend({
+        template: _.template('<yes><my><lord></lord></my></yes>'),
+        onDomRefresh: this.spy2
+      });
+
+      var LucasArts = Marionette.CollectionView.extend({
+        onDomRefresh: this.spy,
+        childView: ItemView
+      });
+
+
+      var Layout = Marionette.LayoutView.extend({
+        template: _.template('<sam class="and-max"></sam>'),
+        regions: {
+          'sam': '.and-max'
+        },
+
+        onShow: function() {
+          this.getRegion('sam').show(new LucasArts({collection: new Backbone.Collection([{}])}));
+        }
+      });
+
+      var region = new Marionette.Region({el: "#james-kyle"});
+
+      region.show(new Layout());
+    });
+
+    it('should call onDomRefresh on region views when shown within the parents onRender', function() {
+      expect(this.spy).toHaveBeenCalled();
+    });
+
+    it('should call onDomRefresh on region view children when shown within the parents onRender', function() {
+      expect(this.spy2).toHaveBeenCalled();
+    });
+
+  });
 });

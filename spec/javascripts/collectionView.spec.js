@@ -1,4 +1,3 @@
-/* jshint maxstatements: 27 */
 describe('collection view', function() {
   'use strict';
 

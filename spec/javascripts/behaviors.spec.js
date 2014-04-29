@@ -1,5 +1,3 @@
-/* jshint maxstatements: 16 */
-
 describe('Behaviors', function() {
   describe('behavior lookup', function() {
     it('should throw if behavior lookup is not defined', function() {

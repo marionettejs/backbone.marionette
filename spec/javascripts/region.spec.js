@@ -1,4 +1,3 @@
-/* jshint maxstatements: 18 */
 describe('region', function() {
   'use strict';
 

@@ -1,4 +1,3 @@
-/* jshint maxstatements: 21 */
 describe('composite view', function() {
   'use strict';
 

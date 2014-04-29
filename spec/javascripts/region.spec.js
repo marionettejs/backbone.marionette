@@ -168,6 +168,17 @@ describe('region', function() {
     });
 
     describe('when passing "preventDestroy" option', function() {
+      var MyView2 = Backbone.View.extend({
+        render: function() {
+          $(this.el).html('some more content');
+        },
+
+        destroy: function() {},
+
+        onShow: function() {
+          $(this.el).addClass('onShowClass');
+        }
+      });
 
       var myRegion, view1, view2;
 
@@ -175,7 +186,7 @@ describe('region', function() {
         setFixtures('<div id="region"></div>');
 
         view1 = new MyView();
-        view2 = new MyView();
+        view2 = new MyView2();
         myRegion = new MyRegion();
 
         spyOn(view1, 'destroy').andCallThrough();
@@ -190,6 +201,11 @@ describe('region', function() {
 
         it('shouldnt "destroy" the old view', function() {
           expect(view1.destroy.callCount).toEqual(0);
+        });
+
+        it('should replace the content in the DOM', function() {
+          expect(myRegion.$el).toHaveText('some more content');
+          expect(myRegion.$el).not.toHaveText('some content');
         });
       });
 

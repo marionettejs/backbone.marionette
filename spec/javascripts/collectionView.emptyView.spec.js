@@ -317,7 +317,7 @@ describe('collectionview - emptyView', function() {
         collection = new Backbone.Collection();
         collectionView = new EmptyCollectionView({
           collection: collection,
-          emptyViewOptions: function(emptyView) {
+          emptyViewOptions: function() {
             return {
               foo: 'bar',
               collection: this.collection

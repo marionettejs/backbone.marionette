@@ -191,7 +191,9 @@ _.extend(Marionette.Region.prototype, Backbone.Events, {
   // Override this method to change how the new view is
   // appended to the `$el` that the region is managing
   open: function(view) {
-    this.$el.empty().append(view.el);
+    // empty the node and append new view
+    this.el.innerHTML='';
+    this.el.appendChild(view.el);
   },
 
   // Destroy the current view, if there is one. If there is no

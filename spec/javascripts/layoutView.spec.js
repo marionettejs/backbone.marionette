@@ -1,4 +1,3 @@
-/* jshint maxstatements: 18 */
 describe('layoutView', function() {
   'use strict';
 

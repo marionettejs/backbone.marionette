@@ -290,6 +290,48 @@ describe('region', function() {
       expect(myRegion.open).not.toHaveBeenCalledWith(view);
     });
 
+    it('should not call "render" on the view', function() {
+      expect(view.render).not.toHaveBeenCalled();
+    });
+  });
+
+  describe('when a view is already shown and showing the same one with a forceShow flag', function() {
+    var MyRegion = Backbone.Marionette.Region.extend({
+      el: '#region'
+    });
+
+    var MyView = Backbone.View.extend({
+      render: function() {
+        $(this.el).html('some content');
+      },
+
+      destroy: function() {},
+      open: function() {}
+    });
+
+    var myRegion, view;
+
+    beforeEach(function() {
+      setFixtures('<div id="region"></div>');
+
+      view = new MyView();
+      myRegion = new MyRegion();
+      myRegion.show(view);
+
+      spyOn(view, 'destroy');
+      spyOn(myRegion, 'open');
+      spyOn(view, 'render');
+      myRegion.show(view, {forceShow: true});
+    });
+
+    it('should not call "destroy" on the view', function() {
+      expect(view.destroy).not.toHaveBeenCalled();
+    });
+
+    it('should call "open" on the view', function() {
+      expect(myRegion.open).toHaveBeenCalledWith(view);
+    });
+
     it('should call "render" on the view', function() {
       expect(view.render).toHaveBeenCalled();
     });
@@ -320,10 +362,10 @@ describe('region', function() {
       spyOn(view, 'render').andCallThrough();
     });
 
-    it('should throw an error saying the views been destroyed if a destroyed view is passed in', function() {
+    it('should not throw an error saying the views been destroyed if a destroyed view is passed in', function() {
       expect(function() {
-        myRegion.show(view);
-      }).toThrow(new Error('Cannot use a view thats already been destroyed.'));
+        myRegion.show();
+      }).not.toThrow(new Error('Cannot use a view thats already been destroyed.'));
     });
   });
 

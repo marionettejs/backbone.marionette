@@ -121,12 +121,16 @@ _.extend(Marionette.Region.prototype, Backbone.Events, {
   // or just before destroying the view, respectively.
   // The `preventDestroy` option can be used to prevent a view from
   // the old view being destroyed on show.
-  show: function(view, options) {
+  // The `forceShow` option can be used to force a view to be
+  // re-rendered if it's already shown in the region.
+
+  show: function(view, options){
     this.ensureEl();
 
     var showOptions = options || {};
     var isDifferentView = view !== this.currentView;
     var preventDestroy =  !!showOptions.preventDestroy;
+    var forceShow = !!showOptions.forceShow;
 
     // only destroy the view if we don't want to preventDestroy and the view is different
     var _shouldDestroyView = !preventDestroy && isDifferentView;
@@ -135,28 +139,28 @@ _.extend(Marionette.Region.prototype, Backbone.Events, {
       this.destroy();
     }
 
-    view.render();
+    // show the view if the view is different or if you want to re-show the view
+    var _shouldShowView = isDifferentView || forceShow;
 
-    this.triggerMethod('before:show', view);
-    this.triggerMethod.call(view, 'before:show');
+    if (_shouldShowView) {
+      view.render();
+      this.triggerMethod('before:show', view);
+      this.triggerMethod.call(view, 'before:show');
 
-    if (isDifferentView) {
       this.open(view);
-    }
+      this.currentView = view;
 
-    this.currentView = view;
-
-
-    this.triggerMethod('show', view);
-    this.triggerMethod.call(view, 'show');
-
-    if (_.isFunction(view.triggerMethod)) {
-      view.triggerMethod('show');
-    } else {
+      this.triggerMethod('show', view);
       this.triggerMethod.call(view, 'show');
-    }
 
-    return this;
+      if (_.isFunction(view.triggerMethod)) {
+        view.triggerMethod('show');
+      } else {
+        this.triggerMethod.call(view, 'show');
+      }
+
+      return this;
+    }
   },
 
   ensureEl: function() {

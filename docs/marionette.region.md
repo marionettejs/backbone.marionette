@@ -90,6 +90,7 @@ MyApp.mainRegion.show(myView);
 MyApp.mainRegion.destroy();
 ```
 
+#### preventDestroy
 If you replace the current view with a new view by calling `show`,
 by default it will automatically destroy the previous view.
 You can prevent this behavior by passing `{preventDestroy: true}` in the options
@@ -110,6 +111,23 @@ MyApp.mainRegion.show(anotherView);
 // Prevent `destroy` from being called
 var anotherView2 = new AnotherView();
 MyApp.mainRegion.show(anotherView2, { preventDestroy: true });
+```
+
+NOTE: When using `preventDestroy: true` you must be careful to cleanup your old views
+manually to prevent memory leaks.
+
+
+#### forceShow
+If you re-call `show` with the same view, by default nothing will happen
+because the view is already in the region. You can force the view to be re-shown
+by passing in `{forceShow: true}` in the options parameter.
+
+```js
+var myView = new MyView();
+MyApp.mainRegion.show(myView);
+
+// the second show call will re-show the view
+MyApp.mainRegion.show(myView, {forceShow: true});
 ```
 
 NOTE: When using `preventDestroy: true` you must be careful to cleanup your old views

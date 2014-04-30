@@ -25,12 +25,6 @@ Marionette.Behaviors = (function(Marionette, _) {
       'behaviorEvents', 'triggerMethod',
       'setElement', 'destroy'
     ]);
-
-    _.each(behaviors, function(b) {
-      if (!_.isUndefined(_.result(b, 'behaviors'))) {
-        new Behaviors(view, _.result(b, 'behaviors'));
-      }
-    });
   }
 
   var methods = {
@@ -188,14 +182,17 @@ Marionette.Behaviors = (function(Marionette, _) {
       return _.isFunction(Behaviors.behaviorsLookup) ? Behaviors.behaviorsLookup.apply(this, arguments)[key] : Behaviors.behaviorsLookup[key];
     },
 
-    // Maps over a view's behaviors. Performing
-    // a lookup on each behavior and the instantiating
-    // said behavior passing its options and view.
+    // Iterate over the behaviors object, for each behavior
+    // instanciate it and get its nested behaviors.
     parseBehaviors: function(view, behaviors) {
-      return _.map(behaviors, function(options, key) {
+      return _.chain(behaviors).map(function(options, key) {
         var BehaviorClass = Behaviors.getBehaviorClass(options, key);
-        return new BehaviorClass(options, view);
-      });
+
+        var behavior = new BehaviorClass(options, view);
+        var nestedBehaviors = Behaviors.parseBehaviors(view, _.result(behavior, 'behaviors'));
+
+        return [behavior].concat(nestedBehaviors);
+      }).flatten().value();
     },
 
     // wrap view internal methods so that they delegate to behaviors. For example,

@@ -76,7 +76,7 @@ describe('application regions', function() {
     });
 
     it('should set the specified selector', function() {
-      expect(MyApp.MyRegion.el).toBe('#region');
+      expect(MyApp.MyRegion.$el.selector).toBe('#region');
     });
 
     it('should pass extra options to the custom regionClass', function() {

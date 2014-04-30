@@ -73,6 +73,22 @@ var mgr = new Backbone.Marionette.Region({
 });
 ```
 
+The `el` option can also be a raw DOM node reference:
+
+```js
+var mgr = new Backbone.Marionette.Region({
+  el: document.querySelector("body")
+});
+```
+
+Or the `el` can also be a `jQuery` wrapped DOM node:
+
+```js
+var mgr = new Backbone.Marionette.Region({
+  el: $("body")
+});
+```
+
 ## Basic Use
 
 ### Showing a View

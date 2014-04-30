@@ -10,9 +10,14 @@ Marionette.Region = function(options) {
   this.options = options || {};
   this.el = this.getOption('el');
 
+  // Handle when this.el is passed in as a $ wrapped element.
+  this.el = this.el instanceof Backbone.$ ? this.el[0] : this.el;
+
   if (!this.el) {
     throwError('An "el" must be specified for a region.', 'NoElError');
   }
+
+  this.$el = this.getEl(this.el);
 
   if (this.initialize) {
     var args = Array.prototype.slice.apply(arguments);
@@ -95,12 +100,15 @@ _.extend(Marionette.Region, {
     // literal to build the region, the element will not be
     // guaranteed to be in the DOM already, and will cause problems
     if (regionConfig.parentEl) {
-      region.getEl = function(selector) {
+      region.getEl = function(el) {
+        if (_.isObject(el)) {
+          return Backbone.$(el);
+        }
         var parentEl = regionConfig.parentEl;
         if (_.isFunction(parentEl)) {
           parentEl = parentEl();
         }
-        return parentEl.find(selector);
+        return parentEl.find(el);
       };
     }
 
@@ -164,19 +172,20 @@ _.extend(Marionette.Region.prototype, Backbone.Events, {
   },
 
   ensureEl: function() {
-    if (!this.$el || this.$el.length === 0) {
+    if (!_.isObject(this.el)) {
       this.$el = this.getEl(this.el);
+      this.el = this.$el[0];
     }
 
-    if (this.$el.length === 0) {
-      throwError('An "el" ' + this.el + ' must exist in DOM');
+    if (!this.$el || this.$el.length === 0) {
+      throwError('An "el" ' + this.$el.selector + ' must exist in DOM');
     }
   },
 
   // Override this method to change how the region finds the
   // DOM element that it manages. Return a jQuery selector object.
-  getEl: function(selector) {
-    return Backbone.$(selector);
+  getEl: function(el) {
+    return Backbone.$(el);
   },
 
   // Override this method to change how the new view is
@@ -216,6 +225,11 @@ _.extend(Marionette.Region.prototype, Backbone.Events, {
   // DOM for the region's `el`.
   reset: function() {
     this.destroy();
+
+    if (this.$el) {
+      this.el = this.$el.selector;
+    }
+
     delete this.$el;
   },
 

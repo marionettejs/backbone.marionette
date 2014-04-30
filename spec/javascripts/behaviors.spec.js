@@ -479,14 +479,12 @@ describe('Behaviors', function() {
   });
 
   describe('behavior trigger calls', function() {
-    var spy, View, hold;
+    var onRenderSpy, View, hold;
     beforeEach(function() {
-      spy = sinon.spy();
+      onRenderSpy = sinon.spy();
       hold = {};
       hold.testB = Marionette.Behavior.extend({
-        onRender: function() {
-          spy();
-        }
+        onRender: onRenderSpy
       });
 
       View = Marionette.View.extend({
@@ -501,7 +499,7 @@ describe('Behaviors', function() {
     it('should call onRender when a view is rendered', function() {
       var view = new View();
       view.triggerMethod('render');
-      expect(spy).toHaveBeenCalled();
+      expect(onRenderSpy).toHaveBeenCalled();
     });
   });
 
@@ -536,19 +534,28 @@ describe('Behaviors', function() {
   });
 
   describe('behavior with behavior', function() {
-    var initSpy, renderSpy, childRenderSpy, entityEventSpy, viewEventSpy;
+    var initSpy, renderSpy, childRenderSpy, entityEventSpy;
+    var viewEventSpy, childEventSpy, parentEventSpy;
     var View, v, m, c, hold, parentBehavior, childBehavior;
     beforeEach(function() {
       initSpy = sinon.spy();
       renderSpy = sinon.spy();
       childRenderSpy = sinon.spy();
       entityEventSpy = sinon.spy();
+      childEventSpy = sinon.spy();
+      parentEventSpy = sinon.spy();
       viewEventSpy = sinon.spy();
 
       hold = {};
       hold.parentB = Marionette.Behavior.extend({
         initialize: function() {
           parentBehavior = this;
+        },
+        ui: {
+          parent: '.parent'
+        },
+        events: {
+          'click @ui.parent': parentEventSpy
         },
         behaviors: {
           childB: {}
@@ -571,17 +578,19 @@ describe('Behaviors', function() {
           'sync': entityEventSpy
         },
         events: {
-          'click @ui.view': viewEventSpy,
-          'click @ui.child': viewEventSpy
+          'click @ui.child': childEventSpy
         },
       });
 
       Marionette.Behaviors.behaviorsLookup = hold;
 
       View = Marionette.CompositeView.extend({
-        template: _.template('<div class="view"></div><div class="child"></div>'),
+        template: _.template('<div class="view"></div><div class="parent"></div><div class="child"></div>'),
         ui: {
           view: '.view'
+        },
+        events: {
+          'click @ui.view': viewEventSpy,
         },
         onRender: renderSpy,
         behaviors: {
@@ -626,16 +635,22 @@ describe('Behaviors', function() {
       expect(entityEventSpy).toHaveBeenCalledOn(childBehavior);
     });
 
-    it('should proxy view UI events to child behavior', function() {
-      v.render();
-      v.$('.view').trigger('click');
-      expect(viewEventSpy).toHaveBeenCalledOn(childBehavior);
-    });
-
     it('should proxy child behavior UI events to child behavior', function() {
       v.render();
       v.$('.child').trigger('click');
-      expect(viewEventSpy).toHaveBeenCalledOn(childBehavior);
+      expect(childEventSpy).toHaveBeenCalledOn(childBehavior);
+    });
+
+    it('should proxy parent behavior UI events to parent behavior', function() {
+      v.render();
+      v.$('.parent').trigger('click');
+      expect(parentEventSpy).toHaveBeenCalledOn(parentBehavior);
+    });
+
+    it('should proxy view UI events to view', function() {
+      v.render();
+      v.$('.view').trigger('click');
+      expect(viewEventSpy).toHaveBeenCalledOn(v);
     });
   });
 });

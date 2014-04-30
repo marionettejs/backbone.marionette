@@ -9,6 +9,46 @@ describe('region', function() {
     });
   });
 
+  describe('when passing an el DOM reference in directly', function() {
+    beforeEach(function() {
+      setFixtures('<div id="region"></div>');
+      this.el = $('#region')[0];
+
+      this.customRegion = new (Backbone.Marionette.Region.extend({
+        el: this.el
+      }))();
+
+      this.optionRegion = new Backbone.Marionette.Region({el: this.el});
+
+      this.optionRegionJquery = new Backbone.Marionette.Region({el: $(this.el)});
+    });
+
+    it('should work when el is passed in as an option', function() {
+      expect(this.optionRegionJquery.$el[0]).toEqual(this.el);
+      expect(this.optionRegionJquery.el).toEqual(this.el);
+    });
+
+    it('should handle when the el option is passed in as a jquery selector', function() {
+      expect(this.optionRegion.$el[0]).toEqual(this.el);
+    });
+
+    it('should work when el is set in the region extend', function() {
+      expect(this.customRegion.$el[0]).toEqual(this.el);
+    });
+
+    it('should complain if the el passed in as an option is invalid', function() {
+      expect(function() {
+        Backbone.Marionette.Region({el: $("the-ghost-of-lechuck")[0]});
+      }).toThrow();
+    });
+
+    it('should complain if the el passed in via an extended region is invalid', function() {
+      expect(function() {
+        (Backbone.Marionette.Region.extend({el: $("the-ghost-of-lechuck")[0]}))();
+      }).toThrow();
+    });
+  });
+
   describe('when creating a new region and the "el" does not exist in DOM', function() {
     var MyRegion = Backbone.Marionette.Region.extend({
       el: '#not-existed-region'
@@ -81,6 +121,10 @@ describe('region', function() {
 
     it('should render the view', function() {
       expect(view.render).toHaveBeenCalled();
+    });
+
+    it('should set $el and el', function() {
+      expect(myRegion.$el[0]).toEqual(myRegion.el);
     });
 
     it('should append the rendered HTML to the managers "el"', function() {
@@ -505,7 +549,7 @@ describe('region', function() {
     });
 
     it('should manage the specified el', function() {
-      expect(region.el).toBe(el);
+      expect(region.$el.selector).toBe(el);
     });
   });
 

@@ -2,12 +2,13 @@ describe('view ui event trigger configuration', function() {
   'use strict';
 
   describe('@ui syntax within events and triggers', function() {
-    var view, view2, view3, fooHandler, attackHandler, tapHandler;
+    var view, view2, view3, fooHandler, attackHandler, tapHandler, defendHandler;
 
     var View = Backbone.Marionette.ItemView.extend({
       ui: {
         foo: '.foo',
-        bar: '#tap'
+        bar: '#tap',
+        bat: '.bat'
       },
 
       triggers: {
@@ -16,7 +17,8 @@ describe('view ui event trigger configuration', function() {
 
       events: {
         'click @ui.bar': 'attack',
-        'click div:not(@ui.bar)': 'tapper'
+        'click div:not(@ui.bar)': 'tapper',
+        'click @ui.bar, @ui.foo, @ui.bat': 'defend'
       },
 
       tapper: function() {
@@ -27,8 +29,12 @@ describe('view ui event trigger configuration', function() {
         attackHandler();
       },
 
+      defend: function() {
+        defendHandler();
+      },
+
       render: function() {
-        this.$el.html('<button class="foo"></button><div id="tap"></div><div class="lap"></div>');
+        this.$el.html('<button class="foo"></button><div id="tap"></div><div class="lap"></div><div class="bat"></div>');
       }
     });
 
@@ -79,6 +85,7 @@ describe('view ui event trigger configuration', function() {
 
       fooHandler = jasmine.createSpy('do:foo event handler');
       attackHandler = jasmine.createSpy('attack handler');
+      defendHandler = jasmine.createSpy('defend handler');
       tapHandler = jasmine.createSpy('tap handler');
       spyOn(view, 'attack').andCallThrough();
       view.on('do:foo', fooHandler);
@@ -113,6 +120,23 @@ describe('view ui event trigger configuration', function() {
     it('should correctly call an event with a functional events hash and functional ui hash', function() {
       view3.$('#tap').trigger('click');
       expect(attackHandler).toHaveBeenCalled();
+    });
+
+    describe('when multiple hashes are specified', function() {
+      it('should correctly call an event when when the first hash is triggered', function() {
+        view.$('#tap').trigger('click');
+        expect(defendHandler).toHaveBeenCalled();
+      });
+
+      it('should correctly call an event when when the second hash is triggered', function() {
+        view.$('.foo').trigger('click');
+        expect(defendHandler).toHaveBeenCalled();
+      });
+
+      it('should correctly call an event when when the third hash is triggered', function() {
+        view.$('.bat').trigger('click');
+        expect(defendHandler).toHaveBeenCalled();
+      });
     });
   });
 });

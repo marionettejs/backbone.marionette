@@ -57,7 +57,7 @@ Marionette.CollectionView = Marionette.View.extend({
   _initialEvents: function() {
     if (this.collection) {
       this.listenTo(this.collection, 'add', this._onCollectionAdd);
-      this.listenTo(this.collection, 'remove', this.onChildRemove);
+      this.listenTo(this.collection, 'remove', this._onCollectionRemove);
       this.listenTo(this.collection, 'reset', this.render);
 
       if (this.sort) {
@@ -75,7 +75,7 @@ Marionette.CollectionView = Marionette.View.extend({
   },
 
   // get the child view by model it holds, and remove it
-  onChildRemove: function(model) {
+  _onCollectionRemove: function(model) {
     var view = this.children.findByModel(model);
     this.removeChildView(view);
     this.checkEmpty();

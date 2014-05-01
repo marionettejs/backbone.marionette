@@ -188,7 +188,7 @@ describe('layoutView', function() {
   });
 
   describe('when showing a layoutView via a region', function() {
-    var region, layoutView, regionOne;
+    var region, layoutView, regionOne, showReturn;
 
     beforeEach(function() {
       setFixtures('<div id="mgr"></div>');
@@ -203,7 +203,8 @@ describe('layoutView', function() {
       region = new Backbone.Marionette.Region({
         el: '#mgr'
       });
-      region.show(layoutView);
+
+      showReturn = region.show(layoutView);
     });
 
     it('should make the regions available in `onRender`', function() {
@@ -212,6 +213,10 @@ describe('layoutView', function() {
 
     it('the regions should find their elements in `onRender`', function() {
       expect(regionOne.$el.length).toBe(1);
+    });
+
+    it('should return the region after showing a view in a region', function() {
+      expect(showReturn).toEqual(region);
     });
   });
 

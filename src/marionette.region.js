@@ -144,6 +144,8 @@ _.extend(Marionette.Region.prototype, Backbone.Events, {
 
     Marionette.triggerMethod.call(this, "show", view);
     Marionette.triggerMethod.call(view, "show");
+
+    return this;
   },
 
   ensureEl: function(){

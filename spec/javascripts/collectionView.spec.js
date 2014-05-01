@@ -270,7 +270,7 @@ describe('collection view', function() {
       spyOn(childView, 'destroy').andCallThrough();
       spyOn(EmptyView.prototype, 'render');
 
-      collectionView.onChildRemove(model);
+      collectionView._onCollectionRemove(model);
     });
 
     it('should destroy the models view', function() {
@@ -336,11 +336,11 @@ describe('collection view', function() {
       expect(onChildRemoveSpy).toHaveBeenCalledOnce();
     });
 
-    it('should pass the removed view to onChildRemove', function() {
+    it('should pass the removed view to _onCollectionRemove', function() {
       expect(onChildRemoveSpy).toHaveBeenCalledWithExactly(childView);
     });
 
-    it('should execute onBeforeChildRemove before onChildRemove', function() {
+    it('should execute onBeforeChildRemove before _onCollectionRemove', function() {
       expect(onBeforeChildRemoveSpy).toHaveBeenCalledBefore(onChildRemoveSpy);
     });
 
@@ -379,7 +379,7 @@ describe('collection view', function() {
       collectionView.listenTo(collectionView, 'item:foo', collectionView.someItemViewCallback);
 
       spyOn(childView, 'destroy').andCallThrough();
-      spyOn(collectionView, 'onChildRemove').andCallThrough();
+      spyOn(collectionView, '_onCollectionRemove').andCallThrough();
       spyOn(collectionView, 'stopListening').andCallThrough();
       spyOn(collectionView, 'remove').andCallThrough();
       spyOn(collectionView, 'someCallback').andCallThrough();

@@ -5,9 +5,9 @@ The most important part of this class is that you **MUST** override the class le
 
 ## Documentation Index
 * [API](#api)
-  * [Behaviors Lookup](#behaviorsLookup)
-  * [getBehaviorClass](#getBehaviorClass)
-  * [behaviorClass](#behaviorClass)
+  * [Behaviors Lookup](#behaviorslookup)
+  * [getBehaviorClass](#getbehaviorclass)
+  * [behaviorClass](#behaviorclass)
 
 ## API
 

@@ -75,16 +75,15 @@ want to wait until your entire application is initialized to start
 
 The events that are currently triggered, are:
 
-* **"initialize:before" / `onInitializeBefore`**: fired just before the initializers kick off
-* **"initialize:after" / `onInitializeAfter`**: fires just after the initializers have finished
-* **"start" / `onStart`**: fires after all initializers and after the initializer events
+* **"before:start" / `onBeforeStart`**: fired just before the `Application` starts and before the initializers are executed.
+* **"start" / `onStart`**: fires after the `Application` has started and after the initializers have been executed.
 
 ```js
-MyApp.on("initialize:before", function(options){
+MyApp.on("before:start", function(options){
   options.moreData = "Yo dawg, I heard you like options so I put some options in your options!"
 });
 
-MyApp.on("initialize:after", function(options){
+MyApp.on("start", function(options){
   if (Backbone.history){
     Backbone.history.start();
   }

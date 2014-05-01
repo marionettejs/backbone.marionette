@@ -2,11 +2,19 @@ describe('application regions', function() {
   'use strict';
 
   describe('when adding region selectors to an app, and starting the app', function() {
-    var MyApp = new Backbone.Marionette.Application();
+    var MyApp, addHandler, beforeAddHandler;
+
+    MyApp = new Backbone.Marionette.Application();
 
     beforeEach(function() {
       setFixtures('<div id="region"></div>');
       setFixtures('<div id="region2"></div>');
+
+      beforeAddHandler = sinon.spy();
+      addHandler = sinon.spy();
+
+      MyApp.on('before:add:region', beforeAddHandler);
+      MyApp.on('add:region', addHandler);
 
       MyApp.addRegions({
         MyRegion: '#region',
@@ -19,6 +27,14 @@ describe('application regions', function() {
     it('should initialize the regions', function() {
       expect(MyApp.MyRegion).not.toBeUndefined();
       expect(MyApp.anotherRegion).not.toBeUndefined();
+    });
+
+    it('should trigger a before:add:region event', function() {
+      expect(beforeAddHandler).toHaveBeenCalledWith('MyRegion');
+    });
+
+    it('should trigger a add:region event', function() {
+      expect(addHandler).toHaveBeenCalledWith('MyRegion');
     });
   });
 
@@ -131,6 +147,44 @@ describe('application regions', function() {
     it('should destroy the regions', function() {
       expect(r1.destroy).toHaveBeenCalled();
       expect(r2.destroy).toHaveBeenCalled();
+    });
+  });
+
+  describe('when removing a region', function() {
+    var MyApp, removeHandler, beforeRemoveHandler;
+
+    MyApp = new Backbone.Marionette.Application();
+
+    beforeEach(function() {
+      setFixtures('<div id="region"></div>');
+      setFixtures('<div id="region2"></div>');
+
+      beforeRemoveHandler = sinon.spy();
+      removeHandler = sinon.spy();
+
+      MyApp.on('before:remove:region', beforeRemoveHandler);
+      MyApp.on('remove:region', removeHandler);
+
+      MyApp.addRegions({
+        MyRegion: '#region',
+        anotherRegion: 'region2'
+      });
+
+      MyApp.start();
+
+      MyApp.removeRegion('MyRegion');
+    });
+
+    it('should remove the region', function() {
+      expect(MyApp.MyRegion).toBeUndefined();
+    });
+
+    it('should trigger a before:remove:region event', function() {
+      expect(beforeRemoveHandler).toHaveBeenCalledWith('MyRegion');
+    });
+
+    it('should trigger a remove:region event', function() {
+      expect(removeHandler).toHaveBeenCalledWith('MyRegion');
     });
   });
 });

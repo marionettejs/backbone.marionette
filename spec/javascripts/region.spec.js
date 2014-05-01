@@ -77,11 +77,13 @@ describe('region', function() {
     });
   });
 
-  describe('when showing a view', function() {
+  describe('when showing an initial view', function() {
     var MyRegion = Backbone.Marionette.Region.extend({
       el: '#region',
 
-      onShow: function() {}
+      onShow: function() {},
+
+      onSwap: function() {}
     });
 
     var MyView = Backbone.View.extend({
@@ -96,12 +98,14 @@ describe('region', function() {
       }
     });
 
-    var myRegion, view, showSpy, regionBeforeShowSpy, viewBeforeShowSpy, openSpy;
+    var myRegion, view, showSpy, regionBeforeShowSpy, swapSpy, regionBeforeSwapSpy, regionSwapSpy, viewBeforeShowSpy, openSpy;
 
     beforeEach(function() {
       setFixtures('<div id="region"></div>');
       showSpy = sinon.spy();
       regionBeforeShowSpy = sinon.spy();
+      regionBeforeSwapSpy = sinon.spy();
+      regionSwapSpy = sinon.spy();
       viewBeforeShowSpy = sinon.spy();
 
       view = new MyView();
@@ -110,9 +114,12 @@ describe('region', function() {
       myRegion = new MyRegion();
       spyOn(myRegion, 'onShow');
       openSpy = sinon.spy(myRegion, 'open');
+      swapSpy = sinon.spy(myRegion, 'onSwap');
 
       myRegion.on('show', showSpy);
       myRegion.on('before:show', regionBeforeShowSpy);
+      myRegion.on('before:swap', regionBeforeSwapSpy);
+      myRegion.on('swap', regionSwapSpy);
 
       view.on('before:show', viewBeforeShowSpy);
 
@@ -165,6 +172,45 @@ describe('region', function() {
 
     it('should set "this" to the manager, from the show event', function() {
       expect(showSpy).toHaveBeenCalledOn(myRegion);
+    });
+
+    it('should not trigger a before swap event for the region', function() {
+      expect(regionBeforeSwapSpy.callCount).toEqual(0);
+    });
+
+    it('should not trigger a swap event for the region', function() {
+      expect(regionSwapSpy.callCount).toEqual(0);
+    });
+
+    it('should not call the `onSwap` function on the region', function() {
+      expect(swapSpy.callCount).toEqual(0);
+    });
+
+    describe('and then showing a different view', function() {
+      beforeEach(function() {
+        this.view2 = new MyView();
+        myRegion.show(this.view2);
+      });
+
+      it('should trigger a before swap event for the region', function() {
+        expect(regionBeforeSwapSpy).toHaveBeenCalled();
+      });
+
+      it('should trigger a swap event for the region', function() {
+        expect(regionSwapSpy).toHaveBeenCalled();
+      });
+
+      it('should call the `onSwap` function on the region', function() {
+        expect(swapSpy).toHaveBeenCalled();
+      });
+
+      it('should pass the swapped view as an argument for the swap event', function() {
+        expect(swapSpy).toHaveBeenCalledWith(this.view2);
+      });
+
+      it('should set "this" to the manager, from the swap event', function() {
+        expect(swapSpy).toHaveBeenCalledOn(myRegion);
+      });
     });
 
     describe('when passing "preventDestroy" option', function() {

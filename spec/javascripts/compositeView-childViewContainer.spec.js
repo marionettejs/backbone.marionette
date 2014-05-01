@@ -218,16 +218,16 @@ describe('composite view - childViewContainer', function() {
       compositeView = new CompositeView({
         collection: collection
       });
-      spyOn(compositeView, 'onChildAdd').andCallThrough();
+      spyOn(compositeView, '_onCollectionAdd').andCallThrough();
     });
 
     it('should not raise any errors when item is added to collection', function() {
       expect(addModel).not.toThrow();
     });
 
-    it('should not call onChildAdd when item is added to collection', function() {
+    it('should not call _onCollectionAdd when item is added to collection', function() {
       addModel();
-      expect(compositeView.onChildAdd).not.toHaveBeenCalled();
+      expect(compositeView._onCollectionAdd).not.toHaveBeenCalled();
     });
 
     it('should not raise any errors when item is removed from collection', function() {

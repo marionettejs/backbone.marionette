@@ -140,6 +140,9 @@ _.extend(Marionette.Region.prototype, Backbone.Events, {
     var preventDestroy =  !!showOptions.preventDestroy;
     var forceShow = !!showOptions.forceShow;
 
+    // we are only changing the view if there is a view to change to begin with
+    var isChangingView = !!this.currentView;
+
     // only destroy the view if we don't want to preventDestroy and the view is different
     var _shouldDestroyView = !preventDestroy && isDifferentView;
 
@@ -152,11 +155,20 @@ _.extend(Marionette.Region.prototype, Backbone.Events, {
 
     if (_shouldShowView) {
       view.render();
+
+      if (isChangingView) {
+        this.triggerMethod('before:swap', view);
+      }
+
       this.triggerMethod('before:show', view);
       this.triggerMethod.call(view, 'before:show');
 
       this.open(view);
       this.currentView = view;
+
+      if (isChangingView) {
+        this.triggerMethod('swap', view);
+      }
 
       this.triggerMethod('show', view);
       this.triggerMethod.call(view, 'show');

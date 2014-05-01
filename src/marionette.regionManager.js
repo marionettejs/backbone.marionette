@@ -49,7 +49,10 @@ Marionette.RegionManager = (function(Marionette) {
         region = definition;
       }
 
+      this.triggerMethod('before:region:add', name, region);
+
       this._store(name, region);
+
       this.triggerMethod('region:add', name, region);
       return region;
     },
@@ -96,6 +99,7 @@ Marionette.RegionManager = (function(Marionette) {
 
     // internal method to remove a region
     _remove: function(name, region) {
+      this.triggerMethod('before:region:remove', name, region);
       region.destroy();
       region.stopListening();
       delete this._regions[name];

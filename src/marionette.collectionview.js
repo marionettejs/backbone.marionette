@@ -64,8 +64,8 @@ Marionette.CollectionView = Marionette.View.extend({
   // binds to.
   _initialEvents: function() {
     if (this.collection) {
-      this.listenTo(this.collection, 'add', this.onChildAdd);
-      this.listenTo(this.collection, 'remove', this.onChildRemove);
+      this.listenTo(this.collection, 'add', this._onCollectionAdd);
+      this.listenTo(this.collection, 'remove', this._onCollectionRemove);
       this.listenTo(this.collection, 'reset', this.render);
 
       if (this.sort) {
@@ -75,7 +75,7 @@ Marionette.CollectionView = Marionette.View.extend({
   },
 
   // Handle a child added to the collection
-  onChildAdd: function(child, collection, options) {
+  _onCollectionAdd: function(child, collection, options) {
     this.destroyEmptyView();
     var ChildView = this.getChildView(child);
     var index = this.collection.indexOf(child);
@@ -83,7 +83,7 @@ Marionette.CollectionView = Marionette.View.extend({
   },
 
   // get the child view by model it holds, and remove it
-  onChildRemove: function(model) {
+  _onCollectionRemove: function(model) {
     var view = this.children.findByModel(model);
     this.removeChildView(view);
     this.checkEmpty();

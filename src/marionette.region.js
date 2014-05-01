@@ -169,6 +169,8 @@ _.extend(Marionette.Region.prototype, Backbone.Events, {
 
       return this;
     }
+
+    return this;
   },
 
   ensureEl: function() {

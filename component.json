@@ -1,7 +1,7 @@
 {
   "name": "backbone.marionette",
   "description": "Make your Backbone.js apps dance!",
-  "version": "1.8.3",
+  "version": "1.8.4",
   "repo": "marionettejs/backbone.marionette",
   "main": "lib/core/amd/backbone.marionette.js",
   "keywords": [

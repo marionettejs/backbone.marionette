@@ -1,3 +1,8 @@
+### v1.8.4 [view commit logs](https://github.com/marionettejs/backbone.marionette/compare/v1.8.3...v1.8.4)
+
+  * General
+    * Update bundled build to use the latest version of babysitter and wreqr.
+
 ### v1.8.3 [view commit logs](https://github.com/marionettejs/backbone.marionette/compare/v1.8.2...v1.8.3)
 
   * Fixes

@@ -89,12 +89,22 @@ _.extend(Marionette.Application.prototype, Backbone.Events, {
   _initRegionManager: function() {
     this._regionManager = new Marionette.RegionManager();
 
-    this.listenTo(this._regionManager, 'region:add', function(name, region) {
-      this[name] = region;
+    this.listenTo(this._regionManager, 'before:add:region', function(name) {
+      this.triggerMethod('before:add:region', name);
     });
 
-    this.listenTo(this._regionManager, 'region:remove', function(name, region) {
+    this.listenTo(this._regionManager, 'add:region', function(name, region) {
+      this[name] = region;
+      this.triggerMethod('add:region', name, region);
+    });
+
+    this.listenTo(this._regionManager, 'before:remove:region', function(name) {
+      this.triggerMethod('before:remove:region', name);
+    });
+
+    this.listenTo(this._regionManager, 'remove:region', function(name, region) {
       delete this[name];
+      this.triggerMethod('remove:region', name, region);
     });
   },
 

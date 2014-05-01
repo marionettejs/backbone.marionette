@@ -240,6 +240,8 @@ and destroying views:
 * "before:show" / `onBeforeShow` - Called on the region instance after the view has been rendered, but before its been displayed.
 * "show" / `onShow` - Called on the view instance when the view has been rendered and displayed.
 * "show" / `onShow` - Called on the region instance when the view has been rendered and displayed.
+* "before:swap" / `onBeforeSwap` - Called on the region instance before a new view is shown. NOTE: this will only be called when a view is being swapped, not when the region is empty.
+* "swap" / `onSwap` - Called on the region instance when a new view is `show`n. NOTE: this will only be called when a view is being swapped, not when the region is empty.
 * "before:destroy" / `onBeforeDestroy` - Called on the region instance before the view has been destroyed.
 * "destroy" / `onDestroy` - Called when the view has been destroyed.
 
@@ -253,6 +255,16 @@ MyApp.mainRegion.on("before:show", function(view){
 });
 
 MyApp.mainRegion.on("show", function(view){
+  // manipulate the `view` or do something extra
+  // with the region via `this`
+});
+
+MyApp.mainRegion.on("before:swap", function(view){
+  // manipulate the `view` or do something extra
+  // with the region via `this`
+});
+
+MyApp.mainRegion.on("swap", function(view){
   // manipulate the `view` or do something extra
   // with the region via `this`
 });
@@ -280,6 +292,18 @@ MyView = Marionette.ItemView.extend({
   },
   onShow: function(){
     // called when the view has been shown
+  }
+});
+
+MyRegion = Backbone.Marionette.Region.extend({
+  // ...
+
+  onBeforeSwap: function(view) {
+    // the `view` has not been swapped yet
+  },
+
+  onSwap: function(view){
+    // the `view` has been swapped
   }
 });
 ```

@@ -27,12 +27,12 @@ describe('marionette application', function() {
       MyModule.initializer.restore();
     });
 
-    it('should notify me before initialization starts', function() {
-      expect(MyApp.trigger).toHaveBeenCalledWith('initialize:before', someOptions);
+    it('should notify me before the starts', function() {
+      expect(MyApp.trigger).toHaveBeenCalledWith('before:start', someOptions);
     });
 
-    it('should notify me after initialization', function() {
-      expect(MyApp.trigger).toHaveBeenCalledWith('initialize:after', someOptions);
+    it('should notify me after the app has started', function() {
+      expect(MyApp.trigger).toHaveBeenCalledWith('start', someOptions);
     });
 
     it('should call the initializer', function() {

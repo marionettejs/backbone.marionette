@@ -21,8 +21,10 @@ objects.
 * [RegionManager.destroyRegions](#regionmanagerdestroyregions)
 * [RegionManager.destroy](#regionmanagerdestroy)
 * [RegionManager Events](#regionmanager-events)
+  * [before:region:add event](#beforeregionadd-event)
   * [region:add event](#regionadd-event)
   * [region:remove event](#regionremove-event)
+  * [before:region:remove event](#beforeregionremove-event)
 * [RegionManager Iterators](#regionmanager-iterators)
 
 ## Basic Use
@@ -209,6 +211,22 @@ rm.destroy();
 A RegionManager will trigger various events as it
 is being used.
 
+### before:region:add event
+
+The `RegionManager` will trigger a "before:region:add"
+event before a region is added to the manager. This
+allows you to perform some actions on the region before it is added.
+
+```js
+var rm = new Marionette.RegionManager();
+
+rm.on("before:region:add", function(name, region){
+  // do something with the region instance
+});
+
+rm.addRegion("foo", "#bar");
+```
+
 ### region:add event
 
 The RegionManager will trigger a "region:add"
@@ -228,6 +246,24 @@ rm.on("region:add", function(name, region){
 });
 
 rm.addRegion("foo", "#bar");
+```
+
+### before:region:remove event
+
+The `RegionManager` will trigger a "before:region:remove"
+event before a region is removed from the manager.
+This allows you to perform any cleanup operations before the region is removed.
+
+```js
+var rm = new Marionette.RegionManager();
+
+rm.on("before:region:remove", function(name, region){
+  // do something with the region instance here
+});
+
+rm.addRegion("foo", "#bar");
+
+rm.removeRegion("foo");
 ```
 
 ### region:remove event

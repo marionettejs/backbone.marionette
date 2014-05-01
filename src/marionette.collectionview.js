@@ -42,9 +42,16 @@ Marionette.CollectionView = Marionette.View.extend({
 
   endBuffering: function() {
     this.isBuffering = false;
+    this._triggerBeforeShowBufferedChildren();
     this.appendBuffer(this, this.elBuffer);
     this._triggerShowBufferedChildren();
     this.initRenderBuffer();
+  },
+
+  _triggerBeforeShowBufferedChildren: function() {
+    if (this._isShown) {
+      _.invoke(this._bufferedChildren, 'triggerMethod', 'before:show');
+    }
   },
 
   _triggerShowBufferedChildren: function() {
@@ -135,9 +142,9 @@ Marionette.CollectionView = Marionette.View.extend({
     this.destroyChildren();
 
     if (!this.isEmpty(this.collection)) {
-      this.triggerMethod('collection:before:render', this);
+      this.triggerMethod('before:render:collection', this);
       this.showCollection();
-      this.triggerMethod('collection:rendered', this);
+      this.triggerMethod('render:collection', this);
     } else {
       this.showEmptyView();
     }
@@ -160,9 +167,13 @@ Marionette.CollectionView = Marionette.View.extend({
     var EmptyView = this.getEmptyView();
 
     if (EmptyView && !this._showingEmptyView) {
+      this.triggerMethod('before:render:empty');
+
       this._showingEmptyView = true;
       var model = new Backbone.Model();
       this.addEmptyView(model, EmptyView);
+
+      this.triggerMethod('render:empty');
     }
   },
 
@@ -196,6 +207,12 @@ Marionette.CollectionView = Marionette.View.extend({
 
     // build the empty view
     var view = this.buildChildView(child, EmptyView, emptyViewOptions);
+
+    // trigger the 'before:show' event on `view` if the collection view
+    // has already been shown
+    if (this._isShown){
+      this.triggerMethod.call(view, 'before:show');
+    }
 
     // Store the `emptyView` like a `childView` so we can properly
     // remove and/or close it later
@@ -279,7 +296,7 @@ Marionette.CollectionView = Marionette.View.extend({
     // set up the child view event forwarding
     this.proxyChildEvents(view);
 
-    this.triggerMethod('before:child:added', view);
+    this.triggerMethod('before:add:child', view);
 
     // Store the child view itself so we can properly
     // remove and/or destroy it later
@@ -294,7 +311,7 @@ Marionette.CollectionView = Marionette.View.extend({
       }
     }
 
-    this.triggerMethod('after:child:added', view);
+    this.triggerMethod('add:child', view);
   },
 
   // render the child view
@@ -316,14 +333,14 @@ Marionette.CollectionView = Marionette.View.extend({
   removeChildView: function(view) {
 
     if (view) {
-      this.triggerMethod('before:child:remove', view);
+      this.triggerMethod('before:remove:child', view);
       // call 'destroy' or 'remove', depending on which is found
       if (view.destroy) { view.destroy(); }
       else if (view.remove) { view.remove(); }
 
       this.stopListening(view);
       this.children.remove(view);
-      this.triggerMethod('child:removed', view);
+      this.triggerMethod('remove:child', view);
 
       // decrement the index of views after this one
       this._updateIndices(view, false);
@@ -404,9 +421,9 @@ Marionette.CollectionView = Marionette.View.extend({
   destroy: function() {
     if (this.isDestroyed) { return; }
 
-    this.triggerMethod('collection:before:destroy');
+    this.triggerMethod('before:destroy:collection');
     this.destroyChildren();
-    this.triggerMethod('collection:destroyed');
+    this.triggerMethod('destroy:collection');
 
     Marionette.View.prototype.destroy.apply(this, arguments);
   },

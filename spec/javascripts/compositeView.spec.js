@@ -234,15 +234,15 @@ describe('composite view', function() {
         collection: collection
       });
 
-      compositeView.on('composite:model:rendered', function() {
+      compositeView.on('render:template', function() {
         order.push(compositeView.renderedModelView);
       });
 
-      compositeView.on('composite:collection:rendered', function() {
+      compositeView.on('render:collection', function() {
         order.push(compositeView.collection);
       });
 
-      compositeView.on('composite:rendered', function() {
+      compositeView.on('render', function() {
         order.push(compositeView);
       });
 
@@ -252,20 +252,20 @@ describe('composite view', function() {
       compositeView.render();
     });
 
-    it('should trigger a rendered event for the model view', function() {
-      expect(compositeView.trigger).toHaveBeenCalledWith('composite:model:rendered');
+    it('should trigger a render event for the model view', function() {
+      expect(compositeView.trigger).toHaveBeenCalledWith('render:template');
     });
 
     it('should trigger a before:render event for the collection', function() {
-      expect(compositeView.trigger).toHaveBeenCalledWith('composite:collection:before:render');
+      expect(compositeView.trigger).toHaveBeenCalledWith('before:render:collection', compositeView);
     });
 
-    it('should trigger a rendered event for the collection', function() {
-      expect(compositeView.trigger).toHaveBeenCalledWith('composite:collection:rendered');
+    it('should trigger a render event for the collection', function() {
+      expect(compositeView.trigger).toHaveBeenCalledWith('render:collection', compositeView);
     });
 
-    it('should trigger a rendered event for the composite view', function() {
-      expect(compositeView.trigger).toHaveBeenCalledWith('composite:rendered');
+    it('should trigger a render event for the composite view', function() {
+      expect(compositeView.trigger).toHaveBeenCalledWith('render', compositeView);
     });
 
     it('should guarantee rendering of the model before rendering the collection', function() {

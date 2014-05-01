@@ -409,13 +409,12 @@ describe('layoutView', function() {
       region.show(new Layout());
     });
 
-    it('should call onDomRefresh on region views when shown within the parents onRender', function() {
+    it('should call onDomRefresh on region views when shown within the parents onShow', function() {
       expect(this.spy).toHaveBeenCalled();
     });
 
-    it('should call onDomRefresh on region view children when shown within the parents onRender', function() {
+    it('should call onDomRefresh on region view children when shown within the parents onShow', function() {
       expect(this.spy2).toHaveBeenCalled();
     });
-
   });
 });

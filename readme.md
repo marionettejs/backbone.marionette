@@ -37,6 +37,13 @@ you want to use. This allows you to work with other Backbone
 frameworks and plugins easily. It also means that you are not required
 to engage in an all-or-nothing migration to begin using Marionette.
 
+### Chat with us
+
+Find us [on gitter](https://gitter.im/marionettejs/backbone.marionette) or on IRC in the FreeNode.net [#marionette channel](http://freenode.net). 
+
+We're happy to discuss design patterns and learn how you're using Marionette. 
+
+
 ### Key Benefits
 
 * Scalable: applications are built in modules, and with event-driven architecture
@@ -177,14 +184,6 @@ If you would like to contribute to Marionette's source code, please read
 the [guidelines for pull requests and contributions](CONTRIBUTING.md).
 Following these guidelines will help make your contributions easier to
 bring into the next release.
-
-## Help is Just a Click Away
-
-### Marionette on chat
-
-Join us [on gitter](https://gitter.im/marionettejs/backbone.marionette) to ask questions and get help.
-
-Or on IRC in the FreeNode.net [#marionette channel](http://freenode.net)
 
 ### [Github Issues](//github.com/marionettejs/backbone.marionette/issues)
 

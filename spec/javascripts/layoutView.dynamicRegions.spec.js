@@ -8,8 +8,8 @@ describe('layoutView - dynamic regions', function() {
 
     beforeEach(function() {
       MyLayoutView = Marionette.LayoutView.extend({
-        onRegionAdd: function() {},
-        onBeforeRegionAdd: function() {}
+        onAddRegion: function() {},
+        onBeforeAddRegion: function() {}
       });
 
       layoutView = new MyLayoutView({
@@ -18,10 +18,10 @@ describe('layoutView - dynamic regions', function() {
 
       beforeAddHandler = sinon.spy();
       addHandler = sinon.spy();
-      onBeforeAddSpy = sinon.spy(layoutView, 'onBeforeRegionAdd');
-      onAddSpy = sinon.spy(layoutView, 'onRegionAdd');
-      layoutView.on('before:region:add', beforeAddHandler);
-      layoutView.on('region:add', addHandler);
+      onBeforeAddSpy = sinon.spy(layoutView, 'onBeforeAddRegion');
+      onAddSpy = sinon.spy(layoutView, 'onAddRegion');
+      layoutView.on('before:add:region', beforeAddHandler);
+      layoutView.on('add:region', addHandler);
 
       layoutView.render();
 
@@ -43,12 +43,12 @@ describe('layoutView - dynamic regions', function() {
       expect(layoutView.foo.$el.children().length).toBe(1);
     });
 
-    it('should trigger a before:region:add event', function() {
+    it('should trigger a before:add:region event', function() {
       expect(beforeAddHandler).toHaveBeenCalledWith('foo');
       expect(onBeforeAddSpy).toHaveBeenCalledWith('foo');
     });
 
-    it('should trigger a region:add event', function() {
+    it('should trigger a add:region event', function() {
       expect(addHandler).toHaveBeenCalledWith('foo', region);
       expect(onAddSpy).toHaveBeenCalledWith('foo', region);
     });
@@ -163,8 +163,8 @@ describe('layoutView - dynamic regions', function() {
         regions: {
           foo: '#foo'
         },
-        onBeforeRegionRemove: function() {},
-        onRegionRemove: function() {}
+        onBeforeRemoveRegion: function() {},
+        onRemoveRegion: function() {}
       });
 
       destroyHandler = sinon.spy();
@@ -173,16 +173,16 @@ describe('layoutView - dynamic regions', function() {
 
       layoutView = new LayoutView();
 
-      onBeforeRemoveSpy = sinon.spy(layoutView, 'onBeforeRegionRemove');
-      onRemoveSpy = sinon.spy(layoutView, 'onRegionRemove');
+      onBeforeRemoveSpy = sinon.spy(layoutView, 'onBeforeRemoveRegion');
+      onRemoveSpy = sinon.spy(layoutView, 'onRemoveRegion');
 
       layoutView.render();
       layoutView.foo.show(new Backbone.View());
       region = layoutView.foo;
 
       region.on('destroy', destroyHandler);
-      layoutView.on('before:region:remove', beforeRemoveHandler);
-      layoutView.on('region:remove', removeHandler);
+      layoutView.on('before:remove:region', beforeRemoveHandler);
+      layoutView.on('remove:region', removeHandler);
 
       layoutView.removeRegion('foo');
     });
@@ -191,12 +191,12 @@ describe('layoutView - dynamic regions', function() {
       expect(destroyHandler).toHaveBeenCalled();
     });
 
-    it('should trigger a before:region:remove event', function() {
+    it('should trigger a before:remove:region event', function() {
       expect(onBeforeRemoveSpy).toHaveBeenCalledWith('foo');
       expect(beforeRemoveHandler).toHaveBeenCalledWith('foo');
     });
 
-    it('should trigger a region:remove event', function() {
+    it('should trigger a remove:region event', function() {
       expect(onRemoveSpy).toHaveBeenCalledWith('foo', region);
       expect(removeHandler).toHaveBeenCalledWith('foo', region);
     });

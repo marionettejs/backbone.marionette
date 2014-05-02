@@ -73,7 +73,7 @@ Marionette.CompositeView = Marionette.CollectionView.extend({
     this.isRendered = true;
     this.resetChildViewContainer();
 
-    this.triggerMethod('before:render', this);
+    this.triggerMethod('before:render');
 
     this._renderRoot();
     this._renderChildren();
@@ -85,9 +85,7 @@ Marionette.CompositeView = Marionette.CollectionView.extend({
 
   _renderChildren: function() {
     if (this.isRendered) {
-      this.triggerMethod('composite:collection:before:render');
       Marionette.CollectionView.prototype._renderChildren.call(this);
-      this.triggerMethod('composite:collection:rendered');
     }
   },
 
@@ -97,6 +95,8 @@ Marionette.CompositeView = Marionette.CollectionView.extend({
     var data = {};
     data = this.serializeData();
     data = this.mixinTemplateHelpers(data);
+
+    this.triggerMethod('before:render:root');
 
     var template = this.getTemplate();
     var html = Marionette.Renderer.render(template, data);

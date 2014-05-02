@@ -195,7 +195,7 @@ The `itemViewEventPrefix` can be provided in the view definition or
 in the constructor function call, to get a view instance.
 
 ### CollectionView's `itemEvents`
-You can specify an `itemEvents` hash or method which allows you to capture all bubbling itemEvents without having to manually set bindings. The keys of the hash can either be a function or a string that is the name of a method on the collection view.
+You can specify an `itemEvents` hash or method which allows you to capture all bubbling itemEvents without having to manually set bindings. The values of the hash can either be a function or a string that is the name of a method on the collection view.
 
 ```js
 itemEvents: {

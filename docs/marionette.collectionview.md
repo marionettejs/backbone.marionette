@@ -31,17 +31,18 @@ will provide features such as `onShow` callbacks, etc. Please see
   * [onRender callback](#onrender-callback)
   * [onBeforeDestroy callback](#beforedestroy-callback)
   * [onDestroy callback](#ondestroy-callback)
-  * [onBeforeChildAdded callback](#onbeforechildadded-callback)
-  * [onAfterChildAdded callback](#onafterchildadded-callback)
-  * [onChildRemoved callback](#onchildremoved-callback)
+  * [onBeforeAddChild callback](#onbeforeaddchild-callback)
+  * [onAddChild callback](#onaddchild-callback)
+  * [onBeforeRemoveChild callback](#onbeforeremovechild-callback)
+  * [onRemoveChild callback](#onremovechild-callback)
 * [CollectionView Events](#collectionview-events)
   * ["before:render" event](#beforerender-event)
   * ["render" event](#render-event)
   * ["before:destroy" event](#beforedestroy-event)
-  * ["destroyed" / "collection:destroyed" event](#destroyed--collectiondestroyed-event)
-  * ["before:child:added" / "after:child:added" event](#beforechildadded--afterchildadded-event)
-  * ["before:child:remove" event](#beforechildremoved-event)
-  * ["child:removed" event](#childremoved-event)
+  * ["destroy" / "destroy:collection" event](#destroy--destroycollection-event)
+  * ["before:add:child" / "add:child" event](#beforeaddchild--addchild-event)
+  * ["before:remove:child event](#beforeremovechild-event)
+  * ["remove:child" event](#removechild-event)
   * ["childview:\*" event bubbling from child views](#childview-event-bubbling-from-child-views)
 * [CollectionView render](#collectionview-render)
 * [CollectionView: Automatic Rendering](#collectionview-automatic-rendering)
@@ -376,7 +377,7 @@ Backbone.Marionette.CollectionView.extend({
 });
 ```
 
-### onBeforeChildAdded callback
+### onBeforeAddChild callback
 
 This callback function allows you to know when a child / child view
 instance is about to be added to the collection view. It provides access to
@@ -384,13 +385,13 @@ the view instance for the child that was added.
 
 ```js
 Backbone.Marionette.CollectionView.extend({
-  onBeforeChildAdded: function(childView){
+  onBeforeAddChild: function(childView){
     // work with the childView instance, here
   }
 });
 ```
 
-### onAfterChildAdded callback
+### onAddChild callback
 
 This callback function allows you to know when a child / child view
 instance has been added to the collection view. It provides access to
@@ -398,13 +399,26 @@ the view instance for the child that was added.
 
 ```js
 Backbone.Marionette.CollectionView.extend({
-  onAfterChildAdded: function(childView){
+  onAddChild: function(childView){
     // work with the childView instance, here
   }
 });
 ```
 
-### onChildRemoved callback
+### onBeforeRemoveChild callback
+
+This callback function allows you to know when a `childView`
+instance is about to be removed from the `collectionView`. It provides access to
+the view instance for the child that was removed.
+
+```js
+Backbone.Marionette.CollectionView.extend({
+  onBeforeRemoveChild: function(childView){
+    // work with the childView instance, here
+  }
+});
+
+### onRemoveChild callback
 
 This callback function allows you to know when a child / childView
 instance has been deleted or removed from the
@@ -412,7 +426,7 @@ collection.
 
 ```js
 Backbone.Marionette.CollectionView.extend({
-  onChildRemoved: function(childView){
+  onRemoveChild: function(childView){
     // work with the childView instance, here
   }
 });
@@ -469,22 +483,22 @@ myView.render();
 
 ### "before:destroy" event
 
-Triggered just before destroying the view. A "collection:before:destroy" /
-`onCollectionBeforeDestroy` event will also be fired
+Triggered just before destroying the view. A "before:destroy:collection" /
+`onBeforeDestroyCollection` event will also be fired
 
 ```js
 MyView = Backbone.Marionette.CollectionView.extend({...});
 
 var myView = new MyView();
 
-myView.on("collection:before:destroy", function(){
+myView.on("before:destroy:collection", function(){
   alert("the collection view is about to be destroyed");
 });
 
 myView.destroy();
 ```
 
-### "destroyed" / "collection:destroyed" event
+### "destroy" / "destroy:collection" event
 
 Triggered just after destroying the view, both with corresponding
 method calls.
@@ -494,21 +508,21 @@ MyView = Backbone.Marionette.CollectionView.extend({...});
 
 var myView = new MyView();
 
-myView.on("collection:destroyed", function(){
+myView.on("destroy:collection", function(){
   alert("the collection view is now destroyed");
 });
 
 myView.destroy();
 ```
 
-### "before:child:added" / "after:child:added" event
+### "before:add:child" / "add:child" event
 
-The "before:child:added" event and corresponding `onBeforeChildAdded`
+The "before:add:child" event and corresponding `onBeforeAddChild`
 method are triggered just after creating a new `childView` instance for
 a child that was added to the collection, but before the
 view is rendered and added to the DOM.
 
-The "after:child:added" event and corresponding `onAfterChildAdded`
+The "add:child" event and corresponding `onAddChild`
 method are triggered after rendering the view and adding it to the
 view's DOM element.
 
@@ -516,45 +530,45 @@ view's DOM element.
 var MyCV = Marionette.CollectionView.extend({
   // ...
 
-  onBeforeChildAdded: function(){
+  onBeforeAddChild: function(){
     // ...
   },
 
-  onAfterChildAdded: function(){
+  onAddChild: function(){
     // ...
   }
 });
 
 var cv = new MyCV({...});
 
-cv.on("before:child:added", function(viewInstance){
+cv.on("before:add:child", function(viewInstance){
   // ...
 });
 
-cv.on("after:child:added", function(viewInstance){
+cv.on("add:child", function(viewInstance){
   // ...
 });
 ```
 
-### "before:child:removed"
+### "before:remove:child"
 
 This is triggered after the childView instance has been
 removed from the collection, but before it has been destroyed.
 
 ```js
-cv.on("before:child:removed", function(childView){
+cv.on("before:remove:child", function(childView){
   // ...
 });
 ```
 
-### "child:removed" event
+### "remove:child" event
 
 Triggered after a childView instance has been destroyed and
 removed, when its child was deleted or removed from the
 collection.
 
 ```js
-cv.on("child:removed", function(viewInstance){
+cv.on("remove:child", function(viewInstance){
   // ...
 });
 ```

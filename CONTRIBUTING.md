@@ -137,7 +137,7 @@ In fact...
 
 If you are stuck in a scenario that fails in your app,
 but you don't know how to fix it, submit a failing spec
-to show the failing scenario. Follow the guidelines for
+to show the failing scenario. Follow the guidelines for a
 pull request submission, but don't worry about fixing the
 problem. A failing spec to show that a problem exists is
 a very very very helpful pull request for us.
@@ -152,7 +152,7 @@ It is very sad that we need to include this section of
 the contribution guidelines...
 
 If you are running in to a scenario with a problem, don't
-be a troll. Comment like "does marionette even have tests?"
+be a troll. Comments like "does marionette even have tests?"
 are not useful, funny or constructive. In fact, it may get
 you blocked and reported for abuse to Github.
 

@@ -73,12 +73,11 @@ Marionette.CompositeView = Marionette.CollectionView.extend({
     this.isRendered = true;
     this.resetChildViewContainer();
 
-    this.triggerMethod('before:render');
+    this.triggerMethod('before:render', this);
 
     this._renderRoot();
     this._renderChildren();
 
-    this.triggerMethod('composite:rendered');
     this.triggerMethod('render', this);
     return this;
   },
@@ -96,7 +95,7 @@ Marionette.CompositeView = Marionette.CollectionView.extend({
     data = this.serializeData();
     data = this.mixinTemplateHelpers(data);
 
-    this.triggerMethod('before:render:root');
+    this.triggerMethod('before:render:template');
 
     var template = this.getTemplate();
     var html = Marionette.Renderer.render(template, data);
@@ -106,7 +105,7 @@ Marionette.CompositeView = Marionette.CollectionView.extend({
     // will not be available until after the model is rendered, but should be
     // available before the collection is rendered.
     this.bindUIElements();
-    this.triggerMethod('composite:model:rendered');
+    this.triggerMethod('render:template');
   },
 
   // You might need to override this if you've overridden appendHtml

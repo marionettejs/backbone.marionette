@@ -10,8 +10,8 @@ describe('regionManager', function() {
         beforeAddHandler = sinon.spy();
 
         regionManager = new Marionette.RegionManager();
-        regionManager.on('region:add', addHandler);
-        regionManager.on('before:region:add', beforeAddHandler);
+        regionManager.on('add:region', addHandler);
+        regionManager.on('before:add:region', beforeAddHandler);
 
         region = regionManager.addRegion('foo', '#foo');
       });
@@ -24,11 +24,11 @@ describe('regionManager', function() {
         expect(regionManager.get('foo')).toBe(region);
       });
 
-      it('should trigger a "before:region:add" event/method', function() {
+      it('should trigger a "before:add:region" event/method', function() {
         expect(beforeAddHandler).toHaveBeenCalledWith('foo', region);
       });
 
-      it('should trigger a "region:add" event/method', function() {
+      it('should trigger a "add:region" event/method', function() {
         expect(addHandler).toHaveBeenCalledWith('foo', region);
       });
 
@@ -45,8 +45,8 @@ describe('regionManager', function() {
         beforeAddHandler = sinon.spy();
 
         regionManager = new Marionette.RegionManager();
-        regionManager.on('region:add', addHandler);
-        regionManager.on('before:region:add', beforeAddHandler);
+        regionManager.on('add:region', addHandler);
+        regionManager.on('before:add:region', beforeAddHandler);
 
         region = new Marionette.Region({el: '#foo'});
         builtRegion = regionManager.addRegion('foo', region);
@@ -60,11 +60,11 @@ describe('regionManager', function() {
         expect(regionManager.get('foo')).toBe(region);
       });
 
-      it('should trigger a "before:region:add" event/method', function() {
+      it('should trigger a "before:add:region" event/method', function() {
         expect(beforeAddHandler).toHaveBeenCalledWith('foo', region);
       });
 
-      it('should trigger a "region:add" event/method', function() {
+      it('should trigger a "add:region" event/method', function() {
         expect(addHandler).toHaveBeenCalledWith('foo', region);
       });
 
@@ -199,8 +199,8 @@ describe('regionManager', function() {
       region.show(new Backbone.View());
 
       region.on('destroy', destroyHandler);
-      regionManager.on('before:region:remove', beforeRemoveHandler);
-      regionManager.on('region:remove', removeHandler);
+      regionManager.on('before:remove:region', beforeRemoveHandler);
+      regionManager.on('remove:region', removeHandler);
 
       spyOn(region, 'stopListening');
 
@@ -219,11 +219,11 @@ describe('regionManager', function() {
       expect(regionManager.get('foo')).toBeUndefined();
     });
 
-    it('should trigger a "before:region:remove" event/method', function() {
+    it('should trigger a "before:remove:region" event/method', function() {
       expect(beforeRemoveHandler).toHaveBeenCalledWith('foo', region);
     });
 
-    it('should trigger a "region:remove" event/method', function() {
+    it('should trigger a "remove:region" event/method', function() {
       expect(removeHandler).toHaveBeenCalledWith('foo', region);
     });
 
@@ -252,7 +252,7 @@ describe('regionManager', function() {
       region.on('destroy', destroyHandler);
       r2.on('destroy', destroyHandler2);
 
-      regionManager.on('region:remove', removeHandler);
+      regionManager.on('remove:region', removeHandler);
 
       spyOn(region, 'stopListening');
       spyOn(r2, 'stopListening');
@@ -275,7 +275,7 @@ describe('regionManager', function() {
       expect(regionManager.get('bar')).toBeUndefined();
     });
 
-    it('should trigger a "region:remove" event/method for each region', function() {
+    it('should trigger a "remove:region" event/method for each region', function() {
       expect(removeHandler).toHaveBeenCalledWith('foo', region);
       expect(removeHandler).toHaveBeenCalledWith('bar', r2);
     });

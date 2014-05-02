@@ -30,7 +30,7 @@ the changes that you want, we will have an easier time
 seeing what you are trying to do. But a pull request in
 itself is not usually sufficient. There needs to be some
 context and purpose with it, and it should be done
-against specific branch.
+against a specific branch.
 
 Try and stick to Marionette's existing coding conventions
 (just use the file your editing as a guideline).

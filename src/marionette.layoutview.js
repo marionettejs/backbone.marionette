@@ -51,10 +51,6 @@ Marionette.LayoutView = Marionette.ItemView.extend({
 
   // Add a single region, by name, to the layoutView
   addRegion: function(name, definition) {
-<<<<<<< HEAD
-    this.triggerMethod('before:region:add', name);
-=======
->>>>>>> a6e28e3... region events
     var regions = {};
     regions[name] = definition;
     return this._buildRegions(regions)[name];
@@ -68,10 +64,6 @@ Marionette.LayoutView = Marionette.ItemView.extend({
 
   // Remove a single region from the LayoutView, by name
   removeRegion: function(name) {
-<<<<<<< HEAD
-    this.triggerMethod('before:region:remove', name);
-=======
->>>>>>> a6e28e3... region events
     delete this.regions[name];
     return this.regionManager.removeRegion(name);
   },
@@ -147,7 +139,7 @@ Marionette.LayoutView = Marionette.ItemView.extend({
 
     this.listenTo(this.regionManager, 'add:region', function(name, region) {
       this[name] = region;
-      this.triggerMethod('region:add', name, region);
+      this.triggerMethod('add:region', name, region);
     });
 
     this.listenTo(this.regionManager, 'before:remove:region', function(name) {
@@ -156,7 +148,7 @@ Marionette.LayoutView = Marionette.ItemView.extend({
 
     this.listenTo(this.regionManager, 'remove:region', function(name, region) {
       delete this[name];
-      this.triggerMethod('region:remove', name, region);
+      this.triggerMethod('remove:region', name, region);
     });
   }
 });

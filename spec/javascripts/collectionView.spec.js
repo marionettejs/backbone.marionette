@@ -107,11 +107,11 @@ describe('collection view', function() {
     });
 
     it('should trigger a "before:render:collection" event', function() {
-      expect(collectionView.trigger).toHaveBeenCalledWith('before:render:collection');
+      expect(collectionView.trigger).toHaveBeenCalledWith('before:render:collection', collectionView);
     });
 
     it('should trigger a "render:collection" event', function() {
-      expect(collectionView.trigger).toHaveBeenCalledWith('render:collection');
+      expect(collectionView.trigger).toHaveBeenCalledWith('render:collection', collectionView);
     });
 
     it('should trigger a "render" event', function() {

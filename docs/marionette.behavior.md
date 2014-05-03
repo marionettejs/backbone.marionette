@@ -11,6 +11,7 @@ A `Behavior` is an  isolated set of DOM / user interactions that can be mixed in
   * [Event proxy](#the-event-proxy)
   * [Model Events](#model-events)
   * [Collection Events](#model-events)
+  * [Grouped Behaviors](#grouped-behaviors)
   * [$](#$)
   * [$el](#$el)
   * [Defaults](#defaults)
@@ -188,8 +189,8 @@ Marionette.Behavior.extend({
   });
 ```
 
-### Nested Behaviors
-`behaviors` allows your behavior to use other behaviors.
+### Grouped Behaviors
+Then `behaviors` key allows a behavior to group multiple behaviors together.
 ```js
   Marionette.Behavior.extend({
     behaviors: {

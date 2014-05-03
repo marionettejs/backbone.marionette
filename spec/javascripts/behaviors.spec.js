@@ -569,7 +569,7 @@ describe('Behaviors', function() {
   describe('behavior with behavior', function() {
     var initSpy, renderSpy, childRenderSpy, entityEventSpy;
     var viewEventSpy, childEventSpy, parentEventSpy;
-    var View, v, m, c, hold, parentBehavior, childBehavior;
+    var View, v, m, c, hold, parentBehavior, groupedBehavior;
     beforeEach(function() {
       initSpy = sinon.spy();
       renderSpy = sinon.spy();
@@ -598,7 +598,7 @@ describe('Behaviors', function() {
       hold.childB = Marionette.Behavior.extend({
         initialize: function() {
           initSpy();
-          childBehavior = this;
+          groupedBehavior = this;
         },
         onRender: childRenderSpy,
         ui: {
@@ -638,13 +638,13 @@ describe('Behaviors', function() {
       spyOn(v, 'undelegateEvents').andCallThrough();
     });
 
-    it('should call initialize on child behavior', function() {
+    it('should call initialize on grouped behaviors', function() {
       expect(initSpy).toHaveBeenCalled();
     });
 
-    it('should call onRender on child behavior', function() {
+    it('should call onRender on grouped behaviors', function() {
       v.triggerMethod('render');
-      expect(childRenderSpy).toHaveBeenCalledOn(childBehavior);
+      expect(childRenderSpy).toHaveBeenCalledOn(groupedBehavior);
     });
 
     it('should call onRender on the view', function() {
@@ -658,23 +658,23 @@ describe('Behaviors', function() {
       expect(v.undelegateEvents.callCount).toBe(1);
     });
 
-    it('should proxy modelEvents to child behavior', function() {
+    it('should proxy modelEvents to grouped behaviors', function() {
       m.trigger('change');
-      expect(entityEventSpy).toHaveBeenCalledOn(childBehavior);
+      expect(entityEventSpy).toHaveBeenCalledOn(groupedBehavior);
     });
 
-    it('should proxy collectionEvents to child behavior', function() {
+    it('should proxy collectionEvents to grouped behaviors', function() {
       c.trigger('sync');
-      expect(entityEventSpy).toHaveBeenCalledOn(childBehavior);
+      expect(entityEventSpy).toHaveBeenCalledOn(groupedBehavior);
     });
 
-    it('should proxy child behavior UI events to child behavior', function() {
+    it('should proxy child behavior UI events to grouped behaviors', function() {
       v.render();
       v.$('.child').trigger('click');
-      expect(childEventSpy).toHaveBeenCalledOn(childBehavior);
+      expect(childEventSpy).toHaveBeenCalledOn(groupedBehavior);
     });
 
-    it('should proxy parent behavior UI events to parent behavior', function() {
+    it('should proxy base behavior UI events to base behavior', function() {
       v.render();
       v.$('.parent').trigger('click');
       expect(parentEventSpy).toHaveBeenCalledOn(parentBehavior);

@@ -185,7 +185,7 @@ Marionette.Behaviors = (function(Marionette, _) {
     },
 
     // Iterate over the behaviors object, for each behavior
-    // instantiate it and get its nested behaviors.
+    // instantiate it and get its grouped behaviors.
     parseBehaviors: function(view, behaviors) {
       return _.chain(behaviors).map(function(options, key) {
         var BehaviorClass = Behaviors.getBehaviorClass(options, key);

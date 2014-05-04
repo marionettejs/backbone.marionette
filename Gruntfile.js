@@ -1,3 +1,6 @@
+var path = require('path');
+var unwrap = require('unwrap');
+
 module.exports = function(grunt) {
 
   require('load-grunt-tasks')(grunt, {
@@ -71,7 +74,7 @@ module.exports = function(grunt) {
       },
       core: {
         src: '<%= preprocess.core.dest %>',
-        dest: 'lib/core/backbone.marionette.js'
+        dest: '<%= preprocess.core.dest %>'
       },
       bundle: {
         src: '<%= preprocess.bundle.dest %>',
@@ -81,21 +84,17 @@ module.exports = function(grunt) {
 
     concat: {
       options: {
-        banner: "<%= meta.core_banner %>"
+        banner: '<%= meta.core_banner %>'
       },
       core: {
-        src: '<%= preprocess.bundle.dest %>',
+        src: '<%= preprocess.core.dest %>',
         dest: 'lib/core/backbone.marionette.js'
       },
       bundle: {
         options: {
-          banner: "<%= meta.banner %>"
+          banner: '<%= meta.banner %>'
         },
-        src: [
-          '<%= assets.babysitter %>',
-          '<%= assets.wreqr %>',
-          '<%= preprocess.bundle.dest %>'
-        ],
+        src: '<%= preprocess.bundle.dest %>',
         dest: 'lib/backbone.marionette.js'
       }
     },
@@ -105,7 +104,7 @@ module.exports = function(grunt) {
         src : '<%= concat.core.dest %>',
         dest : 'lib/core/backbone.marionette.min.js',
         options : {
-          banner: "<%= meta.core_bundle %>",
+          banner: '<%= meta.core_bundle %>',
           sourceMap : 'lib/core/backbone.marionette.map',
           sourceMappingURL : '<%= uglify.bundle.options.sourceMappingURL %>',
           sourceMapPrefix : 1
@@ -201,23 +200,52 @@ module.exports = function(grunt) {
     lintspaces: {
       all: {
         src: [
-            'src/*.js',
-            'docs/*.md'
+          'src/*.js',
+          'docs/*.md'
         ],
         options: {
-            editorconfig: '.editorconfig'
+          editorconfig: '.editorconfig'
         }
       }
+    },
+
+    unwrap: {
+      babysitter: {
+        src: './bower_components/backbone.babysitter/lib/backbone.babysitter.js',
+        dest: './tmp/backbone.babysitter.bare.js'
+      },
+      wreqr: {
+        src: './bower_components/backbone.wreqr/lib/backbone.wreqr.js',
+        dest: './tmp/backbone.wreqr.bare.js'
+      }
     }
+  });
+
+  grunt.registerMultiTask('unwrap', 'Unwrap UMD', function () {
+    var done = this.async();
+    var timesLeft = 0;
+
+    this.files.forEach(function (file) {
+      file.src.forEach(function (src) {
+        timesLeft++;
+        unwrap(path.resolve(__dirname, src), function (err, content) {
+          if (err) return grunt.log.error(err);
+          grunt.file.write(path.resolve(__dirname, file.dest), content);
+          grunt.log.ok(file.dest + ' created.');
+          timesLeft--;
+          if (timesLeft <= 0) done();
+        });
+      });
+    });
   });
 
   grunt.registerTask('default', 'An alias task for running tests.', ['test']);
 
   grunt.registerTask('lint', 'Lints our sources', ['lintspaces', 'jshint']);
 
-  grunt.registerTask('test', 'Run the unit tests.', ['lint', 'preprocess:bundle', 'template:bundle', 'jasmine:marionette', 'clean:tmp']);
+  grunt.registerTask('test', 'Run the unit tests.', ['lint', 'unwrap', 'preprocess:bundle', 'template:bundle', 'jasmine:marionette', 'clean:tmp']);
 
   grunt.registerTask('dev', 'Auto-lints while writing code.', ['test', 'watch:marionette']);
 
-  grunt.registerTask('build', 'Build all three versions of the library.', ['clean:lib', 'bower:install', 'lint', 'preprocess', 'template', 'jasmine:marionette', 'concat', 'uglify', 'clean:tmp']);
+  grunt.registerTask('build', 'Build all three versions of the library.', ['clean:lib', 'bower:install', 'lint', 'unwrap', 'preprocess', 'template', 'jasmine:marionette', 'concat', 'uglify', 'clean:tmp']);
 };

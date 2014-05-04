@@ -1,23 +1,25 @@
 (function(root, factory) {
 
   if (typeof define === 'function' && define.amd) {
-    define(['exports', 'backbone', 'underscore'], function(exports, Backbone, _) {
-      root.Marionette = factory(root, exports, Backbone, _);
+    define(['backbone', 'underscore'], function(Backbone, _) {
+      return (root.Marionette = factory(root, Backbone, _));
     });
   } else if (typeof exports !== 'undefined') {
     var Backbone = require('backbone');
     var _ = require('underscore');
-    require('backbone.wreqr');
-    require('backbone.babysitter');
-    factory(root, exports, Backbone, _);
+    var Wreqr = require('backbone.wreqr');
+    var BabySitter = require('backbone.babysitter');
+    module.exports = factory(root, Backbone, _);
   } else {
-    root.Marionette = factory(root, {}, root.Backbone, root._);
+    root.Marionette = factory(root, root.Backbone, root._);
   }
 
-}(this, function(root, Marionette, Backbone, _) {
+}(this, function(root, Backbone, _) {
   'use strict';
 
   var previousMarionette = root.Marionette;
+
+  var Marionette = Backbone.Marionette = {};
 
   Marionette.VERSION = '<%= version %>';
 
@@ -25,8 +27,6 @@
     root.Marionette = previousMarionette;
     return this;
   };
-
-  Backbone.Marionette = Marionette;
 
   // Get the DOM manipulator for later use
   Marionette.$ = Backbone.$;

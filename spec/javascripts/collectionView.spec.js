@@ -804,7 +804,7 @@ describe('collection view', function() {
     });
 
     it('should provide the child view that triggered the event, including other relevant parameters', function() {
-      expect(someEventSpy).toHaveBeenCalledWith('childview:some:event', childView, 'test', model);
+      expect(someEventSpy).toHaveBeenCalledWith(childView, 'test', model);
     });
   });
 
@@ -836,7 +836,7 @@ describe('collection view', function() {
     });
 
     it('should provide the child view that triggered the event, including other relevant parameters', function() {
-      expect(onSomeEventSpy).toHaveBeenCalledWith('childview:some:event', childView, 'test', model);
+      expect(onSomeEventSpy).toHaveBeenCalledWith(childView, 'test', model);
     });
   });
 
@@ -869,7 +869,7 @@ describe('collection view', function() {
     });
 
     it('should provide the child view that triggered the event, including other relevant parameters', function() {
-      expect(someEventSpy).toHaveBeenCalledWith('childview:some:event', childView, 'test', model);
+      expect(someEventSpy).toHaveBeenCalledWith(childView, 'test', model);
     });
   });
 

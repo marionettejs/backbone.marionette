@@ -1,21 +1,26 @@
 (function(root, factory) {
 
   if (typeof define === 'function' && define.amd) {
-    define(['exports', 'backbone', 'underscore'], function(exports, Backbone, _) {
-      root.Marionette = factory(root, exports, Backbone, _);
+    define(['backbone', 'underscore'], function(Backbone, _) {
+      return (root.Marionette = factory(root, Backbone, _));
     });
   } else if (typeof exports !== 'undefined') {
     var Backbone = require('backbone');
     var _ = require('underscore');
-    factory(root, exports, Backbone, _);
+    module.exports = factory(root, Backbone, _);
   } else {
-    root.Marionette = factory(root, {}, root.Backbone, root._);
+    root.Marionette = factory(root, root.Backbone, root._);
   }
 
-}(this, function(root, Marionette, Backbone, _) {
+}(this, function(root, Backbone, _) {
   'use strict';
 
+  // @include ../../tmp/backbone.babysitter.bare.js
+  // @include ../../tmp/backbone.wreqr.bare.js
+
   var previousMarionette = root.Marionette;
+
+  var Marionette = Backbone.Marionette = {};
 
   Marionette.VERSION = '<%= version %>';
 

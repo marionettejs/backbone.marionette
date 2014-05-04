@@ -63,6 +63,7 @@
     "grunt-preprocess": "~4.0.0",
     "unwrap": "^0.1.0",
     "grunt-bower-task": "~0.3.4",
-    "grunt-template": "^0.2.3"
+    "grunt-template": "^0.2.3",
+    "unwrap": "^0.1.0"
   }
 }

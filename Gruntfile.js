@@ -74,7 +74,7 @@ module.exports = function(grunt) {
       },
       core: {
         src: '<%= preprocess.core.dest %>',
-        dest: 'lib/core/backbone.marionette.js'
+        dest: '<%= preprocess.core.dest %>'
       },
       bundle: {
         src: '<%= preprocess.bundle.dest %>',
@@ -84,21 +84,17 @@ module.exports = function(grunt) {
 
     concat: {
       options: {
-        banner: "<%= meta.core_banner %>"
+        banner: '<%= meta.core_banner %>'
       },
       core: {
-        src: '<%= preprocess.bundle.dest %>',
+        src: '<%= preprocess.core.dest %>',
         dest: 'lib/core/backbone.marionette.js'
       },
       bundle: {
         options: {
-          banner: "<%= meta.banner %>"
+          banner: '<%= meta.banner %>'
         },
-        src: [
-          '<%= assets.babysitter %>',
-          '<%= assets.wreqr %>',
-          '<%= preprocess.bundle.dest %>'
-        ],
+        src: '<%= preprocess.bundle.dest %>',
         dest: 'lib/backbone.marionette.js'
       }
     },
@@ -108,7 +104,7 @@ module.exports = function(grunt) {
         src : '<%= concat.core.dest %>',
         dest : 'lib/core/backbone.marionette.min.js',
         options : {
-          banner: "<%= meta.core_bundle %>",
+          banner: '<%= meta.core_bundle %>',
           sourceMap : 'lib/core/backbone.marionette.map',
           sourceMappingURL : '<%= uglify.bundle.options.sourceMappingURL %>',
           sourceMapPrefix : 1
@@ -204,11 +200,11 @@ module.exports = function(grunt) {
     lintspaces: {
       all: {
         src: [
-            'src/*.js',
-            'docs/*.md'
+          'src/*.js',
+          'docs/*.md'
         ],
         options: {
-            editorconfig: '.editorconfig'
+          editorconfig: '.editorconfig'
         }
       }
     },
@@ -257,5 +253,5 @@ module.exports = function(grunt) {
 
   grunt.registerTask('dev', 'Auto-lints while writing code.', ['test', 'watch:marionette']);
 
-  grunt.registerTask('build', 'Build all three versions of the library.', ['clean:lib', 'bower:install', 'unwrap', 'lint', 'preprocess', 'template', 'jasmine:marionette', 'concat', 'uglify', 'clean:tmp']);
+  grunt.registerTask('build', 'Build all three versions of the library.', ['clean:lib', 'bower:install', 'lint', 'unwrap', 'preprocess', 'template', 'jasmine:marionette', 'concat', 'uglify', 'clean:tmp']);
 };

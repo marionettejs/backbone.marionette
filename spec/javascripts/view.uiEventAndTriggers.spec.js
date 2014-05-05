@@ -2,7 +2,7 @@ describe('view ui event trigger configuration', function() {
   'use strict';
 
   describe('@ui syntax within events and triggers', function() {
-    var view, view2, view3, fooHandler, attackHandler, tapHandler, defendHandler;
+    var view, view2, view3, fooHandler, attackHandler, tapHandler, defendHandler, yieldHandler;
 
     var View = Backbone.Marionette.ItemView.extend({
       ui: {
@@ -16,9 +16,13 @@ describe('view ui event trigger configuration', function() {
       },
 
       events: {
-        'click @ui.bar': 'attack',
+        'click @ui.bar': ['attack', 'yield'],
         'click div:not(@ui.bar)': 'tapper',
         'click @ui.bar, @ui.foo, @ui.bat': 'defend'
+      },
+
+      yield: function() {
+        yieldHandler();
       },
 
       tapper: function() {
@@ -87,6 +91,7 @@ describe('view ui event trigger configuration', function() {
       attackHandler = jasmine.createSpy('attack handler');
       defendHandler = jasmine.createSpy('defend handler');
       tapHandler = jasmine.createSpy('tap handler');
+      yieldHandler = jasmine.createSpy('yield handler');
       spyOn(view, 'attack').andCallThrough();
       view.on('do:foo', fooHandler);
       view2.on('do:foo', fooHandler);
@@ -105,6 +110,7 @@ describe('view ui event trigger configuration', function() {
     it('should correctly call an event', function() {
       view.$('#tap').trigger('click');
       expect(attackHandler).toHaveBeenCalled();
+      expect(yieldHandler).toHaveBeenCalled();
     });
 
     it('should correctly call an event with a functional events hash', function() {

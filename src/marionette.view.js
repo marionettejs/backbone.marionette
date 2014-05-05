@@ -16,6 +16,9 @@ Marionette.View = Backbone.View.extend({
     // parses out the @ui DSL for events
     this.events = this.normalizeUIKeys(_.result(this, 'events'));
 
+    // normalize array formated multiple event methods
+    this.events = this.normalizeHandlers(this.events);
+
     if (_.isObject(this.behaviors)) {
       new Marionette.Behaviors(this);
     }
@@ -48,6 +51,22 @@ Marionette.View = Backbone.View.extend({
     return _.extend(target, templateHelpers);
   },
 
+  normalizeHandlers: function(hash) {
+    return _.chain(hash)
+            .pairs()
+            .reduce(function(events, pair){
+              if (_.isArray(pair[1])) {
+                _.each(pair[1], function(action, i) {
+                  events.push([pair[0] + (new Array(i + 1)).join(' '), action]);
+                });
+              } else {
+                events.push(pair);
+              }
+              return events;
+            }, [])
+            .object()
+            .value();
+  },
 
   normalizeUIKeys: function(hash) {
     var ui = _.result(this, 'ui');

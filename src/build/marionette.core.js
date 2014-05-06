@@ -4,6 +4,10 @@ var Marionette = (function(global, Backbone, _){
   // Define and export the Marionette namespace
   var Marionette = {};
   Backbone.Marionette = Marionette;
+  // We also attach Backbone to Marionette. This is primarily for use in
+  // CommonJS environments where you need a handle of the same
+  // Backbone.history used to register the AppRouter's routes.
+  Marionette.Backbone = Backbone;
 
   // Get the DOM manipulator for later use
   Marionette.$ = Backbone.$;

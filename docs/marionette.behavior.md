@@ -18,7 +18,7 @@ A `Behavior` is an  isolated set of DOM / user interactions that can be mixed in
 
 ## The Motivation
 
-As you build more and more complex views you will find that your `view` becomes less about displaying model data, and more about interactions.
+As you build more and more complex views, you will find that your `view` becomes less about displaying model data, and more about interactions.
 
 These interactions tend to be chunks of logic that you want to use in multiple views.
 
@@ -49,7 +49,7 @@ var MyView = Marionette.ItemView.extend({
 });
 ```
 
-Interaction points such as tooltips and warning messages are generic concepts. There is no need to recode them within your views. They are prime for abstraction into a higher level non-coupled concept, which is exactly what Behaviors provide you with.
+Interaction points, such as tooltips and warning messages, are generic concepts. There is no need to recode them within your views. They are prime for abstraction into a higher level non-coupled concept, which is exactly what Behaviors provide you with.
 
 Here is the syntax for declaring which behaviors get used within a view.
 The keys in the hash are passed to `getBehaviorClass` to lookup the correct `Behavior` class.
@@ -113,7 +113,7 @@ var ToolTip = Marionette.Behavior.extend({
 });
 ```
 
-There is one final piece to finalizing this. The user must define a location for where their `behaviors` are stored.
+Finally, the user must define a location for where their `behaviors` are stored.
 A simple example of this would look like this:
 
 ```js

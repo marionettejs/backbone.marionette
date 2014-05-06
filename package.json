@@ -41,7 +41,9 @@
   "github": "https://github.com/marionettejs/backbone.marionette",
   "dependencies": {
     "backbone.babysitter": "^0.1.0",
-    "backbone.wreqr": "^1.0.0",
+    "backbone.wreqr": "^1.0.0"
+  },
+  "peerDependencies": {
     "backbone": "1.0.0 - 1.1.2",
     "underscore": "1.4.4 - 1.6.0"
   },
@@ -60,6 +62,8 @@
     "bower": "1.2.8",
     "grunt-cli": "0.1.13",
     "grunt-contrib-clean": "~0.5.0",
-    "grunt-preprocess": "~4.0.0"
+    "grunt-preprocess": "~4.0.0",
+    "backbone": "1.0.0 - 1.1.2",
+    "underscore": "1.4.4 - 1.6.0"
   }
 }

@@ -1,3 +1,6 @@
+var path = require('path');
+var unwrap = require('unwrap');
+
 module.exports = function(grunt) {
 
   require('load-grunt-tasks')(grunt, {
@@ -41,7 +44,7 @@ module.exports = function(grunt) {
 
     clean: {
       lib: 'lib',
-      tmp: 'tmp' 
+      tmp: 'tmp'
     },
 
     preprocess: {
@@ -53,8 +56,8 @@ module.exports = function(grunt) {
         src: 'src/build/amd.core.js',
         dest: 'tmp/backbone.marionette.amd.js'
       },
-      tmp: {
-        src: '<%= preprocess.core_build.src %>',
+      bundle: {
+        src: 'src/build/marionette.bundle.js',
         dest: 'tmp/backbone.marionette.js'
       }
     },
@@ -64,18 +67,14 @@ module.exports = function(grunt) {
         banner: "<%= meta.core_banner %>"
       },
       core: {
-        src: '<%= preprocess.tmp.dest %>',
+        src: '<%= preprocess.bundle.dest %>',
         dest: 'lib/core/backbone.marionette.js'
       },
       bundle: {
         options: {
           banner: "<%= meta.banner %>"
         },
-        src: [
-          '<%= assets.babysitter %>',
-          '<%= assets.wreqr %>',
-          '<%= preprocess.tmp.dest %>',
-        ],
+        src: '<%= preprocess.bundle.dest %>',
         dest: 'lib/backbone.marionette.js'
       },
       amd: {
@@ -133,7 +132,7 @@ module.exports = function(grunt) {
       },
       marionette : {
         src : [
-          '<%= preprocess.tmp.dest %>',
+          '<%= preprocess.bundle.dest %>',
           'spec/javascripts/support/marionette.support.js'
         ],
       }
@@ -174,7 +173,7 @@ module.exports = function(grunt) {
         }
       }
     },
-    
+
     lintspaces: {
       all: {
         src: [
@@ -185,17 +184,46 @@ module.exports = function(grunt) {
             editorconfig: '.editorconfig'
         }
       }
+    },
+
+    unwrap: {
+      babysitter: {
+        src: './bower_components/backbone.babysitter/lib/backbone.babysitter.js',
+        dest: './tmp/backbone.babysitter.bare.js'
+      },
+      wreqr: {
+        src: './bower_components/backbone.wreqr/lib/backbone.wreqr.js',
+        dest: './tmp/backbone.wreqr.bare.js'
+      }
     }
+  });
+
+  grunt.registerMultiTask('unwrap', 'Unwrap UMD', function () {
+    var done = this.async();
+    var timesLeft = 0;
+
+    this.files.forEach(function (file) {
+      file.src.forEach(function (src) {
+        timesLeft++;
+        unwrap(path.resolve(__dirname, src), function (err, content) {
+          if (err) return grunt.log.error(err);
+          grunt.file.write(path.resolve(__dirname, file.dest), content);
+          grunt.log.ok(file.dest + ' created.');
+          timesLeft--;
+          if (timesLeft <= 0) done();
+        });
+      });
+    });
   });
 
   grunt.registerTask('default', 'An alias task for running tests.', ['test']);
 
   grunt.registerTask('lint', 'Lints our sources', ['lintspaces', 'jshint']);
 
-  grunt.registerTask('test', 'Run the unit tests.', ['lint', 'preprocess:tmp', 'jasmine:marionette', 'clean:tmp']);
+  grunt.registerTask('test', 'Run the unit tests.', ['lint', 'unwrap', 'preprocess:bundle', 'jasmine:marionette', 'clean:tmp']);
 
-  grunt.registerTask('dev', 'Auto-lints while writing code.', ['lint', 'preprocess:tmp', 'jasmine:marionette', 'watch:marionette']);
+  grunt.registerTask('dev', 'Auto-lints while writing code.', ['lint', 'unwrap', 'preprocess:bundle', 'jasmine:marionette', 'watch:marionette']);
 
-  grunt.registerTask('build', 'Build all three versions of the library.', ['clean:lib', 'lint', 'preprocess', 'jasmine:marionette', 'concat', 'uglify', 'clean:tmp']);
+  grunt.registerTask('build', 'Build all three versions of the library.', ['clean:lib', 'lint', 'unwrap', 'preprocess', 'jasmine:marionette', 'concat', 'uglify', 'clean:tmp']);
 
 };

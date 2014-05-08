@@ -1,3 +1,8 @@
+### v1.8.5 [view commit logs](https://github.com/marionettejs/backbone.marionette/compare/v1.8.4...v1.8.5)
+
+  * Fixes
+    * Update the UMD build to be inline with the 2.x branch UMD implementation.
+
 ### v1.8.4 [view commit logs](https://github.com/marionettejs/backbone.marionette/compare/v1.8.3...v1.8.4)
 
   * General

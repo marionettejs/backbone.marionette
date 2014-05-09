@@ -2,8 +2,8 @@
 
 The `Backbone.Marionette.Application` object is the hub of your composite
 application. It organizes, initializes and coordinates the various pieces of your
-app. It also provides a starting point for you to call into, from your HTML
-script block or from your JavaScript files directly if you prefer to go that
+app. It also provides a starting point for you to call into from your HTML
+script block, or directly from your JavaScript files if you prefer to go that
 route.
 
 The `Application` is meant to be instantiated directly, although you can extend
@@ -53,10 +53,10 @@ MyApp.addInitializer(function(options){
 
 These callbacks will be executed when you start your application,
 and are bound to the application object as the context for
-the callback. In other words, `this` is the `MyApp` object, inside
+the callback. In other words, `this` is the `MyApp` object inside
 of the initializer function.
 
-The `options` parameters is passed from the `start` method (see below).
+The `options` argument is passed from the `start` method (see below).
 
 Initializer callbacks are guaranteed to run, no matter when you
 add them to the app object. If you add them before the app is
@@ -69,7 +69,7 @@ The `Application` object raises a few events during its lifecycle, using the
 [Marionette.triggerMethod](./marionette.functions.md) function. These events
 can be used to do additional processing of your application. For example, you
 may want to pre-process some data just before initialization happens. Or you may
-want to wait until your entire application is initialized to start the
+want to wait until your entire application is initialized to start
 `Backbone.history`.
 
 The events that are currently triggered, are:
@@ -100,8 +100,8 @@ calling: `MyApp.start(options)`.
 
 This function takes a single optional parameter. This parameter will be passed
 to each of your initializer functions, as well as the initialize events. This
-allows you to provide extra configuration for various parts of your app, at
-initialization/start of the app, instead of just at definition.
+allows you to provide extra configuration for various parts of your app throughout the
+initialization sequence.
 
 ```js
 var options = {
@@ -158,7 +158,7 @@ var groceryList = MyApp.request("todoList", "groceries");
 
 ### Commands
 
-Commands is used to make any component tell another component to perform an action without a direct reference to it. A Commands instance is available under the `commands` property of the Application.
+Commands are used to make any component tell another component to perform an action without a direct reference to it. A Commands instance is available under the `commands` property of the Application.
 
 Note that the callback of a command is not meant to return a value.
 

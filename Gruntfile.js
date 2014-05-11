@@ -216,11 +216,17 @@ module.exports = function(grunt) {
     });
   });
 
+  grunt.registerTask('verify-bower', function () {
+    if (!grunt.file.isDir('./bower_components')) {
+      grunt.fail.warn('Missing bower components. You should run `bower install` before.');
+    }
+  });
+
   grunt.registerTask('default', 'An alias task for running tests.', ['test']);
 
   grunt.registerTask('lint', 'Lints our sources', ['lintspaces', 'jshint']);
 
-  grunt.registerTask('test', 'Run the unit tests.', ['lint', 'unwrap', 'preprocess:bundle', 'jasmine:marionette', 'clean:tmp']);
+  grunt.registerTask('test', 'Run the unit tests.', ['verify-bower', 'lint', 'unwrap', 'preprocess:bundle', 'jasmine:marionette', 'clean:tmp']);
 
   grunt.registerTask('dev', 'Auto-lints while writing code.', ['lint', 'unwrap', 'preprocess:bundle', 'jasmine:marionette', 'watch:marionette']);
 

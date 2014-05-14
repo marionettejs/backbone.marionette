@@ -42,6 +42,7 @@
 
   // @include ../marionette.callbacks.js
   // @include ../marionette.controller.js
+  // @include ../marionette.object.js
   // @include ../marionette.region.js
   // @include ../marionette.regionManager.js
 

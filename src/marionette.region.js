@@ -133,7 +133,7 @@ _.extend(Marionette.Region.prototype, Backbone.Events, {
   // re-rendered if it's already shown in the region.
 
   show: function(view, options){
-    this.ensureEl();
+    this._ensureElement();
 
     var showOptions = options || {};
     var isDifferentView = view !== this.currentView;
@@ -185,7 +185,7 @@ _.extend(Marionette.Region.prototype, Backbone.Events, {
     return this;
   },
 
-  ensureEl: function() {
+  _ensureElement: function(){
     if (!_.isObject(this.el)) {
       this.$el = this.getEl(this.el);
       this.el = this.$el[0];

@@ -98,7 +98,7 @@ describe('region', function() {
       }
     });
 
-    var myRegion, view, showSpy, regionBeforeShowSpy, swapSpy, regionBeforeSwapSpy, regionSwapSpy, viewBeforeShowSpy, openSpy;
+    var myRegion, view, showSpy, regionBeforeShowSpy, swapSpy, regionBeforeSwapSpy, regionSwapSpy, viewBeforeShowSpy, setHtmlSpy;
 
     beforeEach(function() {
       setFixtures('<div id="region"></div>');
@@ -113,7 +113,7 @@ describe('region', function() {
 
       myRegion = new MyRegion();
       spyOn(myRegion, 'onShow');
-      openSpy = sinon.spy(myRegion, 'open');
+      setHtmlSpy = sinon.spy(myRegion, 'setHtml');
       swapSpy = sinon.spy(myRegion, 'onSwap');
 
       myRegion.on('show', showSpy);
@@ -138,8 +138,8 @@ describe('region', function() {
       expect(myRegion.$el).toHaveHtml(view.el);
     });
 
-    it('should call region open', function() {
-      expect(openSpy).toHaveBeenCalled();
+    it('should call region setHtml', function() {
+      expect(setHtmlSpy).toHaveBeenCalled();
     });
 
     it('should call "onShow" for the view, after the rendered HTML has been added to the DOM', function() {
@@ -162,8 +162,8 @@ describe('region', function() {
       expect(viewBeforeShowSpy).toHaveBeenCalled();
     });
 
-    it('should trigger a before show before open is called', function() {
-      expect(regionBeforeShowSpy.calledBefore(openSpy)).toBe(true);
+    it('should trigger a before show before setHtml is called', function() {
+      expect(regionBeforeShowSpy.calledBefore(setHtmlSpy)).toBe(true);
     });
 
     it('should pass the shown view as an argument for the show event', function() {
@@ -268,7 +268,7 @@ describe('region', function() {
   });
 
   describe('when showing nested views', function() {
-    var MyRegion, LayoutView, SubView, region, openSpy,
+    var MyRegion, LayoutView, SubView, region, setHtmlSpy,
       innerRegionBeforeShowSpy, innerRegionShowSpy;
 
     MyRegion = Backbone.Marionette.Region.extend({
@@ -305,16 +305,16 @@ describe('region', function() {
     beforeEach(function() {
       setFixtures('<div id="region"></div>');
       region = new MyRegion();
-      openSpy = sinon.spy(region, 'open');
+      setHtmlSpy = sinon.spy(region, 'setHtml');
       region.show(new LayoutView());
     });
 
-    it('should call inner region before:show before region open', function() {
-      expect(innerRegionBeforeShowSpy.calledBefore(openSpy)).toBe(true);
+    it('should call inner region before:show before region setHtml', function() {
+      expect(innerRegionBeforeShowSpy.calledBefore(setHtmlSpy)).toBe(true);
     });
 
-    it('should call inner region show before region open', function() {
-      expect(innerRegionShowSpy.calledBefore(openSpy)).toBe(true);
+    it('should call inner region show before region setHtml', function() {
+      expect(innerRegionShowSpy.calledBefore(setHtmlSpy)).toBe(true);
     });
 
     it('should call inner region before:show before inner region show', function() {
@@ -370,7 +370,7 @@ describe('region', function() {
       },
 
       destroy: function() {},
-      open: function() {}
+      setHtml: function() {}
     });
 
     var myRegion, view;
@@ -383,7 +383,7 @@ describe('region', function() {
       myRegion.show(view);
 
       spyOn(view, 'destroy');
-      spyOn(myRegion, 'open');
+      spyOn(myRegion, 'setHtml');
       spyOn(view, 'render');
       myRegion.show(view);
     });
@@ -392,8 +392,8 @@ describe('region', function() {
       expect(view.destroy).not.toHaveBeenCalled();
     });
 
-    it('should not call "open" on the view', function() {
-      expect(myRegion.open).not.toHaveBeenCalledWith(view);
+    it('should not call "setHtml" on the view', function() {
+      expect(myRegion.setHtml).not.toHaveBeenCalledWith(view);
     });
 
     it('should not call "render" on the view', function() {
@@ -412,7 +412,7 @@ describe('region', function() {
       },
 
       destroy: function() {},
-      open: function() {}
+      setHtml: function() {}
     });
 
     var myRegion, view;
@@ -425,7 +425,7 @@ describe('region', function() {
       myRegion.show(view);
 
       spyOn(view, 'destroy');
-      spyOn(myRegion, 'open');
+      spyOn(myRegion, 'setHtml');
       spyOn(view, 'render');
       myRegion.show(view, {forceShow: true});
     });
@@ -434,8 +434,8 @@ describe('region', function() {
       expect(view.destroy).not.toHaveBeenCalled();
     });
 
-    it('should call "open" on the view', function() {
-      expect(myRegion.open).toHaveBeenCalledWith(view);
+    it('should call "setHtml" on the view', function() {
+      expect(myRegion.setHtml).toHaveBeenCalledWith(view);
     });
 
     it('should call "render" on the view', function() {
@@ -450,7 +450,7 @@ describe('region', function() {
 
     var MyView = Backbone.Marionette.ItemView.extend({
       template: _.template('<div></div>'),
-      open : function() {}
+      setHtml : function() {}
     });
 
     var myRegion, view;
@@ -464,7 +464,7 @@ describe('region', function() {
       view.destroy();
 
       spyOn(view, 'destroy');
-      spyOn(myRegion, 'open');
+      spyOn(myRegion, 'setHtml');
       spyOn(view, 'render').andCallThrough();
     });
 

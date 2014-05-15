@@ -1,8 +1,12 @@
 # Marionette.Controller
 
-A multi-purpose object to use as a controller for
-modules and routers, and as a mediator for workflow
-and coordination of other objects, views, and more.
+A Controller is a white-label Marionette Object. Its name can be a cause for
+confusion, as it actually has nothing to do with the popular MVC architectural pattern.
+Instead, it's better to think of the Controller as a base object from which you can build.
+
+Controllers should be used when you have a task that you would like an object to be responsible for,
+but none of the other Marionette Classes quite make sense to do it. It's a base object for you to use to
+create a new Class altogether.
 
 ## Documentation Index
 

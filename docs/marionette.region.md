@@ -165,22 +165,22 @@ instances, and in unit testing.
 
 ### Set How View's `el` Is Attached
 
-Override the region's `open` method to change how the view is attached
+Override the region's `setHtml` method to change how the view is attached
 to the DOM. This method receives one parameter - the view to show.
 
-The default implementation of `open` is:
+The default implementation of `setHtml` is:
 
 ```js
-Marionette.Region.prototype.open = function(view){
+Marionette.Region.prototype.setHtml = function(view){
   this.$el.empty().append(view.el);
 }
 ```
 
 This replaces the contents of the region with the view's
-`el` / content. You can override `open` for transition effects and more.
+`el` / content. You can override `setHtml` for transition effects and more.
 
 ```js
-Marionette.Region.prototype.open = function(view){
+Marionette.Region.prototype.setHtml = function(view){
   this.$el.hide();
   this.$el.html(view.el);
   this.$el.slideDown("fast");

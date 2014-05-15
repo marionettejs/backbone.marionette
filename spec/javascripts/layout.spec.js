@@ -151,7 +151,7 @@ describe("layout", function(){
     });
 
     it("should find the region scoped within the rendered template", function(){
-      layoutManager.regionOne.ensureEl();
+      layoutManager.regionOne._ensureElement();
       var el = layoutManager.$("#regionOne");
       expect(layoutManager.regionOne.$el[0]).toEqual(el[0]);
     });
@@ -195,7 +195,7 @@ describe("layout", function(){
       layout = new Layout();
       layout.onRender = function(){
         regionOne = layout.regionOne;
-        regionOne.ensureEl();
+        regionOne._ensureElement();
       };
 
       region = new Backbone.Marionette.Region({

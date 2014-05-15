@@ -163,7 +163,7 @@ _.extend(Marionette.Region.prototype, Backbone.Events, {
       this.triggerMethod('before:show', view);
       this.triggerMethod.call(view, 'before:show');
 
-      this.open(view);
+      this.setHtml(view);
       this.currentView = view;
 
       if (isChangingView) {
@@ -204,7 +204,7 @@ _.extend(Marionette.Region.prototype, Backbone.Events, {
 
   // Override this method to change how the new view is
   // appended to the `$el` that the region is managing
-  open: function(view) {
+  setHtml: function(view) {
     // empty the node and append new view
     this.el.innerHTML='';
     this.el.appendChild(view.el);

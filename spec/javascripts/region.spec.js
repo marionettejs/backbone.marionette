@@ -755,7 +755,7 @@ describe('region', function() {
 
       spyOn(region, 'destroy');
 
-      region.ensureEl();
+      region._ensureElement();
 
       region.reset();
     });

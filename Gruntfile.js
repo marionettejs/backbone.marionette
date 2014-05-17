@@ -47,50 +47,70 @@ module.exports = function(grunt) {
       tmp: 'tmp'
     },
 
+    bower: {
+      install: {
+        options: {
+          copy: false
+        }
+      }
+    },
+
     preprocess: {
-      core_build: {
+      core: {
         src: 'src/build/marionette.core.js',
-        dest: 'lib/core/backbone.marionette.js'
-      },
-      amd: {
-        src: 'src/build/amd.core.js',
-        dest: 'tmp/backbone.marionette.amd.js'
+        dest: 'tmp/marionette.core.js'
       },
       bundle: {
-        src: 'src/build/marionette.bundle.js',
+        src: 'src/build/marionette.bundled.js',
         dest: 'tmp/backbone.marionette.js'
+      }
+    },
+
+    template: {
+      options: {
+        data: {
+          version: '<%= pkg.version %>'
+        }
+      },
+      core: {
+        src: '<%= preprocess.core.dest %>',
+        dest: '<%= preprocess.core.dest %>'
+      },
+      bundle: {
+        src: '<%= preprocess.bundle.dest %>',
+        dest: '<%= preprocess.bundle.dest %>'
       }
     },
 
     concat: {
       options: {
-        banner: "<%= meta.core_banner %>"
+        banner: '<%= meta.core_banner %>'
       },
       core: {
-        src: '<%= preprocess.bundle.dest %>',
+        src: '<%= preprocess.core.dest %>',
         dest: 'lib/core/backbone.marionette.js'
       },
       bundle: {
         options: {
-          banner: "<%= meta.banner %>"
+          banner: '<%= meta.banner %>'
         },
         src: '<%= preprocess.bundle.dest %>',
         dest: 'lib/backbone.marionette.js'
-      },
-      amd: {
-        src: '<%= preprocess.amd.dest %>',
-        dest: 'lib/core/amd/backbone.marionette.js'
       }
     },
 
     uglify : {
-      amd : {
-        options: {
-          banner: '<%= meta.banner %>'
-        },
-        src : '<%= concat.amd.dest %>',
-        dest : 'lib/core/amd/backbone.marionette.min.js',
+      core: {
+        src : '<%= concat.core.dest %>',
+        dest : 'lib/core/backbone.marionette.min.js',
+        options : {
+          banner: '<%= meta.core_bundle %>',
+          sourceMap : 'lib/core/backbone.marionette.map',
+          sourceMappingURL : '<%= uglify.bundle.options.sourceMappingURL %>',
+          sourceMapPrefix : 1
+        }
       },
+
       bundle: {
         src : '<%= concat.bundle.dest %>',
         dest : 'lib/backbone.marionette.min.js',
@@ -98,17 +118,7 @@ module.exports = function(grunt) {
           banner: '<%= meta.banner %>',
           sourceMap : 'lib/backbone.marionette.map',
           sourceMappingURL : 'backbone.marionette.map',
-          sourceMapPrefix : 2,
-        }
-      },
-      core: {
-        src : '<%= concat.core.dest %>',
-        dest : 'lib/core/backbone.marionette.min.js',
-        options : {
-          banner: "<%= meta.core_bundle %>",
-          sourceMap : 'lib/core/backbone.marionette.map',
-          sourceMappingURL : '<%= uglify.bundle.options.sourceMappingURL %>',
-          sourceMapPrefix : 1
+          sourceMapPrefix : 2
         }
       }
     },
@@ -150,15 +160,28 @@ module.exports = function(grunt) {
 
     jshint: {
       options: {
-        jshintrc : '.jshintrc'
+        jshintrc: '.jshintrc'
       },
-      marionette : [ 'src/*.js' ]
+
+      marionette: {
+        src: [ 'src/*.js' ]
+      },
+
+      specs: {
+        options: {
+          jshintrc: 'spec/.jshintrc'
+        },
+
+        files: {
+          src: ['spec/javascripts/**.js']
+        }
+      }
     },
 
     watch: {
       marionette : {
         files : ['src/**/*.js', 'spec/**/*.js'],
-        tasks : ['lint', 'jasmine:marionette']
+        tasks : ['test']
       },
       server : {
         files : ['src/**/*.js', 'spec/**/*.js'],
@@ -177,11 +200,11 @@ module.exports = function(grunt) {
     lintspaces: {
       all: {
         src: [
-            'src/*.js',
-            'docs/*.md'
+          'src/*.js',
+          'docs/*.md'
         ],
         options: {
-            editorconfig: '.editorconfig'
+          editorconfig: '.editorconfig'
         }
       }
     },
@@ -220,10 +243,9 @@ module.exports = function(grunt) {
 
   grunt.registerTask('lint', 'Lints our sources', ['lintspaces', 'jshint']);
 
-  grunt.registerTask('test', 'Run the unit tests.', ['lint', 'unwrap', 'preprocess:bundle', 'jasmine:marionette', 'clean:tmp']);
+  grunt.registerTask('test', 'Run the unit tests.', ['lint', 'unwrap', 'preprocess:bundle', 'template:bundle', 'jasmine:marionette', 'clean:tmp']);
 
-  grunt.registerTask('dev', 'Auto-lints while writing code.', ['lint', 'unwrap', 'preprocess:bundle', 'jasmine:marionette', 'watch:marionette']);
+  grunt.registerTask('dev', 'Auto-lints while writing code.', ['test', 'watch:marionette']);
 
-  grunt.registerTask('build', 'Build all three versions of the library.', ['clean:lib', 'lint', 'unwrap', 'preprocess', 'jasmine:marionette', 'concat', 'uglify', 'clean:tmp']);
-
+  grunt.registerTask('build', 'Build all three versions of the library.', ['clean:lib', 'bower:install', 'lint', 'unwrap', 'preprocess', 'template', 'jasmine:marionette', 'concat', 'uglify', 'clean:tmp']);
 };

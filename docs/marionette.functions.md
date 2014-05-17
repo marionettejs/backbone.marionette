@@ -9,8 +9,10 @@ a way to get the same behaviors and conventions from your own code.
 
 * [Marionette.extend](#marionetteextend)
 * [Marionette.getOption](#marionettegetoption)
+* [Marionette.proxyGetOption](#marionetteproxygetoption)
 * [Marionette.triggerMethod](#marionettetriggermethod)
 * [Marionette.bindEntityEvent](#marionettebindentityevents)
+* [Marionette.proxyBindEntityEvent](#marionetteproxybindentityevents)
 * [Marionette.normalizeEvents](#marionettenormalizeevents)
 * [Marionette.normalizeUIKeys](#marionettenormalizeuikeys)
 * [Marionette.actAsCollection](#marionetteactascollection)
@@ -31,7 +33,7 @@ var Foo = function(){};
 // Backbone and Marionette objects
 Foo.extend = Marionette.extend;
 
-// Now Foo can be extended to create a new type, with methods
+// Now Foo can be extended to create a new class, with methods
 var Bar = Foo.extend({
 
   someMethod: function(){ ... }
@@ -93,6 +95,24 @@ new M({}, { foo: f }); // => "bar"
 In this example, "bar" is returned both times because the second
 example has an undefined value for `f`.
 
+## Marionette.proxyGetOption
+
+This method proxies `Marionette.getOption` so that it can be easily added to an instance.
+
+Say you've written your own Pagination class and you always pass options to it.
+With `proxyGetOption`, you can easily give this class the `getOption` function.
+
+```js
+_.extend(Pagination.prototype, {
+
+  getFoo: function(){
+    return this.getOption("foo");
+  },
+
+  getOption: Marionette.proxyGetOption
+});
+```
+
 ## Marionette.triggerMethod
 
 Trigger an event and a corresponding method on the target object.
@@ -102,7 +122,7 @@ event name is capitalized, and the word "on" is tagged on to the front
 of it. Examples:
 
 * `triggerMethod("render")` fires the "onRender" function
-* `triggerMethod("before:close")` fires the "onBeforeClose" function
+* `triggerMethod("before:destroy")` fires the "onBeforeDestroy" function
 
 All arguments that are passed to the triggerMethod call are passed along to both the event and the method, with the exception of the event name not being passed to the corresponding method.
 
@@ -146,6 +166,24 @@ to bind the events from.
 The third parameter is a hash of { "event:name": "eventHandler" }
 configuration. Multiple handlers can be separated by a space. A
 function can be supplied instead of a string handler name.
+
+## Marionette.proxyBindEntityEvents
+This method proxies `Marionette.bindEntityEvents` so that it can easily be added to an instance.
+
+Say you've written your own Pagination class and you want to easily listen to some entities events.
+With `proxyBindEntityEvents`, you can easily give this class the `bindEntityEvents` function.
+
+```js
+_.extend(Pagination.prototype, {
+
+   bindSomething: function() {
+     this.bindEntityEvents(this.something, this.somethingEvents)
+   },
+
+   bindEntityEvents: Marionette.proxyBindEntityEvents
+
+});
+```
 
 ## Marionette.normalizeEvents
 

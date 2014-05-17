@@ -1,219 +1,220 @@
-describe("base view", function(){
-  "use strict";
+describe('base view', function() {
+  'use strict';
 
-  describe("when initializing a view", function(){
-    var fooHandler;
+  describe('when initializing a view', function() {
+    var fooHandler, view;
 
-    beforeEach(function(){
+    beforeEach(function() {
       fooHandler = jasmine.createSpy();
 
-      var view = Backbone.Marionette.View.extend({
-        initialize: function(){
-          this.listenTo(this.model, "foo", fooHandler);
+      var View = Backbone.Marionette.View.extend({
+        initialize: function() {
+          this.listenTo(this.model, 'foo', fooHandler);
         }
       });
 
       var model = new Backbone.Model();
-
-      new view({
+      view = new View({
         model: model
       });
 
-      model.trigger("foo");
+      model.trigger('foo');
     });
 
-    it("should allow event to be bound via event binder", function(){
+    it('should allow event to be bound via event binder', function() {
       expect(fooHandler).toHaveBeenCalled();
     });
   });
 
-  describe("when using listenTo for the 'close' event on itself, and closing the view", function(){
-    var close;
+  describe('when using listenTo for the "destroy" event on itself, and destroying the view', function() {
+    var destroy;
 
-    beforeEach(function(){
-      close = jasmine.createSpy("close");
+    beforeEach(function() {
+      destroy = jasmine.createSpy('destroy');
 
       var view = new Marionette.View();
-      view.listenTo(view, "close", close);
+      view.listenTo(view, 'destroy', destroy);
 
-      view.close();
+      view.destroy();
     });
 
-    it("should trigger the 'close' event", function(){
-      expect(close).toHaveBeenCalled();
+    it('should trigger the "destroy" event', function() {
+      expect(destroy).toHaveBeenCalled();
     });
   });
 
-  describe("when closing a view", function(){
-    var close, view;
+  describe('when destroying a view', function() {
+    var destroy, view;
 
-    beforeEach(function(){
-      view = new (Marionette.View.extend({
-        onClose: jasmine.createSpy("onClose")
-      }));
-
-      spyOn(view, "remove").andCallThrough();
-      close = jasmine.createSpy("close");
-      view.on("close", close);
-
-      view.close(123, "second param");
+    var View = Marionette.View.extend({
+      onDestroy: jasmine.createSpy('onDestroy')
     });
 
-    it("should trigger the close event", function(){
-      expect(close).toHaveBeenCalled();
+    beforeEach(function() {
+      view = new View();
+
+      spyOn(view, 'remove').andCallThrough();
+      destroy = jasmine.createSpy('destroy');
+      view.on('destroy', destroy);
+
+      view.destroy(123, 'second param');
     });
 
-    it("should call an onClose method with any arguments passed to close", function(){
-      expect(view.onClose).toHaveBeenCalledWith(123, "second param");
+    it('should trigger the destroy event', function() {
+      expect(destroy).toHaveBeenCalled();
     });
 
-    it("should remove the view", function(){
+    it('should call an onDestroy method with any arguments passed to destroy', function() {
+      expect(view.onDestroy).toHaveBeenCalledWith(123, 'second param');
+    });
+
+    it('should remove the view', function() {
       expect(view.remove).toHaveBeenCalled();
     });
 
-    it("should set the view isClosed to true", function(){
-      expect(view.isClosed).toBe(true);
+    it('should set the view isDestroyed to true', function() {
+      expect(view.isDestroyed).toBe(true);
     });
   });
 
-  describe("when closing a view and returning false from the onBeforeClose method", function(){
-    var close, view;
+  describe('when destroying a view and returning false from the onBeforeDestroy method', function() {
+    var destroy, view;
 
-    beforeEach(function(){
+    beforeEach(function() {
       view = new Marionette.View();
 
-      spyOn(view, "remove").andCallThrough();
-      close = jasmine.createSpy("close");
-      view.on("close", close);
+      spyOn(view, 'remove').andCallThrough();
+      destroy = jasmine.createSpy('destroy');
+      view.on('destroy', destroy);
 
-      view.onBeforeClose = function(){
+      view.onBeforeDestroy = function() {
         return false;
       };
 
-      view.close();
+      view.destroy();
     });
 
-    it("should not trigger the close event", function(){
-      expect(close).not.toHaveBeenCalled();
+    it('should not trigger the destroy event', function() {
+      expect(destroy).toHaveBeenCalled();
     });
 
-    it("should not remove the view", function(){
-      expect(view.remove).not.toHaveBeenCalled();
-    });
-
-    it("should not set the view isClosed to true", function(){
-      expect(view.isClosed).not.toBe(true);
-    });
-  });
-
-  describe("when closing a view and returning undefined from the onBeforeClose method", function(){
-    var close, view;
-
-    beforeEach(function(){
-      view = new Marionette.View();
-
-      spyOn(view, "remove").andCallThrough();
-      close = jasmine.createSpy("close");
-      view.on("close", close);
-
-      view.onBeforeClose = function(){
-        return undefined;
-      };
-
-      view.close(123, "second param");
-    });
-
-    it("should trigger the close event", function(){
-      expect(close).toHaveBeenCalledWith(123, "second param");
-    });
-
-    it("should remove the view", function(){
+    it('should not remove the view', function() {
       expect(view.remove).toHaveBeenCalled();
     });
 
-    it("should set the view isClosed to true", function(){
-      expect(view.isClosed).toBe(true);
+    it('should not set the view isDestroyed to true', function() {
+      expect(view.isDestroyed).toBe(true);
     });
   });
 
-  describe("constructing a view with default options", function(){
-    var view = Marionette.ItemView.extend();
-    var presetOptions = Marionette.View.extend({
+  describe('when destroying a view and returning undefined from the onBeforeDestroy method', function() {
+    var destroy, view;
+
+    beforeEach(function() {
+      view = new Marionette.View();
+
+      spyOn(view, 'remove').andCallThrough();
+      destroy = jasmine.createSpy('destroy');
+      view.on('destroy', destroy);
+
+      view.onBeforeDestroy = function() {
+        return undefined;
+      };
+
+      view.destroy(123, 'second param');
+    });
+
+    it('should trigger the destroy event', function() {
+      expect(destroy).toHaveBeenCalledWith(123, 'second param');
+    });
+
+    it('should remove the view', function() {
+      expect(view.remove).toHaveBeenCalled();
+    });
+
+    it('should set the view isDestroyed to true', function() {
+      expect(view.isDestroyed).toBe(true);
+    });
+  });
+
+  describe('constructing a view with default options', function() {
+    var View = Marionette.ItemView.extend();
+    var PresetOptions = Marionette.View.extend({
       options: {
         'lila': 'zoidberg'
       }
     });
-    var presetOptionsFn = Marionette.View.extend({
-      options: function () {
-        return { 'fry': 'bender' };
+    var PresetOptionsFn = Marionette.View.extend({
+      options: function() {
+        return {fry: 'bender'};
       }
     });
 
-    it("should take and store view options", function() {
-      var viewInstance = new view({"Guybrush": "Island"});
-      expect(viewInstance.options.Guybrush).toBe("Island");
+    it('should take and store view options', function() {
+      var viewInstance = new View({'Guybrush': 'Island'});
+      expect(viewInstance.options.Guybrush).toBe('Island');
     });
 
-    it("should take and store view options as a function", function() {
-      var viewInstance = new view(function(){
-        return { "Guybrush": "Island" }
+    it('should take and store view options as a function', function() {
+      var viewInstance = new View(function() {
+        return {Guybrush: 'Island'};
       });
-      expect(viewInstance.options.Guybrush).toBe("Island");
+      expect(viewInstance.options.Guybrush).toBe('Island');
     });
 
-    it("should have an empty hash of options by default", function() {
-      var viewInstance = new view;
-      expect(typeof(viewInstance.options.Guybrush)).toBe("undefined");
+    it('should have an empty hash of options by default', function() {
+      var viewInstance = new View();
+      expect(typeof(viewInstance.options.Guybrush)).toBe('undefined');
     });
 
-    it("should retain options set on view class", function() {
-      var viewInstance = new presetOptions;
-      expect(viewInstance.options.lila).toBe("zoidberg");
+    it('should retain options set on view class', function() {
+      var viewInstance = new PresetOptions();
+      expect(viewInstance.options.lila).toBe('zoidberg');
     });
 
-    it("should retain options set on view class as a function", function() {
-      var viewInstance = new presetOptionsFn;
-      expect(viewInstance.options.fry).toBe("bender");
+    it('should retain options set on view class as a function', function() {
+      var viewInstance = new PresetOptionsFn();
+      expect(viewInstance.options.fry).toBe('bender');
     });
   });
 
-  describe("should expose its options in the constructor", function() {
+  describe('should expose its options in the constructor', function() {
     var View = Marionette.View.extend({
-       initialize: function() {
+      initialize: function() {
         this.info = this.options;
       }
     });
 
-    it("should be able to access instance options", function() {
-      var myView = new View({name: "LeChuck"});
-      expect(myView.info.name).toBe("LeChuck");
+    it('should be able to access instance options', function() {
+      var myView = new View({name: 'LeChuck'});
+      expect(myView.info.name).toBe('LeChuck');
     });
   });
 
-  describe("when closing a view that is already closed", function(){
-    var close, view;
+  describe('when destroying a view that is already destroyed', function() {
+    var destroy, view;
 
-    beforeEach(function(){
+    beforeEach(function() {
       view = new Marionette.View();
-      view.close();
+      view.destroy();
 
-      spyOn(view, "remove").andCallThrough();
-      close = jasmine.createSpy("close");
-      view.on("close", close);
+      spyOn(view, 'remove').andCallThrough();
+      destroy = jasmine.createSpy('destroy');
+      view.on('destroy', destroy);
 
-      view.close();
+      view.destroy();
     });
 
-    it("should not trigger the close event", function(){
-      expect(close).not.toHaveBeenCalled();
+    it('should not trigger the destroy event', function() {
+      expect(destroy).not.toHaveBeenCalled();
     });
 
-    it("should not remove the view", function(){
+    it('should not remove the view', function() {
       expect(view.remove).not.toHaveBeenCalled();
     });
 
-    it("should leave isClosed as true", function(){
-      expect(view.isClosed).toBe(true);
+    it('should leave isDestroyed as true', function() {
+      expect(view.isDestroyed).toBe(true);
     });
   });
 

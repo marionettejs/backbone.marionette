@@ -7,8 +7,6 @@
   } else if (typeof exports !== 'undefined') {
     var Backbone = require('backbone');
     var _ = require('underscore');
-    var Wreqr = require('backbone.wreqr');
-    var BabySitter = require('backbone.babysitter');
     module.exports = factory(root, Backbone, _);
   } else {
     root.Marionette = factory(root, root.Backbone, root._);
@@ -16,6 +14,9 @@
 
 }(this, function(root, Backbone, _) {
   'use strict';
+
+  // @include ../../tmp/backbone.babysitter.bare.js
+  // @include ../../tmp/backbone.wreqr.bare.js
 
   var previousMarionette = root.Marionette;
 
@@ -28,8 +29,7 @@
     return this;
   };
 
-  // Get the DOM manipulator for later use
-  Marionette.$ = Backbone.$;
+  Backbone.Marionette = Marionette;
 
   // @include ../marionette.helpers.js
   // @include ../marionette.triggermethod.js

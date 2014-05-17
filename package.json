@@ -3,7 +3,7 @@
   "description": "Make your Backbone.js apps dance!",
   "version": "1.8.5",
   "homepage": "https://github.com/marionettejs/backbone.marionette",
-  "main": "lib/core/amd/backbone.marionette.js",
+  "main": "lib/core/backbone.marionette.js",
   "keywords": [
     "backbone",
     "plugin",
@@ -48,7 +48,7 @@
   "devDependencies": {
     "grunt": "0.4.2",
     "grunt-contrib-jasmine": "^0.4.2",
-    "grunt-contrib-jshint": "^0.1.1",
+    "grunt-contrib-jshint": "^0.10.0",
     "grunt-plato": "~0.1.4",
     "grunt-contrib-uglify": "~0.2.0",
     "grunt-contrib-concat": "~0.1.2",
@@ -61,6 +61,9 @@
     "grunt-cli": "0.1.13",
     "grunt-contrib-clean": "~0.5.0",
     "grunt-preprocess": "~4.0.0",
+    "unwrap": "^0.1.0",
+    "grunt-bower-task": "~0.3.4",
+    "grunt-template": "^0.2.3",
     "unwrap": "^0.1.0"
   }
 }

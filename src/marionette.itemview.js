@@ -8,7 +8,7 @@ Marionette.ItemView = Marionette.View.extend({
 
   // Setting up the inheritance chain which allows changes to
   // Marionette.View.prototype.constructor which allows overriding
-  constructor: function(){
+  constructor: function() {
     Marionette.View.prototype.constructor.apply(this, arguments);
   },
 
@@ -18,14 +18,14 @@ Marionette.ItemView = Marionette.View.extend({
   // resulting data. If both are found, defaults to the model.
   // You can override the `serializeData` method in your own view
   // definition, to provide custom serialization for your view's data.
-  serializeData: function(){
+  serializeData: function() {
     var data = {};
 
     if (this.model) {
       data = this.model.toJSON();
     }
     else if (this.collection) {
-      data = { items: this.collection.toJSON() };
+      data = {items: this.collection.toJSON()};
     }
 
     return data;
@@ -36,11 +36,10 @@ Marionette.ItemView = Marionette.View.extend({
   // a very specific rendering for your view. In general, though,
   // you should override the `Marionette.Renderer` object to
   // change how Marionette renders views.
-  render: function(){
-    this.isClosed = false;
+  render: function() {
+    this._ensureViewIsIntact();
 
-    this.triggerMethod("before:render", this);
-    this.triggerMethod("item:before:render", this);
+    this.triggerMethod('before:render', this);
 
     var data = this.serializeData();
     data = this.mixinTemplateHelpers(data);
@@ -51,21 +50,16 @@ Marionette.ItemView = Marionette.View.extend({
     this.$el.html(html);
     this.bindUIElements();
 
-    this.triggerMethod("render", this);
-    this.triggerMethod("item:rendered", this);
+    this.triggerMethod('render', this);
 
     return this;
   },
 
-  // Override the default close event to add a few
+  // Override the default destroy event to add a few
   // more events that are triggered.
-  close: function(){
-    if (this.isClosed){ return; }
+  destroy: function() {
+    if (this.isDestroyed) { return; }
 
-    this.triggerMethod('item:before:close');
-
-    Marionette.View.prototype.close.apply(this, arguments);
-
-    this.triggerMethod('item:closed');
+    Marionette.View.prototype.destroy.apply(this, arguments);
   }
 });

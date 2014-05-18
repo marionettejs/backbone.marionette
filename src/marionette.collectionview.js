@@ -197,7 +197,7 @@ Marionette.CollectionView = Marionette.View.extend({
     // trigger the 'before:show' event on `view` if the collection view
     // has already been shown
     if (this._isShown){
-      this.triggerMethod.call(view, 'before:show');
+      Marionette.triggerMethodOn(view, 'before:show');
     }
 
     // Store the `emptyView` like a `childView` so we can properly
@@ -210,7 +210,7 @@ Marionette.CollectionView = Marionette.View.extend({
     // call the 'show' method if the collection view
     // has already been shown
     if (this._isShown){
-      this.triggerMethod.call(view, 'show');
+      Marionette.triggerMethodOn(view, 'show');
     }
   },
 
@@ -290,7 +290,7 @@ Marionette.CollectionView = Marionette.View.extend({
     this.renderChildView(view, index);
 
     if (this._isShown && !this.isBuffering) {
-      this.triggerMethod.call(this, 'show');
+      this.triggerMethod('show');
     }
 
     this.triggerMethod('add:child', view);

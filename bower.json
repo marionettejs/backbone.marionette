@@ -32,7 +32,8 @@
     "CONTRIBUTING.md",
     "package.json",
     "addrem",
-    "getdeps"
+    "getdeps",
+    "tmp"
   ],
   "dependencies": {
     "backbone": "1.0.0 - 1.1.2",

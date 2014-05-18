@@ -226,10 +226,9 @@ module.exports = function(grunt) {
 
   grunt.registerTask('lint', 'Lints our sources', ['lintspaces', 'jshint']);
 
-  grunt.registerTask('test', 'Run the unit tests.', ['verify-bower', 'lint', 'unwrap', 'preprocess:bundle', 'jasmine:marionette', 'clean:tmp']);
-
   grunt.registerTask('dev', 'Auto-lints while writing code.', ['lint', 'unwrap', 'preprocess:bundle', 'jasmine:marionette', 'watch:marionette']);
 
-  grunt.registerTask('build', 'Build all three versions of the library.', ['clean:lib', 'lint', 'unwrap', 'preprocess', 'jasmine:marionette', 'concat', 'uglify', 'clean:tmp']);
+  grunt.registerTask('test', 'Run the unit tests.', ['verify-bower', 'lint', 'unwrap', 'preprocess:bundle', 'jasmine:marionette']);
 
+  grunt.registerTask('build', 'Build all three versions of the library.', ['clean:lib', 'lint', 'unwrap', 'preprocess', 'jasmine:marionette', 'concat', 'uglify']);
 };

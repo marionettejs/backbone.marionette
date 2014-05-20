@@ -16,6 +16,7 @@ objects.
 * [RegionManager.addRegions](#regionmanageraddregions)
   * [addRegions default options](#addregions-default-options)
 * [RegionManager.get](#regionmanagerget)
+* [RegionManager.getAll](#regionmanagergetall)
 * [RegionManager.removeRegion](#regionmanagerremoveregion)
 * [RegionManager.removeRegions](#regionmanagerremoveregions)
 * [RegionManager.closeRegions](#regionmanagercloseregions)
@@ -131,6 +132,23 @@ var rm = new Marionette.RegionManager();
 rm.addRegion("foo", "#bar");
 
 var region = rm.get("foo");
+```
+
+## RegionManager.get
+
+Get all the regions from the region manager.
+Returns an object literal with named regions 
+as attributes.
+
+```js
+var rm = new Marionette.RegionManager();
+rm.addRegion("foo", "#foo");
+rm.addRegion("bar", "#bar");
+
+var regions = rm.getAll();
+
+regions.foo; //=> foo region
+regions.bar; //=> bar region
 ```
 
 ## RegionManager.removeRegion

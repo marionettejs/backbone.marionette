@@ -172,6 +172,25 @@ describe("regionManager", function(){
     })
   });
 
+  describe(".getAll", function(){
+
+    var r, r2, regionManager, addHandler, regions;
+
+    beforeEach(function(){
+      regionManager = new Marionette.RegionManager();
+      r = regionManager.addRegion("foo", "#foo");
+      r2 = regionManager.addRegion("bar", "#bar");
+
+      regions = regionManager.getAll();
+    });
+
+    it("should return all the regions", function(){
+      expect(regions.foo).toBe(r);
+      expect(regions.bar).toBe(r2);
+    });
+
+  });
+
   describe(".removeRegion", function(){
     var region, regionManager, closeHandler, removeHandler;
 

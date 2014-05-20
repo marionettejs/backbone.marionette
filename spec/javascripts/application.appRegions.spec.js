@@ -10,8 +10,8 @@ describe('application regions', function() {
     MyApp = new Backbone.Marionette.Application();
 
     beforeEach(function() {
-      setFixtures('<div id="region"></div>');
-      setFixtures('<div id="region2"></div>');
+      this.setFixtures('<div id="region"></div>');
+      this.setFixtures('<div id="region2"></div>');
 
       beforeAddHandler = sinon.spy();
       addHandler = sinon.spy();
@@ -54,8 +54,8 @@ describe('application regions', function() {
     });
 
     beforeEach(function() {
-      setFixtures('<div id="region"></div>');
-      setFixtures('<div id="region2"></div>');
+      this.setFixtures('<div id="region"></div>');
+      this.setFixtures('<div id="region2"></div>');
 
       MyApp.addRegions({
         MyRegion: MyRegion,
@@ -74,8 +74,8 @@ describe('application regions', function() {
     var MyRegion = Backbone.Marionette.Region.extend({});
 
     beforeEach(function() {
-      setFixtures('<div id="region"></div>');
-      setFixtures('<div id="region2"></div>');
+      this.setFixtures('<div id="region"></div>');
+      this.setFixtures('<div id="region2"></div>');
 
       MyApp.addRegions({
         MyRegion: {
@@ -130,8 +130,8 @@ describe('application regions', function() {
     beforeEach(function() {
       var app = new Backbone.Marionette.Application();
 
-      setFixtures('<div id="region"></div>');
-      setFixtures('<div id="r2"></div>');
+      this.setFixtures('<div id="region"></div>');
+      this.setFixtures('<div id="r2"></div>');
 
       app.addRegions({
         myRegion: '#region',
@@ -164,8 +164,8 @@ describe('application regions', function() {
     MyApp = new Backbone.Marionette.Application();
 
     beforeEach(function() {
-      setFixtures('<div id="region"></div>');
-      setFixtures('<div id="region2"></div>');
+      this.setFixtures('<div id="region"></div>');
+      this.setFixtures('<div id="region2"></div>');
 
       beforeRemoveHandler = sinon.spy();
       removeHandler = sinon.spy();

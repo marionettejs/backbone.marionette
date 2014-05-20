@@ -14,7 +14,7 @@ describe('region', function() {
 
   describe('when passing an el DOM reference in directly', function() {
     beforeEach(function() {
-      setFixtures('<div id="region"></div>');
+      this.setFixtures('<div id="region"></div>');
       this.el = $('#region')[0];
 
       this.customRegion = new (Backbone.Marionette.Region.extend({
@@ -66,7 +66,7 @@ describe('region', function() {
     var myRegion;
 
     beforeEach(function() {
-      setFixtures('<div id="region"></div>');
+      this.setFixtures('<div id="region"></div>');
       myRegion = new MyRegion();
     });
 
@@ -104,7 +104,7 @@ describe('region', function() {
     var myRegion, view, showSpy, regionBeforeShowSpy, swapSpy, regionBeforeSwapSpy, regionSwapSpy, viewBeforeShowSpy, setHtmlSpy;
 
     beforeEach(function() {
-      setFixtures('<div id="region"></div>');
+      this.setFixtures('<div id="region"></div>');
       showSpy = sinon.spy();
       regionBeforeShowSpy = sinon.spy();
       regionBeforeSwapSpy = sinon.spy();
@@ -239,7 +239,7 @@ describe('region', function() {
       var myRegion, view1, view2;
 
       beforeEach(function() {
-        setFixtures('<div id="region"></div>');
+        this.setFixtures('<div id="region"></div>');
 
         view1 = new MyView();
         view2 = new MyView2();
@@ -317,7 +317,7 @@ describe('region', function() {
     });
 
     beforeEach(function() {
-      setFixtures('<div id="region"></div>');
+      this.setFixtures('<div id="region"></div>');
       region = new MyRegion();
       setHtmlSpy = sinon.spy(region, 'setHtml');
       region.show(new LayoutView());
@@ -356,7 +356,7 @@ describe('region', function() {
     var myRegion, view1, view2;
 
     beforeEach(function() {
-      setFixtures('<div id="region"></div>');
+      this.setFixtures('<div id="region"></div>');
 
       view1 = new MyView();
       view2 = new MyView();
@@ -398,7 +398,7 @@ describe('region', function() {
     var myRegion, view;
 
     beforeEach(function() {
-      setFixtures('<div id="region"></div>');
+      this.setFixtures('<div id="region"></div>');
 
       view = new MyView();
       myRegion = new MyRegion();
@@ -446,7 +446,7 @@ describe('region', function() {
     var myRegion, view;
 
     beforeEach(function() {
-      setFixtures('<div id="region"></div>');
+      this.setFixtures('<div id="region"></div>');
 
       view = new MyView();
       myRegion = new MyRegion();
@@ -490,7 +490,7 @@ describe('region', function() {
     var myRegion, view;
 
     beforeEach(function() {
-      setFixtures('<div id="region"></div>');
+      this.setFixtures('<div id="region"></div>');
 
       view = new MyView();
       myRegion = new MyRegion();
@@ -529,7 +529,7 @@ describe('region', function() {
     var myRegion, view1, view2;
 
     beforeEach(function() {
-      setFixtures('<div id="region"></div>');
+      this.setFixtures('<div id="region"></div>');
 
       view1 = new MyView();
       view2 = new MyView();
@@ -567,7 +567,7 @@ describe('region', function() {
     var myRegion, view, beforeDestroySpy ,destroyedSpy;
 
     beforeEach(function() {
-      setFixtures('<div id="region"></div>');
+      this.setFixtures('<div id="region"></div>');
       beforeDestroySpy = sinon.spy();
       destroyedSpy = sinon.spy();
 
@@ -705,7 +705,7 @@ describe('region', function() {
     var region, view, View;
 
     beforeEach(function() {
-      setFixtures('<div id="foo">bar</div>');
+      this.setFixtures('<div id="foo">bar</div>');
 
       View = Backbone.View.extend({
         onShow: function() {}
@@ -771,7 +771,7 @@ describe('region', function() {
     var MyApp, region;
 
     beforeEach(function() {
-      setFixtures('<div id="region"></div><div id="region2"></div>');
+      this.setFixtures('<div id="region"></div><div id="region2"></div>');
 
       MyApp = new Backbone.Marionette.Application();
       MyApp.addRegions({
@@ -818,7 +818,7 @@ describe('region', function() {
     var region;
 
     beforeEach(function() {
-      setFixtures('<div id="region"></div>');
+      this.setFixtures('<div id="region"></div>');
 
       region = new Backbone.Marionette.Region({
         el: '#region'

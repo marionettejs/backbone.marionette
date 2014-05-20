@@ -9,7 +9,7 @@ describe('renderer', function() {
     var result;
 
     beforeEach(function() {
-      loadFixtures('rendererTemplate.html');
+      this.loadFixtures('rendererTemplate.html');
       sinon.spy(Backbone.Marionette.TemplateCache, 'get');
       var html = Backbone.Marionette.Renderer.render(templateSelector).trim();
       result = $(html);
@@ -33,7 +33,7 @@ describe('renderer', function() {
     var result;
 
     beforeEach(function() {
-      loadFixtures('rendererWithDataTemplate.html');
+      this.loadFixtures('rendererWithDataTemplate.html');
       sinon.spy(Backbone.Marionette.TemplateCache, 'get');
 
       var data = {foo: 'bar'};

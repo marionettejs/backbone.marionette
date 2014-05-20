@@ -13,7 +13,7 @@ describe('item view', function() {
   var ItemView = Backbone.Marionette.ItemView.extend({});
 
   beforeEach(function() {
-    loadFixtures('itemTemplate.html', 'collectionItemTemplate.html', 'emptyTemplate.html');
+    this.loadFixtures('itemTemplate.html', 'collectionItemTemplate.html', 'emptyTemplate.html');
   });
 
   describe('when rendering without a valid template', function() {
@@ -76,7 +76,7 @@ describe('item view', function() {
     var view;
 
     beforeEach(function() {
-      loadFixtures('itemTemplate.html');
+      this.loadFixtures('itemTemplate.html');
 
       view = new ItemView({
         template: '#itemTemplate',
@@ -107,7 +107,7 @@ describe('item view', function() {
     var view;
 
     beforeEach(function() {
-      loadFixtures('itemTemplate.html');
+      this.loadFixtures('itemTemplate.html');
 
       view = new ItemView({
         template: '#itemTemplate',
@@ -159,7 +159,7 @@ describe('item view', function() {
     var view, promise;
 
     beforeEach(function() {
-      loadFixtures('emptyTemplate.html');
+      this.loadFixtures('emptyTemplate.html');
       view = new AsyncOnRenderView();
       promise = view.render();
     });
@@ -246,7 +246,7 @@ describe('item view', function() {
     var collection;
 
     beforeEach(function() {
-      loadFixtures('itemTemplate.html');
+      this.loadFixtures('itemTemplate.html');
 
       model = new Model({foo: 'bar'});
       collection = new Collection();
@@ -342,7 +342,7 @@ describe('item view', function() {
       var view, spy, model, chk;
 
       beforeEach(function() {
-        loadFixtures('itemWithCheckbox.html');
+        this.loadFixtures('itemWithCheckbox.html');
 
         model = new Backbone.Model({
           done: false

@@ -6,7 +6,7 @@ describe('template cache', function() {
 
   describe('when loading a template for the first time', function() {
     beforeEach(function() {
-      setFixtures('<script id="t1" type="template">t1</script>');
+      this.setFixtures('<script id="t1" type="template">t1</script>');
 
       sinon.spy(Backbone.Marionette.TemplateCache.prototype, 'loadTemplate');
 
@@ -28,7 +28,7 @@ describe('template cache', function() {
     beforeEach(function() {
       Backbone.Marionette.TemplateCache.clear();
 
-      setFixtures('<script id="t2" type="template">t2</script>');
+      this.setFixtures('<script id="t2" type="template">t2</script>');
 
       Backbone.Marionette.TemplateCache.get('#t2');
       templateCache = Backbone.Marionette.TemplateCache.templateCaches['#t2'];
@@ -50,7 +50,7 @@ describe('template cache', function() {
 
   describe('when clearing the full template cache', function() {
     beforeEach(function() {
-      setFixtures('<script id="t3" type="template">t3</script>');
+      this.setFixtures('<script id="t3" type="template">t3</script>');
       Backbone.Marionette.TemplateCache.get('#t3');
 
       Backbone.Marionette.TemplateCache.clear();
@@ -63,7 +63,7 @@ describe('template cache', function() {
 
   describe('when clearing a single template from the cache', function() {
     beforeEach(function() {
-      setFixtures('<script id="t4" type="template">t4</script><script id="t5" type="template">t5</script><script id="t6" type="template">t6</script>');
+      this.setFixtures('<script id="t4" type="template">t4</script><script id="t5" type="template">t5</script><script id="t6" type="template">t6</script>');
       Backbone.Marionette.TemplateCache.get('#t4');
       Backbone.Marionette.TemplateCache.get('#t5');
       Backbone.Marionette.TemplateCache.get('#t6');
@@ -83,7 +83,7 @@ describe('template cache', function() {
 
   describe('when clearing multiple templates from the cache', function() {
     beforeEach(function() {
-      setFixtures('<script id="t4" type="template">t4</script><script id="t5" type="template">t5</script><script id="t6" type="template">t6</script>');
+      this.setFixtures('<script id="t4" type="template">t4</script><script id="t5" type="template">t5</script><script id="t6" type="template">t6</script>');
       Backbone.Marionette.TemplateCache.get('#t4');
       Backbone.Marionette.TemplateCache.get('#t5');
       Backbone.Marionette.TemplateCache.get('#t6');

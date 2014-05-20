@@ -191,7 +191,7 @@ describe('regionManager', function() {
     var region, regionManager, destroyHandler, removeHandler, beforeRemoveHandler;
 
     beforeEach(function() {
-      setFixtures('<div id="foo"></div>');
+      this.setFixtures('<div id="foo"></div>');
 
       destroyHandler = sinon.spy();
       beforeRemoveHandler = sinon.spy();
@@ -243,7 +243,7 @@ describe('regionManager', function() {
     var region, r2, regionManager, destroyHandler, destroyHandler2, removeHandler;
 
     beforeEach(function() {
-      setFixtures('<div id="foo"></div><div id="bar"></div>');
+      this.setFixtures('<div id="foo"></div><div id="bar"></div>');
 
       destroyHandler = sinon.stub();
       destroyHandler2 = sinon.stub();
@@ -297,7 +297,7 @@ describe('regionManager', function() {
     var region, regionManager, destroyHandler, destroyManagerHandler;
 
     beforeEach(function() {
-      setFixtures('<div id="foo">');
+      this.setFixtures('<div id="foo">');
 
       destroyHandler = sinon.stub();
       destroyManagerHandler = sinon.stub();
@@ -324,7 +324,7 @@ describe('regionManager', function() {
     var region, regionManager, destroyHandler, destroyManagerHandler;
 
     beforeEach(function() {
-      setFixtures('<div id="foo">');
+      this.setFixtures('<div id="foo">');
       destroyHandler = sinon.stub();
       destroyManagerHandler = sinon.stub();
 

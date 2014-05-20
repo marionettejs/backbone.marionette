@@ -94,7 +94,7 @@ var mgr = new Backbone.Marionette.Region({
 ### Showing a View
 
 Once a region is defined, you can call its `show`
-and `destroy` methods to display and shut-down a view:
+and `empty` methods to display and shut-down a view:
 
 ```js
 var myView = new MyView();
@@ -102,8 +102,8 @@ var myView = new MyView();
 // render and display the view
 MyApp.mainRegion.show(myView);
 
-// destroys the current view
-MyApp.mainRegion.destroy();
+// empties the current view
+MyApp.mainRegion.empty();
 ```
 
 #### preventDestroy
@@ -242,8 +242,8 @@ and destroying views:
 * "show" / `onShow` - Called on the region instance when the view has been rendered and displayed.
 * "before:swap" / `onBeforeSwap` - Called on the region instance before a new view is shown. NOTE: this will only be called when a view is being swapped, not when the region is empty.
 * "swap" / `onSwap` - Called on the region instance when a new view is `show`n. NOTE: this will only be called when a view is being swapped, not when the region is empty.
-* "before:destroy" / `onBeforeDestroy` - Called on the region instance before the view has been destroyed.
-* "destroy" / `onDestroy` - Called when the view has been destroyed.
+* "before:empty" / `onBeforeEmpty` - Called on the region instance before the view has been emptied.
+* "empty" / `onEmpty` - Called when the view has been emptied.
 
 These events can be used to run code when your region
 opens and destroys views.
@@ -269,7 +269,7 @@ MyApp.mainRegion.on("swap", function(view){
   // with the region via `this`
 });
 
-MyApp.mainRegion.on("destroy", function(view){
+MyApp.mainRegion.on("empty", function(view){
   // manipulate the `view` or do something extra
   // with the region via `this`
 });

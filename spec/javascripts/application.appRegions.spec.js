@@ -132,15 +132,15 @@ describe('application regions', function() {
       this.r1 = this.app.myRegion;
       this.r2 = this.app.r2;
 
-      this.sinon.spy(this.r1, 'destroy');
-      this.sinon.spy(this.r2, 'destroy');
+      this.sinon.spy(this.r1, 'empty');
+      this.sinon.spy(this.r2, 'empty');
 
-      this.app.destroyRegions();
+      this.app.emptyRegions();
     });
 
-    it('should destroy the regions', function() {
-      expect(this.r1.destroy).to.have.been.called;
-      expect(this.r2.destroy).to.have.been.called;
+    it('should empty the regions', function() {
+      expect(this.r1.empty).to.have.been.called;
+      expect(this.r2.empty).to.have.been.called;
     });
   });
 

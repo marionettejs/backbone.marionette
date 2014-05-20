@@ -18,7 +18,7 @@ objects.
 * [RegionManager.get](#regionmanagerget)
 * [RegionManager.removeRegion](#regionmanagerremoveregion)
 * [RegionManager.removeRegions](#regionmanagerremoveregions)
-* [RegionManager.destroyRegions](#regionmanagerdestroyregions)
+* [RegionManager.emptyRegions](#regionmanageremptyregions)
 * [RegionManager.destroy](#regionmanagerdestroy)
 * [RegionManager Events](#regionmanager-events)
   * [before:region:add event](#beforeregionadd-event)
@@ -147,7 +147,7 @@ rm.addRegion("foo", "#bar");
 rm.removeRegion("foo");
 ```
 
-A region will have its `destroy` method called before
+A region will have its `empty` method called before
 it is removed from the RegionManager instance and
 `stopListening` is called.
 
@@ -168,12 +168,12 @@ rm.addRegions({
 rm.removeRegions();
 ```
 
-This will destroy all regions, and remove them.
+This will empty all regions, and remove them.
 
-## RegionManager.destroyRegions
+## RegionManager.emptyRegions
 
-You can quickly destroy all regions from the RegionManager
-instance by calling the `destroyRegions` method.
+You can quickly empty all regions from the RegionManager
+instance by calling the `emptyRegions` method.
 
 ```js
 var rm = new Marionette.RegionManager();
@@ -183,10 +183,10 @@ rm.addRegions({
   baz: "#baz"
 });
 
-rm.destroyRegions();
+rm.emptyRegions();
 ```
 
-This will destroy the regions without removing them
+This will empty the regions without removing them
 from the RegionManager instance.
 
 ## RegionManager.destroy

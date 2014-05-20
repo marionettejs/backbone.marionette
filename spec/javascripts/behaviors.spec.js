@@ -394,7 +394,7 @@ describe('Behaviors', function() {
       });
 
       region.show(view);
-      region.destroy();
+      region.empty();
     });
 
     it('behavior onShow is called once', function() {

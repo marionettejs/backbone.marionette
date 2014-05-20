@@ -46,14 +46,12 @@
     "underscore": "1.4.4 - 1.6.0"
   },
   "devDependencies": {
-    "grunt": "0.4.2",
-    "grunt-contrib-jasmine": "^0.4.2",
+    "grunt": "~0.4.5",
     "grunt-contrib-jshint": "^0.10.0",
     "grunt-plato": "~0.1.4",
     "grunt-contrib-uglify": "~0.2.0",
     "grunt-contrib-concat": "~0.1.2",
-    "grunt-template-jasmine-istanbul": "~0.1.1",
-    "grunt-contrib-watch": "^0.2.0",
+    "grunt-contrib-watch": "^0.6.1",
     "grunt-contrib-connect": "^0.1.2",
     "load-grunt-tasks": "0.3.0",
     "grunt-lintspaces": "^0.4.1",
@@ -64,6 +62,14 @@
     "unwrap": "^0.1.0",
     "grunt-bower-task": "~0.3.4",
     "grunt-template": "^0.2.3",
-    "unwrap": "^0.1.0"
+    "sinon-chai": "^2.5.0",
+    "chai": "^1.9.1",
+    "mocha": "^1.19.0",
+    "grunt-mocha-test": "^0.10.2",
+    "sinon": "^1.9.1",
+    "jsdom": "^0.10.5",
+    "jquery": "^2.1.1",
+    "chai-jquery": "^1.2.1",
+    "chai-jq": "0.0.7"
   }
 }

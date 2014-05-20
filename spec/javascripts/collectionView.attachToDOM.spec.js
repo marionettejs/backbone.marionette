@@ -1,6 +1,9 @@
 describe('attaching collection view to existing DOM structure', function() {
   'use strict';
 
+  beforeEach(global.setup);
+  afterEach(global.teardown);
+
   describe('when initializing a collection view', function() {
 
     var CollectionView = Marionette.CollectionView.extend({
@@ -24,7 +27,7 @@ describe('attaching collection view to existing DOM structure', function() {
     });
 
     it('should be able to store a new child view that was attached to an existing DOM element', function() {
-      expect(collectionView.children.length).toBe(1);
+      expect(collectionView.children.length).to.equal(1);
     });
 
   });

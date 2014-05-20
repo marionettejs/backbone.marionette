@@ -1,6 +1,9 @@
 describe('marionette application', function() {
   'use strict';
 
+  beforeEach(global.setup);
+  afterEach(global.teardown);
+
   describe('when registering an initializer and starting the application', function() {
     var MyModule, MyApp;
     var someOptions = {};
@@ -18,33 +21,34 @@ describe('marionette application', function() {
         return module;
       })(MyApp);
 
-      spyOn(MyApp, 'trigger').andCallThrough();
+      sinon.spy(MyApp, 'trigger');
 
       MyApp.start(someOptions);
     });
 
     afterEach(function() {
       MyModule.initializer.restore();
+      MyApp.trigger.restore();
     });
 
     it('should notify me before the starts', function() {
-      expect(MyApp.trigger).toHaveBeenCalledWith('before:start', someOptions);
+      expect(MyApp.trigger).to.have.been.calledWith('before:start', someOptions);
     });
 
     it('should notify me after the app has started', function() {
-      expect(MyApp.trigger).toHaveBeenCalledWith('start', someOptions);
+      expect(MyApp.trigger).to.have.been.calledWith('start', someOptions);
     });
 
     it('should call the initializer', function() {
-      expect(MyModule.initializer).toHaveBeenCalled();
+      expect(MyModule.initializer).to.have.been.called;
     });
 
     it('should pass the options through to the initializer', function() {
-      expect(MyModule.initializer).toHaveBeenCalledWith(someOptions);
+      expect(MyModule.initializer).to.have.been.calledWith(someOptions);
     });
 
     it('should run the initializer with the context of the app object', function() {
-      expect(MyModule.initializer).toHaveBeenCalledOn(MyApp);
+      expect(MyModule.initializer).to.have.been.calledOn(MyApp);
     });
   });
 
@@ -61,7 +65,7 @@ describe('marionette application', function() {
     });
 
     it('should run the initializer immediately', function() {
-      expect(initialized).toBeTruthy();
+      expect(initialized).to.be.ok;
     });
   });
 
@@ -75,7 +79,7 @@ describe('marionette application', function() {
     });
 
     it('should merge those options into the app', function() {
-      expect(MyApp.someOption).toEqual('some value');
+      expect(MyApp.someOption).to.equal('some value');
     });
   });
 
@@ -95,11 +99,11 @@ describe('marionette application', function() {
     });
 
     it('should run the onStart callback', function() {
-      expect(started).toBeTruthy();
+      expect(started).to.be.ok;
     });
 
     it('should pass the startup option to the callback', function() {
-      expect(onStartOptions).toBe(options);
+      expect(onStartOptions).to.equal(options);
     });
   });
 

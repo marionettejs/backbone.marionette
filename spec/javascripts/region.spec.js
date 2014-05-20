@@ -1,11 +1,14 @@
 describe('region', function() {
   'use strict';
 
+  beforeEach(global.setup);
+  afterEach(global.teardown);
+
   describe('when creating a new region and no configuration has been provided', function() {
     it('should throw an exception saying an "el" is required', function() {
       expect(function () {
         return new Backbone.Marionette.Region();
-      }).toThrow('An "el" must be specified for a region.');
+      }).to.throw('An "el" must be specified for a region.');
     });
   });
 
@@ -24,28 +27,28 @@ describe('region', function() {
     });
 
     it('should work when el is passed in as an option', function() {
-      expect(this.optionRegionJquery.$el[0]).toEqual(this.el);
-      expect(this.optionRegionJquery.el).toEqual(this.el);
+      expect(this.optionRegionJquery.$el[0]).to.equal(this.el);
+      expect(this.optionRegionJquery.el).to.equal(this.el);
     });
 
     it('should handle when the el option is passed in as a jquery selector', function() {
-      expect(this.optionRegion.$el[0]).toEqual(this.el);
+      expect(this.optionRegion.$el[0]).to.equal(this.el);
     });
 
     it('should work when el is set in the region extend', function() {
-      expect(this.customRegion.$el[0]).toEqual(this.el);
+      expect(this.customRegion.$el[0]).to.equal(this.el);
     });
 
     it('should complain if the el passed in as an option is invalid', function() {
       expect(function() {
         Backbone.Marionette.Region({el: $("the-ghost-of-lechuck")[0]});
-      }).toThrow();
+      }).to.throw;
     });
 
     it('should complain if the el passed in via an extended region is invalid', function() {
       expect(function() {
         (Backbone.Marionette.Region.extend({el: $("the-ghost-of-lechuck")[0]}))();
-      }).toThrow();
+      }).to.throw;
     });
   });
 
@@ -72,7 +75,7 @@ describe('region', function() {
         var view = new MyView();
         expect(function() {
           myRegion.show(view);
-        }).toThrow('An "el" #not-existed-region must exist in DOM');
+        }).to.throw('An "el" #not-existed-region must exist in DOM');
       });
     });
   });
@@ -109,10 +112,10 @@ describe('region', function() {
       viewBeforeShowSpy = sinon.spy();
 
       view = new MyView();
-      spyOn(view, 'render').andCallThrough();
+      sinon.spy(view, 'render');
 
       myRegion = new MyRegion();
-      spyOn(myRegion, 'onShow');
+      sinon.spy(myRegion, 'onShow');
       setHtmlSpy = sinon.spy(myRegion, 'setHtml');
       swapSpy = sinon.spy(myRegion, 'onSwap');
 
@@ -126,64 +129,71 @@ describe('region', function() {
       myRegion.show(view);
     });
 
+    afterEach(function() {
+      view.render.restore();
+      myRegion.onShow.restore();
+      myRegion.setHtml.restore();
+      myRegion.onSwap.restore();
+    });
+
     it('should render the view', function() {
-      expect(view.render).toHaveBeenCalled();
+      expect(view.render).to.have.been.called;
     });
 
     it('should set $el and el', function() {
-      expect(myRegion.$el[0]).toEqual(myRegion.el);
+      expect(myRegion.$el[0]).to.equal(myRegion.el);
     });
 
     it('should append the rendered HTML to the managers "el"', function() {
-      expect(myRegion.$el).toHaveHtml(view.el);
+      expect(myRegion.$el).to.contain.$html(view.$el.html());
     });
 
     it('should call region setHtml', function() {
-      expect(setHtmlSpy).toHaveBeenCalled();
+      expect(setHtmlSpy).to.have.been.called;
     });
 
     it('should call "onShow" for the view, after the rendered HTML has been added to the DOM', function() {
-      expect($(view.el)).toHaveClass('onShowClass');
+      expect($(view.el)).to.have.$class('onShowClass');
     });
 
     it('should call "onShow" for the region, after the rendered HTML has been added to the DOM', function() {
-      expect(myRegion.onShow).toHaveBeenCalled();
+      expect(myRegion.onShow).to.have.been.called;
     });
 
     it('should trigger a show event for the view', function() {
-      expect(showSpy).toHaveBeenCalled();
+      expect(showSpy).to.have.been.called;
     });
 
     it('should trigger a before show event for the region', function() {
-      expect(regionBeforeShowSpy).toHaveBeenCalled();
+      expect(regionBeforeShowSpy).to.have.been.called;
     });
 
     it('should trigger a before show event for the view', function() {
-      expect(viewBeforeShowSpy).toHaveBeenCalled();
+      expect(viewBeforeShowSpy).to.have.been.called;
     });
 
     it('should trigger a before show before setHtml is called', function() {
-      expect(regionBeforeShowSpy.calledBefore(setHtmlSpy)).toBe(true);
+      expect(regionBeforeShowSpy.calledBefore(setHtmlSpy)).to.be.true;
     });
 
     it('should pass the shown view as an argument for the show event', function() {
-      expect(showSpy).toHaveBeenCalledWith(view);
+      expect(showSpy).to.have.been.calledWith(view);
     });
 
     it('should set "this" to the manager, from the show event', function() {
-      expect(showSpy).toHaveBeenCalledOn(myRegion);
+      expect(showSpy).to.have.been.calledOn(myRegion);
     });
 
     it('should not trigger a before swap event for the region', function() {
-      expect(regionBeforeSwapSpy.callCount).toEqual(0);
+      expect(regionBeforeSwapSpy.callCount).to.equal(0);
     });
 
     it('should not trigger a swap event for the region', function() {
-      expect(regionSwapSpy.callCount).toEqual(0);
+      expect(regionSwapSpy.callCount).to.equal(0);
     });
 
     it('should not call the `onSwap` function on the region', function() {
-      expect(swapSpy.callCount).toEqual(0);
+      expect(swapSpy.callCount).to.equal(0);
     });
 
     describe('and then showing a different view', function() {
@@ -193,23 +203,23 @@ describe('region', function() {
       });
 
       it('should trigger a before swap event for the region', function() {
-        expect(regionBeforeSwapSpy).toHaveBeenCalled();
+        expect(regionBeforeSwapSpy).to.have.been.called;
       });
 
       it('should trigger a swap event for the region', function() {
-        expect(regionSwapSpy).toHaveBeenCalled();
+        expect(regionSwapSpy).to.have.been.called;
       });
 
       it('should call the `onSwap` function on the region', function() {
-        expect(swapSpy).toHaveBeenCalled();
+        expect(swapSpy).to.have.been.called;
       });
 
       it('should pass the swapped view as an argument for the swap event', function() {
-        expect(swapSpy).toHaveBeenCalledWith(this.view2);
+        expect(swapSpy).to.have.been.calledWith(this.view2);
       });
 
       it('should set "this" to the manager, from the swap event', function() {
-        expect(swapSpy).toHaveBeenCalledOn(myRegion);
+        expect(swapSpy).to.have.been.calledOn(myRegion);
       });
     });
 
@@ -235,9 +245,13 @@ describe('region', function() {
         view2 = new MyView2();
         myRegion = new MyRegion();
 
-        spyOn(view1, 'destroy').andCallThrough();
+        sinon.spy(view1, 'destroy');
 
         myRegion.show(view1);
+      });
+
+      afterEach(function() {
+        view1.destroy.restore();
       });
 
       describe('preventDestroy: true', function() {
@@ -246,12 +260,12 @@ describe('region', function() {
         });
 
         it('shouldnt "destroy" the old view', function() {
-          expect(view1.destroy.callCount).toEqual(0);
+          expect(view1.destroy.callCount).to.equal(0);
         });
 
         it('should replace the content in the DOM', function() {
-          expect(myRegion.$el).toHaveText('some more content');
-          expect(myRegion.$el).not.toHaveText('some content');
+          expect(myRegion.$el).to.contain.$text('some more content');
+          expect(myRegion.$el).not.to.contain.$text('some content');
         });
       });
 
@@ -261,7 +275,7 @@ describe('region', function() {
         });
 
         it('should "destroy" the old view', function() {
-          expect(view1.destroy).toHaveBeenCalled();
+          expect(view1.destroy).to.have.been.called;
         });
       });
     });
@@ -309,16 +323,20 @@ describe('region', function() {
       region.show(new LayoutView());
     });
 
+    afterEach(function() {
+      region.setHtml.restore();
+    });
+
     it('should call inner region before:show before region setHtml', function() {
-      expect(innerRegionBeforeShowSpy.calledBefore(setHtmlSpy)).toBe(true);
+      expect(innerRegionBeforeShowSpy.calledBefore(setHtmlSpy)).to.be.true;
     });
 
     it('should call inner region show before region setHtml', function() {
-      expect(innerRegionShowSpy.calledBefore(setHtmlSpy)).toBe(true);
+      expect(innerRegionShowSpy.calledBefore(setHtmlSpy)).to.be.true;
     });
 
     it('should call inner region before:show before inner region show', function() {
-      expect(innerRegionBeforeShowSpy.calledBefore(innerRegionShowSpy)).toBe(true);
+      expect(innerRegionBeforeShowSpy.calledBefore(innerRegionShowSpy)).to.be.true;
     });
   });
 
@@ -344,18 +362,22 @@ describe('region', function() {
       view2 = new MyView();
       myRegion = new MyRegion();
 
-      spyOn(view1, 'destroy');
+      sinon.spy(view1, 'destroy');
 
       myRegion.show(view1);
       myRegion.show(view2);
     });
 
+    afterEach(function() {
+      view1.destroy.restore();
+    });
+
     it('should call "destroy" on the already open view', function() {
-      expect(view1.destroy).toHaveBeenCalled();
+      expect(view1.destroy).to.have.been.called;
     });
 
     it('should reference the new view as the current view', function() {
-      expect(myRegion.currentView).toBe(view2);
+      expect(myRegion.currentView).to.equal(view2);
     });
   });
 
@@ -382,22 +404,28 @@ describe('region', function() {
       myRegion = new MyRegion();
       myRegion.show(view);
 
-      spyOn(view, 'destroy');
-      spyOn(myRegion, 'setHtml');
-      spyOn(view, 'render');
+      sinon.spy(view, 'destroy');
+      sinon.spy(myRegion, 'setHtml');
+      sinon.spy(view, 'render');
       myRegion.show(view);
     });
 
+    afterEach(function() {
+      view.destroy.restore();
+      myRegion.setHtml.restore();
+      view.render.restore();
+    });
+
     it('should not call "destroy" on the view', function() {
-      expect(view.destroy).not.toHaveBeenCalled();
+      expect(view.destroy).not.to.have.been.called;
     });
 
     it('should not call "setHtml" on the view', function() {
-      expect(myRegion.setHtml).not.toHaveBeenCalledWith(view);
+      expect(myRegion.setHtml).not.to.have.been.calledWith(view);
     });
 
     it('should not call "render" on the view', function() {
-      expect(view.render).not.toHaveBeenCalled();
+      expect(view.render).not.to.have.been.called;
     });
   });
 
@@ -424,22 +452,28 @@ describe('region', function() {
       myRegion = new MyRegion();
       myRegion.show(view);
 
-      spyOn(view, 'destroy');
-      spyOn(myRegion, 'setHtml');
-      spyOn(view, 'render');
+      sinon.spy(view, 'destroy');
+      sinon.spy(myRegion, 'setHtml');
+      sinon.spy(view, 'render');
       myRegion.show(view, {forceShow: true});
     });
 
+    afterEach(function() {
+      view.destroy.restore();
+      myRegion.setHtml.restore();
+      view.render.restore();
+    });
+
     it('should not call "destroy" on the view', function() {
-      expect(view.destroy).not.toHaveBeenCalled();
+      expect(view.destroy).not.to.have.been.called;
     });
 
     it('should call "setHtml" on the view', function() {
-      expect(myRegion.setHtml).toHaveBeenCalledWith(view);
+      expect(myRegion.setHtml).to.have.been.calledWith(view);
     });
 
     it('should call "render" on the view', function() {
-      expect(view.render).toHaveBeenCalled();
+      expect(view.render).to.have.been.called;
     });
   });
 
@@ -463,15 +497,21 @@ describe('region', function() {
       myRegion.show(view);
       view.destroy();
 
-      spyOn(view, 'destroy');
-      spyOn(myRegion, 'setHtml');
-      spyOn(view, 'render').andCallThrough();
+      sinon.spy(view, 'destroy');
+      sinon.spy(myRegion, 'setHtml');
+      sinon.spy(view, 'render');
+    });
+
+    afterEach(function() {
+      view.destroy.restore();
+      myRegion.setHtml.restore();
+      view.render.restore();
     });
 
     it('should not throw an error saying the views been destroyed if a destroyed view is passed in', function() {
       expect(function() {
         myRegion.show();
-      }).not.toThrow(new Error('Cannot use a view thats already been destroyed.'));
+      }).not.to.throw(new Error('Cannot use a view thats already been destroyed.'));
     });
   });
 
@@ -495,7 +535,11 @@ describe('region', function() {
       view2 = new MyView();
       myRegion = new MyRegion();
 
-      spyOn(view1, 'destroy').andCallThrough();
+      sinon.spy(view1, 'destroy');
+    });
+
+    afterEach(function() {
+      view1.destroy.restore();
     });
 
     it('shouldnt call "destroy" on an already destroyed view', function() {
@@ -503,7 +547,7 @@ describe('region', function() {
       view1.destroy();
       myRegion.show(view2);
 
-      expect(view1.destroy.callCount).toEqual(1);
+      expect(view1.destroy.callCount).to.equal(1);
     });
   });
 
@@ -529,8 +573,8 @@ describe('region', function() {
 
       view = new MyView();
 
-      spyOn(view, 'destroy');
-      spyOn(view, 'remove');
+      sinon.spy(view, 'destroy');
+      sinon.spy(view, 'remove');
 
       myRegion = new MyRegion();
       myRegion.on('before:destroy', beforeDestroySpy);
@@ -540,36 +584,41 @@ describe('region', function() {
       myRegion.destroy();
     });
 
+    afterEach(function() {
+      view.destroy.restore();
+      view.remove.restore();
+    });
+
     it('should trigger a "before:destroy" event with the view thats being destroyed', function() {
-      expect(beforeDestroySpy).toHaveBeenCalledWith(view);
+      expect(beforeDestroySpy).to.have.been.calledWith(view);
     });
 
     it('should set "this" to the manager, from the before:destroy event', function() {
-      expect(beforeDestroySpy).toHaveBeenCalledOn(myRegion);
+      expect(beforeDestroySpy).to.have.been.calledOn(myRegion);
     });
 
     it('should trigger a destroy event', function() {
-      expect(destroyedSpy).toHaveBeenCalled();
+      expect(destroyedSpy).to.have.been.called;
     });
 
     it('should trigger a destroy event with the view thats being destroyd', function() {
-      expect(destroyedSpy).toHaveBeenCalledWith(view);
+      expect(destroyedSpy).to.have.been.calledWith(view);
     });
 
     it('should set "this" to the manager, from the destroy event', function() {
-      expect(destroyedSpy).toHaveBeenCalledOn(myRegion);
+      expect(destroyedSpy).to.have.been.calledOn(myRegion);
     });
 
     it('should call "destroy" on the already show view', function() {
-      expect(view.destroy).toHaveBeenCalled();
+      expect(view.destroy).to.have.been.called;
     });
 
     it('should not call "remove" directly, on the view', function() {
-      expect(view.remove).not.toHaveBeenCalled();
+      expect(view.remove).not.to.have.been.called;
     });
 
     it('should delete the current view reference', function() {
-      expect(myRegion.currentView).toBeUndefined();
+      expect(myRegion.currentView).to.be.undefined;
     });
   });
 
@@ -588,14 +637,18 @@ describe('region', function() {
 
     beforeEach(function() {
       view = new MyView();
-      spyOn(view, 'remove');
+      sinon.spy(view, 'remove');
       myRegion = new MyRegion();
       myRegion.show(view);
       myRegion.destroy();
     });
 
+    afterEach(function() {
+      view.remove.restore();
+    });
+
     it('should call "remove" on the view', function() {
-      expect(view.remove).toHaveBeenCalled();
+      expect(view.remove).to.have.been.called;
     });
 
   });
@@ -611,7 +664,7 @@ describe('region', function() {
     });
 
     it('should manage the specified el', function() {
-      expect(region.$el.selector).toBe(el);
+      expect(region.$el.selector).to.equal(el);
     });
   });
 
@@ -625,8 +678,8 @@ describe('region', function() {
 
       view = new View();
 
-      spyOn(view, 'render');
-      spyOn(view, 'onShow');
+      sinon.spy(view, 'render');
+      sinon.spy(view, 'onShow');
 
       region = new Backbone.Marionette.Region({
         el: '#foo',
@@ -634,12 +687,17 @@ describe('region', function() {
       });
     });
 
+    afterEach(function() {
+      view.render.restore();
+      view.onShow.restore();
+    });
+
     it('should not render the view', function() {
-      expect(view.render).not.toHaveBeenCalled();
+      expect(view.render).not.to.have.been.called;
     });
 
     it('should not `show` the view', function() {
-      expect(view.onShow).not.toHaveBeenCalled();
+      expect(view.onShow).not.to.have.been.called;
     });
   });
 
@@ -655,8 +713,8 @@ describe('region', function() {
 
       view = new View();
 
-      spyOn(view, 'render');
-      spyOn(view, 'onShow');
+      sinon.spy(view, 'render');
+      sinon.spy(view, 'onShow');
 
       region = new Backbone.Marionette.Region({
         el: '#foo'
@@ -665,16 +723,21 @@ describe('region', function() {
       region.attachView(view);
     });
 
+    afterEach(function() {
+      view.render.restore();
+      view.onShow.restore();
+    });
+
     it('should not render the view', function() {
-      expect(view.render).not.toHaveBeenCalled();
+      expect(view.render).not.to.have.been.called;
     });
 
     it('should not `show` the view', function() {
-      expect(view.onShow).not.toHaveBeenCalled();
+      expect(view.onShow).not.to.have.been.called;
     });
 
     it('should not replace the existing html', function() {
-      expect($(region.el).text()).toBe('bar');
+      expect($(region.el).text()).to.equal('bar');
     });
   });
 
@@ -688,15 +751,19 @@ describe('region', function() {
         initialize: function() {}
       });
 
-      spyOn(Region.prototype, 'initialize').andCallThrough();
+      sinon.spy(Region.prototype, 'initialize');
 
       region = new Region({
         foo: 'bar'
       });
     });
 
+    afterEach(function() {
+      Region.prototype.initialize.restore();
+    });
+
     it('should call the initialize method with the options from the constructor', function() {
-      expect(Region.prototype.initialize).toHaveBeenCalledWith(expectedOptions);
+      expect(Region.prototype.initialize).to.have.been.calledWith(expectedOptions);
     });
   });
 
@@ -713,17 +780,21 @@ describe('region', function() {
       });
 
       region = MyApp.MyRegion;
-      spyOn(region, 'destroy');
+      sinon.spy(region, 'destroy');
 
       MyApp.removeRegion('MyRegion');
     });
 
+    afterEach(function() {
+      region.destroy.restore();
+    });
+
     it('should be removed from the app', function() {
-      expect(MyApp.MyRegion).not.toBeDefined();
+      expect(MyApp.MyRegion).to.be.undefined;
     });
 
     it('should call "destroy" of the region', function() {
-      expect(region.destroy).toHaveBeenCalled();
+      expect(region.destroy).to.have.been.called;
     });
   });
 
@@ -739,7 +810,7 @@ describe('region', function() {
     });
 
     it('should return the region', function() {
-      expect(this.MyApp.getRegion('MyRegion')).toBe(this.region);
+      expect(this.MyApp.getRegion('MyRegion')).to.equal(this.region);
     });
   });
 
@@ -753,19 +824,23 @@ describe('region', function() {
         el: '#region'
       });
 
-      spyOn(region, 'destroy');
+      sinon.spy(region, 'destroy');
 
       region._ensureElement();
 
       region.reset();
     });
 
+    afterEach(function() {
+      region.destroy.restore();
+    });
+
     it('should not hold on to the regions previous "el"', function() {
-      expect(region.$el).not.toExist();
+      expect(region.$el).not.to.exist;
     });
 
     it('should destroy any existing view', function() {
-      expect(region.destroy).toHaveBeenCalled();
+      expect(region.destroy).to.have.been.called;
     });
 
   });

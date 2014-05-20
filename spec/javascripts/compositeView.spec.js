@@ -1,6 +1,9 @@
 describe('composite view', function() {
   'use strict';
 
+  beforeEach(global.setup);
+  afterEach(global.teardown);
+
   // Models
 
   var Model = Backbone.Model.extend();
@@ -72,12 +75,12 @@ describe('composite view', function() {
     });
 
     it('should render the template', function() {
-      expect(compositeView.$el).toHaveText(/composite/);
+      expect(compositeView.$el).to.contain.$text('composite');
     });
 
     it('should render the collections items', function() {
-      expect(compositeView.$el).toHaveText(/bar/);
-      expect(compositeView.$el).toHaveText(/baz/);
+      expect(compositeView.$el).to.contain.$text('bar');
+      expect(compositeView.$el).to.contain.$text('baz');
     });
   });
 
@@ -115,11 +118,11 @@ describe('composite view', function() {
     });
 
     it('should render the template with the model', function() {
-      expect(compositeView.$el).toHaveText(/composite bar/);
+      expect(compositeView.$el).to.contain.$text('composite bar');
     });
 
     it('should render the collections items', function() {
-      expect(compositeView.$el).toHaveText(/baz/);
+      expect(compositeView.$el).to.contain.$text('baz');
     });
   });
 
@@ -168,7 +171,7 @@ describe('composite view', function() {
     });
 
     it('should call "onShowCallbacks.add"', function() {
-      expect(onShow.length === 1).toBeTruthy();
+      expect(onShow.length === 1).to.be.ok;
     });
   });
 
@@ -199,7 +202,7 @@ describe('composite view', function() {
     });
 
     it('should throw an exception because there was no valid template', function() {
-      expect(compositeView.render).toThrow(new Error('Cannot render the template since its false, null or undefined.'));
+      expect(compositeView.render).to.throw('Cannot render the template since its false, null or undefined.');
     });
   });
 
@@ -246,40 +249,45 @@ describe('composite view', function() {
         order.push(compositeView);
       });
 
-      spyOn(compositeView, 'trigger').andCallThrough();
-      spyOn(compositeView, 'onRender').andCallThrough();
+      sinon.spy(compositeView, 'trigger');
+      sinon.spy(compositeView, 'onRender');
 
       compositeView.render();
     });
 
+    afterEach(function() {
+      compositeView.trigger.restore();
+      compositeView.onRender.restore();
+    });
+
     it('should trigger a render event for the model view', function() {
-      expect(compositeView.trigger).toHaveBeenCalledWith('render:template');
+      expect(compositeView.trigger).to.have.been.calledWith('render:template');
     });
 
     it('should trigger a before:render event for the collection', function() {
-      expect(compositeView.trigger).toHaveBeenCalledWith('before:render:collection', compositeView);
+      expect(compositeView.trigger).to.have.been.calledWith('before:render:collection', compositeView);
     });
 
     it('should trigger a render event for the collection', function() {
-      expect(compositeView.trigger).toHaveBeenCalledWith('render:collection', compositeView);
+      expect(compositeView.trigger).to.have.been.calledWith('render:collection', compositeView);
     });
 
     it('should trigger a render event for the composite view', function() {
-      expect(compositeView.trigger).toHaveBeenCalledWith('render', compositeView);
+      expect(compositeView.trigger).to.have.been.calledWith('render', compositeView);
     });
 
     it('should guarantee rendering of the model before rendering the collection', function() {
-      expect(order[0]).toBe(compositeView.renderedModelView);
-      expect(order[1]).toBe(compositeView.collection);
-      expect(order[2]).toBe(compositeView);
+      expect(order[0]).to.equal(compositeView.renderedModelView);
+      expect(order[1]).to.equal(compositeView.collection);
+      expect(order[2]).to.equal(compositeView);
     });
 
     it('should call "onRender"', function() {
-      expect(compositeView.onRender).toHaveBeenCalled();
+      expect(compositeView.onRender).to.have.been.called;
     });
 
     it('should only call "onRender" once', function() {
-      expect(compositeView.onRender.callCount).toBe(1);
+      expect(compositeView.onRender.callCount).to.equal(1);
     });
   });
 
@@ -311,26 +319,32 @@ describe('composite view', function() {
         collection: collection
       });
 
-      spyOn(compositeView, 'render').andCallThrough();
-      spyOn(compositeView, 'destroyChildren').andCallThrough();
-      spyOn(Backbone.Marionette.Renderer, 'render');
+      sinon.spy(compositeView, 'render');
+      sinon.spy(compositeView, 'destroyChildren');
+      sinon.spy(Backbone.Marionette.Renderer, 'render');
       compositeRenderSpy = compositeView.render;
 
       compositeView.render();
       compositeView.render();
     });
 
+    afterEach(function() {
+      compositeView.render.restore();
+      compositeView.destroyChildren.restore();
+      Backbone.Marionette.Renderer.render.restore();
+    });
+
     it('should re-render the template view', function() {
-      expect(Backbone.Marionette.Renderer.render.callCount).toBe(2);
+      expect(Backbone.Marionette.Renderer.render.callCount).to.equal(2);
     });
 
     it('should destroy all of the child collection child views', function() {
-      expect(compositeView.destroyChildren).toHaveBeenCalled();
-      expect(compositeView.destroyChildren.callCount).toBe(2);
+      expect(compositeView.destroyChildren).to.have.been.called;
+      expect(compositeView.destroyChildren.callCount).to.equal(2);
     });
 
     it('should re-render the collections items', function() {
-      expect(compositeRenderSpy.callCount).toBe(2);
+      expect(compositeRenderSpy.callCount).to.equal(2);
     });
   });
 
@@ -368,11 +382,11 @@ describe('composite view', function() {
     });
 
     it('should render the template with the model', function() {
-      expect(compositeView.$el).toHaveText(/composite bar/);
+      expect(compositeView.$el).to.contain.$text('composite bar');
     });
 
     it('should render the collections items', function() {
-      expect(compositeView.$el).toHaveText(/baz/);
+      expect(compositeView.$el).to.contain.$text('baz');
     });
   });
 
@@ -405,11 +419,11 @@ describe('composite view', function() {
     });
 
     it('should render the template with the model', function() {
-      expect(compositeView.$el).toHaveText(/composite bar/);
+      expect(compositeView.$el).to.contain.$text('composite bar');
     });
 
     it('should not render the collections items', function() {
-      expect(compositeView.$el).not.toHaveText(/baz/);
+      expect(compositeView.$el).not.to.contain.$text('baz');
     });
   });
 
@@ -445,7 +459,11 @@ describe('composite view', function() {
 
       compositeView.render();
 
-      spyOn(compositeView, '_renderRoot').andCallThrough();
+      sinon.spy(compositeView, '_renderRoot');
+    });
+
+    afterEach(function() {
+      compositeView._renderRoot.restore();
     });
 
     describe('and then resetting the collection', function() {
@@ -456,13 +474,13 @@ describe('composite view', function() {
       });
 
       it('should not re-render the template with the model', function() {
-        expect(compositeView._renderRoot).not.toHaveBeenCalled();
+        expect(compositeView._renderRoot).not.to.have.been.called;
       });
 
       it('should render the collections items', function() {
-        expect(compositeView.$el).not.toHaveText(/baz/);
-        expect(compositeView.$el).toHaveText(/quux/);
-        expect(compositeView.$el).toHaveText(/widget/);
+        expect(compositeView.$el).not.to.contain.$text('baz');
+        expect(compositeView.$el).to.contain.$text('quux');
+        expect(compositeView.$el).to.contain.$text('widget');
       });
     });
 
@@ -473,13 +491,13 @@ describe('composite view', function() {
       });
 
       it('should not re-render the template with the model', function() {
-        expect(compositeView._renderRoot).not.toHaveBeenCalled();
+        expect(compositeView._renderRoot).not.to.have.been.called;
       });
 
       it('should add to the collections items', function() {
-        expect(compositeView.$el).toHaveText(/bar/);
-        expect(compositeView.$el).toHaveText(/baz/);
-        expect(compositeView.$el).toHaveText(/quux/);
+        expect(compositeView.$el).to.contain.$text('bar');
+        expect(compositeView.$el).to.contain.$text('baz');
+        expect(compositeView.$el).to.contain.$text('quux');
       });
     });
 
@@ -490,11 +508,11 @@ describe('composite view', function() {
       });
 
       it('should not re-render the template with the model', function() {
-        expect(compositeView._renderRoot).not.toHaveBeenCalled();
+        expect(compositeView._renderRoot).not.to.have.been.called;
       });
 
       it('should remove from the collections items', function() {
-        expect(compositeView.$el).not.toHaveText(/baz/);
+        expect(compositeView.$el).not.to.contain.$text('baz');
       });
     });
   });
@@ -528,15 +546,15 @@ describe('composite view', function() {
     });
 
     it('should render the template with the model', function() {
-      expect(treeView.$el).toHaveText(/level 1/);
+      expect(treeView.$el).to.contain.$text('level 1');
     });
 
     it('should render the collections items', function() {
-      expect(treeView.$el).toHaveText(/level 2/);
+      expect(treeView.$el).to.contain.$text('level 2');
     });
 
     it('should render all the levels of the nested object', function() {
-      expect(treeView.$el).toHaveText(/level 3/);
+      expect(treeView.$el).to.contain.$text('level 3');
     });
   });
 
@@ -568,19 +586,23 @@ describe('composite view', function() {
         collection: collection
       });
 
-      spyOn(CompositeModelView.prototype, 'destroy').andCallThrough();
+      sinon.spy(CompositeModelView.prototype, 'destroy');
 
       compositeView.render();
 
       compositeView.destroy();
     });
 
+    afterEach(function() {
+      CompositeModelView.prototype.destroy.restore();
+    });
+
     it('should delete the model view', function() {
-      expect(compositeView.renderedModelView).toBeUndefined();
+      expect(compositeView.renderedModelView).to.be.undefined;
     });
 
     it('should destroy the collection of views', function() {
-      expect(CompositeModelView.prototype.destroy.callCount).toBe(1);
+      expect(CompositeModelView.prototype.destroy.callCount).to.equal(1);
     });
   });
 
@@ -634,14 +656,14 @@ describe('composite view', function() {
     });
 
     it('should render the table', function() {
-      expect(gridView.$('th').length).not.toBe(0);
+      expect(gridView.$('th').length).not.to.equal(0);
     });
 
     it('should render the users', function() {
       var body = gridView.$('tbody');
-      expect(body).toHaveText(/dbailey/);
-      expect(body).toHaveText(/jbob/);
-      expect(body).toHaveText(/fbar/);
+      expect(body).to.contain.$text('dbailey');
+      expect(body).to.contain.$text('jbob');
+      expect(body).to.contain.$text('fbar');
     });
   });
 
@@ -717,21 +739,21 @@ describe('composite view', function() {
       describe('accessing a ui element that belongs to the model template', function() {
 
         it('should return its jQuery selector if it can be found', function() {
-          expect(gridView.ui.headersRow.find('th:first-child')).toHaveText('Username');
+          expect(gridView.ui.headersRow.find('th:first-child')).to.contain.$text('Username');
         });
 
         it('should return an empty jQuery object if it cannot be found', function() {
-          expect(gridView.ui.unfoundElement.length).toEqual(0);
+          expect(gridView.ui.unfoundElement.length).to.equal(0);
         });
 
         it('should return an up-to-date selector on subsequent renders', function() {
           // asserting state before subsequent render
-          expect(gridView.ui.headersRow.find('th:first-child')).toHaveText('Username');
+          expect(gridView.ui.headersRow.find('th:first-child')).to.contain.$text('Username');
 
           headersModel.set('userHeader', 'User');
           gridView.render();
 
-          expect(gridView.ui.headersRow.find('th:first-child')).toHaveText('User');
+          expect(gridView.ui.headersRow.find('th:first-child')).to.contain.$text('User');
         });
 
       });
@@ -741,7 +763,7 @@ describe('composite view', function() {
         // This test makes it clear that not allowing access to the collection elements is a design decision
         // and not a bug.
         it('should return an empty jQuery object', function() {
-          expect(gridView.ui.itemRows.length).toEqual(0);
+          expect(gridView.ui.itemRows.length).to.equal(0);
         });
 
       });
@@ -757,20 +779,24 @@ describe('composite view', function() {
           gridView.onBeforeRender = function() {
             called = true;
           };
-          spyOn(gridView, 'onBeforeRender').andCallThrough();
+          sinon.spy(gridView, 'onBeforeRender');
 
           gridView.render();
 
         });
 
+        afterEach(function() {
+          gridView.onBeforeRender.restore();
+        });
+
         // this test enforces that ui elements should be accessible as soon as their html was inserted
         // to the DOM
         it('should return its jQuery selector', function() {
-          expect(gridView.onBeforeRender).toHaveBeenCalled();
+          expect(gridView.onBeforeRender).to.have.been.called;
         });
 
         it('should set the username', function() {
-          expect($(gridView.ui.headersRow).find('th:first-child').text()).toEqual('Username');
+          expect($(gridView.ui.headersRow).find('th:first-child').text()).to.equal('Username');
         });
 
       });
@@ -784,12 +810,16 @@ describe('composite view', function() {
     var constructor, compositeView;
 
     beforeEach(function() {
-      constructor = spyOn(Marionette, 'CollectionView');
+      constructor = sinon.spy(Marionette, 'CollectionView');
       compositeView = new Marionette.CompositeView();
     });
 
+    afterEach(function() {
+      Marionette.CollectionView.restore();
+    });
+
     it('calls the parent Marionette.CollectionViews constructor function on instantiation', function() {
-      expect(constructor).toHaveBeenCalled();
+      expect(constructor).to.have.been.called;
     });
   });
 });

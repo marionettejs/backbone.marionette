@@ -1,6 +1,9 @@
 describe('item view', function() {
   'use strict';
 
+  beforeEach(global.setup);
+  afterEach(global.teardown);
+
   var Model = Backbone.Model.extend();
 
   var Collection = Backbone.Collection.extend({
@@ -22,7 +25,7 @@ describe('item view', function() {
     });
 
     it('should throw an exception because there was no valid template', function() {
-      expect(view.render).toThrow(new Error('Cannot render the template since its false, null or undefined.'));
+      expect(view.render).to.throw('Cannot render the template since its false, null or undefined.');
     });
 
   });
@@ -39,27 +42,33 @@ describe('item view', function() {
     beforeEach(function() {
       view = new OnRenderView({});
 
-      spyOn(view, 'onBeforeRender').andCallThrough();
-      spyOn(view, 'onRender').andCallThrough();
-      spyOn(view, 'trigger').andCallThrough();
+      sinon.spy(view, 'onBeforeRender');
+      sinon.spy(view, 'onRender');
+      sinon.spy(view, 'trigger');
 
       view.render();
     });
 
+    afterEach(function() {
+      view.onBeforeRender.restore();
+      view.onRender.restore();
+      view.trigger.restore();
+    });
+
     it('should call a "onBeforeRender" method on the view', function() {
-      expect(view.onBeforeRender).toHaveBeenCalled();
+      expect(view.onBeforeRender).to.have.been.called;
     });
 
     it('should call an "onRender" method on the view', function() {
-      expect(view.onRender).toHaveBeenCalled();
+      expect(view.onRender).to.have.been.called;
     });
 
     it('should trigger a before:render event', function() {
-      expect(view.trigger).toHaveBeenCalledWith('before:render', view);
+      expect(view.trigger).to.have.been.calledWith('before:render', view);
     });
 
     it('should trigger a rendered event', function() {
-      expect(view.trigger).toHaveBeenCalledWith('render', view);
+      expect(view.trigger).to.have.been.calledWith('render', view);
     });
   });
 
@@ -76,17 +85,21 @@ describe('item view', function() {
         })
       });
 
-      spyOn(view, 'serializeData').andCallThrough();
+      sinon.spy(view, 'serializeData');
 
       view.render();
     });
 
+    afterEach(function() {
+      view.serializeData.restore();
+    });
+
     it('should serialize the model', function() {
-      expect(view.serializeData).toHaveBeenCalled();
+      expect(view.serializeData).to.have.been.called;
     });
 
     it('should render the template with the serialized model', function() {
-      expect($(view.el)).toHaveText(/bar/);
+      expect($(view.el)).to.contain.$text('bar');
     });
   });
 
@@ -111,24 +124,28 @@ describe('item view', function() {
         })
       });
 
-      spyOn(view, 'serializeData').andCallThrough();
+      sinon.spy(view, 'serializeData');
 
       view.render();
     });
 
+    afterEach(function() {
+      view.serializeData.restore();
+    });
+
     it('should serialize the model', function() {
-      expect(view.serializeData).toHaveBeenCalled();
+      expect(view.serializeData).to.have.been.called;
     });
 
     it('should render the template with the serialized model', function() {
-      expect($(view.el)).toHaveText(/bar/);
+      expect($(view.el)).to.contain.$text('bar');
     });
   });
 
   describe('when an item view has an asynchronous onRender and is rendered', function() {
     var AsyncOnRenderView = Backbone.Marionette.ItemView.extend({
       template: '#emptyTemplate',
-      asyncCallback: function() {},
+      asyncCallback: sinon.stub(),
       onRender: function() {
         var that = this;
         var deferred = $.Deferred();
@@ -139,22 +156,21 @@ describe('item view', function() {
       }
     });
 
-    var view, promise, callbackSpy;
+    var view, promise;
 
     beforeEach(function() {
       loadFixtures('emptyTemplate.html');
       view = new AsyncOnRenderView();
-      callbackSpy = spyOn(view, 'asyncCallback').andCallThrough();
       promise = view.render();
     });
 
-    it('should delay until onRender resolves', function() {
-      waits(0);
-      runs(function() {
+    it('should delay until onRender resolves', function(done) {
+      setTimeout(function () {
         $.when(promise).then(function() {
-          expect(callbackSpy).toHaveBeenCalled();
+          expect(view.asyncCallback).to.have.been.called;
+          done();
         });
-      });
+      }, 0);
     });
   });
 
@@ -167,18 +183,22 @@ describe('item view', function() {
         collection: new Collection([{foo: 'bar'}, {foo: 'baz'}])
       });
 
-      spyOn(view, 'serializeData').andCallThrough();
+      sinon.spy(view, 'serializeData');
 
       view.render();
     });
 
+    afterEach(function() {
+      view.serializeData.restore();
+    });
+
     it('should serialize the collection', function() {
-      expect(view.serializeData).toHaveBeenCalled();
+      expect(view.serializeData).to.have.been.called;
     });
 
     it('should render the template with the serialized collection', function() {
-      expect($(view.el)).toHaveText(/bar/);
-      expect($(view.el)).toHaveText(/baz/);
+      expect($(view.el)).to.contain.$text('bar');
+      expect($(view.el)).to.contain.$text('baz');
     });
   });
 
@@ -192,18 +212,22 @@ describe('item view', function() {
         collection: new Collection([{foo: 'bar'}, {foo: 'baz'}])
       });
 
-      spyOn(view, 'serializeData').andCallThrough();
+      sinon.spy(view, 'serializeData');
 
       view.render();
     });
 
+    afterEach(function() {
+      view.serializeData.restore();
+    });
+
     it('should serialize the model', function() {
-      expect(view.serializeData).toHaveBeenCalled();
+      expect(view.serializeData).to.have.been.called;
     });
 
     it('should render the template with the serialized model', function() {
-      expect($(view.el)).toHaveText(/bar/);
-      expect($(view.el)).not.toHaveText(/baz/);
+      expect($(view.el)).to.contain.$text('bar');
+      expect($(view.el)).not.to.contain.$text('baz');
     });
   });
 
@@ -233,13 +257,13 @@ describe('item view', function() {
       });
       view.render();
 
-      spyOn(view, 'remove').andCallThrough();
-      spyOn(view, 'stopListening').andCallThrough();
-      spyOn(view, 'modelChange').andCallThrough();
-      spyOn(view, 'collectionChange').andCallThrough();
-      spyOn(view, 'onBeforeDestroy').andCallThrough();
-      spyOn(view, 'onDestroy').andCallThrough();
-      spyOn(view, 'trigger').andCallThrough();
+      sinon.spy(view, 'remove');
+      sinon.spy(view, 'stopListening');
+      sinon.spy(view, 'modelChange');
+      sinon.spy(view, 'collectionChange');
+      sinon.spy(view, 'onBeforeDestroy');
+      sinon.spy(view, 'onDestroy');
+      sinon.spy(view, 'trigger');
 
       view.listenTo(model, 'change:foo', view.modelChange);
       view.listenTo(collection, 'foo', view.collectionChange);
@@ -250,36 +274,46 @@ describe('item view', function() {
       collection.trigger('foo');
     });
 
+    afterEach(function() {
+      view.remove.restore();
+      view.stopListening.restore();
+      view.modelChange.restore();
+      view.collectionChange.restore();
+      view.onBeforeDestroy.restore();
+      view.onDestroy.restore();
+      view.trigger.restore();
+    });
+
     it('should unbind model events for the view', function() {
-      expect(view.modelChange).not.toHaveBeenCalled();
+      expect(view.modelChange).not.to.have.been.called;
     });
 
     it('should unbind all collection events for the view', function() {
-      expect(view.collectionChange).not.toHaveBeenCalled();
+      expect(view.collectionChange).not.to.have.been.called;
     });
 
     it('should unbind any listener to custom view events', function() {
-      expect(view.stopListening).toHaveBeenCalled();
+      expect(view.stopListening).to.have.been.called;
     });
 
     it('should remove the views EL from the DOM', function() {
-      expect(view.remove).toHaveBeenCalled();
+      expect(view.remove).to.have.been.called;
     });
 
     it('should trigger "before:destroy"', function(){
-      expect(view.trigger).toHaveBeenCalledWith('before:destroy');
+      expect(view.trigger).to.have.been.calledWith('before:destroy');
     });
 
     it('should trigger "destroy"', function(){
-      expect(view.trigger).toHaveBeenCalledWith('destroy');
+      expect(view.trigger).to.have.been.calledWith('destroy');
     });
 
     it('should call "onBeforeDestroy" if provided', function() {
-      expect(view.onBeforeDestroy).toHaveBeenCalled();
+      expect(view.onBeforeDestroy).to.have.been.called;
     });
 
     it('should call "onDestroy" if provided', function() {
-      expect(view.onDestroy).toHaveBeenCalled();
+      expect(view.onDestroy).to.have.been.called;
     });
   });
 
@@ -318,7 +352,7 @@ describe('item view', function() {
           model: model
         });
 
-        spy = spyOn(view, 'render').andCallThrough();
+        spy = sinon.spy(view, 'render');
 
         view.setupHandler();
         view.render();
@@ -332,8 +366,12 @@ describe('item view', function() {
         chk.trigger('change');
       });
 
+      afterEach(function() {
+        view.render.restore();
+      });
+
       it('should render the view 3 times total', function() {
-        expect(spy.callCount).toBe(3);
+        expect(spy.callCount).to.equal(3);
       });
     });
 
@@ -347,7 +385,7 @@ describe('item view', function() {
     var renderUpdate, view;
 
     beforeEach(function() {
-      renderUpdate = jasmine.createSpy('dom:refresh');
+      renderUpdate = sinon.stub();
 
       view = new View();
       $('body').append(view.el);
@@ -364,7 +402,7 @@ describe('item view', function() {
     });
 
     it('should trigger a dom:refresh event', function() {
-      expect(renderUpdate).toHaveBeenCalled();
+      expect(renderUpdate).to.have.been.called;
     });
   });
 
@@ -373,12 +411,16 @@ describe('item view', function() {
     var constructor, itemView;
 
     beforeEach(function() {
-      constructor = spyOn(Marionette, 'View');
+      constructor = sinon.spy(Marionette, 'View');
       itemView = new Marionette.ItemView();
     });
 
+    afterEach(function () {
+      Marionette.View.restore();
+    });
+
     it('calls the parent Marionette.Views constructor function on instantiation', function() {
-      expect(constructor).toHaveBeenCalled();
+      expect(constructor).to.have.been.called;
     });
   });
 

@@ -1,5 +1,8 @@
 describe('view entity events', function() {
 
+  beforeEach(global.setup);
+  afterEach(global.teardown);
+
   describe('when a view has string-based model and collection event configuration', function() {
     var view;
 
@@ -7,10 +10,10 @@ describe('view entity events', function() {
       modelEvents: {'model-event': 'modelEventHandler modelEventHandler2'},
       collectionEvents: {'collection-event': 'collectionEventHandler collectionEventHandler2'},
 
-      modelEventHandler: jasmine.createSpy('model event handler'),
-      collectionEventHandler: jasmine.createSpy('collection event handler'),
-      modelEventHandler2: jasmine.createSpy('model event handler2'),
-      collectionEventHandler2: jasmine.createSpy('collection event handler2')
+      modelEventHandler: sinon.stub(),
+      collectionEventHandler: sinon.stub(),
+      modelEventHandler2: sinon.stub(),
+      collectionEventHandler2: sinon.stub()
     });
 
     beforeEach(function() {
@@ -22,14 +25,14 @@ describe('view entity events', function() {
 
     it('should wire up model events', function() {
       view.model.trigger('model-event');
-      expect(view.modelEventHandler).toHaveBeenCalled();
-      expect(view.modelEventHandler2).toHaveBeenCalled();
+      expect(view.modelEventHandler).to.have.been.called;
+      expect(view.modelEventHandler2).to.have.been.called;
     });
 
     it('should wire up collection events', function() {
       view.collection.trigger('collection-event');
-      expect(view.collectionEventHandler).toHaveBeenCalled();
-      expect(view.collectionEventHandler2).toHaveBeenCalled();
+      expect(view.collectionEventHandler).to.have.been.called;
+      expect(view.collectionEventHandler2).to.have.been.called;
     });
 
   });
@@ -39,10 +42,10 @@ describe('view entity events', function() {
 
     var View = Backbone.Marionette.View.extend({
       modelEvents: {
-        'model-event': jasmine.createSpy('model event handler')
+        'model-event': sinon.stub()
       },
       collectionEvents: {
-        'collection-event': jasmine.createSpy('collection event handler')
+        'collection-event': sinon.stub()
       }
     });
 
@@ -55,12 +58,12 @@ describe('view entity events', function() {
 
     it('should wire up model events', function() {
       view.model.trigger('model-event');
-      expect(view.modelEvents['model-event']).toHaveBeenCalled();
+      expect(view.modelEvents['model-event']).to.have.been.called;
     });
 
     it('should wire up collection events', function() {
       view.collection.trigger('collection-event');
-      expect(view.collectionEvents['collection-event']).toHaveBeenCalled();
+      expect(view.collectionEvents['collection-event']).to.have.been.called;
     });
 
   });
@@ -79,7 +82,7 @@ describe('view entity events', function() {
     });
 
     it('should error when method doesnt exist', function() {
-      expect(getBadViewInstance).toThrow('Method "does_not_exist" was configured as an event handler, but does not exist.');
+      expect(getBadViewInstance).to.throw('Method "does_not_exist" was configured as an event handler, but does not exist.');
     });
   });
 
@@ -87,8 +90,8 @@ describe('view entity events', function() {
     var view, modelHandler, collectionHandler;
 
     beforeEach(function() {
-      modelHandler = jasmine.createSpy('model handler');
-      collectionHandler = jasmine.createSpy('collection handler');
+      modelHandler = sinon.stub();
+      collectionHandler = sinon.stub();
 
       var View = Backbone.Marionette.View.extend({
         modelEvents: function() {
@@ -109,11 +112,11 @@ describe('view entity events', function() {
     });
 
     it('should trigger the model event', function() {
-      expect(modelHandler).toHaveBeenCalled();
+      expect(modelHandler).to.have.been.called;
     });
 
     it('should trigger the collection event', function() {
-      expect(collectionHandler).toHaveBeenCalled();
+      expect(collectionHandler).to.have.been.called;
     });
   });
 
@@ -121,8 +124,8 @@ describe('view entity events', function() {
     var view, modelHandler, collectionHandler;
 
     beforeEach(function() {
-      modelHandler = jasmine.createSpy('model event handler');
-      collectionHandler = jasmine.createSpy('collection event handler');
+      modelHandler = sinon.stub();
+      collectionHandler = sinon.stub();
 
       var View = Marionette.View.extend({
         modelEvents: {
@@ -152,11 +155,11 @@ describe('view entity events', function() {
     });
 
     it('should undelegate the model events', function() {
-      expect(modelHandler).not.toHaveBeenCalled();
+      expect(modelHandler).not.to.have.been.called;
     });
 
     it('should undelegate the collection events', function() {
-      expect(collectionHandler).not.toHaveBeenCalled();
+      expect(collectionHandler).not.to.have.been.called;
     });
   });
 
@@ -164,8 +167,8 @@ describe('view entity events', function() {
     var view, modelHandler, collectionHandler;
 
     beforeEach(function() {
-      modelHandler = jasmine.createSpy('model event handler');
-      collectionHandler = jasmine.createSpy('collection event handler');
+      modelHandler = sinon.stub();
+      collectionHandler = sinon.stub();
 
       var View = Marionette.View.extend({
         modelEvents: {
@@ -196,11 +199,11 @@ describe('view entity events', function() {
     });
 
     it('should fire the model event once', function() {
-      expect(modelHandler.callCount).toBe(1);
+      expect(modelHandler.callCount).to.equal(1);
     });
 
     it('should fire the collection event once', function() {
-      expect(collectionHandler.callCount).toBe(1);
+      expect(collectionHandler.callCount).to.equal(1);
     });
   });
 
@@ -238,8 +241,8 @@ describe('view entity events', function() {
     });
 
     beforeEach(function() {
-      destroySpy = spyOn(ChildView.prototype, 'destroy').andCallThrough();
-      renderSpy = spyOn(ChildView.prototype, 'render').andCallFake(function() {});
+      destroySpy = sinon.spy(ChildView.prototype, 'destroy');
+      renderSpy = sinon.stub(ChildView.prototype, 'render');
 
       var model = new Backbone.Model();
       var parent = new ParentView({
@@ -251,8 +254,13 @@ describe('view entity events', function() {
       model.trigger('sync');
     });
 
+    afterEach(function() {
+      ChildView.prototype.destroy.restore();
+      ChildView.prototype.render.restore();
+    });
+
     it('should destroy the previous child view', function() {
-      expect(destroySpy).toHaveBeenCalled();
+      expect(destroySpy).to.have.been.called;
     });
 
     it('should undelegate all previous views modelEvents', function() {
@@ -261,7 +269,7 @@ describe('view entity events', function() {
       // we expect ChildView 1 to destroy
       // we expect ChildView 2 to call render (2nd)
       // we expect destroyed ChildView 1 not to call render again
-      expect(renderSpy.calls.length).toEqual(5);
+      expect(renderSpy.callCount).to.equal(5);
     });
   });
 });

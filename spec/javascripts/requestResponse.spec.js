@@ -1,6 +1,9 @@
 describe('application request/response', function() {
   'use strict';
 
+  beforeEach(global.setup);
+  afterEach(global.teardown);
+
   describe('when creating an instance of an Application', function() {
     var App;
 
@@ -9,11 +12,11 @@ describe('application request/response', function() {
     });
 
     it('should provide request/response framework', function() {
-      expect(App.reqres).toBeInstanceOf(Backbone.Wreqr.RequestResponse);
+      expect(App.reqres).to.be.instanceof(Backbone.Wreqr.RequestResponse);
     });
 
     it('should allow direct request', function() {
-      expect(typeof App.request).toBe('function');
+      expect(typeof App.request).to.equal('function');
     });
 
   });

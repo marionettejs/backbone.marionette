@@ -62,6 +62,12 @@ Marionette.RegionManager = (function(Marionette) {
       return this._regions[name];
     },
 
+    // Gets all the regions contained within
+    // the `regionManager` instance.
+    getRegions: function(){
+      return _.clone(this._regions);
+    },
+
     // Remove a region by name
     removeRegion: function(name) {
       var region = this._regions[name];

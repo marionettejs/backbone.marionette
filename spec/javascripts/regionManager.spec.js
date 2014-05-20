@@ -170,6 +170,22 @@ describe('regionManager', function() {
     });
   });
 
+  describe(".getRegions", function(){
+    beforeEach(function(){
+      this.regionManager = new Marionette.RegionManager();
+      this.r = this.regionManager.addRegion("foo", "#foo");
+      this.r2 = this.regionManager.addRegion("bar", "#bar");
+
+      this.regions = this.regionManager.getRegions();
+    });
+
+    it("should return all the regions", function(){
+      expect(this.regions.foo).to.equal(this.r);
+      expect(this.regions.bar).to.equal(this.r2);
+    });
+
+  });
+
   describe('.removeRegion', function() {
     beforeEach(function() {
       this.setFixtures('<div id="foo"></div>');

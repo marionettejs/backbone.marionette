@@ -39,30 +39,33 @@ global.Marionette = require('../../../tmp/backbone.marionette');
 
 var $body = $(document.body);
 
-global.setFixtures = function () {
+var setFixtures = function () {
   _.each(arguments, function (content) {
     $body.append(content);
   });
 };
 
-global.loadFixtures = function () {
+var loadFixtures = function () {
   _.each(arguments, function (fixture) {
     var file = path.resolve('./spec/javascripts/fixtures/', fixture);
-    global.setFixtures(fs.readFileSync(file).toString());
+    setFixtures(fs.readFileSync(file).toString());
   });
 };
 
-global.clearFixtures = function () {
+var clearFixtures = function () {
   $body.empty();
 };
 
 global.setup = function () {
   this.sinon = sinon.sandbox.create();
+  this.setFixtures = setFixtures;
+  this.loadFixtures = loadFixtures;
+  this.clearFixtures = clearFixtures;
 };
 
 global.teardown = function () {
   this.sinon.restore();
-  global.clearFixtures();
+  clearFixtures();
   window.location.hash = '';
   Backbone.history.stop();
   Backbone.history.handlers.length = 0;

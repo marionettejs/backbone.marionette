@@ -16,7 +16,7 @@ describe('view ui elements', function() {
     var view, model;
 
     beforeEach(function() {
-      loadFixtures('itemWithCheckbox.html');
+      this.loadFixtures('itemWithCheckbox.html');
 
       model = new Backbone.Model({
         done: false
@@ -52,7 +52,7 @@ describe('view ui elements', function() {
     var view, model;
 
     beforeEach(function() {
-      loadFixtures('itemWithCheckbox.html');
+      this.loadFixtures('itemWithCheckbox.html');
 
       model = new Backbone.Model({
         done: false
@@ -92,7 +92,7 @@ describe('view ui elements', function() {
     var view, model;
 
     beforeEach(function() {
-      loadFixtures('itemWithCheckbox.html');
+      this.loadFixtures('itemWithCheckbox.html');
 
       model = new Backbone.Model({
         done: false

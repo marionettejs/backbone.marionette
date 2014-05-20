@@ -118,7 +118,7 @@ _.extend(Marionette.Region.prototype, Backbone.Events, {
   // or just before closing the view, respectively.
   // The `preventClose` option can be used to prevent a view from being destroyed on show.
   show: function(view, options){
-    this.ensureEl();
+    this._ensureElement();
 
     var showOptions = options || {};
     var isViewClosed = view.isClosed || _.isUndefined(view.$el);
@@ -146,7 +146,7 @@ _.extend(Marionette.Region.prototype, Backbone.Events, {
     Marionette.triggerMethod.call(view, "show");
   },
 
-  ensureEl: function(){
+  _ensureElement: function(){
     if (!this.$el || this.$el.length === 0){
       this.$el = this.getEl(this.el);
     }

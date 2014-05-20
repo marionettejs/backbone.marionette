@@ -582,7 +582,7 @@ describe("region", function(){
 
       spyOn(region, "close");
 
-      region.ensureEl();
+      region._ensureElement();
 
       region.reset();
     });

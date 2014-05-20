@@ -1,5 +1,8 @@
 describe('collection view - childViewOptions', function() {
 
+  beforeEach(global.setup);
+  afterEach(global.teardown);
+
   var ItemView = Backbone.Marionette.ItemView.extend({
     tagName: 'span',
     render: function() {
@@ -30,7 +33,7 @@ describe('collection view - childViewOptions', function() {
     });
 
     it('should pass the options to every view instance', function() {
-      expect(view.options.hasOwnProperty('foo')).toBe(true);
+      expect(view.options.hasOwnProperty('foo')).to.be.true;
     });
   });
 
@@ -52,19 +55,23 @@ describe('collection view - childViewOptions', function() {
       collectionView = new CollectionView({
         collection: collection
       });
-      spyOn(collectionView, 'childViewOptions').andCallThrough();
+      sinon.spy(collectionView, 'childViewOptions');
 
       collectionView.render();
       view = collectionView.children.findByIndex(0);
     });
 
+    afterEach(function () {
+      collectionView.childViewOptions.restore();
+    });
+
     it('should pass the options to every view instance', function() {
-      expect(view.options.hasOwnProperty('foo')).toBe(true);
+      expect(view.options.hasOwnProperty('foo')).to.be.true;
     });
 
     it('should pass the model when calling "childViewOptions"', function() {
-      expect(collectionView.childViewOptions).toHaveBeenCalledWith(collection.at(0), 0);
-      expect(collectionView.childViewOptions).toHaveBeenCalledWith(collection.at(1), 1);
+      expect(collectionView.childViewOptions).to.have.been.calledWith(collection.at(0), 0);
+      expect(collectionView.childViewOptions).to.have.been.calledWith(collection.at(1), 1);
     });
   });
 
@@ -89,7 +96,7 @@ describe('collection view - childViewOptions', function() {
     });
 
     it('should pass the options to every view instance', function() {
-      expect(view.options.hasOwnProperty('foo')).toBe(true);
+      expect(view.options.hasOwnProperty('foo')).to.be.true;
     });
   });
 

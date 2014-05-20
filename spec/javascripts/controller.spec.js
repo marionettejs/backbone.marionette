@@ -1,9 +1,12 @@
 describe('marionette controller', function() {
 
+  beforeEach(global.setup);
+  afterEach(global.teardown);
+
   describe('when creating an controller', function() {
 
     var Controller = Marionette.Controller.extend({
-      initialize: jasmine.createSpy('initialize method')
+      initialize: sinon.stub()
     });
 
     var controller, options, handler;
@@ -12,30 +15,30 @@ describe('marionette controller', function() {
       options = {};
       controller = new Controller(options);
 
-      handler = jasmine.createSpy('foo handler');
+      handler = sinon.stub();
       controller.on('foo', handler);
 
       controller.trigger('foo', options);
     });
 
     it('should support triggering events', function() {
-      expect(handler).toHaveBeenCalledWith(options);
+      expect(handler).to.have.been.calledWith(options);
     });
 
     it('should have an event aggregator built in to it', function() {
-      expect(typeof controller.listenTo).toBe('function');
+      expect(typeof controller.listenTo).to.equal('function');
     });
 
     it('should support an initialize function', function() {
-      expect(controller.initialize).toHaveBeenCalled();
+      expect(controller.initialize).to.have.been.called;
     });
 
     it('should pass constructor options to the initialize function', function() {
-      expect(controller.initialize.mostRecentCall.args[0]).toBe(options);
+      expect(controller.initialize.lastCall.args[0]).to.equal(options);
     });
 
     it('should maintain a reference to the options', function() {
-      expect(controller.options).toBe(options);
+      expect(controller.options).to.equal(options);
     });
 
   });
@@ -44,7 +47,7 @@ describe('marionette controller', function() {
     var controller;
 
     var Controller = Marionette.Controller.extend({
-      initialize: jasmine.createSpy('initialize')
+      initialize: sinon.stub()
     });
 
     beforeEach(function() {
@@ -52,11 +55,11 @@ describe('marionette controller', function() {
     });
 
     it('should provide an empty object as the options', function() {
-      expect(_.isObject(controller.options)).toBe(true);
+      expect(_.isObject(controller.options)).to.be.true;
     });
 
     it('should provide the empty object as the options to initialize', function() {
-      expect(controller.initialize.mostRecentCall.args[0]).toBe(controller.options);
+      expect(controller.initialize.lastCall.args[0]).to.equal(controller.options);
     });
   });
 
@@ -64,42 +67,47 @@ describe('marionette controller', function() {
     var controller, destroyHandler, listenToHandler;
 
     var Controller = Marionette.Controller.extend({
-      onDestroy: jasmine.createSpy('onDestroy')
+      onDestroy: sinon.stub()
     });
 
     beforeEach(function() {
       controller = new Controller();
 
-      destroyHandler = jasmine.createSpy('destroy');
+      destroyHandler = sinon.stub();
       controller.on('destroy', destroyHandler);
 
-      listenToHandler = jasmine.createSpy('destroy');
+      listenToHandler = sinon.stub();
       controller.listenTo(controller, 'destroy', listenToHandler);
 
-      spyOn(controller, 'stopListening').andCallThrough();
-      spyOn(controller, 'off').andCallThrough();
+      sinon.spy(controller, 'stopListening');
+      sinon.spy(controller, 'off');
 
       controller.destroy(123, 'second param');
     });
 
+    afterEach(function() {
+      controller.stopListening.restore();
+      controller.off.restore();
+    });
+
     it('should stopListening events', function() {
-      expect(controller.stopListening).toHaveBeenCalled();
+      expect(controller.stopListening).to.have.been.called;
     });
 
     it('should turn off all events', function() {
-      expect(controller.off).toHaveBeenCalled();
+      expect(controller.off).to.have.been.called;
     });
 
     it('should stopListening after calling destroy', function() {
-      expect(listenToHandler).toHaveBeenCalled();
+      expect(listenToHandler).to.have.been.called;
     });
 
     it('should trigger a destroy event with any arguments passed to destroy', function() {
-      expect(destroyHandler).toHaveBeenCalledWith(123, 'second param');
+      expect(destroyHandler).to.have.been.calledWith(123, 'second param');
     });
 
     it('should call an onDestroy method with any arguments passed to destroy', function() {
-      expect(controller.onDestroy).toHaveBeenCalledWith(123, 'second param');
+      expect(controller.onDestroy).to.have.been.calledWith(123, 'second param');
     });
   });
 

@@ -1,6 +1,9 @@
 describe('view triggers', function() {
   'use strict';
 
+  beforeEach(global.setup);
+  afterEach(global.teardown);
+
   describe('when DOM events are configured to trigger a view event, and the DOM events are fired', function() {
     var View = Backbone.Marionette.ItemView.extend({
       triggers: {
@@ -22,8 +25,8 @@ describe('view triggers', function() {
       });
       view.render();
 
-      fooHandler = jasmine.createSpy('do:foo event handler');
-      whatHandler = jasmine.createSpy('what:ever event handler');
+      fooHandler = sinon.stub();
+      whatHandler = sinon.stub();
 
       view.on('do:foo', fooHandler);
       view.on('what:ever', whatHandler);
@@ -37,23 +40,23 @@ describe('view triggers', function() {
     });
 
     it('should trigger the first view event', function() {
-      expect(fooHandler).toHaveBeenCalled();
+      expect(fooHandler).to.have.been.called;
     });
 
     it('should trigger the second view event', function() {
-      expect(whatHandler).toHaveBeenCalled();
+      expect(whatHandler).to.have.been.called;
     });
 
     it('should include the view in the event args', function() {
-      expect(args.view).toBe(view);
+      expect(args.view).to.equal(view);
     });
 
     it('should include the views model in the event args', function() {
-      expect(args.model).toBe(view.model);
+      expect(args.model).to.equal(view.model);
     });
 
     it('should include the views collection in the event args', function() {
-      expect(args.collection).toBe(view.collection);
+      expect(args.collection).to.equal(view.collection);
     });
   });
 
@@ -82,7 +85,7 @@ describe('view triggers', function() {
       view = new View();
       view.render();
 
-      fooHandler = jasmine.createSpy('do:foo handler');
+      fooHandler = sinon.stub();
       view.on('do:foo', fooHandler);
 
       view.$('.foo').trigger('click');
@@ -90,11 +93,11 @@ describe('view triggers', function() {
     });
 
     it('should fire the trigger', function() {
-      expect(fooHandler).toHaveBeenCalled();
+      expect(fooHandler).to.have.been.called;
     });
 
     it('should fire the standard event', function() {
-      expect(view.itWasClicked).toBe(true);
+      expect(view.itWasClicked).to.be.true;
     });
   });
 
@@ -118,8 +121,8 @@ describe('view triggers', function() {
       view = new View();
       view.render();
 
-      fooHandler = jasmine.createSpy('do:foo handler');
-      whatHandler = jasmine.createSpy('what:ever handler');
+      fooHandler = sinon.stub();
+      whatHandler = sinon.stub();
 
       view.on('do:foo', fooHandler);
       view.on('what:ever', whatHandler);
@@ -129,11 +132,11 @@ describe('view triggers', function() {
     });
 
     it('should trigger the first view event', function() {
-      expect(fooHandler).toHaveBeenCalled();
+      expect(fooHandler).to.have.been.called;
     });
 
     it('should trigger the second view event', function() {
-      expect(whatHandler).toHaveBeenCalled();
+      expect(whatHandler).to.have.been.called;
     });
   });
 
@@ -157,23 +160,29 @@ describe('view triggers', function() {
       template: _.template('<h2><span>hi</span></h2><a href="#hash-url">hash link</a>')
     });
 
-    var viewInstance;
+    var viewInstance, hashChangeSpy;
 
     beforeEach(function() {
       viewInstance = new MyView();
-      spyOn(window, 'onhashchange');
+
+      hashChangeSpy = sinon.stub();
+      $(window).on('hashchange', hashChangeSpy);
 
       viewInstance.render();
       viewInstance.$('h2').click();
       viewInstance.$('a').click();
     });
 
+    afterEach(function() {
+      $(window).off('hashchange');
+    });
+
     it('should stop propigation by default', function() {
-      expect(viewInstance.spanClicked).toBe(false);
+      expect(viewInstance.spanClicked).to.be.false;
     });
 
     it('should prevent default by default', function() {
-      expect(window.onhashchange).not.toHaveBeenCalled();
+      expect(hashChangeSpy).not.to.have.been.called;
     });
   });
 
@@ -205,24 +214,31 @@ describe('view triggers', function() {
       fooEvent = $.Event('click');
       barEvent = $.Event('click');
 
-      spyOn(fooEvent, 'preventDefault');
-      spyOn(fooEvent, 'stopPropagation');
+      sinon.spy(fooEvent, 'preventDefault');
+      sinon.spy(fooEvent, 'stopPropagation');
 
-      spyOn(barEvent, 'preventDefault');
-      spyOn(barEvent, 'stopPropagation');
+      sinon.spy(barEvent, 'preventDefault');
+      sinon.spy(barEvent, 'stopPropagation');
 
       view.$('.foo').trigger(fooEvent);
       view.$('.bar').trigger(barEvent);
     });
 
+    afterEach(function() {
+      fooEvent.preventDefault.restore();
+      fooEvent.stopPropagation.restore();
+      barEvent.preventDefault.restore();
+      barEvent.stopPropagation.restore();
+    });
+
     it('should prevent and dont stop the first view event', function() {
-      expect(fooEvent.preventDefault).toHaveBeenCalled();
-      expect(fooEvent.stopPropagation).not.toHaveBeenCalled();
+      expect(fooEvent.preventDefault).to.have.been.called;
+      expect(fooEvent.stopPropagation).not.to.have.been.called;
     });
 
     it('should not prevent and stop the second view event', function() {
-      expect(barEvent.preventDefault).not.toHaveBeenCalled();
-      expect(barEvent.stopPropagation).toHaveBeenCalled();
+      expect(barEvent.preventDefault).not.to.have.been.called;
+      expect(barEvent.stopPropagation).to.have.been.called;
     });
   });
 

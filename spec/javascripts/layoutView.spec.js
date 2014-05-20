@@ -161,15 +161,15 @@ describe('layoutView', function() {
       this.regionOne = this.layoutViewManager.regionOne;
       this.regionTwo = this.layoutViewManager.regionTwo;
 
-      this.sinon.spy(this.regionOne, 'destroy');
-      this.sinon.spy(this.regionTwo, 'destroy');
+      this.sinon.spy(this.regionOne, 'empty');
+      this.sinon.spy(this.regionTwo, 'empty');
 
       this.layoutViewManager.destroy();
     });
 
-    it('should destroy the region managers', function() {
-      expect(this.regionOne.destroy).to.have.been.called;
-      expect(this.regionTwo.destroy).to.have.been.called;
+    it('should empty the region managers', function() {
+      expect(this.regionOne.empty).to.have.been.called;
+      expect(this.regionTwo.empty).to.have.been.called;
     });
 
     it('should delete the region managers', function() {
@@ -224,15 +224,15 @@ describe('layoutView', function() {
       this.view.destroy = function() {};
       this.layoutView.regionOne.show(this.view);
 
-      this.destroyRegionsSpy = this.sinon.spy(this.layoutView.regionManager, 'destroyRegions');
+      this.emptyRegionsSpy = this.sinon.spy(this.layoutView.regionManager, 'emptyRegions');
 
       this.layoutView.render();
       this.layoutView.regionOne.show(this.view);
       this.region = this.layoutView.regionOne;
     });
 
-    it('should destroy the regions', function() {
-      expect(this.destroyRegionsSpy.callCount).to.equal(1);
+    it('should empty the regions', function() {
+      expect(this.emptyRegionsSpy.callCount).to.equal(1);
     });
 
     it('should re-bind the regions to the newly rendered elements', function() {
@@ -268,7 +268,7 @@ describe('layoutView', function() {
       this.layoutView.regionOne.show(this.view);
       this.layoutView.destroy();
 
-      this.sinon.spy(this.region, 'destroy');
+      this.sinon.spy(this.region, 'empty');
       this.sinon.spy(this.view, 'destroy');
 
       this.layoutView.onBeforeRender = this.sinon.stub();

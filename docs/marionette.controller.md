@@ -62,13 +62,17 @@ unbinding all of the events that are directly attached to the controller
 instance, as well as those that are bound using the EventBinder from
 the controller.
 
-Invoking the `destroy` method will trigger a "destroy" event and corresponding
-`onDestroy` method call. These calls will be passed any arguments `destroy`
+Invoking the `destroy` method will trigger the "before:destroy" and "destroy" events and the
+corresponding `onBeforeDestory` and `onDestroy` method calls. These calls will be passed any arguments `destroy`
 was invoked with.
 
 ```js
 // define a controller with an onDestroy method
 var MyController = Marionette.Controller.extend({
+
+  onBeforeDestroy: function(arg1, arg2){
+    // put custom code here, before destroying this controller
+  }
 
   onDestroy: function(arg1, arg2){
     // put custom code here, to destroy this controller
@@ -80,6 +84,7 @@ var MyController = Marionette.Controller.extend({
 var contr = new MyController();
 
 // add some event handlers
+contr.on("before:destroy", function(arg1, arg2){ ... });
 contr.on("destroy", function(arg1, arg2){ ... });
 contr.listenTo(something, "bar", function(){...});
 

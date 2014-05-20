@@ -38,7 +38,7 @@ describe('composite view - childViewContainer', function() {
 
     beforeEach(function() {
       order = [];
-      loadFixtures('compositeChildContainerTemplate.html');
+      this.loadFixtures('compositeChildContainerTemplate.html');
 
       var m1 = new Model({foo: 'bar'});
       var m2 = new Model({foo: 'baz'});
@@ -103,7 +103,7 @@ describe('composite view - childViewContainer', function() {
 
     beforeEach(function() {
       order = [];
-      loadFixtures('compositeChildContainerTemplate.html');
+      this.loadFixtures('compositeChildContainerTemplate.html');
 
       var m1 = new Model({foo: 'bar'});
       var m2 = new Model({foo: 'baz'});
@@ -152,7 +152,7 @@ describe('composite view - childViewContainer', function() {
 
     beforeEach(function() {
       order = [];
-      loadFixtures('compositeChildContainerTemplate.html');
+      this.loadFixtures('compositeChildContainerTemplate.html');
 
       var m1 = new Model({foo: 'bar'});
       var m2 = new Model({foo: 'baz'});
@@ -221,7 +221,7 @@ describe('composite view - childViewContainer', function() {
     };
 
     beforeEach(function() {
-      loadFixtures('compositeChildContainerTemplate.html');
+      this.loadFixtures('compositeChildContainerTemplate.html');
       model1 = new Model({foo: 'bar'});
       model2 = new Model({foo: 'baz'});
       collection = new Collection([ model1 ]);

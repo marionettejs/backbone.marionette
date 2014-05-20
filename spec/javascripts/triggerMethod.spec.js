@@ -146,7 +146,7 @@ describe('trigger event and method name', function() {
     var collectionView;
 
     beforeEach(function() {
-      setFixtures('<script type="text/html" id="aTemplate"><div>foo</div></script>');
+      this.setFixtures('<script type="text/html" id="aTemplate"><div>foo</div></script>');
 
       var collection = new Backbone.Collection([{a: 'b'}, {a: 'c'}]);
       collectionView = new ResultsView({

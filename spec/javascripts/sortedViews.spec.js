@@ -32,7 +32,7 @@ describe('collection/composite view sorting', function(){
     var collectionView, compositeView, collection, model;
 
     beforeEach(function(){
-      loadFixtures('compositeTemplate-noModel.html');
+      this.loadFixtures('compositeTemplate-noModel.html');
 
       collection = new Backbone.Collection([{foo: 'abar', foo2: 'wbar'}, {foo: 'bbar', foo2: 'abar'}, {foo: 'wbar', foo2: 'bbar'}]);
       collection.comparator = 'foo';

@@ -61,7 +61,7 @@ describe('composite view', function() {
     });
 
     beforeEach(function() {
-      loadFixtures('compositeTemplate-noModel.html');
+      this.loadFixtures('compositeTemplate-noModel.html');
 
       var m1 = new Model({foo: 'bar'});
       var m2 = new Model({foo: 'baz'});
@@ -102,7 +102,7 @@ describe('composite view', function() {
     });
 
     beforeEach(function() {
-      loadFixtures('compositeTemplate.html');
+      this.loadFixtures('compositeTemplate.html');
 
       var m1 = new Model({foo: 'bar'});
       var m2 = new Model({foo: 'baz'});
@@ -155,7 +155,7 @@ describe('composite view', function() {
     });
 
     beforeEach(function() {
-      loadFixtures('collectionTemplate.html', 'collectionItemTemplate.html',
+      this.loadFixtures('collectionTemplate.html', 'collectionItemTemplate.html',
           'emptyTemplate.html');
 
       var m1 = new Model({foo: 'bar'});
@@ -225,7 +225,7 @@ describe('composite view', function() {
 
     beforeEach(function() {
       order = [];
-      loadFixtures('compositeTemplate.html');
+      this.loadFixtures('compositeTemplate.html');
 
       var m1 = new Model({foo: 'bar'});
       var m2 = new Model({foo: 'baz'});
@@ -307,7 +307,7 @@ describe('composite view', function() {
     });
 
     beforeEach(function() {
-      loadFixtures('compositeTemplate.html');
+      this.loadFixtures('compositeTemplate.html');
 
       var m1 = new Model({foo: 'bar'});
       var m2 = new Model({foo: 'baz'});
@@ -366,7 +366,7 @@ describe('composite view', function() {
     });
 
     beforeEach(function() {
-      loadFixtures('compositeRerender.html');
+      this.loadFixtures('compositeRerender.html');
 
       var m1 = new Model({foo: 'bar'});
       var collection = new Collection();
@@ -408,7 +408,7 @@ describe('composite view', function() {
     });
 
     beforeEach(function() {
-      loadFixtures('compositeRerender.html');
+      this.loadFixtures('compositeRerender.html');
 
       var m1 = new Model({foo: 'bar'});
       compositeView = new CompositeView({
@@ -445,7 +445,7 @@ describe('composite view', function() {
     });
 
     beforeEach(function() {
-      loadFixtures('compositeRerender.html');
+      this.loadFixtures('compositeRerender.html');
 
       var m1 = new Model({foo: 'bar'});
       var m2 = new Model({foo: 'baz'});
@@ -521,7 +521,7 @@ describe('composite view', function() {
     var treeView;
 
     beforeEach(function() {
-      loadFixtures('recursiveCompositeTemplate.html');
+      this.loadFixtures('recursiveCompositeTemplate.html');
 
       var data = {
         name: 'level 1',
@@ -574,7 +574,7 @@ describe('composite view', function() {
     });
 
     beforeEach(function() {
-      loadFixtures('compositeTemplate.html');
+      this.loadFixtures('compositeTemplate.html');
 
       var m1 = new Model({foo: 'bar'});
       var m2 = new Model({foo: 'baz'});
@@ -628,7 +628,7 @@ describe('composite view', function() {
     });
 
     beforeEach(function() {
-      loadFixtures('gridTemplates.html');
+      this.loadFixtures('gridTemplates.html');
 
       var userData = [
         {
@@ -699,7 +699,7 @@ describe('composite view', function() {
     });
 
     beforeEach(function() {
-      loadFixtures('uiBindingTemplate.html');
+      this.loadFixtures('uiBindingTemplate.html');
 
       var userData = [
         {

@@ -1,6 +1,9 @@
 describe('Marionette.unbindEntityEvents', function() {
   'use strict';
 
+  beforeEach(global.setup);
+  afterEach(global.teardown);
+
   var target, entity;
 
   beforeEach(function() {
@@ -19,7 +22,7 @@ describe('Marionette.unbindEntityEvents', function() {
     });
 
     it('shouldnt unbind any events', function() {
-      expect(target.stopListening).not.toHaveBeenCalled();
+      expect(target.stopListening).not.to.have.been.called;
     });
   });
 
@@ -29,7 +32,7 @@ describe('Marionette.unbindEntityEvents', function() {
     });
 
     it('shouldnt unbind any events', function() {
-      expect(target.stopListening).not.toHaveBeenCalled();
+      expect(target.stopListening).not.to.have.been.called;
     });
   });
 
@@ -45,15 +48,15 @@ describe('Marionette.unbindEntityEvents', function() {
     });
 
     it('should evaluate bindings function', function() {
-      expect(bindingsSpy).toHaveBeenCalled();
+      expect(bindingsSpy).to.have.been.called;
     });
 
     it('should evaluate bindings function in context of target', function() {
-      expect(_.first(bindingsSpy.thisValues)).toBe(target);
+      expect(_.first(bindingsSpy.thisValues)).to.equal(target);
     });
 
     it('should unbind events returned from bindings function', function() {
-      expect(target.stopListening).toHaveBeenCalledWith(entity, 'eventNameMock', target.foo);
+      expect(target.stopListening).to.have.been.calledWith(entity, 'eventNameMock', target.foo);
     });
   });
 
@@ -64,7 +67,7 @@ describe('Marionette.unbindEntityEvents', function() {
       });
 
       it('should unbind an event', function() {
-        expect(target.stopListening).toHaveBeenCalledWith(entity, 'eventNameMock', target.foo);
+        expect(target.stopListening).to.have.been.calledWith(entity, 'eventNameMock', target.foo);
       });
     });
 
@@ -75,7 +78,7 @@ describe('Marionette.unbindEntityEvents', function() {
         });
 
         it('should unbind an event', function() {
-          expect(target.stopListening).toHaveBeenCalledWith(entity, 'eventNameMock', target.foo);
+          expect(target.stopListening).to.have.been.calledWith(entity, 'eventNameMock', target.foo);
         });
       });
 
@@ -85,11 +88,11 @@ describe('Marionette.unbindEntityEvents', function() {
         });
 
         it('should unbind first event', function() {
-          expect(target.stopListening).toHaveBeenCalledWith(entity, 'eventNameMock', target.foo);
+          expect(target.stopListening).to.have.been.calledWith(entity, 'eventNameMock', target.foo);
         });
 
         it('should unbind second event', function() {
-          expect(target.stopListening).toHaveBeenCalledWith(entity, 'eventNameMock', target.bar);
+          expect(target.stopListening).to.have.been.calledWith(entity, 'eventNameMock', target.bar);
         });
       });
     });
@@ -104,11 +107,11 @@ describe('Marionette.unbindEntityEvents', function() {
     });
 
     it('should unbind first event', function() {
-      expect(target.stopListening).toHaveBeenCalledWith(entity, 'firstEventNameMock', target.foo);
+      expect(target.stopListening).to.have.been.calledWith(entity, 'firstEventNameMock', target.foo);
     });
 
     it('should unbind second event', function() {
-      expect(target.stopListening).toHaveBeenCalledWith(entity, 'secondEventNameMock', target.bar);
+      expect(target.stopListening).to.have.been.calledWith(entity, 'secondEventNameMock', target.bar);
     });
   });
 
@@ -126,7 +129,7 @@ describe('Marionette.unbindEntityEvents', function() {
     });
 
     it('should bind an event to target\'s handler', function() {
-      expect(target.stopListening).toHaveBeenCalledWith(entity, 'eventNameMock', target.foo);
+      expect(target.stopListening).to.have.been.calledWith(entity, 'eventNameMock', target.foo);
     });
   });
 });

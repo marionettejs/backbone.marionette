@@ -1,5 +1,8 @@
 describe('composite view - on before render', function() {
 
+  beforeEach(global.setup);
+  afterEach(global.teardown);
+
   describe('when a composite view has a model and a collection', function() {
     var view;
 
@@ -48,7 +51,7 @@ describe('composite view - on before render', function() {
     });
 
     it('should call onBeforeRender before rendering the model', function() {
-      expect(view.$el).toHaveText(/Something Different/);
+      expect(view.$el).to.contain.$text('Something Different');
     });
   });
 });

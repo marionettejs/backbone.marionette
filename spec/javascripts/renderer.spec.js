@@ -1,23 +1,30 @@
 describe('renderer', function() {
   'use strict';
 
+  beforeEach(global.setup);
+  afterEach(global.teardown);
+
   describe('when given a template id to render', function() {
     var templateSelector = '#renderer-template';
     var result;
 
     beforeEach(function() {
       loadFixtures('rendererTemplate.html');
-      spyOn(Backbone.Marionette.TemplateCache, 'get').andCallThrough();
+      sinon.spy(Backbone.Marionette.TemplateCache, 'get');
       var html = Backbone.Marionette.Renderer.render(templateSelector).trim();
       result = $(html);
     });
 
+    afterEach(function() {
+      Backbone.Marionette.TemplateCache.get.restore();
+    });
+
     it('should retrieve the template from the cache', function() {
-      expect(Backbone.Marionette.TemplateCache.get).toHaveBeenCalledWith(templateSelector);
+      expect(Backbone.Marionette.TemplateCache.get).to.have.been.calledWith(templateSelector);
     });
 
     it('should render the template', function() {
-      expect(result).toHaveText(/renderer/);
+      expect(result).to.contain.$text('renderer');
     });
   });
 
@@ -27,19 +34,23 @@ describe('renderer', function() {
 
     beforeEach(function() {
       loadFixtures('rendererWithDataTemplate.html');
-      spyOn(Backbone.Marionette.TemplateCache, 'get').andCallThrough();
+      sinon.spy(Backbone.Marionette.TemplateCache, 'get');
 
       var data = {foo: 'bar'};
       var html = Backbone.Marionette.Renderer.render(templateSelector, data).trim();
       result = $(html);
     });
 
+    afterEach(function() {
+      Backbone.Marionette.TemplateCache.get.restore();
+    });
+
     it('should retrieve the template from the cache', function() {
-      expect(Backbone.Marionette.TemplateCache.get).toHaveBeenCalledWith(templateSelector);
+      expect(Backbone.Marionette.TemplateCache.get).to.have.been.calledWith(templateSelector);
     });
 
     it('should render the template', function() {
-      expect(result).toHaveText(/renderer bar/);
+      expect(result).to.contain.$text('renderer bar');
     });
   });
 
@@ -51,7 +62,7 @@ describe('renderer', function() {
     });
 
     it('should raise an error', function() {
-      expect(render).toThrow(new Error('Cannot render the template since its false, null or undefined.'));
+      expect(render).to.throw('Cannot render the template since its false, null or undefined.');
     });
   });
 
@@ -74,7 +85,7 @@ describe('renderer', function() {
     });
 
     it('should render the view with the overridden method', function() {
-      expect(result).toHaveText('custom');
+      expect(result).to.contain.$text('custom');
     });
   });
 
@@ -82,7 +93,7 @@ describe('renderer', function() {
     it('should use the provided template function', function() {
       var templateFunction = _.template('<%= foo %>');
       var result = Backbone.Marionette.Renderer.render(templateFunction, {foo : 'bar'});
-      expect(result).toEqual('bar');
+      expect(result).to.equal('bar');
     });
   });
 

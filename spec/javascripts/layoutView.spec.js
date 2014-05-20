@@ -405,4 +405,18 @@ describe('layoutView', function() {
       expect(this.spy2).to.have.been.called;
     });
   });
+
+  describe("when a layout has regions", function () {
+    beforeEach(function () {
+      this.layout = new this.LayoutView();
+      this.layout.render();
+
+      this.regions = this.layout.getRegions();
+    });
+
+    it("should be able to retrieve all regions", function () {
+      expect(this.regions.regionOne).to.equal(this.layout.getRegion("regionOne"));
+      expect(this.regions.regionTwo).to.equal(this.layout.getRegion("regionTwo"));
+    });
+  });
 });

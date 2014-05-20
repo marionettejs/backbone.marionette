@@ -147,7 +147,7 @@ _.extend(Marionette.Region.prototype, Backbone.Events, {
     var _shouldDestroyView = !preventDestroy && isDifferentView;
 
     if (_shouldDestroyView) {
-      this.destroy();
+      this.empty();
     }
 
     // show the view if the view is different or if you want to re-show the view
@@ -212,17 +212,17 @@ _.extend(Marionette.Region.prototype, Backbone.Events, {
 
   // Destroy the current view, if there is one. If there is no
   // current view, it does nothing and returns immediately.
-  destroy: function() {
+  empty: function() {
     var view = this.currentView;
     if (!view || view.isDestroyed) { return; }
 
-    this.triggerMethod('before:destroy', view);
+    this.triggerMethod('before:empty', view);
 
     // call 'destroy' or 'remove', depending on which is found
     if (view.destroy) { view.destroy(); }
     else if (view.remove) { view.remove(); }
 
-    this.triggerMethod('destroy', view);
+    this.triggerMethod('empty', view);
 
     delete this.currentView;
   },
@@ -240,7 +240,7 @@ _.extend(Marionette.Region.prototype, Backbone.Events, {
   // is shown via this region, the region will re-query the
   // DOM for the region's `el`.
   reset: function() {
-    this.destroy();
+    this.empty();
 
     if (this.$el) {
       this.el = this.$el.selector;

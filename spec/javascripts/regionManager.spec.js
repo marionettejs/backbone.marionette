@@ -174,7 +174,7 @@ describe('regionManager', function() {
     beforeEach(function() {
       this.setFixtures('<div id="foo"></div>');
 
-      this.destroyHandler = this.sinon.spy();
+      this.emptyHandler = this.sinon.spy();
       this.beforeRemoveHandler = this.sinon.spy();
       this.removeHandler = this.sinon.spy();
 
@@ -182,17 +182,16 @@ describe('regionManager', function() {
       this.region = this.regionManager.addRegion('foo', '#foo');
       this.region.show(new Backbone.View());
 
-      this.region.on('destroy', this.destroyHandler);
+      this.region.on('empty', this.emptyHandler);
       this.regionManager.on('before:remove:region', this.beforeRemoveHandler);
       this.regionManager.on('remove:region', this.removeHandler);
-
       this.sinon.spy(this.region, 'stopListening');
 
       this.regionManager.removeRegion('foo');
     });
 
-    it('should destroy the region', function() {
-      expect(this.destroyHandler).to.have.been.called;
+    it('should empty the region', function() {
+      expect(this.emptyHandler).to.have.been.called;
     });
 
     it('should stopListening on the region', function() {
@@ -220,8 +219,8 @@ describe('regionManager', function() {
     beforeEach(function() {
       this.setFixtures('<div id="foo"></div><div id="bar"></div>');
 
-      this.destroyHandler = this.sinon.stub();
-      this.destroyHandler2 = this.sinon.stub();
+      this.emptyHandler = this.sinon.stub();
+      this.emptyHandler2 = this.sinon.stub();
       this.removeHandler = this.sinon.stub();
 
       this.regionManager = new Marionette.RegionManager();
@@ -231,8 +230,8 @@ describe('regionManager', function() {
       this.region.show(new Backbone.View());
       this.r2.show(new Backbone.View());
 
-      this.region.on('destroy', this.destroyHandler);
-      this.r2.on('destroy', this.destroyHandler2);
+      this.region.on('empty', this.emptyHandler);
+      this.r2.on('empty', this.emptyHandler2);
 
       this.regionManager.on('remove:region', this.removeHandler);
 
@@ -242,9 +241,9 @@ describe('regionManager', function() {
       this.regionManager.removeRegions();
     });
 
-    it('should destroy the regions', function() {
-      expect(this.destroyHandler).to.have.been.called;
-      expect(this.destroyHandler2).to.have.been.called;
+    it('should empty the regions', function() {
+      expect(this.emptyHandler).to.have.been.called;
+      expect(this.emptyHandler2).to.have.been.called;
     });
 
     it('should stopListening on the regions', function() {
@@ -263,24 +262,24 @@ describe('regionManager', function() {
     });
   });
 
-  describe('.destroyRegions', function() {
+  describe('.emptyRegions', function() {
     beforeEach(function() {
       this.setFixtures('<div id="foo">');
 
-      this.destroyHandler = this.sinon.stub();
+      this.emptyHandler = this.sinon.stub();
       this.destroyManagerHandler = this.sinon.stub();
 
       this.regionManager = new Marionette.RegionManager();
       this.region = this.regionManager.addRegion('foo', '#foo');
       this.region.show(new Backbone.View());
 
-      this.region.on('destroy', this.destroyHandler);
+      this.region.on('empty', this.emptyHandler);
 
-      this.regionManager.destroyRegions();
+      this.regionManager.emptyRegions();
     });
 
-    it('should destroy all regions', function() {
-      expect(this.destroyHandler).to.have.been.called;
+    it('should empty all regions', function() {
+      expect(this.emptyHandler).to.have.been.called;
     });
 
     it('should not remove all regions', function() {
@@ -291,14 +290,14 @@ describe('regionManager', function() {
   describe('.destroy', function() {
     beforeEach(function() {
       this.setFixtures('<div id="foo">');
-      this.destroyHandler = this.sinon.stub();
+      this.emptyHandler = this.sinon.stub();
       this.destroyManagerHandler = this.sinon.stub();
 
       this.regionManager = new Marionette.RegionManager();
       this.region = this.regionManager.addRegion('foo', '#foo');
       this.region.show(new Backbone.View());
 
-      this.region.on('destroy', this.destroyHandler);
+      this.region.on('empty', this.emptyHandler);
       this.regionManager.on('destroy', this.destroyManagerHandler);
 
       this.sinon.spy(this.region, 'stopListening');
@@ -306,8 +305,8 @@ describe('regionManager', function() {
       this.regionManager.destroy();
     });
 
-    it('should destroy all regions', function() {
-      expect(this.destroyHandler).to.have.been.called;
+    it('should empty all regions', function() {
+      expect(this.emptyHandler).to.have.been.called;
     });
 
     it('should stopListening on all regions', function() {

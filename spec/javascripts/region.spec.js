@@ -504,7 +504,7 @@ describe('region', function() {
   });
 
   describe('when destroying the current view', function() {
-    var MyRegion, MyView, myRegion, view, beforeDestroySpy ,destroyedSpy;
+    var MyRegion, MyView, myRegion, view, beforeEmptySpy, emptySpy;
 
     beforeEach(function() {
       MyRegion = Backbone.Marionette.Region.extend({
@@ -520,8 +520,8 @@ describe('region', function() {
       });
 
       this.setFixtures('<div id="region"></div>');
-      beforeDestroySpy = this.sinon.spy();
-      destroyedSpy = this.sinon.spy();
+      beforeEmptySpy = this.sinon.spy();
+      emptySpy = this.sinon.spy();
 
       view = new MyView();
 
@@ -529,31 +529,31 @@ describe('region', function() {
       this.sinon.spy(view, 'remove');
 
       myRegion = new MyRegion();
-      myRegion.on('before:destroy', beforeDestroySpy);
-      myRegion.on('destroy', destroyedSpy);
+      myRegion.on('before:empty', beforeEmptySpy);
+      myRegion.on('empty', emptySpy);
       myRegion.show(view);
 
-      myRegion.destroy();
+      myRegion.empty();
     });
 
-    it('should trigger a "before:destroy" event with the view thats being destroyed', function() {
-      expect(beforeDestroySpy).to.have.been.calledWith(view);
+    it('should trigger a "before:empty" event with the view thats being destroyed', function() {
+      expect(beforeEmptySpy).to.have.been.calledWith(view);
     });
 
-    it('should set "this" to the manager, from the before:destroy event', function() {
-      expect(beforeDestroySpy).to.have.been.calledOn(myRegion);
+    it('should set "this" to the manager, from the before:empty event', function() {
+      expect(beforeEmptySpy).to.have.been.calledOn(myRegion);
     });
 
-    it('should trigger a destroy event', function() {
-      expect(destroyedSpy).to.have.been.called;
+    it('should trigger a empty event', function() {
+      expect(emptySpy).to.have.been.called;
     });
 
-    it('should trigger a destroy event with the view thats being destroyd', function() {
-      expect(destroyedSpy).to.have.been.calledWith(view);
+    it('should trigger a empty event with the view thats being emptied', function() {
+      expect(emptySpy).to.have.been.calledWith(view);
     });
 
-    it('should set "this" to the manager, from the destroy event', function() {
-      expect(destroyedSpy).to.have.been.calledOn(myRegion);
+    it('should set "this" to the manager, from the empty event', function() {
+      expect(emptySpy).to.have.been.calledOn(myRegion);
     });
 
     it('should call "destroy" on the already show view', function() {
@@ -587,7 +587,7 @@ describe('region', function() {
       this.sinon.spy(view, 'remove');
       myRegion = new MyRegion();
       myRegion.show(view);
-      myRegion.destroy();
+      myRegion.empty();
     });
 
     it('should call "remove" on the view', function() {
@@ -709,7 +709,7 @@ describe('region', function() {
       });
 
       region = MyApp.MyRegion;
-      this.sinon.spy(region, 'destroy');
+      this.sinon.spy(region, 'empty');
 
       MyApp.removeRegion('MyRegion');
     });
@@ -718,8 +718,8 @@ describe('region', function() {
       expect(MyApp.MyRegion).to.be.undefined;
     });
 
-    it('should call "destroy" of the region', function() {
-      expect(region.destroy).to.have.been.called;
+    it('should call "empty" of the region', function() {
+      expect(region.empty).to.have.been.called;
     });
   });
 
@@ -749,7 +749,7 @@ describe('region', function() {
         el: '#region'
       });
 
-      this.sinon.spy(region, 'destroy');
+      this.sinon.spy(region, 'empty');
 
       region._ensureElement();
 
@@ -760,8 +760,8 @@ describe('region', function() {
       expect(region.$el).not.to.exist;
     });
 
-    it('should destroy any existing view', function() {
-      expect(region.destroy).to.have.been.called;
+    it('should empty any existing view', function() {
+      expect(region.empty).to.have.been.called;
     });
   });
 });

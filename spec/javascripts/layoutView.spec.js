@@ -131,7 +131,7 @@ describe('layoutView', function() {
     });
 
     beforeEach(function() {
-      setFixtures('<div id="foo"><div id="bar"></div></div>');
+      this.setFixtures('<div id="foo"><div id="bar"></div></div>');
       layoutView = new LayoutView();
       layoutView.render();
     });
@@ -150,7 +150,7 @@ describe('layoutView', function() {
     var layoutViewManager;
 
     beforeEach(function() {
-      loadFixtures('layoutViewManagerTemplate.html');
+      this.loadFixtures('layoutViewManagerTemplate.html');
       layoutViewManager = new LayoutView();
       layoutViewManager.render();
     });
@@ -166,7 +166,7 @@ describe('layoutView', function() {
     var layoutViewManager, regionOne, regionTwo;
 
     beforeEach(function() {
-      loadFixtures('layoutViewManagerTemplate.html');
+      this.loadFixtures('layoutViewManagerTemplate.html');
       layoutViewManager = new LayoutView();
       layoutViewManager.render();
 
@@ -199,8 +199,8 @@ describe('layoutView', function() {
     var region, layoutView, regionOne, showReturn;
 
     beforeEach(function() {
-      setFixtures('<div id="mgr"></div>');
-      loadFixtures('layoutViewManagerTemplate.html');
+      this.setFixtures('<div id="mgr"></div>');
+      this.loadFixtures('layoutViewManagerTemplate.html');
 
       layoutView = new LayoutView();
       layoutView.onRender = function() {
@@ -232,7 +232,7 @@ describe('layoutView', function() {
     var region, layoutView, view, destroyRegionsSpy;
 
     beforeEach(function() {
-      loadFixtures('layoutViewManagerTemplate.html');
+      this.loadFixtures('layoutViewManagerTemplate.html');
 
       layoutView = new LayoutView({
         model: new Backbone.Model()
@@ -282,7 +282,7 @@ describe('layoutView', function() {
     var region, layoutView, view;
 
     beforeEach(function() {
-      loadFixtures('layoutViewManagerTemplate.html');
+      this.loadFixtures('layoutViewManagerTemplate.html');
 
       layoutView = new LayoutView();
       layoutView.render();
@@ -404,7 +404,7 @@ describe('layoutView', function() {
 
   describe('childView get onDomRefresh from parent', function() {
     beforeEach(function() {
-      setFixtures('<div id="james-kyle"></div>');
+      this.setFixtures('<div id="james-kyle"></div>');
       this.spy = sinon.spy();
       this.spy2 = sinon.spy();
 

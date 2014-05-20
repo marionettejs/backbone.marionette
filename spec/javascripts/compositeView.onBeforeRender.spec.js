@@ -37,7 +37,7 @@ describe('composite view - on before render', function() {
     });
 
     beforeEach(function() {
-      setFixtures('<script id="itemView" type="text/template">Title: <%= title %> </script><script id="compView" type="text/template"><div class="listing"> <h4><%= modelState %></h4> <br/> <ul id="listTag"> </ul> </div></script>');
+      this.setFixtures('<script id="itemView" type="text/template">Title: <%= title %> </script><script id="compView" type="text/template"><div class="listing"> <h4><%= modelState %></h4> <br/> <ul id="listTag"> </ul> </div></script>');
 
       var collection = new Label.Collection([{title: 'yoddle'}, {title: 'little'}]);
       var model = new Label.Model({modelState: 'Yoddling Tomes'});

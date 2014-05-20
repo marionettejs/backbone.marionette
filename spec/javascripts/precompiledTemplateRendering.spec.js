@@ -1,6 +1,9 @@
 describe('pre-compiled template rendering', function() {
   'use strict';
 
+  beforeEach(global.setup);
+  afterEach(global.teardown);
+
   describe('when rendering views with pre-compiled template functions', function() {
     var templateFunc = _.template('<div>pre-compiled</div>');
 
@@ -28,7 +31,7 @@ describe('pre-compiled template rendering', function() {
     });
 
     it('should render the pre-compiled template', function() {
-      expect(view.$el).toHaveText('pre-compiled');
+      expect(view.$el).to.contain.$text('pre-compiled');
     });
 
   });

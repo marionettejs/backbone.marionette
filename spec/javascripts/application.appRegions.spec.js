@@ -1,6 +1,9 @@
 describe('application regions', function() {
   'use strict';
 
+  beforeEach(global.setup);
+  afterEach(global.teardown);
+
   describe('when adding region selectors to an app, and starting the app', function() {
     var MyApp, addHandler, beforeAddHandler;
 
@@ -25,16 +28,16 @@ describe('application regions', function() {
     });
 
     it('should initialize the regions', function() {
-      expect(MyApp.MyRegion).not.toBeUndefined();
-      expect(MyApp.anotherRegion).not.toBeUndefined();
+      expect(MyApp.MyRegion).to.exist;
+      expect(MyApp.anotherRegion).to.exist;
     });
 
     it('should trigger a before:add:region event', function() {
-      expect(beforeAddHandler).toHaveBeenCalledWith('MyRegion');
+      expect(beforeAddHandler).to.have.been.calledWith('MyRegion');
     });
 
     it('should trigger a add:region event', function() {
-      expect(addHandler).toHaveBeenCalledWith('MyRegion');
+      expect(addHandler).to.have.been.calledWith('MyRegion');
     });
   });
 
@@ -61,8 +64,8 @@ describe('application regions', function() {
     });
 
     it('should initialize the regions, immediately', function() {
-      expect(MyApp.MyRegion instanceof MyRegion).toBe(true);
-      expect(MyApp.anotherRegion instanceof MyRegion2).toBe(true);
+      expect(MyApp.MyRegion instanceof MyRegion).to.be.true;
+      expect(MyApp.anotherRegion instanceof MyRegion2).to.be.true;
     });
   });
 
@@ -84,21 +87,21 @@ describe('application regions', function() {
     });
 
     it('should initialize the regions, immediately', function() {
-      expect(MyApp.MyRegion).not.toBeUndefined();
+      expect(MyApp.MyRegion).to.exist;
     });
 
     it('should create an instance of the specified region class', function() {
-      expect(MyApp.MyRegion).toBeInstanceOf(MyRegion);
+      expect(MyApp.MyRegion).to.be.instanceof(MyRegion);
     });
 
     it('should set the specified selector', function() {
-      expect(MyApp.MyRegion.$el.selector).toBe('#region');
+      expect(MyApp.MyRegion.$el.selector).to.equal('#region');
     });
 
     it('should pass extra options to the custom regionClass', function() {
-      expect(MyApp.MyRegion).toHaveOwnProperty('options');
-      expect(MyApp.MyRegion.options).toHaveOwnProperty('specialOption');
-      expect(MyApp.MyRegion.options.specialOption).toBeTruthy();
+      expect(MyApp.MyRegion).to.have.property('options');
+      expect(MyApp.MyRegion.options).to.have.property('specialOption');
+      expect(MyApp.MyRegion.options.specialOption).to.be.ok;
     });
   });
 
@@ -113,11 +116,11 @@ describe('application regions', function() {
     });
 
     it('should make the region available as a named attribute', function() {
-      expect(app.r1).not.toBeUndefined();
+      expect(app.r1).to.exist;
     });
 
     it('should be able to retrieve the region', function() {
-      expect(app.getRegion('r1')).toBe(app.r1);
+      expect(app.getRegion('r1')).to.equal(app.r1);
     });
   });
 
@@ -138,15 +141,20 @@ describe('application regions', function() {
       r1 = app.myRegion;
       r2 = app.r2;
 
-      spyOn(r1, 'destroy').andCallThrough();
-      spyOn(r2, 'destroy').andCallThrough();
+      sinon.spy(r1, 'destroy');
+      sinon.spy(r2, 'destroy');
 
       app.destroyRegions();
     });
 
+    afterEach(function () {
+      r1.destroy.restore();
+      r2.destroy.restore();
+    });
+
     it('should destroy the regions', function() {
-      expect(r1.destroy).toHaveBeenCalled();
-      expect(r2.destroy).toHaveBeenCalled();
+      expect(r1.destroy).to.have.been.called;
+      expect(r2.destroy).to.have.been.called;
     });
   });
 
@@ -176,15 +184,15 @@ describe('application regions', function() {
     });
 
     it('should remove the region', function() {
-      expect(MyApp.MyRegion).toBeUndefined();
+      expect(MyApp.MyRegion).to.be.undefined;
     });
 
     it('should trigger a before:remove:region event', function() {
-      expect(beforeRemoveHandler).toHaveBeenCalledWith('MyRegion');
+      expect(beforeRemoveHandler).to.have.been.calledWith('MyRegion');
     });
 
     it('should trigger a remove:region event', function() {
-      expect(removeHandler).toHaveBeenCalledWith('MyRegion');
+      expect(removeHandler).to.have.been.calledWith('MyRegion');
     });
   });
 });

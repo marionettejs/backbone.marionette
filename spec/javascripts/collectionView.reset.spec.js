@@ -1,5 +1,8 @@
 describe('collection view - reset', function() {
 
+  beforeEach(global.setup);
+  afterEach(global.teardown);
+
   var ItemView = Backbone.Marionette.ItemView.extend({
     tagName: 'span',
     render: function() {
@@ -29,36 +32,41 @@ describe('collection view - reset', function() {
         collection: collection
       });
 
-      spyOn(collectionView, 'onRender').andCallThrough();
-      spyOn(collectionView, 'destroyChildren').andCallThrough();
+      sinon.spy(collectionView, 'onRender');
+      sinon.spy(collectionView, 'destroyChildren');
 
       collectionView.render();
 
       collection.reset([{foo: 'bar'}, {foo: 'baz'}]);
     });
 
+    afterEach(function () {
+      collectionView.onRender.restore();
+      collectionView.destroyChildren.restore();
+    });
+
     it('should destroy all open child views', function() {
-      expect(collectionView.destroyChildren).toHaveBeenCalled();
+      expect(collectionView.destroyChildren).to.have.been.called;
     });
 
     it('should append the html for each childView', function() {
-      expect($(collectionView.$el)).toHaveHtml('<span>bar</span><span>baz</span>');
+      expect($(collectionView.$el)).to.have.$html('<span>bar</span><span>baz</span>');
     });
 
     it('should reference each of the rendered view items', function() {
-      expect(collectionView.children.length).toBe(2);
+      expect(collectionView.children.length).to.equal(2);
     });
 
     it('should call "onRender" after rendering', function() {
-      expect(collectionView.onRender).toHaveBeenCalled();
+      expect(collectionView.onRender).to.have.been.called;
     });
 
     it('should remove the event handlers for the original children', function() {
       // maintain backwards compatibility with backbone 1.0.0 in tests
       if (typeof collectionView._listeningTo !== 'undefined') {
-        expect(_.size(collectionView._listeningTo)).toBe(4);
+        expect(_.size(collectionView._listeningTo)).to.equal(4);
       } else {
-        expect(_.size(collectionView._listeners)).toBe(4);
+        expect(_.size(collectionView._listeners)).to.equal(4);
       }
     });
   });

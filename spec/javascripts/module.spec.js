@@ -1,5 +1,9 @@
 describe('application modules', function() {
   'use strict';
+
+  beforeEach(global.setup);
+  afterEach(global.teardown);
+
   var app;
 
   beforeEach(function() {
@@ -13,8 +17,8 @@ describe('application modules', function() {
 
       beforeEach(function() {
         app = new Backbone.Marionette.Application();
-        initializeSpy = jasmine.createSpy();
-        defineSpy = jasmine.createSpy();
+        initializeSpy = sinon.stub();
+        defineSpy = sinon.stub();
       });
 
       describe('and no params are passed in', function() {
@@ -23,7 +27,7 @@ describe('application modules', function() {
         });
 
         it('should add module to the app', function() {
-          expect(module).toBe(app.Mod);
+          expect(module).to.equal(app.Mod);
         });
       });
 
@@ -34,19 +38,19 @@ describe('application modules', function() {
         });
 
         it('it should add module to the app', function() {
-          expect(module).toBe(app.Mod);
+          expect(module).to.equal(app.Mod);
         });
 
         it('the define function should be called once', function() {
-          expect(defineSpy.callCount).toBe(1);
+          expect(defineSpy.callCount).to.equal(1);
         });
 
         it('the define function should be called on the module', function() {
-          expect(defineSpy.mostRecentCall.object).toBe(module);
+          expect(defineSpy.lastCall.thisValue).to.equal(module);
         });
 
         it('the define function should be called with arguments', function() {
-          expect(defineSpy).toHaveBeenCalledWith(
+          expect(defineSpy).to.have.been.calledWith(
             module,
             app,
             Backbone,
@@ -77,23 +81,23 @@ describe('application modules', function() {
           });
 
           it('should add module to the app', function() {
-            expect(module).toBe(app.Mod);
+            expect(module).to.equal(app.Mod);
           });
 
           it('initialize function is called', function() {
-            expect(initializeSpy).toHaveBeenCalled();
+            expect(initializeSpy).to.have.been.called;
           });
 
           it('the define function is called', function() {
-            expect(defineSpy).toHaveBeenCalled();
+            expect(defineSpy).to.have.been.called;
           });
 
           it('the define function should be called on the module', function() {
-            expect(defineSpy.mostRecentCall.object).toBe(module);
+            expect(defineSpy.lastCall.thisValue).to.equal(module);
           });
 
           it('the define function is called with arguments', function() {
-            expect(defineSpy).toHaveBeenCalledWith(
+            expect(defineSpy).to.have.been.calledWith(
               module,
               app,
               Backbone,
@@ -105,15 +109,15 @@ describe('application modules', function() {
           });
 
           it('initialize function is called with arguments', function() {
-            expect(initializeSpy).toHaveBeenCalledWith('Mod', app, options);
+            expect(initializeSpy).to.have.been.calledWith('Mod', app, options);
           });
 
           it('prototype properties are defined', function() {
-            expect(module.propA).not.toBeUndefined();
+            expect(module.propA).to.exist;
           });
 
           it('options properties are defined', function() {
-            expect(module.options.propB).not.toBeUndefined();
+            expect(module.options.propB).to.exist;
           });
         });
 
@@ -121,7 +125,7 @@ describe('application modules', function() {
           var initializeOptionSpy;
 
           beforeEach(function() {
-            initializeOptionSpy = jasmine.createSpy();
+            initializeOptionSpy = sinon.stub();
 
             var ModuleClass = Backbone.Marionette.Module.extend({
               initialize: initializeSpy,
@@ -136,7 +140,7 @@ describe('application modules', function() {
           });
 
           it('initialize function is called', function() {
-            expect(initializeOptionSpy).toHaveBeenCalled();
+            expect(initializeOptionSpy).to.have.been.called;
           });
 
         });
@@ -156,26 +160,26 @@ describe('application modules', function() {
           });
 
           it('should add module to the app', function() {
-            expect(module).toBe(app.Mod);
+            expect(module).to.equal(app.Mod);
           });
 
           it('the initialize function is called', function() {
-            expect(initializeSpy).toHaveBeenCalled();
+            expect(initializeSpy).to.have.been.called;
           });
 
           it('the initialize function is called with arguments', function() {
             // this is a weird side effect of ModuleClass being treated as the define function
             // e.g. app.module('Mod', ModuleClass)
             var defOptions = _.extend({}, ModuleClass);
-            expect(initializeSpy).toHaveBeenCalledWith('Mod', app, defOptions);
+            expect(initializeSpy).to.have.been.calledWith('Mod', app, defOptions);
           });
 
           it('prototype properties', function() {
-            expect(module.propA).not.toBeUndefined();
+            expect(module.propA).to.exist;
           });
 
           it('startwithParent should be true', function() {
-            expect(module.startWithParent).toBe(true);
+            expect(module.startWithParent).to.be.true;
           });
         });
 
@@ -191,7 +195,7 @@ describe('application modules', function() {
           });
 
           it('startwithParent should be false', function() {
-            expect(module.startWithParent).toBe(false);
+            expect(module.startWithParent).to.be.false;
           });
         });
       });
@@ -213,8 +217,8 @@ describe('application modules', function() {
         });
 
         it('returns the same module', function() {
-          expect(module1).toBe(module2);
-          expect(module1).toBe(app.Mod);
+          expect(module1).to.equal(module2);
+          expect(module1).to.equal(app.Mod);
         });
       });
 
@@ -230,8 +234,8 @@ describe('application modules', function() {
         });
 
         it('it sets both properties', function() {
-          expect(module.prop1).not.toBeUndefined();
-          expect(module.prop2).not.toBeUndefined();
+          expect(module.prop1).to.exist;
+          expect(module.prop2).to.exist;
         });
       });
 
@@ -256,20 +260,20 @@ describe('application modules', function() {
         });
 
         it('it sets first the property', function() {
-          expect(module.options.propA).toBeDefined();
+          expect(module.options.propA).to.exist;
         });
 
         it('it does not set the second property', function() {
-          expect(module.options.propB).toBeUndefined();
+          expect(module.options.propB).to.be.undefined;
         });
 
         it('it calls both define functions', function() {
-          expect(aSpy).toHaveBeenCalled();
-          expect(bSpy).toHaveBeenCalled();
+          expect(aSpy).to.have.been.called;
+          expect(bSpy).to.have.been.called;
         });
 
         it('startWithParent value will not be lost', function() {
-          expect(module.startWithParent).toBe(false);
+          expect(module.startWithParent).to.be.false;
         });
 
       });
@@ -282,47 +286,47 @@ describe('application modules', function() {
         var parentDefineSpy, childDefineSpy;
 
         beforeEach(function() {
-          parentDefineSpy = jasmine.createSpy();
-          childDefineSpy = jasmine.createSpy();
+          parentDefineSpy = sinon.stub();
+          childDefineSpy = sinon.stub();
 
           parent = app.module('parent', parentDefineSpy);
           child = app.module('parent.child', childDefineSpy);
         });
 
         it('parent should remain the same', function() {
-          expect(parent).toBe(app.parent);
+          expect(parent).to.equal(app.parent);
         });
 
         it('parent definition should be called once', function() {
-          expect(parentDefineSpy.callCount).toBe(1);
+          expect(parentDefineSpy.callCount).to.equal(1);
         });
 
         it('child should be created', function() {
-          expect(child).toBe(app.parent.child);
+          expect(child).to.equal(app.parent.child);
         });
 
         it('child definition should be called once', function() {
-          expect(childDefineSpy.callCount).toBe(1);
+          expect(childDefineSpy.callCount).to.equal(1);
         });
       });
 
       describe('and the parent is not already created', function() {
         var defineSpy;
         beforeEach(function() {
-          defineSpy = jasmine.createSpy();
+          defineSpy = sinon.stub();
           child = app.module('parent.child', defineSpy);
         });
 
         it('parent should be defined', function() {
-          expect(app.parent).not.toBeUndefined();
+          expect(app.parent).to.exist;
         });
 
         it('child should be created', function() {
-          expect(child).toBe(app.parent.child);
+          expect(child).to.equal(app.parent.child);
         });
 
         it('definition should be called once', function() {
-          expect(defineSpy.callCount).toBe(1);
+          expect(defineSpy.callCount).to.equal(1);
         });
       });
     });
@@ -332,10 +336,10 @@ describe('application modules', function() {
     describe('when starting a module', function() {
       var module, startSpy, beforeStartSpy, initializeSpy1, initializeSpy2;
       beforeEach(function() {
-        startSpy = jasmine.createSpy();
-        beforeStartSpy = jasmine.createSpy();
-        initializeSpy1 = jasmine.createSpy();
-        initializeSpy2 = jasmine.createSpy();
+        startSpy = sinon.stub();
+        beforeStartSpy = sinon.stub();
+        initializeSpy1 = sinon.stub();
+        initializeSpy2 = sinon.stub();
 
         module = app.module('Mod');
         module.on('before:start', beforeStartSpy);
@@ -347,20 +351,20 @@ describe('application modules', function() {
       });
 
       it('triggers module before start event', function() {
-        expect(beforeStartSpy).toHaveBeenCalled();
+        expect(beforeStartSpy).to.have.been.called;
       });
 
       it('triggers module start event', function() {
-        expect(startSpy).toHaveBeenCalled();
+        expect(startSpy).to.have.been.called;
       });
 
       it('the module initializers are called', function() {
-        expect(initializeSpy1).toHaveBeenCalled();
-        expect(initializeSpy2).toHaveBeenCalled();
+        expect(initializeSpy1).to.have.been.called;
+        expect(initializeSpy2).to.have.been.called;
       });
 
       it('the module is initialized', function() {
-        expect(module._isInitialized).toBe(true);
+        expect(module._isInitialized).to.be.true;
       });
     });
 
@@ -376,7 +380,7 @@ describe('application modules', function() {
       });
 
       it('its only started once', function() {
-        expect(startSpy.callCount).toBe(1);
+        expect(startSpy.callCount).to.equal(1);
       });
     });
 
@@ -394,12 +398,17 @@ describe('application modules', function() {
             parent.start();
           });
 
+          afterEach(function() {
+            child.start.restore();
+            parent.start.restore();
+          });
+
           it('parent is started', function() {
-            expect(parentStartSpy).toHaveBeenCalled();
+            expect(parentStartSpy).to.have.been.called;
           });
 
           it('child is started', function() {
-            expect(childStartSpy).toHaveBeenCalled();
+            expect(childStartSpy).to.have.been.called;
           });
         });
 
@@ -412,12 +421,16 @@ describe('application modules', function() {
             parent.start();
           });
 
+          afterEach(function() {
+            child.start.restore();
+          });
+
           it('the parent is started', function() {
-            expect(parentStartSpy).toHaveBeenCalled();
+            expect(parentStartSpy).to.have.been.called;
           });
 
           it('the child is not started', function() {
-            expect(childStartSpy).not.toHaveBeenCalled();
+            expect(childStartSpy).not.to.have.been.called;
           });
         });
       });
@@ -434,7 +447,7 @@ describe('application modules', function() {
         });
 
         it('its module starts', function() {
-          expect(startSpy).toHaveBeenCalled();
+          expect(startSpy).to.have.been.called;
         });
       });
 
@@ -446,7 +459,7 @@ describe('application modules', function() {
         });
 
         it('it does not start', function() {
-          expect(startSpy).not.toHaveBeenCalled();
+          expect(startSpy).not.to.have.been.called;
         });
       });
     });
@@ -457,7 +470,7 @@ describe('application modules', function() {
 
       beforeEach(function() {
         app.start();
-        initializeSpy = jasmine.createSpy();
+        initializeSpy = sinon.stub();
 
         module = app.module('Mod');
         module.addInitializer(initializeSpy);
@@ -465,11 +478,11 @@ describe('application modules', function() {
       });
 
       it('creates the module', function() {
-        expect(module).toBe(app.Mod);
+        expect(module).to.equal(app.Mod);
       });
 
       it('calls the modules initializers', function() {
-        expect(initializeSpy).toHaveBeenCalled();
+        expect(initializeSpy).to.have.been.called;
       });
     });
   });
@@ -494,15 +507,15 @@ describe('application modules', function() {
       });
 
       it('finalizer is called', function() {
-        expect(finalizerSpy).toHaveBeenCalled();
+        expect(finalizerSpy).to.have.been.called;
       });
 
       it('before:stop event is triggered', function() {
-        expect(beforeStopSpy).toHaveBeenCalled();
+        expect(beforeStopSpy).to.have.been.called;
       });
 
       it('stop event is triggered', function() {
-        expect(stopSpy).toHaveBeenCalled();
+        expect(stopSpy).to.have.been.called;
       });
     });
 
@@ -519,26 +532,26 @@ describe('application modules', function() {
         child.addFinalizer(finalizerSpy);
         child.on('before:stop', beforeStopSpy);
         child.on('stop', stopSpy);
-        spyOn(child, 'stop').andCallThrough();
+        sinon.spy(child, 'stop');
 
         module.start();
         module.stop();
       });
 
       it('its submodule stop function is invoked', function() {
-        expect(child.stop).toHaveBeenCalled();
+        expect(child.stop).to.have.been.called;
       });
 
       it('its submodule finalizer is called', function() {
-        expect(finalizerSpy).toHaveBeenCalled();
+        expect(finalizerSpy).to.have.been.called;
       });
 
       it('its submodule before:stop event is triggered', function() {
-        expect(beforeStopSpy).toHaveBeenCalled();
+        expect(beforeStopSpy).to.have.been.called;
       });
 
       it('its submoule stop event is triggered', function() {
-        expect(stopSpy).toHaveBeenCalled();
+        expect(stopSpy).to.have.been.called;
       });
     });
 
@@ -565,19 +578,19 @@ describe('application modules', function() {
       });
 
       it('the parent does not trigger a stop event', function() {
-        expect(parentFinalizerSpy).not.toHaveBeenCalled();
+        expect(parentFinalizerSpy).not.to.have.been.called;
       });
 
       it('the child does not trigger a stop event', function() {
-        expect(childFinalizerSpy).not.toHaveBeenCalled();
+        expect(childFinalizerSpy).not.to.have.been.called;
       });
 
       it('the parent does not call its finalizer', function() {
-        expect(parentStopSpy).not.toHaveBeenCalled();
+        expect(parentStopSpy).not.to.have.been.called;
       });
 
       it('the child does not call its finalizer', function() {
-        expect(childStopSpy).not.toHaveBeenCalled();
+        expect(childStopSpy).not.to.have.been.called;
       });
     });
   });

@@ -1,6 +1,9 @@
 describe('callbacks', function() {
   'use strict';
 
+  beforeEach(global.setup);
+  afterEach(global.teardown);
+
   describe('when registering callbacks and running them', function() {
     var specifiedOptions, specifiedContext,
         spyOne, spyTwo;
@@ -20,19 +23,19 @@ describe('callbacks', function() {
     });
 
     it('should execute the first callback', function() {
-      expect(spyOne).toHaveBeenCalled();
+      expect(spyOne).to.have.been.called;
     });
 
     it('should execute the second callback', function() {
-      expect(spyTwo).toHaveBeenCalled();
+      expect(spyTwo).to.have.been.called;
     });
 
     it('should pass the options along', function() {
-      expect(spyOne).toHaveBeenCalledWith(specifiedOptions);
+      expect(spyOne).to.have.been.calledWith(specifiedOptions);
     });
 
     it('should execute in the specified context', function() {
-      expect(spyOne).toHaveBeenCalledOn(specifiedContext);
+      expect(spyOne).to.have.been.calledOn(specifiedContext);
     });
   });
 
@@ -50,11 +53,11 @@ describe('callbacks', function() {
     });
 
     it('should execute the first', function() {
-      expect(spyOne).toHaveBeenCalled();
+      expect(spyOne).to.have.been.called;
     });
 
     it('should execute the second', function() {
-      expect(spyTwo).toHaveBeenCalled();
+      expect(spyTwo).to.have.been.called;
     });
   });
 
@@ -72,7 +75,7 @@ describe('callbacks', function() {
     });
 
     it('should run the callback with the specified context', function() {
-      expect(spyOne).toHaveBeenCalledOn(context);
+      expect(spyOne).to.have.been.calledOn(context);
     });
   });
 
@@ -94,11 +97,11 @@ describe('callbacks', function() {
     });
 
     it('should run the callbacks again', function() {
-      expect(spy).toHaveBeenCalledTwice();
+      expect(spy).to.have.been.calledTwice;
     });
 
     it('should not duplicate the callbacks', function() {
-      expect(numCallbacks).toBe(1);
+      expect(numCallbacks).to.equal(1);
     });
   });
 

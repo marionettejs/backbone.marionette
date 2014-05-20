@@ -56,14 +56,18 @@ describe('marionette controller', function() {
   });
 
   describe('when destroying a controller', function() {
+
     beforeEach(function() {
       this.Controller = Marionette.Controller.extend({
-        onDestroy: this.sinon.stub()
+        onDestroy: this.sinon.stub(),
+        onBeforeDestroy: this.sinon.stub()
       });
       this.controller = new this.Controller();
 
       this.destroyHandler = this.sinon.stub();
+      this.beforeDestroyHandler = this.sinon.stub();
       this.controller.on('destroy', this.destroyHandler);
+      this.controller.on('before:destroy', this.beforeDestroyHandler);
 
       this.listenToHandler = this.sinon.stub();
       this.controller.listenTo(this.controller, 'destroy', this.listenToHandler);
@@ -84,6 +88,14 @@ describe('marionette controller', function() {
 
     it('should stopListening after calling destroy', function() {
       expect(this.listenToHandler).to.have.been.called;
+    });
+
+    it('should trigger a before:destroy event with any arguments passed to destroy', function() {
+      expect(this.beforeDestroyHandler).to.have.been.calledWith(123, 'second param');
+    });
+
+    it('should call an onBeforeDestroy method with any arguments passed to destroy', function() {
+      expect(this.controller.onBeforeDestroy).to.have.been.calledWith(123, 'second param');
     });
 
     it('should trigger a destroy event with any arguments passed to destroy', function() {

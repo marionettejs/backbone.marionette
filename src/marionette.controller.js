@@ -22,7 +22,9 @@ Marionette.Controller.extend = Marionette.extend;
 _.extend(Marionette.Controller.prototype, Backbone.Events, {
   destroy: function() {
     var args = Array.prototype.slice.call(arguments);
+    this.triggerMethod.apply(this, ['before:destroy'].concat(args));
     this.triggerMethod.apply(this, ['destroy'].concat(args));
+
     this.stopListening();
     this.off();
   },

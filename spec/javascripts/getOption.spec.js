@@ -1,5 +1,8 @@
 describe('get option', function() {
 
+  beforeEach(global.setup);
+  afterEach(global.teardown);
+
   describe('when an object only has the option set on the definition', function() {
     var target, value;
 
@@ -12,7 +15,7 @@ describe('get option', function() {
     });
 
     it('should return that definitions option', function() {
-      expect(value).toBe('bar');
+      expect(value).to.equal('bar');
     });
 
   });
@@ -31,7 +34,7 @@ describe('get option', function() {
     });
 
     it('should return value from the options', function() {
-      expect(value).toBe('bar');
+      expect(value).to.equal('bar');
     });
 
   });
@@ -50,7 +53,7 @@ describe('get option', function() {
     });
 
     it('should return value from the options', function() {
-      expect(value).toEqual(false);
+      expect(value).to.equal(false);
     });
 
   });
@@ -71,7 +74,7 @@ describe('get option', function() {
     });
 
     it('should return the objects value', function() {
-      expect(value).toEqual('bar');
+      expect(value).to.equal('bar');
     });
 
   });
@@ -92,7 +95,7 @@ describe('get option', function() {
     });
 
     it('should return that value from the options', function() {
-      expect(value).toBe('quux');
+      expect(value).to.equal('quux');
     });
 
   });
@@ -108,7 +111,7 @@ describe('get option', function() {
     });
 
     it('should return that definition\'s option', function(){
-      expect(target.getOption('foo')).toBe('bar');
+      expect(target.getOption('foo')).to.equal('bar');
     });
   });
 

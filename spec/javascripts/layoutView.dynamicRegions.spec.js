@@ -1,4 +1,8 @@
 describe('layoutView - dynamic regions', function() {
+
+  beforeEach(global.setup);
+  afterEach(global.teardown);
+
   var template = function() {
     return '<div id="foo"></div><div id="bar"></div>';
   };
@@ -31,26 +35,31 @@ describe('layoutView - dynamic regions', function() {
       layoutView.foo.show(view);
     });
 
+    afterEach(function() {
+      layoutView.onBeforeAddRegion.restore();
+      layoutView.onAddRegion.restore();
+    });
+
     it('should add the region to the layoutView', function() {
-      expect(layoutView.foo).toBe(region);
+      expect(layoutView.foo).to.equal(region);
     });
 
     it('should set the parent of the region to the layoutView', function() {
-      expect(region.$el.parent()).toBe(layoutView.$el[0]);
+      expect(region.$el.parent()[0]).to.equal(layoutView.el);
     });
 
     it('should be able to show a view in the region', function() {
-      expect(layoutView.foo.$el.children().length).toBe(1);
+      expect(layoutView.foo.$el.children().length).to.equal(1);
     });
 
     it('should trigger a before:add:region event', function() {
-      expect(beforeAddHandler).toHaveBeenCalledWith('foo');
-      expect(onBeforeAddSpy).toHaveBeenCalledWith('foo');
+      expect(beforeAddHandler).to.have.been.calledWith('foo');
+      expect(onBeforeAddSpy).to.have.been.calledWith('foo');
     });
 
     it('should trigger a add:region event', function() {
-      expect(addHandler).toHaveBeenCalledWith('foo', region);
-      expect(onAddSpy).toHaveBeenCalledWith('foo', region);
+      expect(addHandler).to.have.been.calledWith('foo', region);
+      expect(onAddSpy).to.have.been.calledWith('foo', region);
     });
   });
 
@@ -71,15 +80,15 @@ describe('layoutView - dynamic regions', function() {
     });
 
     it('should add the region to the layoutView after it is rendered', function() {
-      expect(layoutView.foo).toBe(region);
+      expect(layoutView.foo).to.equal(region);
     });
 
     it('should set the parent of the region to the layoutView', function() {
-      expect(region.$el.parent()).toBe(layoutView.$el[0]);
+      expect(region.$el.parent()[0]).to.equal(layoutView.el);
     });
 
     it('should be able to show a view in the region', function() {
-      expect(layoutView.foo.$el.children().length).toBe(1);
+      expect(layoutView.foo.$el.children().length).to.equal(1);
     });
   });
 
@@ -103,19 +112,19 @@ describe('layoutView - dynamic regions', function() {
     });
 
     it('should keep the original regions', function() {
-      expect(layoutView.bar).toBe(barRegion);
+      expect(layoutView.bar).to.equal(barRegion);
     });
 
     it('should re-add the region to the layoutView after it is re-rendered', function() {
-      expect(layoutView.foo).toBe(region);
+      expect(layoutView.foo).to.equal(region);
     });
 
     it('should set the parent of the region to the layoutView', function() {
-      expect(region.$el.parent()).toBe(layoutView.$el[0]);
+      expect(region.$el.parent()[0]).to.equal(layoutView.el);
     });
 
     it('should be able to show a view in the region', function() {
-      expect(layoutView.foo.$el.children().length).toBe(1);
+      expect(layoutView.foo.$el.children().length).to.equal(1);
     });
   });
 
@@ -140,16 +149,16 @@ describe('layoutView - dynamic regions', function() {
     });
 
     it('should re-add the region to the layoutView after it is re-rendered', function() {
-      expect(layoutView.foo).toBe(region);
+      expect(layoutView.foo).to.equal(region);
     });
 
     it('should set the parent of the region to the layoutView', function() {
       region.show(new Backbone.View());
-      expect(region.$el.parent()).toBe(layoutView.$el[0]);
+      expect(region.$el.parent()[0]).to.equal(layoutView.el);
     });
 
     it('should be able to show a view in the region', function() {
-      expect(layoutView.foo.$el.children().length).toBe(1);
+      expect(layoutView.foo.$el.children().length).to.equal(1);
     });
   });
 
@@ -187,24 +196,29 @@ describe('layoutView - dynamic regions', function() {
       layoutView.removeRegion('foo');
     });
 
+    afterEach(function() {
+      layoutView.onBeforeRemoveRegion.restore();
+      layoutView.onRemoveRegion.restore();
+    });
+
     it('should destroy the region', function() {
-      expect(destroyHandler).toHaveBeenCalled();
+      expect(destroyHandler).to.have.been.called;
     });
 
     it('should trigger a before:remove:region event', function() {
-      expect(onBeforeRemoveSpy).toHaveBeenCalledWith('foo');
-      expect(beforeRemoveHandler).toHaveBeenCalledWith('foo');
+      expect(onBeforeRemoveSpy).to.have.been.calledWith('foo');
+      expect(beforeRemoveHandler).to.have.been.calledWith('foo');
     });
 
     it('should trigger a remove:region event', function() {
-      expect(onRemoveSpy).toHaveBeenCalledWith('foo', region);
-      expect(removeHandler).toHaveBeenCalledWith('foo', region);
+      expect(onRemoveSpy).to.have.been.calledWith('foo', region);
+      expect(removeHandler).to.have.been.calledWith('foo', region);
     });
 
     it('should remove the region', function() {
-      expect(layoutView.foo).toBeUndefined();
-      expect(layoutView.regions.foo).toBeUndefined();
-      expect(layoutView.regionManager.get('foo')).toBeUndefined();
+      expect(layoutView.foo).to.be.undefined;
+      expect(layoutView.regions.foo).to.be.undefined;
+      expect(layoutView.regionManager.get('foo')).to.be.undefined;
     });
   });
 
@@ -231,8 +245,8 @@ describe('layoutView - dynamic regions', function() {
     });
 
     it('should not re-attach the region to the layoutView', function() {
-      expect(region).toBeUndefined();
-      expect(layoutView.regionManager.get('foo')).toBeUndefined();
+      expect(region).to.be.undefined;
+      expect(layoutView.regionManager.get('foo')).to.be.undefined;
     });
   });
 
@@ -240,7 +254,7 @@ describe('layoutView - dynamic regions', function() {
     var layoutView, region, destroyHandler;
 
     beforeEach(function() {
-      destroyHandler = jasmine.createSpy('add handler');
+      destroyHandler = sinon.stub();
       layoutView = new Marionette.LayoutView({
         template: template
       });
@@ -257,7 +271,7 @@ describe('layoutView - dynamic regions', function() {
     });
 
     it('should destroy the region', function() {
-      expect(destroyHandler).toHaveBeenCalled();
+      expect(destroyHandler).to.have.been.called;
     });
   });
 });

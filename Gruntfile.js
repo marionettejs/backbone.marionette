@@ -3,9 +3,7 @@ var unwrap = require('unwrap');
 
 module.exports = function(grunt) {
 
-  require('load-grunt-tasks')(grunt, {
-    pattern: ['grunt-*', '!grunt-template-jasmine-istanbul']
-  });
+  require('load-grunt-tasks')(grunt);
 
   // Project configuration.
   grunt.initConfig({
@@ -38,8 +36,7 @@ module.exports = function(grunt) {
       backbone:     'bower_components/backbone/backbone.js',
       jquery:       'bower_components/jquery/dist/jquery.js',
       sinon:        'bower_components/sinonjs/sinon.js',
-      jasmineSinon: 'bower_components/jasmine-sinon/lib/jasmine-sinon.js',
-      wreqr:        'bower_components/backbone.wreqr/lib/backbone.wreqr.js',
+      wreqr:        'bower_components/backbone.wreqr/lib/backbone.wreqr.js'
     },
 
     clean: {
@@ -123,28 +120,14 @@ module.exports = function(grunt) {
       }
     },
 
-    jasmine : {
-      options : {
-        helpers : [
-          '<%= assets.sinon %>',
-          '<%= assets.jasmineSinon %>',
-          'spec/javascripts/helpers/*.js'
-        ],
-        specs : 'spec/javascripts/**/*.spec.js',
-        vendor : [
-          '<%= assets.jquery %>',
-          '<%= assets.underscore %>',
-          '<%= assets.backbone %>',
-          '<%= assets.babysitter %>',
-          '<%= assets.wreqr %>',
-        ],
-        keepRunner: true
-      },
-      marionette : {
-        src : [
-          '<%= preprocess.bundle.dest %>',
-          'spec/javascripts/support/marionette.support.js'
-        ],
+    mochaTest: {
+      tests: {
+        options: {
+          require: 'spec/javascripts/setup/node.js',
+          reporter: 'dot',
+          clearRequireCache: true
+        },
+        src: ['spec/javascripts/*.spec.js']
       }
     },
 
@@ -180,12 +163,11 @@ module.exports = function(grunt) {
 
     watch: {
       marionette : {
+        options: {
+          spawn: false
+        },
         files : ['src/**/*.js', 'spec/**/*.js'],
         tasks : ['test']
-      },
-      server : {
-        files : ['src/**/*.js', 'spec/**/*.js'],
-        tasks : ['jasmine:marionette:build']
       }
     },
 
@@ -245,13 +227,31 @@ module.exports = function(grunt) {
     }
   });
 
+  var defaultTestsSrc = grunt.config('mochaTest.tests.src');
+  var defaultJshintSrc = grunt.config('jshint.marionette.src');
+  var defaultJshintSpecSrc = grunt.config('jshint.specs.files.src');
+  grunt.event.on('watch', function(action, filepath) {
+    grunt.config('mochaTest.tests.src', defaultTestsSrc);
+    grunt.config('jshint.marionette.src', defaultJshintSrc);
+    grunt.config('jshint.specs.files.src', defaultJshintSpecSrc);
+    if (filepath.match('spec/javascripts/') && !filepath.match('setup') && !filepath.match('fixtures')) {
+      grunt.config('mochaTest.tests.src', filepath);
+      grunt.config('jshint.specs.files.src', filepath);
+      grunt.config('jshint.marionette.src', 'DO_NOT_RUN_ME');
+    }
+    if (filepath.match('src/')) {
+      grunt.config('jshint.marionette.src', filepath);
+      grunt.config('jshint.specs.files.src', 'DO_NOT_RUN_ME');
+    }
+  });
+
   grunt.registerTask('default', 'An alias task for running tests.', ['test']);
 
   grunt.registerTask('lint', 'Lints our sources', ['lintspaces', 'jshint']);
 
-  grunt.registerTask('test', 'Run the unit tests.', ['verify-bower', 'lint', 'unwrap', 'preprocess:bundle', 'template:bundle', 'jasmine:marionette']);
+  grunt.registerTask('test', 'Run the unit tests.', ['verify-bower', 'lint', 'unwrap', 'preprocess:bundle', 'template:bundle', 'mochaTest', 'clean:tmp']);
 
   grunt.registerTask('dev', 'Auto-lints while writing code.', ['test', 'watch:marionette']);
 
-  grunt.registerTask('build', 'Build all three versions of the library.', ['clean:lib', 'bower:install', 'lint', 'unwrap', 'preprocess', 'template', 'jasmine:marionette', 'concat', 'uglify', 'clean:tmp']);
+  grunt.registerTask('build', 'Build all three versions of the library.', ['clean:lib', 'bower:install', 'lint', 'unwrap', 'preprocess', 'template', 'mochaTest', 'concat', 'uglify', 'clean:tmp']);
 };

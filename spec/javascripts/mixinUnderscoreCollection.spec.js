@@ -1,4 +1,8 @@
 describe('Marionette.actAsCollection', function() {
+
+  beforeEach(global.setup);
+  afterEach(global.teardown);
+
   var double = function(v) { return v * 2; };
 
   describe('object literal', function() {
@@ -13,7 +17,7 @@ describe('Marionette.actAsCollection', function() {
     });
 
     it('should be able to map over list', function() {
-      expect(obj.map(double)).toEqual([2, 4, 6]);
+      expect(obj.map(double)).to.deep.equal([2, 4, 6]);
     });
   });
 
@@ -30,7 +34,7 @@ describe('Marionette.actAsCollection', function() {
     });
 
     it('should be able to map over list', function() {
-      expect(func.map(double)).toEqual([2, 4, 6]);
+      expect(func.map(double)).to.deep.equal([2, 4, 6]);
     });
   });
 });

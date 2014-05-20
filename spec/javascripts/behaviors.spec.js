@@ -1,7 +1,11 @@
 describe('Behaviors', function() {
+
+  beforeEach(global.setup);
+  afterEach(global.teardown);
+
   describe('behavior lookup', function() {
     it('should throw if behavior lookup is not defined', function() {
-      expect(Marionette.Behaviors.behaviorsLookup).toThrow();
+      expect(Marionette.Behaviors.behaviorsLookup).to.throw;
     });
   });
 
@@ -35,7 +39,7 @@ describe('Behaviors', function() {
       });
 
       it('should instantiate the tooltip behavior', function() {
-        expect(Obj.Tooltip).toHaveBeenCalled();
+        expect(Obj.Tooltip).to.have.been.called;
       });
     });
   });
@@ -67,7 +71,7 @@ describe('Behaviors', function() {
       });
 
       it('should instantiate the tooltip behavior', function() {
-        expect(Obj.Tooltip).toHaveBeenCalled();
+        expect(Obj.Tooltip).to.have.been.called;
       });
     });
 
@@ -87,7 +91,7 @@ describe('Behaviors', function() {
       });
 
       it('should instantiate the tooltip behavior', function() {
-        expect(Obj.Tooltip).toHaveBeenCalled();
+        expect(Obj.Tooltip).to.have.been.called;
       });
     });
 
@@ -111,11 +115,11 @@ describe('Behaviors', function() {
       });
 
       it('should instantiate the tooltip behavior', function() {
-        expect(Obj.Tooltip).toHaveBeenCalled();
+        expect(Obj.Tooltip).to.have.been.called;
       });
 
       it('should call the behaviors method with the view context', function() {
-        expect(_this).toEqual(view);
+        expect(_this).to.equal(view);
       });
     });
 
@@ -136,7 +140,7 @@ describe('Behaviors', function() {
       });
 
       it('should instantiate the tooltip behavior', function() {
-        expect(Obj.Tooltip).toHaveBeenCalled();
+        expect(Obj.Tooltip).to.have.been.called;
       });
     });
   });
@@ -173,7 +177,7 @@ describe('Behaviors', function() {
 
     it('should call initialize when a behavior is created', function() {
       var b = new Behavior({}, {});
-      expect(b.initialize).toHaveBeenCalled();
+      expect(b.initialize).to.have.been.called;
     });
 
     it('should call initialize when a behavior is created', function() {
@@ -181,8 +185,8 @@ describe('Behaviors', function() {
         words: 'big'
       });
 
-      expect(viewOptions).toEqual(view.options);
-      expect(behaviorOptions).toEqual(View.prototype.behaviors.Tooltip);
+      expect(viewOptions).to.equal(view.options);
+      expect(behaviorOptions).to.equal(View.prototype.behaviors.Tooltip);
     });
   });
 
@@ -234,23 +238,23 @@ describe('Behaviors', function() {
     });
 
     it('should call first behaviors event', function() {
-      expect(spy).toHaveBeenCalledOnce();
-      expect(spy).toHaveBeenCalledOn(sinon.match.instanceOf(Marionette.Behavior));
+      expect(spy).to.have.been.calledOnce;
+      expect(spy).to.have.been.calledOn(sinon.match.instanceOf(Marionette.Behavior));
     });
 
     it('should call second behaviors event', function() {
-      expect(spy2).toHaveBeenCalledOn(sinon.match.instanceOf(Marionette.Behavior));
-      expect(spy2).toHaveBeenCalledOnce();
+      expect(spy2).to.have.been.calledOn(sinon.match.instanceOf(Marionette.Behavior));
+      expect(spy2).to.have.been.calledOnce;
     });
 
     it('should call third behaviors event', function() {
-      expect(spy3).toHaveBeenCalledOnce();
-      expect(spy3).toHaveBeenCalledOn(sinon.match.instanceOf(Marionette.Behavior));
+      expect(spy3).to.have.been.calledOnce;
+      expect(spy3).to.have.been.calledOn(sinon.match.instanceOf(Marionette.Behavior));
     });
 
     it('should call the view click handler', function() {
-      expect(viewSpy).toHaveBeenCalledOnce();
-      expect(viewSpy).toHaveBeenCalledOn(sinon.match.instanceOf(Marionette.View));
+      expect(viewSpy).to.have.been.calledOnce;
+      expect(viewSpy).to.have.been.calledOn(sinon.match.instanceOf(Marionette.View));
     });
   });
 
@@ -279,7 +283,7 @@ describe('Behaviors', function() {
     });
 
     it('should proxy the views $el', function() {
-      expect(behavior.$el).toEqual(view.$el);
+      expect(behavior.$el).to.equal(view.$el);
     });
   });
 
@@ -352,7 +356,7 @@ describe('Behaviors', function() {
     it('should set the behavior UI element', function() {
       view = new View();
       view.render();
-      expect(spy).toHaveBeenCalled(1);
+      expect(spy).to.have.been.calledOnce;
     });
 
     it('should handle behavior ui click event', function() {
@@ -360,7 +364,7 @@ describe('Behaviors', function() {
       view.render();
       view.$el.find('.doge').click();
 
-      expect(onDogeClickSpy).toHaveBeenCalledOn(testBehavior);
+      expect(onDogeClickSpy).to.have.been.calledOn(testBehavior);
     });
 
     it('should handle view ui click event', function() {
@@ -368,13 +372,13 @@ describe('Behaviors', function() {
       view.render();
       view.$el.find('.coins').click();
 
-      expect(onCoinsClickSpy).toHaveBeenCalledOn(testBehavior);
+      expect(onCoinsClickSpy).to.have.been.calledOn(testBehavior);
     });
 
     it('should call onShow', function() {
       layoutView = new LayoutView();
       layoutView.render();
-      expect(onShowSpy).toHaveBeenCalled();
+      expect(onShowSpy).to.have.been.called;
     });
 
     describe('should call onShow when inside a CollectionView', function() {
@@ -413,7 +417,7 @@ describe('Behaviors', function() {
       layoutView = new LayoutView();
       layoutView.render();
       layoutView.destroy();
-      expect(onDestroySpy).toHaveBeenCalled(1);
+      expect(onDestroySpy).to.have.been.called;
     });
   });
 
@@ -454,11 +458,11 @@ describe('Behaviors', function() {
     });
 
     it('behavior onShow is called once', function() {
-      expect(onShowSpy).toHaveBeenCalledOnce();
+      expect(onShowSpy).to.have.been.calledOnce;
     });
 
     it('behavior onClose is called once', function() {
-      expect(onDestroySpy).toHaveBeenCalledOnce();
+      expect(onDestroySpy).to.have.been.calledOnce;
     });
   });
 
@@ -488,12 +492,12 @@ describe('Behaviors', function() {
 
     it('shoud unbind listenTo on close', function() {
       model.set('klingon', 'dominion');
-      expect(listenToSpy).not.toHaveBeenCalled();
+      expect(listenToSpy).not.to.have.been.calledOnce;
     });
 
     it('shoud still be bound to "on" on close', function() {
       v.triggerMethod('wow');
-      expect(onSpy).toHaveBeenCalled();
+      expect(onSpy).to.have.been.calledOnce;
     });
   });
 
@@ -523,12 +527,12 @@ describe('Behaviors', function() {
 
     it('should unbind listenTo on destroy', function() {
       model.set('klingon', 'dominion');
-      expect(listenToSpy).not.toHaveBeenCalled();
+      expect(listenToSpy).not.to.have.been.called;
     });
 
     it('should still be bound to "on" on destroy', function() {
       v.triggerMethod('wow');
-      expect(onSpy).toHaveBeenCalled();
+      expect(onSpy).to.have.been.called;
     });
   });
 
@@ -583,7 +587,7 @@ describe('Behaviors', function() {
       });
 
       model.set('name', 'doge');
-      expect(modelSpy).toHaveBeenCalledOn(testBehavior);
+      expect(modelSpy).to.have.been.calledOn(testBehavior);
     });
 
     it('should proxy model events w/ string cbk', function() {
@@ -592,7 +596,7 @@ describe('Behaviors', function() {
       });
 
       model.set('foo', 'doge');
-      expect(fooChangedSpy).toHaveBeenCalledOn(testBehavior);
+      expect(fooChangedSpy).to.have.been.calledOn(testBehavior);
     });
 
     it('should proxy collection events', function() {
@@ -601,7 +605,7 @@ describe('Behaviors', function() {
       });
 
       collection.reset();
-      expect(collectionSpy).toHaveBeenCalledOn(testBehavior);
+      expect(collectionSpy).to.have.been.calledOn(testBehavior);
     });
 
     it('should unbind model events on view undelegate', function() {
@@ -611,7 +615,7 @@ describe('Behaviors', function() {
 
       view.undelegateEvents();
       model.set('foo', 'doge');
-      expect(fooChangedSpy).not.toHaveBeenCalled();
+      expect(fooChangedSpy).not.to.have.been.called;
     });
 
     it('should unbind collection events on view undelegate', function() {
@@ -621,7 +625,7 @@ describe('Behaviors', function() {
 
       view.undelegateEvents();
       collection.reset();
-      expect(collectionSpy).not.toHaveBeenCalled();
+      expect(collectionSpy).not.to.have.been.called;
     });
   });
 
@@ -646,7 +650,7 @@ describe('Behaviors', function() {
     it('should call onRender when a view is rendered', function() {
       var view = new View();
       view.triggerMethod('render');
-      expect(onRenderSpy).toHaveBeenCalled();
+      expect(onRenderSpy).to.have.been.called;
     });
   });
 
@@ -666,17 +670,17 @@ describe('Behaviors', function() {
 
     it('should listenTo events', function() {
       model.trigger('bump');
-      expect(spy).toHaveBeenCalled();
+      expect(spy).to.have.been.called;
     });
 
     it('should support bindEntityEvents', function() {
       model.set('name', 'doge');
-      expect(spy).toHaveBeenCalled();
+      expect(spy).to.have.been.called;
     });
 
     it('should execute in the specified context', function() {
       model.trigger('bump');
-      expect(spy).toHaveBeenCalledOn(behavior);
+      expect(spy).to.have.been.calledOn(behavior);
     });
   });
 
@@ -749,55 +753,59 @@ describe('Behaviors', function() {
       c = new Backbone.Collection();
       v = new View({model: m, collection: c});
 
-      spyOn(v, 'undelegateEvents').andCallThrough();
+      sinon.spy(v, 'undelegateEvents');
+    });
+
+    afterEach(function () {
+      v.undelegateEvents.restore();
     });
 
     it('should call initialize on grouped behaviors', function() {
-      expect(initSpy).toHaveBeenCalled();
+      expect(initSpy).to.have.been.called;
     });
 
     it('should call onRender on grouped behaviors', function() {
       v.triggerMethod('render');
-      expect(childRenderSpy).toHaveBeenCalledOn(groupedBehavior);
+      expect(childRenderSpy).to.have.been.calledOn(groupedBehavior);
     });
 
     it('should call onRender on the view', function() {
       v.triggerMethod('render');
-      expect(renderSpy).toHaveBeenCalledOn(v);
-      expect(renderSpy).toHaveBeenCalledOnce();
+      expect(renderSpy).to.have.been.calledOn(v);
+      expect(renderSpy).to.have.been.calledOnce;
     });
 
     it('should call undelegateEvents once', function() {
       v.undelegateEvents();
-      expect(v.undelegateEvents.callCount).toBe(1);
+      expect(v.undelegateEvents.callCount).to.equal(1);
     });
 
     it('should proxy modelEvents to grouped behaviors', function() {
       m.trigger('change');
-      expect(entityEventSpy).toHaveBeenCalledOn(groupedBehavior);
+      expect(entityEventSpy).to.have.been.calledOn(groupedBehavior);
     });
 
     it('should proxy collectionEvents to grouped behaviors', function() {
       c.trigger('sync');
-      expect(entityEventSpy).toHaveBeenCalledOn(groupedBehavior);
+      expect(entityEventSpy).to.have.been.calledOn(groupedBehavior);
     });
 
     it('should proxy child behavior UI events to grouped behaviors', function() {
       v.render();
       v.$('.child').trigger('click');
-      expect(childEventSpy).toHaveBeenCalledOn(groupedBehavior);
+      expect(childEventSpy).to.have.been.calledOn(groupedBehavior);
     });
 
     it('should proxy base behavior UI events to base behavior', function() {
       v.render();
       v.$('.parent').trigger('click');
-      expect(parentEventSpy).toHaveBeenCalledOn(parentBehavior);
+      expect(parentEventSpy).to.have.been.calledOn(parentBehavior);
     });
 
     it('should proxy view UI events to view', function() {
       v.render();
       v.$('.view').trigger('click');
-      expect(viewEventSpy).toHaveBeenCalledOn(v);
+      expect(viewEventSpy).to.have.been.calledOn(v);
     });
   });
 });

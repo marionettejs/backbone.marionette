@@ -1,6 +1,9 @@
 describe('app router', function() {
   'use strict';
 
+  beforeEach(global.setup);
+  afterEach(global.teardown);
+
   afterEach(function() {
     window.location.hash = '';
   });
@@ -21,7 +24,7 @@ describe('app router', function() {
     }
 
     it('should throw an error saying the method does not exist', function() {
-      expect(run).toThrow(expectedMessage);
+      expect(run).to.throw(expectedMessage);
     });
   });
 
@@ -34,7 +37,7 @@ describe('app router', function() {
     });
 
     var controller = {
-      method1: sinon.spy()
+      method1: sinon.stub()
     };
 
     beforeEach(function() {
@@ -51,17 +54,17 @@ describe('app router', function() {
     });
 
     it('should call the configured method on the controller passed in the constructor', function() {
-      expect(controller.method1).toHaveBeenCalled();
+      expect(controller.method1).to.have.been.called;
     });
 
     it('should execute the controller method with the context of the controller', function() {
-      expect(controller.method1).toHaveBeenCalledOn(controller);
+      expect(controller.method1).to.have.been.calledOn(controller);
     });
   });
 
   describe('when a controller is provided in the router definition and a route fires', function() {
     var controller = {
-      method1: sinon.spy()
+      method1: sinon.stub()
     };
 
     var Router = Backbone.Marionette.AppRouter.extend({
@@ -84,11 +87,11 @@ describe('app router', function() {
     });
 
     it('should call the configured method on the controller passed in the constructor', function() {
-      expect(controller.method1).toHaveBeenCalled();
+      expect(controller.method1).to.have.been.called;
     });
 
     it('should execute the controller method with the context of the controller', function() {
-      expect(controller.method1).toHaveBeenCalledOn(controller);
+      expect(controller.method1).to.have.been.calledOn(controller);
     });
   });
 
@@ -105,7 +108,7 @@ describe('app router', function() {
     var Controller = function() {
       return {
         method1: function() {},
-        method2: sinon.spy()
+        method2: sinon.stub()
       };
     };
 
@@ -126,11 +129,11 @@ describe('app router', function() {
     });
 
     it('should call the configured method on the controller passed in the constructor', function() {
-      expect(controller.method2).toHaveBeenCalled();
+      expect(controller.method2).to.have.been.called;
     });
 
     it('should execute the controller method with the context of the controller', function() {
-      expect(controller.method2).toHaveBeenCalledOn(controller);
+      expect(controller.method2).to.have.been.calledOn(controller);
     });
   });
 
@@ -138,7 +141,7 @@ describe('app router', function() {
 
     var spy, router;
     var Router = Backbone.Marionette.AppRouter.extend({
-      onRoute: sinon.spy(),
+      onRoute: sinon.stub(),
       appRoutes: {
         'm2/:id': 'withParam'
       }
@@ -149,7 +152,7 @@ describe('app router', function() {
     };
 
     beforeEach(function() {
-      spy = sinon.stub(controller, 'withParam');
+      spy = sinon.spy(controller, 'withParam');
 
       router = new Router({
         controller: controller
@@ -166,12 +169,12 @@ describe('app router', function() {
     });
 
     it('should call the configured method with parameters', function() {
-      expect(spy).toHaveBeenAlwaysCalledWith('1');
+      expect(spy).to.have.always.been.calledWith('1');
     });
 
     it('should call the onShow method for the route, passing the name of the route, the matched route, and the params', function() {
-      expect(router.onRoute).toHaveBeenCalledOnce();
-      expect(router.onRoute).toHaveBeenCalledWith('withParam', 'm2/:id', ['1', null]);
+      expect(router.onRoute).to.have.been.calledOnce;
+      expect(router.onRoute).to.have.been.calledWith('withParam', 'm2/:id', ['1', null]);
     });
 
   });
@@ -188,7 +191,7 @@ describe('app router', function() {
     var router;
 
     beforeEach(function() {
-      spyOn(Router.prototype, 'standardRoute').andCallThrough();
+      sinon.spy(Router.prototype, 'standardRoute');
 
       router = new Router();
       Backbone.history.start();
@@ -197,11 +200,12 @@ describe('app router', function() {
     });
 
     afterEach(function() {
+      Router.prototype.standardRoute.restore();
       Backbone.history.stop();
     });
 
     it('should fire the route callback', function() {
-      expect(Router.prototype.standardRoute).toHaveBeenCalled();
+      expect(Router.prototype.standardRoute).to.have.been.called;
     });
   });
 
@@ -217,8 +221,8 @@ describe('app router', function() {
       });
 
       controller = {
-        showPostsTop: jasmine.createSpy('showPostsTop'),
-        showPost: jasmine.createSpy('showPost')
+        showPostsTop: sinon.stub(),
+        showPost: sinon.stub()
       };
 
       Backbone.history.start();
@@ -232,8 +236,8 @@ describe('app router', function() {
     });
 
     it('should take routes order into account', function() {
-      expect(controller.showPostsTop).toHaveBeenCalled();
-      expect(controller.showPost).not.toHaveBeenCalled();
+      expect(controller.showPostsTop).to.have.been.called;
+      expect(controller.showPost).not.to.have.been.called;
     });
   });
 
@@ -249,8 +253,8 @@ describe('app router', function() {
       });
 
       controller = {
-        showPostsTop: jasmine.createSpy('showPostsTop'),
-        showPost: jasmine.createSpy('showPost')
+        showPostsTop: sinon.stub(),
+        showPost: sinon.stub()
       };
 
       Backbone.history.start();
@@ -264,8 +268,8 @@ describe('app router', function() {
     });
 
     it('should fire the wrong route', function() {
-      expect(controller.showPost).toHaveBeenCalled();
-      expect(controller.showPostsTop).not.toHaveBeenCalled();
+      expect(controller.showPost).to.have.been.called;
+      expect(controller.showPostsTop).not.to.have.been.called;
     });
   });
 
@@ -276,7 +280,7 @@ describe('app router', function() {
       var Router = Backbone.Marionette.AppRouter.extend({});
 
       controller = {
-        showPost: jasmine.createSpy('showPost')
+        showPost: sinon.stub()
       };
 
       Backbone.history.start();
@@ -292,7 +296,7 @@ describe('app router', function() {
     });
 
     it('should fire the route', function() {
-      expect(controller.showPost).toHaveBeenCalled();
+      expect(controller.showPost).to.have.been.called;
     });
   });
 
@@ -304,8 +308,8 @@ describe('app router', function() {
     });
 
     var controller = {
-      originalFunc: jasmine.createSpy('original function'),
-      overrideFunc: jasmine.createSpy('override function')
+      originalFunc: sinon.stub(),
+      overrideFunc: sinon.stub()
     };
 
     beforeEach(function() {
@@ -325,8 +329,8 @@ describe('app router', function() {
     });
 
     it('should override the configured routes and use the constructor param', function() {
-      expect(controller.overrideFunc).toHaveBeenCalled();
-      expect(controller.originalFunc).not.toHaveBeenCalled();
+      expect(controller.overrideFunc).to.have.been.called;
+      expect(controller.originalFunc).not.to.have.been.called;
     });
   });
 

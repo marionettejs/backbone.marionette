@@ -1,6 +1,9 @@
 describe('composite view - childViewContainer', function() {
   'use strict';
 
+  beforeEach(global.setup);
+  afterEach(global.teardown);
+
   var Model = Backbone.Model.extend({});
 
   var Collection = Backbone.Collection.extend({
@@ -47,18 +50,22 @@ describe('composite view - childViewContainer', function() {
         beforeEach(function() {
           compositeView = viewCreation();
 
-          spyOn(compositeView, 'resetChildViewContainer').andCallThrough();
+          sinon.spy(compositeView, 'resetChildViewContainer');
 
           compositeView.render();
         });
 
+        afterEach(function () {
+          compositeView.resetChildViewContainer.restore();
+        });
+
         it('should reset any existing childViewContainer', function() {
-          expect(compositeView.resetChildViewContainer).toHaveBeenCalled();
+          expect(compositeView.resetChildViewContainer).to.have.been.called;
         });
 
         it('should render the items in to the specified container', function() {
-          expect(compositeView.$('ul')).toHaveText(/bar/);
-          expect(compositeView.$('ul')).toHaveText(/baz/);
+          expect(compositeView.$('ul')).to.contain.$text('bar');
+          expect(compositeView.$('ul')).to.contain.$text('baz');
         });
       });
     }
@@ -106,12 +113,15 @@ describe('composite view - childViewContainer', function() {
         collection: collection
       });
 
-      spyOn(compositeView, 'resetChildViewContainer').andCallThrough();
+      sinon.spy(compositeView, 'resetChildViewContainer');
+    });
 
+    afterEach(function () {
+      compositeView.resetChildViewContainer.restore();
     });
 
     it('should throw an error', function() {
-      expect(compositeView.render).toThrow('The specified "childViewContainer" was not found: #missing-container');
+      expect(compositeView.render).to.throw('The specified "childViewContainer" was not found: #missing-container');
     });
 
     describe('and referencing the @ui hash', function() {
@@ -125,7 +135,7 @@ describe('composite view - childViewContainer', function() {
       });
 
       it('should still throw an error', function() {
-        expect(compositeView.render).toThrow('The specified "childViewContainer" was not found: #missing-container');
+        expect(compositeView.render).to.throw('The specified "childViewContainer" was not found: #missing-container');
       });
     });
 
@@ -156,7 +166,7 @@ describe('composite view - childViewContainer', function() {
     });
 
     it('should render the items in to the composite view directly', function() {
-      expect(compositeView.$el).toContainHtml('<ul></ul>');
+      expect(compositeView.$el).to.contain.$html('<ul></ul>');
     });
   });
 
@@ -184,7 +194,7 @@ describe('composite view - childViewContainer', function() {
     });
 
     it('should not render the items', function() {
-      expect(view.children.length).toBe(0);
+      expect(view.children.length).to.equal(0);
     });
   });
 
@@ -218,24 +228,28 @@ describe('composite view - childViewContainer', function() {
       compositeView = new CompositeView({
         collection: collection
       });
-      spyOn(compositeView, '_onCollectionAdd').andCallThrough();
+      sinon.spy(compositeView, '_onCollectionAdd');
+    });
+
+    afterEach(function() {
+      compositeView._onCollectionAdd.restore();
     });
 
     it('should not raise any errors when item is added to collection', function() {
-      expect(addModel).not.toThrow();
+      expect(addModel).not.to.throw;
     });
 
     it('should not call _onCollectionAdd when item is added to collection', function() {
       addModel();
-      expect(compositeView._onCollectionAdd).not.toHaveBeenCalled();
+      expect(compositeView._onCollectionAdd).not.to.have.been.called;
     });
 
     it('should not raise any errors when item is removed from collection', function() {
-      expect(removeModel).not.toThrow();
+      expect(removeModel).not.to.throw;
     });
 
     it('should not raise any errors when collection is reset', function() {
-      expect(resetCollection).not.toThrow();
+      expect(resetCollection).not.to.throw;
     });
 
   });
@@ -255,7 +269,7 @@ describe('composite view - childViewContainer', function() {
     });
 
     it('calls the "childViewContainer" in the context of the composite view', function() {
-      expect(compositeView.childViewContainer).toHaveBeenCalledOn(compositeView);
+      expect(compositeView.childViewContainer).to.have.been.calledOn(compositeView);
     });
 
   });

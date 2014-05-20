@@ -1,6 +1,9 @@
 describe('collection view', function() {
   'use strict';
 
+  beforeEach(global.setup);
+  afterEach(global.teardown);
+
   // Shared View Definitions
   // -----------------------
 
@@ -40,7 +43,7 @@ describe('collection view', function() {
     });
 
     it('should throw an error saying theres not child view', function() {
-      expect(collectionView.render).toThrow('A "childView" must be specified');
+      expect(collectionView.render).to.throw('A "childView" must be specified');
     });
   });
 
@@ -49,7 +52,7 @@ describe('collection view', function() {
     var collectionView, childViewRender;
 
     beforeEach(function() {
-      childViewRender = jasmine.createSpy('childview:render');
+      childViewRender = sinon.stub();
 
       collectionView = new MockCollectionView({
         collection: collection
@@ -57,91 +60,103 @@ describe('collection view', function() {
 
       collectionView.on('childview:render', childViewRender);
 
-      spyOn(collectionView, 'onRender').andCallThrough();
-      spyOn(collectionView, 'onBeforeAddChild').andCallThrough();
-      spyOn(collectionView, 'onAddChild').andCallThrough();
-      spyOn(collectionView, 'onBeforeRender').andCallThrough();
-      spyOn(collectionView, 'trigger').andCallThrough();
-      spyOn(collectionView, 'attachHtml').andCallThrough();
-      spyOn(collectionView.$el, 'append').andCallThrough();
-      spyOn(collectionView, 'startBuffering').andCallThrough();
-      spyOn(collectionView, 'endBuffering').andCallThrough();
+      sinon.spy(collectionView, 'onRender');
+      sinon.spy(collectionView, 'onBeforeAddChild');
+      sinon.spy(collectionView, 'onAddChild');
+      sinon.spy(collectionView, 'onBeforeRender');
+      sinon.spy(collectionView, 'trigger');
+      sinon.spy(collectionView, 'attachHtml');
+      sinon.spy(collectionView.$el, 'append');
+      sinon.spy(collectionView, 'startBuffering');
+      sinon.spy(collectionView, 'endBuffering');
 
       collectionView.render();
     });
 
+    afterEach(function () {
+      collectionView.onRender.restore();
+      collectionView.onBeforeAddChild.restore();
+      collectionView.onAddChild.restore();
+      collectionView.onBeforeRender.restore();
+      collectionView.trigger.restore();
+      collectionView.attachHtml.restore();
+      collectionView.$el.append.restore();
+      collectionView.startBuffering.restore();
+      collectionView.endBuffering.restore();
+    });
+
     it('should only call $el.append once', function() {
-      expect(collectionView.$el.append.callCount).toEqual(1);
+      expect(collectionView.$el.append.callCount).to.equal(1);
     });
 
     it('should only call clear render buffer once', function() {
-      expect(collectionView.endBuffering.callCount).toEqual(1);
+      expect(collectionView.endBuffering.callCount).to.equal(1);
     });
 
     it('should add to render buffer once for each child', function() {
-      expect(collectionView.attachHtml.callCount).toEqual(2);
+      expect(collectionView.attachHtml.callCount).to.equal(2);
     });
 
     it('should append the html for each childView', function() {
-      expect($(collectionView.$el)).toHaveHtml('<span>bar</span><span>baz</span>');
+      expect($(collectionView.$el)).to.have.$html('<span>bar</span><span>baz</span>');
     });
 
     it('should provide the index for each childView, when appending', function() {
-      expect(collectionView.attachHtml.calls[0].args[2]).toBe(0);
+      expect(collectionView.attachHtml.firstCall.args[2]).to.equal(0);
     });
 
     it('should reference each of the rendered view children', function() {
-      expect(_.size(collectionView.children)).toBe(2);
+      expect(_.size(collectionView.children)).to.equal(2);
     });
 
     it('should call "onBeforeRender" before rendering', function() {
-      expect(collectionView.onBeforeRender).toHaveBeenCalled();
+      expect(collectionView.onBeforeRender).to.have.been.called;
     });
 
     it('should call "onRender" after rendering', function() {
-      expect(collectionView.onRender).toHaveBeenCalled();
+      expect(collectionView.onRender).to.have.been.called;
     });
 
     it('should trigger a "before:render" event', function() {
-      expect(collectionView.trigger).toHaveBeenCalledWith('before:render', collectionView);
+      expect(collectionView.trigger).to.have.been.calledWith('before:render', collectionView);
     });
 
     it('should trigger a "before:render:collection" event', function() {
-      expect(collectionView.trigger).toHaveBeenCalledWith('before:render:collection', collectionView);
+      expect(collectionView.trigger).to.have.been.calledWith('before:render:collection', collectionView);
     });
 
     it('should trigger a "render:collection" event', function() {
-      expect(collectionView.trigger).toHaveBeenCalledWith('render:collection', collectionView);
+      expect(collectionView.trigger).to.have.been.calledWith('render:collection', collectionView);
     });
 
     it('should trigger a "render" event', function() {
-      expect(collectionView.trigger).toHaveBeenCalledWith('render', collectionView);
+      expect(collectionView.trigger).to.have.been.calledWith('render', collectionView);
     });
 
     it('should call "onBeforeAddChild" for each childView instance', function() {
       var v1 = collectionView.children.findByIndex(0);
       var v2 = collectionView.children.findByIndex(1);
-      expect(collectionView.onBeforeAddChild).toHaveBeenCalledWith(v1);
-      expect(collectionView.onBeforeAddChild).toHaveBeenCalledWith(v2);
+      expect(collectionView.onBeforeAddChild).to.have.been.calledWith(v1);
+      expect(collectionView.onBeforeAddChild).to.have.been.calledWith(v2);
     });
 
     it('should call "onAddChild" for each childView instance', function() {
       var v1 = collectionView.children.findByIndex(0);
       var v2 = collectionView.children.findByIndex(1);
-      expect(collectionView.onAddChild).toHaveBeenCalledWith(v1);
-      expect(collectionView.onAddChild).toHaveBeenCalledWith(v2);
+      expect(collectionView.onAddChild).to.have.been.calledWith(v1);
+      expect(collectionView.onAddChild).to.have.been.calledWith(v2);
     });
 
     it('should call "onBeforeAddChild" for all childView instances', function() {
-      expect(collectionView.onBeforeAddChild.callCount).toBe(2);
+      expect(collectionView.onBeforeAddChild.callCount).to.equal(2);
     });
 
     it('should call "onAddChild" for all childView instances', function() {
-      expect(collectionView.onAddChild.callCount).toBe(2);
+      expect(collectionView.onAddChild.callCount).to.equal(2);
     });
 
     it('should trigger "childview:render" for each item in the collection', function() {
-      expect(childViewRender.callCount).toBe(2);
+      expect(childViewRender.callCount).to.equal(2);
     });
   });
 
@@ -151,19 +166,25 @@ describe('collection view', function() {
     beforeEach(function() {
       collectionView = new MockCollectionView();
 
-      spyOn(collectionView, 'onRender').andCallThrough();
-      spyOn(collectionView, 'onBeforeRender').andCallThrough();
-      spyOn(collectionView, 'trigger').andCallThrough();
+      sinon.spy(collectionView, 'onRender');
+      sinon.spy(collectionView, 'onBeforeRender');
+      sinon.spy(collectionView, 'trigger');
 
       collectionView.render();
     });
 
+    afterEach(function () {
+      collectionView.onRender.restore();
+      collectionView.onBeforeRender.restore();
+      collectionView.trigger.restore();
+    });
+
     it('should not append any html', function() {
-      expect($(collectionView.$el)).not.toHaveHtml('<span>bar</span><span>baz</span>');
+      expect($(collectionView.$el)).not.to.have.$html('<span>bar</span><span>baz</span>');
     });
 
     it('should not reference any view children', function() {
-      expect(collectionView.children.length).toBe(0);
+      expect(collectionView.children.length).to.equal(0);
     });
   });
 
@@ -178,29 +199,33 @@ describe('collection view', function() {
       });
       collectionView.render();
 
-      childViewRender = jasmine.createSpy('childview:render');
+      childViewRender = sinon.stub();
       collectionView.on('childview:render', childViewRender);
 
-      spyOn(collectionView, 'attachHtml').andCallThrough();
+      sinon.spy(collectionView, 'attachHtml');
 
       model = new Backbone.Model({foo: 'bar'});
       collection.add(model);
     });
 
+    afterEach(function () {
+      collectionView.attachHtml.restore();
+    });
+
     it('should add the model to the list', function() {
-      expect(_.size(collectionView.children)).toBe(1);
+      expect(_.size(collectionView.children)).to.equal(1);
     });
 
     it('should render the model in to the DOM', function() {
-      expect($(collectionView.$el)).toHaveText('bar');
+      expect($(collectionView.$el)).to.contain.$text('bar');
     });
 
     it('should provide the index for each childView, when appending', function() {
-      expect(collectionView.attachHtml.calls[0].args[2]).toBe(0);
+      expect(collectionView.attachHtml.firstCall.args[2]).to.equal(0);
     });
 
     it('should trigger the childview:render event from the collectionView', function() {
-      expect(childViewRender).toHaveBeenCalled();
+      expect(childViewRender).to.have.been.called;
     });
   });
 
@@ -216,29 +241,33 @@ describe('collection view', function() {
       });
       collectionView.render();
 
-      childViewRender = jasmine.createSpy('childview:render');
+      childViewRender = sinon.stub();
       collectionView.on('childview:render', childViewRender);
 
-      spyOn(collectionView, 'attachHtml').andCallThrough();
+      sinon.spy(collectionView, 'attachHtml');
 
       model = new Backbone.Model({foo: 'baz'});
       collection.add(model);
     });
 
+    afterEach(function () {
+      collectionView.attachHtml.restore();
+    });
+
     it('should add the model to the list', function() {
-      expect(_.size(collectionView.children)).toBe(2);
+      expect(_.size(collectionView.children)).to.equal(2);
     });
 
     it('should render the model in to the DOM', function() {
-      expect($(collectionView.$el)).toHaveText('barbaz');
+      expect($(collectionView.$el)).to.contain.$text('barbaz');
     });
 
     it('should provide the index for each child view, when appending', function() {
-      expect(collectionView.attachHtml.calls[0].args[2]).toBe(1);
+      expect(collectionView.attachHtml.firstCall.args[2]).to.equal(1);
     });
 
     it('should trigger the childview:render event from the collectionView', function() {
-      expect(childViewRender).toHaveBeenCalled();
+      expect(childViewRender).to.have.been.called;
     });
   });
 
@@ -276,26 +305,33 @@ describe('collection view', function() {
       beforeRenderSpy = sinon.spy(collectionView, 'onBeforeRenderEmpty');
       renderSpy = sinon.spy(collectionView, 'onRenderEmpty');
 
-      spyOn(childView, 'destroy').andCallThrough();
-      spyOn(EmptyView.prototype, 'render');
+      sinon.spy(childView, 'destroy');
+      sinon.spy(EmptyView.prototype, 'render');
 
       collectionView._onCollectionRemove(model);
     });
 
+    afterEach(function () {
+      collectionView.onBeforeRenderEmpty.restore();
+      collectionView.onRenderEmpty.restore();
+      childView.destroy.restore();
+      EmptyView.prototype.render.restore();
+    });
+
     it('should destroy the models view', function() {
-      expect(childView.destroy).toHaveBeenCalled();
+      expect(childView.destroy).to.have.been.called;
     });
 
     it('should show the empty view', function() {
-      expect(EmptyView.prototype.render.callCount).toBe(1);
+      expect(EmptyView.prototype.render.callCount).to.equal(1);
     });
 
     it('should call "onBeforeRenderEmpty"', function() {
-      expect(beforeRenderSpy).toHaveBeenCalled();
+      expect(beforeRenderSpy).to.have.been.called;
     });
 
     it('should call "onRenderEmpty"', function() {
-      expect(renderSpy).toHaveBeenCalled();
+      expect(renderSpy).to.have.been.called;
     });
   });
 
@@ -320,7 +356,7 @@ describe('collection view', function() {
 
       childView = collectionView.children.findByIndex(0);
 
-      spyOn(childView, 'destroy').andCallThrough();
+      sinon.spy(childView, 'destroy');
 
       onBeforeRemoveChildSpy = sinon.spy(collectionView, 'onBeforeRemoveChild');
       onRemoveChildSpy = sinon.spy(collectionView, 'onRemoveChild');
@@ -329,36 +365,37 @@ describe('collection view', function() {
     });
 
     afterEach(function() {
-      onBeforeRemoveChildSpy.reset();
-      onRemoveChildSpy.reset();
+      childView.destroy.restore();
+      collectionView.onBeforeRemoveChild.restore();
+      collectionView.onRemoveChild.restore();
     });
 
     it('should destroy the models view', function() {
-      expect(childView.destroy).toHaveBeenCalled();
+      expect(childView.destroy).to.have.been.called;
     });
 
     it('should remove the model-views HTML', function() {
-      expect($(collectionView.$el).children().length).toBe(0);
+      expect($(collectionView.$el).children().length).to.equal(0);
     });
 
     it('should execute onBeforeRemoveChild', function() {
-      expect(onBeforeRemoveChildSpy).toHaveBeenCalledOnce();
+      expect(onBeforeRemoveChildSpy).to.have.been.calledOnce;
     });
 
     it('should pass the removed view to onBeforeRemoveChild', function() {
-      expect(onBeforeRemoveChildSpy).toHaveBeenCalledWithExactly(childView);
+      expect(onBeforeRemoveChildSpy).to.have.been.calledWithExactly(childView);
     });
 
     it('should execute onRemoveChild', function() {
-      expect(onRemoveChildSpy).toHaveBeenCalledOnce();
+      expect(onRemoveChildSpy).to.have.been.calledOnce;
     });
 
     it('should pass the removed view to _onCollectionRemove', function() {
-      expect(onRemoveChildSpy).toHaveBeenCalledWithExactly(childView);
+      expect(onRemoveChildSpy).to.have.been.calledWithExactly(childView);
     });
 
     it('should execute onBeforeRemoveChild before _onCollectionRemove', function() {
-      expect(onBeforeRemoveChildSpy).toHaveBeenCalledBefore(onRemoveChildSpy);
+      expect(onBeforeRemoveChildSpy).to.have.been.calledBefore(onRemoveChildSpy);
     });
 
   });
@@ -376,7 +413,7 @@ describe('collection view', function() {
     var collection;
     var childView;
     var childModel;
-    var destroyHandler = jasmine.createSpy();
+    var destroyHandler = sinon.stub();
 
     beforeEach(function() {
 
@@ -395,16 +432,16 @@ describe('collection view', function() {
       collectionView.listenTo(collection, 'foo', collectionView.someCallback);
       collectionView.listenTo(collectionView, 'item:foo', collectionView.someItemViewCallback);
 
-      spyOn(childView, 'destroy').andCallThrough();
-      spyOn(collectionView, '_onCollectionRemove').andCallThrough();
-      spyOn(collectionView, 'stopListening').andCallThrough();
-      spyOn(collectionView, 'remove').andCallThrough();
-      spyOn(collectionView, 'someCallback').andCallThrough();
-      spyOn(collectionView, 'someItemViewCallback').andCallThrough();
-      spyOn(collectionView, 'destroy').andCallThrough();
-      spyOn(collectionView, 'onDestroy').andCallThrough();
-      spyOn(collectionView, 'onBeforeDestroy').andCallThrough();
-      spyOn(collectionView, 'trigger').andCallThrough();
+      sinon.spy(childView, 'destroy');
+      sinon.spy(collectionView, '_onCollectionRemove');
+      sinon.spy(collectionView, 'stopListening');
+      sinon.spy(collectionView, 'remove');
+      sinon.spy(collectionView, 'someCallback');
+      sinon.spy(collectionView, 'someItemViewCallback');
+      sinon.spy(collectionView, 'destroy');
+      sinon.spy(collectionView, 'onDestroy');
+      sinon.spy(collectionView, 'onBeforeDestroy');
+      sinon.spy(collectionView, 'trigger');
 
       collectionView.bind('destroy:collection', destroyHandler);
 
@@ -416,56 +453,69 @@ describe('collection view', function() {
       collection.remove(childModel);
     });
 
+    afterEach(function () {
+      childView.destroy.restore();
+      collectionView._onCollectionRemove.restore();
+      collectionView.stopListening.restore();
+      collectionView.remove.restore();
+      collectionView.someCallback.restore();
+      collectionView.someItemViewCallback.restore();
+      collectionView.destroy.restore();
+      collectionView.onDestroy.restore();
+      collectionView.onBeforeDestroy.restore();
+      collectionView.trigger.restore();
+    });
+
     it('should destroy all of the child views', function() {
-      expect(childView.destroy).toHaveBeenCalled();
+      expect(childView.destroy).to.have.been.called;
     });
 
     it('should unbind all the listenTo events', function() {
-      expect(collectionView.stopListening).toHaveBeenCalled();
+      expect(collectionView.stopListening).to.have.been.called;
     });
 
     it('should unbind all collection events for the view', function() {
-      expect(collectionView.someCallback).not.toHaveBeenCalled();
+      expect(collectionView.someCallback).not.to.have.been.called;
     });
 
     it('should unbind all item-view events for the view', function() {
-      expect(collectionView.someItemViewCallback).not.toHaveBeenCalled();
+      expect(collectionView.someItemViewCallback).not.to.have.been.called;
     });
 
     it('should not retain any references to its children', function() {
-      expect(_.size(collectionView.children)).toBe(0);
+      expect(_.size(collectionView.children)).to.equal(0);
     });
 
     it('should unbind any listener to custom view events', function() {
-      expect(collectionView.stopListening).toHaveBeenCalled();
+      expect(collectionView.stopListening).to.have.been.called;
     });
 
     it('should remove the views EL from the DOM', function() {
-      expect(collectionView.remove).toHaveBeenCalled();
+      expect(collectionView.remove).to.have.been.called;
     });
 
     it('should call "onDestroy" if provided', function() {
-      expect(collectionView.onDestroy).toHaveBeenCalled();
+      expect(collectionView.onDestroy).to.have.been.called;
     });
 
     it('should call "onBeforeDestroy" if provided', function() {
-      expect(collectionView.onBeforeDestroy).toHaveBeenCalled();
+      expect(collectionView.onBeforeDestroy).to.have.been.called;
     });
 
     it('should trigger a "before:destroy" event', function() {
-      expect(collectionView.trigger).toHaveBeenCalledWith('before:destroy:collection');
+      expect(collectionView.trigger).to.have.been.calledWith('before:destroy:collection');
     });
 
     it('should trigger a "destroy"', function() {
-      expect(collectionView.trigger).toHaveBeenCalledWith('destroy:collection');
+      expect(collectionView.trigger).to.have.been.calledWith('destroy:collection');
     });
 
     it('should call the handlers add to the destroyed event', function() {
-      expect(destroyHandler).wasCalled();
+      expect(destroyHandler).to.have.been.called;
     });
 
     it('should throw an error saying the views been destroyed if render is attempted again', function() {
-      expect(collectionView.render).toThrow('Cannot use a view thats already been destroyed.');
+      expect(collectionView.render).to.throw('Cannot use a view thats already been destroyed.');
     });
   });
 
@@ -481,13 +531,17 @@ describe('collection view', function() {
       collectionView.render();
 
       childView = collectionView.children.findByIndex(0);
-      spyOn(childView, 'remove').andCallThrough();
+      sinon.spy(childView, 'remove');
 
       collectionView.destroyChildren();
     });
 
+    afterEach(function() {
+      childView.remove.restore();
+    });
+
     it('should call the "remove" method', function() {
-      expect(childView.remove).toHaveBeenCalled();
+      expect(childView.remove).to.have.been.called;
     });
 
   });
@@ -513,7 +567,7 @@ describe('collection view', function() {
     });
 
     it('should append via the overridden method', function() {
-      expect($(collectionView.$el)).toHaveHtml('<span>baz</span><span>bar</span>');
+      expect(collectionView.$el).to.contain.$html('<span>baz</span><span>bar</span>');
     });
   });
 
@@ -521,7 +575,7 @@ describe('collection view', function() {
     var model, collection, collectionView, childView, someEventSpy;
 
     beforeEach(function() {
-      someEventSpy = jasmine.createSpy('some:event spy');
+      someEventSpy = sinon.stub();
 
       model = new Backbone.Model({foo: 'bar'});
       collection = new Backbone.Collection([model]);
@@ -530,17 +584,21 @@ describe('collection view', function() {
       collectionView.on('childview:some:event', someEventSpy);
       collectionView.render();
 
-      spyOn(collectionView, 'trigger').andCallThrough();
+      sinon.spy(collectionView, 'trigger');
       childView = collectionView.children.findByIndex(0);
       childView.trigger('some:event', 'test', model);
     });
 
+    afterEach(function() {
+      collectionView.trigger.restore();
+    });
+
     it('should bubble up through the parent collection view', function() {
-      expect(collectionView.trigger).toHaveBeenCalledWith('childview:some:event', childView, 'test', model);
+      expect(collectionView.trigger).to.have.been.calledWith('childview:some:event', childView, 'test', model);
     });
 
     it('should provide the child view that triggered the event, including other relevant parameters', function() {
-      expect(someEventSpy).toHaveBeenCalledWith(childView, 'test', model);
+      expect(someEventSpy).to.have.been.calledWith(childView, 'test', model);
     });
   });
 
@@ -552,7 +610,7 @@ describe('collection view', function() {
     });
 
     beforeEach(function() {
-      someEventSpy = jasmine.createSpy('some:event spy');
+      someEventSpy = sinon.stub();
 
       model = new Backbone.Model({foo: 'bar'});
       collection = new Backbone.Collection([model]);
@@ -561,17 +619,21 @@ describe('collection view', function() {
       collectionView.on('myPrefix:some:event', someEventSpy);
       collectionView.render();
 
-      spyOn(collectionView, 'trigger').andCallThrough();
+      sinon.spy(collectionView, 'trigger');
       childView = collectionView.children.findByIndex(0);
       childView.trigger('some:event', 'test', model);
     });
 
+    afterEach(function() {
+      collectionView.trigger.restore();
+    });
+
     it('should bubble up through the parent collection view', function() {
-      expect(collectionView.trigger).toHaveBeenCalledWith('myPrefix:some:event', childView, 'test', model);
+      expect(collectionView.trigger).to.have.been.calledWith('myPrefix:some:event', childView, 'test', model);
     });
 
     it('should provide the child view that triggered the event, including other relevant parameters', function() {
-      expect(someEventSpy).toHaveBeenCalledWith(childView, 'test', model);
+      expect(someEventSpy).to.have.been.calledWith(childView, 'test', model);
     });
   });
 
@@ -594,8 +656,8 @@ describe('collection view', function() {
       var beforeSpy, renderSpy;
 
       beforeEach(function() {
-        beforeSpy = jasmine.createSpy('before:render spy');
-        renderSpy = jasmine.createSpy('render spy');
+        beforeSpy = sinon.stub();
+        renderSpy = sinon.stub();
 
         collectionView.on('childview:before:render', beforeSpy);
         collectionView.on('childview:render', renderSpy);
@@ -609,8 +671,8 @@ describe('collection view', function() {
         // the first being the child view which triggered the event
         // and the second being the event's owner.  It just so happens to be the
         // same view.
-        expect(beforeSpy).toHaveBeenCalledWith(childView, childView);
-        expect(renderSpy).toHaveBeenCalledWith(childView, childView);
+        expect(beforeSpy).to.have.been.calledWith(childView, childView);
+        expect(renderSpy).to.have.been.calledWith(childView, childView);
       });
     });
 
@@ -618,8 +680,8 @@ describe('collection view', function() {
       var beforeSpy, destroySpy;
 
       beforeEach(function() {
-        beforeSpy = jasmine.createSpy('before:destroy spy');
-        destroySpy = jasmine.createSpy('destroy spy');
+        beforeSpy = sinon.stub();
+        destroySpy = sinon.stub();
 
         collectionView.on('childview:before:destroy', beforeSpy);
         collectionView.on('childview:destroy', destroySpy);
@@ -630,8 +692,8 @@ describe('collection view', function() {
       });
 
       it('should bubble up through the parent collection view', function() {
-        expect(beforeSpy).toHaveBeenCalledWith(childView);
-        expect(destroySpy).toHaveBeenCalledWith(childView);
+        expect(beforeSpy).to.have.been.calledWith(childView);
+        expect(destroySpy).to.have.been.calledWith(childView);
       });
     });
   });
@@ -661,11 +723,11 @@ describe('collection view', function() {
       var bindings = collectionView.bindings || {};
       expect(_.any(bindings, function(binding) {
         return binding.obj === childView;
-      })).toBe(false);
+      })).to.be.false;
     });
 
     it('should not retain any references to this view', function() {
-      expect(_.size(collectionView.children)).toBe(0);
+      expect(_.size(collectionView.children)).to.equal(0);
     });
   });
 
@@ -691,14 +753,14 @@ describe('collection view', function() {
     });
 
     it('should not retain any references to the previous views', function() {
-      expect(_.size(collectionView.children)).toBe(0);
+      expect(_.size(collectionView.children)).to.equal(0);
     });
 
     it('should not retain any bindings to the previous views', function() {
       var bindings = collectionView.bindings || {};
       expect(_.any(bindings, function(binding) {
         return binding.obj === childView;
-      })).toBe(false);
+      })).to.be.false;
     });
   });
 
@@ -746,22 +808,23 @@ describe('collection view', function() {
     afterEach(function() {
       ChildView.prototype.onShow.restore();
       ChildView.prototype.onDomRefresh.restore();
+      collectionView.attachBuffer.restore();
     });
 
     it('should not use the render buffer', function() {
-      expect(collectionView.attachBuffer).not.toHaveBeenCalled();
+      expect(collectionView.attachBuffer).not.to.have.been.called;
     });
 
     it('should call the "onShow" method of the child view', function() {
-      expect(ChildView.prototype.onShow).toHaveBeenCalled();
+      expect(ChildView.prototype.onShow).to.have.been.called;
     });
 
     it('should call the childs "onShow" method with itself as the context', function() {
-      expect(ChildView.prototype.onShow).toHaveBeenCalledOn(view);
+      expect(ChildView.prototype.onShow).to.have.been.calledOn(view);
     });
 
     it('should call the childs "onDomRefresh" method with itself as the context', function() {
-      expect(ChildView.prototype.onDomRefresh).toHaveBeenCalled();
+      expect(ChildView.prototype.onDomRefresh).to.have.been.called;
     });
   });
 
@@ -786,7 +849,7 @@ describe('collection view', function() {
     });
 
     it('should use the specified childView for each item', function() {
-      expect(itemView.MyItemView).toBe(true);
+      expect(itemView.MyItemView).to.be.true;
     });
   });
 
@@ -802,7 +865,7 @@ describe('collection view', function() {
     });
 
     beforeEach(function() {
-      someEventSpy = jasmine.createSpy('some:event spy');
+      someEventSpy = sinon.stub();
 
       model = new Backbone.Model({foo: 'bar'});
       collection = new Backbone.Collection([model]);
@@ -811,17 +874,21 @@ describe('collection view', function() {
       collectionView.someEvent = someEventSpy;
       collectionView.render();
 
-      spyOn(collectionView, 'trigger').andCallThrough();
+      sinon.spy(collectionView, 'trigger');
       childView = collectionView.children.findByIndex(0);
       childView.trigger('some:event', 'test', model);
     });
 
+    afterEach(function() {
+      collectionView.trigger.restore();
+    });
+
     it('should bubble up through the parent collection view', function() {
-      expect(collectionView.trigger).toHaveBeenCalledWith('childview:some:event', childView, 'test', model);
+      expect(collectionView.trigger).to.have.been.calledWith('childview:some:event', childView, 'test', model);
     });
 
     it('should provide the child view that triggered the event, including other relevant parameters', function() {
-      expect(someEventSpy).toHaveBeenCalledWith(childView, 'test', model);
+      expect(someEventSpy).to.have.been.calledWith(childView, 'test', model);
     });
   });
 
@@ -829,7 +896,7 @@ describe('collection view', function() {
     var model, collection, collectionView, childView, onSomeEventSpy;
 
     beforeEach(function() {
-      onSomeEventSpy = jasmine.createSpy('some:event spy');
+      onSomeEventSpy = sinon.stub();
 
       var CollectionView = MockCollectionView.extend({
         childEvents: {
@@ -843,17 +910,21 @@ describe('collection view', function() {
       collectionView = new CollectionView({collection: collection});
       collectionView.render();
 
-      spyOn(collectionView, 'trigger').andCallThrough();
+      sinon.spy(collectionView, 'trigger');
       childView = collectionView.children.findByIndex(0);
       childView.trigger('some:event', 'test', model);
     });
 
+    afterEach(function() {
+      collectionView.trigger.restore();
+    });
+
     it('should bubble up through the parent collection view', function() {
-      expect(collectionView.trigger).toHaveBeenCalledWith('childview:some:event', childView, 'test', model);
+      expect(collectionView.trigger).to.have.been.calledWith('childview:some:event', childView, 'test', model);
     });
 
     it('should provide the child view that triggered the event, including other relevant parameters', function() {
-      expect(onSomeEventSpy).toHaveBeenCalledWith(childView, 'test', model);
+      expect(onSomeEventSpy).to.have.been.calledWith(childView, 'test', model);
     });
   });
 
@@ -867,7 +938,7 @@ describe('collection view', function() {
     });
 
     beforeEach(function() {
-      someEventSpy = jasmine.createSpy('some:event spy');
+      someEventSpy = sinon.stub();
 
       model = new Backbone.Model({foo: 'bar'});
       collection = new Backbone.Collection([model]);
@@ -876,17 +947,21 @@ describe('collection view', function() {
       collectionView.someEvent = someEventSpy;
       collectionView.render();
 
-      spyOn(collectionView, 'trigger').andCallThrough();
+      sinon.spy(collectionView, 'trigger');
       childView = collectionView.children.findByIndex(0);
       childView.trigger('some:event', 'test', model);
     });
 
+    afterEach(function() {
+      collectionView.trigger.restore();
+    });
+
     it('should bubble up through the parent collection view', function() {
-      expect(collectionView.trigger).toHaveBeenCalledWith('childview:some:event', childView, 'test', model);
+      expect(collectionView.trigger).to.have.been.calledWith('childview:some:event', childView, 'test', model);
     });
 
     it('should provide the child view that triggered the event, including other relevant parameters', function() {
-      expect(someEventSpy).toHaveBeenCalledWith(childView, 'test', model);
+      expect(someEventSpy).to.have.been.calledWith(childView, 'test', model);
     });
   });
 
@@ -915,12 +990,16 @@ describe('collection view', function() {
     var constructor, collectionView;
 
     beforeEach(function() {
-      constructor = spyOn(Marionette, 'View');
+      constructor = sinon.spy(Marionette, 'View');
       collectionView = new Marionette.CollectionView();
     });
 
+    afterEach(function () {
+      Marionette.View.restore();
+    });
+
     it('calls the parent Marionette.Views constructor function on instantiation', function() {
-      expect(constructor).toHaveBeenCalled();
+      expect(constructor).to.have.been.called;
     });
   });
 
@@ -946,13 +1025,13 @@ describe('collection view', function() {
     });
 
     it('collectionView should not be buffering on childView show', function() {
-      expect(isBuffering).toBe(false);
+      expect(isBuffering).to.be.false;
     });
 
     it('collectionView should not be buffering after reset on childView show', function() {
       isBuffering = void 0;
       collection.reset([{}]);
-      expect(isBuffering).toBe(false);
+      expect(isBuffering).to.be.false;
     });
 
     describe('child view show events', function() {
@@ -964,13 +1043,13 @@ describe('collection view', function() {
 
       it('collectionView should trigger the show events when the buffer is inserted and the view has been shown', function() {
         collection.reset([{}]);
-        expect(showCalled).toEqual(true);
+        expect(showCalled).to.equal(true);
       });
 
       it('collectionView should not trigger the show events if the view has not been shown', function() {
         collectionView = new CollectionView({collection: collection});
         collectionView.render();
-        expect(showCalled).toEqual(false);
+        expect(showCalled).to.equal(false);
       });
     });
   });
@@ -1012,19 +1091,19 @@ describe('collection view', function() {
     });
 
     it('should not fail when adding models to an unrendered collectionView', function() {
-      expect(addModel).not.toThrow();
+      expect(addModel).not.to.throw;
     });
 
     it('should not fail when an item is removed from an unrendered collectionView', function() {
-      expect(removeModel).not.toThrow();
+      expect(removeModel).not.to.throw;
     });
 
     it('should not fail when a collection is reset on an unrendered collectionView', function() {
-      expect(resetCollection).not.toThrow();
+      expect(resetCollection).not.to.throw;
     });
 
     it('should not fail when a collection is synced on an unrendered collectionView', function() {
-      expect(sync).not.toThrow();
+      expect(sync).not.to.throw;
     });
   });
 
@@ -1044,7 +1123,7 @@ describe('collection view', function() {
     });
 
     it('should return the child view for the model', function() {
-      expect(childView.$el).toHaveText('bar');
+      expect(childView.$el).to.contain.$text('bar');
     });
   });
 

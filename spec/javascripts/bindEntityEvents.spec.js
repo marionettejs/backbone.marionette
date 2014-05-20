@@ -1,6 +1,9 @@
 describe('Marionette.bindEntityEvents', function() {
   'use strict';
 
+  beforeEach(global.setup);
+  afterEach(global.teardown);
+
   var target, entity;
 
   beforeEach(function() {
@@ -19,7 +22,7 @@ describe('Marionette.bindEntityEvents', function() {
     });
 
     it('shouldnt bind any events', function() {
-      expect(target.listenTo).not.toHaveBeenCalled();
+      expect(target.listenTo).not.to.have.been.called;
     });
   });
 
@@ -29,7 +32,7 @@ describe('Marionette.bindEntityEvents', function() {
     });
 
     it('shouldnt bind any events', function() {
-      expect(target.listenTo).not.toHaveBeenCalled();
+      expect(target.listenTo).not.to.have.been.called;
     });
   });
 
@@ -45,15 +48,15 @@ describe('Marionette.bindEntityEvents', function() {
     });
 
     it('should evaluate bindings function', function() {
-      expect(bindingsSpy).toHaveBeenCalled();
+      expect(bindingsSpy).to.have.been.called;
     });
 
     it('should evaluate bindings function in context of target', function() {
-      expect(bindingsSpy.calledOn(target)).toBe(true);
+      expect(bindingsSpy.calledOn(target)).to.be.true;
     });
 
     it('should bind events returned from bindings function to targets handlers', function() {
-      expect(target.listenTo).toHaveBeenCalledWith(entity, 'eventNameMock', target.foo);
+      expect(target.listenTo).to.have.been.calledWith(entity, 'eventNameMock', target.foo);
     });
   });
 
@@ -64,7 +67,7 @@ describe('Marionette.bindEntityEvents', function() {
       });
 
       it('should bind an event to targets handler', function() {
-        expect(target.listenTo).toHaveBeenCalledWith(entity, 'eventNameMock', target.foo);
+        expect(target.listenTo).to.have.been.calledWith(entity, 'eventNameMock', target.foo);
       });
     });
 
@@ -75,7 +78,7 @@ describe('Marionette.bindEntityEvents', function() {
         });
 
         it('should bind an event to targets handler', function() {
-          expect(target.listenTo).toHaveBeenCalledWith(entity, 'eventNameMock', target.foo);
+          expect(target.listenTo).to.have.been.calledWith(entity, 'eventNameMock', target.foo);
         });
       });
 
@@ -85,11 +88,11 @@ describe('Marionette.bindEntityEvents', function() {
         });
 
         it('should bind first event to targets handler', function() {
-          expect(target.listenTo).toHaveBeenCalledWith(entity, 'eventNameMock', target.foo);
+          expect(target.listenTo).to.have.been.calledWith(entity, 'eventNameMock', target.foo);
         });
 
         it('should bind second event to targets handler', function() {
-          expect(target.listenTo).toHaveBeenCalledWith(entity, 'eventNameMock', target.bar);
+          expect(target.listenTo).to.have.been.calledWith(entity, 'eventNameMock', target.bar);
         });
       });
 
@@ -97,7 +100,7 @@ describe('Marionette.bindEntityEvents', function() {
         it('should throw an exception', function() {
           expect(function() {
             Marionette.bindEntityEvents(target, entity, {'eventNameMock': 'notExistedMethod'});
-          }).toThrow('Method "notExistedMethod" was configured as an event handler, but does not exist.');
+          }).to.throw('Method "notExistedMethod" was configured as an event handler, but does not exist.');
         });
       });
     });
@@ -112,11 +115,11 @@ describe('Marionette.bindEntityEvents', function() {
     });
 
     it('should bind first event to targets handler', function() {
-      expect(target.listenTo).toHaveBeenCalledWith(entity, 'firstEventNameMock', target.foo);
+      expect(target.listenTo).to.have.been.calledWith(entity, 'firstEventNameMock', target.foo);
     });
 
     it('should bind second event to targets handler', function() {
-      expect(target.listenTo).toHaveBeenCalledWith(entity, 'secondEventNameMock', target.bar);
+      expect(target.listenTo).to.have.been.calledWith(entity, 'secondEventNameMock', target.bar);
     });
   });
 
@@ -134,7 +137,7 @@ describe('Marionette.bindEntityEvents', function() {
     });
 
     it('should bind an event to target\'s handler', function() {
-      expect(target.listenTo).toHaveBeenCalledWith(entity, 'eventNameMock', target.foo);
+      expect(target.listenTo).to.have.been.calledWith(entity, 'eventNameMock', target.foo);
     });
   });
 });

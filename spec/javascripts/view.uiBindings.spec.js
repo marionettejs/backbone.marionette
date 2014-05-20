@@ -1,5 +1,8 @@
 describe('view ui elements', function() {
 
+  beforeEach(global.setup);
+  afterEach(global.teardown);
+
   describe('when accessing a ui element from the hash', function() {
     var View = Backbone.Marionette.ItemView.extend({
       template: '#item-with-checkbox',
@@ -27,11 +30,11 @@ describe('view ui elements', function() {
     });
 
     it('should return its jQuery selector if it can be found', function() {
-      expect(view.ui.checkbox.attr('type')).toEqual('checkbox');
+      expect(view.ui.checkbox.attr('type')).to.equal('checkbox');
     });
 
     it('should return an empty jQuery object if it cannot be found', function() {
-      expect(view.ui.unfoundElement.length).toEqual(0);
+      expect(view.ui.unfoundElement.length).to.equal(0);
     });
 
   });
@@ -68,7 +71,7 @@ describe('view ui elements', function() {
     });
 
     it('should return an up-to-date selector on subsequent renders', function() {
-      expect(view.ui.checkbox.attr('checked')).toBeDefined();
+      expect(view.ui.checkbox.attr('checked')).to.exist;
     });
 
   });
@@ -104,16 +107,16 @@ describe('view ui elements', function() {
 
 
     it('should return its jQuery selector if it can be found', function() {
-      expect(view.ui.checkbox.attr('type')).toEqual('checkbox');
+      expect(view.ui.checkbox.attr('type')).to.equal('checkbox');
     });
 
     it('should return an empty jQuery object if it cannot be found', function() {
-      expect(view.ui.unfoundElement.length).toEqual(0);
+      expect(view.ui.unfoundElement.length).to.equal(0);
     });
 
     it('should return an up-to-date selector on subsequent renders', function() {
       // asserting state before subsequent render
-      expect(view.ui.checkbox.attr('checked')).toBeUndefined();
+      expect(view.ui.checkbox.attr('checked')).to.be.undefined;
 
       // setting the model 'done' attribute to true will cause the 'checked' attribute
       // to be added to the checkbox element in the subsequent render.
@@ -122,7 +125,7 @@ describe('view ui elements', function() {
 
       // since the ui elements selectors are refreshed after each render then the associated selector
       // should point to the newly rendered checkbox element that has the 'checked' attribute.
-      expect(view.ui.checkbox.attr('checked')).toBeDefined();
+      expect(view.ui.checkbox.attr('checked')).to.exist;
     });
 
   });
@@ -147,7 +150,7 @@ describe('view ui elements', function() {
     });
 
     it('should not affect future ui bindings', function() {
-      expect(view2.ui.foo).toBe('#foo');
+      expect(view2.ui.foo).to.equal('#foo');
     });
   });
 
@@ -172,7 +175,7 @@ describe('view ui elements', function() {
     });
 
     it('should unbind UI elements and reset them to the selector', function() {
-      expect(view.ui.foo).toBe('#foo');
+      expect(view.ui.foo).to.equal('#foo');
     });
   });
 });

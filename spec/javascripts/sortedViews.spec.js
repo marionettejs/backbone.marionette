@@ -1,6 +1,9 @@
 describe('collection/composite view sorting', function(){
   'use strict';
 
+  beforeEach(global.setup);
+  afterEach(global.teardown);
+
   // Shared View Definitions
   // -----------------------
 
@@ -54,12 +57,12 @@ describe('collection/composite view sorting', function(){
       });
 
       it('should add the model to the list', function(){
-        expect(_.size(collectionView.children)).toBe(4);
+        expect(_.size(collectionView.children)).to.equal(4);
       });
 
       it('should have the order in the dom', function(){
-        expect(getCollectionChildren(collectionView.$el)).toEqual('abar,bbar,fbar,wbar');
-        expect(getCollectionChildren(compositeView.$el)).toEqual('abar,bbar,fbar,wbar');
+        expect(getCollectionChildren(collectionView.$el)).to.equal('abar,bbar,fbar,wbar');
+        expect(getCollectionChildren(compositeView.$el)).to.equal('abar,bbar,fbar,wbar');
       });
     });
 
@@ -70,12 +73,12 @@ describe('collection/composite view sorting', function(){
       });
 
       it('should add the model to the list', function(){
-        expect(_.size(collectionView.children)).toBe(4);
+        expect(_.size(collectionView.children)).to.equal(4);
       });
 
       it('should ignore the sorted order in the dom', function(){
-        expect(getCollectionChildren(collectionView.$el)).toEqual('abar,bbar,wbar,fbar');
-        expect(getCollectionChildren(compositeView.$el)).toEqual('abar,bbar,wbar,fbar');
+        expect(getCollectionChildren(collectionView.$el)).to.equal('abar,bbar,wbar,fbar');
+        expect(getCollectionChildren(compositeView.$el)).to.equal('abar,bbar,wbar,fbar');
       });
 
       describe('and adding another', function(){
@@ -85,8 +88,8 @@ describe('collection/composite view sorting', function(){
         });
 
         it('should render the sorted order in the dom', function(){
-          expect(getCollectionChildren(collectionView.$el)).toEqual('abar,bbar,dbar,fbar,wbar');
-          expect(getCollectionChildren(compositeView.$el)).toEqual('abar,bbar,dbar,fbar,wbar');
+          expect(getCollectionChildren(collectionView.$el)).to.equal('abar,bbar,dbar,fbar,wbar');
+          expect(getCollectionChildren(compositeView.$el)).to.equal('abar,bbar,dbar,fbar,wbar');
         });
       });
     });
@@ -98,12 +101,12 @@ describe('collection/composite view sorting', function(){
       });
 
       it('shouldn\'t add the model to the list', function(){
-        expect(_.size(collectionView.children)).toBe(3);
+        expect(_.size(collectionView.children)).to.equal(3);
       });
 
       it('should have the order in the dom', function(){
-        expect(getCollectionChildren(collectionView.$el)).toEqual('abar,bbar,wbar');
-        expect(getCollectionChildren(compositeView.$el)).toEqual('abar,bbar,wbar');
+        expect(getCollectionChildren(collectionView.$el)).to.equal('abar,bbar,wbar');
+        expect(getCollectionChildren(compositeView.$el)).to.equal('abar,bbar,wbar');
       });
 
       describe('and then adding another', function () {
@@ -113,12 +116,12 @@ describe('collection/composite view sorting', function(){
         });
 
         it('should add both models to the list', function(){
-          expect(_.size(collectionView.children)).toBe(5);
+          expect(_.size(collectionView.children)).to.equal(5);
         });
 
         it('should have the order in the dom', function(){
-          expect(getCollectionChildren(collectionView.$el)).toEqual('abar,bbar,dbar,fbar,wbar');
-          expect(getCollectionChildren(compositeView.$el)).toEqual('abar,bbar,dbar,fbar,wbar');
+          expect(getCollectionChildren(collectionView.$el)).to.equal('abar,bbar,dbar,fbar,wbar');
+          expect(getCollectionChildren(compositeView.$el)).to.equal('abar,bbar,dbar,fbar,wbar');
         });
       });
     });
@@ -130,24 +133,28 @@ describe('collection/composite view sorting', function(){
       });
 
       it('should have the order in the dom', function(){
-        expect(getCollectionChildren(collectionView.$el)).toEqual('abar,wbar');
-        expect(getCollectionChildren(compositeView.$el)).toEqual('abar,wbar');
+        expect(getCollectionChildren(collectionView.$el)).to.equal('abar,wbar');
+        expect(getCollectionChildren(compositeView.$el)).to.equal('abar,wbar');
       });
 
       describe('and then adding another', function(){
         beforeEach(function(){
           model = new Backbone.Model({foo: 'bbar'});
-          spyOn(collectionView, 'render').andCallThrough();
+          sinon.spy(collectionView, 'render');
           collection.add(model);
         });
 
+        afterEach(function() {
+          collectionView.render.restore();
+        });
+
         it('should have the order in the dom', function(){
-          expect(getCollectionChildren(collectionView.$el)).toEqual('abar,bbar,wbar');
-          expect(getCollectionChildren(compositeView.$el)).toEqual('abar,bbar,wbar');
+          expect(getCollectionChildren(collectionView.$el)).to.equal('abar,bbar,wbar');
+          expect(getCollectionChildren(compositeView.$el)).to.equal('abar,bbar,wbar');
         });
 
         it('should not call render', function(){
-           expect(collectionView.render.callCount).toEqual(0);
+           expect(collectionView.render.callCount).to.equal(0);
         });
 
       });
@@ -165,8 +172,8 @@ describe('collection/composite view sorting', function(){
         });
 
         it('should have the order in the dom', function(){
-          expect(getCollectionChildren(collectionView.$el)).toEqual('bbar,wbar,abar');
-          expect(getCollectionChildren(compositeView.$el)).toEqual('bbar,wbar,abar');
+          expect(getCollectionChildren(collectionView.$el)).to.equal('bbar,wbar,abar');
+          expect(getCollectionChildren(compositeView.$el)).to.equal('bbar,wbar,abar');
         });
       });
 
@@ -177,8 +184,8 @@ describe('collection/composite view sorting', function(){
         });
 
         it('should have the order in the dom', function(){
-          expect(getCollectionChildren(collectionView.$el)).toEqual('bbar,wbar,fbar,abar');
-          expect(getCollectionChildren(compositeView.$el)).toEqual('bbar,wbar,fbar,abar');
+          expect(getCollectionChildren(collectionView.$el)).to.equal('bbar,wbar,fbar,abar');
+          expect(getCollectionChildren(compositeView.$el)).to.equal('bbar,wbar,fbar,abar');
         });
       });
     });
@@ -208,12 +215,12 @@ describe('collection/composite view sorting', function(){
 
       describe('and adding a model', function(){
         it('should add the model to the list', function(){
-          expect(_.size(collectionView.children)).toBe(4);
+          expect(_.size(collectionView.children)).to.equal(4);
         });
 
         it('should have the order in the dom', function(){
-          expect(getCollectionChildren(collectionView.$el)).toEqual('abar,bbar,wbar,fbar');
-          expect(getCollectionChildren(compositeView.$el)).toEqual('abar,bbar,wbar,fbar');
+          expect(getCollectionChildren(collectionView.$el)).to.equal('abar,bbar,wbar,fbar');
+          expect(getCollectionChildren(compositeView.$el)).to.equal('abar,bbar,wbar,fbar');
         });
       });
     });

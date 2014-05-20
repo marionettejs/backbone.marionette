@@ -1,24 +1,27 @@
 describe('destroying views', function() {
   'use strict';
 
+  beforeEach(global.setup);
+  afterEach(global.teardown);
+
   describe('when destroying a Marionette.View multiple times', function() {
     var View = Marionette.View.extend({});
     var view;
 
     beforeEach(function() {
       view = new View();
-      view.onBeforeDestroy = jasmine.createSpy('before destroy');
+      view.onBeforeDestroy = sinon.stub();
 
       view.destroy();
       view.destroy();
     });
 
     it('should only run the destroying code once', function() {
-      expect(view.onBeforeDestroy).toHaveBeenCalled();
+      expect(view.onBeforeDestroy).to.have.been.called;
     });
 
     it('should mark the view as destroyed', function() {
-      expect(view.isDestroyed).toBe(true);
+      expect(view.isDestroyed).to.be.true;
     });
   });
 
@@ -28,18 +31,18 @@ describe('destroying views', function() {
 
     beforeEach(function() {
       view = new View();
-      view.onBeforeDestroy = jasmine.createSpy('before destroy');
+      view.onBeforeDestroy = sinon.stub();
 
       view.destroy();
       view.destroy();
     });
 
     it('should only run the destroying code once', function() {
-      expect(view.onBeforeDestroy).toHaveBeenCalled();
+      expect(view.onBeforeDestroy).to.have.been.called;
     });
 
     it('should mark the view as destroyed', function() {
-      expect(view.isDestroyed).toBe(true);
+      expect(view.isDestroyed).to.be.true;
     });
   });
 
@@ -51,14 +54,14 @@ describe('destroying views', function() {
 
     beforeEach(function() {
       view = new View();
-      view.onBeforeRender = jasmine.createSpy('before render');
-      view.onRender = jasmine.createSpy('on render');
+      view.onBeforeRender = sinon.stub();
+      view.onRender = sinon.stub();
 
       view.destroy();
     });
 
     it('should throw an error', function() {
-      expect(view.render).toThrow('Cannot use a view thats already been destroyed.');
+      expect(view.render).to.throw('Cannot use a view thats already been destroyed.');
     });
   });
 
@@ -68,18 +71,18 @@ describe('destroying views', function() {
 
     beforeEach(function() {
       view = new View();
-      view.onBeforeDestroy = jasmine.createSpy('before destroy');
+      view.onBeforeDestroy = sinon.stub();
 
       view.destroy();
       view.destroy();
     });
 
     it('should only run the destroying code once', function() {
-      expect(view.onBeforeDestroy).toHaveBeenCalled();
+      expect(view.onBeforeDestroy).to.have.been.called;
     });
 
     it('should mark the view as destroyed', function() {
-      expect(view.isDestroyed).toBe(true);
+      expect(view.isDestroyed).to.be.true;
     });
   });
 
@@ -95,14 +98,14 @@ describe('destroying views', function() {
 
     beforeEach(function() {
       view = new CollectionView();
-      view.onBeforeRender = jasmine.createSpy('before render');
-      view.onRender = jasmine.createSpy('on render');
+      view.onBeforeRender = sinon.stub();
+      view.onRender = sinon.stub();
 
       view.destroy();
     });
 
     it('should throw an error', function() {
-      expect(view.render).toThrow('Cannot use a view thats already been destroyed.');
+      expect(view.render).to.throw('Cannot use a view thats already been destroyed.');
     });
   });
 
@@ -112,18 +115,18 @@ describe('destroying views', function() {
 
     beforeEach(function() {
       view = new View();
-      view.onBeforeDestroy = jasmine.createSpy('before destroy');
+      view.onBeforeDestroy = sinon.stub();
 
       view.destroy();
       view.destroy();
     });
 
     it('should only run the destroying code once', function() {
-      expect(view.onBeforeDestroy).toHaveBeenCalled();
+      expect(view.onBeforeDestroy).to.have.been.called;
     });
 
     it('should mark the view as destroyed', function() {
-      expect(view.isDestroyed).toBe(true);
+      expect(view.isDestroyed).to.be.true;
     });
   });
 
@@ -141,14 +144,14 @@ describe('destroying views', function() {
     beforeEach(function() {
       view = new CompositeView();
 
-      view.onBeforeRender = jasmine.createSpy('before render');
-      view.onRender = jasmine.createSpy('on render');
+      view.onBeforeRender = sinon.stub();
+      view.onRender = sinon.stub();
 
       view.destroy();
     });
 
     it('should throw an error', function() {
-      expect(view.render).toThrow('Cannot use a view thats already been destroyed.');
+      expect(view.render).to.throw('Cannot use a view thats already been destroyed.');
     });
   });
 

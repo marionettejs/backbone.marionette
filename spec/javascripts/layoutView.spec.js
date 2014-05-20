@@ -1,6 +1,9 @@
 describe('layoutView', function() {
   'use strict';
 
+  beforeEach(global.setup);
+  afterEach(global.teardown);
+
   var template = function() {
     return '<span class=".craft"></span><h1 id="#a-fun-game"></h1>';
   };
@@ -40,8 +43,8 @@ describe('layoutView', function() {
     });
 
     it('should instantiate the specified region managers', function() {
-      expect(layoutViewManager).toHaveOwnProperty('regionOne');
-      expect(layoutViewManager).toHaveOwnProperty('regionTwo');
+      expect(layoutViewManager).to.have.property('regionOne');
+      expect(layoutViewManager).to.have.property('regionTwo');
     });
 
   });
@@ -55,7 +58,7 @@ describe('layoutView', function() {
     }
 
     it('should instantiate the specified region managers', function() {
-      expect(init).not.toThrow();
+      expect(init).not.to.throw;
     });
 
   });
@@ -87,29 +90,29 @@ describe('layoutView', function() {
     });
 
     it('should instantiate specific regions with custom regions if speficied', function() {
-      expect(layoutViewManager).toHaveOwnProperty('regionOne');
-      expect(layoutViewManager.regionOne).toBeInstanceOf(CustomRegion1);
-      expect(layoutViewManager).toHaveOwnProperty('regionTwo');
-      expect(layoutViewManager.regionTwo).toBeInstanceOf(CustomRegion2);
+      expect(layoutViewManager).to.have.property('regionOne');
+      expect(layoutViewManager.regionOne).to.be.instanceof(CustomRegion1);
+      expect(layoutViewManager).to.have.property('regionTwo');
+      expect(layoutViewManager.regionTwo).to.be.instanceof(CustomRegion2);
     });
 
     it('should instantiate the default regionManager if specified', function() {
-      expect(layoutViewManager).toHaveOwnProperty('regionThree');
-      expect(layoutViewManager.regionThree).toBeInstanceOf(CustomRegion1);
-      expect(layoutViewManager).toHaveOwnProperty('regionFour');
-      expect(layoutViewManager.regionThree).toBeInstanceOf(CustomRegion1);
+      expect(layoutViewManager).to.have.property('regionThree');
+      expect(layoutViewManager.regionThree).to.be.instanceof(CustomRegion1);
+      expect(layoutViewManager).to.have.property('regionFour');
+      expect(layoutViewManager.regionThree).to.be.instanceof(CustomRegion1);
     });
 
     it('should instantiate marionette regions is no regionClass is specified', function() {
       var layoutViewManagerNoDefault = new LayoutViewNoDefaultRegion();
-      expect(layoutViewManagerNoDefault).toHaveOwnProperty('regionTwo');
-      expect(layoutViewManagerNoDefault.regionTwo).toBeInstanceOf(Backbone.Marionette.Region);
+      expect(layoutViewManagerNoDefault).to.have.property('regionTwo');
+      expect(layoutViewManagerNoDefault.regionTwo).to.be.instanceof(Backbone.Marionette.Region);
     });
 
     it('should pass extra options to the custom regionClass', function() {
-      expect(layoutViewManager.regionTwo).toHaveOwnProperty('options');
-      expect(layoutViewManager.regionTwo.options).toHaveOwnProperty('specialOption');
-      expect(layoutViewManager.regionTwo.options.specialOption).toBeTruthy();
+      expect(layoutViewManager.regionTwo).to.have.property('options');
+      expect(layoutViewManager.regionTwo.options).to.have.property('specialOption');
+      expect(layoutViewManager.regionTwo.options.specialOption).to.be.ok;
     });
 
   });
@@ -134,12 +137,12 @@ describe('layoutView', function() {
     });
 
     it('should supply the layoutView.options to the function when calling it', function() {
-      expect(options).toEqual(layoutView.options);
+      expect(options).to.deep.equal(layoutView.options);
     });
 
     it('should build the regions from the returns object literal', function() {
-      expect(layoutView).toHaveOwnProperty('foo');
-      expect(layoutView.foo).toBeInstanceOf(Backbone.Marionette.Region);
+      expect(layoutView).to.have.property('foo');
+      expect(layoutView.foo).to.be.instanceof(Backbone.Marionette.Region);
     });
   });
 
@@ -155,7 +158,7 @@ describe('layoutView', function() {
     it('should find the region scoped within the rendered template', function() {
       layoutViewManager.regionOne._ensureElement();
       var el = layoutViewManager.$('#regionOne');
-      expect(layoutViewManager.regionOne.$el[0]).toEqual(el[0]);
+      expect(layoutViewManager.regionOne.$el[0]).to.equal(el[0]);
     });
   });
 
@@ -170,20 +173,25 @@ describe('layoutView', function() {
       regionOne = layoutViewManager.regionOne;
       regionTwo = layoutViewManager.regionTwo;
 
-      spyOn(regionOne, 'destroy').andCallThrough();
-      spyOn(regionTwo, 'destroy').andCallThrough();
+      sinon.spy(regionOne, 'destroy');
+      sinon.spy(regionTwo, 'destroy');
 
       layoutViewManager.destroy();
     });
 
+    afterEach(function() {
+      regionOne.destroy.restore();
+      regionTwo.destroy.restore();
+    });
+
     it('should destroy the region managers', function() {
-      expect(regionOne.destroy).toHaveBeenCalled();
-      expect(regionTwo.destroy).toHaveBeenCalled();
+      expect(regionOne.destroy).to.have.been.called;
+      expect(regionTwo.destroy).to.have.been.called;
     });
 
     it('should delete the region managers', function() {
-      expect(layoutViewManager.regionOne).toBeUndefined();
-      expect(layoutViewManager.regionTwo).toBeUndefined();
+      expect(layoutViewManager.regionOne).to.be.undefined;
+      expect(layoutViewManager.regionTwo).to.be.undefined;
     });
   });
 
@@ -192,7 +200,7 @@ describe('layoutView', function() {
 
     beforeEach(function() {
       setFixtures('<div id="mgr"></div>');
-      appendLoadFixtures('layoutViewManagerTemplate.html');
+      loadFixtures('layoutViewManagerTemplate.html');
 
       layoutView = new LayoutView();
       layoutView.onRender = function() {
@@ -208,15 +216,15 @@ describe('layoutView', function() {
     });
 
     it('should make the regions available in `onRender`', function() {
-      expect(regionOne).not.toBeUndefined();
+      expect(regionOne).to.exist;
     });
 
     it('the regions should find their elements in `onRender`', function() {
-      expect(regionOne.$el.length).toBe(1);
+      expect(regionOne.$el.length).to.equal(1);
     });
 
     it('should return the region after showing a view in a region', function() {
-      expect(showReturn).toEqual(region);
+      expect(showReturn).to.equal(region);
     });
   });
 
@@ -235,19 +243,23 @@ describe('layoutView', function() {
       view.destroy = function() {};
       layoutView.regionOne.show(view);
 
-      destroyRegionsSpy = spyOn(layoutView.regionManager, 'destroyRegions').andCallThrough();
+      destroyRegionsSpy = sinon.spy(layoutView.regionManager, 'destroyRegions');
 
       layoutView.render();
       layoutView.regionOne.show(view);
       region = layoutView.regionOne;
     });
 
+    afterEach(function() {
+      layoutView.regionManager.destroyRegions.restore();
+    });
+
     it('should destroy the regions', function() {
-      expect(destroyRegionsSpy.callCount).toBe(1);
+      expect(destroyRegionsSpy.callCount).to.equal(1);
     });
 
     it('should re-bind the regions to the newly rendered elements', function() {
-      expect(layoutView.regionOne.$el.parent()).toBe(layoutView.$el);
+      expect(layoutView.regionOne.$el.parent()[0]).to.equal(layoutView.el);
     });
 
     describe('and the views "render" function is bound to an event in the "initialize" function', function() {
@@ -260,7 +272,7 @@ describe('layoutView', function() {
       });
 
       it('should re-bind the regions correctly', function() {
-        expect(layoutView.$('#regionOne')).not.toBeEmpty();
+        expect(layoutView.$('#regionOne')).not.to.equal();
       });
     });
 
@@ -281,15 +293,20 @@ describe('layoutView', function() {
       layoutView.regionOne.show(view);
       layoutView.destroy();
 
-      spyOn(region, 'destroy').andCallThrough();
-      spyOn(view, 'destroy').andCallThrough();
+      sinon.spy(region, 'destroy');
+      sinon.spy(view, 'destroy');
 
-      layoutView.onBeforeRender = jasmine.createSpy('before render');
-      layoutView.onRender = jasmine.createSpy('on render');
+      layoutView.onBeforeRender = sinon.stub();
+      layoutView.onRender = sinon.stub();
+    });
+
+    afterEach(function() {
+      region.destroy.restore();
+      view.destroy.restore();
     });
 
     it('should throw an error', function() {
-      expect(layoutView.render).toThrow('Cannot use a view thats already been destroyed.');
+      expect(layoutView.render).to.throw('Cannot use a view thats already been destroyed.');
     });
   });
 
@@ -297,12 +314,16 @@ describe('layoutView', function() {
     var constructor, layoutView;
 
     beforeEach(function() {
-      constructor = spyOn(Marionette, 'View');
+      constructor = sinon.spy(Marionette, 'View');
       layoutView = new Marionette.LayoutView();
     });
 
+    afterEach(function () {
+      Marionette.View.restore();
+    });
+
     it('calls the parent Marionette.Views constructor function on instantiation', function() {
-      expect(constructor).toHaveBeenCalled();
+      expect(constructor).to.have.been.called;
     });
   });
 
@@ -313,7 +334,7 @@ describe('layoutView', function() {
     });
 
     it('should return the region', function() {
-      expect(this.layoutView.getRegion('regionOne')).toBe(this.region);
+      expect(this.layoutView.getRegion('regionOne')).to.equal(this.region);
     });
   });
 
@@ -344,17 +365,17 @@ describe('layoutView', function() {
     });
 
     it('should lookup and set the regions', function() {
-      expect(layoutView.getRegion('is')).toBeDefined();
-      expect(layoutView.getRegion('war')).toBeDefined();
+      expect(layoutView.getRegion('is')).to.exist;
+      expect(layoutView.getRegion('war')).to.exist;
     });
 
     it('should lookup and set the regions when passed a function', function() {
-      expect(layoutView2.getRegion('is')).toBeDefined();
-      expect(layoutView2.getRegion('war')).toBeDefined();
+      expect(layoutView2.getRegion('is')).to.exist;
+      expect(layoutView2.getRegion('war')).to.exist;
     });
 
     it('should set custom region classes', function() {
-      expect(CustomRegion).toHaveBeenCalled();
+      expect(CustomRegion).to.have.been.called;
     });
   });
 
@@ -372,11 +393,11 @@ describe('layoutView', function() {
     });
 
     it('should call into the custom regionManager lookup', function() {
-      expect(spy).toHaveBeenCalled();
+      expect(spy).to.have.been.called;
     });
 
     it('should call the custom regionManager with the view as the context', function() {
-      expect(spy).toHaveBeenCalledOn(layout);
+      expect(spy).to.have.been.calledOn(layout);
     });
 
   });
@@ -415,11 +436,11 @@ describe('layoutView', function() {
     });
 
     it('should call onDomRefresh on region views when shown within the parents onShow', function() {
-      expect(this.spy).toHaveBeenCalled();
+      expect(this.spy).to.have.been.called;
     });
 
     it('should call onDomRefresh on region view children when shown within the parents onShow', function() {
-      expect(this.spy2).toHaveBeenCalled();
+      expect(this.spy2).to.have.been.called;
     });
   });
 });

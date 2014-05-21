@@ -520,12 +520,12 @@ describe('region', function() {
       destroy: function() {}
     });
 
-    var myRegion, view, beforeDestroySpy ,destroyedSpy;
+    var myRegion, view, beforeEmptySpy ,emptySpy;
 
     beforeEach(function() {
       setFixtures('<div id="region"></div>');
-      beforeDestroySpy = sinon.spy();
-      destroyedSpy = sinon.spy();
+      beforeEmptySpy = sinon.spy();
+      emptySpy = sinon.spy();
 
       view = new MyView();
 
@@ -533,31 +533,31 @@ describe('region', function() {
       spyOn(view, 'remove');
 
       myRegion = new MyRegion();
-      myRegion.on('before:destroy', beforeDestroySpy);
-      myRegion.on('destroy', destroyedSpy);
+      myRegion.on('before:empty', beforeEmptySpy);
+      myRegion.on('empty', emptySpy);
       myRegion.show(view);
 
-      myRegion.destroy();
+      myRegion.empty();
     });
 
-    it('should trigger a "before:destroy" event with the view thats being destroyed', function() {
-      expect(beforeDestroySpy).toHaveBeenCalledWith(view);
+    it('should trigger a "before:empty" event with the view thats being destroyed', function() {
+      expect(beforeEmptySpy).toHaveBeenCalledWith(view);
     });
 
-    it('should set "this" to the manager, from the before:destroy event', function() {
-      expect(beforeDestroySpy).toHaveBeenCalledOn(myRegion);
+    it('should set "this" to the manager, from the before:empty event', function() {
+      expect(beforeEmptySpy).toHaveBeenCalledOn(myRegion);
     });
 
     it('should trigger a destroy event', function() {
-      expect(destroyedSpy).toHaveBeenCalled();
+      expect(emptySpy).toHaveBeenCalled();
     });
 
     it('should trigger a destroy event with the view thats being destroyd', function() {
-      expect(destroyedSpy).toHaveBeenCalledWith(view);
+      expect(emptySpy).toHaveBeenCalledWith(view);
     });
 
     it('should set "this" to the manager, from the destroy event', function() {
-      expect(destroyedSpy).toHaveBeenCalledOn(myRegion);
+      expect(emptySpy).toHaveBeenCalledOn(myRegion);
     });
 
     it('should call "destroy" on the already show view', function() {
@@ -591,7 +591,7 @@ describe('region', function() {
       spyOn(view, 'remove');
       myRegion = new MyRegion();
       myRegion.show(view);
-      myRegion.destroy();
+      myRegion.empty();
     });
 
     it('should call "remove" on the view', function() {
@@ -713,7 +713,7 @@ describe('region', function() {
       });
 
       region = MyApp.MyRegion;
-      spyOn(region, 'destroy');
+      spyOn(region, 'empty');
 
       MyApp.removeRegion('MyRegion');
     });
@@ -722,8 +722,8 @@ describe('region', function() {
       expect(MyApp.MyRegion).not.toBeDefined();
     });
 
-    it('should call "destroy" of the region', function() {
-      expect(region.destroy).toHaveBeenCalled();
+    it('should call "empty" of the region', function() {
+      expect(region.empty).toHaveBeenCalled();
     });
   });
 
@@ -753,7 +753,7 @@ describe('region', function() {
         el: '#region'
       });
 
-      spyOn(region, 'destroy');
+      spyOn(region, 'empty');
 
       region._ensureElement();
 
@@ -765,7 +765,7 @@ describe('region', function() {
     });
 
     it('should destroy any existing view', function() {
-      expect(region.destroy).toHaveBeenCalled();
+      expect(region.empty).toHaveBeenCalled();
     });
 
   });

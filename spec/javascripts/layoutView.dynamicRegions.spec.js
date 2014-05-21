@@ -155,7 +155,7 @@ describe('layoutView - dynamic regions', function() {
 
   describe('when removing a region from a layoutView', function() {
     var LayoutView;
-    var layoutView, region, destroyHandler, removeHandler, beforeRemoveHandler, onBeforeRemoveSpy, onRemoveSpy;
+    var layoutView, region, emptyHandler, removeHandler, beforeRemoveHandler, onBeforeRemoveSpy, onRemoveSpy;
 
     beforeEach(function() {
       LayoutView = Marionette.LayoutView.extend({
@@ -167,7 +167,7 @@ describe('layoutView - dynamic regions', function() {
         onRemoveRegion: function() {}
       });
 
-      destroyHandler = sinon.spy();
+      emptyHandler = sinon.spy();
       beforeRemoveHandler = sinon.spy();
       removeHandler = sinon.spy();
 
@@ -180,15 +180,15 @@ describe('layoutView - dynamic regions', function() {
       layoutView.foo.show(new Backbone.View());
       region = layoutView.foo;
 
-      region.on('destroy', destroyHandler);
+      region.on('empty', emptyHandler);
       layoutView.on('before:remove:region', beforeRemoveHandler);
       layoutView.on('remove:region', removeHandler);
 
       layoutView.removeRegion('foo');
     });
 
-    it('should destroy the region', function() {
-      expect(destroyHandler).toHaveBeenCalled();
+    it('should empty the region', function() {
+      expect(emptyHandler).toHaveBeenCalled();
     });
 
     it('should trigger a before:remove:region event', function() {
@@ -237,10 +237,10 @@ describe('layoutView - dynamic regions', function() {
   });
 
   describe('when adding a region to a layoutView then destroying the layoutView', function() {
-    var layoutView, region, destroyHandler;
+    var layoutView, region, emptyHandler;
 
     beforeEach(function() {
-      destroyHandler = jasmine.createSpy('add handler');
+      emptyHandler = jasmine.createSpy('add handler');
       layoutView = new Marionette.LayoutView({
         template: template
       });
@@ -248,7 +248,7 @@ describe('layoutView - dynamic regions', function() {
       layoutView.render();
 
       region = layoutView.addRegion('foo', '#foo');
-      region.on('destroy', destroyHandler);
+      region.on('empty', emptyHandler);
 
       var view = new Backbone.View();
       layoutView.foo.show(view);
@@ -256,8 +256,8 @@ describe('layoutView - dynamic regions', function() {
       layoutView.destroy();
     });
 
-    it('should destroy the region', function() {
-      expect(destroyHandler).toHaveBeenCalled();
+    it('should empty the region', function() {
+      expect(emptyHandler).toHaveBeenCalled();
     });
   });
 });

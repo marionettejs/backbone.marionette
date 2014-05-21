@@ -76,11 +76,11 @@ Marionette.RegionManager = (function(Marionette) {
       }, this);
     },
 
-    // Destroy all regions in the region manager, but
-    // leave them attached
-    destroyRegions: function() {
+    // Destroys the view inside any region,
+    // leaving it empty.
+    emptyRegions: function() {
       _.each(this._regions, function(region) {
-        region.destroy();
+        region.empty();
       }, this);
     },
 
@@ -100,7 +100,7 @@ Marionette.RegionManager = (function(Marionette) {
     // internal method to remove a region
     _remove: function(name, region) {
       this.triggerMethod('before:remove:region', name, region);
-      region.destroy();
+      region.empty();
       region.stopListening();
       delete this._regions[name];
       this._setLength();

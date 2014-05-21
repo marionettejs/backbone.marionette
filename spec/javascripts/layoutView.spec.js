@@ -170,18 +170,18 @@ describe('layoutView', function() {
       regionOne = layoutViewManager.regionOne;
       regionTwo = layoutViewManager.regionTwo;
 
-      spyOn(regionOne, 'destroy').andCallThrough();
-      spyOn(regionTwo, 'destroy').andCallThrough();
+      spyOn(regionOne, 'empty').andCallThrough();
+      spyOn(regionTwo, 'empty').andCallThrough();
 
       layoutViewManager.destroy();
     });
 
-    it('should destroy the region managers', function() {
-      expect(regionOne.destroy).toHaveBeenCalled();
-      expect(regionTwo.destroy).toHaveBeenCalled();
+    it('should empty the regions', function() {
+      expect(regionOne.empty).toHaveBeenCalled();
+      expect(regionTwo.empty).toHaveBeenCalled();
     });
 
-    it('should delete the region managers', function() {
+    it('should delete the regions', function() {
       expect(layoutViewManager.regionOne).toBeUndefined();
       expect(layoutViewManager.regionTwo).toBeUndefined();
     });
@@ -221,7 +221,7 @@ describe('layoutView', function() {
   });
 
   describe('when re-rendering an already rendered layoutView', function() {
-    var region, layoutView, view, destroyRegionsSpy;
+    var region, layoutView, view, emptyRegionsSpy;
 
     beforeEach(function() {
       loadFixtures('layoutViewManagerTemplate.html');
@@ -235,15 +235,15 @@ describe('layoutView', function() {
       view.destroy = function() {};
       layoutView.regionOne.show(view);
 
-      destroyRegionsSpy = spyOn(layoutView.regionManager, 'destroyRegions').andCallThrough();
+      emptyRegionsSpy = spyOn(layoutView.regionManager, 'emptyRegions').andCallThrough();
 
       layoutView.render();
       layoutView.regionOne.show(view);
       region = layoutView.regionOne;
     });
 
-    it('should destroy the regions', function() {
-      expect(destroyRegionsSpy.callCount).toBe(1);
+    it('should empty the regions', function() {
+      expect(emptyRegionsSpy.callCount).toBe(1);
     });
 
     it('should re-bind the regions to the newly rendered elements', function() {
@@ -281,7 +281,7 @@ describe('layoutView', function() {
       layoutView.regionOne.show(view);
       layoutView.destroy();
 
-      spyOn(region, 'destroy').andCallThrough();
+      spyOn(region, 'empty').andCallThrough();
       spyOn(view, 'destroy').andCallThrough();
 
       layoutView.onBeforeRender = jasmine.createSpy('before render');

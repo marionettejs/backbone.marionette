@@ -159,9 +159,9 @@ first render has happened, though, the render function is modified to
 account for re-rendering with regions in the layoutView.
 
 After the first render, all subsequent renders will force every
-region to destroy by calling the `destroy` method on them. This will
-force every view in the region, and sub-views if any, to be destroyd
-as well. Once the regions have been destroyd, the regions will be
+region to be emptied by calling the `empty` method on them. This will
+force every view in the region, and sub-views if any, to be destroyed
+as well. Once the regions are emptied, the regions will also be
 reset so that they are no longer referencing the element of the previous
 layoutView render.
 
@@ -232,8 +232,8 @@ MyApp.mainRegion.show(new Layout1())
 
 When you are finished with a layoutView, you can call the
 `destroy` method on it. This will ensure that all of the region managers
-within the layoutView are destroyd correctly, which in turn
-ensures all of the views shown within the regions are destroyd correctly.
+within the layoutView are destroyed correctly, which in turn
+ensures all of the views shown within the regions are destroyed correctly.
 
 If you are showing a layoutView within a parent region manager, replacing
 the layoutView with another view or another layoutView will destroy the current

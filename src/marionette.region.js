@@ -134,7 +134,12 @@ _.extend(Marionette.Region.prototype, Backbone.Events, {
 
     view.render();
     Marionette.triggerMethod.call(this, "before:show", view);
-    Marionette.triggerMethod.call(view, "before:show");
+
+    if (_.isFunction(view.triggerMethod)) {
+      view.triggerMethod("before:show");
+    } else {
+      Marionette.triggerMethod.call(view, "before:show");
+    }
 
     if (isDifferentView || isViewClosed) {
       this.open(view);
@@ -143,7 +148,12 @@ _.extend(Marionette.Region.prototype, Backbone.Events, {
     this.currentView = view;
 
     Marionette.triggerMethod.call(this, "show", view);
-    Marionette.triggerMethod.call(view, "show");
+
+    if (_.isFunction(view.triggerMethod)) {
+      view.triggerMethod("show");
+    } else {
+      Marionette.triggerMethod.call(view, "show");
+    }
 
     return this;
   },

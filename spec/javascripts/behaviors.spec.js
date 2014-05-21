@@ -375,40 +375,85 @@ describe("Behaviors", function(){
     });
   });
 
-    describe("behavior instance events", function() {
-      var model, v, listenToSpy, onSpy;
+  describe('showing a view in a layout', function() {
+    var behavior, onShowSpy, onCloseSpy, hold;
+    beforeEach(function() {
+      hold = {};
 
-      beforeEach(function() {
-        listenToSpy = new sinon.spy();
-        onSpy       = new sinon.spy();
-        model       = new Backbone.Model();
+      onShowSpy = sinon.spy();
+      onCloseSpy = sinon.spy();
 
-        v = new (Marionette.View.extend({
-          behaviors: {
-            cat: {
-              behaviorClass: (Marionette.Behavior.extend({
-                initialize: function() {
-                  this.listenTo(model, "change", listenToSpy);
-                  this.on("wow", onSpy);
-                }
-              }))
-            }
-          }
-        }));
+      hold.test = Marionette.Behavior.extend({
+        initialize: function() {
+          behavior = this;
+        },
 
-        v.close();
+        onShow: onShowSpy,
+
+        onClose: onCloseSpy
       });
 
-      it("shoud unbind listenTo on close", function() {
-        model.set("klingon", "dominion");
-        expect(listenToSpy).not.toHaveBeenCalled();
+      var View = Marionette.ItemView.extend({
+        template: _.template("<div>hi</div>"),
+        behaviors: {
+          test: {}
+        }
+      });
+      Marionette.Behaviors.behaviorsLookup = hold;
+
+      setFixtures('<div id="region"></div>');
+      var region = new Backbone.Marionette.Region({el: $('#region')[0]});
+      var view = new View({
+        model: new Backbone.Model()
       });
 
-      it("shoud still be bound to 'on' on close", function() {
-        v.triggerMethod("wow");
-        expect(onSpy).toHaveBeenCalled();
-      });
+      region.show(view);
+      region.close();
     });
+
+    it("behavior onShow is called once", function() {
+      expect(onShowSpy).toHaveBeenCalledOnce();
+    });
+
+    it("behavior onClose is called once", function() {
+      expect(onCloseSpy).toHaveBeenCalledOnce();
+    });
+  });
+
+  describe("behavior instance events", function() {
+    var model, v, listenToSpy, onSpy;
+
+    beforeEach(function() {
+      listenToSpy = new sinon.spy();
+      onSpy       = new sinon.spy();
+      model       = new Backbone.Model();
+
+      v = new (Marionette.View.extend({
+        behaviors: {
+          cat: {
+            behaviorClass: (Marionette.Behavior.extend({
+              initialize: function() {
+                this.listenTo(model, "change", listenToSpy);
+                this.on("wow", onSpy);
+              }
+            }))
+          }
+        }
+      }));
+
+      v.close();
+    });
+
+    it("shoud unbind listenTo on close", function() {
+      model.set("klingon", "dominion");
+      expect(listenToSpy).not.toHaveBeenCalled();
+    });
+
+    it("shoud still be bound to 'on' on close", function() {
+      v.triggerMethod("wow");
+      expect(onSpy).toHaveBeenCalled();
+    });
+  });
 
   describe("behavior model events", function() {
     var modelSpy, collectionSpy, V, hold, m, testBehavior;

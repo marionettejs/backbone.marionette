@@ -21,7 +21,6 @@ Marionette.Behaviors = (function(Marionette, _) {
     Behaviors.wrap(view, behaviors, [
       'bindUIElements', 'unbindUIElements',
       'delegateEvents', 'undelegateEvents',
-      'onShow', 'onDestroy',
       'behaviorEvents', 'triggerMethod',
       'setElement', 'destroy'
     ]);
@@ -48,30 +47,6 @@ Marionette.Behaviors = (function(Marionette, _) {
       // This unbinds event listeners
       // that behaviors have registerd for.
       _.invoke(behaviors, 'destroy', args);
-    },
-
-    onShow: function(onShow, behaviors) {
-      var args = _.tail(arguments, 2);
-
-      _.each(behaviors, function(b) {
-        Marionette.triggerMethod.apply(b, ['show'].concat(args));
-      });
-
-      if (_.isFunction(onShow)) {
-        onShow.apply(this, args);
-      }
-    },
-
-    onDestroy: function(onDestroy, behaviors) {
-      var args = _.tail(arguments, 2);
-
-      _.each(behaviors, function(b) {
-        Marionette.triggerMethod.apply(b, ['destroy'].concat(args));
-      });
-
-      if (_.isFunction(onDestroy)) {
-        onDestroy.apply(this, args);
-      }
     },
 
     bindUIElements: function(bindUIElements, behaviors) {

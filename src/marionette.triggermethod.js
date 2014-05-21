@@ -39,3 +39,22 @@ Marionette.triggerMethod = (function() {
 
   return triggerMethod;
 })();
+
+
+
+// Trigger an event or invoke a method on another object.
+//
+// e.g. `Marionette.triggerMethodOn(view, 'show')
+// will trigger a "show" event or invoke onShow the view.
+Marionette.triggerMethodOn = function(context, event) {
+  var args = _.tail(arguments, 2);
+  var fnc;
+
+  if (_.isFunction(context.triggerMethod)) {
+    fnc = context.triggerMethod;
+  } else {
+    fnc = Marionette.triggerMethod;
+  }
+
+  return fnc.apply(context, [event].concat(args));
+};

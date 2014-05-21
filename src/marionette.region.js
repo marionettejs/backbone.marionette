@@ -161,7 +161,8 @@ _.extend(Marionette.Region.prototype, Backbone.Events, {
       }
 
       this.triggerMethod('before:show', view);
-      this.triggerMethod.call(view, 'before:show');
+      Marionette.triggerMethodOn(view, 'before:show');
+
 
       this.setHtml(view);
       this.currentView = view;
@@ -171,7 +172,7 @@ _.extend(Marionette.Region.prototype, Backbone.Events, {
       }
 
       this.triggerMethod('show', view);
-      this.triggerMethod.call(view, 'show');
+      Marionette.triggerMethodOn(view, 'show');
     }
 
     return this;

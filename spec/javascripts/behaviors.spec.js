@@ -375,6 +375,51 @@ describe("Behaviors", function(){
     });
   });
 
+  describe('showing a view in a layout', function() {
+    var behavior, onShowSpy, onCloseSpy, hold;
+    beforeEach(function() {
+      hold = {};
+
+      onShowSpy = sinon.spy();
+      onCloseSpy = sinon.spy();
+
+      hold.test = Marionette.Behavior.extend({
+        initialize: function() {
+          behavior = this;
+        },
+
+        onShow: onShowSpy,
+
+        onClose: onCloseSpy
+      });
+
+      var View = Marionette.ItemView.extend({
+        template: _.template("<div>hi</div>"),
+        behaviors: {
+          test: {}
+        }
+      });
+      Marionette.Behaviors.behaviorsLookup = hold;
+
+      setFixtures('<div id="region"></div>');
+      var region = new Backbone.Marionette.Region({el: $('#region')[0]});
+      var view = new View({
+        model: new Backbone.Model()
+      });
+
+      region.show(view);
+      region.close();
+    });
+
+    it("behavior onShow is called once", function() {
+      expect(onShowSpy).toHaveBeenCalledOnce();
+    });
+
+    it("behavior onClose is called once", function() {
+      expect(onCloseSpy).toHaveBeenCalledOnce();
+    });
+  });
+
   describe("behavior instance events", function() {
     var model, v, listenToSpy, onSpy;
 

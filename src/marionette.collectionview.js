@@ -43,7 +43,7 @@ Marionette.CollectionView = Marionette.View.extend({
   endBuffering: function() {
     this.isBuffering = false;
     this._triggerBeforeShowBufferedChildren();
-    this.appendBuffer(this, this.elBuffer);
+    this.attachBuffer(this, this.elBuffer);
     this._triggerShowBufferedChildren();
     this.initRenderBuffer();
   },
@@ -317,7 +317,7 @@ Marionette.CollectionView = Marionette.View.extend({
   // render the child view
   renderChildView: function(view, index) {
     view.render();
-    this.appendHtml(this, view, index);
+    this.attachHtml(this, view, index);
   },
 
   // Build a `childView` for a model in the collection.
@@ -360,15 +360,15 @@ Marionette.CollectionView = Marionette.View.extend({
     }
   },
 
-  // You might need to override this if you've overridden appendHtml
-  appendBuffer: function(collectionView, buffer) {
+  // You might need to override this if you've overridden attachHtml
+  attachBuffer: function(collectionView, buffer) {
     collectionView.$el.append(buffer);
   },
 
   // Append the HTML to the collection's `el`.
   // Override this method to do something other
   // than `.append`.
-  appendHtml: function(collectionView, childView, index) {
+  attachHtml: function(collectionView, childView, index) {
     if (collectionView.isBuffering) {
       // buffering happens on reset events and initial renders
       // in order to reduce the number of inserts into the

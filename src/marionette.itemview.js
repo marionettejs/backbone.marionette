@@ -9,7 +9,7 @@ Marionette.ItemView = Marionette.View.extend({
   // Setting up the inheritance chain which allows changes to
   // Marionette.View.prototype.constructor which allows overriding
   constructor: function() {
-    Marionette.View.prototype.constructor.apply(this, arguments);
+    Marionette.View.apply(this, arguments);
   },
 
   // Serialize the model or collection for the view. If a model is

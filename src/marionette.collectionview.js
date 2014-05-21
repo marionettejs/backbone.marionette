@@ -21,7 +21,7 @@ Marionette.CollectionView = Marionette.View.extend({
 
     this._initChildViewStorage();
 
-    Marionette.View.prototype.constructor.apply(this, arguments);
+    Marionette.View.apply(this, arguments);
 
     this._initialEvents();
     this.initRenderBuffer();

@@ -784,7 +784,7 @@ describe('composite view', function() {
     var constructor, compositeView;
 
     beforeEach(function() {
-      constructor = spyOn(Marionette.CollectionView.prototype, 'constructor');
+      constructor = spyOn(Marionette, 'CollectionView');
       compositeView = new Marionette.CompositeView();
     });
 

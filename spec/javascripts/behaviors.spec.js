@@ -375,40 +375,40 @@ describe("Behaviors", function(){
     });
   });
 
-    describe("behavior instance events", function() {
-      var model, v, listenToSpy, onSpy;
+  describe("behavior instance events", function() {
+    var model, v, listenToSpy, onSpy;
 
-      beforeEach(function() {
-        listenToSpy = new sinon.spy();
-        onSpy       = new sinon.spy();
-        model       = new Backbone.Model();
+    beforeEach(function() {
+      listenToSpy = new sinon.spy();
+      onSpy       = new sinon.spy();
+      model       = new Backbone.Model();
 
-        v = new (Marionette.View.extend({
-          behaviors: {
-            cat: {
-              behaviorClass: (Marionette.Behavior.extend({
-                initialize: function() {
-                  this.listenTo(model, "change", listenToSpy);
-                  this.on("wow", onSpy);
-                }
-              }))
-            }
+      v = new (Marionette.View.extend({
+        behaviors: {
+          cat: {
+            behaviorClass: (Marionette.Behavior.extend({
+              initialize: function() {
+                this.listenTo(model, "change", listenToSpy);
+                this.on("wow", onSpy);
+              }
+            }))
           }
-        }));
+        }
+      }));
 
-        v.close();
-      });
-
-      it("shoud unbind listenTo on close", function() {
-        model.set("klingon", "dominion");
-        expect(listenToSpy).not.toHaveBeenCalled();
-      });
-
-      it("shoud still be bound to 'on' on close", function() {
-        v.triggerMethod("wow");
-        expect(onSpy).toHaveBeenCalled();
-      });
+      v.close();
     });
+
+    it("shoud unbind listenTo on close", function() {
+      model.set("klingon", "dominion");
+      expect(listenToSpy).not.toHaveBeenCalled();
+    });
+
+    it("shoud still be bound to 'on' on close", function() {
+      v.triggerMethod("wow");
+      expect(onSpy).toHaveBeenCalled();
+    });
+  });
 
   describe("behavior model events", function() {
     var modelSpy, collectionSpy, V, hold, m, testBehavior;

@@ -600,7 +600,7 @@ describe('composite view', function() {
       template: '#grid-template',
       childView: GridRow,
 
-      appendHtml: function(collectionView, itemView) {
+      attachHtml: function(collectionView, itemView) {
         collectionView.$('tbody').append(itemView.el);
       }
     });
@@ -661,7 +661,7 @@ describe('composite view', function() {
       template: '#grid-template',
       childView: GridRow,
 
-      appendHtml: function(collectionView, itemView) {
+      attachHtml: function(collectionView, itemView) {
         collectionView.$('tbody').append(itemView.el);
       }
     });

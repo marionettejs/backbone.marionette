@@ -62,7 +62,7 @@ describe('collection view', function() {
       spyOn(collectionView, 'onAddChild').andCallThrough();
       spyOn(collectionView, 'onBeforeRender').andCallThrough();
       spyOn(collectionView, 'trigger').andCallThrough();
-      spyOn(collectionView, 'appendHtml').andCallThrough();
+      spyOn(collectionView, 'attachHtml').andCallThrough();
       spyOn(collectionView.$el, 'append').andCallThrough();
       spyOn(collectionView, 'startBuffering').andCallThrough();
       spyOn(collectionView, 'endBuffering').andCallThrough();
@@ -79,7 +79,7 @@ describe('collection view', function() {
     });
 
     it('should add to render buffer once for each child', function() {
-      expect(collectionView.appendHtml.callCount).toEqual(2);
+      expect(collectionView.attachHtml.callCount).toEqual(2);
     });
 
     it('should append the html for each childView', function() {
@@ -87,7 +87,7 @@ describe('collection view', function() {
     });
 
     it('should provide the index for each childView, when appending', function() {
-      expect(collectionView.appendHtml.calls[0].args[2]).toBe(0);
+      expect(collectionView.attachHtml.calls[0].args[2]).toBe(0);
     });
 
     it('should reference each of the rendered view children', function() {
@@ -181,7 +181,7 @@ describe('collection view', function() {
       childViewRender = jasmine.createSpy('childview:render');
       collectionView.on('childview:render', childViewRender);
 
-      spyOn(collectionView, 'appendHtml').andCallThrough();
+      spyOn(collectionView, 'attachHtml').andCallThrough();
 
       model = new Backbone.Model({foo: 'bar'});
       collection.add(model);
@@ -196,7 +196,7 @@ describe('collection view', function() {
     });
 
     it('should provide the index for each childView, when appending', function() {
-      expect(collectionView.appendHtml.calls[0].args[2]).toBe(0);
+      expect(collectionView.attachHtml.calls[0].args[2]).toBe(0);
     });
 
     it('should trigger the childview:render event from the collectionView', function() {
@@ -219,7 +219,7 @@ describe('collection view', function() {
       childViewRender = jasmine.createSpy('childview:render');
       collectionView.on('childview:render', childViewRender);
 
-      spyOn(collectionView, 'appendHtml').andCallThrough();
+      spyOn(collectionView, 'attachHtml').andCallThrough();
 
       model = new Backbone.Model({foo: 'baz'});
       collection.add(model);
@@ -234,7 +234,7 @@ describe('collection view', function() {
     });
 
     it('should provide the index for each child view, when appending', function() {
-      expect(collectionView.appendHtml.calls[0].args[2]).toBe(1);
+      expect(collectionView.attachHtml.calls[0].args[2]).toBe(1);
     });
 
     it('should trigger the childview:render event from the collectionView', function() {
@@ -492,11 +492,11 @@ describe('collection view', function() {
 
   });
 
-  describe('when override appendHtml', function() {
+  describe('when override attachHtml', function() {
     var PrependHtmlView = Backbone.Marionette.CollectionView.extend({
       childView: ChildView,
 
-      appendHtml: function(collectionView, childView) {
+      attachHtml: function(collectionView, childView) {
         collectionView.$el.prepend(childView.el);
       }
     });
@@ -737,7 +737,7 @@ describe('collection view', function() {
       collectionView.onShow();
       collectionView.trigger('show');
 
-      sinon.spy(collectionView, 'appendBuffer');
+      sinon.spy(collectionView, 'attachBuffer');
 
       collection.add(model2);
       view = collectionView.children.findByIndex(1);
@@ -749,7 +749,7 @@ describe('collection view', function() {
     });
 
     it('should not use the render buffer', function() {
-      expect(collectionView.appendBuffer).not.toHaveBeenCalled();
+      expect(collectionView.attachBuffer).not.toHaveBeenCalled();
     });
 
     it('should call the "onShow" method of the child view', function() {

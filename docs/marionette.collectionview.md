@@ -47,7 +47,7 @@ will provide features such as `onShow` callbacks, etc. Please see
 * [CollectionView render](#collectionview-render)
 * [CollectionView: Automatic Rendering](#collectionview-automatic-rendering)
 * [CollectionView: Re-render Collection](#collectionview-re-render-collection)
-* [CollectionView's appendHtml](#collectionviews-appendhtml)
+* [CollectionView's attachHtml](#collectionviews-attachhtml)
 * [CollectionView's children](#collectionviews-children)
 * [CollectionView destroy](#collectionview-destroy)
 
@@ -651,13 +651,13 @@ If you need to re-render the entire collection, you can call the
 `view.render` method. This method takes care of destroying all of
 the child views that may have previously been opened.
 
-## CollectionView's appendHtml
+## CollectionView's attachHtml
 
 By default the collection view will append the HTML of each ChildView
 into the element buffer, and then call jQuery's `.append` once at the
 end to move the HTML into the collection view's `el`.
 
-You can override this by specifying an `appendHtml` method in your
+You can override this by specifying an `attachHtml` method in your
 view definition. This method takes three parameters and has no return
 value.
 
@@ -665,7 +665,7 @@ value.
 Backbone.Marionette.CollectionView.extend({
 
 	// The default implementation:
-  appendHtml: function(collectionView, childView, index){
+  attachHtml: function(collectionView, childView, index){
     if (collectionView.isBuffering) {
       // buffering happens on reset events and initial renders
       // in order to reduce the number of inserts into the
@@ -680,11 +680,11 @@ Backbone.Marionette.CollectionView.extend({
   },
 
   // Called after all children have been appended into the elBuffer
-  appendBuffer: function(collectionView, buffer) {
+  appendHtml: function(collectionView, buffer) {
     collectionView.$el.append(buffer);
   },
 
-  // called on initialize and after appendBuffer is called
+  // called on initialize and after appendHtml is called
   initRenderBuffer: function() {
     this.elBuffer = document.createDocumentFragment();
   }
@@ -701,7 +701,7 @@ model that this `childView` instance represents, in the collection
 that the model came from. This is useful for sorting a collection
 and displaying the sorted list in the correct order on the screen.
 
-Overrides of `appendHtml` that don't take into account the element
+Overrides of `attachHtml` that don't take into account the element
 buffer will work fine, but won't take advantage of the 60x performance
 increase the buffer provides.
 

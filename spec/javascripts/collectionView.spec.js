@@ -915,7 +915,7 @@ describe('collection view', function() {
     var constructor, collectionView;
 
     beforeEach(function() {
-      constructor = spyOn(Marionette.View.prototype, 'constructor');
+      constructor = spyOn(Marionette, 'View');
       collectionView = new Marionette.CollectionView();
     });
 

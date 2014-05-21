@@ -61,10 +61,11 @@ describe('marionette controller', function() {
   });
 
   describe('when destroying a controller', function() {
-    var controller, destroyHandler, listenToHandler;
+    var controller, destroyHandler, listenToHandler, beforeDestroyHandler;
 
     var Controller = Marionette.Controller.extend({
-      onDestroy: jasmine.createSpy('onDestroy')
+      onDestroy: jasmine.createSpy('onDestroy'),
+      onBeforeDestroy: jasmine.createSpy('onBeforeDestroy')
     });
 
     beforeEach(function() {
@@ -73,8 +74,11 @@ describe('marionette controller', function() {
       destroyHandler = jasmine.createSpy('destroy');
       controller.on('destroy', destroyHandler);
 
-      listenToHandler = jasmine.createSpy('destroy');
-      controller.listenTo(controller, 'destroy', listenToHandler);
+      beforeDestroyHandler = jasmine.createSpy('beforeDestroy');
+      controller.on('before:destroy', beforeDestroyHandler);
+
+      listenToHandler = jasmine.createSpy('beforeDestroy');
+      controller.listenTo(controller, 'before:destroy', listenToHandler);
 
       spyOn(controller, 'stopListening').andCallThrough();
       spyOn(controller, 'off').andCallThrough();
@@ -90,8 +94,16 @@ describe('marionette controller', function() {
       expect(controller.off).toHaveBeenCalled();
     });
 
-    it('should stopListening after calling destroy', function() {
+    it('should stopListening after calling before:destroy', function() {
       expect(listenToHandler).toHaveBeenCalled();
+    });
+
+    it('should trigger a before:destroy event with any arguments passed to destroy', function() {
+      expect(beforeDestroyHandler).toHaveBeenCalledWith(123, 'second param');
+    });
+
+    it('should call an onBeforeDestroy method with any arguments passed to destroy', function() {
+      expect(controller.onBeforeDestroy).toHaveBeenCalledWith(123, 'second param');
     });
 
     it('should trigger a destroy event with any arguments passed to destroy', function() {

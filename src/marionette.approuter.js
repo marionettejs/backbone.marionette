@@ -19,7 +19,7 @@
 Marionette.AppRouter = Backbone.Router.extend({
 
   constructor: function(options) {
-    Backbone.Router.prototype.constructor.apply(this, arguments);
+    Backbone.Router.apply(this, arguments);
 
     this.options = options || {};
 

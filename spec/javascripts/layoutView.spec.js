@@ -297,7 +297,7 @@ describe('layoutView', function() {
     var constructor, layoutView;
 
     beforeEach(function() {
-      constructor = spyOn(Marionette.View.prototype, 'constructor');
+      constructor = spyOn(Marionette, 'View');
       layoutView = new Marionette.LayoutView();
     });
 

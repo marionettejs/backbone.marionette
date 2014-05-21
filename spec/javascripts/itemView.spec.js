@@ -373,7 +373,7 @@ describe('item view', function() {
     var constructor, itemView;
 
     beforeEach(function() {
-      constructor = spyOn(Marionette.View.prototype, 'constructor');
+      constructor = spyOn(Marionette, 'View');
       itemView = new Marionette.ItemView();
     });
 

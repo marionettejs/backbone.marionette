@@ -7,7 +7,7 @@ Marionette.RegionManager = (function(Marionette) {
   var RegionManager = Marionette.Controller.extend({
     constructor: function(options) {
       this._regions = {};
-      Marionette.Controller.prototype.constructor.call(this, options);
+      Marionette.Controller.call(this, options);
     },
 
     // Add multiple regions using an object literal, where

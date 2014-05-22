@@ -147,6 +147,36 @@ The third parameter is a hash of { "event:name": "eventHandler" }
 configuration. Multiple handlers can be separated by a space. A
 function can be supplied instead of a string handler name.
 
+## Marionette.unbindEntityEvents
+
+This method can be used to unbind callbacks from entities' (collection/model) events. It's
+the opposite of bindEntityEvents, described above. Consequently, the APIs are identical for each method.
+
+```js
+// Just like the above example we bind our model events.
+// This time, however, we unbind them on close.
+Backbone.View.extend({
+
+  modelEvents: {
+    "change:foo": "doSomething"
+  },
+
+  initialize: function(){
+    Marionette.bindEntityEvents(this, this.model, this.modelEvents);
+  },
+
+  doSomething: function(){
+    // the "change:foo" event was fired from the model
+    // respond to it appropriately, here.
+  },
+
+  onClose: function() {
+    Marionette.unbindEntityEvents(this, this.model, this.modelEvents);
+  }
+
+});
+```
+
 ## Marionette.normalizeMethods
 
 Receives a hash of event names and functions and/or function names, and returns the

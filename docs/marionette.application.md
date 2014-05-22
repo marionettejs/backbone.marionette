@@ -28,6 +28,7 @@ MyApp = new Backbone.Marionette.Application();
   * [Custom Region Type And Selector](#custom-region-type-and-selector)
   * [Get Region By Name](#get-region-by-name)
   * [Removing Regions](#removing-regions)
+  * [Displaying Views inside Regions](#displaying-views-inside-regions)
 
 ## Adding Initializers
 

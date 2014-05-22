@@ -278,7 +278,7 @@ region object to display a view:
     model: someModel
   });
 
-  MyApp.getRegion('someRegion').show();
+  MyApp.getRegion('someRegion').show(myView);
 ```
 
 For more information on regions, see [the region documentation](./marionette.region.md)

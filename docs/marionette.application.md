@@ -42,7 +42,7 @@ MyApp.addInitializer(function(options){
   var myView = new MyView({
     model: options.someModel
   });
-  MyApp.mainRegion.show(myView);
+  MyApp.getRegion("mainRegion").show(myView);
 });
 
 MyApp.addInitializer(function(options){
@@ -264,5 +264,20 @@ MyApp.removeRegion('someRegion');
 
 Removing a region will properly close it before removing it from the
 application object.
+
+### Displaying Views inside Regions
+
+Region objects can be retrieved with the `getRegion` method, afterwards we can call the method `show` from the
+region object to display a view:
+
+```js
+  MyApp.addRegion('someRegion');
+
+  var myView = new MyView({
+    model: someModel
+  });
+
+  MyApp.getRegion('someRegion').show();
+```
 
 For more information on regions, see [the region documentation](./marionette.region.md)

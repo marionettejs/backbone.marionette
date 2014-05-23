@@ -1,7 +1,5 @@
 describe('Behaviors', function() {
   'use strict';
-  beforeEach(global.setup);
-  afterEach(global.teardown);
 
   describe('behavior lookup', function() {
     it('should throw if behavior lookup is not defined', function() {

@@ -1,7 +1,5 @@
 describe('composite view - on before render', function() {
   'use strict';
-  beforeEach(global.setup);
-  afterEach(global.teardown);
 
   describe('when a composite view has a model and a collection', function() {
     beforeEach(function() {

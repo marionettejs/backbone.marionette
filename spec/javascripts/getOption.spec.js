@@ -1,7 +1,5 @@
 describe('get option', function() {
   'use strict';
-  beforeEach(global.setup);
-  afterEach(global.teardown);
 
   describe('when an object only has the option set on the definition', function() {
     beforeEach(function() {

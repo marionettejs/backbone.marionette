@@ -1,7 +1,5 @@
 describe('item view', function() {
   'use strict';
-  beforeEach(global.setup);
-  afterEach(global.teardown);
 
   beforeEach(function() {
     this.Model = Backbone.Model.extend();

@@ -3,18 +3,16 @@ describe('application commands', function() {
   afterEach(global.teardown);
 
   describe('when creating an instance of an Application', function() {
-    var App;
-
     beforeEach(function() {
-      App = new Marionette.Application();
+      this.App = new Marionette.Application();
     });
 
     it('should provide command execution framework', function() {
-      expect(App.commands).to.be.instanceof(Backbone.Wreqr.Commands);
+      expect(this.App.commands).to.be.instanceof(Backbone.Wreqr.Commands);
     });
 
     it('should allow execution of commands directly', function() {
-      expect(typeof App.execute).to.equal('function');
+      expect(typeof this.App.execute).to.equal('function');
     });
   });
 });

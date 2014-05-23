@@ -3,102 +3,94 @@ describe('callbacks', function() {
   afterEach(global.teardown);
 
   describe('when registering callbacks and running them', function() {
-    var specifiedOptions, specifiedContext, spyOne, spyTwo, callbacks;
-
     beforeEach(function() {
-      spyOne = this.sinon.spy();
-      spyTwo = this.sinon.spy();
-      callbacks = new Backbone.Marionette.Callbacks();
+      this.spyOne = this.sinon.spy();
+      this.spyTwo = this.sinon.spy();
+      this.callbacks = new Backbone.Marionette.Callbacks();
 
-      specifiedOptions = {};
-      specifiedContext = {};
+      this.specifiedOptions = {};
+      this.specifiedContext = {};
 
-      callbacks.add(spyOne);
-      callbacks.add(spyTwo);
+      this.callbacks.add(this.spyOne);
+      this.callbacks.add(this.spyTwo);
 
-      callbacks.run(specifiedOptions, specifiedContext);
+      this.callbacks.run(this.specifiedOptions, this.specifiedContext);
     });
 
     it('should execute the first callback', function() {
-      expect(spyOne).to.have.been.called;
+      expect(this.spyOne).to.have.been.called;
     });
 
     it('should execute the second callback', function() {
-      expect(spyTwo).to.have.been.called;
+      expect(this.spyTwo).to.have.been.called;
     });
 
     it('should pass the options along', function() {
-      expect(spyOne).to.have.been.calledWith(specifiedOptions);
+      expect(this.spyOne).to.have.been.calledWith(this.specifiedOptions);
     });
 
     it('should execute in the specified context', function() {
-      expect(spyOne).to.have.been.calledOn(specifiedContext);
+      expect(this.spyOne).to.have.been.calledOn(this.specifiedContext);
     });
   });
 
   describe('when running with no callbacks, and then registering callbacks', function() {
-    var spyOne, spyTwo, callbacks;
-
     beforeEach(function() {
-      spyOne = this.sinon.spy();
-      spyTwo = this.sinon.spy();
-      callbacks = new Backbone.Marionette.Callbacks();
-      callbacks.run();
+      this.spyOne = this.sinon.spy();
+      this.spyTwo = this.sinon.spy();
+      this.callbacks = new Backbone.Marionette.Callbacks();
+      this.callbacks.run();
 
-      callbacks.add(spyOne);
-      callbacks.add(spyTwo);
+      this.callbacks.add(this.spyOne);
+      this.callbacks.add(this.spyTwo);
     });
 
     it('should execute the first', function() {
-      expect(spyOne).to.have.been.called;
+      expect(this.spyOne).to.have.been.called;
     });
 
     it('should execute the second', function() {
-      expect(spyTwo).to.have.been.called;
+      expect(this.spyTwo).to.have.been.called;
     });
   });
 
   describe('when registering a callback with a specific context, and running the callbacks', function() {
-    var spyOne, context, callbacks;
-
     beforeEach(function() {
-      spyOne  = this.sinon.spy();
-      context = {};
+      this.spyOne  = this.sinon.spy();
+      this.context = {};
 
-      callbacks = new Backbone.Marionette.Callbacks();
-      callbacks.add(spyOne, context);
+      this.callbacks = new Backbone.Marionette.Callbacks();
+      this.callbacks.add(this.spyOne, this.context);
 
-      callbacks.run();
+      this.callbacks.run();
     });
 
     it('should run the callback with the specified context', function() {
-      expect(spyOne).to.have.been.calledOn(context);
+      expect(this.spyOne).to.have.been.calledOn(this.context);
     });
   });
 
   describe('when resetting callbacks and re-running them', function() {
-    var spy, numCallbacks, callbacks;
-
     beforeEach(function() {
-      callbacks = new Backbone.Marionette.Callbacks();
+      this.callbacks = new Backbone.Marionette.Callbacks();
 
-      spy = this.sinon.spy();
-      callbacks.add(spy);
+      this.spy = this.sinon.spy();
+      this.callbacks.add(this.spy);
 
-      callbacks.run();
-      callbacks.reset();
+      this.callbacks.run();
+      this.callbacks.reset();
 
-      callbacks.run();
+      this.callbacks.run();
 
-      numCallbacks = callbacks._callbacks.length;
+      this.numCallbacks = this.callbacks._callbacks.length;
     });
 
     it('should run the callbacks again', function() {
-      expect(spy).to.have.been.calledTwice;
+      expect(this.spy).to.have.been.calledTwice;
     });
 
     it('should not duplicate the callbacks', function() {
-      expect(numCallbacks).to.equal(1);
+      expect(this.numCallbacks).to.equal(1);
     });
   });
 });

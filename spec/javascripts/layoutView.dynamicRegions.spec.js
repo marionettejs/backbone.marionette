@@ -2,170 +2,158 @@ describe('layoutView - dynamic regions', function() {
   beforeEach(global.setup);
   afterEach(global.teardown);
 
-  var template;
-
   beforeEach(function() {
-    template = function() {
+    this.template = function() {
       return '<div id="foo"></div><div id="bar"></div>';
     };
   });
 
   describe('when adding a region to a layoutView, after it has been rendered', function() {
-    var MyLayoutView, layoutView, region, addHandler, onAddSpy, beforeAddHandler, onBeforeAddSpy, view;
-
     beforeEach(function() {
-      MyLayoutView = Marionette.LayoutView.extend({
+      this.MyLayoutView = Marionette.LayoutView.extend({
         onAddRegion: function() {},
         onBeforeAddRegion: function() {}
       });
 
-      layoutView = new MyLayoutView({
-        template: template
+      this.layoutView = new this.MyLayoutView({
+        template: this.template
       });
 
-      beforeAddHandler = this.sinon.spy();
-      addHandler = this.sinon.spy();
-      onBeforeAddSpy = this.sinon.spy(layoutView, 'onBeforeAddRegion');
-      onAddSpy = this.sinon.spy(layoutView, 'onAddRegion');
-      layoutView.on('before:add:region', beforeAddHandler);
-      layoutView.on('add:region', addHandler);
+      this.beforeAddHandler = this.sinon.spy();
+      this.addHandler = this.sinon.spy();
+      this.onBeforeAddSpy = this.sinon.spy(this.layoutView, 'onBeforeAddRegion');
+      this.onAddSpy = this.sinon.spy(this.layoutView, 'onAddRegion');
+      this.layoutView.on('before:add:region', this.beforeAddHandler);
+      this.layoutView.on('add:region', this.addHandler);
 
-      layoutView.render();
+      this.layoutView.render();
 
-      region = layoutView.addRegion('foo', '#foo');
+      this.region = this.layoutView.addRegion('foo', '#foo');
 
-      view = new Backbone.View();
-      layoutView.foo.show(view);
+      this.view = new Backbone.View();
+      this.layoutView.foo.show(this.view);
     });
 
     it('should add the region to the layoutView', function() {
-      expect(layoutView.foo).to.equal(region);
+      expect(this.layoutView.foo).to.equal(this.region);
     });
 
     it('should set the parent of the region to the layoutView', function() {
-      expect(region.$el.parent()[0]).to.equal(layoutView.el);
+      expect(this.region.$el.parent()[0]).to.equal(this.layoutView.el);
     });
 
     it('should be able to show a view in the region', function() {
-      expect(layoutView.foo.$el.children().length).to.equal(1);
+      expect(this.layoutView.foo.$el.children().length).to.equal(1);
     });
 
     it('should trigger a before:add:region event', function() {
-      expect(beforeAddHandler).to.have.been.calledWith('foo');
-      expect(onBeforeAddSpy).to.have.been.calledWith('foo');
+      expect(this.beforeAddHandler).to.have.been.calledWith('foo');
+      expect(this.onBeforeAddSpy).to.have.been.calledWith('foo');
     });
 
     it('should trigger a add:region event', function() {
-      expect(addHandler).to.have.been.calledWith('foo', region);
-      expect(onAddSpy).to.have.been.calledWith('foo', region);
+      expect(this.addHandler).to.have.been.calledWith('foo', this.region);
+      expect(this.onAddSpy).to.have.been.calledWith('foo', this.region);
     });
   });
 
   describe('when adding a region to a layoutView, before it has been rendered', function() {
-    var layoutView, region, view;
-
     beforeEach(function() {
-      layoutView = new Marionette.LayoutView({
-        template: template
+      this.layoutView = new Marionette.LayoutView({
+        template: this.template
       });
 
-      region = layoutView.addRegion('foo', '#foo');
+      this.region = this.layoutView.addRegion('foo', '#foo');
 
-      layoutView.render();
+      this.layoutView.render();
 
-      view = new Backbone.View();
-      layoutView.foo.show(view);
+      this.view = new Backbone.View();
+      this.layoutView.foo.show(this.view);
     });
 
     it('should add the region to the layoutView after it is rendered', function() {
-      expect(layoutView.foo).to.equal(region);
+      expect(this.layoutView.foo).to.equal(this.region);
     });
 
     it('should set the parent of the region to the layoutView', function() {
-      expect(region.$el.parent()[0]).to.equal(layoutView.el);
+      expect(this.region.$el.parent()[0]).to.equal(this.layoutView.el);
     });
 
     it('should be able to show a view in the region', function() {
-      expect(layoutView.foo.$el.children().length).to.equal(1);
+      expect(this.layoutView.foo.$el.children().length).to.equal(1);
     });
   });
 
   describe('when adding a region to a layoutView that does not have any regions defined, and re-rendering the layoutView', function() {
-    var layoutView, region, barRegion, view;
-
     beforeEach(function() {
-      layoutView = new Marionette.LayoutView({
-        template: template
+      this.layoutView = new Marionette.LayoutView({
+        template: this.template
       });
 
-      barRegion = layoutView.bar;
+      this.barRegion = this.layoutView.bar;
 
-      region = layoutView.addRegion('foo', '#foo');
+      this.region = this.layoutView.addRegion('foo', '#foo');
 
-      layoutView.render();
-      layoutView.render();
+      this.layoutView.render();
+      this.layoutView.render();
 
-      view = new Backbone.View();
-      layoutView.foo.show(view);
+      this.view = new Backbone.View();
+      this.layoutView.foo.show(this.view);
     });
 
     it('should keep the original regions', function() {
-      expect(layoutView.bar).to.equal(barRegion);
+      expect(this.layoutView.bar).to.equal(this.barRegion);
     });
 
     it('should re-add the region to the layoutView after it is re-rendered', function() {
-      expect(layoutView.foo).to.equal(region);
+      expect(this.layoutView.foo).to.equal(this.region);
     });
 
     it('should set the parent of the region to the layoutView', function() {
-      expect(region.$el.parent()[0]).to.equal(layoutView.el);
+      expect(this.region.$el.parent()[0]).to.equal(this.layoutView.el);
     });
 
     it('should be able to show a view in the region', function() {
-      expect(layoutView.foo.$el.children().length).to.equal(1);
+      expect(this.layoutView.foo.$el.children().length).to.equal(1);
     });
   });
 
   describe('when adding a region to a layoutView that already has regions defined, and re-rendering the layoutView', function() {
-    var layoutView, region, view;
-
     beforeEach(function() {
-      layoutView = new Marionette.LayoutView({
+      this.layoutView = new Marionette.LayoutView({
         regions: {
           bar: '#bar'
         },
-        template: template
+        template: this.template
       });
 
-      region = layoutView.addRegion('foo', '#foo');
+      this.region = this.layoutView.addRegion('foo', '#foo');
 
-      layoutView.render();
-      layoutView.render();
+      this.layoutView.render();
+      this.layoutView.render();
 
-      view = new Backbone.View();
-      layoutView.foo.show(view);
+      this.view = new Backbone.View();
+      this.layoutView.foo.show(this.view);
     });
 
     it('should re-add the region to the layoutView after it is re-rendered', function() {
-      expect(layoutView.foo).to.equal(region);
+      expect(this.layoutView.foo).to.equal(this.region);
     });
 
     it('should set the parent of the region to the layoutView', function() {
-      region.show(new Backbone.View());
-      expect(region.$el.parent()[0]).to.equal(layoutView.el);
+      this.region.show(new Backbone.View());
+      expect(this.region.$el.parent()[0]).to.equal(this.layoutView.el);
     });
 
     it('should be able to show a view in the region', function() {
-      expect(layoutView.foo.$el.children().length).to.equal(1);
+      expect(this.layoutView.foo.$el.children().length).to.equal(1);
     });
   });
 
   describe('when removing a region from a layoutView', function() {
-    var LayoutView, layoutView, region, destroyHandler, removeHandler, beforeRemoveHandler, onBeforeRemoveSpy, onRemoveSpy;
-
     beforeEach(function() {
-      LayoutView = Marionette.LayoutView.extend({
-        template: template,
+      this.LayoutView = Marionette.LayoutView.extend({
+        template: this.template,
         regions: {
           foo: '#foo'
         },
@@ -173,97 +161,93 @@ describe('layoutView - dynamic regions', function() {
         onRemoveRegion: function() {}
       });
 
-      destroyHandler = this.sinon.spy();
-      beforeRemoveHandler = this.sinon.spy();
-      removeHandler = this.sinon.spy();
+      this.destroyHandler = this.sinon.spy();
+      this.beforeRemoveHandler = this.sinon.spy();
+      this.removeHandler = this.sinon.spy();
 
-      layoutView = new LayoutView();
+      this.layoutView = new this.LayoutView();
 
-      onBeforeRemoveSpy = this.sinon.spy(layoutView, 'onBeforeRemoveRegion');
-      onRemoveSpy = this.sinon.spy(layoutView, 'onRemoveRegion');
+      this.onBeforeRemoveSpy = this.sinon.spy(this.layoutView, 'onBeforeRemoveRegion');
+      this.onRemoveSpy = this.sinon.spy(this.layoutView, 'onRemoveRegion');
 
-      layoutView.render();
-      layoutView.foo.show(new Backbone.View());
-      region = layoutView.foo;
+      this.layoutView.render();
+      this.layoutView.foo.show(new Backbone.View());
+      this.region = this.layoutView.foo;
 
-      region.on('destroy', destroyHandler);
-      layoutView.on('before:remove:region', beforeRemoveHandler);
-      layoutView.on('remove:region', removeHandler);
+      this.region.on('destroy', this.destroyHandler);
+      this.layoutView.on('before:remove:region', this.beforeRemoveHandler);
+      this.layoutView.on('remove:region', this.removeHandler);
 
-      layoutView.removeRegion('foo');
+      this.layoutView.removeRegion('foo');
     });
 
     it('should destroy the region', function() {
-      expect(destroyHandler).to.have.been.called;
+      expect(this.destroyHandler).to.have.been.called;
     });
 
     it('should trigger a before:remove:region event', function() {
-      expect(onBeforeRemoveSpy).to.have.been.calledWith('foo');
-      expect(beforeRemoveHandler).to.have.been.calledWith('foo');
+      expect(this.onBeforeRemoveSpy).to.have.been.calledWith('foo');
+      expect(this.beforeRemoveHandler).to.have.been.calledWith('foo');
     });
 
     it('should trigger a remove:region event', function() {
-      expect(onRemoveSpy).to.have.been.calledWith('foo', region);
-      expect(removeHandler).to.have.been.calledWith('foo', region);
+      expect(this.onRemoveSpy).to.have.been.calledWith('foo', this.region);
+      expect(this.removeHandler).to.have.been.calledWith('foo', this.region);
     });
 
     it('should remove the region', function() {
-      expect(layoutView.foo).to.be.undefined;
-      expect(layoutView.regions.foo).to.be.undefined;
-      expect(layoutView.regionManager.get('foo')).to.be.undefined;
+      expect(this.layoutView.foo).to.be.undefined;
+      expect(this.layoutView.regions.foo).to.be.undefined;
+      expect(this.layoutView.regionManager.get('foo')).to.be.undefined;
     });
   });
 
   describe('when removing a region and then re-rendering the layoutView', function() {
-    var LayoutView, layoutView, region;
-
     beforeEach(function() {
-      LayoutView = Marionette.LayoutView.extend({
-        template: template,
+      this.LayoutView = Marionette.LayoutView.extend({
+        template: this.template,
         regions: {
           foo: '#foo'
         }
       });
 
-      layoutView = new LayoutView();
+      this.layoutView = new this.LayoutView();
 
-      layoutView.render();
-      layoutView.foo.show(new Backbone.View());
+      this.layoutView.render();
+      this.layoutView.foo.show(new Backbone.View());
 
-      layoutView.removeRegion('foo');
-      layoutView.render();
+      this.layoutView.removeRegion('foo');
+      this.layoutView.render();
 
-      region = layoutView.foo;
+      this.region = this.layoutView.foo;
     });
 
     it('should not re-attach the region to the layoutView', function() {
-      expect(region).to.be.undefined;
-      expect(layoutView.regionManager.get('foo')).to.be.undefined;
+      expect(this.region).to.be.undefined;
+      expect(this.layoutView.regionManager.get('foo')).to.be.undefined;
     });
   });
 
   describe('when adding a region to a layoutView then destroying the layoutView', function() {
-    var layoutView, region, destroyHandler, view;
-
     beforeEach(function() {
-      destroyHandler = this.sinon.stub();
-      layoutView = new Marionette.LayoutView({
-        template: template
+      this.destroyHandler = this.sinon.stub();
+      this.layoutView = new Marionette.LayoutView({
+        template: this.template
       });
 
-      layoutView.render();
+      this.layoutView.render();
 
-      region = layoutView.addRegion('foo', '#foo');
-      region.on('destroy', destroyHandler);
+      this.region = this.layoutView.addRegion('foo', '#foo');
+      this.region.on('destroy', this.destroyHandler);
 
-      view = new Backbone.View();
-      layoutView.foo.show(view);
+      this.view = new Backbone.View();
+      this.layoutView.foo.show(this.view);
 
-      layoutView.destroy();
+      this.layoutView.destroy();
     });
 
     it('should destroy the region', function() {
-      expect(destroyHandler).to.have.been.called;
+      expect(this.destroyHandler).to.have.been.called;
     });
   });
 });

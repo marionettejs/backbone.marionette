@@ -2,326 +2,304 @@ describe('application modules', function() {
   beforeEach(global.setup);
   afterEach(global.teardown);
 
-  var app;
-
   beforeEach(function() {
-    app = new Backbone.Marionette.Application();
+    this.app = new Backbone.Marionette.Application();
   });
 
   describe('.module', function() {
     describe('when creating a module', function() {
-      var module, initializeSpy, additionalParam, defineSpy;
-
       beforeEach(function() {
-        app = new Backbone.Marionette.Application();
-        initializeSpy = this.sinon.stub();
-        defineSpy = this.sinon.stub();
+        this.app = new Backbone.Marionette.Application();
+        this.initializeSpy = this.sinon.stub();
+        this.defineSpy = this.sinon.stub();
       });
 
       describe('and no params are passed in', function() {
         beforeEach(function() {
-          module = app.module('Mod');
+          this.module = this.app.module('Mod');
         });
 
         it('should add module to the app', function() {
-          expect(module).to.equal(app.Mod);
+          expect(this.module).to.equal(this.app.Mod);
         });
       });
 
       describe('and the define function is provided', function() {
         beforeEach(function() {
-          additionalParam = {};
-          module = app.module('Mod', defineSpy, additionalParam);
+          this.additionalParam = {};
+          this.module = this.app.module('Mod', this.defineSpy, this.additionalParam);
         });
 
         it('it should add module to the app', function() {
-          expect(module).to.equal(app.Mod);
+          expect(this.module).to.equal(this.app.Mod);
         });
 
         it('the define function should be called once', function() {
-          expect(defineSpy.callCount).to.equal(1);
+          expect(this.defineSpy.callCount).to.equal(1);
         });
 
         it('the define function should be called on the module', function() {
-          expect(defineSpy.lastCall.thisValue).to.equal(module);
+          expect(this.defineSpy.lastCall.thisValue).to.equal(this.module);
         });
 
         it('the define function should be called with arguments', function() {
-          expect(defineSpy).to.have.been.calledWith(
-            module,
-            app,
+          expect(this.defineSpy).to.have.been.calledWith(
+            this.module,
+            this.app,
             Backbone,
             Marionette,
             Backbone.$,
             _,
-            additionalParam
+            this.additionalParam
           );
         });
       });
 
       describe('and the options object is used', function() {
         describe('', function() {
-          var options, ModuleClass;
-
           beforeEach(function() {
-            ModuleClass = Backbone.Marionette.Module.extend({
-              initialize: initializeSpy,
+            this.ModuleClass = Backbone.Marionette.Module.extend({
+              initialize: this.initializeSpy,
               propA: 'becomes instance property'
             });
 
-            options = {
-              moduleClass: ModuleClass,
-              define: defineSpy,
+            this.options = {
+              moduleClass: this.ModuleClass,
+              define: this.defineSpy,
               propB: 'becomes options property'
             };
-            module = app.module('Mod', options, additionalParam);
+            this.module = this.app.module('Mod', this.options, this.additionalParam);
           });
 
           it('should add module to the app', function() {
-            expect(module).to.equal(app.Mod);
+            expect(this.module).to.equal(this.app.Mod);
           });
 
           it('initialize function is called', function() {
-            expect(initializeSpy).to.have.been.called;
+            expect(this.initializeSpy).to.have.been.called;
           });
 
           it('the define function is called', function() {
-            expect(defineSpy).to.have.been.called;
+            expect(this.defineSpy).to.have.been.called;
           });
 
           it('the define function should be called on the module', function() {
-            expect(defineSpy.lastCall.thisValue).to.equal(module);
+            expect(this.defineSpy.lastCall.thisValue).to.equal(this.module);
           });
 
           it('the define function is called with arguments', function() {
-            expect(defineSpy).to.have.been.calledWith(
-              module,
-              app,
+            expect(this.defineSpy).to.have.been.calledWith(
+              this.module,
+              this.app,
               Backbone,
               Marionette,
               Backbone.$,
               _,
-              additionalParam
+              this.additionalParam
             );
           });
 
           it('initialize function is called with arguments', function() {
-            expect(initializeSpy).to.have.been.calledWith('Mod', app, options);
+            expect(this.initializeSpy).to.have.been.calledWith('Mod', this.app, this.options);
           });
 
           it('prototype properties are defined', function() {
-            expect(module.propA).to.exist;
+            expect(this.module.propA).to.exist;
           });
 
           it('options properties are defined', function() {
-            expect(module.options.propB).to.exist;
+            expect(this.module.options.propB).to.exist;
           });
         });
 
         describe('and initialize is overridden', function() {
-          var initializeOptionSpy, ModuleClass;
-
           beforeEach(function() {
-            initializeOptionSpy = this.sinon.stub();
+            this.initializeOptionSpy = this.sinon.stub();
 
-            ModuleClass = Backbone.Marionette.Module.extend({
-              initialize: initializeSpy,
+            this.ModuleClass = Backbone.Marionette.Module.extend({
+              initialize: this.initializeSpy,
               propA: 'becomes instance property'
             });
 
-            module = app.module('Mod', {
-              moduleClass: ModuleClass,
-              initialize: initializeOptionSpy,
+            this.module = this.app.module('Mod', {
+              moduleClass: this.ModuleClass,
+              initialize: this.initializeOptionSpy,
               propB: 'becomes options property'
             });
           });
 
           it('initialize function is called', function() {
-            expect(initializeOptionSpy).to.have.been.called;
+            expect(this.initializeOptionSpy).to.have.been.called;
           });
         });
       });
 
       describe('and using a module class', function() {
-        var ModuleClass;
-
         describe('', function() {
           beforeEach(function() {
-            ModuleClass = Backbone.Marionette.Module.extend({
-              initialize: initializeSpy,
+            this.ModuleClass = Backbone.Marionette.Module.extend({
+              initialize: this.initializeSpy,
               propA: 'becomes instance property'
             });
 
-            module = app.module('Mod', ModuleClass);
+            this.module = this.app.module('Mod', this.ModuleClass);
           });
 
           it('should add module to the app', function() {
-            expect(module).to.equal(app.Mod);
+            expect(this.module).to.equal(this.app.Mod);
           });
 
           it('the initialize function is called', function() {
-            expect(initializeSpy).to.have.been.called;
+            expect(this.initializeSpy).to.have.been.called;
           });
 
           it('the initialize function is called with arguments', function() {
             // this is a weird side effect of ModuleClass being treated as the define function
-            // e.g. app.module('Mod', ModuleClass)
-            var defOptions = _.extend({}, ModuleClass);
-            expect(initializeSpy).to.have.been.calledWith('Mod', app, defOptions);
+            // e.g. this.app.module('Mod', ModuleClass)
+            var defOptions = _.extend({}, this.ModuleClass);
+            expect(this.initializeSpy).to.have.been.calledWith('Mod', this.app, defOptions);
           });
 
           it('prototype properties', function() {
-            expect(module.propA).to.exist;
+            expect(this.module.propA).to.exist;
           });
 
           it('startwithParent should be true', function() {
-            expect(module.startWithParent).to.be.true;
+            expect(this.module.startWithParent).to.be.true;
           });
         });
 
         describe('and startWithParent is false', function() {
           beforeEach(function() {
-            ModuleClass = Backbone.Marionette.Module.extend({
-              initialize: initializeSpy,
+            this.ModuleClass = Backbone.Marionette.Module.extend({
+              initialize: this.initializeSpy,
               propA: 'becomes instance property',
               startWithParent: false
             });
 
-            module = app.module('Mod', ModuleClass);
+            this.module = this.app.module('Mod', this.ModuleClass);
           });
 
           it('startwithParent should be false', function() {
-            expect(module.startWithParent).to.be.false;
+            expect(this.module.startWithParent).to.be.false;
           });
         });
       });
     });
 
     describe('when re-calling module', function() {
-      var app;
-
       beforeEach(function() {
-        app = new Backbone.Marionette.Application();
+        this.app = new Backbone.Marionette.Application();
       });
 
       describe('and no options are passed', function() {
-        var module1, module2;
-
         beforeEach(function() {
-          module1 = app.module('Mod');
-          module2 = app.module('Mod');
+          this.module1 = this.app.module('Mod');
+          this.module2 = this.app.module('Mod');
         });
 
         it('returns the same module', function() {
-          expect(module1).to.equal(module2);
-          expect(module1).to.equal(app.Mod);
+          expect(this.module1).to.equal(this.module2);
+          expect(this.module1).to.equal(this.app.Mod);
         });
       });
 
       describe('and define functions are provided', function() {
-        var module;
-
         beforeEach(function() {
-          module = app.module('Mod', function(module) {
+          this.module = this.app.module('Mod', function(module) {
             module.prop1 = 'first property';
           });
 
-          module = app.module('Mod', function(module) {
+          this.module = this.app.module('Mod', function(module) {
             module.prop2 = 'second property';
           });
         });
 
         it('it sets both properties', function() {
-          expect(module.prop1).to.exist;
-          expect(module.prop2).to.exist;
+          expect(this.module.prop1).to.exist;
+          expect(this.module.prop2).to.exist;
         });
       });
 
       describe('and options object is provided', function() {
-        var module, aSpy, bSpy;
-
         beforeEach(function() {
-          aSpy = this.sinon.spy();
-          bSpy = this.sinon.spy();
+          this.aSpy = this.sinon.spy();
+          this.bSpy = this.sinon.spy();
 
-          module = app.module('Mod', {
+          this.module = this.app.module('Mod', {
             propA: 'module property a',
-            define: aSpy,
+            define: this.aSpy,
             startWithParent: false
           });
 
-          module = app.module('Mod', {
+          this.module = this.app.module('Mod', {
             propB: 'module property b',
-            define: bSpy
+            define: this.bSpy
           });
         });
 
         it('it sets first the property', function() {
-          expect(module.options.propA).to.exist;
+          expect(this.module.options.propA).to.exist;
         });
 
         it('it does not set the second property', function() {
-          expect(module.options.propB).to.be.undefined;
+          expect(this.module.options.propB).to.be.undefined;
         });
 
         it('it calls both define functions', function() {
-          expect(aSpy).to.have.been.called;
-          expect(bSpy).to.have.been.called;
+          expect(this.aSpy).to.have.been.called;
+          expect(this.bSpy).to.have.been.called;
         });
 
         it('startWithParent value will not be lost', function() {
-          expect(module.startWithParent).to.be.false;
+          expect(this.module.startWithParent).to.be.false;
         });
       });
     });
 
     describe('when creating a sub-module', function() {
       describe('and the parent is already created', function() {
-        var parentDefineSpy, childDefineSpy, parent, child;
-
         beforeEach(function() {
-          parentDefineSpy = this.sinon.stub();
-          childDefineSpy = this.sinon.stub();
+          this.parentDefineSpy = this.sinon.stub();
+          this.childDefineSpy = this.sinon.stub();
 
-          parent = app.module('parent', parentDefineSpy);
-          child = app.module('parent.child', childDefineSpy);
+          this.parent = this.app.module('parent', this.parentDefineSpy);
+          this.child = this.app.module('parent.child', this.childDefineSpy);
         });
 
         it('parent should remain the same', function() {
-          expect(parent).to.equal(app.parent);
+          expect(this.parent).to.equal(this.app.parent);
         });
 
         it('parent definition should be called once', function() {
-          expect(parentDefineSpy.callCount).to.equal(1);
+          expect(this.parentDefineSpy.callCount).to.equal(1);
         });
 
         it('child should be created', function() {
-          expect(child).to.equal(app.parent.child);
+          expect(this.child).to.equal(this.app.parent.child);
         });
 
         it('child definition should be called once', function() {
-          expect(childDefineSpy.callCount).to.equal(1);
+          expect(this.childDefineSpy.callCount).to.equal(1);
         });
       });
 
       describe('and the parent is not already created', function() {
-        var defineSpy, child;
-
         beforeEach(function() {
-          defineSpy = this.sinon.stub();
-          child = app.module('parent.child', defineSpy);
+          this.defineSpy = this.sinon.stub();
+          this.child = this.app.module('parent.child', this.defineSpy);
         });
 
         it('parent should be defined', function() {
-          expect(app.parent).to.exist;
+          expect(this.app.parent).to.exist;
         });
 
         it('child should be created', function() {
-          expect(child).to.equal(app.parent.child);
+          expect(this.child).to.equal(this.app.parent.child);
         });
 
         it('definition should be called once', function() {
-          expect(defineSpy.callCount).to.equal(1);
+          expect(this.defineSpy.callCount).to.equal(1);
         });
       });
     });
@@ -329,95 +307,89 @@ describe('application modules', function() {
 
   describe('.start', function() {
     describe('when starting a module', function() {
-      var module, startSpy, beforeStartSpy, initializeSpy1, initializeSpy2;
-
       beforeEach(function() {
-        startSpy = this.sinon.stub();
-        beforeStartSpy = this.sinon.stub();
-        initializeSpy1 = this.sinon.stub();
-        initializeSpy2 = this.sinon.stub();
+        this.startSpy = this.sinon.stub();
+        this.beforeStartSpy = this.sinon.stub();
+        this.initializeSpy1 = this.sinon.stub();
+        this.initializeSpy2 = this.sinon.stub();
 
-        module = app.module('Mod');
-        module.on('before:start', beforeStartSpy);
-        module.on('start', startSpy);
-        module.addInitializer(initializeSpy1);
-        module.addInitializer(initializeSpy2);
+        this.module = this.app.module('Mod');
+        this.module.on('before:start', this.beforeStartSpy);
+        this.module.on('start', this.startSpy);
+        this.module.addInitializer(this.initializeSpy1);
+        this.module.addInitializer(this.initializeSpy2);
 
-        module.start();
+        this.module.start();
       });
 
       it('triggers module before start event', function() {
-        expect(beforeStartSpy).to.have.been.called;
+        expect(this.beforeStartSpy).to.have.been.called;
       });
 
       it('triggers module start event', function() {
-        expect(startSpy).to.have.been.called;
+        expect(this.startSpy).to.have.been.called;
       });
 
       it('the module initializers are called', function() {
-        expect(initializeSpy1).to.have.been.called;
-        expect(initializeSpy2).to.have.been.called;
+        expect(this.initializeSpy1).to.have.been.called;
+        expect(this.initializeSpy2).to.have.been.called;
       });
 
       it('the module is initialized', function() {
-        expect(module._isInitialized).to.be.true;
+        expect(this.module._isInitialized).to.be.true;
       });
     });
 
     describe('when calling module start twice', function() {
-      var module, startSpy;
-
       beforeEach(function() {
-        module = app.module('Mod');
-        startSpy = this.sinon.spy();
-        module.on('before:start', startSpy);
-        module.start();
-        module.start();
+        this.module = this.app.module('Mod');
+        this.startSpy = this.sinon.spy();
+        this.module.on('before:start', this.startSpy);
+        this.module.start();
+        this.module.start();
       });
 
       it('its only started once', function() {
-        expect(startSpy.callCount).to.equal(1);
+        expect(this.startSpy.callCount).to.equal(1);
       });
     });
 
     describe('when starting a module with sub-modules', function() {
-      var parent, child, parentStartSpy, childStartSpy;
-
       describe('when starting parent', function() {
         describe('', function() {
           beforeEach(function() {
-            parent = app.module('Parent');
-            child = app.module('Parent.Child');
+            this.parent = this.app.module('Parent');
+            this.child = this.app.module('Parent.Child');
 
-            childStartSpy = this.sinon.spy(child, 'start');
-            parentStartSpy = this.sinon.spy(parent, 'start');
-            parent.start();
+            this.childStartSpy = this.sinon.spy(this.child, 'start');
+            this.parentStartSpy = this.sinon.spy(this.parent, 'start');
+            this.parent.start();
           });
 
           it('parent is started', function() {
-            expect(parentStartSpy).to.have.been.called;
+            expect(this.parentStartSpy).to.have.been.called;
           });
 
           it('child is started', function() {
-            expect(childStartSpy).to.have.been.called;
+            expect(this.childStartSpy).to.have.been.called;
           });
         });
 
         describe('and child is set to not start with parent', function() {
           beforeEach(function() {
-            parent = app.module('Parent', {startWithParent: false});
-            child = app.module('Parent.Child', {startWithParent: false});
+            this.parent = this.app.module('Parent', {startWithParent: false});
+            this.child = this.app.module('Parent.Child', {startWithParent: false});
 
-            childStartSpy = this.sinon.spy(child, 'start');
-            parent.start();
+            this.childStartSpy = this.sinon.spy(this.child, 'start');
+            this.parent.start();
           });
 
           it('the parent is started', function() {
-            expect(parentStartSpy).to.have.been.called;
+            expect(this.parentStartSpy).to.have.been.called;
           });
 
           it('the child is not started', function() {
-            expect(childStartSpy).not.to.have.been.called;
+            expect(this.childStartSpy).not.to.have.been.called;
           });
         });
       });
@@ -425,158 +397,146 @@ describe('application modules', function() {
 
     describe('when starting app', function() {
       describe('', function() {
-        var module, startSpy;
-
         beforeEach(function() {
-          module = app.module('Mod');
-          startSpy = this.sinon.spy(module, 'start');
-          app.start();
+          this.module = this.app.module('Mod');
+          this.startSpy = this.sinon.spy(this.module, 'start');
+          this.app.start();
         });
 
         it('its module starts', function() {
-          expect(startSpy).to.have.been.called;
+          expect(this.startSpy).to.have.been.called;
         });
       });
 
       describe('and its module is set to not start with parent', function() {
-        var module, startSpy;
-
         beforeEach(function() {
-          module = app.module('Mod', {startWithParent: false});
-          startSpy = this.sinon.spy(module, 'start');
-          app.start();
+          this.module = this.app.module('Mod', {startWithParent: false});
+          this.startSpy = this.sinon.spy(this.module, 'start');
+          this.app.start();
         });
 
         it('it does not start', function() {
-          expect(startSpy).not.to.have.been.called;
+          expect(this.startSpy).not.to.have.been.called;
         });
       });
     });
 
     describe('after app is started', function() {
-      var module, initializeSpy;
-
       beforeEach(function() {
-        app.start();
-        initializeSpy = this.sinon.stub();
+        this.app.start();
+        this.initializeSpy = this.sinon.stub();
 
-        module = app.module('Mod');
-        module.addInitializer(initializeSpy);
-        module.start();
+        this.module = this.app.module('Mod');
+        this.module.addInitializer(this.initializeSpy);
+        this.module.start();
       });
 
       it('creates the module', function() {
-        expect(module).to.equal(app.Mod);
+        expect(this.module).to.equal(this.app.Mod);
       });
 
       it('calls the modules initializers', function() {
-        expect(initializeSpy).to.have.been.called;
+        expect(this.initializeSpy).to.have.been.called;
       });
     });
   });
 
   describe('.stop', function() {
     describe('when stopping a module', function() {
-      var module, beforeStopSpy, stopSpy, finalizerSpy;
-
       beforeEach(function() {
-        beforeStopSpy = this.sinon.spy();
-        stopSpy = this.sinon.spy();
-        finalizerSpy = this.sinon.spy();
+        this.beforeStopSpy = this.sinon.spy();
+        this.stopSpy = this.sinon.spy();
+        this.finalizerSpy = this.sinon.spy();
 
-        module = app.module('Mod');
-        module.addFinalizer(finalizerSpy);
-        module.on('before:stop', beforeStopSpy);
-        module.on('stop', stopSpy);
+        this.module = this.app.module('Mod');
+        this.module.addFinalizer(this.finalizerSpy);
+        this.module.on('before:stop', this.beforeStopSpy);
+        this.module.on('stop', this.stopSpy);
 
-        module.start();
-        module.stop();
+        this.module.start();
+        this.module.stop();
       });
 
       it('finalizer is called', function() {
-        expect(finalizerSpy).to.have.been.called;
+        expect(this.finalizerSpy).to.have.been.called;
       });
 
       it('before:stop event is triggered', function() {
-        expect(beforeStopSpy).to.have.been.called;
+        expect(this.beforeStopSpy).to.have.been.called;
       });
 
       it('stop event is triggered', function() {
-        expect(stopSpy).to.have.been.called;
+        expect(this.stopSpy).to.have.been.called;
       });
     });
 
     describe('when stopping a module with sub-modules', function() {
-      var module, child, beforeStopSpy, stopSpy, finalizerSpy;
-
       beforeEach(function() {
-        beforeStopSpy = this.sinon.spy();
-        stopSpy = this.sinon.spy();
-        finalizerSpy = this.sinon.spy();
+        this.beforeStopSpy = this.sinon.spy();
+        this.stopSpy = this.sinon.spy();
+        this.finalizerSpy = this.sinon.spy();
 
-        module = app.module('Mod');
-        child = app.module('Mod.Child');
-        child.addFinalizer(finalizerSpy);
-        child.on('before:stop', beforeStopSpy);
-        child.on('stop', stopSpy);
-        this.sinon.spy(child, 'stop');
+        this.module = this.app.module('Mod');
+        this.child = this.app.module('Mod.Child');
+        this.child.addFinalizer(this.finalizerSpy);
+        this.child.on('before:stop', this.beforeStopSpy);
+        this.child.on('stop', this.stopSpy);
+        this.sinon.spy(this.child, 'stop');
 
-        module.start();
-        module.stop();
+        this.module.start();
+        this.module.stop();
       });
 
       it('its submodule stop function is invoked', function() {
-        expect(child.stop).to.have.been.called;
+        expect(this.child.stop).to.have.been.called;
       });
 
       it('its submodule finalizer is called', function() {
-        expect(finalizerSpy).to.have.been.called;
+        expect(this.finalizerSpy).to.have.been.called;
       });
 
       it('its submodule before:stop event is triggered', function() {
-        expect(beforeStopSpy).to.have.been.called;
+        expect(this.beforeStopSpy).to.have.been.called;
       });
 
       it('its submoule stop event is triggered', function() {
-        expect(stopSpy).to.have.been.called;
+        expect(this.stopSpy).to.have.been.called;
       });
     });
 
     describe('when stopping a module before its started', function() {
-      var parent, child, parentFinalizerSpy, childFinalizerSpy, parentStopSpy, childStopSpy;
-
       beforeEach(function() {
-        parentFinalizerSpy = this.sinon.spy();
-        childFinalizerSpy = this.sinon.spy();
-        parentStopSpy = this.sinon.spy();
-        childStopSpy = this.sinon.spy();
+        this.parentFinalizerSpy = this.sinon.spy();
+        this.childFinalizerSpy = this.sinon.spy();
+        this.parentStopSpy = this.sinon.spy();
+        this.childStopSpy = this.sinon.spy();
 
-        parent = app.module('Parent');
-        child = app.module('Child');
+        this.parent = this.app.module('Parent');
+        this.child = this.app.module('Child');
 
-        parent.on('stop', parentStopSpy);
-        child.on('stop', childStopSpy);
+        this.parent.on('stop', this.parentStopSpy);
+        this.child.on('stop', this.childStopSpy);
 
-        parent.addFinalizer(parentFinalizerSpy);
-        child.addFinalizer(childFinalizerSpy);
+        this.parent.addFinalizer(this.parentFinalizerSpy);
+        this.child.addFinalizer(this.childFinalizerSpy);
 
-        parent.stop();
+        this.parent.stop();
       });
 
       it('the parent does not trigger a stop event', function() {
-        expect(parentFinalizerSpy).not.to.have.been.called;
+        expect(this.parentFinalizerSpy).not.to.have.been.called;
       });
 
       it('the child does not trigger a stop event', function() {
-        expect(childFinalizerSpy).not.to.have.been.called;
+        expect(this.childFinalizerSpy).not.to.have.been.called;
       });
 
       it('the parent does not call its finalizer', function() {
-        expect(parentStopSpy).not.to.have.been.called;
+        expect(this.parentStopSpy).not.to.have.been.called;
       });
 
       it('the child does not call its finalizer', function() {
-        expect(childStopSpy).not.to.have.been.called;
+        expect(this.childStopSpy).not.to.have.been.called;
       });
     });
   });

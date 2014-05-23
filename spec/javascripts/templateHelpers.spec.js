@@ -5,7 +5,7 @@ describe('template helper methods', function() {
   describe('composite view', function() {
     describe('when rendering with no model or collection and a templateHelpers is found', function() {
       beforeEach(function() {
-        var self = this;
+        var suite = this;
 
         this.View = Backbone.Marionette.CompositeView.extend({
           templateHelpers: {
@@ -13,7 +13,7 @@ describe('template helper methods', function() {
           },
 
           template: function(d) {
-            self.data = d;
+            suite.data = d;
           }
         });
 
@@ -30,11 +30,11 @@ describe('template helper methods', function() {
   describe('item view', function() {
     describe('when rendering with no model or collection and a templateHelpers is found', function() {
       beforeEach(function() {
-        var self = this;
+        var suite = this;
 
         this.View = Backbone.Marionette.ItemView.extend({
           template: function(data) {
-            self.renderData = data;
+            suite.renderData = data;
           },
           templateHelpers: {
             foo: function() {}
@@ -52,11 +52,11 @@ describe('template helper methods', function() {
 
     describe('when rendering with a model, and a templateHelpers is found', function() {
       beforeEach(function() {
-        var self = this;
+        var suite = this;
 
         this.View = Backbone.Marionette.ItemView.extend({
           template: function(data) {
-            self.renderData = data;
+            suite.renderData = data;
           },
           templateHelpers: {
             foo: function() {}

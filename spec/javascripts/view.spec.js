@@ -4,13 +4,13 @@ describe('base view', function() {
 
   describe('when initializing a view', function() {
     beforeEach(function() {
-      var self = this;
+      var suite = this;
 
       this.fooHandler = this.sinon.stub();
 
       this.View = Backbone.Marionette.View.extend({
         initialize: function() {
-          this.listenTo(this.model, 'foo', self.fooHandler);
+          this.listenTo(this.model, 'foo', suite.fooHandler);
         }
       });
 

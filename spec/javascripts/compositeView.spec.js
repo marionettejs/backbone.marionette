@@ -3,7 +3,7 @@ describe('composite view', function() {
   afterEach(global.teardown);
 
   beforeEach(function() {
-    var self = this;
+    var suite = this;
 
     // Models
 
@@ -15,7 +15,7 @@ describe('composite view', function() {
       initialize: function() {
         var nodes = this.get('nodes');
         if (nodes) {
-          this.nodes = new self.NodeCollection(nodes);
+          this.nodes = new suite.NodeCollection(nodes);
           this.unset('nodes');
         }
       }
@@ -124,13 +124,13 @@ describe('composite view', function() {
 
   describe('when a composite view triggers render in initialize', function() {
     beforeEach(function() {
-      var self = this;
+      var suite = this;
 
       this.EmptyView = Backbone.Marionette.ItemView.extend({
         template: '#emptyTemplate',
         tagName: 'hr',
         onShow: function() {
-          self.onShow.push('EMPTY');
+          suite.onShow.push('EMPTY');
         }
       });
 
@@ -199,7 +199,7 @@ describe('composite view', function() {
 
   describe('when rendering a composite view', function() {
     beforeEach(function() {
-      var self = this;
+      var suite = this;
 
       this.ChildView = Backbone.Marionette.ItemView.extend({
         tagName: 'span',
@@ -228,15 +228,15 @@ describe('composite view', function() {
       });
 
       this.compositeView.on('render:template', function() {
-        self.order.push(self.compositeView.renderedModelView);
+        suite.order.push(suite.compositeView.renderedModelView);
       });
 
       this.compositeView.on('render:collection', function() {
-        self.order.push(self.compositeView.collection);
+        suite.order.push(suite.compositeView.collection);
       });
 
       this.compositeView.on('render', function() {
-        self.order.push(self.compositeView);
+        suite.order.push(suite.compositeView);
       });
 
       this.sinon.spy(this.compositeView, 'trigger');
@@ -715,10 +715,10 @@ describe('composite view', function() {
     describe('after the model finished rendering, but before the collection rendered', function() {
       describe('accessing a ui element that belongs to the model template', function() {
         beforeEach(function() {
-          var self = this;
+          var suite = this;
 
           this.gridView.onBeforeRender = function() {
-            self.called = true;
+            suite.called = true;
           };
           this.sinon.spy(this.gridView, 'onBeforeRender');
           this.gridView.render();

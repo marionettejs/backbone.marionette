@@ -35,10 +35,10 @@ describe('trigger event and method name', function() {
 
     describe('when trigger does not exist', function() {
       beforeEach(function() {
-        var self = this;
+        var suite = this;
         this.customObject = new this.CustomClass();
         this.triggerNonExistantEvent = function() {
-          self.customObject.triggerMethod('does:not:exist');
+          suite.customObject.triggerMethod('does:not:exist');
         };
       });
 

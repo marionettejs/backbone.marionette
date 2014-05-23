@@ -286,7 +286,7 @@ describe('region', function() {
     });
 
     beforeEach(function() {
-      var self = this;
+      var suite = this;
 
       SubView = Backbone.Marionette.ItemView.extend({
         render: function() {
@@ -294,8 +294,8 @@ describe('region', function() {
         },
 
         initialize: function() {
-          innerRegionBeforeShowSpy = self.sinon.spy();
-          innerRegionShowSpy = self.sinon.spy();
+          innerRegionBeforeShowSpy = suite.sinon.spy();
+          innerRegionShowSpy = suite.sinon.spy();
           this.on('before:show', innerRegionBeforeShowSpy);
           this.on('show', innerRegionShowSpy);
         }

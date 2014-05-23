@@ -92,9 +92,9 @@ describe('Marionette.bindEntityEvents', function() {
 
       describe('when handler method doesnt exist', function() {
         it('should throw an exception', function() {
-          var self = this;
+          var suite = this;
           expect(function() {
-            Marionette.bindEntityEvents(self.target, self.entity, {'eventNameMock': 'notExistedMethod'});
+            Marionette.bindEntityEvents(suite.target, suite.entity, {'eventNameMock': 'notExistedMethod'});
           }).to.throw('Method "notExistedMethod" was configured as an event handler, but does not exist.');
         });
       });

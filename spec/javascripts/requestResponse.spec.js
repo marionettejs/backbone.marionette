@@ -1,7 +1,5 @@
 describe('application request/response', function() {
   'use strict';
-  beforeEach(global.setup);
-  afterEach(global.teardown);
 
   describe('when creating an instance of an Application', function() {
     beforeEach(function() {

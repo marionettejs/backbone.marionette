@@ -1,7 +1,5 @@
 describe('view entity events', function() {
   'use strict';
-  beforeEach(global.setup);
-  afterEach(global.teardown);
 
   describe('when a view has string-based model and collection event configuration', function() {
     beforeEach(function() {

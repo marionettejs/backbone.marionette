@@ -1,7 +1,5 @@
 describe('template helper methods', function() {
   'use strict';
-  beforeEach(global.setup);
-  afterEach(global.teardown);
 
   describe('composite view', function() {
     describe('when rendering with no model or collection and a templateHelpers is found', function() {

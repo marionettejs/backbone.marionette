@@ -1,7 +1,5 @@
 describe('marionette controller', function() {
   'use strict';
-  beforeEach(global.setup);
-  afterEach(global.teardown);
 
   describe('when creating an controller', function() {
     beforeEach(function() {

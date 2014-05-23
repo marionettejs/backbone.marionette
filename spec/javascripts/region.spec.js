@@ -1,7 +1,5 @@
 describe('region', function() {
   'use strict';
-  beforeEach(global.setup);
-  afterEach(global.teardown);
 
   describe('when creating a new region and no configuration has been provided', function() {
     it('should throw an exception saying an "el" is required', function() {

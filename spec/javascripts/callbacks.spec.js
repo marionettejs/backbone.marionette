@@ -1,7 +1,5 @@
 describe('callbacks', function() {
   'use strict';
-  beforeEach(global.setup);
-  afterEach(global.teardown);
 
   describe('when registering callbacks and running them', function() {
     beforeEach(function() {

@@ -42,9 +42,9 @@ describe('item view', function() {
     beforeEach(function() {
       view = new OnRenderView({});
 
-      sinon.spy(view, 'onBeforeRender');
-      sinon.spy(view, 'onRender');
-      sinon.spy(view, 'trigger');
+      this.sinon.spy(view, 'onBeforeRender');
+      this.sinon.spy(view, 'onRender');
+      this.sinon.spy(view, 'trigger');
 
       view.render();
     });
@@ -85,7 +85,7 @@ describe('item view', function() {
         })
       });
 
-      sinon.spy(view, 'serializeData');
+      this.sinon.spy(view, 'serializeData');
 
       view.render();
     });
@@ -124,13 +124,9 @@ describe('item view', function() {
         })
       });
 
-      sinon.spy(view, 'serializeData');
+      this.sinon.spy(view, 'serializeData');
 
       view.render();
-    });
-
-    afterEach(function() {
-      view.serializeData.restore();
     });
 
     it('should serialize the model', function() {
@@ -143,22 +139,24 @@ describe('item view', function() {
   });
 
   describe('when an item view has an asynchronous onRender and is rendered', function() {
-    var AsyncOnRenderView = Backbone.Marionette.ItemView.extend({
-      template: '#emptyTemplate',
-      asyncCallback: sinon.stub(),
-      onRender: function() {
-        var that = this;
-        var deferred = $.Deferred();
-        setTimeout(function() {
-          deferred.resolve(that.asyncCallback());
-        }, 0);
-        return deferred.promise();
-      }
-    });
+    var AsyncOnRenderView;
 
     var view, promise;
 
     beforeEach(function() {
+      AsyncOnRenderView = Backbone.Marionette.ItemView.extend({
+        template: '#emptyTemplate',
+        asyncCallback: this.sinon.stub(),
+        onRender: function() {
+          var that = this;
+          var deferred = $.Deferred();
+          setTimeout(function() {
+            deferred.resolve(that.asyncCallback());
+          }, 0);
+          return deferred.promise();
+        }
+      });
+
       this.loadFixtures('emptyTemplate.html');
       view = new AsyncOnRenderView();
       promise = view.render();
@@ -183,13 +181,9 @@ describe('item view', function() {
         collection: new Collection([{foo: 'bar'}, {foo: 'baz'}])
       });
 
-      sinon.spy(view, 'serializeData');
+      this.sinon.spy(view, 'serializeData');
 
       view.render();
-    });
-
-    afterEach(function() {
-      view.serializeData.restore();
     });
 
     it('should serialize the collection', function() {
@@ -212,7 +206,7 @@ describe('item view', function() {
         collection: new Collection([{foo: 'bar'}, {foo: 'baz'}])
       });
 
-      sinon.spy(view, 'serializeData');
+      this.sinon.spy(view, 'serializeData');
 
       view.render();
     });
@@ -257,13 +251,13 @@ describe('item view', function() {
       });
       view.render();
 
-      sinon.spy(view, 'remove');
-      sinon.spy(view, 'stopListening');
-      sinon.spy(view, 'modelChange');
-      sinon.spy(view, 'collectionChange');
-      sinon.spy(view, 'onBeforeDestroy');
-      sinon.spy(view, 'onDestroy');
-      sinon.spy(view, 'trigger');
+      this.sinon.spy(view, 'remove');
+      this.sinon.spy(view, 'stopListening');
+      this.sinon.spy(view, 'modelChange');
+      this.sinon.spy(view, 'collectionChange');
+      this.sinon.spy(view, 'onBeforeDestroy');
+      this.sinon.spy(view, 'onDestroy');
+      this.sinon.spy(view, 'trigger');
 
       view.listenTo(model, 'change:foo', view.modelChange);
       view.listenTo(collection, 'foo', view.collectionChange);
@@ -272,16 +266,6 @@ describe('item view', function() {
 
       model.set({foo: 'bar'});
       collection.trigger('foo');
-    });
-
-    afterEach(function() {
-      view.remove.restore();
-      view.stopListening.restore();
-      view.modelChange.restore();
-      view.collectionChange.restore();
-      view.onBeforeDestroy.restore();
-      view.onDestroy.restore();
-      view.trigger.restore();
     });
 
     it('should unbind model events for the view', function() {
@@ -352,7 +336,7 @@ describe('item view', function() {
           model: model
         });
 
-        spy = sinon.spy(view, 'render');
+        spy = this.sinon.spy(view, 'render');
 
         view.setupHandler();
         view.render();
@@ -364,10 +348,6 @@ describe('item view', function() {
         chk = view.$('#chk');
         chk.removeAttr('checked');
         chk.trigger('change');
-      });
-
-      afterEach(function() {
-        view.render.restore();
       });
 
       it('should render the view 3 times total', function() {
@@ -385,7 +365,7 @@ describe('item view', function() {
     var renderUpdate, view;
 
     beforeEach(function() {
-      renderUpdate = sinon.stub();
+      renderUpdate = this.sinon.stub();
 
       view = new View();
       $('body').append(view.el);
@@ -411,12 +391,8 @@ describe('item view', function() {
     var constructor, itemView;
 
     beforeEach(function() {
-      constructor = sinon.spy(Marionette, 'View');
+      constructor = this.sinon.spy(Marionette, 'View');
       itemView = new Marionette.ItemView();
-    });
-
-    afterEach(function () {
-      Marionette.View.restore();
     });
 
     it('calls the parent Marionette.Views constructor function on instantiation', function() {

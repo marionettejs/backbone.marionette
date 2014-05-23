@@ -32,17 +32,12 @@ describe('collection view - reset', function() {
         collection: collection
       });
 
-      sinon.spy(collectionView, 'onRender');
-      sinon.spy(collectionView, 'destroyChildren');
+      this.sinon.spy(collectionView, 'onRender');
+      this.sinon.spy(collectionView, 'destroyChildren');
 
       collectionView.render();
 
       collection.reset([{foo: 'bar'}, {foo: 'baz'}]);
-    });
-
-    afterEach(function () {
-      collectionView.onRender.restore();
-      collectionView.destroyChildren.restore();
     });
 
     it('should destroy all open child views', function() {

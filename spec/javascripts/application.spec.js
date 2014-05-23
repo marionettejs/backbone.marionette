@@ -9,26 +9,22 @@ describe('marionette application', function() {
     var someOptions = {};
 
     beforeEach(function() {
+      var self = this;
       MyApp = new Backbone.Marionette.Application();
 
       MyModule = (function(MyApp) {
         var module = {};
         module.initializer = function() {};
 
-        sinon.spy(module, 'initializer');
+        self.sinon.spy(module, 'initializer');
         MyApp.addInitializer(module.initializer);
 
         return module;
       })(MyApp);
 
-      sinon.spy(MyApp, 'trigger');
+      this.sinon.spy(MyApp, 'trigger');
 
       MyApp.start(someOptions);
-    });
-
-    afterEach(function() {
-      MyModule.initializer.restore();
-      MyApp.trigger.restore();
     });
 
     it('should notify me before the starts', function() {

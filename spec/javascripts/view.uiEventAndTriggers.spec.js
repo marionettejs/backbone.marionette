@@ -86,17 +86,13 @@ describe('view ui event trigger configuration', function() {
       view2.render();
       view3.render();
 
-      fooHandler = sinon.stub();
-      attackHandler = sinon.stub();
-      defendHandler = sinon.stub();
-      tapHandler = sinon.stub();
-      sinon.spy(view, 'attack');
+      fooHandler = this.sinon.stub();
+      attackHandler = this.sinon.stub();
+      defendHandler = this.sinon.stub();
+      tapHandler = this.sinon.stub();
+      this.sinon.spy(view, 'attack');
       view.on('do:foo', fooHandler);
       view2.on('do:foo', fooHandler);
-    });
-
-    afterEach(function () {
-      view.attack.restore();
     });
 
     it('should correctly trigger an event', function() {

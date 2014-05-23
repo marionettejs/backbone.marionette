@@ -93,14 +93,9 @@ describe('template helper methods', function() {
       beforeEach(function() {
         var model = new Backbone.Model({bar: 'baz'});
         view = new View({model: model});
-        sinon.spy(view, 'template');
-        sinon.stub(view, 'templateHelpers').returns({foo: function() {}});
+        this.sinon.spy(view, 'template');
+        this.sinon.stub(view, 'templateHelpers').returns({foo: function() {}});
         view.render();
-      });
-
-      afterEach(function() {
-        view.template.restore();
-        view.templateHelpers.restore();
       });
 
       it('should include the template helpers in the data object', function() {
@@ -135,12 +130,8 @@ describe('template helper methods', function() {
           }
         });
 
-        sinon.spy(view, 'template');
+        this.sinon.spy(view, 'template');
         view.render();
-      });
-
-      afterEach(function() {
-        view.template.restore();
       });
 
       it('should include the template helpers in the data object', function() {

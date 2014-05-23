@@ -48,13 +48,9 @@ describe('collectionview - emptyView', function() {
       var destroySpy;
 
       beforeEach(function() {
-        destroySpy = sinon.spy(EmptyView.prototype, 'destroy');
+        destroySpy = this.sinon.spy(EmptyView.prototype, 'destroy');
 
         collection.add({foo: 'wut'});
-      });
-
-      afterEach(function () {
-        EmptyView.prototype.destroy.restore();
       });
 
       it('should destroy the emptyView', function() {
@@ -78,15 +74,11 @@ describe('collectionview - emptyView', function() {
 
       collectionView.render();
 
-      destroySpy = sinon.spy(EmptyView.prototype, 'destroy');
+      destroySpy = this.sinon.spy(EmptyView.prototype, 'destroy');
 
       collection.reset([{foo: 'bar'}, {foo: 'baz'}]);
 
       collection.add({foo: 'wut'});
-    });
-
-    afterEach(function () {
-      EmptyView.prototype.destroy.restore();
     });
 
     it('should destroy the emptyView', function() {

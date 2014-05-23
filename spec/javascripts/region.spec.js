@@ -105,19 +105,19 @@ describe('region', function() {
 
     beforeEach(function() {
       this.setFixtures('<div id="region"></div>');
-      showSpy = sinon.spy();
-      regionBeforeShowSpy = sinon.spy();
-      regionBeforeSwapSpy = sinon.spy();
-      regionSwapSpy = sinon.spy();
-      viewBeforeShowSpy = sinon.spy();
+      showSpy = this.sinon.spy();
+      regionBeforeShowSpy = this.sinon.spy();
+      regionBeforeSwapSpy = this.sinon.spy();
+      regionSwapSpy = this.sinon.spy();
+      viewBeforeShowSpy = this.sinon.spy();
 
       view = new MyView();
-      sinon.spy(view, 'render');
+      this.sinon.spy(view, 'render');
 
       myRegion = new MyRegion();
-      sinon.spy(myRegion, 'onShow');
-      setHtmlSpy = sinon.spy(myRegion, 'setHtml');
-      swapSpy = sinon.spy(myRegion, 'onSwap');
+      this.sinon.spy(myRegion, 'onShow');
+      setHtmlSpy = this.sinon.spy(myRegion, 'setHtml');
+      swapSpy = this.sinon.spy(myRegion, 'onSwap');
 
       myRegion.on('show', showSpy);
       myRegion.on('before:show', regionBeforeShowSpy);
@@ -127,13 +127,6 @@ describe('region', function() {
       view.on('before:show', viewBeforeShowSpy);
 
       myRegion.show(view);
-    });
-
-    afterEach(function() {
-      view.render.restore();
-      myRegion.onShow.restore();
-      myRegion.setHtml.restore();
-      myRegion.onSwap.restore();
     });
 
     it('should render the view', function() {
@@ -245,13 +238,9 @@ describe('region', function() {
         view2 = new MyView2();
         myRegion = new MyRegion();
 
-        sinon.spy(view1, 'destroy');
+        this.sinon.spy(view1, 'destroy');
 
         myRegion.show(view1);
-      });
-
-      afterEach(function() {
-        view1.destroy.restore();
       });
 
       describe('preventDestroy: true', function() {
@@ -303,31 +292,29 @@ describe('region', function() {
       }
     });
 
-    SubView = Backbone.Marionette.ItemView.extend({
-      render: function() {
-        $(this.el).html('some content');
-      },
-
-      initialize: function() {
-        innerRegionBeforeShowSpy = sinon.spy();
-        innerRegionShowSpy = sinon.spy();
-        this.on('before:show', innerRegionBeforeShowSpy);
-        this.on('show', innerRegionShowSpy);
-      }
-    });
-
     beforeEach(function() {
+      var self = this;
+
+      SubView = Backbone.Marionette.ItemView.extend({
+        render: function() {
+          $(this.el).html('some content');
+        },
+
+        initialize: function() {
+          innerRegionBeforeShowSpy = self.sinon.spy();
+          innerRegionShowSpy = self.sinon.spy();
+          this.on('before:show', innerRegionBeforeShowSpy);
+          this.on('show', innerRegionShowSpy);
+        }
+      });
+
       this.setFixtures('<div id="region"></div>');
       region = new MyRegion();
-      setHtmlSpy = sinon.spy(region, 'setHtml');
+      setHtmlSpy = this.sinon.spy(region, 'setHtml');
       region.show(new LayoutView());
     });
 
-    afterEach(function() {
-      region.setHtml.restore();
-    });
-
-    it('should call inner region before:show before region setHtml', function() {
+    it('should call inner region before:show before region open', function() {
       expect(innerRegionBeforeShowSpy.calledBefore(setHtmlSpy)).to.be.true;
     });
 
@@ -362,14 +349,10 @@ describe('region', function() {
       view2 = new MyView();
       myRegion = new MyRegion();
 
-      sinon.spy(view1, 'destroy');
+      this.sinon.spy(view1, 'destroy');
 
       myRegion.show(view1);
       myRegion.show(view2);
-    });
-
-    afterEach(function() {
-      view1.destroy.restore();
     });
 
     it('should call "destroy" on the already open view', function() {
@@ -404,16 +387,10 @@ describe('region', function() {
       myRegion = new MyRegion();
       myRegion.show(view);
 
-      sinon.spy(view, 'destroy');
-      sinon.spy(myRegion, 'setHtml');
-      sinon.spy(view, 'render');
+      this.sinon.spy(view, 'destroy');
+      this.sinon.spy(myRegion, 'setHtml');
+      this.sinon.spy(view, 'render');
       myRegion.show(view);
-    });
-
-    afterEach(function() {
-      view.destroy.restore();
-      myRegion.setHtml.restore();
-      view.render.restore();
     });
 
     it('should not call "destroy" on the view', function() {
@@ -452,16 +429,10 @@ describe('region', function() {
       myRegion = new MyRegion();
       myRegion.show(view);
 
-      sinon.spy(view, 'destroy');
-      sinon.spy(myRegion, 'setHtml');
-      sinon.spy(view, 'render');
+      this.sinon.spy(view, 'destroy');
+      this.sinon.spy(myRegion, 'setHtml');
+      this.sinon.spy(view, 'render');
       myRegion.show(view, {forceShow: true});
-    });
-
-    afterEach(function() {
-      view.destroy.restore();
-      myRegion.setHtml.restore();
-      view.render.restore();
     });
 
     it('should not call "destroy" on the view', function() {
@@ -497,15 +468,9 @@ describe('region', function() {
       myRegion.show(view);
       view.destroy();
 
-      sinon.spy(view, 'destroy');
-      sinon.spy(myRegion, 'setHtml');
-      sinon.spy(view, 'render');
-    });
-
-    afterEach(function() {
-      view.destroy.restore();
-      myRegion.setHtml.restore();
-      view.render.restore();
+      this.sinon.spy(view, 'destroy');
+      this.sinon.spy(myRegion, 'setHtml');
+      this.sinon.spy(view, 'render');
     });
 
     it('should not throw an error saying the views been destroyed if a destroyed view is passed in', function() {
@@ -535,11 +500,7 @@ describe('region', function() {
       view2 = new MyView();
       myRegion = new MyRegion();
 
-      sinon.spy(view1, 'destroy');
-    });
-
-    afterEach(function() {
-      view1.destroy.restore();
+      this.sinon.spy(view1, 'destroy');
     });
 
     it('shouldnt call "destroy" on an already destroyed view', function() {
@@ -568,13 +529,13 @@ describe('region', function() {
 
     beforeEach(function() {
       this.setFixtures('<div id="region"></div>');
-      beforeDestroySpy = sinon.spy();
-      destroyedSpy = sinon.spy();
+      beforeDestroySpy = this.sinon.spy();
+      destroyedSpy = this.sinon.spy();
 
       view = new MyView();
 
-      sinon.spy(view, 'destroy');
-      sinon.spy(view, 'remove');
+      this.sinon.spy(view, 'destroy');
+      this.sinon.spy(view, 'remove');
 
       myRegion = new MyRegion();
       myRegion.on('before:destroy', beforeDestroySpy);
@@ -582,11 +543,6 @@ describe('region', function() {
       myRegion.show(view);
 
       myRegion.destroy();
-    });
-
-    afterEach(function() {
-      view.destroy.restore();
-      view.remove.restore();
     });
 
     it('should trigger a "before:destroy" event with the view thats being destroyed', function() {
@@ -637,14 +593,10 @@ describe('region', function() {
 
     beforeEach(function() {
       view = new MyView();
-      sinon.spy(view, 'remove');
+      this.sinon.spy(view, 'remove');
       myRegion = new MyRegion();
       myRegion.show(view);
       myRegion.destroy();
-    });
-
-    afterEach(function() {
-      view.remove.restore();
     });
 
     it('should call "remove" on the view', function() {
@@ -678,18 +630,13 @@ describe('region', function() {
 
       view = new View();
 
-      sinon.spy(view, 'render');
-      sinon.spy(view, 'onShow');
+      this.sinon.spy(view, 'render');
+      this.sinon.spy(view, 'onShow');
 
       region = new Backbone.Marionette.Region({
         el: '#foo',
         currentView: view
       });
-    });
-
-    afterEach(function() {
-      view.render.restore();
-      view.onShow.restore();
     });
 
     it('should not render the view', function() {
@@ -713,19 +660,14 @@ describe('region', function() {
 
       view = new View();
 
-      sinon.spy(view, 'render');
-      sinon.spy(view, 'onShow');
+      this.sinon.spy(view, 'render');
+      this.sinon.spy(view, 'onShow');
 
       region = new Backbone.Marionette.Region({
         el: '#foo'
       });
 
       region.attachView(view);
-    });
-
-    afterEach(function() {
-      view.render.restore();
-      view.onShow.restore();
     });
 
     it('should not render the view', function() {
@@ -751,15 +693,11 @@ describe('region', function() {
         initialize: function() {}
       });
 
-      sinon.spy(Region.prototype, 'initialize');
+      this.sinon.spy(Region.prototype, 'initialize');
 
       region = new Region({
         foo: 'bar'
       });
-    });
-
-    afterEach(function() {
-      Region.prototype.initialize.restore();
     });
 
     it('should call the initialize method with the options from the constructor', function() {
@@ -780,13 +718,9 @@ describe('region', function() {
       });
 
       region = MyApp.MyRegion;
-      sinon.spy(region, 'destroy');
+      this.sinon.spy(region, 'destroy');
 
       MyApp.removeRegion('MyRegion');
-    });
-
-    afterEach(function() {
-      region.destroy.restore();
     });
 
     it('should be removed from the app', function() {
@@ -824,15 +758,11 @@ describe('region', function() {
         el: '#region'
       });
 
-      sinon.spy(region, 'destroy');
+      this.sinon.spy(region, 'destroy');
 
       region._ensureElement();
 
       region.reset();
-    });
-
-    afterEach(function() {
-      region.destroy.restore();
     });
 
     it('should not hold on to the regions previous "el"', function() {

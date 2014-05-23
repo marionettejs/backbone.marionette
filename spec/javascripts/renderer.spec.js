@@ -10,13 +10,9 @@ describe('renderer', function() {
 
     beforeEach(function() {
       this.loadFixtures('rendererTemplate.html');
-      sinon.spy(Backbone.Marionette.TemplateCache, 'get');
+      this.sinon.spy(Backbone.Marionette.TemplateCache, 'get');
       var html = Backbone.Marionette.Renderer.render(templateSelector).trim();
       result = $(html);
-    });
-
-    afterEach(function() {
-      Backbone.Marionette.TemplateCache.get.restore();
     });
 
     it('should retrieve the template from the cache', function() {
@@ -34,15 +30,11 @@ describe('renderer', function() {
 
     beforeEach(function() {
       this.loadFixtures('rendererWithDataTemplate.html');
-      sinon.spy(Backbone.Marionette.TemplateCache, 'get');
+      this.sinon.spy(Backbone.Marionette.TemplateCache, 'get');
 
       var data = {foo: 'bar'};
       var html = Backbone.Marionette.Renderer.render(templateSelector, data).trim();
       result = $(html);
-    });
-
-    afterEach(function() {
-      Backbone.Marionette.TemplateCache.get.restore();
     });
 
     it('should retrieve the template from the cache', function() {

@@ -1,15 +1,14 @@
 describe('onDomRefresh', function() {
-
   beforeEach(global.setup);
   afterEach(global.teardown);
 
-  var view;
-
-  var View = Backbone.Marionette.ItemView.extend({
-    onDomRefresh: function() {}
-  });
+  var View, view;
 
   beforeEach(function() {
+    View = Backbone.Marionette.ItemView.extend({
+      onDomRefresh: function() {}
+    });
+
     this.sinon.spy(View.prototype, 'onDomRefresh');
     view = new View();
     view.trigger('show');

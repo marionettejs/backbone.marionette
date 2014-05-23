@@ -1,6 +1,4 @@
 describe('module stop', function() {
-  'use strict';
-
   beforeEach(global.setup);
   afterEach(global.teardown);
 
@@ -59,7 +57,6 @@ describe('module stop', function() {
     it('should not remove the module from its parent module or application', function() {
       expect(App.module('Mod1')).to.equal(mod1);
     });
-
   });
 
   describe('when stopping a module that has not been started', function() {
@@ -92,11 +89,11 @@ describe('module stop', function() {
   });
 
   describe('when adding a module finalizer outside of the module definition function and stopping the module', function() {
-    var finalizer;
+    var MyApp, module, finalizer;
 
     beforeEach(function() {
-      var MyApp = new Marionette.Application();
-      var module = MyApp.module('MyModule');
+      MyApp = new Marionette.Application();
+      module = MyApp.module('MyModule');
 
       finalizer = this.sinon.stub();
       module.addFinalizer(finalizer);
@@ -108,7 +105,5 @@ describe('module stop', function() {
     it('should run the finalizer', function() {
       expect(finalizer).to.have.been.called;
     });
-
   });
-
 });

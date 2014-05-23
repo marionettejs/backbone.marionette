@@ -1,26 +1,23 @@
 describe('template helper methods', function() {
-  'use strict';
-
   beforeEach(global.setup);
   afterEach(global.teardown);
 
   describe('composite view', function() {
-
     describe('when rendering with no model or collection and a templateHelpers is found', function() {
-      var data;
-
-      var View = Backbone.Marionette.CompositeView.extend({
-        templateHelpers: {
-          foo: function() {}
-        },
-
-        template: function(d) {
-          data = d;
-        }
-      });
+      var View, view, data;
 
       beforeEach(function() {
-        var view = new View();
+        View = Backbone.Marionette.CompositeView.extend({
+          templateHelpers: {
+            foo: function() {}
+          },
+
+          template: function(d) {
+            data = d;
+          }
+        });
+
+        view = new View();
         view.render();
       });
 
@@ -28,25 +25,23 @@ describe('template helper methods', function() {
         expect(data.foo).to.exist;
       });
     });
-
   });
 
   describe('item view', function() {
-
     describe('when rendering with no model or collection and a templateHelpers is found', function() {
-      var renderData;
-
-      var View = Backbone.Marionette.ItemView.extend({
-        template: function(data) {
-          renderData = data;
-        },
-        templateHelpers: {
-          foo: function() {}
-        }
-      });
+      var View, view, renderData;
 
       beforeEach(function() {
-        var view = new View();
+        View = Backbone.Marionette.ItemView.extend({
+          template: function(data) {
+            renderData = data;
+          },
+          templateHelpers: {
+            foo: function() {}
+          }
+        });
+
+        view = new View();
         view.render();
       });
 
@@ -56,20 +51,20 @@ describe('template helper methods', function() {
     });
 
     describe('when rendering with a model, and a templateHelpers is found', function() {
-      var renderData;
-
-      var View = Backbone.Marionette.ItemView.extend({
-        template: function(data) {
-          renderData = data;
-        },
-        templateHelpers: {
-          foo: function() {}
-        }
-      });
+      var View, model, view, renderData;
 
       beforeEach(function() {
-        var model = new Backbone.Model({bar: 'baz'});
-        var view = new View({model: model});
+        View = Backbone.Marionette.ItemView.extend({
+          template: function(data) {
+            renderData = data;
+          },
+          templateHelpers: {
+            foo: function() {}
+          }
+        });
+
+        model = new Backbone.Model({bar: 'baz'});
+        view = new View({model: model});
         view.render();
       });
 
@@ -83,15 +78,15 @@ describe('template helper methods', function() {
     });
 
     describe('when rendering and a templateHelpers is found as a function', function() {
-      var view;
-
-      var View = Backbone.Marionette.ItemView.extend({
-        template: function() {},
-        templateHelpers: function() {}
-      });
+      var View, view, model;
 
       beforeEach(function() {
-        var model = new Backbone.Model({bar: 'baz'});
+        View = Backbone.Marionette.ItemView.extend({
+          template: function() {},
+          templateHelpers: function() {}
+        });
+
+        model = new Backbone.Model({bar: 'baz'});
         view = new View({model: model});
         this.sinon.spy(view, 'template');
         this.sinon.stub(view, 'templateHelpers').returns({foo: function() {}});
@@ -114,14 +109,14 @@ describe('template helper methods', function() {
     });
 
     describe('when templateHelpers is provided to constructor options', function() {
-      var view;
-
-      var View = Backbone.Marionette.ItemView.extend({
-        template: function() {}
-      });
+      var View, view, model;
 
       beforeEach(function() {
-        var model = new Backbone.Model({bar: 'baz'});
+        View = Backbone.Marionette.ItemView.extend({
+          template: function() {}
+        });
+
+        model = new Backbone.Model({bar: 'baz'});
 
         view = new View({
           model: model,
@@ -144,7 +139,5 @@ describe('template helper methods', function() {
         expect(firstArg.bar).to.equal('baz');
       });
     });
-
   });
-
 });

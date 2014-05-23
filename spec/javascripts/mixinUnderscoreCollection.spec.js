@@ -1,9 +1,12 @@
 describe('Marionette.actAsCollection', function() {
-
   beforeEach(global.setup);
   afterEach(global.teardown);
 
-  var double = function(v) { return v * 2; };
+  var double;
+
+  beforeEach(function() {
+    double = function(v) { return v * 2; };
+  });
 
   describe('object literal', function() {
     var obj;

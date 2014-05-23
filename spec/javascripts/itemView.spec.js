@@ -138,10 +138,10 @@ describe('item view', function() {
     });
 
     it('should delay until onRender resolves', function(done) {
-      var self = this;
+      var suite = this;
       setTimeout(function () {
-        $.when(self.promise).then(function() {
-          expect(self.view.asyncCallback).to.have.been.called;
+        $.when(suite.promise).then(function() {
+          expect(suite.view.asyncCallback).to.have.been.called;
           done();
         });
       }, 0);

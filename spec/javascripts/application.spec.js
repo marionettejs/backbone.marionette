@@ -4,7 +4,7 @@ describe('marionette application', function() {
 
   describe('when registering an initializer and starting the application', function() {
     beforeEach(function() {
-      var self = this;
+      var suite = this;
 
       this.someOptions = {};
 
@@ -14,7 +14,7 @@ describe('marionette application', function() {
         var module = {};
         module.initializer = function() {};
 
-        self.sinon.spy(module, 'initializer');
+        suite.sinon.spy(module, 'initializer');
         MyApp.addInitializer(module.initializer);
 
         return module;
@@ -48,12 +48,12 @@ describe('marionette application', function() {
 
   describe('when an app has been started, and registering another initializer', function() {
     beforeEach(function() {
-      var self = this;
+      var suite = this;
       this.MyApp = new Backbone.Marionette.Application();
       this.MyApp.start();
 
       this.MyApp.addInitializer(function() {
-        self.initialized = true;
+        suite.initialized = true;
       });
     });
 
@@ -76,13 +76,13 @@ describe('marionette application', function() {
 
   describe('when specifying an on start callback, and starting the app', function() {
     beforeEach(function() {
-      var self = this;
+      var suite = this;
       this.MyApp = new Backbone.Marionette.Application();
       this.options = {};
 
       this.MyApp.on('start', function(opts) {
-        self.started = true;
-        self.onStartOptions = opts;
+        suite.started = true;
+        suite.onStartOptions = opts;
       });
 
       this.MyApp.start(this.options);

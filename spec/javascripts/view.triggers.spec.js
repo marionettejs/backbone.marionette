@@ -4,7 +4,7 @@ describe('view triggers', function() {
 
   describe('when DOM events are configured to trigger a view event, and the DOM events are fired', function() {
     beforeEach(function() {
-      var self = this;
+      var suite = this;
 
       this.View = Backbone.Marionette.ItemView.extend({
         triggers: {
@@ -30,7 +30,7 @@ describe('view triggers', function() {
       this.view.on('what:ever', this.whatHandler);
 
       this.view.on('do:foo', function(e) {
-        self.args = e;
+        suite.args = e;
       });
 
       this.view.$('.foo').trigger('click');

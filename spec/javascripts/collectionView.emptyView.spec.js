@@ -186,7 +186,7 @@ describe('collectionview - emptyView', function() {
 
   describe('when emptyView is specified with getEmptyView option', function() {
     beforeEach(function() {
-      var self = this;
+      var suite = this;
 
       this.OtherEmptyView = Backbone.Marionette.ItemView.extend({
         render: function() {}
@@ -194,7 +194,7 @@ describe('collectionview - emptyView', function() {
 
       this.CollectionView = Backbone.Marionette.CollectionView.extend({
         childView: this.ItemView,
-        getEmptyView: function() { return self.OtherEmptyView; }
+        getEmptyView: function() { return suite.OtherEmptyView; }
       });
     });
 
@@ -236,13 +236,13 @@ describe('collectionview - emptyView', function() {
 
     describe('when overriding with a populated collection', function() {
       beforeEach(function() {
-        var self = this;
+        var suite = this;
 
         this.collection = new Backbone.Collection([{foo: 'wut'}, {foo: 'wat'}]);
 
         this.OverriddenIsEmptyCollectionView = this.EmptyCollectionView.extend({
           isEmpty: function(col) {
-            self.passedInCollection = col;
+            suite.passedInCollection = col;
             return true;
           }
         });

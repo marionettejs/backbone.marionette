@@ -62,12 +62,12 @@ describe('view entity events', function() {
 
   describe('when a view has model event config with a specified handler method that doesnt exist', function() {
     beforeEach(function() {
-      var self = this;
+      var suite = this;
       this.View = Backbone.Marionette.View.extend({
         modelEvents: {foo: 'does_not_exist'}
       });
       this.getBadViewInstance = function() {
-        return new self.View({model: {}});
+        return new suite.View({model: {}});
       };
     });
 
@@ -78,16 +78,16 @@ describe('view entity events', function() {
 
   describe('when configuring entity events with a function', function() {
     beforeEach(function() {
-      var self = this;
+      var suite = this;
       this.modelHandler = this.sinon.stub();
       this.collectionHandler = this.sinon.stub();
 
       this.View = Backbone.Marionette.View.extend({
         modelEvents: function() {
-          return {'model-event': self.modelHandler};
+          return {'model-event': suite.modelHandler};
         },
         collectionEvents: function() {
-          return {'collection-event': self.collectionHandler};
+          return {'collection-event': suite.collectionHandler};
         }
       });
 
@@ -194,7 +194,7 @@ describe('view entity events', function() {
 
   describe('when LayoutView bound to modelEvent replaces region with new view', function() {
     beforeEach(function() {
-      var self = this;
+      var suite = this;
 
       this.ChildView = Marionette.ItemView.extend({
         template: _.template(''),
@@ -216,7 +216,7 @@ describe('view entity events', function() {
         },
 
         onRender: function() {
-          this.child.show(new self.ChildView({
+          this.child.show(new suite.ChildView({
             model: this.model
           }));
         },

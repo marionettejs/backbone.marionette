@@ -237,7 +237,7 @@ describe('collection view', function() {
 
   describe('when providing a custom render that adds children, without a collection object to use, and removing a child', function() {
     beforeEach(function() {
-      var self = this;
+      var suite = this;
 
       this.model = new Backbone.Model({foo: 'bar'});
 
@@ -254,7 +254,7 @@ describe('collection view', function() {
 
         render: function() {
           var ChildView = this.getChildView();
-          this.addChild(self.model, ChildView, 0);
+          this.addChild(suite.model, ChildView, 0);
         }
       });
 
@@ -610,10 +610,10 @@ describe('collection view', function() {
     });
 
     it('should not retain any bindings to this view', function() {
-      var self = this;
+      var suite = this;
       var bindings = this.collectionView.bindings || {};
       expect(_.any(bindings, function(binding) {
-        return binding.obj === self.childView;
+        return binding.obj === suite.childView;
       })).to.be.false;
     });
 
@@ -643,10 +643,10 @@ describe('collection view', function() {
     });
 
     it('should not retain any bindings to the previous views', function() {
-      var self = this;
+      var suite = this;
       var bindings = this.collectionView.bindings || {};
       expect(_.any(bindings, function(binding) {
-        return binding.obj === self.childView;
+        return binding.obj === suite.childView;
       })).to.be.false;
     });
   });
@@ -856,12 +856,12 @@ describe('collection view', function() {
 
   describe('when a collection is reset child views should not be shown until the buffering is over', function() {
     beforeEach(function() {
-      var self = this;
+      var suite = this;
 
       this.ItemView = Marionette.ItemView.extend({
         template: _.template('<div>hi mom</div>'),
         onShow: function() {
-          self.isBuffering = self.collectionView.isBuffering;
+          suite.isBuffering = suite.collectionView.isBuffering;
         }
       });
 
@@ -887,9 +887,9 @@ describe('collection view', function() {
 
     describe('child view show events', function() {
       beforeEach(function() {
-        var self = this;
+        var suite = this;
         this.showCalled = false;
-        this.ItemView.prototype.onShow = function() { self.showCalled = true; };
+        this.ItemView.prototype.onShow = function() { suite.showCalled = true; };
       });
 
       it('collectionView should trigger the show events when the buffer is inserted and the view has been shown', function() {
@@ -907,7 +907,7 @@ describe('collection view', function() {
 
   describe('when a collection view is not rendered', function() {
     beforeEach(function() {
-      var self = this;
+      var suite = this;
       this.Model       = Backbone.Model.extend({});
       this.Collection  = Backbone.Collection.extend({model: this.Model});
       this.CollectionView = Backbone.Marionette.CollectionView.extend({
@@ -916,19 +916,19 @@ describe('collection view', function() {
       });
 
       this.addModel = function() {
-        self.collection.add(self.model2);
+        suite.collection.add(suite.model2);
       };
 
       this.removeModel = function() {
-        self.collection.remove(self.model1);
+        suite.collection.remove(suite.model1);
       };
 
       this.resetCollection = function() {
-        self.collection.reset([self.model1, self.model2]);
+        suite.collection.reset([suite.model1, suite.model2]);
       };
 
       this.sync = function() {
-        self.collection.trigger('sync');
+        suite.collection.trigger('sync');
       };
 
       this.model1     = new this.Model({monkey: 'island'});

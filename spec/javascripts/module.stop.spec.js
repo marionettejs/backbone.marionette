@@ -8,14 +8,14 @@ describe('module stop', function() {
 
   describe('when stopping a module that has been started', function() {
     beforeEach(function() {
-      var self = this;
+      var suite = this;
 
       this.beforeStop = this.sinon.stub();
       this.stop = this.sinon.stub();
 			this.finalizerSpy = this.sinon.spy();
 
       this.mod1 = this.App.module('Mod1', function(Mod1) {
-        Mod1.addFinalizer(self.finalizerSpy);
+        Mod1.addFinalizer(suite.finalizerSpy);
       });
 
       this.mod1.on('before:stop', this.beforeStop);
@@ -59,10 +59,10 @@ describe('module stop', function() {
 
   describe('when stopping a module that has not been started', function() {
     beforeEach(function() {
-      var self = this;
+      var suite = this;
       this.finalizerSpy = this.sinon.spy();
       this.mod1 = this.App.module('Mod1', function(Mod1) {
-        Mod1.addFinalizer(self.finalizerSpy);
+        Mod1.addFinalizer(suite.finalizerSpy);
       });
 
       this.mod2 = this.App.module('Mod1.Mod2');

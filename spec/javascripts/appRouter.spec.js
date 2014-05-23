@@ -8,7 +8,7 @@ describe('app router', function() {
 
   describe('when a route is configured with a method that does not exist on the controller', function() {
     beforeEach(function () {
-      var self = this;
+      var suite = this;
 
       this.Router = Backbone.Marionette.AppRouter.extend({
         appRoutes: {
@@ -19,7 +19,7 @@ describe('app router', function() {
       this.controller = {};
 
       this.run = function() {
-        self.router = new self.Router({controller: self.controller});
+        suite.router = new suite.Router({controller: suite.controller});
       };
     });
 
@@ -96,7 +96,7 @@ describe('app router', function() {
 
   describe('when a second route fires from a controller instance', function() {
     beforeEach(function() {
-      var self = this;
+      var suite = this;
 
       this.Router = Backbone.Marionette.AppRouter.extend({
         appRoutes: {
@@ -108,7 +108,7 @@ describe('app router', function() {
       this.Controller = function() {
         return {
           method1: function() {},
-          method2: self.sinon.stub()
+          method2: suite.sinon.stub()
         };
       };
 

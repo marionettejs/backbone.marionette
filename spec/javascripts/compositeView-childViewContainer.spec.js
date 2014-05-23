@@ -178,7 +178,7 @@ describe('composite view - childViewContainer', function() {
 
   describe('when a composite view is not yet rendered', function() {
     beforeEach(function() {
-      var self = this;
+      var suite = this;
 
       this.CompositeView = Backbone.Marionette.CompositeView.extend({
         childView: this.ItemView,
@@ -187,15 +187,15 @@ describe('composite view - childViewContainer', function() {
       });
 
       this.addModel = function() {
-        self.collection.add([self.model2]);
+        suite.collection.add([suite.model2]);
       };
 
       this.removeModel = function() {
-        self.collection.remove([self.model1]);
+        suite.collection.remove([suite.model1]);
       };
 
       this.resetCollection = function() {
-        self.collection.reset([self.model1, self.model2]);
+        suite.collection.reset([suite.model1, suite.model2]);
       };
 
       this.loadFixtures('compositeChildContainerTemplate.html');

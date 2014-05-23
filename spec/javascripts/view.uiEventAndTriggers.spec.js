@@ -4,7 +4,7 @@ describe('view ui event trigger configuration', function() {
 
   describe('@ui syntax within events and triggers', function() {
     beforeEach(function() {
-      var self = this;
+      var suite = this;
 
       this.View = Backbone.Marionette.ItemView.extend({
         ui: {
@@ -24,15 +24,15 @@ describe('view ui event trigger configuration', function() {
         },
 
         tapper: function() {
-          self.tapHandler();
+          suite.tapHandler();
         },
 
         attack: function() {
-          self.attackHandler();
+          suite.attackHandler();
         },
 
         defend: function() {
-          self.defendHandler();
+          suite.defendHandler();
         },
 
         render: function() {

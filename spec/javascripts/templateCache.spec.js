@@ -1,20 +1,15 @@
 describe('template cache', function() {
   'use strict';
-
   beforeEach(global.setup);
   afterEach(global.teardown);
 
   describe('when loading a template for the first time', function() {
     beforeEach(function() {
-      setFixtures('<script id="t1" type="template">t1</script>');
+      this.setFixtures('<script id="t1" type="template">t1</script>');
 
-      sinon.spy(Backbone.Marionette.TemplateCache.prototype, 'loadTemplate');
+      this.sinon.spy(Backbone.Marionette.TemplateCache.prototype, 'loadTemplate');
 
       Backbone.Marionette.TemplateCache.get('#t1');
-    });
-
-    afterEach(function() {
-      Backbone.Marionette.TemplateCache.prototype.loadTemplate.restore();
     });
 
     it('should load from the DOM', function() {
@@ -23,34 +18,28 @@ describe('template cache', function() {
   });
 
   describe('when loading a template more than once', function() {
-    var templateCache;
-
     beforeEach(function() {
       Backbone.Marionette.TemplateCache.clear();
 
-      setFixtures('<script id="t2" type="template">t2</script>');
+      this.setFixtures('<script id="t2" type="template">t2</script>');
 
       Backbone.Marionette.TemplateCache.get('#t2');
-      templateCache = Backbone.Marionette.TemplateCache.templateCaches['#t2'];
-      sinon.spy(templateCache, 'loadTemplate');
+      this.templateCache = Backbone.Marionette.TemplateCache.templateCaches['#t2'];
+      this.sinon.spy(this.templateCache, 'loadTemplate');
 
       Backbone.Marionette.TemplateCache.get('#t2');
       Backbone.Marionette.TemplateCache.get('#t2');
-    });
-
-    afterEach(function() {
-      templateCache.loadTemplate.restore();
     });
 
     it('should load from the DOM once', function() {
-      expect(templateCache.loadTemplate).not.to.have.been.called;
-      expect(templateCache.loadTemplate.callCount).to.equal(0);
+      expect(this.templateCache.loadTemplate).not.to.have.been.called;
+      expect(this.templateCache.loadTemplate.callCount).to.equal(0);
     });
   });
 
   describe('when clearing the full template cache', function() {
     beforeEach(function() {
-      setFixtures('<script id="t3" type="template">t3</script>');
+      this.setFixtures('<script id="t3" type="template">t3</script>');
       Backbone.Marionette.TemplateCache.get('#t3');
 
       Backbone.Marionette.TemplateCache.clear();
@@ -63,7 +52,7 @@ describe('template cache', function() {
 
   describe('when clearing a single template from the cache', function() {
     beforeEach(function() {
-      setFixtures('<script id="t4" type="template">t4</script><script id="t5" type="template">t5</script><script id="t6" type="template">t6</script>');
+      this.setFixtures('<script id="t4" type="template">t4</script><script id="t5" type="template">t5</script><script id="t6" type="template">t6</script>');
       Backbone.Marionette.TemplateCache.get('#t4');
       Backbone.Marionette.TemplateCache.get('#t5');
       Backbone.Marionette.TemplateCache.get('#t6');
@@ -83,7 +72,7 @@ describe('template cache', function() {
 
   describe('when clearing multiple templates from the cache', function() {
     beforeEach(function() {
-      setFixtures('<script id="t4" type="template">t4</script><script id="t5" type="template">t5</script><script id="t6" type="template">t6</script>');
+      this.setFixtures('<script id="t4" type="template">t4</script><script id="t5" type="template">t5</script><script id="t6" type="template">t6</script>');
       Backbone.Marionette.TemplateCache.get('#t4');
       Backbone.Marionette.TemplateCache.get('#t5');
       Backbone.Marionette.TemplateCache.get('#t6');

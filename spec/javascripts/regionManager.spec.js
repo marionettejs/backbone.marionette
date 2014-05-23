@@ -1,369 +1,346 @@
 describe('regionManager', function() {
+  beforeEach(global.setup);
+  afterEach(global.teardown);
 
   describe('.addRegion', function() {
-
     describe('with a name and selector', function() {
-      var region, regionManager, addHandler, beforeAddHandler;
-
       beforeEach(function() {
-        addHandler = sinon.spy();
-        beforeAddHandler = sinon.spy();
+        this.addHandler = this.sinon.spy();
+        this.beforeAddHandler = this.sinon.spy();
 
-        regionManager = new Marionette.RegionManager();
-        regionManager.on('add:region', addHandler);
-        regionManager.on('before:add:region', beforeAddHandler);
+        this.regionManager = new Marionette.RegionManager();
+        this.regionManager.on('add:region', this.addHandler);
+        this.regionManager.on('before:add:region', this.beforeAddHandler);
 
-        region = regionManager.addRegion('foo', '#foo');
+        this.region = this.regionManager.addRegion('foo', '#foo');
       });
 
       it('should create the region', function() {
-        expect(region).not.toBeUndefined();
+        expect(this.region).to.exist;
       });
 
       it('should store the region by name', function() {
-        expect(regionManager.get('foo')).toBe(region);
+        expect(this.regionManager.get('foo')).to.equal(this.region);
       });
 
       it('should trigger a "before:add:region" event/method', function() {
-        expect(beforeAddHandler).toHaveBeenCalledWith('foo', region);
+        expect(this.beforeAddHandler).to.have.been.calledWith('foo', this.region);
       });
 
       it('should trigger a "add:region" event/method', function() {
-        expect(addHandler).toHaveBeenCalledWith('foo', region);
+        expect(this.addHandler).to.have.been.calledWith('foo', this.region);
       });
 
       it('should increment the length', function() {
-        expect(regionManager.length).toBe(1);
+        expect(this.regionManager.length).to.equal(1);
       });
     });
 
     describe('and a region instance', function() {
-      var region, builtRegion, regionManager, addHandler, beforeAddHandler;
-
       beforeEach(function() {
-        addHandler = sinon.spy();
-        beforeAddHandler = sinon.spy();
+        this.addHandler = this.sinon.spy();
+        this.beforeAddHandler = this.sinon.spy();
 
-        regionManager = new Marionette.RegionManager();
-        regionManager.on('add:region', addHandler);
-        regionManager.on('before:add:region', beforeAddHandler);
+        this.regionManager = new Marionette.RegionManager();
+        this.regionManager.on('add:region', this.addHandler);
+        this.regionManager.on('before:add:region', this.beforeAddHandler);
 
-        region = new Marionette.Region({el: '#foo'});
-        builtRegion = regionManager.addRegion('foo', region);
+        this.region = new Marionette.Region({el: '#foo'});
+        this.builtRegion = this.regionManager.addRegion('foo', this.region);
       });
 
       it('should use the supplied region', function() {
-        expect(builtRegion).toBe(region);
+        expect(this.builtRegion).to.equal(this.region);
       });
 
       it('should store the region by name', function() {
-        expect(regionManager.get('foo')).toBe(region);
+        expect(this.regionManager.get('foo')).to.equal(this.region);
       });
 
       it('should trigger a "before:add:region" event/method', function() {
-        expect(beforeAddHandler).toHaveBeenCalledWith('foo', region);
+        expect(this.beforeAddHandler).to.have.been.calledWith('foo', this.region);
       });
 
       it('should trigger a "add:region" event/method', function() {
-        expect(addHandler).toHaveBeenCalledWith('foo', region);
+        expect(this.addHandler).to.have.been.calledWith('foo', this.region);
       });
 
       it('should increment the length', function() {
-        expect(regionManager.length).toBe(1);
+        expect(this.regionManager.length).to.equal(1);
       });
     });
 
     describe('and supplying a parent element', function() {
-      var region, regionManager, context;
-
       beforeEach(function() {
-        context = $('<div><div id="foo"></div><div id="bar"></div></div>');
-        regionManager = new Marionette.RegionManager();
-        region = regionManager.addRegion('foo', {
+        this.context = $('<div><div id="foo"></div><div id="bar"></div></div>');
+        this.regionManager = new Marionette.RegionManager();
+        this.region = this.regionManager.addRegion('foo', {
           selector: '#foo',
-          parentEl: context
+          parentEl: this.context
         });
 
-        region.show(new Backbone.View());
+        this.region.show(new Backbone.View());
       });
 
       it('should set the regions selector within the supplied jQuery selector object', function() {
-        expect(region.$el.parent()).toBe(context);
+        expect(this.region.$el.parent()[0]).to.equal(this.context[0]);
       });
     });
 
     describe('and supplying a parent element as a function', function() {
-      var region, regionManager, context, parentElHandler, view;
-
       beforeEach(function() {
-        context = $('<div><div id="foo"></div><div id="bar"></div></div>');
-        parentElHandler = jasmine.createSpy('parent el handler').andReturn(context);
-        regionManager = new Marionette.RegionManager();
-        region = regionManager.addRegion('foo', {
+        this.context = $('<div><div id="foo"></div><div id="bar"></div></div>');
+        this.parentElHandler = this.sinon.stub().returns(this.context);
+        this.regionManager = new Marionette.RegionManager();
+        this.region = this.regionManager.addRegion('foo', {
           selector: '#foo',
-          parentEl: parentElHandler
+          parentEl: this.parentElHandler
         });
 
-        view = new Backbone.View();
-        region.show(view);
+        this.view = new Backbone.View();
+        this.region.show(this.view);
       });
 
       it('should set the regions selector within the supplied jQuery selector object', function() {
-        expect(region.$el.parent()).toBe(context);
+        expect(this.region.$el.parent()[0]).to.equal(this.context[0]);
       });
     });
   });
 
   describe('.addRegions', function() {
     describe('with no options', function() {
-      var regions, regionManager;
-
       beforeEach(function() {
-        regionManager = new Marionette.RegionManager();
+        this.regionManager = new Marionette.RegionManager();
 
-        regions = regionManager.addRegions({
+        this.regions = this.regionManager.addRegions({
           foo: '#bar',
           baz: '#quux'
         });
       });
 
       it('should add all specified regions', function() {
-        expect(regionManager.get('foo')).not.toBeUndefined();
-        expect(regionManager.get('baz')).not.toBeUndefined();
+        expect(this.regionManager.get('foo')).to.exist;
+        expect(this.regionManager.get('baz')).to.exist;
       });
 
       it('should return an object literal containing all named region instances', function() {
-        expect(regions.foo).toBe(regionManager.get('foo'));
-        expect(regions.baz).toBe(regionManager.get('baz'));
+        expect(this.regions.foo).to.equal(this.regionManager.get('foo'));
+        expect(this.regions.baz).to.equal(this.regionManager.get('baz'));
       });
     });
 
     describe('with region instance', function() {
-      var fooRegion, regions, regionManager;
-
       beforeEach(function() {
-        fooRegion = new Marionette.Region({el: '#foo'});
-        regionManager = new Marionette.RegionManager();
+        this.fooRegion = new Marionette.Region({el: '#foo'});
+        this.regionManager = new Marionette.RegionManager();
 
-        regions = regionManager.addRegions({
-          foo: fooRegion
+        this.regions = this.regionManager.addRegions({
+          foo: this.fooRegion
         });
       });
 
       it('should add all specified regions', function() {
-        expect(regionManager.get('foo')).toBe(fooRegion);
+        expect(this.regionManager.get('foo')).to.equal(this.fooRegion);
       });
 
       it('should return an object literal containing all named region instances', function() {
-        expect(regions.foo).toBe(fooRegion);
+        expect(this.regions.foo).to.equal(this.fooRegion);
       });
     });
 
     describe('with defaults', function() {
-      var regions, regionManager, parent;
-
       beforeEach(function() {
-        regionManager = new Marionette.RegionManager();
+        this.regionManager = new Marionette.RegionManager();
 
-        parent = $('<div></div>');
+        this.parent = $('<div></div>');
 
-        var defaults = {
-          parentEl: parent
+        this.defaults = {
+          parentEl: this.parent
         };
 
-        regions = regionManager.addRegions({
+        this.regions = this.regionManager.addRegions({
           foo: '#bar',
           baz: '#quux'
-        }, defaults);
+        }, this.defaults);
       });
 
       it('should add all specified regions with the specified defaults', function() {
-        expect(regionManager.get('foo')).not.toBeUndefined();
-        expect(regionManager.get('baz')).not.toBeUndefined();
+        expect(this.regionManager.get('foo')).to.exist;
+        expect(this.regionManager.get('baz')).to.exist;
       });
     });
   });
 
   describe('.removeRegion', function() {
-    var region, regionManager, destroyHandler, removeHandler, beforeRemoveHandler;
-
     beforeEach(function() {
-      setFixtures('<div id="foo"></div>');
+      this.setFixtures('<div id="foo"></div>');
 
-      destroyHandler = sinon.spy();
-      beforeRemoveHandler = sinon.spy();
-      removeHandler = sinon.spy();
+      this.destroyHandler = this.sinon.spy();
+      this.beforeRemoveHandler = this.sinon.spy();
+      this.removeHandler = this.sinon.spy();
 
-      regionManager = new Marionette.RegionManager();
-      region = regionManager.addRegion('foo', '#foo');
-      region.show(new Backbone.View());
+      this.regionManager = new Marionette.RegionManager();
+      this.region = this.regionManager.addRegion('foo', '#foo');
+      this.region.show(new Backbone.View());
 
-      region.on('destroy', destroyHandler);
-      regionManager.on('before:remove:region', beforeRemoveHandler);
-      regionManager.on('remove:region', removeHandler);
+      this.region.on('destroy', this.destroyHandler);
+      this.regionManager.on('before:remove:region', this.beforeRemoveHandler);
+      this.regionManager.on('remove:region', this.removeHandler);
 
-      spyOn(region, 'stopListening');
+      this.sinon.spy(this.region, 'stopListening');
 
-      regionManager.removeRegion('foo');
+      this.regionManager.removeRegion('foo');
     });
 
     it('should destroy the region', function() {
-      expect(destroyHandler).toHaveBeenCalled();
+      expect(this.destroyHandler).to.have.been.called;
     });
 
     it('should stopListening on the region', function() {
-      expect(region.stopListening).toHaveBeenCalledWith();
+      expect(this.region.stopListening).to.have.been.calledWith();
     });
 
     it('should remove the region', function() {
-      expect(regionManager.get('foo')).toBeUndefined();
+      expect(this.regionManager.get('foo')).to.be.undefined;
     });
 
     it('should trigger a "before:remove:region" event/method', function() {
-      expect(beforeRemoveHandler).toHaveBeenCalledWith('foo', region);
+      expect(this.beforeRemoveHandler).to.have.been.calledWith('foo', this.region);
     });
 
     it('should trigger a "remove:region" event/method', function() {
-      expect(removeHandler).toHaveBeenCalledWith('foo', region);
+      expect(this.removeHandler).to.have.been.calledWith('foo', this.region);
     });
 
     it('should adjust the length of the region manager by -1', function() {
-      expect(regionManager.length).toBe(0);
+      expect(this.regionManager.length).to.equal(0);
     });
   });
 
   describe('.removeRegions', function() {
-    var region, r2, regionManager, destroyHandler, destroyHandler2, removeHandler;
-
     beforeEach(function() {
-      setFixtures('<div id="foo"></div><div id="bar"></div>');
+      this.setFixtures('<div id="foo"></div><div id="bar"></div>');
 
-      destroyHandler = jasmine.createSpy('destroy handler');
-      destroyHandler2 = jasmine.createSpy('destroy handler');
-      removeHandler = jasmine.createSpy('remove handler');
+      this.destroyHandler = this.sinon.stub();
+      this.destroyHandler2 = this.sinon.stub();
+      this.removeHandler = this.sinon.stub();
 
-      regionManager = new Marionette.RegionManager();
-      region = regionManager.addRegion('foo', '#foo');
-      r2 = regionManager.addRegion('bar', '#bar');
+      this.regionManager = new Marionette.RegionManager();
+      this.region = this.regionManager.addRegion('foo', '#foo');
+      this.r2 = this.regionManager.addRegion('bar', '#bar');
 
-      region.show(new Backbone.View());
-      r2.show(new Backbone.View());
+      this.region.show(new Backbone.View());
+      this.r2.show(new Backbone.View());
 
-      region.on('destroy', destroyHandler);
-      r2.on('destroy', destroyHandler2);
+      this.region.on('destroy', this.destroyHandler);
+      this.r2.on('destroy', this.destroyHandler2);
 
-      regionManager.on('remove:region', removeHandler);
+      this.regionManager.on('remove:region', this.removeHandler);
 
-      spyOn(region, 'stopListening');
-      spyOn(r2, 'stopListening');
+      this.sinon.spy(this.region, 'stopListening');
+      this.sinon.spy(this.r2, 'stopListening');
 
-      regionManager.removeRegions();
+      this.regionManager.removeRegions();
     });
 
     it('should destroy the regions', function() {
-      expect(destroyHandler).toHaveBeenCalled();
-      expect(destroyHandler2).toHaveBeenCalled();
+      expect(this.destroyHandler).to.have.been.called;
+      expect(this.destroyHandler2).to.have.been.called;
     });
 
     it('should stopListening on the regions', function() {
-      expect(region.stopListening).toHaveBeenCalledWith();
-      expect(r2.stopListening).toHaveBeenCalledWith();
+      expect(this.region.stopListening).to.have.been.calledWith();
+      expect(this.r2.stopListening).to.have.been.calledWith();
     });
 
     it('should remove the regions', function() {
-      expect(regionManager.get('foo')).toBeUndefined();
-      expect(regionManager.get('bar')).toBeUndefined();
+      expect(this.regionManager.get('foo')).to.be.undefined;
+      expect(this.regionManager.get('bar')).to.be.undefined;
     });
 
     it('should trigger a "remove:region" event/method for each region', function() {
-      expect(removeHandler).toHaveBeenCalledWith('foo', region);
-      expect(removeHandler).toHaveBeenCalledWith('bar', r2);
+      expect(this.removeHandler).to.have.been.calledWith('foo', this.region);
+      expect(this.removeHandler).to.have.been.calledWith('bar', this.r2);
     });
   });
 
   describe('.destroyRegions', function() {
-    var region, regionManager, destroyHandler, destroyManagerHandler;
-
     beforeEach(function() {
-      setFixtures('<div id="foo">');
+      this.setFixtures('<div id="foo">');
 
-      destroyHandler = jasmine.createSpy('destroy region handler');
-      destroyManagerHandler = jasmine.createSpy('destroy manager handler');
+      this.destroyHandler = this.sinon.stub();
+      this.destroyManagerHandler = this.sinon.stub();
 
-      regionManager = new Marionette.RegionManager();
-      region = regionManager.addRegion('foo', '#foo');
-      region.show(new Backbone.View());
+      this.regionManager = new Marionette.RegionManager();
+      this.region = this.regionManager.addRegion('foo', '#foo');
+      this.region.show(new Backbone.View());
 
-      region.on('destroy', destroyHandler);
+      this.region.on('destroy', this.destroyHandler);
 
-      regionManager.destroyRegions();
+      this.regionManager.destroyRegions();
     });
 
     it('should destroy all regions', function() {
-      expect(destroyHandler).toHaveBeenCalled();
+      expect(this.destroyHandler).to.have.been.called;
     });
 
     it('should not remove all regions', function() {
-      expect(regionManager.get('foo')).toBe(region);
+      expect(this.regionManager.get('foo')).to.equal(this.region);
     });
   });
 
   describe('.destroy', function() {
-    var region, regionManager, destroyHandler, destroyManagerHandler;
-
     beforeEach(function() {
-      setFixtures('<div id="foo">');
-      destroyHandler = jasmine.createSpy('destroy region handler');
-      destroyManagerHandler = jasmine.createSpy('destroy manager handler');
+      this.setFixtures('<div id="foo">');
+      this.destroyHandler = this.sinon.stub();
+      this.destroyManagerHandler = this.sinon.stub();
 
-      regionManager = new Marionette.RegionManager();
-      region = regionManager.addRegion('foo', '#foo');
-      region.show(new Backbone.View());
+      this.regionManager = new Marionette.RegionManager();
+      this.region = this.regionManager.addRegion('foo', '#foo');
+      this.region.show(new Backbone.View());
 
-      region.on('destroy', destroyHandler);
-      regionManager.on('destroy', destroyManagerHandler);
+      this.region.on('destroy', this.destroyHandler);
+      this.regionManager.on('destroy', this.destroyManagerHandler);
 
-      spyOn(region, 'stopListening');
+      this.sinon.spy(this.region, 'stopListening');
 
-      regionManager.destroy();
+      this.regionManager.destroy();
     });
 
     it('should destroy all regions', function() {
-      expect(destroyHandler).toHaveBeenCalled();
+      expect(this.destroyHandler).to.have.been.called;
     });
 
     it('should stopListening on all regions', function() {
-      expect(region.stopListening).toHaveBeenCalledWith();
+      expect(this.region.stopListening).to.have.been.calledWith();
     });
 
     it('should remove all regions', function() {
-      expect(regionManager.get('foo')).toBeUndefined();
+      expect(this.regionManager.get('foo')).to.be.undefined;
     });
 
     it('should trigger a "destroy" event/method', function() {
-      expect(destroyManagerHandler).toHaveBeenCalled();
+      expect(this.destroyManagerHandler).to.have.been.called;
     });
   });
 
   describe('when iterating the region manager', function() {
-    var cb, r1, r2, r3;
-
     beforeEach(function() {
-      cb = jasmine.createSpy('iterator callback');
+      this.cb = this.sinon.stub();
 
-      var rm = new Marionette.RegionManager();
+      this.rm = new Marionette.RegionManager();
 
-      r1 = rm.addRegion('foo', '#foo');
-      r2 = rm.addRegion('bar', '#bar');
-      r3 = rm.addRegion('baz', '#baz');
+      this.r1 = this.rm.addRegion('foo', '#foo');
+      this.r2 = this.rm.addRegion('bar', '#bar');
+      this.r3 = this.rm.addRegion('baz', '#baz');
 
-      rm.each(cb);
+      this.rm.each(this.cb);
     });
 
     it('should provide access to each region', function() {
-      expect(cb.calls[0].args[0]).toBe(r1);
-      expect(cb.calls[1].args[0]).toBe(r2);
-      expect(cb.calls[2].args[0]).toBe(r3);
+      expect(this.cb.firstCall.args[0]).to.equal(this.r1);
+      expect(this.cb.secondCall.args[0]).to.equal(this.r2);
+      expect(this.cb.thirdCall.args[0]).to.equal(this.r3);
     });
   });
 });

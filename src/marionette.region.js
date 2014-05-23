@@ -133,7 +133,7 @@ _.extend(Marionette.Region.prototype, Backbone.Events, {
   // re-rendered if it's already shown in the region.
 
   show: function(view, options){
-    this.ensureEl();
+    this._ensureElement();
 
     var showOptions = options || {};
     var isDifferentView = view !== this.currentView;
@@ -163,7 +163,7 @@ _.extend(Marionette.Region.prototype, Backbone.Events, {
       this.triggerMethod('before:show', view);
       this.triggerMethod.call(view, 'before:show');
 
-      this.open(view);
+      this.setHtml(view);
       this.currentView = view;
 
       if (isChangingView) {
@@ -177,7 +177,7 @@ _.extend(Marionette.Region.prototype, Backbone.Events, {
     return this;
   },
 
-  ensureEl: function() {
+  _ensureElement: function(){
     if (!_.isObject(this.el)) {
       this.$el = this.getEl(this.el);
       this.el = this.$el[0];
@@ -196,7 +196,7 @@ _.extend(Marionette.Region.prototype, Backbone.Events, {
 
   // Override this method to change how the new view is
   // appended to the `$el` that the region is managing
-  open: function(view) {
+  setHtml: function(view) {
     // empty the node and append new view
     this.el.innerHTML='';
     this.el.appendChild(view.el);

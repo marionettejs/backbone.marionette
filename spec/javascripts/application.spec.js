@@ -1,106 +1,99 @@
 describe('marionette application', function() {
-  'use strict';
+  beforeEach(global.setup);
+  afterEach(global.teardown);
 
   describe('when registering an initializer and starting the application', function() {
-    var MyModule, MyApp;
-    var someOptions = {};
-
     beforeEach(function() {
-      MyApp = new Backbone.Marionette.Application();
+      var self = this;
 
-      MyModule = (function(MyApp) {
+      this.someOptions = {};
+
+      this.MyApp = new Backbone.Marionette.Application();
+
+      this.MyModule = (function(MyApp) {
         var module = {};
         module.initializer = function() {};
 
-        sinon.spy(module, 'initializer');
+        self.sinon.spy(module, 'initializer');
         MyApp.addInitializer(module.initializer);
 
         return module;
-      })(MyApp);
+      })(this.MyApp);
 
-      spyOn(MyApp, 'trigger').andCallThrough();
+      this.sinon.spy(this.MyApp, 'trigger');
 
-      MyApp.start(someOptions);
-    });
-
-    afterEach(function() {
-      MyModule.initializer.restore();
+      this.MyApp.start(this.someOptions);
     });
 
     it('should notify me before the starts', function() {
-      expect(MyApp.trigger).toHaveBeenCalledWith('before:start', someOptions);
+      expect(this.MyApp.trigger).to.have.been.calledWith('before:start', this.someOptions);
     });
 
     it('should notify me after the app has started', function() {
-      expect(MyApp.trigger).toHaveBeenCalledWith('start', someOptions);
+      expect(this.MyApp.trigger).to.have.been.calledWith('start', this.someOptions);
     });
 
     it('should call the initializer', function() {
-      expect(MyModule.initializer).toHaveBeenCalled();
+      expect(this.MyModule.initializer).to.have.been.called;
     });
 
     it('should pass the options through to the initializer', function() {
-      expect(MyModule.initializer).toHaveBeenCalledWith(someOptions);
+      expect(this.MyModule.initializer).to.have.been.calledWith(this.someOptions);
     });
 
     it('should run the initializer with the context of the app object', function() {
-      expect(MyModule.initializer).toHaveBeenCalledOn(MyApp);
+      expect(this.MyModule.initializer).to.have.been.calledOn(this.MyApp);
     });
   });
 
   describe('when an app has been started, and registering another initializer', function() {
-    var MyApp, initialized;
-
     beforeEach(function() {
-      MyApp = new Backbone.Marionette.Application();
-      MyApp.start();
+      var self = this;
+      this.MyApp = new Backbone.Marionette.Application();
+      this.MyApp.start();
 
-      MyApp.addInitializer(function() {
-        initialized = true;
+      this.MyApp.addInitializer(function() {
+        self.initialized = true;
       });
     });
 
     it('should run the initializer immediately', function() {
-      expect(initialized).toBeTruthy();
+      expect(this.initialized).to.be.ok;
     });
   });
 
   describe('when instantiating an app with options specified', function() {
-    var MyApp;
-
     beforeEach(function() {
-      MyApp = new Backbone.Marionette.Application({
+      this.MyApp = new Backbone.Marionette.Application({
         someOption: 'some value'
       });
     });
 
     it('should merge those options into the app', function() {
-      expect(MyApp.someOption).toEqual('some value');
+      expect(this.MyApp.someOption).to.equal('some value');
     });
   });
 
   describe('when specifying an on start callback, and starting the app', function() {
-    var started, options, onStartOptions;
-
     beforeEach(function() {
-      var MyApp = new Backbone.Marionette.Application();
-      options = {};
+      var self = this;
+      this.MyApp = new Backbone.Marionette.Application();
+      this.options = {};
 
-      MyApp.on('start', function(opts) {
-        started = true;
-        onStartOptions = opts;
+      this.MyApp.on('start', function(opts) {
+        self.started = true;
+        self.onStartOptions = opts;
       });
 
-      MyApp.start(options);
+      this.MyApp.start(this.options);
     });
 
     it('should run the onStart callback', function() {
-      expect(started).toBeTruthy();
+      expect(this.started).to.be.ok;
     });
 
     it('should pass the startup option to the callback', function() {
-      expect(onStartOptions).toBe(options);
+      expect(this.onStartOptions).to.equal(this.options);
     });
   });
-
 });

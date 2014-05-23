@@ -42,7 +42,7 @@ For more examples, see my blog post on
 
 * [Composite Model `template`](#composite-model-template)
 * [CompositeView's `childViewContainer`](#compositeviews-childviewcontainer)
-* [CompositeView's `appendHtml`](#compositeviews-appendhtml)
+* [CompositeView's `attachHtml`](#compositeviews-attachhtml)
 * [Recursive By Default](#recursive-by-default)
 * [Model And Collection Rendering](#model-and-collection-rendering)
 * [Events And Callbacks](#events-and-callbacks)
@@ -63,7 +63,7 @@ new MyComp({
 
 ## CompositeView's `childViewContainer`
 
-By default the composite view uses the same `appendHtml` method that the
+By default the composite view uses the same `attachHtml` method that the
 collection view provides. This means the view will call jQuery's `.append`
 to move the HTML contents from the child view instance in to the collection
 view's `el`.
@@ -158,12 +158,12 @@ var myComp = new Marionette.CompositeView({
 });
 ```
 
-## CompositeView's `appendHtml`
+## CompositeView's `attachHtml`
 
 
 Sometimes the `childViewContainer` configuration is insuficient for
 specifying where the `childView` instance should be placed. If this is the
-case, you can override the `appendHtml` method with your own implementation.
+case, you can override the `attachHtml` method with your own implementation.
 
 For more information on this method, see the [CollectionView's documentation](https://github.com/marionettejs/backbone.marionette/blob/master/docs/marionette.collectionview.md).
 

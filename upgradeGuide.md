@@ -1,3 +1,7 @@
+## v1.x.x - v2.0.0
+Large amounts of things have changed between these releases.
+Please refer to https://github.com/marionettejs/Marionette.Upgrade to ease the transition from any 1.x app.
+
 ## v.1.7.x - v1.8.x
 No breaking changes have been introduced between these versions
 

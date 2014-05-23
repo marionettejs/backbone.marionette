@@ -1,16 +1,14 @@
 describe('pre-compiled template rendering', function() {
-  'use strict';
+  beforeEach(global.setup);
+  afterEach(global.teardown);
 
   describe('when rendering views with pre-compiled template functions', function() {
-    var templateFunc = _.template('<div>pre-compiled</div>');
-
-    var View = Backbone.Marionette.ItemView.extend({
-      template: templateFunc
-    });
-
-    var view;
-
     beforeEach(function() {
+      this.templateFunc = _.template('<div>pre-compiled</div>');
+
+      this.View = Backbone.Marionette.ItemView.extend({
+        template: this.templateFunc
+      });
 
       // store and then replace the render method used by Marionette
       this.render = Backbone.Marionette.Renderer.render;
@@ -18,8 +16,8 @@ describe('pre-compiled template rendering', function() {
         return template(data);
       };
 
-      view = new View();
-      view.render();
+      this.view = new this.View();
+      this.view.render();
     });
 
     afterEach(function() {
@@ -28,9 +26,7 @@ describe('pre-compiled template rendering', function() {
     });
 
     it('should render the pre-compiled template', function() {
-      expect(view.$el).toHaveText('pre-compiled');
+      expect(this.view.$el).to.contain.$text('pre-compiled');
     });
-
   });
-
 });

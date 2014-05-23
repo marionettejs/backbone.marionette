@@ -14,7 +14,7 @@ Marionette.CompositeView = Marionette.CollectionView.extend({
   // maintaining the sorted order of the collection.
   // This will fallback onto appending childView's to the end.
   constructor: function() {
-    Marionette.CollectionView.prototype.constructor.apply(this, arguments);
+    Marionette.CollectionView.apply(this, arguments);
   },
 
   // Configured the initial events that the composite view
@@ -108,8 +108,8 @@ Marionette.CompositeView = Marionette.CollectionView.extend({
     this.triggerMethod('render:template');
   },
 
-  // You might need to override this if you've overridden appendHtml
-  appendBuffer: function(compositeView, buffer) {
+  // You might need to override this if you've overridden attachHtml
+  attachBuffer: function(compositeView, buffer) {
     var $container = this.getChildViewContainer(compositeView);
     $container.append(buffer);
   },
@@ -123,7 +123,7 @@ Marionette.CompositeView = Marionette.CollectionView.extend({
   },
 
   // Internal method to ensure an `$childViewContainer` exists, for the
-  // `appendHtml` method to use.
+  // `attachHtml` method to use.
   getChildViewContainer: function(containerView) {
     if ('$childViewContainer' in containerView) {
       return containerView.$childViewContainer;

@@ -1,4 +1,5 @@
 describe('pre-compiled template rendering', function() {
+  'use strict';
   beforeEach(global.setup);
   afterEach(global.teardown);
 

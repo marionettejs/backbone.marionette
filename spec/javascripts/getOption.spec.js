@@ -1,4 +1,5 @@
 describe('get option', function() {
+  'use strict';
   beforeEach(global.setup);
   afterEach(global.teardown);
 

@@ -14,9 +14,9 @@ describe('module stop', function() {
     var mod1, mod2, mod3, beforeStop, stop, finalizerSpy;
 
     beforeEach(function() {
-      beforeStop = sinon.stub();
-      stop = sinon.stub();
-			finalizerSpy = sinon.spy();
+      beforeStop = this.sinon.stub();
+      stop = this.sinon.stub();
+			finalizerSpy = this.sinon.spy();
 
       mod1 = App.module('Mod1', function(Mod1) {
         Mod1.addFinalizer(finalizerSpy);
@@ -28,16 +28,11 @@ describe('module stop', function() {
       mod2 = App.module('Mod1.Mod2');
       mod3 = App.module('Mod1.Mod3');
 
-      sinon.spy(mod2, 'stop');
-      sinon.spy(mod3, 'stop');
+      this.sinon.spy(mod2, 'stop');
+      this.sinon.spy(mod3, 'stop');
 
       mod1.start();
       mod1.stop();
-    });
-
-    afterEach(function() {
-      mod2.stop.restore();
-      mod3.stop.restore();
     });
 
     it('should trigger a "before:stop" event', function() {
@@ -71,7 +66,7 @@ describe('module stop', function() {
     var mod1, mod2, mod3, finalizerSpy;
 
     beforeEach(function() {
-      finalizerSpy = sinon.spy();
+      finalizerSpy = this.sinon.spy();
       mod1 = App.module('Mod1', function(Mod1) {
         Mod1.addFinalizer(finalizerSpy);
       });
@@ -79,16 +74,11 @@ describe('module stop', function() {
       mod2 = App.module('Mod1.Mod2');
       mod3 = App.module('Mod1.Mod3');
 
-      sinon.spy(mod2, 'stop');
-      sinon.spy(mod3, 'stop');
+      this.sinon.spy(mod2, 'stop');
+      this.sinon.spy(mod3, 'stop');
 
       // this module has not been started
       mod1.stop();
-    });
-
-    afterEach(function() {
-      mod2.stop.restore();
-      mod3.stop.restore();
     });
 
     it('should not run any finalizers', function() {
@@ -108,7 +98,7 @@ describe('module stop', function() {
       var MyApp = new Marionette.Application();
       var module = MyApp.module('MyModule');
 
-      finalizer = sinon.stub();
+      finalizer = this.sinon.stub();
       module.addFinalizer(finalizer);
 
       MyApp.start();

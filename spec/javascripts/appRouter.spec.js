@@ -36,11 +36,13 @@ describe('app router', function() {
       }
     });
 
-    var controller = {
-      method1: sinon.stub()
-    };
+    var controller;
 
     beforeEach(function() {
+      controller = {
+        method1: this.sinon.stub()
+      };
+
       var router = new Router({
         controller: controller
       });
@@ -63,19 +65,21 @@ describe('app router', function() {
   });
 
   describe('when a controller is provided in the router definition and a route fires', function() {
-    var controller = {
-      method1: sinon.stub()
-    };
-
-    var Router = Backbone.Marionette.AppRouter.extend({
-      appRoutes: {
-        'm1': 'method1'
-      },
-
-      controller: controller
-    });
+    var controller, Router;
 
     beforeEach(function() {
+      controller = {
+        method1: this.sinon.stub()
+      };
+
+      Router = Backbone.Marionette.AppRouter.extend({
+        appRoutes: {
+          'm1': 'method1'
+        },
+
+        controller: controller
+      });
+
       var router = new Router();
       Backbone.history.start();
 
@@ -105,14 +109,18 @@ describe('app router', function() {
       }
     });
 
-    var Controller = function() {
-      return {
-        method1: function() {},
-        method2: sinon.stub()
-      };
-    };
+    var Controller;
 
     beforeEach(function() {
+      var self = this;
+
+      Controller = function() {
+        return {
+          method1: function() {},
+          method2: self.sinon.stub()
+        };
+      };
+
       controller = new Controller();
 
       var router = new Router({
@@ -140,19 +148,20 @@ describe('app router', function() {
   describe('when a route fires with parameters', function() {
 
     var spy, router;
-    var Router = Backbone.Marionette.AppRouter.extend({
-      onRoute: sinon.stub(),
-      appRoutes: {
-        'm2/:id': 'withParam'
-      }
-    });
+    var Router;
 
     var controller = {
       withParam: function() {}
     };
 
     beforeEach(function() {
-      spy = sinon.spy(controller, 'withParam');
+      Router = Backbone.Marionette.AppRouter.extend({
+        onRoute: this.sinon.stub(),
+        appRoutes: {
+          'm2/:id': 'withParam'
+        }
+      });
+      spy = this.sinon.spy(controller, 'withParam');
 
       router = new Router({
         controller: controller
@@ -163,9 +172,7 @@ describe('app router', function() {
     });
 
     afterEach(function() {
-      controller.withParam.restore();
       Backbone.history.stop();
-      router.onRoute.reset();
     });
 
     it('should call the configured method with parameters', function() {
@@ -191,7 +198,7 @@ describe('app router', function() {
     var router;
 
     beforeEach(function() {
-      sinon.spy(Router.prototype, 'standardRoute');
+      this.sinon.spy(Router.prototype, 'standardRoute');
 
       router = new Router();
       Backbone.history.start();
@@ -200,7 +207,6 @@ describe('app router', function() {
     });
 
     afterEach(function() {
-      Router.prototype.standardRoute.restore();
       Backbone.history.stop();
     });
 
@@ -221,8 +227,8 @@ describe('app router', function() {
       });
 
       controller = {
-        showPostsTop: sinon.stub(),
-        showPost: sinon.stub()
+        showPostsTop: this.sinon.stub(),
+        showPost: this.sinon.stub()
       };
 
       Backbone.history.start();
@@ -253,8 +259,8 @@ describe('app router', function() {
       });
 
       controller = {
-        showPostsTop: sinon.stub(),
-        showPost: sinon.stub()
+        showPostsTop: this.sinon.stub(),
+        showPost: this.sinon.stub()
       };
 
       Backbone.history.start();
@@ -280,7 +286,7 @@ describe('app router', function() {
       var Router = Backbone.Marionette.AppRouter.extend({});
 
       controller = {
-        showPost: sinon.stub()
+        showPost: this.sinon.stub()
       };
 
       Backbone.history.start();
@@ -307,12 +313,14 @@ describe('app router', function() {
       }
     });
 
-    var controller = {
-      originalFunc: sinon.stub(),
-      overrideFunc: sinon.stub()
-    };
+    var controller;
 
     beforeEach(function() {
+      controller = {
+        originalFunc: this.sinon.stub(),
+        overrideFunc: this.sinon.stub()
+      };
+
       var appRouter = new AppRouter({
         controller: controller,
         appRoutes: {

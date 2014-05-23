@@ -13,7 +13,7 @@ describe('Behaviors', function() {
     var Obj, View, Tooltip;
 
     beforeEach(function() {
-      Tooltip = sinon.spy();
+      Tooltip = this.sinon.spy();
       Obj = {
         Tooltip: Tooltip
       };
@@ -48,7 +48,7 @@ describe('Behaviors', function() {
     var Obj, View, Tooltip;
 
     beforeEach(function() {
-      Tooltip = sinon.spy();
+      Tooltip = this.sinon.spy();
       Obj = {
         Tooltip: Tooltip
       };
@@ -151,7 +151,7 @@ describe('Behaviors', function() {
 
     beforeEach(function() {
       Behavior = Marionette.Behavior.extend({
-        initialize: sinon.spy()
+        initialize: this.sinon.spy()
       });
 
       Obj = {
@@ -194,10 +194,10 @@ describe('Behaviors', function() {
     var View, view, Obj, spy, spy2, spy3, viewSpy;
 
     beforeEach(function() {
-      spy = sinon.spy();
-      spy2 = sinon.spy();
-      spy3 = sinon.spy();
-      viewSpy = sinon.spy();
+      spy = this.sinon.spy();
+      spy2 = this.sinon.spy();
+      spy3 = this.sinon.spy();
+      viewSpy = this.sinon.spy();
 
       Obj = {
         Tooltip: Marionette.Behavior.extend({
@@ -292,11 +292,11 @@ describe('Behaviors', function() {
 
     beforeEach(function() {
       hold = {};
-      spy = new sinon.spy();
-      onShowSpy = new sinon.spy();
-      onDestroySpy = new sinon.spy();
-      onDogeClickSpy = new sinon.spy();
-      onCoinsClickSpy = new sinon.spy();
+      spy = this.sinon.spy();
+      onShowSpy = this.sinon.spy();
+      onDestroySpy = this.sinon.spy();
+      onDogeClickSpy = this.sinon.spy();
+      onCoinsClickSpy = this.sinon.spy();
 
       hold.test = Marionette.Behavior.extend({
         ui: {
@@ -470,8 +470,8 @@ describe('Behaviors', function() {
     var model, v, listenToSpy, onSpy;
 
     beforeEach(function() {
-      listenToSpy = new sinon.spy();
-      onSpy       = new sinon.spy();
+      listenToSpy = this.sinon.spy();
+      onSpy       = this.sinon.spy();
       model       = new Backbone.Model();
 
       v = new (Marionette.View.extend({
@@ -540,9 +540,9 @@ describe('Behaviors', function() {
     var modelSpy, collectionSpy, fooChangedSpy, View, view, CollectionView, hold, model, testBehavior, collection;
 
     beforeEach(function() {
-      modelSpy = sinon.spy();
-      collectionSpy = sinon.spy();
-      fooChangedSpy = sinon.spy();
+      modelSpy = this.sinon.spy();
+      collectionSpy = this.sinon.spy();
+      fooChangedSpy = this.sinon.spy();
 
       hold = {};
 
@@ -632,7 +632,7 @@ describe('Behaviors', function() {
   describe('behavior trigger calls', function() {
     var onRenderSpy, View, hold;
     beforeEach(function() {
-      onRenderSpy = sinon.spy();
+      onRenderSpy = this.sinon.spy();
       hold = {};
       hold.testB = Marionette.Behavior.extend({
         onRender: onRenderSpy
@@ -657,7 +657,7 @@ describe('Behaviors', function() {
   describe('behavior is evented', function() {
     var spy, behavior, model;
     beforeEach(function() {
-      spy = sinon.spy();
+      spy = this.sinon.spy();
       behavior = new Marionette.Behavior({}, {});
       model = new Backbone.Model();
 
@@ -689,13 +689,13 @@ describe('Behaviors', function() {
     var viewEventSpy, childEventSpy, parentEventSpy;
     var View, v, m, c, hold, parentBehavior, groupedBehavior;
     beforeEach(function() {
-      initSpy = sinon.spy();
-      renderSpy = sinon.spy();
-      childRenderSpy = sinon.spy();
-      entityEventSpy = sinon.spy();
-      childEventSpy = sinon.spy();
-      parentEventSpy = sinon.spy();
-      viewEventSpy = sinon.spy();
+      initSpy = this.sinon.spy();
+      renderSpy = this.sinon.spy();
+      childRenderSpy = this.sinon.spy();
+      entityEventSpy = this.sinon.spy();
+      childEventSpy = this.sinon.spy();
+      parentEventSpy = this.sinon.spy();
+      viewEventSpy = this.sinon.spy();
 
       hold = {};
       hold.parentB = Marionette.Behavior.extend({
@@ -753,11 +753,7 @@ describe('Behaviors', function() {
       c = new Backbone.Collection();
       v = new View({model: m, collection: c});
 
-      sinon.spy(v, 'undelegateEvents');
-    });
-
-    afterEach(function () {
-      v.undelegateEvents.restore();
+      this.sinon.spy(v, 'undelegateEvents');
     });
 
     it('should call initialize on grouped behaviors', function() {

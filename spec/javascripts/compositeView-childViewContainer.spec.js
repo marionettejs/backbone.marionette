@@ -50,13 +50,9 @@ describe('composite view - childViewContainer', function() {
         beforeEach(function() {
           compositeView = viewCreation();
 
-          sinon.spy(compositeView, 'resetChildViewContainer');
+          this.sinon.spy(compositeView, 'resetChildViewContainer');
 
           compositeView.render();
-        });
-
-        afterEach(function () {
-          compositeView.resetChildViewContainer.restore();
         });
 
         it('should reset any existing childViewContainer', function() {
@@ -113,11 +109,7 @@ describe('composite view - childViewContainer', function() {
         collection: collection
       });
 
-      sinon.spy(compositeView, 'resetChildViewContainer');
-    });
-
-    afterEach(function () {
-      compositeView.resetChildViewContainer.restore();
+      this.sinon.spy(compositeView, 'resetChildViewContainer');
     });
 
     it('should throw an error', function() {
@@ -228,11 +220,7 @@ describe('composite view - childViewContainer', function() {
       compositeView = new CompositeView({
         collection: collection
       });
-      sinon.spy(compositeView, '_onCollectionAdd');
-    });
-
-    afterEach(function() {
-      compositeView._onCollectionAdd.restore();
+      this.sinon.spy(compositeView, '_onCollectionAdd');
     });
 
     it('should not raise any errors when item is added to collection', function() {
@@ -264,7 +252,7 @@ describe('composite view - childViewContainer', function() {
 
     beforeEach(function() {
       compositeView = new CompositeView();
-      compositeView.childViewContainer = sinon.stub().returns('ul');
+      compositeView.childViewContainer = this.sinon.stub().returns('ul');
       compositeView.render();
     });
 

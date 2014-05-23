@@ -5,17 +5,20 @@ describe('marionette controller', function() {
 
   describe('when creating an controller', function() {
 
-    var Controller = Marionette.Controller.extend({
-      initialize: sinon.stub()
-    });
+    var Controller;
 
     var controller, options, handler;
 
     beforeEach(function() {
       options = {};
+
+      Controller = Marionette.Controller.extend({
+        initialize: this.sinon.stub()
+      });
+
       controller = new Controller(options);
 
-      handler = sinon.stub();
+      handler = this.sinon.stub();
       controller.on('foo', handler);
 
       controller.trigger('foo', options);
@@ -46,11 +49,12 @@ describe('marionette controller', function() {
   describe('when no options argument is supplied to the constructor', function() {
     var controller;
 
-    var Controller = Marionette.Controller.extend({
-      initialize: sinon.stub()
-    });
+    var Controller;
 
     beforeEach(function() {
+      Controller = Marionette.Controller.extend({
+        initialize: this.sinon.stub()
+      });
       controller = new Controller();
     });
 
@@ -66,28 +70,24 @@ describe('marionette controller', function() {
   describe('when destroying a controller', function() {
     var controller, destroyHandler, listenToHandler;
 
-    var Controller = Marionette.Controller.extend({
-      onDestroy: sinon.stub()
-    });
+    var Controller;
 
     beforeEach(function() {
+      Controller = Marionette.Controller.extend({
+        onDestroy: this.sinon.stub()
+      });
       controller = new Controller();
 
-      destroyHandler = sinon.stub();
+      destroyHandler = this.sinon.stub();
       controller.on('destroy', destroyHandler);
 
-      listenToHandler = sinon.stub();
+      listenToHandler = this.sinon.stub();
       controller.listenTo(controller, 'destroy', listenToHandler);
 
-      sinon.spy(controller, 'stopListening');
-      sinon.spy(controller, 'off');
+      this.sinon.spy(controller, 'stopListening');
+      this.sinon.spy(controller, 'off');
 
       controller.destroy(123, 'second param');
-    });
-
-    afterEach(function() {
-      controller.stopListening.restore();
-      controller.off.restore();
     });
 
     it('should stopListening events', function() {

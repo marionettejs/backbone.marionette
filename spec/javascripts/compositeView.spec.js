@@ -249,15 +249,10 @@ describe('composite view', function() {
         order.push(compositeView);
       });
 
-      sinon.spy(compositeView, 'trigger');
-      sinon.spy(compositeView, 'onRender');
+      this.sinon.spy(compositeView, 'trigger');
+      this.sinon.spy(compositeView, 'onRender');
 
       compositeView.render();
-    });
-
-    afterEach(function() {
-      compositeView.trigger.restore();
-      compositeView.onRender.restore();
     });
 
     it('should trigger a render event for the model view', function() {
@@ -319,19 +314,13 @@ describe('composite view', function() {
         collection: collection
       });
 
-      sinon.spy(compositeView, 'render');
-      sinon.spy(compositeView, 'destroyChildren');
-      sinon.spy(Backbone.Marionette.Renderer, 'render');
+      this.sinon.spy(compositeView, 'render');
+      this.sinon.spy(compositeView, 'destroyChildren');
+      this.sinon.spy(Backbone.Marionette.Renderer, 'render');
       compositeRenderSpy = compositeView.render;
 
       compositeView.render();
       compositeView.render();
-    });
-
-    afterEach(function() {
-      compositeView.render.restore();
-      compositeView.destroyChildren.restore();
-      Backbone.Marionette.Renderer.render.restore();
     });
 
     it('should re-render the template view', function() {
@@ -459,11 +448,7 @@ describe('composite view', function() {
 
       compositeView.render();
 
-      sinon.spy(compositeView, '_renderRoot');
-    });
-
-    afterEach(function() {
-      compositeView._renderRoot.restore();
+      this.sinon.spy(compositeView, '_renderRoot');
     });
 
     describe('and then resetting the collection', function() {
@@ -586,15 +571,11 @@ describe('composite view', function() {
         collection: collection
       });
 
-      sinon.spy(CompositeModelView.prototype, 'destroy');
+      this.sinon.spy(CompositeModelView.prototype, 'destroy');
 
       compositeView.render();
 
       compositeView.destroy();
-    });
-
-    afterEach(function() {
-      CompositeModelView.prototype.destroy.restore();
     });
 
     it('should delete the model view', function() {
@@ -779,14 +760,10 @@ describe('composite view', function() {
           gridView.onBeforeRender = function() {
             called = true;
           };
-          sinon.spy(gridView, 'onBeforeRender');
+          this.sinon.spy(gridView, 'onBeforeRender');
 
           gridView.render();
 
-        });
-
-        afterEach(function() {
-          gridView.onBeforeRender.restore();
         });
 
         // this test enforces that ui elements should be accessible as soon as their html was inserted
@@ -810,12 +787,8 @@ describe('composite view', function() {
     var constructor, compositeView;
 
     beforeEach(function() {
-      constructor = sinon.spy(Marionette, 'CollectionView');
+      constructor = this.sinon.spy(Marionette, 'CollectionView');
       compositeView = new Marionette.CompositeView();
-    });
-
-    afterEach(function() {
-      Marionette.CollectionView.restore();
     });
 
     it('calls the parent Marionette.CollectionViews constructor function on instantiation', function() {

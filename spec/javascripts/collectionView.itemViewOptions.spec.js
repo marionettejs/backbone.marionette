@@ -55,14 +55,10 @@ describe('collection view - childViewOptions', function() {
       collectionView = new CollectionView({
         collection: collection
       });
-      sinon.spy(collectionView, 'childViewOptions');
+      this.sinon.spy(collectionView, 'childViewOptions');
 
       collectionView.render();
       view = collectionView.children.findByIndex(0);
-    });
-
-    afterEach(function () {
-      collectionView.childViewOptions.restore();
     });
 
     it('should pass the options to every view instance', function() {

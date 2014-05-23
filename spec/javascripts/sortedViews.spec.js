@@ -1,31 +1,33 @@
 describe('collection/composite view sorting', function(){
-  'use strict';
-
   beforeEach(global.setup);
   afterEach(global.teardown);
 
-  // Shared View Definitions
-  // -----------------------
+  var ChildView, CollectionView, CompositeView, getCollectionChildren;
 
-  function getCollectionChildren(el) {
-    return el.children().map(function(i, v){return v.innerHTML; }).get().join();
-  }
+  beforeEach(function() {
+    // Shared View Definitions
+    // -----------------------
 
-  var ChildView = Backbone.Marionette.ItemView.extend({
-    tagName: 'span',
-    render: function(){
-      this.$el.html(this.model.get('foo'));
-      this.trigger('render');
-    }
-  });
+    getCollectionChildren = function (el) {
+      return el.children().map(function(i, v){return v.innerHTML; }).get().join();
+    };
 
-  var CollectionView = Backbone.Marionette.CollectionView.extend({
-    childView: ChildView
-  });
+    ChildView = Backbone.Marionette.ItemView.extend({
+      tagName: 'span',
+      render: function(){
+        this.$el.html(this.model.get('foo'));
+        this.trigger('render');
+      }
+    });
 
-  var CompositeView = Backbone.Marionette.CompositeView.extend({
-    childView: ChildView,
-    template: '#composite-template-no-model'
+    CollectionView = Backbone.Marionette.CollectionView.extend({
+      childView: ChildView
+    });
+
+    CompositeView = Backbone.Marionette.CompositeView.extend({
+      childView: ChildView,
+      template: '#composite-template-no-model'
+    });
   });
 
   describe('when working with collections with comparators', function(){
@@ -150,11 +152,9 @@ describe('collection/composite view sorting', function(){
         });
 
         it('should not call render', function(){
-           expect(collectionView.render.callCount).to.equal(0);
+          expect(collectionView.render.callCount).to.equal(0);
         });
-
       });
-
     });
 
     describe('when changing the comparator', function(){

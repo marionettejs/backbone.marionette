@@ -6,17 +6,19 @@ describe('view entity events', function() {
   describe('when a view has string-based model and collection event configuration', function() {
     var view;
 
-    var View = Backbone.Marionette.View.extend({
-      modelEvents: {'model-event': 'modelEventHandler modelEventHandler2'},
-      collectionEvents: {'collection-event': 'collectionEventHandler collectionEventHandler2'},
-
-      modelEventHandler: sinon.stub(),
-      collectionEventHandler: sinon.stub(),
-      modelEventHandler2: sinon.stub(),
-      collectionEventHandler2: sinon.stub()
-    });
+    var View;
 
     beforeEach(function() {
+      View = Backbone.Marionette.View.extend({
+        modelEvents: {'model-event': 'modelEventHandler modelEventHandler2'},
+        collectionEvents: {'collection-event': 'collectionEventHandler collectionEventHandler2'},
+
+        modelEventHandler: this.sinon.stub(),
+        collectionEventHandler: this.sinon.stub(),
+        modelEventHandler2: this.sinon.stub(),
+        collectionEventHandler2: this.sinon.stub()
+      });
+
       view = new View({
         model: new Backbone.Model(),
         collection: new Backbone.Collection()
@@ -39,17 +41,17 @@ describe('view entity events', function() {
 
   describe('when a view has function-based model and collection event configuration', function() {
     var view;
-
-    var View = Backbone.Marionette.View.extend({
-      modelEvents: {
-        'model-event': sinon.stub()
-      },
-      collectionEvents: {
-        'collection-event': sinon.stub()
-      }
-    });
+    var View;
 
     beforeEach(function() {
+      View = Backbone.Marionette.View.extend({
+        modelEvents: {
+          'model-event': this.sinon.stub()
+        },
+        collectionEvents: {
+          'collection-event': this.sinon.stub()
+        }
+      });
       view = new View({
         model: new Backbone.Model(),
         collection: new Backbone.Collection()
@@ -90,8 +92,8 @@ describe('view entity events', function() {
     var view, modelHandler, collectionHandler;
 
     beforeEach(function() {
-      modelHandler = sinon.stub();
-      collectionHandler = sinon.stub();
+      modelHandler = this.sinon.stub();
+      collectionHandler = this.sinon.stub();
 
       var View = Backbone.Marionette.View.extend({
         modelEvents: function() {
@@ -124,8 +126,8 @@ describe('view entity events', function() {
     var view, modelHandler, collectionHandler;
 
     beforeEach(function() {
-      modelHandler = sinon.stub();
-      collectionHandler = sinon.stub();
+      modelHandler = this.sinon.stub();
+      collectionHandler = this.sinon.stub();
 
       var View = Marionette.View.extend({
         modelEvents: {
@@ -167,8 +169,8 @@ describe('view entity events', function() {
     var view, modelHandler, collectionHandler;
 
     beforeEach(function() {
-      modelHandler = sinon.stub();
-      collectionHandler = sinon.stub();
+      modelHandler = this.sinon.stub();
+      collectionHandler = this.sinon.stub();
 
       var View = Marionette.View.extend({
         modelEvents: {
@@ -241,8 +243,8 @@ describe('view entity events', function() {
     });
 
     beforeEach(function() {
-      destroySpy = sinon.spy(ChildView.prototype, 'destroy');
-      renderSpy = sinon.stub(ChildView.prototype, 'render');
+      destroySpy = this.sinon.spy(ChildView.prototype, 'destroy');
+      renderSpy = this.sinon.stub(ChildView.prototype, 'render');
 
       var model = new Backbone.Model();
       var parent = new ParentView({
@@ -252,11 +254,6 @@ describe('view entity events', function() {
 
       model.trigger('sync');
       model.trigger('sync');
-    });
-
-    afterEach(function() {
-      ChildView.prototype.destroy.restore();
-      ChildView.prototype.render.restore();
     });
 
     it('should destroy the previous child view', function() {

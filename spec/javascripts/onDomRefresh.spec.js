@@ -10,7 +10,7 @@ describe('onDomRefresh', function() {
   });
 
   beforeEach(function() {
-    sinon.spy(View.prototype, 'onDomRefresh');
+    this.sinon.spy(View.prototype, 'onDomRefresh');
     view = new View();
     view.trigger('show');
     view.trigger('render');
@@ -18,7 +18,6 @@ describe('onDomRefresh', function() {
 
   afterEach(function() {
     view.remove();
-    View.prototype.onDomRefresh.restore();
   });
 
   describe('when the view is not in the DOM', function() {

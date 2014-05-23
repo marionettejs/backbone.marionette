@@ -13,8 +13,8 @@ describe('trigger event and method name', function() {
       this.triggerMethod = Marionette.triggerMethod;
     };
 
-    eventHandler = sinon.stub();
-    methodHandler = sinon.stub();
+    eventHandler = this.sinon.stub();
+    methodHandler = this.sinon.stub();
   });
 
   describe('when triggering an event', function() {
@@ -153,7 +153,7 @@ describe('trigger event and method name', function() {
         collection: collection
       });
 
-      collectionView.onChildviewAddSelection = sinon.stub();
+      collectionView.onChildviewAddSelection = this.sinon.stub();
 
       collectionView.render();
 

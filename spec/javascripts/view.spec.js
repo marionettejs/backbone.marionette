@@ -8,7 +8,7 @@ describe('base view', function() {
     var fooHandler, view;
 
     beforeEach(function() {
-      fooHandler = sinon.stub();
+      fooHandler = this.sinon.stub();
 
       var View = Backbone.Marionette.View.extend({
         initialize: function() {
@@ -33,7 +33,7 @@ describe('base view', function() {
     var destroy;
 
     beforeEach(function() {
-      destroy = sinon.stub();
+      destroy = this.sinon.stub();
 
       var view = new Marionette.View();
       view.listenTo(view, 'destroy', destroy);
@@ -48,23 +48,20 @@ describe('base view', function() {
 
   describe('when destroying a view', function() {
     var destroy, view;
-
-    var View = Marionette.View.extend({
-      onDestroy: sinon.stub()
-    });
+    var View;
 
     beforeEach(function() {
+      View = Marionette.View.extend({
+        onDestroy: this.sinon.stub()
+      });
+
       view = new View();
 
-      sinon.spy(view, 'remove');
-      destroy = sinon.stub();
+      this.sinon.spy(view, 'remove');
+      destroy = this.sinon.stub();
       view.on('destroy', destroy);
 
       view.destroy(123, 'second param');
-    });
-
-    afterEach(function() {
-      view.remove.restore();
     });
 
     it('should trigger the destroy event', function() {
@@ -90,8 +87,8 @@ describe('base view', function() {
     beforeEach(function() {
       view = new Marionette.View();
 
-      sinon.spy(view, 'remove');
-      destroy = sinon.stub();
+      this.sinon.spy(view, 'remove');
+      destroy = this.sinon.stub();
       view.on('destroy', destroy);
 
       view.onBeforeDestroy = function() {
@@ -99,10 +96,6 @@ describe('base view', function() {
       };
 
       view.destroy();
-    });
-
-    afterEach(function() {
-      view.remove.restore();
     });
 
     it('should not trigger the destroy event', function() {
@@ -124,8 +117,8 @@ describe('base view', function() {
     beforeEach(function() {
       view = new Marionette.View();
 
-      sinon.spy(view, 'remove');
-      destroy = sinon.stub();
+      this.sinon.spy(view, 'remove');
+      destroy = this.sinon.stub();
       view.on('destroy', destroy);
 
       view.onBeforeDestroy = function() {
@@ -133,10 +126,6 @@ describe('base view', function() {
       };
 
       view.destroy(123, 'second param');
-    });
-
-    afterEach(function() {
-      view.remove.restore();
     });
 
     it('should trigger the destroy event', function() {
@@ -213,15 +202,11 @@ describe('base view', function() {
       view = new Marionette.View();
       view.destroy();
 
-      sinon.spy(view, 'remove');
-      destroy = sinon.stub();
+      this.sinon.spy(view, 'remove');
+      destroy = this.sinon.stub();
       view.on('destroy', destroy);
 
       view.destroy();
-    });
-
-    afterEach(function() {
-      view.remove.restore();
     });
 
     it('should not trigger the destroy event', function() {

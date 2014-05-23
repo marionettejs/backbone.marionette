@@ -20,10 +20,10 @@ describe('layoutView - dynamic regions', function() {
         template: template
       });
 
-      beforeAddHandler = sinon.spy();
-      addHandler = sinon.spy();
-      onBeforeAddSpy = sinon.spy(layoutView, 'onBeforeAddRegion');
-      onAddSpy = sinon.spy(layoutView, 'onAddRegion');
+      beforeAddHandler = this.sinon.spy();
+      addHandler = this.sinon.spy();
+      onBeforeAddSpy = this.sinon.spy(layoutView, 'onBeforeAddRegion');
+      onAddSpy = this.sinon.spy(layoutView, 'onAddRegion');
       layoutView.on('before:add:region', beforeAddHandler);
       layoutView.on('add:region', addHandler);
 
@@ -33,11 +33,6 @@ describe('layoutView - dynamic regions', function() {
 
       var view = new Backbone.View();
       layoutView.foo.show(view);
-    });
-
-    afterEach(function() {
-      layoutView.onBeforeAddRegion.restore();
-      layoutView.onAddRegion.restore();
     });
 
     it('should add the region to the layoutView', function() {
@@ -176,14 +171,14 @@ describe('layoutView - dynamic regions', function() {
         onRemoveRegion: function() {}
       });
 
-      destroyHandler = sinon.spy();
-      beforeRemoveHandler = sinon.spy();
-      removeHandler = sinon.spy();
+      destroyHandler = this.sinon.spy();
+      beforeRemoveHandler = this.sinon.spy();
+      removeHandler = this.sinon.spy();
 
       layoutView = new LayoutView();
 
-      onBeforeRemoveSpy = sinon.spy(layoutView, 'onBeforeRemoveRegion');
-      onRemoveSpy = sinon.spy(layoutView, 'onRemoveRegion');
+      onBeforeRemoveSpy = this.sinon.spy(layoutView, 'onBeforeRemoveRegion');
+      onRemoveSpy = this.sinon.spy(layoutView, 'onRemoveRegion');
 
       layoutView.render();
       layoutView.foo.show(new Backbone.View());
@@ -194,11 +189,6 @@ describe('layoutView - dynamic regions', function() {
       layoutView.on('remove:region', removeHandler);
 
       layoutView.removeRegion('foo');
-    });
-
-    afterEach(function() {
-      layoutView.onBeforeRemoveRegion.restore();
-      layoutView.onRemoveRegion.restore();
     });
 
     it('should destroy the region', function() {
@@ -254,7 +244,7 @@ describe('layoutView - dynamic regions', function() {
     var layoutView, region, destroyHandler;
 
     beforeEach(function() {
-      destroyHandler = sinon.stub();
+      destroyHandler = this.sinon.stub();
       layoutView = new Marionette.LayoutView({
         template: template
       });

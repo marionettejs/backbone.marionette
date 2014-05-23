@@ -9,8 +9,8 @@ describe('callbacks', function() {
         spyOne, spyTwo;
 
     beforeEach(function() {
-      spyOne = sinon.spy();
-      spyTwo = sinon.spy();
+      spyOne = this.sinon.spy();
+      spyTwo = this.sinon.spy();
       var callbacks = new Backbone.Marionette.Callbacks();
 
       specifiedOptions = {};
@@ -43,8 +43,8 @@ describe('callbacks', function() {
     var spyOne, spyTwo;
 
     beforeEach(function() {
-      spyOne = sinon.spy();
-      spyTwo = sinon.spy();
+      spyOne = this.sinon.spy();
+      spyTwo = this.sinon.spy();
       var callbacks = new Backbone.Marionette.Callbacks();
       callbacks.run();
 
@@ -65,7 +65,7 @@ describe('callbacks', function() {
     var spyOne, context;
 
     beforeEach(function() {
-      spyOne  = sinon.spy();
+      spyOne  = this.sinon.spy();
       context = {};
 
       var callbacks = new Backbone.Marionette.Callbacks();
@@ -85,7 +85,7 @@ describe('callbacks', function() {
     beforeEach(function() {
       var callbacks = new Backbone.Marionette.Callbacks();
 
-      spy = sinon.spy();
+      spy = this.sinon.spy();
       callbacks.add(spy);
 
       callbacks.run();

@@ -9,8 +9,8 @@ describe('regionManager', function() {
       var region, regionManager, addHandler, beforeAddHandler;
 
       beforeEach(function() {
-        addHandler = sinon.spy();
-        beforeAddHandler = sinon.spy();
+        addHandler = this.sinon.spy();
+        beforeAddHandler = this.sinon.spy();
 
         regionManager = new Marionette.RegionManager();
         regionManager.on('add:region', addHandler);
@@ -44,8 +44,8 @@ describe('regionManager', function() {
       var region, builtRegion, regionManager, addHandler, beforeAddHandler;
 
       beforeEach(function() {
-        addHandler = sinon.spy();
-        beforeAddHandler = sinon.spy();
+        addHandler = this.sinon.spy();
+        beforeAddHandler = this.sinon.spy();
 
         regionManager = new Marionette.RegionManager();
         regionManager.on('add:region', addHandler);
@@ -100,7 +100,7 @@ describe('regionManager', function() {
 
       beforeEach(function() {
         context = $('<div><div id="foo"></div><div id="bar"></div></div>');
-        parentElHandler = sinon.stub().returns(context);
+        parentElHandler = this.sinon.stub().returns(context);
         regionManager = new Marionette.RegionManager();
         region = regionManager.addRegion('foo', {
           selector: '#foo',
@@ -193,9 +193,9 @@ describe('regionManager', function() {
     beforeEach(function() {
       this.setFixtures('<div id="foo"></div>');
 
-      destroyHandler = sinon.spy();
-      beforeRemoveHandler = sinon.spy();
-      removeHandler = sinon.spy();
+      destroyHandler = this.sinon.spy();
+      beforeRemoveHandler = this.sinon.spy();
+      removeHandler = this.sinon.spy();
 
       regionManager = new Marionette.RegionManager();
       region = regionManager.addRegion('foo', '#foo');
@@ -205,13 +205,9 @@ describe('regionManager', function() {
       regionManager.on('before:remove:region', beforeRemoveHandler);
       regionManager.on('remove:region', removeHandler);
 
-      sinon.spy(region, 'stopListening');
+      this.sinon.spy(region, 'stopListening');
 
       regionManager.removeRegion('foo');
-    });
-
-    afterEach(function() {
-      region.stopListening.restore();
     });
 
     it('should destroy the region', function() {
@@ -245,9 +241,9 @@ describe('regionManager', function() {
     beforeEach(function() {
       this.setFixtures('<div id="foo"></div><div id="bar"></div>');
 
-      destroyHandler = sinon.stub();
-      destroyHandler2 = sinon.stub();
-      removeHandler = sinon.stub();
+      destroyHandler = this.sinon.stub();
+      destroyHandler2 = this.sinon.stub();
+      removeHandler = this.sinon.stub();
 
       regionManager = new Marionette.RegionManager();
       region = regionManager.addRegion('foo', '#foo');
@@ -261,15 +257,10 @@ describe('regionManager', function() {
 
       regionManager.on('remove:region', removeHandler);
 
-      sinon.spy(region, 'stopListening');
-      sinon.spy(r2, 'stopListening');
+      this.sinon.spy(region, 'stopListening');
+      this.sinon.spy(r2, 'stopListening');
 
       regionManager.removeRegions();
-    });
-
-    afterEach(function() {
-      region.stopListening.restore();
-      r2.stopListening.restore();
     });
 
     it('should destroy the regions', function() {
@@ -299,8 +290,8 @@ describe('regionManager', function() {
     beforeEach(function() {
       this.setFixtures('<div id="foo">');
 
-      destroyHandler = sinon.stub();
-      destroyManagerHandler = sinon.stub();
+      destroyHandler = this.sinon.stub();
+      destroyManagerHandler = this.sinon.stub();
 
       regionManager = new Marionette.RegionManager();
       region = regionManager.addRegion('foo', '#foo');
@@ -325,8 +316,8 @@ describe('regionManager', function() {
 
     beforeEach(function() {
       this.setFixtures('<div id="foo">');
-      destroyHandler = sinon.stub();
-      destroyManagerHandler = sinon.stub();
+      destroyHandler = this.sinon.stub();
+      destroyManagerHandler = this.sinon.stub();
 
       regionManager = new Marionette.RegionManager();
       region = regionManager.addRegion('foo', '#foo');
@@ -335,13 +326,9 @@ describe('regionManager', function() {
       region.on('destroy', destroyHandler);
       regionManager.on('destroy', destroyManagerHandler);
 
-      sinon.spy(region, 'stopListening');
+      this.sinon.spy(region, 'stopListening');
 
       regionManager.destroy();
-    });
-
-    afterEach(function() {
-      region.stopListening.restore();
     });
 
     it('should destroy all regions', function() {
@@ -365,7 +352,7 @@ describe('regionManager', function() {
     var cb, r1, r2, r3;
 
     beforeEach(function() {
-      cb = sinon.stub();
+      cb = this.sinon.stub();
 
       var rm = new Marionette.RegionManager();
 

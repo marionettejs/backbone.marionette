@@ -52,7 +52,7 @@ describe('collection view', function() {
     var collectionView, childViewRender;
 
     beforeEach(function() {
-      childViewRender = sinon.stub();
+      childViewRender = this.sinon.stub();
 
       collectionView = new MockCollectionView({
         collection: collection
@@ -60,29 +60,17 @@ describe('collection view', function() {
 
       collectionView.on('childview:render', childViewRender);
 
-      sinon.spy(collectionView, 'onRender');
-      sinon.spy(collectionView, 'onBeforeAddChild');
-      sinon.spy(collectionView, 'onAddChild');
-      sinon.spy(collectionView, 'onBeforeRender');
-      sinon.spy(collectionView, 'trigger');
-      sinon.spy(collectionView, 'attachHtml');
-      sinon.spy(collectionView.$el, 'append');
-      sinon.spy(collectionView, 'startBuffering');
-      sinon.spy(collectionView, 'endBuffering');
+      this.sinon.spy(collectionView, 'onRender');
+      this.sinon.spy(collectionView, 'onBeforeAddChild');
+      this.sinon.spy(collectionView, 'onAddChild');
+      this.sinon.spy(collectionView, 'onBeforeRender');
+      this.sinon.spy(collectionView, 'trigger');
+      this.sinon.spy(collectionView, 'attachHtml');
+      this.sinon.spy(collectionView.$el, 'append');
+      this.sinon.spy(collectionView, 'startBuffering');
+      this.sinon.spy(collectionView, 'endBuffering');
 
       collectionView.render();
-    });
-
-    afterEach(function () {
-      collectionView.onRender.restore();
-      collectionView.onBeforeAddChild.restore();
-      collectionView.onAddChild.restore();
-      collectionView.onBeforeRender.restore();
-      collectionView.trigger.restore();
-      collectionView.attachHtml.restore();
-      collectionView.$el.append.restore();
-      collectionView.startBuffering.restore();
-      collectionView.endBuffering.restore();
     });
 
     it('should only call $el.append once', function() {
@@ -166,17 +154,11 @@ describe('collection view', function() {
     beforeEach(function() {
       collectionView = new MockCollectionView();
 
-      sinon.spy(collectionView, 'onRender');
-      sinon.spy(collectionView, 'onBeforeRender');
-      sinon.spy(collectionView, 'trigger');
+      this.sinon.spy(collectionView, 'onRender');
+      this.sinon.spy(collectionView, 'onBeforeRender');
+      this.sinon.spy(collectionView, 'trigger');
 
       collectionView.render();
-    });
-
-    afterEach(function () {
-      collectionView.onRender.restore();
-      collectionView.onBeforeRender.restore();
-      collectionView.trigger.restore();
     });
 
     it('should not append any html', function() {
@@ -199,17 +181,13 @@ describe('collection view', function() {
       });
       collectionView.render();
 
-      childViewRender = sinon.stub();
+      childViewRender = this.sinon.stub();
       collectionView.on('childview:render', childViewRender);
 
-      sinon.spy(collectionView, 'attachHtml');
+      this.sinon.spy(collectionView, 'attachHtml');
 
       model = new Backbone.Model({foo: 'bar'});
       collection.add(model);
-    });
-
-    afterEach(function () {
-      collectionView.attachHtml.restore();
     });
 
     it('should add the model to the list', function() {
@@ -241,17 +219,13 @@ describe('collection view', function() {
       });
       collectionView.render();
 
-      childViewRender = sinon.stub();
+      childViewRender = this.sinon.stub();
       collectionView.on('childview:render', childViewRender);
 
-      sinon.spy(collectionView, 'attachHtml');
+      this.sinon.spy(collectionView, 'attachHtml');
 
       model = new Backbone.Model({foo: 'baz'});
       collection.add(model);
-    });
-
-    afterEach(function () {
-      collectionView.attachHtml.restore();
     });
 
     it('should add the model to the list', function() {
@@ -302,20 +276,13 @@ describe('collection view', function() {
 
       childView = collectionView.children.findByIndex(0);
 
-      beforeRenderSpy = sinon.spy(collectionView, 'onBeforeRenderEmpty');
-      renderSpy = sinon.spy(collectionView, 'onRenderEmpty');
+      beforeRenderSpy = this.sinon.spy(collectionView, 'onBeforeRenderEmpty');
+      renderSpy = this.sinon.spy(collectionView, 'onRenderEmpty');
 
-      sinon.spy(childView, 'destroy');
-      sinon.spy(EmptyView.prototype, 'render');
+      this.sinon.spy(childView, 'destroy');
+      this.sinon.spy(EmptyView.prototype, 'render');
 
       collectionView._onCollectionRemove(model);
-    });
-
-    afterEach(function () {
-      collectionView.onBeforeRenderEmpty.restore();
-      collectionView.onRenderEmpty.restore();
-      childView.destroy.restore();
-      EmptyView.prototype.render.restore();
     });
 
     it('should destroy the models view', function() {
@@ -356,18 +323,12 @@ describe('collection view', function() {
 
       childView = collectionView.children.findByIndex(0);
 
-      sinon.spy(childView, 'destroy');
+      this.sinon.spy(childView, 'destroy');
 
-      onBeforeRemoveChildSpy = sinon.spy(collectionView, 'onBeforeRemoveChild');
-      onRemoveChildSpy = sinon.spy(collectionView, 'onRemoveChild');
+      onBeforeRemoveChildSpy = this.sinon.spy(collectionView, 'onBeforeRemoveChild');
+      onRemoveChildSpy = this.sinon.spy(collectionView, 'onRemoveChild');
 
       collection.remove(model);
-    });
-
-    afterEach(function() {
-      childView.destroy.restore();
-      collectionView.onBeforeRemoveChild.restore();
-      collectionView.onRemoveChild.restore();
     });
 
     it('should destroy the models view', function() {
@@ -413,9 +374,10 @@ describe('collection view', function() {
     var collection;
     var childView;
     var childModel;
-    var destroyHandler = sinon.stub();
+    var destroyHandler;
 
     beforeEach(function() {
+      destroyHandler = this.sinon.stub();
 
       collection = new Backbone.Collection([{foo: 'bar'}, {foo: 'baz'}]);
       collectionView = new EventedView({
@@ -432,16 +394,16 @@ describe('collection view', function() {
       collectionView.listenTo(collection, 'foo', collectionView.someCallback);
       collectionView.listenTo(collectionView, 'item:foo', collectionView.someItemViewCallback);
 
-      sinon.spy(childView, 'destroy');
-      sinon.spy(collectionView, '_onCollectionRemove');
-      sinon.spy(collectionView, 'stopListening');
-      sinon.spy(collectionView, 'remove');
-      sinon.spy(collectionView, 'someCallback');
-      sinon.spy(collectionView, 'someItemViewCallback');
-      sinon.spy(collectionView, 'destroy');
-      sinon.spy(collectionView, 'onDestroy');
-      sinon.spy(collectionView, 'onBeforeDestroy');
-      sinon.spy(collectionView, 'trigger');
+      this.sinon.spy(childView, 'destroy');
+      this.sinon.spy(collectionView, '_onCollectionRemove');
+      this.sinon.spy(collectionView, 'stopListening');
+      this.sinon.spy(collectionView, 'remove');
+      this.sinon.spy(collectionView, 'someCallback');
+      this.sinon.spy(collectionView, 'someItemViewCallback');
+      this.sinon.spy(collectionView, 'destroy');
+      this.sinon.spy(collectionView, 'onDestroy');
+      this.sinon.spy(collectionView, 'onBeforeDestroy');
+      this.sinon.spy(collectionView, 'trigger');
 
       collectionView.bind('destroy:collection', destroyHandler);
 
@@ -451,19 +413,6 @@ describe('collection view', function() {
 
       collection.trigger('foo');
       collection.remove(childModel);
-    });
-
-    afterEach(function () {
-      childView.destroy.restore();
-      collectionView._onCollectionRemove.restore();
-      collectionView.stopListening.restore();
-      collectionView.remove.restore();
-      collectionView.someCallback.restore();
-      collectionView.someItemViewCallback.restore();
-      collectionView.destroy.restore();
-      collectionView.onDestroy.restore();
-      collectionView.onBeforeDestroy.restore();
-      collectionView.trigger.restore();
     });
 
     it('should destroy all of the child views', function() {
@@ -531,13 +480,9 @@ describe('collection view', function() {
       collectionView.render();
 
       childView = collectionView.children.findByIndex(0);
-      sinon.spy(childView, 'remove');
+      this.sinon.spy(childView, 'remove');
 
       collectionView.destroyChildren();
-    });
-
-    afterEach(function() {
-      childView.remove.restore();
     });
 
     it('should call the "remove" method', function() {
@@ -575,7 +520,7 @@ describe('collection view', function() {
     var model, collection, collectionView, childView, someEventSpy;
 
     beforeEach(function() {
-      someEventSpy = sinon.stub();
+      someEventSpy = this.sinon.stub();
 
       model = new Backbone.Model({foo: 'bar'});
       collection = new Backbone.Collection([model]);
@@ -584,13 +529,9 @@ describe('collection view', function() {
       collectionView.on('childview:some:event', someEventSpy);
       collectionView.render();
 
-      sinon.spy(collectionView, 'trigger');
+      this.sinon.spy(collectionView, 'trigger');
       childView = collectionView.children.findByIndex(0);
       childView.trigger('some:event', 'test', model);
-    });
-
-    afterEach(function() {
-      collectionView.trigger.restore();
     });
 
     it('should bubble up through the parent collection view', function() {
@@ -610,7 +551,7 @@ describe('collection view', function() {
     });
 
     beforeEach(function() {
-      someEventSpy = sinon.stub();
+      someEventSpy = this.sinon.stub();
 
       model = new Backbone.Model({foo: 'bar'});
       collection = new Backbone.Collection([model]);
@@ -619,13 +560,9 @@ describe('collection view', function() {
       collectionView.on('myPrefix:some:event', someEventSpy);
       collectionView.render();
 
-      sinon.spy(collectionView, 'trigger');
+      this.sinon.spy(collectionView, 'trigger');
       childView = collectionView.children.findByIndex(0);
       childView.trigger('some:event', 'test', model);
-    });
-
-    afterEach(function() {
-      collectionView.trigger.restore();
     });
 
     it('should bubble up through the parent collection view', function() {
@@ -656,8 +593,8 @@ describe('collection view', function() {
       var beforeSpy, renderSpy;
 
       beforeEach(function() {
-        beforeSpy = sinon.stub();
-        renderSpy = sinon.stub();
+        beforeSpy = this.sinon.stub();
+        renderSpy = this.sinon.stub();
 
         collectionView.on('childview:before:render', beforeSpy);
         collectionView.on('childview:render', renderSpy);
@@ -680,8 +617,8 @@ describe('collection view', function() {
       var beforeSpy, destroySpy;
 
       beforeEach(function() {
-        beforeSpy = sinon.stub();
-        destroySpy = sinon.stub();
+        beforeSpy = this.sinon.stub();
+        destroySpy = this.sinon.stub();
 
         collectionView.on('childview:before:destroy', beforeSpy);
         collectionView.on('childview:destroy', destroySpy);
@@ -784,8 +721,8 @@ describe('collection view', function() {
     var collectionView;
 
     beforeEach(function() {
-      sinon.spy(ChildView.prototype, 'onShow');
-      sinon.spy(ChildView.prototype, 'onDomRefresh');
+      this.sinon.spy(ChildView.prototype, 'onShow');
+      this.sinon.spy(ChildView.prototype, 'onDomRefresh');
 
       model1 = new Backbone.Model();
       model2 = new Backbone.Model();
@@ -799,16 +736,10 @@ describe('collection view', function() {
       collectionView.onShow();
       collectionView.trigger('show');
 
-      sinon.spy(collectionView, 'attachBuffer');
+      this.sinon.spy(collectionView, 'attachBuffer');
 
       collection.add(model2);
       view = collectionView.children.findByIndex(1);
-    });
-
-    afterEach(function() {
-      ChildView.prototype.onShow.restore();
-      ChildView.prototype.onDomRefresh.restore();
-      collectionView.attachBuffer.restore();
     });
 
     it('should not use the render buffer', function() {
@@ -865,7 +796,7 @@ describe('collection view', function() {
     });
 
     beforeEach(function() {
-      someEventSpy = sinon.stub();
+      someEventSpy = this.sinon.stub();
 
       model = new Backbone.Model({foo: 'bar'});
       collection = new Backbone.Collection([model]);
@@ -874,13 +805,9 @@ describe('collection view', function() {
       collectionView.someEvent = someEventSpy;
       collectionView.render();
 
-      sinon.spy(collectionView, 'trigger');
+      this.sinon.spy(collectionView, 'trigger');
       childView = collectionView.children.findByIndex(0);
       childView.trigger('some:event', 'test', model);
-    });
-
-    afterEach(function() {
-      collectionView.trigger.restore();
     });
 
     it('should bubble up through the parent collection view', function() {
@@ -896,7 +823,7 @@ describe('collection view', function() {
     var model, collection, collectionView, childView, onSomeEventSpy;
 
     beforeEach(function() {
-      onSomeEventSpy = sinon.stub();
+      onSomeEventSpy = this.sinon.stub();
 
       var CollectionView = MockCollectionView.extend({
         childEvents: {
@@ -910,13 +837,9 @@ describe('collection view', function() {
       collectionView = new CollectionView({collection: collection});
       collectionView.render();
 
-      sinon.spy(collectionView, 'trigger');
+      this.sinon.spy(collectionView, 'trigger');
       childView = collectionView.children.findByIndex(0);
       childView.trigger('some:event', 'test', model);
-    });
-
-    afterEach(function() {
-      collectionView.trigger.restore();
     });
 
     it('should bubble up through the parent collection view', function() {
@@ -938,7 +861,7 @@ describe('collection view', function() {
     });
 
     beforeEach(function() {
-      someEventSpy = sinon.stub();
+      someEventSpy = this.sinon.stub();
 
       model = new Backbone.Model({foo: 'bar'});
       collection = new Backbone.Collection([model]);
@@ -947,13 +870,9 @@ describe('collection view', function() {
       collectionView.someEvent = someEventSpy;
       collectionView.render();
 
-      sinon.spy(collectionView, 'trigger');
+      this.sinon.spy(collectionView, 'trigger');
       childView = collectionView.children.findByIndex(0);
       childView.trigger('some:event', 'test', model);
-    });
-
-    afterEach(function() {
-      collectionView.trigger.restore();
     });
 
     it('should bubble up through the parent collection view', function() {
@@ -990,12 +909,8 @@ describe('collection view', function() {
     var constructor, collectionView;
 
     beforeEach(function() {
-      constructor = sinon.spy(Marionette, 'View');
+      constructor = this.sinon.spy(Marionette, 'View');
       collectionView = new Marionette.CollectionView();
-    });
-
-    afterEach(function () {
-      Marionette.View.restore();
     });
 
     it('calls the parent Marionette.Views constructor function on instantiation', function() {

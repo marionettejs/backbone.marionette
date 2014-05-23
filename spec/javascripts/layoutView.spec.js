@@ -173,15 +173,10 @@ describe('layoutView', function() {
       regionOne = layoutViewManager.regionOne;
       regionTwo = layoutViewManager.regionTwo;
 
-      sinon.spy(regionOne, 'destroy');
-      sinon.spy(regionTwo, 'destroy');
+      this.sinon.spy(regionOne, 'destroy');
+      this.sinon.spy(regionTwo, 'destroy');
 
       layoutViewManager.destroy();
-    });
-
-    afterEach(function() {
-      regionOne.destroy.restore();
-      regionTwo.destroy.restore();
     });
 
     it('should destroy the region managers', function() {
@@ -243,15 +238,11 @@ describe('layoutView', function() {
       view.destroy = function() {};
       layoutView.regionOne.show(view);
 
-      destroyRegionsSpy = sinon.spy(layoutView.regionManager, 'destroyRegions');
+      destroyRegionsSpy = this.sinon.spy(layoutView.regionManager, 'destroyRegions');
 
       layoutView.render();
       layoutView.regionOne.show(view);
       region = layoutView.regionOne;
-    });
-
-    afterEach(function() {
-      layoutView.regionManager.destroyRegions.restore();
     });
 
     it('should destroy the regions', function() {
@@ -293,16 +284,11 @@ describe('layoutView', function() {
       layoutView.regionOne.show(view);
       layoutView.destroy();
 
-      sinon.spy(region, 'destroy');
-      sinon.spy(view, 'destroy');
+      this.sinon.spy(region, 'destroy');
+      this.sinon.spy(view, 'destroy');
 
-      layoutView.onBeforeRender = sinon.stub();
-      layoutView.onRender = sinon.stub();
-    });
-
-    afterEach(function() {
-      region.destroy.restore();
-      view.destroy.restore();
+      layoutView.onBeforeRender = this.sinon.stub();
+      layoutView.onRender = this.sinon.stub();
     });
 
     it('should throw an error', function() {
@@ -314,12 +300,8 @@ describe('layoutView', function() {
     var constructor, layoutView;
 
     beforeEach(function() {
-      constructor = sinon.spy(Marionette, 'View');
+      constructor = this.sinon.spy(Marionette, 'View');
       layoutView = new Marionette.LayoutView();
-    });
-
-    afterEach(function () {
-      Marionette.View.restore();
     });
 
     it('calls the parent Marionette.Views constructor function on instantiation', function() {
@@ -342,7 +324,7 @@ describe('layoutView', function() {
     var layoutView, CustomRegion, layoutView2;
 
     beforeEach(function() {
-      CustomRegion = sinon.spy();
+      CustomRegion = this.sinon.spy();
       var regionOptions = {
         war: '.craft',
         is: {
@@ -383,7 +365,7 @@ describe('layoutView', function() {
     var spy, layout;
 
     beforeEach(function() {
-      spy     = sinon.spy();
+      spy     = this.sinon.spy();
       layout  = new (Marionette.LayoutView.extend({
         getRegionManager: function() {
           spy.apply(this, arguments);
@@ -405,8 +387,8 @@ describe('layoutView', function() {
   describe('childView get onDomRefresh from parent', function() {
     beforeEach(function() {
       this.setFixtures('<div id="james-kyle"></div>');
-      this.spy = sinon.spy();
-      this.spy2 = sinon.spy();
+      this.spy = this.sinon.spy();
+      this.spy2 = this.sinon.spy();
 
       var ItemView = Marionette.ItemView.extend({
         template: _.template('<yes><my><lord></lord></my></yes>'),

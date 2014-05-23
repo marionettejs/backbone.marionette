@@ -25,8 +25,8 @@ describe('view triggers', function() {
       });
       view.render();
 
-      fooHandler = sinon.stub();
-      whatHandler = sinon.stub();
+      fooHandler = this.sinon.stub();
+      whatHandler = this.sinon.stub();
 
       view.on('do:foo', fooHandler);
       view.on('what:ever', whatHandler);
@@ -85,7 +85,7 @@ describe('view triggers', function() {
       view = new View();
       view.render();
 
-      fooHandler = sinon.stub();
+      fooHandler = this.sinon.stub();
       view.on('do:foo', fooHandler);
 
       view.$('.foo').trigger('click');
@@ -121,8 +121,8 @@ describe('view triggers', function() {
       view = new View();
       view.render();
 
-      fooHandler = sinon.stub();
-      whatHandler = sinon.stub();
+      fooHandler = this.sinon.stub();
+      whatHandler = this.sinon.stub();
 
       view.on('do:foo', fooHandler);
       view.on('what:ever', whatHandler);
@@ -165,7 +165,7 @@ describe('view triggers', function() {
     beforeEach(function() {
       viewInstance = new MyView();
 
-      hashChangeSpy = sinon.stub();
+      hashChangeSpy = this.sinon.stub();
       $(window).on('hashchange', hashChangeSpy);
 
       viewInstance.render();
@@ -214,21 +214,14 @@ describe('view triggers', function() {
       fooEvent = $.Event('click');
       barEvent = $.Event('click');
 
-      sinon.spy(fooEvent, 'preventDefault');
-      sinon.spy(fooEvent, 'stopPropagation');
+      this.sinon.spy(fooEvent, 'preventDefault');
+      this.sinon.spy(fooEvent, 'stopPropagation');
 
-      sinon.spy(barEvent, 'preventDefault');
-      sinon.spy(barEvent, 'stopPropagation');
+      this.sinon.spy(barEvent, 'preventDefault');
+      this.sinon.spy(barEvent, 'stopPropagation');
 
       view.$('.foo').trigger(fooEvent);
       view.$('.bar').trigger(barEvent);
-    });
-
-    afterEach(function() {
-      fooEvent.preventDefault.restore();
-      fooEvent.stopPropagation.restore();
-      barEvent.preventDefault.restore();
-      barEvent.stopPropagation.restore();
     });
 
     it('should prevent and dont stop the first view event', function() {

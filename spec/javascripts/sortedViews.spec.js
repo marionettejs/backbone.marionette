@@ -140,12 +140,8 @@ describe('collection/composite view sorting', function(){
       describe('and then adding another', function(){
         beforeEach(function(){
           model = new Backbone.Model({foo: 'bbar'});
-          sinon.spy(collectionView, 'render');
+          this.sinon.spy(collectionView, 'render');
           collection.add(model);
-        });
-
-        afterEach(function() {
-          collectionView.render.restore();
         });
 
         it('should have the order in the dom', function(){

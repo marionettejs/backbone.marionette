@@ -1,4 +1,5 @@
 describe('composite view - on before render', function() {
+  'use strict';
   beforeEach(global.setup);
   afterEach(global.teardown);
 

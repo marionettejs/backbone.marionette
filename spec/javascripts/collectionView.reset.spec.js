@@ -1,4 +1,5 @@
 describe('collection view - reset', function() {
+  'use strict';
   beforeEach(global.setup);
   afterEach(global.teardown);
 

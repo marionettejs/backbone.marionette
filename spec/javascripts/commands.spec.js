@@ -1,6 +1,4 @@
 describe('application commands', function() {
-  'use strict';
-
   beforeEach(global.setup);
   afterEach(global.teardown);
 
@@ -18,7 +16,5 @@ describe('application commands', function() {
     it('should allow execution of commands directly', function() {
       expect(typeof App.execute).to.equal('function');
     });
-
   });
-
 });

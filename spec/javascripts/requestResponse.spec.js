@@ -1,6 +1,4 @@
 describe('application request/response', function() {
-  'use strict';
-
   beforeEach(global.setup);
   afterEach(global.teardown);
 
@@ -18,7 +16,5 @@ describe('application request/response', function() {
     it('should allow direct request', function() {
       expect(typeof App.request).to.equal('function');
     });
-
   });
-
 });

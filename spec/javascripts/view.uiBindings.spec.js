@@ -1,21 +1,20 @@
 describe('view ui elements', function() {
-
   beforeEach(global.setup);
   afterEach(global.teardown);
 
   describe('when accessing a ui element from the hash', function() {
-    var View = Backbone.Marionette.ItemView.extend({
-      template: '#item-with-checkbox',
-
-      ui: {
-        checkbox: '#chk',
-        unfoundElement: '#not_found'
-      }
-    });
-
-    var view, model;
+    var View, view, model;
 
     beforeEach(function() {
+      View = Backbone.Marionette.ItemView.extend({
+        template: '#item-with-checkbox',
+
+        ui: {
+          checkbox: '#chk',
+          unfoundElement: '#not_found'
+        }
+      });
+
       this.loadFixtures('itemWithCheckbox.html');
 
       model = new Backbone.Model({
@@ -36,22 +35,21 @@ describe('view ui elements', function() {
     it('should return an empty jQuery object if it cannot be found', function() {
       expect(view.ui.unfoundElement.length).to.equal(0);
     });
-
   });
 
   describe('when re-rendering a view with a UI element configuration', function() {
-    var View = Backbone.Marionette.ItemView.extend({
-      template: '#item-with-checkbox',
-
-      ui: {
-        checkbox: '#chk',
-        unfoundElement: '#not_found'
-      }
-    });
-
-    var view, model;
+    var View, view, model;
 
     beforeEach(function() {
+      View = Backbone.Marionette.ItemView.extend({
+        template: '#item-with-checkbox',
+
+        ui: {
+          checkbox: '#chk',
+          unfoundElement: '#not_found'
+        }
+      });
+
       this.loadFixtures('itemWithCheckbox.html');
 
       model = new Backbone.Model({
@@ -77,21 +75,20 @@ describe('view ui elements', function() {
   });
 
   describe('when the ui element is a function that returns a hash', function() {
-
-    var View = Backbone.Marionette.ItemView.extend({
-      template: '#item-with-checkbox',
-
-      ui: function() {
-        return {
-          checkbox: '#chk',
-          unfoundElement: '#not_found'
-        };
-      }
-    });
-
-    var view, model;
+    var View, view, model;
 
     beforeEach(function() {
+      View = Backbone.Marionette.ItemView.extend({
+        template: '#item-with-checkbox',
+
+        ui: function() {
+          return {
+            checkbox: '#chk',
+            unfoundElement: '#not_found'
+          };
+        }
+      });
+
       this.loadFixtures('itemWithCheckbox.html');
 
       model = new Backbone.Model({
@@ -104,7 +101,6 @@ describe('view ui elements', function() {
 
       view.render();
     });
-
 
     it('should return its jQuery selector if it can be found', function() {
       expect(view.ui.checkbox.attr('type')).to.equal('checkbox');
@@ -131,19 +127,18 @@ describe('view ui elements', function() {
   });
 
   describe('when destroying a view that has not been rendered', function() {
-    var View = Marionette.ItemView.extend({
-      template: function() {
-        return '<div id="foo"></div>';
-      },
-
-      ui: {
-        foo: '#foo'
-      }
-    });
-
-    var view1, view2;
+    var View, view1, view2;
 
     beforeEach(function() {
+      View = Marionette.ItemView.extend({
+        template: function() {
+          return '<div id="foo"></div>';
+        },
+
+        ui: {
+          foo: '#foo'
+        }
+      });
       view1 = new View();
       view1.destroy();
       view2 = new View();
@@ -155,22 +150,20 @@ describe('view ui elements', function() {
   });
 
   describe('when destroying a view', function() {
-    var View = Marionette.ItemView.extend({
-      template: function() {
-        return '<div id="foo"></div>';
-      },
-
-      ui: {
-        foo: '#foo'
-      }
-    });
-
-    var view;
+    var View, view;
 
     beforeEach(function() {
+      View = Marionette.ItemView.extend({
+        template: function() {
+          return '<div id="foo"></div>';
+        },
+
+        ui: {
+          foo: '#foo'
+        }
+      });
       view = new View();
       view.render();
-
       view.destroy();
     });
 

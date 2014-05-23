@@ -1,15 +1,13 @@
 describe('application regions', function() {
-  'use strict';
-
   beforeEach(global.setup);
   afterEach(global.teardown);
 
   describe('when adding region selectors to an app, and starting the app', function() {
     var MyApp, addHandler, beforeAddHandler;
 
-    MyApp = new Backbone.Marionette.Application();
-
     beforeEach(function() {
+      MyApp = new Backbone.Marionette.Application();
+
       this.setFixtures('<div id="region"></div>');
       this.setFixtures('<div id="region2"></div>');
 
@@ -42,18 +40,20 @@ describe('application regions', function() {
   });
 
   describe('when adding region objects to an app', function() {
-    var MyApp = new Backbone.Marionette.Application();
-
-    var MyRegion = Backbone.Marionette.Region.extend({
-      el: '#region',
-      Foooooooo: 'bar'
-    });
-
-    var MyRegion2 = Backbone.Marionette.Region.extend({
-      el: '#region2'
-    });
+    var MyApp, MyRegion, MyRegion2;
 
     beforeEach(function() {
+      MyApp = new Backbone.Marionette.Application();
+
+      MyRegion = Backbone.Marionette.Region.extend({
+        el: '#region',
+        Foooooooo: 'bar'
+      });
+
+      MyRegion2 = Backbone.Marionette.Region.extend({
+        el: '#region2'
+      });
+
       this.setFixtures('<div id="region"></div>');
       this.setFixtures('<div id="region2"></div>');
 
@@ -70,10 +70,12 @@ describe('application regions', function() {
   });
 
   describe('when adding custom region classes to an app, with selectors', function() {
-    var MyApp = new Backbone.Marionette.Application();
-    var MyRegion = Backbone.Marionette.Region.extend({});
+    var MyApp, MyRegion;
 
     beforeEach(function() {
+      MyApp = new Backbone.Marionette.Application();
+      MyRegion = Backbone.Marionette.Region.extend({});
+
       this.setFixtures('<div id="region"></div>');
       this.setFixtures('<div id="region2"></div>');
 
@@ -125,10 +127,10 @@ describe('application regions', function() {
   });
 
   describe('when destroying all regions in the app', function() {
-    var r1, r2;
+    var app, r1, r2;
 
     beforeEach(function() {
-      var app = new Backbone.Marionette.Application();
+      app = new Backbone.Marionette.Application();
 
       this.setFixtures('<div id="region"></div>');
       this.setFixtures('<div id="r2"></div>');
@@ -156,9 +158,9 @@ describe('application regions', function() {
   describe('when removing a region', function() {
     var MyApp, removeHandler, beforeRemoveHandler;
 
-    MyApp = new Backbone.Marionette.Application();
-
     beforeEach(function() {
+      MyApp = new Backbone.Marionette.Application();
+
       this.setFixtures('<div id="region"></div>');
       this.setFixtures('<div id="region2"></div>');
 

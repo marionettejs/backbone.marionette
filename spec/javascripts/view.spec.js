@@ -1,22 +1,20 @@
 describe('base view', function() {
-  'use strict';
-
   beforeEach(global.setup);
   afterEach(global.teardown);
 
   describe('when initializing a view', function() {
-    var fooHandler, view;
+    var fooHandler, view, View, model;
 
     beforeEach(function() {
       fooHandler = this.sinon.stub();
 
-      var View = Backbone.Marionette.View.extend({
+      View = Backbone.Marionette.View.extend({
         initialize: function() {
           this.listenTo(this.model, 'foo', fooHandler);
         }
       });
 
-      var model = new Backbone.Model();
+      model = new Backbone.Model();
       view = new View({
         model: model
       });
@@ -30,14 +28,12 @@ describe('base view', function() {
   });
 
   describe('when using listenTo for the "destroy" event on itself, and destroying the view', function() {
-    var destroy;
+    var destroy, view;
 
     beforeEach(function() {
       destroy = this.sinon.stub();
-
-      var view = new Marionette.View();
+      view = new Marionette.View();
       view.listenTo(view, 'destroy', destroy);
-
       view.destroy();
     });
 
@@ -47,8 +43,7 @@ describe('base view', function() {
   });
 
   describe('when destroying a view', function() {
-    var destroy, view;
-    var View;
+    var destroy, view, View;
 
     beforeEach(function() {
       View = Marionette.View.extend({
@@ -142,16 +137,20 @@ describe('base view', function() {
   });
 
   describe('constructing a view with default options', function() {
-    var View = Marionette.ItemView.extend();
-    var PresetOptions = Marionette.View.extend({
-      options: {
-        'lila': 'zoidberg'
-      }
-    });
-    var PresetOptionsFn = Marionette.View.extend({
-      options: function() {
-        return {fry: 'bender'};
-      }
+    var View, PresetOptions, PresetOptionsFn;
+
+    beforeEach(function() {
+      View = Marionette.ItemView.extend();
+      PresetOptions = Marionette.View.extend({
+        options: {
+          'lila': 'zoidberg'
+        }
+      });
+      PresetOptionsFn = Marionette.View.extend({
+        options: function() {
+          return {fry: 'bender'};
+        }
+      });
     });
 
     it('should take and store view options', function() {
@@ -183,10 +182,14 @@ describe('base view', function() {
   });
 
   describe('should expose its options in the constructor', function() {
-    var View = Marionette.View.extend({
-      initialize: function() {
-        this.info = this.options;
-      }
+    var View;
+
+    beforeEach(function() {
+      View = Marionette.View.extend({
+        initialize: function() {
+          this.info = this.options;
+        }
+      });
     });
 
     it('should be able to access instance options', function() {
@@ -221,5 +224,4 @@ describe('base view', function() {
       expect(view.isDestroyed).to.be.true;
     });
   });
-
 });

@@ -1,38 +1,40 @@
 describe('layoutView', function() {
-  'use strict';
-
   beforeEach(global.setup);
   afterEach(global.teardown);
 
-  var template = function() {
-    return '<span class=".craft"></span><h1 id="#a-fun-game"></h1>';
-  };
+  var template, LayoutView, CustomRegion1, CustomRegion2, LayoutViewNoDefaultRegion;
 
-  var LayoutView = Backbone.Marionette.LayoutView.extend({
-    template: '#layout-view-manager-template',
-    regions: {
-      regionOne: '#regionOne',
-      regionTwo: '#regionTwo'
-    },
-    initialize: function() {
-      if (this.model) {
-        this.listenTo(this.model, 'change', this.render);
-      }
-    }
-  });
+  beforeEach(function() {
+    template = function() {
+      return '<span class=".craft"></span><h1 id="#a-fun-game"></h1>';
+    };
 
-  var CustomRegion1 = function() {};
-
-  var CustomRegion2 = Backbone.Marionette.Region.extend();
-
-  var LayoutViewNoDefaultRegion = LayoutView.extend({
-    regions: {
-      regionOne: {
-        selector: '#regionOne',
-        regionClass: CustomRegion1
+    LayoutView = Backbone.Marionette.LayoutView.extend({
+      template: '#layout-view-manager-template',
+      regions: {
+        regionOne: '#regionOne',
+        regionTwo: '#regionTwo'
       },
-      regionTwo: '#regionTwo'
-    }
+      initialize: function() {
+        if (this.model) {
+          this.listenTo(this.model, 'change', this.render);
+        }
+      }
+    });
+
+    CustomRegion1 = function() {};
+
+    CustomRegion2 = Backbone.Marionette.Region.extend();
+
+    LayoutViewNoDefaultRegion = LayoutView.extend({
+      regions: {
+        regionOne: {
+          selector: '#regionOne',
+          regionClass: CustomRegion1
+        },
+        regionTwo: '#regionTwo'
+      }
+    });
   });
 
   describe('on instantiation', function() {
@@ -46,46 +48,46 @@ describe('layoutView', function() {
       expect(layoutViewManager).to.have.property('regionOne');
       expect(layoutViewManager).to.have.property('regionTwo');
     });
-
   });
 
   describe('on instantiation with no regions defined', function() {
-    var NoRegions = Marionette.LayoutView.extend({});
-    var layoutViewManager;
+    var NoRegions, layoutViewManager, init;
 
-    function init() {
-      layoutViewManager = new NoRegions();
-    }
+    beforeEach(function() {
+      NoRegions = Marionette.LayoutView.extend({});
+      init = function() {
+        layoutViewManager = new NoRegions();
+      };
+    });
 
     it('should instantiate the specified region managers', function() {
       expect(init).not.to.throw;
     });
-
   });
 
   describe('on instantiation with custom region managers', function() {
-    var LayoutViewCustomRegion = LayoutView.extend({
-      regionClass: CustomRegion1,
-      regions: {
-        regionOne: {
-          selector: '#regionOne',
-          regionClass: CustomRegion1
-        },
-        regionTwo: {
-          selector: '#regionTwo',
-          regionClass: CustomRegion2,
-          specialOption: true
-        },
-        regionThree: {
-          selector: '#regionThree'
-        },
-        regionFour: '#regionFour'
-      }
-    });
-
-    var layoutViewManager;
+    var LayoutViewCustomRegion, layoutViewManager;
 
     beforeEach(function() {
+      LayoutViewCustomRegion = LayoutView.extend({
+        regionClass: CustomRegion1,
+        regions: {
+          regionOne: {
+            selector: '#regionOne',
+            regionClass: CustomRegion1
+          },
+          regionTwo: {
+            selector: '#regionTwo',
+            regionClass: CustomRegion2,
+            specialOption: true
+          },
+          regionThree: {
+            selector: '#regionThree'
+          },
+          regionFour: '#regionFour'
+        }
+      });
+
       layoutViewManager = new LayoutViewCustomRegion();
     });
 
@@ -114,23 +116,22 @@ describe('layoutView', function() {
       expect(layoutViewManager.regionTwo.options).to.have.property('specialOption');
       expect(layoutViewManager.regionTwo.options.specialOption).to.be.ok;
     });
-
   });
 
   describe('when regions are defined as a function', function() {
-    var options, layoutView;
-
-    var LayoutView = Marionette.LayoutView.extend({
-      template: '#foo',
-      regions: function(opts) {
-        options = opts;
-        return {
-          'foo': '#bar'
-        };
-      }
-    });
+    var LayoutView, options, layoutView;
 
     beforeEach(function() {
+      LayoutView = Marionette.LayoutView.extend({
+        template: '#foo',
+        regions: function(opts) {
+          options = opts;
+          return {
+            'foo': '#bar'
+          };
+        }
+      });
+
       this.setFixtures('<div id="foo"><div id="bar"></div></div>');
       layoutView = new LayoutView();
       layoutView.render();
@@ -266,7 +267,6 @@ describe('layoutView', function() {
         expect(layoutView.$('#regionOne')).not.to.equal();
       });
     });
-
   });
 
   describe('when re-rendering a destroyed layoutView', function() {
@@ -321,11 +321,11 @@ describe('layoutView', function() {
   });
 
   describe('when adding regions in a layoutViews options', function() {
-    var layoutView, CustomRegion, layoutView2;
+    var layoutView, CustomRegion, layoutView2, regionOptions;
 
     beforeEach(function() {
       CustomRegion = this.sinon.spy();
-      var regionOptions = {
+      regionOptions = {
         war: '.craft',
         is: {
           regionClass: CustomRegion,
@@ -381,27 +381,27 @@ describe('layoutView', function() {
     it('should call the custom regionManager with the view as the context', function() {
       expect(spy).to.have.been.calledOn(layout);
     });
-
   });
 
   describe('childView get onDomRefresh from parent', function() {
+    var ItemView, LucasArts, Layout, region;
+
     beforeEach(function() {
       this.setFixtures('<div id="james-kyle"></div>');
       this.spy = this.sinon.spy();
       this.spy2 = this.sinon.spy();
 
-      var ItemView = Marionette.ItemView.extend({
+      ItemView = Marionette.ItemView.extend({
         template: _.template('<yes><my><lord></lord></my></yes>'),
         onDomRefresh: this.spy2
       });
 
-      var LucasArts = Marionette.CollectionView.extend({
+      LucasArts = Marionette.CollectionView.extend({
         onDomRefresh: this.spy,
         childView: ItemView
       });
 
-
-      var Layout = Marionette.LayoutView.extend({
+      Layout = Marionette.LayoutView.extend({
         template: _.template('<sam class="and-max"></sam>'),
         regions: {
           'sam': '.and-max'
@@ -412,7 +412,7 @@ describe('layoutView', function() {
         }
       });
 
-      var region = new Marionette.Region({el: "#james-kyle"});
+      region = new Marionette.Region({el: "#james-kyle"});
 
       region.show(new Layout());
     });

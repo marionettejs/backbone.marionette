@@ -1,6 +1,4 @@
 describe('Marionette.unbindEntityEvents', function() {
-  'use strict';
-
   beforeEach(global.setup);
   afterEach(global.teardown);
 
@@ -115,7 +113,7 @@ describe('Marionette.unbindEntityEvents', function() {
     });
   });
 
- describe('when unbindEntityEvents is proxied', function() {
+  describe('when unbindEntityEvents is proxied', function() {
     beforeEach(function() {
       target = {
         foo: this.sinon.spy(),

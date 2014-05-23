@@ -1,45 +1,44 @@
 describe('item view', function() {
-  'use strict';
-
   beforeEach(global.setup);
   afterEach(global.teardown);
 
-  var Model = Backbone.Model.extend();
-
-  var Collection = Backbone.Collection.extend({
-    model: Model
-  });
-
-  var ItemView = Backbone.Marionette.ItemView.extend({});
+  var Model, Collection, ItemView;
 
   beforeEach(function() {
+    Model = Backbone.Model.extend();
+
+    Collection = Backbone.Collection.extend({
+      model: Model
+    });
+
+    ItemView = Backbone.Marionette.ItemView.extend({});
+
     this.loadFixtures('itemTemplate.html', 'collectionItemTemplate.html', 'emptyTemplate.html');
   });
 
   describe('when rendering without a valid template', function() {
-    var TemplatelessView = Backbone.Marionette.ItemView.extend({});
-    var view;
+    var TemplatelessView, view;
 
     beforeEach(function() {
+      TemplatelessView = Backbone.Marionette.ItemView.extend({});
       view = new TemplatelessView({});
     });
 
     it('should throw an exception because there was no valid template', function() {
       expect(view.render).to.throw('Cannot render the template since its false, null or undefined.');
     });
-
   });
 
   describe('when rendering', function() {
-    var OnRenderView = Backbone.Marionette.ItemView.extend({
-      template: '#emptyTemplate',
-      onBeforeRender: function() {},
-      onRender: function() {}
-    });
-
-    var view;
+    var OnRenderView, view;
 
     beforeEach(function() {
+      OnRenderView = Backbone.Marionette.ItemView.extend({
+        template: '#emptyTemplate',
+        onBeforeRender: function() {},
+        onRender: function() {}
+      });
+
       view = new OnRenderView({});
 
       this.sinon.spy(view, 'onBeforeRender');
@@ -139,9 +138,7 @@ describe('item view', function() {
   });
 
   describe('when an item view has an asynchronous onRender and is rendered', function() {
-    var AsyncOnRenderView;
-
-    var view, promise;
+    var AsyncOnRenderView, view, promise;
 
     beforeEach(function() {
       AsyncOnRenderView = Backbone.Marionette.ItemView.extend({
@@ -226,20 +223,17 @@ describe('item view', function() {
   });
 
   describe('when destroying an item view', function() {
-    var EventedView = Backbone.Marionette.ItemView.extend({
-      template: '#emptyTemplate',
-
-      modelChange: function() {},
-      collectionChange: function() {},
-      onBeforeDestroy: function() {},
-      onDestroy: function() {}
-    });
-
-    var view;
-    var model;
-    var collection;
+    var EventedView, view, model, collection;
 
     beforeEach(function() {
+      EventedView = Backbone.Marionette.ItemView.extend({
+        template: '#emptyTemplate',
+        modelChange: function() {},
+        collectionChange: function() {},
+        onBeforeDestroy: function() {},
+        onDestroy: function() {}
+      });
+
       this.loadFixtures('itemTemplate.html');
 
       model = new Model({foo: 'bar'});
@@ -303,29 +297,28 @@ describe('item view', function() {
 
   describe('when a view with a checkbox is bound to re-render on the "change:done" event of the model', function() {
     describe('and rendering the view, then changing the checkbox from unchecked, to checked, and back to unchecked', function() {
-
-      var View = Backbone.Marionette.ItemView.extend({
-        template: '#item-with-checkbox',
-
-        setupHandler: function() {
-          this.listenTo(this.model, 'change:done', this.render, this);
-        },
-
-        events: {
-          'change #chk': 'changeClicked'
-        },
-
-        changeClicked: function(e) {
-          var chk = $(e.currentTarget);
-          var checkedAttr = chk.attr('checked');
-          var checked = !!checkedAttr;
-          this.model.set({done: checked});
-        }
-      });
-
-      var view, spy, model, chk;
+      var View, view, spy, model, chk;
 
       beforeEach(function() {
+        View = Backbone.Marionette.ItemView.extend({
+          template: '#item-with-checkbox',
+
+          setupHandler: function() {
+            this.listenTo(this.model, 'change:done', this.render, this);
+          },
+
+          events: {
+            'change #chk': 'changeClicked'
+          },
+
+          changeClicked: function(e) {
+            var chk = $(e.currentTarget);
+            var checkedAttr = chk.attr('checked');
+            var checked = !!checkedAttr;
+            this.model.set({done: checked});
+          }
+        });
+
         this.loadFixtures('itemWithCheckbox.html');
 
         model = new Backbone.Model({
@@ -354,17 +347,16 @@ describe('item view', function() {
         expect(spy.callCount).to.equal(3);
       });
     });
-
   });
 
   describe('when re-rendering an ItemView that is already shown', function() {
-    var View = Marionette.ItemView.extend({
-      template: function() { return '<div>foo</div>'; }
-    });
-
-    var renderUpdate, view;
+    var View, renderUpdate, view;
 
     beforeEach(function() {
+      View = Marionette.ItemView.extend({
+        template: function() { return '<div>foo</div>'; }
+      });
+
       renderUpdate = this.sinon.stub();
 
       view = new View();
@@ -387,7 +379,6 @@ describe('item view', function() {
   });
 
   describe('has a valid inheritance chain back to Marionette.View', function() {
-
     var constructor, itemView;
 
     beforeEach(function() {
@@ -399,5 +390,4 @@ describe('item view', function() {
       expect(constructor).to.have.been.called;
     });
   });
-
 });

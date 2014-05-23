@@ -1,12 +1,9 @@
 describe('view entity events', function() {
-
   beforeEach(global.setup);
   afterEach(global.teardown);
 
   describe('when a view has string-based model and collection event configuration', function() {
-    var view;
-
-    var View;
+    var view, View;
 
     beforeEach(function() {
       View = Backbone.Marionette.View.extend({
@@ -36,12 +33,10 @@ describe('view entity events', function() {
       expect(view.collectionEventHandler).to.have.been.called;
       expect(view.collectionEventHandler2).to.have.been.called;
     });
-
   });
 
   describe('when a view has function-based model and collection event configuration', function() {
-    var view;
-    var View;
+    var view, View;
 
     beforeEach(function() {
       View = Backbone.Marionette.View.extend({
@@ -67,17 +62,15 @@ describe('view entity events', function() {
       view.collection.trigger('collection-event');
       expect(view.collectionEvents['collection-event']).to.have.been.called;
     });
-
   });
 
   describe('when a view has model event config with a specified handler method that doesnt exist', function() {
-    var getBadViewInstance;
-
-    var View = Backbone.Marionette.View.extend({
-      modelEvents: {foo: 'does_not_exist'}
-    });
+    var getBadViewInstance, View;
 
     beforeEach(function() {
+      View = Backbone.Marionette.View.extend({
+        modelEvents: {foo: 'does_not_exist'}
+      });
       getBadViewInstance = function() {
         return new View({model: {}});
       };
@@ -89,13 +82,13 @@ describe('view entity events', function() {
   });
 
   describe('when configuring entity events with a function', function() {
-    var view, modelHandler, collectionHandler;
+    var View, view, modelHandler, collectionHandler;
 
     beforeEach(function() {
       modelHandler = this.sinon.stub();
       collectionHandler = this.sinon.stub();
 
-      var View = Backbone.Marionette.View.extend({
+      View = Backbone.Marionette.View.extend({
         modelEvents: function() {
           return {'model-event': modelHandler};
         },
@@ -123,13 +116,13 @@ describe('view entity events', function() {
   });
 
   describe('when undelegating events on a view', function() {
-    var view, modelHandler, collectionHandler;
+    var View, model, collection, view, modelHandler, collectionHandler;
 
     beforeEach(function() {
       modelHandler = this.sinon.stub();
       collectionHandler = this.sinon.stub();
 
-      var View = Marionette.View.extend({
+      View = Marionette.View.extend({
         modelEvents: {
           'model-event': 'modelEventHandler'
         },
@@ -142,8 +135,8 @@ describe('view entity events', function() {
         collectionEventHandler: collectionHandler
       });
 
-      var model = new Backbone.Model();
-      var collection = new Backbone.Collection();
+      model = new Backbone.Model();
+      collection = new Backbone.Collection();
 
       view = new View({
         model: model,
@@ -166,13 +159,13 @@ describe('view entity events', function() {
   });
 
   describe('when undelegating events on a view, delegating them again, and then triggering a model event', function() {
-    var view, modelHandler, collectionHandler;
+    var View, view, model, collection, modelHandler, collectionHandler;
 
     beforeEach(function() {
       modelHandler = this.sinon.stub();
       collectionHandler = this.sinon.stub();
 
-      var View = Marionette.View.extend({
+      View = Marionette.View.extend({
         modelEvents: {
           'model-event': 'modelEventHandler'
         },
@@ -185,8 +178,8 @@ describe('view entity events', function() {
         collectionEventHandler: collectionHandler
       });
 
-      var model = new Backbone.Model();
-      var collection = new Backbone.Collection();
+      model = new Backbone.Model();
+      collection = new Backbone.Collection();
 
       view = new View({
         model: model,
@@ -210,44 +203,44 @@ describe('view entity events', function() {
   });
 
   describe('when LayoutView bound to modelEvent replaces region with new view', function() {
-    var destroySpy, renderSpy;
-
-    var ChildView = Marionette.ItemView.extend({
-      template: _.template(''),
-
-      modelEvents: {
-        'sync': 'doStuff'
-      },
-
-      doStuff: function() {
-        this.render();
-      }
-    });
-
-    var ParentView = Marionette.LayoutView.extend({
-      template: _.template('<div id="child"></div>'),
-
-      regions: {
-        child: '#child'
-      },
-
-      onRender: function() {
-        this.child.show(new ChildView({
-          model: this.model
-        }));
-      },
-
-      modelEvents: {
-        'sync': 'render'
-      }
-    });
+    var ChildView, ParentView, destroySpy, renderSpy, model, parent;
 
     beforeEach(function() {
+      ChildView = Marionette.ItemView.extend({
+        template: _.template(''),
+
+        modelEvents: {
+          'sync': 'doStuff'
+        },
+
+        doStuff: function() {
+          this.render();
+        }
+      });
+
+      ParentView = Marionette.LayoutView.extend({
+        template: _.template('<div id="child"></div>'),
+
+        regions: {
+          child: '#child'
+        },
+
+        onRender: function() {
+          this.child.show(new ChildView({
+            model: this.model
+          }));
+        },
+
+        modelEvents: {
+          'sync': 'render'
+        }
+      });
+
       destroySpy = this.sinon.spy(ChildView.prototype, 'destroy');
       renderSpy = this.sinon.stub(ChildView.prototype, 'render');
 
-      var model = new Backbone.Model();
-      var parent = new ParentView({
+      model = new Backbone.Model();
+      parent = new ParentView({
         model: model
       });
       parent.render();

@@ -1,17 +1,16 @@
 describe('renderer', function() {
-  'use strict';
-
   beforeEach(global.setup);
   afterEach(global.teardown);
 
   describe('when given a template id to render', function() {
-    var templateSelector = '#renderer-template';
-    var result;
+    var templateSelector, result, html;
 
     beforeEach(function() {
+      templateSelector = '#renderer-template';
+
       this.loadFixtures('rendererTemplate.html');
       this.sinon.spy(Backbone.Marionette.TemplateCache, 'get');
-      var html = Backbone.Marionette.Renderer.render(templateSelector).trim();
+      html = Backbone.Marionette.Renderer.render(templateSelector).trim();
       result = $(html);
     });
 
@@ -25,15 +24,16 @@ describe('renderer', function() {
   });
 
   describe('when given a template and data to render', function() {
-    var templateSelector = '#renderer-with-data-template';
-    var result;
+    var templateSelector, result, html, data;
 
     beforeEach(function() {
+      templateSelector = '#renderer-with-data-template';
+
       this.loadFixtures('rendererWithDataTemplate.html');
       this.sinon.spy(Backbone.Marionette.TemplateCache, 'get');
 
-      var data = {foo: 'bar'};
-      var html = Backbone.Marionette.Renderer.render(templateSelector, data).trim();
+      data = {foo: 'bar'};
+      html = Backbone.Marionette.Renderer.render(templateSelector, data).trim();
       result = $(html);
     });
 
@@ -88,5 +88,4 @@ describe('renderer', function() {
       expect(result).to.equal('bar');
     });
   });
-
 });

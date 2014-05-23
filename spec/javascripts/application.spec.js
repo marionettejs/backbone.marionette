@@ -1,15 +1,15 @@
 describe('marionette application', function() {
-  'use strict';
-
   beforeEach(global.setup);
   afterEach(global.teardown);
 
   describe('when registering an initializer and starting the application', function() {
-    var MyModule, MyApp;
-    var someOptions = {};
+    var MyModule, MyApp, someOptions;
 
     beforeEach(function() {
       var self = this;
+
+      someOptions = {};
+
       MyApp = new Backbone.Marionette.Application();
 
       MyModule = (function(MyApp) {
@@ -80,10 +80,10 @@ describe('marionette application', function() {
   });
 
   describe('when specifying an on start callback, and starting the app', function() {
-    var started, options, onStartOptions;
+    var MyApp, started, options, onStartOptions;
 
     beforeEach(function() {
-      var MyApp = new Backbone.Marionette.Application();
+      MyApp = new Backbone.Marionette.Application();
       options = {};
 
       MyApp.on('start', function(opts) {
@@ -102,5 +102,4 @@ describe('marionette application', function() {
       expect(onStartOptions).to.equal(options);
     });
   });
-
 });

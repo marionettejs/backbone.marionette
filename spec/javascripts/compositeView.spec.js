@@ -1,71 +1,72 @@
 describe('composite view', function() {
-  'use strict';
-
   beforeEach(global.setup);
   afterEach(global.teardown);
 
-  // Models
+  var Model, User, Node, Collection, UserCollection, NodeCollection, TreeView;
 
-  var Model = Backbone.Model.extend();
+  beforeEach(function() {
+    // Models
 
-  var User = Backbone.Model.extend();
+    Model = Backbone.Model.extend();
 
-  var Node = Backbone.Model.extend({
-    initialize: function() {
-      var nodes = this.get('nodes');
-      if (nodes) {
-        this.nodes = new NodeCollection(nodes);
-        this.unset('nodes');
+    User = Backbone.Model.extend();
+
+    Node = Backbone.Model.extend({
+      initialize: function() {
+        var nodes = this.get('nodes');
+        if (nodes) {
+          this.nodes = new NodeCollection(nodes);
+          this.unset('nodes');
+        }
       }
-    }
-  });
+    });
 
-  // Collections
+    // Collections
 
-  var Collection = Backbone.Collection.extend({
-    model: Model
-  });
+    Collection = Backbone.Collection.extend({
+      model: Model
+    });
 
-  var UserCollection = Backbone.Collection.extend({
-    model: User
-  });
+    UserCollection = Backbone.Collection.extend({
+      model: User
+    });
 
-  var NodeCollection = Backbone.Collection.extend({
-    model: Node
-  });
+    NodeCollection = Backbone.Collection.extend({
+      model: Node
+    });
 
-  // Views
+    // Views
 
-  var TreeView = Backbone.Marionette.CompositeView.extend({
-    tagName: 'ul',
-    template: '#recursive-composite-template',
-
-    initialize: function() {
-      this.collection = this.model.nodes;
-    }
+    TreeView = Backbone.Marionette.CompositeView.extend({
+      tagName: 'ul',
+      template: '#recursive-composite-template',
+      initialize: function() {
+        this.collection = this.model.nodes;
+      }
+    });
   });
 
   describe('when a composite view has a template without a model', function() {
-    var compositeView;
-
-    var ChildView = Backbone.Marionette.ItemView.extend({
-      tagName: 'span',
-      render: function() {
-        this.$el.html(this.model.get('foo'));
-      }
-    });
-
-    var CompositeViewNoModel = Backbone.Marionette.CompositeView.extend({
-      childView: ChildView,
-      template: '#composite-template-no-model'
-    });
+    var ChildView, CompositeViewNoModel, compositeView, m1, m2, collection;
 
     beforeEach(function() {
+      ChildView = Backbone.Marionette.ItemView.extend({
+        tagName: 'span',
+        render: function() {
+          this.$el.html(this.model.get('foo'));
+        }
+      });
+
+      CompositeViewNoModel = Backbone.Marionette.CompositeView.extend({
+        childView: ChildView,
+        template: '#composite-template-no-model'
+      });
+
       this.loadFixtures('compositeTemplate-noModel.html');
 
-      var m1 = new Model({foo: 'bar'});
-      var m2 = new Model({foo: 'baz'});
-      var collection = new Collection([m1, m2]);
+      m1 = new Model({foo: 'bar'});
+      m2 = new Model({foo: 'baz'});
+      collection = new Collection([m1, m2]);
 
       compositeView = new CompositeViewNoModel({
         collection: collection
@@ -85,28 +86,27 @@ describe('composite view', function() {
   });
 
   describe('when a composite view has a model and a template', function() {
-    var compositeView;
-
-    var ChildView = Backbone.Marionette.ItemView.extend({
-      tagName: 'span',
-      render: function() {
-        this.$el.html(this.model.get('foo'));
-      }
-    });
-
-    var CompositeView = Backbone.Marionette.CompositeView.extend({
-      childView: ChildView,
-      template: '#composite-template',
-
-      onRender: function() {}
-    });
+    var ChildView, CompositeView, compositeView, m1, m2, collection;
 
     beforeEach(function() {
+      ChildView = Backbone.Marionette.ItemView.extend({
+        tagName: 'span',
+        render: function() {
+          this.$el.html(this.model.get('foo'));
+        }
+      });
+
+      CompositeView = Backbone.Marionette.CompositeView.extend({
+        childView: ChildView,
+        template: '#composite-template',
+        onRender: function() {}
+      });
+
       this.loadFixtures('compositeTemplate.html');
 
-      var m1 = new Model({foo: 'bar'});
-      var m2 = new Model({foo: 'baz'});
-      var collection = new Collection();
+      m1 = new Model({foo: 'bar'});
+      m2 = new Model({foo: 'baz'});
+      collection = new Collection();
       collection.add(m2);
 
       compositeView = new CompositeView({
@@ -127,38 +127,35 @@ describe('composite view', function() {
   });
 
   describe('when a composite view triggers render in initialize', function() {
-    var compositeView;
-
-    var onShow;
-
-    var EmptyView = Backbone.Marionette.ItemView.extend({
-      template: '#emptyTemplate',
-      tagName: 'hr',
-      onShow: function() {
-        onShow.push('EMPTY');
-      }
-    });
-
-    var ChildView = Backbone.Marionette.ItemView.extend({
-      template: '#collectionItemTemplate',
-      tagName: 'span'
-    });
-
-    var CompositeView = Backbone.Marionette.CompositeView.extend({
-      childView: ChildView,
-      emptyView: EmptyView,
-      template: '#collection-template',
-      initialize: function() {
-        this.render();
-      },
-      onRender: function() {}
-    });
+    var EmptyView, ChildView, CompositeView, compositeView, onShow, m1;
 
     beforeEach(function() {
-      this.loadFixtures('collectionTemplate.html', 'collectionItemTemplate.html',
-          'emptyTemplate.html');
+      EmptyView = Backbone.Marionette.ItemView.extend({
+        template: '#emptyTemplate',
+        tagName: 'hr',
+        onShow: function() {
+          onShow.push('EMPTY');
+        }
+      });
 
-      var m1 = new Model({foo: 'bar'});
+      ChildView = Backbone.Marionette.ItemView.extend({
+        template: '#collectionItemTemplate',
+        tagName: 'span'
+      });
+
+      CompositeView = Backbone.Marionette.CompositeView.extend({
+        childView: ChildView,
+        emptyView: EmptyView,
+        template: '#collection-template',
+        initialize: function() {
+          this.render();
+        },
+        onRender: function() {}
+      });
+
+      this.loadFixtures('collectionTemplate.html', 'collectionItemTemplate.html', 'emptyTemplate.html');
+
+      m1 = new Model({foo: 'bar'});
 
       compositeView = new CompositeView({
         model: m1,
@@ -176,23 +173,23 @@ describe('composite view', function() {
   });
 
   describe('when rendering a composite view without a template', function() {
-    var compositeView;
-
-    var ChildView = Backbone.Marionette.ItemView.extend({
-      tagName: 'span',
-      render: function() {
-        this.$el.html(this.model.get('foo'));
-      }
-    });
-
-    var CompositeView = Backbone.Marionette.CompositeView.extend({
-      childView: ChildView
-    });
+    var ChildView, CompositeView, compositeView, m1, m2, collection;
 
     beforeEach(function() {
-      var m1 = new Model({foo: 'bar'});
-      var m2 = new Model({foo: 'baz'});
-      var collection = new Collection();
+      ChildView = Backbone.Marionette.ItemView.extend({
+        tagName: 'span',
+        render: function() {
+          this.$el.html(this.model.get('foo'));
+        }
+      });
+
+      CompositeView = Backbone.Marionette.CompositeView.extend({
+        childView: ChildView
+      });
+
+      m1 = new Model({foo: 'bar'});
+      m2 = new Model({foo: 'baz'});
+      collection = new Collection();
       collection.add(m2);
 
       compositeView = new CompositeView({
@@ -207,29 +204,28 @@ describe('composite view', function() {
   });
 
   describe('when rendering a composite view', function() {
-    var compositeView, order;
-
-    var ChildView = Backbone.Marionette.ItemView.extend({
-      tagName: 'span',
-      render: function() {
-        this.$el.html(this.model.get('foo'));
-      }
-    });
-
-    var CompositeView = Backbone.Marionette.CompositeView.extend({
-      childView: ChildView,
-      template: '#composite-template',
-
-      onRender: function() {}
-    });
+    var ChildView, CompositeView, compositeView, order, m1, m2, collection;
 
     beforeEach(function() {
+      ChildView = Backbone.Marionette.ItemView.extend({
+        tagName: 'span',
+        render: function() {
+          this.$el.html(this.model.get('foo'));
+        }
+      });
+
+      CompositeView = Backbone.Marionette.CompositeView.extend({
+        childView: ChildView,
+        template: '#composite-template',
+        onRender: function() {}
+      });
+
       order = [];
       this.loadFixtures('compositeTemplate.html');
 
-      var m1 = new Model({foo: 'bar'});
-      var m2 = new Model({foo: 'baz'});
-      var collection = new Collection();
+      m1 = new Model({foo: 'bar'});
+      m2 = new Model({foo: 'baz'});
+      collection = new Collection();
       collection.add(m2);
 
       compositeView = new CompositeView({
@@ -287,26 +283,26 @@ describe('composite view', function() {
   });
 
   describe('when rendering a composite view twice', function() {
-    var compositeView, compositeRenderSpy;
-
-    var ChildView = Backbone.Marionette.ItemView.extend({
-      tagName: 'span',
-      render: function() {
-        this.$el.html(this.model.get('foo'));
-      }
-    });
-
-    var CompositeModelView = Backbone.Marionette.CompositeView.extend({
-      childView: ChildView,
-      template: '#composite-template'
-    });
+    var ChildView, CompositeModelView, compositeView, compositeRenderSpy, m1, m2, collection;
 
     beforeEach(function() {
+      ChildView = Backbone.Marionette.ItemView.extend({
+        tagName: 'span',
+        render: function() {
+          this.$el.html(this.model.get('foo'));
+        }
+      });
+
+      CompositeModelView = Backbone.Marionette.CompositeView.extend({
+        childView: ChildView,
+        template: '#composite-template'
+      });
+
       this.loadFixtures('compositeTemplate.html');
 
-      var m1 = new Model({foo: 'bar'});
-      var m2 = new Model({foo: 'baz'});
-      var collection = new Collection();
+      m1 = new Model({foo: 'bar'});
+      m2 = new Model({foo: 'baz'});
+      collection = new Collection();
       collection.add(m2);
 
       compositeView = new CompositeModelView({
@@ -338,27 +334,27 @@ describe('composite view', function() {
   });
 
   describe('when rendering a composite view with an empty collection and then resetting the collection', function() {
-    var compositeView;
-
-    var ChildView = Backbone.Marionette.ItemView.extend({
-      tagName: 'span',
-      render: function() {
-        this.$el.html(this.model.get('foo'));
-      }
-    });
-
-    var CompositeView = Backbone.Marionette.CompositeView.extend({
-      childView: ChildView,
-      template: '#composite-template',
-
-      onRender: function() {}
-    });
+    var ChildView, CompositeView, compositeView, m1, m2, collection;
 
     beforeEach(function() {
+      ChildView = Backbone.Marionette.ItemView.extend({
+        tagName: 'span',
+        render: function() {
+          this.$el.html(this.model.get('foo'));
+        }
+      });
+
+      CompositeView = Backbone.Marionette.CompositeView.extend({
+        childView: ChildView,
+        template: '#composite-template',
+
+        onRender: function() {}
+      });
+
       this.loadFixtures('compositeRerender.html');
 
-      var m1 = new Model({foo: 'bar'});
-      var collection = new Collection();
+      m1 = new Model({foo: 'bar'});
+      collection = new Collection();
       compositeView = new CompositeView({
         model: m1,
         collection: collection
@@ -366,7 +362,7 @@ describe('composite view', function() {
 
       compositeView.render();
 
-      var m2 = new Model({foo: 'baz'});
+      m2 = new Model({foo: 'baz'});
       collection.reset([m2]);
     });
 
@@ -380,26 +376,25 @@ describe('composite view', function() {
   });
 
   describe('when rendering a composite view without a collection', function() {
-    var compositeView;
-
-    var ChildView = Backbone.Marionette.ItemView.extend({
-      tagName: 'span',
-      render: function() {
-        this.$el.html(this.model.get('foo'));
-      }
-    });
-
-    var CompositeView = Backbone.Marionette.CompositeView.extend({
-      childView: ChildView,
-      template: '#composite-template',
-
-      onRender: function() {}
-    });
+    var ChildView, CompositeView, compositeView, m1;
 
     beforeEach(function() {
+      ChildView = Backbone.Marionette.ItemView.extend({
+        tagName: 'span',
+        render: function() {
+          this.$el.html(this.model.get('foo'));
+        }
+      });
+
+      CompositeView = Backbone.Marionette.CompositeView.extend({
+        childView: ChildView,
+        template: '#composite-template',
+        onRender: function() {}
+      });
+
       this.loadFixtures('compositeRerender.html');
 
-      var m1 = new Model({foo: 'bar'});
+      m1 = new Model({foo: 'bar'});
       compositeView = new CompositeView({
         model: m1
       });
@@ -417,27 +412,26 @@ describe('composite view', function() {
   });
 
   describe('when rendering a composite with a collection', function() {
-    var compositeView, collection;
-
-    var ChildView = Backbone.Marionette.ItemView.extend({
-      tagName: 'span',
-      render: function() {
-        this.$el.html(this.model.get('foo'));
-      }
-    });
-
-    var CompositeView = Backbone.Marionette.CompositeView.extend({
-      childView: ChildView,
-      template: '#composite-template',
-
-      onRender: function() {}
-    });
+    var ChildView, CompositeView, compositeView, m1, m2, collection;
 
     beforeEach(function() {
+      ChildView = Backbone.Marionette.ItemView.extend({
+        tagName: 'span',
+        render: function() {
+          this.$el.html(this.model.get('foo'));
+        }
+      });
+
+      CompositeView = Backbone.Marionette.CompositeView.extend({
+        childView: ChildView,
+        template: '#composite-template',
+        onRender: function() {}
+      });
+
       this.loadFixtures('compositeRerender.html');
 
-      var m1 = new Model({foo: 'bar'});
-      var m2 = new Model({foo: 'baz'});
+      m1 = new Model({foo: 'bar'});
+      m2 = new Model({foo: 'baz'});
 
       collection = new Collection([m2]);
 
@@ -452,9 +446,11 @@ describe('composite view', function() {
     });
 
     describe('and then resetting the collection', function() {
+      var m3, m4;
+
       beforeEach(function() {
-        var m3 = new Model({foo: 'quux'});
-        var m4 = new Model({foo: 'widget'});
+        m3 = new Model({foo: 'quux'});
+        m4 = new Model({foo: 'widget'});
         collection.reset([m3, m4]);
       });
 
@@ -470,8 +466,10 @@ describe('composite view', function() {
     });
 
     describe('and then adding to the collection', function() {
+      var m3;
+
       beforeEach(function() {
-        var m3 = new Model({foo: 'quux'});
+        m3 = new Model({foo: 'quux'});
         collection.add(m3);
       });
 
@@ -487,8 +485,10 @@ describe('composite view', function() {
     });
 
     describe('and then removing from the collection', function() {
+      var model;
+
       beforeEach(function() {
-        var model = collection.at(0);
+        model = collection.at(0);
         collection.remove(model);
       });
 
@@ -503,12 +503,12 @@ describe('composite view', function() {
   });
 
   describe('when working with a composite and recursive model', function() {
-    var treeView;
+    var treeView, data, node;
 
     beforeEach(function() {
       this.loadFixtures('recursiveCompositeTemplate.html');
 
-      var data = {
+      data = {
         name: 'level 1',
         nodes: [
           {
@@ -522,7 +522,7 @@ describe('composite view', function() {
         ]
       };
 
-      var node = new Node(data);
+      node = new Node(data);
       treeView = new TreeView({
         model: node
       });
@@ -544,26 +544,26 @@ describe('composite view', function() {
   });
 
   describe('when destroying a composite view', function() {
-    var compositeView;
-
-    var ChildView = Backbone.Marionette.ItemView.extend({
-      tagName: 'span',
-      render: function() {
-        this.$el.html(this.model.get('foo'));
-      }
-    });
-
-    var CompositeModelView = Backbone.Marionette.CompositeView.extend({
-      childView: ChildView,
-      template: '#composite-template'
-    });
+    var ChildView, CompositeModelView, compositeView, m1, m2, collection;
 
     beforeEach(function() {
+      ChildView = Backbone.Marionette.ItemView.extend({
+        tagName: 'span',
+        render: function() {
+          this.$el.html(this.model.get('foo'));
+        }
+      });
+
+      CompositeModelView = Backbone.Marionette.CompositeView.extend({
+        childView: ChildView,
+        template: '#composite-template'
+      });
+
       this.loadFixtures('compositeTemplate.html');
 
-      var m1 = new Model({foo: 'bar'});
-      var m2 = new Model({foo: 'baz'});
-      var collection = new Collection();
+      m1 = new Model({foo: 'bar'});
+      m2 = new Model({foo: 'baz'});
+      collection = new Collection();
       collection.add(m2);
 
       compositeView = new CompositeModelView({
@@ -574,7 +574,6 @@ describe('composite view', function() {
       this.sinon.spy(CompositeModelView.prototype, 'destroy');
 
       compositeView.render();
-
       compositeView.destroy();
     });
 
@@ -588,30 +587,28 @@ describe('composite view', function() {
   });
 
   describe('when rendering a composite view with no model, using a template to create a grid', function() {
-
-    var gridView;
-
-    // A Grid Row
-    var GridRow = Backbone.Marionette.ItemView.extend({
-      tagName: 'tr',
-      template: '#row-template'
-    });
-
-    // The grid view
-    var GridView = Backbone.Marionette.CompositeView.extend({
-      tagName: 'table',
-      template: '#grid-template',
-      childView: GridRow,
-
-      attachHtml: function(collectionView, itemView) {
-        collectionView.$('tbody').append(itemView.el);
-      }
-    });
+    var GridRow, GridView, gridView, userData, userList;
 
     beforeEach(function() {
+      // A Grid Row
+      GridRow = Backbone.Marionette.ItemView.extend({
+        tagName: 'tr',
+        template: '#row-template'
+      });
+
+      // The grid view
+      GridView = Backbone.Marionette.CompositeView.extend({
+        tagName: 'table',
+        template: '#grid-template',
+        childView: GridRow,
+        attachHtml: function(collectionView, itemView) {
+          collectionView.$('tbody').append(itemView.el);
+        }
+      });
+
       this.loadFixtures('gridTemplates.html');
 
-      var userData = [
+      userData = [
         {
           username: 'dbailey',
           fullname: 'Derick Bailey'
@@ -626,7 +623,7 @@ describe('composite view', function() {
         }
       ];
 
-      var userList = new UserCollection(userData);
+      userList = new UserCollection(userData);
 
       gridView = new GridView({
         tagName: 'table',
@@ -649,40 +646,38 @@ describe('composite view', function() {
   });
 
   describe('when a composite view has a ui elements hash', function() {
-
-    var called, gridView, headersModel;
-
-    // A Grid Row
-    var GridRow = Backbone.Marionette.ItemView.extend({
-      tagName: 'tr',
-      template: '#row-template'
-    });
-
-    // The grid view
-    var GridView = Backbone.Marionette.CompositeView.extend({
-      tagName: 'table',
-      template: '#grid-template',
-      childView: GridRow,
-
-      attachHtml: function(collectionView, itemView) {
-        collectionView.$('tbody').append(itemView.el);
-      }
-    });
-
-    var GridViewWithUIBindings = GridView.extend({
-      template: '#ui-binding-template',
-
-      ui: {
-        headersRow: 'thead tr',
-        unfoundElement: '#unfound',
-        itemRows: 'tbody tr'
-      }
-    });
+    var GridRow, GridView, GridViewWithUIBindings, called, gridView, headersModel, userData, userList;
 
     beforeEach(function() {
+      // A Grid Row
+      GridRow = Backbone.Marionette.ItemView.extend({
+        tagName: 'tr',
+        template: '#row-template'
+      });
+
+      // The grid view
+      GridView = Backbone.Marionette.CompositeView.extend({
+        tagName: 'table',
+        template: '#grid-template',
+        childView: GridRow,
+
+        attachHtml: function(collectionView, itemView) {
+          collectionView.$('tbody').append(itemView.el);
+        }
+      });
+
+      GridViewWithUIBindings = GridView.extend({
+        template: '#ui-binding-template',
+        ui: {
+          headersRow: 'thead tr',
+          unfoundElement: '#unfound',
+          itemRows: 'tbody tr'
+        }
+      });
+
       this.loadFixtures('uiBindingTemplate.html');
 
-      var userData = [
+      userData = [
         {
           username: 'dbailey',
           fullname: 'Derick Bailey'
@@ -698,7 +693,7 @@ describe('composite view', function() {
         nameHeader: 'Full name'
       });
 
-      var userList = new UserCollection(userData);
+      userList = new UserCollection(userData);
 
       gridView = new GridViewWithUIBindings({
         tagName: 'table',
@@ -712,7 +707,6 @@ describe('composite view', function() {
     });
 
     describe('after the whole composite view finished rendering', function() {
-
       beforeEach(function() {
         gridView.render();
       });
@@ -736,34 +730,25 @@ describe('composite view', function() {
 
           expect(gridView.ui.headersRow.find('th:first-child')).to.contain.$text('User');
         });
-
       });
 
       describe('accessing a ui element that belongs to the collection', function() {
-
         // This test makes it clear that not allowing access to the collection elements is a design decision
         // and not a bug.
         it('should return an empty jQuery object', function() {
           expect(gridView.ui.itemRows.length).to.equal(0);
         });
-
       });
-
     });
 
     describe('after the model finished rendering, but before the collection rendered', function() {
-
       describe('accessing a ui element that belongs to the model template', function() {
-
         beforeEach(function() {
-
           gridView.onBeforeRender = function() {
             called = true;
           };
           this.sinon.spy(gridView, 'onBeforeRender');
-
           gridView.render();
-
         });
 
         // this test enforces that ui elements should be accessible as soon as their html was inserted
@@ -775,15 +760,11 @@ describe('composite view', function() {
         it('should set the username', function() {
           expect($(gridView.ui.headersRow).find('th:first-child').text()).to.equal('Username');
         });
-
       });
-
     });
-
   });
 
   describe('has a valid inheritance chain back to Marionette.CollectionView', function() {
-
     var constructor, compositeView;
 
     beforeEach(function() {

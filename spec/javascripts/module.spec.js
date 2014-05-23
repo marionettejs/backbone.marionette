@@ -1,6 +1,4 @@
 describe('application modules', function() {
-  'use strict';
-
   beforeEach(global.setup);
   afterEach(global.teardown);
 
@@ -12,7 +10,6 @@ describe('application modules', function() {
 
   describe('.module', function() {
     describe('when creating a module', function() {
-
       var module, initializeSpy, additionalParam, defineSpy;
 
       beforeEach(function() {
@@ -64,10 +61,10 @@ describe('application modules', function() {
 
       describe('and the options object is used', function() {
         describe('', function() {
-          var options;
+          var options, ModuleClass;
 
           beforeEach(function() {
-            var ModuleClass = Backbone.Marionette.Module.extend({
+            ModuleClass = Backbone.Marionette.Module.extend({
               initialize: initializeSpy,
               propA: 'becomes instance property'
             });
@@ -122,12 +119,12 @@ describe('application modules', function() {
         });
 
         describe('and initialize is overridden', function() {
-          var initializeOptionSpy;
+          var initializeOptionSpy, ModuleClass;
 
           beforeEach(function() {
             initializeOptionSpy = this.sinon.stub();
 
-            var ModuleClass = Backbone.Marionette.Module.extend({
+            ModuleClass = Backbone.Marionette.Module.extend({
               initialize: initializeSpy,
               propA: 'becomes instance property'
             });
@@ -142,7 +139,6 @@ describe('application modules', function() {
           it('initialize function is called', function() {
             expect(initializeOptionSpy).to.have.been.called;
           });
-
         });
       });
 
@@ -202,7 +198,7 @@ describe('application modules', function() {
     });
 
     describe('when re-calling module', function() {
-      var module;
+      var app;
 
       beforeEach(function() {
         app = new Backbone.Marionette.Application();
@@ -223,6 +219,8 @@ describe('application modules', function() {
       });
 
       describe('and define functions are provided', function() {
+        var module;
+
         beforeEach(function() {
           module = app.module('Mod', function(module) {
             module.prop1 = 'first property';
@@ -240,7 +238,6 @@ describe('application modules', function() {
       });
 
       describe('and options object is provided', function() {
-
         var module, aSpy, bSpy;
 
         beforeEach(function() {
@@ -275,15 +272,12 @@ describe('application modules', function() {
         it('startWithParent value will not be lost', function() {
           expect(module.startWithParent).to.be.false;
         });
-
       });
     });
 
     describe('when creating a sub-module', function() {
-      var parent, child;
-
       describe('and the parent is already created', function() {
-        var parentDefineSpy, childDefineSpy;
+        var parentDefineSpy, childDefineSpy, parent, child;
 
         beforeEach(function() {
           parentDefineSpy = this.sinon.stub();
@@ -311,7 +305,8 @@ describe('application modules', function() {
       });
 
       describe('and the parent is not already created', function() {
-        var defineSpy;
+        var defineSpy, child;
+
         beforeEach(function() {
           defineSpy = this.sinon.stub();
           child = app.module('parent.child', defineSpy);
@@ -335,6 +330,7 @@ describe('application modules', function() {
   describe('.start', function() {
     describe('when starting a module', function() {
       var module, startSpy, beforeStartSpy, initializeSpy1, initializeSpy2;
+
       beforeEach(function() {
         startSpy = this.sinon.stub();
         beforeStartSpy = this.sinon.stub();
@@ -369,10 +365,10 @@ describe('application modules', function() {
     });
 
     describe('when calling module start twice', function() {
-      var startSpy;
+      var module, startSpy;
 
       beforeEach(function() {
-        var module = app.module('Mod');
+        module = app.module('Mod');
         startSpy = this.sinon.spy();
         module.on('before:start', startSpy);
         module.start();
@@ -428,11 +424,11 @@ describe('application modules', function() {
     });
 
     describe('when starting app', function() {
-      var startSpy;
-
       describe('', function() {
+        var module, startSpy;
+
         beforeEach(function() {
-          var module = app.module('Mod');
+          module = app.module('Mod');
           startSpy = this.sinon.spy(module, 'start');
           app.start();
         });
@@ -443,8 +439,10 @@ describe('application modules', function() {
       });
 
       describe('and its module is set to not start with parent', function() {
+        var module, startSpy;
+
         beforeEach(function() {
-          var module = app.module('Mod', {startWithParent: false});
+          module = app.module('Mod', {startWithParent: false});
           startSpy = this.sinon.spy(module, 'start');
           app.start();
         });
@@ -456,7 +454,6 @@ describe('application modules', function() {
     });
 
     describe('after app is started', function() {
-
       var module, initializeSpy;
 
       beforeEach(function() {
@@ -479,7 +476,6 @@ describe('application modules', function() {
   });
 
   describe('.stop', function() {
-
     describe('when stopping a module', function() {
       var module, beforeStopSpy, stopSpy, finalizerSpy;
 
@@ -547,7 +543,6 @@ describe('application modules', function() {
     });
 
     describe('when stopping a module before its started', function() {
-
       var parent, child, parentFinalizerSpy, childFinalizerSpy, parentStopSpy, childStopSpy;
 
       beforeEach(function() {

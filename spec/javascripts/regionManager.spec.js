@@ -1,10 +1,8 @@
 describe('regionManager', function() {
-
   beforeEach(global.setup);
   afterEach(global.teardown);
 
   describe('.addRegion', function() {
-
     describe('with a name and selector', function() {
       var region, regionManager, addHandler, beforeAddHandler;
 
@@ -163,14 +161,14 @@ describe('regionManager', function() {
     });
 
     describe('with defaults', function() {
-      var regions, regionManager, parent;
+      var regions, regionManager, parent, defaults;
 
       beforeEach(function() {
         regionManager = new Marionette.RegionManager();
 
         parent = $('<div></div>');
 
-        var defaults = {
+        defaults = {
           parentEl: parent
         };
 
@@ -349,12 +347,12 @@ describe('regionManager', function() {
   });
 
   describe('when iterating the region manager', function() {
-    var cb, r1, r2, r3;
+    var cb, r1, r2, r3, rm;
 
     beforeEach(function() {
       cb = this.sinon.stub();
 
-      var rm = new Marionette.RegionManager();
+      rm = new Marionette.RegionManager();
 
       r1 = rm.addRegion('foo', '#foo');
       r2 = rm.addRegion('bar', '#bar');

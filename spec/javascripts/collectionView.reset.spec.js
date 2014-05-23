@@ -1,29 +1,31 @@
 describe('collection view - reset', function() {
-
   beforeEach(global.setup);
   afterEach(global.teardown);
 
-  var ItemView = Backbone.Marionette.ItemView.extend({
-    tagName: 'span',
-    render: function() {
-      this.$el.html(this.model.get('foo'));
-      this.trigger('render');
-    },
-    onRender: function() {}
-  });
+  var ItemView, CollectionView;
 
-  var CollectionView = Backbone.Marionette.CollectionView.extend({
-    childView: ItemView,
+  beforeEach(function() {
+    ItemView = Backbone.Marionette.ItemView.extend({
+      tagName: 'span',
+      render: function() {
+        this.$el.html(this.model.get('foo'));
+        this.trigger('render');
+      },
+      onRender: function() {}
+    });
 
-    onBeforeRender: function() {},
-    onRender: function() {},
-    onBeforeChildAdded: function() {},
-    onAfterChildAdded: function() {}
+    CollectionView = Backbone.Marionette.CollectionView.extend({
+      childView: ItemView,
+
+      onBeforeRender: function() {},
+      onRender: function() {},
+      onBeforeChildAdded: function() {},
+      onAfterChildAdded: function() {}
+    });
   });
 
   describe('when a collection is reset after the view is loaded', function() {
-    var collection;
-    var collectionView;
+    var collection, collectionView;
 
     beforeEach(function() {
       collection = new Backbone.Collection();

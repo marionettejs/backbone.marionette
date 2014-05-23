@@ -1,6 +1,9 @@
 describe('template helper methods', function() {
   'use strict';
 
+  beforeEach(global.setup);
+  afterEach(global.teardown);
+
   describe('composite view', function() {
 
     describe('when rendering with no model or collection and a templateHelpers is found', function() {
@@ -22,7 +25,7 @@ describe('template helper methods', function() {
       });
 
       it('should include the template helpers in the data object', function() {
-        expect(data.foo).not.toBeUndefined();
+        expect(data.foo).to.exist;
       });
     });
 
@@ -48,7 +51,7 @@ describe('template helper methods', function() {
       });
 
       it('should include the template helpers in the data object', function() {
-        expect(renderData.foo).not.toBeUndefined();
+        expect(renderData.foo).to.exist;
       });
     });
 
@@ -71,11 +74,11 @@ describe('template helper methods', function() {
       });
 
       it('should include the template helpers in the data object', function() {
-        expect(renderData.foo).not.toBeUndefined();
+        expect(renderData.foo).to.exist;
       });
 
       it('should still have the data from the model', function() {
-        expect(renderData.bar).toBe('baz');
+        expect(renderData.bar).to.equal('baz');
       });
     });
 
@@ -95,18 +98,23 @@ describe('template helper methods', function() {
         view.render();
       });
 
+      afterEach(function() {
+        view.template.restore();
+        view.templateHelpers.restore();
+      });
+
       it('should include the template helpers in the data object', function() {
         var firstArg = view.template.args[0][0];
-        expect(firstArg.foo).not.toBeUndefined();
+        expect(firstArg.foo).to.exist;
       });
 
       it('should still have the data from the model', function() {
         var firstArg = view.template.args[0][0];
-        expect(firstArg.bar).toBe('baz');
+        expect(firstArg.bar).to.equal('baz');
       });
 
       it('should maintain the view as the context for the templateHelpers function', function() {
-        expect(view.templateHelpers).toHaveBeenCalledOn(view);
+        expect(view.templateHelpers).to.have.been.calledOn(view);
       });
     });
 
@@ -131,14 +139,18 @@ describe('template helper methods', function() {
         view.render();
       });
 
+      afterEach(function() {
+        view.template.restore();
+      });
+
       it('should include the template helpers in the data object', function() {
         var firstArg = view.template.args[0][0];
-        expect(firstArg.foo).not.toBeUndefined();
+        expect(firstArg.foo).to.exist;
       });
 
       it('should still have the data from the model', function() {
         var firstArg = view.template.args[0][0];
-        expect(firstArg.bar).toBe('baz');
+        expect(firstArg.bar).to.equal('baz');
       });
     });
 

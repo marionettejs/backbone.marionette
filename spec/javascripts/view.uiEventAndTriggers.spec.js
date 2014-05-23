@@ -1,6 +1,9 @@
 describe('view ui event trigger configuration', function() {
   'use strict';
 
+  beforeEach(global.setup);
+  afterEach(global.teardown);
+
   describe('@ui syntax within events and triggers', function() {
     var view, view2, view3, fooHandler, attackHandler, tapHandler, defendHandler;
 
@@ -83,59 +86,63 @@ describe('view ui event trigger configuration', function() {
       view2.render();
       view3.render();
 
-      fooHandler = jasmine.createSpy('do:foo event handler');
-      attackHandler = jasmine.createSpy('attack handler');
-      defendHandler = jasmine.createSpy('defend handler');
-      tapHandler = jasmine.createSpy('tap handler');
-      spyOn(view, 'attack').andCallThrough();
+      fooHandler = sinon.stub();
+      attackHandler = sinon.stub();
+      defendHandler = sinon.stub();
+      tapHandler = sinon.stub();
+      sinon.spy(view, 'attack');
       view.on('do:foo', fooHandler);
       view2.on('do:foo', fooHandler);
     });
 
+    afterEach(function () {
+      view.attack.restore();
+    });
+
     it('should correctly trigger an event', function() {
       view.$('.foo').trigger('click');
-      expect(fooHandler).toHaveBeenCalled();
+      expect(fooHandler).to.have.been.called;
     });
 
     it('should correctly trigger a complex event', function() {
       view.$('.lap').trigger('click');
-      expect(tapHandler).toHaveBeenCalled();
+      expect(tapHandler).to.have.been.called;
     });
 
     it('should correctly call an event', function() {
       view.$('#tap').trigger('click');
-      expect(attackHandler).toHaveBeenCalled();
+      expect(attackHandler).to.have.been.called;
     });
 
     it('should correctly call an event with a functional events hash', function() {
       view2.$('#tap').trigger('click');
-      expect(attackHandler).toHaveBeenCalled();
+      expect(attackHandler).to.have.been.called;
     });
 
     it('should correctly call an event with a functional triggers hash', function() {
       view2.$('.foo').trigger('click');
-      expect(fooHandler).toHaveBeenCalled();
+      expect(fooHandler).to.have.been.called;
     });
 
     it('should correctly call an event with a functional events hash and functional ui hash', function() {
       view3.$('#tap').trigger('click');
-      expect(attackHandler).toHaveBeenCalled();
+      expect(attackHandler).to.have.been.called;
     });
 
     describe('when multiple hashes are specified', function() {
       it('should correctly call an event when when the first hash is triggered', function() {
         view.$('#tap').trigger('click');
-        expect(defendHandler).toHaveBeenCalled();
+        expect(defendHandler).to.have.been.called;
       });
 
       it('should correctly call an event when when the second hash is triggered', function() {
         view.$('.foo').trigger('click');
-        expect(defendHandler).toHaveBeenCalled();
+        expect(defendHandler).to.have.been.called;
       });
 
       it('should correctly call an event when when the third hash is triggered', function() {
         view.$('.bat').trigger('click');
-        expect(defendHandler).toHaveBeenCalled();
+        expect(defendHandler).to.have.been.called;
       });
     });
   });

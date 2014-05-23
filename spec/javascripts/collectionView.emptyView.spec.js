@@ -1,6 +1,9 @@
 describe('collectionview - emptyView', function() {
   'use strict';
 
+  beforeEach(global.setup);
+  afterEach(global.teardown);
+
   var ItemView = Backbone.Marionette.ItemView.extend({
     tagName: 'span',
     render: function() {
@@ -34,28 +37,32 @@ describe('collectionview - emptyView', function() {
     });
 
     it('should append the html for the emptyView', function() {
-      expect(collectionView.$el).toHaveHtml('<span class=\'isempty\'></span>');
+      expect(collectionView.$el).to.have.$html('<span class="isempty"></span>');
     });
 
     it('should reference each of the rendered view items', function() {
-      expect(_.size(collectionView.children)).toBe(1);
+      expect(_.size(collectionView.children)).to.equal(1);
     });
 
     describe('and then adding an item to the collection', function() {
       var destroySpy;
 
       beforeEach(function() {
-        destroySpy = spyOn(EmptyView.prototype, 'destroy');
+        destroySpy = sinon.spy(EmptyView.prototype, 'destroy');
 
         collection.add({foo: 'wut'});
       });
 
+      afterEach(function () {
+        EmptyView.prototype.destroy.restore();
+      });
+
       it('should destroy the emptyView', function() {
-        expect(destroySpy).toHaveBeenCalled();
+        expect(destroySpy).to.have.been.called;
       });
 
       it('should show the new item', function() {
-        expect(collectionView.$el).toHaveText(/wut/);
+        expect(collectionView.$el).to.contain.$text('wut');
       });
     });
   });
@@ -71,20 +78,23 @@ describe('collectionview - emptyView', function() {
 
       collectionView.render();
 
-      destroySpy = spyOn(EmptyView.prototype, 'destroy');
-      destroySpy.andCallThrough();
+      destroySpy = sinon.spy(EmptyView.prototype, 'destroy');
 
       collection.reset([{foo: 'bar'}, {foo: 'baz'}]);
 
       collection.add({foo: 'wut'});
     });
 
+    afterEach(function () {
+      EmptyView.prototype.destroy.restore();
+    });
+
     it('should destroy the emptyView', function() {
-      expect(destroySpy).toHaveBeenCalled();
+      expect(destroySpy).to.have.been.called;
     });
 
     it('should show all three items without empty view', function() {
-      expect(collectionView.$el).toHaveHtml('<span>bar</span><span>baz</span><span>wut</span>');
+      expect(collectionView.$el).to.have.$html('<span>bar</span><span>baz</span><span>wut</span>');
     });
   });
 
@@ -104,11 +114,11 @@ describe('collectionview - emptyView', function() {
     });
 
     it('should append the html for the emptyView', function() {
-      expect(collectionView.$el).toHaveHtml('<span class="isempty"></span>');
+      expect(collectionView.$el).to.have.$html('<span class="isempty"></span>');
     });
 
     it('should reference each of the rendered view items', function() {
-      expect(_.size(collectionView.children)).toBe(1);
+      expect(_.size(collectionView.children)).to.equal(1);
     });
   });
 
@@ -128,7 +138,7 @@ describe('collectionview - emptyView', function() {
       collection.reset(population);   // 1st destroyEmptyView
       collection.reset();             // 2nd showEmptyView
       collection.reset(population);   // 2nd destroyEmptyView
-      expect(collectionView.$el).not.toContain('span.isempty');
+      expect(collectionView.$el).not.to.contain.$html('<span class="isempty"></span>');
     });
 
     it('should have only one emptyView open', function() {
@@ -136,7 +146,7 @@ describe('collectionview - emptyView', function() {
       collection.reset(population);   // 1st destroyEmptyView
       collection.reset();             // 2nd destroyEmptyView, showEmptyView
       collection.reset();             // 3nd destroyEmptyView, showEmptyView
-      expect(collectionView.$('span.isempty').length).toEqual(1);
+      expect(collectionView.$('span.isempty').length).to.equal(1);
     });
 
   });
@@ -184,17 +194,17 @@ describe('collectionview - emptyView', function() {
     });
 
     it('should have 1 child view (empty view)', function() {
-      expect(collectionView.children.length).toBe(1);
+      expect(collectionView.children.length).to.equal(1);
     });
 
     it('should append the html for the emptyView', function() {
-      expect(collectionView.$el).toHaveHtml('<span>0 items</span>');
+      expect(collectionView.$el).to.have.$html('<span>0 items</span>');
     });
 
     it('should not have the empty child view after resetting with data', function() {
       collection.reset(data);
 
-      expect(collectionView.$el).toHaveHtml('<span>bar</span><span>baz</span>');
+      expect(collectionView.$el).to.have.$html('<span>bar</span><span>baz</span>');
     });
   });
 
@@ -222,7 +232,7 @@ describe('collectionview - emptyView', function() {
       });
 
       it('renders other empty view instance', function() {
-        expect(collectionView.children.first()).toBeInstanceOf(OtherEmptyView);
+        expect(collectionView.children.first()).to.be.instanceof(OtherEmptyView);
       });
     });
   });
@@ -241,12 +251,12 @@ describe('collectionview - emptyView', function() {
     });
 
     it('should return true when the collection is empty', function() {
-      expect(collectionView.isEmpty()).toEqual(true);
+      expect(collectionView.isEmpty()).to.equal(true);
     });
 
     it('should return false when the collection is not empty', function() {
       collectionView.collection.add({foo: 'wut'});
-      expect(collectionView.isEmpty()).toEqual(false);
+      expect(collectionView.isEmpty()).to.equal(false);
     });
 
     describe('when overriding with a populated collection', function() {
@@ -269,15 +279,15 @@ describe('collectionview - emptyView', function() {
       });
 
       it('should append the html for the emptyView', function() {
-        expect(collectionView.$el).toHaveHtml('<span class="isempty"></span>');
+        expect(collectionView.$el).to.have.$html('<span class="isempty"></span>');
       });
 
       it('should reference each of the rendered view items', function() {
-        expect(_.size(collectionView.children)).toBe(1);
+        expect(_.size(collectionView.children)).to.equal(1);
       });
 
       it('should pass the collection as an argument to isEmpty', function() {
-        expect(passedInCollection).toEqual(collection);
+        expect(passedInCollection).to.equal(collection);
       });
     });
   });
@@ -302,12 +312,12 @@ describe('collectionview - emptyView', function() {
     });
 
     it('should pass the options to the empty view instance', function(){
-      expect(view.options.hasOwnProperty('foo')).toBe(true);
-      expect(view.options.foo).toEqual('bar');
+      expect(view.options.hasOwnProperty('foo')).to.be.true;
+      expect(view.options.foo).to.equal('bar');
     });
 
     it('overrides options of emptyView class', function(){
-      expect($(collectionView.$el)).toHaveHtml('<p class="baz"></p>');
+      expect($(collectionView.$el)).to.have.$html('<p class="baz"></p>');
     });
 
     describe('when \'emptyViewOptions\' is provided as a fuction', function(){
@@ -330,12 +340,12 @@ describe('collectionview - emptyView', function() {
       });
 
       it('should pass the options to the empty view instance', function(){
-        expect(view.options.hasOwnProperty('foo')).toBe(true);
-        expect(view.options.foo).toEqual('bar');
+        expect(view.options.hasOwnProperty('foo')).to.be.true;
+        expect(view.options.foo).to.equal('bar');
       });
 
       it('should pass the collectionView as the context', function(){
-        expect(view.options.collection).toBe(collection);
+        expect(view.options.collection).to.equal(collection);
       });
 
     });
@@ -358,7 +368,7 @@ describe('collectionview - emptyView', function() {
       });
 
       it('passes the options to the empty view instance correctly', function(){
-        expect(view.options.foo).toEqual('baz');
+        expect(view.options.foo).to.equal('baz');
       });
     });
 
@@ -382,7 +392,7 @@ describe('collectionview - emptyView', function() {
     });
 
     it('passes the options to the empty view instance', function(){
-      expect(view.options.foo).toEqual('baz');
+      expect(view.options.foo).to.equal('baz');
     });
 
   });

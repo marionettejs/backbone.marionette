@@ -1,6 +1,9 @@
 describe('trigger event and method name', function() {
   'use strict';
 
+  beforeEach(global.setup);
+  afterEach(global.teardown);
+
   var view, eventHandler, methodHandler, CustomClass, customObject;
 
   beforeEach(function() {
@@ -10,15 +13,15 @@ describe('trigger event and method name', function() {
       this.triggerMethod = Marionette.triggerMethod;
     };
 
-    eventHandler = jasmine.createSpy('event handler');
-    methodHandler = jasmine.createSpy('method handler');
+    eventHandler = sinon.stub();
+    methodHandler = sinon.stub();
   });
 
   describe('when triggering an event', function() {
     var returnVal;
 
     beforeEach(function() {
-      methodHandler.andReturn('return val');
+      methodHandler.returns('return val');
       view.onSomething = methodHandler;
       view.on('something', eventHandler);
 
@@ -26,15 +29,15 @@ describe('trigger event and method name', function() {
     });
 
     it('should trigger the event', function() {
-      expect(eventHandler).toHaveBeenCalled();
+      expect(eventHandler).to.have.been.called;
     });
 
     it('should call a method named on{Event}', function() {
-      expect(methodHandler).toHaveBeenCalled();
+      expect(methodHandler).to.have.been.called;
     });
 
     it('returns the value returned by the on{Event} method', function() {
-      expect(returnVal).toBe('return val');
+      expect(returnVal).to.equal('return val');
     });
 
     describe('when trigger does not exist', function() {
@@ -48,7 +51,7 @@ describe('trigger event and method name', function() {
           customObject.triggerMethod('does:not:exist');
         };
 
-        expect(triggerNonExistantEvent).not.toThrow();
+        expect(triggerNonExistantEvent).not.to.throw;
       });
     });
   });
@@ -63,11 +66,11 @@ describe('trigger event and method name', function() {
     });
 
     it('should trigger the event with the args', function() {
-      expect(eventHandler.mostRecentCall.args.length).toBe(3);
+      expect(eventHandler.lastCall.args.length).to.equal(3);
     });
 
     it('should call a method named on{Event} with the args', function() {
-      expect(methodHandler.mostRecentCall.args.length).toBe(3);
+      expect(methodHandler.lastCall.args.length).to.equal(3);
     });
 
   });
@@ -82,11 +85,11 @@ describe('trigger event and method name', function() {
     });
 
     it('should trigger the event with the args', function() {
-      expect(eventHandler.mostRecentCall.args.length).toBe(3);
+      expect(eventHandler.lastCall.args.length).to.equal(3);
     });
 
     it('should call a method named with each segment of the event name capitalized', function() {
-      expect(methodHandler).toHaveBeenCalled();
+      expect(methodHandler).to.have.been.called;
     });
 
   });
@@ -98,11 +101,11 @@ describe('trigger event and method name', function() {
     });
 
     it('should trigger the event with the args', function() {
-      expect(eventHandler.mostRecentCall.args.length).toBe(3);
+      expect(eventHandler.lastCall.args.length).to.equal(3);
     });
 
     it('should not call a method named with each segment of the event name capitalized', function() {
-      expect(methodHandler).not.toHaveBeenCalled();
+      expect(methodHandler).not.to.have.been.called;
     });
 
   });
@@ -115,11 +118,11 @@ describe('trigger event and method name', function() {
     });
 
     it('should trigger the event with the args', function() {
-      expect(eventHandler.mostRecentCall.args.length).toBe(3);
+      expect(eventHandler.lastCall.args.length).to.equal(3);
     });
 
     it('should not call a method named with each segment of the event name capitalized', function() {
-      expect(methodHandler).not.toHaveBeenCalled();
+      expect(methodHandler).not.to.have.been.called;
     });
 
   });
@@ -150,7 +153,7 @@ describe('trigger event and method name', function() {
         collection: collection
       });
 
-      collectionView.onChildviewAddSelection = jasmine.createSpy();
+      collectionView.onChildviewAddSelection = sinon.stub();
 
       collectionView.render();
 
@@ -159,7 +162,7 @@ describe('trigger event and method name', function() {
     });
 
     it('should fire the event method once', function() {
-      expect(collectionView.onChildviewAddSelection.callCount).toBe(1);
+      expect(collectionView.onChildviewAddSelection.callCount).to.equal(1);
     });
 
   });

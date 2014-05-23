@@ -1,5 +1,8 @@
 describe('regionManager', function() {
 
+  beforeEach(global.setup);
+  afterEach(global.teardown);
+
   describe('.addRegion', function() {
 
     describe('with a name and selector', function() {
@@ -17,23 +20,23 @@ describe('regionManager', function() {
       });
 
       it('should create the region', function() {
-        expect(region).not.toBeUndefined();
+        expect(region).to.exist;
       });
 
       it('should store the region by name', function() {
-        expect(regionManager.get('foo')).toBe(region);
+        expect(regionManager.get('foo')).to.equal(region);
       });
 
       it('should trigger a "before:add:region" event/method', function() {
-        expect(beforeAddHandler).toHaveBeenCalledWith('foo', region);
+        expect(beforeAddHandler).to.have.been.calledWith('foo', region);
       });
 
       it('should trigger a "add:region" event/method', function() {
-        expect(addHandler).toHaveBeenCalledWith('foo', region);
+        expect(addHandler).to.have.been.calledWith('foo', region);
       });
 
       it('should increment the length', function() {
-        expect(regionManager.length).toBe(1);
+        expect(regionManager.length).to.equal(1);
       });
     });
 
@@ -53,23 +56,23 @@ describe('regionManager', function() {
       });
 
       it('should use the supplied region', function() {
-        expect(builtRegion).toBe(region);
+        expect(builtRegion).to.equal(region);
       });
 
       it('should store the region by name', function() {
-        expect(regionManager.get('foo')).toBe(region);
+        expect(regionManager.get('foo')).to.equal(region);
       });
 
       it('should trigger a "before:add:region" event/method', function() {
-        expect(beforeAddHandler).toHaveBeenCalledWith('foo', region);
+        expect(beforeAddHandler).to.have.been.calledWith('foo', region);
       });
 
       it('should trigger a "add:region" event/method', function() {
-        expect(addHandler).toHaveBeenCalledWith('foo', region);
+        expect(addHandler).to.have.been.calledWith('foo', region);
       });
 
       it('should increment the length', function() {
-        expect(regionManager.length).toBe(1);
+        expect(regionManager.length).to.equal(1);
       });
     });
 
@@ -88,7 +91,7 @@ describe('regionManager', function() {
       });
 
       it('should set the regions selector within the supplied jQuery selector object', function() {
-        expect(region.$el.parent()).toBe(context);
+        expect(region.$el.parent()[0]).to.equal(context[0]);
       });
     });
 
@@ -97,7 +100,7 @@ describe('regionManager', function() {
 
       beforeEach(function() {
         context = $('<div><div id="foo"></div><div id="bar"></div></div>');
-        parentElHandler = jasmine.createSpy('parent el handler').andReturn(context);
+        parentElHandler = sinon.stub().returns(context);
         regionManager = new Marionette.RegionManager();
         region = regionManager.addRegion('foo', {
           selector: '#foo',
@@ -109,7 +112,7 @@ describe('regionManager', function() {
       });
 
       it('should set the regions selector within the supplied jQuery selector object', function() {
-        expect(region.$el.parent()).toBe(context);
+        expect(region.$el.parent()[0]).to.equal(context[0]);
       });
     });
   });
@@ -128,13 +131,13 @@ describe('regionManager', function() {
       });
 
       it('should add all specified regions', function() {
-        expect(regionManager.get('foo')).not.toBeUndefined();
-        expect(regionManager.get('baz')).not.toBeUndefined();
+        expect(regionManager.get('foo')).to.exist;
+        expect(regionManager.get('baz')).to.exist;
       });
 
       it('should return an object literal containing all named region instances', function() {
-        expect(regions.foo).toBe(regionManager.get('foo'));
-        expect(regions.baz).toBe(regionManager.get('baz'));
+        expect(regions.foo).to.equal(regionManager.get('foo'));
+        expect(regions.baz).to.equal(regionManager.get('baz'));
       });
     });
 
@@ -151,11 +154,11 @@ describe('regionManager', function() {
       });
 
       it('should add all specified regions', function() {
-        expect(regionManager.get('foo')).toBe(fooRegion);
+        expect(regionManager.get('foo')).to.equal(fooRegion);
       });
 
       it('should return an object literal containing all named region instances', function() {
-        expect(regions.foo).toBe(fooRegion);
+        expect(regions.foo).to.equal(fooRegion);
       });
     });
 
@@ -178,8 +181,8 @@ describe('regionManager', function() {
       });
 
       it('should add all specified regions with the specified defaults', function() {
-        expect(regionManager.get('foo')).not.toBeUndefined();
-        expect(regionManager.get('baz')).not.toBeUndefined();
+        expect(regionManager.get('foo')).to.exist;
+        expect(regionManager.get('baz')).to.exist;
       });
     });
   });
@@ -202,33 +205,37 @@ describe('regionManager', function() {
       regionManager.on('before:remove:region', beforeRemoveHandler);
       regionManager.on('remove:region', removeHandler);
 
-      spyOn(region, 'stopListening');
+      sinon.spy(region, 'stopListening');
 
       regionManager.removeRegion('foo');
     });
 
+    afterEach(function() {
+      region.stopListening.restore();
+    });
+
     it('should destroy the region', function() {
-      expect(destroyHandler).toHaveBeenCalled();
+      expect(destroyHandler).to.have.been.called;
     });
 
     it('should stopListening on the region', function() {
-      expect(region.stopListening).toHaveBeenCalledWith();
+      expect(region.stopListening).to.have.been.calledWith();
     });
 
     it('should remove the region', function() {
-      expect(regionManager.get('foo')).toBeUndefined();
+      expect(regionManager.get('foo')).to.be.undefined;
     });
 
     it('should trigger a "before:remove:region" event/method', function() {
-      expect(beforeRemoveHandler).toHaveBeenCalledWith('foo', region);
+      expect(beforeRemoveHandler).to.have.been.calledWith('foo', region);
     });
 
     it('should trigger a "remove:region" event/method', function() {
-      expect(removeHandler).toHaveBeenCalledWith('foo', region);
+      expect(removeHandler).to.have.been.calledWith('foo', region);
     });
 
     it('should adjust the length of the region manager by -1', function() {
-      expect(regionManager.length).toBe(0);
+      expect(regionManager.length).to.equal(0);
     });
   });
 
@@ -238,9 +245,9 @@ describe('regionManager', function() {
     beforeEach(function() {
       setFixtures('<div id="foo"></div><div id="bar"></div>');
 
-      destroyHandler = jasmine.createSpy('destroy handler');
-      destroyHandler2 = jasmine.createSpy('destroy handler');
-      removeHandler = jasmine.createSpy('remove handler');
+      destroyHandler = sinon.stub();
+      destroyHandler2 = sinon.stub();
+      removeHandler = sinon.stub();
 
       regionManager = new Marionette.RegionManager();
       region = regionManager.addRegion('foo', '#foo');
@@ -254,30 +261,35 @@ describe('regionManager', function() {
 
       regionManager.on('remove:region', removeHandler);
 
-      spyOn(region, 'stopListening');
-      spyOn(r2, 'stopListening');
+      sinon.spy(region, 'stopListening');
+      sinon.spy(r2, 'stopListening');
 
       regionManager.removeRegions();
     });
 
+    afterEach(function() {
+      region.stopListening.restore();
+      r2.stopListening.restore();
+    });
+
     it('should destroy the regions', function() {
-      expect(destroyHandler).toHaveBeenCalled();
-      expect(destroyHandler2).toHaveBeenCalled();
+      expect(destroyHandler).to.have.been.called;
+      expect(destroyHandler2).to.have.been.called;
     });
 
     it('should stopListening on the regions', function() {
-      expect(region.stopListening).toHaveBeenCalledWith();
-      expect(r2.stopListening).toHaveBeenCalledWith();
+      expect(region.stopListening).to.have.been.calledWith();
+      expect(r2.stopListening).to.have.been.calledWith();
     });
 
     it('should remove the regions', function() {
-      expect(regionManager.get('foo')).toBeUndefined();
-      expect(regionManager.get('bar')).toBeUndefined();
+      expect(regionManager.get('foo')).to.be.undefined;
+      expect(regionManager.get('bar')).to.be.undefined;
     });
 
     it('should trigger a "remove:region" event/method for each region', function() {
-      expect(removeHandler).toHaveBeenCalledWith('foo', region);
-      expect(removeHandler).toHaveBeenCalledWith('bar', r2);
+      expect(removeHandler).to.have.been.calledWith('foo', region);
+      expect(removeHandler).to.have.been.calledWith('bar', r2);
     });
   });
 
@@ -287,8 +299,8 @@ describe('regionManager', function() {
     beforeEach(function() {
       setFixtures('<div id="foo">');
 
-      destroyHandler = jasmine.createSpy('destroy region handler');
-      destroyManagerHandler = jasmine.createSpy('destroy manager handler');
+      destroyHandler = sinon.stub();
+      destroyManagerHandler = sinon.stub();
 
       regionManager = new Marionette.RegionManager();
       region = regionManager.addRegion('foo', '#foo');
@@ -300,11 +312,11 @@ describe('regionManager', function() {
     });
 
     it('should destroy all regions', function() {
-      expect(destroyHandler).toHaveBeenCalled();
+      expect(destroyHandler).to.have.been.called;
     });
 
     it('should not remove all regions', function() {
-      expect(regionManager.get('foo')).toBe(region);
+      expect(regionManager.get('foo')).to.equal(region);
     });
   });
 
@@ -313,8 +325,8 @@ describe('regionManager', function() {
 
     beforeEach(function() {
       setFixtures('<div id="foo">');
-      destroyHandler = jasmine.createSpy('destroy region handler');
-      destroyManagerHandler = jasmine.createSpy('destroy manager handler');
+      destroyHandler = sinon.stub();
+      destroyManagerHandler = sinon.stub();
 
       regionManager = new Marionette.RegionManager();
       region = regionManager.addRegion('foo', '#foo');
@@ -323,25 +335,29 @@ describe('regionManager', function() {
       region.on('destroy', destroyHandler);
       regionManager.on('destroy', destroyManagerHandler);
 
-      spyOn(region, 'stopListening');
+      sinon.spy(region, 'stopListening');
 
       regionManager.destroy();
     });
 
+    afterEach(function() {
+      region.stopListening.restore();
+    });
+
     it('should destroy all regions', function() {
-      expect(destroyHandler).toHaveBeenCalled();
+      expect(destroyHandler).to.have.been.called;
     });
 
     it('should stopListening on all regions', function() {
-      expect(region.stopListening).toHaveBeenCalledWith();
+      expect(region.stopListening).to.have.been.calledWith();
     });
 
     it('should remove all regions', function() {
-      expect(regionManager.get('foo')).toBeUndefined();
+      expect(regionManager.get('foo')).to.be.undefined;
     });
 
     it('should trigger a "destroy" event/method', function() {
-      expect(destroyManagerHandler).toHaveBeenCalled();
+      expect(destroyManagerHandler).to.have.been.called;
     });
   });
 
@@ -349,7 +365,7 @@ describe('regionManager', function() {
     var cb, r1, r2, r3;
 
     beforeEach(function() {
-      cb = jasmine.createSpy('iterator callback');
+      cb = sinon.stub();
 
       var rm = new Marionette.RegionManager();
 
@@ -361,9 +377,9 @@ describe('regionManager', function() {
     });
 
     it('should provide access to each region', function() {
-      expect(cb.calls[0].args[0]).toBe(r1);
-      expect(cb.calls[1].args[0]).toBe(r2);
-      expect(cb.calls[2].args[0]).toBe(r3);
+      expect(cb.firstCall.args[0]).to.equal(r1);
+      expect(cb.secondCall.args[0]).to.equal(r2);
+      expect(cb.thirdCall.args[0]).to.equal(r3);
     });
   });
 });

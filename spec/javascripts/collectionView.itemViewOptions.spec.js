@@ -1,7 +1,5 @@
 describe('collection view - childViewOptions', function() {
   'use strict';
-  beforeEach(global.setup);
-  afterEach(global.teardown);
 
   beforeEach(function() {
     this.ItemView = Backbone.Marionette.ItemView.extend({

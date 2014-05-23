@@ -1,7 +1,5 @@
 describe('renderer', function() {
   'use strict';
-  beforeEach(global.setup);
-  afterEach(global.teardown);
 
   describe('when given a template id to render', function() {
     beforeEach(function() {

@@ -1,7 +1,5 @@
 describe('application regions', function() {
   'use strict';
-  beforeEach(global.setup);
-  afterEach(global.teardown);
 
   describe('when adding region selectors to an app, and starting the app', function() {
     beforeEach(function() {

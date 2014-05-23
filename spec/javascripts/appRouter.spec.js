@@ -1,7 +1,5 @@
 describe('app router', function() {
   'use strict';
-  beforeEach(global.setup);
-  afterEach(global.teardown);
 
   afterEach(function() {
     window.location.hash = '';

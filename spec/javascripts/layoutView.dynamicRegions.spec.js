@@ -1,7 +1,5 @@
 describe('layoutView - dynamic regions', function() {
   'use strict';
-  beforeEach(global.setup);
-  afterEach(global.teardown);
 
   beforeEach(function() {
     this.template = function() {

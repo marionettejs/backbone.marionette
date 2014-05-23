@@ -1,17 +1,14 @@
 describe('callbacks', function() {
-  'use strict';
-
   beforeEach(global.setup);
   afterEach(global.teardown);
 
   describe('when registering callbacks and running them', function() {
-    var specifiedOptions, specifiedContext,
-        spyOne, spyTwo;
+    var specifiedOptions, specifiedContext, spyOne, spyTwo, callbacks;
 
     beforeEach(function() {
       spyOne = this.sinon.spy();
       spyTwo = this.sinon.spy();
-      var callbacks = new Backbone.Marionette.Callbacks();
+      callbacks = new Backbone.Marionette.Callbacks();
 
       specifiedOptions = {};
       specifiedContext = {};
@@ -40,12 +37,12 @@ describe('callbacks', function() {
   });
 
   describe('when running with no callbacks, and then registering callbacks', function() {
-    var spyOne, spyTwo;
+    var spyOne, spyTwo, callbacks;
 
     beforeEach(function() {
       spyOne = this.sinon.spy();
       spyTwo = this.sinon.spy();
-      var callbacks = new Backbone.Marionette.Callbacks();
+      callbacks = new Backbone.Marionette.Callbacks();
       callbacks.run();
 
       callbacks.add(spyOne);
@@ -62,13 +59,13 @@ describe('callbacks', function() {
   });
 
   describe('when registering a callback with a specific context, and running the callbacks', function() {
-    var spyOne, context;
+    var spyOne, context, callbacks;
 
     beforeEach(function() {
       spyOne  = this.sinon.spy();
       context = {};
 
-      var callbacks = new Backbone.Marionette.Callbacks();
+      callbacks = new Backbone.Marionette.Callbacks();
       callbacks.add(spyOne, context);
 
       callbacks.run();
@@ -80,10 +77,10 @@ describe('callbacks', function() {
   });
 
   describe('when resetting callbacks and re-running them', function() {
-    var spy, numCallbacks;
+    var spy, numCallbacks, callbacks;
 
     beforeEach(function() {
-      var callbacks = new Backbone.Marionette.Callbacks();
+      callbacks = new Backbone.Marionette.Callbacks();
 
       spy = this.sinon.spy();
       callbacks.add(spy);
@@ -104,5 +101,4 @@ describe('callbacks', function() {
       expect(numCallbacks).to.equal(1);
     });
   });
-
 });

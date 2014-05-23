@@ -1,12 +1,9 @@
 describe('destroying views', function() {
-  'use strict';
-
   beforeEach(global.setup);
   afterEach(global.teardown);
 
   describe('when destroying a Marionette.View multiple times', function() {
-    var View = Marionette.View.extend({});
-    var view;
+    var View = Marionette.View.extend({}), view;
 
     beforeEach(function() {
       view = new View();
@@ -26,8 +23,7 @@ describe('destroying views', function() {
   });
 
   describe('when destroying a Marionette.ItemView multiple times', function() {
-    var View = Marionette.ItemView.extend({});
-    var view;
+    var View = Marionette.ItemView.extend({}), view;
 
     beforeEach(function() {
       view = new View();
@@ -47,12 +43,13 @@ describe('destroying views', function() {
   });
 
   describe('when rendering a Marionette.ItemView that was previously destroyed', function() {
-    var View = Marionette.ItemView.extend({
-      template: function() {}
-    });
-    var view;
+    var View, view;
 
     beforeEach(function() {
+      View = Marionette.ItemView.extend({
+        template: function() {}
+      });
+
       view = new View();
       view.onBeforeRender = this.sinon.stub();
       view.onRender = this.sinon.stub();
@@ -66,10 +63,11 @@ describe('destroying views', function() {
   });
 
   describe('when destroying a Marionette.CollectionView multiple times', function() {
-    var View = Marionette.CollectionView.extend({});
-    var view;
+    var View, view;
 
     beforeEach(function() {
+      View = Marionette.CollectionView.extend({});
+
       view = new View();
       view.onBeforeDestroy = this.sinon.stub();
 
@@ -87,16 +85,17 @@ describe('destroying views', function() {
   });
 
   describe('when rendering a Marionette.CollectionView that was previously destroyed', function() {
-    var ItemView = Marionette.ItemView.extend({
-      template: function() {}
-    });
-
-    var CollectionView = Marionette.CollectionView.extend({
-      itemView: ItemView
-    });
-    var view;
+    var ItemView, CollectionView, view;
 
     beforeEach(function() {
+      ItemView = Marionette.ItemView.extend({
+        template: function() {}
+      });
+
+      CollectionView = Marionette.CollectionView.extend({
+        itemView: ItemView
+      });
+
       view = new CollectionView();
       view.onBeforeRender = this.sinon.stub();
       view.onRender = this.sinon.stub();
@@ -110,10 +109,11 @@ describe('destroying views', function() {
   });
 
   describe('when destroying a Marionette.CompositeView multiple times', function() {
-    var View = Marionette.CompositeView.extend({});
-    var view;
+    var View, view;
 
     beforeEach(function() {
+      View = Marionette.CompositeView.extend({});
+
       view = new View();
       view.onBeforeDestroy = this.sinon.stub();
 
@@ -131,17 +131,18 @@ describe('destroying views', function() {
   });
 
   describe('when rendering a Marionette.CompositeView that was previously destroyed', function() {
-    var ItemView = Marionette.ItemView.extend({
-      template: function() {}
-    });
-
-    var CompositeView = Marionette.CompositeView.extend({
-      template: function() {},
-      itemView: ItemView
-    });
-    var view;
+    var ItemView, CompositeView, view;
 
     beforeEach(function() {
+      ItemView = Marionette.ItemView.extend({
+        template: function() {}
+      });
+
+      CompositeView = Marionette.CompositeView.extend({
+        template: function() {},
+        itemView: ItemView
+      });
+
       view = new CompositeView();
 
       view.onBeforeRender = this.sinon.stub();
@@ -154,5 +155,4 @@ describe('destroying views', function() {
       expect(view.render).to.throw('Cannot use a view thats already been destroyed.');
     });
   });
-
 });

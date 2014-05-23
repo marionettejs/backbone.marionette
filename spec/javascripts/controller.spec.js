@@ -1,13 +1,9 @@
 describe('marionette controller', function() {
-
   beforeEach(global.setup);
   afterEach(global.teardown);
 
   describe('when creating an controller', function() {
-
-    var Controller;
-
-    var controller, options, handler;
+    var Controller, controller, options, handler;
 
     beforeEach(function() {
       options = {};
@@ -43,13 +39,10 @@ describe('marionette controller', function() {
     it('should maintain a reference to the options', function() {
       expect(controller.options).to.equal(options);
     });
-
   });
 
   describe('when no options argument is supplied to the constructor', function() {
-    var controller;
-
-    var Controller;
+    var Controller, controller;
 
     beforeEach(function() {
       Controller = Marionette.Controller.extend({
@@ -68,9 +61,7 @@ describe('marionette controller', function() {
   });
 
   describe('when destroying a controller', function() {
-    var controller, destroyHandler, listenToHandler;
-
-    var Controller;
+    var Controller, controller, destroyHandler, listenToHandler;
 
     beforeEach(function() {
       Controller = Marionette.Controller.extend({
@@ -110,5 +101,4 @@ describe('marionette controller', function() {
       expect(controller.onDestroy).to.have.been.calledWith(123, 'second param');
     });
   });
-
 });

@@ -1,4 +1,5 @@
 describe('composite view - childViewContainer', function() {
+  'use strict';
   beforeEach(global.setup);
   afterEach(global.teardown);
 

@@ -1,4 +1,5 @@
 describe('view triggers', function() {
+  'use strict';
   beforeEach(global.setup);
   afterEach(global.teardown);
 

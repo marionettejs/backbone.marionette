@@ -17,24 +17,22 @@ describe('template cache', function() {
   });
 
   describe('when loading a template more than once', function() {
-    var templateCache;
-
     beforeEach(function() {
       Backbone.Marionette.TemplateCache.clear();
 
       this.setFixtures('<script id="t2" type="template">t2</script>');
 
       Backbone.Marionette.TemplateCache.get('#t2');
-      templateCache = Backbone.Marionette.TemplateCache.templateCaches['#t2'];
-      this.sinon.spy(templateCache, 'loadTemplate');
+      this.templateCache = Backbone.Marionette.TemplateCache.templateCaches['#t2'];
+      this.sinon.spy(this.templateCache, 'loadTemplate');
 
       Backbone.Marionette.TemplateCache.get('#t2');
       Backbone.Marionette.TemplateCache.get('#t2');
     });
 
     it('should load from the DOM once', function() {
-      expect(templateCache.loadTemplate).not.to.have.been.called;
-      expect(templateCache.loadTemplate.callCount).to.equal(0);
+      expect(this.templateCache.loadTemplate).not.to.have.been.called;
+      expect(this.templateCache.loadTemplate.callCount).to.equal(0);
     });
   });
 

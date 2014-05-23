@@ -3,156 +3,144 @@ describe('destroying views', function() {
   afterEach(global.teardown);
 
   describe('when destroying a Marionette.View multiple times', function() {
-    var View = Marionette.View.extend({}), view;
-
     beforeEach(function() {
-      view = new View();
-      view.onBeforeDestroy = this.sinon.stub();
+      this.View = Marionette.View.extend({});
+      this.view = new this.View();
+      this.view.onBeforeDestroy = this.sinon.stub();
 
-      view.destroy();
-      view.destroy();
+      this.view.destroy();
+      this.view.destroy();
     });
 
     it('should only run the destroying code once', function() {
-      expect(view.onBeforeDestroy).to.have.been.called;
+      expect(this.view.onBeforeDestroy).to.have.been.called;
     });
 
     it('should mark the view as destroyed', function() {
-      expect(view.isDestroyed).to.be.true;
+      expect(this.view.isDestroyed).to.be.true;
     });
   });
 
   describe('when destroying a Marionette.ItemView multiple times', function() {
-    var View = Marionette.ItemView.extend({}), view;
-
     beforeEach(function() {
-      view = new View();
-      view.onBeforeDestroy = this.sinon.stub();
+      this.View = Marionette.ItemView.extend({});
+      this.view = new this.View();
+      this.view.onBeforeDestroy = this.sinon.stub();
 
-      view.destroy();
-      view.destroy();
+      this.view.destroy();
+      this.view.destroy();
     });
 
     it('should only run the destroying code once', function() {
-      expect(view.onBeforeDestroy).to.have.been.called;
+      expect(this.view.onBeforeDestroy).to.have.been.called;
     });
 
     it('should mark the view as destroyed', function() {
-      expect(view.isDestroyed).to.be.true;
+      expect(this.view.isDestroyed).to.be.true;
     });
   });
 
   describe('when rendering a Marionette.ItemView that was previously destroyed', function() {
-    var View, view;
-
     beforeEach(function() {
-      View = Marionette.ItemView.extend({
+      this.View = Marionette.ItemView.extend({
         template: function() {}
       });
 
-      view = new View();
-      view.onBeforeRender = this.sinon.stub();
-      view.onRender = this.sinon.stub();
+      this.view = new this.View();
+      this.view.onBeforeRender = this.sinon.stub();
+      this.view.onRender = this.sinon.stub();
 
-      view.destroy();
+      this.view.destroy();
     });
 
     it('should throw an error', function() {
-      expect(view.render).to.throw('Cannot use a view thats already been destroyed.');
+      expect(this.view.render).to.throw('Cannot use a view thats already been destroyed.');
     });
   });
 
   describe('when destroying a Marionette.CollectionView multiple times', function() {
-    var View, view;
-
     beforeEach(function() {
-      View = Marionette.CollectionView.extend({});
+      this.View = Marionette.CollectionView.extend({});
 
-      view = new View();
-      view.onBeforeDestroy = this.sinon.stub();
+      this.view = new this.View();
+      this.view.onBeforeDestroy = this.sinon.stub();
 
-      view.destroy();
-      view.destroy();
+      this.view.destroy();
+      this.view.destroy();
     });
 
     it('should only run the destroying code once', function() {
-      expect(view.onBeforeDestroy).to.have.been.called;
+      expect(this.view.onBeforeDestroy).to.have.been.called;
     });
 
     it('should mark the view as destroyed', function() {
-      expect(view.isDestroyed).to.be.true;
+      expect(this.view.isDestroyed).to.be.true;
     });
   });
 
   describe('when rendering a Marionette.CollectionView that was previously destroyed', function() {
-    var ItemView, CollectionView, view;
-
     beforeEach(function() {
-      ItemView = Marionette.ItemView.extend({
+      this.ItemView = Marionette.ItemView.extend({
         template: function() {}
       });
 
-      CollectionView = Marionette.CollectionView.extend({
-        itemView: ItemView
+      this.CollectionView = Marionette.CollectionView.extend({
+        itemView: this.ItemView
       });
 
-      view = new CollectionView();
-      view.onBeforeRender = this.sinon.stub();
-      view.onRender = this.sinon.stub();
+      this.view = new this.CollectionView();
+      this.view.onBeforeRender = this.sinon.stub();
+      this.view.onRender = this.sinon.stub();
 
-      view.destroy();
+      this.view.destroy();
     });
 
     it('should throw an error', function() {
-      expect(view.render).to.throw('Cannot use a view thats already been destroyed.');
+      expect(this.view.render).to.throw('Cannot use a view thats already been destroyed.');
     });
   });
 
   describe('when destroying a Marionette.CompositeView multiple times', function() {
-    var View, view;
-
     beforeEach(function() {
-      View = Marionette.CompositeView.extend({});
+      this.View = Marionette.CompositeView.extend({});
 
-      view = new View();
-      view.onBeforeDestroy = this.sinon.stub();
+      this.view = new this.View();
+      this.view.onBeforeDestroy = this.sinon.stub();
 
-      view.destroy();
-      view.destroy();
+      this.view.destroy();
+      this.view.destroy();
     });
 
     it('should only run the destroying code once', function() {
-      expect(view.onBeforeDestroy).to.have.been.called;
+      expect(this.view.onBeforeDestroy).to.have.been.called;
     });
 
     it('should mark the view as destroyed', function() {
-      expect(view.isDestroyed).to.be.true;
+      expect(this.view.isDestroyed).to.be.true;
     });
   });
 
   describe('when rendering a Marionette.CompositeView that was previously destroyed', function() {
-    var ItemView, CompositeView, view;
-
     beforeEach(function() {
-      ItemView = Marionette.ItemView.extend({
+      this.ItemView = Marionette.ItemView.extend({
         template: function() {}
       });
 
-      CompositeView = Marionette.CompositeView.extend({
+      this.CompositeView = Marionette.CompositeView.extend({
         template: function() {},
-        itemView: ItemView
+        itemView: this.ItemView
       });
 
-      view = new CompositeView();
+      this.view = new this.CompositeView();
 
-      view.onBeforeRender = this.sinon.stub();
-      view.onRender = this.sinon.stub();
+      this.view.onBeforeRender = this.sinon.stub();
+      this.view.onRender = this.sinon.stub();
 
-      view.destroy();
+      this.view.destroy();
     });
 
     it('should throw an error', function() {
-      expect(view.render).to.throw('Cannot use a view thats already been destroyed.');
+      expect(this.view.render).to.throw('Cannot use a view thats already been destroyed.');
     });
   });
 });

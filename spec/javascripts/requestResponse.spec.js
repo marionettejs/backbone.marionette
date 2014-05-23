@@ -3,18 +3,16 @@ describe('application request/response', function() {
   afterEach(global.teardown);
 
   describe('when creating an instance of an Application', function() {
-    var App;
-
     beforeEach(function() {
-      App = new Marionette.Application();
+      this.App = new Marionette.Application();
     });
 
     it('should provide request/response framework', function() {
-      expect(App.reqres).to.be.instanceof(Backbone.Wreqr.RequestResponse);
+      expect(this.App.reqres).to.be.instanceof(Backbone.Wreqr.RequestResponse);
     });
 
     it('should allow direct request', function() {
-      expect(typeof App.request).to.equal('function');
+      expect(typeof this.App.request).to.equal('function');
     });
   });
 });

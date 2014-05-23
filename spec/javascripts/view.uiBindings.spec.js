@@ -3,10 +3,8 @@ describe('view ui elements', function() {
   afterEach(global.teardown);
 
   describe('when accessing a ui element from the hash', function() {
-    var View, view, model;
-
     beforeEach(function() {
-      View = Backbone.Marionette.ItemView.extend({
+      this.View = Backbone.Marionette.ItemView.extend({
         template: '#item-with-checkbox',
 
         ui: {
@@ -17,31 +15,29 @@ describe('view ui elements', function() {
 
       this.loadFixtures('itemWithCheckbox.html');
 
-      model = new Backbone.Model({
+      this.model = new Backbone.Model({
         done: false
       });
 
-      view = new View({
-        model: model
+      this.view = new this.View({
+        model: this.model
       });
 
-      view.render();
+      this.view.render();
     });
 
     it('should return its jQuery selector if it can be found', function() {
-      expect(view.ui.checkbox.attr('type')).to.equal('checkbox');
+      expect(this.view.ui.checkbox.attr('type')).to.equal('checkbox');
     });
 
     it('should return an empty jQuery object if it cannot be found', function() {
-      expect(view.ui.unfoundElement.length).to.equal(0);
+      expect(this.view.ui.unfoundElement.length).to.equal(0);
     });
   });
 
   describe('when re-rendering a view with a UI element configuration', function() {
-    var View, view, model;
-
     beforeEach(function() {
-      View = Backbone.Marionette.ItemView.extend({
+      this.View = Backbone.Marionette.ItemView.extend({
         template: '#item-with-checkbox',
 
         ui: {
@@ -52,33 +48,31 @@ describe('view ui elements', function() {
 
       this.loadFixtures('itemWithCheckbox.html');
 
-      model = new Backbone.Model({
+      this.model = new Backbone.Model({
         done: false
       });
 
-      view = new View({
-        model: model
+      this.view = new this.View({
+        model: this.model
       });
 
-      view.render();
+      this.view.render();
 
       // setting the model 'done' attribute to true will cause the 'checked' attribute
       // to be added to the checkbox element in the subsequent render.
-      view.model.set('done', true);
-      view.render();
+      this.view.model.set('done', true);
+      this.view.render();
     });
 
     it('should return an up-to-date selector on subsequent renders', function() {
-      expect(view.ui.checkbox.attr('checked')).to.exist;
+      expect(this.view.ui.checkbox.attr('checked')).to.exist;
     });
 
   });
 
   describe('when the ui element is a function that returns a hash', function() {
-    var View, view, model;
-
     beforeEach(function() {
-      View = Backbone.Marionette.ItemView.extend({
+      this.View = Backbone.Marionette.ItemView.extend({
         template: '#item-with-checkbox',
 
         ui: function() {
@@ -91,46 +85,44 @@ describe('view ui elements', function() {
 
       this.loadFixtures('itemWithCheckbox.html');
 
-      model = new Backbone.Model({
+      this.model = new Backbone.Model({
         done: false
       });
 
-      view = new View({
-        model: model
+      this.view = new this.View({
+        model: this.model
       });
 
-      view.render();
+      this.view.render();
     });
 
     it('should return its jQuery selector if it can be found', function() {
-      expect(view.ui.checkbox.attr('type')).to.equal('checkbox');
+      expect(this.view.ui.checkbox.attr('type')).to.equal('checkbox');
     });
 
     it('should return an empty jQuery object if it cannot be found', function() {
-      expect(view.ui.unfoundElement.length).to.equal(0);
+      expect(this.view.ui.unfoundElement.length).to.equal(0);
     });
 
     it('should return an up-to-date selector on subsequent renders', function() {
       // asserting state before subsequent render
-      expect(view.ui.checkbox.attr('checked')).to.be.undefined;
+      expect(this.view.ui.checkbox.attr('checked')).to.be.undefined;
 
       // setting the model 'done' attribute to true will cause the 'checked' attribute
       // to be added to the checkbox element in the subsequent render.
-      view.model.set('done', true);
-      view.render();
+      this.view.model.set('done', true);
+      this.view.render();
 
       // since the ui elements selectors are refreshed after each render then the associated selector
       // should point to the newly rendered checkbox element that has the 'checked' attribute.
-      expect(view.ui.checkbox.attr('checked')).to.exist;
+      expect(this.view.ui.checkbox.attr('checked')).to.exist;
     });
 
   });
 
   describe('when destroying a view that has not been rendered', function() {
-    var View, view1, view2;
-
     beforeEach(function() {
-      View = Marionette.ItemView.extend({
+      this.View = Marionette.ItemView.extend({
         template: function() {
           return '<div id="foo"></div>';
         },
@@ -139,21 +131,19 @@ describe('view ui elements', function() {
           foo: '#foo'
         }
       });
-      view1 = new View();
-      view1.destroy();
-      view2 = new View();
+      this.view1 = new this.View();
+      this.view1.destroy();
+      this.view2 = new this.View();
     });
 
     it('should not affect future ui bindings', function() {
-      expect(view2.ui.foo).to.equal('#foo');
+      expect(this.view2.ui.foo).to.equal('#foo');
     });
   });
 
   describe('when destroying a view', function() {
-    var View, view;
-
     beforeEach(function() {
-      View = Marionette.ItemView.extend({
+      this.View = Marionette.ItemView.extend({
         template: function() {
           return '<div id="foo"></div>';
         },
@@ -162,13 +152,13 @@ describe('view ui elements', function() {
           foo: '#foo'
         }
       });
-      view = new View();
-      view.render();
-      view.destroy();
+      this.view = new this.View();
+      this.view.render();
+      this.view.destroy();
     });
 
     it('should unbind UI elements and reset them to the selector', function() {
-      expect(view.ui.foo).to.equal('#foo');
+      expect(this.view.ui.foo).to.equal('#foo');
     });
   });
 });

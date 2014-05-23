@@ -2,102 +2,99 @@ describe('Marionette.bindEntityEvents', function() {
   beforeEach(global.setup);
   afterEach(global.teardown);
 
-  var target, entity;
-
   beforeEach(function() {
-    target = {
+    this.target = {
       foo: this.sinon.spy(),
       bar: this.sinon.spy(),
       listenTo: this.sinon.spy()
     };
 
-    entity = this.sinon.spy();
+    this.entity = this.sinon.spy();
   });
 
   describe('when entity isnt passed', function() {
     beforeEach(function() {
-      Marionette.bindEntityEvents(target, false, {'eventNameMock': 'foo'});
+      Marionette.bindEntityEvents(this.target, false, {'eventNameMock': 'foo'});
     });
 
     it('shouldnt bind any events', function() {
-      expect(target.listenTo).not.to.have.been.called;
+      expect(this.target.listenTo).not.to.have.been.called;
     });
   });
 
   describe('when bindings isnt passed', function() {
     beforeEach(function() {
-      Marionette.bindEntityEvents(target, entity, null);
+      Marionette.bindEntityEvents(this.target, this.entity, null);
     });
 
     it('shouldnt bind any events', function() {
-      expect(target.listenTo).not.to.have.been.called;
+      expect(this.target.listenTo).not.to.have.been.called;
     });
   });
 
   describe('when binding is a function', function() {
-    var bindingsSpy;
-
     beforeEach(function() {
-      bindingsSpy = this.sinon.spy(function() {
+      this.bindingsSpy = this.sinon.spy(function() {
         return {'eventNameMock': 'foo'};
       });
 
-      Marionette.bindEntityEvents(target, entity, bindingsSpy);
+      Marionette.bindEntityEvents(this.target, this.entity, this.bindingsSpy);
     });
 
     it('should evaluate bindings function', function() {
-      expect(bindingsSpy).to.have.been.called;
+      expect(this.bindingsSpy).to.have.been.called;
     });
 
     it('should evaluate bindings function in context of target', function() {
-      expect(bindingsSpy.calledOn(target)).to.be.true;
+      expect(this.bindingsSpy.calledOn(this.target)).to.be.true;
     });
 
     it('should bind events returned from bindings function to targets handlers', function() {
-      expect(target.listenTo).to.have.been.calledWith(entity, 'eventNameMock', target.foo);
+      expect(this.target.listenTo).to.have.been.calledWith(this.entity, 'eventNameMock', this.target.foo);
     });
   });
 
   describe('when bindings is an object with one event-handler pair', function() {
     describe('when handler is a function', function() {
       beforeEach(function() {
-        Marionette.bindEntityEvents(target, entity, {'eventNameMock': target.foo});
+        Marionette.bindEntityEvents(this.target, this.entity, {'eventNameMock': this.target.foo});
       });
 
       it('should bind an event to targets handler', function() {
-        expect(target.listenTo).to.have.been.calledWith(entity, 'eventNameMock', target.foo);
+        expect(this.target.listenTo).to.have.been.calledWith(this.entity, 'eventNameMock', this.target.foo);
       });
     });
 
     describe('when handler is a string', function() {
       describe('when one handler is passed', function() {
         beforeEach(function() {
-          Marionette.bindEntityEvents(target, entity, {'eventNameMock': 'foo'});
+          Marionette.bindEntityEvents(this.target, this.entity, {'eventNameMock': 'foo'});
         });
 
         it('should bind an event to targets handler', function() {
-          expect(target.listenTo).to.have.been.calledWith(entity, 'eventNameMock', target.foo);
+          expect(this.target.listenTo).to.have.been.calledWith(this.entity, 'eventNameMock', this.target.foo);
         });
       });
 
       describe('when multiple handlers are passed', function() {
         beforeEach(function() {
-          Marionette.bindEntityEvents(target, entity, {'eventNameMock': 'foo bar'});
+          Marionette.bindEntityEvents(this.target, this.entity, {'eventNameMock': 'foo bar'});
         });
 
         it('should bind first event to targets handler', function() {
-          expect(target.listenTo).to.have.been.calledWith(entity, 'eventNameMock', target.foo);
+          expect(this.target.listenTo).to.have.been.calledWith(this.entity, 'eventNameMock', this.target.foo);
         });
 
         it('should bind second event to targets handler', function() {
-          expect(target.listenTo).to.have.been.calledWith(entity, 'eventNameMock', target.bar);
+          expect(this.target.listenTo).to.have.been.calledWith(this.entity, 'eventNameMock', this.target.bar);
         });
       });
 
       describe('when handler method doesnt exist', function() {
         it('should throw an exception', function() {
+          var self = this;
           expect(function() {
-            Marionette.bindEntityEvents(target, entity, {'eventNameMock': 'notExistedMethod'});
+            Marionette.bindEntityEvents(self.target, self.entity, {'eventNameMock': 'notExistedMethod'});
           }).to.throw('Method "notExistedMethod" was configured as an event handler, but does not exist.');
         });
       });
@@ -106,36 +103,36 @@ describe('Marionette.bindEntityEvents', function() {
 
   describe('when bindings is an object with multiple event-handler pairs', function() {
     beforeEach(function() {
-      Marionette.bindEntityEvents(target, entity, {
+      Marionette.bindEntityEvents(this.target, this.entity, {
         'firstEventNameMock': 'foo',
         'secondEventNameMock': 'bar'
       });
     });
 
     it('should bind first event to targets handler', function() {
-      expect(target.listenTo).to.have.been.calledWith(entity, 'firstEventNameMock', target.foo);
+      expect(this.target.listenTo).to.have.been.calledWith(this.entity, 'firstEventNameMock', this.target.foo);
     });
 
     it('should bind second event to targets handler', function() {
-      expect(target.listenTo).to.have.been.calledWith(entity, 'secondEventNameMock', target.bar);
+      expect(this.target.listenTo).to.have.been.calledWith(this.entity, 'secondEventNameMock', this.target.bar);
     });
   });
 
   describe('when bindEntityEvents is proxied', function() {
     beforeEach(function() {
-      target = {
+      this.target = {
         foo: this.sinon.spy(),
         bar: this.sinon.spy(),
         listenTo: this.sinon.spy(),
         bindEntityEvents: Marionette.proxyBindEntityEvents
       };
 
-      entity = this.sinon.spy();
-      target.bindEntityEvents(entity, {'eventNameMock': target.foo});
+      this.entity = this.sinon.spy();
+      this.target.bindEntityEvents(this.entity, {'eventNameMock': this.target.foo});
     });
 
-    it('should bind an event to target\'s handler', function() {
-      expect(target.listenTo).to.have.been.calledWith(entity, 'eventNameMock', target.foo);
+    it('should bind an event to targets handler', function() {
+      expect(this.target.listenTo).to.have.been.calledWith(this.entity, 'eventNameMock', this.target.foo);
     });
   });
 });

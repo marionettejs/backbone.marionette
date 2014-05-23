@@ -1,7 +1,5 @@
 describe('pre-compiled template rendering', function() {
   'use strict';
-  beforeEach(global.setup);
-  afterEach(global.teardown);
 
   describe('when rendering views with pre-compiled template functions', function() {
     beforeEach(function() {

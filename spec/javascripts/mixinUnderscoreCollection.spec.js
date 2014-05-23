@@ -1,7 +1,5 @@
 describe('Marionette.actAsCollection', function() {
   'use strict';
-  beforeEach(global.setup);
-  afterEach(global.teardown);
 
   beforeEach(function() {
     this.double = function(v) { return v * 2; };

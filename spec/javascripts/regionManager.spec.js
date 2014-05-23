@@ -1,7 +1,5 @@
 describe('regionManager', function() {
   'use strict';
-  beforeEach(global.setup);
-  afterEach(global.teardown);
 
   describe('.addRegion', function() {
     describe('with a name and selector', function() {

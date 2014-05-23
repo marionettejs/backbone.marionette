@@ -1,13 +1,13 @@
-var fs = require('fs');
-var path = require('path');
 var chai = require('chai');
 var sinon = require('sinon');
 var sinonChai = require('sinon-chai');
+var chaiJq = require('chai-jq');
 
 chai.use(sinonChai);
+chai.use(chaiJq);
 
-global.sinon = sinon;
 global.expect = chai.expect;
+global.sinon = sinon;
 
 if (!global.document || !global.window) {
   var jsdom = require('jsdom').jsdom;
@@ -28,45 +28,7 @@ if (!global.document || !global.window) {
 }
 
 global.$ = global.jQuery = require('jquery');
-
-var chaiJq = require('chai-jq');
-chai.use(chaiJq);
-
 global._ = require('underscore');
 global.Backbone = require('backbone');
 global.Backbone.$ = global.$;
 global.Marionette = require('../../../tmp/backbone.marionette');
-
-var $body = $(document.body);
-
-var setFixtures = function () {
-  _.each(arguments, function (content) {
-    $body.append(content);
-  });
-};
-
-var loadFixtures = function () {
-  _.each(arguments, function (fixture) {
-    var file = path.resolve('./spec/javascripts/fixtures/', fixture);
-    setFixtures(fs.readFileSync(file).toString());
-  });
-};
-
-var clearFixtures = function () {
-  $body.empty();
-};
-
-global.setup = function () {
-  this.sinon = sinon.sandbox.create();
-  this.setFixtures = setFixtures;
-  this.loadFixtures = loadFixtures;
-  this.clearFixtures = clearFixtures;
-};
-
-global.teardown = function () {
-  this.sinon.restore();
-  clearFixtures();
-  window.location.hash = '';
-  Backbone.history.stop();
-  Backbone.history.handlers.length = 0;
-};

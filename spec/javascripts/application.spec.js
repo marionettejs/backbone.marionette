@@ -1,7 +1,5 @@
 describe('marionette application', function() {
   'use strict';
-  beforeEach(global.setup);
-  afterEach(global.teardown);
 
   describe('when registering an initializer and starting the application', function() {
     beforeEach(function() {

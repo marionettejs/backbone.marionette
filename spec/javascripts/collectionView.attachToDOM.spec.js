@@ -3,10 +3,8 @@ describe('attaching collection view to existing DOM structure', function() {
   afterEach(global.teardown);
 
   describe('when initializing a collection view', function() {
-    var CollectionView, collectionView;
-
     beforeEach(function() {
-      CollectionView = Marionette.CollectionView.extend({
+      this.CollectionView = Marionette.CollectionView.extend({
         initialize: function() {
           var m = new Backbone.Model();
           var v = new Backbone.View({
@@ -18,13 +16,13 @@ describe('attaching collection view to existing DOM structure', function() {
         }
       });
 
-      collectionView = new CollectionView({
+      this.collectionView = new this.CollectionView({
         collection: new Backbone.Collection()
       });
     });
 
     it('should be able to store a new child view that was attached to an existing DOM element', function() {
-      expect(collectionView.children.length).to.equal(1);
+      expect(this.collectionView.children.length).to.equal(1);
     });
   });
 });

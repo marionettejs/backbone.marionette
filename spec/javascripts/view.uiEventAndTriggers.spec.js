@@ -3,10 +3,10 @@ describe('view ui event trigger configuration', function() {
   afterEach(global.teardown);
 
   describe('@ui syntax within events and triggers', function() {
-    var View, View2, View3, view, view2, view3, fooHandler, attackHandler, tapHandler, defendHandler;
-
     beforeEach(function() {
-      View = Backbone.Marionette.ItemView.extend({
+      var self = this;
+
+      this.View = Backbone.Marionette.ItemView.extend({
         ui: {
           foo: '.foo',
           bar: '#tap',
@@ -24,15 +24,15 @@ describe('view ui event trigger configuration', function() {
         },
 
         tapper: function() {
-          tapHandler();
+          self.tapHandler();
         },
 
         attack: function() {
-          attackHandler();
+          self.attackHandler();
         },
 
         defend: function() {
-          defendHandler();
+          self.defendHandler();
         },
 
         render: function() {
@@ -40,7 +40,7 @@ describe('view ui event trigger configuration', function() {
         }
       });
 
-      View2 = View.extend({
+      this.View2 = this.View.extend({
         triggers: function() {
           return {
             'click @ui.foo': {
@@ -60,7 +60,7 @@ describe('view ui event trigger configuration', function() {
         }
       });
 
-      View3 = View2.extend({
+      this.View3 = this.View2.extend({
         ui: function() {
           return {
             bar: '#tap'
@@ -68,75 +68,75 @@ describe('view ui event trigger configuration', function() {
         }
       });
 
-      view = new View({
+      this.view = new this.View({
         model: new Backbone.Model()
       });
 
-      view2 = new View2({
+      this.view2 = new this.View2({
         model: new Backbone.Model()
       });
 
-      view3 = new View3({
+      this.view3 = new this.View3({
         model: new Backbone.Model()
       });
 
-      view.render();
-      view2.render();
-      view3.render();
+      this.view.render();
+      this.view2.render();
+      this.view3.render();
 
-      fooHandler = this.sinon.stub();
-      attackHandler = this.sinon.stub();
-      defendHandler = this.sinon.stub();
-      tapHandler = this.sinon.stub();
-      this.sinon.spy(view, 'attack');
-      view.on('do:foo', fooHandler);
-      view2.on('do:foo', fooHandler);
+      this.fooHandler = this.sinon.stub();
+      this.attackHandler = this.sinon.stub();
+      this.defendHandler = this.sinon.stub();
+      this.tapHandler = this.sinon.stub();
+      this.sinon.spy(this.view, 'attack');
+      this.view.on('do:foo', this.fooHandler);
+      this.view2.on('do:foo', this.fooHandler);
     });
 
     it('should correctly trigger an event', function() {
-      view.$('.foo').trigger('click');
-      expect(fooHandler).to.have.been.called;
+      this.view.$('.foo').trigger('click');
+      expect(this.fooHandler).to.have.been.called;
     });
 
     it('should correctly trigger a complex event', function() {
-      view.$('.lap').trigger('click');
-      expect(tapHandler).to.have.been.called;
+      this.view.$('.lap').trigger('click');
+      expect(this.tapHandler).to.have.been.called;
     });
 
     it('should correctly call an event', function() {
-      view.$('#tap').trigger('click');
-      expect(attackHandler).to.have.been.called;
+      this.view.$('#tap').trigger('click');
+      expect(this.attackHandler).to.have.been.called;
     });
 
     it('should correctly call an event with a functional events hash', function() {
-      view2.$('#tap').trigger('click');
-      expect(attackHandler).to.have.been.called;
+      this.view2.$('#tap').trigger('click');
+      expect(this.attackHandler).to.have.been.called;
     });
 
     it('should correctly call an event with a functional triggers hash', function() {
-      view2.$('.foo').trigger('click');
-      expect(fooHandler).to.have.been.called;
+      this.view2.$('.foo').trigger('click');
+      expect(this.fooHandler).to.have.been.called;
     });
 
     it('should correctly call an event with a functional events hash and functional ui hash', function() {
-      view3.$('#tap').trigger('click');
-      expect(attackHandler).to.have.been.called;
+      this.view3.$('#tap').trigger('click');
+      expect(this.attackHandler).to.have.been.called;
     });
 
     describe('when multiple hashes are specified', function() {
       it('should correctly call an event when when the first hash is triggered', function() {
-        view.$('#tap').trigger('click');
-        expect(defendHandler).to.have.been.called;
+        this.view.$('#tap').trigger('click');
+        expect(this.defendHandler).to.have.been.called;
       });
 
       it('should correctly call an event when when the second hash is triggered', function() {
-        view.$('.foo').trigger('click');
-        expect(defendHandler).to.have.been.called;
+        this.view.$('.foo').trigger('click');
+        expect(this.defendHandler).to.have.been.called;
       });
 
       it('should correctly call an event when when the third hash is triggered', function() {
-        view.$('.bat').trigger('click');
-        expect(defendHandler).to.have.been.called;
+        this.view.$('.bat').trigger('click');
+        expect(this.defendHandler).to.have.been.called;
       });
     });
   });

@@ -3,10 +3,8 @@ describe('view entity events', function() {
   afterEach(global.teardown);
 
   describe('when a view has string-based model and collection event configuration', function() {
-    var view, View;
-
     beforeEach(function() {
-      View = Backbone.Marionette.View.extend({
+      this.View = Backbone.Marionette.View.extend({
         modelEvents: {'model-event': 'modelEventHandler modelEventHandler2'},
         collectionEvents: {'collection-event': 'collectionEventHandler collectionEventHandler2'},
 
@@ -16,30 +14,28 @@ describe('view entity events', function() {
         collectionEventHandler2: this.sinon.stub()
       });
 
-      view = new View({
+      this.view = new this.View({
         model: new Backbone.Model(),
         collection: new Backbone.Collection()
       });
     });
 
     it('should wire up model events', function() {
-      view.model.trigger('model-event');
-      expect(view.modelEventHandler).to.have.been.called;
-      expect(view.modelEventHandler2).to.have.been.called;
+      this.view.model.trigger('model-event');
+      expect(this.view.modelEventHandler).to.have.been.called;
+      expect(this.view.modelEventHandler2).to.have.been.called;
     });
 
     it('should wire up collection events', function() {
-      view.collection.trigger('collection-event');
-      expect(view.collectionEventHandler).to.have.been.called;
-      expect(view.collectionEventHandler2).to.have.been.called;
+      this.view.collection.trigger('collection-event');
+      expect(this.view.collectionEventHandler).to.have.been.called;
+      expect(this.view.collectionEventHandler2).to.have.been.called;
     });
   });
 
   describe('when a view has function-based model and collection event configuration', function() {
-    var view, View;
-
     beforeEach(function() {
-      View = Backbone.Marionette.View.extend({
+      this.View = Backbone.Marionette.View.extend({
         modelEvents: {
           'model-event': this.sinon.stub()
         },
@@ -47,82 +43,78 @@ describe('view entity events', function() {
           'collection-event': this.sinon.stub()
         }
       });
-      view = new View({
+      this.view = new this.View({
         model: new Backbone.Model(),
         collection: new Backbone.Collection()
       });
     });
 
     it('should wire up model events', function() {
-      view.model.trigger('model-event');
-      expect(view.modelEvents['model-event']).to.have.been.called;
+      this.view.model.trigger('model-event');
+      expect(this.view.modelEvents['model-event']).to.have.been.called;
     });
 
     it('should wire up collection events', function() {
-      view.collection.trigger('collection-event');
-      expect(view.collectionEvents['collection-event']).to.have.been.called;
+      this.view.collection.trigger('collection-event');
+      expect(this.view.collectionEvents['collection-event']).to.have.been.called;
     });
   });
 
   describe('when a view has model event config with a specified handler method that doesnt exist', function() {
-    var getBadViewInstance, View;
-
     beforeEach(function() {
-      View = Backbone.Marionette.View.extend({
+      var self = this;
+      this.View = Backbone.Marionette.View.extend({
         modelEvents: {foo: 'does_not_exist'}
       });
-      getBadViewInstance = function() {
-        return new View({model: {}});
+      this.getBadViewInstance = function() {
+        return new self.View({model: {}});
       };
     });
 
     it('should error when method doesnt exist', function() {
-      expect(getBadViewInstance).to.throw('Method "does_not_exist" was configured as an event handler, but does not exist.');
+      expect(this.getBadViewInstance).to.throw('Method "does_not_exist" was configured as an event handler, but does not exist.');
     });
   });
 
   describe('when configuring entity events with a function', function() {
-    var View, view, modelHandler, collectionHandler;
-
     beforeEach(function() {
-      modelHandler = this.sinon.stub();
-      collectionHandler = this.sinon.stub();
+      var self = this;
+      this.modelHandler = this.sinon.stub();
+      this.collectionHandler = this.sinon.stub();
 
-      View = Backbone.Marionette.View.extend({
+      this.View = Backbone.Marionette.View.extend({
         modelEvents: function() {
-          return {'model-event': modelHandler};
+          return {'model-event': self.modelHandler};
         },
         collectionEvents: function() {
-          return {'collection-event': collectionHandler};
+          return {'collection-event': self.collectionHandler};
         }
       });
 
-      view = new View({
+      this.view = new this.View({
         model: new Backbone.Model(),
         collection: new Backbone.Collection()
       });
 
-      view.model.trigger('model-event');
-      view.collection.trigger('collection-event');
+      this.view.model.trigger('model-event');
+      this.view.collection.trigger('collection-event');
     });
 
     it('should trigger the model event', function() {
-      expect(modelHandler).to.have.been.called;
+      expect(this.modelHandler).to.have.been.called;
     });
 
     it('should trigger the collection event', function() {
-      expect(collectionHandler).to.have.been.called;
+      expect(this.collectionHandler).to.have.been.called;
     });
   });
 
   describe('when undelegating events on a view', function() {
-    var View, model, collection, view, modelHandler, collectionHandler;
-
     beforeEach(function() {
-      modelHandler = this.sinon.stub();
-      collectionHandler = this.sinon.stub();
+      this.modelHandler = this.sinon.stub();
+      this.collectionHandler = this.sinon.stub();
 
-      View = Marionette.View.extend({
+      this.View = Marionette.View.extend({
         modelEvents: {
           'model-event': 'modelEventHandler'
         },
@@ -131,41 +123,39 @@ describe('view entity events', function() {
           'collection-event': 'collectionEventHandler'
         },
 
-        modelEventHandler: modelHandler,
-        collectionEventHandler: collectionHandler
+        modelEventHandler: this.modelHandler,
+        collectionEventHandler: this.collectionHandler
       });
 
-      model = new Backbone.Model();
-      collection = new Backbone.Collection();
+      this.model = new Backbone.Model();
+      this.collection = new Backbone.Collection();
 
-      view = new View({
-        model: model,
-        collection: collection
+      this.view = new this.View({
+        model: this.model,
+        collection: this.collection
       });
 
-      view.undelegateEvents();
+      this.view.undelegateEvents();
 
-      model.trigger('model-event');
-      collection.trigger('collection-event');
+      this.model.trigger('model-event');
+      this.collection.trigger('collection-event');
     });
 
     it('should undelegate the model events', function() {
-      expect(modelHandler).not.to.have.been.called;
+      expect(this.modelHandler).not.to.have.been.called;
     });
 
     it('should undelegate the collection events', function() {
-      expect(collectionHandler).not.to.have.been.called;
+      expect(this.collectionHandler).not.to.have.been.called;
     });
   });
 
   describe('when undelegating events on a view, delegating them again, and then triggering a model event', function() {
-    var View, view, model, collection, modelHandler, collectionHandler;
-
     beforeEach(function() {
-      modelHandler = this.sinon.stub();
-      collectionHandler = this.sinon.stub();
+      this.modelHandler = this.sinon.stub();
+      this.collectionHandler = this.sinon.stub();
 
-      View = Marionette.View.extend({
+      this.View = Marionette.View.extend({
         modelEvents: {
           'model-event': 'modelEventHandler'
         },
@@ -174,39 +164,39 @@ describe('view entity events', function() {
           'collection-event': 'collectionEventHandler'
         },
 
-        modelEventHandler: modelHandler,
-        collectionEventHandler: collectionHandler
+        modelEventHandler: this.modelHandler,
+        collectionEventHandler: this.collectionHandler
       });
 
-      model = new Backbone.Model();
-      collection = new Backbone.Collection();
+      this.model = new Backbone.Model();
+      this.collection = new Backbone.Collection();
 
-      view = new View({
-        model: model,
-        collection: collection
+      this.view = new this.View({
+        model: this.model,
+        collection: this.collection
       });
 
-      view.undelegateEvents();
-      view.delegateEvents();
+      this.view.undelegateEvents();
+      this.view.delegateEvents();
 
-      model.trigger('model-event');
-      collection.trigger('collection-event');
+      this.model.trigger('model-event');
+      this.collection.trigger('collection-event');
     });
 
     it('should fire the model event once', function() {
-      expect(modelHandler.callCount).to.equal(1);
+      expect(this.modelHandler.callCount).to.equal(1);
     });
 
     it('should fire the collection event once', function() {
-      expect(collectionHandler.callCount).to.equal(1);
+      expect(this.collectionHandler.callCount).to.equal(1);
     });
   });
 
   describe('when LayoutView bound to modelEvent replaces region with new view', function() {
-    var ChildView, ParentView, destroySpy, renderSpy, model, parent;
-
     beforeEach(function() {
-      ChildView = Marionette.ItemView.extend({
+      var self = this;
+
+      this.ChildView = Marionette.ItemView.extend({
         template: _.template(''),
 
         modelEvents: {
@@ -218,7 +208,7 @@ describe('view entity events', function() {
         }
       });
 
-      ParentView = Marionette.LayoutView.extend({
+      this.ParentView = Marionette.LayoutView.extend({
         template: _.template('<div id="child"></div>'),
 
         regions: {
@@ -226,7 +216,7 @@ describe('view entity events', function() {
         },
 
         onRender: function() {
-          this.child.show(new ChildView({
+          this.child.show(new self.ChildView({
             model: this.model
           }));
         },
@@ -236,21 +226,21 @@ describe('view entity events', function() {
         }
       });
 
-      destroySpy = this.sinon.spy(ChildView.prototype, 'destroy');
-      renderSpy = this.sinon.stub(ChildView.prototype, 'render');
+      this.destroySpy = this.sinon.spy(this.ChildView.prototype, 'destroy');
+      this.renderSpy = this.sinon.stub(this.ChildView.prototype, 'render');
 
-      model = new Backbone.Model();
-      parent = new ParentView({
-        model: model
+      this.model = new Backbone.Model();
+      this.parent = new this.ParentView({
+        model: this.model
       });
-      parent.render();
+      this.parent.render();
 
-      model.trigger('sync');
-      model.trigger('sync');
+      this.model.trigger('sync');
+      this.model.trigger('sync');
     });
 
     it('should destroy the previous child view', function() {
-      expect(destroySpy).to.have.been.called;
+      expect(this.destroySpy).to.have.been.called;
     });
 
     it('should undelegate all previous views modelEvents', function() {
@@ -259,7 +249,7 @@ describe('view entity events', function() {
       // we expect ChildView 1 to destroy
       // we expect ChildView 2 to call render (2nd)
       // we expect destroyed ChildView 1 not to call render again
-      expect(renderSpy.callCount).to.equal(5);
+      expect(this.renderSpy.callCount).to.equal(5);
     });
   });
 });

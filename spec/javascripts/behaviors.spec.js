@@ -10,7 +10,7 @@ describe('Behaviors', function() {
 
   describe('behavior parsing with a functional behavior lookup', function() {
     beforeEach(function() {
-      var self = this;
+      var suite = this;
 
       this.Tooltip = this.sinon.spy();
       this.Obj = {
@@ -18,7 +18,7 @@ describe('Behaviors', function() {
       };
 
       Marionette.Behaviors.behaviorsLookup = function() {
-        return self.Obj;
+        return suite.Obj;
       };
     });
 
@@ -88,11 +88,11 @@ describe('Behaviors', function() {
 
     describe('when functional behavior', function() {
       beforeEach(function() {
-        var self = this;
+        var suite = this;
 
         this.View = Marionette.ItemView.extend({
           behaviors: function() {
-            self.context = this;
+            suite.context = this;
             return {
               Tooltip: {
                 behaviorClass: this.Tooltip,
@@ -136,7 +136,7 @@ describe('Behaviors', function() {
 
   describe('behavior initialize', function() {
     beforeEach(function() {
-      var self = this;
+      var suite = this;
 
       this.Behavior = Marionette.Behavior.extend({
         initialize: this.sinon.spy()
@@ -145,8 +145,8 @@ describe('Behaviors', function() {
       this.Obj = {
         Tooltip: Marionette.Behavior.extend({
           initialize: function(options, view) {
-            self.behaviorOptions = options;
-            self.viewOptions = view.options;
+            suite.behaviorOptions = options;
+            suite.viewOptions = view.options;
           }
         })
       };
@@ -246,12 +246,12 @@ describe('Behaviors', function() {
 
   describe('behavior $el', function() {
     beforeEach(function() {
-      var self = this;
+      var suite = this;
 
       this.hold = {};
       this.hold.test = Marionette.Behavior.extend({
         initialize: function() {
-          self.behavior = this;
+          suite.behavior = this;
         }
       });
 
@@ -275,7 +275,7 @@ describe('Behaviors', function() {
 
   describe('behavior UI', function() {
     beforeEach(function() {
-      var self = this;
+      var suite = this;
       this.hold = {};
       this.spy = this.sinon.spy();
       this.onShowSpy = this.sinon.spy();
@@ -288,14 +288,14 @@ describe('Behaviors', function() {
           doge: '.doge'
         },
         initialize: function() {
-          self.testBehavior = this;
+          suite.testBehavior = this;
         },
         events: {
           'click @ui.doge': 'onDogeClick',
           'click @ui.coins': 'onCoinsClick'
         },
         onRender: function() {
-          self.spy(this.ui.doge.length);
+          suite.spy(this.ui.doge.length);
         },
         onShow: this.onShowSpy,
         onDestroy: this.onDestroySpy,
@@ -321,7 +321,7 @@ describe('Behaviors', function() {
           topRegion: '.top'
         },
         onRender: function() {
-          this.topRegion.show(new self.View());
+          this.topRegion.show(new suite.View());
         }
       });
     });
@@ -480,7 +480,7 @@ describe('Behaviors', function() {
 
   describe('behavior instance events', function() {
     beforeEach(function() {
-      var self = this;
+      var suite = this;
       this.listenToSpy = this.sinon.spy();
       this.onSpy       = this.sinon.spy();
       this.model       = new Backbone.Model();
@@ -490,8 +490,8 @@ describe('Behaviors', function() {
           cat: {
             behaviorClass: (Marionette.Behavior.extend({
               initialize: function() {
-                this.listenTo(self.model, 'change', self.listenToSpy);
-                this.on('wow', self.onSpy);
+                this.listenTo(suite.model, 'change', suite.listenToSpy);
+                this.on('wow', suite.onSpy);
               }
             }))
           }
@@ -514,7 +514,7 @@ describe('Behaviors', function() {
 
   describe('behavior model events', function() {
     beforeEach(function() {
-      var self = this;
+      var suite = this;
       this.modelSpy = this.sinon.spy();
       this.collectionSpy = this.sinon.spy();
       this.fooChangedSpy = this.sinon.spy();
@@ -523,7 +523,7 @@ describe('Behaviors', function() {
 
       this.hold.test = Marionette.Behavior.extend({
         initialize: function() {
-          self.testBehavior = this;
+          suite.testBehavior = this;
         },
         modelEvents: {
           change: this.modelSpy,
@@ -659,7 +659,7 @@ describe('Behaviors', function() {
 
   describe('behavior with behavior', function() {
     beforeEach(function() {
-      var self = this;
+      var suite = this;
       this.initSpy = this.sinon.spy();
       this.renderSpy = this.sinon.spy();
       this.childRenderSpy = this.sinon.spy();
@@ -671,7 +671,7 @@ describe('Behaviors', function() {
       this.hold = {};
       this.hold.parentB = Marionette.Behavior.extend({
         initialize: function() {
-          self.parentBehavior = this;
+          suite.parentBehavior = this;
         },
         ui: {
           parent: '.parent'
@@ -686,8 +686,8 @@ describe('Behaviors', function() {
 
       this.hold.childB = Marionette.Behavior.extend({
         initialize: function() {
-          self.initSpy();
-          self.groupedBehavior = this;
+          suite.initSpy();
+          suite.groupedBehavior = this;
         },
         onRender: this.childRenderSpy,
         ui: {

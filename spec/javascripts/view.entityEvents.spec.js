@@ -1,4 +1,5 @@
 describe('view entity events', function() {
+  'use strict';
   beforeEach(global.setup);
   afterEach(global.teardown);
 

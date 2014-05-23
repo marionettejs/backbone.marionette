@@ -1,4 +1,5 @@
 describe('destroying views', function() {
+  'use strict';
   beforeEach(global.setup);
   afterEach(global.teardown);
 

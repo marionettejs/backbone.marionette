@@ -1,7 +1,5 @@
 describe('destroying views', function() {
   'use strict';
-  beforeEach(global.setup);
-  afterEach(global.teardown);
 
   describe('when destroying a Marionette.View multiple times', function() {
     beforeEach(function() {

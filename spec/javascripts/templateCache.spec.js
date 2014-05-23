@@ -1,7 +1,5 @@
 describe('template cache', function() {
   'use strict';
-  beforeEach(global.setup);
-  afterEach(global.teardown);
 
   describe('when loading a template for the first time', function() {
     beforeEach(function() {

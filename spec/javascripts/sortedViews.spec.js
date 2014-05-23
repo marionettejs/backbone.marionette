@@ -1,7 +1,5 @@
 describe('collection/composite view sorting', function(){
   'use strict';
-  beforeEach(global.setup);
-  afterEach(global.teardown);
 
   beforeEach(function() {
     // Shared View Definitions

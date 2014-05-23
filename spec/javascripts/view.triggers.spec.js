@@ -1,7 +1,5 @@
 describe('view triggers', function() {
   'use strict';
-  beforeEach(global.setup);
-  afterEach(global.teardown);
 
   describe('when DOM events are configured to trigger a view event, and the DOM events are fired', function() {
     beforeEach(function() {

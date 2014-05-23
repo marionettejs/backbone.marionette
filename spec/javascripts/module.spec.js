@@ -1,7 +1,5 @@
 describe('application modules', function() {
   'use strict';
-  beforeEach(global.setup);
-  afterEach(global.teardown);
 
   beforeEach(function() {
     this.app = new Backbone.Marionette.Application();
@@ -382,6 +380,7 @@ describe('application modules', function() {
             this.child = this.app.module('Parent.Child', {startWithParent: false});
 
             this.childStartSpy = this.sinon.spy(this.child, 'start');
+            this.parentStartSpy = this.sinon.spy(this.parent, 'start');
             this.parent.start();
           });
 

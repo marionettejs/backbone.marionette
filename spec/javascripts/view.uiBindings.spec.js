@@ -1,7 +1,5 @@
 describe('view ui elements', function() {
   'use strict';
-  beforeEach(global.setup);
-  afterEach(global.teardown);
 
   describe('when accessing a ui element from the hash', function() {
     beforeEach(function() {

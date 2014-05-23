@@ -1,7 +1,5 @@
 describe('base view', function() {
   'use strict';
-  beforeEach(global.setup);
-  afterEach(global.teardown);
 
   describe('when initializing a view', function() {
     beforeEach(function() {

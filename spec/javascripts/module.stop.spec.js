@@ -1,7 +1,5 @@
 describe('module stop', function() {
   'use strict';
-  beforeEach(global.setup);
-  afterEach(global.teardown);
 
   beforeEach(function() {
     this.App = new Backbone.Marionette.Application();

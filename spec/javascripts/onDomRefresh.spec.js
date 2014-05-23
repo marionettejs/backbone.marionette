@@ -1,7 +1,5 @@
 describe('onDomRefresh', function() {
   'use strict';
-  beforeEach(global.setup);
-  afterEach(global.teardown);
 
   beforeEach(function() {
     this.View = Backbone.Marionette.ItemView.extend({

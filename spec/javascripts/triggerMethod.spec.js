@@ -1,7 +1,5 @@
 describe('trigger event and method name', function() {
   'use strict';
-  beforeEach(global.setup);
-  afterEach(global.teardown);
 
   beforeEach(function() {
     this.view = new Marionette.View();

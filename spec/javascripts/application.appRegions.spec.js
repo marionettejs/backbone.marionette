@@ -13,8 +13,8 @@ describe('application regions', function() {
       this.setFixtures('<div id="region"></div>');
       this.setFixtures('<div id="region2"></div>');
 
-      beforeAddHandler = sinon.spy();
-      addHandler = sinon.spy();
+      beforeAddHandler = this.sinon.spy();
+      addHandler = this.sinon.spy();
 
       MyApp.on('before:add:region', beforeAddHandler);
       MyApp.on('add:region', addHandler);
@@ -141,15 +141,10 @@ describe('application regions', function() {
       r1 = app.myRegion;
       r2 = app.r2;
 
-      sinon.spy(r1, 'destroy');
-      sinon.spy(r2, 'destroy');
+      this.sinon.spy(r1, 'destroy');
+      this.sinon.spy(r2, 'destroy');
 
       app.destroyRegions();
-    });
-
-    afterEach(function () {
-      r1.destroy.restore();
-      r2.destroy.restore();
     });
 
     it('should destroy the regions', function() {
@@ -167,8 +162,8 @@ describe('application regions', function() {
       this.setFixtures('<div id="region"></div>');
       this.setFixtures('<div id="region2"></div>');
 
-      beforeRemoveHandler = sinon.spy();
-      removeHandler = sinon.spy();
+      beforeRemoveHandler = this.sinon.spy();
+      removeHandler = this.sinon.spy();
 
       MyApp.on('before:remove:region', beforeRemoveHandler);
       MyApp.on('remove:region', removeHandler);

@@ -10,7 +10,7 @@ describe('destroying views', function() {
 
     beforeEach(function() {
       view = new View();
-      view.onBeforeDestroy = sinon.stub();
+      view.onBeforeDestroy = this.sinon.stub();
 
       view.destroy();
       view.destroy();
@@ -31,7 +31,7 @@ describe('destroying views', function() {
 
     beforeEach(function() {
       view = new View();
-      view.onBeforeDestroy = sinon.stub();
+      view.onBeforeDestroy = this.sinon.stub();
 
       view.destroy();
       view.destroy();
@@ -54,8 +54,8 @@ describe('destroying views', function() {
 
     beforeEach(function() {
       view = new View();
-      view.onBeforeRender = sinon.stub();
-      view.onRender = sinon.stub();
+      view.onBeforeRender = this.sinon.stub();
+      view.onRender = this.sinon.stub();
 
       view.destroy();
     });
@@ -71,7 +71,7 @@ describe('destroying views', function() {
 
     beforeEach(function() {
       view = new View();
-      view.onBeforeDestroy = sinon.stub();
+      view.onBeforeDestroy = this.sinon.stub();
 
       view.destroy();
       view.destroy();
@@ -98,8 +98,8 @@ describe('destroying views', function() {
 
     beforeEach(function() {
       view = new CollectionView();
-      view.onBeforeRender = sinon.stub();
-      view.onRender = sinon.stub();
+      view.onBeforeRender = this.sinon.stub();
+      view.onRender = this.sinon.stub();
 
       view.destroy();
     });
@@ -115,7 +115,7 @@ describe('destroying views', function() {
 
     beforeEach(function() {
       view = new View();
-      view.onBeforeDestroy = sinon.stub();
+      view.onBeforeDestroy = this.sinon.stub();
 
       view.destroy();
       view.destroy();
@@ -144,8 +144,8 @@ describe('destroying views', function() {
     beforeEach(function() {
       view = new CompositeView();
 
-      view.onBeforeRender = sinon.stub();
-      view.onRender = sinon.stub();
+      view.onBeforeRender = this.sinon.stub();
+      view.onRender = this.sinon.stub();
 
       view.destroy();
     });

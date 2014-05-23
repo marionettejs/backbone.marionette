@@ -8,12 +8,12 @@ describe('Marionette.unbindEntityEvents', function() {
 
   beforeEach(function() {
     target = {
-      foo: sinon.spy(),
-      bar: sinon.spy(),
-      stopListening: sinon.spy()
+      foo: this.sinon.spy(),
+      bar: this.sinon.spy(),
+      stopListening: this.sinon.spy()
     };
 
-    entity = sinon.spy();
+    entity = this.sinon.spy();
   });
 
   describe('when entity isnt passed', function() {
@@ -40,7 +40,7 @@ describe('Marionette.unbindEntityEvents', function() {
     var bindingsSpy;
 
     beforeEach(function() {
-      bindingsSpy = sinon.spy(function() {
+      bindingsSpy = this.sinon.spy(function() {
         return {'eventNameMock': 'foo'};
       });
 
@@ -118,13 +118,13 @@ describe('Marionette.unbindEntityEvents', function() {
  describe('when unbindEntityEvents is proxied', function() {
     beforeEach(function() {
       target = {
-        foo: sinon.spy(),
-        bar: sinon.spy(),
-        stopListening: sinon.spy(),
+        foo: this.sinon.spy(),
+        bar: this.sinon.spy(),
+        stopListening: this.sinon.spy(),
         unbindEntityEvents: Marionette.proxyUnbindEntityEvents
       };
 
-      entity = sinon.spy();
+      entity = this.sinon.spy();
       target.unbindEntityEvents(entity, {'eventNameMock': target.foo});
     });
 

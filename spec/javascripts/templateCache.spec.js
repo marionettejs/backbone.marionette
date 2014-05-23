@@ -8,13 +8,9 @@ describe('template cache', function() {
     beforeEach(function() {
       this.setFixtures('<script id="t1" type="template">t1</script>');
 
-      sinon.spy(Backbone.Marionette.TemplateCache.prototype, 'loadTemplate');
+      this.sinon.spy(Backbone.Marionette.TemplateCache.prototype, 'loadTemplate');
 
       Backbone.Marionette.TemplateCache.get('#t1');
-    });
-
-    afterEach(function() {
-      Backbone.Marionette.TemplateCache.prototype.loadTemplate.restore();
     });
 
     it('should load from the DOM', function() {
@@ -32,14 +28,10 @@ describe('template cache', function() {
 
       Backbone.Marionette.TemplateCache.get('#t2');
       templateCache = Backbone.Marionette.TemplateCache.templateCaches['#t2'];
-      sinon.spy(templateCache, 'loadTemplate');
+      this.sinon.spy(templateCache, 'loadTemplate');
 
       Backbone.Marionette.TemplateCache.get('#t2');
       Backbone.Marionette.TemplateCache.get('#t2');
-    });
-
-    afterEach(function() {
-      templateCache.loadTemplate.restore();
     });
 
     it('should load from the DOM once', function() {

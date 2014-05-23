@@ -17,8 +17,8 @@ describe('application modules', function() {
 
       beforeEach(function() {
         app = new Backbone.Marionette.Application();
-        initializeSpy = sinon.stub();
-        defineSpy = sinon.stub();
+        initializeSpy = this.sinon.stub();
+        defineSpy = this.sinon.stub();
       });
 
       describe('and no params are passed in', function() {
@@ -125,7 +125,7 @@ describe('application modules', function() {
           var initializeOptionSpy;
 
           beforeEach(function() {
-            initializeOptionSpy = sinon.stub();
+            initializeOptionSpy = this.sinon.stub();
 
             var ModuleClass = Backbone.Marionette.Module.extend({
               initialize: initializeSpy,
@@ -244,8 +244,8 @@ describe('application modules', function() {
         var module, aSpy, bSpy;
 
         beforeEach(function() {
-          aSpy = sinon.spy();
-          bSpy = sinon.spy();
+          aSpy = this.sinon.spy();
+          bSpy = this.sinon.spy();
 
           module = app.module('Mod', {
             propA: 'module property a',
@@ -286,8 +286,8 @@ describe('application modules', function() {
         var parentDefineSpy, childDefineSpy;
 
         beforeEach(function() {
-          parentDefineSpy = sinon.stub();
-          childDefineSpy = sinon.stub();
+          parentDefineSpy = this.sinon.stub();
+          childDefineSpy = this.sinon.stub();
 
           parent = app.module('parent', parentDefineSpy);
           child = app.module('parent.child', childDefineSpy);
@@ -313,7 +313,7 @@ describe('application modules', function() {
       describe('and the parent is not already created', function() {
         var defineSpy;
         beforeEach(function() {
-          defineSpy = sinon.stub();
+          defineSpy = this.sinon.stub();
           child = app.module('parent.child', defineSpy);
         });
 
@@ -336,10 +336,10 @@ describe('application modules', function() {
     describe('when starting a module', function() {
       var module, startSpy, beforeStartSpy, initializeSpy1, initializeSpy2;
       beforeEach(function() {
-        startSpy = sinon.stub();
-        beforeStartSpy = sinon.stub();
-        initializeSpy1 = sinon.stub();
-        initializeSpy2 = sinon.stub();
+        startSpy = this.sinon.stub();
+        beforeStartSpy = this.sinon.stub();
+        initializeSpy1 = this.sinon.stub();
+        initializeSpy2 = this.sinon.stub();
 
         module = app.module('Mod');
         module.on('before:start', beforeStartSpy);
@@ -373,7 +373,7 @@ describe('application modules', function() {
 
       beforeEach(function() {
         var module = app.module('Mod');
-        startSpy = sinon.spy();
+        startSpy = this.sinon.spy();
         module.on('before:start', startSpy);
         module.start();
         module.start();
@@ -393,14 +393,9 @@ describe('application modules', function() {
             parent = app.module('Parent');
             child = app.module('Parent.Child');
 
-            childStartSpy = sinon.spy(child, 'start');
-            parentStartSpy = sinon.spy(parent, 'start');
+            childStartSpy = this.sinon.spy(child, 'start');
+            parentStartSpy = this.sinon.spy(parent, 'start');
             parent.start();
-          });
-
-          afterEach(function() {
-            child.start.restore();
-            parent.start.restore();
           });
 
           it('parent is started', function() {
@@ -417,12 +412,8 @@ describe('application modules', function() {
             parent = app.module('Parent', {startWithParent: false});
             child = app.module('Parent.Child', {startWithParent: false});
 
-            childStartSpy = sinon.spy(child, 'start');
+            childStartSpy = this.sinon.spy(child, 'start');
             parent.start();
-          });
-
-          afterEach(function() {
-            child.start.restore();
           });
 
           it('the parent is started', function() {
@@ -442,7 +433,7 @@ describe('application modules', function() {
       describe('', function() {
         beforeEach(function() {
           var module = app.module('Mod');
-          startSpy = sinon.spy(module, 'start');
+          startSpy = this.sinon.spy(module, 'start');
           app.start();
         });
 
@@ -454,7 +445,7 @@ describe('application modules', function() {
       describe('and its module is set to not start with parent', function() {
         beforeEach(function() {
           var module = app.module('Mod', {startWithParent: false});
-          startSpy = sinon.spy(module, 'start');
+          startSpy = this.sinon.spy(module, 'start');
           app.start();
         });
 
@@ -470,7 +461,7 @@ describe('application modules', function() {
 
       beforeEach(function() {
         app.start();
-        initializeSpy = sinon.stub();
+        initializeSpy = this.sinon.stub();
 
         module = app.module('Mod');
         module.addInitializer(initializeSpy);
@@ -493,9 +484,9 @@ describe('application modules', function() {
       var module, beforeStopSpy, stopSpy, finalizerSpy;
 
       beforeEach(function() {
-        beforeStopSpy = sinon.spy();
-        stopSpy = sinon.spy();
-        finalizerSpy = sinon.spy();
+        beforeStopSpy = this.sinon.spy();
+        stopSpy = this.sinon.spy();
+        finalizerSpy = this.sinon.spy();
 
         module = app.module('Mod');
         module.addFinalizer(finalizerSpy);
@@ -523,16 +514,16 @@ describe('application modules', function() {
       var module, child, beforeStopSpy, stopSpy, finalizerSpy;
 
       beforeEach(function() {
-        beforeStopSpy = sinon.spy();
-        stopSpy = sinon.spy();
-        finalizerSpy = sinon.spy();
+        beforeStopSpy = this.sinon.spy();
+        stopSpy = this.sinon.spy();
+        finalizerSpy = this.sinon.spy();
 
         module = app.module('Mod');
         child = app.module('Mod.Child');
         child.addFinalizer(finalizerSpy);
         child.on('before:stop', beforeStopSpy);
         child.on('stop', stopSpy);
-        sinon.spy(child, 'stop');
+        this.sinon.spy(child, 'stop');
 
         module.start();
         module.stop();
@@ -560,10 +551,10 @@ describe('application modules', function() {
       var parent, child, parentFinalizerSpy, childFinalizerSpy, parentStopSpy, childStopSpy;
 
       beforeEach(function() {
-        parentFinalizerSpy = sinon.spy();
-        childFinalizerSpy = sinon.spy();
-        parentStopSpy = sinon.spy();
-        childStopSpy = sinon.spy();
+        parentFinalizerSpy = this.sinon.spy();
+        childFinalizerSpy = this.sinon.spy();
+        parentStopSpy = this.sinon.spy();
+        childStopSpy = this.sinon.spy();
 
         parent = app.module('Parent');
         child = app.module('Child');

@@ -1,6 +1,4 @@
 describe('region', function() {
-  'use strict';
-
   beforeEach(global.setup);
   afterEach(global.teardown);
 
@@ -53,19 +51,19 @@ describe('region', function() {
   });
 
   describe('when creating a new region and the "el" does not exist in DOM', function() {
-    var MyRegion = Backbone.Marionette.Region.extend({
-      el: '#not-existed-region'
-    });
-
-    var MyView = Backbone.Marionette.View.extend({
-      render: function() {
-        $(this.el).html('some content');
-      }
-    });
-
-    var myRegion;
+    var MyRegion, MyView, myRegion;
 
     beforeEach(function() {
+      MyRegion = Backbone.Marionette.Region.extend({
+        el: '#not-existed-region'
+      });
+
+      MyView = Backbone.Marionette.View.extend({
+        render: function() {
+          $(this.el).html('some content');
+        }
+      });
+
       this.setFixtures('<div id="region"></div>');
       myRegion = new MyRegion();
     });
@@ -81,29 +79,25 @@ describe('region', function() {
   });
 
   describe('when showing an initial view', function() {
-    var MyRegion = Backbone.Marionette.Region.extend({
-      el: '#region',
-
-      onShow: function() {},
-
-      onSwap: function() {}
-    });
-
-    var MyView = Backbone.View.extend({
-      render: function() {
-        $(this.el).html('some content');
-      },
-
-      destroy: function() {},
-
-      onShow: function() {
-        $(this.el).addClass('onShowClass');
-      }
-    });
-
-    var myRegion, view, showSpy, regionBeforeShowSpy, swapSpy, regionBeforeSwapSpy, regionSwapSpy, viewBeforeShowSpy, setHtmlSpy;
+    var MyRegion, MyView, myRegion, view, showSpy, regionBeforeShowSpy, swapSpy, regionBeforeSwapSpy, regionSwapSpy, viewBeforeShowSpy, setHtmlSpy;
 
     beforeEach(function() {
+      MyRegion = Backbone.Marionette.Region.extend({
+        el: '#region',
+        onShow: function() {},
+        onSwap: function() {}
+      });
+
+      MyView = Backbone.View.extend({
+        render: function() {
+          $(this.el).html('some content');
+        },
+        destroy: function() {},
+        onShow: function() {
+          $(this.el).addClass('onShowClass');
+        }
+      });
+
       this.setFixtures('<div id="region"></div>');
       showSpy = this.sinon.spy();
       regionBeforeShowSpy = this.sinon.spy();
@@ -217,21 +211,21 @@ describe('region', function() {
     });
 
     describe('when passing "preventDestroy" option', function() {
-      var MyView2 = Backbone.View.extend({
-        render: function() {
-          $(this.el).html('some more content');
-        },
-
-        destroy: function() {},
-
-        onShow: function() {
-          $(this.el).addClass('onShowClass');
-        }
-      });
-
-      var myRegion, view1, view2;
+      var MyView2, myRegion, view1, view2;
 
       beforeEach(function() {
+        MyView2 = Backbone.View.extend({
+          render: function() {
+            $(this.el).html('some more content');
+          },
+
+          destroy: function() {},
+
+          onShow: function() {
+            $(this.el).addClass('onShowClass');
+          }
+        });
+
         this.setFixtures('<div id="region"></div>');
 
         view1 = new MyView();
@@ -271,8 +265,7 @@ describe('region', function() {
   });
 
   describe('when showing nested views', function() {
-    var MyRegion, LayoutView, SubView, region, setHtmlSpy,
-      innerRegionBeforeShowSpy, innerRegionShowSpy;
+    var MyRegion, LayoutView, SubView, region, setHtmlSpy, innerRegionBeforeShowSpy, innerRegionShowSpy;
 
     MyRegion = Backbone.Marionette.Region.extend({
       el: '#region'
@@ -328,21 +321,21 @@ describe('region', function() {
   });
 
   describe('when a view is already shown and showing another', function() {
-    var MyRegion = Backbone.Marionette.Region.extend({
-      el: '#region'
-    });
-
-    var MyView = Backbone.View.extend({
-      render: function() {
-        $(this.el).html('some content');
-      },
-
-      destroy: function() {}
-    });
-
-    var myRegion, view1, view2;
+    var MyRegion, MyView, myRegion, view1, view2;
 
     beforeEach(function() {
+      MyRegion = Backbone.Marionette.Region.extend({
+        el: '#region'
+      });
+
+      MyView = Backbone.View.extend({
+        render: function() {
+          $(this.el).html('some content');
+        },
+
+        destroy: function() {}
+      });
+
       this.setFixtures('<div id="region"></div>');
 
       view1 = new MyView();
@@ -365,22 +358,21 @@ describe('region', function() {
   });
 
   describe('when a view is already shown and showing the same one', function() {
-    var MyRegion = Backbone.Marionette.Region.extend({
-      el: '#region'
-    });
-
-    var MyView = Backbone.View.extend({
-      render: function() {
-        $(this.el).html('some content');
-      },
-
-      destroy: function() {},
-      setHtml: function() {}
-    });
-
-    var myRegion, view;
+    var MyRegion, MyView, myRegion, view;
 
     beforeEach(function() {
+      MyRegion = Backbone.Marionette.Region.extend({
+        el: '#region'
+      });
+
+      MyView = Backbone.View.extend({
+        render: function() {
+          $(this.el).html('some content');
+        },
+        destroy: function() {},
+        setHtml: function() {}
+      });
+
       this.setFixtures('<div id="region"></div>');
 
       view = new MyView();
@@ -407,22 +399,22 @@ describe('region', function() {
   });
 
   describe('when a view is already shown and showing the same one with a forceShow flag', function() {
-    var MyRegion = Backbone.Marionette.Region.extend({
-      el: '#region'
-    });
-
-    var MyView = Backbone.View.extend({
-      render: function() {
-        $(this.el).html('some content');
-      },
-
-      destroy: function() {},
-      setHtml: function() {}
-    });
-
-    var myRegion, view;
+    var MyRegion, MyView, myRegion, view;
 
     beforeEach(function() {
+      MyRegion = Backbone.Marionette.Region.extend({
+        el: '#region'
+      });
+
+      MyView = Backbone.View.extend({
+        render: function() {
+          $(this.el).html('some content');
+        },
+
+        destroy: function() {},
+        setHtml: function() {}
+      });
+
       this.setFixtures('<div id="region"></div>');
 
       view = new MyView();
@@ -449,18 +441,18 @@ describe('region', function() {
   });
 
   describe('when a view is already shown but destroyed externally', function() {
-    var MyRegion = Backbone.Marionette.Region.extend({
-      el: '#region'
-    });
-
-    var MyView = Backbone.Marionette.ItemView.extend({
-      template: _.template('<div></div>'),
-      setHtml : function() {}
-    });
-
-    var myRegion, view;
+    var MyRegion, MyView, myRegion, view;
 
     beforeEach(function() {
+      MyRegion = Backbone.Marionette.Region.extend({
+        el: '#region'
+      });
+
+      MyView = Backbone.Marionette.ItemView.extend({
+        template: _.template('<div></div>'),
+        open : function() {}
+      });
+
       this.setFixtures('<div id="region"></div>');
 
       view = new MyView();
@@ -481,19 +473,19 @@ describe('region', function() {
   });
 
   describe('when a view is already destroyed and showing another', function() {
-    var MyRegion = Backbone.Marionette.Region.extend({
-      el: '#region'
-    });
-
-    var MyView = Backbone.Marionette.View.extend({
-      render: function() {
-        $(this.el).html('some content');
-      }
-    });
-
-    var myRegion, view1, view2;
+    var MyRegion, MyView, myRegion, view1, view2;
 
     beforeEach(function() {
+      MyRegion = Backbone.Marionette.Region.extend({
+        el: '#region'
+      });
+
+      MyView = Backbone.Marionette.View.extend({
+        render: function() {
+          $(this.el).html('some content');
+        }
+      });
+
       this.setFixtures('<div id="region"></div>');
 
       view1 = new MyView();
@@ -513,21 +505,21 @@ describe('region', function() {
   });
 
   describe('when destroying the current view', function() {
-    var MyRegion = Backbone.Marionette.Region.extend({
-      el: '#region'
-    });
-
-    var MyView = Backbone.View.extend({
-      render: function() {
-        $(this.el).html('some content');
-      },
-
-      destroy: function() {}
-    });
-
-    var myRegion, view, beforeDestroySpy ,destroyedSpy;
+    var MyRegion, MyView, myRegion, view, beforeDestroySpy ,destroyedSpy;
 
     beforeEach(function() {
+      MyRegion = Backbone.Marionette.Region.extend({
+        el: '#region'
+      });
+
+      MyView = Backbone.View.extend({
+        render: function() {
+          $(this.el).html('some content');
+        },
+
+        destroy: function() {}
+      });
+
       this.setFixtures('<div id="region"></div>');
       beforeDestroySpy = this.sinon.spy();
       destroyedSpy = this.sinon.spy();
@@ -579,19 +571,19 @@ describe('region', function() {
   });
 
   describe('when destroying the current view and it does not have a "destroy" method', function() {
-    var MyRegion = Backbone.Marionette.Region.extend({
-      el: '<div></div>'
-    });
-
-    var MyView = Backbone.View.extend({
-      render: function() {
-        $(this.el).html('some content');
-      }
-    });
-
-    var myRegion, view;
+    var MyRegion, MyView, myRegion, view;
 
     beforeEach(function() {
+      MyRegion = Backbone.Marionette.Region.extend({
+        el: '<div></div>'
+      });
+
+      MyView = Backbone.View.extend({
+        render: function() {
+          $(this.el).html('some content');
+        }
+      });
+
       view = new MyView();
       this.sinon.spy(view, 'remove');
       myRegion = new MyRegion();
@@ -772,6 +764,5 @@ describe('region', function() {
     it('should destroy any existing view', function() {
       expect(region.destroy).to.have.been.called;
     });
-
   });
 });

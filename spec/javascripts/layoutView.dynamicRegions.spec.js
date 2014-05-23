@@ -1,14 +1,17 @@
 describe('layoutView - dynamic regions', function() {
-
   beforeEach(global.setup);
   afterEach(global.teardown);
 
-  var template = function() {
-    return '<div id="foo"></div><div id="bar"></div>';
-  };
+  var template;
+
+  beforeEach(function() {
+    template = function() {
+      return '<div id="foo"></div><div id="bar"></div>';
+    };
+  });
 
   describe('when adding a region to a layoutView, after it has been rendered', function() {
-    var MyLayoutView, layoutView, region, addHandler, onAddSpy, beforeAddHandler, onBeforeAddSpy;
+    var MyLayoutView, layoutView, region, addHandler, onAddSpy, beforeAddHandler, onBeforeAddSpy, view;
 
     beforeEach(function() {
       MyLayoutView = Marionette.LayoutView.extend({
@@ -31,7 +34,7 @@ describe('layoutView - dynamic regions', function() {
 
       region = layoutView.addRegion('foo', '#foo');
 
-      var view = new Backbone.View();
+      view = new Backbone.View();
       layoutView.foo.show(view);
     });
 
@@ -59,7 +62,7 @@ describe('layoutView - dynamic regions', function() {
   });
 
   describe('when adding a region to a layoutView, before it has been rendered', function() {
-    var layoutView, region;
+    var layoutView, region, view;
 
     beforeEach(function() {
       layoutView = new Marionette.LayoutView({
@@ -70,7 +73,7 @@ describe('layoutView - dynamic regions', function() {
 
       layoutView.render();
 
-      var view = new Backbone.View();
+      view = new Backbone.View();
       layoutView.foo.show(view);
     });
 
@@ -88,7 +91,7 @@ describe('layoutView - dynamic regions', function() {
   });
 
   describe('when adding a region to a layoutView that does not have any regions defined, and re-rendering the layoutView', function() {
-    var layoutView, region, barRegion;
+    var layoutView, region, barRegion, view;
 
     beforeEach(function() {
       layoutView = new Marionette.LayoutView({
@@ -102,7 +105,7 @@ describe('layoutView - dynamic regions', function() {
       layoutView.render();
       layoutView.render();
 
-      var view = new Backbone.View();
+      view = new Backbone.View();
       layoutView.foo.show(view);
     });
 
@@ -124,7 +127,7 @@ describe('layoutView - dynamic regions', function() {
   });
 
   describe('when adding a region to a layoutView that already has regions defined, and re-rendering the layoutView', function() {
-    var layoutView, region;
+    var layoutView, region, view;
 
     beforeEach(function() {
       layoutView = new Marionette.LayoutView({
@@ -139,7 +142,7 @@ describe('layoutView - dynamic regions', function() {
       layoutView.render();
       layoutView.render();
 
-      var view = new Backbone.View();
+      view = new Backbone.View();
       layoutView.foo.show(view);
     });
 
@@ -158,8 +161,7 @@ describe('layoutView - dynamic regions', function() {
   });
 
   describe('when removing a region from a layoutView', function() {
-    var LayoutView;
-    var layoutView, region, destroyHandler, removeHandler, beforeRemoveHandler, onBeforeRemoveSpy, onRemoveSpy;
+    var LayoutView, layoutView, region, destroyHandler, removeHandler, beforeRemoveHandler, onBeforeRemoveSpy, onRemoveSpy;
 
     beforeEach(function() {
       LayoutView = Marionette.LayoutView.extend({
@@ -213,16 +215,16 @@ describe('layoutView - dynamic regions', function() {
   });
 
   describe('when removing a region and then re-rendering the layoutView', function() {
-    var LayoutView = Marionette.LayoutView.extend({
-      template: template,
-      regions: {
-        foo: '#foo'
-      }
-    });
-
-    var layoutView, region;
+    var LayoutView, layoutView, region;
 
     beforeEach(function() {
+      LayoutView = Marionette.LayoutView.extend({
+        template: template,
+        regions: {
+          foo: '#foo'
+        }
+      });
+
       layoutView = new LayoutView();
 
       layoutView.render();
@@ -241,7 +243,7 @@ describe('layoutView - dynamic regions', function() {
   });
 
   describe('when adding a region to a layoutView then destroying the layoutView', function() {
-    var layoutView, region, destroyHandler;
+    var layoutView, region, destroyHandler, view;
 
     beforeEach(function() {
       destroyHandler = this.sinon.stub();
@@ -254,7 +256,7 @@ describe('layoutView - dynamic regions', function() {
       region = layoutView.addRegion('foo', '#foo');
       region.on('destroy', destroyHandler);
 
-      var view = new Backbone.View();
+      view = new Backbone.View();
       layoutView.foo.show(view);
 
       layoutView.destroy();

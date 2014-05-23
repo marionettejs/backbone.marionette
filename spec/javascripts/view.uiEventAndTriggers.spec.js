@@ -1,75 +1,73 @@
 describe('view ui event trigger configuration', function() {
-  'use strict';
-
   beforeEach(global.setup);
   afterEach(global.teardown);
 
   describe('@ui syntax within events and triggers', function() {
-    var view, view2, view3, fooHandler, attackHandler, tapHandler, defendHandler;
-
-    var View = Backbone.Marionette.ItemView.extend({
-      ui: {
-        foo: '.foo',
-        bar: '#tap',
-        bat: '.bat'
-      },
-
-      triggers: {
-        'click @ui.foo': 'do:foo'
-      },
-
-      events: {
-        'click @ui.bar': 'attack',
-        'click div:not(@ui.bar)': 'tapper',
-        'click @ui.bar, @ui.foo, @ui.bat': 'defend'
-      },
-
-      tapper: function() {
-        tapHandler();
-      },
-
-      attack: function() {
-        attackHandler();
-      },
-
-      defend: function() {
-        defendHandler();
-      },
-
-      render: function() {
-        this.$el.html('<button class="foo"></button><div id="tap"></div><div class="lap"></div><div class="bat"></div>');
-      }
-    });
-
-    var View2 = View.extend({
-      triggers: function() {
-        return {
-          'click @ui.foo': {
-            event: 'do:foo',
-            preventDefault: true,
-            stopPropagation: false
-          }
-        };
-      },
-
-      events: function() {
-        return {
-          'click @ui.bar': function() {
-            this.attack();
-          }
-        };
-      }
-    });
-
-    var View3 = View2.extend({
-      ui: function() {
-        return {
-          bar: '#tap'
-        };
-      }
-    });
+    var View, View2, View3, view, view2, view3, fooHandler, attackHandler, tapHandler, defendHandler;
 
     beforeEach(function() {
+      View = Backbone.Marionette.ItemView.extend({
+        ui: {
+          foo: '.foo',
+          bar: '#tap',
+          bat: '.bat'
+        },
+
+        triggers: {
+          'click @ui.foo': 'do:foo'
+        },
+
+        events: {
+          'click @ui.bar': 'attack',
+          'click div:not(@ui.bar)': 'tapper',
+          'click @ui.bar, @ui.foo, @ui.bat': 'defend'
+        },
+
+        tapper: function() {
+          tapHandler();
+        },
+
+        attack: function() {
+          attackHandler();
+        },
+
+        defend: function() {
+          defendHandler();
+        },
+
+        render: function() {
+          this.$el.html('<button class="foo"></button><div id="tap"></div><div class="lap"></div><div class="bat"></div>');
+        }
+      });
+
+      View2 = View.extend({
+        triggers: function() {
+          return {
+            'click @ui.foo': {
+              event: 'do:foo',
+              preventDefault: true,
+              stopPropagation: false
+            }
+          };
+        },
+
+        events: function() {
+          return {
+            'click @ui.bar': function() {
+              this.attack();
+            }
+          };
+        }
+      });
+
+      View3 = View2.extend({
+        ui: function() {
+          return {
+            bar: '#tap'
+          };
+        }
+      });
+
       view = new View({
         model: new Backbone.Model()
       });

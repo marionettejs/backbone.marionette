@@ -1,5 +1,4 @@
 describe('Behaviors', function() {
-
   beforeEach(global.setup);
   afterEach(global.teardown);
 
@@ -10,7 +9,7 @@ describe('Behaviors', function() {
   });
 
   describe('behavior parsing with a functional behavior lookup', function() {
-    var Obj, View, Tooltip;
+    var Obj, Tooltip;
 
     beforeEach(function() {
       Tooltip = this.sinon.spy();
@@ -24,7 +23,7 @@ describe('Behaviors', function() {
     });
 
     describe('when one behavior', function() {
-      var view;
+      var View, view;
 
       beforeEach(function() {
         View = Marionette.ItemView.extend({
@@ -45,7 +44,7 @@ describe('Behaviors', function() {
   });
 
   describe('behavior parsing', function() {
-    var Obj, View, Tooltip;
+    var Obj, Tooltip;
 
     beforeEach(function() {
       Tooltip = this.sinon.spy();
@@ -56,7 +55,7 @@ describe('Behaviors', function() {
     });
 
     describe('when one behavior', function() {
-      var view;
+      var View, view;
 
       beforeEach(function() {
         View = Marionette.ItemView.extend({
@@ -76,7 +75,7 @@ describe('Behaviors', function() {
     });
 
     describe('when multiple behaviors', function() {
-      var view;
+      var View, view;
 
       beforeEach(function() {
         View = Marionette.ItemView.extend({
@@ -96,7 +95,7 @@ describe('Behaviors', function() {
     });
 
     describe('when functional behavior', function() {
-      var _this, view;
+      var _this, View, view;
 
       beforeEach(function() {
         View = Marionette.ItemView.extend({
@@ -124,7 +123,7 @@ describe('Behaviors', function() {
     });
 
     describe('when behavior class is provided', function() {
-      var view;
+      var View, view;
 
       beforeEach(function() {
         View = Marionette.ItemView.extend({
@@ -146,8 +145,7 @@ describe('Behaviors', function() {
   });
 
   describe('behavior initialize', function() {
-    var View, Behavior, Obj;
-    var behaviorOptions, viewOptions;
+    var View, Behavior, Obj, behaviorOptions, viewOptions;
 
     beforeEach(function() {
       Behavior = Marionette.Behavior.extend({
@@ -302,28 +300,20 @@ describe('Behaviors', function() {
         ui: {
           doge: '.doge'
         },
-
         initialize: function() {
           testBehavior = this;
         },
-
         events: {
           'click @ui.doge': 'onDogeClick',
           'click @ui.coins': 'onCoinsClick'
         },
-
         onRender: function() {
           spy(this.ui.doge.length);
         },
-
         onShow: onShowSpy,
-
         onDestroy: onDestroySpy,
-
         onDogeClick: onDogeClickSpy,
-
         onCoinsClick: onCoinsClickSpy
-
       });
 
       Marionette.Behaviors.behaviorsLookup = hold;
@@ -350,7 +340,7 @@ describe('Behaviors', function() {
     });
 
     it('should not clobber the event prototype', function() {
-      expect(hold.test.prototype.events['click @ui.doge']).toEqual('onDogeClick');
+      expect(hold.test.prototype.events['click @ui.doge']).to.equal('onDogeClick');
     });
 
     it('should set the behavior UI element', function() {
@@ -397,19 +387,19 @@ describe('Behaviors', function() {
       });
 
       it('should call onShow when inside a CollectionView', function() {
-        expect(onShowSpy).toHaveBeenCalled();
+        expect(onShowSpy).to.have.been.called;
       });
 
       it('should call onShow when already shown and reset', function() {
         collection.reset([{id:1}, {id: 2}]);
 
-        expect(onShowSpy.callCount).toEqual(3);
+        expect(onShowSpy.callCount).to.equal(3);
       });
 
       it('should call onShow when a single model is added and the collectionView is already shown', function() {
         collection.add({id: 3});
 
-        expect(onShowSpy.callCount).toEqual(2);
+        expect(onShowSpy.callCount).to.equal(2);
       });
     });
 
@@ -447,7 +437,7 @@ describe('Behaviors', function() {
       });
       Marionette.Behaviors.behaviorsLookup = hold;
 
-      setFixtures('<div id="region"></div>');
+      this.setFixtures('<div id="region"></div>');
       var region = new Backbone.Marionette.Region({el: $('#region')[0]});
       var view = new View({
         model: new Backbone.Model()
@@ -631,6 +621,7 @@ describe('Behaviors', function() {
 
   describe('behavior trigger calls', function() {
     var onRenderSpy, View, hold;
+
     beforeEach(function() {
       onRenderSpy = this.sinon.spy();
       hold = {};
@@ -656,6 +647,7 @@ describe('Behaviors', function() {
 
   describe('behavior is evented', function() {
     var spy, behavior, model;
+
     beforeEach(function() {
       spy = this.sinon.spy();
       behavior = new Marionette.Behavior({}, {});
@@ -685,9 +677,8 @@ describe('Behaviors', function() {
   });
 
   describe('behavior with behavior', function() {
-    var initSpy, renderSpy, childRenderSpy, entityEventSpy;
-    var viewEventSpy, childEventSpy, parentEventSpy;
-    var View, v, m, c, hold, parentBehavior, groupedBehavior;
+    var initSpy, renderSpy, childRenderSpy, entityEventSpy, viewEventSpy, childEventSpy, parentEventSpy, View, v, m, c, hold, parentBehavior, groupedBehavior;
+
     beforeEach(function() {
       initSpy = this.sinon.spy();
       renderSpy = this.sinon.spy();

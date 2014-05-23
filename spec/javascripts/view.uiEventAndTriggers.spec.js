@@ -1,4 +1,5 @@
 describe('view ui event trigger configuration', function() {
+  'use strict';
   beforeEach(global.setup);
   afterEach(global.teardown);
 

@@ -9,13 +9,10 @@ describe('app router', function() {
     beforeEach(function () {
       var suite = this;
 
-      this.Router = Backbone.Marionette.AppRouter.extend({
-        appRoutes: {
-          'm1': 'doesNotExist'
-        }
-      });
-
       this.controller = {};
+      this.Router = Marionette.AppRouter.extend({
+        appRoutes: { 'foo-route': 'doesNotExist' }
+      });
 
       this.run = function() {
         suite.router = new suite.Router({controller: suite.controller});
@@ -29,290 +26,204 @@ describe('app router', function() {
 
   describe('when a controller is passed through the constructor and a route fires', function() {
     beforeEach(function() {
-      this.Router = Backbone.Marionette.AppRouter.extend({
-        appRoutes: {
-          'm1': 'method1'
-        }
+      this.controller = { foo: this.sinon.stub() };
+      this.Router = Marionette.AppRouter.extend({
+        appRoutes: { 'foo-route': 'foo' }
       });
 
-      this.controller = {
-        method1: this.sinon.stub()
-      };
-
-      this.router = new this.Router({
-        controller: this.controller
-      });
+      this.router = new this.Router({ controller: this.controller });
       Backbone.history.start();
 
-      this.router.navigate('m1', true);
-    });
-
-    afterEach(function() {
-      Backbone.history.stop();
+      this.router.navigate('foo-route', true);
     });
 
     it('should call the configured method on the controller passed in the constructor', function() {
-      expect(this.controller.method1).to.have.been.called;
+      expect(this.controller.foo).to.have.been.calledOnce;
     });
 
     it('should execute the controller method with the context of the controller', function() {
-      expect(this.controller.method1).to.have.been.calledOn(this.controller);
+      expect(this.controller.foo).to.have.been.calledOnce.and.calledOn(this.controller);
     });
   });
 
   describe('when a controller is provided in the router definition and a route fires', function() {
     beforeEach(function() {
-      this.controller = {
-        method1: this.sinon.stub()
-      };
-
-      this.Router = Backbone.Marionette.AppRouter.extend({
-        appRoutes: {
-          'm1': 'method1'
-        },
-
+      this.controller = { foo: this.sinon.stub() };
+      this.Router = Marionette.AppRouter.extend({
+        appRoutes: { 'foo-route': 'foo' },
         controller: this.controller
       });
 
       this.router = new this.Router();
       Backbone.history.start();
 
-      this.router.navigate('m1', true);
-    });
-
-    afterEach(function() {
-      Backbone.history.stop();
-    });
-
-    it('should call the configured method on the controller passed in the constructor', function() {
-      expect(this.controller.method1).to.have.been.called;
+      this.router.navigate('foo-route', true);
     });
 
     it('should execute the controller method with the context of the controller', function() {
-      expect(this.controller.method1).to.have.been.calledOn(this.controller);
+      expect(this.controller.foo).to.have.been.calledOnce.and.calledOn(this.controller);
     });
   });
 
   describe('when a second route fires from a controller instance', function() {
     beforeEach(function() {
-      var suite = this;
+      this.controller = {
+        foo: this.sinon.stub(),
+        bar: this.sinon.stub()
+      };
 
-      this.Router = Backbone.Marionette.AppRouter.extend({
+      this.Router = Marionette.AppRouter.extend({
         appRoutes: {
-          'm1': 'method1',
-          'm2': 'method2'
+          'foo-route': 'foo',
+          'bar-route': 'bar'
         }
       });
 
-      this.Controller = function() {
-        return {
-          method1: function() {},
-          method2: suite.sinon.stub()
-        };
-      };
-
-      this.controller = new this.Controller();
-
-      this.router = new this.Router({
-        controller: this.controller
-      });
+      this.router = new this.Router({ controller: this.controller });
       Backbone.history.start();
 
-      this.router.navigate('m1', true);
-      this.router.navigate('m2', true);
-    });
-
-    afterEach(function() {
-      Backbone.history.stop();
-    });
-
-    it('should call the configured method on the controller passed in the constructor', function() {
-      expect(this.controller.method2).to.have.been.called;
+      this.router.navigate('foo-route', true);
+      this.router.navigate('bar-route', true);
     });
 
     it('should execute the controller method with the context of the controller', function() {
-      expect(this.controller.method2).to.have.been.calledOn(this.controller);
+      expect(this.controller.bar).to.have.been.calledOnce.and.calledOn(this.controller);
     });
   });
 
   describe('when a route fires with parameters', function() {
     beforeEach(function() {
-      this.controller = {
-        withParam: function() {}
-      };
-
-      this.Router = Backbone.Marionette.AppRouter.extend({
+      this.fooParam = 'bar';
+      this.controller = { foo: this.sinon.stub() };
+      this.Router = Marionette.AppRouter.extend({
         onRoute: this.sinon.stub(),
-        appRoutes: {
-          'm2/:id': 'withParam'
-        }
+        appRoutes: { 'foo-route/:id': 'foo' }
       });
-      this.spy = this.sinon.spy(this.controller, 'withParam');
 
-      this.router = new this.Router({
-        controller: this.controller
-      });
+      this.router = new this.Router({ controller: this.controller });
       Backbone.history.start();
 
-      this.router.navigate('m2/1', true);
-    });
-
-    afterEach(function() {
-      Backbone.history.stop();
+      this.router.navigate('foo-route/' + this.fooParam, true);
     });
 
     it('should call the configured method with parameters', function() {
-      expect(this.spy).to.have.always.been.calledWith('1');
+      expect(this.controller.foo).to.have.always.been.calledWith(this.fooParam);
     });
 
     it('should call the onShow method for the route, passing the name of the route, the matched route, and the params', function() {
       expect(this.router.onRoute).to.have.been.calledOnce;
-      expect(this.router.onRoute).to.have.been.calledWith('withParam', 'm2/:id', ['1', null]);
+      expect(this.router.onRoute).to.have.been.calledWith('foo', 'foo-route/:id', [this.fooParam, null]);
     });
   });
 
   describe('when a standard route is defined and fired', function() {
     beforeEach(function() {
-      this.Router = Backbone.Marionette.AppRouter.extend({
-        routes: {
-          'm3': 'standardRoute'
-        },
-        standardRoute: function() {}
+      this.fooStub = this.sinon.stub();
+      this.Router = Marionette.AppRouter.extend({
+        routes: { 'foo-route': 'foo' },
+        foo: this.fooStub
       });
-
-      this.sinon.spy(this.Router.prototype, 'standardRoute');
 
       this.router = new this.Router();
       Backbone.history.start();
 
-      this.router.navigate('m3', true);
-    });
-
-    afterEach(function() {
-      Backbone.history.stop();
+      this.router.navigate('foo-route', true);
     });
 
     it('should fire the route callback', function() {
-      expect(this.Router.prototype.standardRoute).to.have.been.called;
+      expect(this.fooStub).to.have.been.calledOnce;
     });
   });
 
   describe('when router configured with ambiguous routes', function() {
     beforeEach(function() {
-      this.PostsRouter = Backbone.Marionette.AppRouter.extend({
+      this.controller = {
+        fooBar: this.sinon.stub(),
+        fooId: this.sinon.stub()
+      };
+      this.Router = Marionette.AppRouter.extend({
         appRoutes: {
-          'posts/top': 'showPostsTop',
-          'posts/:id': 'showPost'
+          'foo/bar': 'fooBar',
+          'foo/:id': 'fooId'
         }
       });
 
-      this.controller = {
-        showPostsTop: this.sinon.stub(),
-        showPost: this.sinon.stub()
-      };
-
       Backbone.history.start();
 
-      this.router = new this.PostsRouter({controller: this.controller});
-      this.router.navigate('posts/top', true);
-    });
-
-    afterEach(function() {
-      Backbone.history.stop();
+      this.router = new this.Router({ controller: this.controller });
+      this.router.navigate('foo/bar', true);
     });
 
     it('should take routes order into account', function() {
-      expect(this.controller.showPostsTop).to.have.been.called;
-      expect(this.controller.showPost).not.to.have.been.called;
+      expect(this.controller.fooBar).to.have.been.calledOnce;
+      expect(this.controller.fooId).not.to.have.been.calledOnce;
     });
   });
 
   describe('when routes are in the wrong order', function() {
     beforeEach(function() {
-      this.PostsRouter = Backbone.Marionette.AppRouter.extend({
+      this.controller = {
+        fooBar: this.sinon.stub(),
+        fooId: this.sinon.stub()
+      };
+      this.Router = Marionette.AppRouter.extend({
         appRoutes: {
-          'posts/:id': 'showPost',
-          'posts/top': 'showPostsTop'
+          'foo/:id': 'fooId',
+          'foo/bar': 'fooBar'
         }
       });
 
-      this.controller = {
-        showPostsTop: this.sinon.stub(),
-        showPost: this.sinon.stub()
-      };
-
       Backbone.history.start();
 
-      this.router = new this.PostsRouter({controller: this.controller});
-      this.router.navigate('posts/top', true);
-    });
-
-    afterEach(function() {
-      Backbone.history.stop();
+      this.router = new this.Router({ controller: this.controller });
+      this.router.navigate('foo/bar', true);
     });
 
     it('should fire the wrong route', function() {
-      expect(this.controller.showPost).to.have.been.called;
-      expect(this.controller.showPostsTop).not.to.have.been.called;
+      expect(this.controller.fooBar).not.to.have.been.calledOnce;
+      expect(this.controller.fooId).to.have.been.calledOnce;
     });
   });
 
   describe('when an app route is added manually', function() {
     beforeEach(function() {
-      this.Router = Backbone.Marionette.AppRouter.extend({});
-
-      this.controller = {
-        showPost: this.sinon.stub()
-      };
+      this.controller = { foo: this.sinon.stub() };
+      this.Router = Marionette.AppRouter.extend();
+      this.router = new this.Router({ controller: this.controller });
 
       Backbone.history.start();
 
-      this.router = new this.Router({controller: this.controller});
-      this.router.appRoute('posts/:id', 'showPost');
-
-      this.router.navigate('posts/10', true);
-    });
-
-    afterEach(function() {
-      Backbone.history.stop();
+      this.router.appRoute('foo-route', 'foo');
+      this.router.navigate('foo-route', true);
     });
 
     it('should fire the route', function() {
-      expect(this.controller.showPost).to.have.been.called;
+      expect(this.controller.foo).to.have.been.calledOnce;
     });
   });
 
   describe('when app routes are provided in the constructor', function() {
     beforeEach(function() {
-      this.AppRouter = Marionette.AppRouter.extend({
-        appRoutes: {
-          'r1': 'originalFunc'
-        }
-      });
-
       this.controller = {
-        originalFunc: this.sinon.stub(),
-        overrideFunc: this.sinon.stub()
+        foo: this.sinon.stub(),
+        bar: this.sinon.stub()
       };
+      this.AppRouter = Marionette.AppRouter.extend({
+        appRoutes: { 'foo-route': 'foo' }
+      });
 
       this.appRouter = new this.AppRouter({
         controller: this.controller,
-        appRoutes: {
-          'r-const-override': 'overrideFunc'
-        }
+        appRoutes: { 'bar-route': 'bar' }
       });
-
       Backbone.history.start();
-      this.appRouter.navigate('r-const-override', true);
-    });
-
-    afterEach(function() {
-      Backbone.history.stop();
+      this.appRouter.navigate('foo-route', true);
+      this.appRouter.navigate('bar-route', true);
     });
 
     it('should override the configured routes and use the constructor param', function() {
-      expect(this.controller.overrideFunc).to.have.been.called;
-      expect(this.controller.originalFunc).not.to.have.been.called;
+      expect(this.controller.foo).not.to.have.been.calledOnce;
+      expect(this.controller.bar).to.have.been.calledOnce;
     });
   });
 });

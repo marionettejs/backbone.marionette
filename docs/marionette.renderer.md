@@ -64,7 +64,7 @@ If you wish to override the template engine used, change the
 ```js
 Backbone.Marionette.Renderer.render = function(template, data){
   return $(template).tmpl(data);
-});
+};
 ```
 
 This implementation will replace the default Underscore.js

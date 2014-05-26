@@ -239,7 +239,7 @@ module.exports = function(grunt) {
     grunt.config('jshint.marionette.src', defaultJshintSrc);
     grunt.config('jshint.specs.files.src', defaultJshintSpecSrc);
     if (filepath.match('spec/javascripts/') && !filepath.match('setup') && !filepath.match('fixtures')) {
-      grunt.config('mochaTest.tests.src', filepath);
+      grunt.config('mochaTest.tests.src', ['spec/javascripts/setup/helpers.js', filepath]);
       grunt.config('jshint.specs.files.src', filepath);
       grunt.config('jshint.marionette.src', 'DO_NOT_RUN_ME');
     }

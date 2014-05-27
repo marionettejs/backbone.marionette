@@ -24,6 +24,24 @@ describe('item view', function() {
     });
   });
 
+  describe('when rendering with a overridden attachHTML', function() {
+    beforeEach(function() {
+      this.attachHTMLStub = this.sinon.stub();
+      this.ItemView = Marionette.ItemView.extend({
+        template: function(){},
+        attachHTML: this.attachHTMLStub
+      });
+
+      this.itemView = new this.ItemView();
+
+      this.itemView.render();
+    });
+
+    it('should render according to the custom attachHTML logic', function() {
+      expect(this.attachHTMLStub).to.have.been.calledOnce.and.calledWith(undefined);
+    });
+  });
+
   describe('when rendering', function() {
     beforeEach(function() {
       this.OnRenderView = Backbone.Marionette.ItemView.extend({

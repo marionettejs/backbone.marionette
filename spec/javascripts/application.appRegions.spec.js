@@ -106,6 +106,25 @@ describe("application regions", function(){
     });
   });
 
+  describe("when an app has multiple regions", function(){
+    var app, regions;
+
+    beforeEach(function(){
+      app = new Marionette.Application();
+      app.addRegions({
+        r1: "#region1",
+        r2: "#region2"
+      });
+
+      regions = app.getRegions();
+    });
+
+    it("should be able to retrieve all regions", function(){
+      expect(regions.r1).toBe(app.getRegion("r1"));
+      expect(regions.r2).toBe(app.getRegion("r2"));
+    });
+  });
+
   describe("when closing all regions in the app", function(){
     var r1, r2;
 

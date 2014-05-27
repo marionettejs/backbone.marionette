@@ -4,16 +4,12 @@ describe('collectionview - emptyView', function() {
   beforeEach(function() {
     this.ItemView = Backbone.Marionette.ItemView.extend({
       tagName: 'span',
-      render: function() {
-        this.$el.html(this.model.get('foo'));
-      },
-      onRender: function() {}
+      template: _.template('<%= foo %>')
     });
 
     this.EmptyView = Backbone.Marionette.ItemView.extend({
       tagName: 'span',
-      className: 'isempty',
-      render: function() {}
+      template: _.template('empty')
     });
 
     this.EmptyCollectionView = Backbone.Marionette.CollectionView.extend({
@@ -33,11 +29,11 @@ describe('collectionview - emptyView', function() {
     });
 
     it('should append the html for the emptyView', function() {
-      expect(this.collectionView.$el).to.have.$html('<span class="isempty"></span>');
+      expect(this.collectionView.$el).to.have.$html('<span>empty</span>');
     });
 
     it('should reference each of the rendered view items', function() {
-      expect(_.size(this.collectionView.children)).to.equal(1);
+      expect(this.collectionView.children).to.have.lengthOf(1);
     });
 
     describe('and then adding an item to the collection', function() {
@@ -51,7 +47,7 @@ describe('collectionview - emptyView', function() {
       });
 
       it('should show the new item', function() {
-        expect(this.collectionView.$el).to.contain.$text('wut');
+        expect(this.collectionView.$el).to.have.$text('wut');
       });
     });
   });
@@ -63,12 +59,10 @@ describe('collectionview - emptyView', function() {
         collection: this.collection
       });
 
-      this.collectionView.render();
-
       this.destroySpy = this.sinon.spy(this.EmptyView.prototype, 'destroy');
 
+      this.collectionView.render();
       this.collection.reset([{foo: 'bar'}, {foo: 'baz'}]);
-
       this.collection.add({foo: 'wut'});
     });
 
@@ -84,22 +78,20 @@ describe('collectionview - emptyView', function() {
   describe('when the last item is removed from a collection', function() {
     beforeEach(function() {
       this.collection = new Backbone.Collection([{foo: 'wut'}]);
-
       this.collectionView = new this.EmptyCollectionView({
         collection: this.collection
       });
 
       this.collectionView.render();
-
       this.collection.remove(this.collection.at(0));
     });
 
     it('should append the html for the emptyView', function() {
-      expect(this.collectionView.$el).to.have.$html('<span class="isempty"></span>');
+      expect(this.collectionView.$el).to.have.$html('<span>empty</span>');
     });
 
     it('should reference each of the rendered view items', function() {
-      expect(_.size(this.collectionView.children)).to.equal(1);
+      expect(this.collectionView.children).to.have.lengthOf(1);
     });
   });
 
@@ -111,89 +103,58 @@ describe('collectionview - emptyView', function() {
       this.collectionView = new this.EmptyCollectionView({
         collection: this.collection
       });
+      this.collectionView.render();
     });
 
     it('should remove all EmptyView', function() {
-      this.collectionView.render();           // 1st showEmptyView
-      this.collection.reset(this.population); // 1st destroyEmptyView
-      this.collection.reset();                // 2nd showEmptyView
-      this.collection.reset(this.population); // 2nd destroyEmptyView
-      expect(this.collectionView.$el).not.to.contain.$html('<span class="isempty"></span>');
+      this.collection.reset();
+      this.collection.reset(this.population);
+      expect(this.collectionView.$el).not.to.have.$html('<span>empty</span>');
     });
 
     it('should have only one emptyView open', function() {
-      this.collectionView.render();           // 1st showEmptyView
-      this.collection.reset(this.population); // 1st destroyEmptyView
-      this.collection.reset();                // 2nd destroyEmptyView, showEmptyView
-      this.collection.reset();                // 3nd destroyEmptyView, showEmptyView
-      expect(this.collectionView.$('span.isempty').length).to.equal(1);
+      this.collection.reset(this.population);
+      this.collection.reset();
+      expect(this.collectionView.$el).to.have.$html('<span>empty</span>');
     });
   });
 
   describe('when a collection is reset with empty data after the view is loaded', function() {
     beforeEach(function() {
-      this.ItemView = Backbone.Marionette.ItemView.extend({
-        tagName: 'span',
-        render: function() {
-          this.$el.html(this.model.get('foo'));
-          this.trigger('render');
-        },
-        onRender: function() {}
-      });
-
-      this.CollectionView = Backbone.Marionette.CollectionView.extend({
-        childView: this.ItemView
-      });
-
-      this.EmptyView = Backbone.Marionette.ItemView.extend({
-        tagName: 'span',
-        render: function() {
-          this.$el.text('0 items');
-          this.trigger('render');
-        },
-        onRender: function() {}
-      });
-
       this.data = [{foo: 'bar'}, {foo: 'baz'}];
-
       this.collection = new Backbone.Collection(this.data);
 
-      this.collectionView = new this.CollectionView({
+      this.collectionView = new this.EmptyCollectionView({
         collection: this.collection,
         emptyView: this.EmptyView
       });
 
       this.collectionView.render();
-
-      this.collection.reset([]);
+      this.collection.reset();
     });
 
     it('should have 1 child view (empty view)', function() {
-      expect(this.collectionView.children.length).to.equal(1);
+      expect(this.collectionView.children).to.have.lengthOf(1);
     });
 
     it('should append the html for the emptyView', function() {
-      expect(this.collectionView.$el).to.have.$html('<span>0 items</span>');
+      expect(this.collectionView.$el).to.have.$html('<span>empty</span>');
     });
 
     it('should not have the empty child view after resetting with data', function() {
       this.collection.reset(this.data);
-
       expect(this.collectionView.$el).to.have.$html('<span>bar</span><span>baz</span>');
     });
   });
 
   describe('when emptyView is specified with getEmptyView option', function() {
     beforeEach(function() {
-      var suite = this;
-
-      this.OtherEmptyView = Backbone.Marionette.ItemView.extend({
-        render: function() {}
-      });
+      this.getEmptyViewStub = this.sinon.stub();
+      this.OtherEmptyView = Backbone.Marionette.ItemView.extend();
 
       this.CollectionView = Backbone.Marionette.CollectionView.extend({
         childView: this.ItemView,
-        getEmptyView: function() { return suite.OtherEmptyView; }
+        getEmptyView: this.getEmptyViewStub
       });
     });
 
@@ -208,7 +169,7 @@ describe('collectionview - emptyView', function() {
       });
 
       it('renders other empty view instance', function() {
-        expect(this.collectionView.children.first()).to.be.instanceof(this.OtherEmptyView);
+        expect(this.getEmptyViewStub).to.have.been.calledWith(this.collectionView.children.first());
       });
     });
   });
@@ -216,7 +177,6 @@ describe('collectionview - emptyView', function() {
   describe('isEmpty', function() {
     beforeEach(function() {
       this.collection = new Backbone.Collection();
-
       this.collectionView = new this.EmptyCollectionView({
         collection: this.collection
       });
@@ -225,25 +185,21 @@ describe('collectionview - emptyView', function() {
     });
 
     it('should return true when the collection is empty', function() {
-      expect(this.collectionView.isEmpty()).to.equal(true);
+      expect(this.collectionView.isEmpty()).to.be.true;
     });
 
     it('should return false when the collection is not empty', function() {
       this.collectionView.collection.add({foo: 'wut'});
-      expect(this.collectionView.isEmpty()).to.equal(false);
+      expect(this.collectionView.isEmpty()).to.be.false;
     });
 
     describe('when overriding with a populated collection', function() {
       beforeEach(function() {
-        var suite = this;
+        this.isEmptyStub = this.sinon.stub().returns(true);
 
         this.collection = new Backbone.Collection([{foo: 'wut'}, {foo: 'wat'}]);
-
         this.OverriddenIsEmptyCollectionView = this.EmptyCollectionView.extend({
-          isEmpty: function(col) {
-            suite.passedInCollection = col;
-            return true;
-          }
+          isEmpty: this.isEmptyStub
         });
         this.collectionView = new this.OverriddenIsEmptyCollectionView({
           collection: this.collection
@@ -253,15 +209,15 @@ describe('collectionview - emptyView', function() {
       });
 
       it('should append the html for the emptyView', function() {
-        expect(this.collectionView.$el).to.have.$html('<span class="isempty"></span>');
+        expect(this.collectionView.$el).to.have.$html('<span>empty</span>');
       });
 
       it('should reference each of the rendered view items', function() {
-        expect(_.size(this.collectionView.children)).to.equal(1);
+        expect(this.collectionView.children).to.have.lengthOf(1);
       });
 
       it('should pass the collection as an argument to isEmpty', function() {
-        expect(this.passedInCollection).to.equal(this.collection);
+        expect(this.isEmptyStub).to.have.been.calledWith(this.collection);
       });
     });
   });
@@ -273,7 +229,6 @@ describe('collectionview - emptyView', function() {
         collection: this.collection,
         emptyViewOptions: {
           foo: 'bar',
-          className: 'baz',
           tagName: 'p'
         }
       });
@@ -283,12 +238,11 @@ describe('collectionview - emptyView', function() {
     });
 
     it('should pass the options to the empty view instance', function() {
-      expect(this.view.options.hasOwnProperty('foo')).to.be.true;
-      expect(this.view.options.foo).to.equal('bar');
+      expect(this.view.options).to.have.property('foo', 'bar');
     });
 
     it('overrides options of emptyView class', function() {
-      expect($(this.collectionView.$el)).to.have.$html('<p class="baz"></p>');
+      expect(this.collectionView.$el).to.have.$html('<p>empty</p>');
     });
 
     describe('when "emptyViewOptions" is provided as a fuction', function() {
@@ -309,12 +263,11 @@ describe('collectionview - emptyView', function() {
       });
 
       it('should pass the options to the empty view instance', function() {
-        expect(this.view.options.hasOwnProperty('foo')).to.be.true;
-        expect(this.view.options.foo).to.equal('bar');
+        expect(this.view.options).to.be.have.property('foo', 'bar');
       });
 
       it('should pass the collectionView as the context', function() {
-        expect(this.view.options.collection).to.equal(this.collection);
+        expect(this.view.options).to.have.property('collection', this.collection);
       });
     });
 
@@ -323,12 +276,8 @@ describe('collectionview - emptyView', function() {
         this.collection = new Backbone.Collection();
         this.collectionView = new this.EmptyCollectionView({
           collection: this.collection,
-          childViewOptions: {
-            foo: 'bar'
-          },
-          emptyViewOptions: {
-            foo: 'baz'
-          }
+          childViewOptions: { foo: 'bar' },
+          emptyViewOptions: { foo: 'baz' }
         });
 
         this.collectionView.render();
@@ -336,7 +285,7 @@ describe('collectionview - emptyView', function() {
       });
 
       it('passes the options to the empty view instance correctly', function() {
-        expect(this.view.options.foo).to.equal('baz');
+        expect(this.view.options).to.have.property('foo', 'baz');
       });
     });
   });
@@ -346,9 +295,7 @@ describe('collectionview - emptyView', function() {
       this.collection = new Backbone.Collection();
       this.collectionView = new this.EmptyCollectionView({
         collection: this.collection,
-        childViewOptions: {
-          foo: 'baz'
-        }
+        childViewOptions: { foo: 'bar' }
       });
 
       this.collectionView.render();
@@ -356,7 +303,7 @@ describe('collectionview - emptyView', function() {
     });
 
     it('passes the options to the empty view instance', function() {
-      expect(this.view.options.foo).to.equal('baz');
+      expect(this.view.options).to.have.property('foo', 'bar');
     });
   });
 });

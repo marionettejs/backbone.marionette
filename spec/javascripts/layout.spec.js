@@ -328,4 +328,18 @@ describe("layout", function(){
     });
   });
 
+  describe("when a layout has regions", function () {
+    beforeEach(function () {
+      this.layout = new Layout();
+      this.layout.render();
+
+      this.regions = layout.getRegions();
+    });
+
+    it("should be able to retrieve all regions", function () {
+      expect(this.regions.regionOne).toBe(this.layout.getRegion("regionOne"));
+      expect(this.regions.regionTwo).toBe(this.layout.getRegion("regionTwo"));
+    });
+  });
+
 });

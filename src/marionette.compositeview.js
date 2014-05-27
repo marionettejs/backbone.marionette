@@ -99,13 +99,31 @@ Marionette.CompositeView = Marionette.CollectionView.extend({
 
     var template = this.getTemplate();
     var html = Marionette.Renderer.render(template, data);
-    this.$el.html(html);
+    this.attachElContent(html);
 
     // the ui bindings is done here and not at the end of render since they
     // will not be available until after the model is rendered, but should be
     // available before the collection is rendered.
     this.bindUIElements();
     this.triggerMethod('render:template');
+  },
+
+  // Attaches the content of the root.
+  // This method can be overriden to optimize rendering,
+  // or to render in a non standard way.
+  //
+  // For example, using `innerHTML` instead of `$el.html`
+  //
+  // ```js
+  // attachElContent: function(html) {
+  //   this.el.innerHTML = html;
+  //   return this;
+  // }
+  // ```
+  attachElContent: function(html) {
+    this.$el.html(html);
+
+    return this;
   },
 
   // You might need to override this if you've overridden attachHtml

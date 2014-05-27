@@ -160,7 +160,7 @@ describe('layoutView - dynamic regions', function() {
         onRemoveRegion: function() {}
       });
 
-      this.destroyHandler = this.sinon.spy();
+      this.emptyHandler = this.sinon.spy();
       this.beforeRemoveHandler = this.sinon.spy();
       this.removeHandler = this.sinon.spy();
 
@@ -173,15 +173,15 @@ describe('layoutView - dynamic regions', function() {
       this.layoutView.foo.show(new Backbone.View());
       this.region = this.layoutView.foo;
 
-      this.region.on('destroy', this.destroyHandler);
+      this.region.on('empty', this.emptyHandler);
       this.layoutView.on('before:remove:region', this.beforeRemoveHandler);
       this.layoutView.on('remove:region', this.removeHandler);
 
       this.layoutView.removeRegion('foo');
     });
 
-    it('should destroy the region', function() {
-      expect(this.destroyHandler).to.have.been.called;
+    it('should empty the region', function() {
+      expect(this.emptyHandler).to.have.been.called;
     });
 
     it('should trigger a before:remove:region event', function() {
@@ -229,7 +229,7 @@ describe('layoutView - dynamic regions', function() {
 
   describe('when adding a region to a layoutView then destroying the layoutView', function() {
     beforeEach(function() {
-      this.destroyHandler = this.sinon.stub();
+      this.emptyHandler = this.sinon.stub();
       this.layoutView = new Marionette.LayoutView({
         template: this.template
       });
@@ -237,7 +237,7 @@ describe('layoutView - dynamic regions', function() {
       this.layoutView.render();
 
       this.region = this.layoutView.addRegion('foo', '#foo');
-      this.region.on('destroy', this.destroyHandler);
+      this.region.on('empty', this.emptyHandler);
 
       this.view = new Backbone.View();
       this.layoutView.foo.show(this.view);
@@ -245,8 +245,8 @@ describe('layoutView - dynamic regions', function() {
       this.layoutView.destroy();
     });
 
-    it('should destroy the region', function() {
-      expect(this.destroyHandler).to.have.been.called;
+    it('should empty the region', function() {
+      expect(this.emptyHandler).to.have.been.called;
     });
   });
 });

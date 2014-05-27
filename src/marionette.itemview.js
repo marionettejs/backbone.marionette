@@ -46,11 +46,28 @@ Marionette.ItemView = Marionette.View.extend({
 
     var template = this.getTemplate();
     var html = Marionette.Renderer.render(template, data);
-
-    this.$el.html(html);
+    this.attachHTML(html);
     this.bindUIElements();
 
     this.triggerMethod('render', this);
+
+    return this;
+  },
+
+  // Attaches the `HTML` content of a given view.
+  // This method can be overriden to optimize rendering,
+  // or to render in a non standard way.
+  //
+  // For example, using `innerHTML` instead of `$el.html`
+  //
+  // ```js
+  // attachHTML: function(html) {
+  //   this.el.innerHTML = html;
+  //   return this;
+  // }
+  // ```
+  attachHTML: function(html) {
+    this.$el.html(html);
 
     return this;
   },

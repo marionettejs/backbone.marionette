@@ -134,10 +134,10 @@ rm.addRegion("foo", "#bar");
 var region = rm.get("foo");
 ```
 
-## RegionManager.get
+## RegionManager.getAll
 
 Get all the regions from the region manager.
-Returns an object literal with named regions 
+Returns an object literal with named regions
 as attributes.
 
 ```js

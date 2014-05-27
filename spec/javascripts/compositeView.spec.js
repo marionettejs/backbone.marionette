@@ -82,6 +82,24 @@ describe('composite view', function() {
     });
   });
 
+  describe('when rendering with a overridden attachHTML', function() {
+    beforeEach(function() {
+      this.attachHTMLStub = this.sinon.stub();
+      this.CompositeView = Marionette.CompositeView.extend({
+        template: function(){},
+        attachHTML: this.attachHTMLStub
+      });
+
+      this.compositeView = new this.CompositeView();
+
+      this.compositeView.render();
+    });
+
+    it('should render according to the custom attachHTML logic', function() {
+      expect(this.attachHTMLStub).to.have.been.calledOnce.and.calledWith(undefined);
+    });
+  });
+
   describe('when a composite view has a model and a template', function() {
     beforeEach(function() {
       this.ChildView = Backbone.Marionette.ItemView.extend({

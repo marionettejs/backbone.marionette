@@ -47,6 +47,14 @@ module.exports = function(grunt) {
       tmp: 'tmp'
     },
 
+    bower: {
+      install: {
+        options: {
+          copy: false
+        }
+      }
+    },
+
     preprocess: {
       core_build: {
         src: 'src/build/marionette.core.js',
@@ -243,5 +251,5 @@ module.exports = function(grunt) {
 
   grunt.registerTask('test', 'Run the unit tests.', ['verify-bower', 'lint', 'unwrap', 'preprocess:bundle', 'jasmine:marionette']);
 
-  grunt.registerTask('build', 'Build all three versions of the library.', ['clean:lib', 'lint', 'unwrap', 'preprocess', 'jasmine:marionette', 'concat', 'uglify']);
+  grunt.registerTask('build', 'Build all three versions of the library.', ['clean:lib', 'bower:install', 'unwrap', 'lint', 'preprocess', 'jasmine:marionette', 'concat', 'uglify', 'clean:tmp']);
 };

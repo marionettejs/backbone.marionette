@@ -1,4 +1,4 @@
-/* jshint maxstatements: 14 */
+/* jshint maxstatements: 16 */
 
 describe('Behaviors', function() {
   describe('behavior lookup', function() {

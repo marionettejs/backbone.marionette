@@ -8,6 +8,9 @@ var Marionette = (function(global, Backbone, _){
   var Marionette = {};
   Backbone.Marionette = Marionette;
 
+  // Get the Deferred creator for later use
+  Marionette.Deferred = Backbone.$.Deferred;
+
 // @include ../marionette.helpers.js
 // @include ../marionette.triggermethod.js
 // @include ../marionette.domRefresh.js

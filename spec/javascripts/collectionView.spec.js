@@ -206,6 +206,44 @@ describe("collection view", function(){
     });
   });
 
+  describe("when a model is added to a non-empty collection at specific index", function(){
+    var collectionView, collection, model, itemViewRender;
+
+    beforeEach(function(){
+      collection = new Backbone.Collection({foo: 'bar'});
+
+      collectionView = new CollectionView({
+        itemView: ItemView,
+        collection: collection
+      });
+      collectionView.render();
+
+      itemViewRender = jasmine.createSpy("itemview:render");
+      collectionView.on("itemview:render", itemViewRender);
+
+      spyOn(collectionView, "appendHtml").andCallThrough();
+
+      model = new Backbone.Model({foo: "baz"});
+      collection.add(model, {at: 0});
+    });
+
+    it("should add the model to the list", function(){
+      expect(_.size(collectionView.children)).toBe(2);
+    });
+
+    it("should render the model in to the DOM with right order", function(){
+      expect($(collectionView.$el)).toHaveText("bazbar");
+    });
+
+    it("should provide the index for each itemView, when appending", function(){
+      expect(collectionView.appendHtml.calls[0].args[2]).toBe(0);
+    });
+
+    it("should trigger the itemview:render event from the collectionView", function(){
+      expect(itemViewRender).toHaveBeenCalled();
+    });
+  });
+
   describe("when a model is added to a non-empty collection", function(){
     var collectionView, collection, model, itemViewRender;
 

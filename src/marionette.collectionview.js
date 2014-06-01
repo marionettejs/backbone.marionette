@@ -304,8 +304,16 @@ Marionette.CollectionView = Marionette.View.extend({
     }
     else {
       // If we've already rendered the main collection, just
-      // append the new items directly into the element.
-      collectionView.$el.append(itemView.el);
+      // append the new items directly into the element preserving
+      // the given index.
+
+      if(index === undefined) {
+        collectionView.$el.append(itemView.el);
+      } else if(index === 0) {
+        collectionView.$el.prepend(itemView.el);
+      } else {
+        $(collectionView.$el.find(itemView.$el.prop('tagName'))[index - 1]).after(itemView.el);
+      }
     }
   },
 

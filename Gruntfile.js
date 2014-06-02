@@ -120,18 +120,14 @@ module.exports = function(grunt) {
       }
     },
 
-    mochaTest: {
-      tests: {
-        options: {
-          require: 'spec/javascripts/setup/node.js',
-          reporter: grunt.option('mocha-reporter') || 'nyan',
-          clearRequireCache: true,
-          mocha: require('mocha')
-        },
-        src: [
-          'spec/javascripts/setup/helpers.js',
-          'spec/javascripts/*.spec.js'
-        ]
+    karma: {
+      unit: {
+        configFile: 'karma.conf.js'
+      },
+      debug: {
+        configFile: 'karma.conf.js',
+        singleRun: false,
+        browsers: ['Chrome']
       }
     },
 
@@ -253,7 +249,7 @@ module.exports = function(grunt) {
 
   grunt.registerTask('lint', 'Lints our sources', ['lintspaces', 'jshint']);
 
-  grunt.registerTask('test', 'Run the unit tests.', ['verify-bower', 'lint', 'unwrap', 'preprocess:bundle', 'template:bundle', 'mochaTest', 'clean:tmp']);
+  grunt.registerTask('test', 'Run the unit tests.', ['verify-bower', 'lint', 'unwrap', 'preprocess:bundle', 'template:bundle', 'karma:unit', 'clean:tmp']);
 
   grunt.registerTask('dev', 'Auto-lints while writing code.', ['test', 'watch:marionette']);
 

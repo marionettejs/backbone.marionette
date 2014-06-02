@@ -59,8 +59,6 @@ describe('composite view', function() {
         template: '#composite-template-no-model'
       });
 
-      this.loadFixtures('compositeTemplate-noModel.html');
-
       this.m1 = new this.Model({foo: 'bar'});
       this.m2 = new this.Model({foo: 'baz'});
       this.collection = new this.Collection([this.m1, this.m2]);
@@ -115,8 +113,6 @@ describe('composite view', function() {
         onRender: function() {}
       });
 
-      this.loadFixtures('compositeTemplate.html');
-
       this.m1 = new this.Model({foo: 'bar'});
       this.m2 = new this.Model({foo: 'baz'});
       this.collection = new this.Collection();
@@ -165,8 +161,6 @@ describe('composite view', function() {
         },
         onRender: function() {}
       });
-
-      this.loadFixtures('collectionTemplate.html', 'collectionItemTemplate.html', 'emptyTemplate.html');
 
       this.m1 = new this.Model({foo: 'bar'});
 
@@ -232,8 +226,6 @@ describe('composite view', function() {
       });
 
       this.order = [];
-      this.loadFixtures('compositeTemplate.html');
-
       this.m1 = new this.Model({foo: 'bar'});
       this.m2 = new this.Model({foo: 'baz'});
       this.collection = new this.Collection();
@@ -307,8 +299,6 @@ describe('composite view', function() {
         template: '#composite-template'
       });
 
-      this.loadFixtures('compositeTemplate.html');
-
       this.m1 = new this.Model({foo: 'bar'});
       this.m2 = new this.Model({foo: 'baz'});
       this.collection = new this.Collection();
@@ -357,8 +347,6 @@ describe('composite view', function() {
         onRender: function() {}
       });
 
-      this.loadFixtures('compositeRerender.html');
-
       this.m1 = new this.Model({foo: 'bar'});
       this.collection = new this.Collection();
       this.compositeView = new this.CompositeView({
@@ -396,8 +384,6 @@ describe('composite view', function() {
         onRender: function() {}
       });
 
-      this.loadFixtures('compositeRerender.html');
-
       this.m1 = new this.Model({foo: 'bar'});
       this.compositeView = new this.CompositeView({
         model: this.m1
@@ -429,8 +415,6 @@ describe('composite view', function() {
         template: '#composite-template',
         onRender: function() {}
       });
-
-      this.loadFixtures('compositeRerender.html');
 
       this.m1 = new this.Model({foo: 'bar'});
       this.m2 = new this.Model({foo: 'baz'});
@@ -500,8 +484,6 @@ describe('composite view', function() {
 
   describe('when working with a composite and recursive model', function() {
     beforeEach(function() {
-      this.loadFixtures('recursiveCompositeTemplate.html');
-
       this.data = {
         name: 'level 1',
         nodes: [
@@ -551,8 +533,6 @@ describe('composite view', function() {
         template: '#composite-template'
       });
 
-      this.loadFixtures('compositeTemplate.html');
-
       this.m1 = new this.Model({foo: 'bar'});
       this.m2 = new this.Model({foo: 'baz'});
       this.collection = new this.Collection();
@@ -595,8 +575,6 @@ describe('composite view', function() {
           collectionView.$('tbody').append(itemView.el);
         }
       });
-
-      this.loadFixtures('gridTemplates.html');
 
       this.userData = [
         {
@@ -662,8 +640,6 @@ describe('composite view', function() {
           itemRows: 'tbody tr'
         }
       });
-
-      this.loadFixtures('uiBindingTemplate.html');
 
       this.userData = [
         {

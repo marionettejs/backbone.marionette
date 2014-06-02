@@ -33,7 +33,6 @@ describe('composite view - childViewContainer', function() {
       });
 
       this.order = [];
-      this.loadFixtures('compositeChildContainerTemplate.html');
 
       this.m1 = new this.Model({foo: 'bar'});
       this.m2 = new this.Model({foo: 'baz'});
@@ -91,7 +90,6 @@ describe('composite view - childViewContainer', function() {
       });
 
       this.order = [];
-      this.loadFixtures('compositeChildContainerTemplate.html');
 
       this.m1 = new this.Model({foo: 'bar'});
       this.m2 = new this.Model({foo: 'baz'});
@@ -131,7 +129,6 @@ describe('composite view - childViewContainer', function() {
       });
 
       this.order = [];
-      this.loadFixtures('compositeChildContainerTemplate.html');
 
       this.m1 = new this.Model({foo: 'bar'});
       this.m2 = new this.Model({foo: 'baz'});
@@ -197,7 +194,6 @@ describe('composite view - childViewContainer', function() {
         suite.collection.reset([suite.model1, suite.model2]);
       };
 
-      this.loadFixtures('compositeChildContainerTemplate.html');
       this.model1 = new this.Model({foo: 'bar'});
       this.model2 = new this.Model({foo: 'baz'});
       this.collection = new this.Collection([ this.model1 ]);

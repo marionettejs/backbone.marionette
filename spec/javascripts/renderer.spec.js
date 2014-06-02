@@ -4,8 +4,6 @@ describe('renderer', function() {
   describe('when given a template id to render', function() {
     beforeEach(function() {
       this.templateSelector = '#renderer-template';
-
-      this.loadFixtures('rendererTemplate.html');
       this.sinon.spy(Backbone.Marionette.TemplateCache, 'get');
       this.html = Backbone.Marionette.Renderer.render(this.templateSelector).trim();
       this.result = $(this.html);
@@ -23,8 +21,6 @@ describe('renderer', function() {
   describe('when given a template and data to render', function() {
     beforeEach(function() {
       this.templateSelector = '#renderer-with-data-template';
-
-      this.loadFixtures('rendererWithDataTemplate.html');
       this.sinon.spy(Backbone.Marionette.TemplateCache, 'get');
 
       this.data = {foo: 'bar'};

@@ -12,8 +12,6 @@ describe('view ui elements', function() {
         }
       });
 
-      this.loadFixtures('itemWithCheckbox.html');
-
       this.model = new Backbone.Model({
         done: false
       });
@@ -44,8 +42,6 @@ describe('view ui elements', function() {
           unfoundElement: '#not_found'
         }
       });
-
-      this.loadFixtures('itemWithCheckbox.html');
 
       this.model = new Backbone.Model({
         done: false
@@ -81,8 +77,6 @@ describe('view ui elements', function() {
           };
         }
       });
-
-      this.loadFixtures('itemWithCheckbox.html');
 
       this.model = new Backbone.Model({
         done: false

@@ -139,9 +139,7 @@ describe('layoutView', function() {
   });
 
   describe('on rendering', function() {
-    beforeEach(function() {
-      this.loadFixtures('layoutViewManagerTemplate.html');
-      this.layoutViewManager = new this.LayoutView();
+    beforeEach(function() {      this.layoutViewManager = new this.LayoutView();
       this.layoutViewManager.render();
     });
 
@@ -153,9 +151,7 @@ describe('layoutView', function() {
   });
 
   describe('when destroying', function() {
-    beforeEach(function() {
-      this.loadFixtures('layoutViewManagerTemplate.html');
-      this.layoutViewManager = new this.LayoutView();
+    beforeEach(function() {      this.layoutViewManager = new this.LayoutView();
       this.layoutViewManager.render();
 
       this.regionOne = this.layoutViewManager.regionOne;
@@ -183,8 +179,6 @@ describe('layoutView', function() {
       var suite = this;
 
       this.setFixtures('<div id="mgr"></div>');
-      this.loadFixtures('layoutViewManagerTemplate.html');
-
       this.layoutView = new this.LayoutView();
       this.layoutView.onRender = function() {
         suite.regionOne = suite.layoutView.regionOne;
@@ -213,8 +207,6 @@ describe('layoutView', function() {
 
   describe('when re-rendering an already rendered layoutView', function() {
     beforeEach(function() {
-      this.loadFixtures('layoutViewManagerTemplate.html');
-
       this.layoutView = new this.LayoutView({
         model: new Backbone.Model()
       });
@@ -257,8 +249,6 @@ describe('layoutView', function() {
 
   describe('when re-rendering a destroyed layoutView', function() {
     beforeEach(function() {
-      this.loadFixtures('layoutViewManagerTemplate.html');
-
       this.layoutView = new this.LayoutView();
       this.layoutView.render();
       this.region = this.layoutView.regionOne;

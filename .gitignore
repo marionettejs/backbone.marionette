@@ -3,7 +3,9 @@
 *.swo
 *.orig
 tmp/
+test/
 ext/
+coverage/
 node_modules/
 .grunt/
 npm-debug.log

@@ -13,4 +13,4 @@ global.$ = global.jQuery = require('jquery');
 global._ = require('underscore');
 global.Backbone = require('backbone');
 global.Backbone.$ = global.$;
-global.Marionette = require('../../../tmp/backbone.marionette');
+global.Marionette = require('../../../test/tmp/backbone.marionette');

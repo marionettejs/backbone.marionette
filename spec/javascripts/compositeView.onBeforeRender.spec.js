@@ -1,57 +1,53 @@
-describe("composite view - on before render", function(){
+describe('composite view - on before render', function() {
+  'use strict';
 
-  describe("when a composite view has a model and a collection", function(){
-    var view;
-
-    var Label = {
+  describe('when a composite view has a model and a collection', function() {
+    beforeEach(function() {
+      this.Label = {
         Views: {}
-    };
+      };
 
-    Label.Model = Backbone.Model.extend({});
-    Label.ListModel = Backbone.Model.extend({});
+      this.Label.Model = Backbone.Model.extend({});
+      this.Label.ListModel = Backbone.Model.extend({});
 
-    Label.Collection = Backbone.Collection.extend({
-        model: Label.Model
-    });
-
-    Label.Views.LabelItem = Backbone.Marionette.ItemView.extend({
-        template: "#itemView",
-        tagName: 'li',
-        className: 'list-item'
-    });
-
-    Label.Views.LabelListModel = Backbone.Model.extend({});
-
-    Label.Views.LabelList = Backbone.Marionette.CompositeView.extend({
-      template: "#compView",
-      itemViewContainer: '#listTag',
-
-      itemView: Label.Views.LabelItem,
-
-      onBeforeRender : function() {
-        this.model.set("modelState", "Something Different");
-      }
-    });
-
-    beforeEach(function(){
-      setFixtures("<script id='itemView' type='text/template'>Title: <%= title %> </script><script id='compView' type='text/template'><div class='listing'> <h4><%= modelState %></h4> <br/> <ul id='listTag'> </ul> </div></script>");
-
-      var collection = new Label.Collection([{ title: 'yoddle' }, { title: 'little' }]);
-      var model = new Label.Model({ modelState: 'Yoddling Tomes' });
-
-      view = new Label.Views.LabelList({
-        collection: collection,
-        model: model
+      this.Label.Collection = Backbone.Collection.extend({
+        model: this.Label.Model
       });
 
-      view.render();
+      this.Label.Views.LabelItem = Backbone.Marionette.ItemView.extend({
+        template: '#itemView',
+        tagName: 'li',
+        className: 'list-item'
+      });
+
+      this.Label.Views.LabelListModel = Backbone.Model.extend({});
+
+      this.Label.Views.LabelList = Backbone.Marionette.CompositeView.extend({
+        template: '#compView',
+        childViewContainer: '#listTag',
+
+        childView: this.Label.Views.LabelItem,
+
+        onBeforeRender: function() {
+          this.model.set('modelState', 'Something Different');
+        }
+      });
+
+      this.setFixtures('<script id="itemView" type="text/template">Title: <%= title %> </script><script id="compView" type="text/template"><div class="listing"> <h4><%= modelState %></h4> <br/> <ul id="listTag"> </ul> </div></script>');
+
+      this.collection = new this.Label.Collection([{title: 'yoddle'}, {title: 'little'}]);
+      this.model = new this.Label.Model({modelState: 'Yoddling Tomes'});
+
+      this.view = new this.Label.Views.LabelList({
+        collection: this.collection,
+        model: this.model
+      });
+
+      this.view.render();
     });
 
-    it("should call onBeforeRender before rendering the model", function(){
-      expect(view.$el).toHaveText(/Something Different/);
+    it('should call onBeforeRender before rendering the model', function() {
+      expect(this.view.$el).to.contain.$text('Something Different');
     });
-
   });
-
-
 });

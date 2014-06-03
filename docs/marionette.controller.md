@@ -11,7 +11,8 @@ create a new Class altogether.
 ## Documentation Index
 
 * [Basic Use](#basic-use)
-* [Closing A Controller](#closing-a-controller)
+* [Destroying A Controller](#destroying-a-controller)
+* [getOption](#getoption)
 * [On The Name 'Controller'](#on-the-name-controller)
 
 ## Basic Use
@@ -49,23 +50,32 @@ c.listenTo(c, "stuff:done", function(stuff){
 c.doStuff();
 ```
 
-## Closing A Controller
+## getOption
+Retrieve an object's attribute either directly from the object, or from the object's this.options, with this.options taking precedence.
 
-Each Controller instance has a built in `close` method that handles
+More information [getOption](./marionette.functions.md)
+
+## Destroying A Controller
+
+Each Controller instance has a built in `destroy` method that handles
 unbinding all of the events that are directly attached to the controller
 instance, as well as those that are bound using the EventBinder from
 the controller.
 
-Invoking the `close` method will trigger a "close" event and corresponding
-`onClose` method call. These calls will be passed any arguments `close`
+Invoking the `destroy` method will trigger the "before:destroy" and "destroy" events and the
+corresponding `onBeforeDestory` and `onDestroy` method calls. These calls will be passed any arguments `destroy`
 was invoked with.
 
 ```js
-// define a controller with an onClose method
+// define a controller with an onDestroy method
 var MyController = Marionette.Controller.extend({
 
-  onClose: function(arg1, arg2){
-    // put custom code here, to close this controller
+  onBeforeDestroy: function(arg1, arg2){
+    // put custom code here, before destroying this controller
+  }
+
+  onDestroy: function(arg1, arg2){
+    // put custom code here, to destroy this controller
   }
 
 });
@@ -74,13 +84,14 @@ var MyController = Marionette.Controller.extend({
 var contr = new MyController();
 
 // add some event handlers
-contr.on("close", function(arg1, arg2){ ... });
+contr.on("before:destroy", function(arg1, arg2){ ... });
+contr.on("destroy", function(arg1, arg2){ ... });
 contr.listenTo(something, "bar", function(){...});
 
-// close the controller: unbind all of the
-// event handlers, trigger the "close" event and
-// call the onClose method
-contr.close(arg1, arg2);
+// destroy the controller: unbind all of the
+// event handlers, trigger the "destroy" event and
+// call the onDestroy method
+contr.destroy(arg1, arg2);
 ```
 
 ## On The Name 'Controller'

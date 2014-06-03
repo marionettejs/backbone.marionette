@@ -2,26 +2,26 @@
 // ------------------------
 //
 // Manage one or more related `Marionette.Region` objects.
-Marionette.RegionManager = (function(Marionette){
+Marionette.RegionManager = (function(Marionette) {
 
   var RegionManager = Marionette.Controller.extend({
-    constructor: function(options){
+    constructor: function(options) {
       this._regions = {};
-      Marionette.Controller.prototype.constructor.call(this, options);
+      Marionette.Controller.call(this, options);
     },
 
     // Add multiple regions using an object literal, where
     // each key becomes the region name, and each value is
     // the region definition.
-    addRegions: function(regionDefinitions, defaults){
+    addRegions: function(regionDefinitions, defaults) {
       var regions = {};
 
-      _.each(regionDefinitions, function(definition, name){
-        if (_.isString(definition)){
-          definition = { selector: definition };
+      _.each(regionDefinitions, function(definition, name) {
+        if (_.isString(definition)) {
+          definition = {selector: definition};
         }
 
-        if (definition.selector){
+        if (definition.selector) {
           definition = _.defaults({}, definition, defaults);
         }
 
@@ -34,77 +34,81 @@ Marionette.RegionManager = (function(Marionette){
 
     // Add an individual region to the region manager,
     // and return the region instance
-    addRegion: function(name, definition){
+    addRegion: function(name, definition) {
       var region;
 
       var isObject = _.isObject(definition);
       var isString = _.isString(definition);
       var hasSelector = !!definition.selector;
 
-      if (isString || (isObject && hasSelector)){
+      if (isString || (isObject && hasSelector)) {
         region = Marionette.Region.buildRegion(definition, Marionette.Region);
-      } else if (_.isFunction(definition)){
+      } else if (_.isFunction(definition)) {
         region = Marionette.Region.buildRegion(definition, Marionette.Region);
       } else {
         region = definition;
       }
 
+      this.triggerMethod('before:add:region', name, region);
+
       this._store(name, region);
-      this.triggerMethod("region:add", name, region);
+
+      this.triggerMethod('add:region', name, region);
       return region;
     },
 
     // Get a region by name
-    get: function(name){
+    get: function(name) {
       return this._regions[name];
     },
 
     // Remove a region by name
-    removeRegion: function(name){
+    removeRegion: function(name) {
       var region = this._regions[name];
       this._remove(name, region);
     },
 
-    // Close all regions in the region manager, and
+    // Empty all regions in the region manager, and
     // remove them
-    removeRegions: function(){
-      _.each(this._regions, function(region, name){
+    removeRegions: function() {
+      _.each(this._regions, function(region, name) {
         this._remove(name, region);
       }, this);
     },
 
-    // Close all regions in the region manager, but
+    // Empty all regions in the region manager, but
     // leave them attached
-    closeRegions: function(){
-      _.each(this._regions, function(region, name){
-        region.close();
+    emptyRegions: function() {
+      _.each(this._regions, function(region) {
+        region.empty();
       }, this);
     },
 
-    // Close all regions and shut down the region
+    // Destroy all regions and shut down the region
     // manager entirely
-    close: function(){
+    destroy: function() {
       this.removeRegions();
-      Marionette.Controller.prototype.close.apply(this, arguments);
+      Marionette.Controller.prototype.destroy.apply(this, arguments);
     },
 
     // internal method to store regions
-    _store: function(name, region){
+    _store: function(name, region) {
       this._regions[name] = region;
       this._setLength();
     },
 
     // internal method to remove a region
-    _remove: function(name, region){
-      region.close();
+    _remove: function(name, region) {
+      this.triggerMethod('before:remove:region', name, region);
+      region.empty();
       region.stopListening();
       delete this._regions[name];
       this._setLength();
-      this.triggerMethod("region:remove", name, region);
+      this.triggerMethod('remove:region', name, region);
     },
 
     // set the number of regions current held
-    _setLength: function(){
+    _setLength: function() {
       this.length = _.size(this._regions);
     }
 

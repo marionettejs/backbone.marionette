@@ -1,21 +1,17 @@
-describe("application request/response", function(){
-  "use strict";
+describe('application request/response', function() {
+  'use strict';
 
-  describe("when creating an instance of an Application", function(){
-    var App;
-
-    beforeEach(function(){
-      App = new Marionette.Application();
+  describe('when creating an instance of an Application', function() {
+    beforeEach(function() {
+      this.App = new Marionette.Application();
     });
 
-    it("should provide request/response framework", function(){
-      expect(App.reqres).toBeInstanceOf(Backbone.Wreqr.RequestResponse);
+    it('should provide request/response framework', function() {
+      expect(this.App.reqres).to.be.instanceof(Backbone.Wreqr.RequestResponse);
     });
 
-    it("should allow direct request", function(){
-      expect(typeof App.request).toBe("function");
+    it('should allow direct request', function() {
+      expect(typeof this.App.request).to.equal('function');
     });
-
   });
-
 });

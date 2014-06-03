@@ -24,12 +24,12 @@ describe('item view', function() {
     });
   });
 
-  describe('when rendering with a overridden attachHTML', function() {
+  describe('when rendering with a overridden attachElContent', function() {
     beforeEach(function() {
-      this.attachHTMLStub = this.sinon.stub();
+      this.attachElContentStub = this.sinon.stub();
       this.ItemView = Marionette.ItemView.extend({
         template: function(){},
-        attachHTML: this.attachHTMLStub
+        attachElContent: this.attachElContentStub
       });
 
       this.itemView = new this.ItemView();
@@ -37,8 +37,8 @@ describe('item view', function() {
       this.itemView.render();
     });
 
-    it('should render according to the custom attachHTML logic', function() {
-      expect(this.attachHTMLStub).to.have.been.calledOnce.and.calledWith(undefined);
+    it('should render according to the custom attachElContent logic', function() {
+      expect(this.attachElContentStub).to.have.been.calledOnce.and.calledWith(undefined);
     });
   });
 

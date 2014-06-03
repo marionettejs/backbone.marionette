@@ -160,4 +160,26 @@ describe('view ui elements', function() {
       expect(this.view.ui.foo).to.equal('#foo');
     });
   });
+
+  describe("when calling delegateEvents", function () {
+    beforeEach(function () {
+      this.ui     = {'foo': '#foo'};
+      this.events = {'click @ui.foo': 'bar'};
+
+      this.View = Marionette.ItemView.extend({
+        ui     : this.ui,
+        events : {}
+      });
+
+      this.view = new this.View();
+      this.view.delegateEvents();
+
+      _.extend(this.view.events, this.events);
+      this.view.delegateEvents();
+    });
+
+    it("the events should be re-normalised", function() {
+      expect(this.view.events).to.deep.equal({'click #foo': 'bar'});
+    });
+  });
 });

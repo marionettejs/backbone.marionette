@@ -3,9 +3,7 @@ var unwrap = require('unwrap');
 
 module.exports = function(grunt) {
 
-  require('load-grunt-tasks')(grunt, {
-    pattern: ['grunt-*', '!grunt-template-jasmine-istanbul']
-  });
+  require('load-grunt-tasks')(grunt);
 
   // Project configuration.
   grunt.initConfig({
@@ -38,8 +36,7 @@ module.exports = function(grunt) {
       backbone:     'bower_components/backbone/backbone.js',
       jquery:       'bower_components/jquery/dist/jquery.js',
       sinon:        'bower_components/sinonjs/sinon.js',
-      jasmineSinon: 'bower_components/jasmine-sinon/lib/jasmine-sinon.js',
-      wreqr:        'bower_components/backbone.wreqr/lib/backbone.wreqr.js',
+      wreqr:        'bower_components/backbone.wreqr/lib/backbone.wreqr.js'
     },
 
     clean: {
@@ -47,50 +44,70 @@ module.exports = function(grunt) {
       tmp: 'tmp'
     },
 
+    bower: {
+      install: {
+        options: {
+          copy: false
+        }
+      }
+    },
+
     preprocess: {
-      core_build: {
+      core: {
         src: 'src/build/marionette.core.js',
-        dest: 'lib/core/backbone.marionette.js'
-      },
-      amd: {
-        src: 'src/build/amd.core.js',
-        dest: 'tmp/backbone.marionette.amd.js'
+        dest: 'tmp/marionette.core.js'
       },
       bundle: {
-        src: 'src/build/marionette.bundle.js',
+        src: 'src/build/marionette.bundled.js',
         dest: 'tmp/backbone.marionette.js'
+      }
+    },
+
+    template: {
+      options: {
+        data: {
+          version: '<%= pkg.version %>'
+        }
+      },
+      core: {
+        src: '<%= preprocess.core.dest %>',
+        dest: '<%= preprocess.core.dest %>'
+      },
+      bundle: {
+        src: '<%= preprocess.bundle.dest %>',
+        dest: '<%= preprocess.bundle.dest %>'
       }
     },
 
     concat: {
       options: {
-        banner: "<%= meta.core_banner %>"
+        banner: '<%= meta.core_banner %>'
       },
       core: {
-        src: '<%= preprocess.bundle.dest %>',
+        src: '<%= preprocess.core.dest %>',
         dest: 'lib/core/backbone.marionette.js'
       },
       bundle: {
         options: {
-          banner: "<%= meta.banner %>"
+          banner: '<%= meta.banner %>'
         },
         src: '<%= preprocess.bundle.dest %>',
         dest: 'lib/backbone.marionette.js'
-      },
-      amd: {
-        src: '<%= preprocess.amd.dest %>',
-        dest: 'lib/core/amd/backbone.marionette.js'
       }
     },
 
     uglify : {
-      amd : {
-        options: {
-          banner: '<%= meta.banner %>'
-        },
-        src : '<%= concat.amd.dest %>',
-        dest : 'lib/core/amd/backbone.marionette.min.js',
+      core: {
+        src : '<%= concat.core.dest %>',
+        dest : 'lib/core/backbone.marionette.min.js',
+        options : {
+          banner: '<%= meta.core_bundle %>',
+          sourceMap : 'lib/core/backbone.marionette.map',
+          sourceMappingURL : '<%= uglify.bundle.options.sourceMappingURL %>',
+          sourceMapPrefix : 1
+        }
       },
+
       bundle: {
         src : '<%= concat.bundle.dest %>',
         dest : 'lib/backbone.marionette.min.js',
@@ -98,43 +115,23 @@ module.exports = function(grunt) {
           banner: '<%= meta.banner %>',
           sourceMap : 'lib/backbone.marionette.map',
           sourceMappingURL : 'backbone.marionette.map',
-          sourceMapPrefix : 2,
-        }
-      },
-      core: {
-        src : '<%= concat.core.dest %>',
-        dest : 'lib/core/backbone.marionette.min.js',
-        options : {
-          banner: "<%= meta.core_bundle %>",
-          sourceMap : 'lib/core/backbone.marionette.map',
-          sourceMappingURL : '<%= uglify.bundle.options.sourceMappingURL %>',
-          sourceMapPrefix : 1
+          sourceMapPrefix : 2
         }
       }
     },
 
-    jasmine : {
-      options : {
-        helpers : [
-          '<%= assets.sinon %>',
-          '<%= assets.jasmineSinon %>',
-          'spec/javascripts/helpers/*.js'
-        ],
-        specs : 'spec/javascripts/**/*.spec.js',
-        vendor : [
-          '<%= assets.jquery %>',
-          '<%= assets.underscore %>',
-          '<%= assets.backbone %>',
-          '<%= assets.babysitter %>',
-          '<%= assets.wreqr %>',
-        ],
-        keepRunner: true
-      },
-      marionette : {
-        src : [
-          '<%= preprocess.bundle.dest %>',
-          'spec/javascripts/support/marionette.support.js'
-        ],
+    mochaTest: {
+      tests: {
+        options: {
+          require: 'spec/javascripts/setup/node.js',
+          reporter: 'dot',
+          clearRequireCache: true,
+          mocha: require('mocha')
+        },
+        src: [
+          'spec/javascripts/setup/helpers.js',
+          'spec/javascripts/*.spec.js'
+        ]
       }
     },
 
@@ -150,19 +147,31 @@ module.exports = function(grunt) {
 
     jshint: {
       options: {
-        jshintrc : '.jshintrc'
+        jshintrc: '.jshintrc'
       },
-      marionette : [ 'src/*.js' ]
+
+      marionette: {
+        src: [ 'src/*.js' ]
+      },
+
+      specs: {
+        options: {
+          jshintrc: 'spec/.jshintrc'
+        },
+
+        files: {
+          src: ['spec/javascripts/**.js']
+        }
+      }
     },
 
     watch: {
       marionette : {
+        options: {
+          spawn: false
+        },
         files : ['src/**/*.js', 'spec/**/*.js'],
-        tasks : ['lint', 'jasmine:marionette']
-      },
-      server : {
-        files : ['src/**/*.js', 'spec/**/*.js'],
-        tasks : ['jasmine:marionette:build']
+        tasks : ['test']
       }
     },
 
@@ -177,11 +186,11 @@ module.exports = function(grunt) {
     lintspaces: {
       all: {
         src: [
-            'src/*.js',
-            'docs/*.md'
+          'src/*.js',
+          'docs/*.md'
         ],
         options: {
-            editorconfig: '.editorconfig'
+          editorconfig: '.editorconfig'
         }
       }
     },
@@ -222,13 +231,31 @@ module.exports = function(grunt) {
     }
   });
 
+  var defaultTestsSrc = grunt.config('mochaTest.tests.src');
+  var defaultJshintSrc = grunt.config('jshint.marionette.src');
+  var defaultJshintSpecSrc = grunt.config('jshint.specs.files.src');
+  grunt.event.on('watch', function(action, filepath) {
+    grunt.config('mochaTest.tests.src', defaultTestsSrc);
+    grunt.config('jshint.marionette.src', defaultJshintSrc);
+    grunt.config('jshint.specs.files.src', defaultJshintSpecSrc);
+    if (filepath.match('spec/javascripts/') && !filepath.match('setup') && !filepath.match('fixtures')) {
+      grunt.config('mochaTest.tests.src', ['spec/javascripts/setup/helpers.js', filepath]);
+      grunt.config('jshint.specs.files.src', filepath);
+      grunt.config('jshint.marionette.src', 'DO_NOT_RUN_ME');
+    }
+    if (filepath.match('src/')) {
+      grunt.config('jshint.marionette.src', filepath);
+      grunt.config('jshint.specs.files.src', 'DO_NOT_RUN_ME');
+    }
+  });
+
   grunt.registerTask('default', 'An alias task for running tests.', ['test']);
 
   grunt.registerTask('lint', 'Lints our sources', ['lintspaces', 'jshint']);
 
-  grunt.registerTask('dev', 'Auto-lints while writing code.', ['lint', 'unwrap', 'preprocess:bundle', 'jasmine:marionette', 'watch:marionette']);
+  grunt.registerTask('test', 'Run the unit tests.', ['verify-bower', 'lint', 'unwrap', 'preprocess:bundle', 'template:bundle', 'mochaTest', 'clean:tmp']);
 
-  grunt.registerTask('test', 'Run the unit tests.', ['verify-bower', 'lint', 'unwrap', 'preprocess:bundle', 'jasmine:marionette']);
+  grunt.registerTask('dev', 'Auto-lints while writing code.', ['test', 'watch:marionette']);
 
-  grunt.registerTask('build', 'Build all three versions of the library.', ['clean:lib', 'lint', 'unwrap', 'preprocess', 'jasmine:marionette', 'concat', 'uglify']);
+  grunt.registerTask('build', 'Build all three versions of the library.', ['clean:lib', 'bower:install', 'lint', 'unwrap', 'preprocess', 'template', 'mochaTest', 'concat', 'uglify', 'clean:tmp']);
 };

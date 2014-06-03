@@ -4,9 +4,9 @@
   "homepage": "http://marionettejs.org",
   "main": [
     "./lib/backbone.marionette.js",
-    "./lib/core/amd/backbone.marionette.js"
+    "./lib/core/backbone.marionette.js"
   ],
-  "version": "1.8.6",
+  "version": "2.0.0-pre.1",
   "keywords": [
     "backbone",
     "framework",
@@ -40,7 +40,7 @@
     "underscore": "1.4.4 - 1.6.0",
     "backbone.babysitter": "^0.1.0",
     "backbone.wreqr": "^1.0.0",
-    "jquery": "^1.8.0 || ^2.0.0"
+    "jquery": "1.8.0 - 2.1.0"
   },
   "devDependencies": {
     "sinonjs": "1.7.3",

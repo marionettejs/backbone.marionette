@@ -15,7 +15,7 @@ $(function(){
 
   var CollectionView = Backbone.Marionette.CollectionView.extend({
     el: "#test_element",
-    itemView: ItemView
+    childView: ItemView
   });
 
   var modelList10 = [];

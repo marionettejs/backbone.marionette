@@ -82,12 +82,12 @@ describe('composite view', function() {
     });
   });
 
-  describe('when rendering with a overridden attachHTML', function() {
+  describe('when rendering with a overridden attachElContent', function() {
     beforeEach(function() {
-      this.attachHTMLStub = this.sinon.stub();
+      this.attachElContentStub = this.sinon.stub();
       this.CompositeView = Marionette.CompositeView.extend({
         template: function(){},
-        attachHTML: this.attachHTMLStub
+        attachElContent: this.attachElContentStub
       });
 
       this.compositeView = new this.CompositeView();
@@ -95,8 +95,8 @@ describe('composite view', function() {
       this.compositeView.render();
     });
 
-    it('should render according to the custom attachHTML logic', function() {
-      expect(this.attachHTMLStub).to.have.been.calledOnce.and.calledWith(undefined);
+    it('should render according to the custom attachElContent logic', function() {
+      expect(this.attachElContentStub).to.have.been.calledOnce.and.calledWith(undefined);
     });
   });
 

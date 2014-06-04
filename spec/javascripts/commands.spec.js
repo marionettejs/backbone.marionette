@@ -1,17 +1,17 @@
 describe('application commands', function() {
   'use strict';
 
-  describe('when creating an instance of an Application', function() {
-    beforeEach(function() {
-      this.App = new Marionette.Application();
-    });
+  beforeEach(function() {
+    this.app = new Marionette.Application();
+  });
 
+  describe('when creating an instance of an Application', function() {
     it('should provide command execution framework', function() {
-      expect(this.App.commands).to.be.instanceof(Backbone.Wreqr.Commands);
+      expect(this.app.commands).to.be.instanceof(Backbone.Wreqr.Commands);
     });
 
     it('should allow execution of commands directly', function() {
-      expect(typeof this.App.execute).to.equal('function');
+      expect(this.app.execute).to.be.a('function');
     });
   });
 });

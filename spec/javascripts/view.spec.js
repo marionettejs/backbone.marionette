@@ -1,73 +1,72 @@
 describe('base view', function() {
   'use strict';
 
-  describe('when initializing a view', function() {
+  describe('when creating a view', function() {
     beforeEach(function() {
-      var suite = this;
+      this.initializeStub = this.sinon.stub();
+      this.viewConstructorSpy = this.sinon.spy(Backbone, 'View');
 
-      this.fooHandler = this.sinon.stub();
-
-      this.View = Backbone.Marionette.View.extend({
-        initialize: function() {
-          this.listenTo(this.model, 'foo', suite.fooHandler);
-        }
+      this.View = Marionette.View.extend({
+        initialize: this.initializeStub
       });
 
-      this.model = new Backbone.Model();
-      this.view = new this.View({
-        model: this.model
-      });
-
-      this.model.trigger('foo');
+      this.view = new this.View();
     });
 
-    it('should allow event to be bound via event binder', function() {
-      expect(this.fooHandler).to.have.been.called;
+    it('should call the Backone.View constructor', function() {
+      expect(this.viewConstructorSpy).to.have.been.calledOnce;
+    });
+
+    it('should call initialize', function() {
+      expect(this.initializeStub).to.have.been.calledOnce;
     });
   });
 
   describe('when using listenTo for the "destroy" event on itself, and destroying the view', function() {
     beforeEach(function() {
-      this.destroy = this.sinon.stub();
+      this.destroyStub = this.sinon.stub();
       this.view = new Marionette.View();
-      this.view.listenTo(this.view, 'destroy', this.destroy);
+      this.view.listenTo(this.view, 'destroy', this.destroyStub);
       this.view.destroy();
     });
 
     it('should trigger the "destroy" event', function() {
-      expect(this.destroy).to.have.been.called;
+      expect(this.destroyStub).to.have.been.called;
     });
   });
 
   describe('when destroying a view', function() {
     beforeEach(function() {
-      this.View = Marionette.View.extend({
-        onDestroy: this.sinon.stub()
-      });
+      this.argumentOne = 'foo';
+      this.argumentTwo = 'bar';
 
-      this.view = new this.View();
+      this.view = new Marionette.View();
 
-      this.sinon.spy(this.view, 'remove');
-      this.destroy = this.sinon.stub();
-      this.view.on('destroy', this.destroy);
+      this.removeSpy = this.sinon.spy(this.view, 'remove');
 
-      this.view.destroy(123, 'second param');
+      this.onDestroyStub = this.sinon.stub();
+      this.view.onDestroy = this.onDestroyStub;
+
+      this.destroyStub = this.sinon.stub();
+      this.view.on('destroy', this.destroyStub);
+
+      this.view.destroy(this.argumentOne, this.argumentTwo);
     });
 
     it('should trigger the destroy event', function() {
-      expect(this.destroy).to.have.been.called;
+      expect(this.destroyStub).to.have.been.calledOnce;
     });
 
     it('should call an onDestroy method with any arguments passed to destroy', function() {
-      expect(this.view.onDestroy).to.have.been.calledWith(123, 'second param');
+      expect(this.onDestroyStub).to.have.been.calledOnce.and.calledWith(this.argumentOne, this.argumentTwo);
     });
 
     it('should remove the view', function() {
-      expect(this.view.remove).to.have.been.called;
+      expect(this.removeSpy).to.have.been.calledOnce;
     });
 
     it('should set the view isDestroyed to true', function() {
-      expect(this.view.isDestroyed).to.be.true;
+      expect(this.view).to.be.have.property('isDestroyed', true);
     });
   });
 
@@ -75,138 +74,134 @@ describe('base view', function() {
     beforeEach(function() {
       this.view = new Marionette.View();
 
-      this.sinon.spy(this.view, 'remove');
-      this.destroy = this.sinon.stub();
-      this.view.on('destroy', this.destroy);
+      this.removeSpy = this.sinon.spy(this.view, 'remove');
 
-      this.view.onBeforeDestroy = function() {
-        return false;
-      };
+      this.destroyStub = this.sinon.stub();
+      this.view.on('destroy', this.destroyStub);
+
+      this.onBeforeDestroyStub = this.sinon.stub().returns(false);
+      this.view.onBeforeDestroy = this.onDestroyStub;
 
       this.view.destroy();
     });
 
     it('should not trigger the destroy event', function() {
-      expect(this.destroy).to.have.been.called;
+      expect(this.destroyStub).to.have.been.calledOnce;
     });
 
     it('should not remove the view', function() {
-      expect(this.view.remove).to.have.been.called;
+      expect(this.removeSpy).to.have.been.calledOnce;
     });
 
     it('should not set the view isDestroyed to true', function() {
-      expect(this.view.isDestroyed).to.be.true;
+      expect(this.view).to.be.have.property('isDestroyed', true);
     });
   });
 
   describe('when destroying a view and returning undefined from the onBeforeDestroy method', function() {
     beforeEach(function() {
+      this.argumentOne = 'foo';
+      this.argumentTwo = 'bar';
+
       this.view = new Marionette.View();
 
-      this.sinon.spy(this.view, 'remove');
-      this.destroy = this.sinon.stub();
-      this.view.on('destroy', this.destroy);
+      this.removeSpy = this.sinon.spy(this.view, 'remove');
+      this.destroySpy = this.sinon.spy(this.view, 'destroy');
 
-      this.view.onBeforeDestroy = function() {
-        return undefined;
-      };
+      this.destroyStub = this.sinon.stub();
+      this.view.on('destroy', this.destroyStub);
 
-      this.view.destroy(123, 'second param');
+      this.onBeforeDestroyStub = this.sinon.stub().returns(false);
+      this.view.onBeforeDestroy = this.onBeforeDestroyStub;
+
+      this.view.destroy(this.argumentOne, this.argumentTwo);
     });
 
     it('should trigger the destroy event', function() {
-      expect(this.destroy).to.have.been.calledWith(123, 'second param');
+      expect(this.destroyStub).to.have.been.calledOnce.and.calledWith(this.argumentOne, this.argumentTwo);
     });
 
     it('should remove the view', function() {
-      expect(this.view.remove).to.have.been.called;
+      expect(this.removeSpy).to.have.been.calledOnce;
     });
 
     it('should set the view isDestroyed to true', function() {
-      expect(this.view.isDestroyed).to.be.true;
+      expect(this.view).to.be.have.property('isDestroyed', true);
     });
   });
 
   describe('constructing a view with default options', function() {
     beforeEach(function() {
-      this.View = Marionette.ItemView.extend();
-      this.PresetOptions = Marionette.View.extend({
-        options: {
-          'lila': 'zoidberg'
-        }
-      });
-      this.PresetOptionsFn = Marionette.View.extend({
-        options: function() {
-          return {fry: 'bender'};
-        }
-      });
+      this.presets = {foo: 'foo'};
+      this.options = {foo: 'bar'};
+
+      this.presetsStub = this.sinon.stub().returns(this.presets);
+      this.optionsStub = this.sinon.stub().returns(this.options);
+
+      this.View = Marionette.View.extend();
+      this.ViewPresets   = Marionette.View.extend({ options: this.presets });
+      this.ViewPresetsFn = Marionette.View.extend({ options: this.presetsStub });
     });
 
     it('should take and store view options', function() {
-      var viewInstance = new this.View({'Guybrush': 'Island'});
-      expect(viewInstance.options.Guybrush).to.equal('Island');
+      this.view = new this.View(this.options);
+      expect(this.view.options).to.deep.equal(this.options);
     });
 
     it('should take and store view options as a function', function() {
-      var viewInstance = new this.View(function() {
-        return {Guybrush: 'Island'};
-      });
-      expect(viewInstance.options.Guybrush).to.equal('Island');
+      this.view = new this.View(this.optionsStub);
+      expect(this.view.options).to.deep.equal(this.options);
     });
 
     it('should have an empty hash of options by default', function() {
-      var viewInstance = new this.View();
-      expect(typeof(viewInstance.options.Guybrush)).to.equal('undefined');
+      this.view = new this.View();
+      expect(this.view.options).to.deep.equal({});
     });
 
     it('should retain options set on view class', function() {
-      var viewInstance = new this.PresetOptions();
-      expect(viewInstance.options.lila).to.equal('zoidberg');
+      this.view = new this.ViewPresets();
+      expect(this.view.options).to.deep.equal(this.presets);
     });
 
     it('should retain options set on view class as a function', function() {
-      var viewInstance = new this.PresetOptionsFn();
-      expect(viewInstance.options.fry).to.equal('bender');
+      this.view = new this.ViewPresetsFn();
+      expect(this.view.options).to.deep.equal(this.presets);
     });
   });
 
   describe('should expose its options in the constructor', function() {
     beforeEach(function() {
-      this.View = Marionette.View.extend({
-        initialize: function() {
-          this.info = this.options;
-        }
-      });
+      this.options = {foo: 'bar'};
+      this.view = new Marionette.View(this.options);
     });
 
     it('should be able to access instance options', function() {
-      var myView = new this.View({name: 'LeChuck'});
-      expect(myView.info.name).to.equal('LeChuck');
+      expect(this.view.options).to.deep.equal(this.options);
     });
   });
 
   describe('when destroying a view that is already destroyed', function() {
     beforeEach(function() {
       this.view = new Marionette.View();
+
+      this.removeSpy = this.sinon.spy(this.view, 'remove');
+      this.destroyStub = this.sinon.stub();
+      this.view.on('destroy', this.destroyStub);
+
       this.view.destroy();
-
-      this.sinon.spy(this.view, 'remove');
-      this.destroy = this.sinon.stub();
-      this.view.on('destroy', this.destroy);
-
       this.view.destroy();
     });
 
     it('should not trigger the destroy event', function() {
-      expect(this.destroy).not.to.have.been.called;
+      expect(this.destroyStub).to.have.been.calledOnce;
     });
 
     it('should not remove the view', function() {
-      expect(this.view.remove).not.to.have.been.called;
+      expect(this.removeSpy).to.have.been.calledOnce;
     });
 
     it('should leave isDestroyed as true', function() {
-      expect(this.view.isDestroyed).to.be.true;
+      expect(this.view).to.be.have.property('isDestroyed', true);
     });
   });
 });

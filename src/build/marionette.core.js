@@ -28,9 +28,6 @@
     return this;
   };
 
-  // Get the DOM manipulator for later use
-  Marionette.$ = Backbone.$;
-
   // Get the Deferred creator for later use
   Marionette.Deferred = Backbone.$.Deferred;
 

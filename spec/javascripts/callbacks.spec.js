@@ -92,4 +92,31 @@ describe('callbacks', function() {
       expect(this.numCallbacks).to.equal(1);
     });
   });
+
+  describe("when Marionette.Deferred().promise is an object", function(){
+    beforeEach(function(){
+      this.sandbox = sinon.sandbox.create();
+
+      this.sandbox.stub(Backbone.Marionette, "Deferred", function(){
+        var deferred = Backbone.$.Deferred();
+        deferred.promise = deferred.promise();
+        return deferred;
+      });
+
+      var callbacks = new Backbone.Marionette.Callbacks();
+
+      this.spy = sinon.spy();
+      callbacks.add(this.spy);
+
+      callbacks.run();
+    });
+
+    afterEach(function(){
+      this.sandbox.restore();
+    });
+
+    it("should execute the callbacks", function(){
+      expect(this.spy).to.have.been.called;
+    });
+  });
 });

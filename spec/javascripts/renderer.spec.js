@@ -1,49 +1,46 @@
 describe('renderer', function() {
   'use strict';
 
+  beforeEach(function() {
+    this.templateCacheSpy = this.sinon.spy(Marionette.TemplateCache, 'get');
+    this.data = {foo: 'bar'};
+  });
+
   describe('when given a template id to render', function() {
     beforeEach(function() {
-      this.templateSelector = '#renderer-template';
-
       this.loadFixtures('rendererTemplate.html');
-      this.sinon.spy(Backbone.Marionette.TemplateCache, 'get');
-      this.html = Backbone.Marionette.Renderer.render(this.templateSelector).trim();
-      this.result = $(this.html);
+      this.templateSelector = '#renderer-template';
+      this.result = Marionette.Renderer.render(this.templateSelector).trim();
     });
 
     it('should retrieve the template from the cache', function() {
-      expect(Backbone.Marionette.TemplateCache.get).to.have.been.calledWith(this.templateSelector);
+      expect(this.templateCacheSpy).to.have.been.calledWith(this.templateSelector);
     });
 
     it('should render the template', function() {
-      expect(this.result).to.contain.$text('renderer');
+      expect(this.result).to.equal('<div>renderer</div>');
     });
   });
 
   describe('when given a template and data to render', function() {
     beforeEach(function() {
-      this.templateSelector = '#renderer-with-data-template';
-
       this.loadFixtures('rendererWithDataTemplate.html');
-      this.sinon.spy(Backbone.Marionette.TemplateCache, 'get');
-
-      this.data = {foo: 'bar'};
-      this.html = Backbone.Marionette.Renderer.render(this.templateSelector, this.data).trim();
-      this.result = $(this.html);
+      this.templateSelector = '#renderer-with-data-template';
+      this.result = Marionette.Renderer.render(this.templateSelector, this.data).trim();
     });
 
     it('should retrieve the template from the cache', function() {
-      expect(Backbone.Marionette.TemplateCache.get).to.have.been.calledWith(this.templateSelector);
+      expect(this.templateCacheSpy).to.have.been.calledWith(this.templateSelector);
     });
 
     it('should render the template', function() {
-      expect(this.result).to.contain.$text('renderer bar');
+      expect(this.result).to.equal('<div>bar</div>');
     });
   });
 
   describe('when no template is provided', function() {
     beforeEach(function() {
-      this.render = _.bind(Backbone.Marionette.Renderer.render, Backbone.Marionette.Renderer);
+      this.render = _.bind(Marionette.Renderer.render, Marionette.Renderer);
     });
 
     it('should raise an error', function() {
@@ -53,33 +50,25 @@ describe('renderer', function() {
 
   describe('when overriding the `render` method', function() {
     beforeEach(function() {
-      this.oldRender = Backbone.Marionette.Renderer.render;
-
-      Backbone.Marionette.Renderer.render = function() {
-        return '<foo>custom</foo>';
-      };
-
-      this.result = Backbone.Marionette.Renderer.render('', {});
-      this.result = $(this.result);
-    });
-
-    afterEach(function() {
-      Backbone.Marionette.Renderer.render = this.oldRender;
+      this.renderStub = this.sinon.stub(Marionette.Renderer, 'render');
+      this.view = new Marionette.ItemView();
+      this.view.render();
     });
 
     it('should render the view with the overridden method', function() {
-      expect(this.result).to.contain.$text('custom');
+      expect(this.renderStub).to.have.been.called;
     });
   });
 
   describe('when providing a precompiled template', function() {
     beforeEach(function() {
       this.templateFunction = _.template('<%= foo %>');
-      this.result = Backbone.Marionette.Renderer.render(this.templateFunction, {foo : 'bar'});
+      this.renderSpy = this.sinon.spy(Marionette.Renderer, 'render');
+      Marionette.Renderer.render(this.templateFunction, this.data);
     });
 
     it('should use the provided template function', function() {
-      expect(this.result).to.equal('bar');
+      expect(this.renderSpy).to.have.been.calledOnce.and.returned(this.data.foo);
     });
   });
 });

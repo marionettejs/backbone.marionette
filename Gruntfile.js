@@ -160,9 +160,19 @@ module.exports = function(grunt) {
           'tmp/backbone.marionette.js': ['coverage']
         },
         coverageReporter: {
-          type : 'html',
+          type : 'lcov',
           dir : 'coverage/'
         }
+      }
+    },
+
+    coveralls: {
+      options: {
+        debug: true,
+        coverage_dir: 'coverage',
+        dryRun: true,
+        force: true,
+        recursive: true
       }
     },
 
@@ -284,9 +294,9 @@ module.exports = function(grunt) {
 
   grunt.registerTask('lint', 'Lints our sources', ['lintspaces', 'jshint']);
 
-  grunt.registerTask('test', 'Run the unit tests.', ['verify-bower', 'lint', 'unwrap', 'preprocess:bundle', 'template:bundle', 'copy:test', 'karma:unit', 'clean:tmp', 'clean:test']);
+  grunt.registerTask('test', 'Run the unit tests.', ['verify-bower', 'lint', 'unwrap', 'preprocess:bundle', 'template:bundle', 'copy:test', 'karma:unit', 'clean:tmp', 'clean:test', 'coverage']);
 
-  grunt.registerTask('coverage', ['unwrap', 'preprocess:bundle', 'template:bundle', 'env:coverage', 'instrument', 'karma:coverage', 'clean:tmp', 'clean:test']);
+  grunt.registerTask('coverage', ['unwrap', 'preprocess:bundle', 'template:bundle', 'env:coverage', 'instrument', 'karma:coverage', 'coveralls', 'clean:tmp', 'clean:test']);
 
   grunt.registerTask('dev', 'Auto-lints while writing code.', ['test', 'watch:marionette']);
 

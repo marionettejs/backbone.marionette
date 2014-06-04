@@ -67,9 +67,9 @@ describe('region', function() {
 
     describe('when showing a view', function() {
       it('should throw an exception saying an "el" doesnt exist in DOM', function() {
-        expect(function(){
+        expect(_.bind(function(){
           this.myRegion.show(new this.MyView());
-        }.bind(this)).to.throw('An "el" #not-existed-region must exist in DOM');
+        }, this)).to.throw('An "el" #not-existed-region must exist in DOM');
       });
     });
   });

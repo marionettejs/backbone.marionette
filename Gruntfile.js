@@ -41,7 +41,8 @@ module.exports = function(grunt) {
 
     clean: {
       lib: 'lib',
-      tmp: 'tmp'
+      tmp: 'tmp',
+      test: 'test'
     },
 
     bower: {
@@ -49,6 +50,14 @@ module.exports = function(grunt) {
         options: {
           copy: false
         }
+      }
+    },
+
+    copy: {
+      test: {
+        files: [
+          { src: 'tmp/backbone.marionette.js', dest: 'test/tmp/backbone.marionette.js', flatten: true }
+        ]
       }
     },
 
@@ -120,18 +129,50 @@ module.exports = function(grunt) {
       }
     },
 
-    mochaTest: {
-      tests: {
-        options: {
-          require: 'spec/javascripts/setup/node.js',
-          reporter: 'dot',
-          clearRequireCache: true,
-          mocha: require('mocha')
+    env: {
+      coverage: {
+        APP_DIR_FOR_CODE_COVERAGE: '../test/tmp/'
+      }
+    },
+
+    instrument: {
+      files: 'tmp/backbone.marionette.js',
+      options: {
+        lazy: true,
+        basePath: 'test'
+      }
+    },
+
+    karma: {
+      unit: {
+        configFile: 'karma.conf.js'
+      },
+      debug: {
+        configFile: 'karma.conf.js',
+        singleRun: false,
+        browsers: ['Chrome']
+      },
+      coverage: {
+        configFile: 'karma.conf.js',
+        reporters: ['progress', 'coverage'],
+        preprocessors: {
+          "/**/*.browserify": "browserify",
+          'tmp/backbone.marionette.js': ['coverage']
         },
-        src: [
-          'spec/javascripts/setup/helpers.js',
-          'spec/javascripts/*.spec.js'
-        ]
+        coverageReporter: {
+          type : 'lcov',
+          dir : 'coverage/'
+        }
+      }
+    },
+
+    coveralls: {
+      options: {
+        debug: true,
+        coverage_dir: 'coverage',
+        dryRun: true,
+        force: true,
+        recursive: true
       }
     },
 
@@ -253,9 +294,11 @@ module.exports = function(grunt) {
 
   grunt.registerTask('lint', 'Lints our sources', ['lintspaces', 'jshint']);
 
-  grunt.registerTask('test', 'Run the unit tests.', ['verify-bower', 'lint', 'unwrap', 'preprocess:bundle', 'template:bundle', 'mochaTest', 'clean:tmp']);
+  grunt.registerTask('test', 'Run the unit tests.', ['verify-bower', 'lint', 'unwrap', 'preprocess:bundle', 'template:bundle', 'copy:test', 'karma:unit', 'clean:tmp', 'clean:test']);
+
+  grunt.registerTask('coverage', ['unwrap', 'preprocess:bundle', 'template:bundle', 'env:coverage', 'instrument', 'karma:coverage', 'coveralls', 'clean:tmp', 'clean:test']);
 
   grunt.registerTask('dev', 'Auto-lints while writing code.', ['test', 'watch:marionette']);
 
-  grunt.registerTask('build', 'Build all three versions of the library.', ['clean:lib', 'bower:install', 'lint', 'unwrap', 'preprocess', 'template', 'mochaTest', 'concat', 'uglify', 'clean:tmp']);
+  grunt.registerTask('build', 'Build all three versions of the library.', ['clean:lib', 'bower:install', 'lint', 'unwrap', 'preprocess', 'template', 'copy:test', 'karma:unit', 'concat', 'uglify', 'clean:tmp', 'clean:test']);
 };

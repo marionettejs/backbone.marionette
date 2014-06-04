@@ -326,7 +326,7 @@ describe('Behaviors', function() {
     });
 
     it('should not clobber the event prototype', function() {
-      expect(this.hold.test.prototype.events['click @ui.doge']).to.equal('onDogeClick');
+      expect(this.hold.test.prototype.events).to.have.property('click @ui.doge', 'onDogeClick');
     });
 
     it('should set the behavior UI element', function() {

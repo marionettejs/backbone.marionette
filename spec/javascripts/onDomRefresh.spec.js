@@ -2,23 +2,21 @@ describe('onDomRefresh', function() {
   'use strict';
 
   beforeEach(function() {
+    this.onDomRefreshStub = this.sinon.stub();
     this.View = Backbone.Marionette.ItemView.extend({
-      onDomRefresh: function() {}
+      onDomRefresh: this.onDomRefreshStub
     });
-
-    this.sinon.spy(this.View.prototype, 'onDomRefresh');
     this.view = new this.View();
-    this.view.trigger('show');
-    this.view.trigger('render');
-  });
-
-  afterEach(function() {
-    this.view.remove();
   });
 
   describe('when the view is not in the DOM', function() {
+    beforeEach(function() {
+      this.view.trigger('show');
+      this.view.trigger('render');
+    });
+
     it('should never trigger onDomRefresh', function() {
-      expect(this.View.prototype.onDomRefresh).not.to.have.been.called;
+      expect(this.onDomRefreshStub).not.to.have.been.called;
     });
   });
 
@@ -30,7 +28,7 @@ describe('onDomRefresh', function() {
     });
 
     it('should trigger onDomRefresh if "show" and "render" have both been triggered on the view', function() {
-      expect(this.View.prototype.onDomRefresh).to.have.been.called;
+      expect(this.onDomRefreshStub).to.have.been.called;
     });
   });
 });

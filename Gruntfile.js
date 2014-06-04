@@ -294,7 +294,7 @@ module.exports = function(grunt) {
 
   grunt.registerTask('lint', 'Lints our sources', ['lintspaces', 'jshint']);
 
-  grunt.registerTask('test', 'Run the unit tests.', ['verify-bower', 'lint', 'unwrap', 'preprocess:bundle', 'template:bundle', 'copy:test', 'karma:unit', 'clean:tmp', 'clean:test', 'coverage']);
+  grunt.registerTask('test', 'Run the unit tests.', ['verify-bower', 'lint', 'unwrap', 'preprocess:bundle', 'template:bundle', 'copy:test', 'karma:unit', 'clean:tmp', 'clean:test']);
 
   grunt.registerTask('coverage', ['unwrap', 'preprocess:bundle', 'template:bundle', 'env:coverage', 'instrument', 'karma:coverage', 'coveralls', 'clean:tmp', 'clean:test']);
 

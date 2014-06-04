@@ -24,7 +24,8 @@
   ],
   "scripts": {
     "bower": "./node_modules/bower/bin/bower install",
-    "test": "./node_modules/grunt-cli/bin/grunt test"
+    "test": "./node_modules/grunt-cli/bin/grunt test",
+    "coverage": "./node_modules/grunt-cli/bin/grunt coverage"
   },
   "author": {
     "name": "Derick Bailey",

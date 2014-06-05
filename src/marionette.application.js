@@ -41,6 +41,8 @@ _.extend(Marionette.Application.prototype, Backbone.Events, {
     this.triggerMethod('before:start', options);
     this._initCallbacks.run(options, this);
     this.triggerMethod('start', options);
+
+    return this;
   },
 
   // Add regions to your app.
@@ -54,6 +56,7 @@ _.extend(Marionette.Application.prototype, Backbone.Events, {
   // Empty all regions in the app, without removing them
   emptyRegions: function() {
     this._regionManager.emptyRegions();
+    return this;
   },
 
   // Removes a region from your app, by name
@@ -61,6 +64,7 @@ _.extend(Marionette.Application.prototype, Backbone.Events, {
   // removeRegion('myRegion')
   removeRegion: function(region) {
     this._regionManager.removeRegion(region);
+    return this;
   },
 
   // Provides alternative access to regions

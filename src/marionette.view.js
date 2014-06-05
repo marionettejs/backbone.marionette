@@ -108,6 +108,7 @@ Marionette.View = Backbone.View.extend({
     this._delegateDOMEvents(events);
     this.bindEntityEvents(this.model, this.getOption('modelEvents'));
     this.bindEntityEvents(this.collection, this.getOption('collectionEvents'));
+    return this;
   },
 
   // internal method to delegate DOM events and triggers
@@ -134,6 +135,7 @@ Marionette.View = Backbone.View.extend({
     Backbone.View.prototype.undelegateEvents.apply(this, args);
     this.unbindEntityEvents(this.model, this.getOption('modelEvents'));
     this.unbindEntityEvents(this.collection, this.getOption('collectionEvents'));
+    return this;
   },
 
   // Internal method, handles the `show` event.
@@ -170,6 +172,7 @@ Marionette.View = Backbone.View.extend({
 
     // remove the view from the DOM
     this.remove();
+    return this;
   },
 
   // This method binds the elements specified in the "ui" hash inside the view's code with

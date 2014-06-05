@@ -53,14 +53,14 @@ _.extend(Marionette.Application.prototype, Backbone.Events, {
 
   // Empty all regions in the app, without removing them
   emptyRegions: function() {
-    this._regionManager.emptyRegions();
+    return this._regionManager.emptyRegions();
   },
 
   // Removes a region from your app, by name
   // Accepts the regions name
   // removeRegion('myRegion')
   removeRegion: function(region) {
-    this._regionManager.removeRegion(region);
+    return this._regionManager.removeRegion(region);
   },
 
   // Provides alternative access to regions

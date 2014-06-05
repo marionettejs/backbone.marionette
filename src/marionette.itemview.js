@@ -77,6 +77,6 @@ Marionette.ItemView = Marionette.View.extend({
   destroy: function() {
     if (this.isDestroyed) { return; }
 
-    Marionette.View.prototype.destroy.apply(this, arguments);
+    return Marionette.View.prototype.destroy.apply(this, arguments);
   }
 });

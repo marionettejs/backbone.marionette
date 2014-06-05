@@ -609,4 +609,52 @@ describe('Behaviors', function() {
       expect(this.bazClickStub).to.have.been.calledOnce.and.calledOn(this.view);
     });
   });
+
+  describe('return values of wrapped methods', function() {
+    beforeEach(function() {
+      this.behaviors = { foo: Marionette.Behavior };
+      Marionette.Behaviors.behaviorsLookup = this.behaviors;
+
+      this.View = Marionette.View.extend({
+        behaviors: { foo: {} }
+      });
+
+      this.view = new this.View();
+    });
+
+    it('destroy should return the view', function() {
+      this.sinon.spy(this.view, 'destroy');
+      this.view.destroy();
+      expect(this.view.destroy).to.have.returned(this.view);
+    });
+
+    it('setElement should return the view', function() {
+      this.sinon.spy(this.view, 'setElement');
+      this.view.setElement(this.view.$el);
+      expect(this.view.setElement).to.have.returned(this.view);
+    });
+
+    it('delegateEvents should return the view', function() {
+      this.sinon.spy(this.view, 'delegateEvents');
+      this.view.delegateEvents();
+      expect(this.view.delegateEvents).to.have.returned(this.view);
+    });
+
+    it('undelegateEvents should return the view', function() {
+      this.sinon.spy(this.view, 'undelegateEvents');
+      this.view.undelegateEvents({});
+      expect(this.view.undelegateEvents).to.have.returned(this.view);
+    });
+  });
+
+  describe('.destroy', function() {
+    beforeEach(function() {
+      this.behavior = new Marionette.Behavior();
+      this.sinon.spy(this.behavior, 'destroy');
+      this.behavior.destroy();
+    });
+
+    it('should return the behavior', function() {
+    });
+  });
 });

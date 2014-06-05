@@ -203,6 +203,7 @@ describe('regionManager', function() {
       this.regionManager.on('remove:region', this.removeHandler);
       this.sinon.spy(this.region, 'stopListening');
 
+      this.sinon.spy(this.regionManager, 'removeRegion');
       this.regionManager.removeRegion('foo');
     });
 
@@ -229,6 +230,10 @@ describe('regionManager', function() {
     it('should adjust the length of the region manager by -1', function() {
       expect(this.regionManager.length).to.equal(0);
     });
+
+    it('should return the region', function() {
+      expect(this.regionManager.removeRegion).to.have.returned(this.region);
+    });
   });
 
   describe('.removeRegions', function() {
@@ -242,6 +247,7 @@ describe('regionManager', function() {
       this.regionManager = new Marionette.RegionManager();
       this.region = this.regionManager.addRegion('foo', '#foo');
       this.r2 = this.regionManager.addRegion('bar', '#bar');
+      this.regions = this.regionManager.getRegions();
 
       this.region.show(new Backbone.View());
       this.r2.show(new Backbone.View());
@@ -254,6 +260,7 @@ describe('regionManager', function() {
       this.sinon.spy(this.region, 'stopListening');
       this.sinon.spy(this.r2, 'stopListening');
 
+      this.sinon.spy(this.regionManager, 'removeRegions');
       this.regionManager.removeRegions();
     });
 
@@ -276,6 +283,10 @@ describe('regionManager', function() {
       expect(this.removeHandler).to.have.been.calledWith('foo', this.region);
       expect(this.removeHandler).to.have.been.calledWith('bar', this.r2);
     });
+
+    it('should return the regions', function() {
+      expect(this.regionManager.removeRegions).to.have.returned(this.regions);
+    });
   });
 
   describe('.emptyRegions', function() {
@@ -287,10 +298,12 @@ describe('regionManager', function() {
 
       this.regionManager = new Marionette.RegionManager();
       this.region = this.regionManager.addRegion('foo', '#foo');
+      this.regions = this.regionManager.getRegions();
       this.region.show(new Backbone.View());
 
       this.region.on('empty', this.emptyHandler);
 
+      this.sinon.spy(this.regionManager, 'emptyRegions');
       this.regionManager.emptyRegions();
     });
 
@@ -300,6 +313,10 @@ describe('regionManager', function() {
 
     it('should not remove all regions', function() {
       expect(this.regionManager.get('foo')).to.equal(this.region);
+    });
+
+    it('should return the regions', function() {
+      expect(this.regionManager.emptyRegions).to.have.returned(this.regions);
     });
   });
 
@@ -318,6 +335,7 @@ describe('regionManager', function() {
 
       this.sinon.spy(this.region, 'stopListening');
 
+      this.sinon.spy(this.regionManager, 'destroy');
       this.regionManager.destroy();
     });
 
@@ -335,6 +353,10 @@ describe('regionManager', function() {
 
     it('should trigger a "destroy" event/method', function() {
       expect(this.destroyManagerHandler).to.have.been.called;
+    });
+
+    it('should return the region manager', function() {
+      expect(this.regionManager.destroy).to.have.returned(this.regionManager);
     });
   });
 

@@ -36,6 +36,8 @@ Marionette.Behaviors = (function(Marionette, _) {
       _.each(behaviors, function(b) {
         b.$el = this.$el;
       }, this);
+
+      return this;
     },
 
     destroy: function(destroy, behaviors) {
@@ -47,6 +49,7 @@ Marionette.Behaviors = (function(Marionette, _) {
       // This unbinds event listeners
       // that behaviors have registerd for.
       _.invoke(behaviors, 'destroy', args);
+      return this;
     },
 
     bindUIElements: function(bindUIElements, behaviors) {
@@ -76,6 +79,8 @@ Marionette.Behaviors = (function(Marionette, _) {
         Marionette.bindEntityEvents(b, this.model, Marionette.getOption(b, 'modelEvents'));
         Marionette.bindEntityEvents(b, this.collection, Marionette.getOption(b, 'collectionEvents'));
       }, this);
+
+      return this;
     },
 
     undelegateEvents: function(undelegateEvents, behaviors) {
@@ -86,6 +91,8 @@ Marionette.Behaviors = (function(Marionette, _) {
         Marionette.unbindEntityEvents(b, this.model, Marionette.getOption(b, 'modelEvents'));
         Marionette.unbindEntityEvents(b, this.collection, Marionette.getOption(b, 'collectionEvents'));
       }, this);
+
+      return this;
     },
 
     behaviorEvents: function(behaviorEvents, behaviors) {

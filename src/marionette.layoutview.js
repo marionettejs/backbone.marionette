@@ -43,10 +43,10 @@ Marionette.LayoutView = Marionette.ItemView.extend({
 
   // Handle destroying regions, and then destroy the view itself.
   destroy: function() {
-    if (this.isDestroyed) { return; }
+    if (this.isDestroyed) { return this; }
 
     this.regionManager.destroy();
-    Marionette.ItemView.prototype.destroy.apply(this, arguments);
+    return Marionette.ItemView.prototype.destroy.apply(this, arguments);
   },
 
   // Add a single region, by name, to the layoutView

@@ -236,6 +236,7 @@ _.extend(Marionette.Region.prototype, Backbone.Events, {
 
     // Remove region pointer to the currentView
     delete this.currentView;
+    return this;
   },
 
   // call 'destroy' or 'remove', depending on which is found
@@ -256,6 +257,7 @@ _.extend(Marionette.Region.prototype, Backbone.Events, {
   // of the region.
   attachView: function(view) {
     this.currentView = view;
+    return this;
   },
 
   // Reset the region by destroying any existing view and
@@ -270,6 +272,7 @@ _.extend(Marionette.Region.prototype, Backbone.Events, {
     }
 
     delete this.$el;
+    return this;
   },
 
   // Proxy `getOption` to enable getting options from this or this.options by name.

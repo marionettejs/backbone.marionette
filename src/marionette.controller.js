@@ -26,6 +26,7 @@ _.extend(Marionette.Controller.prototype, Backbone.Events, {
 
     this.stopListening();
     this.off();
+    return this;
   },
 
   // import the `triggerMethod` to trigger events with corresponding

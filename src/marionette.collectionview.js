@@ -316,6 +316,7 @@ Marionette.CollectionView = Marionette.View.extend({
   renderChildView: function(view, index) {
     view.render();
     this.attachHtml(this, view, index);
+    return view;
   },
 
   // Build a `childView` for a model in the collection.
@@ -344,6 +345,7 @@ Marionette.CollectionView = Marionette.View.extend({
       this._updateIndices(view, false);
     }
 
+    return view;
   },
 
   // check if the collection is empty
@@ -423,14 +425,16 @@ Marionette.CollectionView = Marionette.View.extend({
     this.destroyChildren();
     this.triggerMethod('destroy:collection');
 
-    Marionette.View.prototype.destroy.apply(this, arguments);
+    return Marionette.View.prototype.destroy.apply(this, arguments);
   },
 
   // Destroy the child views that this collection view
   // is holding on to, if any
   destroyChildren: function() {
+    var childViews = this.children.map(_.identity);
     this.children.each(this.removeChildView, this);
     this.checkEmpty();
+    return childViews;
   },
 
   // Set up the child view event forwarding. Uses a "childview:"

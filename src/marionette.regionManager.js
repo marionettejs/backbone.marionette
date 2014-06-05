@@ -72,29 +72,37 @@ Marionette.RegionManager = (function(Marionette) {
     removeRegion: function(name) {
       var region = this._regions[name];
       this._remove(name, region);
+
+      return region;
     },
 
     // Empty all regions in the region manager, and
     // remove them
     removeRegions: function() {
+      var regions = this.getRegions();
       _.each(this._regions, function(region, name) {
         this._remove(name, region);
       }, this);
+
+      return regions;
     },
 
     // Empty all regions in the region manager, but
     // leave them attached
     emptyRegions: function() {
-      _.each(this._regions, function(region) {
+      var regions = this.getRegions();
+      _.each(regions, function(region) {
         region.empty();
       }, this);
+
+      return regions;
     },
 
     // Destroy all regions and shut down the region
     // manager entirely
     destroy: function() {
       this.removeRegions();
-      Marionette.Controller.prototype.destroy.apply(this, arguments);
+      return Marionette.Controller.prototype.destroy.apply(this, arguments);
     },
 
     // internal method to store regions

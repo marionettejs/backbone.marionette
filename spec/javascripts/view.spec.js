@@ -111,6 +111,7 @@ describe('base view', function() {
         return undefined;
       };
 
+      this.sinon.spy(this.view, 'destroy');
       this.view.destroy(123, 'second param');
     });
 
@@ -124,6 +125,10 @@ describe('base view', function() {
 
     it('should set the view isDestroyed to true', function() {
       expect(this.view.isDestroyed).to.be.true;
+    });
+
+    it('should return the view', function() {
+      expect(this.view.destroy).to.have.returned(this.view);
     });
   });
 

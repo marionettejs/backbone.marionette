@@ -119,6 +119,7 @@ describe('region', function() {
       this.view.on('before:show', this.viewBeforeShowSpy);
       this.view.on('show', this.viewShowSpy);
 
+      this.sinon.spy(this.myRegion, 'show');
       this.myRegion.show(this.view);
     });
 
@@ -184,6 +185,10 @@ describe('region', function() {
 
     it('should not call the `onSwap` function on the region', function() {
       expect(this.swapSpy.callCount).to.equal(0);
+    });
+
+    it('should return the region', function() {
+      expect(this.myRegion.show).to.have.returned(this.myRegion);
     });
 
     describe('and then showing a different view', function() {
@@ -532,6 +537,7 @@ describe('region', function() {
       this.myRegion.on('empty', this.emptySpy);
       this.myRegion.show(this.view);
 
+      this.sinon.spy(this.myRegion, 'empty');
       this.myRegion.empty();
     });
 
@@ -565,6 +571,10 @@ describe('region', function() {
 
     it('should delete the current view reference', function() {
       expect(this.myRegion.currentView).to.be.undefined;
+    });
+
+    it('should return the region', function() {
+      expect(this.myRegion.empty).to.have.returned(this.myRegion);
     });
   });
 
@@ -649,6 +659,7 @@ describe('region', function() {
         el: '#foo'
       });
 
+      this.sinon.spy(this.region, 'attachView');
       this.region.attachView(this.view);
     });
 
@@ -662,6 +673,10 @@ describe('region', function() {
 
     it('should not replace the existing html', function() {
       expect($(this.region.el).text()).to.equal('bar');
+    });
+
+    it('should return the region', function() {
+      expect(this.region.attachView).to.have.returned(this.region);
     });
   });
 
@@ -736,6 +751,7 @@ describe('region', function() {
 
       this.region._ensureElement();
 
+      this.sinon.spy(this.region, 'reset');
       this.region.reset();
     });
 
@@ -745,6 +761,10 @@ describe('region', function() {
 
     it('should empty any existing view', function() {
       expect(this.region.empty).to.have.been.called;
+    });
+
+    it('should return the region', function() {
+      expect(this.region.reset).to.have.returned(this.region);
     });
   });
 

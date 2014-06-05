@@ -156,6 +156,7 @@ describe('item view', function() {
       this.stopListeningSpy = this.sinon.spy(this.view, 'stopListening');
       this.triggerSpy       = this.sinon.spy(this.view, 'trigger');
 
+      this.sinon.spy(this.view, 'destroy');
       this.view.destroy();
     });
 
@@ -181,6 +182,10 @@ describe('item view', function() {
 
     it('should call "onDestroy" if provided', function() {
       expect(this.onDestroyStub).to.have.been.called;
+    });
+
+    it('should return the view', function() {
+      expect(this.view.destroy).to.have.returned(this.view);
     });
   });
 

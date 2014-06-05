@@ -128,6 +128,7 @@ describe('view entity events', function() {
         collection : this.collection
       });
 
+      this.sinon.spy(this.view, 'undelegateEvents');
       this.view.undelegateEvents();
 
       this.model.trigger('foo');
@@ -140,6 +141,10 @@ describe('view entity events', function() {
 
     it('should undelegate the collection events', function() {
       expect(this.barStub).not.to.have.been.calledOnce;
+    });
+
+    it('should return the view', function() {
+      expect(this.view.undelegateEvents).to.have.returned(this.view);
     });
   });
 
@@ -158,6 +163,7 @@ describe('view entity events', function() {
       });
 
       this.view.undelegateEvents();
+      this.sinon.spy(this.view, 'delegateEvents');
       this.view.delegateEvents();
     });
 
@@ -169,6 +175,10 @@ describe('view entity events', function() {
     it('should fire the collection event once', function() {
       this.collection.trigger('bar');
       expect(this.barStub).to.have.been.calledOnce;
+    });
+
+    it('should return the view from delegateEvents', function() {
+      expect(this.view.delegateEvents).to.have.returned(this.view);
     });
   });
 

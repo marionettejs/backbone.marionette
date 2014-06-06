@@ -51,7 +51,8 @@ Marionette.View = Backbone.View.extend({
 
   normalizeUIKeys: function(hash) {
     var ui = _.result(this, 'ui');
-    return Marionette.normalizeUIKeys(hash, ui);
+    var uiBindings = _.result(this, '_uiBindings');
+    return Marionette.normalizeUIKeys(hash, uiBindings || ui);
   },
 
   // Configure `triggers` to forward DOM events to view
@@ -114,6 +115,9 @@ Marionette.View = Backbone.View.extend({
   _delegateDOMEvents: function(events) {
     events = events || this.events;
     if (_.isFunction(events)) { events = events.call(this); }
+
+    // normalize ui keys
+    events = this.normalizeUIKeys(events);
 
     var combinedEvents = {};
 

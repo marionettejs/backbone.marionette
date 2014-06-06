@@ -1,107 +1,64 @@
-describe("collection view - itemViewOptions", function(){
+describe('collection view - childViewOptions', function() {
+  'use strict';
 
-  var ItemView = Backbone.Marionette.ItemView.extend({
-    tagName: "span",
-    render: function(){
-      this.$el.html(this.model.get("foo"));
-      this.trigger('render');
-    },
-    onRender: function(){}
-  });
+  beforeEach(function() {
+    this.collection = new Backbone.Collection([{foo: 'bar'}, {foo: 'baz'}]);
+    this.childViewOptions = {foo: 'bar'};
+    this.childViewOptionsStub = this.sinon.stub().returns(this.childViewOptions);
 
-  var CollectionView = Backbone.Marionette.CollectionView.extend({
-    itemView: ItemView,
-
-    onBeforeRender: function(){},
-
-    onRender: function(){},
-
-    onBeforeItemAdded: function(view){},
-    onAfterItemAdded: function(view){}
-  });
-
-  describe("when rendering and an 'itemViewOptions' is provided", function(){
-    var CollectionView = Backbone.Marionette.CollectionView.extend({
-      itemView: ItemView,
-      itemViewOptions: {
-        foo: "bar"
-      }
+    this.ItemView = Backbone.Marionette.ItemView.extend({
+      render: this.sinon.stub()
     });
 
-    var collection = new Backbone.Collection([{foo: "bar"}]);
-    var collectionView, view;
+    this.CollectionView = Backbone.Marionette.CollectionView.extend({
+      collection: this.collection,
+      childView: this.ItemView,
+      childViewOptions: this.childViewOptions
+    });
+  });
 
-    beforeEach(function(){
-      collectionView = new CollectionView({
-        collection: collection
+  describe('when rendering and a "childViewOptions" is provided', function() {
+    beforeEach(function() {
+      this.collectionView = new this.CollectionView();
+      this.collectionView.render();
+      this.view = this.collectionView.children.findByIndex(0);
+    });
+
+    it('should pass the options to every view instance', function() {
+      expect(this.view.options).to.contain(this.childViewOptions);
+    });
+  });
+
+  describe('when rendering and a "childViewOptions" is provided at construction time', function() {
+    beforeEach(function() {
+      this.collectionView = new this.CollectionView({
+        childViewOptions: this.childViewOptions
       });
-
-      collectionView.render();
-      view = collectionView.children.findByIndex(0);
+      this.collectionView.render();
+      this.view = this.collectionView.children.findByIndex(0);
     });
 
-    it("should pass the options to every view instance", function(){
-      expect(view.options.hasOwnProperty("foo")).toBe(true);
+    it('should pass the options to every view instance', function() {
+      expect(this.view.options).to.contain(this.childViewOptions);
     });
   });
 
-  describe("when rendering and an 'itemViewOptions' is provided as a function", function(){
-    var CollectionView = Backbone.Marionette.CollectionView.extend({
-      itemView: ItemView,
-      itemViewOptions: function(model, index){
-        return {
-          foo: "bar",
-          index: index
-        };
-      }
-    });
-
-    var collection = new Backbone.Collection([{foo: "bar"},{foo: "baz"}]);
-    var collectionView, view;
-
-    beforeEach(function(){
-      collectionView = new CollectionView({
-        collection: collection
+  describe('when rendering and a "childViewOptions" is provided as a function', function() {
+    beforeEach(function() {
+      this.collectionView = new this.CollectionView({
+        childViewOptions: this.childViewOptionsStub
       });
-      spyOn(collectionView, 'itemViewOptions').andCallThrough();
-
-      collectionView.render();
-      view = collectionView.children.findByIndex(0);
+      this.collectionView.render();
+      this.view = this.collectionView.children.findByIndex(0);
     });
 
-    it("should pass the options to every view instance", function(){
-      expect(view.options.hasOwnProperty("foo")).toBe(true);
+    it('should pass the options to every view instance', function() {
+      expect(this.view.options).to.contain(this.childViewOptions);
     });
 
-    it("should pass the model when calling 'itemViewOptions'", function() {
-      expect(collectionView.itemViewOptions).toHaveBeenCalledWith(collection.at(0), 0);
-      expect(collectionView.itemViewOptions).toHaveBeenCalledWith(collection.at(1), 1);
+    it('should pass the model when calling "childViewOptions"', function() {
+      expect(this.childViewOptionsStub).to.have.been.calledTwice.and.calledWith(this.collection.at(0), 0);
+      expect(this.childViewOptionsStub).to.have.been.calledTwice.and.calledWith(this.collection.at(1), 1);
     });
   });
-
-  describe("when rendering and an 'itemViewOptions' is provided at construction time", function(){
-    var CollectionView = Backbone.Marionette.CollectionView.extend({
-      itemView: ItemView
-    });
-
-    var collection = new Backbone.Collection([{foo: "bar"}]);
-    var collectionView, view;
-
-    beforeEach(function(){
-      collectionView = new CollectionView({
-        collection: collection,
-        itemViewOptions: {
-          foo: "bar"
-        }
-      });
-
-      collectionView.render();
-      view = _.values(collectionView.children._views)[0];
-    });
-
-    it("should pass the options to every view instance", function(){
-      expect(view.options.hasOwnProperty("foo")).toBe(true);
-    });
-  });
-
 });

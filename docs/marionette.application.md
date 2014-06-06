@@ -18,14 +18,15 @@ MyApp = new Backbone.Marionette.Application();
 * [Adding Initializers](#adding-initializers)
 * [Application Event](#application-event)
 * [Starting An Application](#starting-an-application)
-* [Messaging Systems](#messaging-systems)
+* [The Global Channel](#the-global-channel)
   * [Event Aggregator](#event-aggregator)
   * [Request Response](#request-response)
   * [Commands](#commands)
+  * [Accessing the Global Channel](#accessing-the-global-channel)
 * [Regions And The Application Object](#regions-and-the-application-object)
   * [jQuery Selector](#jquery-selector)
-  * [Custom Region Type](#custom-region-type)
-  * [Custom Region Type And Selector](#custom-region-type-and-selector)
+  * [Custom Region Class](#custom-region-class)
+  * [Custom Region Class And Selector](#custom-region-class-and-selector)
   * [Get Region By Name](#get-region-by-name)
   * [Removing Regions](#removing-regions)
 
@@ -74,16 +75,15 @@ want to wait until your entire application is initialized to start
 
 The events that are currently triggered, are:
 
-* **"initialize:before" / `onInitializeBefore`**: fired just before the initializers kick off
-* **"initialize:after" / `onInitializeAfter`**: fires just after the initializers have finished
-* **"start" / `onStart`**: fires after all initializers and after the initializer events
+* **"before:start" / `onBeforeStart`**: fired just before the `Application` starts and before the initializers are executed.
+* **"start" / `onStart`**: fires after the `Application` has started and after the initializers have been executed.
 
 ```js
-MyApp.on("initialize:before", function(options){
+MyApp.on("before:start", function(options){
   options.moreData = "Yo dawg, I heard you like options so I put some options in your options!"
 });
 
-MyApp.on("initialize:after", function(options){
+MyApp.on("start", function(options){
   if (Backbone.history){
     Backbone.history.start();
   }
@@ -112,10 +112,13 @@ var options = {
 MyApp.start(options);
 ```
 
-## Messaging Systems
+## The Global Channel
 
-Application instances have an instance of all three [messaging systems](http://en.wikipedia.org/wiki/Message_passing) of `Backbone.Wreqr` attached to them. This
-section will give a brief overview of the systems; for a more in-depth look you are encouraged to read
+Marionette Applications come with a [messaging system](http://en.wikipedia.org/wiki/Message_passing) to facilitate communications within your app.
+
+The messaging system on the Application is the global channel from Backbone.Wreqr, which is actually comprised of three distinct systems.
+
+This section will give a brief overview of the systems; for a more in-depth look you are encouraged to read
 the [`Backbone.Wreqr` documentation](https://github.com/marionettejs/backbone.wreqr).
 
 ### Event Aggregator
@@ -179,6 +182,21 @@ MyApp.commands.execute("fetchData", true);
 MyApp.execute("fetchData", true);
 ```
 
+### Accessing the Global Channel
+
+To access this global channel from other objects within your app you are encouraged to get a handle of the systems
+through the Wreqr API instead of the Application instance itself.
+
+```js
+// Assuming that we're in some class within your app,
+// it is preferable to access the global channel like this:
+var globalCh = Backbone.Wreqr.radio.channel('global');
+globalCh.vent;
+
+// This is discouraged because it assumes the name of your application
+window.app.vent;
+```
+
 ## Regions And The Application Object
 
 Marionette's `Region` objects can be directly added to an application by
@@ -199,9 +217,9 @@ MyApp.addRegions({
 });
 ```
 
-### Custom Region Type
+### Custom Region Class
 
-The second is to specify a custom region type, where the region type has
+The second is to specify a custom region class, where the region class has
 already specified a selector:
 
 ```js
@@ -214,9 +232,9 @@ MyApp.addRegions({
 });
 ```
 
-### Custom Region Type And Selector
+### Custom Region Class And Selector
 
-The third method is to specify a custom region type, and a jQuery selector
+The third method is to specify a custom region class, and a jQuery selector
 for this region instance, using an object literal:
 
 ```js
@@ -226,12 +244,12 @@ MyApp.addRegions({
 
   someRegion: {
     selector: "#foo",
-    regionType: MyCustomRegion
+    regionClass: MyCustomRegion
   },
 
   anotherRegion: {
     selector: "#bar",
-    regionType: MyCustomRegion
+    regionClass: MyCustomRegion
   }
 
 });
@@ -262,7 +280,7 @@ the name of the region to remove as a string value:
 MyApp.removeRegion('someRegion');
 ```
 
-Removing a region will properly close it before removing it from the
+Removing a region will properly empty it before removing it from the
 application object.
 
 For more information on regions, see [the region documentation](./marionette.region.md)

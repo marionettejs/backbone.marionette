@@ -7,23 +7,31 @@ most common items to change.
 
 ## Documentation Index
 
-* [Marionette.$](#marionette_)
+* [Marionette.Deferred](#deferred)
 
-## Marionette.$
+## Marionette.Deferred <a name="deferred"></a>
 
-Marionette makes use of jQuery, by default, to manipulate DOM
-elements. To get a reference to jQuery, though, it assigns the
-`Marionette.$` attribute to `Backbone.$`. This provides consistency
-with Backbone in which exact version of jQuery or other DOM manipulation
-library is used.
+By default, Marionette makes use of `Backbone.$.Deferred` to create
+thenable objects. All that is needed is a Deferred that has the
+following properties:
 
-If you wish to change to a specific version of a DOM manipulation
-library, you can directly assign these settings:
+1. `promise`: a Promises/A+ thenable, or a function that returns one
+2. `resolve`: a function that resolves the provided promise with a value
+
+For example:
 
 ```js
-Backbone.$ = myDOMLib;
-Marionette.$ = myDOMLib;
+var deferred = Marionette.Deferred();
+
+_.result(deferred, 'promise').then(function (target) {
+    console.log("Hello, " + target + "!");
+});
+
+deferred.resolve("world"); // asynchronous "Hello, world!"
 ```
 
-Note that you should change both Backbone and Marionette at the same
-time, to the same DOM manipulation library.
+If you wish to use a specific promise library, you can override the default via:
+
+```js
+Marionette.Deferred = myDeferredLib;
+```

@@ -1,18 +1,20 @@
-# Backbone.Marionette
-
-Make your Backbone.js apps dance!
-
-[![Build Status](https://secure.travis-ci.org/marionettejs/backbone.marionette.svg?branch=master)](http://travis-ci.org/marionettejs/backbone.marionette)
-
+<h1 align="center">Backbone.Marionette</h1>
+<p align="center">
+  <img title="backbone marionette" src='http://marionettejs.com/downloads/marionette-gh-banner.svg' />
+</p>
+<p align="center"> Make your Backbone.js apps dance!</p>
+<p align="center">
+  <a title='Build Status' href="https://travis-ci.org/marionettejs/backbone.marionette">
+    <img src='https://secure.travis-ci.org/marionettejs/backbone.marionette.svg?branch=master' />
+  </a>
+</p>
 
 ## About Marionette
 
 Backbone.Marionette is a composite application library for Backbone.js that
 aims to simplify the construction of large scale JavaScript applications.
 It is a collection of common design and implementation patterns found in
-the applications that I (Derick Bailey) have been building with Backbone,
-and includes various pieces inspired by composite application architectures,
-such as Microsoft's "Prism" framework.
+applications.
 
 ### App Architecture On Backbone's Building Blocks
 
@@ -35,6 +37,13 @@ you want to use. This allows you to work with other Backbone
 frameworks and plugins easily. It also means that you are not required
 to engage in an all-or-nothing migration to begin using Marionette.
 
+### Chat with us
+
+Find us [on gitter](https://gitter.im/marionettejs/backbone.marionette) or on IRC in the FreeNode.net [#marionette channel](http://freenode.net). 
+
+We're happy to discuss design patterns and learn how you're using Marionette. 
+
+
 ### Key Benefits
 
 * Scalable: applications are built in modules, and with event-driven architecture
@@ -42,9 +51,9 @@ to engage in an all-or-nothing migration to begin using Marionette.
 * Easily modifiable: make it work with your application's specific needs
 * Reduce boilerplate for views, with specialized view types
 * Build on a modular architecture with an `Application` and modules that attach to it
-* Compose your application's visuals at runtime, with the `Region` and `Layout` objects
+* Compose your application's visuals at runtime, with the `Region` and `LayoutView` objects
 * Nested views and layouts within visual regions
-* Built-in memory management and zombie-killing in views, regions and layouts
+* Built-in memory management and zombie-killing in views, regions and layoutViews
 * Event-driven architecture with `Backbone.Wreqr.EventAggregator`
 * Flexible, "as-needed" architecture allowing you to pick and choose what you need
 * And much, much more
@@ -93,13 +102,6 @@ You can read the annotations for all the details of how Marionette works, and ad
 
 ##### [View the annotated source code](http://marionettejs.com/docs/backbone.marionette.html)
 
-### Marionette Configuration
-
-Marionette provides a few globally configurable settings, such as which
-DOM library to use (jQuery by default). You can find out more about which
-settings will change Marionette in the [configuration
-documentation](docs/marionette.configuration.md).
-
 ### Marionette's Pieces
 
 These are the strings that you can pull to make your puppet dance.
@@ -111,7 +113,7 @@ examples on how to get started, please visit [the Wiki](https://github.com/mario
 * [**Marionette.ItemView**](docs/marionette.itemview.md): A view that renders a single item
 * [**Marionette.CollectionView**](docs/marionette.collectionview.md): A view that iterates over a collection, and renders individual `ItemView` instances for each model
 * [**Marionette.CompositeView**](docs/marionette.compositeview.md): A collection view and item view, for rendering leaf-branch/composite model hierarchies
-* [**Marionette.Layout**](docs/marionette.layout.md): A view that renders a layout and creates region managers to manage areas within it
+* [**Marionette.LayoutView**](docs/marionette.layoutview.md): A view that renders a layout and creates region managers to manage areas within it
 * [**Marionette.View**](docs/marionette.view.md): The base View type that other Marionette views extend from (not intended to be used directly)
 
 **Behaviors**
@@ -166,8 +168,8 @@ MarionetteJS currently works with the following libraries:
 * [jQuery](http://jquery.com) v1.8+
 * [Underscore](http://underscorejs.org) v1.4.4 - 1.6.0
 * [Backbone](http://backbonejs.org) v1.0.0 - 1.1.2 are preferred. v0.9.9 and v0.9.10 should work still
-* [Backbone.Wreqr](https://github.com/marionettejs/backbone.wreqr)
-* [Backbone.BabySitter](https://github.com/marionettejs/backbone.babysitter)
+* [Backbone.Wreqr](https://github.com/marionettejs/backbone.wreqr) Comes automatically with the bundled build.
+* [Backbone.BabySitter](https://github.com/marionettejs/backbone.babysitter) Comes automatically with the bundled build.
 
 Marionette has not been tested against any other versions of these
 libraries. You may or may not have success if you use a version other
@@ -176,30 +178,6 @@ than what it listed here.
 While support for Zepto and EnderJS has been added, it is not officially
 tested against these libraries at this time.
 
-### Deferred/Promise Objects
-
-Marionette makes use of jQuery's [Deferred](http://api.jquery.com/category/deferred-object/)
-objects and, as such, will need supported methods in replacement libraries.
-Zepto users can use @Mumakil's [Standalone-Deferred](https://github.com/Mumakil/Standalone-Deferred)
-or @sudhirj's [simply-deferred](https://github.com/sudhirj/simply-deferred).
-EnderJS users, please let us know of how you solve any compatibility issues.
-
-Marionette no longer relies on [Backbone.EventBinder](https://github.com/marionettejs/backbone.eventbinder).
-Backbone.Events, as of v0.9.9, supersedes this library with its
-`listenTo` and `stopListening` methods. See [the upgrade guide](upgradeGuide.md)
-for more information.
-
-## Donations
-
-Marionette needs your support, but not everyone can offer assistance
-with code, bug submissions, and answering questions. If you're using
-Marionette and you're finding that it is saving you as much time and
-effort as I believe it does, then please consider financial support
-for the project.
-
-**Please see the footer of [MarionetteJS.com](http://marionettejs.com)
-for links to donate.**
-
 ## How to Contribute
 
 If you would like to contribute to Marionette's source code, please read
@@ -207,49 +185,14 @@ the [guidelines for pull requests and contributions](CONTRIBUTING.md).
 Following these guidelines will help make your contributions easier to
 bring into the next release.
 
-## Help is Just a Click Away
-
-### #Marionette on FreeNode.net IRC
-
-Join the `#marionette` channel on [FreeNode.net](http://freenode.net) to ask questions and get help.
-
-### [Google Group Mailing List](https://groups.google.com/forum/#!forum/backbone-marionette)
-
-Get announcements for new releases, share your projects and ideas that are
-using Marionette, and join in open-ended discussion that does not fit in
-to the Github issues list or StackOverflow Q&A.
-
-**For help with syntax, specific questions on how to implement a feature
-using Marionette, and other Q&A items, use StackOverflow.**
-
-### [StackOverflow](http://stackoverflow.com/questions/tagged/backbone.marionette)
-
-Ask questions about using Marionette in specific scenarios, with
-specific features. For example, help with syntax, understanding how a feature works and
-how to override that feature to do what you need or how to organize the
-different view types to work best with your applications needs.
-
-Questions on StackOverflow often turn in to blog posts and wiki entries.
-
 ### [Github Issues](//github.com/marionettejs/backbone.marionette/issues)
 
 Report issues with Marionette, submit pull requests to fix problems, or to
 create summarized and documented feature requests (preferably with pull
 requests that implement the feature).
 
-**Please don't ask questions or seek help in the issues list.** There are
-other, better channels for seeking assistance, like StackOverflow and the
-Google Groups mailing list.
-
-### [DerickBailey.LosTechies.com](http://derickbailey.lostechies.com)
-
-Lastly, I blog about Marionette on a regular basis, at my
-LosTechies.com blog.
-
-## Legal Mumbo Jumbo (MIT License)
+## MIT License
 
 Copyright (c) 2012-2014 Derick Bailey; Muted Solutions, LLC
 
 Distributed under [MIT license](http://mutedsolutions.mit-license.org/).
-
-[![bitdeli analytics](https://d2weczhvl823v0.cloudfront.net/marionettejs/backbone.marionette/trend.png)](https://bitdeli.com/free "Bitdeli Badge")

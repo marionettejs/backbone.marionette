@@ -1,290 +1,309 @@
-describe("collectionview - emptyView", function(){
-  "use strict";
+describe('collectionview - emptyView', function() {
+  'use strict';
 
-  var ItemView = Backbone.Marionette.ItemView.extend({
-    tagName: "span",
-    render: function(){
-      this.$el.html(this.model.get("foo"));
-    },
-    onRender: function(){}
+  beforeEach(function() {
+    this.ItemView = Backbone.Marionette.ItemView.extend({
+      tagName: 'span',
+      template: _.template('<%= foo %>')
+    });
+
+    this.EmptyView = Backbone.Marionette.ItemView.extend({
+      tagName: 'span',
+      template: _.template('empty')
+    });
+
+    this.EmptyCollectionView = Backbone.Marionette.CollectionView.extend({
+      childView: this.ItemView,
+      emptyView: this.EmptyView
+    });
   });
 
-  var EmptyView = Backbone.Marionette.ItemView.extend({
-    tagName: "span",
-    className: "isempty",
-    render: function(){}
-  });
-
-  var EmptyCollectionView = Backbone.Marionette.CollectionView.extend({
-    itemView: ItemView,
-    emptyView: EmptyView
-  });
-
-  describe("when rendering a collection view with an empty collection", function(){
-
-    var collectionView;
-
-    beforeEach(function(){
-      var collection = new Backbone.Collection();
-      collectionView = new EmptyCollectionView({
-        collection: collection
+  describe('when rendering a collection view with an empty collection', function() {
+    beforeEach(function() {
+      this.collection = new Backbone.Collection();
+      this.collectionView = new this.EmptyCollectionView({
+        collection: this.collection
       });
 
-      collectionView.render();
+      this.collectionView.render();
     });
 
-    it("should append the html for the emptyView", function(){
-      expect(collectionView.$el).toHaveHtml("<span class=\"isempty\"></span>");
+    it('should append the html for the emptyView', function() {
+      expect(this.collectionView.$el).to.have.$html('<span>empty</span>');
     });
 
-    it("should reference each of the rendered view items", function(){
-      expect(_.size(collectionView.children)).toBe(1);
+    it('should reference each of the rendered view items', function() {
+      expect(this.collectionView.children).to.have.lengthOf(1);
     });
-  });
 
-  describe("when the emptyView has been rendered for an empty collection, then adding an item to the collection", function(){
-    var collectionView, closeSpy;
-
-    beforeEach(function(){
-      var collection = new Backbone.Collection();
-      collectionView = new EmptyCollectionView({
-        collection: collection
+    describe('and then adding an item to the collection', function() {
+      beforeEach(function() {
+        this.destroySpy = this.sinon.spy(this.EmptyView.prototype, 'destroy');
+        this.collection.add({foo: 'wut'});
       });
 
-      collectionView.render();
-
-      closeSpy = spyOn(EmptyView.prototype, "close");
-
-      collection.add({foo: "wut"});
-    });
-
-    it("should close the emptyView", function(){
-      expect(closeSpy).toHaveBeenCalled();
-    });
-
-    it("should show the new item", function(){
-      expect(collectionView.$el).toHaveText(/wut/);
-    });
-  });
-
-  describe("when the emptyView has been rendered for an empty collection and then collection reset, receiving some values. Then adding an item to the collection", function () {
-    var collectionView, closeSpy;
-
-    beforeEach(function () {
-      var collection = new Backbone.Collection();
-      collectionView = new EmptyCollectionView({
-        collection: collection
+      it('should destroy the emptyView', function() {
+        expect(this.destroySpy).to.have.been.called;
       });
 
-      collectionView.render();
-
-      closeSpy = spyOn(EmptyView.prototype, "close");
-      closeSpy.andCallThrough();
-
-      collection.reset([{ foo: "bar" }, { foo: "baz"}]);
-
-      collection.add({ foo: "wut" });
-    });
-
-    it("should close the emptyView", function () {
-      expect(closeSpy).toHaveBeenCalled();
-    });
-
-    it("should show all three items without empty view", function () {
-      expect(collectionView.$el).toHaveHtml("<span>bar</span><span>baz</span><span>wut</span>");
-    });
-  });
-
-  describe("when the last item is removed from a collection", function(){
-    var collectionView, closeSpy;
-
-    beforeEach(function(){
-      var collection = new Backbone.Collection([{foo: "wut"}]);
-
-      collectionView = new EmptyCollectionView({
-        collection: collection
-      });
-
-      collectionView.render();
-
-      collection.remove(collection.at(0));
-    });
-
-    it("should append the html for the emptyView", function(){
-      expect(collectionView.$el).toHaveHtml("<span class=\"isempty\"></span>");
-    });
-
-    it("should reference each of the rendered view items", function(){
-      expect(_.size(collectionView.children)).toBe(1);
-    });
-  });
-
-
-  describe("when the collection is reset multiple times", function () {
-    var collectionView, collection, population = [{foo:1},{foo:2},{foo:3}];
-
-    beforeEach(function () {
-      collection = new Backbone.Collection();
-      collectionView = new EmptyCollectionView({
-        collection: collection
+      it('should show the new item', function() {
+        expect(this.collectionView.$el).to.have.$text('wut');
       });
     });
-
-    it("should remove all EmptyView", function () {
-      collectionView.render();        // 1st showEmptyView
-      collection.reset(population);   // 1st closeEmptyView
-      collection.reset();             // 2nd showEmptyView
-      collection.reset(population);   // 2nd closeEmptyView
-      expect(collectionView.$el).not.toContain('span.isempty')
-    });
-
-    it("should have only one emptyView open", function () {
-      collectionView.render();        // 1st showEmptyView
-      collection.reset(population);   // 1st closeEmptyView
-      collection.reset();             // 2nd closeEmptyView, showEmptyView
-      collection.reset();             // 3nd closeEmptyView, showEmptyView
-      expect(collectionView.$('span.isempty').length).toEqual(1);
-    });
-
   });
 
-  describe("when a collection is reset with empty data after the view is loaded", function(){
-    var collection;
-    var collectionView;
-    var data;
-
-    var ItemView = Backbone.Marionette.ItemView.extend({
-      tagName: "span",
-      render: function(){
-        this.$el.html(this.model.get("foo"));
-        this.trigger('render');
-      },
-      onRender: function(){}
-    });
-
-    var CollectionView = Backbone.Marionette.CollectionView.extend({
-      itemView: ItemView,
-    });
-
-    var EmptyView = Backbone.Marionette.ItemView.extend({
-      tagName: "span",
-      render: function(){
-        this.$el.text("0 items");
-        this.trigger("render");
-      },
-      onRender: function(){}
-    });
-
-    beforeEach(function(){
-      data = [{foo: "bar"}, {foo: "baz"}];
-
-      collection = new Backbone.Collection(data);
-
-      collectionView = new CollectionView({
-        collection: collection,
-        emptyView: EmptyView
+  describe('when the emptyView has been rendered for an empty collection and then collection reset, receiving some values. Then adding an item to the collection', function() {
+    beforeEach(function() {
+      this.collection = new Backbone.Collection();
+      this.collectionView = new this.EmptyCollectionView({
+        collection: this.collection
       });
 
-      collectionView.render();
+      this.destroySpy = this.sinon.spy(this.EmptyView.prototype, 'destroy');
 
-      collection.reset([]);
+      this.collectionView.render();
+      this.collection.reset([{foo: 'bar'}, {foo: 'baz'}]);
+      this.collection.add({foo: 'wut'});
     });
 
-    it("should have 1 child view (empty view)", function(){
-      expect(collectionView.children.length).toBe(1);
+    it('should destroy the emptyView', function() {
+      expect(this.destroySpy).to.have.been.called;
     });
 
-    it("should append the html for the emptyView", function(){
-      expect(collectionView.$el).toHaveHtml("<span>0 items</span>");
-    });
-
-    it("should not have the empty child view after resetting with data", function(){
-      collection.reset(data);
-
-      expect(collectionView.$el).toHaveHtml("<span>bar</span><span>baz</span>");
+    it('should show all three items without empty view', function() {
+      expect(this.collectionView.$el).to.have.$html('<span>bar</span><span>baz</span><span>wut</span>');
     });
   });
 
-  describe("when emptyView is specified with getEmptyView option", function(){
-    var OtherEmptyView = Backbone.Marionette.ItemView.extend({
-      render: function(){}
+  describe('when the last item is removed from a collection', function() {
+    beforeEach(function() {
+      this.collection = new Backbone.Collection([{foo: 'wut'}]);
+      this.collectionView = new this.EmptyCollectionView({
+        collection: this.collection
+      });
+
+      this.collectionView.render();
+      this.collection.remove(this.collection.at(0));
     });
-    var CollectionView = Backbone.Marionette.CollectionView.extend({
-      itemView: ItemView,
-      getEmptyView: function() { return OtherEmptyView }
-    })
 
-    describe("when rendering a collection view with an empty collection", function(){
+    it('should append the html for the emptyView', function() {
+      expect(this.collectionView.$el).to.have.$html('<span>empty</span>');
+    });
 
-      var collectionView;
+    it('should reference each of the rendered view items', function() {
+      expect(this.collectionView.children).to.have.lengthOf(1);
+    });
+  });
 
-      beforeEach(function(){
-        var collection = new Backbone.Collection();
-        collectionView = new CollectionView({
-          collection: collection
+
+  describe('when the collection is reset multiple times', function() {
+    beforeEach(function() {
+      this.population = [{foo: 1}, {foo: 2}, {foo: 3}];
+      this.collection = new Backbone.Collection();
+      this.collectionView = new this.EmptyCollectionView({
+        collection: this.collection
+      });
+      this.collectionView.render();
+    });
+
+    it('should remove all EmptyView', function() {
+      this.collection.reset();
+      this.collection.reset(this.population);
+      expect(this.collectionView.$el).not.to.have.$html('<span>empty</span>');
+    });
+
+    it('should have only one emptyView open', function() {
+      this.collection.reset(this.population);
+      this.collection.reset();
+      expect(this.collectionView.$el).to.have.$html('<span>empty</span>');
+    });
+  });
+
+  describe('when a collection is reset with empty data after the view is loaded', function() {
+    beforeEach(function() {
+      this.data = [{foo: 'bar'}, {foo: 'baz'}];
+      this.collection = new Backbone.Collection(this.data);
+
+      this.collectionView = new this.EmptyCollectionView({
+        collection: this.collection,
+        emptyView: this.EmptyView
+      });
+
+      this.collectionView.render();
+      this.collection.reset();
+    });
+
+    it('should have 1 child view (empty view)', function() {
+      expect(this.collectionView.children).to.have.lengthOf(1);
+    });
+
+    it('should append the html for the emptyView', function() {
+      expect(this.collectionView.$el).to.have.$html('<span>empty</span>');
+    });
+
+    it('should not have the empty child view after resetting with data', function() {
+      this.collection.reset(this.data);
+      expect(this.collectionView.$el).to.have.$html('<span>bar</span><span>baz</span>');
+    });
+  });
+
+  describe('when emptyView is specified with getEmptyView option', function() {
+    beforeEach(function() {
+      this.getEmptyViewStub = this.sinon.stub();
+      this.OtherEmptyView = Backbone.Marionette.ItemView.extend();
+
+      this.CollectionView = Backbone.Marionette.CollectionView.extend({
+        childView: this.ItemView,
+        getEmptyView: this.getEmptyViewStub
+      });
+    });
+
+    describe('when rendering a collection view with an empty collection', function() {
+      beforeEach(function() {
+        this.collection = new Backbone.Collection();
+        this.collectionView = new this.CollectionView({
+          collection: this.collection
         });
 
-        collectionView.render();
+        this.collectionView.render();
       });
 
-      it("renders other empty view instance", function() {
-        expect(collectionView.children.first()).toBeInstanceOf(OtherEmptyView);
+      it('renders other empty view instance', function() {
+        expect(this.getEmptyViewStub).to.have.been.calledWith(this.collectionView.children.first());
       });
     });
   });
 
-  describe("isEmpty", function(){
-    var collectionView;
-
-    beforeEach(function(){
-      var collection = new Backbone.Collection();
-
-      collectionView = new EmptyCollectionView({
-        collection: collection
+  describe('isEmpty', function() {
+    beforeEach(function() {
+      this.collection = new Backbone.Collection();
+      this.collectionView = new this.EmptyCollectionView({
+        collection: this.collection
       });
 
-      collectionView.render();
+      this.collectionView.render();
     });
 
-    it("should return true when the collection is empty", function(){
-      expect(collectionView.isEmpty()).toEqual(true);
+    it('should return true when the collection is empty', function() {
+      expect(this.collectionView.isEmpty()).to.be.true;
     });
 
-    it("should return false when the collection is not empty", function(){
-      collectionView.collection.add({ foo: "wut" });
-      expect(collectionView.isEmpty()).toEqual(false);
+    it('should return false when the collection is not empty', function() {
+      this.collectionView.collection.add({foo: 'wut'});
+      expect(this.collectionView.isEmpty()).to.be.false;
+    });
+
+    describe('when overriding with a populated collection', function() {
+      beforeEach(function() {
+        this.isEmptyStub = this.sinon.stub().returns(true);
+
+        this.collection = new Backbone.Collection([{foo: 'wut'}, {foo: 'wat'}]);
+        this.OverriddenIsEmptyCollectionView = this.EmptyCollectionView.extend({
+          isEmpty: this.isEmptyStub
+        });
+        this.collectionView = new this.OverriddenIsEmptyCollectionView({
+          collection: this.collection
+        });
+
+        this.collectionView.render();
+      });
+
+      it('should append the html for the emptyView', function() {
+        expect(this.collectionView.$el).to.have.$html('<span>empty</span>');
+      });
+
+      it('should reference each of the rendered view items', function() {
+        expect(this.collectionView.children).to.have.lengthOf(1);
+      });
+
+      it('should pass the collection as an argument to isEmpty', function() {
+        expect(this.isEmptyStub).to.have.been.calledWith(this.collection);
+      });
     });
   });
 
-  describe("overriding isEmpty with a populated collection", function(){
-    var collectionView, collection, passedInCollection;
-
-    beforeEach(function(){
-      collection = new Backbone.Collection([{foo: "wut"}, {foo: "wat"}]);
-
-      var OverriddenIsEmptyCollectionView = EmptyCollectionView.extend({
-        isEmpty: function (col) {
-          passedInCollection = col;
-          return true;
+  describe('when rendering and an "emptyViewOptions" is provided', function() {
+    beforeEach(function() {
+      this.collection = new Backbone.Collection();
+      this.collectionView = new this.EmptyCollectionView({
+        collection: this.collection,
+        emptyViewOptions: {
+          foo: 'bar',
+          tagName: 'p'
         }
       });
-      collectionView = new OverriddenIsEmptyCollectionView({
-        collection: collection
+
+      this.collectionView.render();
+      this.view = this.collectionView.children.findByIndex(0);
+    });
+
+    it('should pass the options to the empty view instance', function() {
+      expect(this.view.options).to.have.property('foo', 'bar');
+    });
+
+    it('overrides options of emptyView class', function() {
+      expect(this.collectionView.$el).to.have.$html('<p>empty</p>');
+    });
+
+    describe('when "emptyViewOptions" is provided as a fuction', function() {
+      beforeEach(function() {
+        this.collection = new Backbone.Collection();
+        this.collectionView = new this.EmptyCollectionView({
+          collection: this.collection,
+          emptyViewOptions: function() {
+            return {
+              foo: 'bar',
+              collection: this.collection
+            };
+          }
+        });
+
+        this.collectionView.render();
+        this.view = this.collectionView.children.findByIndex(0);
       });
 
-      collectionView.render();
+      it('should pass the options to the empty view instance', function() {
+        expect(this.view.options).to.be.have.property('foo', 'bar');
+      });
+
+      it('should pass the collectionView as the context', function() {
+        expect(this.view.options).to.have.property('collection', this.collection);
+      });
     });
 
-    it("should append the html for the emptyView", function(){
-      expect(collectionView.$el).toHaveHtml("<span class=\"isempty\"></span>");
+    describe('when "childViewOptions" are also provided', function() {
+      beforeEach(function() {
+        this.collection = new Backbone.Collection();
+        this.collectionView = new this.EmptyCollectionView({
+          collection: this.collection,
+          childViewOptions: { foo: 'bar' },
+          emptyViewOptions: { foo: 'baz' }
+        });
+
+        this.collectionView.render();
+        this.view = this.collectionView.children.findByIndex(0);
+      });
+
+      it('passes the options to the empty view instance correctly', function() {
+        expect(this.view.options).to.have.property('foo', 'baz');
+      });
+    });
+  });
+
+  describe('when rendering and only "childViewOptions" are provided', function() {
+    beforeEach(function() {
+      this.collection = new Backbone.Collection();
+      this.collectionView = new this.EmptyCollectionView({
+        collection: this.collection,
+        childViewOptions: { foo: 'bar' }
+      });
+
+      this.collectionView.render();
+      this.view = this.collectionView.children.findByIndex(0);
     });
 
-    it("should reference each of the rendered view items", function(){
-      expect(_.size(collectionView.children)).toBe(1);
-    });
-
-    it("should pass the collection as an argument to isEmpty", function () {
-      expect(passedInCollection).toEqual(collection);
+    it('passes the options to the empty view instance', function() {
+      expect(this.view.options).to.have.property('foo', 'bar');
     });
   });
 });

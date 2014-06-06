@@ -1,7 +1,7 @@
 # Marionette.Behavior
 
 
-A `Behavior` is an  isolated set of DOM / user interactions that can be mixed into any `View`. `Behaviors` allow you to blackbox `View` specific interactions into portable logical chunks, keeping your `views` simple and your code DRY.
+A `Behavior` is an  isolated set of DOM / user interactions that can be mixed into any `View` or another `Behavior`. `Behaviors` allow you to blackbox `View` specific interactions into portable logical chunks, keeping your `views` simple and your code DRY.
 
 ## Documentation Index
 
@@ -11,6 +11,7 @@ A `Behavior` is an  isolated set of DOM / user interactions that can be mixed in
   * [Event proxy](#the-event-proxy)
   * [Model Events](#model-events)
   * [Collection Events](#model-events)
+  * [Grouped Behaviors](#grouped-behaviors)
   * [$](#$)
   * [$el](#$el)
   * [Defaults](#defaults)
@@ -29,20 +30,20 @@ Here is an example of a simple `itemView`. Let's take a stab at simplifying it, 
 ```js
 var MyView = Marionette.ItemView.extend({
   ui: {
-    "close": ".close-btn"
+    "destroy": ".destroy-btn"
   },
 
   events: {
-    "click @ui.close": "warnBeforeClose"
+    "click @ui.destroy": "warnBeforeDestroy"
   },
 
-  warnBeforeClose: function() {
-    alert("you are closing all your data is now gone!");
-    this.close();
+  warnBeforeDestroy: function() {
+    alert("you are destroying all your data is now gone!");
+    this.destroy();
   },
 
   onShow: function() {
-    this.ui.close.tooltip({
+    this.ui.destroy.tooltip({
       text: "what a nice mouse you have"
     });
   }
@@ -58,12 +59,12 @@ The options for each behavior are also passed to said Behavior during initializa
 ```js
 var MyView = Marionette.ItemView.extend({
   ui: {
-    "close": ".close-btn"
+    "destroy": ".destroy-btn"
   },
 
   behaviors: {
-    CloseWarn: {
-      message: "you are closing all your data is now gone!"
+    DestroyWarn: {
+      message: "you are destroying all your data is now gone!"
     },
     ToolTip: {
       text: "what a nice mouse you have"
@@ -72,27 +73,27 @@ var MyView = Marionette.ItemView.extend({
 });
 ```
 
-Now let's create the `CloseWarn` behavior.
+Now let's create the `DestroyWarn` behavior.
 
 ```js
-var CloseWarn = Marionette.Behavior.extend({
+var DestroyWarn = Marionette.Behavior.extend({
   // you can set default options
   // just like you can in your Backbone Models
   // they will be overriden if you pass in an option with the same key
   defaults: {
-    "message": "you are closing!"
+    "message": "you are destroying!"
   },
 
   // behaviors have events that are bound to the views DOM
   events: {
-    "click @ui.close": "warnBeforeClose"
+    "click @ui.destroy": "warnBeforeDestroy"
   },
 
-  warnBeforeClose: function() {
+  warnBeforeDestroy: function() {
     alert(this.options.message);
     // every Behavior has a hook into the
     // view that it is attached to
-    this.view.close();
+    this.view.destroy();
   }
 });
 ```
@@ -126,8 +127,22 @@ In this example you would then store your behaviors like this:
 
 ```js
 window.Behaviors.ToolTip = ToolTip;
-window.Behaviors.CloseWarn = CloseWarn;
+window.Behaviors.DestroyWarn = DestroyWarn;
 ```
+
+Note than in addition to extending a `View` with `Behavior`, a `Behavior` can itself use other behaviors. The syntax is identical to that used for a `View`:
+
+```js
+var Modal = Marionette.Behavior.extend({
+  behaviors: {
+    DestroyWarn: {
+      message: "Whoa! You sure about this?"
+    }
+  }
+});
+```
+
+Nested behaviors act as if they were direct behaviors of the parent behavior's view instance.
 
 ## API
 
@@ -174,6 +189,16 @@ Marionette.Behavior.extend({
   });
 ```
 
+### Grouped Behaviors
+Then `behaviors` key allows a behavior to group multiple behaviors together.
+```js
+  Marionette.Behavior.extend({
+    behaviors: {
+      SomeBehavior: {}
+    }
+  });
+```
+
 ### $
 `$` is a direct proxy of the views `$` lookup method.
 ```js
@@ -211,8 +236,8 @@ Marionette.Behavior.extend({
 ```js
 Marionette.Behavior.extend({
 	defaults: {
-			'dominion': 'invasion',
-			'doge': 'amaze'
+		'dominion': 'invasion',
+		'doge': 'amaze'
 	}
 });
 ```
@@ -222,8 +247,8 @@ The `view` is a reference to the view instance that the `behavior` is on.
 
 ```js
 Marionette.Behavior.extend({
-	onShow: function() {
-		this.view.close();
+	handleDestroyClick: function() {
+		this.view.destroy();
 	}
 });
 ```

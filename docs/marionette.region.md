@@ -1,10 +1,10 @@
 # Marionette.Region
 
-Regions provide consistent methods to manage, show and close
+Regions provide consistent methods to manage, show and destroy
 views in your applications and layouts. They use a jQuery selector
 to show your views in the correct place.
 
-Using the `Layout` class you can create nested regions.
+Using the `LayoutView` class you can create nested regions.
 
 ## Documentation Index
 
@@ -19,8 +19,8 @@ Using the `Layout` class you can create nested regions.
   * [Call `attachView` On Region](#call-attachview-on-region)
 * [Region Events And Callbacks](#region-events-and-callbacks)
   * [Events raised during `show`](#events-raised-during-show)
-* [Custom Region Types](#custom-region-types)
-  * [Attaching Custom Region Types](#attaching-custom-region-types)
+* [Custom Region Classes](#custom-region-classes)
+  * [Attaching Custom Region Classes](#attaching-custom-region-classes)
   * [Instantiate Your Own Region](#instantiate-your-own-region)
 
 ## Defining An Application Region
@@ -44,21 +44,21 @@ would be available for use immediately.
 
 If you specify the same region name twice, the last one in wins.
 
-You can also add regions via `Layouts`:
+You can also add regions via `LayoutView`s:
 
 ```js
-AppLayout = Backbone.Marionette.Layout.extend({
-  template: "#layout-template",
+AppLayoutView = Backbone.Marionette.LayoutView.extend({
+  template: "#layout-view-template",
 
   regions: {
     menu: "#menu",
     content: "#content"
   }
 });
-var layout = new AppLayout();
-layout.render();
-layout.menu.show(new MenuView());
-layout.content.show(new MainContentView());
+var layoutView = new AppLayoutView();
+layoutView.render();
+layoutView.menu.show(new MenuView());
+layoutView.content.show(new MainContentView());
 ```
 
 
@@ -73,12 +73,28 @@ var mgr = new Backbone.Marionette.Region({
 });
 ```
 
+The `el` option can also be a raw DOM node reference:
+
+```js
+var mgr = new Backbone.Marionette.Region({
+  el: document.querySelector("body")
+});
+```
+
+Or the `el` can also be a `jQuery` wrapped DOM node:
+
+```js
+var mgr = new Backbone.Marionette.Region({
+  el: $("body")
+});
+```
+
 ## Basic Use
 
 ### Showing a View
 
 Once a region is defined, you can call its `show`
-and `close` methods to display and shut-down a view:
+and `empty` methods to display and shut-down a view:
 
 ```js
 var myView = new MyView();
@@ -86,13 +102,14 @@ var myView = new MyView();
 // render and display the view
 MyApp.mainRegion.show(myView);
 
-// closes the current view
-MyApp.mainRegion.close();
+// empties the current view
+MyApp.mainRegion.empty();
 ```
 
+#### preventDestroy
 If you replace the current view with a new view by calling `show`,
-by default it will automatically close the previous view.
-You can prevent this behavior by passing `{preventClose: true}` in the options
+by default it will automatically destroy the previous view.
+You can prevent this behavior by passing `{preventDestroy: true}` in the options
 parameter. Several events will also be triggered on the views; see
 [Region Events And Callbacks](#region-events-and-callbacks) for details.
 
@@ -102,22 +119,39 @@ var myView = new MyView();
 MyApp.mainRegion.show(myView);
 
 // Replace the view with another. The
-// `close` method is called for you
+// `destroy` method is called for you
 var anotherView = new AnotherView();
 MyApp.mainRegion.show(anotherView);
 
 // Replace the view with another.
-// Prevent `close` from being called
+// Prevent `destroy` from being called
 var anotherView2 = new AnotherView();
-MyApp.mainRegion.show(anotherView2, { preventClose: true });
+MyApp.mainRegion.show(anotherView2, { preventDestroy: true });
 ```
 
-NOTE: When using `preventClose: true` you must be careful to cleanup your old views
+NOTE: When using `preventDestroy: true` you must be careful to cleanup your old views
+manually to prevent memory leaks.
+
+
+#### forceShow
+If you re-call `show` with the same view, by default nothing will happen
+because the view is already in the region. You can force the view to be re-shown
+by passing in `{forceShow: true}` in the options parameter.
+
+```js
+var myView = new MyView();
+MyApp.mainRegion.show(myView);
+
+// the second show call will re-show the view
+MyApp.mainRegion.show(myView, {forceShow: true});
+```
+
+NOTE: When using `preventDestroy: true` you must be careful to cleanup your old views
 manually to prevent memory leaks.
 
 ### `reset` A Region
 
-A region can be `reset` at any time. This closes any existing view
+A region can be `reset` at any time. This destroys any existing view
 being displayed, and deletes the cached `el`. The next time the
 region shows a view, the region's `el` is queried from
 the DOM.
@@ -131,22 +165,22 @@ instances, and in unit testing.
 
 ### Set How View's `el` Is Attached
 
-Override the region's `open` method to change how the view is attached
+Override the region's `attachHtml` method to change how the view is attached
 to the DOM. This method receives one parameter - the view to show.
 
-The default implementation of `open` is:
+The default implementation of `attachHtml` is:
 
 ```js
-Marionette.Region.prototype.open = function(view){
+Marionette.Region.prototype.attachHtml = function(view){
   this.$el.empty().append(view.el);
 }
 ```
 
 This replaces the contents of the region with the view's
-`el` / content. You can override `open` for transition effects and more.
+`el` / content. You can override `attachHtml` for transition effects and more.
 
 ```js
-Marionette.Region.prototype.open = function(view){
+Marionette.Region.prototype.attachHtml = function(view){
   this.$el.hide();
   this.$el.html(view.el);
   this.$el.slideDown("fast");
@@ -200,16 +234,19 @@ MyApp.someRegion.attachView(myView);
 
 ### Events raised during `show`:
 A region will raise a few events when showing
-and closing views:
+and destroying views:
 
 * "before:show" / `onBeforeShow` - Called on the view instance after the view has been rendered, but before its been displayed.
 * "before:show" / `onBeforeShow` - Called on the region instance after the view has been rendered, but before its been displayed.
 * "show" / `onShow` - Called on the view instance when the view has been rendered and displayed.
 * "show" / `onShow` - Called on the region instance when the view has been rendered and displayed.
-* "close" / `onClose` - Called when the view has been closed.
+* "before:swap" / `onBeforeSwap` - Called on the region instance before a new view is shown. NOTE: this will only be called when a view is being swapped, not when the region is empty.
+* "swap" / `onSwap` - Called on the region instance when a new view is `show`n. NOTE: this will only be called when a view is being swapped, not when the region is empty.
+* "before:empty" / `onBeforeEmpty` - Called on the region instance before the view has been emptied.
+* "empty" / `onEmpty` - Called when the view has been emptied.
 
 These events can be used to run code when your region
-opens and closes views.
+opens and destroys views.
 
 ```js
 MyApp.mainRegion.on("before:show", function(view){
@@ -222,7 +259,17 @@ MyApp.mainRegion.on("show", function(view){
   // with the region via `this`
 });
 
-MyApp.mainRegion.on("close", function(view){
+MyApp.mainRegion.on("before:swap", function(view){
+  // manipulate the `view` or do something extra
+  // with the region via `this`
+});
+
+MyApp.mainRegion.on("swap", function(view){
+  // manipulate the `view` or do something extra
+  // with the region via `this`
+});
+
+MyApp.mainRegion.on("empty", function(view){
   // manipulate the `view` or do something extra
   // with the region via `this`
 });
@@ -247,18 +294,30 @@ MyView = Marionette.ItemView.extend({
     // called when the view has been shown
   }
 });
+
+MyRegion = Backbone.Marionette.Region.extend({
+  // ...
+
+  onBeforeSwap: function(view) {
+    // the `view` has not been swapped yet
+  },
+
+  onSwap: function(view){
+    // the `view` has been swapped
+  }
+});
 ```
 
-## Custom Region Types
+## Custom Region Classes
 
 You can define a custom region by extending from
 `Region`. This allows you to create new functionality,
 or provide a base set of functionality for your app.
 
-### Attaching Custom Region Types
+### Attaching Custom Region Classes
 
-Once you define a region type, you can attach the
-new region type by specifying the region type as the
+Once you define a region class, you can attach the
+new region class by specifying the region class as the
 value. In this case, `addRegions` expects the constructor itself, not an instance.
 
 ```js
@@ -282,14 +341,14 @@ var FooterRegion = Backbone.Marionette.Region.extend({
 MyApp.addRegions({
   footerRegion: {
     selector: "#footer",
-    regionType: FooterRegion
+    regionClass: FooterRegion
   }
 });
 ```
 
 Note that a region must have an element to attach itself to. If you
 do not specify a selector when attaching the region instance to your
-Application or Layout, the region must provide an `el` either in its
+Application or LayoutView, the region must provide an `el` either in its
 definition or constructor options.
 
 ### Instantiate Your Own Region

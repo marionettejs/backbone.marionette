@@ -1,4 +1,4 @@
-### v1.8.6 [view commit logs](https://github.com/marionettejs/backbone.marionette/compare/v1.8.6...v1.8.7)
+### v1.8.7 [view commit logs](https://github.com/marionettejs/backbone.marionette/compare/v1.8.6...v1.8.7)
 
   * Fixes
     * Fixed nasty ui interpolation bug with behaviors.

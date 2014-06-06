@@ -94,7 +94,7 @@ Marionette.Behaviors = (function(Marionette, _) {
 
       _.each(behaviors, function(b, i) {
         var _events = {};
-        var behaviorEvents = _.result(b, 'events') || {};
+        var behaviorEvents = _.clone(_.result(b, 'events')) || {};
         var behaviorUI = _.result(b, 'ui');
 
         // Construct an internal UI hash first using

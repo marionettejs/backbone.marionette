@@ -234,6 +234,10 @@ describe('Behaviors', function() {
         this.view.$el.find('.bar').click();
       });
 
+      it('should not clobber the event prototype', function() {
+        expect(this.behaviors.foo.prototype.events).to.have.property('click @ui.bar', 'onBarClick');
+      });
+
       it('should set the behavior UI element', function() {
         expect(this.onRenderStub).to.have.been.calledOnce;
       });

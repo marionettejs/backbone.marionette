@@ -124,7 +124,7 @@ module.exports = function(grunt) {
       tests: {
         options: {
           require: 'spec/javascripts/setup/node.js',
-          reporter: 'dot',
+          reporter: 'nyan',
           clearRequireCache: true,
           mocha: require('mocha')
         },

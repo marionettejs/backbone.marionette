@@ -338,6 +338,10 @@ describe("Behaviors", function(){
       });
     });
 
+    it('should not clobber the event prototype', function() {
+      expect(hold.test.prototype.events['click @ui.doge']).toEqual('onDogeClick');
+    });
+
     it("should set the behavior UI element", function() {
       v = new V;
       v.render();

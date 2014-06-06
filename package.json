@@ -24,7 +24,7 @@
   ],
   "scripts": {
     "bower": "bower install",
-    "test": "grunt test"
+    "test": "grunt test --mocha-reporter=dot"
   },
   "author": {
     "name": "Derick Bailey",

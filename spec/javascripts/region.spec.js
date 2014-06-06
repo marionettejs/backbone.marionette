@@ -98,6 +98,7 @@ describe('region', function() {
       this.regionBeforeSwapSpy = this.sinon.spy();
       this.regionSwapSpy = this.sinon.spy();
       this.viewBeforeShowSpy = this.sinon.spy();
+      this.viewShowSpy = this.sinon.spy();
 
       this.view = new this.MyView();
       this.sinon.spy(this.view, 'render');
@@ -113,6 +114,7 @@ describe('region', function() {
       this.myRegion.on('swap', this.regionSwapSpy);
 
       this.view.on('before:show', this.viewBeforeShowSpy);
+      this.view.on('show', this.viewShowSpy);
 
       this.myRegion.show(this.view);
     });
@@ -141,7 +143,7 @@ describe('region', function() {
       expect(this.myRegion.onShow).to.have.been.called;
     });
 
-    it('should trigger a show event for the view', function() {
+    it('should trigger a show event for the region', function() {
       expect(this.showSpy).to.have.been.called;
     });
 
@@ -151,6 +153,10 @@ describe('region', function() {
 
     it('should trigger a before show event for the view', function() {
       expect(this.viewBeforeShowSpy).to.have.been.called;
+    });
+
+    it('should trigger a show event for the view', function() {
+      expect(this.viewShowSpy).to.have.been.calledOnce;
     });
 
     it('should trigger a before show before attachHtml is called', function() {

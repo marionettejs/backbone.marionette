@@ -203,6 +203,7 @@ describe('regionManager', function() {
       this.regionManager.on('remove:region', this.removeHandler);
       this.sinon.spy(this.region, 'stopListening');
 
+      this.sinon.spy(this.regionManager, 'removeRegion');
       this.regionManager.removeRegion('foo');
     });
 
@@ -229,6 +230,10 @@ describe('regionManager', function() {
     it('should adjust the length of the region manager by -1', function() {
       expect(this.regionManager.length).to.equal(0);
     });
+
+    it('should return the region manager', function() {
+      expect(this.regionManager.removeRegion).to.have.returned(this.regionManager);
+    });
   });
 
   describe('.removeRegions', function() {
@@ -254,6 +259,7 @@ describe('regionManager', function() {
       this.sinon.spy(this.region, 'stopListening');
       this.sinon.spy(this.r2, 'stopListening');
 
+      this.sinon.spy(this.regionManager, 'removeRegions');
       this.regionManager.removeRegions();
     });
 
@@ -276,6 +282,10 @@ describe('regionManager', function() {
       expect(this.removeHandler).to.have.been.calledWith('foo', this.region);
       expect(this.removeHandler).to.have.been.calledWith('bar', this.r2);
     });
+
+    it('should return the region manager', function() {
+      expect(this.regionManager.removeRegions).to.have.returned(this.regionManager);
+    });
   });
 
   describe('.emptyRegions', function() {
@@ -291,6 +301,7 @@ describe('regionManager', function() {
 
       this.region.on('empty', this.emptyHandler);
 
+      this.sinon.spy(this.regionManager, 'emptyRegions');
       this.regionManager.emptyRegions();
     });
 
@@ -300,6 +311,10 @@ describe('regionManager', function() {
 
     it('should not remove all regions', function() {
       expect(this.regionManager.get('foo')).to.equal(this.region);
+    });
+
+    it('should return the region manager', function() {
+      expect(this.regionManager.emptyRegions).to.have.returned(this.regionManager);
     });
   });
 
@@ -318,6 +333,7 @@ describe('regionManager', function() {
 
       this.sinon.spy(this.region, 'stopListening');
 
+      this.sinon.spy(this.regionManager, 'destroy');
       this.regionManager.destroy();
     });
 
@@ -335,6 +351,10 @@ describe('regionManager', function() {
 
     it('should trigger a "destroy" event/method', function() {
       expect(this.destroyManagerHandler).to.have.been.called;
+    });
+
+    it('should return the region manager', function() {
+      expect(this.regionManager.destroy).to.have.returned(this.regionManager);
     });
   });
 

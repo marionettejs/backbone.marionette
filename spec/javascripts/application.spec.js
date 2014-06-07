@@ -66,7 +66,7 @@ describe('marionette application', function() {
 
       this.startStub = this.sinon.stub();
       this.app.on('start', this.startStub);
-
+      this.sinon.spy(this.app, 'start');
       this.app.start(this.fooOptions);
     });
 
@@ -76,6 +76,10 @@ describe('marionette application', function() {
 
     it('should pass the startup option to the callback', function() {
       expect(this.startStub).to.have.been.calledOnce.and.calledWith(this.fooOptions);
+    });
+
+    it('should return the app', function() {
+      expect(this.app.start).to.have.returned(this.app);
     });
   });
 });

@@ -110,12 +110,17 @@ describe('application regions', function() {
       this.sinon.spy(this.app.fooRegion, 'empty');
       this.sinon.spy(this.app.barRegion, 'empty');
 
+      this.sinon.spy(this.app, 'emptyRegions');
       this.app.emptyRegions();
     });
 
     it('should empty the regions', function() {
       expect(this.app.fooRegion.empty).to.have.been.called;
       expect(this.app.barRegion.empty).to.have.been.called;
+    });
+
+    it('should return the app', function() {
+      expect(this.app.emptyRegions).to.have.returned(this.app);
     });
   });
 
@@ -150,6 +155,8 @@ describe('application regions', function() {
       this.app.on('remove:region', this.removeRegionStub);
 
       this.app.start();
+
+      this.sinon.spy(this.app, 'removeRegion');
       this.app.removeRegion('fooRegion');
     });
 
@@ -163,6 +170,10 @@ describe('application regions', function() {
 
     it('should trigger a remove:region event', function() {
       expect(this.removeRegionStub).to.have.been.calledWith('fooRegion');
+    });
+
+    it('should return the app', function() {
+      expect(this.app.removeRegion).to.have.returned(this.app);
     });
   });
 });

@@ -171,7 +171,6 @@ _.extend(Marionette.Region.prototype, Backbone.Events, {
       }
 
       this.triggerMethod('show', view);
-      this.triggerMethod.call(view, 'show');
 
       if (_.isFunction(view.triggerMethod)) {
         view.triggerMethod('show');

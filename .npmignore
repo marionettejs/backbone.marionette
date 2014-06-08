@@ -3,6 +3,7 @@
 .grunt
 .editorconfig
 _SpecRunner.html
+coverage/
 bower.json
 component.json
 bower_components

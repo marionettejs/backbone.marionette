@@ -9,8 +9,6 @@ describe('item view', function() {
     });
 
     this.ItemView = Backbone.Marionette.ItemView.extend({});
-
-    this.loadFixtures('itemTemplate.html', 'collectionItemTemplate.html', 'emptyTemplate.html');
   });
 
   describe('when rendering without a valid template', function() {
@@ -78,8 +76,6 @@ describe('item view', function() {
 
   describe('when an item view has a model and is rendered', function() {
     beforeEach(function() {
-      this.loadFixtures('itemTemplate.html');
-
       this.view = new this.ItemView({
         template: '#itemTemplate',
         model: new this.Model({
@@ -103,8 +99,6 @@ describe('item view', function() {
 
   describe('when an item view has asynchronous data and is rendered', function() {
     beforeEach(function() {
-      this.loadFixtures('itemTemplate.html');
-
       this.view = new this.ItemView({
         template: '#itemTemplate',
         serializeData: function() {
@@ -148,8 +142,6 @@ describe('item view', function() {
           return deferred.promise();
         }
       });
-
-      this.loadFixtures('emptyTemplate.html');
       this.view = new this.AsyncOnRenderView();
       this.promise = this.view.render();
     });
@@ -219,8 +211,6 @@ describe('item view', function() {
         onBeforeDestroy: function() {},
         onDestroy: function() {}
       });
-
-      this.loadFixtures('itemTemplate.html');
 
       this.model = new this.Model({foo: 'bar'});
       this.collection = new this.Collection();
@@ -302,8 +292,6 @@ describe('item view', function() {
             this.model.set({done: checked});
           }
         });
-
-        this.loadFixtures('itemWithCheckbox.html');
 
         this.model = new Backbone.Model({
           done: false

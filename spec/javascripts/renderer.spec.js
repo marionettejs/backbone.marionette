@@ -8,7 +8,6 @@ describe('renderer', function() {
 
   describe('when given a template id to render', function() {
     beforeEach(function() {
-      this.loadFixtures('rendererTemplate.html');
       this.templateSelector = '#renderer-template';
       this.result = Marionette.Renderer.render(this.templateSelector).trim();
     });
@@ -24,7 +23,6 @@ describe('renderer', function() {
 
   describe('when given a template and data to render', function() {
     beforeEach(function() {
-      this.loadFixtures('rendererWithDataTemplate.html');
       this.templateSelector = '#renderer-with-data-template';
       this.result = Marionette.Renderer.render(this.templateSelector, this.data).trim();
     });

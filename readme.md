@@ -39,9 +39,9 @@ to engage in an all-or-nothing migration to begin using Marionette.
 
 ### Chat with us
 
-Find us [on gitter](https://gitter.im/marionettejs/backbone.marionette) or on IRC in the FreeNode.net [#marionette channel](http://freenode.net). 
+Find us [on gitter](https://gitter.im/marionettejs/backbone.marionette) or on IRC in the FreeNode.net [#marionette channel](http://freenode.net).
 
-We're happy to discuss design patterns and learn how you're using Marionette. 
+We're happy to discuss design patterns and learn how you're using Marionette.
 
 
 ### Key Benefits
@@ -69,10 +69,7 @@ please visit [the downloads section on the website](http://marionettejs.com#down
 
 ### Available Packages
 
-Marionette is unofficially available from various package
-management systems, such as RubyGems, Node Package Manager,
-Nuget, etc. These packages are maintained by the community
-and are not part of the core Backbone.Marionette code.
+Marionette is available via bower, npm, and component.io. There are other channels that are maintained by the community.
 
 ##### [Available Packages](https://github.com/marionettejs/backbone.marionette/wiki/Available-packages)
 
@@ -93,20 +90,14 @@ documentation for each piece of Marionette.
 
 ### Annotated Source Code
 
-In addition to this readme, I've commented the source code quite
-heavily and run it through Docco as part of my build process.
-This produces a nicely formatted, annotated source code as a documentation
-file.
+In addition to this readme, the source code is documented
+heavily and run through Docco as part of the build process.
 
 You can read the annotations for all the details of how Marionette works, and advice on which methods to override.
 
 ##### [View the annotated source code](http://marionettejs.com/docs/backbone.marionette.html)
 
 ### Marionette's Pieces
-
-These are the strings that you can pull to make your puppet dance.
-If you're looking for an introduction and/or
-examples on how to get started, please visit [the Wiki](https://github.com/marionettejs/backbone.marionette/wiki).
 
 **Views**
 
@@ -146,21 +137,6 @@ examples on how to get started, please visit [the Wiki](https://github.com/mario
 * [**Marionette.Callbacks**](docs/marionette.callbacks.md): Manage a collection of callback methods, and execute them as needed
 * [**Marionette.functions**](docs/marionette.functions.md): A suite of helper functions and utilities for implementing common Marionette behavior in your objects
 
-**Deprecated Items**
-
-* [&rarr;] [**Backbone.EventBinder**](https://github.com/marionettejs/backbone.eventbinder): Deprecated w/ Backbone v0.9.9 and higher. An event binding manager for Backbone v0.9.2, to facilitate binding and unbinding of events
-
-### The Wiki: Sample Apps, Tutorials, and Much More
-
-A wiki is an important aspect of a thriving community, as it provides
-a place for the community to contribute ideas, examples, answer
-frequently asked questions, and more. If you're looking for
-community-driven information, examples that go beyond the
-dry technical documentation, or want to contribute your own
-ideas and examples to the community, please see the wiki page.
-
-##### [View The Marionette Wiki](https://github.com/marionettejs/backbone.marionette/wiki)
-
 ## Compatibility and Requirements
 
 MarionetteJS currently works with the following libraries:
@@ -175,8 +151,6 @@ Marionette has not been tested against any other versions of these
 libraries. You may or may not have success if you use a version other
 than what it listed here.
 
-While support for Zepto and EnderJS has been added, it is not officially
-tested against these libraries at this time.
 
 ## How to Contribute
 

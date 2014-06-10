@@ -1,167 +1,137 @@
-describe("trigger event and method name", function(){
-  "use strict";
+describe('trigger event and method name', function() {
+  'use strict';
 
-  var view, eventHandler, methodHandler, CustomClass, customObject;
+  beforeEach(function() {
+    this.returnValue = 'foo';
+    this.argumentOne = 'bar';
+    this.argumentTwo = 'baz';
 
-  beforeEach(function(){
-    view = new Marionette.View();
+    this.view = new Marionette.View();
 
-    CustomClass = function() {
-      this.triggerMethod = Marionette.triggerMethod;
-    };
-
-    eventHandler = jasmine.createSpy("event handler");
-    methodHandler = jasmine.createSpy("method handler");
+    this.eventHandler = this.sinon.stub();
+    this.methodHandler = this.sinon.stub().returns(this.returnValue);
+    this.triggerMethodSpy = this.sinon.spy(this.view, 'triggerMethod');
   });
 
-  describe("when triggering an event", function(){
-    var returnVal;
-
-    beforeEach(function(){
-      methodHandler.andReturn("return val");
-      view.onSomething = methodHandler;
-      view.on("something", eventHandler);
-
-      returnVal = view.triggerMethod("something");
+  describe('when triggering an event', function() {
+    beforeEach(function() {
+      this.view.onFoo = this.methodHandler;
+      this.view.on('foo', this.eventHandler);
+      this.view.triggerMethod('foo');
     });
 
-    it("should trigger the event", function(){
-      expect(eventHandler).toHaveBeenCalled();
+    it('should trigger the event', function() {
+      expect(this.eventHandler).to.have.been.calledOnce;
     });
 
-    it("should call a method named on{Event}", function(){
-      expect(methodHandler).toHaveBeenCalled();
+    it('should call a method named on{Event}', function() {
+      expect(this.methodHandler).to.have.been.calledOnce;
     });
 
-    it("returns the value returned by the on{Event} method", function(){
-      expect(returnVal).toBe("return val");
+    it('returns the value returned by the on{Event} method', function() {
+      expect(this.triggerMethodSpy).to.have.been.calledOnce.and.returned(this.returnValue);
     });
 
-    describe("when trigger does not exist", function() {
-
+    describe('when trigger does not exist', function() {
       beforeEach(function() {
-        customObject = new CustomClass();
+        this.triggerNonExistantEvent = _.partial(this.view.triggerMethod, 'does:not:exist');
       });
 
-      it("should do nothing", function() {
-        var triggerNonExistantEvent = function() {
-          customObject.triggerMethod("does:not:exist");
-        };
-
-        expect( triggerNonExistantEvent ).not.toThrow();
+      it('should do nothing', function() {
+        expect(this.triggerNonExistantEvent).not.to.throw;
       });
     });
   });
 
-  describe("when triggering an event with arguments", function(){
-
-    beforeEach(function(){
-      view.onSomething = methodHandler;
-      view.on("something", eventHandler);
-
-      view.triggerMethod("something", 1, 2, 3);
+  describe('when triggering an event with arguments', function() {
+    beforeEach(function() {
+      this.view.onFoo = this.methodHandler;
+      this.view.on('foo', this.eventHandler);
+      this.view.triggerMethod('foo', this.argumentOne, this.argumentTwo);
     });
 
-    it("should trigger the event with the args", function(){
-      expect(eventHandler.mostRecentCall.args.length).toBe(3);
+    it('should trigger the event with the args', function() {
+      expect(this.eventHandler).to.have.been.calledOnce.and.calledWith(this.argumentOne, this.argumentTwo);
     });
 
-    it("should call a method named on{Event} with the args", function(){
-      expect(methodHandler.mostRecentCall.args.length).toBe(3);
+    it('should call a method named on{Event} with the args', function() {
+      expect(this.methodHandler).to.have.been.calledOnce.and.calledWith(this.argumentOne, this.argumentTwo);
     });
-
   });
 
-  describe("when triggering an event with : separated name", function(){
-
-    beforeEach(function(){
-      view.onDoSomething = methodHandler;
-      view.on("do:something", eventHandler);
-
-      view.triggerMethod("do:something", 1, 2, 3);
+  describe('when triggering an event with : separated name', function() {
+    beforeEach(function() {
+      this.view.onFooBar = this.methodHandler;
+      this.view.on('foo:bar', this.eventHandler);
+      this.view.triggerMethod('foo:bar', this.argumentOne, this.argumentTwo);
     });
 
-    it("should trigger the event with the args", function(){
-      expect(eventHandler.mostRecentCall.args.length).toBe(3);
+    it('should trigger the event with the args', function() {
+      expect(this.eventHandler).to.have.been.calledOnce.and.calledWith(this.argumentOne, this.argumentTwo);
     });
 
-    it("should call a method named with each segment of the event name capitalized", function(){
-      expect(methodHandler).toHaveBeenCalled();
+    it('should call a method named with each segment of the event name capitalized', function() {
+      expect(this.methodHandler).to.have.been.calledOnce.and.calledWith(this.argumentOne, this.argumentTwo);
     });
-
   });
 
-  describe("when triggering an event and no handler method exists", function(){
-    beforeEach(function(){
-      view.on("do:something", eventHandler);
-      view.triggerMethod("do:something", 1, 2, 3);
+  describe('when triggering an event and no handler method exists', function() {
+    beforeEach(function() {
+      this.view.on('foo:bar', this.eventHandler);
+      this.view.triggerMethod('foo:bar', this.argumentOne, this.argumentTwo);
     });
 
-    it("should trigger the event with the args", function(){
-      expect(eventHandler.mostRecentCall.args.length).toBe(3);
+    it('should trigger the event with the args', function() {
+      expect(this.eventHandler).to.have.been.calledOnce.and.calledWith(this.argumentOne, this.argumentTwo);
     });
 
-    it("should not call a method named with each segment of the event name capitalized", function(){
-      expect(methodHandler).not.toHaveBeenCalled();
+    it('should not call a method named with each segment of the event name capitalized', function() {
+      expect(this.methodHandler).not.to.have.been.calledOnce;
     });
-
   });
 
-  describe("when triggering an event and the attribute for that event is not a function", function(){
-    beforeEach(function(){
-      view.onDoSomething = "bar";
-      view.on("do:something", eventHandler);
-      view.triggerMethod("do:something", 1, 2, 3);
+  describe('when triggering an event and the attribute for that event is not a function', function() {
+    beforeEach(function() {
+      this.view.onFooBar = 'baz';
+      this.view.on('foo:bar', this.eventHandler);
+      this.view.triggerMethod('foo:bar', this.argumentOne, this.argumentTwo);
     });
 
-    it("should trigger the event with the args", function(){
-      expect(eventHandler.mostRecentCall.args.length).toBe(3);
+    it('should trigger the event with the args', function() {
+      expect(this.eventHandler).to.have.been.calledOnce.and.calledWith(this.argumentOne, this.argumentTwo);
     });
 
-    it("should not call a method named with each segment of the event name capitalized", function(){
-      expect(methodHandler).not.toHaveBeenCalled();
+    it('should not call a method named with each segment of the event name capitalized', function() {
+      expect(this.methodHandler).not.to.have.been.calledOnce;
     });
-
   });
 
-  describe("triggering events through a child view", function(){
-    var ResultView = Backbone.Marionette.ItemView.extend({
-        template : "#aTemplate",
-        events : {
-          "click" : "onAddToSelection"
-        },
-        onAddToSelection : function(e) {
-          this.triggerMethod("add:selection", this.model);
-        }
-    });
+  describe('triggering events through a child view', function() {
+    beforeEach(function() {
+      this.onChildviewFooClickStub = this.sinon.stub();
 
-    var ResultsView =  Backbone.Marionette.CompositeView.extend({
-        template: "#aTemplate",
-        itemView : ResultView
-    });
-
-    var cv;
-
-    beforeEach(function(){
-      setFixtures("<script type='text/html' id='aTemplate'><div>foo</div></script>");
-
-      var c = new Backbone.Collection([{a: "b"}, {a: "c"}]);
-      cv = new ResultsView({
-        collection: c
+      this.ItemView = Marionette.ItemView.extend({
+        template: _.template('foo'),
+        triggers: { 'click' : 'foo:click' }
       });
 
-      cv.onItemviewAddSelection = jasmine.createSpy();
+      this.CollectionView = Marionette.CollectionView.extend({
+        childView: this.ItemView,
+        onChildviewFooClick: this.onChildviewFooClickStub
+      });
 
-      cv.render();
+      this.collection = new Backbone.Collection([{ foo: 'bar' }]);
+      this.collectionView = new this.CollectionView({
+        collection: this.collection
+      });
 
-      var childView = cv.children.findByModel(c.at(0));
-      childView.$el.click();
+      this.collectionView.render();
+      this.childView = this.collectionView.children.findByModel(this.collection.at(0));
+      this.childView.$el.click();
     });
 
-    it("should fire the event method once", function(){
-      expect(cv.onItemviewAddSelection.callCount).toBe(1);
+    it('should fire the event method once', function() {
+      expect(this.onChildviewFooClickStub).to.have.been.calledOnce;
     });
-
   });
-
 });

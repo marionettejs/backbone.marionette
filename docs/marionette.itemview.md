@@ -19,8 +19,8 @@ will provide features such as `onShow` callbacks, etc. Please see
 * [Events and Callback Methods](#events-and-callback-methods)
   * ["before:render" / onBeforeRender event](#beforerender--onbeforerender-event)
   * ["render" / onRender event](#render--onrender-event)
-  * ["before:close" / onBeforeClose event](#beforeclose--onbeforeclose-event)
-  * ["close" / onClose event](#close--onclose-event)
+  * ["before:destroy" / onBeforeDestroy event](#beforedestroy--onbeforedestroy-event)
+  * ["destroy" / onDestroy event](#destroy--ondestroy-event)
 * [ItemView serializeData](#itemview-serializedata)
 * [Organizing ui elements](#organizing-ui-elements)
 * [modelEvents and collectionEvents](#modelevents-and-collectionevents)
@@ -120,8 +120,7 @@ triggers the event and a corresponding "on{EventName}" method.
 
 ### "before:render" / onBeforeRender event
 
-Triggered before an ItemView is rendered. Also triggered as
-"item:before:render" / `onItemBeforeRender`.
+Triggered before an ItemView is rendered.
 
 ```js
 Backbone.Marionette.ItemView.extend({
@@ -137,8 +136,6 @@ Triggered after the view has been rendered.
 You can implement this in your view to provide custom code for dealing
 with the view's `el` after it has been rendered.
 
-Also triggered as "item:rendered" / `onItemRender`.
-
 ```js
 Backbone.Marionette.ItemView.extend({
   onRender: function(){
@@ -149,15 +146,14 @@ Backbone.Marionette.ItemView.extend({
 });
 ```
 
-### "before:close" / onBeforeClose event
+### "before:destroy" / onBeforeDestroy event
 
-Triggered just prior to closing the view, when the view's `close()`
-method has been called. Also triggered as "item:before:close" /
-`onItemBeforeClose`.
+Triggered just prior to destroying the view, when the view's `destroy()`
+method has been called.
 
 ```js
 Backbone.Marionette.ItemView.extend({
-  onBeforeClose: function(){
+  onBeforeDestroy: function(){
     // manipulate the `el` here. it's already
     // been rendered, and is full of the view's
     // HTML, ready to go.
@@ -165,15 +161,14 @@ Backbone.Marionette.ItemView.extend({
 });
 ```
 
-### "close" / onClose event
+### "destroy" / onDestroy event
 
-Triggered just after the view has been closed. Also triggered
-as "item:closed" / `onItemClose`.
+Triggered just after the view has been destroyed.
 
 ```js
 Backbone.Marionette.ItemView.extend({
-  onClose: function(){
-    // custom closing and cleanup goes here
+  onDestroy: function(){
+    // custom destroying and cleanup goes here
   }
 });
 ```

@@ -7,3 +7,5 @@ bower.json
 component.json
 bower_components
 tmp
+coverage
+test

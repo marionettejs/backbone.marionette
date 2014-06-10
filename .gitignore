@@ -5,6 +5,8 @@
 tmp/
 ext/
 node_modules/
+coverage/
+test/
 .grunt/
 npm-debug.log
 _SpecRunner.html

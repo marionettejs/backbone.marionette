@@ -1,147 +1,120 @@
-describe("template helper methods", function(){
-  "use strict";
+describe('template helper methods', function() {
+  'use strict';
 
-  describe("composite view", function(){
-
-    describe("when rendering with no model or collection and a templateHelpers is found", function(){
-      var data;
-
-      var View = Backbone.Marionette.CompositeView.extend({
-        templateHelpers: {
-          foo: function(){}
-        },
-
-        template: function(d){
-          data = d;
-        }
-      });
-
-      beforeEach(function(){
-        var view = new View();
-        view.render();
-      });
-
-      it('should include the template helpers in the data object', function(){
-        expect(data.foo).not.toBeUndefined();
-      });
-    });
-
+  beforeEach(function() {
+    this.templateStub = this.sinon.stub();
+    this.templateHelpers = { foo: this.sinon.stub() };
+    this.templateHelpersFn = this.sinon.stub().returns(this.templateHelpers);
+    this.modelData = { bar: 'baz' };
+    this.model = new Backbone.Model(this.modelData);
   });
 
-  describe("item view", function(){
-
-    describe("when rendering with no model or collection and a templateHelpers is found", function(){
-      var renderData;
-
-      var View = Backbone.Marionette.ItemView.extend({
-        template: function(data){
-          renderData = data;
-        },
-        templateHelpers: {
-          foo: function(){}
-        }
-      });
-
-      beforeEach(function(){
-        var view = new View();
-        view.render();
-      });
-
-      it('should include the template helpers in the data object', function(){
-        expect(renderData.foo).not.toBeUndefined();
-      });
-    });
-
-    describe("when rendering with a model, and a templateHelpers is found", function(){
-      var renderData;
-
-      var View = Backbone.Marionette.ItemView.extend({
-        template: function(data){
-          renderData = data;
-        },
-        templateHelpers: {
-          foo: function(){}
-        }
-      });
-
-      beforeEach(function(){
-        var model = new Backbone.Model({bar: "baz"});
-        var view = new View({ model:model });
-        view.render();
-      });
-
-      it('should include the template helpers in the data object', function(){
-        expect(renderData.foo).not.toBeUndefined();
-      });
-
-      it('should still have the data from the model', function(){
-        expect(renderData.bar).toBe("baz");
-      });
-    });
-
-    describe("when rendering and a templateHelpers is found as a function", function(){
-      var view;
-
-      var View = Backbone.Marionette.ItemView.extend({
-        template: function() {},
-        templateHelpers: function() {}
-      });
-
-      beforeEach(function(){
-        var model = new Backbone.Model({bar: "baz"});
-        view = new View({ model:model });
-        sinon.spy(view, "template")
-        sinon.stub(view, "templateHelpers").returns({ foo: function(){} })
-        view.render();
-      });
-
-      it('should include the template helpers in the data object', function(){
-        var firstArg = view.template.args[0][0];
-        expect(firstArg.foo).not.toBeUndefined();
-      });
-
-      it('should still have the data from the model', function(){
-        var firstArg = view.template.args[0][0];
-        expect(firstArg.bar).toBe("baz");
-      });
-
-      it('should maintain the view as the context for the templateHelpers function', function(){
-        expect(view.templateHelpers).toHaveBeenCalledOn(view);
-      });
-    });
-
-    describe("when templateHelpers is provided to constructor options", function(){
-      var view;
-
-      var View = Backbone.Marionette.ItemView.extend({
-        template: function() {}
-      });
-
-      beforeEach(function(){
-        var model = new Backbone.Model({bar: "baz"});
-
-        view = new View({
-          model: model,
-          templateHelpers: {
-            foo: function() { }
-          }
+  describe('composite view', function() {
+    describe('when rendering with no model or collection and a templateHelpers is found', function() {
+      beforeEach(function() {
+        this.View = Marionette.CompositeView.extend({
+          templateHelpers: this.templateHelpers,
+          template: this.templateStub
         });
 
-        sinon.spy(view, 'template');
-        view.render();
+        this.view = new this.View();
+        this.view.render();
       });
 
-      it('should include the template helpers in the data object', function(){
-        var firstArg = view.template.args[0][0];
-        expect(firstArg.foo).not.toBeUndefined();
+      it('should include the template helpers in the data object', function() {
+        expect(this.templateStub).to.have.been.calledOnce.and.calledWith(this.templateHelpers);
+      });
+    });
+  });
+
+  describe('item view', function() {
+    describe('when rendering with no model or collection and a templateHelpers is found', function() {
+      beforeEach(function() {
+        this.View = Marionette.ItemView.extend({
+          templateHelpers: this.templateHelpers,
+          template: this.templateStub
+        });
+
+        this.view = new this.View();
+        this.view.render();
       });
 
-      it('should still have the data from the model', function(){
-        var firstArg = view.template.args[0][0];
-        expect(firstArg.bar).toBe("baz");
+      it('should include the template helpers in the data object', function() {
+        expect(this.templateStub).to.have.been.calledOnce.and.calledWith(this.templateHelpers);
       });
     });
 
-  });
+    describe('when rendering with a model, and a templateHelpers is found', function() {
+      beforeEach(function() {
+        this.View = Marionette.ItemView.extend({
+          templateHelpers: this.templateHelpers,
+          template: this.templateStub
+        });
 
+        this.view = new this.View({
+          model: this.model
+        });
+
+        this.view.render();
+      });
+
+      it('should include the template helpers in the data object', function() {
+        expect(this.templateStub.lastCall.args[0]).to.contain(this.templateHelpers);
+      });
+
+      it('should still have the data from the model', function() {
+        expect(this.templateStub.lastCall.args[0]).to.contain(this.modelData);
+      });
+    });
+
+    describe('when rendering and a templateHelpers is found as a function', function() {
+      beforeEach(function() {
+        this.View = Marionette.ItemView.extend({
+          templateHelpers: this.templateHelpersFn,
+          template: this.templateStub
+        });
+
+        this.view = new this.View({
+          model: this.model
+        });
+
+        this.view.render();
+      });
+
+      it('should include the template helpers in the data object', function() {
+        expect(this.templateStub.lastCall.args[0]).to.contain(this.templateHelpers);
+      });
+
+      it('should still have the data from the model', function() {
+        expect(this.templateStub.lastCall.args[0]).to.contain(this.modelData);
+      });
+
+      it('should maintain the view as the context for the templateHelpers function', function() {
+        expect(this.templateHelpersFn).to.have.been.calledOnce.and.calledOn(this.view);
+      });
+    });
+
+    describe('when templateHelpers is provided to constructor options', function() {
+      beforeEach(function() {
+        this.View = Marionette.ItemView.extend({
+          template: this.templateStub
+        });
+
+        this.view = new this.View({
+          templateHelpers: this.templateHelpers,
+          model: this.model
+        });
+
+        this.view.render();
+      });
+
+      it('should include the template helpers in the data object', function() {
+        expect(this.templateStub.lastCall.args[0]).to.contain(this.templateHelpers);
+      });
+
+      it('should still have the data from the model', function() {
+        expect(this.templateStub.lastCall.args[0]).to.contain(this.modelData);
+      });
+    });
+  });
 });

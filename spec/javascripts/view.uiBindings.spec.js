@@ -168,15 +168,18 @@ describe('view ui elements', function() {
 
       this.View = Marionette.ItemView.extend({
         ui     : this.ui,
-        events : this.events
+        events : {}
       });
 
       this.view = new this.View();
       this.view.delegateEvents();
+
+      _.extend(this.view.events, this.events);
+      this.view.delegateEvents();
     });
 
     it("the events should be re-normalised", function() {
-      expect(this.view.events).to.deep.equal(this.events);
+      expect(this.view.events).to.deep.equal({'click #foo': 'bar'});
     });
   });
 });

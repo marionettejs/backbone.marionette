@@ -119,6 +119,20 @@ module.exports = function(grunt) {
       }
     },
 
+    env: {
+      coverage: {
+        APP_DIR_FOR_CODE_COVERAGE: '../../../test/tmp/'
+      }
+    },
+
+    instrument: {
+      files: 'tmp/backbone.marionette.js',
+      options: {
+        lazy: true,
+        basePath: 'test'
+      }
+    },
+
     mochaTest: {
       tests: {
         options: {
@@ -131,6 +145,30 @@ module.exports = function(grunt) {
           'spec/javascripts/setup/helpers.js',
           'spec/javascripts/*.spec.js'
         ]
+      }
+    },
+
+    storeCoverage: {
+      options: {
+        dir: 'coverage'
+      }
+    },
+    makeReport: {
+      src: 'coverage/**/*.json',
+      options: {
+        type: 'lcov',
+        dir: 'coverage',
+        print: 'detail'
+      }
+    },
+
+    coveralls: {
+      options: {
+        src: 'coverage/lcov.info',
+        force: false
+      },
+      default: {
+        src: 'coverage/lcov.info'
       }
     },
 
@@ -253,6 +291,8 @@ module.exports = function(grunt) {
   grunt.registerTask('lint', 'Lints our sources', ['lintspaces', 'jshint']);
 
   grunt.registerTask('test', 'Run the unit tests.', ['verify-bower', 'lint', 'unwrap', 'preprocess:bundle', 'template:bundle', 'mochaTest']);
+
+  grunt.registerTask('coverage', ['unwrap', 'preprocess:bundle', 'template:bundle', 'env:coverage', 'instrument', 'mochaTest', 'storeCoverage', 'makeReport', 'coveralls']);
 
   grunt.registerTask('dev', 'Auto-lints while writing code.', ['test', 'watch:marionette']);
 

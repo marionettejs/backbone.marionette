@@ -5,3 +5,5 @@ before_install:
   - npm config set ca ""
 before_script:
   - npm run-script bower
+after_success:
+  - npm run-script coverage

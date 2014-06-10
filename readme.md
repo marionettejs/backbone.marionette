@@ -7,6 +7,9 @@
   <a title='Build Status' href="https://travis-ci.org/marionettejs/backbone.marionette">
     <img src='https://secure.travis-ci.org/marionettejs/backbone.marionette.svg?branch=master' />
   </a>
+  <a href='https://coveralls.io/r/marionettejs/backbone.marionette'>
+    <img src='https://img.shields.io/coveralls/marionettejs/backbone.marionette.svg' alt='Coverage Status' />
+  </a>
 </p>
 
 ## About Marionette

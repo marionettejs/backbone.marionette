@@ -8,3 +8,5 @@ component.json
 bower_components
 tmp
 SpecRunner.html
+coverage
+test

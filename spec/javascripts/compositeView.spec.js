@@ -128,6 +128,8 @@ describe('composite view', function() {
         collection: this.collection
       });
 
+      this.sinon.spy(Marionette.Renderer, 'render');
+
       this.compositeView.render();
     });
 
@@ -137,6 +139,10 @@ describe('composite view', function() {
 
     it('should render the collections items', function() {
       expect(this.compositeView.$el).to.contain.$text('baz');
+    });
+
+    it("should pass template fn, data, and view instance to Marionette.Renderer.Render", function(){
+      expect(Marionette.Renderer.render).to.have.been.calledWith(this.templateFn, { foo: 'bar' }, this.compositeView);
     });
   });
 

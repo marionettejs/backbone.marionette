@@ -70,6 +70,8 @@ describe("composite view", function(){
         collection: collection
       });
 
+      spyOn(Marionette.Renderer, 'render').andCallThrough();
+
       compositeView.render();
     });
 
@@ -80,6 +82,10 @@ describe("composite view", function(){
     it("should render the collection's items", function(){
       expect(compositeView.$el).toHaveText(/baz/);
     });
+
+    it("should pass the view instance to `Marionette.Renderer.Render`", function(){
+      expect(Marionette.Renderer.render).toHaveBeenCalledWith('#composite-template', { foo: 'bar' }, compositeView)
+    })
   });
 
   describe("when a composite view triggers render in initialize", function(){

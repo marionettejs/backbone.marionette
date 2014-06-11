@@ -45,6 +45,8 @@ describe("item view", function(){
       spyOn(view, "onRender").andCallThrough();
       spyOn(view, "trigger").andCallThrough();
 
+      spyOn(Marionette.Renderer, 'render').andCallThrough();
+
       view.render();
     });
 
@@ -63,6 +65,10 @@ describe("item view", function(){
     it("should trigger a rendered event", function(){
       expect(view.trigger).toHaveBeenCalledWith("item:rendered", view);
     });
+
+    it("should pass the view instance to `Marionette.Renderer.Render`", function(){
+      expect(Marionette.Renderer.render).toHaveBeenCalledWith('#emptyTemplate', {}, view)
+    })
   });
 
   describe("when an item view has a model and is rendered", function(){

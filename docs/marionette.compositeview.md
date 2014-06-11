@@ -196,6 +196,10 @@ You can also manually re-render either or both of them:
 * If you want to re-render everything, call the `.render()` method
 * If you want to re-render the model's view, you can call `.renderModel()`
 
+As with item view instances, the composite view instance is passed as the
+third argument to the `Renderer` object's `render` method, which is
+useful in custom `Renderer` implementations.
+
 ## Events And Callbacks
 
 During the course of rendering a composite, several events will

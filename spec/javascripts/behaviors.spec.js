@@ -370,6 +370,37 @@ describe("Behaviors", function(){
       expect(onShowSpy).toHaveBeenCalled();
     });
 
+    describe("should call onShow when inside a CollectionView", function() {
+      var CollectionView, collectionView, collection;
+
+      beforeEach(function() {
+        CollectionView = Marionette.CollectionView.extend({
+          itemView: V
+        });
+
+        collection     = new Backbone.Collection([{}]);
+        collectionView = new CollectionView({collection: collection});
+
+        collectionView.render();
+        collectionView.triggerMethod("show");
+      });
+
+      it("should call onShow when inside a CollectionView", function() {
+        expect(onShowSpy).toHaveBeenCalled();
+      });
+
+      it("should call onShow when already shown and reset", function() {
+        collection.reset([{id:1}, {id: 2}])
+
+        expect(onShowSpy.callCount).toEqual(3);
+      });
+
+      it("should call onShow when a single model is added and the collectionView is already shown", function() {
+        collection.add({id: 3});
+
+        expect(onShowSpy.callCount).toEqual(2);
+      });
+    });
 
     it("should call onClose", function() {
       layout = new Layout();

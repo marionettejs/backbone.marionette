@@ -41,7 +41,11 @@ Marionette.CollectionView = Marionette.View.extend({
   _triggerShowBufferedChildren: function () {
     if (this._isShown) {
       _.each(this._bufferedChildren, function (child) {
-        Marionette.triggerMethod.call(child, "show");
+        if (_.isFunction(child.triggerMethod)) {
+          child.triggerMethod('show');
+        } else {
+          Marionette.triggerMethod.call(child, 'show');
+        }
       });
       this._bufferedChildren = [];
     }
@@ -69,7 +73,11 @@ Marionette.CollectionView = Marionette.View.extend({
   // of child views is called.
   onShowCalled: function(){
     this.children.each(function(child){
-      Marionette.triggerMethod.call(child, "show");
+      if (_.isFunction(child.triggerMethod)) {
+        child.triggerMethod('show');
+      } else {
+        Marionette.triggerMethod.call(child, 'show');
+      }
     });
   },
 
@@ -195,7 +203,11 @@ Marionette.CollectionView = Marionette.View.extend({
     // call the "show" method if the collection view
     // has already been shown
     if (this._isShown && !this.isBuffering){
-      Marionette.triggerMethod.call(view, "show");
+      if (_.isFunction(view.triggerMethod)) {
+        view.triggerMethod('show');
+      } else {
+        Marionette.triggerMethod.call(view, 'show');
+      }
     }
 
     // this view was added

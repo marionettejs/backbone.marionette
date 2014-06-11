@@ -274,6 +274,41 @@ describe('Behaviors', function() {
     });
   });
 
+  describe('within a collectionView', function() {
+    beforeEach(function() {
+      this.onShowStub = this.sinon.stub();
+
+      this.behaviors = {
+        foo: Marionette.Behavior.extend({
+          onShow : this.onShowStub
+        })
+      };
+      Marionette.Behaviors.behaviorsLookup = this.behaviors;
+
+      this.View = Marionette.ItemView.extend({
+        template: _.template('foo')
+      });
+      
+      this.CollectionView = Marionette.CollectionView.extend({
+        childView: this.View,
+        behaviors: { foo: {} }
+      });
+
+      this.collection = new Backbone.Collection();
+      this.collectionView = new this.CollectionView({
+        collection: this.collection
+      });
+
+      this.region = new Backbone.Marionette.Region({ el: $('<div>') });
+      this.region.show(this.collectionView);
+    });
+
+    it('behavior onShow is called via collectionView, but not childView', function() {
+      this.collection.add({foo: "bar"});
+      expect(this.onShowStub).to.have.been.calledOnce;
+    });
+  });
+
   describe('showing a view in a layout', function() {
     beforeEach(function() {
       this.onShowStub = this.sinon.stub();

@@ -290,7 +290,7 @@ Marionette.CollectionView = Marionette.View.extend({
     this.renderChildView(view, index);
 
     if (this._isShown && !this.isBuffering) {
-      this.triggerMethod.call(view, 'show');
+      view.triggerMethod('show');
     }
 
     this.triggerMethod('add:child', view);

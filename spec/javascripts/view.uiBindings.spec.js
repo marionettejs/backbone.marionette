@@ -3,16 +3,16 @@ describe('view ui elements', function() {
 
   describe('when accessing a ui element from the hash', function() {
     beforeEach(function() {
+      this.itemWithCheckboxTemplateFn = _.template('<input type="checkbox" id="chk" <% if (done) { %>checked<% } %>></input>');
+
       this.View = Backbone.Marionette.ItemView.extend({
-        template: '#item-with-checkbox',
+        template: this.itemWithCheckboxTemplateFn,
 
         ui: {
           checkbox: '#chk',
           unfoundElement: '#not_found'
         }
       });
-
-      this.loadFixtures('itemWithCheckbox.html');
 
       this.model = new Backbone.Model({
         done: false
@@ -36,16 +36,16 @@ describe('view ui elements', function() {
 
   describe('when re-rendering a view with a UI element configuration', function() {
     beforeEach(function() {
+      this.itemWithCheckboxTemplateFn = _.template('<input type="checkbox" id="chk" <% if (done) { %>checked<% } %>></input>');
+
       this.View = Backbone.Marionette.ItemView.extend({
-        template: '#item-with-checkbox',
+        template: this.itemWithCheckboxTemplateFn,
 
         ui: {
           checkbox: '#chk',
           unfoundElement: '#not_found'
         }
       });
-
-      this.loadFixtures('itemWithCheckbox.html');
 
       this.model = new Backbone.Model({
         done: false
@@ -71,8 +71,10 @@ describe('view ui elements', function() {
 
   describe('when the ui element is a function that returns a hash', function() {
     beforeEach(function() {
+      this.itemWithCheckboxTemplateFn = _.template('<input type="checkbox" id="chk" <% if (done) { %>checked<% } %>></input>');
+
       this.View = Backbone.Marionette.ItemView.extend({
-        template: '#item-with-checkbox',
+        template: this.itemWithCheckboxTemplateFn,
 
         ui: function() {
           return {
@@ -81,8 +83,6 @@ describe('view ui elements', function() {
           };
         }
       });
-
-      this.loadFixtures('itemWithCheckbox.html');
 
       this.model = new Backbone.Model({
         done: false

@@ -30,6 +30,10 @@ will provide features such as `onShow` callbacks, etc. Please see
 An item view has a `render` method built in to it, and uses the
 `Renderer` object to do the actual rendering.
 
+The item view instance is passed as the third argument to the
+`Renderer` object's `render` method, which is useful in custom
+`Renderer` implementations.
+
 You should provide a `template` attribute on the item view, which
 will be either a jQuery selector:
 

@@ -1,0 +1,111 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Marionette SpecRunner</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="node_modules/mocha/mocha.css" />
+    <script src="node_modules/mocha/mocha.js"></script>
+
+    <script src="node_modules/chai/chai.js"></script>
+    <script src="node_modules/sinon/pkg/sinon.js"></script>
+    <script src="node_modules/sinon-chai/lib/sinon-chai.js"></script>
+    <script src="node_modules/chai-jq/chai-jq.js"></script>
+
+    <script>
+      mocha.setup('bdd');
+
+      window.expect = chai.expect;
+      window.sinon = sinon;
+
+      onload = function() {
+        mocha.checkLeaks();
+        mocha.run();
+
+        var $fixtures = $('#fixtures');
+
+        var setFixtures = function () {
+            _.each(arguments, function (content) {
+                $fixtures.append(content);
+            });
+        };
+
+        var clearFixtures = function () {
+            $fixtures.empty();
+        };
+
+        var originalHash = window.location.hash;
+
+        before(function() {
+            this.setFixtures = setFixtures;
+            this.clearFixtures = clearFixtures;
+        });
+
+        beforeEach(function () {
+            this.sinon = sinon.sandbox.create();
+
+        });
+
+        afterEach(function () {
+            this.sinon.restore();
+            this.clearFixtures();
+            window.location.hash = originalHash;
+            Backbone.history.stop();
+            Backbone.history.handlers.length = 0;
+        });
+      };
+    </script>
+
+    <script src="bower_components/jquery/dist/jquery.js"></script>
+    <script src="bower_components/underscore/underscore.js"></script>
+    <script src="bower_components/backbone/backbone.js"></script>
+
+    <script src="tmp/backbone.marionette.js"></script>
+
+    <script src="spec/javascripts/application.appRegions.spec.js"></script>
+    <script src="spec/javascripts/application.spec.js"></script>
+    <script src="spec/javascripts/appRouter.spec.js"></script>
+    <script src="spec/javascripts/behaviors.spec.js"></script>
+    <script src="spec/javascripts/bindEntityEvents.spec.js"></script>
+    <script src="spec/javascripts/callbacks.spec.js"></script>
+    <script src="spec/javascripts/collectionView.attachToDOM.spec.js"></script>
+    <script src="spec/javascripts/collectionView.emptyView.spec.js"></script>
+    <script src="spec/javascripts/collectionView.itemViewOptions.spec.js"></script>
+    <script src="spec/javascripts/collectionView.reset.spec.js"></script>
+    <script src="spec/javascripts/collectionView.spec.js"></script>
+    <script src="spec/javascripts/commands.spec.js"></script>
+    <script src="spec/javascripts/compositeView-childViewContainer.spec.js"></script>
+    <script src="spec/javascripts/compositeView.onBeforeRender.spec.js"></script>
+    <script src="spec/javascripts/compositeView.spec.js"></script>
+    <script src="spec/javascripts/controller.spec.js"></script>
+    <script src="spec/javascripts/destroyingViews.spec.js"></script>
+    <script src="spec/javascripts/getOption.spec.js"></script>
+    <script src="spec/javascripts/itemView.spec.js"></script>
+    <script src="spec/javascripts/layoutView.dynamicRegions.spec.js"></script>
+    <script src="spec/javascripts/layoutView.spec.js"></script>
+    <script src="spec/javascripts/mixinUnderscoreCollection.spec.js"></script>
+    <script src="spec/javascripts/module.spec.js"></script>
+    <script src="spec/javascripts/module.stop.spec.js"></script>
+    <script src="spec/javascripts/normalizeMethods.spec.js"></script>
+    <script src="spec/javascripts/onDomRefresh.spec.js"></script>
+    <script src="spec/javascripts/precompiledTemplateRendering.spec.js"></script>
+    <script src="spec/javascripts/region.spec.js"></script>
+    <script src="spec/javascripts/regionManager.spec.js"></script>
+    <script src="spec/javascripts/renderer.spec.js"></script>
+    <script src="spec/javascripts/requestResponse.spec.js"></script>
+    <script src="spec/javascripts/sortedViews.spec.js"></script>
+    <script src="spec/javascripts/templateCache.spec.js"></script>
+    <script src="spec/javascripts/templateHelpers.spec.js"></script>
+    <script src="spec/javascripts/triggerMethod.spec.js"></script>
+    <script src="spec/javascripts/unbindEntityEvents.spec.js"></script>
+    <script src="spec/javascripts/view.entityEvents.spec.js"></script>
+    <script src="spec/javascripts/view.spec.js"></script>
+    <script src="spec/javascripts/view.triggers.spec.js"></script>
+    <script src="spec/javascripts/view.uiBindings.spec.js"></script>
+    <script src="spec/javascripts/view.uiEventAndTriggers.spec.js"></script>
+  </head>
+  <body>
+    <div id="mocha"></div>
+    <div id="fixtures" hidden></div>
+  </body>
+</html>

@@ -36,9 +36,11 @@ describe('composite view', function() {
 
     // Views
 
+    this.treeViewTemplateFn = _.template('<li>name: <%= name %></li>');
+
     this.TreeView = Backbone.Marionette.CompositeView.extend({
       tagName: 'ul',
-      template: '#recursive-composite-template',
+      template: this.treeViewTemplateFn,
       initialize: function() {
         this.collection = this.model.nodes;
       }
@@ -47,6 +49,8 @@ describe('composite view', function() {
 
   describe('when a composite view has a template without a model', function() {
     beforeEach(function() {
+      this.templateFn = _.template('composite template');
+
       this.ChildView = Backbone.Marionette.ItemView.extend({
         tagName: 'span',
         render: function() {
@@ -56,10 +60,8 @@ describe('composite view', function() {
 
       this.CompositeViewNoModel = Backbone.Marionette.CompositeView.extend({
         childView: this.ChildView,
-        template: '#composite-template-no-model'
+        template: this.templateFn
       });
-
-      this.loadFixtures('compositeTemplate-noModel.html');
 
       this.m1 = new this.Model({foo: 'bar'});
       this.m2 = new this.Model({foo: 'baz'});
@@ -102,6 +104,7 @@ describe('composite view', function() {
 
   describe('when a composite view has a model and a template', function() {
     beforeEach(function() {
+      this.templateFn = _.template('composite <%= foo %>');
       this.ChildView = Backbone.Marionette.ItemView.extend({
         tagName: 'span',
         render: function() {
@@ -111,11 +114,9 @@ describe('composite view', function() {
 
       this.CompositeView = Backbone.Marionette.CompositeView.extend({
         childView: this.ChildView,
-        template: '#composite-template',
+        template: this.templateFn,
         onRender: function() {}
       });
-
-      this.loadFixtures('compositeTemplate.html');
 
       this.m1 = new this.Model({foo: 'bar'});
       this.m2 = new this.Model({foo: 'baz'});
@@ -143,8 +144,12 @@ describe('composite view', function() {
     beforeEach(function() {
       var suite = this;
 
+      this.collectionTemplateFn = _.template('');
+      this.collectionItemTemplateFn = _.template('<% _.each(items, function(item){ %><span><%= item.foo %></span><% }) %>');
+      this.emptyTemplateFn = _.template('&nbsp;');
+
       this.EmptyView = Backbone.Marionette.ItemView.extend({
-        template: '#emptyTemplate',
+        template: this.emptyTemplateFn,
         tagName: 'hr',
         onShow: function() {
           suite.onShow.push('EMPTY');
@@ -152,21 +157,19 @@ describe('composite view', function() {
       });
 
       this.ChildView = Backbone.Marionette.ItemView.extend({
-        template: '#collectionItemTemplate',
+        template: this.collectionItemTemplateFn,
         tagName: 'span'
       });
 
       this.CompositeView = Backbone.Marionette.CompositeView.extend({
         childView: this.ChildView,
         emptyView: this.EmptyView,
-        template: '#collection-template',
+        template: this.collectionTemplateFn,
         initialize: function() {
           this.render();
         },
         onRender: function() {}
       });
-
-      this.loadFixtures('collectionTemplate.html', 'collectionItemTemplate.html', 'emptyTemplate.html');
 
       this.m1 = new this.Model({foo: 'bar'});
 
@@ -218,6 +221,8 @@ describe('composite view', function() {
     beforeEach(function() {
       var suite = this;
 
+      this.templateFn = _.template('composite <%= foo %>');
+
       this.ChildView = Backbone.Marionette.ItemView.extend({
         tagName: 'span',
         render: function() {
@@ -227,12 +232,11 @@ describe('composite view', function() {
 
       this.CompositeView = Backbone.Marionette.CompositeView.extend({
         childView: this.ChildView,
-        template: '#composite-template',
+        template: this.templateFn,
         onRender: function() {}
       });
 
       this.order = [];
-      this.loadFixtures('compositeTemplate.html');
 
       this.m1 = new this.Model({foo: 'bar'});
       this.m2 = new this.Model({foo: 'baz'});
@@ -295,6 +299,8 @@ describe('composite view', function() {
 
   describe('when rendering a composite view twice', function() {
     beforeEach(function() {
+      this.templateFn = _.template('composite <%= foo %>');
+
       this.ChildView = Backbone.Marionette.ItemView.extend({
         tagName: 'span',
         render: function() {
@@ -304,10 +310,8 @@ describe('composite view', function() {
 
       this.CompositeModelView = Backbone.Marionette.CompositeView.extend({
         childView: this.ChildView,
-        template: '#composite-template'
+        template: this.templateFn
       });
-
-      this.loadFixtures('compositeTemplate.html');
 
       this.m1 = new this.Model({foo: 'bar'});
       this.m2 = new this.Model({foo: 'baz'});
@@ -344,6 +348,8 @@ describe('composite view', function() {
 
   describe('when rendering a composite view with an empty collection and then resetting the collection', function() {
     beforeEach(function() {
+      this.templateFn = _.template('composite <%= foo %>');
+
       this.ChildView = Backbone.Marionette.ItemView.extend({
         tagName: 'span',
         render: function() {
@@ -353,11 +359,9 @@ describe('composite view', function() {
 
       this.CompositeView = Backbone.Marionette.CompositeView.extend({
         childView: this.ChildView,
-        template: '#composite-template',
+        template: this.templateFn,
         onRender: function() {}
       });
-
-      this.loadFixtures('compositeRerender.html');
 
       this.m1 = new this.Model({foo: 'bar'});
       this.collection = new this.Collection();
@@ -383,6 +387,8 @@ describe('composite view', function() {
 
   describe('when rendering a composite view without a collection', function() {
     beforeEach(function() {
+      this.templateFn = _.template('composite <%= foo %>');
+
       this.ChildView = Backbone.Marionette.ItemView.extend({
         tagName: 'span',
         render: function() {
@@ -392,11 +398,9 @@ describe('composite view', function() {
 
       this.CompositeView = Backbone.Marionette.CompositeView.extend({
         childView: this.ChildView,
-        template: '#composite-template',
+        template: this.templateFn,
         onRender: function() {}
       });
-
-      this.loadFixtures('compositeRerender.html');
 
       this.m1 = new this.Model({foo: 'bar'});
       this.compositeView = new this.CompositeView({
@@ -417,6 +421,8 @@ describe('composite view', function() {
 
   describe('when rendering a composite with a collection', function() {
     beforeEach(function() {
+      this.templateFn = _.template('composite <%= foo %>');
+
       this.ChildView = Backbone.Marionette.ItemView.extend({
         tagName: 'span',
         render: function() {
@@ -426,11 +432,9 @@ describe('composite view', function() {
 
       this.CompositeView = Backbone.Marionette.CompositeView.extend({
         childView: this.ChildView,
-        template: '#composite-template',
+        template: this.templateFn,
         onRender: function() {}
       });
-
-      this.loadFixtures('compositeRerender.html');
 
       this.m1 = new this.Model({foo: 'bar'});
       this.m2 = new this.Model({foo: 'baz'});
@@ -500,8 +504,6 @@ describe('composite view', function() {
 
   describe('when working with a composite and recursive model', function() {
     beforeEach(function() {
-      this.loadFixtures('recursiveCompositeTemplate.html');
-
       this.data = {
         name: 'level 1',
         nodes: [
@@ -539,6 +541,8 @@ describe('composite view', function() {
 
   describe('when destroying a composite view', function() {
     beforeEach(function() {
+      this.templateFn = _.template('composite <%= foo %>');
+
       this.ChildView = Backbone.Marionette.ItemView.extend({
         tagName: 'span',
         render: function() {
@@ -548,10 +552,8 @@ describe('composite view', function() {
 
       this.CompositeModelView = Backbone.Marionette.CompositeView.extend({
         childView: this.ChildView,
-        template: '#composite-template'
+        template: this.templateFn
       });
-
-      this.loadFixtures('compositeTemplate.html');
 
       this.m1 = new this.Model({foo: 'bar'});
       this.m2 = new this.Model({foo: 'baz'});
@@ -580,23 +582,24 @@ describe('composite view', function() {
 
   describe('when rendering a composite view with no model, using a template to create a grid', function() {
     beforeEach(function() {
+      this.gridTemplateFn = _.template('<thead><tr><th>Username</th><th>Full Name</th><tr></thead><tbody></tbody>');
+      this.gridRowTemplateFn = _.template('<td><%= username %></td><td><%= fullname %></td>');
+
       // A Grid Row
       this.GridRow = Backbone.Marionette.ItemView.extend({
         tagName: 'tr',
-        template: '#row-template'
+        template: this.gridRowTemplateFn
       });
 
       // The grid view
       this.GridView = Backbone.Marionette.CompositeView.extend({
         tagName: 'table',
-        template: '#grid-template',
+        template: this.gridTemplateFn,
         childView: this.GridRow,
         attachHtml: function(collectionView, itemView) {
           collectionView.$('tbody').append(itemView.el);
         }
       });
-
-      this.loadFixtures('gridTemplates.html');
 
       this.userData = [
         {
@@ -637,16 +640,20 @@ describe('composite view', function() {
 
   describe('when a composite view has a ui elements hash', function() {
     beforeEach(function() {
+      this.gridTemplateFn = _.template('<thead><tr><th>Username</th><th>Full Name</th><tr></thead><tbody></tbody>');
+      this.gridRowTemplateFn = _.template('<td><%= username %></td><td><%= fullname %></td>');
+      this.GridViewWithUIBindingsTemplateFn = _.template('<thead><tr><th><%= userHeader %></th><th><%= nameHeader %></th><tr></thead><tbody></tbody>');
+
       // A Grid Row
       this.GridRow = Backbone.Marionette.ItemView.extend({
         tagName: 'tr',
-        template: '#row-template'
+        template: this.gridRowTemplateFn
       });
 
       // The grid view
       this.GridView = Backbone.Marionette.CompositeView.extend({
         tagName: 'table',
-        template: '#grid-template',
+        template: this.gridTemplateFn,
         childView: this.GridRow,
 
         attachHtml: function(collectionView, itemView) {
@@ -655,15 +662,13 @@ describe('composite view', function() {
       });
 
       this.GridViewWithUIBindings = this.GridView.extend({
-        template: '#ui-binding-template',
+        template: this.GridViewWithUIBindingsTemplateFn,
         ui: {
           headersRow: 'thead tr',
           unfoundElement: '#unfound',
           itemRows: 'tbody tr'
         }
       });
-
-      this.loadFixtures('uiBindingTemplate.html');
 
       this.userData = [
         {

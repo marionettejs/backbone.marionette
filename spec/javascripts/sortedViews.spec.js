@@ -5,6 +5,8 @@ describe('collection/composite view sorting', function(){
     // Shared View Definitions
     // -----------------------
 
+    this.templateFn = _.template('composite template');
+
     this.getCollectionChildren = function (el) {
       return el.children().map(function(i, v){return v.innerHTML; }).get().join();
     };
@@ -23,14 +25,12 @@ describe('collection/composite view sorting', function(){
 
     this.CompositeView = Backbone.Marionette.CompositeView.extend({
       childView: this.ChildView,
-      template: '#composite-template-no-model'
+      template: this.templateFn
     });
   });
 
   describe('when working with collections with comparators', function(){
     beforeEach(function(){
-      this.loadFixtures('compositeTemplate-noModel.html');
-
       this.collection = new Backbone.Collection([{foo: 'abar', foo2: 'wbar'}, {foo: 'bbar', foo2: 'abar'}, {foo: 'wbar', foo2: 'bbar'}]);
       this.collection.comparator = 'foo';
 

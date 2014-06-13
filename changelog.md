@@ -1,3 +1,8 @@
+### v1.8.8 [view commit logs](https://github.com/marionettejs/backbone.marionette/compare/v1.8.7...v1.8.8)
+
+  * Fixes
+    * Fixed the case where `onShow` was not called on child view behaviors when inside a `Collection` or `Composite` view.
+
 ### v1.8.7 [view commit logs](https://github.com/marionettejs/backbone.marionette/compare/v1.8.6...v1.8.7)
 
   * Fixes

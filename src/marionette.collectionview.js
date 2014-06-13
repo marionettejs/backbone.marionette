@@ -198,7 +198,7 @@ Marionette.CollectionView = Marionette.View.extend({
     // has already been shown
     if (this._isShown && !this.isBuffering){
       var triggerMethod = view.triggerMethod || Marionette.triggerMethod;
-      triggerMethod.call(child, "show");
+      triggerMethod.call(view, "show");
     }
 
     // this view was added

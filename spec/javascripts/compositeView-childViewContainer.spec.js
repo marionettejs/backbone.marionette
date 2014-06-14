@@ -18,10 +18,12 @@ describe('composite view - childViewContainer', function() {
 
   describe('when rendering a collection in a composite view with a "childViewContainer" specified', function() {
     beforeEach(function() {
+      this.templateFn = _.template('<div><h1>composite view</h1><ul></ul></div>');
+
       this.CompositeView = Backbone.Marionette.CompositeView.extend({
         childView: this.ItemView,
         childViewContainer: 'ul',
-        template: '#composite-child-container-template',
+        template: this.templateFn,
         ui: {
           list: 'ul'
         }
@@ -29,11 +31,10 @@ describe('composite view - childViewContainer', function() {
 
       this.CompositeViewWithoutItemViewContainer = Backbone.Marionette.CompositeView.extend({
         childView: this.ItemView,
-        template: '#composite-child-container-template'
+        template: this.templateFn
       });
 
       this.order = [];
-      this.loadFixtures('compositeChildContainerTemplate.html');
 
       this.m1 = new this.Model({foo: 'bar'});
       this.m2 = new this.Model({foo: 'baz'});
@@ -84,14 +85,15 @@ describe('composite view - childViewContainer', function() {
 
   describe('when rendering a collection in a composite view with a missing "childViewContainer" specified', function() {
     beforeEach(function() {
+      this.templateFn = _.template('<div><h1>composite view</h1><ul></ul></div>');
+
       this.CompositeView = Backbone.Marionette.CompositeView.extend({
         childView: this.ItemView,
         childViewContainer: '#missing-container',
-        template: '#composite-child-container-template'
+        template: this.templateFn
       });
 
       this.order = [];
-      this.loadFixtures('compositeChildContainerTemplate.html');
 
       this.m1 = new this.Model({foo: 'bar'});
       this.m2 = new this.Model({foo: 'baz'});
@@ -125,13 +127,14 @@ describe('composite view - childViewContainer', function() {
 
   describe('when rendering a collection in a composite view without a "childViewContainer" specified', function() {
     beforeEach(function() {
+      this.templateFn = _.template('<div><h1>composite view</h1><ul></ul></div>');
+
       this.CompositeView = Backbone.Marionette.CompositeView.extend({
         childView: this.ItemView,
-        template: '#composite-child-container-template'
+        template: this.templateFn
       });
 
       this.order = [];
-      this.loadFixtures('compositeChildContainerTemplate.html');
 
       this.m1 = new this.Model({foo: 'bar'});
       this.m2 = new this.Model({foo: 'baz'});
@@ -179,10 +182,12 @@ describe('composite view - childViewContainer', function() {
     beforeEach(function() {
       var suite = this;
 
+      this.templateFn = _.template('<div><h1>composite view</h1><ul></ul></div>');
+
       this.CompositeView = Backbone.Marionette.CompositeView.extend({
         childView: this.ItemView,
         childViewContainer: 'ul',
-        template: '#composite-child-container-template'
+        template: this.templateFn
       });
 
       this.addModel = function() {
@@ -197,7 +202,6 @@ describe('composite view - childViewContainer', function() {
         suite.collection.reset([suite.model1, suite.model2]);
       };
 
-      this.loadFixtures('compositeChildContainerTemplate.html');
       this.model1 = new this.Model({foo: 'bar'});
       this.model2 = new this.Model({foo: 'baz'});
       this.collection = new this.Collection([ this.model1 ]);
@@ -227,9 +231,11 @@ describe('composite view - childViewContainer', function() {
 
   describe('when a composite view has the "childViewContainer" specified as a function', function() {
     beforeEach(function() {
+      this.templateFn = _.template('<div><h1>composite view</h1><ul></ul></div>');
+
       this.CompositeView = Backbone.Marionette.CompositeView.extend({
         childView: this.ItemView,
-        template: '#composite-child-container-template'
+        template: this.templateFn
       });
 
       this.compositeView = new this.CompositeView();

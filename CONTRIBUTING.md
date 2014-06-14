@@ -115,11 +115,11 @@ request, we will ask you to re-do your pull request.
 
 ### Branch from "dev" not "master"
 
-The "master" branch of the Marionette repository is for 
-production release code, and documentation updates only. Never 
-create a pull request from the master branch. Always create 
-a branch for your work from the "dev" branch. This will 
-facilitate easier pull request management for the continuous 
+The "master" branch of the Marionette repository is for
+production release code, and documentation updates only. Never
+create a pull request from the master branch. Always create
+a branch for your work from the "dev" branch. This will
+facilitate easier pull request management for the continuous
 work that is done in the dev branch.
 
 ### Submit Specs With Your Pull Request
@@ -172,3 +172,9 @@ do it in a manner that allows us to learn from your
 experiences, instead of reacting to you being a troll
 (likely causing us to get defensive and miss an opportunity
 to learn something).
+
+## Running the unit tests in a browser
+
+In order to run the unit tests in a browser, make sure
+you've run `npm install` and `bower install` then open
+[SpecRunner.html](SpecRunner.html) in your browser.

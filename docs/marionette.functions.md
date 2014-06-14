@@ -13,8 +13,8 @@ a way to get the same behaviors and conventions from your own code.
 * [Marionette.triggerMethod](#marionettetriggermethod)
 * [Marionette.bindEntityEvent](#marionettebindentityevents)
 * [Marionette.unbindEntityEvents](#marionetteunbindentityevents)
-* [Marionette.normalizeMethods](#marionettenormalizemethods)
 * [Marionette.proxyBindEntityEvent](#marionetteproxybindentityevents)
+* [Marionette.normalizeMethods](#marionettenormalizemethods)
 * [Marionette.normalizeUIKeys](#marionettenormalizeuikeys)
 * [Marionette.actAsCollection](#marionetteactascollection)
 
@@ -194,6 +194,9 @@ Backbone.View.extend({
   onClose: function() {
     Marionette.unbindEntityEvents(this, this.model, this.modelEvents);
   }
+
+});
+```
 
 ## Marionette.proxyBindEntityEvents
 This method proxies `Marionette.bindEntityEvents` so that it can easily be added to an instance.

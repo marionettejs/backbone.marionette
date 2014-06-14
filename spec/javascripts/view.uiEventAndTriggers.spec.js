@@ -3,139 +3,93 @@ describe('view ui event trigger configuration', function() {
 
   describe('@ui syntax within events and triggers', function() {
     beforeEach(function() {
-      var suite = this;
+      this.fooHandlerStub       = this.sinon.stub();
+      this.barHandlerStub       = this.sinon.stub();
+      this.notBarHandlerStub    = this.sinon.stub();
+      this.fooBarBazHandlerStub = this.sinon.stub();
 
-      this.View = Backbone.Marionette.ItemView.extend({
-        ui: {
-          foo: '.foo',
-          bar: '#tap',
-          bat: '.bat'
-        },
+      this.templateFn = _.template('<div id="foo"></div><div id="bar"></div><div id="baz"></div>');
 
-        triggers: {
-          'click @ui.foo': 'do:foo'
-        },
+      this.uiHash = {
+        foo: '#foo',
+        bar: '#bar',
+        baz: '#baz'
+      };
 
-        events: {
-          'click @ui.bar': 'attack',
-          'click div:not(@ui.bar)': 'tapper',
-          'click @ui.bar, @ui.foo, @ui.bat': 'defend'
-        },
+      this.triggersHash = {
+        'click @ui.foo': 'fooHandler'
+      };
 
-        tapper: function() {
-          suite.tapHandler();
-        },
-
-        attack: function() {
-          suite.attackHandler();
-        },
-
-        defend: function() {
-          suite.defendHandler();
-        },
-
-        render: function() {
-          this.$el.html('<button class="foo"></button><div id="tap"></div><div class="lap"></div><div class="bat"></div>');
-        }
-      });
-
-      this.View2 = this.View.extend({
-        triggers: function() {
-          return {
-            'click @ui.foo': {
-              event: 'do:foo',
-              preventDefault: true,
-              stopPropagation: false
-            }
-          };
-        },
-
-        events: function() {
-          return {
-            'click @ui.bar': function() {
-              this.attack();
-            }
-          };
-        }
-      });
-
-      this.View3 = this.View2.extend({
-        ui: function() {
-          return {
-            bar: '#tap'
-          };
-        }
-      });
-
-      this.view = new this.View({
-        model: new Backbone.Model()
-      });
-
-      this.view2 = new this.View2({
-        model: new Backbone.Model()
-      });
-
-      this.view3 = new this.View3({
-        model: new Backbone.Model()
-      });
-
-      this.view.render();
-      this.view2.render();
-      this.view3.render();
-
-      this.fooHandler = this.sinon.stub();
-      this.attackHandler = this.sinon.stub();
-      this.defendHandler = this.sinon.stub();
-      this.tapHandler = this.sinon.stub();
-      this.sinon.spy(this.view, 'attack');
-      this.view.on('do:foo', this.fooHandler);
-      this.view2.on('do:foo', this.fooHandler);
+      this.eventsHash = {
+        'click @ui.bar'                   : this.barHandlerStub,
+        'click div:not(@ui.bar)'          : this.notBarHandlerStub,
+        'click @ui.foo, @ui.bar, @ui.baz' : this.fooBarBazHandlerStub
+      };
     });
 
-    it('should correctly trigger an event', function() {
-      this.view.$('.foo').trigger('click');
-      expect(this.fooHandler).to.have.been.called;
-    });
+    describe('as objects', function() {
+      beforeEach(function() {
+        this.View = Marionette.ItemView.extend({
+          template : this.templateFn,
+          ui       : this.uiHash,
+          triggers : this.triggersHash,
+          events   : this.eventsHash
+        });
+        this.view = new this.View();
+        this.view.render();
 
-    it('should correctly trigger a complex event', function() {
-      this.view.$('.lap').trigger('click');
-      expect(this.tapHandler).to.have.been.called;
-    });
-
-    it('should correctly call an event', function() {
-      this.view.$('#tap').trigger('click');
-      expect(this.attackHandler).to.have.been.called;
-    });
-
-    it('should correctly call an event with a functional events hash', function() {
-      this.view2.$('#tap').trigger('click');
-      expect(this.attackHandler).to.have.been.called;
-    });
-
-    it('should correctly call an event with a functional triggers hash', function() {
-      this.view2.$('.foo').trigger('click');
-      expect(this.fooHandler).to.have.been.called;
-    });
-
-    it('should correctly call an event with a functional events hash and functional ui hash', function() {
-      this.view3.$('#tap').trigger('click');
-      expect(this.attackHandler).to.have.been.called;
-    });
-
-    describe('when multiple hashes are specified', function() {
-      it('should correctly call an event when when the first hash is triggered', function() {
-        this.view.$('#tap').trigger('click');
-        expect(this.defendHandler).to.have.been.called;
+        this.view.on('fooHandler', this.fooHandlerStub);
       });
 
-      it('should correctly call an event when when the second hash is triggered', function() {
-        this.view.$('.foo').trigger('click');
-        expect(this.defendHandler).to.have.been.called;
+      it('should correctly trigger an event', function() {
+        this.view.ui.foo.trigger('click');
+        expect(this.fooHandlerStub).to.have.been.calledOnce;
+        expect(this.fooBarBazHandlerStub).to.have.been.calledOnce;
       });
 
-      it('should correctly call an event when when the third hash is triggered', function() {
-        this.view.$('.bat').trigger('click');
-        expect(this.defendHandler).to.have.been.called;
+      it('should correctly trigger a complex event', function() {
+        this.view.ui.bar.trigger('click');
+        expect(this.barHandlerStub).to.have.been.calledOnce;
+        expect(this.fooBarBazHandlerStub).to.have.been.calledOnce;
+      });
+
+      it('should correctly call an event', function() {
+        this.view.ui.baz.trigger('click');
+        expect(this.notBarHandlerStub).to.have.been.calledOnce;
+        expect(this.fooBarBazHandlerStub).to.have.been.calledOnce;
+      });
+    });
+
+    describe('as functions', function() {
+      beforeEach(function() {
+        this.View = Marionette.ItemView.extend({
+          template : this.templateFn,
+          ui       : this.sinon.stub().returns(this.uiHash),
+          triggers : this.sinon.stub().returns(this.triggersHash),
+          events   : this.sinon.stub().returns(this.eventsHash)
+        });
+        this.view = new this.View();
+        this.view.render();
+
+        this.view.on('fooHandler', this.fooHandlerStub);
+      });
+
+      it('should correctly trigger an event', function() {
+        this.view.ui.foo.trigger('click');
+        expect(this.fooHandlerStub).to.have.been.calledOnce;
+        expect(this.fooBarBazHandlerStub).to.have.been.calledOnce;
+      });
+
+      it('should correctly trigger a complex event', function() {
+        this.view.ui.bar.trigger('click');
+        expect(this.barHandlerStub).to.have.been.calledOnce;
+        expect(this.fooBarBazHandlerStub).to.have.been.calledOnce;
+      });
+
+      it('should correctly call an event', function() {
+        this.view.ui.baz.trigger('click');
+        expect(this.notBarHandlerStub).to.have.been.calledOnce;
+        expect(this.fooBarBazHandlerStub).to.have.been.calledOnce;
       });
     });
   });

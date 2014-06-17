@@ -1,3 +1,6 @@
+### v2.0.0 [view commit logs](https://github.com/marionettejs/backbone.marionette/compare/v1.8.8...v2.0.0)
+  * This is a breaking release and contains many API updates and changes, thus changelog is quite large for this release, please refer to the [google doc](https://docs.google.com/document/d/1fuXb9N5LwmdPn-teMwAo3c8JTx6ifUowbqFY1NNSdp8/edit#) for the full details of what is new and what has changed.
+
 ### v2.0.0-pre.2 [view commit logs](https://github.com/marionettejs/backbone.marionette/compare/v2.0.0-pre.1...v2.0.0-pre.2)
   * The changelog is quite large for this release, please refer to the [google doc](https://docs.google.com/document/d/1fuXb9N5LwmdPn-teMwAo3c8JTx6ifUowbqFY1NNSdp8/edit#)
 

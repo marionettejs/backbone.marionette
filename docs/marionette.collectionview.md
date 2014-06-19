@@ -22,7 +22,7 @@ will provide features such as `onShow` callbacks, etc. Please see
   * [CollectionView's `childViewEventPrefix`](#collectionviews-childvieweventprefix)
   * [CollectionView's `childEvents`](#collectionviews-childevents)
   * [CollectionView's `buildChildView`](#collectionviews-buildchildview)
-  * [CollectionView's `addChild`](#collectionviews-addchildview)
+  * [CollectionView's `addChild`](#collectionviews-addchild)
 * [CollectionView's `emptyView`](#collectionviews-emptyview)
   * [CollectionView's `getEmptyView`](#collectionviews-getemptyview)
   * [CollectionView's `emptyViewOptions`](#collectionviews-emptyviewoptions)

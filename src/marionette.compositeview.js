@@ -77,6 +77,7 @@ Marionette.CompositeView = Marionette.CollectionView.extend({
 
     this._renderRoot();
     this._renderChildren();
+    this.bindUIElements();
 
     this.triggerMethod('render', this);
     return this;

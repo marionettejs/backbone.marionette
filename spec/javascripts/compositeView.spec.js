@@ -726,10 +726,8 @@ describe('composite view', function() {
       });
 
       describe('accessing a ui element that belongs to the collection', function() {
-        // This test makes it clear that not allowing access to the collection elements is a design decision
-        // and not a bug.
-        it('should return an empty jQuery object', function() {
-          expect(this.gridView.ui.itemRows.length).to.equal(0);
+        it('should return a jQuery object', function() {
+          expect(this.gridView.ui.itemRows.length).to.equal(2);
         });
       });
     });

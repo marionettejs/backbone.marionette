@@ -232,10 +232,11 @@ describe('composite view - childViewContainer', function() {
   describe('when a composite view has the "childViewContainer" specified as a function', function() {
     beforeEach(function() {
       this.templateFn = _.template('<div><h1>composite view</h1><ul></ul></div>');
-
+      this.collection = new Backbone.Collection([{}]);
       this.CompositeView = Backbone.Marionette.CompositeView.extend({
         childView: this.ItemView,
-        template: this.templateFn
+        template: this.templateFn,
+        collection: this.collection
       });
 
       this.compositeView = new this.CompositeView();

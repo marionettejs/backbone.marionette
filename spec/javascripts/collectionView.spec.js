@@ -89,7 +89,7 @@ describe('collection view', function() {
     });
 
     it('should only call onBeforeRenderCollection once', function() {
-      expect(this.collectionView.onBeforeRenderCollection.callCount).to.equal(1);
+      expect(this.collectionView.onBeforeRenderCollection).to.have.been.calledOnce;
     });
 
     it('should append the html for each childView', function() {

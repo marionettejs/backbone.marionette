@@ -136,20 +136,18 @@ Marionette.CollectionView = Marionette.View.extend({
   // more control over events being triggered, around the rendering
   // process
   _renderChildren: function() {
-    this.startBuffering();
-
     this.destroyEmptyView();
     this.destroyChildren();
 
     if (!this.isEmpty(this.collection)) {
+      this.startBuffering();
       this.triggerMethod('before:render:collection', this);
       this.showCollection();
+      this.endBuffering();
       this.triggerMethod('render:collection', this);
     } else {
       this.showEmptyView();
     }
-
-    this.endBuffering();
   },
 
   // Internal method to loop through collection and show each child view.

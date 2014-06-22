@@ -204,72 +204,50 @@ describe('app router', function() {
 
   describe('when app routes are provided in the constructor', function() {
     beforeEach(function() {
-      this.underscoreSpy = this.sinon.spy(_, 'invert');
       this.controller = {
         foo: this.sinon.stub(),
         bar: this.sinon.stub()
       };
-      this.extendRoutes = { 'foo-route': 'foo' };
       this.AppRouter = Marionette.AppRouter.extend({
-        appRoutes: this.extendRoutes
+        appRoutes: { 'foo-route': 'foo' }
       });
-      this.constructorRoutes = { 'bar-route': 'bar' };
       this.appRouter = new this.AppRouter({
         controller: this.controller,
-        appRoutes: this.constructorRoutes
+        appRoutes: { 'bar-route': 'bar' }
       });
       Backbone.history.start();
       this.appRouter.navigate('foo-route', true);
       this.appRouter.navigate('bar-route', true);
     });
 
-    afterEach(function () {
-      this.underscoreSpy.restore();
-    });
-
     it('should override the configured routes and use the constructor param', function() {
       expect(this.controller.foo).not.to.have.been.calledOnce;
       expect(this.controller.bar).to.have.been.calledOnce;
     });
-
-    it('should call _.invert() with constructor provided app routes as the first argument', function() {
-      expect(_.invert).to.have.been.calledOnce;
-      expect(_.invert).to.have.been.calledWithExactly(this.constructorRoutes);
-    });
-
-    it('should not call _.invert() with initial extend provided app routes as the first argument', function() {
-      expect(_.invert).to.have.been.calledOnce;
-      expect(_.invert).to.have.not.been.calledWithExactly(this.extendRoutes);
-    });
   });
 
-  describe('when app routes are provided exclusively in the constructor', function() {
-    beforeEach(function () {
-      this.underscoreSpy = this.sinon.spy(_, 'invert');
-      this.constructorRoutes = { 'foo-route': 'foo' };
-      this.controller = {
-        foo: function() {}
-      };
-      this.appRouter = new Marionette.AppRouter({
+  describe('when a route fires with parameters and app routes are provided exclusively in the constructor', function() {
+    beforeEach(function() {
+      this.fooParam = 'bar';
+      this.controller = { foo: this.sinon.stub() };
+      this.AppRouter = Marionette.AppRouter.extend({
+        onRoute: this.sinon.stub()
+      });
+      this.appRouter = new this.AppRouter({
         controller: this.controller,
-        appRoutes: this.constructorRoutes
+        appRoutes: { 'foo-route/:id': 'foo' }
       });
       Backbone.history.start();
-      this.appRouter.navigate('foo-route', true);
+      this.appRouter.navigate('foo-route/' + this.fooParam, true);
     });
 
-    afterEach(function () {
-      this.underscoreSpy.restore();
+    it('should call the configured method with parameters', function() {
+      expect(this.controller.foo).to.have.always.been.calledWith(this.fooParam);
     });
 
-    it('should call _.invert() with constructor provided app routes as the first argument', function() {
-      expect(_.invert).to.have.been.calledOnce;
-      expect(_.invert).to.have.been.calledWithExactly(this.constructorRoutes);
-    });
-
-    it('should not call _.invert() with undefined as the first argument', function() {
-      expect(_.invert).to.have.been.calledOnce;
-      expect(_.invert).to.have.not.been.calledWithExactly(undefined);
+    it('should call the onRoute method for the route, passing the name of the route, the matched route, and the params', function() {
+      expect(this.appRouter.onRoute).to.have.been.calledOnce;
+      expect(this.appRouter.onRoute).to.have.been.calledWith('foo', 'foo-route/:id', [this.fooParam, null]);
     });
   });
 });

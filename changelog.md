@@ -1,4 +1,4 @@
-### v2.0.0 [view commit logs](https://github.com/marionettejs/backbone.marionette/compare/v2.0.0...v2.0.1)
+### v2.0.1 [view commit logs](https://github.com/marionettejs/backbone.marionette/compare/v2.0.0...v2.0.1)
   * Fix missing Wreqr and Babysitter in Core AMD definition.
 
 ### v2.0.0 [view commit logs](https://github.com/marionettejs/backbone.marionette/compare/v1.8.8...v2.0.0)

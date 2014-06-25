@@ -18,11 +18,11 @@ var MyApp = new Backbone.Marionette.Application();
 * [Adding Initializers](#adding-initializers)
 * [Application Event](#application-event)
 * [Starting An Application](#starting-an-application)
-* [The Global Channel](#the-global-channel)
+* [The Application Channel](#the-application-channel)
   * [Event Aggregator](#event-aggregator)
   * [Request Response](#request-response)
   * [Commands](#commands)
-  * [Accessing the Global Channel](#accessing-the-global-channel)
+  * [Accessing the Application Channel](#accessing-the-application-channel)
 * [Regions And The Application Object](#regions-and-the-application-object)
   * [jQuery Selector](#jquery-selector)
   * [Custom Region Class](#custom-region-class)
@@ -114,11 +114,17 @@ var options = {
 MyApp.start(options);
 ```
 
-## The Global Channel
+## The Application Channel
 
 Marionette Applications come with a [messaging system](http://en.wikipedia.org/wiki/Message_passing) to facilitate communications within your app.
 
-The messaging system on the Application is the global channel from Backbone.Wreqr, which is actually comprised of three distinct systems.
+The messaging system on the Application is the radio channel from Backbone.Wreqr, which is actually comprised of three distinct systems.
+
+Marionette Applications default to the 'global' channel, but the channel can be configured.
+
+```js
+var MyApp = new Marionette.Application({ channelName: 'appChannel' });
+```
 
 This section will give a brief overview of the systems; for a more in-depth look you are encouraged to read
 the [`Backbone.Wreqr` documentation](https://github.com/marionettejs/backbone.wreqr).
@@ -184,14 +190,15 @@ MyApp.commands.execute("fetchData", true);
 MyApp.execute("fetchData", true);
 ```
 
-### Accessing the Global Channel
+### Accessing the Application Channel
 
-To access this global channel from other objects within your app you are encouraged to get a handle of the systems
+To access this application channel from other objects within your app you are encouraged to get a handle of the systems
 through the Wreqr API instead of the Application instance itself.
 
 ```js
 // Assuming that we're in some class within your app,
-// it is preferable to access the global channel like this:
+// and that we are using the default 'global' channel
+// it is preferable to access the channel like this:
 var globalCh = Backbone.Wreqr.radio.channel('global');
 globalCh.vent;
 

@@ -7,13 +7,9 @@
 Marionette.Application = function(options) {
   this._initializeRegions(options);
   this._initCallbacks = new Marionette.Callbacks();
-  var globalCh = Backbone.Wreqr.radio.channel('global');
-  this.vent = globalCh.vent;
-  this.commands = globalCh.commands;
-  this.reqres = globalCh.reqres;
   this.submodules = {};
-
   _.extend(this, options);
+  this._initChannel();
 };
 
 _.extend(Marionette.Application.prototype, Backbone.Events, {
@@ -141,6 +137,15 @@ _.extend(Marionette.Application.prototype, Backbone.Events, {
       delete this[name];
       this.triggerMethod('remove:region', name, region);
     });
+  },
+
+  // Internal method to setup the Wreqr.radio channel
+  _initChannel: function() {
+    this.channelName = _.result(this, 'channelName') || 'global';
+    this.channel = _.result(this, 'channel') || Backbone.Wreqr.radio.channel(this.channelName);
+    this.vent = _.result(this, 'vent') || this.channel.vent;
+    this.commands = _.result(this, 'commands') || this.channel.commands;
+    this.reqres = _.result(this, 'reqres') || this.channel.reqres;
   },
 
   // import the `triggerMethod` to trigger events with corresponding

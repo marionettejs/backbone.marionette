@@ -165,4 +165,22 @@ describe('application regions', function() {
       expect(this.removeRegionStub).to.have.been.calledWith('fooRegion');
     });
   });
+
+  describe('overriding default regionManager', function() {
+    beforeEach(function() {
+      this.getRegionManagerStub = this.sinon.stub().returns(new Marionette.RegionManager());
+
+      this.App = Marionette.Application.extend({
+        getRegionManager: this.getRegionManagerStub
+      });
+
+      this.app = new this.App();
+    });
+
+    it('should call into the custom regionManager lookup', function() {
+      expect(this.app.getRegionManager).
+        to.have.been.calledOnce.
+        and.have.been.calledOn(this.app);
+    });
+  });
 });

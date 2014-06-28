@@ -27,6 +27,7 @@ var MyApp = new Backbone.Marionette.Application();
   * [jQuery Selector](#jquery-selector)
   * [Custom Region Class](#custom-region-class)
   * [Custom Region Class And Selector](#custom-region-class-and-selector)
+  * [Overriding the default RegionManager](#overriding-the-default-regionmanager)
   * [Get Region By Name](#get-region-by-name)
   * [Removing Regions](#removing-regions)
 
@@ -256,6 +257,22 @@ MyApp.addRegions({
 
 });
 ```
+
+### Overriding the default `RegionManager`
+
+If you need the `RegionManager`'s class chosen dynamically, specify `getRegionManager`:
+
+```js
+Marionette.Application.extend({
+  // ...
+
+  getRegionManager: function() {
+    // custom logic
+    return new MyRegionManager();
+  }
+```
+
+This can be useful if you want to attach `Application`'s regions to your own instance of `RegionManager`.
 
 ### Get Region By Name
 

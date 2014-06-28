@@ -90,9 +90,16 @@ _.extend(Marionette.Application.prototype, Backbone.Events, {
     return ModuleClass.create.apply(ModuleClass, args);
   },
 
+  // Enable easy overriding of the default `RegionManager`
+  // for customized region interactions and business-specific
+  // view logic for better control over single regions.
+  getRegionManager: function() {
+    return new Marionette.RegionManager();
+  },
+
   // Internal method to set up the region manager
   _initRegionManager: function() {
-    this._regionManager = new Marionette.RegionManager();
+    this._regionManager = this.getRegionManager();
 
     this.listenTo(this._regionManager, 'before:add:region', function(name) {
       this.triggerMethod('before:add:region', name);

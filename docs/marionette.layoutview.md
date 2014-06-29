@@ -126,7 +126,7 @@ Marionette.LayoutView.extend({
 
   getRegionManager: function() {
     // custom logic
-    return MyRegionManager;
+    return new MyRegionManager();
   }
 ```
 

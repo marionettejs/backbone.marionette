@@ -34,7 +34,7 @@ describe('view ui elements', function() {
     });
   });
 
-  describe('when re-rendering a view with a UI element configuration', function() {
+  describe('when re-rendering an ItemView with a UI element configuration', function() {
     beforeEach(function() {
       this.itemWithCheckboxTemplateFn = _.template('<input type="checkbox" id="chk" <% if (done) { %>checked<% } %>></input>');
 
@@ -65,6 +65,72 @@ describe('view ui elements', function() {
 
     it('should return an up-to-date selector on subsequent renders', function() {
       expect(this.view.ui.checkbox.attr('checked')).to.exist;
+    });
+
+  });
+
+  describe('when re-rendering a CollectionView with a UI element configuration', function() {
+    beforeEach(function() {
+      this.itemWithCheckboxTemplateFn = _.template('<input type="checkbox" class="chk"></input>');
+
+      this.ItemView = Backbone.Marionette.ItemView.extend({
+        template: this.itemWithCheckboxTemplateFn,
+      });
+
+      this.CollectionView = Backbone.Marionette.CollectionView.extend({
+
+        childView: this.ItemView,
+
+        ui: {
+          checkbox: '.chk',
+        }
+      });
+
+      this.collection = new Backbone.Collection([{}, {}]);
+
+      this.view = new this.CollectionView({
+        collection: this.collection
+      });
+
+      this.view.render();
+    });
+
+    it('should return an up-to-date selector on subsequent renders', function() {
+      expect(this.view.ui.checkbox.length).to.equal(2);
+    });
+
+  });
+
+  describe('when re-rendering a CompositeView with a UI element configuration', function() {
+    beforeEach(function() {
+      this.itemWithCheckboxTemplateFn = _.template('<input type="checkbox" class="chk"></input>');
+
+      this.ItemView = Backbone.Marionette.ItemView.extend({
+        template: this.itemWithCheckboxTemplateFn,
+      });
+
+      this.CompositeView = Backbone.Marionette.CompositeView.extend({
+
+        template: _.template(''),
+
+        childView: this.ItemView,
+
+        ui: {
+          checkbox: '.chk',
+        }
+      });
+
+      this.collection = new Backbone.Collection([{}, {}]);
+
+      this.view = new this.CompositeView({
+        collection: this.collection
+      });
+
+      this.view.render();
+    });
+
+    it('should return an up-to-date selector on subsequent renders', function() {
+      expect(this.view.ui.checkbox.length).to.equal(2);
     });
 
   });

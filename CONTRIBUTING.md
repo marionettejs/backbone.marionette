@@ -88,7 +88,7 @@ Without at least the first 2 items in this list, we won't
 have any clue why you're changing the code. The first thing
 we'll ask, then, is that you add that information.
 
-Please refrain from giving code examples in altJS langauges like
+Please refrain from giving code examples in altJS languages like
 CoffeeScript, etc. Marionette is written in plain-old JavaScript
 and is generally easier all members in the community to read.
 

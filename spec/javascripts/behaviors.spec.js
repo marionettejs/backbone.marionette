@@ -342,44 +342,6 @@ describe('Behaviors', function() {
   describe('behavior instance events', function() {
     beforeEach(function() {
       var suite = this;
-
-      this.listenToStub = this.sinon.stub();
-      this.onStub       = this.sinon.stub();
-
-      this.behaviors = {
-        foo: Marionette.Behavior.extend({
-          initialize: function() {
-            this.listenTo(suite.model, 'change:foo', suite.listenToStub);
-            this.on('baz', suite.onStub);
-          }
-        })
-      };
-      Marionette.Behaviors.behaviorsLookup = this.behaviors;
-
-      this.View = Marionette.View.extend({
-        behaviors: { foo: {} }
-      });
-
-      this.model = new Backbone.Model();
-      this.view = new this.View({ model: this.model });
-      this.view.destroy();
-    });
-
-    it('shoud unbind listenTo on close', function() {
-      this.model.set('foo', 'bar');
-      expect(this.listenToStub).not.to.have.been.calledOnce;
-    });
-
-    it('shoud still be bound to "on" on close', function() {
-      this.view.triggerMethod('baz');
-      expect(this.onStub).to.have.been.calledOnce;
-    });
-
-  });
-
-  describe('behavior instance events', function() {
-    beforeEach(function() {
-      var suite = this;
       this.listenToChangeStub = this.sinon.stub();
       this.onFooStub = this.sinon.stub();
       this.model = new Backbone.Model();

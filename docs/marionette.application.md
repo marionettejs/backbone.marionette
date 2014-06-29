@@ -27,6 +27,7 @@ var MyApp = new Backbone.Marionette.Application();
   * [jQuery Selector](#jquery-selector)
   * [Custom Region Class](#custom-region-class)
   * [Custom Region Class And Selector](#custom-region-class-and-selector)
+  * [Region Options](#region-options)
   * [Overriding the default RegionManager](#overriding-the-default-regionmanager)
   * [Get Region By Name](#get-region-by-name)
   * [Removing Regions](#removing-regions)
@@ -255,6 +256,18 @@ MyApp.addRegions({
     regionClass: MyCustomRegion
   }
 
+});
+```
+
+### Region Options
+
+You can also specify regions per `Application` instance.
+
+```js
+new Marionette.Application({
+  regions: {
+    fooRegion: '#foo-region'
+  }
 });
 ```
 

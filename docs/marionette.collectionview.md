@@ -102,7 +102,7 @@ var BarView = Backbone.Marionette.ItemView.extend({
 });
 
 var MyCollectionView = Backbone.Marionette.CollectionView.extend({
-  getItemView: function(item) {
+  getChildView: function(item) {
     // Choose which view class to render,
     // depending on the properties of the item model
     if  (item.get('isFoo')) {

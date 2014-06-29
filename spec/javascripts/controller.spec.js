@@ -74,6 +74,7 @@ describe('marionette controller', function() {
       this.controller.on('before:destroy', this.beforeDestroyHandlerStub);
       this.controller.listenTo(this.controller, 'destroy', this.listenToHandlerStub);
 
+      this.sinon.spy(this.controller, 'destroy');
       this.controller.destroy(this.argumentOne, this.argumentTwo);
     });
 
@@ -103,6 +104,10 @@ describe('marionette controller', function() {
 
     it('should call an onDestroy method with any arguments passed to destroy', function() {
       expect(this.controller.onDestroy).to.have.been.calledOnce.and.calledWith(this.argumentOne, this.argumentTwo);
+    });
+
+    it('should return the controller', function() {
+      expect(this.controller.destroy).to.have.returned(this.controller);
     });
   });
 });

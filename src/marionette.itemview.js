@@ -45,7 +45,7 @@ Marionette.ItemView = Marionette.View.extend({
     data = this.mixinTemplateHelpers(data);
 
     var template = this.getTemplate();
-    var html = Marionette.Renderer.render(template, data);
+    var html = Marionette.Renderer.render(template, data, this);
     this.attachElContent(html);
     this.bindUIElements();
 
@@ -77,6 +77,6 @@ Marionette.ItemView = Marionette.View.extend({
   destroy: function() {
     if (this.isDestroyed) { return; }
 
-    Marionette.View.prototype.destroy.apply(this, arguments);
+    return Marionette.View.prototype.destroy.apply(this, arguments);
   }
 });

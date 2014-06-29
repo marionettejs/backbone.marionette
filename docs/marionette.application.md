@@ -31,6 +31,7 @@ var MyApp = new Backbone.Marionette.Application();
   * [Overriding the default RegionManager](#overriding-the-default-regionmanager)
   * [Get Region By Name](#get-region-by-name)
   * [Removing Regions](#removing-regions)
+* [Application.getOption](#applicationgetoption)
 
 ## Adding Initializers
 
@@ -324,3 +325,8 @@ application object.
 
 For more information on regions, see [the region documentation](./marionette.region.md) Also, the API that Applications use to
 manage regions comes from the RegionManager Class, which is documented [over here](https://github.com/marionettejs/backbone.marionette/blob/master/docs/marionette.regionmanager.md).
+
+### Application.getOption
+Retrieve an object's attribute either directly from the object, or from the object's this.options, with this.options taking precedence.
+
+More information [getOption](./marionette.functions.md)

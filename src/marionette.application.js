@@ -150,7 +150,10 @@ _.extend(Marionette.Application.prototype, Backbone.Events, {
 
   // import the `triggerMethod` to trigger events with corresponding
   // methods if the method exists
-  triggerMethod: Marionette.triggerMethod
+  triggerMethod: Marionette.triggerMethod,
+
+  // Proxy `getOption` to enable getting options from this or this.options by name.
+  getOption: Marionette.proxyGetOption
 });
 
 // Copy the `extend` function used by Backbone's classes

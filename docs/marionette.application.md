@@ -29,6 +29,7 @@ MyApp = new Backbone.Marionette.Application();
   * [Custom Region Class And Selector](#custom-region-class-and-selector)
   * [Get Region By Name](#get-region-by-name)
   * [Removing Regions](#removing-regions)
+* [Application.getOption](#applicationgetoption)
 
 ## Adding Initializers
 
@@ -291,3 +292,8 @@ Removing a region will properly empty it before removing it from the
 application object.
 
 For more information on regions, see [the region documentation](./marionette.region.md)
+
+### Application.getOption
+Retrieve an object's attribute either directly from the object, or from the object's this.options, with this.options taking precedence.
+
+More information [getOption](./marionette.functions.md)

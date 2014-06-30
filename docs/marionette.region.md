@@ -146,7 +146,7 @@ MyApp.mainRegion.show(myView);
 MyApp.mainRegion.show(myView, {forceShow: true});
 ```
 
-NOTE: When using `preventDestroy: true` you must be careful to cleanup your old views
+NOTE: When using `forceShow: true` you must be careful to cleanup your old views
 manually to prevent memory leaks.
 
 ### `reset` A Region

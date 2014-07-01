@@ -417,6 +417,7 @@ Backbone.Marionette.CollectionView.extend({
     // work with the childView instance, here
   }
 });
+```
 
 ### onRemoveChild callback
 

@@ -17,7 +17,44 @@ describe('item view', function() {
     });
 
     it('should throw an exception because there was no valid template', function() {
-      expect(this.view.render).to.throw('Cannot render the template since its false, null or undefined.');
+      expect(this.view.render).to.throw('Cannot render the template since it is null or undefined.');
+    });
+  });
+
+  describe('when rendering with a false template', function() {
+    beforeEach(function() {
+      this.onBeforeRenderStub = this.sinon.stub();
+      this.onRenderStub       = this.sinon.stub();
+
+      this.View = Marionette.ItemView.extend({
+        template: false,
+        onBeforeRender: this.onBeforeRenderStub,
+        onRender: this.onRenderStub
+      });
+
+      this.view = new this.View();
+      this.triggerSpy = this.sinon.spy(this.view, 'trigger');
+      this.view.render();
+    });
+
+    it('should not throw an exception for a false template', function() {
+      expect(this.view.render).to.not.throw('Cannot render the template since it is null or undefined.');
+    });
+
+    it('should call an "onBeforeRender" method on the view', function() {
+      expect(this.onBeforeRenderStub).to.have.been.calledOnce;
+    });
+
+    it('should call an "onRender" method on the view', function() {
+      expect(this.onRenderStub).to.have.been.calledOnce;
+    });
+
+    it('should trigger a before:render event', function() {
+      expect(this.triggerSpy).to.have.been.calledWith('before:render', this.view);
+    });
+
+    it('should trigger a rendered event', function() {
+      expect(this.triggerSpy).to.have.been.calledWith('render', this.view);
     });
   });
 

@@ -41,17 +41,31 @@ Marionette.ItemView = Marionette.View.extend({
 
     this.triggerMethod('before:render', this);
 
-    var data = this.serializeData();
-    data = this.mixinTemplateHelpers(data);
-
-    var template = this.getTemplate();
-    var html = Marionette.Renderer.render(template, data);
-    this.attachElContent(html);
+    this.renderTemplate();
     this.bindUIElements();
 
     this.triggerMethod('render', this);
 
     return this;
+  },
+
+  renderTemplate: function() {
+    var template = this.getTemplate();
+
+    if (template === false) {
+      return;
+    }
+
+    if (!template) {
+      throwError('Cannot render the template since it is null or undefined.',
+        'UndefinedTemplateError');
+    }
+
+    var data = this.serializeData();
+    data = this.mixinTemplateHelpers(data);
+
+    var html = Marionette.Renderer.render(template, data);
+    this.attachElContent(html);
   },
 
   // Attaches the content of a given view.

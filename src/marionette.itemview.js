@@ -41,15 +41,38 @@ Marionette.ItemView = Marionette.View.extend({
 
     this.triggerMethod('before:render', this);
 
-    var data = this.serializeData();
-    data = this.mixinTemplateHelpers(data);
-
-    var template = this.getTemplate();
-    var html = Marionette.Renderer.render(template, data, this);
-    this.attachElContent(html);
+    this._renderTemplate();
     this.bindUIElements();
 
     this.triggerMethod('render', this);
+
+    return this;
+  },
+
+  // Internal method to render the template with the serialized data
+  // and template helpers via the `Marionette.Renderer` object.
+  // Throws an `UndefinedTemplateError` error if the template is
+  // any falsely value but literal `false`.
+  _renderTemplate: function() {
+    var template = this.getTemplate();
+
+    // Allow template-less item views
+    if (template === false) {
+      return;
+    }
+
+    if (!template) {
+      throwError('Cannot render the template since it is null or undefined.',
+        'UndefinedTemplateError');
+    }
+
+    // Add in entity data and template helpers
+    var data = this.serializeData();
+    data = this.mixinTemplateHelpers(data);
+
+    // Render and add to el
+    var html = Marionette.Renderer.render(template, data, this);
+    this.attachElContent(html);
 
     return this;
   },

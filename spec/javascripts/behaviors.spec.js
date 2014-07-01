@@ -191,6 +191,10 @@ describe('Behaviors', function() {
     it('should proxy the views $el', function() {
       expect(this.fooBehavior.$el).to.equal(this.view.$el);
     });
+
+    it('should proxy the views el', function() {
+      expect(this.fooBehavior.el).to.equal(this.view.el);
+    });
   });
 
   describe('behavior UI', function() {

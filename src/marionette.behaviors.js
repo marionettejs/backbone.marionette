@@ -30,6 +30,7 @@ Marionette.Behaviors = (function(Marionette, _) {
       // is not set until after setElement is called.
       _.each(behaviors, function(b) {
         b.$el = this.$el;
+        b.el = this.el;
       }, this);
 
       return this;

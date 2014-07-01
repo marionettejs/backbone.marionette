@@ -197,27 +197,57 @@ The `childViewEventPrefix` can be provided in the view definition or
 in the constructor function call, to get a view instance.
 
 ### CollectionView's `childEvents`
+
 You can specify a `childEvents` hash or method which allows you to capture all bubbling childEvents without having to manually set bindings. The keys of the hash can either be a function or a string that is the name of a method on the collection view.
 
 ```js
-childEvents: {
-  "render": function() {
-    console.log("a childView has been rendered");
-  },
-  "onChildDestroy": "someFn" // where the collection view has a method `someFn`
-}
-```
+// childEvents can be specified as a hash...
+var MyCollectionView = Marionette.CollectionView.extend({
 
-You can also use a method for `childEvents` that returns a hash.
-
-```js
-childEvents: function() {
-  return {
-    "render": function() {
+  // This callback will be called whenever a child is rendered or emits a `render` event
+  childEvents: {
+    render: function() {
       console.log("a childView has been rendered");
     }
   }
-}
+});
+
+// ...or as a function that returns a hash.
+var MyCollectionView = Marionette.CollectionView.extend({
+
+  childEvents: function() {
+    return {
+      render: this.onChildRendered
+    }
+});
+```
+
+This also works for custom events that you might fire on your child views.
+
+```js
+// The child view fires a custom event, `show:message`
+var ChildView = new Marionette.ItemView.extend({
+  events: {
+    'click .button': 'showMessage'
+  },
+
+  showMessage: function () {
+    console.log('The button was clicked.');
+
+    this.trigger('show:message');
+  }
+});
+
+// The parent uses childEvents to catch that custom event on the child view
+var ParentView = new Marionette.CollectionView.extend({
+  childView: ChildView,
+
+  childEvents: {
+    'show:alert': function () {
+      console.log('The show:message event bubbled up to the parent.');
+    }
+  }
+});
 ```
 
 ### CollectionView's `buildChildView`

@@ -51,7 +51,11 @@ describe('renderer', function() {
   describe('when overriding the `render` method', function() {
     beforeEach(function() {
       this.renderStub = this.sinon.stub(Marionette.Renderer, 'render');
-      this.view = new Marionette.ItemView();
+
+      this.view = new Marionette.ItemView({
+        template: 'foobar'
+      });
+
       this.view.render();
     });
 

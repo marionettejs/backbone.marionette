@@ -13,7 +13,7 @@ A `Behavior` is an  isolated set of DOM / user interactions that can be mixed in
   * [Collection Events](#model-events)
   * [Grouped Behaviors](#grouped-behaviors)
   * [$](#$)
-  * [$el](#$el)
+  * [$el and el](#$el-and-el)
   * [Defaults](#defaults)
   * [View](#view)
 
@@ -213,8 +213,9 @@ Then `behaviors` key allows a behavior to group multiple behaviors together.
 	});
 ```
 
-### $el
-`$el` is a direct proxy of the views `el` cached as a jquery selector.
+### $el and el
+`el` is a direct proxy of the view's `el`.
+Similarly, `$el` is a direct proxy of the view's `el` cached as a jQuery selector.
 
 ```js
 Marionette.Behavior.extend({

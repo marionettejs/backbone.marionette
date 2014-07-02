@@ -220,7 +220,7 @@ childEvents: function() {
 }
 ```
 
-As an example of how unleash something on a click event, your parent's view – which can be whether a CollectionView or their extensions, such as a [CompositeView](https://github.com/marionettejs/backbone.marionette/blob/master/docs/marionette.compositeview.md) – should to be like this:
+As an example of how unleash something on a click event, your parent's view – which can be either a CollectionView or their extensions, such as a [CompositeView](https://github.com/marionettejs/backbone.marionette/blob/master/docs/marionette.compositeview.md) – should to be like this:
 
 ```js
 childEvents: {

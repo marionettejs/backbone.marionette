@@ -163,17 +163,23 @@ describe('layoutView', function() {
       this.sinon.spy(this.regionOne, 'empty');
       this.sinon.spy(this.regionTwo, 'empty');
 
+      this.sinon.spy(this.layoutViewManager, 'destroy');
+      this.layoutViewManager.destroy();
       this.layoutViewManager.destroy();
     });
 
     it('should empty the region managers', function() {
-      expect(this.regionOne.empty).to.have.been.called;
-      expect(this.regionTwo.empty).to.have.been.called;
+      expect(this.regionOne.empty).to.have.been.calledOnce;
+      expect(this.regionTwo.empty).to.have.been.calledOnce;
     });
 
     it('should delete the region managers', function() {
       expect(this.layoutViewManager.regionOne).to.be.undefined;
       expect(this.layoutViewManager.regionTwo).to.be.undefined;
+    });
+
+    it('should return the view', function() {
+      expect(this.layoutViewManager.destroy).to.have.always.returned(this.layoutViewManager);
     });
   });
 

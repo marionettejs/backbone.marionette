@@ -29,6 +29,7 @@ describe('item view', function() {
         template        : this.templateStub,
         attachElContent : this.attachElContentStub
       });
+      this.sinon.spy(Marionette.Renderer, 'render');
 
       this.itemView = new this.ItemView();
       this.itemView.render();
@@ -36,6 +37,10 @@ describe('item view', function() {
 
     it('should render according to the custom attachElContent logic', function() {
       expect(this.attachElContentStub).to.have.been.calledOnce.and.calledWith(this.template);
+    });
+
+    it("should pass template stub, data and view instance to `Marionette.Renderer.Render`", function(){
+      expect(Marionette.Renderer.render).to.have.been.calledWith(this.templateStub, {}, this.itemView);
     });
   });
 
@@ -151,6 +156,7 @@ describe('item view', function() {
       this.stopListeningSpy = this.sinon.spy(this.view, 'stopListening');
       this.triggerSpy       = this.sinon.spy(this.view, 'trigger');
 
+      this.sinon.spy(this.view, 'destroy');
       this.view.destroy();
     });
 
@@ -176,6 +182,10 @@ describe('item view', function() {
 
     it('should call "onDestroy" if provided', function() {
       expect(this.onDestroyStub).to.have.been.called;
+    });
+
+    it('should return the view', function() {
+      expect(this.view.destroy).to.have.returned(this.view);
     });
   });
 

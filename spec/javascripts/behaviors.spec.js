@@ -267,6 +267,8 @@ describe('Behaviors', function() {
         this.view.render();
         this.view.$el.find('.foo').click();
         this.view.$el.find('.bar').click();
+        $(this.view.el).find('.foo').click();
+        $(this.view.el).find('.bar').click();
       });
 
       it('should not clobber the event prototype', function() {
@@ -278,11 +280,11 @@ describe('Behaviors', function() {
       });
 
       it('should handle behavior ui click event', function() {
-        expect(this.onFooClickStub).to.have.been.calledOnce.and.calledOn(this.fooBehavior);
+        expect(this.onFooClickStub).to.have.been.calledTwice.and.always.calledOn(this.fooBehavior);
       });
 
       it('should handle view ui click event', function() {
-        expect(this.onBarClickStub).to.have.been.calledOnce.and.calledOn(this.fooBehavior);
+        expect(this.onBarClickStub).to.have.been.calledTwice.and.always.calledOn(this.fooBehavior);
       });
     });
 

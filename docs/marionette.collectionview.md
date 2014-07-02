@@ -230,15 +230,43 @@ childEvents: {
 }
 ```
 
-And finally, your childView is the responsible to triggering `childView:doSomething`:
+Then, your childView is the responsible to triggering `childView:doSomething`:
 
-```
+```js
 initialize: function () {
   this.trigger("childView:doSomething");
 }
 ```
 
 Note that `.initialize()` is just a method of example. You can trigger `childView:doSomething` wherever you want.
+
+Finally, this is an example of how your code should look like. This is **views/ChildView.js**:
+
+```js
+var ChildView = new Marionette.ChildView.extend({
+  events: {
+    'click .element': 'showMessage'
+  },
+  showMessage: function () {
+    alert('Dancing with Marionette!');
+
+    this.trigger('show:alert');
+  }
+});
+```
+
+And then: **views/ParentView.js**:
+
+```js
+var ParentView = new Marionette.CompositeView.extend({
+  childView: new ChildView,
+  childEvents: {
+    'show:alert': function () {
+      console.log('This is unleashing when showMessage(); is called.');
+    }
+  }
+});
+```
 
 ### CollectionView's `buildChildView`
 

@@ -240,7 +240,7 @@ initialize: function () {
 
 Note that `.initialize()` is just a method of example. You can trigger `childView:doSomething` wherever you want.
 
-Finally, this is an example of how your code should look like. This is **views/ChildView.js**:
+Finally, this is an example of how your code should look like. Follow the **views/ChildView.js**:
 
 ```js
 var ChildView = new Marionette.ChildView.extend({
@@ -262,7 +262,7 @@ var ParentView = new Marionette.CompositeView.extend({
   childView: new ChildView,
   childEvents: {
     'show:alert': function () {
-      console.log('This is unleashing when showMessage(); is called.');
+      console.log('"show:alert" is now being triggered when showMessage(); is called.');
     }
   }
 });

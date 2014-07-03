@@ -220,7 +220,7 @@ childEvents: function() {
 }
 ```
 
-As an example of how trigger something on a click event, your parent's view – which can be either a CollectionView or their extensions, such as a [CompositeView](https://github.com/marionettejs/backbone.marionette/blob/master/docs/marionette.compositeview.md) – should to be like this:
+As an example of how to trigger something on a click event, your parent's view – which can be either a CollectionView or their extensions, such as a [CompositeView](https://github.com/marionettejs/backbone.marionette/blob/master/docs/marionette.compositeview.md) – should to be like this:
 
 ```js
 childEvents: {
@@ -238,7 +238,7 @@ initialize: function () {
 }
 ```
 
-Note that `.initialize()` is just a method of example. You can trigger `childView:doSomething` wherever method you want.
+Note that `.initialize()` is just a method of example. You can trigger `childView:doSomething` in whatever method you want.
 
 Finally, this is a complete example of how your code should look like. Follow the **views/ChildView.js**:
 

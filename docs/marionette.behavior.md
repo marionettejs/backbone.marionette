@@ -164,6 +164,7 @@ Marionette.Behavior.extend({
 
 ### Model Events
 `modelEvents` will respond to the view's model events.
+
 ```js
   Marionette.Behavior.extend({
     modelEvents: {
@@ -178,6 +179,7 @@ Marionette.Behavior.extend({
 
 ### Collection Events
 `collectionEvents` will respond to the view's collection events.
+
 ```js
   Marionette.Behavior.extend({
     collectionEvents: {
@@ -191,6 +193,7 @@ Marionette.Behavior.extend({
 
 ### Grouped Behaviors
 Then `behaviors` key allows a behavior to group multiple behaviors together.
+
 ```js
   Marionette.Behavior.extend({
     behaviors: {
@@ -201,6 +204,7 @@ Then `behaviors` key allows a behavior to group multiple behaviors together.
 
 ### $
 `$` is a direct proxy of the views `$` lookup method.
+
 ```js
 	Marionette.Behavior.extend({
 		onShow: function() {
@@ -211,6 +215,7 @@ Then `behaviors` key allows a behavior to group multiple behaviors together.
 
 ### $el
 `$el` is a direct proxy of the views `el` cached as a jquery selector.
+
 ```js
 Marionette.Behavior.extend({
 	onShow: function() {

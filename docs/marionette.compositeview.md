@@ -41,6 +41,7 @@ For more examples, see my blog post on
 ## Documentation Index
 
 * [Composite Model `template`](#composite-model-template)
+* [CompositeView's `childView`](#compositeviews-childview)
 * [CompositeView's `childViewContainer`](#compositeviews-childviewcontainer)
 * [CompositeView's `attachHtml`](#compositeviews-attachhtml)
 * [Recursive By Default](#recursive-by-default)
@@ -58,6 +59,19 @@ override the template by passing it in as a constructor option:
 ```js
 new MyComp({
   template: "#some-template"
+});
+```
+
+## CompositeView's `childView`
+
+Each childView will be rendered using the `childView`'s template. The `CompositeView`'s
+template is rendered and the childView's templates are added to this.
+
+```js
+var ChildView = Backbone.Marionette.ItemView.extend({});
+
+var CompView = Backbone.Marionette.CompositeView.extend({
+  childView: ChildView
 });
 ```
 
@@ -167,22 +181,14 @@ case, you can override the `attachHtml` method with your own implementation.
 
 For more information on this method, see the [CollectionView's documentation](https://github.com/marionettejs/backbone.marionette/blob/master/docs/marionette.collectionview.md).
 
+
 ## Recursive By Default
 
 The default rendering mode for a `CompositeView` assumes a
 hierarchical, recursive structure. If you configure a composite
 view without specifying an `childView`, you'll get the same
-composite view class rendered for each child in the collection. If
-you need to override this, you can specify a `childView` in the
-composite view's definition:
+composite view class rendered for each child in the collection.
 
-```js
-var ChildView = Backbone.Marionette.ItemView.extend({});
-
-var CompView = Backbone.Marionette.CompositeView.extend({
-  childView: ChildView
-});
-```
 
 ## Model And Collection Rendering
 

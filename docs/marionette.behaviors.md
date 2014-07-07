@@ -59,7 +59,7 @@ getBehaviorClass: function(options, key) {
 This property lets you pass a `class` in for the `behavior` to use (bypassing the normal key based lookup). This is nice to have when the behavior is a dependency of the view in [requirejs](http://requirejs.org/). Properties passed in this way will be used in `getBehaviorClass`.
 
 ```js
-define(['lib/tooltip'], function(Tooltip) {
+define(['marionette', 'lib/tooltip'], function(Marionette, Tooltip) {
   var View = Marionette.ItemView.extend({
      behaviors: {
         Tooltip: {

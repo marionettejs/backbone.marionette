@@ -8,6 +8,8 @@
 Marionette.Module = function(moduleName, app, options) {
   this.moduleName = moduleName;
   this.options = _.extend({}, this.options, options);
+  this.pickOptions(options);
+
   // Allow for a user to overide the initialize
   // for a given module instance.
   this.initialize = options.initialize || this.initialize;
@@ -34,6 +36,10 @@ Marionette.Module.extend = Marionette.extend;
 // Extend the Module prototype with events / listenTo, so that the module
 // can be used as an event aggregator or pub/sub.
 _.extend(Marionette.Module.prototype, Backbone.Events, {
+
+  // A list of keys that will be merged onto the object directly from the passed-in options
+  // during instantiation
+  mergeOptions: [],
 
   // Initialize is an empty function by default. Override it with your own
   // initialization logic when extending Marionette.Module.
@@ -132,7 +138,10 @@ _.extend(Marionette.Module.prototype, Backbone.Events, {
 
   // import the `triggerMethod` to trigger events with corresponding
   // methods if the method exists
-  triggerMethod: Marionette.triggerMethod
+  triggerMethod: Marionette.triggerMethod,
+
+  // Import Marionette's pickOptions for pulling out values from the options during instantiation
+  pickOptions: Marionette.pickOptions
 });
 
 // Class methods to create modules

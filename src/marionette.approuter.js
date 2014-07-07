@@ -18,10 +18,15 @@
 
 Marionette.AppRouter = Backbone.Router.extend({
 
+  // A list of keys that will be merged onto the object directly from the passed-in options
+  // during instantiation
+  mergeOptions: [],
+
   constructor: function(options) {
     Backbone.Router.apply(this, arguments);
 
     this.options = options || {};
+    this.pickOptions(options);
 
     var appRoutes = this.getOption('appRoutes');
     var controller = this._getController();
@@ -76,5 +81,8 @@ Marionette.AppRouter = Backbone.Router.extend({
   },
 
   // Proxy `getOption` to enable getting options from this or this.options by name.
-  getOption: Marionette.proxyGetOption
+  getOption: Marionette.proxyGetOption,
+
+  // Import Marionette's pickOptions for pulling out values from the options during instantiation
+  pickOptions: Marionette.pickOptions
 });

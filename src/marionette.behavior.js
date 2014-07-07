@@ -15,6 +15,7 @@ Marionette.Behavior = (function(_, Backbone) {
     this.view = view;
     this.defaults = _.result(this, 'defaults') || {};
     this.options  = _.extend({}, this.defaults, options);
+    this.pickOptions(options);
 
     // proxy behavior $ method to the view
     // this is useful for doing jquery DOM lookups
@@ -29,6 +30,11 @@ Marionette.Behavior = (function(_, Backbone) {
   }
 
   _.extend(Behavior.prototype, Backbone.Events, {
+
+    // A list of keys that will be merged onto the object directly from the passed-in options
+    // during instantiation
+    mergeOptions: [],
+
     initialize: function() {},
 
     // stopListening to behavior `onListen` events.
@@ -47,7 +53,10 @@ Marionette.Behavior = (function(_, Backbone) {
     bindEntityEvents: Marionette.proxyBindEntityEvents,
 
     // Proxy `unbindEntityEvents` to enable unbinding view's events from another entity.
-    unbindEntityEvents: Marionette.proxyUnbindEntityEvents
+    unbindEntityEvents: Marionette.proxyUnbindEntityEvents,
+
+    // Import Marionette's pickOptions for pulling out values from the options during instantiation
+    pickOptions: Marionette.pickOptions
   });
 
   // Borrow Backbones extend implementation

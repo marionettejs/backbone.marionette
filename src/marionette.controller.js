@@ -7,6 +7,7 @@
 Marionette.Controller = function(options) {
   this.triggerMethod = Marionette.triggerMethod;
   this.options = options || {};
+  this.pickOptions(options);
 
   if (_.isFunction(this.initialize)) {
     this.initialize(this.options);
@@ -20,6 +21,11 @@ Marionette.Controller.extend = Marionette.extend;
 
 // Ensure it can trigger events with Backbone.Events
 _.extend(Marionette.Controller.prototype, Backbone.Events, {
+
+  // A list of keys that will be merged onto the object directly from the passed-in options
+  // during instantiation
+  mergeOptions: [],
+
   destroy: function() {
     var args = Array.prototype.slice.call(arguments);
     this.triggerMethod.apply(this, ['before:destroy'].concat(args));
@@ -35,6 +41,8 @@ _.extend(Marionette.Controller.prototype, Backbone.Events, {
   triggerMethod: Marionette.triggerMethod,
 
   // Proxy `getOption` to enable getting options from this or this.options by name.
-  getOption: Marionette.proxyGetOption
+  getOption: Marionette.proxyGetOption,
 
+  // Import Marionette's pickOptions for pulling out values from the options during instantiation
+  pickOptions: Marionette.pickOptions
 });

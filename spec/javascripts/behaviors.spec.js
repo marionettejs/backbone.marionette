@@ -205,6 +205,7 @@ describe('Behaviors', function() {
       this.onDestroyStub  = this.sinon.stub();
       this.onFooClickStub = this.sinon.stub();
       this.onBarClickStub = this.sinon.stub();
+      this.triggerFooStub = this.sinon.stub();
 
       this.behaviors = {
         foo: Marionette.Behavior.extend({
@@ -213,6 +214,10 @@ describe('Behaviors', function() {
           events: {
             'click @ui.foo': 'onFooClick',
             'click @ui.bar': 'onBarClick'
+          },
+          triggers: {
+            'click @ui.foo': 'foo:click',
+            'click .foo': 'foo:click'
           },
           onRender   : this.onRenderStub,
           onShow     : this.onShowStub,
@@ -226,7 +231,8 @@ describe('Behaviors', function() {
       this.View = Marionette.ItemView.extend({
         template: _.template('<div class="foo"></div><div class="bar"></div>'),
         ui: { bar: '.bar' },
-        behaviors: { foo: {} }
+        behaviors: { foo: {} },
+        onFooClick: suite.triggerFooStub
       });
     });
 
@@ -287,6 +293,10 @@ describe('Behaviors', function() {
 
         it('should handle view ui click event', function() {
           expect(this.onBarClickStub).to.have.been.calledOnce.and.calledOn(this.fooBehavior);
+        });
+
+        it('should handle view ui click trigger', function() {
+          expect(this.triggerFooStub).to.have.been.calledTwice;
         });
       });
 

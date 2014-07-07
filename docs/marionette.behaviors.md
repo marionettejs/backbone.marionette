@@ -1,7 +1,7 @@
 # Marionette.Behaviors
 
 'Marionette.Behaviors' is a utility class that takes care of glueing your `behavior` instances to their given `View`.
-The most important part of this class is that you **MUST** override the class level `behaviorsLookup` method for things to work properly.
+The most important part of this class is that you **MUST** override the class level `behaviorsLookup` method or set the option `behaviorClass` for things to work properly.
 
 ## Documentation Index
 * [API](#api)

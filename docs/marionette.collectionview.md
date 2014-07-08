@@ -220,6 +220,54 @@ childEvents: function() {
 }
 ```
 
+As an example of how to trigger something on a click event, your parent's view – which can be either a CollectionView or their extensions, such as a [CompositeView](https://github.com/marionettejs/backbone.marionette/blob/master/docs/marionette.compositeview.md) – should to be like this:
+
+```js
+childEvents: {
+  "childView:doSomething": function () {
+     console.log("Something happened to your childView!");
+  }
+}
+```
+
+Then, your childView is the responsible for triggering `childView:doSomething`:
+
+```js
+initialize: function () {
+  this.trigger("childView:doSomething");
+}
+```
+
+Note that `.initialize()` is just a method of example. You can trigger `childView:doSomething` in whatever method you want.
+
+Finally, this is a complete example of how your code should look like. Follow the **views/ChildView.js**:
+
+```js
+var ChildView = new Marionette.ChildView.extend({
+  events: {
+    'click .element': 'showMessage'
+  },
+  showMessage: function () {
+    alert('Dancing with Marionette!');
+
+    this.trigger('show:alert');
+  }
+});
+```
+
+And then: **views/ParentView.js**:
+
+```js
+var ParentView = new Marionette.CompositeView.extend({
+  childView: new ChildView,
+  childEvents: {
+    'show:alert': function () {
+      console.log('"show:alert" is now being triggered when showMessage(); is called.');
+    }
+  }
+});
+```
+
 ### CollectionView's `buildChildView`
 
 When a custom view instance needs to be created for the `childView` that

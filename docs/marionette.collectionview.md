@@ -627,9 +627,8 @@ children in the collection and renders them individually as an
 ```js
 MyCollectionView = Backbone.Marionette.CollectionView.extend({...});
 
-new MyCollectionView().render().done(function(){
-  // all of the children are now rendered. do stuff here.
-});
+// all of the children views will now be rendered.
+new MyCollectionView().render();
 ```
 
 ## CollectionView: Automatic Rendering

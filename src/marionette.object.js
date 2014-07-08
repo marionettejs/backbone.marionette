@@ -4,8 +4,8 @@
 // A Base Class that other Classes should descend from.
 // Object borrows many conventions and utilities from Backbone.
 Marionette.Object = function(options) {
-
   this.options = _.extend({}, _.result(this, 'options'), options);
+  this.pickOptions(options);
 
   this.initialize(this.options);
 };
@@ -16,6 +16,10 @@ Marionette.Object.extend = Marionette.extend;
 // --------------
 
 _.extend(Marionette.Object.prototype, {
+
+  // A list of keys that will be merged onto the object directly from the passed-in options
+  // during instantiation
+  mergeOptions: [],
 
   //this is a noop method intended to be overridden by classes that extend from this base
   initialize: function() {},
@@ -37,7 +41,10 @@ _.extend(Marionette.Object.prototype, {
   bindEntityEvents: Marionette.proxyBindEntityEvents,
 
   // Proxy `unbindEntityEvents` to enable unbinding view's events from another entity.
-  unbindEntityEvents: Marionette.proxyUnbindEntityEvents
+  unbindEntityEvents: Marionette.proxyUnbindEntityEvents,
+
+  // Import Marionette's pickOptions for pulling out values from the options during instantiation
+  pickOptions: Marionette.pickOptions
 });
 
 // Ensure it can trigger events with Backbone.Events

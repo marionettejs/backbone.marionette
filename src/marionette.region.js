@@ -8,6 +8,8 @@
 
 Marionette.Region = function(options) {
   this.options = options || {};
+  this.pickOptions(options);
+
   this.el = this.getOption('el');
 
   // Handle when this.el is passed in as a $ wrapped element.
@@ -121,6 +123,10 @@ _.extend(Marionette.Region, {
 // -----------------------
 
 _.extend(Marionette.Region.prototype, Backbone.Events, {
+
+  // A list of keys that will be merged onto the object directly from the passed-in options
+  // during instantiation
+  mergeOptions: [],
 
   // Displays a backbone view instance inside of the region.
   // Handles calling the `render` method for you. Reads content
@@ -256,7 +262,10 @@ _.extend(Marionette.Region.prototype, Backbone.Events, {
 
   // import the `triggerMethod` to trigger events with corresponding
   // methods if the method exists
-  triggerMethod: Marionette.triggerMethod
+  triggerMethod: Marionette.triggerMethod,
+
+  // Import Marionette's pickOptions for pulling out values from the options during instantiation
+  pickOptions: Marionette.pickOptions
 });
 
 // Copy the `extend` function used by Backbone's classes

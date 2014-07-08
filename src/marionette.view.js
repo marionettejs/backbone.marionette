@@ -5,6 +5,10 @@
 // The core view class that other Marionette views extend from.
 Marionette.View = Backbone.View.extend({
 
+  // A list of keys that will be merged onto the object directly from the passed-in options
+  // during instantiation
+  mergeOptions: [],
+
   constructor: function(options) {
     _.bindAll(this, 'render');
 
@@ -13,6 +17,8 @@ Marionette.View = Backbone.View.extend({
     // of this.options
     // at some point however this may be removed
     this.options = _.extend({}, _.result(this, 'options'), _.isFunction(options) ? options.call(this) : options);
+    this.pickOptions(options);
+
     // parses out the @ui DSL for events
     this.events = this.normalizeUIKeys(_.result(this, 'events'));
 
@@ -232,5 +238,8 @@ Marionette.View = Backbone.View.extend({
   bindEntityEvents: Marionette.proxyBindEntityEvents,
 
   // Proxy `unbindEntityEvents` to enable unbinding view's events from another entity.
-  unbindEntityEvents: Marionette.proxyUnbindEntityEvents
+  unbindEntityEvents: Marionette.proxyUnbindEntityEvents,
+
+  // Import Marionette's pickOptions for pulling out values from the options during instantiation
+  pickOptions: Marionette.pickOptions
 });

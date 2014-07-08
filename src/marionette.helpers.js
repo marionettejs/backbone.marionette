@@ -41,6 +41,15 @@ Marionette.proxyGetOption = function(optionName) {
   return Marionette.getOption(this, optionName);
 };
 
+// Marionette.pickOptions
+// ----------------------
+
+// Pick the mergeOptions hash from the passed-in options
+// and set them on the object itself.
+Marionette.pickOptions = function(options) {
+  _.extend(this, _.pick(options, this.mergeOptions));
+};
+
 // Marionette.normalizeMethods
 // ----------------------
 

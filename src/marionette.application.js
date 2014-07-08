@@ -8,11 +8,14 @@ Marionette.Application = function(options) {
   this._initRegionManager();
   this._initCallbacks = new Marionette.Callbacks();
   this.submodules = {};
+
   _.extend(this, options);
+
   this._initChannel();
 };
 
 _.extend(Marionette.Application.prototype, Backbone.Events, {
+
   // Command execution, facilitated by Backbone.Wreqr.Commands
   execute: function() {
     this.commands.execute.apply(this.commands, arguments);

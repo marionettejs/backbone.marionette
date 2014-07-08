@@ -303,6 +303,8 @@ Backbone.Marionette.CollectionView.extend({
 
 Similar to `childView` and `childViewOptions`, there is an `emptyViewOptions` property that will be passed to the `emptyView` constructor. It can be provided as an object literal or as a function.
 
+If `emptyViewOptions` aren't provided the CollectionView will default to passing the `childViewOptions` to the `emptyView`.
+
 ```js
 EmptyView = Backbone.Marionette.ItemView({
   initialize: function(options){

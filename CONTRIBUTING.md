@@ -122,14 +122,13 @@ pull request on a topic branch. If your pull request contains
 commits or other changes that are not related to the pull
 request, we will ask you to re-do your pull request.
 
-### Branch from "dev" not "master"
+### Branch from "minor" or "major," not "master"
 
-The "master" branch of the Marionette repository is for
-production release code, and documentation updates only. Never
-create a pull request from the master branch. Always create
-a branch for your work from the "dev" branch. This will
-facilitate easier pull request management for the continuous
-work that is done in the dev branch.
+README and unit test updates can be opened against Master.
+
+Code changes should go against the "minor" or "major" branches. If your change is backwards
+compatible then it should be "minor," otherwise go with "major." If you're unsure,
+go with "minor" and we will update it if we need to.
 
 ### Submit Specs With Your Pull Request
 

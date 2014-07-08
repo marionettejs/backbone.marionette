@@ -5,7 +5,7 @@
 // Stores and starts up `Region` objects, includes an
 // event aggregator as `app.vent`
 Marionette.Application = function(options) {
-  this._initRegionManager();
+  this._initializeRegions(options);
   this._initCallbacks = new Marionette.Callbacks();
   var globalCh = Backbone.Wreqr.radio.channel('global');
   this.vent = globalCh.vent;
@@ -95,6 +95,29 @@ _.extend(Marionette.Application.prototype, Backbone.Events, {
   // view logic for better control over single regions.
   getRegionManager: function() {
     return new Marionette.RegionManager();
+  },
+
+  // Internal method to initialize the regions that have been defined in a
+  // `regions` attribute on the application instance
+  _initializeRegions: function(options) {
+    var regions = _.isFunction(this.regions) ? this.regions(options) : this.regions || {};
+
+    this._initRegionManager();
+
+    // Enable users to define `regions` in instance options.
+    var optionRegions = Marionette.getOption(options, 'regions');
+
+    // Enable region options to be a function
+    if (_.isFunction(optionRegions)) {
+      optionRegions = optionRegions.call(this, options);
+    }
+
+    // Overwrite current regions with those passed in options
+    _.extend(regions, optionRegions);
+
+    this.addRegions(regions);
+
+    return this;
   },
 
   // Internal method to set up the region manager

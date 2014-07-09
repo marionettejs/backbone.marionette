@@ -10,6 +10,9 @@ describe('application regions', function() {
       this.app.on('before:add:region', this.beforeAddRegionStub);
       this.app.on('add:region', this.addRegionStub);
 
+      this.fooRegion = new Marionette.Region({ el: '#foo-region' });
+      this.barRegion = new Marionette.Region({ el: '#bar-region' });
+
       this.app.addRegions({
         fooRegion: '#foo-region',
         barRegion: '#bar-region'
@@ -18,8 +21,8 @@ describe('application regions', function() {
     });
 
     it('should initialize the regions', function() {
-      expect(this.app.fooRegion).to.exist;
-      expect(this.app.barRegion).to.exist;
+      expect(this.app.fooRegion).to.deep.equal(this.fooRegion);
+      expect(this.app.barRegion).to.deep.equal(this.barRegion);
     });
 
     it('should trigger a before:add:region event', function() {
@@ -56,6 +59,11 @@ describe('application regions', function() {
       this.app = new Marionette.Application();
       this.FooRegion = Marionette.Region.extend();
 
+      this.fooRegion = new this.FooRegion({
+        el: this.fooSelector,
+        fooOption: this.fooOption
+      });
+
       this.app.addRegions({
         fooRegion: {
           selector: this.fooSelector,
@@ -66,7 +74,7 @@ describe('application regions', function() {
     });
 
     it('should initialize the regions, immediately', function() {
-      expect(this.app.fooRegion).to.exist;
+      expect(this.app.fooRegion).to.deep.equal(this.fooRegion);
     });
 
     it('should create an instance of the specified region class', function() {
@@ -81,7 +89,6 @@ describe('application regions', function() {
       expect(this.app.fooRegion).to.have.deep.property('options.fooOption', this.fooOption);
     });
   });
-
 
   describe('when adding regions as an option', function() {
     beforeEach(function() {
@@ -315,16 +322,43 @@ describe('application regions', function() {
     });
   });
 
+  describe('when adding custom region classes to an app', function() {
+    beforeEach(function() {
+      this.fooSelector = '#foo-region';
+      this.app = new Marionette.Application();
+      this.FooRegion = Marionette.Region.extend({ el: this.fooSelector });
+
+      this.fooRegion = new this.FooRegion();
+
+      this.app.addRegions({
+        fooRegion: this.FooRegion
+      });
+    });
+
+    it('should initialize the regions, immediately', function() {
+      expect(this.app.fooRegion).to.deep.equal(this.fooRegion);
+    });
+
+    it('should create an instance of the specified region class', function() {
+      expect(this.app.fooRegion).to.be.instanceof(this.FooRegion);
+    });
+
+    it('should set the specified selector', function() {
+      expect(this.app.fooRegion.$el.selector).to.equal('#foo-region');
+    });
+  });
+
   describe('when an app has a region', function() {
     beforeEach(function() {
       this.app = new Marionette.Application();
+      this.fooRegion = new Marionette.Region({ el: '#foo-region' });
       this.app.addRegions({
         fooRegion: '#foo-region'
       });
     });
 
     it('should make the region available as a named attribute', function() {
-      expect(this.app.fooRegion).to.exist;
+      expect(this.app.fooRegion).to.deep.equal(this.fooRegion);
     });
 
     it('should be able to retrieve the region', function() {

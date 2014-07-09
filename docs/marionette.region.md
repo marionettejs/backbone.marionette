@@ -9,6 +9,7 @@ Using the `LayoutView` class you can create nested regions.
 ## Documentation Index
 
 * [Defining An Application Region](#defining-an-application-region)
+  * [Region Configuration Types](#region-configuration-types)
 * [Initialize A Region With An `el`](#initialize-a-region-with-an-el)
 * [Basic Use](#basic-use)
 * [Showing a view](#showing-a-view)
@@ -62,6 +63,122 @@ layoutView.menu.show(new MenuView());
 layoutView.content.show(new MainContentView());
 ```
 
+### Region Configuration Types
+
+Marionette supports multiple ways to define regions on your `Application` or `LayoutView`.
+
+#### String Selector
+
+You can use a jQuery string selector to define regions.
+
+```js
+App.addRegions({
+  mainRegion: '#main'
+});
+```
+
+#### Region Class
+
+If you've created a custom region class, you can use it to
+define your region.
+
+**NOTE:** Make sure the region class has an `el`
+property set or it won't work!
+
+```js
+var MyRegion = Marionette.Region.extend({
+  el: '#main-nav'
+});
+
+App.addRegions({
+  navigationRegion: MyRegion
+});
+```
+
+#### Object Literal
+
+Finally, you can define regions with an object literal. Object
+literal definitions normally expect a `selector` or `el`
+property.  The `selector` property is a selector string, and
+the `el` property can be a selector string, a jQuery object,
+or an HTML node.
+
+You may also supply a `regionClass` property for a custom region
+class. If your `regionClass` already has `el` set, then you do
+not need to supply a `selector` or `el` property on the object
+literal.
+
+Any other properties you set on the object literal will be
+used as options passed to the region instance.
+
+```js
+var MyRegion      = Marionette.Region.extend();
+var MyOtherRegion = Marionette.Region.extend();
+var MyElRegion    = Marionette.Region.extend({ el: '#footer' });
+
+App.addRegions({
+  contentRegion: {
+    el: '#content',
+    regionClass: MyRegion
+  },
+
+  navigationRegion: {
+    el: '#navigation',
+    regionClass: MyOtherRegion,
+
+    // Options passed to instance of `MyOtherRegion` for
+    // the `navigationRegion` on `App`
+    navigationOption: 42,
+    anotherNavigationOption: 'foo'
+  },
+
+  footerRegion: {
+    regionClass: MyElRegion
+  }
+});
+```
+
+Take note that one of the primary benefits of using `regionClass`
+with an `el` already set is to also provide options to the region
+instance. This isn't possible when using the region class directly
+like earlier.
+
+```js
+var MyRegion = Marionette.Region.extend({
+  el: '#content',
+});
+
+App.addRegions({
+  contentRegion: {
+    regionClass: MyRegion,
+    myRegionOption: 'bar',
+    myOtherRegionOption: 'baz'
+  }
+});
+```
+
+#### Mix-and-match
+
+Of course you can mix-and-match the region configuration types.
+
+```js
+var MyRegion = Marionette.Region.extend({
+  el: '#content'
+});
+
+var MyOtherRegion = Marionette.Region.extend();
+
+App.addRegions({
+  contentRegion: MyRegion,
+
+  navigationRegion: '#navigation',
+
+  footerRegion: {
+    el: '#footer',
+    regionClass: MyOtherRegion
+  }
+});
+```
 
 ## Initialize A Region With An `el`
 

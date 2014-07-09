@@ -422,16 +422,21 @@ Marionette.CollectionView = Marionette.View.extend({
     if (this.isDestroyed) { return; }
 
     this.triggerMethod('before:destroy:collection');
-    this.destroyChildren();
+    this._destroyChildren();
     this.triggerMethod('destroy:collection');
 
     Marionette.View.prototype.destroy.apply(this, arguments);
   },
 
-  // Destroy the child views that this collection view
-  // is holding on to, if any
-  destroyChildren: function() {
+  // Internal method to destroy the instances `childViews`
+  _destroyChildren: function() {
     this.children.each(this.removeChildView, this);
+  },
+
+  // Destroy the child views that this collection view
+  // is holding on to, and then invoke empty collection view.
+  destroyChildren: function() {
+    this._destroyChildren();
     this.checkEmpty();
   },
 

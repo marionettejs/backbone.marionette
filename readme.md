@@ -167,9 +167,3 @@ bring into the next release.
 Report issues with Marionette, submit pull requests to fix problems, or to
 create summarized and documented feature requests (preferably with pull
 requests that implement the feature).
-
-## MIT License
-
-Copyright (c) 2012-2014 Derick Bailey; Muted Solutions, LLC
-
-Distributed under [MIT license](http://mutedsolutions.mit-license.org/).

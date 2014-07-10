@@ -70,3 +70,21 @@ define(['marionette', 'lib/tooltip'], function(Marionette, Tooltip) {
   });
 });
 ```
+
+Beware of the name under which Marionette dependency is registered. In this example Marionette is registered as `marionette`, which means that you must have something like this in the requirejs configuration paths:
+
+```js
+require.config({
+  // ...
+  paths: {
+    marionette: 'path/to/backbone.marionette/lib/core/backbone.marionette'
+  },
+  // ...
+});
+```
+
+If you set the path to marionette library to `backbone.marionette`, then you must change the import in the example above to:
+
+```js
+define(['backbone.marionette', 'lib/tooltip'], function(Marionette, Tooltip) {
+```

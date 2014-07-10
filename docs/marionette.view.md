@@ -200,6 +200,7 @@ view.$(".do-something").trigger("click");
 The result of this is an alert box that says, "I DID IT!"
 
 By default all triggers are stopped with `preventDefault` and `stopPropagation` methods. But you can manually configure the triggers using hash instead of event name. Example below triggers an event and prevents default browser behaviour using `preventDefault` method.
+
 ```js
 Backbone.Marionette.CompositeView.extend({
   triggers: {

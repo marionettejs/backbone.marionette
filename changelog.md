@@ -1,3 +1,11 @@
+### v2.0.2 [view commit logs](https://github.com/marionettejs/backbone.marionette/compare/v2.0.1...v2.0.2)
+
+  * Bug Fixes
+    * Fixed issue where `render:collection` called before the entire collection and children had been rendered.
+
+  * General
+    * Remove bundled main entry point for bower.
+
 ### v2.0.1 [view commit logs](https://github.com/marionettejs/backbone.marionette/compare/v2.0.0...v2.0.1)
   * Fix missing Wreqr and Babysitter in Core AMD definition.
 

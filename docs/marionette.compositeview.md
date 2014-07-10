@@ -25,7 +25,7 @@ You can specify a `modelView` to use for the model. If you don't
 specify one, it will default to the `Marionette.ItemView`.
 
 ```js
-CompositeView = Backbone.Marionette.CompositeView.extend({
+var CompositeView = Backbone.Marionette.CompositeView.extend({
   template: "#leaf-branch-template"
 });
 
@@ -123,12 +123,12 @@ table structure, specify an `childViewContainer` in your composite view,
 like this:
 
 ```js
-RowView = Backbone.Marionette.ItemView.extend({
+var RowView = Backbone.Marionette.ItemView.extend({
   tagName: "tr",
   template: "#row-template"
 });
 
-TableView = Backbone.Marionette.CompositeView.extend({
+var TableView = Backbone.Marionette.CompositeView.extend({
   childView: RowView,
 
   // specify a jQuery selector to put the `childView` instances into

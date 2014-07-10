@@ -52,7 +52,7 @@ to the layoutView.
 ```
 
 ```js
-AppLayoutView = Backbone.Marionette.LayoutView.extend({
+var AppLayoutView = Backbone.Marionette.LayoutView.extend({
   template: "#layout-view-template",
 
   regions: {
@@ -189,7 +189,7 @@ has all of the core functionality of an item view. This includes
 the methods necessary to be shown within an existing region manager.
 
 ```js
-MyApp = new Backbone.Marionette.Application();
+var MyApp = new Backbone.Marionette.Application();
 MyApp.addRegions({
   mainRegion: "#main"
 });
@@ -249,7 +249,7 @@ your own implementation, you can specify an alternate class to use
 with the `regionClass` property of the `LayoutView`.
 
 ```js
-MyLayoutView = Backbone.Marionette.LayoutView.extend({
+var MyLayoutView = Backbone.Marionette.LayoutView.extend({
   regionClass: SomeCustomRegion
 });
 ```
@@ -257,7 +257,7 @@ MyLayoutView = Backbone.Marionette.LayoutView.extend({
 You can also specify custom `Region` classes for each `region`:
 
 ```js
-AppLayoutView = Backbone.Marionette.LayoutView.extend({
+var AppLayoutView = Backbone.Marionette.LayoutView.extend({
   template: "#layout-view-template",
 
   regionClass: SomeDefaultCustomRegion,

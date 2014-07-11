@@ -23,6 +23,7 @@ var MyApp = new Backbone.Marionette.Application();
   * [Request Response](#request-response)
   * [Commands](#commands)
   * [Accessing the Application Channel](#accessing-the-application-channel)
+  * [Overriding Channel Creation](#overriding-channel-creation)
 * [Regions And The Application Object](#regions-and-the-application-object)
   * [jQuery Selector](#jquery-selector)
   * [Custom Region Class](#custom-region-class)
@@ -206,6 +207,21 @@ globalCh.vent;
 // This is discouraged because it assumes the name of your application
 window.app.vent;
 ```
+
+### Overriding Channel Creation
+
+The application creates its channel at construction by calling `configureChannel`.
+This method can be overridden to provide custom channel behavior.
+For instance, to use the new `Backbone.Radio` instead of `Backbone.Wreqr`:
+
+```js
+Marionette.Application.prototype.configureChannel = function () {
+  this.channel = Backbone.Radio.channel('global');
+};
+```
+
+Be careful when doing this. Marionette does not expect your Application to provide
+`vent`, `commands`, and `reqres`, but your existing code might.
 
 ## Regions And The Application Object
 

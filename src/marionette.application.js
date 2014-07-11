@@ -9,7 +9,7 @@ Marionette.Application = function(options) {
   this._initCallbacks = new Marionette.Callbacks();
   this.submodules = {};
   _.extend(this, options);
-  this._initChannel();
+  this.configureChannel();
 };
 
 _.extend(Marionette.Application.prototype, Backbone.Events, {
@@ -139,8 +139,10 @@ _.extend(Marionette.Application.prototype, Backbone.Events, {
     });
   },
 
-  // Internal method to setup the Wreqr.radio channel
-  _initChannel: function() {
+  // Method to setup the event channel
+  // The default behavior uses Backbone.Wreqr,
+  // but this can be overridden to provide a custom channel configuration
+  configureChannel: function() {
     this.channelName = _.result(this, 'channelName') || 'global';
     this.channel = _.result(this, 'channel') || Backbone.Wreqr.radio.channel(this.channelName);
     this.vent = _.result(this, 'vent') || this.channel.vent;

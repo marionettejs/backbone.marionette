@@ -128,5 +128,19 @@ describe('marionette application', function() {
         expect(this.app.channelName).to.equal(this.channelName);
       });
     });
+
+    describe('configureChannel', function() {
+      beforeEach(function() {
+        this.ConfiguredApp = Marionette.Application.extend({
+          configureChannel: this.sinon.stub()
+        });
+
+        this.app = new this.ConfiguredApp();
+      });
+
+      it("should be called at construction", function() {
+        expect(this.app.configureChannel).to.have.been.calledOnce.and.calledOn(this.app);
+      });
+    });
   });
 });

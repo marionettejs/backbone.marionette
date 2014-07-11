@@ -10,10 +10,15 @@ Marionette.RegionManager = (function(Marionette) {
       Marionette.Controller.call(this, options);
     },
 
-    // Add multiple regions using an object literal, where
+    // Add multiple regions using an object literal or a
+    // function that returns an object literal, where
     // each key becomes the region name, and each value is
     // the region definition.
     addRegions: function(regionDefinitions, defaults) {
+      if (_.isFunction(regionDefinitions)) {
+        regionDefinitions = regionDefinitions.apply(this, arguments);
+      }
+
       var regions = {};
 
       _.each(regionDefinitions, function(definition, name) {

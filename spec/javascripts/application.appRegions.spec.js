@@ -189,9 +189,9 @@ describe('application regions', function() {
       });
 
       it('should call the regions function on the application context', function() {
-        expect(this.regionOptionsStub).
-          to.have.been.calledOnce.
-          and.have.been.calledOn(this.app);
+        expect(this.regionOptionsStub)
+          .to.have.been.calledOnce
+          .and.have.been.calledOn(this.app);
       });
 
       it('should call the regions function with the options', function() {
@@ -235,9 +235,9 @@ describe('application regions', function() {
       });
 
       it('should call the regions function on the application context', function() {
-        expect(this.regionOptionsStub).
-          to.have.been.calledOnce.
-          and.have.been.calledOn(this.app);
+        expect(this.regionOptionsStub)
+          .to.have.been.calledOnce
+          .and.have.been.calledOn(this.app);
       });
 
       it('should call the regions function with the options', function() {
@@ -311,9 +311,9 @@ describe('application regions', function() {
       });
 
       it('should call the regions function on the application context', function() {
-        expect(this.regionOptionsStub).
-          to.have.been.calledOnce.
-          and.have.been.calledOn(this.app);
+        expect(this.regionOptionsStub)
+          .to.have.been.calledOnce
+          .and.have.been.calledOn(this.app);
       });
 
       it('should call the regions function with the options', function() {
@@ -345,6 +345,49 @@ describe('application regions', function() {
 
     it('should set the specified selector', function() {
       expect(this.app.fooRegion.$el.selector).to.equal('#foo-region');
+    });
+  });
+
+  describe('when adding regions with a function', function() {
+    beforeEach(function() {
+      this.fooSelector = '#foo-region';
+      this.barSelector = '#bar-region';
+
+      this.fooRegion = new Marionette.Region({ el: this.fooSelector });
+      this.BarRegion = Marionette.Region.extend();
+      this.barRegion = new this.BarRegion({ el: this.barSelector });
+
+      this.app = new Marionette.Application();
+
+      this.regionDefinition = this.sinon.stub().returns({
+        fooRegion: this.fooSelector,
+        barRegion: {
+          selector: this.barSelector,
+          regionClass: this.BarRegion
+        }
+      });
+
+      this.regions = this.app.addRegions(this.regionDefinition);
+    });
+
+    it('calls the regions definition function', function() {
+      expect(this.regionDefinition)
+        .to.have.been.calledOnce
+        .and.have.been.calledWith(this.regionDefinition);
+    });
+
+    it('returns all the created regions on an object literal', function() {
+      expect(this.app.fooRegion).to.deep.equal(this.fooRegion);
+      expect(this.app.barRegion).to.deep.equal(this.barRegion);
+    });
+
+    it('initializes all the regions immediately', function() {
+      expect(this.app.getRegion('fooRegion')).to.deep.equal(this.fooRegion);
+      expect(this.app.getRegion('barRegion')).to.deep.equal(this.barRegion);
+    });
+
+    it('uses the custom regionClass', function() {
+      expect(this.app.getRegion('barRegion')).to.be.an.instanceof(this.BarRegion);
     });
   });
 
@@ -458,9 +501,9 @@ describe('application regions', function() {
     });
 
     it('should call into the custom regionManager lookup', function() {
-      expect(this.app.getRegionManager).
-        to.have.been.calledOnce.
-        and.have.been.calledOn(this.app);
+      expect(this.app.getRegionManager)
+        .to.have.been.calledOnce
+        .and.have.been.calledOn(this.app);
     });
   });
 });

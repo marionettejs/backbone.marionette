@@ -16,6 +16,7 @@ will provide features such as `onShow` callbacks, etc. Please see
 
 * [ItemView render](#itemview-render)
 * [Rendering A Collection In An ItemView](#rendering-a-collection-in-an-itemview)
+* [Template-less ItemView](#template-less-itemview)
 * [Events and Callback Methods](#events-and-callback-methods)
   * ["before:render" / onBeforeRender event](#beforerender--onbeforerender-event)
   * ["render" / onRender event](#render--onrender-event)
@@ -114,6 +115,44 @@ For more information on when you would want to do this, and what options
 you have for retrieving an individual item that was clicked or
 otherwise interacted with, see the blog post on
 [Getting The Model For A Clicked Element](http://lostechies.com/derickbailey/2011/10/11/backbone-js-getting-the-model-for-a-clicked-element/).
+
+## Template-less ItemView
+
+An `ItemView` can be attached to existing elements as well. The primary benefit of this is to attach behavior and events to static content that has been rendered by your server (typically for SEO purposes). To set up a template-less `ItemView`, your `template` attribute must be `false`.
+
+```html
+<div id="my-element">
+  <p>Hello World</p>
+  <button class="my-button">Click Me</button>
+</div>
+```
+
+```js
+var MyView = Marionette.ItemView.extend({
+  el: '#my-element',
+
+  template: false,
+
+  ui: {
+    paragraph: 'p',
+    button: '.my-button'
+  },
+
+  events: {
+    'click @ui.button': 'clickedButton'
+  },
+
+  clickedButton: function() {
+    console.log('I clicked the button!');
+  }
+});
+
+var view = new MyView();
+view.render();
+
+view.ui.paragraph.text();        // returns 'Hello World'
+view.ui.button.trigger('click'); // logs 'I clicked the button!'
+```
 
 ## Events and Callback Methods
 

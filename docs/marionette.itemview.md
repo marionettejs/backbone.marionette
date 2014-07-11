@@ -34,7 +34,7 @@ You should provide a `template` attribute on the item view, which
 will be either a jQuery selector:
 
 ```js
-MyView = Backbone.Marionette.ItemView.extend({
+var MyView = Backbone.Marionette.ItemView.extend({
   template: "#some-template"
 });
 
@@ -44,8 +44,8 @@ new MyView().render();
 .. or a function taking a single argument: the object returned by [ItemView.serializeData](#itemview-serializedata):
 
 ```js
-my_template_html = '<div><%= args.name %></div>'
-MyView = Backbone.Marionette.ItemView.extend({
+var my_template_html = '<div><%= args.name %></div>'
+var MyView = Backbone.Marionette.ItemView.extend({
   template : function(serialized_model) {
     var name = serialized_model.name;
     return _.template(my_template_html, {

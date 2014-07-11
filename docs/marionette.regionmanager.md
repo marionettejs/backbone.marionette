@@ -73,28 +73,55 @@ on this, see the Region documentation.
 ## RegionManager.addRegions
 
 Regions can also be added en-masse through the use
-of the `addRegions` method. To use this method,
-pass an object literal that contains the names of
-the regions as keys, and the region definitions as
-values.
+of the `addRegions` method. This method takes an object
+literal or a function that returns an object literal.
+The object literal must contain region names as keys
+and region definitions as values. The return value
+is an object literal with all the created regions.
 
 ```js
 var rm = new Marionette.RegionManager();
 
+// With an object literal
 var regions = rm.addRegions({
-  foo: "#bar",
-  bar: {
-    selector: "#quux",
-    regionClass: MyRegionClass
+  main: '#main-content',
+  navigation: {
+    selector: '#navigation',
+    regionClass: MyNavRegion
   }
 });
 
-regions.foo; //=> the "foo" region instance
-regions.bar; //=> the "bar" region instance
+// With a function
+var otherRegions = rm.addRegions(function(regionDefinition) {
+  return {
+    footer: '#footer'
+  };
+});
+
+regions.main;        //=> 'main' region instance
+regions.navigation;  //=> 'navigation' region instance
+otherRegions.footer; //=> 'footer' region instance
 ```
 
-This method returns an object literal that contains
-all of the named region instances.
+If you supply a function to `addRegions`, it will be
+called with the `RegionManager` instance context and
+all the arguments passed to `addRegions`.
+
+```js
+var rm = new Marionette.RegionManager();
+
+var regionDefaults = {
+  regionClass: MyRegionClass
+};
+
+rm.addRegions(function(regionDefinition, defaults) {
+  console.log(this);             // `rm` instance of `RegionManager`
+  console.log(regionDefinition); // the region definition function
+  console.log(defaults);         // `{ regionClass: MyRegionClass }`
+
+  // ...return the region definiton object literal
+}, regionDefaults);
+```
 
 ### addRegions default options
 

@@ -18,12 +18,7 @@ Marionette.Behaviors = (function(Marionette, _) {
     // Wraps several of the view's methods
     // calling the methods first on each behavior
     // and then eventually calling the method on the view.
-    Behaviors.wrap(view, behaviors, [
-      'bindUIElements', 'unbindUIElements',
-      'delegateEvents', 'undelegateEvents',
-      'behaviorEvents', 'triggerMethod',
-      'setElement', 'destroy'
-    ]);
+    Behaviors.wrap(view, behaviors, _.keys(methods));
   }
 
   var methods = {

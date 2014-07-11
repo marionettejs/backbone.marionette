@@ -267,7 +267,7 @@ delegate collection calls to its list.
 
 #### Object Literal
 ```js
-obj = {
+var obj = {
   list: [1, 2, 3]
 }
 

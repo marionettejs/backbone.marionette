@@ -68,6 +68,7 @@ describe('collection view', function() {
       this.sinon.spy(this.collectionView.$el, 'append');
       this.sinon.spy(this.collectionView, 'startBuffering');
       this.sinon.spy(this.collectionView, 'endBuffering');
+      this.sinon.spy(this.collectionView, 'getChildView');
 
       this.collectionView.render();
     });
@@ -152,6 +153,12 @@ describe('collection view', function() {
 
     it('should trigger "childview:render" for each item in the collection', function() {
       expect(this.childViewRender.callCount).to.equal(2);
+    });
+
+    it('should call "getChildView" for each item in the collection', function() {
+      expect(this.collectionView.getChildView).to.have.been.calledTwice.
+        and.calledWith(this.collection.models[0]).
+        and.calledWith(this.collection.models[1]);
     });
   });
 
@@ -783,6 +790,7 @@ describe('collection view', function() {
       this.collectionView.trigger('show');
 
       this.sinon.spy(this.collectionView, 'attachBuffer');
+      this.sinon.spy(this.collectionView, 'getChildView');
 
       this.collection.add(this.model2);
       this.view = this.collectionView.children.findByIndex(1);
@@ -802,6 +810,10 @@ describe('collection view', function() {
 
     it('should call the childs "onDomRefresh" method with itself as the context', function() {
       expect(this.ChildView.prototype.onDomRefresh).to.have.been.called;
+    });
+
+    it('should call "getChildView" with the new model', function() {
+      expect(this.collectionView.getChildView).to.have.been.calledWith(this.model2);
     });
   });
 

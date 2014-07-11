@@ -226,9 +226,12 @@ Marionette.CollectionView = Marionette.View.extend({
     }
   },
 
-  // Retrieve the childView class, either from `this.options.childView`
+  // Retrieve the `childView` class, either from `this.options.childView`
   // or from the `childView` in the object definition. The "options"
   // takes precedence.
+  // This method receives the model that will be passed to the instance
+  // created from this `childView`. Overriding methods may use the child
+  // to determine what `childView` class to return.
   getChildView: function(child) {
     var childView = this.getOption('childView');
 

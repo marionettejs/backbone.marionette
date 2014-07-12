@@ -454,7 +454,7 @@ describe('composite view', function() {
 
       this.compositeView.render();
 
-      this.sinon.spy(this.compositeView, '_renderRoot');
+      this.sinon.spy(this.compositeView, '_renderTemplate');
     });
 
     describe('and then resetting the collection', function() {
@@ -465,7 +465,7 @@ describe('composite view', function() {
       });
 
       it('should not re-render the template with the model', function() {
-        expect(this.compositeView._renderRoot).not.to.have.been.called;
+        expect(this.compositeView._renderTemplate).not.to.have.been.called;
       });
 
       it('should render the collections items', function() {
@@ -482,7 +482,7 @@ describe('composite view', function() {
       });
 
       it('should not re-render the template with the model', function() {
-        expect(this.compositeView._renderRoot).not.to.have.been.called;
+        expect(this.compositeView._renderTemplate).not.to.have.been.called;
       });
 
       it('should add to the collections items', function() {
@@ -499,7 +499,7 @@ describe('composite view', function() {
       });
 
       it('should not re-render the template with the model', function() {
-        expect(this.compositeView._renderRoot).not.to.have.been.called;
+        expect(this.compositeView._renderTemplate).not.to.have.been.called;
       });
 
       it('should remove from the collections items', function() {

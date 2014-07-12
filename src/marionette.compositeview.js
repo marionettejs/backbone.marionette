@@ -55,11 +55,11 @@ Marionette.CompositeView = Marionette.CollectionView.extend({
   // Serialize the collection for the view.
   // You can override the `serializeData` method in your own view
   // definition, to provide custom serialization for your view's data.
-  serializeData: function() {
+  serializeData: function(options) {
     var data = {};
 
-    if (this.model) {
-      data = this.model.toJSON();
+    if (this.model){
+      data = this.serializeModel(this.model, options);
     }
 
     return data;

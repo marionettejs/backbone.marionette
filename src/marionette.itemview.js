@@ -19,22 +19,22 @@ Marionette.ItemView = Marionette.View.extend({
   // the resulting data. If both are found, defaults to the model.
   // You can override the `serializeData` method in your own view definition,
   // to provide custom serialization for your view's data.
-  serializeData: function(){
+  serializeData: function(options){
     var data = {};
 
     if (this.model) {
-      data = this.serializeModel(this.model);
+      data = this.serializeModel(this.model, options);
     }
     else if (this.collection) {
-      data = { items: this.serializeCollection(this.collection) };
+      data = { items: this.serializeCollection(this.collection, options) };
     }
 
     return data;
   },
 
   // Serialize a collection by serializing each of its models.
-  serializeCollection: function(collection){
-    return collection.toJSON();
+  serializeCollection: function(collection, options){
+    return collection.toJSON(options);
   },
 
   // Render the view, defaulting to underscore.js templates.

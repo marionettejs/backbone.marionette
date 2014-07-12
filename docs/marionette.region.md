@@ -47,7 +47,7 @@ If you specify the same region name twice, the last one in wins.
 You can also add regions via `LayoutView`s:
 
 ```js
-AppLayoutView = Backbone.Marionette.LayoutView.extend({
+var AppLayoutView = Backbone.Marionette.LayoutView.extend({
   template: "#layout-view-template",
 
   regions: {
@@ -271,7 +271,7 @@ MyApp.mainRegion.on("empty", function(view){
   // with the region via `this`
 });
 
-MyRegion = Backbone.Marionette.Region.extend({
+var MyRegion = Backbone.Marionette.Region.extend({
   // ...
 
   onBeforeShow: function(view) {
@@ -283,7 +283,7 @@ MyRegion = Backbone.Marionette.Region.extend({
   }
 });
 
-MyView = Marionette.ItemView.extend({
+var MyView = Marionette.ItemView.extend({
   onBeforeShow: function() {
     // called before the view has been shown
   },
@@ -292,7 +292,7 @@ MyView = Marionette.ItemView.extend({
   }
 });
 
-MyRegion = Backbone.Marionette.Region.extend({
+var MyRegion = Backbone.Marionette.Region.extend({
   // ...
 
   onBeforeSwap: function(view) {

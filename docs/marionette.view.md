@@ -36,7 +36,7 @@ the `listenTo` method to bind model, collection, or other events from Backbone
 and Marionette objects.
 
 ```js
-MyView = Backbone.Marionette.ItemView.extend({
+var MyView = Backbone.Marionette.ItemView.extend({
   initialize: function(){
     this.listenTo(this.model, "change:foo", this.modelChanged);
     this.listenTo(this.collection, "add", this.modelAdded);
@@ -110,7 +110,7 @@ that `destroy` was invoked with. This lets you handle any additional clean
 up code without having to override the `destroy` method.
 
 ```js
-MyView = Backbone.Marionette.ItemView.extend({
+var MyView = Backbone.Marionette.ItemView.extend({
   onDestroy: function(arg1, arg2){
     // custom cleanup or destroying code, here
   }
@@ -154,7 +154,7 @@ Since Views extend from backbone`s view class, you gain the benefits of the [eve
 Some preprocessing sugar is added on top to add the ability to cross utilize the ```ui``` hash.
 
 ```js
-MyView = Backbone.Marionette.ItemView.extend({
+var MyView = Backbone.Marionette.ItemView.extend({
   // ...
 
   ui: {
@@ -177,7 +177,7 @@ event configuration, while the right side of the hash is the
 view event that you want to trigger from the view.
 
 ```js
-MyView = Backbone.Marionette.ItemView.extend({
+var MyView = Backbone.Marionette.ItemView.extend({
   // ...
 
   triggers: {
@@ -185,7 +185,7 @@ MyView = Backbone.Marionette.ItemView.extend({
   }
 });
 
-view = new MyView();
+var view = new MyView();
 view.render();
 
 view.on("something:do:it", function(args){
@@ -254,7 +254,7 @@ includes the following:
 These properties match the `view`, `model`, and `collection` properties of the view that triggered the event.
 
 ```js
-MyView = Backbone.Marionette.ItemView.extend({
+var MyView = Backbone.Marionette.ItemView.extend({
   // ...
 
   triggers: {
@@ -262,7 +262,7 @@ MyView = Backbone.Marionette.ItemView.extend({
   }
 });
 
-view = new MyView();
+var view = new MyView();
 
 view.on("some:event", function(args){
   args.view; // => the view instance that triggered the event
@@ -425,7 +425,7 @@ that can be called from within your templates.
 ```
 
 ```js
-MyView = Backbone.Marionette.ItemView.extend({
+var MyView = Backbone.Marionette.ItemView.extend({
   template: "#my-template",
 
   templateHelpers: {
@@ -436,8 +436,8 @@ MyView = Backbone.Marionette.ItemView.extend({
 
 });
 
-model = new Backbone.Model({name: "Backbone.Marionette"});
-view = new MyView({
+var model = new Backbone.Model({name: "Backbone.Marionette"});
+var view = new MyView({
   model: model
 });
 
@@ -503,7 +503,7 @@ a `getTemplate` function on your views and use this to return the
 template that you need.
 
 ```js
-MyView = Backbone.Marionette.ItemView.extend({
+var MyView = Backbone.Marionette.ItemView.extend({
   getTemplate: function(){
     if (this.model.get("foo")){
       return "#some-template";

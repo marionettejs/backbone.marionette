@@ -58,7 +58,7 @@ a Backbone view object definition, not an instance. It can be any
 `Backbone.View` or be derived from `Marionette.ItemView`.
 
 ```js
-MyChildView = Backbone.Marionette.ItemView.extend({});
+var MyChildView = Backbone.Marionette.ItemView.extend({});
 
 Backbone.Marionette.CollectionView.extend({
   childView: MyChildView
@@ -73,7 +73,7 @@ Alternatively, you can specify a `childView` in the options for
 the constructor:
 
 ```js
-MyCollectionView = Backbone.Marionette.CollectionView.extend({...});
+var MyCollectionView = Backbone.Marionette.CollectionView.extend({...});
 
 new MyCollectionView({
   childView: MyChildView
@@ -138,13 +138,13 @@ literal. This will be passed to the constructor of your childView as part
 of the `options`.
 
 ```js
-ChildView = Backbone.Marionette.ItemView({
+var ChildView = Backbone.Marionette.ItemView({
   initialize: function(options) {
     console.log(options.foo); // => "bar"
   }
 });
 
-CollectionView = Backbone.Marionette.CollectionView({
+var CollectionView = Backbone.Marionette.CollectionView({
   childView: ChildView,
 
   childViewOptions: {
@@ -160,7 +160,7 @@ the function should you need access to it when calculating
 of the object will be copied to the `childView` instance's options.
 
 ```js
-CollectionView = Backbone.Marionette.CollectionView({
+var CollectionView = Backbone.Marionette.CollectionView({
   childViewOptions: function(model, index) {
     // do some calculations based on the model
     return {
@@ -259,7 +259,7 @@ the list of childViews, you can specify an `emptyView` attribute on your
 collection view.
 
 ```js
-NoChildsView = Backbone.Marionette.ItemView.extend({
+var NoChildsView = Backbone.Marionette.ItemView.extend({
   template: "#show-no-children-message-template"
 });
 
@@ -306,13 +306,13 @@ Similar to `childView` and `childViewOptions`, there is an `emptyViewOptions` pr
 If `emptyViewOptions` aren't provided the CollectionView will default to passing the `childViewOptions` to the `emptyView`.
 
 ```js
-EmptyView = Backbone.Marionette.ItemView({
+var EmptyView = Backbone.Marionette.ItemView({
   initialize: function(options){
     console.log(options.foo); // => "bar"
   }
 });
 
-CollectionView = Backbone.Marionette.CollectionView({
+var CollectionView = Backbone.Marionette.CollectionView({
   emptyView: EmptyView,
 
   emptyViewOptions: {
@@ -450,7 +450,7 @@ Triggers just prior to the view being rendered. Also triggered as
 "collection:before:render" / `onCollectionBeforeRender`.
 
 ```js
-MyView = Backbone.Marionette.CollectionView.extend({...});
+var MyView = Backbone.Marionette.CollectionView.extend({...});
 
 var myView = new MyView();
 
@@ -469,7 +469,7 @@ and allows parent views and other parts of the application to
 know that the view was rendered.
 
 ```js
-MyView = Backbone.Marionette.CollectionView.extend({...});
+var MyView = Backbone.Marionette.CollectionView.extend({...});
 
 var myView = new MyView();
 
@@ -490,7 +490,7 @@ Triggered just before destroying the view. A "before:destroy:collection" /
 `onBeforeDestroyCollection` event will also be fired
 
 ```js
-MyView = Backbone.Marionette.CollectionView.extend({...});
+var MyView = Backbone.Marionette.CollectionView.extend({...});
 
 var myView = new MyView();
 
@@ -507,7 +507,7 @@ Triggered just after destroying the view, both with corresponding
 method calls.
 
 ```js
-MyView = Backbone.Marionette.CollectionView.extend({...});
+var MyView = Backbone.Marionette.CollectionView.extend({...});
 
 var myView = new MyView();
 
@@ -593,7 +593,7 @@ var myCollection = new MyCollection();
 myCollection.add(myModel);
 
 // get the collection view in place
-colView = new CollectionView({
+var colView = new CollectionView({
   collection: myCollection
 });
 colView.render();
@@ -627,7 +627,7 @@ children in the collection and renders them individually as an
 `childView`.
 
 ```js
-MyCollectionView = Backbone.Marionette.CollectionView.extend({...});
+var MyCollectionView = Backbone.Marionette.CollectionView.extend({...});
 
 // all of the children views will now be rendered.
 new MyCollectionView().render();

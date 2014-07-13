@@ -19,6 +19,12 @@ aims to simplify the construction of large scale JavaScript applications.
 It is a collection of common design and implementation patterns found in
 applications.
 
+## Documentation
+
+All of the documentation for Marionette can be found at
+
+##### [marionettejs.com/docs/current](http://marionettejs.com/docs/current)
+
 ### App Architecture On Backbone's Building Blocks
 
 Backbone provides a great set of building blocks for our JavaScript
@@ -84,11 +90,6 @@ Marionette is available via bower, npm, and component.io. There are other channe
 **Upgrade Guide**: Be sure to read [the upgrade guide](upgradeGuide.md)
 for information on upgrading to the latest version of Marionette.
 
-## Documentation
-
-All of the documentation for Marionette can be found at
-
-##### [marionettejs.com/docs/current](http://marionettejs.com/docs/current)
 
 ### Annotated Source Code
 

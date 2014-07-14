@@ -82,7 +82,7 @@ Marionette.CollectionView = Marionette.View.extend({
   },
 
   // Handle a child added to the collection
-  _onCollectionAdd: function(child, collection, options) {
+  _onCollectionAdd: function(child) {
     this.destroyEmptyView();
     var ChildView = this.getChildView(child);
     var index = this.collection.indexOf(child);

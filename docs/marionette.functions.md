@@ -16,6 +16,7 @@ a way to get the same behaviors and conventions from your own code.
 * [Marionette.proxyBindEntityEvents](#marionetteproxybindentityevents)
 * [Marionette.normalizeMethods](#marionettenormalizemethods)
 * [Marionette.normalizeUIKeys](#marionettenormalizeuikeys)
+* [Marionette.normalizeUIValues](#marionettenormalizeuivalues)
 * [Marionette.actAsCollection](#marionetteactascollection)
 
 ## Marionette.extend
@@ -256,6 +257,24 @@ var ui = {
 
 // This sets 'click @ui.list' to be 'click ul' in the newHash object
 var newHash = Marionette.normalizeUIKeys(hash, ui);
+```
+
+## Marionette.normalizeUIValues
+
+This method allows you to use the `@ui.` syntax within a given hash value (for example region hashes). It
+swaps the `@ui.` reference with the associated selector.
+
+```js
+var hash = {
+  'foo': '@ui.bar'
+};
+
+var ui = {
+  'bar': '.quux'
+};
+
+// This sets 'foo' to be '.quux' in the newHash object
+var newHash = Marionette.normalizeUIValues(hash, ui);
 ```
 
 ## Marionette.actAsCollection

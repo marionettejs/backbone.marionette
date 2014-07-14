@@ -116,6 +116,10 @@ Marionette.LayoutView = Marionette.ItemView.extend({
 
     _.extend(regions, regionOptions);
 
+    // Normalize region selectors hash to allow
+    // a user to use the @ui. syntax.
+    regions = this.normalizeUIValues(regions);
+
     this.addRegions(regions);
   },
 

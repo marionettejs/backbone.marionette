@@ -343,6 +343,26 @@ describe('layoutView', function() {
     });
   });
 
+  describe('when defining region selectors using @ui. syntax', function() {
+    beforeEach(function() {
+      var UILayoutView = Backbone.Marionette.LayoutView.extend({
+        template: this.template,
+        regions: {
+          war: '@ui.war'
+        },
+        ui: {
+          war: '.craft'
+        }
+      });
+      this.layoutView = new UILayoutView();
+    });
+
+    it('should apply the relevant @ui. syntax selector', function() {
+      expect(this.layoutView.getRegion('war')).to.exist;
+      expect(this.layoutView.getRegion('war').$el.selector).to.equal('.craft');
+    });
+  });
+
   describe('overiding default regionManager', function() {
     beforeEach(function() {
       var suite = this;

@@ -260,6 +260,13 @@ _.extend(Marionette.Region.prototype, Backbone.Events, {
     return this;
   },
 
+  // Checks whether a view is currently present within
+  // the region. Returns `true` if there is and `false` if
+  // no view is present.
+  hasView: function() {
+    return !!this.currentView;
+  },
+
   // Reset the region by destroying any existing view and
   // clearing out the cached `$el`. The next time a view
   // is shown via this region, the region will re-query the

@@ -36,6 +36,11 @@ describe('region', function() {
       expect(this.customRegion.$el[0]).to.equal(this.el);
     });
 
+    it('should not have a view', function() {
+      expect(this.customRegion.hasView()).to.equal(false);
+      expect(this.optionRegion.hasView()).to.equal(false);
+    });
+
     it('should complain if the el passed in as an option is invalid', function() {
       expect(function() {
         Backbone.Marionette.Region({el: $("the-ghost-of-lechuck")[0]});
@@ -70,6 +75,10 @@ describe('region', function() {
         expect(function(){
           this.myRegion.show(new this.MyView());
         }.bind(this)).to.throw('An "el" #not-existed-region must exist in DOM');
+      });
+
+      it('should not have a view', function() {
+        expect(this.myRegion.hasView()).to.equal(false);
       });
     });
   });
@@ -125,6 +134,10 @@ describe('region', function() {
 
     it('should render the view', function() {
       expect(this.view.render).to.have.been.called;
+    });
+
+    it('should have a view', function() {
+      expect(this.myRegion.hasView()).to.equal(true);
     });
 
     it('should set $el and el', function() {
@@ -220,6 +233,10 @@ describe('region', function() {
 
       it('should set "this" to the manager, from the swap event', function() {
         expect(this.swapSpy).to.have.been.calledOn(this.myRegion);
+      });
+
+      it('should stil have a view', function() {
+        expect(this.myRegion.hasView()).to.equal(true);
       });
     });
 
@@ -575,6 +592,10 @@ describe('region', function() {
 
     it('should return the region', function() {
       expect(this.myRegion.empty).to.have.returned(this.myRegion);
+    });
+
+    it('should not have a view', function() {
+      expect(this.myRegion.hasView()).to.equal(false);
     });
   });
 

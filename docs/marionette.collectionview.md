@@ -48,6 +48,7 @@ will provide features such as `onShow` callbacks, etc. Please see
 * [CollectionView: Automatic Rendering](#collectionview-automatic-rendering)
 * [CollectionView: Re-render Collection](#collectionview-re-render-collection)
 * [CollectionView's attachHtml](#collectionviews-attachhtml)
+* [CollectionView's resortView](#collectionviews-resortview)
 * [CollectionView's children](#collectionviews-children)
 * [CollectionView destroy](#collectionview-destroy)
 
@@ -736,6 +737,24 @@ and displaying the sorted list in the correct order on the screen.
 Overrides of `attachHtml` that don't take into account the element
 buffer will work fine, but won't take advantage of the 60x performance
 increase the buffer provides.
+
+## CollectionView's resortView
+
+By default the `CollectionView` will maintain the order of its `collection`
+in the DOM. However on occasions the view may need to re-render to make this
+possible, for example if you were to change the comparator on the collection.
+By default `CollectionView` will call `render` when this happens, but there are
+cases where this may not be suitable. For instance when sorting the `children`
+in a `CompositeView`, you want to only render the internal collection.
+
+```js
+var cv = new Marionette.CollectionView({
+  collection: someCollection,
+  resortView: function() {
+    // provide custom logic for rendering after sorting the collection
+  }
+});
+```
 
 ## CollectionView's children
 

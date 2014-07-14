@@ -118,9 +118,17 @@ Marionette.CollectionView = Marionette.View.extend({
     return this;
   },
 
+  // Render view after sorting. Override this method to
+  // change how the view renders after a `sort` on the collection.
+  // An example of this would be to only `renderChildren` in a `CompositeView`
+  // rather than the full view.
+  resortView: function() {
+    this.render();
+  },
+
   // Internal method. This checks for any changes in the order of the collection.
   // If the index of any view doesn't match, it will render.
-  _sortViews: function(){
+  _sortViews: function() {
     // check for any changes in sort order of views
     var orderChanged = this.collection.find(function(item, index){
       var view = this.children.findByModel(item);
@@ -128,7 +136,7 @@ Marionette.CollectionView = Marionette.View.extend({
     }, this);
 
     if (orderChanged) {
-      this.render();
+      this.resortView();
     }
   },
 

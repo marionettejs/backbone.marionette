@@ -12,6 +12,7 @@ Using the `LayoutView` class you can create nested regions.
 * [Initialize A Region With An `el`](#initialize-a-region-with-an-el)
 * [Basic Use](#basic-use)
 * [Showing a view](#showing-a-view)
+* [Checking whether a region is showing a view](#checking-whether-a-region-is-showing-a-view)
 * [`reset` A Region](#reset-a-region)
 * [Set How View's `el` Is Attached](#set-how-views-el-is-attached)
 * [Attach Existing View](#attach-existing-view)
@@ -145,6 +146,12 @@ MyApp.mainRegion.show(myView);
 // the second show call will re-show the view
 MyApp.mainRegion.show(myView, {forceShow: true});
 ```
+
+### Checking whether a region is showing a view
+
+If you wish to check whether a region has a view, you can use the `hasView`
+function. This will return a boolean value depending whether or not the region
+is showing a view.
 
 ### `reset` A Region
 

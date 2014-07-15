@@ -124,7 +124,7 @@ Marionette.CollectionView = Marionette.View.extend({
     // check for any changes in sort order of views
     var orderChanged = this.collection.find(function(item, index){
       var view = this.children.findByModel(item);
-      return view && view._index !== index;
+      return !view || view._index !== index;
     }, this);
 
     if (orderChanged) {

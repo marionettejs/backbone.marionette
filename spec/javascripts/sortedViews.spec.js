@@ -99,8 +99,6 @@ describe('collection/composite view sorting', function() {
         beforeEach(function() {
           this.model = new Backbone.Model({foo: 5, bar: 0});
           this.collection.add(this.model);
-          this.collectionView.render();
-          this.compositeView.render();
         });
 
         it('should add both models to the list', function() {

@@ -163,17 +163,23 @@ describe('layoutView', function() {
       this.sinon.spy(this.regionOne, 'empty');
       this.sinon.spy(this.regionTwo, 'empty');
 
+      this.sinon.spy(this.layoutViewManager, 'destroy');
+      this.layoutViewManager.destroy();
       this.layoutViewManager.destroy();
     });
 
     it('should empty the region managers', function() {
-      expect(this.regionOne.empty).to.have.been.called;
-      expect(this.regionTwo.empty).to.have.been.called;
+      expect(this.regionOne.empty).to.have.been.calledOnce;
+      expect(this.regionTwo.empty).to.have.been.calledOnce;
     });
 
     it('should delete the region managers', function() {
       expect(this.layoutViewManager.regionOne).to.be.undefined;
       expect(this.layoutViewManager.regionTwo).to.be.undefined;
+    });
+
+    it('should return the view', function() {
+      expect(this.layoutViewManager.destroy).to.have.always.returned(this.layoutViewManager);
     });
   });
 
@@ -320,6 +326,20 @@ describe('layoutView', function() {
           return suite.regionOptions;
         }
       });
+
+      var UiLayoutView = Backbone.Marionette.LayoutView.extend({
+        ui: {
+          war: '.craft',
+          is: '#a-fun-game'
+        }
+      });
+      this.layoutView3 = new UiLayoutView({
+        template: this.template,
+        regions: {
+          war: '@ui.war',
+          is: '@ui.is'
+        }
+      });
     });
 
     it('should lookup and set the regions', function() {
@@ -334,6 +354,13 @@ describe('layoutView', function() {
 
     it('should set custom region classes', function() {
       expect(this.CustomRegion).to.have.been.called;
+    });
+
+    it('should lookup and set the regions when passed a @ui.syntax selector', function() {
+      expect(this.layoutView3.getRegion('war')).to.exist;
+      expect(this.layoutView3.getRegion('is')).to.exist;
+      expect(this.layoutView3.regions.war).to.equal('.craft');
+      expect(this.layoutView3.regions.is).to.equal('#a-fun-game');
     });
   });
 

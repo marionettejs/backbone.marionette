@@ -17,7 +17,63 @@ describe('item view', function() {
     });
 
     it('should throw an exception because there was no valid template', function() {
-      expect(this.view.render).to.throw('Cannot render the template since its false, null or undefined.');
+      expect(this.view.render).to.throw('Cannot render the template since it is null or undefined.');
+    });
+  });
+
+  describe('when rendering with a false template', function() {
+    beforeEach(function() {
+      this.onBeforeRenderStub = this.sinon.stub();
+      this.onRenderStub       = this.sinon.stub();
+
+      this.View = Marionette.ItemView.extend({
+        template: false,
+        onBeforeRender: this.onBeforeRenderStub,
+        onRender: this.onRenderStub
+      });
+
+      this.view = new this.View();
+
+      this.marionetteRendererSpy   = this.sinon.spy(Marionette.Renderer, 'render');
+      this.triggerSpy              = this.sinon.spy(this.view, 'trigger');
+      this.serializeDataSpy        = this.sinon.spy(this.view, 'serializeData');
+      this.mixinTemplateHelpersSpy = this.sinon.spy(this.view, 'mixinTemplateHelpers');
+      this.attachElContentSpy      = this.sinon.spy(this.view, 'attachElContent');
+
+      this.view.render();
+    });
+
+    it('should not throw an exception for a false template', function() {
+      expect(this.view.render).to.not.throw('Cannot render the template since it is null or undefined.');
+    });
+
+    it('should call an "onBeforeRender" method on the view', function() {
+      expect(this.onBeforeRenderStub).to.have.been.calledOnce;
+    });
+
+    it('should call an "onRender" method on the view', function() {
+      expect(this.onRenderStub).to.have.been.calledOnce;
+    });
+
+    it('should trigger a before:render event', function() {
+      expect(this.triggerSpy).to.have.been.calledWith('before:render', this.view);
+    });
+
+    it('should trigger a rendered event', function() {
+      expect(this.triggerSpy).to.have.been.calledWith('render', this.view);
+    });
+
+    it('should not add in data or template helpers', function() {
+      expect(this.serializeDataSpy).to.not.have.been.called;
+      expect(this.mixinTemplateHelpersSpy).to.not.have.been.called;
+    });
+
+    it('should not render a template', function() {
+      expect(this.marionetteRendererSpy).to.not.have.been.called;
+    });
+
+    it('should not attach any html content', function() {
+      expect(this.attachElContentSpy).to.not.have.been.called;
     });
   });
 
@@ -29,6 +85,7 @@ describe('item view', function() {
         template        : this.templateStub,
         attachElContent : this.attachElContentStub
       });
+      this.sinon.spy(Marionette.Renderer, 'render');
 
       this.itemView = new this.ItemView();
       this.itemView.render();
@@ -36,6 +93,10 @@ describe('item view', function() {
 
     it('should render according to the custom attachElContent logic', function() {
       expect(this.attachElContentStub).to.have.been.calledOnce.and.calledWith(this.template);
+    });
+
+    it("should pass template stub, data and view instance to `Marionette.Renderer.Render`", function(){
+      expect(Marionette.Renderer.render).to.have.been.calledWith(this.templateStub, {}, this.itemView);
     });
   });
 
@@ -151,6 +212,7 @@ describe('item view', function() {
       this.stopListeningSpy = this.sinon.spy(this.view, 'stopListening');
       this.triggerSpy       = this.sinon.spy(this.view, 'trigger');
 
+      this.sinon.spy(this.view, 'destroy');
       this.view.destroy();
     });
 
@@ -176,6 +238,10 @@ describe('item view', function() {
 
     it('should call "onDestroy" if provided', function() {
       expect(this.onDestroyStub).to.have.been.called;
+    });
+
+    it('should return the view', function() {
+      expect(this.view.destroy).to.have.returned(this.view);
     });
   });
 

@@ -191,6 +191,10 @@ describe('Behaviors', function() {
     it('should proxy the views $el', function() {
       expect(this.fooBehavior.$el).to.equal(this.view.$el);
     });
+
+    it('should proxy the views el', function() {
+      expect(this.fooBehavior.el).to.equal(this.view.el);
+    });
   });
 
   describe('behavior UI', function() {
@@ -261,8 +265,6 @@ describe('Behaviors', function() {
       beforeEach(function() {
         this.view = new this.View();
         this.view.render();
-        this.view.$el.find('.foo').click();
-        this.view.$el.find('.bar').click();
       });
 
       it('should not clobber the event prototype', function() {
@@ -273,12 +275,34 @@ describe('Behaviors', function() {
         expect(this.onRenderStub).to.have.been.calledOnce;
       });
 
-      it('should handle behavior ui click event', function() {
-        expect(this.onFooClickStub).to.have.been.calledOnce.and.calledOn(this.fooBehavior);
+      describe("the $el", function() {
+        beforeEach(function() {
+          this.view.$el.find('.foo').click();
+          this.view.$el.find('.bar').click();
+        });
+
+        it('should handle behavior ui click event', function() {
+          expect(this.onFooClickStub).to.have.been.calledOnce.and.calledOn(this.fooBehavior);
+        });
+
+        it('should handle view ui click event', function() {
+          expect(this.onBarClickStub).to.have.been.calledOnce.and.calledOn(this.fooBehavior);
+        });
       });
 
-      it('should handle view ui click event', function() {
-        expect(this.onBarClickStub).to.have.been.calledOnce.and.calledOn(this.fooBehavior);
+      describe("the el", function() {
+        beforeEach(function() {
+          $(this.view.el).find('.foo').click();
+          $(this.view.el).find('.bar').click();
+        });
+
+        it('should handle behavior ui click event', function() {
+          expect(this.onFooClickStub).to.have.been.calledOnce.and.calledOn(this.fooBehavior);
+        });
+
+        it('should handle view ui click event', function() {
+          expect(this.onBarClickStub).to.have.been.calledOnce.and.calledOn(this.fooBehavior);
+        });
       });
     });
 
@@ -601,6 +625,54 @@ describe('Behaviors', function() {
       this.view.render();
       this.view.ui.baz.click();
       expect(this.bazClickStub).to.have.been.calledOnce.and.calledOn(this.view);
+    });
+  });
+
+  describe('return values of wrapped methods', function() {
+    beforeEach(function() {
+      this.behaviors = { foo: Marionette.Behavior };
+      Marionette.Behaviors.behaviorsLookup = this.behaviors;
+
+      this.View = Marionette.View.extend({
+        behaviors: { foo: {} }
+      });
+
+      this.view = new this.View();
+    });
+
+    it('destroy should return the view', function() {
+      this.sinon.spy(this.view, 'destroy');
+      this.view.destroy();
+      expect(this.view.destroy).to.have.returned(this.view);
+    });
+
+    it('setElement should return the view', function() {
+      this.sinon.spy(this.view, 'setElement');
+      this.view.setElement(this.view.$el);
+      expect(this.view.setElement).to.have.returned(this.view);
+    });
+
+    it('delegateEvents should return the view', function() {
+      this.sinon.spy(this.view, 'delegateEvents');
+      this.view.delegateEvents();
+      expect(this.view.delegateEvents).to.have.returned(this.view);
+    });
+
+    it('undelegateEvents should return the view', function() {
+      this.sinon.spy(this.view, 'undelegateEvents');
+      this.view.undelegateEvents({});
+      expect(this.view.undelegateEvents).to.have.returned(this.view);
+    });
+  });
+
+  describe('.destroy', function() {
+    beforeEach(function() {
+      this.behavior = new Marionette.Behavior();
+      this.sinon.spy(this.behavior, 'destroy');
+      this.behavior.destroy();
+    });
+
+    it('should return the behavior', function() {
     });
   });
 });

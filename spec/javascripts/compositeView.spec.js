@@ -128,6 +128,8 @@ describe('composite view', function() {
         collection: this.collection
       });
 
+      this.sinon.spy(Marionette.Renderer, 'render');
+
       this.compositeView.render();
     });
 
@@ -137,6 +139,10 @@ describe('composite view', function() {
 
     it('should render the collections items', function() {
       expect(this.compositeView.$el).to.contain.$text('baz');
+    });
+
+    it("should pass template fn, data, and view instance to Marionette.Renderer.Render", function(){
+      expect(Marionette.Renderer.render).to.have.been.calledWith(this.templateFn, { foo: 'bar' }, this.compositeView);
     });
   });
 
@@ -448,7 +454,7 @@ describe('composite view', function() {
 
       this.compositeView.render();
 
-      this.sinon.spy(this.compositeView, '_renderRoot');
+      this.sinon.spy(this.compositeView, '_renderTemplate');
     });
 
     describe('and then resetting the collection', function() {
@@ -459,7 +465,7 @@ describe('composite view', function() {
       });
 
       it('should not re-render the template with the model', function() {
-        expect(this.compositeView._renderRoot).not.to.have.been.called;
+        expect(this.compositeView._renderTemplate).not.to.have.been.called;
       });
 
       it('should render the collections items', function() {
@@ -476,7 +482,7 @@ describe('composite view', function() {
       });
 
       it('should not re-render the template with the model', function() {
-        expect(this.compositeView._renderRoot).not.to.have.been.called;
+        expect(this.compositeView._renderTemplate).not.to.have.been.called;
       });
 
       it('should add to the collections items', function() {
@@ -493,7 +499,7 @@ describe('composite view', function() {
       });
 
       it('should not re-render the template with the model', function() {
-        expect(this.compositeView._renderRoot).not.to.have.been.called;
+        expect(this.compositeView._renderTemplate).not.to.have.been.called;
       });
 
       it('should remove from the collections items', function() {

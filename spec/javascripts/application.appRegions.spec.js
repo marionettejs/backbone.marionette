@@ -82,6 +82,239 @@ describe('application regions', function() {
     });
   });
 
+
+  describe('when adding regions as an option', function() {
+    beforeEach(function() {
+      this.fooSelector  = '#foo-region';
+      this.barSelector  = '#bar-region';
+      this.bazSelector  = '#baz-region';
+      this.quuxSelector = '#quux-selector';
+
+      this.BarRegion = Marionette.Region.extend();
+      this.BazRegion = Marionette.Region.extend({ el: this.bazSelector });
+    });
+
+    describe('and when regions is an object', function() {
+      beforeEach(function() {
+        this.app = new Marionette.Application({
+          regions: {
+            fooRegion: this.fooSelector,
+            barRegion: {
+              selector: this.barSelector,
+              regionClass: this.BarRegion
+            },
+            bazRegion: this.BazRegion
+          }
+        });
+      });
+
+      it('should initialize the regions immediately', function() {
+        expect(this.app.fooRegion).to.exist;
+        expect(this.app.barRegion).to.exist;
+        expect(this.app.bazRegion).to.exist;
+      });
+
+      it('should use the custom region class', function() {
+        expect(this.app.barRegion).to.be.an.instanceof(this.BarRegion);
+        expect(this.app.bazRegion).to.be.an.instanceof(this.BazRegion);
+      });
+    });
+
+    describe('and when regions is an object and the application has predefined regions', function() {
+      beforeEach(function() {
+        this.App = Marionette.Application.extend({
+          regions: {
+            fooRegion: this.fooSelector,
+            barRegion: {
+              selector: this.barSelector,
+              regionClass: this.BarRegion
+            }
+          }
+        });
+
+        this.app = new this.App({
+          regions: {
+            barRegion: this.BazRegion,
+            quuxRegion: this.quuxSelector
+          }
+        });
+      });
+
+      it('should initialize the regions immediately', function() {
+        expect(this.app.fooRegion).to.exist;
+        expect(this.app.barRegion).to.exist;
+        expect(this.app.quuxRegion).to.exist;
+      });
+
+      it('should overwrite regions from the instance options', function() {
+        expect(this.app.barRegion).to.be.an.instanceof(this.BazRegion);
+        expect(this.app.quuxRegion.el).to.equal(this.quuxSelector);
+      });
+    });
+
+    describe('and when regions is a function', function() {
+      beforeEach(function() {
+        this.regionOptionsStub = this.sinon.stub().returns({
+          fooRegion: this.fooSelector,
+          barRegion: {
+            selector: this.barSelector,
+            regionClass: this.BarRegion
+          },
+          bazRegion: this.BazRegion
+        });
+
+        this.options = {
+          regions: this.regionOptionsStub
+        };
+
+        this.app = new Marionette.Application(this.options);
+      });
+
+      it('should initialize the regions immediately', function() {
+        expect(this.app.fooRegion).to.exist;
+        expect(this.app.barRegion).to.exist;
+        expect(this.app.bazRegion).to.exist;
+      });
+
+      it('should use the custom region class', function() {
+        expect(this.app.barRegion).to.be.an.instanceof(this.BarRegion);
+        expect(this.app.bazRegion).to.be.an.instanceof(this.BazRegion);
+      });
+
+      it('should call the regions function on the application context', function() {
+        expect(this.regionOptionsStub).
+          to.have.been.calledOnce.
+          and.have.been.calledOn(this.app);
+      });
+
+      it('should call the regions function with the options', function() {
+        expect(this.regionOptionsStub).to.have.been.calledWith(this.options);
+      });
+    });
+
+    describe('and when regions is a function and the application has predefined regions', function() {
+      beforeEach(function() {
+        this.App = Marionette.Application.extend({
+          regions: {
+            fooRegion: this.fooSelector,
+            barRegion: {
+              selector: this.barSelector,
+              regionClass: this.BarRegion
+            }
+          }
+        });
+
+        this.regionOptionsStub = this.sinon.stub().returns({
+          barRegion: this.BazRegion,
+          quuxRegion: this.quuxSelector
+        });
+
+        this.options = {
+          regions: this.regionOptionsStub
+        };
+
+        this.app = new this.App(this.options);
+      });
+
+      it('should initialize the regions immediately', function() {
+        expect(this.app.fooRegion).to.exist;
+        expect(this.app.barRegion).to.exist;
+        expect(this.app.quuxRegion).to.exist;
+      });
+
+      it('should overwrite regions from the instance options', function() {
+        expect(this.app.barRegion).to.be.an.instanceof(this.BazRegion);
+        expect(this.app.quuxRegion.el).to.equal(this.quuxSelector);
+      });
+
+      it('should call the regions function on the application context', function() {
+        expect(this.regionOptionsStub).
+          to.have.been.calledOnce.
+          and.have.been.calledOn(this.app);
+      });
+
+      it('should call the regions function with the options', function() {
+        expect(this.regionOptionsStub).to.have.been.calledWith(this.options);
+      });
+    });
+  });
+
+  describe('when defining regions in a class definition', function() {
+    beforeEach(function() {
+      this.fooSelector  = '#foo-region';
+      this.barSelector  = '#bar-region';
+      this.bazSelector  = '#baz-region';
+
+      this.BarRegion = Marionette.Region.extend();
+      this.BazRegion = Marionette.Region.extend({ el: this.bazSelector });
+
+      this.regions = {
+        fooRegion: this.fooSelector,
+        barRegion: {
+          selector: this.barSelector,
+          regionClass: this.BarRegion
+        },
+        bazRegion: this.BazRegion
+      };
+    });
+
+    describe('and when regions is an object', function() {
+      beforeEach(function() {
+        this.App = Marionette.Application.extend({
+          regions: this.regions
+        });
+
+        this.app = new this.App();
+      });
+
+      it('should initialize the regions immediately', function() {
+        expect(this.app.fooRegion).to.exist;
+        expect(this.app.barRegion).to.exist;
+        expect(this.app.bazRegion).to.exist;
+      });
+
+      it('should use the custom region class', function() {
+        expect(this.app.barRegion).to.be.an.instanceof(this.BarRegion);
+        expect(this.app.bazRegion).to.be.an.instanceof(this.BazRegion);
+      });
+    });
+
+    describe('and when regions is a function', function() {
+      beforeEach(function() {
+        this.regionOptionsStub = this.sinon.stub().returns(this.regions);
+
+        this.options = { foo: 'bar' };
+
+        this.App = Marionette.Application.extend({
+          regions: this.regionOptionsStub
+        });
+
+        this.app = new this.App(this.options);
+      });
+
+      it('should initialize the regions immediately', function() {
+        expect(this.app.fooRegion).to.exist;
+        expect(this.app.barRegion).to.exist;
+        expect(this.app.bazRegion).to.exist;
+      });
+
+      it('should use the custom region class', function() {
+        expect(this.app.barRegion).to.be.an.instanceof(this.BarRegion);
+        expect(this.app.bazRegion).to.be.an.instanceof(this.BazRegion);
+      });
+
+      it('should call the regions function on the application context', function() {
+        expect(this.regionOptionsStub).
+          to.have.been.calledOnce.
+          and.have.been.calledOn(this.app);
+      });
+
+      it('should call the regions function with the options', function() {
+        expect(this.regionOptionsStub).to.have.been.calledWith(this.options);
+      });
+    });
+  });
+
   describe('when an app has a region', function() {
     beforeEach(function() {
       this.app = new Marionette.Application();
@@ -106,16 +339,22 @@ describe('application regions', function() {
         fooRegion: '#foo-region',
         barRegion: '#bar-region'
       });
+      this.regions = this.app.getRegions();
 
       this.sinon.spy(this.app.fooRegion, 'empty');
       this.sinon.spy(this.app.barRegion, 'empty');
 
+      this.sinon.spy(this.app, 'emptyRegions');
       this.app.emptyRegions();
     });
 
     it('should empty the regions', function() {
       expect(this.app.fooRegion.empty).to.have.been.called;
       expect(this.app.barRegion.empty).to.have.been.called;
+    });
+
+    it('should return the regions', function() {
+      expect(this.app.emptyRegions).to.have.returned(this.regions);
     });
   });
 
@@ -143,6 +382,7 @@ describe('application regions', function() {
         fooRegion: '#foo-region',
         barRegion: '#bar-region'
       });
+      this.fooRegion = this.app.fooRegion;
 
       this.beforeRemoveRegionStub = this.sinon.stub();
       this.removeRegionStub = this.sinon.stub();
@@ -150,6 +390,8 @@ describe('application regions', function() {
       this.app.on('remove:region', this.removeRegionStub);
 
       this.app.start();
+
+      this.sinon.spy(this.app, 'removeRegion');
       this.app.removeRegion('fooRegion');
     });
 
@@ -163,6 +405,28 @@ describe('application regions', function() {
 
     it('should trigger a remove:region event', function() {
       expect(this.removeRegionStub).to.have.been.calledWith('fooRegion');
+    });
+
+    it('should return the region', function() {
+      expect(this.app.removeRegion).to.have.returned(this.fooRegion);
+    });
+  });
+
+  describe('overriding default regionManager', function() {
+    beforeEach(function() {
+      this.getRegionManagerStub = this.sinon.stub().returns(new Marionette.RegionManager());
+
+      this.App = Marionette.Application.extend({
+        getRegionManager: this.getRegionManagerStub
+      });
+
+      this.app = new this.App();
+    });
+
+    it('should call into the custom regionManager lookup', function() {
+      expect(this.app.getRegionManager).
+        to.have.been.calledOnce.
+        and.have.been.calledOn(this.app);
     });
   });
 });

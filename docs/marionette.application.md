@@ -18,17 +18,20 @@ var MyApp = new Backbone.Marionette.Application();
 * [Adding Initializers](#adding-initializers)
 * [Application Event](#application-event)
 * [Starting An Application](#starting-an-application)
-* [The Global Channel](#the-global-channel)
+* [The Application Channel](#the-application-channel)
   * [Event Aggregator](#event-aggregator)
   * [Request Response](#request-response)
   * [Commands](#commands)
-  * [Accessing the Global Channel](#accessing-the-global-channel)
+  * [Accessing the Application Channel](#accessing-the-application-channel)
 * [Regions And The Application Object](#regions-and-the-application-object)
   * [jQuery Selector](#jquery-selector)
   * [Custom Region Class](#custom-region-class)
   * [Custom Region Class And Selector](#custom-region-class-and-selector)
+  * [Region Options](#region-options)
+  * [Overriding the default RegionManager](#overriding-the-default-regionmanager)
   * [Get Region By Name](#get-region-by-name)
   * [Removing Regions](#removing-regions)
+* [Application.getOption](#applicationgetoption)
 
 ## Adding Initializers
 
@@ -112,11 +115,17 @@ var options = {
 MyApp.start(options);
 ```
 
-## The Global Channel
+## The Application Channel
 
 Marionette Applications come with a [messaging system](http://en.wikipedia.org/wiki/Message_passing) to facilitate communications within your app.
 
-The messaging system on the Application is the global channel from Backbone.Wreqr, which is actually comprised of three distinct systems.
+The messaging system on the Application is the radio channel from Backbone.Wreqr, which is actually comprised of three distinct systems.
+
+Marionette Applications default to the 'global' channel, but the channel can be configured.
+
+```js
+var MyApp = new Marionette.Application({ channelName: 'appChannel' });
+```
 
 This section will give a brief overview of the systems; for a more in-depth look you are encouraged to read
 the [`Backbone.Wreqr` documentation](https://github.com/marionettejs/backbone.wreqr).
@@ -182,14 +191,15 @@ MyApp.commands.execute("fetchData", true);
 MyApp.execute("fetchData", true);
 ```
 
-### Accessing the Global Channel
+### Accessing the Application Channel
 
-To access this global channel from other objects within your app you are encouraged to get a handle of the systems
+To access this application channel from other objects within your app you are encouraged to get a handle of the systems
 through the Wreqr API instead of the Application instance itself.
 
 ```js
 // Assuming that we're in some class within your app,
-// it is preferable to access the global channel like this:
+// and that we are using the default 'global' channel
+// it is preferable to access the channel like this:
 var globalCh = Backbone.Wreqr.radio.channel('global');
 globalCh.vent;
 
@@ -257,6 +267,34 @@ MyApp.addRegions({
 });
 ```
 
+### Region Options
+
+You can also specify regions per `Application` instance.
+
+```js
+new Marionette.Application({
+  regions: {
+    fooRegion: '#foo-region'
+  }
+});
+```
+
+### Overriding the default `RegionManager`
+
+If you need the `RegionManager`'s class chosen dynamically, specify `getRegionManager`:
+
+```js
+Marionette.Application.extend({
+  // ...
+
+  getRegionManager: function() {
+    // custom logic
+    return new MyRegionManager();
+  }
+```
+
+This can be useful if you want to attach `Application`'s regions to your own instance of `RegionManager`.
+
 ### Get Region By Name
 
 A region can be retrieved by name, using the `getRegion` method:
@@ -287,3 +325,8 @@ application object.
 
 For more information on regions, see [the region documentation](./marionette.region.md) Also, the API that Applications use to
 manage regions comes from the RegionManager Class, which is documented [over here](https://github.com/marionettejs/backbone.marionette/blob/master/docs/marionette.regionmanager.md).
+
+### Application.getOption
+Retrieve an object's attribute either directly from the object, or from the object's this.options, with this.options taking precedence.
+
+More information [getOption](./marionette.functions.md)

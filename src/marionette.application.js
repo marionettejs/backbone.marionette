@@ -5,15 +5,11 @@
 // Stores and starts up `Region` objects, includes an
 // event aggregator as `app.vent`
 Marionette.Application = function(options) {
-  this._initRegionManager();
+  this._initializeRegions(options);
   this._initCallbacks = new Marionette.Callbacks();
-  var globalCh = Backbone.Wreqr.radio.channel('global');
-  this.vent = globalCh.vent;
-  this.commands = globalCh.commands;
-  this.reqres = globalCh.reqres;
   this.submodules = {};
-
   _.extend(this, options);
+  this._initChannel();
 };
 
 _.extend(Marionette.Application.prototype, Backbone.Events, {
@@ -53,14 +49,14 @@ _.extend(Marionette.Application.prototype, Backbone.Events, {
 
   // Empty all regions in the app, without removing them
   emptyRegions: function() {
-    this._regionManager.emptyRegions();
+    return this._regionManager.emptyRegions();
   },
 
   // Removes a region from your app, by name
   // Accepts the regions name
   // removeRegion('myRegion')
   removeRegion: function(region) {
-    this._regionManager.removeRegion(region);
+    return this._regionManager.removeRegion(region);
   },
 
   // Provides alternative access to regions
@@ -90,9 +86,39 @@ _.extend(Marionette.Application.prototype, Backbone.Events, {
     return ModuleClass.create.apply(ModuleClass, args);
   },
 
+  // Enable easy overriding of the default `RegionManager`
+  // for customized region interactions and business-specific
+  // view logic for better control over single regions.
+  getRegionManager: function() {
+    return new Marionette.RegionManager();
+  },
+
+  // Internal method to initialize the regions that have been defined in a
+  // `regions` attribute on the application instance
+  _initializeRegions: function(options) {
+    var regions = _.isFunction(this.regions) ? this.regions(options) : this.regions || {};
+
+    this._initRegionManager();
+
+    // Enable users to define `regions` in instance options.
+    var optionRegions = Marionette.getOption(options, 'regions');
+
+    // Enable region options to be a function
+    if (_.isFunction(optionRegions)) {
+      optionRegions = optionRegions.call(this, options);
+    }
+
+    // Overwrite current regions with those passed in options
+    _.extend(regions, optionRegions);
+
+    this.addRegions(regions);
+
+    return this;
+  },
+
   // Internal method to set up the region manager
   _initRegionManager: function() {
-    this._regionManager = new Marionette.RegionManager();
+    this._regionManager = this.getRegionManager();
 
     this.listenTo(this._regionManager, 'before:add:region', function(name) {
       this.triggerMethod('before:add:region', name);
@@ -113,9 +139,21 @@ _.extend(Marionette.Application.prototype, Backbone.Events, {
     });
   },
 
+  // Internal method to setup the Wreqr.radio channel
+  _initChannel: function() {
+    this.channelName = _.result(this, 'channelName') || 'global';
+    this.channel = _.result(this, 'channel') || Backbone.Wreqr.radio.channel(this.channelName);
+    this.vent = _.result(this, 'vent') || this.channel.vent;
+    this.commands = _.result(this, 'commands') || this.channel.commands;
+    this.reqres = _.result(this, 'reqres') || this.channel.reqres;
+  },
+
   // import the `triggerMethod` to trigger events with corresponding
   // methods if the method exists
-  triggerMethod: Marionette.triggerMethod
+  triggerMethod: Marionette.triggerMethod,
+
+  // Proxy `getOption` to enable getting options from this or this.options by name.
+  getOption: Marionette.proxyGetOption
 });
 
 // Copy the `extend` function used by Backbone's classes

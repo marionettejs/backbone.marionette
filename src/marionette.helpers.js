@@ -70,13 +70,19 @@ Marionette.normalizeUIKeys = function(hash, ui) {
     return;
   }
 
-  _.each(_.keys(hash), function(v) {
+  _.each(hash, function(v, k) {
     var pattern = /@ui.[a-zA-Z_$0-9]*/g;
-    if (v.match(pattern)) {
-      hash[v.replace(pattern, function(r) {
-        return ui[r.slice(4)];
-      })] = hash[v];
-      delete hash[v];
+
+    function replaceUIKey(r) {
+      return ui[r.slice(4)];
+    }
+
+    if (_.isString(v) && v.match(pattern)) {
+      hash[k] = v.replace(pattern, replaceUIKey);
+    }
+    if (k.match(pattern)) {
+      hash[k.replace(pattern, replaceUIKey)] = hash[k];
+      delete hash[k];
     }
   });
 

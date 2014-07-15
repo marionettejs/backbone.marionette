@@ -106,10 +106,6 @@ Marionette.LayoutView = Marionette.ItemView.extend({
       regions = this.regions || {};
     }
 
-    // Normalize region selectors hash to allow
-    // a user to use the @ui. syntax.
-    regions = this.normalizeUIKeys(regions);
-
     // Enable users to define `regions` as instance options.
     var regionOptions = this.getOption.call(options, 'regions');
 
@@ -119,6 +115,10 @@ Marionette.LayoutView = Marionette.ItemView.extend({
     }
 
     _.extend(regions, regionOptions);
+
+    // Normalize region selectors hash to allow
+    // a user to use the @ui. syntax.
+    regions = this.normalizeUIKeys(regions);
 
     this.addRegions(regions);
   },

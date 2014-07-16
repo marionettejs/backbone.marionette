@@ -145,8 +145,6 @@ Marionette.CollectionView = Marionette.View.extend({
       this.triggerMethod('before:render:collection', this);
       this.showCollection();
       this.triggerMethod('render:collection', this);
-    } else {
-      this.showEmptyView();
     }
 
     this.endBuffering();

@@ -24,6 +24,7 @@ describe('collectionview - emptyView', function() {
       this.collectionView = new this.EmptyCollectionView({
         collection: this.collection
       });
+      this.sinon.spy(this.collectionView, 'showEmptyView');
 
       this.collectionView.render();
     });
@@ -34,6 +35,10 @@ describe('collectionview - emptyView', function() {
 
     it('should reference each of the rendered view items', function() {
       expect(this.collectionView.children).to.have.lengthOf(1);
+    });
+
+    it('should attach an emptyView once', function() {
+      expect(this.collectionView.showEmptyView).to.have.been.calledOnce;
     });
 
     describe('and then adding an item to the collection', function() {

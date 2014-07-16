@@ -137,36 +137,3 @@ a very very very helpful pull request for us.
 We'll even accept a failing test pasted in to the ticket
 description instead of a pull request. That would at
 least get us started on creating the failing test in the code.
-
-## Don't Be A Troll
-
-It is very sad that we need to include this section of
-the contribution guidelines...
-
-If you are running in to a scenario with a problem, don't
-be a troll. Comments like "does marionette even have tests?"
-are not useful, funny or constructive. In fact, it may get
-you blocked and reported for abuse to Github.
-
-Submit a useful comment describing the scenario that is
-having an issue. Show us a failing test. Show us some
-code that is not behaving the way the documentation says
-it should. Be useful and work with us to fix the problem.
-
-We're all for criticism and tearing apart Marionette for
-the problems it has. Do it in a constructive and helpful
-manner: "There isn't a test for this scenario. Here's a
-rough idea for one that shows the problem." Tell us why
-you don't like Marionette. Tell us that someone else is
-building something better and why that other thing fits
-your scenario and needs better than Marionette does. Just
-do it in a manner that allows us to learn from your
-experiences, instead of reacting to you being a troll
-(likely causing us to get defensive and miss an opportunity
-to learn something).
-
-## Running the unit tests in a browser
-
-In order to run the unit tests in a browser, make sure
-you've run `npm install` and `bower install` then open
-[SpecRunner.html](SpecRunner.html) in your browser.

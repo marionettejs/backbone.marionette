@@ -106,14 +106,14 @@ describe('base view', function() {
       this.view = new Marionette.View();
 
       this.removeSpy = this.sinon.spy(this.view, 'remove');
-      this.destroySpy = this.sinon.spy(this.view, 'destroy');
 
       this.destroyStub = this.sinon.stub();
       this.view.on('destroy', this.destroyStub);
 
       this.onBeforeDestroyStub = this.sinon.stub().returns(false);
       this.view.onBeforeDestroy = this.onBeforeDestroyStub;
-
+      this.sinon.spy(this.view, 'destroy');
+      
       this.view.destroy(this.argumentOne, this.argumentTwo);
     });
 
@@ -126,7 +126,11 @@ describe('base view', function() {
     });
 
     it('should set the view isDestroyed to true', function() {
-      expect(this.view).to.be.have.property('isDestroyed', true);
+      expect(this.view).to.have.property('isDestroyed', true);
+    });
+
+    it('should return the view', function() {
+      expect(this.view.destroy).to.have.returned(this.view);
     });
   });
 
@@ -202,6 +206,21 @@ describe('base view', function() {
 
     it('should leave isDestroyed as true', function() {
       expect(this.view).to.be.have.property('isDestroyed', true);
+    });
+  });
+
+  describe("when serializing a model", function(){
+    var modelData = { foo: "bar" };
+    var model;
+    var view;
+
+    beforeEach(function(){
+      model = new Backbone.Model(modelData);
+      view = new Marionette.View();
+    });
+
+    it("should return all attributes", function(){
+      expect(view.serializeModel(model)).to.be.eql(modelData);
     });
   });
 });

@@ -198,6 +198,32 @@ describe('collection view', function() {
     });
   });
 
+  describe('when rendering a childView', function() {
+    beforeEach(function() {
+      this.collection = new Backbone.Collection([{foo: 'bar'}]);
+      this.collectionView = new Marionette.CollectionView({
+        childView: this.ChildView,
+        collection: this.collection
+      });
+
+      this.collectionView.render();
+
+      this.childView = this.collectionView.children.first();
+      this.sinon.spy(this.childView, 'render');
+
+      this.sinon.spy(this.collectionView, 'renderChildView');
+      this.collectionView.renderChildView(this.childView);
+    });
+
+    it('should call "render" on the childView', function() {
+      expect(this.childView.render).to.have.been.calledOnce;
+    });
+
+    it('should return the childView', function() {
+      expect(this.collectionView.renderChildView).to.have.returned(this.childView);
+    });
+  });
+
   describe('when a model is added to the collection', function() {
     beforeEach(function() {
       this.collection = new Backbone.Collection();
@@ -472,9 +498,13 @@ describe('collection view', function() {
     it('should throw an error saying the views been destroyed if render is attempted again', function() {
       expect(this.collectionView.render).to.throw('Cannot use a view thats already been destroyed.');
     });
+
+    it('should return the collection view', function() {
+      expect(this.collectionView.destroy).to.have.returned(this.collectionView);
+    });
   });
 
-  describe('when destroying an childView that does not have a "destroy" method', function() {
+  describe('when removing a childView that does not have a "destroy" method', function() {
     beforeEach(function() {
       this.collectionView = new Marionette.CollectionView({
         childView: Backbone.View,
@@ -486,11 +516,47 @@ describe('collection view', function() {
       this.childView = this.collectionView.children.findByIndex(0);
       this.sinon.spy(this.childView, 'remove');
 
-      this.collectionView.destroyChildren();
+      this.sinon.spy(this.collectionView, 'removeChildView');
+      this.collectionView.removeChildView(this.childView);
     });
 
     it('should call the "remove" method', function() {
       expect(this.childView.remove).to.have.been.called;
+    });
+
+    it('should return the childView', function() {
+      expect(this.collectionView.removeChildView).to.have.returned(this.childView);
+    });
+  });
+
+  describe('when destroying all children', function() {
+    beforeEach(function() {
+      this.collectionView = new Marionette.CollectionView({
+        childView: Backbone.View,
+        collection: new Backbone.Collection([{id: 1}, {id: 2}])
+      });
+
+      this.collectionView.render();
+
+      this.childView0 = this.collectionView.children.findByIndex(0);
+      this.sinon.spy(this.childView0, 'remove');
+
+      this.childView1 = this.collectionView.children.findByIndex(1);
+      this.sinon.spy(this.childView1, 'remove');
+
+      this.childrenViews = this.collectionView.children.map(_.identity);
+
+      this.sinon.spy(this.collectionView, 'destroyChildren');
+      this.collectionView.destroyChildren();
+    });
+
+    it('should call the "remove" method on each child', function() {
+      expect(this.childView0.remove).to.have.been.called;
+      expect(this.childView1.remove).to.have.been.called;
+    });
+
+    it('should return the child views', function() {
+      expect(this.collectionView.destroyChildren).to.have.returned(this.childrenViews);
     });
   });
 

@@ -58,8 +58,8 @@ Marionette.CompositeView = Marionette.CollectionView.extend({
   serializeData: function() {
     var data = {};
 
-    if (this.model) {
-      data = this.model.toJSON();
+    if (this.model){
+      data = _.partial(this.serializeModel, this.model).apply(this, arguments);
     }
 
     return data;
@@ -98,7 +98,7 @@ Marionette.CompositeView = Marionette.CollectionView.extend({
     this.triggerMethod('before:render:template');
 
     var template = this.getTemplate();
-    var html = Marionette.Renderer.render(template, data);
+    var html = Marionette.Renderer.render(template, data, this);
     this.attachElContent(html);
 
     // the ui bindings is done here and not at the end of render since they

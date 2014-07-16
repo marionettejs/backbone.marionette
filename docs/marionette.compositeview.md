@@ -199,6 +199,10 @@ themselves under the following conditions:
 * When the collection has a model added to it (the "add" event is fired), it will render that one child into the list
 * When the collection has a model removed (the "remove" event is fired), it will remove that one child from the rendered list
 
+As with item view instances, the composite view instance is passed as the
+third argument to the `Renderer` object's `render` method, which is
+useful in custom `Renderer` implementations.
+
 ## Events And Callbacks
 
 During the course of rendering a composite, several events will

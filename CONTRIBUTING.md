@@ -1,6 +1,23 @@
 Marionette has a few guidelines to facilitate your contribution and streamline
 the process of getting the changes merged in and released.
 
+## Running the tests
+
+There are two methods to running the unit test suite, suited for your desired workflow and overall developer happiness.
+To begin ensure that you have installed the project dev dependencies via:
+
+    $ npm install
+
+    $ bower install
+
+### In a browser
+
+  Open [SpecRunner.html](SpecRunner.html) in your browser.
+
+### Via Grunt
+
+  Running `grunt` alone will default to running the tests once.
+  Running `grunt watch` will rerun the tests after any file change.
 
 ## Documentation Fixes
 

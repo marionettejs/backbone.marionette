@@ -141,7 +141,7 @@ Marionette.View = Backbone.View.extend({
   // Overriding Backbone.View's undelegateEvents to handle unbinding
   // the `triggers`, `modelEvents`, and `collectionEvents` config
   undelegateEvents: function() {
-    var args = Array.prototype.slice.call(arguments);
+    var args = slice.call(arguments);
     Backbone.View.prototype.undelegateEvents.apply(this, args);
     this.unbindEntityEvents(this.model, this.getOption('modelEvents'));
     this.unbindEntityEvents(this.collection, this.getOption('collectionEvents'));
@@ -167,7 +167,7 @@ Marionette.View = Backbone.View.extend({
   destroy: function() {
     if (this.isDestroyed) { return; }
 
-    var args = Array.prototype.slice.call(arguments);
+    var args = slice.call(arguments);
 
     this.triggerMethod.apply(this, ['before:destroy'].concat(args));
 

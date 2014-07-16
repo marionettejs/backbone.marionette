@@ -1,14 +1,6 @@
-Marionette has a few very specific guidelines in addition
-to some of the standard guidelines that Github and open
-source projects in general recommend. These guidelines
-are here to facilitate your contribution and streamline
+Marionette has a few guidelines to facilitate your contribution and streamline
 the process of getting the changes merged in and released.
 
-If you don't follow these guidelines, we'll still work
-with you to get the changes in. Any contribution you can
-make will help tremendously. Following these guidelines
-will help to streamline the pull request and change
-submission process.
 
 ## Documentation Fixes
 

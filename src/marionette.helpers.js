@@ -70,7 +70,7 @@ Marionette.normalizeUIKeys = function(hash, ui) {
   }
 
   _.each(_.keys(hash), function(v) {
-    var pattern = /@ui.[a-zA-Z_$0-9]*/g;
+    var pattern = /@ui\.[a-zA-Z_$0-9]*/g;
     if (v.match(pattern)) {
       hash[v.replace(pattern, function(r) {
         return ui[r.slice(4)];

@@ -96,7 +96,10 @@ describe('view ui elements', function() {
   describe("when calling delegateEvents", function () {
     beforeEach(function () {
       this.uiHash = {'foo': '#foo'};
-      this.eventsHash = {'click @ui.foo': 'bar'};
+      this.eventsHash = {
+        'click @ui.foo': 'bar',
+        'mouseout @ui#foo': 'baz'
+      };
 
       this.View = Marionette.ItemView.extend({
         ui     : this.uiHash,
@@ -110,8 +113,11 @@ describe('view ui elements', function() {
       this.view.delegateEvents();
     });
 
-    it("the events should be re-normalised", function() {
-      expect(this.view.events).to.deep.equal({'click #foo': 'bar'});
+    it("the events should be re-normalised valid ui references", function() {
+      expect(this.view.events).to.deep.equal({
+        'click #foo': 'bar',
+        'mouseout @ui#foo': 'baz'
+      });
     });
   });
 });

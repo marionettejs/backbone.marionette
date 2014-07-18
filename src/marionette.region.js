@@ -45,53 +45,41 @@ _.extend(Marionette.Region, {
   // }
   // ```
   //
-  buildRegion: function(regionConfig, defaultRegionClass) {
-    var regionIsString = _.isString(regionConfig);
-    var regionSelectorIsString = _.isString(regionConfig.selector);
-    var regionClassIsUndefined = _.isUndefined(regionConfig.regionClass);
-    var regionIsClass = _.isFunction(regionConfig);
-
-    if (!regionIsClass && !regionIsString && !regionSelectorIsString) {
-      throwError('Region must be specified as a Region class,' +
-        'a selector string or an object with selector property');
+  buildRegion: function(regionConfig, DefaultRegionClass) {
+    if (_.isString(regionConfig)) {
+      return this._buildRegionFromSelector(regionConfig, DefaultRegionClass);
     }
 
-    var selector, RegionClass;
-
-    // get the selector for the region
-
-    if (regionIsString) {
-      selector = regionConfig;
+    if (regionConfig.selector || regionConfig.el || regionConfig.regionClass) {
+      return this._buildRegionFromObject(regionConfig, DefaultRegionClass);
     }
 
-    if (regionConfig.selector) {
-      selector = regionConfig.selector;
-      delete regionConfig.selector;
+    if (_.isFunction(regionConfig)) {
+      return this._buildRegionFromRegionClass(regionConfig);
     }
 
-    // get the class for the region
+    throwError('Improper region configuration type. Please refer ' +
+      'to http://marionettejs.com/docs/marionette.region.html#region-configuration-types');
+  },
 
-    if (regionIsClass) {
-      RegionClass = regionConfig;
+  // Build the region from a string selector like '#foo-region'
+  _buildRegionFromSelector: function(selector, DefaultRegionClass) {
+    return new DefaultRegionClass({ el: selector });
+  },
+
+  // Build the region from a configuration object
+  // ```js
+  // { selector: '#foo', regionClass: FooRegion }
+  // ```
+  _buildRegionFromObject: function(regionConfig, DefaultRegionClass) {
+    var RegionClass = regionConfig.regionClass || DefaultRegionClass;
+    var options = _.omit(regionConfig, 'selector', 'regionClass');
+
+    if (regionConfig.selector && !options.el) {
+      options.el = regionConfig.selector;
     }
 
-    if (!regionIsClass && regionClassIsUndefined) {
-      RegionClass = defaultRegionClass;
-    }
-
-    if (regionConfig.regionClass) {
-      RegionClass = regionConfig.regionClass;
-      delete regionConfig.regionClass;
-    }
-
-    if (regionIsString || regionIsClass) {
-      regionConfig = {};
-    }
-
-    regionConfig.el = selector;
-
-    // build the region instance
-    var region = new RegionClass(regionConfig);
+    var region = new RegionClass(options);
 
     // override the `getEl` function if we have a parentEl
     // this must be overridden to ensure the selector is found
@@ -113,6 +101,11 @@ _.extend(Marionette.Region, {
     }
 
     return region;
+  },
+
+  // Build the region directly from a given `RegionClass`
+  _buildRegionFromRegionClass: function(RegionClass) {
+    return new RegionClass();
   }
 
 });

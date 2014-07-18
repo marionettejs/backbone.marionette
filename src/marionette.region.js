@@ -1,4 +1,4 @@
-/* jshint maxcomplexity: 10, maxstatements: 28 */
+/* jshint maxcomplexity: 10, maxstatements: 29 */
 
 // Region
 // ------
@@ -154,6 +154,13 @@ _.extend(Marionette.Region.prototype, Backbone.Events, {
     var _shouldShowView = isDifferentView || forceShow;
 
     if (_shouldShowView) {
+
+      // We need to listen for if a view is destroyed
+      // in a way other than through the region.
+      // If this happens we need to remove the reference
+      // to the currentView since once a view has been destroyed
+      // we can not reuse it.
+      view.once('destroy', _.bind(this.empty, this));
       view.render();
 
       if (isChangingView) {
@@ -218,17 +225,29 @@ _.extend(Marionette.Region.prototype, Backbone.Events, {
   // current view, it does nothing and returns immediately.
   empty: function() {
     var view = this.currentView;
-    if (!view || view.isDestroyed) { return; }
+
+    // If there is no view in the region
+    // we should not remove anything
+    if (!view) { return; }
 
     this.triggerMethod('before:empty', view);
-
-    // call 'destroy' or 'remove', depending on which is found
-    if (view.destroy) { view.destroy(); }
-    else if (view.remove) { view.remove(); }
-
+    this._destroyView();
     this.triggerMethod('empty', view);
 
+    // Remove region pointer to the currentView
     delete this.currentView;
+  },
+
+  // call 'destroy' or 'remove', depending on which is found
+  // on the view (if showing a raw Backbone view or a Marionette View)
+  _destroyView: function() {
+    var view = this.currentView;
+
+    if (view.destroy && !view.isDestroyed) {
+      view.destroy();
+    } else if (view.remove) {
+      view.remove();
+    }
   },
 
   // Attach an existing view to the region. This

@@ -1,3 +1,11 @@
+### v2.0.3 [view commit logs](https://github.com/marionettejs/backbone.marionette/compare/v2.0.2...v2.0.3)
+
+  * Bug Fixes
+
+    * Fixed an issue where `before:show` was not triggered on a view's behavior when shown within a region.
+
+    * Destroying a view outside of its region will now cause the region to remove its reference to that view.
+
 ### v2.0.2 [view commit logs](https://github.com/marionettejs/backbone.marionette/compare/v2.0.1...v2.0.2)
 
   * Bug Fixes

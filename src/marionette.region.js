@@ -20,7 +20,7 @@ Marionette.Region = function(options) {
   this.$el = this.getEl(this.el);
 
   if (this.initialize) {
-    var args = Array.prototype.slice.apply(arguments);
+    var args = slice.apply(arguments);
     this.initialize.apply(this, args);
   }
 };

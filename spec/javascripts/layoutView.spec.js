@@ -35,6 +35,44 @@ describe('layoutView', function() {
     });
   });
 
+  describe('long form declaration', function() {
+    beforeEach(function() {
+      this.FooRegion = Marionette.Region.extend();
+      this.sinon.spy(Marionette.Region, 'buildRegion');
+
+      this.fooRegion = new this.FooRegion({
+        el: '#foo-region'
+      });
+
+      this.LayoutView = Marionette.LayoutView.extend({
+        regions: {
+          fooRegion: {
+            el: '#foo-region',
+            regionClass: this.FooRegion
+          }
+        }
+      });
+
+      this.view = new this.LayoutView();
+    });
+
+    it('should call Marionette.Region.buildRegion', function() {
+      expect(Marionette.Region.buildRegion).to.have.been.called;
+    });
+
+    it('should create the region', function() {
+      expect(this.view.getRegion('fooRegion')).to.deep.equal(this.fooRegion);
+    });
+
+    it('should be a FooRegion', function() {
+      expect(this.view.getRegion('fooRegion')).to.be.an.instanceof(this.FooRegion);
+    });
+
+    it('should be a Region', function() {
+      expect(this.view.getRegion('fooRegion')).to.be.an.instanceof(Marionette.Region);
+    });
+  });
+
   describe('on instantiation', function() {
     beforeEach(function() {
       this.layoutViewManager = new this.LayoutView();

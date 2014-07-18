@@ -196,11 +196,12 @@ describe('Behaviors', function() {
   describe('behavior UI', function() {
     beforeEach(function() {
       var suite = this;
-      this.onRenderStub   = this.sinon.stub();
-      this.onShowStub     = this.sinon.stub();
-      this.onDestroyStub  = this.sinon.stub();
-      this.onFooClickStub = this.sinon.stub();
-      this.onBarClickStub = this.sinon.stub();
+      this.onRenderStub     = this.sinon.stub();
+      this.onBeforeShowStub = this.sinon.stub();
+      this.onShowStub       = this.sinon.stub();
+      this.onDestroyStub    = this.sinon.stub();
+      this.onFooClickStub   = this.sinon.stub();
+      this.onBarClickStub   = this.sinon.stub();
 
       this.behaviors = {
         foo: Marionette.Behavior.extend({
@@ -210,11 +211,12 @@ describe('Behaviors', function() {
             'click @ui.foo': 'onFooClick',
             'click @ui.bar': 'onBarClick'
           },
-          onRender   : this.onRenderStub,
-          onShow     : this.onShowStub,
-          onDestroy  : this.onDestroyStub,
-          onFooClick : this.onFooClickStub,
-          onBarClick : this.onBarClickStub
+          onRender     : this.onRenderStub,
+          onBeforeShow : this.onBeforeShowStub,
+          onShow       : this.onShowStub,
+          onDestroy    : this.onDestroyStub,
+          onFooClick   : this.onFooClickStub,
+          onBarClick   : this.onBarClickStub
         })
       };
       Marionette.Behaviors.behaviorsLookup = this.behaviors;
@@ -293,6 +295,10 @@ describe('Behaviors', function() {
         this.layoutView.render();
         this.layoutView.bazRegion.show(new this.View());
         this.layoutView.destroy();
+      });
+
+      it('should call onBeforeShow', function() {
+        expect(this.onBeforeShowStub).to.have.been.calledOnce;
       });
 
       it('should call onShow', function() {

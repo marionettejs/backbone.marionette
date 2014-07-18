@@ -1,4 +1,4 @@
-/* jshint maxcomplexity: 10, maxstatements: 27 */
+/* jshint maxcomplexity: 10, maxstatements: 28 */
 
 // Region
 // ------
@@ -161,7 +161,12 @@ _.extend(Marionette.Region.prototype, Backbone.Events, {
       }
 
       this.triggerMethod('before:show', view);
-      this.triggerMethod.call(view, 'before:show');
+
+      if (_.isFunction(view.triggerMethod)) {
+        view.triggerMethod('before:show');
+      } else {
+        this.triggerMethod.call(view, 'before:show');
+      }
 
       this.attachHtml(view);
       this.currentView = view;

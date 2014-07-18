@@ -45,8 +45,14 @@ Marionette.Behaviors = (function(Marionette, _) {
     },
 
     bindUIElements: function(bindUIElements, behaviors) {
+      var view = this;
       bindUIElements.apply(this);
-      _.invoke(behaviors, bindUIElements);
+
+      _.each(behaviors, function(behavior) {
+        bindUIElements.apply(behavior);
+
+        _.defaults(behavior.ui, view.ui);
+      });
     },
 
     unbindUIElements: function(unbindUIElements, behaviors) {

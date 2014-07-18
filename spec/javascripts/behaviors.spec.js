@@ -282,6 +282,14 @@ describe('Behaviors', function() {
       it('should handle view ui click event', function() {
         expect(this.onBarClickStub).to.have.been.calledOnce.and.calledOn(this.fooBehavior);
       });
+
+      it('should have access to bound ui elements from the behavior', function() {
+        expect(this.fooBehavior.ui.foo[0]).to.equal(this.view.$el.find('.foo')[0]);
+      });
+
+      it('should have access to bound ui elements from the view', function() {
+        expect(this.fooBehavior.ui.bar[0]).to.equal(this.view.$el.find('.bar')[0]);
+      });
     });
 
     describe('within a layout', function() {

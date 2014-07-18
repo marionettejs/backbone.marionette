@@ -51,6 +51,7 @@ Marionette.Behaviors = (function(Marionette, _) {
       _.each(behaviors, function(behavior) {
         bindUIElements.apply(behavior);
 
+        if (!behavior.ui) { behavior.ui = {}; }
         _.defaults(behavior.ui, view.ui);
       });
     },

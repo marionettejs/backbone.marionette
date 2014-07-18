@@ -760,29 +760,34 @@ describe('collection view', function() {
 
   describe('when a child view is added to a collection view, after the collection view has been shown', function() {
     beforeEach(function() {
+      this.childOnShowStub       = this.sinon.stub();
+      this.childOnDomRefreshStub = this.sinon.stub();
+
+      this.childRenderSpy = this.sinon.spy(function() {
+        this.trigger('render');
+      });
+
+      this.collectionOnShowStub = this.sinon.stub();
+
       this.ChildView = Backbone.Marionette.ItemView.extend({
-        onShow: function() {},
-        onDomRefresh: function() {},
-        onRender: function() {},
-        render: function() {
-          this.trigger('render');
-        }
+        onShow:       this.childOnShowStub,
+        onDomRefresh: this.childOnDomRefreshStub,
+        render:       this.childRenderSpy
       });
 
       this.CollectionView = Backbone.Marionette.CollectionView.extend({
         childView: this.ChildView,
-        onShow: function() {}
+        onShow:    this.collectionOnShowStub
       });
-
-      this.sinon.spy(this.ChildView.prototype, 'onShow');
-      this.sinon.spy(this.ChildView.prototype, 'onDomRefresh');
 
       this.model1 = new Backbone.Model();
       this.model2 = new Backbone.Model();
       this.collection = new Backbone.Collection([ this.model1 ]);
+
       this.collectionView = new this.CollectionView({
         collection: this.collection
       });
+
       $('body').append(this.collectionView.el);
 
       this.collectionView.render();
@@ -793,7 +798,8 @@ describe('collection view', function() {
       this.sinon.spy(this.collectionView, 'getChildView');
 
       this.collection.add(this.model2);
-      this.view = this.collectionView.children.findByIndex(1);
+      this.view1 = this.collectionView.children.findByIndex(0);
+      this.view2 = this.collectionView.children.findByIndex(1);
     });
 
     it('should not use the render buffer', function() {
@@ -801,15 +807,17 @@ describe('collection view', function() {
     });
 
     it('should call the "onShow" method of the child view', function() {
-      expect(this.ChildView.prototype.onShow).to.have.been.called;
-    });
-
-    it('should call the childs "onShow" method with itself as the context', function() {
-      expect(this.ChildView.prototype.onShow).to.have.been.calledOn(this.view);
+      expect(this.childOnShowStub).to.
+        have.been.calledTwice.
+        and.have.been.calledOn(this.view1).
+        and.have.been.calledOn(this.view2);
     });
 
     it('should call the childs "onDomRefresh" method with itself as the context', function() {
-      expect(this.ChildView.prototype.onDomRefresh).to.have.been.called;
+      expect(this.childOnDomRefreshStub).to.
+        have.been.calledTwice.
+        and.have.been.calledOn(this.view1).
+        and.have.been.calledOn(this.view2);
     });
 
     it('should call "getChildView" with the new model', function() {

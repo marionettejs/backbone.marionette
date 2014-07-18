@@ -99,6 +99,8 @@ describe('region', function() {
       this.regionSwapSpy = this.sinon.spy();
       this.viewBeforeShowSpy = this.sinon.spy();
       this.viewShowSpy = this.sinon.spy();
+      this.regionEmptySpy = this.sinon.spy();
+      this.regionBeforeEmptySpy = this.sinon.spy();
 
       this.view = new this.MyView();
       this.sinon.spy(this.view, 'render');
@@ -112,7 +114,8 @@ describe('region', function() {
       this.myRegion.on('before:show', this.regionBeforeShowSpy);
       this.myRegion.on('before:swap', this.regionBeforeSwapSpy);
       this.myRegion.on('swap', this.regionSwapSpy);
-
+      this.myRegion.on('empty', this.regionEmptySpy);
+      this.myRegion.on('before:empty', this.regionBeforeEmptySpy);
       this.view.on('before:show', this.viewBeforeShowSpy);
       this.view.on('show', this.viewShowSpy);
 
@@ -191,6 +194,11 @@ describe('region', function() {
 
       it('should trigger a before swap event for the region', function() {
         expect(this.regionBeforeSwapSpy).to.have.been.called;
+      });
+
+      it('should trigger empty once', function() {
+         expect(this.regionEmptySpy).to.have.been.calledOnce;
+         expect(this.regionBeforeEmptySpy).to.have.been.calledOnce;
       });
 
       it('should trigger a swap event for the region', function() {
@@ -737,6 +745,36 @@ describe('region', function() {
 
     it('should empty any existing view', function() {
       expect(this.region.empty).to.have.been.called;
+    });
+  });
+
+  describe('when destroying a view in a region', function() {
+    beforeEach(function() {
+      this.setFixtures('<div id="region"></div>');
+      this.beforeEmptySpy = new sinon.spy();
+      this.emptySpy = new sinon.spy();
+
+      this.region = new Backbone.Marionette.Region({
+        el: '#region'
+      });
+
+      this.region.on('before:empty', this.beforeEmptySpy);
+      this.region.on('empty', this.emptySpy);
+
+      this.View = Backbone.Marionette.View.extend({
+        template: _.template('')
+      });
+
+      this.view = new this.View();
+
+      this.region.show(this.view);
+      this.region.currentView.destroy();
+    });
+
+    it('should remove the view from the region after being destroyed', function() {
+      expect(this.beforeEmptySpy).to.have.been.calledOnce.and.calledWith(this.view);
+      expect(this.emptySpy).to.have.been.calledOnce.calledWith(this.view);
+      expect(this.region.currentView).to.be.undefined;
     });
   });
 });

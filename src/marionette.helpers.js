@@ -3,22 +3,9 @@
 // Helpers
 // -------
 
-/**
-  * Proxies Array.prototype.slice
-  *
-  * A convenience method used to slice arguments in functions
-  * @type {Function}
-  * @private
-  */
+// For slicing `arguments` in functions
 var slice = Array.prototype.slice;
 
-/**
-  * Throw an Error
-  * @param {String} message - The message to assign to the error
-  * @param {String} name - The name to assign to the error
-  * @throws {Error}
-  * @private
-  */
 function throwError(message, name) {
   var error = new Error(message);
   error.name = name || 'Error';
@@ -28,15 +15,16 @@ function throwError(message, name) {
 /**
   * Proxies Backbone.Model.extend
   *
-  * Extend the context and it's prototype to create a new Class
+  * To create a derived class of your own, extend an existing class,
+  * providing instance properties, protoProps, as well as optional
+  * class properties, staticProps to be attached directly to the
+  * new class's constructor function. This does not modify the existing class.
   *
   * @this A constructor function
-  * @param {Object} protoProps - Properties to add to the prototype
-  * @param {Object} staticProps - Properties to add to the constructor
-  * @returns {Function} A new constructor resulting from adding the given properties to the context
+  * @param {Object} protoProps - Properties to add to the prototype of the new class
+  * @param {Object} staticProps - Properties to add to the constructor of the new class
+  * @returns {Function} A new class created by adding the new properties to the existing class
   * @public
-  * @memberof Marionette
-  *
   */
 Marionette.extend = Backbone.Model.extend;
 
@@ -49,10 +37,8 @@ Marionette.extend = Backbone.Model.extend;
   *
   * @param {Object} target - The object to get the value from
   * @param {String} optionName - The name of the property to return from the target or its options
-  * @returns {} The value read from target.options or target
-  *
+  * @returns {*} The value read from target.options or target
   * @public
-  * @memberof Marionette
   */
 Marionette.getOption = function(target, optionName) {
   if (!target || !optionName) { return; }
@@ -73,9 +59,8 @@ Marionette.getOption = function(target, optionName) {
   *
   * @this {Object} Passed to Marionette.getOption as target
   * @param {String} optionName - Passed to Marionette.getOption as optionName
-  * @returns {} The value read from this or this.options
+  * @returns {*} The value read from this or this.options
   * @public
-  * @memberof Marionette
   */
 Marionette.proxyGetOption = function(optionName) {
   return Marionette.getOption(this, optionName);
@@ -104,7 +89,6 @@ Marionette.proxyGetOption = function(optionName) {
   * @param {Object} - The mapping of events => functions or function names to transform
   * @returns {Object} - The mapping of events => functions resulting from the transform
   * @public
-  * @memberof Marionette
   */
 Marionette.normalizeMethods = function(hash) {
   var normalizedHash = {}, method;
@@ -137,7 +121,6 @@ Marionette.normalizeMethods = function(hash) {
   * @param {Object} ui - The mapping of @ui.name => substitution to replace
   * @returns {Object} hash with the substitutions contained in ui
   * @public
-  * @memberof Marionette
   */
 Marionette.normalizeUIKeys = function(hash, ui) {
   if (typeof(hash) === 'undefined') {
@@ -161,12 +144,11 @@ Marionette.normalizeUIKeys = function(hash, ui) {
   * Mixes in a number of Underscore methods for working with Collections to the object,
   * binding their context to the listProperty.
   * This is similar to how Backbone.Collection has Underscore methods on the prototype
-  * that execute with the models property of the Collection as the context.
+  * that execute with the models of the Collection as the context.
   *
   * @param {Object} object - The object to place the methods on
   * @param {String} listProperty - The property on object that will be the target of the methods
   * @public
-  * @memberof Marionette
   */
 Marionette.actAsCollection = function(object, listProperty) {
   var methods = ['forEach', 'each', 'map', 'find', 'detect', 'filter',

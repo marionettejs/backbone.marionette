@@ -114,64 +114,6 @@ describe('view entity events', function() {
     });
   });
 
-  describe('when undelegating events on a view', function() {
-    beforeEach(function() {
-      this.View = Marionette.View.extend({
-        modelEvents      : {'foo': 'foo'},
-        collectionEvents : {'bar': 'bar'},
-        foo: this.fooStub,
-        bar: this.barStub
-      });
-
-      this.view = new this.View({
-        model      : this.model,
-        collection : this.collection
-      });
-
-      this.view.undelegateEvents();
-
-      this.model.trigger('foo');
-      this.collection.trigger('bar');
-    });
-
-    it('should undelegate the model events', function() {
-      expect(this.fooStub).not.to.have.been.calledOnce;
-    });
-
-    it('should undelegate the collection events', function() {
-      expect(this.barStub).not.to.have.been.calledOnce;
-    });
-  });
-
-  describe('when undelegating events on a view, delegating them again, and then triggering a model event', function() {
-    beforeEach(function() {
-      this.View = Marionette.View.extend({
-        modelEvents      : {'foo': 'foo'},
-        collectionEvents : {'bar': 'bar'},
-        foo: this.fooStub,
-        bar: this.barStub
-      });
-
-      this.view = new this.View({
-        model      : this.model,
-        collection : this.collection
-      });
-
-      this.view.undelegateEvents();
-      this.view.delegateEvents();
-    });
-
-    it('should fire the model event once', function() {
-      this.model.trigger('foo');
-      expect(this.fooStub).to.have.been.calledOnce;
-    });
-
-    it('should fire the collection event once', function() {
-      this.collection.trigger('bar');
-      expect(this.barStub).to.have.been.calledOnce;
-    });
-  });
-
   describe('when LayoutView bound to modelEvent replaces region with new view', function() {
     beforeEach(function() {
       this.LayoutView = Marionette.LayoutView.extend({

@@ -212,7 +212,8 @@ window.app.vent;
 Application instances have an API that allow you to manage [Regions](https://github.com/marionettejs/backbone.marionette/blob/master/docs/marionette.region.md).
 These Regions are typically the means through which your views become attached to the `document`.
 
-You can create Regions through the `addRegions` method.
+You can create Regions through the `addRegions` method by passing in an object
+literal or a function that returns an object literal.
 
 There are three syntax forms for adding a region to an application object.
 
@@ -239,8 +240,10 @@ var MyCustomRegion = Marionette.Region.extend({
   el: "#foo"
 });
 
-MyApp.addRegions({
-  someRegion: MyCustomRegion
+MyApp.addRegions(function() {
+  return {
+    someRegion: MyCustomRegion
+  };
 });
 ```
 

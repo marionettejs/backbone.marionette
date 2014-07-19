@@ -217,6 +217,9 @@ describe('Behaviors', function() {
           onDestroy    : this.onDestroyStub,
           onFooClick   : this.onFooClickStub,
           onBarClick   : this.onBarClickStub
+        }),
+        bar: Marionette.Behavior.extend({
+          initialize: function() { suite.barBehavior = this; }
         })
       };
       Marionette.Behaviors.behaviorsLookup = this.behaviors;
@@ -225,6 +228,10 @@ describe('Behaviors', function() {
         template: _.template('<div class="foo"></div><div class="bar"></div>'),
         ui: { bar: '.bar' },
         behaviors: { foo: {} }
+      });
+
+      this.ViewWithBehaviorWithoutUI = this.View.extend({
+        behaviors: { bar: {} }
       });
     });
 
@@ -281,6 +288,25 @@ describe('Behaviors', function() {
 
       it('should handle view ui click event', function() {
         expect(this.onBarClickStub).to.have.been.calledOnce.and.calledOn(this.fooBehavior);
+      });
+
+      it('should have access to bound ui elements from the behavior', function() {
+        expect(this.fooBehavior.ui.foo[0]).to.equal(this.view.$el.find('.foo')[0]);
+      });
+
+      it('should have access to bound ui elements from the view', function() {
+        expect(this.fooBehavior.ui.bar[0]).to.equal(this.view.$el.find('.bar')[0]);
+      });
+    });
+
+    describe('behavior without UI hash', function() {
+      beforeEach(function() {
+        this.view = new this.ViewWithBehaviorWithoutUI();
+        this.view.render();
+      });
+
+      it('should have only the ui elements bound to the view', function() {
+        expect(this.barBehavior.ui.bar[0]).to.equal(this.view.$el.find('.bar')[0]);
       });
     });
 

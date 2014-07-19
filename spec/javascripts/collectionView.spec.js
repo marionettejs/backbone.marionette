@@ -410,6 +410,7 @@ describe('collection view', function() {
       this.sinon.spy(this.collectionView, 'onDestroy');
       this.sinon.spy(this.collectionView, 'onBeforeDestroy');
       this.sinon.spy(this.collectionView, 'trigger');
+      this.sinon.spy(this.collectionView, 'showEmptyView');
 
       this.collectionView.bind('destroy:collection', this.destroyHandler);
 
@@ -471,6 +472,34 @@ describe('collection view', function() {
 
     it('should throw an error saying the views been destroyed if render is attempted again', function() {
       expect(this.collectionView.render).to.throw('Cannot use a view thats already been destroyed.');
+    });
+
+    it('should not insert an empty view', function() {
+      expect(this.collectionView.showEmptyView).not.to.have.been.called;
+    });
+
+    describe('when the collection is empty', function() {
+      beforeEach(function() {
+        this.EmptyView = Marionette.ItemView.extend({
+          tagName: 'strong',
+          template: _.template('wut')
+        });
+
+        this.emptyCollection = new Backbone.Collection();
+        this.EmptyCollectionView = Marionette.CollectionView.extend({
+          emptyView: this.EmptyView,
+          childView: this.ItemView
+        });
+        this.emptyCollectionView = new this.EmptyCollectionView({collection: this.emptyCollection});
+        this.sinon.spy(this.emptyCollectionView, 'showEmptyView');
+
+        this.emptyCollectionView.render();
+        this.emptyCollectionView.destroy();
+      });
+
+      it('should not call showEmptyView after destroy', function() {
+        expect(this.emptyCollectionView.showEmptyView).to.have.been.calledOnce;
+      });
     });
   });
 

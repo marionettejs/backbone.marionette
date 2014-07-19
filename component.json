@@ -3,7 +3,7 @@
   "description": "Make your Backbone.js apps dance!",
   "version": "2.0.3",
   "repo": "marionettejs/backbone.marionette",
-  "main": "lib/core/amd/backbone.marionette.js",
+  "main": "lib/core/backbone.marionette.js",
   "keywords": [
     "backbone",
     "plugin",
@@ -35,6 +35,6 @@
     "jashkenas/underscore": "*"
   },
   "scripts": [
-    "lib/core/amd/backbone.marionette.js"
+    "lib/core/backbone.marionette.js"
   ]
 }

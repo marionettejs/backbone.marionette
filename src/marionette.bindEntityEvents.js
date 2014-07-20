@@ -62,6 +62,13 @@
   function iterateEvents(target, entity, bindings, functionCallback, stringCallback) {
     if (!entity || !bindings) { return; }
 
+    // type-check bindings
+    if (!_.isFunction(bindings) && !_.isObject(bindings)) {
+      throwError('Bindings must be an object or function. Please refer to ' +
+        'http://marionettejs.com/docs/current/marionette.functions.html' +
+        '#marionettebindentityevents');
+    }
+
     // allow the bindings to be a function
     if (_.isFunction(bindings)) {
       bindings = bindings.call(target);

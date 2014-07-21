@@ -29,7 +29,7 @@ Marionette.MonitorDOMRefresh = (function(documentElement) {
   }
 
   function isInDOM(view) {
-    return documentElement.contains(view.el);
+    return Backbone.$.contains(documentElement, view.el);
   }
 
   // Export public API

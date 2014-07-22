@@ -199,14 +199,20 @@ Marionette.View = Backbone.View.extend({
     // get the bindings result, as a function or otherwise
     var bindings = _.result(this, '_uiBindings');
 
-    // empty the ui so we don't have anything to start with
-    this.ui = {};
-
     // bind each of the selectors
-    _.each(_.keys(bindings), function(key) {
-      var selector = bindings[key];
-      this.ui[key] = this.$(selector);
-    }, this);
+    var bindSelectors = function (bindings) {
+      var ui = {};
+      _.each(_.keys(bindings), function(key) {
+        if (typeof bindings[key] === 'object') {
+          ui[key] = bindSelectors.call(this, bindings[key]);
+        } else {
+          var selector = bindings[key];
+          ui[key] = this.$(selector);
+        }
+      }, this);
+      return ui;
+    };
+    this.ui = bindSelectors.call(this, bindings);
   },
 
   // This method unbinds the elements specified in the "ui" hash

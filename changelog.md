@@ -1,3 +1,63 @@
+### v2.1.0-pre [view commit logs](https://github.com/marionettejs/backbone.marionette/compare/v2.0.3...v2.1.0)
+
+* Features
+
+  * Marionette.Object
+    * A base class which other classes can extend from. Marionette.Object incorporates many backbone conventions and utilities like `initialize` and `Backbone.Events`. It is a user friendly class to base your classes on to get Backbone conventions on any generic class.
+
+  * Add a `el` reference to the views `el` from within a `behavior` instance.
+
+  * `ItemView`s can now have no template by setting `template: false`
+
+  * Application objects can now configure their default  message channel.
+    * This will allow you to configure multiple applications to exist at the same time within an apps without their event bus colliding.
+
+  * Application objects now have the `getOption` method.
+
+  * Regions now have a `hasView` method to determine if there is a view within a given region.
+
+  * Views no longer use toJSON directly on models. instead they call into the new overridable methods  `serializeModel` and `serializeCollection` where are called via `serializeData`
+
+  * Return chainable objects from more methods to be consistent
+
+    * Application: emptyRegions
+    * Application: removeRegion
+    * CollectionView renderChildView
+
+    * Controller new
+    * LayoutView destroy
+
+    * Region reset
+    * Region attachView
+    * Region empty
+
+    * RegionManager destroy
+    * RegionMananger emptyRegions (now returns regions)
+    * RegionMananger removeRegions (now returns regions)
+    * RegionMananger removeRegion (now returns region)
+    * View destroy
+    * View undelegateEvents
+    * View delegateEvents
+
+  * RegionManager `addRegions` now accepts a function that returns a region definition in addition to a region definition object
+    * This extends to Marionette.Application’s and CompositeView’s `regions` properties
+
+  * Added CollectionView `resortView`
+    * Override this method on a subclass of CollectionView to provide custom logic for rendering after sorting the collection.
+
+  * View instance is now passed as a third argument to `Marionette.Renderer.render`
+
+  * Add `getRegionMananger` to Application
+
+* Fixes
+
+  * CollectionView now maintains proper order when adding a mode
+  * Fix component.js path
+  * Prevent AppRouter from erroring  when appRoutes are passed into the router constructor as an option.
+  * UI hash keys now only allow documented syntax, enforcing `@ui.stuff` instead of `@ui<ANY_CHAR>stuff`
+
+### v2.1.0-pre [view commit logs](https://github.com/marionettejs/backbone.marionette/compare/v2.0.3...v2.1.0-pre)
+
 ### v2.0.3 [view commit logs](https://github.com/marionettejs/backbone.marionette/compare/v2.0.2...v2.0.3)
 
   * Bug Fixes

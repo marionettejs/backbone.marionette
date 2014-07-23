@@ -3,7 +3,7 @@
   "description": "Make your Backbone.js apps dance with a composite application architecture!",
   "homepage": "http://marionettejs.org",
   "main": "./lib/core/backbone.marionette.js",
-  "version": "2.0.3",
+  "version": "2.1.0",
   "keywords": [
     "backbone",
     "framework",

@@ -1,4 +1,4 @@
-## v2.0.0 - v2.0.x
+## v2.0.0 - v2.1.x
 No breaking changes have been introduced between these versions
 
 ## v1.x.x - v2.0.0

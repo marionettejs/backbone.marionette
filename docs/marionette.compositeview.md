@@ -179,7 +179,7 @@ Sometimes the `childViewContainer` configuration is insuficient for
 specifying where the `childView` instance should be placed. If this is the
 case, you can override the `attachHtml` method with your own implementation.
 
-For more information on this method, see the [CollectionView's documentation](https://github.com/marionettejs/backbone.marionette/blob/master/docs/marionette.collectionview.md).
+For more information on this method, see the [CollectionView's documentation](http://marionettejs.com/docs/marionette.collectionview.html).
 
 
 ## Recursive By Default

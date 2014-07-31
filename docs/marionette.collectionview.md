@@ -244,7 +244,7 @@ var ParentView = new Marionette.CollectionView.extend({
   childView: ChildView,
 
   childEvents: {
-    'show:alert': function () {
+    'show:message': function () {
       console.log('The show:message event bubbled up to the parent.');
     }
   }

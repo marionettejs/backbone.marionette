@@ -1,4 +1,4 @@
-### v2.1.0-pre [view commit logs](https://github.com/marionettejs/backbone.marionette/compare/v2.0.3...v2.1.0)
+### v2.1.0 [view commit logs](https://github.com/marionettejs/backbone.marionette/compare/v2.0.3...v2.1.0)
 
 * Features
 

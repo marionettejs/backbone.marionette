@@ -35,6 +35,22 @@ describe('regionManager', function() {
       });
     });
 
+    describe('with a name and el', function() {
+      beforeEach(function() {
+        this.buildSpy = sinon.spy(Marionette.Region, 'buildRegion');
+        this.$el = $('<div>');
+
+        this.regionManager = new Marionette.RegionManager();
+        this.region = this.regionManager.addRegion('foo', {
+          el: this.$el
+        });
+      });
+
+      it('should call Region.buildRegion', function() {
+        expect(this.buildSpy.calledOnce).to.equal(true);
+      });
+    });
+
     describe('and a region instance', function() {
       beforeEach(function() {
         this.addHandler = this.sinon.spy();

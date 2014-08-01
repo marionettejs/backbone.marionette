@@ -42,16 +42,10 @@ Marionette.RegionManager = (function(Marionette) {
     addRegion: function(name, definition) {
       var region;
 
-      var isObject = _.isObject(definition);
-      var isString = _.isString(definition);
-      var hasSelector = !!definition.selector;
-
-      if (isString || (isObject && hasSelector)) {
-        region = Marionette.Region.buildRegion(definition, Marionette.Region);
-      } else if (_.isFunction(definition)) {
-        region = Marionette.Region.buildRegion(definition, Marionette.Region);
-      } else {
+      if (definition instanceof Marionette.Region) {
         region = definition;
+      } else {
+        region = Marionette.Region.buildRegion(definition, Marionette.Region);
       }
 
       this.triggerMethod('before:add:region', name, region);

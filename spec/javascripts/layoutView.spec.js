@@ -440,4 +440,52 @@ describe('layoutView', function() {
       expect(this.regions.regionTwo).to.equal(this.layout.getRegion("regionTwo"));
     });
   });
+
+  describe('when attached to an existing element with a string selector', function() {
+    beforeEach(function() {
+      this.setFixtures('<div id="attached-layout"></div>');
+
+      this.LayoutView = Marionette.LayoutView.extend({
+        el: '#attached-layout',
+        template: _.template('<div class="the-region">Inner</div>'),
+        regions: {
+          theRegion: '.the-region'
+        }
+      });
+
+      this.MyView1 = Marionette.ItemView.extend({
+        template: _.template('My View 1')
+      });
+    });
+
+    describe('and when a region with the same selector exists outside the layout view', function() {
+      beforeEach(function() {
+        this.setFixtures('<div class="the-region">Outer</div>');
+
+        this.layoutView = new this.LayoutView();
+        this.theRegion  = this.layoutView.getRegion('theRegion');
+      });
+
+      it('should assign the region $el to 0 elements', function() {
+        expect(this.theRegion.$el).to.have.lengthOf(0);
+      });
+
+      describe('and when showing a view', function() {
+        beforeEach(function() {
+          this.myView = new this.MyView1();
+
+          this.layoutView.render();
+          this.theRegion.show(this.myView);
+        });
+
+        it('should have 1 element associated with the region $el still', function() {
+          expect(this.theRegion.$el).to.have.lengthOf(1);
+        });
+
+        it('should assign the region $el to the element of the shown `ItemView`', function() {
+          expect(this.theRegion.$el.text()).to.equal('My View 1');
+        });
+      });
+    });
+  });
 });

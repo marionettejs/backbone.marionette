@@ -7,8 +7,9 @@
 // http://lostechies.com/derickbailey/2011/12/12/composite-js-apps-regions-and-region-managers/
 
 Marionette.Region = function(options) {
-  this.options = options || {};
-  this.el = this.getOption('el');
+  this.options   = options || {};
+  this.el        = this.getOption('el');
+  this._parentEl = this.getOption('parentEl');
 
   // Handle when this.el is passed in as a $ wrapped element.
   this.el = this.el instanceof Backbone.$ ? this.el[0] : this.el;
@@ -84,28 +85,7 @@ _.extend(Marionette.Region, {
       options.el = regionConfig.selector;
     }
 
-    var region = new RegionClass(options);
-
-    // override the `getEl` function if we have a parentEl
-    // this must be overridden to ensure the selector is found
-    // on the first use of the region. if we try to assign the
-    // region's `el` to `parentEl.find(selector)` in the object
-    // literal to build the region, the element will not be
-    // guaranteed to be in the DOM already, and will cause problems
-    if (regionConfig.parentEl) {
-      region.getEl = function(el) {
-        if (_.isObject(el)) {
-          return Backbone.$(el);
-        }
-        var parentEl = regionConfig.parentEl;
-        if (_.isFunction(parentEl)) {
-          parentEl = parentEl();
-        }
-        return parentEl.find(el);
-      };
-    }
-
-    return region;
+    return new RegionClass(options);
   },
 
   // Build the region directly from a given `RegionClass`
@@ -206,7 +186,14 @@ _.extend(Marionette.Region.prototype, Backbone.Events, {
   // Override this method to change how the region finds the
   // DOM element that it manages. Return a jQuery selector object.
   getEl: function(el) {
-    return Backbone.$(el);
+    if (!this._parentEl || _.isObject(el)) {
+      return Backbone.$(el);
+    }
+
+    // If we have a `parentEl`, then we attempt to find the
+    // region within it.
+    var parentEl = _.result(this, '_parentEl');
+    return parentEl.find(el);
   },
 
   // Override this method to change how the new view is

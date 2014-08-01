@@ -35,6 +35,22 @@ describe('regionManager', function() {
       });
     });
 
+    describe('and with a name and el', function() {
+      beforeEach(function() {
+        this.buildSpy = sinon.spy(Marionette.Region, 'buildRegion');
+        this.$el = $('<div>');
+
+        this.regionManager = new Marionette.RegionManager();
+        this.region = this.regionManager.addRegion('foo', {
+          el: this.$el
+        });
+      });
+
+      it('should call Region.buildRegion', function() {
+        expect(this.buildSpy).to.have.been.calledOnce;
+      });
+    });
+
     describe('and a region instance', function() {
       beforeEach(function() {
         this.addHandler = this.sinon.spy();
@@ -104,6 +120,22 @@ describe('regionManager', function() {
         expect(this.region.$el.parent()[0]).to.equal(this.context[0]);
       });
     });
+
+    describe('and with an improper object literal', function() {
+      beforeEach(function() {
+        var regionManager = new Marionette.RegionManager();
+        this.addRegion = function () {
+          regionManager.addRegion('foo', {});
+        };
+      });
+
+      it('throws an error', function() {
+        expect(this.addRegion).
+          to.throw('Improper region configuration type. Please refer ' +
+            'to http://marionettejs.com/docs/marionette.region.html#region-configuration-types');
+      });
+    });
+
   });
 
   describe('.addRegions', function() {

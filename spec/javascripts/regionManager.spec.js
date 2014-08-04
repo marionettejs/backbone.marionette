@@ -47,7 +47,7 @@ describe('regionManager', function() {
       });
 
       it('should call Region.buildRegion', function() {
-        expect(this.buildSpy.calledOnce).to.equal(true);
+        expect(this.buildSpy).to.have.been.calledOnce;
       });
     });
 

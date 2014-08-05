@@ -1,0 +1,326 @@
+name: Collectionview
+
+class: Marionette.Collectionview
+
+description:
+
+examples:
+
+properties:
+  
+events:
+  
+constructor:
+  description: |
+    ...
+    
+  examples:
+  
+functions:
+  initRenderBuffer:
+    description: |
+      ...
+      
+      @api public
+    
+    examples:
+      
+  startBuffering:
+    description: |
+      ...
+      
+      @api public
+    
+    examples:
+      
+  endBuffering:
+    description: |
+      ...
+      
+      @api public
+    
+    examples:
+      
+  _triggerBeforeShowBufferedChildren:
+    description: |
+      ...
+      
+      @api private 
+    
+    examples:
+      
+  _triggerShowBufferedChildren:
+    description: |
+      ...
+      
+      @api private 
+    
+    examples:
+      
+  _initialEvents:
+    description: |
+      ...
+      
+      @api private
+    
+    examples:
+      
+  _onCollectionAdd:
+    description: |
+      ...
+      
+      @api private
+      @param {Marionette.Model} child
+    
+    examples:
+      
+  _onCollectionRemove:
+    description: |
+      ...
+      
+      @api private
+      @param {Marionette.Model} model
+    
+    examples:
+      
+  onShowCalled:
+    description: |
+      ...
+      
+      @api public
+    
+    examples:
+      
+  render:
+    description: |
+      ...
+      
+      @api public
+    
+    examples:
+      
+  resortView:
+    description: |
+      ...
+      
+      @api public
+    
+    examples:
+      
+  _sortViews:
+    description: |
+      ...
+      
+      @api private
+    
+    examples:
+      
+  _renderChildren:
+    description: |
+      ...
+      
+      @api private
+    
+    examples:
+      
+  showCollection:
+    description: |
+      ...
+      
+      @api public
+    
+    examples:
+      
+  showEmptyView:
+    description: |
+      ...
+      
+      @api public
+    
+    examples:
+      
+  destroyEmptyView:
+    description: |
+      ...
+      
+      @api public
+    
+    examples:
+      
+  getEmptyView:
+    description: |
+      ...
+      
+      @api public
+    
+    examples:
+      
+  addEmptyView:
+    description: |
+      ...
+      
+      @api public
+      @param {Marionette.Model} child
+      @param {Marionette.View} EmptyView
+    
+    examples:
+      
+  getChildView:
+    description: |
+      ...
+      
+      @api public
+      @param {Marionette.Model} child
+    
+    examples:
+      
+  addChild:
+    description: |
+      ...
+      
+      @api public
+      @param {Marionette.Model} child
+      @param {Marionette.View} ChildView
+      @param {Number} index
+    
+    examples:
+      
+  _updateIndices:
+    description: |
+      ...
+      
+      @api private
+      @param {Marionette.View} view
+      @param {Boolean} increment
+      @param {Number} index
+    
+    examples:
+      
+  _addChildView:
+    description: |
+      ...
+      
+      @api private
+      @param {Marionette.View} view
+      @param {Number} index
+    
+    examples:
+      
+  renderChildView:
+    description: |
+      ...
+      
+      @api public
+      @param {Marionette.View} view
+      @param {Number} index
+    
+    examples:
+      
+  buildChildView:
+    description: |
+      ...
+      
+      @api public
+      @param {Marionette.Model} child
+      @param {Marionette.View} ChildViewClass
+      @param {Object} childViewOptions
+    
+    examples:
+      
+  removeChildView:
+    description: |
+      ...
+      
+      @api public
+      @param {Marionette.View} view
+    
+    examples:
+      
+  isEmpty:
+    description: |
+      ...
+      
+      @api public
+      @param {Marionette.Collection} collection
+    
+    examples:
+      
+  checkEmpty:
+    description: |
+      ...
+      
+      @api public
+    
+    examples:
+      
+  attachBuffer:
+    description: |
+      ...
+      
+      @api public
+      @param {Marionette.Collectionview} collectionView
+      @param {} buffer
+    
+    examples:
+      
+  attachHtml:
+    description: |
+      ...
+      
+      @api public
+      @param {Marionette.Collectionview} collectionView
+      @param {Marionette.View} childView
+      @param {Number} index
+    
+    examples:
+      
+  _insertBefore:
+    description: |
+      ...
+      
+      @api private
+      @param {Marionette.View} childView
+      @param {Number} index
+    
+    examples:
+      
+  _insertAfter:
+    description: |
+      ...
+      
+      @api private
+      @param {Marionette.View} childView
+    
+    examples:
+      
+  _initChildViewStorage:
+    description: |
+      ...
+      
+      @api private
+    
+    examples:
+      
+  destroy:
+    description: |
+      ...
+      
+      @api public
+    
+    examples:
+      
+  destroyChildren:
+    description: |
+      ...
+      
+      @api public
+    
+    examples:
+      
+  proxyChildEvents:
+    description: |
+      ...
+      
+      @api public
+      @param {Marionette.View} view
+    

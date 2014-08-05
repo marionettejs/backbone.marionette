@@ -1,0 +1,58 @@
+name: View
+
+class: Marionette.View
+
+description:
+
+examples:
+
+properties:
+
+constructor: |
+  @param {Object} options
+
+functions:
+  
+  getTemplate: |
+    @api public
+    
+  serializeModel: |
+    @api public
+    @param {} model
+    
+  mixinTemplateHelpers: |
+    @api public
+    @param {} target
+    
+  normalizeUIKeys: |
+    @api public
+    @param {Object} hash
+    
+  configureTriggers: |
+    @api public
+    
+  delegateEvents: |
+    @api public
+    @param {Object} events
+  
+  _delegateDOMEvents: |
+    @api private
+    @param {Object} events
+  
+  undelegateEvents: |
+    @api public
+  
+  onShowCalled: |
+    @api public
+  
+  _ensureViewIsIntact: |
+    @api private
+  
+  destroy: |
+    @api public
+  
+  bindUIElements: |
+    @api public
+  
+  unbindUIElements: |
+    @api public

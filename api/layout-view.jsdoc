@@ -7,13 +7,13 @@ extends:
 
 description: |
   A `LayoutView` is a hybrid of an `ItemView` and a collection of `Region` objects. They are ideal for rendering application layouts with multiple sub-regions managed by specified region managers.
-
+  
   A LayoutView can also act as a composite-view to aggregate multiple views and sub-application areas of the screen allowing applications to attach multiple region managers to dynamically rendered HTML.
-
+  
   You can create complex views by nesting LayoutView managers within `Regions`.
-
+  
   Please see the [Marionette.ItemView documentation](item-view.jsdoc) for more information on available features and functionality.
-
+  
   Additionally, interactions with Marionette.Region will provide features such as `onShow` callbacks, etc. Please see the [Region documentation](region.jsdoc) for more information.
 
 examples:
@@ -22,34 +22,34 @@ examples:
 
     example: |
       Since the `LayoutView` extends directly from `ItemView`, it has all of the core functionality of an `ItemView`. This includes the methods necessary to be shown within an existing region manager.
-
+      
       ```js
       // Create an Application
       var MyApp = new Marionette.Application();
-
+      
       // Add a region
       MyApp.addRegions({
         main: "main"
       });
-
+      
       // Create a new LayoutView
       var layoutView = new Marionette.LayoutView();
-
+      
       // Lastly, show the LayoutView in the App's mainRegion
       MyApp.getRegion('main').show(layoutView);
       ```
-
+      
       You can nest Layout Views as deeply as you want. This provides for a well organized, nested view structure.
-
+      
       For example, to nest 3 layouts:
-
+        
       ```js
       var layout1 = new Layout1();
       var layout2 = new Layout2();
       var layout3 = new Layout3();
-
+      
       MyApp.getRegion('main').show(layout1);
-
+      
       layout1.getRegion('region1').show(layout2);
       layout2.getRegion('region2').show(layout3);
       ```
@@ -57,9 +57,9 @@ examples:
 constructor:
   description: |
     Creates a new LayoutView.
-
+    
     The constructor function calls initialize if it exists, and sets up the regions that have been defined in the`regions` attribute.
-
+    
     @param {Object} options
 
   examples:
@@ -68,7 +68,7 @@ constructor:
 
       example: |
         The `LayoutView` extends directly from `ItemView` and adds the ability to specify `regions` which become `Region` instances that are attached to the LayoutView.
-
+        
         ```html
         <script id="layout-view-template" type="text/template">
           <section>
@@ -77,23 +77,23 @@ constructor:
           </section>
         </script>
         ```
-
+        
         ```js
         var MyLayoutView = Marionette.LayoutView.extend({
           template: "#layout-view-template",
-
+          
           ui: {
             menu: '#menu',
             content: '#content'
           },
-
+          
           regions: {
             menuRegion: "@ui.menu",
             contentRegion: "@ui.content"
             }
           }
         });
-
+        
         var layoutView = new MyLayoutView();
         ```
     -
@@ -101,15 +101,15 @@ constructor:
 
       example: |
         Regions can be specified on a LayoutView using a function that returns an object with the region definitions. The returned object follow the same rules for defining a region, as outlined above.
-
+        
         ```js
         var MyLayoutView = Marionette.LayoutView.extend({
           template: "#layout-view-template",
-
+          
           ui: {
             menu: '#menu'
           },
-
+          
           regions: function(options) {
             return {
               menuRegion: "@ui.menu"
@@ -117,7 +117,7 @@ constructor:
           }
         });
         ```
-
+        
         Note that the function receives the view's `options` arguments that were passed in to the view's constructor. `this.options` is not yet available when the regions are first initialized, so the options must be accessed through this parameter.
 
     -
@@ -156,17 +156,17 @@ functions:
   render:
     description: |
       A LayoutView can be rendered as many times as needed, but renders after the first one behave differently than the initial render.
-
+      
       The first time a LayoutView is rendered, nothing special happens. It just delegates to the `ItemView` prototype to do the render. After the first render has happened, though, the render function is modified to account for re-rendering with regions in the LayoutView.
-
+      
       After the first render, all subsequent renders will force every region to be emptied by calling the `empty` method on them. This will force every view in the region, and sub-views if any, to be destroyed as well. Once the regions are emptied, the regions will also be reset so that they are no longer referencing the element of the previous layoutView render.
-
+      
       Then after the LayoutView is finished re-rendering itself, showing a view in the LayoutView's regions will cause the regions to attach themselves to the new elements in the LayoutView.
-
+      
       There are times when re-rendering the entire LayoutView is necessary. However, due to the behavior described above, this can cause a large amount of work to be needed in order to fully restore the LayoutView and all of the views that the LayoutView is displaying.
-
+      
       Therefore, it is suggested that you avoid re-rendering the entire LayoutView unless absolutely necessary. Instead, if you are binding the LayoutView's template to a model and need to update portions of the LayoutView, you should listen to the model's "change" events and only update the necessary DOM elements.
-
+      
       @api public
 
     examples:
@@ -176,18 +176,18 @@ functions:
         example: |
           ```js
           var layoutView = new MyLayoutView();
-
+          
           // ...
-
+          
           layoutView.render();
           ```
 
   destroy:
     description: |
       Destroys all the regions and views, and then destroy the LayoutView itself.
-
+      
       If you are showing a LayoutView within a parent region manager, replacing the LayoutView with another view or LayoutView will destroy the current one. All of this ensures that LayoutViews and the views that they contain are cleaned up correctly.
-
+      
       @api public
 
     examples:
@@ -197,66 +197,66 @@ functions:
         example: |
           ```js
           var layoutView = new MyLayoutView();
-
+          
           // ...
-
+          
           layoutView.destroy();
           ```
 
   addRegion:
     description: |
       Adds a single region, by name, to the LayoutView.
-
+      
       @api public
       @param {String} name - The name of the region being added.
       @param {Marionette.Region|Function|String|Object} definition - Accepts a Marionette.Region instance, a function that returns a Marionette.Region instance (such as a Region constructor), a selector, or an object definition for finer control.
-
+      
     examples:
       -
         name: Adding a region to a LayoutView
-
+        
         example: |
           ```js
           var layoutView = new MyLayoutView();
-
+          
           // ...
-
+          
           layoutView.addRegion("foo", "#foo");
           ```
-
+          
   addRegions:
     description: |
       Adds multiple regions to the LayoutView.
-
+      
       @api public
       @param {Object|Function} regions - Accepts an object literal or a function that returns an object literal. The object literal must contain region names as keys and region definitions as values.
       @returns {Object} Object literal with all the created regions.
-
+      
     examples:
       -
         name: Adding multiple regions to a LayoutView using an object literal
-
+        
         example: |
           ```js
           var layoutView = new MyLayoutView();
-
+          
           // ...
-
+          
           layoutView.addRegions({
             foo: "#foo",
             bar: "#bar"
           });
           ```
-
+          
       -
         name: Adding multiple regions to a LayoutView using a function that returns an object literal
-
+        
         example: |
           ```js
           var layoutView = new MyLayoutView();
-
+          
           // ...
-
+          
           layoutView.addRegions(function() {
             return {
               foo: "#foo",
@@ -264,190 +264,192 @@ functions:
             };
           });
           ```
-
+          
   removeRegion:
     description: |
       Removes a single region, by name, from the LayoutView. Any region can be removed, whether it was defined in the `regions` attribute of the region definition, or added later.
-
+      
       For more information on using these methods, see the `regionManager` documentation.
-
+      
       @api public
       @param {String} name - The name of the region being removed.
-
+      
     examples:
       -
         name: Removing a region from a LayoutView
-
+        
         example: |
           ```js
           var layoutView = new MyLayoutView();
-
+          
           // ...
-
+          
           layoutView.removeRegion("foo");
           ```
 
   getRegion:
     description: |
       Retrieves a region from the LayoutView.
-
+      
       Any defined regions within a LayoutView will be available to the View or any calling code immediately after instantiating the View. This allows a View to be attached to an existing DOM element in an HTML page, without the need to call a render method or anything else, to create the regions.
-
+      
       However, a region will only be able to populate itself if the View has access to the elements specified within the region definitions. That is, if your view has not yet rendered, your regions may not be able to find the element that you've specified for them to manage. In that scenario, using the region will result in no changes to the DOM.
-
+      
       @api public
       @param {String} region - The name of the region you're trying to get
-
+      
     examples:
       -
         name: Accessing a region from a LayoutView
-
+        
         example: |
           Once you've rendered the LayoutView, you now have direct access to all of the specified regions as region managers.
-
+          
           ```js
           var layoutView = new MyLayoutView();
           layoutView.render();
-
+          
           // ...
-
+          
           layoutView.getRegion('menu').show(new MenuView());
           layoutView.getRegion('content').show(new ContentView());
           ```
-
+          
   getRegions:
     description: |
       Retrieves all the regions from the LayoutView.
-
+      
       @api public
       @returns {Object} Object literal with all the regions.
-
+      
     examples:
      -
       name: Getting all regions from a LayoutView
-
+      
       example: |
         Once you've rendered the LayoutView, you now have direct access to all of the specified regions as region managers.
-
+        
         ```js
         var layoutView = new MyLayoutView();
-
+        
         // ...
-
+        
         var regions = layoutView.getRegions();
         regions.foo; //=> foo region
         regions.bar; //=> bar region
         ```
-
+        
   getRegionManager:
     description: |
       Lets you override the default `RegionManager` for times when you need the `RegionManager`'s class chosen dynamically.
-
+      
       @api public
       @returns {Marionette.RegionManager} A new Marionette RegionManager.
-
+      
     examples:
      -
        name: Overriding the default RegionManager
-
+       
        example: |
         This can be useful if you want to attach `LayoutView`'s regions to your own instance of `RegionManager`.
-
+        
         ```js
         Marionette.LayoutView.extend({
           // ...
-
+          
           getRegionManager: function() {
             // custom logic
             return new MyRegionManager();
           }
         ```
-
+        
 events:
   -
     name: before:add:region
-
+    
     description: |
       Triggered before a region is added to the LayoutView.
-
+      
     example: |
       ```js
       var MyLayoutView = Marionette.LayoutView.extend({
         // ...
-
+        
         onBeforeAddRegion: function(name) {
           // do something
         }
       });
       ```
-
+      
   -
     name: add:region
-
+    
     description: |
       Triggered when a region is added to the LayoutView. This allows you to use the region instance immediately, or attach the region to an object that needs a reference to it.
-
+      
     example: |
       ```js
       var MyLayoutView = Marionette.LayoutView.extend({
         // ...
-
+        
         onAddRegion: function(name, region) {
           // do something with the region instance
         }
       });
       ```
-
+      
   -
     name: before:remove:region
-
+    
     description: |
       Triggered before a region is removed from the LayoutView, so you can perform any cleanup opersations.
-
+      
     example: |
       ```js
       var MyLayoutView = Marionette.LayoutView.extend({
         // ...
-
+        
         onBeforeRemoveRegion: function(name) {
           // do something
         }
       });
       ```
-
+      
   -
     name: remove:region
-
+    
     description: |
       Triggered when a region is removed from the LayoutView. This allows you to use the region instance one last time, or remove the region from an object that has a reference to it.
-
+      
     example: |
       ```js
       var MyLayoutView = Marionette.LayoutView.extend({
         // ...
-
+        
         onRemoveRegion: function(name, region) {
           // do something with the region instance
         }
       });
       ```
-
-region naming: |
-  A LayoutViews' regions are attached directly to the LayoutView instance with the name of the region as the key and the region itself as the value. Because of this, you need to be careful to avoid conflicts with existing properties on the LayoutView when you name your Region.
-
-  The prototype chain of LayoutViews is:
-
-  `Backbone.View > Marionette.View > Marionette.ItemView > Marionette.LayoutView`
-
-  Consequently, every property on each of those Classes must be avoided as Region names. The most common issue people run into is trying to name their Region *"attributes"*. Be aware that you are **not** able to do this.
-
-  The following is an abbreviated list of other names that can't be used as Region names. For a more complete list refer to the API documentation for each Class on the prototype chain:
-
-  - attributes
-  - constructor
-  - regionClass
-  - render
-  - destroy
-  - addRegion
-  -git addRegions
-  - removeRegion
+      
+notes: 
+  name: Region Naming
+  note: |
+    A LayoutViews' regions are attached directly to the LayoutView instance with the name of the region as the key and the region itself as the value. Because of this, you need to be careful to avoid conflicts with existing properties on the LayoutView when you name your Region.
+    
+    The prototype chain of LayoutViews is:
+    
+    `Backbone.View > Marionette.View > Marionette.ItemView > Marionette.LayoutView`
+    
+    Consequently, every property on each of those Classes must be avoided as Region names. The most common issue people run into is trying to name their Region *"attributes"*. Be aware that you are **not** able to do this.
+    
+    The following is an abbreviated list of other names that can't be used as Region names. For a more complete list refer to the API documentation for each Class on the prototype chain:
+      
+    - attributes
+    - constructor
+    - regionClass
+    - render
+    - destroy
+    - addRegion
+    - git addRegions
+    - removeRegion

@@ -75,7 +75,7 @@ functions:
         
     examples:
       -
-        name:
+        name: Basic Use
         example: |
           ```js
           // define a controller

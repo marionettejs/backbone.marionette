@@ -1,0 +1,28 @@
+name: Behavior
+
+class: Marionette.Behavior
+
+description:
+
+examples:
+
+properties:
+  
+events:
+
+functions:
+  initialize:
+    description: |
+      ...
+      
+      @api public
+    
+    examples:
+
+  destroy:
+    description: |
+      ...
+      
+      @api public
+    
+    examples:

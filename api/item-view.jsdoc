@@ -1,0 +1,70 @@
+name: ItemView
+
+class: Marionette.ItemView
+
+description:
+
+examples:
+
+properties:
+
+events:
+
+constructor:
+  description: |
+    ...
+    
+  examples: 
+    
+functions:
+
+  serializeData:
+    description: |
+      ...
+      
+      @api public
+    
+    examples: 
+
+  serializeCollection:
+    description: |
+      ...
+      
+      @api public
+      @param {Marionette.Collection} collection
+    
+    examples: 
+
+  render:
+    description: |
+      ...
+      
+      @api public
+    
+    examples: 
+
+  _renderTemplate:
+    description: |
+      ...
+      
+      @api private 
+    
+    examples: 
+
+  attachElContent:
+    description: |
+      ...
+      
+      @api public
+      @param {} html
+    
+    examples: 
+
+  destroy:
+    description: |
+      ...
+      
+      @api public
+    
+    examples: 
+

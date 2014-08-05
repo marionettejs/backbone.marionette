@@ -45,7 +45,7 @@ _.extend(JsDocFilesTask.prototype, {
   compileJsDoc: function(file, filepath) {
 
     var doc = this.grunt.file.read(filepath);
-    var json = this.parseYaml(doc);
+    var json = this.parseYaml(filepath, doc);
 
     json.functions = this.buildFunctions(json.functions);
     json.properties = this.buildProperties(json.properties);
@@ -190,7 +190,7 @@ _.extend(JsDocFilesTask.prototype, {
         description: param.description.replace(/^- /,'') // because dox doesn't parse the - out
       })
     });
-    
+
 
     return doc;
   },
@@ -202,11 +202,11 @@ _.extend(JsDocFilesTask.prototype, {
   },
 
   // read yaml file
-  parseYaml: function(file) {
+  parseYaml: function(filepath, file) {
     try {
       return yaml.safeLoad(file);
     } catch (err){
-      this.grunt.fail.fatal(err.name + ":\n"+  err.reason + "\n\n" + err.mark);
+      this.grunt.fail.fatal(filepath + "\n" + err.name + ":\n"+  err.reason + "\n\n" + err.mark);
     }
   }
 

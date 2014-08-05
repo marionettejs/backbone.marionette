@@ -6,7 +6,7 @@ description:|
 
   The Region is a 'background Class'. Background Classes are named because one doesn't typically
   instantiate a Background Class. Instead, other Classes extend from, or include the Background
-  Class functionality into their own API.  
+  Class functionality into their own API.
 
   > Long-story short: you shouldn't ever need to call `new Region`. Instead, to create and use Regions you are encouraged to use the Application or LayoutView API.
 
@@ -57,12 +57,12 @@ functions:
     will be destroyed in this process. The `show` methods fires the show and swap triggerMethods.
     
     You can modify the behavior of `show` by passing in an options object.
-    
+
     `preventDestroy`
     Pass this as `true` to prevent the destruction of the old view. This is not recommended, as Views
     are intended to be throwaway objects in Marionette. You are encouraged to only use this option
     if the View you are rendering is a render-heavy view, such as a large chart or graphic.
-    
+
     `forceShow`
     By default passing the same view to `show` will be a noop; your view will not be rendered, and no
     events will be fired. Pass `true` for this option to cause the entire show process to happen again,

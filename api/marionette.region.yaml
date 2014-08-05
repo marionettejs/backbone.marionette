@@ -1,0 +1,73 @@
+name: Region
+namespace: Marionette
+description:
+examples:
+
+extends:
+  Backbone.Events
+
+classMethods:
+  buildRegion:
+
+  _buildRegionFromSelector:
+
+  _buildRegionFromObject:
+
+  _buildRegionFromRegionClass:
+
+instanceMethods:
+  show:
+    api: public
+    params:
+      view:
+        type: Marionette.View
+      options:
+        type: Object
+    returns: this
+    description:
+    example:
+
+  _ensureElement:
+    api: private
+
+  getEl:
+    api: private
+    params:
+      el:
+        type: Element
+
+  attachHtml:
+    api: private
+    params:
+      view:
+        type: Marionette.View
+
+  empty:
+    api: public
+    returns: this
+
+  _destroyView:
+    api: private
+
+  attachView:
+    api: private
+    params:
+      view:
+        type: Marionette.View
+
+  hasView:
+    api: public
+    returns: Boolean
+
+  reset:
+    api: public
+    returns: this
+
+  getOption:
+    api: private
+
+  triggerMethod:
+    api: private
+
+properties:
+  currentView:

@@ -20,6 +20,10 @@ describe('base view', function() {
     it('should call initialize', function() {
       expect(this.initializeStub).to.have.been.calledOnce;
     });
+
+    it('should set _behaviors', function() {
+      expect(this.view._behaviors).to.be.eql({});
+    });
   });
 
   describe('when using listenTo for the "destroy" event on itself, and destroying the view', function() {
@@ -113,7 +117,7 @@ describe('base view', function() {
       this.onBeforeDestroyStub = this.sinon.stub().returns(false);
       this.view.onBeforeDestroy = this.onBeforeDestroyStub;
       this.sinon.spy(this.view, 'destroy');
-      
+
       this.view.destroy(this.argumentOne, this.argumentTwo);
     });
 

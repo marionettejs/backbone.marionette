@@ -11,6 +11,7 @@ a way to get the same behaviors and conventions from your own code.
 * [Marionette.getOption](#marionettegetoption)
 * [Marionette.proxyGetOption](#marionetteproxygetoption)
 * [Marionette.triggerMethod](#marionettetriggermethod)
+* [Marionette.triggerMethodOn](#marionettetriggermethodon)
 * [Marionette.bindEntityEvent](#marionettebindentityevents)
 * [Marionette.unbindEntityEvents](#marionetteunbindentityevents)
 * [Marionette.proxyBindEntityEvent](#marionetteproxybindentityevents)
@@ -133,6 +134,18 @@ Note that `triggerMethod` can be called on objects that do not have
 `Backbone.Events` mixed in to them. These objects will not have a `trigger`
 method, and no attempt to call `.trigger()` will be made. The `on{Name}`
 callback methods will still be called, though.
+
+## Marionette.triggerMethodOn
+
+Invoke `triggerMethod` on a specific context.
+
+This is useful when it's not clear that the object has `triggerMethod` defined. In the case of views, `Marionette.View` defines `triggerMethod`, but `Backbone.View` does not.
+
+```js
+Marionette.triggerMethodOn(ctx, "foo", bar);
+// will invoke `onFoo: function(bar){...})`
+// will trigger "foo" on ctx
+```
 
 ## Marionette.bindEntityEvents
 

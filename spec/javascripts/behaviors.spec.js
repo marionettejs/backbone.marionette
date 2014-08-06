@@ -123,6 +123,10 @@ describe('Behaviors', function() {
     it('should call initialize when a behavior is created', function() {
       expect(this.initializeStub).to.have.been.calledOnce.and.calledWith(this.behaviorOptions, this.view);
     });
+
+    it('should set _behaviors', function() {
+      expect(this.view._behaviors.length).to.be.equal(1);
+    });
   });
 
   describe('behavior events', function() {
@@ -590,6 +594,10 @@ describe('Behaviors', function() {
 
     it('should call initialize on grouped behaviors', function() {
       expect(this.initializeStub).to.have.been.calledOnce;
+    });
+
+    it('should set _behaviors', function() {
+      expect(this.view._behaviors.length).to.be.equal(2);
     });
 
     it('should call onRender on grouped behaviors', function() {

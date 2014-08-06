@@ -11,6 +11,11 @@
 Marionette.Behaviors = (function(Marionette, _) {
 
   function Behaviors(view, behaviors) {
+
+    if (!_.isObject(view.behaviors)) {
+      return {};
+    }
+
     // Behaviors defined on a view can be a flat object literal
     // or it can be a function that returns an object.
     behaviors = Behaviors.parseBehaviors(view, behaviors || _.result(view, 'behaviors'));
@@ -19,6 +24,7 @@ Marionette.Behaviors = (function(Marionette, _) {
     // calling the methods first on each behavior
     // and then eventually calling the method on the view.
     Behaviors.wrap(view, behaviors, _.keys(methods));
+    return behaviors;
   }
 
   var methods = {

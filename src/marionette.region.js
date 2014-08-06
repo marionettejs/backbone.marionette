@@ -161,12 +161,7 @@ _.extend(Marionette.Region.prototype, Backbone.Events, {
       }
 
       this.triggerMethod('before:show', view);
-
-      if (_.isFunction(view.triggerMethod)) {
-        view.triggerMethod('before:show');
-      } else {
-        this.triggerMethod.call(view, 'before:show');
-      }
+      Marionette.triggerMethodOn(view, 'before:show');
 
       this.attachHtml(view);
       this.currentView = view;
@@ -176,12 +171,7 @@ _.extend(Marionette.Region.prototype, Backbone.Events, {
       }
 
       this.triggerMethod('show', view);
-
-      if (_.isFunction(view.triggerMethod)) {
-        view.triggerMethod('show');
-      } else {
-        this.triggerMethod.call(view, 'show');
-      }
+      Marionette.triggerMethodOn(view, 'show');
 
       return this;
     }

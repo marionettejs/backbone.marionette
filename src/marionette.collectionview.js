@@ -1,4 +1,5 @@
 /* jshint maxstatements: 14 */
+/* jshint maxlen: 200 */
 
 // Collection View
 // ---------------
@@ -18,6 +19,10 @@ Marionette.CollectionView = Marionette.View.extend({
   constructor: function(options){
     var initOptions = options || {};
     this.sort = _.isUndefined(initOptions.sort) ? true : initOptions.sort;
+
+    if (initOptions.collection && !(initOptions.collection instanceof Backbone.Collection)) {
+      throwError('The Collection option passed to this view needs to be an instance of a Backbone.Collection');
+    }
 
     this._initChildViewStorage();
 

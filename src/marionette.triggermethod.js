@@ -5,7 +5,7 @@
 //
 // `this.triggerMethod("foo:bar")` will trigger the "foo:bar" event and
 // call the "onFooBar" method.
-Marionette.triggerMethod = (function() {
+Marionette.triggerMethod = function(event) {
 
   // split the event name on the ":"
   var splitter = /(^|:)(\w)/gi;
@@ -16,26 +16,38 @@ Marionette.triggerMethod = (function() {
     return eventName.toUpperCase();
   }
 
-  // actual triggerMethod implementation
-  var triggerMethod = function(event) {
-    // get the method name from the event name
-    var methodName = 'on' + event.replace(splitter, getEventName);
-    var method = this[methodName];
-    var result;
+  // get the method name from the event name
+  var methodName = 'on' + event.replace(splitter, getEventName);
+  var method = this[methodName];
+  var result;
 
-    // call the onMethodName if it exists
-    if (_.isFunction(method)) {
-      // pass all arguments, except the event name
-      result = method.apply(this, _.tail(arguments));
-    }
+  // call the onMethodName if it exists
+  if (_.isFunction(method)) {
+    // pass all arguments, except the event name
+    result = method.apply(this, _.tail(arguments));
+  }
 
-    // trigger the event, if a trigger method exists
-    if (_.isFunction(this.trigger)) {
-      this.trigger.apply(this, arguments);
-    }
+  // trigger the event, if a trigger method exists
+  if (_.isFunction(this.trigger)) {
+    this.trigger.apply(this, arguments);
+  }
 
-    return result;
-  };
+  return result;
+};
 
-  return triggerMethod;
-})();
+// triggerMethodOn invokes triggerMethod on a specific context
+//
+// e.g. `Marionette.triggerMethodOn(view, 'show')`
+// will trigger a "show" event or invoke onShow the view.
+Marionette.triggerMethodOn = function(context, event) {
+  var args = _.tail(arguments, 2);
+  var fnc;
+
+  if (_.isFunction(context.triggerMethod)) {
+    fnc = context.triggerMethod;
+  } else {
+    fnc = Marionette.triggerMethod;
+  }
+
+  return fnc.apply(context, [event].concat(args));
+};

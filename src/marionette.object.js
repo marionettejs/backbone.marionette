@@ -4,10 +4,9 @@
 // A Base Class that other Classes should descend from.
 // Object borrows many conventions and utilities from Backbone.
 Marionette.Object = function(options) {
-
   this.options = _.extend({}, _.result(this, 'options'), options);
 
-  this.initialize(this.options);
+  this.initialize.apply(this, arguments);
 };
 
 Marionette.Object.extend = Marionette.extend;

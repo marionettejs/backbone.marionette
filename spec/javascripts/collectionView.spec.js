@@ -1086,4 +1086,22 @@ describe('collection view', function() {
       expect(this.childView.$el).to.contain.$text('bar');
     });
   });
+
+  describe('when passing a raw array into a collectionView', function() {
+    beforeEach(function() {
+      this.CollectionView = Marionette.CollectionView.extend({
+        childView: this.ChildView
+      });
+
+      this.Collection = [{},{},{}];
+
+      this.collectionView = new this.CollectionView({
+        collection: this.Collection
+      });
+    });
+
+    it('should coerce the array into a generic Backbone Collection', function() {
+      expect(this.collectionView.collection).to.be.instanceof(Backbone.Collection);
+    });
+  });
 });

@@ -17,6 +17,11 @@ Marionette.CollectionView = Marionette.View.extend({
   // This will fallback onto appending childView's to the end.
   constructor: function(options){
     var initOptions = options || {};
+
+    if (_.isArray(initOptions.collection)) {
+      initOptions.collection = new Backbone.Collection(initOptions.collection);
+    }
+
     this.sort = _.isUndefined(initOptions.sort) ? true : initOptions.sort;
 
     this._initChildViewStorage();

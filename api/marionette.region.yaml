@@ -1,73 +1,124 @@
 name: Region
+
 namespace: Marionette
-description:
+
+description:|
+
+  The Region is a 'background Class'. Background Classes are named because one doesn't typically
+  instantiate a Background Class. Instead, other Classes extend from, or include the Background
+  Class functionality into their own API.  
+
+  > Long-story short: you shouldn't ever need to call `new Region`. Instead, to create and use Regions you are encouraged to use the Application or LayoutView API.
+
+  Views and Regions go hand-in-hand. They are both used to achieve the goal of presenting
+  content to the viewers of your webapp. But Views and Regions accomplish two distinct tasks to achieve
+  that goal.
+
+  As you might already know, Views render the actual content that you would like to display.
+  But not all Views render content that is attached to the `document`. These views render a detached DOM
+  tree, that isn't visible to the user. This creates a new responsibility: attaching that detached tree
+  to another tree. This is what Regions are for: they serve as a connector between DOM trees.
+
+  In other words, Regions are used to attach views to parent views and also to the `document` of your page
+  itself.
+
+
 examples:
 
-extends:
-  Backbone.Events
+functions:
+  buildRegion:|
+    Returns a new Region from the `regionConfig` object. This is used by the RegionManager to
+    create a new Region instance.
+    
+    @api public
+    @static
+    @param {} regionConfig
+    @param {} DefaultRegionClass
 
-classMethods:
-  buildRegion:
+  _buildRegionFromSelector:|
+    @api private
+    @static
+    @param {} selector
+    @param {} DefaultRegionClass
 
-  _buildRegionFromSelector:
+  _buildRegionFromObject:|
+    @api private
+    @static
+    @param {} regionConfig
+    @param {} DefaultRegionClass
 
-  _buildRegionFromObject:
+  _buildRegionFromRegionClass:|
+    @api private
+    @static
+    @param {} RegionClass
 
-  _buildRegionFromRegionClass:
+  show:|
+    Shows `newView` inside the region if it isn't already shown. The previous view, if one exists,
+    will be destroyed in this process. The `show` methods fires the show and swap triggerMethods.
+    
+    You can modify the behavior of `show` by passing in an options object.
+    
+    `preventDestroy`
+    Pass this as `true` to prevent the destruction of the old view. This is not recommended, as Views
+    are intended to be throwaway objects in Marionette. You are encouraged to only use this option
+    if the View you are rendering is a render-heavy view, such as a large chart or graphic.
+    
+    `forceShow`
+    By default passing the same view to `show` will be a noop; your view will not be rendered, and no
+    events will be fired. Pass `true` for this option to cause the entire show process to happen again,
+    including events and the re-rendering of your view.
+    
+    @api public
+    @static
+    @param {} view
+    @param {} options
 
-instanceMethods:
-  show:
-    api: public
-    params:
-      view:
-        type: Marionette.View
-      options:
-        type: Object
-    returns: this
-    description:
-    example:
+  _ensureElement:|
+    @api private
 
-  _ensureElement:
-    api: private
+  getEl:|
+    Returns the jQuery Object of `el`.
+    Do note that it is not recommended that you override this method because it is ignored in certain circumstances.
+    
+    @api private
+    @param {} el
 
-  getEl:
-    api: private
-    params:
-      el:
-        type: Element
+  attachHtml:|
+    This method determines how the view's html is attached to the Region's element. The default
+    method is using append. You can override this if you would like to, for instance, specify that
+    the view's element fade in to view.
+    
+    Note that the creation of an animated region is a more involved process than just this. For more,
+    refer to the guide on animated regions.
+    
+    @api private
+    @param {} view
 
-  attachHtml:
-    api: private
-    params:
-      view:
-        type: Marionette.View
+  empty:|
+    Empty calls `destroy` on the `currentView`. This has the consequence of clearing the contents
+    of the Region.
+    
+    @api public
 
-  empty:
-    api: public
-    returns: this
+  _destroyView:|
+    @api private
 
-  _destroyView:
-    api: private
+  attachView:|
+    Associate a new view with the region by setting the region's value of `currentView`. This will not call render,
+    show, or fire any events.
+    
+    @api private
+    @param {} view
 
-  attachView:
-    api: private
-    params:
-      view:
-        type: Marionette.View
+  hasView:|
+    @api public
 
-  hasView:
-    api: public
-    returns: Boolean
-
-  reset:
-    api: public
-    returns: this
-
-  getOption:
-    api: private
-
-  triggerMethod:
-    api: private
-
-properties:
-  currentView:
+  reset:|
+    Reset the region by calling `empty`, which destroys its view and clears its content. It then deletes
+    the cached `$el` property. Finally it sets `this.el` to the value of the selector string of the old
+    element.
+    
+    This prepares the Region to be 're-initialized' with a new element based on the old selector
+    string, and is used by the LayoutView when it re-renders itself.
+    
+    @api private

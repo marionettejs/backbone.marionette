@@ -184,8 +184,29 @@ Marionette.Region.prototype.attachHtml = function(view){
 }
 ```
 
-This example will cause a view to slide down from the top
-of the region, instead of just appearing in place.
+It is also possible to define a custom render method for a single region by
+extending from the Region class and including a custom attachHtml method.
+
+This example will make a view slide down from the top of the screen instead of just
+appearing in place:
+
+```js
+var ModalRegion = Marionette.Region.extend({
+  attachHtml: function(view){
+    // Some effect to show the view:
+    this.$el.empty().append(view.el);
+    this.$el.hide().slideDown('fast');
+  }
+})
+
+MyApp.addRegions({
+  mainRegion: '#main-region',
+  modalRegion: {
+    regionClass: ModalRegion,
+    selector: '#modal-region'
+  }
+})
+```
 
 ### Attach Existing View
 

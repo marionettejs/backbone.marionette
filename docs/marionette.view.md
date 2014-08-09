@@ -414,13 +414,14 @@ A `templateHelpers` attribute can be applied to any View object that
 renders a template. When this attribute is present its contents
 will be mixed in to the data object that comes back from the
 `serializeData` method. This will allow you to create helper methods
-that can be called from within your templates.
+that can be called from within your templates. This is also a good place
+to add data not returned from `serializeData`, such as calculated values.
 
 ### Basic Example
 
 ```html
 <script id="my-template" type="text/html">
-  I think that <%= showMessage() %>
+  I <%= percent %>% think that <%= showMessage() %>
 </script>
 ```
 
@@ -428,20 +429,26 @@ that can be called from within your templates.
 var MyView = Backbone.Marionette.ItemView.extend({
   template: "#my-template",
 
-  templateHelpers: {
-    showMessage: function(){
-      return this.name + " is the coolest!"
-    }
-  }
+  templateHelpers: function () {
+    return {
+      showMessage: function(){
+        return this.name + " is the coolest!";
+      },
 
+      percent: this.model.get('decimal') * 100
+    };
+  }
 });
 
-var model = new Backbone.Model({name: "Backbone.Marionette"});
+var model = new Backbone.Model({
+  name: "Backbone.Marionette",
+  decimal: 1
+});
 var view = new MyView({
   model: model
 });
 
-view.render(); //=> "I think that Backbone.Marionette is the coolest!";
+view.render(); //=> "I 100% think that Backbone.Marionette is the coolest!";
 ```
 
 The `templateHelpers` can also be provided as a constructor parameter

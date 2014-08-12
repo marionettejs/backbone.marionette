@@ -12,17 +12,34 @@ function throwError(message, name) {
   throw error;
 }
 
-// Marionette.extend
-// -----------------
-
-// Borrow the Backbone `extend` method so we can use it as needed
+/**
+ * Proxies Backbone.Model.extend
+ *
+ * To create a derived class of your own, extend an existing class,
+ * providing instance properties, protoProps, as well as optional
+ * class properties, staticProps to be attached directly to the
+ * new class's constructor function. This does not modify the existing class.
+ *
+ * @this A constructor function
+ * @param {Object} protoProps - Properties to add to the prototype of the new class
+ * @param {Object} staticProps - Properties to add to the constructor of the new class
+ * @returns {Function} A new class created by adding the new properties to the existing class
+ * @public
+ */
 Marionette.extend = Backbone.Model.extend;
 
-// Marionette.getOption
-// --------------------
 
-// Retrieve an object, function or other value from a target
-// object or its `options`, with `options` taking precedence.
+/**
+ * Obtain optionName from the target, if it exists.
+ * First, it looks for target.options[optionName].
+ * If that doesn't exist it looks for target[optionName].
+ * It returns the first that it finds, returning undefined if nothing is found.
+ *
+ * @param {Object} target - The object to get the value from
+ * @param {String} optionName - The name of the property to return from the target or its options
+ * @returns {*} The value read from target.options or target
+ * @public
+ */
 Marionette.getOption = function(target, optionName) {
   if (!target || !optionName) { return; }
   var value;
@@ -36,16 +53,43 @@ Marionette.getOption = function(target, optionName) {
   return value;
 };
 
-// Proxy `Marionette.getOption`
+/**
+ * Convenience method to add Marionette.getOption to an object.
+ * Used on the prototypes of the Marionette Classes.
+ *
+ * @this {Object} Passed to Marionette.getOption as target
+ * @param {String} optionName - Passed to Marionette.getOption as optionName
+ * @returns {*} The value read from this or this.options
+ * @public
+ */
 Marionette.proxyGetOption = function(optionName) {
   return Marionette.getOption(this, optionName);
 };
 
-// Marionette.normalizeMethods
-// ----------------------
-
-// Pass in a mapping of events => functions or function names
-// and return a mapping of events => functions
+/**
+ * Converts a hash that maps strings to method names to a map of strings or
+ * functions to the actual methods on this.
+ * If the method does not exist on then that key-value pair will be dropped.
+ * The normalized hash is returned.
+ *
+ * Used on the prototypes of the Marionette Classes.
+ *
+ * @example
+ * // The following hash:
+ * var hash = {
+ *   'some:event': 'myCallback'
+ * };
+ *
+ * // would be converted to:
+ * var hash = {
+ *   'some:event': this.myCallback
+ * };
+ *
+ * @this {Object} - The context to extract functions from, given a function name
+ * @param {Object} - The mapping of events => functions or function names to transform
+ * @returns {Object} - The mapping of events => functions resulting from the transform
+ * @public
+ */
 Marionette.normalizeMethods = function(hash) {
   var normalizedHash = {};
   _.each(hash, function(method, name) {
@@ -61,9 +105,22 @@ Marionette.normalizeMethods = function(hash) {
 };
 
 
-// allows for the use of the @ui. syntax within
-// a given key for triggers and events
-// swaps the @ui with the associated selector
+/**
+ * Used internally by Views to parse the @ui syntax in a hash of DOM events.
+ * It works by replacing the @ui reference with the corresponding element from the View's ui hash.
+ *
+ * @example
+ *
+ * // would be transformed to reference the element specified as view.ui.myButton.
+ * var hash = {
+ *  'click {@literal @}ui.myButton': 'onClickMyButton'
+ * };
+ *
+ * @param {Object} hash - The object whose keys will be substituted
+ * @param {Object} ui - The mapping of @ui.name => substitution to replace
+ * @returns {Object} hash with the substitutions contained in ui
+ * @public
+ */
 Marionette.normalizeUIKeys = function(hash, ui) {
   if (typeof(hash) === 'undefined') {
     return;
@@ -82,10 +139,16 @@ Marionette.normalizeUIKeys = function(hash, ui) {
   return hash;
 };
 
-// Mix in methods from Underscore, for iteration, and other
-// collection related features.
-// Borrowing this code from Backbone.Collection:
-// http://backbonejs.org/docs/backbone.html#section-121
+/**
+ * Mixes in a number of Underscore methods for working with Collections to the object,
+ * binding their context to the listProperty.
+ * This is similar to how Backbone.Collection has Underscore methods on the prototype
+ * that execute with the models of the Collection as the context.
+ *
+ * @param {Object} object - The object to place the methods on
+ * @param {String} listProperty - The property on object that will be the target of the methods
+ * @public
+ */
 Marionette.actAsCollection = function(object, listProperty) {
   var methods = ['forEach', 'each', 'map', 'find', 'detect', 'filter',
     'select', 'reject', 'every', 'all', 'some', 'any', 'include',

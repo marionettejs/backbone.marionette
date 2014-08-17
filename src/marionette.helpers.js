@@ -63,12 +63,22 @@ Marionette.normalizeMethods = function(hash) {
 
 // allows for the use of the @ui. syntax within
 // a given key for triggers and events
-// swaps the @ui with the associated selector
+// swaps the @ui with the associated selector.
+// Returns a new, non-mutated, parsed events hash.
 Marionette.normalizeUIKeys = function(hash, ui) {
   if (typeof(hash) === 'undefined') {
     return;
   }
 
+  if (_.isFunction(hash)) {
+    hash = hash.call(this);
+  }
+
+  if (_.isFunction(ui)) {
+    ui = ui.call(this);
+  }
+
+  hash = _.clone(hash);
   _.each(_.keys(hash), function(v) {
     var pattern = /@ui\.[a-zA-Z_$0-9]*/g;
     if (v.match(pattern)) {

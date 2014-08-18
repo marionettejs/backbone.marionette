@@ -1,3 +1,5 @@
+/* jshint maxstatements: 27 */
+
 // Marionette.RegionManager
 // ------------------------
 //
@@ -53,6 +55,11 @@ Marionette.RegionManager = (function(Marionette) {
       this._store(name, region);
 
       this.triggerMethod('add:region', name, region);
+
+      if (region.on) {
+        this.listenTo(region, 'all', this._onRegionEvent);
+      }
+
       return region;
     },
 
@@ -115,6 +122,7 @@ Marionette.RegionManager = (function(Marionette) {
       this.triggerMethod('before:remove:region', name, region);
       region.empty();
       region.stopListening();
+      this.off(region);
       delete this._regions[name];
       this._setLength();
       this.triggerMethod('remove:region', name, region);
@@ -123,8 +131,11 @@ Marionette.RegionManager = (function(Marionette) {
     // set the number of regions current held
     _setLength: function() {
       this.length = _.size(this._regions);
-    }
+    },
 
+    _onRegionEvent: function() {
+      this.trigger.apply(this, arguments);
+    }
   });
 
   Marionette.actAsCollection(RegionManager.prototype, '_regions');

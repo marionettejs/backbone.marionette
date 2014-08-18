@@ -17,12 +17,16 @@ describe('application regions', function() {
         fooRegion: '#foo-region',
         barRegion: '#bar-region'
       });
+
       this.app.start();
     });
 
     it('should initialize the regions', function() {
-      expect(this.app.fooRegion).to.deep.equal(this.fooRegion);
-      expect(this.app.barRegion).to.deep.equal(this.barRegion);
+      expect(this.app.fooRegion)
+      .to.be.instanceOf(Marionette.Region);
+
+      expect(this.app.barRegion)
+      .to.be.instanceOf(Marionette.Region);
     });
 
     it('should trigger a before:add:region event', function() {
@@ -74,7 +78,7 @@ describe('application regions', function() {
     });
 
     it('should initialize the regions, immediately', function() {
-      expect(this.app.fooRegion).to.deep.equal(this.fooRegion);
+      expect(this.app.fooRegion).to.be.instanceOf(Marionette.Region);
     });
 
     it('should create an instance of the specified region class', function() {
@@ -336,7 +340,7 @@ describe('application regions', function() {
     });
 
     it('should initialize the regions, immediately', function() {
-      expect(this.app.fooRegion).to.deep.equal(this.fooRegion);
+      expect(this.app.fooRegion).to.be.instanceOf(Marionette.Region);
     });
 
     it('should create an instance of the specified region class', function() {
@@ -377,13 +381,13 @@ describe('application regions', function() {
     });
 
     it('returns all the created regions on an object literal', function() {
-      expect(this.app.fooRegion).to.deep.equal(this.fooRegion);
-      expect(this.app.barRegion).to.deep.equal(this.barRegion);
+      expect(this.app.fooRegion).to.be.instanceOf(Marionette.Region);
+      expect(this.app.barRegion).to.be.instanceOf(Marionette.Region);
     });
 
     it('initializes all the regions immediately', function() {
-      expect(this.app.getRegion('fooRegion')).to.deep.equal(this.fooRegion);
-      expect(this.app.getRegion('barRegion')).to.deep.equal(this.barRegion);
+      expect(this.app.getRegion('fooRegion')).to.be.instanceOf(Marionette.Region);
+      expect(this.app.getRegion('barRegion')).to.be.instanceOf(Marionette.Region);
     });
 
     it('uses the custom regionClass', function() {
@@ -401,7 +405,7 @@ describe('application regions', function() {
     });
 
     it('should make the region available as a named attribute', function() {
-      expect(this.app.fooRegion).to.deep.equal(this.fooRegion);
+      expect(this.app.fooRegion).to.be.instanceOf(Marionette.Region);
     });
 
     it('should be able to retrieve the region', function() {

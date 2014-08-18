@@ -36,13 +36,13 @@ describe('layoutView - dynamic regions', function() {
     });
 
     it('returns all the created regions on an object literal', function() {
-      expect(this.app.fooRegion).to.deep.equal(this.fooRegion);
-      expect(this.app.barRegion).to.deep.equal(this.barRegion);
+      expect(this.app.fooRegion).to.be.instanceOf(Marionette.Region);
+      expect(this.app.barRegion).to.be.instanceOf(Marionette.Region);
     });
 
     it('initializes all the regions immediately', function() {
-      expect(this.app.getRegion('fooRegion')).to.deep.equal(this.fooRegion);
-      expect(this.app.getRegion('barRegion')).to.deep.equal(this.barRegion);
+      expect(this.app.getRegion('fooRegion')).to.be.instanceOf(Marionette.Region);
+      expect(this.app.getRegion('barRegion')).to.be.instanceOf(Marionette.Region);
     });
 
     it('uses the custom regionClass', function() {

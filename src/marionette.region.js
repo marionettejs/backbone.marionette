@@ -139,12 +139,16 @@ _.extend(Marionette.Region.prototype, Backbone.Events, {
     // only destroy the view if we don't want to preventDestroy and the view is different
     var _shouldDestroyView = !preventDestroy && isDifferentView;
 
+    // show the view if the view is different or if you want to re-show the view
+    var _shouldShowView = isDifferentView || forceShow;
+
+    if (isChangingView) {
+      this.triggerMethod('before:swapOut', this.currentView);
+    }
+
     if (_shouldDestroyView) {
       this.empty();
     }
-
-    // show the view if the view is different or if you want to re-show the view
-    var _shouldShowView = isDifferentView || forceShow;
 
     if (_shouldShowView) {
 
@@ -162,6 +166,10 @@ _.extend(Marionette.Region.prototype, Backbone.Events, {
 
       this.triggerMethod('before:show', view);
       Marionette.triggerMethodOn(view, 'before:show');
+
+      if (isChangingView) {
+        this.triggerMethod('swapOut', this.currentView);
+      }
 
       this.attachHtml(view);
       this.currentView = view;

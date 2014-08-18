@@ -88,7 +88,9 @@ describe('region', function() {
       this.MyRegion = Backbone.Marionette.Region.extend({
         el: '#region',
         onShow: function() {},
-        onSwap: function() {}
+        onSwap: function() {},
+        onBeforeSwapOut: function() {},
+        onSwapOut: function() {}
       });
 
       this.MyView = Backbone.View.extend({
@@ -118,6 +120,8 @@ describe('region', function() {
       this.sinon.spy(this.myRegion, 'onShow');
       this.attachHtmlSpy = this.sinon.spy(this.myRegion, 'attachHtml');
       this.swapSpy = this.sinon.spy(this.myRegion, 'onSwap');
+      this.onBeforeSwapOutSpy = this.sinon.spy(this.myRegion, 'onBeforeSwapOut');
+      this.onSwapOutSpy = this.sinon.spy(this.myRegion, 'onSwapOut');
 
       this.myRegion.on('show', this.showSpy);
       this.myRegion.on('before:show', this.regionBeforeShowSpy);
@@ -189,15 +193,23 @@ describe('region', function() {
     });
 
     it('should not trigger a before swap event for the region', function() {
-      expect(this.regionBeforeSwapSpy.callCount).to.equal(0);
+      expect(this.regionBeforeSwapSpy).to.have.not.been.called;
+    });
+
+    it('should not trigger a beforeSwapOut event for the region', function() {
+      expect(this.onBeforeSwapOutSpy).to.have.not.been.called;
+    });
+
+    it('should not trigger a swapOut event for the region', function() {
+      expect(this.onSwapOutSpy).to.have.not.been.called;
     });
 
     it('should not trigger a swap event for the region', function() {
-      expect(this.regionSwapSpy.callCount).to.equal(0);
+      expect(this.regionSwapSpy).to.have.not.been.called;
     });
 
     it('should not call the `onSwap` function on the region', function() {
-      expect(this.swapSpy.callCount).to.equal(0);
+      expect(this.swapSpy).to.have.not.been.called;
     });
 
     it('should return the region', function() {
@@ -235,8 +247,19 @@ describe('region', function() {
         expect(this.swapSpy).to.have.been.calledOn(this.myRegion);
       });
 
-      it('should stil have a view', function() {
+      it('should still have a view', function() {
         expect(this.myRegion.hasView()).to.equal(true);
+      });
+
+      it('should trigger a beforeSwapOut event for the region', function() {
+        expect(this.onBeforeSwapOutSpy)
+        .to.have.been.calledOnce
+        .and.to.have.been.calledOn(this.myRegion);
+      });
+
+      it('should trigger a swapOut event for the region', function() {
+        expect(this.onSwapOutSpy).to.have.been.calledOnce
+        .and.to.have.been.calledOn(this.myRegion);
       });
     });
 

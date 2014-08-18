@@ -4,10 +4,9 @@
 // Manage one or more related `Marionette.Region` objects.
 Marionette.RegionManager = (function(Marionette) {
 
-  var RegionManager = Marionette.Controller.extend({
-    constructor: function(options) {
+  var RegionManager = Marionette.Object.extend({
+    initialize: function(options) {
       this._regions = {};
-      Marionette.Controller.call(this, options);
     },
 
     // Add multiple regions using an object literal or a

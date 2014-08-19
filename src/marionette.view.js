@@ -79,36 +79,7 @@ Marionette.View = Backbone.View.extend({
     // Configure the triggers, prevent default
     // action and stop propagation of DOM events
     _.each(triggers, function(value, key) {
-
-      var hasOptions = _.isObject(value);
-      var eventName = hasOptions ? value.event : value;
-
-      // build the event handler function for the DOM event
-      triggerEvents[key] = function(e) {
-
-        // stop the event in its tracks
-        if (e) {
-          var prevent = e.preventDefault;
-          var stop = e.stopPropagation;
-
-          var shouldPrevent = hasOptions ? value.preventDefault : prevent;
-          var shouldStop = hasOptions ? value.stopPropagation : stop;
-
-          if (shouldPrevent && prevent) { prevent.apply(e); }
-          if (shouldStop && stop) { stop.apply(e); }
-        }
-
-        // build the args for the event
-        var args = {
-          view: this,
-          model: this.model,
-          collection: this.collection
-        };
-
-        // trigger the event
-        this.triggerMethod(eventName, args);
-      };
-
+      triggerEvents[key] = this._buildViewTrigger(value);
     }, this);
 
     return triggerEvents;
@@ -136,9 +107,10 @@ Marionette.View = Backbone.View.extend({
     // look up if this view has behavior events
     var behaviorEvents = _.result(this, 'behaviorEvents') || {};
     var triggers = this.configureTriggers();
+    var behaviorTriggers = _.result(this, 'behaviorTriggers') || {};
 
-    // behavior events will be overridden by view events and or triggers
-    _.extend(combinedEvents, behaviorEvents, events, triggers);
+    // behavior events will be overriden by view events and or triggers
+    _.extend(combinedEvents, behaviorEvents, events, triggers, behaviorTriggers);
 
     Backbone.View.prototype.delegateEvents.call(this, combinedEvents);
   },
@@ -236,6 +208,39 @@ Marionette.View = Backbone.View.extend({
     // reset the ui element to the original bindings configuration
     this.ui = this._uiBindings;
     delete this._uiBindings;
+  },
+
+  // Internal method to create an event handler for a given `triggerDef` like
+  // 'click:foo'
+  _buildViewTrigger: function(triggerDef) {
+    var hasOptions = _.isObject(triggerDef);
+
+    var options = _.defaults({}, (hasOptions ? triggerDef : {}), {
+      preventDefault: true,
+      stopPropagation: true
+    });
+
+    var eventName = hasOptions ? options.event : triggerDef;
+
+    return function(e) {
+      if (e) {
+        if (e.preventDefault && options.preventDefault) {
+          e.preventDefault();
+        }
+
+        if (e.stopPropagation && options.stopPropagation) {
+          e.stopPropagation();
+        }
+      }
+
+      var args = {
+        view: this,
+        model: this.model,
+        collection: this.collection
+      };
+
+      this.triggerMethod(eventName, args);
+    };
   },
 
   // import the `triggerMethod` to trigger events with corresponding

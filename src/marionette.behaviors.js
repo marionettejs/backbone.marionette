@@ -87,6 +87,11 @@ Marionette.Behaviors = (function(Marionette, _) {
       return this;
     },
 
+    behaviorTriggers: function(behaviorTriggers, behaviors) {
+      var triggerBuilder = new BehaviorTriggersBuilder(this, behaviors);
+      return triggerBuilder.buildBehaviorTriggers();
+    },
+
     behaviorEvents: function(behaviorEvents, behaviors) {
       var _behaviorsEvents = {};
       var viewUI = _.result(this, 'ui');
@@ -180,6 +185,44 @@ Marionette.Behaviors = (function(Marionette, _) {
       _.each(methodNames, function(methodName) {
         view[methodName] = _.partial(methods[methodName], view[methodName], behaviors);
       });
+    }
+  });
+
+  // Class to build handlers for `triggers` on behaviors
+  // for views
+  function BehaviorTriggersBuilder(view, behaviors) {
+    this._view      = view;
+    this._viewUI    = _.result(view, 'ui');
+    this._behaviors = behaviors;
+    this._triggers  = {};
+  }
+
+  _.extend(BehaviorTriggersBuilder.prototype, {
+    // Main method to build the triggers hash with event keys and handlers
+    buildBehaviorTriggers: function() {
+      _.each(this._behaviors, this._buildTriggerHandlersForBehavior, this);
+      return this._triggers;
+    },
+
+    // Internal method to build all trigger handlers for a given behavior
+    _buildTriggerHandlersForBehavior: function(behavior, i) {
+      var ui = _.extend({}, this._viewUI, _.result(behavior, 'ui'));
+      var triggersHash = _.clone(_.result(behavior, 'triggers')) || {};
+
+      triggersHash = Marionette.normalizeUIKeys(triggersHash, ui);
+
+      _.each(triggersHash, _.partial(this._setHandlerForBehavior, behavior, i), this);
+    },
+
+    // Internal method to create and assign the trigger handler for a given
+    // behavior
+    _setHandlerForBehavior: function(behavior, i, eventName, trigger) {
+      // Unique identifier for the `this._triggers` hash
+      var triggerKey = trigger.replace(/^\S+/, function(triggerName) {
+        return triggerName + '.' + 'behaviortriggers' + i;
+      });
+
+      this._triggers[triggerKey] = this._view._buildViewTrigger(eventName);
     }
   });
 

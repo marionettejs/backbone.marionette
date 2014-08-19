@@ -139,13 +139,13 @@ literal. This will be passed to the constructor of your childView as part
 of the `options`.
 
 ```js
-var ChildView = Backbone.Marionette.ItemView({
+var ChildView = Backbone.Marionette.ItemView.extend({
   initialize: function(options) {
     console.log(options.foo); // => "bar"
   }
 });
 
-var CollectionView = Backbone.Marionette.CollectionView({
+var CollectionView = Backbone.Marionette.CollectionView.extend({
   childView: ChildView,
 
   childViewOptions: {
@@ -161,7 +161,7 @@ the function should you need access to it when calculating
 of the object will be copied to the `childView` instance's options.
 
 ```js
-var CollectionView = Backbone.Marionette.CollectionView({
+var CollectionView = Backbone.Marionette.CollectionView.extend({
   childViewOptions: function(model, index) {
     // do some calculations based on the model
     return {

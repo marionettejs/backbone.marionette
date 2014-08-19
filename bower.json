@@ -23,6 +23,7 @@
     ".travis.yml",
     ".editorconfig",
     ".jshintc",
+    "jsdoc",
     "build",
     "build.cmd",
     "Gruntfile.js",

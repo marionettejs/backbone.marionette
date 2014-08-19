@@ -15,9 +15,9 @@ Marionette.Behaviors = (function(Marionette, _) {
     // or it can be a function that returns an object.
     behaviors = Behaviors.parseBehaviors(view, behaviors || _.result(view, 'behaviors'));
 
-    // Wraps several of the view's methods
-    // calling the methods first on each behavior
-    // and then eventually calling the method on the view.
+    // Wraps several of the view's methods calling the
+    // method first on the view and then calling the method
+    // on each behavior.
     Behaviors.wrap(view, behaviors, _.keys(methods));
   }
 
@@ -50,12 +50,12 @@ Marionette.Behaviors = (function(Marionette, _) {
 
     bindUIElements: function(bindUIElements, behaviors) {
       bindUIElements.apply(this);
-      _.invoke(behaviors, bindUIElements);
+      _.invoke(behaviors, 'bindUIElements');
     },
 
     unbindUIElements: function(unbindUIElements, behaviors) {
       unbindUIElements.apply(this);
-      _.invoke(behaviors, unbindUIElements);
+      _.invoke(behaviors, 'unbindUIElements');
     },
 
     triggerMethod: function(triggerMethod, behaviors) {

@@ -30,6 +30,8 @@ Marionette.Behavior = (function(_, Backbone) {
 
   _.extend(Behavior.prototype, Backbone.Events, {
     initialize: function() {},
+    bindUIElements: function() {},
+    unbindUIElements: function() {},
 
     // stopListening to behavior `onListen` events.
     destroy: function() {

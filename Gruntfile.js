@@ -202,6 +202,20 @@ module.exports = function(grunt) {
       }
     },
 
+    jsDocFiles: {
+     docs: {
+        options: {
+        },
+        files: [{
+          expand: true,
+          cwd: 'api',
+          src: '*.jsdoc',
+          dest: 'jsdoc',
+          ext: '.json'
+        }]
+      }
+    },
+
     watch: {
       marionette : {
         options: {
@@ -243,6 +257,8 @@ module.exports = function(grunt) {
       }
     }
   });
+
+  grunt.loadTasks('tasks');
 
   grunt.registerMultiTask('unwrap', 'Unwrap UMD', function () {
     var done = this.async();
@@ -295,6 +311,8 @@ module.exports = function(grunt) {
   grunt.registerTask('coverage', ['unwrap', 'preprocess:bundle', 'template:bundle', 'env:coverage', 'instrument', 'mochaTest', 'storeCoverage', 'makeReport', 'coveralls']);
 
   grunt.registerTask('dev', 'Auto-lints while writing code.', ['test', 'watch:marionette']);
+
+  grunt.registerTask('api', 'Build jsdoc api files', ['jsDocFiles']);
 
   grunt.registerTask('build', 'Build all three versions of the library.', ['clean:lib', 'bower:install', 'lint', 'unwrap', 'preprocess', 'template', 'mochaTest', 'concat', 'uglify']);
 };

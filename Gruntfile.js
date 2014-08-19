@@ -1,5 +1,8 @@
 var path = require('path');
 var unwrap = require('unwrap');
+var dox = require('dox');
+var _ = require('underscore');
+var yaml = require('js-yaml')
 
 module.exports = function(grunt) {
 
@@ -202,6 +205,20 @@ module.exports = function(grunt) {
       }
     },
 
+    jsDocFiles: {
+     docs: {
+        options: {
+        },
+        files: [{
+          expand: true,
+          cwd: 'api',
+          src: '*.jsdoc',
+          dest: 'jsdoc',
+          ext: '.json'
+        }]
+      }
+    },
+
     watch: {
       marionette : {
         options: {
@@ -262,6 +279,39 @@ module.exports = function(grunt) {
     });
   });
 
+  grunt.registerMultiTask('jsDocFiles', function() {
+    this.files.forEach(function(f) {
+      f.src.filter(function(filepath) {
+        return grunt.file.exists(filepath) && !grunt.file.isDir(filepath);
+      }).map(function(filepath) {
+
+        // read yaml file
+        var file = grunt.file.read(filepath);
+
+        try {
+          var json = yaml.safeLoad(file);
+        } catch (err){ 
+          grunt.fail.fatal(err.name + ":\n"+  err.reason + "\n\n" + err.mark);
+        }
+        
+        // parse jsDoc comment
+        _.each(json.functions, function(docString, name) {
+          var doc = dox.parseComment(docString);
+
+          var tags = doc.tags || [];
+          doc.api = _.findWhere(tags, {type: 'api'});
+          doc.params = _.where(tags, {type: 'param'});
+          
+          json.functions[name] = doc;
+        });
+
+        // write parsed api to file
+        var prettyJSON = JSON.stringify(json, undefined, 2);
+        grunt.file.write(f.dest, prettyJSON);
+      });
+    });
+  });
+
   grunt.registerTask('verify-bower', function () {
     if (!grunt.file.isDir('./bower_components')) {
       grunt.fail.warn('Missing bower components. You should run `bower install` before.');
@@ -295,6 +345,8 @@ module.exports = function(grunt) {
   grunt.registerTask('coverage', ['unwrap', 'preprocess:bundle', 'template:bundle', 'env:coverage', 'instrument', 'mochaTest', 'storeCoverage', 'makeReport', 'coveralls']);
 
   grunt.registerTask('dev', 'Auto-lints while writing code.', ['test', 'watch:marionette']);
+
+  grunt.registerTask('api', 'Build jsdoc api files', ['jsDocFiles']);
 
   grunt.registerTask('build', 'Build all three versions of the library.', ['clean:lib', 'bower:install', 'lint', 'unwrap', 'preprocess', 'template', 'mochaTest', 'concat', 'uglify']);
 };

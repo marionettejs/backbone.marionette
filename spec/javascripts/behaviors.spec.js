@@ -176,6 +176,51 @@ describe('Behaviors', function() {
     });
   });
 
+  describe('behavior triggers', function() {
+    beforeEach(function() {
+      this.onClickFooStub = this.sinon.stub();
+
+      this.behaviors = {
+        foo: Marionette.Behavior.extend({
+          triggers: { 'click': 'click:foo' },
+          onClickFoo: this.onClickFooStub
+        })
+      };
+
+      this.model      = new Backbone.Model();
+      this.collection = new Backbone.Collection();
+
+      this.View = Marionette.ItemView.extend({
+        behaviors: { foo: {} }
+      });
+
+      Marionette.Behaviors.behaviorsLookup = this.behaviors;
+
+      this.view = new this.View({
+        model: this.model,
+        collection: this.collection
+      });
+
+      this.triggerMethodSpy = this.sinon.spy();
+
+      this.view.on('click:foo', this.triggerMethodSpy);
+
+      this.view.$el.click();
+    });
+
+    it('calls `triggerMethod` with the triggered event', function() {
+      expect(this.triggerMethodSpy)
+        .to.have.been.calledOnce
+        .and.calledOn(this.view);
+    });
+
+    it('calls the triggered method', function() {
+      expect(this.onClickFooStub)
+        .to.have.been.calledOnce
+        .and.have.been.calledOn(sinon.match.instanceOf(this.behaviors.foo));
+    });
+  });
+
   describe('behavior $el', function() {
     beforeEach(function() {
       var suite = this;

@@ -276,7 +276,8 @@ describe('layoutView', function() {
     });
 
     it('should throw an error', function() {
-      expect(this.layoutView.render).to.throw('Cannot use a view thats already been destroyed.');
+      expect(this.layoutView.render).to.throw('View (cid: "' + this.layoutView.cid +
+          '") has already been destroyed and cannot be used.');
     });
   });
 

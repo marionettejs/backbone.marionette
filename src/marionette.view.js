@@ -172,7 +172,7 @@ Marionette.View = Backbone.View.extend({
   // for you. You can specify an `onDestroy` method in your view to
   // add custom code that is called after the view is destroyed.
   destroy: function() {
-    if (this.isDestroyed) { return; }
+    this._ensureViewIsIntact();
 
     var args = slice.call(arguments);
 

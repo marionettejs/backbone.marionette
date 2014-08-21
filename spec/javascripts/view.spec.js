@@ -188,31 +188,6 @@ describe('base view', function() {
     });
   });
 
-  describe('when destroying a view that is already destroyed', function() {
-    beforeEach(function() {
-      this.view = new Marionette.View();
-
-      this.removeSpy = this.sinon.spy(this.view, 'remove');
-      this.destroyStub = this.sinon.stub();
-      this.view.on('destroy', this.destroyStub);
-
-      this.view.destroy();
-      this.view.destroy();
-    });
-
-    it('should not trigger the destroy event', function() {
-      expect(this.destroyStub).to.have.been.calledOnce;
-    });
-
-    it('should not remove the view', function() {
-      expect(this.removeSpy).to.have.been.calledOnce;
-    });
-
-    it('should leave isDestroyed as true', function() {
-      expect(this.view).to.be.have.property('isDestroyed', true);
-    });
-  });
-
   describe("when serializing a model", function(){
     var modelData = { foo: "bar" };
     var model;

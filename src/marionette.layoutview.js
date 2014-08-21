@@ -43,7 +43,7 @@ Marionette.LayoutView = Marionette.ItemView.extend({
 
   // Handle destroying regions, and then destroy the view itself.
   destroy: function() {
-    if (this.isDestroyed) { return this; }
+    this._ensureViewIsIntact();
 
     this.regionManager.destroy();
     return Marionette.ItemView.prototype.destroy.apply(this, arguments);

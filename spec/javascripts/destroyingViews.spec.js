@@ -48,7 +48,8 @@ describe('destroying views', function() {
     });
 
     it('should throw an error', function() {
-      expect(this.itemView.render).to.throw('Cannot use a view thats already been destroyed.');
+      expect(this.itemView.render).to.throw('View (cid: "' + this.itemView.cid +
+          '") has already been destroyed and cannot be used.');
     });
   });
 
@@ -79,7 +80,8 @@ describe('destroying views', function() {
     });
 
     it('should throw an error', function() {
-      expect(this.collectionView.render).to.throw('Cannot use a view thats already been destroyed.');
+      expect(this.collectionView.render).to.throw('View (cid: "' + this.collectionView.cid +
+          '") has already been destroyed and cannot be used.');
     });
   });
 
@@ -110,7 +112,8 @@ describe('destroying views', function() {
     });
 
     it('should throw an error', function() {
-      expect(this.compositeView.render).to.throw('Cannot use a view thats already been destroyed.');
+      expect(this.compositeView.render).to.throw('View (cid: "' + this.compositeView.cid +
+          '") has already been destroyed and cannot be used.');
     });
   });
 });

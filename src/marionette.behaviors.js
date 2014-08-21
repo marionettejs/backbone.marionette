@@ -149,7 +149,7 @@ Marionette.Behaviors = (function(Marionette, _) {
     // }
     // ```
     behaviorsLookup: function() {
-      throw new Error('You must define where your behaviors are stored.' +
+      throwError('You must define where your behaviors are stored. ' +
         'See https://github.com/marionettejs/backbone.marionette' +
         '/blob/master/docs/marionette.behaviors.md#behaviorslookup');
     },

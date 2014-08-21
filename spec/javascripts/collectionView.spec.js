@@ -503,7 +503,8 @@ describe('collection view', function() {
     });
 
     it('should throw an error saying the views been destroyed if render is attempted again', function() {
-      expect(this.collectionView.render).to.throw('Cannot use a view thats already been destroyed.');
+      expect(this.collectionView.render).to.throw('View (cid: "' + this.collectionView.cid +
+          '") has already been destroyed and cannot be used.');
     });
 
     it('should return the collection view', function() {

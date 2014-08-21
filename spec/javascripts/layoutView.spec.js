@@ -165,7 +165,6 @@ describe('layoutView', function() {
 
       this.sinon.spy(this.layoutViewManager, 'destroy');
       this.layoutViewManager.destroy();
-      this.layoutViewManager.destroy();
     });
 
     it('should empty the region managers', function() {

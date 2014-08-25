@@ -16,7 +16,7 @@ function throwError(message, name) {
 // -----------------
 
 // Borrow the Backbone `extend` method so we can use it as needed
-Marionette.extend = Backbone.Model.extend;
+Marionette.extend = Backbone.View.extend;
 
 // Marionette.getOption
 // --------------------

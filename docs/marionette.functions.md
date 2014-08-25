@@ -55,7 +55,8 @@ the object's `this.options`, with `this.options` taking precedence.
 var M = Backbone.Model.extend({
   foo: "bar",
 
-  initialize: function(){
+  initialize: function(attributes, options){
+    this.options = options;
     var f = Marionette.getOption(this, "foo");
     console.log(f);
   }

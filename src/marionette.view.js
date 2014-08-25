@@ -13,8 +13,6 @@ Marionette.View = Backbone.View.extend({
     // of this.options
     // at some point however this may be removed
     this.options = _.extend({}, _.result(this, 'options'), _.isFunction(options) ? options.call(this) : options);
-    // parses out the @ui DSL for events
-    this.events = this.normalizeUIKeys(_.result(this, 'events'));
 
     this._behaviors = new Marionette.Behaviors(this);
 

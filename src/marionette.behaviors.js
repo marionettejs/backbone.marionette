@@ -1,4 +1,4 @@
-/* jshint maxlen: 143, nonew: false */
+/* jshint maxlen: 143 */
 // Marionette.Behaviors
 // --------
 

@@ -190,9 +190,14 @@ Marionette.View = Backbone.View.extend({
     return this;
   },
 
+  bindUIElements: function() {
+    this._bindUIElements();
+    _.invoke(this._behaviors, this._bindUIElements);
+  },
+
   // This method binds the elements specified in the "ui" hash inside the view's code with
   // the associated jQuery selectors.
-  bindUIElements: function() {
+  _bindUIElements: function() {
     if (!this.ui) { return; }
 
     // store the ui hash in _uiBindings so they can be reset later
@@ -216,6 +221,11 @@ Marionette.View = Backbone.View.extend({
 
   // This method unbinds the elements specified in the "ui" hash
   unbindUIElements: function() {
+    this._unbindUIElements();
+    _.invoke(this._behaviors, this._unbindUIElements);
+  },
+
+  _unbindUIElements: function() {
     if (!this.ui || !this._uiBindings) { return; }
 
     // delete all of the existing ui bindings

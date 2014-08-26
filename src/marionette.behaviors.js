@@ -54,15 +54,6 @@ Marionette.Behaviors = (function(Marionette, _) {
       return this;
     },
 
-    triggerMethod: function(triggerMethod, behaviors) {
-      var args = _.tail(arguments, 2);
-      triggerMethod.apply(this, args);
-
-      _.each(behaviors, function(b) {
-        triggerMethod.apply(b, args);
-      });
-    },
-
     delegateEvents: function(delegateEvents, behaviors) {
       var args = _.tail(arguments, 2);
       delegateEvents.apply(this, args);

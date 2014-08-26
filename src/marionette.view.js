@@ -159,7 +159,9 @@ Marionette.View = Backbone.View.extend({
   // Internal helper method to verify whether the view hasn't been destroyed
   _ensureViewIsIntact: function() {
     if (this.isDestroyed) {
-      throwError('Cannot use a view thats already been destroyed.', 'ViewDestroyedError');
+      throwError('View (cid: "' + this.cid +
+          '") has already been destroyed and cannot be used.',
+          'ViewDestroyedError');
     }
   },
 

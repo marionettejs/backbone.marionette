@@ -713,11 +713,11 @@ Backbone.Marionette.CollectionView.extend({
   },
 
   // Called after all children have been appended into the elBuffer
-  appendHtml: function(collectionView, buffer) {
+  attachBuffer: function(collectionView, buffer) {
     collectionView.$el.append(buffer);
   },
 
-  // called on initialize and after appendHtml is called
+  // called on initialize and after attachBuffer is called
   initRenderBuffer: function() {
     this.elBuffer = document.createDocumentFragment();
   }

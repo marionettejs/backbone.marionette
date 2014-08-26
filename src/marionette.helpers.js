@@ -70,11 +70,14 @@ Marionette.normalizeUIString = function(uiString, ui) {
 
 // allows for the use of the @ui. syntax within
 // a given key for triggers and events
-// swaps the @ui with the associated selector
+// swaps the @ui with the associated selector.
+// Returns a new, non-mutated, parsed events hash.
 Marionette.normalizeUIKeys = function(hash, ui) {
   if (typeof(hash) === 'undefined') {
     return;
   }
+
+  hash = _.clone(hash);
 
   _.each(_.keys(hash), function(key) {
     var normalizedKey = Marionette.normalizeUIString(key, ui);

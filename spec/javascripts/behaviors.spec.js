@@ -543,6 +543,33 @@ describe('Behaviors', function() {
     });
   });
 
+  describe('behavior triggerMethod calls', function() {
+    beforeEach(function() {
+      this.behaviors = {
+        foo: Marionette.Behavior.extend({
+          onFoo: function() {
+            return "behavior foo";
+          }
+        })
+      };
+      Marionette.Behaviors.behaviorsLookup = this.behaviors;
+
+      this.View = Marionette.View.extend({
+        behaviors: { foo: {} },
+
+        onFoo: function() {
+          return "view foo";
+        }
+      });
+
+      this.view = new this.View();
+    });
+
+    it('onFoo should return "foo"', function() {
+      expect(this.view.triggerMethod('foo')).to.equal('view foo');
+    });
+  });
+
   describe('behavior is evented', function() {
     beforeEach(function() {
       this.listenToStub = this.sinon.stub();

@@ -54,16 +54,6 @@ Marionette.Behaviors = (function(Marionette, _) {
       return this;
     },
 
-    bindUIElements: function(bindUIElements, behaviors) {
-      bindUIElements.apply(this);
-      _.invoke(behaviors, bindUIElements);
-    },
-
-    unbindUIElements: function(unbindUIElements, behaviors) {
-      unbindUIElements.apply(this);
-      _.invoke(behaviors, unbindUIElements);
-    },
-
     triggerMethod: function(triggerMethod, behaviors) {
       var args = _.tail(arguments, 2);
       triggerMethod.apply(this, args);

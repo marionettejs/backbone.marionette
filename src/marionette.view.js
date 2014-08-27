@@ -13,12 +13,8 @@ Marionette.View = Backbone.View.extend({
     // of this.options
     // at some point however this may be removed
     this.options = _.extend({}, _.result(this, 'options'), _.isFunction(options) ? options.call(this) : options);
-    // parses out the @ui DSL for events
-    this.events = this.normalizeUIKeys(_.result(this, 'events'));
 
-    if (_.isObject(this.behaviors)) {
-      new Marionette.Behaviors(this);
-    }
+    this._behaviors = Marionette.Behaviors(this);
 
     Backbone.View.apply(this, arguments);
 
@@ -54,11 +50,20 @@ Marionette.View = Backbone.View.extend({
     return _.extend(target, templateHelpers);
   },
 
-
+  // normalize the keys of passed hash with the views `ui` selectors.
+  // `{"@ui.foo": "bar"}`
   normalizeUIKeys: function(hash) {
     var ui = _.result(this, 'ui');
     var uiBindings = _.result(this, '_uiBindings');
     return Marionette.normalizeUIKeys(hash, uiBindings || ui);
+  },
+
+  // normalize the values of passed hash with the views `ui` selectors.
+  // `{foo: "@ui.bar"}`
+  normalizeUIValues: function(hash) {
+    var ui = _.result(this, 'ui');
+    var uiBindings = _.result(this, '_uiBindings');
+    return Marionette.normalizeUIValues(hash, uiBindings || ui);
   },
 
   // Configure `triggers` to forward DOM events to view
@@ -74,36 +79,7 @@ Marionette.View = Backbone.View.extend({
     // Configure the triggers, prevent default
     // action and stop propagation of DOM events
     _.each(triggers, function(value, key) {
-
-      var hasOptions = _.isObject(value);
-      var eventName = hasOptions ? value.event : value;
-
-      // build the event handler function for the DOM event
-      triggerEvents[key] = function(e) {
-
-        // stop the event in its tracks
-        if (e) {
-          var prevent = e.preventDefault;
-          var stop = e.stopPropagation;
-
-          var shouldPrevent = hasOptions ? value.preventDefault : prevent;
-          var shouldStop = hasOptions ? value.stopPropagation : stop;
-
-          if (shouldPrevent && prevent) { prevent.apply(e); }
-          if (shouldStop && stop) { stop.apply(e); }
-        }
-
-        // build the args for the event
-        var args = {
-          view: this,
-          model: this.model,
-          collection: this.collection
-        };
-
-        // trigger the event
-        this.triggerMethod(eventName, args);
-      };
-
+      triggerEvents[key] = this._buildViewTrigger(value);
     }, this);
 
     return triggerEvents;
@@ -131,9 +107,10 @@ Marionette.View = Backbone.View.extend({
     // look up if this view has behavior events
     var behaviorEvents = _.result(this, 'behaviorEvents') || {};
     var triggers = this.configureTriggers();
+    var behaviorTriggers = _.result(this, 'behaviorTriggers') || {};
 
     // behavior events will be overriden by view events and or triggers
-    _.extend(combinedEvents, behaviorEvents, events, triggers);
+    _.extend(combinedEvents, behaviorEvents, events, triggers, behaviorTriggers);
 
     Backbone.View.prototype.delegateEvents.call(this, combinedEvents);
   },
@@ -154,9 +131,9 @@ Marionette.View = Backbone.View.extend({
   // Internal helper method to verify whether the view hasn't been destroyed
   _ensureViewIsIntact: function() {
     if (this.isDestroyed) {
-      var err = new Error('Cannot use a view thats already been destroyed.');
-      err.name = 'ViewDestroyedError';
-      throw err;
+      throwError('View (cid: "' + this.cid +
+          '") has already been destroyed and cannot be used.',
+          'ViewDestroyedError');
     }
   },
 
@@ -221,6 +198,39 @@ Marionette.View = Backbone.View.extend({
     // reset the ui element to the original bindings configuration
     this.ui = this._uiBindings;
     delete this._uiBindings;
+  },
+
+  // Internal method to create an event handler for a given `triggerDef` like
+  // 'click:foo'
+  _buildViewTrigger: function(triggerDef) {
+    var hasOptions = _.isObject(triggerDef);
+
+    var options = _.defaults({}, (hasOptions ? triggerDef : {}), {
+      preventDefault: true,
+      stopPropagation: true
+    });
+
+    var eventName = hasOptions ? options.event : triggerDef;
+
+    return function(e) {
+      if (e) {
+        if (e.preventDefault && options.preventDefault) {
+          e.preventDefault();
+        }
+
+        if (e.stopPropagation && options.stopPropagation) {
+          e.stopPropagation();
+        }
+      }
+
+      var args = {
+        view: this,
+        model: this.model,
+        collection: this.collection
+      };
+
+      this.triggerMethod(eventName, args);
+    };
   },
 
   // import the `triggerMethod` to trigger events with corresponding

@@ -157,15 +157,15 @@ _.extend(Marionette.Region.prototype, Backbone.Events, {
       view.render();
 
       if (isChangingView) {
+        this.triggerMethod('before:swapOut', this.currentView);
         this.triggerMethod('before:swap', view);
       }
 
       this.triggerMethod('before:show', view);
+      Marionette.triggerMethodOn(view, 'before:show');
 
-      if (_.isFunction(view.triggerMethod)) {
-        view.triggerMethod('before:show');
-      } else {
-        this.triggerMethod.call(view, 'before:show');
+      if (isChangingView) {
+        this.triggerMethod('swapOut', this.currentView);
       }
 
       this.attachHtml(view);
@@ -176,12 +176,7 @@ _.extend(Marionette.Region.prototype, Backbone.Events, {
       }
 
       this.triggerMethod('show', view);
-
-      if (_.isFunction(view.triggerMethod)) {
-        view.triggerMethod('show');
-      } else {
-        this.triggerMethod.call(view, 'show');
-      }
+      Marionette.triggerMethodOn(view, 'show');
 
       return this;
     }

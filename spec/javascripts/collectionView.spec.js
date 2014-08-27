@@ -503,7 +503,8 @@ describe('collection view', function() {
     });
 
     it('should throw an error saying the views been destroyed if render is attempted again', function() {
-      expect(this.collectionView.render).to.throw('Cannot use a view thats already been destroyed.');
+      expect(this.collectionView.render).to.throw('View (cid: "' + this.collectionView.cid +
+          '") has already been destroyed and cannot be used.');
     });
 
     it('should return the collection view', function() {
@@ -1086,4 +1087,19 @@ describe('collection view', function() {
       expect(this.childView.$el).to.contain.$text('bar');
     });
   });
+
+  describe('Creating an invalid collectionView', function() {
+    beforeEach(function() {
+      this.createCollectionView = function() {
+        Backbone.Marionette.CollectionView({
+          collection: []
+        });
+      };
+    });
+
+    it('should warn you of an invalid collectionView', function() {
+      expect(this.createCollectionView).to.throw('The Collection option passed to this view needs to be an instance of a Backbone.Collection');
+    });
+  });
+
 });

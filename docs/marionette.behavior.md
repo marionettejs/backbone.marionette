@@ -9,6 +9,7 @@ A `Behavior` is an  isolated set of DOM / user interactions that can be mixed in
 * [Using Behaviors](#using)
 * [API](#api)
   * [Event proxy](#the-event-proxy)
+  * [Triggers](#triggers)
   * [Model Events](#model-events)
   * [Collection Events](#model-events)
   * [Grouped Behaviors](#grouped-behaviors)
@@ -146,7 +147,7 @@ Nested behaviors act as if they were direct behaviors of the parent behavior's v
 
 ## API
 
-### the event proxy
+### The Event Proxy
 Behaviors are powered by an event proxy. What this means is that any events that are triggered by the view's `triggerMethod` function are passed to each Behavior on the view as well.
 
 As a real world example, whenever in your `view` you would have `onShow`, your behavior can also have this `onShow` method defined. The same follows for `modelEvents` and `collectionEvents`. Think of your behavior as a receiver for all of the events on your view instance.
@@ -159,6 +160,18 @@ Marionette.Behavior.extend({
 	onSomeEvent: function(data) {
 		console.log("wow such data", data);
 	}
+});
+```
+
+### Triggers
+Any `triggers` you define on the `Behavior` will be triggered in response to the
+appropriate event on the view.
+
+```js
+Marionette.Behavior.extend({
+  triggers: {
+    'click .label': 'click:label'
+  }
 });
 ```
 

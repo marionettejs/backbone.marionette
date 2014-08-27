@@ -157,11 +157,16 @@ _.extend(Marionette.Region.prototype, Backbone.Events, {
       view.render();
 
       if (isChangingView) {
+        this.triggerMethod('before:swapOut', this.currentView);
         this.triggerMethod('before:swap', view);
       }
 
       this.triggerMethod('before:show', view);
       Marionette.triggerMethodOn(view, 'before:show');
+
+      if (isChangingView) {
+        this.triggerMethod('swapOut', this.currentView);
+      }
 
       this.attachHtml(view);
       this.currentView = view;

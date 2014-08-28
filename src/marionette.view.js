@@ -245,7 +245,17 @@ Marionette.View = Backbone.View.extend({
 
   // import the `triggerMethod` to trigger events with corresponding
   // methods if the method exists
-  triggerMethod: Marionette.triggerMethod,
+  triggerMethod: function() {
+    var args = arguments;
+    var triggerMethod = Marionette.triggerMethod;
+
+    var ret = triggerMethod.apply(this, args);
+    _.each(this._behaviors, function(b) {
+      triggerMethod.apply(b, args);
+    });
+
+    return ret;
+  },
 
   // Imports the "normalizeMethods" to transform hashes of
   // events=>function references/names to a hash of events=>function references

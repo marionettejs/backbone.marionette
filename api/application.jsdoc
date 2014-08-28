@@ -1,4 +1,4 @@
-name: Appliction
+name: Application
 
 class: Marionette.Application
 

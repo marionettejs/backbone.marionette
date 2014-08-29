@@ -95,12 +95,13 @@ Marionette.View = Backbone.View.extend({
   },
 
   // internal method to delegate DOM events and triggers
-  _delegateDOMEvents: function(events) {
-    events = events || this.events;
+  _delegateDOMEvents: function(eventsArg) {
+    var events = eventsArg || this.events;
     if (_.isFunction(events)) { events = events.call(this); }
 
     // normalize ui keys
     events = this.normalizeUIKeys(events);
+    if(_.isUndefined(eventsArg)) {this.events = events;}
 
     var combinedEvents = {};
 

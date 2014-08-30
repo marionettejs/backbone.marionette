@@ -1,3 +1,5 @@
+## [View the new docs](http://marionettejs.com/docs/marionette.controller.html)
+
 # Marionette.Controller
 
 A Controller is a white-label Marionette Object. Its name can be a cause for

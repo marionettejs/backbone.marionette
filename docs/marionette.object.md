@@ -1,3 +1,5 @@
+## [View the new docs](http://marionettejs.com/docs/marionette.object.html)
+
 # Marionette.Object
 
 A base class which other classes can extend from.

@@ -1,3 +1,5 @@
+## [View the new docs](http://marionettejs.com/docs/marionette.functions.html)
+
 # Marionette functions
 
 Marionette provides a set of utility / helper functions that are used to

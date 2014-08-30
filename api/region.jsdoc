@@ -223,7 +223,6 @@ functions:
     ```
     
     @api public
-    @static
     @param {Marionette.View} view
     @param {Object} options
 

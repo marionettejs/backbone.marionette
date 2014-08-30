@@ -41,6 +41,61 @@ Marionette.Behavior = (function(_, Backbone) {
       this.el = view.el;
     },
 
+    // Internal method to build all trigger handlers
+    _buildTriggers: function(i) {
+      var ui = _.extend({}, _.result(this.view, 'ui'), _.result(this, 'ui'));
+      var triggersHash = _.clone(_.result(this, 'triggers')) || {};
+      this._triggers = {};
+
+      triggersHash = Marionette.normalizeUIKeys(triggersHash, ui);
+
+      _.each(triggersHash, function(eventName, trigger) {
+        // Unique identifier for the `this._triggers` hash
+        var triggerKey = trigger.replace(/^\S+/, function(triggerName) {
+          return triggerName + '.' + 'behaviortriggers' + i;
+        });
+
+        this._triggers[triggerKey] = this.view._buildViewTrigger(eventName);
+      }, this);
+
+      return this._triggers;
+    },
+
+    // internal method to build all event handlers
+    _buildEvents: function(i) {
+      var _events = {};
+      var behaviorEvents = _.clone(_.result(this, 'events')) || {};
+      var behaviorUI = _.result(this, 'ui');
+      var viewUI = _.result(this.view, 'ui');
+
+      // Construct an internal UI hash first using
+      // the views UI hash and then the behaviors UI hash.
+      // This allows the user to use UI hash elements
+      // defined in the parent view as well as those
+      // defined in the given behavior.
+      var ui = _.extend({}, viewUI, behaviorUI);
+
+      // Normalize behavior events hash to allow
+      // a user to use the @ui. syntax.
+      behaviorEvents = Marionette.normalizeUIKeys(behaviorEvents, ui);
+
+      _.each(_.keys(behaviorEvents), function(key) {
+        // Append white-space at the end of each key to prevent behavior key collisions.
+        // This is relying on the fact that backbone events considers "click .foo" the same as
+        // "click .foo ".
+
+        // +2 is used because new Array(1) or 0 is "" and not " "
+        var whitespace = (new Array(i + 2)).join(' ');
+        var eventKey   = key + whitespace;
+        var handler    = _.isFunction(behaviorEvents[key]) ?
+          behaviorEvents[key] : this[behaviorEvents[key]];
+
+        _events[eventKey] = _.bind(handler, this);
+      }, this);
+
+      return _events;
+    },
+
     // import the `triggerMethod` to trigger events with corresponding
     // methods if the method exists
     triggerMethod: Marionette.triggerMethod,

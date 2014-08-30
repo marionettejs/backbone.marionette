@@ -625,7 +625,8 @@ myCollection.add(myModel);
 
 // get the collection view in place
 var colView = new CollectionView({
-  collection: myCollection
+  collection: myCollection,
+  childView: MyItemView
 });
 colView.render();
 

@@ -1,3 +1,5 @@
+## [View the new docs](http://marionettejs.com/docs/marionette.regionmanager.html)
+
 # Marionette.RegionManager
 
 Region managers provide a consistent way to manage

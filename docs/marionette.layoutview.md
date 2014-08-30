@@ -1,3 +1,5 @@
+## [View the new docs](http://marionettejs.com/docs/marionette.layoutview.html)
+
 # Marionette.LayoutView
 
 A `LayoutView` is a hybrid of an `ItemView` and a collection of `Region` objects. They

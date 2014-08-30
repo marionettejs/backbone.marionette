@@ -1,3 +1,5 @@
+## [View the new docs](http://marionettejs.com/docs/marionette.approuter.html)
+
 # Marionette.AppRouter
 
 Reduce the boilerplate code of handling route events and then calling a single method on another object.

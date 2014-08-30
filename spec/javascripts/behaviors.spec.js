@@ -9,7 +9,9 @@ describe('Behaviors', function() {
 
   describe('behavior parsing with a functional behavior lookup', function() {
     beforeEach(function() {
-      this.behaviors = { foo: this.sinon.stub() };
+      this.behaviors = {
+        foo: this.sinon.spy(Marionette, "Behavior")
+      };
       Marionette.Behaviors.behaviorsLookup = _.constant(this.behaviors);
     });
 
@@ -30,7 +32,10 @@ describe('Behaviors', function() {
 
   describe('behavior parsing', function() {
     beforeEach(function() {
-      this.behaviors = { foo: this.sinon.stub() };
+      this.behaviors = {
+        foo: this.sinon.spy(Marionette, "Behavior")
+      };
+
       Marionette.Behaviors.behaviorsLookup = this.behaviors;
     });
 

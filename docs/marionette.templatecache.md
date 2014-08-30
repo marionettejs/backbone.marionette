@@ -1,3 +1,5 @@
+## [View the new docs](http://marionettejs.com/docs/marionette.templatecache.html)
+
 # Marionette.TemplateCache
 
 The `TemplateCache` provides a cache for retrieving templates

@@ -1,3 +1,5 @@
+## [View the new docs](http://marionettejs.com/docs/marionette.behaviors.html)
+
 # Marionette.Behaviors
 
 'Marionette.Behaviors' is a utility class that takes care of glueing your `behavior` instances to their given `View`.

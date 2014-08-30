@@ -1,3 +1,5 @@
+## [View the new docs](http://marionettejs.com/docs/marionette.compositeview.html)
+
 # Marionette.CompositeView
 
 A `CompositeView` extends from `CollectionView` to be used as a

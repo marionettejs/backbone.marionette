@@ -1,3 +1,5 @@
+## [View the new docs](http://marionettejs.com/docs/marionette.configuration.html)
+
 # Marionette Configuration
 
 Marionette has a few globally configurable settings that will

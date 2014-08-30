@@ -1,3 +1,5 @@
+## [View the new docs](http://marionettejs.com/docs/marionette.callbacks.html)
+
 # Marionette.Callbacks
 
 The `Callbacks` object assists in managing a collection of callback

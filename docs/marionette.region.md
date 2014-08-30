@@ -1,3 +1,5 @@
+## [View the new docs](http://marionettejs.com/docs/marionette.region.html)
+
 # Marionette.Region
 
 Regions provide consistent methods to manage, show and destroy

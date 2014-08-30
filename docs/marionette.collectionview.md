@@ -1,3 +1,5 @@
+## [View the new docs](http://marionettejs.com/docs/marionette.collectionview.html)
+
 # Marionette.CollectionView
 
 The `CollectionView` will loop through all of the models in the

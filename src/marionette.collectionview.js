@@ -188,8 +188,12 @@ Marionette.CollectionView = Marionette.View.extend({
   // rendered empty, and then a child is added to the collection.
   destroyEmptyView: function() {
     if (this._showingEmptyView) {
+      this.triggerMethod('before:remove:empty');
+
       this.destroyChildren();
       delete this._showingEmptyView;
+
+      this.triggerMethod('remove:empty');
     }
   },
 

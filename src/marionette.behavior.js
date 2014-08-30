@@ -36,6 +36,11 @@ Marionette.Behavior = (function(_, Backbone) {
       this.stopListening();
     },
 
+    proxyViewProperties: function (view) {
+      this.$el = view.$el;
+      this.el = view.el;
+    },
+
     // import the `triggerMethod` to trigger events with corresponding
     // methods if the method exists
     triggerMethod: Marionette.triggerMethod,

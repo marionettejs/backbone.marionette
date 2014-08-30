@@ -131,8 +131,6 @@ functions:
   getRegions: |
     Get all the regions from the RegionManager. Returns an object literal with named regions as attributes.
 
-    @param {String} name - The name of the region you're trying to get
-
     ```js
     var rm = new Marionette.RegionManager();
     rm.addRegion("foo", "#foo");

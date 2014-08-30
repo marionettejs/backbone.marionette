@@ -356,7 +356,7 @@ Marionette.CollectionView = Marionette.View.extend({
   },
 
   // check if the collection is empty
-  isEmpty: function(collection) {
+  isEmpty: function() {
     return !this.collection || this.collection.length === 0;
   },
 

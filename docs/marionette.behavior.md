@@ -1,3 +1,5 @@
+## [View the new docs](http://marionettejs.com/docs/marionette.behavior.html)
+
 # Marionette.Behavior
 
 

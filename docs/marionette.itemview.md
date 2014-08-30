@@ -1,3 +1,5 @@
+## [View the new docs](http://marionettejs.com/docs/marionette.itemview.html)
+
 # Marionette.ItemView
 
 An `ItemView` is a view that represents a single item. That item may be a

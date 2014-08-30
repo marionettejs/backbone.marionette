@@ -1,3 +1,5 @@
+## [View the new docs](http://marionettejs.com/docs/marionette.renderer.html)
+
 # Marionette.Renderer
 
 The `Renderer` object was extracted from the `ItemView` rendering

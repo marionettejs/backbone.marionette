@@ -1,3 +1,5 @@
+## [View the new docs](http://marionettejs.com/docs/marionette.application.html)
+
 # Marionette.Application
 
 The `Backbone.Marionette.Application` object is the hub of your composite

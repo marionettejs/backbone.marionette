@@ -112,9 +112,15 @@ Marionette.View = Backbone.View.extend({
     var combinedEvents = {};
 
     // look up if this view has behavior events
-    var behaviorEvents = _.result(this, 'behaviorEvents') || {};
     var triggers = this.configureTriggers();
-    var behaviorTriggers = _.result(this, 'behaviorTriggers') || {};
+
+    var behaviorEvents = _.reduce(this._behaviors, function(memo, behavior, i) {
+      return _.extend(memo, behavior._buildEvents(i));
+    }, {});
+
+    var behaviorTriggers = _.reduce(this._behaviors, function(memo, behavior, index) {
+      return _.extend(memo, behavior._buildTriggers(index));
+    }, {});
 
     // behavior events will be overriden by view events and or triggers
     _.extend(combinedEvents, behaviorEvents, events, triggers, behaviorTriggers);

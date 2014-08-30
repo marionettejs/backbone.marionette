@@ -1,3 +1,5 @@
+## [View the new docs](http://marionettejs.com/docs/marionette.view.html)
+
 # Marionette.View
 
 Marionette has a base `Marionette.View` class that other views extend from.

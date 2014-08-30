@@ -91,6 +91,12 @@ Marionette.View = Backbone.View.extend({
     this._delegateDOMEvents(events);
     this.bindEntityEvents(this.model, this.getOption('modelEvents'));
     this.bindEntityEvents(this.collection, this.getOption('collectionEvents'));
+
+    _.each(this._behaviors, function(behavior) {
+      behavior.bindEntityEvents(this.model, behavior.getOption('modelEvents'));
+      behavior.bindEntityEvents(this.collection, behavior.getOption('collectionEvents'));
+    }, this);
+
     return this;
   },
 
@@ -121,8 +127,15 @@ Marionette.View = Backbone.View.extend({
   undelegateEvents: function() {
     var args = slice.call(arguments);
     Backbone.View.prototype.undelegateEvents.apply(this, args);
+
     this.unbindEntityEvents(this.model, this.getOption('modelEvents'));
     this.unbindEntityEvents(this.collection, this.getOption('collectionEvents'));
+
+    _.each(this._behaviors, function(behavior) {
+      behavior.unbindEntityEvents(this.model, behavior.getOption('modelEvents'));
+      behavior.unbindEntityEvents(this.collection, behavior.getOption('collectionEvents'));
+    }, this);
+
     return this;
   },
 
@@ -160,6 +173,13 @@ Marionette.View = Backbone.View.extend({
 
     // remove the view from the DOM
     this.remove();
+
+    // Call destroy on each behavior after
+    // destroying the view.
+    // This unbinds event listeners
+    // that behaviors have registerd for.
+    _.invoke(this._behaviors, 'destroy', args);
+
     return this;
   },
 
@@ -242,6 +262,17 @@ Marionette.View = Backbone.View.extend({
 
       this.triggerMethod(eventName, args);
     };
+  },
+
+  setElement: function() {
+    var ret = Backbone.View.prototype.setElement.apply(this, arguments);
+
+    // proxy behavior $el to the view's $el.
+    // This is needed because a view's $el proxy
+    // is not set until after setElement is called.
+    _.invoke(this._behaviors, 'proxyViewProperties', this);
+
+    return ret;
   },
 
   // import the `triggerMethod` to trigger events with corresponding

@@ -28,56 +28,6 @@ Marionette.Behaviors = (function(Marionette, _) {
   }
 
   var methods = {
-    setElement: function(setElement, behaviors) {
-      setElement.apply(this, _.tail(arguments, 2));
-
-      // proxy behavior $el to the view's $el.
-      // This is needed because a view's $el proxy
-      // is not set until after setElement is called.
-      _.each(behaviors, function(b) {
-        b.$el = this.$el;
-        b.el = this.el;
-      }, this);
-
-      return this;
-    },
-
-    destroy: function(destroy, behaviors) {
-      var args = _.tail(arguments, 2);
-      destroy.apply(this, args);
-
-      // Call destroy on each behavior after
-      // destroying the view.
-      // This unbinds event listeners
-      // that behaviors have registered for.
-      _.invoke(behaviors, 'destroy', args);
-      return this;
-    },
-
-    delegateEvents: function(delegateEvents, behaviors) {
-      var args = _.tail(arguments, 2);
-      delegateEvents.apply(this, args);
-
-      _.each(behaviors, function(b) {
-        Marionette.bindEntityEvents(b, this.model, Marionette.getOption(b, 'modelEvents'));
-        Marionette.bindEntityEvents(b, this.collection, Marionette.getOption(b, 'collectionEvents'));
-      }, this);
-
-      return this;
-    },
-
-    undelegateEvents: function(undelegateEvents, behaviors) {
-      var args = _.tail(arguments, 2);
-      undelegateEvents.apply(this, args);
-
-      _.each(behaviors, function(b) {
-        Marionette.unbindEntityEvents(b, this.model, Marionette.getOption(b, 'modelEvents'));
-        Marionette.unbindEntityEvents(b, this.collection, Marionette.getOption(b, 'collectionEvents'));
-      }, this);
-
-      return this;
-    },
-
     behaviorTriggers: function(behaviorTriggers, behaviors) {
       var triggerBuilder = new BehaviorTriggersBuilder(this, behaviors);
       return triggerBuilder.buildBehaviorTriggers();

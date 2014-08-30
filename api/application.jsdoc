@@ -100,6 +100,28 @@ properties:
           ```
       
 functions:
+  initialize:
+    description: | 
+      If `initialize` is set in the Application class, it will be called when new regions are instantiated.
+      
+      @param {Object} options - The constructor's options
+      
+    examples:
+      - 
+        name: Basic Use
+        example: |
+          The `initialize` function is a good place to put custom, post instantiation class logic.
+           
+          ```js
+          var MyApp = Marionette.Application.extend({
+            initialize: function(options) {
+              console.log(options.container);
+            }
+          });
+          
+          var myApp = new MyApp({container: '#app'});
+          ```
+  
   execute: |
     A convenience method to access the execute method
     on the instance of Backbone.Wreqr.Commands attached to

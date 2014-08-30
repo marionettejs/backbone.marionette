@@ -4,13 +4,19 @@ describe('marionette application', function() {
   describe('when registering an initializer and starting the application', function() {
     beforeEach(function() {
       this.fooOptions = { foo: 'bar' };
-      this.app = new Marionette.Application();
+      this.appOptions = { baz: 'tah' };
+      this.initializeStub = this.sinon.stub(Marionette.Application.prototype, 'initialize');
+      this.app = new Marionette.Application(this.appOptions);
 
       this.triggerSpy = this.sinon.spy(this.app, 'trigger');
       this.initializerStub = this.sinon.stub();
       this.app.addInitializer(this.initializerStub);
 
       this.app.start(this.fooOptions);
+    });
+
+    it('should call initialize', function() {
+      expect(this.initializeStub).to.have.been.calledOn(this.app).and.calledWith(this.appOptions);
     });
 
     it('should notify me before the starts', function() {

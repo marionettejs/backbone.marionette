@@ -62,5 +62,7 @@
   // @include ../marionette.application.js
   // @include ../marionette.module.js
 
+  // @include ../marionette.error.js
+
   return Marionette;
 }));

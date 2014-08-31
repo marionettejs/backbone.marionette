@@ -34,19 +34,13 @@ _.extend(JsDocFilesTask.prototype, {
     var doc = this.grunt.file.read(filepath);
     var json = this.parseYaml(doc);
 
-    json.functions = json.functions || [];
-    json.properties = json.properties || [];
-    json.constructor = json.constructor || "";
+    json.functions = this.buildFunctions(json.functions);
+    json.properties = this.buildProperties(json.properties);
+    json.examples = this.buildExamples(json.examples);
 
     json.description = this.parseDescription(json.description);
 
-    _.each(json.functions, function(value, name) {
-      json.functions[name] = this.parseBody(value, name);
-    }, this);
-
-    _.each(json.properties, function(value, name) {
-      json.properties[name] = this.parseBody(value, name);
-    }, this);
+    json.constructor = json.constructor || "";
 
     json.constructor = this.parseBody(json.constructor, 'constructor');
 
@@ -56,6 +50,37 @@ _.extend(JsDocFilesTask.prototype, {
   parseDescription: function(description) {
     description = description || "";
     return marked(description);
+  },
+
+  buildFunctions: function(functions) {
+    functions = functions || [];
+
+    _.each(functions, function(value, name) {
+      functions[name] = this.parseBody(value, name);
+    }, this);
+
+    return functions
+  },
+
+  buildProperties: function(properties) {
+    properties = properties || [];
+
+    _.each(properties, function(value, name) {
+      properties[name] = this.parseBody(value, name);
+    }, this);
+
+    return properties
+  },
+
+  buildExamples: function(examples) {
+    examples = examples || [];
+
+    _.each(examples, function(value, name) {
+      examples[name] = this.parseBody(value, name);
+    }, this);
+
+    return examples
+>>>>>>> more improevements
   },
 
   /**
@@ -87,6 +112,7 @@ _.extend(JsDocFilesTask.prototype, {
    *          ```
    *
   **/
+
   parseBody: function(value, name) {
     var result = {};
 
@@ -126,7 +152,6 @@ _.extend(JsDocFilesTask.prototype, {
 
     return example;
   },
-
 
   /**
    * parse the dox comment string.

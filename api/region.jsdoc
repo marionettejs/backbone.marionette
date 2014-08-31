@@ -290,4 +290,3 @@ functions:
     string, and is used by the LayoutView when it re-renders itself.
     
     @api private
-

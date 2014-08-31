@@ -75,12 +75,11 @@ _.extend(JsDocFilesTask.prototype, {
   buildExamples: function(examples) {
     examples = examples || [];
 
-    _.each(examples, function(value, name) {
-      examples[name] = this.parseBody(value, name);
+    _.each(examples, function(example, i) {
+      examples[i] = this.parseExample(example);
     }, this);
 
     return examples
->>>>>>> more improevements
   },
 
   /**
@@ -170,6 +169,13 @@ _.extend(JsDocFilesTask.prototype, {
     var tags = doc.tags || [];
     doc.api = _.findWhere(tags, {type: 'api'});
     doc.params = _.where(tags, {type: 'param'});
+    
+    doc.params = _.map(doc.params, function(param) {
+      return _.extend(param, {
+        typeStr: param.types.join(", ")
+      })
+    });
+    
 
     return doc;
   },

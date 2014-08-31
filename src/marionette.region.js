@@ -128,10 +128,12 @@ _.extend(Marionette.Region.prototype, Backbone.Events, {
   show: function(view, options){
     this._ensureElement();
 
+    var that = this;
     var showOptions = options || {};
     var isDifferentView = view !== this.currentView;
     var preventDestroy =  !!showOptions.preventDestroy;
     var forceShow = !!showOptions.forceShow;
+    var showPromise = $.Deferred();
 
     // we are only changing the view if there is a view to change to begin with
     var isChangingView = !!this.currentView;
@@ -140,48 +142,52 @@ _.extend(Marionette.Region.prototype, Backbone.Events, {
     var _shouldDestroyView = !preventDestroy && isDifferentView;
 
     if (_shouldDestroyView) {
-      this.empty();
+      $.when(this.empty()).done(function() {
+        showPromise.resolve();
+      });
+    } else {
+      showPromise.resolve();
     }
 
-    // show the view if the view is different or if you want to re-show the view
-    var _shouldShowView = isDifferentView || forceShow;
+    showPromise.done(function() {
+      // show the view if the view is different or if you want to re-show the view
+      var _shouldShowView = isDifferentView || forceShow;
 
-    if (_shouldShowView) {
+      if (_shouldShowView) {
 
-      // We need to listen for if a view is destroyed
-      // in a way other than through the region.
-      // If this happens we need to remove the reference
-      // to the currentView since once a view has been destroyed
-      // we can not reuse it.
-      view.once('destroy', _.bind(this.empty, this));
-      view.render();
+        // We need to listen for if a view is destroyed
+        // in a way other than through the region.
+        // If that happens we need to remove the reference
+        // to the currentView since once a view has been destroyed
+        // we can not reuse it.
+        view.once('destroy', _.bind(that.empty, that));
+        view.render();
 
-      if (isChangingView) {
-        this.triggerMethod('before:swapOut', this.currentView);
-        this.triggerMethod('before:swap', view);
+        if (isChangingView) {
+          that.triggerMethod('before:swapOut', that.currentView);
+          that.triggerMethod('before:swap', view);
+        }
+
+        that.triggerMethod('before:show', view);
+        Marionette.triggerMethodOn(view, 'before:show');
+
+        if (isChangingView) {
+          that.triggerMethod('swapOut', that.currentView);
+        }
+
+        that.attachHtml(view);
+        that.currentView = view;
+
+        if (isChangingView) {
+          that.triggerMethod('swap', view);
+        }
+
+        that.triggerMethod('show', view);
+        Marionette.triggerMethodOn(view, 'show');
       }
+    });
 
-      this.triggerMethod('before:show', view);
-      Marionette.triggerMethodOn(view, 'before:show');
-
-      if (isChangingView) {
-        this.triggerMethod('swapOut', this.currentView);
-      }
-
-      this.attachHtml(view);
-      this.currentView = view;
-
-      if (isChangingView) {
-        this.triggerMethod('swap', view);
-      }
-
-      this.triggerMethod('show', view);
-      Marionette.triggerMethodOn(view, 'show');
-
-      return this;
-    }
-
-    return this;
+    return showPromise;
   },
 
   _ensureElement: function(){
@@ -219,12 +225,12 @@ _.extend(Marionette.Region.prototype, Backbone.Events, {
     if (!view) { return; }
 
     this.triggerMethod('before:empty', view);
-    this._destroyView();
+    var destroyResult = this._destroyView();
     this.triggerMethod('empty', view);
 
     // Remove region pointer to the currentView
     delete this.currentView;
-    return this;
+    return destroyResult;
   },
 
   // call 'destroy' or 'remove', depending on which is found
@@ -233,9 +239,9 @@ _.extend(Marionette.Region.prototype, Backbone.Events, {
     var view = this.currentView;
 
     if (view.destroy && !view.isDestroyed) {
-      view.destroy();
+      return view.destroy();
     } else if (view.remove) {
-      view.remove();
+      return view.remove();
     }
   },
 

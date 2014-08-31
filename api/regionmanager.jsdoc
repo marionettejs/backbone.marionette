@@ -1,4 +1,4 @@
-name: Region Manager
+name: RegionManager
 
 class: Marionette.RegionManager
 
@@ -7,206 +7,261 @@ extends:
 
 description: |
   RegionManagers provide a consistent way to manage a number of Marionette.Region objects within an application. The RegionManager is intended to be used by other objects, to facilitate the addition, storage, retrieval, and removal of regions from that object.
+
   Even if you're not using this class redirectly, it is already being used by Marionette.Application and Marionette.LayoutView.
 
 examples:
-  name: Instantiating a RegionManager
-  example: |
-    RegionManagers can be instantiated directly, and can have regions added and removed via several methods:
+  -
+    name: Instantiating a RegionManager
 
-    ```js
-    var rm = new Marionette.RegionManager();
+    example: |
+      RegionManagers can be instantiated directly, and can have regions added and removed via several methods.
 
-    var region = rm.addRegion("foo", "#bar");
+      ```js
+      var rm = new Marionette.RegionManager();
 
-    var regions = rm.addRegions({
-      baz: "#baz",
-      quux: "ul.quux"
-    });
+      var region = rm.addRegion("foo", "#bar");
 
-    regions.baz.show(myView);
+      var regions = rm.addRegions({
+        baz: "#baz",
+        quux: "ul.quux"
+      });
 
-    rm.removeRegion("foo");
+      regions.baz.show(myView);
+
+      rm.removeRegion("foo");
       ```
 
 functions:
-  addRegion: |
-    Regions can be added individually using the `addRegion` method.
+  addRegion:
+    description: |
+      Regions can be added individually using the `addRegion` method.
 
-    @param {String} name - The name of the region being added
-    @param {Marionette.Region} definition - Accepts a Marionette.Region, a selector, an object, or a class.
-    example: |
-      A region named "foo" will be added to the RegionManager instance. It is defined as a jQuery selector that will search for the `#bar` element in the DOM.
+      @param {String} name - The name of the region being added
+      @param {Marionette.Region} definition - Accepts a Marionette.Region, a selector, an object, or a class
 
-    There are a lot of other ways to define a region, including object literals with various options, and instances of Region objects. For more information on this, see the Region documentation.
+    examples:
+      -
+        name: Adding a region
 
-    ```js
-    var rm = new Marionette.RegionManager();
+        example: |
+          A region named "foo" will be added to the RegionManager instance. It is defined as a jQuery selector that will search for the `#bar` element in the DOM.
 
-    var region = rm.addRegion("foo", "#bar");
-    ```
+          There are a lot of other ways to define a region, including object literals with various options, and instances of Region objects. For more information on this, see the Region documentation.
 
-  addRegions: |
-    Regions can also be added en-masse through the use of the `addRegions` method.
-    This method takes an object literal or a function that returns an object literal.
+          ```js
+          var rm = new Marionette.RegionManager();
 
-    @param {Object} name - Accepts an object literal or a function that returns an object literal. The object literal must contain region names as keys and region definitions as values. The return value is an object literal with all the created regions.
+          var region = rm.addRegion("foo", "#bar");
+          ```
 
-    example: |
-      ```js
-      var rm = new Marionette.RegionManager();
+  addRegions:
+    description: |
+      Regions can also be added en-masse through the use of the `addRegions` method. This method takes an object literal or a function that returns an object literal.
 
-      // With an object literal
-      var regions = rm.addRegions({
-        main: '#main-content',
-        navigation: {
-          selector: '#navigation',
-          regionClass: MyNavRegion
-        }
-      });
+      @param {Object} name - Accepts an object literal or a function that returns an object literal. The object literal must contain region names as keys and region definitions as values. The return value is an object literal with all the created regions.
 
-      // With a function
-      var otherRegions = rm.addRegions(function(regionDefinition) {
-        return {
-          footer: '#footer'
-        };
-      });
+    examples:
+      -
+        name: Adding multiple regions with a object literal or a function
 
-      regions.main;        //=> 'main' region instance
-      regions.navigation;  //=> 'navigation' region instance
-      otherRegions.footer; //=> 'footer' region instance
-      ```
+        example: |
+          ```js
+          var rm = new Marionette.RegionManager();
 
-      If you supply a function to `addRegions`, it will be called with the `RegionManager` instance context and all the arguments passed to `addRegions`.
+          // With an object literal
+          var regions = rm.addRegions({
+            main: '#main-content',
+            navigation: {
+              selector: '#navigation',
+              regionClass: MyNavRegion
+            }
+          });
 
-      ```js
-      var rm = new Marionette.RegionManager();
+          // With a function
+          var otherRegions = rm.addRegions(function(regionDefinition) {
+            return {
+              footer: '#footer'
+            };
+          });
 
-      var regionDefaults = {
-        regionClass: MyRegionClass
-      };
+          regions.main;        //=> 'main' region instance
+          regions.navigation;  //=> 'navigation' region instance
+          otherRegions.footer; //=> 'footer' region instance
+          ```
 
-      rm.addRegions(function(regionDefinition, defaults) {
-        console.log(this);             // `rm` instance of `RegionManager`
-        console.log(regionDefinition); // the region definition function
-        console.log(defaults);         // `{ regionClass: MyRegionClass }`
+      -
+        name: Adding multiple regions with a function
 
-        // ...return the region definition object literal
-      }, regionDefaults);
-      ```
+        example: |
+          If you supply a function to `addRegions`, it will be called with the `RegionManager` instance context and all the arguments passed to `addRegions`.
 
-      When adding multiple regions it may be useful to provide a set of defaults that get applied to all of the regions being added. This can be done through the use of a `defaults` parameter. Specify this parameter as an object literal with `key: value` pairs that will be applied to every region added.
+          ```js
+          var rm = new Marionette.RegionManager();
 
-      ```js
-      var rm = new Marionette.RegionManager();
+          var regionDefaults = {
+            regionClass: MyRegionClass
+          };
 
-      var defaults = {
-        regionClass: MyRegionClass
-      };
+          rm.addRegions(function(regionDefinition, defaults) {
+            console.log(this);             // `rm` instance of `RegionManager`
+            console.log(regionDefinition); // the region definition function
+            console.log(defaults);         // `{ regionClass: MyRegionClass }`
 
-      var regions = {
-        foo: "#bar",
-        baz: "#quux"
-      };
+            // ...return the region definition object literal
+          }, regionDefaults);
+          ```
 
-      rm.addRegions(regions, defaults);
-      ```
+      -
+        name: Adding multiple regions with defaults
 
-      In this example, all regions will be added as
-      instances of `MyRegionClass`.
+        example: |
+          When adding multiple regions it may be useful to provide a set of defaults that get applied to all of the regions being added. This can be done through the use of a `defaults` parameter. Specify this parameter as an object literal with `key: value` pairs that will be applied to every region added.
 
+          In this example, all regions will be added as instances of `MyRegionClass`.
 
-  get: |
-    A region instance can be retrieved from the RegionManager instance using the `get` method and passing in the name of the region.
+          ```js
+          var rm = new Marionette.RegionManager();
 
-    @param {String} name - The name of the region you're trying to get
+          var defaults = {
+            regionClass: MyRegionClass
+          };
 
-    ```js
-    var rm = new Marionette.RegionManager();
-    rm.addRegion("foo", "#bar");
+          var regions = {
+            foo: "#bar",
+            baz: "#quux"
+          };
 
-    var region = rm.get("foo");
-    ```
+          rm.addRegions(regions, defaults);
+          ```
 
-  getRegions: |
-    Get all the regions from the RegionManager. Returns an object literal with named regions as attributes.
+  get:
+    description: |
+      A region instance can be retrieved from the RegionManager instance using the `get` method and passing in the name of the region.
 
-    ```js
-    var rm = new Marionette.RegionManager();
-    rm.addRegion("foo", "#foo");
-    rm.addRegion("bar", "#bar");
+      @param {String} name - The name of the region you're trying to get
 
-    var regions = rm.getRegions();
+    examples:
+      -
+        name: Adding a region
 
-    regions.foo; //=> foo region
-    regions.bar; //=> bar region
-    ```
+        example: |
+          ```js
+          var rm = new Marionette.RegionManager();
+          rm.addRegion("foo", "#bar");
 
-  removeRegion: |
-    A region can be removed by calling the `removeRegion` method and passing in the name of the region.
+          var region = rm.get("foo");
+          ```
 
-    @param {String} name - The name of the region you're trying to remove
+  getRegions:
+    description: |
+      Get all the regions from the RegionManager. Returns an object literal with named regions as attributes.
 
-    ```js
-    var rm = new Marionette.RegionManager();
-    rm.addRegion("foo", "#bar");
+    examples:
+      -
+        name: Getting all the regions
 
-    rm.removeRegion("foo");
-    ```
+        example: |
+          ```js
+          var rm = new Marionette.RegionManager();
+          rm.addRegion("foo", "#foo");
+          rm.addRegion("bar", "#bar");
 
-    A region will have its `empty` method called before it is removed from the RegionManager instance and `stopListening` is called.
+          var regions = rm.getRegions();
 
-  removeRegions: |
-    Quickly remove all regions from the RegionManager instance.
+          regions.foo; //=> foo region
+          regions.bar; //=> bar region
+          ```
 
-    ```js
-    var rm = new Marionette.RegionManager();
-    rm.addRegions({
-      foo: "#foo",
-      bar: "#bar",
-      baz: "#baz"
-    });
+  removeRegion:
+      description: |
+        A region can be removed by calling the `removeRegion` method and passing in the name of the region. A region will have its `empty` and `stopListening` methods called before it is removed from the RegionManager instance.
 
-    rm.removeRegions();
-    ```
+        @param {String} name - The name of the region you're trying to remove
 
-    This will empty all regions, and remove them.
+      examples:
+        -
+          name: Removing a region
 
-  emptyRegions: |
-    Quickly empty all regions from the RegionManager instance while leaving them attached.
+          example: |
+            ```js
+            var rm = new Marionette.RegionManager();
+            rm.addRegion("foo", "#bar");
 
-    ```js
-    var rm = new Marionette.RegionManager();
-    rm.addRegions({
-      foo: "#foo",
-      bar: "#bar",
-      baz: "#baz"
-    });
+            rm.removeRegion("foo");
+            ```
 
-    rm.emptyRegions();
-    ```
+  removeRegions:
+    description: |
+      Quickly remove all regions from the RegionManager instance.
 
-    This will empty the regions without removing them from the RegionManager instance.
+    examples:
+      -
+        name: Removing all regions
 
-  destroy: |
-    A RegionManager instance can be destroyed entirely by calling the `destroy` method. This will both destroy and remove all regions from the RegionManager instance.
+        example: |
+          This will empty all regions, and remove them.
 
-    ```js
-    var rm = new Marionette.RegionManager();
-    rm.addRegions({
-      foo: "#foo",
-      bar: "#bar",
-      baz: "#baz"
-    });
+          ```js
+          var rm = new Marionette.RegionManager();
+          rm.addRegions({
+            foo: "#foo",
+            bar: "#bar",
+            baz: "#baz"
+          });
 
-    rm.destroy();
-    ```
+          rm.removeRegions();
+          ```
+
+  emptyRegions:
+    description: |
+      Quickly empty all regions from the RegionManager instance while leaving them attached.
+
+    examples:
+      -
+        name: Emptying all regions
+
+        example: |
+          This will empty all regions without removing them from the RegionManager instance.
+
+          ```js
+          var rm = new Marionette.RegionManager();
+          rm.addRegions({
+            foo: "#foo",
+            bar: "#bar",
+            baz: "#baz"
+          });
+
+          rm.emptyRegions();
+          ```
+
+  destroy:
+    description: |
+      Destroy a RegionManager instance.
+
+    examples:
+      -
+        name: Destroying and removing all regions from the RegionManager instance
+
+        example: |
+          ```js
+          var rm = new Marionette.RegionManager();
+          rm.addRegions({
+            foo: "#foo",
+            bar: "#bar",
+            baz: "#baz"
+          });
+
+          rm.destroy();
+          ```
 
 events:
   -
     name: before:add:region
+
     description: |
       Triggered before a region is added to the RegionManager.
+
     example: |
       ```js
       var rm = new Marionette.RegionManager();
@@ -220,17 +275,17 @@ events:
 
   -
     name: add:region
+
     description: |
       Triggered when a region is added to the RegionManager. This allows you to use the region instance immediately, or attach the region to an object that needs a reference to it.
+
     example: |
       ```js
       var rm = new Marionette.RegionManager();
 
       rm.on("add:region", function(name, region){
-
         // add the region instance to an object
         myObject[name] = region;
-
       });
 
       rm.addRegion("foo", "#bar");
@@ -238,8 +293,10 @@ events:
 
   -
     name: before:remove:region
+
     description: |
       Triggered before a region is removed from the manager, so you can perform any cleanup opersations.
+
     example: |
       ```js
       var rm = new Marionette.RegionManager();
@@ -255,17 +312,17 @@ events:
 
   -
     name: remove:region
+
     description: |
       Triggered when a region is removed from the RegionManager. This allows you to use the region instance one last time, or remove the region from an object that has a reference to it.
+
     example: |
       ```js
       var rm = new Marionette.RegionManager();
       
       rm.on("remove:region", function(name, region){
-      
         // add the region instance to an object
         delete myObject[name];
-      
       });
       
       rm.addRegion("foo", "#bar");
@@ -283,28 +340,28 @@ interators: |
     // do stuff w/ the region instance here
   });
   ```
-  The list of underscore methods includes:
-    - forEach
-    - each
-    - map
-    - find
-    - detect
-    - filter
-    - select
-    - reject
-    - every
-    - all
-    - some
-    - any
-    - include
-    - contains
-    - invoke
-    - toArray
-    - first
-    - initial
-    - rest
-    - last
-    - without
-    - isEmpty
-    - pluck
 
+  The list of underscore methods includes:
+  - forEach
+  - each
+  - map
+  - find
+  - detect
+  - filter
+  - select
+  - reject
+  - every
+  - all
+  - some
+  - any
+  - include
+  - contains
+  - invoke
+  - toArray
+  - first
+  - initial
+  - rest
+  - last
+  - without
+  - isEmpty
+  - pluck

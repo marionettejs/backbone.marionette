@@ -19,38 +19,9 @@
 
 *Slogan goes here*
 
-Backbone provides a great foundation for building web applications, but it famously
-offers nothing more. Marionette expands on what Backbone provides, offering
-a robust View layer and tools application architecture, all while staying
-true to Backbone's commitment to simplicity and flexibility.
+Backbone provides a solid foundation for building web applications, but it famously
+offers nothing more. Marionette expands on this foundation, offering a robust View
+layer and tools for application architecture, all while staying true to Backbone's
+commitment to simplicity and flexibility.
 
-## Installation
-
-You can download the latest builds directly from the "lib" folder above.
-For more information about the files in this folder, or to obtain an archive
-containing all Marionette dependencies (including Underscore, Backbone, etc.),
-please visit [the downloads section on the website](http://marionettejs.com#download).
-
-Marionette is also available as a package on bower and npm.
-
-```js
-bower install backbone.marionette
-npm install backbone.marionette
-```
-
-#### [MarionetteJS.com](http://marionettejs.com#download)
-
-## Compatibility & Requirements
-
-MarionetteJS currently works with the following libraries:
-
-* [jQuery](http://jquery.com) v1.8+
-* [Underscore](http://underscorejs.org) v1.4.4 - 1.6.0
-* [Backbone](http://backbonejs.org) v1.0.0 - 1.1.2 are recommended.
-* [Backbone.Wreqr](https://github.com/marionettejs/backbone.wreqr) Included for you in the bundled build.
-* [Backbone.BabySitter](https://github.com/marionettejs/backbone.babysitter) Included for you in the bundled build.
-
-Marionette has not been tested against any other versions of these
-libraries. You may or may not have success if you use a version other
-than what it listed here.
-
+[marionette.js.com](http://marionettejs.com)

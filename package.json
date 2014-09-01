@@ -75,8 +75,9 @@
     "sinon": "^1.9.1",
     "sinon-chai": "^2.5.0",
     "unwrap": "^0.1.0",
-    "dox": "^0.4",
+    "dox": "git://github.com/jasonLaster/dox.git#marked",
     "js-yaml": "^3.1.0",
-    "marked": "^0.3"
+    "marked": "^0.3",
+    "highlight.js": "^8.2.0"
   }
 }

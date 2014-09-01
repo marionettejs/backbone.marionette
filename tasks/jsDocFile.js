@@ -9,11 +9,24 @@ var dox = require('dox');
 var _ = require('underscore');
 var yaml = require('js-yaml');
 var marked = require('marked');
-
-
+var highlight = require('highlight.js');
 
 function JsDocFilesTask(grunt) {
   this.grunt = grunt;
+  this.markdown = new marked.Renderer();
+  this.dox = dox.setMarkedOptions({
+      renderer: this.markdown
+    , gfm: true
+    , tables: true
+    , breaks: false
+    , pedantic: false
+    , sanitize: false
+    , smartLists: true
+    , smartypants: false
+    , highlight: function(code, lang) {
+        return highlight.highlight(lang, code).value;
+    }
+  })
 };
 
 _.extend(JsDocFilesTask.prototype, {

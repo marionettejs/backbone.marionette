@@ -19,8 +19,8 @@
 *Slogan goes here*
 
 Backbone provides a solid foundation for building web applications, but it famously
-offers nothing more. Marionette expands on this foundation, offering a robust View
-layer and tools for application architecture, all while staying true to Backbone's
+offers nothing more. Marionette builds on this foundation, offering a robust View
+layer and tools for application architecture while staying true to Backbone's
 commitment to simplicity and flexibility.
 
 For documentation, downloads, and other resources visit our website at [marionette.js.com](http://marionettejs.com).

@@ -126,22 +126,26 @@ _.extend(Marionette.Application.prototype, Backbone.Events, {
   _initRegionManager: function() {
     this._regionManager = this.getRegionManager();
 
-    this.listenTo(this._regionManager, 'before:add:region', function(name) {
-      this.triggerMethod('before:add:region', name);
+    this.listenTo(this._regionManager, 'before:add:region', function() {
+      var args = slice.call(arguments, 0);
+      this.triggerMethod.apply(this, ['before:add:region'].concat(args));
     });
 
     this.listenTo(this._regionManager, 'add:region', function(name, region) {
       this[name] = region;
-      this.triggerMethod('add:region', name, region);
+      var args = slice.call(arguments, 0);
+      this.triggerMethod.apply(this, ['add:region'].concat(args));
     });
 
-    this.listenTo(this._regionManager, 'before:remove:region', function(name) {
-      this.triggerMethod('before:remove:region', name);
+    this.listenTo(this._regionManager, 'before:remove:region', function() {
+      var args = slice.call(arguments, 0);
+      this.triggerMethod.apply(this, ['before:remove:region'].concat(args));
     });
 
-    this.listenTo(this._regionManager, 'remove:region', function(name, region) {
+    this.listenTo(this._regionManager, 'remove:region', function(name) {
       delete this[name];
-      this.triggerMethod('remove:region', name, region);
+      var args = slice.call(arguments, 0);
+      this.triggerMethod.apply(this, ['remove:region'].concat(args));
     });
   },
 

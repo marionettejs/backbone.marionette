@@ -30,6 +30,52 @@ describe('collection view', function() {
   // Collection View Specs
   // ---------------------
 
+  describe('before rendering a collection view', function() {
+    beforeEach(function() {
+      this.collection = new Backbone.Collection([]);
+      this.CollectionView = this.MockCollectionView.extend({
+        sort: function(){ return 1; }
+      });
+
+      this.collectionView = new this.CollectionView({
+        collection: this.collection,
+        _sortViews: function() {}
+      });
+
+      this.onAddChildSpy = this.sinon.spy(this.collectionView, 'onAddChild');
+      this.onRemoveChildSpy = this.sinon.spy(this.collectionView, 'onRemoveChild');
+      this.onSortViewsSpy = this.sinon.spy(this.collectionView, '_sortViews');
+    });
+
+    it('should not add a child', function() {
+      this.collection.push({});
+
+      expect(this.onAddChildSpy).to.not.have.been.called;
+    });
+
+
+    it('should not add a child', function() {
+      this.collection.reset([{}]);
+
+      expect(this.onAddChildSpy).to.not.have.been.called;
+    });
+
+    it('should not remove a child', function() {
+      var model = new Backbone.Model();
+      this.collection.add(model);
+      this.collection.remove(model);
+
+      expect(this.onRemoveChildSpy).to.not.have.been.called;
+    });
+
+
+    it('should not call sort', function() {
+      this.collection.trigger('sort');
+
+      expect(this.onSortViewsSpy).to.not.have.been.called;
+    });
+  });
+
   describe('when rendering a collection view with no "childView" specified', function() {
     beforeEach(function() {
       this.NoChildView = Backbone.Marionette.CollectionView.extend();

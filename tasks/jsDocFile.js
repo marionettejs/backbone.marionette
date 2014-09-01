@@ -182,10 +182,12 @@ _.extend(JsDocFilesTask.prototype, {
     var tags = doc.tags || [];
     doc.api = _.findWhere(tags, {type: 'api'});
     doc.params = _.where(tags, {type: 'param'});
-    
+    doc.paramStr = _.pluck(doc.params, 'name').join(", ")
+
     doc.params = _.map(doc.params, function(param) {
       return _.extend(param, {
-        typeStr: param.types.join(", ")
+        typeStr: param.types.join(", "),
+        description: param.description.replace(/^- /,'') // because dox doesn't parse the - out
       })
     });
     

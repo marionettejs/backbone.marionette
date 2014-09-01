@@ -20,15 +20,9 @@ Marionette.Behaviors = (function(Marionette, _) {
     // or it can be a function that returns an object.
     behaviors = Behaviors.parseBehaviors(view, behaviors || _.result(view, 'behaviors'));
 
-    // Wraps several of the view's methods
-    // calling the methods first on each behavior
-    // and then eventually calling the method on the view.
-    Behaviors.wrap(view, behaviors, _.keys(methods));
     return behaviors;
   }
 
-  var methods = {
-  };
 
   _.extend(Behaviors, {
 
@@ -72,17 +66,6 @@ Marionette.Behaviors = (function(Marionette, _) {
 
         return [behavior].concat(nestedBehaviors);
       }).flatten().value();
-    },
-
-    // Wrap view internal methods so that they delegate to behaviors. For example,
-    // `onDestroy` should trigger destroy on all of the behaviors and then destroy itself.
-    // i.e.
-    //
-    // `view.delegateEvents = _.partial(methods.delegateEvents, view.delegateEvents, behaviors);`
-    wrap: function(view, behaviors, methodNames) {
-      _.each(methodNames, function(methodName) {
-        view[methodName] = _.partial(methods[methodName], view[methodName], behaviors);
-      });
     }
   });
 

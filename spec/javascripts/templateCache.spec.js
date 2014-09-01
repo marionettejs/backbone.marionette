@@ -7,6 +7,14 @@ describe('template cache', function() {
     this.loadTemplateSpy = this.sinon.spy(Marionette.TemplateCache.prototype, 'loadTemplate');
   });
 
+  describe('when loading a template that does not exist', function() {
+    it("should throw", function() {
+      expect(function() {
+        Marionette.TemplateCache.get('#void');
+      })
+      .to.throw('Could not find template: "#void"');
+    });
+  });
   describe('when loading a template for the first time', function() {
     beforeEach(function() {
       Marionette.TemplateCache.get('#foo');

@@ -1,4 +1,3 @@
-<h1 align="center">Backbone.Marionette</h1>
 <p align="center">
   <img title="backbone marionette" src='http://marionettejs.com/downloads/marionette-gh-banner.svg' />
 </p>

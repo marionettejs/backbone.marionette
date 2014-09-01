@@ -34,6 +34,31 @@ describe('marionette application', function() {
     });
   });
 
+  describe('application proxies to wreqr', function() {
+    beforeEach(function() {
+      this.app = new Marionette.Application();
+
+      this.executeSpy = this.sinon.spy(this.app.commands, 'execute');
+      this.requestSpy = this.sinon.spy(this.app.reqres, 'request');
+    });
+
+    it('should proxy execute', function() {
+      this.app.execute('test');
+
+      expect(this.executeSpy)
+      .to.have.been.calledOnce
+      .and.calledWith('test');
+    });
+
+    it('should proxy request', function() {
+      this.app.request('test');
+
+      expect(this.requestSpy)
+      .to.have.been.calledOnce
+      .and.calledWith('test');
+    });
+  });
+
   describe('when an app has been started, and registering another initializer', function() {
     beforeEach(function() {
       this.app = new Marionette.Application();

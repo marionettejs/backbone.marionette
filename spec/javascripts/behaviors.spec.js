@@ -3,7 +3,9 @@ describe('Behaviors', function() {
 
   describe('behavior lookup', function() {
     it('should throw if behavior lookup is not defined', function() {
-      expect(Marionette.Behaviors.behaviorsLookup).to.throw;
+      expect(function() {
+        Marionette.Behaviors.behaviorsLookup();
+      }).to.throw("You must define where your behaviors are stored.See https://github.com/marionettejs/backbone.marionette/blob/master/docs/marionette.behaviors.md#behaviorslookup");
     });
   });
 

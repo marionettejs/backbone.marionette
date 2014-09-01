@@ -14,7 +14,7 @@
   </a>
 </p>
 
-## About Marionette
+## About
 
 *Slogan goes here*
 

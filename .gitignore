@@ -12,5 +12,6 @@ npm-debug.log
 _SpecRunner.html
 bower_components/
 .idea
+*.iml
 .grunt
 reports

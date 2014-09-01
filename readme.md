@@ -23,4 +23,4 @@ offers nothing more. Marionette expands on this foundation, offering a robust Vi
 layer and tools for application architecture, all while staying true to Backbone's
 commitment to simplicity and flexibility.
 
-[marionette.js.com](http://marionettejs.com)
+For documentation, downloads, and other resources visit our website at [marionette.js.com](http://marionettejs.com).

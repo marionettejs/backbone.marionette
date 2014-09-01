@@ -276,7 +276,8 @@ describe('layoutView', function() {
     });
 
     it('should throw an error', function() {
-      expect(this.layoutView.render).to.throw('Cannot use a view thats already been destroyed.');
+      expect(this.layoutView.render).to.throw('View (cid: "' + this.layoutView.cid +
+          '") has already been destroyed and cannot be used.');
     });
   });
 
@@ -340,6 +341,26 @@ describe('layoutView', function() {
 
     it('should set custom region classes', function() {
       expect(this.CustomRegion).to.have.been.called;
+    });
+  });
+
+  describe('when defining region selectors using @ui. syntax', function() {
+    beforeEach(function() {
+      var UILayoutView = Backbone.Marionette.LayoutView.extend({
+        template: this.template,
+        regions: {
+          war: '@ui.war'
+        },
+        ui: {
+          war: '.craft'
+        }
+      });
+      this.layoutView = new UILayoutView();
+    });
+
+    it('should apply the relevant @ui. syntax selector', function() {
+      expect(this.layoutView.getRegion('war')).to.exist;
+      expect(this.layoutView.getRegion('war').$el.selector).to.equal('.craft');
     });
   });
 

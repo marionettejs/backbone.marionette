@@ -1,4 +1,4 @@
-/* jshint maxlen: 143, nonew: false */
+/* jshint maxlen: 143 */
 // Marionette.Behaviors
 // --------
 
@@ -11,6 +11,11 @@
 Marionette.Behaviors = (function(Marionette, _) {
 
   function Behaviors(view, behaviors) {
+
+    if (!_.isObject(view.behaviors)) {
+      return {};
+    }
+
     // Behaviors defined on a view can be a flat object literal
     // or it can be a function that returns an object.
     behaviors = Behaviors.parseBehaviors(view, behaviors || _.result(view, 'behaviors'));
@@ -19,76 +24,14 @@ Marionette.Behaviors = (function(Marionette, _) {
     // calling the methods first on each behavior
     // and then eventually calling the method on the view.
     Behaviors.wrap(view, behaviors, _.keys(methods));
+    return behaviors;
   }
 
   var methods = {
-    setElement: function(setElement, behaviors) {
-      setElement.apply(this, _.tail(arguments, 2));
 
-      // proxy behavior $el to the view's $el.
-      // This is needed because a view's $el proxy
-      // is not set until after setElement is called.
-      _.each(behaviors, function(b) {
-        b.$el = this.$el;
-        b.el = this.el;
-      }, this);
-
-      return this;
-    },
-
-    destroy: function(destroy, behaviors) {
-      var args = _.tail(arguments, 2);
-      destroy.apply(this, args);
-
-      // Call destroy on each behavior after
-      // destroying the view.
-      // This unbinds event listeners
-      // that behaviors have registerd for.
-      _.invoke(behaviors, 'destroy', args);
-      return this;
-    },
-
-    bindUIElements: function(bindUIElements, behaviors) {
-      bindUIElements.apply(this);
-      _.invoke(behaviors, bindUIElements);
-    },
-
-    unbindUIElements: function(unbindUIElements, behaviors) {
-      unbindUIElements.apply(this);
-      _.invoke(behaviors, unbindUIElements);
-    },
-
-    triggerMethod: function(triggerMethod, behaviors) {
-      var args = _.tail(arguments, 2);
-      triggerMethod.apply(this, args);
-
-      _.each(behaviors, function(b) {
-        triggerMethod.apply(b, args);
-      });
-    },
-
-    delegateEvents: function(delegateEvents, behaviors) {
-      var args = _.tail(arguments, 2);
-      delegateEvents.apply(this, args);
-
-      _.each(behaviors, function(b) {
-        Marionette.bindEntityEvents(b, this.model, Marionette.getOption(b, 'modelEvents'));
-        Marionette.bindEntityEvents(b, this.collection, Marionette.getOption(b, 'collectionEvents'));
-      }, this);
-
-      return this;
-    },
-
-    undelegateEvents: function(undelegateEvents, behaviors) {
-      var args = _.tail(arguments, 2);
-      undelegateEvents.apply(this, args);
-
-      _.each(behaviors, function(b) {
-        Marionette.unbindEntityEvents(b, this.model, Marionette.getOption(b, 'modelEvents'));
-        Marionette.unbindEntityEvents(b, this.collection, Marionette.getOption(b, 'collectionEvents'));
-      }, this);
-
-      return this;
+    behaviorTriggers: function(behaviorTriggers, behaviors) {
+      var triggerBuilder = new BehaviorTriggersBuilder(this, behaviors);
+      return triggerBuilder.buildBehaviorTriggers();
     },
 
     behaviorEvents: function(behaviorEvents, behaviors) {
@@ -143,7 +86,7 @@ Marionette.Behaviors = (function(Marionette, _) {
     // }
     // ```
     behaviorsLookup: function() {
-      throw new Error('You must define where your behaviors are stored.' +
+      throwError('You must define where your behaviors are stored. ' +
         'See https://github.com/marionettejs/backbone.marionette' +
         '/blob/master/docs/marionette.behaviors.md#behaviorslookup');
     },
@@ -184,6 +127,44 @@ Marionette.Behaviors = (function(Marionette, _) {
       _.each(methodNames, function(methodName) {
         view[methodName] = _.partial(methods[methodName], view[methodName], behaviors);
       });
+    }
+  });
+
+  // Class to build handlers for `triggers` on behaviors
+  // for views
+  function BehaviorTriggersBuilder(view, behaviors) {
+    this._view      = view;
+    this._viewUI    = _.result(view, 'ui');
+    this._behaviors = behaviors;
+    this._triggers  = {};
+  }
+
+  _.extend(BehaviorTriggersBuilder.prototype, {
+    // Main method to build the triggers hash with event keys and handlers
+    buildBehaviorTriggers: function() {
+      _.each(this._behaviors, this._buildTriggerHandlersForBehavior, this);
+      return this._triggers;
+    },
+
+    // Internal method to build all trigger handlers for a given behavior
+    _buildTriggerHandlersForBehavior: function(behavior, i) {
+      var ui = _.extend({}, this._viewUI, _.result(behavior, 'ui'));
+      var triggersHash = _.clone(_.result(behavior, 'triggers')) || {};
+
+      triggersHash = Marionette.normalizeUIKeys(triggersHash, ui);
+
+      _.each(triggersHash, _.partial(this._setHandlerForBehavior, behavior, i), this);
+    },
+
+    // Internal method to create and assign the trigger handler for a given
+    // behavior
+    _setHandlerForBehavior: function(behavior, i, eventName, trigger) {
+      // Unique identifier for the `this._triggers` hash
+      var triggerKey = trigger.replace(/^\S+/, function(triggerName) {
+        return triggerName + '.' + 'behaviortriggers' + i;
+      });
+
+      this._triggers[triggerKey] = this._view._buildViewTrigger(eventName);
     }
   });
 

@@ -1,3 +1,5 @@
+## [View the new docs](http://marionettejs.com/docs/marionette.module.html)
+
 # Marionette.Module
 
 Marionette Modules allow you to create modular encapsulated logic.

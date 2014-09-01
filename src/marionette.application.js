@@ -10,9 +10,14 @@ Marionette.Application = function(options) {
   this.submodules = {};
   _.extend(this, options);
   this._initChannel();
+  this.initialize.apply(this, arguments);
 };
 
 _.extend(Marionette.Application.prototype, Backbone.Events, {
+  // Initialize is an empty function by default. Override it with your own
+  // initialization logic.
+  initialize: function() {},
+
   // Command execution, facilitated by Backbone.Wreqr.Commands
   execute: function() {
     this.commands.execute.apply(this.commands, arguments);

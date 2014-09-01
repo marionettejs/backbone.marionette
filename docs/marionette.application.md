@@ -1,3 +1,5 @@
+## [View the new docs](http://marionettejs.com/docs/marionette.application.html)
+
 # Marionette.Application
 
 The `Backbone.Marionette.Application` object is the hub of your composite
@@ -15,6 +17,7 @@ var MyApp = new Backbone.Marionette.Application();
 
 ## Documentation Index
 
+* [initialize](#initialize)
 * [Adding Initializers](#adding-initializers)
 * [Application Event](#application-event)
 * [Starting An Application](#starting-an-application)
@@ -32,6 +35,20 @@ var MyApp = new Backbone.Marionette.Application();
   * [Get Region By Name](#get-region-by-name)
   * [Removing Regions](#removing-regions)
 * [Application.getOption](#applicationgetoption)
+
+### Initialize
+Initialize is called immediately after the Application has been instantiated,
+and is invoked with the same arguments that the constructor received.
+
+```js
+var MyApp = Marionette.Application.extend({
+  initialize: function(options) {
+    console.log(options.container);
+  }
+});
+
+var myApp = new MyApp({container: '#app'});
+```
 
 ## Adding Initializers
 

@@ -21,9 +21,6 @@ Marionette.Module = function(moduleName, app, options) {
   // within a module.
   this.app = app;
 
-  // By default modules start with their parents.
-  this.startWithParent = true;
-
   if (_.isFunction(this.initialize)) {
     this.initialize(moduleName, app, this.options);
   }
@@ -34,6 +31,9 @@ Marionette.Module.extend = Marionette.extend;
 // Extend the Module prototype with events / listenTo, so that the module
 // can be used as an event aggregator or pub/sub.
 _.extend(Marionette.Module.prototype, Backbone.Events, {
+
+  // By default modules start with their parents.
+  startWithParent: true,
 
   // Initialize is an empty function by default. Override it with your own
   // initialization logic when extending Marionette.Module.

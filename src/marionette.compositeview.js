@@ -24,18 +24,16 @@ Marionette.CompositeView = Marionette.CollectionView.extend({
 
     // Bind only after composite view is rendered to avoid adding child views
     // to nonexistent childViewContainer
-    this.once('render', function() {
-      if (this.collection) {
-        this.listenTo(this.collection, 'add', this._onCollectionAdd);
-        this.listenTo(this.collection, 'remove', this._onCollectionRemove);
-        this.listenTo(this.collection, 'reset', this._renderChildren);
 
-        if (this.sort) {
-          this.listenTo(this.collection, 'sort', this._sortViews);
-        }
+    if (this.collection) {
+      this.listenTo(this.collection, 'add', this._onCollectionAdd);
+      this.listenTo(this.collection, 'remove', this._onCollectionRemove);
+      this.listenTo(this.collection, 'reset', this._renderChildren);
+
+      if (this.sort) {
+        this.listenTo(this.collection, 'sort', this._sortViews);
       }
-    });
-
+    }
   },
 
   // Retrieve the `childView` to be used when rendering each of

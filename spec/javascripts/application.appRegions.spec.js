@@ -26,11 +26,11 @@ describe('application regions', function() {
     });
 
     it('should trigger a before:add:region event', function() {
-      expect(this.beforeAddRegionStub).to.have.been.calledWith('fooRegion');
+      expect(this.beforeAddRegionStub).to.have.been.calledWith('fooRegion', this.fooRegion);
     });
 
     it('should trigger a add:region event', function() {
-      expect(this.addRegionStub).to.have.been.calledWith('barRegion');
+      expect(this.addRegionStub).to.have.been.calledWith('barRegion', this.barRegion);
     });
   });
 
@@ -477,11 +477,11 @@ describe('application regions', function() {
     });
 
     it('should trigger a before:remove:region event', function() {
-      expect(this.beforeRemoveRegionStub).to.have.been.calledWith('fooRegion');
+      expect(this.beforeRemoveRegionStub).to.have.been.calledWith('fooRegion', this.fooRegion);
     });
 
     it('should trigger a remove:region event', function() {
-      expect(this.removeRegionStub).to.have.been.calledWith('fooRegion');
+      expect(this.removeRegionStub).to.have.been.calledWith('fooRegion', this.fooRegion);
     });
 
     it('should return the region', function() {

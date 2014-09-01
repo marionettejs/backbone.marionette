@@ -1,5 +1,6 @@
 (function(root, factory) {
 
+  /* istanbul ignore next */
   if (typeof define === 'function' && define.amd) {
     define(['backbone', 'underscore'], function(Backbone, _) {
       return (root.Marionette = factory(root, Backbone, _));
@@ -15,7 +16,10 @@
 }(this, function(root, Backbone, _) {
   'use strict';
 
+  /* istanbul ignore next */
   // @include ../../tmp/backbone.babysitter.bare.js
+
+  /* istanbul ignore next */
   // @include ../../tmp/backbone.wreqr.bare.js
 
   var previousMarionette = root.Marionette;

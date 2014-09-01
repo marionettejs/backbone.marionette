@@ -10,27 +10,23 @@ description: |
 
   Even if you're not using this class redirectly, it is already being used by Marionette.Application and Marionette.LayoutView.
 
-examples:
-  -
-    name: Instantiating a RegionManager
+constructor: |
+  RegionManagers can be instantiated directly and can have regions added and removed via several methods.
 
-    example: |
-      RegionManagers can be instantiated directly, and can have regions added and removed via several methods.
+  ```js
+  var rm = new Marionette.RegionManager();
 
-      ```js
-      var rm = new Marionette.RegionManager();
+  var region = rm.addRegion("foo", "#bar");
 
-      var region = rm.addRegion("foo", "#bar");
+  var regions = rm.addRegions({
+    baz: "#baz",
+    quux: "ul.quux"
+  });
 
-      var regions = rm.addRegions({
-        baz: "#baz",
-        quux: "ul.quux"
-      });
+  regions.baz.show(myView);
 
-      regions.baz.show(myView);
-
-      rm.removeRegion("foo");
-      ```
+  rm.removeRegion("foo");
+  ```
 
 functions:
   addRegion:

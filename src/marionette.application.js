@@ -5,6 +5,7 @@
 // Stores and starts up `Region` objects, includes an
 // event aggregator as `app.vent`
 Marionette.Application = function(options) {
+  this.options = options;
   this._initRegionManager();
   this._initCallbacks = new Marionette.Callbacks();
   this.submodules = {};

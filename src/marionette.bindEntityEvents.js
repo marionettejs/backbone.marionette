@@ -28,7 +28,7 @@
 
       var method = target[methodName];
       if (!method) {
-        throwError('Method "' + methodName +
+        throw new Marionette.Error('Method "' + methodName +
           '" was configured as an event handler, but does not exist.');
       }
 
@@ -64,9 +64,10 @@
 
     // type-check bindings
     if (!_.isFunction(bindings) && !_.isObject(bindings)) {
-      throwError('Bindings must be an object or function. Please refer to ' +
-        'http://marionettejs.com/docs/current/marionette.functions.html' +
-        '#marionettebindentityevents');
+      throw new Marionette.Error({
+        message: 'Bindings must be an object or function.',
+        url: 'marionette.functions.html#marionettebindentityevents'
+      });
     }
 
     // allow the bindings to be a function

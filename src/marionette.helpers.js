@@ -6,12 +6,6 @@
 // For slicing `arguments` in functions
 var slice = Array.prototype.slice;
 
-function throwError(message, name) {
-  var error = new Error(message);
-  error.name = name || 'Error';
-  throw error;
-}
-
 // Marionette.extend
 // -----------------
 

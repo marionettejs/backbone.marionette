@@ -11,8 +11,10 @@ Marionette.Renderer = {
   // custom rendering and template handling for all of Marionette.
   render: function(template, data) {
     if (!template) {
-      throwError('Cannot render the template since its false, null or undefined.',
-        'TemplateNotFoundError');
+      throw new Marionette.Error({
+        name: 'TemplateNotFoundError',
+        message: 'Cannot render the template since its false, null or undefined.'
+      });
     }
 
     var templateFunc;

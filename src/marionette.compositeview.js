@@ -46,7 +46,10 @@ Marionette.CompositeView = Marionette.CollectionView.extend({
     var childView = this.getOption('childView') || this.constructor;
 
     if (!childView) {
-      throwError('A "childView" must be specified', 'NoChildViewError');
+      throw new Marionette.Error({
+        name: 'NoChildViewError',
+        message: 'A "childView" must be specified'
+      });
     }
 
     return childView;
@@ -160,8 +163,10 @@ Marionette.CompositeView = Marionette.CollectionView.extend({
       }
 
       if (container.length <= 0) {
-        throwError('The specified "childViewContainer" was not found: ' +
-          containerView.childViewContainer, 'ChildViewContainerMissingError');
+        throw new Marionette.Error({
+          name: 'ChildViewContainerMissingError',
+          message: 'The specified "childViewContainer" was not found: ' + containerView.childViewContainer
+        });
       }
 
     } else {

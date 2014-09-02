@@ -25,9 +25,16 @@ describe('collectionview - emptyView', function() {
 
   describe('when rendering a collection view with an empty collection', function() {
     beforeEach(function() {
+      this.childRenderSpy = this.sinon.spy();
       this.collection = new Backbone.Collection();
-      this.collectionView = new this.EmptyCollectionView({
-        collection: this.collection
+      this.CollectionView = this.EmptyCollectionView.extend({
+        childEvents: {
+          'render': this.childRenderSpy
+        }
+      });
+
+      this.collectionView = new this.CollectionView({
+        collection: this.collection,
       });
 
       this.beforeRenderSpy = this.sinon.spy(this.collectionView, 'onBeforeRenderEmpty');
@@ -38,6 +45,11 @@ describe('collectionview - emptyView', function() {
 
     it('should append the html for the emptyView', function() {
       expect(this.collectionView.$el).to.have.$html('<span>empty</span>');
+    });
+
+    it('should emit emptyView events', function() {
+      expect(this.childRenderSpy)
+      .to.have.been.calledOnce;
     });
 
     it('should call "onBeforeRenderEmpty"', function() {

@@ -1,4 +1,4 @@
-/* jshint maxcomplexity: 10, maxstatements: 29 */
+/* jshint maxcomplexity: 10, maxstatements: 30 */
 
 // Region
 // ------
@@ -132,6 +132,7 @@ _.extend(Marionette.Region.prototype, Backbone.Events, {
 
   show: function(view, options){
     this._ensureElement();
+    this._ensureViewIsIntact(view);
 
     var showOptions     = options || {};
     var isDifferentView = view !== this.currentView;
@@ -207,6 +208,15 @@ _.extend(Marionette.Region.prototype, Backbone.Events, {
     }
   },
 
+  _ensureViewIsIntact: function(view) {
+    if (view.isDestroyed) {
+      throw new Marionette.Error({
+        name: 'ViewDestroyedError',
+        message: 'View (cid: "' + view.cid + '") has already been destroyed and cannot be used.'
+      });
+    }
+  },
+
   // Override this method to change how the region finds the
   // DOM element that it manages. Return a jQuery selector object.
   getEl: function(el) {
@@ -249,6 +259,10 @@ _.extend(Marionette.Region.prototype, Backbone.Events, {
       view.destroy();
     } else if (view.remove) {
       view.remove();
+
+      // appending isDestroyed to raw Backbone View allows regions
+      // to throw a ViewDestroyedError for this view
+      view.isDestroyed = true;
     }
   },
 

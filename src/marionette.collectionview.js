@@ -219,6 +219,9 @@ Marionette.CollectionView = Marionette.View.extend({
     // build the empty view
     var view = this.buildChildView(child, EmptyView, emptyViewOptions);
 
+    // Proxy emptyView events
+    this.proxyChildEvents(view);
+
     // trigger the 'before:show' event on `view` if the collection view
     // has already been shown
     if (this._isShown) {

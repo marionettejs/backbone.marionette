@@ -68,8 +68,10 @@ Marionette.ItemView = Marionette.View.extend({
     }
 
     if (!template) {
-      throwError('Cannot render the template since it is null or undefined.',
-        'UndefinedTemplateError');
+      throw new Marionette.Error({
+        name: 'UndefinedTemplateError',
+        message: 'Cannot render the template since it is null or undefined.'
+      });
     }
 
     // Add in entity data and template helpers

@@ -14,7 +14,10 @@ Marionette.Region = function(options) {
   this.el = this.el instanceof Backbone.$ ? this.el[0] : this.el;
 
   if (!this.el) {
-    throwError('An "el" must be specified for a region.', 'NoElError');
+    throw new Marionette.Error({
+      name: 'NoElError',
+      message: 'An "el" must be specified for a region.'
+    });
   }
 
   this.$el = this.getEl(this.el);
@@ -58,8 +61,10 @@ _.extend(Marionette.Region, {
       return this._buildRegionFromRegionClass(regionConfig);
     }
 
-    throwError('Improper region configuration type. Please refer ' +
-      'to http://marionettejs.com/docs/marionette.region.html#region-configuration-types');
+    throw new Marionette.Error({
+      message: 'Improper region configuration type.',
+      url: 'marionette.region.html#region-configuration-types'
+    });
   },
 
   // Build the region from a string selector like '#foo-region'
@@ -194,7 +199,7 @@ _.extend(Marionette.Region.prototype, Backbone.Events, {
     }
 
     if (!this.$el || this.$el.length === 0) {
-      throwError('An "el" ' + this.$el.selector + ' must exist in DOM');
+      throw new Marionette.Error('An "el" ' + this.$el.selector + ' must exist in DOM');
     }
   },
 

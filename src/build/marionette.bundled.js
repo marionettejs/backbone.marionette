@@ -44,6 +44,7 @@
 
   // @include ../marionette.bindEntityEvents.js
 
+  // @include ../marionette.error.js
   // @include ../marionette.callbacks.js
   // @include ../marionette.controller.js
   // @include ../marionette.object.js

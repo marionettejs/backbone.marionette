@@ -130,9 +130,10 @@ describe('regionManager', function() {
       });
 
       it('throws an error', function() {
-        expect(this.addRegion).
-          to.throw('Improper region configuration type. Please refer ' +
-            'to http://marionettejs.com/docs/marionette.region.html#region-configuration-types');
+        expect(this.addRegion).to.throw(Marionette.Error, new Marionette.Error({
+          message: 'Improper region configuration type.',
+          url: 'marionette.region.html#region-configuration-types'
+        }));
       });
     });
 

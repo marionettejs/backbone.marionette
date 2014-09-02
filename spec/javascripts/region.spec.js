@@ -646,6 +646,22 @@ describe('region', function() {
       expect(this.view.remove).to.have.been.called;
     });
 
+    it('should set "isDestroyed" on the view', function() {
+      expect(this.view.isDestroyed).to.be.true;
+    });
+
+    describe('and then attempting to show the view again in the Region', function() {
+      beforeEach(function() {
+        var suite = this;
+        this.showFunction = function() {
+          suite.myRegion.show(suite.view);
+        };
+      });
+
+      it('should throw an error.', function() {
+        expect(this.showFunction).to.throw('View (cid: "' + this.view.cid + '") has already been destroyed and cannot be used.');
+      });
+    });
   });
 
   describe('when initializing a region and passing an "el" option', function() {

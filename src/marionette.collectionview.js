@@ -21,7 +21,7 @@ Marionette.CollectionView = Marionette.View.extend({
     this.sort = _.isUndefined(initOptions.sort) ? true : initOptions.sort;
 
     if (initOptions.collection && !(initOptions.collection instanceof Backbone.Collection)) {
-      throwError('The Collection option passed to this view needs to be an instance of a Backbone.Collection');
+      throw new Marionette.Error('The Collection option passed to this view needs to be an instance of a Backbone.Collection');
     }
 
     this._initChildViewStorage();
@@ -248,7 +248,10 @@ Marionette.CollectionView = Marionette.View.extend({
     var childView = this.getOption('childView');
 
     if (!childView) {
-      throwError('A "childView" must be specified', 'NoChildViewError');
+      throw new Marionette.Error({
+        name: 'NoChildViewError',
+        message: 'A "childView" must be specified'
+      });
     }
 
     return childView;

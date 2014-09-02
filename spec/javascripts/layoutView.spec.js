@@ -440,4 +440,81 @@ describe('layoutView', function() {
       expect(this.regions.regionTwo).to.equal(this.layout.getRegion("regionTwo"));
     });
   });
+
+  describe('when attached to an existing element with a string selector', function() {
+    beforeEach(function() {
+      this.setFixtures('<div id="attached-layout"></div>');
+
+      this.LayoutView = Marionette.LayoutView.extend({
+        el: '#attached-layout',
+        template: _.template('<div class="the-region">Inner</div>'),
+        regions: {
+          theRegion: '.the-region'
+        }
+      });
+
+      this.MyView1 = Marionette.ItemView.extend({
+        template: _.template('My View 1')
+      });
+
+      this.MyView2 = Marionette.ItemView.extend({
+        template: _.template('My View 2')
+      });
+    });
+
+    describe('and when showing a view, resetting, and showing another view', function() {
+      beforeEach(function() {
+        this.selector = '#attached-layout .the-region';
+
+        this.layoutView = new this.LayoutView();
+        this.layoutView.render();
+
+        this.theRegion = this.layoutView.getRegion('theRegion');
+        this.theRegion.show(new this.MyView1());
+        this.selectorBefore = this.theRegion.$el.selector;
+
+        this.theRegion.reset();
+        this.theRegion.show(new this.MyView2());
+        this.selectorAfter = this.theRegion.$el.selector;
+      });
+
+      it('should have the correct selector before resetting', function() {
+        expect(this.selectorBefore).to.equal(this.selector);
+      });
+
+      it('should have the same selector after resetting', function() {
+        expect(this.selectorAfter).to.equal(this.selector);
+      });
+    });
+
+    describe('and when a region with the same selector exists outside the layout view', function() {
+      beforeEach(function() {
+        this.setFixtures('<div class="the-region">Outer</div>');
+
+        this.layoutView = new this.LayoutView();
+        this.theRegion  = this.layoutView.getRegion('theRegion');
+      });
+
+      it('should assign the region $el to 0 elements', function() {
+        expect(this.theRegion.$el).to.have.lengthOf(0);
+      });
+
+      describe('and when showing a view', function() {
+        beforeEach(function() {
+          this.myView = new this.MyView1();
+
+          this.layoutView.render();
+          this.theRegion.show(this.myView);
+        });
+
+        it('should have 1 element associated with the region $el still', function() {
+          expect(this.theRegion.$el).to.have.lengthOf(1);
+        });
+
+        it('should assign the region $el to the element of the shown `ItemView`', function() {
+          expect(this.theRegion.$el.text()).to.equal('My View 1');
+        });
+      });
+    });
+  });
 });

@@ -14,11 +14,9 @@ Marionette.LayoutView = Marionette.ItemView.extend({
   // is called.
   constructor: function(options) {
     options = options || {};
-
     this._firstRender = true;
-    this._initializeRegions(options);
-
     Marionette.ItemView.call(this, options);
+    this._initializeRegions(options);
   },
 
   // LayoutView's render will use the existing region objects the

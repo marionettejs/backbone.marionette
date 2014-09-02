@@ -77,7 +77,10 @@ _.extend(Marionette.TemplateCache.prototype, {
     var template = Backbone.$(templateId).html();
 
     if (!template || template.length === 0) {
-      throwError('Could not find template: "' + templateId + '"', 'NoTemplateError');
+      throw new Marionette.Error({
+        name: 'NoTemplateError',
+        message: 'Could not find template: "' + templateId + '"'
+      });
     }
 
     return template;

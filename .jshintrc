@@ -9,8 +9,7 @@
     "_"                  : true,
     "Backbone"           : true,
     "Marionette"         : true,
-    "slice"              : true,
-    "throwError"         : true
+    "slice"              : true
   },
 
   "bitwise"       : true,

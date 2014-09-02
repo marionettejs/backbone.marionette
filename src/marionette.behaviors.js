@@ -85,9 +85,10 @@ Marionette.Behaviors = (function(Marionette, _) {
     // }
     // ```
     behaviorsLookup: function() {
-      throwError('You must define where your behaviors are stored. ' +
-        'See https://github.com/marionettejs/backbone.marionette' +
-        '/blob/master/docs/marionette.behaviors.md#behaviorslookup');
+      throw new Marionette.Error({
+        message: 'You must define where your behaviors are stored.',
+        url: 'marionette.behaviors.html#behaviorslookup'
+      });
     },
 
     // Takes care of getting the behavior class

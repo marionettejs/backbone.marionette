@@ -132,6 +132,7 @@ _.extend(Marionette.Region.prototype, Backbone.Events, {
 
   show: function(view, options){
     this._ensureElement();
+    this._ensureViewIsIntact(view);
 
     var showOptions     = options || {};
     var isDifferentView = view !== this.currentView;
@@ -189,7 +190,6 @@ _.extend(Marionette.Region.prototype, Backbone.Events, {
       this.triggerMethod('show', view);
       Marionette.triggerMethodOn(view, 'show');
 
-      return this;
     }
 
     return this;
@@ -203,6 +203,15 @@ _.extend(Marionette.Region.prototype, Backbone.Events, {
 
     if (!this.$el || this.$el.length === 0) {
       throw new Marionette.Error('An "el" ' + this.$el.selector + ' must exist in DOM');
+    }
+  },
+
+  _ensureViewIsIntact: function(view) {
+    if (view.isDestroyed) {
+      throw new Marionette.Error({
+        name: 'ViewDestroyedError',
+        message: 'View (cid: "' + view.cid + '") has already been destroyed and cannot be used.'
+      });
     }
   },
 
@@ -247,6 +256,10 @@ _.extend(Marionette.Region.prototype, Backbone.Events, {
       view.destroy();
     } else if (view.remove) {
       view.remove();
+
+      // appending isDestroyed to raw Backbone View allows regions
+      // to throw a ViewDestroyedError for this view
+      view.isDestroyed = true;
     }
   },
 

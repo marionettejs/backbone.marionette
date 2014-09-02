@@ -24,11 +24,12 @@ Marionette.CollectionView = Marionette.View.extend({
       throw new Marionette.Error('The Collection option passed to this view needs to be an instance of a Backbone.Collection');
     }
 
+    this.once('render', this._initialEvents);
+
     this._initChildViewStorage();
 
     Marionette.View.apply(this, arguments);
 
-    this._initialEvents();
     this.initRenderBuffer();
   },
 

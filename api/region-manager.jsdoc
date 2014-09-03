@@ -34,7 +34,8 @@ functions:
       Regions can be added individually using the `addRegion` method.
 
       @param {String} name - The name of the region being added
-      @param {Marionette.Region|Function|String|Object} definition - Accepts a Marionette.Region instance, a function that returns a Marionette.Region instance (such as a Region constructor), a selector, or an object definition for finer control
+      @param {Marionette.Region|Function|String|Object} definition - Accepts a Marionette.Region instance, a Function that returns a Marionette.Region instance (such as a Region constructor), a selector, or an object definition for finer control
+
 
     examples:
       -
@@ -296,13 +297,13 @@ events:
     example: |
       ```js
       var rm = new Marionette.RegionManager();
-      
+
       rm.on("before:remove:region", function(name, region){
         // do something with the region instance here
       });
-      
+
       rm.addRegion("foo", "#bar");
-      
+
       rm.removeRegion("foo");
       ```
 
@@ -315,14 +316,14 @@ events:
     example: |
       ```js
       var rm = new Marionette.RegionManager();
-      
+
       rm.on("remove:region", function(name, region){
         // remove the region instance from an object
         delete myObject[name];
       });
-      
+
       rm.addRegion("foo", "#bar");
-      
+
       rm.removeRegion("foo");
       ```
 

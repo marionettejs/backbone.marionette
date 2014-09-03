@@ -178,7 +178,7 @@ Marionette.View = Backbone.View.extend({
     // Call destroy on each behavior after
     // destroying the view.
     // This unbinds event listeners
-    // that behaviors have registerd for.
+    // that behaviors have registered for.
     _.invoke(this._behaviors, 'destroy', args);
 
     return this;

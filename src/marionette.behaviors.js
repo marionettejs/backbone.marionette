@@ -3,7 +3,7 @@
 // --------
 
 // Behaviors is a utility class that takes care of
-// glueing your behavior instances to their given View.
+// gluing your behavior instances to their given View.
 // The most important part of this class is that you
 // **MUST** override the class level behaviorsLookup
 // method for things to work properly.
@@ -43,7 +43,7 @@ Marionette.Behaviors = (function(Marionette, _) {
       // Call destroy on each behavior after
       // destroying the view.
       // This unbinds event listeners
-      // that behaviors have registerd for.
+      // that behaviors have registered for.
       _.invoke(behaviors, 'destroy', args);
       return this;
     },

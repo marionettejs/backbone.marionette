@@ -128,8 +128,8 @@ Marionette.LayoutView = Marionette.ItemView.extend({
     });
   },
 
-  // Enable easy overiding of the default `RegionManager`
-  // for customized region interactions and buisness specific
+  // Enable easy overriding of the default `RegionManager`
+  // for customized region interactions and business specific
   // view logic for better control over single regions.
   getRegionManager: function() {
     return new Marionette.RegionManager();

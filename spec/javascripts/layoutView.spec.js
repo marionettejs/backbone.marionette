@@ -12,11 +12,6 @@ describe('layoutView', function() {
       regions: {
         regionOne: '#regionOne',
         regionTwo: '#regionTwo'
-      },
-      initialize: function() {
-        if (this.model) {
-          this.listenTo(this.model, 'change', this.render);
-        }
       }
     });
 
@@ -37,12 +32,23 @@ describe('layoutView', function() {
 
   describe('on instantiation', function() {
     beforeEach(function() {
-      this.layoutViewManager = new this.LayoutView();
+      var suite = this;
+      this.LayoutViewInitialize = this.LayoutView.extend({
+        initialize: function() {
+          suite.regionOne = this.regionOne;
+        }
+      });
+
+      this.layoutViewManager = new this.LayoutViewInitialize();
     });
 
     it('should instantiate the specified region managers', function() {
       expect(this.layoutViewManager).to.have.property('regionOne');
       expect(this.layoutViewManager).to.have.property('regionTwo');
+    });
+
+    it('should instantiate the specified region before initialize', function() {
+      expect(this.regionOne).to.equal(this.layoutViewManager.regionOne);
     });
   });
 
@@ -84,7 +90,7 @@ describe('layoutView', function() {
       this.layoutViewManager = new this.LayoutViewCustomRegion();
     });
 
-    it('should instantiate specific regions with custom regions if speficied', function() {
+    it('should instantiate specific regions with custom regions if specified', function() {
       expect(this.layoutViewManager).to.have.property('regionOne');
       expect(this.layoutViewManager.regionOne).to.be.instanceof(this.CustomRegion1);
       expect(this.layoutViewManager).to.have.property('regionTwo');
@@ -217,7 +223,15 @@ describe('layoutView', function() {
 
   describe('when re-rendering an already rendered layoutView', function() {
     beforeEach(function() {
-      this.layoutView = new this.LayoutView({
+      this.LayoutViewBoundRender = this.LayoutView.extend({
+        initialize: function() {
+          if (this.model) {
+            this.listenTo(this.model, 'change', this.render);
+          }
+        }
+      });
+
+      this.layoutView = new this.LayoutViewBoundRender({
         model: new Backbone.Model()
       });
       this.layoutView.render();

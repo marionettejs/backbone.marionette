@@ -84,7 +84,7 @@ Marionette.ItemView = Marionette.View.extend({
   },
 
   // Attaches the content of a given view.
-  // This method can be overriden to optimize rendering,
+  // This method can be overridden to optimize rendering,
   // or to render in a non standard way.
   //
   // For example, using `innerHTML` instead of `$el.html`

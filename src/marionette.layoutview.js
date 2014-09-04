@@ -28,17 +28,39 @@ Marionette.LayoutView = Marionette.ItemView.extend({
   render: function() {
     this._ensureViewIsIntact();
 
-    if (this._firstRender) {
-      // if this is the first render, don't do anything to
-      // reset the regions
-      this._firstRender = false;
-    } else {
-      // If this is not the first render call, then we need to
-      // re-initialize the `el` for each region
-      this._reInitializeRegions();
-    }
+    this.triggerMethod('before:render', this);
 
-    return Marionette.ItemView.prototype.render.apply(this, arguments);
+    this.regionManager.each(function(region) {
+      if(region.$el && region.$el.children().length) {
+        region._detachedChildren = region.$el.children().detach();
+        region.el = region.$el.selector;
+        delete region.$el;
+      }
+    });
+
+    this._renderTemplate();
+    this.bindUIElements();
+
+    this.regionManager.each(function(region) {
+      var target = this.$(region.el);
+      if (region._detachedChildren && target && target.length) {
+        target.empty();
+        target.append(region._detachedChildren);
+        region._ensureElement();
+      } else {
+        if (region._detachedChildren) {
+          region._detachedChildren.remove();
+        }
+        region.reset();
+      }
+
+      delete region._detachedChildren;
+
+    }.bind(this));
+
+    this.triggerMethod('render', this);
+
+    return this;
   },
 
   // Handle destroying regions, and then destroy the view itself.
@@ -117,15 +139,6 @@ Marionette.LayoutView = Marionette.ItemView.extend({
     _.extend(regions, regionOptions);
 
     this.addRegions(regions);
-  },
-
-  // Internal method to re-initialize all of the regions by updating the `el` that
-  // they point to
-  _reInitializeRegions: function() {
-    this.regionManager.emptyRegions();
-    this.regionManager.each(function(region) {
-      region.reset();
-    });
   },
 
   // Enable easy overriding of the default `RegionManager`

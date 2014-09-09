@@ -1,3 +1,46 @@
+### v2.2.0 [view commit logs](https://github.com/marionettejs/backbone.marionette/compare/v2.1.0...v2.2.0)
+
+* Features
+
+  * Normalize region selectors hash to allow a user to use the `@ui.` syntax
+  * `Marionette.triggerMethodOn`
+    * `triggerMethodOn` invokes `triggerMethod` on a specific context
+  * Marionette.Error
+    * `captureStackTrace` cleans up stack traces
+  * add view _behaviors reference to associated behaviors
+    * enabling you to easily test and spy and your behaviors
+  * CollectionViews now receive events from emptyViews in the childEvents hash
+  * Regions now receive `swapOut` and `beforeSwapOut` events.
+  * Region constructor now can take a `el` as an option when calling `addRegion  `
+  * Region reset leaves `el` intact
+  * Application has `this.options`
+  * Application has `initialize` method
+  * Behaviors no longer wrap view methods
+
+* Bug Fixes
+
+  * LayoutView’s regions are scoped inside it’s `el`
+  * Fix inconsistent Marionette.Object  constructor implementation.
+  * emptyView instances now proxy their events up to the collection / compositeView
+  * collection / compositeView does not listen to collection add/remove/reset events until after render.
+  * Marionette.normalizeUIKeys no longer mutates UI hash
+
+* Better Errors
+
+  * View destroyed error now includes the view cid in the error message.
+  * Throw an error when Marionette.bindEntityEvents is not an object or funcunction
+  * Throw a descriptive error for `collectionViews`
+    * If you do not pass a valid `collectionView` instance you are now given a logical error.
+
+* Documentation Improvements
+
+  * New API docs are in progress
+  * Examples have been cleaned up
+
+### v2.2.0-pre.2 [view commit logs](https://github.com/marionettejs/backbone.marionette/compare/v2.1.0...v2.2.0-pre.2)
+
+### v2.2.0-pre [view commit logs](https://github.com/marionettejs/backbone.marionette/compare/v2.1.0...v2.2.0-pre)
+
 ### v2.1.0 [view commit logs](https://github.com/marionettejs/backbone.marionette/compare/v2.0.3...v2.1.0)
 
 * Features

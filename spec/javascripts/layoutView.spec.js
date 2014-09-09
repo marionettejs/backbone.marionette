@@ -454,4 +454,54 @@ describe('layoutView', function() {
       expect(this.regions.regionTwo).to.equal(this.layout.getRegion("regionTwo"));
     });
   });
+
+  describe('manipulating regions', function () {
+    beforeEach(function() {
+      this.beforeAddRegionSpy = this.sinon.spy();
+      this.addRegionSpy = this.sinon.spy();
+      this.beforeRegionRemoveSpy = this.sinon.spy();
+      this.removeRegionSpy = this.sinon.spy();
+
+      this.Layout = Marionette.LayoutView.extend({
+        template: false,
+        onBeforeAddRegion: this.beforeAddRegionSpy,
+        onAddRegion: this.addRegionSpy,
+        onBeforeRemoveRegion: this.beforeRegionRemoveSpy,
+        onRemoveRegion: this.removeRegionSpy
+      });
+
+      this.layout = new this.Layout();
+
+      this.regionName = 'myRegion';
+      this.layout.addRegion(this.regionName, '.region-selector');
+    });
+
+    it('should trigger correct region add events', function() {
+      expect(this.beforeAddRegionSpy)
+        .to.have.been.calledOnce
+        .and.calledOn(this.layout)
+        .and.calledWith(this.regionName);
+
+      expect(this.addRegionSpy)
+        .to.have.been.calledOnce
+        .and.calledOn(this.layout)
+        .and.calledWith(this.regionName);
+    });
+
+
+    it('should trigger correct region remove events', function() {
+      this.layout.removeRegion(this.regionName);
+
+      expect(this.beforeRegionRemoveSpy)
+        .to.have.been.calledOnce
+        .and.calledOn(this.layout)
+        .and.calledWith(this.regionName);
+
+      expect(this.removeRegionSpy)
+        .to.have.been.calledOnce
+        .and.calledOn(this.layout)
+        .and.calledWith(this.regionName);
+    });
+  });
+
 });

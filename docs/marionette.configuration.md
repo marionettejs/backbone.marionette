@@ -12,8 +12,11 @@ most common items to change.
 ## Marionette.Deferred <a name="deferred"></a>
 
 By default, Marionette makes use of `Backbone.$.Deferred` to create
-thenable objects. All that is needed is a Deferred that has the
-following properties:
+thenable objects.
+
+### Overriding Marionette.Deferred
+
+If you are using Marionette without jquery you must first shim `Backbone.$.Deferred` with a following object that adherses to these properties:
 
 1. `promise`: a Promises/A+ thenable, or a function that returns one
 2. `resolve`: a function that resolves the provided promise with a value

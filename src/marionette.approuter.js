@@ -76,5 +76,11 @@ Marionette.AppRouter = Backbone.Router.extend({
   },
 
   // Proxy `getOption` to enable getting options from this or this.options by name.
-  getOption: Marionette.proxyGetOption
+  getOption: Marionette.proxyGetOption,
+
+  triggerMethod: Marionette.triggerMethod,
+
+  bindEntityEvents: Marionette.proxyBindEntityEvents,
+
+  unbindEntityEvents: Marionette.proxyUnbindEntityEvents
 });

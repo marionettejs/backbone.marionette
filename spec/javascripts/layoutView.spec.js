@@ -234,25 +234,25 @@ describe('layoutView', function() {
       this.layoutView = new this.LayoutViewBoundRender({
         model: new Backbone.Model()
       });
+      this.sinon.spy(this.layoutView.regionOne, 'empty');
       this.layoutView.render();
 
       this.view = new Backbone.View();
       this.view.destroy = function() {};
       this.layoutView.regionOne.show(this.view);
 
-      this.emptyRegionsSpy = this.sinon.spy(this.layoutView.regionManager, 'emptyRegions');
 
       this.layoutView.render();
       this.layoutView.regionOne.show(this.view);
       this.region = this.layoutView.regionOne;
     });
 
-    it('should empty the regions', function() {
-      expect(this.emptyRegionsSpy.callCount).to.equal(1);
+    it('should re-bind the regions to the newly rendered elements', function() {
+      expect(this.region.$el.parent()[0]).to.equal(this.layoutView.el);
     });
 
-    it('should re-bind the regions to the newly rendered elements', function() {
-      expect(this.layoutView.regionOne.$el.parent()[0]).to.equal(this.layoutView.el);
+    it('should call empty twice', function() {
+      expect(this.region.empty).to.have.been.calledThrice;
     });
 
     describe('and the views "render" function is bound to an event in the "initialize" function', function() {

@@ -124,7 +124,6 @@ Marionette.LayoutView = Marionette.ItemView.extend({
   // Internal method to re-initialize all of the regions by updating the `el` that
   // they point to
   _reInitializeRegions: function() {
-    this.regionManager.emptyRegions();
     this.regionManager.each(function(region) {
       region.reset();
     });

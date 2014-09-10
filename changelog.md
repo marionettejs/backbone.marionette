@@ -8,7 +8,7 @@
   * Marionette.Error
     * `captureStackTrace` cleans up stack traces
   * add view _behaviors reference to associated behaviors
-    * enabling you to easily test and spy and your behaviors
+    * enabling you to easily test and spy on your behaviors
   * CollectionViews now receive events from emptyViews in the childEvents hash
   * Regions now receive `swapOut` and `beforeSwapOut` events.
   * Application has `this.options`

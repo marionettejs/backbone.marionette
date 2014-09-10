@@ -1,31 +1,15 @@
-## JS Doc Overview
+## API Documentation – JSDoc
 
-We on Marionette, believe that documentation is incredibly important. Because of that, we've gone the extra mile to design an api format (jsdoc) that works great for us.
- 
-### Goals
-1. Documentation should be in its own file
-Good documentation is just as important as good source and tests. 
+This is the folder for our API docs files. The files are parsed by JSDoc and converted into HTML during the www build
+step. Although they're JSDoc, there might be some differences from what you're used to. First, we separated the documentation
+from the source code so as not to impede the readability of the source files themselves. Secondly, we selected YAML as our
+format of choice to take advantage of its readability and lightweight syntax.
 
-  Tests takes space to do right and context. 
-Separating the the docs from the source makes it much easier to evaluate the documentation holistically.
+### Structure of a Marionette YAML document
 
-2. Documentation should be structured
+These are the top-level properties of each YAML file for the Marionette docs. Given that they're
+not always required for each object that's being documented, they're all optional.
 
-  There are many different components of documentation that should be structured: function signatures, descriptions, properties, examples.
-Each of these types should be optimized so that it's easy to record the relevant information. 
-
-  Function signatures fit naturally with `@tag` formats, while descriptions and examples fit well as markdown.
-Yaml as overall document format provides the overall structure for the document so that the content is properly organized.
-
-3. Documentation should have great content
-
-  This should go without saying, but too often the documentation fails at being practical.
-
-  The documentation should have complete coverage over all of the ways any class function could be used or property value set.
-
-  The documentation should also have examples for the main use cases and explain the pros and cons of those approaches.
-
-### Structure of the jsdoc document
 + class
 + namespace
 + name
@@ -34,68 +18,67 @@ Yaml as overall document format provides the overall structure for the document 
 + constructor
 + functions
 
+#### Example
 
-### Example Doc
 ```yaml
 name: Region
 class: Region
 namespace: Marionette
 description: |
-  # Regions do really cool things
+  # Regions are a persistent container for displaying Views.
 
 properties:
   currentView: |
-    current view is important
+    The View that is currently being displayed inside of the Region.
 
 constructor: |
-  instantiate ya
+  Instantiates the Region, creating its `el`.
   
 functions: 
   show: 
     description: |
-      show yea
+      Displays the passed-in `view` within the Region, destroying the current View, if there is one.
       
-      @param woo
+      @param view
       
     examples:
       -
         name: Showing a simple view
         example: |
-          markdown example
-
-  empty: |
-    This is just a jsdoc description. 
-    Why, because I'm lazy and don't want to write any examples
+          An example could be included here.
+          It can span several lines, and it can also contain markdown.
 ```
 
-### Compile phase
-Jsdoc documents are compiled by running `grunt api`. Under the hood, the docs are compiled with the `jsDocFiles` task.
+### Compiling & Linting the Docs
 
-The `jsdoc` files are compiled via a two-phase process. First, they're parsed through `yaml` to `json`. Then the `jsdoc` sections are parsed with the great `dox` library.
+The JSDoc files are compiled by running `grunt api` from the command line. This lints the files, then compiles the YAML into JSON documents,
+placing them within in the `jsdoc` folder.
 
-The result is a `json` api document in the `jsdoc` folder. We use the `json` files on the website to present the api, but you can feel free to use it for other purposes as well.
+### Getting Started with YAML & JSDoc
 
+It can be useful to know a few facts about YAML and JSDoc before making changes to the documentation. We'll list a few common
+features of these languages that might come in handy to you.
 
-### Gotchas
+#### JSDoc Sections
 
-#### jsdoc sections
-It's important to know a little `yaml` and a little `jsdoc` to document a function.
-
-1. all `jsdoc` sections start with a pipe (`|`). This is because when `yaml` sees that it will convert the subsequent content to text.
-2. `jsdoc` always begins with at least one line of description. Multiple line descriptions are cool, but the first line will become a summary.
-3. `jsdoc` loves its tags, you should read all about them, but here are the basics `@param`, `return`, `@api`
+1. All JSDoc sections start with a pipe (`|`). This indicates to YAML that the subsequent content is intended to be parsed as text.
+2. JSDoc always begins with a description, which can span multiple lines. The first line is special in that it is intended to be used as a summary.
+3. JSDoc has a wide variety of tags, many of which are relevant to our documentation. There is sufficient documentation on [all of them on the JSDoc website](http://usejsdoc.org/).
+  Three of the most common tags are `@param`, `return`, and `@api`, which you'll find examples of below.
 
 ```js
 _.extend(Foo.prototype, {
   foo: function(options) {
-    // does foo
+    // do something interesting
+    return this;
   }
-})
+});
 ```
+
 ```yaml
 functions: 
   foo: |
-     This is my description
+     This is the description of this method.
         
      @param {Object} options
      @return this
@@ -105,19 +88,20 @@ functions:
 
 #### Whitespace matters
 
-The api is written in `yaml`, so whitespace matters.
+Unlike JSON, whitespace has meaning in YAML. To give an example of a good and bad JSDoc file here are two examples.
 
-  #### > line 18 is bad
-  ![](http://f.cl.ly/items/0O3B0P3G3u1o3i112G16/Image%202014-08-22%20at%209.27.36%20PM.png)
+In the first image, line 18 has an error because it doesn't consider the second paragraph as part of the same
+description.
 
-  #### > line 18 is good
-  ![](http://f.cl.ly/items/272h0V442i0c1j1L3V3o/Image%202014-08-22%20at%209.27.42%20PM.png)
+![](http://f.cl.ly/items/0O3B0P3G3u1o3i112G16/Image%202014-08-22%20at%209.27.36%20PM.png)
 
-#### Lists
-`Yaml`, is a little funny. One of the most common questions is how to list an array of objects.
-This comes up in our `jsdocs` when you're showing a list of examples.
+To fix it add a line of whitespace that matches the indentation of the paragraphs.
 
-The appropriate way to do that is to separate each item in the list with a dash (`-`)
+![](http://f.cl.ly/items/272h0V442i0c1j1L3V3o/Image%202014-08-22%20at%209.27.42%20PM.png)
+
+#### YAML Lists
+
+To create a list in YAML, separate each section with a hyphen on its own line (`-`)
 
 ```yaml
 examples:

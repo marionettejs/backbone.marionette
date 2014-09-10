@@ -59,8 +59,37 @@
     <script src="bower_components/jquery/dist/jquery.js"></script>
     <script src="bower_components/underscore/underscore.js"></script>
     <script src="bower_components/backbone/backbone.js"></script>
+    <script src="bower_components/backbone.wreqr/lib/backbone.wreqr.js"></script>
+    <script src="bower_components/backbone.babysitter/lib/backbone.babysitter.js"></script>
 
-    <script src="tmp/backbone.marionette.js"></script>
+
+    <script>
+        window.Marionette = Backbone.Marionette = {};
+        window.slice = Array.prototype.slice;
+        Marionette.Deferred = Backbone.$.Deferred;
+    </script>
+    <script src="src/marionette.callbacks.js"></script>
+    <script src="src/marionette.triggermethod.js"></script>
+    <script src="src/marionette.bindEntityEvents.js"></script>
+    <script src="src/marionette.domRefresh.js"></script>
+    <script src="src/marionette.helpers.js"></script>
+    <script src="src/marionette.error.js"></script>
+    <script src="src/marionette.renderer.js"></script>
+    <script src="src/marionette.templatecache.js"></script>
+    <script src="src/marionette.object.js"></script>
+    <script src="src/marionette.controller.js"></script>
+    <script src="src/marionette.approuter.js"></script>
+    <script src="src/marionette.application.js"></script>
+    <script src="src/marionette.module.js"></script>
+    <script src="src/marionette.region.js"></script>
+    <script src="src/marionette.regionManager.js"></script>
+    <script src="src/marionette.behavior.js"></script>
+    <script src="src/marionette.behaviors.js"></script>
+    <script src="src/marionette.view.js"></script>
+    <script src="src/marionette.itemview.js"></script>
+    <script src="src/marionette.layoutview.js"></script>
+    <script src="src/marionette.collectionview.js"></script>
+    <script src="src/marionette.compositeview.js"></script>
 
     <script src="spec/javascripts/application.appRegions.spec.js"></script>
     <script src="spec/javascripts/application.spec.js"></script>

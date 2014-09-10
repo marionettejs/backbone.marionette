@@ -131,6 +131,10 @@ describe('item view', function() {
     it('should trigger a rendered event', function() {
       expect(this.triggerSpy).to.have.been.calledWith('render', this.view);
     });
+
+    it('should call the "template" method with the item view as the context', function() {
+      expect(this.templateStub).to.have.been.calledOn(this.view);
+    });
   });
 
   describe('when an item view has a model and is rendered', function() {

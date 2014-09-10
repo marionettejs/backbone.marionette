@@ -469,7 +469,7 @@ describe("collection view", function(){
   });
 
   describe("when a child view triggers an event", function(){
-    var model, collection, collectionView, childView, someEventSpy;
+    var model, collection, collectionView, childView, someEventSpy, TestBehavior;
 
     beforeEach(function(){
       someEventSpy = jasmine.createSpy("some:event spy");
@@ -477,7 +477,21 @@ describe("collection view", function(){
       model = new Backbone.Model({ foo: "bar" });
       collection = new Backbone.Collection([model]);
 
-      collectionView = new CollectionView({ collection: collection });
+      TestBehavior = Marionette.Behavior.extend({
+        onItemviewSomeEvent: function() {}
+      });
+
+      spyOn(TestBehavior.prototype, 'onItemviewSomeEvent');
+
+      var TestCollectionView = CollectionView.extend({
+        behaviors: {
+          TestBehavior: {
+            behaviorClass: TestBehavior
+          }
+        }
+      });
+
+      collectionView = new TestCollectionView({ collection: collection });
       collectionView.on("itemview:some:event", someEventSpy);
       collectionView.render();
 
@@ -488,6 +502,11 @@ describe("collection view", function(){
 
     it("should bubble up through the parent collection view", function(){
       expect(collectionView.trigger).toHaveBeenCalledWith("itemview:some:event", childView, "test", model);
+    });
+
+    it("should bubble up through the parent collection view", function(){
+      expect(TestBehavior.prototype.onItemviewSomeEvent.callCount).toEqual(1);
+      expect(TestBehavior.prototype.onItemviewSomeEvent).toHaveBeenCalledWith(childView, "test", model);
     });
 
     it("should provide the child view that triggered the event, including other relevant parameters", function() {

@@ -11,8 +11,6 @@
     * enabling you to easily test and spy and your behaviors
   * CollectionViews now receive events from emptyViews in the childEvents hash
   * Regions now receive `swapOut` and `beforeSwapOut` events.
-  * Region constructor now can take a `el` as an option when calling `addRegion  `
-  * Region reset leaves `el` intact
   * Application has `this.options`
   * Application has `initialize` method
   * Behaviors no longer wrap view methods

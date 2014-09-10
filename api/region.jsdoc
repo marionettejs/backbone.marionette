@@ -290,3 +290,57 @@ functions:
     
     @api private
 
+events:
+  -
+    name: before:show
+
+    description: |
+      Triggered after the view has been rendered, but before it has been placed inside of the Region. At this
+      time the view will still be detached from the `document`.
+
+  -
+    name: show
+
+    description: |
+      Triggered after the view has been both rendered and placed inside of the Region. With the exception
+      of deeply nested view trees, the View will be attached to the `document` at the time of this event.
+
+  -
+    name: before:swapOut
+
+    description: |
+      Triggered before the new view has replaced the old view within the Region. The old view is passed as the
+      first argument.
+
+  -
+    name: swapOut
+
+    description: |
+      Triggered when the new view has replaced the old view within the Region. The old view is passed as the
+      first argument.
+
+  -
+    name: before:swap
+
+    description: |
+      Triggered before the new view has replaced the old view within the Region. The new view is passed as the
+      first argument.
+
+  -
+    name: swapOut
+
+    description: |
+      Triggered when the new view has replaced the old view within the Region. The new view is passed as the
+      first argument.
+
+  -
+    name: before:empty
+
+    description: |
+      Triggered before the Region empties the contents of it element by destroying its current view.
+
+  -
+    name: empty
+
+    description: |
+      Triggered right after Region empties the contents of it element by destroying its current view.

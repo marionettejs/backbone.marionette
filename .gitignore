@@ -9,9 +9,7 @@ coverage/
 test/
 .grunt/
 npm-debug.log
-_SpecRunner.html
 bower_components/
-.idea
 .grunt
 reports
 jsdoc

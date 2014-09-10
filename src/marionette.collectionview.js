@@ -236,7 +236,7 @@ Marionette.CollectionView = Marionette.View.extend({
         itemEvents[rootEvent].apply(this, args);
       }
 
-      Marionette.triggerMethod.apply(this, args);
+      this.triggerMethod.apply(this, args);
     }, this);
   },
 

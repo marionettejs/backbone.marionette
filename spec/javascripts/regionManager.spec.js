@@ -238,15 +238,15 @@ describe('regionManager', function() {
         });
 
         it('returns all the created regions on an object literal', function() {
-          expect(this.regions.fooRegion).to.deep.equal(this.fooRegion);
-          expect(this.regions.barRegion).to.deep.equal(this.barRegion);
-          expect(this.regions.bazRegion).to.deep.equal(this.bazRegion);
+          expect(this.regions.fooRegion).to.be.instanceof(Marionette.Region);
+          expect(this.regions.barRegion).to.be.instanceof(Marionette.Region);
+          expect(this.regions.bazRegion).to.be.instanceof(Marionette.Region);
         });
 
         it('adds all the specified regions', function() {
-          expect(this.regionManager.get('fooRegion')).to.deep.equal(this.fooRegion);
-          expect(this.regionManager.get('barRegion')).to.deep.equal(this.barRegion);
-          expect(this.regionManager.get('bazRegion')).to.deep.equal(this.bazRegion);
+          expect(this.regionManager.get('fooRegion')).to.be.instanceof(Marionette.Region);
+          expect(this.regionManager.get('barRegion')).to.be.instanceof(Marionette.Region);
+          expect(this.regionManager.get('bazRegion')).to.be.instanceof(Marionette.Region);
         });
 
         it('uses the custom `regionClass`', function() {
@@ -282,13 +282,13 @@ describe('regionManager', function() {
         });
 
         it('returns all the created regions on an object literal', function() {
-          expect(this.regionManager.get('fooRegion')).to.deep.equal(this.fooRegion);
-          expect(this.regionManager.get('barRegion')).to.deep.equal(this.barRegion);
+          expect(this.regionManager.get('fooRegion')).to.be.an.instanceOf(this.BazRegion);
+          expect(this.regionManager.get('barRegion')).to.be.an.instanceOf(this.BazRegion);
         });
 
         it('adds all the specified regions', function() {
-          expect(this.regionManager.get('fooRegion')).to.deep.equal(this.fooRegion);
-          expect(this.regionManager.get('barRegion')).to.deep.equal(this.barRegion);
+          expect(this.regionManager.get('fooRegion')).to.be.an.instanceof(Marionette.Region);
+          expect(this.regionManager.get('barRegion')).to.be.an.instanceof(Marionette.Region);
         });
 
         it('overrides the regionClass via defaults', function() {

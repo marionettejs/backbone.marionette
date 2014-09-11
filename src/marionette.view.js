@@ -16,11 +16,11 @@ Marionette.View = Backbone.View.extend({
     // parses out the @ui DSL for events
     this.events = this.normalizeUIKeys(_.result(this, 'events'));
 
+    Backbone.View.apply(this, arguments);
+
     if (_.isObject(this.behaviors)) {
       new Marionette.Behaviors(this);
     }
-
-    Backbone.View.apply(this, arguments);
 
     Marionette.MonitorDOMRefresh(this);
     this.listenTo(this, 'show', this.onShowCalled);

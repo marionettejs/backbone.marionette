@@ -123,6 +123,26 @@ describe('Behaviors', function() {
     });
   });
 
+  describe('behavior initialization order', function() {
+    it('should have access to view.model', function() {
+      var model = new Backbone.Model();
+
+      var behaviorInitialize = function(behaviorOptions, view) {
+        expect(view.model).to.be.equal(model);
+      };
+      
+      Marionette.Behaviors.behaviorsLookup = {
+        foo: Marionette.Behavior.extend({ initialize: behaviorInitialize })
+      };
+
+      var View = Marionette.ItemView.extend({
+        behaviors: { foo: { } }
+      });
+
+      new View({ model: model });
+    });
+  });
+
   describe('behavior events', function() {
     beforeEach(function() {
       this.fooClickStub  = this.sinon.stub();

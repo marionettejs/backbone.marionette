@@ -1133,19 +1133,4 @@ describe('collection view', function() {
       expect(this.childView.$el).to.contain.$text('bar');
     });
   });
-
-  describe('Creating an invalid collectionView', function() {
-    beforeEach(function() {
-      this.createCollectionView = function() {
-        Backbone.Marionette.CollectionView({
-          collection: []
-        });
-      };
-    });
-
-    it('should warn you of an invalid collectionView', function() {
-      expect(this.createCollectionView).to.throw('The Collection option passed to this view needs to be an instance of a Backbone.Collection');
-    });
-  });
-
 });

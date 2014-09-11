@@ -266,6 +266,7 @@ describe('composite view', function() {
         suite.order.push(suite.compositeView);
       });
 
+      this.sinon.spy(this.compositeView, 'template');
       this.sinon.spy(this.compositeView, 'trigger');
       this.sinon.spy(this.compositeView, 'onRender');
 
@@ -300,6 +301,10 @@ describe('composite view', function() {
 
     it('should only call "onRender" once', function() {
       expect(this.compositeView.onRender.callCount).to.equal(1);
+    });
+
+    it('should call "template" with the compositeView as the context', function() {
+      expect(this.compositeView.template).to.have.been.calledOn(this.compositeView);
     });
   });
 

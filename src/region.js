@@ -105,10 +105,6 @@ Marionette.Region = Marionette.Object.extend({
       this.triggerMethod('before:show', view, this, options);
       Marionette.triggerMethodOn(view, 'before:show', view, this, options);
 
-      if (isChangingView) {
-        this.triggerMethod('swapOut', changingView, this, options);
-      }
-
       // An array of views that we're about to display
       var attachedRegion = Marionette.isNodeAttached(this.el);
 
@@ -136,6 +132,7 @@ Marionette.Region = Marionette.Object.extend({
       }
 
       if (isChangingView) {
+        this.triggerMethod('swapOut', changingView, this, options);
         this.triggerMethod('swap', view, this, options);
       }
 

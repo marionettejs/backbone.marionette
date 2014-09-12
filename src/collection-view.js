@@ -135,6 +135,9 @@ Marionette.CollectionView = Marionette.View.extend({
     }
   },
 
+  // Internal reference to what index a `emptyView` is.
+  _emptyViewIndex: -1,
+
   // Internal method. Separated so that CompositeView can have
   // more control over events being triggered, around the rendering
   // process
@@ -207,7 +210,7 @@ Marionette.CollectionView = Marionette.View.extend({
                           this.getOption('childViewOptions');
 
     if (_.isFunction(emptyViewOptions)){
-      emptyViewOptions = emptyViewOptions.call(this);
+      emptyViewOptions = emptyViewOptions.call(this, child, this._emptyViewIndex);
     }
 
     // build the empty view
@@ -229,7 +232,7 @@ Marionette.CollectionView = Marionette.View.extend({
     this.children.add(view);
 
     // Render it and show it
-    this.renderChildView(view, -1);
+    this.renderChildView(view, this._emptyViewIndex);
 
     // call the 'show' method if the collection view
     // has already been shown

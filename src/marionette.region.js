@@ -178,7 +178,7 @@ _.extend(Marionette.Region.prototype, Backbone.Events, {
       if (isChangingView) {
         this.triggerMethod('swapOut', this.currentView);
       }
-      
+
       this.currentView = view;
 
       if (isChangingView) {

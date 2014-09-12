@@ -34,7 +34,7 @@ functions:
       Regions can be added individually using the `addRegion` method.
 
       @param {String} name - The name of the region being added
-      @param {Marionette.Region} definition - Accepts a Marionette.Region, a selector, an object, or a class
+      @param {Marionette.Region|Function|String|Object} definition - Accepts a Marionette.Region instance, a Function that returns a Marionette.Region instance (such as a Region constructor), a selector, or an object definition for finer control
 
     examples:
       -

@@ -14,9 +14,9 @@ Marionette.View = Backbone.View.extend({
     // at some point however this may be removed
     this.options = _.extend({}, _.result(this, 'options'), _.isFunction(options) ? options.call(this) : options);
 
-    this._behaviors = Marionette.Behaviors(this);
-
     Backbone.View.apply(this, arguments);
+
+    this._behaviors = Marionette.Behaviors(this);
 
     Marionette.MonitorDOMRefresh(this);
     this.listenTo(this, 'show', this.onShowCalled);
@@ -178,7 +178,7 @@ Marionette.View = Backbone.View.extend({
     // Call destroy on each behavior after
     // destroying the view.
     // This unbinds event listeners
-    // that behaviors have registerd for.
+    // that behaviors have registered for.
     _.invoke(this._behaviors, 'destroy', args);
 
     return this;

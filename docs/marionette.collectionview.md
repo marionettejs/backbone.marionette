@@ -338,6 +338,8 @@ Similar to `childView` and `childViewOptions`, there is an `emptyViewOptions` pr
 
 If `emptyViewOptions` aren't provided the CollectionView will default to passing the `childViewOptions` to the `emptyView`.
 
+`emptyViewOptions` recieves three arguments, the `collectionView` instance, a generic `Backbone.Model` instance, and -1.
+
 ```js
 var EmptyView = Backbone.Marionette.ItemView({
   initialize: function(options){

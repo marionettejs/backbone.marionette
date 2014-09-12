@@ -213,7 +213,7 @@ Marionette.CollectionView = Marionette.View.extend({
                           this.getOption('childViewOptions');
 
     if (_.isFunction(emptyViewOptions)){
-      emptyViewOptions = emptyViewOptions.call(this);
+      emptyViewOptions = emptyViewOptions.call(this, child, -1);
     }
 
     // build the empty view

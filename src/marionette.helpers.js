@@ -119,3 +119,10 @@ Marionette.actAsCollection = function(object, listProperty) {
     };
   });
 };
+
+// Verifies if the argument fn is a view "class" (or "constructor"). That is,
+// verifies if fn is a function which is the return value of calling Backbone.View.extend,
+// Marionette.View.extend, or any other Marionette view class.
+Marionette.isViewClass = function(fn){
+  return _.isFunction(fn) && fn.prototype instanceof Backbone.View ? true : false;
+};

@@ -2,7 +2,7 @@
 
   if (typeof define === 'function' && define.amd) {
     define(['backbone', 'underscore', 'backbone.wreqr', 'backbone.babysitter'], function(Backbone, _) {
-      return (root.Marionette = factory(root, Backbone, _));
+      return (root.Marionette = root.Mn = factory(root, Backbone, _));
     });
   } else if (typeof exports !== 'undefined') {
     var Backbone = require('backbone');
@@ -11,13 +11,14 @@
     var BabySitter = require('backbone.babysitter');
     module.exports = factory(root, Backbone, _);
   } else {
-    root.Marionette = factory(root, root.Backbone, root._);
+    root.Marionette = root.Mn = factory(root, root.Backbone, root._);
   }
 
 }(this, function(root, Backbone, _) {
   'use strict';
 
   var previousMarionette = root.Marionette;
+  var previousMn = root.Mn;
 
   var Marionette = Backbone.Marionette = {};
 
@@ -25,6 +26,7 @@
 
   Marionette.noConflict = function() {
     root.Marionette = previousMarionette;
+    root.Mn = previousMn;
     return this;
   };
 

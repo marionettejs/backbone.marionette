@@ -1,3 +1,6 @@
+// Error
+// -----
+
 var errorProps = ['description', 'fileName', 'lineNumber', 'name', 'message', 'number'];
 
 Marionette.Error = Marionette.extend.call(Error, {

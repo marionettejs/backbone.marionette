@@ -38,34 +38,33 @@
   // Get the Deferred creator for later use
   Marionette.Deferred = Backbone.$.Deferred;
 
-  // @include ../marionette.helpers.js
-  // @include ../marionette.triggermethod.js
-  // @include ../marionette.domRefresh.js
+  // @include ../helpers.js
+  // @include ../trigger-method.js
+  // @include ../dom-refresh.js
+  // @include ../bind-entity-events.js
 
-  // @include ../marionette.bindEntityEvents.js
+  // @include ../error.js
+  // @include ../callbacks.js
+  // @include ../controller.js
+  // @include ../object.js
+  // @include ../region.js
+  // @include ../region-manager.js
 
-  // @include ../marionette.error.js
-  // @include ../marionette.callbacks.js
-  // @include ../marionette.controller.js
-  // @include ../marionette.object.js
-  // @include ../marionette.region.js
-  // @include ../marionette.regionManager.js
+  // @include ../template-cache.js
+  // @include ../renderer.js
 
-  // @include ../marionette.templatecache.js
-  // @include ../marionette.renderer.js
+  // @include ../view.js
+  // @include ../item-view.js
+  // @include ../collection-view.js
+  // @include ../composite-view.js
+  // @include ../layout-view.js
 
-  // @include ../marionette.view.js
-  // @include ../marionette.itemview.js
-  // @include ../marionette.collectionview.js
-  // @include ../marionette.compositeview.js
-  // @include ../marionette.layoutview.js
+  // @include ../behavior.js
+  // @include ../behaviors.js
 
-  // @include ../marionette.behavior.js
-  // @include ../marionette.behaviors.js
-
-  // @include ../marionette.approuter.js
-  // @include ../marionette.application.js
-  // @include ../marionette.module.js
+  // @include ../app-router.js
+  // @include ../application.js
+  // @include ../module.js
 
   return Marionette;
 }));

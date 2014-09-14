@@ -53,11 +53,11 @@ module.exports = function(grunt) {
 
     preprocess: {
       core: {
-        src: 'src/build/marionette.core.js',
-        dest: 'tmp/marionette.core.js'
+        src: 'src/build/core.js',
+        dest: 'tmp/core.js'
       },
       bundle: {
-        src: 'src/build/marionette.bundled.js',
+        src: 'src/build/bundled.js',
         dest: 'tmp/backbone.marionette.js'
       }
     },
@@ -136,14 +136,14 @@ module.exports = function(grunt) {
     mochaTest: {
       tests: {
         options: {
-          require: 'spec/javascripts/setup/node.js',
+          require: 'test/unit/setup/node.js',
           reporter: grunt.option('mocha-reporter') || 'nyan',
           clearRequireCache: true,
           mocha: require('mocha')
         },
         src: [
-          'spec/javascripts/setup/helpers.js',
-          'spec/javascripts/*.spec.js'
+          'test/unit/setup/helpers.js',
+          'test/unit/*.spec.js'
         ]
       }
     },
@@ -193,11 +193,11 @@ module.exports = function(grunt) {
 
       specs: {
         options: {
-          jshintrc: 'spec/.jshintrc'
+          jshintrc: 'test/.jshintrc'
         },
 
         files: {
-          src: ['spec/javascripts/**.js']
+          src: ['test/unit/**.js']
         }
       }
     },
@@ -221,7 +221,7 @@ module.exports = function(grunt) {
         options: {
           spawn: false
         },
-        files : ['src/**/*.js', 'spec/**/*.js'],
+        files : ['src/**/*.js', 'test/**/*.js'],
         tasks : ['test']
       }
     },
@@ -291,8 +291,8 @@ module.exports = function(grunt) {
     grunt.config('mochaTest.tests.src', defaultTestsSrc);
     grunt.config('jshint.marionette.src', defaultJshintSrc);
     grunt.config('jshint.specs.files.src', defaultJshintSpecSrc);
-    if (filepath.match('spec/javascripts/') && !filepath.match('setup') && !filepath.match('fixtures')) {
-      grunt.config('mochaTest.tests.src', ['spec/javascripts/setup/helpers.js', filepath]);
+    if (filepath.match('test/unit/') && !filepath.match('setup') && !filepath.match('fixtures')) {
+      grunt.config('mochaTest.tests.src', ['test/unit/setup/helpers.js', filepath]);
       grunt.config('jshint.specs.files.src', filepath);
       grunt.config('jshint.marionette.src', 'DO_NOT_RUN_ME');
     }

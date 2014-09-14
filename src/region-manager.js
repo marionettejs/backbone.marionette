@@ -1,6 +1,6 @@
-// Marionette.RegionManager
-// ------------------------
-//
+// Region Manager
+// --------------
+
 // Manage one or more related `Marionette.Region` objects.
 Marionette.RegionManager = (function(Marionette) {
 

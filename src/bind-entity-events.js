@@ -1,7 +1,7 @@
 /* jshint maxparams: 5 */
 
-// Marionette.bindEntityEvents & unbindEntityEvents
-// ---------------------------
+// Bind Entity Events & Unbind Entity Events
+// -----------------------------------------
 //
 // These methods are used to bind/unbind a backbone "entity" (collection/model)
 // to methods on a target object.

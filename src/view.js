@@ -1,6 +1,6 @@
 /* jshint maxlen: 114, nonew: false */
-// Marionette.View
-// ---------------
+// View
+// ----
 
 // The core view class that other Marionette views extend from.
 Marionette.View = Backbone.View.extend({

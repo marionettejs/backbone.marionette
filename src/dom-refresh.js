@@ -1,6 +1,6 @@
-// DOMRefresh
-// ----------
-//
+// DOM Refresh
+// -----------
+
 // Monitor a view's state, and after it has been rendered and shown
 // in the DOM, trigger a "dom:refresh" event every time it is
 // re-rendered.

@@ -11,13 +11,6 @@ var setFixtures = function () {
   });
 };
 
-var loadFixtures = function () {
-  _.each(arguments, function (fixture) {
-    var file = path.resolve('./spec/javascripts/fixtures/', fixture);
-    setFixtures(fs.readFileSync(file).toString());
-  });
-};
-
 var clearFixtures = function () {
   $body.empty();
 };
@@ -25,7 +18,6 @@ var clearFixtures = function () {
 beforeEach(function () {
   this.sinon = sinon.sandbox.create();
   this.setFixtures   = setFixtures;
-  this.loadFixtures  = loadFixtures;
   this.clearFixtures = clearFixtures;
 });
 

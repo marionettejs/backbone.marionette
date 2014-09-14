@@ -1,5 +1,5 @@
-// AppRouter
-// ---------
+// App Router
+// ----------
 
 // Reduce the boilerplate code of handling route events
 // and then calling a single method on another object.

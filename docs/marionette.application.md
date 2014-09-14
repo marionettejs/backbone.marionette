@@ -323,13 +323,10 @@ A region can be retrieved by name, using the `getRegion` method:
 var app = new Marionette.Application();
 app.addRegions({ r1: "#region1" });
 
-// r1 === r1Again; true
-var r1 = app.getRegion("r1");
-var r1Again = app.r1;
+var myRegion = app.getRegion('r1');
 ```
 
-Accessing a region by named attribute is equivalent to accessing
-it from the `getRegion` method.
+Regions are also attached directly to the Application instance, **but this is not recommended usage**.
 
 ### Removing Regions
 

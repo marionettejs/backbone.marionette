@@ -23,7 +23,7 @@ constructor: |
     quux: "ul.quux"
   });
 
-  regions.baz.show(myView);
+  regions.getRegion("baz").show(myView);
 
   rm.removeRegion("foo");
   ```
@@ -81,9 +81,9 @@ functions:
             };
           });
 
-          regions.main;        //=> 'main' region instance
-          regions.navigation;  //=> 'navigation' region instance
-          otherRegions.footer; //=> 'footer' region instance
+          regions.getRegion("main");        //=> 'main' region instance
+          regions.getRegion("navigation");  //=> 'navigation' region instance
+          otherRegions.getRegion("footer"); //=> 'footer' region instance
           ```
 
       -
@@ -139,7 +139,7 @@ functions:
 
     examples:
       -
-        name: Adding a region
+        name: Adding and then accessing a region
 
         example: |
           ```js
@@ -165,8 +165,8 @@ functions:
 
           var regions = rm.getRegions();
 
-          regions.foo; //=> foo region
-          regions.bar; //=> bar region
+          regions.getRegion("foo"); //=> foo region
+          regions.getRegion("bar"); //=> bar region
           ```
 
   removeRegion:

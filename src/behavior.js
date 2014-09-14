@@ -1,5 +1,5 @@
 // Behavior
-// -----------
+// --------
 
 // A Behavior is an isolated set of DOM /
 // user interactions that can be mixed into any View.

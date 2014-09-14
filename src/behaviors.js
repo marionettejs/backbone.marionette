@@ -1,6 +1,6 @@
 /* jshint maxlen: 143 */
-// Marionette.Behaviors
-// --------
+// Behaviors
+// ---------
 
 // Behaviors is a utility class that takes care of
 // gluing your behavior instances to their given View.

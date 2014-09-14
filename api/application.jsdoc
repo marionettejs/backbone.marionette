@@ -180,7 +180,7 @@ functions:
             var myView = new MyView({
               model: options.someModel
             });
-            MyApp.mainRegion.show(myView);
+            MyApp.getRegion("main").show(myView);
           });
           
           MyApp.addInitializer(function(options){
@@ -306,7 +306,7 @@ functions:
             the name of the region to remove as a string value:
             
             ```js
-            MyApp.removeRegion('someRegion');
+            MyApp.removeRegion("someRegion");
             ```
       
   getRegion: 
@@ -318,7 +318,7 @@ functions:
 
     examples: 
       -
-        name: Get Region By Name
+        name: Get Region by name
         example: |
           A region can be retrieved by name, using the `getRegion` method:
           
@@ -331,8 +331,7 @@ functions:
           var r1Again = app.r1;
           ```
           
-          Accessing a region by named attribute is equivalent to accessing
-          it from the `getRegion` method.
+          This is the preferred method of accessing Regions on the Application instance.
 
     
   getRegions: |

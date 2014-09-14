@@ -71,11 +71,10 @@ Once you've rendered the layoutView, you now have direct access
 to all of the specified regions as region managers.
 
 ```js
-layoutView.menu.show(new MenuView());
+layoutView.getRegion('menu').show(new MenuView());
 
-layoutView.content.show(new MainContentView());
+layoutView.getRegion('content').show(new MainContentView());
 ```
-
 
 ### Region Options
 
@@ -190,44 +189,39 @@ Since the `LayoutView` extends directly from `ItemView`, it
 has all of the core functionality of an item view. This includes
 the methods necessary to be shown within an existing region manager.
 
+In the following example, we will use the Application's Regions
+as the base of a deeply nested view structure.
+
 ```js
-var MyApp = new Backbone.Marionette.Application();
+// Create an Application
+var MyApp = new Marionette.Application();
+
+// Add a region
 MyApp.addRegions({
-  mainRegion: "#main"
+  main: "main"
 });
 
-var layoutView = new AppLayout();
-MyApp.mainRegion.show(layoutView);
+// Create a new LayoutView
+var layoutView = new Marionette.LayoutView();
 
-layoutView.show(new MenuView());
+// Lastly, show the LayoutView in the App's mainRegion
+MyApp.getRegion('main').show(layoutView);
 ```
 
-You can nest layoutViews into region managers as deeply as you want.
-This provides for a well organized, nested view structure.
+You can nest LayoutViews as deeply as you want. This provides for a well organized,
+nested view structure.
 
-For example, to nest 3 layouts (all of these are equivalent):
+For example, to nest 3 layouts:
 
 ```js
 var layout1 = new Layout1();
 var layout2 = new Layout2();
 var layout3 = new Layout3();
-MyApp.mainRegion.show(layout1);
-layout1.region1.show(layout2);
-layout2.region2.show(layout3);
-```
 
-```js
-MyApp.mainRegion.show(new Layout1());
-MyApp.mainRegion.currentView.myRegion1.show(new Layout2());
-MyApp.mainRegion.currentView.myRegion1.currentView.myRegion2.show(new Layout3());
-```
+MyApp.getRegion('main').show(layout1);
 
-Or if you like chaining:
-
-```js
-MyApp.mainRegion.show(new Layout1())
-  .currentView.myRegion1.show(new Layout2())
-  .currentView.myRegion2.show(new Layout3());
+layout1.getRegion('region1').show(layout2);
+layout2.getRegion('region2').show(layout3);
 ```
 
 ## Destroying A LayoutView
@@ -294,7 +288,7 @@ var layoutView = new MyLayoutView();
 // ...
 
 layoutView.addRegion("foo", "#foo");
-layoutView.foo.show(new someView());
+layoutView.getRegion('foo').show(new someView());
 ```
 
 addRegions:

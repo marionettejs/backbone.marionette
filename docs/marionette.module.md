@@ -35,8 +35,6 @@ var MyApp = new Backbone.Marionette.Application();
 // Creates a new module named "MyModule"
 var myModule = MyApp.module("MyModule");
 
-MyApp.MyModule; // => a new Marionette.Module object
-
 myModule === MyApp.MyModule; // => true
 ```
 
@@ -52,7 +50,6 @@ var myModule = MyApp.module("MyModule");
 
 // Returns the module you just created
 var theSameModule = MyApp.module("MyModule");
-
 ```
 
 ## Module Definitions
@@ -253,7 +250,6 @@ MyApp.module("Foo", FooModule);
 
 If all of the module's functionality is defined inside its class, then the class can be passed in directly. `MyApp.module("Foo", FooModule)`
 
-
 ## Defining Sub-Modules
 
 Sub-Modules (or 'child' Modules) can be defined in a single call by passing
@@ -270,6 +266,21 @@ MyApp.Parent.Child.GrandChild; // => a valid module object
 When defining sub-modules using the dot-notation, the
 parent modules do not need to exist; they'll be created for you. If a parent
 has already been instantiated then that instance will be used.
+
+## Accessing Modules
+
+Although modules are attached directly to the Application instance we don't recommend accessing them this way. Instead,
+use the `.module()` function to access your modules.
+
+Let's look at two examples of accessing a module named `MyModule.Submodule`.
+
+```js
+// Not recommended
+var myModule = App.MyModule.Submodule;
+
+// Recommended
+var MyModule = App.module('MyModule.Submodule');
+```
 
 ## Starting And Stopping Modules
 

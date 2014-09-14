@@ -276,6 +276,17 @@ Marionette.View = Backbone.View.extend({
     return ret;
   },
 
+  // Inform every nested view that it has been attached
+  triggerAttach: function() {
+    if (!Marionette.isNodeAttached(this.el)) { return; }
+    this.triggerMethod('attach');
+    if (!this.getNestedViews && !this.children) { return; }
+    var childrenViews = this.getNestedViews ? this.getNestedViews() : this.children._views;
+    _.each(childrenViews, function(childView) {
+      Marionette.triggerMethodOn(childView, 'attach');
+    });
+  },
+
   // import the `triggerMethod` to trigger events with corresponding
   // methods if the method exists
   triggerMethod: function() {

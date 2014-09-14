@@ -136,6 +136,24 @@ Marionette.LayoutView = Marionette.ItemView.extend({
     return new Marionette.RegionManager();
   },
 
+  // Returns every nested view within this Layout
+  getNestedViews: function() {
+
+    // Get each view of each region
+    var views = _.pluck(this.regionManager.getRegions(), 'currentView');
+
+    // Ignore empty regions
+    views = _.filter(views, function(view) { return !!view; });
+
+    var nestedViews = [];
+    _.each(views, function(view) {
+      if (!view || !view.getNestedViews) { return; }
+      nestedViews = nestedViews.concat(view.getNestedViews());
+    });
+    views = views.concat(nestedViews);
+    return views;
+  },
+
   // Internal method to initialize the region manager
   // and all regions in it
   _initRegionManager: function() {

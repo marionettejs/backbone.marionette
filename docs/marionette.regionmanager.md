@@ -46,7 +46,7 @@ var regions = rm.addRegions({
   quux: "ul.quux"
 });
 
-regions.baz.show(myView);
+regions.get('baz').show(myView);
 
 rm.removeRegion("foo");
 ```
@@ -115,9 +115,9 @@ var otherRegions = rm.addRegions(function(regionDefinition) {
   };
 });
 
-regions.main;        //=> 'main' region instance
-regions.navigation;  //=> 'navigation' region instance
-otherRegions.footer; //=> 'footer' region instance
+regions.get('main');        //=> 'main' region instance
+regions.get('navigation');  //=> 'navigation' region instance
+otherRegions.get('footer'); //=> 'footer' region instance
 ```
 
 If you supply a function to `addRegions`, it will be

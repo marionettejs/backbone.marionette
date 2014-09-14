@@ -1,3 +1,6 @@
+// Trigger Method
+// --------------
+
 // Trigger an event and/or a corresponding method name. Examples:
 //
 // `this.triggerMethod("foo")` will trigger the "foo" event and

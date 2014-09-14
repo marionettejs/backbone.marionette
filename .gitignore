@@ -6,7 +6,6 @@ tmp/
 ext/
 node_modules/
 coverage/
-test/
 .grunt/
 npm-debug.log
 bower_components/

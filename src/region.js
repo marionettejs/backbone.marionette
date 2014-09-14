@@ -2,7 +2,7 @@
 
 // Region
 // ------
-//
+
 // Manage the visual regions of your composite application. See
 // http://lostechies.com/derickbailey/2011/12/12/composite-js-apps-regions-and-region-managers/
 

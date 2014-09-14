@@ -16,7 +16,6 @@ description: |
   create a new Class altogether.
   
 example: |
-
   A `Marionette.Controller` can be extended, like other
   Backbone and Marionette objects. It supports the standard
   `initialize` method, has a built-in `EventBinder`, and

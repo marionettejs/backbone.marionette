@@ -1,5 +1,5 @@
-// LayoutView
-// ----------
+// Layout View
+// -----------
 
 // Used for managing application layoutViews, nested layoutViews and
 // multiple regions within an application or sub-application.

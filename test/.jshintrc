@@ -21,7 +21,6 @@
     "afterEach"          : true,
     "spyOn"              : true,
     "sinon"              : true,
-    "loadFixtures"       : true,
     "setFixtures"        : true,
     "appendLoadFixtures" : true,
     "waits"              : true,

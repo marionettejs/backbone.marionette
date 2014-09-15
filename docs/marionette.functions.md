@@ -18,6 +18,7 @@ a way to get the same behaviors and conventions from your own code.
 * [Marionette.bindEntityEvent](#marionettebindentityevents)
 * [Marionette.unbindEntityEvents](#marionetteunbindentityevents)
 * [Marionette.proxyBindEntityEvents](#marionetteproxybindentityevents)
+* [Marionette.proxyUnbindEntityEvents](#marionetteproxyunbindentityevents)
 * [Marionette.normalizeMethods](#marionettenormalizemethods)
 * [Marionette.normalizeUIKeys](#marionettenormalizeuikeys)
 * [Marionette.normalizeUIValues](#marionettenormalizeuivalues)
@@ -230,6 +231,32 @@ _.extend(Pagination.prototype, {
    },
 
    bindEntityEvents: Marionette.proxyBindEntityEvents
+
+});
+```
+
+## Marionette.proxyUnbindEntityEvents
+This method proxies `Marionette.unbindEntityEvents` so that it can easily be added to an instance.
+
+It's the opposite of proxyBindEntityEvents, described above. Consequently, the APIs are identical for each method.
+
+Say you've written your own Pagination class and you want to easily unbind callbacks from some entities events.
+With `proxyUnbindEntityEvents`, you can easily give this class the `unbindEntityEvents` function.
+
+```js
+_.extend(Pagination.prototype, {
+
+   bindSomething: function() {
+     this.bindEntityEvents(this.something, this.somethingEvents)
+   },
+
+   unbindSomething: function() {
+     this.unbindEntityEvents(this.something, this.somethingEvents)
+   },
+
+   bindEntityEvents: Marionette.proxyBindEntityEvents,
+
+   unbindEntityEvents: Marionette.proxyUnbindEntityEvents
 
 });
 ```

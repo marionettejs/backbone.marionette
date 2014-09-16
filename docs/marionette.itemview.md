@@ -61,10 +61,10 @@ var my_template_html = '<div><%= args.name %></div>'
 var MyView = Backbone.Marionette.ItemView.extend({
   template : function(serialized_model) {
     var name = serialized_model.name;
-    return _.template(my_template_html, {
+    return _.template(my_template_html, { variable: 'args' })({
         name : name,
         some_custom_attribute : some_custom_key
-    }, {variable: 'args'});
+    });
   }
 });
 
@@ -72,7 +72,7 @@ new MyView().render();
 ```
 
 Note that using a template function allows passing custom arguments into the _.template function,
-including a third "settings" argument, as used in the example above.
+including a "settings" argument, as used in the example above.
 
 According to the [Underscore docs](http://underscorejs.org/#template), using the "variable" setting
 "can significantly improve the speed at which a template is able to render." Using this setting

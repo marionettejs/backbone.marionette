@@ -141,13 +141,13 @@ _.extend(Marionette.Region.prototype, Backbone.Events, {
     // We are only changing the view if there is a current view to change to begin with
     var isChangingView = !!this.currentView;
 
-    // Only destroy the current view if we don't want to preventDestroy and if
-    // the view given in the first argument is different than the current view
+    // Only destroy the current view if we don't want to `preventDestroy` and if
+    // the view given in the first argument is different than `currentView`
     var _shouldDestroyView = isDifferentView && !preventDestroy;
 
     // Only show the view given in the first argument if it is different than
     // the current view or if we want to re-show the view. Note that if
-    // _shouldDestroyView is true, then _shouldShowView is also necessarily true.
+    // `_shouldDestroyView` is true, then `_shouldShowView` is also necessarily true.
     var _shouldShowView = isDifferentView || forceShow;
 
     if (isChangingView) {

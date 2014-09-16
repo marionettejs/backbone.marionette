@@ -30,12 +30,15 @@ describe('collectionview - emptyView', function() {
       this.CollectionView = this.EmptyCollectionView.extend({
         childEvents: {
           'render': this.childRenderSpy
-        }
+        },
+        emptyViewOptions: function() {}
       });
 
       this.collectionView = new this.CollectionView({
         collection: this.collection,
       });
+
+      this.emptyViewOptionsSpy = sinon.spy(this.collectionView, 'emptyViewOptions');
 
       this.beforeRenderSpy = this.sinon.spy(this.collectionView, 'onBeforeRenderEmpty');
       this.renderSpy = this.sinon.spy(this.collectionView, 'onRenderEmpty');
@@ -45,6 +48,17 @@ describe('collectionview - emptyView', function() {
 
     it('should append the html for the emptyView', function() {
       expect(this.collectionView.$el).to.have.$html('<span>empty</span>');
+    });
+
+    it('should pass the correct emptyViewOptions params', function() {
+      expect(this.emptyViewOptionsSpy)
+      .to.have.been.calledOnce;
+
+      expect(this.emptyViewOptionsSpy.getCall(0).args[0])
+      .to.be.instanceOf(Backbone.Model);
+
+      expect(this.emptyViewOptionsSpy.getCall(0).args[1])
+      .to.eql(-1);
     });
 
     it('should emit emptyView events', function() {

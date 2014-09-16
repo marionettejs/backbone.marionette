@@ -1,3 +1,9 @@
+### v2.2.1 [view commit logs](https://github.com/marionettejs/backbone.marionette/compare/v2.2.0...v2.2.1)
+
+* Fixes
+
+  * Revert collection type checking for `collectionView`.
+
 ### v2.2.0 [view commit logs](https://github.com/marionettejs/backbone.marionette/compare/v2.1.0...v2.2.0)
 
 * Features

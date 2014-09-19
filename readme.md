@@ -1,6 +1,6 @@
 <h1 align="center">Backbone.Marionette</h1>
 <p align="center">
-  <img title="backbone marionette" src='http://marionettejs.com/downloads/marionette-gh-banner.svg' />
+  <img title="backbone marionette" src='https://cdn.mediacru.sh/6sNqngKFuqft.svg' />
 </p>
 <p align="center">The Backbone framework</p>
 <p align="center">

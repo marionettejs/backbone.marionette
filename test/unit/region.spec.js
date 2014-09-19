@@ -859,35 +859,21 @@ describe('region', function() {
     });
   });
 
-  describe('when destroying a marionette view in a region', function() {
+  describe('when showing undefined in a region', function() {
     beforeEach(function() {
       this.setFixtures('<div id="region"></div>');
-      this.beforeEmptySpy = new sinon.spy();
-      this.emptySpy = new sinon.spy();
 
       this.region = new Backbone.Marionette.Region({
         el: '#region'
       });
 
-      this.region.on('before:empty', this.beforeEmptySpy);
-      this.region.on('empty', this.emptySpy);
-
-      this.View = Backbone.Marionette.View.extend({
-        template: _.template('')
-      });
-
-      this.view = new this.View();
-
-      this.region.show(this.view);
-      this.region.empty();
+      this.insertUndefined = function() {
+        this.region.show(undefined);
+      }.bind(this);
     });
 
-    it('should trigger a empty event once', function() {
-      expect(this.emptySpy).to.have.been.calledOnce;
-    });
-
-    it('should trigger a before:empty event once', function() {
-      expect(this.beforeEmptySpy).to.have.been.calledOnce;
+    it('should throw an error', function() {
+      expect(this.insertUndefined).to.throw('The view passed is undefined and therefore invalid. You must pass a view instance to show.');
     });
   });
 });

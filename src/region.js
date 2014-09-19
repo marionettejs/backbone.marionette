@@ -1,4 +1,4 @@
-/* jshint maxcomplexity: 10, maxstatements: 30 */
+/* jshint maxcomplexity: 10, maxstatements: 30, maxlen: 120 */
 
 // Region
 // ------
@@ -209,6 +209,13 @@ _.extend(Marionette.Region.prototype, Backbone.Events, {
   },
 
   _ensureViewIsIntact: function(view) {
+    if (!view) {
+      throw new Marionette.Error({
+        name: 'ViewNotValid',
+        message: 'The view passed is undefined and therefore invalid. You must pass a view instance to show.'
+      });
+    }
+
     if (view.isDestroyed) {
       throw new Marionette.Error({
         name: 'ViewDestroyedError',

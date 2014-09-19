@@ -46,6 +46,8 @@ will provide features such as `onShow` callbacks, etc. Please see
   * ["before:remove:child event](#beforeremovechild-event)
   * ["remove:child" event](#removechild-event)
   * ["childview:\*" event bubbling from child views](#childview-event-bubbling-from-child-views)
+  * ["before:render:collection" event](#beforerendercollection-event)
+  * ["render:collection" event](#rendercollection-event)
 * [CollectionView render](#collectionview-render)
 * [CollectionView: Automatic Rendering](#collectionview-automatic-rendering)
 * [CollectionView: Re-render Collection](#collectionview-re-render-collection)
@@ -652,6 +654,14 @@ that hack as a way to demonstrate the event bubbling.
 Normally, you would have your child view listening to DOM
 events or model change events, and then triggering an event
 of its own based on that.
+
+### before:render:collection event
+
+The `before:render:collection` event is triggered before the `collectionView`'s children have been rendered and buffered. It differs from the `collectionsView`'s `before:render` in that it is __only__ emitted if the `collection` is not empty.
+
+### render:collection event
+
+The `render:collection` event is triggered after a `collectionView`'s children have been rendered and buffered. It differs from the `collectionViews`'s `render` event in that it happens __only__ if the `collection` is not not empty.
 
 ## CollectionView render
 

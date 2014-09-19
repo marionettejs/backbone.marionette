@@ -858,4 +858,22 @@ describe('region', function() {
       expect(this.region.currentView).to.be.undefined;
     });
   });
+
+  describe('when showing undefined in a region', function() {
+    beforeEach(function() {
+      this.setFixtures('<div id="region"></div>');
+
+      this.region = new Backbone.Marionette.Region({
+        el: '#region'
+      });
+
+      this.insertUndefined = function() {
+        this.region.show(undefined);
+      }.bind(this);
+    });
+
+    it('should throw an error', function() {
+      expect(this.insertUndefined).to.throw('The view passed is undefined and therefore invalid. You must pass a view instance to show.');
+    });
+  });
 });

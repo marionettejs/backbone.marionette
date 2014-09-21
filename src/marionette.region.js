@@ -1,4 +1,4 @@
-/* jshint maxcomplexity: 10, maxstatements: 29 */
+/* jshint maxcomplexity: 10, maxstatements: 31 */
 
 // Region
 // ------
@@ -167,6 +167,15 @@ _.extend(Marionette.Region.prototype, Backbone.Events, {
       // we can not reuse it.
       view.once('destroy', _.bind(this.empty, this));
       view.render();
+
+      // If a user prevents destroying the view
+      // when showing another view, we need to
+      // unregister the destroy listener otherwise
+      // destroying the view external to the region
+      // will cause the region to self empty.
+      if (this.currentView && isChangingView) {
+        this.currentView.off('destroy');
+      }
 
       if (isChangingView) {
         this.triggerMethod('before:swap', view);

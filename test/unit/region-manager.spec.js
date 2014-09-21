@@ -1,6 +1,34 @@
 describe('regionManager', function() {
   'use strict';
 
+  describe('instantiating a regionManager', function() {
+    beforeEach(function() {
+      this.context = $('<div><div id="thor"></div><div id="eos"></div></div>');
+      this.parentElHandler = this.sinon.stub().returns(this.context);
+
+      this.regions = {
+        "aRegion": "#thor",
+        "bRegion": "#eos"
+      };
+
+      this.addRegionSpy = this.sinon.stub();
+
+      this.RegionManager = Marionette.RegionManager.extend({
+        addRegions: this.addRegionSpy
+      });
+
+      this.regionManager = new this.RegionManager({
+        regions: this.regions
+      });
+    });
+
+    it('should pass regions to addRegions', function() {
+      expect(this.addRegionSpy).to.have
+      .been.calledWith(this.regions)
+      .and.to.have.been.calledOn(this.regionManager);
+    });
+  });
+
   describe('.addRegion', function() {
     describe('with a name and selector', function() {
       beforeEach(function() {

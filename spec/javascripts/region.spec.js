@@ -290,7 +290,7 @@ describe('region', function() {
         this.myRegion = new this.MyRegion();
 
         this.sinon.spy(this.view1, 'destroy');
-
+        this.regionEmptySpy = this.sinon.spy(this.myRegion, 'empty');
         this.myRegion.show(this.view1);
       });
 
@@ -301,6 +301,12 @@ describe('region', function() {
 
         it('shouldnt "destroy" the old view', function() {
           expect(this.view1.destroy.callCount).to.equal(0);
+        });
+
+        it('shouldnt empty the region when the old view is destroyed', function() {
+          this.view1.trigger('destroy');
+
+          expect(this.regionEmptySpy).to.have.been.calledOnce;
         });
 
         it('should replace the content in the DOM', function() {

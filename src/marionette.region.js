@@ -141,10 +141,6 @@ _.extend(Marionette.Region.prototype, Backbone.Events, {
     // We are only changing the view if there is a current view to change to begin with
     var isChangingView = !!this.currentView;
 
-    // Only destroy the current view if we don't want to `preventDestroy` and if
-    // the view given in the first argument is different than `currentView`
-    var _shouldDestroyView = isDifferentView && !preventDestroy;
-
     // Only show the view given in the first argument if it is different than
     // the current view or if we want to re-show the view. Note that if
     // `_shouldDestroyView` is true, then `_shouldShowView` is also necessarily true.
@@ -154,8 +150,8 @@ _.extend(Marionette.Region.prototype, Backbone.Events, {
       this.triggerMethod('before:swapOut', this.currentView);
     }
 
-    if (_shouldDestroyView) {
-      this.empty();
+    if (isDifferentView) {
+      this.empty({ preventDestroy : preventDestroy });
     }
 
     if (_shouldShowView) {
@@ -222,8 +218,11 @@ _.extend(Marionette.Region.prototype, Backbone.Events, {
 
   // Destroy the current view, if there is one. If there is no
   // current view, it does nothing and returns immediately.
-  empty: function() {
+  empty: function(options) {
     var view = this.currentView;
+
+    var emptyOptions     = options || {};
+    var preventDestroy  = !!emptyOptions.preventDestroy;
 
     // If there is no view in the region
     // we should not remove anything
@@ -231,7 +230,12 @@ _.extend(Marionette.Region.prototype, Backbone.Events, {
 
     view.off('destroy', this.empty, this);
     this.triggerMethod('before:empty', view);
-    this._destroyView();
+    // Don't destroy the view if we don't want to `preventDestroy`
+    if (!preventDestroy) {
+      this._destroyView();
+    }
+    // Empty the node of HTML
+    this.el.innerHTML='';
     this.triggerMethod('empty', view);
 
     // Remove region pointer to the currentView

@@ -21,7 +21,7 @@ examples:
     name: Nesting LayoutViews
 
     example: |
-      Since the `LayoutView` extends directly from `ItemView`, it has all of the core functionality of an `ItemView`. This includes the methods necessary to be shown within an existing region manager.
+      Since `LayoutView` extends directly from `ItemView`, it has all of the core functionality of an `ItemView`. This includes the methods necessary to be shown within an existing region manager. This example uses Application regions as the base of our view tree.
       
       ```js
       // Create an Application
@@ -39,7 +39,7 @@ examples:
       MyApp.getRegion('main').show(layoutView);
       ```
       
-      You can nest Layout Views as deeply as you want. This provides for a well organized, nested view structure.
+      You can nest LayoutViews as deeply as you want. This provides for a well organized, nested view structure.
       
       For example, to nest 3 layouts:
         

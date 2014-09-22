@@ -182,6 +182,7 @@ _.extend(Marionette.Region.prototype, Backbone.Events, {
 
       this.attachHtml(view);
       this.currentView = view;
+      this.isEmpty = false;
 
       if (isChangingView) {
         this.triggerMethod('swap', view);
@@ -232,6 +233,8 @@ _.extend(Marionette.Region.prototype, Backbone.Events, {
   // Destroy the current view, if there is one. If there is no
   // current view, it does nothing and returns immediately.
   empty: function() {
+    if(this.isEmpty){ return this; }
+
     var view = this.currentView;
 
     // If there is no view in the region
@@ -239,6 +242,12 @@ _.extend(Marionette.Region.prototype, Backbone.Events, {
     if (!view) { return; }
 
     this.triggerMethod('before:empty', view);
+
+    // mark the region as empty before doing the actual emptying,
+    // to prevent the `onBeforeEmpty` and `Empty` methods to
+    // be triggered twice (if they are defined)
+    this.isEmpty = true;
+
     this._destroyView();
     this.triggerMethod('empty', view);
 

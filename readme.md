@@ -12,7 +12,7 @@
   </a>
 </p>
 
-## About Marionette
+## About Marionettee
 
 Backbone.Marionette is a composite application library for Backbone.js that
 aims to simplify the construction of large scale JavaScript applications.

@@ -165,7 +165,7 @@ _.extend(Marionette.Region.prototype, Backbone.Events, {
       // If this happens we need to remove the reference
       // to the currentView since once a view has been destroyed
       // we can not reuse it.
-      view.once('destroy', _.bind(this.empty, this));
+      view.once('destroy', this.empty, this);
       view.render();
 
       if (isChangingView) {
@@ -229,6 +229,7 @@ _.extend(Marionette.Region.prototype, Backbone.Events, {
     // we should not remove anything
     if (!view) { return; }
 
+    view.off('destroy', this.empty, this);
     this.triggerMethod('before:empty', view);
     this._destroyView();
     this.triggerMethod('empty', view);

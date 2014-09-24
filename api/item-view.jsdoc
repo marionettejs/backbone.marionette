@@ -2,69 +2,167 @@ name: ItemView
 
 class: Marionette.ItemView
 
-description:
+extends:
+  - Marionette.View
 
-examples:
+description: |
+  An `ItemView` is a view that represents a single item. That item may be a `Backbone.Model` or may be a `Backbone.Collection`. Whichever it is though, it will be treated as a single item.
 
-properties:
+  Please see [the Marionette.View documentation](marionette.view.md) for more information on available features and functionality.
 
-events:
+  Additionally, interactions with Marionette.Region will provide features such as `onShow` callbacks, etc. Please see [the Region documentation](marionette.region.md) for more information.
 
 constructor:
   description: |
-    ...
-    
-  examples: 
-    
-functions:
+    Creates a new ItemView.
 
+    As a View, the constructor calls the initialize function if it exists.
+
+    @param {Object} options
+
+  examples:
+    -
+      name: Creating a new ItemView representing a single model.
+
+      example: |
+        ItemViews can be used to represent either a `Backbone.Model` or `Backbone.Collection` by setting `model` or `collection` properties on the ItemView. The collection is only used if a model is not already set.
+
+        ```js
+        var MyItemView = Marionette.ItemView.extend({
+          template: '#some-item-template'
+        });
+
+        var itemView = new MyItemView({
+          model: myModel
+        });
+        ```
+
+functions:
   serializeData:
     description: |
-      ...
-      
+      Serialize the model or collection for the view. If a model is found, the view's `serializeModel` is called. If a collection is found, each model in the collection is serialized by calling the view's `serializeCollection` and putting into an `items` array in the resulting data. If both are found, the model is used.
+
+      You can override the `serializeData` method in your own view definition, to provide custom serialization for your view's data. These serializations are then passed into the template function if one is set.
+
       @api public
-    
-    examples: 
+
+      examples:
+        -
+          name: Defining custom data serialization.
+
+          example: |
+            This example sets a custom `serializeData` method to prioritize collections over models.
+
+            ```js
+            var MyItemView = Marionette.ItemView.extend({
+              serializeData: function(){
+                var data = {};
+
+                if (this.collection) {
+                  data = { items: _.partial(this.serializeCollection, this.collection).apply(this, arguments) };
+                }
+                else if (this.model) {
+                  data = _.partial(this.serializeModel, this.model).apply(this, arguments);
+                }
+
+                return data;
+              }
+            });
+            ```
+
+  serializeModel:
+    description: |
+      Serialize the view's model.
+
+      @api public
+      @param {Backbone.Model} model - The model set on the ItemView to be serialized.
+      @returns {Object} Javascript object representation of the model.
+
+      examples:
+        -
+          name: Defining custom model serialization.
+
+          example: |
+            ```js
+            var MyitemView = Marionette.ItemView.extend({
+              serializeModel: function(model){
+                return _.omit(model.attributes, 'secretData');
+              }
+            });
+            ```
+        -
+          name: Defining custom model serialization and
 
   serializeCollection:
     description: |
-      ...
-      
-      @api public
-      @param {Marionette.Collection} collection
-    
-    examples: 
+      Serialize the view's collection.
 
+      @api public
+      @param {Backbone.Collection} collection - The collection set on the ItemView to be serialized.
+
+      examples:
+        -
+          name: Defining custom collection serialization.
+
+          example: |
+            ```js
+            var MyItemView = Marionette.ItemView.extend({
+              serializeCollection: function(collection){
+                return collection.map(function(model){ return _.omit(model.attributes, 'secretData'); });
+              }
+            });
+            ```
   render:
     description: |
-      ...
-      
-      @api public
-    
-    examples: 
+      Render the view, defaulting to underscore.js templates. You can override this in your view definition to provide a very specific rendering for your view.
 
-  _renderTemplate:
-    description: |
-      ...
-      
-      @api private 
-    
-    examples: 
+      In general, though, you should override the `Marionette.Renderer` object to change how Marionette renders views.
+
+      @api public
 
   attachElContent:
     description: |
-      ...
-      
-      @api public
-      @param {} html
-    
-    examples: 
+      Attaches the content of the view. This method can be overridden to optimize rendering, or to render in a non standard way.
 
-  destroy:
-    description: |
-      ...
-      
       @api public
-    
-    examples: 
+      @param {String} html - The html content to set inside the view element.
 
+    examples:
+      -
+        name: Render using `innerHTML` instead of `$el.html`
+
+        example: |
+          ```js
+          var MyItemView = Marionette.ItemView.extend({
+            attachElContent: function(html){
+              this.el.innerHTML = html;
+              return this;
+            }
+          });
+          ```
+
+    destroy:
+      description: |
+        Destroy the view.
+        |
+        @api public
+
+      examples:
+        -
+          name: Override the destroy method to trigger another event.
+
+          example: |
+            ```js
+            var myItemView = Marionette.ItemView.extend({
+              destroy: function(){
+                if (this.isDestroyed) { return; }
+
+                var destroyed = Marionette.View.prototype.destroy.apply(this, arguments);
+
+                var args = Array.prototype.slice.call(arguments);
+                this.triggerMethod.apply(this, ['after:destroy'].concat(args));
+
+                return destroyed;
+              }
+            });
+            ```

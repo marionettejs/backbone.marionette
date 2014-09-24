@@ -842,4 +842,36 @@ describe('region', function() {
       expect(this.region.currentView).to.be.undefined;
     });
   });
+
+  describe('when destroying a marionette view in a region', function() {
+    beforeEach(function() {
+      this.setFixtures('<div id="region"></div>');
+      this.beforeEmptySpy = new sinon.spy();
+      this.emptySpy = new sinon.spy();
+
+      this.region = new Backbone.Marionette.Region({
+        el: '#region'
+      });
+
+      this.region.on('before:empty', this.beforeEmptySpy);
+      this.region.on('empty', this.emptySpy);
+
+      this.View = Backbone.Marionette.View.extend({
+        template: _.template('')
+      });
+
+      this.view = new this.View();
+
+      this.region.show(this.view);
+      this.region.empty();
+    });
+
+    it('should trigger a empty event once', function() {
+      expect(this.emptySpy).to.have.been.calledOnce;
+    });
+
+    it('should trigger a before:empty event once', function() {
+      expect(this.beforeEmptySpy).to.have.been.calledOnce;
+    });
+  });
 });

@@ -320,7 +320,7 @@ describe('collectionview - emptyView', function() {
       expect(this.collectionView.$el).to.have.$html('<p>empty</p>');
     });
 
-    describe('when "emptyViewOptions" is provided as a fuction', function() {
+    describe('when "emptyViewOptions" is provided as a function', function() {
       beforeEach(function() {
         this.collection = new Backbone.Collection();
         this.collectionView = new this.EmptyCollectionView({

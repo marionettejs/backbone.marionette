@@ -141,28 +141,28 @@ functions:
           });
           ```
 
-    destroy:
-      description: |
-        Destroy the view.
-        |
-        @api public
+  destroy:
+    description: |
+      Destroy the view.
 
-      examples:
-        -
-          name: Override the destroy method to trigger another event.
+      @api public
 
-          example: |
-            ```js
-            var myItemView = Marionette.ItemView.extend({
-              destroy: function(){
-                if (this.isDestroyed) { return; }
+    examples:
+      -
+        name: Override the destroy method to trigger another event.
 
-                var destroyed = Marionette.View.prototype.destroy.apply(this, arguments);
+        example: |
+          ```js
+          var myItemView = Marionette.ItemView.extend({
+            destroy: function(){
+              if (this.isDestroyed) { return; }
 
-                var args = Array.prototype.slice.call(arguments);
-                this.triggerMethod.apply(this, ['after:destroy'].concat(args));
+              var destroyed = Marionette.View.prototype.destroy.apply(this, arguments);
 
-                return destroyed;
-              }
-            });
-            ```
+              var args = Array.prototype.slice.call(arguments);
+              this.triggerMethod.apply(this, ['after:destroy'].concat(args));
+
+              return destroyed;
+            }
+          });
+          ```

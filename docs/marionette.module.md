@@ -254,7 +254,9 @@ var FooModule = Marionette.Module.extend({
 MyApp.module("Foo", FooModule);
 ```
 
-If all of the module's functionality is defined inside its class, then the class can be passed in directly. `MyApp.module("Foo", FooModule)`
+If all of the module's functionality is defined inside its class, then the class can be passed in directly.
+Please note, above example is not working one. Usually you don't want to override constructor. If you provide empty one like above neither initializer nor callbacks work.
+`MyApp.module("Foo", FooModule)`
 
 
 ## Defining Sub-Modules

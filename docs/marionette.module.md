@@ -238,9 +238,6 @@ The extend function of a Module is identical to the extend functions on other Ba
 var FooModule = Marionette.Module.extend({
   startWithParent: false,
 
-  constructor: function(moduleName, app, options) {
-  },
-
   initialize: function(options, moduleName, app) {
   },
 
@@ -255,7 +252,6 @@ MyApp.module("Foo", FooModule);
 ```
 
 If all of the module's functionality is defined inside its class, then the class can be passed in directly.
-Please note, above example is not working one. Usually you don't want to override constructor. If you provide empty one like above neither initializer nor callbacks work.
 `MyApp.module("Foo", FooModule)`
 
 

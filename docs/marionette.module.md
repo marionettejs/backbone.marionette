@@ -238,9 +238,6 @@ The extend function of a Module is identical to the extend functions on other Ba
 var FooModule = Marionette.Module.extend({
   startWithParent: false,
 
-  constructor: function(moduleName, app, options) {
-  },
-
   initialize: function(options, moduleName, app) {
   },
 

@@ -457,7 +457,7 @@ Marionette.CollectionView = Marionette.View.extend({
     // Forward all child view events through the parent,
     // prepending "childview:" to the event name
     this.listenTo(view, 'all', function() {
-      var args = slice.call(arguments);
+      var args = _.toArray(arguments);
       var rootEvent = args[0];
       var childEvents = this.normalizeMethods(_.result(this, 'childEvents'));
 

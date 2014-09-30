@@ -33,7 +33,7 @@ Marionette.View = Backbone.View.extend({
   // Serialize a model by returning its attributes. Clones
   // the attributes to allow modification.
   serializeModel: function(model){
-    return model.toJSON.apply(model, slice.call(arguments, 1));
+    return model.toJSON.apply(model, _.toArray(arguments).slice(1));
   },
 
   // Mix in template helper methods. Looks for a
@@ -125,7 +125,7 @@ Marionette.View = Backbone.View.extend({
   // Overriding Backbone.View's undelegateEvents to handle unbinding
   // the `triggers`, `modelEvents`, and `collectionEvents` config
   undelegateEvents: function() {
-    var args = slice.call(arguments);
+    var args = _.toArray(arguments);
     Backbone.View.prototype.undelegateEvents.apply(this, args);
 
     this.unbindEntityEvents(this.model, this.getOption('modelEvents'));
@@ -159,7 +159,7 @@ Marionette.View = Backbone.View.extend({
   destroy: function() {
     if (this.isDestroyed) { return; }
 
-    var args = slice.call(arguments);
+    var args = _.toArray(arguments);
 
     this.triggerMethod.apply(this, ['before:destroy'].concat(args));
 

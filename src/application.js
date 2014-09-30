@@ -83,9 +83,7 @@ _.extend(Marionette.Application.prototype, Backbone.Events, {
     // Overwrite the module class if the user specifies one
     var ModuleClass = Marionette.Module.getClass(moduleDefinition);
 
-    // slice the args, and add this application object as the
-    // first argument of the array
-    var args = slice.call(arguments);
+    var args = _.toArray(arguments);
     args.unshift(this);
 
     // see the Marionette.Module object for more information
@@ -127,24 +125,24 @@ _.extend(Marionette.Application.prototype, Backbone.Events, {
     this._regionManager = this.getRegionManager();
 
     this.listenTo(this._regionManager, 'before:add:region', function() {
-      var args = slice.call(arguments, 0);
+      var args = _.toArray(arguments);
       this.triggerMethod.apply(this, ['before:add:region'].concat(args));
     });
 
     this.listenTo(this._regionManager, 'add:region', function(name, region) {
       this[name] = region;
-      var args = slice.call(arguments, 0);
+      var args = _.toArray(arguments);
       this.triggerMethod.apply(this, ['add:region'].concat(args));
     });
 
     this.listenTo(this._regionManager, 'before:remove:region', function() {
-      var args = slice.call(arguments, 0);
+      var args = _.toArray(arguments);
       this.triggerMethod.apply(this, ['before:remove:region'].concat(args));
     });
 
     this.listenTo(this._regionManager, 'remove:region', function(name) {
       delete this[name];
-      var args = slice.call(arguments, 0);
+      var args = _.toArray(arguments);
       this.triggerMethod.apply(this, ['remove:region'].concat(args));
     });
   },

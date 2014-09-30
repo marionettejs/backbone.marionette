@@ -23,7 +23,7 @@ Marionette.Region = function(options) {
   this.$el = this.getEl(this.el);
 
   if (this.initialize) {
-    var args = slice.apply(arguments);
+    var args = _.toArray(arguments);
     this.initialize.apply(this, args);
   }
 };

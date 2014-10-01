@@ -1,4 +1,4 @@
-/* jshint maxcomplexity: 10, maxstatements: 29, maxlen: 120 */
+/* jshint maxcomplexity: 10, maxstatements: 32, maxlen: 120 */
 
 // Region
 // ------
@@ -182,6 +182,10 @@ _.extend(Marionette.Region.prototype, Backbone.Events, {
 
       this.attachHtml(view);
       this.currentView = view;
+
+      if (view.triggerAttach) {
+        view.triggerAttach();
+      }
 
       if (isChangingView) {
         this.triggerMethod('swap', view);

@@ -290,6 +290,24 @@ Marionette.View = Backbone.View.extend({
     return ret;
   },
 
+  // This method returns any views that are immediate
+  // children of this view
+  _getImmediateChildren: function() {
+    return [];
+  },
+
+  // Returns an array of every nested view within this view
+  _getNestedViews: function() {
+    var children = this._getImmediateChildren();
+
+    if (!children.length) { return children; }
+
+    return _.reduce(children, function(memo, view) {
+      if (!view._getNestedViews) { return memo; }
+      return memo.concat(view._getNestedViews());
+    }, children);
+  },
+
   // Imports the "normalizeMethods" to transform hashes of
   // events=>function references/names to a hash of events=>function references
   normalizeMethods: Marionette.normalizeMethods,

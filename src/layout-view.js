@@ -158,5 +158,12 @@ Marionette.LayoutView = Marionette.ItemView.extend({
       delete this[name];
       this.triggerMethod('remove:region', name, region);
     });
+  },
+
+  _getImmediateChildren: function() {
+    return _.chain(this.regionManager.getRegions())
+      .pluck('currentView')
+      .filter(function(view) { return !!view; })
+      .value();
   }
 });

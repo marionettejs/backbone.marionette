@@ -326,7 +326,9 @@ app.addRegions({ r1: "#region1" });
 var myRegion = app.getRegion('r1');
 ```
 
-Regions are also attached directly to the Application instance, **but this is not recommended usage**.
+Regions are also attached directly to the Application instance, **but this is not recommended usage**. This feature is deprecated and will be
+removed in the next major release of Marionette, as it increases the likelihood of property name collisions. For instance, if you
+create a Region named `module` then it will overwrite the Application's `module` function, which is never desired behavior.
 
 ### Removing Regions
 

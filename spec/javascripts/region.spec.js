@@ -874,4 +874,31 @@ describe('region', function() {
       expect(this.beforeEmptySpy).to.have.been.calledOnce;
     });
   });
+
+  describe('when resetting a region', function() {
+    beforeEach(function() {
+      this.el = document.createElement('div');
+      this.$el = $('<div>');
+
+      this.region1 = new Marionette.Region({ el: '#main' });
+      this.region2 = new Marionette.Region({ el: this.el });
+      this.region3 = new Marionette.Region({ el: this.$el });
+
+      this.region1.reset();
+      this.region2.reset();
+      this.region3.reset();
+    });
+
+    it('resets the el to the original string selector', function() {
+      expect(this.region1.el).to.equal('#main');
+    });
+
+    it('resets the el to the original dom element', function() {
+      expect(this.region2.el).to.equal(this.el);
+    });
+
+    it('resets the el to the original jquery object', function() {
+      expect(this.region3.el).to.equal(this.$el);
+    });
+  });
 });

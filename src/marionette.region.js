@@ -8,7 +8,8 @@
 
 Marionette.Region = function(options) {
   this.options = options || {};
-  this.el = this.getOption('el');
+  this.el      = this.getOption('el');
+  this._el     = this.el;
 
   // Handle when this.el is passed in as a $ wrapped element.
   this.el = this.el instanceof Backbone.$ ? this.el[0] : this.el;
@@ -276,7 +277,7 @@ _.extend(Marionette.Region.prototype, Backbone.Events, {
     this.empty();
 
     if (this.$el) {
-      this.el = this.$el.selector;
+      this.el = this._el;
     }
 
     delete this.$el;

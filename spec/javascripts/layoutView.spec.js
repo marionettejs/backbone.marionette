@@ -504,4 +504,50 @@ describe('layoutView', function() {
     });
   });
 
+  describe('when attached to an existing element with a string selector', function() {
+    beforeEach(function() {
+      this.setFixtures('<div id="attached-layout"></div>');
+
+      this.LayoutView = Marionette.LayoutView.extend({
+        el: '#attached-layout',
+        template: _.template('<div class="the-region">Inner</div>'),
+        regions: {
+          theRegion: '.the-region'
+        }
+      });
+
+      this.MyView1 = Marionette.ItemView.extend({
+        template: _.template('My View 1')
+      });
+
+      this.MyView2 = Marionette.ItemView.extend({
+        template: _.template('My View 2')
+      });
+    });
+
+    describe('and when showing a view, resetting, and showing another view', function() {
+      beforeEach(function() {
+        this.selector = '#attached-layout .the-region';
+
+        this.layoutView = new this.LayoutView();
+        this.layoutView.render();
+
+        this.theRegion = this.layoutView.getRegion('theRegion');
+        this.theRegion.show(new this.MyView1());
+        this.selectorBefore = this.theRegion.$el.selector;
+
+        this.theRegion.reset();
+        this.theRegion.show(new this.MyView2());
+        this.selectorAfter = this.theRegion.$el.selector;
+      });
+
+      it('should have the correct selector before resetting', function() {
+        expect(this.selectorBefore).to.equal(this.selector);
+      });
+
+      it('should have the same selector after resetting', function() {
+        expect(this.selectorAfter).to.equal(this.selector);
+      });
+    });
+  });
 });

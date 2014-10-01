@@ -21,15 +21,11 @@ Marionette.MonitorDOMRefresh = (function(documentElement) {
 
   // Trigger the "dom:refresh" event and corresponding "onDomRefresh" method
   function triggerDOMRefresh(view) {
-    if (view._isShown && view._isRendered && isInDOM(view)) {
+    if (view._isShown && view._isRendered && Marionette.isNodeAttached(view.el)) {
       if (_.isFunction(view.triggerMethod)) {
         view.triggerMethod('dom:refresh');
       }
     }
-  }
-
-  function isInDOM(view) {
-    return Backbone.$.contains(documentElement, view.el);
   }
 
   // Export public API

@@ -9,6 +9,15 @@
 // Borrow the Backbone `extend` method so we can use it as needed
 Marionette.extend = Backbone.Model.extend;
 
+// Marionette.isNodeAttached
+// -------------------------
+
+// Determine if `el` is a child of the document
+Marionette.isNodeAttached = function(el) {
+  return Backbone.$.contains(document.documentElement, el);
+};
+
+
 // Marionette.getOption
 // --------------------
 

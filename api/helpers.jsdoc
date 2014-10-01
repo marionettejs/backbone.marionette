@@ -53,6 +53,31 @@ functions:
           var b = new Bar();
           ```
 
+  isNodeAttached:
+    description: |
+      Determines whether the passed-in node is a child of the `document` or not.
+      
+      @api public
+      @static
+      @param {Node} el
+      @return {Boolean}
+      
+    examples:
+      -
+        name: Testing whether an element is a child of the document or not
+        example: |
+          This method returns `false` when the node isn't attached to the `document`; otherwise it returns `true`.
+          
+          ```js
+          var div = document.createElement('div');
+          Marionette.isNodeAttached(div);
+          // => false
+
+          $('body').append(div);
+          Marionette.isNodeAttached(div);
+          // => true
+          ```
+
   getOption:
     description: |
       Retrieve an object, function or other value from a target object or its `options`, with

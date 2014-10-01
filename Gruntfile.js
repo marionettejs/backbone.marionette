@@ -59,6 +59,12 @@ module.exports = function(grunt) {
       bundle: {
         src: 'src/build/bundled.js',
         dest: 'tmp/backbone.marionette.js'
+      },
+      components: {
+        expand: true,
+        cwd: 'src/wrappers',
+        src: '*.js',
+        dest: 'lib'
       }
     },
 

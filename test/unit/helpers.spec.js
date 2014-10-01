@@ -1,3 +1,28 @@
+describe("isNodeAttached", function() {
+  'use strict';
+
+  describe("When calling isNodeAttached on a detached node", function() {
+    beforeEach(function() {
+      this.el = document.createElement('div');
+    });
+
+    it("should return false", function() {
+      expect(Marionette.isNodeAttached(this.el)).to.be.false;
+    });
+  });
+
+  describe("When calling isNodeAttached on an attached node", function() {
+    beforeEach(function() {
+      this.el = document.createElement('div');
+      this.setFixtures(this.el);
+    });
+
+    it("should return true", function() {
+      expect(Marionette.isNodeAttached(this.el)).to.be.true;
+    });
+  });
+});
+
 describe("normalizeUIKeys", function () {
   'use strict';
 

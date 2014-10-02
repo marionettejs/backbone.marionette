@@ -132,6 +132,20 @@ properties:
     The `currentView` property references the currently shown view. 
     If `currentView` is `undefined`, the region is empty.
 
+  triggerBeforeAttach: |
+    Whether or not the Region will trigger the `before:attach` event on nested views that are about
+    to be attached. Defaults to `true`.
+
+    In general, the only time you'll want to set this to false is if you're rendering hundreds or
+    thousands of views and are running into performance problems.
+
+  triggerAttach: |
+    Whether or not the Region will trigger the `attach` event on nested views that have been attached.
+    Defaults to `true`.
+
+    As with triggerBeforeAttach, you might want to set this to `false` if you're rendering many, many
+    views and are running into performance problems.
+
   initialize: |
     If `initialize` is set in the Region class, it will be called when new regions are instantiated.
     
@@ -196,7 +210,7 @@ functions:
     In these instances, the region should be defined with the `allowMissingEl` option, suppressing the missing
     element error and causing `show` calls to be treated as no-ops.
 
-    You can modify the behavior of `show` by passing in an options object.
+    You can modify the behavior of `show` by passing in an `options` object. The following options are supported:
     
     `preventDestroy`
     Pass this as `true` to prevent the destruction of the old view. This is not recommended, as Views
@@ -228,6 +242,14 @@ functions:
     // the second show call will re-show the view
     MyApp.mainRegion.show(myView, {forceShow: true});
     ```
+
+    `triggerAttach`
+    Whether or not to trigger the `attach` event on the views being shown. This overrides the property
+    on the prototype.
+
+    `triggerBeforeAttach`
+    Whether or not to trigger the `before:attach` event on the views being shown. This overrides the property
+    on the prototype.
     
     @api public
     @param {Marionette.View} view

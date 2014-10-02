@@ -1,0 +1,161 @@
+name: marionette.module.js
+
+description: |
+  <module description>
+  
+class: Module
+
+description: |
+  <class description>
+  
+initialize:
+  description: | 
+  
+  examples:
+    -
+      name:
+      example: |
+      
+addInitializer:
+  description: | 
+    @param {type} callback - <param description> 
+  
+  examples:
+    -
+      name:
+      example: |
+      
+addFinalizer:
+  description: | 
+    @param {type} callback - <param description> 
+  
+  examples:
+    -
+      name:
+      example: |
+      
+start:
+  description: | 
+    @param {type} options - <param description> 
+  
+  examples:
+    -
+      name:
+      example: |
+      
+stop:
+  description: | 
+  
+  examples:
+    -
+      name:
+      example: |
+      
+addDefinition:
+  description: | 
+    @param {type} moduleDefinition - <param description> 
+    @param {type} customArgs - <param description> 
+  
+  examples:
+    -
+      name:
+      example: |
+      
+_runModuleDefinition:
+  description: | 
+    @param {type} definition - <param description> 
+    @param {type} customArgs - <param description> 
+  
+  examples:
+    -
+      name:
+      example: |
+      
+_setupInitializersAndFinalizers:
+  description: | 
+  
+  examples:
+    -
+      name:
+      example: |
+      
+create:
+  description: | 
+    @param {type} app - <param description> 
+    @param {type} moduleNames - <param description> 
+    @param {type} moduleDefinition - <param description> 
+    @returns {type} - <returns description>
+  
+  examples:
+    -
+      name:
+      example: |
+      
+_getModule:
+  description: | 
+    @param {type} parentModule - <param description> 
+    @param {type} moduleName - <param description> 
+    @param {type} app - <param description> 
+    @param {type} def - <param description> 
+    @param {type} args - <param description> 
+    @returns {type} - <returns description>
+  
+  examples:
+    -
+      name:
+      example: |
+      
+getClass:
+  description: | 
+    @param {type} moduleDefinition - <param description> 
+    @returns {type} - <returns description>
+  
+  examples:
+    -
+      name:
+      example: |
+      
+_addModuleDefinition:
+  description: | 
+    @param {type} parentModule - <param description> 
+    @param {type} module - <param description> 
+    @param {type} def - <param description> 
+    @param {type} args - <param description> 
+  
+  examples:
+    -
+      name:
+      example: |
+      
+_getStartWithParent:
+  description: | 
+    @param {type} def - <param description> 
+    @param {type} module - <param description> 
+    @returns {type} - <returns description>
+  
+  examples:
+    -
+      name:
+      example: |
+      
+_getDefine:
+  description: | 
+    @param {type} def - <param description> 
+    @returns {type} - <returns description>
+  
+  examples:
+    -
+      name:
+      example: |
+      
+_addStartWithParent:
+  description: | 
+    @param {type} parentModule - <param description> 
+    @param {type} module - <param description> 
+    @param {type} startWithParent - <param description> 
+  
+  examples:
+    -
+      name:
+      example: |
+      

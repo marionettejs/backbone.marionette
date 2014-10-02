@@ -236,6 +236,7 @@ MyApp.mainRegion.empty();
 ```
 
 #### preventDestroy
+
 If you replace the current view with a new view by calling `show`,
 by default it will automatically destroy the previous view.
 You can prevent this behavior by passing `{preventDestroy: true}` in the options
@@ -261,8 +262,8 @@ MyApp.mainRegion.show(anotherView2, { preventDestroy: true });
 NOTE: When using `preventDestroy: true` you must be careful to cleanup your old views
 manually to prevent memory leaks.
 
-
 #### forceShow
+
 If you re-call `show` with the same view, by default nothing will happen
 because the view is already in the region. You can force the view to be re-shown
 by passing in `{forceShow: true}` in the options parameter.
@@ -273,6 +274,31 @@ MyApp.mainRegion.show(myView);
 
 // the second show call will re-show the view
 MyApp.mainRegion.show(myView, {forceShow: true});
+```
+
+#### onBeforeAttach & onAttach
+
+Regions that are attached to the document when you execute `show` are special in that the
+views that they show will also become attached to the document. These regions fire a pair of triggerMethods on *all*
+of the views that are about to be attached – even the nested ones. This can cause a performance issue if you're
+rendering hundreds or thousands of views at once.
+
+If you think these events might be causing some lag in your app, you can selectively turn them off
+with the `triggerBeforeAttach` and `triggerAttach` properties.
+
+```js
+// No longer trigger attach
+myRegion.triggerAttach = false;
+```
+
+You can override this on a per-show basis by passing it in as an option to show.
+
+```js
+// This region won't trigger beforeAttach...
+myRegion.triggerBeforeAttach = false;
+
+// Unless we tell it to
+myRegion.show(myView, {triggerBeforeAttach: true});
 ```
 
 ### Checking whether a region is showing a view

@@ -1,4 +1,4 @@
-/* jshint maxcomplexity: 10, maxstatements: 29, maxlen: 120 */
+/* jshint maxcomplexity: 15, maxstatements: 40, maxlen: 120 */
 
 // Region
 // ------
@@ -87,8 +87,27 @@ Marionette.Region = Marionette.Object.extend({
         this.triggerMethod('swapOut', this.currentView);
       }
 
+      // An array of views that we're about to display
+      var attachedRegion = Marionette.isNodeAttached(this.el);
+
+      // The views that we're about to attach to the document
+      // It's important that we prevent _getNestedViews from being executed unnecessarily
+      // as it's a potentially-slow method
+      var displayedViews = [];
+
+      var triggerBeforeAttach = showOptions.triggerBeforeAttach || this.triggerBeforeAttach;
+      var triggerAttach = showOptions.triggerAttach || this.triggerAttach;
+
+      if (attachedRegion && triggerBeforeAttach) {
+        displayedViews = _.union([view], _.result(view, '_getNestedViews') || []);
+        this._triggerAttach(displayedViews, 'before:');
+      }
       this.attachHtml(view);
       this.currentView = view;
+      if (attachedRegion && triggerAttach) {
+        displayedViews = _.union([view], _.result(view, '_getNestedViews') || []);
+        this._triggerAttach(displayedViews);
+      }
 
       if (isChangingView) {
         this.triggerMethod('swap', view);
@@ -100,6 +119,16 @@ Marionette.Region = Marionette.Object.extend({
     }
 
     return this;
+  },
+
+  triggerBeforeAttach: true,
+  triggerAttach: true,
+
+  _triggerAttach: function(views, prefix) {
+    var eventName = (prefix || '') + 'attach';
+    _.each(views, function(view) {
+      Marionette.triggerMethodOn(view, eventName, view, this);
+    }, this);
   },
 
   _ensureElement: function(){

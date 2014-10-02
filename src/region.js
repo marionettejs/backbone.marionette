@@ -6,119 +6,27 @@
 // Manage the visual regions of your composite application. See
 // http://lostechies.com/derickbailey/2011/12/12/composite-js-apps-regions-and-region-managers/
 
-Marionette.Region = function(options) {
-  this.options = options || {};
-  this.el = this.getOption('el');
+Marionette.Region = Marionette.Object.extend({
+  constructor: function (options) {
 
-  // Handle when this.el is passed in as a $ wrapped element.
-  this.el = this.el instanceof Backbone.$ ? this.el[0] : this.el;
+    // set options temporarily so that we can get `el`.
+    // options will be overriden by Object.constructor
+    this.options = options || {};
+    this.el = this.getOption('el');
 
-  if (!this.el) {
-    throw new Marionette.Error({
-      name: 'NoElError',
-      message: 'An "el" must be specified for a region.'
-    });
-  }
+    // Handle when this.el is passed in as a $ wrapped element.
+    this.el = this.el instanceof Backbone.$ ? this.el[0] : this.el;
 
-  this.$el = this.getEl(this.el);
-
-  if (this.initialize) {
-    var args = _.toArray(arguments);
-    this.initialize.apply(this, args);
-  }
-};
-
-
-// Region Class methods
-// -------------------
-
-_.extend(Marionette.Region, {
-
-  // Build an instance of a region by passing in a configuration object
-  // and a default region class to use if none is specified in the config.
-  //
-  // The config object should either be a string as a jQuery DOM selector,
-  // a Region class directly, or an object literal that specifies both
-  // a selector and regionClass:
-  //
-  // ```js
-  // {
-  //   selector: "#foo",
-  //   regionClass: MyCustomRegion
-  // }
-  // ```
-  //
-  buildRegion: function(regionConfig, DefaultRegionClass) {
-    if (_.isString(regionConfig)) {
-      return this._buildRegionFromSelector(regionConfig, DefaultRegionClass);
+    if (!this.el) {
+      throw new Marionette.Error({
+        name: 'NoElError',
+        message: 'An "el" must be specified for a region.'
+      });
     }
 
-    if (regionConfig.selector || regionConfig.el || regionConfig.regionClass) {
-      return this._buildRegionFromObject(regionConfig, DefaultRegionClass);
-    }
-
-    if (_.isFunction(regionConfig)) {
-      return this._buildRegionFromRegionClass(regionConfig);
-    }
-
-    throw new Marionette.Error({
-      message: 'Improper region configuration type.',
-      url: 'marionette.region.html#region-configuration-types'
-    });
+    this.$el = this.getEl(this.el);
+    Marionette.Object.call(this, options);
   },
-
-  // Build the region from a string selector like '#foo-region'
-  _buildRegionFromSelector: function(selector, DefaultRegionClass) {
-    return new DefaultRegionClass({ el: selector });
-  },
-
-  // Build the region from a configuration object
-  // ```js
-  // { selector: '#foo', regionClass: FooRegion }
-  // ```
-  _buildRegionFromObject: function(regionConfig, DefaultRegionClass) {
-    var RegionClass = regionConfig.regionClass || DefaultRegionClass;
-    var options = _.omit(regionConfig, 'selector', 'regionClass');
-
-    if (regionConfig.selector && !options.el) {
-      options.el = regionConfig.selector;
-    }
-
-    var region = new RegionClass(options);
-
-    // override the `getEl` function if we have a parentEl
-    // this must be overridden to ensure the selector is found
-    // on the first use of the region. if we try to assign the
-    // region's `el` to `parentEl.find(selector)` in the object
-    // literal to build the region, the element will not be
-    // guaranteed to be in the DOM already, and will cause problems
-    if (regionConfig.parentEl) {
-      region.getEl = function(el) {
-        if (_.isObject(el)) {
-          return Backbone.$(el);
-        }
-        var parentEl = regionConfig.parentEl;
-        if (_.isFunction(parentEl)) {
-          parentEl = parentEl();
-        }
-        return parentEl.find(el);
-      };
-    }
-
-    return region;
-  },
-
-  // Build the region directly from a given `RegionClass`
-  _buildRegionFromRegionClass: function(RegionClass) {
-    return new RegionClass();
-  }
-
-});
-
-// Region Instance Methods
-// -----------------------
-
-_.extend(Marionette.Region.prototype, Backbone.Events, {
 
   // Displays a backbone view instance inside of the region.
   // Handles calling the `render` method for you. Reads content
@@ -129,7 +37,6 @@ _.extend(Marionette.Region.prototype, Backbone.Events, {
   // the old view being destroyed on show.
   // The `forceShow` option can be used to force a view to be
   // re-rendered if it's already shown in the region.
-
   show: function(view, options){
     this._ensureElement();
     this._ensureViewIsIntact(view);
@@ -302,15 +209,89 @@ _.extend(Marionette.Region.prototype, Backbone.Events, {
 
     delete this.$el;
     return this;
+  }
+
+},
+
+// Static Methods
+{
+
+  // Build an instance of a region by passing in a configuration object
+  // and a default region class to use if none is specified in the config.
+  //
+  // The config object should either be a string as a jQuery DOM selector,
+  // a Region class directly, or an object literal that specifies both
+  // a selector and regionClass:
+  //
+  // ```js
+  // {
+  //   selector: "#foo",
+  //   regionClass: MyCustomRegion
+  // }
+  // ```
+  //
+  buildRegion: function(regionConfig, DefaultRegionClass) {
+    if (_.isString(regionConfig)) {
+      return this._buildRegionFromSelector(regionConfig, DefaultRegionClass);
+    }
+
+    if (regionConfig.selector || regionConfig.el || regionConfig.regionClass) {
+      return this._buildRegionFromObject(regionConfig, DefaultRegionClass);
+    }
+
+    if (_.isFunction(regionConfig)) {
+      return this._buildRegionFromRegionClass(regionConfig);
+    }
+
+    throw new Marionette.Error({
+      message: 'Improper region configuration type.',
+      url: 'marionette.region.html#region-configuration-types'
+    });
   },
 
-  // Proxy `getOption` to enable getting options from this or this.options by name.
-  getOption: Marionette.proxyGetOption,
+  // Build the region from a string selector like '#foo-region'
+  _buildRegionFromSelector: function(selector, DefaultRegionClass) {
+    return new DefaultRegionClass({ el: selector });
+  },
 
-  // import the `triggerMethod` to trigger events with corresponding
-  // methods if the method exists
-  triggerMethod: Marionette.triggerMethod
+  // Build the region from a configuration object
+  // ```js
+  // { selector: '#foo', regionClass: FooRegion }
+  // ```
+  _buildRegionFromObject: function(regionConfig, DefaultRegionClass) {
+    var RegionClass = regionConfig.regionClass || DefaultRegionClass;
+    var options = _.omit(regionConfig, 'selector', 'regionClass');
+
+    if (regionConfig.selector && !options.el) {
+      options.el = regionConfig.selector;
+    }
+
+    var region = new RegionClass(options);
+
+    // override the `getEl` function if we have a parentEl
+    // this must be overridden to ensure the selector is found
+    // on the first use of the region. if we try to assign the
+    // region's `el` to `parentEl.find(selector)` in the object
+    // literal to build the region, the element will not be
+    // guaranteed to be in the DOM already, and will cause problems
+    if (regionConfig.parentEl) {
+      region.getEl = function(el) {
+        if (_.isObject(el)) {
+          return Backbone.$(el);
+        }
+        var parentEl = regionConfig.parentEl;
+        if (_.isFunction(parentEl)) {
+          parentEl = parentEl();
+        }
+        return parentEl.find(el);
+      };
+    }
+
+    return region;
+  },
+
+  // Build the region directly from a given `RegionClass`
+  _buildRegionFromRegionClass: function(RegionClass) {
+    return new RegionClass();
+  }
 });
-
-// Copy the `extend` function used by Backbone's classes
-Marionette.Region.extend = Marionette.extend;

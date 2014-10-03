@@ -4,20 +4,15 @@
 // Contain and manage the composite application as a whole.
 // Stores and starts up `Region` objects, includes an
 // event aggregator as `app.vent`
-Marionette.Application = function(options) {
-  this.options = options;
-  this._initializeRegions(options);
-  this._initCallbacks = new Marionette.Callbacks();
-  this.submodules = {};
-  _.extend(this, options);
-  this._initChannel();
-  this.initialize.apply(this, arguments);
-};
-
-_.extend(Marionette.Application.prototype, Backbone.Events, {
-  // Initialize is an empty function by default. Override it with your own
-  // initialization logic.
-  initialize: function() {},
+Marionette.Application = Marionette.Object.extend({
+  constructor: function(options) {
+    this._initializeRegions(options);
+    this._initCallbacks = new Marionette.Callbacks();
+    this.submodules = {};
+    _.extend(this, options);
+    this._initChannel();
+    Marionette.Object.call(this, options);
+  },
 
   // Command execution, facilitated by Backbone.Wreqr.Commands
   execute: function() {
@@ -154,15 +149,5 @@ _.extend(Marionette.Application.prototype, Backbone.Events, {
     this.vent = _.result(this, 'vent') || this.channel.vent;
     this.commands = _.result(this, 'commands') || this.channel.commands;
     this.reqres = _.result(this, 'reqres') || this.channel.reqres;
-  },
-
-  // import the `triggerMethod` to trigger events with corresponding
-  // methods if the method exists
-  triggerMethod: Marionette.triggerMethod,
-
-  // Proxy `getOption` to enable getting options from this or this.options by name.
-  getOption: Marionette.proxyGetOption
+  }
 });
-
-// Copy the `extend` function used by Backbone's classes
-Marionette.Application.extend = Marionette.extend;

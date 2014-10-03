@@ -302,13 +302,10 @@ Marionette.View = Backbone.View.extend({
 
     if (!children.length) { return children; }
 
-    var nestedViews = [];
-    _.each(children, function(view) {
-      if (!view._getNestedViews) { return; }
-      nestedViews = nestedViews.concat(view._getNestedViews());
-    });
-    children = children.concat(nestedViews);
-    return children;
+    return _.reduce(children, function(memo, view) {
+      if (!view._getNestedViews) { return memo; }
+      return memo.concat(view._getNestedViews());
+    }, children);
   },
 
   // Imports the "normalizeMethods" to transform hashes of

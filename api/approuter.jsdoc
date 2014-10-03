@@ -1,0 +1,64 @@
+name: marionette.approuter.js
+
+description: |
+  <module description>
+  
+class: AppRouter
+
+description: |
+  <class description>
+  
+constructor: 
+  description: | 
+    @param {type} options - <param description> 
+  
+appRoute:
+  description: | 
+    @param {type} route - <param description> 
+    @param {type} methodName - <param description> 
+  
+  examples:
+    -
+      name:
+      example: |
+      
+_processOnRoute:
+  description: | 
+    @param {type} routeName - <param description> 
+    @param {type} routeArgs - <param description> 
+  
+  examples:
+    -
+      name:
+      example: |
+      
+processAppRoutes:
+  description: | 
+    @param {type} controller - <param description> 
+    @param {type} appRoutes - <param description> 
+  
+  examples:
+    -
+      name:
+      example: |
+      
+_getController:
+  description: | 
+    @returns {type} - <returns description>
+  
+  examples:
+    -
+      name:
+      example: |
+      
+_addAppRoute:
+  description: | 
+    @param {type} controller - <param description> 
+    @param {type} route - <param description> 
+    @param {type} methodName - <param description> 
+  
+  examples:
+    -
+      name:
+      example: |
+      

@@ -17,9 +17,8 @@ var MyApp = new Backbone.Marionette.Application();
 
 ## Documentation Index
 
-* [Initialize](#initialize)
-* [Adding Initializers](#adding-initializers)
-* [Application Event](#application-event)
+* [initialize](#initialize)
+* [Application Events](#application-events)
 * [Starting An Application](#starting-an-application)
 * [The Application Channel](#the-application-channel)
   * [Event Aggregator](#event-aggregator)
@@ -35,6 +34,7 @@ var MyApp = new Backbone.Marionette.Application();
   * [Get Region By Name](#get-region-by-name)
   * [Removing Regions](#removing-regions)
 * [Application.getOption](#applicationgetoption)
+* [Adding Initializers (deprecated)](#adding-initializers)
 
 ### Initialize
 Initialize is called immediately after the Application has been instantiated,
@@ -50,41 +50,7 @@ var MyApp = Marionette.Application.extend({
 var myApp = new MyApp({container: '#app'});
 ```
 
-## Adding Initializers
-
-Your application needs to do useful things, like displaying content in your
-regions, starting up your routers, and more. To accomplish these tasks and
-ensure that your `Application` is fully configured, you can add initializer
-callbacks to the application.
-
-```js
-MyApp.addInitializer(function(options){
-  // do useful stuff here
-  var myView = new MyView({
-    model: options.someModel
-  });
-  MyApp.mainRegion.show(myView);
-});
-
-MyApp.addInitializer(function(options){
-  new MyAppRouter();
-  Backbone.history.start();
-});
-```
-
-These callbacks will be executed when you start your application,
-and are bound to the application object as the context for
-the callback. In other words, `this` is the `MyApp` object inside
-of the initializer function.
-
-The `options` argument is passed from the `start` method (see below).
-
-Initializer callbacks are guaranteed to run, no matter when you
-add them to the app object. If you add them before the app is
-started, they will run when the `start` method is called. If you
-add them after the app is started, they will run immediately.
-
-## Application Event
+## Application Events
 
 The `Application` object raises a few events during its lifecycle, using the
 [Marionette.triggerMethod](./marionette.functions.md) function. These events
@@ -347,3 +313,51 @@ manage regions comes from the RegionManager Class, which is documented [over her
 Retrieve an object's attribute either directly from the object, or from the object's this.options, with this.options taking precedence.
 
 More information [getOption](./marionette.functions.md)
+
+## Adding Initializers
+
+> Warning: deprecated
+>
+> This feature is deprecated, and is scheduled to be removed in version 3 of Marionette. Instead
+> of Initializers, you should use events to manage start-up logic. The `start` event is an ideal
+> substitute for Initializers.
+>
+> If you were relying on the deferred nature of Initializers in your app, you should instead
+> use Promises. This might look something like the following:
+>
+> ```js
+> doAsyncThings().then(app.start);
+> ```
+>
+
+Your application needs to do useful things, like displaying content in your
+regions, starting up your routers, and more. To accomplish these tasks and
+ensure that your `Application` is fully configured, you can add initializer
+callbacks to the application.
+
+```js
+MyApp.addInitializer(function(options){
+  // do useful stuff here
+  var myView = new MyView({
+    model: options.someModel
+  });
+  MyApp.mainRegion.show(myView);
+});
+
+MyApp.addInitializer(function(options){
+  new MyAppRouter();
+  Backbone.history.start();
+});
+```
+
+These callbacks will be executed when you start your application,
+and are bound to the application object as the context for
+the callback. In other words, `this` is the `MyApp` object inside
+of the initializer function.
+
+The `options` argument is passed from the `start` method (see below).
+
+Initializer callbacks are guaranteed to run, no matter when you
+add them to the app object. If you add them before the app is
+started, they will run when the `start` method is called. If you
+add them after the app is started, they will run immediately.

@@ -45,7 +45,7 @@ describe('collection view - reset', function() {
     });
 
     it('should remove the event handlers for the original children', function() {
-      expect(_.toArray(this.collectionView._listeningTo)).to.have.lengthOf(4);
+      expect(_.toArray(this.collectionView._listeningTo)).to.have.lengthOf(3);
     });
   });
 });

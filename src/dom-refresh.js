@@ -5,22 +5,23 @@
 // in the DOM, trigger a "dom:refresh" event every time it is
 // re-rendered.
 
-Marionette.MonitorDOMRefresh = (function(documentElement) {
+Marionette.MonitorDOMRefresh = function(view) {
+
   // track when the view has been shown in the DOM,
   // using a Marionette.Region (or by other means of triggering "show")
-  function handleShow(view) {
+  function handleShow() {
     view._isShown = true;
-    triggerDOMRefresh(view);
+    triggerDOMRefresh();
   }
 
   // track when the view has been rendered
-  function handleRender(view) {
+  function handleRender() {
     view._isRendered = true;
-    triggerDOMRefresh(view);
+    triggerDOMRefresh();
   }
 
   // Trigger the "dom:refresh" event and corresponding "onDomRefresh" method
-  function triggerDOMRefresh(view) {
+  function triggerDOMRefresh() {
     if (view._isShown && view._isRendered && Marionette.isNodeAttached(view.el)) {
       if (_.isFunction(view.triggerMethod)) {
         view.triggerMethod('dom:refresh');
@@ -28,14 +29,8 @@ Marionette.MonitorDOMRefresh = (function(documentElement) {
     }
   }
 
-  // Export public API
-  return function(view) {
-    view.listenTo(view, 'show', function() {
-      handleShow(view);
-    });
-
-    view.listenTo(view, 'render', function() {
-      handleRender(view);
-    });
-  };
-})(document.documentElement);
+  view.on({
+    show: handleShow,
+    render: handleRender
+  });
+};

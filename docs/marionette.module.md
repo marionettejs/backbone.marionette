@@ -16,13 +16,14 @@ and to build individual components of your app.
 * [Defining Sub-Modules](#defining-sub-modules)
 * [Starting and Stopping Modules](#starting-and-stopping-modules)
 * [Starting Modules](#starting-modules)
-  * [Module Initializers](#module-initializers)
   * [Start Events](#start-events)
   * [Preventing Auto-Start Of Modules](#preventing-auto-start-of-modules)
   * [Starting Sub-Modules With Parent](#starting-sub-modules-with-parent)
 * [Stopping Modules](#stopping-modules)
-  * [Module Finalizers](#module-finalizers)
   * [Stop Events](#stop-events)
+* [Module Initializers (deprecated)](#module-initializers)
+* [Module Finalizers (deprecated)](#module-finalizers)
+
 
 ## Basic Usage
 
@@ -313,28 +314,6 @@ MyApp.start();
 Note that modules loaded after the `MyApp.start()` call will be
 immediately started.
 
-### Module Initializers
-
-Modules, like `Application` objects, can be configured to have initializers. And just like
-an Application's initializers, module's initializers are run anytime that
-the module is started. Further, there is no limit to the number of initializers it can have.
-
-Initializers can be added in the module's definition function.
-
-```js
-MyApp.module("Foo", function(Foo){
-
-  Foo.addInitializer(function(){
-    // Do things once the module has started
-  });
-
-  Foo.addInitializer(function(){
-    // You can have more than one initializer
-  });
-
-});
-```
-
 ### Start Events
 
 When starting a module, a "before:start" event will be triggered prior
@@ -474,26 +453,6 @@ This call to `stop` causes the `Bar` and `Baz` modules to both be stopped
 as they are sub-modules of `Foo`. For more information on defining
 sub-modules, see the section "Defining Sub-Modules".
 
-### Module Finalizers
-
-Modules also have finalizers that work in an opposite manner to
-initializers: they are called whenever a module is stopped via the `stop` method.
-You can have as many finalizers as you'd like.
-
-```js
-MyApp.module("Foo", function(Foo){
-
-  Foo.addFinalizer(function(){
-    // Tear down, shut down and clean up the module in here
-  });
-
-  Foo.addFinalizer(function(){
-    // Do more things
-  });
-
-});
-```
-
 ### Stop Events
 
 When stopping a module, a "before:stop" event will be triggered prior
@@ -509,5 +468,74 @@ mod.on("before:stop", function(){
 
 mod.on("stop", function(){
   // do stuff after the module has been stopped
+});
+```
+
+### Module Initializers
+
+> Warning: deprecated
+>
+> This feature is deprecated, and is scheduled to be removed in version 3 of Marionette. Instead
+> of Initializers, you should use events to manage start-up logic. The `start` event is an ideal
+> substitute for Initializers.
+>
+> If you were relying on the deferred nature of Initializers in your app, you should instead
+> use Promises. This might look something like the following:
+>
+> ```js
+> doAsyncThings().then(myModule.start);
+> ```
+>
+
+Modules, like `Application` objects, can be configured to have initializers. And just like
+an Application's initializers, module's initializers are run anytime that
+the module is started. Further, there is no limit to the number of initializers it can have.
+
+Initializers can be added in the module's definition function.
+
+```js
+MyApp.module("Foo", function(Foo){
+
+  Foo.addInitializer(function(){
+    // Do things once the module has started
+  });
+
+  Foo.addInitializer(function(){
+    // You can have more than one initializer
+  });
+
+});
+```
+
+### Module Finalizers
+
+> Warning: deprecated
+>
+> This feature is deprecated, and is scheduled to be removed in version 3 of Marionette. Instead
+> of Finalizers, you should use events to manage start-up logic. The `stop` event is an ideal
+> substitute for Finalizers.
+>
+> If you were relying on the deferred nature of Initializers in your app, you should instead
+> use Promises. This might look something like the following:
+>
+> ```js
+> doAsyncThings().then(myModule.stop);
+> ```
+>
+Modules also have finalizers that work in an opposite manner to
+initializers: they are called whenever a module is stopped via the `stop` method.
+You can have as many finalizers as you'd like.
+
+```js
+MyApp.module("Foo", function(Foo){
+
+  Foo.addFinalizer(function(){
+    // Tear down, shut down and clean up the module in here
+  });
+
+  Foo.addFinalizer(function(){
+    // Do more things
+  });
+
 });
 ```

@@ -328,7 +328,7 @@ events:
       rm.removeRegion("foo");
       ```
 
-interators: |
+iterators: |
   The RegionManager has several methods for iteration attached to it, from underscore.js. This works in the same way as the Backbone.Collection methods that have been imported. For example, you can easily iterate over the entire collection of region instances by calling the `each` method.
 
   ```js

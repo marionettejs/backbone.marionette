@@ -1,4 +1,4 @@
-/* jshint maxcomplexity: 10, maxstatements: 29, maxlen: 120 */
+/* jshint maxcomplexity: 10, maxstatements: 31, maxlen: 120 */
 
 // Region
 // ------
@@ -45,6 +45,7 @@ Marionette.Region = Marionette.Object.extend({
     var isDifferentView = view !== this.currentView;
     var preventDestroy  = !!showOptions.preventDestroy;
     var forceShow       = !!showOptions.forceShow;
+    var replaceElement  = !!showOptions.replaceElement;
 
     // We are only changing the view if there is a current view to change to begin with
     var isChangingView = !!this.currentView;
@@ -57,6 +58,9 @@ Marionette.Region = Marionette.Object.extend({
     // the current view or if we want to re-show the view. Note that if
     // `_shouldDestroyView` is true, then `_shouldShowView` is also necessarily true.
     var _shouldShowView = isDifferentView || forceShow;
+
+    // only replace the region's element with the view's element if explicitly set
+    var _shouldReplaceElement = replaceElement;
 
     if (isChangingView) {
       this.triggerMethod('before:swapOut', this.currentView);
@@ -87,7 +91,7 @@ Marionette.Region = Marionette.Object.extend({
         this.triggerMethod('swapOut', this.currentView);
       }
 
-      this.attachHtml(view);
+      this.attachHtml(view, _shouldReplaceElement);
       this.currentView = view;
 
       if (isChangingView) {
@@ -135,12 +139,35 @@ Marionette.Region = Marionette.Object.extend({
     return Backbone.$(el);
   },
 
+  // Replace the region's DOM element with the view's DOM element.
+  replaceEl: function(view) {
+    var parent = this.el.parentNode;
+
+    parent.replaceChild(view.el, this.el);
+    this.replaced = true;
+  },
+
+  // Restore the region's element in the DOM.
+  restoreEl: function() {
+    var view = this.currentView;
+    var parent = view.el.parentNode;
+
+    parent.replaceChild(this.el, view.el);
+    this.replaced = false;
+  },
+
   // Override this method to change how the new view is
   // appended to the `$el` that the region is managing
   attachHtml: function(view) {
-    // empty the node and append new view
-    this.el.innerHTML='';
-    this.el.appendChild(view.el);
+      if (arguments[1]) {
+        // replace the region's node with the view's
+        // node
+        this.replaceEl(view);
+      } else {
+        // empty the node and append new view
+        this.el.innerHTML='';
+        this.el.appendChild(view.el);
+      }
   },
 
   // Destroy the current view, if there is one. If there is no
@@ -153,6 +180,9 @@ Marionette.Region = Marionette.Object.extend({
     if (!view) { return; }
 
     this.triggerMethod('before:empty', view);
+
+    if (this.replaced) { this.restoreEl(); }
+
     this._destroyView();
     this.triggerMethod('empty', view);
 

@@ -108,7 +108,7 @@ Marionette.CollectionView = Marionette.View.extend({
   render: function() {
     this._ensureViewIsIntact();
     this.triggerMethod('before:render', this);
-    this._renderChildren();
+    _.defer(this._renderChildren.bind(this));
     this.triggerMethod('render', this);
     return this;
   },

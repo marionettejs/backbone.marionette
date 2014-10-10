@@ -77,7 +77,7 @@ Marionette.CompositeView = Marionette.CollectionView.extend({
     this.triggerMethod('before:render', this);
 
     this._renderTemplate();
-    this._renderChildren();
+    _.defer(this._renderChildren.bind(this));
 
     this.triggerMethod('render', this);
     return this;

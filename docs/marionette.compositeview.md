@@ -196,6 +196,11 @@ case, you can override the `attachHtml` method with your own implementation.
 
 For more information on this method, see the [CollectionView's documentation](http://marionettejs.com/docs/marionette.collectionview.html).
 
+## CompositeView's `childView` container selection
+
+
+The `getChildViewContainer` method is passed a second `childView` parameter which, when overridden, allows for a finer tuned container selection by being able to access the `childView` which is about to be appended to the `containerView` returned by `getChildViewContainer`.
+
 
 ## Recursive By Default
 

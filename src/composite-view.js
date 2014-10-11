@@ -137,13 +137,13 @@ Marionette.CompositeView = Marionette.CollectionView.extend({
   // Overidden from CollectionView to ensure view is appended to
   // childViewContainer
   _insertAfter: function (childView) {
-    var $container = this.getChildViewContainer(this);
+    var $container = this.getChildViewContainer(this, childView);
     $container.append(childView.el);
   },
 
   // Internal method to ensure an `$childViewContainer` exists, for the
   // `attachHtml` method to use.
-  getChildViewContainer: function(containerView) {
+  getChildViewContainer: function(containerView, childView) {
     if ('$childViewContainer' in containerView) {
       return containerView.$childViewContainer;
     }

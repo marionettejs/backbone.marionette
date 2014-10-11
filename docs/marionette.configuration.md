@@ -7,11 +7,15 @@ change how the system works. While many of these subjects are covered
 in other docs, this configuration doc should provide a list of the
 most common items to change.
 
-## Documentation Index
+## Marionette.Deferred
 
-* [Marionette.Deferred](#deferred)
-
-## Marionette.Deferred <a name="deferred"></a>
+> Warning: deprecated
+>
+> This feature is deprecated, and is scheduled to be removed in version 3 of Marionette. It is used to configure
+> `Marionette.Callbacks`, which is also deprecated and scheduled to be removed in version 3. Instead of proxying
+> the `Deferred` property on Marionette, use the native `Promise` object directly, and include a polyfill such as
+> https://github.com/jakearchibald/es6-promise if you are supporting older browsers. `$.Deferred` can also be used, but
+> it is not compliant with the ES6 Promise and is not recommended.
 
 By default, Marionette makes use of `Backbone.$.Deferred` to create
 thenable objects.

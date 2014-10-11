@@ -25,7 +25,9 @@ var MyApp = new Backbone.Marionette.Application();
   * [Request Response](#request-response)
   * [Commands](#commands)
   * [Accessing the Application Channel](#accessing-the-application-channel)
-* [Regions And The Application Object](#regions-and-the-application-object)
+* [Application.getOption](#applicationgetoption)
+* [Adding Initializers (deprecated)](#adding-initializers)
+* [Application Regions (deprecated)](#application-regions)
   * [jQuery Selector](#jquery-selector)
   * [Custom Region Class](#custom-region-class)
   * [Custom Region Class And Selector](#custom-region-class-and-selector)
@@ -33,8 +35,6 @@ var MyApp = new Backbone.Marionette.Application();
   * [Overriding the default RegionManager](#overriding-the-default-regionmanager)
   * [Get Region By Name](#get-region-by-name)
   * [Removing Regions](#removing-regions)
-* [Application.getOption](#applicationgetoption)
-* [Adding Initializers (deprecated)](#adding-initializers)
 
 ### Initialize
 Initialize is called immediately after the Application has been instantiated,
@@ -190,7 +190,71 @@ globalCh.vent;
 window.app.vent;
 ```
 
-## Regions And The Application Object
+### Application.getOption
+Retrieve an object's attribute either directly from the object, or from the object's this.options, with this.options taking precedence.
+
+More information [getOption](./marionette.functions.md)
+
+## Adding Initializers
+
+> Warning: deprecated
+>
+> This feature is deprecated, and is scheduled to be removed in version 3 of Marionette. Instead
+> of Initializers, you should use events to manage start-up logic. The `start` event is an ideal
+> substitute for Initializers.
+>
+> If you were relying on the deferred nature of Initializers in your app, you should instead
+> use Promises. This might look something like the following:
+>
+> ```js
+> doAsyncThings().then(app.start);
+> ```
+>
+
+Your application needs to do useful things, like displaying content in your
+regions, starting up your routers, and more. To accomplish these tasks and
+ensure that your `Application` is fully configured, you can add initializer
+callbacks to the application.
+
+```js
+MyApp.addInitializer(function(options){
+  // do useful stuff here
+  var myView = new MyView({
+    model: options.someModel
+  });
+  MyApp.mainRegion.show(myView);
+});
+
+MyApp.addInitializer(function(options){
+  new MyAppRouter();
+  Backbone.history.start();
+});
+```
+
+These callbacks will be executed when you start your application,
+and are bound to the application object as the context for
+the callback. In other words, `this` is the `MyApp` object inside
+of the initializer function.
+
+The `options` argument is passed from the `start` method (see below).
+
+Initializer callbacks are guaranteed to run, no matter when you
+add them to the app object. If you add them before the app is
+started, they will run when the `start` method is called. If you
+add them after the app is started, they will run immediately.
+
+## Application Regions
+
+> Warning: deprecated
+> This feature is deprecated. Instead of using the Application as the root
+> of your view tree, you should use a Layout View. To scope your Layout View to the entire
+> document, you could set its `el` to 'body'. This might look something like the following:
+>
+> var RootView = Marionette.LayoutView.extend({
+>   el: 'body'
+> });
+>
+>
 
 Application instances have an API that allow you to manage [Regions](https://github.com/marionettejs/backbone.marionette/blob/master/docs/marionette.region.md).
 These Regions are typically the means through which your views become attached to the `document`.
@@ -308,56 +372,3 @@ application object.
 
 For more information on regions, see [the region documentation](./marionette.region.md) Also, the API that Applications use to
 manage regions comes from the RegionManager Class, which is documented [over here](https://github.com/marionettejs/backbone.marionette/blob/master/docs/marionette.regionmanager.md).
-
-### Application.getOption
-Retrieve an object's attribute either directly from the object, or from the object's this.options, with this.options taking precedence.
-
-More information [getOption](./marionette.functions.md)
-
-## Adding Initializers
-
-> Warning: deprecated
->
-> This feature is deprecated, and is scheduled to be removed in version 3 of Marionette. Instead
-> of Initializers, you should use events to manage start-up logic. The `start` event is an ideal
-> substitute for Initializers.
->
-> If you were relying on the deferred nature of Initializers in your app, you should instead
-> use Promises. This might look something like the following:
->
-> ```js
-> doAsyncThings().then(app.start);
-> ```
->
-
-Your application needs to do useful things, like displaying content in your
-regions, starting up your routers, and more. To accomplish these tasks and
-ensure that your `Application` is fully configured, you can add initializer
-callbacks to the application.
-
-```js
-MyApp.addInitializer(function(options){
-  // do useful stuff here
-  var myView = new MyView({
-    model: options.someModel
-  });
-  MyApp.mainRegion.show(myView);
-});
-
-MyApp.addInitializer(function(options){
-  new MyAppRouter();
-  Backbone.history.start();
-});
-```
-
-These callbacks will be executed when you start your application,
-and are bound to the application object as the context for
-the callback. In other words, `this` is the `MyApp` object inside
-of the initializer function.
-
-The `options` argument is passed from the `start` method (see below).
-
-Initializer callbacks are guaranteed to run, no matter when you
-add them to the app object. If you add them before the app is
-started, they will run when the `start` method is called. If you
-add them after the app is started, they will run immediately.

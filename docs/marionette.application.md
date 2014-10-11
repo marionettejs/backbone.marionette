@@ -17,7 +17,7 @@ var MyApp = new Backbone.Marionette.Application();
 
 ## Documentation Index
 
-* [initialize](#initialize)
+* [Initialize](#initialize)
 * [Adding Initializers](#adding-initializers)
 * [Application Event](#application-event)
 * [Starting An Application](#starting-an-application)

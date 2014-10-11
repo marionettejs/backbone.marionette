@@ -42,7 +42,7 @@ context and purpose with it, and it should be done
 against a specific branch.
 
 Try and stick to Marionette's existing coding conventions
-(just use the file your editing as a guideline).
+(just use the file you're editing as a guideline).
 Installing the appropriate [EditorConfig plugin](http://editorconfig.org/#download)
 for your code editor will help with this.
 

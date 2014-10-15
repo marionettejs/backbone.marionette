@@ -242,9 +242,14 @@ describe('regionManager', function() {
       describe('without defaults', function() {
         beforeEach(function() {
           this.fooRegion = new Marionette.Region({ el: this.fooSelector });
+          this.fooRegion._parent = this.regionManager;
+
           this.barRegion = new Marionette.Region({ el: this.barSelector });
+          this.barRegion._parent = this.regionManager;
+
           this.BazRegion = Marionette.Region.extend();
           this.bazRegion = new this.BazRegion({ el: this.bazSelector });
+          this.bazRegion._parent = this.regionManager;
 
           this.regionDefinition = this.sinon.stub().returns({
             fooRegion: this.fooSelector,
@@ -288,7 +293,10 @@ describe('regionManager', function() {
           this.defaults = { regionClass: this.BazRegion };
 
           this.fooRegion = new this.BazRegion({ el: this.fooSelector });
+          this.fooRegion._parent = this.regionManager;
+
           this.barRegion = new this.BazRegion({ el: this.barSelector });
+          this.barRegion._parent = this.regionManager;
 
           this.regionDefinition = this.sinon.stub().returns({
             fooRegion: this.fooSelector,
@@ -386,6 +394,10 @@ describe('regionManager', function() {
 
     it('should adjust the length of the region manager by -1', function() {
       expect(this.regionManager.length).to.equal(0);
+    });
+
+    it('should not reference parent', function() {
+      expect(this.region._parent).to.be.undefined;
     });
 
     it('should return the region', function() {

@@ -172,6 +172,10 @@ describe('region', function() {
       expect(this.myRegion.hasView()).to.equal(true);
     });
 
+    it('should reference region', function() {
+      expect(this.view._parent).to.deep.equal(this.myRegion);
+    });
+
     it('should set $el and el', function() {
       expect(this.myRegion.$el[0]).to.equal(this.myRegion.el);
     });
@@ -279,6 +283,15 @@ describe('region', function() {
         expect(this.myRegion.hasView()).to.equal(true);
       });
 
+
+      it('should reference region', function() {
+        expect(this.view2._parent).to.deep.equal(this.myRegion);
+      });
+
+      it('old view should not reference region', function() {
+        expect(this.view._parent).to.be.undefined;
+      });
+
       it('should trigger a beforeSwapOut event for the region', function() {
         expect(this.onBeforeSwapOutSpy)
         .to.have.been.calledOnce
@@ -331,6 +344,10 @@ describe('region', function() {
           expect(this.view1.destroy.callCount).to.equal(0);
         });
 
+        it('view1 should not reference region', function() {
+          expect(this.view1._parent).to.be.undefined;
+        });
+
         it('should replace the content in the DOM', function() {
           expect(this.myRegion.$el).to.contain.$text('some more content');
           expect(this.myRegion.$el).not.to.contain.$text('some content');
@@ -344,6 +361,10 @@ describe('region', function() {
 
         it('should "destroy" the old view', function() {
           expect(this.view1.destroy).to.have.been.called;
+        });
+
+        it('view1 should not reference region', function() {
+          expect(this.view1._parent).to.be.undefined;
         });
       });
     });

@@ -13,3 +13,4 @@ bower_components/
 .grunt
 reports
 jsdoc
+.idea

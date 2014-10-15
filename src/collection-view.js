@@ -213,6 +213,8 @@ Marionette.CollectionView = Marionette.View.extend({
     // build the empty view
     var view = this.buildChildView(child, EmptyView, emptyViewOptions);
 
+    view._parent = this;
+
     // Proxy emptyView events
     this.proxyChildEvents(view);
 
@@ -271,6 +273,8 @@ Marionette.CollectionView = Marionette.View.extend({
     this._updateIndices(view, true, index);
 
     this._addChildView(view, index);
+
+    view._parent = this;
 
     return view;
   },
@@ -349,6 +353,7 @@ Marionette.CollectionView = Marionette.View.extend({
       if (view.destroy) { view.destroy(); }
       else if (view.remove) { view.remove(); }
 
+      delete view._parent;
       this.stopListening(view);
       this.children.remove(view);
       this.triggerMethod('remove:child', view);

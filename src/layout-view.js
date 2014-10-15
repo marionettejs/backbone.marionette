@@ -138,6 +138,7 @@ Marionette.LayoutView = Marionette.ItemView.extend({
   // and all regions in it
   _initRegionManager: function() {
     this.regionManager = this.getRegionManager();
+    this.regionManager._parent = this;
 
     this.listenTo(this.regionManager, 'before:add:region', function(name) {
       this.triggerMethod('before:add:region', name);

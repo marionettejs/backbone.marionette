@@ -50,6 +50,12 @@ describe('layoutView', function() {
     it('should instantiate the specified region before initialize', function() {
       expect(this.regionOne).to.equal(this.layoutViewManager.regionOne);
     });
+
+    it('should create backlink with region manager', function() {
+      it('should instantiate the specified region managers', function() {
+        expect(this.layoutViewManager._parent).to.deep.equal(this.layoutViewManager);
+      });
+    });
   });
 
   describe('on instantiation with no regions defined', function() {

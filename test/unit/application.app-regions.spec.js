@@ -13,6 +13,9 @@ describe('application regions', function() {
       this.fooRegion = new Marionette.Region({ el: '#foo-region' });
       this.barRegion = new Marionette.Region({ el: '#bar-region' });
 
+      this.fooRegion._parent = this.app._regionManager;
+      this.barRegion._parent = this.app._regionManager;
+
       this.app.addRegions({
         fooRegion: '#foo-region',
         barRegion: '#bar-region'
@@ -23,6 +26,10 @@ describe('application regions', function() {
     it('should initialize the regions', function() {
       expect(this.app.fooRegion).to.deep.equal(this.fooRegion);
       expect(this.app.barRegion).to.deep.equal(this.barRegion);
+    });
+
+    it('should create backlink to regionManager', function() {
+      expect(this.app._regionManager._parent).to.deep.equal(this.app);
     });
 
     it('should trigger a before:add:region event', function() {
@@ -63,6 +70,8 @@ describe('application regions', function() {
         el: this.fooSelector,
         fooOption: this.fooOption
       });
+
+      this.fooRegion._parent = this.app._regionManager;
 
       this.app.addRegions({
         fooRegion: {
@@ -329,6 +338,7 @@ describe('application regions', function() {
       this.FooRegion = Marionette.Region.extend({ el: this.fooSelector });
 
       this.fooRegion = new this.FooRegion();
+      this.fooRegion._parent = this.app._regionManager;
 
       this.app.addRegions({
         fooRegion: this.FooRegion
@@ -350,14 +360,22 @@ describe('application regions', function() {
 
   describe('when adding regions with a function', function() {
     beforeEach(function() {
+      this.app = new Marionette.Application();
+
       this.fooSelector = '#foo-region';
       this.barSelector = '#bar-region';
 
-      this.fooRegion = new Marionette.Region({ el: this.fooSelector });
-      this.BarRegion = Marionette.Region.extend();
-      this.barRegion = new this.BarRegion({ el: this.barSelector });
+      this.fooRegion = new Marionette.Region({
+        el: this.fooSelector
+      });
+      this.fooRegion._parent = this.app._regionManager;
 
-      this.app = new Marionette.Application();
+
+      this.BarRegion = Marionette.Region.extend();
+      this.barRegion = new this.BarRegion({
+        el: this.barSelector
+      });
+      this.barRegion._parent = this.app._regionManager;
 
       this.regionDefinition = this.sinon.stub().returns({
         fooRegion: this.fooSelector,
@@ -395,6 +413,8 @@ describe('application regions', function() {
     beforeEach(function() {
       this.app = new Marionette.Application();
       this.fooRegion = new Marionette.Region({ el: '#foo-region' });
+      this.fooRegion._parent = this.app._regionManager;
+
       this.app.addRegions({
         fooRegion: '#foo-region'
       });

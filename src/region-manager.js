@@ -51,6 +51,7 @@ Marionette.RegionManager = Marionette.Controller.extend({
 
     this.triggerMethod('before:add:region', name, region);
 
+    region._parent = this;
     this._store(name, region);
 
     this.triggerMethod('add:region', name, region);
@@ -113,6 +114,8 @@ Marionette.RegionManager = Marionette.Controller.extend({
     this.triggerMethod('before:remove:region', name, region);
     region.empty();
     region.stopListening();
+
+    delete region._parent;
     delete this._regions[name];
     this._setLength();
     this.triggerMethod('remove:region', name, region);

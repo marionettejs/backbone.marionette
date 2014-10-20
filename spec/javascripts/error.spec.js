@@ -51,12 +51,12 @@ describe('Marionette.Error', function() {
       expect(this.error).to.contain({
         name: 'Bar',
         message: 'Foo',
-        url: 'http://marionettejs.com/docs/' + Marionette.VERSION + '/Baz'
+        url: 'http://marionettejs.com/docs/v' + Marionette.VERSION + '/Baz'
       });
     });
 
     it('should output the correct string', function() {
-      expect(this.error.toString()).to.equal('Bar: Foo See: http://marionettejs.com/docs/' + Marionette.VERSION + '/Baz');
+      expect(this.error.toString()).to.equal('Bar: Foo See: http://marionettejs.com/docs/v' + Marionette.VERSION + '/Baz');
     });
   });
 
@@ -93,12 +93,12 @@ describe('Marionette.Error', function() {
       expect(this.error).to.contain({
         name: 'Foo',
         message: 'Bar',
-        url: 'http://marionettejs.com/docs/' + Marionette.VERSION + '/Baz'
+        url: 'http://marionettejs.com/docs/v' + Marionette.VERSION + '/Baz'
       });
     });
 
     it('should output the correct string', function() {
-      expect(this.error.toString()).to.equal('Foo: Bar See: http://marionettejs.com/docs/' + Marionette.VERSION + '/Baz');
+      expect(this.error.toString()).to.equal('Foo: Bar See: http://marionettejs.com/docs/v' + Marionette.VERSION + '/Baz');
     });
   });
 

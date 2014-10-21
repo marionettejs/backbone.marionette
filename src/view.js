@@ -53,9 +53,8 @@ Marionette.View = Backbone.View.extend({
   // normalize the keys of passed hash with the views `ui` selectors.
   // `{"@ui.foo": "bar"}`
   normalizeUIKeys: function(hash) {
-    var ui = _.result(this, 'ui');
     var uiBindings = _.result(this, '_uiBindings');
-    return Marionette.normalizeUIKeys(hash, uiBindings || ui);
+    return Marionette.normalizeUIKeys(hash, uiBindings || _.result(this, 'ui'));
   },
 
   // normalize the values of passed hash with the views `ui` selectors.

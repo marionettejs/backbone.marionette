@@ -21,6 +21,7 @@ behaviors that are shared across all views.
 * [View.triggers](#viewtriggers)
 * [View.events](#viewevents)
 * [View.modelEvents and View.collectionEvents](#viewmodelevents-and-viewcollectionevents)
+* [View.serializeModel](#viewserializemodel)
 * [View.bindUIElements](#viewbinduielements)
 * [View.getOption](#viewgetoption)
 * [View.bindEntityEvents](#viewbindentityevents)
@@ -367,6 +368,10 @@ Backbone.Marionette.CompositeView.extend({
 ```
 
 This works for both `modelEvents` and `collectionEvents`.
+
+## View.serializeModel
+
+The `serializeModel` method will serialize a model that is passed in as an argument.
 
 ## View.bindUIElements
 

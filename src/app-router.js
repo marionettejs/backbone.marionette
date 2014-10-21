@@ -39,11 +39,10 @@ Marionette.AppRouter = Backbone.Router.extend({
   // process the route event and trigger the onRoute
   // method call, if it exists
   _processOnRoute: function(routeName, routeArgs) {
-    // find the path that matched
-    var routePath = _.invert(this.getOption('appRoutes'))[routeName];
-
-    // make sure an onRoute is there, and call it
+    // make sure an onRoute before trying to call it
     if (_.isFunction(this.onRoute)) {
+      // find the path that matches the current route
+      var routePath = _.invert(this.getOption('appRoutes'))[routeName];
       this.onRoute(routeName, routePath, routeArgs);
     }
   },

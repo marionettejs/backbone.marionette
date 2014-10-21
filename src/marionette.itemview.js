@@ -52,6 +52,10 @@ Marionette.ItemView = Marionette.View.extend({
 
     this.triggerMethod('render', this);
 
+    _.defer(function(){
+      this.triggerMethod('after:render', this);
+    }.bind(this));
+
     return this;
   },
 

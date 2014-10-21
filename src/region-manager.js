@@ -91,10 +91,7 @@ Marionette.RegionManager = Marionette.Controller.extend({
   // leave them attached
   emptyRegions: function() {
     var regions = this.getRegions();
-    _.each(regions, function(region) {
-      region.empty();
-    }, this);
-
+    _.invoke(regions, 'empty');
     return regions;
   },
 

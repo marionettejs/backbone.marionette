@@ -70,18 +70,15 @@ Marionette.View = Backbone.View.extend({
   configureTriggers: function() {
     if (!this.triggers) { return; }
 
-    var triggerEvents = {};
-
     // Allow `triggers` to be configured as a function
     var triggers = this.normalizeUIKeys(_.result(this, 'triggers'));
 
     // Configure the triggers, prevent default
     // action and stop propagation of DOM events
-    _.each(triggers, function(value, key) {
-      triggerEvents[key] = this._buildViewTrigger(value);
-    }, this);
-
-    return triggerEvents;
+    return _.reduce(triggers, function(events, value, key) {
+      events[key] = this._buildViewTrigger(value);
+      return events;
+    }, {}, this);
   },
 
   // Overriding Backbone.View's delegateEvents to handle

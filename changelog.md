@@ -1,3 +1,11 @@
+### v2.2.2 [view commit logs](https://github.com/marionettejs/backbone.marionette/compare/v2.2.1...v2.2.2)
+
+* Fixes
+
+  * Remove duplicate call to region.empty on view destroy.
+  * Fix call time of `swapOut`.
+  * Fix broken link in Marionette Error messages
+
 ### v2.2.1 [view commit logs](https://github.com/marionettejs/backbone.marionette/compare/v2.2.0...v2.2.1)
 
 * Fixes

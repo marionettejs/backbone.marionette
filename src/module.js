@@ -144,8 +144,7 @@ _.extend(Marionette.Module, {
 
     // get the custom args passed in after the module definition and
     // get rid of the module name and definition function
-    var customArgs = _.toArray(arguments);
-    customArgs.splice(0, 3);
+    var customArgs = _.rest(arguments, 3);
 
     // Split the module names and get the number of submodules.
     // i.e. an example module name of `Doge.Wow.Amaze` would

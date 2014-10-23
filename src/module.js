@@ -85,7 +85,7 @@ _.extend(Marionette.Module.prototype, Backbone.Events, {
 
     // stop the sub-modules; depth-first, to make sure the
     // sub-modules are stopped / finalized before parents
-    _.each(this.submodules, function(mod) { mod.stop(); });
+    _.invoke(this.submodules, 'stop');
 
     // run the finalizers
     this._finalizerCallbacks.run(undefined, this);

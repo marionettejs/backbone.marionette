@@ -520,6 +520,10 @@ describe('collection view', function() {
       expect(_.size(this.collectionView.children)).to.equal(0);
     });
 
+    it('should not affect the underlying collection', function() {
+      expect(this.collection).to.have.length(1);
+    });
+
     it('should unbind any listener to custom view events', function() {
       expect(this.collectionView.stopListening).to.have.been.called;
     });

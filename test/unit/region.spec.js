@@ -862,6 +862,8 @@ describe('region', function() {
       this.setFixtures('<div id="region"></div>');
       this.beforeEmptySpy = new sinon.spy();
       this.emptySpy = new sinon.spy();
+      this.onBeforeDestroy = this.sinon.stub();
+      this.onDestroy = this.sinon.stub();
 
       this.region = new Backbone.Marionette.Region({
         el: '#region'
@@ -876,6 +878,9 @@ describe('region', function() {
 
       this.view = new this.View();
 
+      this.view.on('before:destroy', this.onBeforeDestroy);
+      this.view.on('destroy', this.onDestroy);
+
       this.region.show(this.view);
       this.region.currentView.destroy();
     });
@@ -884,6 +889,14 @@ describe('region', function() {
       expect(this.beforeEmptySpy).to.have.been.calledOnce.and.calledWith(this.view);
       expect(this.emptySpy).to.have.been.calledOnce.calledWith(this.view);
       expect(this.region.currentView).to.be.undefined;
+    });
+
+    it('view "before:destroy" event is triggered once', function() {
+      expect(this.onBeforeDestroy).to.have.been.calledOnce;
+    });
+
+    it('view "destroy" event is triggered once', function() {
+      expect(this.onDestroy).to.have.been.calledOnce;
     });
   });
 

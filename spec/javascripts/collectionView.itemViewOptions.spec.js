@@ -61,4 +61,27 @@ describe('collection view - childViewOptions', function() {
       expect(this.childViewOptionsStub).to.have.been.calledTwice.and.calledWith(this.collection.at(1), 1);
     });
   });
+
+  describe('when rendering with an empty collection and emptyView', function() {
+    beforeEach(function() {
+      this.EmptyCollectionView = Marionette.CollectionView.extend({
+        emptyView: Marionette.View,
+        childViewOptions: this.childViewOptionsStub
+      });
+
+      this.emptyCollectionView = new this.EmptyCollectionView();
+      this.emptyCollectionView.render();
+    });
+
+    it('should pass consistent arguments to childViewOptions', function() {
+      expect(this.childViewOptionsStub)
+      .to.have.been.calledOnce;
+
+      expect(this.childViewOptionsStub.firstCall.args[0])
+      .to.be.instanceOf(Backbone.Model);
+
+      expect(this.childViewOptionsStub.firstCall.args[1])
+      .to.eql(this.emptyCollectionView._emptyViewIndex);
+    });
+  });
 });

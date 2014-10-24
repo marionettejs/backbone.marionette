@@ -276,12 +276,12 @@ Marionette.View = Backbone.View.extend({
   // import the `triggerMethod` to trigger events with corresponding
   // methods if the method exists
   triggerMethod: function() {
-    var triggerMethod = Marionette.triggerMethod;
-    var ret = triggerMethod.apply(this, arguments);
+    var triggerMethod = Marionette._triggerMethod;
+    var ret = triggerMethod(this, arguments);
     var behaviors = this._behaviors;
     // Use good ol' for as this is a very hot function
     for (var i = 0, length = behaviors && behaviors.length; i < length; i++) {
-      triggerMethod.apply(behaviors[i], arguments);
+      triggerMethod(behaviors[i], arguments);
     }
 
     return ret;

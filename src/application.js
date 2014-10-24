@@ -120,25 +120,21 @@ Marionette.Application = Marionette.Object.extend({
     this._regionManager = this.getRegionManager();
 
     this.listenTo(this._regionManager, 'before:add:region', function() {
-      var args = _.toArray(arguments);
-      this.triggerMethod.apply(this, ['before:add:region'].concat(args));
+      Marionette._triggerMethod(this, 'before:add:region', arguments);
     });
 
     this.listenTo(this._regionManager, 'add:region', function(name, region) {
       this[name] = region;
-      var args = _.toArray(arguments);
-      this.triggerMethod.apply(this, ['add:region'].concat(args));
+      Marionette._triggerMethod(this, 'add:region', arguments);
     });
 
     this.listenTo(this._regionManager, 'before:remove:region', function() {
-      var args = _.toArray(arguments);
-      this.triggerMethod.apply(this, ['before:remove:region'].concat(args));
+      Marionette._triggerMethod(this, 'before:remove:region', arguments);
     });
 
     this.listenTo(this._regionManager, 'remove:region', function(name) {
       delete this[name];
-      var args = _.toArray(arguments);
-      this.triggerMethod.apply(this, ['remove:region'].concat(args));
+      Marionette._triggerMethod(this, 'remove:region', arguments);
     });
   },
 

@@ -33,14 +33,14 @@ properties:
 
 constructor: |
   Instantiates the Region, creating its `el`.
-  
-functions: 
-  show: 
+
+functions:
+  show:
     description: |
       Displays the passed-in `view` within the Region, destroying the current View, if there is one.
-      
+
       @param view
-      
+
     examples:
       -
         name: Showing a simple view
@@ -53,6 +53,42 @@ functions:
 
 The JSDoc files are compiled by running `grunt api` from the command line. This lints the files, then compiles the YAML into JSON documents,
 placing them within in the `jsdoc` folder.
+
+### Previewing the API
+
+There are a couple steps needed for seeing the api on the website.
+
+1. Clone the website
+```bash
+git clone git@github.com:marionettejs/marionettejs.com.git
+```
+
+2. Move into the website
+```bash
+cd marionettejs.com
+```
+
+3. Install the website dependencies
+```bash
+npm run setup
+```
+
+4. Build the api
+```bash
+grunt compile-api
+```
+
+
+#### Steps
+cd www
+bundle install
+bundle exec rake api
+middleman server
+open http://0.0.0.0:4567/api
+```
+
+#### Local API
+![](http://f.cl.ly/items/3w3w351W0Q1K0S0G2501/Image%202014-10-01%20at%201.19.05%20AM.png)
 
 ### Getting Started with YAML & JSDoc
 
@@ -76,14 +112,14 @@ _.extend(Foo.prototype, {
 ```
 
 ```yaml
-functions: 
+functions:
   foo: |
      This is the description of this method.
-        
+
      @param {Object} options
      @return this
      @api private
-``` 
+```
 
 
 #### Whitespace matters
@@ -114,4 +150,3 @@ examples:
     example: |
        my cool markdown based example
 ```
-

@@ -34,7 +34,7 @@ Marionette.ItemView = Marionette.View.extend({
 
   // Serialize a collection by serializing each of its models.
   serializeCollection: function(collection){
-    return collection.toJSON.apply(collection, _.toArray(arguments).slice(1));
+    return collection.toJSON.apply(collection, _.rest(arguments));
   },
 
   // Render the view, defaulting to underscore.js templates.

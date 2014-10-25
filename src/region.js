@@ -73,7 +73,7 @@ Marionette.Region = Marionette.Object.extend({
       // If this happens we need to remove the reference
       // to the currentView since once a view has been destroyed
       // we can not reuse it.
-      view.once('destroy', _.bind(this.empty, this));
+      view.once('destroy', this.empty, this);
       view.render();
 
       if (isChangingView) {

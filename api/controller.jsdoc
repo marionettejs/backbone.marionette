@@ -4,7 +4,6 @@ class: Marionette.Controller
 
 extends: 
   - Backbone.Events
-  - Backbone.extend
 
 description: |
   A Controller is a white-label Marionette Object. Its name can be a cause for
@@ -67,7 +66,7 @@ functions:
   
   initialize: 
     description: |
-      Initialize is called after a controller has been instanciated.
+      Initialize is called after a controller has been instantiated.
       
       The `options` parameter can take any key/value pair and set it on the Controller instance.
           

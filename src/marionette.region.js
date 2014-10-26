@@ -1,4 +1,4 @@
-/* jshint maxcomplexity: 10, maxstatements: 29 */
+/* jshint maxcomplexity: 10, maxstatements: 30 */
 
 // Region
 // ------
@@ -131,7 +131,9 @@ _.extend(Marionette.Region.prototype, Backbone.Events, {
   // re-rendered if it's already shown in the region.
 
   show: function(view, options){
-    this._ensureElement();
+    if (!this._ensureElement()) {
+      return;
+    }
 
     var showOptions     = options || {};
     var isDifferentView = view !== this.currentView;
@@ -203,8 +205,10 @@ _.extend(Marionette.Region.prototype, Backbone.Events, {
     }
 
     if (!this.$el || this.$el.length === 0) {
-      throw new Marionette.Error('An "el" ' + this.$el.selector + ' must exist in DOM');
+      this._throwOnMissingRegionElement();
+      return false;
     }
+    return true;
   },
 
   // Override this method to change how the region finds the
@@ -281,6 +285,12 @@ _.extend(Marionette.Region.prototype, Backbone.Events, {
 
     delete this.$el;
     return this;
+  },
+
+  // Throws an error when showing a view in a region which
+  // is not backed by a DOM element.
+  _throwOnMissingRegionElement: function () {
+    throw new Marionette.Error('An "el" ' + this.$el.selector + ' must exist in DOM');
   },
 
   // Proxy `getOption` to enable getting options from this or this.options by name.

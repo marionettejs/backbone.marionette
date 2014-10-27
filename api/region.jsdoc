@@ -152,8 +152,9 @@ properties:
 functions:
   buildRegion: |
     Returns a new Region from the `regionConfig` object. This is used by the RegionManager to
-    create a new Region instance.
-    
+    create a new Region instance. Any options supplied in the `regionConfig` other than
+    `selector` and `regionClass` are provided as the instance's `options`.
+
     @api public
     @static
     @param {Object} regionConfig
@@ -189,6 +190,12 @@ functions:
     Shows `newView` inside the region if `newView` is not already shown within the region. The previous view, if one exists,
     will be destroyed in this process. The `show` methods fires the show and swap triggerMethods.
     
+    By default, a region must have a containing element in the DOM, and if this element is not available, an error
+    is thrown. In some instances it may be desirable to allow a view to define a region which its template does not
+    provide, such as regions defined by a parent `LayoutView` class that are used by only some of its subclasses.
+    In these instances, the region should be defined with the `allowMissingEl` option, suppressing the missing
+    element error and causing `show` calls to be treated as no-ops.
+
     You can modify the behavior of `show` by passing in an options object.
     
     `preventDestroy`

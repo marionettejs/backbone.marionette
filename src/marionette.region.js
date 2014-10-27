@@ -217,7 +217,7 @@ _.extend(Marionette.Region.prototype, Backbone.Events, {
   // appended to the `$el` that the region is managing
   attachHtml: function(view) {
     // empty the node and append new view
-    this.el.innerHTML='';
+    this.$el.html('');
     this.el.appendChild(view.el);
   },
 

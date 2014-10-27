@@ -38,7 +38,10 @@ Marionette.Region = Marionette.Object.extend({
   // The `forceShow` option can be used to force a view to be
   // re-rendered if it's already shown in the region.
   show: function(view, options){
-    this._ensureElement();
+    if (!this._ensureElement()) {
+      return;
+    }
+
     this._ensureViewIsIntact(view);
 
     var showOptions     = options || {};
@@ -111,8 +114,13 @@ Marionette.Region = Marionette.Object.extend({
     }
 
     if (!this.$el || this.$el.length === 0) {
-      throw new Marionette.Error('An "el" ' + this.$el.selector + ' must exist in DOM');
+      if (this.getOption('allowMissingEl')) {
+        return false;
+      } else {
+        throw new Marionette.Error('An "el" ' + this.$el.selector + ' must exist in DOM');
+      }
     }
+    return true;
   },
 
   _ensureViewIsIntact: function(view) {
@@ -220,13 +228,14 @@ Marionette.Region = Marionette.Object.extend({
   // and a default region class to use if none is specified in the config.
   //
   // The config object should either be a string as a jQuery DOM selector,
-  // a Region class directly, or an object literal that specifies both
-  // a selector and regionClass:
+  // a Region class directly, or an object literal that specifies a selector,
+  // a custom regionClass, and any options to be supplied to the region:
   //
   // ```js
   // {
   //   selector: "#foo",
-  //   regionClass: MyCustomRegion
+  //   regionClass: MyCustomRegion,
+  //   allowMissingEl: false
   // }
   // ```
   //
@@ -256,7 +265,7 @@ Marionette.Region = Marionette.Object.extend({
 
   // Build the region from a configuration object
   // ```js
-  // { selector: '#foo', regionClass: FooRegion }
+  // { selector: '#foo', regionClass: FooRegion, allowMissingEl: false }
   // ```
   _buildRegionFromObject: function(regionConfig, DefaultRegionClass) {
     var RegionClass = regionConfig.regionClass || DefaultRegionClass;

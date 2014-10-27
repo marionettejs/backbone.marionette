@@ -111,7 +111,16 @@ not need to supply a `selector` or `el` property on the object
 literal.
 
 Any other properties you set on the object literal will be
-used as options passed to the region instance.
+used as options passed to the region instance, including the
+`allowMissingEl` option.
+
+Ordinarily regions enforce the presence of a backing DOM element.
+In some instances it may be desirable to allow regions to be
+instantiated and used without an element, such as when regions
+defined by a parent `LayoutView` class are used by only some of its
+subclasses. In these instances, the region can be defined with the
+`allowMissingEl` option, suppressing the missing element error and
+causing `show` calls to the region to be treated as no-ops.
 
 ```js
 var MyRegion      = Marionette.Region.extend();

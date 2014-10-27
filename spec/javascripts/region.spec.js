@@ -56,8 +56,12 @@ describe('region', function() {
 
   describe('when creating a new region and the "el" does not exist in DOM', function() {
     beforeEach(function() {
-      this.MyRegion = Backbone.Marionette.Region.extend({
+      this.MyConcreteRegion = Backbone.Marionette.Region.extend({
         el: '#not-existed-region'
+      });
+      this.MyEphemeralRegion = Backbone.Marionette.Region.extend({
+        el: '#not-existed-region',
+        _throwOnMissingRegionElement: function() {}
       });
 
       this.MyView = Backbone.Marionette.View.extend({
@@ -67,18 +71,26 @@ describe('region', function() {
       });
 
       this.setFixtures('<div id="region"></div>');
-      this.myRegion = new this.MyRegion();
+      this.myConcreteRegion = new this.MyConcreteRegion();
+      this.myEphemeralRegion = new this.MyEphemeralRegion();
     });
 
     describe('when showing a view', function() {
       it('should throw an exception saying an "el" doesnt exist in DOM', function() {
         expect(function(){
-          this.myRegion.show(new this.MyView());
+          this.myConcreteRegion.show(new this.MyView());
         }.bind(this)).to.throw('An "el" #not-existed-region must exist in DOM');
       });
 
+      it('should not throw an exception', function() {
+        expect(function(){
+          this.myEphemeralRegion.show(new this.MyView());
+        }.bind(this)).not.to.throw();
+      });
+
       it('should not have a view', function() {
-        expect(this.myRegion.hasView()).to.equal(false);
+        expect(this.myConcreteRegion.hasView()).to.be.false;
+        expect(this.myEphemeralRegion.hasView()).to.be.false;
       });
     });
   });

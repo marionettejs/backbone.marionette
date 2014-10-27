@@ -20,11 +20,6 @@ var MyApp = new Backbone.Marionette.Application();
 * [initialize](#initialize)
 * [Application Events](#application-events)
 * [Starting An Application](#starting-an-application)
-* [The Application Channel](#the-application-channel)
-  * [Event Aggregator](#event-aggregator)
-  * [Request Response](#request-response)
-  * [Commands](#commands)
-  * [Accessing the Application Channel](#accessing-the-application-channel)
 * [Regions And The Application Object](#regions-and-the-application-object)
   * [jQuery Selector](#jquery-selector)
   * [Custom Region Class](#custom-region-class)
@@ -35,6 +30,11 @@ var MyApp = new Backbone.Marionette.Application();
   * [Removing Regions](#removing-regions)
 * [Application.getOption](#applicationgetoption)
 * [Adding Initializers (deprecated)](#adding-initializers)
+* [The Application Channel (deprecated)](#the-application-channel)
+  * [Event Aggregator](#event-aggregator)
+  * [Request Response](#request-response)
+  * [Commands](#commands)
+  * [Accessing the Application Channel](#accessing-the-application-channel)
 
 ### Initialize
 Initialize is called immediately after the Application has been instantiated,
@@ -96,98 +96,6 @@ var options = {
 };
 
 MyApp.start(options);
-```
-
-## The Application Channel
-
-Marionette Applications come with a [messaging system](http://en.wikipedia.org/wiki/Message_passing) to facilitate communications within your app.
-
-The messaging system on the Application is the radio channel from Backbone.Wreqr, which is actually comprised of three distinct systems.
-
-Marionette Applications default to the 'global' channel, but the channel can be configured.
-
-```js
-var MyApp = new Marionette.Application({ channelName: 'appChannel' });
-```
-
-This section will give a brief overview of the systems; for a more in-depth look you are encouraged to read
-the [`Backbone.Wreqr` documentation](https://github.com/marionettejs/backbone.wreqr).
-
-### Event Aggregator
-
-The Event Aggregator is available through the `vent` property. `vent` is convenient for passively sharing information between
-pieces of your application as events occur.
-
-```js
-var MyApp = new Backbone.Marionette.Application();
-
-// Alert the user on the 'minutePassed' event
-MyApp.vent.on("minutePassed", function(someData){
-  alert("Received", someData);
-});
-
-// This will emit an event with the value of window.someData every minute
-window.setInterval(function() {
-  MyApp.vent.trigger("minutePassed", window.someData);
-}, 1000 * 60);
-```
-
-### Request Response
-
-Request Response is a means for any component to request information from another component without being tightly coupled. An instance of Request Response is available on the Application as the `reqres` property.
-
-```js
-var MyApp = new Backbone.Marionette.Application();
-
-// Set up a handler to return a todoList based on type
-MyApp.reqres.setHandler("todoList", function(type){
-  return this.todoLists[type];
-});
-
-// Make the request to get the grocery list
-var groceryList = MyApp.reqres.request("todoList", "groceries");
-
-// The request method can also be accessed directly from the application object
-var groceryList = MyApp.request("todoList", "groceries");
-```
-
-### Commands
-
-Commands are used to make any component tell another component to perform an action without a direct reference to it. A Commands instance is available under the `commands` property of the Application.
-
-Note that the callback of a command is not meant to return a value.
-
-```js
-var MyApp = new Backbone.Marionette.Application();
-
-MyApp.model = new Backbone.Model();
-
-// Set up the handler to call fetch on the model
-MyApp.commands.setHandler("fetchData", function(reset){
-  MyApp.model.fetch({reset: reset});
-});
-
-// Order that the data be fetched
-MyApp.commands.execute("fetchData", true);
-
-// The execute function is also available directly from the application
-MyApp.execute("fetchData", true);
-```
-
-### Accessing the Application Channel
-
-To access this application channel from other objects within your app you are encouraged to get a handle of the systems
-through the Wreqr API instead of the Application instance itself.
-
-```js
-// Assuming that we're in some class within your app,
-// and that we are using the default 'global' channel
-// it is preferable to access the channel like this:
-var globalCh = Backbone.Wreqr.radio.channel('global');
-globalCh.vent;
-
-// This is discouraged because it assumes the name of your application
-window.app.vent;
 ```
 
 ## Regions And The Application Object
@@ -361,3 +269,111 @@ Initializer callbacks are guaranteed to run, no matter when you
 add them to the app object. If you add them before the app is
 started, they will run when the `start` method is called. If you
 add them after the app is started, they will run immediately.
+
+## The Application Channel
+
+> Warning: deprecated
+>
+> This feature is deprecated, and is scheduled to be removed in the next major release of Marionette.
+> Instead of accessing Channels through the Application, you should use the Wreqr (or Radio) API.
+> By default the application's channel is named 'global'. To access this channel, you can use
+> the following code, depending on whether you're using Wreqr or Radio:
+>
+> ```js
+> // Wreqr
+> var globalCh = Backbone.Wreqr.radio.channel('global');
+>
+> // Radio
+> var globalCh = Backbone.Radio.channel('global');
+> ```
+>
+
+Marionette Applications come with a [messaging system](http://en.wikipedia.org/wiki/Message_passing) to facilitate communications within your app.
+
+The messaging system on the Application is the radio channel from Backbone.Wreqr, which is actually comprised of three distinct systems.
+
+Marionette Applications default to the 'global' channel, but the channel can be configured.
+
+```js
+var MyApp = new Marionette.Application({ channelName: 'appChannel' });
+```
+
+This section will give a brief overview of the systems; for a more in-depth look you are encouraged to read
+the [`Backbone.Wreqr` documentation](https://github.com/marionettejs/backbone.wreqr).
+
+### Event Aggregator
+
+The Event Aggregator is available through the `vent` property. `vent` is convenient for passively sharing information between
+pieces of your application as events occur.
+
+```js
+var MyApp = new Backbone.Marionette.Application();
+
+// Alert the user on the 'minutePassed' event
+MyApp.vent.on("minutePassed", function(someData){
+  alert("Received", someData);
+});
+
+// This will emit an event with the value of window.someData every minute
+window.setInterval(function() {
+  MyApp.vent.trigger("minutePassed", window.someData);
+}, 1000 * 60);
+```
+
+### Request Response
+
+Request Response is a means for any component to request information from another component without being tightly coupled. An instance of Request Response is available on the Application as the `reqres` property.
+
+```js
+var MyApp = new Backbone.Marionette.Application();
+
+// Set up a handler to return a todoList based on type
+MyApp.reqres.setHandler("todoList", function(type){
+  return this.todoLists[type];
+});
+
+// Make the request to get the grocery list
+var groceryList = MyApp.reqres.request("todoList", "groceries");
+
+// The request method can also be accessed directly from the application object
+var groceryList = MyApp.request("todoList", "groceries");
+```
+
+### Commands
+
+Commands are used to make any component tell another component to perform an action without a direct reference to it. A Commands instance is available under the `commands` property of the Application.
+
+Note that the callback of a command is not meant to return a value.
+
+```js
+var MyApp = new Backbone.Marionette.Application();
+
+MyApp.model = new Backbone.Model();
+
+// Set up the handler to call fetch on the model
+MyApp.commands.setHandler("fetchData", function(reset){
+  MyApp.model.fetch({reset: reset});
+});
+
+// Order that the data be fetched
+MyApp.commands.execute("fetchData", true);
+
+// The execute function is also available directly from the application
+MyApp.execute("fetchData", true);
+```
+
+### Accessing the Application Channel
+
+To access this application channel from other objects within your app you are encouraged to get a handle of the systems
+through the Wreqr API instead of the Application instance itself.
+
+```js
+// Assuming that we're in some class within your app,
+// and that we are using the default 'global' channel
+// it is preferable to access the channel like this:
+var globalCh = Backbone.Wreqr.radio.channel('global');
+globalCh.vent;
+
+// This is discouraged because it assumes the name of your application
+window.app.vent;
+```

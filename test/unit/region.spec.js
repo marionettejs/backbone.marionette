@@ -65,20 +65,48 @@ describe('region', function() {
           $(this.el).html('some content');
         }
       });
+      this.myView = new this.MyView();
 
       this.setFixtures('<div id="region"></div>');
-      this.myRegion = new this.MyRegion();
     });
 
     describe('when showing a view', function() {
-      it('should throw an exception saying an "el" doesnt exist in DOM', function() {
-        expect(function(){
-          this.myRegion.show(new this.MyView());
-        }.bind(this)).to.throw('An "el" #not-existed-region must exist in DOM');
+      describe('when allowMissingEl is not set', function() {
+        beforeEach(function() {
+          this.myRegion = new this.MyRegion();
+        });
+
+        it('should throw an exception saying an "el" doesnt exist in DOM', function() {
+          expect(function(){
+            this.myRegion.show(new this.MyView());
+          }.bind(this)).to.throw('An "el" #not-existed-region must exist in DOM');
+        });
+
+        it('should not have a view', function() {
+          expect(this.myRegion.hasView()).to.be.false;
+        });
       });
 
-      it('should not have a view', function() {
-        expect(this.myRegion.hasView()).to.equal(false);
+      describe('when allowMissingEl is set', function() {
+        beforeEach(function() {
+          this.myRegion = new this.MyRegion({ allowMissingEl: true });
+        });
+
+        it('should not throw an exception', function() {
+          expect(function(){
+            this.myRegion.show(new this.MyView());
+          }.bind(this)).not.to.throw();
+        });
+
+        it('should not have a view', function() {
+          expect(this.myRegion.hasView()).to.be.false;
+        });
+
+        it('should not render the view', function() {
+          sinon.spy(this.myView, 'render');
+          this.myRegion.show(this.myView);
+          expect(this.myView.render).not.to.have.been.called;
+        });
       });
     });
   });

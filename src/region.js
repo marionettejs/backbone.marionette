@@ -189,7 +189,14 @@ Marionette.Region = Marionette.Object.extend({
   // appended to the `$el` that the region is managing
   attachHtml: function(view) {
     // empty the node and append new view
-    this.el.innerHTML='';
+    // We can not use `.innerHTML` due to the fact that IE
+    // will not let us clear the html of tables and selects.
+    // We also do not want to use the more declarative `empty` method
+    // that jquery exposes since `.empty` loops over all of the children DOM
+    // nodes and unsets the listeners on each node. While this seems like
+    // a desirable thing, it comes at quite a high perf cost. For that reason
+    // we are simply clearing the html contents of the node.
+    this.$el.html('');
     this.el.appendChild(view.el);
   },
 

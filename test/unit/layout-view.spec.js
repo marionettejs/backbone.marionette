@@ -445,13 +445,37 @@ describe('layoutView', function() {
     beforeEach(function () {
       this.layout = new this.LayoutView();
       this.layout.render();
-
       this.regions = this.layout.getRegions();
     });
 
     it("should be able to retrieve all regions", function () {
       expect(this.regions.regionOne).to.equal(this.layout.getRegion("regionOne"));
       expect(this.regions.regionTwo).to.equal(this.layout.getRegion("regionTwo"));
+    });
+
+    describe("when the regions are specified via regions hash and the view has no template", function () {
+      beforeEach(function () {
+        var fixture =
+          '<div class="region-hash-no-template-spec">' +
+            '<div class="region-one">Out-of-scope region</div>' +
+            '<div class="some-layout-view">' +
+              '<div class="region-one">In-scope region</div>' +
+            '</div>' +
+          '</div>';
+        this.setFixtures(fixture);
+        this.LayoutView = Backbone.Marionette.LayoutView.extend({
+          el: ".region-hash-no-template-spec .some-layout-view",
+          template: false,
+          regions: {
+            regionOne: '.region-one'
+          }
+        });
+        this.layoutViewInstance = new this.LayoutView();
+      });
+
+      it("after initialization, the view's regions should be scoped to its parent view", function () {
+        expect(this.layoutViewInstance.regionOne.$el.length).to.equal(1);
+      });
     });
   });
 

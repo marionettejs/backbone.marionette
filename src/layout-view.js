@@ -18,7 +18,19 @@ Marionette.LayoutView = Marionette.ItemView.extend({
     this._firstRender = true;
     this._initializeRegions(options);
 
+    //At this point since this view's $el is not constructed,
+    // regions' $el will be scoped to $(document).
     Marionette.ItemView.call(this, options);
+
+    //Now that this view's $el is constructed,
+    // and the regions' 'getEl' method is overridden,
+    // scope all regions to this view's $el (the parent view).
+    this.regionManager.each(function(region) {
+      if (!_.isObject(region.el)) {
+        region.$el = region.getEl(region.el);
+        region.el = (region.$el.length > 0) ? region.$el[0] : region.el;
+      }
+    });
   },
 
   // LayoutView's render will use the existing region objects the

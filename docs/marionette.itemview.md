@@ -61,7 +61,7 @@ var my_template_html = '<div><%= args.name %></div>'
 var MyView = Backbone.Marionette.ItemView.extend({
   template : function(serialized_model) {
     var name = serialized_model.name;
-    return _.template(my_template_html)({
+    return _.template(my_template_html, null, {variable: 'args'})({
         name : name,
         some_custom_attribute : some_custom_key
     });

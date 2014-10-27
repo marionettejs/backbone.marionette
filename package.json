@@ -72,7 +72,7 @@
     "jsdom": "^0.10.5",
     "load-grunt-tasks": "0.3.0",
     "mocha": "^1.19.0",
-    "sinon": "^1.9.1",
+    "sinon": "~1.10.3",
     "sinon-chai": "^2.5.0",
     "unwrap": "^0.1.0",
     "dox": "git://github.com/jasonLaster/dox.git#marked",

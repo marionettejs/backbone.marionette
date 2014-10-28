@@ -84,7 +84,7 @@ Marionette.LayoutView = Marionette.ItemView.extend({
   _buildRegions: function(regions) {
     var defaults = {
       regionClass: this.getOption('regionClass'),
-      parentEl: _.partial(_.result, this, '$el')
+      parentEl: _.partial(_.result, this, 'el')
     };
 
     return this.regionManager.addRegions(regions, defaults);

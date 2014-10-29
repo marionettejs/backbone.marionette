@@ -82,11 +82,9 @@ Marionette.LayoutView = Marionette.ItemView.extend({
 
   // internal method to build regions
   _buildRegions: function(regions) {
-    var that = this;
-
     var defaults = {
       regionClass: this.getOption('regionClass'),
-      parentEl: function() { return that.$el; }
+      parentEl: _.partial(_.result, this, '$el')
     };
 
     return this.regionManager.addRegions(regions, defaults);
@@ -163,7 +161,7 @@ Marionette.LayoutView = Marionette.ItemView.extend({
   _getImmediateChildren: function() {
     return _.chain(this.regionManager.getRegions())
       .pluck('currentView')
-      .filter(function(view) { return !!view; })
+      .compact()
       .value();
   }
 });

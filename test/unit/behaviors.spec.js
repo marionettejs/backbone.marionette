@@ -17,7 +17,9 @@ describe('Behaviors', function() {
       this.behaviors = {
         foo: this.sinon.spy(Marionette, "Behavior")
       };
-      Marionette.Behaviors.behaviorsLookup = _.constant(this.behaviors);
+      Marionette.Behaviors.behaviorsLookup = _.bind(function() {
+        return this.behaviors;
+      }, this);
     });
 
     describe('when one behavior', function() {

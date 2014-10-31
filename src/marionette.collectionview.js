@@ -334,7 +334,11 @@ Marionette.CollectionView = Marionette.View.extend({
   // Build a `childView` for a model in the collection.
   buildChildView: function(child, ChildViewClass, childViewOptions) {
     var options = _.extend({model: child}, childViewOptions);
-    return new ChildViewClass(options);
+    if (ChildViewClass instanceof Marionette.CollectionView) {
+      return new ChildViewClass(undefined, options);
+    } else {
+      return new ChildViewClass(options);
+    }
   },
 
   // Remove the child view and destroy it.

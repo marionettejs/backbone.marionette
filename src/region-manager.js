@@ -80,7 +80,7 @@ Marionette.RegionManager = Marionette.Controller.extend({
   // remove them
   removeRegions: function() {
     var regions = this.getRegions();
-    _.each(this._regions, function(region, name) {
+    _.each(regions, function(region, name) {
       this._remove(name, region);
     }, this);
 

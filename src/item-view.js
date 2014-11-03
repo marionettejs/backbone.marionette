@@ -20,16 +20,16 @@ Marionette.ItemView = Marionette.View.extend({
   // You can override the `serializeData` method in your own view definition,
   // to provide custom serialization for your view's data.
   serializeData: function(){
-    var data = {};
-
-    if (this.model) {
-      data = _.partial(this.serializeModel, this.model).apply(this, arguments);
+    if (this.model || this.collection) {
+      var args = [this.model || this.collection].concat(_.toArray(arguments));
+      if (this.model) {
+        return this.serializeModel.apply(this, args);
+      }
+      return {
+        items: this.serializeCollection.apply(this, args)
+      };
     }
-    else if (this.collection) {
-      data = { items: _.partial(this.serializeCollection, this.collection).apply(this, arguments) };
-    }
-
-    return data;
+    return {};
   },
 
   // Serialize a collection by serializing each of its models.

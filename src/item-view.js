@@ -101,13 +101,5 @@ Marionette.ItemView = Marionette.View.extend({
     this.$el.html(html);
 
     return this;
-  },
-
-  // Override the default destroy event to add a few
-  // more events that are triggered.
-  destroy: function() {
-    if (this.isDestroyed) { return; }
-
-    return Marionette.View.prototype.destroy.apply(this, arguments);
   }
 });

@@ -45,7 +45,7 @@ will provide features such as `onShow` callbacks, etc. Please see
   * ["before:add:child" / "add:child" event](#beforeaddchild--addchild-event)
   * ["before:remove:child event](#beforeremovechild-event)
   * ["remove:child" event](#removechild-event)
-  * ["childview:\*" event bubbling from child views](#childview-event-bubbling-from-child-views)
+  * ["childview:\*" event bubbling from child views](#childview*-event-bubbling-from-child-views)
   * ["before:render:collection" event](#beforerendercollection-event)
   * ["render:collection" event](#rendercollection-event)
 * [CollectionView render](#collectionview-render)

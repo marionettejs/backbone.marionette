@@ -151,7 +151,7 @@ _.extend(Marionette.Region.prototype, Backbone.Events, {
     var _shouldShowView = isDifferentView || forceShow;
 
     if (isChangingView) {
-      this.triggerMethod('before:swapOut', this.currentView);
+      this.triggerMethod('before:swapOut', this.currentView, options);
     }
 
     if (_shouldDestroyView) {
@@ -169,26 +169,26 @@ _.extend(Marionette.Region.prototype, Backbone.Events, {
       view.render();
 
       if (isChangingView) {
-        this.triggerMethod('before:swap', view);
+        this.triggerMethod('before:swap', view, options);
       }
 
-      this.triggerMethod('before:show', view);
-      Marionette.triggerMethodOn(view, 'before:show');
+      this.triggerMethod('before:show', view, options);
+      Marionette.triggerMethodOn(view, 'before:show', options);
 
       this.attachHtml(view);
 
       if (isChangingView) {
-        this.triggerMethod('swapOut', this.currentView);
+        this.triggerMethod('swapOut', this.currentView, options);
       }
 
       this.currentView = view;
 
       if (isChangingView) {
-        this.triggerMethod('swap', view);
+        this.triggerMethod('swap', view, options);
       }
 
-      this.triggerMethod('show', view);
-      Marionette.triggerMethodOn(view, 'show');
+      this.triggerMethod('show', view, options);
+      Marionette.triggerMethodOn(view, 'show', options);
 
       return this;
     }

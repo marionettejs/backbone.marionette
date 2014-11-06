@@ -62,7 +62,7 @@ Marionette.Region = Marionette.Object.extend({
     var _shouldShowView = isDifferentView || forceShow;
 
     if (isChangingView) {
-      this.triggerMethod('before:swapOut', this.currentView);
+      this.triggerMethod('before:swapOut', this.currentView, this, options);
     }
 
     if (this.currentView) {
@@ -86,14 +86,14 @@ Marionette.Region = Marionette.Object.extend({
       view._parent = this;
 
       if (isChangingView) {
-        this.triggerMethod('before:swap', view);
+        this.triggerMethod('before:swap', view, this, options);
       }
 
-      this.triggerMethod('before:show', view);
-      Marionette.triggerMethodOn(view, 'before:show');
+      this.triggerMethod('before:show', view, this, options);
+      Marionette.triggerMethodOn(view, 'before:show', view, this, options);
 
       if (isChangingView) {
-        this.triggerMethod('swapOut', this.currentView);
+        this.triggerMethod('swapOut', this.currentView, this, options);
       }
 
       // An array of views that we're about to display
@@ -121,11 +121,11 @@ Marionette.Region = Marionette.Object.extend({
       }
 
       if (isChangingView) {
-        this.triggerMethod('swap', view);
+        this.triggerMethod('swap', view, this, options);
       }
 
-      this.triggerMethod('show', view);
-      Marionette.triggerMethodOn(view, 'show');
+      this.triggerMethod('show', view, this, options);
+      Marionette.triggerMethodOn(view, 'show', view, this, options);
 
       return this;
     }

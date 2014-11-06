@@ -35,14 +35,6 @@ module.exports = function(grunt) {
       lib: 'lib'
     },
 
-    bower: {
-      install: {
-        options: {
-          copy: false
-        }
-      }
-    },
-
     preprocess: {
       core: {
         src: 'src/build/core.js',
@@ -240,11 +232,11 @@ module.exports = function(grunt) {
 
     unwrap: {
       babysitter: {
-        src: './bower_components/backbone.babysitter/lib/backbone.babysitter.js',
+        src: './node_modules/backbone.babysitter/lib/backbone.babysitter.js',
         dest: './tmp/backbone.babysitter.bare.js'
       },
       wreqr: {
-        src: './bower_components/backbone.wreqr/lib/backbone.wreqr.js',
+        src: './node_modules/backbone.wreqr/lib/backbone.wreqr.js',
         dest: './tmp/backbone.wreqr.bare.js'
       }
     }
@@ -270,12 +262,6 @@ module.exports = function(grunt) {
     });
   });
 
-  grunt.registerTask('verify-bower', function () {
-    if (!grunt.file.isDir('./bower_components')) {
-      grunt.fail.warn('Missing bower components. You should run `bower install` before.');
-    }
-  });
-
   var defaultTestsSrc = grunt.config('mochaTest.tests.src');
   var defaultJshintSrc = grunt.config('jshint.marionette.src');
   var defaultJshintSpecSrc = grunt.config('jshint.specs.files.src');
@@ -298,7 +284,7 @@ module.exports = function(grunt) {
 
   grunt.registerTask('lint', 'Lints our sources', ['lintspaces', 'jshint']);
 
-  grunt.registerTask('test', 'Run the unit tests.', ['verify-bower', 'lint', 'api', 'mochaTest']);
+  grunt.registerTask('test', 'Run the unit tests.', ['lint', 'api', 'mochaTest']);
 
   grunt.registerTask('coverage', ['unwrap', 'preprocess:bundle', 'template:bundle', 'env:coverage', 'instrument', 'mochaTest', 'storeCoverage', 'makeReport', 'coveralls']);
 
@@ -306,5 +292,5 @@ module.exports = function(grunt) {
 
   grunt.registerTask('api', 'Build jsdoc api files', ['jsDocFiles']);
 
-  grunt.registerTask('build', 'Build all three versions of the library.', ['clean:lib', 'bower:install', 'lint', 'mochaTest', 'unwrap', 'preprocess', 'template', 'concat', 'uglify']);
+  grunt.registerTask('build', 'Build all three versions of the library.', ['clean:lib', 'lint', 'mochaTest', 'unwrap', 'preprocess', 'template', 'concat', 'uglify']);
 };

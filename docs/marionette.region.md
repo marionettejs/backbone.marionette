@@ -431,61 +431,86 @@ These events can be used to run code when your region
 opens and destroys views.
 
 ```js
-MyApp.mainRegion.on("before:show", function(view){
+MyApp.mainRegion.on("before:show", function(view, region, options){
   // manipulate the `view` or do something extra
-  // with the region via `this`
+  // with the `region`
+  // you also have access to the `options` that were passed to the Region.show call
 });
 
-MyApp.mainRegion.on("show", function(view){
+MyApp.mainRegion.on("show", function(view, region, options){
   // manipulate the `view` or do something extra
-  // with the region via `this`
+  // with the `region`
+  // you also have access to the `options` that were passed to the Region.show call
 });
 
-MyApp.mainRegion.on("before:swap", function(view){
+MyApp.mainRegion.on("before:swap", function(view, region, options){
   // manipulate the `view` or do something extra
-  // with the region via `this`
+  // with the `region`
+  // you also have access to the `options` that were passed to the Region.show call
 });
 
-MyApp.mainRegion.on("swap", function(view){
+MyApp.mainRegion.on("swap", function(view, region, options){
   // manipulate the `view` or do something extra
-  // with the region via `this`
+  // with the `region`
+  // you also have access to the `options` that were passed to the Region.show call
 });
 
-MyApp.mainRegion.on("empty", function(view){
+MyApp.mainRegion.on("before:swapOut", function(view, region, options){
   // manipulate the `view` or do something extra
-  // with the region via `this`
+  // with the `region`
+  // you also have access to the `options` that were passed to the Region.show call
+});
+
+MyApp.mainRegion.on("swapOut", function(view, region, options){
+  // manipulate the `view` or do something extra
+  // with the `region`
+  // you also have access to the `options` that were passed to the Region.show call
+});
+
+MyApp.mainRegion.on("empty", function(view, region, options){
+  // manipulate the `view` or do something extra
+  // with the `region`
+  // you also have access to the `options` that were passed to the Region.show call
 });
 
 var MyRegion = Backbone.Marionette.Region.extend({
   // ...
 
-  onBeforeShow: function(view) {
+  onBeforeShow: function(view, region, options) {
     // the `view` has not been shown yet
   },
 
-  onShow: function(view){
+  onShow: function(view, region, options){
     // the `view` has been shown
   }
 });
 
 var MyView = Marionette.ItemView.extend({
-  onBeforeShow: function() {
-    // called before the view has been shown
+  onBeforeShow: function(view, region, options) {
+    // called before the `view` has been shown
   },
-  onShow: function(){
-    // called when the view has been shown
+  onShow: function(view, region, options){
+    // called when the `view` has been shown
   }
 });
 
 var MyRegion = Backbone.Marionette.Region.extend({
   // ...
 
-  onBeforeSwap: function(view) {
+  onBeforeSwap: function(view, region, options) {
     // the `view` has not been swapped yet
   },
 
-  onSwap: function(view){
+  onSwap: function(view, region, options){
     // the `view` has been swapped
+  },
+
+  onBeforeSwapOut: function(view, region, options) {
+    // the `view` has not been swapped out yet
+  },
+
+  onSwapOut: function(view, region, options){
+    // the `view` has been swapped out
   }
 });
 ```

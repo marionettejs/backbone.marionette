@@ -25,6 +25,19 @@ describe('template cache', function() {
     });
   });
 
+  describe('template options', function() {
+    beforeEach(function() {
+      this.templateOptions = {sample: "options"};
+      this.compileTemplateSpy = sinon.spy(Marionette.TemplateCache.prototype, 'compileTemplate');
+
+      Marionette.TemplateCache.get('#foo', this.templateOptions);
+    });
+
+    it('passes options when getting a template', function() {
+      expect(this.compileTemplateSpy).to.have.been.calledWith('foo', this.templateOptions);
+    });
+  });
+
   describe('when loading a template more than once', function() {
     beforeEach(function() {
       Marionette.TemplateCache.get('#foo');

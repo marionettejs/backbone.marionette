@@ -15,6 +15,9 @@ Marionette.CollectionView = Marionette.View.extend({
   // option to pass `{sort: false}` to prevent the `CollectionView` from
   // maintaining the sorted order of the collection.
   // This will fallback onto appending childView's to the end.
+  //
+  // option to pass `{comparator: compFunction()}` to allow the `CollectionView`
+  // to use a custom sort order for the collection.
   constructor: function(options){
     var initOptions = options || {};
     if (_.isUndefined(this.sort)){
@@ -33,7 +36,6 @@ Marionette.CollectionView = Marionette.View.extend({
   // it's much more performant to insert elements into a document
   // fragment and then insert that document fragment into the page
   initRenderBuffer: function() {
-    this.elBuffer = document.createDocumentFragment();
     this._bufferedChildren = [];
   },
 
@@ -45,7 +47,9 @@ Marionette.CollectionView = Marionette.View.extend({
   endBuffering: function() {
     this.isBuffering = false;
     this._triggerBeforeShowBufferedChildren();
-    this.attachBuffer(this, this.elBuffer);
+
+    this.attachBuffer(this);
+
     this._triggerShowBufferedChildren();
     this.initRenderBuffer();
   },
@@ -85,10 +89,18 @@ Marionette.CollectionView = Marionette.View.extend({
   },
 
   // Handle a child added to the collection
-  _onCollectionAdd: function(child) {
+  _onCollectionAdd: function(child, collection, opts) {
+    var index;
+
     this.destroyEmptyView();
     var ChildView = this.getChildView(child);
-    var index = this.collection.indexOf(child);
+
+    if (opts.at !== undefined) {
+      index = opts.at;
+    } else {
+      index = this._sortedModels().indexOf(child);
+    }
+
     this.addChild(child, ChildView, index);
   },
 
@@ -127,8 +139,10 @@ Marionette.CollectionView = Marionette.View.extend({
   // Internal method. This checks for any changes in the order of the collection.
   // If the index of any view doesn't match, it will render.
   _sortViews: function() {
+    var models = this._sortedModels();
+
     // check for any changes in sort order of views
-    var orderChanged = this.collection.find(function(item, index){
+    var orderChanged = _.find(models, function(item, index){
       var view = this.children.findByModel(item);
       return !view || view._index !== index;
     }, this);
@@ -162,10 +176,31 @@ Marionette.CollectionView = Marionette.View.extend({
   // Internal method to loop through collection and show each child view.
   showCollection: function() {
     var ChildView;
-    this.collection.each(function(child, index) {
+
+    var models = this._sortedModels();
+
+    _.each(models, function(child, index) {
       ChildView = this.getChildView(child);
       this.addChild(child, ChildView, index);
     }, this);
+  },
+
+  // Allow the collection to be sorted by a custom view comparator
+  _sortedModels: function() {
+    var models;
+    var viewComparator = this.getViewComparator();
+
+    if (viewComparator) {
+      if (_.isString(viewComparator) || viewComparator.length === 1) {
+        models = this.collection.sortBy(viewComparator, this);
+      } else {
+        models = _.clone(this.collection.models).sort(_.bind(viewComparator, this));
+      }
+    } else {
+      models = this.collection.models;
+    }
+
+    return models;
   },
 
   // Internal method to show an empty view in place of
@@ -374,8 +409,17 @@ Marionette.CollectionView = Marionette.View.extend({
   },
 
   // You might need to override this if you've overridden attachHtml
-  attachBuffer: function(collectionView, buffer) {
-    collectionView.$el.append(buffer);
+  attachBuffer: function(collectionView) {
+    collectionView.$el.append(this._createBuffer(collectionView));
+  },
+
+  // Create a fragment buffer from the currently buffered children
+  _createBuffer: function(collectionView) {
+    var elBuffer = document.createDocumentFragment();
+    _.each(collectionView._bufferedChildren, function(b) {
+      elBuffer.appendChild(b.el);
+    });
+    return elBuffer;
   },
 
   // Append the HTML to the collection's `el`.
@@ -386,8 +430,7 @@ Marionette.CollectionView = Marionette.View.extend({
       // buffering happens on reset events and initial renders
       // in order to reduce the number of inserts into the
       // document, which are expensive.
-      collectionView.elBuffer.appendChild(childView.el);
-      collectionView._bufferedChildren.push(childView);
+      collectionView._bufferedChildren.splice(index, 0, childView);
     }
     else {
       // If we've already rendered the main collection, append
@@ -476,5 +519,9 @@ Marionette.CollectionView = Marionette.View.extend({
 
   _getImmediateChildren: function() {
     return _.values(this.children._views);
+  },
+
+  getViewComparator: function() {
+    return this.getOption('viewComparator');
   }
 });

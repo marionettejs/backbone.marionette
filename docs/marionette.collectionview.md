@@ -53,6 +53,7 @@ will provide features such as `onShow` callbacks, etc. Please see
 * [CollectionView: Re-render Collection](#collectionview-re-render-collection)
 * [CollectionView's attachHtml](#collectionviews-attachhtml)
 * [CollectionView's resortView](#collectionviews-resortview)
+* [CollectionView's viewComparator](#collectionviews-viewcomparator)
 * [CollectionView's children](#collectionviews-children)
 * [CollectionView destroy](#collectionview-destroy)
 
@@ -768,6 +769,19 @@ var cv = new Marionette.CollectionView({
   }
 });
 ```
+
+## CollectionView's viewComparator
+
+CollectionView allows for a custom `viewComparator` option if you want your CollectionView's children to be rendered with a different sort order than the underlying Backbone collection uses.
+
+```js
+  var cv = new MarionetteCollectionView({
+    collection: someCollection,
+    viewComparator: 'otherFieldToSortOn'
+  });
+```
+
+The `viewComparator` can take any of the acceptable `Backbone.Collection` [comparator formats](http://backbonejs.org/#Collection-comparator) -- a sortBy (pass a function that takes a single argument), as a sort (pass a comparator function that expects two arguments), or as a string indicating the attribute to sort by.
 
 ## CollectionView's children
 

@@ -121,9 +121,9 @@ Marionette.CompositeView = Marionette.CollectionView.extend({
   },
 
   // You might need to override this if you've overridden attachHtml
-  attachBuffer: function(compositeView, buffer) {
+  attachBuffer: function(compositeView) {
     var $container = this.getChildViewContainer(compositeView);
-    $container.append(buffer);
+    $container.append(this._createBuffer(compositeView));
   },
 
   // Internal method. Append a view to the end of the $el.

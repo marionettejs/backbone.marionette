@@ -112,7 +112,10 @@ describe('app router', function() {
 
     it('should call the onShow method for the route, passing the name of the route, the matched route, and the params', function() {
       expect(this.router.onRoute).to.have.been.calledOnce;
-      expect(this.router.onRoute).to.have.been.calledWith('foo', 'foo-route/:id', [this.fooParam, null]);
+      // Needs to be written this way as Backbone > 1.0 will pass an additional null param
+      expect(this.router.onRoute.lastCall.args[0]).to.equal('foo');
+      expect(this.router.onRoute.lastCall.args[1]).to.equal('foo-route/:id');
+      expect(this.router.onRoute.lastCall.args[2][0]).to.equal(this.fooParam);
     });
   });
 
@@ -247,7 +250,10 @@ describe('app router', function() {
 
     it('should call the onRoute method for the route, passing the name of the route, the matched route, and the params', function() {
       expect(this.appRouter.onRoute).to.have.been.calledOnce;
-      expect(this.appRouter.onRoute).to.have.been.calledWith('foo', 'foo-route/:id', [this.fooParam, null]);
+      // Needs to be written this way as Backbone > 1.0 will pass an additional null param
+      expect(this.appRouter.onRoute.lastCall.args[0]).to.equal('foo');
+      expect(this.appRouter.onRoute.lastCall.args[1]).to.equal('foo-route/:id');
+      expect(this.appRouter.onRoute.lastCall.args[2][0]).to.equal(this.fooParam);
     });
   });
 });

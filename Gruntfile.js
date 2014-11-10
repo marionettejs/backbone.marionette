@@ -255,6 +255,50 @@ module.exports = function(grunt) {
         src: './bower_components/backbone.wreqr/lib/backbone.wreqr.js',
         dest: './tmp/backbone.wreqr.bare.js'
       }
+    },
+
+    'jsDoccerYaml': {
+      doc: {
+        options: {
+          filesToFilter: [
+            '.DS_Store'
+          ]
+        },
+        files: [{
+          expand: true,
+          src: 'src/*.js'
+        }]
+      }
+    },
+
+    'jsDoccerJson': {
+      doc: {
+        options: {
+          filesToFilter: [
+            '.DS_Store'
+          ]
+        }
+      }
+    },
+
+    'jsDoccerHtml': {
+      doc: {
+        options: {
+          filesToFilter: [
+            '.DS_Store'
+          ]
+        }
+      }
+    },
+
+    'jsDoccerDoc': {
+      doc: {
+        options: {
+          filesToFilter: [
+            '.DS_Store'
+          ]
+        }
+      }
     }
   });
 
@@ -313,6 +357,12 @@ module.exports = function(grunt) {
   grunt.registerTask('dev', 'Auto-lints while writing code.', ['test', 'watch:marionette']);
 
   grunt.registerTask('api', 'Build jsdoc api files', ['jsDocFiles']);
+
+  grunt.registerTask('yaml', 'Build stubbed yaml jsdoc api files', ['jsDoccerYaml']);
+
+  grunt.registerTask('json', 'Build fancy json from documented yaml jsdoc api files', ['jsDoccerJson']);
+
+  grunt.registerTask('html', 'Build html documents from fancy json jsdoc api files', ['jsDoccerHtml']);
 
   grunt.registerTask('build', 'Build all three versions of the library.', ['clean:lib', 'bower:install', 'lint', 'mochaTest', 'unwrap', 'preprocess', 'template', 'concat', 'uglify']);
 };

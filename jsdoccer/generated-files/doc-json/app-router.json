@@ -1,0 +1,411 @@
+{
+  "name": "AppRouter",
+  "class": "AppRouter",
+  "constructor": {
+    "description": {
+      "tags": [
+        {
+          "type": "api",
+          "visibility": "public"
+        },
+        {
+          "type": "param",
+          "types": [
+            "<type>"
+          ],
+          "name": "options",
+          "description": "<description>",
+          "optional": false,
+          "typeStr": "<type>"
+        }
+      ],
+      "description": {
+        "full": "",
+        "summary": "",
+        "body": ""
+      },
+      "isPrivate": false,
+      "api": {
+        "type": "api",
+        "visibility": "public"
+      },
+      "params": [
+        {
+          "type": "param",
+          "types": [
+            "<type>"
+          ],
+          "name": "options",
+          "description": "<description>",
+          "optional": false,
+          "typeStr": "<type>"
+        }
+      ],
+      "paramStr": "options"
+    },
+    "examples": [
+      {
+        "name": "<name>",
+        "example": "<example>\n"
+      }
+    ]
+  },
+  "properties": {
+    "options": {
+      "examples": [],
+      "description": {
+        "tags": [
+          {
+            "type": "type",
+            "types": [
+              "<type>"
+            ]
+          }
+        ],
+        "description": {
+          "full": "<description>\n",
+          "summary": "<description>\n",
+          "body": ""
+        },
+        "isPrivate": false,
+        "params": [],
+        "paramStr": ""
+      }
+    }
+  },
+  "functions": {
+    "appRoute": {
+      "description": {
+        "tags": [
+          {
+            "type": "api",
+            "visibility": "public"
+          },
+          {
+            "type": "param",
+            "types": [
+              "<type>"
+            ],
+            "name": "route",
+            "description": "<description>",
+            "optional": false,
+            "typeStr": "<type>"
+          },
+          {
+            "type": "param",
+            "types": [
+              "<type>"
+            ],
+            "name": "methodName",
+            "description": "<description>",
+            "optional": false,
+            "typeStr": "<type>"
+          }
+        ],
+        "description": {
+          "full": "",
+          "summary": "",
+          "body": ""
+        },
+        "isPrivate": false,
+        "api": {
+          "type": "api",
+          "visibility": "public"
+        },
+        "params": [
+          {
+            "type": "param",
+            "types": [
+              "<type>"
+            ],
+            "name": "route",
+            "description": "<description>",
+            "optional": false,
+            "typeStr": "<type>"
+          },
+          {
+            "type": "param",
+            "types": [
+              "<type>"
+            ],
+            "name": "methodName",
+            "description": "<description>",
+            "optional": false,
+            "typeStr": "<type>"
+          }
+        ],
+        "paramStr": "route, methodName"
+      },
+      "examples": [
+        {
+          "name": "<name>",
+          "example": "<example>\n"
+        }
+      ]
+    },
+    "_processOnRoute": {
+      "description": {
+        "tags": [
+          {
+            "type": "api",
+            "visibility": "private"
+          },
+          {
+            "type": "param",
+            "types": [
+              "<type>"
+            ],
+            "name": "routeName",
+            "description": "<description>",
+            "optional": false,
+            "typeStr": "<type>"
+          },
+          {
+            "type": "param",
+            "types": [
+              "<type>"
+            ],
+            "name": "routeArgs",
+            "description": "<description>",
+            "optional": false,
+            "typeStr": "<type>"
+          }
+        ],
+        "description": {
+          "full": "",
+          "summary": "",
+          "body": ""
+        },
+        "isPrivate": true,
+        "api": {
+          "type": "api",
+          "visibility": "private"
+        },
+        "params": [
+          {
+            "type": "param",
+            "types": [
+              "<type>"
+            ],
+            "name": "routeName",
+            "description": "<description>",
+            "optional": false,
+            "typeStr": "<type>"
+          },
+          {
+            "type": "param",
+            "types": [
+              "<type>"
+            ],
+            "name": "routeArgs",
+            "description": "<description>",
+            "optional": false,
+            "typeStr": "<type>"
+          }
+        ],
+        "paramStr": "routeName, routeArgs"
+      },
+      "examples": [
+        {
+          "name": "<name>",
+          "example": "<example>\n"
+        }
+      ]
+    },
+    "processAppRoutes": {
+      "description": {
+        "tags": [
+          {
+            "type": "api",
+            "visibility": "public"
+          },
+          {
+            "type": "param",
+            "types": [
+              "<type>"
+            ],
+            "name": "controller",
+            "description": "<description>",
+            "optional": false,
+            "typeStr": "<type>"
+          },
+          {
+            "type": "param",
+            "types": [
+              "<type>"
+            ],
+            "name": "appRoutes",
+            "description": "<description>",
+            "optional": false,
+            "typeStr": "<type>"
+          }
+        ],
+        "description": {
+          "full": "",
+          "summary": "",
+          "body": ""
+        },
+        "isPrivate": false,
+        "api": {
+          "type": "api",
+          "visibility": "public"
+        },
+        "params": [
+          {
+            "type": "param",
+            "types": [
+              "<type>"
+            ],
+            "name": "controller",
+            "description": "<description>",
+            "optional": false,
+            "typeStr": "<type>"
+          },
+          {
+            "type": "param",
+            "types": [
+              "<type>"
+            ],
+            "name": "appRoutes",
+            "description": "<description>",
+            "optional": false,
+            "typeStr": "<type>"
+          }
+        ],
+        "paramStr": "controller, appRoutes"
+      },
+      "examples": [
+        {
+          "name": "<name>",
+          "example": "<example>\n"
+        }
+      ]
+    },
+    "_getController": {
+      "description": {
+        "tags": [
+          {
+            "type": "api",
+            "visibility": "private"
+          },
+          {
+            "type": "returns",
+            "types": [
+              "<type>"
+            ],
+            "description": "- <description>"
+          }
+        ],
+        "description": {
+          "full": "",
+          "summary": "",
+          "body": ""
+        },
+        "isPrivate": true,
+        "api": {
+          "type": "api",
+          "visibility": "private"
+        },
+        "params": [],
+        "paramStr": ""
+      },
+      "examples": [
+        {
+          "name": "<name>",
+          "example": "<example>\n"
+        }
+      ]
+    },
+    "_addAppRoute": {
+      "description": {
+        "tags": [
+          {
+            "type": "api",
+            "visibility": "private"
+          },
+          {
+            "type": "param",
+            "types": [
+              "<type>"
+            ],
+            "name": "controller",
+            "description": "<description>",
+            "optional": false,
+            "typeStr": "<type>"
+          },
+          {
+            "type": "param",
+            "types": [
+              "<type>"
+            ],
+            "name": "route",
+            "description": "<description>",
+            "optional": false,
+            "typeStr": "<type>"
+          },
+          {
+            "type": "param",
+            "types": [
+              "<type>"
+            ],
+            "name": "methodName",
+            "description": "<description>",
+            "optional": false,
+            "typeStr": "<type>"
+          }
+        ],
+        "description": {
+          "full": "",
+          "summary": "",
+          "body": ""
+        },
+        "isPrivate": true,
+        "api": {
+          "type": "api",
+          "visibility": "private"
+        },
+        "params": [
+          {
+            "type": "param",
+            "types": [
+              "<type>"
+            ],
+            "name": "controller",
+            "description": "<description>",
+            "optional": false,
+            "typeStr": "<type>"
+          },
+          {
+            "type": "param",
+            "types": [
+              "<type>"
+            ],
+            "name": "route",
+            "description": "<description>",
+            "optional": false,
+            "typeStr": "<type>"
+          },
+          {
+            "type": "param",
+            "types": [
+              "<type>"
+            ],
+            "name": "methodName",
+            "description": "<description>",
+            "optional": false,
+            "typeStr": "<type>"
+          }
+        ],
+        "paramStr": "controller, route, methodName"
+      },
+      "examples": [
+        {
+          "name": "<name>",
+          "example": "<example>\n"
+        }
+      ]
+    }
+  },
+  "examples": [],
+  "description": ""
+}

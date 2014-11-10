@@ -1,0 +1,26 @@
+name: TriggerMethod
+
+class: TriggerMethod
+
+functions: 
+  triggerMethod:
+    description: |
+      @param {<type>} event - <description>
+    
+    examples:
+      -
+        name: <name>
+        example: |
+          <example>
+          
+
+  triggerMethodOn:
+    description: |
+      @param {<type>} context - <description>
+    
+    examples:
+      -
+        name: <name>
+        example: |
+          <example>
+          

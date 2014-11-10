@@ -1,0 +1,233 @@
+name: LayoutView
+
+class: LayoutView
+
+constructor:   
+  description: |
+    @api public
+    @param {<type>} options - <description>
+  
+  examples:
+  -
+    name: <name>
+    example: |
+      <example>
+      
+properties: 
+  _firstRender: |
+    <description>
+    
+    @type {<type>}
+    
+
+  _firstRender: |
+    <description>
+    
+    @type {<type>}
+    
+
+  regions: |
+    <description>
+    
+    @type {<type>}
+    
+
+  regionManager: |
+    <description>
+    
+    @type {<type>}
+    
+
+  name: |
+    <description>
+    
+    @type {<type>}
+    
+functions: 
+  render:
+    description: |
+      @api public
+      @returns {<type>} - <description>
+    
+    examples:
+      -
+        name: <name>
+        example: |
+          <example>
+          
+
+  destroy:
+    description: |
+      @api public
+      @returns {<type>} - <description>
+    
+    examples:
+      -
+        name: <name>
+        example: |
+          <example>
+          
+
+  addRegion:
+    description: |
+      @api public
+      @param {<type>} name - <description>
+      @param {<type>} definition - <description>
+      @returns {<type>} - <description>
+    
+    examples:
+      -
+        name: <name>
+        example: |
+          <example>
+          
+
+  addRegions:
+    description: |
+      @api public
+      @param {<type>} regions - <description>
+      @returns {<type>} - <description>
+    
+    examples:
+      -
+        name: <name>
+        example: |
+          <example>
+          
+
+  removeRegion:
+    description: |
+      @api public
+      @param {<type>} name - <description>
+      @returns {<type>} - <description>
+    
+    examples:
+      -
+        name: <name>
+        example: |
+          <example>
+          
+
+  getRegion:
+    description: |
+      @api public
+      @param {<type>} region - <description>
+      @returns {<type>} - <description>
+    
+    examples:
+      -
+        name: <name>
+        example: |
+          <example>
+          
+
+  getRegions:
+    description: |
+      @api public
+      @returns {<type>} - <description>
+    
+    examples:
+      -
+        name: <name>
+        example: |
+          <example>
+          
+
+  _buildRegions:
+    description: |
+      @api private
+      @param {<type>} regions - <description>
+      @returns {<type>} - <description>
+    
+    examples:
+      -
+        name: <name>
+        example: |
+          <example>
+          
+
+  _initializeRegions:
+    description: |
+      @api private
+      @param {<type>} options - <description>
+    
+    examples:
+      -
+        name: <name>
+        example: |
+          <example>
+          
+
+  _reInitializeRegions:
+    description: |
+      @api private
+    
+    examples:
+      -
+        name: <name>
+        example: |
+          <example>
+          
+
+  getRegionManager:
+    description: |
+      @api public
+      @returns {<type>} - <description>
+    
+    examples:
+      -
+        name: <name>
+        example: |
+          <example>
+          
+
+  _initRegionManager:
+    description: |
+      @api private
+    
+    examples:
+      -
+        name: <name>
+        example: |
+          <example>
+          
+
+  _getImmediateChildren:
+    description: |
+      @api private
+      @returns {<type>} - <description>
+    
+    examples:
+      -
+        name: <name>
+        example: |
+          <example>
+          
+events: 
+  name: before:add:region
+  
+  description: | 
+  
+  example: | 
+      
+
+  name: add:region
+  
+  description: | 
+  
+  example: | 
+      
+
+  name: before:remove:region
+  
+  description: | 
+  
+  example: | 
+      
+
+  name: remove:region
+  
+  description: | 
+  
+  example: | 
+      

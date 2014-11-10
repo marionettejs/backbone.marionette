@@ -1,0 +1,45 @@
+name: Error
+
+class: Error
+
+constructor:   
+  description: |
+    @api public
+    @param {<type>} message - <description>
+    @param {<type>} options - <description>
+  
+  examples:
+  -
+    name: <name>
+    example: |
+      <example>
+      
+properties: 
+  url: |
+    <description>
+    
+    @type {<type>}
+    
+functions: 
+  captureStackTrace:
+    description: |
+      @api public
+    
+    examples:
+      -
+        name: <name>
+        example: |
+          <example>
+          
+
+  toString:
+    description: |
+      @api public
+      @returns {<type>} - <description>
+    
+    examples:
+      -
+        name: <name>
+        example: |
+          <example>
+          

@@ -1,0 +1,81 @@
+name: Behavior
+
+class: Behavior
+
+constructor:   
+  description: |
+    @api public
+    @param {<type>} options - <description>
+    @param {<type>} view - <description>
+  
+  examples:
+  -
+    name: <name>
+    example: |
+      <example>
+      
+properties: 
+  view: |
+    <description>
+    
+    @type {<type>}
+    
+
+  defaults: |
+    <description>
+    
+    @type {<type>}
+    
+
+  options: |
+    <description>
+    
+    @type {<type>}
+    
+
+  $el: |
+    <description>
+    
+    @type {<type>}
+    
+
+  el: |
+    <description>
+    
+    @type {<type>}
+    
+functions: 
+  $:
+    description: |
+      @api public
+      @returns {<type>} - <description>
+    
+    examples:
+      -
+        name: <name>
+        example: |
+          <example>
+          
+
+  destroy:
+    description: |
+      @api public
+    
+    examples:
+      -
+        name: <name>
+        example: |
+          <example>
+          
+
+  proxyViewProperties:
+    description: |
+      @api public
+      @param {<type>} view - <description>
+    
+    examples:
+      -
+        name: <name>
+        example: |
+          <example>
+          

@@ -1,0 +1,30 @@
+{
+  "filename": [
+    {
+      "name": "DomRefresh",
+      "isCollection": false
+    }
+  ],
+  "class": [
+    {
+      "name": "DomRefresh",
+      "isCollection": false
+    }
+  ],
+  "functions": [
+    {
+      "name": "MonitorDOMRefresh",
+      "tags": [
+        "@param {<type>} view - <description>"
+      ]
+    }
+  ],
+  "constructor": [
+    {
+      "tags": [
+        "@api public",
+        "@param {<type>} view - <description>"
+      ]
+    }
+  ]
+}

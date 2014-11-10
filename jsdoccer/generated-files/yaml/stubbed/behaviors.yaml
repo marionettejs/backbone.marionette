@@ -1,0 +1,149 @@
+name: Behaviors
+
+class: Behaviors
+
+functions: 
+  behaviorTriggers:
+    description: |
+      @api public
+      @param {<type>} behaviorTriggers - <description>
+      @param {<type>} behaviors - <description>
+      @returns {<type>} - <description>
+    
+    examples:
+      -
+        name: <name>
+        example: |
+          <example>
+          
+
+  behaviorEvents:
+    description: |
+      @api public
+      @param {<type>} behaviorEvents - <description>
+      @param {<type>} behaviors - <description>
+      @returns {<type>} - <description>
+    
+    examples:
+      -
+        name: <name>
+        example: |
+          <example>
+          
+
+  behaviorsLookup:
+    description: |
+      @api public
+    
+    examples:
+      -
+        name: <name>
+        example: |
+          <example>
+          
+
+  getBehaviorClass:
+    description: |
+      @api public
+      @param {<type>} options - <description>
+      @param {<type>} key - <description>
+      @returns {<type>} - <description>
+    
+    examples:
+      -
+        name: <name>
+        example: |
+          <example>
+          
+
+  parseBehaviors:
+    description: |
+      @api public
+      @param {<type>} view - <description>
+      @param {<type>} behaviors - <description>
+      @returns {<type>} - <description>
+    
+    examples:
+      -
+        name: <name>
+        example: |
+          <example>
+          
+
+  wrap:
+    description: |
+      @api public
+      @param {<type>} view - <description>
+      @param {<type>} behaviors - <description>
+      @param {<type>} methodNames - <description>
+    
+    examples:
+      -
+        name: <name>
+        example: |
+          <example>
+          
+
+  buildBehaviorTriggers:
+    description: |
+      @api public
+      @returns {<type>} - <description>
+    
+    examples:
+      -
+        name: <name>
+        example: |
+          <example>
+          
+
+  _buildTriggerHandlersForBehavior:
+    description: |
+      @api private
+      @param {<type>} behavior - <description>
+      @param {<type>} i - <description>
+    
+    examples:
+      -
+        name: <name>
+        example: |
+          <example>
+          
+
+  _setHandlerForBehavior:
+    description: |
+      @api private
+      @param {<type>} behavior - <description>
+      @param {<type>} i - <description>
+      @param {<type>} eventName - <description>
+      @param {<type>} trigger - <description>
+    
+    examples:
+      -
+        name: <name>
+        example: |
+          <example>
+          
+properties: 
+  _view: |
+    <description>
+    
+    @type {<type>}
+    
+
+  _viewUI: |
+    <description>
+    
+    @type {<type>}
+    
+
+  _behaviors: |
+    <description>
+    
+    @type {<type>}
+    
+
+  _triggers: |
+    <description>
+    
+    @type {<type>}
+    

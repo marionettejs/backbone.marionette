@@ -1,0 +1,69 @@
+{
+  "filename": [
+    {
+      "name": "AppRouter",
+      "isCollection": false
+    }
+  ],
+  "class": [
+    {
+      "name": "AppRouter",
+      "isCollection": false
+    }
+  ],
+  "constructor": [
+    {
+      "tags": [
+        "@api public",
+        "@param {<type>} options - <description>"
+      ]
+    }
+  ],
+  "properties": [
+    {
+      "name": "options"
+    }
+  ],
+  "functions": [
+    {
+      "name": "appRoute",
+      "tags": [
+        "@api public",
+        "@param {<type>} route - <description>",
+        "@param {<type>} methodName - <description>"
+      ]
+    },
+    {
+      "name": "_processOnRoute",
+      "tags": [
+        "@api private",
+        "@param {<type>} routeName - <description>",
+        "@param {<type>} routeArgs - <description>"
+      ]
+    },
+    {
+      "name": "processAppRoutes",
+      "tags": [
+        "@api public",
+        "@param {<type>} controller - <description>",
+        "@param {<type>} appRoutes - <description>"
+      ]
+    },
+    {
+      "name": "_getController",
+      "tags": [
+        "@api private",
+        "@returns {<type>} - <description>"
+      ]
+    },
+    {
+      "name": "_addAppRoute",
+      "tags": [
+        "@api private",
+        "@param {<type>} controller - <description>",
+        "@param {<type>} route - <description>",
+        "@param {<type>} methodName - <description>"
+      ]
+    }
+  ]
+}

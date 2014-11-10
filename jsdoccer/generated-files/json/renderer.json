@@ -1,0 +1,25 @@
+{
+  "filename": [
+    {
+      "name": "Renderer",
+      "isCollection": false
+    }
+  ],
+  "class": [
+    {
+      "name": "Renderer",
+      "isCollection": false
+    }
+  ],
+  "functions": [
+    {
+      "name": "render",
+      "tags": [
+        "@api public",
+        "@param {<type>} template - <description>",
+        "@param {<type>} data - <description>",
+        "@returns {<type>} - <description>"
+      ]
+    }
+  ]
+}

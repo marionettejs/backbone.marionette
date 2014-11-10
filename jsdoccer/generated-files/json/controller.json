@@ -1,0 +1,42 @@
+{
+  "filename": [
+    {
+      "name": "Controller",
+      "isCollection": false
+    }
+  ],
+  "class": [
+    {
+      "name": "Controller",
+      "isCollection": false
+    }
+  ],
+  "functions": [
+    {
+      "name": "Controller",
+      "tags": [
+        "@param {<type>} options - <description>"
+      ]
+    },
+    {
+      "name": "destroy",
+      "tags": [
+        "@api public",
+        "@returns {<type>} - <description>"
+      ]
+    }
+  ],
+  "constructor": [
+    {
+      "tags": [
+        "@api public",
+        "@param {<type>} options - <description>"
+      ]
+    }
+  ],
+  "properties": [
+    {
+      "name": "options"
+    }
+  ]
+}

@@ -1,0 +1,339 @@
+name: Region
+
+class: Region
+
+constructor:   
+  description: |
+    @api public
+    @param {<type>} options - <description>
+  
+  examples:
+  -
+    name: <name>
+    example: |
+      <example>
+      
+properties: 
+  options: |
+    <description>
+    
+    @type {<type>}
+    
+
+  el: |
+    <description>
+    
+    @type {<type>}
+    
+
+  el: |
+    <description>
+    
+    @type {<type>}
+    
+
+  $el: |
+    <description>
+    
+    @type {<type>}
+    
+
+  currentView: |
+    <description>
+    
+    @type {<type>}
+    
+
+  $el: |
+    <description>
+    
+    @type {<type>}
+    
+
+  el: |
+    <description>
+    
+    @type {<type>}
+    
+
+  currentView: |
+    <description>
+    
+    @type {<type>}
+    
+
+  el: |
+    <description>
+    
+    @type {<type>}
+    
+functions: 
+  show:
+    description: |
+      @api public
+      @param {<type>} view - <description>
+      @param {<type>} options - <description>
+      @returns {<type>} - <description>
+    
+    examples:
+      -
+        name: <name>
+        example: |
+          <example>
+          
+
+  _triggerAttach:
+    description: |
+      @api private
+      @param {<type>} views - <description>
+      @param {<type>} prefix - <description>
+    
+    examples:
+      -
+        name: <name>
+        example: |
+          <example>
+          
+
+  _displayedViews:
+    description: |
+      @api private
+      @param {<type>} view - <description>
+      @returns {<type>} - <description>
+    
+    examples:
+      -
+        name: <name>
+        example: |
+          <example>
+          
+
+  _ensureElement:
+    description: |
+      @api private
+      @returns {<type>} - <description>
+    
+    examples:
+      -
+        name: <name>
+        example: |
+          <example>
+          
+
+  _ensureViewIsIntact:
+    description: |
+      @api private
+      @param {<type>} view - <description>
+    
+    examples:
+      -
+        name: <name>
+        example: |
+          <example>
+          
+
+  getEl:
+    description: |
+      @api public
+      @param {<type>} el - <description>
+      @returns {<type>} - <description>
+    
+    examples:
+      -
+        name: <name>
+        example: |
+          <example>
+          
+
+  attachHtml:
+    description: |
+      @api public
+      @param {<type>} view - <description>
+    
+    examples:
+      -
+        name: <name>
+        example: |
+          <example>
+          
+
+  empty:
+    description: |
+      @api public
+      @returns {<type>} - <description>
+    
+    examples:
+      -
+        name: <name>
+        example: |
+          <example>
+          
+
+  _destroyView:
+    description: |
+      @api private
+    
+    examples:
+      -
+        name: <name>
+        example: |
+          <example>
+          
+
+  attachView:
+    description: |
+      @api public
+      @param {<type>} view - <description>
+      @returns {<type>} - <description>
+    
+    examples:
+      -
+        name: <name>
+        example: |
+          <example>
+          
+
+  hasView:
+    description: |
+      @api public
+      @returns {<type>} - <description>
+    
+    examples:
+      -
+        name: <name>
+        example: |
+          <example>
+          
+
+  reset:
+    description: |
+      @api public
+      @returns {<type>} - <description>
+    
+    examples:
+      -
+        name: <name>
+        example: |
+          <example>
+          
+
+  buildRegion:
+    description: |
+      @api public
+      @param {<type>} regionConfig - <description>
+      @param {<type>} DefaultRegionClass - <description>
+    
+    examples:
+      -
+        name: <name>
+        example: |
+          <example>
+          
+
+  _buildRegionFromSelector:
+    description: |
+      @api private
+      @param {<type>} selector - <description>
+      @param {<type>} DefaultRegionClass - <description>
+      @returns {<type>} - <description>
+    
+    examples:
+      -
+        name: <name>
+        example: |
+          <example>
+          
+
+  _buildRegionFromObject:
+    description: |
+      @api private
+      @param {<type>} regionConfig - <description>
+      @param {<type>} DefaultRegionClass - <description>
+      @returns {<type>} - <description>
+    
+    examples:
+      -
+        name: <name>
+        example: |
+          <example>
+          
+
+  getEl:
+    description: |
+      @param {<type>} el - <description>
+    
+    examples:
+      -
+        name: <name>
+        example: |
+          <example>
+          
+
+  _buildRegionFromRegionClass:
+    description: |
+      @api private
+      @param {<type>} RegionClass - <description>
+      @returns {<type>} - <description>
+    
+    examples:
+      -
+        name: <name>
+        example: |
+          <example>
+          
+events: 
+  name: before:swapOut
+  
+  description: | 
+  
+  example: | 
+      
+
+  name: before:swap
+  
+  description: | 
+  
+  example: | 
+      
+
+  name: before:show
+  
+  description: | 
+  
+  example: | 
+      
+
+  name: swapOut
+  
+  description: | 
+  
+  example: | 
+      
+
+  name: swap
+  
+  description: | 
+  
+  example: | 
+      
+
+  name: show
+  
+  description: | 
+  
+  example: | 
+      
+
+  name: before:empty
+  
+  description: | 
+  
+  example: | 
+      
+
+  name: empty
+  
+  description: | 
+  
+  example: | 
+      

@@ -1,0 +1,198 @@
+{
+  "filename": [
+    {
+      "name": "Module",
+      "isCollection": false
+    }
+  ],
+  "class": [
+    {
+      "name": "Module",
+      "isCollection": false
+    }
+  ],
+  "functions": [
+    {
+      "name": "Module",
+      "tags": [
+        "@param {<type>} moduleName - <description>",
+        "@param {<type>} app - <description>",
+        "@param {<type>} options - <description>"
+      ]
+    },
+    {
+      "name": "initialize",
+      "tags": [
+        "@api public"
+      ]
+    },
+    {
+      "name": "addInitializer",
+      "tags": [
+        "@api public",
+        "@param {<type>} callback - <description>"
+      ]
+    },
+    {
+      "name": "addFinalizer",
+      "tags": [
+        "@api public",
+        "@param {<type>} callback - <description>"
+      ]
+    },
+    {
+      "name": "start",
+      "tags": [
+        "@api public",
+        "@param {<type>} options - <description>"
+      ]
+    },
+    {
+      "name": "stop",
+      "tags": [
+        "@api public"
+      ]
+    },
+    {
+      "name": "addDefinition",
+      "tags": [
+        "@api public",
+        "@param {<type>} moduleDefinition - <description>",
+        "@param {<type>} customArgs - <description>"
+      ]
+    },
+    {
+      "name": "_runModuleDefinition",
+      "tags": [
+        "@api private",
+        "@param {<type>} definition - <description>",
+        "@param {<type>} customArgs - <description>"
+      ]
+    },
+    {
+      "name": "_setupInitializersAndFinalizers",
+      "tags": [
+        "@api private"
+      ]
+    },
+    {
+      "name": "create",
+      "tags": [
+        "@api public",
+        "@param {<type>} app - <description>",
+        "@param {<type>} moduleNames - <description>",
+        "@param {<type>} moduleDefinition - <description>",
+        "@returns {<type>} - <description>"
+      ]
+    },
+    {
+      "name": "_getModule",
+      "tags": [
+        "@api private",
+        "@param {<type>} parentModule - <description>",
+        "@param {<type>} moduleName - <description>",
+        "@param {<type>} app - <description>",
+        "@param {<type>} def - <description>",
+        "@param {<type>} args - <description>",
+        "@returns {<type>} - <description>"
+      ]
+    },
+    {
+      "name": "getClass",
+      "tags": [
+        "@api public",
+        "@param {<type>} moduleDefinition - <description>",
+        "@returns {<type>} - <description>"
+      ]
+    },
+    {
+      "name": "_addModuleDefinition",
+      "tags": [
+        "@api private",
+        "@param {<type>} parentModule - <description>",
+        "@param {<type>} module - <description>",
+        "@param {<type>} def - <description>",
+        "@param {<type>} args - <description>"
+      ]
+    },
+    {
+      "name": "_getStartWithParent",
+      "tags": [
+        "@api private",
+        "@param {<type>} def - <description>",
+        "@param {<type>} module - <description>",
+        "@returns {<type>} - <description>"
+      ]
+    },
+    {
+      "name": "_getDefine",
+      "tags": [
+        "@api private",
+        "@param {<type>} def - <description>",
+        "@returns {<type>} - <description>"
+      ]
+    },
+    {
+      "name": "_addStartWithParent",
+      "tags": [
+        "@api private",
+        "@param {<type>} parentModule - <description>",
+        "@param {<type>} module - <description>",
+        "@param {<type>} startWithParent - <description>"
+      ]
+    }
+  ],
+  "constructor": [
+    {
+      "tags": [
+        "@api public",
+        "@param {<type>} moduleName - <description>",
+        "@param {<type>} app - <description>",
+        "@param {<type>} options - <description>"
+      ]
+    }
+  ],
+  "properties": [
+    {
+      "name": "moduleName"
+    },
+    {
+      "name": "options"
+    },
+    {
+      "name": "initialize"
+    },
+    {
+      "name": "submodules"
+    },
+    {
+      "name": "app"
+    },
+    {
+      "name": "_isInitialized"
+    },
+    {
+      "name": "_isInitialized"
+    },
+    {
+      "name": "_initializerCallbacks"
+    },
+    {
+      "name": "_finalizerCallbacks"
+    }
+  ],
+  "events": [
+    {
+      "name": "before:start"
+    },
+    {
+      "name": "start"
+    },
+    {
+      "name": "before:stop"
+    },
+    {
+      "name": "stop"
+    }
+  ]
+}

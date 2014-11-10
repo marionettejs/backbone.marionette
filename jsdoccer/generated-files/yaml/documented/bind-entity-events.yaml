@@ -1,0 +1,56 @@
+name: BindEntityEvents
+
+class: BindEntityEvents
+
+functions: 
+  bindEntityEvents:
+    description: |
+      @param {<type>} target - <description>
+      @param {<type>} entity - <description>
+      @param {<type>} bindings - <description>
+    
+    examples:
+      -
+        name: <name>
+        example: |
+          <example>
+          
+
+  unbindEntityEvents:
+    description: |
+      @param {<type>} target - <description>
+      @param {<type>} entity - <description>
+      @param {<type>} bindings - <description>
+    
+    examples:
+      -
+        name: <name>
+        example: |
+          <example>
+          
+
+  proxyBindEntityEvents:
+    description: |
+      @param {<type>} entity - <description>
+      @param {<type>} bindings - <description>
+      @returns {<type>} - <description>
+    
+    examples:
+      -
+        name: <name>
+        example: |
+          <example>
+          
+
+  proxyUnbindEntityEvents:
+    description: |
+      @param {<type>} entity - <description>
+      @param {<type>} bindings - <description>
+      @returns {<type>} - <description>
+    
+    examples:
+      -
+        name: <name>
+        example: |
+          <example>
+          

@@ -1,0 +1,75 @@
+{
+  "filename": [
+    {
+      "name": "ItemView",
+      "isCollection": false
+    }
+  ],
+  "class": [
+    {
+      "name": "ItemView",
+      "isCollection": false
+    }
+  ],
+  "constructor": [
+    {
+      "tags": [
+        "@api public"
+      ]
+    }
+  ],
+  "functions": [
+    {
+      "name": "serializeData",
+      "tags": [
+        "@api public",
+        "@returns {<type>} - <description>"
+      ]
+    },
+    {
+      "name": "serializeCollection",
+      "tags": [
+        "@api public",
+        "@param {<type>} collection - <description>",
+        "@returns {<type>} - <description>"
+      ]
+    },
+    {
+      "name": "render",
+      "tags": [
+        "@api public",
+        "@returns {<type>} - <description>"
+      ]
+    },
+    {
+      "name": "_renderTemplate",
+      "tags": [
+        "@api private",
+        "@returns {<type>} - <description>"
+      ]
+    },
+    {
+      "name": "attachElContent",
+      "tags": [
+        "@api public",
+        "@param {<type>} html - <description>",
+        "@returns {<type>} - <description>"
+      ]
+    },
+    {
+      "name": "destroy",
+      "tags": [
+        "@api public",
+        "@returns {<type>} - <description>"
+      ]
+    }
+  ],
+  "events": [
+    {
+      "name": "before:render"
+    },
+    {
+      "name": "render"
+    }
+  ]
+}

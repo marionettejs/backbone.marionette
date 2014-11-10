@@ -1,0 +1,358 @@
+{
+  "filename": [
+    {
+      "name": "CollectionView",
+      "isCollection": false
+    }
+  ],
+  "class": [
+    {
+      "name": "CollectionView",
+      "isCollection": false
+    }
+  ],
+  "constructor": [
+    {
+      "tags": [
+        "@api public",
+        "@param {<type>} options - <description>"
+      ]
+    }
+  ],
+  "properties": [
+    {
+      "name": "sort"
+    },
+    {
+      "name": "elBuffer"
+    },
+    {
+      "name": "_bufferedChildren"
+    },
+    {
+      "name": "isBuffering"
+    },
+    {
+      "name": "isBuffering"
+    },
+    {
+      "name": "_bufferedChildren"
+    },
+    {
+      "name": "_showingEmptyView"
+    },
+    {
+      "name": "children"
+    }
+  ],
+  "functions": [
+    {
+      "name": "initRenderBuffer",
+      "tags": [
+        "@api public"
+      ]
+    },
+    {
+      "name": "startBuffering",
+      "tags": [
+        "@api public"
+      ]
+    },
+    {
+      "name": "endBuffering",
+      "tags": [
+        "@api public"
+      ]
+    },
+    {
+      "name": "_triggerBeforeShowBufferedChildren",
+      "tags": [
+        "@api private"
+      ]
+    },
+    {
+      "name": "_triggerShowBufferedChildren",
+      "tags": [
+        "@api private"
+      ]
+    },
+    {
+      "name": "_triggerMethodOnChild",
+      "tags": [
+        "@api private",
+        "@param {<type>} event - <description>",
+        "@param {<type>} childView - <description>"
+      ]
+    },
+    {
+      "name": "_initialEvents",
+      "tags": [
+        "@api private"
+      ]
+    },
+    {
+      "name": "_onCollectionAdd",
+      "tags": [
+        "@api private",
+        "@param {<type>} child - <description>"
+      ]
+    },
+    {
+      "name": "_onCollectionRemove",
+      "tags": [
+        "@api private",
+        "@param {<type>} model - <description>"
+      ]
+    },
+    {
+      "name": "onShowCalled",
+      "tags": [
+        "@api public"
+      ]
+    },
+    {
+      "name": "render",
+      "tags": [
+        "@api public",
+        "@returns {<type>} - <description>"
+      ]
+    },
+    {
+      "name": "resortView",
+      "tags": [
+        "@api public"
+      ]
+    },
+    {
+      "name": "_sortViews",
+      "tags": [
+        "@api private"
+      ]
+    },
+    {
+      "name": "_renderChildren",
+      "tags": [
+        "@api private"
+      ]
+    },
+    {
+      "name": "showCollection",
+      "tags": [
+        "@api public"
+      ]
+    },
+    {
+      "name": "showEmptyView",
+      "tags": [
+        "@api public"
+      ]
+    },
+    {
+      "name": "destroyEmptyView",
+      "tags": [
+        "@api public"
+      ]
+    },
+    {
+      "name": "getEmptyView",
+      "tags": [
+        "@api public",
+        "@returns {<type>} - <description>"
+      ]
+    },
+    {
+      "name": "addEmptyView",
+      "tags": [
+        "@api public",
+        "@param {<type>} child - <description>",
+        "@param {<type>} EmptyView - <description>"
+      ]
+    },
+    {
+      "name": "getChildView",
+      "tags": [
+        "@api public",
+        "@param {<type>} child - <description>",
+        "@returns {<type>} - <description>"
+      ]
+    },
+    {
+      "name": "addChild",
+      "tags": [
+        "@api public",
+        "@param {<type>} child - <description>",
+        "@param {<type>} ChildView - <description>",
+        "@param {<type>} index - <description>",
+        "@returns {<type>} - <description>"
+      ]
+    },
+    {
+      "name": "_updateIndices",
+      "tags": [
+        "@api private",
+        "@param {<type>} view - <description>",
+        "@param {<type>} increment - <description>",
+        "@param {<type>} index - <description>"
+      ]
+    },
+    {
+      "name": "_addChildView",
+      "tags": [
+        "@api private",
+        "@param {<type>} view - <description>",
+        "@param {<type>} index - <description>"
+      ]
+    },
+    {
+      "name": "renderChildView",
+      "tags": [
+        "@api public",
+        "@param {<type>} view - <description>",
+        "@param {<type>} index - <description>",
+        "@returns {<type>} - <description>"
+      ]
+    },
+    {
+      "name": "buildChildView",
+      "tags": [
+        "@api public",
+        "@param {<type>} child - <description>",
+        "@param {<type>} ChildViewClass - <description>",
+        "@param {<type>} childViewOptions - <description>",
+        "@returns {<type>} - <description>"
+      ]
+    },
+    {
+      "name": "removeChildView",
+      "tags": [
+        "@api public",
+        "@param {<type>} view - <description>",
+        "@returns {<type>} - <description>"
+      ]
+    },
+    {
+      "name": "isEmpty",
+      "tags": [
+        "@api public",
+        "@returns {<type>} - <description>"
+      ]
+    },
+    {
+      "name": "checkEmpty",
+      "tags": [
+        "@api public"
+      ]
+    },
+    {
+      "name": "attachBuffer",
+      "tags": [
+        "@api public",
+        "@param {<type>} collectionView - <description>",
+        "@param {<type>} buffer - <description>"
+      ]
+    },
+    {
+      "name": "attachHtml",
+      "tags": [
+        "@api public",
+        "@param {<type>} collectionView - <description>",
+        "@param {<type>} childView - <description>",
+        "@param {<type>} index - <description>"
+      ]
+    },
+    {
+      "name": "_insertBefore",
+      "tags": [
+        "@api private",
+        "@param {<type>} childView - <description>",
+        "@param {<type>} index - <description>",
+        "@returns {<type>} - <description>"
+      ]
+    },
+    {
+      "name": "_insertAfter",
+      "tags": [
+        "@api private",
+        "@param {<type>} childView - <description>"
+      ]
+    },
+    {
+      "name": "_initChildViewStorage",
+      "tags": [
+        "@api private"
+      ]
+    },
+    {
+      "name": "destroy",
+      "tags": [
+        "@api public",
+        "@returns {<type>} - <description>"
+      ]
+    },
+    {
+      "name": "destroyChildren",
+      "tags": [
+        "@api public",
+        "@returns {<type>} - <description>"
+      ]
+    },
+    {
+      "name": "proxyChildEvents",
+      "tags": [
+        "@api public",
+        "@param {<type>} view - <description>"
+      ]
+    },
+    {
+      "name": "_getImmediateChildren",
+      "tags": [
+        "@api private",
+        "@returns {<type>} - <description>"
+      ]
+    }
+  ],
+  "events": [
+    {
+      "name": "before:render"
+    },
+    {
+      "name": "render"
+    },
+    {
+      "name": "before:render:collection"
+    },
+    {
+      "name": "render:collection"
+    },
+    {
+      "name": "before:render:empty"
+    },
+    {
+      "name": "render:empty"
+    },
+    {
+      "name": "before:remove:empty"
+    },
+    {
+      "name": "remove:empty"
+    },
+    {
+      "name": "before:add:child"
+    },
+    {
+      "name": "add:child"
+    },
+    {
+      "name": "before:remove:child"
+    },
+    {
+      "name": "remove:child"
+    },
+    {
+      "name": "before:destroy:collection"
+    },
+    {
+      "name": "destroy:collection"
+    }
+  ]
+}

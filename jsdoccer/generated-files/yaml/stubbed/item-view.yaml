@@ -1,0 +1,102 @@
+name: ItemView
+
+class: ItemView
+
+constructor:   
+  description: |
+    @api public
+  
+  examples:
+  -
+    name: <name>
+    example: |
+      <example>
+      
+functions: 
+  serializeData:
+    description: |
+      @api public
+      @returns {<type>} - <description>
+    
+    examples:
+      -
+        name: <name>
+        example: |
+          <example>
+          
+
+  serializeCollection:
+    description: |
+      @api public
+      @param {<type>} collection - <description>
+      @returns {<type>} - <description>
+    
+    examples:
+      -
+        name: <name>
+        example: |
+          <example>
+          
+
+  render:
+    description: |
+      @api public
+      @returns {<type>} - <description>
+    
+    examples:
+      -
+        name: <name>
+        example: |
+          <example>
+          
+
+  _renderTemplate:
+    description: |
+      @api private
+      @returns {<type>} - <description>
+    
+    examples:
+      -
+        name: <name>
+        example: |
+          <example>
+          
+
+  attachElContent:
+    description: |
+      @api public
+      @param {<type>} html - <description>
+      @returns {<type>} - <description>
+    
+    examples:
+      -
+        name: <name>
+        example: |
+          <example>
+          
+
+  destroy:
+    description: |
+      @api public
+      @returns {<type>} - <description>
+    
+    examples:
+      -
+        name: <name>
+        example: |
+          <example>
+          
+events: 
+  name: before:render
+  
+  description: | 
+  
+  example: | 
+      
+
+  name: render
+  
+  description: | 
+  
+  example: | 
+      

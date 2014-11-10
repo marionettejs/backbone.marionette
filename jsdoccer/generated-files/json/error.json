@@ -1,0 +1,43 @@
+{
+  "filename": [
+    {
+      "name": "Error",
+      "isCollection": false
+    }
+  ],
+  "class": [
+    {
+      "name": "Error",
+      "isCollection": false
+    }
+  ],
+  "constructor": [
+    {
+      "tags": [
+        "@api public",
+        "@param {<type>} message - <description>",
+        "@param {<type>} options - <description>"
+      ]
+    }
+  ],
+  "properties": [
+    {
+      "name": "url"
+    }
+  ],
+  "functions": [
+    {
+      "name": "captureStackTrace",
+      "tags": [
+        "@api public"
+      ]
+    },
+    {
+      "name": "toString",
+      "tags": [
+        "@api public",
+        "@returns {<type>} - <description>"
+      ]
+    }
+  ]
+}

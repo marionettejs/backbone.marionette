@@ -1,0 +1,308 @@
+name: Module
+
+class: Module
+
+functions: 
+  Module:
+    description: |
+      @param {<type>} moduleName - <description>
+      @param {<type>} app - <description>
+      @param {<type>} options - <description>
+    
+    examples:
+      -
+        name: <name>
+        example: |
+          <example>
+          
+
+  initialize:
+    description: |
+      @api public
+    
+    examples:
+      -
+        name: <name>
+        example: |
+          <example>
+          
+
+  addInitializer:
+    description: |
+      @api public
+      @param {<type>} callback - <description>
+    
+    examples:
+      -
+        name: <name>
+        example: |
+          <example>
+          
+
+  addFinalizer:
+    description: |
+      @api public
+      @param {<type>} callback - <description>
+    
+    examples:
+      -
+        name: <name>
+        example: |
+          <example>
+          
+
+  start:
+    description: |
+      @api public
+      @param {<type>} options - <description>
+    
+    examples:
+      -
+        name: <name>
+        example: |
+          <example>
+          
+
+  stop:
+    description: |
+      @api public
+    
+    examples:
+      -
+        name: <name>
+        example: |
+          <example>
+          
+
+  addDefinition:
+    description: |
+      @api public
+      @param {<type>} moduleDefinition - <description>
+      @param {<type>} customArgs - <description>
+    
+    examples:
+      -
+        name: <name>
+        example: |
+          <example>
+          
+
+  _runModuleDefinition:
+    description: |
+      @api private
+      @param {<type>} definition - <description>
+      @param {<type>} customArgs - <description>
+    
+    examples:
+      -
+        name: <name>
+        example: |
+          <example>
+          
+
+  _setupInitializersAndFinalizers:
+    description: |
+      @api private
+    
+    examples:
+      -
+        name: <name>
+        example: |
+          <example>
+          
+
+  create:
+    description: |
+      @api public
+      @param {<type>} app - <description>
+      @param {<type>} moduleNames - <description>
+      @param {<type>} moduleDefinition - <description>
+      @returns {<type>} - <description>
+    
+    examples:
+      -
+        name: <name>
+        example: |
+          <example>
+          
+
+  _getModule:
+    description: |
+      @api private
+      @param {<type>} parentModule - <description>
+      @param {<type>} moduleName - <description>
+      @param {<type>} app - <description>
+      @param {<type>} def - <description>
+      @param {<type>} args - <description>
+      @returns {<type>} - <description>
+    
+    examples:
+      -
+        name: <name>
+        example: |
+          <example>
+          
+
+  getClass:
+    description: |
+      @api public
+      @param {<type>} moduleDefinition - <description>
+      @returns {<type>} - <description>
+    
+    examples:
+      -
+        name: <name>
+        example: |
+          <example>
+          
+
+  _addModuleDefinition:
+    description: |
+      @api private
+      @param {<type>} parentModule - <description>
+      @param {<type>} module - <description>
+      @param {<type>} def - <description>
+      @param {<type>} args - <description>
+    
+    examples:
+      -
+        name: <name>
+        example: |
+          <example>
+          
+
+  _getStartWithParent:
+    description: |
+      @api private
+      @param {<type>} def - <description>
+      @param {<type>} module - <description>
+      @returns {<type>} - <description>
+    
+    examples:
+      -
+        name: <name>
+        example: |
+          <example>
+          
+
+  _getDefine:
+    description: |
+      @api private
+      @param {<type>} def - <description>
+      @returns {<type>} - <description>
+    
+    examples:
+      -
+        name: <name>
+        example: |
+          <example>
+          
+
+  _addStartWithParent:
+    description: |
+      @api private
+      @param {<type>} parentModule - <description>
+      @param {<type>} module - <description>
+      @param {<type>} startWithParent - <description>
+    
+    examples:
+      -
+        name: <name>
+        example: |
+          <example>
+          
+constructor:   
+  description: |
+    @api public
+    @param {<type>} moduleName - <description>
+    @param {<type>} app - <description>
+    @param {<type>} options - <description>
+  
+  examples:
+  -
+    name: <name>
+    example: |
+      <example>
+      
+properties: 
+  moduleName: |
+    <description>
+    
+    @type {<type>}
+    
+
+  options: |
+    <description>
+    
+    @type {<type>}
+    
+
+  initialize: |
+    <description>
+    
+    @type {<type>}
+    
+
+  submodules: |
+    <description>
+    
+    @type {<type>}
+    
+
+  app: |
+    <description>
+    
+    @type {<type>}
+    
+
+  _isInitialized: |
+    <description>
+    
+    @type {<type>}
+    
+
+  _isInitialized: |
+    <description>
+    
+    @type {<type>}
+    
+
+  _initializerCallbacks: |
+    <description>
+    
+    @type {<type>}
+    
+
+  _finalizerCallbacks: |
+    <description>
+    
+    @type {<type>}
+    
+events: 
+  name: before:start
+  
+  description: | 
+  
+  example: | 
+      
+
+  name: start
+  
+  description: | 
+  
+  example: | 
+      
+
+  name: before:stop
+  
+  description: | 
+  
+  example: | 
+      
+
+  name: stop
+  
+  description: | 
+  
+  example: | 
+      

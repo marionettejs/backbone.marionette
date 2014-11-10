@@ -1,0 +1,254 @@
+name: Application
+
+class: Application
+
+constructor:   
+  description: |
+    @api public
+    @param {<type>} options - <description>
+  
+  examples:
+  -
+    name: <name>
+    example: |
+      <example>
+      
+properties: 
+  _initCallbacks: |
+    <description>
+    
+    @type {<type>}
+    
+
+  submodules: |
+    <description>
+    
+    @type {<type>}
+    
+
+  _regionManager: |
+    <description>
+    
+    @type {<type>}
+    
+
+  name: |
+    <description>
+    
+    @type {<type>}
+    
+
+  channelName: |
+    <description>
+    
+    @type {<type>}
+    
+
+  channel: |
+    <description>
+    
+    @type {<type>}
+    
+
+  vent: |
+    <description>
+    
+    @type {<type>}
+    
+
+  commands: |
+    <description>
+    
+    @type {<type>}
+    
+
+  reqres: |
+    <description>
+    
+    @type {<type>}
+    
+functions: 
+  execute:
+    description: |
+      @api public
+    
+    examples:
+      -
+        name: <name>
+        example: |
+          <example>
+          
+
+  request:
+    description: |
+      @api public
+      @returns {<type>} - <description>
+    
+    examples:
+      -
+        name: <name>
+        example: |
+          <example>
+          
+
+  addInitializer:
+    description: |
+      @api public
+      @param {<type>} initializer - <description>
+    
+    examples:
+      -
+        name: <name>
+        example: |
+          <example>
+          
+
+  start:
+    description: |
+      @api public
+      @param {<type>} options - <description>
+    
+    examples:
+      -
+        name: <name>
+        example: |
+          <example>
+          
+
+  addRegions:
+    description: |
+      @api public
+      @param {<type>} regions - <description>
+      @returns {<type>} - <description>
+    
+    examples:
+      -
+        name: <name>
+        example: |
+          <example>
+          
+
+  emptyRegions:
+    description: |
+      @api public
+      @returns {<type>} - <description>
+    
+    examples:
+      -
+        name: <name>
+        example: |
+          <example>
+          
+
+  removeRegion:
+    description: |
+      @api public
+      @param {<type>} region - <description>
+      @returns {<type>} - <description>
+    
+    examples:
+      -
+        name: <name>
+        example: |
+          <example>
+          
+
+  getRegion:
+    description: |
+      @api public
+      @param {<type>} region - <description>
+      @returns {<type>} - <description>
+    
+    examples:
+      -
+        name: <name>
+        example: |
+          <example>
+          
+
+  getRegions:
+    description: |
+      @api public
+      @returns {<type>} - <description>
+    
+    examples:
+      -
+        name: <name>
+        example: |
+          <example>
+          
+
+  module:
+    description: |
+      @api public
+      @param {<type>} moduleNames - <description>
+      @param {<type>} moduleDefinition - <description>
+      @returns {<type>} - <description>
+    
+    examples:
+      -
+        name: <name>
+        example: |
+          <example>
+          
+
+  getRegionManager:
+    description: |
+      @api public
+      @returns {<type>} - <description>
+    
+    examples:
+      -
+        name: <name>
+        example: |
+          <example>
+          
+
+  _initializeRegions:
+    description: |
+      @api private
+      @param {<type>} options - <description>
+      @returns {<type>} - <description>
+    
+    examples:
+      -
+        name: <name>
+        example: |
+          <example>
+          
+
+  _initRegionManager:
+    description: |
+      @api private
+    
+    examples:
+      -
+        name: <name>
+        example: |
+          <example>
+          
+
+  _initChannel:
+    description: |
+      @api private
+    
+    examples:
+      -
+        name: <name>
+        example: |
+          <example>
+          
+events: 
+  name: before:start
+  
+  description: | 
+  
+  example: | 
+      
+
+  name: start
+  
+  description: | 
+  
+  example: | 
+      

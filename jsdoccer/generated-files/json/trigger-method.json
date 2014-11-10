@@ -1,0 +1,28 @@
+{
+  "filename": [
+    {
+      "name": "TriggerMethod",
+      "isCollection": false
+    }
+  ],
+  "class": [
+    {
+      "name": "TriggerMethod",
+      "isCollection": false
+    }
+  ],
+  "functions": [
+    {
+      "name": "triggerMethod",
+      "tags": [
+        "@param {<type>} event - <description>"
+      ]
+    },
+    {
+      "name": "triggerMethodOn",
+      "tags": [
+        "@param {<type>} context - <description>"
+      ]
+    }
+  ]
+}

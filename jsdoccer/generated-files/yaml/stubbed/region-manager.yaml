@@ -1,0 +1,194 @@
+name: RegionManager
+
+class: RegionManager
+
+constructor:   
+  description: |
+    @api public
+    @param {<type>} options - <description>
+  
+  examples:
+  -
+    name: <name>
+    example: |
+      <example>
+      
+properties: 
+  _regions: |
+    <description>
+    
+    @type {<type>}
+    
+
+  length: |
+    <description>
+    
+    @type {<type>}
+    
+functions: 
+  addRegions:
+    description: |
+      @api public
+      @param {<type>} regionDefinitions - <description>
+      @param {<type>} defaults - <description>
+      @returns {<type>} - <description>
+    
+    examples:
+      -
+        name: <name>
+        example: |
+          <example>
+          
+
+  addRegion:
+    description: |
+      @api public
+      @param {<type>} name - <description>
+      @param {<type>} definition - <description>
+      @returns {<type>} - <description>
+    
+    examples:
+      -
+        name: <name>
+        example: |
+          <example>
+          
+
+  get:
+    description: |
+      @api public
+      @param {<type>} name - <description>
+      @returns {<type>} - <description>
+    
+    examples:
+      -
+        name: <name>
+        example: |
+          <example>
+          
+
+  getRegions:
+    description: |
+      @api public
+      @returns {<type>} - <description>
+    
+    examples:
+      -
+        name: <name>
+        example: |
+          <example>
+          
+
+  removeRegion:
+    description: |
+      @api public
+      @param {<type>} name - <description>
+      @returns {<type>} - <description>
+    
+    examples:
+      -
+        name: <name>
+        example: |
+          <example>
+          
+
+  removeRegions:
+    description: |
+      @api public
+      @returns {<type>} - <description>
+    
+    examples:
+      -
+        name: <name>
+        example: |
+          <example>
+          
+
+  emptyRegions:
+    description: |
+      @api public
+      @returns {<type>} - <description>
+    
+    examples:
+      -
+        name: <name>
+        example: |
+          <example>
+          
+
+  destroy:
+    description: |
+      @api public
+      @returns {<type>} - <description>
+    
+    examples:
+      -
+        name: <name>
+        example: |
+          <example>
+          
+
+  _store:
+    description: |
+      @api private
+      @param {<type>} name - <description>
+      @param {<type>} region - <description>
+    
+    examples:
+      -
+        name: <name>
+        example: |
+          <example>
+          
+
+  _remove:
+    description: |
+      @api private
+      @param {<type>} name - <description>
+      @param {<type>} region - <description>
+    
+    examples:
+      -
+        name: <name>
+        example: |
+          <example>
+          
+
+  _setLength:
+    description: |
+      @api private
+    
+    examples:
+      -
+        name: <name>
+        example: |
+          <example>
+          
+events: 
+  name: before:add:region
+  
+  description: | 
+  
+  example: | 
+      
+
+  name: add:region
+  
+  description: | 
+  
+  example: | 
+      
+
+  name: before:remove:region
+  
+  description: | 
+  
+  example: | 
+      
+
+  name: remove:region
+  
+  description: | 
+  
+  example: | 
+      

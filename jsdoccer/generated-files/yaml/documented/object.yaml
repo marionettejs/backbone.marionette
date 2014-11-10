@@ -1,0 +1,68 @@
+name: Object
+
+class: Object
+
+functions: 
+  Object:
+    description: |
+      @param {<type>} options - <description>
+    
+    examples:
+      -
+        name: <name>
+        example: |
+          <example>
+          
+
+  initialize:
+    description: |
+      @api public
+    
+    examples:
+      -
+        name: <name>
+        example: |
+          <example>
+          
+
+  destroy:
+    description: |
+      @api public
+    
+    examples:
+      -
+        name: <name>
+        example: |
+          <example>
+          
+constructor:   
+  description: |
+    @api public
+    @param {<type>} options - <description>
+  
+  examples:
+  -
+    name: <name>
+    example: |
+      <example>
+      
+properties: 
+  options: |
+    <description>
+    
+    @type {<type>}
+    
+events: 
+  name: before:destroy
+  
+  description: | 
+  
+  example: | 
+      
+
+  name: destroy
+  
+  description: | 
+  
+  example: | 
+      

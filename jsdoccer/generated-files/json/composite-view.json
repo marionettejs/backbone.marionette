@@ -1,0 +1,119 @@
+{
+  "filename": [
+    {
+      "name": "CompositeView",
+      "isCollection": false
+    }
+  ],
+  "class": [
+    {
+      "name": "CompositeView",
+      "isCollection": false
+    }
+  ],
+  "constructor": [
+    {
+      "tags": [
+        "@api public"
+      ]
+    }
+  ],
+  "functions": [
+    {
+      "name": "_initialEvents",
+      "tags": [
+        "@api private"
+      ]
+    },
+    {
+      "name": "getChildView",
+      "tags": [
+        "@api public",
+        "@param {<type>} child - <description>",
+        "@returns {<type>} - <description>"
+      ]
+    },
+    {
+      "name": "serializeData",
+      "tags": [
+        "@api public",
+        "@returns {<type>} - <description>"
+      ]
+    },
+    {
+      "name": "render",
+      "tags": [
+        "@api public",
+        "@returns {<type>} - <description>"
+      ]
+    },
+    {
+      "name": "_renderChildren",
+      "tags": [
+        "@api private"
+      ]
+    },
+    {
+      "name": "_renderTemplate",
+      "tags": [
+        "@api private"
+      ]
+    },
+    {
+      "name": "attachElContent",
+      "tags": [
+        "@api public",
+        "@param {<type>} html - <description>",
+        "@returns {<type>} - <description>"
+      ]
+    },
+    {
+      "name": "attachBuffer",
+      "tags": [
+        "@api public",
+        "@param {<type>} compositeView - <description>",
+        "@param {<type>} buffer - <description>"
+      ]
+    },
+    {
+      "name": "_insertAfter",
+      "tags": [
+        "@api private",
+        "@param {<type>} childView - <description>"
+      ]
+    },
+    {
+      "name": "getChildViewContainer",
+      "tags": [
+        "@api public",
+        "@param {<type>} containerView - <description>",
+        "@returns {<type>} - <description>"
+      ]
+    },
+    {
+      "name": "resetChildViewContainer",
+      "tags": [
+        "@api public"
+      ]
+    }
+  ],
+  "properties": [
+    {
+      "name": "isRendered"
+    }
+  ],
+  "events": [
+    {
+      "name": "before:render"
+    },
+    {
+      "name": "render"
+    },
+    {
+      "name": "before:render:template"
+    },
+    {
+      "name": "render:template"
+    }
+  ]
+}

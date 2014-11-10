@@ -1,0 +1,194 @@
+{
+  "filename": [
+    {
+      "name": "View",
+      "isCollection": false
+    }
+  ],
+  "class": [
+    {
+      "name": "View",
+      "isCollection": false
+    }
+  ],
+  "constructor": [
+    {
+      "tags": [
+        "@api public",
+        "@param {<type>} options - <description>"
+      ]
+    }
+  ],
+  "properties": [
+    {
+      "name": "options"
+    },
+    {
+      "name": "_behaviors"
+    },
+    {
+      "name": "events"
+    },
+    {
+      "name": "isDestroyed"
+    },
+    {
+      "name": "_uiBindings"
+    },
+    {
+      "name": "ui"
+    },
+    {
+      "name": "ui"
+    }
+  ],
+  "functions": [
+    {
+      "name": "getTemplate",
+      "tags": [
+        "@api public",
+        "@returns {<type>} - <description>"
+      ]
+    },
+    {
+      "name": "serializeModel",
+      "tags": [
+        "@api public",
+        "@param {<type>} model - <description>",
+        "@returns {<type>} - <description>"
+      ]
+    },
+    {
+      "name": "mixinTemplateHelpers",
+      "tags": [
+        "@api public",
+        "@param {<type>} target - <description>",
+        "@returns {<type>} - <description>"
+      ]
+    },
+    {
+      "name": "normalizeUIKeys",
+      "tags": [
+        "@api public",
+        "@param {<type>} hash - <description>",
+        "@returns {<type>} - <description>"
+      ]
+    },
+    {
+      "name": "normalizeUIValues",
+      "tags": [
+        "@api public",
+        "@param {<type>} hash - <description>",
+        "@returns {<type>} - <description>"
+      ]
+    },
+    {
+      "name": "configureTriggers",
+      "tags": [
+        "@api public",
+        "@returns {<type>} - <description>"
+      ]
+    },
+    {
+      "name": "delegateEvents",
+      "tags": [
+        "@api public",
+        "@param {<type>} events - <description>",
+        "@returns {<type>} - <description>"
+      ]
+    },
+    {
+      "name": "_delegateDOMEvents",
+      "tags": [
+        "@api private",
+        "@param {<type>} eventsArg - <description>"
+      ]
+    },
+    {
+      "name": "undelegateEvents",
+      "tags": [
+        "@api public",
+        "@returns {<type>} - <description>"
+      ]
+    },
+    {
+      "name": "onShowCalled",
+      "tags": [
+        "@api public"
+      ]
+    },
+    {
+      "name": "_ensureViewIsIntact",
+      "tags": [
+        "@api private"
+      ]
+    },
+    {
+      "name": "destroy",
+      "tags": [
+        "@api public",
+        "@returns {<type>} - <description>"
+      ]
+    },
+    {
+      "name": "bindUIElements",
+      "tags": [
+        "@api public"
+      ]
+    },
+    {
+      "name": "_bindUIElements",
+      "tags": [
+        "@api private"
+      ]
+    },
+    {
+      "name": "unbindUIElements",
+      "tags": [
+        "@api public"
+      ]
+    },
+    {
+      "name": "_unbindUIElements",
+      "tags": [
+        "@api private"
+      ]
+    },
+    {
+      "name": "_buildViewTrigger",
+      "tags": [
+        "@api private",
+        "@param {<type>} triggerDef - <description>",
+        "@returns {<type>} - <description>"
+      ]
+    },
+    {
+      "name": "setElement",
+      "tags": [
+        "@api public",
+        "@returns {<type>} - <description>"
+      ]
+    },
+    {
+      "name": "triggerMethod",
+      "tags": [
+        "@api public",
+        "@returns {<type>} - <description>"
+      ]
+    },
+    {
+      "name": "_getImmediateChildren",
+      "tags": [
+        "@api private",
+        "@returns {<type>} - <description>"
+      ]
+    },
+    {
+      "name": "_getNestedViews",
+      "tags": [
+        "@api private",
+        "@returns {<type>} - <description>"
+      ]
+    }
+  ]
+}

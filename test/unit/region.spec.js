@@ -132,7 +132,7 @@ describe('region', function() {
       });
 
       this.setFixtures('<div id="region"></div>');
-      this.showSpy = this.sinon.spy();
+      this.regionShowSpy = this.sinon.spy();
       this.regionBeforeShowSpy = this.sinon.spy();
       this.regionBeforeSwapSpy = this.sinon.spy();
       this.regionSwapSpy = this.sinon.spy();
@@ -145,13 +145,13 @@ describe('region', function() {
       this.sinon.spy(this.view, 'render');
 
       this.myRegion = new this.MyRegion();
-      this.sinon.spy(this.myRegion, 'onShow');
+      this.showSpy = this.sinon.spy(this.myRegion, 'onShow');
       this.attachHtmlSpy = this.sinon.spy(this.myRegion, 'attachHtml');
       this.swapSpy = this.sinon.spy(this.myRegion, 'onSwap');
       this.onBeforeSwapOutSpy = this.sinon.spy(this.myRegion, 'onBeforeSwapOut');
       this.onSwapOutSpy = this.sinon.spy(this.myRegion, 'onSwapOut');
 
-      this.myRegion.on('show', this.showSpy);
+      this.myRegion.on('show', this.regionShowSpy);
       this.myRegion.on('before:show', this.regionBeforeShowSpy);
       this.myRegion.on('before:swap', this.regionBeforeSwapSpy);
       this.myRegion.on('swap', this.regionSwapSpy);
@@ -189,11 +189,11 @@ describe('region', function() {
     });
 
     it('should call "onShow" for the region, after the rendered HTML has been added to the DOM', function() {
-      expect(this.myRegion.onShow).to.have.been.called;
+      expect(this.showSpy).to.have.been.called;
     });
 
     it('should trigger a show event for the region', function() {
-      expect(this.showSpy).to.have.been.called;
+      expect(this.regionShowSpy).to.have.been.called;
     });
 
     it('should trigger a before show event for the region', function() {
@@ -213,11 +213,11 @@ describe('region', function() {
     });
 
     it('should pass the shown view as an argument for the show event', function() {
-      expect(this.showSpy).to.have.been.calledWith(this.view);
+      expect(this.regionShowSpy).to.have.been.calledWith(this.view);
     });
 
     it('should set "this" to the manager, from the show event', function() {
-      expect(this.showSpy).to.have.been.calledOn(this.myRegion);
+      expect(this.regionShowSpy).to.have.been.calledOn(this.myRegion);
     });
 
     it('should not trigger a before swap event for the region', function() {

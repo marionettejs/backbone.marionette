@@ -255,6 +255,19 @@ module.exports = function(grunt) {
         src: './bower_components/backbone.wreqr/lib/backbone.wreqr.js',
         dest: './tmp/backbone.wreqr.bare.js'
       }
+    },
+
+    jsdoccer: {
+      options: {
+        filesToFilter: ['.DS_Store']
+      },
+      yaml: {
+        src: ['src/*.js']
+      },
+      json: {},
+      html: {},
+      doc: {},
+      lint: {}
     }
   });
 
@@ -313,6 +326,10 @@ module.exports = function(grunt) {
   grunt.registerTask('dev', 'Auto-lints while writing code.', ['test', 'watch:marionette']);
 
   grunt.registerTask('api', 'Build jsdoc api files', ['jsDocFiles']);
+
+  grunt.registerTask('json', 'Build fancy json from documented yaml jsdoc api files', ['jsDoccerJson']);
+
+  grunt.registerTask('html', 'Build html documents from fancy json jsdoc api files', ['jsDoccerHtml']);
 
   grunt.registerTask('build', 'Build all three versions of the library.', ['clean:lib', 'bower:install', 'lint', 'mochaTest', 'unwrap', 'preprocess', 'template', 'concat', 'uglify']);
 };

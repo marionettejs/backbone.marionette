@@ -32,7 +32,7 @@ _.extend(Marionette.Object.prototype, {
   // Proxy `getOption` to enable getting options from this or this.options by name.
   getOption: Marionette.proxyGetOption,
 
-  // Proxy `unbindEntityEvents` to enable binding view's events from another entity.
+  // Proxy `bindEntityEvents` to enable binding view's events from another entity.
   bindEntityEvents: Marionette.proxyBindEntityEvents,
 
   // Proxy `unbindEntityEvents` to enable unbinding view's events from another entity.

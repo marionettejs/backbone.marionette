@@ -14,7 +14,8 @@ Marionette.Object.extend = Marionette.extend;
 // Object Methods
 // --------------
 
-_.extend(Marionette.Object.prototype, {
+// Ensure it can trigger events with Backbone.Events
+_.extend(Marionette.Object.prototype, Backbone.Events, {
 
   //this is a noop method intended to be overridden by classes that extend from this base
   initialize: function() {},
@@ -32,12 +33,9 @@ _.extend(Marionette.Object.prototype, {
   // Proxy `getOption` to enable getting options from this or this.options by name.
   getOption: Marionette.proxyGetOption,
 
-  // Proxy `unbindEntityEvents` to enable binding view's events from another entity.
+  // Proxy `bindEntityEvents` to enable binding view's events from another entity.
   bindEntityEvents: Marionette.proxyBindEntityEvents,
 
   // Proxy `unbindEntityEvents` to enable unbinding view's events from another entity.
   unbindEntityEvents: Marionette.proxyUnbindEntityEvents
 });
-
-// Ensure it can trigger events with Backbone.Events
-_.extend(Marionette.Object.prototype, Backbone.Events);

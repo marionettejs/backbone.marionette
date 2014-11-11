@@ -1,6 +1,0 @@
-
-  <%= name %>: |
-    <description>
-    
-    @type {<type>}
-    

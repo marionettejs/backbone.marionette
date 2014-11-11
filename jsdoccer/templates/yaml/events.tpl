@@ -1,7 +1,0 @@
-
-  name: <%= name %>
-  
-  description: | 
-  
-  example: | 
-      

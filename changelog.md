@@ -31,7 +31,7 @@
 
 * Bug Fixes
 
-  * LayoutView’s regions are scoped inside it’s `el`
+  * LayoutView’s regions are scoped inside its `el`
   * Fix inconsistent Marionette.Object constructor implementation.
   * emptyView instances now proxy their events up to the collection / compositeView
   * collection / compositeView does not listen to collection add/remove/reset events until after render.
@@ -58,20 +58,20 @@
 * Features
 
   * Marionette.Object
-    * A base class which other classes can extend from. Marionette.Object incorporates many backbone conventions and utilities like `initialize` and `Backbone.Events`. It is a user friendly class to base your classes on to get Backbone conventions on any generic class.
+    * A base class which other classes can extend from. Marionette.Object incorporates many Backbone conventions and utilities like `initialize` and `Backbone.Events`. It is a user friendly class to base your classes on to get Backbone conventions on any generic class.
 
   * Add a `el` reference to the views `el` from within a `behavior` instance.
 
   * `ItemView`s can now have no template by setting `template: false`
 
   * Application objects can now configure their default message channel.
-    * This will allow you to configure multiple applications to exist at the same time within an apps without their event bus colliding.
+    * This will allow you to configure multiple applications to exist at the same time within an app without their event bus colliding.
 
   * Application objects now have the `getOption` method.
 
   * Regions now have a `hasView` method to determine if there is a view within a given region.
 
-  * Views no longer use toJSON directly on models. instead they call into the new overridable methods `serializeModel` and `serializeCollection` where are called via `serializeData`
+  * Views no longer use toJSON directly on models. Instead they call into the new overridable methods `serializeModel` and `serializeCollection` via `serializeData`
 
   * Return chainable objects from more methods to be consistent
 
@@ -87,9 +87,9 @@
     * Region empty
 
     * RegionManager destroy
-    * RegionMananger emptyRegions (now returns regions)
-    * RegionMananger removeRegions (now returns regions)
-    * RegionMananger removeRegion (now returns region)
+    * RegionManager emptyRegions (now returns regions)
+    * RegionManager removeRegions (now returns regions)
+    * RegionManager removeRegion (now returns region)
     * View destroy
     * View undelegateEvents
     * View delegateEvents
@@ -102,7 +102,7 @@
 
   * View instance is now passed as a third argument to `Marionette.Renderer.render`
 
-  * Add `getRegionMananger` to Application
+  * Add `getRegionManager` to Application
 
 * Fixes
 

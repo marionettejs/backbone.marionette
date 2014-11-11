@@ -12,4 +12,4 @@ bower_components/
 .grunt
 reports
 jsdoc
-jsdoccer/generated-files
+jsdoccer/generated-files/

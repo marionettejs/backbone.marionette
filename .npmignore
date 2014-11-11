@@ -11,3 +11,5 @@ SpecRunner.html
 coverage
 test
 jsdoc
+jsdoccer/documentation
+jsdoccer/generated-files

@@ -255,5 +255,16 @@ describe('app router', function() {
       expect(this.appRouter.onRoute.lastCall.args[1]).to.equal('foo-route/:id');
       expect(this.appRouter.onRoute.lastCall.args[2][0]).to.equal(this.fooParam);
     });
+    
+    it('should support getOption inside initialize', function() {
+      var fooParam = '';
+      this.AppRouter = Marionette.AppRouter.extend({
+        initialize : function(){
+          fooParam = this.getOption('fooParam');
+        }
+      });
+      this.appRouter = new this.AppRouter({ fooParam : 'bar' });
+      expect(fooParam).to.equal('bar');
+    });
   });
 });

@@ -1,4 +1,4 @@
-/* jshint unused: false */
+/* jshint unused: false *//* global console */
 
 // Helpers
 // -------
@@ -125,3 +125,21 @@ Marionette.actAsCollection = function(object, listProperty) {
     };
   });
 };
+
+var deprecate = Marionette.deprecate = function(message, test) {
+  if (_.isObject(message)) {
+    message = (
+      message.prev + ' is going to be removed in the future. ' +
+      'Please use ' + message.next + ' instead.' +
+      (message.url ? ' See: ' + message.url : '')
+    );
+  }
+
+  if ((test === undefined || !test) && !deprecate._cache[message]) {
+    deprecate._warn('Deprecation warning: ' + message);
+    deprecate._cache[message] = true;
+  }
+};
+
+deprecate._warn = typeof console !== 'undefined' && (console.warn || console.log) || function() {};
+deprecate._cache = {};

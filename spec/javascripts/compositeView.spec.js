@@ -429,8 +429,10 @@ describe('composite view', function() {
     beforeEach(function() {
       this.templateFn = _.template('composite <%= foo %>');
 
+      this.childViewTagName = 'span';
+
       this.ChildView = Backbone.Marionette.ItemView.extend({
-        tagName: 'span',
+        tagName: this.childViewTagName,
         render: function() {
           this.$el.html(this.model.get('foo'));
         }
@@ -455,6 +457,7 @@ describe('composite view', function() {
       this.compositeView.render();
 
       this.sinon.spy(this.compositeView, '_renderTemplate');
+      this.sinon.spy(this.compositeView, 'getChildViewContainer');
     });
 
     describe('and then resetting the collection', function() {
@@ -489,6 +492,11 @@ describe('composite view', function() {
         expect(this.compositeView.$el).to.contain.$text('bar');
         expect(this.compositeView.$el).to.contain.$text('baz');
         expect(this.compositeView.$el).to.contain.$text('quux');
+      });
+
+      it('shound send childView to getChildViewContainer', function() {
+        expect(this.compositeView.getChildViewContainer).to.have.been.called;
+        expect(this.compositeView.getChildViewContainer.getCall(0).args[1].tagName).to.equal(this.childViewTagName);
       });
     });
 

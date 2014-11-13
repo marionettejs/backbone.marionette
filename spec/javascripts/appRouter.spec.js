@@ -249,5 +249,16 @@ describe('app router', function() {
       expect(this.appRouter.onRoute).to.have.been.calledOnce;
       expect(this.appRouter.onRoute).to.have.been.calledWith('foo', 'foo-route/:id', [this.fooParam, null]);
     });
+    
+    it('should support getOption inside initialize', function() {
+      var fooParam = '';
+      this.AppRouter = Marionette.AppRouter.extend({
+        initialize : function(){
+          fooParam = this.getOption('fooParam');
+        }
+      });
+      this.appRouter = new this.AppRouter({ fooParam : 'bar' });
+      expect(fooParam).to.equal('bar');
+    });
   });
 });

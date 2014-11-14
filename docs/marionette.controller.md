@@ -42,6 +42,18 @@ var myRouter = new Marionette.AppRouter({
 
 ## getOption
 
+> Warning: deprecated
+>
+> This feature is deprecated, and is scheduled to be removed in version 3 of Marionette. Instead
+> of getOption, you should add `options` to the instance in either the `constructor` or `initialize`
+> methods.
+>
+> ```js
+> initialize: function(options) {
+>   this.myOption = options.myOption;
+> }
+> ```
+
 Retrieve an object's attribute either directly from the object, or from the object's this.options, with this.options taking precedence.
 
 More information [getOption](./marionette.functions.md#marionettegetoption)

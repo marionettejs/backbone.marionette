@@ -93,7 +93,7 @@ var DestroyWarn = Marionette.Behavior.extend({
   },
 
   warnBeforeDestroy: function() {
-    alert(this.options.message);
+    alert(this.warningMessage);
     // every Behavior has a hook into the
     // view that it is attached to
     this.view.destroy();
@@ -111,7 +111,7 @@ var ToolTip = Marionette.Behavior.extend({
 
   onShow: function() {
     this.ui.tooltip.tooltip({
-      text: this.options.text
+      text: this.tooltipText
     });
   }
 });

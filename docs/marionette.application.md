@@ -20,7 +20,7 @@ var MyApp = new Backbone.Marionette.Application();
 * [initialize](#initialize)
 * [Application Events](#application-events)
 * [Starting An Application](#starting-an-application)
-* [Regions And The Application Object](#regions-and-the-application-object)
+* [Application Regions (deprecated)](#application-regions)
   * [jQuery Selector](#jquery-selector)
   * [Custom Region Class](#custom-region-class)
   * [Custom Region Class And Selector](#custom-region-class-and-selector)
@@ -98,7 +98,18 @@ var options = {
 MyApp.start(options);
 ```
 
-## Regions And The Application Object
+## Application Regions
+
+> Warning: deprecated
+> This feature is deprecated. Instead of using the Application as the root
+> of your view tree, you should use a Layout View. To scope your Layout View to the entire
+> document, you could set its `el` to 'body'. This might look something like the following:
+>
+>
+> var RootView = Marionette.LayoutView.extend({
+>   el: 'body'
+> });
+>
 
 Application instances have an API that allow you to manage [Regions](https://github.com/marionettejs/backbone.marionette/blob/master/docs/marionette.region.md).
 These Regions are typically the means through which your views become attached to the `document`.

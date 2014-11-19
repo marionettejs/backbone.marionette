@@ -283,6 +283,53 @@ describe('collection view', function() {
     });
   });
 
+  describe('when sorting a collection', function() {
+    beforeEach(function() {
+      this.collection = new Backbone.Collection([{
+          foo: 'foo'
+        }, {
+          foo: 'bar'
+        }, {
+          foo: 'biz'
+        }, {
+          foo: 'baz'
+      }]);
+      this.collection.comparator = function(model){
+        return model.get('foo');
+      };
+    });
+
+    it('should not update the order of children when "sort" is set to "false" as a property on a class', function() {
+      this.CollectionView = Marionette.CollectionView.extend({
+        childView: this.ChildView,
+        sort : false
+      });
+      this.collectionView = new this.CollectionView({
+        childView: this.ChildView,
+        collection: this.collection
+      });
+      this.collectionView.render();
+
+      this.collection.sort();
+      expect($(this.collectionView.$('span').first())).to.contain.$text('foo');
+    });
+
+    it('should not update the order of children when "sort" is set to "false" inside options', function() {
+      this.CollectionView = Marionette.CollectionView.extend({
+        childView: this.ChildView,
+      });
+      this.collectionView = new this.CollectionView({
+        childView: this.ChildView,
+        sort : false,
+        collection: this.collection
+      });
+      this.collectionView.render();
+
+      this.collection.sort();
+      expect($(this.collectionView.$('span').first())).to.contain.$text('foo');
+    });
+  });
+
   describe('when a model is added to the collection', function() {
     beforeEach(function() {
       this.collection = new Backbone.Collection();

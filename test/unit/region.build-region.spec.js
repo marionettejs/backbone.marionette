@@ -124,6 +124,23 @@ describe('Region', function() {
           it('uses the el', function() {
             expect(this.region.el).to.equal(this.el);
           });
+
+          describe('with `parentEl` also defined', function() {
+            beforeEach(function() {
+              this.parentEl = $('<div id="not-actual-parent"></div>');
+              this.definition = _.defaults({ parentEl: this.parentEl }, this.definition);
+              this.region = Marionette.Region.buildRegion(this.definition, this.DefaultRegionClass);
+            });
+
+            it('overrides region.getEl', function(){
+                expect(this.region.getEl).not.to.equal(this.DefaultRegionClass.prototype.getEl);
+            });
+
+            it('returns the jQuery(el)', function(){
+                expect(this.region.getEl(this.el)).to.deep.equal($(this.el));
+            });
+
+          });
         });
 
         describe('when el is a jQuery object', function() {

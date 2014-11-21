@@ -19,7 +19,9 @@ describe('collectionview - emptyView', function() {
       onBeforeRenderEmpty: function () {},
       onRenderEmpty: function () {},
       onBeforeRemoveEmpty: function () {},
-      onRemoveEmpty: function () {}
+      onRemoveEmpty: function () {},
+      onBeforeShow: function(){},
+      onShow: function(){}
     });
   });
 
@@ -194,6 +196,40 @@ describe('collectionview - emptyView', function() {
     });
   });
 
+  describe('when a collection is reset with empty data after the view is shown', function() {
+    beforeEach(function() {
+      this.data = [{foo: 'bar'}, {foo: 'baz'}];
+      this.collection = new Backbone.Collection(this.data);
+      this.el = $('<div></div>');
+      this.region = new Backbone.Marionette.Region({
+        el: this.el
+      });
+
+      this.collectionView = new this.EmptyCollectionView({
+        collection: this.collection,
+        emptyView: this.EmptyView
+      });
+
+      this.beforeShowEmptySpy = this.sinon.spy(this.collectionView, 'onBeforeShow');
+      this.showEmptySpy = this.sinon.spy(this.collectionView, 'onShow');
+
+      this.region.show(this.collectionView);
+      this.collection.reset();
+    });
+
+    it('should call "onBeforeShow"', function() {
+      expect(this.beforeShowEmptySpy)
+        .to.have.been.calledOnce
+        .and.calledOn(this.collectionView);
+    });
+
+    it('should call "onShow"', function() {
+      expect(this.showEmptySpy)
+        .to.have.been.calledOnce
+        .and.calledOn(this.collectionView);
+    });
+  });
+
   describe('when a collection is reset with empty data after the view is loaded', function() {
     beforeEach(function() {
       this.data = [{foo: 'bar'}, {foo: 'baz'}];
@@ -320,7 +356,7 @@ describe('collectionview - emptyView', function() {
       expect(this.collectionView.$el).to.have.$html('<p>empty</p>');
     });
 
-    describe('when "emptyViewOptions" is provided as a fuction', function() {
+    describe('when "emptyViewOptions" is provided as a function', function() {
       beforeEach(function() {
         this.collection = new Backbone.Collection();
         this.collectionView = new this.EmptyCollectionView({

@@ -43,13 +43,6 @@ Marionette.CompositeView = Marionette.CollectionView.extend({
   getChildView: function(child) {
     var childView = this.getOption('childView') || this.constructor;
 
-    if (!childView) {
-      throw new Marionette.Error({
-        name: 'NoChildViewError',
-        message: 'A "childView" must be specified'
-      });
-    }
-
     return childView;
   },
 

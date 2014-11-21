@@ -59,6 +59,11 @@ describe('normalizeUI* utility functions', function() {
         expect(this.normalizedUIValues.bar).to.equal('.bar');
       });
     });
+    describe('when passed an undefined hash', function() {
+      it('should return undefined', function() {
+        expect(Marionette.normalizeUIValues()).to.equal(undefined);
+      });
+    });
   });
 
 });

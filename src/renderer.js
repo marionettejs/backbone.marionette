@@ -9,7 +9,7 @@ Marionette.Renderer = {
   // passed to the `TemplateCache` object to retrieve the
   // template function. Override this method to provide your own
   // custom rendering and template handling for all of Marionette.
-  render: function(template, data) {
+  render: function(template, data, context) {
     if (!template) {
       throw new Marionette.Error({
         name: 'TemplateNotFoundError',
@@ -24,6 +24,6 @@ Marionette.Renderer = {
       templateFunc = Marionette.TemplateCache.get(template);
     }
 
-    return templateFunc(data);
+    return templateFunc.call(context, data);
   }
 };

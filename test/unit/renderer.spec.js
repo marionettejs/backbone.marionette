@@ -75,4 +75,22 @@ describe('renderer', function() {
       expect(this.renderSpy).to.have.been.calledOnce.and.returned(this.data.foo);
     });
   });
+
+  describe('when using context in `render` method', function() {
+    beforeEach(function() {
+      this.view = new Marionette.ItemView({
+        foo: 'bar',
+
+        template: function() {
+          return this.getOption('foo');
+        }
+      });
+
+      this.result = this.view.render().$el.html();
+    });
+
+    it('should render ItemView using its context', function() {
+      expect(this.result).to.equal('bar');
+    });
+  });
 });

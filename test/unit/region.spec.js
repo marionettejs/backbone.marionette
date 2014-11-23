@@ -392,6 +392,8 @@ describe('region', function() {
         this.myRegion = new this.MyRegion();
 
         this.sinon.spy(this.view1, 'destroy');
+        this.sinon.spy(this.view1, 'off');
+        this.sinon.spy(this.view2, 'destroy');
 
         this.myRegion.show(this.view1);
       });
@@ -407,6 +409,16 @@ describe('region', function() {
 
         it('view1 should not reference region', function() {
           expect(this.view1._parent).to.be.undefined;
+        });
+
+        it('should remove destroy listener from old view', function() {
+          expect(this.view1.off).to.be.calledOnce;
+        });
+
+        it('should not empty region after destorying old view', function() {
+          expect(this.view1.off).to.be.calledOnce;
+          this.view1.destroy();
+          expect(this.view2.destroy).not.to.have.been.called;
         });
 
         it('should replace the content in the DOM', function() {

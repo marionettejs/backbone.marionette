@@ -1,4 +1,4 @@
-/* jshint maxcomplexity: 16, maxstatements: 40, maxlen: 120 */
+/* jshint maxcomplexity: 16, maxstatements: 45, maxlen: 120 */
 
 // Region
 // ------
@@ -65,6 +65,10 @@ Marionette.Region = Marionette.Object.extend({
       this.triggerMethod('before:swapOut', this.currentView);
     }
 
+    if (this.currentView) {
+      delete this.currentView._parent;
+    }
+
     if (_shouldDestroyView) {
       this.empty();
     }
@@ -78,6 +82,8 @@ Marionette.Region = Marionette.Object.extend({
       // we can not reuse it.
       view.once('destroy', this.empty, this);
       view.render();
+
+      view._parent = this;
 
       if (isChangingView) {
         this.triggerMethod('before:swap', view);

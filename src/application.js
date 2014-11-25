@@ -118,6 +118,7 @@ Marionette.Application = Marionette.Object.extend({
   // Internal method to set up the region manager
   _initRegionManager: function() {
     this._regionManager = this.getRegionManager();
+    this._regionManager._parent = this;
 
     this.listenTo(this._regionManager, 'before:add:region', function() {
       Marionette._triggerMethod(this, 'before:add:region', arguments);

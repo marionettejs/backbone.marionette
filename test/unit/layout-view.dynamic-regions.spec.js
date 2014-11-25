@@ -9,14 +9,17 @@ describe('layoutView - dynamic regions', function() {
 
   describe('when adding regions with a function', function() {
     beforeEach(function() {
+      this.app = new Marionette.Application();
+
       this.fooSelector = '#foo-region';
       this.barSelector = '#bar-region';
 
       this.fooRegion = new Marionette.Region({ el: this.fooSelector });
+      this.fooRegion._parent = this.app._regionManager;
+
       this.BarRegion = Marionette.Region.extend();
       this.barRegion = new this.BarRegion({ el: this.barSelector });
-
-      this.app = new Marionette.Application();
+      this.barRegion._parent = this.app._regionManager;
 
       this.regionDefinition = this.sinon.stub().returns({
         fooRegion: this.fooSelector,

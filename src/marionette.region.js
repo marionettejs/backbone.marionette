@@ -1,4 +1,4 @@
-/* jshint maxcomplexity: 10, maxstatements: 29 */
+/* jshint maxcomplexity: 10, maxstatements: 30 */
 
 // Region
 // ------
@@ -156,6 +156,12 @@ _.extend(Marionette.Region.prototype, Backbone.Events, {
 
     if (_shouldDestroyView) {
       this.empty();
+
+    // A `destroy` event is attached to the clean up manually removed views.
+    // We need to detach this event when a new view is going to be shown as it
+    // is no longer relevant.
+    } else if (isChangingView && _shouldShowView) {
+      this.currentView.off('destroy', this.empty, this);
     }
 
     if (_shouldShowView) {

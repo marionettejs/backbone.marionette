@@ -1,7 +1,26 @@
 language: node_js
 node_js:
   - "0.10"
+matrix:
+  include:
+    - node_js: "0.10"
+      env: UNDERSCORE=1.4.4 BACKBONE=1.0 MAINRUN=false
+    - node_js: "0.10"
+      env: UNDERSCORE=1.5 BACKBONE=1.0 MAINRUN=false
+    - node_js: "0.10"
+      env: UNDERSCORE=1.6 BACKBONE=1.0 MAINRUN=false
+    - node_js: "0.10"
+      env: UNDERSCORE=1.4.4 BACKBONE=1.1.0 MAINRUN=false
+    - node_js: "0.10"
+      env: UNDERSCORE=1.5 BACKBONE=1.1 MAINRUN=false
+env: MAINRUN=true
 before_install:
   - npm config set ca ""
+install:
+  - npm install -g grunt-cli
+  - npm install
+  # Which matrix settings -- otherwise default
+  - if [[ $MAINRUN == false ]]; then npm install backbone@$BACKBONE; fi
+  - if [[ $MAINRUN == false ]]; then npm install underscore@$UNDERSCORE; fi
 after_success:
-  - npm run-script coverage
+  - if [[ $MAINRUN == true ]]; then npm run-script coverage; fi

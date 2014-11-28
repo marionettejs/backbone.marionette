@@ -832,9 +832,7 @@ describe('collection view', function() {
         onShow: function() {},
         onDomRefresh: function() {},
         onRender: function() {},
-        render: function() {
-          this.trigger('render');
-        }
+        template: _.template('<%= foo %>')
       });
 
       this.CollectionView = Backbone.Marionette.CollectionView.extend({
@@ -845,8 +843,8 @@ describe('collection view', function() {
       this.sinon.spy(this.ChildView.prototype, 'onShow');
       this.sinon.spy(this.ChildView.prototype, 'onDomRefresh');
 
-      this.model1 = new Backbone.Model();
-      this.model2 = new Backbone.Model();
+      this.model1 = new Backbone.Model({ foo: 1 });
+      this.model2 = new Backbone.Model({ foo: 2 });
       this.collection = new Backbone.Collection([ this.model1 ]);
       this.collectionView = new this.CollectionView({
         collection: this.collection
@@ -883,9 +881,26 @@ describe('collection view', function() {
     it('should call "getChildView" with the new model', function() {
       expect(this.collectionView.getChildView).to.have.been.calledWith(this.model2);
     });
+
+    describe('when the childView is added at an existing index', function() {
+      beforeEach(function() {
+        this.childViewAtIndex0 = this.collectionView.children.findByIndex(0);
+
+        this.beforeModel = new Backbone.Model({ foo: 0 });
+        this.beforeView = this.collectionView.addChild(this.beforeModel, this.ChildView, 0);
+      });
+
+      it('should increment the later childView indexes', function() {
+        expect(this.childViewAtIndex0._index).to.equal(1);
+      });
+
+      it('should be inserted in the DOM before later indexed children', function() {
+        expect(this.collectionView.$el).to.have.$text('012');
+      });
+    });
   });
 
-  describe('when setting an childView in the constructor options', function() {
+  describe('when setting a childView in the constructor options', function() {
     beforeEach(function() {
       this.ItemView = Marionette.ItemView.extend({
         template: function() {},
@@ -908,7 +923,7 @@ describe('collection view', function() {
     });
   });
 
-  describe('when calling childEvents via an childEvents method', function() {
+  describe('when calling childEvents via a childEvents method', function() {
     beforeEach(function() {
       this.CollectionView = this.MockCollectionView.extend({
         childEvents: function() {

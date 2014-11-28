@@ -25,9 +25,8 @@ Marionette.ItemView = Marionette.View.extend({
     }
 
     var args = [this.model || this.collection];
-
     if (arguments.length) {
-      args = args.concat(_.rest(arguments, 0));
+      args.push.apply(args, arguments);
     }
 
     if (this.model) {

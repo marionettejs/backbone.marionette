@@ -239,6 +239,19 @@ module.exports = function(grunt) {
         src: './node_modules/backbone.wreqr/lib/backbone.wreqr.js',
         dest: './tmp/backbone.wreqr.bare.js'
       }
+    },
+
+    jsdoccer: {
+      options: {
+        filesToFilter: ['.DS_Store']
+      },
+      yaml: {
+        src: ['src/*.js']
+      },
+      json: {},
+      html: {},
+      doc: {},
+      lint: {}
     }
   });
 

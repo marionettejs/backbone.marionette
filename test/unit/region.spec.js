@@ -115,6 +115,7 @@ describe('region', function() {
     beforeEach(function() {
       this.MyRegion = Backbone.Marionette.Region.extend({
         el: '#region',
+        onBeforeShow: function() {},
         onShow: function() {},
         onSwap: function() {},
         onBeforeSwapOut: function() {},
@@ -126,13 +127,14 @@ describe('region', function() {
           $(this.el).html('some content');
         },
         destroy: function() {},
+        onBeforeShow: function() {},
         onShow: function() {
           $(this.el).addClass('onShowClass');
         }
       });
 
       this.setFixtures('<div id="region"></div>');
-      this.showSpy = this.sinon.spy();
+      this.regionShowSpy = this.sinon.spy();
       this.regionBeforeShowSpy = this.sinon.spy();
       this.regionBeforeSwapSpy = this.sinon.spy();
       this.regionSwapSpy = this.sinon.spy();
@@ -142,16 +144,19 @@ describe('region', function() {
       this.regionBeforeEmptySpy = this.sinon.spy();
 
       this.view = new this.MyView();
-      this.sinon.spy(this.view, 'render');
+      this.viewRenderSpy = this.sinon.spy(this.view, 'render');
+      this.viewOnBeforeShowSpy = this.sinon.spy(this.view, 'onBeforeShow');
+      this.viewOnShowSpy = this.sinon.spy(this.view, 'onShow');
 
       this.myRegion = new this.MyRegion();
-      this.sinon.spy(this.myRegion, 'onShow');
-      this.attachHtmlSpy = this.sinon.spy(this.myRegion, 'attachHtml');
-      this.swapSpy = this.sinon.spy(this.myRegion, 'onSwap');
-      this.onBeforeSwapOutSpy = this.sinon.spy(this.myRegion, 'onBeforeSwapOut');
-      this.onSwapOutSpy = this.sinon.spy(this.myRegion, 'onSwapOut');
+      this.regionOnBeforeShowSpy = this.sinon.spy(this.myRegion, 'onBeforeShow');
+      this.regionOnShowSpy = this.sinon.spy(this.myRegion, 'onShow');
+      this.regionOnAttachHtmlSpy = this.sinon.spy(this.myRegion, 'attachHtml');
+      this.regionOnSwapSpy = this.sinon.spy(this.myRegion, 'onSwap');
+      this.regionOnBeforeSwapOutSpy = this.sinon.spy(this.myRegion, 'onBeforeSwapOut');
+      this.regionOnSwapOutSpy = this.sinon.spy(this.myRegion, 'onSwapOut');
 
-      this.myRegion.on('show', this.showSpy);
+      this.myRegion.on('show', this.regionShowSpy);
       this.myRegion.on('before:show', this.regionBeforeShowSpy);
       this.myRegion.on('before:swap', this.regionBeforeSwapSpy);
       this.myRegion.on('swap', this.regionSwapSpy);
@@ -161,11 +166,13 @@ describe('region', function() {
       this.view.on('show', this.viewShowSpy);
 
       this.sinon.spy(this.myRegion, 'show');
-      this.myRegion.show(this.view);
+
+      this.showOptions = {foo: 'bar'};
+      this.myRegion.show(this.view, this.showOptions);
     });
 
     it('should render the view', function() {
-      expect(this.view.render).to.have.been.called;
+      expect(this.viewRenderSpy).to.have.been.called;
     });
 
     it('should have a view', function() {
@@ -185,43 +192,76 @@ describe('region', function() {
     });
 
     it('should call region attachHtml', function() {
-      expect(this.attachHtmlSpy).to.have.been.called;
+      expect(this.regionOnAttachHtmlSpy).to.have.been.called;
     });
 
     it('should call "onShow" for the view, after the rendered HTML has been added to the DOM', function() {
+      expect(this.viewOnShowSpy).to.have.been.called;
       expect($(this.view.el)).to.have.$class('onShowClass');
     });
 
+    it('should pass the shown view, region and options arguments to the view "onShow"', function () {
+      expect(this.viewOnShowSpy).to.have.been.calledWith(this.view, this.myRegion, this.showOptions);
+    });
+
     it('should call "onShow" for the region, after the rendered HTML has been added to the DOM', function() {
-      expect(this.myRegion.onShow).to.have.been.called;
+      expect(this.regionOnShowSpy).to.have.been.called;
+    });
+
+    it('should pass the shown view, region and options arguments to the region "onShow"', function () {
+      expect(this.regionOnShowSpy).to.have.been.calledWith(this.view, this.myRegion, this.showOptions);
     });
 
     it('should trigger a show event for the region', function() {
-      expect(this.showSpy).to.have.been.called;
+      expect(this.regionShowSpy).to.have.been.called;
+    });
+
+    it('should pass the shown view, region and options arguments to the region show listener event', function () {
+      expect(this.regionShowSpy).to.have.been.calledWith(this.view, this.myRegion, this.showOptions);
     });
 
     it('should trigger a before show event for the region', function() {
       expect(this.regionBeforeShowSpy).to.have.been.called;
     });
 
+    it('should pass the shown view, region and options arguments to the region before show event listener', function () {
+      expect(this.regionBeforeShowSpy).to.have.been.calledWith(this.view, this.myRegion, this.showOptions);
+    });
+
+    it('should pass the shown view, region and options arguments to the region "onBeforeShow"', function () {
+      expect(this.regionOnBeforeShowSpy).to.have.been.calledWith(this.view, this.myRegion, this.showOptions);
+    });
+
     it('should trigger a before show event for the view', function() {
       expect(this.viewBeforeShowSpy).to.have.been.called;
+    });
+
+    it('should pass the shown view, region and options arguments to the view before show listener event', function () {
+      expect(this.viewBeforeShowSpy).to.have.been.calledWith(this.view, this.myRegion, this.showOptions);
+    });
+
+    it('should pass the shown view, region and options arguments to the view "onBeforeShow"', function () {
+      expect(this.viewOnBeforeShowSpy).to.have.been.calledWith(this.view, this.myRegion, this.showOptions);
     });
 
     it('should trigger a show event for the view', function() {
       expect(this.viewShowSpy).to.have.been.calledOnce;
     });
 
-    it('should trigger a before show before attachHtml is called', function() {
-      expect(this.regionBeforeShowSpy.calledBefore(this.attachHtmlSpy)).to.be.true;
+    it('should pass the shown view, region and options arguments to the view show listener event', function () {
+      expect(this.viewShowSpy).to.have.been.calledWith(this.view, this.myRegion, this.showOptions);
     });
 
-    it('should pass the shown view as an argument for the show event', function() {
-      expect(this.showSpy).to.have.been.calledWith(this.view);
+    it('should trigger a before show before attachHtml is called', function() {
+      expect(this.regionBeforeShowSpy.calledBefore(this.regionOnAttachHtmlSpy)).to.be.true;
+    });
+
+    it('should pass the shown view, region and options arguments to the region show listener event', function () {
+      expect(this.regionShowSpy).to.have.been.calledWith(this.view, this.myRegion, this.showOptions);
     });
 
     it('should set "this" to the manager, from the show event', function() {
-      expect(this.showSpy).to.have.been.calledOn(this.myRegion);
+      expect(this.regionShowSpy).to.have.been.calledOn(this.myRegion);
     });
 
     it('should not trigger a before swap event for the region', function() {
@@ -229,11 +269,11 @@ describe('region', function() {
     });
 
     it('should not trigger a beforeSwapOut event for the region', function() {
-      expect(this.onBeforeSwapOutSpy).to.have.not.been.called;
+      expect(this.regionOnBeforeSwapOutSpy).to.have.not.been.called;
     });
 
     it('should not trigger a swapOut event for the region', function() {
-      expect(this.onSwapOutSpy).to.have.not.been.called;
+      expect(this.regionOnSwapOutSpy).to.have.not.been.called;
     });
 
     it('should not trigger a swap event for the region', function() {
@@ -241,7 +281,7 @@ describe('region', function() {
     });
 
     it('should not call the `onSwap` function on the region', function() {
-      expect(this.swapSpy).to.have.not.been.called;
+      expect(this.regionOnSwapSpy).to.have.not.been.called;
     });
 
     it('should return the region', function() {
@@ -250,12 +290,26 @@ describe('region', function() {
 
     describe('and then showing a different view', function() {
       beforeEach(function() {
+        this.view = this.myRegion.currentView;
+
+        this.regionEmptySpy.reset();
+        this.regionBeforeEmptySpy.reset();
+        this.regionOnBeforeSwapOutSpy.reset();
+        this.regionOnSwapOutSpy.reset();
+
         this.view2 = new this.MyView();
-        this.myRegion.show(this.view2);
+        this.otherOptions = {
+          bar: 'foo'
+        };
+        this.myRegion.show(this.view2, this.otherOptions);
       });
 
       it('should trigger a before swap event for the region', function() {
         expect(this.regionBeforeSwapSpy).to.have.been.called;
+      });
+
+      it('should pass the shown view, region and options arguments to the before swap event for the region', function() {
+        expect(this.regionBeforeSwapSpy).to.have.been.calledWith(this.view2, this.myRegion, this.otherOptions);
       });
 
       it('should trigger empty once', function() {
@@ -267,16 +321,20 @@ describe('region', function() {
         expect(this.regionSwapSpy).to.have.been.called;
       });
 
-      it('should call the `onSwap` function on the region', function() {
-        expect(this.swapSpy).to.have.been.called;
+      it('should pass the swapped view, region and options as arguments for the swap event for the region', function() {
+        expect(this.regionSwapSpy).to.have.been.calledWith(this.view2, this.myRegion, this.otherOptions);
       });
 
-      it('should pass the swapped view as an argument for the swap event', function() {
-        expect(this.swapSpy).to.have.been.calledWith(this.view2);
+      it('should call the `onSwap` function on the region', function() {
+        expect(this.regionOnSwapSpy).to.have.been.called;
+      });
+
+      it('should pass the swapped view, region and options as arguments for the swap event', function() {
+        expect(this.regionOnSwapSpy).to.have.been.calledWith(this.view2, this.myRegion, this.otherOptions);
       });
 
       it('should set "this" to the manager, from the swap event', function() {
-        expect(this.swapSpy).to.have.been.calledOn(this.myRegion);
+        expect(this.regionOnSwapSpy).to.have.been.calledOn(this.myRegion);
       });
 
       it('should still have a view', function() {
@@ -293,14 +351,17 @@ describe('region', function() {
       });
 
       it('should trigger a beforeSwapOut event for the region', function() {
-        expect(this.onBeforeSwapOutSpy)
+        expect(this.regionOnBeforeSwapOutSpy)
         .to.have.been.calledOnce
-        .and.to.have.been.calledOn(this.myRegion);
+        .and.to.have.been.calledOn(this.myRegion)
+        .and.to.have.been.calledWith(this.view, this.myRegion, this.otherOptions);
       });
 
       it('should trigger a swapOut event for the region', function() {
-        expect(this.onSwapOutSpy).to.have.been.calledOnce
-        .and.to.have.been.calledOn(this.myRegion);
+        expect(this.regionOnSwapOutSpy).to.have.been.calledOnce
+        .and.to.have.been.calledOn(this.myRegion)
+        // see issue #2055
+        .and.to.have.been.calledWith(undefined, this.myRegion, this.otherOptions);
       });
     });
 

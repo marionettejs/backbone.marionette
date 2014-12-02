@@ -14,6 +14,7 @@ objects.
 ## Documentation Index
 
 * [Basic Use](#basic-use)
+* [Constucting](#constructing)
 * [RegionManager.addRegion](#regionmanageraddregion)
 * [RegionManager.addRegions](#regionmanageraddregions)
   * [addRegions default options](#addregions-default-options)
@@ -45,9 +46,23 @@ var regions = rm.addRegions({
   quux: "ul.quux"
 });
 
-regions.baz.show(myView);
+regions.get('baz').show(myView);
 
 rm.removeRegion("foo");
+```
+
+## Constructing
+
+The RegionMananger take an optional `region` option in their constructor. the regions are passed directly into `addRegions` for the region mananger instance.
+
+```js
+var mananger = new Marionette.RegionManager({
+  regions: {
+    "aRegion": "#bar"
+  }
+});
+
+mananger.getRegion('aRegion').show(new MyView);
 ```
 
 ## RegionManager.addRegion
@@ -100,9 +115,9 @@ var otherRegions = rm.addRegions(function(regionDefinition) {
   };
 });
 
-regions.main;        //=> 'main' region instance
-regions.navigation;  //=> 'navigation' region instance
-otherRegions.footer; //=> 'footer' region instance
+regions.get('main');        //=> 'main' region instance
+regions.get('navigation');  //=> 'navigation' region instance
+otherRegions.get('footer'); //=> 'footer' region instance
 ```
 
 If you supply a function to `addRegions`, it will be

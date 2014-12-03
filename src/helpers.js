@@ -92,16 +92,11 @@ Marionette.normalizeUIKeys = function(hash, ui) {
 // a given value for regions
 // swaps the @ui with the associated selector
 Marionette.normalizeUIValues = function(hash, ui) {
-  if (typeof(hash) === 'undefined') {
-    return;
-  }
-
   _.each(hash, function(val, key) {
     if (_.isString(val)) {
       hash[key] = Marionette.normalizeUIString(val, ui);
     }
   });
-
   return hash;
 };
 

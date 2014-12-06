@@ -16,7 +16,7 @@ _.extend(Marionette.TemplateCache, {
   // Get the specified template by id. Either
   // retrieves the cached version, or loads it
   // from the DOM.
-  get: function(templateId,options) {
+  get: function(templateId) {
     var cachedTemplate = this.templateCaches[templateId];
 
     if (!cachedTemplate) {
@@ -24,7 +24,7 @@ _.extend(Marionette.TemplateCache, {
       this.templateCaches[templateId] = cachedTemplate;
     }
 
-    return cachedTemplate.load(options);
+    return cachedTemplate.load();
   },
 
   // Clear templates from the cache. If no arguments
@@ -55,15 +55,15 @@ _.extend(Marionette.TemplateCache, {
 _.extend(Marionette.TemplateCache.prototype, {
 
   // Internal method to load the template
-  load: function(options) {
+  load: function() {
     // Guard clause to prevent loading this template more than once
     if (this.compiledTemplate) {
       return this.compiledTemplate;
     }
 
     // Load the template and compile it
-    var template = this.loadTemplate(this.templateId,options);
-    this.compiledTemplate = this.compileTemplate(template,options);
+    var template = this.loadTemplate(this.templateId);
+    this.compiledTemplate = this.compileTemplate(template);
 
     return this.compiledTemplate;
   },
@@ -73,7 +73,7 @@ _.extend(Marionette.TemplateCache.prototype, {
   // For asynchronous loading with AMD/RequireJS, consider
   // using a template-loader plugin as described here:
   // https://github.com/marionettejs/backbone.marionette/wiki/Using-marionette-with-requirejs
-  loadTemplate: function(templateId,options) {
+  loadTemplate: function(templateId) {
     var template = Backbone.$(templateId).html();
 
     if (!template || template.length === 0) {
@@ -90,7 +90,7 @@ _.extend(Marionette.TemplateCache.prototype, {
   // this method if you do not need to pre-compile a template
   // (JST / RequireJS for example) or if you want to change
   // the template engine used (Handebars, etc).
-  compileTemplate: function(rawTemplate,options) {
+  compileTemplate: function(rawTemplate) {
     return _.template(rawTemplate);
   }
 });

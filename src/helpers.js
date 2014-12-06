@@ -25,15 +25,11 @@ Marionette.isNodeAttached = function(el) {
 // object or its `options`, with `options` taking precedence.
 Marionette.getOption = function(target, optionName) {
   if (!target || !optionName) { return; }
-  var value;
-
   if (target.options && (target.options[optionName] !== undefined)) {
-    value = target.options[optionName];
+    return target.options[optionName];
   } else {
-    value = target[optionName];
+    return target[optionName];
   }
-
-  return value;
 };
 
 // Proxy `Marionette.getOption`
@@ -47,17 +43,15 @@ Marionette.proxyGetOption = function(optionName) {
 // Pass in a mapping of events => functions or function names
 // and return a mapping of events => functions
 Marionette.normalizeMethods = function(hash) {
-  var normalizedHash = {};
-  _.each(hash, function(method, name) {
+  return _.reduce(hash, function(normalizedHash, method, name) {
     if (!_.isFunction(method)) {
       method = this[method];
     }
-    if (!method) {
-      return;
+    if (method) {
+      normalizedHash[name] = method;
     }
-    normalizedHash[name] = method;
-  }, this);
-  return normalizedHash;
+    return normalizedHash;
+  }, {}, this);
 };
 
 // utility method for parsing @ui. syntax strings
@@ -73,37 +67,22 @@ Marionette.normalizeUIString = function(uiString, ui) {
 // swaps the @ui with the associated selector.
 // Returns a new, non-mutated, parsed events hash.
 Marionette.normalizeUIKeys = function(hash, ui) {
-  if (typeof(hash) === 'undefined') {
-    return;
-  }
-
-  hash = _.clone(hash);
-
-  _.each(_.keys(hash), function(key) {
+  return _.reduce(hash, function(memo, val, key) {
     var normalizedKey = Marionette.normalizeUIString(key, ui);
-    if (normalizedKey !== key) {
-      hash[normalizedKey] = hash[key];
-      delete hash[key];
-    }
-  });
-
-  return hash;
+    memo[normalizedKey] = val;
+    return memo;
+  }, {});
 };
 
 // allows for the use of the @ui. syntax within
 // a given value for regions
 // swaps the @ui with the associated selector
 Marionette.normalizeUIValues = function(hash, ui) {
-  if (typeof(hash) === 'undefined') {
-    return;
-  }
-
   _.each(hash, function(val, key) {
     if (_.isString(val)) {
       hash[key] = Marionette.normalizeUIString(val, ui);
     }
   });
-
   return hash;
 };
 

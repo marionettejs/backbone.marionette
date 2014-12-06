@@ -67,9 +67,9 @@ Marionette.normalizeUIString = function(uiString, ui) {
 // swaps the @ui with the associated selector.
 // Returns a new, non-mutated, parsed events hash.
 Marionette.normalizeUIKeys = function(hash, ui) {
-  return _.reduce(_.keys(hash), function(memo, key) {
+  return _.reduce(hash, function(memo, val, key) {
     var normalizedKey = Marionette.normalizeUIString(key, ui);
-    memo[normalizedKey] = hash[key];
+    memo[normalizedKey] = val;
     return memo;
   }, {});
 };

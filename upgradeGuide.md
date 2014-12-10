@@ -9,7 +9,7 @@ Please refer to https://github.com/marionettejs/Marionette.Upgrade to ease the t
 No breaking changes have been introduced between these versions
 
 ## Upgrade to v.1.5.0 ~ v.1.7.x
-If you are overriding `appendHTML` in your `collectionView` or `compositeView` make sure to update your method to match the [buffering implementation](https://github.com/marionettejs/backbone.marionette/blob/master/src/marionette.collectionview.js#L299). If you do not you may observe the `show` event not being called per `itemViews`
+If you are overriding `appendHTML` in your `collectionView` or `compositeView` make sure to update your method to match the [buffering implementation](https://github.com/marionettejs/backbone.marionette/blob/v1.8.8/src/marionette.collectionview.js#L303). If you do not you may observe the `show` event not being called per `itemViews`
 
 ## Upgrade to v.1.1.0 ~ v.1.4.x
 No breaking changes have been introduced between these versions

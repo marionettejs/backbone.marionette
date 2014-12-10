@@ -1,3 +1,70 @@
+### v2.3.0 [view commit logs](https://github.com/marionettejs/backbone.marionette/compare/v2.2.2...v2.3.0)
+
+#### 2.3.0 in overview:
+
+This release of Marionette contains a significant amount of code optimizations and refactors. These changes will not be visible to you as end user however as they improve the underlying base of Marionette and speed up your app to improve consistency across the base classes. Such speed ups are most visible in the great work @megawac has been doing in both [serializeData](https://github.com/marionettejs/backbone.marionette/commit/62f15dc7ec880631a0bb79b18470c94b0a0ad086) and [triggerMethod](https://github.com/marionettejs/backbone.marionette/commit/e5957dde9a9a48eeb8097a0ce2f628d795668e64)
+
+As always you can come chat with us in the main chatroom at https://gitter.im/marionettejs/backbone.marionette/
+
+Work has been continuing on improving the documentation of Marionette, via an external custom JSDOC tool that @ChetHarrison has been spear heading via https://github.com/ChetHarrison/jsdoccer
+
+If you have not already checked out Marionette Inspector, it is a great tool that Jason Laster has been working on to make debugging and working with marionette much easier. https://github.com/MarionetteLabs/marionette.inspector
+
+##### Features
+
+* Marionette.isNodeAttached
+  * Determines whether the passed-in node is a child of the `document` or not.
+* View "attach" / onAttach event
+  * Triggered anytime that showing the view in a Region causes it to be attached to the `document`. Like other Marionette events, it also executes a callback method, `onAttach`, if you've specified one.
+* View "before:attach" / onBeforeAttach
+  * This is just like the "attach" event described above, but it's triggered right before the view is attached to the `document`.
+* AppRouter Enhancements
+  * `triggerMethod`, `bindEntityEvents`, and `unbindEntityEvents` are now available on AppRouter
+* Marionette.Application is now a subclass of Marionette.Object
+* Marionette.Behavior is now a subclass of Marionette.Object
+* Marionette.Region is now a subclass of Marionette.Object
+* CompositeView’s `getChildViewContainer` now receives `childView` as a second argument.
+* Region Triggers now pass the view, region instance, and trigger options to all handler methods
+* CollectionView `emptyViewOption` method now receives the model and index as options.
+* Allow non-DOM-backed regions with `allowMissingEl`
+  * `allowMissingEl` option is respected by `_ensureElement`
+  * `_ensureElement` returns a boolean, indicating whether or not element is available
+  * Region#show early-terminates on missing element
+* Regions now ensure the view being shown is valid
+  * Allowing you to handle the error of a region.show without the region killing the currentView and breaking without recourse.
+  * Appending isDestroyed to a Backbone.View on region empty now adds the same safety for not re-showing a removed Backbone view.
+* Marionette is now aliased as Mn on the `window`.
+* Collection/Composite Views now support passing in 'sort' as both a class property and as an option.
+* RegionManager will now auto instantiate regions that are attached to the regionManager instance.
+
+```js
+new Marionette.RegionManager({
+  regions: {
+    "aRegion": "#bar"
+  }
+});
+```
+
+##### Fixes
+
+* Region now uses `$.el.html(‘’)` instead of `.innerHTML` to clear contents.
+  * We can not use `.innerHTML` due to the fact that IE will not let us clear the html of tables and selects. We also do not want to use the more declarative `empty` method that jquery exposes since `.empty` loops over all of the children DOM nodes and unsets the listeners on each node. While this seems like a desirable thing, it comes at quite a high performance cost. For that reason we are simply clearing the html contents of the node.
+* Destroying an old view kept alive by `{preventDestroy: true}` no longer empties its former region.
+  * Now the destroy listener from previous view is removed on region show
+* AppRouter `this.options` now assigned prior to `initialize` being called.
+
+
+##### Deprecation Warnings
+
+* Marionette.Application.addInitializer
+* Marionette.Application Channel
+* Marionette.Application Regions
+* Marionette.Callbacks
+* Marionette.Deferred
+* Marionette.Module.addInitializer
+* Marionette.Module.addFinalizer
+
+
 ### v2.2.2 [view commit logs](https://github.com/marionettejs/backbone.marionette/compare/v2.2.1...v2.2.2)
 
 * Fixes

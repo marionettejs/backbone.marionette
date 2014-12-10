@@ -32,6 +32,17 @@ Marionette.LayoutView = Marionette.ItemView.extend({
       // if this is the first render, don't do anything to
       // reset the regions
       this._firstRender = false;
+
+      // force the region to find the region selectors in the layout container
+      // and not on the whole document as the view.el is already defined
+      var $el = this.$el;
+      var find = function (el) {
+        // fallback to Backbone.$
+        return $el && $el[0] ? $el.find.call($el, el) : Backbone.$(el);
+      };
+      this.regionManager.each(function (region) {
+        region.getEl = find;
+      });
     } else {
       // If this is not the first render call, then we need to
       // re-initialize the `el` for each region

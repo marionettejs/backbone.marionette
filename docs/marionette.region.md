@@ -111,7 +111,16 @@ not need to supply a `selector` or `el` property on the object
 literal.
 
 Any other properties you set on the object literal will be
-used as options passed to the region instance.
+used as options passed to the region instance, including the
+`allowMissingEl` option.
+
+Ordinarily regions enforce the presence of a backing DOM element.
+In some instances it may be desirable to allow regions to be
+instantiated and used without an element, such as when regions
+defined by a parent `LayoutView` class are used by only some of its
+subclasses. In these instances, the region can be defined with the
+`allowMissingEl` option, suppressing the missing element error and
+causing `show` calls to the region to be treated as no-ops.
 
 ```js
 var MyRegion      = Marionette.Region.extend();
@@ -227,6 +236,7 @@ MyApp.mainRegion.empty();
 ```
 
 #### preventDestroy
+
 If you replace the current view with a new view by calling `show`,
 by default it will automatically destroy the previous view.
 You can prevent this behavior by passing `{preventDestroy: true}` in the options
@@ -252,8 +262,8 @@ MyApp.mainRegion.show(anotherView2, { preventDestroy: true });
 NOTE: When using `preventDestroy: true` you must be careful to cleanup your old views
 manually to prevent memory leaks.
 
-
 #### forceShow
+
 If you re-call `show` with the same view, by default nothing will happen
 because the view is already in the region. You can force the view to be re-shown
 by passing in `{forceShow: true}` in the options parameter.
@@ -264,6 +274,31 @@ MyApp.mainRegion.show(myView);
 
 // the second show call will re-show the view
 MyApp.mainRegion.show(myView, {forceShow: true});
+```
+
+#### onBeforeAttach & onAttach
+
+Regions that are attached to the document when you execute `show` are special in that the
+views that they show will also become attached to the document. These regions fire a pair of triggerMethods on *all*
+of the views that are about to be attached – even the nested ones. This can cause a performance issue if you're
+rendering hundreds or thousands of views at once.
+
+If you think these events might be causing some lag in your app, you can selectively turn them off
+with the `triggerBeforeAttach` and `triggerAttach` properties.
+
+```js
+// No longer trigger attach
+myRegion.triggerAttach = false;
+```
+
+You can override this on a per-show basis by passing it in as an option to show.
+
+```js
+// This region won't trigger beforeAttach...
+myRegion.triggerBeforeAttach = false;
+
+// Unless we tell it to
+myRegion.show(myView, {triggerBeforeAttach: true});
 ```
 
 ### Checking whether a region is showing a view
@@ -396,61 +431,86 @@ These events can be used to run code when your region
 opens and destroys views.
 
 ```js
-MyApp.mainRegion.on("before:show", function(view){
+MyApp.mainRegion.on("before:show", function(view, region, options){
   // manipulate the `view` or do something extra
-  // with the region via `this`
+  // with the `region`
+  // you also have access to the `options` that were passed to the Region.show call
 });
 
-MyApp.mainRegion.on("show", function(view){
+MyApp.mainRegion.on("show", function(view, region, options){
   // manipulate the `view` or do something extra
-  // with the region via `this`
+  // with the `region`
+  // you also have access to the `options` that were passed to the Region.show call
 });
 
-MyApp.mainRegion.on("before:swap", function(view){
+MyApp.mainRegion.on("before:swap", function(view, region, options){
   // manipulate the `view` or do something extra
-  // with the region via `this`
+  // with the `region`
+  // you also have access to the `options` that were passed to the Region.show call
 });
 
-MyApp.mainRegion.on("swap", function(view){
+MyApp.mainRegion.on("swap", function(view, region, options){
   // manipulate the `view` or do something extra
-  // with the region via `this`
+  // with the `region`
+  // you also have access to the `options` that were passed to the Region.show call
 });
 
-MyApp.mainRegion.on("empty", function(view){
+MyApp.mainRegion.on("before:swapOut", function(view, region, options){
   // manipulate the `view` or do something extra
-  // with the region via `this`
+  // with the `region`
+  // you also have access to the `options` that were passed to the Region.show call
+});
+
+MyApp.mainRegion.on("swapOut", function(view, region, options){
+  // manipulate the `view` or do something extra
+  // with the `region`
+  // you also have access to the `options` that were passed to the Region.show call
+});
+
+MyApp.mainRegion.on("empty", function(view, region, options){
+  // manipulate the `view` or do something extra
+  // with the `region`
+  // you also have access to the `options` that were passed to the Region.show call
 });
 
 var MyRegion = Backbone.Marionette.Region.extend({
   // ...
 
-  onBeforeShow: function(view) {
+  onBeforeShow: function(view, region, options) {
     // the `view` has not been shown yet
   },
 
-  onShow: function(view){
+  onShow: function(view, region, options){
     // the `view` has been shown
   }
 });
 
 var MyView = Marionette.ItemView.extend({
-  onBeforeShow: function() {
-    // called before the view has been shown
+  onBeforeShow: function(view, region, options) {
+    // called before the `view` has been shown
   },
-  onShow: function(){
-    // called when the view has been shown
+  onShow: function(view, region, options){
+    // called when the `view` has been shown
   }
 });
 
 var MyRegion = Backbone.Marionette.Region.extend({
   // ...
 
-  onBeforeSwap: function(view) {
+  onBeforeSwap: function(view, region, options) {
     // the `view` has not been swapped yet
   },
 
-  onSwap: function(view){
+  onSwap: function(view, region, options){
     // the `view` has been swapped
+  },
+
+  onBeforeSwapOut: function(view, region, options) {
+    // the `view` has not been swapped out yet
+  },
+
+  onSwapOut: function(view, region, options){
+    // the `view` has been swapped out
   }
 });
 ```

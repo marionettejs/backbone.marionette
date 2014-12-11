@@ -3,7 +3,7 @@
   "description": "Make your Backbone.js apps dance with a composite application architecture!",
   "homepage": "http://marionettejs.org",
   "main": "./lib/core/backbone.marionette.js",
-  "version": "2.2.2",
+  "version": "2.3.0-pre",
   "keywords": [
     "backbone",
     "framework",
@@ -16,22 +16,22 @@
     "email": "derickbailey@gmail.com"
   },
   "ignore": [
+    "api",
     "docs",
-    "reports",
-    "spec",
-    ".gitignore",
-    ".travis.yml",
-    ".editorconfig",
-    ".jshintc",
     "jsdoc",
-    "build",
-    "build.cmd",
-    "Gruntfile.js",
+    "src",
+    "tasks",
+    "test",
+    ".editorconfig",
+    ".gitignore",
+    ".jshintrc",
+    ".npmignore",
+    ".travis.yml",
+    "component.json",
     "CONTRIBUTING.md",
-    "package.json",
-    "addrem",
-    "getdeps",
-    "tmp"
+    "Gruntfile.js",
+    "SpecRunner.html",
+    "upgradeGuide.md"
   ],
   "dependencies": {
     "backbone": "1.0.0 - 1.1.2",
@@ -39,9 +39,5 @@
     "backbone.babysitter": "^0.1.0",
     "backbone.wreqr": "^1.0.0",
     "jquery": "^1.8.0 || ^2.0.0"
-  },
-  "devDependencies": {
-    "sinonjs": "1.7.3",
-    "jasmine-sinon": "0.3.1"
   }
 }

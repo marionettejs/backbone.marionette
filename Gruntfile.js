@@ -30,34 +30,18 @@ module.exports = function(grunt) {
         ' * https://github.com/marionettejs/backbone.wreqr/\n' +
         ' */\n\n\n'
     },
-    assets: {
-      babysitter:   'bower_components/backbone.babysitter/lib/backbone.babysitter.js',
-      underscore:   'bower_components/underscore/underscore.js',
-      backbone:     'bower_components/backbone/backbone.js',
-      jquery:       'bower_components/jquery/dist/jquery.js',
-      sinon:        'bower_components/sinonjs/sinon.js',
-      wreqr:        'bower_components/backbone.wreqr/lib/backbone.wreqr.js'
-    },
 
     clean: {
       lib: 'lib'
     },
 
-    bower: {
-      install: {
-        options: {
-          copy: false
-        }
-      }
-    },
-
     preprocess: {
       core: {
-        src: 'src/build/marionette.core.js',
-        dest: 'tmp/marionette.core.js'
+        src: 'src/build/core.js',
+        dest: 'tmp/core.js'
       },
       bundle: {
-        src: 'src/build/marionette.bundled.js',
+        src: 'src/build/bundled.js',
         dest: 'tmp/backbone.marionette.js'
       }
     },
@@ -136,14 +120,14 @@ module.exports = function(grunt) {
     mochaTest: {
       tests: {
         options: {
-          require: 'spec/javascripts/setup/node.js',
+          require: 'test/unit/setup/node.js',
           reporter: grunt.option('mocha-reporter') || 'nyan',
           clearRequireCache: true,
           mocha: require('mocha')
         },
         src: [
-          'spec/javascripts/setup/helpers.js',
-          'spec/javascripts/*.spec.js'
+          'test/unit/setup/helpers.js',
+          'test/unit/*.spec.js'
         ]
       }
     },
@@ -193,11 +177,11 @@ module.exports = function(grunt) {
 
       specs: {
         options: {
-          jshintrc: 'spec/.jshintrc'
+          jshintrc: 'test/.jshintrc'
         },
 
         files: {
-          src: ['spec/javascripts/**.js']
+          src: ['test/unit/**.js']
         }
       }
     },
@@ -221,7 +205,7 @@ module.exports = function(grunt) {
         options: {
           spawn: false
         },
-        files : ['src/**/*.js', 'spec/**/*.js'],
+        files : ['src/**/*.js', 'test/**/*.js'],
         tasks : ['test']
       }
     },
@@ -248,11 +232,11 @@ module.exports = function(grunt) {
 
     unwrap: {
       babysitter: {
-        src: './bower_components/backbone.babysitter/lib/backbone.babysitter.js',
+        src: './node_modules/backbone.babysitter/lib/backbone.babysitter.js',
         dest: './tmp/backbone.babysitter.bare.js'
       },
       wreqr: {
-        src: './bower_components/backbone.wreqr/lib/backbone.wreqr.js',
+        src: './node_modules/backbone.wreqr/lib/backbone.wreqr.js',
         dest: './tmp/backbone.wreqr.bare.js'
       }
     }
@@ -278,12 +262,6 @@ module.exports = function(grunt) {
     });
   });
 
-  grunt.registerTask('verify-bower', function () {
-    if (!grunt.file.isDir('./bower_components')) {
-      grunt.fail.warn('Missing bower components. You should run `bower install` before.');
-    }
-  });
-
   var defaultTestsSrc = grunt.config('mochaTest.tests.src');
   var defaultJshintSrc = grunt.config('jshint.marionette.src');
   var defaultJshintSpecSrc = grunt.config('jshint.specs.files.src');
@@ -291,8 +269,8 @@ module.exports = function(grunt) {
     grunt.config('mochaTest.tests.src', defaultTestsSrc);
     grunt.config('jshint.marionette.src', defaultJshintSrc);
     grunt.config('jshint.specs.files.src', defaultJshintSpecSrc);
-    if (filepath.match('spec/javascripts/') && !filepath.match('setup') && !filepath.match('fixtures')) {
-      grunt.config('mochaTest.tests.src', ['spec/javascripts/setup/helpers.js', filepath]);
+    if (filepath.match('test/unit/') && !filepath.match('setup') && !filepath.match('fixtures')) {
+      grunt.config('mochaTest.tests.src', ['test/unit/setup/helpers.js', filepath]);
       grunt.config('jshint.specs.files.src', filepath);
       grunt.config('jshint.marionette.src', 'DO_NOT_RUN_ME');
     }
@@ -306,7 +284,7 @@ module.exports = function(grunt) {
 
   grunt.registerTask('lint', 'Lints our sources', ['lintspaces', 'jshint']);
 
-  grunt.registerTask('test', 'Run the unit tests.', ['verify-bower', 'lint', 'api', 'mochaTest']);
+  grunt.registerTask('test', 'Run the unit tests.', ['lint', 'api', 'mochaTest']);
 
   grunt.registerTask('coverage', ['unwrap', 'preprocess:bundle', 'template:bundle', 'env:coverage', 'instrument', 'mochaTest', 'storeCoverage', 'makeReport', 'coveralls']);
 
@@ -314,5 +292,5 @@ module.exports = function(grunt) {
 
   grunt.registerTask('api', 'Build jsdoc api files', ['jsDocFiles']);
 
-  grunt.registerTask('build', 'Build all three versions of the library.', ['clean:lib', 'bower:install', 'lint', 'mochaTest', 'unwrap', 'preprocess', 'template', 'concat', 'uglify']);
+  grunt.registerTask('build', 'Build all three versions of the library.', ['clean:lib', 'lint', 'mochaTest', 'unwrap', 'preprocess', 'template', 'concat', 'uglify']);
 };

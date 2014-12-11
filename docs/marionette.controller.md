@@ -2,57 +2,43 @@
 
 # Marionette.Controller
 
-A Controller is a white-label Marionette Object. Its name can be a cause for
-confusion, as it actually has nothing to do with the popular MVC architectural pattern.
-Instead, it's better to think of the Controller as a base object from which you can build.
-
-Controllers should be used when you have a task that you would like an object to be responsible for,
-but none of the other Marionette Classes quite make sense to do it. It's a base object for you to use to
-create a new Class altogether.
+A Controller is an object used in the Marionette Router. Controllers are where you store
+your Router's callbacks.
 
 ## Documentation Index
 
 * [Basic Use](#basic-use)
 * [Destroying A Controller](#destroying-a-controller)
 * [getOption](#getoption)
-* [On The Name 'Controller'](#on-the-name-controller)
+* [Prior Usage](#prior-usage)
 
 ## Basic Use
 
-A `Marionette.Controller` can be extended, like other
-Backbone and Marionette objects. It supports the standard
-`initialize` method, has a built-in `EventBinder`, and
-can trigger events, itself.
+A `Marionette.Controller` is intended to solely be used within the Router.
 
 ```js
-// define a controller
+
+// Create a Controller, giving it the callbacks for our Router.
 var MyController = Marionette.Controller.extend({
+  home: function() {},
+  profile: function() {}
+});
 
-  initialize: function(options){
-    this.stuff = options.stuff;
-  },
+// Instantiate it
+var myController = new MyController();
 
-  doStuff: function(){
-    this.trigger("stuff:done", this.stuff);
+// Pass it into the Router
+var myRouter = new Marionette.AppRouter({
+  controller: myController,
+  appRoutes: {
+    "home": "home",
+    "profile": "profile"
   }
-
 });
-
-// create an instance
-var c = new MyController({
-  stuff: "some stuff"
-});
-
-// use the built in EventBinder
-c.listenTo(c, "stuff:done", function(stuff){
-  console.log(stuff);
-});
-
-// do some stuff
-c.doStuff();
 ```
 
 ## getOption
+
 Retrieve an object's attribute either directly from the object, or from the object's this.options, with this.options taking precedence.
 
 More information [getOption](./marionette.functions.md)
@@ -96,18 +82,8 @@ contr.listenTo(something, "bar", function(){...});
 contr.destroy(arg1, arg2);
 ```
 
-## On The Name 'Controller'
+## Prior Usage
 
-The name `Controller` is bound to cause a bit of confusion, which is
-rather unfortunate. There was some discussion and debate about what to
-call this object, the idea that people would confuse this with an
-MVC style controller came up a number of times. In the end, we decided
-to call this a controller anyway--as the typical use case is to control
-the workflow and process of an application and/or module.
+Before Marionette 2.1, the Controller had another use, which was a general-purpose, white-label object. This was confusing given its other use within the Router, and its name, which carries so much meaning in the context of MVC frameworks.
 
-But the truth is, this is a very generic, multi-purpose object that can
-serve many different roles, in many different scenarios. We are always open
-to suggestions, with good reason and discussion, on renaming objects to
-be more descriptive and less confusing. If you would like to suggest a
-different name, please do so in either the mailing list or in the Github
-Issues list.
+As of v2.1, a new Class is available for your use: Marionette.Object. We recommend using Marionette.Object instead of Marionette.Controller in all situations outside of the Router.

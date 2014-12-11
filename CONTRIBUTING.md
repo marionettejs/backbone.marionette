@@ -3,12 +3,11 @@ the process of getting the changes merged in and released.
 
 ## Running the tests
 
-There are two methods to running the unit test suite, suited for your desired workflow and overall developer happiness.
+There are two methods to running the unit test suite, suited for your desired workflow and overall developer happiness:
+you can open SpecRunner.html in the browser or run `npm test`
 To begin ensure that you have installed the project dev dependencies via:
 
     $ npm install
-
-    $ bower install
 
 ### In a browser
 

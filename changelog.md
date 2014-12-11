@@ -16,11 +16,11 @@ If you have not already checked out Marionette Inspector, it is a great tool tha
 * Marionette.isNodeAttached
   * Determines whether the passed-in node is a child of the `document` or not.
 * View "attach" / onAttach event
-* Triggered anytime that showing the view in a Region causes it to be attached to the `document`. Like other Marionette events, it also executes a callback method, `onAttach`, if you've specified one.
+  * Triggered anytime that showing the view in a Region causes it to be attached to the `document`. Like other Marionette events, it also executes a callback method, `onAttach`, if you've specified one.
 * View "before:attach" / onBeforeAttach
   * This is just like the attach event described above, but it's triggered right before the view is attached to the document.
 * AppRouter Enhancements
-* `triggerMethod`, `bindEntityEvents`, and `unbindEntityEvents` are now available on AppRouter
+  * `triggerMethod`, `bindEntityEvents`, and `unbindEntityEvents` are now available on AppRouter
 * Marionette.Application is now a subclass of Marionette.Object
 * Marionette.Behavior is now a subclass of Marionette.Object
 * Marionette.Region is now a subclass of Marionette.Object
@@ -49,8 +49,8 @@ new Marionette.RegionManager({
 ##### Fixes
 
 * Region now uses `$.el.html(‘’)` instead of `.innerHTML` to clear contents.
-  * We can not use `.innerHTML` due to the fact that IE will not let us clear the html of tables and selects. We also do not want to use the more declarative `empty` method that jquery exposes since `.empty` loops over all of the children DOM nodes and unsets the listeners on each node. While this seems like a desirable thing, it comes at quite a high perf cost. For that reason we are simply clearing the html contents of the node.
-* Destroying and old view kept alive by `{preventDestroy: true}` no longer empties it’s former region.
+  * We can not use `.innerHTML` due to the fact that IE will not let us clear the html of tables and selects. We also do not want to use the more declarative `empty` method that jquery exposes since `.empty` loops over all of the children DOM nodes and unsets the listeners on each node. While this seems like a desirable thing, it comes at quite a high performance cost. For that reason we are simply clearing the html contents of the node.
+* Destroying an old view kept alive by `{preventDestroy: true}` no longer empties its former region.
 * Now the destroy listener from previous view is removed on region show
 * AppRouter `this.options` now assigned prior to `initialize` being called.
 

@@ -80,7 +80,6 @@ please visit [the downloads section on the website](http://marionettejs.com#down
 
 Marionette is available via bower, npm, and component.io. There are other channels that are maintained by the community.
 
-##### [Available Packages](https://github.com/marionettejs/backbone.marionette/wiki/Available-packages)
 
 ## Release Notes And Upgrade Guide
 

@@ -64,6 +64,19 @@ new MyComp({
 });
 ```
 
+The `collection` option is not passed to the template context by
+default. If your `template` needs access to the collection, you'll
+need to pass it via `templateHelpers`:
+
+```js
+new MyComp({
+  template: "#some-template",
+  templateHelpers: function() {
+    return { items: this.collection.toJSON() };
+  }
+})
+```
+
 ## CompositeView's `childView`
 
 Each childView will be rendered using the `childView`'s template. The `CompositeView`'s

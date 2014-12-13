@@ -17,6 +17,12 @@ describe('layoutView', function() {
         if (this.model) {
           this.listenTo(this.model, 'change', this.render);
         }
+      },
+      onBeforeRender: function() {
+        return this.isRendered;
+      },
+      onRender: function() {
+        return this.isRendered;
       }
     });
 
@@ -142,6 +148,9 @@ describe('layoutView', function() {
   describe('on rendering', function() {
     beforeEach(function() {
       this.layoutViewManager = new this.LayoutView();
+      sinon.spy(this.layoutViewManager, 'onRender');
+      sinon.spy(this.layoutViewManager, 'onBeforeRender');
+      sinon.spy(this.layoutViewManager, 'trigger');
       this.layoutViewManager.render();
     });
 
@@ -149,6 +158,38 @@ describe('layoutView', function() {
       this.layoutViewManager.regionOne._ensureElement();
       var el = this.layoutViewManager.$('#regionOne');
       expect(this.layoutViewManager.regionOne.$el[0]).to.equal(el[0]);
+    });
+
+    it('should call "onBeforeRender" before rendering', function() {
+      expect(this.layoutViewManager.onBeforeRender).to.have.been.calledOnce;
+    });
+
+    it('should call "onRender" after rendering', function() {
+      expect(this.layoutViewManager.onRender).to.have.been.calledOnce;
+    });
+
+    it('should call "onBeforeRender" before "onRender"', function() {
+      expect(this.layoutViewManager.onBeforeRender).to.have.been.calledBefore(this.layoutViewManager.onRender);
+    });
+
+    it('should not be rendered when "onBeforeRender" is called', function() {
+      expect(this.layoutViewManager.onBeforeRender.lastCall.returnValue).not.to.be.ok;
+    });
+
+    it('should be rendered when "onRender" is called', function() {
+      expect(this.layoutViewManager.onRender.lastCall.returnValue).to.be.true;
+    });
+
+    it('should trigger a "before:render" event', function() {
+      expect(this.layoutViewManager.trigger).to.have.been.calledWith('before:render', this.layoutViewManager);
+    });
+
+    it('should trigger a "render" event', function() {
+      expect(this.layoutViewManager.trigger).to.have.been.calledWith('render', this.layoutViewManager);
+    });
+
+    it('should be marked rendered', function() {
+      expect(this.layoutViewManager).to.have.property('isRendered', true);
     });
   });
 

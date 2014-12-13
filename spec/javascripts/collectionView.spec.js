@@ -364,8 +364,18 @@ describe('collection view', function() {
       this.EventedView = Backbone.Marionette.CollectionView.extend({
         childView: this.ChildView,
         someCallback: function() {},
-        onBeforeDestroy: function() {},
-        onDestroy: function() {}
+        onBeforeDestroy: function() {
+          return {
+            isRendered: this.isRendered,
+            isDestroyed: this.isDestroyed
+          };
+        },
+        onDestroy: function() {
+          return {
+            isRendered: this.isRendered,
+            isDestroyed: this.isDestroyed
+          };
+        }
       });
 
       this.destroyHandler = this.sinon.stub();
@@ -442,6 +452,18 @@ describe('collection view', function() {
       expect(this.collectionView.onBeforeDestroy).to.have.been.called;
     });
 
+    it('should call "onBeforeDestroy" before "onDestroy"', function() {
+      expect(this.collectionView.onBeforeDestroy).to.have.been.calledBefore(this.collectionView.onDestroy);
+    });
+
+    it('should not be destroyed when "onBeforeDestroy" is called', function() {
+      expect(this.collectionView.onBeforeDestroy.lastCall.returnValue.isDestroyed).not.to.be.ok;
+    });
+
+    it('should be destroyed when "onDestroy" is called', function() {
+      expect(this.collectionView.onDestroy.lastCall.returnValue.isDestroyed).to.be.true;
+    });
+
     it('should trigger a "before:destroy" event', function() {
       expect(this.collectionView.trigger).to.have.been.calledWith('before:destroy:collection');
     });
@@ -456,6 +478,14 @@ describe('collection view', function() {
 
     it('should throw an error saying the views been destroyed if render is attempted again', function() {
       expect(this.collectionView.render).to.throw('Cannot use a view thats already been destroyed.');
+    });
+
+    it('should be marked destroyed', function() {
+      expect(this.collectionView).to.have.property('isDestroyed', true);
+    });
+
+    it('should be marked not rendered', function() {
+      expect(this.collectionView).to.have.property('isRendered', false);
     });
   });
 

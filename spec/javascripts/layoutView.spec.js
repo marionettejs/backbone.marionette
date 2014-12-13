@@ -216,6 +216,14 @@ describe('layoutView', function() {
       expect(this.layoutViewManager.regionOne).to.be.undefined;
       expect(this.layoutViewManager.regionTwo).to.be.undefined;
     });
+
+    it('should be marked destroyed', function() {
+      expect(this.layoutViewManager).to.have.property('isDestroyed', true);
+    });
+
+    it('should be marked not rendered', function() {
+      expect(this.layoutViewManager).to.have.property('isRendered', false);
+    });
   });
 
   describe('when showing a layoutView via a region', function() {

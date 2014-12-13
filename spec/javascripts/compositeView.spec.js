@@ -598,7 +598,15 @@ describe('composite view', function() {
     });
 
     it('should destroy the collection of views', function() {
-      expect(this.CompositeModelView.prototype.destroy.callCount).to.equal(1);
+      expect(this.CompositeModelView.prototype.destroy).to.have.been.calledOnce;
+    });
+
+    it('should be marked destroyed', function() {
+      expect(this.compositeView).to.have.property('isDestroyed', true);
+    });
+
+    it('should be marked not rendered', function() {
+      expect(this.compositeView).to.have.property('isRendered', false);
     });
   });
 

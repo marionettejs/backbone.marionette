@@ -172,6 +172,8 @@ Marionette.View = Backbone.View.extend({
     // unbind UI elements
     this.unbindUIElements();
 
+    this.isRendered = false;
+
     // remove the view from the DOM
     this.remove();
   },

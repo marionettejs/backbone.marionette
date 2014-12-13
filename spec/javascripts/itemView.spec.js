@@ -155,8 +155,18 @@ describe('item view', function() {
 
   describe('when destroying an item view', function() {
     beforeEach(function() {
-      this.onBeforeDestroyStub = this.sinon.stub();
-      this.onDestroyStub       = this.sinon.stub();
+      this.onBeforeDestroyStub = this.sinon.spy(function() {
+        return {
+          isRendered: this.isRendered,
+          isDestroyed: this.isDestroyed
+        };
+      });
+      this.onDestroyStub = this.sinon.spy(function() {
+        return {
+          isRendered: this.isRendered,
+          isDestroyed: this.isDestroyed
+        };
+      });
 
       this.View = Marionette.ItemView.extend({
         template        : this.templateStub,
@@ -196,6 +206,26 @@ describe('item view', function() {
 
     it('should call "onDestroy" if provided', function() {
       expect(this.onDestroyStub).to.have.been.called;
+    });
+
+    it('should not be destroyed when "onBeforeDestroy" is called', function () {
+      expect(this.onBeforeDestroyStub.lastCall.returnValue.isDestroyed).not.to.be.ok;
+    });
+
+    it('should be destroyed when "onDestroy" is called', function() {
+      expect(this.onDestroyStub.lastCall.returnValue.isDestroyed).to.be.true;
+    });
+
+    it('should be rendered when "onDestroy" is called', function() {
+      expect(this.onDestroyStub.lastCall.returnValue.isRendered).to.be.true;
+    });
+
+    it('should be marked destroyed', function() {
+      expect(this.view).to.have.property('isDestroyed', true);
+    });
+
+    it('should be marked not rendered', function() {
+      expect(this.view).to.have.property('isRendered', false);
     });
   });
 

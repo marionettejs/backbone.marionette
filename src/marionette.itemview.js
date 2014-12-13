@@ -49,6 +49,7 @@ Marionette.ItemView = Marionette.View.extend({
     this.attachElContent(html);
     this.bindUIElements();
 
+    this.isRendered = true;
     this.triggerMethod('render', this);
 
     return this;

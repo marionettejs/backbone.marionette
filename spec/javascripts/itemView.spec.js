@@ -41,8 +41,12 @@ describe('item view', function() {
 
   describe('when rendering', function() {
     beforeEach(function() {
-      this.onBeforeRenderStub = this.sinon.stub();
-      this.onRenderStub       = this.sinon.stub();
+      this.onBeforeRenderStub = this.sinon.spy(function() {
+        return this.isRendered;
+      });
+      this.onRenderStub       = this.sinon.spy(function() {
+        return this.isRendered;
+      });
 
       this.View = Marionette.ItemView.extend({
         template       : this.templateStub,
@@ -63,12 +67,28 @@ describe('item view', function() {
       expect(this.onRenderStub).to.have.been.calledOnce;
     });
 
+    it('should call "onBeforeRender" before "onRender"', function() {
+      expect(this.onBeforeRenderStub).to.have.been.calledBefore(this.onRenderStub);
+    });
+
+    it('should not be rendered when "onBeforeRender" is called', function() {
+      expect(this.onBeforeRenderStub.lastCall.returnValue).not.to.be.ok;
+    });
+
+    it('should be rendered when "onRender" is called', function() {
+      expect(this.onRenderStub.lastCall.returnValue).to.be.true;
+    });
+
     it('should trigger a before:render event', function() {
       expect(this.triggerSpy).to.have.been.calledWith('before:render', this.view);
     });
 
     it('should trigger a rendered event', function() {
       expect(this.triggerSpy).to.have.been.calledWith('render', this.view);
+    });
+
+    it('should mark as rendered', function() {
+      expect(this.view).to.have.property('isRendered', true);
     });
   });
 

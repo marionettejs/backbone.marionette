@@ -239,7 +239,12 @@ describe('composite view', function() {
       this.CompositeView = Backbone.Marionette.CompositeView.extend({
         childView: this.ChildView,
         template: this.templateFn,
-        onRender: function() {}
+        onBeforeRender: function() {
+          return this.isRendered;
+        },
+        onRender: function() {
+          return this.isRendered;
+        }
       });
 
       this.order = [];
@@ -267,6 +272,7 @@ describe('composite view', function() {
       });
 
       this.sinon.spy(this.compositeView, 'trigger');
+      this.sinon.spy(this.compositeView, 'onBeforeRender');
       this.sinon.spy(this.compositeView, 'onRender');
 
       this.compositeView.render();
@@ -294,12 +300,28 @@ describe('composite view', function() {
       expect(this.order[2]).to.equal(this.compositeView);
     });
 
-    it('should call "onRender"', function() {
-      expect(this.compositeView.onRender).to.have.been.called;
+    it('should call "onBeforeRender"', function() {
+      expect(this.compositeView.onBeforeRender).to.have.been.calledOnce;
     });
 
-    it('should only call "onRender" once', function() {
-      expect(this.compositeView.onRender.callCount).to.equal(1);
+    it('should call "onRender"', function() {
+      expect(this.compositeView.onRender).to.have.been.calledOnce;
+    });
+
+    it('should call "onBeforeRender" before "onRender"', function() {
+      expect(this.compositeView.onBeforeRender).to.have.been.calledBefore(this.compositeView.onRender);
+    });
+
+    it('should not be rendered when "onBeforeRender" is called', function() {
+      expect(this.compositeView.onBeforeRender.lastCall.returnValue).not.to.be.ok;
+    });
+
+    it('should be rendered when "onRender" is called', function() {
+      expect(this.compositeView.onRender.lastCall.returnValue).to.be.true;
+    });
+
+    it('should mark as rendered', function() {
+      expect(this.compositeView).to.have.property('isRendered', true);
     });
   });
 
@@ -590,7 +612,15 @@ describe('composite view', function() {
     });
 
     it('should destroy the collection of views', function() {
-      expect(this.CompositeModelView.prototype.destroy.callCount).to.equal(1);
+      expect(this.CompositeModelView.prototype.destroy).to.have.been.calledOnce;
+    });
+
+    it('should be marked destroyed', function() {
+      expect(this.compositeView).to.have.property('isDestroyed', true);
+    });
+
+    it('should be marked not rendered', function() {
+      expect(this.compositeView).to.have.property('isRendered', false);
     });
   });
 

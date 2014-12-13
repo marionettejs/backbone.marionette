@@ -102,7 +102,7 @@ Marionette.Behaviors = (function(Marionette, _) {
       }
 
       // Get behavior class can be either a flat object or a method
-      return _.isFunction(Behaviors.behaviorsLookup) ? Behaviors.behaviorsLookup.apply(this, arguments)[key] : Behaviors.behaviorsLookup[key];
+      return Marionette._getValue(Behaviors.behaviorsLookup, this, [options, key])[key];
     },
 
     // Iterate over the behaviors object, for each behavior

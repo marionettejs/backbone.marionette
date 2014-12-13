@@ -96,19 +96,13 @@ Marionette.LayoutView = Marionette.ItemView.extend({
     var regions;
     this._initRegionManager();
 
-    if (_.isFunction(this.regions)) {
-      regions = this.regions(options);
-    } else {
-      regions = this.regions || {};
-    }
+    regions = Marionette._getValue(this.regions, this, [options]) || {};
 
     // Enable users to define `regions` as instance options.
     var regionOptions = this.getOption.call(options, 'regions');
 
     // enable region options to be a function
-    if (_.isFunction(regionOptions)) {
-      regionOptions = regionOptions.call(this, options);
-    }
+    regionOptions = Marionette._getValue(regionOptions, this, [options]);
 
     _.extend(regions, regionOptions);
 

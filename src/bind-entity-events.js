@@ -63,7 +63,7 @@
     if (!entity || !bindings) { return; }
 
     // type-check bindings
-    if (!_.isFunction(bindings) && !_.isObject(bindings)) {
+    if (!_.isObject(bindings)) {
       throw new Marionette.Error({
         message: 'Bindings must be an object or function.',
         url: 'marionette.functions.html#marionettebindentityevents'
@@ -71,9 +71,7 @@
     }
 
     // allow the bindings to be a function
-    if (_.isFunction(bindings)) {
-      bindings = bindings.call(target);
-    }
+    bindings = Marionette._getValue(bindings, target);
 
     // iterate the bindings and bind them
     _.each(bindings, function(methods, evt) {

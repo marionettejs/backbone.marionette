@@ -16,9 +16,7 @@ Marionette.RegionManager = Marionette.Controller.extend({
   // each key becomes the region name, and each value is
   // the region definition.
   addRegions: function(regionDefinitions, defaults) {
-    if (_.isFunction(regionDefinitions)) {
-      regionDefinitions = regionDefinitions.apply(this, arguments);
-    }
+    regionDefinitions = Marionette._getValue(regionDefinitions, this, arguments);
 
     var regions = {};
 

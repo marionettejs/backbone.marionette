@@ -341,10 +341,7 @@ Marionette.Region = Marionette.Object.extend({
         if (_.isObject(el)) {
           return Backbone.$(el);
         }
-        var parentEl = regionConfig.parentEl;
-        if (_.isFunction(parentEl)) {
-          parentEl = parentEl();
-        }
+        var parentEl = Marionette._getValue(regionConfig.parentEl);
         return parentEl.find(el);
       };
     }

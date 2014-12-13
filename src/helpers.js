@@ -37,6 +37,17 @@ Marionette.proxyGetOption = function(optionName) {
   return Marionette.getOption(this, optionName);
 };
 
+// Similar to `_.result`, this is a simple helper
+// If a function is provided we call it with context
+// otherwise just return the value. If the value is
+// undefined return a default value
+Marionette._getValue = function(value, context, params) {
+  if (_.isFunction(value)) {
+    value = value.apply(context, params);
+  }
+  return value;
+};
+
 // Marionette.normalizeMethods
 // ----------------------
 

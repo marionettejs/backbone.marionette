@@ -143,7 +143,7 @@ Marionette.CompositeView = Marionette.CollectionView.extend({
     var childViewContainer = Marionette.getOption(containerView, 'childViewContainer');
     if (childViewContainer) {
 
-      var selector = _.isFunction(childViewContainer) ? childViewContainer.call(containerView) : childViewContainer;
+      var selector = Marionette._getValue(childViewContainer, containerView);
 
       if (selector.charAt(0) === '@' && containerView.ui) {
         container = containerView.ui[selector.substr(4)];

@@ -16,8 +16,12 @@ describe('collection view', function() {
 
     this.MockCollectionView = Backbone.Marionette.CollectionView.extend({
       childView: this.ChildView,
-      onBeforeRender: function() {},
-      onRender: function() {},
+      onBeforeRender: function() {
+        return this.isRendered;
+      },
+      onRender: function() {
+        return this.isRendered;
+      },
       onBeforeAddChild: function() {},
       onAddChild: function() {},
       onBeforeRemoveChild: function() {},
@@ -100,6 +104,18 @@ describe('collection view', function() {
       expect(this.collectionView.onRender).to.have.been.called;
     });
 
+    it('should call "onBeforeRender" before "onRender"', function() {
+      expect(this.collectionView.onBeforeRender).to.have.been.calledBefore(this.collectionView.onRender);
+    });
+
+    it('should not be rendered when "onBeforeRender" is called', function() {
+      expect(this.collectionView.onBeforeRender.lastCall.returnValue).not.to.be.ok;
+    });
+
+    it('should be rendered when "onRender" is called', function() {
+      expect(this.collectionView.onRender.lastCall.returnValue).to.be.true;
+    });
+
     it('should trigger a "before:render" event', function() {
       expect(this.collectionView.trigger).to.have.been.calledWith('before:render', this.collectionView);
     });
@@ -140,6 +156,10 @@ describe('collection view', function() {
 
     it('should trigger "childview:render" for each item in the collection', function() {
       expect(this.childViewRender.callCount).to.equal(2);
+    });
+
+    it('should be marked rendered', function() {
+      expect(this.collectionView).to.have.property('isRendered', true);
     });
   });
 

@@ -17,12 +17,7 @@ Marionette.Renderer = {
       });
     }
 
-    var templateFunc;
-    if (typeof template === 'function') {
-      templateFunc = template;
-    } else {
-      templateFunc = Marionette.TemplateCache.get(template);
-    }
+    var templateFunc = _.isFunction(template) ? template : Marionette.TemplateCache.get(template);
 
     return templateFunc(data);
   }

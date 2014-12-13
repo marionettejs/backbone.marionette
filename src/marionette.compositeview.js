@@ -70,7 +70,7 @@ Marionette.CompositeView = Marionette.CollectionView.extend({
   // but the collection will not re-render.
   render: function() {
     this._ensureViewIsIntact();
-    this.isRendered = true;
+    this._isRendering = true;
     this.resetChildViewContainer();
 
     this.triggerMethod('before:render', this);
@@ -78,12 +78,14 @@ Marionette.CompositeView = Marionette.CollectionView.extend({
     this._renderRoot();
     this._renderChildren();
 
+    this._isRendering = false;
+    this.isRendered = true;
     this.triggerMethod('render', this);
     return this;
   },
 
   _renderChildren: function() {
-    if (this.isRendered) {
+    if (this.isRendered || this._isRendering) {
       Marionette.CollectionView.prototype._renderChildren.call(this);
     }
   },

@@ -268,9 +268,7 @@ Marionette.CollectionView = Marionette.View.extend({
   // in order to keep the children in sync with the collection.
   addChild: function(child, ChildView, index) {
     var childViewOptions = this.getOption('childViewOptions');
-    if (_.isFunction(childViewOptions)) {
-      childViewOptions = childViewOptions.call(this, child, index);
-    }
+    childViewOptions = Marionette._getValue(childViewOptions, this, [child, index]);
 
     var view = this.buildChildView(child, ChildView, childViewOptions);
 

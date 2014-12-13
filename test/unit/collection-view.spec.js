@@ -16,8 +16,12 @@ describe('collection view', function() {
 
     this.MockCollectionView = Backbone.Marionette.CollectionView.extend({
       childView: this.ChildView,
-      onBeforeRender: function() {},
-      onRender: function() {},
+      onBeforeRender: function() {
+        return this.isRendered;
+      },
+      onRender: function() {
+        return this.isRendered;
+      },
       onBeforeAddChild: function() {},
       onAddChild: function() {},
       onBeforeRemoveChild: function() {},
@@ -165,6 +169,18 @@ describe('collection view', function() {
       expect(this.collectionView.onRender).to.have.been.called;
     });
 
+    it('should call "onBeforeRender" before "onRender"', function() {
+      expect(this.collectionView.onBeforeRender).to.have.been.calledBefore(this.collectionView.onRender);
+    });
+
+    it('should not be rendered when "onBeforeRender" is called', function() {
+      expect(this.collectionView.onBeforeRender.lastCall.returnValue).not.to.be.ok;
+    });
+
+    it('should be rendered when "onRender" is called', function() {
+      expect(this.collectionView.onRender.lastCall.returnValue).to.be.true;
+    });
+
     it('should trigger a "before:render" event', function() {
       expect(this.collectionView.trigger).to.have.been.calledWith('before:render', this.collectionView);
     });
@@ -211,6 +227,10 @@ describe('collection view', function() {
       expect(this.collectionView.getChildView).to.have.been.calledTwice.
         and.calledWith(this.collection.models[0]).
         and.calledWith(this.collection.models[1]);
+    });
+
+    it('should be marked rendered', function() {
+      expect(this.collectionView).to.have.property('isRendered', true);
     });
   });
 
@@ -517,8 +537,18 @@ describe('collection view', function() {
       this.EventedView = Backbone.Marionette.CollectionView.extend({
         childView: this.ChildView,
         someCallback: function() {},
-        onBeforeDestroy: function() {},
-        onDestroy: function() {}
+        onBeforeDestroy: function() {
+          return {
+            isRendered: this.isRendered,
+            isDestroyed: this.isDestroyed
+          };
+        },
+        onDestroy: function() {
+          return {
+            isRendered: this.isRendered,
+            isDestroyed: this.isDestroyed
+          };
+        }
       });
 
       this.destroyHandler = this.sinon.stub();
@@ -599,6 +629,18 @@ describe('collection view', function() {
       expect(this.collectionView.onBeforeDestroy).to.have.been.called;
     });
 
+    it('should call "onBeforeDestroy" before "onDestroy"', function() {
+      expect(this.collectionView.onBeforeDestroy).to.have.been.calledBefore(this.collectionView.onDestroy);
+    });
+
+    it('should not be destroyed when "onBeforeDestroy" is called', function() {
+      expect(this.collectionView.onBeforeDestroy.lastCall.returnValue.isDestroyed).not.to.be.ok;
+    });
+
+    it('should be destroyed when "onDestroy" is called', function() {
+      expect(this.collectionView.onDestroy.lastCall.returnValue.isDestroyed).to.be.true;
+    });
+
     it('should trigger a "before:destroy" event', function() {
       expect(this.collectionView.trigger).to.have.been.calledWith('before:destroy:collection');
     });
@@ -618,6 +660,14 @@ describe('collection view', function() {
 
     it('should return the collection view', function() {
       expect(this.collectionView.destroy).to.have.returned(this.collectionView);
+    });
+
+    it('should be marked destroyed', function() {
+      expect(this.collectionView).to.have.property('isDestroyed', true);
+    });
+
+    it('should be marked not rendered', function() {
+      expect(this.collectionView).to.have.property('isRendered', false);
     });
   });
 

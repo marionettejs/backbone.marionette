@@ -1,15 +1,14 @@
 {
   "globals": {
-    "define"             : true,
-    "require"            : true,
-    "module"             : true,
-    "exports"            : true,
-    "$"                  : true,
-    "jQuery"             : true,
-    "_"                  : true,
-    "Backbone"           : true,
-    "Marionette"         : true,
-    "slice"              : true
+    "define"     : true,
+    "require"    : true,
+    "module"     : true,
+    "exports"    : true,
+    "$"          : true,
+    "jQuery"     : true,
+    "_"          : true,
+    "Backbone"   : true,
+    "Marionette" : true
   },
 
   "bitwise"       : true,

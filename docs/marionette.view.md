@@ -17,6 +17,8 @@ behaviors that are shared across all views.
 * [View onShow](#view-onshow)
 * [View destroy](#view-destroy)
 * [View onBeforeDestroy](#view-onbeforedestroy)
+* [View "attach" / onAttach event](#view-attach--onattach-event)
+* [View "before:attach" / onBeforeAttach event](#view-beforeattach--onbeforeattach-event)
 * [View "dom:refresh" / onDomRefresh event](#view-domrefresh--ondomrefresh-event)
 * [View.triggers](#viewtriggers)
 * [View.events](#viewevents)
@@ -127,6 +129,28 @@ v.destroy(arg1, arg2);
 When destroying a view, an `onBeforeDestroy` method will be called, if it
 has been provided, just before the view destroys. It will be passed any arguments
 that `destroy` was invoked with.
+
+### View "attach" / onAttach event
+
+Every view in Marionette has a special event called "attach," which is triggered anytime that showing
+the view in a Region causes it to be attached to the `document`. Like other Marionette events, it also
+executes a callback method, `onAttach`, if you've specified one. The `"attach"` event is great for jQuery
+plugins or other logic that must be executed *after* the view is attached to the `document`.
+
+Because the `attach` event is only fired when the view is a child of the `document`, it is a requirement
+that the Region you're showing it in be a child of the `document` at the time that you call `show`.
+
+This event is unique in that it propagates down the view tree. For instance, when a CollectionView's
+`attach` event is fired, all of its children views will have the `attach` event fired as well. In
+addition, deeply nested Layout View structures will all have their `attach` event fired at the proper
+time, too.
+
+For more on efficient, deeply-nested view structures, refer to the LayoutView docs.
+
+### View "before:attach" / onBeforeAttach
+
+This is just like the attach event described above, but it's triggered right before the view is
+attached to the document.
 
 ### View "dom:refresh" / onDomRefresh event
 

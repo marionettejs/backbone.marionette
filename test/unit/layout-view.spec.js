@@ -153,7 +153,9 @@ describe('layoutView', function() {
     });
 
     it('should supply the layoutView.options to the function when calling it', function() {
-      expect(this.options).to.deep.equal(this.layoutView.options);
+      expect(_.extend({
+        destroyImmediate: false
+      }, this.options)).to.deep.equal(this.layoutView.options);
     });
 
     it('should build the regions from the returns object literal', function() {
@@ -212,11 +214,23 @@ describe('layoutView', function() {
 
   describe('when destroying', function() {
     beforeEach(function() {
-      this.layoutViewManager = new this.LayoutView();
+      this.layoutViewManager = new this.LayoutView(this.viewOptions );
+      $('<span id="parent">').append(this.layoutViewManager.el);
       this.layoutViewManager.render();
 
       this.regionOne = this.layoutViewManager.regionOne;
       this.regionTwo = this.layoutViewManager.regionTwo;
+
+      var View = Marionette.ItemView.extend({
+        template: false,
+        destroy: function() {
+          this.hadParent = this.$el.closest('#parent').length > 0;
+          return View.__super__.destroy.call(this);
+        }
+      });
+
+      this.regionOneView = new View();
+      this.regionOne.show(this.regionOneView);
 
       this.sinon.spy(this.regionOne, 'empty');
       this.sinon.spy(this.regionTwo, 'empty');
@@ -238,6 +252,31 @@ describe('layoutView', function() {
 
     it('should return the view', function() {
       expect(this.layoutViewManager.destroy).to.have.always.returned(this.layoutViewManager);
+    });
+
+    it('should not remove itself from the DOM before destroying child regions by default', function() {
+      expect(this.regionOneView.hadParent).to.be.true;
+      this.viewOptions = {
+        destroyImmediate: true
+      };
+    });
+
+    it('should remove itself from the DOM before destroying child regions if flag set via options', function() {
+      expect(this.regionOneView.hadParent).to.be.false;
+      this.viewOptions = null;
+      this.LayoutView.prototype.options.destroyImmediate = true;
+    });
+
+    it('should remove itself from the DOM before destroying child regions if flag set on proto options', function() {
+      expect(this.regionOneView.hadParent).to.be.false;
+      _.extend(this.LayoutView.prototype, {
+        options: null,
+        destroyImmediate: true
+      });
+    });
+
+    it('should remove itself from the DOM before destroying child regions if flag set on proto', function() {
+      expect(this.regionOneView.hadParent).to.be.false;
     });
 
     it('should be marked destroyed', function() {

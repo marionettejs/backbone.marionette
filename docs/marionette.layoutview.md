@@ -212,7 +212,14 @@ MyApp.addRegions({
 });
 
 // Create a new LayoutView
-var layoutView = new Marionette.LayoutView();
+var layoutView = new Marionette.LayoutView({
+  // This option removes the layoutView from
+  // the DOM before destroying the children
+  // preventing repaints as each option is removed.
+  // However, it makes it difficult to do close animations
+  // for a child view (false by default)
+  destroyImmediate: true
+});
 
 // Lastly, show the LayoutView in the App's mainRegion
 MyApp.getRegion('main').show(layoutView);

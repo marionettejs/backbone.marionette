@@ -292,22 +292,14 @@ Marionette.CollectionView = Marionette.View.extend({
     if (increment) {
       // assign the index to the view
       view._index = index;
+    }
 
-      // increment the index of views after this one
-      this.children.each(function (laterView) {
-        if (laterView._index >= view._index) {
-          laterView._index++;
-        }
-      });
-    }
-    else {
-      // decrement the index of views after this one
-      this.children.each(function (laterView) {
-        if (laterView._index >= view._index) {
-          laterView._index--;
-        }
-      });
-    }
+    // update the indexes of views after this one
+    this.children.each(function (laterView) {
+      if (laterView._index >= view._index) {
+        laterView._index += increment ? 1 : -1;
+      }
+    });
   },
 
 

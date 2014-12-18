@@ -249,6 +249,19 @@ describe('layoutView', function() {
     });
   });
 
+  describe('when showing a childView', function() {
+    beforeEach(function() {
+      this.layoutView = new this.LayoutView();
+      this.layoutView.render();
+      this.childView = new Backbone.View();
+      this.layoutView.showChildView('regionOne', this.childView);
+    });
+
+    it('shows the childview in the region', function() {
+      expect(this.layoutView.getChildView('regionOne')).to.equal(this.childView);
+    });
+  });
+
   describe('when showing a layoutView via a region', function() {
     beforeEach(function() {
       var suite = this;

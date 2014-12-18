@@ -78,6 +78,14 @@ layoutView.getRegion('menu').show(new MenuView());
 layoutView.getRegion('content').show(new MainContentView());
 ```
 
+There are also helpful shortcuts for more consise syntax.
+
+```js
+layoutView.showChildView('menu', new MenuView());
+
+layoutView.showChildView('content', new MainContentView());
+```
+
 ### Region Options
 
 A `LayoutView` can take a `regions` hash that allows you to specify regions per `LayoutView` instance.
@@ -222,8 +230,8 @@ var layout3 = new Layout3();
 
 MyApp.getRegion('main').show(layout1);
 
-layout1.getRegion('region1').show(layout2);
-layout2.getRegion('region2').show(layout3);
+layout1.showChildView('region1', layout2);
+layout2.showChildView('region2', layout3);
 ```
 
 ### Efficient Nested View Structures
@@ -235,8 +243,8 @@ of the children in the `onBeforeShow` callback.
 ```js
 var ParentLayout = Marionette.LayoutView.extend({
   onBeforeShow: function() {
-    this.getRegion('header').show(new HeaderView());
-    this.getRegion('footer').show(new FooterView());
+    this.showChildView('header', new HeaderView());
+    this.showChildView('footer', new FooterView());
   }
 });
 

@@ -198,13 +198,15 @@ Marionette.View = Backbone.View.extend({
     var bindings = _.result(this, '_uiBindings');
 
     // empty the ui so we don't have anything to start with
-    this.ui = {};
+    this._ui = {};
 
     // bind each of the selectors
     _.each(_.keys(bindings), function(key) {
       var selector = bindings[key];
-      this.ui[key] = this.$(selector);
+      this._ui[key] = this.$(selector);
     }, this);
+
+    this.ui = this._ui;
   },
 
   // This method unbinds the elements specified in the "ui" hash
@@ -224,6 +226,13 @@ Marionette.View = Backbone.View.extend({
     // reset the ui element to the original bindings configuration
     this.ui = this._uiBindings;
     delete this._uiBindings;
+    delete this._ui;
+  },
+
+  getUI: function(name) {
+    this._ensureViewIsIntact();
+
+    return this._ui[name];
   },
 
   // Internal method to create an event handler for a given `triggerDef` like

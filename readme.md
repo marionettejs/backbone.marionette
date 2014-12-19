@@ -70,7 +70,7 @@ We're happy to discuss design patterns and learn how you're using Marionette.
 
 ## Marionette Inspector
 
-<a href="https://github.com/marionettejs/marionette.inspector"><img src="http://i.imgur.com/B1q9QXH.jpg" align="center" height="367" width="858" /></a>
+<a href="https://github.com/marionettejs/marionette.inspector"><img src="http://i.imgur.com/B1q9QXH.jpg" align="center" /></a>
 
 + **Visualize** the view hierarchy with the UI tree
 + **Visualize** application activity with a full history of actions

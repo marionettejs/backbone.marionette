@@ -35,12 +35,12 @@ Marionette.Behaviors = (function(Marionette, _) {
 
     behaviorEvents: function(behaviorEvents, behaviors) {
       var _behaviorsEvents = {};
-      var viewUI = _.result(this, 'ui');
+      var viewUI = this._uiBindings || _.result(this, 'ui');
 
       _.each(behaviors, function(b, i) {
         var _events = {};
         var behaviorEvents = _.clone(_.result(b, 'events')) || {};
-        var behaviorUI = _.result(b, 'ui');
+        var behaviorUI = b._uiBindings || _.result(b, 'ui');
 
         // Construct an internal UI hash first using
         // the views UI hash and then the behaviors UI hash.

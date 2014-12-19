@@ -18,22 +18,17 @@ Marionette.RegionManager = Marionette.Controller.extend({
   addRegions: function(regionDefinitions, defaults) {
     regionDefinitions = Marionette._getValue(regionDefinitions, this, arguments);
 
-    var regions = {};
-
-    _.each(regionDefinitions, function(definition, name) {
+    return _.reduce(regionDefinitions, function(regions, definition, name) {
       if (_.isString(definition)) {
         definition = {selector: definition};
       }
-
       if (definition.selector) {
         definition = _.defaults({}, definition, defaults);
       }
 
-      var region = this.addRegion(name, definition);
-      regions[name] = region;
-    }, this);
-
-    return regions;
+      regions[name] = this.addRegion(name, definition);
+      return regions;
+    }, {}, this);
   },
 
   // Add an individual region to the region manager,

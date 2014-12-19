@@ -8,7 +8,7 @@ Marionette.View = Backbone.View.extend({
   constructor: function(options) {
     _.bindAll(this, 'render');
 
-    options = Marionette.getValue(options, this);
+    options = Marionette._getValue(options, this);
 
     // this exposes view options to the view initializer
     // this is a backfill since backbone removed the assignment
@@ -46,7 +46,7 @@ Marionette.View = Backbone.View.extend({
   mixinTemplateHelpers: function(target) {
     target = target || {};
     var templateHelpers = this.getOption('templateHelpers');
-    templateHelpers = Marionette.getValue(templateHelpers, this);
+    templateHelpers = Marionette._getValue(templateHelpers, this);
     return _.extend(target, templateHelpers);
   },
 
@@ -98,7 +98,7 @@ Marionette.View = Backbone.View.extend({
 
   // internal method to delegate DOM events and triggers
   _delegateDOMEvents: function(eventsArg) {
-    var events = Marionette.getValue(eventsArg || this.events, this);
+    var events = Marionette._getValue(eventsArg || this.events, this);
 
     // normalize ui keys
     events = this.normalizeUIKeys(events);

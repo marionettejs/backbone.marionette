@@ -71,7 +71,7 @@
     }
 
     // allow the bindings to be a function
-    bindings = Marionette.getValue(bindings, target);
+    bindings = Marionette._getValue(bindings, target);
 
     // iterate the bindings and bind them
     _.each(bindings, function(methods, evt) {

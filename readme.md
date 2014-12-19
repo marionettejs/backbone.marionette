@@ -67,6 +67,22 @@ We're happy to discuss design patterns and learn how you're using Marionette.
 * Flexible, "as-needed" architecture allowing you to pick and choose what you need
 * And much, much more
 
+
+## Marionette Inspector
+
+<a href="https://github.com/marionettejs/marionette.inspector"><img src="http://i.imgur.com/B1q9QXH.jpg" align="center" height="367" width="858" /></a>
+
++ **Visualize** the view hierarchy with the UI tree
++ **Visualize** application activity with a full history of actions
++ **Inspect** view ui, events, listeners, properties
++ **Inspect** model attributes, listeners, properties
++ **Explore** Radio channel events, requests, commands
++ **Explore** application with an inspector magnifying glass
++ **Jump** between the inspector elements and source panel with intelligent links
+
+Download at [Chrome Web Store](https://chrome.google.com/webstore/detail/marionette-inspector/fbgfjlockdhidoaempmjcddibjklhpka)  
+Explore code at  [Github](https://github.com/marionettejs/marionette.inspector)
+
 ## Source Code and Downloads
 
 You can download the latest builds directly from the "lib" folder above.

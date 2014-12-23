@@ -132,12 +132,8 @@ describe('Region', function() {
               this.region = Marionette.Region.buildRegion(this.definition, this.DefaultRegionClass);
             });
 
-            it('overrides region.getEl', function(){
-                expect(this.region.getEl).not.to.equal(this.DefaultRegionClass.prototype.getEl);
-            });
-
             it('returns the jQuery(el)', function(){
-                expect(this.region.getEl(this.el)).to.deep.equal($(this.el));
+              expect(this.region.getEl(this.el)).to.deep.equal($(this.el));
             });
 
           });

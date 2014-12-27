@@ -72,6 +72,21 @@ describe('base view', function() {
     it('should set the view isDestroyed to true', function() {
       expect(this.view).to.be.have.property('isDestroyed', true);
     });
+
+    describe('isDestroyed property', function() {
+      beforeEach(function() {
+        this.view = new Marionette.View();
+      });
+
+      it('should be set to false before destroy', function() {
+        expect(this.view).to.be.have.property('isDestroyed', false);
+      });
+
+      it('should be set to true after destroying', function() {
+        this.view.destroy();
+        expect(this.view).to.be.have.property('isDestroyed', true);
+      });
+    });
   });
 
   describe('when destroying a view and returning false from the onBeforeDestroy method', function() {

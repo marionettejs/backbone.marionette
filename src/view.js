@@ -202,8 +202,7 @@ Marionette.View = Backbone.View.extend({
     this.ui = {};
 
     // bind each of the selectors
-    _.each(_.keys(bindings), function(key) {
-      var selector = bindings[key];
+    _.each(bindings, function(selector, key) {
       this.ui[key] = this.$(selector);
     }, this);
   },

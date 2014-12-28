@@ -158,7 +158,7 @@ Marionette.Behaviors = (function(Marionette, _) {
 
       triggersHash = Marionette.normalizeUIKeys(triggersHash, ui);
 
-      _.each(triggersHash, _.partial(this._setHandlerForBehavior, behavior, i), this);
+      _.each(triggersHash, _.bind(this._setHandlerForBehavior, this, behavior, i));
     },
 
     // Internal method to create and assign the trigger handler for a given

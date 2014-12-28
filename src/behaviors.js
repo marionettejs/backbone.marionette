@@ -55,18 +55,19 @@ Marionette.Behaviors = (function(Marionette, _) {
         // a user to use the @ui. syntax.
         behaviorEvents = Marionette.normalizeUIKeys(behaviorEvents, ui);
 
-        _.each(_.keys(behaviorEvents), function(key, j) {
+        var j = 0;
+        _.each(behaviorEvents, function(behaviour, key) {
           var match     = key.match(delegateEventSplitter);
 
           // Set event name to be namespaced using the view cid,
           // the behavior index, and the behavior event index
           // to generate a non colliding event namespace
           // http://api.jquery.com/event.namespace/
-          var eventName = match[1] + '.' + [this.cid, i, j, ' '].join(''),
+          var eventName = match[1] + '.' + [this.cid, i, j++, ' '].join(''),
               selector  = match[2];
 
           var eventKey  = eventName + selector;
-          var handler   = _.isFunction(behaviorEvents[key]) ? behaviorEvents[key] : b[behaviorEvents[key]];
+          var handler   = _.isFunction(behaviour) ? behaviour : b[behaviour];
 
           _events[eventKey] = _.bind(handler, b);
         }, this);

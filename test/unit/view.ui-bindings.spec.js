@@ -24,6 +24,11 @@ describe('view ui elements', function() {
     it('should return an empty jQuery object if it cannot be found', function() {
       expect(this.view.ui.bar).to.be.instanceOf(jQuery).and.to.have.lengthOf(0);
     });
+
+    it('should return its jQuery selector through getUI', function() {
+      expect(this.view.getUI('foo')).to.be.instanceOf(jQuery).and.to.have.lengthOf(1);
+      expect(this.view.getUI('bar')).to.be.instanceOf(jQuery).and.to.have.lengthOf(0);
+    });
   });
 
   describe('when re-rendering a view with a UI element configuration', function() {
@@ -37,6 +42,11 @@ describe('view ui elements', function() {
     it('should return an up-to-date selector on subsequent renders', function() {
       expect(this.view.ui.foo).to.be.instanceOf(jQuery).and.to.have.lengthOf(0);
       expect(this.view.ui.bar).to.be.instanceOf(jQuery).and.to.have.lengthOf(1);
+    });
+
+    it('should return an up-to-date selector through getUI', function() {
+      expect(this.view.getUI('foo')).to.be.instanceOf(jQuery).and.to.have.lengthOf(0);
+      expect(this.view.getUI('bar')).to.be.instanceOf(jQuery).and.to.have.lengthOf(1);
     });
   });
 
@@ -68,6 +78,10 @@ describe('view ui elements', function() {
       expect(this.view.ui.foo).to.have.lengthOf(0);
       expect(this.view.ui.bar).to.have.lengthOf(1);
     });
+
+    it('should return its jQuery selector through getUI', function() {
+      expect(this.view.getUI('foo')).to.be.instanceOf(jQuery).and.to.have.lengthOf(1);
+    });
   });
 
   describe('when destroying a view that has not been rendered', function() {
@@ -90,6 +104,15 @@ describe('view ui elements', function() {
 
     it('should unbind UI elements and reset them to the selector', function() {
       expect(this.view.ui).to.deep.equal(this.uiHash);
+    });
+
+    it('should throw ViewDestroyedError when accessing ui bindings through getUI', function() {
+      expect(_.bind(function() {
+        return this.view.getUI('foo');
+      }, this)).to.throw(Marionette.Error, new Marionette.Error({
+        name: 'ViewDestroyedError',
+        message: 'View (cid: "' + this.view.id + '") has already been destroyed and cannot be used.'
+      }));
     });
   });
 

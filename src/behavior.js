@@ -43,5 +43,4 @@ Marionette.Behavior = Marionette.Object.extend({
     this.$el = view.$el;
     this.el = view.el;
   }
-}); 
- 
+});

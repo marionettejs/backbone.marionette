@@ -15,6 +15,8 @@ Marionette.Behavior = Marionette.Object.extend({
     this.view = view;
     this.defaults = _.result(this, 'defaults') || {};
     this.options  = _.extend({}, this.defaults, options);
+    // Create an empty array for views this behavior creates
+    this.childViews = [];
 
     Marionette.Object.apply(this, arguments);
   },
@@ -29,11 +31,17 @@ Marionette.Behavior = Marionette.Object.extend({
   // Stops the behavior from listening to events.
   // Overrides Object#destroy to prevent additional events from being triggered.
   destroy: function() {
+    // Destroy each view created by this behavior
+    var args = _.toArray(arguments);
+    _.invoke(this.childViews, 'destroy', args);
+
     this.stopListening();
+    return this;
   },
 
   proxyViewProperties: function (view) {
     this.$el = view.$el;
     this.el = view.el;
   }
-});
+}); 
+ 

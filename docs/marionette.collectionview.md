@@ -498,7 +498,7 @@ myView.render();
 
 ### "render" event
 
-A "collection:rendered" / `onCollectionRendered` event will also be fired. This allows you to
+A "render:collection" / `onRenderCollection` event will also be fired. This allows you to
 add more than one callback to execute after the view is rendered,
 and allows parent views and other parts of the application to
 know that the view was rendered.

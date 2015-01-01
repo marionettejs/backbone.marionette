@@ -203,7 +203,7 @@ Marionette.CollectionView = Marionette.View.extend({
   },
 
   // Render and show the emptyView. Similar to addChild method
-  // but "child:added" events are not fired, and the event from
+  // but "add:child" events are not fired, and the event from
   // emptyView are not forwarded
   addEmptyView: function(child, EmptyView) {
 

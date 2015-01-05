@@ -147,7 +147,7 @@ time, too.
 
 For more on efficient, deeply-nested view structures, refer to the LayoutView docs.
 
-### View "before:attach" / onBeforeAttach
+### View "before:attach" / onBeforeAttach event
 
 This is just like the attach event described above, but it's triggered right before the view is
 attached to the document.

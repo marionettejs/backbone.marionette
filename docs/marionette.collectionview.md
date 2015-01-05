@@ -6,12 +6,12 @@ then append the results of the item view's `el` to the collection view's
 `el`.
 
 CollectionView extends directly from Marionette.View. Please see
-[the Marionette.View documentation](marionette.view.md)
+[the Marionette.View documentation](./marionette.view.html)
 for more information on available features and functionality.
 
 Additionally, interactions with Marionette.Region
 will provide features such as `onShow` callbacks, etc. Please see
-[the Region documentation](marionette.region.md) for more information.
+[the Region documentation](./marionette.region.html) for more information.
 
 ## Documentation Index
 
@@ -401,7 +401,7 @@ Backbone.Marionette.CollectionView.extend({
 
 There are several events that will be triggered during the life
 of a collection view. Each of these events is called with the
-[Marionette.triggerMethod](./marionette.functions.md) function,
+[Marionette.triggerMethod](./marionette.functions.html) function,
 which calls a corresponding "on{EventName}" method on the
 view instance (see [above](#callback-methods)).
 

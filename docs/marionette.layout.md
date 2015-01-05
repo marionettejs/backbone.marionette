@@ -14,12 +14,12 @@ For a more in-depth discussion on Layouts, see the blog post
 [Manage Layouts And Nested Views With Backbone.Marionette](http://lostechies.com/derickbailey/2012/03/22/managing-layouts-and-nested-views-with-backbone-marionette/)
 
 Please see
-[the Marionette.ItemView documentation](marionette.itemview.md)
+[the Marionette.ItemView documentation](./marionette.itemview.html)
 for more information on available features and functionality.
 
 Additionally, interactions with Marionette.Region
 will provide features such as `onShow` callbacks, etc. Please see
-[the Region documentation](marionette.region.md) for more information.
+[the Region documentation](./marionette.region.html) for more information.
 
 ## Documentation Index
 

@@ -66,7 +66,7 @@ add them after the app is started, they will run immediately.
 ## Application Event
 
 The `Application` object raises a few events during its lifecycle, using the
-[Marionette.triggerMethod](./marionette.functions.md) function. These events
+[Marionette.triggerMethod](./marionette.functions.html) function. These events
 can be used to do additional processing of your application. For example, you
 may want to pre-process some data just before initialization happens. Or you may
 want to wait until your entire application is initialized to start the
@@ -265,4 +265,4 @@ MyApp.removeRegion('someRegion');
 Removing a region will properly close it before removing it from the
 application object.
 
-For more information on regions, see [the region documentation](./marionette.region.md)
+For more information on regions, see [the region documentation](./marionette.region.html)

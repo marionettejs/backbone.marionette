@@ -6,12 +6,12 @@ branch and leaf in a tree structure, or for scenarios where a
 collection needs to be rendered within a wrapper template.
 
 Please see
-[the Marionette.CollectionView documentation](marionette.collectionview.md)
+[the Marionette.CollectionView documentation](./marionette.collectionview.html)
 for more information on available features and functionality.
 
 Additionally, interactions with Marionette.Region
 will provide features such as `onShow` callbacks, etc. Please see
-[the Region documentation](marionette.region.md) for more information.
+[the Region documentation](./marionette.region.html) for more information.
 
 ## Example Usage: Tree View
 
@@ -163,7 +163,7 @@ Sometimes the `itemViewContainer` configuration is insuficient for
 specifying where the itemView instance should be placed. If this is the
 case, you can override the `appendHtml` method with your own implementation.
 
-For more information on this method, see the [CollectionView's documentation](https://github.com/marionettejs/backbone.marionette/blob/master/docs/marionette.collectionview.md).
+For more information on this method, see the [CollectionView's documentation](./marionette.collectionview.html).
 
 ## Recursive By Default
 
@@ -199,7 +199,7 @@ You can also manually re-render either or both of them:
 ## Events And Callbacks
 
 During the course of rendering a composite, several events will
-be triggered. These events are triggered with the [Marionette.triggerMethod](./marionette.functions.md)
+be triggered. These events are triggered with the [Marionette.triggerMethod](./marionette.functions.html)
 function, which calls a corresponding "on{EventName}" method on the view.
 
 * "composite:model:rendered" / `onCompositeModelRendered` - after the `modelView` has been rendered
@@ -249,4 +249,4 @@ Marionette.CompositeView.extend({
 });
 ```
 
-For more information, see the [Marionette.View](./marionette.view.md) documentation.
+For more information, see the [Marionette.View](./marionette.view.html) documentation.

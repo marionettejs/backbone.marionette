@@ -294,14 +294,14 @@ the list of childViews, you can specify an `emptyView` attribute on your
 collection view.
 
 ```js
-var NoChildsView = Backbone.Marionette.ItemView.extend({
+var NoChildrenView = Backbone.Marionette.ItemView.extend({
   template: "#show-no-children-message-template"
 });
 
 Backbone.Marionette.CollectionView.extend({
   // ...
 
-  emptyView: NoChildsView
+  emptyView: NoChildrenView
 });
 ```
 
@@ -315,7 +315,7 @@ Backbone.Marionette.CollectionView.extend({
 
   getEmptyView: function() {
     // custom logic
-    return NoChildsView;
+    return NoChildrenView;
   }
 ```
 

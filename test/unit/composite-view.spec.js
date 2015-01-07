@@ -790,7 +790,7 @@ describe('composite view', function() {
         this.view.serializeData();
       });
 
-      it("should call serializeModel", function(){
+      it("should call serializeModel", function() {
         expect(this.view.serializeModel).to.have.been.calledOnce;
       });
     });

@@ -395,7 +395,14 @@ This works for both `modelEvents` and `collectionEvents`.
 
 ## View.serializeModel
 
-The `serializeModel` method will serialize a model that is passed in as an argument.
+This method is used internally during a view's rendering phase. It
+will serialize the View's `model` property, adding it to the data
+that is ultimately passed to the template.
+
+If you would like to serialize the View's `model` in a special way,
+then you should override this method. With that said, **do not** override
+this if you're simply adding additional data to your template, like computed
+fields. Use [templateHelpers](#viewtemplatehelpers) instead.
 
 ## View.bindUIElements
 

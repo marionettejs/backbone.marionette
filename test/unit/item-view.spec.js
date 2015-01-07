@@ -75,6 +75,10 @@ describe('item view', function() {
     it('should not attach any html content', function() {
       expect(this.attachElContentSpy).to.not.have.been.called;
     });
+
+    it('should claim isRendered', function() {
+      expect(this.view.isRendered).to.be.true;
+    });
   });
 
   describe('when rendering with a overridden attachElContent', function() {

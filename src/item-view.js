@@ -54,6 +54,7 @@ Marionette.ItemView = Marionette.View.extend({
     this.triggerMethod('before:render', this);
 
     this._renderTemplate();
+    this.isRendered = true;
     this.bindUIElements();
 
     this.triggerMethod('render', this);
@@ -86,8 +87,6 @@ Marionette.ItemView = Marionette.View.extend({
     // Render and add to el
     var html = Marionette.Renderer.render(template, data, this);
     this.attachElContent(html);
-
-    this.isRendered = true;
 
     return this;
   },

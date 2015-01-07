@@ -273,3 +273,15 @@ Marionette.Behavior.extend({
 	}
 });
 ```
+
+### childViews
+The `childViews` property is an array to place any views that this `behavior` may create as part of the behavior. Using this property ensures that when the behavior's parent `view` is destroyed, that all of the child views are also destroyed.
+
+```js
+Marionette.Behavior.extend({
+    onShow: function() {
+        var childView = new Marionette.ItemView();
+        this.childViews.push(childView);
+    }
+});
+```

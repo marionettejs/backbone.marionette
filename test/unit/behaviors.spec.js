@@ -767,10 +767,20 @@ describe('Behaviors', function() {
     beforeEach(function() {
       this.behavior = new Marionette.Behavior();
       this.sinon.spy(this.behavior, 'destroy');
-      this.behavior.destroy();
     });
 
     it('should return the behavior', function() {
+      this.behavior.destroy();
+      expect(this.behavior.destroy).to.have.returned(this.behavior);
+    });
+
+    it('should return the child view and the behavior', function() {
+      this.childView = new Marionette.View();
+      this.sinon.spy(this.childView, 'destroy');
+      this.behavior.childViews.push(this.childView);
+      this.behavior.destroy();
+      expect(this.childView.destroy).to.have.returned(this.childView);
+      expect(this.behavior.destroy).to.have.returned(this.behavior);
     });
   });
 });

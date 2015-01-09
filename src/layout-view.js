@@ -108,7 +108,7 @@ Marionette.LayoutView = Marionette.ItemView.extend({
 
     // Normalize region selectors hash to allow
     // a user to use the @ui. syntax.
-    regions = this.normalizeUIValues(regions);
+    regions = this.normalizeUIValues(regions, ['selector', 'el']);
 
     this.addRegions(regions);
   },

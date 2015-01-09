@@ -4,6 +4,7 @@ root = true;
 
 [*]
 trim_trailing_whitespace = true
+trim_trailing_white_space_on_save = false
 insert_final_newline = true
 
 [*.js]

@@ -64,6 +64,25 @@ describe('normalizeUI* utility functions', function() {
         expect(Marionette.normalizeUIValues()).to.equal(undefined);
       });
     });
+    describe('when passed a hash containing embedded objects', function() {
+      beforeEach(function() {
+        this.uiValuesHash = {
+          embedded: {
+            foo: '@ui.foo',
+            bar: '@ui.bar'
+          }
+        };
+        this.normalizedUIValues = Marionette.normalizeUIValues(this.uiValuesHash, this.ui, ['foo']);
+      });
+      describe('when passed a hash containing objects whose properties contain @ui syntax values', function() {
+        it('should normalize properties with @ui. syntax values if they are named in the properties array', function() {
+          expect(this.normalizedUIValues.embedded.foo).to.equal(this.ui.foo);
+        });
+        it('should not modify hash value object properties not named in the properties array', function() {
+          expect(this.normalizedUIValues.embedded.bar).to.equal('@ui.bar');
+        });
+      });
+    });
   });
 
 });

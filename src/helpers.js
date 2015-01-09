@@ -93,7 +93,7 @@ Marionette.normalizeUIValues = function(hash, ui, properties) {
     if (_.isString(val)) {
       hash[key] = Marionette.normalizeUIString(val, ui);
     }
-    else if (_.isObject(val) && properties) {
+    else if (_.isObject(val) && _.isArray(properties)) {
       /* Value is an object, and we got an array of embedded property names to normalize. */
       _.each(properties, function(property) {
         var propertyVal = val[property];

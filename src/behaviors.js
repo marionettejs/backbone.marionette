@@ -9,6 +9,8 @@
 // method for things to work properly.
 
 Marionette.Behaviors = (function(Marionette, _) {
+  // Borrow event splitter from Backbone
+  var delegateEventSplitter = /^(\S+)\s*(.*)$/;
 
   function Behaviors(view, behaviors) {
 
@@ -35,12 +37,12 @@ Marionette.Behaviors = (function(Marionette, _) {
 
     behaviorEvents: function(behaviorEvents, behaviors) {
       var _behaviorsEvents = {};
-      var viewUI = _.result(this, 'ui');
+      var viewUI = this._uiBindings || _.result(this, 'ui');
 
       _.each(behaviors, function(b, i) {
         var _events = {};
         var behaviorEvents = _.clone(_.result(b, 'events')) || {};
-        var behaviorUI = _.result(b, 'ui');
+        var behaviorUI = b._uiBindings || _.result(b, 'ui');
 
         // Construct an internal UI hash first using
         // the views UI hash and then the behaviors UI hash.
@@ -53,21 +55,25 @@ Marionette.Behaviors = (function(Marionette, _) {
         // a user to use the @ui. syntax.
         behaviorEvents = Marionette.normalizeUIKeys(behaviorEvents, ui);
 
-        _.each(_.keys(behaviorEvents), function(key) {
-          // Append white-space at the end of each key to prevent behavior key collisions.
-          // This is relying on the fact that backbone events considers "click .foo" the same as
-          // "click .foo ".
+        var j = 0;
+        _.each(behaviorEvents, function(behaviour, key) {
+          var match     = key.match(delegateEventSplitter);
 
-          // +2 is used because new Array(1) or 0 is "" and not " "
-          var whitespace = (new Array(i + 2)).join(' ');
-          var eventKey   = key + whitespace;
-          var handler    = _.isFunction(behaviorEvents[key]) ? behaviorEvents[key] : b[behaviorEvents[key]];
+          // Set event name to be namespaced using the view cid,
+          // the behavior index, and the behavior event index
+          // to generate a non colliding event namespace
+          // http://api.jquery.com/event.namespace/
+          var eventName = match[1] + '.' + [this.cid, i, j++, ' '].join(''),
+              selector  = match[2];
+
+          var eventKey  = eventName + selector;
+          var handler   = _.isFunction(behaviour) ? behaviour : b[behaviour];
 
           _events[eventKey] = _.bind(handler, b);
-        });
+        }, this);
 
         _behaviorsEvents = _.extend(_behaviorsEvents, _events);
-      });
+      }, this);
 
       return _behaviorsEvents;
     }
@@ -102,7 +108,7 @@ Marionette.Behaviors = (function(Marionette, _) {
       }
 
       // Get behavior class can be either a flat object or a method
-      return _.isFunction(Behaviors.behaviorsLookup) ? Behaviors.behaviorsLookup.apply(this, arguments)[key] : Behaviors.behaviorsLookup[key];
+      return Marionette._getValue(Behaviors.behaviorsLookup, this, [options, key])[key];
     },
 
     // Iterate over the behaviors object, for each behavior
@@ -153,7 +159,7 @@ Marionette.Behaviors = (function(Marionette, _) {
 
       triggersHash = Marionette.normalizeUIKeys(triggersHash, ui);
 
-      _.each(triggersHash, _.partial(this._setHandlerForBehavior, behavior, i), this);
+      _.each(triggersHash, _.bind(this._setHandlerForBehavior, this, behavior, i));
     },
 
     // Internal method to create and assign the trigger handler for a given

@@ -123,6 +123,9 @@ describe('region', function() {
       });
 
       this.MyView = Backbone.View.extend({
+        events: {
+          'click': function(){}
+        },
         render: function() {
           $(this.el).html('some content');
         },
@@ -424,6 +427,11 @@ describe('region', function() {
         it('should replace the content in the DOM', function() {
           expect(this.myRegion.$el).to.contain.$text('some more content');
           expect(this.myRegion.$el).not.to.contain.$text('some content');
+        });
+
+        // https://github.com/marionettejs/backbone.marionette/issues/2159#issue-52745401
+        it('should still have view1\'s, event bindings', function() {
+          expect(jQuery._data(this.view.el, "events" ).click).to.be.defined;
         });
       });
 

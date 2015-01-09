@@ -37,6 +37,17 @@ Marionette.proxyGetOption = function(optionName) {
   return Marionette.getOption(this, optionName);
 };
 
+// Similar to `_.result`, this is a simple helper
+// If a function is provided we call it with context
+// otherwise just return the value. If the value is
+// undefined return a default value
+Marionette._getValue = function(value, context, params) {
+  if (_.isFunction(value)) {
+    value = value.apply(context, params);
+  }
+  return value;
+};
+
 // Marionette.normalizeMethods
 // ----------------------
 
@@ -77,10 +88,19 @@ Marionette.normalizeUIKeys = function(hash, ui) {
 // allows for the use of the @ui. syntax within
 // a given value for regions
 // swaps the @ui with the associated selector
-Marionette.normalizeUIValues = function(hash, ui) {
+Marionette.normalizeUIValues = function(hash, ui, properties) {
   _.each(hash, function(val, key) {
     if (_.isString(val)) {
       hash[key] = Marionette.normalizeUIString(val, ui);
+    }
+    else if (_.isObject(val) && _.isArray(properties)) {
+      /* Value is an object, and we got an array of embedded property names to normalize. */
+      _.each(properties, function(property) {
+        var propertyVal = val[property];
+        if (_.isString(propertyVal)) {
+          val[property] = Marionette.normalizeUIString(propertyVal, ui);
+        }
+      });
     }
   });
   return hash;

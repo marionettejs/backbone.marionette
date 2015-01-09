@@ -185,24 +185,18 @@ Marionette.Region = Marionette.Object.extend({
     }
   },
 
-  // Override this method to change how the region finds the
-  // DOM element that it manages. Return a jQuery selector object.
+  // Override this method to change how the region finds the DOM
+  // element that it manages. Return a jQuery selector object scoped
+  // to a provided parent el or the document if none exists.
   getEl: function(el) {
-    return Backbone.$(el);
+    return Backbone.$(el, Marionette._getValue(this.options.parentEl, this));
   },
 
   // Override this method to change how the new view is
   // appended to the `$el` that the region is managing
   attachHtml: function(view) {
-    // empty the node and append new view
-    // We can not use `.innerHTML` due to the fact that IE
-    // will not let us clear the html of tables and selects.
-    // We also do not want to use the more declarative `empty` method
-    // that jquery exposes since `.empty` loops over all of the children DOM
-    // nodes and unsets the listeners on each node. While this seems like
-    // a desirable thing, it comes at quite a high perf cost. For that reason
-    // we are simply clearing the html contents of the node.
-    this.$el.html('');
+    this.$el.contents().detach();
+
     this.el.appendChild(view.el);
   },
 
@@ -328,28 +322,7 @@ Marionette.Region = Marionette.Object.extend({
       options.el = regionConfig.selector;
     }
 
-    var region = new RegionClass(options);
-
-    // override the `getEl` function if we have a parentEl
-    // this must be overridden to ensure the selector is found
-    // on the first use of the region. if we try to assign the
-    // region's `el` to `parentEl.find(selector)` in the object
-    // literal to build the region, the element will not be
-    // guaranteed to be in the DOM already, and will cause problems
-    if (regionConfig.parentEl) {
-      region.getEl = function(el) {
-        if (_.isObject(el)) {
-          return Backbone.$(el);
-        }
-        var parentEl = regionConfig.parentEl;
-        if (_.isFunction(parentEl)) {
-          parentEl = parentEl();
-        }
-        return parentEl.find(el);
-      };
-    }
-
-    return region;
+    return new RegionClass(options);
   },
 
   // Build the region directly from a given `RegionClass`

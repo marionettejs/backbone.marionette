@@ -334,6 +334,12 @@ describe('Behaviors', function() {
         expect(this.behaviors.foo.prototype.events).to.have.property('click @ui.bar', 'onBarClick');
       });
 
+      it('should handle click events after calling delegateEvents', function() {
+        this.view.delegateEvents();
+        expect(this.fooBehavior.ui.foo.click.bind(this.view.ui.bar)).to.not.throw(Error);
+        expect(this.view.ui.bar.click.bind(this.view.ui.bar)).to.not.throw(Error);
+      });
+
       it('should set the behavior UI element', function() {
         expect(this.onRenderStub).to.have.been.calledOnce;
       });

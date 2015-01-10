@@ -1,4 +1,4 @@
-## [View the new docs](http://marionettejs.com/docs/marionette.behaviors.html)
+## [View the new docs](http://marionettejs.com/docs/v2.3.0/marionette.behaviors.html)
 
 # Marionette.Behaviors
 

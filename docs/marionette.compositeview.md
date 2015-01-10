@@ -1,4 +1,4 @@
-## [View the new docs](http://marionettejs.com/docs/marionette.compositeview.html)
+## [View the new docs](http://marionettejs.com/docs/v2.3.0/marionette.compositeview.html)
 
 # Marionette.CompositeView
 

@@ -1,4 +1,4 @@
-## [View the new docs](http://marionettejs.com/docs/marionette.configuration.html)
+## [View the new docs](http://marionettejs.com/docs/v2.3.0/marionette.configuration.html)
 
 # Marionette Configuration
 

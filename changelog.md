@@ -1,3 +1,31 @@
+### v2.3.1 [view commit logs](https://github.com/marionettejs/backbone.marionette/compare/v2.3.0...v2.3.1)
+
+#### 2.3.1 in overview:
+
+##### Features
+
+* Regions can set a `parentEl` as a way of specifying the DOM tree (default `body`) that they are scoped with. (useful for instance in `LayoutView`).
+
+```js
+  var region = new Region({parentEl: $(“#sub-tree”)})
+```
+
+##### Bug Fixes
+
+* Layout region lookups are now scoped to the layout and not to the entire DOM.
+
+* Calling `delegateEvents` after the `ui` hash has been modified now works.
+
+* Prevent unsetting event listeners on region swap when a view is swapped out from a region, but not destroyed, its DOM events will not be removed.
+
+* A view's `isDestroyed` state is now explicitly set to `false` when the view is created.
+
+##### Refactors
+
+* Added `Marionette._getValue`. This method is similar to `_.result`. If a function is provided we call it with context otherwise just return the value. If the value is undefined return a default value. This method is private and should not be used directly in your code.
+
+* Various other code refactors.
+
 ### v2.3.0 [view commit logs](https://github.com/marionettejs/backbone.marionette/compare/v2.2.2...v2.3.0)
 
 #### 2.3.0 in overview:

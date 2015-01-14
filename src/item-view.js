@@ -54,6 +54,7 @@ Marionette.ItemView = Marionette.View.extend({
     this.triggerMethod('before:render', this);
 
     this._renderTemplate();
+    this.isRendered = true;
     this.bindUIElements();
 
     this.triggerMethod('render', this);
@@ -81,8 +82,7 @@ Marionette.ItemView = Marionette.View.extend({
     }
 
     // Add in entity data and template helpers
-    var data = this.serializeData();
-    data = this.mixinTemplateHelpers(data);
+    var data = this.mixinTemplateHelpers(this.serializeData());
 
     // Render and add to el
     var html = Marionette.Renderer.render(template, data, this);

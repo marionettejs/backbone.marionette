@@ -12,6 +12,17 @@ describe('layoutView', function() {
       regions: {
         regionOne: '#regionOne',
         regionTwo: '#regionTwo'
+      },
+      initialize: function() {
+        if (this.model) {
+          this.listenTo(this.model, 'change', this.render);
+        }
+      },
+      onBeforeRender: function() {
+        return this.isRendered;
+      },
+      onRender: function() {
+        return this.isRendered;
       }
     });
 
@@ -154,6 +165,9 @@ describe('layoutView', function() {
   describe('on rendering', function() {
     beforeEach(function() {
       this.layoutViewManager = new this.LayoutView();
+      sinon.spy(this.layoutViewManager, 'onRender');
+      sinon.spy(this.layoutViewManager, 'onBeforeRender');
+      sinon.spy(this.layoutViewManager, 'trigger');
       this.layoutViewManager.render();
     });
 
@@ -161,6 +175,38 @@ describe('layoutView', function() {
       this.layoutViewManager.regionOne._ensureElement();
       var el = this.layoutViewManager.$('#regionOne');
       expect(this.layoutViewManager.regionOne.$el[0]).to.equal(el[0]);
+    });
+
+    it('should call "onBeforeRender" before rendering', function() {
+      expect(this.layoutViewManager.onBeforeRender).to.have.been.calledOnce;
+    });
+
+    it('should call "onRender" after rendering', function() {
+      expect(this.layoutViewManager.onRender).to.have.been.calledOnce;
+    });
+
+    it('should call "onBeforeRender" before "onRender"', function() {
+      expect(this.layoutViewManager.onBeforeRender).to.have.been.calledBefore(this.layoutViewManager.onRender);
+    });
+
+    it('should not be rendered when "onBeforeRender" is called', function() {
+      expect(this.layoutViewManager.onBeforeRender.lastCall.returnValue).not.to.be.ok;
+    });
+
+    it('should be rendered when "onRender" is called', function() {
+      expect(this.layoutViewManager.onRender.lastCall.returnValue).to.be.true;
+    });
+
+    it('should trigger a "before:render" event', function() {
+      expect(this.layoutViewManager.trigger).to.have.been.calledWith('before:render', this.layoutViewManager);
+    });
+
+    it('should trigger a "render" event', function() {
+      expect(this.layoutViewManager.trigger).to.have.been.calledWith('render', this.layoutViewManager);
+    });
+
+    it('should be marked rendered', function() {
+      expect(this.layoutViewManager).to.have.property('isRendered', true);
     });
   });
 
@@ -192,6 +238,14 @@ describe('layoutView', function() {
 
     it('should return the view', function() {
       expect(this.layoutViewManager.destroy).to.have.always.returned(this.layoutViewManager);
+    });
+
+    it('should be marked destroyed', function() {
+      expect(this.layoutViewManager).to.have.property('isDestroyed', true);
+    });
+
+    it('should be marked not rendered', function() {
+      expect(this.layoutViewManager).to.have.property('isRendered', false);
     });
   });
 
@@ -451,13 +505,43 @@ describe('layoutView', function() {
     beforeEach(function () {
       this.layout = new this.LayoutView();
       this.layout.render();
-
       this.regions = this.layout.getRegions();
     });
 
     it("should be able to retrieve all regions", function () {
       expect(this.regions.regionOne).to.equal(this.layout.getRegion("regionOne"));
       expect(this.regions.regionTwo).to.equal(this.layout.getRegion("regionTwo"));
+    });
+
+    describe('when the regions are specified via regions hash and the view has no template', function () {
+      beforeEach(function () {
+        var fixture =
+          '<div class="region-hash-no-template-spec">' +
+            '<div class="region-one">Out-of-scope region</div>' +
+            '<div class="some-layout-view">' +
+              '<div class="region-one">In-scope region</div>' +
+            '</div>' +
+          '</div>';
+        this.setFixtures(fixture);
+        this.LayoutView = Backbone.Marionette.LayoutView.extend({
+          el: '.region-hash-no-template-spec .some-layout-view',
+          template: false,
+          regions: {
+            regionOne: '.region-one'
+          }
+        });
+        this.layoutViewInstance = new this.LayoutView();
+        this.layoutViewInstance.render();
+        var $specNode = $('.region-hash-no-template-spec');
+        this.$inScopeRegion =  $specNode.find('.some-layout-view .region-one');
+        this.$outOfScopeRegion = $specNode.children('.region-one');
+      });
+
+      it('after initialization, the view\'s regions should be scoped to its parent view', function () {
+        expect(this.layoutViewInstance.regionOne.$el).to.have.length(1);
+        expect(this.layoutViewInstance.regionOne.$el.is(this.$inScopeRegion)).to.equal(true);
+        expect(this.layoutViewInstance.regionOne.$el.is(this.$outOfScopeRegion)).to.equal(false);
+      });
     });
   });
 

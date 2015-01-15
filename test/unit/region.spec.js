@@ -680,6 +680,37 @@ describe('region', function() {
     });
   });
 
+  describe('when preventing destroy on empty', function() {
+    beforeEach(function() {
+      this.MyRegion = Backbone.Marionette.Region.extend({
+        el: '#region'
+      });
+
+      this.setFixtures('<div id="region"></div>');
+      this.MyView = Backbone.View.extend({
+        render: function() {
+          $(this.el).html('some content');
+        },
+
+        destroy: function() {}
+      });
+
+      this.myRegion = new this.MyRegion();
+      this.view = new this.MyView();
+      this.sinon.spy(this.view, 'destroy');
+      this.myRegion.show(this.view);
+      this.myRegion.empty({preventDestroy: true});
+    });
+
+    it('should not destroy view', function() {
+      expect(this.view.destroy).to.have.been.not.called;
+    });
+
+    it('should clear region contents', function() {
+      expect(this.myRegion.$el.html()).to.eql("");
+    });
+  });
+
   describe('when destroying the current view', function() {
     beforeEach(function() {
       this.MyRegion = Backbone.Marionette.Region.extend({

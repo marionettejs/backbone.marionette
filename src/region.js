@@ -202,20 +202,28 @@ Marionette.Region = Marionette.Object.extend({
 
   // Destroy the current view, if there is one. If there is no
   // current view, it does nothing and returns immediately.
-  empty: function() {
+  empty: function(options) {
     var view = this.currentView;
 
+    var preventDestroy = Marionette._getValue(options, 'preventDestroy', this);
     // If there is no view in the region
     // we should not remove anything
     if (!view) { return; }
 
     view.off('destroy', this.empty, this);
     this.triggerMethod('before:empty', view);
-    this._destroyView();
+    if (!preventDestroy) {
+      this._destroyView();
+    }
     this.triggerMethod('empty', view);
 
     // Remove region pointer to the currentView
     delete this.currentView;
+
+    if (preventDestroy) {
+      this.$el.contents().detach();
+    }
+
     return this;
   },
 

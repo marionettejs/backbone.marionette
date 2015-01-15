@@ -66,7 +66,7 @@ The events that are currently triggered, are:
 
 ```js
 MyApp.on("before:start", function(options){
-  options.moreData = "Yo dawg, I heard you like options so I put some options in your options!"
+  options.moreData = "Yo dawg, I heard you like options so I put some options in your options!";
 });
 
 MyApp.on("start", function(options){

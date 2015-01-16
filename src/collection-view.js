@@ -9,7 +9,7 @@ Marionette.CollectionView = Marionette.View.extend({
 
   // used as the prefix for child view events
   // that are forwarded through the collectionview
-  childViewEventPrefix: 'childview',
+  childViewEventPrefix: 'childView',
 
   // constructor
   // option to pass `{sort: false}` to prevent the `CollectionView` from
@@ -450,13 +450,13 @@ Marionette.CollectionView = Marionette.View.extend({
     return childViews;
   },
 
-  // Set up the child view event forwarding. Uses a "childview:"
+  // Set up the child view event forwarding. Uses a "childView:"
   // prefix in front of all forwarded events.
   proxyChildEvents: function(view) {
     var prefix = this.getOption('childViewEventPrefix');
 
     // Forward all child view events through the parent,
-    // prepending "childview:" to the event name
+    // prepending "childView:" to the event name
     this.listenTo(view, 'all', function() {
       var args = _.toArray(arguments);
       var rootEvent = args[0];

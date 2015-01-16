@@ -105,7 +105,7 @@ describe('collection view', function() {
         collection: this.collection
       });
 
-      this.collectionView.on('childview:render', this.childViewRender);
+      this.collectionView.on('childView:render', this.childViewRender);
 
       this.sinon.spy(this.collectionView, 'onRender');
       this.sinon.spy(this.collectionView, 'onBeforeAddChild');
@@ -219,7 +219,7 @@ describe('collection view', function() {
       expect(this.collectionView.onAddChild.callCount).to.equal(2);
     });
 
-    it('should trigger "childview:render" for each item in the collection', function() {
+    it('should trigger "childView:render" for each item in the collection', function() {
       expect(this.childViewRender.callCount).to.equal(2);
     });
 
@@ -360,7 +360,7 @@ describe('collection view', function() {
       this.collectionView.render();
 
       this.childViewRender = this.sinon.stub();
-      this.collectionView.on('childview:render', this.childViewRender);
+      this.collectionView.on('childView:render', this.childViewRender);
 
       this.sinon.spy(this.collectionView, 'attachHtml');
 
@@ -380,7 +380,7 @@ describe('collection view', function() {
       expect(this.collectionView.attachHtml.firstCall.args[2]).to.equal(0);
     });
 
-    it('should trigger the childview:render event from the collectionView', function() {
+    it('should trigger the childView:render event from the collectionView', function() {
       expect(this.childViewRender).to.have.been.called;
     });
   });
@@ -396,7 +396,7 @@ describe('collection view', function() {
       this.collectionView.render();
 
       this.childViewRender = this.sinon.stub();
-      this.collectionView.on('childview:render', this.childViewRender);
+      this.collectionView.on('childView:render', this.childViewRender);
 
       this.sinon.spy(this.collectionView, 'attachHtml');
 
@@ -416,7 +416,7 @@ describe('collection view', function() {
       expect(this.collectionView.attachHtml.firstCall.args[2]).to.equal(1);
     });
 
-    it('should trigger the childview:render event from the collectionView', function() {
+    it('should trigger the childView:render event from the collectionView', function() {
       expect(this.childViewRender).to.have.been.called;
     });
 
@@ -759,7 +759,7 @@ describe('collection view', function() {
       this.collection = new Backbone.Collection([this.model]);
 
       this.collectionView = new this.MockCollectionView({collection: this.collection});
-      this.collectionView.on('childview:some:event', this.someEventSpy);
+      this.collectionView.on('childView:some:event', this.someEventSpy);
       this.collectionView.render();
 
       this.sinon.spy(this.collectionView, 'trigger');
@@ -768,7 +768,7 @@ describe('collection view', function() {
     });
 
     it('should bubble up through the parent collection view', function() {
-      expect(this.collectionView.trigger).to.have.been.calledWith('childview:some:event', this.childView, 'test', this.model);
+      expect(this.collectionView.trigger).to.have.been.calledWith('childView:some:event', this.childView, 'test', this.model);
     });
 
     it('should provide the child view that triggered the event, including other relevant parameters', function() {
@@ -823,8 +823,8 @@ describe('collection view', function() {
         this.beforeSpy = this.sinon.stub();
         this.renderSpy = this.sinon.stub();
 
-        this.collectionView.on('childview:before:render', this.beforeSpy);
-        this.collectionView.on('childview:render', this.renderSpy);
+        this.collectionView.on('childView:before:render', this.beforeSpy);
+        this.collectionView.on('childView:render', this.renderSpy);
 
         this.collectionView.render();
         this.childView = this.collectionView.children.findByIndex(0);
@@ -845,8 +845,8 @@ describe('collection view', function() {
         this.beforeSpy = this.sinon.stub();
         this.destroySpy = this.sinon.stub();
 
-        this.collectionView.on('childview:before:destroy', this.beforeSpy);
-        this.collectionView.on('childview:destroy', this.destroySpy);
+        this.collectionView.on('childView:before:destroy', this.beforeSpy);
+        this.collectionView.on('childView:destroy', this.destroySpy);
 
         this.collectionView.render();
         this.childView = this.collectionView.children.findByIndex(0);
@@ -1045,7 +1045,7 @@ describe('collection view', function() {
     });
 
     it('should bubble up through the parent collection view', function() {
-      expect(this.collectionView.trigger).to.have.been.calledWith('childview:some:event', this.childView, 'test', this.model);
+      expect(this.collectionView.trigger).to.have.been.calledWith('childView:some:event', this.childView, 'test', this.model);
     });
 
     it('should provide the child view that triggered the event, including other relevant parameters', function() {
@@ -1075,7 +1075,7 @@ describe('collection view', function() {
     });
 
     it('should bubble up through the parent collection view', function() {
-      expect(this.collectionView.trigger).to.have.been.calledWith('childview:some:event', this.childView, 'test', this.model);
+      expect(this.collectionView.trigger).to.have.been.calledWith('childView:some:event', this.childView, 'test', this.model);
     });
 
     it('should provide the child view that triggered the event, including other relevant parameters', function() {
@@ -1106,7 +1106,7 @@ describe('collection view', function() {
     });
 
     it('should bubble up through the parent collection view', function() {
-      expect(this.collectionView.trigger).to.have.been.calledWith('childview:some:event', this.childView, 'test', this.model);
+      expect(this.collectionView.trigger).to.have.been.calledWith('childView:some:event', this.childView, 'test', this.model);
     });
 
     it('should provide the child view that triggered the event, including other relevant parameters', function() {

@@ -612,15 +612,15 @@ cv.on("remove:child", function(viewInstance){
 });
 ```
 
-### "childview:\*" event bubbling from child views
+### "childView:\*" event bubbling from child views
 
 When a child view within a collection view triggers an
 event, that event will bubble up through the parent
-collection view with "childview:" prepended to the event
+collection view with "childView:" prepended to the event
 name.
 
 That is, if a child view triggers "do:something", the
-parent collection view will then trigger "childview:do:something".
+parent collection view will then trigger "childView:do:something".
 
 ```js
 // set up basic collection
@@ -637,7 +637,7 @@ colView.render();
 
 // bind to the collection view's events that were bubbled
 // from the child view
-colView.on("childview:do:something", function(childView, msg){
+colView.on("childView:do:something", function(childView, msg){
   alert("I said, '" + msg + "'");
 });
 

@@ -278,4 +278,4 @@ Marionette.CompositeView.extend({
 });
 ```
 
-For more information, see the [Marionette.View](./marionette.view.html) documentation.
+For more information, see the [Marionette.View](./marionette.view.md) documentation.

@@ -62,7 +62,7 @@ Marionette.CompositeView = Marionette.CollectionView.extend({
   // Renders the model and the collection.
   render: function() {
     this._ensureViewIsIntact();
-    this.isRendered = true;
+    this._isRendering = true;
     this.resetChildViewContainer();
 
     this.triggerMethod('before:render', this);
@@ -70,12 +70,14 @@ Marionette.CompositeView = Marionette.CollectionView.extend({
     this._renderTemplate();
     this._renderChildren();
 
+    this._isRendering = false;
+    this.isRendered = true;
     this.triggerMethod('render', this);
     return this;
   },
 
   _renderChildren: function() {
-    if (this.isRendered) {
+    if (this.isRendered || this._isRendering) {
       Marionette.CollectionView.prototype._renderChildren.call(this);
     }
   },
@@ -119,9 +121,9 @@ Marionette.CompositeView = Marionette.CollectionView.extend({
   },
 
   // You might need to override this if you've overridden attachHtml
-  attachBuffer: function(compositeView, buffer) {
+  attachBuffer: function(compositeView) {
     var $container = this.getChildViewContainer(compositeView);
-    $container.append(buffer);
+    $container.append(this._createBuffer(compositeView));
   },
 
   // Internal method. Append a view to the end of the $el.

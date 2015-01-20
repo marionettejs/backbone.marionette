@@ -170,7 +170,7 @@ Marionette.triggerMethodOn(ctx, "foo", bar);
 
 ## Marionette.bindEntityEvents
 
-This method is used to bind a backbone "entity" (collection/model)
+This method is used to bind a backbone "entity" (e.g. collection/model)
 to methods on a target object.
 
 ```js
@@ -192,11 +192,10 @@ Backbone.View.extend({
 });
 ```
 
-The first parameter, `target`, must have a `listenTo` method from the
-EventBinder object.
+The first parameter, `target`, must have the Backbone.Events module mixed in.
 
-The second parameter is the entity (Backbone.Model or Backbone.Collection)
-to bind the events from.
+The second parameter is the `entity` (Backbone.Model, Backbone.Collection or
+any object that has Backbone.Events mixed in) to bind the events from.
 
 The third parameter is a hash of { "event:name": "eventHandler" }
 configuration. Multiple handlers can be separated by a space. A
@@ -204,7 +203,7 @@ function can be supplied instead of a string handler name.
 
 ## Marionette.unbindEntityEvents
 
-This method can be used to unbind callbacks from entities' (collection/model) events. It's
+This method can be used to unbind callbacks from entities' (e.g. collection/model) events. It's
 the opposite of bindEntityEvents, described above. Consequently, the APIs are identical for each method.
 
 ```js

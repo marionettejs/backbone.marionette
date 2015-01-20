@@ -3,14 +3,13 @@
 // Bind Entity Events & Unbind Entity Events
 // -----------------------------------------
 //
-// These methods are used to bind/unbind a backbone "entity" (collection/model)
+// These methods are used to bind/unbind a backbone "entity" (e.g. collection/model)
 // to methods on a target object.
 //
-// The first parameter, `target`, must have a `listenTo` method from the
-// EventBinder object.
+// The first parameter, `target`, must have the Backbone.Events module mixed in.
 //
-// The second parameter is the entity (Backbone.Model or Backbone.Collection)
-// to bind the events from.
+// The second parameter is the `entity` (Backbone.Model, Backbone.Collection or
+// any object that has Backbone.Events mixed in) to bind the events from.
 //
 // The third parameter is a hash of { "event:name": "eventHandler" }
 // configuration. Multiple handlers can be separated by a space. A

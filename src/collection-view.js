@@ -514,7 +514,7 @@ Marionette.CollectionView = Marionette.View.extend({
       }
 
       this.triggerMethod.apply(this, args);
-    }, this);
+    });
   },
 
   _getImmediateChildren: function() {

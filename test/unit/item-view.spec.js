@@ -360,15 +360,11 @@ describe('item view', function() {
     describe('and the view only has a collection', function() {
       beforeEach(function() {
         this.itemView.collection = new Backbone.Collection(this.collectionData);
-        this.itemView.serializeData(1, 2, 3);
+        this.itemView.serializeData();
       });
 
       it("should call serializeCollection", function(){
         expect(this.itemView.serializeCollection).to.have.been.calledOnce;
-      });
-
-      it('and the serialize function should be called with the provided arguments', function() {
-        expect(this.itemView.serializeCollection).to.have.been.calledWith(this.itemView.collection, 1, 2, 3);
       });
 
       it("should not call serializeModel", function() {
@@ -380,15 +376,11 @@ describe('item view', function() {
       beforeEach(function() {
         this.itemView.model = new Backbone.Model(this.modelData);
         this.itemView.collection = new Backbone.Collection(this.collectionData);
-        this.itemView.serializeData(1, 2, 3);
+        this.itemView.serializeData();
       });
 
       it("should call serializeModel", function() {
         expect(this.itemView.serializeModel).to.have.been.calledOnce;
-      });
-
-      it('and the serialize function should be called with the provided arguments', function() {
-        expect(this.itemView.serializeModel).to.have.been.calledWith(this.itemView.model, 1, 2, 3);
       });
 
       it('should not call serializeCollection', function() {

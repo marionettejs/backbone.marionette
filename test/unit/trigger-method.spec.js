@@ -108,7 +108,7 @@ describe('trigger event and method name', function() {
 
   describe('triggering events through a child view', function() {
     beforeEach(function() {
-      this.onChildviewFooClickStub = this.sinon.stub();
+      this.onChildViewFooClickStub = this.sinon.stub();
 
       this.ItemView = Marionette.ItemView.extend({
         template: _.template('foo'),
@@ -117,7 +117,7 @@ describe('trigger event and method name', function() {
 
       this.CollectionView = Marionette.CollectionView.extend({
         childView: this.ItemView,
-        onChildviewFooClick: this.onChildviewFooClickStub
+        onChildViewFooClick: this.onChildViewFooClickStub
       });
 
       this.collection = new Backbone.Collection([{ foo: 'bar' }]);
@@ -131,7 +131,7 @@ describe('trigger event and method name', function() {
     });
 
     it('should fire the event method once', function() {
-      expect(this.onChildviewFooClickStub).to.have.been.calledOnce;
+      expect(this.onChildViewFooClickStub).to.have.been.calledOnce;
     });
   });
 

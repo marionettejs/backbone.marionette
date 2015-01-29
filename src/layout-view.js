@@ -49,6 +49,14 @@ Marionette.LayoutView = Marionette.ItemView.extend({
     return Marionette.ItemView.prototype.destroy.apply(this, arguments);
   },
 
+  showChildView: function(regionName, view) {
+    return this.getRegion(regionName).show(view);
+  },
+
+  getChildView: function(regionName) {
+    return this.getRegion(regionName).currentView;
+  },
+
   // Add a single region, by name, to the layoutView
   addRegion: function(name, definition) {
     var regions = {};

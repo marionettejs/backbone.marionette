@@ -88,6 +88,8 @@ Marionette.ItemView = Marionette.View.extend({
     var html = Marionette.Renderer.render(template, data, this);
     this.attachElContent(html);
 
+    this.isRendered = true;
+
     return this;
   },
 

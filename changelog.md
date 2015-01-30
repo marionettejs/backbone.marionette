@@ -1,3 +1,11 @@
+### v2.3.2 [view commit logs](https://github.com/marionettejs/backbone.marionette/compare/v2.3.1...v2.3.2)
+
+#### 2.3.2 in overview:
+
+##### Bug Fixes
+
+* Fix IE8 regression in `Marionette._getValue` to always call `apply` with either an array of params or an empty array.
+
 ### v2.3.1 [view commit logs](https://github.com/marionettejs/backbone.marionette/compare/v2.3.0...v2.3.1)
 
 #### 2.3.1 in overview:

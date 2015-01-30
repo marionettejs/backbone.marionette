@@ -43,11 +43,7 @@ Marionette.proxyGetOption = function(optionName) {
 // undefined return a default value
 Marionette._getValue = function(value, context, params) {
   if (_.isFunction(value)) {
-    // We need to ensure that params is not undefined
-    // to prevent `apply` from failing in ie8
-    params = params || [];
-
-    value = value.apply(context, params);
+    value = params ? value.apply(context, params) : value.call(context);
   }
   return value;
 };

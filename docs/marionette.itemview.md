@@ -7,12 +7,12 @@ An `ItemView` is a view that represents a single item. That item may be a
 will be treated as a single item.
 
 ItemView extends directly from Marionette.View. Please see
-[the Marionette.View documentation](marionette.view.md)
+[the Marionette.View documentation](./marionette.view.md)
 for more information on available features and functionality.
 
 Additionally, interactions with Marionette.Region
 will provide features such as `onShow` callbacks, etc. Please see
-[the Region documentation](marionette.region.md) for more information.
+[the Region documentation](./marionette.region.md) for more information.
 
 ## Documentation Index
 
@@ -165,7 +165,7 @@ Another use case is when you want to attach a `Marionette.ItemView` to a SVG gra
 
 There are several events and callback methods that are called
 for an ItemView. These events and methods are triggered with the
-[Marionette.triggerMethod](./marionette.functions.md) function, which
+[Marionette.triggerMethod](./marionette.functions.md#marionettetriggermethod) function, which
 triggers the event and a corresponding "on{EventName}" method.
 
 ### "before:render" / onBeforeRender event
@@ -288,7 +288,7 @@ Backbone.Marionette.ItemView.extend({
 
 ## Organizing UI Elements
 
-As documented in [Marionette.View](./marionette.view.md), you can specify a `ui` hash in your `view` that
+As documented in [Marionette.View](./marionette.view.md#viewbindentityevents), you can specify a `ui` hash in your `view` that
 maps UI elements by their jQuery selectors. This is especially useful if you access the
 same UI element more than once in your view's code. Instead of
 duplicating the selector, you can simply reference it by
@@ -329,4 +329,4 @@ Marionette.ItemView.extend({
 });
 ```
 
-For more information, see the [Marionette.View](./marionette.view.md) documentation.
+For more information, see the [Marionette.View](./marionette.view.md#viewmodelevents-and-viewcollectionevents) documentation.

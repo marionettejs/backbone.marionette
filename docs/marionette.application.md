@@ -110,7 +110,7 @@ var app = new app({container: '#app'});
 ## Application Events
 
 The `Application` object raises a few events during its lifecycle, using the
-[Marionette.triggerMethod](./marionette.functions.md) function. These events
+[Marionette.triggerMethod](./marionette.functions.md#marionettetriggermethod) function. These events
 can be used to do additional processing of your application. For example, you
 may want to pre-process some data just before initialization happens. Or you may
 want to wait until your entire application is initialized to start
@@ -176,8 +176,7 @@ MyApp.start(options);
 > ```
 >
 
-Application instances have an API that allow you to manage
-[Regions](https://github.com/marionettejs/backbone.marionette/blob/master/docs/marionette.region.md).
+Application instances have an API that allow you to manage [Regions](./marionette.region.md).
 These Regions are typically the means through which your views become attached to the `document`.
 
 You can create Regions through the `addRegions` method by passing in an object
@@ -292,12 +291,12 @@ Removing a region will properly empty it before removing it from the
 application object.
 
 For more information on regions, see [the region documentation](./marionette.region.md) Also, the API that Applications use to
-manage regions comes from the RegionManager Class, which is documented [over here](https://github.com/marionettejs/backbone.marionette/blob/master/docs/marionette.regionmanager.md).
+manage regions comes from the RegionManager Class, which is documented [over here](./marionette.regionmanager.md).
 
 ### Application.getOption
 Retrieve an object's attribute either directly from the object, or from the object's this.options, with this.options taking precedence.
 
-More information [getOption](./marionette.functions.md)
+More information [getOption](./marionette.functions.md#marionettegetoption)
 
 ## Adding Initializers
 

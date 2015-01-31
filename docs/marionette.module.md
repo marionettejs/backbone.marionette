@@ -230,7 +230,7 @@ var CustomModule = Marionette.Module.extend({
 
 Module classes can be used as an alternative to the define pattern.
 
-The extend function of a Module is identical to the extend functions on other Backbone and Marionette classes. This allows module lifecyle events like `onStart` and `onStop` to be called directly.
+The extend function of a Module is identical to the extend functions on other Backbone and Marionette classes. This allows module lifecycle events like `onStart` and `onStop` to be called directly.
 
 ```
 var FooModule = Marionette.Module.extend({

@@ -68,7 +68,7 @@ this.listenTo(this.collection, "add", _.bind(this.reconcileCollection, this.coll
 
 * "show" / `onShow` - Called on the view instance when the view has been rendered and displayed.
 
-This event can be used to react to when a view has been shown via a [region](marionette.region.md).
+This event can be used to react to when a view has been shown via a [region](./marionette.region.md).
 All `views` that inherit from the base `Marionette.View` class have this functionality, notably `ItemView`, `CollectionView`, `CompositeView`, and `LayoutView`.
 
 ```js
@@ -109,7 +109,7 @@ are performed:
 
 By providing an `onDestroy` method in your view definition, you can
 run custom code for your view that is fired after your view has been
-destroyd and cleaned up. The `onDestroy` method will be passed any arguments
+destroyed and cleaned up. The `onDestroy` method will be passed any arguments
 that `destroy` was invoked with. This lets you handle any additional clean
 up code without having to override the `destroy` method.
 
@@ -175,7 +175,7 @@ For more information about integration Marionette w/ KendoUI (also applicable to
 widget suites), see [this blog post on KendoUI + Backbone](http://www.kendoui.com/blogs/teamblog/posts/12-11-26/backbone_and_kendo_ui_a_beautiful_combination.aspx).
 
 ## View.events
-Since Views extend from backbone`s view class, you gain the benefits of the [events hash](http://backbonejs.org/#View-delegateEvents).
+Since Views extend from backbone's view class, you gain the benefits of the [events hash](http://backbonejs.org/#View-delegateEvents).
 
 Some preprocessing sugar is added on top to add the ability to cross utilize the ```ui``` hash.
 
@@ -417,12 +417,12 @@ In ItemView and CompositeView this is already taken care of.
 ## View.getOption
 Retrieve an object's attribute either directly from the object, or from the object's this.options, with this.options taking precedence.
 
-More information [getOption](./marionette.functions.md)
+More information [getOption](./marionette.functions.md#marionettegetoption)
 
 ## View.bindEntityEvents
 Helps bind a backbone "entity" to methods on a target object. bindEntityEvents is used to support `modelEvents` and `collectionEvents`.
 
-More information [bindEntityEvents](./marionette.functions.md)
+More information [bindEntityEvents](./marionette.functions.md#marionettebindentityevents)
 
 ## View.templateHelpers
 

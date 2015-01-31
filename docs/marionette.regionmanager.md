@@ -53,7 +53,7 @@ rm.removeRegion("foo");
 
 ## Constructing
 
-The RegionMananger take an optional `region` option in their constructor. the regions are passed directly into `addRegions` for the region mananger instance.
+The RegionManager take an optional `region` option in their constructor. the regions are passed directly into `addRegions` for the region manager instance.
 
 ```js
 var mananger = new Marionette.RegionManager({
@@ -253,7 +253,7 @@ from the RegionManager instance.
 
 ## RegionManager.destroy
 
-A RegionManager instance can be destroyd entirely by
+A RegionManager instance can be destroyed entirely by
 calling the `destroy` method. This will both destroy
 and remove all regions from the RegionManager instance.
 
@@ -364,28 +364,28 @@ rm.each(function(region){
 });
 ```
 
-The list of underscore methods includes:
+The list of underscore methods include:
 
-* forEach
-* each
-* map
-* find
-* detect
-* filter
-* select
-* reject
-* every
-* all
-* some
-* any
-* include
-* contains
-* invoke
-* toArray
-* first
-* initial
-* rest
-* last
-* without
-* isEmpty
-* pluck
+* [forEach](http://underscorejs.org/#each)
+* [each](http://underscorejs.org/#each)
+* [map](http://underscorejs.org/#map)
+* [find](http://underscorejs.org/#find)
+* [detect](http://underscorejs.org/#find)
+* [filter](http://underscorejs.org/#filter)
+* [select](http://underscorejs.org/#filter)
+* [reject](http://underscorejs.org/#reject)
+* [every](http://underscorejs.org/#every)
+* [all](http://underscorejs.org/#every)
+* [some](http://underscorejs.org/#some)
+* [any](http://underscorejs.org/#some)
+* [include](http://underscorejs.org/#contains)
+* [contains](http://underscorejs.org/#contains)
+* [invoke](http://underscorejs.org/#invoke)
+* [toArray](http://underscorejs.org/#toArray)
+* [first](http://underscorejs.org/#first)
+* [initial](http://underscorejs.org/#initial)
+* [rest](http://underscorejs.org/#rest)
+* [last](http://underscorejs.org/#last)
+* [without](http://underscorejs.org/#without)
+* [isEmpty](http://underscorejs.org/#isEmpty)
+* [pluck](http://underscorejs.org/#pluck)

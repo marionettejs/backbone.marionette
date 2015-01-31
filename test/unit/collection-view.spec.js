@@ -926,6 +926,7 @@ describe('collection view', function() {
   describe('when a child view is added to a collection view, after the collection view has been shown', function() {
     beforeEach(function() {
       this.ChildView = Backbone.Marionette.ItemView.extend({
+        onBeforeShow: function() {},
         onShow: function() {},
         onDomRefresh: function() {},
         onRender: function() {},
@@ -937,6 +938,7 @@ describe('collection view', function() {
         onShow: function() {}
       });
 
+      this.sinon.spy(this.ChildView.prototype, 'onBeforeShow');
       this.sinon.spy(this.ChildView.prototype, 'onShow');
       this.sinon.spy(this.ChildView.prototype, 'onDomRefresh');
 
@@ -961,6 +963,14 @@ describe('collection view', function() {
 
     it('should not use the render buffer', function() {
       expect(this.collectionView.attachBuffer).not.to.have.been.called;
+    });
+
+    it('should call the "onBeforeShow" method of the child view', function() {
+      expect(this.ChildView.prototype.onBeforeShow).to.have.been.called;
+    });
+
+    it('should call the childs "onBeforeShow" method with itself as the context', function() {
+      expect(this.ChildView.prototype.onBeforeShow).to.have.been.calledOn(this.view);
     });
 
     it('should call the "onShow" method of the child view', function() {

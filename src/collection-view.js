@@ -347,6 +347,12 @@ Marionette.CollectionView = Marionette.View.extend({
 
     this.triggerMethod('before:add:child', view);
 
+    // trigger the 'before:show' event on `view` if the collection view
+    // has already been shown
+    if (this._isShown && !this.isBuffering) {
+      Marionette.triggerMethodOn(view, 'before:show');
+    }
+
     // Store the child view itself so we can properly
     // remove and/or destroy it later
     this.children.add(view);

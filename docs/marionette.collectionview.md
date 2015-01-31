@@ -9,12 +9,12 @@ then append the results of the child view's `el` to the collection view's
 in the DOM. This behavior can be disabled by specifying `{sort: false}` on initialize.
 
 CollectionView extends directly from Marionette.View. Please see
-[the Marionette.View documentation](marionette.view.md)
+[the Marionette.View documentation](./marionette.view.md)
 for more information on available features and functionality.
 
 Additionally, interactions with Marionette.Region
 will provide features such as `onShow` callbacks, etc. Please see
-[the Region documentation](marionette.region.md) for more information.
+[the Region documentation](./marionette.region.md) for more information.
 
 ## Documentation Index
 
@@ -276,7 +276,7 @@ buildChildView: function(child, ChildViewClass, childViewOptions){
 
 ### CollectionView's `addChild`
 
-The `addChild` method is responsible for rendering the `childViews` and adding them to the HTML for the `collectionView` instance. It is also responsible for triggering the events per `ChildView`. In most cases you should not override this method. However if you do want to short circut this method, it can be accomplished via the following.
+The `addChild` method is responsible for rendering the `childViews` and adding them to the HTML for the `collectionView` instance. It is also responsible for triggering the events per `ChildView`. In most cases you should not override this method. However if you do want to short circuit this method, it can be accomplished via the following.
 
 ```js
 Backbone.Marionette.CollectionView.extend({
@@ -475,7 +475,7 @@ Backbone.Marionette.CollectionView.extend({
 
 There are several events that will be triggered during the life
 of a collection view. Each of these events is called with the
-[Marionette.triggerMethod](./marionette.functions.md) function,
+[Marionette.triggerMethod](./marionette.functions.md#marionettetriggermethod) function,
 which calls a corresponding "on{EventName}" method on the
 view instance (see [above](#callback-methods)).
 

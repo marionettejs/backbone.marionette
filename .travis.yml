@@ -13,14 +13,15 @@ matrix:
       env: UNDERSCORE=1.4.4 BACKBONE=1.1.0 MAINRUN=false
     - node_js: "0.10"
       env: UNDERSCORE=1.5 BACKBONE=1.1 MAINRUN=false
-env: MAINRUN=true
+    - node_js: "0.10"
+      env: UNDERSCORE=1.5 BACKBONE=1.1 MAINRUN=false LODASH=3.0
+env: MAINRUN=true LODASH=false
 before_install:
   - npm config set ca ""
 install:
   - npm install -g grunt-cli
   - npm install
-  # Which matrix settings -- otherwise default
-  - if [[ $MAINRUN == false ]]; then npm install backbone@$BACKBONE; fi
-  - if [[ $MAINRUN == false ]]; then npm install underscore@$UNDERSCORE; fi
+  - npm dedupe
+  - ./test/ci.sh
 after_success:
   - if [[ $MAINRUN == true ]]; then npm run-script coverage; fi

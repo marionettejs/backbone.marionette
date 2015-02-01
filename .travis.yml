@@ -26,7 +26,7 @@ install:
   - if [[ $MAINRUN == false ]]; then npm install backbone@$BACKBONE; fi
   - if [[ $MAINRUN == false ]]; then npm install underscore@$UNDERSCORE; fi
   - if [[ $LODASH != false ]]; then npm install lodash@$LODASH &&\
-      cd node_modules && cp lodash/index.js underscore/underscore.js; cd ..\
+      (cd node_modules && cp lodash/index.js underscore/underscore.js;)\
     fi
 after_success:
   - if [[ $MAINRUN == true ]]; then npm run-script coverage; fi

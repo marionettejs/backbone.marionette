@@ -56,10 +56,10 @@ john.graduate();
 ### getOption
 Retrieve an object's attribute either directly from the object, or from the object's this.options, with this.options taking precedence.
 
-More information [getOption](./marionette.functions.html).
+More information [getOption](./marionette.functions.md#marionettegetoption).
 
 ### bindEntityEvents
-Helps bind a backbone "entity" to methods on a target object. More information [bindEntityEvents](./marionette.functions.md).
+Helps bind a backbone "entity" to methods on a target object. More information [bindEntityEvents](./marionette.functions.md#marionettebindentityevents).
 
 ### Destroying A Object
 

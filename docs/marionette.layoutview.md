@@ -16,12 +16,12 @@ For a more in-depth discussion on LayoutViews, see the blog post
 [Manage Layouts And Nested Views With Backbone.Marionette](http://lostechies.com/derickbailey/2012/03/22/managing-layouts-and-nested-views-with-backbone-marionette/)
 
 Please see
-[the Marionette.ItemView documentation](marionette.itemview.md)
+[the Marionette.ItemView documentation](./marionette.itemview.md)
 for more information on available features and functionality.
 
 Additionally, interactions with Marionette.Region
 will provide features such as `onShow` callbacks, etc. Please see
-[the Region documentation](marionette.region.md) for more information.
+[the Region documentation](./marionette.region.md) for more information.
 
 ## Documentation Index
 
@@ -78,7 +78,7 @@ layoutView.getRegion('menu').show(new MenuView());
 layoutView.getRegion('content').show(new MainContentView());
 ```
 
-There are also helpful shortcuts for more consise syntax.
+There are also helpful shortcuts for more concise syntax.
 
 ```js
 layoutView.showChildView('menu', new MenuView());

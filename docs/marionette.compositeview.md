@@ -10,16 +10,16 @@ collection needs to be rendered within a wrapper template. By default the
 in the DOM. This behavior can be disabled by specifying `{sort: false}` on initialize.
 
 Please see
-[the Marionette.CollectionView documentation](marionette.collectionview.md)
+[the Marionette.CollectionView documentation](./marionette.collectionview.md)
 for more information on available features and functionality.
 
 Additionally, interactions with Marionette.Region
 will provide features such as `onShow` callbacks, etc. Please see
-[the Region documentation](marionette.region.md) for more information.
+[the Region documentation](./marionette.region.md) for more information.
 
 ## Example Usage: Tree View
 
-For example, if you're rendering a treeview control, you may
+For example, if you're rendering a tree-view control, you may
 want to render a collection view with a model and template so
 that it will show a parent child with children in the tree.
 
@@ -189,18 +189,15 @@ var myComp = new Marionette.CompositeView({
 
 ## CompositeView's `attachHtml`
 
-
-Sometimes the `childViewContainer` configuration is insuficient for
+Sometimes the `childViewContainer` configuration is insufficient for
 specifying where the `childView` instance should be placed. If this is the
 case, you can override the `attachHtml` method with your own implementation.
 
-For more information on this method, see the [CollectionView's documentation](http://marionettejs.com/docs/marionette.collectionview.html).
+For more information on this method, see the [CollectionView's documentation](./marionette.collectionview.md#collectionviews-attachhtml).
 
 ## CompositeView's `childView` container selection
 
-
 The `getChildViewContainer` method is passed a second `childView` parameter which, when overridden, allows for a finer tuned container selection by being able to access the `childView` which is about to be appended to the `containerView` returned by `getChildViewContainer`.
-
 
 ## Recursive By Default
 
@@ -208,7 +205,6 @@ The default rendering mode for a `CompositeView` assumes a
 hierarchical, recursive structure. If you configure a composite
 view without specifying an `childView`, you'll get the same
 composite view class rendered for each child in the collection.
-
 
 ## Model And Collection Rendering
 
@@ -226,7 +222,7 @@ useful in custom `Renderer` implementations.
 ## Events And Callbacks
 
 During the course of rendering a composite, several events will
-be triggered. These events are triggered with the [Marionette.triggerMethod](./marionette.functions.md)
+be triggered. These events are triggered with the [Marionette.triggerMethod](./marionette.functions.md#marionettetriggermethod)
 function, which calls a corresponding "on{EventName}" method on the view.
 
 * "before:render:template" / `onBeforeRenderTemplate` - before the `model` has been rendered

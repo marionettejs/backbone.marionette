@@ -6,7 +6,7 @@ describe('trigger event and method name', function() {
     this.argumentOne = 'bar';
     this.argumentTwo = 'baz';
 
-    this.view = new Marionette.View();
+    this.view = new Marionette.AbstractView();
 
     this.eventHandler = this.sinon.stub();
     this.methodHandler = this.sinon.stub().returns(this.returnValue);

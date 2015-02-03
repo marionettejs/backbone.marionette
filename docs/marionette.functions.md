@@ -160,7 +160,7 @@ callback methods will still be called, though.
 
 Invoke `triggerMethod` on a specific context.
 
-This is useful when it's not clear that the object has `triggerMethod` defined. In the case of views, `Marionette.View` defines `triggerMethod`, but `Backbone.View` does not.
+This is useful when it's not clear that the object has `triggerMethod` defined. In the case of views, `Marionette.AbstractView` defines `triggerMethod`, but `Backbone.View` does not.
 
 ```js
 Marionette.triggerMethodOn(ctx, "foo", bar);
@@ -280,7 +280,7 @@ _.extend(Pagination.prototype, {
 Receives a hash of event names and functions and/or function names, and returns the
 same hash with the function names replaced with the function references themselves.
 
-This function is attached to the `Marionette.View` prototype by default. To use it from non-View classes you'll need to attach it yourself.
+This function is attached to the `Marionette.AbstractView` prototype by default. To use it from non-View classes you'll need to attach it yourself.
 
 ```js
 var View = Marionette.ItemView.extend({

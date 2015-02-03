@@ -1,33 +1,31 @@
-## [View the new docs](http://marionettejs.com/docs/marionette.view.html)
+## [View the new docs](http://marionettejs.com/docs/marionette.abstractview.html)
 
-# Marionette.View
+# Marionette.AbstractView
 
-Marionette has a base `Marionette.View` class that other views extend from.
-This base view provides some common and core functionality for
-other views to take advantage of.
+The `Marionette.AbstractView` is a base view class that other views extend from.
+This base view provides some common and core functionality for other views to take
+advantage of.
 
-**Note:** The `Marionette.View` class is not intended to be
-used directly. It exists as a base view for other view classes
-to be extended from, and to provide a common location for
-behaviors that are shared across all views.
+Unlike the other views, it is unlikely that you will need to interface with the
+AbstractView directly.
 
 ## Documentation Index
 
 * [Binding To View Events](#binding-to-view-events)
-* [View onShow](#view-onshow)
-* [View destroy](#view-destroy)
-* [View onBeforeDestroy](#view-onbeforedestroy)
-* [View "attach" / onAttach event](#view-attach--onattach-event)
-* [View "before:attach" / onBeforeAttach event](#view-beforeattach--onbeforeattach-event)
-* [View "dom:refresh" / onDomRefresh event](#view-domrefresh--ondomrefresh-event)
-* [View.triggers](#viewtriggers)
-* [View.events](#viewevents)
-* [View.modelEvents and View.collectionEvents](#viewmodelevents-and-viewcollectionevents)
-* [View.serializeModel](#viewserializemodel)
-* [View.bindUIElements](#viewbinduielements)
-* [View.getOption](#viewgetoption)
-* [View.bindEntityEvents](#viewbindentityevents)
-* [View.templateHelpers](#viewtemplatehelpers)
+* [AbstractView onShow](#abstractview-onshow)
+* [AbstractView destroy](#abstractview-destroy)
+* [AbstractView onBeforeDestroy](#abstractview-onbeforedestroy)
+* [AbstractView "attach" / onAttach event](#abstractview-attach--onattach-event)
+* [AbstractView "before:attach" / onBeforeAttach event](#abstractview-beforeattach--onbeforeattach-event)
+* [AbstractView "dom:refresh" / onDomRefresh event](#abstractview-domrefresh--ondomrefresh-event)
+* [AbstractView.triggers](#abstractviewtriggers)
+* [AbstractView.events](#abstractviewevents)
+* [AbstractView.modelEvents and AbstractView.collectionEvents](#abstractviewmodelevents-and-abstractviewcollectionevents)
+* [AbstractView.serializeModel](#abstractviewserializemodel)
+* [AbstractView.bindUIElements](#abstractviewbinduielements)
+* [AbstractView.getOption](#abstractviewgetoption)
+* [AbstractView.bindEntityEvents](#abstractviewbindentityevents)
+* [AbstractView.templateHelpers](#abstractviewtemplatehelpers)
   * [Basic Example](#basic-example)
   * [Accessing Data Within The Helpers](#accessing-data-within-the-helpers)
   * [Object Or Function As `templateHelpers`](#object-or-function-as-templatehelpers)
@@ -35,7 +33,7 @@ behaviors that are shared across all views.
 
 ## Binding To View Events
 
-Marionette.View extends `Backbone.View`. It is recommended that you use
+Marionette.AbstractView extends `Backbone.View`. It is recommended that you use
 the `listenTo` method to bind model, collection, or other events from Backbone
 and Marionette objects.
 
@@ -64,12 +62,12 @@ optionally set the context by using `_.bind`.
 this.listenTo(this.collection, "add", _.bind(this.reconcileCollection, this.collection));
 ```
 
-## View onShow
+## AbstractView onShow
 
 * "show" / `onShow` - Called on the view instance when the view has been rendered and displayed.
 
-This event can be used to react to when a view has been shown via a [region](./marionette.region.md).
-All `views` that inherit from the base `Marionette.View` class have this functionality, notably `ItemView`, `CollectionView`, `CompositeView`, and `LayoutView`.
+This event can be used to react to when a view has been shown via a [region](marionette.region.md).
+All `views` that inherit from the base `Marionette.AbstractView` class have this functionality, notably `ItemView`, `CollectionView`, `CompositeView`, and `LayoutView`.
 
 ```js
 Backbone.Marionette.ItemView.extend({
@@ -94,7 +92,7 @@ var LayoutView = Backbone.Marionette.LayoutView.extend({
 });
 ```
 
-## View destroy
+## AbstractView destroy
 
 View implements a `destroy` method, which is called by the region
 managers automatically. As part of the implementation, the following
@@ -124,13 +122,13 @@ var v = new MyView();
 v.destroy(arg1, arg2);
 ```
 
-## View onBeforeDestroy
+## AbstractView onBeforeDestroy
 
 When destroying a view, an `onBeforeDestroy` method will be called, if it
 has been provided, just before the view destroys. It will be passed any arguments
 that `destroy` was invoked with.
 
-### View "attach" / onAttach event
+### AbstractView "attach" / onAttach event
 
 Every view in Marionette has a special event called "attach," which is triggered anytime that showing
 the view in a Region causes it to be attached to the `document`. Like other Marionette events, it also
@@ -147,12 +145,12 @@ time, too.
 
 For more on efficient, deeply-nested view structures, refer to the LayoutView docs.
 
-### View "before:attach" / onBeforeAttach event
+### AbstractView "before:attach" / onBeforeAttach event
 
 This is just like the attach event described above, but it's triggered right before the view is
 attached to the document.
 
-### View "dom:refresh" / onDomRefresh event
+### AbstractView "dom:refresh" / onDomRefresh event
 
 Triggered after the view has been rendered, has been shown in the DOM via a Marionette.Region, and has been
 re-rendered.
@@ -174,8 +172,8 @@ Backbone.Marionette.ItemView.extend({
 For more information about integration Marionette w/ KendoUI (also applicable to jQueryUI and other UI
 widget suites), see [this blog post on KendoUI + Backbone](http://www.kendoui.com/blogs/teamblog/posts/12-11-26/backbone_and_kendo_ui_a_beautiful_combination.aspx).
 
-## View.events
-Since Views extend from backbone's view class, you gain the benefits of the [events hash](http://backbonejs.org/#View-delegateEvents).
+## AbstractView.events
+Since Views extend from backbone`s view class, you gain the benefits of the [events hash](http://backbonejs.org/#View-delegateEvents).
 
 Some preprocessing sugar is added on top to add the ability to cross utilize the ```ui``` hash.
 
@@ -193,7 +191,7 @@ var MyView = Backbone.Marionette.ItemView.extend({
 });
 ```
 
-## View.triggers
+## AbstractView.triggers
 
 Views can define a set of `triggers` as a hash, which will
 convert a DOM event into a `view.triggerMethod` call.
@@ -266,7 +264,7 @@ Backbone.Marionette.ItemView.extend({
 ```
 
 Triggers work with all View classes that extend from the base
-Marionette.View.
+Marionette.AbstractView.
 
 ### Trigger Handler Arguments
 
@@ -302,7 +300,7 @@ multiple views. For example, a tab control or expand/collapse widget such
 as a panel bar could trigger the same event from many different views
 and be handled with a single function.
 
-## View.modelEvents and View.collectionEvents
+## AbstractView.modelEvents and View.collectionEvents
 
 Similar to the `events` hash, views can specify a configuration
 hash for collections and models. The left side is the event on
@@ -393,7 +391,7 @@ Backbone.Marionette.CompositeView.extend({
 
 This works for both `modelEvents` and `collectionEvents`.
 
-## View.serializeModel
+## AbstractView.serializeModel
 
 This method is used internally during a view's rendering phase. It
 will serialize the View's `model` property, adding it to the data
@@ -404,7 +402,7 @@ then you should override this method. With that said, **do not** override
 this if you're simply adding additional data to your template, like computed
 fields. Use [templateHelpers](#viewtemplatehelpers) instead.
 
-## View.bindUIElements
+## AbstractView.bindUIElements
 
 In several cases you need to access ui elements inside the view
 to retrieve their data or manipulate them. For example you have a
@@ -421,17 +419,17 @@ Since View doesn't implement the render method, then if you directly extend
 from View you will need to invoke this method from your render method.
 In ItemView and CompositeView this is already taken care of.
 
-## View.getOption
+## AbstractView.getOption
 Retrieve an object's attribute either directly from the object, or from the object's this.options, with this.options taking precedence.
 
 More information [getOption](./marionette.functions.md#marionettegetoption)
 
-## View.bindEntityEvents
+## AbstractView.bindEntityEvents
 Helps bind a backbone "entity" to methods on a target object. bindEntityEvents is used to support `modelEvents` and `collectionEvents`.
 
 More information [bindEntityEvents](./marionette.functions.md#marionettebindentityevents)
 
-## View.templateHelpers
+## AbstractView.templateHelpers
 
 There are times when a view's template needs to have some
 logic in it and the view engine itself will not provide an

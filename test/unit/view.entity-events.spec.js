@@ -19,7 +19,7 @@ describe('view entity events', function() {
       this.barOneStub = this.sinon.stub();
       this.barTwoStub = this.sinon.stub();
 
-      this.View = Marionette.View.extend({
+      this.View = Marionette.AbstractView.extend({
         modelEvents      : {'foo': 'fooOne fooTwo'},
         collectionEvents : {'bar': 'barOne barTwo'},
         fooOne: this.fooOneStub,
@@ -49,7 +49,7 @@ describe('view entity events', function() {
 
   describe('when a view has function-based model and collection event configuration', function() {
     beforeEach(function() {
-      this.View = Marionette.View.extend({
+      this.View = Marionette.AbstractView.extend({
         modelEvents      : {'foo': this.fooStub},
         collectionEvents : {'bar': this.barStub}
       });
@@ -75,7 +75,7 @@ describe('view entity events', function() {
     beforeEach(function() {
       var suite = this;
 
-      this.View = Marionette.View.extend({
+      this.View = Marionette.AbstractView.extend({
         modelEvents: {foo: 'doesNotExist'},
         model: this.model
       });
@@ -92,7 +92,7 @@ describe('view entity events', function() {
 
   describe('when configuring entity events with a function', function() {
     beforeEach(function() {
-      this.View = Marionette.View.extend({
+      this.View = Marionette.AbstractView.extend({
         modelEvents      : this.modelEventsStub,
         collectionEvents : this.collectionEventsStub
       });
@@ -116,7 +116,7 @@ describe('view entity events', function() {
 
   describe('when undelegating events on a view', function() {
     beforeEach(function() {
-      this.View = Marionette.View.extend({
+      this.View = Marionette.AbstractView.extend({
         modelEvents      : {'foo': 'foo'},
         collectionEvents : {'bar': 'bar'},
         foo: this.fooStub,
@@ -150,7 +150,7 @@ describe('view entity events', function() {
 
   describe('when undelegating events on a view, delegating them again, and then triggering a model event', function() {
     beforeEach(function() {
-      this.View = Marionette.View.extend({
+      this.View = Marionette.AbstractView.extend({
         modelEvents      : {'foo': 'foo'},
         collectionEvents : {'bar': 'bar'},
         foo: this.fooStub,

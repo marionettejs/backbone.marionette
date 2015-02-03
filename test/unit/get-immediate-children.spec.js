@@ -7,9 +7,9 @@ describe('_getImmediateChildren', function() {
     });
   });
 
-  describe('Marionette.View', function() {
+  describe('Marionette.AbstractView', function() {
     beforeEach(function() {
-      this.view = new Marionette.View();
+      this.view = new Marionette.AbstractView();
     });
     it('should return an empty array for getImmediateChildren', function() {
       expect(this.view._getImmediateChildren())

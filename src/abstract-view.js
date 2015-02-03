@@ -1,9 +1,13 @@
 /* jshint maxlen: 114, nonew: false */
-// View
-// ----
 
-// The core view class that other Marionette views extend from.
-Marionette.View = Backbone.View.extend({
+//
+// AbstractView
+// The View class that Marionette's other views extend from. Generally,
+// you won't ever need to extend from this class. Use the other Views
+// to build new classes.
+//
+
+Marionette.AbstractView = Backbone.View.extend({
   isDestroyed: false,
 
   constructor: function(options) {

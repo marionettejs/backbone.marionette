@@ -55,7 +55,7 @@
   // @include ../template-cache.js
   // @include ../renderer.js
 
-  // @include ../view.js
+  // @include ../abstract-view.js
   // @include ../item-view.js
   // @include ../collection-view.js
   // @include ../composite-view.js

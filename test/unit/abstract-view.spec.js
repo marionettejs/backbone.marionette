@@ -6,7 +6,7 @@ describe('base view', function() {
       this.initializeStub = this.sinon.stub();
       this.viewConstructorSpy = this.sinon.spy(Backbone, 'View');
 
-      this.View = Marionette.View.extend({
+      this.View = Marionette.AbstractView.extend({
         initialize: this.initializeStub
       });
 
@@ -29,7 +29,7 @@ describe('base view', function() {
   describe('when using listenTo for the "destroy" event on itself, and destroying the view', function() {
     beforeEach(function() {
       this.destroyStub = this.sinon.stub();
-      this.view = new Marionette.View();
+      this.view = new Marionette.AbstractView();
       this.view.listenTo(this.view, 'destroy', this.destroyStub);
       this.view.destroy();
     });
@@ -44,7 +44,7 @@ describe('base view', function() {
       this.argumentOne = 'foo';
       this.argumentTwo = 'bar';
 
-      this.view = new Marionette.View();
+      this.view = new Marionette.AbstractView();
 
       this.sinon.spy(this.view, 'remove');
       this.sinon.spy(this.view, 'destroy');
@@ -90,7 +90,7 @@ describe('base view', function() {
 
     describe('isDestroyed property', function() {
       beforeEach(function() {
-        this.view = new Marionette.View();
+        this.view = new Marionette.AbstractView();
       });
 
       it('should be set to false before destroy', function() {
@@ -106,7 +106,7 @@ describe('base view', function() {
 
   describe('when destroying a view and returning false from the onBeforeDestroy method', function() {
     beforeEach(function() {
-      this.view = new Marionette.View();
+      this.view = new Marionette.AbstractView();
 
       this.removeSpy = this.sinon.spy(this.view, 'remove');
 
@@ -137,7 +137,7 @@ describe('base view', function() {
       this.argumentOne = 'foo';
       this.argumentTwo = 'bar';
 
-      this.view = new Marionette.View();
+      this.view = new Marionette.AbstractView();
 
       this.removeSpy = this.sinon.spy(this.view, 'remove');
 
@@ -176,9 +176,9 @@ describe('base view', function() {
       this.presetsStub = this.sinon.stub().returns(this.presets);
       this.optionsStub = this.sinon.stub().returns(this.options);
 
-      this.View = Marionette.View.extend();
-      this.ViewPresets   = Marionette.View.extend({options: this.presets});
-      this.ViewPresetsFn = Marionette.View.extend({options: this.presetsStub});
+      this.View = Marionette.AbstractView.extend();
+      this.ViewPresets   = Marionette.AbstractView.extend({options: this.presets});
+      this.ViewPresetsFn = Marionette.AbstractView.extend({options: this.presetsStub});
     });
 
     it('should take and store view options', function() {
@@ -210,7 +210,7 @@ describe('base view', function() {
   // http://backbonejs.org/#View-constructor
   describe('when constructing a view with Backbone viewOptions', function() {
     it('should attach the viewOptions to the view if options are on the view', function() {
-      this.MyView = Marionette.View.extend({
+      this.MyView = Marionette.AbstractView.extend({
         options: {
           className: '.some-class'
         }
@@ -225,7 +225,7 @@ describe('base view', function() {
           className: '.some-class'
         };
       };
-      this.myView = new Marionette.View(options);
+      this.myView = new Marionette.AbstractView(options);
       expect(this.myView.className).to.equal('.some-class');
     });
   });
@@ -233,7 +233,7 @@ describe('base view', function() {
   describe('should expose its options in the constructor', function() {
     beforeEach(function() {
       this.options = {foo: 'bar'};
-      this.view = new Marionette.View(this.options);
+      this.view = new Marionette.AbstractView(this.options);
     });
 
     it('should be able to access instance options', function() {
@@ -243,7 +243,7 @@ describe('base view', function() {
 
   describe('when destroying a view that is already destroyed', function() {
     beforeEach(function() {
-      this.view = new Marionette.View();
+      this.view = new Marionette.AbstractView();
 
       this.removeSpy = this.sinon.spy(this.view, 'remove');
       this.destroyStub = this.sinon.stub();
@@ -273,7 +273,7 @@ describe('base view', function() {
 
     beforeEach(function() {
       model = new Backbone.Model(modelData);
-      view = new Marionette.View({
+      view = new Marionette.AbstractView({
         model: model
       });
     });

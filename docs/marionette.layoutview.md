@@ -464,7 +464,7 @@ to avoid conflicts with existing properties on the LayoutView when you name your
 
 The prototype chain of LayoutViews is:
 
-`Backbone.View > Marionette.View > Marionette.ItemView > Marionette.LayoutView`
+`Backbone.View > Marionette.AbstractView > Marionette.ItemView > Marionette.LayoutView`
 
 Consequently, every property on each of those Classes must be avoided as Region names. The most
 common issue people run into is trying to name their Region *"attributes"*. Be aware

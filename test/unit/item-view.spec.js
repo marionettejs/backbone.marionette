@@ -317,13 +317,13 @@ describe('item view', function() {
     });
   });
 
-  describe('has a valid inheritance chain back to Marionette.View', function() {
+  describe('has a valid inheritance chain back to Marionette.AbstractView', function() {
     beforeEach(function() {
-      this.constructorSpy = this.sinon.spy(Marionette, 'View');
+      this.constructorSpy = this.sinon.spy(Marionette, 'AbstractView');
       this.itemView = new Marionette.ItemView();
     });
 
-    it('calls the parent Marionette.Views constructor function on instantiation', function() {
+    it('calls the parent Marionette.AbstractViews constructor function on instantiation', function() {
       expect(this.constructorSpy).to.have.been.called;
     });
   });
@@ -406,13 +406,13 @@ describe('item view', function() {
     });
   });
 
-  describe("has a valid inheritance chain back to Marionette.View", function(){
+  describe("has a valid inheritance chain back to Marionette.AbstractView", function(){
     beforeEach(function(){
-      this.constructor = this.sinon.spy(Marionette, "View");
+      this.constructor = this.sinon.spy(Marionette, "AbstractView");
       this.collectionView = new Marionette.ItemView();
     });
 
-    it("calls the parent Marionette.View's constructor function on instantiation", function(){
+    it("calls the parent Marionette.AbstractView's constructor function on instantiation", function(){
       expect(this.constructor).to.have.been.calledOnce;
     });
   });

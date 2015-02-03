@@ -17,9 +17,9 @@ describe('getNestedView', function() {
     });
   });
 
-  describe('Starting with a LayoutView with no regions', function() {
+  describe('Starting with a ItemView with no regions', function() {
     beforeEach(function() {
-      this.layoutView = new Marionette.LayoutView({
+      this.layoutView = new Marionette.ItemView({
         template: this.template
       });
     });
@@ -33,7 +33,7 @@ describe('getNestedView', function() {
 
   describe('Starting with a layoutView with regions', function() {
     beforeEach(function() {
-      this.Layout = Marionette.LayoutView.extend({
+      this.Layout = Marionette.ItemView.extend({
         template: this.template,
 
         regions: {
@@ -58,7 +58,7 @@ describe('getNestedView', function() {
         .and.to.have.length(0);
     });
 
-    describe('a LayoutView with two regions, both with child views', function() {
+    describe('a ItemView with two regions, both with child views', function() {
       beforeEach(function() {
         this.childOne = new this.BaseView();
         this.childTwo = new this.BaseView();
@@ -76,7 +76,7 @@ describe('getNestedView', function() {
       });
     });
 
-    describe('a LayoutView with two regions, one of them empty', function() {
+    describe('a ItemView with two regions, one of them empty', function() {
       beforeEach(function() {
         this.childOne = new this.BaseView();
 
@@ -91,7 +91,7 @@ describe('getNestedView', function() {
       });
     });
 
-    describe('a LayoutView containing a regular Backbone View', function() {
+    describe('a ItemView containing a regular Backbone View', function() {
       beforeEach(function() {
         this.childOne = new Backbone.View();
         this.layoutView.getRegion('main').show(this.childOne);
@@ -105,7 +105,7 @@ describe('getNestedView', function() {
       });
     });
 
-    describe('a LayoutView with another LayoutView as a child, and that LayoutView has children of its own', function() {
+    describe('a ItemView with another ItemView as a child, and that ItemView has children of its own', function() {
       beforeEach(function() {
         this.childOne = new this.Layout();
         this.subChildOne = new this.BaseView();
@@ -122,7 +122,7 @@ describe('getNestedView', function() {
       });
     });
 
-    describe('a LayoutView with an empty CollectionView as a child', function() {
+    describe('a ItemView with an empty CollectionView as a child', function() {
       beforeEach(function() {
         this.childOne = new Marionette.CollectionView();
         this.layoutView.getRegion('main').show(this.childOne);
@@ -136,7 +136,7 @@ describe('getNestedView', function() {
       });
     });
 
-    describe('a LayoutView with a CollectionView with children', function() {
+    describe('a ItemView with a CollectionView with children', function() {
       beforeEach(function() {
         this.childOne = new Marionette.CollectionView({
           collection: new Backbone.Collection([{}, {}, {}]),
@@ -160,7 +160,7 @@ describe('getNestedView', function() {
       });
     });
 
-    describe('a LayoutView with a CollectionView of LayoutViews, one of them having children of its own', function() {
+    describe('a ItemView with a CollectionView of ItemViews, one of them having children of its own', function() {
       beforeEach(function() {
         this.childOne = new Marionette.CollectionView({
           collection: new Backbone.Collection([{}, {}]),

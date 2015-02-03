@@ -6,11 +6,12 @@ extends:
   - Marionette.AbstractView
 
 description: |
-  An `ItemView` is a view that represents a single item. That item may be a `Backbone.Model` or may be a `Backbone.Collection`. Whichever it is though, it will be treated as a single item.
+  An `ItemView` is the basic view of Marionette. It can be used to render a Model or Collection. In addition, ItemViews can create and manage child views through the use of
+  [Regions]((marionette.region.md)). Regions are containers for child views.
 
-  Please see [the Marionette.AbstractView documentation](marionette.Abstractview.md) for more information on available features and functionality.
+  ItemView extends from AbstractView. For the full API, refer to [the Marionette.AbstractView documentation](marionette.abstractview.md) for inherited methods and properties.
 
-  Additionally, interactions with Marionette.Region will provide features such as `onShow` callbacks, etc. Please see [the Region documentation](marionette.region.md) for more information.
+  Unlike Backbone Views, the ItemView Class emits many events. These are most often triggered when a ItemView is displayed as a child within another ItemView or CollectionView.
 
 constructor:
   description: |

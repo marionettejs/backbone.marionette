@@ -35,5 +35,17 @@ Marionette.Behavior = Marionette.Object.extend({
   proxyViewProperties: function (view) {
     this.$el = view.$el;
     this.el = view.el;
+  },
+
+  // First emit on the behavior, then emit on the view context
+  triggerMethod: function() {
+    var ret = Marionette._triggerMethod(this, arguments);
+
+    if (Marionette.Features.isEnabled('behavior_trigger_proxy')) {
+      ret = Marionette._triggerMethod(this.view, arguments);
+    }
+
+    return ret;
   }
+
 });

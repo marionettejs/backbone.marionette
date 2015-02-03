@@ -5,7 +5,7 @@
 
 // A view that iterates over a Backbone.Collection
 // and renders an individual child view for each model.
-Marionette.CollectionView = Marionette.View.extend({
+Marionette.CollectionView = Marionette.AbstractView.extend({
 
   // used as the prefix for child view events
   // that are forwarded through the collectionview
@@ -24,7 +24,7 @@ Marionette.CollectionView = Marionette.View.extend({
     this.once('render', this._initialEvents);
     this._initChildViewStorage();
 
-    Marionette.View.apply(this, arguments);
+    Marionette.AbstractView.apply(this, arguments);
 
     this.initRenderBuffer();
   },
@@ -99,7 +99,7 @@ Marionette.CollectionView = Marionette.View.extend({
     this.checkEmpty();
   },
 
-  // Override from `Marionette.View` to trigger show on child views
+  // Override from `Marionette.AbstractView` to trigger show on child views
   onShowCalled: function() {
     this.children.each(_.partial(this._triggerMethodOnChild, 'show'));
   },
@@ -438,7 +438,7 @@ Marionette.CollectionView = Marionette.View.extend({
     this.destroyChildren();
     this.triggerMethod('destroy:collection');
 
-    return Marionette.View.prototype.destroy.apply(this, arguments);
+    return Marionette.AbstractView.prototype.destroy.apply(this, arguments);
   },
 
   // Destroy the child views that this collection view

@@ -1,6 +1,6 @@
-name: View
+name: AbstractView
 
-class: Marionette.View
+class: Marionette.AbstractView
 
 description:
 

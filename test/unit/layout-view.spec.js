@@ -355,13 +355,13 @@ describe('layoutView', function() {
     });
   });
 
-  describe('has a valid inheritance chain back to Marionette.View', function() {
+  describe('has a valid inheritance chain back to Marionette.AbstractView', function() {
     beforeEach(function() {
-      this.constructor = this.sinon.spy(Marionette, 'View');
+      this.constructor = this.sinon.spy(Marionette, 'AbstractView');
       this.layoutView = new Marionette.LayoutView();
     });
 
-    it('calls the parent Marionette.Views constructor function on instantiation', function() {
+    it('calls the parent Marionette.AbstractViews constructor function on instantiation', function() {
       expect(this.constructor).to.have.been.called;
     });
   });

@@ -6,8 +6,8 @@ An `ItemView` is a view that represents a single item. That item may be a
 `Backbone.Model` or may be a `Backbone.Collection`. Whichever it is though, it
 will be treated as a single item.
 
-ItemView extends directly from Marionette.View. Please see
-[the Marionette.View documentation](marionette.view.md)
+ItemView extends directly from Marionette.AbstractView. Please see
+[the Marionette.AbstractView documentation](marionette.abstractview.md)
 for more information on available features and functionality.
 
 Additionally, interactions with Marionette.Region
@@ -292,11 +292,11 @@ If you need to serialize the View's `model` or `collection` in a custom way,
 then you should override either `serializeModel` or `serializeCollection`.
 
 On the other hand, you should not use this method to add arbitrary extra data
-to your template. Instead, use [View.templateHelpers](./marionette.view.md#viewtemplatehelpers).
+to your template. Instead, use [View.templateHelpers](./marionette.abstractview.md#viewtemplatehelpers).
 
 ## Organizing UI Elements
 
-As documented in [Marionette.View](./marionette.view.md), you can specify a `ui` hash in your `view` that
+As documented in [Marionette.AbstractView](./marionette.abstractview.md), you can specify a `ui` hash in your `view` that
 maps UI elements by their jQuery selectors. This is especially useful if you access the
 same UI element more than once in your view's code. Instead of
 duplicating the selector, you can simply reference it by
@@ -337,4 +337,4 @@ Marionette.ItemView.extend({
 });
 ```
 
-For more information, see the [Marionette.View](./marionette.view.md) documentation.
+For more information, see the [Marionette.AbstractView](./marionette.abstractview.md) documentation.

@@ -4,12 +4,12 @@
 // A single item view implementation that contains code for rendering
 // with underscore.js templates, serializing the view's model or collection,
 // and calling several methods on extended views, such as `onRender`.
-Marionette.ItemView = Marionette.View.extend({
+Marionette.ItemView = Marionette.AbstractView.extend({
 
   // Setting up the inheritance chain which allows changes to
-  // Marionette.View.prototype.constructor which allows overriding
+  // Marionette.AbstractView.prototype.constructor which allows overriding
   constructor: function() {
-    Marionette.View.apply(this, arguments);
+    Marionette.AbstractView.apply(this, arguments);
   },
 
   // Serialize the view's model *or* collection, if

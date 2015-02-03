@@ -59,7 +59,6 @@
   // @include ../item-view.js
   // @include ../collection-view.js
   // @include ../composite-view.js
-  // @include ../layout-view.js
 
   // @include ../behavior.js
   // @include ../behaviors.js

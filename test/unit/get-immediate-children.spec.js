@@ -50,10 +50,10 @@ describe('_getImmediateChildren', function() {
     });
   });
 
-  describe('Marionette.LayoutView', function() {
+  describe('Marionette.ItemView', function() {
     describe('without regions', function() {
       beforeEach(function() {
-        this.layoutView = new Marionette.LayoutView({
+        this.layoutView = new Marionette.ItemView({
           template: false
         });
       });
@@ -66,7 +66,7 @@ describe('_getImmediateChildren', function() {
 
     describe('when there are empty regions', function() {
       beforeEach(function() {
-        this.layoutView = new Marionette.LayoutView({
+        this.layoutView = new Marionette.ItemView({
           template: _.template('<main></main><footer></footer>'),
           regions: {
             main: '.main',
@@ -84,7 +84,7 @@ describe('_getImmediateChildren', function() {
 
     describe('when there are non-empty regions', function() {
       beforeEach(function() {
-        this.layoutView = new Marionette.LayoutView({
+        this.layoutView = new Marionette.ItemView({
           template: _.template('<main></main><footer></footer>'),
           regions: {
             main: 'main',

@@ -252,7 +252,7 @@ functions:
     on the prototype.
     
     @api public
-    @param {Marionette.View} view
+    @param {Marionette.AbstractView} view
     @param {Object} options
 
   renderView: |
@@ -302,7 +302,7 @@ functions:
     ```
     
     @api private
-    @param {Marionette.View} view
+    @param {Marionette.AbstractView} view
 
   empty: |
     Empty calls `destroy` on the `currentView`. This has the consequence of clearing the contents
@@ -320,7 +320,7 @@ functions:
     show, or fire any events.
     
     @api private
-    @param {Marionette.View} view
+    @param {Marionette.AbstractView} view
   
   hasView: |
     Checks whether a view is currently present within the region. 

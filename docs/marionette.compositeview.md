@@ -274,5 +274,4 @@ Marionette.CompositeView.extend({
 });
 ```
 
-For more information, see the [Marionette.View](./marionette.view.md#viewmodelevents-and-viewcollectionevents)
-documentation.
+For more information, see the [Marionette.AbstractView](./marionette.abstractview.md) documentation.

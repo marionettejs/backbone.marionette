@@ -170,7 +170,7 @@ functions:
       
       @api public
       @param {Marionette.Model} child
-      @param {Marionette.View} EmptyView
+      @param {Marionette.AbstractView} EmptyView
     
     examples:
       
@@ -189,7 +189,7 @@ functions:
       
       @api public
       @param {Marionette.Model} child
-      @param {Marionette.View} ChildView
+      @param {Marionette.AbstractView} ChildView
       @param {Number} index
     
     examples:
@@ -199,7 +199,7 @@ functions:
       ...
       
       @api private
-      @param {Marionette.View} view
+      @param {Marionette.AbstractView} view
       @param {Boolean} increment
       @param {Number} index
     
@@ -210,7 +210,7 @@ functions:
       ...
       
       @api private
-      @param {Marionette.View} view
+      @param {Marionette.AbstractView} view
       @param {Number} index
     
     examples:
@@ -220,7 +220,7 @@ functions:
       ...
       
       @api public
-      @param {Marionette.View} view
+      @param {Marionette.AbstractView} view
       @param {Number} index
     
     examples:
@@ -231,7 +231,7 @@ functions:
       
       @api public
       @param {Marionette.Model} child
-      @param {Marionette.View} ChildViewClass
+      @param {Marionette.AbstractView} ChildViewClass
       @param {Object} childViewOptions
     
     examples:
@@ -241,7 +241,7 @@ functions:
       ...
       
       @api public
-      @param {Marionette.View} view
+      @param {Marionette.AbstractView} view
     
     examples:
       
@@ -278,7 +278,7 @@ functions:
       
       @api public
       @param {Marionette.Collectionview} collectionView
-      @param {Marionette.View} childView
+      @param {Marionette.AbstractView} childView
       @param {Number} index
     
     examples:
@@ -288,7 +288,7 @@ functions:
       ...
       
       @api private
-      @param {Marionette.View} childView
+      @param {Marionette.AbstractView} childView
       @param {Number} index
     
     examples:
@@ -298,7 +298,7 @@ functions:
       ...
       
       @api private
-      @param {Marionette.View} childView
+      @param {Marionette.AbstractView} childView
     
     examples:
       
@@ -333,14 +333,5 @@ functions:
       ...
       
       @api public
-      @param {Marionette.View} view
+      @param {Marionette.AbstractView} view
     
-    filter:
-    description: |
-      ...
-
-      @api public
-      @param {Backbone.Model} model
-      @param {Number} index
-      @param {Backbone.Collection} collection
-

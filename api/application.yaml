@@ -25,7 +25,6 @@ constructor:
     The `options` parameter can take any key/value pair and set it on the application instance.
     Two special properties that are used in the application are:
       + regions - regions are set on the app
-      + channelName - channel name for the app
       
     @param {...*} options - Options to be available on the Application instance directly.
     
@@ -43,21 +42,6 @@ constructor:
         });
 
 properties:
-  vent: |
-    The eventAggregator from the global Channel to be used for Application-level events.
-    
-    @type {Backbone.Wreqr.EventAggregator}
-    
-  commands: |
-    The commands instance from the global Channel to be used for Application-level commands.
-    
-    @type {Backbone.Wreqr.Commands}
-    
-  reqres: |
-    The RequestResponse instance from the global Channel to be used for Application-level requests.
-    
-    @type {Backbone.Wreqr.RequestResponse}
-    
   submodules: |
     The container for the Application's modules. 
     Modules are stored with their name as the key, and the module itself as the value.
@@ -121,30 +105,7 @@ functions:
           
           var myApp = new MyApp({container: '#app'});
           ```
-  
-  execute: |
-    A convenience method to access the execute method
-    on the instance of Backbone.Wreqr.Commands attached to
-    every instance of Marionette.Application.
-    
-    This method is alternatively available as app.commands.execute,
-    where app is the instance name of the Application.
-    
-    @param {String} commandName - The command to be executed.
-    @param {...*} args - Additional arguments to pass to the command callback.
-    @api public
-    
-  request: |  
-    A convenience method to access the request method on the instance of 
-    Backbone.Wreqr.RequestResponse attached to every instance of Marionette.Application.
-    
-    This method is alternatively available as app.reqres.request,
-    where app is the instance name of the Application.
-    
-    @param {String} requestName - The name of the request.
-    @param {...*} args - Additional arguments to pass to the response callback.
-    @api public
-    
+
   addInitializer: 
     description: |
       Adds an initializer that runs once the Application has started,
@@ -366,9 +327,3 @@ functions:
     the events from the RegionManager to the Application itself.
     
     @api private
-    
-  _initChannel: |
-    Internal method to setup the Wreqr.radio channel
-    
-    @api private
-    

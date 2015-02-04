@@ -1,13 +1,12 @@
 (function(root, factory) {
 
   if (typeof define === 'function' && define.amd) {
-    define(['backbone', 'underscore', 'backbone.wreqr', 'backbone.babysitter'], function(Backbone, _) {
+    define(['backbone', 'underscore', 'backbone.babysitter'], function(Backbone, _) {
       return (root.Marionette = root.Mn = factory(root, Backbone, _));
     });
   } else if (typeof exports !== 'undefined') {
     var Backbone = require('backbone');
     var _ = require('underscore');
-    var Wreqr = require('backbone.wreqr');
     var BabySitter = require('backbone.babysitter');
     module.exports = factory(root, Backbone, _);
   } else {

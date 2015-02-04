@@ -33,7 +33,6 @@ global._ = require('underscore');
 global.Backbone = require('backbone');
 global.Backbone.$ = global.$;
 global.Marionette = Backbone.Marionette = {};
-require('backbone.wreqr');
 require('backbone.babysitter');
 global.slice = Array.prototype.slice;
 Marionette.Deferred = global.Backbone.$.Deferred;

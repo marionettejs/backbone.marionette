@@ -4,12 +4,11 @@
 // A simple way of managing a collection of callbacks
 // and executing them at a later point in time, using jQuery's
 // `Deferred` object.
-Marionette.Callbacks = function() {
-  this._deferred = Marionette.Deferred();
-  this._callbacks = [];
-};
-
-_.extend(Marionette.Callbacks.prototype, {
+Marionette.Callbacks = Marionette.Class.extend({
+  constructor: function() {
+    this._deferred = Marionette.Deferred();
+    this._callbacks = [];
+  },
 
   // Add a callback to be executed. Callbacks added here are
   // guaranteed to execute, even if they are added after the

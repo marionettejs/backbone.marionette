@@ -40,9 +40,10 @@
   },
   "github": "https://github.com/marionettejs/backbone.marionette",
   "dependencies": {
+    "backbone": "1.0.0 - 1.1.2",
+    "backbone-metal": "^0.3.0",
     "backbone.babysitter": "^0.1.0",
     "backbone.wreqr": "^1.0.0",
-    "backbone": "1.0.0 - 1.1.2",
     "underscore": "1.4.4 - 1.6.0"
   },
   "devDependencies": {

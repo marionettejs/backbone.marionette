@@ -4,14 +4,14 @@
 // Contain and manage the composite application as a whole.
 // Stores and starts up `Region` objects, includes an
 // event aggregator as `app.vent`
-Marionette.Application = Marionette.Object.extend({
+Marionette.Application = Marionette.Class.extend({
   constructor: function(options) {
     this._initializeRegions(options);
     this._initCallbacks = new Marionette.Callbacks();
     this.submodules = {};
     _.extend(this, options);
     this._initChannel();
-    Marionette.Object.call(this, options);
+    this._super.apply(this, arguments);
   },
 
   // Command execution, facilitated by Backbone.Wreqr.Commands

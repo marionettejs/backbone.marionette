@@ -3,56 +3,10 @@
 
 // Manage templates stored in `<script>` blocks,
 // caching them for faster access.
-Marionette.TemplateCache = function(templateId) {
-  this.templateId = templateId;
-};
-
-// TemplateCache object-level methods. Manage the template
-// caches from these method calls instead of creating
-// your own TemplateCache instances
-_.extend(Marionette.TemplateCache, {
-  templateCaches: {},
-
-  // Get the specified template by id. Either
-  // retrieves the cached version, or loads it
-  // from the DOM.
-  get: function(templateId, options) {
-    var cachedTemplate = this.templateCaches[templateId];
-
-    if (!cachedTemplate) {
-      cachedTemplate = new Marionette.TemplateCache(templateId);
-      this.templateCaches[templateId] = cachedTemplate;
-    }
-
-    return cachedTemplate.load(options);
+Marionette.TemplateCache = Marionette.Class.extend({
+  constructor: function(templateId) {
+    this.templateId = templateId;
   },
-
-  // Clear templates from the cache. If no arguments
-  // are specified, clears all templates:
-  // `clear()`
-  //
-  // If arguments are specified, clears each of the
-  // specified templates from the cache:
-  // `clear("#t1", "#t2", "...")`
-  clear: function() {
-    var i;
-    var args = _.toArray(arguments);
-    var length = args.length;
-
-    if (length > 0) {
-      for (i = 0; i < length; i++) {
-        delete this.templateCaches[args[i]];
-      }
-    } else {
-      this.templateCaches = {};
-    }
-  }
-});
-
-// TemplateCache instance methods, allowing each
-// template cache object to manage its own state
-// and know whether or not it has been loaded
-_.extend(Marionette.TemplateCache.prototype, {
 
   // Internal method to load the template
   load: function(options) {
@@ -92,5 +46,42 @@ _.extend(Marionette.TemplateCache.prototype, {
   // the template engine used (Handebars, etc).
   compileTemplate: function(rawTemplate, options) {
     return _.template(rawTemplate, options);
+  }
+}, {
+  templateCaches: {},
+
+  // Get the specified template by id. Either
+  // retrieves the cached version, or loads it
+  // from the DOM.
+  get: function(templateId) {
+    var cachedTemplate = this.templateCaches[templateId];
+
+    if (!cachedTemplate) {
+      cachedTemplate = new Marionette.TemplateCache(templateId);
+      this.templateCaches[templateId] = cachedTemplate;
+    }
+
+    return cachedTemplate.load();
+  },
+
+  // Clear templates from the cache. If no arguments
+  // are specified, clears all templates:
+  // `clear()`
+  //
+  // If arguments are specified, clears each of the
+  // specified templates from the cache:
+  // `clear("#t1", "#t2", "...")`
+  clear: function() {
+    var i;
+    var args = _.toArray(arguments);
+    var length = args.length;
+
+    if (length > 0) {
+      for (i = 0; i < length; i++) {
+        delete this.templateCaches[args[i]];
+      }
+    } else {
+      this.templateCaches = {};
+    }
   }
 });

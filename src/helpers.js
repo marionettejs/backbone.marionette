@@ -3,38 +3,12 @@
 // Helpers
 // -------
 
-// Marionette.extend
-// -----------------
-
-// Borrow the Backbone `extend` method so we can use it as needed
-Marionette.extend = Backbone.Model.extend;
-
 // Marionette.isNodeAttached
 // -------------------------
 
 // Determine if `el` is a child of the document
 Marionette.isNodeAttached = function(el) {
   return Backbone.$.contains(document.documentElement, el);
-};
-
-
-// Marionette.getOption
-// --------------------
-
-// Retrieve an object, function or other value from a target
-// object or its `options`, with `options` taking precedence.
-Marionette.getOption = function(target, optionName) {
-  if (!target || !optionName) { return; }
-  if (target.options && (target.options[optionName] !== undefined)) {
-    return target.options[optionName];
-  } else {
-    return target[optionName];
-  }
-};
-
-// Proxy `Marionette.getOption`
-Marionette.proxyGetOption = function(optionName) {
-  return Marionette.getOption(this, optionName);
 };
 
 // Similar to `_.result`, this is a simple helper
@@ -125,21 +99,3 @@ Marionette.actAsCollection = function(object, listProperty) {
     };
   });
 };
-
-var deprecate = Marionette.deprecate = function(message, test) {
-  if (_.isObject(message)) {
-    message = (
-      message.prev + ' is going to be removed in the future. ' +
-      'Please use ' + message.next + ' instead.' +
-      (message.url ? ' See: ' + message.url : '')
-    );
-  }
-
-  if ((test === undefined || !test) && !deprecate._cache[message]) {
-    deprecate._warn('Deprecation warning: ' + message);
-    deprecate._cache[message] = true;
-  }
-};
-
-deprecate._warn = typeof console !== 'undefined' && (console.warn || console.log) || function() {};
-deprecate._cache = {};

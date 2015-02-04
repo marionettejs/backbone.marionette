@@ -309,18 +309,5 @@ Marionette.AbstractView = Backbone.View.extend({
       if (!view._getNestedViews) { return memo; }
       return memo.concat(view._getNestedViews());
     }, children);
-  },
-
-  // Imports the "normalizeMethods" to transform hashes of
-  // events=>function references/names to a hash of events=>function references
-  normalizeMethods: Marionette.normalizeMethods,
-
-  // Proxy `getOption` to enable getting options from this or this.options by name.
-  getOption: Marionette.proxyGetOption,
-
-  // Proxy `bindEntityEvents` to enable binding view's events from another entity.
-  bindEntityEvents: Marionette.proxyBindEntityEvents,
-
-  // Proxy `unbindEntityEvents` to enable unbinding view's events from another entity.
-  unbindEntityEvents: Marionette.proxyUnbindEntityEvents
+  }
 });

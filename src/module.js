@@ -5,32 +5,25 @@
 
 // A simple module system, used to create privacy and encapsulation in
 // Marionette applications
-Marionette.Module = function(moduleName, app, options) {
-  this.moduleName = moduleName;
-  this.options = _.extend({}, this.options, options);
-  // Allow for a user to overide the initialize
-  // for a given module instance.
-  this.initialize = options.initialize || this.initialize;
+Marionette.Module = Marionette.Class.extend({
+  constructor: function(moduleName, app, options) {
+    this.moduleName = moduleName;
+    this.options = _.extend({}, this.options, options);
+    // Allow for a user to overide the initialize
+    // for a given module instance.
+    this.initialize = options.initialize || this.initialize;
 
-  // Set up an internal store for sub-modules.
-  this.submodules = {};
+    // Set up an internal store for sub-modules.
+    this.submodules = {};
 
-  this._setupInitializersAndFinalizers();
+    this._setupInitializersAndFinalizers();
 
-  // Set an internal reference to the app
-  // within a module.
-  this.app = app;
+    // Set an internal reference to the app
+    // within a module.
+    this.app = app;
 
-  if (_.isFunction(this.initialize)) {
     this.initialize(moduleName, app, this.options);
-  }
-};
-
-Marionette.Module.extend = Marionette.extend;
-
-// Extend the Module prototype with events / listenTo, so that the module
-// can be used as an event aggregator or pub/sub.
-_.extend(Marionette.Module.prototype, Backbone.Events, {
+  },
 
   // By default modules start with their parents.
   startWithParent: true,
@@ -128,11 +121,7 @@ _.extend(Marionette.Module.prototype, Backbone.Events, {
   _setupInitializersAndFinalizers: function() {
     this._initializerCallbacks = new Marionette.Callbacks();
     this._finalizerCallbacks = new Marionette.Callbacks();
-  },
-
-  // import the `triggerMethod` to trigger events with corresponding
-  // methods if the method exists
-  triggerMethod: Marionette.triggerMethod
+  }
 });
 
 // Class methods to create modules

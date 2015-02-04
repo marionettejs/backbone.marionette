@@ -26,9 +26,7 @@ Marionette.CollectionView = Marionette.AbstractView.extend({
 
     this.once('render', this._initialEvents);
     this._initChildViewStorage();
-
-    Marionette.AbstractView.apply(this, arguments);
-
+    this._super.apply(this, arguments);
     this.initRenderBuffer();
   },
 
@@ -71,7 +69,7 @@ Marionette.CollectionView = Marionette.AbstractView.extend({
   // Internal method for _.each loops to call `Marionette.triggerMethodOn` on
   // a child view
   _triggerMethodOnChild: function(event, childView) {
-    Marionette.triggerMethodOn(childView, event);
+    this.triggerMethodOn(childView, event);
   },
 
   // Configured the initial events that the collection view
@@ -262,7 +260,7 @@ Marionette.CollectionView = Marionette.AbstractView.extend({
     // trigger the 'before:show' event on `view` if the collection view
     // has already been shown
     if (this._isShown) {
-      Marionette.triggerMethodOn(view, 'before:show');
+      this.triggerMethodOn(view, 'before:show');
     }
 
     // Store the `emptyView` like a `childView` so we can properly
@@ -275,7 +273,7 @@ Marionette.CollectionView = Marionette.AbstractView.extend({
     // call the 'show' method if the collection view
     // has already been shown
     if (this._isShown) {
-      Marionette.triggerMethodOn(view, 'show');
+      this.triggerMethodOn(view, 'show');
     }
   },
 
@@ -359,7 +357,7 @@ Marionette.CollectionView = Marionette.AbstractView.extend({
     this.renderChildView(view, index);
 
     if (this._isShown && !this.isBuffering) {
-      Marionette.triggerMethodOn(view, 'show');
+      this.triggerMethodOn(view, 'show');
     }
 
     this.triggerMethod('add:child', view);

@@ -1,20 +1,21 @@
 (function(root, factory) {
 
   if (typeof define === 'function' && define.amd) {
-    define(['backbone', 'underscore', 'backbone.wreqr', 'backbone.babysitter'], function(Backbone, _) {
-      return (root.Marionette = root.Mn = factory(root, Backbone, _));
+    define(['backbone', 'underscore', 'backbone-metal', 'backbone.wreqr', 'backbone.babysitter'], function(Backbone, _, Metal) {
+      return (root.Marionette = root.Mn = factory(root, Backbone, _, Metal));
     });
   } else if (typeof exports !== 'undefined') {
     var Backbone = require('backbone');
     var _ = require('underscore');
+    var Metal = require('backbone-metal');
     var Wreqr = require('backbone.wreqr');
     var BabySitter = require('backbone.babysitter');
-    module.exports = factory(root, Backbone, _);
+    module.exports = factory(root, Backbone, _, Metal);
   } else {
-    root.Marionette = root.Mn = factory(root, root.Backbone, root._);
+    root.Marionette = root.Mn = factory(root, root.Backbone, root._, root.Backbone.Metal);
   }
 
-}(this, function(root, Backbone, _) {
+}(this, function(root, Backbone, _, Metal) {
   'use strict';
 
   var previousMarionette = root.Marionette;
@@ -33,10 +34,10 @@
   // Get the Deferred creator for later use
   Marionette.Deferred = Backbone.$.Deferred;
 
+  // @include ../metal.js
   // @include ../helpers.js
   // @include ../trigger-method.js
   // @include ../dom-refresh.js
-  // @include ../bind-entity-events.js
 
   // @include ../error.js
   // @include ../callbacks.js

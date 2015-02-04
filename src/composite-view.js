@@ -14,7 +14,7 @@ Marionette.CompositeView = Marionette.CollectionView.extend({
   // maintaining the sorted order of the collection.
   // This will fallback onto appending childView's to the end.
   constructor: function() {
-    Marionette.CollectionView.apply(this, arguments);
+    this._super.apply(this, arguments);
   },
 
   // Configured the initial events that the composite view
@@ -70,7 +70,7 @@ Marionette.CompositeView = Marionette.CollectionView.extend({
 
   _renderChildren: function() {
     if (this.isRendered || this._isRendering) {
-      Marionette.CollectionView.prototype._renderChildren.call(this);
+      this._super();
     }
   },
 
@@ -132,7 +132,7 @@ Marionette.CompositeView = Marionette.CollectionView.extend({
     }
 
     var container;
-    var childViewContainer = Marionette.getOption(containerView, 'childViewContainer');
+    var childViewContainer = this.getOption.call(containerView, 'childViewContainer');
     if (childViewContainer) {
 
       var selector = Marionette._getValue(childViewContainer, containerView);

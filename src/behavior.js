@@ -6,7 +6,7 @@
 // Behaviors allow you to blackbox View specific interactions
 // into portable logical chunks, keeping your views simple and your code DRY.
 
-Marionette.Behavior = Marionette.Object.extend({
+Marionette.Behavior = Marionette.Class.extend({
   constructor: function(options, view) {
     // Setup reference to the view.
     // this comes in handle when a behavior
@@ -16,7 +16,7 @@ Marionette.Behavior = Marionette.Object.extend({
     this.defaults = _.result(this, 'defaults') || {};
     this.options  = _.extend({}, this.defaults, options);
 
-    Marionette.Object.apply(this, arguments);
+    this._super.apply(this, arguments);
   },
 
   // proxy behavior $ method to the view

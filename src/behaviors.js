@@ -49,7 +49,7 @@ Marionette.Behaviors = (function(Marionette, _) {
         // This allows the user to use UI hash elements
         // defined in the parent view as well as those
         // defined in the given behavior.
-        var ui = _.extend({}, viewUI, behaviorUI);
+        var ui = _.extend({}, behaviorUI, viewUI);
 
         // Normalize behavior events hash to allow
         // a user to use the @ui. syntax.

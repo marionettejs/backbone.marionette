@@ -5,6 +5,7 @@
 Marionette.RegionManager = Marionette.Controller.extend({
   constructor: function(options) {
     this._regions = {};
+    this.length = 0;
 
     Marionette.Controller.call(this, options);
 
@@ -98,8 +99,11 @@ Marionette.RegionManager = Marionette.Controller.extend({
 
   // internal method to store regions
   _store: function(name, region) {
+    if (!this._regions[name]) {
+      this.length++;
+    }
+
     this._regions[name] = region;
-    this._setLength();
   },
 
   // internal method to remove a region
@@ -110,13 +114,8 @@ Marionette.RegionManager = Marionette.Controller.extend({
 
     delete region._parent;
     delete this._regions[name];
-    this._setLength();
+    this.length--;
     this.triggerMethod('remove:region', name, region);
-  },
-
-  // set the number of regions current held
-  _setLength: function() {
-    this.length = _.size(this._regions);
   }
 });
 

@@ -1,59 +1,6 @@
 describe('marionette application', function() {
   'use strict';
 
-  describe('when registering an initializer and starting the application', function() {
-    beforeEach(function() {
-      this.fooOptions = { foo: 'bar' };
-      this.appOptions = { baz: 'tah' };
-      this.initializeStub = this.sinon.stub(Marionette.Application.prototype, 'initialize');
-      this.app = new Marionette.Application(this.appOptions);
-
-      this.triggerSpy = this.sinon.spy(this.app, 'trigger');
-      this.initializerStub = this.sinon.stub();
-      this.app.addInitializer(this.initializerStub);
-
-      this.app.start(this.fooOptions);
-    });
-
-    it('should call initialize', function() {
-      expect(this.initializeStub).to.have.been.calledOn(this.app).and.calledWith(this.appOptions);
-    });
-
-    it('should notify me before the starts', function() {
-      expect(this.triggerSpy).to.have.been.calledWith('before:start', this.fooOptions);
-    });
-
-    it('should notify me after the app has started', function() {
-      expect(this.triggerSpy).to.have.been.calledWith('start', this.fooOptions);
-    });
-
-    it('should call the initializer', function() {
-      expect(this.initializerStub).to.have.been.called;
-    });
-
-    it('should pass the options through to the initializer', function() {
-      expect(this.initializerStub).to.have.been.calledOnce.and.calledWith(this.fooOptions);
-    });
-
-    it('should run the initializer with the context of the app object', function() {
-      expect(this.initializerStub).to.have.been.calledOn(this.app);
-    });
-  });
-
-  describe('when an app has been started, and registering another initializer', function() {
-    beforeEach(function() {
-      this.app = new Marionette.Application();
-      this.app.start();
-
-      this.initializerStub = this.sinon.stub();
-      this.app.addInitializer(this.initializerStub);
-    });
-
-    it('should run the initializer immediately', function() {
-      expect(this.initializerStub).to.have.been.called;
-    });
-  });
-
   describe('when instantiating an app with options specified', function() {
     beforeEach(function() {
       this.fooOption = 'bar';

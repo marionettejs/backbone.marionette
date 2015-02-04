@@ -37,7 +37,6 @@ require('backbone.babysitter');
 global.slice = Array.prototype.slice;
 Marionette.Deferred = global.Backbone.$.Deferred;
 requireHelper('bind-entity-events');
-requireHelper('callbacks');
 requireHelper('trigger-method');
 requireHelper('helpers');
 requireHelper('dom-refresh');

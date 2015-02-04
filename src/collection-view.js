@@ -92,17 +92,17 @@ Marionette.CollectionView = Marionette.View.extend({
   // Handle a child added to the collection
   _onCollectionAdd: function(child, collection, opts) {
     var index;
-
-    this.destroyEmptyView();
-    var ChildView = this.getChildView(child);
-
     if (opts.at !== undefined) {
       index = opts.at;
     } else {
-      index = this._sortedModels().indexOf(child);
+      index = _.indexOf(this._filteredSortedModels(), child);
     }
 
-    this.addChild(child, ChildView, index);
+    if (this._shouldAddChild(child, index)) {
+      this.destroyEmptyView();
+      var ChildView = this.getChildView(child);
+      this.addChild(child, ChildView, index);
+    }
   },
 
   // get the child view by model it holds, and remove it
@@ -134,17 +134,28 @@ Marionette.CollectionView = Marionette.View.extend({
   // all the collectionView
   reorder: function () {
     var children = this.children;
-
-    // get the DOM nodes in the same order as the models
-    var els = _.map(this._sortedModels(), function (model) {
-      return children.findByModel(model).el;
+    var models = this._filteredSortedModels();
+    var modelsChanged = _.find(models, function (model) {
+      return !children.findByModel(model);
     });
 
-    // since append moves elements that are already in the DOM,
-    // appending the elements will effectively reorder them
-    this.triggerMethod('before:reorder');
-    this.$el.append(els);
-    this.triggerMethod('reorder');
+    // If the models we're displaying have changed due to filtering
+    // We need to add and/or remove child views
+    // So render as normal
+    if (modelsChanged) {
+      this.render();
+    } else {
+      // get the DOM nodes in the same order as the models
+      var els = _.map(models, function (model) {
+        return children.findByModel(model).el;
+      });
+
+      // since append moves elements that are already in the DOM,
+      // appending the elements will effectively reorder them
+      this.triggerMethod('before:reorder');
+      this.$el.append(els);
+      this.triggerMethod('reorder');
+    }
   },
 
   // Render view after sorting. Override this method to
@@ -162,7 +173,7 @@ Marionette.CollectionView = Marionette.View.extend({
   // Internal method. This checks for any changes in the order of the collection.
   // If the index of any view doesn't match, it will render.
   _sortViews: function() {
-    var models = this._sortedModels();
+    var models = this._filteredSortedModels();
 
     // check for any changes in sort order of views
     var orderChanged = _.find(models, function(item, index){
@@ -193,6 +204,11 @@ Marionette.CollectionView = Marionette.View.extend({
       this.showCollection();
       this.endBuffering();
       this.triggerMethod('render:collection', this);
+
+      // If we have shown children and none have passed the filter, show the empty view
+      if (this.children.isEmpty()) {
+        this.showEmptyView();
+      }
     }
   },
 
@@ -200,7 +216,7 @@ Marionette.CollectionView = Marionette.View.extend({
   showCollection: function() {
     var ChildView;
 
-    var models = this._sortedModels();
+    var models = this._filteredSortedModels();
 
     _.each(models, function(child, index) {
       ChildView = this.getChildView(child);
@@ -209,7 +225,7 @@ Marionette.CollectionView = Marionette.View.extend({
   },
 
   // Allow the collection to be sorted by a custom view comparator
-  _sortedModels: function() {
+  _filteredSortedModels: function() {
     var models;
     var viewComparator = this.getViewComparator();
 
@@ -221,6 +237,13 @@ Marionette.CollectionView = Marionette.View.extend({
       }
     } else {
       models = this.collection.models;
+    }
+
+    // Filter after sorting in case the filter uses the index
+    if (this.getOption('filter')) {
+      models = _.filter(models, function (model, index) {
+        return this._shouldAddChild(model, index);
+      }, this);
     }
 
     return models;
@@ -520,6 +543,18 @@ Marionette.CollectionView = Marionette.View.extend({
     this.children.each(this.removeChildView, this);
     this.checkEmpty();
     return childViews;
+  },
+
+  // Return true if the given child should be shown
+  // Return false otherwise
+  // The filter will be passed (child, index, collection)
+  // Where
+  //  'child' is the given model
+  //  'index' is the index of that model in the collection
+  //  'collection' is the collection referenced by this CollectionView
+  _shouldAddChild: function (child, index) {
+    var filter = this.getOption('filter');
+    return !_.isFunction(filter) || filter.call(this, child, index, this.collection);
   },
 
   // Set up the child view event forwarding. Uses a "childview:"

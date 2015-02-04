@@ -352,6 +352,35 @@ describe('Behaviors', function() {
       });
     });
 
+    describe('view should be able to override predefined behavior ui', function() {
+      beforeEach(function() {
+        var AnotherView = Marionette.View.extend({
+          template: _.template('<div class="zip"></div><div class="bar"></div>'),
+          ui: {
+            bar: '.bar',
+            foo: '.zip'  // override foo selector behavior
+          },
+          behaviors: {
+            foo: {}
+          }
+        });
+
+        this.view = new AnotherView();
+        this.view.render();
+
+        this.view.$el.find('.zip').click();
+        this.view.$el.find('.bar').click();
+      });
+
+      it('should handle behavior ui click event', function() {
+        expect(this.onFooClickStub).to.have.been.calledOnce.and.calledOn(this.fooBehavior);
+      });
+
+      it('should handle view ui click event', function() {
+        expect(this.onBarClickStub).to.have.been.calledOnce.and.calledOn(this.fooBehavior);
+      });
+    });
+
     describe('within a view', function() {
       beforeEach(function() {
         this.view = new this.View();

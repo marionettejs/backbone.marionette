@@ -16,11 +16,14 @@ Marionette.Behavior = Marionette.Object.extend({
     this.defaults = _.result(this, 'defaults') || {};
     this.options  = _.extend({}, this.defaults, options);
     // Construct an internal UI hash using
-    // the views UI hash and then the behaviors UI hash.
+    // the behaviors UI hash and then the view UI hash.
     // This allows the user to use UI hash elements
     // defined in the parent view as well as those
     // defined in the given behavior.
-    this.ui = _.extend({}, _.result(view, 'ui'), _.result(this, 'ui'));
+    // This order will help the reuse and share of a behavior
+    // between multiple views, while letting a view override a
+    // selector under an UI key.
+    this.ui = _.extend({}, _.result(this, 'ui'), _.result(view, 'ui'));
 
     Marionette.Object.apply(this, arguments);
   },

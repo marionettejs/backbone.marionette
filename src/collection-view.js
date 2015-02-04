@@ -29,6 +29,7 @@ Marionette.CollectionView = Marionette.View.extend({
 
     Marionette.View.apply(this, arguments);
 
+    this.on('show', this._onShowCalled);
     this.initRenderBuffer();
   },
 
@@ -111,8 +112,7 @@ Marionette.CollectionView = Marionette.View.extend({
     this.checkEmpty();
   },
 
-  // Override from `Marionette.View` to trigger show on child views
-  onShowCalled: function() {
+  _onShowCalled: function() {
     this.children.each(_.partial(this._triggerMethodOnChild, 'show'));
   },
 

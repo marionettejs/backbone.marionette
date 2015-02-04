@@ -58,6 +58,7 @@ will provide features such as `onShow` callbacks, etc. Please see
 * [CollectionView's attachHtml](#collectionviews-attachhtml)
 * [CollectionView's resortView](#collectionviews-resortview)
 * [CollectionView's viewComparator](#collectionviews-viewcomparator)
+* [CollectionView's `filter`](#collectionviews-filter)
 * [CollectionView's children](#collectionviews-children)
 * [CollectionView destroy](#collectionview-destroy)
 
@@ -301,6 +302,9 @@ is activated, when you sort your `Collection`, there will be no re-rendering, on
 will be reordered. This can be a problem if your `ChildView`s use their collection's index
 in their rendering. In this case, you cannot use this option as you need to re-render each
 `ChildView`.
+
+If you combine this option with a [filter](#collectionviews-filter) that changes the views that are
+to be displayed, `reorderOnSort` will be bypassed to render new children and remove those that are rejected by the filter.
 
 ## CollectionView's `emptyView`
 
@@ -847,6 +851,51 @@ CollectionView allows for a custom `viewComparator` option if you want your Coll
 ```
 
 The `viewComparator` can take any of the acceptable `Backbone.Collection` [comparator formats](http://backbonejs.org/#Collection-comparator) -- a sortBy (pass a function that takes a single argument), as a sort (pass a comparator function that expects two arguments), or as a string indicating the attribute to sort by.
+
+## CollectionView's `filter`
+
+CollectionView allows for a custom `filter` option if you want to prevent some of the
+underlying `collection`'s models from being rendered as child views.
+The filter function takes a model from the collection and returns a truthy value if the child should be rendered,
+and a falsey value if it should not.
+
+```js
+  var cv = new Marionette.CollectionView({
+    childView: SomeChildView,
+    emptyView: SomeEmptyView,
+    collection: new Backbone.Collection([
+      { value: 1 },
+      { value: 2 },
+      { value: 3 },
+      { value: 4 }
+    ]),
+
+    // Only show views with even values
+    filter: function (child, index, collection) {
+      return child.get('value') % 2 === 0;
+    }
+  });
+
+  // renders the views with values '2' and '4'
+  cv.render();
+
+  // change the filter
+  cv.filter = function (child, index, collection) {
+    return child.get('value') % 2 !== 0;
+  };
+
+  // renders the views with values '1' and '3'
+  cv.render();
+
+  // remove the filter
+  // note that using `delete cv.filter` will cause the prototype's filter to be used
+  // which may be undesirable
+  cv.filter = null;
+
+  // renders all views
+  cv.render();
+```
+
 
 ## CollectionView's children
 

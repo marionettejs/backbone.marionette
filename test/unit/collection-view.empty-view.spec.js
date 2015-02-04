@@ -30,7 +30,7 @@ describe('collectionview - emptyView', function() {
       this.childRenderSpy = this.sinon.spy();
       this.collection = new Backbone.Collection();
       this.CollectionView = this.EmptyCollectionView.extend({
-        childEvents: {
+        childViewEvents: {
           'render': this.childRenderSpy
         }
       });

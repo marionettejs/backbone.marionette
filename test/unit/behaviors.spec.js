@@ -377,12 +377,12 @@ describe('Behaviors', function() {
 
     describe('within a layout', function() {
       beforeEach(function() {
-        this.LayoutView = Marionette.LayoutView.extend({
+        this.ItemView = Marionette.ItemView.extend({
           template: _.template('<div class="baz"></div>'),
           regions: { bazRegion: '.baz' }
         });
 
-        this.layoutView = new this.LayoutView();
+        this.layoutView = new this.ItemView();
         this.layoutView.render();
         this.layoutView.bazRegion.show(new this.View());
         this.layoutView.destroy();

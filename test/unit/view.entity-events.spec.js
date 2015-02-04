@@ -182,9 +182,9 @@ describe('view entity events', function() {
     });
   });
 
-  describe('when LayoutView bound to modelEvent replaces region with new view', function() {
+  describe('when ItemView bound to modelEvent replaces region with new view', function() {
     beforeEach(function() {
-      this.LayoutView = Marionette.LayoutView.extend({
+      this.Layout = Marionette.ItemView.extend({
         template: _.template('<div id="child"></div>'),
         regions: {child: '#child'},
 
@@ -198,7 +198,7 @@ describe('view entity events', function() {
         bar: this.barStub
       });
 
-      this.layoutView = new this.LayoutView({model: this.model});
+      this.layoutView = new this.Layout({model: this.model});
       this.itemViewOne = new this.ItemView({model: this.model});
       this.itemViewTwo = new this.ItemView({model: this.model});
 

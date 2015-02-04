@@ -8,6 +8,7 @@
     "jQuery"     : true,
     "_"          : true,
     "Backbone"   : true,
+    "Metal"      : true,
     "Marionette" : true
   },
 

@@ -160,12 +160,12 @@ describe('trigger event and method name', function() {
 
     describe('when the context does not have triggerMethod defined', function() {
       beforeEach(function() {
-        this.view = new Backbone.View();
-        this.view.onFoo = this.methodHandler;
-        this.view.on('foo', this.eventHandler);
+        this.obj = _.extend({}, Backbone.Events);
+        this.obj.onFoo = this.methodHandler;
+        this.obj.on('foo', this.eventHandler);
         this.triggerMethodSpy = this.sinon.spy(Marionette, 'triggerMethod');
 
-        Marionette.triggerMethodOn(this.view, 'foo');
+        Marionette.triggerMethodOn(this.obj, 'foo');
       });
 
       it('should trigger the event', function() {

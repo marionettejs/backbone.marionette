@@ -509,14 +509,14 @@ Marionette.CollectionView = Marionette.AbstractView.extend({
     this.listenTo(view, 'all', function() {
       var args = _.toArray(arguments);
       var rootEvent = args[0];
-      var childEvents = this.normalizeMethods(_.result(this, 'childEvents'));
+      var childViewEvents = this.normalizeMethods(_.result(this, 'childViewEvents'));
 
       args[0] = prefix + ':' + rootEvent;
       args.splice(1, 0, view);
 
-      // call collectionView childEvent if defined
-      if (typeof childEvents !== 'undefined' && _.isFunction(childEvents[rootEvent])) {
-        childEvents[rootEvent].apply(this, args.slice(1));
+      // call collectionView childViewEvent if defined
+      if (typeof childViewEvents !== 'undefined' && _.isFunction(childViewEvents[rootEvent])) {
+        childViewEvents[rootEvent].apply(this, args.slice(1));
       }
 
       this.triggerMethod.apply(this, args);

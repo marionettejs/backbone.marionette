@@ -20,14 +20,6 @@ var MyApp = new Backbone.Marionette.Application();
 * [initialize](#initialize)
 * [Application Events](#application-events)
 * [Starting An Application](#starting-an-application)
-* [Application Regions (deprecated)](#application-regions)
-  * [jQuery Selector](#jquery-selector)
-  * [Custom Region Class](#custom-region-class)
-  * [Custom Region Class And Selector](#custom-region-class-and-selector)
-  * [Region Options](#region-options)
-  * [Overriding the default RegionManager](#overriding-the-default-regionmanager)
-  * [Get Region By Name](#get-region-by-name)
-  * [Removing Regions](#removing-regions)
 * [Application.getOption](#applicationgetoption)
 * [Adding Initializers (deprecated)](#adding-initializers)
 
@@ -93,136 +85,6 @@ var options = {
 MyApp.start(options);
 ```
 
-## Application Regions
-
-> Warning: deprecated
-> This feature is deprecated. Instead of using the Application as the root
-> of your view tree, you should use a Layout View. To scope your Layout View to the entire
-> document, you could set its `el` to 'body'. This might look something like the following:
->
->
-> var RootView = Marionette.LayoutView.extend({
->   el: 'body'
-> });
->
-
-Application instances have an API that allow you to manage [Regions](./marionette.region.md).
-These Regions are typically the means through which your views become attached to the `document`.
-
-You can create Regions through the `addRegions` method by passing in an object
-literal or a function that returns an object literal.
-
-There are three syntax forms for adding a region to an application object.
-
-### jQuery Selector
-
-The first is to specify a jQuery selector as the value of the region
-definition. This will create an instance of a Marionette.Region directly,
-and assign it to the selector:
-
-```js
-MyApp.addRegions({
-  someRegion: "#some-div",
-  anotherRegion: "#another-div"
-});
-```
-
-### Custom Region Class
-
-The second is to specify a custom region class, where the region class has
-already specified a selector:
-
-```js
-var MyCustomRegion = Marionette.Region.extend({
-  el: "#foo"
-});
-
-MyApp.addRegions(function() {
-  return {
-    someRegion: MyCustomRegion
-  };
-});
-```
-
-### Custom Region Class And Selector
-
-The third method is to specify a custom region class, and a jQuery selector
-for this region instance, using an object literal:
-
-```js
-var MyCustomRegion = Marionette.Region.extend({});
-
-MyApp.addRegions({
-
-  someRegion: {
-    selector: "#foo",
-    regionClass: MyCustomRegion
-  },
-
-  anotherRegion: {
-    selector: "#bar",
-    regionClass: MyCustomRegion
-  }
-
-});
-```
-
-### Region Options
-
-You can also specify regions per `Application` instance.
-
-```js
-new Marionette.Application({
-  regions: {
-    fooRegion: '#foo-region'
-  }
-});
-```
-
-### Overriding the default `RegionManager`
-
-If you need the `RegionManager`'s class chosen dynamically, specify `getRegionManager`:
-
-```js
-Marionette.Application.extend({
-  // ...
-
-  getRegionManager: function() {
-    // custom logic
-    return new MyRegionManager();
-  }
-```
-
-This can be useful if you want to attach `Application`'s regions to your own instance of `RegionManager`.
-
-### Get Region By Name
-
-A region can be retrieved by name, using the `getRegion` method:
-
-```js
-var app = new Marionette.Application();
-app.addRegions({ r1: "#region1" });
-
-var myRegion = app.getRegion('r1');
-```
-
-Regions are also attached directly to the Application instance, **but this is not recommended usage**.
-
-### Removing Regions
-
-Regions can also be removed with the `removeRegion` method, passing in
-the name of the region to remove as a string value:
-
-```js
-MyApp.removeRegion('someRegion');
-```
-
-Removing a region will properly empty it before removing it from the
-application object.
-
-For more information on regions, see [the region documentation](./marionette.region.md) Also, the API that Applications use to
-manage regions comes from the RegionManager Class, which is documented [over here](./marionette.regionmanager.md).
-
 ### Application.getOption
 Retrieve an object's attribute either directly from the object, or from the object's this.options, with this.options taking precedence.
 
@@ -255,7 +117,7 @@ MyApp.addInitializer(function(options){
   var myView = new MyView({
     model: options.someModel
   });
-  MyApp.mainRegion.show(myView);
+  MyApp.rootView.mainRegion.show(myView);
 });
 
 MyApp.addInitializer(function(options){

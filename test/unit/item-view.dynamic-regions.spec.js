@@ -9,17 +9,17 @@ describe('itemView - dynamic regions', function() {
 
   describe('when adding regions with a function', function() {
     beforeEach(function() {
-      this.app = new Marionette.Application();
+      this.view = new Marionette.ItemView();
 
       this.fooSelector = '#foo-region';
       this.barSelector = '#bar-region';
 
       this.fooRegion = new Marionette.Region({ el: this.fooSelector });
-      this.fooRegion._parent = this.app._regionManager;
+      this.fooRegion._parent = this.view._regionManager;
 
       this.BarRegion = Marionette.Region.extend();
       this.barRegion = new this.BarRegion({ el: this.barSelector });
-      this.barRegion._parent = this.app._regionManager;
+      this.barRegion._parent = this.view._regionManager;
 
       this.regionDefinition = this.sinon.stub().returns({
         fooRegion: this.fooSelector,
@@ -29,7 +29,7 @@ describe('itemView - dynamic regions', function() {
         }
       });
 
-      this.regions = this.app.addRegions(this.regionDefinition);
+      this.regions = this.view.addRegions(this.regionDefinition);
     });
 
     it('calls the regions definition function', function() {
@@ -38,18 +38,22 @@ describe('itemView - dynamic regions', function() {
         .and.have.been.calledWith(this.regionDefinition);
     });
 
+    // We compare the most unique thing about the regions: the element, because
+    // the regions themselves are circular objects that can't be serialized into
+    // JSON. In the future, we should compare cids.
     it('returns all the created regions on an object literal', function() {
-      expect(this.app.fooRegion).to.deep.equal(this.fooRegion);
-      expect(this.app.barRegion).to.deep.equal(this.barRegion);
+      expect(this.view.fooRegion.el).to.deep.equal(this.fooRegion.el);
+      expect(this.view.barRegion.el).to.deep.equal(this.barRegion.el);
     });
 
+    // Same as above.
     it('initializes all the regions immediately', function() {
-      expect(this.app.getRegion('fooRegion')).to.deep.equal(this.fooRegion);
-      expect(this.app.getRegion('barRegion')).to.deep.equal(this.barRegion);
+      expect(this.view.getRegion('fooRegion').el).to.deep.equal(this.fooRegion.el);
+      expect(this.view.getRegion('barRegion').el).to.deep.equal(this.barRegion.el);
     });
 
     it('uses the custom regionClass', function() {
-      expect(this.app.getRegion('barRegion')).to.be.an.instanceof(this.BarRegion);
+      expect(this.view.getRegion('barRegion')).to.be.an.instanceof(this.BarRegion);
     });
   });
 

@@ -19,9 +19,6 @@
   /* istanbul ignore next */
   // @include ../../tmp/backbone.babysitter.bare.js
 
-  /* istanbul ignore next */
-  // @include ../../tmp/backbone.wreqr.bare.js
-
   var previousMarionette = root.Marionette;
 
   var Marionette = Backbone.Marionette = {};

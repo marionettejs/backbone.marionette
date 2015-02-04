@@ -40,31 +40,6 @@ describe('marionette application', function() {
     });
   });
 
-  describe('application proxies to wreqr', function() {
-    beforeEach(function() {
-      this.app = new Marionette.Application();
-
-      this.executeSpy = this.sinon.spy(this.app.commands, 'execute');
-      this.requestSpy = this.sinon.spy(this.app.reqres, 'request');
-    });
-
-    it('should proxy execute', function() {
-      this.app.execute('test');
-
-      expect(this.executeSpy)
-      .to.have.been.calledOnce
-      .and.calledWith('test');
-    });
-
-    it('should proxy request', function() {
-      this.app.request('test');
-
-      expect(this.requestSpy)
-      .to.have.been.calledOnce
-      .and.calledWith('test');
-    });
-  });
-
   describe('when an app has been started, and registering another initializer', function() {
     beforeEach(function() {
       this.app = new Marionette.Application();
@@ -107,57 +82,6 @@ describe('marionette application', function() {
 
     it('should pass the startup option to the callback', function() {
       expect(this.startStub).to.have.been.calledOnce.and.calledWith(this.fooOptions);
-    });
-  });
-
-  describe('radio channels', function() {
-    describe('when channelName is specified', function() {
-      beforeEach(function() {
-        this.channelName = 'foo';
-        this.App = Marionette.Application.extend({ channelName: 'foo' });
-        this.app = new this.App();
-        this.channel = Backbone.Wreqr.radio.channel(this.channelName);
-      });
-
-      it('should create a Wreqr channel on this.channel', function() {
-        expect(this.app.channel).to.deep.equal(this.channel);
-      });
-
-      it('should set the app EventAggregator to the channel vent', function() {
-        expect(this.app.vent).to.deep.equal(this.channel.vent);
-      });
-
-      it('should set the app Commands to the channel commands', function() {
-        expect(this.app.commands).to.deep.equal(this.channel.commands);
-      });
-
-      it('should set the app RequestResponse to the channel reqres', function() {
-        expect(this.app.reqres).to.deep.equal(this.channel.reqres);
-      });
-    });
-
-    describe('when channelName is set as function', function() {
-      beforeEach(function() {
-        this.channelName = 'foo';
-        this.channelNameStub = this.sinon.stub().returns(this.channelName);
-        this.App = Marionette.Application.extend({ channelName: this.channelNameStub });
-        this.app = new this.App();
-      });
-
-      it('should set the app channelName to the result of channelName', function() {
-        expect(this.app.channelName).to.equal(this.channelName);
-      });
-    });
-
-    describe('when no channelName is specified', function() {
-      beforeEach(function() {
-        this.channelName = 'global';
-        this.app = new Marionette.Application();
-      });
-
-      it('should set the app channelName to "global"', function() {
-        expect(this.app.channelName).to.equal(this.channelName);
-      });
     });
   });
 });

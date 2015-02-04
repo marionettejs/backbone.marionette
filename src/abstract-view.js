@@ -1,9 +1,13 @@
 /* jshint maxlen: 114, nonew: false */
-// View
-// ----
 
-// The core view class that other Marionette views extend from.
-Marionette.View = Backbone.View.extend({
+//
+// AbstractView
+// The View class that Marionette's other views extend from. Generally,
+// you won't ever need to extend from this class. Use the other Views
+// to build new classes.
+//
+
+Marionette.AbstractView = Backbone.View.extend({
   isDestroyed: false,
 
   constructor: function(options) {
@@ -33,10 +37,13 @@ Marionette.View = Backbone.View.extend({
     return this.getOption('template');
   },
 
-  // Serialize a model by returning its attributes. Clones
-  // the attributes to allow modification.
-  serializeModel: function(model){
-    return model.toJSON.apply(model, _.rest(arguments));
+  // Prepares the special `model` property of a view
+  // for being displayed in the template. By default
+  // we simply clone the attributes. Override this if
+  // you need a custom transformation for your view's model
+  serializeModel: function() {
+    if (!this.model) { return {}; }
+    return _.clone(this.model.attributes);
   },
 
   // Mix in template helper methods. Looks for a
@@ -166,6 +173,8 @@ Marionette.View = Backbone.View.extend({
 
     // unbind UI elements
     this.unbindUIElements();
+
+    this.isRendered = false;
 
     // remove the view from the DOM
     this.remove();

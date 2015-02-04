@@ -6,8 +6,8 @@ An `ItemView` is a view that represents a single item. That item may be a
 `Backbone.Model` or may be a `Backbone.Collection`. Whichever it is though, it
 will be treated as a single item.
 
-ItemView extends directly from Marionette.View. Please see
-[the Marionette.View documentation](marionette.view.md)
+ItemView extends directly from Marionette.AbstractView. Please see
+[the Marionette.AbstractView documentation](marionette.abstractview.md)
 for more information on available features and functionality.
 
 Additionally, interactions with Marionette.Region
@@ -225,13 +225,29 @@ Backbone.Marionette.ItemView.extend({
 
 ## ItemView serializeData
 
-Item views will serialize a model or collection, by default, by
-calling `.toJSON` on either the model or collection. If both a model
-and collection are attached to an item view, the model will be used
-as the data source. The results of the data serialization will be passed to the template
-that is rendered.
+This method is used to convert a View's `model` or `collection`
+into a usable form for a template.
 
-If the serialization is a model, the results are passed in directly:
+Item Views are called such because they process only a single item
+at a time. Consequently, only the `model` **or** the `collection` will
+be serialized. If both exist, only the `model` will be serialized.
+
+By default, models are serialized by cloning the attributes of the model.
+
+Collections are serialized into an object of this form:
+
+```js
+{
+  items: [modelOne, modelTwo]
+}
+``
+
+where each model in the collection will have its attributes cloned.
+
+The result of `serializeData` is included in the data passed to
+the view's template.
+
+Let's take a look at some examples of how serializing data works.
 
 ```js
 var myModel = new MyModel({foo: "bar"});
@@ -272,23 +288,15 @@ MyItemView.render();
 </script>
 ```
 
-If you need custom serialization for your data, you can provide a
-`serializeData` method on your view. It must return a valid JSON
-object, as if you had called `.toJSON` on a model or collection.
+If you need to serialize the View's `model` or `collection` in a custom way,
+then you should override either `serializeModel` or `serializeCollection`.
 
-```js
-Backbone.Marionette.ItemView.extend({
-  serializeData: function(){
-    return {
-      "some attribute": "some value"
-    }
-  }
-});
-```
+On the other hand, you should not use this method to add arbitrary extra data
+to your template. Instead, use [View.templateHelpers](./marionette.abstractview.md#viewtemplatehelpers).
 
 ## Organizing UI Elements
 
-As documented in [Marionette.View](./marionette.view.md), you can specify a `ui` hash in your `view` that
+As documented in [Marionette.AbstractView](./marionette.abstractview.md), you can specify a `ui` hash in your `view` that
 maps UI elements by their jQuery selectors. This is especially useful if you access the
 same UI element more than once in your view's code. Instead of
 duplicating the selector, you can simply reference it by
@@ -329,4 +337,4 @@ Marionette.ItemView.extend({
 });
 ```
 
-For more information, see the [Marionette.View](./marionette.view.md) documentation.
+For more information, see the [Marionette.AbstractView](./marionette.abstractview.md) documentation.

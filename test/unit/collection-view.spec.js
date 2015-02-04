@@ -16,8 +16,12 @@ describe('collection view', function() {
 
     this.MockCollectionView = Backbone.Marionette.CollectionView.extend({
       childView: this.ChildView,
-      onBeforeRender: function() {},
-      onRender: function() {},
+      onBeforeRender: function() {
+        return this.isRendered;
+      },
+      onRender: function() {
+        return this.isRendered;
+      },
       onBeforeAddChild: function() {},
       onAddChild: function() {},
       onBeforeRemoveChild: function() {},
@@ -101,7 +105,7 @@ describe('collection view', function() {
         collection: this.collection
       });
 
-      this.collectionView.on('childview:render', this.childViewRender);
+      this.collectionView.on('childView:render', this.childViewRender);
 
       this.sinon.spy(this.collectionView, 'onRender');
       this.sinon.spy(this.collectionView, 'onBeforeAddChild');
@@ -165,6 +169,18 @@ describe('collection view', function() {
       expect(this.collectionView.onRender).to.have.been.called;
     });
 
+    it('should call "onBeforeRender" before "onRender"', function() {
+      expect(this.collectionView.onBeforeRender).to.have.been.calledBefore(this.collectionView.onRender);
+    });
+
+    it('should not be rendered when "onBeforeRender" is called', function() {
+      expect(this.collectionView.onBeforeRender.lastCall.returnValue).not.to.be.ok;
+    });
+
+    it('should be rendered when "onRender" is called', function() {
+      expect(this.collectionView.onRender.lastCall.returnValue).to.be.true;
+    });
+
     it('should trigger a "before:render" event', function() {
       expect(this.collectionView.trigger).to.have.been.calledWith('before:render', this.collectionView);
     });
@@ -203,7 +219,7 @@ describe('collection view', function() {
       expect(this.collectionView.onAddChild.callCount).to.equal(2);
     });
 
-    it('should trigger "childview:render" for each item in the collection', function() {
+    it('should trigger "childView:render" for each item in the collection', function() {
       expect(this.childViewRender.callCount).to.equal(2);
     });
 
@@ -211,6 +227,10 @@ describe('collection view', function() {
       expect(this.collectionView.getChildView).to.have.been.calledTwice.
         and.calledWith(this.collection.models[0]).
         and.calledWith(this.collection.models[1]);
+    });
+
+    it('should be marked rendered', function() {
+      expect(this.collectionView).to.have.property('isRendered', true);
     });
   });
 
@@ -340,7 +360,7 @@ describe('collection view', function() {
       this.collectionView.render();
 
       this.childViewRender = this.sinon.stub();
-      this.collectionView.on('childview:render', this.childViewRender);
+      this.collectionView.on('childView:render', this.childViewRender);
 
       this.sinon.spy(this.collectionView, 'attachHtml');
 
@@ -360,7 +380,7 @@ describe('collection view', function() {
       expect(this.collectionView.attachHtml.firstCall.args[2]).to.equal(0);
     });
 
-    it('should trigger the childview:render event from the collectionView', function() {
+    it('should trigger the childView:render event from the collectionView', function() {
       expect(this.childViewRender).to.have.been.called;
     });
   });
@@ -376,7 +396,7 @@ describe('collection view', function() {
       this.collectionView.render();
 
       this.childViewRender = this.sinon.stub();
-      this.collectionView.on('childview:render', this.childViewRender);
+      this.collectionView.on('childView:render', this.childViewRender);
 
       this.sinon.spy(this.collectionView, 'attachHtml');
 
@@ -396,7 +416,7 @@ describe('collection view', function() {
       expect(this.collectionView.attachHtml.firstCall.args[2]).to.equal(1);
     });
 
-    it('should trigger the childview:render event from the collectionView', function() {
+    it('should trigger the childView:render event from the collectionView', function() {
       expect(this.childViewRender).to.have.been.called;
     });
 
@@ -517,8 +537,18 @@ describe('collection view', function() {
       this.EventedView = Backbone.Marionette.CollectionView.extend({
         childView: this.ChildView,
         someCallback: function() {},
-        onBeforeDestroy: function() {},
-        onDestroy: function() {}
+        onBeforeDestroy: function() {
+          return {
+            isRendered: this.isRendered,
+            isDestroyed: this.isDestroyed
+          };
+        },
+        onDestroy: function() {
+          return {
+            isRendered: this.isRendered,
+            isDestroyed: this.isDestroyed
+          };
+        }
       });
 
       this.destroyHandler = this.sinon.stub();
@@ -599,6 +629,18 @@ describe('collection view', function() {
       expect(this.collectionView.onBeforeDestroy).to.have.been.called;
     });
 
+    it('should call "onBeforeDestroy" before "onDestroy"', function() {
+      expect(this.collectionView.onBeforeDestroy).to.have.been.calledBefore(this.collectionView.onDestroy);
+    });
+
+    it('should not be destroyed when "onBeforeDestroy" is called', function() {
+      expect(this.collectionView.onBeforeDestroy.lastCall.returnValue.isDestroyed).not.to.be.ok;
+    });
+
+    it('should be destroyed when "onDestroy" is called', function() {
+      expect(this.collectionView.onDestroy.lastCall.returnValue.isDestroyed).to.be.true;
+    });
+
     it('should trigger a "before:destroy" event', function() {
       expect(this.collectionView.trigger).to.have.been.calledWith('before:destroy:collection');
     });
@@ -618,6 +660,14 @@ describe('collection view', function() {
 
     it('should return the collection view', function() {
       expect(this.collectionView.destroy).to.have.returned(this.collectionView);
+    });
+
+    it('should be marked destroyed', function() {
+      expect(this.collectionView).to.have.property('isDestroyed', true);
+    });
+
+    it('should be marked not rendered', function() {
+      expect(this.collectionView).to.have.property('isRendered', false);
     });
   });
 
@@ -709,7 +759,7 @@ describe('collection view', function() {
       this.collection = new Backbone.Collection([this.model]);
 
       this.collectionView = new this.MockCollectionView({collection: this.collection});
-      this.collectionView.on('childview:some:event', this.someEventSpy);
+      this.collectionView.on('childView:some:event', this.someEventSpy);
       this.collectionView.render();
 
       this.sinon.spy(this.collectionView, 'trigger');
@@ -718,7 +768,7 @@ describe('collection view', function() {
     });
 
     it('should bubble up through the parent collection view', function() {
-      expect(this.collectionView.trigger).to.have.been.calledWith('childview:some:event', this.childView, 'test', this.model);
+      expect(this.collectionView.trigger).to.have.been.calledWith('childView:some:event', this.childView, 'test', this.model);
     });
 
     it('should provide the child view that triggered the event, including other relevant parameters', function() {
@@ -773,8 +823,8 @@ describe('collection view', function() {
         this.beforeSpy = this.sinon.stub();
         this.renderSpy = this.sinon.stub();
 
-        this.collectionView.on('childview:before:render', this.beforeSpy);
-        this.collectionView.on('childview:render', this.renderSpy);
+        this.collectionView.on('childView:before:render', this.beforeSpy);
+        this.collectionView.on('childView:render', this.renderSpy);
 
         this.collectionView.render();
         this.childView = this.collectionView.children.findByIndex(0);
@@ -795,8 +845,8 @@ describe('collection view', function() {
         this.beforeSpy = this.sinon.stub();
         this.destroySpy = this.sinon.stub();
 
-        this.collectionView.on('childview:before:destroy', this.beforeSpy);
-        this.collectionView.on('childview:destroy', this.destroySpy);
+        this.collectionView.on('childView:before:destroy', this.beforeSpy);
+        this.collectionView.on('childView:destroy', this.destroySpy);
 
         this.collectionView.render();
         this.childView = this.collectionView.children.findByIndex(0);
@@ -970,10 +1020,10 @@ describe('collection view', function() {
     });
   });
 
-  describe('when calling childEvents via a childEvents method', function() {
+  describe('when calling childViewEvents via a childEvents method', function() {
     beforeEach(function() {
       this.CollectionView = this.MockCollectionView.extend({
-        childEvents: function() {
+        childViewEvents: function() {
           return {
             'some:event': 'someEvent'
           };
@@ -995,7 +1045,7 @@ describe('collection view', function() {
     });
 
     it('should bubble up through the parent collection view', function() {
-      expect(this.collectionView.trigger).to.have.been.calledWith('childview:some:event', this.childView, 'test', this.model);
+      expect(this.collectionView.trigger).to.have.been.calledWith('childView:some:event', this.childView, 'test', this.model);
     });
 
     it('should provide the child view that triggered the event, including other relevant parameters', function() {
@@ -1003,12 +1053,12 @@ describe('collection view', function() {
     });
   });
 
-  describe('when calling childEvents via the childEvents hash', function() {
+  describe('when calling childViewEvents via the childEvents hash', function() {
     beforeEach(function() {
       this.onSomeEventSpy = this.sinon.stub();
 
       this.CollectionView = this.MockCollectionView.extend({
-        childEvents: {
+        childViewEvents: {
           'some:event': this.onSomeEventSpy
         }
       });
@@ -1025,7 +1075,7 @@ describe('collection view', function() {
     });
 
     it('should bubble up through the parent collection view', function() {
-      expect(this.collectionView.trigger).to.have.been.calledWith('childview:some:event', this.childView, 'test', this.model);
+      expect(this.collectionView.trigger).to.have.been.calledWith('childView:some:event', this.childView, 'test', this.model);
     });
 
     it('should provide the child view that triggered the event, including other relevant parameters', function() {
@@ -1033,10 +1083,10 @@ describe('collection view', function() {
     });
   });
 
-  describe('when calling childEvents via the childEvents hash with a string of the function name', function() {
+  describe('when calling childViewEvents via the childEvents hash with a string of the function name', function() {
     beforeEach(function() {
       this.CollectionView = this.MockCollectionView.extend({
-        childEvents: {
+        childViewEvents: {
           'some:event': 'someEvent'
         }
       });
@@ -1056,7 +1106,7 @@ describe('collection view', function() {
     });
 
     it('should bubble up through the parent collection view', function() {
-      expect(this.collectionView.trigger).to.have.been.calledWith('childview:some:event', this.childView, 'test', this.model);
+      expect(this.collectionView.trigger).to.have.been.calledWith('childView:some:event', this.childView, 'test', this.model);
     });
 
     it('should provide the child view that triggered the event, including other relevant parameters', function() {
@@ -1064,11 +1114,11 @@ describe('collection view', function() {
     });
   });
 
-  describe('calling childEvents via the childEvents hash with a string of a nonexistent function name', function() {
+  describe('calling childEvents via the childViewEvents hash with a string of a nonexistent function name', function() {
     beforeEach(function() {
       this.CollectionView = Marionette.CollectionView.extend({
         childView: this.ChildView,
-        childEvents: {
+        childViewEvents: {
           'render': 'nonexistentFn'
         }
       });
@@ -1085,13 +1135,13 @@ describe('collection view', function() {
     });
   });
 
-  describe('has a valid inheritance chain back to Marionette.View', function() {
+  describe('has a valid inheritance chain back to Marionette.AbstractView', function() {
     beforeEach(function() {
-      this.constructor = this.sinon.spy(Marionette, 'View');
+      this.constructor = this.sinon.spy(Marionette, 'AbstractView');
       this.collectionView = new Marionette.CollectionView();
     });
 
-    it('calls the parent Marionette.Views constructor function on instantiation', function() {
+    it('calls the parent Marionette.AbstractViews constructor function on instantiation', function() {
       expect(this.constructor).to.have.been.called;
     });
   });

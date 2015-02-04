@@ -49,7 +49,7 @@ requireHelper('application');
 requireHelper('module');
 requireHelper('renderer');
 requireHelper('template-cache');
-requireHelper('view');
+requireHelper('abstract-view');
 requireHelper('item-view');
 requireHelper('layout-view');
 requireHelper('collection-view');

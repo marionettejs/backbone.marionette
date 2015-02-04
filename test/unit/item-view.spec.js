@@ -102,8 +102,12 @@ describe('item view', function() {
 
   describe('when rendering', function() {
     beforeEach(function() {
-      this.onBeforeRenderStub = this.sinon.stub();
-      this.onRenderStub       = this.sinon.stub();
+      this.onBeforeRenderStub = this.sinon.spy(function() {
+        return this.isRendered;
+      });
+      this.onRenderStub       = this.sinon.spy(function() {
+        return this.isRendered;
+      });
 
       this.View = Marionette.ItemView.extend({
         template       : this.templateStub,
@@ -124,12 +128,28 @@ describe('item view', function() {
       expect(this.onRenderStub).to.have.been.calledOnce;
     });
 
+    it('should call "onBeforeRender" before "onRender"', function() {
+      expect(this.onBeforeRenderStub).to.have.been.calledBefore(this.onRenderStub);
+    });
+
+    it('should not be rendered when "onBeforeRender" is called', function() {
+      expect(this.onBeforeRenderStub.lastCall.returnValue).not.to.be.ok;
+    });
+
+    it('should be rendered when "onRender" is called', function() {
+      expect(this.onRenderStub.lastCall.returnValue).to.be.true;
+    });
+
     it('should trigger a before:render event', function() {
       expect(this.triggerSpy).to.have.been.calledWith('before:render', this.view);
     });
 
     it('should trigger a rendered event', function() {
       expect(this.triggerSpy).to.have.been.calledWith('render', this.view);
+    });
+
+    it('should mark as rendered', function() {
+      expect(this.view).to.have.property('isRendered', true);
     });
   });
 
@@ -196,8 +216,18 @@ describe('item view', function() {
 
   describe('when destroying an item view', function() {
     beforeEach(function() {
-      this.onBeforeDestroyStub = this.sinon.stub();
-      this.onDestroyStub       = this.sinon.stub();
+      this.onBeforeDestroyStub = this.sinon.spy(function() {
+        return {
+          isRendered: this.isRendered,
+          isDestroyed: this.isDestroyed
+        };
+      });
+      this.onDestroyStub = this.sinon.spy(function() {
+        return {
+          isRendered: this.isRendered,
+          isDestroyed: this.isDestroyed
+        };
+      });
 
       this.View = Marionette.ItemView.extend({
         template        : this.templateStub,
@@ -243,6 +273,26 @@ describe('item view', function() {
     it('should return the view', function() {
       expect(this.view.destroy).to.have.returned(this.view);
     });
+
+    it('should not be destroyed when "onBeforeDestroy" is called', function () {
+      expect(this.onBeforeDestroyStub.lastCall.returnValue.isDestroyed).not.to.be.ok;
+    });
+
+    it('should be destroyed when "onDestroy" is called', function() {
+      expect(this.onDestroyStub.lastCall.returnValue.isDestroyed).to.be.true;
+    });
+
+    it('should be rendered when "onDestroy" is called', function() {
+      expect(this.onDestroyStub.lastCall.returnValue.isRendered).to.be.true;
+    });
+
+    it('should be marked destroyed', function() {
+      expect(this.view).to.have.property('isDestroyed', true);
+    });
+
+    it('should be marked not rendered', function() {
+      expect(this.view).to.have.property('isRendered', false);
+    });
   });
 
   describe('when re-rendering an ItemView that is already shown', function() {
@@ -267,13 +317,13 @@ describe('item view', function() {
     });
   });
 
-  describe('has a valid inheritance chain back to Marionette.View', function() {
+  describe('has a valid inheritance chain back to Marionette.AbstractView', function() {
     beforeEach(function() {
-      this.constructorSpy = this.sinon.spy(Marionette, 'View');
+      this.constructorSpy = this.sinon.spy(Marionette, 'AbstractView');
       this.itemView = new Marionette.ItemView();
     });
 
-    it('calls the parent Marionette.Views constructor function on instantiation', function() {
+    it('calls the parent Marionette.AbstractViews constructor function on instantiation', function() {
       expect(this.constructorSpy).to.have.been.called;
     });
   });
@@ -310,15 +360,11 @@ describe('item view', function() {
     describe('and the view only has a collection', function() {
       beforeEach(function() {
         this.itemView.collection = new Backbone.Collection(this.collectionData);
-        this.itemView.serializeData(1, 2, 3);
+        this.itemView.serializeData();
       });
 
       it("should call serializeCollection", function(){
         expect(this.itemView.serializeCollection).to.have.been.calledOnce;
-      });
-
-      it('and the serialize function should be called with the provided arguments', function() {
-        expect(this.itemView.serializeCollection).to.have.been.calledWith(this.itemView.collection, 1, 2, 3);
       });
 
       it("should not call serializeModel", function() {
@@ -330,15 +376,11 @@ describe('item view', function() {
       beforeEach(function() {
         this.itemView.model = new Backbone.Model(this.modelData);
         this.itemView.collection = new Backbone.Collection(this.collectionData);
-        this.itemView.serializeData(1, 2, 3);
+        this.itemView.serializeData();
       });
 
       it("should call serializeModel", function() {
         expect(this.itemView.serializeModel).to.have.been.calledOnce;
-      });
-
-      it('and the serialize function should be called with the provided arguments', function() {
-        expect(this.itemView.serializeModel).to.have.been.calledWith(this.itemView.model, 1, 2, 3);
       });
 
       it('should not call serializeCollection', function() {
@@ -364,13 +406,13 @@ describe('item view', function() {
     });
   });
 
-  describe("has a valid inheritance chain back to Marionette.View", function(){
+  describe("has a valid inheritance chain back to Marionette.AbstractView", function(){
     beforeEach(function(){
-      this.constructor = this.sinon.spy(Marionette, "View");
+      this.constructor = this.sinon.spy(Marionette, "AbstractView");
       this.collectionView = new Marionette.ItemView();
     });
 
-    it("calls the parent Marionette.View's constructor function on instantiation", function(){
+    it("calls the parent Marionette.AbstractView's constructor function on instantiation", function(){
       expect(this.constructor).to.have.been.calledOnce;
     });
   });

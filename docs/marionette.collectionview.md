@@ -8,8 +8,8 @@ then append the results of the child view's `el` to the collection view's
 `el`. By default the `CollectionView` will maintain a sorted collection's order
 in the DOM. This behavior can be disabled by specifying `{sort: false}` on initialize.
 
-CollectionView extends directly from Marionette.View. Please see
-[the Marionette.View documentation](marionette.view.md)
+CollectionView extends directly from Marionette.AbstractView. Please see
+[the Marionette.AbstractView documentation](marionette.abstractview.md)
 for more information on available features and functionality.
 
 Additionally, interactions with Marionette.Region
@@ -22,7 +22,7 @@ will provide features such as `onShow` callbacks, etc. Please see
   * [CollectionView's `getChildView`](#collectionviews-getchildview)
   * [CollectionView's `childViewOptions`](#collectionviews-childviewoptions)
   * [CollectionView's `childViewEventPrefix`](#collectionviews-childvieweventprefix)
-  * [CollectionView's `childEvents`](#collectionviews-childevents)
+  * [CollectionView's `childViewEvents`](#collectionviews-childviewevents)
   * [CollectionView's `buildChildView`](#collectionviews-buildchildview)
   * [CollectionView's `addChild`](#collectionviews-addchild)
 * [CollectionView's `emptyView`](#collectionviews-emptyview)
@@ -201,16 +201,16 @@ c.render();
 The `childViewEventPrefix` can be provided in the view definition or
 in the constructor function call, to get a view instance.
 
-### CollectionView's `childEvents`
+### CollectionView's `childViewEvents`
 
-You can specify a `childEvents` hash or method which allows you to capture all bubbling childEvents without having to manually set bindings. The keys of the hash can either be a function or a string that is the name of a method on the collection view.
+You can specify a `childViewEvents` hash or method which allows you to capture all bubbling childEvents without having to manually set bindings. The keys of the hash can either be a function or a string that is the name of a method on the collection view.
 
 ```js
 // childEvents can be specified as a hash...
 var MyCollectionView = Marionette.CollectionView.extend({
 
   // This callback will be called whenever a child is rendered or emits a `render` event
-  childEvents: {
+  childViewEvents: {
     render: function() {
       console.log("a childView has been rendered");
     }
@@ -220,7 +220,7 @@ var MyCollectionView = Marionette.CollectionView.extend({
 // ...or as a function that returns a hash.
 var MyCollectionView = Marionette.CollectionView.extend({
 
-  childEvents: function() {
+  childViewEvents: function() {
     return {
       render: this.onChildRendered
     }
@@ -611,15 +611,15 @@ cv.on("remove:child", function(viewInstance){
 });
 ```
 
-### "childview:\*" event bubbling from child views
+### "childView:\*" event bubbling from child views
 
 When a child view within a collection view triggers an
 event, that event will bubble up through the parent
-collection view with "childview:" prepended to the event
+collection view with "childView:" prepended to the event
 name.
 
 That is, if a child view triggers "do:something", the
-parent collection view will then trigger "childview:do:something".
+parent collection view will then trigger "childView:do:something".
 
 ```js
 // set up basic collection
@@ -636,7 +636,7 @@ colView.render();
 
 // bind to the collection view's events that were bubbled
 // from the child view
-colView.on("childview:do:something", function(childView, msg){
+colView.on("childView:do:something", function(childView, msg){
   alert("I said, '" + msg + "'");
 });
 

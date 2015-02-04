@@ -5,11 +5,11 @@
 
 // A view that iterates over a Backbone.Collection
 // and renders an individual child view for each model.
-Marionette.CollectionView = Marionette.View.extend({
+Marionette.CollectionView = Marionette.AbstractView.extend({
 
   // used as the prefix for child view events
   // that are forwarded through the collectionview
-  childViewEventPrefix: 'childview',
+  childViewEventPrefix: 'childView',
 
   // constructor
   // option to pass `{sort: false}` to prevent the `CollectionView` from
@@ -24,7 +24,7 @@ Marionette.CollectionView = Marionette.View.extend({
     this.once('render', this._initialEvents);
     this._initChildViewStorage();
 
-    Marionette.View.apply(this, arguments);
+    Marionette.AbstractView.apply(this, arguments);
 
     this.initRenderBuffer();
   },
@@ -99,7 +99,7 @@ Marionette.CollectionView = Marionette.View.extend({
     this.checkEmpty();
   },
 
-  // Override from `Marionette.View` to trigger show on child views
+  // Override from `Marionette.AbstractView` to trigger show on child views
   onShowCalled: function() {
     this.children.each(_.partial(this._triggerMethodOnChild, 'show'));
   },
@@ -111,6 +111,7 @@ Marionette.CollectionView = Marionette.View.extend({
     this._ensureViewIsIntact();
     this.triggerMethod('before:render', this);
     this._renderChildren();
+    this.isRendered = true;
     this.triggerMethod('render', this);
     return this;
   },
@@ -437,7 +438,7 @@ Marionette.CollectionView = Marionette.View.extend({
     this.destroyChildren();
     this.triggerMethod('destroy:collection');
 
-    return Marionette.View.prototype.destroy.apply(this, arguments);
+    return Marionette.AbstractView.prototype.destroy.apply(this, arguments);
   },
 
   // Destroy the child views that this collection view
@@ -449,24 +450,24 @@ Marionette.CollectionView = Marionette.View.extend({
     return childViews;
   },
 
-  // Set up the child view event forwarding. Uses a "childview:"
+  // Set up the child view event forwarding. Uses a "childView:"
   // prefix in front of all forwarded events.
   proxyChildEvents: function(view) {
     var prefix = this.getOption('childViewEventPrefix');
 
     // Forward all child view events through the parent,
-    // prepending "childview:" to the event name
+    // prepending "childView:" to the event name
     this.listenTo(view, 'all', function() {
       var args = _.toArray(arguments);
       var rootEvent = args[0];
-      var childEvents = this.normalizeMethods(_.result(this, 'childEvents'));
+      var childViewEvents = this.normalizeMethods(_.result(this, 'childViewEvents'));
 
       args[0] = prefix + ':' + rootEvent;
       args.splice(1, 0, view);
 
-      // call collectionView childEvent if defined
-      if (typeof childEvents !== 'undefined' && _.isFunction(childEvents[rootEvent])) {
-        childEvents[rootEvent].apply(this, args.slice(1));
+      // call collectionView childViewEvent if defined
+      if (typeof childViewEvents !== 'undefined' && _.isFunction(childViewEvents[rootEvent])) {
+        childViewEvents[rootEvent].apply(this, args.slice(1));
       }
 
       this.triggerMethod.apply(this, args);

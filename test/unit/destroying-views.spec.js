@@ -1,11 +1,13 @@
 describe('destroying views', function() {
   'use strict';
 
-  describe('when destroying a Marionette.View multiple times', function() {
+  describe('when destroying a Marionette.AbstractView multiple times', function() {
     beforeEach(function() {
-      this.onDestroyStub = this.sinon.stub();
+      this.onDestroyStub = this.sinon.spy(function () {
+        return this.isRendered;
+      });
 
-      this.view = new Marionette.View();
+      this.view = new Marionette.AbstractView();
       this.view.onDestroy = this.onDestroyStub;
 
       this.view.destroy();

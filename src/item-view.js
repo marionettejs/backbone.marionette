@@ -4,43 +4,40 @@
 // A single item view implementation that contains code for rendering
 // with underscore.js templates, serializing the view's model or collection,
 // and calling several methods on extended views, such as `onRender`.
-Marionette.ItemView = Marionette.View.extend({
+Marionette.ItemView = Marionette.AbstractView.extend({
 
   // Setting up the inheritance chain which allows changes to
-  // Marionette.View.prototype.constructor which allows overriding
+  // Marionette.AbstractView.prototype.constructor which allows overriding
   constructor: function() {
-    Marionette.View.apply(this, arguments);
+    Marionette.AbstractView.apply(this, arguments);
   },
 
-  // Serialize the model or collection for the view. If a model is
-  // found, the view's `serializeModel` is called. If a collection is found,
-  // each model in the collection is serialized by calling
-  // the view's `serializeCollection` and put into an `items` array in
-  // the resulting data. If both are found, defaults to the model.
-  // You can override the `serializeData` method in your own view definition,
-  // to provide custom serialization for your view's data.
-  serializeData: function(){
-    if (!this.model && !this.collection) {
-      return {};
-    }
+  // Serialize the view's model *or* collection, if
+  // it exists, for the template
+  serializeData: function() {
+    var data = {};
 
-    var args = [this.model || this.collection];
-    if (arguments.length) {
-      args.push.apply(args, arguments);
-    }
-
+    // If we have a model, we serialize that
     if (this.model) {
-      return this.serializeModel.apply(this, args);
-    } else {
-      return {
-        items: this.serializeCollection.apply(this, args)
+      data = this.serializeModel();
+    }
+
+    // Otherwise, we serialize the collection,
+    // making it available under the `items` property
+    else if (this.collection) {
+      data = {
+        items: this.serializeCollection()
       };
     }
+
+    return data;
   },
 
-  // Serialize a collection by serializing each of its models.
-  serializeCollection: function(collection){
-    return collection.toJSON.apply(collection, _.rest(arguments));
+  // Serialize a collection by cloning each of
+  // its model's attributes
+  serializeCollection: function() {
+    if (!this.collection) { return {}; }
+    return _.pluck(this.collection.invoke('clone'), 'attributes');
   },
 
   // Render the view, defaulting to underscore.js templates.
@@ -81,12 +78,13 @@ Marionette.ItemView = Marionette.View.extend({
     }
 
     // Add in entity data and template helpers
-    var data = this.serializeData();
-    data = this.mixinTemplateHelpers(data);
+    var data = this.mixinTemplateHelpers(this.serializeData());
 
     // Render and add to el
     var html = Marionette.Renderer.render(template, data, this);
     this.attachElContent(html);
+
+    this.isRendered = true;
 
     return this;
   },

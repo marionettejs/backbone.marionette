@@ -324,3 +324,12 @@ functions:
       @api public
       @param {Marionette.View} view
     
+    filter:
+    description: |
+      ...
+
+      @api public
+      @param {Backbone.Model} model
+      @param {Number} index
+      @param {Backbone.Collection} collection
+

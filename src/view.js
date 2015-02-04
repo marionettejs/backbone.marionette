@@ -22,7 +22,6 @@ Marionette.View = Backbone.View.extend({
     Backbone.View.apply(this, arguments);
 
     Marionette.MonitorDOMRefresh(this);
-    this.on('show', this.onShowCalled);
   },
 
   // Get the template for this view
@@ -133,9 +132,6 @@ Marionette.View = Backbone.View.extend({
 
     return this;
   },
-
-  // Internal method, handles the `show` event.
-  onShowCalled: function() {},
 
   // Internal helper method to verify whether the view hasn't been destroyed
   _ensureViewIsIntact: function() {

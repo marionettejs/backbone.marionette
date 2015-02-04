@@ -325,7 +325,7 @@ functions:
       @api public
       @param {Marionette.View} view
     
-    filter:
+  filter:
     description: |
       ...
 
@@ -334,3 +334,9 @@ functions:
       @param {Number} index
       @param {Backbone.Collection} collection
 
+  setFilter:
+    description: |
+      ...
+
+      @api public
+      @param {Function} function

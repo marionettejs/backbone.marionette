@@ -8,6 +8,10 @@ matrix:
     - node_js: "0.10"
       env: UNDERSCORE=1.5 BACKBONE=1.0 MAINRUN=false
     - node_js: "0.10"
+      env: UNDERSCORE=1.7 BACKBONE=1.1 MAINRUN=false
+    - node_js: "0.10"
+      env: UNDERSCORE=1.7 BACKBONE=1.0 MAINRUN=false
+    - node_js: "0.10"
       env: UNDERSCORE=1.6 BACKBONE=1.0 MAINRUN=false
     - node_js: "0.10"
       env: UNDERSCORE=1.4.4 BACKBONE=1.1.0 MAINRUN=false

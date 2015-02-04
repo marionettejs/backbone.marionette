@@ -31,6 +31,7 @@
   "dependencies": {
     "marionettejs/backbone.babysitter": "*",
     "marionettejs/backbone.radio": "*",
+    "marionettejs/backbone-metal": "*",
     "jashkenas/backbone": "*",
     "jashkenas/underscore": "*"
   },

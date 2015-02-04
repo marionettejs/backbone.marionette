@@ -34,9 +34,6 @@
 
   Backbone.Marionette = Marionette;
 
-  // Get the Deferred creator for later use
-  Marionette.Deferred = Backbone.$.Deferred;
-
   // @include ../helpers.js
   // @include ../trigger-method.js
   // @include ../dom-refresh.js

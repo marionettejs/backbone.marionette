@@ -35,7 +35,6 @@ global.Backbone.$ = global.$;
 global.Marionette = Backbone.Marionette = {};
 require('backbone.babysitter');
 global.slice = Array.prototype.slice;
-Marionette.Deferred = global.Backbone.$.Deferred;
 requireHelper('bind-entity-events');
 requireHelper('trigger-method');
 requireHelper('helpers');

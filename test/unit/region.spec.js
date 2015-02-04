@@ -924,20 +924,20 @@ describe('region', function() {
     beforeEach(function() {
       this.setFixtures('<div id="region"></div><div id="region2"></div>');
 
-      this.myApp = new Backbone.Marionette.Application();
-      this.myApp.addRegions({
+      this.itemView = new Backbone.Marionette.ItemView();
+      this.itemView.addRegions({
         MyRegion: '#region',
         anotherRegion: '#region2'
       });
 
-      this.region = this.myApp.MyRegion;
+      this.region = this.itemView.MyRegion;
       this.sinon.spy(this.region, 'empty');
 
-      this.myApp.removeRegion('MyRegion');
+      this.itemView.removeRegion('MyRegion');
     });
 
-    it('should be removed from the app', function() {
-      expect(this.myApp.MyRegion).to.be.undefined;
+    it('should be removed from the view', function() {
+      expect(this.itemView.MyRegion).to.be.undefined;
     });
 
     it('should call "empty" of the region', function() {
@@ -947,17 +947,17 @@ describe('region', function() {
 
   describe('when getting a region', function() {
     beforeEach(function() {
-      this.MyApp = new Backbone.Marionette.Application();
-      this.MyApp.addRegions({
+      this.itemView = new Backbone.Marionette.ItemView();
+      this.itemView.addRegions({
         MyRegion: '#region',
         anotherRegion: '#region2'
       });
 
-      this.region = this.MyApp.MyRegion;
+      this.region = this.itemView.MyRegion;
     });
 
     it('should return the region', function() {
-      expect(this.MyApp.getRegion('MyRegion')).to.equal(this.region);
+      expect(this.itemView.getRegion('MyRegion')).to.equal(this.region);
     });
   });
 

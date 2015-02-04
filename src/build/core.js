@@ -39,7 +39,6 @@
   // @include ../bind-entity-events.js
 
   // @include ../error.js
-  // @include ../callbacks.js
   // @include ../object.js
   // @include ../controller.js
   // @include ../region.js

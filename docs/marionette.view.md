@@ -137,8 +137,7 @@ the view in a Region causes it to be attached to the `document`. Like other Mari
 executes a callback method, `onAttach`, if you've specified one. The `"attach"` event is great for jQuery
 plugins or other logic that must be executed *after* the view is attached to the `document`.
 
-Because the `attach` event is only fired when the view is a child of the `document`, it is a requirement
-that the Region you're showing it in be a child of the `document` at the time that you call `show`.
+The `attach` event is only fired when the view becomes a child of the `document`. If the Region you're showing the view in is not a child of the `document` at the time that you call `show` then the `attach` event will not fire until the Region is a child of the `document`.
 
 This event is unique in that it propagates down the view tree. For instance, when a CollectionView's
 `attach` event is fired, all of its children views will have the `attach` event fired as well. In

@@ -5,7 +5,7 @@ describe('view ui elements', function() {
     this.templateFn = _.template('<div id="<%= name %>"></div>');
     this.uiHash = {foo: '#foo', bar: '#bar'};
     this.model = this.model = new Backbone.Model({name: 'foo'});
-    this.View = Marionette.ItemView.extend({
+    this.View = Marionette.View.extend({
       template: this.templateFn,
       ui: this.uiHash
     });
@@ -101,7 +101,7 @@ describe('view ui elements', function() {
         'mouseout @ui#foo': 'baz'
       };
 
-      this.View = Marionette.ItemView.extend({
+      this.View = Marionette.View.extend({
         ui     : this.uiHash,
         events : {}
       });

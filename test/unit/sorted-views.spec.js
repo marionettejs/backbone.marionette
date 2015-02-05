@@ -2,7 +2,7 @@ describe('collection/composite view sorting', function() {
   'use strict';
 
   beforeEach(function() {
-    this.ChildView = Marionette.ItemView.extend({
+    this.ChildView = Marionette.View.extend({
       template: _.template('<%= foo %>')
     });
 

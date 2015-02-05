@@ -48,7 +48,7 @@ requireHelper('module');
 requireHelper('renderer');
 requireHelper('template-cache');
 requireHelper('abstract-view');
-requireHelper('item-view');
+requireHelper('view');
 requireHelper('collection-view');
 requireHelper('composite-view');
 requireHelper('behavior');

@@ -24,7 +24,7 @@ describe('Behaviors', function() {
 
     describe('when one behavior', function() {
       beforeEach(function() {
-        this.View = Marionette.ItemView.extend({
+        this.View = Marionette.View.extend({
           behaviors: { foo: {} }
         });
 
@@ -48,7 +48,7 @@ describe('Behaviors', function() {
 
     describe('when one behavior', function() {
       beforeEach(function() {
-        this.View = Marionette.ItemView.extend({
+        this.View = Marionette.View.extend({
           behaviors: { foo: {} }
         });
 
@@ -62,7 +62,7 @@ describe('Behaviors', function() {
 
     describe('when multiple behaviors', function() {
       beforeEach(function() {
-        this.View = Marionette.ItemView.extend({
+        this.View = Marionette.View.extend({
           behaviors: { foo: {} }
         });
 
@@ -79,7 +79,7 @@ describe('Behaviors', function() {
         this.behaviorsStub = this.sinon.stub().returns({
           foo: { behaviorClass: this.behaviors.foo }
         });
-        this.View = Marionette.ItemView.extend({
+        this.View = Marionette.View.extend({
           behaviors: this.behaviorsStub
         });
 
@@ -97,7 +97,7 @@ describe('Behaviors', function() {
 
     describe('when behavior class is provided', function() {
       beforeEach(function() {
-        this.View = Marionette.ItemView.extend({
+        this.View = Marionette.View.extend({
           behaviors: { foo: { behaviorClass: this.behaviors.foo } }
         });
 
@@ -120,7 +120,7 @@ describe('Behaviors', function() {
       };
       Marionette.Behaviors.behaviorsLookup = this.behaviors;
 
-      this.View = Marionette.ItemView.extend({
+      this.View = Marionette.View.extend({
         behaviors: { foo: this.behaviorOptions }
       });
       this.view = new this.View();
@@ -159,7 +159,7 @@ describe('Behaviors', function() {
         })
       };
 
-      this.View = Marionette.ItemView.extend({
+      this.View = Marionette.View.extend({
         events: { 'click': this.viewClickStub },
         behaviors: { foo: {}, bar: {}, baz: {} }
       });
@@ -200,7 +200,7 @@ describe('Behaviors', function() {
       this.model      = new Backbone.Model();
       this.collection = new Backbone.Collection();
 
-      this.View = Marionette.ItemView.extend({
+      this.View = Marionette.View.extend({
         behaviors: { foo: {} }
       });
 
@@ -241,7 +241,7 @@ describe('Behaviors', function() {
       };
       Marionette.Behaviors.behaviorsLookup = this.behaviors;
 
-      this.View = Marionette.ItemView.extend({
+      this.View = Marionette.View.extend({
         behaviors: { foo: {} }
       });
 
@@ -286,7 +286,7 @@ describe('Behaviors', function() {
       };
       Marionette.Behaviors.behaviorsLookup = this.behaviors;
 
-      this.View = Marionette.ItemView.extend({
+      this.View = Marionette.View.extend({
         template: _.template('<div class="foo"></div><div class="bar"></div>'),
         ui: { bar: '.bar' },
         behaviors: { foo: {} }
@@ -377,7 +377,7 @@ describe('Behaviors', function() {
 
     describe('within a layout', function() {
       beforeEach(function() {
-        this.ItemView = Marionette.ItemView.extend({
+        this.ItemView = Marionette.View.extend({
           template: _.template('<div class="baz"></div>'),
           regions: { bazRegion: '.baz' }
         });
@@ -415,7 +415,7 @@ describe('Behaviors', function() {
       };
       Marionette.Behaviors.behaviorsLookup = this.behaviors;
 
-      this.View = Marionette.ItemView.extend({
+      this.View = Marionette.View.extend({
         template: _.template('foo'),
         behaviors: { foo: {} }
       });
@@ -494,7 +494,7 @@ describe('Behaviors', function() {
       this.CollectionView = Marionette.CollectionView.extend({
         behaviors: { foo: {} }
       });
-      this.ItemView = Marionette.ItemView.extend({
+      this.ItemView = Marionette.View.extend({
         behaviors: { foo: {} }
       });
 

@@ -283,7 +283,7 @@ same hash with the function names replaced with the function references themselv
 This function is attached to the `Marionette.AbstractView` prototype by default. To use it from non-View classes you'll need to attach it yourself.
 
 ```js
-var View = Marionette.ItemView.extend({
+var View = Marionette.View.extend({
 
   initialize: function() {
     this.someFn = function() {};

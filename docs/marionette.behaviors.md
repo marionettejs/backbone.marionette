@@ -30,7 +30,7 @@ By default the behaviors are looked up by their key value in a given views behav
 In this sample (using the default `getBehaviorClass` implementation) your code will expect the following behaviors to be present in `window.Behaviors.DestroyWarn` and `window.Behaviors.ToolTip`
 
 ```js
-var MyView = Marionette.ItemView.extend({
+var MyView = Marionette.View.extend({
 	behaviors: {
 		DestroyWarn: {
 			message: "you are destroying all your data is now gone!"
@@ -62,7 +62,7 @@ This property lets you pass a `class` in for the `behavior` to use (bypassing th
 
 ```js
 define(['marionette', 'lib/tooltip'], function(Marionette, Tooltip) {
-  var View = Marionette.ItemView.extend({
+  var View = Marionette.View.extend({
      behaviors: {
         Tooltip: {
           behaviorClass: Tooltip,

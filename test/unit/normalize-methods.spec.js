@@ -2,7 +2,7 @@ describe('normalizeMethods', function() {
   'use strict';
 
   beforeEach(function() {
-    this.View = Backbone.Marionette.ItemView.extend({
+    this.View = Backbone.Marionette.View.extend({
       foo: this.sinon.stub()
     });
     this.view = new this.View();

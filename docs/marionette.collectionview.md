@@ -61,10 +61,10 @@ will provide features such as `onShow` callbacks, etc. Please see
 
 Specify a `childView` in your collection view definition. This must be
 a Backbone view object definition, not an instance. It can be any
-`Backbone.View` or be derived from `Marionette.ItemView`.
+`Backbone.View` or be derived from `Marionette.View`.
 
 ```js
-var MyChildView = Backbone.Marionette.ItemView.extend({});
+var MyChildView = Backbone.Marionette.View.extend({});
 
 Backbone.Marionette.CollectionView.extend({
   childView: MyChildView
@@ -100,10 +100,10 @@ var FooBar = Backbone.Model.extend({
   }
 });
 
-var FooView = Backbone.Marionette.ItemView.extend({
+var FooView = Backbone.Marionette.View.extend({
   template: '#foo-template'
 });
-var BarView = Backbone.Marionette.ItemView.extend({
+var BarView = Backbone.Marionette.View.extend({
   template: '#bar-template'
 });
 
@@ -144,7 +144,7 @@ literal. This will be passed to the constructor of your childView as part
 of the `options`.
 
 ```js
-var ChildView = Backbone.Marionette.ItemView.extend({
+var ChildView = Backbone.Marionette.View.extend({
   initialize: function(options) {
     console.log(options.foo); // => "bar"
   }
@@ -232,7 +232,7 @@ This also works for custom events that you might fire on your child views.
 
 ```js
 // The child view fires a custom event, `show:message`
-var ChildView = new Marionette.ItemView.extend({
+var ChildView = new Marionette.View.extend({
   events: {
     'click .button': 'showMessage'
   },
@@ -295,7 +295,7 @@ the list of childViews, you can specify an `emptyView` attribute on your
 collection view.
 
 ```js
-var NoChildrenView = Backbone.Marionette.ItemView.extend({
+var NoChildrenView = Backbone.Marionette.View.extend({
   template: "#show-no-children-message-template"
 });
 
@@ -342,7 +342,7 @@ Similar to `childView` and `childViewOptions`, there is an `emptyViewOptions` pr
 If `emptyViewOptions` aren't provided the CollectionView will default to passing the `childViewOptions` to the `emptyView`.
 
 ```js
-var EmptyView = Backbone.Marionette.ItemView({
+var EmptyView = Backbone.Marionette.View({
   initialize: function(options){
     console.log(options.foo); // => "bar"
   }
@@ -631,7 +631,7 @@ myCollection.add(myModel);
 // get the collection view in place
 var colView = new CollectionView({
   collection: myCollection,
-  childView: MyItemView
+  childView: MyView
 });
 colView.render();
 

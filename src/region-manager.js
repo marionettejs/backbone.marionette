@@ -94,7 +94,7 @@ Marionette.RegionManager = Marionette.Object.extend({
   // manager entirely
   destroy: function() {
     this.removeRegions();
-    return Marionette.Controller.prototype.destroy.apply(this, arguments);
+    return Marionette.Object.prototype.destroy.apply(this, arguments);
   },
 
   // internal method to store regions

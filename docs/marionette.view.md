@@ -25,6 +25,7 @@ behaviors that are shared across all views.
 * [View.modelEvents and View.collectionEvents](#viewmodelevents-and-viewcollectionevents)
 * [View.serializeModel](#viewserializemodel)
 * [View.bindUIElements](#viewbinduielements)
+* [View.mergeOptions](#viewmergeoptions)
 * [View.getOption](#viewgetoption)
 * [View.bindEntityEvents](#viewbindentityevents)
 * [View.templateHelpers](#viewtemplatehelpers)
@@ -412,6 +413,24 @@ This functionality is provided via the `bindUIElements` method.
 Since View doesn't implement the render method, then if you directly extend
 from View you will need to invoke this method from your render method.
 In ItemView and CompositeView this is already taken care of.
+
+## View.mergeOptions
+The preferred way to manage your view's options is with `mergeOptions`. It accepts two arguments: the `options` object
+and the keys to merge onto the instance directly.
+
+```js
+var ProfileView = Marionette.ItemView.extend({
+  profileViewOptions: ['user', 'age'],
+
+  initialize: function(options) {
+    this.mergeOptions(options, this.profileViewOptions);
+
+    console.log('The merged options are:', this.user, this.age);
+  }
+});
+```
+
+More information [mergeOptions](./marionette.functions.md#marionettemergeoptions)
 
 ## View.getOption
 Retrieve an object's attribute either directly from the object, or from the object's this.options, with this.options taking precedence.

@@ -9,6 +9,8 @@
 
 Marionette.AbstractView = Backbone.View.extend({
   isDestroyed: false,
+  _isShown: false,
+  _isRendered: false,
 
   constructor: function(options) {
     _.bindAll(this, 'render');
@@ -25,7 +27,10 @@ Marionette.AbstractView = Backbone.View.extend({
 
     Backbone.View.apply(this, arguments);
 
-    Marionette.MonitorDOMRefresh(this);
+    this.on({
+      render: this._setRendered,
+      show: this._setShown
+    });
     this.on('show', this.onShowCalled);
   },
 
@@ -309,6 +314,14 @@ Marionette.AbstractView = Backbone.View.extend({
       if (!view._getNestedViews) { return memo; }
       return memo.concat(view._getNestedViews());
     }, children);
+  },
+
+  _setShown: function() {
+    this._isShown = true;
+  },
+
+  _setRendered: function() {
+    this._isRendered = true;
   },
 
   // Imports the "normalizeMethods" to transform hashes of

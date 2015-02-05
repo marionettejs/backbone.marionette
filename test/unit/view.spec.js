@@ -299,28 +299,6 @@ describe('item view', function() {
     });
   });
 
-  describe('when re-rendering an View that is already shown', function() {
-    beforeEach(function() {
-      this.onDomRefreshStub = this.sinon.stub();
-
-      this.View = Marionette.View.extend({
-        template     : this.templateStub,
-        onDomRefresh : this.onDomRefreshStub
-      });
-
-      this.view = new this.View();
-      this.setFixtures(this.view.$el);
-
-      this.view.render();
-      this.view.triggerMethod('show');
-      this.view.render();
-    });
-
-    it('should trigger a dom:refresh event', function() {
-      expect(this.onDomRefreshStub).to.have.been.calledTwice;
-    });
-  });
-
   describe('has a valid inheritance chain back to Marionette.AbstractView', function() {
     beforeEach(function() {
       this.constructorSpy = this.sinon.spy(Marionette, 'AbstractView');

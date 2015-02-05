@@ -17,7 +17,6 @@ AbstractView directly.
 * [AbstractView onBeforeDestroy](#abstractview-onbeforedestroy)
 * [AbstractView "attach" / onAttach event](#abstractview-attach--onattach-event)
 * [AbstractView "before:attach" / onBeforeAttach event](#abstractview-beforeattach--onbeforeattach-event)
-* [AbstractView "dom:refresh" / onDomRefresh event](#abstractview-domrefresh--ondomrefresh-event)
 * [AbstractView.triggers](#abstractviewtriggers)
 * [AbstractView.events](#abstractviewevents)
 * [AbstractView.modelEvents and AbstractView.collectionEvents](#abstractviewmodelevents-and-abstractviewcollectionevents)
@@ -149,28 +148,6 @@ For more on efficient, deeply-nested view structures, refer to the LayoutView do
 
 This is just like the attach event described above, but it's triggered right before the view is
 attached to the document.
-
-### AbstractView "dom:refresh" / onDomRefresh event
-
-Triggered after the view has been rendered, has been shown in the DOM via a Marionette.Region, and has been
-re-rendered.
-
-This event / callback is useful for
-[DOM-dependent UI plugins](http://lostechies.com/derickbailey/2012/02/20/using-jquery-plugins-and-ui-controls-with-backbone/) such as
-[jQueryUI](http://jqueryui.com/) or [KendoUI](http://kendoui.com).
-
-```js
-Backbone.Marionette.View.extend({
-  onDomRefresh: function(){
-    // manipulate the `el` here. it's already
-    // been rendered, and is full of the view's
-    // HTML, ready to go.
-  }
-});
-```
-
-For more information about integration Marionette w/ KendoUI (also applicable to jQueryUI and other UI
-widget suites), see [this blog post on KendoUI + Backbone](http://www.kendoui.com/blogs/teamblog/posts/12-11-26/backbone_and_kendo_ui_a_beautiful_combination.aspx).
 
 ## AbstractView.events
 Since Views extend from backbone`s view class, you gain the benefits of the [events hash](http://backbonejs.org/#View-delegateEvents).

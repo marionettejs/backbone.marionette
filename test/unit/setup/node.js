@@ -38,7 +38,6 @@ global.slice = Array.prototype.slice;
 requireHelper('bind-entity-events');
 requireHelper('trigger-method');
 requireHelper('helpers');
-requireHelper('dom-refresh');
 requireHelper('object');
 requireHelper('app-router');
 requireHelper('application');

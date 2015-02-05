@@ -30,7 +30,6 @@
   };
 
   // @include ../trigger-method.js
-  // @include ../dom-refresh.js
   // @include ../bind-entity-events.js
 
   // @include ../error.js

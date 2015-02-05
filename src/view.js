@@ -1,9 +1,9 @@
-// Item View
+// View
 // ---------
 
 // The standard view. Includes view events, automatic rendering
 // of Underscore templates, nested views, and more.
-Marionette.ItemView = Marionette.AbstractView.extend({
+Marionette.View = Marionette.AbstractView.extend({
   regionClass: Marionette.Region,
 
   options: {

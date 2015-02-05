@@ -24,7 +24,7 @@ want to render a collection view with a model and template so
 that it will show a parent child with children in the tree.
 
 You can specify a `modelView` to use for the model. If you don't
-specify one, it will default to the `Marionette.ItemView`.
+specify one, it will default to the `Marionette.View`.
 
 ```js
 var CompositeView = Backbone.Marionette.CompositeView.extend({
@@ -83,7 +83,7 @@ Each childView will be rendered using the `childView`'s template. The `Composite
 template is rendered and the childView's templates are added to this.
 
 ```js
-var ChildView = Backbone.Marionette.ItemView.extend({});
+var ChildView = Backbone.Marionette.View.extend({});
 
 var CompView = Backbone.Marionette.CompositeView.extend({
   childView: ChildView
@@ -138,7 +138,7 @@ table structure, specify an `childViewContainer` in your composite view,
 like this:
 
 ```js
-var RowView = Backbone.Marionette.ItemView.extend({
+var RowView = Backbone.Marionette.View.extend({
   tagName: "tr",
   template: "#row-template"
 });
@@ -247,7 +247,7 @@ Backbone.Marionette.CompositeView.extend({
 
 ## Organizing UI elements
 
-Similar to ItemView, you can organize the UI elements inside the
+Similar to View, you can organize the UI elements inside the
 CompositeView by specifying them in the `UI` hash. It should be
 noted that the elements that can be accessed via this hash are
 the elements that are directly rendered by the composite view

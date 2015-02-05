@@ -459,7 +459,7 @@ describe('region', function() {
         el: '#region'
       });
 
-      this.ItemView = Backbone.Marionette.ItemView.extend({
+      this.View = Backbone.Marionette.View.extend({
         regions: {
           subRegion: '.sub-region'
         },
@@ -473,7 +473,7 @@ describe('region', function() {
         }
       });
 
-      this.SubView = Backbone.Marionette.ItemView.extend({
+      this.SubView = Backbone.Marionette.View.extend({
         render: function() {
           $(this.el).html('some content');
         },
@@ -489,7 +489,7 @@ describe('region', function() {
       this.setFixtures('<div id="region"></div>');
       this.region = new this.MyRegion();
       this.attachHtmlSpy = this.sinon.spy(this.region, 'attachHtml');
-      this.region.show(new this.ItemView());
+      this.region.show(new this.View());
     });
 
     it('should call inner region before:show before region open', function() {
@@ -625,7 +625,7 @@ describe('region', function() {
         el: '#region'
       });
 
-      this.MyView = Backbone.Marionette.ItemView.extend({
+      this.MyView = Backbone.Marionette.View.extend({
         template: _.template('<div></div>'),
         open : function() {}
       });
@@ -924,7 +924,7 @@ describe('region', function() {
     beforeEach(function() {
       this.setFixtures('<div id="region"></div><div id="region2"></div>');
 
-      this.itemView = new Backbone.Marionette.ItemView();
+      this.itemView = new Backbone.Marionette.View();
       this.itemView.addRegions({
         MyRegion: '#region',
         anotherRegion: '#region2'
@@ -947,7 +947,7 @@ describe('region', function() {
 
   describe('when getting a region', function() {
     beforeEach(function() {
-      this.itemView = new Backbone.Marionette.ItemView();
+      this.itemView = new Backbone.Marionette.View();
       this.itemView.addRegions({
         MyRegion: '#region',
         anotherRegion: '#region2'

@@ -17,7 +17,7 @@ describe('view triggers', function() {
       this.model      = new Backbone.Model();
       this.collection = new Backbone.Collection();
 
-      this.View = Marionette.ItemView.extend({triggers: this.triggersHash});
+      this.View = Marionette.View.extend({triggers: this.triggersHash});
       this.view = new this.View({
         model      : this.model,
         collection : this.collection
@@ -46,7 +46,7 @@ describe('view triggers', function() {
 
   describe('when triggers and standard events are both configured', function() {
     beforeEach(function() {
-      this.View = Marionette.ItemView.extend({
+      this.View = Marionette.View.extend({
         triggers   : this.triggersHash,
         events     : this.eventsHash,
         barHandler : this.barHandlerStub
@@ -71,7 +71,7 @@ describe('view triggers', function() {
   describe('when triggers are configured with a function', function() {
     beforeEach(function() {
       this.triggersStub = this.sinon.stub().returns(this.triggersHash);
-      this.View = Marionette.ItemView.extend({triggers: this.triggersStub});
+      this.View = Marionette.View.extend({triggers: this.triggersStub});
       this.view = new this.View();
       this.view.on('fooHandler', this.fooHandlerStub);
 
@@ -89,7 +89,7 @@ describe('view triggers', function() {
 
   describe('triggers should stop propigation and events by default', function() {
     beforeEach(function() {
-      this.View = Marionette.ItemView.extend({triggers: this.triggersHash});
+      this.View = Marionette.View.extend({triggers: this.triggersHash});
       this.view = new this.View();
       this.view.on('fooHandler', this.fooHandlerStub);
 
@@ -107,7 +107,7 @@ describe('view triggers', function() {
 
   describe('when triggers items are manually configured', function() {
     beforeEach(function() {
-      this.View = Marionette.ItemView.extend({
+      this.View = Marionette.View.extend({
         triggers: {
           'foo': {
             event: 'fooHandler',

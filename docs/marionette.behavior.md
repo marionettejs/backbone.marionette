@@ -28,10 +28,10 @@ These interactions tend to be chunks of logic that you want to use in multiple v
 
 ## Using
 
-Here is an example of a simple `itemView`. Let's take a stab at simplifying it, and abstracting behaviors from it.
+Here is an example of a simple `view`. Let's take a stab at simplifying it, and abstracting behaviors from it.
 
 ```js
-var MyView = Marionette.ItemView.extend({
+var MyView = Marionette.View.extend({
   ui: {
     "destroy": ".destroy-btn"
   },
@@ -60,7 +60,7 @@ The keys in the hash are passed to `getBehaviorClass` to lookup the correct `Beh
 The options for each behavior are also passed to said Behavior during initialization. The options are then stored within each behavior under `options`.
 
 ```js
-var MyView = Marionette.ItemView.extend({
+var MyView = Marionette.View.extend({
   ui: {
     "destroy": ".destroy-btn"
   },

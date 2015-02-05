@@ -110,13 +110,13 @@ describe('trigger event and method name', function() {
     beforeEach(function() {
       this.onChildViewFooClickStub = this.sinon.stub();
 
-      this.ItemView = Marionette.ItemView.extend({
+      this.View = Marionette.View.extend({
         template: _.template('foo'),
         triggers: { 'click' : 'foo:click' }
       });
 
       this.CollectionView = Marionette.CollectionView.extend({
-        childView: this.ItemView,
+        childView: this.View,
         onChildViewFooClick: this.onChildViewFooClickStub
       });
 

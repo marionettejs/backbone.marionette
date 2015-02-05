@@ -13,7 +13,7 @@ describe('item view', function() {
 
   describe('when rendering without a valid template', function() {
     beforeEach(function() {
-      this.view = new Marionette.ItemView();
+      this.view = new Marionette.View();
     });
 
     it('should throw an exception because there was no valid template', function() {
@@ -26,7 +26,7 @@ describe('item view', function() {
       this.onBeforeRenderStub = this.sinon.stub();
       this.onRenderStub       = this.sinon.stub();
 
-      this.View = Marionette.ItemView.extend({
+      this.View = Marionette.View.extend({
         template: false,
         onBeforeRender: this.onBeforeRenderStub,
         onRender: this.onRenderStub
@@ -85,13 +85,13 @@ describe('item view', function() {
     beforeEach(function() {
       this.attachElContentStub = this.sinon.stub();
 
-      this.ItemView = Marionette.ItemView.extend({
+      this.View = Marionette.View.extend({
         template        : this.templateStub,
         attachElContent : this.attachElContentStub
       });
       this.sinon.spy(Marionette.Renderer, 'render');
 
-      this.itemView = new this.ItemView();
+      this.itemView = new this.View();
       this.itemView.render();
     });
 
@@ -113,7 +113,7 @@ describe('item view', function() {
         return this.isRendered;
       });
 
-      this.View = Marionette.ItemView.extend({
+      this.View = Marionette.View.extend({
         template       : this.templateStub,
         onBeforeRender : this.onBeforeRenderStub,
         onRender       : this.onRenderStub
@@ -159,7 +159,7 @@ describe('item view', function() {
 
   describe('when an item view has a model and is rendered', function() {
     beforeEach(function() {
-      this.view = new Marionette.ItemView({
+      this.view = new Marionette.View({
         template : this.templateStub,
         model    : this.model
       });
@@ -179,7 +179,7 @@ describe('item view', function() {
 
   describe('when an item view has a collection and is rendered', function() {
     beforeEach(function() {
-      this.view = new Marionette.ItemView({
+      this.view = new Marionette.View({
         template   : this.templateStub,
         collection : this.collection
       });
@@ -199,7 +199,7 @@ describe('item view', function() {
 
   describe('when an item view has a model and collection, and is rendered', function() {
     beforeEach(function() {
-      this.view = new Marionette.ItemView({
+      this.view = new Marionette.View({
         template   : this.templateStub,
         model      : this.model,
         collection : this.collection
@@ -233,7 +233,7 @@ describe('item view', function() {
         };
       });
 
-      this.View = Marionette.ItemView.extend({
+      this.View = Marionette.View.extend({
         template        : this.templateStub,
         onBeforeDestroy : this.onBeforeDestroyStub,
         onDestroy       : this.onDestroyStub
@@ -299,11 +299,11 @@ describe('item view', function() {
     });
   });
 
-  describe('when re-rendering an ItemView that is already shown', function() {
+  describe('when re-rendering an View that is already shown', function() {
     beforeEach(function() {
       this.onDomRefreshStub = this.sinon.stub();
 
-      this.View = Marionette.ItemView.extend({
+      this.View = Marionette.View.extend({
         template     : this.templateStub,
         onDomRefresh : this.onDomRefreshStub
       });
@@ -324,7 +324,7 @@ describe('item view', function() {
   describe('has a valid inheritance chain back to Marionette.AbstractView', function() {
     beforeEach(function() {
       this.constructorSpy = this.sinon.spy(Marionette, 'AbstractView');
-      this.itemView = new Marionette.ItemView();
+      this.itemView = new Marionette.View();
     });
 
     it('calls the parent Marionette.AbstractViews constructor function on instantiation', function() {
@@ -337,7 +337,7 @@ describe('item view', function() {
       this.modelData = { foo: "bar" };
       this.collectionData = [ { foo: "bar" }, { foo: "baz" } ];
 
-      this.itemView = new Marionette.ItemView();
+      this.itemView = new Marionette.View();
       this.sinon.spy(this.itemView, "serializeModel");
       this.sinon.spy(this.itemView, "serializeCollection");
     });
@@ -396,7 +396,7 @@ describe('item view', function() {
   describe("when serializing a collection", function(){
     beforeEach(function(){
       this.collectionData = [ { foo: "bar" }, { foo: "baz" } ];
-      this.itemView = new Marionette.ItemView({
+      this.itemView = new Marionette.View({
         collection: new Backbone.Collection(this.collectionData)
       });
     });
@@ -413,7 +413,7 @@ describe('item view', function() {
   describe("has a valid inheritance chain back to Marionette.AbstractView", function(){
     beforeEach(function(){
       this.constructor = this.sinon.spy(Marionette, "AbstractView");
-      this.collectionView = new Marionette.ItemView();
+      this.collectionView = new Marionette.View();
     });
 
     it("calls the parent Marionette.AbstractView's constructor function on instantiation", function(){

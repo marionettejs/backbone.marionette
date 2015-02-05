@@ -2,18 +2,18 @@ describe('collectionview - emptyView', function() {
   'use strict';
 
   beforeEach(function() {
-    this.ItemView = Backbone.Marionette.ItemView.extend({
+    this.View = Backbone.Marionette.View.extend({
       tagName: 'span',
       template: _.template('<%= foo %>')
     });
 
-    this.EmptyView = Backbone.Marionette.ItemView.extend({
+    this.EmptyView = Backbone.Marionette.View.extend({
       tagName: 'span',
       template: _.template('empty')
     });
 
     this.EmptyCollectionView = Backbone.Marionette.CollectionView.extend({
-      childView: this.ItemView,
+      childView: this.View,
       emptyView: this.EmptyView,
 
       onBeforeRenderEmpty: function () {},
@@ -261,10 +261,10 @@ describe('collectionview - emptyView', function() {
   describe('when emptyView is specified with getEmptyView option', function() {
     beforeEach(function() {
       this.getEmptyViewStub = this.sinon.stub();
-      this.OtherEmptyView = Backbone.Marionette.ItemView.extend();
+      this.OtherEmptyView = Backbone.Marionette.View.extend();
 
       this.CollectionView = Backbone.Marionette.CollectionView.extend({
-        childView: this.ItemView,
+        childView: this.View,
         getEmptyView: this.getEmptyViewStub
       });
     });

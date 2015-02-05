@@ -3,13 +3,13 @@ describe('onAttach', function() {
 
   beforeEach(function() {
 
-    // A Region to show our ItemView within
+    // A Region to show our View within
     this.setFixtures('<div id="region"></div>');
     this.el = $('#region')[0];
     this.region = new Marionette.Region({el: this.el});
 
     // A view we can use as nested child views
-    this.BasicView = Marionette.ItemView.extend({
+    this.BasicView = Marionette.View.extend({
       template: false,
       onAttach: function() {},
       onBeforeAttach: function() {}
@@ -171,8 +171,8 @@ describe('onAttach', function() {
   describe('when the parent view is initially detached', function() {
     beforeEach(function() {
 
-      // A ItemView class that we can use for all of our tests
-      this.ItemView = Marionette.ItemView.extend({
+      // A View class that we can use for all of our tests
+      this.View = Marionette.View.extend({
         template: _.template('<main></main><footer></footer>'),
         regions: {
           main: 'main',
@@ -185,7 +185,7 @@ describe('onAttach', function() {
 
     describe('When showing a View in a Region', function() {
       beforeEach(function() {
-        this.MyView = Marionette.ItemView.extend({
+        this.MyView = Marionette.View.extend({
           template: _.template(''),
           onBeforeAttach: this.sinon.stub(),
           onAttach: this.sinon.stub()
@@ -208,7 +208,7 @@ describe('onAttach', function() {
       });
     });
 
-    describe('When showing a ItemView with a single level of nested views that are attached within onBeforeShow', function() {
+    describe('When showing a View with a single level of nested views that are attached within onBeforeShow', function() {
       beforeEach(function() {
         this.mainView = new this.BasicView();
         this.footerView = new this.BasicView();
@@ -220,14 +220,14 @@ describe('onAttach', function() {
 
         var suite = this;
 
-        this.CustomItemView = this.ItemView.extend({
+        this.CustomView = this.View.extend({
           onBeforeShow: function() {
             this.getRegion('main').show(suite.mainView);
             this.getRegion('footer').show(suite.footerView);
           }
         });
 
-        this.layoutView = new this.CustomItemView();
+        this.layoutView = new this.CustomView();
         this.sinon.spy(this.layoutView, 'onAttach');
         this.sinon.spy(this.layoutView, 'onBeforeAttach');
 
@@ -250,7 +250,7 @@ describe('onAttach', function() {
       });
     });
 
-    describe('When showing a ItemView with a single level of nested views that are attached within onBeforeAttach', function() {
+    describe('When showing a View with a single level of nested views that are attached within onBeforeAttach', function() {
       beforeEach(function() {
         this.mainView = new this.BasicView();
         this.footerView = new this.BasicView();
@@ -262,14 +262,14 @@ describe('onAttach', function() {
 
         var suite = this;
 
-        this.CustomItemView = this.ItemView.extend({
+        this.CustomView = this.View.extend({
           onBeforeAttach: function() {
             this.getRegion('main').show(suite.mainView);
             this.getRegion('footer').show(suite.footerView);
           }
         });
 
-        this.layoutView = new this.CustomItemView();
+        this.layoutView = new this.CustomView();
         this.sinon.spy(this.layoutView, 'onAttach');
         this.sinon.spy(this.layoutView, 'onBeforeAttach');
 
@@ -292,14 +292,14 @@ describe('onAttach', function() {
       });
     });
 
-    describe('When showing a ItemView with two levels of nested views; with onBeforeShow for the first and second level', function() {
+    describe('When showing a View with two levels of nested views; with onBeforeShow for the first and second level', function() {
       beforeEach(function() {
         var suite = this;
         this.headerView = new this.BasicView();
         this.sinon.spy(this.headerView, 'onAttach');
         this.sinon.spy(this.headerView, 'onBeforeAttach');
 
-        this.MainView = this.ItemView.extend({
+        this.MainView = this.View.extend({
           template: _.template('<header></header>'),
           regions: {
             header: 'header'
@@ -312,13 +312,13 @@ describe('onAttach', function() {
         this.sinon.spy(this.mainView, 'onAttach');
         this.sinon.spy(this.mainView, 'onBeforeAttach');
 
-        this.CustomItemView = this.ItemView.extend({
+        this.CustomView = this.View.extend({
           onBeforeShow: function() {
             this.getRegion('main').show(suite.mainView);
           }
         });
 
-        this.layoutView = new this.CustomItemView();
+        this.layoutView = new this.CustomView();
         this.sinon.spy(this.layoutView, 'onAttach');
         this.sinon.spy(this.layoutView, 'onBeforeAttach');
 
@@ -341,14 +341,14 @@ describe('onAttach', function() {
       });
     });
 
-    describe('When showing a ItemView with two levels of nested views; onBeforeShow for the first level, then onShow for the second', function() {
+    describe('When showing a View with two levels of nested views; onBeforeShow for the first level, then onShow for the second', function() {
       beforeEach(function() {
         var suite = this;
         this.headerView = new this.BasicView();
         this.sinon.spy(this.headerView, 'onBeforeAttach');
         this.sinon.spy(this.headerView, 'onAttach');
 
-        this.MainView = Marionette.ItemView.extend({
+        this.MainView = Marionette.View.extend({
           template: _.template('<header></header>'),
           onAttach: this.sinon.stub(),
           onBeforeAttach: this.sinon.stub(),
@@ -361,13 +361,13 @@ describe('onAttach', function() {
         });
         this.mainView = new this.MainView();
 
-        this.CustomItemView = this.ItemView.extend({
+        this.CustomView = this.View.extend({
           onBeforeShow: function() {
             this.getRegion('main').show(suite.mainView);
           }
         });
 
-        this.layoutView = new this.CustomItemView();
+        this.layoutView = new this.CustomView();
         this.sinon.spy(this.layoutView, 'onAttach');
         this.sinon.spy(this.layoutView, 'onBeforeAttach');
 
@@ -390,14 +390,14 @@ describe('onAttach', function() {
       });
     });
 
-    describe('When showing a ItemView with two levels of nested views; with onShow for the first level, onBeforeShow for the second', function() {
+    describe('When showing a View with two levels of nested views; with onShow for the first level, onBeforeShow for the second', function() {
       beforeEach(function() {
         var suite = this;
         this.headerView = new this.BasicView();
         this.sinon.spy(this.headerView, 'onBeforeAttach');
         this.sinon.spy(this.headerView, 'onAttach');
 
-        this.MainView = Marionette.ItemView.extend({
+        this.MainView = Marionette.View.extend({
           template: _.template('<header></header>'),
           onAttach: this.sinon.stub(),
           onBeforeAttach: this.sinon.stub(),
@@ -410,13 +410,13 @@ describe('onAttach', function() {
         });
         this.mainView = new this.MainView();
 
-        this.CustomItemView = this.ItemView.extend({
+        this.CustomView = this.View.extend({
           onShow: function() {
             this.getRegion('main').show(suite.mainView);
           }
         });
 
-        this.layoutView = new this.CustomItemView();
+        this.layoutView = new this.CustomView();
         this.sinon.spy(this.layoutView, 'onBeforeAttach');
         this.sinon.spy(this.layoutView, 'onAttach');
 
@@ -439,7 +439,7 @@ describe('onAttach', function() {
       });
     });
 
-    describe('When showing a ItemView with a single level of nested views that are attached within onShow', function() {
+    describe('When showing a View with a single level of nested views that are attached within onShow', function() {
       beforeEach(function() {
         this.mainView = new this.BasicView();
         this.footerView = new this.BasicView();
@@ -451,14 +451,14 @@ describe('onAttach', function() {
 
         var suite = this;
 
-        this.CustomItemView = this.ItemView.extend({
+        this.CustomView = this.View.extend({
           onShow: function() {
             this.getRegion('main').show(suite.mainView);
             this.getRegion('footer').show(suite.footerView);
           }
         });
 
-        this.layoutView = new this.CustomItemView();
+        this.layoutView = new this.CustomView();
         this.sinon.spy(this.layoutView, 'onBeforeAttach');
         this.sinon.spy(this.layoutView, 'onAttach');
 
@@ -486,8 +486,8 @@ describe('onAttach', function() {
     beforeEach(function() {
       this.setFixtures('<div class="layout-view"></div>');
 
-      // A ItemView class that we can use for all of our tests
-      this.ItemView = Marionette.ItemView.extend({
+      // A View class that we can use for all of our tests
+      this.View = Marionette.View.extend({
         el: '.layout-view',
         template: _.template('<main></main><footer></footer>'),
         regions: {
@@ -501,7 +501,7 @@ describe('onAttach', function() {
 
     describe('When showing a View in a Region', function() {
       beforeEach(function() {
-        this.MyView = Marionette.ItemView.extend({
+        this.MyView = Marionette.View.extend({
           el: '.layout-view',
           template: _.template(''),
           onBeforeAttach: this.sinon.stub(),
@@ -518,7 +518,7 @@ describe('onAttach', function() {
       });
     });
 
-    describe('When showing a ItemView with a single level of nested views that are attached within onBeforeShow', function() {
+    describe('When showing a View with a single level of nested views that are attached within onBeforeShow', function() {
       beforeEach(function() {
         this.mainView = new this.BasicView();
         this.footerView = new this.BasicView();
@@ -530,14 +530,14 @@ describe('onAttach', function() {
 
         var suite = this;
 
-        this.CustomItemView = this.ItemView.extend({
+        this.CustomView = this.View.extend({
           onBeforeShow: function() {
             this.getRegion('main').show(suite.mainView);
             this.getRegion('footer').show(suite.footerView);
           }
         });
 
-        this.layoutView = new this.CustomItemView();
+        this.layoutView = new this.CustomView();
         this.sinon.spy(this.layoutView, 'onBeforeAttach');
         this.sinon.spy(this.layoutView, 'onAttach');
 
@@ -560,14 +560,14 @@ describe('onAttach', function() {
       });
     });
 
-    describe('When showing a ItemView with two levels of nested views; with onBeforeShow for the first and second level', function() {
+    describe('When showing a View with two levels of nested views; with onBeforeShow for the first and second level', function() {
       beforeEach(function() {
         var suite = this;
         this.headerView = new this.BasicView();
         this.sinon.spy(this.headerView, 'onBeforeAttach');
         this.sinon.spy(this.headerView, 'onAttach');
 
-        this.MainView = Marionette.ItemView.extend({
+        this.MainView = Marionette.View.extend({
           template: _.template('<header></header>'),
           onAttach: this.sinon.stub(),
           onBeforeAttach: this.sinon.stub(),
@@ -580,13 +580,13 @@ describe('onAttach', function() {
         });
         this.mainView = new this.MainView();
 
-        this.CustomItemView = this.ItemView.extend({
+        this.CustomView = this.View.extend({
           onBeforeShow: function() {
             this.getRegion('main').show(suite.mainView);
           }
         });
 
-        this.layoutView = new this.CustomItemView();
+        this.layoutView = new this.CustomView();
         this.sinon.spy(this.layoutView, 'onBeforeAttach');
         this.sinon.spy(this.layoutView, 'onAttach');
 
@@ -609,14 +609,14 @@ describe('onAttach', function() {
       });
     });
 
-    describe('When showing a ItemView with two levels of nested views; onBeforeShow for the first level, then onShow for the second', function() {
+    describe('When showing a View with two levels of nested views; onBeforeShow for the first level, then onShow for the second', function() {
       beforeEach(function() {
         var suite = this;
         this.headerView = new this.BasicView();
         this.sinon.spy(this.headerView, 'onBeforeAttach');
         this.sinon.spy(this.headerView, 'onAttach');
 
-        this.MainView = Marionette.ItemView.extend({
+        this.MainView = Marionette.View.extend({
           template: _.template('<header></header>'),
           onAttach: this.sinon.stub(),
           onBeforeAttach: this.sinon.stub(),
@@ -629,13 +629,13 @@ describe('onAttach', function() {
         });
         this.mainView = new this.MainView();
 
-        this.CustomItemView = this.ItemView.extend({
+        this.CustomView = this.View.extend({
           onBeforeShow: function() {
             this.getRegion('main').show(suite.mainView);
           }
         });
 
-        this.layoutView = new this.CustomItemView();
+        this.layoutView = new this.CustomView();
         this.sinon.spy(this.layoutView, 'onBeforeAttach');
         this.sinon.spy(this.layoutView, 'onAttach');
 
@@ -658,14 +658,14 @@ describe('onAttach', function() {
       });
     });
 
-    describe('When showing a ItemView with two levels of nested views; with onShow for the first level, onBeforeShow for the second', function() {
+    describe('When showing a View with two levels of nested views; with onShow for the first level, onBeforeShow for the second', function() {
       beforeEach(function() {
         var suite = this;
         this.headerView = new this.BasicView();
         this.sinon.spy(this.headerView, 'onBeforeAttach');
         this.sinon.spy(this.headerView, 'onAttach');
 
-        this.MainView = Marionette.ItemView.extend({
+        this.MainView = Marionette.View.extend({
           template: _.template('<header></header>'),
           onAttach: this.sinon.stub(),
           onBeforeAttach: this.sinon.stub(),
@@ -678,13 +678,13 @@ describe('onAttach', function() {
         });
         this.mainView = new this.MainView();
 
-        this.CustomItemView = this.ItemView.extend({
+        this.CustomView = this.View.extend({
           onShow: function() {
             this.getRegion('main').show(suite.mainView);
           }
         });
 
-        this.layoutView = new this.CustomItemView();
+        this.layoutView = new this.CustomView();
         this.sinon.spy(this.layoutView, 'onBeforeAttach');
         this.sinon.spy(this.layoutView, 'onAttach');
 
@@ -707,7 +707,7 @@ describe('onAttach', function() {
       });
     });
 
-    describe('When showing a ItemView with a single level of nested views that are attached within onShow', function() {
+    describe('When showing a View with a single level of nested views that are attached within onShow', function() {
       beforeEach(function() {
         this.mainView = new this.BasicView();
         this.footerView = new this.BasicView();
@@ -719,14 +719,14 @@ describe('onAttach', function() {
 
         var suite = this;
 
-        this.CustomItemView = this.ItemView.extend({
+        this.CustomView = this.View.extend({
           onShow: function() {
             this.getRegion('main').show(suite.mainView);
             this.getRegion('footer').show(suite.footerView);
           }
         });
 
-        this.layoutView = new this.CustomItemView();
+        this.layoutView = new this.CustomView();
         this.sinon.spy(this.layoutView, 'onBeforeAttach');
         this.sinon.spy(this.layoutView, 'onAttach');
 

@@ -1,21 +1,21 @@
-name: ItemView
+name: View
 
-class: Marionette.ItemView
+class: Marionette.View
 
 extends:
   - Marionette.AbstractView
 
 description: |
-  An `ItemView` is the basic view of Marionette. It can be used to render a Model or Collection. In addition, ItemViews can create and manage child views through the use of
+  An `View` is the basic view of Marionette. It can be used to render a Model or Collection. In addition, Views can create and manage child views through the use of
   [Regions]((marionette.region.md)). Regions are containers for child views.
 
-  ItemView extends from AbstractView. For the full API, refer to [the Marionette.AbstractView documentation](marionette.abstractview.md) for inherited methods and properties.
+  View extends from AbstractView. For the full API, refer to [the Marionette.AbstractView documentation](marionette.abstractview.md) for inherited methods and properties.
 
-  Unlike Backbone Views, the ItemView Class emits many events. These are most often triggered when a ItemView is displayed as a child within another ItemView or CollectionView.
+  Unlike Backbone Views, the View Class emits many events. These are most often triggered when a View is displayed as a child within another View or CollectionView.
 
 constructor:
   description: |
-    Creates a new ItemView.
+    Creates a new View.
 
     As a View, the constructor calls the initialize function if it exists.
 
@@ -23,17 +23,17 @@ constructor:
 
   examples:
     -
-      name: Creating a new ItemView representing a single model.
+      name: Creating a new View representing a single model.
 
       example: |
-        ItemViews can be used to represent either a `Backbone.Model` or `Backbone.Collection` by setting `model` or `collection` properties on the ItemView. The collection is only used if a model is not already set.
+        Views can be used to represent either a `Backbone.Model` or `Backbone.Collection` by setting `model` or `collection` properties on the View. The collection is only used if a model is not already set.
 
         ```js
-        var MyItemView = Marionette.ItemView.extend({
+        var MyView = Marionette.View.extend({
           template: '#some-item-template'
         });
 
-        var itemView = new MyItemView({
+        var view = new MyView({
           model: myModel
         });
         ```
@@ -60,7 +60,7 @@ functions:
             This example sets a custom `serializeData` method to prioritize collections over models.
 
             ```js
-            var MyItemView = Marionette.ItemView.extend({
+            var MyView = Marionette.View.extend({
               serializeData: function(){
                 var data = {};
 
@@ -85,7 +85,7 @@ functions:
       Do not override `serializeModel` to add additional data to your templates. Use `templateHelpers` for that instead.
 
       @api public
-      @param {Backbone.Model} model - The model set on the ItemView to be serialized.
+      @param {Backbone.Model} model - The model set on the View to be serialized.
       @returns {Object} Javascript object representation of the model.
 
       examples:
@@ -94,7 +94,7 @@ functions:
 
           example: |
             ```js
-            var MyitemView = Marionette.ItemView.extend({
+            var MyView = Marionette.View.extend({
               serializeModel: function(model){
                 return _.omit(model.attributes, 'secretData');
               }
@@ -110,7 +110,7 @@ functions:
       Do not override `serializeCollection` to add additional data to your templates. Use `templateHelpers` for that instead.
 
       @api public
-      @param {Backbone.Collection} collection - The collection set on the ItemView to be serialized.
+      @param {Backbone.Collection} collection - The collection set on the View to be serialized.
 
       examples:
         -
@@ -118,7 +118,7 @@ functions:
 
           example: |
             ```js
-            var MyItemView = Marionette.ItemView.extend({
+            var MyView = Marionette.View.extend({
               serializeCollection: function(collection){
                 return collection.map(function(model){ return _.omit(model.attributes, 'secretData'); });
               }
@@ -145,7 +145,7 @@ functions:
 
         example: |
           ```js
-          var MyItemView = Marionette.ItemView.extend({
+          var MyView = Marionette.View.extend({
             attachElContent: function(html){
               this.el.innerHTML = html;
               return this;
@@ -165,7 +165,7 @@ functions:
 
         example: |
           ```js
-          var myItemView = Marionette.ItemView.extend({
+          var myView = Marionette.View.extend({
             destroy: function(){
               if (this.isDestroyed) { return; }
 

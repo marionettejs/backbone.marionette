@@ -399,7 +399,7 @@ functions:
           you'll need to attach it yourself.
           
           ```js
-          var View = Marionette.ItemView.extend({
+          var View = Marionette.View.extend({
           
             initialize: function() {
               this.someFn = function() {};

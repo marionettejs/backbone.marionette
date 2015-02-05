@@ -74,7 +74,7 @@ A handy function to pluck certain `options` and attach them directly to an insta
 Most Marionette Classes, such as the Views, come with this method.
 
 ```js
-var MyView = ItemView.extend({
+var MyView = Marionette.View.extend({
   myViewOptions: ['color', 'size', 'country'],
 
   initialize: function(options) {
@@ -319,7 +319,7 @@ same hash with the function names replaced with the function references themselv
 This function is attached to the `Marionette.AbstractView` prototype by default. To use it from non-View classes you'll need to attach it yourself.
 
 ```js
-var View = Marionette.ItemView.extend({
+var View = Marionette.View.extend({
 
   initialize: function() {
     this.someFn = function() {};

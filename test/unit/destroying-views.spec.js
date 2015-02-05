@@ -23,11 +23,11 @@ describe('destroying views', function() {
     });
   });
 
-  describe('when destroying a Marionette.ItemView multiple times', function() {
+  describe('when destroying a Marionette.View multiple times', function() {
     beforeEach(function() {
       this.onBeforeDestroyStub = this.sinon.stub();
 
-      this.itemView = new Marionette.ItemView();
+      this.itemView = new Marionette.View();
       this.itemView.onBeforeDestroy = this.onBeforeDestroyStub;
 
       this.itemView.destroy();
@@ -43,9 +43,9 @@ describe('destroying views', function() {
     });
   });
 
-  describe('when rendering a Marionette.ItemView that was previously destroyed', function() {
+  describe('when rendering a Marionette.View that was previously destroyed', function() {
     beforeEach(function() {
-      this.itemView = new Marionette.ItemView();
+      this.itemView = new Marionette.View();
       this.itemView.destroy();
     });
 

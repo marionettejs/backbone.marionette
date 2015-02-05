@@ -40,7 +40,7 @@ the `listenTo` method to bind model, collection, or other events from Backbone
 and Marionette objects.
 
 ```js
-var MyView = Marionette.ItemView.extend({
+var MyView = Marionette.View.extend({
   initialize: function(){
     this.listenTo(this.model, "change:foo", this.modelChanged);
     this.listenTo(this.collection, "add", this.modelAdded);
@@ -69,10 +69,10 @@ this.listenTo(this.collection, "add", _.bind(this.reconcileCollection, this.coll
 * "show" / `onShow` - Called on the view instance when the view has been rendered and displayed.
 
 This event can be used to react to when a view has been shown via a [region](marionette.region.md).
-All `views` that inherit from the base `Marionette.AbstractView` class have this functionality, notably `ItemView`, `CollectionView`, `CompositeView`, and `LayoutView`.
+All `views` that inherit from the base `Marionette.AbstractView` class have this functionality, notably `View`, `CollectionView`, `CompositeView`, and `LayoutView`.
 
 ```js
-Marionette.ItemView.extend({
+Marionette.View.extend({
   onShow: function(){
     // react to when a view has been shown
   }
@@ -115,7 +115,7 @@ that `destroy` was invoked with. This lets you handle any additional clean
 up code without having to override the `destroy` method.
 
 ```js
-var MyView = Marionette.ItemView.extend({
+var MyView = Marionette.View.extend({
   onDestroy: function(arg1, arg2){
     // custom cleanup or destroying code, here
   }
@@ -162,7 +162,7 @@ This event / callback is useful for
 [jQueryUI](http://jqueryui.com/) or [KendoUI](http://kendoui.com).
 
 ```js
-Marionette.ItemView.extend({
+Marionette.View.extend({
   onDomRefresh: function(){
     // manipulate the `el` here. it's already
     // been rendered, and is full of the view's
@@ -180,7 +180,7 @@ Since Views extend from backbone`s view class, you gain the benefits of the [eve
 Some preprocessing sugar is added on top to add the ability to cross utilize the ```ui``` hash.
 
 ```js
-var MyView = Marionette.ItemView.extend({
+var MyView = Marionette.View.extend({
   // ...
 
   ui: {
@@ -204,7 +204,7 @@ event configuration, while the right side of the hash is the
 view event that you want to trigger from the view.
 
 ```js
-var MyView = Marionette.ItemView.extend({
+var MyView = Marionette.View.extend({
   // ...
 
   triggers: {
@@ -260,7 +260,7 @@ Marionette.CompositeView.extend({
 Trigger keys can be configured to cross utilize the ```ui``` hash.
 
 ```js
-Marionette.ItemView.extend({
+Marionette.View.extend({
   ui: {
      'monkey': '.guybrush'
   },
@@ -285,7 +285,7 @@ includes the following:
 These properties match the `view`, `model`, and `collection` properties of the view that triggered the event.
 
 ```js
-var MyView = Marionette.ItemView.extend({
+var MyView = Marionette.View.extend({
   // ...
 
   triggers: {
@@ -419,12 +419,12 @@ Instead of having jQuery selectors hanging around in the view's code
 you can define a `ui` hash that contains a mapping between the
 ui element's name and its jQuery selector. Afterwards you can simply
 access it via `this.getUI('elementName')`.
-See ItemView documentation for examples.
+See View documentation for examples.
 
 This functionality is provided via the `bindUIElements` method.
 Since View doesn't implement the render method, then if you directly extend
 from View you will need to invoke this method from your render method.
-In ItemView and CompositeView this is already taken care of.
+In View and CompositeView this is already taken care of.
 
 ## AbstractView.getUI
 
@@ -437,7 +437,7 @@ The preferred way to manage your view's options is with `mergeOptions`. It accep
 and the keys to merge onto the instance directly.
 
 ```js
-var ProfileView = Marionette.ItemView.extend({
+var ProfileView = Marionette.View.extend({
   profileViewOptions: ['user', 'age'],
 
   initialize: function(options) {
@@ -484,7 +484,7 @@ to add data not returned from `serializeData`, such as calculated values.
 ```
 
 ```js
-var MyView = Marionette.ItemView.extend({
+var MyView = Marionette.View.extend({
   template: "#my-template",
 
   templateHelpers: function () {
@@ -513,7 +513,7 @@ The `templateHelpers` can also be provided as a constructor parameter
 for any Marionette view class that supports the helpers.
 
 ```js
-var MyView = Marionette.ItemView.extend({
+var MyView = Marionette.View.extend({
   // ...
 });
 
@@ -550,7 +550,7 @@ function. The function must return an object that can be
 mixed in to the data for the view.
 
 ```js
-Marionette.ItemView.extend({
+Marionette.View.extend({
   templateHelpers: function(){
     return {
       foo: function(){ /* ... */ }
@@ -568,7 +568,7 @@ a `getTemplate` function on your views and use this to return the
 template that you need.
 
 ```js
-var MyView = Marionette.ItemView.extend({
+var MyView = Marionette.View.extend({
   getTemplate: function(){
     if (this.model.get("foo")){
       return "#some-template";

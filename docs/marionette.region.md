@@ -515,7 +515,7 @@ var MyRegion = Marionette.Region.extend({
   }
 });
 
-var MyView = Marionette.ItemView.extend({
+var MyView = Marionette.View.extend({
   onBeforeShow: function(view, region, options) {
     // called before the `view` has been shown
   },

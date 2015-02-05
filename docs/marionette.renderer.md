@@ -2,7 +2,7 @@
 
 # Marionette.Renderer
 
-The `Renderer` object was extracted from the `ItemView` rendering
+The `Renderer` object was extracted from the `View` rendering
 process, in order to create a consistent and re-usable method of
 rendering a template with or without data.
 
@@ -40,7 +40,7 @@ to specify a pre-compiled template function as the `template` setting.
 
 ```js
 var myTemplate = _.template("<div>foo</div>");
-Marionette.ItemView.extend({
+Marionette.View.extend({
   template: myTemplate
 });
 ```
@@ -104,7 +104,7 @@ Then you can specify the pre-compiled template function as your view's
 ```js
 var myPrecompiledTemplate = _.template("<div>some template</div>");
 
-Marionette.ItemView.extend({
+Marionette.View.extend({
   template: myPrecompiledTemplate
 });
 ```

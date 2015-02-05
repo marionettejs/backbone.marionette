@@ -28,10 +28,10 @@ These interactions tend to be chunks of logic that you want to use in multiple v
 
 ## Usage
 
-Here is an example of a simple `ItemView`. Let's take a stab at simplifying it, and abstracting Behaviors from it.
+Here is an example of a simple `View`. Let's take a stab at simplifying it, and abstracting Behaviors from it.
 
 ```js
-var MyView = Marionette.ItemView.extend({
+var MyView = Marionette.View.extend({
   ui: {
     "destroy": ".destroy-btn"
   },
@@ -62,7 +62,7 @@ Here is the syntax for declaring which behaviors get used within a View.
 * The options are then stored within each `Behavior` under `options`.
 
 ```js
-var MyView = Marionette.ItemView.extend({
+var MyView = Marionette.View.extend({
   ui: {
     "destroy": ".destroy-btn"
   },

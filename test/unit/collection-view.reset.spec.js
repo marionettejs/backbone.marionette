@@ -4,7 +4,7 @@ describe('collection view - reset', function() {
   beforeEach(function() {
     this.collection = new Backbone.Collection();
 
-    this.ItemView = Backbone.Marionette.ItemView.extend({
+    this.View = Backbone.Marionette.View.extend({
       template: _.template('<%= foo %>')
     });
 
@@ -12,7 +12,7 @@ describe('collection view - reset', function() {
     this.destroyChildrenStub = this.sinon.stub();
 
     this.CollectionView = Backbone.Marionette.CollectionView.extend({
-      childView: this.ItemView,
+      childView: this.View,
       onRender: this.onRenderStub,
       destroyChildren: this.destroyChildrenStub
     });

@@ -286,7 +286,7 @@ describe('base view', function() {
   describe('when proxying events to a parent layout', function() {
 
     beforeEach(function() {
-      this.LayoutView = Marionette.ItemView.extend({
+      this.LayoutView = Marionette.View.extend({
         template: _.template('<div class="child"></div>'),
 
         regions: {
@@ -299,7 +299,7 @@ describe('base view', function() {
 
       });
 
-      this.ChildView = Marionette.ItemView.extend({
+      this.ChildView = Marionette.View.extend({
         template: false
       });
 

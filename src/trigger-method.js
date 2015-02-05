@@ -35,7 +35,7 @@ Marionette._triggerMethod = (function() {
     // trigger the event, if a trigger method exists
     if (_.isFunction(context.trigger)) {
       if (noEventArg + args.length > 1) {
-        context.trigger.apply(context, noEventArg ? args : [event].concat(_.rest(args, 0)));
+        context.trigger.apply(context, noEventArg ? args : [event].concat(_.drop(args, 0)));
       } else {
         context.trigger(event);
       }

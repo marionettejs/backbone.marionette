@@ -2,9 +2,10 @@
 // ----------
 
 // Reduce the boilerplate code of handling route events
-// and then calling a single method on another object.
+// and then calling a single method on another object,
+// called a controller.
 // Have your routers configured to call the method on
-// your object, directly.
+// your controller, directly.
 //
 // Configure an AppRouter with `appRoutes`.
 //

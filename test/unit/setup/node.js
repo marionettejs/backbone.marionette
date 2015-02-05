@@ -42,7 +42,6 @@ requireHelper('trigger-method');
 requireHelper('helpers');
 requireHelper('dom-refresh');
 requireHelper('object');
-requireHelper('controller');
 requireHelper('app-router');
 requireHelper('application');
 requireHelper('module');

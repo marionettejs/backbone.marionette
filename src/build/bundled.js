@@ -23,6 +23,7 @@
   // @include ../../tmp/backbone.wreqr.bare.js
 
   var previousMarionette = root.Marionette;
+  var previousMn = root.Mn;
 
   var Marionette = Backbone.Marionette = {};
 
@@ -30,6 +31,7 @@
 
   Marionette.noConflict = function() {
     root.Marionette = previousMarionette;
+    root.Mn = previousMn;
     return this;
   };
 

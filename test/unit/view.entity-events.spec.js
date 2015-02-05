@@ -114,7 +114,7 @@ describe('view entity events', function() {
     });
   });
 
-  describe('when undelegating events on a view', function() {
+  describe('when undelegating entity events on a view', function() {
     beforeEach(function() {
       this.View = Marionette.AbstractView.extend({
         modelEvents      : {'foo': 'foo'},
@@ -128,8 +128,8 @@ describe('view entity events', function() {
         collection : this.collection
       });
 
-      this.sinon.spy(this.view, 'undelegateEvents');
-      this.view.undelegateEvents();
+      this.sinon.spy(this.view, 'undelegateEntityEvents');
+      this.view.undelegateEntityEvents();
 
       this.model.trigger('foo');
       this.collection.trigger('bar');
@@ -144,7 +144,7 @@ describe('view entity events', function() {
     });
 
     it('should return the view', function() {
-      expect(this.view.undelegateEvents).to.have.returned(this.view);
+      expect(this.view.undelegateEntityEvents).to.have.returned(this.view);
     });
   });
 
@@ -162,9 +162,9 @@ describe('view entity events', function() {
         collection : this.collection
       });
 
-      this.view.undelegateEvents();
-      this.sinon.spy(this.view, 'delegateEvents');
-      this.view.delegateEvents();
+      this.view.undelegateEntityEvents();
+      this.sinon.spy(this.view, 'delegateEntityEvents');
+      this.view.delegateEntityEvents();
     });
 
     it('should fire the model event once', function() {
@@ -177,8 +177,8 @@ describe('view entity events', function() {
       expect(this.barStub).to.have.been.calledOnce;
     });
 
-    it('should return the view from delegateEvents', function() {
-      expect(this.view.delegateEvents).to.have.returned(this.view);
+    it('should return the view from delegateEntityEvents', function() {
+      expect(this.view.delegateEntityEvents).to.have.returned(this.view);
     });
   });
 

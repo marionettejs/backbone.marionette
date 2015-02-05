@@ -25,6 +25,8 @@ Marionette.AbstractView = Backbone.View.extend({
 
     Backbone.View.apply(this, arguments);
 
+    this.delegateEntityEvents();
+
     Marionette.MonitorDOMRefresh(this);
     this.on('show', this.onShowCalled);
   },
@@ -89,23 +91,9 @@ Marionette.AbstractView = Backbone.View.extend({
     }, {}, this);
   },
 
-  // Overriding Backbone.View's delegateEvents to handle
-  // the `triggers`, `modelEvents`, and `collectionEvents` configuration
-  delegateEvents: function(events) {
-    this._delegateDOMEvents(events);
-    this.bindEntityEvents(this.model, this.getOption('modelEvents'));
-    this.bindEntityEvents(this.collection, this.getOption('collectionEvents'));
-
-    _.each(this._behaviors, function(behavior) {
-      behavior.bindEntityEvents(this.model, behavior.getOption('modelEvents'));
-      behavior.bindEntityEvents(this.collection, behavior.getOption('collectionEvents'));
-    }, this);
-
-    return this;
-  },
-
-  // internal method to delegate DOM events and triggers
-  _delegateDOMEvents: function(eventsArg) {
+  // Overriding Backbone.View's `delegateEvents` to handle
+  // `events` and `triggers`
+  delegateEvents: function(eventsArg) {
     var events = Marionette._getValue(eventsArg || this.events, this);
 
     // normalize ui keys
@@ -123,13 +111,27 @@ Marionette.AbstractView = Backbone.View.extend({
     _.extend(combinedEvents, behaviorEvents, events, triggers, behaviorTriggers);
 
     Backbone.View.prototype.delegateEvents.call(this, combinedEvents);
+
+    return this;
   },
 
-  // Overriding Backbone.View's undelegateEvents to handle unbinding
-  // the `triggers`, `modelEvents`, and `collectionEvents` config
-  undelegateEvents: function() {
-    Backbone.View.prototype.undelegateEvents.apply(this, arguments);
+  // Handle `modelEvents`, and `collectionEvents` configuration
+  delegateEntityEvents: function() {
+    this.undelegateEntityEvents();
 
+    this.bindEntityEvents(this.model, this.getOption('modelEvents'));
+    this.bindEntityEvents(this.collection, this.getOption('collectionEvents'));
+
+    _.each(this._behaviors, function(behavior) {
+      behavior.bindEntityEvents(this.model, behavior.getOption('modelEvents'));
+      behavior.bindEntityEvents(this.collection, behavior.getOption('collectionEvents'));
+    }, this);
+
+    return this;
+  },
+
+  // Handle unbinding `modelEvents`, and `collectionEvents` configuration
+  undelegateEntityEvents: function() {
     this.unbindEntityEvents(this.model, this.getOption('modelEvents'));
     this.unbindEntityEvents(this.collection, this.getOption('collectionEvents'));
 

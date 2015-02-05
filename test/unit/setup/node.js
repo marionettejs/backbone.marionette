@@ -44,7 +44,6 @@ requireHelper('dom-refresh');
 requireHelper('object');
 requireHelper('app-router');
 requireHelper('application');
-requireHelper('module');
 requireHelper('renderer');
 requireHelper('template-cache');
 requireHelper('abstract-view');

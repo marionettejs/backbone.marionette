@@ -39,7 +39,6 @@
 
   // @include ../error.js
   // @include ../callbacks.js
-  // @include ../controller.js
   // @include ../object.js
   // @include ../region.js
   // @include ../region-manager.js

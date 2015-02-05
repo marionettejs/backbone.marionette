@@ -523,10 +523,6 @@ describe('regionManager', function() {
     it('should trigger a "destroy" event/method', function() {
       expect(this.destroyManagerHandler).to.have.been.called;
     });
-
-    it('should return the region manager', function() {
-      expect(this.regionManager.destroy).to.have.returned(this.regionManager);
-    });
   });
 
   describe('when iterating the region manager', function() {

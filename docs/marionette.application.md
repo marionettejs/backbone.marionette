@@ -41,6 +41,7 @@ instead of these deprecated features.
   * [Overriding the default RegionManager](#overriding-the-default-regionmanager)
   * [Get Region By Name](#get-region-by-name)
   * [Removing Regions](#removing-regions)
+* [Application.mergeOptions](#applicationmergeoptions)
 * [Application.getOption](#applicationgetoption)
 * [Adding Initializers (deprecated)](#adding-initializers)
 * [The Application Channel (deprecated)](#the-application-channel)
@@ -292,6 +293,21 @@ application object.
 
 For more information on regions, see [the region documentation](./marionette.region.md) Also, the API that Applications use to
 manage regions comes from the RegionManager Class, which is documented [over here](./marionette.regionmanager.md).
+
+### Application.mergeOptions
+Merge keys from the `options` object directly onto the Application instance.
+
+```js
+var MyApp = Marionette.Application.extend({
+  initialize: function(options) {
+    this.mergeOptions(options, ['myOption']);
+
+    console.log('The option is:', this.myOption);
+  }
+})
+```
+
+More information at [mergeOptions](./marionette.functions.md#marionettemergeoptions)
 
 ### Application.getOption
 Retrieve an object's attribute either directly from the object, or from the object's this.options, with this.options taking precedence.

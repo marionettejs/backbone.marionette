@@ -12,6 +12,7 @@ your Router's callbacks.
 
 * [Basic Use](#basic-use)
 * [Destroying A Controller](#destroying-a-controller)
+* [mergeOptions](#mergeoptions)
 * [getOption](#getoption)
 * [Prior Usage](#prior-usage)
 
@@ -39,6 +40,13 @@ var myRouter = new Marionette.AppRouter({
   }
 });
 ```
+
+## mergeOptions
+
+Merge keys from the `options` object directly onto the instance. This is the preferred way to access options
+passed into the Controller.
+
+More information at [mergeOptions](./marionette.functions.md#marionettemergeoptions)
 
 ## getOption
 

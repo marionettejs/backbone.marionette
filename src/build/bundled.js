@@ -32,16 +32,12 @@
 
   Backbone.Marionette = Marionette;
 
-  // Get the Deferred creator for later use
-  Marionette.Deferred = Backbone.$.Deferred;
-
   // @include ../helpers.js
   // @include ../trigger-method.js
   // @include ../dom-refresh.js
   // @include ../bind-entity-events.js
 
   // @include ../error.js
-  // @include ../callbacks.js
   // @include ../object.js
   // @include ../region.js
   // @include ../region-manager.js
@@ -59,7 +55,6 @@
 
   // @include ../app-router.js
   // @include ../application.js
-  // @include ../module.js
 
   return Marionette;
 }));

@@ -338,9 +338,9 @@ bound at the time of instantiation, and an exception will be thrown
 if the handlers on the view do not exist.
 
 The `modelEvents` and `collectionEvents` will be bound and
-unbound with the Backbone.View `delegateEvents` and `undelegateEvents`
-method calls. This allows the view to be re-used and have
-the model and collection events re-bound.
+unbound with the Backbone.View `delegateEntityEvents` and `undelegateEntityEvents`
+method calls. `delegateEntityEvents` is called in the View's `constructor` and
+entity events are unbound during the View's `destroy`.
 
 ### Multiple Callbacks
 

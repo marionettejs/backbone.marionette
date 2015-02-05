@@ -59,7 +59,6 @@
 
   // @include ../app-router.js
   // @include ../application.js
-  // @include ../module.js
 
   return Marionette;
 }));

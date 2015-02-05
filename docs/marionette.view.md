@@ -19,7 +19,6 @@ behaviors that are shared across all views.
 * [View onBeforeDestroy](#view-onbeforedestroy)
 * [View "attach" / onAttach event](#view-attach--onattach-event)
 * [View "before:attach" / onBeforeAttach event](#view-beforeattach--onbeforeattach-event)
-* [View "dom:refresh" / onDomRefresh event](#view-domrefresh--ondomrefresh-event)
 * [View.triggers](#viewtriggers)
 * [View.events](#viewevents)
 * [View.modelEvents and View.collectionEvents](#viewmodelevents-and-viewcollectionevents)
@@ -33,6 +32,7 @@ behaviors that are shared across all views.
   * [Accessing Data Within The Helpers](#accessing-data-within-the-helpers)
   * [Object Or Function As `templateHelpers`](#object-or-function-as-templatehelpers)
 * [Change Which Template Is Rendered For A View](#change-which-template-is-rendered-for-a-view)
+* [View "dom:refresh" / onDomRefresh event (deprecated)](#view-domrefresh--ondomrefresh-event)
 
 ## Binding To View Events
 
@@ -152,28 +152,6 @@ For more on efficient, deeply-nested view structures, refer to the LayoutView do
 
 This is just like the attach event described above, but it's triggered right before the view is
 attached to the document.
-
-### View "dom:refresh" / onDomRefresh event
-
-Triggered after the view has been rendered, has been shown in the DOM via a Marionette.Region, and has been
-re-rendered.
-
-This event / callback is useful for
-[DOM-dependent UI plugins](http://lostechies.com/derickbailey/2012/02/20/using-jquery-plugins-and-ui-controls-with-backbone/) such as
-[jQueryUI](http://jqueryui.com/) or [KendoUI](http://kendoui.com).
-
-```js
-Backbone.Marionette.ItemView.extend({
-  onDomRefresh: function(){
-    // manipulate the `el` here. it's already
-    // been rendered, and is full of the view's
-    // HTML, ready to go.
-  }
-});
-```
-
-For more information about integration Marionette w/ KendoUI (also applicable to jQueryUI and other UI
-widget suites), see [this blog post on KendoUI + Backbone](http://www.kendoui.com/blogs/teamblog/posts/12-11-26/backbone_and_kendo_ui_a_beautiful_combination.aspx).
 
 ## View.events
 Since Views extend from backbone's view class, you gain the benefits of the [events hash](http://backbonejs.org/#View-delegateEvents).
@@ -563,3 +541,27 @@ var MyView = Backbone.Marionette.ItemView.extend({
 ```
 
 This applies to all view classes.
+
+### View "dom:refresh" / onDomRefresh event
+
+> Warning: deprecated. This method is deprecated, and will be removed in v3.0.0. Use `onAttach` instead.
+
+Triggered after the view has been rendered, has been shown in the DOM via a Marionette.Region, and has been
+re-rendered.
+
+This event / callback is useful for
+[DOM-dependent UI plugins](http://lostechies.com/derickbailey/2012/02/20/using-jquery-plugins-and-ui-controls-with-backbone/) such as
+[jQueryUI](http://jqueryui.com/) or [KendoUI](http://kendoui.com).
+
+```js
+Backbone.Marionette.ItemView.extend({
+  onDomRefresh: function(){
+    // manipulate the `el` here. it's already
+    // been rendered, and is full of the view's
+    // HTML, ready to go.
+  }
+});
+```
+
+For more information about integration Marionette w/ KendoUI (also applicable to jQueryUI and other UI
+widget suites), see [this blog post on KendoUI + Backbone](http://www.kendoui.com/blogs/teamblog/posts/12-11-26/backbone_and_kendo_ui_a_beautiful_combination.aspx).

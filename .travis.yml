@@ -4,30 +4,29 @@ node_js:
 matrix:
   include:
     - node_js: "0.10"
-      env: UNDERSCORE=1.4.4 BACKBONE=1.0 MAINRUN=false
+      env: UNDERSCORE=1.4.4 BACKBONE=1.0
     - node_js: "0.10"
-      env: UNDERSCORE=1.5 BACKBONE=1.0 MAINRUN=false
+      env: UNDERSCORE=1.5 BACKBONE=1.0
     - node_js: "0.10"
-      env: UNDERSCORE=1.7 BACKBONE=1.1 MAINRUN=false
+      env: UNDERSCORE=1.7 BACKBONE=1.1
     - node_js: "0.10"
-      env: UNDERSCORE=1.7 BACKBONE=1.0 MAINRUN=false
+      env: UNDERSCORE=1.7 BACKBONE=1.0
     - node_js: "0.10"
-      env: UNDERSCORE=1.6 BACKBONE=1.0 MAINRUN=false
+      env: UNDERSCORE=1.6 BACKBONE=1.0
     - node_js: "0.10"
-      env: UNDERSCORE=1.4.4 BACKBONE=1.1.0 MAINRUN=false
+      env: UNDERSCORE=1.4.4 BACKBONE=1.1.0
     - node_js: "0.10"
-      env: UNDERSCORE=1.5 BACKBONE=1.1 MAINRUN=false
+      env: UNDERSCORE=1.5 BACKBONE=1.1
     - node_js: "0.10"
-      env: LODASH=3.0 BACKBONE=1.1 MAINRUN=false
+      env: LODASH=2.4 BACKBONE=1.1
     - node_js: "0.10"
-      env: LODASH=3.1 BACKBONE=1.0 MAINRUN=false
-env: MAINRUN=true LODASH=false UNDERSCORE=latest
+      env: LODASH=3.0 BACKBONE=1.1
+    - node_js: "0.10"
+      env: LODASH=3.1 BACKBONE=1.0
+env: MAINRUN=true
 before_install:
   - npm config set ca ""
 install:
-  - npm install -g grunt-cli
-  - npm install
-  - npm dedupe
-  - ./test/ci.sh
+  - curl -L https://rawgit.com/marionettejs/travis-ci-setup/master/ci.sh | bash
 after_success:
   - if [[ $MAINRUN == true ]]; then npm run-script coverage; fi

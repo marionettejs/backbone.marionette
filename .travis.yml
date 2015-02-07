@@ -18,8 +18,10 @@ matrix:
     - node_js: "0.10"
       env: UNDERSCORE=1.5 BACKBONE=1.1 MAINRUN=false
     - node_js: "0.10"
-      env: UNDERSCORE=1.5 BACKBONE=1.1 MAINRUN=false LODASH=3.0
-env: MAINRUN=true LODASH=false
+      env: LODASH=3.0 BACKBONE=1.1 MAINRUN=false
+    - node_js: "0.10"
+      env: LODASH=3.1 BACKBONE=1.0 MAINRUN=false
+env: MAINRUN=true LODASH=false UNDERSCORE=latest
 before_install:
   - npm config set ca ""
 install:

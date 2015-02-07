@@ -391,4 +391,30 @@ describe('collection/composite view sorting', function() {
       });
     });
   });
+
+  describe('when using `{ reorderOnSort: true }`', function () {
+    beforeEach(function () {
+      this.collectionView = new this.CollectionView({
+        childView: this.ChildView,
+        collection: this.collection,
+        reorderOnSort: true
+      });
+      this.collectionView.render();
+      this.sinon.spy(this.collectionView, 'reorder');
+      this.sinon.spy(this.collectionView, 'render');
+      this.collection.comparator = function (m) {
+        return m.get('bar');
+      };
+      this.collection.sort();
+    });
+
+    it('should call reorder instead of render', function () {
+      expect(this.collectionView.render).not.to.have.been.calledOnce;
+      expect(this.collectionView.reorder).to.have.been.calledOnce;
+    });
+
+    it('should reorder the DOM', function () {
+      expect(this.collectionView.$el).to.have.$text('321');
+    });
+  });
 });

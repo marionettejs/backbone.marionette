@@ -128,12 +128,36 @@ Marionette.CollectionView = Marionette.AbstractView.extend({
     return this;
   },
 
+  // Reorder DOM after sorting. When your element's rendering
+  // do not use their index, you can pass reorderOnSort: true
+  // to only reorder the DOM after a sort instead of rendering
+  // all the collectionView
+  reorder: function () {
+    var children = this.children;
+    var idx = children._indexByModel;
+    var views = children._views;
+    // get the views in the same order as the models
+    var arr = this.collection.models.map(function (model) {
+      var viewid = idx[model.cid];
+      var view = views[viewid];
+      return view.$el;
+    });
+    // transform into a jQuery array
+    var allEls = $(arr).map(function () { return this.toArray(); });
+    allEls.detach();
+    this.$el.append(allEls);
+  },
+
   // Render view after sorting. Override this method to
   // change how the view renders after a `sort` on the collection.
   // An example of this would be to only `renderChildren` in a `CompositeView`
   // rather than the full view.
   resortView: function() {
-    this.render();
+    if (Marionette.getOption(this, 'reorderOnSort')) {
+      this.reorder();
+    } else {
+      this.render();
+    }
   },
 
   // Internal method. This checks for any changes in the order of the collection.

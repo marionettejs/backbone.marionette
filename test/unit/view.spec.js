@@ -192,6 +192,29 @@ describe('base view', function() {
     });
   });
 
+  // http://backbonejs.org/#View-constructor
+  describe('when constructing a view with Backbone viewOptions', function () {
+    it('should attach the viewOptions to the view if options are on the view', function () {
+      this.MyView = Marionette.View.extend({
+        options: {
+          className: '.some-class'
+        } 
+      });
+      this.myView = new this.MyView();
+      expect(this.myView.className).to.equal('.some-class');
+    });
+
+    it('should attach the viewOptions to the view if options are passed as a function', function () {
+      var options = function(){
+        return {
+          className: '.some-class'
+        };
+      };  
+      this.myView = new Marionette.View(options);
+      expect(this.myView.className).to.equal('.some-class');
+    });
+  });
+
   describe('should expose its options in the constructor', function() {
     beforeEach(function() {
       this.options = {foo: 'bar'};

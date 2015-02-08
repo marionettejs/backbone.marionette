@@ -78,6 +78,33 @@ functions:
           // => true
           ```
 
+  mergeOptions:
+    description: |
+      Merge `keys` from `obj` onto `this`.
+      
+      @api public
+      @static
+      @param {Object} obj
+      @param {Array} keys
+
+    examples:
+      -
+        name: mergeOptions
+        example: |
+          By setting the keys on your prototype, you can create self-documenting classes. Take
+          the example below.
+          
+          ```js
+          var MyView = Marionette.ItemView.extend({
+            myViewOptions: ['color', 'size', 'country'],
+          
+            initialize: function(options) {
+              this.mergeOptions(options, this.myViewOptions),
+              console.log('These are my options:', this.color, this.size, this.country);
+            }
+          });
+          ```
+
   getOption:
     description: |
       Retrieve an object, function or other value from a target object or its `options`, with

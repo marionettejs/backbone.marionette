@@ -11,6 +11,7 @@ like `initialize` and `Backbone.Events`.
 * [initialize](#initialize)
 * [events](#events)
 * [Destroying An Object](#destroying-a-object)
+* [mergeOptions](#mergeoptions)
 * [getOption](#getoption)
 * [bindEntityEvents](#bindentityevents)
 * [Basic Use](#basic-use)
@@ -52,6 +53,13 @@ john.on('announce', function(message) {
 
 john.graduate();
 ```
+
+## mergeOptions
+
+Merge keys from the `options` object directly onto the instance. This is the preferred way to access options
+passed into the Object.
+
+More information at [mergeOptions](./marionette.functions.md#marionettemergeoptions)
 
 ### getOption
 Retrieve an object's attribute either directly from the object, or from the object's this.options, with this.options taking precedence.

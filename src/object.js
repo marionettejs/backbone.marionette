@@ -30,6 +30,9 @@ _.extend(Marionette.Object.prototype, Backbone.Events, {
   // methods if the method exists
   triggerMethod: Marionette.triggerMethod,
 
+  // A handy way to merge options onto the instance
+  mergeOptions: Marionette.mergeOptions,
+
   // Proxy `getOption` to enable getting options from this or this.options by name.
   getOption: Marionette.proxyGetOption,
 

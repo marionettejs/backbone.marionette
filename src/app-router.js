@@ -74,6 +74,8 @@ Marionette.AppRouter = Backbone.Router.extend({
     this.route(route, methodName, _.bind(method, controller));
   },
 
+  mergeOptions: Marionette.mergeOptions,
+
   // Proxy `getOption` to enable getting options from this or this.options by name.
   getOption: Marionette.proxyGetOption,
 

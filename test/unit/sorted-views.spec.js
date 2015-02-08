@@ -391,4 +391,86 @@ describe('collection/composite view sorting', function() {
       });
     });
   });
+
+  describe('when using `{ reorderOnSort: true }`', function () {
+    var texts = {
+      asOption: 'as an option',
+      onPrototype: 'on the prototype',
+      viewComparator: 'with viewComparator'
+    };
+
+    var getSpecTitle = function(options) {
+      return _.map(options, function (v, k) {
+        return texts[k];
+      }).join(' ');
+    };
+
+    var describeSpec = function (specOptions) {
+      describe(getSpecTitle(specOptions), function () {
+        beforeEach(function () {
+          var commonAttrs = {
+            childView: this.ChildView,
+            collection: this.collection
+          };
+
+          if (specOptions.viewComparator) {
+            commonAttrs.viewComparator = 'foo';
+          }
+
+          if (specOptions.asOption) {
+            this.collectionView = new this.CollectionView(_.extend({}, {
+              reorderOnSort: true
+            }, commonAttrs));
+          } else if (specOptions.onPrototype) {
+            var ReorderedCollectionView = this.CollectionView.extend({
+              reorderOnSort: true,
+              onReorder: this.sinon.spy(),
+              onBeforeReorder: this.sinon.spy()
+            });
+            this.collectionView = new ReorderedCollectionView(commonAttrs);
+          }
+
+          this.collectionView.render();
+          this.sinon.spy(this.collectionView, 'reorder');
+          this.sinon.spy(this.collectionView, 'render');
+          this.sinon.spy(this.collectionView, 'trigger');
+
+          var cmp = function (m) {
+            return m.get('bar');
+          };
+          if (specOptions.viewComparator) {
+            this.collection.comparator = 'foo';
+            this.collectionView.options.viewComparator = cmp;
+          } else {
+            this.collection.comparator = cmp;
+          }
+          this.collection.sort();
+        });
+
+        it('should call reorder instead of render', function () {
+          expect(this.collectionView.render).not.to.have.been.called;
+          expect(this.collectionView.reorder).to.have.been.calledOnce;
+        });
+
+        it('should reorder the DOM', function () {
+          expect(this.collectionView.$el).to.have.$text('321');
+        });
+
+        it('should triggerMethods events', function () {
+          var cv = this.collectionView;
+          if (specOptions.onPrototype) {
+            expect(cv.onBeforeReorder).calledBefore(cv.onReorder);
+          }
+          expect(cv.trigger).to.have.been.calledWith('before:reorder');
+          expect(cv.trigger).to.have.been.calledWith('reorder');
+          expect(cv.trigger).to.have.been.calledTwice;
+        });
+      });
+    };
+
+    describeSpec({ asOption: true });
+    describeSpec({ asOption: true, viewComparator: true });
+    describeSpec({ onPrototype: true });
+    describeSpec({ onPrototype: true, viewComparator: true });
+  });
 });

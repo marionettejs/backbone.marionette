@@ -350,6 +350,14 @@ describe('collection view', function() {
     });
   });
 
+  describe('when instantiating a view with a different sort option than in the view\'s definition', function () {
+    it('should maintain the instantiated sort option', function () {
+      this.CollectionView = Marionette.CollectionView.extend({ sort: false }); 
+      this.newCollectionView = new this.CollectionView({ sort: true });
+      expect(this.newCollectionView.getOption('sort')).to.equal(true);
+    });
+  });
+
   describe('when a model is added to the collection', function() {
     beforeEach(function() {
       this.collection = new Backbone.Collection();

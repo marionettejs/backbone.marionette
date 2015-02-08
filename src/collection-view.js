@@ -11,6 +11,9 @@ Marionette.CollectionView = Marionette.View.extend({
   // that are forwarded through the collectionview
   childViewEventPrefix: 'childview',
 
+  // flag for maintaining the sorted order of the collection
+  sort: true,
+
   // constructor
   // option to pass `{sort: false}` to prevent the `CollectionView` from
   // maintaining the sorted order of the collection.
@@ -19,10 +22,6 @@ Marionette.CollectionView = Marionette.View.extend({
   // option to pass `{comparator: compFunction()}` to allow the `CollectionView`
   // to use a custom sort order for the collection.
   constructor: function(options){
-    var initOptions = options || {};
-    if (_.isUndefined(this.sort)){
-      this.sort = _.isUndefined(initOptions.sort) ? true : initOptions.sort;
-    }
 
     this.once('render', this._initialEvents);
     this._initChildViewStorage();
@@ -30,6 +29,7 @@ Marionette.CollectionView = Marionette.View.extend({
     Marionette.View.apply(this, arguments);
 
     this.on('show', this._onShowCalled);
+
     this.initRenderBuffer();
   },
 
@@ -83,7 +83,7 @@ Marionette.CollectionView = Marionette.View.extend({
       this.listenTo(this.collection, 'remove', this._onCollectionRemove);
       this.listenTo(this.collection, 'reset', this.render);
 
-      if (this.sort) {
+      if (this.getOption('sort')) {
         this.listenTo(this.collection, 'sort', this._sortViews);
       }
     }
@@ -321,7 +321,7 @@ Marionette.CollectionView = Marionette.View.extend({
   // Internal method. This decrements or increments the indices of views after the
   // added/removed view to keep in sync with the collection.
   _updateIndices: function(view, increment, index) {
-    if (!this.sort) {
+    if (!this.getOption('sort')) {
       return;
     }
 
@@ -452,7 +452,7 @@ Marionette.CollectionView = Marionette.View.extend({
   // the correct position.
   _insertBefore: function(childView, index) {
     var currentView;
-    var findPosition = this.sort && (index < this.children.length - 1);
+    var findPosition = this.getOption('sort') && (index < this.children.length - 1);
     if (findPosition) {
       // Find the view after this one
       currentView = this.children.find(function (view) {

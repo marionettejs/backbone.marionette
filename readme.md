@@ -14,6 +14,8 @@
 
 ## About Marionette
 
+[![Join the chat at https://gitter.im/marionettejs/backbone.marionette](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/marionettejs/backbone.marionette?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
 Backbone.Marionette is a composite application library for Backbone.js that
 aims to simplify the construction of large scale JavaScript applications.
 It is a collection of common design and implementation patterns found in

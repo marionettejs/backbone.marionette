@@ -25,12 +25,15 @@ will provide features such as `onShow` callbacks, etc. Please see
   * [CollectionView's `childEvents`](#collectionviews-childevents)
   * [CollectionView's `buildChildView`](#collectionviews-buildchildview)
   * [CollectionView's `addChild`](#collectionviews-addchild)
+  * [CollectionView's `reorderOnSort`](#collectionviews-reorderonsort)
 * [CollectionView's `emptyView`](#collectionviews-emptyview)
   * [CollectionView's `getEmptyView`](#collectionviews-getemptyview)
   * [CollectionView's `emptyViewOptions`](#collectionviews-emptyviewoptions)
 * [Callback Methods](#callback-methods)
   * [onBeforeRender callback](#onbeforerender-callback)
   * [onRender callback](#onrender-callback)
+  * [onBeforeReorder callback](#onbeforereorder-callback)
+  * [onReorder callback](#onreorder-callback)
   * [onBeforeDestroy callback](#beforedestroy-callback)
   * [onDestroy callback](#ondestroy-callback)
   * [onBeforeAddChild callback](#onbeforeaddchild-callback)
@@ -40,6 +43,7 @@ will provide features such as `onShow` callbacks, etc. Please see
 * [CollectionView Events](#collectionview-events)
   * ["before:render" event](#beforerender-event)
   * ["render" event](#render-event)
+  * ["before:reorder" / "reorder" event](#beforereorder--reorder-event)
   * ["before:destroy" event](#beforedestroy-event)
   * ["destroy" / "destroy:collection" event](#destroy--destroycollection-event)
   * ["before:add:child" / "add:child" event](#beforeaddchild--addchild-event)
@@ -288,6 +292,16 @@ Backbone.Marionette.CollectionView.extend({
 });
 ```
 
+### CollectionView's `reorderOnSort`
+
+This option is useful when you have performance issues when you resort your `CollectionView`.
+Without this option, your `CollectionView` will be completely re-rendered, which can be
+costly if you have a large number of elements or if your `ChildView`s are complex. If this option
+is activated, when you sort your `Collection`, there will be no re-rendering, only the DOM nodes
+will be reordered. This can be a problem if your `ChildView`s use their collection's index
+in their rendering. In this case, you cannot use this option as you need to re-render each
+`ChildView`.
+
 ## CollectionView's `emptyView`
 
 When a collection has no children, and you need to render a view other than
@@ -386,6 +400,32 @@ with the view's `el` after it has been rendered:
 ```js
 Backbone.Marionette.CollectionView.extend({
   onRender: function(){
+    // do stuff here
+  }
+});
+```
+
+### onBeforeReorder callback
+
+If `reorderOnSort` is set to `true`, `onBeforeReorder` will be called just
+prior to reordering the collection view.
+
+```js
+Backbone.Marionette.CollectionView.extend({
+  onBeforeReorder: function(){
+    // do stuff here
+  }
+});
+```
+
+### onReorder callback
+
+If `reorderOnSort` is set to `true`, after the view has been reordered,
+a `onReorder` method will be called.
+
+```js
+Backbone.Marionette.CollectionView.extend({
+  onReorder: function(){
     // do stuff here
   }
 });
@@ -518,6 +558,31 @@ myView.on("collection:rendered", function(){
 });
 
 myView.render();
+```
+
+### "before:reorder" / "reorder" events
+
+When `reorderOnSort` is set to `true`, these events are fired
+respectfully just prior/just after the reordering of the collection.
+
+```js
+var MyView = Backbone.Marionette.CollectionView.extend({...});
+
+var myCol = new Backbone.Collection({ comparator: ... })
+var myView = new MyView({ reorderOnSort: true });
+myView.render();
+myCol.comparator = function () { return this.get('foo'); };
+
+myView.on("before:reorder", function(){
+  alert("the collection view is about to be reordered");
+});
+
+myView.on("reorder", function(){
+  alert("the collection view has been reordered following its collection");
+});
+
+myCol.sort()
+
 ```
 
 ### "before:destroy" event

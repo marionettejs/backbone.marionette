@@ -30,7 +30,7 @@ Marionette.CompositeView = Marionette.CollectionView.extend({
       this.listenTo(this.collection, 'remove', this._onCollectionRemove);
       this.listenTo(this.collection, 'reset', this._renderChildren);
 
-      if (this.sort) {
+      if (this.getOption('sort')) {
         this.listenTo(this.collection, 'sort', this._sortViews);
       }
     }

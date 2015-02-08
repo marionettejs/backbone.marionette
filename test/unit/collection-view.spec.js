@@ -935,7 +935,6 @@ describe('collection view', function() {
       this.ChildView = Backbone.Marionette.View.extend({
         onBeforeShow: function() {},
         onShow: function() {},
-        onDomRefresh: function() {},
         onRender: function() {},
         template: _.template('<%= foo %>')
       });
@@ -947,7 +946,6 @@ describe('collection view', function() {
 
       this.sinon.spy(this.ChildView.prototype, 'onBeforeShow');
       this.sinon.spy(this.ChildView.prototype, 'onShow');
-      this.sinon.spy(this.ChildView.prototype, 'onDomRefresh');
 
       this.model1 = new Backbone.Model({ foo: 1 });
       this.model2 = new Backbone.Model({ foo: 2 });
@@ -986,10 +984,6 @@ describe('collection view', function() {
 
     it('should call the childs "onShow" method with itself as the context', function() {
       expect(this.ChildView.prototype.onShow).to.have.been.calledOn(this.view);
-    });
-
-    it('should call the childs "onDomRefresh" method with itself as the context', function() {
-      expect(this.ChildView.prototype.onDomRefresh).to.have.been.called;
     });
 
     it('should call "getChildView" with the new model', function() {

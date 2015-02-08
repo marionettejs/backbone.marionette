@@ -527,48 +527,6 @@ describe('layoutView', function() {
     });
   });
 
-  describe('childView get onDomRefresh from parent', function() {
-    beforeEach(function() {
-      var suite = this;
-      this.setFixtures('<div id="james-kyle"></div>');
-      this.spy = this.sinon.spy();
-      this.spy2 = this.sinon.spy();
-
-      this.View = Marionette.View.extend({
-        template: _.template('<yes><my><lord></lord></my></yes>'),
-        onDomRefresh: this.spy2
-      });
-
-      this.LucasArts = Marionette.CollectionView.extend({
-        onDomRefresh: this.spy,
-        childView: this.View
-      });
-
-      this.Layout = Marionette.View.extend({
-        template: _.template('<sam class="and-max"></sam>'),
-        regions: {
-          'sam': '.and-max'
-        },
-
-        onShow: function() {
-          this.getRegion('sam').show(new suite.LucasArts({collection: new Backbone.Collection([{}])}));
-        }
-      });
-
-      this.region = new Marionette.Region({el: "#james-kyle"});
-
-      this.region.show(new this.Layout());
-    });
-
-    it('should call onDomRefresh on region views when shown within the parents onShow', function() {
-      expect(this.spy).to.have.been.called;
-    });
-
-    it('should call onDomRefresh on region view children when shown within the parents onShow', function() {
-      expect(this.spy2).to.have.been.called;
-    });
-  });
-
   describe("when a layout has regions", function () {
     beforeEach(function () {
       this.layout = new this.View();

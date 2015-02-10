@@ -362,6 +362,14 @@ describe('layoutView', function() {
       expect(this.region.$el.parent()[0]).to.equal(this.layoutView.el);
     });
 
+    it('triggers "before:render" before emptying the regions', function() {
+      var cb = function() {
+        expect(this.region.$el).to.exist;
+      };
+      this.layoutView.listenTo(this.layoutView, 'before:render', _.bind(cb, this));
+      this.layoutView.render();
+    });
+
     it('should call empty twice', function() {
       expect(this.region.empty).to.have.been.calledThrice;
     });

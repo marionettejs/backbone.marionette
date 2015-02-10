@@ -32,6 +32,8 @@ Marionette.LayoutView = Marionette.ItemView.extend({
   render: function() {
     this._ensureViewIsIntact();
 
+    this.triggerMethod('before:render', this);
+
     if (this._firstRender) {
       // if this is the first render, don't do anything to
       // reset the regions
@@ -42,7 +44,9 @@ Marionette.LayoutView = Marionette.ItemView.extend({
       this._reInitializeRegions();
     }
 
-    return Marionette.ItemView.prototype.render.apply(this, arguments);
+    this._renderItem();
+
+    return this;
   },
 
   // Handle destroying regions, and then destroy the view itself.

@@ -59,6 +59,8 @@ Marionette.View = Marionette.AbstractView.extend({
   render: function() {
     this._ensureViewIsIntact();
 
+    this.triggerMethod('before:render', this);
+
     if (this._firstRender) {
       // if this is the first render, don't do anything to
       // reset the regions
@@ -68,8 +70,6 @@ Marionette.View = Marionette.AbstractView.extend({
       // re-initialize the `el` for each region
       this._reInitializeRegions();
     }
-
-    this.triggerMethod('before:render', this);
 
     this._renderTemplate();
     this.isRendered = true;

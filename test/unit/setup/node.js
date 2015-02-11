@@ -43,6 +43,7 @@ requireHelper('trigger-method');
 requireHelper('helpers');
 requireHelper('dom-refresh');
 requireHelper('object');
+requireHelper('features');
 requireHelper('controller');
 requireHelper('app-router');
 requireHelper('application');

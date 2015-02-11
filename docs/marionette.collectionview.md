@@ -245,7 +245,7 @@ var ChildView = new Marionette.ItemView.extend({
   showMessage: function () {
     console.log('The button was clicked.');
 
-    this.trigger('show:message');
+    this.triggerMethod('show:message');
   }
 });
 

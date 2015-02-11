@@ -271,15 +271,42 @@ Marionette.View = Backbone.View.extend({
   // import the `triggerMethod` to trigger events with corresponding
   // methods if the method exists
   triggerMethod: function() {
+    var ret = Marionette._triggerMethod(this, arguments);
+
+    this._triggerEventOnBehaviors(arguments);
+    this._triggerEventOnParentLayout(arguments[0], _.rest(arguments));
+
+    return ret;
+  },
+
+  _triggerEventOnBehaviors: function(args) {
     var triggerMethod = Marionette._triggerMethod;
-    var ret = triggerMethod(this, arguments);
     var behaviors = this._behaviors;
     // Use good ol' for as this is a very hot function
     for (var i = 0, length = behaviors && behaviors.length; i < length; i++) {
-      triggerMethod(behaviors[i], arguments);
+      triggerMethod(behaviors[i], args);
+    }
+  },
+
+  _triggerEventOnParentLayout: function(eventName, args) {
+    var layoutView = this._parentLayoutView();
+    if (!layoutView) {
+      return;
     }
 
-    return ret;
+    // invoke triggerMethod on parent view
+    var eventPrefix = Marionette.getOption(layoutView, 'childViewEventPrefix');
+    var prefixedEventName = eventPrefix + ':' + eventName;
+
+    Marionette._triggerMethod(layoutView, [prefixedEventName, this].concat(args));
+
+    // call the parent view's childEvents handler
+    var childEvents = Marionette.getOption(layoutView, 'childEvents');
+    var normalizedChildEvents = layoutView.normalizeMethods(childEvents);
+
+    if (!!normalizedChildEvents && _.isFunction(normalizedChildEvents[eventName])) {
+      normalizedChildEvents[eventName].apply(layoutView, [this].concat(args));
+    }
   },
 
   // This method returns any views that are immediate
@@ -298,6 +325,28 @@ Marionette.View = Backbone.View.extend({
       if (!view._getNestedViews) { return memo; }
       return memo.concat(view._getNestedViews());
     }, children);
+  },
+
+  // Internal utility for building an ancestor
+  // view tree list.
+  _getAncestors: function() {
+    var ancestors = [];
+    var parent  = this._parent;
+
+    while (parent) {
+      ancestors.push(parent);
+      parent = parent._parent;
+    }
+
+    return ancestors;
+  },
+
+  // Returns the containing parent view.
+  _parentLayoutView: function() {
+    var ancestors = this._getAncestors();
+    return _.find(ancestors, function(parent) {
+      return parent instanceof Marionette.LayoutView;
+    });
   },
 
   // Imports the "normalizeMethods" to transform hashes of

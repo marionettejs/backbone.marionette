@@ -33,6 +33,7 @@
   // Get the Deferred creator for later use
   Marionette.Deferred = Backbone.$.Deferred;
 
+  // @include ../features.js
   // @include ../helpers.js
   // @include ../trigger-method.js
   // @include ../dom-refresh.js

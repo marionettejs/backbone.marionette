@@ -53,11 +53,7 @@ Marionette.ItemView = Marionette.View.extend({
 
     this.triggerMethod('before:render', this);
 
-    this._renderTemplate();
-    this.isRendered = true;
-    this.bindUIElements();
-
-    this.triggerMethod('render', this);
+    this._renderItem();
 
     return this;
   },
@@ -89,6 +85,14 @@ Marionette.ItemView = Marionette.View.extend({
     this.attachElContent(html);
 
     return this;
+  },
+
+  _renderItem: function() {
+    this._renderTemplate();
+    this.isRendered = true;
+    this.bindUIElements();
+
+    this.triggerMethod('render', this);
   },
 
   // Attaches the content of a given view.

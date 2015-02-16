@@ -520,16 +520,16 @@ describe('Behaviors', function() {
       expect(this.handleCollectionResetStub).to.have.been.calledOnce.and.calledOn(this.fooBehavior);
     });
 
-    it('should unbind model events on view undelegate', function() {
+    it('should unbind model events on view undelegateEntityEvents', function() {
       this.view = new this.ItemView({ model: this.model });
-      this.view.undelegateEvents();
+      this.view.undelegateEntityEvents();
       this.model.set('foo', 'doge');
       expect(this.handleModelFooChangeStub).not.to.have.been.called;
     });
 
-    it('should unbind collection events on view undelegate', function() {
+    it('should unbind collection events on view undelegateEntityEvents', function() {
       this.view = new this.CollectionView({ collection: this.collection });
-      this.view.undelegateEvents();
+      this.view.undelegateEntityEvents();
       this.collection.reset();
       expect(this.handleCollectionResetStub).not.to.have.been.called;
     });
@@ -678,6 +678,7 @@ describe('Behaviors', function() {
       });
 
       this.sinon.spy(this.view, 'undelegateEvents');
+      this.sinon.spy(this.view, 'undelegateEntityEvents');
     });
 
     it('should call initialize on grouped behaviors', function() {
@@ -701,6 +702,11 @@ describe('Behaviors', function() {
     it('should call undelegateEvents once', function() {
       this.view.undelegateEvents();
       expect(this.view.undelegateEvents).to.have.been.calledOnce;
+    });
+
+    it('should call undelegateEntityEvents once', function() {
+      this.view.undelegateEntityEvents();
+      expect(this.view.undelegateEntityEvents).to.have.been.calledOnce;
     });
 
     it('should proxy modelEvents to grouped behaviors', function() {
@@ -766,6 +772,18 @@ describe('Behaviors', function() {
       this.sinon.spy(this.view, 'undelegateEvents');
       this.view.undelegateEvents({});
       expect(this.view.undelegateEvents).to.have.returned(this.view);
+    });
+
+    it('delegateEntityEvents should return the view', function() {
+      this.sinon.spy(this.view, 'delegateEntityEvents');
+      this.view.delegateEntityEvents();
+      expect(this.view.delegateEntityEvents).to.have.returned(this.view);
+    });
+
+    it('undelegateEntityEvents should return the view', function() {
+      this.sinon.spy(this.view, 'undelegateEntityEvents');
+      this.view.undelegateEntityEvents({});
+      expect(this.view.undelegateEntityEvents).to.have.returned(this.view);
     });
   });
 

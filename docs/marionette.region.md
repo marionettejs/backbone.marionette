@@ -307,6 +307,20 @@ myRegion.triggerBeforeAttach = false;
 myRegion.show(myView, {triggerBeforeAttach: true});
 ```
 
+#### `renderView`
+
+In order to add conditional logic when rendering a view you can override the `renderView` method. This could be useful if you don't want the region to re-render views that aren't destroyed. By default this method will call `view.render`.
+
+```js
+
+var CachingRegion = Marionette.Region.extend({
+  shouldDestroyView(view, options) { return false; },
+  renderView(view, options) {
+    if (!view.isRendered) { view.render(); }
+  }
+});
+```
+
 ### Checking whether a region is showing a view
 
 If you wish to check whether a region has a view, you can use the `hasView`

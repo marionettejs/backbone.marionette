@@ -87,7 +87,8 @@ Marionette.Region = Marionette.Object.extend({
       // to the currentView since once a view has been destroyed
       // we can not reuse it.
       view.once('destroy', this.empty, this);
-      view.render();
+
+      this.renderView(view, options);
 
       view._parent = this;
 
@@ -137,6 +138,10 @@ Marionette.Region = Marionette.Object.extend({
     }
 
     return this;
+  },
+
+  renderView: function(view, options) {
+    view.render();
   },
 
   triggerBeforeAttach: true,

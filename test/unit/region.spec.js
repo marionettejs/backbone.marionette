@@ -103,9 +103,9 @@ describe('region', function() {
         });
 
         it('should not render the view', function() {
-          sinon.spy(this.myView, 'render');
+          this.sinon.spy(this.myRegion, 'renderView');
           this.myRegion.show(this.myView);
-          expect(this.myView.render).not.to.have.been.called;
+          expect(this.myRegion.renderView).not.to.have.been.called;
         });
       });
     });
@@ -561,6 +561,7 @@ describe('region', function() {
 
       this.sinon.spy(this.view, 'destroy');
       this.sinon.spy(this.myRegion, 'attachHtml');
+      this.sinon.spy(this.myRegion, 'renderView');
       this.sinon.spy(this.view, 'render');
       this.myRegion.show(this.view);
     });
@@ -573,8 +574,8 @@ describe('region', function() {
       expect(this.myRegion.attachHtml).not.to.have.been.calledWith(this.view);
     });
 
-    it('should not call "render" on the view', function() {
-      expect(this.view.render).not.to.have.been.called;
+    it('should not call "renderView"', function() {
+      expect(this.myRegion.renderView).not.to.have.been.called;
     });
   });
 
@@ -601,6 +602,7 @@ describe('region', function() {
 
       this.sinon.spy(this.view, 'destroy');
       this.sinon.spy(this.myRegion, 'attachHtml');
+      this.sinon.spy(this.myRegion, 'renderView');
       this.sinon.spy(this.view, 'render');
       this.myRegion.show(this.view, {forceShow: true});
     });
@@ -613,8 +615,8 @@ describe('region', function() {
       expect(this.myRegion.attachHtml).to.have.been.calledWith(this.view);
     });
 
-    it('should call "render" on the view', function() {
-      expect(this.view.render).to.have.been.called;
+    it('should call "renderView"', function() {
+      expect(this.myRegion.renderView).to.have.been.calledOnce.and.calledWith(this.view, {forceShow: true});
     });
   });
 
@@ -853,10 +855,12 @@ describe('region', function() {
         el: '#foo',
         currentView: this.view
       });
+
+      this.sinon.spy(this.region, 'renderView');
     });
 
     it('should not render the view', function() {
-      expect(this.view.render).not.to.have.been.called;
+      expect(this.region.renderView).not.to.have.been.called;
     });
 
     it('should not `show` the view', function() {
@@ -881,12 +885,13 @@ describe('region', function() {
         el: '#foo'
       });
 
+      this.sinon.spy(this.region, 'renderView');
       this.sinon.spy(this.region, 'attachView');
       this.region.attachView(this.view);
     });
 
     it('should not render the view', function() {
-      expect(this.view.render).not.to.have.been.called;
+      expect(this.region.renderView).not.to.have.been.called;
     });
 
     it('should not `show` the view', function() {
@@ -1049,6 +1054,27 @@ describe('region', function() {
     it('should throw an error', function() {
       var errorMessage = 'The view passed is undefined and therefore invalid. You must pass a view instance to show.';
       expect(this.insertUndefined).to.throw(errorMessage);
+    });
+  });
+
+  describe('when calling "renderView"', function() {
+    beforeEach(function() {
+      this.region = new Backbone.Marionette.Region({
+        el: '#region'
+      });
+
+      this.View = Backbone.Marionette.View.extend({
+        template: _.template('')
+      });
+
+      this.view = new this.View();
+      this.sinon.spy(this.view, 'render');
+
+      this.region.renderView(this.view);
+    });
+
+    it('should call "render" on the view', function() {
+      expect(this.view.render).to.have.been.calledOnce;
     });
   });
 });

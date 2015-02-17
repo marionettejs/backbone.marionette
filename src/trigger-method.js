@@ -6,7 +6,7 @@
 
 Marionette._triggerMethod = (function() {
   // split the event name on the ":"
-  var splitter = /(^|:)(\w)/gi;
+  var splitter = /(^|:|_)(\w)/gi;
 
   // take the event section ("section1:section2:section3")
   // and turn it in to uppercase name

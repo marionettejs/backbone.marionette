@@ -102,6 +102,7 @@ functions:
       
       @api public
       @param {} containerView
+      @param {} childView
 
     examples:
       

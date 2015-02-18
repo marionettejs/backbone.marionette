@@ -786,12 +786,15 @@ Backbone.Marionette.CollectionView.extend({
       // buffering happens on reset events and initial renders
       // in order to reduce the number of inserts into the
       // document, which are expensive.
-      collectionView.elBuffer.appendChild(childView.el);
+      collectionView._bufferedChildren.splice(index, 0, childView);
     }
     else {
-      // If we've already rendered the main collection, just
-      // append the new children directly into the element.
-      collectionView.$el.append(childView.el);
+      // If we've already rendered the main collection, append
+      // the new child into the correct order if we need to. Otherwise
+      // append to the end.
+      if (!collectionView._insertBefore(childView, index)){
+        collectionView._insertAfter(childView);
+      }
     }
   },
 

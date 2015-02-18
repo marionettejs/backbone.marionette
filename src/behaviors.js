@@ -37,23 +37,15 @@ Marionette.Behaviors = (function(Marionette, _) {
 
     behaviorEvents: function(behaviorEvents, behaviors) {
       var _behaviorsEvents = {};
-      var viewUI = this._uiBindings || _.result(this, 'ui');
 
       _.each(behaviors, function(b, i) {
         var _events = {};
         var behaviorEvents = _.clone(_.result(b, 'events')) || {};
-        var behaviorUI = b._uiBindings || _.result(b, 'ui');
 
-        // Construct an internal UI hash first using
-        // the views UI hash and then the behaviors UI hash.
-        // This allows the user to use UI hash elements
-        // defined in the parent view as well as those
-        // defined in the given behavior.
-        var ui = _.extend({}, viewUI, behaviorUI);
 
         // Normalize behavior events hash to allow
         // a user to use the @ui. syntax.
-        behaviorEvents = Marionette.normalizeUIKeys(behaviorEvents, ui);
+        behaviorEvents = Marionette.normalizeUIKeys(behaviorEvents, getBehaviorsUI(b));
 
         var j = 0;
         _.each(behaviorEvents, function(behaviour, key) {
@@ -140,7 +132,6 @@ Marionette.Behaviors = (function(Marionette, _) {
   // for views
   function BehaviorTriggersBuilder(view, behaviors) {
     this._view      = view;
-    this._viewUI    = _.result(view, 'ui');
     this._behaviors = behaviors;
     this._triggers  = {};
   }
@@ -154,10 +145,9 @@ Marionette.Behaviors = (function(Marionette, _) {
 
     // Internal method to build all trigger handlers for a given behavior
     _buildTriggerHandlersForBehavior: function(behavior, i) {
-      var ui = _.extend({}, this._viewUI, _.result(behavior, 'ui'));
       var triggersHash = _.clone(_.result(behavior, 'triggers')) || {};
 
-      triggersHash = Marionette.normalizeUIKeys(triggersHash, ui);
+      triggersHash = Marionette.normalizeUIKeys(triggersHash, getBehaviorsUI(behavior));
 
       _.each(triggersHash, _.bind(this._setHandlerForBehavior, this, behavior, i));
     },
@@ -173,6 +163,10 @@ Marionette.Behaviors = (function(Marionette, _) {
       this._triggers[triggerKey] = this._view._buildViewTrigger(eventName);
     }
   });
+
+  function getBehaviorsUI(behavior) {
+    return behavior._uiBindings || behavior.ui;
+  }
 
   return Behaviors;
 

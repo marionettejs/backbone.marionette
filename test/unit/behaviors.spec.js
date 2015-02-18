@@ -276,6 +276,9 @@ describe('Behaviors', function() {
             'click @ui.foo': 'onFooClick',
             'click @ui.bar': 'onBarClick'
           },
+
+          testViewUI: function() { this.ui.bar.trigger('test'); },
+          testBehaviorUI: function() { this.ui.foo.trigger('test'); },
           onRender     : this.onRenderStub,
           onBeforeShow : this.onBeforeShowStub,
           onShow       : this.onShowStub,
@@ -342,6 +345,14 @@ describe('Behaviors', function() {
 
       it('should set the behavior UI element', function() {
         expect(this.onRenderStub).to.have.been.calledOnce;
+      });
+
+      it('should make the view\'s ui hash available to callbacks', function() {
+        expect(this.fooBehavior.testViewUI.bind(this.fooBehavior)).to.not.throw(Error);
+      });
+
+      it('should make the behavior\'s ui hash available to callbacks', function() {
+        expect(this.fooBehavior.testBehaviorUI.bind(this.fooBehavior)).to.not.throw(Error);
       });
 
       describe("the $el", function() {

@@ -273,3 +273,21 @@ Marionette.Behavior.extend({
 	}
 });
 ```
+
+### ui
+
+Behaviors can have their own ui hash, which will be mixed into the ui hash of its associated view instance.
+ui elements defined on either the behavior or the view will be made available within events, and triggers.  They
+also are attached directly to the behavior and can be accessed within behavior methods as `this.ui`.
+
+```js
+Marionette.Behavior.extend({
+    ui: {
+        'foo' : 'li.foo'
+    },
+
+    doStuff: function() {
+        this.ui.foo.trigger('something');
+    }
+})
+```

@@ -191,7 +191,9 @@ describe('app router', function() {
   describe('when an app route is added manually', function() {
     beforeEach(function() {
       this.controller = { foo: this.sinon.stub() };
-      this.Router = Marionette.AppRouter.extend();
+      this.Router = Marionette.AppRouter.extend({
+        onRoute: this.sinon.stub()
+      });
       this.router = new this.Router({ controller: this.controller });
 
       Backbone.history.start();
@@ -203,6 +205,13 @@ describe('app router', function() {
     it('should fire the route', function() {
       expect(this.controller.foo).to.have.been.calledOnce;
     });
+
+    it('should call the onRoute method for the route, passing the name of the route and the matched route', function() {
+      expect(this.router.onRoute).to.have.been.calledOnce;
+      // Needs to be written this way as Backbone > 1.0 will pass an additional null param
+      expect(this.router.onRoute.lastCall.args[0]).to.equal('foo');
+      expect(this.router.onRoute.lastCall.args[1]).to.equal('foo-route');
+    });
   });
 
   describe('when app routes are provided in the constructor', function() {
@@ -211,16 +220,16 @@ describe('app router', function() {
         foo: this.sinon.stub(),
         bar: this.sinon.stub()
       };
-      this.AppRouter = Marionette.AppRouter.extend({
+      this.Router = Marionette.AppRouter.extend({
         appRoutes: { 'foo-route': 'foo' }
       });
-      this.appRouter = new this.AppRouter({
+      this.router = new this.Router({
         controller: this.controller,
         appRoutes: { 'bar-route': 'bar' }
       });
       Backbone.history.start();
-      this.appRouter.navigate('foo-route', true);
-      this.appRouter.navigate('bar-route', true);
+      this.router.navigate('foo-route', true);
+      this.router.navigate('bar-route', true);
     });
 
     it('should override the configured routes and use the constructor param', function() {
@@ -233,15 +242,15 @@ describe('app router', function() {
     beforeEach(function() {
       this.fooParam = 'bar';
       this.controller = { foo: this.sinon.stub() };
-      this.AppRouter = Marionette.AppRouter.extend({
+      this.Router = Marionette.AppRouter.extend({
         onRoute: this.sinon.stub()
       });
-      this.appRouter = new this.AppRouter({
+      this.router = new this.Router({
         controller: this.controller,
         appRoutes: { 'foo-route/:id': 'foo' }
       });
       Backbone.history.start();
-      this.appRouter.navigate('foo-route/' + this.fooParam, true);
+      this.router.navigate('foo-route/' + this.fooParam, true);
     });
 
     it('should call the configured method with parameters', function() {
@@ -249,21 +258,21 @@ describe('app router', function() {
     });
 
     it('should call the onRoute method for the route, passing the name of the route, the matched route, and the params', function() {
-      expect(this.appRouter.onRoute).to.have.been.calledOnce;
+      expect(this.router.onRoute).to.have.been.calledOnce;
       // Needs to be written this way as Backbone > 1.0 will pass an additional null param
-      expect(this.appRouter.onRoute.lastCall.args[0]).to.equal('foo');
-      expect(this.appRouter.onRoute.lastCall.args[1]).to.equal('foo-route/:id');
-      expect(this.appRouter.onRoute.lastCall.args[2][0]).to.equal(this.fooParam);
+      expect(this.router.onRoute.lastCall.args[0]).to.equal('foo');
+      expect(this.router.onRoute.lastCall.args[1]).to.equal('foo-route/:id');
+      expect(this.router.onRoute.lastCall.args[2][0]).to.equal(this.fooParam);
     });
     
     it('should support getOption inside initialize', function() {
       var fooParam = '';
-      this.AppRouter = Marionette.AppRouter.extend({
+      this.Router = Marionette.AppRouter.extend({
         initialize : function(){
           fooParam = this.getOption('fooParam');
         }
       });
-      this.appRouter = new this.AppRouter({ fooParam : 'bar' });
+      this.router = new this.Router({ fooParam : 'bar' });
       expect(fooParam).to.equal('bar');
     });
   });

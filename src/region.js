@@ -7,7 +7,7 @@
 // http://lostechies.com/derickbailey/2011/12/12/composite-js-apps-regions-and-region-managers/
 
 Marionette.Region = Marionette.Object.extend({
-  constructor: function (options) {
+  constructor: function(options) {
 
     // set options temporarily so that we can get `el`.
     // options will be overriden by Object.constructor
@@ -37,7 +37,7 @@ Marionette.Region = Marionette.Object.extend({
   // the old view being destroyed on show.
   // The `forceShow` option can be used to force a view to be
   // re-rendered if it's already shown in the region.
-  show: function(view, options){
+  show: function(view, options) {
     if (!this._ensureElement()) {
       return;
     }
@@ -153,7 +153,7 @@ Marionette.Region = Marionette.Object.extend({
     return _.union([view], _.result(view, '_getNestedViews') || []);
   },
 
-  _ensureElement: function(){
+  _ensureElement: function() {
     if (!_.isObject(this.el)) {
       this.$el = this.getEl(this.el);
       this.el = this.$el[0];
@@ -315,7 +315,7 @@ Marionette.Region = Marionette.Object.extend({
 
   // Build the region from a string selector like '#foo-region'
   _buildRegionFromSelector: function(selector, DefaultRegionClass) {
-    return new DefaultRegionClass({ el: selector });
+    return new DefaultRegionClass({el: selector});
   },
 
   // Build the region from a configuration object

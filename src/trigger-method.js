@@ -3,7 +3,6 @@
 // Trigger Method
 // --------------
 
-
 Marionette._triggerMethod = (function() {
   // split the event name on the ":"
   var splitter = /(^|:)(\w)/gi;

@@ -93,8 +93,8 @@ describe('view ui elements', function() {
     });
   });
 
-  describe("when calling delegateEvents", function () {
-    beforeEach(function () {
+  describe('when calling delegateEvents', function() {
+    beforeEach(function() {
       this.uiHash = {'foo': '#foo'};
       this.eventsHash = {
         'click @ui.foo': 'bar',
@@ -113,7 +113,7 @@ describe('view ui elements', function() {
       this.view.delegateEvents();
     });
 
-    it("the events should be re-normalised valid ui references", function() {
+    it('the events should be re-normalised valid ui references', function() {
       expect(this.view.events).to.deep.equal({
         'click #foo': 'bar',
         'mouseout @ui#foo': 'baz'

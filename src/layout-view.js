@@ -54,7 +54,7 @@ Marionette.LayoutView = Marionette.ItemView.extend({
     if (this.isDestroyed) { return this; }
     // #2134: remove parent element before destroying the child views, so
     // removing the child views doesn't retrigger repaints
-    if(this.getOption('destroyImmediate') === true) {
+    if (this.getOption('destroyImmediate') === true) {
       this.$el.remove();
     }
     this.regionManager.destroy();
@@ -96,7 +96,7 @@ Marionette.LayoutView = Marionette.ItemView.extend({
   },
 
   // Get all regions
-  getRegions: function(){
+  getRegions: function() {
     return this.regionManager.getRegions();
   },
 

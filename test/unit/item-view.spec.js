@@ -99,7 +99,7 @@ describe('item view', function() {
       expect(this.attachElContentStub).to.have.been.calledOnce.and.calledWith(this.template);
     });
 
-    it("should pass template stub, data and view instance to `Marionette.Renderer.Render`", function(){
+    it('should pass template stub, data and view instance to `Marionette.Renderer.Render`', function() {
       expect(Marionette.Renderer.render).to.have.been.calledWith(this.templateStub, {}, this.itemView);
     });
   });
@@ -258,11 +258,11 @@ describe('item view', function() {
       expect(this.stopListeningSpy).to.have.been.calledOnce;
     });
 
-    it('should trigger "before:destroy"', function(){
+    it('should trigger "before:destroy"', function() {
       expect(this.triggerSpy).to.have.been.calledWith('before:destroy');
     });
 
-    it('should trigger "destroy"', function(){
+    it('should trigger "destroy"', function() {
       expect(this.triggerSpy).to.have.been.calledWith('destroy');
     });
 
@@ -278,7 +278,7 @@ describe('item view', function() {
       expect(this.view.destroy).to.have.returned(this.view);
     });
 
-    it('should not be destroyed when "onBeforeDestroy" is called', function () {
+    it('should not be destroyed when "onBeforeDestroy" is called', function() {
       expect(this.onBeforeDestroyStub.lastCall.returnValue.isDestroyed).not.to.be.ok;
     });
 
@@ -332,18 +332,18 @@ describe('item view', function() {
     });
   });
 
-  describe("when serializing view data", function(){
-    beforeEach(function(){
-      this.modelData = { foo: "bar" };
-      this.collectionData = [ { foo: "bar" }, { foo: "baz" } ];
+  describe('when serializing view data', function() {
+    beforeEach(function() {
+      this.modelData = {foo: 'bar'};
+      this.collectionData = [{foo: 'bar'}, {foo: 'baz'}];
 
       this.itemView = new Marionette.ItemView();
-      this.sinon.spy(this.itemView, "serializeModel");
-      this.sinon.spy(this.itemView, "serializeCollection");
+      this.sinon.spy(this.itemView, 'serializeModel');
+      this.sinon.spy(this.itemView, 'serializeCollection');
     });
 
-    it("should return an empty object without data", function(){
-      expect(this.itemView.serializeData()).to.deep.equal({ });
+    it('should return an empty object without data', function() {
+      expect(this.itemView.serializeData()).to.deep.equal({});
     });
 
     describe('and the view has a model', function() {
@@ -352,7 +352,7 @@ describe('item view', function() {
         this.itemView.serializeData();
       });
 
-      it("should call serializeModel", function() {
+      it('should call serializeModel', function() {
         expect(this.itemView.serializeModel).to.have.been.calledOnce;
       });
 
@@ -367,7 +367,7 @@ describe('item view', function() {
         this.itemView.serializeData(1, 2, 3);
       });
 
-      it("should call serializeCollection", function(){
+      it('should call serializeCollection', function() {
         expect(this.itemView.serializeCollection).to.have.been.calledOnce;
       });
 
@@ -375,7 +375,7 @@ describe('item view', function() {
         expect(this.itemView.serializeCollection).to.have.been.calledWith(this.itemView.collection, 1, 2, 3);
       });
 
-      it("should not call serializeModel", function() {
+      it('should not call serializeModel', function() {
         expect(this.itemView.serializeModel).to.not.have.been.called;
       });
     });
@@ -387,7 +387,7 @@ describe('item view', function() {
         this.itemView.serializeData(1, 2, 3);
       });
 
-      it("should call serializeModel", function() {
+      it('should call serializeModel', function() {
         expect(this.itemView.serializeModel).to.have.been.calledOnce;
       });
 
@@ -401,30 +401,30 @@ describe('item view', function() {
     });
   });
 
-  describe("when serializing a collection", function(){
-    beforeEach(function(){
-      this.collectionData = [ { foo: "bar" }, { foo: "baz" } ];
+  describe('when serializing a collection', function() {
+    beforeEach(function() {
+      this.collectionData = [{foo: 'bar'}, {foo: 'baz'}];
       this.itemView = new Marionette.ItemView({
         collection: new Backbone.Collection(this.collectionData)
       });
     });
 
-    it("should serialize to an items attribute", function(){
+    it('should serialize to an items attribute', function() {
       expect(this.itemView.serializeData().items).to.be.defined;
     });
 
-    it("should serialize all models", function(){
+    it('should serialize all models', function() {
       expect(this.itemView.serializeData().items).to.deep.equal(this.collectionData);
     });
   });
 
-  describe("has a valid inheritance chain back to Marionette.View", function(){
-    beforeEach(function(){
-      this.constructor = this.sinon.spy(Marionette, "View");
+  describe('has a valid inheritance chain back to Marionette.View', function() {
+    beforeEach(function() {
+      this.constructor = this.sinon.spy(Marionette, 'View');
       this.collectionView = new Marionette.ItemView();
     });
 
-    it("calls the parent Marionette.View's constructor function on instantiation", function(){
+    it('calls the parent Marionette.View\'s constructor function on instantiation', function() {
       expect(this.constructor).to.have.been.calledOnce;
     });
   });

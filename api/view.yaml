@@ -50,6 +50,7 @@ functions:
   
   destroy: |
     @api public
+    @returns {Marionette.View} The current view.
   
   bindUIElements: |
     @api public

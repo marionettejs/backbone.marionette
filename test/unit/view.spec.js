@@ -46,7 +46,8 @@ describe('base view', function() {
 
       this.view = new Marionette.View();
 
-      this.removeSpy = this.sinon.spy(this.view, 'remove');
+      this.sinon.spy(this.view, 'remove');
+      this.sinon.spy(this.view, 'destroy');
 
       this.onDestroyStub = this.sinon.stub();
       this.view.onDestroy = this.onDestroyStub;
@@ -66,11 +67,25 @@ describe('base view', function() {
     });
 
     it('should remove the view', function() {
-      expect(this.removeSpy).to.have.been.calledOnce;
+      expect(this.view.remove).to.have.been.calledOnce;
     });
 
     it('should set the view isDestroyed to true', function() {
       expect(this.view).to.be.have.property('isDestroyed', true);
+    });
+
+    it('should return the View', function() {
+      expect(this.view.destroy).to.have.returned(this.view);
+    });
+
+    describe('and it has already been destroyed', function() {
+      beforeEach(function() {
+        this.view.destroy();
+      });
+
+      it('should return the View', function() {
+        expect(this.view.destroy).to.have.returned(this.view);
+      });
     });
 
     describe('isDestroyed property', function() {

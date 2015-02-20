@@ -107,6 +107,7 @@ are performed:
 * unbind all DOM events
 * remove `this.el` from the DOM
 * unbind all `listenTo` events
+* returns the view.
 
 By providing an `onDestroy` method in your view definition, you can
 run custom code for your view that is fired after your view has been

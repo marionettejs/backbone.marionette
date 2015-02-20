@@ -941,6 +941,7 @@ following are performed:
 * unbind all child views that were rendered
 * remove `this.el` from the DOM
 * call an `onDestroy` event on the view, if one is provided
+* the `CollectionView` is returned
 
 By providing an `onDestroy` event in your view definition, you can
 run custom code for your view that is fired after your view has been

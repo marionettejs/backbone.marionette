@@ -76,7 +76,7 @@ instance.
 
 Invoking the `destroy` method will trigger a "before:destroy" event and corresponding
 `onBeforeDestroy` method call. These calls will be passed any arguments `destroy`
-was invoked with.
+was invoked with. Invoking `destroy` will return the object, this can be useful for chaining.
 
 ```js
 // define a object with an onDestroy method

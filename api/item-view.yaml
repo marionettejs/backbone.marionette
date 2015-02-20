@@ -144,8 +144,9 @@ functions:
   destroy:
     description: |
       Destroy the view.
-
+      
       @api public
+      @returns {Marionette.ItemView} The current view.
 
     examples:
       -

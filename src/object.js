@@ -24,6 +24,8 @@ _.extend(Marionette.Object.prototype, Backbone.Events, {
     this.triggerMethod('before:destroy');
     this.triggerMethod('destroy');
     this.stopListening();
+
+    return this;
   },
 
   // Import the `triggerMethod` to trigger events with corresponding

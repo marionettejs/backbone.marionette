@@ -10,8 +10,8 @@ describe('application regions', function() {
       this.app.on('before:add:region', this.beforeAddRegionStub);
       this.app.on('add:region', this.addRegionStub);
 
-      this.fooRegion = new Marionette.Region({ el: '#foo-region' });
-      this.barRegion = new Marionette.Region({ el: '#bar-region' });
+      this.fooRegion = new Marionette.Region({el: '#foo-region'});
+      this.barRegion = new Marionette.Region({el: '#bar-region'});
 
       this.fooRegion._parent = this.app._regionManager;
       this.barRegion._parent = this.app._regionManager;
@@ -44,8 +44,8 @@ describe('application regions', function() {
   describe('when adding region objects to an app', function() {
     beforeEach(function() {
       this.app = new Marionette.Application();
-      this.FooRegion = Marionette.Region.extend({ el: '#foo-region' });
-      this.BarRegion = Marionette.Region.extend({ el: '#bar-region' });
+      this.FooRegion = Marionette.Region.extend({el: '#foo-region'});
+      this.BarRegion = Marionette.Region.extend({el: '#bar-region'});
 
       this.app.addRegions({
         fooRegion: this.FooRegion,
@@ -107,7 +107,7 @@ describe('application regions', function() {
       this.quuxSelector = '#quux-selector';
 
       this.BarRegion = Marionette.Region.extend();
-      this.BazRegion = Marionette.Region.extend({ el: this.bazSelector });
+      this.BazRegion = Marionette.Region.extend({el: this.bazSelector});
     });
 
     describe('and when regions is an object', function() {
@@ -262,7 +262,7 @@ describe('application regions', function() {
       this.bazSelector  = '#baz-region';
 
       this.BarRegion = Marionette.Region.extend();
-      this.BazRegion = Marionette.Region.extend({ el: this.bazSelector });
+      this.BazRegion = Marionette.Region.extend({el: this.bazSelector});
 
       this.regions = {
         fooRegion: this.fooSelector,
@@ -299,7 +299,7 @@ describe('application regions', function() {
       beforeEach(function() {
         this.regionOptionsStub = this.sinon.stub().returns(this.regions);
 
-        this.options = { foo: 'bar' };
+        this.options = {foo: 'bar'};
 
         this.App = Marionette.Application.extend({
           regions: this.regionOptionsStub
@@ -335,7 +335,7 @@ describe('application regions', function() {
     beforeEach(function() {
       this.fooSelector = '#foo-region';
       this.app = new Marionette.Application();
-      this.FooRegion = Marionette.Region.extend({ el: this.fooSelector });
+      this.FooRegion = Marionette.Region.extend({el: this.fooSelector});
 
       this.fooRegion = new this.FooRegion();
       this.fooRegion._parent = this.app._regionManager;
@@ -369,7 +369,6 @@ describe('application regions', function() {
         el: this.fooSelector
       });
       this.fooRegion._parent = this.app._regionManager;
-
 
       this.BarRegion = Marionette.Region.extend();
       this.barRegion = new this.BarRegion({
@@ -412,7 +411,7 @@ describe('application regions', function() {
   describe('when an app has a region', function() {
     beforeEach(function() {
       this.app = new Marionette.Application();
-      this.fooRegion = new Marionette.Region({ el: '#foo-region' });
+      this.fooRegion = new Marionette.Region({el: '#foo-region'});
       this.fooRegion._parent = this.app._regionManager;
 
       this.app.addRegions({
@@ -455,20 +454,20 @@ describe('application regions', function() {
     });
   });
 
-  describe("when an app has multiple regions", function(){
-    beforeEach(function(){
+  describe('when an app has multiple regions', function() {
+    beforeEach(function() {
       this.App = new Marionette.Application();
       this.App.addRegions({
-        r1: "#region1",
-        r2: "#region2"
+        r1: '#region1',
+        r2: '#region2'
       });
 
       this.regions = this.App.getRegions();
     });
 
-    it("should be able to retrieve all regions", function(){
-      expect(this.regions.r1).to.equal(this.App.getRegion("r1"));
-      expect(this.regions.r2).to.equal(this.App.getRegion("r2"));
+    it('should be able to retrieve all regions', function() {
+      expect(this.regions.r1).to.equal(this.App.getRegion('r1'));
+      expect(this.regions.r2).to.equal(this.App.getRegion('r2'));
     });
   });
 

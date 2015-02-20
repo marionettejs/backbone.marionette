@@ -3,9 +3,9 @@ describe('template helper methods', function() {
 
   beforeEach(function() {
     this.templateStub = this.sinon.stub();
-    this.templateHelpers = { foo: this.sinon.stub() };
+    this.templateHelpers = {foo: this.sinon.stub()};
     this.templateHelpersFn = this.sinon.stub().returns(this.templateHelpers);
-    this.modelData = { bar: 'baz' };
+    this.modelData = {bar: 'baz'};
     this.model = new Backbone.Model(this.modelData);
   });
 

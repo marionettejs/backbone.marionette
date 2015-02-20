@@ -16,12 +16,12 @@ describe('collectionview - emptyView', function() {
       childView: this.ItemView,
       emptyView: this.EmptyView,
 
-      onBeforeRenderEmpty: function () {},
-      onRenderEmpty: function () {},
-      onBeforeRemoveEmpty: function () {},
-      onRemoveEmpty: function () {},
-      onBeforeShow: function(){},
-      onShow: function(){}
+      onBeforeRenderEmpty: function() {},
+      onRenderEmpty: function() {},
+      onBeforeRemoveEmpty: function() {},
+      onRemoveEmpty: function() {},
+      onBeforeShow: function() {},
+      onShow: function() {}
     });
   });
 
@@ -171,7 +171,6 @@ describe('collectionview - emptyView', function() {
       expect(this.collectionView.children).to.have.lengthOf(1);
     });
   });
-
 
   describe('when the collection is reset multiple times', function() {
     beforeEach(function() {
@@ -387,8 +386,8 @@ describe('collectionview - emptyView', function() {
         this.collection = new Backbone.Collection();
         this.collectionView = new this.EmptyCollectionView({
           collection: this.collection,
-          childViewOptions: { foo: 'bar' },
-          emptyViewOptions: { foo: 'baz' }
+          childViewOptions: {foo: 'bar'},
+          emptyViewOptions: {foo: 'baz'}
         });
 
         this.collectionView.render();
@@ -406,7 +405,7 @@ describe('collectionview - emptyView', function() {
       this.collection = new Backbone.Collection();
       this.collectionView = new this.EmptyCollectionView({
         collection: this.collection,
-        childViewOptions: { foo: 'bar' }
+        childViewOptions: {foo: 'bar'}
       });
 
       this.collectionView.render();
@@ -418,4 +417,3 @@ describe('collectionview - emptyView', function() {
     });
   });
 });
-

@@ -6,12 +6,12 @@ describe('app router', function() {
   });
 
   describe('when a route is configured with a method that does not exist on the controller', function() {
-    beforeEach(function () {
+    beforeEach(function() {
       var suite = this;
 
       this.controller = {};
       this.Router = Marionette.AppRouter.extend({
-        appRoutes: { 'foo-route': 'doesNotExist' }
+        appRoutes: {'foo-route': 'doesNotExist'}
       });
 
       this.run = function() {
@@ -26,12 +26,12 @@ describe('app router', function() {
 
   describe('when a controller is passed through the constructor and a route fires', function() {
     beforeEach(function() {
-      this.controller = { foo: this.sinon.stub() };
+      this.controller = {foo: this.sinon.stub()};
       this.Router = Marionette.AppRouter.extend({
-        appRoutes: { 'foo-route': 'foo' }
+        appRoutes: {'foo-route': 'foo'}
       });
 
-      this.router = new this.Router({ controller: this.controller });
+      this.router = new this.Router({controller: this.controller});
       Backbone.history.start();
 
       this.router.navigate('foo-route', true);
@@ -48,9 +48,9 @@ describe('app router', function() {
 
   describe('when a controller is provided in the router definition and a route fires', function() {
     beforeEach(function() {
-      this.controller = { foo: this.sinon.stub() };
+      this.controller = {foo: this.sinon.stub()};
       this.Router = Marionette.AppRouter.extend({
-        appRoutes: { 'foo-route': 'foo' },
+        appRoutes: {'foo-route': 'foo'},
         controller: this.controller
       });
 
@@ -79,7 +79,7 @@ describe('app router', function() {
         }
       });
 
-      this.router = new this.Router({ controller: this.controller });
+      this.router = new this.Router({controller: this.controller});
       Backbone.history.start();
 
       this.router.navigate('foo-route', true);
@@ -94,13 +94,13 @@ describe('app router', function() {
   describe('when a route fires with parameters', function() {
     beforeEach(function() {
       this.fooParam = 'bar';
-      this.controller = { foo: this.sinon.stub() };
+      this.controller = {foo: this.sinon.stub()};
       this.Router = Marionette.AppRouter.extend({
         onRoute: this.sinon.stub(),
-        appRoutes: { 'foo-route/:id': 'foo' }
+        appRoutes: {'foo-route/:id': 'foo'}
       });
 
-      this.router = new this.Router({ controller: this.controller });
+      this.router = new this.Router({controller: this.controller});
       Backbone.history.start();
 
       this.router.navigate('foo-route/' + this.fooParam, true);
@@ -123,7 +123,7 @@ describe('app router', function() {
     beforeEach(function() {
       this.fooStub = this.sinon.stub();
       this.Router = Marionette.AppRouter.extend({
-        routes: { 'foo-route': 'foo' },
+        routes: {'foo-route': 'foo'},
         foo: this.fooStub
       });
 
@@ -153,7 +153,7 @@ describe('app router', function() {
 
       Backbone.history.start();
 
-      this.router = new this.Router({ controller: this.controller });
+      this.router = new this.Router({controller: this.controller});
       this.router.navigate('foo/bar', true);
     });
 
@@ -178,7 +178,7 @@ describe('app router', function() {
 
       Backbone.history.start();
 
-      this.router = new this.Router({ controller: this.controller });
+      this.router = new this.Router({controller: this.controller});
       this.router.navigate('foo/bar', true);
     });
 
@@ -190,9 +190,9 @@ describe('app router', function() {
 
   describe('when an app route is added manually', function() {
     beforeEach(function() {
-      this.controller = { foo: this.sinon.stub() };
+      this.controller = {foo: this.sinon.stub()};
       this.Router = Marionette.AppRouter.extend();
-      this.router = new this.Router({ controller: this.controller });
+      this.router = new this.Router({controller: this.controller});
 
       Backbone.history.start();
 
@@ -212,11 +212,11 @@ describe('app router', function() {
         bar: this.sinon.stub()
       };
       this.AppRouter = Marionette.AppRouter.extend({
-        appRoutes: { 'foo-route': 'foo' }
+        appRoutes: {'foo-route': 'foo'}
       });
       this.appRouter = new this.AppRouter({
         controller: this.controller,
-        appRoutes: { 'bar-route': 'bar' }
+        appRoutes: {'bar-route': 'bar'}
       });
       Backbone.history.start();
       this.appRouter.navigate('foo-route', true);
@@ -232,13 +232,13 @@ describe('app router', function() {
   describe('when a route fires with parameters and app routes are provided exclusively in the constructor', function() {
     beforeEach(function() {
       this.fooParam = 'bar';
-      this.controller = { foo: this.sinon.stub() };
+      this.controller = {foo: this.sinon.stub()};
       this.AppRouter = Marionette.AppRouter.extend({
         onRoute: this.sinon.stub()
       });
       this.appRouter = new this.AppRouter({
         controller: this.controller,
-        appRoutes: { 'foo-route/:id': 'foo' }
+        appRoutes: {'foo-route/:id': 'foo'}
       });
       Backbone.history.start();
       this.appRouter.navigate('foo-route/' + this.fooParam, true);
@@ -255,15 +255,15 @@ describe('app router', function() {
       expect(this.appRouter.onRoute.lastCall.args[1]).to.equal('foo-route/:id');
       expect(this.appRouter.onRoute.lastCall.args[2][0]).to.equal(this.fooParam);
     });
-    
+
     it('should support getOption inside initialize', function() {
       var fooParam = '';
       this.AppRouter = Marionette.AppRouter.extend({
-        initialize : function(){
+        initialize : function() {
           fooParam = this.getOption('fooParam');
         }
       });
-      this.appRouter = new this.AppRouter({ fooParam : 'bar' });
+      this.appRouter = new this.AppRouter({fooParam : 'bar'});
       expect(fooParam).to.equal('bar');
     });
   });

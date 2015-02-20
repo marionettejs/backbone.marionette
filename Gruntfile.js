@@ -191,6 +191,27 @@ module.exports = function(grunt) {
       }
     },
 
+    jscs: {
+      options: {
+        config: ".jscsrc"
+      },
+
+      marionette: {
+        files: {
+          src: [ 'src/*.js' ]
+        }
+      },
+
+      specs: {
+        files: {
+          src: ['test/unit/**.js']
+        },
+        options: {
+          maximumLineLength: 200
+        }
+      }
+    },
+
     watch: {
       marionette : {
         options: {
@@ -273,7 +294,7 @@ module.exports = function(grunt) {
 
   grunt.registerTask('default', 'An alias task for running tests.', ['test']);
 
-  grunt.registerTask('lint', 'Lints our sources', ['lintspaces', 'jshint']);
+  grunt.registerTask('lint', 'Lints our sources', ['lintspaces', 'jshint', 'jscs']);
 
   grunt.registerTask('test', 'Run the unit tests.', ['lint', 'api', 'mochaTest']);
 

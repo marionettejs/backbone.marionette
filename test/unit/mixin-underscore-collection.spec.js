@@ -9,7 +9,7 @@ describe('Marionette.actAsCollection', function() {
 
   describe('object literal', function() {
     beforeEach(function() {
-      this.target = { list: this.data };
+      this.target = {list: this.data};
       Marionette.actAsCollection(this.target, 'list');
       this.result = this.target.map(this.double);
     });

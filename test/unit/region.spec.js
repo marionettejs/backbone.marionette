@@ -3,7 +3,7 @@ describe('region', function() {
 
   describe('when creating a new region and no configuration has been provided', function() {
     it('should throw an exception saying an "el" is required', function() {
-      expect(function () {
+      expect(function() {
         return new Backbone.Marionette.Region();
       }).to.throw('An "el" must be specified for a region.');
     });
@@ -43,13 +43,13 @@ describe('region', function() {
 
     it('should complain if the el passed in as an option is invalid', function() {
       expect(function() {
-        Backbone.Marionette.Region({el: $("the-ghost-of-lechuck")[0]});
+        Backbone.Marionette.Region({el: $('the-ghost-of-lechuck')[0]});
       }).to.throw;
     });
 
     it('should complain if the el passed in via an extended region is invalid', function() {
       expect(function() {
-        (Backbone.Marionette.Region.extend({el: $("the-ghost-of-lechuck")[0]}))();
+        (Backbone.Marionette.Region.extend({el: $('the-ghost-of-lechuck')[0]}))();
       }).to.throw;
     });
   });
@@ -77,7 +77,7 @@ describe('region', function() {
         });
 
         it('should throw an exception saying an "el" doesnt exist in DOM', function() {
-          expect(function(){
+          expect(function() {
             this.myRegion.show(new this.MyView());
           }.bind(this)).to.throw('An "el" #not-existed-region must exist in DOM');
         });
@@ -89,11 +89,11 @@ describe('region', function() {
 
       describe('when allowMissingEl is set', function() {
         beforeEach(function() {
-          this.myRegion = new this.MyRegion({ allowMissingEl: true });
+          this.myRegion = new this.MyRegion({allowMissingEl: true});
         });
 
         it('should not throw an exception', function() {
-          expect(function(){
+          expect(function() {
             this.myRegion.show(new this.MyView());
           }.bind(this)).not.to.throw();
         });
@@ -124,7 +124,7 @@ describe('region', function() {
 
       this.MyView = Backbone.View.extend({
         events: {
-          'click': function(){}
+          'click': function() {}
         },
         render: function() {
           $(this.el).html('some content');
@@ -203,7 +203,7 @@ describe('region', function() {
       expect($(this.view.el)).to.have.$class('onShowClass');
     });
 
-    it('should pass the shown view, region and options arguments to the view "onShow"', function () {
+    it('should pass the shown view, region and options arguments to the view "onShow"', function() {
       expect(this.viewOnShowSpy).to.have.been.calledWith(this.view, this.myRegion, this.showOptions);
     });
 
@@ -211,7 +211,7 @@ describe('region', function() {
       expect(this.regionOnShowSpy).to.have.been.called;
     });
 
-    it('should pass the shown view, region and options arguments to the region "onShow"', function () {
+    it('should pass the shown view, region and options arguments to the region "onShow"', function() {
       expect(this.regionOnShowSpy).to.have.been.calledWith(this.view, this.myRegion, this.showOptions);
     });
 
@@ -219,7 +219,7 @@ describe('region', function() {
       expect(this.regionShowSpy).to.have.been.called;
     });
 
-    it('should pass the shown view, region and options arguments to the region show listener event', function () {
+    it('should pass the shown view, region and options arguments to the region show listener event', function() {
       expect(this.regionShowSpy).to.have.been.calledWith(this.view, this.myRegion, this.showOptions);
     });
 
@@ -227,11 +227,11 @@ describe('region', function() {
       expect(this.regionBeforeShowSpy).to.have.been.called;
     });
 
-    it('should pass the shown view, region and options arguments to the region before show event listener', function () {
+    it('should pass the shown view, region and options arguments to the region before show event listener', function() {
       expect(this.regionBeforeShowSpy).to.have.been.calledWith(this.view, this.myRegion, this.showOptions);
     });
 
-    it('should pass the shown view, region and options arguments to the region "onBeforeShow"', function () {
+    it('should pass the shown view, region and options arguments to the region "onBeforeShow"', function() {
       expect(this.regionOnBeforeShowSpy).to.have.been.calledWith(this.view, this.myRegion, this.showOptions);
     });
 
@@ -239,11 +239,11 @@ describe('region', function() {
       expect(this.viewBeforeShowSpy).to.have.been.called;
     });
 
-    it('should pass the shown view, region and options arguments to the view before show listener event', function () {
+    it('should pass the shown view, region and options arguments to the view before show listener event', function() {
       expect(this.viewBeforeShowSpy).to.have.been.calledWith(this.view, this.myRegion, this.showOptions);
     });
 
-    it('should pass the shown view, region and options arguments to the view "onBeforeShow"', function () {
+    it('should pass the shown view, region and options arguments to the view "onBeforeShow"', function() {
       expect(this.viewOnBeforeShowSpy).to.have.been.calledWith(this.view, this.myRegion, this.showOptions);
     });
 
@@ -251,7 +251,7 @@ describe('region', function() {
       expect(this.viewShowSpy).to.have.been.calledOnce;
     });
 
-    it('should pass the shown view, region and options arguments to the view show listener event', function () {
+    it('should pass the shown view, region and options arguments to the view show listener event', function() {
       expect(this.viewShowSpy).to.have.been.calledWith(this.view, this.myRegion, this.showOptions);
     });
 
@@ -259,7 +259,7 @@ describe('region', function() {
       expect(this.regionBeforeShowSpy.calledBefore(this.regionOnAttachHtmlSpy)).to.be.true;
     });
 
-    it('should pass the shown view, region and options arguments to the region show listener event', function () {
+    it('should pass the shown view, region and options arguments to the region show listener event', function() {
       expect(this.regionShowSpy).to.have.been.calledWith(this.view, this.myRegion, this.showOptions);
     });
 
@@ -311,13 +311,13 @@ describe('region', function() {
         expect(this.regionBeforeSwapSpy).to.have.been.called;
       });
 
-      it('should pass the shown view, region and options arguments to the before swap event for the region', function() {
+      it('should pass the shown view, region and options arguments to the regions before swap event', function() {
         expect(this.regionBeforeSwapSpy).to.have.been.calledWith(this.view2, this.myRegion, this.otherOptions);
       });
 
       it('should trigger empty once', function() {
-         expect(this.regionEmptySpy).to.have.been.calledOnce;
-         expect(this.regionBeforeEmptySpy).to.have.been.calledOnce;
+        expect(this.regionEmptySpy).to.have.been.calledOnce;
+        expect(this.regionBeforeEmptySpy).to.have.been.calledOnce;
       });
 
       it('should trigger a swap event for the region', function() {
@@ -343,7 +343,6 @@ describe('region', function() {
       it('should still have a view', function() {
         expect(this.myRegion.hasView()).to.equal(true);
       });
-
 
       it('should reference region', function() {
         expect(this.view2._parent).to.deep.equal(this.myRegion);
@@ -431,7 +430,7 @@ describe('region', function() {
 
         // https://github.com/marionettejs/backbone.marionette/issues/2159#issue-52745401
         it('should still have view1\'s, event bindings', function() {
-          expect(jQuery._data(this.view.el, "events" ).click).to.be.defined;
+          expect(jQuery._data(this.view.el, 'events').click).to.be.defined;
         });
       });
 
@@ -707,7 +706,7 @@ describe('region', function() {
     });
 
     it('should clear region contents', function() {
-      expect(this.myRegion.$el.html()).to.eql("");
+      expect(this.myRegion.$el.html()).to.eql('');
     });
   });
 
@@ -820,7 +819,8 @@ describe('region', function() {
       });
 
       it('should throw an error.', function() {
-        expect(this.showFunction).to.throw('View (cid: "' + this.view.cid + '") has already been destroyed and cannot be used.');
+        var errorMessage = 'View (cid: "' + this.view.cid + '") has already been destroyed and cannot be used.';
+        expect(this.showFunction).to.throw(errorMessage);
       });
     });
   });
@@ -1047,7 +1047,8 @@ describe('region', function() {
     });
 
     it('should throw an error', function() {
-      expect(this.insertUndefined).to.throw('The view passed is undefined and therefore invalid. You must pass a view instance to show.');
+      var errorMessage = 'The view passed is undefined and therefore invalid. You must pass a view instance to show.';
+      expect(this.insertUndefined).to.throw(errorMessage);
     });
   });
 });

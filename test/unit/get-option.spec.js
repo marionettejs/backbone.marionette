@@ -3,7 +3,7 @@ describe('get option', function() {
 
   describe('when an object only has the option set on the definition', function() {
     beforeEach(function() {
-      this.target = { foo: 'bar' };
+      this.target = {foo: 'bar'};
       this.value = Marionette.getOption(this.target, 'foo');
     });
 
@@ -14,7 +14,7 @@ describe('get option', function() {
 
   describe('when an object only has the option set on the options', function() {
     beforeEach(function() {
-      this.target = { options: { foo: 'bar' } };
+      this.target = {options: {foo: 'bar'}};
       this.value = Marionette.getOption(this.target, 'foo');
     });
 
@@ -25,7 +25,7 @@ describe('get option', function() {
 
   describe('when an object has the option set on the options, and it is a "falsey" value', function() {
     beforeEach(function() {
-      this.target = { options: { foo: false } };
+      this.target = {options: {foo: false}};
       this.value = Marionette.getOption(this.target, 'foo');
     });
 
@@ -36,7 +36,7 @@ describe('get option', function() {
 
   describe('when an object has the option set on the options, and it is a "undefined" value', function() {
     beforeEach(function() {
-      this.target = { foo: 'bar', options: { foo: undefined } };
+      this.target = {foo: 'bar', options: {foo: undefined}};
       this.value = Marionette.getOption(this.target, 'foo');
     });
 
@@ -47,7 +47,7 @@ describe('get option', function() {
 
   describe('when an object has the option set on both the defininition and options', function() {
     beforeEach(function() {
-      this.target = { foo: 'bar', options: { foo: 'baz' } };
+      this.target = {foo: 'bar', options: {foo: 'baz'}};
       this.value = Marionette.getOption(this.target, 'foo');
     });
 
@@ -58,7 +58,7 @@ describe('get option', function() {
 
   describe('when proxying getOption', function() {
     beforeEach(function() {
-      this.target = { foo: 'bar' };
+      this.target = {foo: 'bar'};
       this.target.getOption = Marionette.proxyGetOption;
       this.value = this.target.getOption('foo');
     });

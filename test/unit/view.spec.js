@@ -177,8 +177,8 @@ describe('base view', function() {
       this.optionsStub = this.sinon.stub().returns(this.options);
 
       this.View = Marionette.View.extend();
-      this.ViewPresets   = Marionette.View.extend({ options: this.presets });
-      this.ViewPresetsFn = Marionette.View.extend({ options: this.presetsStub });
+      this.ViewPresets   = Marionette.View.extend({options: this.presets});
+      this.ViewPresetsFn = Marionette.View.extend({options: this.presetsStub});
     });
 
     it('should take and store view options', function() {
@@ -208,8 +208,8 @@ describe('base view', function() {
   });
 
   // http://backbonejs.org/#View-constructor
-  describe('when constructing a view with Backbone viewOptions', function () {
-    it('should attach the viewOptions to the view if options are on the view', function () {
+  describe('when constructing a view with Backbone viewOptions', function() {
+    it('should attach the viewOptions to the view if options are on the view', function() {
       this.MyView = Marionette.View.extend({
         options: {
           className: '.some-class'
@@ -219,8 +219,8 @@ describe('base view', function() {
       expect(this.myView.className).to.equal('.some-class');
     });
 
-    it('should attach the viewOptions to the view if options are passed as a function', function () {
-      var options = function(){
+    it('should attach the viewOptions to the view if options are passed as a function', function() {
+      var options = function() {
         return {
           className: '.some-class'
         };
@@ -266,22 +266,22 @@ describe('base view', function() {
     });
   });
 
-  describe("when serializing a model", function(){
-    var modelData = { foo: "bar" };
+  describe('when serializing a model', function() {
+    var modelData = {foo: 'bar'};
     var model;
     var view;
 
-    beforeEach(function(){
+    beforeEach(function() {
       model = new Backbone.Model(modelData);
       view = new Marionette.View();
     });
 
-    it("should return all attributes", function(){
+    it('should return all attributes', function() {
       expect(view.serializeModel(model)).to.be.eql(modelData);
     });
   });
 
-  describe("when proxying events to a parent layout", function() {
+  describe('when proxying events to a parent layout', function() {
 
     beforeEach(function() {
       this.LayoutView = Marionette.LayoutView.extend({
@@ -316,7 +316,7 @@ describe('base view', function() {
     });
 
     describe('when there is not a containing layout', function() {
-      beforeEach(function(){
+      beforeEach(function() {
         this.childView.triggerMethod('boom', 'foo', 'bar');
       });
 
@@ -326,7 +326,7 @@ describe('base view', function() {
     });
 
     describe('when there is a containing layout', function() {
-      beforeEach(function(){
+      beforeEach(function() {
         this.layoutView.showChildView('child', this.childView);
         this.childView.triggerMethod('boom', 'foo', 'bar');
       });

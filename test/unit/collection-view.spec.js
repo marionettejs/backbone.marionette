@@ -38,7 +38,7 @@ describe('collection view', function() {
     beforeEach(function() {
       this.collection = new Backbone.Collection([]);
       this.CollectionView = this.MockCollectionView.extend({
-        sort: function(){ return 1; }
+        sort: function() { return 1; }
       });
 
       this.collectionView = new this.CollectionView({
@@ -57,7 +57,6 @@ describe('collection view', function() {
       expect(this.onAddChildSpy).to.not.have.been.called;
     });
 
-
     it('should not add a child', function() {
       this.collection.reset([{}]);
 
@@ -71,7 +70,6 @@ describe('collection view', function() {
 
       expect(this.onRemoveChildSpy).to.not.have.been.called;
     });
-
 
     it('should not call sort', function() {
       this.collection.trigger('sort');
@@ -238,7 +236,6 @@ describe('collection view', function() {
     beforeEach(function() {
       var suite = this;
 
-
       this.collection = new Backbone.Collection([{foo: 'bar'}, {foo: 'baz'}]);
 
       this.collectionView = new this.MockCollectionView({
@@ -253,7 +250,7 @@ describe('collection view', function() {
     });
 
     it('should find the expected number of childen', function() {
-      expect(this.onRenderCollectionHTML).to.equal("<span>bar</span><span>baz</span>");
+      expect(this.onRenderCollectionHTML).to.equal('<span>bar</span><span>baz</span>');
     });
   });
 
@@ -314,7 +311,7 @@ describe('collection view', function() {
         }, {
           foo: 'baz'
       }]);
-      this.collection.comparator = function(model){
+      this.collection.comparator = function(model) {
         return model.get('foo');
       };
     });
@@ -350,10 +347,10 @@ describe('collection view', function() {
     });
   });
 
-  describe('when instantiating a view with a different sort option than in the view\'s definition', function () {
-    it('should maintain the instantiated sort option', function () {
-      this.CollectionView = Marionette.CollectionView.extend({ sort: false }); 
-      this.newCollectionView = new this.CollectionView({ sort: true });
+  describe('when instantiating a view with a different sort option than in the view\'s definition', function() {
+    it('should maintain the instantiated sort option', function() {
+      this.CollectionView = Marionette.CollectionView.extend({sort: false});
+      this.newCollectionView = new this.CollectionView({sort: true});
       expect(this.newCollectionView.getOption('sort')).to.equal(true);
     });
   });
@@ -568,7 +565,6 @@ describe('collection view', function() {
       });
       this.collectionView.someItemViewCallback = function() {};
       this.collectionView.render();
-
 
       this.childModel = this.collection.at(0);
       this.childView = this.collectionView.children.findByIndex(0);
@@ -919,7 +915,7 @@ describe('collection view', function() {
   describe('when the collection of a collection view is reset', function() {
     beforeEach(function() {
       this.model = new Backbone.Model({foo: 'bar'});
-      this.collection = new Backbone.Collection([ this.model ]);
+      this.collection = new Backbone.Collection([this.model]);
 
       this.collectionView = new this.MockCollectionView({
         template: '#itemTemplate',
@@ -964,9 +960,9 @@ describe('collection view', function() {
       this.sinon.spy(this.ChildView.prototype, 'onShow');
       this.sinon.spy(this.ChildView.prototype, 'onDomRefresh');
 
-      this.model1 = new Backbone.Model({ foo: 1 });
-      this.model2 = new Backbone.Model({ foo: 2 });
-      this.collection = new Backbone.Collection([ this.model1 ]);
+      this.model1 = new Backbone.Model({foo: 1});
+      this.model2 = new Backbone.Model({foo: 2});
+      this.collection = new Backbone.Collection([this.model1]);
       this.collectionView = new this.CollectionView({
         collection: this.collection
       });
@@ -1015,7 +1011,7 @@ describe('collection view', function() {
       beforeEach(function() {
         this.childViewAtIndex0 = this.collectionView.children.findByIndex(0);
 
-        this.beforeModel = new Backbone.Model({ foo: 0 });
+        this.beforeModel = new Backbone.Model({foo: 0});
         this.beforeView = this.collectionView.addChild(this.beforeModel, this.ChildView, 0);
       });
 

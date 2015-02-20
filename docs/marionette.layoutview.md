@@ -290,6 +290,9 @@ one, the same it will destroy a view.
 All of this ensures that layoutViews and the views that they
 contain are cleaned up correctly.
 
+When calling `destroy` on a layoutView, the layoutView will be returned. This can be useful for
+chaining.
+
 ## Custom Region Class
 
 If you have the need to replace the `Region` with a region class of

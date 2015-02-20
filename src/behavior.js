@@ -30,6 +30,8 @@ Marionette.Behavior = Marionette.Object.extend({
   // Overrides Object#destroy to prevent additional events from being triggered.
   destroy: function() {
     this.stopListening();
+
+    return this;
   },
 
   proxyViewProperties: function (view) {

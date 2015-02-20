@@ -50,6 +50,7 @@ describe('marionette object', function() {
     beforeEach(function() {
       this.object = new Marionette.Object();
 
+      this.sinon.spy(this.object, 'destroy');
       this.beforeDestroyHandler = sinon.spy();
       this.object.on('before:destroy', this.beforeDestroyHandler);
       this.object.destroy();
@@ -57,6 +58,10 @@ describe('marionette object', function() {
 
     it('should hear the before:destroy event', function() {
       expect(this.beforeDestroyHandler).to.have.been.calledOnce;
+    });
+
+    it('should return the object', function() {
+      expect(this.object.destroy).to.have.returned(this.object);
     });
   });
 });

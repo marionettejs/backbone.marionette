@@ -306,6 +306,7 @@ functions:
       ...
       
       @api public
+      @returns {Marionette.CollectionView} The current view.
     
     examples:
       

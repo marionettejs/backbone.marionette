@@ -677,6 +677,20 @@ describe('collection view', function() {
     it('should be marked not rendered', function() {
       expect(this.collectionView).to.have.property('isRendered', false);
     });
+
+    it('should return the CollectionView', function() {
+      expect(this.collectionView.destroy).to.have.returned(this.collectionView);
+    });
+
+    describe('and it has already been destroyed', function() {
+      beforeEach(function() {
+        this.collectionView.destroy();
+      });
+
+      it('should return the CollectionView', function() {
+        expect(this.collectionView.destroy).to.have.returned(this.collectionView);
+      });
+    });
   });
 
   describe('when removing a childView that does not have a "destroy" method', function() {

@@ -98,7 +98,7 @@ describe('collection/composite view sorting', function() {
         expect(this.compositeView.$el).to.have.$text('123');
       });
 
-      describe('and then adding another', function () {
+      describe('and then adding another', function() {
         beforeEach(function() {
           this.model = new Backbone.Model({foo: 5, bar: 0});
           this.collection.add(this.model);
@@ -238,7 +238,7 @@ describe('collection/composite view sorting', function() {
         expect(this.compositeView.$el).to.have.$text('321');
       });
 
-      describe('and then adding another', function () {
+      describe('and then adding another', function() {
         beforeEach(function() {
           this.model = new Backbone.Model({foo: 5, bar: 0});
           this.collection.add(this.model);
@@ -392,7 +392,7 @@ describe('collection/composite view sorting', function() {
     });
   });
 
-  describe('when using `{ reorderOnSort: true }`', function () {
+  describe('when using `{ reorderOnSort: true }`', function() {
     var texts = {
       asOption: 'as an option',
       onPrototype: 'on the prototype',
@@ -400,14 +400,14 @@ describe('collection/composite view sorting', function() {
     };
 
     var getSpecTitle = function(options) {
-      return _.map(options, function (v, k) {
+      return _.map(options, function(v, k) {
         return texts[k];
       }).join(' ');
     };
 
-    var describeSpec = function (specOptions) {
-      describe(getSpecTitle(specOptions), function () {
-        beforeEach(function () {
+    var describeSpec = function(specOptions) {
+      describe(getSpecTitle(specOptions), function() {
+        beforeEach(function() {
           var commonAttrs = {
             childView: this.ChildView,
             collection: this.collection
@@ -450,7 +450,7 @@ describe('collection/composite view sorting', function() {
           this.sinon.spy(this.collectionView, 'render');
           this.sinon.spy(this.collectionView, 'trigger');
 
-          var cmp = function (m) {
+          var cmp = function(m) {
             return m.get('bar');
           };
           if (specOptions.viewComparator) {
@@ -463,16 +463,16 @@ describe('collection/composite view sorting', function() {
           this.collection.sort();
         });
 
-        it('should call reorder instead of render', function () {
+        it('should call reorder instead of render', function() {
           expect(this.collectionView.render).not.to.have.been.called;
           expect(this.collectionView.reorder).to.have.been.calledOnce;
         });
 
-        it('should reorder the DOM', function () {
+        it('should reorder the DOM', function() {
           expect(this.collectionView.$el).to.have.$text('321');
         });
 
-        it('should triggerMethods events', function () {
+        it('should triggerMethods events', function() {
           var cv = this.collectionView;
           if (specOptions.onPrototype) {
             expect(cv.onBeforeReorder).calledBefore(cv.onReorder);
@@ -488,9 +488,9 @@ describe('collection/composite view sorting', function() {
       });
     };
 
-    describeSpec({ asOption: true });
-    describeSpec({ asOption: true, viewComparator: true });
-    describeSpec({ onPrototype: true });
-    describeSpec({ onPrototype: true, viewComparator: true });
+    describeSpec({asOption: true});
+    describeSpec({asOption: true, viewComparator: true});
+    describeSpec({onPrototype: true});
+    describeSpec({onPrototype: true, viewComparator: true});
   });
 });

@@ -40,7 +40,7 @@ Marionette.Behavior = Marionette.Object.extend({
     return this;
   },
 
-  proxyViewProperties: function (view) {
+  proxyViewProperties: function(view) {
     this.$el = view.$el;
     this.el = view.el;
   }

@@ -11,7 +11,7 @@ describe('module stop', function() {
 
       this.beforeStop = this.sinon.stub();
       this.stop = this.sinon.stub();
-			this.finalizerSpy = this.sinon.spy();
+      this.finalizerSpy = this.sinon.spy();
 
       this.mod1 = this.App.module('Mod1', function(Mod1) {
         Mod1.addFinalizer(suite.finalizerSpy);
@@ -43,7 +43,7 @@ describe('module stop', function() {
     });
 
     it('should run all finalizers for the module in the context of the module', function() {
-			expect(this.finalizerSpy).to.have.been.calledOn(this.mod1);
+      expect(this.finalizerSpy).to.have.been.calledOn(this.mod1);
     });
 
     it('should stop all sub-modules', function() {

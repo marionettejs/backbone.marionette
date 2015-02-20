@@ -12,7 +12,7 @@ describe('marionette object', function() {
           this.bindEntityEvents(options.model, this.modelEvents);
         },
 
-        onBar: function(){}
+        onBar: function() {}
       });
 
       var model = new Backbone.Model();

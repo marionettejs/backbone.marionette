@@ -142,7 +142,7 @@ describe('getNestedView', function() {
           collection: new Backbone.Collection([{}, {}, {}]),
           childView: Marionette.ItemView.extend({template: false})
         });
-        
+
         this.layoutView.getRegion('main').show(this.childOne);
         this.subChildOne = this.childOne.children.findByIndex(0);
         this.subChildTwo = this.childOne.children.findByIndex(1);
@@ -166,7 +166,7 @@ describe('getNestedView', function() {
           collection: new Backbone.Collection([{}, {}]),
           childView: this.Layout
         });
-        
+
         this.subSubChildOne = new this.BaseView();
         this.layoutView.getRegion('main').show(this.childOne);
         this.subChildOne = this.childOne.children.findByIndex(0);

@@ -527,7 +527,7 @@ Marionette.CollectionView = Marionette.View.extend({
 
   // Handle cleanup and other destroying needs for the collection of views
   destroy: function() {
-    if (this.isDestroyed) { return; }
+    if (this.isDestroyed) { return this; }
 
     this.triggerMethod('before:destroy:collection');
     this.destroyChildren();

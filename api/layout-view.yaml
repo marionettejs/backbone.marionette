@@ -196,6 +196,7 @@ functions:
       If you are showing a LayoutView within a parent region manager, replacing the LayoutView with another view or LayoutView will destroy the current one. All of this ensures that LayoutViews and the views that they contain are cleaned up correctly.
       
       @api public
+      @returns {Marionette.LayoutView} The current view.
 
     examples:
       -

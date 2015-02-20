@@ -777,6 +777,7 @@ describe('Behaviors', function() {
     });
 
     it('should return the behavior', function() {
+      expect(this.behavior.destroy).to.have.returned(this.behavior);
     });
   });
 });

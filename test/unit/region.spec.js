@@ -122,18 +122,17 @@ describe('region', function() {
         onSwapOut: function() {}
       });
 
-      this.MyView = Backbone.View.extend({
+      this.MyView = Marionette.View.extend({
         events: {
           'click': function() {}
         },
-        render: function() {
-          $(this.el).html('some content');
-        },
+        template: _.template('some content'),
         destroy: function() {},
         onBeforeShow: function() {},
         onShow: function() {
           $(this.el).addClass('onShowClass');
-        }
+        },
+        onBeforeRender: function() {},
       });
 
       this.setFixtures('<div id="region"></div>');
@@ -147,9 +146,11 @@ describe('region', function() {
       this.regionBeforeEmptySpy = this.sinon.spy();
 
       this.view = new this.MyView();
+      this.viewOnBeforeRenderSpy = this.sinon.spy(this.view, 'onBeforeRender');
       this.viewRenderSpy = this.sinon.spy(this.view, 'render');
       this.viewOnBeforeShowSpy = this.sinon.spy(this.view, 'onBeforeShow');
       this.viewOnShowSpy = this.sinon.spy(this.view, 'onShow');
+      this.triggerSpy = this.sinon.spy(this.view, 'trigger');
 
       this.myRegion = new this.MyRegion();
       this.regionOnBeforeShowSpy = this.sinon.spy(this.myRegion, 'onBeforeShow');
@@ -253,6 +254,16 @@ describe('region', function() {
 
     it('should pass the shown view, region and options arguments to the view "onBeforeShow"', function() {
       expect(this.viewOnBeforeShowSpy).to.have.been.calledWith(this.view, this.myRegion, this.showOptions);
+    });
+
+    describe('Render and show event ordering', function() {
+      it('triggers the before render event before the before show event', function() {
+        expect(this.viewOnBeforeRenderSpy).to.have.been.calledBefore(this.viewOnBeforeShowSpy);
+      });
+
+      it('triggers the show event after the render event', function() {
+        expect(this.viewRenderSpy).to.have.been.calledBefore(this.viewOnShowSpy);
+      });
     });
 
     it('should trigger a show event for the view', function() {

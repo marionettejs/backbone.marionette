@@ -21,7 +21,7 @@ Marionette.Controller.extend = Marionette.extend;
 // Ensure it can trigger events with Backbone.Events
 _.extend(Marionette.Controller.prototype, Backbone.Events, {
   destroy: function() {
-    if (this.isDestroyed) { return; }
+    if (this.isDestroyed) { return this; }
 
     Marionette._triggerMethod(this, 'before:destroy', arguments);
     this.isDestroyed = true;

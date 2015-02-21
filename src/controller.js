@@ -6,6 +6,7 @@
 // and coordination of other objects, views, and more.
 Marionette.Controller = function(options) {
   this.options = options || {};
+  this.isDestroyed = false;
 
   if (_.isFunction(this.initialize)) {
     this.initialize(this.options);
@@ -20,7 +21,10 @@ Marionette.Controller.extend = Marionette.extend;
 // Ensure it can trigger events with Backbone.Events
 _.extend(Marionette.Controller.prototype, Backbone.Events, {
   destroy: function() {
+    if (this.isDestroyed) { return; }
+
     Marionette._triggerMethod(this, 'before:destroy', arguments);
+    this.isDestroyed = true;
     Marionette._triggerMethod(this, 'destroy', arguments);
 
     this.stopListening();

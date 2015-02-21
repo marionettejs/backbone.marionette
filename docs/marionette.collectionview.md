@@ -28,6 +28,7 @@ will provide features such as `onShow` callbacks, etc. Please see
   * [CollectionView's `reorderOnSort`](#collectionviews-reorderonsort)
 * [CollectionView's `emptyView`](#collectionviews-emptyview)
   * [CollectionView's `getEmptyView`](#collectionviews-getemptyview)
+  * [CollectionView's `isEmpty`](#collectionviews-isempty)
   * [CollectionView's `emptyViewOptions`](#collectionviews-emptyviewoptions)
 * [Callback Methods](#callback-methods)
   * [onBeforeRender callback](#onbeforerender-callback)
@@ -69,9 +70,9 @@ a Backbone view object definition, not an instance. It can be any
 `Backbone.View` or be derived from `Marionette.ItemView`.
 
 ```js
-var MyChildView = Backbone.Marionette.ItemView.extend({});
+var MyChildView = Marionette.ItemView.extend({});
 
-Backbone.Marionette.CollectionView.extend({
+Marionette.CollectionView.extend({
   childView: MyChildView
 });
 ```
@@ -84,7 +85,7 @@ Alternatively, you can specify a `childView` in the options for
 the constructor:
 
 ```js
-var MyCollectionView = Backbone.Marionette.CollectionView.extend({...});
+var MyCollectionView = Marionette.CollectionView.extend({...});
 
 new MyCollectionView({
   childView: MyChildView
@@ -105,14 +106,14 @@ var FooBar = Backbone.Model.extend({
   }
 });
 
-var FooView = Backbone.Marionette.ItemView.extend({
+var FooView = Marionette.ItemView.extend({
   template: '#foo-template'
 });
-var BarView = Backbone.Marionette.ItemView.extend({
+var BarView = Marionette.ItemView.extend({
   template: '#bar-template'
 });
 
-var MyCollectionView = Backbone.Marionette.CollectionView.extend({
+var MyCollectionView = Marionette.CollectionView.extend({
   getChildView: function(item) {
     // Choose which view class to render,
     // depending on the properties of the item model
@@ -149,13 +150,13 @@ literal. This will be passed to the constructor of your childView as part
 of the `options`.
 
 ```js
-var ChildView = Backbone.Marionette.ItemView.extend({
+var ChildView = Marionette.ItemView.extend({
   initialize: function(options) {
     console.log(options.foo); // => "bar"
   }
 });
 
-var CollectionView = Backbone.Marionette.CollectionView.extend({
+var CollectionView = Marionette.CollectionView.extend({
   childView: ChildView,
 
   childViewOptions: {
@@ -171,7 +172,7 @@ the function should you need access to it when calculating
 of the object will be copied to the `childView` instance's options.
 
 ```js
-var CollectionView = Backbone.Marionette.CollectionView.extend({
+var CollectionView = Marionette.CollectionView.extend({
   childViewOptions: function(model, index) {
     // do some calculations based on the model
     return {
@@ -284,10 +285,10 @@ buildChildView: function(child, ChildViewClass, childViewOptions){
 The `addChild` method is responsible for rendering the `childViews` and adding them to the HTML for the `collectionView` instance. It is also responsible for triggering the events per `ChildView`. In most cases you should not override this method. However if you do want to short circuit this method, it can be accomplished via the following.
 
 ```js
-Backbone.Marionette.CollectionView.extend({
+Marionette.CollectionView.extend({
   addChild: function(child, ChildView, index){
     if (child.shouldBeShown()) {
-      Backbone.Marionette.CollectionView.prototype.addChild.apply(this, arguments);
+      Marionette.CollectionView.prototype.addChild.apply(this, arguments);
     }
   }
 });
@@ -313,11 +314,11 @@ the list of childViews, you can specify an `emptyView` attribute on your
 collection view.
 
 ```js
-var NoChildrenView = Backbone.Marionette.ItemView.extend({
+var NoChildrenView = Marionette.ItemView.extend({
   template: "#show-no-children-message-template"
 });
 
-Backbone.Marionette.CollectionView.extend({
+Marionette.CollectionView.extend({
   // ...
 
   emptyView: NoChildrenView
@@ -329,23 +330,23 @@ Backbone.Marionette.CollectionView.extend({
 If you need the `emptyView`'s class chosen dynamically, specify `getEmptyView`:
 
 ```js
-Backbone.Marionette.CollectionView.extend({
+Marionette.CollectionView.extend({
   // ...
 
   getEmptyView: function() {
     // custom logic
     return NoChildrenView;
   }
+});
 ```
 
-This will render the `emptyView` and display the message that needs to
-be displayed when there are no children.
+### CollectionView's `isEmpty`
 
 If you want to control when the empty view is rendered, you can override
 `isEmpty`:
 
 ```js
-Backbone.Marionette.CollectionView.extend({
+Marionette.CollectionView.extend({
   isEmpty: function(collection) {
     // some logic to calculate if the view should be rendered as empty
     return someBoolean;
@@ -360,13 +361,13 @@ Similar to `childView` and `childViewOptions`, there is an `emptyViewOptions` pr
 If `emptyViewOptions` aren't provided the CollectionView will default to passing the `childViewOptions` to the `emptyView`.
 
 ```js
-var EmptyView = Backbone.Marionette.ItemView({
+var EmptyView = Marionette.ItemView({
   initialize: function(options){
     console.log(options.foo); // => "bar"
   }
 });
 
-var CollectionView = Backbone.Marionette.CollectionView({
+var CollectionView = Marionette.CollectionView({
   emptyView: EmptyView,
 
   emptyViewOptions: {
@@ -388,7 +389,7 @@ A `onBeforeRender` callback will be called just prior to rendering
 the collection view.
 
 ```js
-Backbone.Marionette.CollectionView.extend({
+Marionette.CollectionView.extend({
   onBeforeRender: function(){
     // do stuff here
   }
@@ -402,7 +403,7 @@ You can implement this in your view to provide custom code for dealing
 with the view's `el` after it has been rendered:
 
 ```js
-Backbone.Marionette.CollectionView.extend({
+Marionette.CollectionView.extend({
   onRender: function(){
     // do stuff here
   }
@@ -415,7 +416,7 @@ If `reorderOnSort` is set to `true`, `onBeforeReorder` will be called just
 prior to reordering the collection view.
 
 ```js
-Backbone.Marionette.CollectionView.extend({
+Marionette.CollectionView.extend({
   onBeforeReorder: function(){
     // do stuff here
   }
@@ -428,7 +429,7 @@ If `reorderOnSort` is set to `true`, after the view has been reordered,
 a `onReorder` method will be called.
 
 ```js
-Backbone.Marionette.CollectionView.extend({
+Marionette.CollectionView.extend({
   onReorder: function(){
     // do stuff here
   }
@@ -440,7 +441,7 @@ Backbone.Marionette.CollectionView.extend({
 This method is called just before destroying the view.
 
 ```js
-Backbone.Marionette.CollectionView.extend({
+Marionette.CollectionView.extend({
   onBeforeDestroy: function(){
     // do stuff here
   }
@@ -452,7 +453,7 @@ Backbone.Marionette.CollectionView.extend({
 This method is called just after destroying the view.
 
 ```js
-Backbone.Marionette.CollectionView.extend({
+Marionette.CollectionView.extend({
   onDestroy: function(){
     // do stuff here
   }
@@ -466,7 +467,7 @@ instance is about to be added to the collection view. It provides access to
 the view instance for the child that was added.
 
 ```js
-Backbone.Marionette.CollectionView.extend({
+Marionette.CollectionView.extend({
   onBeforeAddChild: function(childView){
     // work with the childView instance, here
   }
@@ -480,7 +481,7 @@ instance has been added to the collection view. It provides access to
 the view instance for the child that was added.
 
 ```js
-Backbone.Marionette.CollectionView.extend({
+Marionette.CollectionView.extend({
   onAddChild: function(childView){
     // work with the childView instance, here
   }
@@ -494,7 +495,7 @@ instance is about to be removed from the `collectionView`. It provides access to
 the view instance for the child that was removed.
 
 ```js
-Backbone.Marionette.CollectionView.extend({
+Marionette.CollectionView.extend({
   onBeforeRemoveChild: function(childView){
     // work with the childView instance, here
   }
@@ -508,7 +509,7 @@ instance has been deleted or removed from the
 collection.
 
 ```js
-Backbone.Marionette.CollectionView.extend({
+Marionette.CollectionView.extend({
   onRemoveChild: function(childView){
     // work with the childView instance, here
   }
@@ -530,7 +531,7 @@ Triggers just prior to the view being rendered. Also triggered as
 "collection:before:render" / `onCollectionBeforeRender`.
 
 ```js
-var MyView = Backbone.Marionette.CollectionView.extend({...});
+var MyView = Marionette.CollectionView.extend({...});
 
 var myView = new MyView();
 
@@ -549,7 +550,7 @@ and allows parent views and other parts of the application to
 know that the view was rendered.
 
 ```js
-var MyView = Backbone.Marionette.CollectionView.extend({...});
+var MyView = Marionette.CollectionView.extend({...});
 
 var myView = new MyView();
 
@@ -570,7 +571,7 @@ When `reorderOnSort` is set to `true`, these events are fired
 respectfully just prior/just after the reordering of the collection.
 
 ```js
-var MyView = Backbone.Marionette.CollectionView.extend({...});
+var MyView = Marionette.CollectionView.extend({...});
 
 var myCol = new Backbone.Collection({ comparator: ... })
 var myView = new MyView({ reorderOnSort: true });
@@ -595,7 +596,7 @@ Triggered just before destroying the view. A "before:destroy:collection" /
 `onBeforeDestroyCollection` event will also be fired
 
 ```js
-var MyView = Backbone.Marionette.CollectionView.extend({...});
+var MyView = Marionette.CollectionView.extend({...});
 
 var myView = new MyView();
 
@@ -612,7 +613,7 @@ Triggered just after destroying the view, both with corresponding
 method calls.
 
 ```js
-var MyView = Backbone.Marionette.CollectionView.extend({...});
+var MyView = Marionette.CollectionView.extend({...});
 
 var myView = new MyView();
 
@@ -741,7 +742,7 @@ children in the collection and renders them individually as an
 `childView`.
 
 ```js
-var MyCollectionView = Backbone.Marionette.CollectionView.extend({...});
+var MyCollectionView = Marionette.CollectionView.extend({...});
 
 // all of the children views will now be rendered.
 new MyCollectionView().render();
@@ -778,7 +779,7 @@ view definition. This method takes three parameters and has no return
 value.
 
 ```js
-Backbone.Marionette.CollectionView.extend({
+Marionette.CollectionView.extend({
 
 	// The default implementation:
   attachHtml: function(collectionView, childView, index){
@@ -949,7 +950,7 @@ destroyed and cleaned up. This lets you handle any additional clean up
 code without having to override the `destroy` method.
 
 ```js
-Backbone.Marionette.CollectionView.extend({
+Marionette.CollectionView.extend({
   onDestroy: function() {
     // custom cleanup or destroying code, here
   }

@@ -14,6 +14,10 @@ Marionette.LayoutView = Marionette.ItemView.extend({
     destroyImmediate: false
   },
 
+  // used as the prefix for child view events
+  // that are forwarded through the layoutview
+  childViewEventPrefix: 'childview',
+
   // Ensure the regions are available when the `initialize` method
   // is called.
   constructor: function(options) {

@@ -122,13 +122,11 @@ describe('region', function() {
         onSwapOut: function() {}
       });
 
-      this.MyView = Backbone.View.extend({
+      this.MyView = Marionette.View.extend({
         events: {
           'click': function() {}
         },
-        render: function() {
-          $(this.el).html('some content');
-        },
+        template: _.template('some content'),
         destroy: function() {},
         onBeforeShow: function() {},
         onShow: function() {
@@ -150,6 +148,7 @@ describe('region', function() {
       this.viewRenderSpy = this.sinon.spy(this.view, 'render');
       this.viewOnBeforeShowSpy = this.sinon.spy(this.view, 'onBeforeShow');
       this.viewOnShowSpy = this.sinon.spy(this.view, 'onShow');
+      this.triggerSpy = this.sinon.spy(this.view, 'trigger');
 
       this.myRegion = new this.MyRegion();
       this.regionOnBeforeShowSpy = this.sinon.spy(this.myRegion, 'onBeforeShow');
@@ -245,6 +244,22 @@ describe('region', function() {
 
     it('should pass the shown view, region and options arguments to the view "onBeforeShow"', function() {
       expect(this.viewOnBeforeShowSpy).to.have.been.calledWith(this.view, this.myRegion, this.showOptions);
+    });
+
+    describe('wrapping the view render events inside the view show events', function() {
+      beforeEach(function() {
+        this.viewEvents = _.map(this.triggerSpy.getCalls(), function(call) {
+          return call.args[0];
+        });
+      });
+
+      it('triggers the before render event after the before show event', function() {
+        expect(_.indexOf(this.viewEvents, 'before:show')).to.be.below(_.indexOf(this.viewEvents, 'before:render'));
+      });
+
+      it('triggers the show event after the render event', function() {
+        expect(_.indexOf(this.viewEvents, 'render')).to.be.below(_.indexOf(this.viewEvents, 'show'));
+      });
     });
 
     it('should trigger a show event for the view', function() {

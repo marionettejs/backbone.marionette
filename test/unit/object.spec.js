@@ -64,7 +64,7 @@ describe('marionette object', function() {
       expect(this.object.destroy).to.have.returned(this.object);
     });
 
-    it('should set the controller isDestroyed to true', function() {
+    it('should set the object isDestroyed to true', function() {
       expect(this.object).to.be.have.property('isDestroyed', true);
     });
 

@@ -1,16 +1,17 @@
 (function(root, factory) {
 
   if (typeof define === 'function' && define.amd) {
-    define(['backbone', 'underscore', 'backbone.babysitter'], function(Backbone, _) {
-      return (root.Marionette = root.Mn = factory(root, Backbone, _));
+    define(['backbone', 'underscore', 'backbone.babysitter', 'backbone-metal'], function(Backbone, _, Metal) {
+      return (root.Marionette = root.Mn = factory(root, Backbone, _, Metal));
     });
   } else if (typeof exports !== 'undefined') {
     var Backbone = require('backbone');
     var _ = require('underscore');
     var BabySitter = require('backbone.babysitter');
-    module.exports = factory(root, Backbone, _);
+    var Metal = require('backbone-metal');
+    module.exports = factory(root, Backbone, _, Metal);
   } else {
-    root.Marionette = root.Mn = factory(root, root.Backbone, root._);
+    root.Marionette = root.Mn = factory(root, root.Backbone, root._, root.Metal);
   }
 
 }(this, function(root, Backbone, _) {
@@ -33,7 +34,8 @@
   // @include ../dom-refresh.js
   // @include ../bind-entity-events.js
 
-  // @include ../error.js
+  // @include ../metal.js
+
   // @include ../object.js
   // @include ../region.js
   // @include ../region-manager.js

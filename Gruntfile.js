@@ -146,6 +146,11 @@ module.exports = function(grunt) {
       }
     },
 
+    "yaml-validate": {
+      options: {
+        glob: "api/*.yaml"
+      }
+    },
     coveralls: {
       options: {
         src: 'coverage/lcov.info',
@@ -183,20 +188,6 @@ module.exports = function(grunt) {
         files: {
           src: ['test/unit/**.js']
         }
-      }
-    },
-
-    jsDocFiles: {
-     docs: {
-        options: {
-        },
-        files: [{
-          expand: true,
-          cwd: 'api',
-          src: '*.jsdoc',
-          dest: 'jsdoc',
-          ext: '.json'
-        }]
       }
     },
 
@@ -290,7 +281,7 @@ module.exports = function(grunt) {
 
   grunt.registerTask('dev', 'Auto-lints while writing code.', ['test', 'watch:marionette']);
 
-  grunt.registerTask('api', 'Build jsdoc api files', ['jsDocFiles']);
+  grunt.registerTask('api', 'test all yaml files', ['yaml-validate']);
 
   grunt.registerTask('build', 'Build all three versions of the library.', ['clean:lib', 'lint', 'mochaTest', 'unwrap', 'preprocess', 'template', 'concat', 'uglify']);
 };

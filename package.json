@@ -75,6 +75,7 @@
     "mocha": "1.19.0",
     "sinon": "1.10.3",
     "sinon-chai": "2.5.0",
-    "unwrap": "0.1.0"
+    "unwrap": "0.1.0",
+    "grunt-yaml-validate": "~0.1.1"
   }
 }

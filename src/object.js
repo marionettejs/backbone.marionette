@@ -5,6 +5,7 @@
 // Object borrows many conventions and utilities from Backbone.
 Marionette.Object = function(options) {
   this.options = _.extend({}, _.result(this, 'options'), options);
+  this.isDestroyed = false;
 
   this.initialize.apply(this, arguments);
 };
@@ -21,7 +22,10 @@ _.extend(Marionette.Object.prototype, Backbone.Events, {
   initialize: function() {},
 
   destroy: function() {
+    if (this.isDestroyed) { return this; }
+
     this.triggerMethod('before:destroy');
+    this.isDestroyed = true;
     this.triggerMethod('destroy');
     this.stopListening();
 

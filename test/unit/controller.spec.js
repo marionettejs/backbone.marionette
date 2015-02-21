@@ -109,5 +109,24 @@ describe('marionette controller', function() {
     it('should return the controller', function() {
       expect(this.controller.destroy).to.have.returned(this.controller);
     });
+
+    it('should set the controller isDestroyed to true', function() {
+      expect(this.controller).to.be.have.property('isDestroyed', true);
+    });
+
+    describe('isDestroyed property', function() {
+      beforeEach(function() {
+        this.controller = new Marionette.Controller();
+      });
+
+      it('should be set to false before destroy', function() {
+        expect(this.controller).to.be.have.property('isDestroyed', false);
+      });
+
+      it('should be set to true after destroying', function() {
+        this.controller.destroy();
+        expect(this.controller).to.be.have.property('isDestroyed', true);
+      });
+    });
   });
 });

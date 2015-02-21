@@ -63,5 +63,24 @@ describe('marionette object', function() {
     it('should return the object', function() {
       expect(this.object.destroy).to.have.returned(this.object);
     });
+
+    it('should set the object isDestroyed to true', function() {
+      expect(this.object).to.be.have.property('isDestroyed', true);
+    });
+
+    describe('isDestroyed property', function() {
+      beforeEach(function() {
+        this.object = new Marionette.Object();
+      });
+
+      it('should be set to false before destroy', function() {
+        expect(this.object).to.be.have.property('isDestroyed', false);
+      });
+
+      it('should be set to true after destroying', function() {
+        this.object.destroy();
+        expect(this.object).to.be.have.property('isDestroyed', true);
+      });
+    });
   });
 });

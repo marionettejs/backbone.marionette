@@ -18,7 +18,7 @@ Marionette.View = Backbone.View.extend({
     // at some point however this may be removed
     this.options = _.extend({}, _.result(this, 'options'), options);
 
-    if (this.options && ('el' in this.options ? this.options.el === false : this.el === false)) {
+    if (this.getOption('el') === false) {
       this.noElement = true;
     }
 

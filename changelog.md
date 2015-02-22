@@ -1,3 +1,75 @@
+### v2.4.0 [view commit logs](https://github.com/marionettejs/backbone.marionette/compare/v2.3.2...v2.4.0)
+
+#### 2.4 In Overview
+
+The Marionette 2.4 release is primarily focused around adding power and performance to `Marionette.CollectionView’s` and `CompositeViews`. It is now possible for users to declaratively sort, filter, and reorder in a performant and clear way on the view layer. Prior to this work it was difficult and required significant workarounds.
+
+As well as working on the `CollectionView` layer we have added full support for lodash and multiple builds of backbone, underscore and lodash. Allowing the user to pick whatever tools they wish.
+
+The other powerful feature that we introduced in this release is the concept of `childEvents` for `LayoutView` and their subviews. Prior to this release there was never a great way to listen or react to events that were triggered on subviews, like when something was rendered or destroyed. Now we have brought over the declarative `childEvents` hash from `CollectionView` into the `LayoutView`.
+
+As always come and join us in [chat](https://gitter.im/marionettejs/backbone.marionette/)
+
+#### Features
+
+* CollectionView
+  * You can now set a filter method on a `CollectionView` or `CompositeView` to filter what views are show. This is useful for when you are displaying a list that a user can filter.
+  * Add the `reorderOnSort` option to `CollectionView` and `CompositeView` to use jQuery to move child nodes around without having to re-render the entire tree. This is a massive perf boost and is an easy win if you are sorting your collections.
+  * The `CollectionView` now has a `viewComparator`, to enable custom sorting on a per view basis regardless of what how your backing collection is sorted.
+  * Refactor sort param lookup to use `Marionette.getOption`.
+  * **Fix** childViews now fire a `before:show` event even if the childView is inserted after the parent `CollectionView` or `CompositeView` has been shown.
+
+* Regions
+  * The `empty` method now takes an optional `preventDestroy` flag to prevent the destruction of the view shown within.
+  * `this.myRegion.empty({preventDestroy: true})`
+
+* TemplateCache
+  * The templateCache `get` method now takes a second param of options to enable passing options to the loading of templates.
+
+* LayoutView
+  * Add a new helper method for easier showing of child nodes `showChildView`
+  *  `this.showChildView('sidebar', new SidebarView());`
+  *  Add a new helper method of easier retrieving of child nodes `getChildView`
+  *  `this.getChildView(‘sidebar’)`
+  *  Add a `destroyImmediate` option to the `LayoutView`, to destroy the layout view element and then remove the child nodes. This is a perf optimization that you can now opt into.
+  *  `@ui` interpolation is now supported within region definitions on a `LayoutView`
+  *  `regionEvent` support was added
+  *  you can access this functionality via `onChildViewX` or via the declarative `childEvents` hash
+
+* ItemViews
+  * the `isRendered` property is now set to `true` after render, even if no template is set.
+  * Views
+  * The `destroy` method now returns this instance that was destroyed to enable easier chaining of view actions.
+  * If you define the options hash on your `Marionette.View` or if you pass options as a function to your `Marionette.View`, pass the result of options down to the backbone view constructor.
+  * All views now have a `isRendered` property, that is updated after `render` and `destroy`.
+
+* Object
+  * The `destroy` method now returns this instance that was destroyed to enable easier chaining of object actions.
+
+* Behavior
+  * The `destroy` method now returns this instance that was destroyed to enable easier chaining of behavior actions.
+  * Expose the `UI` hash to a behavior instance. The behavior `UI` hash is a composite of the view hash and the behavior hash merged with the behavior hash tasking precedence.
+
+#### Util
+
+* `Marionette._getValue` will now use `call` under the hood if no arguments are passed (micro optimization).
+* Add `Marionette.mergeOptions` to `Marionette.View*` classes, `Marionette.Object`. `Marionette.AppRouter`, `Marionette.Controller`
+* `mergeOptions` is a handy function to pluck certain `options` and attach them directly to an instance.
+
+#### Docs
+
+* Minor documentation cleanups and fixes
+
+#### Deprecation Notices
+
+* Deprecate `Marionette.Controller`, Use `Marionette.Object` instead.
+
+#### Misc
+
+* YAML api documentation is now linted on each PR.
+* Add `Marionette.FEATURES` flag.
+* Refactor several methods to enable 100% compatibility with lodash.
+
 ### v2.3.2 [view commit logs](https://github.com/marionettejs/backbone.marionette/compare/v2.3.1...v2.3.2)
 
 #### 2.3.2 in overview:

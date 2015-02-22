@@ -115,7 +115,13 @@ Marionette.CompositeView = Marionette.CollectionView.extend({
   // }
   // ```
   attachElContent: function(html) {
-    this.$el.html(html);
+    if (this.noElement === true) {
+      var newEl = $(html);
+      this.$el.replaceWith(newEl);
+      this.setElement();
+    } else {
+      this.$el.html(html);
+    }
 
     return this;
   },

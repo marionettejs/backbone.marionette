@@ -81,6 +81,13 @@ Marionette.ItemView = Marionette.View.extend({
       });
     }
 
+    if (!template && this.noElement === true) {
+      throw new Marionette.Error({
+        name: 'UndefinedTemplateAndNoElementError',
+        message: 'Cannot render the template since it is null or undefined, and no element has been specified.'
+      });
+    }
+
     // Add in entity data and template helpers
     var data = this.mixinTemplateHelpers(this.serializeData());
 
@@ -104,7 +111,13 @@ Marionette.ItemView = Marionette.View.extend({
   // }
   // ```
   attachElContent: function(html) {
-    this.$el.html(html);
+      if (this.noElement === true) {
+        var newEl = $(html);
+        this.$el.replaceWith(newEl);
+        this.setElement();
+      } else {
+        this.$el.html(html);
+      }
 
     return this;
   }

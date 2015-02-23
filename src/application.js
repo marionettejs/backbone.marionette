@@ -68,7 +68,7 @@ Marionette.Application = Marionette.Object.extend({
   },
 
   // Get all the regions from the region manager
-  getRegions: function(){
+  getRegions: function() {
     return this._regionManager.getRegions();
   },
 

@@ -20,7 +20,7 @@ _.extend(Marionette.Callbacks.prototype, {
     this._callbacks.push({cb: callback, ctx: contextOverride});
 
     promise.then(function(args) {
-      if (contextOverride){ args.context = contextOverride; }
+      if (contextOverride) { args.context = contextOverride; }
       callback.call(args.context, args.options);
     });
   },

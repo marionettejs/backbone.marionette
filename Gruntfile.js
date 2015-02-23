@@ -191,6 +191,24 @@ module.exports = function(grunt) {
       }
     },
 
+    jscs: {
+      options: {
+        config: ".jscsrc"
+      },
+
+      marionette: {
+        files: {
+          src: [ 'src/*.js' ]
+        }
+      },
+
+      specs: {
+        files: {
+          src: ['test/unit/**.js']
+        }
+      }
+    },
+
     watch: {
       marionette : {
         options: {

@@ -431,9 +431,13 @@ Marionette.CollectionView = Marionette.View.extend({
 
     if (view) {
       this.triggerMethod('before:remove:child', view);
+
       // call 'destroy' or 'remove', depending on which is found
-      if (view.destroy) { view.destroy(); }
-      else if (view.remove) { view.remove(); }
+      if (view.destroy) {
+        view.destroy();
+      } else if (view.remove) {
+        view.remove();
+      }
 
       delete view._parent;
       this.stopListening(view);
@@ -482,8 +486,7 @@ Marionette.CollectionView = Marionette.View.extend({
       // in order to reduce the number of inserts into the
       // document, which are expensive.
       collectionView._bufferedChildren.splice(index, 0, childView);
-    }
-    else {
+    } else {
       // If we've already rendered the main collection, append
       // the new child into the correct order if we need to. Otherwise
       // append to the end.

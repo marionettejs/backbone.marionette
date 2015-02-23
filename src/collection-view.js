@@ -384,7 +384,6 @@ Marionette.CollectionView = Marionette.View.extend({
     });
   },
 
-
   // Internal Method. Add the view to children and render it at
   // the given index.
   _addChildView: function(view, index) {

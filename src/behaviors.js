@@ -55,8 +55,8 @@ Marionette.Behaviors = (function(Marionette, _) {
           // the behavior index, and the behavior event index
           // to generate a non colliding event namespace
           // http://api.jquery.com/event.namespace/
-          var eventName = match[1] + '.' + [this.cid, i, j++, ' '].join(''),
-              selector  = match[2];
+          var eventName = match[1] + '.' + [this.cid, i, j++, ' '].join('');
+          var selector  = match[2];
 
           var eventKey  = eventName + selector;
           var handler   = _.isFunction(behaviour) ? behaviour : b[behaviour];

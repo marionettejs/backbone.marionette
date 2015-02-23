@@ -315,7 +315,7 @@ Marionette.Region = Marionette.Object.extend({
 
   // Build the region from a string selector like '#foo-region'
   _buildRegionFromSelector: function(selector, DefaultRegionClass) {
-    return new DefaultRegionClass({ el: selector });
+    return new DefaultRegionClass({el: selector});
   },
 
   // Build the region from a configuration object

@@ -55,8 +55,9 @@ var MyView = Marionette.ItemView.extend({
 
 Interaction points, such as tooltips and warning messages, are generic concepts. There is no need to recode them within your Views. They are prime candidates for abstraction into a higher level, non-coupled concept, which is exactly what Behaviors provide you with.
 
-Here is the syntax for declaring which behaviors get used within a View:
-* The keys in the hash are passed to `getBehaviorClass`, which looks up the correct `Behavior` class.
+Here is the syntax for declaring which behaviors get used within a View.  
+* You can pass behaviors either as a set of key-value pairs where the keys are used to lookup the behavior class, or as an array.
+* The keys in the hash are passed to `getBehaviorClass` which looks up the correct `Behavior` class.
 * The options for each `Behavior` are also passed through to the `Behavior` during initialization.
 * The options are then stored within each `Behavior` under `options`.
 

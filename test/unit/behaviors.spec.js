@@ -39,8 +39,12 @@ describe('Behaviors', function() {
 
   describe('behavior parsing', function() {
     beforeEach(function() {
+      this.Bar = Marionette.Behavior.extend({});
+      this.Baz = Marionette.Behavior.extend({});
       this.behaviors = {
-        foo: this.sinon.spy(Marionette, 'Behavior')
+        foo: this.sinon.spy(Marionette, 'Behavior'),
+        bar: this.sinon.spy(this, 'Bar'),
+        baz: this.sinon.spy(this, 'Baz')
       };
 
       Marionette.Behaviors.behaviorsLookup = this.behaviors;
@@ -106,6 +110,27 @@ describe('Behaviors', function() {
 
       it('should instantiate the behavior', function() {
         expect(this.behaviors.foo).to.have.been.calledOnce;
+      });
+    });
+
+    describe('when behaviors are specified as an array', function() {
+      beforeEach(function() {
+        this.View = Marionette.ItemView.extend({
+          behaviors: [this.behaviors.foo, this.behaviors.bar, {
+            behaviorClass: this.behaviors.baz
+          }]
+        });
+
+        this.view = new this.View();
+      });
+
+      it('should instantiate behaviors passed directly as a class', function() {
+        expect(this.behaviors.foo).to.have.been.calledOnce;
+        expect(this.behaviors.bar).to.have.been.calledOnce;
+      });
+
+      it('should instantiate behaviors passed with behaviorClass', function() {
+        expect(this.behaviors.baz).to.have.been.calledOnce;
       });
     });
   });

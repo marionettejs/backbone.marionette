@@ -2,8 +2,8 @@
 
 # Marionette.Behaviors
 
-'Marionette.Behaviors' is a utility class that takes care of glueing your `behavior` instances to their given `View`.
-The most important part of this class is that you **MUST** override the class level `behaviorsLookup` method or set the option `behaviorClass` for things to work properly.
+'Marionette.Behaviors' is a utility class that takes care of gluing your `Behavior` instances to their given `View`.
+The most important thing to understand when using this class is that you **MUST** override the class level `behaviorsLookup` method or set the option `behaviorClass` for things to work properly.
 
 ## Documentation Index
 * [API](#api)
@@ -13,11 +13,11 @@ The most important part of this class is that you **MUST** override the class le
 
 ## API
 
-There are two class level methods that you can override on the `Behaviors` class. The rest of the class is tied to under the hood implementation details of views.
+There are two class level methods that you can override on the `Behaviors` class. The rest of the class is tied to under the hood implementation details of Views.
 
 ### behaviorsLookup
 
-This method defines where your behavior classes are stored. A simple implementation might look something like this.
+This method defines where your Behavior classes are stored. A simple implementation might look something like this.
 
 ```js
 Marionette.Behaviors.behaviorsLookup = function() {
@@ -25,9 +25,9 @@ Marionette.Behaviors.behaviorsLookup = function() {
 }
 ```
 
-By default the behaviors are looked up by their key value in a given views behavior hash.
+By default the Behaviors are looked up by their key value in a given View's behavior hash.
 
-In this sample (using the default `getBehaviorClass` implementation) your code will expect the following behaviors to be present in `window.Behaviors.DestroyWarn` and `window.Behaviors.ToolTip`
+In this sample (using the default `getBehaviorClass` implementation) your code will expect the following Behaviors to be present in `window.Behaviors.DestroyWarn` and `window.Behaviors.ToolTip`
 
 ```js
 var MyView = Marionette.ItemView.extend({
@@ -44,7 +44,7 @@ var MyView = Marionette.ItemView.extend({
 
 ### getBehaviorClass
 
-This method has a default implementation that is simple to override. It is responsible for the lookup of single behavior from within the `Behaviors.behaviorsLookup` or elsewhere.
+This method has a default implementation that is simple to override. It is responsible for the lookup of single Behavior from within the `Behaviors.behaviorsLookup` or elsewhere.
 
 ```js
 getBehaviorClass: function(options, key) {
@@ -58,7 +58,7 @@ getBehaviorClass: function(options, key) {
 
 ### behaviorClass
 
-This property lets you pass a `class` in for the `behavior` to use (bypassing the normal key based lookup). This is nice to have when the behavior is a dependency of the view in [requirejs](http://requirejs.org/). Properties passed in this way will be used in `getBehaviorClass`.
+This property lets you pass a `class` in for the Behavior to use (bypassing the normal key based lookup). This is nice to have when the Behavior is a dependency of the View in a module system like [requirejs](http://requirejs.org/) or [browserify](http://browserify.org/). Properties passed in this way will be used in `getBehaviorClass`.
 
 ```js
 define(['marionette', 'lib/tooltip'], function(Marionette, Tooltip) {

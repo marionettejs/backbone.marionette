@@ -3,7 +3,7 @@
 # Marionette.Behavior
 
 
-A `Behavior` is an  isolated set of DOM / user interactions that can be mixed into any `View` or another `Behavior`. `Behaviors` allow you to blackbox `View` specific interactions into portable logical chunks, keeping your `views` simple and your code DRY.
+A `Behavior` is an  isolated set of DOM / user interactions that can be mixed into any `View` or another `Behavior`. Behaviors allow you to blackbox View specific interactions into portable logical chunks, keeping your Views simple and your code DRY.
 
 ## Documentation Index
 
@@ -22,13 +22,13 @@ A `Behavior` is an  isolated set of DOM / user interactions that can be mixed in
 
 ## The Motivation
 
-As you build more and more complex views, you will find that your `view` becomes less about displaying model data, and more about interactions.
+As you build more and more complex Views, you will find that your View becomes less about displaying model data, and more about interactions.
 
 These interactions tend to be chunks of logic that you want to use in multiple views.
 
 ## Using
 
-Here is an example of a simple `itemView`. Let's take a stab at simplifying it, and abstracting behaviors from it.
+Here is an example of a simple `ItemView`. Let's take a stab at simplifying it, and abstracting Behaviors from it.
 
 ```js
 var MyView = Marionette.ItemView.extend({
@@ -53,11 +53,11 @@ var MyView = Marionette.ItemView.extend({
 });
 ```
 
-Interaction points, such as tooltips and warning messages, are generic concepts. There is no need to recode them within your views. They are prime for abstraction into a higher level non-coupled concept, which is exactly what Behaviors provide you with.
+Interaction points, such as tooltips and warning messages, are generic concepts. There is no need to recode them within your Views. They are prime for abstraction into a higher level non-coupled concept, which is exactly what Behaviors provide you with.
 
-Here is the syntax for declaring which behaviors get used within a view.
-The keys in the hash are passed to `getBehaviorClass` to lookup the correct `Behavior` class.
-The options for each behavior are also passed to said Behavior during initialization. The options are then stored within each behavior under `options`.
+Here is the syntax for declaring which behaviors get used within a View.
+The keys in the hash are passed to `getBehaviorClass` which looks up the correct `Behavior` class.
+The options for each Behavior are also passed through to the Behavior during initialization. The options are then stored within each Behavior under `options`.
 
 ```js
 var MyView = Marionette.ItemView.extend({
@@ -76,7 +76,7 @@ var MyView = Marionette.ItemView.extend({
 });
 ```
 
-Now let's create the `DestroyWarn` behavior.
+Now let's create the `DestroyWarn` Behavior.
 
 ```js
 var DestroyWarn = Marionette.Behavior.extend({
@@ -117,7 +117,7 @@ var ToolTip = Marionette.Behavior.extend({
 });
 ```
 
-Finally, the user must define a location for where their `behaviors` are stored.
+Finally, the user must define a location for where their Behaviors are stored.
 A simple example of this would look like this:
 
 ```js
@@ -126,14 +126,14 @@ A simple example of this would look like this:
   }
 ```
 
-In this example you would then store your behaviors like this:
+In this example you would then store your Behaviors like this:
 
 ```js
 window.Behaviors.ToolTip = ToolTip;
 window.Behaviors.DestroyWarn = DestroyWarn;
 ```
 
-Note than in addition to extending a `View` with `Behavior`, a `Behavior` can itself use other behaviors. The syntax is identical to that used for a `View`:
+Note than in addition to extending a `View` with `Behavior`, a `Behavior` can itself use other Behaviors. The syntax is identical to that used for a `View`:
 
 ```js
 var Modal = Marionette.Behavior.extend({
@@ -145,37 +145,30 @@ var Modal = Marionette.Behavior.extend({
 });
 ```
 
-Nested behaviors act as if they were direct behaviors of the parent behavior's view instance.
+Nested Behaviors act as if they were direct Behaviors of the parent Behavior's view instance.
 
 ## API
 
 ### The Event Proxy
 Behaviors are powered by an event proxy. What this means is that any events that are triggered by the view's `triggerMethod` function are passed to each Behavior on the view as well.
 
-As a real world example, whenever in your `view` you would have `onShow`, your behavior can also have this `onShow` method defined. The same follows for `modelEvents` and `collectionEvents`. Think of your behavior as a receiver for all of the events on your view instance.
+As a real world example, whenever in your View you would define a click event in the `events` hash, you can define the same event listeners and callbacks in the behavior's `events` hash. The same follows for `modelEvents` and `collectionEvents`. Think of your behavior as a receiver for all of the events on your view instance.
 
 This concept also allows for a nice decoupled method to communicate to behaviors from your view instance.
 You can just call from within your view `this.triggerMethod("SomeEvent", {some: "data"})`. then your `behavior` class would look like this:
 
 ```js
 Marionette.Behavior.extend({
-	onSomeEvent: function(data) {
+    events: {
+        'click .foo' : 'onClick'
+    },
+
+	onClick: function(data) {
 		console.log("wow such data", data);
 	}
 });
 ```
 
-### Triggers
-Any `triggers` you define on the `Behavior` will be triggered in response to the
-appropriate event on the view.
-
-```js
-Marionette.Behavior.extend({
-  triggers: {
-    'click .label': 'click:label'
-  }
-});
-```
 
 ### Model Events
 `modelEvents` will respond to the view's model events.
@@ -206,6 +199,34 @@ Marionette.Behavior.extend({
   });
 ```
 
+### Life Cycle Methods
+
+In addition to providing the same event hashes as Views, Behaviors allow you to use the same life cycle functions that you find on Views.
+That means methods like `initialize`, `onRender`, `onBeforeShow`, and `onBeforeDestroy` are all valid as long as the View that implements the Behavior fires the relevant events.
+
+
+```js
+  Marionette.Behavior.extend({
+
+    onRender: function() {
+        //apply a jQuery plugin to every .foo item within the view
+        this.$('.foo').bar();
+    }
+  });
+```
+
+### Triggers
+Any `triggers` you define on the `Behavior` will be triggered in response to the
+appropriate event on the view.
+
+```js
+Marionette.Behavior.extend({
+  triggers: {
+    'click .label': 'click:label'
+  }
+});
+```
+
 ### Grouped Behaviors
 Then `behaviors` key allows a behavior to group multiple behaviors together.
 
@@ -218,7 +239,7 @@ Then `behaviors` key allows a behavior to group multiple behaviors together.
 ```
 
 ### $
-`$` is a direct proxy of the views `$` lookup method.
+`$` is a direct proxy of the view's `$` lookup method.
 
 ```js
 	Marionette.Behavior.extend({
@@ -241,8 +262,8 @@ Marionette.Behavior.extend({
 ```
 
 ### defaults
-`defaults` can be a `hash` or `function` to define the default options for your behavior.
-The default options will be overridden depending on what you set as the options per behavior (this works just like a `backbone.model`).
+`defaults` can be a `hash` or `function` to define the default options for your Behavior.
+The default options will be overridden depending on what you set as the options per Behavior (this works just like a `Backbone.Model`).
 
 ```js
 Marionette.Behavior.extend({
@@ -264,7 +285,7 @@ Marionette.Behavior.extend({
 ```
 
 ### view
-The `view` is a reference to the view instance that the `behavior` is on.
+The `view` is a reference to the view instance that the Behavior is on.
 
 ```js
 Marionette.Behavior.extend({
@@ -277,8 +298,8 @@ Marionette.Behavior.extend({
 ### ui
 
 Behaviors can have their own ui hash, which will be mixed into the ui hash of its associated view instance.
-ui elements defined on either the behavior or the view will be made available within events, and triggers.  They
-also are attached directly to the behavior and can be accessed within behavior methods as `this.ui`.
+ui elements defined on either the Behavior or the View will be made available within events, and triggers.  They
+also are attached directly to the Behavior and can be accessed within Behavior methods as `this.ui`.
 
 ```js
 Marionette.Behavior.extend({

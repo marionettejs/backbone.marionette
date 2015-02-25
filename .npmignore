@@ -5,6 +5,7 @@ jsdoc
 src
 tasks
 test
+tmp
 .editorconfig
 .gitignore
 .jshintrc

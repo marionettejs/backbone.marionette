@@ -25,11 +25,13 @@ describe('item view', function() {
     beforeEach(function() {
       this.onBeforeRenderStub = this.sinon.stub();
       this.onRenderStub       = this.sinon.stub();
+      this.bindUIElementsStub = this.sinon.stub();
 
       this.View = Marionette.View.extend({
         template: false,
         onBeforeRender: this.onBeforeRenderStub,
-        onRender: this.onRenderStub
+        onRender: this.onRenderStub,
+        bindUIElements: this.bindUIElementsStub
       });
 
       this.view = new this.View();
@@ -78,6 +80,10 @@ describe('item view', function() {
 
     it('should claim isRendered', function() {
       expect(this.view.isRendered).to.be.true;
+    });
+
+    it('should call bindUIElements', function() {
+      expect(this.bindUIElementsStub).to.have.been.calledOnce;
     });
   });
 

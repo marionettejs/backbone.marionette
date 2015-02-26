@@ -86,7 +86,8 @@ describe('view entity events', function() {
     });
 
     it('should error when method doesnt exist', function() {
-      expect(this.getBadViewInstance).to.throw('Method "doesNotExist" was configured as an event handler, but does not exist.');
+      var errorMessage = 'Method "doesNotExist" was configured as an event handler, but does not exist.';
+      expect(this.getBadViewInstance).to.throw(errorMessage);
     });
   });
 

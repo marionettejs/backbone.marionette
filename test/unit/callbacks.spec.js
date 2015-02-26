@@ -91,11 +91,11 @@ describe('callbacks', function() {
     });
   });
 
-  describe("when Marionette.Deferred().promise is an object", function(){
-    beforeEach(function(){
+  describe('when Marionette.Deferred().promise is an object', function() {
+    beforeEach(function() {
       this.sandbox = sinon.sandbox.create();
 
-      this.sandbox.stub(Backbone.Marionette, "Deferred", function(){
+      this.sandbox.stub(Backbone.Marionette, 'Deferred', function() {
         var deferred = Backbone.$.Deferred();
         deferred.promise = deferred.promise();
         return deferred;
@@ -109,11 +109,11 @@ describe('callbacks', function() {
       callbacks.run();
     });
 
-    afterEach(function(){
+    afterEach(function() {
       this.sandbox.restore();
     });
 
-    it("should execute the callbacks", function(){
+    it('should execute the callbacks', function() {
       expect(this.spy).to.have.been.called;
     });
   });

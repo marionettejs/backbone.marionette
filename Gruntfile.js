@@ -294,7 +294,7 @@ module.exports = function(grunt) {
 
   grunt.registerTask('default', 'An alias task for running tests.', ['test']);
 
-  grunt.registerTask('lint', 'Lints our sources', ['lintspaces', 'jshint']);
+  grunt.registerTask('lint', 'Lints our sources', ['lintspaces', 'jshint', 'jscs']);
 
   grunt.registerTask('test', 'Run the unit tests.', ['lint', 'api', 'mochaTest']);
 

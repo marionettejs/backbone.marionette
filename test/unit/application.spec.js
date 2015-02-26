@@ -3,8 +3,8 @@ describe('marionette application', function() {
 
   describe('when registering an initializer and starting the application', function() {
     beforeEach(function() {
-      this.fooOptions = { foo: 'bar' };
-      this.appOptions = { baz: 'tah' };
+      this.fooOptions = {foo: 'bar'};
+      this.appOptions = {baz: 'tah'};
       this.initializeStub = this.sinon.stub(Marionette.Application.prototype, 'initialize');
       this.app = new Marionette.Application(this.appOptions);
 
@@ -82,7 +82,7 @@ describe('marionette application', function() {
   describe('when instantiating an app with options specified', function() {
     beforeEach(function() {
       this.fooOption = 'bar';
-      this.app = new Marionette.Application({ fooOption: this.fooOption });
+      this.app = new Marionette.Application({fooOption: this.fooOption});
     });
 
     it('should merge those options into the app', function() {
@@ -92,7 +92,7 @@ describe('marionette application', function() {
 
   describe('when specifying an on start callback, and starting the app', function() {
     beforeEach(function() {
-      this.fooOptions = { foo: 'bar' };
+      this.fooOptions = {foo: 'bar'};
       this.app = new Marionette.Application();
 
       this.startStub = this.sinon.stub();
@@ -114,7 +114,7 @@ describe('marionette application', function() {
     describe('when channelName is specified', function() {
       beforeEach(function() {
         this.channelName = 'foo';
-        this.App = Marionette.Application.extend({ channelName: 'foo' });
+        this.App = Marionette.Application.extend({channelName: 'foo'});
         this.app = new this.App();
         this.channel = Backbone.Wreqr.radio.channel(this.channelName);
       });
@@ -140,7 +140,7 @@ describe('marionette application', function() {
       beforeEach(function() {
         this.channelName = 'foo';
         this.channelNameStub = this.sinon.stub().returns(this.channelName);
-        this.App = Marionette.Application.extend({ channelName: this.channelNameStub });
+        this.App = Marionette.Application.extend({channelName: this.channelNameStub});
         this.app = new this.App();
       });
 

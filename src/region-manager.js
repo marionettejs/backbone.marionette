@@ -59,7 +59,7 @@ Marionette.RegionManager = Marionette.Controller.extend({
 
   // Gets all the regions contained within
   // the `regionManager` instance.
-  getRegions: function(){
+  getRegions: function() {
     return _.clone(this._regions);
   },
 

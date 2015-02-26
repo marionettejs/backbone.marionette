@@ -1,4 +1,4 @@
-describe("collection view - filter", function() {
+describe('collection view - filter', function() {
   'use strict';
 
   beforeEach(function() {
@@ -38,14 +38,14 @@ describe("collection view - filter", function() {
     });
   });
 
-  describe("_shouldAddChild", function() {
-    it("returns the result of the filter", function() {
+  describe('_shouldAddChild', function() {
+    it('returns the result of the filter', function() {
       var collectionView = new this.CollectionView();
       expect(collectionView._shouldAddChild(this.passModel)).to.be.true;
       expect(collectionView._shouldAddChild(this.failModel)).to.be.false;
     });
 
-    it("will prefer to use the filter supplied at construction", function() {
+    it('will prefer to use the filter supplied at construction', function() {
       var collectionView = new this.CollectionView({
         filter: this.inverseFilter
       });
@@ -53,14 +53,14 @@ describe("collection view - filter", function() {
       expect(collectionView._shouldAddChild(this.failModel)).to.be.true;
     });
 
-    it("always returns true when no filter is supplied", function() {
+    it('always returns true when no filter is supplied', function() {
       var collectionView = new Backbone.Marionette.CollectionView();
       expect(collectionView._shouldAddChild(this.passModel)).to.be.true;
       expect(collectionView._shouldAddChild(this.failModel)).to.be.true;
     });
   });
 
-  describe("when rendering a collection where some models pass the filter", function() {
+  describe('when rendering a collection where some models pass the filter', function() {
     beforeEach(function() {
       this.collection.add(this.passModel);
       this.collection.add(this.failModel);
@@ -91,7 +91,7 @@ describe("collection view - filter", function() {
       expect(this.collectionView.children.length).to.equal(1);
     });
 
-    describe("when a model that fails the filter is removed from the collection", function() {
+    describe('when a model that fails the filter is removed from the collection', function() {
       beforeEach(function() {
         this.collection.remove(this.failModel);
       });
@@ -109,7 +109,7 @@ describe("collection view - filter", function() {
       });
     });
 
-    describe("when resetting the collection with some of the models passing the filter", function() {
+    describe('when resetting the collection with some of the models passing the filter', function() {
       beforeEach(function() {
         this.filter.reset();
         this.newPassModel = this.passModel.clone();
@@ -141,7 +141,7 @@ describe("collection view - filter", function() {
       });
     });
 
-    describe("when resetting the collection with none of the models passing the filter", function() {
+    describe('when resetting the collection with none of the models passing the filter', function() {
       beforeEach(function() {
         this.filter.reset();
         this.newFailModel = this.failModel.clone();
@@ -163,24 +163,24 @@ describe("collection view - filter", function() {
       });
     });
 
-    describe("changing the filter", function() {
+    describe('changing the filter', function() {
       beforeEach(function() {
         this.collectionView.filter = this.inverseFilter;
       });
 
-      it("uses the new filter on the next render", function() {
+      it('uses the new filter on the next render', function() {
         this.collectionView.render();
         expect(this.collectionView.children.findByModel(this.passModel)).not.to.exist;
         expect(this.collectionView.children.findByModel(this.failModel)).to.exist;
       });
     });
 
-    describe("removing the filter", function() {
+    describe('removing the filter', function() {
       beforeEach(function() {
         this.collectionView.filter = null;
       });
 
-      it("shows all views on the next render", function() {
+      it('shows all views on the next render', function() {
         this.collectionView.render();
         expect(this.collectionView.children.findByModel(this.passModel)).to.exist;
         expect(this.collectionView.children.findByModel(this.failModel)).to.exist;
@@ -188,7 +188,7 @@ describe("collection view - filter", function() {
     });
   });
 
-  describe("when rendering a collection where no models pass the filter", function() {
+  describe('when rendering a collection where no models pass the filter', function() {
     beforeEach(function() {
       this.collection.add(this.failModel);
       this.collectionView = new this.CollectionView();
@@ -206,7 +206,7 @@ describe("collection view - filter", function() {
     });
   });
 
-  describe("manipulating the collection after rendering with an empty collection", function() {
+  describe('manipulating the collection after rendering with an empty collection', function() {
     beforeEach(function() {
       this.collectionView = new this.CollectionView();
       this.collectionView.render();
@@ -243,7 +243,7 @@ describe("collection view - filter", function() {
     });
   });
 
-  describe("combined with a sort", function() {
+  describe('combined with a sort', function() {
     beforeEach(function() {
       this.collection.comparator = 'bar';
       this.model1 = new Backbone.Model({foo: true, bar: 1});
@@ -260,7 +260,7 @@ describe("collection view - filter", function() {
       this.collectionView = new this.CollectionView({childView: this.ChildView});
     });
 
-    describe("when the filter does not change between sorts", function() {
+    describe('when the filter does not change between sorts', function() {
       beforeEach(function() {
         this.collectionView.render();
         this.collection.comparator = function(model) {
@@ -269,38 +269,38 @@ describe("collection view - filter", function() {
         this.collection.sort();
       });
 
-      it("only renders views that pass the filter", function() {
+      it('only renders views that pass the filter', function() {
         expect(this.collectionView.children.findByModel(this.model1)).to.exist;
         expect(this.collectionView.children.findByModel(this.model2)).not.to.exist;
         expect(this.collectionView.children.findByModel(this.model3)).to.exist;
         expect(this.collectionView.children.findByModel(this.model4)).not.to.exist;
       });
 
-      it("renders the views in the correct order", function() {
+      it('renders the views in the correct order', function() {
         expect(this.collectionView.$el).to.contain.$text('31');
       });
     });
 
-    describe("when the filter changes between sorts", function() {
+    describe('when the filter changes between sorts', function() {
       beforeEach(function() {
         this.collectionView.render();
         this.collectionView.filter = this.inverseFilter;
         this.collection.sort();
       });
 
-      it("only renders views that pass the filter", function() {
+      it('only renders views that pass the filter', function() {
         expect(this.collectionView.children.findByModel(this.model1)).not.to.exist;
         expect(this.collectionView.children.findByModel(this.model2)).to.exist;
         expect(this.collectionView.children.findByModel(this.model3)).not.to.exist;
         expect(this.collectionView.children.findByModel(this.model4)).to.exist;
       });
 
-      it("renders the views in the correct order", function() {
+      it('renders the views in the correct order', function() {
         expect(this.collectionView.$el).to.contain.$text('24');
       });
     });
 
-    describe("when the filter changes between sorts and the collection hasn't changed order", function() {
+    describe('when the filter changes between sorts and the collection hasn\'t changed order', function() {
       beforeEach(function() {
         this.collection.sort();
         this.collectionView.render();
@@ -308,20 +308,20 @@ describe("collection view - filter", function() {
         this.collection.sort();
       });
 
-      it("only renders views that pass the filter", function() {
+      it('only renders views that pass the filter', function() {
         expect(this.collectionView.children.findByModel(this.model1)).not.to.exist;
         expect(this.collectionView.children.findByModel(this.model2)).to.exist;
         expect(this.collectionView.children.findByModel(this.model3)).not.to.exist;
         expect(this.collectionView.children.findByModel(this.model4)).to.exist;
       });
 
-      it("renders the views in the correct order", function() {
+      it('renders the views in the correct order', function() {
         expect(this.collectionView.$el).to.contain.$text('24');
       });
     });
   });
 
-  describe("combined with a reorder", function() {
+  describe('combined with a reorder', function() {
     beforeEach(function() {
       this.collection.comparator = 'bar';
       this.model1 = new Backbone.Model({foo: true, bar: 1});
@@ -341,7 +341,7 @@ describe("collection view - filter", function() {
       });
     });
 
-    describe("when the filter does not change between sorts", function() {
+    describe('when the filter does not change between sorts', function() {
       beforeEach(function() {
         this.collectionView.render();
         this.collection.comparator = function(model) {
@@ -350,38 +350,38 @@ describe("collection view - filter", function() {
         this.collection.sort();
       });
 
-      it("only renders views that pass the filter", function() {
+      it('only renders views that pass the filter', function() {
         expect(this.collectionView.children.findByModel(this.model1)).to.exist;
         expect(this.collectionView.children.findByModel(this.model2)).not.to.exist;
         expect(this.collectionView.children.findByModel(this.model3)).to.exist;
         expect(this.collectionView.children.findByModel(this.model4)).not.to.exist;
       });
 
-      it("renders the views in the correct order", function() {
+      it('renders the views in the correct order', function() {
         expect(this.collectionView.$el).to.contain.$text('31');
       });
     });
 
-    describe("when the filter changes between sorts", function() {
+    describe('when the filter changes between sorts', function() {
       beforeEach(function() {
         this.collectionView.render();
         this.collectionView.filter = this.inverseFilter;
         this.collection.sort();
       });
 
-      it("only renders views that pass the filter", function() {
+      it('only renders views that pass the filter', function() {
         expect(this.collectionView.children.findByModel(this.model1)).not.to.exist;
         expect(this.collectionView.children.findByModel(this.model2)).to.exist;
         expect(this.collectionView.children.findByModel(this.model3)).not.to.exist;
         expect(this.collectionView.children.findByModel(this.model4)).to.exist;
       });
 
-      it("renders the views in the correct order", function() {
+      it('renders the views in the correct order', function() {
         expect(this.collectionView.$el).to.contain.$text('24');
       });
     });
 
-    describe("when the filter changes between sorts and the collection hasn't changed order", function() {
+    describe('when the filter changes between sorts and the collection hasn\'t changed order', function() {
       beforeEach(function() {
         this.collection.sort();
         this.collectionView.render();
@@ -389,14 +389,14 @@ describe("collection view - filter", function() {
         this.collection.sort();
       });
 
-      it("only renders views that pass the filter", function() {
+      it('only renders views that pass the filter', function() {
         expect(this.collectionView.children.findByModel(this.model1)).not.to.exist;
         expect(this.collectionView.children.findByModel(this.model2)).to.exist;
         expect(this.collectionView.children.findByModel(this.model3)).not.to.exist;
         expect(this.collectionView.children.findByModel(this.model4)).to.exist;
       });
 
-      it("renders the views in the correct order", function() {
+      it('renders the views in the correct order', function() {
         expect(this.collectionView.$el).to.contain.$text('24');
       });
     });

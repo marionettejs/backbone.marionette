@@ -61,6 +61,7 @@
     "grunt-coveralls": "0.3.0",
     "grunt-env": "0.4.1",
     "grunt-istanbul": "0.3.0",
+    "grunt-jscs": "^1.5.0",
     "grunt-lintspaces": "0.4.1",
     "grunt-mocha-test": "0.10.2",
     "grunt-plato": "0.1.4",

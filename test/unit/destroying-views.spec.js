@@ -3,7 +3,7 @@ describe('destroying views', function() {
 
   describe('when destroying a Marionette.View multiple times', function() {
     beforeEach(function() {
-      this.onDestroyStub = this.sinon.spy(function () {
+      this.onDestroyStub = this.sinon.spy(function() {
         return this.isRendered;
       });
 

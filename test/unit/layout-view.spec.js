@@ -214,7 +214,7 @@ describe('layoutView', function() {
 
   describe('when destroying', function() {
     beforeEach(function() {
-      this.layoutViewManager = new this.LayoutView(this.viewOptions );
+      this.layoutViewManager = new this.LayoutView(this.viewOptions);
       $('<span id="parent">').append(this.layoutViewManager.el);
       this.layoutViewManager.render();
 
@@ -352,7 +352,6 @@ describe('layoutView', function() {
       this.view = new Backbone.View();
       this.view.destroy = function() {};
       this.layoutView.regionOne.show(this.view);
-
 
       this.layoutView.render();
       this.layoutView.regionOne.show(this.view);
@@ -555,7 +554,7 @@ describe('layoutView', function() {
         }
       });
 
-      this.region = new Marionette.Region({el: "#james-kyle"});
+      this.region = new Marionette.Region({el: '#james-kyle'});
 
       this.region.show(new this.Layout());
     });
@@ -569,20 +568,20 @@ describe('layoutView', function() {
     });
   });
 
-  describe("when a layout has regions", function () {
-    beforeEach(function () {
+  describe('when a layout has regions', function() {
+    beforeEach(function() {
       this.layout = new this.LayoutView();
       this.layout.render();
       this.regions = this.layout.getRegions();
     });
 
-    it("should be able to retrieve all regions", function () {
-      expect(this.regions.regionOne).to.equal(this.layout.getRegion("regionOne"));
-      expect(this.regions.regionTwo).to.equal(this.layout.getRegion("regionTwo"));
+    it('should be able to retrieve all regions', function() {
+      expect(this.regions.regionOne).to.equal(this.layout.getRegion('regionOne'));
+      expect(this.regions.regionTwo).to.equal(this.layout.getRegion('regionTwo'));
     });
 
-    describe('when the regions are specified via regions hash and the view has no template', function () {
-      beforeEach(function () {
+    describe('when the regions are specified via regions hash and the view has no template', function() {
+      beforeEach(function() {
         var fixture =
           '<div class="region-hash-no-template-spec">' +
             '<div class="region-one">Out-of-scope region</div>' +
@@ -605,7 +604,7 @@ describe('layoutView', function() {
         this.$outOfScopeRegion = $specNode.children('.region-one');
       });
 
-      it('after initialization, the view\'s regions should be scoped to its parent view', function () {
+      it('after initialization, the view\'s regions should be scoped to its parent view', function() {
         expect(this.layoutViewInstance.regionOne.$el).to.have.length(1);
         expect(this.layoutViewInstance.regionOne.$el.is(this.$inScopeRegion)).to.equal(true);
         expect(this.layoutViewInstance.regionOne.$el.is(this.$outOfScopeRegion)).to.equal(false);
@@ -613,7 +612,7 @@ describe('layoutView', function() {
     });
   });
 
-  describe('manipulating regions', function () {
+  describe('manipulating regions', function() {
     beforeEach(function() {
       this.beforeAddRegionSpy = this.sinon.spy();
       this.addRegionSpy = this.sinon.spy();
@@ -645,7 +644,6 @@ describe('layoutView', function() {
         .and.calledOn(this.layout)
         .and.calledWith(this.regionName);
     });
-
 
     it('should trigger correct region remove events', function() {
       this.layout.removeRegion(this.regionName);

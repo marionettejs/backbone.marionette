@@ -153,7 +153,7 @@ Marionette.CollectionView = Marionette.View.extend({
       // since append moves elements that are already in the DOM,
       // appending the elements will effectively reorder them
       this.triggerMethod('before:reorder');
-      this.$el.append(els);
+      this._appendReorderedChildren(els);
       this.triggerMethod('reorder');
     }
   },
@@ -188,6 +188,12 @@ Marionette.CollectionView = Marionette.View.extend({
 
   // Internal reference to what index a `emptyView` is.
   _emptyViewIndex: -1,
+
+  // Internal method. Separated so that CompositeView can append to the childViewContainer
+  // if necessary
+  _appendReorderedChildren: function(children) {
+    this.$el.append(children);
+  },
 
   // Internal method. Separated so that CompositeView can have
   // more control over events being triggered, around the rendering

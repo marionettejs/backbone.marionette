@@ -134,6 +134,14 @@ Marionette.CompositeView = Marionette.CollectionView.extend({
     $container.append(childView.el);
   },
 
+  // Internal method. Append reordered childView'.
+  // Overidden from CollectionView to ensure reordered views
+  // are appended to childViewContainer
+  _appendReorderedChildren: function(children) {
+    var $container = this.getChildViewContainer(this);
+    $container.append(children);
+  },
+
   // Internal method to ensure an `$childViewContainer` exists, for the
   // `attachHtml` method to use.
   getChildViewContainer: function(containerView, childView) {

@@ -3,12 +3,13 @@ describe('template cache', function() {
 
   beforeEach(function() {
     Marionette.TemplateCache.clear();
-    this.setFixtures('<script id="foo" type="template">foo</script><script id="bar" type="template">bar</script><script id="baz" type="template">baz</script>');
+    var templateString = '<script id="foo" type="template">foo</script><script id="bar" type="template">bar</script><script id="baz" type="template">baz</script>';
+    this.setFixtures(templateString);
     this.loadTemplateSpy = this.sinon.spy(Marionette.TemplateCache.prototype, 'loadTemplate');
   });
 
   describe('when loading a template that does not exist', function() {
-    it("should throw", function() {
+    it('should throw', function() {
       expect(function() {
         Marionette.TemplateCache.get('#void');
       })
@@ -27,7 +28,7 @@ describe('template cache', function() {
 
   describe('template options', function() {
     beforeEach(function() {
-      this.templateOptions = {sample: "options"};
+      this.templateOptions = {sample: 'options'};
       this.compileTemplateSpy = sinon.spy(Marionette.TemplateCache.prototype, 'compileTemplate');
 
       Marionette.TemplateCache.get('#foo', this.templateOptions);

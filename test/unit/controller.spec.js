@@ -2,7 +2,7 @@ describe('marionette controller', function() {
   'use strict';
 
   beforeEach(function() {
-    this.initializeOptions = { foo: 'bar' };
+    this.initializeOptions = {foo: 'bar'};
 
     this.initializeStub           = this.sinon.stub();
     this.onDestroyStub            = this.sinon.stub();
@@ -20,7 +20,7 @@ describe('marionette controller', function() {
 
   describe('when creating an controller', function() {
     beforeEach(function() {
-      this.triggerOptions = { bar: 'foo' };
+      this.triggerOptions = {bar: 'foo'};
       this.controller = new this.Controller(this.initializeOptions);
 
       this.fooHandler = this.sinon.stub();

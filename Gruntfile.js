@@ -205,6 +205,9 @@ module.exports = function(grunt) {
       specs: {
         files: {
           src: ['test/unit/**.js']
+        },
+        options: {
+          maximumLineLength: 200
         }
       }
     },

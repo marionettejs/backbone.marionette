@@ -114,6 +114,15 @@ functions:
       @api private
     
     examples:
+
+  _appendReorderedChildren:
+    description: |
+      ...
+      
+      @api private
+      @param {} children
+
+    examples:
       
   _renderChildren:
     description: |

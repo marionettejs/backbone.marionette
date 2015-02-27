@@ -31,7 +31,11 @@ describe('item view', function() {
         template: false,
         onBeforeRender: this.onBeforeRenderStub,
         onRender: this.onRenderStub,
-        bindUIElements: this.bindUIElementsStub
+        bindUIElements: this.bindUIElementsStub,
+
+        ui: {
+          testElement: '.test-element'
+        }
       });
 
       this.view = new this.View();
@@ -84,6 +88,10 @@ describe('item view', function() {
 
     it('should call bindUIElements', function() {
       expect(this.bindUIElementsStub).to.have.been.calledOnce;
+    });
+
+    it('should bind the ui hash to jQuery selectors', function() {
+      expect(this.view.ui.testElement).to.not.equal('.test-element');
     });
   });
 

@@ -30,6 +30,7 @@ will provide features such as `onShow` callbacks, etc. Please see
   * [CollectionView's `getEmptyView`](#collectionviews-getemptyview)
   * [CollectionView's `isEmpty`](#collectionviews-isempty)
   * [CollectionView's `emptyViewOptions`](#collectionviews-emptyviewoptions)
+  * [CollectionView's `destroyChildren`](#collectionviews-destroychildren)
 * [Callback Methods](#callback-methods)
   * [onBeforeRender callback](#onbeforerender-callback)
   * [onRender callback](#onrender-callback)
@@ -375,6 +376,16 @@ var CollectionView = Marionette.CollectionView({
     foo: "bar"
   }
 });
+```
+
+### CollectionView's `destroyChildren`
+
+`CollectionView` provides a `destroyChildren` method that will only destroy it's childViews. This can be useful when you would like to empty your view but keep the data in the `collection`. This method takes an optional `checkEmpty` parameter, by default it is set to `true`, if `false` it will disable the call to `checkEmpty` and `destroyChildren` will not show the `emptyView`.
+
+```js
+myView.destroyChildren(); // will show emptyView
+myView.destroyChildren({checkEmpty: false}); // will not show emptyView
+
 ```
 
 ## Callback Methods

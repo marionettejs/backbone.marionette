@@ -90,7 +90,7 @@ describe('item view', function() {
     });
 
     it('should bind the ui hash to jQuery selectors', function() {
-      expect(this.view.ui.testElement).to.not.equal('.test-element');
+      expect(this.view.ui.testElement.selector).to.equal('.test-element');
     });
   });
 

@@ -95,6 +95,15 @@ functions:
       @param {} childView
 
     examples:
+
+  _appendReorderedChildren:
+    description: |
+      ...
+      
+      @api private
+      @param {} children
+
+    examples:
       
   getChildViewContainer:
     description: |

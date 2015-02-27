@@ -12,7 +12,7 @@ describe('collection/composite view sorting', function() {
 
     this.CompositeView = Marionette.CompositeView.extend({
       childView: this.ChildView,
-      template: this.sinon.stub()
+      template: _.template('<div id="container"></div>')
     });
 
     this.collection = new Backbone.Collection([{foo: 1, bar: 4}, {foo: 2, bar: 3}, {foo: 3, bar: 2}]);
@@ -421,16 +421,31 @@ describe('collection/composite view sorting', function() {
             this.collectionView = new this.CollectionView(_.extend({}, {
               reorderOnSort: true
             }, commonAttrs));
+
+            this.compositeView = new this.CompositeView(_.extend({}, {
+              reorderOnSort: true,
+              childViewContainer: '#container'
+            }, commonAttrs));
           } else if (specOptions.onPrototype) {
             var ReorderedCollectionView = this.CollectionView.extend({
               reorderOnSort: true,
               onReorder: this.sinon.spy(),
               onBeforeReorder: this.sinon.spy()
             });
+
+            var ReorderedCompositeView = this.CompositeView.extend({
+              reorderOnSort: true,
+              childViewContainer: '#container',
+              onReorder: this.sinon.spy(),
+              onBeforeReorder: this.sinon.spy()
+            });
+
             this.collectionView = new ReorderedCollectionView(commonAttrs);
+            this.compositeView = new ReorderedCompositeView(commonAttrs);
           }
 
           this.collectionView.render();
+          this.compositeView.render();
           this.sinon.spy(this.collectionView, 'reorder');
           this.sinon.spy(this.collectionView, 'render');
           this.sinon.spy(this.collectionView, 'trigger');
@@ -441,6 +456,7 @@ describe('collection/composite view sorting', function() {
           if (specOptions.viewComparator) {
             this.collection.comparator = 'foo';
             this.collectionView.options.viewComparator = cmp;
+            this.compositeView.options.viewComparator = cmp;
           } else {
             this.collection.comparator = cmp;
           }
@@ -464,6 +480,10 @@ describe('collection/composite view sorting', function() {
           expect(cv.trigger).to.have.been.calledWith('before:reorder');
           expect(cv.trigger).to.have.been.calledWith('reorder');
           expect(cv.trigger).to.have.been.calledTwice;
+        });
+
+        it('should respect the childViewContainer in a CompositeView', function() {
+          expect(this.compositeView.$('#container')).to.have.$text('321');
         });
       });
     };

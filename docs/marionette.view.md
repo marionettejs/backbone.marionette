@@ -225,7 +225,8 @@ view.on("something:do:it", function(args){
 view.$(".do-something").trigger("click");
 ```
 
-The result of this is an alert box that says, "I DID IT!"
+The result of this is an alert box that says, "I DID IT!" Triggers can also be
+executed using the 'on{EventName}' attribute.
 
 By default all triggers are stopped with `preventDefault` and
 `stopPropagation` methods. But you can manually configure the triggers using

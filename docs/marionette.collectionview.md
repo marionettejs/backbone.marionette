@@ -187,7 +187,8 @@ var CollectionView = Marionette.CollectionView.extend({
 
 You can customize the event prefix for events that are forwarded
 through the collection view. To do this, set the `childViewEventPrefix`
-on the collection view.
+on the collection view. For more information on the `childViewEventPrefix` see
+["childview:*" event bubbling from child views](#childview-event-bubbling-from-child-views)
 
 ```js
 var CV = Marionette.CollectionView.extend({

@@ -197,7 +197,8 @@ var MyView = Backbone.Marionette.ItemView.extend({
 ## View.triggers
 
 Views can define a set of `triggers` as a hash, which will
-convert a DOM event into a `view.triggerMethod` call.
+convert a DOM event into a
+[`view.triggerMethod`](./marionette.functions.md#marionettetriggermethod) call.
 
 The left side of the hash is a standard Backbone.View DOM
 event configuration, while the right side of the hash is the
@@ -226,7 +227,10 @@ view.$(".do-something").trigger("click");
 
 The result of this is an alert box that says, "I DID IT!"
 
-By default all triggers are stopped with `preventDefault` and `stopPropagation` methods. But you can manually configure the triggers using hash instead of event name. Example below triggers an event and prevents default browser behaviour using `preventDefault` method.
+By default all triggers are stopped with `preventDefault` and
+`stopPropagation` methods. But you can manually configure the triggers using
+hash instead of event name. Example below triggers an event and prevents
+default browser behaviour using `preventDefault` method.
 
 ```js
 Backbone.Marionette.CompositeView.extend({

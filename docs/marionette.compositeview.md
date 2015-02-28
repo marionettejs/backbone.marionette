@@ -166,7 +166,7 @@ var TableView = Backbone.Marionette.CompositeView.extend({
   // ...
 
   childViewContainer: function(){
-    return "#tbody"
+    return "#my-tbody"
   }
 });
 ```
@@ -183,7 +183,7 @@ function options:
 var myComp = new Marionette.CompositeView({
   // ...,
 
-  childViewContainer: "#tbody"
+  childViewContainer: "#my-tbody"
 });
 ```
 

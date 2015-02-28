@@ -18,7 +18,7 @@ describe('Marionette.bindEntityEvents', function() {
 
   describe('when entity isnt passed', function() {
     beforeEach(function() {
-      Marionette.bindEntityEvents(this.target, false, { 'foo': 'handleFoo' });
+      Marionette.bindEntityEvents(this.target, false, {'foo': 'handleFoo'});
     });
 
     it('shouldnt bind any events', function() {
@@ -39,7 +39,7 @@ describe('Marionette.bindEntityEvents', function() {
   describe('when binding is a function', function() {
     beforeEach(function() {
       this.bindingsSpy = this.sinon.spy(function() {
-        return { 'foo': 'handleFoo' };
+        return {'foo': 'handleFoo'};
       });
 
       Marionette.bindEntityEvents(this.target, this.entity, this.bindingsSpy);
@@ -61,7 +61,7 @@ describe('Marionette.bindEntityEvents', function() {
   describe('when bindings is an object with one event-handler pair', function() {
     describe('when handler is a function', function() {
       beforeEach(function() {
-        Marionette.bindEntityEvents(this.target, this.entity, { 'foo': this.handleFooStub });
+        Marionette.bindEntityEvents(this.target, this.entity, {'foo': this.handleFooStub});
       });
 
       it('should bind an event to targets handler', function() {
@@ -72,7 +72,7 @@ describe('Marionette.bindEntityEvents', function() {
     describe('when handler is a string', function() {
       describe('when one handler is passed', function() {
         beforeEach(function() {
-          Marionette.bindEntityEvents(this.target, this.entity, { 'foo': 'handleFoo' });
+          Marionette.bindEntityEvents(this.target, this.entity, {'foo': 'handleFoo'});
         });
 
         it('should bind an event to targets handler', function() {
@@ -142,7 +142,7 @@ describe('Marionette.bindEntityEvents', function() {
   describe('when bindEntityEvents is proxied', function() {
     beforeEach(function() {
       this.target.bindEntityEvents = Marionette.proxyBindEntityEvents;
-      this.target.bindEntityEvents(this.entity, { 'foo': 'handleFoo' });
+      this.target.bindEntityEvents(this.entity, {'foo': 'handleFoo'});
     });
 
     it('should bind an event to targets handler', function() {

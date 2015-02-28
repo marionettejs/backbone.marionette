@@ -56,7 +56,6 @@
     target.stopListening(entity, evt, method);
   }
 
-
   // generic looping function
   function iterateEvents(target, entity, bindings, functionCallback, stringCallback) {
     if (!entity || !bindings) { return; }

@@ -88,7 +88,7 @@ describe('composite view', function() {
     beforeEach(function() {
       this.attachElContentStub = this.sinon.stub();
       this.CompositeView = Marionette.CompositeView.extend({
-        template: function(){},
+        template: function() {},
         attachElContent: this.attachElContentStub
       });
 
@@ -141,8 +141,8 @@ describe('composite view', function() {
       expect(this.compositeView.$el).to.contain.$text('baz');
     });
 
-    it("should pass template fn, data, and view instance to Marionette.Renderer.Render", function(){
-      expect(Marionette.Renderer.render).to.have.been.calledWith(this.templateFn, { foo: 'bar' }, this.compositeView);
+    it('should pass template fn, data, and view instance to Marionette.Renderer.Render', function() {
+      expect(Marionette.Renderer.render).to.have.been.calledWith(this.templateFn, {foo: 'bar'}, this.compositeView);
     });
   });
 
@@ -803,15 +803,15 @@ describe('composite view', function() {
     });
   });
 
-  describe("when serializing view data", function() {
-    beforeEach(function(){
-      this.modelData = { foo: "bar" };
+  describe('when serializing view data', function() {
+    beforeEach(function() {
+      this.modelData = {foo: 'bar'};
       this.view = new Marionette.CompositeView();
-      this.sinon.spy(this.view, "serializeModel");
+      this.sinon.spy(this.view, 'serializeModel');
     });
 
-    it("should return an empty object without data", function(){
-      expect(this.view.serializeData()).to.deep.equal({ });
+    it('should return an empty object without data', function() {
+      expect(this.view.serializeData()).to.deep.equal({});
     });
 
     describe('and the view has a model', function() {
@@ -820,7 +820,7 @@ describe('composite view', function() {
         this.view.serializeData();
       });
 
-      it("should call serializeModel", function(){
+      it('should call serializeModel', function() {
         expect(this.view.serializeModel).to.have.been.calledOnce;
       });
     });

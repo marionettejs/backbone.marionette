@@ -112,7 +112,7 @@ describe('trigger event and method name', function() {
 
       this.ItemView = Marionette.ItemView.extend({
         template: _.template('foo'),
-        triggers: { 'click' : 'foo:click' }
+        triggers: {'click' : 'foo:click'}
       });
 
       this.CollectionView = Marionette.CollectionView.extend({
@@ -120,7 +120,7 @@ describe('trigger event and method name', function() {
         onChildviewFooClick: this.onChildviewFooClickStub
       });
 
-      this.collection = new Backbone.Collection([{ foo: 'bar' }]);
+      this.collection = new Backbone.Collection([{foo: 'bar'}]);
       this.collectionView = new this.CollectionView({
         collection: this.collection
       });

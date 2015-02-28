@@ -34,7 +34,7 @@ Marionette.View = Backbone.View.extend({
 
   // Serialize a model by returning its attributes. Clones
   // the attributes to allow modification.
-  serializeModel: function(model){
+  serializeModel: function(model) {
     return model.toJSON.apply(model, _.rest(arguments));
   },
 
@@ -102,7 +102,7 @@ Marionette.View = Backbone.View.extend({
 
     // normalize ui keys
     events = this.normalizeUIKeys(events);
-    if(_.isUndefined(eventsArg)) {this.events = events;}
+    if (_.isUndefined(eventsArg)) {this.events = events;}
 
     var combinedEvents = {};
 

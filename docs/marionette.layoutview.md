@@ -164,6 +164,8 @@ This also works for custom events that you might fire on your child views.
       }
     },
 
+    // Alternatively we can use the trigger notation with childview: as the
+    // prefix
     onChildviewShowMessage: function (childView, msg) {
       console.log('The show:message event bubbled up to the parent.');
     }

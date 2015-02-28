@@ -187,7 +187,8 @@ var CollectionView = Marionette.CollectionView.extend({
 
 You can customize the event prefix for events that are forwarded
 through the collection view. To do this, set the `childViewEventPrefix`
-on the collection view.
+on the collection view. For more information on the `childViewEventPrefix` see
+["childview:*" event bubbling from child views](#childview-event-bubbling-from-child-views)
 
 ```js
 var CV = Marionette.CollectionView.extend({
@@ -698,33 +699,29 @@ var myModel = new MyModel();
 var myCollection = new MyCollection();
 myCollection.add(myModel);
 
+var MyItemView = Backbone.Marionette.ItemView.extend({
+  triggers: {
+    'click button': 'do:something'
+  }
+});
+
 // get the collection view in place
 var colView = new CollectionView({
   collection: myCollection,
-  childView: MyItemView
+  childView: MyItemView,
+
+  onChildviewDoSomething: function() {
+    alert("I said, 'do something!'");
+  }
 });
 colView.render();
-
-// bind to the collection view's events that were bubbled
-// from the child view
-colView.on("childview:do:something", function(childView, msg){
-  alert("I said, '" + msg + "'");
-});
-
-// hack, to get the child view and trigger from it
-var childView = colView.children[myModel.cid];
-childView.trigger("do:something", "do something!");
 ```
 
-The result of this will be an alert box that says
-"I said, 'do something!'".
+Now, whenever the button inside the attached childView is clicked, an alert box
+will appear that says: I said, 'do something!'
 
-Also note that you would not normally grab a reference to
-the child view the way this is showing. I'm merely using
-that hack as a way to demonstrate the event bubbling.
-Normally, you would have your child view listening to DOM
-events or model change events, and then triggering an event
-of its own based on that.
+It's also possible to attach the event manually using the usual
+`view.on('childview:do:something')`.
 
 ### before:render:collection event
 

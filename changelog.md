@@ -1,3 +1,17 @@
+### v2.4.1 [view commit logs](https://github.com/marionettejs/backbone.marionette/compare/v2.4.0...v2.4.1)
+
+#### Fixes
+
+* Fixed a nasty bug where `reorderOnSort` when used on a `CompositeView` would not respect the `childViewContainer`.
+
+#### General
+
+* Add JSCS for style linting and consistency.
+
+#### Docs
+
+* Improve internal linking across docs, to make it easier for people to understand how pieces relate to each other.
+
 ### v2.4.0 [view commit logs](https://github.com/marionettejs/backbone.marionette/compare/v2.3.2...v2.4.0)
 
 #### 2.4 In Overview

@@ -292,7 +292,7 @@ As documented in [Marionette.View](./marionette.view.md#viewbindentityevents), y
 maps UI elements by their jQuery selectors. This is especially useful if you access the
 same UI element more than once in your view's code. Instead of
 duplicating the selector, you can simply reference it by
-`this.ui.elementName`:
+`this.getUI('elementName')`:
 
 You can also use the ui hash values from within events and trigger keys using the ```"@ui.elementName"```: syntax
 
@@ -306,7 +306,7 @@ Backbone.Marionette.ItemView.extend({
 
   onRender: function() {
     if (this.model.get('selected')) {
-      this.ui.checkbox.addClass('checked');
+      this.getUI('checkbox').addClass('checked');
     }
   }
 });

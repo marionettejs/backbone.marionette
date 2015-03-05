@@ -57,3 +57,13 @@ functions:
   
   unbindUIElements: |
     @api public
+
+  getUI: |
+    @api public
+    @param {String} name - the name of the ui element to receive
+    @returns {jQuery} - the jQuery object of the ui element
+
+    description: |
+      A stable interface to the view's ui hash. 
+      Will return the specified ui element if it is available. If the view is destroyed
+      a `ViewDestroyedError` will be thrown.

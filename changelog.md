@@ -392,7 +392,7 @@ new Marionette.RegionManager({
   * Features
     * Add `onRoute` to the `appRouter`.
     ```js
-      Backbone.Marionette.AppRouter.extend({
+      Marionette.AppRouter.extend({
         onRoute: function(route, params) {
         }
       })

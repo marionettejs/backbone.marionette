@@ -399,7 +399,7 @@ The Event Aggregator is available through the `vent` property. `vent` is conveni
 pieces of your application as events occur.
 
 ```js
-var MyApp = new Backbone.Marionette.Application();
+var MyApp = new Marionette.Application();
 
 // Alert the user on the 'minutePassed' event
 MyApp.vent.on("minutePassed", function(someData){
@@ -417,7 +417,7 @@ window.setInterval(function() {
 Request Response is a means for any component to request information from another component without being tightly coupled. An instance of Request Response is available on the Application as the `reqres` property.
 
 ```js
-var MyApp = new Backbone.Marionette.Application();
+var MyApp = new Marionette.Application();
 
 // Set up a handler to return a todoList based on type
 MyApp.reqres.setHandler("todoList", function(type){
@@ -438,7 +438,7 @@ Commands are used to make any component tell another component to perform an act
 Note that the callback of a command is not meant to return a value.
 
 ```js
-var MyApp = new Backbone.Marionette.Application();
+var MyApp = new Marionette.Application();
 
 MyApp.model = new Backbone.Model();
 

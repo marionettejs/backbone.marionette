@@ -17,7 +17,7 @@
 
 ## About Marionette
 
-Backbone.Marionette is a composite application library for Backbone.js that
+Marionette is a composite application library for Backbone.js that
 aims to simplify the construction of large scale JavaScript applications.
 It is a collection of common design and implementation patterns found in
 applications.

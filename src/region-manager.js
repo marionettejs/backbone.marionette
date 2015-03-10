@@ -2,12 +2,12 @@
 // --------------
 
 // Manage one or more related `Marionette.Region` objects.
-Marionette.RegionManager = Marionette.Controller.extend({
+Marionette.RegionManager = Marionette.Object.extend({
   constructor: function(options) {
     this._regions = {};
     this.length = 0;
 
-    Marionette.Controller.call(this, options);
+    Marionette.Object.call(this, options);
 
     this.addRegions(this.getOption('regions'));
   },

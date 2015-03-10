@@ -47,7 +47,7 @@ You should provide a `template` attribute on the item view, which
 will be either a jQuery selector:
 
 ```js
-var MyView = Backbone.Marionette.ItemView.extend({
+var MyView = Marionette.ItemView.extend({
   template: "#some-template"
 });
 
@@ -58,7 +58,7 @@ new MyView().render();
 
 ```js
 var my_template_html = '<div><%= args.name %></div>'
-var MyView = Backbone.Marionette.ItemView.extend({
+var MyView = Marionette.ItemView.extend({
   template : function(serialized_model) {
     var name = serialized_model.name;
     return _.template(my_template_html)({
@@ -173,7 +173,7 @@ triggers the event and a corresponding "on{EventName}" method.
 Triggered before an ItemView is rendered.
 
 ```js
-Backbone.Marionette.ItemView.extend({
+Marionette.ItemView.extend({
   onBeforeRender: function(){
     // set up final bits just before rendering the view's `el`
   }
@@ -187,7 +187,7 @@ You can implement this in your view to provide custom code for dealing
 with the view's `el` after it has been rendered.
 
 ```js
-Backbone.Marionette.ItemView.extend({
+Marionette.ItemView.extend({
   onRender: function(){
     // manipulate the `el` here. it's already
     // been rendered, and is full of the view's
@@ -202,7 +202,7 @@ Triggered just prior to destroying the view, when the view's `destroy()`
 method has been called.
 
 ```js
-Backbone.Marionette.ItemView.extend({
+Marionette.ItemView.extend({
   onBeforeDestroy: function(){
     // manipulate the `el` here. it's already
     // been rendered, and is full of the view's
@@ -216,7 +216,7 @@ Backbone.Marionette.ItemView.extend({
 Triggered just after the view has been destroyed.
 
 ```js
-Backbone.Marionette.ItemView.extend({
+Marionette.ItemView.extend({
   onDestroy: function(){
     // custom destroying and cleanup goes here
   }
@@ -277,7 +277,7 @@ If you need custom serialization for your data, you can provide a
 object, as if you had called `.toJSON` on a model or collection.
 
 ```js
-Backbone.Marionette.ItemView.extend({
+Marionette.ItemView.extend({
   serializeData: function(){
     return {
       "some attribute": "some value"
@@ -297,7 +297,7 @@ duplicating the selector, you can simply reference it by
 You can also use the ui hash values from within events and trigger keys using the ```"@ui.elementName"```: syntax
 
 ```js
-Backbone.Marionette.ItemView.extend({
+Marionette.ItemView.extend({
   tagName: "tr",
 
   ui: {

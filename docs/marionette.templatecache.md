@@ -22,7 +22,7 @@ but you do not have to manually create these instances yourself. `get` will
 return a compiled template function.
 
 ```js
-var template = Backbone.Marionette.TemplateCache.get("#my-template", {some: options});
+var template = Marionette.TemplateCache.get("#my-template", {some: options});
 // use the template
 template({param1:'value1', paramN:'valueN'});
 ```
@@ -41,24 +41,24 @@ If you do not specify any parameters, all items will be cleared
 from the cache:
 
 ```js
-Backbone.Marionette.TemplateCache.get("#my-template");
-Backbone.Marionette.TemplateCache.get("#this-template");
-Backbone.Marionette.TemplateCache.get("#that-template");
+Marionette.TemplateCache.get("#my-template");
+Marionette.TemplateCache.get("#this-template");
+Marionette.TemplateCache.get("#that-template");
 
 // clear all templates from the cache
-Backbone.Marionette.TemplateCache.clear()
+Marionette.TemplateCache.clear()
 ```
 
 If you specify one or more parameters, these parameters are assumed
 to be the `templateId` used for loading / caching:
 
 ```js
-Backbone.Marionette.TemplateCache.get("#my-template");
-Backbone.Marionette.TemplateCache.get("#this-template");
-Backbone.Marionette.TemplateCache.get("#that-template");
+Marionette.TemplateCache.get("#my-template");
+Marionette.TemplateCache.get("#this-template");
+Marionette.TemplateCache.get("#that-template");
 
 // clear 2 of 3 templates from the cache
-Backbone.Marionette.TemplateCache.clear("#my-template", "#this-template")
+Marionette.TemplateCache.clear("#my-template", "#this-template")
 ```
 
 ## Customizing Template Access
@@ -79,7 +79,7 @@ works, you can override the `loadTemplate` method on the
 `TemplateCache` object.
 
 ```js
-Backbone.Marionette.TemplateCache.prototype.loadTemplate = function(templateId, options){
+Marionette.TemplateCache.prototype.loadTemplate = function(templateId, options){
   // load your template here, returning the data needed for the compileTemplate
   // function. For example, you have a function that creates templates based on the
   // value of templateId
@@ -99,7 +99,7 @@ remember that it must return a function which takes an object of parameters and 
 and returns a formatted HTML string.
 
 ```js
-Backbone.Marionette.TemplateCache.prototype.compileTemplate = function(rawTemplate, options) {
+Marionette.TemplateCache.prototype.compileTemplate = function(rawTemplate, options) {
   // use Handlebars.js to compile the template
   return Handlebars.compile(rawTemplate);
 }

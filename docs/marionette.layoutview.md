@@ -13,7 +13,7 @@ attach multiple region managers to dynamically rendered HTML.
 You can create complex views by nesting layoutView managers within `Regions`.
 
 For a more in-depth discussion on LayoutViews, see the blog post
-[Manage Layouts And Nested Views With Backbone.Marionette](http://lostechies.com/derickbailey/2012/03/22/managing-layouts-and-nested-views-with-backbone-marionette/)
+[Manage Layouts And Nested Views With Marionette](http://lostechies.com/derickbailey/2012/03/22/managing-layouts-and-nested-views-with-backbone-marionette/)
 
 Please see
 [the Marionette.ItemView documentation](./marionette.itemview.md)
@@ -57,7 +57,7 @@ to the layoutView.
 ```
 
 ```js
-var AppLayoutView = Backbone.Marionette.LayoutView.extend({
+var AppLayoutView = Marionette.LayoutView.extend({
   template: "#layout-view-template",
 
   regions: {
@@ -371,7 +371,7 @@ your own implementation, you can specify an alternate class to use
 with the `regionClass` property of the `LayoutView`.
 
 ```js
-var MyLayoutView = Backbone.Marionette.LayoutView.extend({
+var MyLayoutView = Marionette.LayoutView.extend({
   regionClass: SomeCustomRegion
 });
 ```
@@ -379,7 +379,7 @@ var MyLayoutView = Backbone.Marionette.LayoutView.extend({
 You can also specify custom `Region` classes for each `region`:
 
 ```js
-var AppLayoutView = Backbone.Marionette.LayoutView.extend({
+var AppLayoutView = Marionette.LayoutView.extend({
   template: "#layout-view-template",
 
   regionClass: SomeDefaultCustomRegion,

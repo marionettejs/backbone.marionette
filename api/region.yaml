@@ -40,7 +40,7 @@ examples:
       the layout is shown, it should show its subviews in its regions.
       
       ```js
-      var AppLayoutView = Backbone.Marionette.LayoutView.extend({
+      var AppLayoutView = Marionette.LayoutView.extend({
         template: "#layout-view-template",
         
         regions: {
@@ -83,7 +83,7 @@ constructor: |
   #### 1. `el` as a class property
   
   ```js
-  var SomeRegion = Backbone.Marionette.Region.extend({
+  var SomeRegion = Marionette.Region.extend({
     el: "#some-div",
   });
   
@@ -94,7 +94,7 @@ constructor: |
   #### 2. `el` as a selector:
   
   ```js
-  var mgr = new Backbone.Marionette.Region({
+  var mgr = new Marionette.Region({
     el: "#someElement"
   });
   ```
@@ -102,7 +102,7 @@ constructor: |
   #### `el` as raw DOM node reference:
   
   ```js
-  var mgr = new Backbone.Marionette.Region({
+  var mgr = new Marionette.Region({
     el: document.querySelector("body")
   });
   ```
@@ -110,7 +110,7 @@ constructor: |
   #### `el` as a `jQuery` wrapped DOM node:
   
   ```js
-  var mgr = new Backbone.Marionette.Region({
+  var mgr = new Marionette.Region({
     el: $("body")
   });
 
@@ -152,7 +152,7 @@ properties:
     The `initialize` function is a good place to put custom, post instantiation class logic. 
     
     ```js
-    var SomeRegion = Backbone.Marionette.Region.extend({
+    var SomeRegion = Marionette.Region.extend({
       initialize: function() {
         // do some stuff
       }

@@ -18,7 +18,7 @@ Have your routers configured to call the method on your object, directly.
 Configure an AppRouter with `appRoutes`. The route definition is passed on to Backbone's standard routing handlers. This means that you define routes like you normally would.  However, instead of providing a callback method that exists on the router, you provide a callback method that exists on the controller, which you specify for the router instance (see below.)
 
 ```js
-var MyRouter = Backbone.Marionette.AppRouter.extend({
+var MyRouter = Marionette.AppRouter.extend({
   // "someMethod" must exist at controller.someMethod
   appRoutes: {
     "some/route": "someMethod"
@@ -92,7 +92,7 @@ var someController = {
   someMethod: function(){ /*...*/ }
 };
 
-Backbone.Marionette.AppRouter.extend({
+Marionette.AppRouter.extend({
   controller: someController
 });
 ```

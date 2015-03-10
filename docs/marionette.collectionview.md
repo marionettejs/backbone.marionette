@@ -699,7 +699,7 @@ var myModel = new MyModel();
 var myCollection = new MyCollection();
 myCollection.add(myModel);
 
-var MyItemView = Backbone.Marionette.ItemView.extend({
+var MyItemView = Marionette.ItemView.extend({
   triggers: {
     'click button': 'do:something'
   }

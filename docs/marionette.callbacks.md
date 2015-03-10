@@ -30,7 +30,7 @@ provided options to the callbacks.
 ## Basic Usage
 
 ```js
-var callbacks = new Backbone.Marionette.Callbacks();
+var callbacks = new Marionette.Callbacks();
 
 callbacks.add(function(options){
   alert("I'm a callback with " + options.value + "!");
@@ -50,7 +50,7 @@ You can optionally specify the context that you want each callback to be
 executed with, when adding a callback:
 
 ```js
-var callbacks = new Backbone.Marionette.Callbacks();
+var callbacks = new Marionette.Callbacks();
 
 callbacks.add(function(options){
   alert("I'm a callback with " + options.value + "!");

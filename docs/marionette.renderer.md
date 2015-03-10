@@ -22,7 +22,7 @@ template using the `data` object as the context.
 ```js
 var template = "#some-template";
 var data = {foo: "bar"};
-var html = Backbone.Marionette.Renderer.render(template, data);
+var html = Marionette.Renderer.render(template, data);
 
 // do something with the HTML here
 ```
@@ -40,7 +40,7 @@ to specify a pre-compiled template function as the `template` setting.
 
 ```js
 var myTemplate = _.template("<div>foo</div>");
-Backbone.Marionette.ItemView.extend({
+Marionette.ItemView.extend({
   template: myTemplate
 });
 ```
@@ -64,7 +64,7 @@ If you wish to override the template engine used, change the
 `render` method to work however you want:
 
 ```js
-Backbone.Marionette.Renderer.render = function(template, data){
+Marionette.Renderer.render = function(template, data){
   return $(template).tmpl(data);
 };
 ```
@@ -77,7 +77,7 @@ If you override the `render` method and wish to use the
 fetch the template from the cache in your `render` method:
 
 ```js
-Backbone.Marionette.Renderer.render = function(template, data){
+Marionette.Renderer.render = function(template, data){
   var template = Marionette.TemplateCache.get(template);
   // Do something with the template here
 };
@@ -93,7 +93,7 @@ To do this, just override the `render` method to return your executed
 template with the data.
 
 ```js
-Backbone.Marionette.Renderer.render = function(template, data){
+Marionette.Renderer.render = function(template, data){
   return template(data);
 };
 ```
@@ -104,7 +104,7 @@ Then you can specify the pre-compiled template function as your view's
 ```js
 var myPrecompiledTemplate = _.template("<div>some template</div>");
 
-Backbone.Marionette.ItemView.extend({
+Marionette.ItemView.extend({
   template: myPrecompiledTemplate
 });
 ```

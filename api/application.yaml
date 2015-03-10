@@ -12,7 +12,7 @@ description: |
   Lastly, they give you a way to connect Views to the document through its Regions.
   
   ```js
-  var MyApp = new Backbone.Marionette.Application();
+  var MyApp = new Marionette.Application();
   ```
 
 constructor: 

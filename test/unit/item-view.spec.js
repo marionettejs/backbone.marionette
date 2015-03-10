@@ -29,7 +29,11 @@ describe('item view', function() {
       this.View = Marionette.ItemView.extend({
         template: false,
         onBeforeRender: this.onBeforeRenderStub,
-        onRender: this.onRenderStub
+        onRender: this.onRenderStub,
+
+        ui: {
+          testElement: '.test-element'
+        }
       });
 
       this.view = new this.View();
@@ -39,6 +43,7 @@ describe('item view', function() {
       this.serializeDataSpy        = this.sinon.spy(this.view, 'serializeData');
       this.mixinTemplateHelpersSpy = this.sinon.spy(this.view, 'mixinTemplateHelpers');
       this.attachElContentSpy      = this.sinon.spy(this.view, 'attachElContent');
+      this.bindUIElementsSpy       = this.sinon.spy(this.view, 'bindUIElements');
 
       this.view.render();
     });
@@ -53,6 +58,14 @@ describe('item view', function() {
 
     it('should call an "onRender" method on the view', function() {
       expect(this.onRenderStub).to.have.been.calledOnce;
+    });
+
+    it('should call bindUIElements', function() {
+      expect(this.bindUIElementsSpy).to.have.been.calledOnce;
+    });
+
+    it('should bind the ui hash to jQuery selectors', function() {
+      expect(this.view.ui.testElement.selector).to.equal('.test-element');
     });
 
     it('should trigger a before:render event', function() {

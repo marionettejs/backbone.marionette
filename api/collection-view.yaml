@@ -324,6 +324,7 @@ functions:
       ...
       
       @api public
+      @param {Object} options
     
     examples:
       

@@ -64,21 +64,12 @@ Marionette.ItemView = Marionette.View.extend({
 
   // Internal method to render the template with the serialized data
   // and template helpers via the `Marionette.Renderer` object.
-  // Throws an `UndefinedTemplateError` error if the template is
-  // any falsely value but literal `false`.
   _renderTemplate: function() {
     var template = this.getTemplate();
 
     // Allow template-less item views
     if (template === false) {
       return;
-    }
-
-    if (!template) {
-      throw new Marionette.Error({
-        name: 'UndefinedTemplateError',
-        message: 'Cannot render the template since it is null or undefined.'
-      });
     }
 
     // Add in entity data and template helpers

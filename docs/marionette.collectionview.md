@@ -19,7 +19,6 @@ will provide features such as `onShow` callbacks, etc. Please see
 ## Documentation Index
 
 * [CollectionView's `childView`](#collectionviews-childview)
-  * [CollectionView's `getChildView`](#collectionviews-getchildview)
   * [CollectionView's `childViewOptions`](#collectionviews-childviewoptions)
   * [CollectionView's `childViewEventPrefix`](#collectionviews-childvieweventprefix)
   * [CollectionView's `childViewEvents`](#collectionviews-childviewevents)
@@ -72,8 +71,7 @@ Backbone.Marionette.CollectionView.extend({
 ```
 
 Child views must be defined before they are referenced by the
-`childView` attribute in a collection view definition. Use `getChildView`
-to lookup the definition as child views are instantiated.
+`childView` attribute in a collection view definition.
 
 Alternatively, you can specify a `childView` in the options for
 the constructor:
@@ -89,9 +87,10 @@ new MyCollectionView({
 If you do not specify a `childView`, an exception will be thrown
 stating that you must specify a `childView`.
 
-### CollectionView's `getChildView`
-The value returned by this method is the `ChildView` class that will be instantiated when a `Model` needs to be initially rendered.
-This method also gives you the ability to customize per `Model` `ChildViews`.
+You can also define `childView` as a function. In this form, the value
+returned by this method is the `ChildView` class that will be instantiated
+when a `Model` needs to be initially rendered. This method also gives you
+the ability to customize per `Model` `ChildViews`.
 
 ```js
 var FooBar = Backbone.Model.extend({
@@ -108,7 +107,7 @@ var BarView = Backbone.Marionette.View.extend({
 });
 
 var MyCollectionView = Backbone.Marionette.CollectionView.extend({
-  getChildView: function(item) {
+  childView: function(item) {
     // Choose which view class to render,
     // depending on the properties of the item model
     if  (item.get('isFoo')) {

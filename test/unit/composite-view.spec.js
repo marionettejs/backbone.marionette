@@ -836,4 +836,45 @@ describe('composite view', function() {
       expect(this.constructor).to.have.been.calledOnce;
     });
   });
+
+  describe('when defining childView as a function that returns a view class', function() {
+    beforeEach(function() {
+
+      this.m1 = new this.Model({id: 1, name: 'one'});
+      this.m2 = new this.Model({id: 2, name: 'two'});
+      this.m3 = new this.Model({foo: 'bar'});
+      this.collection = new this.Collection([this.m1, this.m2]);
+
+      this.EvenView = Backbone.Marionette.View.extend({
+        tagName: 'span',
+        template: _.template('My name is <%= name %>. I am even.')
+      });
+
+      this.OddView = Backbone.Marionette.View.extend({
+        tagName: 'article',
+        template: _.template('My name is <%= name %>. I am odd.')
+      });
+
+      var suite = this;
+      this.CompositeView = Backbone.Marionette.CompositeView.extend({
+        template: _.template('<header>composite template <%= foo %><div id="cv-container"></div></header>'),
+        childViewContainer: '#cv-container',
+        childView: function(child){ 
+          return child.get('id') % 2 === 0 ? suite.EvenView : suite.OddView; 
+        }
+      });
+
+      this.compositeView = new this.CompositeView({
+        collection: this.collection,
+        model: this.m3
+      });
+
+      this.compositeView.render();
+    });
+
+    it('should use the correct view class for each child', function() {
+      expect(this.compositeView.$el).to.have.$html('<header>composite template bar<div id="cv-container"><article>My name is one. I am odd.</article><span>My name is two. I am even.</span></div></header>');
+    });
+  });
+
 });

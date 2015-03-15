@@ -93,7 +93,7 @@ Marionette.CollectionView = Marionette.AbstractView.extend({
     var index;
 
     this.destroyEmptyView();
-    var ChildView = this.getChildView(child);
+    var ChildView = this._getChildView(child);
 
     if (opts.at !== undefined) {
       index = opts.at;
@@ -180,7 +180,7 @@ Marionette.CollectionView = Marionette.AbstractView.extend({
     var models = this._sortedModels();
 
     _.each(models, function(child, index) {
-      ChildView = this.getChildView(child);
+      ChildView = this._getChildView(child);
       this.addChild(child, ChildView, index);
     }, this);
   },
@@ -282,10 +282,11 @@ Marionette.CollectionView = Marionette.AbstractView.extend({
   // Retrieve the `childView` class, either from `this.options.childView`
   // or from the `childView` in the object definition. The "options"
   // takes precedence.
-  // This method receives the model that will be passed to the instance
-  // created from this `childView`. Overriding methods may use the child
-  // to determine what `childView` class to return.
-  getChildView: function(child) {
+  // The `childView` property can be either a view class or a function that
+  // returns a view class. If it is a function, it will receive the model that
+  // will be passed to the view instance (created from the returned view class)
+
+  _getChildView: function(child) {
     var childView = this.getOption('childView');
 
     if (!childView) {
@@ -295,7 +296,20 @@ Marionette.CollectionView = Marionette.AbstractView.extend({
       });
     }
 
-    return childView;
+    // first check if the `childView` is a view class (the common case)
+    if(childView.prototype instanceof Backbone.View || childView === Backbone.View){
+      return childView;
+    }
+    // then check if it's a function (which we assume that returns a view class)
+    else if(_.isFunction(childView)){
+      return childView.call(this, child);
+    }
+    else{
+      throw new Marionette.Error({
+        name: 'InvalidChildViewError',
+        message: '"childView" must be a view class or a function that returns a view class'
+      });
+    }
   },
 
   // Render the child's view and add it to the

@@ -39,11 +39,28 @@ Marionette.CompositeView = Marionette.CollectionView.extend({
   // Retrieve the `childView` to be used when rendering each of
   // the items in the collection. The default is to return
   // `this.childView` or Marionette.CompositeView if no `childView`
-  // has been defined
-  getChildView: function(child) {
-    var childView = this.getOption('childView') || this.constructor;
+  // has been defined. As happens in CollectionView, `childView` can
+  // be a function (which should return a view class).
+  _getChildView: function(child) {
+    var childView = this.getOption('childView');
 
-    return childView;
+    // for CompositeView, if `childView` is not specified, we'll get the same
+    // composite view class rendered for each child in the collection
+    // then check if the `childView` is a view class (the common case)
+    // finally check if it's a function (which we assume that returns a view class)
+    if (!childView) {
+      return this.constructor;
+    } else if (childView.prototype instanceof Backbone.View || childView === Backbone.View) {
+      return childView;
+    } else if (_.isFunction(childView)) {
+      return childView.call(this, child);
+    } else {
+      throw new Marionette.Error({
+        name: 'InvalidChildViewError',
+        message: '"childView" must be a view class or a function that returns a view class'
+      });
+    }
+
   },
 
   // Return the serialized model

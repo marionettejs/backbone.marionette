@@ -65,7 +65,7 @@ Marionette.CollectionView = Marionette.View.extend({
     if (this._isShown) {
       _.each(this._bufferedChildren, _.partial(this._triggerMethodOnChild, 'show'));
 
-      this._bufferedChildren = [];
+      this.initRenderBuffer();
     }
   },
 

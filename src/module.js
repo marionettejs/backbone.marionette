@@ -10,7 +10,7 @@ Marionette.Module = function(moduleName, app, options) {
   this.options = _.extend({}, this.options, options);
   // Allow for a user to overide the initialize
   // for a given module instance.
-  this.initialize = options.initialize || this.initialize;
+  this.initialize = this.options.initialize || this.initialize;
 
   // Set up an internal store for sub-modules.
   this.submodules = {};

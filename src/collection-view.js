@@ -160,13 +160,11 @@ Marionette.CollectionView = Marionette.View.extend({
 
   // Render view after sorting. Override this method to
   // change how the view renders after a `sort` on the collection.
-  // An example of this would be to only `renderChildren` in a `CompositeView`
-  // rather than the full view.
   resortView: function() {
     if (Marionette.getOption(this, 'reorderOnSort')) {
       this.reorder();
     } else {
-      this.render();
+      this._renderChildren();
     }
   },
 

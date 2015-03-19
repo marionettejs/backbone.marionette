@@ -56,13 +56,13 @@ rm.removeRegion("foo");
 The RegionManager take an optional `region` option in their constructor. the regions are passed directly into `addRegions` for the region manager instance.
 
 ```js
-var mananger = new Marionette.RegionManager({
+var manager = new Marionette.RegionManager({
   regions: {
     "aRegion": "#bar"
   }
 });
 
-mananger.get('aRegion').show(new MyView);
+manager.get('aRegion').show(new MyView);
 ```
 
 ## RegionManager.addRegion

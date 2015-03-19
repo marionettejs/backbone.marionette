@@ -28,6 +28,7 @@ Marionette.CollectionView = Marionette.View.extend({
 
     Marionette.View.apply(this, arguments);
 
+    this.on('before:show', this._onBeforeShowCalled);
     this.on('show', this._onShowCalled);
 
     this.initRenderBuffer();
@@ -47,32 +48,22 @@ Marionette.CollectionView = Marionette.View.extend({
 
   endBuffering: function() {
     this.isBuffering = false;
-    this._triggerBeforeShowBufferedChildren();
+    if (this._isShown) {
+      this._triggerShowMultiple(this._bufferedChildren, 'before:');
+    }
 
     this.attachBuffer(this);
 
-    this._triggerShowBufferedChildren();
-    this.initRenderBuffer();
-  },
-
-  _triggerBeforeShowBufferedChildren: function() {
     if (this._isShown) {
-      _.each(this._bufferedChildren, _.partial(this._triggerMethodOnChild, 'before:show'));
+      this._triggerShowMultiple(this._bufferedChildren);
     }
   },
 
-  _triggerShowBufferedChildren: function() {
-    if (this._isShown) {
-      _.each(this._bufferedChildren, _.partial(this._triggerMethodOnChild, 'show'));
-
-      this._bufferedChildren = [];
-    }
-  },
-
-  // Internal method for _.each loops to call `Marionette.triggerMethodOn` on
-  // a child view
-  _triggerMethodOnChild: function(event, childView) {
-    Marionette.triggerMethodOn(childView, event);
+  _triggerShowMultiple: function(views, prefix) {
+    var eventName = (prefix || '') + 'show';
+    _.each(views, function(view) {
+      Marionette.triggerMethodOn(view, eventName, view);
+    }, this);
   },
 
   // Configured the initial events that the collection view
@@ -112,8 +103,16 @@ Marionette.CollectionView = Marionette.View.extend({
     this.checkEmpty();
   },
 
+  _onBeforeShowCalled: function() {
+    this.children.each(function(childView) {
+      Marionette.triggerMethodOn(childView, 'before:show', childView);
+    });
+  },
+
   _onShowCalled: function() {
-    this.children.each(_.partial(this._triggerMethodOnChild, 'show'));
+    this.children.each(function(childView) {
+      Marionette.triggerMethodOn(childView, 'show', childView);
+    });
   },
 
   // Render children views. Override this method to
@@ -316,7 +315,7 @@ Marionette.CollectionView = Marionette.View.extend({
     // trigger the 'before:show' event on `view` if the collection view
     // has already been shown
     if (this._isShown) {
-      Marionette.triggerMethodOn(view, 'before:show');
+      Marionette.triggerMethodOn(view, 'before:show', view);
     }
 
     // Store the `emptyView` like a `childView` so we can properly
@@ -329,7 +328,7 @@ Marionette.CollectionView = Marionette.View.extend({
     // call the 'show' method if the collection view
     // has already been shown
     if (this._isShown) {
-      Marionette.triggerMethodOn(view, 'show');
+      Marionette.triggerMethodOn(view, 'show', view);
     }
   },
 
@@ -403,7 +402,7 @@ Marionette.CollectionView = Marionette.View.extend({
     // trigger the 'before:show' event on `view` if the collection view
     // has already been shown
     if (this._isShown && !this.isBuffering) {
-      Marionette.triggerMethodOn(view, 'before:show');
+      Marionette.triggerMethodOn(view, 'before:show', view);
     }
 
     // Store the child view itself so we can properly
@@ -412,7 +411,7 @@ Marionette.CollectionView = Marionette.View.extend({
     this.renderChildView(view, index);
 
     if (this._isShown && !this.isBuffering) {
-      Marionette.triggerMethodOn(view, 'show');
+      Marionette.triggerMethodOn(view, 'show', view);
     }
 
     this.triggerMethod('add:child', view);

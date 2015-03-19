@@ -54,8 +54,35 @@ john.on('announce', function(message) {
 john.graduate();
 ```
 
-## mergeOptions
+### Radio Events
+`Marionette.Object` integrates with `Backbone.Radio` to provide powerful messaging capabilities.  Objects can respond to any of Radio's three message types; `Events`, `Commands` and `Requests`.  The syntax is similar to the `events` syntax from Backbone Views, and looks like this:
 
+```js
+radioEvents: {
+  'app start': 'onAppStart',
+  'books finish': 'onBooksFinish',
+},
+
+radioCommands: {
+  'app doFoo': 'executeFoo',
+},
+
+radioRequests: {
+  'resources bar': 'getBar',
+},
+```
+
+where each hash value is in the form `'channel eventName' : 'handler'`.  So
+
+```js
+radioCommands: {
+  'app doFoo': 'executeFoo',
+},
+```
+
+means that the object will listen for the `doFoo` command on the `app` channel, and run the 'executeFoo' method.  When using Radio Commands and Requests with Objects, the same rules and restrictions that normal Radio use implies also apply here: a single handler can be associated with a command or request, either through manual use of the comply or reply functions, or through the Object API.
+
+### mergeOptions
 Merge keys from the `options` object directly onto the instance. This is the preferred way to access options
 passed into the Object.
 

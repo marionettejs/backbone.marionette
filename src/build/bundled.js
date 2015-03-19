@@ -38,6 +38,7 @@
   // @include ../trigger-method.js
   // @include ../dom-refresh.js
   // @include ../bind-entity-events.js
+  // @include ../radio-helpers.js
 
   // @include ../error.js
   // @include ../object.js

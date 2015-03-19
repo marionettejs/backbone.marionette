@@ -16,17 +16,17 @@ constructor:
   
   examples:
     -
-      name: Creating a RegionMananger with default regions
+      name: Creating a RegionManager with default regions
       example: |
 
         ```js
-        var mananger = new Marionette.RegionManager({
+        var manager = new Marionette.RegionManager({
           regions: {
             "aRegion": "#bar"
           }
         })
 
-        mananger.getRegion("aRegion").show(new MyView);
+        manager.getRegion("aRegion").show(new MyView);
         ```
 
 functions:

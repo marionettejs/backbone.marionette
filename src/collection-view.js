@@ -28,6 +28,7 @@ Marionette.CollectionView = Marionette.View.extend({
 
     Marionette.View.apply(this, arguments);
 
+    this.on('before:show', this._onBeforeShowCalled);
     this.on('show', this._onShowCalled);
 
     this.initRenderBuffer();
@@ -110,6 +111,10 @@ Marionette.CollectionView = Marionette.View.extend({
     var view = this.children.findByModel(model);
     this.removeChildView(view);
     this.checkEmpty();
+  },
+
+  _onBeforeShowCalled: function() {
+    this.children.each(_.partial(this._triggerMethodOnChild, 'before:show'));
   },
 
   _onShowCalled: function() {

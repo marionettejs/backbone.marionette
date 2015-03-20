@@ -1318,4 +1318,46 @@ describe('collection view', function() {
       expect(this.childView.$el).to.contain.$text('bar');
     });
   });
+
+  describe('when a collection view has been rendered but not shown', function() {
+    beforeEach(function() {
+      this.ChildView = Backbone.Marionette.ItemView.extend({
+        onBeforeShow: function() {},
+        onShow: function() {},
+        template: _.template('<%= foo %>')
+      });
+
+      this.CollectionView = Backbone.Marionette.CollectionView.extend({
+        childView: this.ChildView
+      });
+
+      this.sinon.spy(this.ChildView.prototype, 'onBeforeShow');
+      this.sinon.spy(this.ChildView.prototype, 'onShow');
+
+      this.model1 = new Backbone.Model({foo: 1});
+      this.model2 = new Backbone.Model({foo: 2});
+      this.collection = new Backbone.Collection([this.model1, this.model2]);
+      this.collectionView = new this.CollectionView({
+        collection: this.collection
+      });
+      $('body').append(this.collectionView.el);
+
+      this.collectionView.render();
+      this.collectionView.trigger('before:show');
+      this.collectionView.trigger('show');
+
+      this.childView1 = this.collectionView.children.findByIndex(0);
+      this.childView2 = this.collectionView.children.findByIndex(1);
+    });
+
+    it('onBeforeShow should propagate to each child view', function() {
+      expect(this.childView1.onBeforeShow).to.have.been.called;
+      expect(this.childView2.onBeforeShow).to.have.been.called;
+    });
+
+    it('onShow should propagate to each child view', function() {
+      expect(this.childView1.onShow).to.have.been.called;
+      expect(this.childView2.onShow).to.have.been.called;
+    });
+  });
 });

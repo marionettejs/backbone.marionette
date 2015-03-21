@@ -6,7 +6,7 @@
 
 var _        = require('underscore');
 var Backbone = require('Backbone'); // Backbone should be modularized too!
-var FEATURES = require(./features.js);
+var FEATURES = require('./features.js');
 
 var deprecate = function(message, test) {
   if (_.isObject(message)) {

@@ -4,6 +4,7 @@
 // Helpers
 // -------
 
+var _        = require('underscore');
 var Backbone = require('Backbone'); // Backbone should be modularized too!
 var FEATURES = require(./features.js);
 
@@ -26,7 +27,7 @@ deprecate._warn = typeof console !== 'undefined' && (console.warn || console.log
 deprecate._cache = {};
 
 
-module.exports = {
+exports = {
 
   // Marionette.extend
   // -----------------
@@ -64,7 +65,7 @@ module.exports = {
 
   // Proxy `Marionette.getOption`
   proxyGetOption: function(optionName) {
-    return module.exports.getOption(this, optionName);
+    return exports.getOption(this, optionName);
   },
 
   // Similar to `_.result`, this is a simple helper
@@ -109,7 +110,7 @@ module.exports = {
   // Returns a new, non-mutated, parsed events hash.
   normalizeUIKeys: function(hash, ui) {
     return _.reduce(hash, function(memo, val, key) {
-      var normalizedKey = module.exports.normalizeUIString(key, ui);
+      var normalizedKey = exports.normalizeUIString(key, ui);
       memo[normalizedKey] = val;
       return memo;
     }, {});
@@ -121,14 +122,14 @@ module.exports = {
   normalizeUIValues: function(hash, ui, properties) {
     _.each(hash, function(val, key) {
       if (_.isString(val)) {
-        hash[key] = module.exports.normalizeUIString(val, ui);
+        hash[key] = exports.normalizeUIString(val, ui);
       } else if (_.isObject(val) && _.isArray(properties)) {
-        _.extend(val, module.exports.normalizeUIValues(_.pick(val, properties), ui));
+        _.extend(val, exports.normalizeUIValues(_.pick(val, properties), ui));
         /* Value is an object, and we got an array of embedded property names to normalize. */
         _.each(properties, function(property) {
           var propertyVal = val[property];
           if (_.isString(propertyVal)) {
-            val[property] = module.exports.normalizeUIString(propertyVal, ui);
+            val[property] = exports.normalizeUIString(propertyVal, ui);
           }
         });
       }

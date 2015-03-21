@@ -5,6 +5,7 @@
 // -------
 
 var Backbone = require('Backbone'); // Backbone should be modularized too!
+var FEATURES = require(./features.js);
 
 var deprecate = function(message, test) {
   if (_.isObject(message)) {
@@ -26,6 +27,7 @@ deprecate._cache = {};
 
 
 module.exports = {
+
   // Marionette.extend
   // -----------------
 

@@ -1,4 +1,4 @@
-/* jshint maxstatements: 14 */
+/* jshint maxcomplexity: 8, maxstatements: 20 */
 
 // Collection View
 // ---------------
@@ -14,6 +14,11 @@ Marionette.CollectionView = Marionette.View.extend({
   // flag for maintaining the sorted order of the collection
   sort: true,
 
+  // TODO: Discuss how to handle option to disable attach/beforeAttach on child view trees.
+  // These properties are a placeholder for now.
+  triggerBeforeAttach: true,
+  triggerAttach: true,
+
   // constructor
   // option to pass `{sort: false}` to prevent the `CollectionView` from
   // maintaining the sorted order of the collection.
@@ -22,7 +27,6 @@ Marionette.CollectionView = Marionette.View.extend({
   // option to pass `{comparator: compFunction()}` to allow the `CollectionView`
   // to use a custom sort order for the collection.
   constructor: function(options) {
-
     this.once('render', this._initialEvents);
     this._initChildViewStorage();
 
@@ -46,33 +50,42 @@ Marionette.CollectionView = Marionette.View.extend({
   },
 
   endBuffering: function() {
+    // Only trigger attach if already shown and attached, otherwise Region#show() handles this.
+    var canTriggerAttach = this._isShown && Marionette.isNodeAttached(this.el);
+    var nestedViews;
+
     this.isBuffering = false;
-    this._triggerBeforeShowBufferedChildren();
+
+    if (this._isShown) {
+      this._triggerMethodOnAll(this._bufferedChildren, 'before:show');
+    }
+    if (canTriggerAttach && this.triggerBeforeAttach) {
+      // Recursively retrieve nested views.
+      nestedViews = this._getNestedViews();
+      this._triggerMethodOnAll(nestedViews, 'before:attach');
+    }
 
     this.attachBuffer(this);
 
-    this._triggerShowBufferedChildren();
+    if (canTriggerAttach && this.triggerAttach) {
+      // Don't recursively retrieve nested views unnecessarily.
+      nestedViews = nestedViews || this._getNestedViews();
+      this._triggerMethodOnAll(nestedViews, 'attach');
+    }
+    if (this._isShown) {
+      this._triggerMethodOnAll(this._bufferedChildren, 'show');
+    }
+
     this.initRenderBuffer();
   },
 
-  _triggerBeforeShowBufferedChildren: function() {
-    if (this._isShown) {
-      _.each(this._bufferedChildren, _.partial(this._triggerMethodOnChild, 'before:show'));
-    }
+  _triggerMethodOnAll: function(views, event) {
+    _.each(views, _.partial(this._triggerMethodOn, event));
   },
 
-  _triggerShowBufferedChildren: function() {
-    if (this._isShown) {
-      _.each(this._bufferedChildren, _.partial(this._triggerMethodOnChild, 'show'));
-
-      this.initRenderBuffer();
-    }
-  },
-
-  // Internal method for _.each loops to call `Marionette.triggerMethodOn` on
-  // a child view
-  _triggerMethodOnChild: function(event, childView) {
-    Marionette.triggerMethodOn(childView, event);
+  // Internal method for _.each loops to call `Marionette.triggerMethodOn` on a view
+  _triggerMethodOn: function(event, view) {
+    Marionette.triggerMethodOn(view, event);
   },
 
   // Configured the initial events that the collection view
@@ -113,7 +126,7 @@ Marionette.CollectionView = Marionette.View.extend({
   },
 
   _onShowCalled: function() {
-    this.children.each(_.partial(this._triggerMethodOnChild, 'show'));
+    this.children.each(_.partial(this._triggerMethodOn, 'show'));
   },
 
   // Render children views. Override this method to
@@ -294,6 +307,9 @@ Marionette.CollectionView = Marionette.View.extend({
   // but "add:child" events are not fired, and the event from
   // emptyView are not forwarded
   addEmptyView: function(child, EmptyView) {
+    // Only trigger attach if already shown and attached, otherwise Region#show() handles this.
+    var canTriggerAttach = this._isShown && Marionette.isNodeAttached(this.el);
+    var nestedViews;
 
     // get the emptyViewOptions, falling back to childViewOptions
     var emptyViewOptions = this.getOption('emptyViewOptions') ||
@@ -321,9 +337,19 @@ Marionette.CollectionView = Marionette.View.extend({
     // remove and/or close it later
     this.children.add(view);
 
+    if (canTriggerAttach && this.triggerBeforeAttach) {
+      nestedViews = [view].concat(view._getNestedViews());
+      // Trigger before:attach after render to honor Region#show() lifecycle order.
+      view.once('render', _.partial(this._triggerMethodOnAll, nestedViews, 'before:attach'), this);
+    }
+
     // Render it and show it
     this.renderChildView(view, this._emptyViewIndex);
 
+    if (canTriggerAttach && this.triggerAttach) {
+      nestedViews = nestedViews || [view].concat(view._getNestedViews());
+      this._triggerMethodOnAll(nestedViews, 'attach');
+    }
     // call the 'show' method if the collection view
     // has already been shown
     if (this._isShown) {
@@ -393,6 +419,11 @@ Marionette.CollectionView = Marionette.View.extend({
   // Internal Method. Add the view to children and render it at
   // the given index.
   _addChildView: function(view, index) {
+    // Only trigger attach if already shown, attached, and not buffering, otherwise endBuffer() or
+    // Region#show() handles this.
+    var canTriggerAttach = this._isShown && !this.isBuffering && Marionette.isNodeAttached(this.el);
+    var nestedViews;
+
     // set up the child view event forwarding
     this.proxyChildEvents(view);
 
@@ -407,8 +438,19 @@ Marionette.CollectionView = Marionette.View.extend({
     // Store the child view itself so we can properly
     // remove and/or destroy it later
     this.children.add(view);
+
+    if (canTriggerAttach && this.triggerBeforeAttach) {
+      nestedViews = [view].concat(view._getNestedViews());
+      // Trigger before:attach after render to honor Region#show() lifecycle order.
+      view.once('render', _.partial(this._triggerMethodOnAll, nestedViews, 'before:attach'), this);
+    }
+
     this.renderChildView(view, index);
 
+    if (canTriggerAttach && this.triggerAttach) {
+      nestedViews = nestedViews || [view].concat(view._getNestedViews());
+      this._triggerMethodOnAll(nestedViews, 'attach');
+    }
     if (this._isShown && !this.isBuffering) {
       Marionette.triggerMethodOn(view, 'show');
     }

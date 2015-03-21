@@ -4,9 +4,9 @@
 // Helpers
 // -------
 
-var _        = require('underscore');
-var Backbone = require('Backbone'); // Backbone should be modularized too!
-var FEATURES = require('./features.js');
+import _        from 'underscore';
+import Backbone from 'Backbone'; // Backbone should be modularized too!
+import FEATURES from './features';
 
 var deprecate = function(message, test) {
   if (_.isObject(message)) {
@@ -27,7 +27,7 @@ deprecate._warn = typeof console !== 'undefined' && (console.warn || console.log
 deprecate._cache = {};
 
 
-exports = {
+var exports = {
 
   // Marionette.extend
   // -----------------
@@ -158,3 +158,5 @@ exports = {
 
   deprecate: deprecate
 };
+
+export default exports;

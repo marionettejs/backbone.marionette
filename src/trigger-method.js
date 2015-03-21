@@ -3,9 +3,9 @@
 // Trigger Method
 // --------------
 
-var _ = require('underscore');
+import _ from 'underscore';
 
-exports = {
+var exports = {
   _triggerMethod: (function() {
     // split the event name on the ":"
     var splitter = /(^|:)(\w)/gi;
@@ -70,4 +70,6 @@ exports = {
     return fnc.apply(context, _.rest(arguments));
   }
 };
+
+export default exports;
 

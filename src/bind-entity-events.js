@@ -15,11 +15,11 @@
 // configuration. Multiple handlers can be separated by a space. A
 // function can be supplied instead of a string handler name.
 
-'use strict';
+import _       from 'underscore';
+import helpers from './helpers';
+import error   from './error';
 
-var _       = require('underscore');
-var helpers = require('./helpers.js');
-var error   = require('./error.js');
+'use strict';
 
 // Bind the event to handlers specified as a string of
 // handler names on the target object
@@ -88,7 +88,7 @@ function iterateEvents(target, entity, bindings, functionCallback, stringCallbac
   });
 }
 
-exports = {
+var exports = {
   // Export Public API
   bindEntityEvents: function(target, entity, bindings) {
     iterateEvents(target, entity, bindings, bindToFunction, bindFromStrings);
@@ -108,3 +108,5 @@ exports = {
     return exports.unbindEntityEvents(this, entity, bindings);
   }
 };
+
+export default exports;

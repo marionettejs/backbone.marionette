@@ -1,10 +1,10 @@
 // DOM Refresh
 // -----------
 
-var _       = require('underscore');
-var helpers = require('./helpers.js');
+import _       from 'underscore';
+import helpers from './helpers';
 
-exports = {
+exports default {
 
   // Monitor a view's state, and after it has been rendered and shown
   // in the DOM, trigger a "dom:refresh" event every time it is

@@ -87,3 +87,5 @@ export default {
   triggerMethodMany:  triggerMethodMany
 };
 
+export default exports;
+

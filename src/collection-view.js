@@ -80,11 +80,11 @@ Marionette.CollectionView = Marionette.View.extend({
   },
 
   _triggerMethodOnAll: function(views, event) {
-    _.each(views, _.partial(this._triggerMethodOn, _, event));
+    _.each(views, _.partial(this._triggerMethodOn, event));
   },
 
   // Internal method for _.each loops to call `Marionette.triggerMethodOn` on a view
-  _triggerMethodOn: function(view, event) {
+  _triggerMethodOn: function(event, view) {
     Marionette.triggerMethodOn(view, event);
   },
 
@@ -126,7 +126,7 @@ Marionette.CollectionView = Marionette.View.extend({
   },
 
   _onShowCalled: function() {
-    this.children.each(_.partial(this._triggerMethodOn, _, 'show'));
+    this.children.each(_.partial(this._triggerMethodOn, 'show'));
   },
 
   // Render children views. Override this method to

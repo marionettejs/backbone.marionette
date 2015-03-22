@@ -1,10 +1,11 @@
 
-var exports = {
-  FEATURES = {},
+var FEATURES = {};
 
-  isEnabled: function(name) {
-    return !!exports.FEATURES[name];
-  }
+function isEnabled(name) {
+  return !!FEATURES[name];
+}
+
+export default {
+  FEATURES: FEATURES,
+  isEnabled: isEnabled
 };
-
-export default exports;

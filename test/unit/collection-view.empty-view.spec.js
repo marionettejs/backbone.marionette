@@ -330,6 +330,26 @@ describe('collectionview - emptyView', function() {
         expect(this.isEmptyStub).to.have.been.calledWith(this.collection);
       });
     });
+
+    describe('with a filter', function() {
+      beforeEach(function() {
+        this.collection.reset([{foo: true}, {foo: false}]);
+      });
+
+      it('returns false if any of the models pass the filter', function() {
+        this.collectionView.filter = function(model) {
+          return model.get('foo');
+        };
+        expect(this.collectionView.isEmpty()).to.be.false;
+      });
+
+      it('returns false if none of the models pass the filter', function() {
+        this.collectionView.filter = function() {
+          return false;
+        };
+        expect(this.collectionView.isEmpty()).to.be.true;
+      });
+    });
   });
 
   describe('when rendering and an "emptyViewOptions" is provided', function() {

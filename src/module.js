@@ -117,7 +117,7 @@ _.extend(Marionette.Module.prototype, Backbone.Events, {
       Marionette,
       Backbone.$, _,
       customArgs
-    ]);
+    ], true);
 
     definition.apply(this, args);
   },

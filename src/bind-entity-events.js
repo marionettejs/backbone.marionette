@@ -15,9 +15,9 @@
 // configuration. Multiple handlers can be separated by a space. A
 // function can be supplied instead of a string handler name.
 
-import _       from 'underscore';
-import helpers from './helpers';
-import error   from './error';
+import _               from 'underscore';
+import helpers         from './helpers';
+import MarionetteError from './error';
 
 'use strict';
 
@@ -30,7 +30,7 @@ function bindFromStrings(target, entity, evt, methods) {
 
     var method = target[methodName];
     if (!method) {
-      throw new error.Error('Method "' + methodName +
+      throw new MarionetteError('Method "' + methodName +
         '" was configured as an event handler, but does not exist.');
     }
 
@@ -65,7 +65,7 @@ function iterateEvents(target, entity, bindings, functionCallback, stringCallbac
 
   // type-check bindings
   if (!_.isObject(bindings)) {
-    throw new error.Error({
+    throw new MarionetteError({
       message: 'Bindings must be an object or function.',
       url: 'marionette.functions.html#marionettebindentityevents'
     });
@@ -88,25 +88,29 @@ function iterateEvents(target, entity, bindings, functionCallback, stringCallbac
   });
 }
 
-var exports = {
-  // Export Public API
-  bindEntityEvents: function(target, entity, bindings) {
-    iterateEvents(target, entity, bindings, bindToFunction, bindFromStrings);
-  },
+function bindEntityEvents(target, entity, bindings) {
+  iterateEvents(target, entity, bindings, bindToFunction, bindFromStrings);
+}
 
-  unbindEntityEvents: function(target, entity, bindings) {
-    iterateEvents(target, entity, bindings, unbindToFunction, unbindFromStrings);
-  },
+function unbindEntityEvents(target, entity, bindings) {
+  iterateEvents(target, entity, bindings, unbindToFunction, unbindFromStrings);
+}
 
-  // Proxy `bindEntityEvents`
-  proxyBindEntityEvents: function(entity, bindings) {
-    return exports.bindEntityEvents(this, entity, bindings);
-  },
+// Proxy `bindEntityEvents`
+function proxyBindEntityEvents(entity, bindings) {
+  return bindEntityEvents(this, entity, bindings);
+}
 
-  // Proxy `unbindEntityEvents`
-  proxyUnbindEntityEvents: function(entity, bindings) {
-    return exports.unbindEntityEvents(this, entity, bindings);
-  }
+// Proxy `unbindEntityEvents`
+function proxyUnbindEntityEvents(entity, bindings) {
+  return unbindEntityEvents(this, entity, bindings);
+}
+
+// Export Public API
+export default {
+  bindEntityEvents: bindEntityEvents,
+  unbindEntityEvents: unbindEntityEvents,
+  proxyBindEntityEvents: proxyBindEntityEvents,
+  proxyUnbindEntityEvents: proxyUnbindEntityEvents
 };
 
-export default exports;

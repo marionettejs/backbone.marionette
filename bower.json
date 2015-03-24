@@ -24,6 +24,7 @@
     "test",
     ".editorconfig",
     ".gitignore",
+    ".jscsrc",
     ".jshintrc",
     ".npmignore",
     ".travis.yml",

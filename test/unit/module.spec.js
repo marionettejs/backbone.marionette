@@ -25,7 +25,7 @@ describe('application modules', function() {
 
       describe('and the define function is provided', function() {
         beforeEach(function() {
-          this.additionalParam = {};
+          this.additionalParam = [[1], 2];
           this.module = this.app.module('Mod', this.defineSpy, this.additionalParam);
         });
 

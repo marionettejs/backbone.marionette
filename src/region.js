@@ -144,9 +144,7 @@ Marionette.Region = Marionette.Object.extend({
 
   _triggerAttach: function(views, prefix) {
     var eventName = (prefix || '') + 'attach';
-    _.each(views, function(view) {
-      Marionette.triggerMethodOn(view, eventName, view, this);
-    }, this);
+    Marionette.triggerMethodMany(views, this, eventName);
   },
 
   _displayedViews: function(view) {

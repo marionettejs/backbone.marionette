@@ -273,11 +273,13 @@ describe('base view', function() {
 
     beforeEach(function() {
       model = new Backbone.Model(modelData);
-      view = new Marionette.View();
+      view = new Marionette.View({
+        model: model
+      });
     });
 
     it('should return all attributes', function() {
-      expect(view.serializeModel(model)).to.be.eql(modelData);
+      expect(view.serializeModel()).to.be.eql(modelData);
     });
   });
 

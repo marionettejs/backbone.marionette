@@ -114,7 +114,7 @@ _.extend(Marionette.Module.prototype, Backbone.Events, {
     // make flattening consistent
     // in lodash (v3) it's flatten(collection, deep)
     // and in underscore it's flatten(collection, shallow)
-    var deepFlag = !!_.flattenDeep;
+    var deepFlag = !_.flattenDeep;
     var args = _.flatten([
       this,
       this.app,

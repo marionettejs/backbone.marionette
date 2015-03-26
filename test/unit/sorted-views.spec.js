@@ -453,6 +453,7 @@ describe('collection/composite view sorting', function() {
           var cmp = function(m) {
             return m.get('bar');
           };
+
           if (specOptions.viewComparator) {
             this.collection.comparator = 'foo';
             this.collectionView.options.viewComparator = cmp;
@@ -484,6 +485,26 @@ describe('collection/composite view sorting', function() {
 
         it('should respect the childViewContainer in a CompositeView', function() {
           expect(this.compositeView.$('#container')).to.have.$text('321');
+        });
+
+        describe('and reversing the sort', function() {
+          beforeEach(function() {
+            var cmp = function(m) {
+              return m.get('foo');
+            };
+            if (specOptions.viewComparator) {
+              this.collection.comparator = 'bar';
+              this.collectionView.options.viewComparator = cmp;
+              this.compositeView.options.viewComparator = cmp;
+            } else {
+              this.collection.comparator = cmp;
+            }
+            this.collection.sort();
+          });
+
+          it('should reorder the DOM', function() {
+            expect(this.collectionView.$el).to.have.$text('123');
+          });
         });
       });
     };

@@ -46,7 +46,6 @@ Marionette.Region = Marionette.Object.extend({
 
     var showOptions     = options || {};
     var isDifferentView = view !== this.currentView;
-    var preventDestroy  = !!showOptions.preventDestroy;
     var forceShow       = !!showOptions.forceShow;
 
     // We are only changing the view if there is a current view to change to begin with
@@ -54,7 +53,7 @@ Marionette.Region = Marionette.Object.extend({
 
     // Only destroy the current view if we don't want to `preventDestroy` and if
     // the view given in the first argument is different than `currentView`
-    var _shouldDestroyView = isDifferentView && !preventDestroy;
+    var _shouldDestroyView = this.shouldDestroyView(view, options);
 
     // Only show the view given in the first argument if it is different than
     // the current view or if we want to re-show the view. Note that if
@@ -87,7 +86,8 @@ Marionette.Region = Marionette.Object.extend({
       // to the currentView since once a view has been destroyed
       // we can not reuse it.
       view.once('destroy', this.empty, this);
-      view.render();
+
+      this.renderView(view, options);
 
       view._parent = this;
 
@@ -137,6 +137,18 @@ Marionette.Region = Marionette.Object.extend({
     }
 
     return this;
+  },
+
+  shouldDestroyView: function(view, options) {
+    var showOptions     = options || {};
+    var isDifferentView = view !== this.currentView;
+    var preventDestroy  = !!showOptions.preventDestroy;
+
+    return isDifferentView && !preventDestroy;
+  },
+
+  renderView: function(view, options) {
+    view.render();
   },
 
   triggerBeforeAttach: true,

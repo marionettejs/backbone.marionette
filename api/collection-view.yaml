@@ -251,6 +251,7 @@ functions:
       
       @api public
       @param {Marionette.Collection} collection
+      @param {Object} options
     
     examples:
       

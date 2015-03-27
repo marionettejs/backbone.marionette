@@ -145,5 +145,9 @@ var deprecate = Marionette.deprecate = function(message, test) {
   }
 };
 
-deprecate._warn = typeof console !== 'undefined' && (console.warn || console.log) || function() {};
+deprecate._console = typeof console !== 'undefined' ? console : {};
+deprecate._warn = function() {
+  var warn = deprecate._console.warn || deprecate._console.log || function() {};
+  return warn.apply(deprecate._console, arguments);
+};
 deprecate._cache = {};

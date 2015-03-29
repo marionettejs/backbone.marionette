@@ -246,15 +246,15 @@ describe('region', function() {
       expect(this.viewOnBeforeShowSpy).to.have.been.calledWith(this.view, this.myRegion, this.showOptions);
     });
 
-    describe('wrapping the view render events inside the view show events', function() {
+    describe('Render and show event ordering', function() {
       beforeEach(function() {
         this.viewEvents = _.map(this.triggerSpy.getCalls(), function(call) {
           return call.args[0];
         });
       });
 
-      it('triggers the before render event after the before show event', function() {
-        expect(_.indexOf(this.viewEvents, 'before:show')).to.be.below(_.indexOf(this.viewEvents, 'before:render'));
+      it('triggers the before render event before the before show event', function() {
+        expect(_.indexOf(this.viewEvents, 'before:render')).to.be.below(_.indexOf(this.viewEvents, 'before:show'));
       });
 
       it('triggers the show event after the render event', function() {

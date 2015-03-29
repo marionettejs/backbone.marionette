@@ -303,13 +303,13 @@ describe('collection view', function() {
   describe('when sorting a collection', function() {
     beforeEach(function() {
       this.collection = new Backbone.Collection([{
-          foo: 'foo'
-        }, {
-          foo: 'bar'
-        }, {
-          foo: 'biz'
-        }, {
-          foo: 'baz'
+        foo: 'foo'
+      }, {
+        foo: 'bar'
+      }, {
+        foo: 'biz'
+      }, {
+        foo: 'baz'
       }]);
       this.collection.comparator = function(model) {
         return model.get('foo');

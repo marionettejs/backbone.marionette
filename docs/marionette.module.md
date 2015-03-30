@@ -132,7 +132,7 @@ Sometimes a module definition can become quite long. You can split
 apart the definition by making subsequent calls to the `module`
 function.
 
-This can used to split the definition of your module
+This can be used to split the definition of your module
 across multiple files.
 
 ```js

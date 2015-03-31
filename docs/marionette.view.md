@@ -25,6 +25,7 @@ behaviors that are shared across all views.
 * [View.modelEvents and View.collectionEvents](#viewmodelevents-and-viewcollectionevents)
 * [View.serializeModel](#viewserializemodel)
 * [View.bindUIElements](#viewbinduielements)
+* [View.getUI](#viewgetui)
 * [View.mergeOptions](#viewmergeoptions)
 * [View.getOption](#viewgetoption)
 * [View.bindEntityEvents](#viewbindentityevents)
@@ -401,7 +402,14 @@ This works for both `modelEvents` and `collectionEvents`.
 
 ## View.serializeModel
 
-The `serializeModel` method will serialize a model that is passed in as an argument.
+This method is used internally during a view's rendering phase. It
+will serialize the View's `model` property, adding it to the data
+that is ultimately passed to the template.
+
+If you would like to serialize the View's `model` in a special way,
+then you should override this method. With that said, **do not** override
+this if you're simply adding additional data to your template, like computed
+fields. Use [templateHelpers](#viewtemplatehelpers) instead.
 
 ## View.bindUIElements
 
@@ -412,13 +420,19 @@ or other ui element that you wish to set a css class to it.
 Instead of having jQuery selectors hanging around in the view's code
 you can define a `ui` hash that contains a mapping between the
 ui element's name and its jQuery selector. Afterwards you can simply
-access it via `this.ui.elementName`.
+access it via `this.getUI('elementName')`.
 See ItemView documentation for examples.
 
 This functionality is provided via the `bindUIElements` method.
 Since View doesn't implement the render method, then if you directly extend
 from View you will need to invoke this method from your render method.
 In ItemView and CompositeView this is already taken care of.
+
+## View.getUI
+
+The `getUI` method is is a “stable” interface to the `ui` hash, this helps when
+attempting to gain access a `ui` property when the view is in a destroyed state. Doing
+so will throw a `ViewDestroyedError`.
 
 ## View.mergeOptions
 The preferred way to manage your view's options is with `mergeOptions`. It accepts two arguments: the `options` object

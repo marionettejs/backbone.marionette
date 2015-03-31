@@ -65,7 +65,7 @@ Marionette.CollectionView = Marionette.View.extend({
     if (this._isShown) {
       _.each(this._bufferedChildren, _.partial(this._triggerMethodOnChild, 'show'));
 
-      this._bufferedChildren = [];
+      this.initRenderBuffer();
     }
   },
 
@@ -146,8 +146,10 @@ Marionette.CollectionView = Marionette.View.extend({
       this.render();
     } else {
       // get the DOM nodes in the same order as the models
-      var els = _.map(models, function(model) {
-        return children.findByModel(model).el;
+      var els = _.map(models, function(model, index) {
+        var view = children.findByModel(model);
+        view._index = index;
+        return view.el;
       });
 
       // since append moves elements that are already in the DOM,
@@ -160,13 +162,11 @@ Marionette.CollectionView = Marionette.View.extend({
 
   // Render view after sorting. Override this method to
   // change how the view renders after a `sort` on the collection.
-  // An example of this would be to only `renderChildren` in a `CompositeView`
-  // rather than the full view.
   resortView: function() {
     if (Marionette.getOption(this, 'reorderOnSort')) {
       this.reorder();
     } else {
-      this.render();
+      this._renderChildren();
     }
   },
 
@@ -200,7 +200,7 @@ Marionette.CollectionView = Marionette.View.extend({
   // process
   _renderChildren: function() {
     this.destroyEmptyView();
-    this.destroyChildren();
+    this.destroyChildren({checkEmpty: false});
 
     if (this.isEmpty(this.collection)) {
       this.showEmptyView();
@@ -538,7 +538,7 @@ Marionette.CollectionView = Marionette.View.extend({
     if (this.isDestroyed) { return this; }
 
     this.triggerMethod('before:destroy:collection');
-    this.destroyChildren();
+    this.destroyChildren({checkEmpty: false});
     this.triggerMethod('destroy:collection');
 
     return Marionette.View.prototype.destroy.apply(this, arguments);
@@ -546,10 +546,20 @@ Marionette.CollectionView = Marionette.View.extend({
 
   // Destroy the child views that this collection view
   // is holding on to, if any
-  destroyChildren: function() {
+  destroyChildren: function(options) {
+    var destroyOptions = options || {};
+    var shouldCheckEmpty = true;
     var childViews = this.children.map(_.identity);
+
+    if (!_.isUndefined(destroyOptions.checkEmpty)) {
+      shouldCheckEmpty = destroyOptions.checkEmpty;
+    }
+
     this.children.each(this.removeChildView, this);
-    this.checkEmpty();
+
+    if (shouldCheckEmpty) {
+      this.checkEmpty();
+    }
     return childViews;
   },
 

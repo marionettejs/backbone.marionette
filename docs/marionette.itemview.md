@@ -225,13 +225,29 @@ Marionette.ItemView.extend({
 
 ## ItemView serializeData
 
-Item views will serialize a model or collection, by default, by
-calling `.toJSON` on either the model or collection. If both a model
-and collection are attached to an item view, the model will be used
-as the data source. The results of the data serialization will be passed to the template
-that is rendered.
+This method is used to convert a View's `model` or `collection`
+into a usable form for a template.
 
-If the serialization is a model, the results are passed in directly:
+Item Views are called such because they process only a single item
+at a time. Consequently, only the `model` **or** the `collection` will
+be serialized. If both exist, only the `model` will be serialized.
+
+By default, models are serialized by cloning the attributes of the model.
+
+Collections are serialized into an object of this form:
+
+```js
+{
+  items: [modelOne, modelTwo]
+}
+``
+
+where each model in the collection will have its attributes cloned.
+
+The result of `serializeData` is included in the data passed to
+the view's template.
+
+Let's take a look at some examples of how serializing data works.
 
 ```js
 var myModel = new MyModel({foo: "bar"});
@@ -272,19 +288,11 @@ MyItemView.render();
 </script>
 ```
 
-If you need custom serialization for your data, you can provide a
-`serializeData` method on your view. It must return a valid JSON
-object, as if you had called `.toJSON` on a model or collection.
+If you need to serialize the View's `model` or `collection` in a custom way,
+then you should override either `serializeModel` or `serializeCollection`.
 
-```js
-Marionette.ItemView.extend({
-  serializeData: function(){
-    return {
-      "some attribute": "some value"
-    }
-  }
-});
-```
+On the other hand, you should not use this method to add arbitrary extra data
+to your template. Instead, use [View.templateHelpers](./marionette.view.md#viewtemplatehelpers).
 
 ## Organizing UI Elements
 
@@ -292,7 +300,7 @@ As documented in [Marionette.View](./marionette.view.md#viewbindentityevents), y
 maps UI elements by their jQuery selectors. This is especially useful if you access the
 same UI element more than once in your view's code. Instead of
 duplicating the selector, you can simply reference it by
-`this.ui.elementName`:
+`this.getUI('elementName')`:
 
 You can also use the ui hash values from within events and trigger keys using the ```"@ui.elementName"```: syntax
 
@@ -306,7 +314,7 @@ Marionette.ItemView.extend({
 
   onRender: function() {
     if (this.model.get('selected')) {
-      this.ui.checkbox.addClass('checked');
+      this.getUI('checkbox').addClass('checked');
     }
   }
 });

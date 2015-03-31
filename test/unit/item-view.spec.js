@@ -17,7 +17,7 @@ describe('item view', function() {
     });
 
     it('should throw an exception because there was no valid template', function() {
-      expect(this.view.render).to.throw('Cannot render the template since it is null or undefined.');
+      expect(this.view.render).to.throw('Cannot render the template since its false, null or undefined.');
     });
   });
 
@@ -29,7 +29,11 @@ describe('item view', function() {
       this.View = Marionette.ItemView.extend({
         template: false,
         onBeforeRender: this.onBeforeRenderStub,
-        onRender: this.onRenderStub
+        onRender: this.onRenderStub,
+
+        ui: {
+          testElement: '.test-element'
+        }
       });
 
       this.view = new this.View();
@@ -39,6 +43,7 @@ describe('item view', function() {
       this.serializeDataSpy        = this.sinon.spy(this.view, 'serializeData');
       this.mixinTemplateHelpersSpy = this.sinon.spy(this.view, 'mixinTemplateHelpers');
       this.attachElContentSpy      = this.sinon.spy(this.view, 'attachElContent');
+      this.bindUIElementsSpy       = this.sinon.spy(this.view, 'bindUIElements');
 
       this.view.render();
     });
@@ -53,6 +58,14 @@ describe('item view', function() {
 
     it('should call an "onRender" method on the view', function() {
       expect(this.onRenderStub).to.have.been.calledOnce;
+    });
+
+    it('should call bindUIElements', function() {
+      expect(this.bindUIElementsSpy).to.have.been.calledOnce;
+    });
+
+    it('should bind the ui hash to jQuery selectors', function() {
+      expect(this.view.ui.testElement.selector).to.equal('.test-element');
     });
 
     it('should trigger a before:render event', function() {
@@ -364,15 +377,11 @@ describe('item view', function() {
     describe('and the view only has a collection', function() {
       beforeEach(function() {
         this.itemView.collection = new Backbone.Collection(this.collectionData);
-        this.itemView.serializeData(1, 2, 3);
+        this.itemView.serializeData();
       });
 
       it('should call serializeCollection', function() {
         expect(this.itemView.serializeCollection).to.have.been.calledOnce;
-      });
-
-      it('and the serialize function should be called with the provided arguments', function() {
-        expect(this.itemView.serializeCollection).to.have.been.calledWith(this.itemView.collection, 1, 2, 3);
       });
 
       it('should not call serializeModel', function() {
@@ -384,15 +393,11 @@ describe('item view', function() {
       beforeEach(function() {
         this.itemView.model = new Backbone.Model(this.modelData);
         this.itemView.collection = new Backbone.Collection(this.collectionData);
-        this.itemView.serializeData(1, 2, 3);
+        this.itemView.serializeData();
       });
 
       it('should call serializeModel', function() {
         expect(this.itemView.serializeModel).to.have.been.calledOnce;
-      });
-
-      it('and the serialize function should be called with the provided arguments', function() {
-        expect(this.itemView.serializeModel).to.have.been.calledWith(this.itemView.model, 1, 2, 3);
       });
 
       it('should not call serializeCollection', function() {

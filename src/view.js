@@ -32,10 +32,13 @@ Marionette.View = Backbone.View.extend({
     return this.getOption('template');
   },
 
-  // Serialize a model by returning its attributes. Clones
-  // the attributes to allow modification.
-  serializeModel: function(model) {
-    return model.toJSON.apply(model, _.rest(arguments));
+  // Prepares the special `model` property of a view
+  // for being displayed in the template. By default
+  // we simply clone the attributes. Override this if
+  // you need a custom transformation for your view's model
+  serializeModel: function() {
+    if (!this.model) { return {}; }
+    return _.clone(this.model.attributes);
   },
 
   // Mix in template helper methods. Looks for a
@@ -197,12 +200,14 @@ Marionette.View = Backbone.View.extend({
     var bindings = _.result(this, '_uiBindings');
 
     // empty the ui so we don't have anything to start with
-    this.ui = {};
+    this._ui = {};
 
     // bind each of the selectors
     _.each(bindings, function(selector, key) {
-      this.ui[key] = this.$(selector);
+      this._ui[key] = this.$(selector);
     }, this);
+
+    this.ui = this._ui;
   },
 
   // This method unbinds the elements specified in the "ui" hash
@@ -222,6 +227,13 @@ Marionette.View = Backbone.View.extend({
     // reset the ui element to the original bindings configuration
     this.ui = this._uiBindings;
     delete this._uiBindings;
+    delete this._ui;
+  },
+
+  getUI: function(name) {
+    this._ensureViewIsIntact();
+
+    return this._ui[name];
   },
 
   // Internal method to create an event handler for a given `triggerDef` like

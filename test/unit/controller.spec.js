@@ -42,7 +42,7 @@ describe('marionette controller', function() {
     });
 
     it('should maintain a reference to the options', function() {
-      expect(this.controller).to.have.property('options', this.initializeOptions);
+      expect(this.controller.options).to.eql(this.initializeOptions);
     });
   });
 
@@ -53,10 +53,6 @@ describe('marionette controller', function() {
 
     it('should provide an empty object as the options', function() {
       expect(this.controller.options).to.be.an('object');
-    });
-
-    it('should provide the empty object as the options to initialize', function() {
-      expect(this.initializeStub).to.have.been.calledOnce.and.calledWith(this.controller.options);
     });
   });
 

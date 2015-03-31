@@ -12,35 +12,32 @@ Marionette.ItemView = Marionette.View.extend({
     Marionette.View.apply(this, arguments);
   },
 
-  // Serialize the model or collection for the view. If a model is
-  // found, the view's `serializeModel` is called. If a collection is found,
-  // each model in the collection is serialized by calling
-  // the view's `serializeCollection` and put into an `items` array in
-  // the resulting data. If both are found, defaults to the model.
-  // You can override the `serializeData` method in your own view definition,
-  // to provide custom serialization for your view's data.
+  // Serialize the view's model *or* collection, if
+  // it exists, for the template
   serializeData: function() {
-    if (!this.model && !this.collection) {
-      return {};
-    }
+    var data = {};
 
-    var args = [this.model || this.collection];
-    if (arguments.length) {
-      args.push.apply(args, arguments);
-    }
-
+    // If we have a model, we serialize that
     if (this.model) {
-      return this.serializeModel.apply(this, args);
-    } else {
-      return {
-        items: this.serializeCollection.apply(this, args)
+      data = this.serializeModel();
+
+    } else if (this.collection) {
+      // Otherwise, we serialize the collection,
+      // making it available under the `items` property
+
+      data = {
+        items: this.serializeCollection()
       };
     }
+
+    return data;
   },
 
-  // Serialize a collection by serializing each of its models.
-  serializeCollection: function(collection) {
-    return collection.toJSON.apply(collection, _.rest(arguments));
+  // Serialize a collection by cloning each of
+  // its model's attributes
+  serializeCollection: function() {
+    if (!this.collection) { return {}; }
+    return _.pluck(this.collection.invoke('clone'), 'attributes');
   },
 
   // Render the view, defaulting to underscore.js templates.
@@ -64,21 +61,12 @@ Marionette.ItemView = Marionette.View.extend({
 
   // Internal method to render the template with the serialized data
   // and template helpers via the `Marionette.Renderer` object.
-  // Throws an `UndefinedTemplateError` error if the template is
-  // any falsely value but literal `false`.
   _renderTemplate: function() {
     var template = this.getTemplate();
 
     // Allow template-less item views
     if (template === false) {
       return;
-    }
-
-    if (!template) {
-      throw new Marionette.Error({
-        name: 'UndefinedTemplateError',
-        message: 'Cannot render the template since it is null or undefined.'
-      });
     }
 
     // Add in entity data and template helpers

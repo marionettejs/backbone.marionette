@@ -25,50 +25,48 @@ Marionette.Behaviors.behaviorsLookup = function() {
 }
 ```
 
-By default the Behaviors are looked up by their key value in a given View's behavior hash.
+There are 2 different syntaxes for attaching Behaviors to a View.  The first is an object syntax where the Behaviors are looked up by their key value in a given View's behavior hash. The second is an array syntax where you can pass the Behavior class directly.
 
-In this sample (using the default `getBehaviorClass` implementation) your code will expect the following Behaviors to be present in `window.Behaviors.DestroyWarn` and `window.Behaviors.ToolTip`
+In this sample, which uses the object syntax, your code will expect the following Behaviors to be present in `window.Behaviors.DestroyWarn` and `window.Behaviors.ToolTip`
 
 ```js
 var MyView = Marionette.ItemView.extend({
 	behaviors: {
+    ToolTip: {},
 		DestroyWarn: {
 			message: "you are destroying all your data is now gone!"
-		},
-		ToolTip: {
-			text: "what a nice mouse you have"
 		}
 	}
 });
 ```
 
+If you use a module loader like [requirejs](http://requirejs.org/) or [browserify](http://browserify.org/) you can use the array based syntax, where you pass in a Behavior Class directly or include it as a behaviorClass property on your options object.
+
+```js
+var Tooltip = require('behaviors/tooltip');
+var DestroyWarn = require('behaviors/destroy-warn');
+
+var MyView = Marionette.ItemView.extend({
+  behaviors: [Tooltip, {
+      behaviorClass: DestroyWarn,
+      message: "you are destroying all your data is now gone!"
+    }]
+});
+```
+
 ### getBehaviorClass
 
-This method has a default implementation that is simple to override. It is responsible for the lookup of single Behavior from within the `Behaviors.behaviorsLookup` or elsewhere.
+This method has a default implementation that is simple to override. It is responsible for the lookup of single Behavior when given an options object and a key, and is used for both the array and object based notations.
 
 ```js
 getBehaviorClass: function(options, key) {
-    if (options.behaviorClass) {
+      if (options.behaviorClass) {
         return options.behaviorClass;
-    }
-
-    return Behaviors.behaviorsLookup[key];
-}
-```
-
-### behaviorClass
-
-This property lets you pass a `class` in for the Behavior to use (bypassing the normal key based lookup). This is nice to have when the Behavior is a dependency of the View in a module system like [requirejs](http://requirejs.org/) or [browserify](http://browserify.org/). Properties passed in this way will be used in `getBehaviorClass`.
-
-```js
-define(['marionette', 'lib/tooltip'], function(Marionette, Tooltip) {
-  var View = Marionette.ItemView.extend({
-     behaviors: {
-        Tooltip: {
-          behaviorClass: Tooltip,
-          message: "hello world"
-        }
-     }
-  });
-});
+        //treat functions as a Behavior constructor
+      } else if(_.isFunction(options)) {
+        return options;
+      }
+      // behaviorsLookup can be either a flat object or a method
+      return Marionette._getValue(Behaviors.behaviorsLookup, this, [options, key])[key];
+    },
 ```

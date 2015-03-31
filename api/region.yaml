@@ -255,6 +255,24 @@ functions:
     @param {Marionette.View} view
     @param {Object} options
 
+  renderView: |
+    Utility function to allow overriding of logic that determines whether the shown view should `render`. It will
+    always `render` by default.
+    
+    @api public
+    @param {Marionette.View} view
+    @param {Object} options
+    @returns {void}
+
+  shouldDestroyView: |
+    Utility function to allow overriding of logic that determines whether the old view should be destroyed. It will
+    always `destroy` by default unless the `preventDestroy` option is `true`.
+    
+    @api public
+    @param {Marionette.View} view
+    @param {Object} options
+    @returns {Boolean} should the view be destroyed
+
   _ensureElement: |
     Ensure that `this.el` and `this.$el` is set. If 
     

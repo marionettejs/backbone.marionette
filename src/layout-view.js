@@ -52,8 +52,9 @@ Marionette.LayoutView = Marionette.ItemView.extend({
   // Handle destroying regions, and then destroy the view itself.
   destroy: function() {
     if (this.isDestroyed) { return this; }
-    // #2134: remove parent element before destroying the child views, so
-    // removing the child views doesn't retrigger repaints
+    // via [2134](https://github.com/marionettejs/backbone.marionette/issues/2134): remove
+    // parent element before destroying the child views, so removing
+    // the child views doesn't retrigger repaints
     if (this.getOption('destroyImmediate') === true) {
       this.$el.remove();
     }

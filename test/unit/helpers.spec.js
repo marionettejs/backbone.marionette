@@ -61,8 +61,24 @@ describe('normalizeUIKeys', function() {
 
 describe('Marionette.deprecate', function() {
   beforeEach(function() {
-    this.sinon.stub(Marionette.deprecate, '_warn');
+    this.sinon.spy(Marionette.deprecate, '_warn');
+    this.sinon.stub(Marionette.deprecate, '_console', {
+      warn: this.sinon.stub()
+    });
     Marionette.deprecate._cache = {};
+  });
+
+  describe('Marionette.deprecate._warn', function() {
+    beforeEach(function() {
+      Marionette.deprecate._warn('foo');
+    });
+
+    it('should `console.warn` the message', function() {
+      expect(Marionette.deprecate._console.warn)
+        .to.have.been.calledOnce
+        .and.calledOn(Marionette.deprecate._console)
+        .and.calledWith('foo');
+    });
   });
 
   describe('when calling with a message', function() {

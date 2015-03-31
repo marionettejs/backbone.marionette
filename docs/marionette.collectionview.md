@@ -30,6 +30,7 @@ will provide features such as `onShow` callbacks, etc. Please see
   * [CollectionView's `getEmptyView`](#collectionviews-getemptyview)
   * [CollectionView's `isEmpty`](#collectionviews-isempty)
   * [CollectionView's `emptyViewOptions`](#collectionviews-emptyviewoptions)
+  * [CollectionView's `destroyChildren`](#collectionviews-destroychildren)
 * [Callback Methods](#callback-methods)
   * [onBeforeRender callback](#onbeforerender-callback)
   * [onRender callback](#onrender-callback)
@@ -53,6 +54,10 @@ will provide features such as `onShow` callbacks, etc. Please see
   * ["childview:\*" event bubbling from child views](#childview-event-bubbling-from-child-views)
   * ["before:render:collection" event](#beforerendercollection-event)
   * ["render:collection" event](#rendercollection-event)
+  * ["before:render:empty" event](#beforerenderempty-event)
+  * ["render:empty" event](#renderempty-event)
+  * ["before:remove:empty" event](#beforeremoveempty-event)
+  * ["remove:empty" event](#removeempty-event)
 * [CollectionView render](#collectionview-render)
 * [CollectionView: Automatic Rendering](#collectionview-automatic-rendering)
 * [CollectionView: Re-render Collection](#collectionview-re-render-collection)
@@ -375,6 +380,16 @@ var CollectionView = Marionette.CollectionView({
     foo: "bar"
   }
 });
+```
+
+### CollectionView's `destroyChildren`
+
+`CollectionView` provides a `destroyChildren` method that will only destroy it's childViews. This can be useful when you would like to empty your view but keep the data in the `collection`. This method takes an optional `checkEmpty` parameter, by default it is set to `true`, if `false` it will disable the call to `checkEmpty` and `destroyChildren` will not show the `emptyView`.
+
+```js
+myView.destroyChildren(); // will show emptyView
+myView.destroyChildren({checkEmpty: false}); // will not show emptyView
+
 ```
 
 ## Callback Methods
@@ -730,6 +745,113 @@ The `before:render:collection` event is triggered before the `collectionView`'s 
 ### render:collection event
 
 The `render:collection` event is triggered after a `collectionView`'s children have been rendered and buffered. It differs from the `collectionViews`'s `render` event in that it happens __only__ if the `collection` is not not empty.
+
+### "before:render:empty" event
+
+The `"before:render:empty"` event is triggered just after creating a new empty view, but before the view is rendered and added to the DOM.
+
+```js
+var myEmptyView = Marionette.ItemView.extend({
+  template: false
+});
+
+var MyCollectionView = Marionette.CollectionView.extend({
+  emptyView: myEmptyView
+});
+
+var myCollectionView = new MyCollectionView();
+
+myCollectionView.on("before:render:empty", function(){
+  alert("the empty view is now created");
+});
+
+myCollectionView.render()
+```
+
+### "render:empty" event
+
+The `"render:empty"` event is triggered after rendering the empty view and adding it to the view's DOM element.
+
+```js
+var myEmptyView = Marionette.ItemView.extend({
+  template: false
+});
+
+var MyCollectionView = Marionette.CollectionView.extend({
+  emptyView: myEmptyView
+});
+
+var myCollectionView = new MyCollectionView();
+
+myCollectionView.on("render:empty", function(){
+  alert("the empty view has been rendered");
+});
+
+myCollectionView.render()
+```
+
+### "before:remove:empty" event
+
+This is triggered before the empty view instance has been removed and before it has been destroyed.
+
+```js
+var collection = new Backbone.Collection();
+
+var myEmptyView = Marionette.ItemView.extend({
+  template: false
+});
+
+var myChildView = Marionette.ItemView.extend({
+  template: false
+});
+
+var MyCollectionView = Marionette.CollectionView.extend({
+  childView: myChildView,
+  collection: collection,
+  emptyView: myEmptyView
+});
+
+var myCollectionView = new MyCollectionView();
+
+myCollectionView.on("before:remove:empty", function(){
+  alert("the empty view is now removed");
+});
+
+myCollectionView.render()
+
+collection.add([{foo: 'bar'}]);
+```
+
+### "remove:empty" event
+
+Triggered just after destroying the empty view from the DOM.
+
+```js
+var collection = new Backbone.Collection();
+
+var myChildView = Marionette.ItemView.extend({
+  template: false
+});
+
+var myEmptyView = Marionette.ItemView.extend({
+  template: false
+});
+
+var MyCollectionView = Marionette.CollectionView.extend({
+  childView: myChildView,
+  collection: collection,
+  emptyView: myEmptyView
+});
+
+var myCollectionView = new MyCollectionView();
+
+myCollectionView.on("before:remove:empty", function(){
+  alert("the empty view has been destroyed");
+});
+
+myCollectionView.render()
+collection.add([{foo: 'bar'}])
+```
 
 ## CollectionView render
 

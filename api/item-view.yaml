@@ -3,12 +3,12 @@ name: ItemView
 class: Marionette.ItemView
 
 extends:
-  - Marionette.View
+  - Marionette.AbstractView
 
 description: |
   An `ItemView` is a view that represents a single item. That item may be a `Backbone.Model` or may be a `Backbone.Collection`. Whichever it is though, it will be treated as a single item.
 
-  Please see [the Marionette.View documentation](marionette.view.md) for more information on available features and functionality.
+  Please see [the Marionette.AbstractView documentation](marionette.Abstractview.md) for more information on available features and functionality.
 
   Additionally, interactions with Marionette.Region will provide features such as `onShow` callbacks, etc. Please see [the Region documentation](marionette.region.md) for more information.
 
@@ -169,7 +169,7 @@ functions:
             destroy: function(){
               if (this.isDestroyed) { return; }
 
-              var destroyed = Marionette.View.prototype.destroy.apply(this, arguments);
+              var destroyed = Marionette.AbstractView.prototype.destroy.apply(this, arguments);
 
               var args = Array.prototype.slice.call(arguments);
               this.triggerMethod.apply(this, ['after:destroy'].concat(args));

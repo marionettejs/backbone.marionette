@@ -353,7 +353,7 @@ If you want to control when the empty view is rendered, you can override
 
 ```js
 Marionette.CollectionView.extend({
-  isEmpty: function(collection) {
+  isEmpty: function(collection, options) {
     // some logic to calculate if the view should be rendered as empty
     return someBoolean;
   }

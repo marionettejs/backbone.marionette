@@ -1,11 +1,14 @@
 // DOM Refresh
 // -----------
 
+import _       from 'underscore';
+import helpers from './helpers';
+
 // Monitor a view's state, and after it has been rendered and shown
 // in the DOM, trigger a "dom:refresh" event every time it is
 // re-rendered.
 
-Marionette.MonitorDOMRefresh = function(view) {
+function MonitorDOMRefresh(view) {
 
   // track when the view has been shown in the DOM,
   // using a Marionette.Region (or by other means of triggering "show")
@@ -22,7 +25,7 @@ Marionette.MonitorDOMRefresh = function(view) {
 
   // Trigger the "dom:refresh" event and corresponding "onDomRefresh" method
   function triggerDOMRefresh() {
-    if (view._isShown && view._isRendered && Marionette.isNodeAttached(view.el)) {
+    if (view._isShown && view._isRendered && helpers.isNodeAttached(view.el)) {
       if (_.isFunction(view.triggerMethod)) {
         view.triggerMethod('dom:refresh');
       }
@@ -33,4 +36,6 @@ Marionette.MonitorDOMRefresh = function(view) {
     show: handleShow,
     render: handleRender
   });
-};
+}
+
+export default MonitorDOMRefresh;

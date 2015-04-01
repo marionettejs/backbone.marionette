@@ -1,12 +1,15 @@
 // Error
 // -----
 
+import _       from 'underscore';
+import helpers from './helpers';
+
 var errorProps = ['description', 'fileName', 'lineNumber', 'name', 'message', 'number'];
 
-Marionette.Error = Marionette.extend.call(Error, {
-  urlRoot: 'http://marionettejs.com/docs/v' + Marionette.VERSION + '/',
+var MarionetteError = helpers.extend.call(Error, {
+  urlRoot: 'http://marionettejs.com/docs/v' + Marionette.VERSION + '/', // trusktr TODO: handle VERSION.
 
-  constructor: function(message, options) {
+  constructor: function MarionetteError(message, options) {
     if (_.isObject(message)) {
       options = message;
       message = options.message;
@@ -26,13 +29,15 @@ Marionette.Error = Marionette.extend.call(Error, {
 
   captureStackTrace: function() {
     if (Error.captureStackTrace) {
-      Error.captureStackTrace(this, Marionette.Error);
+      Error.captureStackTrace(this, MarionetteError);
     }
   },
 
   toString: function() {
     return this.name + ': ' + this.message + (this.url ? ' See: ' + this.url : '');
   }
-});
+})
 
-Marionette.Error.extend = Marionette.extend;
+MarionetteError.extend = helpers.extend;
+
+export default MarionetteError;

@@ -189,6 +189,21 @@ Marionette.triggerMethodOn(ctx, "foo", bar);
 // will trigger "foo" on ctx
 ```
 
+## Marionette.triggerMethodMany
+
+Invokes `triggerMethod` on many contexts.
+
+This is useful when you want to trigger an event on many different objects.
+
+```js
+var views = getManyViews();
+var context = this;
+Marionette.triggerMethodMany(views, context, "foo", bar);
+// will call `onFoo: function(view, context, bar){...})` for each view
+// will trigger "foo" on each of the views
+```
+
+
 ## Marionette.bindEntityEvents
 
 This method is used to bind a backbone "entity" (e.g. collection/model)

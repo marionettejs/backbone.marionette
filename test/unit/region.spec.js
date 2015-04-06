@@ -458,7 +458,7 @@ describe('region', function() {
         el: '#region'
       });
 
-      this.LayoutView = Backbone.Marionette.LayoutView.extend({
+      this.ItemView = Backbone.Marionette.ItemView.extend({
         regions: {
           subRegion: '.sub-region'
         },
@@ -488,7 +488,7 @@ describe('region', function() {
       this.setFixtures('<div id="region"></div>');
       this.region = new this.MyRegion();
       this.attachHtmlSpy = this.sinon.spy(this.region, 'attachHtml');
-      this.region.show(new this.LayoutView());
+      this.region.show(new this.ItemView());
     });
 
     it('should call inner region before:show before region open', function() {

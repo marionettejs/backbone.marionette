@@ -305,7 +305,7 @@ Marionette.AbstractView = Backbone.View.extend({
   },
 
   _triggerEventOnParentLayout: function(eventName, args) {
-    var layoutView = this._parentLayoutView();
+    var layoutView = this._parentItemView();
     if (!layoutView) {
       return;
     }
@@ -358,10 +358,10 @@ Marionette.AbstractView = Backbone.View.extend({
   },
 
   // Returns the containing parent view.
-  _parentLayoutView: function() {
+  _parentItemView: function() {
     var ancestors = this._getAncestors();
     return _.find(ancestors, function(parent) {
-      return parent instanceof Marionette.LayoutView;
+      return parent instanceof Marionette.ItemView;
     });
   },
 

@@ -43,6 +43,7 @@ describe('marionette object', function() {
     it('should maintain a reference to the options', function() {
       expect(this.object.options).to.deep.equal(this.options);
     });
+
   });
 
   describe('when destroying a object', function() {

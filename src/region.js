@@ -263,10 +263,15 @@ Marionette.Region = Marionette.Object.extend({
   // clearing out the cached `$el`. The next time a view
   // is shown via this region, the region will re-query the
   // DOM for the region's `el`.
+  // When this.$el is Object and this.el is DOM selector string, it doesn't works,
+  // because this.$el.selector contains parent's selector,
+  // for example:
+  // this.$el.selector = '#parent #child',
+  // this.el = '#child', it will be override so that this.el can't be find in DOM...
   reset: function() {
     this.empty();
 
-    if (this.$el) {
+    if (this.$el && _.isObject(this.el)) {
       this.el = this.$el.selector;
     }
 

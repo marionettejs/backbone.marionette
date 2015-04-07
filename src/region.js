@@ -265,7 +265,7 @@ Marionette.Region = Marionette.Object.extend({
   // DOM for the region's `el`.
   // When this.$el is Object and this.el is DOM selector string, it doesn't works,
   // because this.$el.selector contains parent's selector,
-  // for example 
+  // for example:
   // this.$el.selector = '#parent #child',
   // this.el = '#child', it will be override so that this.el can't be find in DOM...
   reset: function() {

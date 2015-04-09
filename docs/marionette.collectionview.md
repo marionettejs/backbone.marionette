@@ -72,10 +72,10 @@ will provide features such as `onShow` callbacks, etc. Please see
 
 Specify a `childView` in your collection view definition. This must be
 a Backbone view object definition, not an instance. It can be any
-`Backbone.View` or be derived from `Marionette.ItemView`.
+`Backbone.View` or be derived from `Marionette.View`.
 
 ```js
-var MyChildView = Marionette.ItemView.extend({});
+var MyChildView = Marionette.View.extend({});
 
 Marionette.CollectionView.extend({
   childView: MyChildView
@@ -111,10 +111,10 @@ var FooBar = Backbone.Model.extend({
   }
 });
 
-var FooView = Marionette.ItemView.extend({
+var FooView = Marionette.View.extend({
   template: '#foo-template'
 });
-var BarView = Marionette.ItemView.extend({
+var BarView = Marionette.View.extend({
   template: '#bar-template'
 });
 
@@ -155,7 +155,7 @@ literal. This will be passed to the constructor of your childView as part
 of the `options`.
 
 ```js
-var ChildView = Marionette.ItemView.extend({
+var ChildView = Marionette.View.extend({
   initialize: function(options) {
     console.log(options.foo); // => "bar"
   }
@@ -244,7 +244,7 @@ This also works for custom events that you might fire on your child views.
 
 ```js
 // The child view fires a custom event, `show:message`
-var ChildView = new Marionette.ItemView.extend({
+var ChildView = new Marionette.View.extend({
   events: {
     'click .button': 'showMessage'
   },
@@ -320,7 +320,7 @@ the list of childViews, you can specify an `emptyView` attribute on your
 collection view.
 
 ```js
-var NoChildrenView = Marionette.ItemView.extend({
+var NoChildrenView = Marionette.View.extend({
   template: "#show-no-children-message-template"
 });
 
@@ -367,7 +367,7 @@ Similar to `childView` and `childViewOptions`, there is an `emptyViewOptions` pr
 If `emptyViewOptions` aren't provided the CollectionView will default to passing the `childViewOptions` to the `emptyView`.
 
 ```js
-var EmptyView = Marionette.ItemView({
+var EmptyView = Marionette.View({
   initialize: function(options){
     console.log(options.foo); // => "bar"
   }
@@ -714,7 +714,7 @@ var myModel = new MyModel();
 var myCollection = new MyCollection();
 myCollection.add(myModel);
 
-var MyItemView = Marionette.ItemView.extend({
+var MyView = Marionette.View.extend({
   triggers: {
     'click button': 'do:something'
   }
@@ -723,8 +723,7 @@ var MyItemView = Marionette.ItemView.extend({
 // get the collection view in place
 var colView = new CollectionView({
   collection: myCollection,
-  childView: MyItemView,
-
+  childView: MyView,
   onChildviewDoSomething: function() {
     alert("I said, 'do something!'");
   }
@@ -751,7 +750,7 @@ The `render:collection` event is triggered after a `collectionView`'s children h
 The `"before:render:empty"` event is triggered just after creating a new empty view, but before the view is rendered and added to the DOM.
 
 ```js
-var myEmptyView = Marionette.ItemView.extend({
+var myEmptyView = Marionette.View.extend({
   template: false
 });
 
@@ -773,7 +772,7 @@ myCollectionView.render()
 The `"render:empty"` event is triggered after rendering the empty view and adding it to the view's DOM element.
 
 ```js
-var myEmptyView = Marionette.ItemView.extend({
+var myEmptyView = Marionette.View.extend({
   template: false
 });
 
@@ -797,11 +796,11 @@ This is triggered before the empty view instance has been removed and before it 
 ```js
 var collection = new Backbone.Collection();
 
-var myEmptyView = Marionette.ItemView.extend({
+var myEmptyView = Marionette.View.extend({
   template: false
 });
 
-var myChildView = Marionette.ItemView.extend({
+var myChildView = Marionette.View.extend({
   template: false
 });
 
@@ -829,11 +828,11 @@ Triggered just after destroying the empty view from the DOM.
 ```js
 var collection = new Backbone.Collection();
 
-var myChildView = Marionette.ItemView.extend({
+var myChildView = Marionette.View.extend({
   template: false
 });
 
-var myEmptyView = Marionette.ItemView.extend({
+var myEmptyView = Marionette.View.extend({
   template: false
 });
 

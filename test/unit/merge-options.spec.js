@@ -2,7 +2,7 @@ describe('mergeOptions', function() {
   'use strict';
 
   beforeEach(function() {
-    this.MyView = Marionette.ItemView.extend({
+    this.MyView = Marionette.View.extend({
       myViewOptions: ['color', 'size'],
 
       initialize: function(options) {

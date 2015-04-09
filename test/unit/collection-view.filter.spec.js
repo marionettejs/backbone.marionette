@@ -8,13 +8,13 @@ describe('collection view - filter', function() {
     this.failModel = new Backbone.Model({foo: false});
     this.collection = new Backbone.Collection();
 
-    this.EmptyView = Backbone.Marionette.ItemView.extend({
+    this.EmptyView = Marionette.View.extend({
       template: function() {
         return 'empty';
       }
     });
 
-    this.ChildView = Backbone.Marionette.ItemView.extend({
+    this.ChildView = Marionette.View.extend({
       template: function(data) {
         return data.foo;
       }
@@ -290,7 +290,7 @@ describe('collection view - filter', function() {
       this.model4 = new Backbone.Model({foo: false, bar: 4});
       this.collection.reset([this.model2, this.model4, this.model3, this.model1]);
 
-      this.ChildView = Marionette.ItemView.extend({
+      this.ChildView = Marionette.View.extend({
         template: function(data) {
           return data.bar;
         }
@@ -368,7 +368,7 @@ describe('collection view - filter', function() {
       this.model4 = new Backbone.Model({foo: false, bar: 4});
       this.collection.reset([this.model2, this.model4, this.model3, this.model1]);
 
-      this.ChildView = Marionette.ItemView.extend({
+      this.ChildView = Marionette.View.extend({
         template: function(data) {
           return data.bar;
         }

@@ -361,7 +361,7 @@ Marionette.AbstractView = Backbone.View.extend({
   _parentItemView: function() {
     var ancestors = this._getAncestors();
     return _.find(ancestors, function(parent) {
-      return parent instanceof Marionette.ItemView;
+      return parent instanceof Marionette.View;
     });
   },
 

@@ -140,7 +140,7 @@ describe('collection view', function() {
       this.sinon.spy(this.collectionView.$el, 'append');
       this.sinon.spy(this.collectionView, 'startBuffering');
       this.sinon.spy(this.collectionView, 'endBuffering');
-      this.sinon.spy(this.collectionView, 'getChildView');
+      this.sinon.spy(this.collectionView, '_getChildView');
 
       this.collectionView.render();
     });
@@ -245,14 +245,60 @@ describe('collection view', function() {
       expect(this.childViewRender.callCount).to.equal(2);
     });
 
-    it('should call "getChildView" for each item in the collection', function() {
-      expect(this.collectionView.getChildView).to.have.been.calledTwice.
+    it('should call "_getChildView" for each item in the collection', function() {
+      expect(this.collectionView._getChildView).to.have.been.calledTwice.
         and.calledWith(this.collection.models[0]).
         and.calledWith(this.collection.models[1]);
     });
 
     it('should be marked rendered', function() {
       expect(this.collectionView).to.have.property('isRendered', true);
+    });
+  });
+
+  describe('when defining childView as a function that returns a view class', function() {
+    beforeEach(function() {
+      this.collection = new Backbone.Collection([{id: 1, name: 'one'}, {id: 2, name: 'two'}]);
+
+      this.EvenView = Backbone.Marionette.ItemView.extend({
+        tagName: 'span',
+        template: _.template('My name is <%= name %>. I am even.')
+      });
+
+      this.OddView = Backbone.Marionette.ItemView.extend({
+        tagName: 'article',
+        template: _.template('My name is <%= name %>. I am odd.')
+      });
+
+      var suite = this;
+      this.collectionView = new this.MockCollectionView({
+        collection: this.collection,
+        childView: function(child) {
+          return child.get('id') % 2 === 0 ? suite.EvenView : suite.OddView;
+        }
+      });
+
+      this.collectionView.render();
+    });
+
+    it('should use the correct view class for each child', function() {
+      expect(this.collectionView.$el).to.have.$html('<article>My name is one. I am odd.</article><span>My name is two. I am even.</span>');
+    });
+
+  });
+
+  describe('when defining childView as neither a function or a class', function() {
+    beforeEach(function() {
+      this.collection = new Backbone.Collection([{id: 1, name: 'one'}, {id: 2, name: 'two'}]);
+
+      this.collectionView = new this.MockCollectionView({
+        collection: this.collection,
+        childView: 'invalid childView'
+      });
+    });
+
+    it('should throw an error saying the childView is invalid', function() {
+      expect(this.collectionView.render).to.throw('"childView" must be a view class or a function that returns a view class');
     });
   });
 
@@ -474,7 +520,7 @@ describe('collection view', function() {
         onRenderEmpty: function() {},
 
         render: function() {
-          var ChildView = this.getChildView();
+          var ChildView = this._getChildView();
           this.addChild(suite.model, ChildView, 0);
         }
       });
@@ -1005,7 +1051,7 @@ describe('collection view', function() {
       this.collectionView.trigger('show');
 
       this.sinon.spy(this.collectionView, 'attachBuffer');
-      this.sinon.spy(this.collectionView, 'getChildView');
+      this.sinon.spy(this.collectionView, '_getChildView');
 
       this.collection.add(this.model2);
       this.childView2 = this.collectionView.children.findByIndex(1);
@@ -1033,8 +1079,8 @@ describe('collection view', function() {
       expect(this.childView2.onDomRefresh).to.have.been.calledWithExactly(); // no args
     });
 
-    it('should call getChildView with the new model', function() {
-      expect(this.collectionView.getChildView).to.have.been.calledWith(this.model2);
+    it('should call "_getChildView" with the new model', function() {
+      expect(this.collectionView._getChildView).to.have.been.calledWith(this.model2);
     });
 
     describe('when the childView is added at an existing index', function() {

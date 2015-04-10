@@ -198,6 +198,11 @@ For more information on this method, see the [CollectionView's documentation](./
 ## CompositeView's `childView` container selection
 
 The `getChildViewContainer` method is passed a second `childView` parameter which, when overridden, allows for a finer tuned container selection by being able to access the `childView` which is about to be appended to the `containerView` returned by `getChildViewContainer`.
+You can also define `childView` as a function, which allows you to choose the view class
+to be rendered at runtime.
+
+For more information see the [CollectionView's documentation](./marionette.collectionview.md#collectionviews-childview).
+
 
 ## Recursive By Default
 

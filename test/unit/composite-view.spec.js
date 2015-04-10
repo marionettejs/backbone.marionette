@@ -865,12 +865,12 @@ describe('composite view', function() {
       this.m3 = new this.Model({foo: 'bar'});
       this.collection = new this.Collection([this.m1, this.m2]);
 
-      this.EvenView = Backbone.Marionette.ItemView.extend({
+      this.EvenView = Marionette.View.extend({
         tagName: 'span',
         template: _.template('My name is <%= name %>. I am even.')
       });
 
-      this.OddView = Backbone.Marionette.ItemView.extend({
+      this.OddView = Marionette.View.extend({
         tagName: 'article',
         template: _.template('My name is <%= name %>. I am odd.')
       });

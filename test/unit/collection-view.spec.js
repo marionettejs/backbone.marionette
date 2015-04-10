@@ -260,12 +260,12 @@ describe('collection view', function() {
     beforeEach(function() {
       this.collection = new Backbone.Collection([{id: 1, name: 'one'}, {id: 2, name: 'two'}]);
 
-      this.EvenView = Backbone.Marionette.ItemView.extend({
+      this.EvenView = Marionette.View.extend({
         tagName: 'span',
         template: _.template('My name is <%= name %>. I am even.')
       });
 
-      this.OddView = Backbone.Marionette.ItemView.extend({
+      this.OddView = Marionette.View.extend({
         tagName: 'article',
         template: _.template('My name is <%= name %>. I am odd.')
       });
@@ -676,7 +676,7 @@ describe('collection view', function() {
       expect(this.collectionView.someCallback).not.to.have.been.called;
     });
 
-    it('should unbind all item-view events for the view', function() {
+    it('should unbind all view events for the view', function() {
       expect(this.collectionView.someViewCallback).not.to.have.been.called;
     });
 
@@ -1116,11 +1116,11 @@ describe('collection view', function() {
 
       this.collectionView.render();
 
-      this.itemView = this.collectionView.children.findByModel(this.collection.at(0));
+      this.view = this.collectionView.children.findByModel(this.collection.at(0));
     });
 
     it('should use the specified childView for each item', function() {
-      expect(this.itemView.MyView).to.be.true;
+      expect(this.view.MyView).to.be.true;
     });
   });
 

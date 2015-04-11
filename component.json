@@ -3,7 +3,7 @@
   "description": "Make your Backbone.js apps dance!",
   "version": "2.4.1",
   "repo": "marionettejs/backbone.marionette",
-  "main": "lib/core/backbone.marionette.js",
+  "main": "lib/backbone.marionette.js",
   "keywords": [
     "backbone",
     "plugin",
@@ -30,11 +30,11 @@
   },
   "dependencies": {
     "marionettejs/backbone.babysitter": "*",
-    "marionettejs/backbone.wreqr": "*",
+    "marionettejs/backbone.radio": "*",
     "jashkenas/backbone": "*",
     "jashkenas/underscore": "*"
   },
   "scripts": [
-    "lib/core/backbone.marionette.js"
+    "lib/backbone.marionette.js"
   ]
 }

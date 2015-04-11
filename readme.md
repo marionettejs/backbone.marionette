@@ -83,7 +83,7 @@ We're happy to discuss design patterns and learn how you're using Marionette.
 + **Explore** application with an inspector magnifying glass
 + **Jump** between the inspector elements and source panel with intelligent links
 
-Download at [Chrome Web Store](https://chrome.google.com/webstore/detail/marionette-inspector/fbgfjlockdhidoaempmjcddibjklhpka)  
+Download at [Chrome Web Store](https://chrome.google.com/webstore/detail/marionette-inspector/fbgfjlockdhidoaempmjcddibjklhpka)
 Explore code at  [Github](https://github.com/marionettejs/marionette.inspector)
 
 ## Source Code and Downloads
@@ -123,8 +123,8 @@ MarionetteJS currently works with the following libraries:
 * [jQuery](http://jquery.com) v1.8+
 * [Underscore](http://underscorejs.org) v1.4.4 - 1.6.0
 * [Backbone](http://backbonejs.org) v1.0.0 - 1.1.2 are preferred.
-* [Backbone.Wreqr](https://github.com/marionettejs/backbone.wreqr) Comes automatically with the bundled build.
-* [Backbone.BabySitter](https://github.com/marionettejs/backbone.babysitter) Comes automatically with the bundled build.
+* [Backbone.Radio](https://github.com/marionettejs/backbone.radio)
+* [Backbone.BabySitter](https://github.com/marionettejs/backbone.babysitter)
 
 Marionette has not been tested against any other versions of these
 libraries. You may or may not have success if you use a version other

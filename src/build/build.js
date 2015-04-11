@@ -1,13 +1,15 @@
 (function(root, factory) {
 
-  /* istanbul ignore next */
   if (typeof define === 'function' && define.amd) {
-    define(['backbone', 'underscore'], function(Backbone, _) {
+    define(['backbone', 'underscore','backbone.radio', 'backbone.babysitter'],
+      function(Backbone, _) {
       return (root.Marionette = root.Mn = factory(root, Backbone, _));
     });
   } else if (typeof exports !== 'undefined') {
     var Backbone = require('backbone');
     var _ = require('underscore');
+    var BabySitter = require('backbone.babysitter');
+    var Radio = require('backbone.radio');
     module.exports = factory(root, Backbone, _);
   } else {
     root.Marionette = root.Mn = factory(root, root.Backbone, root._);
@@ -15,9 +17,6 @@
 
 }(this, function(root, Backbone, _) {
   'use strict';
-
-  /* istanbul ignore next */
-  // @include ../../tmp/backbone.babysitter.bare.js
 
   var previousMarionette = root.Marionette;
   var previousMn = root.Mn;
@@ -32,8 +31,7 @@
     return this;
   };
 
-  Backbone.Marionette = Marionette;
-
+  // @include ../features.js
   // @include ../helpers.js
   // @include ../trigger-method.js
   // @include ../dom-refresh.js
@@ -42,7 +40,6 @@
 
   // @include ../error.js
   // @include ../object.js
-  // @include ../controller.js
   // @include ../region.js
   // @include ../region-manager.js
 

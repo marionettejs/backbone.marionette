@@ -174,7 +174,6 @@ describe('base view', function() {
       this.options = {foo: 'bar'};
 
       this.presetsStub = this.sinon.stub().returns(this.presets);
-      this.optionsStub = this.sinon.stub().returns(this.options);
 
       this.View = Marionette.AbstractView.extend();
       this.ViewPresets   = Marionette.AbstractView.extend({options: this.presets});
@@ -183,11 +182,6 @@ describe('base view', function() {
 
     it('should take and store view options', function() {
       this.view = new this.View(this.options);
-      expect(this.view.options).to.deep.equal(this.options);
-    });
-
-    it('should take and store view options as a function', function() {
-      this.view = new this.View(this.optionsStub);
       expect(this.view.options).to.deep.equal(this.options);
     });
 
@@ -216,16 +210,6 @@ describe('base view', function() {
         }
       });
       this.myView = new this.MyView();
-      expect(this.myView.className).to.equal('.some-class');
-    });
-
-    it('should attach the viewOptions to the view if options are passed as a function', function() {
-      var options = function() {
-        return {
-          className: '.some-class'
-        };
-      };
-      this.myView = new Marionette.AbstractView(options);
       expect(this.myView.className).to.equal('.some-class');
     });
   });

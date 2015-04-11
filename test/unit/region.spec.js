@@ -995,6 +995,29 @@ describe('region', function() {
     });
   });
 
+  describe('when destroying a region', function() {
+    beforeEach(function() {
+      this.setFixtures('<div id="region"></div>');
+
+      this.region = new Backbone.Marionette.Region({
+        el: '#region'
+      });
+
+      this.sinon.spy(this.region, 'reset');
+
+      this.sinon.spy(this.region, 'destroy');
+      this.region.destroy();
+    });
+
+    it('should reset the region', function() {
+      expect(this.region.reset).to.have.been.called;
+    });
+
+    it('should return the region', function() {
+      expect(this.region.destroy).to.have.returned(this.region);
+    });
+  });
+
   describe('when destroying a view in a region', function() {
     beforeEach(function() {
       this.setFixtures('<div id="region"></div>');

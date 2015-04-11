@@ -282,6 +282,13 @@ Marionette.Region = Marionette.Object.extend({
 
     delete this.$el;
     return this;
+  },
+
+  // Handle cleanup and other destroying needs for the region
+  destroy: function() {
+    this.reset();
+
+    return Marionette.Object.prototype.destroy.apply(this, arguments);
   }
 
 },

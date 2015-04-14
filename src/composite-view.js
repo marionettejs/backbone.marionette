@@ -135,7 +135,7 @@ Marionette.CompositeView = Marionette.CollectionView.extend({
   // Internal method to ensure an `$childViewContainer` exists, for the
   // `attachHtml` method to use.
   getChildViewContainer: function(containerView, childView) {
-    if ('$childViewContainer' in containerView) {
+    if (!!containerView.$childViewContainer) {
       return containerView.$childViewContainer;
     }
 
@@ -169,7 +169,7 @@ Marionette.CompositeView = Marionette.CollectionView.extend({
   // Internal method to reset the `$childViewContainer` on render
   resetChildViewContainer: function() {
     if (this.$childViewContainer) {
-      delete this.$childViewContainer;
+      this.$childViewContainer = undefined;
     }
   }
 });

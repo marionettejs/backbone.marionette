@@ -33,6 +33,7 @@ behaviors that are shared across all views.
   * [Accessing Data Within The Helpers](#accessing-data-within-the-helpers)
   * [Object Or Function As `templateHelpers`](#object-or-function-as-templatehelpers)
 * [Change Which Template Is Rendered For A View](#change-which-template-is-rendered-for-a-view)
+* [UI Interpolation](#ui-interpolation)
 
 ## Binding To View Events
 
@@ -568,3 +569,35 @@ var MyView = Marionette.ItemView.extend({
 ```
 
 This applies to all view classes.
+
+## UI Interpolation
+
+Marionette UI offers a convenient way to reference jQuery elements.
+UI elements can also be interpolated into event and region selectors.
+
+In this example, the buy button is referenced in a DOM event and the checkout section is referenced in the region selector.
+
+
+```js
+var MyView = Marionette.ItemView.extend({
+
+  ui: {
+    buyButton: '.buy-button',
+    checkoutSection: '.checkout-section'
+  },
+
+  events: {
+    'click @ui.buyButton': 'onClickBuyButton'
+  },
+
+  regions: {
+    checkoutSection: '@ui.checkoutSection'
+  },
+
+  onShow: function() {
+    this.getRegion('checkoutSection').show(new CheckoutSection({
+      model: this.checkoutModel
+    }));
+  }
+});
+```

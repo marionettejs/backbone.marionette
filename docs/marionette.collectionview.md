@@ -867,7 +867,7 @@ new MyCollectionView().render();
 
 ## CollectionView: Automatic Rendering
 
-The collection view binds to the "add", "remove" and "reset" events of the
+After the initial render the collection view binds to the "add", "remove" and "reset" events of the
 collection that is specified.
 
 When the collection for the view is "reset", the view will call `render` on
@@ -878,6 +878,30 @@ one model in to the collection of child views.
 
 When a model is removed from a collection (or destroyed / deleted), the collection
 view will destroy and remove that model's child view.
+
+```js
+var collection = new Backbone.Collection();
+
+var myChildView = Marionette.View.extend({
+  template: false
+});
+
+var MyCollectionView = Marionette.CollectionView.extend({
+  childView: myChildView,
+  collection: collection,
+});
+
+var myCollectionView = new MyCollectionView();
+
+// Collection view will not re-render as it has not been rendered
+collection.reset([{foo: 'foo'}]);
+
+myCollectionView.render();
+
+// Collection view will re-render displaying the new model
+collection.reset([{foo: 'bar'}]);
+
+```
 
 ## CollectionView: Re-render Collection
 

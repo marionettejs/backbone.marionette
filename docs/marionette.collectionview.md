@@ -879,6 +879,9 @@ one model in to the collection of child views.
 When a model is removed from a collection (or destroyed / deleted), the collection
 view will destroy and remove that model's child view.
 
+When the collection for the view is sorted, the view will automatically re-sort its child views.
+if the `reorderOnSort` option is set it will attempt to reorder the DOM and do this without a full re-render, otherwise it will re-render if the order has changed. Please Note that if you apply a filter to the collection view and the filtered views change during a sort then it will always re-render.
+
 ```js
 var collection = new Backbone.Collection();
 
@@ -900,7 +903,6 @@ myCollectionView.render();
 
 // Collection view will re-render displaying the new model
 collection.reset([{foo: 'bar'}]);
-
 ```
 
 ## CollectionView: Re-render Collection

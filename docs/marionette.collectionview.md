@@ -747,7 +747,7 @@ new MyCollectionView().render();
 
 ## CollectionView: Automatic Rendering
 
-The collection view binds to the "add", "remove" and "reset" events of the
+After the initial render the collection view binds to the "add", "remove" and "reset" events of the
 collection that is specified.
 
 When the collection for the view is "reset", the view will call `render` on

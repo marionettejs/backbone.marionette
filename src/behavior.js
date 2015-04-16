@@ -38,6 +38,7 @@ Marionette.Behavior = Marionette.Object.extend({
   // Stops the behavior from listening to events.
   // Overrides Object#destroy to prevent additional events from being triggered.
   destroy: function() {
+    this.triggerMethod = function() {};
     this.stopListening();
 
     return this;

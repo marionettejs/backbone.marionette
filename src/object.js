@@ -24,6 +24,8 @@ _.extend(Marionette.Object.prototype, Backbone.Events, {
     this.triggerMethod('before:destroy');
     this.triggerMethod('destroy');
     Marionette.unproxyRadioHandlers.apply(this);
+
+    this.triggerMethod = function() {};
     this.stopListening();
 
     return this;

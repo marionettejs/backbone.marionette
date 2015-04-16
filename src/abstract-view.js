@@ -167,6 +167,8 @@ Marionette.AbstractView = Backbone.View.extend({
     this.isDestroyed = true;
     this.triggerMethod.apply(this, ['destroy'].concat(args));
 
+    this.triggerMethod = function() {};
+
     // unbind UI elements
     this.unbindUIElements();
 

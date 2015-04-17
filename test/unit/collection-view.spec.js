@@ -1302,7 +1302,7 @@ describe('collection view', function() {
     });
   });
 
-  describe('when a collection view has been rendered but not shown', function() {
+  describe('when a collection view is initially shown', function() {
     beforeEach(function() {
       this.collection = new Backbone.Collection([{foo: 1}, {foo: 2}]);
       this.collectionView = new this.CollectionView({

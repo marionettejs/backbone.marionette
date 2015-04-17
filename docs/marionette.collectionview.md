@@ -239,7 +239,7 @@ This also works for custom events that you might fire on your child views.
 
 ```js
 // The child view fires a custom event, `show:message`
-var ChildView = new Marionette.ItemView.extend({
+var ChildView = Marionette.ItemView.extend({
   events: {
     'click .button': 'showMessage'
   },
@@ -252,7 +252,7 @@ var ChildView = new Marionette.ItemView.extend({
 });
 
 // The parent uses childEvents to catch that custom event on the child view
-var ParentView = new Marionette.CollectionView.extend({
+var ParentView = Marionette.CollectionView.extend({
   childView: ChildView,
 
   childEvents: {

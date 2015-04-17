@@ -52,7 +52,7 @@ Marionette.CollectionView = Marionette.View.extend({
       this._triggerShowMultiple(this._bufferedChildren, 'before:');
     }
 
-    this.attachBuffer(this);
+    this.attachBuffer(this, this._createBuffer());
 
     if (this._isShown) {
       this._triggerShowMultiple(this._bufferedChildren);
@@ -471,14 +471,14 @@ Marionette.CollectionView = Marionette.View.extend({
   },
 
   // You might need to override this if you've overridden attachHtml
-  attachBuffer: function(collectionView) {
-    collectionView.$el.append(this._createBuffer(collectionView));
+  attachBuffer: function(collectionView, buffer) {
+    collectionView.$el.append(buffer);
   },
 
   // Create a fragment buffer from the currently buffered children
-  _createBuffer: function(collectionView) {
+  _createBuffer: function() {
     var elBuffer = document.createDocumentFragment();
-    _.each(collectionView._bufferedChildren, function(b) {
+    _.each(this._bufferedChildren, function(b) {
       elBuffer.appendChild(b.el);
     });
     return elBuffer;

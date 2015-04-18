@@ -16,6 +16,7 @@ Marionette.Object.extend = Marionette.extend;
 
 // Ensure it can trigger events with Backbone.Events
 _.extend(Marionette.Object.prototype, Backbone.Events, {
+  cid: _.uniqueId('mno'),
 
   //this is a noop method intended to be overridden by classes that extend from this base
   initialize: function() {},

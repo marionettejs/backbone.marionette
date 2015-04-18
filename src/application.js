@@ -9,6 +9,7 @@ Marionette.Application = Marionette.Object.extend({
     this._initializeRegions(options);
     this._initCallbacks = new Marionette.Callbacks();
     this.submodules = {};
+    this.cid = _.uniqueId('mna');
     _.extend(this, options);
     this._initChannel();
     Marionette.Object.call(this, options);

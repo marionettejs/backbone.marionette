@@ -403,6 +403,12 @@ describe('application modules', function() {
           this.app.start();
         });
 
+        it('should contains cid', function() {
+          expect(this.module.cid).to.exist;
+          expect(this.module.cid).to.be.a('string');
+          expect(this.module.cid).to.match(/mnm/);
+        });
+
         it('its module starts', function() {
           expect(this.startSpy).to.have.been.called;
         });

@@ -310,7 +310,8 @@ describe('collection view', function() {
           foo: 'biz'
         }, {
           foo: 'baz'
-      }]);
+        }
+      ]);
       this.collection.comparator = function(model) {
         return model.get('foo');
       };

@@ -21,6 +21,7 @@ Marionette.Behavior = Marionette.Object.extend({
     // defined in the parent view as well as those
     // defined in the given behavior.
     this.ui = _.extend({}, _.result(view, 'ui'), _.result(this, 'ui'));
+    this.cid = _.uniqueId('mnb');
 
     Marionette.Object.apply(this, arguments);
   },

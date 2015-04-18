@@ -151,6 +151,13 @@ describe('Behaviors', function() {
       this.view = new this.View();
     });
 
+    it('should contains cid on behavior', function() {
+      var behaviorInstance = new this.behaviors.foo();
+      expect(behaviorInstance.cid).to.exist;
+      expect(behaviorInstance.cid).to.be.a('string');
+      expect(behaviorInstance.cid).to.match(/mnb/);
+    });
+
     it('should call initialize when a behavior is created', function() {
       expect(this.initializeStub).to.have.been.calledOnce;
     });

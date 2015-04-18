@@ -6,6 +6,8 @@
 // and coordination of other objects, views, and more.
 Marionette.Controller = Marionette.Object.extend({
   options: {},
+  cid: _.uniqueId('mnc'),
+
   destroy: function() {
     Marionette._triggerMethod(this, 'before:destroy', arguments);
     Marionette._triggerMethod(this, 'destroy', arguments);

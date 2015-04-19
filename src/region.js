@@ -7,6 +7,8 @@
 // http://lostechies.com/derickbailey/2011/12/12/composite-js-apps-regions-and-region-managers/
 
 Marionette.Region = Marionette.Object.extend({
+  _cid: 'mnr',
+
   constructor: function(options) {
 
     // set options temporarily so that we can get `el`.

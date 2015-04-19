@@ -11,11 +11,16 @@ describe('Region', function() {
       this.barRegion   = new this.BarRegion();
 
       this.BazRegion = Marionette.Region.extend();
+
+      delete this.fooRegion.cid;
+      delete this.barRegion.cid;
     });
 
     describe('with a selector string', function() {
       beforeEach(function() {
         this.region = Marionette.Region.buildRegion(this.fooSelector, this.DefaultRegionClass);
+
+        delete this.region.cid;
       });
 
       it('returns the region', function() {
@@ -35,6 +40,8 @@ describe('Region', function() {
       describe('with `el` defined', function() {
         beforeEach(function() {
           this.region = Marionette.Region.buildRegion(this.BarRegion, this.DefaultRegionClass);
+
+          delete this.region.cid;
         });
 
         it('returns the region', function() {
@@ -70,6 +77,8 @@ describe('Region', function() {
         beforeEach(function() {
           this.definition = {selector: this.fooSelector};
           this.region = Marionette.Region.buildRegion(this.definition, this.DefaultRegionClass);
+
+          delete this.region.cid;
         });
 
         it('returns the region', function() {
@@ -90,6 +99,8 @@ describe('Region', function() {
           beforeEach(function() {
             this.definition = {el: this.fooSelector};
             this.region = Marionette.Region.buildRegion(this.definition, this.DefaultRegionClass);
+
+            delete this.region.cid;
           });
 
           it('returns the region', function() {
@@ -111,6 +122,9 @@ describe('Region', function() {
             this.bazRegion = new this.DefaultRegionClass({el: this.el});
             this.definition = {el: this.el};
             this.region = Marionette.Region.buildRegion(this.definition, this.DefaultRegionClass);
+
+            delete this.region.cid;
+            delete this.bazRegion.cid;
           });
 
           it('returns the region', function() {
@@ -145,6 +159,9 @@ describe('Region', function() {
             this.bazRegion = new this.DefaultRegionClass({el: this.el});
             this.definition = {el: this.el};
             this.region = Marionette.Region.buildRegion(this.definition, this.DefaultRegionClass);
+
+            delete this.region.cid;
+            delete this.bazRegion.cid;
           });
 
           it('returns the region', function() {
@@ -196,6 +213,13 @@ describe('Region', function() {
             this.region1 = Marionette.Region.buildRegion(this.region1Definition, this.DefaultRegionClass);
             this.region2 = Marionette.Region.buildRegion(this.region2Definition, this.DefaultRegionClass);
             this.region3 = Marionette.Region.buildRegion(this.region3Definition, this.DefaultRegionClass);
+
+            delete this.region1.cid;
+            delete this.region2.cid;
+            delete this.region3.cid;
+            delete this.baz1Region.cid;
+            delete this.baz2Region.cid;
+            delete this.baz3Region.cid;
           });
 
           it('returns the regions', function() {
@@ -222,6 +246,8 @@ describe('Region', function() {
             beforeEach(function() {
               this.definition = {regionClass: this.BarRegion};
               this.region = Marionette.Region.buildRegion(this.definition, this.DefaultRegionClass);
+
+              delete this.region.cid;
             });
 
             it('returns the region', function() {

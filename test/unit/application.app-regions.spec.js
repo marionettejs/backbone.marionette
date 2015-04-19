@@ -21,6 +21,11 @@ describe('application regions', function() {
         barRegion: '#bar-region'
       });
       this.app.start();
+
+      delete this.app.fooRegion.cid;
+      delete this.app.barRegion.cid;
+      delete this.fooRegion.cid;
+      delete this.barRegion.cid;
     });
 
     it('should initialize the regions', function() {
@@ -51,6 +56,11 @@ describe('application regions', function() {
         fooRegion: this.FooRegion,
         barRegion: this.BarRegion
       });
+
+      delete this.app.fooRegion.cid;
+      delete this.app.barRegion.cid;
+      delete this.FooRegion.cid;
+      delete this.BarRegion.cid;
     });
 
     it('should initialize the regions, immediately', function() {
@@ -80,6 +90,9 @@ describe('application regions', function() {
           fooOption: this.fooOption
         }
       });
+
+      delete this.app.fooRegion.cid;
+      delete this.fooRegion.cid;
     });
 
     it('should initialize the regions, immediately', function() {
@@ -343,6 +356,9 @@ describe('application regions', function() {
       this.app.addRegions({
         fooRegion: this.FooRegion
       });
+
+      delete this.app.fooRegion.cid;
+      delete this.fooRegion.cid;
     });
 
     it('should initialize the regions, immediately', function() {
@@ -385,6 +401,11 @@ describe('application regions', function() {
       });
 
       this.regions = this.app.addRegions(this.regionDefinition);
+
+      delete this.app.fooRegion.cid;
+      delete this.app.barRegion.cid;
+      delete this.fooRegion.cid;
+      delete this.barRegion.cid;
     });
 
     it('calls the regions definition function', function() {
@@ -417,6 +438,9 @@ describe('application regions', function() {
       this.app.addRegions({
         fooRegion: '#foo-region'
       });
+
+      delete this.app.fooRegion.cid;
+      delete this.fooRegion.cid;
     });
 
     it('should make the region available as a named attribute', function() {

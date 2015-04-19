@@ -261,6 +261,13 @@ describe('regionManager', function() {
           });
 
           this.regions = this.regionManager.addRegions(this.regionDefinition);
+
+          delete this.regions.fooRegion.cid;
+          delete this.regions.barRegion.cid;
+          delete this.regions.bazRegion.cid;
+          delete this.fooRegion.cid;
+          delete this.barRegion.cid;
+          delete this.bazRegion.cid;
         });
 
         it('calls the regions definition function', function() {
@@ -308,6 +315,11 @@ describe('regionManager', function() {
           });
 
           this.regions = this.regionManager.addRegions(this.regionDefinition, this.defaults);
+
+          delete this.regions.fooRegion.cid;
+          delete this.regions.barRegion.cid;
+          delete this.fooRegion.cid;
+          delete this.barRegion.cid;
         });
 
         it('calls the regions definition function', function() {

@@ -30,6 +30,11 @@ describe('layoutView - dynamic regions', function() {
       });
 
       this.regions = this.app.addRegions(this.regionDefinition);
+
+      delete this.app.fooRegion.cid;
+      delete this.fooRegion.cid;
+      delete this.app.barRegion.cid;
+      delete this.barRegion.cid;
     });
 
     it('calls the regions definition function', function() {

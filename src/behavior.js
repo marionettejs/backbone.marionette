@@ -7,6 +7,8 @@
 // into portable logical chunks, keeping your views simple and your code DRY.
 
 Marionette.Behavior = Marionette.Object.extend({
+  _cid: 'mnb',
+
   constructor: function(options, view) {
     // Setup reference to the view.
     // this comes in handle when a behavior
@@ -21,7 +23,6 @@ Marionette.Behavior = Marionette.Object.extend({
     // defined in the parent view as well as those
     // defined in the given behavior.
     this.ui = _.extend({}, _.result(view, 'ui'), _.result(this, 'ui'));
-    this.cid = _.uniqueId('mnb');
 
     Marionette.Object.apply(this, arguments);
   },

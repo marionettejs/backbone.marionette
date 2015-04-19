@@ -178,6 +178,12 @@ describe('region', function() {
       expect(this.viewRenderSpy).to.have.been.called;
     });
 
+    it('should contains cid', function() {
+      expect(this.myRegion.cid).to.exist;
+      expect(this.myRegion.cid).to.be.a('string');
+      expect(this.myRegion.cid).to.match(/mnr/);
+    });
+
     it('should have a view', function() {
       expect(this.myRegion.hasView()).to.equal(true);
     });

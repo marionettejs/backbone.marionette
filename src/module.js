@@ -6,6 +6,8 @@
 // A simple module system, used to create privacy and encapsulation in
 // Marionette applications
 Marionette.Module = function(moduleName, app, options) {
+  this.cid = _.uniqueId('mnm');
+
   this.moduleName = moduleName;
   this.options = _.extend({}, this.options, options);
   // Allow for a user to overide the initialize
@@ -31,8 +33,6 @@ Marionette.Module.extend = Marionette.extend;
 // Extend the Module prototype with events / listenTo, so that the module
 // can be used as an event aggregator or pub/sub.
 _.extend(Marionette.Module.prototype, Backbone.Events, {
-  cid: _.uniqueId('mnm'),
-
   // By default modules start with their parents.
   startWithParent: true,
 

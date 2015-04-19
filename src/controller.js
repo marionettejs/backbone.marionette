@@ -5,8 +5,9 @@
 // modules and routers, and as a mediator for workflow
 // and coordination of other objects, views, and more.
 Marionette.Controller = Marionette.Object.extend({
+  _cid: 'mnc',
+
   options: {},
-  cid: _.uniqueId('mnc'),
 
   destroy: function() {
     Marionette._triggerMethod(this, 'before:destroy', arguments);

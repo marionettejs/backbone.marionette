@@ -129,7 +129,7 @@ Marionette.View = Marionette.AbstractView.extend({
   addRegion: function(name, definition) {
     var regions = {};
     regions[name] = definition;
-    return this._buildRegions(regions)[name];
+    return this.addRegions(regions)[name];
   },
 
   // Add multiple regions as a {name: definition, name2: def2} object literal

@@ -219,6 +219,8 @@ As with item view instances, the composite view instance is passed as the
 third argument to the `Renderer` object's `render` method, which is
 useful in custom `Renderer` implementations.
 
+As with CollectionView, CompositeView will maintain the sort order of its child views from the collection. It should be noted that the full view will re-render and not just the children, this is to cater for the use case where no `childViewContainer` is used.
+
 ## Events And Callbacks
 
 During the course of rendering a composite, several events will

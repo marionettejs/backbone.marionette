@@ -135,10 +135,14 @@ Marionette.View = Marionette.AbstractView.extend({
   },
 
   // Add multiple regions as a {name: definition, name2: def2} object literal or
-  // a function evaluation to such literal
-  addRegions: function(regions, defaults) {
+  // a function that evaluates to such literal
+  addRegions: function(regions) {
+    return this._addRegions(regions, arguments);
+  },
+
+  _addRegions: function(regions, parameters) {
     // Enable regions to be a function
-    regions = Marionette._getValue(regions, this, arguments);
+    regions = Marionette._getValue(regions, this, parameters);
 
     // Normalize region selectors hash to allow
     // a user to use the @ui. syntax.
@@ -201,8 +205,8 @@ Marionette.View = Marionette.AbstractView.extend({
   _initializeRegions: function(options) {
     this._initRegionManager();
 
-    this.addRegions(this.regions);
-    this.addRegions(this.getOption.call(options, 'regions'));
+    this._addRegions(this.regions, [options]);
+    this._addRegions(this.getOption.call(options, 'regions'), [options]);
   },
 
   // internal method to build regions

@@ -139,8 +139,6 @@ describe('itemView - dynamic regions', function() {
         template: this.template
       });
 
-      this.barRegion = this.layoutView.bar;
-
       this.region = this.layoutView.addRegion('foo', '#foo');
 
       this.layoutView.render();
@@ -148,10 +146,6 @@ describe('itemView - dynamic regions', function() {
 
       this.view = new Backbone.View();
       this.layoutView.foo.show(this.view);
-    });
-
-    it('should keep the original regions', function() {
-      expect(this.layoutView.bar).to.equal(this.barRegion);
     });
 
     it('should re-add the region to the layoutView after it is re-rendered', function() {
@@ -176,6 +170,8 @@ describe('itemView - dynamic regions', function() {
         template: this.template
       });
 
+      this.barRegion = this.layoutView.bar;
+
       this.region = this.layoutView.addRegion('foo', '#foo');
 
       this.layoutView.render();
@@ -183,6 +179,10 @@ describe('itemView - dynamic regions', function() {
 
       this.view = new Backbone.View();
       this.layoutView.foo.show(this.view);
+    });
+
+    it('should keep the original regions', function() {
+      expect(this.layoutView.bar).to.equal(this.barRegion);
     });
 
     it('should re-add the region to the layoutView after it is re-rendered', function() {

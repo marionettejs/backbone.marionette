@@ -52,6 +52,14 @@ describe('itemView - dynamic regions', function() {
       expect(this.view.getRegion('barRegion').el).to.deep.equal(this.barRegion.el);
     });
 
+    it('adds the regions definitions to the regions property', function(){
+      console.log(this.view.regions);
+      expect(this.view.regions.fooRegion).to.equal(this.fooSelector);
+      expect(this.view.regions.barRegion).to.deep.equal({
+        selector: this.barSelector, regionClass: this.BarRegion
+      });
+    });
+
     it('uses the custom regionClass', function() {
       expect(this.view.getRegion('barRegion')).to.be.an.instanceof(this.BarRegion);
     });
@@ -85,6 +93,10 @@ describe('itemView - dynamic regions', function() {
 
     it('should add the region to the layoutView', function() {
       expect(this.layoutView.foo).to.equal(this.region);
+    });
+
+    it('should add the region definition to the regions property', function() {
+      expect(this.layoutView.regions.foo).to.equal('#foo');
     });
 
     it('should set the parent of the region to the layoutView', function() {

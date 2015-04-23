@@ -22,6 +22,8 @@ Marionette.View = Marionette.AbstractView.extend({
     this._firstRender = true;
     this._initializeRegions(options);
 
+    this.regions = {};
+
     Marionette.AbstractView.apply(this, arguments);
   },
 
@@ -132,9 +134,19 @@ Marionette.View = Marionette.AbstractView.extend({
     return this.addRegions(regions)[name];
   },
 
-  // Add multiple regions as a {name: definition, name2: def2} object literal
-  addRegions: function(regions) {
+  // Add multiple regions as a {name: definition, name2: def2} object literal or
+  // a function evaluation to such literal
+  addRegions: function(regions, defaults) {
+    // Enable regions to be a function
+    regions = Marionette._getValue(regions, this, arguments);
+
+    // Normalize region selectors hash to allow
+    // a user to use the @ui. syntax.
+    regions = this.normalizeUIValues(regions, ['selector', 'el']);
+
+    // Add the regions definitions to the regions property
     this.regions = _.extend({}, this.regions, regions);
+
     return this._buildRegions(regions);
   },
 
@@ -187,24 +199,10 @@ Marionette.View = Marionette.AbstractView.extend({
   // Internal method to initialize the regions that have been defined in a
   // `regions` attribute on this layoutView.
   _initializeRegions: function(options) {
-    var regions;
     this._initRegionManager();
 
-    regions = Marionette._getValue(this.regions, this, [options]) || {};
-
-    // Enable users to define `regions` as instance options.
-    var regionOptions = this.getOption.call(options, 'regions');
-
-    // enable region options to be a function
-    regionOptions = Marionette._getValue(regionOptions, this, [options]);
-
-    _.extend(regions, regionOptions);
-
-    // Normalize region selectors hash to allow
-    // a user to use the @ui. syntax.
-    regions = this.normalizeUIValues(regions, ['selector', 'el']);
-
-    this.addRegions(regions);
+    this.addRegions(this.regions);
+    this.addRegions(this.getOption.call(options, 'regions'));
   },
 
   // internal method to build regions

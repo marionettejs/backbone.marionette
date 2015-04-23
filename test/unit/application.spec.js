@@ -15,6 +15,10 @@ describe('marionette application', function() {
       this.app.start(this.fooOptions);
     });
 
+    it('should contains cidPrefix', function() {
+      expect(this.app.cidPrefix).to.equal('mna');
+    });
+
     it('should contains cid', function() {
       expect(this.app.cid).to.exist;
       expect(this.app.cid).to.be.a('string');

@@ -11,20 +11,17 @@ describe('Region', function() {
       this.barRegion   = new this.BarRegion();
 
       this.BazRegion = Marionette.Region.extend();
-
-      delete this.fooRegion.cid;
-      delete this.barRegion.cid;
     });
 
     describe('with a selector string', function() {
       beforeEach(function() {
         this.region = Marionette.Region.buildRegion(this.fooSelector, this.DefaultRegionClass);
-
-        delete this.region.cid;
       });
 
       it('returns the region', function() {
-        expect(this.region).to.deep.equal(this.fooRegion);
+        this.checkProperties(function(props) {
+          expect(props(this.region)).to.deep.equal(props(this.fooRegion));
+        });
       });
 
       it('uses the default region class', function() {
@@ -40,12 +37,12 @@ describe('Region', function() {
       describe('with `el` defined', function() {
         beforeEach(function() {
           this.region = Marionette.Region.buildRegion(this.BarRegion, this.DefaultRegionClass);
-
-          delete this.region.cid;
         });
 
         it('returns the region', function() {
-          expect(this.region).to.deep.equal(this.barRegion);
+          this.checkProperties(function(props) {
+            expect(props(this.region)).to.deep.equal(props(this.barRegion));
+          });
         });
 
         it('uses the passed in region class', function() {
@@ -77,12 +74,12 @@ describe('Region', function() {
         beforeEach(function() {
           this.definition = {selector: this.fooSelector};
           this.region = Marionette.Region.buildRegion(this.definition, this.DefaultRegionClass);
-
-          delete this.region.cid;
         });
 
         it('returns the region', function() {
-          expect(this.region).to.deep.equal(this.fooRegion);
+          this.checkProperties(function(props) {
+            expect(props(this.region)).to.deep.equal(props(this.fooRegion));
+          });
         });
 
         it('uses the default region class', function() {
@@ -99,12 +96,12 @@ describe('Region', function() {
           beforeEach(function() {
             this.definition = {el: this.fooSelector};
             this.region = Marionette.Region.buildRegion(this.definition, this.DefaultRegionClass);
-
-            delete this.region.cid;
           });
 
           it('returns the region', function() {
-            expect(this.region).to.deep.equal(this.fooRegion);
+            this.checkProperties(function(props) {
+              expect(props(this.region)).to.deep.equal(props(this.fooRegion));
+            });
           });
 
           it('uses the default region class', function() {
@@ -122,13 +119,12 @@ describe('Region', function() {
             this.bazRegion = new this.DefaultRegionClass({el: this.el});
             this.definition = {el: this.el};
             this.region = Marionette.Region.buildRegion(this.definition, this.DefaultRegionClass);
-
-            delete this.region.cid;
-            delete this.bazRegion.cid;
           });
 
           it('returns the region', function() {
-            expect(this.region).to.deep.equal(this.bazRegion);
+            this.checkProperties(function(props) {
+              expect(props(this.region)).to.deep.equal(props(this.bazRegion));
+            });
           });
 
           it('uses the default region class', function() {
@@ -159,13 +155,12 @@ describe('Region', function() {
             this.bazRegion = new this.DefaultRegionClass({el: this.el});
             this.definition = {el: this.el};
             this.region = Marionette.Region.buildRegion(this.definition, this.DefaultRegionClass);
-
-            delete this.region.cid;
-            delete this.bazRegion.cid;
           });
 
           it('returns the region', function() {
-            expect(this.region).to.deep.equal(this.bazRegion);
+            this.checkProperties(function(props) {
+              expect(props(this.region)).to.deep.equal(props(this.bazRegion));
+            });
           });
 
           it('uses the default region class', function() {
@@ -213,19 +208,14 @@ describe('Region', function() {
             this.region1 = Marionette.Region.buildRegion(this.region1Definition, this.DefaultRegionClass);
             this.region2 = Marionette.Region.buildRegion(this.region2Definition, this.DefaultRegionClass);
             this.region3 = Marionette.Region.buildRegion(this.region3Definition, this.DefaultRegionClass);
-
-            delete this.region1.cid;
-            delete this.region2.cid;
-            delete this.region3.cid;
-            delete this.baz1Region.cid;
-            delete this.baz2Region.cid;
-            delete this.baz3Region.cid;
           });
 
           it('returns the regions', function() {
-            expect(this.region1).to.deep.equal(this.baz1Region);
-            expect(this.region2).to.deep.equal(this.baz2Region);
-            expect(this.region3).to.deep.equal(this.baz3Region);
+            this.checkProperties(function(props) {
+              expect(props(this.region1)).to.deep.equal(props(this.baz1Region));
+              expect(props(this.region2)).to.deep.equal(props(this.baz2Region));
+              expect(props(this.region3)).to.deep.equal(props(this.baz3Region));
+            });
           });
 
           it('uses the region class', function() {
@@ -246,12 +236,12 @@ describe('Region', function() {
             beforeEach(function() {
               this.definition = {regionClass: this.BarRegion};
               this.region = Marionette.Region.buildRegion(this.definition, this.DefaultRegionClass);
-
-              delete this.region.cid;
             });
 
             it('returns the region', function() {
-              expect(this.region).to.deep.equal(this.barRegion);
+              this.checkProperties(function(props) {
+                expect(props(this.region)).to.deep.equal(props(this.barRegion));
+              });
             });
 
             it('uses the region class', function() {

@@ -168,6 +168,16 @@ describe('item view', function() {
     it('should mark as rendered', function() {
       expect(this.view).to.have.property('isRendered', true);
     });
+
+    it('should contains cidPrefix', function() {
+      expect(this.view.cidPrefix).to.equal('mnv');
+    });
+
+    it('should contains cid', function() {
+      expect(this.view.cid).to.exist;
+      expect(this.view.cid).to.be.a('string');
+      expect(this.view.cid).to.match(/mnv/);
+    });
   });
 
   describe('when an item view has a model and is rendered', function() {

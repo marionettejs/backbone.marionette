@@ -30,11 +30,6 @@ describe('layoutView - dynamic regions', function() {
       });
 
       this.regions = this.app.addRegions(this.regionDefinition);
-
-      delete this.app.fooRegion.cid;
-      delete this.fooRegion.cid;
-      delete this.app.barRegion.cid;
-      delete this.barRegion.cid;
     });
 
     it('calls the regions definition function', function() {
@@ -44,13 +39,17 @@ describe('layoutView - dynamic regions', function() {
     });
 
     it('returns all the created regions on an object literal', function() {
-      expect(this.app.fooRegion).to.deep.equal(this.fooRegion);
-      expect(this.app.barRegion).to.deep.equal(this.barRegion);
+      this.checkProperties(function(props) {
+        expect(props(this.app.fooRegion)).to.deep.equal(props(this.fooRegion));
+        expect(props(this.app.barRegion)).to.deep.equal(props(this.barRegion));
+      });
     });
 
     it('initializes all the regions immediately', function() {
-      expect(this.app.getRegion('fooRegion')).to.deep.equal(this.fooRegion);
-      expect(this.app.getRegion('barRegion')).to.deep.equal(this.barRegion);
+      this.checkProperties(function(props) {
+        expect(props(this.app.getRegion('fooRegion'))).to.deep.equal(props(this.fooRegion));
+        expect(props(this.app.getRegion('barRegion'))).to.deep.equal(props(this.barRegion));
+      });
     });
 
     it('uses the custom regionClass', function() {

@@ -29,6 +29,10 @@ describe('marionette controller', function() {
       this.controller.trigger('foo', this.triggerOptions);
     });
 
+    it('should contains cidPrefix', function() {
+      expect(this.controller.cidPrefix).to.equal('mnc');
+    });
+
     it('should contains cid', function() {
       expect(this.controller.cid).to.exist;
       expect(this.controller.cid).to.be.a('string');

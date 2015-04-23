@@ -7,6 +7,7 @@
 // Extends directly from CollectionView and also renders an
 // a child view as `modelView`, for the top leaf
 Marionette.CompositeView = Marionette.CollectionView.extend({
+  cidPrefix: 'mncpv',
 
   // Setting up the inheritance chain which allows changes to
   // Marionette.CollectionView.prototype.constructor which allows overriding

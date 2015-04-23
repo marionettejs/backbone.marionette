@@ -24,6 +24,12 @@ describe('base view', function() {
     it('should set _behaviors', function() {
       expect(this.view._behaviors).to.be.eql({});
     });
+
+    it('should contains cid', function() {
+      expect(this.view.cid).to.exist;
+      expect(this.view.cid).to.be.a('string');
+      expect(this.view.cid).to.match(/mnv/);
+    });
   });
 
   describe('when using listenTo for the "destroy" event on itself, and destroying the view', function() {

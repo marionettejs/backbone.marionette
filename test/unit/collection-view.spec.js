@@ -76,6 +76,16 @@ describe('collection view', function() {
 
       expect(this.onSortViewsSpy).to.not.have.been.called;
     });
+
+    it('should contains cidPrefix', function() {
+      expect(this.collectionView.cidPrefix).to.equal('mncv');
+    });
+
+    it('should contains cid', function() {
+      expect(this.collectionView.cid).to.exist;
+      expect(this.collectionView.cid).to.be.a('string');
+      expect(this.collectionView.cid).to.match(/mncv/);
+    });
   });
 
   describe('when rendering a collection view with no "childView" specified', function() {

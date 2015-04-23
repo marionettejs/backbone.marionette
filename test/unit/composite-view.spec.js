@@ -82,6 +82,16 @@ describe('composite view', function() {
       expect(this.compositeView.$el).to.contain.$text('bar');
       expect(this.compositeView.$el).to.contain.$text('baz');
     });
+
+    it('should contains cidPrefix', function() {
+      expect(this.compositeView.cidPrefix).to.equal('mncpv');
+    });
+
+    it('should contains cid', function() {
+      expect(this.compositeView.cid).to.exist;
+      expect(this.compositeView.cid).to.be.a('string');
+      expect(this.compositeView.cid).to.match(/mncpv/);
+    });
   });
 
   describe('when rendering with a overridden attachElContent', function() {

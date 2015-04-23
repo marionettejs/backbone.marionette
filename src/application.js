@@ -5,7 +5,7 @@
 // Stores and starts up `Region` objects, includes an
 // event aggregator as `app.vent`
 Marionette.Application = Marionette.Object.extend({
-  _cid: 'mna',
+  cidPrefix: 'mna',
 
   constructor: function(options) {
     this._initializeRegions(options);

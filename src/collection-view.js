@@ -6,6 +6,7 @@
 // A view that iterates over a Backbone.Collection
 // and renders an individual child view for each model.
 Marionette.CollectionView = Marionette.View.extend({
+  cidPrefix: 'mncv',
 
   // used as the prefix for child view events
   // that are forwarded through the collectionview

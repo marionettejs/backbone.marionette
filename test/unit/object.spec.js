@@ -34,7 +34,7 @@ describe('marionette object', function() {
 
     it('should contains cid', function() {
       var FooObject = Marionette.Object.extend({
-        _cid: 'foo'
+        cidPrefix: 'foo'
       });
 
       var object = new FooObject();

@@ -52,7 +52,7 @@ describe('itemView - dynamic regions', function() {
       expect(this.view.getRegion('barRegion').el).to.deep.equal(this.barRegion.el);
     });
 
-    it('adds the regions definitions to the regions property', function(){
+    it('adds the regions definitions to the regions property', function() {
       expect(this.view.regions.fooRegion).to.equal(this.fooSelector);
       expect(this.view.regions.barRegion).to.deep.equal({
         selector: this.barSelector, regionClass: this.BarRegion

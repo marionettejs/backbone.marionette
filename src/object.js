@@ -5,7 +5,7 @@
 // Object borrows many conventions and utilities from Backbone.
 Marionette.Object = function(options) {
   this.options = _.extend({}, _.result(this, 'options'), options);
-  this.cid = _.uniqueId(this.cidPrefix);
+  this.cid = _.uniqueId(this.cidPrefix || 'mno');
   this.initialize.apply(this, arguments);
 };
 

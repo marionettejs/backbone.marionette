@@ -33,14 +33,9 @@ describe('marionette object', function() {
     });
 
     it('should contains cid', function() {
-      var FooObject = Marionette.Object.extend({
-        cidPrefix: 'foo'
-      });
-
-      var object = new FooObject();
-      expect(object.cid).to.exist;
-      expect(object.cid).to.be.a('string');
-      expect(object.cid).to.match(/foo/);
+      expect(this.object.cid).to.exist;
+      expect(this.object.cid).to.be.a('string');
+      expect(this.object.cid).to.match(/mno/);
     });
 
     it('should support triggering events on itself', function() {

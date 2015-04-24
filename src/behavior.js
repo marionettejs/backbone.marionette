@@ -7,6 +7,8 @@
 // into portable logical chunks, keeping your views simple and your code DRY.
 
 Marionette.Behavior = Marionette.Object.extend({
+  cidPrefix: 'mnb',
+
   constructor: function(options, view) {
     // Setup reference to the view.
     // this comes in handle when a behavior

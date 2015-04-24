@@ -15,6 +15,14 @@ var clearFixtures = function () {
   $body.empty();
 };
 
+before(function() {
+  this.checkProperties = function(block, blacklist) {
+    blacklist = blacklist ? blacklist.push('cid') : 'cid'
+    var props = _.partial(_.omit, _, blacklist);
+    block.call(this, props);
+  }
+});
+
 beforeEach(function () {
   this.sinon = sinon.sandbox.create();
   this.setFixtures   = setFixtures;

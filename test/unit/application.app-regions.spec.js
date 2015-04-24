@@ -24,8 +24,10 @@ describe('application regions', function() {
     });
 
     it('should initialize the regions', function() {
-      expect(this.app.fooRegion).to.deep.equal(this.fooRegion);
-      expect(this.app.barRegion).to.deep.equal(this.barRegion);
+      this.checkProperties(function(props) {
+        expect(props(this.app.fooRegion)).to.deep.equal(props(this.fooRegion));
+        expect(props(this.app.barRegion)).to.deep.equal(props(this.barRegion));
+      });
     });
 
     it('should create backlink to regionManager', function() {
@@ -33,11 +35,21 @@ describe('application regions', function() {
     });
 
     it('should trigger a before:add:region event', function() {
-      expect(this.beforeAddRegionStub).to.have.been.calledWith('fooRegion', this.fooRegion);
+      expect(this.beforeAddRegionStub).to.have.been.calledWith('fooRegion');
+
+      this.checkProperties(function(props) {
+        var args = _.object(this.beforeAddRegionStub.args);
+        expect(props(args.fooRegion)).to.deep.equal(props(this.fooRegion));
+      });
     });
 
     it('should trigger a add:region event', function() {
-      expect(this.addRegionStub).to.have.been.calledWith('barRegion', this.barRegion);
+      expect(this.addRegionStub).to.have.been.calledWith('barRegion');
+
+      this.checkProperties(function(props) {
+        var args = _.object(this.addRegionStub.args);
+        expect(props(args.barRegion)).to.deep.equal(props(this.barRegion));
+      });
     });
   });
 
@@ -83,7 +95,9 @@ describe('application regions', function() {
     });
 
     it('should initialize the regions, immediately', function() {
-      expect(this.app.fooRegion).to.deep.equal(this.fooRegion);
+      this.checkProperties(function(props) {
+        expect(props(this.fooRegion)).to.deep.equal(props(this.app.fooRegion));
+      });
     });
 
     it('should create an instance of the specified region class', function() {
@@ -346,7 +360,9 @@ describe('application regions', function() {
     });
 
     it('should initialize the regions, immediately', function() {
-      expect(this.app.fooRegion).to.deep.equal(this.fooRegion);
+      this.checkProperties(function(props) {
+        expect(props(this.app.fooRegion)).to.deep.equal(props(this.fooRegion));
+      });
     });
 
     it('should create an instance of the specified region class', function() {
@@ -394,13 +410,17 @@ describe('application regions', function() {
     });
 
     it('returns all the created regions on an object literal', function() {
-      expect(this.app.fooRegion).to.deep.equal(this.fooRegion);
-      expect(this.app.barRegion).to.deep.equal(this.barRegion);
+      this.checkProperties(function(props) {
+        expect(props(this.app.fooRegion)).to.deep.equal(props(this.fooRegion));
+        expect(props(this.app.barRegion)).to.deep.equal(props(this.barRegion));
+      });
     });
 
     it('initializes all the regions immediately', function() {
-      expect(this.app.getRegion('fooRegion')).to.deep.equal(this.fooRegion);
-      expect(this.app.getRegion('barRegion')).to.deep.equal(this.barRegion);
+      this.checkProperties(function(props) {
+        expect(props(this.app.getRegion('fooRegion'))).to.deep.equal(props(this.fooRegion));
+        expect(props(this.app.getRegion('barRegion'))).to.deep.equal(props(this.barRegion));
+      });
     });
 
     it('uses the custom regionClass', function() {
@@ -420,11 +440,15 @@ describe('application regions', function() {
     });
 
     it('should make the region available as a named attribute', function() {
-      expect(this.app.fooRegion).to.deep.equal(this.fooRegion);
+      this.checkProperties(function(props) {
+        expect(props(this.app.fooRegion)).to.deep.equal(props(this.fooRegion));
+      });
     });
 
     it('should be able to retrieve the region', function() {
-      expect(this.app.getRegion('fooRegion')).to.equal(this.app.fooRegion);
+      this.checkProperties(function(props) {
+        expect(props(this.app.getRegion('fooRegion'))).to.deep.equal(props(this.fooRegion));
+      });
     });
   });
 

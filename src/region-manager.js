@@ -3,6 +3,8 @@
 
 // Manage one or more related `Marionette.Region` objects.
 Marionette.RegionManager = Marionette.Object.extend({
+  cidPrefix: 'mnrm',
+
   constructor: function(options) {
     this._regions = {};
     this.length = 0;

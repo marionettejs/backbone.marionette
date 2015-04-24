@@ -151,6 +151,18 @@ describe('Behaviors', function() {
       this.view = new this.View();
     });
 
+    it('should contains cidPrefix', function() {
+      var behavior = _.first(this.view._behaviors);
+      expect(behavior.cidPrefix).to.equal('mnb');
+    });
+
+    it('should contains cid on behavior', function() {
+      var behavior = _.first(this.view._behaviors);
+      expect(behavior.cid).to.exist;
+      expect(behavior.cid).to.be.a('string');
+      expect(behavior.cid).to.match(/mnb/);
+    });
+
     it('should call initialize when a behavior is created', function() {
       expect(this.initializeStub).to.have.been.calledOnce;
     });

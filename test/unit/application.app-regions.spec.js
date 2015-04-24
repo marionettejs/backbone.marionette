@@ -39,7 +39,7 @@ describe('application regions', function() {
 
       this.checkProperties(function(props) {
         var args = _.object(this.beforeAddRegionStub.args);
-        expect(props(args.fooRegion)).to.deep.equal(props(this.fooRegion))
+        expect(props(args.fooRegion)).to.deep.equal(props(this.fooRegion));
       });
     });
 
@@ -48,7 +48,7 @@ describe('application regions', function() {
 
       this.checkProperties(function(props) {
         var args = _.object(this.addRegionStub.args);
-        expect(props(args.barRegion)).to.deep.equal(props(this.barRegion))
+        expect(props(args.barRegion)).to.deep.equal(props(this.barRegion));
       });
     });
   });

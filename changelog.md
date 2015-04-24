@@ -52,7 +52,6 @@ As always come and join us in [chat](https://gitter.im/marionettejs/backbone.mar
 
 * ItemViews
   * the `isRendered` property is now set to `true` after render, even if no template is set.
-  * Views
   * The `destroy` method now returns this instance that was destroyed to enable easier chaining of view actions.
   * If you define the options hash on your `Marionette.View` or if you pass options as a function to your `Marionette.View`, pass the result of options down to the backbone view constructor.
   * All views now have a `isRendered` property, that is updated after `render` and `destroy`.

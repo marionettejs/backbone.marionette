@@ -3,6 +3,8 @@
 
 // A container for a Marionette application.
 Marionette.Application = Marionette.Object.extend({
+  cidPrefix: 'mna',
+
   constructor: function(options) {
     _.extend(this, options);
     Marionette.Object.call(this, options);

@@ -22,8 +22,6 @@ Marionette.View = Backbone.View.extend({
     Backbone.View.call(this, this.options);
 
     Marionette.MonitorDOMRefresh(this);
-
-    this.cid = _.uniqueId(this.cidPrefix || 'mnv');
   },
 
   // Get the template for this view

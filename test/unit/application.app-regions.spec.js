@@ -36,10 +36,20 @@ describe('application regions', function() {
 
     it('should trigger a before:add:region event', function() {
       expect(this.beforeAddRegionStub).to.have.been.calledWith('fooRegion');
+
+      this.checkProperties(function(props) {
+        var args = _.object(this.beforeAddRegionStub.args);
+        expect(props(args.fooRegion)).to.deep.equal(props(this.fooRegion))
+      });
     });
 
     it('should trigger a add:region event', function() {
       expect(this.addRegionStub).to.have.been.calledWith('barRegion');
+
+      this.checkProperties(function(props) {
+        var args = _.object(this.addRegionStub.args);
+        expect(props(args.barRegion)).to.deep.equal(props(this.barRegion))
+      });
     });
   });
 

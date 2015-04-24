@@ -32,6 +32,10 @@ describe('marionette object', function() {
       model.trigger('bar', this.options);
     });
 
+    it('should contains cidPrefix', function() {
+      expect(this.object.cidPrefix).to.equal('mno');
+    });
+
     it('should contains cid', function() {
       expect(this.object.cid).to.exist;
       expect(this.object.cid).to.be.a('string');

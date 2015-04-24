@@ -55,7 +55,7 @@ As always come and join us in [chat](https://gitter.im/marionettejs/backbone.mar
   * Views
   * The `destroy` method now returns this instance that was destroyed to enable easier chaining of view actions.
   * If you define the options hash on your `Marionette.View` or if you pass options as a function to your `Marionette.View`, pass the result of options down to the backbone view constructor.
-  * All views now have a `isRendered` property, that is updated after `render` and `destroy`.
+  * All views now have an `isRendered` property, that is updated after `render` and `destroy`.
 
 * Object
   * The `destroy` method now returns this instance that was destroyed to enable easier chaining of object actions.

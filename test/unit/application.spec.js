@@ -35,10 +35,8 @@ describe('marionette application', function() {
       expect(this.app.cidPrefix).to.equal('mna');
     });
 
-    it('should contains cid on behavior', function() {
+    it('should exist cid', function() {
       expect(this.app.cid).to.exist;
-      expect(this.app.cid).to.be.a('string');
-      expect(this.app.cid).to.match(/mna/);
     });
   });
 });

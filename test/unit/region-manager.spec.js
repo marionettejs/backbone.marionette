@@ -32,10 +32,8 @@ describe('regionManager', function() {
       expect(this.regionManager.cidPrefix).to.equal('mnrm');
     });
 
-    it('should contains cid on behavior', function() {
+    it('should exist cid', function() {
       expect(this.regionManager.cid).to.exist;
-      expect(this.regionManager.cid).to.be.a('string');
-      expect(this.regionManager.cid).to.match(/mnrm/);
     });
   });
 

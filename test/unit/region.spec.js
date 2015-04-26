@@ -178,10 +178,8 @@ describe('region', function() {
       expect(this.myRegion.cidPrefix).to.equal('mnr');
     });
 
-    it('should contains cid on behavior', function() {
+    it('should exist cid', function() {
       expect(this.myRegion.cid).to.exist;
-      expect(this.myRegion.cid).to.be.a('string');
-      expect(this.myRegion.cid).to.match(/mnr/);
     });
 
     it('should render the view', function() {

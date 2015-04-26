@@ -156,12 +156,10 @@ describe('Behaviors', function() {
       expect(fooBehavior.cidPrefix).to.equal('mnb');
     });
 
-    it('should contains cid on behavior', function() {
+    it('should exist cid', function() {
       var fooBehavior = new this.behaviors.foo();
 
       expect(fooBehavior.cid).to.exist;
-      expect(fooBehavior.cid).to.be.a('string');
-      expect(fooBehavior.cid).to.match(/mnb/);
     });
 
     it('should call initialize when a behavior is created', function() {

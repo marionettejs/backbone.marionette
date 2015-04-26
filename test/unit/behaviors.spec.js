@@ -151,12 +151,12 @@ describe('Behaviors', function() {
       this.view = new this.View();
     });
 
-    it('should contains cidPrefix', function() {
+    it('should have a cidPrefix', function() {
       var fooBehavior = new this.behaviors.foo();
       expect(fooBehavior.cidPrefix).to.equal('mnb');
     });
 
-    it('should exist cid', function() {
+    it('should have a cid', function() {
       var fooBehavior = new this.behaviors.foo();
 
       expect(fooBehavior.cid).to.exist;

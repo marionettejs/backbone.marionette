@@ -28,11 +28,11 @@ describe('regionManager', function() {
       .and.to.have.been.calledOn(this.regionManager);
     });
 
-    it('should contains cidPrefix', function() {
+    it('should have a cidPrefix', function() {
       expect(this.regionManager.cidPrefix).to.equal('mnrm');
     });
 
-    it('should exist cid', function() {
+    it('should have a cid', function() {
       expect(this.regionManager.cid).to.exist;
     });
   });

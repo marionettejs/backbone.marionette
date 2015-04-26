@@ -174,11 +174,11 @@ describe('region', function() {
       this.myRegion.show(this.view, this.showOptions);
     });
 
-    it('should contains cidPrefix', function() {
+    it('should have a cidPrefix', function() {
       expect(this.myRegion.cidPrefix).to.equal('mnr');
     });
 
-    it('should exist cid', function() {
+    it('should have a cid', function() {
       expect(this.myRegion.cid).to.exist;
     });
 

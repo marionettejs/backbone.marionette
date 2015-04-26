@@ -44,11 +44,11 @@ describe('marionette object', function() {
       expect(this.object.options).to.deep.equal(this.options);
     });
 
-    it('should contains cidPrefix', function() {
+    it('should have a cidPrefix', function() {
       expect(this.object.cidPrefix).to.equal('mno');
     });
 
-    it('should exist cid', function() {
+    it('should have a cid', function() {
       expect(this.object.cid).to.exist;
     });
   });

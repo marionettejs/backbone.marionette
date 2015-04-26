@@ -31,11 +31,11 @@ describe('marionette application', function() {
       expect(this.startStub).to.have.been.calledOnce.and.calledWith(this.fooOptions);
     });
 
-    it('should contains cidPrefix', function() {
+    it('should have a cidPrefix', function() {
       expect(this.app.cidPrefix).to.equal('mna');
     });
 
-    it('should exist cid', function() {
+    it('should have a cid', function() {
       expect(this.app.cid).to.exist;
     });
   });

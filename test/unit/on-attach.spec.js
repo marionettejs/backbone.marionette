@@ -14,6 +14,28 @@ describe('onAttach', function() {
       onAttach: function() {},
       onBeforeAttach: function() {}
     });
+
+    var spec = this;
+    this.EmptyView = Marionette.ItemView.extend({
+      template: false,
+      constructor: function(options) {
+        Marionette.ItemView.prototype.constructor.call(this, options);
+        this.onAttach = spec.sinon.stub();
+        this.onBeforeAttach = spec.sinon.stub();
+      }
+    });
+    this.ChildView = Marionette.ItemView.extend({
+      template: false,
+      constructor: function(options) {
+        Marionette.ItemView.prototype.constructor.call(this, options);
+        this.onAttach = spec.sinon.stub();
+        this.onBeforeAttach = spec.sinon.stub();
+      }
+    });
+    this.BasicCollectionView = Marionette.CollectionView.extend({
+      childView: this.ChildView,
+      emptyView: this.EmptyView
+    });
   });
 
   describe('when showing a region that is not attached to the document', function() {
@@ -746,6 +768,212 @@ describe('onAttach', function() {
       it('should trigger onBeforeAttach & onAttach on the footerView a single time', function() {
         expect(this.footerView.onBeforeAttach).to.have.been.calledOnce;
         expect(this.footerView.onAttach).to.have.been.calledOnce;
+      });
+    });
+  });
+
+  describe('when showing an empty CollectionView', function() {
+    beforeEach(function() {
+      this.collection = new Backbone.Collection();
+      this.collectionView = new this.BasicCollectionView({
+        collection: this.collection
+      });
+      this.region.show(this.collectionView);
+      this.childView = this.collectionView.children.findByIndex(0);
+    });
+
+    it('should trigger onBeforeAttach and onAttach on the emptyView a single time', function() {
+      expect(this.childView).to.be.an.instanceof(this.EmptyView);
+      expect(this.childView.onBeforeAttach).to.have.been.calledOnce;
+      expect(this.childView.onBeforeAttach).to.have.been.calledOn(this.childView);
+      expect(this.childView.onBeforeAttach).to.have.been.calledWith(this.childView);
+      expect(this.childView.onAttach).to.have.been.calledOnce;
+      expect(this.childView.onAttach).to.have.been.calledOn(this.childView);
+      expect(this.childView.onAttach).to.have.been.calledWith(this.childView);
+    });
+
+    describe('when adding a new element to the collection', function() {
+      beforeEach(function() {
+        this.collection.add({id: 1});
+        this.childView = this.collectionView.children.findByIndex(0);
+      });
+      it('should trigger onBeforeAttach and onAttach on the childView a single time', function() {
+        expect(this.childView).to.be.an.instanceof(this.ChildView);
+        expect(this.childView.onBeforeAttach).to.have.been.calledOnce;
+        expect(this.childView.onBeforeAttach).to.have.been.calledOn(this.childView);
+        expect(this.childView.onBeforeAttach).to.have.been.calledWith(this.childView);
+        expect(this.childView.onAttach).to.have.been.calledOnce;
+        expect(this.childView.onAttach).to.have.been.calledOn(this.childView);
+        expect(this.childView.onAttach).to.have.been.calledWith(this.childView);
+      });
+    });
+  });
+
+  describe('when showing an empty CollectionView with triggerBeforeAttach and triggerAttach set to false on the region', function() {
+    beforeEach(function() {
+      this.collection = new Backbone.Collection();
+      this.collectionView = new this.BasicCollectionView({
+        collection: this.collection
+      });
+      this.region.triggerAttach = false;
+      this.region.triggerBeforeAttach = false;
+      this.region.show(this.collectionView);
+      this.childView = this.collectionView.children.findByIndex(0);
+    });
+
+    it('should not trigger onAttach or onBeforeAttach on the emptyView a single time', function() {
+      expect(this.childView).to.be.an.instanceof(this.EmptyView);
+      expect(this.childView.onBeforeAttach).to.not.have.been.calledOnce;
+      expect(this.childView.onBeforeAttach).to.not.have.been.calledOn(this.childView);
+      expect(this.childView.onBeforeAttach).to.not.have.been.calledWith(this.childView);
+      expect(this.childView.onAttach).to.not.have.been.calledOnce;
+      expect(this.childView.onAttach).to.not.have.been.calledOn(this.childView);
+      expect(this.childView.onAttach).to.not.have.been.calledWith(this.childView);
+    });
+
+    describe('when adding a new element to the collection', function() {
+      beforeEach(function() {
+        this.collection.add({id: 1});
+        this.childView = this.collectionView.children.findByIndex(0);
+      });
+      it('should not trigger onBeforeAttach or onAttach on the childView a single time', function() {
+        expect(this.childView).to.be.an.instanceof(this.ChildView);
+        expect(this.childView.onBeforeAttach).to.not.have.been.calledOnce;
+        expect(this.childView.onBeforeAttach).to.not.have.been.calledOn(this.childView);
+        expect(this.childView.onBeforeAttach).to.not.have.been.calledWith(this.childView);
+        expect(this.childView.onAttach).to.not.have.been.calledOnce;
+        expect(this.childView.onAttach).to.not.have.been.calledOn(this.childView);
+        expect(this.childView.onAttach).to.not.have.been.calledWith(this.childView);
+      });
+    });
+  });
+
+  describe('when showing a non-empty CollectionView', function() {
+    beforeEach(function() {
+      this.collection = new Backbone.Collection([{id: 1}, {id: 2}]);
+      this.collectionView = new this.BasicCollectionView({
+        collection: this.collection
+      });
+      this.region.show(this.collectionView);
+      this.childView1 = this.collectionView.children.findByIndex(0);
+      this.childView2 = this.collectionView.children.findByIndex(1);
+    });
+
+    it('should trigger onBeforeAttach and onAttach on each of its childViews a single time', function() {
+      expect(this.childView1.onBeforeAttach).to.have.been.calledOnce;
+      expect(this.childView1.onBeforeAttach).to.have.been.calledOn(this.childView1);
+      expect(this.childView1.onBeforeAttach).to.have.been.calledWith(this.childView1);
+      expect(this.childView1.onAttach).to.have.been.calledOnce;
+      expect(this.childView1.onAttach).to.have.been.calledOn(this.childView1);
+      expect(this.childView1.onAttach).to.have.been.calledWith(this.childView1);
+      expect(this.childView2.onBeforeAttach).to.have.been.calledOnce;
+      expect(this.childView2.onBeforeAttach).to.have.been.calledOn(this.childView2);
+      expect(this.childView2.onBeforeAttach).to.have.been.calledWith(this.childView2);
+      expect(this.childView2.onAttach).to.have.been.calledOnce;
+      expect(this.childView2.onAttach).to.have.been.calledOn(this.childView2);
+      expect(this.childView2.onAttach).to.have.been.calledWith(this.childView2);
+    });
+
+    describe('when re-rendering the CollectionView', function() {
+      beforeEach(function() {
+        this.collectionView.render();
+      });
+
+      it('should trigger onBeforeAttach and onAttach on each of its childViews a single time', function() {
+        expect(this.childView1.onBeforeAttach).to.have.been.calledOnce;
+        expect(this.childView1.onBeforeAttach).to.have.been.calledOn(this.childView1);
+        expect(this.childView1.onBeforeAttach).to.have.been.calledWith(this.childView1);
+        expect(this.childView1.onAttach).to.have.been.calledOnce;
+        expect(this.childView1.onAttach).to.have.been.calledOn(this.childView1);
+        expect(this.childView1.onAttach).to.have.been.calledWith(this.childView1);
+        expect(this.childView2.onBeforeAttach).to.have.been.calledOnce;
+        expect(this.childView2.onBeforeAttach).to.have.been.calledOn(this.childView2);
+        expect(this.childView2.onBeforeAttach).to.have.been.calledWith(this.childView2);
+        expect(this.childView2.onAttach).to.have.been.calledOnce;
+        expect(this.childView2.onAttach).to.have.been.calledOn(this.childView2);
+        expect(this.childView2.onAttach).to.have.been.calledWith(this.childView2);
+      });
+    });
+
+    describe('when emptying the collection', function() {
+      beforeEach(function() {
+        this.collection.reset();
+        this.childView = this.collectionView.children.findByIndex(0);
+      });
+      it('should trigger onBeforeAttach and onAttach on the emptyView a single time', function() {
+        expect(this.childView).to.be.an.instanceof(this.EmptyView);
+        expect(this.childView.onBeforeAttach).to.have.been.calledOnce;
+        expect(this.childView.onBeforeAttach).to.have.been.calledOn(this.childView);
+        expect(this.childView.onBeforeAttach).to.have.been.calledWith(this.childView);
+        expect(this.childView.onAttach).to.have.been.calledOnce;
+        expect(this.childView.onAttach).to.have.been.calledOn(this.childView);
+        expect(this.childView.onAttach).to.have.been.calledWith(this.childView);
+      });
+    });
+  });
+
+  describe('when showing a non-empty CollectionView with triggerBeforeAttach and triggerAttach set to false on the region', function() {
+    beforeEach(function() {
+      this.collection = new Backbone.Collection([{id: 1}, {id: 2}]);
+      this.collectionView = new this.BasicCollectionView({
+        collection: this.collection
+      });
+      this.region.triggerAttach = false;
+      this.region.triggerBeforeAttach = false;
+      this.region.show(this.collectionView);
+      this.childView1 = this.collectionView.children.findByIndex(0);
+      this.childView2 = this.collectionView.children.findByIndex(1);
+    });
+
+    it('should not trigger onBeforeAttach or onAttach on each of its childViews a single time', function() {
+      expect(this.childView1.onBeforeAttach).to.not.have.been.calledOnce;
+      expect(this.childView1.onBeforeAttach).to.not.have.been.calledOn(this.childView1);
+      expect(this.childView1.onBeforeAttach).to.not.have.been.calledWith(this.childView1);
+      expect(this.childView1.onAttach).to.not.have.been.calledOnce;
+      expect(this.childView1.onAttach).to.not.have.been.calledOn(this.childView1);
+      expect(this.childView1.onAttach).to.not.have.been.calledWith(this.childView1);
+      expect(this.childView2.onBeforeAttach).to.not.have.been.calledOnce;
+      expect(this.childView2.onBeforeAttach).to.not.have.been.calledOn(this.childView2);
+      expect(this.childView2.onBeforeAttach).to.not.have.been.calledWith(this.childView2);
+      expect(this.childView2.onAttach).to.not.have.been.calledOnce;
+      expect(this.childView2.onAttach).to.not.have.been.calledOn(this.childView2);
+      expect(this.childView2.onAttach).to.not.have.been.calledWith(this.childView2);
+    });
+
+    describe('when re-rendering the CollectionView', function() {
+      beforeEach(function() {
+        this.collectionView.render();
+      });
+
+      it('should not trigger onBeforeAttach or onAttach on each of its childViews a single time', function() {
+        expect(this.childView1.onBeforeAttach).to.not.have.been.calledOnce;
+        expect(this.childView1.onBeforeAttach).to.not.have.been.calledOn(this.childView1);
+        expect(this.childView1.onBeforeAttach).to.not.have.been.calledWith(this.childView1);
+        expect(this.childView1.onAttach).to.not.have.been.calledOnce;
+        expect(this.childView1.onAttach).to.not.have.been.calledOn(this.childView1);
+        expect(this.childView1.onAttach).to.not.have.been.calledWith(this.childView1);
+        expect(this.childView2.onBeforeAttach).to.not.have.been.calledOnce;
+        expect(this.childView2.onBeforeAttach).to.not.have.been.calledOn(this.childView2);
+        expect(this.childView2.onBeforeAttach).to.not.have.been.calledWith(this.childView2);
+        expect(this.childView2.onAttach).to.not.have.been.calledOnce;
+        expect(this.childView2.onAttach).to.not.have.been.calledOn(this.childView2);
+        expect(this.childView2.onAttach).to.not.have.been.calledWith(this.childView2);
+      });
+    });
+
+    describe('when emptying the collection', function() {
+      beforeEach(function() {
+        this.collection.reset();
+        this.childView = this.collectionView.children.findByIndex(0);
+      });
+      it('should not trigger onBeforeAttach or onAttach on the emptyView a single time', function() {
+        expect(this.childView).to.be.an.instanceof(this.EmptyView);
+        expect(this.childView.onBeforeAttach).to.not.have.been.calledOnce;
+        expect(this.childView.onBeforeAttach).to.not.have.been.calledOn(this.childView);
+        expect(this.childView.onBeforeAttach).to.not.have.been.calledWith(this.childView);
+        expect(this.childView.onAttach).to.not.have.been.calledOnce;
+        expect(this.childView.onAttach).to.not.have.been.calledOn(this.childView);
+        expect(this.childView.onAttach).to.not.have.been.calledWith(this.childView);
       });
     });
   });

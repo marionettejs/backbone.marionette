@@ -1,5 +1,4 @@
 var path = require('path');
-var unwrap = require('unwrap');
 
 module.exports = function(grunt) {
 
@@ -10,7 +9,7 @@ module.exports = function(grunt) {
     pkg: grunt.file.readJSON('package.json'),
     meta: {
       version: '<%= pkg.version %>',
-      core_banner:
+      banner:
         '// MarionetteJS (Backbone.Marionette)\n' +
         '// ----------------------------------\n' +
         '// v<%= pkg.version %>\n' +
@@ -19,16 +18,7 @@ module.exports = function(grunt) {
         '// Distributed under MIT license\n' +
         '//\n' +
         '// http://marionettejs.com\n' +
-        '\n',
-      banner:
-        '<%= meta.core_banner %>\n' +
-        '/*!\n' +
-        ' * Includes BabySitter\n' +
-        ' * https://github.com/marionettejs/backbone.babysitter/\n' +
-        ' *\n' +
-        ' * Includes Wreqr\n' +
-        ' * https://github.com/marionettejs/backbone.wreqr/\n' +
-        ' */\n\n\n'
+        '\n'
     },
 
     clean: {
@@ -36,13 +26,9 @@ module.exports = function(grunt) {
     },
 
     preprocess: {
-      core: {
-        src: 'src/build/core.js',
-        dest: 'tmp/core.js'
-      },
-      bundle: {
-        src: 'src/build/bundled.js',
-        dest: 'tmp/backbone.marionette.js'
+      build: {
+        src: 'src/build/build.js',
+        dest: 'tmp/build.js'
       }
     },
 
@@ -52,53 +38,31 @@ module.exports = function(grunt) {
           version: '<%= pkg.version %>'
         }
       },
-      core: {
-        src: '<%= preprocess.core.dest %>',
-        dest: '<%= preprocess.core.dest %>'
-      },
-      bundle: {
-        src: '<%= preprocess.bundle.dest %>',
-        dest: '<%= preprocess.bundle.dest %>'
+      build: {
+        src: '<%= preprocess.build.dest %>',
+        dest: '<%= preprocess.build.dest %>'
       }
     },
 
     concat: {
       options: {
-        banner: '<%= meta.core_banner %>'
+        banner: '<%= meta.banner %>'
       },
-      core: {
-        src: '<%= preprocess.core.dest %>',
-        dest: 'lib/core/backbone.marionette.js'
-      },
-      bundle: {
-        options: {
-          banner: '<%= meta.banner %>'
-        },
-        src: '<%= preprocess.bundle.dest %>',
+      build: {
+        src: '<%= preprocess.build.dest %>',
         dest: 'lib/backbone.marionette.js'
       }
     },
 
     uglify : {
-      core: {
-        src : '<%= concat.core.dest %>',
-        dest : 'lib/core/backbone.marionette.min.js',
-        options : {
-          banner: '<%= meta.core_bundle %>',
-          sourceMap : 'lib/core/backbone.marionette.map',
-          sourceMappingURL : '<%= uglify.bundle.options.sourceMappingURL %>',
-          sourceMapPrefix : 1
-        }
-      },
-
-      bundle: {
-        src : '<%= concat.bundle.dest %>',
+      build: {
+        src : '<%= concat.build.dest %>',
         dest : 'lib/backbone.marionette.min.js',
         options : {
           banner: '<%= meta.banner %>',
           sourceMap : 'lib/backbone.marionette.map',
           sourceMappingURL : 'backbone.marionette.map',
-          sourceMapPrefix : 2
+          sourceMapPrefix : 1
         }
       }
     },
@@ -240,39 +204,10 @@ module.exports = function(grunt) {
           editorconfig: '.editorconfig'
         }
       }
-    },
-
-    unwrap: {
-      babysitter: {
-        src: './node_modules/backbone.babysitter/lib/backbone.babysitter.js',
-        dest: './tmp/backbone.babysitter.bare.js'
-      },
-      wreqr: {
-        src: './node_modules/backbone.wreqr/lib/backbone.wreqr.js',
-        dest: './tmp/backbone.wreqr.bare.js'
-      }
     }
   });
 
   grunt.loadTasks('tasks');
-
-  grunt.registerMultiTask('unwrap', 'Unwrap UMD', function () {
-    var done = this.async();
-    var timesLeft = 0;
-
-    this.files.forEach(function (file) {
-      file.src.forEach(function (src) {
-        timesLeft++;
-        unwrap(path.resolve(__dirname, src), function (err, content) {
-          if (err) return grunt.log.error(err);
-          grunt.file.write(path.resolve(__dirname, file.dest), content);
-          grunt.log.ok(file.dest + ' created.');
-          timesLeft--;
-          if (timesLeft <= 0) done();
-        });
-      });
-    });
-  });
 
   var defaultTestsSrc = grunt.config('mochaTest.tests.src');
   var defaultJshintSrc = grunt.config('jshint.marionette.src');
@@ -298,11 +233,11 @@ module.exports = function(grunt) {
 
   grunt.registerTask('test', 'Run the unit tests.', ['lint', 'api', 'mochaTest']);
 
-  grunt.registerTask('coverage', ['unwrap', 'preprocess:bundle', 'template:bundle', 'env:coverage', 'instrument', 'mochaTest', 'storeCoverage', 'makeReport', 'coveralls']);
+  grunt.registerTask('coverage', ['preprocess', 'template', 'env:coverage', 'instrument', 'mochaTest', 'storeCoverage', 'makeReport', 'coveralls']);
 
   grunt.registerTask('dev', 'Auto-lints while writing code.', ['test', 'watch:marionette']);
 
   grunt.registerTask('api', 'test all yaml files', ['yaml-validate']);
 
-  grunt.registerTask('build', 'Build all three versions of the library.', ['clean:lib', 'lint', 'mochaTest', 'unwrap', 'preprocess', 'template', 'concat', 'uglify']);
+  grunt.registerTask('build', 'Builds the library.', ['clean:lib', 'lint', 'mochaTest', 'preprocess', 'template', 'concat', 'uglify']);
 };

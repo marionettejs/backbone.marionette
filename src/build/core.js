@@ -40,7 +40,6 @@
 
   // @include ../error.js
   // @include ../object.js
-  // @include ../controller.js
   // @include ../region.js
   // @include ../region-manager.js
 

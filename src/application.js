@@ -8,16 +8,6 @@ Marionette.Application = Marionette.Object.extend({
     Marionette.Object.call(this, options);
   },
 
-  // Command execution, facilitated by Backbone.Wreqr.Commands
-  execute: function() {
-    this.commands.execute.apply(this.commands, arguments);
-  },
-
-  // Request/response, facilitated by Backbone.Wreqr.RequestResponse
-  request: function() {
-    return this.reqres.request.apply(this.reqres, arguments);
-  },
-
   // kick off all of the application's processes.
   // initializes all of the regions that have been added
   // to the app, and runs all of the initializer functions

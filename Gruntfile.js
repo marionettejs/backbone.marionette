@@ -26,8 +26,8 @@ module.exports = function(grunt) {
         ' * Includes BabySitter\n' +
         ' * https://github.com/marionettejs/backbone.babysitter/\n' +
         ' *\n' +
-        ' * Includes Wreqr\n' +
-        ' * https://github.com/marionettejs/backbone.wreqr/\n' +
+        ' * Includes Radio\n' +
+        ' * https://github.com/marionettejs/backbone.radio/\n' +
         ' */\n\n\n'
     },
 
@@ -247,9 +247,9 @@ module.exports = function(grunt) {
         src: './node_modules/backbone.babysitter/lib/backbone.babysitter.js',
         dest: './tmp/backbone.babysitter.bare.js'
       },
-      wreqr: {
-        src: './node_modules/backbone.wreqr/lib/backbone.wreqr.js',
-        dest: './tmp/backbone.wreqr.bare.js'
+      radio: {
+        src: './node_modules/backbone.radio/build/backbone.radio.js',
+        dest: './tmp/backbone.radio.bare.js'
       }
     }
   });

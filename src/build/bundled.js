@@ -19,6 +19,9 @@
   /* istanbul ignore next */
   // @include ../../tmp/backbone.babysitter.bare.js
 
+  /* istanbul ignore next */
+  // @include ../../tmp/backbone.radio.bare.js
+
   var previousMarionette = root.Marionette;
   var previousMn = root.Mn;
 
@@ -32,8 +35,7 @@
     return this;
   };
 
-  Backbone.Marionette = Marionette;
-
+  // @include ../features.js
   // @include ../helpers.js
   // @include ../trigger-method.js
   // @include ../dom-refresh.js
@@ -42,7 +44,6 @@
 
   // @include ../error.js
   // @include ../object.js
-  // @include ../controller.js
   // @include ../region.js
   // @include ../region-manager.js
 

@@ -30,7 +30,7 @@
   },
   "dependencies": {
     "marionettejs/backbone.babysitter": "*",
-    "marionettejs/backbone.wreqr": "*",
+    "marionettejs/backbone.radio": "*",
     "jashkenas/backbone": "*",
     "jashkenas/underscore": "*"
   },

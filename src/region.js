@@ -110,10 +110,12 @@ Marionette.Region = Marionette.Object.extend({
       // as it's a potentially-slow method
       var displayedViews = [];
 
-      var triggerBeforeAttach = showOptions.triggerBeforeAttach || this.triggerBeforeAttach;
-      var triggerAttach = showOptions.triggerAttach || this.triggerAttach;
+      var attachOptions = _.extend({
+        triggerBeforeAttach: this.triggerBeforeAttach,
+        triggerAttach: this.triggerAttach
+      }, showOptions);
 
-      if (attachedRegion && triggerBeforeAttach) {
+      if (attachedRegion && attachOptions.triggerBeforeAttach) {
         displayedViews = this._displayedViews(view);
         this._triggerAttach(displayedViews, 'before:');
       }
@@ -121,7 +123,7 @@ Marionette.Region = Marionette.Object.extend({
       this.attachHtml(view);
       this.currentView = view;
 
-      if (attachedRegion && triggerAttach) {
+      if (attachedRegion && attachOptions.triggerAttach) {
         displayedViews = this._displayedViews(view);
         this._triggerAttach(displayedViews);
       }

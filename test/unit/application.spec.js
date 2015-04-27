@@ -30,5 +30,13 @@ describe('marionette application', function() {
     it('should pass the startup option to the callback', function() {
       expect(this.startStub).to.have.been.calledOnce.and.calledWith(this.fooOptions);
     });
+
+    it('should have a cidPrefix', function() {
+      expect(this.app.cidPrefix).to.equal('mna');
+    });
+
+    it('should have a cid', function() {
+      expect(this.app.cid).to.exist;
+    });
   });
 });

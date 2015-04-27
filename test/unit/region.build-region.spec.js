@@ -19,7 +19,9 @@ describe('Region', function() {
       });
 
       it('returns the region', function() {
-        expect(this.region).to.deep.equal(this.fooRegion);
+        this.checkProperties(function(props) {
+          expect(props(this.region)).to.deep.equal(props(this.fooRegion));
+        });
       });
 
       it('uses the default region class', function() {
@@ -38,7 +40,9 @@ describe('Region', function() {
         });
 
         it('returns the region', function() {
-          expect(this.region).to.deep.equal(this.barRegion);
+          this.checkProperties(function(props) {
+            expect(props(this.region)).to.deep.equal(props(this.barRegion));
+          });
         });
 
         it('uses the passed in region class', function() {
@@ -73,7 +77,9 @@ describe('Region', function() {
         });
 
         it('returns the region', function() {
-          expect(this.region).to.deep.equal(this.fooRegion);
+          this.checkProperties(function(props) {
+            expect(props(this.region)).to.deep.equal(props(this.fooRegion));
+          });
         });
 
         it('uses the default region class', function() {
@@ -93,7 +99,9 @@ describe('Region', function() {
           });
 
           it('returns the region', function() {
-            expect(this.region).to.deep.equal(this.fooRegion);
+            this.checkProperties(function(props) {
+              expect(props(this.region)).to.deep.equal(props(this.fooRegion));
+            });
           });
 
           it('uses the default region class', function() {
@@ -114,7 +122,9 @@ describe('Region', function() {
           });
 
           it('returns the region', function() {
-            expect(this.region).to.deep.equal(this.bazRegion);
+            this.checkProperties(function(props) {
+              expect(props(this.region)).to.deep.equal(props(this.bazRegion));
+            });
           });
 
           it('uses the default region class', function() {
@@ -148,7 +158,9 @@ describe('Region', function() {
           });
 
           it('returns the region', function() {
-            expect(this.region).to.deep.equal(this.bazRegion);
+            this.checkProperties(function(props) {
+              expect(props(this.region)).to.deep.equal(props(this.bazRegion));
+            });
           });
 
           it('uses the default region class', function() {
@@ -199,9 +211,11 @@ describe('Region', function() {
           });
 
           it('returns the regions', function() {
-            expect(this.region1).to.deep.equal(this.baz1Region);
-            expect(this.region2).to.deep.equal(this.baz2Region);
-            expect(this.region3).to.deep.equal(this.baz3Region);
+            this.checkProperties(function(props) {
+              expect(props(this.region1)).to.deep.equal(props(this.baz1Region));
+              expect(props(this.region2)).to.deep.equal(props(this.baz2Region));
+              expect(props(this.region3)).to.deep.equal(props(this.baz3Region));
+            });
           });
 
           it('uses the region class', function() {
@@ -225,7 +239,9 @@ describe('Region', function() {
             });
 
             it('returns the region', function() {
-              expect(this.region).to.deep.equal(this.barRegion);
+              this.checkProperties(function(props) {
+                expect(props(this.region)).to.deep.equal(props(this.barRegion));
+              });
             });
 
             it('uses the region class', function() {

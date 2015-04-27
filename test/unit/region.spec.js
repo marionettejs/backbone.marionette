@@ -174,6 +174,14 @@ describe('region', function() {
       this.myRegion.show(this.view, this.showOptions);
     });
 
+    it('should have a cidPrefix', function() {
+      expect(this.myRegion.cidPrefix).to.equal('mnr');
+    });
+
+    it('should have a cid', function() {
+      expect(this.myRegion.cid).to.exist;
+    });
+
     it('should render the view', function() {
       expect(this.viewRenderSpy).to.have.been.called;
     });

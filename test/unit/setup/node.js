@@ -23,8 +23,8 @@ if (!global.document || !global.window) {
   global.window = document.createWindow();
   global.navigator = global.window.navigator;
 
-  global.window.Node.prototype.contains = function (node) {
-    return this.compareDocumentPosition(node) & 16;
+  global.window.Node.prototype.contains = function(node) {
+    return this.compareDocumentPosition(node) && 16;
   };
 }
 

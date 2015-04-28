@@ -22,7 +22,7 @@ Marionette.View = Marionette.AbstractView.extend({
     this._firstRender = true;
     this._initializeRegions(options);
 
-    this.regions = {};
+    this.regions = this.regions || {};
 
     Marionette.AbstractView.apply(this, arguments);
   },

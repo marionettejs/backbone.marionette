@@ -125,6 +125,26 @@ describe('onAttach', function() {
     });
   });
 
+  describe('when showing a region that is attached to the document & triggerBeforeAttach defaults to true, but the option is passed as false', function() {
+    beforeEach(function() {
+      this.view = new this.BasicView();
+      this.view.onAttach = this.sinon.stub();
+      this.view.onBeforeAttach = this.sinon.stub();
+
+      this.region.show(this.view, {triggerBeforeAttach: false});
+    });
+
+    it('should not call onBeforeAttach on the view', function() {
+      expect(this.view.onBeforeAttach).to.not.have.been.called;
+    });
+
+    it('should call onAttach on the view', function() {
+      expect(this.view.onAttach)
+        .to.have.been.calledOnce
+        .and.to.have.been.calledWithExactly(this.view, this.region);
+    });
+  });
+
   describe('when showing a region that is attached to the document & has triggerAttach set to false', function() {
     beforeEach(function() {
       this.view = new this.BasicView();
@@ -166,6 +186,26 @@ describe('onAttach', function() {
       expect(this.view.onAttach)
         .to.have.been.calledOnce
         .and.to.have.been.calledWithExactly(this.view, this.region);
+    });
+  });
+
+  describe('when showing a region that is attached to the document & triggerAttach defaults to true, but the option is passed as false', function() {
+    beforeEach(function() {
+      this.view = new this.BasicView();
+      this.view.onAttach = this.sinon.stub();
+      this.view.onBeforeAttach = this.sinon.stub();
+
+      this.region.show(this.view, {triggerAttach: false});
+    });
+
+    it('should call onBeforeAttach on the view', function() {
+      expect(this.view.onBeforeAttach)
+        .to.have.been.calledOnce
+        .and.to.have.been.calledWithExactly(this.view, this.region);
+    });
+
+    it('should not call onAttach on the view', function() {
+      expect(this.view.onAttach).to.not.have.been.called;
     });
   });
 

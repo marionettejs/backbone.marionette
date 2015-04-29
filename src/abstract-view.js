@@ -19,7 +19,8 @@ Marionette.AbstractView = Backbone.View.extend({
     // at some point however this may be removed
     this.options = _.extend({}, _.result(this, 'options'), options);
 
-    this._behaviors = Marionette.Behaviors(this);
+    var behaviors = Marionette._getValue(this.getOption('behaviors'), this);
+    this._behaviors = Marionette.Behaviors(this, behaviors);
 
     Backbone.View.call(this, this.options);
 

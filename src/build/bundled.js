@@ -22,6 +22,9 @@
   /* istanbul ignore next */
   // @include ../../tmp/backbone.radio.bare.js
 
+  /* istanbul ignore next */
+  // @include ../../tmp/backbone.metal.bare.js
+
   var previousMarionette = root.Marionette;
   var previousMn = root.Mn;
 
@@ -43,6 +46,8 @@
   // @include ../radio-helpers.js
 
   // @include ../error.js
+  // @include ../metal.js
+
   // @include ../object.js
   // @include ../region.js
   // @include ../region-manager.js

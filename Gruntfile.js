@@ -28,6 +28,8 @@ module.exports = function(grunt) {
         ' *\n' +
         ' * Includes Radio\n' +
         ' * https://github.com/marionettejs/backbone.radio/\n' +
+        ' * Includes Metal\n' +
+        ' * https://github.com/marionettejs/backbone-metal/\n' +
         ' */\n\n\n'
     },
 
@@ -250,6 +252,10 @@ module.exports = function(grunt) {
       radio: {
         src: './node_modules/backbone.radio/build/backbone.radio.js',
         dest: './tmp/backbone.radio.bare.js'
+      },
+      metal: {
+        src: './node_modules/backbone-metal/dist/backbone-metal.js',
+        dest: './tmp/backbone.metal.bare.js'
       }
     }
   });

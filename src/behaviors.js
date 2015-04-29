@@ -20,7 +20,8 @@ Marionette.Behaviors = (function(Marionette, _) {
 
     // Behaviors defined on a view can be a flat object literal
     // or it can be a function that returns an object.
-    behaviors = Behaviors.parseBehaviors(view, behaviors || _.result(view, 'behaviors'));
+    behaviors = Behaviors.parseBehaviors(view, behaviors ||
+        _.result(view.options, 'behaviors') || _.result(view, 'behaviors'));
 
     // Wraps several of the view's methods
     // calling the methods first on each behavior

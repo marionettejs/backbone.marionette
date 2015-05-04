@@ -529,7 +529,7 @@ view instance (see [above](#callback-methods)).
 
 
 Triggers just prior to the view being rendered. Also triggered as
-"collection:before:render" / `onCollectionBeforeRender`.
+"before:render:collection" / `onBeforeRenderCollection`.
 
 ```js
 var MyView = Marionette.CollectionView.extend({...});

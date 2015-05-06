@@ -1,4 +1,4 @@
-<h1 align="center">Backbone.Marionette</h1>
+<h1 align="center">Marionette.js</h1>
 <p align="center">
   <img title="backbone marionette" src='https://cdn.mediacru.sh/6sNqngKFuqft.svg' />
 </p>

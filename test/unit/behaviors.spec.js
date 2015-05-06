@@ -164,6 +164,34 @@ describe('Behaviors', function() {
     });
   });
 
+  describe('behavior initialize from constructor args', function() {
+    beforeEach(function() {
+      this.behaviorOptions = {foo: 'bar'};
+      this.fooStub = this.sinon.stub();
+      this.barStub = this.sinon.stub();
+
+      this.behaviors = {
+        foo: Marionette.Behavior.extend({initialize: this.fooStub}),
+        bar: Marionette.Behavior.extend({initialize: this.barStub})
+      };
+      Marionette.Behaviors.behaviorsLookup = this.behaviors;
+
+      this.View = Marionette.ItemView.extend({
+        behaviors: {foo: this.behaviorOptions}
+      });
+      this.view = new this.View({behaviors: {bar: {}}});
+    });
+
+    it('should call initialize when a behavior is created', function() {
+      expect(this.barStub).to.have.been.calledOnce;
+      expect(this.fooStub).not.to.have.been.called;
+    });
+
+    it('should set _behaviors', function() {
+      expect(this.view._behaviors.length).to.be.equal(1);
+    });
+  });
+
   describe('behavior events', function() {
     beforeEach(function() {
       this.fooClickStub  = this.sinon.stub();

@@ -132,8 +132,6 @@ Marionette.Region = Marionette.Object.extend({
 
       this.triggerMethod('show', view, this, options);
       Marionette.triggerMethodOn(view, 'show', view, this, options);
-
-      return this;
     }
 
     return this;

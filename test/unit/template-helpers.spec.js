@@ -30,7 +30,7 @@ describe('template helper methods', function() {
   describe('item view', function() {
     describe('when rendering with no model or collection and a templateHelpers is found', function() {
       beforeEach(function() {
-        this.View = Marionette.ItemView.extend({
+        this.View = Marionette.View.extend({
           templateHelpers: this.templateHelpers,
           template: this.templateStub
         });
@@ -46,7 +46,7 @@ describe('template helper methods', function() {
 
     describe('when rendering with a model, and a templateHelpers is found', function() {
       beforeEach(function() {
-        this.View = Marionette.ItemView.extend({
+        this.View = Marionette.View.extend({
           templateHelpers: this.templateHelpers,
           template: this.templateStub
         });
@@ -69,7 +69,7 @@ describe('template helper methods', function() {
 
     describe('when rendering and a templateHelpers is found as a function', function() {
       beforeEach(function() {
-        this.View = Marionette.ItemView.extend({
+        this.View = Marionette.View.extend({
           templateHelpers: this.templateHelpersFn,
           template: this.templateStub
         });
@@ -96,7 +96,7 @@ describe('template helper methods', function() {
 
     describe('when templateHelpers is provided to constructor options', function() {
       beforeEach(function() {
-        this.View = Marionette.ItemView.extend({
+        this.View = Marionette.View.extend({
           template: this.templateStub
         });
 

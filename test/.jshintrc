@@ -17,6 +17,7 @@
     "it"                 : true,
     "xit"                : true,
     "expect"             : true,
+    "before"             : true,
     "beforeEach"         : true,
     "afterEach"          : true,
     "spyOn"              : true,

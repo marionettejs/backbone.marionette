@@ -30,9 +30,9 @@ There are 2 different syntaxes for attaching Behaviors to a View.  The first is 
 In this sample, which uses the object syntax, your code will expect the following Behaviors to be present in `window.Behaviors.DestroyWarn` and `window.Behaviors.ToolTip`
 
 ```js
-var MyView = Marionette.ItemView.extend({
+var MyView = Marionette.View.extend({
 	behaviors: {
-    ToolTip: {},
+        ToolTip: {},
 		DestroyWarn: {
 			message: "you are destroying all your data is now gone!"
 		}
@@ -46,10 +46,10 @@ If you use a module loader like [requirejs](http://requirejs.org/) or [browserif
 var Tooltip = require('behaviors/tooltip');
 var DestroyWarn = require('behaviors/destroy-warn');
 
-var MyView = Marionette.ItemView.extend({
-  behaviors: [Tooltip, {
-      behaviorClass: DestroyWarn,
-      message: "you are destroying all your data is now gone!"
+var MyView = Marionette.View.extend({
+    behaviors: [Tooltip, {
+        behaviorClass: DestroyWarn,
+        message: "you are destroying all your data is now gone!"
     }]
 });
 ```
@@ -60,13 +60,13 @@ This method has a default implementation that is simple to override. It is respo
 
 ```js
 getBehaviorClass: function(options, key) {
-      if (options.behaviorClass) {
+    if (options.behaviorClass) {
         return options.behaviorClass;
         //treat functions as a Behavior constructor
-      } else if(_.isFunction(options)) {
+    } else if(_.isFunction(options)) {
         return options;
-      }
-      // behaviorsLookup can be either a flat object or a method
-      return Marionette._getValue(Behaviors.behaviorsLookup, this, [options, key])[key];
-    },
+    }
+    // behaviorsLookup can be either a flat object or a method
+    return Marionette._getValue(Behaviors.behaviorsLookup, this, [options, key])[key];
+}
 ```

@@ -19,7 +19,7 @@ describe('view entity events', function() {
       this.barOneStub = this.sinon.stub();
       this.barTwoStub = this.sinon.stub();
 
-      this.View = Marionette.View.extend({
+      this.View = Marionette.AbstractView.extend({
         modelEvents      : {'foo': 'fooOne fooTwo'},
         collectionEvents : {'bar': 'barOne barTwo'},
         fooOne: this.fooOneStub,
@@ -49,7 +49,7 @@ describe('view entity events', function() {
 
   describe('when a view has function-based model and collection event configuration', function() {
     beforeEach(function() {
-      this.View = Marionette.View.extend({
+      this.View = Marionette.AbstractView.extend({
         modelEvents      : {'foo': this.fooStub},
         collectionEvents : {'bar': this.barStub}
       });
@@ -75,7 +75,7 @@ describe('view entity events', function() {
     beforeEach(function() {
       var suite = this;
 
-      this.View = Marionette.View.extend({
+      this.View = Marionette.AbstractView.extend({
         modelEvents: {foo: 'doesNotExist'},
         model: this.model
       });
@@ -93,7 +93,7 @@ describe('view entity events', function() {
 
   describe('when configuring entity events with a function', function() {
     beforeEach(function() {
-      this.View = Marionette.View.extend({
+      this.View = Marionette.AbstractView.extend({
         modelEvents      : this.modelEventsStub,
         collectionEvents : this.collectionEventsStub
       });
@@ -115,9 +115,9 @@ describe('view entity events', function() {
     });
   });
 
-  describe('when undelegating events on a view', function() {
+  describe('when undelegating entity events on a view', function() {
     beforeEach(function() {
-      this.View = Marionette.View.extend({
+      this.View = Marionette.AbstractView.extend({
         modelEvents      : {'foo': 'foo'},
         collectionEvents : {'bar': 'bar'},
         foo: this.fooStub,
@@ -129,8 +129,8 @@ describe('view entity events', function() {
         collection : this.collection
       });
 
-      this.sinon.spy(this.view, 'undelegateEvents');
-      this.view.undelegateEvents();
+      this.sinon.spy(this.view, 'undelegateEntityEvents');
+      this.view.undelegateEntityEvents();
 
       this.model.trigger('foo');
       this.collection.trigger('bar');
@@ -145,13 +145,13 @@ describe('view entity events', function() {
     });
 
     it('should return the view', function() {
-      expect(this.view.undelegateEvents).to.have.returned(this.view);
+      expect(this.view.undelegateEntityEvents).to.have.returned(this.view);
     });
   });
 
   describe('when undelegating events on a view, delegating them again, and then triggering a model event', function() {
     beforeEach(function() {
-      this.View = Marionette.View.extend({
+      this.View = Marionette.AbstractView.extend({
         modelEvents      : {'foo': 'foo'},
         collectionEvents : {'bar': 'bar'},
         foo: this.fooStub,
@@ -163,9 +163,9 @@ describe('view entity events', function() {
         collection : this.collection
       });
 
-      this.view.undelegateEvents();
-      this.sinon.spy(this.view, 'delegateEvents');
-      this.view.delegateEvents();
+      this.view.undelegateEntityEvents();
+      this.sinon.spy(this.view, 'delegateEntityEvents');
+      this.view.delegateEntityEvents();
     });
 
     it('should fire the model event once', function() {
@@ -178,14 +178,14 @@ describe('view entity events', function() {
       expect(this.barStub).to.have.been.calledOnce;
     });
 
-    it('should return the view from delegateEvents', function() {
-      expect(this.view.delegateEvents).to.have.returned(this.view);
+    it('should return the view from delegateEntityEvents', function() {
+      expect(this.view.delegateEntityEvents).to.have.returned(this.view);
     });
   });
 
-  describe('when LayoutView bound to modelEvent replaces region with new view', function() {
+  describe('when View bound to modelEvent replaces region with new view', function() {
     beforeEach(function() {
-      this.LayoutView = Marionette.LayoutView.extend({
+      this.Layout = Marionette.View.extend({
         template: _.template('<div id="child"></div>'),
         regions: {child: '#child'},
 
@@ -193,15 +193,15 @@ describe('view entity events', function() {
         foo: this.fooStub
       });
 
-      this.ItemView = Marionette.ItemView.extend({
+      this.View = Marionette.View.extend({
         template: _.template('bar'),
         modelEvents: {'baz': 'bar'},
         bar: this.barStub
       });
 
-      this.layoutView = new this.LayoutView({model: this.model});
-      this.itemViewOne = new this.ItemView({model: this.model});
-      this.itemViewTwo = new this.ItemView({model: this.model});
+      this.layoutView = new this.Layout({model: this.model});
+      this.itemViewOne = new this.View({model: this.model});
+      this.itemViewTwo = new this.View({model: this.model});
 
       this.layoutView.render();
       this.layoutView.child.show(this.itemViewOne);

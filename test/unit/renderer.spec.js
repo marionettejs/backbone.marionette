@@ -52,7 +52,7 @@ describe('renderer', function() {
     beforeEach(function() {
       this.renderStub = this.sinon.stub(Marionette.Renderer, 'render');
 
-      this.view = new Marionette.ItemView({
+      this.view = new Marionette.View({
         template: 'foobar'
       });
 

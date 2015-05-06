@@ -26,8 +26,10 @@ module.exports = function(grunt) {
         ' * Includes BabySitter\n' +
         ' * https://github.com/marionettejs/backbone.babysitter/\n' +
         ' *\n' +
-        ' * Includes Wreqr\n' +
-        ' * https://github.com/marionettejs/backbone.wreqr/\n' +
+        ' * Includes Radio\n' +
+        ' * https://github.com/marionettejs/backbone.radio/\n' +
+        ' * Includes Metal\n' +
+        ' * https://github.com/marionettejs/backbone-metal/\n' +
         ' */\n\n\n'
     },
 
@@ -186,7 +188,7 @@ module.exports = function(grunt) {
         },
 
         files: {
-          src: ['test/unit/**.js']
+          src: ['test/unit/**/*.js']
         }
       }
     },
@@ -204,7 +206,7 @@ module.exports = function(grunt) {
 
       specs: {
         files: {
-          src: ['test/unit/**.js']
+          src: ['test/unit/**/*.js']
         },
         options: {
           maximumLineLength: 200
@@ -247,9 +249,13 @@ module.exports = function(grunt) {
         src: './node_modules/backbone.babysitter/lib/backbone.babysitter.js',
         dest: './tmp/backbone.babysitter.bare.js'
       },
-      wreqr: {
-        src: './node_modules/backbone.wreqr/lib/backbone.wreqr.js',
-        dest: './tmp/backbone.wreqr.bare.js'
+      radio: {
+        src: './node_modules/backbone.radio/build/backbone.radio.js',
+        dest: './tmp/backbone.radio.bare.js'
+      },
+      metal: {
+        src: './node_modules/backbone-metal/dist/backbone-metal.js',
+        dest: './tmp/backbone.metal.bare.js'
       }
     }
   });

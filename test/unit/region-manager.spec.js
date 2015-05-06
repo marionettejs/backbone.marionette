@@ -27,6 +27,14 @@ describe('regionManager', function() {
       .been.calledWith(this.regions)
       .and.to.have.been.calledOn(this.regionManager);
     });
+
+    it('should have a cidPrefix', function() {
+      expect(this.regionManager.cidPrefix).to.equal('mnrm');
+    });
+
+    it('should have a cid', function() {
+      expect(this.regionManager.cid).to.exist;
+    });
   });
 
   describe('.addRegion', function() {
@@ -47,15 +55,27 @@ describe('regionManager', function() {
       });
 
       it('should store the region by name', function() {
-        expect(this.regionManager.get('foo')).to.equal(this.region);
+        this.checkProperties(function(props) {
+          expect(props(this.regionManager.get('foo'))).to.deep.equal(props(this.region));
+        });
       });
 
       it('should trigger a "before:add:region" event/method', function() {
-        expect(this.beforeAddHandler).to.have.been.calledWith('foo', this.region);
+        expect(this.beforeAddHandler).to.have.been.calledWith('foo');
+
+        this.checkProperties(function(props) {
+          var args = _.object(this.beforeAddHandler.args);
+          expect(props(args.foo)).to.deep.equal(props(this.region));
+        });
       });
 
       it('should trigger a "add:region" event/method', function() {
-        expect(this.addHandler).to.have.been.calledWith('foo', this.region);
+        expect(this.addHandler).to.have.been.calledWith('foo');
+
+        this.checkProperties(function(props) {
+          var args = _.object(this.addHandler.args);
+          expect(props(args.foo)).to.deep.equal(props(this.region));
+        });
       });
 
       it('should increment the length', function() {
@@ -93,11 +113,15 @@ describe('regionManager', function() {
       });
 
       it('should use the supplied region', function() {
-        expect(this.builtRegion).to.equal(this.region);
+        this.checkProperties(function(props) {
+          expect(props(this.builtRegion)).to.deep.equal(props(this.region));
+        });
       });
 
       it('should store the region by name', function() {
-        expect(this.regionManager.get('foo')).to.equal(this.region);
+        this.checkProperties(function(props) {
+          expect(props(this.regionManager.get('foo'))).to.deep.equal(props(this.region));
+        });
       });
 
       it('should trigger a "before:add:region" event/method', function() {
@@ -184,8 +208,10 @@ describe('regionManager', function() {
       });
 
       it('should return an object literal containing all named region instances', function() {
-        expect(this.regions.foo).to.equal(this.regionManager.get('foo'));
-        expect(this.regions.baz).to.equal(this.regionManager.get('baz'));
+        this.checkProperties(function(props) {
+          expect(props(this.regions.foo)).to.deep.equal(props(this.regionManager.get('foo')));
+          expect(props(this.regions.baz)).to.deep.equal(props(this.regionManager.get('baz')));
+        });
       });
     });
 
@@ -200,11 +226,15 @@ describe('regionManager', function() {
       });
 
       it('should add all specified regions', function() {
-        expect(this.regionManager.get('foo')).to.equal(this.fooRegion);
+        this.checkProperties(function(props) {
+          expect(props(this.regionManager.get('foo'))).to.deep.equal(props(this.fooRegion));
+        });
       });
 
       it('should return an object literal containing all named region instances', function() {
-        expect(this.regions.foo).to.equal(this.fooRegion);
+        this.checkProperties(function(props) {
+          expect(props(this.regions.foo)).to.deep.equal(props(this.fooRegion));
+        });
       });
     });
 
@@ -271,15 +301,19 @@ describe('regionManager', function() {
         });
 
         it('returns all the created regions on an object literal', function() {
-          expect(this.regions.fooRegion).to.deep.equal(this.fooRegion);
-          expect(this.regions.barRegion).to.deep.equal(this.barRegion);
-          expect(this.regions.bazRegion).to.deep.equal(this.bazRegion);
+          this.checkProperties(function(props) {
+            expect(props(this.regions.fooRegion)).to.deep.equal(props(this.fooRegion));
+            expect(props(this.regions.barRegion)).to.deep.equal(props(this.barRegion));
+            expect(props(this.regions.bazRegion)).to.deep.equal(props(this.bazRegion));
+          });
         });
 
         it('adds all the specified regions', function() {
-          expect(this.regionManager.get('fooRegion')).to.deep.equal(this.fooRegion);
-          expect(this.regionManager.get('barRegion')).to.deep.equal(this.barRegion);
-          expect(this.regionManager.get('bazRegion')).to.deep.equal(this.bazRegion);
+          this.checkProperties(function(props) {
+            expect(props(this.regionManager.get('fooRegion'))).to.deep.equal(props(this.fooRegion));
+            expect(props(this.regionManager.get('barRegion'))).to.deep.equal(props(this.barRegion));
+            expect(props(this.regionManager.get('bazRegion'))).to.deep.equal(props(this.bazRegion));
+          });
         });
 
         it('uses the custom `regionClass`', function() {
@@ -318,13 +352,17 @@ describe('regionManager', function() {
         });
 
         it('returns all the created regions on an object literal', function() {
-          expect(this.regionManager.get('fooRegion')).to.deep.equal(this.fooRegion);
-          expect(this.regionManager.get('barRegion')).to.deep.equal(this.barRegion);
+          this.checkProperties(function(props) {
+            expect(props(this.regionManager.get('fooRegion'))).to.deep.equal(props(this.fooRegion));
+            expect(props(this.regionManager.get('barRegion'))).to.deep.equal(props(this.barRegion));
+          });
         });
 
         it('adds all the specified regions', function() {
-          expect(this.regionManager.get('fooRegion')).to.deep.equal(this.fooRegion);
-          expect(this.regionManager.get('barRegion')).to.deep.equal(this.barRegion);
+          this.checkProperties(function(props) {
+            expect(props(this.regionManager.get('fooRegion'))).to.deep.equal(props(this.fooRegion));
+            expect(props(this.regionManager.get('barRegion'))).to.deep.equal(props(this.barRegion));
+          });
         });
 
         it('overrides the regionClass via defaults', function() {
@@ -522,10 +560,6 @@ describe('regionManager', function() {
 
     it('should trigger a "destroy" event/method', function() {
       expect(this.destroyManagerHandler).to.have.been.called;
-    });
-
-    it('should return the region manager', function() {
-      expect(this.regionManager.destroy).to.have.returned(this.regionManager);
     });
   });
 

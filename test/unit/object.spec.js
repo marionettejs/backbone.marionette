@@ -43,6 +43,14 @@ describe('marionette object', function() {
     it('should maintain a reference to the options', function() {
       expect(this.object.options).to.deep.equal(this.options);
     });
+
+    it('should have a cidPrefix', function() {
+      expect(this.object.cidPrefix).to.equal('mno');
+    });
+
+    it('should have a cid', function() {
+      expect(this.object.cid).to.exist;
+    });
   });
 
   describe('when destroying a object', function() {

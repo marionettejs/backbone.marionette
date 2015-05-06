@@ -29,7 +29,7 @@ describe('view ui event trigger configuration', function() {
 
     describe('as objects', function() {
       beforeEach(function() {
-        this.View = Marionette.ItemView.extend({
+        this.View = Marionette.View.extend({
           template : this.templateFn,
           ui       : this.uiHash,
           triggers : this.triggersHash,
@@ -62,7 +62,7 @@ describe('view ui event trigger configuration', function() {
 
     describe('as functions', function() {
       beforeEach(function() {
-        this.View = Marionette.ItemView.extend({
+        this.View = Marionette.View.extend({
           template : this.templateFn,
           ui       : this.sinon.stub().returns(this.uiHash),
           triggers : this.sinon.stub().returns(this.triggersHash),

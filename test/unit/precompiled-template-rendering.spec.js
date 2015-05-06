@@ -4,7 +4,7 @@ describe('pre-compiled template rendering', function() {
   describe('when rendering views with pre-compiled template functions', function() {
     beforeEach(function() {
       this.template = 'foobar';
-      this.View = Backbone.Marionette.ItemView.extend({
+      this.View = Backbone.Marionette.View.extend({
         template: _.template(this.template)
       });
       this.view = new this.View();

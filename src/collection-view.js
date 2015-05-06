@@ -1,11 +1,11 @@
-/* jshint maxstatements: 14 */
+/* jshint maxstatements: 15 */
 
 // Collection View
 // ---------------
 
 // A view that iterates over a Backbone.Collection
 // and renders an individual child view for each model.
-Marionette.CollectionView = Marionette.View.extend({
+Marionette.CollectionView = Marionette.AbstractView.extend({
 
   // used as the prefix for child view events
   // that are forwarded through the collectionview
@@ -22,14 +22,17 @@ Marionette.CollectionView = Marionette.View.extend({
   // option to pass `{comparator: compFunction()}` to allow the `CollectionView`
   // to use a custom sort order for the collection.
   constructor: function(options) {
-
     this.once('render', this._initialEvents);
     this._initChildViewStorage();
 
-    Marionette.View.apply(this, arguments);
+    Marionette.AbstractView.apply(this, arguments);
 
-    this.on('show', this._onShowCalled);
-
+    this.on({
+      'before:show':   this._onBeforeShowCalled,
+      'show':          this._onShowCalled,
+      'before:attach': this._onBeforeAttachCalled,
+      'attach':        this._onAttachCalled
+    });
     this.initRenderBuffer();
   },
 
@@ -46,33 +49,31 @@ Marionette.CollectionView = Marionette.View.extend({
   },
 
   endBuffering: function() {
+    // Only trigger attach if already shown and attached, otherwise Region#show() handles this.
+    var canTriggerAttach = this._isShown && Marionette.isNodeAttached(this.el);
+    var nestedViews;
+
     this.isBuffering = false;
-    this._triggerBeforeShowBufferedChildren();
 
-    this.attachBuffer(this);
+    if (this._isShown) {
+      Marionette.triggerMethodMany(this._bufferedChildren, this, 'before:show');
+    }
+    if (canTriggerAttach && this._triggerBeforeAttach) {
+      nestedViews = this._getNestedViews();
+      Marionette.triggerMethodMany(nestedViews, this, 'before:attach');
+    }
 
-    this._triggerShowBufferedChildren();
+    this.attachBuffer(this, this._createBuffer());
+
+    if (canTriggerAttach && this._triggerAttach) {
+      nestedViews = this._getNestedViews();
+      Marionette.triggerMethodMany(nestedViews, this, 'attach');
+    }
+    if (this._isShown) {
+      Marionette.triggerMethodMany(this._bufferedChildren, this, 'show');
+    }
+
     this.initRenderBuffer();
-  },
-
-  _triggerBeforeShowBufferedChildren: function() {
-    if (this._isShown) {
-      _.each(this._bufferedChildren, _.partial(this._triggerMethodOnChild, 'before:show'));
-    }
-  },
-
-  _triggerShowBufferedChildren: function() {
-    if (this._isShown) {
-      _.each(this._bufferedChildren, _.partial(this._triggerMethodOnChild, 'show'));
-
-      this.initRenderBuffer();
-    }
-  },
-
-  // Internal method for _.each loops to call `Marionette.triggerMethodOn` on
-  // a child view
-  _triggerMethodOnChild: function(event, childView) {
-    Marionette.triggerMethodOn(childView, event);
   },
 
   // Configured the initial events that the collection view
@@ -92,6 +93,7 @@ Marionette.CollectionView = Marionette.View.extend({
   // Handle a child added to the collection
   _onCollectionAdd: function(child, collection, opts) {
     var index;
+
     if (opts.at !== undefined) {
       index = opts.at;
     } else {
@@ -100,7 +102,7 @@ Marionette.CollectionView = Marionette.View.extend({
 
     if (this._shouldAddChild(child, index)) {
       this.destroyEmptyView();
-      var ChildView = this.getChildView(child);
+      var ChildView = this._getChildView(child);
       this.addChild(child, ChildView, index);
     }
   },
@@ -112,8 +114,29 @@ Marionette.CollectionView = Marionette.View.extend({
     this.checkEmpty();
   },
 
+  _onBeforeShowCalled: function() {
+    // Reset attach event flags at the top of the Region#show() event lifecycle; if the Region's
+    // show() options permit onBeforeAttach/onAttach events, these flags will be set true again.
+    this._triggerBeforeAttach = this._triggerAttach = false;
+    this.children.each(function(childView) {
+      Marionette.triggerMethodOn(childView, 'before:show', childView);
+    });
+  },
+
   _onShowCalled: function() {
-    this.children.each(_.partial(this._triggerMethodOnChild, 'show'));
+    this.children.each(function(childView) {
+      Marionette.triggerMethodOn(childView, 'show', childView);
+    });
+  },
+
+  // If during Region#show() onBeforeAttach was fired, continue firing it for child views
+  _onBeforeAttachCalled: function() {
+    this._triggerBeforeAttach = true;
+  },
+
+  // If during Region#show() onAttach was fired, continue firing it for child views
+  _onAttachCalled: function() {
+    this._triggerAttach = true;
   },
 
   // Render children views. Override this method to
@@ -146,8 +169,10 @@ Marionette.CollectionView = Marionette.View.extend({
       this.render();
     } else {
       // get the DOM nodes in the same order as the models
-      var els = _.map(models, function(model) {
-        return children.findByModel(model).el;
+      var els = _.map(models, function(model, index) {
+        var view = children.findByModel(model);
+        view._index = index;
+        return view.el;
       });
 
       // since append moves elements that are already in the DOM,
@@ -160,13 +185,11 @@ Marionette.CollectionView = Marionette.View.extend({
 
   // Render view after sorting. Override this method to
   // change how the view renders after a `sort` on the collection.
-  // An example of this would be to only `renderChildren` in a `CompositeView`
-  // rather than the full view.
   resortView: function() {
     if (Marionette.getOption(this, 'reorderOnSort')) {
       this.reorder();
     } else {
-      this.render();
+      this._renderChildren();
     }
   },
 
@@ -202,36 +225,32 @@ Marionette.CollectionView = Marionette.View.extend({
     this.destroyEmptyView();
     this.destroyChildren({checkEmpty: false});
 
-    if (this.isEmpty(this.collection)) {
+    var models = this._filteredSortedModels();
+    if (this.isEmpty(this.collection, {processedModels: models})) {
       this.showEmptyView();
     } else {
       this.triggerMethod('before:render:collection', this);
       this.startBuffering();
-      this.showCollection();
+      this.showCollection(models);
       this.endBuffering();
       this.triggerMethod('render:collection', this);
-
-      // If we have shown children and none have passed the filter, show the empty view
-      if (this.children.isEmpty()) {
-        this.showEmptyView();
-      }
     }
   },
 
   // Internal method to loop through collection and show each child view.
-  showCollection: function() {
-    var ChildView;
-
-    var models = this._filteredSortedModels();
-
+  showCollection: function(models) {
     _.each(models, function(child, index) {
-      ChildView = this.getChildView(child);
+      var ChildView = this._getChildView(child);
       this.addChild(child, ChildView, index);
     }, this);
   },
 
   // Allow the collection to be sorted by a custom view comparator
   _filteredSortedModels: function() {
+    if (!this.collection) {
+      return [];
+    }
+
     var models;
     var viewComparator = this.getViewComparator();
 
@@ -246,12 +265,18 @@ Marionette.CollectionView = Marionette.View.extend({
     }
 
     // Filter after sorting in case the filter uses the index
+    models = this._filterModels(models);
+
+    return models;
+  },
+
+  // Filter an array of models, if a filter exists
+  _filterModels: function(models) {
     if (this.getOption('filter')) {
       models = _.filter(models, function(model, index) {
         return this._shouldAddChild(model, index);
       }, this);
     }
-
     return models;
   },
 
@@ -261,13 +286,22 @@ Marionette.CollectionView = Marionette.View.extend({
     var EmptyView = this.getEmptyView();
 
     if (EmptyView && !this._showingEmptyView) {
-      this.triggerMethod('before:render:empty');
-
       this._showingEmptyView = true;
-      var model = new Backbone.Model();
-      this.addEmptyView(model, EmptyView);
 
-      this.triggerMethod('render:empty');
+      var model = new Backbone.Model();
+      var emptyViewOptions =
+        this.getOption('emptyViewOptions') || this.getOption('childViewOptions');
+      if (_.isFunction(emptyViewOptions)) {
+        emptyViewOptions = emptyViewOptions.call(this, model, this._emptyViewIndex);
+      }
+
+      var view = this.buildChildView(model, EmptyView, emptyViewOptions);
+
+      this.triggerMethod('before:render:empty', view);
+      this._addChildView(view, 0);
+      this.triggerMethod('render:empty', view);
+
+      view._parent = this;
     }
   },
 
@@ -290,54 +324,13 @@ Marionette.CollectionView = Marionette.View.extend({
     return this.getOption('emptyView');
   },
 
-  // Render and show the emptyView. Similar to addChild method
-  // but "add:child" events are not fired, and the event from
-  // emptyView are not forwarded
-  addEmptyView: function(child, EmptyView) {
-
-    // get the emptyViewOptions, falling back to childViewOptions
-    var emptyViewOptions = this.getOption('emptyViewOptions') ||
-                          this.getOption('childViewOptions');
-
-    if (_.isFunction(emptyViewOptions)) {
-      emptyViewOptions = emptyViewOptions.call(this, child, this._emptyViewIndex);
-    }
-
-    // build the empty view
-    var view = this.buildChildView(child, EmptyView, emptyViewOptions);
-
-    view._parent = this;
-
-    // Proxy emptyView events
-    this.proxyChildEvents(view);
-
-    // trigger the 'before:show' event on `view` if the collection view
-    // has already been shown
-    if (this._isShown) {
-      Marionette.triggerMethodOn(view, 'before:show');
-    }
-
-    // Store the `emptyView` like a `childView` so we can properly
-    // remove and/or close it later
-    this.children.add(view);
-
-    // Render it and show it
-    this.renderChildView(view, this._emptyViewIndex);
-
-    // call the 'show' method if the collection view
-    // has already been shown
-    if (this._isShown) {
-      Marionette.triggerMethodOn(view, 'show');
-    }
-  },
-
   // Retrieve the `childView` class, either from `this.options.childView`
   // or from the `childView` in the object definition. The "options"
   // takes precedence.
-  // This method receives the model that will be passed to the instance
-  // created from this `childView`. Overriding methods may use the child
-  // to determine what `childView` class to return.
-  getChildView: function(child) {
+  // The `childView` property can be either a view class or a function that
+  // returns a view class. If it is a function, it will receive the model that
+  // will be passed to the view instance (created from the returned view class)
+  _getChildView: function(child) {
     var childView = this.getOption('childView');
 
     if (!childView) {
@@ -347,7 +340,18 @@ Marionette.CollectionView = Marionette.View.extend({
       });
     }
 
-    return childView;
+    // first check if the `childView` is a view class (the common case)
+    // then check if it's a function (which we assume that returns a view class)
+    if (childView.prototype instanceof Backbone.View || childView === Backbone.View) {
+      return childView;
+    } else if (_.isFunction(childView)) {
+      return childView.call(this, child);
+    } else {
+      throw new Marionette.Error({
+        name: 'InvalidChildViewError',
+        message: '"childView" must be a view class or a function that returns a view class'
+      });
+    }
   },
 
   // Render the child's view and add it to the
@@ -363,7 +367,9 @@ Marionette.CollectionView = Marionette.View.extend({
     // increment indices of views after this one
     this._updateIndices(view, true, index);
 
+    this.triggerMethod('before:add:child', view);
     this._addChildView(view, index);
+    this.triggerMethod('add:child', view);
 
     view._parent = this;
 
@@ -393,32 +399,41 @@ Marionette.CollectionView = Marionette.View.extend({
   // Internal Method. Add the view to children and render it at
   // the given index.
   _addChildView: function(view, index) {
+    // Only trigger attach if already shown, attached, and not buffering, otherwise endBuffer() or
+    // Region#show() handles this.
+    var canTriggerAttach = this._isShown && !this.isBuffering && Marionette.isNodeAttached(this.el);
+    var triggerBeforeAttach = canTriggerAttach && this._triggerBeforeAttach;
+    var triggerAttach = canTriggerAttach && this._triggerAttach;
+
     // set up the child view event forwarding
     this.proxyChildEvents(view);
 
-    this.triggerMethod('before:add:child', view);
-
-    // trigger the 'before:show' event on `view` if the collection view
-    // has already been shown
+    // trigger the 'before:show' event on `view` if the collection view has already been shown
     if (this._isShown && !this.isBuffering) {
-      Marionette.triggerMethodOn(view, 'before:show');
+      Marionette.triggerMethodOn(view, 'before:show', view);
     }
 
-    // Store the child view itself so we can properly
-    // remove and/or destroy it later
+    // Store the child view itself so we can properly remove and/or destroy it later
     this.children.add(view);
-    this.renderChildView(view, index);
 
-    if (this._isShown && !this.isBuffering) {
-      Marionette.triggerMethodOn(view, 'show');
+    this._renderChildView(view, index, triggerBeforeAttach);
+
+    if (triggerAttach) {
+      var nestedViews = [view].concat(view._getNestedViews());
+      Marionette.triggerMethodMany(nestedViews, this, 'attach');
     }
-
-    this.triggerMethod('add:child', view);
+    if (this._isShown && !this.isBuffering) {
+      Marionette.triggerMethodOn(view, 'show', view);
+    }
   },
 
   // render the child view
-  renderChildView: function(view, index) {
+  _renderChildView: function(view, index, triggerBeforeAttach) {
     view.render();
+    if (triggerBeforeAttach) {
+      var nestedViews = [view].concat(view._getNestedViews());
+      Marionette.triggerMethodMany(nestedViews, this, 'before:attach');
+    }
     this.attachHtml(this, view, index);
     return view;
   },
@@ -458,8 +473,16 @@ Marionette.CollectionView = Marionette.View.extend({
   },
 
   // check if the collection is empty
-  isEmpty: function() {
-    return !this.collection || this.collection.length === 0;
+  // or optionally whether an array of pre-processed models is empty
+  isEmpty: function(collection, options) {
+    var models;
+    if (_.result(options, 'processedModels')) {
+      models = options.processedModels;
+    } else {
+      models = this.collection ? this.collection.models : [];
+      models = this._filterModels(models);
+    }
+    return models.length === 0;
   },
 
   // If empty, show the empty view
@@ -470,14 +493,14 @@ Marionette.CollectionView = Marionette.View.extend({
   },
 
   // You might need to override this if you've overridden attachHtml
-  attachBuffer: function(collectionView) {
-    collectionView.$el.append(this._createBuffer(collectionView));
+  attachBuffer: function(collectionView, buffer) {
+    collectionView.$el.append(buffer);
   },
 
   // Create a fragment buffer from the currently buffered children
-  _createBuffer: function(collectionView) {
+  _createBuffer: function() {
     var elBuffer = document.createDocumentFragment();
-    _.each(collectionView._bufferedChildren, function(b) {
+    _.each(this._bufferedChildren, function(b) {
       elBuffer.appendChild(b.el);
     });
     return elBuffer;
@@ -541,7 +564,7 @@ Marionette.CollectionView = Marionette.View.extend({
     this.destroyChildren({checkEmpty: false});
     this.triggerMethod('destroy:collection');
 
-    return Marionette.View.prototype.destroy.apply(this, arguments);
+    return Marionette.AbstractView.prototype.destroy.apply(this, arguments);
   },
 
   // Destroy the child views that this collection view
@@ -585,14 +608,14 @@ Marionette.CollectionView = Marionette.View.extend({
     this.listenTo(view, 'all', function() {
       var args = _.toArray(arguments);
       var rootEvent = args[0];
-      var childEvents = this.normalizeMethods(_.result(this, 'childEvents'));
+      var childViewEvents = this.normalizeMethods(_.result(this, 'childViewEvents'));
 
       args[0] = prefix + ':' + rootEvent;
       args.splice(1, 0, view);
 
-      // call collectionView childEvent if defined
-      if (typeof childEvents !== 'undefined' && _.isFunction(childEvents[rootEvent])) {
-        childEvents[rootEvent].apply(this, args.slice(1));
+      // call collectionView childViewEvent if defined
+      if (typeof childViewEvents !== 'undefined' && _.isFunction(childViewEvents[rootEvent])) {
+        childViewEvents[rootEvent].apply(this, args.slice(1));
       }
 
       this.triggerMethod.apply(this, args);

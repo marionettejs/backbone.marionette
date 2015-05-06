@@ -6,7 +6,7 @@ describe('trigger event and method name', function() {
     this.argumentOne = 'bar';
     this.argumentTwo = 'baz';
 
-    this.view = new Marionette.View();
+    this.view = new Marionette.AbstractView();
 
     this.eventHandler = this.sinon.stub();
     this.methodHandler = this.sinon.stub().returns(this.returnValue);
@@ -110,13 +110,13 @@ describe('trigger event and method name', function() {
     beforeEach(function() {
       this.onChildviewFooClickStub = this.sinon.stub();
 
-      this.ItemView = Marionette.ItemView.extend({
+      this.View = Marionette.View.extend({
         template: _.template('foo'),
         triggers: {'click' : 'foo:click'}
       });
 
       this.CollectionView = Marionette.CollectionView.extend({
-        childView: this.ItemView,
+        childView: this.View,
         onChildviewFooClick: this.onChildviewFooClickStub
       });
 
@@ -160,12 +160,12 @@ describe('trigger event and method name', function() {
 
     describe('when the context does not have triggerMethod defined', function() {
       beforeEach(function() {
-        this.view = new Backbone.View();
-        this.view.onFoo = this.methodHandler;
-        this.view.on('foo', this.eventHandler);
+        this.obj = _.extend({}, Backbone.Events);
+        this.obj.onFoo = this.methodHandler;
+        this.obj.on('foo', this.eventHandler);
         this.triggerMethodSpy = this.sinon.spy(Marionette, 'triggerMethod');
 
-        Marionette.triggerMethodOn(this.view, 'foo');
+        Marionette.triggerMethodOn(this.obj, 'foo');
       });
 
       it('should trigger the event', function() {
@@ -181,6 +181,24 @@ describe('trigger event and method name', function() {
           .to.have.been.calledOnce
           .and.returned(this.returnValue);
       });
+    });
+  });
+
+  describe('when triggering an event on many other contexts', function() {
+    beforeEach(function() {
+      this.views = _.times(2, function() {
+        var view = new Backbone.View();
+        view.onFoo = this.sinon.stub();
+        return view;
+      }, this);
+
+      this.context = {};
+      Marionette.triggerMethodMany(this.views, this.context, 'foo', 'bar', 'baz');
+    });
+
+    it('should trigger the event', function() {
+      expect(this.views[0].onFoo).to.have.been.calledOnce.and.calledWith(this.views[0], this.context, 'bar', 'baz');
+      expect(this.views[1].onFoo).to.have.been.calledOnce.and.calledWith(this.views[1], this.context, 'bar', 'baz');
     });
   });
 });

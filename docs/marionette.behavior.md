@@ -28,10 +28,10 @@ These interactions tend to be chunks of logic that you want to use in multiple v
 
 ## Usage
 
-Here is an example of a simple `ItemView`. Let's take a stab at simplifying it, and abstracting Behaviors from it.
+Here is an example of a simple `View`. Let's take a stab at simplifying it, and abstracting Behaviors from it.
 
 ```js
-var MyView = Marionette.ItemView.extend({
+var MyView = Marionette.View.extend({
   ui: {
     "destroy": ".destroy-btn"
   },
@@ -62,7 +62,7 @@ Here is the syntax for declaring which behaviors get used within a View.
 * The options are then stored within each `Behavior` under `options`.
 
 ```js
-var MyView = Marionette.ItemView.extend({
+var MyView = Marionette.View.extend({
   ui: {
     "destroy": ".destroy-btn"
   },
@@ -256,6 +256,58 @@ Marionette.Behavior.extend({
 	}
 });
 ```
+
+### ui
+
+Same thing as documented in Marionette.View, `ui` hash let you maps UI elements to their jQuery selectors.
+Thus a behavior can have its own selectors and as in a view, you will be able to attach events to these ui elements.
+
+```js
+var Foo = Marionette.Behavior.extend({
+  ui: {
+    foo: '.foo'
+  },
+
+  events: {
+    'click @ui.foo': 'onFooClick'
+  },
+
+  onFooClick: function () {
+    console.log('foo');
+  }
+});
+```
+Behaviors are small unit logics that you can reuse and share between views. To push forward their usage, a view can override the selectors defined by the applied behaviors. Using the example above, if a view a want to map `foo` to another selector, it is as easy as adding the `foo` key under view `ui` hash with the corresponding selector.
+
+Given the example below:
+
+```js
+var FirstView = Marionette.View.extend({
+  ui: {
+    "foo": ".foo-btn"
+  },
+
+  behaviors: {
+    Foo: {
+      // no options
+    }
+  }
+});
+
+var SecondView = Marionette.View.extend({
+  behaviors: {
+    Foo: {
+      // no options
+    }
+  }
+});
+
+var firstView = new FirstView();
+var secondView = new SecondView();
+```
+
+This means that for the `firstView`, the `Foo` behavior will react to a click on `.foo-btn` while for the `secondView`, the `Foo` behavior will react to a click on the predefined `.foo` selector.
+
 
 ### defaults
 `defaults` can be a `hash` or `function` to define the default options for your `Behavior`. The default options will be overridden depending on what you set as the options per `Behavior`. (This works just like a `Backbone.Model`.)

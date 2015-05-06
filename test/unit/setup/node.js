@@ -23,8 +23,8 @@ if (!global.document || !global.window) {
   global.window = document.createWindow();
   global.navigator = global.window.navigator;
 
-  global.window.Node.prototype.contains = function (node) {
-    return this.compareDocumentPosition(node) & 16;
+  global.window.Node.prototype.contains = function(node) {
+    return this.compareDocumentPosition(node) && 16;
   };
 }
 
@@ -32,27 +32,25 @@ global.$ = global.jQuery = require('jquery');
 global._ = require('underscore');
 global.Backbone = require('backbone');
 global.Backbone.$ = global.$;
+global.Metal = require('backbone-metal');
 global.Marionette = Backbone.Marionette = {};
-require('backbone.wreqr');
 require('backbone.babysitter');
+require('backbone.radio');
 global.slice = Array.prototype.slice;
-Marionette.Deferred = global.Backbone.$.Deferred;
 requireHelper('bind-entity-events');
-requireHelper('callbacks');
+requireHelper('radio-helpers');
 requireHelper('trigger-method');
 requireHelper('helpers');
 requireHelper('dom-refresh');
+requireHelper('metal');
 requireHelper('object');
-requireHelper('features');
-requireHelper('controller');
 requireHelper('app-router');
 requireHelper('application');
-requireHelper('module');
 requireHelper('renderer');
 requireHelper('template-cache');
+requireHelper('abstract-view');
+requireHelper('features');
 requireHelper('view');
-requireHelper('item-view');
-requireHelper('layout-view');
 requireHelper('collection-view');
 requireHelper('composite-view');
 requireHelper('behavior');

@@ -2,68 +2,180 @@ name: View
 
 class: Marionette.View
 
-description:
+extends:
+  - Marionette.AbstractView
 
-examples:
+description: |
+  An `View` is the basic view of Marionette. It can be used to render a Model or Collection. In addition, Views can create and manage child views through the use of
+  [Regions]((marionette.region.md)). Regions are containers for child views.
 
-properties:
+  View extends from AbstractView. For the full API, refer to [the Marionette.AbstractView documentation](marionette.abstractview.md) for inherited methods and properties.
 
-constructor: |
-  @param {Object} options
+  Unlike Backbone Views, the View Class emits many events. These are most often triggered when a View is displayed as a child within another View or CollectionView.
+
+constructor:
+  description: |
+    Creates a new View.
+
+    As a View, the constructor calls the initialize function if it exists.
+
+    @param {Object} options
+
+  examples:
+    -
+      name: Creating a new View representing a single model.
+
+      example: |
+        Views can be used to represent either a `Backbone.Model` or `Backbone.Collection` by setting `model` or `collection` properties on the View. The collection is only used if a model is not already set.
+
+        ```js
+        var MyView = Marionette.View.extend({
+          template: '#some-item-template'
+        });
+
+        var view = new MyView({
+          model: myModel
+        });
+        ```
 
 functions:
-  
-  getTemplate: |
-    @api public
-    
-  serializeModel: |
-    @api public
-    @param {} model
-    
-  mixinTemplateHelpers: |
-    @api public
-    @param {} target
-    
-  normalizeUIKeys: |
-    @api public
-    @param {Object} hash
-    
-  configureTriggers: |
-    @api public
-    
-  delegateEvents: |
-    @api public
-    @param {Object} events
-  
-  _delegateDOMEvents: |
-    @api private
-    @param {Object} events
-  
-  undelegateEvents: |
-    @api public
-  
-  onShowCalled: |
-    @api public
-  
-  _ensureViewIsIntact: |
-    @api private
-  
-  destroy: |
-    @api public
-    @returns {Marionette.View} The current view.
-  
-  bindUIElements: |
-    @api public
-  
-  unbindUIElements: |
-    @api public
-
-  getUI: |
-    @api public
-    @param {String} name - the name of the ui element to receive
-    @returns {jQuery} - the jQuery object of the ui element
-
+  serializeData:
     description: |
-      A stable interface to the view's ui hash. 
-      Will return the specified ui element if it is available. If the view is destroyed
-      a `ViewDestroyedError` will be thrown.
+      Serialize the view's model or collection for rendering the view's template. If a model is found, the view's `serializeModel` is called. If a
+      collection is found, `serializeCollection` will be called. The collection will be available in your template as `items`. If both a model and a
+      collection are found, the model will be used.
+
+      You can override the `serializeData` method in your own view definition to provide custom serialization for your view's `model` or
+      `collection`.
+
+      Do not override `serializeData` to add additional data to your templates. Use `templateHelpers` for that instead.
+
+      @api public
+
+      examples:
+        -
+          name: Defining custom data serialization.
+
+          example: |
+            This example sets a custom `serializeData` method to prioritize collections over models.
+
+            ```js
+            var MyView = Marionette.View.extend({
+              serializeData: function(){
+                var data = {};
+
+                if (this.collection) {
+                  data = {
+                    items: this.serializeCollection()
+                  };
+                }
+                else if (this.model) {
+                  data = this.serializeModel();
+                }
+
+                return data;
+              }
+            });
+            ```
+
+  serializeModel:
+    description: |
+      Serialize the view's model.
+
+      Do not override `serializeModel` to add additional data to your templates. Use `templateHelpers` for that instead.
+
+      @api public
+      @param {Backbone.Model} model - The model set on the View to be serialized.
+      @returns {Object} Javascript object representation of the model.
+
+      examples:
+        -
+          name: Defining custom model serialization.
+
+          example: |
+            ```js
+            var MyView = Marionette.View.extend({
+              serializeModel: function(model){
+                return _.omit(model.attributes, 'secretData');
+              }
+            });
+            ```
+        -
+          name: Defining custom model serialization and
+
+  serializeCollection:
+    description: |
+      Serialize the view's collection.
+
+      Do not override `serializeCollection` to add additional data to your templates. Use `templateHelpers` for that instead.
+
+      @api public
+      @param {Backbone.Collection} collection - The collection set on the View to be serialized.
+
+      examples:
+        -
+          name: Defining custom collection serialization.
+
+          example: |
+            ```js
+            var MyView = Marionette.View.extend({
+              serializeCollection: function(collection){
+                return collection.map(function(model){ return _.omit(model.attributes, 'secretData'); });
+              }
+            });
+            ```
+  render:
+    description: |
+      Render the view, defaulting to underscore.js templates. You can override this in your view definition to provide a very specific rendering for your view.
+
+      In general, though, you should override the `Marionette.Renderer` object to change how Marionette renders views.
+
+      @api public
+
+  attachElContent:
+    description: |
+      Attaches the content of the view. This method can be overridden to optimize rendering, or to render in a non standard way.
+
+      @api public
+      @param {String} html - The html content to set inside the view element.
+
+    examples:
+      -
+        name: Render using `innerHTML` instead of `$el.html`
+
+        example: |
+          ```js
+          var MyView = Marionette.View.extend({
+            attachElContent: function(html){
+              this.el.innerHTML = html;
+              return this;
+            }
+          });
+          ```
+
+  destroy:
+    description: |
+      Destroy the view.
+
+      @api public
+      @returns {Marionette.View} The current view.
+
+    examples:
+      -
+        name: Override the destroy method to trigger another event.
+
+        example: |
+          ```js
+          var myView = Marionette.View.extend({
+            destroy: function(){
+              if (this.isDestroyed) { return; }
+
+              var destroyed = Marionette.AbstractView.prototype.destroy.apply(this, arguments);
+
+              var args = Array.prototype.slice.call(arguments);
+              this.triggerMethod.apply(this, ['after:destroy'].concat(args));
+
+              return destroyed;
+            }
+          });
+          ```

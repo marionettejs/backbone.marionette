@@ -1,4 +1,4 @@
-describe('layoutView - dynamic regions', function() {
+describe('itemView - dynamic regions', function() {
   'use strict';
 
   beforeEach(function() {
@@ -9,17 +9,17 @@ describe('layoutView - dynamic regions', function() {
 
   describe('when adding regions with a function', function() {
     beforeEach(function() {
-      this.app = new Marionette.Application();
+      this.view = new Marionette.View();
 
       this.fooSelector = '#foo-region';
       this.barSelector = '#bar-region';
 
       this.fooRegion = new Marionette.Region({el: this.fooSelector});
-      this.fooRegion._parent = this.app._regionManager;
+      this.fooRegion._parent = this.view._regionManager;
 
       this.BarRegion = Marionette.Region.extend();
       this.barRegion = new this.BarRegion({el: this.barSelector});
-      this.barRegion._parent = this.app._regionManager;
+      this.barRegion._parent = this.view._regionManager;
 
       this.regionDefinition = this.sinon.stub().returns({
         fooRegion: this.fooSelector,
@@ -29,7 +29,7 @@ describe('layoutView - dynamic regions', function() {
         }
       });
 
-      this.regions = this.app.addRegions(this.regionDefinition);
+      this.regions = this.view.addRegions(this.regionDefinition);
     });
 
     it('calls the regions definition function', function() {
@@ -38,29 +38,33 @@ describe('layoutView - dynamic regions', function() {
         .and.have.been.calledWith(this.regionDefinition);
     });
 
+    // We compare the most unique thing about the regions: the element, because
+    // the regions themselves are circular objects that can't be serialized into
+    // JSON. In the future, we should compare cids.
     it('returns all the created regions on an object literal', function() {
-      expect(this.app.fooRegion).to.deep.equal(this.fooRegion);
-      expect(this.app.barRegion).to.deep.equal(this.barRegion);
+      expect(this.view.fooRegion.el).to.deep.equal(this.fooRegion.el);
+      expect(this.view.barRegion.el).to.deep.equal(this.barRegion.el);
     });
 
+    // Same as above.
     it('initializes all the regions immediately', function() {
-      expect(this.app.getRegion('fooRegion')).to.deep.equal(this.fooRegion);
-      expect(this.app.getRegion('barRegion')).to.deep.equal(this.barRegion);
+      expect(this.view.getRegion('fooRegion').el).to.deep.equal(this.fooRegion.el);
+      expect(this.view.getRegion('barRegion').el).to.deep.equal(this.barRegion.el);
     });
 
     it('uses the custom regionClass', function() {
-      expect(this.app.getRegion('barRegion')).to.be.an.instanceof(this.BarRegion);
+      expect(this.view.getRegion('barRegion')).to.be.an.instanceof(this.BarRegion);
     });
   });
 
   describe('when adding a region to a layoutView, after it has been rendered', function() {
     beforeEach(function() {
-      this.MyLayoutView = Marionette.LayoutView.extend({
+      this.MyView = Marionette.View.extend({
         onAddRegion: function() {},
         onBeforeAddRegion: function() {}
       });
 
-      this.layoutView = new this.MyLayoutView({
+      this.layoutView = new this.MyView({
         template: this.template
       });
 
@@ -104,7 +108,7 @@ describe('layoutView - dynamic regions', function() {
 
   describe('when adding a region to a layoutView, before it has been rendered', function() {
     beforeEach(function() {
-      this.layoutView = new Marionette.LayoutView({
+      this.layoutView = new Marionette.View({
         template: this.template
       });
 
@@ -131,7 +135,38 @@ describe('layoutView - dynamic regions', function() {
 
   describe('when adding a region to a layoutView that does not have any regions defined, and re-rendering the layoutView', function() {
     beforeEach(function() {
-      this.layoutView = new Marionette.LayoutView({
+      this.layoutView = new Marionette.View({
+        template: this.template
+      });
+
+      this.region = this.layoutView.addRegion('foo', '#foo');
+
+      this.layoutView.render();
+      this.layoutView.render();
+
+      this.view = new Backbone.View();
+      this.layoutView.foo.show(this.view);
+    });
+
+    it('should re-add the region to the layoutView after it is re-rendered', function() {
+      expect(this.layoutView.foo).to.equal(this.region);
+    });
+
+    it('should set the parent of the region to the layoutView', function() {
+      expect(this.region.$el.parent()[0]).to.equal(this.layoutView.el);
+    });
+
+    it('should be able to show a view in the region', function() {
+      expect(this.layoutView.foo.$el.children().length).to.equal(1);
+    });
+  });
+
+  describe('when adding a region to a layoutView that already has regions defined, and re-rendering the layoutView', function() {
+    beforeEach(function() {
+      this.layoutView = new Marionette.View({
+        regions: {
+          bar: '#bar'
+        },
         template: this.template
       });
 
@@ -155,37 +190,6 @@ describe('layoutView - dynamic regions', function() {
     });
 
     it('should set the parent of the region to the layoutView', function() {
-      expect(this.region.$el.parent()[0]).to.equal(this.layoutView.el);
-    });
-
-    it('should be able to show a view in the region', function() {
-      expect(this.layoutView.foo.$el.children().length).to.equal(1);
-    });
-  });
-
-  describe('when adding a region to a layoutView that already has regions defined, and re-rendering the layoutView', function() {
-    beforeEach(function() {
-      this.layoutView = new Marionette.LayoutView({
-        regions: {
-          bar: '#bar'
-        },
-        template: this.template
-      });
-
-      this.region = this.layoutView.addRegion('foo', '#foo');
-
-      this.layoutView.render();
-      this.layoutView.render();
-
-      this.view = new Backbone.View();
-      this.layoutView.foo.show(this.view);
-    });
-
-    it('should re-add the region to the layoutView after it is re-rendered', function() {
-      expect(this.layoutView.foo).to.equal(this.region);
-    });
-
-    it('should set the parent of the region to the layoutView', function() {
       this.region.show(new Backbone.View());
       expect(this.region.$el.parent()[0]).to.equal(this.layoutView.el);
     });
@@ -197,7 +201,7 @@ describe('layoutView - dynamic regions', function() {
 
   describe('when removing a region from a layoutView', function() {
     beforeEach(function() {
-      this.LayoutView = Marionette.LayoutView.extend({
+      this.View = Marionette.View.extend({
         template: this.template,
         regions: {
           foo: '#foo'
@@ -210,7 +214,7 @@ describe('layoutView - dynamic regions', function() {
       this.beforeRemoveHandler = this.sinon.spy();
       this.removeHandler = this.sinon.spy();
 
-      this.layoutView = new this.LayoutView();
+      this.layoutView = new this.View();
 
       this.onBeforeRemoveSpy = this.sinon.spy(this.layoutView, 'onBeforeRemoveRegion');
       this.onRemoveSpy = this.sinon.spy(this.layoutView, 'onRemoveRegion');
@@ -249,14 +253,14 @@ describe('layoutView - dynamic regions', function() {
 
   describe('when removing a region and then re-rendering the layoutView', function() {
     beforeEach(function() {
-      this.LayoutView = Marionette.LayoutView.extend({
+      this.View = Marionette.View.extend({
         template: this.template,
         regions: {
           foo: '#foo'
         }
       });
 
-      this.layoutView = new this.LayoutView();
+      this.layoutView = new this.View();
 
       this.layoutView.render();
       this.layoutView.foo.show(new Backbone.View());
@@ -276,7 +280,7 @@ describe('layoutView - dynamic regions', function() {
   describe('when adding a region to a layoutView then destroying the layoutView', function() {
     beforeEach(function() {
       this.emptyHandler = this.sinon.stub();
-      this.layoutView = new Marionette.LayoutView({
+      this.layoutView = new Marionette.View({
         template: this.template
       });
 

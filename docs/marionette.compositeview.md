@@ -24,7 +24,7 @@ want to render a collection view with a model and template so
 that it will show a parent child with children in the tree.
 
 You can specify a `modelView` to use for the model. If you don't
-specify one, it will default to the `Marionette.ItemView`.
+specify one, it will default to the `Marionette.View`.
 
 ```js
 var CompositeView = Marionette.CompositeView.extend({
@@ -83,7 +83,7 @@ Each childView will be rendered using the `childView`'s template. The `Composite
 template is rendered and the childView's templates are added to this.
 
 ```js
-var ChildView = Marionette.ItemView.extend({});
+var ChildView = Marionette.View.extend({});
 
 var CompView = Marionette.CompositeView.extend({
   childView: ChildView
@@ -138,7 +138,7 @@ table structure, specify an `childViewContainer` in your composite view,
 like this:
 
 ```js
-var RowView = Marionette.ItemView.extend({
+var RowView = Marionette.View.extend({
   tagName: "tr",
   template: "#row-template"
 });
@@ -198,6 +198,11 @@ For more information on this method, see the [CollectionView's documentation](./
 ## CompositeView's `childView` container selection
 
 The `getChildViewContainer` method is passed a second `childView` parameter which, when overridden, allows for a finer tuned container selection by being able to access the `childView` which is about to be appended to the `containerView` returned by `getChildViewContainer`.
+You can also define `childView` as a function, which allows you to choose the view class
+to be rendered at runtime.
+
+For more information see the [CollectionView's documentation](./marionette.collectionview.md#collectionviews-childview).
+
 
 ## Recursive By Default
 
@@ -247,7 +252,7 @@ Marionette.CompositeView.extend({
 
 ## Organizing UI elements
 
-Similar to ItemView, you can organize the UI elements inside the
+Similar to View, you can organize the UI elements inside the
 CompositeView by specifying them in the `UI` hash. It should be
 noted that the elements that can be accessed via this hash are
 the elements that are directly rendered by the composite view
@@ -274,5 +279,4 @@ Marionette.CompositeView.extend({
 });
 ```
 
-For more information, see the [Marionette.View](./marionette.view.md#viewmodelevents-and-viewcollectionevents)
-documentation.
+For more information, see the [Marionette.AbstractView](./marionette.abstractview.md) documentation.

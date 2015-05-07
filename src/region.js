@@ -89,8 +89,6 @@ Marionette.Region = Marionette.Object.extend({
       // we can not reuse it.
       view.once('destroy', this.empty, this);
 
-      this.renderView(view, options);
-
       view._parent = this;
 
       if (isChangingView) {
@@ -99,6 +97,8 @@ Marionette.Region = Marionette.Object.extend({
 
       this.triggerMethod('before:show', view, this, options);
       Marionette.triggerMethodOn(view, 'before:show', view, this, options);
+
+      this.renderView(view, options);
 
       if (isChangingView) {
         this.triggerMethod('swapOut', this.currentView, this, options);

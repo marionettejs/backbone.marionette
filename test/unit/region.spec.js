@@ -257,8 +257,8 @@ describe('region', function() {
     });
 
     describe('Render and show event ordering', function() {
-      it('triggers the before render event before the before show event', function() {
-        expect(this.viewOnBeforeRenderSpy).to.have.been.calledBefore(this.viewOnBeforeShowSpy);
+      it('triggers the before render event after the before show event', function() {
+        expect(this.viewOnBeforeShowSpy).to.have.been.calledBefore(this.viewOnBeforeRenderSpy);
       });
 
       it('triggers the show event after the render event', function() {

@@ -16,7 +16,7 @@ For a more in-depth discussion on LayoutViews, see the blog post
 [Manage Layouts And Nested Views With Marionette](http://lostechies.com/derickbailey/2012/03/22/managing-layouts-and-nested-views-with-backbone-marionette/)
 
 Please see
-[the Marionette.ItemView documentation](./marionette.itemview.md)
+[the Marionette.View documentation](./marionette.view.md)
 for more information on available features and functionality.
 
 Additionally, interactions with Marionette.Region
@@ -145,7 +145,7 @@ This also works for custom events that you might fire on your child views.
 
 ```js
   // The child view fires a custom event, `show:message`
-  var ChildView = new Marionette.ItemView.extend({
+  var ChildView = new Marionette.View.extend({
     events: {
       'click .button': 'showMessage'
     },
@@ -293,7 +293,7 @@ var layoutView = new Marionette.LayoutView({
 });
 
 // Lastly, show the LayoutView in the App's mainRegion
-MyApp.getRegion('main').show(layoutView);
+MyApp.rootView.getRegion('main').show(layoutView);
 ```
 
 You can nest LayoutViews as deeply as you want. This provides for a well organized,
@@ -306,7 +306,7 @@ var layout1 = new Layout1();
 var layout2 = new Layout2();
 var layout3 = new Layout3();
 
-MyApp.getRegion('main').show(layout1);
+MyApp.rootView.getRegion('main').show(layout1);
 
 layout1.showChildView('region1', layout2);
 layout2.showChildView('region2', layout3);
@@ -464,7 +464,7 @@ to avoid conflicts with existing properties on the LayoutView when you name your
 
 The prototype chain of LayoutViews is:
 
-`Backbone.View > Marionette.View > Marionette.ItemView > Marionette.LayoutView`
+`Backbone.View > Marionette.AbstractView > Marionette.View
 
 Consequently, every property on each of those Classes must be avoided as Region names. The most
 common issue people run into is trying to name their Region *"attributes"*. Be aware

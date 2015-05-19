@@ -66,3 +66,18 @@ Marionette.triggerMethodOn = function(context) {
 
   return fnc.apply(context, _.rest(arguments));
 };
+
+// triggerMethodMany invokes triggerMethod on many targets from a source
+// it's useful for standardizing a pattern where we propogate an event from a source
+// to many targets.
+//
+// For each target we want to follow the pattern
+// target.triggerMethod(event, target, source, ...other args)
+// e.g childview.triggerMethod('attach', childView, region, ...args)
+Marionette.triggerMethodMany = function(targets, source, eventName) {
+  var args = _.drop(arguments, 3);
+
+  _.each(targets, function(target) {
+    Marionette.triggerMethodOn.apply(target, [target, eventName, target, source].concat(args));
+  });
+};

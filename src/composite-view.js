@@ -39,24 +39,33 @@ Marionette.CompositeView = Marionette.CollectionView.extend({
   // Retrieve the `childView` to be used when rendering each of
   // the items in the collection. The default is to return
   // `this.childView` or Marionette.CompositeView if no `childView`
-  // has been defined
-  getChildView: function(child) {
-    var childView = this.getOption('childView') || this.constructor;
+  // has been defined. As happens in CollectionView, `childView` can
+  // be a function (which should return a view class).
+  _getChildView: function(child) {
+    var childView = this.getOption('childView');
 
-    return childView;
-  },
-
-  // Serialize the model for the view.
-  // You can override the `serializeData` method in your own view
-  // definition, to provide custom serialization for your view's data.
-  serializeData: function() {
-    var data = {};
-
-    if (this.model) {
-      data = _.partial(this.serializeModel, this.model).apply(this, arguments);
+    // for CompositeView, if `childView` is not specified, we'll get the same
+    // composite view class rendered for each child in the collection
+    // then check if the `childView` is a view class (the common case)
+    // finally check if it's a function (which we assume that returns a view class)
+    if (!childView) {
+      return this.constructor;
+    } else if (childView.prototype instanceof Backbone.View || childView === Backbone.View) {
+      return childView;
+    } else if (_.isFunction(childView)) {
+      return childView.call(this, child);
+    } else {
+      throw new Marionette.Error({
+        name: 'InvalidChildViewError',
+        message: '"childView" must be a view class or a function that returns a view class'
+      });
     }
 
-    return data;
+  },
+
+  // Return the serialized model
+  serializeData: function() {
+    return this.serializeModel();
   },
 
   // Renders the model and the collection.
@@ -85,15 +94,16 @@ Marionette.CompositeView = Marionette.CollectionView.extend({
   // Render the root template that the children
   // views are appended to
   _renderTemplate: function() {
-    var data = {};
-    data = this.serializeData();
-    data = this.mixinTemplateHelpers(data);
-
     this.triggerMethod('before:render:template');
-
     var template = this.getTemplate();
-    var html = Marionette.Renderer.render(template, data, this);
-    this.attachElContent(html);
+
+    // Allow template-less composite views
+    if (template !== false) {
+      var data = this.mixinTemplateHelpers(this.serializeData());
+
+      var html = Marionette.Renderer.render(template, data, this);
+      this.attachElContent(html);
+    }
 
     // the ui bindings is done here and not at the end of render since they
     // will not be available until after the model is rendered, but should be
@@ -121,9 +131,9 @@ Marionette.CompositeView = Marionette.CollectionView.extend({
   },
 
   // You might need to override this if you've overridden attachHtml
-  attachBuffer: function(compositeView) {
+  attachBuffer: function(compositeView, buffer) {
     var $container = this.getChildViewContainer(compositeView);
-    $container.append(this._createBuffer(compositeView));
+    $container.append(buffer);
   },
 
   // Internal method. Append a view to the end of the $el.
@@ -145,7 +155,7 @@ Marionette.CompositeView = Marionette.CollectionView.extend({
   // Internal method to ensure an `$childViewContainer` exists, for the
   // `attachHtml` method to use.
   getChildViewContainer: function(containerView, childView) {
-    if ('$childViewContainer' in containerView) {
+    if (!!containerView.$childViewContainer) {
       return containerView.$childViewContainer;
     }
 
@@ -179,7 +189,7 @@ Marionette.CompositeView = Marionette.CollectionView.extend({
   // Internal method to reset the `$childViewContainer` on render
   resetChildViewContainer: function() {
     if (this.$childViewContainer) {
-      delete this.$childViewContainer;
+      this.$childViewContainer = undefined;
     }
   }
 });

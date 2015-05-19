@@ -60,7 +60,7 @@ describe('region', function() {
         el: '#not-existed-region'
       });
 
-      this.MyView = Backbone.Marionette.View.extend({
+      this.MyView = Backbone.Marionette.AbstractView.extend({
         render: function() {
           $(this.el).html('some content');
         }
@@ -103,9 +103,9 @@ describe('region', function() {
         });
 
         it('should not render the view', function() {
-          sinon.spy(this.myView, 'render');
+          this.sinon.spy(this.myRegion, 'renderView');
           this.myRegion.show(this.myView);
-          expect(this.myView.render).not.to.have.been.called;
+          expect(this.myRegion.renderView).not.to.have.been.called;
         });
       });
     });
@@ -172,6 +172,14 @@ describe('region', function() {
 
       this.showOptions = {foo: 'bar'};
       this.myRegion.show(this.view, this.showOptions);
+    });
+
+    it('should have a cidPrefix', function() {
+      expect(this.myRegion.cidPrefix).to.equal('mnr');
+    });
+
+    it('should have a cid', function() {
+      expect(this.myRegion.cid).to.exist;
     });
 
     it('should render the view', function() {
@@ -458,7 +466,7 @@ describe('region', function() {
         el: '#region'
       });
 
-      this.LayoutView = Backbone.Marionette.LayoutView.extend({
+      this.View = Backbone.Marionette.View.extend({
         regions: {
           subRegion: '.sub-region'
         },
@@ -472,7 +480,7 @@ describe('region', function() {
         }
       });
 
-      this.SubView = Backbone.Marionette.ItemView.extend({
+      this.SubView = Backbone.Marionette.View.extend({
         render: function() {
           $(this.el).html('some content');
         },
@@ -488,7 +496,7 @@ describe('region', function() {
       this.setFixtures('<div id="region"></div>');
       this.region = new this.MyRegion();
       this.attachHtmlSpy = this.sinon.spy(this.region, 'attachHtml');
-      this.region.show(new this.LayoutView());
+      this.region.show(new this.View());
     });
 
     it('should call inner region before:show before region open', function() {
@@ -561,6 +569,7 @@ describe('region', function() {
 
       this.sinon.spy(this.view, 'destroy');
       this.sinon.spy(this.myRegion, 'attachHtml');
+      this.sinon.spy(this.myRegion, 'renderView');
       this.sinon.spy(this.view, 'render');
       this.myRegion.show(this.view);
     });
@@ -573,8 +582,8 @@ describe('region', function() {
       expect(this.myRegion.attachHtml).not.to.have.been.calledWith(this.view);
     });
 
-    it('should not call "render" on the view', function() {
-      expect(this.view.render).not.to.have.been.called;
+    it('should not call "renderView"', function() {
+      expect(this.myRegion.renderView).not.to.have.been.called;
     });
   });
 
@@ -601,6 +610,7 @@ describe('region', function() {
 
       this.sinon.spy(this.view, 'destroy');
       this.sinon.spy(this.myRegion, 'attachHtml');
+      this.sinon.spy(this.myRegion, 'renderView');
       this.sinon.spy(this.view, 'render');
       this.myRegion.show(this.view, {forceShow: true});
     });
@@ -613,8 +623,8 @@ describe('region', function() {
       expect(this.myRegion.attachHtml).to.have.been.calledWith(this.view);
     });
 
-    it('should call "render" on the view', function() {
-      expect(this.view.render).to.have.been.called;
+    it('should call "renderView"', function() {
+      expect(this.myRegion.renderView).to.have.been.calledOnce.and.calledWith(this.view, {forceShow: true});
     });
   });
 
@@ -624,7 +634,7 @@ describe('region', function() {
         el: '#region'
       });
 
-      this.MyView = Backbone.Marionette.ItemView.extend({
+      this.MyView = Backbone.Marionette.View.extend({
         template: _.template('<div></div>'),
         open : function() {}
       });
@@ -655,7 +665,7 @@ describe('region', function() {
         el: '#region'
       });
 
-      this.MyView = Backbone.Marionette.View.extend({
+      this.MyView = Backbone.Marionette.AbstractView.extend({
         render: function() {
           $(this.el).html('some content');
         }
@@ -853,10 +863,12 @@ describe('region', function() {
         el: '#foo',
         currentView: this.view
       });
+
+      this.sinon.spy(this.region, 'renderView');
     });
 
     it('should not render the view', function() {
-      expect(this.view.render).not.to.have.been.called;
+      expect(this.region.renderView).not.to.have.been.called;
     });
 
     it('should not `show` the view', function() {
@@ -881,12 +893,13 @@ describe('region', function() {
         el: '#foo'
       });
 
+      this.sinon.spy(this.region, 'renderView');
       this.sinon.spy(this.region, 'attachView');
       this.region.attachView(this.view);
     });
 
     it('should not render the view', function() {
-      expect(this.view.render).not.to.have.been.called;
+      expect(this.region.renderView).not.to.have.been.called;
     });
 
     it('should not `show` the view', function() {
@@ -924,20 +937,20 @@ describe('region', function() {
     beforeEach(function() {
       this.setFixtures('<div id="region"></div><div id="region2"></div>');
 
-      this.myApp = new Backbone.Marionette.Application();
-      this.myApp.addRegions({
+      this.itemView = new Backbone.Marionette.View();
+      this.itemView.addRegions({
         MyRegion: '#region',
         anotherRegion: '#region2'
       });
 
-      this.region = this.myApp.MyRegion;
+      this.region = this.itemView.MyRegion;
       this.sinon.spy(this.region, 'empty');
 
-      this.myApp.removeRegion('MyRegion');
+      this.itemView.removeRegion('MyRegion');
     });
 
-    it('should be removed from the app', function() {
-      expect(this.myApp.MyRegion).to.be.undefined;
+    it('should be removed from the view', function() {
+      expect(this.itemView.MyRegion).to.be.undefined;
     });
 
     it('should call "empty" of the region', function() {
@@ -947,17 +960,17 @@ describe('region', function() {
 
   describe('when getting a region', function() {
     beforeEach(function() {
-      this.MyApp = new Backbone.Marionette.Application();
-      this.MyApp.addRegions({
+      this.itemView = new Backbone.Marionette.View();
+      this.itemView.addRegions({
         MyRegion: '#region',
         anotherRegion: '#region2'
       });
 
-      this.region = this.MyApp.MyRegion;
+      this.region = this.itemView.MyRegion;
     });
 
     it('should return the region', function() {
-      expect(this.MyApp.getRegion('MyRegion')).to.equal(this.region);
+      expect(this.itemView.getRegion('MyRegion')).to.equal(this.region);
     });
   });
 
@@ -1005,7 +1018,7 @@ describe('region', function() {
       this.region.on('before:empty', this.beforeEmptySpy);
       this.region.on('empty', this.emptySpy);
 
-      this.View = Backbone.Marionette.View.extend({
+      this.View = Backbone.Marionette.AbstractView.extend({
         template: _.template('')
       });
 
@@ -1049,6 +1062,27 @@ describe('region', function() {
     it('should throw an error', function() {
       var errorMessage = 'The view passed is undefined and therefore invalid. You must pass a view instance to show.';
       expect(this.insertUndefined).to.throw(errorMessage);
+    });
+  });
+
+  describe('when calling "renderView"', function() {
+    beforeEach(function() {
+      this.region = new Backbone.Marionette.Region({
+        el: '#region'
+      });
+
+      this.View = Backbone.Marionette.AbstractView.extend({
+        template: _.template('')
+      });
+
+      this.view = new this.View();
+      this.sinon.spy(this.view, 'render');
+
+      this.region.renderView(this.view);
+    });
+
+    it('should call "render" on the view', function() {
+      expect(this.view.render).to.have.been.calledOnce;
     });
   });
 });

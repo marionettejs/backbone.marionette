@@ -2,18 +2,18 @@ describe('collectionview - emptyView', function() {
   'use strict';
 
   beforeEach(function() {
-    this.ItemView = Backbone.Marionette.ItemView.extend({
+    this.View = Backbone.Marionette.View.extend({
       tagName: 'span',
       template: _.template('<%= foo %>')
     });
 
-    this.EmptyView = Backbone.Marionette.ItemView.extend({
+    this.EmptyView = Backbone.Marionette.View.extend({
       tagName: 'span',
       template: _.template('empty')
     });
 
     this.EmptyCollectionView = Backbone.Marionette.CollectionView.extend({
-      childView: this.ItemView,
+      childView: this.View,
       emptyView: this.EmptyView,
 
       onBeforeRenderEmpty: function() {},
@@ -30,7 +30,7 @@ describe('collectionview - emptyView', function() {
       this.childRenderSpy = this.sinon.spy();
       this.collection = new Backbone.Collection();
       this.CollectionView = this.EmptyCollectionView.extend({
-        childEvents: {
+        childViewEvents: {
           'render': this.childRenderSpy
         }
       });
@@ -260,10 +260,10 @@ describe('collectionview - emptyView', function() {
   describe('when emptyView is specified with getEmptyView option', function() {
     beforeEach(function() {
       this.getEmptyViewStub = this.sinon.stub();
-      this.OtherEmptyView = Backbone.Marionette.ItemView.extend();
+      this.OtherEmptyView = Backbone.Marionette.View.extend();
 
       this.CollectionView = Backbone.Marionette.CollectionView.extend({
-        childView: this.ItemView,
+        childView: this.View,
         getEmptyView: this.getEmptyViewStub
       });
     });
@@ -328,6 +328,26 @@ describe('collectionview - emptyView', function() {
 
       it('should pass the collection as an argument to isEmpty', function() {
         expect(this.isEmptyStub).to.have.been.calledWith(this.collection);
+      });
+    });
+
+    describe('with a filter', function() {
+      beforeEach(function() {
+        this.collection.reset([{foo: true}, {foo: false}]);
+      });
+
+      it('returns false if any of the models pass the filter', function() {
+        this.collectionView.filter = function(model) {
+          return model.get('foo');
+        };
+        expect(this.collectionView.isEmpty()).to.be.false;
+      });
+
+      it('returns true if none of the models pass the filter', function() {
+        this.collectionView.filter = function() {
+          return false;
+        };
+        expect(this.collectionView.isEmpty()).to.be.true;
       });
     });
   });

@@ -8,13 +8,13 @@ describe('collection view - filter', function() {
     this.failModel = new Backbone.Model({foo: false});
     this.collection = new Backbone.Collection();
 
-    this.EmptyView = Backbone.Marionette.ItemView.extend({
+    this.EmptyView = Marionette.View.extend({
       template: function() {
         return 'empty';
       }
     });
 
-    this.ChildView = Backbone.Marionette.ItemView.extend({
+    this.ChildView = Marionette.View.extend({
       template: function(data) {
         return data.foo;
       }
@@ -34,7 +34,9 @@ describe('collection view - filter', function() {
       filter: this.filter,
       collection: this.collection,
       onBeforeRemoveChild: this.sinon.stub(),
-      onRemoveChild: this.sinon.stub()
+      onRemoveChild: this.sinon.stub(),
+      onBeforeRenderCollection: this.sinon.stub(),
+      onRenderCollection: this.sinon.stub()
     });
   });
 
@@ -65,6 +67,7 @@ describe('collection view - filter', function() {
       this.collection.add(this.passModel);
       this.collection.add(this.failModel);
       this.collectionView = new this.CollectionView();
+      this.sinon.spy(this.collectionView, 'removeChildView');
       this.collectionView.render();
     });
 
@@ -109,6 +112,23 @@ describe('collection view - filter', function() {
       });
     });
 
+    describe('when all models passing the filter are removed from the collection', function() {
+      beforeEach(function() {
+        this.passView = this.collectionView.children.first();
+        this.collection.remove(this.passModel);
+      });
+
+      it('should remove the child view', function() {
+        expect(this.collectionView.removeChildView).to.have.been.calledOnce
+          .and.calledOn(this.collectionView)
+          .and.calledWith(this.passView);
+      });
+
+      it('should show the EmptyView', function() {
+        expect(this.collectionView.$el).to.contain.$text('empty');
+      });
+    });
+
     describe('when resetting the collection with some of the models passing the filter', function() {
       beforeEach(function() {
         this.filter.reset();
@@ -146,6 +166,8 @@ describe('collection view - filter', function() {
         this.filter.reset();
         this.newFailModel = this.failModel.clone();
         this.sinon.spy(this.collectionView, 'showEmptyView');
+        this.collectionView.onBeforeRenderCollection.reset();
+        this.collectionView.onRenderCollection.reset();
         this.collection.reset([this.newFailModel]);
       });
 
@@ -160,6 +182,14 @@ describe('collection view - filter', function() {
 
       it('should contain the empty view in the DOM', function() {
         expect(this.collectionView.$el).to.contain.$text('empty');
+      });
+
+      it('should not call onBeforeRenderCollection', function() {
+        expect(this.collectionView.onBeforeRenderCollection).not.to.have.been.called;
+      });
+
+      it('should not call onRenderCollection', function() {
+        expect(this.collectionView.onBeforeRenderCollection).not.to.have.been.called;
       });
     });
 
@@ -203,6 +233,14 @@ describe('collection view - filter', function() {
 
     it('should contain the empty view in the DOM', function() {
       expect(this.collectionView.$el).to.contain.$text('empty');
+    });
+
+    it('should not call onBeforeRenderCollection', function() {
+      expect(this.collectionView.onBeforeRenderCollection).not.to.have.been.called;
+    });
+
+    it('should not call onRenderCollection', function() {
+      expect(this.collectionView.onBeforeRenderCollection).not.to.have.been.called;
     });
   });
 
@@ -252,7 +290,7 @@ describe('collection view - filter', function() {
       this.model4 = new Backbone.Model({foo: false, bar: 4});
       this.collection.reset([this.model2, this.model4, this.model3, this.model1]);
 
-      this.ChildView = Marionette.ItemView.extend({
+      this.ChildView = Marionette.View.extend({
         template: function(data) {
           return data.bar;
         }
@@ -330,7 +368,7 @@ describe('collection view - filter', function() {
       this.model4 = new Backbone.Model({foo: false, bar: 4});
       this.collection.reset([this.model2, this.model4, this.model3, this.model1]);
 
-      this.ChildView = Marionette.ItemView.extend({
+      this.ChildView = Marionette.View.extend({
         template: function(data) {
           return data.bar;
         }

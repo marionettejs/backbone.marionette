@@ -74,7 +74,7 @@ A handy function to pluck certain `options` and attach them directly to an insta
 Most Marionette Classes, such as the Views, come with this method.
 
 ```js
-var MyView = ItemView.extend({
+var MyView = Marionette.View.extend({
   myViewOptions: ['color', 'size', 'country'],
 
   initialize: function(options) {
@@ -181,13 +181,28 @@ callback methods will still be called, though.
 
 Invoke `triggerMethod` on a specific context.
 
-This is useful when it's not clear that the object has `triggerMethod` defined. In the case of views, `Marionette.View` defines `triggerMethod`, but `Backbone.View` does not.
+This is useful when it's not clear that the object has `triggerMethod` defined. In the case of views, `Marionette.AbstractView` defines `triggerMethod`, but `Backbone.View` does not.
 
 ```js
 Marionette.triggerMethodOn(ctx, "foo", bar);
 // will invoke `onFoo: function(bar){...})`
 // will trigger "foo" on ctx
 ```
+
+## Marionette.triggerMethodMany
+
+Invokes `triggerMethod` on many contexts.
+
+This is useful when you want to trigger an event on many different objects.
+
+```js
+var views = getManyViews();
+var context = this;
+Marionette.triggerMethodMany(views, context, "foo", bar);
+// will call `onFoo: function(view, context, bar){...})` for each view
+// will trigger "foo" on each of the views
+```
+
 
 ## Marionette.bindEntityEvents
 
@@ -301,10 +316,10 @@ _.extend(Pagination.prototype, {
 Receives a hash of event names and functions and/or function names, and returns the
 same hash with the function names replaced with the function references themselves.
 
-This function is attached to the `Marionette.View` prototype by default. To use it from non-View classes you'll need to attach it yourself.
+This function is attached to the `Marionette.AbstractView` prototype by default. To use it from non-View classes you'll need to attach it yourself.
 
 ```js
-var View = Marionette.ItemView.extend({
+var View = Marionette.View.extend({
 
   initialize: function() {
     this.someFn = function() {};

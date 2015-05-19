@@ -3,7 +3,7 @@ describe('onDomRefresh', function() {
 
   beforeEach(function() {
     this.onDomRefreshStub = this.sinon.stub();
-    this.View = Backbone.Marionette.ItemView.extend({
+    this.View = Backbone.Marionette.View.extend({
       onDomRefresh: this.onDomRefreshStub
     });
     this.view = new this.View();

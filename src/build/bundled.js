@@ -20,7 +20,10 @@
   // @include ../../tmp/backbone.babysitter.bare.js
 
   /* istanbul ignore next */
-  // @include ../../tmp/backbone.wreqr.bare.js
+  // @include ../../tmp/backbone.radio.bare.js
+
+  /* istanbul ignore next */
+  // @include ../../tmp/backbone.metal.bare.js
 
   var previousMarionette = root.Marionette;
   var previousMn = root.Mn;
@@ -35,38 +38,33 @@
     return this;
   };
 
-  Backbone.Marionette = Marionette;
-
-  // Get the Deferred creator for later use
-  Marionette.Deferred = Backbone.$.Deferred;
-
+  // @include ../features.js
   // @include ../helpers.js
   // @include ../trigger-method.js
   // @include ../dom-refresh.js
   // @include ../bind-entity-events.js
+  // @include ../radio-helpers.js
 
   // @include ../error.js
-  // @include ../callbacks.js
+  // @include ../metal.js
+
   // @include ../object.js
-  // @include ../controller.js
   // @include ../region.js
   // @include ../region-manager.js
 
   // @include ../template-cache.js
   // @include ../renderer.js
 
+  // @include ../abstract-view.js
   // @include ../view.js
-  // @include ../item-view.js
   // @include ../collection-view.js
   // @include ../composite-view.js
-  // @include ../layout-view.js
 
   // @include ../behavior.js
   // @include ../behaviors.js
 
   // @include ../app-router.js
   // @include ../application.js
-  // @include ../module.js
 
   return Marionette;
 }));

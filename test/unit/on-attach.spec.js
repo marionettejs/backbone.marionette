@@ -3,16 +3,38 @@ describe('onAttach', function() {
 
   beforeEach(function() {
 
-    // A Region to show our LayoutView within
+    // A Region to show our View within
     this.setFixtures('<div id="region"></div>');
     this.el = $('#region')[0];
     this.region = new Marionette.Region({el: this.el});
 
     // A view we can use as nested child views
-    this.BasicView = Marionette.ItemView.extend({
+    this.BasicView = Marionette.View.extend({
       template: false,
       onAttach: function() {},
       onBeforeAttach: function() {}
+    });
+
+    var spec = this;
+    this.EmptyView = Marionette.View.extend({
+      template: false,
+      constructor: function(options) {
+        Marionette.View.prototype.constructor.call(this, options);
+        this.onAttach = spec.sinon.stub();
+        this.onBeforeAttach = spec.sinon.stub();
+      }
+    });
+    this.ChildView = Marionette.View.extend({
+      template: false,
+      constructor: function(options) {
+        Marionette.View.prototype.constructor.call(this, options);
+        this.onAttach = spec.sinon.stub();
+        this.onBeforeAttach = spec.sinon.stub();
+      }
+    });
+    this.BasicCollectionView = Marionette.CollectionView.extend({
+      childView: this.ChildView,
+      emptyView: this.EmptyView
     });
   });
 
@@ -103,6 +125,26 @@ describe('onAttach', function() {
     });
   });
 
+  describe('when showing a region that is attached to the document & triggerBeforeAttach defaults to true, but the option is passed as false', function() {
+    beforeEach(function() {
+      this.view = new this.BasicView();
+      this.view.onAttach = this.sinon.stub();
+      this.view.onBeforeAttach = this.sinon.stub();
+
+      this.region.show(this.view, {triggerBeforeAttach: false});
+    });
+
+    it('should not call onBeforeAttach on the view', function() {
+      expect(this.view.onBeforeAttach).to.not.have.been.called;
+    });
+
+    it('should call onAttach on the view', function() {
+      expect(this.view.onAttach)
+        .to.have.been.calledOnce
+        .and.to.have.been.calledWithExactly(this.view, this.region);
+    });
+  });
+
   describe('when showing a region that is attached to the document & has triggerAttach set to false', function() {
     beforeEach(function() {
       this.view = new this.BasicView();
@@ -147,6 +189,26 @@ describe('onAttach', function() {
     });
   });
 
+  describe('when showing a region that is attached to the document & triggerAttach defaults to true, but the option is passed as false', function() {
+    beforeEach(function() {
+      this.view = new this.BasicView();
+      this.view.onAttach = this.sinon.stub();
+      this.view.onBeforeAttach = this.sinon.stub();
+
+      this.region.show(this.view, {triggerAttach: false});
+    });
+
+    it('should call onBeforeAttach on the view', function() {
+      expect(this.view.onBeforeAttach)
+        .to.have.been.calledOnce
+        .and.to.have.been.calledWithExactly(this.view, this.region);
+    });
+
+    it('should not call onAttach on the view', function() {
+      expect(this.view.onAttach).to.not.have.been.called;
+    });
+  });
+
   describe('when a view is shown in a region', function() {
     beforeEach(function() {
       this.childView = new this.BasicView();
@@ -171,8 +233,8 @@ describe('onAttach', function() {
   describe('when the parent view is initially detached', function() {
     beforeEach(function() {
 
-      // A LayoutView class that we can use for all of our tests
-      this.LayoutView = Marionette.LayoutView.extend({
+      // A View class that we can use for all of our tests
+      this.View = Marionette.View.extend({
         template: _.template('<main></main><footer></footer>'),
         regions: {
           main: 'main',
@@ -185,7 +247,7 @@ describe('onAttach', function() {
 
     describe('When showing a View in a Region', function() {
       beforeEach(function() {
-        this.MyView = Marionette.ItemView.extend({
+        this.MyView = Marionette.View.extend({
           template: _.template(''),
           onBeforeAttach: this.sinon.stub(),
           onAttach: this.sinon.stub()
@@ -208,7 +270,7 @@ describe('onAttach', function() {
       });
     });
 
-    describe('When showing a LayoutView with a single level of nested views that are attached within onBeforeShow', function() {
+    describe('When showing a View with a single level of nested views that are attached within onBeforeShow', function() {
       beforeEach(function() {
         this.mainView = new this.BasicView();
         this.footerView = new this.BasicView();
@@ -220,14 +282,14 @@ describe('onAttach', function() {
 
         var suite = this;
 
-        this.CustomLayoutView = this.LayoutView.extend({
+        this.CustomView = this.View.extend({
           onBeforeShow: function() {
             this.getRegion('main').show(suite.mainView);
             this.getRegion('footer').show(suite.footerView);
           }
         });
 
-        this.layoutView = new this.CustomLayoutView();
+        this.layoutView = new this.CustomView();
         this.sinon.spy(this.layoutView, 'onAttach');
         this.sinon.spy(this.layoutView, 'onBeforeAttach');
 
@@ -250,7 +312,7 @@ describe('onAttach', function() {
       });
     });
 
-    describe('When showing a LayoutView with a single level of nested views that are attached within onBeforeAttach', function() {
+    describe('When showing a View with a single level of nested views that are attached within onBeforeAttach', function() {
       beforeEach(function() {
         this.mainView = new this.BasicView();
         this.footerView = new this.BasicView();
@@ -262,14 +324,14 @@ describe('onAttach', function() {
 
         var suite = this;
 
-        this.CustomLayoutView = this.LayoutView.extend({
+        this.CustomView = this.View.extend({
           onBeforeAttach: function() {
             this.getRegion('main').show(suite.mainView);
             this.getRegion('footer').show(suite.footerView);
           }
         });
 
-        this.layoutView = new this.CustomLayoutView();
+        this.layoutView = new this.CustomView();
         this.sinon.spy(this.layoutView, 'onAttach');
         this.sinon.spy(this.layoutView, 'onBeforeAttach');
 
@@ -292,14 +354,14 @@ describe('onAttach', function() {
       });
     });
 
-    describe('When showing a LayoutView with two levels of nested views; with onBeforeShow for the first and second level', function() {
+    describe('When showing a View with two levels of nested views; with onBeforeShow for the first and second level', function() {
       beforeEach(function() {
         var suite = this;
         this.headerView = new this.BasicView();
         this.sinon.spy(this.headerView, 'onAttach');
         this.sinon.spy(this.headerView, 'onBeforeAttach');
 
-        this.MainView = this.LayoutView.extend({
+        this.MainView = this.View.extend({
           template: _.template('<header></header>'),
           regions: {
             header: 'header'
@@ -312,13 +374,13 @@ describe('onAttach', function() {
         this.sinon.spy(this.mainView, 'onAttach');
         this.sinon.spy(this.mainView, 'onBeforeAttach');
 
-        this.CustomLayoutView = this.LayoutView.extend({
+        this.CustomView = this.View.extend({
           onBeforeShow: function() {
             this.getRegion('main').show(suite.mainView);
           }
         });
 
-        this.layoutView = new this.CustomLayoutView();
+        this.layoutView = new this.CustomView();
         this.sinon.spy(this.layoutView, 'onAttach');
         this.sinon.spy(this.layoutView, 'onBeforeAttach');
 
@@ -341,14 +403,14 @@ describe('onAttach', function() {
       });
     });
 
-    describe('When showing a LayoutView with two levels of nested views; onBeforeShow for the first level, then onShow for the second', function() {
+    describe('When showing a View with two levels of nested views; onBeforeShow for the first level, then onShow for the second', function() {
       beforeEach(function() {
         var suite = this;
         this.headerView = new this.BasicView();
         this.sinon.spy(this.headerView, 'onBeforeAttach');
         this.sinon.spy(this.headerView, 'onAttach');
 
-        this.MainView = Marionette.LayoutView.extend({
+        this.MainView = Marionette.View.extend({
           template: _.template('<header></header>'),
           onAttach: this.sinon.stub(),
           onBeforeAttach: this.sinon.stub(),
@@ -361,13 +423,13 @@ describe('onAttach', function() {
         });
         this.mainView = new this.MainView();
 
-        this.CustomLayoutView = this.LayoutView.extend({
+        this.CustomView = this.View.extend({
           onBeforeShow: function() {
             this.getRegion('main').show(suite.mainView);
           }
         });
 
-        this.layoutView = new this.CustomLayoutView();
+        this.layoutView = new this.CustomView();
         this.sinon.spy(this.layoutView, 'onAttach');
         this.sinon.spy(this.layoutView, 'onBeforeAttach');
 
@@ -390,14 +452,14 @@ describe('onAttach', function() {
       });
     });
 
-    describe('When showing a LayoutView with two levels of nested views; with onShow for the first level, onBeforeShow for the second', function() {
+    describe('When showing a View with two levels of nested views; with onShow for the first level, onBeforeShow for the second', function() {
       beforeEach(function() {
         var suite = this;
         this.headerView = new this.BasicView();
         this.sinon.spy(this.headerView, 'onBeforeAttach');
         this.sinon.spy(this.headerView, 'onAttach');
 
-        this.MainView = Marionette.LayoutView.extend({
+        this.MainView = Marionette.View.extend({
           template: _.template('<header></header>'),
           onAttach: this.sinon.stub(),
           onBeforeAttach: this.sinon.stub(),
@@ -410,13 +472,13 @@ describe('onAttach', function() {
         });
         this.mainView = new this.MainView();
 
-        this.CustomLayoutView = this.LayoutView.extend({
+        this.CustomView = this.View.extend({
           onShow: function() {
             this.getRegion('main').show(suite.mainView);
           }
         });
 
-        this.layoutView = new this.CustomLayoutView();
+        this.layoutView = new this.CustomView();
         this.sinon.spy(this.layoutView, 'onBeforeAttach');
         this.sinon.spy(this.layoutView, 'onAttach');
 
@@ -439,7 +501,7 @@ describe('onAttach', function() {
       });
     });
 
-    describe('When showing a LayoutView with a single level of nested views that are attached within onShow', function() {
+    describe('When showing a View with a single level of nested views that are attached within onShow', function() {
       beforeEach(function() {
         this.mainView = new this.BasicView();
         this.footerView = new this.BasicView();
@@ -451,14 +513,14 @@ describe('onAttach', function() {
 
         var suite = this;
 
-        this.CustomLayoutView = this.LayoutView.extend({
+        this.CustomView = this.View.extend({
           onShow: function() {
             this.getRegion('main').show(suite.mainView);
             this.getRegion('footer').show(suite.footerView);
           }
         });
 
-        this.layoutView = new this.CustomLayoutView();
+        this.layoutView = new this.CustomView();
         this.sinon.spy(this.layoutView, 'onBeforeAttach');
         this.sinon.spy(this.layoutView, 'onAttach');
 
@@ -486,8 +548,8 @@ describe('onAttach', function() {
     beforeEach(function() {
       this.setFixtures('<div class="layout-view"></div>');
 
-      // A LayoutView class that we can use for all of our tests
-      this.LayoutView = Marionette.LayoutView.extend({
+      // A View class that we can use for all of our tests
+      this.View = Marionette.View.extend({
         el: '.layout-view',
         template: _.template('<main></main><footer></footer>'),
         regions: {
@@ -501,7 +563,7 @@ describe('onAttach', function() {
 
     describe('When showing a View in a Region', function() {
       beforeEach(function() {
-        this.MyView = Marionette.ItemView.extend({
+        this.MyView = Marionette.View.extend({
           el: '.layout-view',
           template: _.template(''),
           onBeforeAttach: this.sinon.stub(),
@@ -518,7 +580,7 @@ describe('onAttach', function() {
       });
     });
 
-    describe('When showing a LayoutView with a single level of nested views that are attached within onBeforeShow', function() {
+    describe('When showing a View with a single level of nested views that are attached within onBeforeShow', function() {
       beforeEach(function() {
         this.mainView = new this.BasicView();
         this.footerView = new this.BasicView();
@@ -530,14 +592,14 @@ describe('onAttach', function() {
 
         var suite = this;
 
-        this.CustomLayoutView = this.LayoutView.extend({
+        this.CustomView = this.View.extend({
           onBeforeShow: function() {
             this.getRegion('main').show(suite.mainView);
             this.getRegion('footer').show(suite.footerView);
           }
         });
 
-        this.layoutView = new this.CustomLayoutView();
+        this.layoutView = new this.CustomView();
         this.sinon.spy(this.layoutView, 'onBeforeAttach');
         this.sinon.spy(this.layoutView, 'onAttach');
 
@@ -560,14 +622,14 @@ describe('onAttach', function() {
       });
     });
 
-    describe('When showing a LayoutView with two levels of nested views; with onBeforeShow for the first and second level', function() {
+    describe('When showing a View with two levels of nested views; with onBeforeShow for the first and second level', function() {
       beforeEach(function() {
         var suite = this;
         this.headerView = new this.BasicView();
         this.sinon.spy(this.headerView, 'onBeforeAttach');
         this.sinon.spy(this.headerView, 'onAttach');
 
-        this.MainView = Marionette.LayoutView.extend({
+        this.MainView = Marionette.View.extend({
           template: _.template('<header></header>'),
           onAttach: this.sinon.stub(),
           onBeforeAttach: this.sinon.stub(),
@@ -580,13 +642,13 @@ describe('onAttach', function() {
         });
         this.mainView = new this.MainView();
 
-        this.CustomLayoutView = this.LayoutView.extend({
+        this.CustomView = this.View.extend({
           onBeforeShow: function() {
             this.getRegion('main').show(suite.mainView);
           }
         });
 
-        this.layoutView = new this.CustomLayoutView();
+        this.layoutView = new this.CustomView();
         this.sinon.spy(this.layoutView, 'onBeforeAttach');
         this.sinon.spy(this.layoutView, 'onAttach');
 
@@ -609,14 +671,14 @@ describe('onAttach', function() {
       });
     });
 
-    describe('When showing a LayoutView with two levels of nested views; onBeforeShow for the first level, then onShow for the second', function() {
+    describe('When showing a View with two levels of nested views; onBeforeShow for the first level, then onShow for the second', function() {
       beforeEach(function() {
         var suite = this;
         this.headerView = new this.BasicView();
         this.sinon.spy(this.headerView, 'onBeforeAttach');
         this.sinon.spy(this.headerView, 'onAttach');
 
-        this.MainView = Marionette.LayoutView.extend({
+        this.MainView = Marionette.View.extend({
           template: _.template('<header></header>'),
           onAttach: this.sinon.stub(),
           onBeforeAttach: this.sinon.stub(),
@@ -629,13 +691,13 @@ describe('onAttach', function() {
         });
         this.mainView = new this.MainView();
 
-        this.CustomLayoutView = this.LayoutView.extend({
+        this.CustomView = this.View.extend({
           onBeforeShow: function() {
             this.getRegion('main').show(suite.mainView);
           }
         });
 
-        this.layoutView = new this.CustomLayoutView();
+        this.layoutView = new this.CustomView();
         this.sinon.spy(this.layoutView, 'onBeforeAttach');
         this.sinon.spy(this.layoutView, 'onAttach');
 
@@ -658,14 +720,14 @@ describe('onAttach', function() {
       });
     });
 
-    describe('When showing a LayoutView with two levels of nested views; with onShow for the first level, onBeforeShow for the second', function() {
+    describe('When showing a View with two levels of nested views; with onShow for the first level, onBeforeShow for the second', function() {
       beforeEach(function() {
         var suite = this;
         this.headerView = new this.BasicView();
         this.sinon.spy(this.headerView, 'onBeforeAttach');
         this.sinon.spy(this.headerView, 'onAttach');
 
-        this.MainView = Marionette.LayoutView.extend({
+        this.MainView = Marionette.View.extend({
           template: _.template('<header></header>'),
           onAttach: this.sinon.stub(),
           onBeforeAttach: this.sinon.stub(),
@@ -678,13 +740,13 @@ describe('onAttach', function() {
         });
         this.mainView = new this.MainView();
 
-        this.CustomLayoutView = this.LayoutView.extend({
+        this.CustomView = this.View.extend({
           onShow: function() {
             this.getRegion('main').show(suite.mainView);
           }
         });
 
-        this.layoutView = new this.CustomLayoutView();
+        this.layoutView = new this.CustomView();
         this.sinon.spy(this.layoutView, 'onBeforeAttach');
         this.sinon.spy(this.layoutView, 'onAttach');
 
@@ -707,7 +769,7 @@ describe('onAttach', function() {
       });
     });
 
-    describe('When showing a LayoutView with a single level of nested views that are attached within onShow', function() {
+    describe('When showing a View with a single level of nested views that are attached within onShow', function() {
       beforeEach(function() {
         this.mainView = new this.BasicView();
         this.footerView = new this.BasicView();
@@ -719,14 +781,14 @@ describe('onAttach', function() {
 
         var suite = this;
 
-        this.CustomLayoutView = this.LayoutView.extend({
+        this.CustomView = this.View.extend({
           onShow: function() {
             this.getRegion('main').show(suite.mainView);
             this.getRegion('footer').show(suite.footerView);
           }
         });
 
-        this.layoutView = new this.CustomLayoutView();
+        this.layoutView = new this.CustomView();
         this.sinon.spy(this.layoutView, 'onBeforeAttach');
         this.sinon.spy(this.layoutView, 'onAttach');
 
@@ -746,6 +808,212 @@ describe('onAttach', function() {
       it('should trigger onBeforeAttach & onAttach on the footerView a single time', function() {
         expect(this.footerView.onBeforeAttach).to.have.been.calledOnce;
         expect(this.footerView.onAttach).to.have.been.calledOnce;
+      });
+    });
+  });
+
+  describe('when showing an empty CollectionView', function() {
+    beforeEach(function() {
+      this.collection = new Backbone.Collection();
+      this.collectionView = new this.BasicCollectionView({
+        collection: this.collection
+      });
+      this.region.show(this.collectionView);
+      this.childView = this.collectionView.children.findByIndex(0);
+    });
+
+    it('should trigger onBeforeAttach and onAttach on the emptyView a single time', function() {
+      expect(this.childView).to.be.an.instanceof(this.EmptyView);
+      expect(this.childView.onBeforeAttach).to.have.been.calledOnce;
+      expect(this.childView.onBeforeAttach).to.have.been.calledOn(this.childView);
+      expect(this.childView.onBeforeAttach).to.have.been.calledWith(this.childView);
+      expect(this.childView.onAttach).to.have.been.calledOnce;
+      expect(this.childView.onAttach).to.have.been.calledOn(this.childView);
+      expect(this.childView.onAttach).to.have.been.calledWith(this.childView);
+    });
+
+    describe('when adding a new element to the collection', function() {
+      beforeEach(function() {
+        this.collection.add({id: 1});
+        this.childView = this.collectionView.children.findByIndex(0);
+      });
+      it('should trigger onBeforeAttach and onAttach on the childView a single time', function() {
+        expect(this.childView).to.be.an.instanceof(this.ChildView);
+        expect(this.childView.onBeforeAttach).to.have.been.calledOnce;
+        expect(this.childView.onBeforeAttach).to.have.been.calledOn(this.childView);
+        expect(this.childView.onBeforeAttach).to.have.been.calledWith(this.childView);
+        expect(this.childView.onAttach).to.have.been.calledOnce;
+        expect(this.childView.onAttach).to.have.been.calledOn(this.childView);
+        expect(this.childView.onAttach).to.have.been.calledWith(this.childView);
+      });
+    });
+  });
+
+  describe('when showing an empty CollectionView with triggerBeforeAttach and triggerAttach set to false on the region', function() {
+    beforeEach(function() {
+      this.collection = new Backbone.Collection();
+      this.collectionView = new this.BasicCollectionView({
+        collection: this.collection
+      });
+      this.region.triggerAttach = false;
+      this.region.triggerBeforeAttach = false;
+      this.region.show(this.collectionView);
+      this.childView = this.collectionView.children.findByIndex(0);
+    });
+
+    it('should not trigger onAttach or onBeforeAttach on the emptyView a single time', function() {
+      expect(this.childView).to.be.an.instanceof(this.EmptyView);
+      expect(this.childView.onBeforeAttach).to.not.have.been.calledOnce;
+      expect(this.childView.onBeforeAttach).to.not.have.been.calledOn(this.childView);
+      expect(this.childView.onBeforeAttach).to.not.have.been.calledWith(this.childView);
+      expect(this.childView.onAttach).to.not.have.been.calledOnce;
+      expect(this.childView.onAttach).to.not.have.been.calledOn(this.childView);
+      expect(this.childView.onAttach).to.not.have.been.calledWith(this.childView);
+    });
+
+    describe('when adding a new element to the collection', function() {
+      beforeEach(function() {
+        this.collection.add({id: 1});
+        this.childView = this.collectionView.children.findByIndex(0);
+      });
+      it('should not trigger onBeforeAttach or onAttach on the childView a single time', function() {
+        expect(this.childView).to.be.an.instanceof(this.ChildView);
+        expect(this.childView.onBeforeAttach).to.not.have.been.calledOnce;
+        expect(this.childView.onBeforeAttach).to.not.have.been.calledOn(this.childView);
+        expect(this.childView.onBeforeAttach).to.not.have.been.calledWith(this.childView);
+        expect(this.childView.onAttach).to.not.have.been.calledOnce;
+        expect(this.childView.onAttach).to.not.have.been.calledOn(this.childView);
+        expect(this.childView.onAttach).to.not.have.been.calledWith(this.childView);
+      });
+    });
+  });
+
+  describe('when showing a non-empty CollectionView', function() {
+    beforeEach(function() {
+      this.collection = new Backbone.Collection([{id: 1}, {id: 2}]);
+      this.collectionView = new this.BasicCollectionView({
+        collection: this.collection
+      });
+      this.region.show(this.collectionView);
+      this.childView1 = this.collectionView.children.findByIndex(0);
+      this.childView2 = this.collectionView.children.findByIndex(1);
+    });
+
+    it('should trigger onBeforeAttach and onAttach on each of its childViews a single time', function() {
+      expect(this.childView1.onBeforeAttach).to.have.been.calledOnce;
+      expect(this.childView1.onBeforeAttach).to.have.been.calledOn(this.childView1);
+      expect(this.childView1.onBeforeAttach).to.have.been.calledWith(this.childView1);
+      expect(this.childView1.onAttach).to.have.been.calledOnce;
+      expect(this.childView1.onAttach).to.have.been.calledOn(this.childView1);
+      expect(this.childView1.onAttach).to.have.been.calledWith(this.childView1);
+      expect(this.childView2.onBeforeAttach).to.have.been.calledOnce;
+      expect(this.childView2.onBeforeAttach).to.have.been.calledOn(this.childView2);
+      expect(this.childView2.onBeforeAttach).to.have.been.calledWith(this.childView2);
+      expect(this.childView2.onAttach).to.have.been.calledOnce;
+      expect(this.childView2.onAttach).to.have.been.calledOn(this.childView2);
+      expect(this.childView2.onAttach).to.have.been.calledWith(this.childView2);
+    });
+
+    describe('when re-rendering the CollectionView', function() {
+      beforeEach(function() {
+        this.collectionView.render();
+      });
+
+      it('should trigger onBeforeAttach and onAttach on each of its childViews a single time', function() {
+        expect(this.childView1.onBeforeAttach).to.have.been.calledOnce;
+        expect(this.childView1.onBeforeAttach).to.have.been.calledOn(this.childView1);
+        expect(this.childView1.onBeforeAttach).to.have.been.calledWith(this.childView1);
+        expect(this.childView1.onAttach).to.have.been.calledOnce;
+        expect(this.childView1.onAttach).to.have.been.calledOn(this.childView1);
+        expect(this.childView1.onAttach).to.have.been.calledWith(this.childView1);
+        expect(this.childView2.onBeforeAttach).to.have.been.calledOnce;
+        expect(this.childView2.onBeforeAttach).to.have.been.calledOn(this.childView2);
+        expect(this.childView2.onBeforeAttach).to.have.been.calledWith(this.childView2);
+        expect(this.childView2.onAttach).to.have.been.calledOnce;
+        expect(this.childView2.onAttach).to.have.been.calledOn(this.childView2);
+        expect(this.childView2.onAttach).to.have.been.calledWith(this.childView2);
+      });
+    });
+
+    describe('when emptying the collection', function() {
+      beforeEach(function() {
+        this.collection.reset();
+        this.childView = this.collectionView.children.findByIndex(0);
+      });
+      it('should trigger onBeforeAttach and onAttach on the emptyView a single time', function() {
+        expect(this.childView).to.be.an.instanceof(this.EmptyView);
+        expect(this.childView.onBeforeAttach).to.have.been.calledOnce;
+        expect(this.childView.onBeforeAttach).to.have.been.calledOn(this.childView);
+        expect(this.childView.onBeforeAttach).to.have.been.calledWith(this.childView);
+        expect(this.childView.onAttach).to.have.been.calledOnce;
+        expect(this.childView.onAttach).to.have.been.calledOn(this.childView);
+        expect(this.childView.onAttach).to.have.been.calledWith(this.childView);
+      });
+    });
+  });
+
+  describe('when showing a non-empty CollectionView with triggerBeforeAttach and triggerAttach set to false on the region', function() {
+    beforeEach(function() {
+      this.collection = new Backbone.Collection([{id: 1}, {id: 2}]);
+      this.collectionView = new this.BasicCollectionView({
+        collection: this.collection
+      });
+      this.region.triggerAttach = false;
+      this.region.triggerBeforeAttach = false;
+      this.region.show(this.collectionView);
+      this.childView1 = this.collectionView.children.findByIndex(0);
+      this.childView2 = this.collectionView.children.findByIndex(1);
+    });
+
+    it('should not trigger onBeforeAttach or onAttach on each of its childViews a single time', function() {
+      expect(this.childView1.onBeforeAttach).to.not.have.been.calledOnce;
+      expect(this.childView1.onBeforeAttach).to.not.have.been.calledOn(this.childView1);
+      expect(this.childView1.onBeforeAttach).to.not.have.been.calledWith(this.childView1);
+      expect(this.childView1.onAttach).to.not.have.been.calledOnce;
+      expect(this.childView1.onAttach).to.not.have.been.calledOn(this.childView1);
+      expect(this.childView1.onAttach).to.not.have.been.calledWith(this.childView1);
+      expect(this.childView2.onBeforeAttach).to.not.have.been.calledOnce;
+      expect(this.childView2.onBeforeAttach).to.not.have.been.calledOn(this.childView2);
+      expect(this.childView2.onBeforeAttach).to.not.have.been.calledWith(this.childView2);
+      expect(this.childView2.onAttach).to.not.have.been.calledOnce;
+      expect(this.childView2.onAttach).to.not.have.been.calledOn(this.childView2);
+      expect(this.childView2.onAttach).to.not.have.been.calledWith(this.childView2);
+    });
+
+    describe('when re-rendering the CollectionView', function() {
+      beforeEach(function() {
+        this.collectionView.render();
+      });
+
+      it('should not trigger onBeforeAttach or onAttach on each of its childViews a single time', function() {
+        expect(this.childView1.onBeforeAttach).to.not.have.been.calledOnce;
+        expect(this.childView1.onBeforeAttach).to.not.have.been.calledOn(this.childView1);
+        expect(this.childView1.onBeforeAttach).to.not.have.been.calledWith(this.childView1);
+        expect(this.childView1.onAttach).to.not.have.been.calledOnce;
+        expect(this.childView1.onAttach).to.not.have.been.calledOn(this.childView1);
+        expect(this.childView1.onAttach).to.not.have.been.calledWith(this.childView1);
+        expect(this.childView2.onBeforeAttach).to.not.have.been.calledOnce;
+        expect(this.childView2.onBeforeAttach).to.not.have.been.calledOn(this.childView2);
+        expect(this.childView2.onBeforeAttach).to.not.have.been.calledWith(this.childView2);
+        expect(this.childView2.onAttach).to.not.have.been.calledOnce;
+        expect(this.childView2.onAttach).to.not.have.been.calledOn(this.childView2);
+        expect(this.childView2.onAttach).to.not.have.been.calledWith(this.childView2);
+      });
+    });
+
+    describe('when emptying the collection', function() {
+      beforeEach(function() {
+        this.collection.reset();
+        this.childView = this.collectionView.children.findByIndex(0);
+      });
+      it('should not trigger onBeforeAttach or onAttach on the emptyView a single time', function() {
+        expect(this.childView).to.be.an.instanceof(this.EmptyView);
+        expect(this.childView.onBeforeAttach).to.not.have.been.calledOnce;
+        expect(this.childView.onBeforeAttach).to.not.have.been.calledOn(this.childView);
+        expect(this.childView.onBeforeAttach).to.not.have.been.calledWith(this.childView);
+        expect(this.childView.onAttach).to.not.have.been.calledOnce;
+        expect(this.childView.onAttach).to.not.have.been.calledOn(this.childView);
+        expect(this.childView.onAttach).to.not.have.been.calledWith(this.childView);
       });
     });
   });

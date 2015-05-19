@@ -7,6 +7,8 @@
 // http://lostechies.com/derickbailey/2011/12/12/composite-js-apps-regions-and-region-managers/
 
 Marionette.Region = Marionette.Object.extend({
+  cidPrefix: 'mnr',
+
   constructor: function(options) {
 
     // set options temporarily so that we can get `el`.
@@ -46,7 +48,6 @@ Marionette.Region = Marionette.Object.extend({
 
     var showOptions     = options || {};
     var isDifferentView = view !== this.currentView;
-    var preventDestroy  = !!showOptions.preventDestroy;
     var forceShow       = !!showOptions.forceShow;
 
     // We are only changing the view if there is a current view to change to begin with
@@ -54,7 +55,7 @@ Marionette.Region = Marionette.Object.extend({
 
     // Only destroy the current view if we don't want to `preventDestroy` and if
     // the view given in the first argument is different than `currentView`
-    var _shouldDestroyView = isDifferentView && !preventDestroy;
+    var _shouldDestroyView = this.shouldDestroyView(view, options);
 
     // Only show the view given in the first argument if it is different than
     // the current view or if we want to re-show the view. Note that if
@@ -87,7 +88,8 @@ Marionette.Region = Marionette.Object.extend({
       // to the currentView since once a view has been destroyed
       // we can not reuse it.
       view.once('destroy', this.empty, this);
-      view.render();
+
+      this.renderView(view, options);
 
       view._parent = this;
 
@@ -110,10 +112,12 @@ Marionette.Region = Marionette.Object.extend({
       // as it's a potentially-slow method
       var displayedViews = [];
 
-      var triggerBeforeAttach = showOptions.triggerBeforeAttach || this.triggerBeforeAttach;
-      var triggerAttach = showOptions.triggerAttach || this.triggerAttach;
+      var attachOptions = _.extend({
+        triggerBeforeAttach: this.triggerBeforeAttach,
+        triggerAttach: this.triggerAttach
+      }, showOptions);
 
-      if (attachedRegion && triggerBeforeAttach) {
+      if (attachedRegion && attachOptions.triggerBeforeAttach) {
         displayedViews = this._displayedViews(view);
         this._triggerAttach(displayedViews, 'before:');
       }
@@ -121,7 +125,7 @@ Marionette.Region = Marionette.Object.extend({
       this.attachHtml(view);
       this.currentView = view;
 
-      if (attachedRegion && triggerAttach) {
+      if (attachedRegion && attachOptions.triggerAttach) {
         displayedViews = this._displayedViews(view);
         this._triggerAttach(displayedViews);
       }
@@ -132,11 +136,21 @@ Marionette.Region = Marionette.Object.extend({
 
       this.triggerMethod('show', view, this, options);
       Marionette.triggerMethodOn(view, 'show', view, this, options);
-
-      return this;
     }
 
     return this;
+  },
+
+  shouldDestroyView: function(view, options) {
+    var showOptions     = options || {};
+    var isDifferentView = view !== this.currentView;
+    var preventDestroy  = !!showOptions.preventDestroy;
+
+    return isDifferentView && !preventDestroy;
+  },
+
+  renderView: function(view, options) {
+    view.render();
   },
 
   triggerBeforeAttach: true,
@@ -144,9 +158,7 @@ Marionette.Region = Marionette.Object.extend({
 
   _triggerAttach: function(views, prefix) {
     var eventName = (prefix || '') + 'attach';
-    _.each(views, function(view) {
-      Marionette.triggerMethodOn(view, eventName, view, this);
-    }, this);
+    Marionette.triggerMethodMany(views, this, eventName);
   },
 
   _displayedViews: function(view) {

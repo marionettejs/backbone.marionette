@@ -898,4 +898,76 @@ describe('composite view', function() {
     });
   });
 
+  describe('when rendering with a false template', function() {
+    beforeEach(function() {
+      this.onBeforeRenderStub = this.sinon.stub();
+      this.onRenderStub       = this.sinon.stub();
+
+      this.CompositeView = Marionette.CompositeView.extend({
+        template: false,
+        onBeforeRender: this.onBeforeRenderStub,
+        onRender: this.onRenderStub,
+
+        ui: {
+          testElement: '.test-element'
+        }
+      });
+
+      this.compositeView = new this.CompositeView();
+
+      this.marionetteRendererSpy   = this.sinon.spy(Marionette.Renderer, 'render');
+      this.triggerSpy              = this.sinon.spy(this.compositeView, 'trigger');
+      this.serializeDataSpy        = this.sinon.spy(this.compositeView, 'serializeData');
+      this.mixinTemplateHelpersSpy = this.sinon.spy(this.compositeView, 'mixinTemplateHelpers');
+      this.attachElContentSpy      = this.sinon.spy(this.compositeView, 'attachElContent');
+      this.bindUIElementsSpy       = this.sinon.spy(this.compositeView, 'bindUIElements');
+      this.compositeView.render();
+    });
+
+    it('should not throw an exception for a false template', function() {
+      expect(this.compositeView.render).to.not.throw('Cannot render the template since it is null or undefined.');
+    });
+
+    it('should call an "onBeforeRender" method on the view', function() {
+      expect(this.onBeforeRenderStub).to.have.been.calledOnce;
+    });
+
+    it('should call an "onRender" method on the view', function() {
+      expect(this.onRenderStub).to.have.been.calledOnce;
+    });
+
+    it('should call bindUIElements', function() {
+      expect(this.bindUIElementsSpy).to.have.been.calledOnce;
+    });
+
+    it('should bind the ui hash to jQuery selectors', function() {
+      expect(this.compositeView.ui.testElement.selector).to.equal('.test-element');
+    });
+
+    it('should trigger a before:render event', function() {
+      expect(this.triggerSpy).to.have.been.calledWith('before:render', this.compositeView);
+    });
+
+    it('should trigger a rendered event', function() {
+      expect(this.triggerSpy).to.have.been.calledWith('render', this.compositeView);
+    });
+
+    it('should not add in data or template helpers', function() {
+      expect(this.serializeDataSpy).to.not.have.been.called;
+      expect(this.mixinTemplateHelpersSpy).to.not.have.been.called;
+    });
+
+    it('should not render a template', function() {
+      expect(this.marionetteRendererSpy).to.not.have.been.called;
+    });
+
+    it('should not attach any html content', function() {
+      expect(this.attachElContentSpy).to.not.have.been.called;
+    });
+
+    it('should claim isRendered', function() {
+      expect(this.compositeView.isRendered).to.be.true;
+    });
+  });
+
 });

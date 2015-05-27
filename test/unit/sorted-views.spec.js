@@ -472,6 +472,16 @@ describe('collection/composite view sorting', function() {
           expect(this.collectionView.$el).to.have.$text('321');
         });
 
+        it('should reindex the views', function() {
+          _.each(this.collectionView._filteredSortedModels(), function(model, index) {
+            expect(this.collectionView.children.findByModel(model)._index).to.equal(index);
+          }.bind(this));
+
+          _.each(this.compositeView._filteredSortedModels(), function(model, index) {
+            expect(this.compositeView.children.findByModel(model)._index).to.equal(index);
+          }.bind(this));
+        });
+
         it('should triggerMethods events', function() {
           var cv = this.collectionView;
           if (specOptions.onPrototype) {
@@ -492,5 +502,55 @@ describe('collection/composite view sorting', function() {
     describeSpec({asOption: true, viewComparator: true});
     describeSpec({onPrototype: true});
     describeSpec({onPrototype: true, viewComparator: true});
+
+    describe('when changing the comparator multiple times', function() {
+      beforeEach(function() {
+        this.collectionView = new this.CollectionView({
+          childView: this.ChildView,
+          collection: this.collection,
+          reorderOnSort: true,
+        });
+
+        this.compositeView = new this.CompositeView({
+          childView: this.ChildView,
+          collection: this.collection,
+          reorderOnSort: true,
+        });
+
+        this.collectionView.render();
+        this.compositeView.render();
+      });
+
+      it('should reorder the DOM', function() {
+        // Try ordering descending...
+        this.collection.comparator = function(a, b) {
+          if (a.get('foo') > b.get('foo')) {
+            return -1;
+          } else if (a.get('foo') < b.get('foo')) {
+            return 1;
+          } else {
+            return 0;
+          }
+        };
+        this.collection.sort();
+        expect(this.collectionView.$el).to.have.$text('321');
+        expect(this.compositeView.$el).to.have.$text('321');
+
+        // ...then ascending.
+        this.collection.comparator = function(a, b) {
+          if (a.get('foo') < b.get('foo')) {
+            return -1;
+          } else if (a.get('foo') > b.get('foo')) {
+            return 1;
+          } else {
+            return 0;
+          }
+        };
+
+        this.collection.sort();
+        expect(this.collectionView.$el).to.have.$text('123');
+        expect(this.compositeView.$el).to.have.$text('123');
+      });
+    });
   });
 });

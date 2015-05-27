@@ -145,9 +145,12 @@ Marionette.CollectionView = Marionette.View.extend({
     if (modelsChanged) {
       this.render();
     } else {
-      // get the DOM nodes in the same order as the models
-      var els = _.map(models, function(model) {
-        return children.findByModel(model).el;
+      // Get the DOM nodes in the same order as the models and reindex the
+      // views.
+      var els = _.map(models, function(model, index) {
+        var childView = children.findByModel(model);
+        childView._index = index;
+        return childView.el;
       });
 
       // since append moves elements that are already in the DOM,

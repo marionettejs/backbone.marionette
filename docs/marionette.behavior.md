@@ -224,7 +224,7 @@ Marionette.Behavior.extend({
 ```
 
 ### Grouped Behaviors
-Then `behaviors` key allows a `Behavior` to group multiple behaviors together.
+The `behaviors` key allows a `Behavior` to group multiple behaviors together.
 
 ```js
   Marionette.Behavior.extend({

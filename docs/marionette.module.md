@@ -176,7 +176,7 @@ MyApp.module("MyModule", {
 One of the more useful features of the object literal definition is specifying a custom
 module class. You can make a new class using the extend function.
 
-```
+```js
 var CustomModule = Marionette.Module.extend({
   // Custom module properties
 });
@@ -198,12 +198,12 @@ The initialize function is only available through the object literal definition 
 ```js
 MyApp.module("Foo", {
   startWithParent: false,
-  initialize: function( moduleName, app, options ) {
+  initialize: function(moduleName, app, options) {
     this.someProperty = 'someValue';
   },
   // You can still set a define function
-  define: function( Foo ) {
-    console.log( this.someProperty ); // Logs 'someValue'
+  define: function(Foo) {
+    console.log(this.someProperty); // Logs 'someValue'
   }
 });
 ```
@@ -237,11 +237,11 @@ Module classes can be used as an alternative to the define pattern.
 
 The extend function of a Module is identical to the extend functions on other Backbone and Marionette classes. This allows module lifecycle events like `onStart` and `onStop` to be called directly.
 
-```
+```js
 var FooModule = Marionette.Module.extend({
   startWithParent: false,
 
-  initialize: function(options, moduleName, app) {
+  initialize: function(moduleName, app, options) {
   },
 
   onStart: function(options) {

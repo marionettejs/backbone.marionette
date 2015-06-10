@@ -105,9 +105,9 @@ Marionette.CollectionView = Marionette.View.extend({
     }
   },
 
-  // get the child view by model it holds, and remove it
-  _onCollectionRemove: function(model) {
-    var view = this.children.findByModel(model);
+  // get the child view by index, and remove it
+  _onCollectionRemove: function(child, collection, opts) {
+    var view = this.children.findByIndex(opts.index);
     this.removeChildView(view);
     this.checkEmpty();
   },

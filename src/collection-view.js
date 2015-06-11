@@ -128,6 +128,40 @@ Marionette.CollectionView = Marionette.View.extend({
     return this;
   },
 
+  // An efficient rendering used for filtering. Instead of modifying
+  // the whole DOM for the collection view, we are only adding or
+  // removing the related childrenViews.
+  setFilter: function(filter) {
+    if (!filter || this.filter === filter) {
+      return;
+    }
+    this.triggerMethod('before:filter', this);
+
+    this.filter = filter;
+    this._resolveDeltasForFiltering();
+
+    this.triggerMethod('filter', this);
+  },
+
+  // Calculate the deltas to remove/add the related childrenViews,
+  // so you don't need to rebuild the whole DOM.
+  _resolveDeltasForFiltering: function() {
+    var currentIds = _.pluck(this._filteredSortedModels(), 'cid');
+    var at = 0;
+    this.collection.each(function(model) {
+      if (_.contains(currentIds, model.cid)) {
+        if (!this.children.findByModel(model)) {
+          this._onCollectionAdd(model, this.collection, {at:at});
+        }
+        at++;
+      } else {
+        if (this.children.findByModel(model)) {
+          this._onCollectionRemove(model);
+        }
+      }
+    }, this);
+  },
+
   // Reorder DOM after sorting. When your element's rendering
   // do not use their index, you can pass reorderOnSort: true
   // to only reorder the DOM after a sort instead of rendering

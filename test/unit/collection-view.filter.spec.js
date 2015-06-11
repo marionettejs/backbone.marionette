@@ -438,5 +438,25 @@ describe('collection view - filter', function() {
         expect(this.collectionView.$el).to.contain.$text('24');
       });
     });
+
+    describe('when the filter changes dinamically', function() {
+      beforeEach(function() {
+        this.collectionView.render();
+        this.collection.sort();
+        this.collectionView.setFilter(this.inverseFilter);
+      });
+
+      it('only renders views that pass the last filter', function() {
+        expect(this.collectionView.children.findByModel(this.model1)).not.to.exist;
+        expect(this.collectionView.children.findByModel(this.model2)).to.exist;
+        expect(this.collectionView.children.findByModel(this.model3)).not.to.exist;
+        expect(this.collectionView.children.findByModel(this.model4)).to.exist;
+      });
+
+      it('renders the views in the correct order', function() {
+        expect(this.collectionView.$el).to.contain.$text('24');
+      });
+    });
+
   });
 });

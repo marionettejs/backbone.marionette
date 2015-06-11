@@ -438,5 +438,69 @@ describe('collection view - filter', function() {
         expect(this.collectionView.$el).to.contain.$text('24');
       });
     });
+
+    describe('when the filter changes dynamically', function() {
+      beforeEach(function() {
+        this.collectionView.render();
+        this.collection.sort();
+        this.collectionView.setFilter(this.inverseFilter);
+      });
+
+      it('only renders views that pass the last filter', function() {
+        expect(this.collectionView.children.findByModel(this.model1)).not.to.exist;
+        expect(this.collectionView.children.findByModel(this.model2)).to.exist;
+        expect(this.collectionView.children.findByModel(this.model3)).not.to.exist;
+        expect(this.collectionView.children.findByModel(this.model4)).to.exist;
+      });
+
+      it('renders the views in the correct order', function() {
+        expect(this.collectionView.$el).to.contain.$text('24');
+      });
+    });
   });
+
+  describe('combined with viewComparator attribute', function() {
+    beforeEach(function() {
+      this.model1 = new Backbone.Model({foo: true, bar: 1});
+      this.model2 = new Backbone.Model({foo: false, bar: 2});
+      this.model3 = new Backbone.Model({foo: true, bar: 3});
+      this.model4 = new Backbone.Model({foo: false, bar: 4});
+      this.collection.reset([this.model2, this.model4, this.model3, this.model1]);
+
+      this.ChildView = Marionette.View.extend({
+        template: function(data) {
+          return data.bar;
+        }
+      });
+
+      this.viewComparator = function(data) {
+        return -data.get('bar');
+      };
+
+      this.collectionView = new this.CollectionView({
+        childView: this.ChildView,
+        reorderOnSort: true,
+        viewComparator: this.viewComparator
+      });
+    });
+
+    describe('when the filter changes dynamically', function() {
+      beforeEach(function() {
+        this.collectionView.render();
+        this.collectionView.setFilter(this.inverseFilter);
+      });
+
+      it('only renders views that pass the last filter', function() {
+        expect(this.collectionView.children.findByModel(this.model1)).not.to.exist;
+        expect(this.collectionView.children.findByModel(this.model2)).to.exist;
+        expect(this.collectionView.children.findByModel(this.model3)).not.to.exist;
+        expect(this.collectionView.children.findByModel(this.model4)).to.exist;
+      });
+
+      it('renders the views in the correct order', function() {
+        expect(this.collectionView.$el).to.contain.$text('42');
+      });
+    });
+  });
+
 });

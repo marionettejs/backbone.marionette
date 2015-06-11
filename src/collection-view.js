@@ -151,6 +151,54 @@ Marionette.CollectionView = Marionette.AbstractView.extend({
     return this;
   },
 
+  // An efficient rendering used for filtering. Instead of modifying
+  // the whole DOM for the collection view, we are only adding or
+  // removing the related childrenViews.
+  setFilter: function(filter, options) {
+    options = options || {};
+    var viewCanBeRendered = this.isRendered && !this.isDestroyed;
+    // The same filter or a `prevent` option won't render the filter.
+    // Nevertheless, a `prevent` option will modify the value.
+    if (!viewCanBeRendered || this.filter === filter) {
+      return;
+    }
+    if (!options.preventRender) {
+      this.triggerMethod('before:apply:filter', this);
+      this._resolveDeltasForFiltering(filter);
+      this.triggerMethod('apply:filter', this);
+    } else {
+      this.filter = filter;
+    }
+  },
+
+  // `removeFilter` is actually an alias for removing filters.
+  removeFilter: function(options) {
+    this.setFilter(null, options);
+  },
+
+  // Calculate the deltas to remove/add the related childrenViews,
+  // so you don't need to rebuild the whole DOM.
+  _resolveDeltasForFiltering: function(filter) {
+    var previousModels = this._filteredSortedModels();
+    this.filter = filter;
+    var models = this._filteredSortedModels();
+    var currentIds = _.pluck(models, 'cid');
+    var modelMustBeShown;
+    // We resolve the deltas in a different way because we have
+    // to respect the sorting algorithm.
+    _.each(models, function(model, index) {
+      if (!this.children.findByModel(model)) {
+        this._onCollectionAdd(model, this.collection, {at:index});
+      }
+    }, this);
+    _.each(previousModels, function(model) {
+      modelMustBeShown = _.contains(currentIds, model.cid);
+      if (this.children.findByModel(model) && !modelMustBeShown) {
+        this._onCollectionRemove(model);
+      }
+    }, this);
+  },
+
   // Reorder DOM after sorting. When your element's rendering
   // do not use their index, you can pass reorderOnSort: true
   // to only reorder the DOM after a sort instead of rendering

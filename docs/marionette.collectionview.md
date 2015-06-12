@@ -24,6 +24,7 @@ will provide features such as `onShow` callbacks, etc. Please see
   * [CollectionView's `childViewEvents`](#collectionviews-childviewevents)
   * [CollectionView's `buildChildView`](#collectionviews-buildchildview)
   * [CollectionView's `addChild`](#collectionviews-addchild)
+  * [CollectionView's `setFilter`](#collectionviews-setfilter)
   * [CollectionView's `reorderOnSort`](#collectionviews-reorderonsort)
 * [CollectionView's `emptyView`](#collectionviews-emptyview)
   * [CollectionView's `getEmptyView`](#collectionviews-getemptyview)
@@ -44,6 +45,7 @@ will provide features such as `onShow` callbacks, etc. Please see
 * [CollectionView Events](#collectionview-events)
   * ["before:render" event](#beforerender-event)
   * ["render" event](#render-event)
+  * ["before:apply:filter" / "apply:filter" event](#beforeapplyfilter--applyfilter-event)
   * ["before:reorder" / "reorder" event](#beforereorder--reorder-event)
   * ["before:destroy" event](#beforedestroy-event)
   * ["destroy" / "destroy:collection" event](#destroy--destroycollection-event)
@@ -297,6 +299,26 @@ Marionette.CollectionView.extend({
     }
   }
 });
+```
+
+### CollectionView's `setFilter`
+
+The `setFilter` method modifies the `CollectionView`'s filter attribute, and
+renders the new `ChildrenViews` in a efficient way, instead of
+rendering the whole DOM structure again. In addiction, these changes are triggered with the `before:apply:filter` and `apply:filter` event.
+
+```js
+var cv = new Marionette.CollectionView({
+  collection: someCollection
+});
+
+cv.render();
+
+cv.setFilter(function(child, index, collection) {
+  return child.get('value') % 2 === 0;
+});
+
+//Renderize the new state of the ChildrenViews instead of the whole DOM.
 ```
 
 ### CollectionView's `reorderOnSort`
@@ -578,6 +600,33 @@ myView.on("collection:rendered", function(){
 });
 
 myView.render();
+```
+
+### "before:apply:filter" / "apply:filter" events"
+
+When `setFilter` is modifying the `filter` attribute, these events
+are fired respectfully just prior/just after the filtering of its
+`ChildrenViews`.
+
+```js
+var MyView = Marionette.CollectionView.extend({...});
+
+var myView = new MyView();
+myView.render();
+
+var myFilter = function(child) {
+  return child.get('foo') % 2 === 0;
+};
+
+myView.on("before:apply:filter", function(){
+  alert("the collection view is about to be filtered");
+});
+
+myView.on("apply:filter", function(){
+  alert("the collection view has been filtered following its filter attribute");
+});
+
+myView.setFilter(myFilter);
 ```
 
 ### "before:reorder" / "reorder" events

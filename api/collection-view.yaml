@@ -98,7 +98,14 @@ functions:
       @api public
     
     examples:
-      
+  
+  setFilter:
+    description: |
+      ...
+
+      @api public
+      @param {} filter
+
   resortView:
     description: |
       ...

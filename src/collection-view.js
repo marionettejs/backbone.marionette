@@ -155,7 +155,7 @@ Marionette.CollectionView = Marionette.AbstractView.extend({
   // the whole DOM for the collection view, we are only adding or
   // removing the related childrenViews.
   setFilter: function(filter) {
-    if (!filter || this.filter === filter) {
+    if (this.filter === filter) {
       return;
     }
     this.triggerMethod('before:apply:filter', this);

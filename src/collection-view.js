@@ -158,11 +158,11 @@ Marionette.CollectionView = Marionette.AbstractView.extend({
     if (!filter || this.filter === filter) {
       return;
     }
-    this.triggerMethod('before:filter', this);
+    this.triggerMethod('before:apply:filter', this);
 
     this._resolveDeltasForFiltering(filter);
 
-    this.triggerMethod('filter', this);
+    this.triggerMethod('apply:filter', this);
   },
 
   // Calculate the deltas to remove/add the related childrenViews,

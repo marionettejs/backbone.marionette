@@ -335,6 +335,23 @@ describe('layoutView', function() {
     });
   });
 
+  describe('when using showChildView with options', function() {
+    var options = {myOption: 'some value'};
+
+    beforeEach(function() {
+      this.layoutView = new this.LayoutView().render();
+      this.childView = new Backbone.View();
+      this.sinon.spy(this.layoutView.regionOne, 'show');
+      this.layoutView.showChildView('regionOne', this.childView, options);
+    });
+
+    it('passes the options hash to the region', function() {
+      expect(this.layoutView.regionOne.show)
+        .to.have.been.calledOnce
+        .and.calledWith(this.childView, options);
+    });
+  });
+
   describe('when showing a layoutView via a region', function() {
     beforeEach(function() {
       var suite = this;

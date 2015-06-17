@@ -23,8 +23,8 @@ beforeEach(function () {
 
 afterEach(function () {
   this.sinon.restore();
-  clearFixtures();
   window.location.hash = '';
   Backbone.history.stop();
   Backbone.history.handlers.length = 0;
+  clearFixtures();
 });

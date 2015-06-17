@@ -290,7 +290,7 @@ of the views that are about to be attached – even the nested ones. This can c
 rendering hundreds or thousands of views at once.
 
 If you think these events might be causing some lag in your app, you can selectively turn them off
-with the `triggerBeforeAttach` and `triggerAttach` properties.
+with the `triggerBeforeAttach` and `triggerAttach` properties or `show()` options.
 
 ```js
 // No longer trigger attach
@@ -305,6 +305,13 @@ myRegion.triggerBeforeAttach = false;
 
 // Unless we tell it to
 myRegion.show(myView, {triggerBeforeAttach: true});
+```
+
+Or you can leave the events on by default but disable them for a single show.
+
+```js
+// This region will trigger attach events by default but not for this particular show.
+myRegion.show(myView, {triggerBeforeAttach: false, triggerAttach: false});
 ```
 
 ### Checking whether a region is showing a view

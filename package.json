@@ -1,7 +1,7 @@
 {
   "name": "backbone.marionette",
   "description": "Make your Backbone.js apps dance!",
-  "version": "2.4.1",
+  "version": "2.4.2",
   "homepage": "https://github.com/marionettejs/backbone.marionette",
   "main": "lib/core/backbone.marionette.js",
   "keywords": [
@@ -42,8 +42,8 @@
   "dependencies": {
     "backbone.babysitter": "^0.1.0",
     "backbone.wreqr": "^1.0.0",
-    "backbone": "1.0.0 - 1.1.2",
-    "underscore": "1.4.4 - 1.6.0"
+    "backbone": "1.0.0 - 1.2.1",
+    "underscore": "1.4.4 - 1.8.3"
   },
   "devDependencies": {
     "chai": "1.9.1",
@@ -62,7 +62,7 @@
     "grunt-env": "0.4.1",
     "grunt-istanbul": "0.3.0",
     "grunt-jscs": "^1.5.0",
-    "grunt-lintspaces": "0.4.1",
+    "grunt-lintspaces": "0.7.0",
     "grunt-mocha-test": "0.10.2",
     "grunt-plato": "0.1.4",
     "grunt-preprocess": "4.0.0",
@@ -70,7 +70,7 @@
     "highlight.js": "8.2.0",
     "jquery": "2.1.1",
     "js-yaml": "3.1.0",
-    "jsdom": "0.10.5",
+    "jsdom": "2.0.0",
     "load-grunt-tasks": "0.3.0",
     "marked": "0.3",
     "mocha": "1.19.0",

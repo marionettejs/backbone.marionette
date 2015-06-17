@@ -1,7 +1,7 @@
 {
   "name": "backbone.marionette",
   "description": "Make your Backbone.js apps dance!",
-  "version": "2.4.1",
+  "version": "2.4.2",
   "repo": "marionettejs/backbone.marionette",
   "main": "lib/core/backbone.marionette.js",
   "keywords": [
@@ -16,7 +16,7 @@
     "client",
     "browser"
   ],
-  "license":  "MIT",
+  "license": "MIT",
   "licenses": [
     {
       "type": "MIT",

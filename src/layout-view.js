@@ -88,6 +88,11 @@ Marionette.LayoutView = Marionette.ItemView.extend({
     return this.regionManager.removeRegion(name);
   },
 
+  // Checks to see if layout contains region
+  hasRegion: function(name) {
+    return !!this.getRegion(name);
+  },
+
   // Provides alternative access to regions
   // Accepts the region name
   // getRegion('main')

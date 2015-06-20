@@ -131,7 +131,11 @@ Marionette.CompositeView = Marionette.CollectionView.extend({
   // childViewContainer
   _insertAfter: function(childView) {
     var $container = this.getChildViewContainer(this, childView);
-    $container.append(childView.el);
+    if (this.getOption('reverse')) {
+      $container.prepend(childView.el);
+    } else {
+      $container.append(childView.el);
+    }
   },
 
   // Internal method. Append reordered childView'.

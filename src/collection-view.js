@@ -541,9 +541,15 @@ Marionette.CollectionView = Marionette.View.extend({
   // Create a fragment buffer from the currently buffered children
   _createBuffer: function() {
     var elBuffer = document.createDocumentFragment();
-    _.each(this._bufferedChildren, function(b) {
-      elBuffer.appendChild(b.el);
-    });
+    if (this.getOption('reverse')) {
+      _.each(this._bufferedChildren, function(b) {
+        elBuffer.insertBefore(b.el, elBuffer.firstChild);
+      });
+    } else {
+      _.each(this._bufferedChildren, function(b) {
+        elBuffer.appendChild(b.el);
+      });
+    }
     return elBuffer;
   },
 
@@ -588,7 +594,11 @@ Marionette.CollectionView = Marionette.View.extend({
 
   // Internal method. Append a view to the end of the $el
   _insertAfter: function(childView) {
-    this.$el.append(childView.el);
+    if (this.getOption('reverse')) {
+      this.$el.prepend(childView.el);
+    } else {
+      this.$el.append(childView.el);
+    }
   },
 
   // Internal method to set up the `children` object for

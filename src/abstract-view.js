@@ -368,17 +368,5 @@ Marionette.AbstractView = Backbone.View.extend({
 
   // Imports the "normalizeMethods" to transform hashes of
   // events=>function references/names to a hash of events=>function references
-  normalizeMethods: Marionette.normalizeMethods,
-
-  // A handy way to merge passed-in options onto the instance
-  mergeOptions: Marionette.mergeOptions,
-
-  // Proxy `getOption` to enable getting options from this or this.options by name.
-  getOption: Marionette.proxyGetOption,
-
-  // Proxy `bindEntityEvents` to enable binding view's events from another entity.
-  bindEntityEvents: Marionette.proxyBindEntityEvents,
-
-  // Proxy `unbindEntityEvents` to enable unbinding view's events from another entity.
-  unbindEntityEvents: Marionette.proxyUnbindEntityEvents
+  normalizeMethods: Marionette.normalizeMethods
 });

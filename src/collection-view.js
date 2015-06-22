@@ -543,7 +543,7 @@ Marionette.CollectionView = Marionette.View.extend({
     var elBuffer = document.createDocumentFragment();
     if (this.getOption('reverse')) {
       _.each(this._bufferedChildren, function(b) {
-        elBuffer.prependChild(b.el);
+        elBuffer.insertBefore(b.el, elBuffer.firstChild);
       });
     } else {
       _.each(this._bufferedChildren, function(b) {

@@ -154,15 +154,26 @@ Marionette.CollectionView = Marionette.AbstractView.extend({
   // An efficient rendering used for filtering. Instead of modifying
   // the whole DOM for the collection view, we are only adding or
   // removing the related childrenViews.
-  setFilter: function(filter) {
-    if (this.filter === filter) {
+  setFilter: function(filter, options) {
+    options = options || {};
+    var viewCanBeRendered = this.isRendered && !this.isDestroyed;
+    // The same filter or a `prevent` option won't render the filter.
+    // Nevertheless, a `prevent` option will modify the value.
+    if (!viewCanBeRendered || this.filter === filter) {
       return;
     }
-    this.triggerMethod('before:apply:filter', this);
+    if (!options.preventRender) {
+      this.triggerMethod('before:apply:filter', this);
+      this._resolveDeltasForFiltering(filter);
+      this.triggerMethod('apply:filter', this);
+    } else {
+      this.filter = filter;
+    }
+  },
 
-    this._resolveDeltasForFiltering(filter);
-
-    this.triggerMethod('apply:filter', this);
+  // `removeFilter` is actually an alias for removing filters.
+  removeFilter: function(options) {
+    this.setFilter(null, options);
   },
 
   // Calculate the deltas to remove/add the related childrenViews,

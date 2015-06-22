@@ -105,6 +105,14 @@ functions:
 
       @api public
       @param {} filter
+      @param {} options
+
+  removeFilter:
+    description: |
+      ...
+
+      @api public
+      @param {} options
 
   resortView:
     description: |

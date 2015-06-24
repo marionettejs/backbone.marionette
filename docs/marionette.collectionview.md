@@ -305,8 +305,8 @@ Marionette.CollectionView.extend({
 ### CollectionView's `setFilter`
 
 The `setFilter` method modifies the `CollectionView`'s filter attribute, and
-renders the new `ChildrenViews` in a efficient way, instead of
-rendering the whole DOM structure again. In addiction, these changes are triggered with the `before:apply:filter` and `apply:filter` event.
+renders the new `ChildViews` in a efficient way, instead of
+rendering the whole DOM structure again. In addition, these changes are triggered with the `before:apply:filter` and `apply:filter` event.
 A `preventRender` option will prevent the view to be rendered.
 
 ```js
@@ -320,13 +320,13 @@ cv.setFilter(function(child, index, collection) {
   return child.get('value') % 2 === 0;
 });
 
-//Render the new state of the ChildrenViews instead of the whole DOM.
+//Render the new state of the ChildViews instead of the whole DOM.
 ```
 
 ### CollectionView's `removeFilter`
 
-This function is actually an alias of `setFilter(null, options)`. Useful for removing filters.
-Also accepts `preventRender` as a option.
+This function is actually an alias of `setFilter(null, options)`. It is useful for removing filters.
+`removeFilter` also accepts `preventRender` as a option.
 
 ```js
 var cv = new Marionette.CollectionView({
@@ -627,9 +627,9 @@ myView.render();
 
 ### "before:apply:filter" / "apply:filter" events"
 
-When `setFilter` is modifying the `filter` attribute, these events
+When `setFilter` modifies the `filter` attribute, these events
 are fired respectfully just prior/just after the filtering of its
-`ChildrenViews`.
+`ChildViews`.
 
 ```js
 var MyView = Marionette.CollectionView.extend({...});

@@ -397,6 +397,23 @@ var AppLayoutView = Marionette.LayoutView.extend({
 });
 ```
 
+## Checking For Presence Of A Region
+
+A Region can be looked up to see if it is contained
+in a LayoutView. Use the following method:
+
+* `hasRegion`
+
+```js
+var layoutView = new MyLayoutView();
+
+// ...
+
+if (!layoutView.hasRegion('foo')) {
+  layoutView.addRegion('foo', '#foo');
+}
+```
+
 ## Adding And Removing Regions
 
 Regions can be added and removed as needed, in a

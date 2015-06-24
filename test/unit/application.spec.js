@@ -5,7 +5,7 @@ describe('marionette application', function() {
     beforeEach(function() {
       this.fooOptions = {foo: 'bar'};
       this.appOptions = {baz: 'tah'};
-      this.extraArg = 'qux'
+      this.extraArg = 'qux';
       this.initializeStub = this.sinon.stub(Marionette.Application.prototype, 'initialize');
       this.app = new Marionette.Application(this.appOptions, this.extraArg);
 

@@ -217,7 +217,7 @@ Marionette.Region = Marionette.Object.extend({
   empty: function(options) {
     var view = this.currentView;
 
-    var preventDestroy = Marionette._getValue(options, 'preventDestroy', this);
+    var preventDestroy = options && options.preventDestroy;
     // If there is no view in the region
     // we should not remove anything
     if (!view) { return; }

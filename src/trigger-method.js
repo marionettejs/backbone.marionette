@@ -22,7 +22,7 @@ Marionette._triggerMethod = (function() {
 
     // get the method name from the event name
     var methodName = 'on' + event.replace(splitter, getEventName);
-    var method = context[methodName];
+    var method = Marionette.getOption(context, methodName);
     var result;
 
     // call the onMethodName if it exists

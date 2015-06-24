@@ -13,6 +13,17 @@ describe('trigger event and method name', function() {
     this.triggerMethodSpy = this.sinon.spy(this.view, 'triggerMethod');
   });
 
+  describe('triggering an event when passed options', function() {
+    beforeEach(function() {
+      this.view.options.onFoo = this.methodHandler;
+      this.view.triggerMethod('foo');
+    });
+
+    it('should trigger the event', function() {
+      expect(this.methodHandler).to.have.been.calledOnce;
+    });
+  });
+
   describe('when triggering an event', function() {
     beforeEach(function() {
       this.view.onFoo = this.methodHandler;

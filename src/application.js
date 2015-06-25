@@ -11,7 +11,7 @@ Marionette.Application = Marionette.Object.extend({
     this.submodules = {};
     _.extend(this, options);
     this._initChannel();
-    Marionette.Object.call(this, options);
+    Marionette.Object.apply(this, arguments);
   },
 
   // Command execution, facilitated by Backbone.Wreqr.Commands

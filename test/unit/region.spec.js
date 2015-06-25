@@ -679,7 +679,7 @@ describe('region', function() {
     });
   });
 
-  describe('when passing "preventDestroy" option to empty', function() {
+  describe('when passing options to empty', function() {
     beforeEach(function() {
       this.MyRegion = Backbone.Marionette.Region.extend({
         el: '#region'
@@ -716,6 +716,14 @@ describe('region', function() {
     describe('preventDestroy: false', function() {
       beforeEach(function() {
         this.myRegion.empty({preventDestroy: false});
+      });
+      it('should destroy view', function() {
+        expect(this.view.destroy).to.have.been.called;
+      });
+    });
+    describe('preventDestroy undefined', function() {
+      beforeEach(function() {
+        this.myRegion.empty({});
       });
       it('should destroy view', function() {
         expect(this.view.destroy).to.have.been.called;

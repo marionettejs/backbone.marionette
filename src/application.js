@@ -7,7 +7,7 @@ Marionette.Application = Marionette.Object.extend({
 
   constructor: function(options) {
     _.extend(this, options);
-    Marionette.Object.call(this, options);
+    Marionette.Object.apply(this, arguments);
   },
 
   // kick off all of the application's processes.

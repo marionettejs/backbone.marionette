@@ -38,11 +38,12 @@ Marionette.Class = Metal.Class.extend({
   unbindEntityEvents: Marionette.proxyUnbindEntityEvents
 });
 
+var props = _.keys(Metal.Class.prototype);
 function classify(obj) {
   return Marionette.Class.extend(
     _.extend(
       {constructor: obj},
-      _.omit(obj.prototype, _.keys(Metal.Class.prototype))
+      _.omit(obj.prototype, props)
     )
   );
 }

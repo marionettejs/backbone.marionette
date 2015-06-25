@@ -9,6 +9,7 @@
     "_"                  : true,
     "Backbone"           : true,
     "Marionette"         : true,
+    "Metal"              : true,
     "slice"              : true,
 
     "jasmine"            : true,

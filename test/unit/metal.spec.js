@@ -24,4 +24,18 @@ describe('metal', function() {
       expect(new Marionette.View()).to.be.instanceof(Backbone.Metal.Class);
     });
   });
+
+  describe('The Metal implementation', function() {
+    _.each(['Model', 'Collection', 'Router', 'History'], function(klass) {
+      var Klass = Marionette[klass];
+      describe('should be used for ' + klass, function() {
+        _.each(Metal.Class.prototype, function(method, name) {
+          it('for method ' + name, function() {
+            expect(Klass.prototype[name]).to.be.equal(method);
+          });
+        });
+      });
+    });
+
+  });
 });

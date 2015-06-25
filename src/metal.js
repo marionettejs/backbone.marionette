@@ -8,7 +8,7 @@ function classify(obj) {
   return Marionette.Class.extend(
     _.extend(
       {constructor: obj},
-      _.omit(obj.prototype, _.keys(Marionette.Class.prototype))
+      _.omit(obj.prototype, _.keys(Metal.Class.prototype))
     )
   );
 }

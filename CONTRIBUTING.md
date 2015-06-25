@@ -121,13 +121,9 @@ pull request on a topic branch. If your pull request contains
 commits or other changes that are not related to the pull
 request, we will ask you to re-do your pull request.
 
-### Branch from "minor" or "major," not "master"
+### Branch from "next" not "master"
 
-README and unit test updates can be opened against Master.
-
-Code changes should go against the "minor" or "major" branches. If your change is backwards
-compatible then it should be "minor," otherwise go with "major." If you're unsure,
-go with "minor" and we will update it if we need to.
+README and unit test updates can be opened against Master. Code changes should go against the "next" branch.
 
 ### Submit Specs With Your Pull Request
 

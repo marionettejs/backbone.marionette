@@ -38,6 +38,7 @@ will provide features such as `onShow` callbacks, etc. Please see
     * [Use of the `attach` Event](#use-of-the-attach-event)
 * [Destroying A LayoutView](#destroying-a-layoutview)
 * [Custom Region Class](#custom-region-class)
+* [Checking For Presence Of A Region](#checking-for-presence-of-a-region)
 * [Adding And Removing Regions](#adding-and-removing-regions)
 * [Region Naming](#region-naming)
 
@@ -395,6 +396,23 @@ var AppLayoutView = Marionette.LayoutView.extend({
     }
   }
 });
+```
+
+## Checking For Presence Of A Region
+
+A Region can be looked up to see if it is contained
+in a LayoutView. Use the following method:
+
+* `hasRegion`
+
+```js
+var layoutView = new MyLayoutView();
+
+// ...
+
+if (!layoutView.hasRegion('foo')) {
+  layoutView.addRegion('foo', '#foo');
+}
 ```
 
 ## Adding And Removing Regions

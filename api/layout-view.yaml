@@ -337,6 +337,25 @@ functions:
           layoutView.removeRegion("foo");
           ```
 
+  hasRegion:
+    description: |
+      Checks to see if the LayoutView contains a specified region.
+      @api public
+      @param {String} name - The name of the region being looked up.
+      @returns {Boolean} Whether or not the LayoutView has the region.
+    examples:
+      -
+        name: Checking if a LayoutView has a region
+
+        example: |
+          ```js
+          var layoutView = new MyLayoutView();
+          // ...
+          if (!layoutView.hasRegion('foo')) {
+            layoutView.addRegion('foo', '#foo');
+          }
+          ```
+
   getRegion:
     description: |
       Retrieves a region from the LayoutView.

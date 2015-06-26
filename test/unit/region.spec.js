@@ -679,7 +679,7 @@ describe('region', function() {
     });
   });
 
-  describe('when preventing destroy on empty', function() {
+  describe('when passing options to empty', function() {
     beforeEach(function() {
       this.MyRegion = Backbone.Marionette.Region.extend({
         el: '#region'
@@ -698,15 +698,36 @@ describe('region', function() {
       this.view = new this.MyView();
       this.sinon.spy(this.view, 'destroy');
       this.myRegion.show(this.view);
-      this.myRegion.empty({preventDestroy: true});
     });
 
-    it('should not destroy view', function() {
-      expect(this.view.destroy).to.have.been.not.called;
+    describe('preventDestroy: true', function() {
+      beforeEach(function() {
+        this.myRegion.empty({preventDestroy: true});
+      });
+      it('should not destroy view', function() {
+        expect(this.view.destroy).to.have.been.not.called;
+      });
+
+      it('should clear region contents', function() {
+        expect(this.myRegion.$el.html()).to.eql('');
+      });
     });
 
-    it('should clear region contents', function() {
-      expect(this.myRegion.$el.html()).to.eql('');
+    describe('preventDestroy: false', function() {
+      beforeEach(function() {
+        this.myRegion.empty({preventDestroy: false});
+      });
+      it('should destroy view', function() {
+        expect(this.view.destroy).to.have.been.called;
+      });
+    });
+    describe('preventDestroy undefined', function() {
+      beforeEach(function() {
+        this.myRegion.empty({});
+      });
+      it('should destroy view', function() {
+        expect(this.view.destroy).to.have.been.called;
+      });
     });
   });
 

@@ -168,6 +168,13 @@ Marionette.View = Marionette.AbstractView.extend({
     return this.getRegion(regionName).currentView;
   },
 
+  // Checks to see if layout contains region
+  // Accepts the region name
+  // hasRegion('main')
+  hasRegion: function(region) {
+    return !!this.getRegion(region);
+  },
+
   // Provides alternative access to regions
   // Accepts the region name
   // getRegion('main')

@@ -121,9 +121,10 @@ pull request on a topic branch. If your pull request contains
 commits or other changes that are not related to the pull
 request, we will ask you to re-do your pull request.
 
-### Branch from "next" not "master"
+### Branch from "patch" or "next", not "master"
 
-README and unit test updates can be opened against Master. Code changes should go against the "next" branch.
+* PRs for all bug fixes, doc updates, and unit tests of existing features should be opened against `patch`.
+* PRs for all new features, breaking or not, should be opened against `next`.
 
 ### Submit Specs With Your Pull Request
 

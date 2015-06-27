@@ -467,6 +467,34 @@ describe('collection view', function() {
     });
   });
 
+  describe('when a number of models are added to a non-empty collection with an "at" option', function() {
+    beforeEach(function() {
+      this.model1 = new Backbone.Model({foo: '1'});
+      this.model2 = new Backbone.Model({foo: '2'});
+      this.collection = new Backbone.Collection([this.model1, this.model2]);
+
+      this.collectionView = new this.DeepEqualCollectionView({
+        childView: this.ChildView,
+        collection: this.collection
+      });
+      this.collectionView.render();
+
+      this.childViewRender = this.sinon.stub();
+      this.collectionView.on('childview:render', this.childViewRender);
+
+      this.sinon.spy(this.collectionView, 'attachHtml');
+
+      this.model3 = new Backbone.Model({foo: '3'});
+      this.model4 = new Backbone.Model({foo: '4'});
+      this.collection.add([this.model3, this.model4], {at: 1});
+    });
+
+    it('should add models and render views in right order', function() {
+      var order = _.pluck(this.collectionView.$el.find('span'), 'innerHTML');
+      expect(order).to.deep.equal(['1', '3', '4', '2']);
+    });
+  });
+
   describe('when providing a custom render that adds children, without a collection object to use, and removing a child', function() {
     beforeEach(function() {
       var suite = this;

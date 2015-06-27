@@ -90,6 +90,7 @@ Marionette.CollectionView = Marionette.View.extend({
       this.listenTo(this.collection, 'add', this._onCollectionAdd);
       this.listenTo(this.collection, 'remove', this._onCollectionRemove);
       this.listenTo(this.collection, 'reset', this.render);
+      this.listenTo(this.collection, 'update', this._onCollectionUpdate);
 
       if (this.getOption('sort')) {
         this.listenTo(this.collection, 'sort', this._sortViews);
@@ -97,11 +98,24 @@ Marionette.CollectionView = Marionette.View.extend({
     }
   },
 
+  // Handle a Backbone.Collection#add method finished (called once after a
+  // number of sequential _onCollectionAdd calls)
+  _onCollectionUpdate: function() {
+    this._atIndex = null;
+  },
+
   // Handle a child added to the collection
   _onCollectionAdd: function(child, collection, opts) {
     var index;
     if (opts.at !== undefined) {
-      index = opts.at;
+      if (this._atIndex) {
+        // correct child index if a number of models added to collection at once
+        this._atIndex += 1;
+        index = this._atIndex;
+      } else {
+        index = opts.at;
+        this._atIndex = index;
+      }
     } else {
       index = _.indexOf(this._filteredSortedModels(), child);
     }

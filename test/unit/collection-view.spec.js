@@ -467,6 +467,46 @@ describe('collection view', function() {
     });
   });
 
+  describe('when a number of models are added to a non-empty collection with an "at" option', function() {
+    beforeEach(function() {
+      this.model1 = new Backbone.Model({foo: 1});
+      this.model2 = new Backbone.Model({foo: 6});
+      this.collection = new Backbone.Collection([this.model1, this.model2]);
+
+      this.collectionView = new this.CollectionView({
+        collection: this.collection
+      });
+      this.collectionView.render();
+
+      this.model3 = new Backbone.Model({foo: 2});
+      this.model4 = new Backbone.Model({foo: 5});
+      this.collection.add([this.model3, this.model4], {at: 1});
+
+      this.model5 = new Backbone.Model({foo: 3});
+      this.model6 = new Backbone.Model({foo: 4});
+      this.collection.add([this.model5, this.model6], {at: 2});
+    });
+
+    it('should add models and render views in right order', function() {
+      var order = _.pluck(this.collectionView.$el.find('span'), 'innerHTML');
+      expect(order).to.deep.equal(['1', '2', '3', '4', '5', '6']);
+    });
+
+    it('should add models and render views in right order for filtered collection', function() {
+      this.collectionView.filter = function(child) {
+        return child.get('foo') > 4;
+      };
+      this.collectionView.render();
+      this.collection.add([new Backbone.Model({foo: 10})], {at: 1});
+      var order = _.pluck(this.collectionView.$el.find('span'), 'innerHTML');
+      expect(order).to.deep.equal(['10', '5', '6']);
+      this.collectionView.filter = null;
+      this.collectionView.render();
+      order = _.pluck(this.collectionView.$el.find('span'), 'innerHTML');
+      expect(order).to.deep.equal(['1', '10', '2', '3', '4', '5', '6']);
+    });
+  });
+
   describe('when providing a custom render that adds children, without a collection object to use, and removing a child', function() {
     beforeEach(function() {
       var suite = this;

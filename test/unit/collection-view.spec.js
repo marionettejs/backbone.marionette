@@ -473,25 +473,23 @@ describe('collection view', function() {
       this.model2 = new Backbone.Model({foo: '2'});
       this.collection = new Backbone.Collection([this.model1, this.model2]);
 
-      this.collectionView = new this.DeepEqualCollectionView({
-        childView: this.ChildView,
+      this.collectionView = new this.CollectionView({
         collection: this.collection
       });
       this.collectionView.render();
 
-      this.childViewRender = this.sinon.stub();
-      this.collectionView.on('childview:render', this.childViewRender);
-
-      this.sinon.spy(this.collectionView, 'attachHtml');
-
       this.model3 = new Backbone.Model({foo: '3'});
       this.model4 = new Backbone.Model({foo: '4'});
       this.collection.add([this.model3, this.model4], {at: 1});
+
+      this.model5 = new Backbone.Model({foo: '5'});
+      this.model6 = new Backbone.Model({foo: '6'});
+      this.collection.add([this.model5, this.model6], {at: 2});
     });
 
     it('should add models and render views in right order', function() {
       var order = _.pluck(this.collectionView.$el.find('span'), 'innerHTML');
-      expect(order).to.deep.equal(['1', '3', '4', '2']);
+      expect(order).to.deep.equal(['1', '3', '5', '6', '4', '2']);
     });
   });
 

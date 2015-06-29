@@ -3,7 +3,7 @@
 # Marionette.Controller
 
 > Warning: deprecated. The Controller object is deprecated. Instead of using the Controller
-> class with the AppRouter, you should specify your callbacks on a plain Javascript object.
+> class with the AppRouter, you should specify your callbacks on a plain Javascript object or a [Marionette Object](./marionette.object.md)
 
 A Controller is an object used in the Marionette Router. Controllers are where you store
 your Router's callbacks.

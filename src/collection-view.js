@@ -243,7 +243,7 @@ Marionette.CollectionView = Marionette.View.extend({
       this.triggerMethod('render:collection', this);
 
       // If we have shown children and none have passed the filter, show the empty view
-      if (this.children.isEmpty() && this.getOption('filter') && this.getOption('filter') != '') {
+      if (this.children.isEmpty() && this.getOption('filter')) {
         this.showEmptyView();
       }
     }

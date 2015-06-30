@@ -42,6 +42,7 @@ function classify(obj) {
   return Marionette.Class.extend(
     _.defaults(
       {constructor: obj},
+      Marionette.Class.prototype,
       Metal.Class.prototype,
       obj.prototype
     )

@@ -489,7 +489,14 @@ describe('collection view', function() {
 
     it('should add models and render views in right order', function() {
       var order = _.pluck(this.collectionView.$el.find('span'), 'innerHTML');
-      expect(order).to.deep.equal(['1', '3', '5', '6', '4', '2']);
+      var backboneVersion = _.map(Backbone.VERSION.split('.'), function(x) {
+        return parseInt(x);
+      });
+      if (backboneVersion[0] >= 1 && backboneVersion[1] >= 2) {
+        expect(order).to.deep.equal(['1', '3', '5', '6', '4', '2']);
+      } else {
+        expect(order).to.deep.equal(['1', '4', '6', '5', '3', '2']);
+      }
     });
   });
 

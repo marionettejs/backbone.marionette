@@ -74,16 +74,15 @@ _.extend(Marionette.TemplateCache.prototype, {
   // using a template-loader plugin as described here:
   // https://github.com/marionettejs/backbone.marionette/wiki/Using-marionette-with-requirejs
   loadTemplate: function(templateId, options) {
-    var template = Backbone.$(templateId).html();
+    var $template = Backbone.$(templateId);
 
-    if (!template || template.length === 0) {
+    if (!$template.length) {
       throw new Marionette.Error({
         name: 'NoTemplateError',
         message: 'Could not find template: "' + templateId + '"'
       });
     }
-
-    return template;
+    return $template.html();
   },
 
   // Pre-compile the template before caching it. Override

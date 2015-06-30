@@ -220,6 +220,7 @@ functions:
       @api public
       @param {String} regionName - The name of the region you're trying to get
       @param {View} view - The view instance that you\'re showing in the region
+      @returns {Marionette.LayoutView} The current view.
 
     examples:
       -

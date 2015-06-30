@@ -80,12 +80,12 @@ layoutView.getRegion('menu').show(new MenuView());
 layoutView.getRegion('content').show(new MainContentView());
 ```
 
-There are also helpful shortcuts for more concise syntax.
+For more concise syntax, use `showChildView` which returns the `LayoutView` instance.
 
 ```js
 layoutView.showChildView('menu', new MenuView());
-
-layoutView.showChildView('content', new MainContentView());
+// allows chaining calls
+layoutView.showChildView('content', new MainContentView()).addRegion("foo", "#foo");
 ```
 
 ### Region Options

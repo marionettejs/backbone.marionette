@@ -161,7 +161,8 @@ Marionette.View = Marionette.AbstractView.extend({
   },
 
   showChildView: function(regionName, view) {
-    return this.getRegion(regionName).show(view);
+    this.getRegion(regionName).show(view);
+    return this;
   },
 
   getChildView: function(regionName) {

@@ -454,7 +454,7 @@ Marionette.CollectionView = Marionette.AbstractView.extend({
       this.triggerMethod('before:remove:child', view);
 
       // call 'destroy' or 'remove', depending on which is found
-      if (view.destroy) {
+      if (view instanceof Marionette.AbstractView) {
         view.destroy();
       } else if (view.remove) {
         view.remove();

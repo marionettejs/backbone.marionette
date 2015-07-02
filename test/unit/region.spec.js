@@ -528,12 +528,10 @@ describe('region', function() {
         el: '#region'
       });
 
-      this.MyView = Backbone.View.extend({
+      this.MyView = Marionette.View.extend({
         render: function() {
           $(this.el).html('some content');
-        },
-
-        destroy: function() {}
+        }
       });
 
       this.setFixtures('<div id="region"></div>');
@@ -563,11 +561,10 @@ describe('region', function() {
         el: '#region'
       });
 
-      this.MyView = Backbone.View.extend({
+      this.MyView = Marionette.View.extend({
         render: function() {
           $(this.el).html('some content');
         },
-        destroy: function() {},
         attachHtml: function() {}
       });
 
@@ -603,12 +600,10 @@ describe('region', function() {
         el: '#region'
       });
 
-      this.MyView = Backbone.View.extend({
+      this.MyView = Marionette.View.extend({
         render: function() {
           $(this.el).html('some content');
         },
-
-        destroy: function() {},
         attachHtml: function() {}
       });
 
@@ -736,12 +731,10 @@ describe('region', function() {
         el: '#region'
       });
 
-      this.MyView = Backbone.View.extend({
+      this.MyView = Marionette.View.extend({
         render: function() {
           $(this.el).html('some content');
-        },
-
-        destroy: function() {}
+        }
       });
 
       this.setFixtures('<div id="region"></div>');
@@ -786,8 +779,8 @@ describe('region', function() {
       expect(this.view.destroy).to.have.been.called;
     });
 
-    it('should not call "remove" directly, on the view', function() {
-      expect(this.view.remove).not.to.have.been.called;
+    it('should call "remove" on the view', function() {
+      expect(this.view.remove).to.have.been.called;
     });
 
     it('should delete the current view reference', function() {

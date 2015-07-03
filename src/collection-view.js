@@ -358,7 +358,7 @@ Marionette.CollectionView = Marionette.View.extend({
     // Trigger `before:attach` following `render` to avoid adding logic and event triggers
     // to public method `renderChildView()`.
     if (canTriggerAttach && this._triggerBeforeAttach) {
-      nestedViews = [view].concat(view._getNestedViews());
+      nestedViews = this._getViewAndNested(view);
       view.once('render', function() {
         this._triggerMethodMany(nestedViews, this, 'before:attach');
       }, this);
@@ -369,7 +369,7 @@ Marionette.CollectionView = Marionette.View.extend({
 
     // Trigger `attach`
     if (canTriggerAttach && this._triggerAttach) {
-      nestedViews = [view].concat(view._getNestedViews());
+      nestedViews = this._getViewAndNested(view);
       this._triggerMethodMany(nestedViews, this, 'attach');
     }
     // call the 'show' method if the collection view has already been shown
@@ -461,7 +461,7 @@ Marionette.CollectionView = Marionette.View.extend({
     // Trigger `before:attach` following `render` to avoid adding logic and event triggers
     // to public method `renderChildView()`.
     if (canTriggerAttach && this._triggerBeforeAttach) {
-      nestedViews = [view].concat(view._getNestedViews());
+      nestedViews = this._getViewAndNested(view);
       view.once('render', function() {
         this._triggerMethodMany(nestedViews, this, 'before:attach');
       }, this);
@@ -471,7 +471,7 @@ Marionette.CollectionView = Marionette.View.extend({
 
     // Trigger `attach`
     if (canTriggerAttach && this._triggerAttach) {
-      nestedViews = [view].concat(view._getNestedViews());
+      nestedViews = this._getViewAndNested(view);
       this._triggerMethodMany(nestedViews, this, 'attach');
     }
     // Trigger `show`
@@ -482,7 +482,13 @@ Marionette.CollectionView = Marionette.View.extend({
 
   // render the child view
   renderChildView: function(view, index) {
+    if (!(view instanceof Marionette.View)) {
+      Marionette.triggerMethodOn(view, 'before:render', view);
+    }
     view.render();
+    if (!(view instanceof Marionette.View)) {
+      Marionette.triggerMethodOn(view, 'render', view);
+    }
     this.attachHtml(this, view, index);
     return view;
   },
@@ -490,7 +496,11 @@ Marionette.CollectionView = Marionette.View.extend({
   // Build a `childView` for a model in the collection.
   buildChildView: function(child, ChildViewClass, childViewOptions) {
     var options = _.extend({model: child}, childViewOptions);
-    return new ChildViewClass(options);
+    var childView = new ChildViewClass(options);
+    if (!(childView instanceof Marionette.View)) {
+      Marionette.MonitorDOMRefresh(childView);
+    }
+    return childView;
   },
 
   // Remove the child view and destroy it.
@@ -506,7 +516,9 @@ Marionette.CollectionView = Marionette.View.extend({
       if (view.destroy) {
         view.destroy();
       } else if (view.remove) {
+        Marionette.triggerMethodOn(view, 'before:destroy', view);
         view.remove();
+        Marionette.triggerMethodOn(view, 'destroy', view);
       }
 
       delete view._parent;
@@ -665,6 +677,11 @@ Marionette.CollectionView = Marionette.View.extend({
 
   _getImmediateChildren: function() {
     return _.values(this.children._views);
+  },
+
+  _getViewAndNested: function(view) {
+    // This will not fail on Backbone.View which does not have #_getNestedViews.
+    return [view].concat(_.result(view, '_getNestedViews') || []);
   },
 
   getViewComparator: function() {

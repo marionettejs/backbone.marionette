@@ -10,10 +10,10 @@ describe('onAttach', function() {
     this.region = new Marionette.Region({el: this.el});
 
     // A view we can use as nested child views
-    this.BasicView = Marionette.ItemView.extend({
+    this.BasicView = Backbone.View.extend({
       template: false,
       constructor: function(options) {
-        Marionette.ItemView.prototype.constructor.call(this, options);
+        Backbone.View.prototype.constructor.call(this, options);
         spec.sinon.spy(this, 'onAttach');
         spec.sinon.spy(this, 'onBeforeAttach');
       },
@@ -37,18 +37,18 @@ describe('onAttach', function() {
       onBeforeAttach: function() {}
     });
 
-    this.EmptyView = Marionette.ItemView.extend({
+    this.EmptyView = Backbone.View.extend({
       template: false,
       constructor: function(options) {
-        Marionette.ItemView.prototype.constructor.call(this, options);
+        Backbone.View.prototype.constructor.call(this, options);
         this.onAttach = spec.sinon.stub();
         this.onBeforeAttach = spec.sinon.stub();
       }
     });
-    this.ChildView = Marionette.ItemView.extend({
+    this.ChildView = Backbone.View.extend({
       template: false,
       constructor: function(options) {
-        Marionette.ItemView.prototype.constructor.call(this, options);
+        Backbone.View.prototype.constructor.call(this, options);
         this.onAttach = spec.sinon.stub();
         this.onBeforeAttach = spec.sinon.stub();
       }
@@ -775,7 +775,7 @@ describe('onAttach', function() {
         .and.to.not.have.been.calledOnce
         .and.to.not.have.been.calledOn(this.childView)
         .and.to.not.have.been.calledWith(this.childView);
-      });
+    });
 
     describe('when adding a new element to the collection', function() {
       beforeEach(function() {

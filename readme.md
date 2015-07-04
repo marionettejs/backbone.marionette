@@ -1,6 +1,6 @@
 <h1 align="center">Marionette.js</h1>
 <p align="center">
-  <img title="backbone marionette" src='https://cdn.mediacru.sh/6sNqngKFuqft.svg' />
+  <img title="backbone marionette" src='marionette-logo.png' />
 </p>
 <p align="center">The Backbone framework</p>
 <p align="center">
@@ -83,7 +83,7 @@ We're happy to discuss design patterns and learn how you're using Marionette.
 + **Explore** application with an inspector magnifying glass
 + **Jump** between the inspector elements and source panel with intelligent links
 
-Download at [Chrome Web Store](https://chrome.google.com/webstore/detail/marionette-inspector/fbgfjlockdhidoaempmjcddibjklhpka)  
+Download at [Chrome Web Store](https://chrome.google.com/webstore/detail/marionette-inspector/fbgfjlockdhidoaempmjcddibjklhpka)
 Explore code at  [Github](https://github.com/marionettejs/marionette.inspector)
 
 ## Source Code and Downloads
@@ -138,7 +138,7 @@ the [guidelines for pull requests and contributions](CONTRIBUTING.md).
 Following these guidelines will help make your contributions easier to
 bring into the next release.
 
-### [Github Issues](//github.com/marionettejs/backbone.marionette/issues)
+### [GitHub Issues](//github.com/marionettejs/backbone.marionette/issues)
 
 Report issues with Marionette, submit pull requests to fix problems, or to
 create summarized and documented feature requests (preferably with pull

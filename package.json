@@ -43,7 +43,7 @@
     "backbone.babysitter": "^0.1.0",
     "backbone.radio": "^0.9.0",
     "backbone": "1.0.0 - 1.2.1",
-    "backbone-metal": "^0.5.0",
+    "backbone-metal": "^0.6.0",
     "underscore": "1.4.4 - 1.8.3"
   },
   "devDependencies": {

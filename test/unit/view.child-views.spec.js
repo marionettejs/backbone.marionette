@@ -293,11 +293,15 @@ describe('layoutView', function() {
       this.layoutView = new this.View();
       this.layoutView.render();
       this.childView = new Backbone.View();
-      this.layoutView.showChildView('regionOne', this.childView);
+      this.fooView = this.layoutView.showChildView('regionOne', this.childView);
     });
 
     it('shows the childview in the region', function() {
       expect(this.layoutView.getChildView('regionOne')).to.equal(this.childView);
+    });
+
+    it('returns the view instance', function() {
+      expect(this.fooView).to.equal(this.layoutView);
     });
   });
 

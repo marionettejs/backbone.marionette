@@ -27,7 +27,6 @@
     ".jshintrc",
     ".npmignore",
     ".travis.yml",
-    "component.json",
     "CONTRIBUTING.md",
     "Gruntfile.js",
     "SpecRunner.html",

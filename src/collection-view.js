@@ -100,7 +100,7 @@ Marionette.CollectionView = Marionette.View.extend({
   // Handle a child added to the collection
   _onCollectionAdd: function(child, collection, opts) {
     var index;
-    if (opts.index !== undefined && !this._isFilteredOrOrdered()) {
+    if (opts.index !== undefined && !this.getOption('filter')) {
       index = opts.index;
     } else {
       index = _.indexOf(this._filteredSortedModels(), child);
@@ -259,10 +259,6 @@ Marionette.CollectionView = Marionette.View.extend({
       ChildView = this.getChildView(child);
       this.addChild(child, ChildView, index);
     }, this);
-  },
-
-  _isFilteredOrOrdered: function() {
-    return !!(this.getViewComparator() || this.getOption('filter'));
   },
 
   // Allow the collection to be sorted by a custom view comparator

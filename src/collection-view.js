@@ -101,7 +101,13 @@ Marionette.CollectionView = Marionette.View.extend({
   _onCollectionAdd: function(child, collection, opts) {
     var index;
     if (opts.at !== undefined && !this.getOption('filter')) {
-      index = opts.index || _.indexOf(this._filteredSortedModels(), child);
+      index = opts.index;
+      if (!index) {
+        // ignore sorting with at options specified
+        index = this.getViewComparator() ?
+                collection.indexOf(child) :
+                _.indexOf(this._filteredSortedModels(), child);
+      }
     } else {
       index = _.indexOf(this._filteredSortedModels(), child);
     }

@@ -499,7 +499,7 @@ describe('collection view', function() {
       this.collectionView.render();
       this.collection.add([new Backbone.Model({foo: 10})], {at: 1});
       var order = _.pluck(this.collectionView.$el.find('span'), 'innerHTML');
-      expect(order).to.deep.equal(['5', '10', '6']);
+      expect(order).to.deep.equal(['10', '5', '6']);
       this.collectionView.filter = null;
       this.collectionView.render();
       order = _.pluck(this.collectionView.$el.find('span'), 'innerHTML');

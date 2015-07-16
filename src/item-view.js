@@ -5,6 +5,7 @@
 // with underscore.js templates, serializing the view's model or collection,
 // and calling several methods on extended views, such as `onRender`.
 Marionette.ItemView = Marionette.View.extend({
+  renderer: Marionette.Renderer,
 
   // Setting up the inheritance chain which allows changes to
   // Marionette.View.prototype.constructor which allows overriding
@@ -85,7 +86,7 @@ Marionette.ItemView = Marionette.View.extend({
     var data = this.mixinTemplateHelpers(this.serializeData());
 
     // Render and add to el
-    var html = Marionette.Renderer.render(template, data, this);
+    var html = this.renderer.render(template, data, this);
     this.attachElContent(html);
 
     return this;

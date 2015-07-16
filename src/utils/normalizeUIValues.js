@@ -1,5 +1,3 @@
-/* jshint unused: false *//* global console */
-
 // allows for the use of the @ui. syntax within
 // a given value for regions
 // swaps the @ui with the associated selector

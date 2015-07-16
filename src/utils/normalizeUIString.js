@@ -1,5 +1,3 @@
-/* jshint unused: false *//* global console */
-
 // utility method for parsing @ui. syntax strings
 // into associated selector
 Marionette.normalizeUIString = function(uiString, ui) {

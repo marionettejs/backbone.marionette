@@ -1,4 +1,4 @@
-/* jshint unused: false *//* global console */
+/* global console */
 
 var deprecate = Marionette.deprecate = function(message, test) {
   if (_.isObject(message)) {

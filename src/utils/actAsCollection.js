@@ -1,5 +1,3 @@
-/* jshint unused: false *//* global console */
-
 // Mix in methods from Underscore, for iteration, and other
 // collection related features.
 // Borrowing this code from Backbone.Collection:

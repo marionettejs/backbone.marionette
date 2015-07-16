@@ -7,6 +7,7 @@
 // Extends directly from CollectionView and also renders an
 // a child view as `modelView`, for the top leaf
 Marionette.CompositeView = Marionette.CollectionView.extend({
+  renderer: Marionette.Renderer,
 
   // Setting up the inheritance chain which allows changes to
   // Marionette.CollectionView.prototype.constructor which allows overriding
@@ -92,7 +93,7 @@ Marionette.CompositeView = Marionette.CollectionView.extend({
     this.triggerMethod('before:render:template');
 
     var template = this.getTemplate();
-    var html = Marionette.Renderer.render(template, data, this);
+    var html = this.renderer.render(template, data, this);
     this.attachElContent(html);
 
     // the ui bindings is done here and not at the end of render since they

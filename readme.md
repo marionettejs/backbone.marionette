@@ -97,7 +97,7 @@ please visit [the downloads section on the website](http://marionettejs.com#down
 
 ### Available Packages
 
-Marionette is available via bower, npm, and component.io. There are other channels that are maintained by the community.
+Marionette is available via bower and npm. There are other channels that are maintained by the community.
 
 
 ## Release Notes And Upgrade Guide

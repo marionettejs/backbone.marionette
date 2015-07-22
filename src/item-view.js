@@ -5,6 +5,7 @@
 // with underscore.js templates, serializing the view's model or collection,
 // and calling several methods on extended views, such as `onRender`.
 Marionette.ItemView = Marionette.View.extend({
+
   // Setting up the inheritance chain which allows changes to
   // Marionette.View.prototype.constructor which allows overriding
   constructor: function() {

@@ -349,6 +349,11 @@ Marionette.View = Backbone.View.extend({
     });
   },
 
+  // Returns the view's renderer.
+  getRenderer: function() {
+    return Marionette.Renderer;
+  },
+
   // Imports the "normalizeMethods" to transform hashes of
   // events=>function references/names to a hash of events=>function references
   normalizeMethods: Marionette.normalizeMethods,

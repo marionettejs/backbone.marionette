@@ -85,7 +85,7 @@ Marionette.ItemView = Marionette.View.extend({
     var data = this.mixinTemplateHelpers(this.serializeData());
 
     // Render and add to el
-    var html = Marionette.Renderer.render(template, data, this);
+    var html = (this.getRenderer()).render(template, data, this);
     this.attachElContent(html);
 
     return this;

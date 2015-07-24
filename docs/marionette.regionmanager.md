@@ -46,7 +46,7 @@ var regions = rm.addRegions({
   quux: "ul.quux"
 });
 
-regions.get('baz').show(myView);
+regions.get('baz').show(myView, options);
 
 rm.removeRegion("foo");
 ```
@@ -62,7 +62,7 @@ var manager = new Marionette.RegionManager({
   }
 });
 
-manager.get('aRegion').show(new MyView);
+manager.get('aRegion').show(new MyView, options);
 ```
 
 ## RegionManager.addRegion

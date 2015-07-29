@@ -47,7 +47,7 @@ Marionette.Behaviors = (function(Marionette, _) {
         behaviorEvents = Marionette.normalizeUIKeys(behaviorEvents, getBehaviorsUI(b));
 
         var j = 0;
-        _.each(behaviorEvents, function(behaviour, key) {
+        _.each(behaviorEvents, function(behaviorHandler, key) {
           var match     = key.match(delegateEventSplitter);
 
           // Set event name to be namespaced using the view cid,
@@ -58,7 +58,7 @@ Marionette.Behaviors = (function(Marionette, _) {
           var selector  = match[2];
 
           var eventKey  = eventName + selector;
-          var handler   = _.isFunction(behaviour) ? behaviour : b[behaviour];
+          var handler   = _.isFunction(behaviorHandler) ? behaviorHandler : b[behaviorHandler];
 
           _events[eventKey] = _.bind(handler, b);
         }, this);

@@ -60,6 +60,7 @@ will provide features such as `onShow` callbacks, etc. Please see
   * ["render:empty" event](#renderempty-event)
   * ["before:remove:empty" event](#beforeremoveempty-event)
   * ["remove:empty" event](#removeempty-event)
+* [CollectionView Child View Events](#collectionview-child-view-events)
 * [CollectionView render](#collectionview-render)
 * [CollectionView: Automatic Rendering](#collectionview-automatic-rendering)
 * [CollectionView: Re-render Collection](#collectionview-re-render-collection)
@@ -922,6 +923,20 @@ myCollectionView.on("before:remove:empty", function(){
 myCollectionView.render()
 collection.add([{foo: 'bar'}])
 ```
+
+## CollectionView Child View Events
+
+* `before:show` / `onBeforeShow` - Called after the child view has been rendered, but before it has been bound to the CollectionView.
+* `show` / `onShow` - Called when the view has been rendered and bound to the CollectionView.
+* `before:render` / `onBeforeRender` - Called before the view is rendered.
+* `render` / `onRender` - Called after the view is rendered, but before it is attached to the DOM.
+* `dom:refresh` / `onDomRefresh` - Called when the view is shown, rendered, and attached to the DOM.
+* `before:attach` / `onBeforeAttach` - Called before the view is attached to the DOM.
+* `attach` / `onAttach` - Called after the view is attached to the DOM.
+* `before:destroy` / `onBeforeDestroy` - Called before destroying a view.
+* `destroy` / `onDestroy` - Called after destroying a view.
+
+Note: All events and event handlers are also supported on pure Backbone views during child view operations.  Keep in mind that `render/onRender` and `destroy/onDestroy` are not fired when calling `childView.render()` or `childView.remove()` manually.
 
 ## CollectionView render
 

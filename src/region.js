@@ -251,6 +251,10 @@ Marionette.Region = Marionette.Object.extend({
   // and will not replace the current HTML for the `el`
   // of the region.
   attachView: function(view) {
+    if (this.currentView) {
+      delete this.currentView._parent;
+    }
+    view._parent = this;
     this.currentView = view;
     return this;
   },

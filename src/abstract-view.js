@@ -96,7 +96,7 @@ Marionette.AbstractView = Backbone.View.extend({
 
     // normalize ui keys
     events = this.normalizeUIKeys(events);
-    if (_.isUndefined(eventsArg)) {this.events = events;}
+    if (typeof eventsArg === 'undefined') {this.events = events;}
 
     var combinedEvents = {};
 

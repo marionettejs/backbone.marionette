@@ -80,11 +80,13 @@ grunt compile-api
 
 #### Steps
 
-    cd www
-    bundle install
-    bundle exec rake api
-    middleman server
-    open http://0.0.0.0:4567/api
+```bash
+cd www
+bundle install
+bundle exec rake api
+middleman server
+open http://0.0.0.0:4567/api
+```
 
 #### Local API
 ![](http://f.cl.ly/items/3w3w351W0Q1K0S0G2501/Image%202014-10-01%20at%201.19.05%20AM.png)

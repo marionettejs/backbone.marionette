@@ -848,7 +848,7 @@ describe('composite view', function() {
 
   describe('has a valid inheritance chain back to Marionette.CollectionView', function() {
     beforeEach(function() {
-      this.constructor = this.sinon.spy(Marionette, 'CollectionView');
+      this.constructor = this.sinon.spy(Marionette.CollectionView.prototype, 'constructor');
       this.compositeView = new Marionette.CompositeView();
     });
 

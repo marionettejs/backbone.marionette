@@ -25,7 +25,7 @@ Marionette.CollectionView = Marionette.View.extend({
     this.once('render', this._initialEvents);
     this._initChildViewStorage();
 
-    Marionette.View.apply(this, arguments);
+    Marionette.View.prototype.constructor.apply(this, arguments);
 
     this.on({
       'before:show':   this._onBeforeShowCalled,

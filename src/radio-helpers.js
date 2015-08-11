@@ -21,9 +21,6 @@
       }
       _.each(hash, function(handler, radioMessage) {
         handler = normalizeHandler.call(this, handler);
-        if (!handler) {
-          return;
-        }
         var messageComponents = radioMessage.split(' ');
         var channel = messageComponents[0];
         var messageName = messageComponents[1];

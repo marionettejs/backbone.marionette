@@ -43,6 +43,7 @@ Marionette.Region = Marionette.Object.extend({
     }
 
     this._ensureViewIsIntact(view);
+    this._ensureViewIsDomRefreshMonitored(view);
 
     var showOptions     = options || {};
     var isDifferentView = view !== this.currentView;
@@ -87,7 +88,8 @@ Marionette.Region = Marionette.Object.extend({
       // to the currentView since once a view has been destroyed
       // we can not reuse it.
       view.once('destroy', this.empty, this);
-      view.render();
+
+      this._renderView(view);
 
       view._parent = this;
 
@@ -155,6 +157,16 @@ Marionette.Region = Marionette.Object.extend({
     return _.union([view], _.result(view, '_getNestedViews') || []);
   },
 
+  _renderView: function(view) {
+    if (!(view instanceof Marionette.View)) {
+      Marionette.triggerMethodOn(view, 'before:render', view);
+    }
+    view.render();
+    if (!(view instanceof Marionette.View)) {
+      Marionette.triggerMethodOn(view, 'render', view);
+    }
+  },
+
   _ensureElement: function() {
     if (!_.isObject(this.el)) {
       this.$el = this.getEl(this.el);
@@ -184,6 +196,13 @@ Marionette.Region = Marionette.Object.extend({
         name: 'ViewDestroyedError',
         message: 'View (cid: "' + view.cid + '") has already been destroyed and cannot be used.'
       });
+    }
+  },
+
+  _ensureViewIsDomRefreshMonitored: function(view) {
+    // Backbone Views will not be domRefresh monitored
+    if (!view._isDomRefreshMonitored) {
+      Marionette.MonitorDOMRefresh(view);
     }
   },
 
@@ -234,11 +253,14 @@ Marionette.Region = Marionette.Object.extend({
   // on the view (if showing a raw Backbone view or a Marionette View)
   _destroyView: function() {
     var view = this.currentView;
+    if (view.isDestroyed) { return; }
 
-    if (view.destroy && !view.isDestroyed) {
+    if (view.destroy) {
       view.destroy();
     } else if (view.remove) {
+      Marionette.triggerMethodOn(view, 'before:destroy', view);
       view.remove();
+      Marionette.triggerMethodOn(view, 'destroy', view);
 
       // appending isDestroyed to raw Backbone View allows regions
       // to throw a ViewDestroyedError for this view

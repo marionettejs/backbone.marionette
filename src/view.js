@@ -5,6 +5,8 @@
 // The core view class that other Marionette views extend from.
 Marionette.View = Backbone.View.extend({
   isDestroyed: false,
+  supportsRenderLifecycle: true,
+  supportsDestroyLifecycle: true,
 
   constructor: function(options) {
     this.render = _.bind(this.render, this);

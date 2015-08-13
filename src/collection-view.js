@@ -488,11 +488,11 @@ Marionette.CollectionView = Marionette.View.extend({
 
   // render the child view
   renderChildView: function(view, index) {
-    if (!(view instanceof Marionette.View)) {
+    if (!view.supportsRenderLifecycle) {
       Marionette.triggerMethodOn(view, 'before:render', view);
     }
     view.render();
-    if (!(view instanceof Marionette.View)) {
+    if (!view.supportsRenderLifecycle) {
       Marionette.triggerMethodOn(view, 'render', view);
     }
     this.attachHtml(this, view, index);
@@ -503,9 +503,7 @@ Marionette.CollectionView = Marionette.View.extend({
   buildChildView: function(child, ChildViewClass, childViewOptions) {
     var options = _.extend({model: child}, childViewOptions);
     var childView = new ChildViewClass(options);
-    if (!(childView instanceof Marionette.View)) {
-      Marionette.MonitorDOMRefresh(childView);
-    }
+    Marionette.MonitorDOMRefresh(childView);
     return childView;
   },
 
@@ -514,27 +512,30 @@ Marionette.CollectionView = Marionette.View.extend({
   // later views in the collection in order to keep
   // the children in sync with the collection.
   removeChildView: function(view) {
+    if (!view) { return view; }
 
-    if (view) {
-      this.triggerMethod('before:remove:child', view);
+    this.triggerMethod('before:remove:child', view);
 
-      // call 'destroy' or 'remove', depending on which is found
-      if (view.destroy) {
-        view.destroy();
-      } else if (view.remove) {
-        Marionette.triggerMethodOn(view, 'before:destroy', view);
-        view.remove();
-        Marionette.triggerMethodOn(view, 'destroy', view);
-      }
-
-      delete view._parent;
-      this.stopListening(view);
-      this.children.remove(view);
-      this.triggerMethod('remove:child', view);
-
-      // decrement the index of views after this one
-      this._updateIndices(view, false);
+    if (!view.supportsDestroyLifecycle) {
+      Marionette.triggerMethodOn(view, 'before:destroy', view);
     }
+    // call 'destroy' or 'remove', depending on which is found
+    if (view.destroy) {
+      view.destroy();
+    } else if (view.remove) {
+      view.remove();
+    }
+    if (!view.supportsDestroyLifecycle) {
+      Marionette.triggerMethodOn(view, 'destroy', view);
+    }
+
+    delete view._parent;
+    this.stopListening(view);
+    this.children.remove(view);
+    this.triggerMethod('remove:child', view);
+
+    // decrement the index of views after this one
+    this._updateIndices(view, false);
 
     return view;
   },

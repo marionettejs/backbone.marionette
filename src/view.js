@@ -7,7 +7,7 @@ Marionette.View = Backbone.View.extend({
   isDestroyed: false,
 
   constructor: function(options) {
-    _.bindAll(this, 'render');
+    this.render = _.bind(this.render, this);
 
     options = Marionette._getValue(options, this);
 

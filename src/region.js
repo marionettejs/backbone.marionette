@@ -45,6 +45,7 @@ Marionette.Region = Marionette.Object.extend({
     }
 
     this._ensureViewIsIntact(view);
+    Marionette.MonitorDOMRefresh(view);
 
     var showOptions     = options || {};
     var isDifferentView = view !== this.currentView;
@@ -155,11 +156,11 @@ Marionette.Region = Marionette.Object.extend({
   },
 
   _renderView: function(view, options) {
-    if (!(view instanceof Marionette.View)) {
+    if (!view.supportsRenderLifecycle) {
       Marionette.triggerMethodOn(view, 'before:render', view);
     }
     this.renderView(view, options);
-    if (!(view instanceof Marionette.View)) {
+    if (!view.supportsRenderLifecycle) {
       Marionette.triggerMethodOn(view, 'render', view);
     }
   },
@@ -209,13 +210,6 @@ Marionette.Region = Marionette.Object.extend({
         name: 'ViewDestroyedError',
         message: 'View (cid: "' + view.cid + '") has already been destroyed and cannot be used.'
       });
-    }
-  },
-
-  _ensureViewIsDomRefreshMonitored: function(view) {
-    // Backbone Views will not be domRefresh monitored
-    if (!view._isDomRefreshMonitored) {
-      Marionette.MonitorDOMRefresh(view);
     }
   },
 
@@ -311,16 +305,20 @@ Marionette.Region = Marionette.Object.extend({
     var view = this.currentView;
     if (view.isDestroyed) { return; }
 
+    if (!view.supportsDestroyLifecycle) {
+      Marionette.triggerMethodOn(view, 'before:destroy', view);
+    }
     if (view.destroy) {
       view.destroy();
     } else if (view.remove) {
-      Marionette.triggerMethodOn(view, 'before:destroy', view);
       view.remove();
-      Marionette.triggerMethodOn(view, 'destroy', view);
 
       // appending isDestroyed to raw Backbone View allows regions
       // to throw a ViewDestroyedError for this view
       view.isDestroyed = true;
+    }
+    if (!view.supportsDestroyLifecycle) {
+      Marionette.triggerMethodOn(view, 'destroy', view);
     }
   },
 

@@ -926,17 +926,24 @@ collection.add([{foo: 'bar'}])
 
 ## CollectionView Child View Events
 
-* `before:show` / `onBeforeShow` - Called after the child view has been rendered, but before it has been bound to the CollectionView.
-* `show` / `onShow` - Called when the view has been rendered and bound to the CollectionView.
+The following events are raised on child views during rendering and destruction of child views, which is consistent with the view lifecycle experienced during `Region#show`.
+
 * `before:render` / `onBeforeRender` - Called before the view is rendered.
 * `render` / `onRender` - Called after the view is rendered, but before it is attached to the DOM.
-* `dom:refresh` / `onDomRefresh` - Called when the view is shown, rendered, and attached to the DOM.
-* `before:attach` / `onBeforeAttach` - Called before the view is attached to the DOM.
-* `attach` / `onAttach` - Called after the view is attached to the DOM.
+* `before:show` / `onBeforeShow` - Called after the view has been rendered, but before it has been bound to the CollectionView.
+* `before:attach` / `onBeforeAttach` - Called before the view is attached to the DOM.  This will not fire if the CollectionView itself is not attached.
+* `attach` / `onAttach` - Called after the view is attached to the DOM.  This will not fire if the CollectionView itself is not attached.
+* `show` / `onShow` - Called when the view has been rendered and bound to the CollectionView.
+* `dom:refresh` / `onDomRefresh` - Called when the view is both rendered and shown, but only if it is attached to the DOM.  This will not fire if the CollectionView itself is not attached.
 * `before:destroy` / `onBeforeDestroy` - Called before destroying a view.
 * `destroy` / `onDestroy` - Called after destroying a view.
 
-Note: All events and event handlers are also supported on pure Backbone views during child view operations.  Keep in mind that `render/onRender` and `destroy/onDestroy` are not fired when calling `childView.render()` or `childView.remove()` manually.
+Note: `render`, `destroy`, and `dom:refresh` are triggered on pure Backbone Views during child view rendering, but for a complete implementation of these events the Backbone View should fire `render` within `render()` and `destroy` within `remove()` as well as set the following flags:
+
+```js
+view.supportsRenderLifecycle = true;
+view.supportsDestroyLifecycle = true;
+```
 
 ## CollectionView render
 

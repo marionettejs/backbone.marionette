@@ -9,6 +9,8 @@
 
 Marionette.AbstractView = Backbone.View.extend({
   isDestroyed: false,
+  supportsRenderLifecycle: true,
+  supportsDestroyLifecycle: true,
 
   constructor: function(options) {
     this.render = _.bind(this.render, this);

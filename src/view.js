@@ -4,6 +4,7 @@
 // The standard view. Includes view events, automatic rendering
 // of Underscore templates, nested views, and more.
 Marionette.View = Marionette.AbstractView.extend({
+
   regionClass: Marionette.Region,
 
   options: {

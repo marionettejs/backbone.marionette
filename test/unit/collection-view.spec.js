@@ -1000,8 +1000,11 @@ describe('collection view', function() {
       var ChildView = this.ChildView.extend({
         constructor: function() {
           ChildView.__super__.constructor.apply(this, arguments);
+          spec.sinon.stub(this, 'onRender');
           spec.sinon.stub(this, 'onBeforeShow');
           spec.sinon.stub(this, 'onShow');
+          spec.sinon.stub(this, 'onBeforeAttach');
+          spec.sinon.stub(this, 'onAttach');
           spec.sinon.stub(this, 'onDomRefresh');
         },
         onRender: function() {},
@@ -1049,6 +1052,29 @@ describe('collection view', function() {
         .and.to.have.been.calledWith(this.childView2);
     });
 
+    it('should call Region#show-like events on the initial child views in proper order', function() {
+      expect(this.childView1.onRender).to.have.been.calledBefore(this.childView1.onBeforeShow);
+      expect(this.childView1.onBeforeShow).to.have.been.calledBefore(this.childView1.onBeforeAttach);
+      expect(this.childView1.onBeforeAttach).to.have.been.calledBefore(this.childView1.onAttach);
+      expect(this.childView1.onAttach).to.have.been.calledBefore(this.childView1.onShow);
+      expect(this.childView1.onShow).to.have.been.called;
+    });
+
+    describe('when collection view is emptied', function() {
+      beforeEach(function() {
+        this.collection.reset();
+        this.emptyView = this.collectionView.children.findByIndex(0);
+      });
+
+      it('should call Region#show-like events on the empty view in proper order', function() {
+        expect(this.emptyView.onRender).to.have.been.calledBefore(this.emptyView.onBeforeShow);
+        expect(this.emptyView.onBeforeShow).to.have.been.calledBefore(this.emptyView.onBeforeAttach);
+        expect(this.emptyView.onBeforeAttach).to.have.been.calledBefore(this.emptyView.onAttach);
+        expect(this.emptyView.onAttach).to.have.been.calledBefore(this.emptyView.onShow);
+        expect(this.emptyView.onShow).to.have.been.called;
+      });
+    });
+
     describe('when a child view is added to a collection view, after the collection view has been shown', function() {
       beforeEach(function() {
         this.sinon.spy(this.collectionView, 'attachBuffer');
@@ -1085,6 +1111,14 @@ describe('collection view', function() {
 
       it('should call getChildView with the new model', function() {
         expect(this.collectionView.getChildView).to.have.been.calledWith(this.model3);
+      });
+
+      it('should call Region#show-like events on the added child view in proper order', function() {
+        expect(this.childView3.onRender).to.have.been.calledBefore(this.childView3.onBeforeShow);
+        expect(this.childView3.onBeforeShow).to.have.been.calledBefore(this.childView3.onBeforeAttach);
+        expect(this.childView3.onBeforeAttach).to.have.been.calledBefore(this.childView3.onAttach);
+        expect(this.childView3.onAttach).to.have.been.calledBefore(this.childView3.onShow);
+        expect(this.childView3.onShow).to.have.been.called;
       });
     });
 

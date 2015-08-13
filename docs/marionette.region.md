@@ -24,7 +24,6 @@ Using the `LayoutView` class you can create nested regions.
 * [Region Events And Callbacks](#region-events-and-callbacks)
   * [Events Raised on the Region During `show`](#events-raised-on-the-region-during-show)
   * [Events Raised on the View During `show`](#events-raised-on-the-view-during-show)
-    * [Backbone Views](#backbone-views)
   * [Example Event Handlers](#example-event-handlers)
 * [Custom Region Classes](#custom-region-classes)
   * [Attaching Custom Region Classes](#attaching-custom-region-classes)
@@ -429,7 +428,7 @@ MyApp.someRegion.attachView(myView);
 
 A region will raise a few events on itself and on the target view when showing and destroying views.
 
-### Events Raised on the Region During `show`
+### Events Raised on the Region During `show()`
 
 * `before:show` / `onBeforeShow` - Called after the view has been rendered, but before its been displayed.
 * `show` / `onShow` - Called when the view has been rendered and displayed.
@@ -440,19 +439,24 @@ A region will raise a few events on itself and on the target view when showing a
 * `before:empty` / `onBeforeEmpty` - Called before the view has been emptied.
 * `empty` / `onEmpty` - Called when the view has been emptied.
 
-### Events Raised on the View During `show`
+### Events Raised on the View During `show()`
 
-* `before:show` / `onBeforeShow` - Called after the view has been rendered, but before it has been bound to the region.
-* `show` / `onShow` - Called when the view has been rendered and bound to the region.
 * `before:render` / `onBeforeRender` - Called before the view is rendered.
 * `render` / `onRender` - Called after the view is rendered, but before it is attached to the DOM.
-* `dom:refresh` / `onDomRefresh` - Called when the view is shown, rendered, and attached to the DOM.
-* `before:attach` / `onBeforeAttach` - Called before the view is attached to the DOM.
-* `attach` / `onAttach` - Called after the view is attached to the DOM.
-* `before:destroy` / `onBeforeDestroy` - Called before destroying a view (on empty or swapOut).
-* `destroy` / `onDestroy` - Called after destroying a view (on empty or swapOut).
+* `before:show` / `onBeforeShow` - Called after the view has been rendered, but before it has been bound to the region.
+* `before:attach` / `onBeforeAttach` - Called before the view is attached to the DOM.  This will not fire if the Region itself is not attached.
+* `attach` / `onAttach` - Called after the view is attached to the DOM.  This will not fire if the Region itself is not attached.
+* `show` / `onShow` - Called when the view has been rendered and bound to the region.
+* `dom:refresh` / `onDomRefresh` - Called when the view is both rendered and shown, but only if it is attached to the DOM.  This will not fire if the Region itself is not attached.
+* `before:destroy` / `onBeforeDestroy` - Called before destroying a view.
+* `destroy` / `onDestroy` - Called after destroying a view.
 
-Note: All events and event handlers are also supported on pure Backbone views during a `show`.  Keep in mind that `render/onRender` and `destroy/onDestroy` are not fired when calling `view.render()` or `view.remove()` manually.
+Note: `render`, `destroy`, and `dom:refresh` are triggered on pure Backbone Views during a show, but for a complete implementation of these events the Backbone View should fire `render` within `render()` and `destroy` within `remove()` as well as set the following flags:
+
+```js
+view.supportsRenderLifecycle = true;
+view.supportsDestroyLifecycle = true;
+```
 
 ### Example Event Handlers
 

@@ -16,10 +16,8 @@
 // function can be supplied instead of a string handler name.
 
 import _               from 'underscore';
-import helpers         from './helpers';
+import _getValue       from './utils/_getvalue';
 import MarionetteError from './error';
-
-'use strict';
 
 // Bind the event to handlers specified as a string of
 // handler names on the target object
@@ -72,7 +70,7 @@ function iterateEvents(target, entity, bindings, functionCallback, stringCallbac
   }
 
   // allow the bindings to be a function
-  bindings = helpers._getValue(bindings, target);
+  bindings = _getValue(bindings, target);
 
   // iterate the bindings and bind them
   _.each(bindings, function(methods, evt) {
@@ -113,4 +111,3 @@ export default {
   proxyBindEntityEvents: proxyBindEntityEvents,
   proxyUnbindEntityEvents: proxyUnbindEntityEvents
 };
-

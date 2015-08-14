@@ -2,6 +2,8 @@
 // -------------------------
 
 // Determine if `el` is a child of the document
-Marionette.isNodeAttached = function(el) {
+var isNodeAttached = function(el) {
   return Backbone.$.contains(document.documentElement, el);
 };
+
+export default isNodeAttached;

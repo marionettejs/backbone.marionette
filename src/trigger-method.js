@@ -86,4 +86,3 @@ export default {
   triggerMethodOn:    triggerMethodOn,
   triggerMethodMany:  triggerMethodMany
 };
-

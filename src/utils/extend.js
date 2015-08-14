@@ -2,4 +2,6 @@
 // -----------------
 
 // Borrow the Backbone `extend` method so we can use it as needed
-Marionette.extend = Backbone.Model.extend;
+var extend = Backbone.Model.extend;
+
+export default extend;

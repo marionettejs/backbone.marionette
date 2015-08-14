@@ -2,7 +2,7 @@
 // collection related features.
 // Borrowing this code from Backbone.Collection:
 // http://backbonejs.org/docs/backbone.html#section-121
-Marionette.actAsCollection = function(object, listProperty) {
+var actAsCollection = function(object, listProperty) {
   var methods = ['forEach', 'each', 'map', 'find', 'detect', 'filter',
     'select', 'reject', 'every', 'all', 'some', 'any', 'include',
     'contains', 'invoke', 'toArray', 'first', 'initial', 'rest',
@@ -16,3 +16,5 @@ Marionette.actAsCollection = function(object, listProperty) {
     };
   });
 };
+
+export default actAsCollection;

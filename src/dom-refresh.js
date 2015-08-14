@@ -1,8 +1,8 @@
 // DOM Refresh
 // -----------
 
-import _       from 'underscore';
-import helpers from './helpers';
+import _              from 'underscore';
+import isNodeAttached from './utils/isNodeAttached';
 
 // Monitor a view's state, and after it has been rendered and shown
 // in the DOM, trigger a "dom:refresh" event every time it is
@@ -25,7 +25,7 @@ function MonitorDOMRefresh(view) {
 
   // Trigger the "dom:refresh" event and corresponding "onDomRefresh" method
   function triggerDOMRefresh() {
-    if (view._isShown && view._isRendered && helpers.isNodeAttached(view.el)) {
+    if (view._isShown && view._isRendered && isNodeAttached(view.el)) {
       if (_.isFunction(view.triggerMethod)) {
         view.triggerMethod('dom:refresh');
       }

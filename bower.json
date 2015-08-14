@@ -11,6 +11,7 @@
     "browser",
     "composite"
   ],
+  "license": "MIT",
   "author": {
     "name": "Derick Bailey",
     "email": "derickbailey@gmail.com"

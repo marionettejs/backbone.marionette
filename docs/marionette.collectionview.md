@@ -213,16 +213,16 @@ in the constructor function call, to get a view instance.
 
 ### CollectionView's `childEvents`
 
-You can specify a `childEvents` hash or method which allows you to capture all bubbling childEvents without having to manually set bindings. The keys of the hash can either be a function or a string that is the name of a method on the collection view.
+A `childEvents` hash or method permits handling of child view events without manually setting bindings. The values of the hash can either be a function or a string method name on the collection view.
 
 ```js
 // childEvents can be specified as a hash...
 var MyCollectionView = Marionette.CollectionView.extend({
 
-  // This callback will be called whenever a child is rendered or emits a `render` event
   childEvents: {
+    // This callback will be called whenever a child is rendered or emits a `render` event
     render: function() {
-      console.log("a childView has been rendered");
+      console.log('A child view has been rendered.');
     }
   }
 });
@@ -234,33 +234,53 @@ var MyCollectionView = Marionette.CollectionView.extend({
     return {
       render: this.onChildRendered
     }
+  },
+
+  onChildRendered: function () {
+    console.log('A child view has been rendered.');
+  }
 });
 ```
 
-This also works for custom events that you might fire on your child views.
+`childEvents` also catches custom events fired by a child view.  Take note that the first argument to a `childEvents` handler is the child view itself.
 
 ```js
 // The child view fires a custom event, `show:message`
 var ChildView = Marionette.ItemView.extend({
+
+  // Events hash defines local event handlers that in turn may call `triggerMethod`.
   events: {
-    'click .button': 'showMessage'
+    'click .button': 'onClickButton'
   },
 
-  showMessage: function () {
-    console.log('The button was clicked.');
+  // Triggers hash converts DOM events directly to view events catchable on the parent.
+  triggers: {
+    'submit form': 'submit:form'
+  },
 
-    this.triggerMethod('show:message');
+  onClickButton: function () {
+    // Both `trigger` and `triggerMethod` events will be caught by parent.
+    this.trigger('show:message', 'foo');
+    this.triggerMethod('show:message', 'bar');
   }
 });
 
-// The parent uses childEvents to catch that custom event on the child view
+// The parent uses childEvents to catch the child view's custom event
 var ParentView = Marionette.CollectionView.extend({
+
   childView: ChildView,
 
   childEvents: {
-    'show:message': function () {
-      console.log('The show:message event bubbled up to the parent.');
-    }
+    'show:message': 'onChildShowMessage',
+    'submit:form': 'onChildSubmitForm'
+  },
+
+  onChildShowMessage: function (childView, message) {
+    console.log('A child view fired show:message with ' + message);
+  },
+
+  onChildSubmitForm: function (childView) {
+    console.log('A child view fired submit:form');
   }
 });
 ```

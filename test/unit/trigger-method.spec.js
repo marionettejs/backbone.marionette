@@ -125,7 +125,7 @@ describe('trigger event and method name', function() {
 
       this.View = Marionette.View.extend({
         template: _.template('foo'),
-        triggers: {'click' : 'foo:click'}
+        triggers: {'click': 'foo:click'}
       });
 
       this.CollectionView = Marionette.CollectionView.extend({

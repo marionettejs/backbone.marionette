@@ -8,10 +8,10 @@ describe('Marionette radio helpers', function() {
       this.clickStub3 = this.sinon.stub();
       this.Object = Marionette.Object.extend({
         radioEvents: {
-          'foo bar' : this.clickStub1
+          'foo bar': this.clickStub1
         },
         radioRequests: {
-          'foo bar' : 'baz'
+          'foo bar': 'baz'
         },
 
         baz: this.clickStub3,

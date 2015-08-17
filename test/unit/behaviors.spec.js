@@ -345,12 +345,12 @@ describe('Behaviors', function() {
 
           testViewUI: function() { this.ui.bar.trigger('test'); },
           testBehaviorUI: function() { this.ui.foo.trigger('test'); },
-          onRender     : this.onRenderStub,
-          onBeforeShow : this.onBeforeShowStub,
-          onShow       : this.onShowStub,
-          onDestroy    : this.onDestroyStub,
-          onFooClick   : this.onFooClickStub,
-          onBarClick   : this.onBarClickStub
+          onRender:     this.onRenderStub,
+          onBeforeShow: this.onBeforeShowStub,
+          onShow:       this.onShowStub,
+          onDestroy:    this.onDestroyStub,
+          onFooClick:   this.onFooClickStub,
+          onBarClick:   this.onBarClickStub
         })
       };
       Marionette.Behaviors.behaviorsLookup = this.behaviors;
@@ -381,7 +381,7 @@ describe('Behaviors', function() {
       });
 
       it('should call onShow when already shown and reset', function() {
-        this.collection.reset([{id:1}, {id: 2}]);
+        this.collection.reset([{id: 1}, {id: 2}]);
 
         expect(this.onShowStub.callCount).to.equal(3);
       });
@@ -515,8 +515,8 @@ describe('Behaviors', function() {
 
       this.behaviors = {
         foo: Marionette.Behavior.extend({
-          onShow    : this.onShowStub,
-          onDestroy : this.onDestroyStub
+          onShow:    this.onShowStub,
+          onDestroy: this.onDestroyStub
         })
       };
       Marionette.Behaviors.behaviorsLookup = this.behaviors;
@@ -779,8 +779,8 @@ describe('Behaviors', function() {
       this.collection = new Backbone.Collection();
 
       this.view = new this.View({
-        model      : this.model,
-        collection : this.collection
+        model:      this.model,
+        collection: this.collection
       });
 
       this.sinon.spy(this.view, 'undelegateEvents');

@@ -194,7 +194,7 @@ Marionette.CollectionView = Marionette.AbstractView.extend({
     // to respect the sorting algorithm.
     _.each(models, function(model, index) {
       if (!this.children.findByModel(model)) {
-        this._onCollectionAdd(model, this.collection, {at:index});
+        this._onCollectionAdd(model, this.collection, {at: index});
       }
     }, this);
     _.each(previousModels, function(model) {

@@ -259,11 +259,11 @@ describe('app router', function() {
     it('should support getOption inside initialize', function() {
       var fooParam = '';
       this.AppRouter = Marionette.AppRouter.extend({
-        initialize : function() {
+        initialize: function() {
           fooParam = this.getOption('fooParam');
         }
       });
-      this.appRouter = new this.AppRouter({fooParam : 'bar'});
+      this.appRouter = new this.AppRouter({fooParam: 'bar'});
       expect(fooParam).to.equal('bar');
     });
   });

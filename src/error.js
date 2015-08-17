@@ -8,7 +8,7 @@ var errorProps = ['description', 'fileName', 'lineNumber', 'name', 'message', 'n
 
 var MarionetteError = extend.call(Error, {
   // TODO: handle VERSION.
-  urlRoot: 'http://marionettejs.com/docs/v' + Marionette.VERSION + '/',
+  urlRoot: 'http://marionettejs.com/docs/v' + '<%= version %>' + '/',
 
   constructor: function MarionetteError(message, options) {
     if (_.isObject(message)) {

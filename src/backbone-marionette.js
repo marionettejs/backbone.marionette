@@ -11,7 +11,6 @@ import isNodeAttached     from './utils/isNodeAttached';
 import mergeOptions       from './utils/mergeOptions';
 import getOption          from './utils/getOption';
 import proxyGetOption     from './utils/proxyGetOption';
-import _getValue          from './utils/_getValue';
 import normalizeMethods   from './utils/normalizeMethods';
 import normalizeUIString  from './utils/normalizeUIString';
 import normalizeUIKeys    from './utils/normalizeUIKeys';
@@ -22,7 +21,6 @@ import deprecate          from './utils/deprecate';
 import MonitorDOMRefresh from './dom-refresh';
 import
   {
-    _triggerMethod,
     triggerMethod,
     triggerMethodOn,
     triggerMethodMany
@@ -45,7 +43,6 @@ Object.assign(Marionette, {
   mergeOptions,
   getOption,
   proxyGetOption,
-  _getValue,
   normalizeMethods,
   normalizeUIString,
   normalizeUIKeys,
@@ -53,7 +50,6 @@ Object.assign(Marionette, {
   actAsCollection,
   deprecate,
   MonitorDOMRefresh,
-  _triggerMethod,
   triggerMethod,
   triggerMethodOn,
   triggerMethodMany,

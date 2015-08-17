@@ -21,9 +21,13 @@ matrix:
     - node_js: "io.js"
       env: LODASH=3.1 BACKBONE=1.0
 env: MAINRUN=true
+script: "gulp coverage"
 before_install:
   - npm config set ca ""
 install:
   - curl -L https://rawgit.com/marionettejs/travis-ci-setup/master/ci.sh | bash
 after_success:
   - if [[ $MAINRUN == true ]]; then npm run-script coverage; fi
+# babel-boilerplate default
+#  - npm install -g codeclimate-test-reporter
+#  - codeclimate-test-reporter < coverage/lcov.info

@@ -10,9 +10,9 @@ describe('Marionette.bindEntityEvents', function() {
     this.entityStub    = this.sinon.stub();
 
     this.target = {
-      handleFoo : this.handleFooStub,
-      handleBar : this.handleBarStub,
-      listenTo  : this.listenToStub
+      handleFoo: this.handleFooStub,
+      handleBar: this.handleBarStub,
+      listenTo:  this.listenToStub
     };
 
     this.entity = this.entityStub;

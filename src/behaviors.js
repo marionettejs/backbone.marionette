@@ -8,6 +8,10 @@
 // **MUST** override the class level behaviorsLookup
 // method for things to work properly.
 
+import _getValue       from './utils/_getValue';
+import normalizeUIKeys from './utils/normalizeUIKeys';
+import MarionetteError from './error';
+
 Marionette.Behaviors = (function(Marionette, _) {
   // Borrow event splitter from Backbone
   var delegateEventSplitter = /^(\S+)\s*(.*)$/;
@@ -44,7 +48,7 @@ Marionette.Behaviors = (function(Marionette, _) {
 
         // Normalize behavior events hash to allow
         // a user to use the @ui. syntax.
-        behaviorEvents = Marionette.normalizeUIKeys(behaviorEvents, getBehaviorsUI(b));
+        behaviorEvents = normalizeUIKeys(behaviorEvents, getBehaviorsUI(b));
 
         var j = 0;
         _.each(behaviorEvents, function(behaviour, key) {
@@ -82,9 +86,9 @@ Marionette.Behaviors = (function(Marionette, _) {
     // }
     // ```
     behaviorsLookup: function() {
-      throw new Marionette.Error({
+      throw new MarionetteError({
         message: 'You must define where your behaviors are stored.',
-        url: 'marionette.behaviors.html#behaviorslookup'
+        url: 'marionette.behaviors.md#behaviorslookup'
       });
     },
 
@@ -103,7 +107,7 @@ Marionette.Behaviors = (function(Marionette, _) {
       }
 
       // behaviorsLookup can be either a flat object or a method
-      return Marionette._getValue(Behaviors.behaviorsLookup, this, [options, key])[key];
+      return _getValue(Behaviors.behaviorsLookup, this, [options, key])[key];
     },
 
     // Iterate over the behaviors object, for each behavior
@@ -152,7 +156,7 @@ Marionette.Behaviors = (function(Marionette, _) {
     _buildTriggerHandlersForBehavior: function(behavior, i) {
       var triggersHash = _.clone(_.result(behavior, 'triggers')) || {};
 
-      triggersHash = Marionette.normalizeUIKeys(triggersHash, getBehaviorsUI(behavior));
+      triggersHash = normalizeUIKeys(triggersHash, getBehaviorsUI(behavior));
 
       _.each(triggersHash, _.bind(this._setHandlerForBehavior, this, behavior, i));
     },

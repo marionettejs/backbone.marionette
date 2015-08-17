@@ -3,7 +3,8 @@
 // Trigger Method
 // --------------
 
-import _ from 'underscore';
+import _               from 'underscore';
+import getOption       from './utils/getOption';
 
 var _triggerMethod = (function() {
   // split the event name on the ":"
@@ -24,7 +25,7 @@ var _triggerMethod = (function() {
 
     // get the method name from the event name
     var methodName = 'on' + event.replace(splitter, getEventName);
-    var method = Marionette.getOption(context, methodName);
+    var method = getOption(context, methodName);
     var result;
 
     // call the onMethodName if it exists
@@ -76,7 +77,7 @@ function triggerMethodMany(targets, source, eventName) {
   var args = _.drop(arguments, 3);
 
   _.each(targets, function(target) {
-    Marionette.triggerMethodOn.apply(target, [target, eventName, target, source].concat(args));
+    triggerMethodOn.apply(target, [target, eventName, target, source].concat(args));
   });
 }
 

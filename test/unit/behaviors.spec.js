@@ -1,3 +1,5 @@
+import Marionette from '../../src/backbone-marionette';
+
 describe('Behaviors', function() {
   'use strict';
 
@@ -5,7 +7,7 @@ describe('Behaviors', function() {
     it('should throw if behavior lookup is not defined', function() {
       expect(function() {
         Marionette.Behaviors.behaviorsLookup();
-      }).to.throw(Marionette.Error, new Marionette.Error({
+      }).to.throw(new Marionette.MarionetteError({
         message: 'You must define where your behaviors are stored.',
         url: 'marionette.behaviors.md#behaviorslookup'
       }));

@@ -1,11 +1,13 @@
+import Marionette from '../../src/backbone-marionette';
+
 describe('Marionette.Error', function() {
   it('should be subclass of native Error', function() {
-    expect(new Marionette.Error()).to.be.instanceOf(Error);
+    expect(new Marionette.MarionetteError()).to.be.instanceOf(Error);
   });
 
   describe('when passed a message', function() {
     beforeEach(function() {
-      this.error = new Marionette.Error('Foo');
+      this.error = new Marionette.MarionetteError('Foo');
     });
 
     it('should contain the correct properties', function() {
@@ -22,7 +24,7 @@ describe('Marionette.Error', function() {
 
   describe('when passed a message and options', function() {
     beforeEach(function() {
-      this.error = new Marionette.Error('Foo', {
+      this.error = new Marionette.MarionetteError('Foo', {
         name: 'Bar'
       });
     });
@@ -41,7 +43,7 @@ describe('Marionette.Error', function() {
 
   describe('when passed a message and options with a url', function() {
     beforeEach(function() {
-      this.error = new Marionette.Error('Foo', {
+      this.error = new Marionette.MarionetteError('Foo', {
         name: 'Bar',
         url: 'Baz'
       });
@@ -62,7 +64,7 @@ describe('Marionette.Error', function() {
 
   describe('when passed options', function() {
     beforeEach(function() {
-      this.error = new Marionette.Error({
+      this.error = new Marionette.MarionetteError({
         name: 'Foo',
         message: 'Bar'
       });
@@ -82,7 +84,7 @@ describe('Marionette.Error', function() {
 
   describe('when passed options with a url', function() {
     beforeEach(function() {
-      this.error = new Marionette.Error({
+      this.error = new Marionette.MarionetteError({
         name: 'Foo',
         message: 'Bar',
         url: 'Baz'
@@ -112,7 +114,7 @@ describe('Marionette.Error', function() {
         message      : 'myMessage',
         number       : 'myNumber'
       };
-      this.error = new Marionette.Error(this.props);
+      this.error = new Marionette.MarionetteError(this.props);
     });
 
     it('should contain all the valid error properties', function() {
@@ -127,7 +129,7 @@ describe('Marionette.Error', function() {
         bar : 'myBar',
         baz : 'myBaz'
       };
-      this.error = new Marionette.Error(this.props);
+      this.error = new Marionette.MarionetteError(this.props);
     });
 
     it('should not contain invalid properties', function() {
@@ -137,14 +139,14 @@ describe('Marionette.Error', function() {
 
   describe('when extended', function() {
     beforeEach(function() {
-      this.TypeError = Marionette.Error.extend();
+      this.TypeError = Marionette.MarionetteError.extend();
       this.typeError = new this.TypeError('Foo');
     });
 
     it('should subclass the error properly', function() {
       expect(this.typeError)
         .to.be.instanceOf(Error)
-        .to.be.instanceOf(Marionette.Error)
+        .to.be.instanceOf(Marionette.MarionetteError)
         .to.be.instanceOf(this.TypeError);
     });
   });

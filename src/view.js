@@ -1,6 +1,8 @@
 // View
 // ---------
 
+import _getValue from './utils/_getValue';
+
 // The standard view. Includes view events, automatic rendering
 // of Underscore templates, nested views, and more.
 Marionette.View = Marionette.AbstractView.extend({
@@ -142,7 +144,7 @@ Marionette.View = Marionette.AbstractView.extend({
 
   _addRegions: function(regions, parameters) {
     // Enable regions to be a function
-    regions = Marionette._getValue(regions, this, parameters);
+    regions = _getValue(regions, this, parameters);
 
     // Normalize region selectors hash to allow
     // a user to use the @ui. syntax.

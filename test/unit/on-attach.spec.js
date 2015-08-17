@@ -1,3 +1,5 @@
+import Marionette from '../../src/backbone-marionette';
+
 describe('onAttach', function() {
   'use strict';
 

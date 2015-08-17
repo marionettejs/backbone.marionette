@@ -1,3 +1,5 @@
+import Marionette from '../../src/backbone-marionette';
+
 describe('Marionette.bindEntityEvents', function() {
   'use strict';
 
@@ -132,7 +134,7 @@ describe('Marionette.bindEntityEvents', function() {
     });
 
     it('should error', function() {
-      expect(this.run).to.throw(Marionette.Error, new Marionette.Error({
+      expect(this.run).to.throw(new Marionette.MarionetteError({
         message: 'Bindings must be an object or function.',
         url: 'marionette.functions.html#marionettebindentityevents'
       }));

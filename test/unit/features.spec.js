@@ -1,9 +1,6 @@
+import Marionette from '../../src/backbone-marionette';
+
 describe('features', function() {
-
-  beforeEach(function() {
-    Marionette.FEATURES = {};
-  });
-
   it('enabled when its present and true', function() {
     Marionette.FEATURES.foo = true;
     expect(Marionette.isEnabled('foo')).to.be.true;

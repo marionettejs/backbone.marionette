@@ -1,3 +1,5 @@
+import Marionette from '../../../src/backbone-marionette';
+
 describe('Marionette.deprecate', function() {
   beforeEach(function() {
     this.sinon.spy(Marionette.deprecate, '_warn');

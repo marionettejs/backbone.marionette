@@ -3,6 +3,11 @@
 // Region
 // ------
 
+import isNodeAttached    from './utils/isNodeAttached';
+import _getValue         from './utils/_getValue';
+import MarionetteError   from './error';
+import { triggerMethodOn, triggerMethodMany } from './trigger-method';
+
 // Manage the visual regions of your composite application. See
 // http://lostechies.com/derickbailey/2011/12/12/composite-js-apps-regions-and-region-managers/
 
@@ -20,7 +25,7 @@ Marionette.Region = Marionette.Object.extend({
     this.el = this.el instanceof Backbone.$ ? this.el[0] : this.el;
 
     if (!this.el) {
-      throw new Marionette.Error({
+      throw new MarionetteError({
         name: 'NoElError',
         message: 'An "el" must be specified for a region.'
       });
@@ -98,14 +103,14 @@ Marionette.Region = Marionette.Object.extend({
       }
 
       this.triggerMethod('before:show', view, this, options);
-      Marionette.triggerMethodOn(view, 'before:show', view, this, options);
+      triggerMethodOn(view, 'before:show', view, this, options);
 
       if (isChangingView) {
         this.triggerMethod('swapOut', this.currentView, this, options);
       }
 
       // An array of views that we're about to display
-      var attachedRegion = Marionette.isNodeAttached(this.el);
+      var attachedRegion = isNodeAttached(this.el);
 
       // The views that we're about to attach to the document
       // It's important that we prevent _getNestedViews from being executed unnecessarily
@@ -135,7 +140,7 @@ Marionette.Region = Marionette.Object.extend({
       }
 
       this.triggerMethod('show', view, this, options);
-      Marionette.triggerMethodOn(view, 'show', view, this, options);
+      triggerMethodOn(view, 'show', view, this, options);
     }
 
     return this;
@@ -158,7 +163,7 @@ Marionette.Region = Marionette.Object.extend({
 
   _triggerAttach: function(views, prefix) {
     var eventName = (prefix || '') + 'attach';
-    Marionette.triggerMethodMany(views, this, eventName);
+    triggerMethodMany(views, this, eventName);
   },
 
   _displayedViews: function(view) {
@@ -175,7 +180,7 @@ Marionette.Region = Marionette.Object.extend({
       if (this.getOption('allowMissingEl')) {
         return false;
       } else {
-        throw new Marionette.Error('An "el" ' + this.$el.selector + ' must exist in DOM');
+        throw new MarionetteError('An "el" ' + this.$el.selector + ' must exist in DOM');
       }
     }
     return true;
@@ -183,14 +188,14 @@ Marionette.Region = Marionette.Object.extend({
 
   _ensureViewIsIntact: function(view) {
     if (!view) {
-      throw new Marionette.Error({
+      throw new MarionetteError({
         name: 'ViewNotValid',
         message: 'The view passed is undefined and therefore invalid. You must pass a view instance to show.'
       });
     }
 
     if (view.isDestroyed) {
-      throw new Marionette.Error({
+      throw new MarionetteError({
         name: 'ViewDestroyedError',
         message: 'View (cid: "' + view.cid + '") has already been destroyed and cannot be used.'
       });
@@ -201,7 +206,7 @@ Marionette.Region = Marionette.Object.extend({
   // element that it manages. Return a jQuery selector object scoped
   // to a provided parent el or the document if none exists.
   getEl: function(el) {
-    return Backbone.$(el, Marionette._getValue(this.options.parentEl, this));
+    return Backbone.$(el, _getValue(this.options.parentEl, this));
   },
 
   // Override this method to change how the new view is
@@ -217,7 +222,7 @@ Marionette.Region = Marionette.Object.extend({
   empty: function(options) {
     var view = this.currentView;
 
-    var preventDestroy = Marionette._getValue(options, 'preventDestroy', this);
+    var preventDestroy = _getValue(options, 'preventDestroy', this);
     // If there is no view in the region
     // we should not remove anything
     if (!view) { return; }
@@ -319,7 +324,7 @@ Marionette.Region = Marionette.Object.extend({
       return this._buildRegionFromRegionClass(regionConfig);
     }
 
-    throw new Marionette.Error({
+    throw new MarionetteError({
       message: 'Improper region configuration type.',
       url: 'marionette.region.html#region-configuration-types'
     });

@@ -21,7 +21,7 @@
   "immed"         : true,
   "indent"        : 2,
   "latedef"       : true,
-  "newcap"        : true,
+  "newcap"        : false,
   "noarg"         : true,
   "noempty"       : true,
   "nonbsp"        : true,

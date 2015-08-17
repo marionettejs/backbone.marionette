@@ -17,6 +17,12 @@
 //
 // You can also add standard routes to an AppRouter.
 
+import MarionetteError         from './error';
+import mergeOptions            from './utils/mergeOptions';
+import proxyGetOption          from './utils/proxyGetOption';
+import { proxyBindEntityEvents, proxyUnbindEntityEvents } from './bind-entity-events';
+import { triggerMethod }       from './trigger-method';
+
 Marionette.AppRouter = Backbone.Router.extend({
 
   constructor: function(options) {
@@ -69,20 +75,20 @@ Marionette.AppRouter = Backbone.Router.extend({
     var method = controller[methodName];
 
     if (!method) {
-      throw new Marionette.Error('Method "' + methodName + '" was not found on the controller');
+      throw new MarionetteError('Method "' + methodName + '" was not found on the controller');
     }
 
     this.route(route, methodName, _.bind(method, controller));
   },
 
-  mergeOptions: Marionette.mergeOptions,
+  mergeOptions: mergeOptions,
 
   // Proxy `getOption` to enable getting options from this or this.options by name.
-  getOption: Marionette.proxyGetOption,
+  getOption: proxyGetOption,
 
-  triggerMethod: Marionette.triggerMethod,
+  triggerMethod: triggerMethod,
 
-  bindEntityEvents: Marionette.proxyBindEntityEvents,
+  bindEntityEvents: proxyBindEntityEvents,
 
-  unbindEntityEvents: Marionette.proxyUnbindEntityEvents
+  unbindEntityEvents: proxyUnbindEntityEvents
 });

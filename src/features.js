@@ -1,4 +1,5 @@
 Marionette.FEATURES = {
+  'class':  false
 };
 
 Marionette.isEnabled = function(name) {

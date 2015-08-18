@@ -32,8 +32,13 @@ global.$ = global.jQuery = require('jquery');
 global._ = require('underscore');
 global.Backbone = require('backbone');
 global.Backbone.$ = global.$;
-global.Metal = require('backbone-metal');
 global.Marionette = Backbone.Marionette = {};
+
+requireHelper('features');
+Marionette.FEATURES.class = true;
+
+global.Metal = require('backbone-metal');
+
 require('backbone.babysitter');
 require('backbone.radio');
 global.slice = Array.prototype.slice;
@@ -62,7 +67,6 @@ requireHelper('application');
 requireHelper('renderer');
 requireHelper('template-cache');
 requireHelper('abstract-view');
-requireHelper('features');
 requireHelper('view');
 requireHelper('collection-view');
 requireHelper('composite-view');

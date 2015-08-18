@@ -1,4 +1,18 @@
 describe('metal', function() {
+  beforeEach(function() {
+    _.extend(Marionette.FEATURES, {
+        'classify': true,
+        'class':  true
+    });
+  });
+
+  afterEach(function() {
+      _.extend(Marionette.FEATURES, {
+          'classify': false,
+          'class':  false
+      });
+  });
+
   describe('classifying backbone primitives', function() {
     it('view instances are instances of classes', function() {
       expect(new Marionette.View()).to.be.instanceof(Backbone.View);

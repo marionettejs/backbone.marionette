@@ -341,14 +341,14 @@ describe('Behaviors', function() {
             'click @ui.bar': 'onBarClick'
           },
 
-          testViewUI: function() { this.ui.bar.trigger('test'); },
+          testViewUI:     function() { this.ui.bar.trigger('test'); },
           testBehaviorUI: function() { this.ui.foo.trigger('test'); },
-          onRender     : this.onRenderStub,
-          onBeforeShow : this.onBeforeShowStub,
-          onShow       : this.onShowStub,
-          onDestroy    : this.onDestroyStub,
-          onFooClick   : this.onFooClickStub,
-          onBarClick   : this.onBarClickStub
+          onRender:       this.onRenderStub,
+          onBeforeShow:   this.onBeforeShowStub,
+          onShow:         this.onShowStub,
+          onDestroy:      this.onDestroyStub,
+          onFooClick:     this.onFooClickStub,
+          onBarClick:     this.onBarClickStub
         })
       };
       Marionette.Behaviors.behaviorsLookup = this.behaviors;

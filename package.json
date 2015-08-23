@@ -62,6 +62,7 @@
     "glob": "^5.0.14",
     "gulp": "^3.8.10",
     "gulp-babel": "^5.0.0",
+    "gulp-concat-util": "^0.5.2",
     "gulp-coveralls": "^0.1.4",
     "gulp-env": "^0.2.0",
     "gulp-eslint": "^1.0.0",

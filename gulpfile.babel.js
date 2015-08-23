@@ -3,7 +3,7 @@ import fs from 'fs';
 // Load Gulp and all of our Gulp plugins
 import gulp from 'gulp';
 import loadPlugins from 'gulp-load-plugins'
-const $ = loadPlugins({rename: {'gulp-yaml-validate': 'yaml'}});
+const $ = loadPlugins({rename: {'gulp-yaml-validate': 'yaml', 'gulp-concat-util': 'concat'}});
 
 // Load other npm modules
 import del from 'del';
@@ -73,7 +73,7 @@ const coreBanner = `// MarionetteJS (Backbone.Marionette)
 // Distributed under MIT license
 //
 // http://marionettejs.com
-`;
+\n`;
 
 //TODO: Figure out getting current year in gulp
 const meta = {
@@ -137,8 +137,8 @@ gulp.task('lint-docs', function() {
     .pipe($.lintspaces.reporter());
 });
 
-// Build two versions of the library
-gulp.task('build', ['lint-src', 'clean'], function(done) {
+// build to be used when es6 modules are used
+gulp.task('build-modules', ['lint-src', 'clean'], function(done) {
   esperanto.bundle({
     base: 'src',
     entry: config.entryFileName,
@@ -323,6 +323,32 @@ gulp.task('coveralls', function() {
 });
 
 // gulp.task('coverage', ['unwrap', 'preprocess-bundle', 'template-bundle', 'env-coverage', 'instrument', 'test', 'storeCoverage', 'makeReport', 'coveralls']);
+
+// Build all three versions of the library.
+gulp.task('build-core', function() {
+  return gulp.src(preprocessData.core.dest)
+    .pipe($.concat.header(meta.coreBanner))
+    .pipe($.rename('lib/core/backbone.marionette.js'))
+    .pipe(gulp.dest(''))
+    .pipe($.uglify())
+    .pipe($.sourcemaps.write('./lib/core'))
+    .pipe($.rename('lib/core/backbone.marionette.min.js'))
+    .pipe(gulp.dest(''));
+});
+
+gulp.task('build-bundle', function() {
+  return gulp.src(preprocessData.bundle.dest)
+    .pipe($.concat.header(meta.banner))
+    .pipe($.rename('lib/backbone.marionette.js'))
+    .pipe(gulp.dest(''))
+    .pipe($.uglify())
+    .pipe($.concat.header(meta.banner))
+    .pipe($.sourcemaps.write('./lib'))
+    .pipe($.rename('lib/backbone.marionette.min.js'))
+    .pipe(gulp.dest(''));
+});
+
+gulp.task('build', ['build-core', 'build-bundle']);
 
 // An alias of test
 gulp.task('default', ['test']);

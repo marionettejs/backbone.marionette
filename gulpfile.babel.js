@@ -25,7 +25,8 @@ const config = manifest.babelBoilerplateOptions;
 const mainFile = manifest.main;
 const destinationFolder = path.dirname(mainFile);
 const exportFileName = path.basename(mainFile, path.extname(mainFile));
-const unwrapConfigFiles = [
+
+config.unwrap = [
   {
     src: './node_modules/backbone.babysitter/lib/backbone.babysitter.js',
     dest: './tmp/backbone.babysitter.bare.js'
@@ -40,7 +41,7 @@ const unwrapConfigFiles = [
   }
 ];
 
-const preprocessData = {
+config.preprocess = {
   core: {
     src: 'src/build/core.js',
     dest: 'tmp/core.js'
@@ -51,20 +52,36 @@ const preprocessData = {
   }
 };
 
-const templateData = {
+config.template = {
   options: {
     version: `${manifest.version}`
   },
   core: {
-    src: `${preprocessData.core.dest}`,
-    dest: `${preprocessData.core.dest}`
+    src: `${config.preprocess.core.dest}`,
+    dest: `${config.preprocess.core.dest}`
   },
   bundle: {
-    src: `${preprocessData.bundle.dest}`,
-    dest: `${preprocessData.bundle.dest}`
+    src: `${config.preprocess.bundle.dest}`,
+    dest: `${config.preprocess.bundle.dest}`
   }
 };
 
+config.build = {
+  core: {
+    src: config.preprocess.core.dest,
+    mapDir: 'lib/core',
+    minDest: 'lib/core/backbone.marionette.min.js',
+    dest: 'lib/core/backbone.marionette.js'
+  },
+  bundle: {
+    src: config.preprocess.bundle.dest,
+    mapDir: 'lib',
+    minDest: 'lib/backbone.marionette.min.js',
+    dest: 'lib/backbone.marionette.js'
+  }
+}
+
+//TODO: Figure out getting current year in gulp
 const coreBanner = `// MarionetteJS (Backbone.Marionette)
 // ----------------------------------
 // v${manifest.version}
@@ -72,11 +89,9 @@ const coreBanner = `// MarionetteJS (Backbone.Marionette)
 // Copyright (c)2015 Derick Bailey, Muted Solutions, LLC.
 // Distributed under MIT license
 //
-// http://marionettejs.com
-\n`;
+// http://marionettejs.com\n\n`;
 
-//TODO: Figure out getting current year in gulp
-const meta = {
+config.meta = {
   version: `${manifest.version}`,
   coreBanner: coreBanner,
   banner: `${coreBanner}
@@ -232,9 +247,9 @@ gulp.task('coverage', ['lint-src', 'lint-test'], function(done) {
 });
 
 // Lint and run our tests
-gulp.task('test', ['lint-src', 'lint-test', 'api'], function() {
+gulp.task('test', ['lint-src', 'lint-test'], function() {
   require('babel-core/register');
-  return test();
+  runSequence('api', test);
 });
 
 gulp.task('api', function() {
@@ -294,21 +309,21 @@ function createPreprocessTask(taskName, src, dest) {
   });
 }
 
-createPreprocessTask('preprocess-core', ['src/build/core.js'], 'tmp/core.js');
-createPreprocessTask('preprocess-bundle', ['src/build/bundled.js'], 'tmp/backbone.marionette.js');
+createPreprocessTask('preprocess-core', [config.preprocess.core.src], config.preprocess.core.dest);
+createPreprocessTask('preprocess-bundle', [config.preprocess.bundle.src], config.preprocess.bundle.dest);
 gulp.task('preprocess', ['preprocess-core', 'preprocess-bundle']);
 
 function createTemplateTask(taskName, src, dest) {
   gulp.task(taskName, function() {
     return gulp.src(src)
-      .pipe($.template(templateData.options))
+      .pipe($.template(config.template.options))
       .pipe($.rename(dest))
       .pipe(gulp.dest(''));
   });
 }
 
-createTemplateTask('template-core', [templateData.core.src], templateData.core.dest);
-createTemplateTask('template-bundle', [templateData.bundle.src], templateData.bundle.dest);
+createTemplateTask('template-core', [config.template.core.src], config.template.core.dest);
+createTemplateTask('template-bundle', [config.template.bundle.src], config.template.bundle.dest);
 gulp.task('template', ['template-core', 'template-bundle']);
 
 gulp.task('env-coverage', function() {
@@ -322,29 +337,27 @@ gulp.task('coveralls', function() {
     .pipe($.coveralls({force: false}));
 });
 
-// gulp.task('coverage', ['unwrap', 'preprocess-bundle', 'template-bundle', 'env-coverage', 'instrument', 'test', 'storeCoverage', 'makeReport', 'coveralls']);
-
-// Build all three versions of the library.
+// Build all versions of the library.
 gulp.task('build-core', function() {
-  return gulp.src(preprocessData.core.dest)
-    .pipe($.concat.header(meta.coreBanner))
-    .pipe($.rename('lib/core/backbone.marionette.js'))
+  return gulp.src(config.build.core.src)
+    .pipe($.concat.header(config.meta.coreBanner))
+    .pipe($.rename(config.build.core.dest))
     .pipe(gulp.dest(''))
     .pipe($.uglify())
-    .pipe($.sourcemaps.write('./lib/core'))
-    .pipe($.rename('lib/core/backbone.marionette.min.js'))
+    .pipe($.sourcemaps.write(config.build.core.mapDir))
+    .pipe($.rename(config.build.core.minDest))
     .pipe(gulp.dest(''));
 });
 
 gulp.task('build-bundle', function() {
-  return gulp.src(preprocessData.bundle.dest)
-    .pipe($.concat.header(meta.banner))
-    .pipe($.rename('lib/backbone.marionette.js'))
+  return gulp.src(config.build.bundle.src)
+    .pipe($.concat.header(config.meta.banner))
+    .pipe($.rename(config.build.bundle.dest))
     .pipe(gulp.dest(''))
     .pipe($.uglify())
-    .pipe($.concat.header(meta.banner))
-    .pipe($.sourcemaps.write('./lib'))
-    .pipe($.rename('lib/backbone.marionette.min.js'))
+    .pipe($.concat.header(config.meta.banner))
+    .pipe($.sourcemaps.write(config.build.bundle.mapDir))
+    .pipe($.rename(config.build.bundle.minDest))
     .pipe(gulp.dest(''));
 });
 

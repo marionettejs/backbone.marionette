@@ -1,3 +1,5 @@
+import fs from 'fs';
+
 // Load Gulp and all of our Gulp plugins
 import gulp from 'gulp';
 import loadPlugins from 'gulp-load-plugins'
@@ -15,6 +17,7 @@ import esperanto from 'esperanto';
 import browserify from 'browserify';
 import runSequence from 'run-sequence';
 import source from 'vinyl-source-stream';
+import unwrap from 'unwrap';
 
 // Gather the library data from `package.json`
 import manifest from './package.json';
@@ -22,6 +25,71 @@ const config = manifest.babelBoilerplateOptions;
 const mainFile = manifest.main;
 const destinationFolder = path.dirname(mainFile);
 const exportFileName = path.basename(mainFile, path.extname(mainFile));
+const unwrapConfigFiles = [
+  {
+    src: './node_modules/backbone.babysitter/lib/backbone.babysitter.js',
+    dest: './tmp/backbone.babysitter.bare.js'
+  },
+  {
+    src: './node_modules/backbone.radio/build/backbone.radio.js',
+    dest: './tmp/backbone.radio.bare.js'
+  },
+  {
+    src: './node_modules/backbone-metal/dist/backbone-metal.js',
+    dest: './tmp/backbone.metal.bare.js'
+  }
+];
+
+const preprocessData = {
+  core: {
+    src: 'src/build/core.js',
+    dest: 'tmp/core.js'
+  },
+  bundle: {
+    src: 'src/build/bundled.js',
+    dest: 'tmp/backbone.marionette.js'
+  }
+};
+
+const templateData = {
+  options: {
+    version: `${manifest.version}`
+  },
+  core: {
+    src: `${preprocessData.core.dest}`,
+    dest: `${preprocessData.core.dest}`
+  },
+  bundle: {
+    src: `${preprocessData.bundle.dest}`,
+    dest: `${preprocessData.bundle.dest}`
+  }
+};
+
+const coreBanner = `// MarionetteJS (Backbone.Marionette)
+// ----------------------------------
+// v${manifest.version}
+//
+// Copyright (c)2015 Derick Bailey, Muted Solutions, LLC.
+// Distributed under MIT license
+//
+// http://marionettejs.com
+`;
+
+//TODO: Figure out getting current year in gulp
+const meta = {
+  version: `${manifest.version}`,
+  coreBanner: coreBanner,
+  banner: `${coreBanner}
+/*!
+ * Includes BabySitter
+ * https://github.com/marionettejs/backbone.babysitter/
+ *
+ * Includes Radio
+ * https://github.com/marionettejs/backbone.radio/
+ * Includes Metal
+ * https://github.com/marionettejs/backbone-metal/
+ */\n\n\n`
+};
 
 // Remove the built files
 gulp.task('clean', function(cb) {
@@ -59,6 +127,8 @@ createLintTask('lint-src', ['src/**/*.js']);
 
 // Lint our test code
 createLintTask('lint-test', ['test/**/*.js'], { maximumLineLength: 200 });
+
+gulp.task('lint', ['lint-src', 'lint-test']);
 
 // Lint docs
 gulp.task('lint-docs', function() {
@@ -151,7 +221,7 @@ function test() {
 
 gulp.task('coverage', ['lint-src', 'lint-test'], function(done) {
   require('babel-core/register');
-  gulp.src(['src/**/*.js'])
+  return gulp.src(['src/**/*.js'])
     .pipe($.istanbul({ instrumenter: isparta.Instrumenter }))
     .pipe($.istanbul.hookRequire())
     .on('finish', function() {
@@ -164,11 +234,11 @@ gulp.task('coverage', ['lint-src', 'lint-test'], function(done) {
 // Lint and run our tests
 gulp.task('test', ['lint-src', 'lint-test', 'api'], function() {
   require('babel-core/register');
-  test();
+  return test();
 });
 
 gulp.task('api', function() {
-  gulp.src(['api/*.yaml'])
+  return gulp.src(['api/*.yaml'])
     .pipe($.yaml());
 });
 
@@ -195,6 +265,64 @@ gulp.task('test-browser', ['build-in-sequence'], function() {
   $.livereload.listen({port: 35729, host: 'localhost', start: true});
   return gulp.watch(otherWatchFiles, ['build-in-sequence']);
 });
+
+function writeFile(path, content) {
+  fs.writeFile(path, content);
+}
+
+gulp.task('unwrap', function(cb) {
+  var timesLeft = 0;
+
+  unwrapConfigFiles.forEach(function (file) {
+    timesLeft++;
+    unwrap(path.resolve(__dirname, file.src), function (err, content) {
+      if (err) return console.log(err);
+      writeFile(path.resolve(__dirname, file.dest), content);
+      console.log(file.dest + ' created.');
+      timesLeft--;
+      if (timesLeft <= 0) cb();
+    });
+  });
+});
+
+function createPreprocessTask(taskName, src, dest) {
+  gulp.task(taskName, function() {
+    return gulp.src(src)
+      .pipe($.preprocess())
+      .pipe($.rename(dest))
+      .pipe(gulp.dest(''));
+  });
+}
+
+createPreprocessTask('preprocess-core', ['src/build/core.js'], 'tmp/core.js');
+createPreprocessTask('preprocess-bundle', ['src/build/bundled.js'], 'tmp/backbone.marionette.js');
+gulp.task('preprocess', ['preprocess-core', 'preprocess-bundle']);
+
+function createTemplateTask(taskName, src, dest) {
+  gulp.task(taskName, function() {
+    return gulp.src(src)
+      .pipe($.template(templateData.options))
+      .pipe($.rename(dest))
+      .pipe(gulp.dest(''));
+  });
+}
+
+createTemplateTask('template-core', [templateData.core.src], templateData.core.dest);
+createTemplateTask('template-bundle', [templateData.bundle.src], templateData.bundle.dest);
+gulp.task('template', ['template-core', 'template-bundle']);
+
+gulp.task('env-coverage', function() {
+  $.env({
+    APP_DIR_FOR_CODE_COVERAGE: '../../../test/src/'
+  });
+});
+
+gulp.task('coveralls', function() {
+  return gulp.src('coverage/lcov.info')
+    .pipe($.coveralls({force: false}));
+});
+
+// gulp.task('coverage', ['unwrap', 'preprocess-bundle', 'template-bundle', 'env-coverage', 'instrument', 'test', 'storeCoverage', 'makeReport', 'coveralls']);
 
 // An alias of test
 gulp.task('default', ['test']);

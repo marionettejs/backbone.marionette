@@ -1,6 +1,9 @@
 // Region Manager
 // --------------
 
+import actAsCollection from './utils/actAsCollection';
+import _getValue       from './utils/_getValue';
+
 // Manage one or more related `Marionette.Region` objects.
 Marionette.RegionManager = Marionette.Object.extend({
   cidPrefix: 'mnrm',
@@ -19,7 +22,7 @@ Marionette.RegionManager = Marionette.Object.extend({
   // each key becomes the region name, and each value is
   // the region definition.
   addRegions: function(regionDefinitions, defaults) {
-    regionDefinitions = Marionette._getValue(regionDefinitions, this, arguments);
+    regionDefinitions = _getValue(regionDefinitions, this, arguments);
 
     return _.reduce(regionDefinitions, function(regions, definition, name) {
       if (_.isString(definition)) {
@@ -121,4 +124,4 @@ Marionette.RegionManager = Marionette.Object.extend({
   }
 });
 
-Marionette.actAsCollection(Marionette.RegionManager.prototype, '_regions');
+actAsCollection(Marionette.RegionManager.prototype, '_regions');

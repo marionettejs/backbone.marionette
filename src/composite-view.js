@@ -3,6 +3,10 @@
 // Composite View
 // --------------
 
+import _getValue       from './utils/_getValue';
+import getOption       from './utils/getOption';
+import MarionetteError from './error';
+
 // Used for rendering a branch-leaf, hierarchical structure.
 // Extends directly from CollectionView and also renders an
 // a child view as `modelView`, for the top leaf
@@ -55,7 +59,7 @@ Marionette.CompositeView = Marionette.CollectionView.extend({
     } else if (_.isFunction(childView)) {
       return childView.call(this, child);
     } else {
-      throw new Marionette.Error({
+      throw new MarionetteError({
         name: 'InvalidChildViewError',
         message: '"childView" must be a view class or a function that returns a view class'
       });
@@ -159,10 +163,10 @@ Marionette.CompositeView = Marionette.CollectionView.extend({
     }
 
     var container;
-    var childViewContainer = Marionette.getOption(containerView, 'childViewContainer');
+    var childViewContainer = getOption(containerView, 'childViewContainer');
     if (childViewContainer) {
 
-      var selector = Marionette._getValue(childViewContainer, containerView);
+      var selector = _getValue(childViewContainer, containerView);
 
       if (selector.charAt(0) === '@' && containerView.ui) {
         container = containerView.ui[selector.substr(4)];
@@ -171,7 +175,7 @@ Marionette.CompositeView = Marionette.CollectionView.extend({
       }
 
       if (container.length <= 0) {
-        throw new Marionette.Error({
+        throw new MarionetteError({
           name: 'ChildViewContainerMissingError',
           message: 'The specified "childViewContainer" was not found: ' + containerView.childViewContainer
         });

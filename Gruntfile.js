@@ -122,7 +122,10 @@ module.exports = function(grunt) {
     mochaTest: {
       tests: {
         options: {
-          require: 'test/unit/setup/node.js',
+          require: [
+            'babel/register',
+            'test/unit/setup/node.js'
+          ],
           reporter: grunt.option('mocha-reporter') || 'nyan',
           clearRequireCache: true,
           mocha: require('mocha')

@@ -1,6 +1,8 @@
 // Renderer
 // --------
 
+import MarionetteError from './error';
+
 // Render a template with data by passing in the template
 // selector and the data to render.
 Marionette.Renderer = {
@@ -11,7 +13,7 @@ Marionette.Renderer = {
   // custom rendering and template handling for all of Marionette.
   render: function(template, data) {
     if (!template) {
-      throw new Marionette.Error({
+      throw new MarionetteError({
         name: 'TemplateNotFoundError',
         message: 'Cannot render the template since its false, null or undefined.'
       });

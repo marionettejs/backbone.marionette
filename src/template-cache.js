@@ -1,6 +1,8 @@
 // Template Cache
 // --------------
 
+import MarionetteError from './error';
+
 // Manage templates stored in `<script>` blocks,
 // caching them for faster access.
 Marionette.TemplateCache = function(templateId) {
@@ -77,7 +79,7 @@ _.extend(Marionette.TemplateCache.prototype, {
     var template = Backbone.$(templateId).html();
 
     if (!template || template.length === 0) {
-      throw new Marionette.Error({
+      throw new MarionetteError({
         name: 'NoTemplateError',
         message: 'Could not find template: "' + templateId + '"'
       });

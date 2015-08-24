@@ -1,3 +1,5 @@
+import Marionette from '../../src/backbone-marionette';
+
 describe('view ui elements', function() {
   'use strict';
 
@@ -109,7 +111,7 @@ describe('view ui elements', function() {
     it('should throw ViewDestroyedError when accessing ui bindings through getUI', function() {
       expect(_.bind(function() {
         return this.view.getUI('foo');
-      }, this)).to.throw(Marionette.Error, new Marionette.Error({
+      }, this)).to.throw(new Marionette.MarionetteError({
         name: 'ViewDestroyedError',
         message: 'View (cid: "' + this.view.id + '") has already been destroyed and cannot be used.'
       }));
@@ -125,8 +127,8 @@ describe('view ui elements', function() {
       };
 
       this.View = Marionette.View.extend({
-        ui     : this.uiHash,
-        events : {}
+        ui:     this.uiHash,
+        events: {}
       });
 
       this.view = new this.View();

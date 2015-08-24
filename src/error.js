@@ -1,12 +1,16 @@
 // Error
 // -----
 
+import _      from 'underscore';
+import extend from './utils/extend';
+
 var errorProps = ['description', 'fileName', 'lineNumber', 'name', 'message', 'number'];
 
-Marionette.Error = Marionette.extend.call(Error, {
-  urlRoot: 'http://marionettejs.com/docs/v' + Marionette.VERSION + '/',
+var MarionetteError = extend.call(Error, {
+  // TODO: handle VERSION.
+  urlRoot: 'http://marionettejs.com/docs/v' + '<%= version %>' + '/',
 
-  constructor: function(message, options) {
+  constructor: function MarionetteError(message, options) {
     if (_.isObject(message)) {
       options = message;
       message = options.message;
@@ -26,7 +30,7 @@ Marionette.Error = Marionette.extend.call(Error, {
 
   captureStackTrace: function() {
     if (Error.captureStackTrace) {
-      Error.captureStackTrace(this, Marionette.Error);
+      Error.captureStackTrace(this, MarionetteError);
     }
   },
 
@@ -35,4 +39,6 @@ Marionette.Error = Marionette.extend.call(Error, {
   }
 });
 
-Marionette.Error.extend = Marionette.extend;
+MarionetteError.extend = extend;
+
+export default MarionetteError;

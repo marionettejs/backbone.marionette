@@ -110,7 +110,7 @@ describe('collection view', function() {
     beforeEach(function() {
       this.NoChildView = Backbone.Marionette.CollectionView.extend();
 
-      this.collection = new Backbone.Collection([{foo:'bar'}, {foo: 'baz'}]);
+      this.collection = new Backbone.Collection([{foo: 'bar'}, {foo: 'baz'}]);
       this.collectionView = new this.NoChildView({
         collection: this.collection
       });
@@ -384,7 +384,7 @@ describe('collection view', function() {
     it('should not update the order of children when "sort" is set to "false" as a property on a class', function() {
       this.CollectionView = Marionette.CollectionView.extend({
         childView: this.ChildView,
-        sort : false
+        sort: false
       });
       this.collectionView = new this.CollectionView({
         childView: this.ChildView,
@@ -402,7 +402,7 @@ describe('collection view', function() {
       });
       this.collectionView = new this.CollectionView({
         childView: this.ChildView,
-        sort : false,
+        sort: false,
         collection: this.collection
       });
       this.collectionView.render();

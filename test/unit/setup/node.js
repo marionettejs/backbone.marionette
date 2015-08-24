@@ -14,10 +14,10 @@ if (!global.document || !global.window) {
   var jsdom = require('jsdom').jsdom;
 
   global.document = jsdom('<html><head><script></script></head><body></body></html>', null, {
-    FetchExternalResources   : ['script'],
-    ProcessExternalResources : ['script'],
-    MutationEvents           : '2.0',
-    QuerySelector            : false
+    FetchExternalResources:   ['script'],
+    ProcessExternalResources: ['script'],
+    MutationEvents:           '2.0',
+    QuerySelector:            false
   });
 
   global.window = document.parentWindow;
@@ -37,24 +37,11 @@ global.Marionette = Backbone.Marionette = {};
 require('backbone.babysitter');
 require('backbone.radio');
 global.slice = Array.prototype.slice;
-requireHelper('bind-entity-events');
+// requireHelper('bind-entity-events');
 requireHelper('radio-helpers');
-requireHelper('trigger-method');
-
-requireHelper('utils/extend');
-requireHelper('utils/isNodeAttached');
-requireHelper('utils/mergeOptions');
-requireHelper('utils/getOption');
-requireHelper('utils/proxyGetOption');
-requireHelper('utils/_getValue');
-requireHelper('utils/normalizeMethods');
-requireHelper('utils/normalizeUIString');
-requireHelper('utils/normalizeUIKeys');
-requireHelper('utils/normalizeUIValues');
-requireHelper('utils/actAsCollection');
-requireHelper('utils/deprecate');
-
-requireHelper('dom-refresh');
+// requireHelper('trigger-method');
+// require utils
+// requireHelper('dom-refresh');
 requireHelper('metal');
 requireHelper('object');
 requireHelper('app-router');
@@ -62,7 +49,7 @@ requireHelper('application');
 requireHelper('renderer');
 requireHelper('template-cache');
 requireHelper('abstract-view');
-requireHelper('features');
+// requireHelper('features');
 requireHelper('view');
 requireHelper('collection-view');
 requireHelper('composite-view');
@@ -70,4 +57,4 @@ requireHelper('behavior');
 requireHelper('behaviors');
 requireHelper('region');
 requireHelper('region-manager');
-requireHelper('error');
+//requireHelper('error');

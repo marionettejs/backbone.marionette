@@ -1,6 +1,13 @@
 // Object
 // ------
 
+import extend                   from './utils/extend';
+import proxyGetOption           from './utils/proxyGetOption';
+import mergeOptions             from './utils/mergeOptions';
+import { triggerMethod }        from './trigger-method';
+import { proxyBindEntityEvents, proxyUnbindEntityEvents }
+                                from './bind-entity-events';
+
 // A Base Class that other Classes should descend from.
 // Object borrows many conventions and utilities from Backbone.
 Marionette.Object = function(options) {
@@ -10,7 +17,7 @@ Marionette.Object = function(options) {
   this.initialize.apply(this, arguments);
 };
 
-Marionette.Object.extend = Marionette.extend;
+Marionette.Object.extend = extend;
 
 // Object Methods
 // --------------
@@ -42,18 +49,18 @@ _.extend(Marionette.Object.prototype, Backbone.Events, {
 
   // Import the `triggerMethod` to trigger events with corresponding
   // methods if the method exists
-  triggerMethod: Marionette.triggerMethod,
+  triggerMethod: triggerMethod,
 
   // A handy way to merge options onto the instance
-  mergeOptions: Marionette.mergeOptions,
+  mergeOptions: mergeOptions,
 
   // Proxy `getOption` to enable getting options from this or this.options by name.
-  getOption: Marionette.proxyGetOption,
+  getOption: proxyGetOption,
 
   // Proxy `bindEntityEvents` to enable binding view's events from another entity.
-  bindEntityEvents: Marionette.proxyBindEntityEvents,
+  bindEntityEvents: proxyBindEntityEvents,
 
   // Proxy `unbindEntityEvents` to enable unbinding view's events from another entity.
-  unbindEntityEvents: Marionette.proxyUnbindEntityEvents
+  unbindEntityEvents: proxyUnbindEntityEvents
 
 });

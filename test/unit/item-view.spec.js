@@ -323,7 +323,7 @@ describe('item view', function() {
 
   describe('has a valid inheritance chain back to Marionette.View', function() {
     beforeEach(function() {
-      this.constructorSpy = this.sinon.spy(Marionette, 'View');
+      this.constructorSpy = this.sinon.spy(Marionette.View.prototype, 'constructor');
       this.itemView = new Marionette.ItemView();
     });
 
@@ -420,7 +420,7 @@ describe('item view', function() {
 
   describe('has a valid inheritance chain back to Marionette.View', function() {
     beforeEach(function() {
-      this.constructor = this.sinon.spy(Marionette, 'View');
+      this.constructor = this.sinon.spy(Marionette.View.prototype, 'constructor');
       this.collectionView = new Marionette.ItemView();
     });
 

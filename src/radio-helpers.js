@@ -2,11 +2,11 @@
 
   //Proxy Radio message handling to enable declarative interactions with radio channels
   var radioAPI = {
-    'radioEvents' : {
+    'radioEvents': {
       startMethod: 'on',
       stopMethod: 'off'
     },
-    'radioRequests' : {
+    'radioRequests': {
       startMethod: 'reply',
       stopMethod: 'stopReplying'
     }

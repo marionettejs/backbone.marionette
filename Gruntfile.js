@@ -112,7 +112,7 @@ module.exports = function(grunt) {
     },
 
     instrument: {
-      files: 'src/*.js',
+      files: 'src/**/*.js',
       options: {
         lazy: true,
         basePath: 'test'

@@ -80,6 +80,8 @@ grunt compile-api
 
 
 #### Steps
+
+```bash
 cd www
 bundle install
 bundle exec rake api

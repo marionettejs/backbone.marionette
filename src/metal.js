@@ -6,9 +6,10 @@ Marionette.Class = Metal.Class.extend({});
 
 function classify(obj) {
   return Marionette.Class.extend(
-    _.extend(
+    _.defaults(
       {constructor: obj},
-      _.omit(obj.prototype, _.keys(Marionette.Class.prototype))
+      Metal.Class.prototype,
+      obj.prototype
     )
   );
 }

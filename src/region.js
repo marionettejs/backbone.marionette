@@ -291,7 +291,7 @@ Marionette.Region = Marionette.Object.extend({
   _destroyView: function() {
     var view = this.currentView;
 
-    if (view.destroy && !view.isDestroyed) {
+    if (view instanceof Marionette.AbstractView && !view.isDestroyed) {
       view.destroy();
     } else if (view.remove) {
       view.remove();

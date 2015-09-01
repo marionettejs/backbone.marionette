@@ -1,14 +1,50 @@
 // Missing Metal Items
-// 1. Marionette.Class parity
+// 1. Marionette.Error
 // 2. Marionette.Deprecate
 
-Marionette.Class = Metal.Class.extend({});
+Marionette.Class = Metal.Class.extend({
+  constructor: function(options) {
+    this.options = _.extend({}, _.result(this, 'options'), options);
+    Marionette.proxyRadioHandlers.apply(this);
+    this.cid = _.uniqueId(this.cidPrefix);
+    this.initialize.apply(this, arguments);
+  },
+
+  cidPrefix: 'mnc',
+
+  destroy: function() {
+    this.triggerMethod('before:destroy');
+    this.triggerMethod('destroy');
+    Marionette.unproxyRadioHandlers.apply(this);
+    this.stopListening();
+
+    return this;
+  },
+
+  // Import the `triggerMethod` to trigger events with corresponding
+  // methods if the method exists
+  triggerMethod: Marionette.triggerMethod,
+
+  // A handy way to merge options onto the instance
+  mergeOptions: Marionette.mergeOptions,
+
+  // Proxy `getOption` to enable getting options from this or this.options by name.
+  getOption: Marionette.proxyGetOption,
+
+  // Proxy `bindEntityEvents` to enable binding view's events from another entity.
+  bindEntityEvents: Marionette.proxyBindEntityEvents,
+
+  // Proxy `unbindEntityEvents` to enable unbinding view's events from another entity.
+  unbindEntityEvents: Marionette.proxyUnbindEntityEvents
+});
 
 function classify(obj) {
   return Marionette.Class.extend(
-    _.extend(
+    _.defaults(
       {constructor: obj},
-      _.omit(obj.prototype, _.keys(Marionette.Class.prototype))
+      Marionette.Class.prototype,
+      Metal.Class.prototype,
+      obj.prototype
     )
   );
 }

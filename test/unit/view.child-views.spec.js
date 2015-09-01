@@ -366,11 +366,16 @@ describe('layoutView', function() {
       this.sinon.spy(this.layoutView.regionOne, 'empty');
       this.layoutView.render();
 
-      this.view = new Backbone.View();
-      this.view.destroy = function() {};
+      this.view = new Marionette.View({
+        template: false
+      });
       this.layoutView.regionOne.show(this.view);
 
       this.layoutView.render();
+
+      this.view = new Marionette.View({
+        template: false
+      });
       this.layoutView.regionOne.show(this.view);
       this.region = this.layoutView.regionOne;
     });
@@ -394,6 +399,9 @@ describe('layoutView', function() {
     describe('and the views "render" function is bound to an event in the "initialize" function', function() {
       beforeEach(function() {
         var suite = this;
+        this.view = new Marionette.View({
+          template: false
+        });
         this.layoutView.onRender = function() {
           this.regionOne.show(suite.view);
         };

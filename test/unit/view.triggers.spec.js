@@ -42,6 +42,10 @@ describe('view triggers', function() {
     it('should include the views collection in the event args', function() {
       expect(this.fooHandlerStub.lastCall.args[0]).to.contain({collection: this.collection});
     });
+
+    it('should include the original event in the event args', function() {
+      expect(this.fooHandlerStub.lastCall.args[0]).to.contain({originalEvent: this.fooEvent});
+    });
   });
 
   describe('when triggers and standard events are both configured', function() {

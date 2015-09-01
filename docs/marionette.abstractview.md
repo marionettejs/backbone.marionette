@@ -282,8 +282,11 @@ includes the following:
 * view
 * model
 * collection
+* originalEvent
 
-These properties match the `view`, `model`, and `collection` properties of the view that triggered the event.
+The first three properties match the `view`, `model`, and `collection`
+properties of the view that triggered the event, whereas `originalEvent`
+is a reference to the DOM event that was initially triggered on the view.
 
 ```js
 var MyView = Marionette.View.extend({
@@ -300,6 +303,7 @@ view.on("some:event", function(args){
   args.view; // => the view instance that triggered the event
   args.model; // => the view.model, if one was set on the view
   args.collection; // => the view.collection, if one was set on the view
+  args.originalEvent; // => the click event that was triggered on the view
 });
 ```
 

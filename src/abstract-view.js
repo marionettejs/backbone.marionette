@@ -254,7 +254,15 @@ Marionette.AbstractView = Backbone.View.extend({
     var eventName = hasOptions ? options.event : triggerDef;
 
     return function(e) {
+      var args = {
+        view: this,
+        model: this.model,
+        collection: this.collection
+      };
+
       if (e) {
+        args.originalEvent = e;
+
         if (e.preventDefault && options.preventDefault) {
           e.preventDefault();
         }
@@ -263,12 +271,6 @@ Marionette.AbstractView = Backbone.View.extend({
           e.stopPropagation();
         }
       }
-
-      var args = {
-        view: this,
-        model: this.model,
-        collection: this.collection
-      };
 
       this.triggerMethod(eventName, args);
     };

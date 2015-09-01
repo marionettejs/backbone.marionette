@@ -49,6 +49,7 @@ Marionette.Region = Marionette.Object.extend({
     var showOptions     = options || {};
     var isDifferentView = view !== this.currentView;
     var forceShow       = !!showOptions.forceShow;
+    var replaceElement  = !!showOptions.replaceElement;
 
     // We are only changing the view if there is a current view to change to begin with
     var isChangingView = !!this.currentView;
@@ -61,6 +62,9 @@ Marionette.Region = Marionette.Object.extend({
     // the current view or if we want to re-show the view. Note that if
     // `_shouldDestroyView` is true, then `_shouldShowView` is also necessarily true.
     var _shouldShowView = isDifferentView || forceShow;
+
+    // only replace the region's element with the view's element if explicitly set
+    var _shouldReplaceElement = replaceElement;
 
     if (isChangingView) {
       this.triggerMethod('before:swapOut', this.currentView, this, options);
@@ -122,7 +126,7 @@ Marionette.Region = Marionette.Object.extend({
         this._triggerAttach(displayedViews, 'before:');
       }
 
-      this.attachHtml(view);
+      this.attachHtml(view, _shouldReplaceElement);
       this.currentView = view;
 
       if (attachedRegion && attachOptions.triggerAttach) {
@@ -204,12 +208,50 @@ Marionette.Region = Marionette.Object.extend({
     return Backbone.$(el, Marionette._getValue(this.options.parentEl, this));
   },
 
-  // Override this method to change how the new view is
-  // appended to the `$el` that the region is managing
-  attachHtml: function(view) {
+  // Replace the region's DOM element with the view's DOM element.
+  _replaceEl: function(view) {
+    // empty el so we don't save any non-destroyed views
     this.$el.contents().detach();
 
-    this.el.appendChild(view.el);
+    // always restore the el to ensure the regions el is
+    // present before replacing
+    this._restoreEl();
+
+    var parent = this.el.parentNode;
+
+    parent.replaceChild(view.el, this.el);
+    this.replaced = true;
+  },
+
+  // Restore the region's element in the DOM.
+  _restoreEl: function() {
+    if (!this.currentView) {
+      return;
+    }
+
+    var view = this.currentView;
+    var parent = view.el.parentNode;
+
+    if (!parent) {
+      return;
+    }
+
+    parent.replaceChild(this.el, view.el);
+    this.replaced = false;
+  },
+
+  // Override this method to change how the new view is
+  // appended to the `$el` that the region is managing
+  attachHtml: function(view, shouldReplace) {
+    if (shouldReplace) {
+      // replace the region's node with the view's node
+      this._replaceEl(view);
+    } else {
+      // empty the node and append new view
+      this.$el.contents().detach();
+
+      this.el.appendChild(view.el);
+    }
   },
 
   // Destroy the current view, if there is one. If there is no
@@ -224,6 +266,11 @@ Marionette.Region = Marionette.Object.extend({
 
     view.off('destroy', this.empty, this);
     this.triggerMethod('before:empty', view);
+
+    if (this.replaced) {
+      this._restoreEl();
+    }
+
     if (!preventDestroy) {
       this._destroyView();
     }

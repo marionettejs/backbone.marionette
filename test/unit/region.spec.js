@@ -405,8 +405,6 @@ describe('region', function() {
           }
         });
 
-        this.setFixtures('<div id="region"></div>');
-
         this.view1 = new this.MyView();
         this.view2 = new this.MyView2();
         this.myRegion = new this.MyRegion();
@@ -450,6 +448,39 @@ describe('region', function() {
         it('should still have view1\'s, event bindings', function() {
           expect(jQuery._data(this.view.el, 'events').click).to.be.defined;
         });
+
+        describe('when passing the "replaceElement" option', function() {
+          beforeEach(function() {
+            // empty region to clean existing view
+            this.$parentEl = this.myRegion.$el.parent();
+            this.regionHtml = this.$parentEl.html();
+            this.showOptions = {replaceElement: true, preventDestroy: true};
+            this.myRegion.show(this.view, this.showOptions);
+          });
+
+          it('should append the view HTML to the parent "el"', function() {
+            expect(this.$parentEl).to.contain.$html(this.view.$el.html());
+          });
+
+          it('should remove the region\'s "el" from the DOM', function() {
+            expect(this.$parentEl).to.not.contain.$html(this.regionHtml);
+          });
+
+          describe('and then emptying the region', function() {
+            beforeEach(function() {
+              this.myRegion.empty();
+            });
+
+            it('should remove the view from the parent', function() {
+              expect(this.$parentEl).to.not.contain.$html(this.view.$el.html());
+            });
+
+            it('should restore the region\'s "el" to the DOM', function() {
+              expect(this.$parentEl).to.contain.$html('<div id="region"></div>');
+            });
+          });
+        });
+
       });
 
       describe('preventDestroy: false', function() {
@@ -466,6 +497,79 @@ describe('region', function() {
         });
       });
     });
+
+    describe('when passing the "replaceElement" option', function() {
+      beforeEach(function() {
+        // empty region to clean existing view
+        this.myRegion.empty();
+
+        this.$parentEl = this.myRegion.$el.parent();
+        this.regionHtml = this.$parentEl.html();
+        this.showOptions = {replaceElement: true};
+        this.myRegion.show(this.view, this.showOptions);
+      });
+
+      it('should append the view HTML to the parent "el"', function() {
+        expect(this.$parentEl).to.contain.$html(this.view.$el.html());
+      });
+
+      it('should remove the region\'s "el" from the DOM', function() {
+        expect(this.$parentEl).to.not.contain.$html(this.regionHtml);
+      });
+
+      describe('and then emptying the region', function() {
+        beforeEach(function() {
+          this.myRegion.empty();
+        });
+
+        it('should remove the view from the parent', function() {
+          expect(this.$parentEl).to.not.contain.$html(this.view.$el.html());
+        });
+
+        it('should restore the region\'s "el" to the DOM', function() {
+          expect(this.$parentEl).to.contain.$html('<div id="region"></div>');
+        });
+      });
+
+      describe('and showing another view', function() {
+        beforeEach(function() {
+          this.MyView2 = Marionette.View.extend({
+            events: {
+              'click': function() {}
+            },
+            template: _.template('some different content'),
+            destroy: function() {},
+            onBeforeShow: function() {},
+            onShow: function() {
+              $(this.el).addClass('onShowClass');
+            },
+            onBeforeRender: function() {},
+          });
+
+          this.view2 = new this.MyView2();
+          this.myRegion.show(this.view2, this.showOptions);
+        });
+
+        it('should append the view HTML to the parent "el"', function() {
+          expect(this.$parentEl).to.contain.$html(this.view2.$el.html());
+        });
+      });
+
+      describe('and calling attachHtml a second time', function() {
+        beforeEach(function() {
+          this.myRegion.attachHtml(this.view, true);
+        });
+
+        it('should append the view HTML to the parent "el"', function() {
+          expect(this.$parentEl).to.contain.$html(this.view.$el.html());
+        });
+
+        it('should remove the region\'s "el" from the DOM', function() {
+          expect(this.$parentEl).to.not.contain.$html(this.regionHtml);
+        });
+      });
+    });
+
   });
 
   describe('when showing nested views', function() {

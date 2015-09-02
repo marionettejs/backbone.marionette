@@ -336,12 +336,12 @@ describe('item view', function() {
 
   describe('has a valid inheritance chain back to Marionette.AbstractView', function() {
     beforeEach(function() {
-      this.constructorSpy = this.sinon.spy(Marionette, 'AbstractView');
-      this.itemView = new Marionette.View();
+      this.constructor = this.sinon.spy(Marionette.AbstractView.prototype, 'constructor');
+      this.layoutView = new Marionette.View();
     });
 
     it('calls the parent Marionette.AbstractViews constructor function on instantiation', function() {
-      expect(this.constructorSpy).to.have.been.called;
+      expect(this.constructor).to.have.been.called;
     });
   });
 
@@ -420,17 +420,6 @@ describe('item view', function() {
 
     it('should serialize all models', function() {
       expect(this.itemView.serializeData().items).to.deep.equal(this.collectionData);
-    });
-  });
-
-  describe('has a valid inheritance chain back to Marionette.AbstractView', function() {
-    beforeEach(function() {
-      this.constructor = this.sinon.spy(Marionette, 'AbstractView');
-      this.collectionView = new Marionette.View();
-    });
-
-    it('calls the parent Marionette.AbstractView\'s constructor function on instantiation', function() {
-      expect(this.constructor).to.have.been.calledOnce;
     });
   });
 });

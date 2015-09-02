@@ -24,7 +24,7 @@ Marionette.View = Marionette.AbstractView.extend({
 
     this.regions = this.regions || {};
 
-    Marionette.AbstractView.apply(this, arguments);
+    Marionette.AbstractView.prototype.constructor.apply(this, arguments);
   },
 
   // Serialize the view's model *or* collection, if

@@ -935,9 +935,26 @@ describe('region', function() {
       expect(this.barRegion.attachView).to.have.returned(this.fooView.barRegion);
     });
 
-    it('calls the child events defined on parent view', function() {
+    it('should call the child events defined on parent view', function() {
       this.viewAttached.$el.click();
-      expect(this.fooView.childEvents.attachViewClicked).to.have.been.called;
+      expect(this.fooView.childEvents.attachViewClicked).to.have.been.calledOnce;
+    });
+
+    describe('when attaching another view to the same region', function() {
+      beforeEach(function() {
+        this.viewAttachedLater = new this.ItemView({el: '#baz'});
+        this.fooView.getRegion('barRegion').attachView(this.viewAttachedLater);
+      });
+
+      it('the first view should no longer call the child events defined on the parent', function() {
+        this.viewAttached.triggerMethod('attachViewClicked');
+        expect(this.fooView.childEvents.attachViewClicked).to.not.have.been.called;
+      });
+
+      it('the new view should call the child events defined on the parent instead', function() {
+        this.viewAttachedLater.triggerMethod('attachViewClicked');
+        expect(this.fooView.childEvents.attachViewClicked).to.have.been.calledOnce;
+      });
     });
   });
 

@@ -441,25 +441,108 @@ describe('collection view', function() {
       this.model5 = new Backbone.Model({foo: 3});
       this.model6 = new Backbone.Model({foo: 4});
       this.collection.add([this.model5, this.model6], {at: 2});
+
+      this.order = _.pluck(this.collectionView.$el.find('span'), 'innerHTML');
     });
 
     it('should add models and render views in right order', function() {
-      var order = _.pluck(this.collectionView.$el.find('span'), 'innerHTML');
-      expect(order).to.deep.equal(['1', '2', '3', '4', '5', '6']);
+      expect(this.order).to.deep.equal(['1', '2', '3', '4', '5', '6']);
     });
 
-    it('should add models and render views in right order for filtered collection', function() {
-      this.collectionView.filter = function(child) {
-        return child.get('foo') > 4;
-      };
+    describe('when the CollectionView has a filter', function() {
+      beforeEach(function() {
+        this.collectionView.filter = function(child) {
+          return child.get('foo') > 4;
+        };
+
+        this.collectionView.render();
+        this.collection.add([new Backbone.Model({foo: 10})], {at: 1});
+        this.orderWithFilter = _.pluck(this.collectionView.$el.find('span'), 'innerHTML');
+
+        this.collectionView.filter = null;
+        this.collectionView.render();
+        this.orderWithoutFilter = _.pluck(this.collectionView.$el.find('span'), 'innerHTML');
+      });
+
+      it('should render views in the right order', function() {
+        expect(this.orderWithFilter).to.deep.equal(['10', '5', '6']);
+      });
+
+      it('should maintain view order after filter is removed', function() {
+        expect(this.orderWithoutFilter).to.deep.equal(['1', '10', '2', '3', '4', '5', '6']);
+      });
+    });
+
+    describe('when the CollectionView has a comparator', function() {
+      beforeEach(function() {
+        this.collectionView.viewComparator = 'foo';
+
+        this.collectionView.render();
+        this.collection.add([new Backbone.Model({foo: 10})], {at: 1});
+        this.orderBeforeRerender = _.pluck(this.collectionView.$el.find('span'), 'innerHTML');
+
+        this.collectionView.render();
+        this.orderAfterRerender = _.pluck(this.collectionView.$el.find('span'), 'innerHTML');
+      });
+
+      it('should render views in comparator order overridden by `at` model adds since the last `render()`', function() {
+        expect(this.orderBeforeRerender).to.deep.equal(['1', '10', '2', '3', '4', '5', '6']);
+      });
+
+      it('should return view to comparator order after subsequent `render()`', function() {
+        expect(this.orderAfterRerender).to.deep.equal(['1', '2', '3', '4', '5', '6', '10']);
+      });
+    });
+
+    describe('when the CollectionView has a filter and a comparator', function() {
+      beforeEach(function() {
+        this.collectionView.filter = function(child) {
+          return child.get('foo') > 4;
+        };
+        this.collectionView.viewComparator = 'foo';
+
+        this.collectionView.render();
+        this.collection.add([new Backbone.Model({foo: 10})], {at: 1});
+        this.orderBeforeRerender = _.pluck(this.collectionView.$el.find('span'), 'innerHTML');
+
+        this.collectionView.render();
+        this.orderAfterRerender = _.pluck(this.collectionView.$el.find('span'), 'innerHTML');
+
+        this.collectionView.filter = null;
+        this.collectionView.render();
+        this.orderWithoutFilter = _.pluck(this.collectionView.$el.find('span'), 'innerHTML');
+      });
+
+      it('should render views in comparator order overriden by `at` model adds and, lastly, filtered', function() {
+        expect(this.orderBeforeRerender).to.deep.equal(['10', '5', '6']);
+      });
+
+      it('should render views in comparator order but still filtered after subsequent `render()`', function() {
+        expect(this.orderAfterRerender).to.deep.equal(['5', '6', '10']);
+      });
+
+      it('should render all views in comparator order after filter is removed', function() {
+        expect(this.orderWithoutFilter).to.deep.equal(['1', '2', '3', '4', '5', '6', '10']);
+      });
+    });
+  });
+
+  describe('when firing an `add` event on the collection with `at` but without `index`, BB < 1.2 style', function() {
+    beforeEach(function() {
+      this.collection = new Backbone.Collection([{foo: 1}, {foo: 3}]);
+      this.collectionView = new this.CollectionView({
+        collection: this.collection
+      });
       this.collectionView.render();
-      this.collection.add([new Backbone.Model({foo: 10})], {at: 1});
-      var order = _.pluck(this.collectionView.$el.find('span'), 'innerHTML');
-      expect(order).to.deep.equal(['10', '5', '6']);
-      this.collectionView.filter = null;
-      this.collectionView.render();
-      order = _.pluck(this.collectionView.$el.find('span'), 'innerHTML');
-      expect(order).to.deep.equal(['1', '10', '2', '3', '4', '5', '6']);
+
+      this.collection.add({foo: 2}, {at: 1, silent: true});
+      var model = this.collection.at(1);
+      this.collection.trigger('add', model, this.collection, {at: 1});
+      this.order = _.pluck(this.collectionView.$el.find('span'), 'innerHTML').join('');
+    });
+
+    it('should render views in `at` order', function() {
+      expect(this.order).to.equal('123');
     });
   });
 

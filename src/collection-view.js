@@ -622,7 +622,7 @@ Marionette.CollectionView = Marionette.AbstractView.extend({
     var shouldCheckEmpty = true;
     var childViews = this.children.map(_.identity);
 
-    if (!_.isUndefined(destroyOptions.checkEmpty)) {
+    if (typeof destroyOptions.checkEmpty !== 'undefined') {
       shouldCheckEmpty = destroyOptions.checkEmpty;
     }
 

@@ -101,7 +101,7 @@ Marionette.CompositeView = Marionette.CollectionView.extend({
     if (template !== false) {
       var data = this.mixinTemplateHelpers(this.serializeData());
 
-      var html = Marionette.Renderer.render(template, data, this);
+      var html = this.getRenderer().render(template, data, this);
       this.attachElContent(html);
     }
 

@@ -31,7 +31,7 @@
   "dependencies": {
     "marionettejs/backbone.babysitter": "*",
     "marionettejs/backbone.wreqr": "*",
-    "jashkenas/backbone": "1.0.0 - 1.2.1",
+    "jashkenas/backbone": "1.0.0 - 1.2.3",
     "jashkenas/underscore": "1.4.4 - 1.8.3"
   },
   "scripts": [

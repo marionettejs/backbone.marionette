@@ -77,6 +77,7 @@ Marionette.CompositeView = Marionette.CollectionView.extend({
     this.triggerMethod('before:render', this);
 
     this._renderTemplate();
+    this.bindUIElements();
     this._renderChildren();
 
     this._isRendering = false;
@@ -91,26 +92,6 @@ Marionette.CompositeView = Marionette.CollectionView.extend({
     }
   },
 
-  // Render the root template that the children
-  // views are appended to
-  _renderTemplate: function() {
-    this.triggerMethod('before:render:template');
-    var template = this.getTemplate();
-
-    // Allow template-less composite views
-    if (template !== false) {
-      var data = this.mixinTemplateHelpers(this.serializeData());
-
-      var html = Marionette.Renderer.render(template, data, this);
-      this.attachElContent(html);
-    }
-
-    // the ui bindings is done here and not at the end of render since they
-    // will not be available until after the model is rendered, but should be
-    // available before the collection is rendered.
-    this.bindUIElements();
-    this.triggerMethod('render:template');
-  },
   // Attaches the content of the root.
   // This method can be overridden to optimize rendering,
   // or to render in a non standard way.

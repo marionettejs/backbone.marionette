@@ -225,8 +225,6 @@ describe('composite view', function() {
 
   describe('when rendering a composite view', function() {
     beforeEach(function() {
-      var suite = this;
-
       this.templateFn = _.template('composite <%= foo %>');
 
       this.ChildView = Backbone.Marionette.View.extend({
@@ -247,8 +245,6 @@ describe('composite view', function() {
         }
       });
 
-      this.order = [];
-
       this.m1 = new this.Model({foo: 'bar'});
       this.m2 = new this.Model({foo: 'baz'});
       this.collection = new this.Collection();
@@ -259,27 +255,14 @@ describe('composite view', function() {
         collection: this.collection
       });
 
-      this.compositeView.on('render:template', function() {
-        suite.order.push(suite.compositeView.renderedModelView);
-      });
-
-      this.compositeView.on('render:collection', function() {
-        suite.order.push(suite.compositeView.collection);
-      });
-
-      this.compositeView.on('render', function() {
-        suite.order.push(suite.compositeView);
-      });
-
       this.sinon.spy(this.compositeView, 'trigger');
       this.sinon.spy(this.compositeView, 'onBeforeRender');
       this.sinon.spy(this.compositeView, 'onRender');
+      this.sinon.spy(this.compositeView, '_renderTemplate');
+      this.sinon.spy(this.compositeView, 'bindUIElements');
+      this.sinon.spy(this.compositeView, '_renderChildren');
 
       this.compositeView.render();
-    });
-
-    it('should trigger a render event for the model view', function() {
-      expect(this.compositeView.trigger).to.have.been.calledWith('render:template');
     });
 
     it('should trigger a before:render event for the collection', function() {
@@ -294,10 +277,10 @@ describe('composite view', function() {
       expect(this.compositeView.trigger).to.have.been.calledWith('render', this.compositeView);
     });
 
+    // ui bindings will only be available after the model is rendered,
+    // but should be available before the collection is rendered.
     it('should guarantee rendering of the model before rendering the collection', function() {
-      expect(this.order[0]).to.equal(this.compositeView.renderedModelView);
-      expect(this.order[1]).to.equal(this.compositeView.collection);
-      expect(this.order[2]).to.equal(this.compositeView);
+      sinon.assert.callOrder(this.compositeView._renderTemplate, this.compositeView.bindUIElements, this.compositeView._renderChildren);
     });
 
     it('should call "onBeforeRender"', function() {

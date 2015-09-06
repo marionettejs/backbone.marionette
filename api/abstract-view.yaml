@@ -16,6 +16,9 @@ functions:
   getTemplate: |
     @api public
     
+  _renderTemplate: |
+    @api private
+
   serializeModel: |
     @api public
     @param {} model

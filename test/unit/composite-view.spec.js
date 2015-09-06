@@ -266,11 +266,11 @@ describe('composite view', function() {
     });
 
     it('should trigger a before:render event for the collection', function() {
-      expect(this.compositeView.trigger).to.have.been.calledWith('before:render:collection', this.compositeView);
+      expect(this.compositeView.trigger).to.have.been.calledWith('before:render:children', this.compositeView);
     });
 
     it('should trigger a render event for the collection', function() {
-      expect(this.compositeView.trigger).to.have.been.calledWith('render:collection', this.compositeView);
+      expect(this.compositeView.trigger).to.have.been.calledWith('render:children', this.compositeView);
     });
 
     it('should trigger a render event for the composite view', function() {

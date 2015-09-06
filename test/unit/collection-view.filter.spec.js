@@ -35,8 +35,8 @@ describe('collection view - filter', function() {
       collection: this.collection,
       onBeforeRemoveChild: this.sinon.stub(),
       onRemoveChild: this.sinon.stub(),
-      onBeforeRenderCollection: this.sinon.stub(),
-      onRenderCollection: this.sinon.stub()
+      onBeforeRenderChildren: this.sinon.stub(),
+      onRenderChildren: this.sinon.stub()
     });
   });
 
@@ -166,8 +166,8 @@ describe('collection view - filter', function() {
         this.filter.reset();
         this.newFailModel = this.failModel.clone();
         this.sinon.spy(this.collectionView, 'showEmptyView');
-        this.collectionView.onBeforeRenderCollection.reset();
-        this.collectionView.onRenderCollection.reset();
+        this.collectionView.onBeforeRenderChildren.reset();
+        this.collectionView.onRenderChildren.reset();
         this.collection.reset([this.newFailModel]);
       });
 
@@ -184,12 +184,12 @@ describe('collection view - filter', function() {
         expect(this.collectionView.$el).to.contain.$text('empty');
       });
 
-      it('should not call onBeforeRenderCollection', function() {
-        expect(this.collectionView.onBeforeRenderCollection).not.to.have.been.called;
+      it('should not call onBeforeRenderChildren', function() {
+        expect(this.collectionView.onBeforeRenderChildren).not.to.have.been.called;
       });
 
-      it('should not call onRenderCollection', function() {
-        expect(this.collectionView.onBeforeRenderCollection).not.to.have.been.called;
+      it('should not call onRenderChildren', function() {
+        expect(this.collectionView.onBeforeRenderChildren).not.to.have.been.called;
       });
     });
 
@@ -235,12 +235,12 @@ describe('collection view - filter', function() {
       expect(this.collectionView.$el).to.contain.$text('empty');
     });
 
-    it('should not call onBeforeRenderCollection', function() {
-      expect(this.collectionView.onBeforeRenderCollection).not.to.have.been.called;
+    it('should not call onBeforeRenderChildren', function() {
+      expect(this.collectionView.onBeforeRenderChildren).not.to.have.been.called;
     });
 
-    it('should not call onRenderCollection', function() {
-      expect(this.collectionView.onBeforeRenderCollection).not.to.have.been.called;
+    it('should not call onRenderChildren', function() {
+      expect(this.collectionView.onBeforeRenderChildren).not.to.have.been.called;
     });
   });
 

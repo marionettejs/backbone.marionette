@@ -277,11 +277,11 @@ Marionette.CollectionView = Marionette.AbstractView.extend({
     if (this.isEmpty(this.collection, {processedModels: models})) {
       this.showEmptyView();
     } else {
-      this.triggerMethod('before:render:collection', this);
+      this.triggerMethod('before:render:children', this);
       this.startBuffering();
       this.showCollection(models);
       this.endBuffering();
-      this.triggerMethod('render:collection', this);
+      this.triggerMethod('render:children', this);
     }
   },
 

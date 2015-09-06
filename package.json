@@ -42,7 +42,7 @@
   "dependencies": {
     "backbone.babysitter": "^0.1.0",
     "backbone.wreqr": "^1.0.0",
-    "backbone": "1.0.0 - 1.2.1",
+    "backbone": "1.0.0 - 1.2.3",
     "underscore": "1.4.4 - 1.8.3"
   },
   "devDependencies": {

@@ -99,17 +99,12 @@ Marionette.CollectionView = Marionette.View.extend({
 
   // Handle a child added to the collection
   _onCollectionAdd: function(child, collection, opts) {
-    var index;
-    if (opts.at !== undefined && !this.getOption('filter')) {
-      index = opts.index;
-      if (!index) {
-        // ignore sorting with at options specified
-        index = this.getViewComparator() ?
-                collection.indexOf(child) :
-                _.indexOf(this._filteredSortedModels(), child);
-      }
-    } else {
-      index = _.indexOf(this._filteredSortedModels(), child);
+    // `index` is present when adding with `at` since BB 1.2; indexOf fallback for < 1.2
+    var index = opts.at !== undefined && (opts.index || collection.indexOf(child));
+
+    // When filtered or when there is no initial index, calculate index.
+    if (this.getOption('filter') || index === false) {
+      index = _.indexOf(this._filteredSortedModels(index), child);
     }
 
     if (this._shouldAddChild(child, index)) {
@@ -268,18 +263,22 @@ Marionette.CollectionView = Marionette.View.extend({
   },
 
   // Allow the collection to be sorted by a custom view comparator
-  _filteredSortedModels: function() {
-    var models;
+  _filteredSortedModels: function(addedAt) {
     var viewComparator = this.getViewComparator();
+    var models = this.collection.models;
+    addedAt = Math.min(Math.max(addedAt, 0), models.length - 1);
 
     if (viewComparator) {
-      if (_.isString(viewComparator) || viewComparator.length === 1) {
-        models = this.collection.sortBy(viewComparator, this);
-      } else {
-        models = _.clone(this.collection.models).sort(_.bind(viewComparator, this));
+      var addedModel;
+      // Preserve `at` location, even for a sorted view
+      if (addedAt) {
+        addedModel = models[addedAt];
+        models = models.slice(0, addedAt).concat(models.slice(addedAt + 1));
       }
-    } else {
-      models = this.collection.models;
+      models = this._sortModelsBy(models, viewComparator);
+      if (addedModel) {
+        models.splice(addedAt, 0, addedModel);
+      }
     }
 
     // Filter after sorting in case the filter uses the index
@@ -290,6 +289,18 @@ Marionette.CollectionView = Marionette.View.extend({
     }
 
     return models;
+  },
+
+  _sortModelsBy: function(models, comparator) {
+    if (typeof comparator === 'string') {
+      return _.sortBy(models, function(model) {
+        return model.get(comparator);
+      }, this);
+    } else if (comparator.length === 1) {
+      return _.sortBy(models, comparator, this);
+    } else {
+      return models.sort(_.bind(comparator, this));
+    }
   },
 
   // Internal method to show an empty view in place of
@@ -518,7 +529,7 @@ Marionette.CollectionView = Marionette.View.extend({
     // call 'destroy' or 'remove', depending on which is found
     if (view.destroy) {
       view.destroy();
-    } else if (view.remove) {
+    } else {
       view.remove();
     }
     if (!view.supportsDestroyLifecycle) {

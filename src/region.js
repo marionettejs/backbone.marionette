@@ -253,7 +253,7 @@ Marionette.Region = Marionette.Object.extend({
     }
     if (view.destroy) {
       view.destroy();
-    } else if (view.remove) {
+    } else {
       view.remove();
 
       // appending isDestroyed to raw Backbone View allows regions

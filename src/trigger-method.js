@@ -13,12 +13,8 @@ Marionette._triggerMethod = (function() {
     return eventName.toUpperCase();
   }
 
-  return function(context, event, args) {
-    var noEventArg = arguments.length < 3;
-    if (noEventArg) {
-      args = event;
-      event = args[0];
-    }
+  return function(context, args) {
+    var event = args[0];
 
     // get the method name from the event name
     var methodName = 'on' + event.replace(splitter, getEventName);
@@ -28,13 +24,11 @@ Marionette._triggerMethod = (function() {
     // call the onMethodName if it exists
     if (_.isFunction(method)) {
       // pass all args, except the event name
-      result = method.apply(context, noEventArg ? _.rest(args) : args);
+      result = method.apply(context, _.rest(args));
     }
 
-    // trigger the event, if a trigger method exists
-    if (_.isFunction(context.trigger)) {
-      context.trigger.apply(context, noEventArg ? args : [event].concat(_.drop(args, 0)));
-    }
+    // trigger the event
+    context.trigger.apply(context, args);
 
     return result;
   };

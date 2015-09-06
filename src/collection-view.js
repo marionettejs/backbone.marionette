@@ -633,9 +633,9 @@ Marionette.CollectionView = Marionette.AbstractView.extend({
   destroy: function() {
     if (this._isDestroyed) { return this; }
 
-    this.triggerMethod('before:destroy:collection');
+    this.triggerMethod('before:destroy:children');
     this.destroyChildren({checkEmpty: false});
-    this.triggerMethod('destroy:collection');
+    this.triggerMethod('destroy:children');
 
     return Marionette.AbstractView.prototype.destroy.apply(this, arguments);
   },

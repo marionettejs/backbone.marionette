@@ -741,7 +741,7 @@ describe('collection view', function() {
       this.sinon.spy(this.collectionView, 'trigger');
       this.sinon.spy(this.collectionView, 'checkEmpty');
 
-      this.collectionView.bind('destroy:collection', this.destroyHandler);
+      this.collectionView.bind('destroy:children', this.destroyHandler);
 
       this.collectionView.destroy();
 
@@ -804,11 +804,11 @@ describe('collection view', function() {
     });
 
     it('should trigger a "before:destroy" event', function() {
-      expect(this.collectionView.trigger).to.have.been.calledWith('before:destroy:collection');
+      expect(this.collectionView.trigger).to.have.been.calledWith('before:destroy:children');
     });
 
     it('should trigger a "destroy"', function() {
-      expect(this.collectionView.trigger).to.have.been.calledWith('destroy:collection');
+      expect(this.collectionView.trigger).to.have.been.calledWith('destroy:children');
     });
 
     it('should call the handlers add to the destroyed event', function() {

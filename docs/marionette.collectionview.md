@@ -49,7 +49,7 @@ will provide features such as `onShow` callbacks, etc. Please see
   * ["before:apply:filter" / "apply:filter" event](#beforeapplyfilter--applyfilter-event)
   * ["before:reorder" / "reorder" event](#beforereorder--reorder-event)
   * ["before:destroy" event](#beforedestroy-event)
-  * ["destroy" / "destroy:collection" event](#destroy--destroycollection-event)
+  * ["destroy" / "destroy:childen" event](#destroy--destroychildren-event)
   * ["before:add:child" / "add:child" event](#beforeaddchild--addchild-event)
   * ["before:remove:child event](#beforeremovechild-event)
   * ["remove:child" event](#removechild-event)
@@ -700,22 +700,22 @@ myCol.sort()
 
 ### "before:destroy" event
 
-Triggered just before destroying the view. A "before:destroy:collection" /
-`onBeforeDestroyCollection` event will also be fired
+Triggered just before destroying the view. A "before:destroy:childen" /
+`onBeforeDestroyChildren` event will also be fired
 
 ```js
 var MyView = Marionette.CollectionView.extend({...});
 
 var myView = new MyView();
 
-myView.on("before:destroy:collection", function(){
+myView.on("before:destroy:childen", function(){
   alert("the collection view is about to be destroyed");
 });
 
 myView.destroy();
 ```
 
-### "destroy" / "destroy:collection" event
+### "destroy" / "destroy:childen" event
 
 Triggered just after destroying the view, both with corresponding
 method calls.
@@ -725,7 +725,7 @@ var MyView = Marionette.CollectionView.extend({...});
 
 var myView = new MyView();
 
-myView.on("destroy:collection", function(){
+myView.on("destroy:childen", function(){
   alert("the collection view is now destroyed");
 });
 

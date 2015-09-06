@@ -30,25 +30,20 @@ Marionette.View = Marionette.AbstractView.extend({
   // Serialize the view's model *or* collection, if
   // it exists, for the template
   serializeData: function() {
-    var data = {};
-
     if (!this.model && !this.collection) {
       return {};
     }
 
     // If we have a model, we serialize that
     if (this.model) {
-      data = this.serializeModel();
-
-    } else if (this.collection) {
-      // Otherwise, we serialize the collection,
-      // making it available under the `items` property
-      data = {
-        items: this.serializeCollection()
-      };
+      return this.serializeModel();
     }
 
-    return data;
+    // Otherwise, we serialize the collection,
+    // making it available under the `items` property
+    return {
+      items: this.serializeCollection()
+    };
   },
 
   // Serialize a collection by cloning each of

@@ -128,7 +128,7 @@ var MyCollectionView = Marionette.CollectionView.extend({
 });
 
 var collectionView = new MyCollectionView({
-  collection: new Backbone.Collection();
+  collection: new Backbone.Collection()
 });
 var foo = new FooBar({
   isFoo: true

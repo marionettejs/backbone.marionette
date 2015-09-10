@@ -2,33 +2,93 @@ describe('onDomRefresh', function() {
   'use strict';
 
   beforeEach(function() {
-    this.onDomRefreshStub = this.sinon.stub();
-    this.View = Backbone.Marionette.ItemView.extend({
-      onDomRefresh: this.onDomRefreshStub
+    this.setFixtures($('<div id="region"></div>'));
+    this.attachedRegion = new Marionette.Region({el: '#region'});
+    this.detachedRegion = new Marionette.Region({el: $('<div></div>')});
+    this.BbView = Backbone.View.extend({
+      onDomRefresh: this.sinon.stub()
     });
-    this.view = new this.View();
+    this.MnView = Marionette.ItemView.extend({
+      template: false,
+      onDomRefresh: this.sinon.stub()
+    });
   });
 
-  describe('when the view is not in the DOM', function() {
+  describe('when a Backbone view is shown detached from the DOM', function() {
     beforeEach(function() {
-      this.view.trigger('show');
-      this.view.trigger('render');
+      this.bbView = new this.BbView();
+      this.detachedRegion.show(this.bbView);
     });
 
     it('should never trigger onDomRefresh', function() {
-      expect(this.onDomRefreshStub).not.to.have.been.called;
+      expect(this.bbView.onDomRefresh).not.to.have.been.calledOnce;
     });
   });
 
-  describe('when the view is in the DOM', function() {
+  describe('when a Marionette view is shown detached from the DOM', function() {
     beforeEach(function() {
-      $('body').append(this.view.$el);
-      this.view.trigger('show');
-      this.view.trigger('render');
+      this.mnView = new this.MnView();
+      this.detachedRegion.show(this.mnView);
     });
 
-    it('should trigger onDomRefresh if "show" and "render" have both been triggered on the view', function() {
-      expect(this.onDomRefreshStub).to.have.been.called;
+    it('should never trigger onDomRefresh', function() {
+      expect(this.mnView.onDomRefresh).not.to.have.been.calledOnce;
+    });
+  });
+
+  describe('when a Backbone view is shown attached to the DOM', function() {
+    beforeEach(function() {
+      this.bbView = new this.MnView();
+      this.attachedRegion.show(this.bbView);
+    });
+
+    it('should trigger onDomRefresh on the view', function() {
+      expect(this.bbView.onDomRefresh).to.have.been.calledOnce;
+    });
+  });
+
+  describe('when a Marionette view is shown attached to the DOM', function() {
+    beforeEach(function() {
+      this.mnView = new this.MnView();
+      this.attachedRegion.show(this.mnView);
+    });
+
+    it('should trigger onDomRefresh on the view', function() {
+      expect(this.mnView.onDomRefresh).to.have.been.calledOnce;
+    });
+  });
+
+  describe('when a CollectionView attached to the DOM renders a Backbone child view', function() {
+    beforeEach(function() {
+      var collection = new Backbone.Collection();
+      var collectionView = new Marionette.CollectionView({
+        childView: this.BbView,
+        collection: collection
+      });
+      this.attachedRegion.show(collectionView);
+      collection.add({id: 1});
+      this.bbView = collectionView.children.findByIndex(0);
+    });
+
+    it('should trigger onDomRefresh on the child view', function() {
+      expect(this.bbView.onDomRefresh).to.have.been.calledOnce;
+    });
+  });
+
+  describe('when a CollectionView attached to the DOM renders a Marionette child view', function() {
+    beforeEach(function() {
+      var collection = new Backbone.Collection();
+      var collectionView = new Marionette.CollectionView({
+        childView: this.MnView,
+        collection: collection
+      });
+      this.attachedRegion.show(collectionView);
+      collection.add({id: 1});
+      this.mnView = collectionView.children.findByIndex(0);
+    });
+
+    it('should trigger onDomRefresh on the child view', function() {
+      expect(this.mnView.onDomRefresh).to.have.been.calledOnce;
     });
   });
 });

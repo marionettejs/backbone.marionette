@@ -82,11 +82,17 @@ describe('marionette application', function() {
   describe('when instantiating an app with options specified', function() {
     beforeEach(function() {
       this.fooOption = 'bar';
-      this.app = new Marionette.Application({fooOption: this.fooOption});
+      this.appOptions = {fooOption: this.fooOption};
+      this.initializeStub = this.sinon.stub(Marionette.Application.prototype, 'initialize');
+      this.app = new Marionette.Application(this.appOptions, 'fooArg');
     });
 
     it('should merge those options into the app', function() {
       expect(this.app.fooOption).to.equal(this.fooOption);
+    });
+
+    it('should pass all arguments to the initialize method', function() {
+      expect(this.initializeStub).to.have.been.calledOn(this.app).and.calledWith(this.appOptions, 'fooArg');
     });
   });
 

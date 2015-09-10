@@ -6,20 +6,18 @@ matrix:
   include:
     - node_js: "0.10"
       env: UNDERSCORE=1.4.4 BACKBONE=1.0
-    - node_js: "io.js"
-      env: UNDERSCORE=1.5 BACKBONE=1.0
+    - env: UNDERSCORE=1.5 BACKBONE=1.0
     - env: UNDERSCORE=1.7 BACKBONE=1.1
     - env: UNDERSCORE=1.7 BACKBONE=1.0
     - env: UNDERSCORE=1.6 BACKBONE=1.0
     - env: UNDERSCORE=1.4.4 BACKBONE=1.1.0
     - env: UNDERSCORE=1.5 BACKBONE=1.1
-    - env: UNDERSCORE=1.7 BACKBONE=1.2
+    - env: UNDERSCORE=1.7 BACKBONE=1.2.3
     - node_js: "0.10"
-      env: UNDERSCORE=1.8 BACKBONE=1.2
+      env: UNDERSCORE=1.8 BACKBONE=1.2.3
     - env: LODASH=2.4 BACKBONE=1.1
     - env: LODASH=3.0 BACKBONE=1.1
-    - node_js: "io.js"
-      env: LODASH=3.1 BACKBONE=1.0
+    - env: LODASH=3.1 BACKBONE=1.0
 env: MAINRUN=true
 before_install:
   - npm config set ca ""

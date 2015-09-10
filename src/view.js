@@ -5,9 +5,11 @@
 // The core view class that other Marionette views extend from.
 Marionette.View = Backbone.View.extend({
   isDestroyed: false,
+  supportsRenderLifecycle: true,
+  supportsDestroyLifecycle: true,
 
   constructor: function(options) {
-    _.bindAll(this, 'render');
+    this.render = _.bind(this.render, this);
 
     options = Marionette._getValue(options, this);
 
@@ -227,14 +229,13 @@ Marionette.View = Backbone.View.extend({
   // Internal method to create an event handler for a given `triggerDef` like
   // 'click:foo'
   _buildViewTrigger: function(triggerDef) {
-    var hasOptions = _.isObject(triggerDef);
 
-    var options = _.defaults({}, (hasOptions ? triggerDef : {}), {
+    var options = _.defaults({}, triggerDef, {
       preventDefault: true,
       stopPropagation: true
     });
 
-    var eventName = hasOptions ? options.event : triggerDef;
+    var eventName = _.isObject(triggerDef) ? options.event : triggerDef;
 
     return function(e) {
       if (e) {
@@ -297,15 +298,16 @@ Marionette.View = Backbone.View.extend({
     // invoke triggerMethod on parent view
     var eventPrefix = Marionette.getOption(layoutView, 'childViewEventPrefix');
     var prefixedEventName = eventPrefix + ':' + eventName;
+    var callArgs = [this].concat(args);
 
-    Marionette._triggerMethod(layoutView, [prefixedEventName, this].concat(args));
+    Marionette._triggerMethod(layoutView, prefixedEventName, callArgs);
 
     // call the parent view's childEvents handler
     var childEvents = Marionette.getOption(layoutView, 'childEvents');
     var normalizedChildEvents = layoutView.normalizeMethods(childEvents);
 
-    if (!!normalizedChildEvents && _.isFunction(normalizedChildEvents[eventName])) {
-      normalizedChildEvents[eventName].apply(layoutView, [this].concat(args));
+    if (normalizedChildEvents && _.isFunction(normalizedChildEvents[eventName])) {
+      normalizedChildEvents[eventName].apply(layoutView, callArgs);
     }
   },
 

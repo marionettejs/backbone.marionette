@@ -99,11 +99,12 @@ Marionette.CollectionView = Marionette.View.extend({
 
   // Handle a child added to the collection
   _onCollectionAdd: function(child, collection, opts) {
-    var index;
-    if (opts.at !== undefined) {
-      index = opts.at;
-    } else {
-      index = _.indexOf(this._filteredSortedModels(), child);
+    // `index` is present when adding with `at` since BB 1.2; indexOf fallback for < 1.2
+    var index = opts.at !== undefined && (opts.index || collection.indexOf(child));
+
+    // When filtered or when there is no initial index, calculate index.
+    if (this.getOption('filter') || index === false) {
+      index = _.indexOf(this._filteredSortedModels(index), child);
     }
 
     if (this._shouldAddChild(child, index)) {
@@ -243,7 +244,7 @@ Marionette.CollectionView = Marionette.View.extend({
       this.triggerMethod('render:collection', this);
 
       // If we have shown children and none have passed the filter, show the empty view
-      if (this.children.isEmpty()) {
+      if (this.children.isEmpty() && this.getOption('filter')) {
         this.showEmptyView();
       }
     }
@@ -262,18 +263,22 @@ Marionette.CollectionView = Marionette.View.extend({
   },
 
   // Allow the collection to be sorted by a custom view comparator
-  _filteredSortedModels: function() {
-    var models;
+  _filteredSortedModels: function(addedAt) {
     var viewComparator = this.getViewComparator();
+    var models = this.collection.models;
+    addedAt = Math.min(Math.max(addedAt, 0), models.length - 1);
 
     if (viewComparator) {
-      if (_.isString(viewComparator) || viewComparator.length === 1) {
-        models = this.collection.sortBy(viewComparator, this);
-      } else {
-        models = _.clone(this.collection.models).sort(_.bind(viewComparator, this));
+      var addedModel;
+      // Preserve `at` location, even for a sorted view
+      if (addedAt) {
+        addedModel = models[addedAt];
+        models = models.slice(0, addedAt).concat(models.slice(addedAt + 1));
       }
-    } else {
-      models = this.collection.models;
+      models = this._sortModelsBy(models, viewComparator);
+      if (addedModel) {
+        models.splice(addedAt, 0, addedModel);
+      }
     }
 
     // Filter after sorting in case the filter uses the index
@@ -284,6 +289,18 @@ Marionette.CollectionView = Marionette.View.extend({
     }
 
     return models;
+  },
+
+  _sortModelsBy: function(models, comparator) {
+    if (typeof comparator === 'string') {
+      return _.sortBy(models, function(model) {
+        return model.get(comparator);
+      }, this);
+    } else if (comparator.length === 1) {
+      return _.sortBy(models, comparator, this);
+    } else {
+      return models.sort(_.bind(comparator, this));
+    }
   },
 
   // Internal method to show an empty view in place of
@@ -346,30 +363,27 @@ Marionette.CollectionView = Marionette.View.extend({
     // Proxy emptyView events
     this.proxyChildEvents(view);
 
-    // trigger the 'before:show' event on `view` if the collection view has already been shown
-    if (this._isShown) {
-      Marionette.triggerMethodOn(view, 'before:show', view);
-    }
+    view.once('render', function() {
+      // trigger the 'before:show' event on `view` if the collection view has already been shown
+      if (this._isShown) {
+        Marionette.triggerMethodOn(view, 'before:show', view);
+      }
 
-    // Store the `emptyView` like a `childView` so we can properly
-    // remove and/or close it later
-    this.children.add(view);
-
-    // Trigger `before:attach` following `render` to avoid adding logic and event triggers
-    // to public method `renderChildView()`.
-    if (canTriggerAttach && this._triggerBeforeAttach) {
-      nestedViews = [view].concat(view._getNestedViews());
-      view.once('render', function() {
+      // Trigger `before:attach` following `render` to avoid adding logic and event triggers
+      // to public method `renderChildView()`.
+      if (canTriggerAttach && this._triggerBeforeAttach) {
+        nestedViews = this._getViewAndNested(view);
         this._triggerMethodMany(nestedViews, this, 'before:attach');
-      }, this);
-    }
+      }
+    }, this);
 
-    // Render it and show it
+    // Store the `emptyView` like a `childView` so we can properly remove and/or close it later
+    this.children.add(view);
     this.renderChildView(view, this._emptyViewIndex);
 
     // Trigger `attach`
     if (canTriggerAttach && this._triggerAttach) {
-      nestedViews = [view].concat(view._getNestedViews());
+      nestedViews = this._getViewAndNested(view);
       this._triggerMethodMany(nestedViews, this, 'attach');
     }
     // call the 'show' method if the collection view has already been shown
@@ -450,28 +464,27 @@ Marionette.CollectionView = Marionette.View.extend({
     // set up the child view event forwarding
     this.proxyChildEvents(view);
 
-    // trigger the 'before:show' event on `view` if the collection view has already been shown
-    if (this._isShown && !this.isBuffering) {
-      Marionette.triggerMethodOn(view, 'before:show', view);
-    }
+    view.once('render', function() {
+      // trigger the 'before:show' event on `view` if the collection view has already been shown
+      if (this._isShown && !this.isBuffering) {
+        Marionette.triggerMethodOn(view, 'before:show', view);
+      }
+
+      // Trigger `before:attach` following `render` to avoid adding logic and event triggers
+      // to public method `renderChildView()`.
+      if (canTriggerAttach && this._triggerBeforeAttach) {
+        nestedViews = this._getViewAndNested(view);
+        this._triggerMethodMany(nestedViews, this, 'before:attach');
+      }
+    }, this);
 
     // Store the child view itself so we can properly remove and/or destroy it later
     this.children.add(view);
-
-    // Trigger `before:attach` following `render` to avoid adding logic and event triggers
-    // to public method `renderChildView()`.
-    if (canTriggerAttach && this._triggerBeforeAttach) {
-      nestedViews = [view].concat(view._getNestedViews());
-      view.once('render', function() {
-        this._triggerMethodMany(nestedViews, this, 'before:attach');
-      }, this);
-    }
-
     this.renderChildView(view, index);
 
     // Trigger `attach`
     if (canTriggerAttach && this._triggerAttach) {
-      nestedViews = [view].concat(view._getNestedViews());
+      nestedViews = this._getViewAndNested(view);
       this._triggerMethodMany(nestedViews, this, 'attach');
     }
     // Trigger `show`
@@ -482,7 +495,13 @@ Marionette.CollectionView = Marionette.View.extend({
 
   // render the child view
   renderChildView: function(view, index) {
+    if (!view.supportsRenderLifecycle) {
+      Marionette.triggerMethodOn(view, 'before:render', view);
+    }
     view.render();
+    if (!view.supportsRenderLifecycle) {
+      Marionette.triggerMethodOn(view, 'render', view);
+    }
     this.attachHtml(this, view, index);
     return view;
   },
@@ -490,7 +509,9 @@ Marionette.CollectionView = Marionette.View.extend({
   // Build a `childView` for a model in the collection.
   buildChildView: function(child, ChildViewClass, childViewOptions) {
     var options = _.extend({model: child}, childViewOptions);
-    return new ChildViewClass(options);
+    var childView = new ChildViewClass(options);
+    Marionette.MonitorDOMRefresh(childView);
+    return childView;
   },
 
   // Remove the child view and destroy it.
@@ -498,25 +519,30 @@ Marionette.CollectionView = Marionette.View.extend({
   // later views in the collection in order to keep
   // the children in sync with the collection.
   removeChildView: function(view) {
+    if (!view) { return view; }
 
-    if (view) {
-      this.triggerMethod('before:remove:child', view);
+    this.triggerMethod('before:remove:child', view);
 
-      // call 'destroy' or 'remove', depending on which is found
-      if (view.destroy) {
-        view.destroy();
-      } else if (view.remove) {
-        view.remove();
-      }
-
-      delete view._parent;
-      this.stopListening(view);
-      this.children.remove(view);
-      this.triggerMethod('remove:child', view);
-
-      // decrement the index of views after this one
-      this._updateIndices(view, false);
+    if (!view.supportsDestroyLifecycle) {
+      Marionette.triggerMethodOn(view, 'before:destroy', view);
     }
+    // call 'destroy' or 'remove', depending on which is found
+    if (view.destroy) {
+      view.destroy();
+    } else {
+      view.remove();
+    }
+    if (!view.supportsDestroyLifecycle) {
+      Marionette.triggerMethodOn(view, 'destroy', view);
+    }
+
+    delete view._parent;
+    this.stopListening(view);
+    this.children.remove(view);
+    this.triggerMethod('remove:child', view);
+
+    // decrement the index of views after this one
+    this._updateIndices(view, false);
 
     return view;
   },
@@ -665,6 +691,11 @@ Marionette.CollectionView = Marionette.View.extend({
 
   _getImmediateChildren: function() {
     return _.values(this.children._views);
+  },
+
+  _getViewAndNested: function(view) {
+    // This will not fail on Backbone.View which does not have #_getNestedViews.
+    return [view].concat(_.result(view, '_getNestedViews') || []);
   },
 
   getViewComparator: function() {

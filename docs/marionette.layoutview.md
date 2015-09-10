@@ -105,24 +105,16 @@ new Marionette.LayoutView({
 
 ### LayoutView childEvents
 
-You can specify a `childEvents` hash or method which allows you to capture all
-bubbling `childEvents` without having to manually set bindings.
-
-The keys of the hash can either be a function or a string
-that is the name of a method on the layout view.
-
-The function is called in the context of the view. The first parameter is
-the child view, which emitted the event, the remainder are the arguments
-associated with the event.
+A `childEvents` hash or method permits handling of child view events without manually setting bindings. The values of the hash can either be a function or a string method name on the collection view.
 
 ```js
 // childEvents can be specified as a hash...
 var MyLayoutView = Marionette.LayoutView.extend({
 
-  // This callback will be called whenever a child is rendered or emits a `render` event
   childEvents: {
-    render: function(childView) {
-      console.log("a childView has been rendered");
+    // This callback will be called whenever a child is rendered or emits a `render` event
+    render: function() {
+      console.log('A child view has been rendered.');
     }
   }
 });
@@ -136,42 +128,50 @@ var MyLayoutView = Marionette.LayoutView.extend({
     }
   },
 
-  onChildRender: function(childView) {
+  onChildRendered: function () {
+    console.log('A child view has been rendered.');
   }
 });
 ```
 
-This also works for custom events that you might fire on your child views.
+`childEvents` also catches custom events fired by a child view.  Take note that the first argument to a `childEvents` handler is the child view itself.  Caution: Events triggered on the child view through `this.trigger` are not yet supported for LayoutView `childEvents`.  Use strictly `triggerMethod` within the child view.
 
 ```js
-  // The child view fires a custom event, `show:message`
-  var ChildView = new Marionette.ItemView.extend({
-    events: {
-      'click .button': 'showMessage'
-    },
+// The child view fires a custom event, `show:message`
+var ChildView = Marionette.ItemView.extend({
 
-    showMessage: function (e) {
-      console.log('The button was clicked.');
-      this.triggerMethod('show:message', msg);
-    }
-  });
+  // Events hash defines local event handlers that in turn may call `triggerMethod`.
+  events: {
+    'click .button': 'onClickButton'
+  },
 
-  // The parent uses childEvents to catch that custom event on the child view
-  var ParentView = new Marionette.LayoutView.extend({
-    childEvents: {
-      'show:message': function (childView, msg) {
-        console.log('The show:message event bubbled up to the parent.');
-      }
-    },
+  // Triggers hash converts DOM events directly to view events catchable on the parent.
+  triggers: {
+    'submit form': 'submit:form'
+  },
 
-    // Alternatively we can use the trigger notation with childview: as the
-    // prefix
-    onChildviewShowMessage: function (childView, msg) {
-      console.log('The show:message event bubbled up to the parent.');
-    }
-  });
+  onClickButton: function () {
+    this.triggerMethod('show:message', 'foo');
+  }
+});
+
+// The parent uses childEvents to catch that custom event on the child view
+var ParentView = Marionette.LayoutView.extend({
+
+  childEvents: {
+    'show:message': 'onChildShowMessage',
+    'submit:form': 'onChildSubmitForm'
+  },
+
+  onChildShowMessage: function (childView, message) {
+    console.log('A child view fired show:message with ' + message);
+  },
+
+  onChildSubmitForm: function (childView) {
+    console.log('A child view fired submit:form');
+  }
+});
 ```
-
 
 ### Specifying Regions As A Function
 

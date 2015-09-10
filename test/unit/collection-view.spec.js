@@ -2,66 +2,28 @@ describe('collection view', function() {
   'use strict';
 
   beforeEach(function() {
+    this.sinon.spy(Backbone, 'View');
+
     // Shared View Definitions
     // -----------------------
-
-    var spec = this;
-
-    this.ChildView = Backbone.Marionette.ItemView.extend({
+    this.ChildView = Backbone.View.extend({
       tagName: 'span',
-      // Stub methods in contructor to ensure calls are counted from the moment the parent
-      // CollectionView instantiates it.
-      constructor: function(options) {
-        Marionette.ItemView.prototype.constructor.call(this, options);
-        this.onBeforeShow = spec.sinon.stub();
-        this.onShow = spec.sinon.stub();
-        this.onDomRefresh = spec.sinon.stub();
-      },
       render: function() {
         this.$el.html(this.model.get('foo'));
-        this.trigger('render');
-      },
-      // Init region manager creates a circular reference, which
-      // explodes Sinon's deep equals assertion. These tests
-      // do not care if the view has a region manager or not.
-      _initializeRegions: function() {},
-      // The ItemView's destroy method tries to destroy the
-      // RegionManager, which, from the above, does not exist.
-      destroy: Marionette.View.prototype.destroy,
-      onRender: function() {},
-      onBeforeShow: function() {},
-      onShow: function() {},
-      onDomRefresh: function() {},
+      }
     });
 
-    this.DeepEqualChildView = this.ChildView.extend({
-      // Init region manager creates a circular reference, which explodes Sinon's deep equals
-      // assertion. Some tests do not care if the view has a region manager or not, but do care
-      // about deep equality.
-      _initializeRegions: function() {},
-      // The View's destroy method tries to destroy the RegionManager, which, from the above,
-      // does not exist.
-      destroy: Marionette.View.prototype.destroy
+    this.MnChildView = Marionette.View.extend({
+      tagName: 'span',
+      render: function() {
+        this.trigger('before:render', this);
+        this.$el.html(this.model.get('foo'));
+        this.trigger('render', this);
+      }
     });
 
     this.CollectionView = Marionette.CollectionView.extend({
-      childView: this.ChildView,
-      onBeforeRender: function() {
-        return this.isRendered;
-      },
-      onRender: function() {
-        return this.isRendered;
-      },
-      onBeforeAddChild: function() {},
-      onAddChild: function() {},
-      onBeforeRemoveChild: function() {},
-      onRemoveChild: function() {},
-      onRenderCollection: function() {},
-      onBeforeRenderCollection: function() {}
-    });
-
-    this.DeepEqualCollectionView = this.CollectionView.extend({
-      childView: this.DeepEqualChildView,
+      childView: this.ChildView
     });
   });
 
@@ -70,51 +32,48 @@ describe('collection view', function() {
 
   describe('before rendering a collection view', function() {
     beforeEach(function() {
+      var CollectionView = this.CollectionView.extend({
+        sort: function() { return 1; },
+        onAddChild: this.sinon.stub(),
+        onRemoveChild: this.sinon.stub()
+      });
+
       this.collection = new Backbone.Collection([]);
-      this.CollectionView = this.DeepEqualCollectionView.extend({
-        sort: function() { return 1; }
+      this.collectionView = new CollectionView({
+        collection: this.collection
       });
 
-      this.collectionView = new this.CollectionView({
-        collection: this.collection,
-        _sortViews: function() {}
-      });
-
-      this.onAddChildSpy = this.sinon.spy(this.collectionView, 'onAddChild');
-      this.onRemoveChildSpy = this.sinon.spy(this.collectionView, 'onRemoveChild');
-      this.onSortViewsSpy = this.sinon.spy(this.collectionView, '_sortViews');
+      this.sinon.spy(this.collectionView, '_sortViews');
     });
 
     it('should not add a child', function() {
       this.collection.push({});
-
-      expect(this.onAddChildSpy).to.not.have.been.called;
+      expect(this.collectionView.onAddChild).to.not.have.been.called;
     });
 
     it('should not add a child', function() {
       this.collection.reset([{}]);
-
-      expect(this.onAddChildSpy).to.not.have.been.called;
+      expect(this.collectionView.onAddChild).to.not.have.been.called;
     });
 
     it('should not remove a child', function() {
       var model = new Backbone.Model();
       this.collection.add(model);
       this.collection.remove(model);
-
-      expect(this.onRemoveChildSpy).to.not.have.been.called;
+      expect(this.collectionView.onRemoveChild).to.not.have.been.called;
     });
 
     it('should not call sort', function() {
       this.collection.trigger('sort');
-
-      expect(this.onSortViewsSpy).to.not.have.been.called;
+      expect(this.collectionView._sortViews).to.not.have.been.called;
     });
   });
 
   describe('when rendering a collection view with no "childView" specified', function() {
     beforeEach(function() {
-      this.NoChildView = Backbone.Marionette.CollectionView.extend();
+      this.NoChildView = this.CollectionView.extend({
+        childView: undefined
+      });
 
       this.collection = new Backbone.Collection([{foo:'bar'}, {foo: 'baz'}]);
       this.collectionView = new this.NoChildView({
@@ -129,22 +88,26 @@ describe('collection view', function() {
 
   describe('when rendering a collection view', function() {
     beforeEach(function() {
+      var CollectionView = this.CollectionView.extend({
+        childEvents: {
+          'render': 'onChildViewRender'
+        },
+        onBeforeRender:           function() { return this.isRendered; },
+        onRender:                 function() { return this.isRendered; },
+        onBeforeAddChild:         this.sinon.stub(),
+        onAddChild:               this.sinon.stub(),
+        onBeforeRenderCollection: this.sinon.stub(),
+        onRenderCollection:       this.sinon.stub(),
+        onChildViewRender:        this.sinon.stub()
+      });
+
       this.collection = new Backbone.Collection([{foo: 'bar'}, {foo: 'baz'}]);
-
-      this.childViewRender = this.sinon.stub();
-
-      this.collectionView = new this.DeepEqualCollectionView({
+      this.collectionView = new CollectionView({
         collection: this.collection
       });
 
-      this.collectionView.on('childview:render', this.childViewRender);
-
-      this.sinon.spy(this.collectionView, 'onRender');
-      this.sinon.spy(this.collectionView, 'onBeforeAddChild');
-      this.sinon.spy(this.collectionView, 'onAddChild');
       this.sinon.spy(this.collectionView, 'onBeforeRender');
-      this.sinon.spy(this.collectionView, 'onBeforeRenderCollection');
-      this.sinon.spy(this.collectionView, 'onRenderCollection');
+      this.sinon.spy(this.collectionView, 'onRender');
       this.sinon.spy(this.collectionView, 'trigger');
       this.sinon.spy(this.collectionView, 'attachHtml');
       this.sinon.spy(this.collectionView.$el, 'append');
@@ -206,7 +169,7 @@ describe('collection view', function() {
     });
 
     it('should not be rendered when "onBeforeRender" is called', function() {
-      expect(this.collectionView.onBeforeRender.lastCall.returnValue).not.to.be.ok;
+      expect(this.collectionView.onBeforeRender.lastCall.returnValue).to.not.be.ok;
     });
 
     it('should be rendered when "onRender" is called', function() {
@@ -252,7 +215,7 @@ describe('collection view', function() {
     });
 
     it('should trigger "childview:render" for each item in the collection', function() {
-      expect(this.childViewRender.callCount).to.equal(2);
+      expect(this.collectionView.onChildViewRender.callCount).to.equal(2);
     });
 
     it('should call "getChildView" for each item in the collection', function() {
@@ -269,10 +232,12 @@ describe('collection view', function() {
   describe('when rendering a collection view and accessing children via the DOM', function() {
     beforeEach(function() {
       var suite = this;
+      var CollectionView = this.CollectionView.extend({
+        onRenderCollection: function() {}
+      });
 
       this.collection = new Backbone.Collection([{foo: 'bar'}, {foo: 'baz'}]);
-
-      this.collectionView = new this.DeepEqualCollectionView({
+      this.collectionView = new CollectionView({
         collection: this.collection
       });
 
@@ -290,10 +255,12 @@ describe('collection view', function() {
 
   describe('when rendering a collection view without a collection', function() {
     beforeEach(function() {
-      this.collectionView = new this.DeepEqualCollectionView();
+      var CollectionView = this.CollectionView.extend({
+        onRender:       this.sinon.stub(),
+        onBeforeRender: this.sinon.stub()
+      });
+      this.collectionView = new CollectionView();
 
-      this.sinon.spy(this.collectionView, 'onRender');
-      this.sinon.spy(this.collectionView, 'onBeforeRender');
       this.sinon.spy(this.collectionView, 'trigger');
 
       this.collectionView.render();
@@ -311,8 +278,7 @@ describe('collection view', function() {
   describe('when rendering a childView', function() {
     beforeEach(function() {
       this.collection = new Backbone.Collection([{foo: 'bar'}]);
-      this.collectionView = new Marionette.CollectionView({
-        childView: this.ChildView,
+      this.collectionView = new this.CollectionView({
         collection: this.collection
       });
 
@@ -352,12 +318,8 @@ describe('collection view', function() {
     });
 
     it('should not update the order of children when "sort" is set to "false" as a property on a class', function() {
-      this.CollectionView = Marionette.CollectionView.extend({
-        childView: this.ChildView,
-        sort : false
-      });
       this.collectionView = new this.CollectionView({
-        childView: this.ChildView,
+        sort: false,
         collection: this.collection
       });
       this.collectionView.render();
@@ -367,11 +329,7 @@ describe('collection view', function() {
     });
 
     it('should not update the order of children when "sort" is set to "false" inside options', function() {
-      this.CollectionView = Marionette.CollectionView.extend({
-        childView: this.ChildView,
-      });
       this.collectionView = new this.CollectionView({
-        childView: this.ChildView,
         sort : false,
         collection: this.collection
       });
@@ -384,8 +342,8 @@ describe('collection view', function() {
 
   describe('when instantiating a view with a different sort option than in the view\'s definition', function() {
     it('should maintain the instantiated sort option', function() {
-      this.CollectionView = Marionette.CollectionView.extend({sort: false});
-      this.newCollectionView = new this.CollectionView({sort: true});
+      var CollectionView = this.CollectionView.extend({sort: false});
+      this.newCollectionView = new CollectionView({sort: true});
       expect(this.newCollectionView.getOption('sort')).to.equal(true);
     });
   });
@@ -393,8 +351,7 @@ describe('collection view', function() {
   describe('when a model is added to the collection', function() {
     beforeEach(function() {
       this.collection = new Backbone.Collection();
-      this.collectionView = new this.DeepEqualCollectionView({
-        childView: this.ChildView,
+      this.collectionView = new this.CollectionView({
         collection: this.collection
       });
       this.collectionView.render();
@@ -429,8 +386,7 @@ describe('collection view', function() {
     beforeEach(function() {
       this.collection = new Backbone.Collection({foo: 'bar'});
 
-      this.collectionView = new this.DeepEqualCollectionView({
-        childView: this.ChildView,
+      this.collectionView = new this.CollectionView({
         collection: this.collection
       });
       this.collectionView.render();
@@ -467,19 +423,142 @@ describe('collection view', function() {
     });
   });
 
+  describe('when a number of models are added to a non-empty collection with an "at" option', function() {
+    beforeEach(function() {
+      this.model1 = new Backbone.Model({foo: 1});
+      this.model2 = new Backbone.Model({foo: 6});
+      this.collection = new Backbone.Collection([this.model1, this.model2]);
+
+      this.collectionView = new this.CollectionView({
+        collection: this.collection
+      });
+      this.collectionView.render();
+
+      this.model3 = new Backbone.Model({foo: 2});
+      this.model4 = new Backbone.Model({foo: 5});
+      this.collection.add([this.model3, this.model4], {at: 1});
+
+      this.model5 = new Backbone.Model({foo: 3});
+      this.model6 = new Backbone.Model({foo: 4});
+      this.collection.add([this.model5, this.model6], {at: 2});
+
+      this.order = _.pluck(this.collectionView.$el.find('span'), 'innerHTML');
+    });
+
+    it('should add models and render views in right order', function() {
+      expect(this.order).to.deep.equal(['1', '2', '3', '4', '5', '6']);
+    });
+
+    describe('when the CollectionView has a filter', function() {
+      beforeEach(function() {
+        this.collectionView.filter = function(child) {
+          return child.get('foo') > 4;
+        };
+
+        this.collectionView.render();
+        this.collection.add([new Backbone.Model({foo: 10})], {at: 1});
+        this.orderWithFilter = _.pluck(this.collectionView.$el.find('span'), 'innerHTML');
+
+        this.collectionView.filter = null;
+        this.collectionView.render();
+        this.orderWithoutFilter = _.pluck(this.collectionView.$el.find('span'), 'innerHTML');
+      });
+
+      it('should render views in the right order', function() {
+        expect(this.orderWithFilter).to.deep.equal(['10', '5', '6']);
+      });
+
+      it('should maintain view order after filter is removed', function() {
+        expect(this.orderWithoutFilter).to.deep.equal(['1', '10', '2', '3', '4', '5', '6']);
+      });
+    });
+
+    describe('when the CollectionView has a comparator', function() {
+      beforeEach(function() {
+        this.collectionView.viewComparator = 'foo';
+
+        this.collectionView.render();
+        this.collection.add([new Backbone.Model({foo: 10})], {at: 1});
+        this.orderBeforeRerender = _.pluck(this.collectionView.$el.find('span'), 'innerHTML');
+
+        this.collectionView.render();
+        this.orderAfterRerender = _.pluck(this.collectionView.$el.find('span'), 'innerHTML');
+      });
+
+      it('should render views in comparator order overridden by `at` model adds since the last `render()`', function() {
+        expect(this.orderBeforeRerender).to.deep.equal(['1', '10', '2', '3', '4', '5', '6']);
+      });
+
+      it('should return view to comparator order after subsequent `render()`', function() {
+        expect(this.orderAfterRerender).to.deep.equal(['1', '2', '3', '4', '5', '6', '10']);
+      });
+    });
+
+    describe('when the CollectionView has a filter and a comparator', function() {
+      beforeEach(function() {
+        this.collectionView.filter = function(child) {
+          return child.get('foo') > 4;
+        };
+        this.collectionView.viewComparator = 'foo';
+
+        this.collectionView.render();
+        this.collection.add([new Backbone.Model({foo: 10})], {at: 1});
+        this.orderBeforeRerender = _.pluck(this.collectionView.$el.find('span'), 'innerHTML');
+
+        this.collectionView.render();
+        this.orderAfterRerender = _.pluck(this.collectionView.$el.find('span'), 'innerHTML');
+
+        this.collectionView.filter = null;
+        this.collectionView.render();
+        this.orderWithoutFilter = _.pluck(this.collectionView.$el.find('span'), 'innerHTML');
+      });
+
+      it('should render views in comparator order overriden by `at` model adds and, lastly, filtered', function() {
+        expect(this.orderBeforeRerender).to.deep.equal(['10', '5', '6']);
+      });
+
+      it('should render views in comparator order but still filtered after subsequent `render()`', function() {
+        expect(this.orderAfterRerender).to.deep.equal(['5', '6', '10']);
+      });
+
+      it('should render all views in comparator order after filter is removed', function() {
+        expect(this.orderWithoutFilter).to.deep.equal(['1', '2', '3', '4', '5', '6', '10']);
+      });
+    });
+  });
+
+  describe('when firing an `add` event on the collection with `at` but without `index`, BB < 1.2 style', function() {
+    beforeEach(function() {
+      this.collection = new Backbone.Collection([{foo: 1}, {foo: 3}]);
+      this.collectionView = new this.CollectionView({
+        collection: this.collection
+      });
+      this.collectionView.render();
+
+      this.collection.add({foo: 2}, {at: 1, silent: true});
+      var model = this.collection.at(1);
+      this.collection.trigger('add', model, this.collection, {at: 1});
+      this.order = _.pluck(this.collectionView.$el.find('span'), 'innerHTML').join('');
+    });
+
+    it('should render views in `at` order', function() {
+      expect(this.order).to.equal('123');
+    });
+  });
+
   describe('when providing a custom render that adds children, without a collection object to use, and removing a child', function() {
     beforeEach(function() {
       var suite = this;
 
       this.model = new Backbone.Model({foo: 'bar'});
 
-      this.EmptyView = Backbone.Marionette.ItemView.extend({
+      this.EmptyView = Backbone.View.extend({
         render: function() {}
       });
 
-      this.CollectionView = Backbone.Marionette.CollectionView.extend({
-        childView: this.ChildView,
+      this.CollectionView = this.CollectionView.extend({
         emptyView: this.EmptyView,
+        childView: this.MnChildView,
 
         onBeforeRenderEmpty: function() {},
         onRenderEmpty: function() {},
@@ -523,12 +602,17 @@ describe('collection view', function() {
 
   describe('when a model is removed from the collection', function() {
     beforeEach(function() {
+      var CollectionView = this.CollectionView.extend({
+        childView: this.MnChildView,
+        onBeforeRemoveChild: this.sinon.stub(),
+        onRemoveChild: this.sinon.stub()
+      });
+
       this.model = new Backbone.Model({foo: 'bar'});
       this.collection = new Backbone.Collection();
       this.collection.add(this.model);
 
-      this.collectionView = new this.DeepEqualCollectionView({
-        childView: this.ChildView,
+      this.collectionView = new CollectionView({
         collection: this.collection
       });
       this.collectionView.render();
@@ -536,9 +620,6 @@ describe('collection view', function() {
       this.childView = this.collectionView.children.findByIndex(0);
 
       this.sinon.spy(this.childView, 'destroy');
-
-      this.onBeforeRemoveChildSpy = this.sinon.spy(this.collectionView, 'onBeforeRemoveChild');
-      this.onRemoveChildSpy = this.sinon.spy(this.collectionView, 'onRemoveChild');
 
       this.collection.remove(this.model);
     });
@@ -552,30 +633,30 @@ describe('collection view', function() {
     });
 
     it('should execute onBeforeRemoveChild', function() {
-      expect(this.onBeforeRemoveChildSpy).to.have.been.calledOnce;
+      expect(this.collectionView.onBeforeRemoveChild).to.have.been.calledOnce;
     });
 
     it('should pass the removed view to onBeforeRemoveChild', function() {
-      expect(this.onBeforeRemoveChildSpy).to.have.been.calledWithExactly(this.childView);
+      expect(this.collectionView.onBeforeRemoveChild).to.have.been.calledWithExactly(this.childView);
     });
 
     it('should execute onRemoveChild', function() {
-      expect(this.onRemoveChildSpy).to.have.been.calledOnce;
+      expect(this.collectionView.onRemoveChild).to.have.been.calledOnce;
     });
 
     it('should pass the removed view to _onCollectionRemove', function() {
-      expect(this.onRemoveChildSpy).to.have.been.calledWithExactly(this.childView);
+      expect(this.collectionView.onRemoveChild).to.have.been.calledWithExactly(this.childView);
     });
 
     it('should execute onBeforeRemoveChild before _onCollectionRemove', function() {
-      expect(this.onBeforeRemoveChildSpy).to.have.been.calledBefore(this.onRemoveChildSpy);
+      expect(this.collectionView.onBeforeRemoveChild).to.have.been.calledBefore(this.collectionView.onRemoveChild);
     });
   });
 
   describe('when destroying a collection view', function() {
     beforeEach(function() {
-      this.EventedView = Backbone.Marionette.CollectionView.extend({
-        childView: this.ChildView,
+      this.EventedView = this.CollectionView.extend({
+        childView: this.MnChildView,
         someCallback: function() {},
         onBeforeDestroy: function() {
           return {
@@ -731,7 +812,7 @@ describe('collection view', function() {
 
   describe('when removing a childView that does not have a "destroy" method', function() {
     beforeEach(function() {
-      this.collectionView = new Marionette.CollectionView({
+      this.collectionView = new this.CollectionView({
         childView: Backbone.View,
         collection: new Backbone.Collection([{id: 1}])
       });
@@ -756,7 +837,7 @@ describe('collection view', function() {
 
   describe('when destroying all children', function() {
     beforeEach(function() {
-      this.collectionView = new Marionette.CollectionView({
+      this.collectionView = new this.CollectionView({
         childView: Backbone.View,
         collection: new Backbone.Collection([{id: 1}, {id: 2}])
       });
@@ -806,8 +887,7 @@ describe('collection view', function() {
 
   describe('when override attachHtml', function() {
     beforeEach(function() {
-      this.PrependHtmlView = Backbone.Marionette.CollectionView.extend({
-        childView: this.ChildView,
+      this.PrependHtmlView = this.CollectionView.extend({
 
         attachHtml: function(collectionView, childView) {
           collectionView.$el.prepend(childView.el);
@@ -835,7 +915,7 @@ describe('collection view', function() {
       this.model = new Backbone.Model({foo: 'bar'});
       this.collection = new Backbone.Collection([this.model]);
 
-      this.collectionView = new this.DeepEqualCollectionView({collection: this.collection});
+      this.collectionView = new this.CollectionView({collection: this.collection});
       this.collectionView.on('childview:some:event', this.someEventSpy);
       this.collectionView.render();
 
@@ -855,7 +935,7 @@ describe('collection view', function() {
 
   describe('when configuring a custom childViewEventPrefix', function() {
     beforeEach(function() {
-      this.CollectionView = this.DeepEqualCollectionView.extend({
+      this.CollectionView = this.CollectionView.extend({
         childViewEventPrefix: 'myPrefix'
       });
 
@@ -887,10 +967,7 @@ describe('collection view', function() {
       this.model = new Backbone.Model({foo: 'bar'});
       this.collection = new Backbone.Collection([this.model]);
 
-      this.collectionView = new this.DeepEqualCollectionView({
-        childView: Backbone.Marionette.ItemView.extend({
-          template: function() { return '<%= foo %>'; }
-        }),
+      this.collectionView = new this.CollectionView({
         collection: this.collection
       });
     });
@@ -942,7 +1019,7 @@ describe('collection view', function() {
       this.model = new Backbone.Model({foo: 'bar'});
       this.collection = new Backbone.Collection([this.model]);
 
-      this.collectionView = new this.DeepEqualCollectionView({
+      this.collectionView = new this.CollectionView({
         template: '#itemTemplate',
         collection: this.collection
       });
@@ -976,7 +1053,7 @@ describe('collection view', function() {
       this.model = new Backbone.Model({foo: 'bar'});
       this.collection = new Backbone.Collection([this.model]);
 
-      this.collectionView = new this.DeepEqualCollectionView({
+      this.collectionView = new this.CollectionView({
         template: '#itemTemplate',
         collection: this.collection
       });
@@ -1000,52 +1077,132 @@ describe('collection view', function() {
     });
   });
 
-  describe('when a child view is added to a collection view, after the collection view has been shown', function() {
+  describe('when a collection view is initially attached to the DOM and shown', function() {
     beforeEach(function() {
-      this.setFixtures($('<div id="fixture-container"></div>'));
-
-      this.model1 = new Backbone.Model({foo: 1});
-      this.model2 = new Backbone.Model({foo: 2});
-      this.collection = new Backbone.Collection([this.model1]);
-      this.collectionView = new this.CollectionView({
-        collection: this.collection
+      var spec = this;
+      var ChildView = this.ChildView.extend({
+        constructor: function() {
+          ChildView.__super__.constructor.apply(this, arguments);
+          spec.sinon.stub(this, 'onRender');
+          spec.sinon.stub(this, 'onBeforeShow');
+          spec.sinon.stub(this, 'onShow');
+          spec.sinon.stub(this, 'onBeforeAttach');
+          spec.sinon.stub(this, 'onAttach');
+          spec.sinon.stub(this, 'onDomRefresh');
+        },
+        onRender: function() {},
+        onBeforeShow: function() {},
+        onShow: function() {},
+        onBeforeAttach: function() {},
+        onAttach: function() {},
+        onDomRefresh: function() {}
       });
-      $('#fixture-container').append(this.collectionView.el);
 
-      this.collectionView.render();
-      this.collectionView.trigger('show');
+      this.collection = new Backbone.Collection([{foo: 1}, {foo: 2}]);
+      this.collectionView = new this.CollectionView({
+        childView: ChildView,
+        collection: this.collection,
+        emptyView: ChildView
+      });
 
-      this.sinon.spy(this.collectionView, 'attachBuffer');
-      this.sinon.spy(this.collectionView, 'getChildView');
+      this.setFixtures($('<div id="fixture-container"></div>'));
+      var region = new Marionette.Region({el: '#fixture-container'});
+      region.show(this.collectionView);
 
-      this.collection.add(this.model2);
+      this.childView1 = this.collectionView.children.findByIndex(0);
       this.childView2 = this.collectionView.children.findByIndex(1);
     });
 
-    it('should not use the render buffer', function() {
-      expect(this.collectionView.attachBuffer).not.to.have.been.called;
+    it('onBeforeShow should propagate to each initial child view', function() {
+      expect(this.childView1.onBeforeShow)
+        .to.have.been.calledOnce
+        .and.to.have.been.calledOn(this.childView1)
+        .and.to.have.been.calledWith(this.childView1);
+      expect(this.childView2.onBeforeShow)
+        .to.have.been.calledOnce
+        .and.to.have.been.calledOn(this.childView2)
+        .and.to.have.been.calledWith(this.childView2);
     });
 
-    it('should call onBeforeShow of the added child view', function() {
-      expect(this.childView2.onBeforeShow).to.have.been.calledOnce;
-      expect(this.childView2.onBeforeShow).to.have.been.calledOn(this.childView2);
-      expect(this.childView2.onBeforeShow).to.have.been.calledWith(this.childView2);
+    it('onShow should propagate to each initial child view', function() {
+      expect(this.childView1.onShow)
+        .to.have.been.calledOnce
+        .and.to.have.been.calledOn(this.childView1)
+        .and.to.have.been.calledWith(this.childView1);
+      expect(this.childView2.onShow)
+        .to.have.been.calledOnce
+        .and.to.have.been.calledOn(this.childView2)
+        .and.to.have.been.calledWith(this.childView2);
     });
 
-    it('should call onShow of the added child view', function() {
-      expect(this.childView2.onShow).to.have.been.calledOnce;
-      expect(this.childView2.onShow).to.have.been.calledOn(this.childView2);
-      expect(this.childView2.onShow).to.have.been.calledWith(this.childView2);
+    it('should call Region#show-like events on the initial child views in proper order', function() {
+      expect(this.childView1.onRender).to.have.been.calledBefore(this.childView1.onBeforeShow);
+      expect(this.childView1.onBeforeShow).to.have.been.calledBefore(this.childView1.onBeforeAttach);
+      expect(this.childView1.onBeforeAttach).to.have.been.calledBefore(this.childView1.onAttach);
+      expect(this.childView1.onAttach).to.have.been.calledBefore(this.childView1.onShow);
+      expect(this.childView1.onShow).to.have.been.called;
     });
 
-    it('should call onDomRefresh of the added child view', function() {
-      expect(this.childView2.onDomRefresh).to.have.been.calledOnce;
-      expect(this.childView2.onDomRefresh).to.have.been.calledOn(this.childView2);
-      expect(this.childView2.onDomRefresh).to.have.been.calledWithExactly(); // no args
+    describe('when collection view is emptied', function() {
+      beforeEach(function() {
+        this.collection.reset();
+        this.emptyView = this.collectionView.children.findByIndex(0);
+      });
+
+      it('should call Region#show-like events on the empty view in proper order', function() {
+        expect(this.emptyView.onRender).to.have.been.calledBefore(this.emptyView.onBeforeShow);
+        expect(this.emptyView.onBeforeShow).to.have.been.calledBefore(this.emptyView.onBeforeAttach);
+        expect(this.emptyView.onBeforeAttach).to.have.been.calledBefore(this.emptyView.onAttach);
+        expect(this.emptyView.onAttach).to.have.been.calledBefore(this.emptyView.onShow);
+        expect(this.emptyView.onShow).to.have.been.called;
+      });
     });
 
-    it('should call getChildView with the new model', function() {
-      expect(this.collectionView.getChildView).to.have.been.calledWith(this.model2);
+    describe('when a child view is added to a collection view, after the collection view has been shown', function() {
+      beforeEach(function() {
+        this.sinon.spy(this.collectionView, 'attachBuffer');
+        this.sinon.spy(this.collectionView, 'getChildView');
+        this.model3 = new Backbone.Model({foo: 3});
+        this.collection.add(this.model3);
+        this.childView3 = this.collectionView.children.findByIndex(2);
+      });
+
+      it('should not use the render buffer', function() {
+        expect(this.collectionView.attachBuffer).not.to.have.been.called;
+      });
+
+      it('should call onBeforeShow of the added child view', function() {
+        expect(this.childView3.onBeforeShow)
+          .to.have.been.calledOnce
+          .and.to.have.been.calledOn(this.childView3)
+          .and.to.have.been.calledWith(this.childView3);
+      });
+
+      it('should call onShow of the added child view', function() {
+        expect(this.childView3.onShow)
+          .to.have.been.calledOnce
+          .and.to.have.been.calledOn(this.childView3)
+          .and.to.have.been.calledWith(this.childView3);
+      });
+
+      it('should call onDomRefresh of the added child view', function() {
+        expect(this.childView3.onDomRefresh)
+          .to.have.been.calledOnce
+          .and.to.have.been.calledOn(this.childView3)
+          .and.to.have.been.calledWith(this.childView3);
+      });
+
+      it('should call getChildView with the new model', function() {
+        expect(this.collectionView.getChildView).to.have.been.calledWith(this.model3);
+      });
+
+      it('should call Region#show-like events on the added child view in proper order', function() {
+        expect(this.childView3.onRender).to.have.been.calledBefore(this.childView3.onBeforeShow);
+        expect(this.childView3.onBeforeShow).to.have.been.calledBefore(this.childView3.onBeforeAttach);
+        expect(this.childView3.onBeforeAttach).to.have.been.calledBefore(this.childView3.onAttach);
+        expect(this.childView3.onAttach).to.have.been.calledBefore(this.childView3.onShow);
+        expect(this.childView3.onShow).to.have.been.called;
+      });
     });
 
     describe('when the childView is added at an existing index', function() {
@@ -1068,14 +1225,14 @@ describe('collection view', function() {
 
   describe('when setting a childView in the constructor options', function() {
     beforeEach(function() {
-      this.ItemView = Marionette.ItemView.extend({
+      var ChildView = this.ChildView.extend({
         template: function() {},
         MyItemView: true
       });
 
       this.collection = new Backbone.Collection([{a: 'b'}]);
-      this.collectionView = new Marionette.CollectionView({
-        childView: this.ItemView,
+      this.collectionView = new this.CollectionView({
+        childView: ChildView,
         collection: this.collection
       });
 
@@ -1091,7 +1248,7 @@ describe('collection view', function() {
 
   describe('when calling childEvents via a childEvents method', function() {
     beforeEach(function() {
-      this.CollectionView = this.DeepEqualCollectionView.extend({
+      this.CollectionView = this.CollectionView.extend({
         childEvents: function() {
           return {
             'some:event': 'someEvent'
@@ -1126,7 +1283,7 @@ describe('collection view', function() {
     beforeEach(function() {
       this.onSomeEventSpy = this.sinon.stub();
 
-      this.CollectionView = this.DeepEqualCollectionView.extend({
+      this.CollectionView = this.CollectionView.extend({
         childEvents: {
           'some:event': this.onSomeEventSpy
         }
@@ -1154,7 +1311,7 @@ describe('collection view', function() {
 
   describe('when calling childEvents via the childEvents hash with a string of the function name', function() {
     beforeEach(function() {
-      this.CollectionView = this.DeepEqualCollectionView.extend({
+      var CollectionView = this.CollectionView.extend({
         childEvents: {
           'some:event': 'someEvent'
         }
@@ -1165,7 +1322,7 @@ describe('collection view', function() {
       this.model = new Backbone.Model({foo: 'bar'});
       this.collection = new Backbone.Collection([this.model]);
 
-      this.collectionView = new this.CollectionView({collection: this.collection});
+      this.collectionView = new CollectionView({collection: this.collection});
       this.collectionView.someEvent = this.someEventSpy;
       this.collectionView.render();
 
@@ -1185,14 +1342,13 @@ describe('collection view', function() {
 
   describe('calling childEvents via the childEvents hash with a string of a nonexistent function name', function() {
     beforeEach(function() {
-      this.CollectionView = Marionette.CollectionView.extend({
-        childView: this.ChildView,
+      var CollectionView = this.CollectionView.extend({
         childEvents: {
           'render': 'nonexistentFn'
         }
       });
 
-      this.collectionView = new this.CollectionView({
+      this.collectionView = new CollectionView({
         collection: (new Backbone.Collection([{}]))
       });
 
@@ -1204,64 +1360,64 @@ describe('collection view', function() {
     });
   });
 
-  describe('has a valid inheritance chain back to Marionette.View', function() {
+  describe('has a valid inheritance chain back to Backbone.View', function() {
     beforeEach(function() {
-      this.constructor = this.sinon.spy(Marionette, 'View');
-      this.collectionView = new Marionette.CollectionView();
+      this.collectionView = new this.ChildView();
     });
 
-    it('calls the parent Marionette.Views constructor function on instantiation', function() {
-      expect(this.constructor).to.have.been.called;
+    it('calls the parent Backbone.View constructor function on instantiation', function() {
+      expect(Backbone.View).to.have.been.called;
     });
   });
 
   describe('when a collection is reset child views should not be shown until the buffering is over', function() {
-    beforeEach(function() {
-      var suite = this;
+    var suite;
 
-      this.ItemView = Marionette.ItemView.extend({
+    beforeEach(function() {
+      suite = this;
+
+      var ChildView = this.ChildView.extend({
         template: _.template('<div>hi mom</div>'),
+        constructor: function() {
+          suite.ChildView.prototype.constructor.apply(this, arguments);
+          suite.sinon.spy(this, 'onShow');
+        },
         onShow: function() {
-          suite.isBuffering = suite.collectionView.isBuffering;
+          suite.isBufferingOnChildShow = suite.collectionView.isBuffering;
         }
       });
 
-      this.CollectionView = Marionette.CollectionView.extend({
-        childView: this.ItemView
-      });
-
-      this.isBuffering = null;
       this.collection = new Backbone.Collection([{}]);
-      this.collectionView = new this.CollectionView({collection: this.collection});
-      this.collectionView.render().trigger('show');
+      this.collectionView = new this.CollectionView({
+        childView: ChildView,
+        collection: this.collection
+      });
+      this.collectionView.render();
+      this.childView = this.collectionView.children.findByIndex(0);
     });
 
-    it('collectionView should not be buffering on childView show', function() {
-      expect(this.isBuffering).to.be.false;
+    it('collectionView should not trigger child view show events if the view has not been shown', function() {
+      expect(this.childView.onShow).to.not.have.been.calledOnce;
     });
 
-    it('collectionView should not be buffering after reset on childView show', function() {
-      this.isBuffering = undefined;
-      this.collection.reset([{}]);
-      expect(this.isBuffering).to.be.false;
-    });
-
-    describe('child view show events', function() {
+    describe('when collectionView is shown', function() {
       beforeEach(function() {
-        var suite = this;
-        this.showCalled = false;
-        this.ItemView.prototype.onShow = function() { suite.showCalled = true; };
+        suite.isBufferingOnChildShow = undefined;
+        this.collectionView.trigger('show');
       });
 
-      it('collectionView should trigger the show events when the buffer is inserted and the view has been shown', function() {
+      it('collectionView should not be buffering on childView show', function() {
+        expect(suite.isBufferingOnChildShow).to.be.false;
+      });
+
+      it('collectionView should not be buffering after reset on childView show', function() {
         this.collection.reset([{}]);
-        expect(this.showCalled).to.equal(true);
+        expect(suite.isBufferingOnChildShow).to.be.false;
       });
 
-      it('collectionView should not trigger the show events if the view has not been shown', function() {
-        this.collectionView = new this.CollectionView({collection: this.collection});
-        this.collectionView.render();
-        expect(this.showCalled).to.equal(false);
+      it('collectionView should trigger child view show events when the buffer is inserted and the view has been shown', function() {
+        this.collection.reset([{}]);
+        expect(this.childView.onShow).to.have.been.calledOnce;
       });
     });
   });
@@ -1271,8 +1427,7 @@ describe('collection view', function() {
       var suite = this;
       this.Model       = Backbone.Model.extend({});
       this.Collection  = Backbone.Collection.extend({model: this.Model});
-      this.CollectionView = Backbone.Marionette.CollectionView.extend({
-        childView: this.ChildView,
+      this.CollectionView = this.CollectionView.extend({
         tagName: 'ul'
       });
 
@@ -1321,52 +1476,12 @@ describe('collection view', function() {
   describe('when returning the view from addChild', function() {
     beforeEach(function() {
       this.model = new Backbone.Model({foo: 'bar'});
-
-      this.CollectionView = Backbone.Marionette.CollectionView.extend({
-        childView: this.ChildView
-      });
-
       this.collectionView = new this.CollectionView();
-
       this.childView = this.collectionView.addChild(this.model, this.ChildView, 0);
     });
 
     it('should return the child view for the model', function() {
       expect(this.childView.$el).to.contain.$text('bar');
-    });
-  });
-
-  describe('when a collection view is initially shown', function() {
-    beforeEach(function() {
-      this.collection = new Backbone.Collection([{foo: 1}, {foo: 2}]);
-      this.collectionView = new this.CollectionView({
-        collection: this.collection
-      });
-
-      this.collectionView.render();
-      this.collectionView.trigger('before:show');
-      this.collectionView.trigger('show');
-
-      this.childView1 = this.collectionView.children.findByIndex(0);
-      this.childView2 = this.collectionView.children.findByIndex(1);
-    });
-
-    it('onBeforeShow should propagate to each child view', function() {
-      expect(this.childView1.onBeforeShow).to.have.been.calledOnce;
-      expect(this.childView1.onBeforeShow).to.have.been.calledOn(this.childView1);
-      expect(this.childView1.onBeforeShow).to.have.been.calledWith(this.childView1);
-      expect(this.childView2.onBeforeShow).to.have.been.calledOnce;
-      expect(this.childView2.onBeforeShow).to.have.been.calledOn(this.childView2);
-      expect(this.childView2.onBeforeShow).to.have.been.calledWith(this.childView2);
-    });
-
-    it('onShow should propagate to each child view', function() {
-      expect(this.childView1.onShow).to.have.been.calledOnce;
-      expect(this.childView1.onShow).to.have.been.calledOn(this.childView1);
-      expect(this.childView1.onShow).to.have.been.calledWith(this.childView1);
-      expect(this.childView2.onShow).to.have.been.calledOnce;
-      expect(this.childView2.onShow).to.have.been.calledOn(this.childView2);
-      expect(this.childView2.onShow).to.have.been.calledWith(this.childView2);
     });
   });
 });

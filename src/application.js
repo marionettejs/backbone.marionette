@@ -5,11 +5,6 @@
 Marionette.Application = Marionette.Object.extend({
   cidPrefix: 'mna',
 
-  constructor: function(options) {
-    _.extend(this, options);
-    Marionette.Object.apply(this, arguments);
-  },
-
   // kick off all of the application's processes.
   // initializes all of the regions that have been added
   // to the app, and runs all of the initializer functions

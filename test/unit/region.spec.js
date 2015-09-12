@@ -380,8 +380,7 @@ describe('region', function() {
       it('should trigger a swapOut event for the region', function() {
         expect(this.regionOnSwapOutSpy).to.have.been.calledOnce
         .and.to.have.been.calledOn(this.myRegion)
-        // see issue #2055
-        .and.to.have.been.calledWith(undefined, this.myRegion, this.otherOptions);
+        .and.to.have.been.calledWith(this.view, this.myRegion, this.otherOptions);
       });
     });
 

@@ -9,10 +9,6 @@ describe('marionette application', function() {
       this.app = new Marionette.Application(this.appOptions, 'fooArg');
     });
 
-    it('should merge those options into the app', function() {
-      expect(this.app.fooOption).to.equal(this.fooOption);
-    });
-
     it('should pass all arguments to the initialize method', function() {
       expect(this.initializeStub).to.have.been.calledOn(this.app).and.calledWith(this.appOptions, 'fooArg');
     });

@@ -22,10 +22,6 @@ By creating an Application you get three important things:
   that makes it easy to understand and debug your application. Using the Application Class
   will automatically hook up your application to that extension.
 
-Note that the Application is undergoing many changes to become more lightweight. While it
-still includes many more features beyond what has been listed here, such as a Radio Channel and Regions,
-these features are now deprecated. Refer to the relevant sections below to learn what to use
-instead of these deprecated features.
 
 ## Documentation Index
 
@@ -142,55 +138,23 @@ var options = {
 MyApp.start(options);
 ```
 
+### Application.mergeOptions
+Merge keys from the `options` object directly onto the Application instance.
+
+```js
+var MyApp = Marionette.Application.extend({
+  initialize: function(options) {
+    this.mergeOptions(options, ['myOption']);
+
+    console.log('The option is:', this.myOption);
+  }
+})
+```
+
+More information at [mergeOptions](./marionette.functions.md#marionettemergeoptions)
+
 ### Application.getOption
 Retrieve an object's attribute either directly from the object, or from the object's this.options, with this.options taking precedence.
 
 More information [getOption](./marionette.functions.md#marionettegetoption)
 
-## Adding Initializers
-
-> Warning: deprecated
->
-> This feature is deprecated, and is scheduled to be removed in version 3 of Marionette. Instead
-> of Initializers, you should use events to manage start-up logic. The `start` event is an ideal
-> substitute for Initializers.
->
-> If you were relying on the deferred nature of Initializers in your app, you should instead
-> use Promises. This might look something like the following:
->
-> ```js
-> doAsyncThings().then(app.start);
-> ```
->
-
-Your application needs to do useful things, like displaying content in your
-regions, starting up your routers, and more. To accomplish these tasks and
-ensure that your `Application` is fully configured, you can add initializer
-callbacks to the application.
-
-```js
-MyApp.addInitializer(function(options){
-  // do useful stuff here
-  var myView = new MyView({
-    model: options.someModel
-  });
-  MyApp.rootView.mainRegion.show(myView);
-});
-
-MyApp.addInitializer(function(options){
-  new MyAppRouter();
-  Backbone.history.start();
-});
-```
-
-These callbacks will be executed when you start your application,
-and are bound to the application object as the context for
-the callback. In other words, `this` is the `MyApp` object inside
-of the initializer function.
-
-The `options` argument is passed from the `start` method (see below).
-
-Initializer callbacks are guaranteed to run, no matter when you
-add them to the app object. If you add them before the app is
-started, they will run when the `start` method is called. If you
-add them after the app is started, they will run immediately.

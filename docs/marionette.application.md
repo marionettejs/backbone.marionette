@@ -157,4 +157,3 @@ More information at [mergeOptions](./marionette.functions.md#marionettemergeopti
 Retrieve an object's attribute either directly from the object, or from the object's this.options, with this.options taking precedence.
 
 More information [getOption](./marionette.functions.md#marionettegetoption)
-

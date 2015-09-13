@@ -100,7 +100,7 @@ Marionette.Region = Marionette.Object.extend({
       view._parent = this;
 
       if (isChangingView) {
-        this.triggerMethod('before:swap', view, this, options);
+        this.triggerMethod('before:swapIn', view, this, options);
       }
 
       this.triggerMethod('before:show', view, this, options);
@@ -134,7 +134,7 @@ Marionette.Region = Marionette.Object.extend({
 
       if (isChangingView) {
         this.triggerMethod('swapOut', changingView, this, options);
-        this.triggerMethod('swap', view, this, options);
+        this.triggerMethod('swapIn', view, this, options);
       }
 
       this.triggerMethod('show', view, this, options);

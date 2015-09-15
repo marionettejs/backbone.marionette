@@ -92,8 +92,8 @@ describe('collection view', function() {
         childViewEvents: {
           'render': 'onChildViewRender'
         },
-        onBeforeRender:           function() { return this.isRendered; },
-        onRender:                 function() { return this.isRendered; },
+        onBeforeRender:           function() { return this.isRendered(); },
+        onRender:                 function() { return this.isRendered(); },
         onBeforeAddChild:         this.sinon.stub(),
         onAddChild:               this.sinon.stub(),
         onBeforeRenderCollection: this.sinon.stub(),
@@ -225,7 +225,7 @@ describe('collection view', function() {
     });
 
     it('should be marked rendered', function() {
-      expect(this.collectionView).to.have.property('isRendered', true);
+      expect(this.collectionView).to.have.property('_isRendered', true);
     });
   });
 
@@ -701,14 +701,14 @@ describe('collection view', function() {
         someCallback: function() {},
         onBeforeDestroy: function() {
           return {
-            isRendered: this.isRendered,
-            isDestroyed: this.isDestroyed
+            isRendered: this.isRendered(),
+            isDestroyed: this.isDestroyed()
           };
         },
         onDestroy: function() {
           return {
-            isRendered: this.isRendered,
-            isDestroyed: this.isDestroyed
+            isRendered: this.isRendered(),
+            isDestroyed: this.isDestroyed()
           };
         }
       });
@@ -825,11 +825,11 @@ describe('collection view', function() {
     });
 
     it('should be marked destroyed', function() {
-      expect(this.collectionView).to.have.property('isDestroyed', true);
+      expect(this.collectionView).to.have.property('_isDestroyed', true);
     });
 
     it('should be marked not rendered', function() {
-      expect(this.collectionView).to.have.property('isRendered', false);
+      expect(this.collectionView).to.have.property('_isRendered', false);
     });
 
     it('should not call checkEmpty', function() {

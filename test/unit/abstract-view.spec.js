@@ -70,8 +70,8 @@ describe('base view', function() {
       expect(this.view.remove).to.have.been.calledOnce;
     });
 
-    it('should set the view isDestroyed to true', function() {
-      expect(this.view).to.be.have.property('isDestroyed', true);
+    it('should set the view _isDestroyed to true', function() {
+      expect(this.view).to.be.have.property('_isDestroyed', true);
     });
 
     it('should return the View', function() {
@@ -88,18 +88,18 @@ describe('base view', function() {
       });
     });
 
-    describe('isDestroyed property', function() {
+    describe('_isDestroyed property', function() {
       beforeEach(function() {
         this.view = new Marionette.AbstractView();
       });
 
       it('should be set to false before destroy', function() {
-        expect(this.view).to.be.have.property('isDestroyed', false);
+        expect(this.view).to.be.have.property('_isDestroyed', false);
       });
 
       it('should be set to true after destroying', function() {
         this.view.destroy();
-        expect(this.view).to.be.have.property('isDestroyed', true);
+        expect(this.view).to.be.have.property('_isDestroyed', true);
       });
     });
   });
@@ -127,8 +127,8 @@ describe('base view', function() {
       expect(this.removeSpy).to.have.been.calledOnce;
     });
 
-    it('should not set the view isDestroyed to true', function() {
-      expect(this.view).to.be.have.property('isDestroyed', true);
+    it('should not set the view _isDestroyed to true', function() {
+      expect(this.view).to.be.have.property('_isDestroyed', true);
     });
   });
 
@@ -159,8 +159,8 @@ describe('base view', function() {
       expect(this.removeSpy).to.have.been.calledOnce;
     });
 
-    it('should set the view isDestroyed to true', function() {
-      expect(this.view).to.have.property('isDestroyed', true);
+    it('should set the view _isDestroyed to true', function() {
+      expect(this.view).to.have.property('_isDestroyed', true);
     });
 
     it('should return the view', function() {
@@ -245,8 +245,8 @@ describe('base view', function() {
       expect(this.removeSpy).to.have.been.calledOnce;
     });
 
-    it('should leave isDestroyed as true', function() {
-      expect(this.view).to.be.have.property('isDestroyed', true);
+    it('should leave _isDestroyed as true', function() {
+      expect(this.view).to.be.have.property('_isDestroyed', true);
     });
   });
 

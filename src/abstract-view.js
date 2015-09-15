@@ -8,9 +8,20 @@
 //
 
 Marionette.AbstractView = Backbone.View.extend({
-  isDestroyed: false,
+
   supportsRenderLifecycle: true,
   supportsDestroyLifecycle: true,
+  _isDestroyed: false,
+
+  isDestroyed: function() {
+    return this._isDestroyed;
+  },
+
+  _isRendered: false,
+
+  isRendered: function() {
+    return this._isRendered;
+  },
 
   constructor: function(options) {
     this.render = _.bind(this.render, this);
@@ -145,7 +156,7 @@ Marionette.AbstractView = Backbone.View.extend({
 
   // Internal helper method to verify whether the view hasn't been destroyed
   _ensureViewIsIntact: function() {
-    if (this.isDestroyed) {
+    if (this._isDestroyed) {
       throw new Marionette.Error({
         name: 'ViewDestroyedError',
         message: 'View (cid: "' + this.cid + '") has already been destroyed and cannot be used.'
@@ -158,7 +169,7 @@ Marionette.AbstractView = Backbone.View.extend({
   // for you. You can specify an `onDestroy` method in your view to
   // add custom code that is called after the view is destroyed.
   destroy: function() {
-    if (this.isDestroyed) { return this; }
+    if (this._isDestroyed) { return this; }
 
     var args = _.toArray(arguments);
 
@@ -167,13 +178,13 @@ Marionette.AbstractView = Backbone.View.extend({
     // mark as destroyed before doing the actual destroy, to
     // prevent infinite loops within "destroy" event handlers
     // that are trying to destroy other views
-    this.isDestroyed = true;
+    this._isDestroyed = true;
     this.triggerMethod.apply(this, ['destroy'].concat(args));
 
     // unbind UI elements
     this.unbindUIElements();
 
-    this.isRendered = false;
+    this._isRendered = false;
 
     // remove the view from the DOM
     this.remove();

@@ -19,10 +19,10 @@ describe('layoutView', function() {
         }
       },
       onBeforeRender: function() {
-        return this.isRendered;
+        return this.isRendered();
       },
       onRender: function() {
-        return this.isRendered;
+        return this.isRendered();
       }
     });
 
@@ -208,7 +208,7 @@ describe('layoutView', function() {
     });
 
     it('should be marked rendered', function() {
-      expect(this.layoutViewManager).to.have.property('isRendered', true);
+      expect(this.layoutViewManager).to.have.property('_isRendered', true);
     });
   });
 
@@ -280,11 +280,11 @@ describe('layoutView', function() {
     });
 
     it('should be marked destroyed', function() {
-      expect(this.layoutViewManager).to.have.property('isDestroyed', true);
+      expect(this.layoutViewManager).to.have.property('_isDestroyed', true);
     });
 
     it('should be marked not rendered', function() {
-      expect(this.layoutViewManager).to.have.property('isRendered', false);
+      expect(this.layoutViewManager).to.have.property('_isRendered', false);
     });
   });
 

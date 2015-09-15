@@ -66,12 +66,12 @@ new MyComp({
 
 The `collection` option is not passed to the template context by
 default. If your `template` needs access to the collection, you'll
-need to pass it via `templateHelpers`:
+need to pass it via `templateContext`:
 
 ```js
 new MyComp({
   template: "#some-template",
-  templateHelpers: function() {
+  templateContext: function() {
     return { items: this.collection.toJSON() };
   }
 })

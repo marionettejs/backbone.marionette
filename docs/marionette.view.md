@@ -292,7 +292,7 @@ If you need to serialize the View's `model` or `collection` in a custom way,
 then you should override either `serializeModel` or `serializeCollection`.
 
 On the other hand, you should not use this method to add arbitrary extra data
-to your template. Instead, use [View.templateHelpers](./marionette.abstractview.md#viewtemplatehelpers).
+to your template. Instead, use [View.templateContext](./marionette.abstractview.md#viewtemplatecontext).
 
 ## Organizing UI Elements
 

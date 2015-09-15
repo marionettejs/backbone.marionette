@@ -27,10 +27,10 @@ AbstractView directly.
 * [AbstractView.mergeOptions](#abstractviewmergeoptions)
 * [AbstractView.getOption](#abstractviewgetoption)
 * [AbstractView.bindEntityEvents](#abstractviewbindentityevents)
-* [AbstractView.templateHelpers](#abstractviewtemplatehelpers)
+* [AbstractView.templateContext](#abstractviewtemplatecontext)
   * [Basic Example](#basic-example)
-  * [Accessing Data Within The Helpers](#accessing-data-within-the-helpers)
-  * [Object Or Function As `templateHelpers`](#object-or-function-as-templatehelpers)
+  * [Accessing Data Within The Template Context](#accessing-data-within-the-template-context)
+  * [Object Or Function As `templateContext`](#object-or-function-as-templatecontext)
 * [Change Which Template Is Rendered For A View](#change-which-template-is-rendered-for-a-view)
 * [UI Interpolation](#ui-interpolation)
 
@@ -408,7 +408,7 @@ that is ultimately passed to the template.
 If you would like to serialize the View's `model` in a special way,
 then you should override this method. With that said, **do not** override
 this if you're simply adding additional data to your template, like computed
-fields. Use [templateHelpers](#viewtemplatehelpers) instead.
+fields. Use [templateContext](#viewtemplatecontext) instead.
 
 ## AbstractView.bindUIElements
 
@@ -461,18 +461,18 @@ Helps bind a backbone "entity" to methods on a target object. bindEntityEvents i
 
 More information [bindEntityEvents](./marionette.functions.md#marionettebindentityevents)
 
-## AbstractView.templateHelpers
+## AbstractView.templateContext
 
 There are times when a view's template needs to have some
 logic in it and the view engine itself will not provide an
 easy way to accomplish this. For example, Underscore templates
-do not provide a helper method mechanism while Handlebars
+do not provide a context method mechanism while Handlebars
 templates do.
 
-A `templateHelpers` attribute can be applied to any View object that
+A `templateContext` attribute can be applied to any View object that
 renders a template. When this attribute is present its contents
 will be mixed in to the data object that comes back from the
-`serializeData` method. This will allow you to create helper methods
+`serializeData` method. This will allow you to create context methods
 that can be called from within your templates. This is also a good place
 to add data not returned from `serializeData`, such as calculated values.
 
@@ -488,7 +488,7 @@ to add data not returned from `serializeData`, such as calculated values.
 var MyView = Marionette.View.extend({
   template: "#my-template",
 
-  templateHelpers: function () {
+  templateContext: function () {
     return {
       showMessage: function(){
         return this.name + " is the coolest!";
@@ -510,8 +510,8 @@ var view = new MyView({
 view.render(); //=> "I 100% think that Marionette is the coolest!";
 ```
 
-The `templateHelpers` can also be provided as a constructor parameter
-for any Marionette view class that supports the helpers.
+The `templateContext` can also be provided as a constructor parameter
+for any Marionette view class that supports the context methods.
 
 ```js
 var MyView = Marionette.View.extend({
@@ -519,31 +519,31 @@ var MyView = Marionette.View.extend({
 });
 
 new MyView({
-  templateHelpers: {
+  templateContext: {
     doFoo: function(){ /* ... */ }
   }
 });
 ```
 
-### Accessing Data Within The Helpers
+### Accessing Data Within The Template Context
 
-In order to access data from within the helper methods, you
+In order to access data from within the context methods, you
 need to prefix the data you need with `this`. Doing that will
 give you all of the methods and attributes of the serialized
-data object, including the other helper methods.
+data object, including the other context methods.
 
 ```js
-templateHelpers: {
+templateContext: {
   something: function(){
     return "Do stuff with " + this.name + " because it's awesome.";
   }
 }
 ```
 
-### Object Or Function As `templateHelpers`
+### Object Or Function As `templateContext`
 
 You can specify an object literal (as shown above), a reference
-to an object literal, or a function as the `templateHelpers`.
+to an object literal, or a function as the `templateContext`.
 
 If you specify a function, the function will be invoked
 with the current view instance as the context of the
@@ -552,7 +552,7 @@ mixed in to the data for the view.
 
 ```js
 Marionette.View.extend({
-  templateHelpers: function(){
+  templateContext: function(){
     return {
       foo: function(){ /* ... */ }
     }

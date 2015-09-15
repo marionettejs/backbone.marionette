@@ -48,7 +48,7 @@ functions:
       You can override the `serializeData` method in your own view definition to provide custom serialization for your view's `model` or
       `collection`.
 
-      Do not override `serializeData` to add additional data to your templates. Use `templateHelpers` for that instead.
+      Do not override `serializeData` to add additional data to your templates. Use `templateContext` for that instead.
 
       @api public
 
@@ -82,7 +82,7 @@ functions:
     description: |
       Serialize the view's model.
 
-      Do not override `serializeModel` to add additional data to your templates. Use `templateHelpers` for that instead.
+      Do not override `serializeModel` to add additional data to your templates. Use `templateContext` for that instead.
 
       @api public
       @param {Backbone.Model} model - The model set on the View to be serialized.
@@ -107,7 +107,7 @@ functions:
     description: |
       Serialize the view's collection.
 
-      Do not override `serializeCollection` to add additional data to your templates. Use `templateHelpers` for that instead.
+      Do not override `serializeCollection` to add additional data to your templates. Use `templateContext` for that instead.
 
       @api public
       @param {Backbone.Collection} collection - The collection set on the View to be serialized.

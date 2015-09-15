@@ -23,7 +23,7 @@ functions:
     @api public
     @param {} model
     
-  mixinTemplateHelpers: |
+  mixinTemplateContext: |
     @api public
     @param {} target
     

@@ -38,7 +38,7 @@ Marionette.AbstractView = Backbone.View.extend({
   },
 
   // Internal method to render the template with the serialized data
-  // and template helpers via the `Marionette.Renderer` object.
+  // and template context via the `Marionette.Renderer` object.
   _renderTemplate: function() {
     var template = this.getTemplate();
 
@@ -47,8 +47,8 @@ Marionette.AbstractView = Backbone.View.extend({
       return;
     }
 
-    // Add in entity data and template helpers
-    var data = this.mixinTemplateHelpers(this.serializeData());
+    // Add in entity data and template context
+    var data = this.mixinTemplateContext(this.serializeData());
 
     // Render and add to el
     var html = Marionette.Renderer.render(template, data, this);
@@ -64,16 +64,16 @@ Marionette.AbstractView = Backbone.View.extend({
     return _.clone(this.model.attributes);
   },
 
-  // Mix in template helper methods. Looks for a
-  // `templateHelpers` attribute, which can either be an
+  // Mix in template context methods. Looks for a
+  // `templateContext` attribute, which can either be an
   // object literal, or a function that returns an object
   // literal. All methods and attributes from this object
   // are copies to the object passed in.
-  mixinTemplateHelpers: function(target) {
+  mixinTemplateContext: function(target) {
     target = target || {};
-    var templateHelpers = this.getOption('templateHelpers');
-    templateHelpers = Marionette._getValue(templateHelpers, this);
-    return _.extend(target, templateHelpers);
+    var templateContext = this.getOption('templateContext');
+    templateContext = Marionette._getValue(templateContext, this);
+    return _.extend(target, templateContext);
   },
 
   // normalize the keys of passed hash with the views `ui` selectors.

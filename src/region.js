@@ -194,7 +194,7 @@ Marionette.Region = Marionette.Object.extend({
       });
     }
 
-    if (view.isDestroyed) {
+    if (view._isDestroyed) {
       throw new Marionette.Error({
         name: 'ViewDestroyedError',
         message: 'View (cid: "' + view.cid + '") has already been destroyed and cannot be used.'
@@ -292,14 +292,14 @@ Marionette.Region = Marionette.Object.extend({
   _destroyView: function() {
     var view = this.currentView;
 
-    if (view.destroy && !view.isDestroyed) {
+    if (view.destroy && !view._isDestroyed) {
       view.destroy();
     } else if (view.remove) {
       view.remove();
 
-      // appending isDestroyed to raw Backbone View allows regions
+      // appending _isDestroyed to raw Backbone View allows regions
       // to throw a ViewDestroyedError for this view
-      view.isDestroyed = true;
+      view._isDestroyed = true;
     }
   },
 

@@ -80,13 +80,13 @@ Marionette.CompositeView = Marionette.CollectionView.extend({
     this._renderChildren();
 
     this._isRendering = false;
-    this.isRendered = true;
+    this._isRendered = true;
     this.triggerMethod('render', this);
     return this;
   },
 
   _renderChildren: function() {
-    if (this.isRendered || this._isRendering) {
+    if (this._isRendered || this._isRendering) {
       Marionette.CollectionView.prototype._renderChildren.call(this);
     }
   },

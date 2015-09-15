@@ -76,7 +76,7 @@ Marionette.View = Marionette.AbstractView.extend({
     }
 
     this._renderTemplate();
-    this.isRendered = true;
+    this._isRendered = true;
     this.bindUIElements();
 
     this.triggerMethod('render', this);
@@ -192,7 +192,7 @@ Marionette.View = Marionette.AbstractView.extend({
 
   // Handle destroying regions, and then destroy the view itself.
   destroy: function() {
-    if (this.isDestroyed) { return this; }
+    if (this._isDestroyed) { return this; }
 
     // #2134: remove parent element before destroying the child views, so
     // removing the child views doesn't retrigger repaints

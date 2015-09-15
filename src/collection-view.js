@@ -146,7 +146,7 @@ Marionette.CollectionView = Marionette.AbstractView.extend({
     this._ensureViewIsIntact();
     this.triggerMethod('before:render', this);
     this._renderChildren();
-    this.isRendered = true;
+    this._isRendered = true;
     this.triggerMethod('render', this);
     return this;
   },
@@ -156,7 +156,7 @@ Marionette.CollectionView = Marionette.AbstractView.extend({
   // removing the related childrenViews.
   setFilter: function(filter, options) {
     options = options || {};
-    var viewCanBeRendered = this.isRendered && !this.isDestroyed;
+    var viewCanBeRendered = this._isRendered && !this._isDestroyed;
     // The same filter or a `prevent` option won't render the filter.
     // Nevertheless, a `prevent` option will modify the value.
     if (!viewCanBeRendered || this.filter === filter) {
@@ -606,7 +606,7 @@ Marionette.CollectionView = Marionette.AbstractView.extend({
 
   // Handle cleanup and other destroying needs for the collection of views
   destroy: function() {
-    if (this.isDestroyed) { return this; }
+    if (this._isDestroyed) { return this; }
 
     this.triggerMethod('before:destroy:collection');
     this.destroyChildren({checkEmpty: false});

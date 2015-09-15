@@ -52,8 +52,8 @@ describe('marionette object', function() {
       expect(this.object.cid).to.exist;
     });
 
-    it('should have `isDestroyed` set to `false`', function() {
-      expect(this.object.isDestroyed).to.be.false;
+    it('should have `isDestroyed()` set to `false`', function() {
+      expect(this.object._isDestroyed).to.be.false;
     });
   });
 
@@ -72,8 +72,8 @@ describe('marionette object', function() {
       expect(this.beforeDestroyHandler).to.have.been.calledOnce;
     });
 
-    it('should set `object.isDestroyed` to `true`', function() {
-      expect(this.object.isDestroyed).to.be.true;
+    it('should set `object.isDestroyed()` to `true`', function() {
+      expect(this.object._isDestroyed).to.be.true;
     });
 
     it('should return the object', function() {

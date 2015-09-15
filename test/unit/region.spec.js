@@ -929,8 +929,8 @@ describe('region', function() {
       expect(this.view.remove).to.have.been.called;
     });
 
-    it('should set "isDestroyed" on the view', function() {
-      expect(this.view.isDestroyed).to.be.true;
+    it('should set "_isDestroyed" on the view', function() {
+      expect(this.view._isDestroyed).to.be.true;
     });
 
     describe('and then attempting to show the view again in the Region', function() {

@@ -168,7 +168,7 @@ functions:
           ```js
           var myView = Marionette.View.extend({
             destroy: function(){
-              if (this.isDestroyed) { return; }
+              if (this.isDestroyed()) { return; }
 
               var destroyed = Marionette.AbstractView.prototype.destroy.apply(this, arguments);
 

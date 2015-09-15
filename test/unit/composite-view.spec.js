@@ -240,10 +240,10 @@ describe('composite view', function() {
         childView: this.ChildView,
         template: this.templateFn,
         onBeforeRender: function() {
-          return this.isRendered;
+          return this.isRendered();
         },
         onRender: function() {
-          return this.isRendered;
+          return this.isRendered();
         }
       });
 
@@ -321,7 +321,7 @@ describe('composite view', function() {
     });
 
     it('should mark as rendered', function() {
-      expect(this.compositeView).to.have.property('isRendered', true);
+      expect(this.compositeView).to.have.property('_isRendered', true);
     });
   });
 
@@ -636,11 +636,11 @@ describe('composite view', function() {
     });
 
     it('should be marked destroyed', function() {
-      expect(this.compositeView).to.have.property('isDestroyed', true);
+      expect(this.compositeView).to.have.property('_isDestroyed', true);
     });
 
     it('should be marked not rendered', function() {
-      expect(this.compositeView).to.have.property('isRendered', false);
+      expect(this.compositeView).to.have.property('_isRendered', false);
     });
   });
 
@@ -966,7 +966,7 @@ describe('composite view', function() {
     });
 
     it('should claim isRendered', function() {
-      expect(this.compositeView.isRendered).to.be.true;
+      expect(this.compositeView.isRendered()).to.be.true;
     });
   });
 });

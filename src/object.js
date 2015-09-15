@@ -20,19 +20,23 @@ _.extend(Marionette.Object.prototype, Backbone.Events, {
   cidPrefix: 'mno',
 
   // for parity with Marionette.AbstractView lifecyle
-  isDestroyed: false,
+  _isDestroyed: false,
+
+  isDestroyed: function() {
+    return this._isDestroyed();
+  },
 
   //this is a noop method intended to be overridden by classes that extend from this base
   initialize: function() {},
 
   destroy: function() {
-    if (this.isDestroyed) { return this; }
+    if (this._isDestroyed) { return this; }
 
     this.triggerMethod('before:destroy');
 
     // mark as destroyed before doing the actual destroy, to
     // prevent infinite loops within "destroy" event handlers
-    this.isDestroyed = true;
+    this._isDestroyed = true;
     this.triggerMethod('destroy');
     Marionette.unproxyRadioHandlers.apply(this);
     this.stopListening();

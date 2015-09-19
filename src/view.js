@@ -85,26 +85,6 @@ Marionette.View = Marionette.AbstractView.extend({
     return this;
   },
 
-  // Internal method to render the template with the serialized data
-  // and template helpers via the `Marionette.Renderer` object.
-  _renderTemplate: function() {
-    var template = this.getTemplate();
-
-    // Allow template-less item views
-    if (template === false) {
-      return;
-    }
-
-    // Add in entity data and template helpers
-    var data = this.mixinTemplateHelpers(this.serializeData());
-
-    // Render and add to el
-    var html = Marionette.Renderer.render(template, data, this);
-    this.attachElContent(html);
-
-    return this;
-  },
-
   // Attaches the content of a given view.
   // This method can be overridden to optimize rendering,
   // or to render in a non standard way.

@@ -54,17 +54,8 @@ functions:
   _renderChildren:
     description: |
       ...
-      
-      @api private
 
-    examples:
-      
-  _renderTemplate:
-    description: |
-      ...
-      
       @api private
-      @param {} html
 
     examples:
       

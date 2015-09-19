@@ -50,6 +50,24 @@ Marionette.AbstractView = Backbone.View.extend({
     return this.getOption('template');
   },
 
+  // Internal method to render the template with the serialized data
+  // and template helpers via the `Marionette.Renderer` object.
+  _renderTemplate: function() {
+    var template = this.getTemplate();
+
+    // Allow template-less views
+    if (template === false) {
+      return;
+    }
+
+    // Add in entity data and template helpers
+    var data = this.mixinTemplateHelpers(this.serializeData());
+
+    // Render and add to el
+    var html = Marionette.Renderer.render(template, data, this);
+    this.attachElContent(html);
+  },
+
   // Prepares the special `model` property of a view
   // for being displayed in the template. By default
   // we simply clone the attributes. Override this if

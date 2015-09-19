@@ -458,8 +458,8 @@ A region will raise a few events on itself and on the target view when showing a
 
 * `before:show` / `onBeforeShow` - Called after the view has been rendered, but before its been displayed.
 * `show` / `onShow` - Called when the view has been rendered and displayed.
-* `before:swap` / `onBeforeSwap` - Called before a new view is shown. NOTE: this will only be called when a view is being swapped, not when the region is empty.
-* `swap` / `onSwap` - Called when a new view is shown. NOTE: this will only be called when a view is being swapped, not when the region is empty.
+* `before:swapIn` / `onBeforeSwapIn` - Called before a new view is shown. NOTE: this will only be called when a view is being swapped, not when the region is empty.
+* `swapIn` / `onSwapIn` - Called when a new view is shown. NOTE: this will only be called when a view is being swapped, not when the region is empty.
 * `before:swapOut` / `onBeforeSwapOut` - Called before a new view swapped in. NOTE: this will only be called when a view is being swapped, not when the region is empty.
 * `swapOut` / `onSwapOut` - Called when a new view swapped in to replace the currently shown view. NOTE: this will only be called when a view is being swapped, not when the region is empty.
 * `before:empty` / `onBeforeEmpty` - Called before the view has been emptied.
@@ -499,13 +499,13 @@ MyApp.mainRegion.on("show", function(view, region, options){
   // you also have access to the `options` that were passed to the Region.show call
 });
 
-MyApp.mainRegion.on("before:swap", function(view, region, options){
+MyApp.mainRegion.on("before:swapIn", function(view, region, options){
   // manipulate the `view` or do something extra
   // with the `region`
   // you also have access to the `options` that were passed to the Region.show call
 });
 
-MyApp.mainRegion.on("swap", function(view, region, options){
+MyApp.mainRegion.on("swapIn", function(view, region, options){
   // manipulate the `view` or do something extra
   // with the `region`
   // you also have access to the `options` that were passed to the Region.show call
@@ -552,11 +552,11 @@ var MyView = Marionette.View.extend({
 var MyRegion = Marionette.Region.extend({
   // ...
 
-  onBeforeSwap: function(view, region, options) {
+  onBeforeSwapIn: function(view, region, options) {
     // the `view` has not been swapped yet
   },
 
-  onSwap: function(view, region, options){
+  onSwapIn: function(view, region, options){
     // the `view` has been swapped
   },
 

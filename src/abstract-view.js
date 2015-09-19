@@ -345,7 +345,7 @@ Marionette.AbstractView = Backbone.View.extend({
     var prefixedEventName = eventPrefix + ':' + eventName;
     var callArgs = [this].concat(args);
 
-    Marionette._triggerMethod(layoutView, prefixedEventName, callArgs);
+    Marionette._triggerMethod(layoutView, [prefixedEventName].concat(callArgs));
 
     // call the parent view's childEvents handler
     var childEvents = Marionette.getOption(layoutView, 'childEvents');

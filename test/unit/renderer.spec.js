@@ -38,6 +38,22 @@ describe('renderer', function() {
     });
   });
 
+  describe('when given an empty template to render', function() {
+    beforeEach(function() {
+      this.setFixtures('<script type="text/template" id="renderer-empty-template"></script>');
+      this.templateSelector = '#renderer-empty-template';
+      this.result = Marionette.Renderer.render(this.templateSelector).trim();
+    });
+
+    it('should retrieve the template from the cache', function() {
+      expect(this.templateCacheSpy).to.have.been.calledWith(this.templateSelector);
+    });
+
+    it('should render the template', function() {
+      expect(this.result).to.equal('');
+    });
+  });
+
   describe('when no template is provided', function() {
     beforeEach(function() {
       this.render = _.bind(Marionette.Renderer.render, Marionette.Renderer);

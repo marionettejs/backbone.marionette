@@ -2,6 +2,7 @@ describe('onAttach', function() {
   'use strict';
 
   beforeEach(function() {
+    var spec = this;
 
     // A Region to show our View within
     this.setFixtures('<div id="region"></div>');
@@ -9,25 +10,45 @@ describe('onAttach', function() {
     this.region = new Marionette.Region({el: this.el});
 
     // A view we can use as nested child views
+    // this.ChildView = Backbone.View.extend({
+    //   template: false,
+    //   constructor: function(options) {
+    //     Backbone.View.prototype.constructor.call(this, options);
+    //     spec.sinon.spy(this, 'onAttach');
+    //     spec.sinon.spy(this, 'onBeforeAttach');
+    //   },
+    //   onAttach: function() {},
+    //   onBeforeAttach: function() {}
+    // });
+
     this.BasicView = Marionette.View.extend({
-      template: false,
+      template: _.template('<header></header><main></main><footer></footer>'),
+      regions: {
+        header: 'header',
+        main: 'main',
+        footer: 'footer'
+      },
+      constructor: function() {
+        Marionette.View.prototype.constructor.apply(this, arguments);
+        spec.sinon.spy(this, 'onBeforeAttach');
+        spec.sinon.spy(this, 'onAttach');
+      },
       onAttach: function() {},
       onBeforeAttach: function() {}
     });
 
-    var spec = this;
-    this.EmptyView = Marionette.View.extend({
+    this.EmptyView = Backbone.View.extend({
       template: false,
       constructor: function(options) {
-        Marionette.View.prototype.constructor.call(this, options);
+        Backbone.View.prototype.constructor.call(this, options);
         this.onAttach = spec.sinon.stub();
         this.onBeforeAttach = spec.sinon.stub();
       }
     });
-    this.ChildView = Marionette.View.extend({
+    this.ChildView = Backbone.View.extend({
       template: false,
       constructor: function(options) {
-        Marionette.View.prototype.constructor.call(this, options);
+        Backbone.View.prototype.constructor.call(this, options);
         this.onAttach = spec.sinon.stub();
         this.onBeforeAttach = spec.sinon.stub();
       }
@@ -42,11 +63,11 @@ describe('onAttach', function() {
     beforeEach(function() {
       this.detachedRegion = new Marionette.Region({el: $('<div></div>')});
 
-      this.view = new this.BasicView();
+      this.view = new this.ChildView();
       this.view.onAttach = this.sinon.stub();
       this.view.onBeforeAttach = this.sinon.stub();
 
-      this.detachedRegion.show(new this.BasicView());
+      this.detachedRegion.show(new this.ChildView());
     });
 
     it('should not call either trigger method on the view', function() {
@@ -57,7 +78,7 @@ describe('onAttach', function() {
 
   describe('when showing a region that is attached to the document', function() {
     beforeEach(function() {
-      this.view = new this.BasicView();
+      this.view = new this.ChildView();
       this.view.onAttach = this.sinon.stub();
       this.view.onBeforeAttach = this.sinon.stub();
 
@@ -83,7 +104,7 @@ describe('onAttach', function() {
 
   describe('when showing a region that is attached to the document & has triggerBeforeAttach set to false', function() {
     beforeEach(function() {
-      this.view = new this.BasicView();
+      this.view = new this.ChildView();
       this.view.onAttach = this.sinon.stub();
       this.view.onBeforeAttach = this.sinon.stub();
       this.region.triggerBeforeAttach = false;
@@ -104,7 +125,7 @@ describe('onAttach', function() {
 
   describe('when showing a region that is attached to the document & has triggerBeforeAttach set to false, but the option is passed as true', function() {
     beforeEach(function() {
-      this.view = new this.BasicView();
+      this.view = new this.ChildView();
       this.view.onAttach = this.sinon.stub();
       this.view.onBeforeAttach = this.sinon.stub();
       this.region.triggerBeforeAttach = false;
@@ -127,7 +148,7 @@ describe('onAttach', function() {
 
   describe('when showing a region that is attached to the document & triggerBeforeAttach defaults to true, but the option is passed as false', function() {
     beforeEach(function() {
-      this.view = new this.BasicView();
+      this.view = new this.ChildView();
       this.view.onAttach = this.sinon.stub();
       this.view.onBeforeAttach = this.sinon.stub();
 
@@ -147,7 +168,7 @@ describe('onAttach', function() {
 
   describe('when showing a region that is attached to the document & has triggerAttach set to false', function() {
     beforeEach(function() {
-      this.view = new this.BasicView();
+      this.view = new this.ChildView();
       this.view.onAttach = this.sinon.stub();
       this.view.onBeforeAttach = this.sinon.stub();
       this.region.triggerAttach = false;
@@ -168,7 +189,7 @@ describe('onAttach', function() {
 
   describe('when showing a region that is attached to the document & has triggerAttach set to false, but the option is passed as true', function() {
     beforeEach(function() {
-      this.view = new this.BasicView();
+      this.view = new this.ChildView();
       this.view.onAttach = this.sinon.stub();
       this.view.onBeforeAttach = this.sinon.stub();
       this.region.triggerAttach = false;
@@ -191,7 +212,7 @@ describe('onAttach', function() {
 
   describe('when showing a region that is attached to the document & triggerAttach defaults to true, but the option is passed as false', function() {
     beforeEach(function() {
-      this.view = new this.BasicView();
+      this.view = new this.ChildView();
       this.view.onAttach = this.sinon.stub();
       this.view.onBeforeAttach = this.sinon.stub();
 
@@ -211,7 +232,7 @@ describe('onAttach', function() {
 
   describe('when a view is shown in a region', function() {
     beforeEach(function() {
-      this.childView = new this.BasicView();
+      this.childView = new this.ChildView();
       this.childView.onBeforeAttach = function() {
         this.beforeAttached = Marionette.isNodeAttached(this.el);
       };
@@ -231,29 +252,9 @@ describe('onAttach', function() {
   });
 
   describe('when the parent view is initially detached', function() {
-    beforeEach(function() {
-
-      // A View class that we can use for all of our tests
-      this.View = Marionette.View.extend({
-        template: _.template('<main></main><footer></footer>'),
-        regions: {
-          main: 'main',
-          footer: 'footer'
-        },
-        onBeforeAttach: function() {},
-        onAttach: function() {}
-      });
-    });
-
     describe('When showing a View in a Region', function() {
       beforeEach(function() {
-        this.MyView = Marionette.View.extend({
-          template: _.template(''),
-          onBeforeAttach: this.sinon.stub(),
-          onAttach: this.sinon.stub()
-        });
-
-        this.myView = new this.MyView();
+        this.myView = new this.ChildView();
         this.region.show(this.myView);
       });
 
@@ -272,17 +273,12 @@ describe('onAttach', function() {
 
     describe('When showing a View with a single level of nested views that are attached within onBeforeShow', function() {
       beforeEach(function() {
-        this.mainView = new this.BasicView();
-        this.footerView = new this.BasicView();
-
-        this.sinon.spy(this.mainView, 'onAttach');
-        this.sinon.spy(this.mainView, 'onBeforeAttach');
-        this.sinon.spy(this.footerView, 'onAttach');
-        this.sinon.spy(this.footerView, 'onBeforeAttach');
+        this.mainView = new this.ChildView();
+        this.footerView = new this.ChildView();
 
         var suite = this;
 
-        this.CustomView = this.View.extend({
+        this.CustomView = this.BasicView.extend({
           onBeforeShow: function() {
             this.getRegion('main').show(suite.mainView);
             this.getRegion('footer').show(suite.footerView);
@@ -290,8 +286,6 @@ describe('onAttach', function() {
         });
 
         this.layoutView = new this.CustomView();
-        this.sinon.spy(this.layoutView, 'onAttach');
-        this.sinon.spy(this.layoutView, 'onBeforeAttach');
 
         this.region.show(this.layoutView);
       });
@@ -314,17 +308,12 @@ describe('onAttach', function() {
 
     describe('When showing a View with a single level of nested views that are attached within onBeforeAttach', function() {
       beforeEach(function() {
-        this.mainView = new this.BasicView();
-        this.footerView = new this.BasicView();
-
-        this.sinon.spy(this.mainView, 'onAttach');
-        this.sinon.spy(this.mainView, 'onBeforeAttach');
-        this.sinon.spy(this.footerView, 'onAttach');
-        this.sinon.spy(this.footerView, 'onBeforeAttach');
+        this.mainView = new this.ChildView();
+        this.footerView = new this.ChildView();
 
         var suite = this;
 
-        this.CustomView = this.View.extend({
+        this.CustomView = this.BasicView.extend({
           onBeforeAttach: function() {
             this.getRegion('main').show(suite.mainView);
             this.getRegion('footer').show(suite.footerView);
@@ -332,8 +321,6 @@ describe('onAttach', function() {
         });
 
         this.layoutView = new this.CustomView();
-        this.sinon.spy(this.layoutView, 'onAttach');
-        this.sinon.spy(this.layoutView, 'onBeforeAttach');
 
         this.region.show(this.layoutView);
       });
@@ -357,11 +344,9 @@ describe('onAttach', function() {
     describe('When showing a View with two levels of nested views; with onBeforeShow for the first and second level', function() {
       beforeEach(function() {
         var suite = this;
-        this.headerView = new this.BasicView();
-        this.sinon.spy(this.headerView, 'onAttach');
-        this.sinon.spy(this.headerView, 'onBeforeAttach');
+        this.headerView = new this.ChildView();
 
-        this.MainView = this.View.extend({
+        this.MainView = this.BasicView.extend({
           template: _.template('<header></header>'),
           regions: {
             header: 'header'
@@ -371,18 +356,14 @@ describe('onAttach', function() {
           }
         });
         this.mainView = new this.MainView();
-        this.sinon.spy(this.mainView, 'onAttach');
-        this.sinon.spy(this.mainView, 'onBeforeAttach');
 
-        this.CustomView = this.View.extend({
+        this.CustomView = this.BasicView.extend({
           onBeforeShow: function() {
             this.getRegion('main').show(suite.mainView);
           }
         });
 
         this.layoutView = new this.CustomView();
-        this.sinon.spy(this.layoutView, 'onAttach');
-        this.sinon.spy(this.layoutView, 'onBeforeAttach');
 
         this.region.show(this.layoutView);
       });
@@ -406,14 +387,10 @@ describe('onAttach', function() {
     describe('When showing a View with two levels of nested views; onBeforeShow for the first level, then onShow for the second', function() {
       beforeEach(function() {
         var suite = this;
-        this.headerView = new this.BasicView();
-        this.sinon.spy(this.headerView, 'onBeforeAttach');
-        this.sinon.spy(this.headerView, 'onAttach');
+        this.headerView = new this.ChildView();
 
-        this.MainView = Marionette.View.extend({
+        this.MainView = this.BasicView.extend({
           template: _.template('<header></header>'),
-          onAttach: this.sinon.stub(),
-          onBeforeAttach: this.sinon.stub(),
           regions: {
             header: 'header'
           },
@@ -423,15 +400,13 @@ describe('onAttach', function() {
         });
         this.mainView = new this.MainView();
 
-        this.CustomView = this.View.extend({
+        this.CustomView = this.BasicView.extend({
           onBeforeShow: function() {
             this.getRegion('main').show(suite.mainView);
           }
         });
 
         this.layoutView = new this.CustomView();
-        this.sinon.spy(this.layoutView, 'onAttach');
-        this.sinon.spy(this.layoutView, 'onBeforeAttach');
 
         this.region.show(this.layoutView);
       });
@@ -455,32 +430,22 @@ describe('onAttach', function() {
     describe('When showing a View with two levels of nested views; with onShow for the first level, onBeforeShow for the second', function() {
       beforeEach(function() {
         var suite = this;
-        this.headerView = new this.BasicView();
-        this.sinon.spy(this.headerView, 'onBeforeAttach');
-        this.sinon.spy(this.headerView, 'onAttach');
+        this.headerView = new this.ChildView();
 
-        this.MainView = Marionette.View.extend({
-          template: _.template('<header></header>'),
-          onAttach: this.sinon.stub(),
-          onBeforeAttach: this.sinon.stub(),
-          regions: {
-            header: 'header'
-          },
+        this.MainView = this.BasicView.extend({
           onBeforeShow: function() {
             this.getRegion('header').show(suite.headerView);
           }
         });
         this.mainView = new this.MainView();
 
-        this.CustomView = this.View.extend({
+        this.CustomView = this.BasicView.extend({
           onShow: function() {
             this.getRegion('main').show(suite.mainView);
           }
         });
 
         this.layoutView = new this.CustomView();
-        this.sinon.spy(this.layoutView, 'onBeforeAttach');
-        this.sinon.spy(this.layoutView, 'onAttach');
 
         this.region.show(this.layoutView);
       });
@@ -503,17 +468,12 @@ describe('onAttach', function() {
 
     describe('When showing a View with a single level of nested views that are attached within onShow', function() {
       beforeEach(function() {
-        this.mainView = new this.BasicView();
-        this.footerView = new this.BasicView();
-
-        this.sinon.spy(this.mainView, 'onBeforeAttach');
-        this.sinon.spy(this.mainView, 'onAttach');
-        this.sinon.spy(this.footerView, 'onBeforeAttach');
-        this.sinon.spy(this.footerView, 'onAttach');
+        this.mainView = new this.ChildView();
+        this.footerView = new this.ChildView();
 
         var suite = this;
 
-        this.CustomView = this.View.extend({
+        this.CustomView = this.BasicView.extend({
           onShow: function() {
             this.getRegion('main').show(suite.mainView);
             this.getRegion('footer').show(suite.footerView);
@@ -521,8 +481,6 @@ describe('onAttach', function() {
         });
 
         this.layoutView = new this.CustomView();
-        this.sinon.spy(this.layoutView, 'onBeforeAttach');
-        this.sinon.spy(this.layoutView, 'onAttach');
 
         this.region.show(this.layoutView);
       });
@@ -549,28 +507,14 @@ describe('onAttach', function() {
       this.setFixtures('<div class="layout-view"></div>');
 
       // A View class that we can use for all of our tests
-      this.View = Marionette.View.extend({
-        el: '.layout-view',
-        template: _.template('<main></main><footer></footer>'),
-        regions: {
-          main: 'main',
-          footer: 'footer'
-        },
-        onAttach: function() {},
-        onBeforeAttach: function() {}
+      this.View = this.BasicView.extend({
+        el: '.layout-view'
       });
     });
 
     describe('When showing a View in a Region', function() {
       beforeEach(function() {
-        this.MyView = Marionette.View.extend({
-          el: '.layout-view',
-          template: _.template(''),
-          onBeforeAttach: this.sinon.stub(),
-          onAttach: this.sinon.stub()
-        });
-
-        this.myView = new this.MyView();
+        this.myView = new this.ChildView();
         this.region.show(this.myView);
       });
 
@@ -582,13 +526,8 @@ describe('onAttach', function() {
 
     describe('When showing a View with a single level of nested views that are attached within onBeforeShow', function() {
       beforeEach(function() {
-        this.mainView = new this.BasicView();
-        this.footerView = new this.BasicView();
-
-        this.sinon.spy(this.mainView, 'onBeforeAttach');
-        this.sinon.spy(this.mainView, 'onAttach');
-        this.sinon.spy(this.footerView, 'onBeforeAttach');
-        this.sinon.spy(this.footerView, 'onAttach');
+        this.mainView = new this.ChildView();
+        this.footerView = new this.ChildView();
 
         var suite = this;
 
@@ -600,8 +539,6 @@ describe('onAttach', function() {
         });
 
         this.layoutView = new this.CustomView();
-        this.sinon.spy(this.layoutView, 'onBeforeAttach');
-        this.sinon.spy(this.layoutView, 'onAttach');
 
         this.region.show(this.layoutView);
       });
@@ -625,17 +562,9 @@ describe('onAttach', function() {
     describe('When showing a View with two levels of nested views; with onBeforeShow for the first and second level', function() {
       beforeEach(function() {
         var suite = this;
-        this.headerView = new this.BasicView();
-        this.sinon.spy(this.headerView, 'onBeforeAttach');
-        this.sinon.spy(this.headerView, 'onAttach');
+        this.headerView = new this.ChildView();
 
-        this.MainView = Marionette.View.extend({
-          template: _.template('<header></header>'),
-          onAttach: this.sinon.stub(),
-          onBeforeAttach: this.sinon.stub(),
-          regions: {
-            header: 'header'
-          },
+        this.MainView = this.BasicView.extend({
           onBeforeShow: function() {
             this.getRegion('header').show(suite.headerView);
           }
@@ -649,8 +578,6 @@ describe('onAttach', function() {
         });
 
         this.layoutView = new this.CustomView();
-        this.sinon.spy(this.layoutView, 'onBeforeAttach');
-        this.sinon.spy(this.layoutView, 'onAttach');
 
         this.region.show(this.layoutView);
       });
@@ -674,17 +601,9 @@ describe('onAttach', function() {
     describe('When showing a View with two levels of nested views; onBeforeShow for the first level, then onShow for the second', function() {
       beforeEach(function() {
         var suite = this;
-        this.headerView = new this.BasicView();
-        this.sinon.spy(this.headerView, 'onBeforeAttach');
-        this.sinon.spy(this.headerView, 'onAttach');
+        this.headerView = new this.ChildView();
 
-        this.MainView = Marionette.View.extend({
-          template: _.template('<header></header>'),
-          onAttach: this.sinon.stub(),
-          onBeforeAttach: this.sinon.stub(),
-          regions: {
-            header: 'header'
-          },
+        this.MainView = this.BasicView.extend({
           onShow: function() {
             this.getRegion('header').show(suite.headerView);
           }
@@ -698,8 +617,6 @@ describe('onAttach', function() {
         });
 
         this.layoutView = new this.CustomView();
-        this.sinon.spy(this.layoutView, 'onBeforeAttach');
-        this.sinon.spy(this.layoutView, 'onAttach');
 
         this.region.show(this.layoutView);
       });
@@ -723,17 +640,9 @@ describe('onAttach', function() {
     describe('When showing a View with two levels of nested views; with onShow for the first level, onBeforeShow for the second', function() {
       beforeEach(function() {
         var suite = this;
-        this.headerView = new this.BasicView();
-        this.sinon.spy(this.headerView, 'onBeforeAttach');
-        this.sinon.spy(this.headerView, 'onAttach');
+        this.headerView = new this.ChildView();
 
-        this.MainView = Marionette.View.extend({
-          template: _.template('<header></header>'),
-          onAttach: this.sinon.stub(),
-          onBeforeAttach: this.sinon.stub(),
-          regions: {
-            header: 'header'
-          },
+        this.MainView = this.BasicView.extend({
           onBeforeShow: function() {
             this.getRegion('header').show(suite.headerView);
           }
@@ -747,8 +656,6 @@ describe('onAttach', function() {
         });
 
         this.layoutView = new this.CustomView();
-        this.sinon.spy(this.layoutView, 'onBeforeAttach');
-        this.sinon.spy(this.layoutView, 'onAttach');
 
         this.region.show(this.layoutView);
       });
@@ -771,13 +678,8 @@ describe('onAttach', function() {
 
     describe('When showing a View with a single level of nested views that are attached within onShow', function() {
       beforeEach(function() {
-        this.mainView = new this.BasicView();
-        this.footerView = new this.BasicView();
-
-        this.sinon.spy(this.mainView, 'onBeforeAttach');
-        this.sinon.spy(this.mainView, 'onAttach');
-        this.sinon.spy(this.footerView, 'onBeforeAttach');
-        this.sinon.spy(this.footerView, 'onAttach');
+        this.mainView = new this.ChildView();
+        this.footerView = new this.ChildView();
 
         var suite = this;
 
@@ -789,8 +691,6 @@ describe('onAttach', function() {
         });
 
         this.layoutView = new this.CustomView();
-        this.sinon.spy(this.layoutView, 'onBeforeAttach');
-        this.sinon.spy(this.layoutView, 'onAttach');
 
         this.region.show(this.layoutView);
       });
@@ -824,12 +724,14 @@ describe('onAttach', function() {
 
     it('should trigger onBeforeAttach and onAttach on the emptyView a single time', function() {
       expect(this.childView).to.be.an.instanceof(this.EmptyView);
-      expect(this.childView.onBeforeAttach).to.have.been.calledOnce;
-      expect(this.childView.onBeforeAttach).to.have.been.calledOn(this.childView);
-      expect(this.childView.onBeforeAttach).to.have.been.calledWith(this.childView);
-      expect(this.childView.onAttach).to.have.been.calledOnce;
-      expect(this.childView.onAttach).to.have.been.calledOn(this.childView);
-      expect(this.childView.onAttach).to.have.been.calledWith(this.childView);
+      expect(this.childView.onBeforeAttach)
+        .and.to.have.been.calledOnce
+        .and.to.have.been.calledOn(this.childView)
+        .and.to.have.been.calledWith(this.childView);
+      expect(this.childView.onAttach)
+        .and.to.have.been.calledOnce
+        .and.to.have.been.calledOn(this.childView)
+        .and.to.have.been.calledWith(this.childView);
     });
 
     describe('when adding a new element to the collection', function() {
@@ -839,12 +741,14 @@ describe('onAttach', function() {
       });
       it('should trigger onBeforeAttach and onAttach on the childView a single time', function() {
         expect(this.childView).to.be.an.instanceof(this.ChildView);
-        expect(this.childView.onBeforeAttach).to.have.been.calledOnce;
-        expect(this.childView.onBeforeAttach).to.have.been.calledOn(this.childView);
-        expect(this.childView.onBeforeAttach).to.have.been.calledWith(this.childView);
-        expect(this.childView.onAttach).to.have.been.calledOnce;
-        expect(this.childView.onAttach).to.have.been.calledOn(this.childView);
-        expect(this.childView.onAttach).to.have.been.calledWith(this.childView);
+        expect(this.childView.onBeforeAttach)
+          .and.to.have.been.calledOnce
+          .and.to.have.been.calledOn(this.childView)
+          .and.to.have.been.calledWith(this.childView);
+        expect(this.childView.onAttach)
+          .and.to.have.been.calledOnce
+          .and.to.have.been.calledOn(this.childView)
+          .and.to.have.been.calledWith(this.childView);
       });
     });
   });
@@ -863,12 +767,14 @@ describe('onAttach', function() {
 
     it('should not trigger onAttach or onBeforeAttach on the emptyView a single time', function() {
       expect(this.childView).to.be.an.instanceof(this.EmptyView);
-      expect(this.childView.onBeforeAttach).to.not.have.been.calledOnce;
-      expect(this.childView.onBeforeAttach).to.not.have.been.calledOn(this.childView);
-      expect(this.childView.onBeforeAttach).to.not.have.been.calledWith(this.childView);
-      expect(this.childView.onAttach).to.not.have.been.calledOnce;
-      expect(this.childView.onAttach).to.not.have.been.calledOn(this.childView);
-      expect(this.childView.onAttach).to.not.have.been.calledWith(this.childView);
+      expect(this.childView.onBeforeAttach)
+        .and.to.not.have.been.calledOnce
+        .and.to.not.have.been.calledOn(this.childView)
+        .and.to.not.have.been.calledWith(this.childView);
+      expect(this.childView.onAttach)
+        .and.to.not.have.been.calledOnce
+        .and.to.not.have.been.calledOn(this.childView)
+        .and.to.not.have.been.calledWith(this.childView);
     });
 
     describe('when adding a new element to the collection', function() {
@@ -878,12 +784,14 @@ describe('onAttach', function() {
       });
       it('should not trigger onBeforeAttach or onAttach on the childView a single time', function() {
         expect(this.childView).to.be.an.instanceof(this.ChildView);
-        expect(this.childView.onBeforeAttach).to.not.have.been.calledOnce;
-        expect(this.childView.onBeforeAttach).to.not.have.been.calledOn(this.childView);
-        expect(this.childView.onBeforeAttach).to.not.have.been.calledWith(this.childView);
-        expect(this.childView.onAttach).to.not.have.been.calledOnce;
-        expect(this.childView.onAttach).to.not.have.been.calledOn(this.childView);
-        expect(this.childView.onAttach).to.not.have.been.calledWith(this.childView);
+        expect(this.childView.onBeforeAttach)
+          .and.to.not.have.been.calledOnce
+          .and.to.not.have.been.calledOn(this.childView)
+          .and.to.not.have.been.calledWith(this.childView);
+        expect(this.childView.onAttach)
+          .and.to.not.have.been.calledOnce
+          .and.to.not.have.been.calledOn(this.childView)
+          .and.to.not.have.been.calledWith(this.childView);
       });
     });
   });
@@ -900,18 +808,22 @@ describe('onAttach', function() {
     });
 
     it('should trigger onBeforeAttach and onAttach on each of its childViews a single time', function() {
-      expect(this.childView1.onBeforeAttach).to.have.been.calledOnce;
-      expect(this.childView1.onBeforeAttach).to.have.been.calledOn(this.childView1);
-      expect(this.childView1.onBeforeAttach).to.have.been.calledWith(this.childView1);
-      expect(this.childView1.onAttach).to.have.been.calledOnce;
-      expect(this.childView1.onAttach).to.have.been.calledOn(this.childView1);
-      expect(this.childView1.onAttach).to.have.been.calledWith(this.childView1);
-      expect(this.childView2.onBeforeAttach).to.have.been.calledOnce;
-      expect(this.childView2.onBeforeAttach).to.have.been.calledOn(this.childView2);
-      expect(this.childView2.onBeforeAttach).to.have.been.calledWith(this.childView2);
-      expect(this.childView2.onAttach).to.have.been.calledOnce;
-      expect(this.childView2.onAttach).to.have.been.calledOn(this.childView2);
-      expect(this.childView2.onAttach).to.have.been.calledWith(this.childView2);
+      expect(this.childView1.onBeforeAttach)
+        .and.to.have.been.calledOnce
+        .and.to.have.been.calledOn(this.childView1)
+        .and.to.have.been.calledWith(this.childView1);
+      expect(this.childView1.onAttach)
+        .and.to.have.been.calledOnce
+        .and.to.have.been.calledOn(this.childView1)
+        .and.to.have.been.calledWith(this.childView1);
+      expect(this.childView2.onBeforeAttach)
+        .and.to.have.been.calledOnce
+        .and.to.have.been.calledOn(this.childView2)
+        .and.to.have.been.calledWith(this.childView2);
+      expect(this.childView2.onAttach)
+        .and.to.have.been.calledOnce
+        .and.to.have.been.calledOn(this.childView2)
+        .and.to.have.been.calledWith(this.childView2);
     });
 
     describe('when re-rendering the CollectionView', function() {
@@ -920,18 +832,22 @@ describe('onAttach', function() {
       });
 
       it('should trigger onBeforeAttach and onAttach on each of its childViews a single time', function() {
-        expect(this.childView1.onBeforeAttach).to.have.been.calledOnce;
-        expect(this.childView1.onBeforeAttach).to.have.been.calledOn(this.childView1);
-        expect(this.childView1.onBeforeAttach).to.have.been.calledWith(this.childView1);
-        expect(this.childView1.onAttach).to.have.been.calledOnce;
-        expect(this.childView1.onAttach).to.have.been.calledOn(this.childView1);
-        expect(this.childView1.onAttach).to.have.been.calledWith(this.childView1);
-        expect(this.childView2.onBeforeAttach).to.have.been.calledOnce;
-        expect(this.childView2.onBeforeAttach).to.have.been.calledOn(this.childView2);
-        expect(this.childView2.onBeforeAttach).to.have.been.calledWith(this.childView2);
-        expect(this.childView2.onAttach).to.have.been.calledOnce;
-        expect(this.childView2.onAttach).to.have.been.calledOn(this.childView2);
-        expect(this.childView2.onAttach).to.have.been.calledWith(this.childView2);
+        expect(this.childView1.onBeforeAttach)
+          .and.to.have.been.calledOnce
+          .and.to.have.been.calledOn(this.childView1)
+          .and.to.have.been.calledWith(this.childView1);
+        expect(this.childView1.onAttach)
+          .and.to.have.been.calledOnce
+          .and.to.have.been.calledOn(this.childView1)
+          .and.to.have.been.calledWith(this.childView1);
+        expect(this.childView2.onBeforeAttach)
+          .and.to.have.been.calledOnce
+          .and.to.have.been.calledOn(this.childView2)
+          .and.to.have.been.calledWith(this.childView2);
+        expect(this.childView2.onAttach)
+          .and.to.have.been.calledOnce
+          .and.to.have.been.calledOn(this.childView2)
+          .and.to.have.been.calledWith(this.childView2);
       });
     });
 
@@ -942,12 +858,14 @@ describe('onAttach', function() {
       });
       it('should trigger onBeforeAttach and onAttach on the emptyView a single time', function() {
         expect(this.childView).to.be.an.instanceof(this.EmptyView);
-        expect(this.childView.onBeforeAttach).to.have.been.calledOnce;
-        expect(this.childView.onBeforeAttach).to.have.been.calledOn(this.childView);
-        expect(this.childView.onBeforeAttach).to.have.been.calledWith(this.childView);
-        expect(this.childView.onAttach).to.have.been.calledOnce;
-        expect(this.childView.onAttach).to.have.been.calledOn(this.childView);
-        expect(this.childView.onAttach).to.have.been.calledWith(this.childView);
+        expect(this.childView.onBeforeAttach)
+          .and.to.have.been.calledOnce
+          .and.to.have.been.calledOn(this.childView)
+          .and.to.have.been.calledWith(this.childView);
+        expect(this.childView.onAttach)
+          .and.to.have.been.calledOnce
+          .and.to.have.been.calledOn(this.childView)
+          .and.to.have.been.calledWith(this.childView);
       });
     });
   });
@@ -966,18 +884,22 @@ describe('onAttach', function() {
     });
 
     it('should not trigger onBeforeAttach or onAttach on each of its childViews a single time', function() {
-      expect(this.childView1.onBeforeAttach).to.not.have.been.calledOnce;
-      expect(this.childView1.onBeforeAttach).to.not.have.been.calledOn(this.childView1);
-      expect(this.childView1.onBeforeAttach).to.not.have.been.calledWith(this.childView1);
-      expect(this.childView1.onAttach).to.not.have.been.calledOnce;
-      expect(this.childView1.onAttach).to.not.have.been.calledOn(this.childView1);
-      expect(this.childView1.onAttach).to.not.have.been.calledWith(this.childView1);
-      expect(this.childView2.onBeforeAttach).to.not.have.been.calledOnce;
-      expect(this.childView2.onBeforeAttach).to.not.have.been.calledOn(this.childView2);
-      expect(this.childView2.onBeforeAttach).to.not.have.been.calledWith(this.childView2);
-      expect(this.childView2.onAttach).to.not.have.been.calledOnce;
-      expect(this.childView2.onAttach).to.not.have.been.calledOn(this.childView2);
-      expect(this.childView2.onAttach).to.not.have.been.calledWith(this.childView2);
+      expect(this.childView1.onBeforeAttach)
+        .and.to.not.have.been.calledOnce
+        .and.to.not.have.been.calledOn(this.childView1)
+        .and.to.not.have.been.calledWith(this.childView1);
+      expect(this.childView1.onAttach)
+        .and.to.not.have.been.calledOnce
+        .and.to.not.have.been.calledOn(this.childView1)
+        .and.to.not.have.been.calledWith(this.childView1);
+      expect(this.childView2.onBeforeAttach)
+        .and.to.not.have.been.calledOnce
+        .and.to.not.have.been.calledOn(this.childView2)
+        .and.to.not.have.been.calledWith(this.childView2);
+      expect(this.childView2.onAttach)
+        .and.to.not.have.been.calledOnce
+        .and.to.not.have.been.calledOn(this.childView2)
+        .and.to.not.have.been.calledWith(this.childView2);
     });
 
     describe('when re-rendering the CollectionView', function() {
@@ -986,18 +908,22 @@ describe('onAttach', function() {
       });
 
       it('should not trigger onBeforeAttach or onAttach on each of its childViews a single time', function() {
-        expect(this.childView1.onBeforeAttach).to.not.have.been.calledOnce;
-        expect(this.childView1.onBeforeAttach).to.not.have.been.calledOn(this.childView1);
-        expect(this.childView1.onBeforeAttach).to.not.have.been.calledWith(this.childView1);
-        expect(this.childView1.onAttach).to.not.have.been.calledOnce;
-        expect(this.childView1.onAttach).to.not.have.been.calledOn(this.childView1);
-        expect(this.childView1.onAttach).to.not.have.been.calledWith(this.childView1);
-        expect(this.childView2.onBeforeAttach).to.not.have.been.calledOnce;
-        expect(this.childView2.onBeforeAttach).to.not.have.been.calledOn(this.childView2);
-        expect(this.childView2.onBeforeAttach).to.not.have.been.calledWith(this.childView2);
-        expect(this.childView2.onAttach).to.not.have.been.calledOnce;
-        expect(this.childView2.onAttach).to.not.have.been.calledOn(this.childView2);
-        expect(this.childView2.onAttach).to.not.have.been.calledWith(this.childView2);
+        expect(this.childView1.onBeforeAttach)
+          .and.to.not.have.been.calledOnce
+          .and.to.not.have.been.calledOn(this.childView1)
+          .and.to.not.have.been.calledWith(this.childView1);
+        expect(this.childView1.onAttach)
+          .and.to.not.have.been.calledOnce
+          .and.to.not.have.been.calledOn(this.childView1)
+          .and.to.not.have.been.calledWith(this.childView1);
+        expect(this.childView2.onBeforeAttach)
+          .and.to.not.have.been.calledOnce
+          .and.to.not.have.been.calledOn(this.childView2)
+          .and.to.not.have.been.calledWith(this.childView2);
+        expect(this.childView2.onAttach)
+          .and.to.not.have.been.calledOnce
+          .and.to.not.have.been.calledOn(this.childView2)
+          .and.to.not.have.been.calledWith(this.childView2);
       });
     });
 
@@ -1008,12 +934,14 @@ describe('onAttach', function() {
       });
       it('should not trigger onBeforeAttach or onAttach on the emptyView a single time', function() {
         expect(this.childView).to.be.an.instanceof(this.EmptyView);
-        expect(this.childView.onBeforeAttach).to.not.have.been.calledOnce;
-        expect(this.childView.onBeforeAttach).to.not.have.been.calledOn(this.childView);
-        expect(this.childView.onBeforeAttach).to.not.have.been.calledWith(this.childView);
-        expect(this.childView.onAttach).to.not.have.been.calledOnce;
-        expect(this.childView.onAttach).to.not.have.been.calledOn(this.childView);
-        expect(this.childView.onAttach).to.not.have.been.calledWith(this.childView);
+        expect(this.childView.onBeforeAttach)
+          .and.to.not.have.been.calledOnce
+          .and.to.not.have.been.calledOn(this.childView)
+          .and.to.not.have.been.calledWith(this.childView);
+        expect(this.childView.onAttach)
+          .and.to.not.have.been.calledOnce
+          .and.to.not.have.been.calledOn(this.childView)
+          .and.to.not.have.been.calledWith(this.childView);
       });
     });
   });

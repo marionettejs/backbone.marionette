@@ -260,7 +260,7 @@ describe('composite view', function() {
       this.sinon.spy(this.compositeView, 'onRender');
       this.sinon.spy(this.compositeView, '_renderTemplate');
       this.sinon.spy(this.compositeView, 'bindUIElements');
-      this.sinon.spy(this.compositeView, '_renderChildren');
+      this.sinon.spy(this.compositeView, 'renderChildren');
 
       this.compositeView.render();
     });
@@ -280,7 +280,7 @@ describe('composite view', function() {
     // ui bindings will only be available after the model is rendered,
     // but should be available before the collection is rendered.
     it('should guarantee rendering of the model before rendering the collection', function() {
-      sinon.assert.callOrder(this.compositeView._renderTemplate, this.compositeView.bindUIElements, this.compositeView._renderChildren);
+      sinon.assert.callOrder(this.compositeView._renderTemplate, this.compositeView.bindUIElements, this.compositeView.renderChildren);
     });
 
     it('should call "onBeforeRender"', function() {

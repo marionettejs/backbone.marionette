@@ -46,6 +46,7 @@ For more examples, see my blog post on
 * [CompositeView's `childView`](#compositeviews-childview)
 * [CompositeView's `childViewContainer`](#compositeviews-childviewcontainer)
 * [CompositeView's `attachHtml`](#compositeviews-attachhtml)
+* [CompositeView's `renderChildren`](#compositeviews-renderchildren)
 * [Recursive By Default](#recursive-by-default)
 * [Model And Collection Rendering](#model-and-collection-rendering)
 * [Events And Callbacks](#events-and-callbacks)
@@ -203,6 +204,9 @@ to be rendered at runtime.
 
 For more information see the [CollectionView's documentation](./marionette.collectionview.md#collectionviews-childview).
 
+## CompositeView's `renderChildren`
+
+The `renderChildren` method re-renders the views within the `childViewContainer` for the collection without re-rendering the surrouding template.
 
 ## Recursive By Default
 

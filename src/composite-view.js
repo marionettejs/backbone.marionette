@@ -28,7 +28,7 @@ Marionette.CompositeView = Marionette.CollectionView.extend({
     if (this.collection) {
       this.listenTo(this.collection, 'add', this._onCollectionAdd);
       this.listenTo(this.collection, 'remove', this._onCollectionRemove);
-      this.listenTo(this.collection, 'reset', this._renderChildren);
+      this.listenTo(this.collection, 'reset', this.renderChildren);
 
       if (this.getOption('sort')) {
         this.listenTo(this.collection, 'sort', this._sortViews);
@@ -78,7 +78,7 @@ Marionette.CompositeView = Marionette.CollectionView.extend({
 
     this._renderTemplate();
     this.bindUIElements();
-    this._renderChildren();
+    this.renderChildren();
 
     this._isRendering = false;
     this._isRendered = true;
@@ -86,7 +86,7 @@ Marionette.CompositeView = Marionette.CollectionView.extend({
     return this;
   },
 
-  _renderChildren: function() {
+  renderChildren: function() {
     if (this._isRendered || this._isRendering) {
       Marionette.CollectionView.prototype._renderChildren.call(this);
     }

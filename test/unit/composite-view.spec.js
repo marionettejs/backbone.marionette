@@ -901,7 +901,7 @@ describe('composite view', function() {
       this.marionetteRendererSpy   = this.sinon.spy(Marionette.Renderer, 'render');
       this.triggerSpy              = this.sinon.spy(this.compositeView, 'trigger');
       this.serializeDataSpy        = this.sinon.spy(this.compositeView, 'serializeData');
-      this.mixinTemplateHelpersSpy = this.sinon.spy(this.compositeView, 'mixinTemplateHelpers');
+      this.mixinTemplateContextSpy = this.sinon.spy(this.compositeView, 'mixinTemplateContext');
       this.attachElContentSpy      = this.sinon.spy(this.compositeView, 'attachElContent');
       this.bindUIElementsSpy       = this.sinon.spy(this.compositeView, 'bindUIElements');
       this.compositeView.render();
@@ -935,9 +935,9 @@ describe('composite view', function() {
       expect(this.triggerSpy).to.have.been.calledWith('render', this.compositeView);
     });
 
-    it('should not add in data or template helpers', function() {
+    it('should not add in data or template context', function() {
       expect(this.serializeDataSpy).to.not.have.been.called;
-      expect(this.mixinTemplateHelpersSpy).to.not.have.been.called;
+      expect(this.mixinTemplateContextSpy).to.not.have.been.called;
     });
 
     it('should not render a template', function() {

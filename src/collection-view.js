@@ -277,11 +277,11 @@ Marionette.CollectionView = Marionette.AbstractView.extend({
     if (this.isEmpty(this.collection, {processedModels: models})) {
       this.showEmptyView();
     } else {
-      this.triggerMethod('before:render:collection', this);
+      this.triggerMethod('before:render:children', this);
       this.startBuffering();
       this.showCollection(models);
       this.endBuffering();
-      this.triggerMethod('render:collection', this);
+      this.triggerMethod('render:children', this);
     }
   },
 
@@ -633,9 +633,9 @@ Marionette.CollectionView = Marionette.AbstractView.extend({
   destroy: function() {
     if (this._isDestroyed) { return this; }
 
-    this.triggerMethod('before:destroy:collection');
+    this.triggerMethod('before:destroy:children');
     this.destroyChildren({checkEmpty: false});
-    this.triggerMethod('destroy:collection');
+    this.triggerMethod('destroy:children');
 
     return Marionette.AbstractView.prototype.destroy.apply(this, arguments);
   },

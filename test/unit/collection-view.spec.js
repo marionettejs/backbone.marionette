@@ -96,8 +96,8 @@ describe('collection view', function() {
         onRender:                 function() { return this.isRendered(); },
         onBeforeAddChild:         this.sinon.stub(),
         onAddChild:               this.sinon.stub(),
-        onBeforeRenderCollection: this.sinon.stub(),
-        onRenderCollection:       this.sinon.stub(),
+        onBeforeRenderChildren: this.sinon.stub(),
+        onRenderChildren:       this.sinon.stub(),
         onChildViewRender:        this.sinon.stub()
       });
 
@@ -130,12 +130,12 @@ describe('collection view', function() {
       expect(this.collectionView.attachHtml.callCount).to.equal(2);
     });
 
-    it('should only call onRenderCollection once', function() {
-      expect(this.collectionView.onRenderCollection).to.have.been.calledOnce;
+    it('should only call onRenderChildren once', function() {
+      expect(this.collectionView.onRenderChildren).to.have.been.calledOnce;
     });
 
-    it('should only call onBeforeRenderCollection once', function() {
-      expect(this.collectionView.onBeforeRenderCollection).to.have.been.calledOnce;
+    it('should only call onBeforeRenderChildren once', function() {
+      expect(this.collectionView.onBeforeRenderChildren).to.have.been.calledOnce;
     });
 
     it('should append the html for each childView', function() {
@@ -180,12 +180,12 @@ describe('collection view', function() {
       expect(this.collectionView.trigger).to.have.been.calledWith('before:render', this.collectionView);
     });
 
-    it('should trigger a "before:render:collection" event', function() {
-      expect(this.collectionView.trigger).to.have.been.calledWith('before:render:collection', this.collectionView);
+    it('should trigger a "before:render:children" event', function() {
+      expect(this.collectionView.trigger).to.have.been.calledWith('before:render:children', this.collectionView);
     });
 
-    it('should trigger a "render:collection" event', function() {
-      expect(this.collectionView.trigger).to.have.been.calledWith('render:collection', this.collectionView);
+    it('should trigger a "render:children" event', function() {
+      expect(this.collectionView.trigger).to.have.been.calledWith('render:children', this.collectionView);
     });
 
     it('should trigger a "render" event', function() {
@@ -281,19 +281,19 @@ describe('collection view', function() {
       this.collection = new Backbone.Collection([{foo: 'bar'}, {foo: 'baz'}]);
 
       var CollectionView = this.CollectionView.extend({
-        onRenderCollection: function() {
-          suite.onRenderCollectionHTML = this.el.innerHTML;
+        onRenderChildren: function() {
+          suite.onRenderChildrenHTML = this.el.innerHTML;
         }
       });
       this.collectionView = new CollectionView({
         collection: this.collection,
       });
-      sinon.spy(this.collectionView, 'onRenderCollection');
+      sinon.spy(this.collectionView, 'onRenderChildren');
       this.collectionView.render();
     });
 
     it('should find the expected number of childen', function() {
-      expect(this.onRenderCollectionHTML).to.equal('<span>bar</span><span>baz</span>');
+      expect(this.onRenderChildrenHTML).to.equal('<span>bar</span><span>baz</span>');
     });
   });
 
@@ -741,7 +741,7 @@ describe('collection view', function() {
       this.sinon.spy(this.collectionView, 'trigger');
       this.sinon.spy(this.collectionView, 'checkEmpty');
 
-      this.collectionView.bind('destroy:collection', this.destroyHandler);
+      this.collectionView.bind('destroy:children', this.destroyHandler);
 
       this.collectionView.destroy();
 
@@ -804,11 +804,11 @@ describe('collection view', function() {
     });
 
     it('should trigger a "before:destroy" event', function() {
-      expect(this.collectionView.trigger).to.have.been.calledWith('before:destroy:collection');
+      expect(this.collectionView.trigger).to.have.been.calledWith('before:destroy:children');
     });
 
     it('should trigger a "destroy"', function() {
-      expect(this.collectionView.trigger).to.have.been.calledWith('destroy:collection');
+      expect(this.collectionView.trigger).to.have.been.calledWith('destroy:children');
     });
 
     it('should call the handlers add to the destroyed event', function() {

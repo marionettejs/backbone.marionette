@@ -19,10 +19,22 @@ describe('marionette application', function() {
       this.fooOptions = {foo: 'bar'};
       this.app = new Marionette.Application();
 
+      this.beforeStartStub = this.sinon.stub();
+      this.app.on('before:start', this.beforeStartStub);
+      this.renderStub = this.sinon.stub();
+      this.app.on('render', this.renderStub);
       this.startStub = this.sinon.stub();
       this.app.on('start', this.startStub);
 
       this.app.start(this.fooOptions);
+    });
+
+    it('should run the onBeforeStart callback', function() {
+      expect(this.beforeStartStub).to.have.been.called;
+    });
+
+    it('should run the onRender callback', function() {
+      expect(this.renderStub).to.have.been.called;
     });
 
     it('should run the onStart callback', function() {

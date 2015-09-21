@@ -158,11 +158,7 @@ This concept also allows for a nice decoupled method to communicate to Behaviors
 
 ```js
 Marionette.Behavior.extend({
-    events: {
-        'click .foo' : 'onClick'
-    },
-
-	onClick: function(data) {
+  onSomeEvent: function(data) {
 		console.log("wow such data", data);
 	}
 });

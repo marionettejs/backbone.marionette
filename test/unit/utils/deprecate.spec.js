@@ -1,10 +1,15 @@
 describe('Marionette.deprecate', function() {
   beforeEach(function() {
+    Marionette.DEV_MODE = true;
     this.sinon.spy(Marionette.deprecate, '_warn');
     this.sinon.stub(Marionette.deprecate, '_console', {
       warn: this.sinon.stub()
     });
     Marionette.deprecate._cache = {};
+  });
+
+  afterEach(function() {
+    Marionette.DEV_MODE = false;
   });
 
   describe('Marionette.deprecate._warn', function() {
@@ -95,6 +100,17 @@ describe('Marionette.deprecate', function() {
       expect(Marionette.deprecate._warn)
         .to.have.been.calledOnce
         .and.calledWith('Deprecation warning: baz');
+    });
+  });
+
+  describe('when calling in production mode', function() {
+    beforeEach(function() {
+      Marionette.DEV_MODE = false;
+      Marionette.deprecate('baz');
+    });
+
+    it('should `console.warn` the message', function() {
+      expect(Marionette.deprecate._warn).to.not.have.been.called;
     });
   });
 });

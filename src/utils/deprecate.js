@@ -1,5 +1,7 @@
 /* global console */
 
+Marionette.DEV_MODE = false;
+
 var deprecate = Marionette.deprecate = function(message, test) {
   if (_.isObject(message)) {
     message = (
@@ -7,6 +9,10 @@ var deprecate = Marionette.deprecate = function(message, test) {
       'Please use ' + message.next + ' instead.' +
       (message.url ? ' See: ' + message.url : '')
     );
+  }
+
+  if (!Marionette.DEV_MODE) {
+    return;
   }
 
   if ((test === undefined || !test) && !deprecate._cache[message]) {

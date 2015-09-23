@@ -51,7 +51,7 @@ Marionette.View = Marionette.AbstractView.extend({
   // its model's attributes
   serializeCollection: function() {
     if (!this.collection) { return {}; }
-    return _.pluck(this.collection.invoke('clone'), 'attributes');
+    return this.collection.map(function(model) { return _.clone(model.attributes); });
   },
 
   // Render the view, defaulting to underscore.js templates.

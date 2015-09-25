@@ -22,7 +22,7 @@ Marionette.View = Backbone.View.extend({
     this._behaviors = Marionette.Behaviors(this);
 
     Backbone.View.call(this, this.options);
-
+    this._delegateCollectionModelEvents();
     Marionette.MonitorDOMRefresh(this);
   },
 
@@ -83,10 +83,8 @@ Marionette.View = Backbone.View.extend({
     }, {}, this);
   },
 
-  // Overriding Backbone.View's delegateEvents to handle
-  // the `triggers`, `modelEvents`, and `collectionEvents` configuration
-  delegateEvents: function(events) {
-    this._delegateDOMEvents(events);
+  // internal method to delegate DOM events and triggers
+  _delegateCollectionModelEvents: function(events) {
     this.bindEntityEvents(this.model, this.getOption('modelEvents'));
     this.bindEntityEvents(this.collection, this.getOption('collectionEvents'));
 
@@ -98,8 +96,9 @@ Marionette.View = Backbone.View.extend({
     return this;
   },
 
-  // internal method to delegate DOM events and triggers
-  _delegateDOMEvents: function(eventsArg) {
+  // Overriding Backbone.View's delegateEvents to handle
+  // the `triggers`, `modelEvents`, and `collectionEvents` configuration
+  delegateEvents:function(eventsArg) {
     var events = Marionette._getValue(eventsArg || this.events, this);
 
     // normalize ui keys

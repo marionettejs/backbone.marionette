@@ -166,7 +166,8 @@ var ParentView = Marionette.LayoutView.extend({
   onChildShowMessage: function (childView, message) {
     console.log('A child view fired show:message with ' + message);
   },
-
+  // Methods called from the triggers hash do not have access to DOM events
+  // Any logic requiring the original DOM event should be handled in it's respective view
   onChildSubmitForm: function (childView) {
     console.log('A child view fired submit:form');
   }

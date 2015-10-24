@@ -128,7 +128,9 @@ var MyCollectionView = Marionette.CollectionView.extend({
   }
 });
 
-var collectionView = new MyCollectionView();
+var collectionView = new MyCollectionView({
+  collection: new Backbone.Collection()
+});
 var foo = new FooBar({
   isFoo: true
 });
@@ -761,7 +763,7 @@ The `before:render:collection` event is triggered before the `collectionView`'s 
 
 ### render:collection event
 
-The `render:collection` event is triggered after a `collectionView`'s children have been rendered and buffered. It differs from the `collectionViews`'s `render` event in that it happens __only__ if the `collection` is not not empty.
+The `render:collection` event is triggered after a `collectionView`'s children have been rendered and buffered. It differs from the `collectionViews`'s `render` event in that it happens __only__ if the `collection` is not empty.
 
 ## CollectionView Child View Events
 

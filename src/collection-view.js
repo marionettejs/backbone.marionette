@@ -169,6 +169,9 @@ Marionette.CollectionView = Marionette.View.extend({
       return !children.findByModel(model);
     });
 
+    // determine which models have been filtered out
+    var filteredOutModels = _.difference(this.collection.models, models);
+
     // If the models we're displaying have changed due to filtering
     // We need to add and/or remove child views
     // So render as normal
@@ -186,6 +189,14 @@ Marionette.CollectionView = Marionette.View.extend({
       // appending the elements will effectively reorder them
       this.triggerMethod('before:reorder');
       this._appendReorderedChildren(els);
+
+      // remove any views that have been filtered out
+      _.each(filteredOutModels, function(model) {
+        var viewToRemove = this.children.findByModel(model);
+        this.removeChildView(viewToRemove);
+        this.checkEmpty();
+      }, this);
+
       this.triggerMethod('reorder');
     }
   },

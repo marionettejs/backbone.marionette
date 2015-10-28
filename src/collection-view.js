@@ -192,8 +192,8 @@ Marionette.CollectionView = Marionette.View.extend({
 
       // remove any views that have been filtered out
       _.each(filteredOutModels, function(model) {
-        var viewToRemve = this.children.findByModel(model);
-        this.removeChildView(viewToRemve);
+        var viewToRemove = this.children.findByModel(model);
+        this.removeChildView(viewToRemove);
         this.checkEmpty();
       }, this);
 

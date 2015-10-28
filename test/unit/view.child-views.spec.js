@@ -213,77 +213,87 @@ describe('layoutView', function() {
   });
 
   describe('when destroying', function() {
-    beforeEach(function() {
-      this.layoutViewManager = new this.View(this.viewOptions);
-      $('<span id="parent">').append(this.layoutViewManager.el);
-      this.layoutViewManager.render();
 
-      this.regionOne = this.layoutViewManager.regionOne;
-      this.regionTwo = this.layoutViewManager.regionTwo;
+    before(function() {
+      this.setup = function(viewOptions) {
+        this.layoutViewManager = new this.View(viewOptions);
+        $('<span id="parent">').append(this.layoutViewManager.el);
+        this.layoutViewManager.render();
 
-      var View = Marionette.View.extend({
-        template: false,
-        destroy: function() {
-          this.hadParent = this.$el.closest('#parent').length > 0;
-          return View.__super__.destroy.call(this);
-        }
-      });
+        this.regionOne = this.layoutViewManager.regionOne;
+        this.regionTwo = this.layoutViewManager.regionTwo;
 
-      this.regionOneView = new View();
-      this.regionOne.show(this.regionOneView);
+        var View = Marionette.View.extend({
+          template: false,
+          destroy: function() {
+            this.hadParent = this.$el.closest('#parent').length > 0;
+            return View.__super__.destroy.call(this);
+          }
+        });
 
-      this.sinon.spy(this.regionOne, 'empty');
-      this.sinon.spy(this.regionTwo, 'empty');
+        this.regionOneView = new View();
+        this.regionOne.show(this.regionOneView);
 
-      this.sinon.spy(this.layoutViewManager, 'destroy');
-      this.layoutViewManager.destroy();
-      this.layoutViewManager.destroy();
+        this.sinon.spy(this.regionOne, 'empty');
+        this.sinon.spy(this.regionTwo, 'empty');
+
+        this.sinon.spy(this.layoutViewManager, 'destroy');
+        this.layoutViewManager.destroy();
+        this.layoutViewManager.destroy();
+      };
     });
 
     it('should empty the region managers', function() {
+      this.setup();
       expect(this.regionOne.empty).to.have.been.calledOnce;
       expect(this.regionTwo.empty).to.have.been.calledOnce;
     });
 
     it('should delete the region managers', function() {
+      this.setup();
       expect(this.layoutViewManager.regionOne).to.be.undefined;
       expect(this.layoutViewManager.regionTwo).to.be.undefined;
     });
 
     it('should return the view', function() {
+      this.setup();
       expect(this.layoutViewManager.destroy).to.have.always.returned(this.layoutViewManager);
     });
 
     it('should not remove itself from the DOM before destroying child regions by default', function() {
+      this.setup();
       expect(this.regionOneView.hadParent).to.be.true;
-      this.viewOptions = {
-        destroyImmediate: true
-      };
     });
 
     it('should remove itself from the DOM before destroying child regions if flag set via options', function() {
+      this.setup({
+        destroyImmediate: true
+      });
       expect(this.regionOneView.hadParent).to.be.false;
-      this.viewOptions = null;
-      this.View.prototype.options.destroyImmediate = true;
     });
 
     it('should remove itself from the DOM before destroying child regions if flag set on proto options', function() {
+      this.View.prototype.options.destroyImmediate = true;
+      this.setup();
       expect(this.regionOneView.hadParent).to.be.false;
+    });
+
+    it('should remove itself from the DOM before destroying child regions if flag set on proto', function() {
       _.extend(this.View.prototype, {
         options: null,
         destroyImmediate: true
       });
-    });
-
-    it('should remove itself from the DOM before destroying child regions if flag set on proto', function() {
+      this.setup();
       expect(this.regionOneView.hadParent).to.be.false;
     });
 
     it('should be marked destroyed', function() {
+      this.setup();
       expect(this.layoutViewManager).to.have.property('_isDestroyed', true);
     });
 
     it('should be marked not rendered', function() {
+      this.setup();
       expect(this.layoutViewManager).to.have.property('_isRendered', false);
     });
   });

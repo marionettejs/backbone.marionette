@@ -1,5 +1,3 @@
-/* jshint maxcomplexity: 16, maxstatements: 46, maxlen: 120 */
-
 // Region
 // ------
 

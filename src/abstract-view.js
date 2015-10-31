@@ -1,4 +1,3 @@
-/* jshint maxlen: 114, nonew: false */
 
 //
 // AbstractView

@@ -279,7 +279,7 @@ describe('collectionview - emptyView', function() {
       });
 
       it('renders other empty view instance', function() {
-        expect(this.getEmptyViewStub).to.have.been.calledWith(this.collectionView.children.first());
+        expect(this.getEmptyViewStub).to.have.been.called;
       });
     });
   });

@@ -2,6 +2,9 @@
 
 # Marionette.CompositeView
 
+**_DEPRECATED: `CompositeView` is deprecated. You should use the `replaceElement` option on `Region.show` and
+render a `CollectionView` into a `region` inside a `View` to achieve this functionality._**
+
 A `CompositeView` extends from `CollectionView` to be used as a
 composite view for scenarios where it should represent both a
 branch and leaf in a tree structure, or for scenarios where a

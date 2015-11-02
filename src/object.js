@@ -20,9 +20,11 @@ _.extend(Marionette.Object.prototype, Backbone.Events, {
   //this is a noop method intended to be overridden by classes that extend from this base
   initialize: function() {},
 
-  destroy: function() {
-    this.triggerMethod('before:destroy');
-    this.triggerMethod('destroy');
+  destroy: function(options) {
+    options = options || {};
+
+    this.triggerMethod('before:destroy', options);
+    this.triggerMethod('destroy', options);
     this.stopListening();
 
     return this;

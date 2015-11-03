@@ -23,7 +23,6 @@ Marionette.noConflict = function() {
 // @include ../utils/normalizeUIString.js
 // @include ../utils/normalizeUIKeys.js
 // @include ../utils/normalizeUIValues.js
-// @include ../utils/actAsCollection.js
 // @include ../utils/deprecate.js
 
 // @include ../trigger-method.js
@@ -36,7 +35,7 @@ Marionette.noConflict = function() {
 
 // @include ../object.js
 // @include ../region.js
-// @include ../region-manager.js
+// @include ../regions-mixin.js
 
 // @include ../template-cache.js
 // @include ../renderer.js

@@ -1,6 +1,7 @@
 api
 bower_components
 docs
+gulp
 jsdoc
 src
 tasks
@@ -8,10 +9,11 @@ test
 tmp
 .editorconfig
 .gitignore
-.jshintrc
+.eslintrc
+.jscsrc
 .travis.yml
 bower.json
 CONTRIBUTING.md
-Gruntfile.js
+gulpfile.babel.js
 SpecRunner.html
 upgradeGuide.md

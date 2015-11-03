@@ -1,5 +1,3 @@
-/* jshint maxstatements: 17, maxlen: 117 */
-
 // Composite View
 // --------------
 

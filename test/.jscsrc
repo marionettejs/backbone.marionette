@@ -1,0 +1,7 @@
+{
+  "preset": "google",
+  "disallowSpaceAfterObjectKeys": false,
+  "requireSpaceBeforeObjectValues": false,
+  "maximumLineLength": 200,
+  "esnext": true
+}

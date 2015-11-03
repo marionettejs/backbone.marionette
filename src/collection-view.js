@@ -1,5 +1,3 @@
-/* jshint maxstatements: 16 */
-
 // Collection View
 // ---------------
 

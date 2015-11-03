@@ -1,4 +1,3 @@
-/* jshint maxlen: 143 */
 // Behaviors
 // ---------
 
@@ -30,12 +29,12 @@ Marionette.Behaviors = (function(Marionette, _) {
   }
 
   var methods = {
-    behaviorTriggers: function(behaviorTriggers, behaviors) {
+    behaviorTriggers: function(unusedBehaviorTriggers, behaviors) {
       var triggerBuilder = new BehaviorTriggersBuilder(this, behaviors);
       return triggerBuilder.buildBehaviorTriggers();
     },
 
-    behaviorEvents: function(behaviorEvents, behaviors) {
+    behaviorEvents: function(unusedBehaviorEvents, behaviors) {
       var _behaviorsEvents = {};
 
       _.each(behaviors, function(b, i) {

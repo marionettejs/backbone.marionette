@@ -1,5 +1,3 @@
-/* jshint maxparams: 5 */
-
 // Bind Entity Events & Unbind Entity Events
 // -----------------------------------------
 //

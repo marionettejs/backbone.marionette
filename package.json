@@ -1,6 +1,6 @@
 {
   "name": "backbone.marionette",
-  "description": "Make your Backbone.js apps dance!",
+  "description": "The Backbone Framework",
   "version": "2.4.1",
   "homepage": "https://github.com/marionettejs/backbone.marionette",
   "main": "lib/core/backbone.marionette.js",
@@ -16,22 +16,17 @@
     "client",
     "browser"
   ],
-  "licenses": [
-    {
-      "type": "MIT",
-      "url": "https://github.com/marionettejs/backbone.marionette/blob/master/license.txt"
-    }
-  ],
+  "license": "MIT",
   "scripts": {
-    "test": "gulp",
-    "test-browser": "gulp test-browser",
     "build": "gulp build",
-    "coverage": "gulp coverage"
+    "coverage": "gulp coverage",
+    "coveralls": "gulp coveralls",
+    "test": "gulp"
   },
   "author": {
     "name": "Derick Bailey",
     "email": "derickbailey@gmail.com",
-    "url": "http://derickbailey.lostechies.com"
+    "url": "http://derickbailey.com/"
   },
   "bugs": {
     "url": "https://github.com/marionettejs/backbone.marionette/issues"
@@ -49,82 +44,30 @@
     "underscore": "1.4.4 - 1.8.3"
   },
   "devDependencies": {
-    "babel-core": "^5.2.17",
-    "babel-eslint": "^4.0.5",
-    "babelify": "^6.0.0",
-    "browserify": "^11.0.1",
-    "chai": "^3.2.0",
-    "chai-jq": "^0.0.7",
-    "chai-jquery": "^2.0.0",
-    "del": "^1.1.1",
+    "babel-core": "^5.0.0",
+    "babel-eslint": "^4.1.3",
+    "chai": "^3.4.0",
+    "chai-jq": "0.0.8",
     "dox": "git://github.com/jasonLaster/dox.git#marked",
-    "esperanto": "^0.7.4",
-    "glob": "^5.0.14",
-    "gulp": "^3.8.10",
-    "gulp-babel": "^5.0.0",
-    "gulp-concat-util": "^0.5.2",
+    "gulp": "^3.9.0",
     "gulp-coveralls": "^0.1.4",
-    "gulp-env": "^0.2.0",
     "gulp-eslint": "^1.0.0",
-    "gulp-file": "^0.2.0",
-    "gulp-filter": "^3.0.0",
-    "gulp-istanbul": "^0.10.0",
-    "gulp-jscs": "^2.0.0",
-    "gulp-lintspaces": "^0.3.0",
-    "gulp-livereload": "^3.4.0",
-    "gulp-load-plugins": "^0.10.0",
-    "gulp-mocha": "^2.0.0",
-    "gulp-notify": "^2.1.0",
+    "gulp-header": "^1.7.1",
+    "gulp-istanbul": "^0.10.2",
+    "gulp-jscs": "^3.0.2",
+    "gulp-lintspaces": "^0.3.1",
+    "gulp-mocha": "^2.1.3",
     "gulp-plumber": "^1.0.1",
     "gulp-preprocess": "^1.2.0",
-    "gulp-rename": "^1.2.0",
-    "gulp-sourcemaps": "^1.3.0",
-    "gulp-template": "^3.0.0",
-    "gulp-uglify": "^1.2.0",
+    "gulp-rename": "^1.2.2",
+    "gulp-sourcemaps": "^1.6.0",
+    "gulp-uglify": "^1.4.2",
+    "gulp-unwrapper": "^0.1.0",
     "gulp-yaml-validate": "^1.0.2",
-
-    "grunt": "0.4.5",
-    "grunt-cli": "0.1.13",
-    "grunt-contrib-clean": "0.5.0",
-    "grunt-contrib-concat": "0.1.2",
-    "grunt-contrib-connect": "0.1.2",
-    "grunt-contrib-jshint": "0.10.0",
-    "grunt-contrib-uglify": "0.2.0",
-    "grunt-contrib-watch": "0.6.1",
-    "grunt-coveralls": "0.3.0",
-    "grunt-env": "0.4.1",
-    "grunt-istanbul": "0.3.0",
-    "grunt-jscs": "^1.5.0",
-    "grunt-lintspaces": "0.7.0",
-    "grunt-mocha-test": "0.10.2",
-    "grunt-plato": "0.1.4",
-    "grunt-preprocess": "4.0.0",
-    "grunt-template": "0.2.3",
-    "load-grunt-tasks": "0.3.0",
-    "grunt-yaml-validate": "~0.1.1",
-
-    "highlight.js": "^8.7.0",
-    "isparta": "^3.0.3",
-    "jquery": "2.1.1",
-    "js-yaml": "3.1.0",
-    "jsdom": "2.0.0",
-    "marked": "0.3",
-    "mocha": "^2.1.0",
-    "run-sequence": "^1.0.2",
-    "sinon": "1.10.3",
-    "sinon-chai": "^2.7.0",
-    "unwrap": "0.1.0",
-    "vinyl-buffer": "^1.0.0",
-    "vinyl-source-stream": "^1.0.0",
-    "watchify": "^3.3.1"
-  },
-  "babelBoilerplateOptions": {
-    "entryFileName": "backbone.marionette",
-    "mainVarName": "Marionette",
-    "mochaGlobals": [
-      "stub",
-      "spy",
-      "expect"
-    ]
+    "isparta": "^3.1.0",
+    "jquery": "^2.1.4",
+    "jsdom": "^7.0.2",
+    "sinon": "^1.17.2",
+    "sinon-chai": "^2.8.0"
   }
 }

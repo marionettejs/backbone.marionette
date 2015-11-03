@@ -165,27 +165,38 @@ Marionette.CollectionView = Marionette.View.extend({
   reorder: function() {
     var children = this.children;
     var models = this._filteredSortedModels();
-    var modelsChanged = _.find(models, function(model) {
+    var anyModelsAdded = _.some(models, function(model) {
       return !children.findByModel(model);
     });
 
-    // If the models we're displaying have changed due to filtering
-    // We need to add and/or remove child views
+    // If there are any new models added due to filtering
+    // We need to add child views
     // So render as normal
-    if (modelsChanged) {
+    if (anyModelsAdded) {
       this.render();
     } else {
       // get the DOM nodes in the same order as the models
-      var els = _.map(models, function(model, index) {
+      var elsToReorder = _.map(models, function(model, index) {
         var view = children.findByModel(model);
         view._index = index;
         return view.el;
       });
 
+      // find the views that were children before but arent in this new ordering
+      var filteredOutViews = children.filter(function(view) {
+        return !_.contains(elsToReorder, view.el);
+      });
+
+      this.triggerMethod('before:reorder');
+
       // since append moves elements that are already in the DOM,
       // appending the elements will effectively reorder them
-      this.triggerMethod('before:reorder');
-      this._appendReorderedChildren(els);
+      this._appendReorderedChildren(elsToReorder);
+
+      // remove any views that have been filtered out
+      _.each(filteredOutViews, this.removeChildView, this);
+      this.checkEmpty();
+
       this.triggerMethod('reorder');
     }
   },

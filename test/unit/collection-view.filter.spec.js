@@ -28,6 +28,10 @@ describe('collection view - filter', function() {
       return !spec.filter(child);
     });
 
+    this.noFilter = this.sinon.spy(function() {
+      return true;
+    });
+
     this.CollectionView = Backbone.Marionette.CollectionView.extend({
       emptyView: this.EmptyView,
       childView: this.ChildView,
@@ -379,6 +383,24 @@ describe('collection view - filter', function() {
       it('renders the views in the correct order', function() {
         expect(this.collectionView.$el).to.contain.$text('24');
       });
+    });
+
+    describe('when the filter changes and results in a subset of children models', function() {
+      beforeEach(function() {
+        this.collectionView.filter = this.noFilter;
+        this.collectionView.render();
+        this.collection.sort();
+      });
+
+      it('only renders views that pass the filter', function() {
+        this.collectionView.filter = this.inverseFilter;
+        this.collectionView.reorder();
+        expect(this.collectionView.children.findByModel(this.model1)).not.to.exist;
+        expect(this.collectionView.children.findByModel(this.model2)).to.exist;
+        expect(this.collectionView.children.findByModel(this.model3)).not.to.exist;
+        expect(this.collectionView.children.findByModel(this.model4)).to.exist;
+      });
+
     });
 
     describe('when the filter changes between sorts and the collection hasn\'t changed order', function() {

@@ -64,10 +64,18 @@
     "gulp-unwrapper": "^0.1.0",
     "gulp-util": "^3.0.7",
     "gulp-yaml-validate": "^1.0.2",
+    "gulp-livereload": "^3.4.0",
+    "vinyl-source-stream": "^1.0.0",
+    "vinyl-buffer": "^1.0.0",
     "isparta": "^3.1.0",
     "jquery": "^2.1.4",
     "jsdom": "^7.0.2",
     "sinon": "^1.17.2",
-    "sinon-chai": "^2.8.0"
+    "sinon-chai": "^2.8.0",
+    "babelify": "^7.2.0",
+    "watchify": "^3.6.0",
+    "browserify": "^12.0.0",
+    "run-sequence": "^1.1.0",
+    "glob": "^5.0.14"
   }
 }

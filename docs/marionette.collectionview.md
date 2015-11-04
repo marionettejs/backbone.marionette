@@ -24,6 +24,7 @@ will provide features such as `onShow` callbacks, etc. Please see
   * [CollectionView's `childViewEventPrefix`](#collectionviews-childvieweventprefix)
   * [CollectionView's `childEvents`](#collectionviews-childevents)
   * [CollectionView's `buildChildView`](#collectionviews-buildchildview)
+  * [CollectionView's `removeChildView`](#collectionviews-removechildview)
   * [CollectionView's `addChild`](#collectionviews-addchild)
   * [CollectionView's `reorderOnSort`](#collectionviews-reorderonsort)
 * [CollectionView's `emptyView`](#collectionviews-emptyview)
@@ -303,6 +304,28 @@ buildChildView: function(child, ChildViewClass, childViewOptions){
   // return it
   return view;
 },
+```
+
+### CollectionView's `removeChildView`
+
+Remove a specific view instance and destroy it. This function also updates the indices of later views in the collection in order to keep the children in sync with the collection.
+
+```js
+// add some views to a CollectionView
+var myCollectionView = new MyCollectionView({
+  collection: new Backbone.Collection([fooModel, barModel]);
+});
+
+myCollectionView.render();
+
+var myView = myCollectionView.children.findByModel(foo);
+
+// remove a child view myView
+myCollectionView.removeChildView(myView);
+
+// check if the removed view still exist
+console.log(myCollectionView.children.findByModel(fooModel)); // return undefined
+console.log(myCollectionView.children.findByModel(barModel)); // return a childView bar
 ```
 
 ### CollectionView's `addChild`

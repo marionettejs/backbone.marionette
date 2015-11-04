@@ -799,6 +799,12 @@ describe('region', function() {
       expect(this.myRegion.empty).to.have.returned(this.myRegion);
     });
 
+    it('should return the region even when there was not a view to destroy', function() {
+      // The first empty() should have removed the view, this empty() call would be when there isn't a view
+      this.myRegion.empty();
+      expect(this.myRegion.empty.secondCall).to.have.returned(this.myRegion);
+    });
+
     it('should not have a view', function() {
       expect(this.myRegion.hasView()).to.equal(false);
     });

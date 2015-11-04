@@ -2,7 +2,7 @@
 (function(root, factory) {
 
   if (typeof define === 'function' && define.amd) {
-    define(['backbone', 'underscore','backbone.radio', 'backbone.babysitter','backbone-metal'],
+    define(['backbone', 'underscore','backbone.radio', 'backbone.babysitter'],
       function(Backbone, _) {
       return (root.Marionette = root.Mn = factory(root, Backbone, _));
     });
@@ -11,7 +11,6 @@
     var _ = require('underscore');
     var BabySitter = require('backbone.babysitter');
     var Radio = require('backbone.radio');
-    var Metal = require('backbone-metal');
     module.exports = factory(root, Backbone, _);
   } else {
     root.Marionette = root.Mn = factory(root, root.Backbone, root._);

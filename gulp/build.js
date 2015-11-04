@@ -17,7 +17,6 @@ const buildPath = './lib/';
 const unwrapConfig = [
   './node_modules/backbone.babysitter/lib/backbone.babysitter.js',
   './node_modules/backbone.radio/build/backbone.radio.js',
-  './node_modules/backbone-metal/dist/backbone-metal.js'
 ];
 
 gulp.task('unwrap', function(){

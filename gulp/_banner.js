@@ -19,9 +19,6 @@ const bundled = `${core}
 *
 * Includes Radio
 * https://github.com/marionettejs/backbone.radio/
-*
-* Includes Metal
-* https://github.com/marionettejs/backbone-metal/
 */\n\n\n`;
 
 export default {

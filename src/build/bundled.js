@@ -23,9 +23,6 @@
   /* istanbul ignore next */
   // @include ../../tmp/backbone.radio.js
 
-  /* istanbul ignore next */
-  // @include ../../tmp/backbone-metal.js
-
   // @include ./mn.js
   return Marionette;
 }));

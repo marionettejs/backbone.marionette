@@ -66,7 +66,6 @@
     <script src="node_modules/backbone/backbone.js"></script>
     <script src="node_modules/backbone.babysitter/lib/backbone.babysitter.js"></script>
     <script src="node_modules/backbone.radio/build/backbone.radio.js"></script>
-    <script src="node_modules/backbone-metal/dist/backbone-metal.js"></script>
 
     <script>
         window.Marionette = Backbone.Marionette = {};
@@ -74,12 +73,14 @@
 
     <script src="src/features.js"></script>
     <script>
-      Marionette.FEATURES.class = true;
+      /*
+       * Add Marionette Feature overrides here:
+       * e.g. Marionette.FEATURES.class = true;
+       */
     </script>
 
 
 
-    <script src="src/metal.js"></script>
     <script src="src/trigger-method.js"></script>
     <script src="src/bind-entity-events.js"></script>
     <script src="src/radio-helpers.js"></script>
@@ -136,9 +137,7 @@
     <script src="test/unit/utils/normalizeUIKeys.spec.js"></script>
     <script src="test/unit/utils/deprecate.spec.js"></script>
     <script src="test/unit/merge-options.spec.js"></script>
-    <script src="test/unit/metal.spec.js"></script>
     <script src="test/unit/mixin-underscore-collection.spec.js"></script>
-    <script src="test/unit/normalize-methods.spec.js"></script>
     <script src="test/unit/normalize-ui.spec.js"></script>
     <script src="test/unit/object.spec.js"></script>
     <script src="test/unit/on-attach.spec.js"></script>

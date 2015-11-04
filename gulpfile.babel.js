@@ -2,6 +2,7 @@ import gulp from 'gulp';
 import './gulp/build';
 import './gulp/linting';
 import './gulp/test';
+import './gulp/browser_test';
 
 gulp.task('watch-code', function() {
   gulp.watch(['src/**/*', 'test/**/*'], ['lint-code', 'test']);

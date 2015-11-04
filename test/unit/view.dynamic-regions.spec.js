@@ -15,11 +15,9 @@ describe('itemView - dynamic regions', function() {
       this.barSelector = '#bar-region';
 
       this.fooRegion = new Marionette.Region({el: this.fooSelector});
-      this.fooRegion._parent = this.view._regionManager;
 
       this.BarRegion = Marionette.Region.extend();
       this.barRegion = new this.BarRegion({el: this.barSelector});
-      this.barRegion._parent = this.view._regionManager;
 
       this.regionDefinition = this.sinon.stub().returns({
         fooRegion: this.fooSelector,
@@ -36,14 +34,6 @@ describe('itemView - dynamic regions', function() {
       expect(this.regionDefinition)
         .to.have.been.calledOnce
         .and.have.been.calledWith(this.regionDefinition);
-    });
-
-    // We compare the most unique thing about the regions: the element, because
-    // the regions themselves are circular objects that can't be serialized into
-    // JSON. In the future, we should compare cids.
-    it('returns all the created regions on an object literal', function() {
-      expect(this.view.fooRegion.el).to.deep.equal(this.fooRegion.el);
-      expect(this.view.barRegion.el).to.deep.equal(this.barRegion.el);
     });
 
     // Same as above.
@@ -87,11 +77,11 @@ describe('itemView - dynamic regions', function() {
       this.region = this.layoutView.addRegion('foo', '#foo');
 
       this.view = new Backbone.View();
-      this.layoutView.foo.show(this.view);
+      this.layoutView.getRegion('foo').show(this.view);
     });
 
     it('should add the region to the layoutView', function() {
-      expect(this.layoutView.foo).to.equal(this.region);
+      expect(this.layoutView.getRegion('foo')).to.equal(this.region);
     });
 
     it('should add the region definition to the regions property', function() {
@@ -103,7 +93,7 @@ describe('itemView - dynamic regions', function() {
     });
 
     it('should be able to show a view in the region', function() {
-      expect(this.layoutView.foo.$el.children().length).to.equal(1);
+      expect(this.layoutView.getRegion('foo').$el.children().length).to.equal(1);
     });
 
     it('should trigger a before:add:region event', function() {
@@ -128,11 +118,11 @@ describe('itemView - dynamic regions', function() {
       this.layoutView.render();
 
       this.view = new Backbone.View();
-      this.layoutView.foo.show(this.view);
+      this.layoutView.getRegion('foo').show(this.view);
     });
 
     it('should add the region to the layoutView after it is rendered', function() {
-      expect(this.layoutView.foo).to.equal(this.region);
+      expect(this.layoutView.getRegion('foo')).to.equal(this.region);
     });
 
     it('should set the parent of the region to the layoutView', function() {
@@ -140,7 +130,7 @@ describe('itemView - dynamic regions', function() {
     });
 
     it('should be able to show a view in the region', function() {
-      expect(this.layoutView.foo.$el.children().length).to.equal(1);
+      expect(this.layoutView.getRegion('foo').$el.children().length).to.equal(1);
     });
   });
 
@@ -156,11 +146,11 @@ describe('itemView - dynamic regions', function() {
       this.layoutView.render();
 
       this.view = new Backbone.View();
-      this.layoutView.foo.show(this.view);
+      this.layoutView.getRegion('foo').show(this.view);
     });
 
     it('should re-add the region to the layoutView after it is re-rendered', function() {
-      expect(this.layoutView.foo).to.equal(this.region);
+      expect(this.layoutView.getRegion('foo')).to.equal(this.region);
     });
 
     it('should set the parent of the region to the layoutView', function() {
@@ -168,7 +158,7 @@ describe('itemView - dynamic regions', function() {
     });
 
     it('should be able to show a view in the region', function() {
-      expect(this.layoutView.foo.$el.children().length).to.equal(1);
+      expect(this.layoutView.getRegion('foo').$el.children().length).to.equal(1);
     });
   });
 
@@ -181,7 +171,7 @@ describe('itemView - dynamic regions', function() {
         template: this.template
       });
 
-      this.barRegion = this.layoutView.bar;
+      this.barRegion = this.layoutView.getRegion('bar');
 
       this.region = this.layoutView.addRegion('foo', '#foo');
 
@@ -189,15 +179,15 @@ describe('itemView - dynamic regions', function() {
       this.layoutView.render();
 
       this.view = new Backbone.View();
-      this.layoutView.foo.show(this.view);
+      this.layoutView.getRegion('foo').show(this.view);
     });
 
     it('should keep the original regions', function() {
-      expect(this.layoutView.bar).to.equal(this.barRegion);
+      expect(this.layoutView.getRegion('bar')).to.equal(this.barRegion);
     });
 
     it('should re-add the region to the layoutView after it is re-rendered', function() {
-      expect(this.layoutView.foo).to.equal(this.region);
+      expect(this.layoutView.getRegion('foo')).to.equal(this.region);
     });
 
     it('should set the parent of the region to the layoutView', function() {
@@ -206,7 +196,7 @@ describe('itemView - dynamic regions', function() {
     });
 
     it('should be able to show a view in the region', function() {
-      expect(this.layoutView.foo.$el.children().length).to.equal(1);
+      expect(this.layoutView.getRegion('foo').$el.children().length).to.equal(1);
     });
   });
 
@@ -231,8 +221,8 @@ describe('itemView - dynamic regions', function() {
       this.onRemoveSpy = this.sinon.spy(this.layoutView, 'onRemoveRegion');
 
       this.layoutView.render();
-      this.layoutView.foo.show(new Backbone.View());
-      this.region = this.layoutView.foo;
+      this.layoutView.getRegion('foo').show(new Backbone.View());
+      this.region = this.layoutView.getRegion('foo');
 
       this.region.on('empty', this.emptyHandler);
       this.layoutView.on('before:remove:region', this.beforeRemoveHandler);
@@ -256,9 +246,8 @@ describe('itemView - dynamic regions', function() {
     });
 
     it('should remove the region', function() {
-      expect(this.layoutView.foo).to.be.undefined;
+      expect(this.layoutView.getRegion('foo')).to.be.undefined;
       expect(this.layoutView.regions.foo).to.be.undefined;
-      expect(this.layoutView.regionManager.get('foo')).to.be.undefined;
     });
   });
 
@@ -274,17 +263,16 @@ describe('itemView - dynamic regions', function() {
       this.layoutView = new this.View();
 
       this.layoutView.render();
-      this.layoutView.foo.show(new Backbone.View());
+      this.layoutView.getRegion('foo').show(new Backbone.View());
 
       this.layoutView.removeRegion('foo');
       this.layoutView.render();
 
-      this.region = this.layoutView.foo;
+      this.region = this.layoutView.getRegion('foo');
     });
 
     it('should not re-attach the region to the layoutView', function() {
       expect(this.region).to.be.undefined;
-      expect(this.layoutView.regionManager.get('foo')).to.be.undefined;
     });
   });
 
@@ -301,13 +289,44 @@ describe('itemView - dynamic regions', function() {
       this.region.on('empty', this.emptyHandler);
 
       this.view = new Backbone.View();
-      this.layoutView.foo.show(this.view);
+      this.layoutView.getRegion('foo').show(this.view);
 
       this.layoutView.destroy();
     });
 
     it('should empty the region', function() {
       expect(this.emptyHandler).to.have.been.called;
+    });
+  });
+
+  describe('when calling emptyRegions', function() {
+    beforeEach(function() {
+
+      this.view = new Marionette.View({
+        template: this.template
+      });
+      this.view.render();
+      this.region = this.view.addRegion('foo', '#foo');
+      this.regions = this.view.getRegions();
+      this.region.show(new Backbone.View());
+
+      this.emptyHandler = this.sinon.stub();
+      this.region.on('empty', this.emptyHandler);
+
+      this.sinon.spy(this.view, 'emptyRegions');
+      this.view.emptyRegions();
+    });
+
+    it('should empty all regions', function() {
+      expect(this.emptyHandler).to.have.been.called;
+    });
+
+    it('should not remove all regions', function() {
+      expect(this.view.getRegion('foo')).to.equal(this.region);
+    });
+
+    it('should return the regions', function() {
+      expect(this.view.emptyRegions).to.have.returned(this.regions);
     });
   });
 });

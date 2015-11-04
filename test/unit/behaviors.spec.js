@@ -488,7 +488,7 @@ describe('Behaviors', function() {
 
         this.layoutView = new this.ItemView();
         this.layoutView.render();
-        this.layoutView.bazRegion.show(new this.View());
+        this.layoutView.getRegion('bazRegion').show(new this.View());
         this.layoutView.destroy();
       });
 

@@ -47,6 +47,18 @@ describe('composite view', function() {
     });
   });
 
+  describe('when instantiating a composite view', function() {
+    beforeEach(function() {
+      this.sinon.spy(Marionette, 'deprecate');
+
+      this.view = new Backbone.Marionette.CompositeView();
+    });
+
+    it('should call Marionette.deprecate', function() {
+      expect(Marionette.deprecate).to.be.calledWith('CompositeView is deprecated. Convert to View at your earliest convenience');
+    });
+  });
+
   describe('when a composite view has a template without a model', function() {
     beforeEach(function() {
       this.templateFn = _.template('composite template');

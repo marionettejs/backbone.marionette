@@ -46,20 +46,15 @@ describe('layoutView', function() {
       var suite = this;
       this.ViewInitialize = this.View.extend({
         initialize: function() {
-          suite.regionOne = this.regionOne;
+          suite.regionOne = this.getRegion('regionOne');
         }
       });
 
       this.layoutViewManager = new this.ViewInitialize();
     });
 
-    it('should instantiate the specified region managers', function() {
-      expect(this.layoutViewManager).to.have.property('regionOne');
-      expect(this.layoutViewManager).to.have.property('regionTwo');
-    });
-
     it('should instantiate the specified region before initialize', function() {
-      expect(this.regionOne).to.equal(this.layoutViewManager.regionOne);
+      expect(this.regionOne).to.equal(this.layoutViewManager.getRegion('regionOne'));
     });
 
     it('should create backlink with region manager', function() {
@@ -108,29 +103,24 @@ describe('layoutView', function() {
     });
 
     it('should instantiate specific regions with custom regions if specified', function() {
-      expect(this.layoutViewManager).to.have.property('regionOne');
-      expect(this.layoutViewManager.regionOne).to.be.instanceof(this.CustomRegion1);
-      expect(this.layoutViewManager).to.have.property('regionTwo');
-      expect(this.layoutViewManager.regionTwo).to.be.instanceof(this.CustomRegion2);
+      expect(this.layoutViewManager.getRegion('regionOne')).to.be.instanceof(this.CustomRegion1);
+      expect(this.layoutViewManager.getRegion('regionTwo')).to.be.instanceof(this.CustomRegion2);
     });
 
     it('should instantiate the default regionManager if specified', function() {
-      expect(this.layoutViewManager).to.have.property('regionThree');
-      expect(this.layoutViewManager.regionThree).to.be.instanceof(this.CustomRegion1);
-      expect(this.layoutViewManager).to.have.property('regionFour');
-      expect(this.layoutViewManager.regionThree).to.be.instanceof(this.CustomRegion1);
+      expect(this.layoutViewManager.getRegion('regionThree')).to.be.instanceof(this.CustomRegion1);
+      expect(this.layoutViewManager.getRegion('regionThree')).to.be.instanceof(this.CustomRegion1);
     });
 
     it('should instantiate marionette regions is no regionClass is specified', function() {
       var layoutViewManagerNoDefault = new this.ViewNoDefaultRegion();
-      expect(layoutViewManagerNoDefault).to.have.property('regionTwo');
-      expect(layoutViewManagerNoDefault.regionTwo).to.be.instanceof(Backbone.Marionette.Region);
+      expect(layoutViewManagerNoDefault.getRegion('regionTwo')).to.be.instanceof(Backbone.Marionette.Region);
     });
 
     it('should pass extra options to the custom regionClass', function() {
-      expect(this.layoutViewManager.regionTwo).to.have.property('options');
-      expect(this.layoutViewManager.regionTwo.options).to.have.property('specialOption');
-      expect(this.layoutViewManager.regionTwo.options.specialOption).to.be.ok;
+      expect(this.layoutViewManager.getRegion('regionTwo')).to.have.property('options');
+      expect(this.layoutViewManager.getRegion('regionTwo').options).to.have.property('specialOption');
+      expect(this.layoutViewManager.getRegion('regionTwo').options.specialOption).to.be.ok;
     });
   });
 
@@ -159,8 +149,7 @@ describe('layoutView', function() {
     });
 
     it('should build the regions from the returns object literal', function() {
-      expect(this.layoutView).to.have.property('foo');
-      expect(this.layoutView.foo).to.be.instanceof(Backbone.Marionette.Region);
+      expect(this.layoutView.getRegion('foo')).to.be.instanceof(Backbone.Marionette.Region);
     });
   });
 
@@ -174,9 +163,9 @@ describe('layoutView', function() {
     });
 
     it('should find the region scoped within the rendered template', function() {
-      this.layoutViewManager.regionOne._ensureElement();
+      this.layoutViewManager.getRegion('regionOne')._ensureElement();
       var el = this.layoutViewManager.$('#regionOne');
-      expect(this.layoutViewManager.regionOne.$el[0]).to.equal(el[0]);
+      expect(this.layoutViewManager.getRegion('regionOne').$el[0]).to.equal(el[0]);
     });
 
     it('should call "onBeforeRender" before rendering', function() {
@@ -220,8 +209,8 @@ describe('layoutView', function() {
         $('<span id="parent">').append(this.layoutViewManager.el);
         this.layoutViewManager.render();
 
-        this.regionOne = this.layoutViewManager.regionOne;
-        this.regionTwo = this.layoutViewManager.regionTwo;
+        this.regionOne = this.layoutViewManager.getRegion('regionOne');
+        this.regionTwo = this.layoutViewManager.getRegion('regionTwo');
 
         var View = Marionette.View.extend({
           template: false,
@@ -251,8 +240,8 @@ describe('layoutView', function() {
 
     it('should delete the region managers', function() {
       this.setup();
-      expect(this.layoutViewManager.regionOne).to.be.undefined;
-      expect(this.layoutViewManager.regionTwo).to.be.undefined;
+      expect(this.layoutViewManager.getRegion('regionOne')).to.be.undefined;
+      expect(this.layoutViewManager.getRegion('regionTwo')).to.be.undefined;
     });
 
     it('should return the view', function() {
@@ -316,13 +305,14 @@ describe('layoutView', function() {
 
     beforeEach(function() {
       this.layoutView = new this.View().render();
+      this.regionOne = this.layoutView.getRegion('regionOne');
       this.childView = new Backbone.View();
-      this.sinon.spy(this.layoutView.regionOne, 'show');
+      this.sinon.spy(this.regionOne, 'show');
       this.layoutView.showChildView('regionOne', this.childView, options);
     });
 
     it('passes the options hash to the region', function() {
-      expect(this.layoutView.regionOne.show)
+      expect(this.regionOne.show)
         .to.have.been.calledOnce
         .and.calledWith(this.childView, options);
     });
@@ -336,7 +326,7 @@ describe('layoutView', function() {
 
       this.layoutView = new this.View();
       this.layoutView.onRender = function() {
-        suite.regionOne = suite.layoutView.regionOne;
+        suite.regionOne = suite.layoutView.getRegion('regionOne');
         suite.regionOne._ensureElement();
       };
 
@@ -373,16 +363,16 @@ describe('layoutView', function() {
       this.layoutView = new this.ViewBoundRender({
         model: new Backbone.Model()
       });
-      this.sinon.spy(this.layoutView.regionOne, 'empty');
+      this.sinon.spy(this.layoutView.getRegion('regionOne'), 'empty');
       this.layoutView.render();
 
       this.view = new Backbone.View();
       this.view.destroy = function() {};
-      this.layoutView.regionOne.show(this.view);
+      this.layoutView.getRegion('regionOne').show(this.view);
 
       this.layoutView.render();
-      this.layoutView.regionOne.show(this.view);
-      this.region = this.layoutView.regionOne;
+      this.layoutView.getRegion('regionOne').show(this.view);
+      this.region = this.layoutView.getRegion('regionOne');
     });
 
     it('should re-bind the regions to the newly rendered elements', function() {
@@ -405,7 +395,7 @@ describe('layoutView', function() {
       beforeEach(function() {
         var suite = this;
         this.layoutView.onRender = function() {
-          this.regionOne.show(suite.view);
+          this.getRegion('regionOne').show(suite.view);
         };
 
         this.layoutView.model.trigger('change');
@@ -421,11 +411,11 @@ describe('layoutView', function() {
     beforeEach(function() {
       this.layoutView = new this.View();
       this.layoutView.render();
-      this.region = this.layoutView.regionOne;
+      this.region = this.layoutView.getRegion('regionOne');
 
       this.view = new Backbone.View();
       this.view.destroy = function() {};
-      this.layoutView.regionOne.show(this.view);
+      this.layoutView.getRegion('regionOne').show(this.view);
       this.layoutView.destroy();
 
       this.sinon.spy(this.region, 'empty');
@@ -455,7 +445,7 @@ describe('layoutView', function() {
   describe('when getting a region', function() {
     beforeEach(function() {
       this.layoutView = new this.View();
-      this.region = this.layoutView.regionOne;
+      this.region = this.layoutView.getRegion('regionOne');
     });
 
     it('should return the region', function() {
@@ -466,7 +456,7 @@ describe('layoutView', function() {
   describe('when checking for a region', function() {
     beforeEach(function() {
       this.layoutView = new this.View();
-      this.region = this.layoutView.regionOne;
+      this.region = this.layoutView.getRegion('regionOne');
     });
 
     it('should return if has the region', function() {
@@ -552,27 +542,6 @@ describe('layoutView', function() {
     });
   });
 
-  describe('overiding default regionManager', function() {
-    beforeEach(function() {
-      var suite = this;
-      this.spy     = this.sinon.spy();
-      this.layout  = new (Marionette.View.extend({
-        getRegionManager: function() {
-          suite.spy.apply(this, arguments);
-          return new Marionette.RegionManager();
-        }
-      }))();
-    });
-
-    it('should call into the custom regionManager lookup', function() {
-      expect(this.spy).to.have.been.called;
-    });
-
-    it('should call the custom regionManager with the view as the context', function() {
-      expect(this.spy).to.have.been.calledOn(this.layout);
-    });
-  });
-
   describe('childView get onDomRefresh from parent', function() {
     beforeEach(function() {
       var suite = this;
@@ -652,9 +621,9 @@ describe('layoutView', function() {
       });
 
       it('after initialization, the view\'s regions should be scoped to its parent view', function() {
-        expect(this.layoutViewInstance.regionOne.$el).to.have.length(1);
-        expect(this.layoutViewInstance.regionOne.$el.is(this.$inScopeRegion)).to.equal(true);
-        expect(this.layoutViewInstance.regionOne.$el.is(this.$outOfScopeRegion)).to.equal(false);
+        expect(this.layoutViewInstance.getRegion('regionOne').$el).to.have.length(1);
+        expect(this.layoutViewInstance.getRegion('regionOne').$el.is(this.$inScopeRegion)).to.equal(true);
+        expect(this.layoutViewInstance.getRegion('regionOne').$el.is(this.$outOfScopeRegion)).to.equal(false);
       });
     });
   });

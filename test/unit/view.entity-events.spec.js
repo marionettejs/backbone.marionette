@@ -204,8 +204,8 @@ describe('view entity events', function() {
       this.itemViewTwo = new this.View({model: this.model});
 
       this.layoutView.render();
-      this.layoutView.child.show(this.itemViewOne);
-      this.layoutView.child.show(this.itemViewTwo);
+      this.layoutView.getRegion('child').show(this.itemViewOne);
+      this.layoutView.getRegion('child').show(this.itemViewTwo);
 
       this.model.trigger('baz');
     });

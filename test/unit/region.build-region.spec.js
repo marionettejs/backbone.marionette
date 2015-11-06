@@ -1,7 +1,13 @@
 describe('Region', function() {
   describe('.buildRegion', function() {
     beforeEach(function() {
+
       this.DefaultRegionClass = Marionette.Region.extend();
+
+      this.view = new Marionette.View({
+        template: false,
+        regionClass: this.DefaultRegionClass
+      });
 
       this.fooSelector = '#foo-region';
       this.fooRegion   = new this.DefaultRegionClass({el: this.fooSelector});
@@ -15,13 +21,7 @@ describe('Region', function() {
 
     describe('with a selector string', function() {
       beforeEach(function() {
-        this.region = Marionette.Region.buildRegion(this.fooSelector, this.DefaultRegionClass);
-      });
-
-      it('returns the region', function() {
-        this.checkProperties(function(props) {
-          expect(props(this.region)).to.deep.equal(props(this.fooRegion));
-        });
+        this.region = this.view._buildRegion(this.fooSelector);
       });
 
       it('uses the default region class', function() {
@@ -36,13 +36,7 @@ describe('Region', function() {
     describe('with a region class', function() {
       describe('with `el` defined', function() {
         beforeEach(function() {
-          this.region = Marionette.Region.buildRegion(this.BarRegion, this.DefaultRegionClass);
-        });
-
-        it('returns the region', function() {
-          this.checkProperties(function(props) {
-            expect(props(this.region)).to.deep.equal(props(this.barRegion));
-          });
+          this.region = this.view._buildRegion(this.BarRegion);
         });
 
         it('uses the passed in region class', function() {
@@ -59,7 +53,7 @@ describe('Region', function() {
           this.BarRegion = Marionette.Region.extend();
 
           this.buildRegion = function() {
-            Marionette.Region.buildRegion(this.BarRegion, this.DefaultRegionClass);
+            this.view._buildRegion(this.BarRegion);
           }.bind(this);
         });
 
@@ -73,13 +67,7 @@ describe('Region', function() {
       describe('with `selector` defined', function() {
         beforeEach(function() {
           this.definition = {selector: this.fooSelector};
-          this.region = Marionette.Region.buildRegion(this.definition, this.DefaultRegionClass);
-        });
-
-        it('returns the region', function() {
-          this.checkProperties(function(props) {
-            expect(props(this.region)).to.deep.equal(props(this.fooRegion));
-          });
+          this.region = this.view._buildRegion(this.definition);
         });
 
         it('uses the default region class', function() {
@@ -95,13 +83,7 @@ describe('Region', function() {
         describe('when el is a selector string', function() {
           beforeEach(function() {
             this.definition = {el: this.fooSelector};
-            this.region = Marionette.Region.buildRegion(this.definition, this.DefaultRegionClass);
-          });
-
-          it('returns the region', function() {
-            this.checkProperties(function(props) {
-              expect(props(this.region)).to.deep.equal(props(this.fooRegion));
-            });
+            this.region = this.view._buildRegion(this.definition);
           });
 
           it('uses the default region class', function() {
@@ -118,13 +100,7 @@ describe('Region', function() {
             this.el = $('<div id="baz-region">')[0];
             this.bazRegion = new this.DefaultRegionClass({el: this.el});
             this.definition = {el: this.el};
-            this.region = Marionette.Region.buildRegion(this.definition, this.DefaultRegionClass);
-          });
-
-          it('returns the region', function() {
-            this.checkProperties(function(props) {
-              expect(props(this.region)).to.deep.equal(props(this.bazRegion));
-            });
+            this.region = this.view._buildRegion(this.definition);
           });
 
           it('uses the default region class', function() {
@@ -139,7 +115,7 @@ describe('Region', function() {
             beforeEach(function() {
               this.parentEl = $('<div id="not-actual-parent"></div>');
               this.definition = _.defaults({parentEl: this.parentEl}, this.definition);
-              this.region = Marionette.Region.buildRegion(this.definition, this.DefaultRegionClass);
+              this.region = this.view._buildRegion(this.definition);
             });
 
             it('returns the jQuery(el)', function() {
@@ -154,13 +130,7 @@ describe('Region', function() {
             this.el = $('<div id="baz-region">');
             this.bazRegion = new this.DefaultRegionClass({el: this.el});
             this.definition = {el: this.el};
-            this.region = Marionette.Region.buildRegion(this.definition, this.DefaultRegionClass);
-          });
-
-          it('returns the region', function() {
-            this.checkProperties(function(props) {
-              expect(props(this.region)).to.deep.equal(props(this.bazRegion));
-            });
+            this.region = this.view._buildRegion(this.definition);
           });
 
           it('uses the default region class', function() {
@@ -179,7 +149,7 @@ describe('Region', function() {
           this.definition = {el: this.el};
 
           this.buildRegion = function() {
-            Marionette.Region.buildRegion(this.definition, this.DefaultRegionClass);
+            this.view._buildRegion(this.definition);
           }.bind(this);
         });
 
@@ -205,17 +175,9 @@ describe('Region', function() {
             this.baz2Region = new this.BazRegion({el: this.el});
             this.baz3Region = new this.BazRegion({el: this.$el});
 
-            this.region1 = Marionette.Region.buildRegion(this.region1Definition, this.DefaultRegionClass);
-            this.region2 = Marionette.Region.buildRegion(this.region2Definition, this.DefaultRegionClass);
-            this.region3 = Marionette.Region.buildRegion(this.region3Definition, this.DefaultRegionClass);
-          });
-
-          it('returns the regions', function() {
-            this.checkProperties(function(props) {
-              expect(props(this.region1)).to.deep.equal(props(this.baz1Region));
-              expect(props(this.region2)).to.deep.equal(props(this.baz2Region));
-              expect(props(this.region3)).to.deep.equal(props(this.baz3Region));
-            });
+            this.region1 = this.view._buildRegion(this.region1Definition);
+            this.region2 = this.view._buildRegion(this.region2Definition);
+            this.region3 = this.view._buildRegion(this.region3Definition);
           });
 
           it('uses the region class', function() {
@@ -235,13 +197,7 @@ describe('Region', function() {
           describe('with `el` defined on `regionClass`', function() {
             beforeEach(function() {
               this.definition = {regionClass: this.BarRegion};
-              this.region = Marionette.Region.buildRegion(this.definition, this.DefaultRegionClass);
-            });
-
-            it('returns the region', function() {
-              this.checkProperties(function(props) {
-                expect(props(this.region)).to.deep.equal(props(this.barRegion));
-              });
+              this.region = this.view._buildRegion(this.definition);
             });
 
             it('uses the region class', function() {
@@ -254,7 +210,7 @@ describe('Region', function() {
               this.definition = {regionClass: this.BazRegion};
 
               this.buildRegion = function() {
-                Marionette.Region.buildRegion(this.definition, this.DefaultRegionClass);
+                this.view._buildRegion(this.definition);
               }.bind(this);
             });
 
@@ -274,7 +230,7 @@ describe('Region', function() {
             myOtherRegionOption: 'foobar'
           };
 
-          this.region = Marionette.buildRegion(this.definition, this.DefaultRegionClass);
+          this.region = this.view._buildRegion(this.definition);
         });
 
         expect('it sets the region options', function() {
@@ -284,19 +240,21 @@ describe('Region', function() {
       });
     });
 
-    describe('with a missing regionConfig', function() {
-      it('throws an error', function() {
-        expect(function() {
-          Marionette.Region.buildRegion();
-        }).to.throw(TypeError);
+    describe('with a instantiated region', function() {
+      beforeEach(function() {
+        this.region = this.view._buildRegion(this.barRegion);
+      });
+
+      it('uses the region class', function() {
+        expect(this.region).to.be.an.instanceof(this.BarRegion);
       });
     });
 
-    describe('with an improper object literal', function() {
+    describe('with a missing regionConfig', function() {
       beforeEach(function() {
         this.buildRegion = function() {
-          Marionette.Region.buildRegion({});
-        };
+          this.view._buildRegion();
+        }.bind(this);
       });
 
       it('throws an error', function() {

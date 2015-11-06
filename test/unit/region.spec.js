@@ -591,7 +591,7 @@ describe('region', function() {
         },
 
         onBeforeShow: function() {
-          this.subRegion.show(new suite.SubView());
+          this.getRegion('subRegion').show(new suite.SubView());
         }
       });
 
@@ -1042,7 +1042,7 @@ describe('region', function() {
       this.barRegion = this.fooView.getRegion('barRegion');
       this.sinon.spy(this.barRegion, 'attachView');
       this.sinon.spy(this.fooView.childEvents, 'attachViewClicked');
-      this.fooView.getRegion('barRegion').attachView(this.viewAttached);
+      this.barRegion.attachView(this.viewAttached);
     });
 
     it('should not render the view', function() {
@@ -1058,7 +1058,7 @@ describe('region', function() {
     });
 
     it('should return the region', function() {
-      expect(this.barRegion.attachView).to.have.returned(this.fooView.barRegion);
+      expect(this.barRegion.attachView).to.have.returned(this.fooView.getRegion('barRegion'));
     });
 
     it('should call the child events defined on parent view', function() {
@@ -1112,14 +1112,14 @@ describe('region', function() {
         anotherRegion: '#region2'
       });
 
-      this.region = this.itemView.MyRegion;
+      this.region = this.itemView.getRegion('MyRegion');
       this.sinon.spy(this.region, 'empty');
 
       this.itemView.removeRegion('MyRegion');
     });
 
     it('should be removed from the view', function() {
-      expect(this.itemView.MyRegion).to.be.undefined;
+      expect(this.itemView.getRegion('MyRegion')).to.be.undefined;
     });
 
     it('should call "empty" of the region', function() {
@@ -1135,7 +1135,7 @@ describe('region', function() {
         anotherRegion: '#region2'
       });
 
-      this.region = this.itemView.MyRegion;
+      this.region = this.itemView._regions.MyRegion;
     });
 
     it('should return the region', function() {

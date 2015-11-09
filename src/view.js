@@ -304,6 +304,10 @@ Marionette.View = Backbone.View.extend({
 
     // call the parent view's childEvents handler
     var childEvents = Marionette.getOption(layoutView, 'childEvents');
+
+    // since childEvents can be an object or a function use Marionette._getValue
+    // to handle the abstaction for us.
+    childEvents = Marionette._getValue(childEvents, layoutView);
     var normalizedChildEvents = layoutView.normalizeMethods(childEvents);
 
     if (normalizedChildEvents && _.isFunction(normalizedChildEvents[eventName])) {

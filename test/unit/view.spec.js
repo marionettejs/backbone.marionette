@@ -313,6 +313,12 @@ describe('base view', function() {
 
       this.layoutViewOnBoomHandler = this.sinon.spy();
       this.layoutView.onBoom = this.layoutViewOnBoomHandler;
+
+      this.childEventsFunction = _.bind(function() {
+        return {
+          'boom': this.layoutViewOnBoomHandler
+        };
+      }, this);
     });
 
     describe('when there is not a containing layout', function() {
@@ -351,6 +357,24 @@ describe('base view', function() {
           .and.to.have.been.calledOn(this.layoutView)
           .and.CalledOnce;
       });
+
     });
+
+    describe('when childEvents was passed as a function', function() {
+      beforeEach(function() {
+        // use the function definition of childEvents instead of the hash
+        this.layoutView.childEvents = this.childEventsFunction;
+        this.layoutView.showChildView('child', this.childView);
+        this.childView.triggerMethod('boom', 'foo', 'bar');
+      });
+
+      it('invokes the layout childEvents handler', function() {
+        expect(this.layoutViewOnBoomHandler)
+          .to.have.been.calledWith(this.childView, 'foo', 'bar')
+          .and.to.have.been.calledOn(this.layoutView)
+          .and.CalledOnce;
+      });
+    });
+
   });
 });

@@ -479,7 +479,7 @@ var MyView = Marionette.ItemView.extend({
   templateHelpers: function () {
     return {
       showMessage: function(){
-        return this.name + " is the coolest!";
+        return this.model.get('name') + " is the coolest!";
       },
 
       percent: this.model.get('decimal') * 100

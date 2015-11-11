@@ -313,6 +313,15 @@ Marionette.View = Backbone.View.extend({
     if (normalizedChildEvents && _.isFunction(normalizedChildEvents[eventName])) {
       normalizedChildEvents[eventName].apply(layoutView, callArgs);
     }
+
+    // call the parent view's proxyEvent handlers
+    var childTriggers = Marionette.getOption(layoutView, 'childTriggers');
+    childTriggers = Marionette._getValue(childTriggers, layoutView);
+
+    // Call the event with the proxy name on the parent layout
+    if (childTriggers && _.isString(childTriggers[eventName])) {
+      layoutView.triggerMethod.apply(layoutView, [childTriggers[eventName]].concat(args));
+    }
   },
 
   // This method returns any views that are immediate

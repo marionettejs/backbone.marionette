@@ -340,20 +340,8 @@ Marionette.AbstractView = Backbone.View.extend({
       return;
     }
 
-    // invoke triggerMethod on parent view
-    var eventPrefix = Marionette.getOption(layoutView, 'childViewEventPrefix');
-    var prefixedEventName = eventPrefix + ':' + eventName;
-    var callArgs = [this].concat(args);
-
-    Marionette._triggerMethod(layoutView, [prefixedEventName].concat(callArgs));
-
-    // call the parent view's childEvents handler
-    var childEvents = Marionette.getOption(layoutView, 'childEvents');
-    var normalizedChildEvents = layoutView.normalizeMethods(childEvents);
-
-    if (!!normalizedChildEvents && _.isFunction(normalizedChildEvents[eventName])) {
-      normalizedChildEvents[eventName].apply(layoutView, callArgs);
-    }
+    // let the layoutView trigger its childEvents
+    layoutView.triggerChildEvents(eventName, this, args);
   },
 
   // This method returns any views that are immediate

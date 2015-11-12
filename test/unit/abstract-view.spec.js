@@ -339,4 +339,103 @@ describe('base view', function() {
       });
     });
   });
+
+  describe('when proxying events to a parent layout using region aliases', function() {
+
+    beforeEach(function() {
+      this.LayoutView = Marionette.View.extend({
+        template: _.template('<div class="child1"></div><div class="child2"></div>'),
+
+        regions: {
+          'child1': '.child1',
+          'child2': '.child2',
+        },
+
+        childEvents: {
+          '@region.child1 boom': 'onBoom1',
+          '@region.child2 boom': 'onBoom2',
+        },
+
+      });
+
+      this.ChildView = Marionette.View.extend({
+        template: false
+      });
+
+      this.layoutView = new this.LayoutView();
+      this.child1View = new this.ChildView();
+      this.child2View = new this.ChildView();
+      this.layoutView.render();
+
+      this.layoutEventHandler = this.sinon.spy();
+      this.layoutView.on('childview:boom', this.layoutEventHandler);
+
+      this.layoutEventOnHandler = this.sinon.spy();
+      this.layoutView.onChildviewBoom = this.layoutEventOnHandler;
+
+      this.layoutViewOnBoom1Handler = this.sinon.spy();
+      this.layoutViewOnBoom2Handler = this.sinon.spy();
+
+      this.layoutView.onBoom1 = this.layoutViewOnBoom1Handler;
+      this.layoutView.onBoom2 = this.layoutViewOnBoom2Handler;
+    });
+
+    describe('when there is not a containing layout', function() {
+      beforeEach(function() {
+        this.child1View.triggerMethod('boom', 'foo', 'bar');
+        this.child2View.triggerMethod('boom', 'foo', 'bar');
+      });
+
+      it('does not emit the event on the layout', function() {
+        expect(this.layoutEventHandler).not.to.have.been.called;
+      });
+    });
+
+    describe('when there is a containing layout', function() {
+      beforeEach(function() {
+        this.layoutView.showChildView('child1', this.child1View);
+        this.layoutView.showChildView('child2', this.child2View);
+        this.child1View.triggerMethod('boom', 'foo', 'bar');
+        this.child2View.triggerMethod('boom', 'foo', 'bar');
+      });
+
+      it('emits the event on the layout', function() {
+
+        expect(this.layoutEventHandler)
+          .to.have.been.calledWith(this.child1View, 'foo', 'bar')
+          .and.to.have.been.calledOn(this.layoutView)
+          .and.CalledOnce;
+
+        expect(this.layoutEventHandler)
+          .to.have.been.calledWith(this.child2View, 'foo', 'bar')
+          .and.to.have.been.calledOn(this.layoutView)
+          .and.CalledOnce;
+      });
+
+      it('invokes the layout on handler for each region', function() {
+        expect(this.layoutEventOnHandler)
+          .to.have.been.calledWith(this.child1View, 'foo', 'bar')
+          .and.to.have.been.calledOn(this.layoutView)
+          .and.CalledOnce;
+
+        expect(this.layoutEventOnHandler)
+          .to.have.been.calledWith(this.child2View, 'foo', 'bar')
+          .and.to.have.been.calledOn(this.layoutView)
+          .and.CalledOnce;
+      });
+
+      it('invokes the individual region layout childEvents handlers', function() {
+        expect(this.layoutViewOnBoom1Handler)
+          .to.have.been.calledWith(this.child1View, 'foo', 'bar')
+          .and.to.have.been.calledOn(this.layoutView)
+          .and.CalledOnce;
+
+        expect(this.layoutViewOnBoom2Handler)
+          .to.have.been.calledWith(this.child2View, 'foo', 'bar')
+          .and.to.have.been.calledOn(this.layoutView)
+          .and.CalledOnce;
+      });
+
+    });
+  });
 });

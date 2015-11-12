@@ -234,6 +234,41 @@ Marionette.View = Marionette.AbstractView.extend({
     });
   },
 
+  // given an event name, childView and args determine if the layout view's
+  // we need to trigger any matching handlers defined in the childEvents options
+  triggerChildEvents: function(eventName, childView, args) {
+    // invoke triggerMethod on parent view
+    var eventPrefix = this.getOption('childViewEventPrefix');
+    var prefixedEventName = eventPrefix + ':' + eventName;
+    var callArgs = [childView].concat(args);
+
+    // trigger the prefixed event
+    Marionette._triggerMethod(this, [prefixedEventName].concat(callArgs));
+
+    var childEvents = this.getOption('childEvents');
+    var normalizedChildEvents = this.normalizeMethods(childEvents);
+
+    // iterate over all normalized events looking for matching childEventName
+    // determine if there is also a region alias that needs to be bound correctly
+    _.each(normalizedChildEvents, function(eventHandler, childEventName) {
+        var regionEventSplitter = /^(@region\.(.*?)\s+)?\s*(.*)$/;
+        var match = childEventName.match(regionEventSplitter);
+        var regionName = match[2];
+        var regionEventName = match[3];
+
+        // is there a valid region alias event bound to this childView
+        var validRegionAliasEvent = !!regionName &&
+                                    this.getChildView(regionName) === childView &&
+                                    regionEventName === eventName;
+
+        if (_.isFunction(eventHandler) && (validRegionAliasEvent || childEventName === eventName)) {
+          eventHandler.apply(this, callArgs);
+        }
+      }, this);
+
+    return childView;
+  },
+
   _getImmediateChildren: function() {
     return _.chain(this.regionManager.getRegions())
       .pluck('currentView')

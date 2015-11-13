@@ -333,26 +333,17 @@ Marionette.View = Backbone.View.extend({
     }, children);
   },
 
-  // Internal utility for building an ancestor
-  // view tree list.
-  _getAncestors: function() {
-    var ancestors = [];
+  // Walk the _parent tree until we find a layout view (if one exists).
+  // Returns the parent layout view hierarchically closest to this view.
+  _parentLayoutView: function() {
     var parent  = this._parent;
 
     while (parent) {
-      ancestors.push(parent);
+      if (parent instanceof Marionette.LayoutView) {
+        return parent;
+      }
       parent = parent._parent;
     }
-
-    return ancestors;
-  },
-
-  // Returns the containing parent view.
-  _parentLayoutView: function() {
-    var ancestors = this._getAncestors();
-    return _.find(ancestors, function(parent) {
-      return parent instanceof Marionette.LayoutView;
-    });
   },
 
   // Imports the "normalizeMethods" to transform hashes of

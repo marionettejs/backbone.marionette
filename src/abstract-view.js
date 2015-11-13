@@ -393,26 +393,17 @@ var AbstractView = Backbone.View.extend({
     }, children);
   },
 
-  // Internal utility for building an ancestor
-  // view tree list.
-  _getAncestors: function() {
-    var ancestors = [];
+  // Walk the _parent tree until we find a view (if one exists).
+  // Returns the parent view hierarchically closest to this view.
+  _parentItemView: function() {
     var parent  = this._parent;
 
     while (parent) {
-      ancestors.push(parent);
+      if (parent instanceof AbstractView) {
+        return parent;
+      }
       parent = parent._parent;
     }
-
-    return ancestors;
-  },
-
-  // Returns the containing parent view.
-  _parentItemView: function() {
-    var ancestors = this._getAncestors();
-    return _.find(ancestors, function(parent) {
-      return parent instanceof AbstractView;
-    });
   },
 
   // Imports the "normalizeMethods" to transform hashes of

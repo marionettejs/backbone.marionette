@@ -123,7 +123,7 @@ describe('trigger event and method name', function() {
 
       this.View = Marionette.View.extend({
         template: _.template('foo'),
-        triggers: {'click' : 'foo:click'}
+        triggers: {'click': 'foo:click'}
       });
 
       this.CollectionView = Marionette.CollectionView.extend({
@@ -141,8 +141,8 @@ describe('trigger event and method name', function() {
       this.childView.$el.click();
     });
 
-    it('should fire the event method once', function() {
-      expect(this.onChildviewFooClickStub).to.have.been.calledOnce;
+    it('should fire the event method', function() {
+      expect(this.onChildviewFooClickStub).to.have.been.called;
     });
   });
 
@@ -174,8 +174,6 @@ describe('trigger event and method name', function() {
         this.obj = _.extend({}, Backbone.Events);
         this.obj.onFoo = this.methodHandler;
         this.obj.on('foo', this.eventHandler);
-        this.triggerMethodSpy = this.sinon.spy(Marionette, 'triggerMethod');
-
         Marionette.triggerMethodOn(this.obj, 'foo');
       });
 
@@ -185,12 +183,6 @@ describe('trigger event and method name', function() {
 
       it('should call a method named on{Event}', function() {
         expect(this.methodHandler).to.have.been.calledOnce;
-      });
-
-      it('should return the value returned by the on{Event} method', function() {
-        expect(this.triggerMethodSpy)
-          .to.have.been.calledOnce
-          .and.returned(this.returnValue);
       });
     });
   });

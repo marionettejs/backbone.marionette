@@ -27,9 +27,9 @@ describe('item view', function() {
       this.onRenderStub       = this.sinon.stub();
 
       this.View = Marionette.View.extend({
-        template: false,
+        template:       false,
         onBeforeRender: this.onBeforeRenderStub,
-        onRender: this.onRenderStub,
+        onRender:       this.onRenderStub,
 
         ui: {
           testElement: '.test-element'
@@ -99,8 +99,8 @@ describe('item view', function() {
       this.attachElContentStub = this.sinon.stub();
 
       this.View = Marionette.View.extend({
-        template        : this.templateStub,
-        attachElContent : this.attachElContentStub
+        template:        this.templateStub,
+        attachElContent: this.attachElContentStub
       });
       this.sinon.spy(Marionette.Renderer, 'render');
 
@@ -127,9 +127,9 @@ describe('item view', function() {
       });
 
       this.View = Marionette.View.extend({
-        template       : this.templateStub,
-        onBeforeRender : this.onBeforeRenderStub,
-        onRender       : this.onRenderStub
+        template:       this.templateStub,
+        onBeforeRender: this.onBeforeRenderStub,
+        onRender:       this.onRenderStub
       });
 
       this.view = new this.View();
@@ -173,8 +173,8 @@ describe('item view', function() {
   describe('when an item view has a model and is rendered', function() {
     beforeEach(function() {
       this.view = new Marionette.View({
-        template : this.templateStub,
-        model    : this.model
+        template: this.templateStub,
+        model:    this.model
       });
 
       this.serializeDataSpy = this.sinon.spy(this.view, 'serializeData');
@@ -193,8 +193,8 @@ describe('item view', function() {
   describe('when an item view has a collection and is rendered', function() {
     beforeEach(function() {
       this.view = new Marionette.View({
-        template   : this.templateStub,
-        collection : this.collection
+        template:   this.templateStub,
+        collection: this.collection
       });
 
       this.serializeDataSpy = this.sinon.spy(this.view, 'serializeData');
@@ -213,9 +213,9 @@ describe('item view', function() {
   describe('when an item view has a model and collection, and is rendered', function() {
     beforeEach(function() {
       this.view = new Marionette.View({
-        template   : this.templateStub,
-        model      : this.model,
-        collection : this.collection
+        template:   this.templateStub,
+        model:      this.model,
+        collection: this.collection
       });
 
       this.serializeDataSpy = this.sinon.spy(this.view, 'serializeData');
@@ -247,9 +247,9 @@ describe('item view', function() {
       });
 
       this.View = Marionette.View.extend({
-        template        : this.templateStub,
-        onBeforeDestroy : this.onBeforeDestroyStub,
-        onDestroy       : this.onDestroyStub
+        template:        this.templateStub,
+        onBeforeDestroy: this.onBeforeDestroyStub,
+        onDestroy:       this.onDestroyStub
       });
 
       this.view = new this.View();
@@ -317,8 +317,8 @@ describe('item view', function() {
       this.onDomRefreshStub = this.sinon.stub();
 
       this.View = Marionette.View.extend({
-        template     : this.templateStub,
-        onDomRefresh : this.onDomRefreshStub
+        template:     this.templateStub,
+        onDomRefresh: this.onDomRefreshStub
       });
 
       this.view = new this.View();

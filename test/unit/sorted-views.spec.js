@@ -1,3 +1,5 @@
+import _ from 'underscore';
+
 describe('collection/composite view sorting', function() {
   'use strict';
 

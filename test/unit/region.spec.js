@@ -751,7 +751,7 @@ describe('region', function() {
 
       this.MyView = Backbone.Marionette.View.extend({
         template: _.template('<div></div>'),
-        open : function() {}
+        open: function() {}
       });
 
       this.setFixtures('<div id="region"></div>');

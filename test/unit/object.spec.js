@@ -62,7 +62,7 @@ describe('marionette object', function() {
     beforeEach(function() {
       this.object = new Marionette.Object();
 
-      this.sinon.spy(this.object, 'destroy');
+      sinon.spy(this.object, 'destroy');
       this.beforeDestroyHandler = sinon.spy();
       this.object.on('before:destroy', this.beforeDestroyHandler);
       this.object.destroy();

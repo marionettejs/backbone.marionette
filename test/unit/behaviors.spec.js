@@ -3,12 +3,15 @@ describe('Behaviors', function() {
 
   describe('behavior lookup', function() {
     it('should throw if behavior lookup is not defined', function() {
-      expect(function() {
-        Marionette.Behaviors.behaviorsLookup();
-      }).to.throw(Marionette.Error, new Marionette.Error({
-        message: 'You must define where your behaviors are stored.',
-        url: 'marionette.behaviors.md#behaviorslookup'
-      }));
+      expect(
+        function() { Marionette.Behaviors.behaviorsLookup(); }
+      ).to.throw(
+        Marionette.Error,
+        new Marionette.Error({
+          message: 'You must define where your behaviors are stored.',
+          url: 'marionette.behaviors.md#behaviorslookup'
+        })
+      );
     });
   });
 
@@ -379,7 +382,7 @@ describe('Behaviors', function() {
       });
 
       it('should call onShow when already shown and reset', function() {
-        this.collection.reset([{id:1}, {id: 2}]);
+        this.collection.reset([{id: 1}, {id: 2}]);
 
         expect(this.onShowStub.callCount).to.equal(3);
       });
@@ -513,8 +516,8 @@ describe('Behaviors', function() {
 
       this.behaviors = {
         foo: Marionette.Behavior.extend({
-          onShow    : this.onShowStub,
-          onDestroy : this.onDestroyStub
+          onShow:    this.onShowStub,
+          onDestroy: this.onDestroyStub
         })
       };
       Marionette.Behaviors.behaviorsLookup = this.behaviors;
@@ -777,8 +780,8 @@ describe('Behaviors', function() {
       this.collection = new Backbone.Collection();
 
       this.view = new this.View({
-        model      : this.model,
-        collection : this.collection
+        model:      this.model,
+        collection: this.collection
       });
 
       this.sinon.spy(this.view, 'undelegateEvents');

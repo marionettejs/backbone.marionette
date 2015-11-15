@@ -2,9 +2,12 @@ describe('base view', function() {
   'use strict';
 
   describe('when creating a view', function() {
+    before(function() {
+      this.viewConstructorSpy = sinon.spy(Backbone, 'View');
+    });
+
     beforeEach(function() {
-      this.initializeStub = this.sinon.stub();
-      this.viewConstructorSpy = this.sinon.spy(Backbone, 'View');
+      this.initializeStub = sinon.stub();
 
       this.View = Marionette.AbstractView.extend({
         initialize: this.initializeStub
@@ -28,7 +31,7 @@ describe('base view', function() {
 
   describe('when using listenTo for the "destroy" event on itself, and destroying the view', function() {
     beforeEach(function() {
-      this.destroyStub = this.sinon.stub();
+      this.destroyStub = sinon.stub();
       this.view = new Marionette.AbstractView();
       this.view.listenTo(this.view, 'destroy', this.destroyStub);
       this.view.destroy();
@@ -46,13 +49,13 @@ describe('base view', function() {
 
       this.view = new Marionette.AbstractView();
 
-      this.sinon.spy(this.view, 'remove');
-      this.sinon.spy(this.view, 'destroy');
+      sinon.spy(this.view, 'remove');
+      sinon.spy(this.view, 'destroy');
 
-      this.onDestroyStub = this.sinon.stub();
+      this.onDestroyStub = sinon.stub();
       this.view.onDestroy = this.onDestroyStub;
 
-      this.destroyStub = this.sinon.stub();
+      this.destroyStub = sinon.stub();
       this.view.on('destroy', this.destroyStub);
 
       this.view.destroy(this.argumentOne, this.argumentTwo);
@@ -108,12 +111,12 @@ describe('base view', function() {
     beforeEach(function() {
       this.view = new Marionette.AbstractView();
 
-      this.removeSpy = this.sinon.spy(this.view, 'remove');
+      this.removeSpy = sinon.spy(this.view, 'remove');
 
-      this.destroyStub = this.sinon.stub();
+      this.destroyStub = sinon.stub();
       this.view.on('destroy', this.destroyStub);
 
-      this.onBeforeDestroyStub = this.sinon.stub().returns(false);
+      this.onBeforeDestroyStub = sinon.stub().returns(false);
       this.view.onBeforeDestroy = this.onDestroyStub;
 
       this.view.destroy();
@@ -139,14 +142,14 @@ describe('base view', function() {
 
       this.view = new Marionette.AbstractView();
 
-      this.removeSpy = this.sinon.spy(this.view, 'remove');
+      this.removeSpy = sinon.spy(this.view, 'remove');
 
-      this.destroyStub = this.sinon.stub();
+      this.destroyStub = sinon.stub();
       this.view.on('destroy', this.destroyStub);
 
-      this.onBeforeDestroyStub = this.sinon.stub().returns(false);
+      this.onBeforeDestroyStub = sinon.stub().returns(false);
       this.view.onBeforeDestroy = this.onBeforeDestroyStub;
-      this.sinon.spy(this.view, 'destroy');
+      sinon.spy(this.view, 'destroy');
 
       this.view.destroy(this.argumentOne, this.argumentTwo);
     });
@@ -173,7 +176,7 @@ describe('base view', function() {
       this.presets = {foo: 'foo'};
       this.options = {foo: 'bar'};
 
-      this.presetsStub = this.sinon.stub().returns(this.presets);
+      this.presetsStub = sinon.stub().returns(this.presets);
 
       this.View = Marionette.AbstractView.extend();
       this.ViewPresets   = Marionette.AbstractView.extend({options: this.presets});
@@ -229,8 +232,8 @@ describe('base view', function() {
     beforeEach(function() {
       this.view = new Marionette.AbstractView();
 
-      this.removeSpy = this.sinon.spy(this.view, 'remove');
-      this.destroyStub = this.sinon.stub();
+      this.removeSpy = sinon.spy(this.view, 'remove');
+      this.destroyStub = sinon.stub();
       this.view.on('destroy', this.destroyStub);
 
       this.view.destroy();
@@ -291,13 +294,13 @@ describe('base view', function() {
       this.childView = new this.ChildView();
       this.layoutView.render();
 
-      this.layoutEventHandler = this.sinon.spy();
+      this.layoutEventHandler = sinon.spy();
       this.layoutView.on('childview:boom', this.layoutEventHandler);
 
-      this.layoutEventOnHandler = this.sinon.spy();
+      this.layoutEventOnHandler = sinon.spy();
       this.layoutView.onChildviewBoom = this.layoutEventOnHandler;
 
-      this.layoutViewOnBoomHandler = this.sinon.spy();
+      this.layoutViewOnBoomHandler = sinon.spy();
       this.layoutView.onBoom = this.layoutViewOnBoomHandler;
     });
 

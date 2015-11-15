@@ -1,8 +1,6 @@
-/* global console */
+/* global console Marionette */
 
-Marionette.DEV_MODE = false;
-
-var deprecate = Marionette.deprecate = function(message, test) {
+var deprecate = function(message, test) {
   if (_.isObject(message)) {
     message = (
       message.prev + ' is going to be removed in the future. ' +
@@ -27,3 +25,5 @@ deprecate._warn = function() {
   return warn.apply(deprecate._console, arguments);
 };
 deprecate._cache = {};
+
+export default deprecate;

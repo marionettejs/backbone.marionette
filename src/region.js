@@ -1,10 +1,19 @@
 // Region
 // ------
 
+import _                 from 'underscore';
+import Backbone          from 'backbone';
+import isNodeAttached    from './utils/isNodeAttached';
+import MNObject          from './object';
+import _getValue         from './utils/_getValue';
+import MarionetteError   from './error';
+import MonitorDOMRefresh from './dom-refresh';
+import { triggerMethodOn, triggerMethodMany } from './trigger-method';
+
 // Manage the visual regions of your composite application. See
 // http://lostechies.com/derickbailey/2011/12/12/composite-js-apps-regions-and-region-managers/
 
-Marionette.Region = Marionette.Object.extend({
+var Region = MNObject.extend({
   cidPrefix: 'mnr',
 
   constructor: function(options) {
@@ -18,14 +27,14 @@ Marionette.Region = Marionette.Object.extend({
     this.el = this.el instanceof Backbone.$ ? this.el[0] : this.el;
 
     if (!this.el) {
-      throw new Marionette.Error({
+      throw new MarionetteError({
         name: 'NoElError',
         message: 'An "el" must be specified for a region.'
       });
     }
 
     this.$el = this.getEl(this.el);
-    Marionette.Object.call(this, options);
+    MNObject.call(this, options);
   },
 
   // Displays a backbone view instance inside of the region.
@@ -43,7 +52,7 @@ Marionette.Region = Marionette.Object.extend({
     }
 
     this._ensureViewIsIntact(view);
-    Marionette.MonitorDOMRefresh(view);
+    MonitorDOMRefresh(view);
 
     var showOptions     = options || {};
     var isDifferentView = view !== this.currentView;
@@ -102,10 +111,10 @@ Marionette.Region = Marionette.Object.extend({
       }
 
       this.triggerMethod('before:show', view, this, options);
-      Marionette.triggerMethodOn(view, 'before:show', view, this, options);
+      triggerMethodOn(view, 'before:show', view, this, options);
 
       // An array of views that we're about to display
-      var attachedRegion = Marionette.isNodeAttached(this.el);
+      var attachedRegion = isNodeAttached(this.el);
 
       // The views that we're about to attach to the document
       // It's important that we prevent _getNestedViews from being executed unnecessarily
@@ -136,7 +145,7 @@ Marionette.Region = Marionette.Object.extend({
       }
 
       this.triggerMethod('show', view, this, options);
-      Marionette.triggerMethodOn(view, 'show', view, this, options);
+      triggerMethodOn(view, 'show', view, this, options);
     }
 
     return this;
@@ -152,11 +161,11 @@ Marionette.Region = Marionette.Object.extend({
 
   _renderView: function(view, options) {
     if (!view.supportsRenderLifecycle) {
-      Marionette.triggerMethodOn(view, 'before:render', view);
+      triggerMethodOn(view, 'before:render', view);
     }
     this.renderView(view, options);
     if (!view.supportsRenderLifecycle) {
-      Marionette.triggerMethodOn(view, 'render', view);
+      triggerMethodOn(view, 'render', view);
     }
   },
 
@@ -169,7 +178,7 @@ Marionette.Region = Marionette.Object.extend({
 
   _triggerAttach: function(views, prefix) {
     var eventName = (prefix || '') + 'attach';
-    Marionette.triggerMethodMany(views, this, eventName);
+    triggerMethodMany(views, this, eventName);
   },
 
   _displayedViews: function(view) {
@@ -186,7 +195,7 @@ Marionette.Region = Marionette.Object.extend({
       if (this.getOption('allowMissingEl')) {
         return false;
       } else {
-        throw new Marionette.Error('An "el" ' + this.$el.selector + ' must exist in DOM');
+        throw new MarionetteError('An "el" ' + this.$el.selector + ' must exist in DOM');
       }
     }
     return true;
@@ -194,14 +203,14 @@ Marionette.Region = Marionette.Object.extend({
 
   _ensureViewIsIntact: function(view) {
     if (!view) {
-      throw new Marionette.Error({
+      throw new MarionetteError({
         name: 'ViewNotValid',
         message: 'The view passed is undefined and therefore invalid. You must pass a view instance to show.'
       });
     }
 
     if (view._isDestroyed) {
-      throw new Marionette.Error({
+      throw new MarionetteError({
         name: 'ViewDestroyedError',
         message: 'View (cid: "' + view.cid + '") has already been destroyed and cannot be used.'
       });
@@ -212,7 +221,7 @@ Marionette.Region = Marionette.Object.extend({
   // element that it manages. Return a jQuery selector object scoped
   // to a provided parent el or the document if none exists.
   getEl: function(el) {
-    return Backbone.$(el, Marionette._getValue(this.options.parentEl, this));
+    return Backbone.$(el, _getValue(this.options.parentEl, this));
   },
 
   // Replace the region's DOM element with the view's DOM element.
@@ -268,6 +277,7 @@ Marionette.Region = Marionette.Object.extend({
 
     var emptyOptions = options || {};
     var preventDestroy  = !!emptyOptions.preventDestroy;
+
     // If there is no view in the region
     // we should not remove anything
     if (!view) { return; }
@@ -301,7 +311,7 @@ Marionette.Region = Marionette.Object.extend({
     if (view._isDestroyed) { return; }
 
     if (!view.supportsDestroyLifecycle) {
-      Marionette.triggerMethodOn(view, 'before:destroy', view);
+      triggerMethodOn(view, 'before:destroy', view);
     }
     if (view.destroy) {
       view.destroy();
@@ -313,7 +323,7 @@ Marionette.Region = Marionette.Object.extend({
       view._isDestroyed = true;
     }
     if (!view.supportsDestroyLifecycle) {
-      Marionette.triggerMethodOn(view, 'destroy', view);
+      triggerMethodOn(view, 'destroy', view);
     }
   },
 
@@ -353,3 +363,5 @@ Marionette.Region = Marionette.Object.extend({
   }
 
 });
+
+export default Region;

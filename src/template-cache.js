@@ -1,16 +1,20 @@
 // Template Cache
 // --------------
 
+import _               from 'underscore';
+import Backbone        from 'backbone';
+import MarionetteError from './error';
+
 // Manage templates stored in `<script>` blocks,
 // caching them for faster access.
-Marionette.TemplateCache = function(templateId) {
+var TemplateCache = function(templateId) {
   this.templateId = templateId;
 };
 
 // TemplateCache object-level methods. Manage the template
 // caches from these method calls instead of creating
 // your own TemplateCache instances
-_.extend(Marionette.TemplateCache, {
+_.extend(TemplateCache, {
   templateCaches: {},
 
   // Get the specified template by id. Either
@@ -20,7 +24,7 @@ _.extend(Marionette.TemplateCache, {
     var cachedTemplate = this.templateCaches[templateId];
 
     if (!cachedTemplate) {
-      cachedTemplate = new Marionette.TemplateCache(templateId);
+      cachedTemplate = new TemplateCache(templateId);
       this.templateCaches[templateId] = cachedTemplate;
     }
 
@@ -52,7 +56,7 @@ _.extend(Marionette.TemplateCache, {
 // TemplateCache instance methods, allowing each
 // template cache object to manage its own state
 // and know whether or not it has been loaded
-_.extend(Marionette.TemplateCache.prototype, {
+_.extend(TemplateCache.prototype, {
 
   // Internal method to load the template
   load: function(options) {
@@ -77,7 +81,7 @@ _.extend(Marionette.TemplateCache.prototype, {
     var $template = Backbone.$(templateId);
 
     if (!$template.length) {
-      throw new Marionette.Error({
+      throw new MarionetteError({
         name: 'NoTemplateError',
         message: 'Could not find template: "' + templateId + '"'
       });
@@ -93,3 +97,5 @@ _.extend(Marionette.TemplateCache.prototype, {
     return _.template(rawTemplate, options);
   }
 });
+
+export default TemplateCache;

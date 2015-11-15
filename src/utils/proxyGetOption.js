@@ -1,4 +1,8 @@
+import getOption from './getOption';
+
 // Proxy `Marionette.getOption`
-Marionette.proxyGetOption = function(optionName) {
-  return Marionette.getOption(this, optionName);
+var proxyGetOption = function(optionName) {
+  return getOption(this, optionName);
 };
+
+export default proxyGetOption;

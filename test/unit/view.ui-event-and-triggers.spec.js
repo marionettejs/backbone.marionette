@@ -21,19 +21,19 @@ describe('view ui event trigger configuration', function() {
       };
 
       this.eventsHash = {
-        'click @ui.bar'                   : this.barHandlerStub,
-        'click div:not(@ui.bar)'          : this.notBarHandlerStub,
-        'click @ui.foo, @ui.bar, @ui.baz' : this.fooBarBazHandlerStub
+        'click @ui.bar':                   this.barHandlerStub,
+        'click div:not(@ui.bar)':          this.notBarHandlerStub,
+        'click @ui.foo, @ui.bar, @ui.baz': this.fooBarBazHandlerStub
       };
     });
 
     describe('as objects', function() {
       beforeEach(function() {
         this.View = Marionette.View.extend({
-          template : this.templateFn,
-          ui       : this.uiHash,
-          triggers : this.triggersHash,
-          events   : this.eventsHash
+          template: this.templateFn,
+          ui:       this.uiHash,
+          triggers: this.triggersHash,
+          events:   this.eventsHash
         });
         this.view = new this.View();
         this.view.render();
@@ -63,10 +63,10 @@ describe('view ui event trigger configuration', function() {
     describe('as functions', function() {
       beforeEach(function() {
         this.View = Marionette.View.extend({
-          template : this.templateFn,
-          ui       : this.sinon.stub().returns(this.uiHash),
-          triggers : this.sinon.stub().returns(this.triggersHash),
-          events   : this.sinon.stub().returns(this.eventsHash)
+          template: this.templateFn,
+          ui:       this.sinon.stub().returns(this.uiHash),
+          triggers: this.sinon.stub().returns(this.triggersHash),
+          events:   this.sinon.stub().returns(this.eventsHash)
         });
         this.view = new this.View();
         this.view.render();

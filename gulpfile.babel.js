@@ -1,4 +1,5 @@
 import gulp from 'gulp';
+import './gulp/browser-test';
 import './gulp/build';
 import './gulp/linting';
 import './gulp/test';

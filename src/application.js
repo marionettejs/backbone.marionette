@@ -1,8 +1,10 @@
 // Application
 // -----------
 
+import MNObject from './object';
+
 // A container for a Marionette application.
-Marionette.Application = Marionette.Object.extend({
+var Application = MNObject.extend({
   cidPrefix: 'mna',
 
   // kick off all of the application's processes.
@@ -13,3 +15,5 @@ Marionette.Application = Marionette.Object.extend({
     this.triggerMethod('start', options);
   }
 });
+
+export default Application;

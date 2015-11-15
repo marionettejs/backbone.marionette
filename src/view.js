@@ -1,9 +1,14 @@
 // View
 // ---------
+import _             from 'underscore';
+import AbstractView  from './abstract-view';
+import RegionsMixin from './regions-mixin';
+import Region        from './region';
+import _getValue     from './utils/_getValue';
 
 // The standard view. Includes view events, automatic rendering
 // of Underscore templates, nested views, and more.
-Marionette.View = Marionette.AbstractView.extend({
+var View = AbstractView.extend({
 
   options: {
     destroyImmediate: false
@@ -20,7 +25,7 @@ Marionette.View = Marionette.AbstractView.extend({
 
     this._initRegions(options);
 
-    Marionette.AbstractView.prototype.constructor.apply(this, arguments);
+    AbstractView.prototype.constructor.apply(this, arguments);
   },
 
   // Serialize the view's model *or* collection, if
@@ -110,4 +115,6 @@ Marionette.View = Marionette.AbstractView.extend({
   }
 });
 
-_.extend(Marionette.View.prototype, Marionette.RegionsMixin);
+_.extend(View.prototype, RegionsMixin);
+
+export default View;

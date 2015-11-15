@@ -2,8 +2,6 @@ describe('collection view', function() {
   'use strict';
 
   beforeEach(function() {
-    this.sinon.spy(Backbone, 'View');
-
     // Shared View Definitions
     // -----------------------
     this.ChildView = Backbone.View.extend({
@@ -75,7 +73,7 @@ describe('collection view', function() {
         childView: undefined
       });
 
-      this.collection = new Backbone.Collection([{foo:'bar'}, {foo: 'baz'}]);
+      this.collection = new Backbone.Collection([{foo: 'bar'}, {foo: 'baz'}]);
       this.collectionView = new this.NoChildView({
         collection: this.collection
       });

@@ -105,12 +105,12 @@ describe('Marionette.Error', function() {
   describe('when passed valid error properties', function() {
     beforeEach(function() {
       this.props = {
-        description  : 'myDescription',
-        fileName     : 'myFileName',
-        lineNumber   : 'myLineNumber',
-        name         : 'myName',
-        message      : 'myMessage',
-        number       : 'myNumber'
+        description: 'myDescription',
+        fileName:    'myFileName',
+        lineNumber:  'myLineNumber',
+        name:        'myName',
+        message:     'myMessage',
+        number:      'myNumber'
       };
       this.error = new Marionette.Error(this.props);
     });
@@ -123,9 +123,9 @@ describe('Marionette.Error', function() {
   describe('when passed invalid error properties', function() {
     beforeEach(function() {
       this.props = {
-        foo : 'myFoo',
-        bar : 'myBar',
-        baz : 'myBaz'
+        foo: 'myFoo',
+        bar: 'myBar',
+        baz: 'myBaz'
       };
       this.error = new Marionette.Error(this.props);
     });

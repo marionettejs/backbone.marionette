@@ -19,8 +19,8 @@ describe('view triggers', function() {
 
       this.View = Marionette.View.extend({triggers: this.triggersHash});
       this.view = new this.View({
-        model      : this.model,
-        collection : this.collection
+        model:      this.model,
+        collection: this.collection
       });
 
       this.view.on('fooHandler', this.fooHandlerStub);
@@ -47,9 +47,9 @@ describe('view triggers', function() {
   describe('when triggers and standard events are both configured', function() {
     beforeEach(function() {
       this.View = Marionette.View.extend({
-        triggers   : this.triggersHash,
-        events     : this.eventsHash,
-        barHandler : this.barHandlerStub
+        triggers:   this.triggersHash,
+        events:     this.eventsHash,
+        barHandler: this.barHandlerStub
       });
 
       this.view = new this.View();
@@ -110,8 +110,8 @@ describe('view triggers', function() {
       this.View = Marionette.View.extend({
         triggers: {
           'foo': {
-            event: 'fooHandler',
-            preventDefault: true,
+            event:           'fooHandler',
+            preventDefault:  true,
             stopPropagation: false
           }
         }

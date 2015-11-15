@@ -1,5 +1,9 @@
-Marionette.RegionsMixin = {
-  regionClass: Marionette.Region,
+import Region       from './region';
+import _getValue    from './utils/_getValue';
+import MarionetteError      from './error';
+
+export default {
+  regionClass: Region,
 
   // Internal method to initialize the regions that have been defined in a
   // `regions` attribute on this View.
@@ -30,7 +34,7 @@ Marionette.RegionsMixin = {
   addRegions: function(regions) {
 
     // Enable regions to be a function
-    regions = Marionette._getValue(regions, this, arguments);
+    regions = _getValue(regions, this, arguments);
 
     // If there's nothing to add, stop here.
     if (_.isEmpty(regions)) {
@@ -49,7 +53,7 @@ Marionette.RegionsMixin = {
 
   // internal method to build and add regions
   _addRegions: function(regionDefinitions) {
-    regionDefinitions = Marionette._getValue(regionDefinitions, this, arguments);
+    regionDefinitions = _getValue(regionDefinitions, this, arguments);
 
     return _.reduce(regionDefinitions, function(regions, definition, name) {
       regions[name] = this._buildRegion(definition);
@@ -60,7 +64,7 @@ Marionette.RegionsMixin = {
 
   // return the region instance from the definition
   _buildRegion: function(definition) {
-    if (definition instanceof Marionette.Region) {
+    if (definition instanceof Region) {
       return definition;
     }
 
@@ -80,7 +84,7 @@ Marionette.RegionsMixin = {
       return this._buildRegionFromObject(definition);
     }
 
-    throw new Marionette.Error({
+    throw new MarionetteError({
       message: 'Improper region configuration type.',
       url: 'marionette.region.html#region-configuration-types'
     });

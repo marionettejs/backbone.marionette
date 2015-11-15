@@ -1,22 +1,36 @@
 // Object
 // ------
 
+import _                        from 'underscore';
+import Backbone                 from 'backbone';
+import extend                   from './utils/extend';
+import proxyGetOption           from './utils/proxyGetOption';
+import mergeOptions             from './utils/mergeOptions';
+import { triggerMethod }        from './trigger-method';
+import {
+  proxyBindEntityEvents,
+  proxyUnbindEntityEvents }     from './bind-entity-events';
+
+import {
+  proxyRadioHandlers,
+  unproxyRadioHandlers }        from './radio-helpers';
+
 // A Base Class that other Classes should descend from.
 // Object borrows many conventions and utilities from Backbone.
-Marionette.Object = function(options) {
+var MarionetteObject = function(options) {
   this.options = _.extend({}, _.result(this, 'options'), options);
-  Marionette.proxyRadioHandlers.apply(this);
+  proxyRadioHandlers.apply(this);
   this.cid = _.uniqueId(this.cidPrefix);
   this.initialize.apply(this, arguments);
 };
 
-Marionette.Object.extend = Marionette.extend;
+MarionetteObject.extend = extend;
 
 // Object Methods
 // --------------
 
 // Ensure it can trigger events with Backbone.Events
-_.extend(Marionette.Object.prototype, Backbone.Events, {
+_.extend(MarionetteObject.prototype, Backbone.Events, {
   cidPrefix: 'mno',
 
   // for parity with Marionette.AbstractView lifecyle
@@ -38,7 +52,7 @@ _.extend(Marionette.Object.prototype, Backbone.Events, {
     // prevent infinite loops within "destroy" event handlers
     this._isDestroyed = true;
     this.triggerMethod('destroy');
-    Marionette.unproxyRadioHandlers.apply(this);
+    unproxyRadioHandlers.apply(this);
     this.stopListening();
 
     return this;
@@ -46,18 +60,20 @@ _.extend(Marionette.Object.prototype, Backbone.Events, {
 
   // Import the `triggerMethod` to trigger events with corresponding
   // methods if the method exists
-  triggerMethod: Marionette.triggerMethod,
+  triggerMethod: triggerMethod,
 
   // A handy way to merge options onto the instance
-  mergeOptions: Marionette.mergeOptions,
+  mergeOptions: mergeOptions,
 
   // Proxy `getOption` to enable getting options from this or this.options by name.
-  getOption: Marionette.proxyGetOption,
+  getOption: proxyGetOption,
 
   // Proxy `bindEntityEvents` to enable binding view's events from another entity.
-  bindEntityEvents: Marionette.proxyBindEntityEvents,
+  bindEntityEvents: proxyBindEntityEvents,
 
   // Proxy `unbindEntityEvents` to enable unbinding view's events from another entity.
-  unbindEntityEvents: Marionette.proxyUnbindEntityEvents
+  unbindEntityEvents: proxyUnbindEntityEvents
 
 });
+
+export default MarionetteObject;

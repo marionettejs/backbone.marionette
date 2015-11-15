@@ -6,7 +6,10 @@
 // Behaviors allow you to blackbox View specific interactions
 // into portable logical chunks, keeping your views simple and your code DRY.
 
-Marionette.Behavior = Marionette.Object.extend({
+import _        from 'underscore';
+import MNObject from './object';
+
+var Behavior = MNObject.extend({
   cidPrefix: 'mnb',
 
   constructor: function(options, view) {
@@ -27,7 +30,7 @@ Marionette.Behavior = Marionette.Object.extend({
     // selector under an UI key.
     this.ui = _.extend({}, _.result(this, 'ui'), _.result(view, 'ui'));
 
-    Marionette.Object.apply(this, arguments);
+    MNObject.apply(this, arguments);
   },
 
   // proxy behavior $ method to the view
@@ -50,3 +53,5 @@ Marionette.Behavior = Marionette.Object.extend({
     this.el = view.el;
   }
 });
+
+export default Behavior;

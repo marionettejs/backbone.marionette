@@ -1,4 +1,16 @@
 module.exports = function() {
+  var _ = require('underscore');
+  var Backbone = require('backbone');
+  var jQuery = require('jquery');
+  Backbone.$ = jQuery;
+  Backbone.ChildViewContainer = require('backbone.babysitter');
+  Backbone.Radio = require('backbone.radio');
+  var Marionette = require('../../src/backbone.marionette');
+
+  global.$ = global.jQuery = jQuery;
+  global._ = _;
+  global.Backbone = Backbone;
+  global.Marionette = Backbone.Marionette = Marionette;
   global.expect = global.chai.expect;
 
   var $fixtures;

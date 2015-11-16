@@ -89,9 +89,12 @@ Marionette.Region = Marionette.Object.extend({
       // we can not reuse it.
       view.once('destroy', this.empty, this);
 
-      this._renderView(view);
-
+      // make this region the view's parent,
+      // It's important that this parent binding happens before rendering
+      // so that any events the child may trigger during render can also be
+      // triggered on the child's ancestor views
       view._parent = this;
+      this._renderView(view);
 
       if (isChangingView) {
         this.triggerMethod('before:swap', view, this, options);

@@ -275,7 +275,7 @@ Marionette.View = Backbone.View.extend({
     var ret = Marionette._triggerMethod(this, arguments);
 
     this._triggerEventOnBehaviors(arguments);
-    this._triggerEventOnParentLayout(arguments[0], _.rest(arguments));
+    this._triggerEventOnParentLayout(arguments);
 
     return ret;
   },
@@ -289,18 +289,19 @@ Marionette.View = Backbone.View.extend({
     }
   },
 
-  _triggerEventOnParentLayout: function(eventName, args) {
+  _triggerEventOnParentLayout: function(args) {
     var layoutView = this._parentLayoutView();
     if (!layoutView) {
       return;
     }
+    var eventName = args[0];
 
     // invoke triggerMethod on parent view
     var eventPrefix = Marionette.getOption(layoutView, 'childViewEventPrefix');
     var prefixedEventName = eventPrefix + ':' + eventName;
-    var callArgs = [this].concat(args);
+    args[0] = this;
 
-    Marionette._triggerMethod(layoutView, prefixedEventName, callArgs);
+    Marionette._triggerMethod(layoutView, prefixedEventName, args);
 
     // call the parent view's childEvents handler
     var childEvents = Marionette.getOption(layoutView, 'childEvents');
@@ -311,7 +312,17 @@ Marionette.View = Backbone.View.extend({
     var normalizedChildEvents = layoutView.normalizeMethods(childEvents);
 
     if (normalizedChildEvents && _.isFunction(normalizedChildEvents[eventName])) {
-      normalizedChildEvents[eventName].apply(layoutView, callArgs);
+      normalizedChildEvents[eventName].apply(layoutView, args);
+    }
+
+    // call the parent view's proxyEvent handlers
+    var childTriggers = Marionette.getOption(layoutView, 'childTriggers');
+    childTriggers = Marionette._getValue(childTriggers, layoutView);
+
+    // Call the event with the proxy name on the parent layout
+    if (childTriggers && _.has(childTriggers, eventName)) {
+      args[0] = childTriggers[eventName];
+      layoutView.triggerMethod.apply(layoutView, args);
     }
   },
 

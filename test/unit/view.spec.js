@@ -295,15 +295,33 @@ describe('base view', function() {
           'boom': 'onBoom'
         },
 
+        childTriggers: {
+          'whack': 'rattle'
+        }
+
       });
 
       this.ChildView = Marionette.ItemView.extend({
         template: false
       });
 
+      this.SuperView = Marionette.LayoutView.extend({
+        template: _.template('<div class="layout"></div>'),
+
+        regions: {
+          'layout': '.layout',
+        },
+
+        childEvents: {
+          rattle: 'onRattle'
+        }
+      });
+
+      this.superView = new this.SuperView();
       this.layoutView = new this.LayoutView();
       this.childView = new this.ChildView();
       this.layoutView.render();
+      this.superView.render();
 
       this.layoutEventHandler = this.sinon.spy();
       this.layoutView.on('childview:boom', this.layoutEventHandler);
@@ -313,6 +331,9 @@ describe('base view', function() {
 
       this.layoutViewOnBoomHandler = this.sinon.spy();
       this.layoutView.onBoom = this.layoutViewOnBoomHandler;
+
+      this.superViewOnRattleHandler = this.sinon.spy();
+      this.superView.onRattle = this.superViewOnRattleHandler;
 
       this.childEventsFunction = _.bind(function() {
         return {
@@ -372,6 +393,21 @@ describe('base view', function() {
         expect(this.layoutViewOnBoomHandler)
           .to.have.been.calledWith(this.childView, 'foo', 'bar')
           .and.to.have.been.calledOn(this.layoutView)
+          .and.CalledOnce;
+      });
+    });
+
+    describe('using childTriggers', function() {
+      beforeEach(function() {
+        this.superView.showChildView('layout', this.layoutView);
+        this.layoutView.showChildView('child', this.childView);
+        this.childView.triggerMethod('whack', this.childView, 'foo', 'bar');
+      });
+
+      it('invokes the super trigger handler', function() {
+        expect(this.superViewOnRattleHandler)
+          .to.have.been.calledWith(this.layoutView, this.childView, 'foo', 'bar')
+          .and.to.have.been.calledOn(this.superView)
           .and.CalledOnce;
       });
     });

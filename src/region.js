@@ -66,7 +66,7 @@ Marionette.Region = Marionette.Object.extend({
       this.triggerMethod('before:swapOut', this.currentView, this, options);
     }
 
-    if (this.currentView) {
+    if (this.currentView && isDifferentView) {
       delete this.currentView._parent;
     }
 

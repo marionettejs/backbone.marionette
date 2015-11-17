@@ -701,20 +701,17 @@ var CollectionView = Backbone.View.extend({
 
     // Forward all child view events through the parent,
     // prepending "childview:" to the event name
-    this.listenTo(view, 'all', function() {
-      var args = _.toArray(arguments);
-      var rootEvent = args[0];
-      var childViewEvents = this.normalizeMethods(_.result(this, 'childViewEvents'));
+    this.listenTo(view, 'all', function(rootEvent, ...args) {
 
-      args[0] = prefix + ':' + rootEvent;
-      args.splice(1, 0, view);
+      var childViewEvents = this.normalizeMethods(_.result(this, 'childViewEvents'));
+      var childEventName = prefix + ':' + rootEvent;
 
       // call collectionView childViewEvent if defined
       if (typeof childViewEvents !== 'undefined' && _.isFunction(childViewEvents[rootEvent])) {
-        childViewEvents[rootEvent].apply(this, args.slice(1));
+        childViewEvents[rootEvent].apply(this, [view, ...args]);
       }
 
-      this.triggerMethod.apply(this, args);
+      this.triggerMethod.apply(this, [childEventName, view, ...args]);
     });
   },
 

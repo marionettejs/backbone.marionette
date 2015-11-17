@@ -79,7 +79,7 @@ var Region = MNObject.extend({
       this.triggerMethod('before:swapOut', changingView, this, options);
     }
 
-    if (this.currentView) {
+    if (this.currentView && isDifferentView) {
       delete this.currentView._parent;
     }
 

@@ -186,6 +186,11 @@ describe('region', function() {
       expect(this.view._parent).to.deep.equal(this.myRegion);
     });
 
+    it('should reference region, when same view was passed', function() {
+      this.myRegion.show(this.view);
+      expect(this.view._parent).to.deep.equal(this.myRegion);
+    });
+
     it('should set $el and el', function() {
       expect(this.myRegion.$el[0]).to.equal(this.myRegion.el);
     });

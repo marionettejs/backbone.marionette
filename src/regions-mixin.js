@@ -178,9 +178,9 @@ export default {
     return _.clone(this._regions);
   },
 
-  showChildView: function(name, view, options) {
+  showChildView: function(name, view, ...args) {
     var region = this.getRegion(name);
-    return region.show.apply(region, _.rest(arguments));
+    return region.show(view, ...args);
   },
 
   getChildView: function(name) {

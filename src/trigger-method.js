@@ -52,12 +52,12 @@ function triggerMethod(event) {
 //
 // e.g. `Marionette.triggerMethodOn(view, 'show')`
 // will trigger a "show" event or invoke onShow the view.
-function triggerMethodOn(context) {
+function triggerMethodOn(context, ...args) {
   var fnc = _.isFunction(context.triggerMethod) ?
                 context.triggerMethod :
                 triggerMethod;
 
-  return fnc.apply(context, _.rest(arguments));
+  return fnc.apply(context, args);
 }
 
 // triggerMethodMany invokes triggerMethod on many targets from a source
@@ -67,11 +67,9 @@ function triggerMethodOn(context) {
 // For each target we want to follow the pattern
 // target.triggerMethod(event, target, source, ...other args)
 // e.g childview.triggerMethod('attach', childView, region, ...args)
-function triggerMethodMany(targets, source, eventName) {
-  var args = _.drop(arguments, 3);
-
+function triggerMethodMany(targets, source, eventName, ...args) {
   _.each(targets, function(target) {
-    triggerMethodOn.apply(target, [target, eventName, target, source].concat(args));
+    triggerMethodOn(target, eventName, target, source, ...args);
   });
 }
 

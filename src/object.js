@@ -43,17 +43,15 @@ _.extend(MarionetteObject.prototype, Backbone.Events, {
   //this is a noop method intended to be overridden by classes that extend from this base
   initialize: function() {},
 
-  destroy: function(options) {
+  destroy: function(...args) {
     if (this._isDestroyed) { return this; }
 
-    options = options || {};
-
-    this.triggerMethod('before:destroy', options);
+    this.triggerMethod('before:destroy', ...args);
 
     // mark as destroyed before doing the actual destroy, to
     // prevent infinite loops within "destroy" event handlers
     this._isDestroyed = true;
-    this.triggerMethod('destroy', options);
+    this.triggerMethod('destroy', ...args);
     unproxyRadioHandlers.apply(this);
     this.stopListening();
 

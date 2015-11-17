@@ -1,4 +1,4 @@
-describe('base view', function() {
+describe('view mixin', function() {
   'use strict';
 
   describe('when creating a view', function() {
@@ -58,7 +58,9 @@ describe('base view', function() {
     });
 
     it('should call an onDestroy method with any arguments passed to destroy', function() {
-      expect(this.onDestroyStub).to.have.been.calledOnce.and.calledWith(this.argumentOne, this.argumentTwo);
+      expect(this.onDestroyStub)
+        .to.have.been.calledOnce
+        .and.calledWith(this.argumentOne, this.argumentTwo);
     });
 
     it('should remove the view', function() {

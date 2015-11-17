@@ -182,12 +182,10 @@ export default {
   },
 
   // Handle destroying the view and its children.
-  destroy: function() {
+  destroy: function(...args) {
     if (this._isDestroyed) { return this; }
 
-    var args = _.toArray(arguments);
-
-    this.triggerMethod.apply(this, ['before:destroy'].concat(args));
+    this.triggerMethod('before:destroy', ...args);
 
     // update lifecycle flags
     this._isDestroyed = true;
@@ -208,7 +206,7 @@ export default {
     // that behaviors have registered for.
     _.invoke(this._behaviors, 'destroy', args);
 
-    this.triggerMethod.apply(this, ['destroy'].concat(args));
+    this.triggerMethod('destroy', ...args);
 
     this.stopListening();
 
@@ -308,11 +306,11 @@ export default {
 
   // import the `triggerMethod` to trigger events with corresponding
   // methods if the method exists
-  triggerMethod: function() {
+  triggerMethod: function(eventName, ...args) {
     var ret = _triggerMethod(this, arguments);
 
     this._triggerEventOnBehaviors(arguments);
-    this._triggerEventOnParentLayout(arguments[0], _.rest(arguments));
+    this._triggerEventOnParentLayout(eventName, args);
 
     return ret;
   },

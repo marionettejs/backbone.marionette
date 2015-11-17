@@ -38,9 +38,8 @@ _.extend(TemplateCache, {
   // If arguments are specified, clears each of the
   // specified templates from the cache:
   // `clear("#t1", "#t2", "...")`
-  clear: function() {
+  clear: function(...args) {
     var i;
-    var args = _.toArray(arguments);
     var length = args.length;
 
     if (length > 0) {

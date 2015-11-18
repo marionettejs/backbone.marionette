@@ -1,3 +1,63 @@
+### v2.4.4 [view commit logs](https://github.com/marionettejs/backbone.marionette/compare/v2.4.3...v2.4.4)
+
+#### Fixes
+
+* `Region#empty` will return the region instance whether or not it has a current view.
+* `CollectionView#reorder` will now correctly respect any set filter.
+* Fixed `childEvents` failing to trigger during showing a view in a region.
+* Stop deleting the `currentView._parent` if showing the same view in a region.
+
+#### Misc
+
+* `LayoutView#showChildView` new `options` argument passed to underlying `Region#show` to enable full `show` functionality.
+* Added support for passing down arguments to `Object#destroy`.
+
+### v2.4.3 [view commit logs](https://github.com/marionettejs/backbone.marionette/compare/v2.4.2...v2.4.3)
+
+#### Fixes
+
+* `TemplateCache#loadTemplate` accepts empty script-tag templates.
+* Parent LayoutView's `childEvents` continue working with views attached manually using `Region#attachView`.
+* When an array of items (length > 1) are added to a collection backing a CollectionView using the `at` option, the child views are appended to the DOM in the proper order.
+* When models are added to a collection backing a CollectionView with the `at` option, the child views are rendered in the proper order even when the CollectionView has a filter.
+* `CollectionView#isEmpty` respects a `false` return value even when there are no child views.
+* `Region#empty` reliably destroys views when called with options.
+* CollectionView child views can, in turn, render children within `onBeforeShow` as documented.
+* CollectionView `childView` and `emptyView` can be pure `Backbone.View` classes.
+
+#### Docs
+
+* Better documentation around view `childEvents` that reinforces the distinction between child view `triggers` and `events`.
+* Guidance on achieving full event lifecycle while using `Backbone.View` as the child view within CollectionViews or LayoutViews/Regions.
+
+#### Misc
+
+* Allow `Application` to be initialized with multiple arguments for consistency with earlier releases.
+* More comprehensive support for Backbone child views, including a more rigorous test suite and support for `render`, `destroy`, and `dom:refresh` lifecycle events when shown by CollectionViews or LayoutViews/Regions.
+* Bumped Backbone dependency to 1.2.3
+
+### v2.4.2 [view commit logs](https://github.com/marionettejs/backbone.marionette/compare/v2.4.1...v2.4.2)
+
+#### Fixes
+
+* Fixed a bug where `reorderOnSort` would not reorder back to the original order.
+* Stop deleting `$childViewContainer` so that it can be accessed in behaviors.
+* Ensure `before:show` and `show` events are triggered on `CollectionView` children.
+* Ensure `onBeforeAttach` and `onAttach` are called for `CollectionView` children.
+* Allow for disabling of `triggerBeforeAttach` and `triggerAttach` via `show()` options.
+* Added the documented `buffer` argument to `attachBuffer` and changed implementation so this was used rather than `_createBuffer`.
+* Fixed potential memory leak when destroying children on `CollectionView` by making the `checkEmpty` call optional.
+
+#### Docs
+
+* Improve documentation around the requirement for an initial render to bind events in `CollectionView`.
+* Add documentation around UI interpolation usage.
+* Add documentation to warn about the full re-render of a `CollectionView` or `CompositeView` if `reorderOnSort` is not set.
+
+#### Misc
+
+* Bumped Underscore and Backbone dependencies to 1.8.3 and 1.2.1 respectively.
+
 ### v2.4.1 [view commit logs](https://github.com/marionettejs/backbone.marionette/compare/v2.4.0...v2.4.1)
 
 #### Fixes

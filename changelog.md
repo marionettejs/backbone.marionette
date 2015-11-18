@@ -1,3 +1,17 @@
+### v2.4.4 [view commit logs](https://github.com/marionettejs/backbone.marionette/compare/v2.4.3...v2.4.4)
+
+#### Fixes
+
+* `Region#empty` will return the region instance whether or not it has a current view.
+* `CollectionView#reorder` will now correctly respect any set filter.
+* Fixed `childEvents` failing to trigger during showing a view in a region.
+* Stop deleting the `currentView._parent` if showing the same view in a region.
+
+#### Misc
+
+* `LayoutView#showChildView` new `options` argument passed to underlying `Region#show` to enable full `show` functionality.
+* Added support for passing down arguments to `Object#destroy`.
+
 ### v2.4.3 [view commit logs](https://github.com/marionettejs/backbone.marionette/compare/v2.4.2...v2.4.3)
 
 #### Fixes
@@ -18,7 +32,6 @@
 
 #### Misc
 
-* `LayoutView#showChildView` new `options` argument passed to underlying `Region#show` to enable full `show` functionality.
 * Allow `Application` to be initialized with multiple arguments for consistency with earlier releases.
 * More comprehensive support for Backbone child views, including a more rigorous test suite and support for `render`, `destroy`, and `dom:refresh` lifecycle events when shown by CollectionViews or LayoutViews/Regions.
 * Bumped Backbone dependency to 1.2.3

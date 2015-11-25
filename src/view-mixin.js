@@ -339,13 +339,13 @@ export default {
 
     _triggerMethod(layoutView, [prefixedEventName].concat(callArgs));
 
-    // call the parent view's childEvents handler
-    var childEvents = getOption(layoutView, 'childEvents');
+    // call the parent view's childViewEvents handler
+    var childViewEvents = getOption(layoutView, 'childViewEvents');
 
-    // since childEvents can be an object or a function use Marionette._getValue
+    // since childViewEvents can be an object or a function use Marionette._getValue
     // to handle the abstaction for us.
-    childEvents = _getValue(childEvents, layoutView);
-    var normalizedChildEvents = layoutView.normalizeMethods(childEvents);
+    childViewEvents = _getValue(childViewEvents, layoutView);
+    var normalizedChildEvents = layoutView.normalizeMethods(childViewEvents);
 
     if (!!normalizedChildEvents && _.isFunction(normalizedChildEvents[eventName])) {
       normalizedChildEvents[eventName].apply(layoutView, callArgs);

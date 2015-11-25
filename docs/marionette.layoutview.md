@@ -27,7 +27,7 @@ will provide features such as `onShow` callbacks, etc. Please see
 
 * [Basic Usage](#basic-usage)
 * [Region Options](#region-options)
-* [LayoutView.childViewEvents](#layoutview-childevents)
+* [LayoutView.childViewEvents](#layoutview-childviewevents)
 * [Specifying Regions As A Function](#specifying-regions-as-a-function)
 * [Overriding the default RegionManager](#overriding-the-default-regionmanager)
 * [Region Availability](#region-availability)

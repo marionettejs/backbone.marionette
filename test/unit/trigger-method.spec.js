@@ -6,7 +6,7 @@ describe('trigger event and method name', function() {
     this.argumentOne = 'bar';
     this.argumentTwo = 'baz';
 
-    this.view = new Marionette.AbstractView();
+    this.view = new Marionette.View();
 
     this.eventHandler = this.sinon.stub();
     this.methodHandler = this.sinon.stub().returns(this.returnValue);
@@ -141,8 +141,8 @@ describe('trigger event and method name', function() {
       this.childView.$el.click();
     });
 
-    it('should fire the event method', function() {
-      expect(this.onChildviewFooClickStub).to.have.been.called;
+    it('should fire the event method once', function() {
+      expect(this.onChildviewFooClickStub).to.have.been.calledOnce;
     });
   });
 

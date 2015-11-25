@@ -255,7 +255,7 @@ describe('item view', function() {
       this.view = new this.View();
       this.view.render();
 
-      this.removeSpy        = this.sinon.spy(this.view, 'remove');
+      this.removeSpy        = this.sinon.spy(this.view, '_removeElement');
       this.stopListeningSpy = this.sinon.spy(this.view, 'stopListening');
       this.triggerSpy       = this.sinon.spy(this.view, 'trigger');
 
@@ -295,12 +295,16 @@ describe('item view', function() {
       expect(this.onBeforeDestroyStub.lastCall.returnValue.isDestroyed).not.to.be.ok;
     });
 
+    it('should be rendered when "onBeforeDestroy" is called', function() {
+      expect(this.onBeforeDestroyStub.lastCall.returnValue.isRendered).to.be.true;
+    });
+
     it('should be destroyed when "onDestroy" is called', function() {
       expect(this.onDestroyStub.lastCall.returnValue.isDestroyed).to.be.true;
     });
 
-    it('should be rendered when "onDestroy" is called', function() {
-      expect(this.onDestroyStub.lastCall.returnValue.isRendered).to.be.true;
+    it('should not be rendered when "onDestroy" is called', function() {
+      expect(this.onDestroyStub.lastCall.returnValue.isRendered).to.be.false;
     });
 
     it('should be marked destroyed', function() {
@@ -334,13 +338,13 @@ describe('item view', function() {
     });
   });
 
-  describe('has a valid inheritance chain back to Marionette.AbstractView', function() {
+  describe('has a valid inheritance chain back to Backbone.View', function() {
     beforeEach(function() {
-      this.constructor = this.sinon.spy(Marionette.AbstractView.prototype, 'constructor');
+      this.constructor = this.sinon.spy(Backbone.View.prototype, 'constructor');
       this.layoutView = new Marionette.View();
     });
 
-    it('calls the parent Marionette.AbstractViews constructor function on instantiation', function() {
+    it('calls the parent Backbone.Views constructor function on instantiation', function() {
       expect(this.constructor).to.have.been.called;
     });
   });

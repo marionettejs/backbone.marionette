@@ -2,22 +2,14 @@ describe('base view', function() {
   'use strict';
 
   describe('when creating a view', function() {
-    before(function() {
-      this.viewConstructorSpy = sinon.spy(Backbone, 'View');
-    });
-
     beforeEach(function() {
       this.initializeStub = sinon.stub();
 
-      this.View = Marionette.AbstractView.extend({
+      this.View = Marionette.View.extend({
         initialize: this.initializeStub
       });
 
       this.view = new this.View();
-    });
-
-    it('should call the Backone.View constructor', function() {
-      expect(this.viewConstructorSpy).to.have.been.calledOnce;
     });
 
     it('should call initialize', function() {
@@ -32,7 +24,7 @@ describe('base view', function() {
   describe('when using listenTo for the "destroy" event on itself, and destroying the view', function() {
     beforeEach(function() {
       this.destroyStub = sinon.stub();
-      this.view = new Marionette.AbstractView();
+      this.view = new Marionette.View();
       this.view.listenTo(this.view, 'destroy', this.destroyStub);
       this.view.destroy();
     });
@@ -47,9 +39,9 @@ describe('base view', function() {
       this.argumentOne = 'foo';
       this.argumentTwo = 'bar';
 
-      this.view = new Marionette.AbstractView();
+      this.view = new Marionette.View();
 
-      sinon.spy(this.view, 'remove');
+      sinon.spy(this.view, '_removeElement');
       sinon.spy(this.view, 'destroy');
 
       this.onDestroyStub = sinon.stub();
@@ -70,7 +62,7 @@ describe('base view', function() {
     });
 
     it('should remove the view', function() {
-      expect(this.view.remove).to.have.been.calledOnce;
+      expect(this.view._removeElement).to.have.been.calledOnce;
     });
 
     it('should set the view _isDestroyed to true', function() {
@@ -93,7 +85,7 @@ describe('base view', function() {
 
     describe('_isDestroyed property', function() {
       beforeEach(function() {
-        this.view = new Marionette.AbstractView();
+        this.view = new Marionette.View();
       });
 
       it('should be set to false before destroy', function() {
@@ -109,9 +101,9 @@ describe('base view', function() {
 
   describe('when destroying a view and returning false from the onBeforeDestroy method', function() {
     beforeEach(function() {
-      this.view = new Marionette.AbstractView();
+      this.view = new Marionette.View();
 
-      this.removeSpy = sinon.spy(this.view, 'remove');
+      this.removeSpy = sinon.spy(this.view, '_removeElement');
 
       this.destroyStub = sinon.stub();
       this.view.on('destroy', this.destroyStub);
@@ -140,9 +132,9 @@ describe('base view', function() {
       this.argumentOne = 'foo';
       this.argumentTwo = 'bar';
 
-      this.view = new Marionette.AbstractView();
+      this.view = new Marionette.View();
 
-      this.removeSpy = sinon.spy(this.view, 'remove');
+      this.removeSpy = sinon.spy(this.view, '_removeElement');
 
       this.destroyStub = sinon.stub();
       this.view.on('destroy', this.destroyStub);
@@ -178,9 +170,9 @@ describe('base view', function() {
 
       this.presetsStub = sinon.stub().returns(this.presets);
 
-      this.View = Marionette.AbstractView.extend();
-      this.ViewPresets   = Marionette.AbstractView.extend({options: this.presets});
-      this.ViewPresetsFn = Marionette.AbstractView.extend({options: this.presetsStub});
+      this.View = Marionette.View.extend();
+      this.ViewPresets   = Marionette.View.extend({options: this.presets});
+      this.ViewPresetsFn = Marionette.View.extend({options: this.presetsStub});
     });
 
     it('should take and store view options', function() {
@@ -207,7 +199,7 @@ describe('base view', function() {
   // http://backbonejs.org/#View-constructor
   describe('when constructing a view with Backbone viewOptions', function() {
     it('should attach the viewOptions to the view if options are on the view', function() {
-      this.MyView = Marionette.AbstractView.extend({
+      this.MyView = Marionette.View.extend({
         options: {
           className: '.some-class'
         }
@@ -220,7 +212,7 @@ describe('base view', function() {
   describe('should expose its options in the constructor', function() {
     beforeEach(function() {
       this.options = {foo: 'bar'};
-      this.view = new Marionette.AbstractView(this.options);
+      this.view = new Marionette.View(this.options);
     });
 
     it('should be able to access instance options', function() {
@@ -230,9 +222,9 @@ describe('base view', function() {
 
   describe('when destroying a view that is already destroyed', function() {
     beforeEach(function() {
-      this.view = new Marionette.AbstractView();
+      this.view = new Marionette.View();
 
-      this.removeSpy = sinon.spy(this.view, 'remove');
+      this.removeSpy = sinon.spy(this.view, '_removeElement');
       this.destroyStub = sinon.stub();
       this.view.on('destroy', this.destroyStub);
 
@@ -260,7 +252,7 @@ describe('base view', function() {
 
     beforeEach(function() {
       model = new Backbone.Model(modelData);
-      view = new Marionette.AbstractView({
+      view = new Marionette.View({
         model: model
       });
     });

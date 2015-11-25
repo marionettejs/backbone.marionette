@@ -58,16 +58,15 @@ We're happy to discuss design patterns and learn how you're using Marionette.
 
 ### Key Benefits
 
-* Scalable: applications are built in modules, and with event-driven architecture
+* Scalable: applications built in modules with event-driven architecture
 * Sensible defaults: Underscore templates are used for view rendering
-* Easily modifiable: make it work with your application's specific needs
-* Reduce boilerplate for views, with specialized view types
-* Build on a modular architecture with an `Application` and modules that attach to it
-* Compose your application's visuals at runtime, with the `Region` and `LayoutView` objects
-* Nested views and layouts within visual regions
-* Built-in memory management and zombie-killing in views, regions and layoutViews
-* Event-driven architecture with `Backbone.Wreqr.EventAggregator`
-* Flexible, "as-needed" architecture allowing you to pick and choose what you need
+* Easily modifiable: works with the specific needs of your application
+* Reduce boilerplate: for all views, including specialized types
+* Create: application visuals at runtime with `Region` and `LayoutView` objects
+* Nested: views and layouts within visual regions
+* Built-in: memory management and zombie-killing for views, layoutViews and regions
+* Event-driven architecture: utilizing the `Backbone.Wreqr.EventAggregator`
+* Flexible: "as-needed" architecture allowing you to pick and choose what you need
 * And much, much more
 
 
@@ -112,7 +111,7 @@ for information on upgrading to the latest version of Marionette.
 ### Annotated Source Code
 
 The source code for Marionette is heavily documented.
-You can read the annotations for all the details of how Marionette works, and advice on which methods to override.
+You can read the annotations for all the details of how Marionette works and advice on which methods to override.
 
 ##### [View the annotated source code](http://marionettejs.com/annotated-src/backbone.marionette)
 

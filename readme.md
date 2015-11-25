@@ -58,15 +58,14 @@ We're happy to discuss design patterns and learn how you're using Marionette.
 
 ### Key Benefits
 
-* Scalable: applications as built in modules with event-driven architecture
-* Sensible defaults: Underscore templates used for view rendering
-* Easily modifiable: works with the specific needs of your application 
+* Scalable: applications built in modules with event-driven architecture
+* Sensible defaults: Underscore templates are used for view rendering
+* Easily modifiable: works with the specific needs of your application
 * Reduce boilerplate: for all views, including specialized types
-* Build with: modular architecture to design an `Application` and associated modules to attach to it
 * Create: application visuals at runtime with `Region` and `LayoutView` objects
 * Nested: views and layouts within visual regions
-* Built-in: memory management and killer views, layoutViews and regions
-* Event-driven: aggregated with `Backbone.Wreqr.EventAggregator`
+* Built-in: memory management and zombie-killing for views, layoutViews and regions
+* Event-driven architecture: utilizing the `Backbone.Wreqr.EventAggregator`
 * Flexible: "as-needed" architecture allowing you to pick and choose what you need
 * And much, much more
 

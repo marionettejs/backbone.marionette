@@ -10,10 +10,10 @@ export default {
   _initRegions: function(options) {
 
     // init regions hash
-    this.regions =  options.regions || this.regions || {};
+    this.regions =  this.regions || {};
     this._regions = {};
 
-    this.addRegions(this.regions);
+    this.addRegions(this.getOption('regions'));
   },
 
   // Internal method to re-initialize all of the regions by updating

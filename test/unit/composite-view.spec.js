@@ -49,13 +49,22 @@ describe('composite view', function() {
 
   describe('when instantiating a composite view', function() {
     beforeEach(function() {
-      this.sinon.spy(Marionette, 'deprecate');
+      Marionette.DEV_MODE = true;
+      this.sinon.spy(Marionette.deprecate, '_warn');
+      this.sinon.stub(Marionette.deprecate, '_console', {
+        warn: this.sinon.stub()
+      });
+      Marionette.deprecate._cache = {};
 
       this.view = new Backbone.Marionette.CompositeView();
     });
 
     it('should call Marionette.deprecate', function() {
-      expect(Marionette.deprecate).to.be.calledWith('CompositeView is deprecated. Convert to View at your earliest convenience');
+      expect(Marionette.deprecate._warn).to.be.calledWith('Deprecation warning: CompositeView is deprecated. Convert to View at your earliest convenience');
+    });
+
+    afterEach(function() {
+      Marionette.DEV_MODE = false;
     });
   });
 

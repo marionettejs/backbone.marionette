@@ -1,14 +1,15 @@
 // Collection View
 // ---------------
 
-import _                 from 'underscore';
-import Backbone          from 'backbone';
-import isNodeAttached    from './utils/isNodeAttached';
-import _getValue         from './utils/_getValue';
-import getOption         from './utils/getOption';
-import MarionetteError   from './error';
-import ViewMixin         from './view-mixin';
-import MonitorDOMRefresh from './dom-refresh';
+import _                  from 'underscore';
+import Backbone           from 'backbone';
+import ChildViewContainer from 'backbone.babysitter';
+import isNodeAttached     from './utils/isNodeAttached';
+import _getValue          from './utils/_getValue';
+import getOption          from './utils/getOption';
+import MarionetteError    from './error';
+import ViewMixin          from './view-mixin';
+import MonitorDOMRefresh  from './dom-refresh';
 import { triggerMethodMany, triggerMethodOn } from './trigger-method';
 
 // A view that iterates over a Backbone.Collection
@@ -651,7 +652,7 @@ var CollectionView = Backbone.View.extend({
   // Internal method to set up the `children` object for
   // storing all of the child views
   _initChildViewStorage: function() {
-    this.children = new Backbone.ChildViewContainer();
+    this.children = new ChildViewContainer();
   },
 
   // called by ViewMixin destroy

@@ -13,6 +13,7 @@ import mergeOptions             from './utils/mergeOptions';
 import proxyGetOption           from './utils/proxyGetOption';
 import MarionetteError          from './error';
 import Renderer                 from './renderer';
+import View                     from './view';
 import { proxyBindEntityEvents, proxyUnbindEntityEvents } from './bind-entity-events';
 import { _triggerMethod }       from './trigger-method';
 
@@ -369,7 +370,7 @@ export default {
     var parent  = this._parent;
 
     while (parent) {
-      if (parent instanceof Marionette.View) {
+      if (parent instanceof View) {
         return parent;
       }
       parent = parent._parent;

@@ -75,9 +75,9 @@ function triggerMethodMany(targets, source, eventName) {
   });
 }
 
-export default {
-  _triggerMethod:     _triggerMethod,
-  triggerMethod:      triggerMethod,
-  triggerMethodOn:    triggerMethodOn,
-  triggerMethodMany:  triggerMethodMany
+export {
+  _triggerMethod,
+  triggerMethod,
+  triggerMethodOn,
+  triggerMethodMany
 };

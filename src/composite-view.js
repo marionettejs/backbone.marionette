@@ -1,6 +1,9 @@
 // Composite View
 // --------------
 
+import _               from 'underscore';
+import Backbone        from 'backbone';
+import deprecate       from './utils/deprecate';
 import _getValue       from './utils/_getValue';
 import getOption       from './utils/getOption';
 import MarionetteError from './error';
@@ -17,7 +20,7 @@ var CompositeView = CollectionView.extend({
   // maintaining the sorted order of the collection.
   // This will fallback onto appending childView's to the end.
   constructor: function() {
-    Marionette.deprecate('CompositeView is deprecated. Convert to View at your earliest convenience');
+    deprecate('CompositeView is deprecated. Convert to View at your earliest convenience');
     CollectionView.prototype.constructor.apply(this, arguments);
   },
 

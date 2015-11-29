@@ -5,13 +5,13 @@
     "node": true
   },
   "globals": {
-      "define"     : true,
-      "$"          : true,
-      "jQuery"     : true,
-      "_"          : true,
-      "Backbone"   : true,
-      "Metal"      : true,
-      "Marionette" : true
+    "define"     : true,
+    "$"          : true,
+    "jQuery"     : true,
+    "_"          : true,
+    "Backbone"   : true,
+    "Metal"      : true,
+    "Marionette" : true
   },
   "rules": {
     "block-scoped-var": 2,

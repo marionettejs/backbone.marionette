@@ -1,7 +1,5 @@
-var Marionette;
-
+import Backbone           from 'backbone';
 import {version}          from '../package.json';
-import _                  from 'underscore';
 
 import extend             from './utils/extend';
 import isNodeAttached     from './utils/isNodeAttached';
@@ -52,7 +50,17 @@ import {
   triggerMethodMany
 } from './trigger-method';
 
-Marionette = Marionette || {};
+var previousMarionette = Backbone.Marionette;
+var Marionette = Backbone.Marionette = {};
+
+// This allows you to run multiple instances of Marionette on the same
+// webapp. After loading the new version, call `noConflict()` to
+// get a reference to it. At the same time the old version will be
+// returned to Backbone.Marionette.
+Marionette.noConflict = function() {
+  Backbone.Marionette = previousMarionette;
+  return this;
+};
 
 // Utilities
 Marionette.bindEntityEvents = bindEntityEvents;

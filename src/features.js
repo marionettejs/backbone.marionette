@@ -11,8 +11,8 @@ function setEnabled(name, state) {
   return FEATURES[name] = state;
 }
 
-export default {
-  FEATURES: FEATURES,
-  setEnabled: setEnabled,
-  isEnabled: isEnabled
+export {
+  FEATURES,
+  setEnabled,
+  isEnabled
 };

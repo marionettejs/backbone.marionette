@@ -103,9 +103,9 @@ function proxyUnbindEntityEvents(entity, bindings) {
 }
 
 // Export Public API
-export default {
-  bindEntityEvents: bindEntityEvents,
-  unbindEntityEvents: unbindEntityEvents,
-  proxyBindEntityEvents: proxyBindEntityEvents,
-  proxyUnbindEntityEvents: proxyUnbindEntityEvents
+export {
+  bindEntityEvents,
+  unbindEntityEvents,
+  proxyBindEntityEvents,
+  proxyUnbindEntityEvents
 };

@@ -56,7 +56,7 @@ function normalizeHandler(handler) {
   return handler;
 }
 
-export default {
-  proxyRadioHandlers: proxyRadioHandlers,
-  unproxyRadioHandlers: unproxyRadioHandlers
+export {
+  proxyRadioHandlers,
+  unproxyRadioHandlers
 };

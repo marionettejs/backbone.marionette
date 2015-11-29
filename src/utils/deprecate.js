@@ -1,4 +1,8 @@
-/* global console Marionette */
+/* global console */
+
+import _ from 'underscore';
+
+import Marionette from '../backbone.marionette';
 
 var deprecate = function(message, test) {
   if (_.isObject(message)) {

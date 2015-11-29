@@ -7,15 +7,10 @@ import extend                   from './utils/extend';
 import CommonMixin              from './mixins/common';
 import { triggerMethod }        from './trigger-method';
 
-import {
-  proxyRadioHandlers,
-  unproxyRadioHandlers }        from './radio-helpers';
-
 // A Base Class that other Classes should descend from.
 // Object borrows many conventions and utilities from Backbone.
 var MarionetteObject = function(options) {
   this._setOptions(options);
-  proxyRadioHandlers.apply(this);
   this.cid = _.uniqueId(this.cidPrefix);
   this.initialize.apply(this, arguments);
 };
@@ -48,7 +43,6 @@ _.extend(MarionetteObject.prototype, Backbone.Events, CommonMixin, {
     // prevent infinite loops within "destroy" event handlers
     this._isDestroyed = true;
     this.triggerMethod('destroy', ...args);
-    unproxyRadioHandlers.apply(this);
     this.stopListening();
 
     return this;

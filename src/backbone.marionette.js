@@ -36,11 +36,6 @@ import {
 } from './bind-entity-events';
 
 import {
-  proxyRadioHandlers,
-  unproxyRadioHandlers
-} from './radio-helpers';
-
-import {
   triggerMethod,
   triggerMethodOn,
   triggerMethodMany
@@ -64,8 +59,6 @@ Marionette.unbindEntityEvents = proxy(unbindEntityEvents);
 Marionette.mergeOptions = proxy(mergeOptions);
 Marionette.getOption = proxy(getOption);
 Marionette.normalizeMethods = proxy(normalizeMethods);
-Marionette.proxyRadioHandlers = proxyRadioHandlers;
-Marionette.unproxyRadioHandlers = unproxyRadioHandlers;
 Marionette.extend = extend;
 Marionette.isNodeAttached = isNodeAttached;
 Marionette.deprecate = deprecate;

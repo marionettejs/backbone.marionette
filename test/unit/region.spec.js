@@ -785,7 +785,7 @@ describe('region', function() {
         el: '#region'
       });
 
-      this.MyView = Backbone.Marionette.AbstractView.extend({
+      this.MyView = Backbone.Marionette.View.extend({
         render: function() {
           $(this.el).html('some content');
         }
@@ -882,7 +882,7 @@ describe('region', function() {
       this.view = new this.MyView();
 
       this.sinon.spy(this.view, 'destroy');
-      this.sinon.spy(this.view, 'remove');
+      this.sinon.spy(this.view, '_removeElement');
 
       this.myRegion = new this.MyRegion();
       this.myRegion.on('before:empty', this.beforeEmptySpy);
@@ -917,8 +917,8 @@ describe('region', function() {
       expect(this.view.destroy).to.have.been.called;
     });
 
-    it('should not call "remove" directly, on the view', function() {
-      expect(this.view.remove).not.to.have.been.called;
+    it('should not call "_removeElement" directly, on the view', function() {
+      expect(this.view._removeElement).not.to.have.been.called;
     });
 
     it('should delete the current view reference', function() {
@@ -953,14 +953,14 @@ describe('region', function() {
       });
 
       this.view = new this.MyView();
-      this.sinon.spy(this.view, 'remove');
+      this.sinon.spy(this.view, '_removeElement');
       this.myRegion = new this.MyRegion();
       this.myRegion.show(this.view);
       this.myRegion.empty();
     });
 
-    it('should call "remove" on the view', function() {
-      expect(this.view.remove).to.have.been.called;
+    it('should call "_removeElement" on the view', function() {
+      expect(this.view._removeElement).to.have.been.called;
     });
 
     it('should set "_isDestroyed" on the view', function() {
@@ -1295,7 +1295,7 @@ describe('region', function() {
         el: '#region'
       });
 
-      this.View = Backbone.Marionette.AbstractView.extend({
+      this.View = Backbone.Marionette.View.extend({
         template: _.template('')
       });
 

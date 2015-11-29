@@ -1,31 +1,30 @@
 // View
 // ---------
+
 import _             from 'underscore';
-import AbstractView  from './abstract-view';
-import RegionsMixin from './regions-mixin';
-import Region        from './region';
+import Backbone      from 'backbone';
+import ViewMixin     from './view-mixin';
+import RegionsMixin  from './regions-mixin';
+import MonitorDOMRefresh from './dom-refresh';
 import _getValue     from './utils/_getValue';
 
 // The standard view. Includes view events, automatic rendering
 // of Underscore templates, nested views, and more.
-var View = AbstractView.extend({
+var View = Backbone.View.extend({
 
-  options: {
-    destroyImmediate: false
-  },
-
-  // used as the prefix for child view events
-  // that are forwarded through the layoutview
-  childViewEventPrefix: 'childview',
-
-  // Setting up the inheritance chain which allows changes to
-  // Marionette.AbstractView.prototype.constructor which allows overriding
   constructor: function(options) {
-    options = options || {};
+    this.render = _.bind(this.render, this);
 
-    this._initRegions(options);
+    this.options = _.extend({}, _.result(this, 'options'), options);
 
-    AbstractView.prototype.constructor.apply(this, arguments);
+    MonitorDOMRefresh(this);
+
+    this._initBehaviors();
+    this._initRegions();
+
+    Backbone.View.prototype.constructor.call(this, this.options);
+
+    this.delegateEntityEvents();
   },
 
   // Serialize the view's model *or* collection, if
@@ -99,21 +98,13 @@ var View = AbstractView.extend({
     return this;
   },
 
-  // Handle destroying regions, and then destroy the view itself.
-  destroy: function() {
-    if (this._isDestroyed) { return this; }
-
-    // #2134: remove parent element before destroying the child views, so
-    // removing the child views doesn't retrigger repaints
-    if (this.getOption('destroyImmediate') === true) {
-      this.$el.remove();
-    }
-
+  // called by ViewMixin destroy
+  _removeChildren: function() {
     this.removeRegions();
-
-    return Marionette.AbstractView.prototype.destroy.apply(this, arguments);
   }
 });
+
+_.extend(View.prototype, ViewMixin);
 
 _.extend(View.prototype, RegionsMixin);
 

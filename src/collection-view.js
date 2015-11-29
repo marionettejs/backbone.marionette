@@ -1,21 +1,19 @@
 // Collection View
 // ---------------
 
+import _                 from 'underscore';
+import Backbone          from 'backbone';
 import isNodeAttached    from './utils/isNodeAttached';
 import _getValue         from './utils/_getValue';
 import getOption         from './utils/getOption';
 import MarionetteError   from './error';
-import AbstractView      from './abstract-view';
+import ViewMixin         from './view-mixin';
 import MonitorDOMRefresh from './dom-refresh';
 import { triggerMethodMany, triggerMethodOn } from './trigger-method';
 
 // A view that iterates over a Backbone.Collection
 // and renders an individual child view for each model.
-var CollectionView = AbstractView.extend({
-
-  // used as the prefix for child view events
-  // that are forwarded through the collectionview
-  childViewEventPrefix: 'childview',
+var CollectionView = Backbone.View.extend({
 
   // flag for maintaining the sorted order of the collection
   sort: true,
@@ -28,10 +26,11 @@ var CollectionView = AbstractView.extend({
   // option to pass `{comparator: compFunction()}` to allow the `CollectionView`
   // to use a custom sort order for the collection.
   constructor: function(options) {
-    this.once('render', this._initialEvents);
-    this._initChildViewStorage();
+    this.render = _.bind(this.render, this);
 
-    AbstractView.prototype.constructor.apply(this, arguments);
+    this.options = _.extend({}, _.result(this, 'options'), options);
+
+    MonitorDOMRefresh(this);
 
     this.on({
       'before:show':   this._onBeforeShowCalled,
@@ -39,7 +38,15 @@ var CollectionView = AbstractView.extend({
       'before:attach': this._onBeforeAttachCalled,
       'attach':        this._onAttachCalled
     });
+
+    this._initBehaviors();
+    this.once('render', this._initialEvents);
+    this._initChildViewStorage();
     this.initRenderBuffer();
+
+    Backbone.View.prototype.constructor.call(this, this.options);
+
+    this.delegateEntityEvents();
   },
 
   // Instead of inserting elements one by one into the page,
@@ -647,13 +654,9 @@ var CollectionView = AbstractView.extend({
     this.children = new Backbone.ChildViewContainer();
   },
 
-  // Handle cleanup and other destroying needs for the collection of views
-  destroy: function() {
-    if (this._isDestroyed) { return this; }
-
+  // called by ViewMixin destroy
+  _removeChildren: function() {
     this.destroyChildren({checkEmpty: false});
-
-    return AbstractView.prototype.destroy.apply(this, arguments);
   },
 
   // Destroy the child views that this collection view
@@ -727,5 +730,7 @@ var CollectionView = AbstractView.extend({
     return this.getOption('viewComparator');
   }
 });
+
+_.extend(CollectionView.prototype, ViewMixin);
 
 export default CollectionView;

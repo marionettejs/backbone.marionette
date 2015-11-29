@@ -1,10 +1,6 @@
+// ViewMixin
+//  ---------
 
-//
-// AbstractView
-// The View class that Marionette's other views extend from. Generally,
-// you won't ever need to extend from this class. Use the other Views
-// to build new classes.
-//
 import Backbone                 from 'backbone';
 import _                        from 'underscore';
 import Behaviors                from './behaviors';
@@ -15,14 +11,12 @@ import normalizeUIKeys          from './utils/normalizeUIKeys';
 import normalizeUIValues        from './utils/normalizeUIValues';
 import mergeOptions             from './utils/mergeOptions';
 import proxyGetOption           from './utils/proxyGetOption';
-import MonitorDOMRefresh        from './dom-refresh';
 import MarionetteError          from './error';
 import Renderer                 from './renderer';
 import { proxyBindEntityEvents, proxyUnbindEntityEvents } from './bind-entity-events';
 import { _triggerMethod }       from './trigger-method';
 
-var AbstractView = Backbone.View.extend({
-
+export default {
   supportsRenderLifecycle: true,
   supportsDestroyLifecycle: true,
 
@@ -38,23 +32,9 @@ var AbstractView = Backbone.View.extend({
     return !!this._isRendered;
   },
 
-  constructor: function(options) {
-    this.render = _.bind(this.render, this);
-
-    // this exposes view options to the view initializer
-    // this is a backfill since backbone removed the assignment
-    // of this.options
-    // at some point however this may be removed
-    this.options = _.extend({}, _.result(this, 'options'), options);
-
+  _initBehaviors: function() {
     var behaviors = _getValue(this.getOption('behaviors'), this);
     this._behaviors = Behaviors(this, behaviors);
-
-    Backbone.View.call(this, this.options);
-
-    this.delegateEntityEvents();
-
-    MonitorDOMRefresh(this);
   },
 
   // Get the template for this view
@@ -138,6 +118,9 @@ var AbstractView = Backbone.View.extend({
   // Overriding Backbone.View's `delegateEvents` to handle
   // `events` and `triggers`
   delegateEvents: function(eventsArg) {
+    // proxy behavior $el to the view's $el.
+    _.invoke(this._behaviors, 'proxyViewProperties', this);
+
     var events = _getValue(eventsArg || this.events, this);
 
     // normalize ui keys
@@ -197,10 +180,7 @@ var AbstractView = Backbone.View.extend({
     }
   },
 
-  // Default `destroy` implementation, for removing a view from the
-  // DOM and unbinding it. Regions will call this method
-  // for you. You can specify an `onDestroy` method in your view to
-  // add custom code that is called after the view is destroyed.
+  // Handle destroying the view and its children.
   destroy: function() {
     if (this._isDestroyed) { return this; }
 
@@ -208,25 +188,28 @@ var AbstractView = Backbone.View.extend({
 
     this.triggerMethod.apply(this, ['before:destroy'].concat(args));
 
-    // mark as destroyed before doing the actual destroy, to
-    // prevent infinite loops within "destroy" event handlers
-    // that are trying to destroy other views
+    // update lifecycle flags
     this._isDestroyed = true;
-    this.triggerMethod.apply(this, ['destroy'].concat(args));
+    this._isRendered = false;
 
     // unbind UI elements
     this.unbindUIElements();
 
-    this._isRendered = false;
-
     // remove the view from the DOM
-    this.remove();
+    // https://github.com/jashkenas/backbone/blob/1.2.3/backbone.js#L1235
+    this._removeElement();
 
+    // remove children after the remove to prevent extra paints
+    this._removeChildren();
     // Call destroy on each behavior after
     // destroying the view.
     // This unbinds event listeners
     // that behaviors have registered for.
     _.invoke(this._behaviors, 'destroy', args);
+
+    this.triggerMethod.apply(this, ['destroy'].concat(args));
+
+    this.stopListening();
 
     return this;
   },
@@ -318,16 +301,9 @@ var AbstractView = Backbone.View.extend({
     };
   },
 
-  setElement: function() {
-    var ret = Backbone.View.prototype.setElement.apply(this, arguments);
-
-    // proxy behavior $el to the view's $el.
-    // This is needed because a view's $el proxy
-    // is not set until after setElement is called.
-    _.invoke(this._behaviors, 'proxyViewProperties', this);
-
-    return ret;
-  },
+  // used as the prefix for child view events
+  // that are forwarded through the layoutview
+  childViewEventPrefix: 'childview',
 
   // import the `triggerMethod` to trigger events with corresponding
   // methods if the method exists
@@ -375,12 +351,6 @@ var AbstractView = Backbone.View.extend({
     }
   },
 
-  // This method returns any views that are immediate
-  // children of this view
-  _getImmediateChildren: function() {
-    return [];
-  },
-
   // Returns an array of every nested view within this view
   _getNestedViews: function() {
     var children = this._getImmediateChildren();
@@ -399,7 +369,7 @@ var AbstractView = Backbone.View.extend({
     var parent  = this._parent;
 
     while (parent) {
-      if (parent instanceof AbstractView) {
+      if (parent instanceof Marionette.View) {
         return parent;
       }
       parent = parent._parent;
@@ -421,6 +391,4 @@ var AbstractView = Backbone.View.extend({
 
   // Proxy `unbindEntityEvents` to enable unbinding view's events from another entity.
   unbindEntityEvents: proxyUnbindEntityEvents
-});
-
-export default AbstractView;
+};

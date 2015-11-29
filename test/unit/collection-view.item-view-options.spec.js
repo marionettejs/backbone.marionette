@@ -65,7 +65,7 @@ describe('collection view - childViewOptions', function() {
   describe('when rendering with an empty collection and emptyView', function() {
     beforeEach(function() {
       this.EmptyCollectionView = Marionette.CollectionView.extend({
-        emptyView: Marionette.AbstractView,
+        emptyView: Backbone.View,
         childViewOptions: this.childViewOptionsStub
       });
 

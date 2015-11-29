@@ -142,12 +142,6 @@ describe('layoutView', function() {
       this.layoutView.render();
     });
 
-    it('should supply the layoutView.options to the function when calling it', function() {
-      expect(_.extend({
-        destroyImmediate: false
-      }, this.options)).to.deep.equal(this.layoutView.options);
-    });
-
     it('should build the regions from the returns object literal', function() {
       expect(this.layoutView.getRegion('foo')).to.be.instanceof(Backbone.Marionette.Region);
     });
@@ -249,29 +243,7 @@ describe('layoutView', function() {
       expect(this.layoutViewManager.destroy).to.have.always.returned(this.layoutViewManager);
     });
 
-    it('should not remove itself from the DOM before destroying child regions by default', function() {
-      this.setup();
-      expect(this.regionOneView.hadParent).to.be.true;
-    });
-
-    it('should remove itself from the DOM before destroying child regions if flag set via options', function() {
-      this.setup({
-        destroyImmediate: true
-      });
-      expect(this.regionOneView.hadParent).to.be.false;
-    });
-
-    it('should remove itself from the DOM before destroying child regions if flag set on proto options', function() {
-      this.View.prototype.options.destroyImmediate = true;
-      this.setup();
-      expect(this.regionOneView.hadParent).to.be.false;
-    });
-
-    it('should remove itself from the DOM before destroying child regions if flag set on proto', function() {
-      _.extend(this.View.prototype, {
-        options: null,
-        destroyImmediate: true
-      });
+    it('should remove itself from the DOM before destroying child regions by default', function() {
       this.setup();
       expect(this.regionOneView.hadParent).to.be.false;
     });
@@ -465,13 +437,13 @@ describe('layoutView', function() {
     });
   });
 
-  describe('has a valid inheritance chain back to Marionette.AbstractView', function() {
+  describe('has a valid inheritance chain back to Backbone.View', function() {
     beforeEach(function() {
-      this.constructor = this.sinon.spy(Marionette.AbstractView.prototype, 'constructor');
+      this.constructor = this.sinon.spy(Backbone.View.prototype, 'constructor');
       this.layoutView = new Marionette.View();
     });
 
-    it('calls the parent Marionette.AbstractViews constructor function on instantiation', function() {
+    it('calls the parent Backbone.Views constructor function on instantiation', function() {
       expect(this.constructor).to.have.been.called;
     });
   });

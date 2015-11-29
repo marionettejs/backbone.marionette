@@ -1,17 +1,19 @@
 // Object
 // ------
 
-import _                        from 'underscore';
-import Backbone                 from 'backbone';
-import extend                   from './utils/extend';
-import CommonMixin              from './mixins/common';
-import { triggerMethod }        from './trigger-method';
+import _ from 'underscore';
+import Backbone from 'backbone';
+import extend from './utils/extend';
+import CommonMixin from './mixins/common';
+import RadioMixin from './mixins/radio';
+import { triggerMethod } from './trigger-method';
 
 // A Base Class that other Classes should descend from.
 // Object borrows many conventions and utilities from Backbone.
 var MarionetteObject = function(options) {
   this._setOptions(options);
   this.cid = _.uniqueId(this.cidPrefix);
+  this._initRadio();
   this.initialize.apply(this, arguments);
 };
 
@@ -21,7 +23,7 @@ MarionetteObject.extend = extend;
 // --------------
 
 // Ensure it can trigger events with Backbone.Events
-_.extend(MarionetteObject.prototype, Backbone.Events, CommonMixin, {
+_.extend(MarionetteObject.prototype, Backbone.Events, CommonMixin, RadioMixin, {
   cidPrefix: 'mno',
 
   // for parity with Marionette.AbstractView lifecyle

@@ -35,28 +35,6 @@ describe('Marionette.unbindEntityEvents', function() {
     });
   });
 
-  describe('when binding is a function', function() {
-    beforeEach(function() {
-      this.bindingsSpy = this.sinon.spy(function() {
-        return {'foo': 'foo'};
-      });
-
-      Marionette.unbindEntityEvents(this.target, this.entity, this.bindingsSpy);
-    });
-
-    it('should evaluate bindings function', function() {
-      expect(this.bindingsSpy).to.have.been.calledOnce;
-    });
-
-    it('should evaluate bindings function in context of target', function() {
-      expect(this.bindingsSpy).to.have.been.calledOnce.and.calledOn(this.target);
-    });
-
-    it('should unbind events returned from bindings function', function() {
-      expect(this.stopListeningStub).to.have.been.calledOnce.and.calledWith(this.entity, 'foo', this.target.foo);
-    });
-  });
-
   describe('when bindings is an object with one event-handler pair', function() {
     describe('when handler is a function', function() {
       beforeEach(function() {

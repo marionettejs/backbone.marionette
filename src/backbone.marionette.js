@@ -36,6 +36,11 @@ import {
 } from './bind-entity-events';
 
 import {
+  bindRadioRequests,
+  unbindRadioRequests
+} from './bind-radio-requests';
+
+import {
   triggerMethod,
   triggerMethodOn,
   triggerMethodMany
@@ -56,6 +61,10 @@ Marionette.noConflict = function() {
 // Utilities
 Marionette.bindEntityEvents = proxy(bindEntityEvents);
 Marionette.unbindEntityEvents = proxy(unbindEntityEvents);
+Marionette.bindRadioEvents = proxy(bindEntityEvents);
+Marionette.unbindRadioEvents = proxy(unbindEntityEvents);
+Marionette.bindRadioRequests = proxy(bindRadioRequests);
+Marionette.unbindRadioRequests = proxy(unbindRadioRequests);
 Marionette.mergeOptions = proxy(mergeOptions);
 Marionette.getOption = proxy(getOption);
 Marionette.normalizeMethods = proxy(normalizeMethods);

@@ -32,8 +32,7 @@ export default {
   // literal. All methods and attributes from this object
   // are copies to the object passed in.
   mixinTemplateContext: function(target = {}) {
-    var templateContext = this.getOption('templateContext');
-    templateContext = this.getValue(templateContext);
+    var templateContext = this.getValue(this.getOption('templateContext'));
     return _.extend(target, templateContext);
   },
 
@@ -117,8 +116,11 @@ export default {
 
   // Handle `modelEvents`, and `collectionEvents` configuration
   delegateEntityEvents: function() {
-    this.bindEntityEvents(this.model, this.getOption('modelEvents'));
-    this.bindEntityEvents(this.collection, this.getOption('collectionEvents'));
+    var modelEvents = this.getValue(this.getOption('modelEvents'));
+    this.bindEntityEvents(this.model, modelEvents);
+
+    var collectionEvents = this.getValue(this.getOption('collectionEvents'));
+    this.bindEntityEvents(this.collection, collectionEvents);
 
     // bind each behaviors model and collection events
     this._delegateBehaviorEntityEvents();
@@ -128,8 +130,11 @@ export default {
 
   // Handle unbinding `modelEvents`, and `collectionEvents` configuration
   undelegateEntityEvents: function() {
-    this.unbindEntityEvents(this.model, this.getOption('modelEvents'));
-    this.unbindEntityEvents(this.collection, this.getOption('collectionEvents'));
+    var modelEvents = this.getValue(this.getOption('modelEvents'));
+    this.unbindEntityEvents(this.model, modelEvents);
+
+    var collectionEvents = this.getValue(this.getOption('collectionEvents'));
+    this.unbindEntityEvents(this.collection, collectionEvents);
 
     // unbind each behaviors model and collection events
     this._undelegateBehaviorEntityEvents();

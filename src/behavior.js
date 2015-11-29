@@ -78,15 +78,21 @@ var Behavior = MarionetteObject.extend({
   delegateEntityEvents: function() {
     this.undelegateEntityEvents();
 
-    this.bindEntityEvents(this.view.model, this.getOption('modelEvents'));
-    this.bindEntityEvents(this.view.collection, this.getOption('collectionEvents'));
+    var modelEvents = this.getValue(this.getOption('modelEvents'));
+    this.bindEntityEvents(this.view.model, modelEvents);
+
+    var collectionEvents = this.getValue(this.getOption('collectionEvents'));
+    this.bindEntityEvents(this.view.collection, collectionEvents);
 
     return this;
   },
 
   undelegateEntityEvents: function() {
-    this.unbindEntityEvents(this.view.model, this.getOption('modelEvents'));
-    this.unbindEntityEvents(this.view.collection, this.getOption('collectionEvents'));
+    var modelEvents = this.getValue(this.getOption('modelEvents'));
+    this.unbindEntityEvents(this.view.model, modelEvents);
+
+    var collectionEvents = this.getValue(this.getOption('collectionEvents'));
+    this.unbindEntityEvents(this.view.collection, collectionEvents);
 
     return this;
   },

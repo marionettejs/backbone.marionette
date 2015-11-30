@@ -17,46 +17,23 @@ import _               from 'underscore';
 import _getValue       from './utils/_getValue';
 import MarionetteError from './error';
 
-// Bind the event to handlers specified as a string of
+// Bind/unbind the event to handlers specified as a string of
 // handler names on the target object
-function bindFromStrings(target, entity, evt, methods) {
+function bindFromStrings(target, entity, evt, methods, actionName) {
   var methodNames = methods.split(/\s+/);
 
   _.each(methodNames, function(methodName) {
-
     var method = target[methodName];
     if (!method) {
-      throw new MarionetteError('Method "' + methodName +
-        '" was configured as an event handler, but does not exist.');
+      throw new MarionetteError(`Method "${methodName}" was configured as an event handler, but does not exist.`);
     }
 
-    target.listenTo(entity, evt, method);
+    target[actionName](entity, evt, method);
   });
-}
-
-// Bind the event to a supplied callback function
-function bindToFunction(target, entity, evt, method) {
-  target.listenTo(entity, evt, method);
-}
-
-// Bind the event to handlers specified as a string of
-// handler names on the target object
-function unbindFromStrings(target, entity, evt, methods) {
-  var methodNames = methods.split(/\s+/);
-
-  _.each(methodNames, function(methodName) {
-    var method = target[methodName];
-    target.stopListening(entity, evt, method);
-  });
-}
-
-// Bind the event to a supplied callback function
-function unbindToFunction(target, entity, evt, method) {
-  target.stopListening(entity, evt, method);
 }
 
 // generic looping function
-function iterateEvents(target, entity, bindings, functionCallback, stringCallback) {
+function iterateEvents(target, entity, bindings, actionName) {
   if (!entity || !bindings) { return; }
 
   // type-check bindings
@@ -70,26 +47,25 @@ function iterateEvents(target, entity, bindings, functionCallback, stringCallbac
   // allow the bindings to be a function
   bindings = _getValue(bindings, target);
 
-  // iterate the bindings and bind them
-  _.each(bindings, function(methods, evt) {
+  // iterate the bindings and bind/unbind them
+  _.each(bindings, function(method, evt) {
 
-    // allow for a function as the handler,
-    // or a list of event names as a string
-    if (_.isFunction(methods)) {
-      functionCallback(target, entity, evt, methods);
-    } else {
-      stringCallback(target, entity, evt, methods);
+    // allow for a list of method names as a string
+    if (_.isString(method)) {
+      bindFromStrings(target, entity, evt, method, actionName);
+      return;
     }
 
+    target[actionName](entity, evt, method);
   });
 }
 
 function bindEntityEvents(target, entity, bindings) {
-  iterateEvents(target, entity, bindings, bindToFunction, bindFromStrings);
+  iterateEvents(target, entity, bindings, 'listenTo');
 }
 
 function unbindEntityEvents(target, entity, bindings) {
-  iterateEvents(target, entity, bindings, unbindToFunction, unbindFromStrings);
+  iterateEvents(target, entity, bindings, 'stopListening');
 }
 
 // Proxy `bindEntityEvents`

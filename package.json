@@ -40,7 +40,7 @@
     "backbone.babysitter": "^0.1.0",
     "backbone.radio": "^1.0.0",
     "backbone": "1.2.1 - 1.2.3",
-    "underscore": "1.7 - 1.8.3"
+    "underscore": "1.8 - 1.8.3"
   },
   "devDependencies": {
     "babel-core": "^5.0.0",

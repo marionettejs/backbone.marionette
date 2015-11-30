@@ -27,8 +27,8 @@ import { triggerMethod }       from './trigger-method';
 
 var AppRouter = Backbone.Router.extend({
 
-  constructor: function(options) {
-    this.options = options || {};
+  constructor: function(options = {}) {
+    this.options = options;
 
     Backbone.Router.apply(this, arguments);
 

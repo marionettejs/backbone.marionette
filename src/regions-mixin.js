@@ -8,7 +8,7 @@ export default {
 
   // Internal method to initialize the regions that have been defined in a
   // `regions` attribute on this View.
-  _initRegions: function(options) {
+  _initRegions: function() {
 
     // init regions hash
     this.regions =  this.regions || {};

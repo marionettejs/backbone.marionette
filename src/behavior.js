@@ -18,7 +18,7 @@ var Behavior = MNObject.extend({
     // wants to directly talk up the chain
     // to the view.
     this.view = view;
-    this.defaults = _.result(this, 'defaults') || {};
+    this.defaults = _.clone(_.result(this, 'defaults', {}));
     this.options  = _.extend({}, this.defaults, options);
     // Construct an internal UI hash using
     // the behaviors UI hash and then the view UI hash.

@@ -8,7 +8,8 @@ import isNodeAttached     from './utils/isNodeAttached';
 import _getValue          from './utils/_getValue';
 import getOption          from './utils/getOption';
 import MarionetteError    from './error';
-import ViewMixin          from './view-mixin';
+import ViewMixin     from './mixins/view';
+import BehaviorsMixin  from './mixins/behaviors';
 import MonitorDOMRefresh  from './dom-refresh';
 import { triggerMethodMany, triggerMethodOn } from './trigger-method';
 
@@ -729,5 +730,7 @@ var CollectionView = Backbone.View.extend({
 });
 
 _.extend(CollectionView.prototype, ViewMixin);
+
+_.extend(CollectionView.prototype, BehaviorsMixin);
 
 export default CollectionView;

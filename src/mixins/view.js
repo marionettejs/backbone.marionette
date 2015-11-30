@@ -3,19 +3,21 @@
 
 import Backbone                 from 'backbone';
 import _                        from 'underscore';
-import Behaviors                from './behaviors';
-import _getValue                from './utils/_getValue';
-import getOption                from './utils/getOption';
-import normalizeMethods         from './utils/normalizeMethods';
-import normalizeUIKeys          from './utils/normalizeUIKeys';
-import normalizeUIValues        from './utils/normalizeUIValues';
-import mergeOptions             from './utils/mergeOptions';
-import proxyGetOption           from './utils/proxyGetOption';
-import MarionetteError          from './error';
-import Renderer                 from './renderer';
-import View                     from './view';
-import { proxyBindEntityEvents, proxyUnbindEntityEvents } from './bind-entity-events';
-import { _triggerMethod }       from './trigger-method';
+import _getValue                from '../utils/_getValue';
+import getOption                from '../utils/getOption';
+import normalizeMethods         from '../utils/normalizeMethods';
+import normalizeUIKeys          from '../utils/normalizeUIKeys';
+import normalizeUIValues        from '../utils/normalizeUIValues';
+import mergeOptions             from '../utils/mergeOptions';
+import proxyGetOption           from '../utils/proxyGetOption';
+import MarionetteError          from '../error';
+import Renderer                 from '../renderer';
+import View                     from '../view';
+import {
+  proxyBindEntityEvents,
+  proxyUnbindEntityEvents
+}                               from '../bind-entity-events';
+import { _triggerMethod }       from '../trigger-method';
 
 export default {
   supportsRenderLifecycle: true,
@@ -31,11 +33,6 @@ export default {
 
   isRendered: function() {
     return !!this._isRendered;
-  },
-
-  _initBehaviors: function() {
-    var behaviors = _getValue(this.getOption('behaviors'), this);
-    this._behaviors = Behaviors(this, behaviors);
   },
 
   // Get the template for this view
@@ -118,24 +115,23 @@ export default {
   // Overriding Backbone.View's `delegateEvents` to handle
   // `events` and `triggers`
   delegateEvents: function(eventsArg) {
-    // proxy behavior $el to the view's $el.
-    _.invoke(this._behaviors, 'proxyViewProperties', this);
 
-    var events = _getValue(eventsArg || this.events, this);
+    this._proxyBehaviorViewProperties();
 
-    // normalize ui keys
-    events = this.normalizeUIKeys(events);
-    if (typeof eventsArg === 'undefined') {this.events = events;}
+    var events = this.normalizeUIKeys(
+      _getValue(eventsArg || this.events, this)
+    );
 
-    var combinedEvents = {};
+    if (typeof eventsArg === 'undefined') {
+      this.events = events;
+    }
 
-    // look up if this view has behavior events
-    var behaviorEvents = _.result(this, 'behaviorEvents', {});
-    var triggers = this.configureTriggers();
-    var behaviorTriggers = _.result(this, 'behaviorTriggers', {});
-
-    // behavior events will be overriden by view events and or triggers
-    _.extend(combinedEvents, behaviorEvents, events, triggers, behaviorTriggers);
+    var combinedEvents = _.extend({},
+      this._getBehaviorEvents(),
+      events,
+      this.configureTriggers(),
+      this._getBehaviorTriggers()
+    );
 
     Backbone.View.prototype.delegateEvents.call(this, combinedEvents);
 
@@ -149,10 +145,8 @@ export default {
     this.bindEntityEvents(this.model, this.getOption('modelEvents'));
     this.bindEntityEvents(this.collection, this.getOption('collectionEvents'));
 
-    _.each(this._behaviors, function(behavior) {
-      behavior.bindEntityEvents(this.model, behavior.getOption('modelEvents'));
-      behavior.bindEntityEvents(this.collection, behavior.getOption('collectionEvents'));
-    }, this);
+    // bind each behaviors model and collection events
+    this._delegateBehaviorEntityEvents();
 
     return this;
   },
@@ -162,10 +156,8 @@ export default {
     this.unbindEntityEvents(this.model, this.getOption('modelEvents'));
     this.unbindEntityEvents(this.collection, this.getOption('collectionEvents'));
 
-    _.each(this._behaviors, function(behavior) {
-      behavior.unbindEntityEvents(this.model, behavior.getOption('modelEvents'));
-      behavior.unbindEntityEvents(this.collection, behavior.getOption('collectionEvents'));
-    }, this);
+    // unbind each behaviors model and collection events
+    this._undelegateBehaviorEntityEvents();
 
     return this;
   },
@@ -199,11 +191,8 @@ export default {
 
     // remove children after the remove to prevent extra paints
     this._removeChildren();
-    // Call destroy on each behavior after
-    // destroying the view.
-    // This unbinds event listeners
-    // that behaviors have registered for.
-    _.invoke(this._behaviors, 'destroy', args);
+
+    this._destroyBehaviors(args);
 
     this.triggerMethod('destroy', ...args);
 
@@ -214,7 +203,7 @@ export default {
 
   bindUIElements: function() {
     this._bindUIElements();
-    _.invoke(this._behaviors, this._bindUIElements);
+    this._bindBehaviorUIElements();
   },
 
   // This method binds the elements specified in the "ui" hash inside the view's code with
@@ -245,7 +234,7 @@ export default {
   // This method unbinds the elements specified in the "ui" hash
   unbindUIElements: function() {
     this._unbindUIElements();
-    _.invoke(this._behaviors, this._unbindUIElements);
+    this._unbindBehaviorUIElements();
   },
 
   _unbindUIElements: function() {
@@ -312,15 +301,6 @@ export default {
     this._triggerEventOnParentLayout(eventName, args);
 
     return ret;
-  },
-
-  _triggerEventOnBehaviors: function(args) {
-    var triggerMethod = _triggerMethod;
-    var behaviors = this._behaviors;
-    // Use good ol' for as this is a very hot function
-    for (var i = 0, length = behaviors && behaviors.length; i < length; i++) {
-      triggerMethod(behaviors[i], args);
-    }
   },
 
   _triggerEventOnParentLayout: function(eventName, args) {

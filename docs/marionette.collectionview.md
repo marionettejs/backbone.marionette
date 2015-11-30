@@ -222,7 +222,7 @@ in the constructor function call, to get a view instance.
 A `childViewEvents` hash or method permits handling of child view events without manually setting bindings. The values of the hash can either be a function or a string method name on the collection view.
 
 ```js
-// childEvents can be specified as a hash...
+// childViewEvents can be specified as a hash...
 var MyCollectionView = Marionette.CollectionView.extend({
 
   childViewEvents: {
@@ -248,7 +248,7 @@ var MyCollectionView = Marionette.CollectionView.extend({
 });
 ```
 
-`childViewEvents` also catches custom events fired by a child view.  Take note that the first argument to a `childEvents` handler is the child view itself.
+`childViewEvents` also catches custom events fired by a child view.  Take note that the first argument to a `childViewEvents` handler is the child view itself.
 
 ```js
 // The child view fires a custom event, `show:message`
@@ -271,12 +271,12 @@ var ChildView = Marionette.View.extend({
   }
 });
 
-// The parent uses childEvents to catch the child view's custom event
+// The parent uses childViewEvents to catch the child view's custom event
 var ParentView = Marionette.CollectionView.extend({
 
   childView: ChildView,
 
-  childEvents: {
+  childViewEvents: {
     'show:message': 'onChildShowMessage',
     'submit:form': 'onChildSubmitForm'
   },

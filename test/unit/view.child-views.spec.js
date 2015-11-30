@@ -298,7 +298,7 @@ describe('layoutView', function() {
       this.childEventsHandler = this.sinon.spy();
 
       // add child events to listen for
-      this.layoutView.childEvents = {
+      this.layoutView.childViewEvents = {
         'content:rendered': this.childEventsHandler
       };
       this.layoutView.render();
@@ -319,7 +319,7 @@ describe('layoutView', function() {
       expect(this.layoutView.getChildView('regionOne')).to.equal(this.childView);
     });
 
-    it('childEvents are triggered', function() {
+    it('childViewEvents are triggered', function() {
       expect(this.childEventsHandler).to.have.been.calledOnce;
     });
   });

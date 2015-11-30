@@ -272,7 +272,7 @@ describe('base view', function() {
           'child': '.child',
         },
 
-        childEvents: {
+        childViewEvents: {
           'boom': 'onBoom'
         },
 
@@ -332,7 +332,7 @@ describe('base view', function() {
           .and.CalledOnce;
       });
 
-      it('invokes the layout childEvents handler', function() {
+      it('invokes the layout childViewEvents handler', function() {
         expect(this.layoutViewOnBoomHandler)
           .to.have.been.calledWith(this.childView, 'foo', 'bar')
           .and.to.have.been.calledOn(this.layoutView)
@@ -340,15 +340,15 @@ describe('base view', function() {
       });
     });
 
-    describe('when childEvents was passed as a function', function() {
+    describe('when childViewEvents was passed as a function', function() {
       beforeEach(function() {
-        // use the function definition of childEvents instead of the hash
-        this.layoutView.childEvents = this.childEventsFunction;
+        // use the function definition of childViewEvents instead of the hash
+        this.layoutView.childViewEvents = this.childEventsFunction;
         this.layoutView.showChildView('child', this.childView);
         this.childView.triggerMethod('boom', 'foo', 'bar');
       });
 
-      it('invokes the layout childEvents handler', function() {
+      it('invokes the layout childViewEvents handler', function() {
         expect(this.layoutViewOnBoomHandler)
           .to.have.been.calledWith(this.childView, 'foo', 'bar')
           .and.to.have.been.calledOn(this.layoutView)

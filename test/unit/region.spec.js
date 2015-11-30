@@ -1044,7 +1044,7 @@ describe('region', function() {
         regions: {
           barRegion: '#bar'
         },
-        childEvents: {
+        childViewEvents: {
           attachViewClicked: function() {},
         }
       });
@@ -1052,7 +1052,7 @@ describe('region', function() {
       this.fooView = new View();
       this.barRegion = this.fooView.getRegion('barRegion');
       this.sinon.spy(this.barRegion, 'attachView');
-      this.sinon.spy(this.fooView.childEvents, 'attachViewClicked');
+      this.sinon.spy(this.fooView.childViewEvents, 'attachViewClicked');
       this.barRegion.attachView(this.viewAttached);
     });
 
@@ -1074,7 +1074,7 @@ describe('region', function() {
 
     it('should call the child events defined on parent view', function() {
       this.viewAttached.$el.click();
-      expect(this.fooView.childEvents.attachViewClicked).to.have.been.calledOnce;
+      expect(this.fooView.childViewEvents.attachViewClicked).to.have.been.calledOnce;
     });
 
     describe('when attaching another view to the same region', function() {
@@ -1085,12 +1085,12 @@ describe('region', function() {
 
       it('the first view should no longer call the child events defined on the parent', function() {
         this.viewAttached.triggerMethod('attachViewClicked');
-        expect(this.fooView.childEvents.attachViewClicked).to.not.have.been.called;
+        expect(this.fooView.childViewEvents.attachViewClicked).to.not.have.been.called;
       });
 
       it('the new view should call the child events defined on the parent instead', function() {
         this.viewAttachedLater.triggerMethod('attachViewClicked');
-        expect(this.fooView.childEvents.attachViewClicked).to.have.been.calledOnce;
+        expect(this.fooView.childViewEvents.attachViewClicked).to.have.been.calledOnce;
       });
     });
   });

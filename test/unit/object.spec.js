@@ -82,12 +82,12 @@ describe('marionette object', function() {
       expect(this.object.destroy).to.have.returned(this.object);
     });
 
-    it('should pass an empty object options down to the onBeforeDestroy method', function() {
-      expect(this.beforeDestroyHandler).to.have.been.calledWith({});
+    it('shouldn\'t pass any options to the onBeforeDestroy method', function() {
+      expect(this.beforeDestroyHandler).to.have.been.calledWith();
     });
 
-    it('should pass an empty object options down to the onDestroy method', function() {
-      expect(this.onDestroyHandler).to.have.been.calledWith({});
+    it('shouldn\'t pass any options to the onDestroy method', function() {
+      expect(this.onDestroyHandler).to.have.been.calledWith();
     });
   });
 
@@ -109,7 +109,8 @@ describe('marionette object', function() {
     });
 
     it('should pass the arguments down to the onBeforeDestroy method', function() {
-      expect(this.beforeDestroyHandler).to.have.been.calledWithExactly(destroyArgs);
+      expect(this.beforeDestroyHandler)
+      .to.have.been.calledWithExactly(destroyArgs);
     });
 
     it('should pass the arguments down to the onDestroy method', function() {

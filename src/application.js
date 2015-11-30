@@ -38,9 +38,9 @@ var Application = MarionetteObject.extend({
     return this._region;
   },
 
-  showView: function(view, options) {
+  showView: function(view, ...args) {
     var region = this.getRegion();
-    return region.show.apply(region, arguments);
+    return region.show(region, ...args);
   },
 
   getView: function() {

@@ -182,10 +182,8 @@ export default {
   },
 
   // Handle destroying the view and its children.
-  destroy: function() {
+  destroy: function(...args) {
     if (this._isDestroyed) { return this; }
-
-    var args = _.toArray(arguments);
 
     this.triggerMethod.apply(this, ['before:destroy'].concat(args));
 
@@ -308,11 +306,11 @@ export default {
 
   // import the `triggerMethod` to trigger events with corresponding
   // methods if the method exists
-  triggerMethod: function() {
+  triggerMethod: function(eventName, ...args) {
     var ret = _triggerMethod(this, arguments);
 
     this._triggerEventOnBehaviors(arguments);
-    this._triggerEventOnParentLayout(arguments[0], _.rest(arguments));
+    this._triggerEventOnParentLayout(eventName, args);
 
     return ret;
   },

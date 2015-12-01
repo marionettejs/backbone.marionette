@@ -57,7 +57,6 @@ var View = Backbone.View.extend({
     return _.clone(this.model.attributes);
   },
 
-
   // Serialize a collection by cloning each of
   // its model's attributes
   serializeCollection: function() {

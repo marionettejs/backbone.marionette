@@ -85,7 +85,6 @@ var CompositeView = CollectionView.extend({
     return _.clone(this.model.attributes);
   },
 
-
   // Renders the model and the collection.
   render: function() {
     this._ensureViewIsIntact();

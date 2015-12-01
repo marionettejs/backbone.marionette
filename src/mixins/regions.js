@@ -1,7 +1,7 @@
-import _            from 'underscore';
-import Region       from './region';
-import _getValue    from './utils/_getValue';
-import MarionetteError      from './error';
+import _                    from 'underscore';
+import Region               from '../region';
+import _getValue            from '../utils/_getValue';
+import MarionetteError      from '../error';
 
 export default {
   regionClass: Region,

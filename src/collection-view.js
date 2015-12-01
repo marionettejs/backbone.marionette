@@ -1,16 +1,21 @@
 // Collection View
 // ---------------
 
-import _                  from 'underscore';
-import Backbone           from 'backbone';
-import ChildViewContainer from 'backbone.babysitter';
-import isNodeAttached     from './utils/isNodeAttached';
-import _getValue          from './utils/_getValue';
-import getOption          from './utils/getOption';
-import MarionetteError    from './error';
-import ViewMixin          from './view-mixin';
-import MonitorDOMRefresh  from './dom-refresh';
-import { triggerMethodMany, triggerMethodOn } from './trigger-method';
+import _                    from 'underscore';
+import Backbone             from 'backbone';
+import ChildViewContainer   from 'backbone.babysitter';
+import isNodeAttached       from './utils/isNodeAttached';
+import _getValue            from './utils/_getValue';
+import getOption            from './utils/getOption';
+import MarionetteError      from './error';
+import ViewMixin            from './mixins/view';
+import BehaviorsMixin       from './mixins/behaviors';
+import UIMixin              from './mixins/ui';
+import MonitorDOMRefresh    from './dom-refresh';
+import {
+  triggerMethodMany,
+  triggerMethodOn
+}                           from './trigger-method';
 
 // A view that iterates over a Backbone.Collection
 // and renders an individual child view for each model.
@@ -729,5 +734,7 @@ var CollectionView = Backbone.View.extend({
 });
 
 _.extend(CollectionView.prototype, ViewMixin);
+_.extend(CollectionView.prototype, BehaviorsMixin);
+_.extend(CollectionView.prototype, UIMixin);
 
 export default CollectionView;

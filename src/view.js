@@ -1,12 +1,14 @@
 // View
 // ---------
 
-import _             from 'underscore';
-import Backbone      from 'backbone';
-import ViewMixin     from './view-mixin';
-import RegionsMixin  from './regions-mixin';
-import MonitorDOMRefresh from './dom-refresh';
-import _getValue     from './utils/_getValue';
+import _                  from 'underscore';
+import Backbone           from 'backbone';
+import ViewMixin          from './mixins/view';
+import RegionsMixin       from './mixins/regions';
+import BehaviorsMixin     from './mixins/behaviors';
+import UIMixin            from './mixins/ui';
+import MonitorDOMRefresh  from './dom-refresh';
+import _getValue          from './utils/_getValue';
 
 // The standard view. Includes view events, automatic rendering
 // of Underscore templates, nested views, and more.
@@ -105,7 +107,8 @@ var View = Backbone.View.extend({
 });
 
 _.extend(View.prototype, ViewMixin);
-
 _.extend(View.prototype, RegionsMixin);
+_.extend(View.prototype, BehaviorsMixin);
+_.extend(View.prototype, UIMixin);
 
 export default View;

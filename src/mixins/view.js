@@ -264,7 +264,7 @@ export default {
     // since childViewEvents can be an object or a function use Marionette._getValue
     // to handle the abstaction for us.
     childViewEvents = _getValue(childViewEvents, layoutView);
-    var normalizedChildEvents = layoutView.normalizeMethods(childViewEvents);
+    var normalizedChildEvents = normalizeMethods(layoutView, childViewEvents);
 
     if (!!normalizedChildEvents && _.isFunction(normalizedChildEvents[eventName])) {
       normalizedChildEvents[eventName].apply(layoutView, callArgs);
@@ -295,10 +295,6 @@ export default {
       parent = parent._parent;
     }
   },
-
-  // Imports the "normalizeMethods" to transform hashes of
-  // events=>function references/names to a hash of events=>function references
-  normalizeMethods: normalizeMethods,
 
   // A handy way to merge passed-in options onto the instance
   mergeOptions: mergeOptions,

@@ -10,7 +10,7 @@ describe('normalizeMethods', function() {
       'foo': 'foo',
       'bar': 'bar'
     };
-    this.normalizedHash = this.view.normalizeMethods(this.hash);
+    this.normalizedHash = Marionette.normalizeMethods(this.view, this.hash);
   });
 
   describe('when normalizeMethods is called with a hash of functions and strings', function() {

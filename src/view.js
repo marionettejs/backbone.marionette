@@ -177,7 +177,7 @@ Marionette.View = Marionette.AbstractView.extend({
   },
   showChildView: function(regionName, view, options) {
     var region = this.getRegion(regionName);
-    // this._unbindRegionEvents(regionName, view);
+    this._unbindRegionEvents(regionName, view);
     this._bindRegionEvents(regionName, view);
 
     return region.show.apply(region, _.rest(arguments));

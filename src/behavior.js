@@ -6,10 +6,12 @@
 // Behaviors allow you to blackbox View specific interactions
 // into portable logical chunks, keeping your views simple and your code DRY.
 
-import _        from 'underscore';
-import MNObject from './object';
+import _                  from 'underscore';
+import MarionetteObject   from './object';
+import UIMixin            from './mixins/ui';
+import getUniqueEventName from './utils/getUniqueEventName';
 
-var Behavior = MNObject.extend({
+var Behavior = MarionetteObject.extend({
   cidPrefix: 'mnb',
 
   constructor: function(options, view) {
@@ -30,7 +32,7 @@ var Behavior = MNObject.extend({
     // selector under an UI key.
     this.ui = _.extend({}, _.result(this, 'ui'), _.result(view, 'ui'));
 
-    MNObject.apply(this, arguments);
+    MarionetteObject.apply(this, arguments);
   },
 
   // proxy behavior $ method to the view
@@ -48,10 +50,81 @@ var Behavior = MNObject.extend({
     return this;
   },
 
-  proxyViewProperties: function(view) {
-    this.$el = view.$el;
-    this.el = view.el;
+  proxyViewProperties: function() {
+    this.$el = this.view.$el;
+    this.el = this.view.el;
+
+    return this;
+  },
+
+  bindUIElements: function() {
+    this._bindUIElements();
+
+    return this;
+  },
+
+  unbindUIElements: function() {
+    this._unbindUIElements();
+
+    return this;
+  },
+
+  getUI: function(name) {
+    this.view._ensureViewIsIntact();
+    return this._getUI(name);
+  },
+
+  // Handle `modelEvents`, and `collectionEvents` configuration
+  delegateEntityEvents: function() {
+    this.undelegateEntityEvents();
+
+    this.bindEntityEvents(this.view.model, this.getOption('modelEvents'));
+    this.bindEntityEvents(this.view.collection, this.getOption('collectionEvents'));
+
+    return this;
+  },
+
+  undelegateEntityEvents: function() {
+    this.unbindEntityEvents(this.view.model, this.getOption('modelEvents'));
+    this.unbindEntityEvents(this.view.collection, this.getOption('collectionEvents'));
+
+    return this;
+  },
+
+  _getEvents: function() {
+    // Normalize behavior events hash to allow
+    // a user to use the @ui. syntax.
+    var behaviorEvents = this.normalizeUIKeys(_.result(this, 'events'));
+
+    // binds the handler to the behavior and builds a unique eventName
+    return _.reduce(behaviorEvents, function(events, behaviorHandler, key) {
+      if (!_.isFunction(behaviorHandler)) {
+        behaviorHandler = this[behaviorHandler];
+      }
+      if (!behaviorHandler) { return; }
+      key = getUniqueEventName(key);
+      events[key] = _.bind(behaviorHandler, this);
+      return events;
+    } , {}, this);
+  },
+
+  // Internal method to build all trigger handlers for a given behavior
+  _getTriggers: function() {
+    if (!this.triggers) { return; }
+
+    // Normalize behavior triggers hash to allow
+    // a user to use the @ui. syntax.
+    var behaviorTriggers = this.normalizeUIKeys(_.result(this, 'triggers'));
+
+    return _.reduce(behaviorTriggers, function(events, eventName, key) {
+      key = getUniqueEventName(key);
+      events[key] = this.view._buildViewTrigger(eventName);
+      return events;
+    } , {}, this);
   }
+
 });
+
+_.extend(Behavior.prototype, UIMixin);
 
 export default Behavior;

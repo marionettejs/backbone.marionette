@@ -2,96 +2,75 @@ import _                        from 'underscore';
 import _getValue                from '../utils/_getValue';
 import getOption                from '../utils/getOption';
 import { _triggerMethod }       from '../trigger-method';
-import normalizeUIKeys          from '../utils/normalizeUIKeys';
-import BehaviorTriggersBuilder  from '../utils/behavior-trigger-builder';
-import parseBehaviors           from '../utils/parseBehaviors';
+import Marionette               from '../backbone.marionette';
 
-// Borrow event splitter from Backbone
-var delegateEventSplitter = /^(\S+)\s*(.*)$/;
+// Takes care of getting the behavior class
+// given options and a key.
+// If a user passes in options.behaviorClass
+// default to using that.
+// If a user passes in a Behavior Class directly, use that
+// Otherwise delegate the lookup to the users `behaviorsLookup` implementation.
+function getBehaviorClass(options, key) {
+  if (options.behaviorClass) {
+    return options.behaviorClass;
+    //treat functions as a Behavior constructor
+  } else if (_.isFunction(options)) {
+    return options;
+  }
 
-function getBehaviorsUI(behavior) {
-  return behavior._uiBindings || behavior.ui;
+  // behaviorsLookup can be either a flat object or a method
+  return _getValue(Marionette.Behaviors.behaviorsLookup, this, [options, key])[key];
+}
+
+// Iterate over the behaviors object, for each behavior
+// instantiate it and get its grouped behaviors.
+// This accepts a list of behaviors in either an object or array form
+function parseBehaviors(view, behaviors) {
+  return _.chain(behaviors).map(function(options, key) {
+    var BehaviorClass = getBehaviorClass(options, key);
+    //if we're passed a class directly instead of an object
+    var _options = options === BehaviorClass ? {} : options;
+    var behavior = new BehaviorClass(_options, view);
+    var nestedBehaviors = parseBehaviors(view, _.result(behavior, 'behaviors'));
+
+    return [behavior].concat(nestedBehaviors);
+  }).flatten().value();
 }
 
 export default {
   _initBehaviors: function() {
     var behaviors = _getValue(this.getOption('behaviors'), this);
-    var instanciatedBehaviors = {};
 
     // Behaviors defined on a view can be a flat object literal
     // or it can be a function that returns an object.
-    if (_.isObject(this.behaviors)) {
-      instanciatedBehaviors = parseBehaviors(this, behaviors);
-    }
-
-    this._behaviors = instanciatedBehaviors;
-    return behaviors;
-  },
-
-  _getBehaviorEvents: function() {
-    return _.result(this, 'behaviorEvents', {});
+    this._behaviors = _.isObject(behaviors) ? parseBehaviors(this, behaviors) : {};
   },
 
   _getBehaviorTriggers: function() {
-    return _.result(this, 'behaviorTriggers', {});
+    return _.reduce(this._behaviors, function(triggers, behavior) {
+      return _.extend(triggers, behavior._getTriggers());
+    }, {});
   },
 
-  behaviorTriggers: function(unusedBehaviorTriggers) {
-    var triggerBuilder = new BehaviorTriggersBuilder(this, this._behaviors);
-    return triggerBuilder.buildBehaviorTriggers();
+  _getBehaviorEvents: function() {
+    return _.reduce(this._behaviors, function(events, behavior) {
+      return _.extend(events, behavior._getEvents());
+    }, {});
   },
 
-  behaviorEvents: function(unusedBehaviorEvents) {
-    var _behaviorsEvents = {};
-
-    _.each(this._behaviors, function(b, i) {
-      var _events = {};
-      var behaviorEvents = _.clone(_.result(b, 'events')) || {};
-
-      // Normalize behavior events hash to allow
-      // a user to use the @ui. syntax.
-      behaviorEvents = normalizeUIKeys(behaviorEvents, getBehaviorsUI(b));
-
-      var j = 0;
-      _.each(behaviorEvents, function(behaviorHandler, key) {
-        var match     = key.match(delegateEventSplitter);
-
-        // Set event name to be namespaced using the view cid,
-        // the behavior index, and the behavior event index
-        // to generate a non colliding event namespace
-        // http://api.jquery.com/event.namespace/
-        var eventName = match[1] + '.' + [this.cid, i, j++, ' '].join('');
-        var selector  = match[2];
-
-        var eventKey  = eventName + selector;
-        var handler   = _.isFunction(behaviorHandler) ? behaviorHandler : b[behaviorHandler];
-
-        _events[eventKey] = _.bind(handler, b);
-      }, this);
-
-      _behaviorsEvents = _.extend(_behaviorsEvents, _events);
-    }, this);
-
-    return _behaviorsEvents;
-  },
-
+  // proxy behavior $el to the view's $el.
   _proxyBehaviorViewProperties: function() {
-    // proxy behavior $el to the view's $el.
-    _.invoke(this._behaviors, 'proxyViewProperties', this);
+    _.invoke(this._behaviors, 'proxyViewProperties');
   },
 
+  // delegate modelEvents and collectionEvents
   _delegateBehaviorEntityEvents: function() {
-    _.each(this._behaviors, function(behavior) {
-      behavior.bindEntityEvents(this.model, behavior.getOption('modelEvents'));
-      behavior.bindEntityEvents(this.collection, behavior.getOption('collectionEvents'));
-    }, this);
+    _.invoke(this._behaviors, 'delegateEntityEvents');
   },
 
+  // undelegate modelEvents and collectionEvents
   _undelegateBehaviorEntityEvents: function() {
-    _.each(this._behaviors, function(behavior) {
-      behavior.unbindEntityEvents(this.model, behavior.getOption('modelEvents'));
-      behavior.unbindEntityEvents(this.collection, behavior.getOption('collectionEvents'));
-    }, this);
+    _.invoke(this._behaviors, 'undelegateEntityEvents');
   },
 
   _destroyBehaviors: function(args) {
@@ -103,11 +82,11 @@ export default {
   },
 
   _bindBehaviorUIElements: function() {
-    _.invoke(this._behaviors, this._bindUIElements);
+    _.invoke(this._behaviors, 'bindUIElements');
   },
 
   _unbindBehaviorUIElements: function() {
-    _.invoke(this._behaviors, this._unbindUIElements);
+    _.invoke(this._behaviors, 'unbindUIElements');
   },
 
   _triggerEventOnBehaviors: function(args) {

@@ -8,6 +8,7 @@ import getOption                from '../utils/getOption';
 import normalizeMethods         from '../utils/normalizeMethods';
 import mergeOptions             from '../utils/mergeOptions';
 import proxyGetOption           from '../utils/proxyGetOption';
+import getUniqueEventName       from '../utils/getUniqueEventName';
 import MarionetteError          from '../error';
 import Renderer                 from '../renderer';
 import View                     from '../view';
@@ -79,31 +80,13 @@ export default {
     return _.extend(target, templateContext);
   },
 
-  // Configure `triggers` to forward DOM events to view
-  // events. `triggers: {"click .foo": "do:foo"}`
-  configureTriggers: function() {
-    if (!this.triggers) { return; }
-
-    // Allow `triggers` to be configured as a function
-    var triggers = this.normalizeUIKeys(_.result(this, 'triggers', {}));
-
-    // Configure the triggers, prevent default
-    // action and stop propagation of DOM events
-    return _.reduce(triggers, function(events, value, key) {
-      events[key] = this._buildViewTrigger(value);
-      return events;
-    }, {}, this);
-  },
-
   // Overriding Backbone.View's `delegateEvents` to handle
   // `events` and `triggers`
   delegateEvents: function(eventsArg) {
 
     this._proxyBehaviorViewProperties();
 
-    var events = this.normalizeUIKeys(
-      _getValue(eventsArg || this.events, this)
-    );
+    var events = this._getEvents(eventsArg);
 
     if (typeof eventsArg === 'undefined') {
       this.events = events;
@@ -113,7 +96,7 @@ export default {
       this._getBehaviorEvents(),
       events,
       this._getBehaviorTriggers(),
-      this.configureTriggers()
+      this._getTriggers()
     );
 
     Backbone.View.prototype.delegateEvents.call(this, combinedEvents);
@@ -121,10 +104,62 @@ export default {
     return this;
   },
 
+  _getEvents: function(eventsArg) {
+    var events = _getValue(eventsArg || this.events, this);
+
+    return this.normalizeUIKeys(events);
+  },
+
+  // Configure `triggers` to forward DOM events to view
+  // events. `triggers: {"click .foo": "do:foo"}`
+  _getTriggers: function() {
+    if (!this.triggers) { return; }
+
+    // Allow `triggers` to be configured as a function
+    var triggers = this.normalizeUIKeys(_.result(this, 'triggers'));
+
+    // Configure the triggers, prevent default
+    // action and stop propagation of DOM events
+    return _.reduce(triggers, function(events, value, key) {
+      key = getUniqueEventName(key);
+      events[key] = this._buildViewTrigger(value);
+      return events;
+    }, {}, this);
+  },
+
+  // Internal method to create an event handler for a given `triggerDef` like
+  // 'click:foo'
+  _buildViewTrigger: function(triggerDef) {
+    var options = _.defaults({}, triggerDef, {
+      preventDefault: true,
+      stopPropagation: true
+    });
+
+    var eventName = _.isObject(triggerDef) ? options.event : triggerDef;
+
+    return function(e) {
+      if (e) {
+        if (e.preventDefault && options.preventDefault) {
+          e.preventDefault();
+        }
+
+        if (e.stopPropagation && options.stopPropagation) {
+          e.stopPropagation();
+        }
+      }
+
+      var args = {
+        view: this,
+        model: this.model,
+        collection: this.collection
+      };
+
+      this.triggerMethod(eventName, args);
+    };
+  },
+
   // Handle `modelEvents`, and `collectionEvents` configuration
   delegateEntityEvents: function() {
-    this.undelegateEntityEvents();
-
     this.bindEntityEvents(this.model, this.getOption('modelEvents'));
     this.bindEntityEvents(this.collection, this.getOption('collectionEvents'));
 
@@ -187,43 +222,21 @@ export default {
   bindUIElements: function() {
     this._bindUIElements();
     this._bindBehaviorUIElements();
+
+    return this;
   },
 
   // This method unbinds the elements specified in the "ui" hash
   unbindUIElements: function() {
     this._unbindUIElements();
     this._unbindBehaviorUIElements();
+
+    return this;
   },
 
-  // Internal method to create an event handler for a given `triggerDef` like
-  // 'click:foo'
-  _buildViewTrigger: function(triggerDef) {
-    var options = _.defaults({}, triggerDef, {
-      preventDefault: true,
-      stopPropagation: true
-    });
-
-    var eventName = _.isObject(triggerDef) ? options.event : triggerDef;
-
-    return function(e) {
-      if (e) {
-        if (e.preventDefault && options.preventDefault) {
-          e.preventDefault();
-        }
-
-        if (e.stopPropagation && options.stopPropagation) {
-          e.stopPropagation();
-        }
-      }
-
-      var args = {
-        view: this,
-        model: this.model,
-        collection: this.collection
-      };
-
-      this.triggerMethod(eventName, args);
-    };
+  getUI: function(name) {
+    this._ensureViewIsIntact();
+    return this._getUI(name);
   },
 
   // used as the prefix for child view events

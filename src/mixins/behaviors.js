@@ -1,4 +1,3 @@
-import Backbone                 from 'backbone';
 import _                        from 'underscore';
 import Behaviors                from '../behaviors';
 import _getValue                from '../utils/_getValue';

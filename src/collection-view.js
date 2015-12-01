@@ -168,8 +168,7 @@ var CollectionView = Backbone.View.extend({
   // An efficient rendering used for filtering. Instead of modifying
   // the whole DOM for the collection view, we are only adding or
   // removing the related childrenViews.
-  setFilter: function(filter, options) {
-    options = options || {};
+  setFilter: function(filter, options = {}) {
     var viewCanBeRendered = this._isRendered && !this._isDestroyed;
     // The same filter or a `prevent` option won't render the filter.
     // Nevertheless, a `prevent` option will modify the value.

@@ -43,7 +43,7 @@ var methods = {
 
     _.each(behaviors, function(b, i) {
       var _events = {};
-      var behaviorEvents = _.clone(_.result(b, 'events')) || {};
+      var behaviorEvents = _.clone(_.result(b, 'events', {}));
 
       // Normalize behavior events hash to allow
       // a user to use the @ui. syntax.
@@ -153,7 +153,7 @@ _.extend(BehaviorTriggersBuilder.prototype, {
 
   // Internal method to build all trigger handlers for a given behavior
   _buildTriggerHandlersForBehavior: function(behavior, i) {
-    var triggersHash = _.clone(_.result(behavior, 'triggers')) || {};
+    var triggersHash = _.clone(_.result(behavior, 'triggers', {}));
 
     triggersHash = normalizeUIKeys(triggersHash, getBehaviorsUI(behavior));
 

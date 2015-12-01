@@ -78,8 +78,7 @@ export default {
   // object literal, or a function that returns an object
   // literal. All methods and attributes from this object
   // are copies to the object passed in.
-  mixinTemplateContext: function(target) {
-    target = target || {};
+  mixinTemplateContext: function(target = {}) {
     var templateContext = this.getOption('templateContext');
     templateContext = _getValue(templateContext, this);
     return _.extend(target, templateContext);
@@ -106,7 +105,7 @@ export default {
     if (!this.triggers) { return; }
 
     // Allow `triggers` to be configured as a function
-    var triggers = this.normalizeUIKeys(_.result(this, 'triggers'));
+    var triggers = this.normalizeUIKeys(_.result(this, 'triggers', {}));
 
     // Configure the triggers, prevent default
     // action and stop propagation of DOM events
@@ -131,9 +130,9 @@ export default {
     var combinedEvents = {};
 
     // look up if this view has behavior events
-    var behaviorEvents = _.result(this, 'behaviorEvents') || {};
+    var behaviorEvents = _.result(this, 'behaviorEvents', {});
     var triggers = this.configureTriggers();
-    var behaviorTriggers = _.result(this, 'behaviorTriggers') || {};
+    var behaviorTriggers = _.result(this, 'behaviorTriggers', {});
 
     // behavior events will be overriden by view events and or triggers
     _.extend(combinedEvents, behaviorEvents, events, triggers, behaviorTriggers);

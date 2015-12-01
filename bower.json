@@ -37,7 +37,7 @@
   ],
   "dependencies": {
     "backbone": "1.2.1 - 1.2.3",
-    "underscore": "1.7 - 1.8.3",
+    "underscore": "1.8 - 1.8.3",
     "backbone.babysitter": "^0.1.0",
     "backbone.radio": "^1.0.0",
     "jquery": "^1.8.0 || ^2.0.0"

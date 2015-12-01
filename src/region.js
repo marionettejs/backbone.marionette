@@ -16,11 +16,11 @@ import { triggerMethodOn, triggerMethodMany } from './trigger-method';
 var Region = MNObject.extend({
   cidPrefix: 'mnr',
 
-  constructor: function(options) {
+  constructor: function(options = {}) {
 
     // set options temporarily so that we can get `el`.
     // options will be overriden by Object.constructor
-    this.options = options || {};
+    this.options = options;
     this.el = this.getOption('el');
 
     // Handle when this.el is passed in as a $ wrapped element.

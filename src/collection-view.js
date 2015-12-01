@@ -7,6 +7,7 @@ import ChildViewContainer   from 'backbone.babysitter';
 import isNodeAttached       from './utils/isNodeAttached';
 import _getValue            from './utils/_getValue';
 import getOption            from './utils/getOption';
+import normalizeMethods     from './utils/normalizeMethods';
 import MarionetteError      from './error';
 import ViewMixin            from './mixins/view';
 import BehaviorsMixin       from './mixins/behaviors';
@@ -707,7 +708,7 @@ var CollectionView = Backbone.View.extend({
     // prepending "childview:" to the event name
     this.listenTo(view, 'all', function(rootEvent, ...args) {
 
-      var childViewEvents = this.normalizeMethods(_.result(this, 'childViewEvents'));
+      var childViewEvents = normalizeMethods(this, _.result(this, 'childViewEvents'));
       var childEventName = prefix + ':' + rootEvent;
 
       // call collectionView childViewEvent if defined

@@ -75,6 +75,17 @@ var CompositeView = CollectionView.extend({
     return this.serializeModel();
   },
 
+  // Duplicated from View#serializeModel
+  // Prepares the special `model` property of a view
+  // for being displayed in the template. By default
+  // we simply clone the attributes. Override this if
+  // you need a custom transformation for your view's model
+  serializeModel: function() {
+    if (!this.model) { return {}; }
+    return _.clone(this.model.attributes);
+  },
+
+
   // Renders the model and the collection.
   render: function() {
     this._ensureViewIsIntact();

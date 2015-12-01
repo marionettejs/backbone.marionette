@@ -60,15 +60,6 @@ export default {
     this.attachElContent(html);
   },
 
-  // Prepares the special `model` property of a view
-  // for being displayed in the template. By default
-  // we simply clone the attributes. Override this if
-  // you need a custom transformation for your view's model
-  serializeModel: function() {
-    if (!this.model) { return {}; }
-    return _.clone(this.model.attributes);
-  },
-
   // Mix in template context methods. Looks for a
   // `templateContext` attribute, which can either be an
   // object literal, or a function that returns an object

@@ -91,7 +91,7 @@ var Behavior = MarionetteObject.extend({
     return this;
   },
 
-  _getEvents: function() {
+  getEvents: function() {
     // Normalize behavior events hash to allow
     // a user to use the @ui. syntax.
     var behaviorEvents = this.normalizeUIKeys(_.result(this, 'events'));
@@ -109,7 +109,7 @@ var Behavior = MarionetteObject.extend({
   },
 
   // Internal method to build all trigger handlers for a given behavior
-  _getTriggers: function() {
+  getTriggers: function() {
     if (!this.triggers) { return; }
 
     // Normalize behavior triggers hash to allow

@@ -47,15 +47,13 @@ export default {
   },
 
   _getBehaviorTriggers: function() {
-    return _.reduce(this._behaviors, function(triggers, behavior) {
-      return _.extend(triggers, behavior._getTriggers());
-    }, {});
+    var triggers = _.invoke(this._behaviors, 'getTriggers');
+    return _.extend({}, ...triggers);
   },
 
   _getBehaviorEvents: function() {
-    return _.reduce(this._behaviors, function(events, behavior) {
-      return _.extend(events, behavior._getEvents());
-    }, {});
+    var events = _.invoke(this._behaviors, 'getEvents');
+    return _.extend({}, ...events);
   },
 
   // proxy behavior $el to the view's $el.

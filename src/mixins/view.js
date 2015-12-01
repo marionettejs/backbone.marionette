@@ -86,15 +86,15 @@ export default {
 
     this._proxyBehaviorViewProperties();
 
-    var events = this._getEvents(eventsArg);
+    var viewEvents = this._getEvents(eventsArg);
 
     if (typeof eventsArg === 'undefined') {
-      this.events = events;
+      this.events = viewEvents;
     }
 
     var combinedEvents = _.extend({},
       this._getBehaviorEvents(),
-      events,
+      viewEvents,
       this._getBehaviorTriggers(),
       this._getTriggers()
     );

@@ -8,6 +8,7 @@ import getValue        from './utils/getValue';
 import getOption       from './utils/getOption';
 import MarionetteError from './error';
 import CollectionView  from './collection-view';
+import View            from './view';
 
 // Used for rendering a branch-leaf, hierarchical structure.
 // Extends directly from CollectionView and also renders an
@@ -75,16 +76,6 @@ var CompositeView = CollectionView.extend({
     return this.serializeModel();
   },
 
-  // Duplicated from View#serializeModel
-  // Prepares the special `model` property of a view
-  // for being displayed in the template. By default
-  // we simply clone the attributes. Override this if
-  // you need a custom transformation for your view's model
-  serializeModel: function() {
-    if (!this.model) { return {}; }
-    return _.clone(this.model.attributes);
-  },
-
   // Renders the model and the collection.
   render: function() {
     this._ensureViewIsIntact();
@@ -107,24 +98,6 @@ var CompositeView = CollectionView.extend({
     if (this._isRendered || this._isRendering) {
       CollectionView.prototype._renderChildren.call(this);
     }
-  },
-
-  // Attaches the content of the root.
-  // This method can be overridden to optimize rendering,
-  // or to render in a non standard way.
-  //
-  // For example, using `innerHTML` instead of `$el.html`
-  //
-  // ```js
-  // attachElContent: function(html) {
-  //   this.el.innerHTML = html;
-  //   return this;
-  // }
-  // ```
-  attachElContent: function(html) {
-    this.$el.html(html);
-
-    return this;
   },
 
   // You might need to override this if you've overridden attachHtml
@@ -190,5 +163,10 @@ var CompositeView = CollectionView.extend({
     }
   }
 });
+
+// To prevent duplication but allow the best View organization
+// Certain View methods are mixed directly into the deprecated CompositeView
+var MixinFromView = _.pick(View.prototype, 'serializeModel', 'getTemplate', '_renderTemplate', 'attachElContent');
+_.extend(CompositeView.prototype, MixinFromView);
 
 export default CompositeView;

@@ -26,32 +26,6 @@ export default {
     return !!this._isRendered;
   },
 
-  // Get the template for this view
-  // instance. You can set a `template` attribute in the view
-  // definition or pass a `template: "whatever"` parameter in
-  // to the constructor options.
-  getTemplate: function() {
-    return this.getOption('template');
-  },
-
-  // Internal method to render the template with the serialized data
-  // and template context via the `Marionette.Renderer` object.
-  _renderTemplate: function() {
-    var template = this.getTemplate();
-
-    // Allow template-less views
-    if (template === false) {
-      return;
-    }
-
-    // Add in entity data and template context
-    var data = this.mixinTemplateContext(this.serializeData());
-
-    // Render and add to el
-    var html = Renderer.render(template, data, this);
-    this.attachElContent(html);
-  },
-
   // Mix in template context methods. Looks for a
   // `templateContext` attribute, which can either be an
   // object literal, or a function that returns an object

@@ -126,18 +126,60 @@ Marionette.View = Marionette.AbstractView.extend({
 
     // Add the regions definitions to the regions property
     this.regions = _.extend({}, this.regions, regions);
+    this._regionEvents = {};
 
     return this._buildRegions(regions);
   },
 
   // Remove a single region from the LayoutView, by name
   removeRegion: function(name) {
+    this._unbindRegionEvents(name);
     delete this.regions[name];
     return this.regionManager.removeRegion(name);
   },
+  _bindRegionEvents: function(regionName, childView) {
+    var childEvents = this.getOption('childEvents');
+    var normalizedChildEvents = this.normalizeMethods(childEvents);
 
+    var regionEvents = {};
+
+    // determine if there is a region alias that needs to be bound
+    _.each(normalizedChildEvents, function(eventHandler, childEventName) {
+        var regionEventSplitter = /^(@region\.(.*?)\s+)?\s*(.*)$/;
+        var match = childEventName.match(regionEventSplitter);
+        var regionAlias = match[2];
+        var regionEventName = match[3];
+
+        // is there a valid region alias event bound to this childView
+        var validRegionEvent = _.isString(regionAlias) && regionAlias === regionName;
+
+        if (_.isFunction(eventHandler) && validRegionEvent) {
+          regionEvents[regionEventName] = function() {
+            var args = Array.prototype.slice.call(arguments);
+            eventHandler.apply(this, [childView].concat(args));
+          };
+
+          this.listenTo(childView, childEventName, regionEvents[regionEventName]);
+        }
+      }, this);
+
+    this._regionEvents[regionName] = regionEvents;
+    return regionEvents;
+  },
+  _unbindRegionEvents: function(regionName, childView) {
+    if (_.isEmpty(this._regionEvents[regionName])) {
+      return;
+    }
+    childView = childView || this.getChildView(regionName);
+    _.each(this._regionEvents[regionName], function(handler, eventName) {
+      childView.off(eventName, handler, this);
+    }, this);
+  },
   showChildView: function(regionName, view, options) {
     var region = this.getRegion(regionName);
+    // this._unbindRegionEvents(regionName, view);
+    this._bindRegionEvents(regionName, view);
+
     return region.show.apply(region, _.rest(arguments));
   },
 
@@ -248,23 +290,10 @@ Marionette.View = Marionette.AbstractView.extend({
     var childEvents = this.getOption('childEvents');
     var normalizedChildEvents = this.normalizeMethods(childEvents);
 
-    // iterate over all normalized events looking for matching childEventName
-    // determine if there is also a region alias that needs to be bound correctly
-    _.each(normalizedChildEvents, function(eventHandler, childEventName) {
-        var regionEventSplitter = /^(@region\.(.*?)\s+)?\s*(.*)$/;
-        var match = childEventName.match(regionEventSplitter);
-        var regionName = match[2];
-        var regionEventName = match[3];
-
-        // is there a valid region alias event bound to this childView
-        var validRegionAliasEvent = !!regionName &&
-                                    this.getChildView(regionName) === childView &&
-                                    regionEventName === eventName;
-
-        if (_.isFunction(eventHandler) && (validRegionAliasEvent || childEventName === eventName)) {
-          eventHandler.apply(this, callArgs);
-        }
-      }, this);
+    var childEventHandler = normalizedChildEvents[eventName];
+    if (_.isFunction(normalizedChildEvents[eventName])) {
+      childEventHandler.apply(this, callArgs);
+    }
 
     return childView;
   },

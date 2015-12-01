@@ -21,13 +21,14 @@ import Region             from './region';
 import Application        from './application';
 import AppRouter          from './app-router';
 import MarionetteError    from './error';
-import behaviorsLookup    from './behaviors-lookup';
+
+import behaviorsLookup    from './config/behaviors-lookup';
 
 import {
   FEATURES,
   isEnabled,
   setEnabled
-} from './features';
+} from './config/features';
 
 import {
   bindEntityEvents,

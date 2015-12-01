@@ -20,11 +20,11 @@ import View               from './view';
 import CollectionView     from './collection-view';
 import CompositeView      from './composite-view';
 import Behavior           from './behavior';
-import Behaviors          from './behaviors';
 import Region             from './region';
 import Application        from './application';
 import AppRouter          from './app-router';
 import MarionetteError    from './error';
+import behaviorsLookup    from './behaviors-lookup';
 
 import {
   FEATURES,
@@ -85,6 +85,9 @@ Marionette.triggerMethodMany = triggerMethodMany;
 Marionette.isEnabled = isEnabled;
 Marionette.setEnabled = setEnabled;
 
+Marionette.Behaviors = {};
+Marionette.Behaviors.behaviorsLookup = behaviorsLookup;
+
 // Classes
 Marionette.Application = Application;
 Marionette.AppRouter = AppRouter;
@@ -95,7 +98,6 @@ Marionette.View = View;
 Marionette.CollectionView = CollectionView;
 Marionette.CompositeView = CompositeView;
 Marionette.Behavior = Behavior;
-Marionette.Behaviors = Behaviors;
 Marionette.Region = Region;
 Marionette.Error = MarionetteError;
 Marionette.Object = MarionetteObject;

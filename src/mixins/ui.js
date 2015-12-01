@@ -2,7 +2,6 @@ import normalizeUIKeys          from '../utils/normalizeUIKeys';
 import normalizeUIValues        from '../utils/normalizeUIValues';
 
 export default {
-
   // normalize the keys of passed hash with the views `ui` selectors.
   // `{"@ui.foo": "bar"}`
   normalizeUIKeys: function(hash) {
@@ -17,7 +16,6 @@ export default {
     var uiBindings = _.result(this, '_uiBindings');
     return normalizeUIValues(hash, uiBindings || ui, properties);
   },
-
 
   // This method binds the elements specified in the "ui" hash inside the view's code with
   // the associated jQuery selectors.

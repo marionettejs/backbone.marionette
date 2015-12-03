@@ -4,12 +4,8 @@
 import _                        from 'underscore';
 import Backbone                 from 'backbone';
 import extend                   from './utils/extend';
-import proxyGetOption           from './utils/proxyGetOption';
-import mergeOptions             from './utils/mergeOptions';
+import CommonMixin              from './mixins/common';
 import { triggerMethod }        from './trigger-method';
-import {
-  proxyBindEntityEvents,
-  proxyUnbindEntityEvents }     from './bind-entity-events';
 
 import {
   proxyRadioHandlers,
@@ -18,7 +14,7 @@ import {
 // A Base Class that other Classes should descend from.
 // Object borrows many conventions and utilities from Backbone.
 var MarionetteObject = function(options) {
-  this.options = _.extend({}, _.result(this, 'options'), options);
+  this._setOptions(options);
   proxyRadioHandlers.apply(this);
   this.cid = _.uniqueId(this.cidPrefix);
   this.initialize.apply(this, arguments);
@@ -30,7 +26,7 @@ MarionetteObject.extend = extend;
 // --------------
 
 // Ensure it can trigger events with Backbone.Events
-_.extend(MarionetteObject.prototype, Backbone.Events, {
+_.extend(MarionetteObject.prototype, Backbone.Events, CommonMixin, {
   cidPrefix: 'mno',
 
   // for parity with Marionette.AbstractView lifecyle
@@ -58,22 +54,7 @@ _.extend(MarionetteObject.prototype, Backbone.Events, {
     return this;
   },
 
-  // Import the `triggerMethod` to trigger events with corresponding
-  // methods if the method exists
-  triggerMethod: triggerMethod,
-
-  // A handy way to merge options onto the instance
-  mergeOptions: mergeOptions,
-
-  // Proxy `getOption` to enable getting options from this or this.options by name.
-  getOption: proxyGetOption,
-
-  // Proxy `bindEntityEvents` to enable binding view's events from another entity.
-  bindEntityEvents: proxyBindEntityEvents,
-
-  // Proxy `unbindEntityEvents` to enable unbinding view's events from another entity.
-  unbindEntityEvents: proxyUnbindEntityEvents
-
+  triggerMethod: triggerMethod
 });
 
 export default MarionetteObject;

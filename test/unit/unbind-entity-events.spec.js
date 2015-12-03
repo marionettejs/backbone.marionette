@@ -111,15 +111,4 @@ describe('Marionette.unbindEntityEvents', function() {
       expect(this.stopListeningStub).to.have.been.calledWith(this.entity, 'bar', this.target.bar);
     });
   });
-
-  describe('when unbindEntityEvents is proxied', function() {
-    beforeEach(function() {
-      this.target.unbindEntityEvents = Marionette.proxyUnbindEntityEvents;
-      this.target.unbindEntityEvents(this.entity, {'foo': this.target.foo});
-    });
-
-    it('should bind an event to target\'s handler', function() {
-      expect(this.stopListeningStub).to.have.been.calledOnce.and.calledWith(this.entity, 'foo', this.target.foo);
-    });
-  });
 });

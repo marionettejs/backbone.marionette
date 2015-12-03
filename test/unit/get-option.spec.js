@@ -55,16 +55,4 @@ describe('get option', function() {
       expect(this.value).to.equal(this.target.options.foo);
     });
   });
-
-  describe('when proxying getOption', function() {
-    beforeEach(function() {
-      this.target = {foo: 'bar'};
-      this.target.getOption = Marionette.proxyGetOption;
-      this.value = this.target.getOption('foo');
-    });
-
-    it('should return that definition\'s option', function() {
-      expect(this.value).to.equal(this.target.foo);
-    });
-  });
 });

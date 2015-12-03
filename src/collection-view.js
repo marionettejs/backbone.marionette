@@ -5,12 +5,11 @@ import _                    from 'underscore';
 import Backbone             from 'backbone';
 import ChildViewContainer   from 'backbone.babysitter';
 import isNodeAttached       from './utils/isNodeAttached';
-import _getValue            from './utils/_getValue';
-import getOption            from './utils/getOption';
 import MarionetteError      from './error';
 import ViewMixin            from './mixins/view';
 import BehaviorsMixin       from './mixins/behaviors';
 import UIMixin              from './mixins/ui';
+import CommonMixin          from './mixins/common';
 import MonitorDOMRefresh    from './dom-refresh';
 import {
   triggerMethodMany,
@@ -34,7 +33,7 @@ var CollectionView = Backbone.View.extend({
   constructor: function(options) {
     this.render = _.bind(this.render, this);
 
-    this.options = _.extend({}, _.result(this, 'options'), options);
+    this._setOptions(options);
 
     MonitorDOMRefresh(this);
 
@@ -263,7 +262,7 @@ var CollectionView = Backbone.View.extend({
   // Render view after sorting. Override this method to
   // change how the view renders after a `sort` on the collection.
   resortView: function() {
-    if (getOption(this, 'reorderOnSort')) {
+    if (this.getOption('reorderOnSort')) {
       this.reorder();
     } else {
       this._renderChildren();
@@ -451,7 +450,7 @@ var CollectionView = Backbone.View.extend({
   // in order to keep the children in sync with the collection.
   addChild: function(child, ChildView, index) {
     var childViewOptions = this.getOption('childViewOptions');
-    childViewOptions = _getValue(childViewOptions, this, [child, index]);
+    childViewOptions = this.getValue(childViewOptions, child, index);
 
     var view = this.buildChildView(child, ChildView, childViewOptions);
 
@@ -736,5 +735,6 @@ var CollectionView = Backbone.View.extend({
 _.extend(CollectionView.prototype, ViewMixin);
 _.extend(CollectionView.prototype, BehaviorsMixin);
 _.extend(CollectionView.prototype, UIMixin);
+_.extend(CollectionView.prototype, CommonMixin);
 
 export default CollectionView;

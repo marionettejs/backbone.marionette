@@ -4,7 +4,7 @@
 import _               from 'underscore';
 import Backbone        from 'backbone';
 import deprecate       from './utils/deprecate';
-import _getValue       from './utils/_getValue';
+import getValue        from './utils/getValue';
 import getOption       from './utils/getOption';
 import MarionetteError from './error';
 import CollectionView  from './collection-view';
@@ -157,10 +157,10 @@ var CompositeView = CollectionView.extend({
     }
 
     var container;
-    var childViewContainer = getOption(containerView, 'childViewContainer');
+    var childViewContainer = getOption.call(containerView, 'childViewContainer');
     if (childViewContainer) {
 
-      var selector = _getValue(childViewContainer, containerView);
+      var selector = getValue.call(containerView, childViewContainer);
 
       if (selector.charAt(0) === '@' && containerView.ui) {
         container = containerView.ui[selector.substr(4)];

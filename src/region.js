@@ -4,8 +4,7 @@
 import _                 from 'underscore';
 import Backbone          from 'backbone';
 import isNodeAttached    from './utils/isNodeAttached';
-import MNObject          from './object';
-import _getValue         from './utils/_getValue';
+import MarionetteObject  from './object';
 import MarionetteError   from './error';
 import MonitorDOMRefresh from './dom-refresh';
 import { triggerMethodOn, triggerMethodMany } from './trigger-method';
@@ -13,14 +12,11 @@ import { triggerMethodOn, triggerMethodMany } from './trigger-method';
 // Manage the visual regions of your composite application. See
 // http://lostechies.com/derickbailey/2011/12/12/composite-js-apps-regions-and-region-managers/
 
-var Region = MNObject.extend({
+var Region = MarionetteObject.extend({
   cidPrefix: 'mnr',
 
-  constructor: function(options = {}) {
-
-    // set options temporarily so that we can get `el`.
-    // options will be overriden by Object.constructor
-    this.options = options;
+  constructor: function(options) {
+    this._setOptions(options);
     this.el = this.getOption('el');
 
     // Handle when this.el is passed in as a $ wrapped element.
@@ -34,7 +30,7 @@ var Region = MNObject.extend({
     }
 
     this.$el = this.getEl(this.el);
-    MNObject.call(this, options);
+    MarionetteObject.call(this, options);
   },
 
   // Displays a backbone view instance inside of the region.
@@ -224,7 +220,7 @@ var Region = MNObject.extend({
   // element that it manages. Return a jQuery selector object scoped
   // to a provided parent el or the document if none exists.
   getEl: function(el) {
-    return Backbone.$(el, _getValue(this.options.parentEl, this));
+    return Backbone.$(el, this.getValue(this.getOption('parentEl')));
   },
 
   // Replace the region's DOM element with the view's DOM element.

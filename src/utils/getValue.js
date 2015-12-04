@@ -4,11 +4,11 @@ import _ from 'underscore';
 // If a function is provided we call it with context
 // otherwise just return the value. If the value is
 // undefined return a default value
-var _getValue = function(value, context, params) {
+var getValue = function(value, ...args) {
   if (_.isFunction(value)) {
-    value = params ? value.apply(context, params) : value.call(context);
+    return value.call(this, ...args);
   }
   return value;
 };
 
-export default _getValue;
+export default getValue;

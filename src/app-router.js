@@ -20,15 +20,13 @@
 import Backbone                from 'backbone';
 import _                       from 'underscore';
 import MarionetteError         from './error';
-import mergeOptions            from './utils/mergeOptions';
-import proxyGetOption          from './utils/proxyGetOption';
-import { proxyBindEntityEvents, proxyUnbindEntityEvents } from './bind-entity-events';
+import CommonMixin             from './mixins/common';
 import { triggerMethod }       from './trigger-method';
 
 var AppRouter = Backbone.Router.extend({
 
-  constructor: function(options = {}) {
-    this.options = options;
+  constructor: function(options) {
+    this._setOptions(options);
 
     Backbone.Router.apply(this, arguments);
 
@@ -83,16 +81,9 @@ var AppRouter = Backbone.Router.extend({
     this.route(route, methodName, _.bind(method, controller));
   },
 
-  mergeOptions: mergeOptions,
-
-  // Proxy `getOption` to enable getting options from this or this.options by name.
-  getOption: proxyGetOption,
-
-  triggerMethod: triggerMethod,
-
-  bindEntityEvents: proxyBindEntityEvents,
-
-  unbindEntityEvents: proxyUnbindEntityEvents
+  triggerMethod: triggerMethod
 });
+
+_.extend(AppRouter.prototype, CommonMixin);
 
 export default AppRouter;

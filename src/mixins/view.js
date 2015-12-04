@@ -3,20 +3,12 @@
 
 import Backbone                 from 'backbone';
 import _                        from 'underscore';
-import _getValue                from '../utils/_getValue';
-import getOption                from '../utils/getOption';
-import normalizeMethods         from '../utils/normalizeMethods';
-import mergeOptions             from '../utils/mergeOptions';
-import proxyGetOption           from '../utils/proxyGetOption';
+import getValue                 from '../utils/getValue';
 import getUniqueEventName       from '../utils/getUniqueEventName';
 import MarionetteError          from '../error';
 import Renderer                 from '../renderer';
 import View                     from '../view';
-import {
-  proxyBindEntityEvents,
-  proxyUnbindEntityEvents
-}                               from '../bind-entity-events';
-import { _triggerMethod }       from '../trigger-method';
+import { triggerMethod }        from '../trigger-method';
 
 export default {
   supportsRenderLifecycle: true,
@@ -67,7 +59,7 @@ export default {
   // are copies to the object passed in.
   mixinTemplateContext: function(target = {}) {
     var templateContext = this.getOption('templateContext');
-    templateContext = _getValue(templateContext, this);
+    templateContext = this.getValue(templateContext);
     return _.extend(target, templateContext);
   },
 
@@ -96,7 +88,7 @@ export default {
   },
 
   _getEvents: function(eventsArg) {
-    var events = _getValue(eventsArg || this.events, this);
+    var events = this.getValue(eventsArg || this.events);
 
     return this.normalizeUIKeys(events);
   },
@@ -236,38 +228,37 @@ export default {
 
   // import the `triggerMethod` to trigger events with corresponding
   // methods if the method exists
-  triggerMethod: function(eventName, ...args) {
-    var ret = _triggerMethod(this, arguments);
+  triggerMethod: function(...args) {
+    var ret = triggerMethod.call(this, ...args);
 
-    this._triggerEventOnBehaviors(arguments);
-    this._triggerEventOnParentLayout(eventName, args);
+    this._triggerEventOnBehaviors(...args);
+    this._triggerEventOnParentLayout(...args);
 
     return ret;
   },
 
-  _triggerEventOnParentLayout: function(eventName, args) {
+  _triggerEventOnParentLayout: function(eventName, ...args) {
     var layoutView = this._parentItemView();
     if (!layoutView) {
       return;
     }
 
     // invoke triggerMethod on parent view
-    var eventPrefix = getOption(layoutView, 'childViewEventPrefix');
+    var eventPrefix = layoutView.getOption('childViewEventPrefix');
     var prefixedEventName = eventPrefix + ':' + eventName;
-    var callArgs = [this].concat(args);
 
-    _triggerMethod(layoutView, [prefixedEventName].concat(callArgs));
+    layoutView.triggerMethod(prefixedEventName, this, ...args);
 
     // call the parent view's childViewEvents handler
-    var childViewEvents = getOption(layoutView, 'childViewEvents');
+    var childViewEvents = layoutView.getOption('childViewEvents');
 
-    // since childViewEvents can be an object or a function use Marionette._getValue
+    // since childViewEvents can be an object or a function use getValue
     // to handle the abstaction for us.
-    childViewEvents = _getValue(childViewEvents, layoutView);
+    childViewEvents = layoutView.getValue(childViewEvents);
     var normalizedChildEvents = layoutView.normalizeMethods(childViewEvents);
 
     if (!!normalizedChildEvents && _.isFunction(normalizedChildEvents[eventName])) {
-      normalizedChildEvents[eventName].apply(layoutView, callArgs);
+      normalizedChildEvents[eventName].call(layoutView, this, ...args);
     }
   },
 
@@ -294,21 +285,5 @@ export default {
       }
       parent = parent._parent;
     }
-  },
-
-  // Imports the "normalizeMethods" to transform hashes of
-  // events=>function references/names to a hash of events=>function references
-  normalizeMethods: normalizeMethods,
-
-  // A handy way to merge passed-in options onto the instance
-  mergeOptions: mergeOptions,
-
-  // Proxy `getOption` to enable getting options from this or this.options by name.
-  getOption: proxyGetOption,
-
-  // Proxy `bindEntityEvents` to enable binding view's events from another entity.
-  bindEntityEvents: proxyBindEntityEvents,
-
-  // Proxy `unbindEntityEvents` to enable unbinding view's events from another entity.
-  unbindEntityEvents: proxyUnbindEntityEvents
+  }
 };

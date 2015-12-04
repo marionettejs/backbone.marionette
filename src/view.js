@@ -7,8 +7,8 @@ import ViewMixin          from './mixins/view';
 import RegionsMixin       from './mixins/regions';
 import BehaviorsMixin     from './mixins/behaviors';
 import UIMixin            from './mixins/ui';
+import CommonMixin        from './mixins/common';
 import MonitorDOMRefresh  from './dom-refresh';
-import _getValue          from './utils/_getValue';
 
 // The standard view. Includes view events, automatic rendering
 // of Underscore templates, nested views, and more.
@@ -17,7 +17,7 @@ var View = Backbone.View.extend({
   constructor: function(options) {
     this.render = _.bind(this.render, this);
 
-    this.options = _.extend({}, _.result(this, 'options'), options);
+    this._setOptions(options);
 
     MonitorDOMRefresh(this);
 
@@ -119,5 +119,6 @@ _.extend(View.prototype, ViewMixin);
 _.extend(View.prototype, RegionsMixin);
 _.extend(View.prototype, BehaviorsMixin);
 _.extend(View.prototype, UIMixin);
+_.extend(View.prototype, CommonMixin);
 
 export default View;

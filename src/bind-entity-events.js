@@ -14,7 +14,7 @@
 // function can be supplied instead of a string handler name.
 
 import _               from 'underscore';
-import _getValue       from './utils/_getValue';
+import getValue       from './utils/getValue';
 import MarionetteError from './error';
 
 // Bind/unbind the event to handlers specified as a string of
@@ -45,7 +45,7 @@ function iterateEvents(target, entity, bindings, actionName) {
   }
 
   // allow the bindings to be a function
-  bindings = _getValue(bindings, target);
+  bindings = getValue.call(target, bindings);
 
   // iterate the bindings and bind/unbind them
   _.each(bindings, function(method, evt) {
@@ -60,28 +60,16 @@ function iterateEvents(target, entity, bindings, actionName) {
   });
 }
 
-function bindEntityEvents(target, entity, bindings) {
-  iterateEvents(target, entity, bindings, 'listenTo');
+function bindEntityEvents(entity, bindings) {
+  iterateEvents(this, entity, bindings, 'listenTo');
 }
 
-function unbindEntityEvents(target, entity, bindings) {
-  iterateEvents(target, entity, bindings, 'stopListening');
-}
-
-// Proxy `bindEntityEvents`
-function proxyBindEntityEvents(entity, bindings) {
-  return bindEntityEvents(this, entity, bindings);
-}
-
-// Proxy `unbindEntityEvents`
-function proxyUnbindEntityEvents(entity, bindings) {
-  return unbindEntityEvents(this, entity, bindings);
+function unbindEntityEvents(entity, bindings) {
+  iterateEvents(this, entity, bindings, 'stopListening');
 }
 
 // Export Public API
 export {
   bindEntityEvents,
-  unbindEntityEvents,
-  proxyBindEntityEvents,
-  proxyUnbindEntityEvents
+  unbindEntityEvents
 };

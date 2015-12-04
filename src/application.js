@@ -9,9 +9,9 @@ var Application = MarionetteObject.extend({
   cidPrefix: 'mna',
 
   constructor: function(options) {
-    options = options || {};
+    this._setOptions(options);
 
-    this._initRegion(options);
+    this._initRegion();
 
     MarionetteObject.prototype.constructor.apply(this, arguments);
   },
@@ -19,8 +19,8 @@ var Application = MarionetteObject.extend({
   regionClass: Region,
 
   _initRegion: function(options) {
-    var region = options.region || this.region;
-    var RegionClass = options.regionClass || this.regionClass;
+    var region = this.getOption('region');
+    var RegionClass = this.getOption('regionClass');
 
     // if the region is a string expect an el or selector
     // and instantiate a region

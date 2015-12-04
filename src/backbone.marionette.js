@@ -1,11 +1,11 @@
 import Backbone           from 'backbone';
 import {version}          from '../package.json';
 
+import proxy              from './utils/_proxy';
 import extend             from './utils/extend';
 import isNodeAttached     from './utils/isNodeAttached';
 import mergeOptions       from './utils/mergeOptions';
 import getOption          from './utils/getOption';
-import proxyGetOption     from './utils/proxyGetOption';
 import normalizeMethods   from './utils/normalizeMethods';
 import deprecate          from './utils/deprecate';
 
@@ -31,9 +31,7 @@ import {
 
 import {
   bindEntityEvents,
-  unbindEntityEvents,
-  proxyBindEntityEvents,
-  proxyUnbindEntityEvents
+  unbindEntityEvents
 } from './bind-entity-events';
 
 import {
@@ -60,20 +58,17 @@ Marionette.noConflict = function() {
 };
 
 // Utilities
-Marionette.bindEntityEvents = bindEntityEvents;
-Marionette.unbindEntityEvents = unbindEntityEvents;
-Marionette.proxyBindEntityEvents = proxyBindEntityEvents;
-Marionette.proxyUnbindEntityEvents = proxyUnbindEntityEvents;
+Marionette.bindEntityEvents = proxy(bindEntityEvents);
+Marionette.unbindEntityEvents = proxy(unbindEntityEvents);
+Marionette.mergeOptions = proxy(mergeOptions);
+Marionette.getOption = proxy(getOption);
+Marionette.normalizeMethods = proxy(normalizeMethods);
 Marionette.proxyRadioHandlers = proxyRadioHandlers;
 Marionette.unproxyRadioHandlers = unproxyRadioHandlers;
 Marionette.extend = extend;
 Marionette.isNodeAttached = isNodeAttached;
-Marionette.mergeOptions = mergeOptions;
-Marionette.getOption = getOption;
-Marionette.proxyGetOption = proxyGetOption;
-Marionette.normalizeMethods = normalizeMethods;
 Marionette.deprecate = deprecate;
-Marionette.triggerMethod = triggerMethod;
+Marionette.triggerMethod = proxy(triggerMethod);
 Marionette.triggerMethodOn = triggerMethodOn;
 Marionette.triggerMethodMany = triggerMethodMany;
 Marionette.isEnabled = isEnabled;

@@ -138,15 +138,4 @@ describe('Marionette.bindEntityEvents', function() {
       }));
     });
   });
-
-  describe('when bindEntityEvents is proxied', function() {
-    beforeEach(function() {
-      this.target.bindEntityEvents = Marionette.proxyBindEntityEvents;
-      this.target.bindEntityEvents(this.entity, {'foo': 'handleFoo'});
-    });
-
-    it('should bind an event to targets handler', function() {
-      expect(this.listenToStub).to.have.been.calledOnce.and.calledWith(this.entity, 'foo', this.handleFooStub);
-    });
-  });
 });

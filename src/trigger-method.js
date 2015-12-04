@@ -6,36 +6,14 @@
 import _               from 'underscore';
 import getOption       from './utils/getOption';
 
-var _triggerMethod = (function() {
-  // split the event name on the ":"
-  var splitter = /(^|:)(\w)/gi;
+// split the event name on the ":"
+var splitter = /(^|:)(\w)/gi;
 
-  // take the event section ("section1:section2:section3")
-  // and turn it in to uppercase name
-  function getEventName(match, prefix, eventName) {
-    return eventName.toUpperCase();
-  }
-
-  return function(context, args) {
-    var event = args[0];
-
-    // get the method name from the event name
-    var methodName = 'on' + event.replace(splitter, getEventName);
-    var method = getOption(context, methodName);
-    var result;
-
-    // call the onMethodName if it exists
-    if (_.isFunction(method)) {
-      // pass all args, except the event name
-      result = method.apply(context, _.rest(args));
-    }
-
-    // trigger the event
-    context.trigger.apply(context, args);
-
-    return result;
-  };
-})();
+// take the event section ("section1:section2:section3")
+// and turn it in to uppercase name onSection1Section2Section3
+function getEventName(match, prefix, eventName) {
+  return eventName.toUpperCase();
+}
 
 // Trigger an event and/or a corresponding method name. Examples:
 //
@@ -44,8 +22,22 @@ var _triggerMethod = (function() {
 //
 // `this.triggerMethod("foo:bar")` will trigger the "foo:bar" event and
 // call the "onFooBar" method.
-function triggerMethod(event) {
-  return _triggerMethod(this, arguments);
+function triggerMethod(event, ...args) {
+  // get the method name from the event name
+  var methodName = 'on' + event.replace(splitter, getEventName);
+  var method = getOption.call(this, methodName);
+  var result;
+
+  // call the onMethodName if it exists
+  if (_.isFunction(method)) {
+    // pass all args, except the event name
+    result = method.call(this, ...args);
+  }
+
+  // trigger the event
+  this.trigger(event, ...args);
+
+  return result;
 }
 
 // triggerMethodOn invokes triggerMethod on a specific context
@@ -74,7 +66,6 @@ function triggerMethodMany(targets, source, eventName, ...args) {
 }
 
 export {
-  _triggerMethod,
   triggerMethod,
   triggerMethodOn,
   triggerMethodMany

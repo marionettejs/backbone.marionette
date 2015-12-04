@@ -1,6 +1,5 @@
 import _                    from 'underscore';
 import Region               from '../region';
-import _getValue            from '../utils/_getValue';
 import MarionetteError      from '../error';
 
 export default {
@@ -32,10 +31,10 @@ export default {
 
   // Add multiple regions as a {name: definition, name2: def2} object literal or
   // a function that evaluates to such literal
-  addRegions: function(regions) {
+  addRegions: function(regions, ...args) {
 
     // Enable regions to be a function
-    regions = _getValue(regions, this, arguments);
+    regions = this.getValue(regions, regions, ...args);
 
     // If there's nothing to add, stop here.
     if (_.isEmpty(regions)) {
@@ -54,8 +53,6 @@ export default {
 
   // internal method to build and add regions
   _addRegions: function(regionDefinitions) {
-    regionDefinitions = _getValue(regionDefinitions, this, arguments);
-
     return _.reduce(regionDefinitions, function(regions, definition, name) {
       regions[name] = this._buildRegion(definition);
       this._addRegion(regions[name], name);

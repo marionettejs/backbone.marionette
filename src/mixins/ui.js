@@ -1,3 +1,4 @@
+import _ from 'underscore';
 // allows for the use of the @ui. syntax within
 // a given key for triggers and events
 // swaps the @ui with the associated selector.

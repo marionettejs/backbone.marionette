@@ -1,7 +1,6 @@
 import _                        from 'underscore';
-import _getValue                from '../utils/_getValue';
-import getOption                from '../utils/getOption';
-import { _triggerMethod }       from '../trigger-method';
+import getValue                 from '../utils/getValue';
+import { triggerMethod }        from '../trigger-method';
 import Marionette               from '../backbone.marionette';
 
 // Takes care of getting the behavior class
@@ -19,7 +18,7 @@ function getBehaviorClass(options, key) {
   }
 
   // behaviorsLookup can be either a flat object or a method
-  return _getValue(Marionette.Behaviors.behaviorsLookup, this, [options, key])[key];
+  return getValue(Marionette.Behaviors.behaviorsLookup, options, key)[key];
 }
 
 // Iterate over the behaviors object, for each behavior
@@ -39,7 +38,7 @@ function parseBehaviors(view, behaviors) {
 
 export default {
   _initBehaviors: function() {
-    var behaviors = _getValue(this.getOption('behaviors'), this);
+    var behaviors = this.getValue(this.getOption('behaviors'));
 
     // Behaviors defined on a view can be a flat object literal
     // or it can be a function that returns an object.
@@ -87,12 +86,11 @@ export default {
     _.invoke(this._behaviors, 'unbindUIElements');
   },
 
-  _triggerEventOnBehaviors: function(args) {
-    var triggerMethod = _triggerMethod;
+  _triggerEventOnBehaviors: function(...args) {
     var behaviors = this._behaviors;
     // Use good ol' for as this is a very hot function
     for (var i = 0, length = behaviors && behaviors.length; i < length; i++) {
-      triggerMethod(behaviors[i], args);
+      triggerMethod.call(behaviors[i], ...args);
     }
   }
 };

@@ -5,7 +5,10 @@ import _                  from 'underscore';
 import Backbone           from 'backbone';
 import ViewMixin          from './mixins/view';
 import RegionsMixin       from './mixins/regions';
-import MonitorDOMRefresh  from './dom-refresh';
+import BehaviorsMixin     from './mixins/behaviors';
+import UIMixin            from './mixins/ui';
+import CommonMixin        from './mixins/common';
+import MonitorViewEvents  from './dom-refresh';
 import Renderer           from './renderer';
 
 // The standard view. Includes view events, automatic rendering
@@ -17,7 +20,7 @@ var View = Backbone.View.extend({
 
     this._setOptions(options);
 
-    MonitorDOMRefresh(this);
+    MonitorViewEvents(this);
 
     this._initBehaviors();
     this._initRegions();

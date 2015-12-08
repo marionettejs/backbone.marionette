@@ -8,7 +8,7 @@ import RegionsMixin       from './mixins/regions';
 import BehaviorsMixin     from './mixins/behaviors';
 import UIMixin            from './mixins/ui';
 import CommonMixin        from './mixins/common';
-import MonitorViewEvents  from './dom-refresh';
+import MonitorViewEvents  from './monitor-view-events';
 import Renderer           from './renderer';
 
 // The standard view. Includes view events, automatic rendering

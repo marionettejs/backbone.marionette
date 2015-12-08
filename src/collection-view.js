@@ -1,16 +1,16 @@
 // Collection View
 // ---------------
 
-import _                    from 'underscore';
-import Backbone             from 'backbone';
-import ChildViewContainer   from 'backbone.babysitter';
-import isNodeAttached       from './utils/isNodeAttached';
-import MarionetteError      from './error';
-import ViewMixin            from './mixins/view';
-import BehaviorsMixin       from './mixins/behaviors';
-import UIMixin              from './mixins/ui';
-import CommonMixin          from './mixins/common';
-import MonitorViewEvents    from './dom-refresh';
+import _                  from 'underscore';
+import Backbone           from 'backbone';
+import ChildViewContainer from 'backbone.babysitter';
+import isNodeAttached     from './utils/isNodeAttached';
+import MarionetteError    from './error';
+import ViewMixin          from './mixins/view';
+import BehaviorsMixin     from './mixins/behaviors';
+import UIMixin            from './mixins/ui';
+import CommonMixin        from './mixins/common';
+import MonitorViewEvents  from './monitor-view-events';
 import {
   triggerMethodMany,
   triggerMethodOn

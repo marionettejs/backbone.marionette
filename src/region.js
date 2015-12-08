@@ -64,24 +64,25 @@ const Region = MarionetteObject.extend({
 
     const isChangingView = !!this.currentView;
     const isDifferentView = view !== this.currentView;
-    const isAttachedRegion = isNodeAttached(this.el);
     const shouldForceShow = !!options.forceShow;
-    const shouldReplaceEl = !!options.replaceElement;
-    const shouldDestroyView = view !== this.currentView && options.preventDestroy;
+    const shouldDestroyView = !options.preventDestroy;
+    const shouldEmptyRegion = isDifferentView && shouldDestroyView;
     const shouldShowView = isDifferentView || shouldForceShow;
-    const shouldTriggerAttach = options.triggerAttach !== false && this.triggerAttach;
 
-    if (this.currentView && isDifferentView) {
+    if (isChangingView) {
       delete this.currentView._parent;
     }
 
-    if (shouldDestroyView) {
-      this.empty();
-    } else if (isChangingView && shouldShowView) {
-      // A `destroy` event is attached to the clean up manually removed views.
-      // We need to detach this event when a new view is going to be shown as it
-      // is no longer relevant.
+    // A `destroy` event is attached to the clean up manually removed views.
+    // We need to detach this event when a new view is going to be shown as it
+    // is no longer relevant.
+    if (!shouldDestroyView || shouldEmptyRegion) {
       this.currentView.off('destroy', this.empty, this);
+    }
+
+    // After stopping the listener
+    if (shouldEmptyRegion) {
+      this.empty();
     }
 
     if (!shouldShowView) {
@@ -100,7 +101,18 @@ const Region = MarionetteObject.extend({
     // the child may trigger during render can also be triggered on the child's ancestor views.
     view._parent = this;
 
-    // Render the view
+    this._renderView(view);
+
+    this._attachView(view, options);
+
+    this.triggerMethod('show', view, this, options);
+    return this;
+  },
+
+  _renderView: function(view) {
+    if (view.isRendered()) {
+      return;
+    }
     if (!view.supportsRenderLifecycle) {
       triggerMethodOn(view, 'before:render', view);
     }
@@ -108,6 +120,12 @@ const Region = MarionetteObject.extend({
     if (!view.supportsRenderLifecycle) {
       triggerMethodOn(view, 'render', view);
     }
+  },
+
+  _attachView: function(view, options={}) {
+    const isAttachedRegion = isNodeAttached(this.el);
+    const shouldTriggerAttach = options.triggerAttach !== false && this.triggerAttach;
+    const shouldReplaceEl = !!options.replaceElement;
 
     // Attach the view
     if (isAttachedRegion && shouldTriggerAttach) {
@@ -118,9 +136,6 @@ const Region = MarionetteObject.extend({
     if (isAttachedRegion && shouldTriggerAttach) {
       triggerMethodOn(view, this, 'attach');
     }
-
-    this.triggerMethod('show', view, this, options);
-    return this;
   },
 
   _ensureElement: function() {

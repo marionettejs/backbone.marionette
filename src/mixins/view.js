@@ -1,14 +1,14 @@
 // ViewMixin
 //  ---------
 
-import Backbone                 from 'backbone';
-import _                        from 'underscore';
-import getValue                 from '../utils/getValue';
-import getUniqueEventName       from '../utils/getUniqueEventName';
-import MarionetteError          from '../error';
-import Renderer                 from '../renderer';
-import View                     from '../view';
-import { triggerMethod }        from '../trigger-method';
+import Backbone           from 'backbone';
+import _                  from 'underscore';
+import getValue           from '../utils/getValue';
+import getUniqueEventName from '../utils/getUniqueEventName';
+import MarionetteError    from '../error';
+import Renderer           from '../renderer';
+import View               from '../view';
+import { triggerMethod }  from '../trigger-method';
 
 export default {
   supportsRenderLifecycle: true,
@@ -24,6 +24,12 @@ export default {
 
   isRendered: function() {
     return !!this._isRendered;
+  },
+
+  _isAttached: false,
+
+  isAttached() {
+    return !!this._isAttached;
   },
 
   // Mix in template context methods. Looks for a
@@ -212,7 +218,7 @@ export default {
   },
 
   _triggerEventOnParentLayout: function(eventName, ...args) {
-    var layoutView = this._parentItemView();
+    var layoutView = this._parentView();
     if (!layoutView) {
       return;
     }
@@ -236,21 +242,9 @@ export default {
     }
   },
 
-  // Returns an array of every nested view within this view
-  _getNestedViews: function() {
-    var children = this._getImmediateChildren();
-
-    if (!children.length) { return children; }
-
-    return _.reduce(children, function(memo, view) {
-      if (!view._getNestedViews) { return memo; }
-      return memo.concat(view._getNestedViews());
-    }, children);
-  },
-
   // Walk the _parent tree until we find a view (if one exists).
   // Returns the parent view hierarchically closest to this view.
-  _parentItemView: function() {
+  _parentView: function() {
     var parent  = this._parent;
 
     while (parent) {

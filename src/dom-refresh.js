@@ -3,40 +3,51 @@
 
 import _              from 'underscore';
 import isNodeAttached from './utils/isNodeAttached';
-import {triggerMethodOn} from './trigger-method';
+import { triggerMethodOn, triggerMethodMany } from './trigger-method';
 
-// Monitor a view's state, and after it has been rendered and shown
-// in the DOM, trigger a "dom:refresh" event every time it is
-// re-rendered.
+// Monitor a view's state, propagating attach/detach events to children and firing dom:refresh
+// whenever a rendered view is attached or an attached view is rendered.
+function MonitorViewEvents(view) {
+  if (view._areViewEventsMonitored) { return; }
+  view._areViewEventsMonitored = true;
 
-function MonitorDOMRefresh(view) {
-  if (view._isDomRefreshMonitored) { return; }
-  view._isDomRefreshMonitored = true;
+  function handleBeforeAttach() {
+    triggerMethodMany(view._getImmediateChildren(), 'before:attach');
+  }
 
-  // track when the view has been shown in the DOM,
-  // using a Marionette.Region (or by other means of triggering "show")
-  function handleShow() {
-    view._isShown = true;
+  function handleAttach() {
+    view._isAttached = true;
+    triggerMethodMany(view._getImmediateChildren(), 'attach');
     triggerDOMRefresh();
   }
 
-  // track when the view has been rendered
+  function handleBeforeDetach() {
+    triggerMethodMany(view._getImmediateChildren(), 'before:detach');
+  }
+
+  function handleDetach() {
+    view._isAttached = false;
+    triggerMethodMany(view._getImmediateChildren(), 'detach');
+  }
+
   function handleRender() {
     view._isRendered = true;
     triggerDOMRefresh();
   }
 
-  // Trigger the "dom:refresh" event and corresponding "onDomRefresh" method
   function triggerDOMRefresh() {
-    if (view._isShown && view._isRendered && isNodeAttached(view.el)) {
+    if (view._isAttached && view._isRendered) {
       triggerMethodOn(view, 'dom:refresh', view);
     }
   }
 
   view.on({
-    show: handleShow,
-    render: handleRender
+    'before:attach': handleBeforeAttach,
+    'attach':        handleAttach,
+    'before:detach': handleBeforeDetach,
+    'detach':        handleDetach,
+    'render':        handleRender
   });
 }
 
-export default MonitorDOMRefresh;
+export default MonitorViewEvents;

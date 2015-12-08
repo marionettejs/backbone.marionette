@@ -5,29 +5,37 @@ import _              from 'underscore';
 import isNodeAttached from './utils/isNodeAttached';
 import { triggerMethodOn, triggerMethodMany } from './trigger-method';
 
+// Trigger method on children unless a pure Backbone.View
+function triggerMethodChildren(view, event) {
+  if (view._getImmediateChildren) {
+    triggerMethodMany(view._getImmediateChildren(), view, event);
+  }
+}
+
 // Monitor a view's state, propagating attach/detach events to children and firing dom:refresh
 // whenever a rendered view is attached or an attached view is rendered.
 function MonitorViewEvents(view) {
   if (view._areViewEventsMonitored) { return; }
+
   view._areViewEventsMonitored = true;
 
   function handleBeforeAttach() {
-    triggerMethodMany(view._getImmediateChildren(), 'before:attach');
+    triggerMethodChildren(view, 'before:attach');
   }
 
   function handleAttach() {
     view._isAttached = true;
-    triggerMethodMany(view._getImmediateChildren(), 'attach');
+    triggerMethodChildren(view, 'attach');
     triggerDOMRefresh();
   }
 
   function handleBeforeDetach() {
-    triggerMethodMany(view._getImmediateChildren(), 'before:detach');
+    triggerMethodChildren(view, 'before:detach');
   }
 
   function handleDetach() {
     view._isAttached = false;
-    triggerMethodMany(view._getImmediateChildren(), 'detach');
+    triggerMethodChildren(view, 'detach');
   }
 
   function handleRender() {

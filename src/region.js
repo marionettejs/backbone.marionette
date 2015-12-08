@@ -1,12 +1,13 @@
 // Region
 // ------
 
-import _                 from 'underscore';
-import Backbone          from 'backbone';
-import isNodeAttached    from './utils/isNodeAttached';
-import MarionetteObject  from './object';
-import MarionetteError   from './error';
+import _ from 'underscore';
+import Backbone from 'backbone';
+import isNodeAttached from './utils/isNodeAttached';
+import MarionetteObject from './object';
+import MarionetteError from './error';
 import MonitorViewEvents from './monitor-view-events';
+import getValue from './utils/getValue';
 import { triggerMethodOn, triggerMethodMany } from './trigger-method';
 
 const Region = MarionetteObject.extend({
@@ -105,12 +106,12 @@ const Region = MarionetteObject.extend({
 
     // Attach the view
     if (isAttachedRegion && shouldTriggerAttach) {
-      triggerMethodOn(view, this, 'before:attach');
+      triggerMethodOn(view, 'before:attach', view);
     }
     this.attachHtml(view, shouldReplaceEl);
     this.currentView = view;
     if (isAttachedRegion && shouldTriggerAttach) {
-      triggerMethodOn(view, this, 'attach');
+      triggerMethodOn(view, 'attach', view);
     }
 
     if (isChangingView) {

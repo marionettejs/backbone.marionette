@@ -50,28 +50,29 @@ const Region = MarionetteObject.extend({
     const changingView = this.currentView;
     const isChangingView = !!changingView;
     const isDifferentView = view !== this.currentView;
-    const isAttachedRegion = isNodeAttached(this.el);
     const shouldForceShow = !!forceShow;
-    const shouldReplaceEl = !!replaceElement;
-    const shouldDestroyView = view !== this.currentView && preventDestroy;
+    const shouldDestroyView = !preventDestroy;
+    const shouldEmptyRegion = isDifferentView && shouldDestroyView;
     const shouldShowView = isDifferentView || shouldForceShow;
-    const shouldTriggerAttach = triggerAttach !== false && this.triggerAttach;
 
     if (isChangingView) {
       this.triggerMethod('before:swapOut', changingView, this, options);
     }
 
-    if (this.currentView && isDifferentView) {
+    if (isChangingView) {
       delete this.currentView._parent;
     }
 
-    if (shouldDestroyView) {
-      this.empty();
-    } else if (isChangingView && shouldShowView) {
-      // A `destroy` event is attached to the clean up manually removed views.
-      // We need to detach this event when a new view is going to be shown as it
-      // is no longer relevant.
+    // A `destroy` event is attached to the clean up manually removed views.
+    // We need to detach this event when a new view is going to be shown as it
+    // is no longer relevant.
+    if (!shouldDestroyView || shouldEmptyRegion) {
       this.currentView.off('destroy', this.empty, this);
+    }
+
+    // After stopping the listener
+    if (shouldEmptyRegion) {
+      this.empty();
     }
 
     if (!shouldShowView) {
@@ -79,7 +80,6 @@ const Region = MarionetteObject.extend({
     }
 
     this.triggerMethod('before:show', view, this, options);
-    this._isShowing = true;
 
     // We need to listen for if a view is destroyed in a way other than through the region.
     // If this happens we need to remove the reference to the currentView since once a view
@@ -91,7 +91,27 @@ const Region = MarionetteObject.extend({
     // the child may trigger during render can also be triggered on the child's ancestor views.
     view._parent = this;
 
-    // Render the view
+    this._renderView(view);
+
+    if (isChangingView) {
+      this.triggerMethod('before:swapIn', view, this, options);
+    }
+
+    this._attachView(view, options);
+
+    if (isChangingView) {
+      this.triggerMethod('swapOut', changingView, this, options);
+      this.triggerMethod('swapIn', view, this, options);
+    }
+
+    this.triggerMethod('show', view, this, options);
+    return this;
+  },
+
+  _renderView: function(view) {
+    if (view._isRendered) {
+      return;
+    }
     if (!view.supportsRenderLifecycle) {
       triggerMethodOn(view, 'before:render', view);
     }
@@ -99,10 +119,12 @@ const Region = MarionetteObject.extend({
     if (!view.supportsRenderLifecycle) {
       triggerMethodOn(view, 'render', view);
     }
+  },
 
-    if (isChangingView) {
-      this.triggerMethod('before:swapIn', view, this, options);
-    }
+  _attachView: function(view, options={}) {
+    const isAttachedRegion = isNodeAttached(this.el);
+    const shouldTriggerAttach = options.triggerAttach !== false && this.triggerAttach;
+    const shouldReplaceEl = !!options.replaceElement;
 
     // Attach the view
     if (isAttachedRegion && shouldTriggerAttach) {
@@ -113,15 +135,6 @@ const Region = MarionetteObject.extend({
     if (isAttachedRegion && shouldTriggerAttach) {
       triggerMethodOn(view, 'attach', view);
     }
-
-    if (isChangingView) {
-      this.triggerMethod('swapOut', changingView, this, options);
-      this.triggerMethod('swapIn', view, this, options);
-    }
-
-    this._isShowing = false;
-    this.triggerMethod('show', view, this, options);
-    return this;
   },
 
   _ensureElement: function() {
@@ -210,7 +223,7 @@ const Region = MarionetteObject.extend({
 
   // Destroy the current view, if there is one. If there is no
   // current view, it does nothing and returns immediately.
-  empty: function(options={}) {
+  empty: function(options) {
     const { preventDestroy, triggerDetach } = options || {};
     const shouldPreventDestroy = !!preventDestroy;
     const shouldTriggerDetach = triggerDetach !== false && !this.triggerDetach;

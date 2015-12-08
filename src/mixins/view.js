@@ -234,6 +234,15 @@ export default {
     if (!!normalizedChildEvents && _.isFunction(normalizedChildEvents[eventName])) {
       normalizedChildEvents[eventName].call(layoutView, this, ...args);
     }
+
+    // call the parent view's proxyEvent handlers
+    var childViewTriggers = layoutView.getOption('childViewTriggers');
+    childViewTriggers = layoutView.getValue(childViewTriggers);
+
+    // Call the event with the proxy name on the parent layout
+    if (childViewTriggers && _.isString(childViewTriggers[eventName])) {
+      layoutView.triggerMethod(childViewTriggers[eventName], ...args);
+    }
   },
 
   // Returns an array of every nested view within this view

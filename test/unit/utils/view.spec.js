@@ -278,15 +278,32 @@ describe('view mixin', function() {
           'boom': 'onBoom'
         },
 
+        childViewTriggers: {
+          'whack': 'rattle'
+        }
       });
 
       this.ChildView = Marionette.View.extend({
         template: false
       });
 
+      this.SuperView = Marionette.View.extend({
+        template: _.template('<div class="layout"></div>'),
+
+        regions: {
+          'layout': '.layout',
+        },
+
+        childViewEvents: {
+          rattle: 'onRattle'
+        }
+      });
+
+      this.superView = new this.SuperView();
       this.layoutView = new this.LayoutView();
       this.childView = new this.ChildView();
       this.layoutView.render();
+      this.superView.render();
 
       this.layoutEventHandler = sinon.spy();
       this.layoutView.on('childview:boom', this.layoutEventHandler);
@@ -296,6 +313,9 @@ describe('view mixin', function() {
 
       this.layoutViewOnBoomHandler = sinon.spy();
       this.layoutView.onBoom = this.layoutViewOnBoomHandler;
+
+      this.superViewOnRattleHandler = this.sinon.spy();
+      this.superView.onRattle = this.superViewOnRattleHandler;
 
       this.childEventsFunction = _.bind(function() {
         return {
@@ -358,5 +378,19 @@ describe('view mixin', function() {
       });
     });
 
+    describe('using childViewTriggers', function() {
+      beforeEach(function() {
+        this.superView.showChildView('layout', this.layoutView);
+        this.layoutView.showChildView('child', this.childView);
+        this.childView.triggerMethod('whack', this.childView, 'foo', 'bar');
+      });
+
+      it('invokes the super trigger handler', function() {
+        expect(this.superViewOnRattleHandler)
+          .to.have.been.calledWith(this.layoutView, this.childView, 'foo', 'bar')
+          .to.have.been.calledOn(this.superView)
+          .and.CalledOnce;
+      });
+    });
   });
 });

@@ -356,7 +356,7 @@ describe('composite view', function() {
       });
 
       this.sinon.spy(this.compositeView, 'render');
-      this.sinon.spy(this.compositeView, 'destroyChildren');
+      this.sinon.spy(this.compositeView, '_destroyChildren');
       this.sinon.spy(Backbone.Marionette.Renderer, 'render');
       this.compositeRenderSpy = this.compositeView.render;
 

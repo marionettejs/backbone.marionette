@@ -71,7 +71,7 @@ describe('collection view - filter', function() {
       this.collection.add(this.passModel);
       this.collection.add(this.failModel);
       this.collectionView = new this.CollectionView();
-      this.sinon.spy(this.collectionView, 'removeChildView');
+      this.sinon.spy(this.collectionView, '_removeChildView');
       this.collectionView.render();
     });
 
@@ -123,7 +123,7 @@ describe('collection view - filter', function() {
       });
 
       it('should remove the child view', function() {
-        expect(this.collectionView.removeChildView).to.have.been.calledOnce
+        expect(this.collectionView._removeChildView).to.have.been.calledOnce
           .and.calledOn(this.collectionView)
           .and.calledWith(this.passView);
       });
@@ -169,7 +169,7 @@ describe('collection view - filter', function() {
       beforeEach(function() {
         this.filter.reset();
         this.newFailModel = this.failModel.clone();
-        this.sinon.spy(this.collectionView, 'showEmptyView');
+        this.sinon.spy(this.collectionView, '_showEmptyView');
         this.collectionView.onBeforeRenderChildren.reset();
         this.collectionView.onRenderChildren.reset();
         this.collection.reset([this.newFailModel]);
@@ -180,7 +180,7 @@ describe('collection view - filter', function() {
       });
 
       it('should show the empty view', function() {
-        expect(this.collectionView.showEmptyView).to.have.been.calledOnce
+        expect(this.collectionView._showEmptyView).to.have.been.calledOnce
           .and.calledOn(this.collectionView);
       });
 
@@ -226,12 +226,12 @@ describe('collection view - filter', function() {
     beforeEach(function() {
       this.collection.add(this.failModel);
       this.collectionView = new this.CollectionView();
-      this.sinon.spy(this.collectionView, 'showEmptyView');
+      this.sinon.spy(this.collectionView, '_showEmptyView');
       this.collectionView.render();
     });
 
     it('should show the empty view', function() {
-      expect(this.collectionView.showEmptyView).to.have.been.calledOnce
+      expect(this.collectionView._showEmptyView).to.have.been.calledOnce
         .and.calledOn(this.collectionView);
     });
 
@@ -252,7 +252,7 @@ describe('collection view - filter', function() {
     beforeEach(function() {
       this.collectionView = new this.CollectionView();
       this.collectionView.render();
-      this.sinon.spy(this.collectionView, 'destroyEmptyView');
+      this.sinon.spy(this.collectionView, '_destroyEmptyView');
     });
 
     describe('when a model is added to the collection but rejected by the filter', function() {
@@ -265,7 +265,7 @@ describe('collection view - filter', function() {
       });
 
       it('should not destroy the empty view', function() {
-        expect(this.collectionView.destroyEmptyView).not.to.have.been.called;
+        expect(this.collectionView._destroyEmptyView).not.to.have.been.called;
       });
     });
 
@@ -279,7 +279,7 @@ describe('collection view - filter', function() {
       });
 
       it('should destroy the empty view', function() {
-        expect(this.collectionView.destroyEmptyView).to.have.been.calledOnce
+        expect(this.collectionView._destroyEmptyView).to.have.been.calledOnce
           .and.calledOn(this.collectionView);
       });
     });

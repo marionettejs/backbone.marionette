@@ -9,25 +9,32 @@ import { triggerMethodOn, triggerMethodMany } from './trigger-method';
 // whenever a rendered view is attached or an attached view is rendered.
 function MonitorViewEvents(view) {
   if (view._areViewEventsMonitored) { return; }
+
+  if (!view._getImmediateChildren) {
+    return;
+  }
+
   view._areViewEventsMonitored = true;
 
+
+
   function handleBeforeAttach() {
-    triggerMethodMany(view._getImmediateChildren(), 'before:attach');
+    triggerMethodMany(view._getImmediateChildren(), view, 'before:attach');
   }
 
   function handleAttach() {
     view._isAttached = true;
-    triggerMethodMany(view._getImmediateChildren(), 'attach');
+    triggerMethodMany(view._getImmediateChildren(), view, 'attach');
     triggerDOMRefresh();
   }
 
   function handleBeforeDetach() {
-    triggerMethodMany(view._getImmediateChildren(), 'before:detach');
+    triggerMethodMany(view._getImmediateChildren(), view, 'before:detach');
   }
 
   function handleDetach() {
     view._isAttached = false;
-    triggerMethodMany(view._getImmediateChildren(), 'detach');
+    triggerMethodMany(view._getImmediateChildren(), view, 'detach');
   }
 
   function handleRender() {

@@ -6,7 +6,7 @@ import Backbone          from 'backbone';
 import isNodeAttached    from './utils/isNodeAttached';
 import MarionetteObject  from './object';
 import MarionetteError   from './error';
-import MonitorViewEvents from './dom-refresh';
+import MonitorViewEvents from './monitor-view-events';
 import { triggerMethodOn, triggerMethodMany } from './trigger-method';
 
 const Region = MarionetteObject.extend({

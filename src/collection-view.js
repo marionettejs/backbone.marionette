@@ -10,7 +10,7 @@ import ViewMixin          from './mixins/view';
 import BehaviorsMixin     from './mixins/behaviors';
 import UIMixin            from './mixins/ui';
 import CommonMixin        from './mixins/common';
-import MonitorViewEvents  from './dom-refresh';
+import MonitorViewEvents  from './monitor-view-events';
 import {
   triggerMethodMany,
   triggerMethodOn

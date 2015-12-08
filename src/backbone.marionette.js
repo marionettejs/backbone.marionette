@@ -9,7 +9,7 @@ import getOption          from './utils/getOption';
 import normalizeMethods   from './utils/normalizeMethods';
 import deprecate          from './utils/deprecate';
 
-import MonitorViewEvents  from './dom-refresh';
+import MonitorViewEvents  from './monitor-view-events';
 import MarionetteObject   from './object';
 import Renderer           from './renderer';
 import TemplateCache      from './template-cache';

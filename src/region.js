@@ -1,12 +1,13 @@
 // Region
 // ------
 
-import _                 from 'underscore';
-import Backbone          from 'backbone';
-import isNodeAttached    from './utils/isNodeAttached';
-import MarionetteObject  from './object';
-import MarionetteError   from './error';
+import _ from 'underscore';
+import Backbone from 'backbone';
+import isNodeAttached from './utils/isNodeAttached';
+import MarionetteObject from './object';
+import MarionetteError from './error';
 import MonitorViewEvents from './monitor-view-events';
+import getValue from './utils/getValue';
 import { triggerMethodOn, triggerMethodMany } from './trigger-method';
 
 const Region = MarionetteObject.extend({
@@ -111,12 +112,12 @@ const Region = MarionetteObject.extend({
 
     // Attach the view
     if (isAttachedRegion && shouldTriggerAttach) {
-      triggerMethodOn(view, this, 'before:attach');
+      triggerMethodOn(view, 'before:attach', view);
     }
     this.attachHtml(view, shouldReplaceEl);
     this.currentView = view;
     if (isAttachedRegion && shouldTriggerAttach) {
-      triggerMethodOn(view, this, 'attach');
+      triggerMethodOn(view, 'attach', view);
     }
 
     this.triggerMethod('show', view, this, options);
@@ -125,7 +126,7 @@ const Region = MarionetteObject.extend({
 
   _ensureElement: function() {
     if (!_.isObject(this.el)) {
-      this.$el = Backbone.$(this.el, this.getValue(this.getOption('parentEl')));
+      this.$el = this.getEl(this.el);
       this.el = this.$el[0];
     }
 
@@ -137,6 +138,13 @@ const Region = MarionetteObject.extend({
       }
     }
     return true;
+  },
+
+  // Override this method to change how the region finds the DOM
+  // element that it manages. Return a jQuery selector object scoped
+  // to a provided parent el or the document if none exists.
+  getEl: function(el) {
+    return Backbone.$(el, getValue(this.options.parentEl, this));
   },
 
   _replaceEl: function(view) {

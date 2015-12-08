@@ -1,4 +1,4 @@
-describe('getNestedView', function() {
+xdescribe('getNestedView', function() {
   beforeEach(function() {
     this.template = _.template('<div class="main"></div><div class="subheader"></div>');
   });

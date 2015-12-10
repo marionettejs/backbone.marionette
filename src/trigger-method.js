@@ -31,7 +31,7 @@ function triggerMethod(event, ...args) {
   // call the onMethodName if it exists
   if (_.isFunction(method)) {
     // pass all args, except the event name
-    result = method.call(this, ...args);
+    result = method.apply(this, args);
   }
 
   // trigger the event

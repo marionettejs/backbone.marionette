@@ -301,6 +301,7 @@ describe('layoutView', function() {
       this.layoutView.childViewEvents = {
         'content:rendered': this.childEventsHandler
       };
+      this.layoutView.delegateEvents();
       this.layoutView.render();
 
       // create a child view which triggers an event on render

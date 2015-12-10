@@ -342,21 +342,21 @@ describe('view mixin', function() {
 
       it('emits the event on the layout', function() {
         expect(this.layoutEventHandler)
-          .to.have.been.calledWith(this.childView, 'foo', 'bar')
+          .to.have.been.calledWith('foo', 'bar')
           .and.to.have.been.calledOn(this.layoutView)
           .and.CalledOnce;
       });
 
       it('invokes the layout on handler', function() {
         expect(this.layoutEventOnHandler)
-          .to.have.been.calledWith(this.childView, 'foo', 'bar')
+          .to.have.been.calledWith('foo', 'bar')
           .and.to.have.been.calledOn(this.layoutView)
           .and.CalledOnce;
       });
 
       it('invokes the layout childViewEvents handler', function() {
         expect(this.layoutViewOnBoomHandler)
-          .to.have.been.calledWith(this.childView, 'foo', 'bar')
+          .to.have.been.calledWith('foo', 'bar')
           .and.to.have.been.calledOn(this.layoutView)
           .and.CalledOnce;
       });
@@ -366,13 +366,14 @@ describe('view mixin', function() {
       beforeEach(function() {
         // use the function definition of childViewEvents instead of the hash
         this.layoutView.childViewEvents = this.childEventsFunction;
+        this.layoutView.delegateEvents();
         this.layoutView.showChildView('child', this.childView);
         this.childView.triggerMethod('boom', 'foo', 'bar');
       });
 
       it('invokes the layout childViewEvents handler', function() {
         expect(this.layoutViewOnBoomHandler)
-          .to.have.been.calledWith(this.childView, 'foo', 'bar')
+          .to.have.been.calledWith('foo', 'bar')
           .and.to.have.been.calledOn(this.layoutView)
           .and.CalledOnce;
       });
@@ -382,12 +383,12 @@ describe('view mixin', function() {
       beforeEach(function() {
         this.superView.showChildView('layout', this.layoutView);
         this.layoutView.showChildView('child', this.childView);
-        this.childView.triggerMethod('whack', this.childView, 'foo', 'bar');
+        this.childView.triggerMethod('whack', 'foo', 'bar');
       });
 
       it('invokes the super trigger handler', function() {
         expect(this.superViewOnRattleHandler)
-          .to.have.been.calledWith(this.layoutView, this.childView, 'foo', 'bar')
+          .to.have.been.calledWith('foo', 'bar')
           .to.have.been.calledOn(this.superView)
           .and.CalledOnce;
       });

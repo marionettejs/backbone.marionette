@@ -31,16 +31,8 @@ describe('view triggers', function() {
       expect(this.fooHandlerStub).to.have.been.calledOnce;
     });
 
-    it('should include the view in the event args', function() {
-      expect(this.fooHandlerStub.lastCall.args[0]).to.contain({view: this.view});
-    });
-
-    it('should include the views model in the event args', function() {
-      expect(this.fooHandlerStub.lastCall.args[0]).to.contain({model: this.model});
-    });
-
-    it('should include the views collection in the event args', function() {
-      expect(this.fooHandlerStub.lastCall.args[0]).to.contain({collection: this.collection});
+    it('should include the view in the event', function() {
+      expect(this.fooHandlerStub.lastCall.args[0]).to.contain(this.view);
     });
   });
 
@@ -87,7 +79,7 @@ describe('view triggers', function() {
     });
   });
 
-  describe('triggers should stop propigation and events by default', function() {
+  describe('triggers should stop propagation and events by default', function() {
     beforeEach(function() {
       this.View = Marionette.View.extend({triggers: this.triggersHash});
       this.view = new this.View();
@@ -96,7 +88,7 @@ describe('view triggers', function() {
       this.view.$el.trigger(this.fooEvent);
     });
 
-    it('should stop propigation by default', function() {
+    it('should stop propagation by default', function() {
       expect(this.fooEvent.isPropagationStopped()).to.be.true;
     });
 

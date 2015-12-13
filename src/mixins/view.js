@@ -88,31 +88,24 @@ export default {
   // Internal method to create an event handler for a given `triggerDef` like
   // 'click:foo'
   _buildViewTrigger: function(triggerDef) {
-    var options = _.defaults({}, triggerDef, {
-      preventDefault: true,
-      stopPropagation: true
-    });
+    if (_.isString(triggerDef)) {
+      triggerDef = { event: triggerDef };
+    }
 
-    var eventName = _.isObject(triggerDef) ? options.event : triggerDef;
+    const eventName = triggerDef.event;
+    const shouldPreventDefault = triggerDef.preventDefault !== false;
+    const shouldStopPropagation = triggerDef.stopPropagation !== false;
 
     return function(e) {
-      if (e) {
-        if (e.preventDefault && options.preventDefault) {
-          e.preventDefault();
-        }
-
-        if (e.stopPropagation && options.stopPropagation) {
-          e.stopPropagation();
-        }
+      if (shouldPreventDefault) {
+        e.preventDefault();
       }
 
-      var args = {
-        view: this,
-        model: this.model,
-        collection: this.collection
-      };
+      if (shouldStopPropagation) {
+        e.stopPropagation();
+      }
 
-      this.triggerMethod(eventName, args);
+      this.triggerMethod(eventName, this);
     };
   },
 

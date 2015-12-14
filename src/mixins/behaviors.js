@@ -1,7 +1,8 @@
-import _                        from 'underscore';
-import getValue                 from '../utils/getValue';
-import { triggerMethod }        from '../trigger-method';
-import Marionette               from '../backbone.marionette';
+import _ from 'underscore';
+import getValue from '../utils/getValue';
+import _getOptionValue from '../utils/_getOptionValue';
+import { triggerMethod } from '../trigger-method';
+import Marionette from '../backbone.marionette';
 
 // Takes care of getting the behavior class
 // given options and a key.
@@ -38,7 +39,7 @@ function parseBehaviors(view, behaviors) {
 
 export default {
   _initBehaviors: function() {
-    var behaviors = this.getValue(this.getOption('behaviors'));
+    var behaviors = _getOptionValue(this, 'behaviors');
 
     // Behaviors defined on a view can be a flat object literal
     // or it can be a function that returns an object.

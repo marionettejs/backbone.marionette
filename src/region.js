@@ -7,15 +7,14 @@ import isNodeAttached from './utils/isNodeAttached';
 import MarionetteObject from './object';
 import MarionetteError from './error';
 import MonitorViewEvents from './monitor-view-events';
-import getValue from './utils/getValue';
-import { triggerMethodOn, triggerMethodMany } from './trigger-method';
+import { triggerMethodOnCond } from './trigger-method';
 
 const Region = MarionetteObject.extend({
   cidPrefix: 'mnr',
   triggerAttach: true,
   triggerDetach: true,
 
-  constructor: function(options) {
+  constructor(options) {
     this._setOptions(options);
     this._initEl = this.el = this.getOption('el');
 
@@ -36,50 +35,18 @@ const Region = MarionetteObject.extend({
   // Displays a backbone view instance inside of the region. Handles calling the `render`
   // method for you. Reads content directly from the `el` attribute. The `preventDestroy`
   // option can be used to prevent a view from the old view being destroyed on show.
-  // The `forceShow` option can be used to force a view to be re-rendered if it's already
-  // shown in the region.
-  show: function(view, options) {
+  show(view, options) {
     if (!this._ensureElement()) {
       return;
     }
     this._ensureView(view);
+    if (view === this.currentView) { return this; }
+
+    this.triggerMethod('before:show', view, this, options);
 
     MonitorViewEvents(view);
 
-    const { forceShow, replaceElement, preventDestroy, triggerAttach } = options || {};
-    const changingView = this.currentView;
-    const isChangingView = !!changingView;
-    const isDifferentView = view !== this.currentView;
-    const shouldForceShow = !!forceShow;
-    const shouldDestroyView = !preventDestroy;
-    const shouldEmptyRegion = isDifferentView && shouldDestroyView;
-    const shouldShowView = isDifferentView || shouldForceShow;
-
-    if (isChangingView) {
-      this.triggerMethod('before:swapOut', changingView, this, options);
-    }
-
-    if (isChangingView) {
-      delete this.currentView._parent;
-    }
-
-    // A `destroy` event is attached to the clean up manually removed views.
-    // We need to detach this event when a new view is going to be shown as it
-    // is no longer relevant.
-    if (!shouldDestroyView || shouldEmptyRegion) {
-      this.currentView.off('destroy', this.empty, this);
-    }
-
-    // After stopping the listener
-    if (shouldEmptyRegion) {
-      this.empty();
-    }
-
-    if (!shouldShowView) {
-      return this;
-    }
-
-    this.triggerMethod('before:show', view, this, options);
+    this.empty(options);
 
     // We need to listen for if a view is destroyed in a way other than through the region.
     // If this happens we need to remove the reference to the currentView since once a view
@@ -93,51 +60,37 @@ const Region = MarionetteObject.extend({
 
     this._renderView(view);
 
-    if (isChangingView) {
-      this.triggerMethod('before:swapIn', view, this, options);
-    }
-
     this._attachView(view, options);
-
-    if (isChangingView) {
-      this.triggerMethod('swapOut', changingView, this, options);
-      this.triggerMethod('swapIn', view, this, options);
-    }
 
     this.triggerMethod('show', view, this, options);
     return this;
   },
 
-  _renderView: function(view) {
+  _renderView(view) {
     if (view._isRendered) {
       return;
     }
-    if (!view.supportsRenderLifecycle) {
-      triggerMethodOn(view, 'before:render', view);
-    }
+
+    triggerMethodOnCond(!view.supportsRenderLifecycle, view, 'before:render', view);
+
     view.render();
-    if (!view.supportsRenderLifecycle) {
-      triggerMethodOn(view, 'render', view);
-    }
+
+    triggerMethodOnCond(!view.supportsRenderLifecycle, view, 'render', view);
   },
 
-  _attachView: function(view, options={}) {
-    const isAttachedRegion = isNodeAttached(this.el);
-    const shouldTriggerAttach = options.triggerAttach !== false && this.triggerAttach;
+  _attachView(view, options={}) {
+    const shouldTriggerAttach = options.triggerAttach !== false && this.triggerAttach && isNodeAttached(this.el);
     const shouldReplaceEl = !!options.replaceElement;
 
-    // Attach the view
-    if (isAttachedRegion && shouldTriggerAttach) {
-      triggerMethodOn(view, 'before:attach', view);
-    }
+    triggerMethodOnCond(shouldTriggerAttach, view, 'before:attach', view);
+
     this.attachHtml(view, shouldReplaceEl);
+
+    triggerMethodOnCond(shouldTriggerAttach, view, 'attach', view);
     this.currentView = view;
-    if (isAttachedRegion && shouldTriggerAttach) {
-      triggerMethodOn(view, 'attach', view);
-    }
   },
 
-  _ensureElement: function() {
+  _ensureElement() {
     if (!_.isObject(this.el)) {
       this.$el = this.getEl(this.el);
       this.el = this.$el[0];
@@ -153,7 +106,7 @@ const Region = MarionetteObject.extend({
     return true;
   },
 
-  _ensureView: function(view) {
+  _ensureView(view) {
     if (!view) {
       throw new MarionetteError({
         name: 'ViewNotValid',
@@ -169,29 +122,24 @@ const Region = MarionetteObject.extend({
     }
   },
 
-  // Override this method to change how the region finds the DOM
-  // element that it manages. Return a jQuery selector object scoped
-  // to a provided parent el or the document if none exists.
-  getEl: function(el) {
+  // Override this method to change how the region finds the DOM element that it manages. Return
+  // a jQuery selector object scoped to a provided parent el or the document if none exists.
+  getEl(el) {
     return Backbone.$(el, this.getValue(this.getOption('parentEl')));
   },
 
-  _replaceEl: function(view) {
-    // empty el so we don't save any non-destroyed views
-    this.$el.contents().detach();
-
-    // always restore the el to ensure the regions el is
-    // present before replacing
+  _replaceEl(view) {
+    // always restore the el to ensure the regions el is present before replacing
     this._restoreEl();
 
     const parent = this.el.parentNode;
 
     parent.replaceChild(view.el, this.el);
-    this.replaced = true;
+    this._isReplaced = true;
   },
 
   // Restore the region's element in the DOM.
-  _restoreEl: function() {
+  _restoreEl() {
     if (!this.currentView) {
       return;
     }
@@ -204,12 +152,12 @@ const Region = MarionetteObject.extend({
     }
 
     parent.replaceChild(this.el, view.el);
-    this.replaced = false;
+    this._isReplaced = false;
   },
 
-  // Override this method to change how the new view is
-  // appended to the `$el` that the region is managing
-  attachHtml: function(view, shouldReplace) {
+  // Override this method to change how the new view is appended to the `$el` that the
+  // region is managing
+  attachHtml(view, shouldReplace) {
     if (shouldReplace) {
       // replace the region's node with the view's node
       this._replaceEl(view);
@@ -221,87 +169,83 @@ const Region = MarionetteObject.extend({
     }
   },
 
-  // Destroy the current view, if there is one. If there is no
-  // current view, it does nothing and returns immediately.
-  empty: function(options) {
-    const { preventDestroy, triggerDetach } = options || {};
+  // Destroy the current view, if there is one. If there is no current view, it does
+  // nothing and returns immediately.
+  empty(options) {
+    const { preventDestroy } = options || {};
     const shouldPreventDestroy = !!preventDestroy;
-    const shouldTriggerDetach = triggerDetach !== false && !this.triggerDetach;
     const view = this.currentView;
 
-    // If there is no view in the region
-    // we should not remove anything
+    // If there is no view in the region we should not remove anything
     if (!view) { return this; }
 
     view.off('destroy', this.empty, this);
     this.triggerMethod('before:empty', view);
 
-    if (this.replaced) {
+    if (this._isReplaced) {
       this._restoreEl();
     }
 
-    if (!shouldPreventDestroy) {
+    if (shouldPreventDestroy) {
+      this._detachView(options);
+    } else {
       this._destroyView(options);
     }
-    this.triggerMethod('empty', view);
 
-    // Remove region pointer to the currentView
+    delete this.currentView._parent;
     delete this.currentView;
 
-    if (shouldPreventDestroy) {
-      if (shouldTriggerDetach) {
-        triggerMethodOn(view, 'before:detach', view);
-      }
-      this.$el.contents().detach();
-      if (shouldTriggerDetach) {
-        triggerMethodOn(view, 'detach', view);
-      }
-    }
-
+    this.triggerMethod('empty', view);
     return this;
   },
 
-  // call 'destroy' or 'remove', depending on which is found
-  // on the view (if showing a raw Backbone view or a Marionette View)
-  _destroyView: function(options) {
+  _detachView(options) {
+    const { triggerDetach } = options || {};
+    const view = this.currentView;
+    const shouldTriggerDetach = triggerDetach !== false && !this.triggerDetach && view.isAttached();
+
+    triggerMethodOnCond(shouldTriggerDetach, view, 'before:detach', view);
+
+    this.$el.contents().detach();
+
+    triggerMethodOnCond(shouldTriggerDetach, view, 'detach', view);
+  },
+
+  // Call 'destroy' or 'remove', depending on which is found on the view (if showing a raw
+  // Backbone view or a Marionette View)
+  _destroyView(options) {
     const view = this.currentView;
     if (view._isDestroyed) { return; }
 
-    const shouldTriggerDetach = options.triggerDetach !== false && !this.triggerDetach;
+    const shouldTriggerDetach = options.triggerDetach !== false && !this.triggerDetach && view.isAttached();
 
-    if (!view.supportsDestroyLifecycle) {
-      triggerMethodOn(view, 'before:destroy', view);
-      if (shouldTriggerDetach) {
-        triggerMethodOn(view, 'before:detach', view);
-      }
-    }
+    triggerMethodOnCond(!view.supportsDestroyLifecycle, view, 'before:destroy', view);
+    triggerMethodOnCond(shouldTriggerDetach, view, 'before:detach', view);
+
     if (view.destroy) {
       view.destroy();
     } else {
       view.remove();
 
-      // appending _isDestroyed to raw Backbone View allows regions
-      // to throw a ViewDestroyedError for this view
+      // appending _isDestroyed to raw Backbone View allows regions to throw a ViewDestroyedError
+      // for this view
       view._isDestroyed = true;
     }
-    if (shouldTriggerDetach) {
-      triggerMethodOn(view, 'detach', view);
-    }
-    if (!view.supportsDestroyLifecycle) {
-      triggerMethodOn(view, 'destroy', view);
-    }
+
+    triggerMethodOnCond(shouldTriggerDetach, view, 'detach', view);
+    triggerMethodOnCond(!view.supportsDestroyLifecycle, view, 'destroy', view);
   },
 
   // Checks whether a view is currently present within the region. Returns `true` if there is
   // and `false` if no view is present.
-  hasView: function() {
+  hasView() {
     return !!this.currentView;
   },
 
   // Reset the region by destroying any existing view and clearing out the cached `$el`.
   // The next time a view is shown via this region, the region will re-query the DOM for
   // the region's `el`.
-  reset: function() {
+  reset() {
     this.empty();
 
     if (this.$el) {
@@ -315,6 +259,10 @@ const Region = MarionetteObject.extend({
   destroy: function() {
     this.reset();
     return MarionetteObject.prototype.destroy.apply(this, arguments);
+  },
+
+  isReplaced() {
+    return !!this._isReplaced;
   }
 });
 

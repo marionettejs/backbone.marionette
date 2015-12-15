@@ -1,8 +1,6 @@
 // DOM Refresh
 // -----------
 
-import _              from 'underscore';
-import isNodeAttached from './utils/isNodeAttached';
 import { triggerMethodOn, triggerMethodMany } from './trigger-method';
 
 // Trigger method on children unless a pure Backbone.View

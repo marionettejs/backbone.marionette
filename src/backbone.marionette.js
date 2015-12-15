@@ -76,6 +76,7 @@ Marionette.triggerMethodOn = triggerMethodOn;
 Marionette.triggerMethodMany = triggerMethodMany;
 Marionette.isEnabled = isEnabled;
 Marionette.setEnabled = setEnabled;
+Marionette.MonitorViewEvents = MonitorViewEvents;
 
 Marionette.Behaviors = {};
 Marionette.Behaviors.behaviorsLookup = behaviorsLookup;
@@ -83,7 +84,6 @@ Marionette.Behaviors.behaviorsLookup = behaviorsLookup;
 // Classes
 Marionette.Application = Application;
 Marionette.AppRouter = AppRouter;
-Marionette.MonitorViewEvents = MonitorViewEvents;
 Marionette.Renderer = Renderer;
 Marionette.TemplateCache = TemplateCache;
 Marionette.View = View;

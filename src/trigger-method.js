@@ -3,8 +3,8 @@
 // Trigger Method
 // --------------
 
-import _               from 'underscore';
-import getOption       from './utils/getOption';
+import _         from 'underscore';
+import getOption from './utils/getOption';
 
 // split the event name on the ":"
 var splitter = /(^|:)(\w)/gi;
@@ -22,7 +22,7 @@ function getEventName(match, prefix, eventName) {
 //
 // `this.triggerMethod("foo:bar")` will trigger the "foo:bar" event and
 // call the "onFooBar" method.
-function triggerMethod(event, ...args) {
+export function triggerMethod(event, ...args) {
   // get the method name from the event name
   var methodName = 'on' + event.replace(splitter, getEventName);
   var method = getOption.call(this, methodName);
@@ -44,12 +44,16 @@ function triggerMethod(event, ...args) {
 //
 // e.g. `Marionette.triggerMethodOn(view, 'show')`
 // will trigger a "show" event or invoke onShow the view.
-function triggerMethodOn(context, ...args) {
-  var fnc = _.isFunction(context.triggerMethod) ?
-                context.triggerMethod :
-                triggerMethod;
+export function triggerMethodOn(context, ...args) {
+  var fnc = _.isFunction(context.triggerMethod) ? context.triggerMethod : triggerMethod;
+  return fnc.call(context, ...args);
+}
 
-  return fnc.apply(context, args);
+// Conditional triggerMethodOn; `condition` is the predicate.
+export function triggerMethodOnCond(condition, ...args) {
+  if (condition) {
+    triggerMethodOn(...args);
+  }
 }
 
 // triggerMethodMany invokes triggerMethod on many targets from a source
@@ -59,14 +63,8 @@ function triggerMethodOn(context, ...args) {
 // For each target we want to follow the pattern
 // target.triggerMethod(event, target, source, ...other args)
 // e.g childview.triggerMethod('attach', childView, region, ...args)
-function triggerMethodMany(targets, source, eventName, ...args) {
+export function triggerMethodMany(targets, source, eventName, ...args) {
   _.each(targets, function(target) {
     triggerMethodOn(target, eventName, target, source, ...args);
   });
 }
-
-export {
-  triggerMethod,
-  triggerMethodOn,
-  triggerMethodMany
-};

@@ -90,8 +90,8 @@ var LayoutView = Marionette.LayoutView.extend({
      Section: 'section'
    },
    onShow: function() {
-      this.Header.show(new Header());
-      this.Section.show(new Section());
+      this.showChildView('Header', new Header());
+      this.showChildView('Section', new Section());
    }
 });
 ```

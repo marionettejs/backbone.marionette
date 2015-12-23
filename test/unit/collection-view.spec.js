@@ -193,15 +193,15 @@ describe('collection view', function() {
     it('should call "onBeforeAddChild" for each childView instance', function() {
       var v1 = this.collectionView.children.findByIndex(0);
       var v2 = this.collectionView.children.findByIndex(1);
-      expect(this.collectionView.onBeforeAddChild).to.have.been.calledWith(v1);
-      expect(this.collectionView.onBeforeAddChild).to.have.been.calledWith(v2);
+      expect(this.collectionView.onBeforeAddChild).to.have.been.calledWith(this.collectionView, v1);
+      expect(this.collectionView.onBeforeAddChild).to.have.been.calledWith(this.collectionView, v2);
     });
 
     it('should call "onAddChild" for each childView instance', function() {
       var v1 = this.collectionView.children.findByIndex(0);
       var v2 = this.collectionView.children.findByIndex(1);
-      expect(this.collectionView.onAddChild).to.have.been.calledWith(v1);
-      expect(this.collectionView.onAddChild).to.have.been.calledWith(v2);
+      expect(this.collectionView.onAddChild).to.have.been.calledWith(this.collectionView, v1);
+      expect(this.collectionView.onAddChild).to.have.been.calledWith(this.collectionView, v2);
     });
 
     it('should call "onBeforeAddChild" for all childView instances', function() {
@@ -676,7 +676,7 @@ describe('collection view', function() {
     });
 
     it('should pass the removed view to onBeforeRemoveChild', function() {
-      expect(this.collectionView.onBeforeRemoveChild).to.have.been.calledWithExactly(this.childView);
+      expect(this.collectionView.onBeforeRemoveChild).to.have.been.calledWithExactly(this.collectionView, this.childView);
     });
 
     it('should execute onRemoveChild', function() {
@@ -684,7 +684,7 @@ describe('collection view', function() {
     });
 
     it('should pass the removed view to _onCollectionRemove', function() {
-      expect(this.collectionView.onRemoveChild).to.have.been.calledWithExactly(this.childView);
+      expect(this.collectionView.onRemoveChild).to.have.been.calledWithExactly(this.collectionView, this.childView);
     });
 
     it('should execute onBeforeRemoveChild before _onCollectionRemove', function() {
@@ -964,11 +964,11 @@ describe('collection view', function() {
     });
 
     it('should bubble up through the parent collection view', function() {
-      expect(this.collectionView.trigger).to.have.been.calledWith('childview:some:event', this.childView, 'test', this.model);
+      expect(this.collectionView.trigger).to.have.been.calledWith('childview:some:event', 'test', this.model);
     });
 
-    it('should provide the child view that triggered the event, including other relevant parameters', function() {
-      expect(this.someEventSpy).to.have.been.calledWith(this.childView, 'test', this.model);
+    it('should provide the relevant parameters', function() {
+      expect(this.someEventSpy).to.have.been.calledWith('test', this.model);
     });
   });
 
@@ -993,11 +993,11 @@ describe('collection view', function() {
     });
 
     it('should bubble up through the parent collection view', function() {
-      expect(this.collectionView.trigger).to.have.been.calledWith('myPrefix:some:event', this.childView, 'test', this.model);
+      expect(this.collectionView.trigger).to.have.been.calledWith('myPrefix:some:event', 'test', this.model);
     });
 
-    it('should provide the child view that triggered the event, including other relevant parameters', function() {
-      expect(this.someEventSpy).to.have.been.calledWith(this.childView, 'test', this.model);
+    it('should provide the relevant parameters', function() {
+      expect(this.someEventSpy).to.have.been.calledWith('test', this.model);
     });
   });
 
@@ -1024,12 +1024,8 @@ describe('collection view', function() {
       });
 
       it('should bubble up through the parent collection view', function() {
-        // As odd as it seems, the events are triggered with two arguments,
-        // the first being the child view which triggered the event
-        // and the second being the event's owner.  It just so happens to be the
-        // same view.
-        expect(this.beforeSpy).to.have.been.calledWith(this.childView, this.childView);
-        expect(this.renderSpy).to.have.been.calledWith(this.childView, this.childView);
+        expect(this.beforeSpy).to.have.been.calledWith(this.childView);
+        expect(this.renderSpy).to.have.been.calledWith(this.childView);
       });
     });
 
@@ -1310,11 +1306,11 @@ describe('collection view', function() {
     });
 
     it('should bubble up through the parent collection view', function() {
-      expect(this.collectionView.trigger).to.have.been.calledWith('childview:some:event', this.childView, 'test', this.model);
+      expect(this.collectionView.trigger).to.have.been.calledWith('childview:some:event', 'test', this.model);
     });
 
-    it('should provide the child view that triggered the event, including other relevant parameters', function() {
-      expect(this.someEventSpy).to.have.been.calledWith(this.childView, 'test', this.model);
+    it('should provide the relevant parameters', function() {
+      expect(this.someEventSpy).to.have.been.calledWith('test', this.model);
     });
   });
 
@@ -1340,11 +1336,11 @@ describe('collection view', function() {
     });
 
     it('should bubble up through the parent collection view', function() {
-      expect(this.collectionView.trigger).to.have.been.calledWith('childview:some:event', this.childView, 'test', this.model);
+      expect(this.collectionView.trigger).to.have.been.calledWith('childview:some:event', 'test', this.model);
     });
 
-    it('should provide the child view that triggered the event, including other relevant parameters', function() {
-      expect(this.onSomeEventSpy).to.have.been.calledWith(this.childView, 'test', this.model);
+    it('should provide the relevant parameters', function() {
+      expect(this.onSomeEventSpy).to.have.been.calledWith('test', this.model);
     });
   });
 
@@ -1371,11 +1367,11 @@ describe('collection view', function() {
     });
 
     it('should bubble up through the parent collection view', function() {
-      expect(this.collectionView.trigger).to.have.been.calledWith('childview:some:event', this.childView, 'test', this.model);
+      expect(this.collectionView.trigger).to.have.been.calledWith('childview:some:event', 'test', this.model);
     });
 
-    it('should provide the child view that triggered the event, including other relevant parameters', function() {
-      expect(this.someEventSpy).to.have.been.calledWith(this.childView, 'test', this.model);
+    it('should provide the other relevant parameters', function() {
+      expect(this.someEventSpy).to.have.been.calledWith('test', this.model);
     });
   });
 

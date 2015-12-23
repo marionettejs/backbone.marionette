@@ -31,7 +31,7 @@ function triggerMethod(event, ...args) {
   // call the onMethodName if it exists
   if (_.isFunction(method)) {
     // pass all args, except the event name
-    result = method.call(this, ...args);
+    result = method.apply(this, args);
   }
 
   // trigger the event
@@ -53,7 +53,7 @@ function triggerMethodOn(context, ...args) {
 }
 
 // triggerMethodMany invokes triggerMethod on many targets from a source
-// it's useful for standardizing a pattern where we propogate an event from a source
+// it's useful for standardizing a pattern where we propagate an event from a source
 // to many targets.
 //
 // For each target we want to follow the pattern

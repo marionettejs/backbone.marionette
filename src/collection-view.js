@@ -245,7 +245,7 @@ var CollectionView = Backbone.View.extend({
         return !_.contains(elsToReorder, view.el);
       });
 
-      this.triggerMethod('before:reorder');
+      this.triggerMethod('before:reorder', this);
 
       // since append moves elements that are already in the DOM,
       // appending the elements will effectively reorder them
@@ -255,7 +255,7 @@ var CollectionView = Backbone.View.extend({
       _.each(filteredOutViews, this.removeChildView, this);
       this.checkEmpty();
 
-      this.triggerMethod('reorder');
+      this.triggerMethod('reorder', this);
     }
   },
 
@@ -387,9 +387,9 @@ var CollectionView = Backbone.View.extend({
 
       var view = this.buildChildView(model, EmptyView, emptyViewOptions);
 
-      this.triggerMethod('before:render:empty', view);
+      this.triggerMethod('before:render:empty', this, view);
       this._addChildView(view, 0);
-      this.triggerMethod('render:empty', view);
+      this.triggerMethod('render:empty', this, view);
 
       view._parent = this;
     }
@@ -400,12 +400,12 @@ var CollectionView = Backbone.View.extend({
   // rendered empty, and then a child is added to the collection.
   destroyEmptyView: function() {
     if (this._showingEmptyView) {
-      this.triggerMethod('before:remove:empty');
+      this.triggerMethod('before:remove:empty', this);
 
       this.destroyChildren();
       delete this._showingEmptyView;
 
-      this.triggerMethod('remove:empty');
+      this.triggerMethod('remove:empty', this);
     }
   },
 
@@ -457,9 +457,9 @@ var CollectionView = Backbone.View.extend({
     // increment indices of views after this one
     this._updateIndices(view, true, index);
 
-    this.triggerMethod('before:add:child', view);
+    this.triggerMethod('before:add:child', this, view);
     this._addChildView(view, index);
-    this.triggerMethod('add:child', view);
+    this.triggerMethod('add:child', this, view);
 
     view._parent = this;
 
@@ -548,7 +548,7 @@ var CollectionView = Backbone.View.extend({
   removeChildView: function(view) {
     if (!view) { return view; }
 
-    this.triggerMethod('before:remove:child', view);
+    this.triggerMethod('before:remove:child', this, view);
 
     if (!view.supportsDestroyLifecycle) {
       triggerMethodOn(view, 'before:destroy', view);
@@ -566,7 +566,7 @@ var CollectionView = Backbone.View.extend({
     delete view._parent;
     this.stopListening(view);
     this.children.remove(view);
-    this.triggerMethod('remove:child', view);
+    this.triggerMethod('remove:child', this, view);
 
     // decrement the index of views after this one
     this._updateIndices(view, false);
@@ -666,7 +666,7 @@ var CollectionView = Backbone.View.extend({
   // Destroy the child views that this collection view
   // is holding on to, if any
   destroyChildren: function(options) {
-    this.triggerMethod('before:destroy:children');
+    this.triggerMethod('before:destroy:children', this);
     var destroyOptions = options || {};
     var shouldCheckEmpty = true;
     var childViews = this.children.map(_.identity);
@@ -681,7 +681,7 @@ var CollectionView = Backbone.View.extend({
       this.checkEmpty();
     }
 
-    this.triggerMethod('destroy:children');
+    this.triggerMethod('destroy:children', this);
     return childViews;
   },
 
@@ -704,17 +704,26 @@ var CollectionView = Backbone.View.extend({
 
     // Forward all child view events through the parent,
     // prepending "childview:" to the event name
-    this.listenTo(view, 'all', function(rootEvent, ...args) {
+    this.listenTo(view, 'all', function(eventName, ...args) {
 
-      var childViewEvents = this.normalizeMethods(_.result(this, 'childViewEvents'));
-      var childEventName = prefix + ':' + rootEvent;
+      var childEventName = prefix + ':' + eventName;
+
+      var childViewEvents = this.normalizeMethods(this._childViewEvents);
 
       // call collectionView childViewEvent if defined
-      if (typeof childViewEvents !== 'undefined' && _.isFunction(childViewEvents[rootEvent])) {
-        childViewEvents[rootEvent].call(this, view, ...args);
+      if (typeof childViewEvents !== 'undefined' && _.isFunction(childViewEvents[eventName])) {
+        childViewEvents[eventName].apply(this, args);
       }
 
-      this.triggerMethod(childEventName, view, ...args);
+      // use the parent view's proxyEvent handlers
+      var childViewTriggers = this._childViewTriggers;
+
+      // Call the event with the proxy name on the parent layout
+      if (childViewTriggers && _.isString(childViewTriggers[eventName])) {
+        this.triggerMethod(childViewTriggers[eventName], ...args);
+      }
+
+      this.triggerMethod(childEventName, ...args);
     });
   },
 

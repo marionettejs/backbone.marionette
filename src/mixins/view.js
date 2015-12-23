@@ -41,6 +41,7 @@ export default {
   delegateEvents: function(eventsArg) {
 
     this._proxyBehaviorViewProperties();
+    this._buildEventProxies();
 
     var viewEvents = this._getEvents(eventsArg);
 
@@ -86,31 +87,24 @@ export default {
   // Internal method to create an event handler for a given `triggerDef` like
   // 'click:foo'
   _buildViewTrigger: function(triggerDef) {
-    var options = _.defaults({}, triggerDef, {
-      preventDefault: true,
-      stopPropagation: true
-    });
+    if (_.isString(triggerDef)) {
+      triggerDef = { event: triggerDef };
+    }
 
-    var eventName = _.isObject(triggerDef) ? options.event : triggerDef;
+    const eventName = triggerDef.event;
+    const shouldPreventDefault = triggerDef.preventDefault !== false;
+    const shouldStopPropagation = triggerDef.stopPropagation !== false;
 
     return function(e) {
-      if (e) {
-        if (e.preventDefault && options.preventDefault) {
-          e.preventDefault();
-        }
-
-        if (e.stopPropagation && options.stopPropagation) {
-          e.stopPropagation();
-        }
+      if (shouldPreventDefault) {
+        e.preventDefault();
       }
 
-      var args = {
-        view: this,
-        model: this.model,
-        collection: this.collection
-      };
+      if (shouldStopPropagation) {
+        e.stopPropagation();
+      }
 
-      this.triggerMethod(eventName, args);
+      this.triggerMethod(eventName, this);
     };
   },
 
@@ -208,12 +202,19 @@ export default {
   // import the `triggerMethod` to trigger events with corresponding
   // methods if the method exists
   triggerMethod: function(...args) {
-    var ret = triggerMethod.call(this, ...args);
+    var ret = triggerMethod.apply(this, args);
 
     this._triggerEventOnBehaviors(...args);
     this._triggerEventOnParentLayout(...args);
 
     return ret;
+  },
+
+  // Cache `childViewEvents` and `childViewTriggers`
+  _buildEventProxies: function() {
+    this._childViewEvents = this.getValue(this.getOption('childViewEvents'));
+
+    this._childViewTriggers = this.getValue(this.getOption('childViewTriggers'));
   },
 
   _triggerEventOnParentLayout: function(eventName, ...args) {
@@ -226,23 +227,17 @@ export default {
     var eventPrefix = layoutView.getOption('childViewEventPrefix');
     var prefixedEventName = eventPrefix + ':' + eventName;
 
-    layoutView.triggerMethod(prefixedEventName, this, ...args);
+    layoutView.triggerMethod(prefixedEventName, ...args);
 
-    // call the parent view's childViewEvents handler
-    var childViewEvents = layoutView.getOption('childViewEvents');
+    // use the parent view's childViewEvents handler
+    var childViewEvents = layoutView.normalizeMethods(layoutView._childViewEvents);
 
-    // since childViewEvents can be an object or a function use getValue
-    // to handle the abstaction for us.
-    childViewEvents = layoutView.getValue(childViewEvents);
-    var normalizedChildEvents = layoutView.normalizeMethods(childViewEvents);
-
-    if (!!normalizedChildEvents && _.isFunction(normalizedChildEvents[eventName])) {
-      normalizedChildEvents[eventName].call(layoutView, this, ...args);
+    if (!!childViewEvents && _.isFunction(childViewEvents[eventName])) {
+      childViewEvents[eventName].apply(layoutView, args);
     }
 
-    // call the parent view's proxyEvent handlers
-    var childViewTriggers = layoutView.getOption('childViewTriggers');
-    childViewTriggers = layoutView.getValue(childViewTriggers);
+    // use the parent view's proxyEvent handlers
+    var childViewTriggers = layoutView._childViewTriggers;
 
     // Call the event with the proxy name on the parent layout
     if (childViewTriggers && _.isString(childViewTriggers[eventName])) {

@@ -1,22 +1,19 @@
 // Object
 // ------
 
-import _                        from 'underscore';
-import Backbone                 from 'backbone';
-import extend                   from './utils/extend';
-import CommonMixin              from './mixins/common';
-import { triggerMethod }        from './trigger-method';
-
-import {
-  proxyRadioHandlers,
-  unproxyRadioHandlers }        from './radio-helpers';
+import _ from 'underscore';
+import Backbone from 'backbone';
+import extend from './utils/extend';
+import CommonMixin from './mixins/common';
+import RadioMixin from './mixins/radio';
+import { triggerMethod } from './trigger-method';
 
 // A Base Class that other Classes should descend from.
 // Object borrows many conventions and utilities from Backbone.
 var MarionetteObject = function(options) {
   this._setOptions(options);
-  proxyRadioHandlers.apply(this);
   this.cid = _.uniqueId(this.cidPrefix);
+  this._initRadio();
   this.initialize.apply(this, arguments);
 };
 
@@ -26,7 +23,7 @@ MarionetteObject.extend = extend;
 // --------------
 
 // Ensure it can trigger events with Backbone.Events
-_.extend(MarionetteObject.prototype, Backbone.Events, CommonMixin, {
+_.extend(MarionetteObject.prototype, Backbone.Events, CommonMixin, RadioMixin, {
   cidPrefix: 'mno',
 
   // for parity with Marionette.AbstractView lifecyle
@@ -48,7 +45,6 @@ _.extend(MarionetteObject.prototype, Backbone.Events, CommonMixin, {
     // prevent infinite loops within "destroy" event handlers
     this._isDestroyed = true;
     this.triggerMethod('destroy', ...args);
-    unproxyRadioHandlers.apply(this);
     this.stopListening();
 
     return this;

@@ -36,28 +36,6 @@ describe('Marionette.bindEntityEvents', function() {
     });
   });
 
-  describe('when binding is a function', function() {
-    beforeEach(function() {
-      this.bindingsSpy = this.sinon.spy(function() {
-        return {'foo': 'handleFoo'};
-      });
-
-      Marionette.bindEntityEvents(this.target, this.entity, this.bindingsSpy);
-    });
-
-    it('should evaluate bindings function', function() {
-      expect(this.bindingsSpy).to.have.been.calledOnce;
-    });
-
-    it('should evaluate bindings function in context of target', function() {
-      expect(this.bindingsSpy).to.have.been.calledOnce.and.calledOn(this.target);
-    });
-
-    it('should bind events returned from bindings function to targets handlers', function() {
-      expect(this.listenToStub).to.have.been.calledOnce.and.calledWith(this.entity, 'foo', this.handleFooStub);
-    });
-  });
-
   describe('when bindings is an object with one event-handler pair', function() {
     describe('when handler is a function', function() {
       beforeEach(function() {
@@ -124,7 +102,7 @@ describe('Marionette.bindEntityEvents', function() {
     });
   });
 
-  describe('when bindings is not an object nor a function', function() {
+  describe('when bindings is not an object', function() {
     beforeEach(function() {
       this.run = function() {
         Marionette.bindEntityEvents(this.target, this.entity, 'handleFoo');
@@ -133,7 +111,7 @@ describe('Marionette.bindEntityEvents', function() {
 
     it('should error', function() {
       expect(this.run).to.throw(Marionette.Error, new Marionette.Error({
-        message: 'Bindings must be an object or function.',
+        message: 'Bindings must be an object.',
         url: 'marionette.functions.html#marionettebindentityevents'
       }));
     });

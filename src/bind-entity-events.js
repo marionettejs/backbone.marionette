@@ -14,7 +14,6 @@
 // function can be supplied instead of a string handler name.
 
 import _               from 'underscore';
-import getValue       from './utils/getValue';
 import MarionetteError from './error';
 
 // Bind/unbind the event to handlers specified as a string of
@@ -39,13 +38,10 @@ function iterateEvents(target, entity, bindings, actionName) {
   // type-check bindings
   if (!_.isObject(bindings)) {
     throw new MarionetteError({
-      message: 'Bindings must be an object or function.',
+      message: 'Bindings must be an object.',
       url: 'marionette.functions.html#marionettebindentityevents'
     });
   }
-
-  // allow the bindings to be a function
-  bindings = getValue.call(target, bindings);
 
   // iterate the bindings and bind/unbind them
   _.each(bindings, function(method, evt) {

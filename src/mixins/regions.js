@@ -13,7 +13,7 @@ export default {
     this.regions =  this.regions || {};
     this._regions = {};
 
-    this.addRegions(this.getOption('regions'));
+    this.addRegions(this.getValue(this.getOption('regions')));
   },
 
   // Internal method to re-initialize all of the regions by updating
@@ -29,13 +29,8 @@ export default {
     return this.addRegions(regions)[name];
   },
 
-  // Add multiple regions as a {name: definition, name2: def2} object literal or
-  // a function that evaluates to such literal
-  addRegions: function(regions, ...args) {
-
-    // Enable regions to be a function
-    regions = this.getValue(regions, regions, ...args);
-
+  // Add multiple regions as a {name: definition, name2: def2} object literal
+  addRegions: function(regions) {
     // If there's nothing to add, stop here.
     if (_.isEmpty(regions)) {
       return;

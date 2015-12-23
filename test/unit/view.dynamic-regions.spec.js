@@ -7,53 +7,6 @@ describe('itemView - dynamic regions', function() {
     };
   });
 
-  describe('when adding regions with a function', function() {
-    beforeEach(function() {
-      this.view = new Marionette.View();
-
-      this.fooSelector = '#foo-region';
-      this.barSelector = '#bar-region';
-
-      this.fooRegion = new Marionette.Region({el: this.fooSelector});
-
-      this.BarRegion = Marionette.Region.extend();
-      this.barRegion = new this.BarRegion({el: this.barSelector});
-
-      this.regionDefinition = this.sinon.stub().returns({
-        fooRegion: this.fooSelector,
-        barRegion: {
-          selector: this.barSelector,
-          regionClass: this.BarRegion
-        }
-      });
-
-      this.regions = this.view.addRegions(this.regionDefinition);
-    });
-
-    it('calls the regions definition function', function() {
-      expect(this.regionDefinition)
-        .to.have.been.calledOnce
-        .and.have.been.calledWith(this.regionDefinition);
-    });
-
-    // Same as above.
-    it('initializes all the regions immediately', function() {
-      expect(this.view.getRegion('fooRegion').el).to.deep.equal(this.fooRegion.el);
-      expect(this.view.getRegion('barRegion').el).to.deep.equal(this.barRegion.el);
-    });
-
-    it('adds the regions definitions to the regions property', function() {
-      expect(this.view.regions.fooRegion).to.equal(this.fooSelector);
-      expect(this.view.regions.barRegion).to.deep.equal({
-        selector: this.barSelector, regionClass: this.BarRegion
-      });
-    });
-
-    it('uses the custom regionClass', function() {
-      expect(this.view.getRegion('barRegion')).to.be.an.instanceof(this.BarRegion);
-    });
-  });
-
   describe('when adding a region to a layoutView, after it has been rendered', function() {
     beforeEach(function() {
       this.MyView = Marionette.View.extend({

@@ -6,7 +6,7 @@ import _ from 'underscore';
 // undefined return a default value
 var getValue = function(value, ...args) {
   if (_.isFunction(value)) {
-    return value.call(this, ...args);
+    return value.apply(this, args);
   }
   return value;
 };

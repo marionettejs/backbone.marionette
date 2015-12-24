@@ -90,7 +90,7 @@ export default {
     var behaviors = this._behaviors;
     // Use good ol' for as this is a very hot function
     for (var i = 0, length = behaviors && behaviors.length; i < length; i++) {
-      triggerMethod.call(behaviors[i], ...args);
+      triggerMethod.apply(behaviors[i], args);
     }
   }
 };

@@ -63,8 +63,11 @@ var AppLayoutView = Marionette.LayoutView.extend({
 });
 var layoutView = new AppLayoutView();
 layoutView.render();
+// you can access your region by its name
+layoutView.menu.show(new MenuView());
+// also with the getRegion method
 layoutView.getRegion('menu').show(new MenuView());
-// or with a more concise syntax
+// or in this case reference and show it with the showChildView method
 layoutView.showChildView('content', new MainContentView())
 ```
 

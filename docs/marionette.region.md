@@ -63,8 +63,9 @@ var AppLayoutView = Marionette.LayoutView.extend({
 });
 var layoutView = new AppLayoutView();
 layoutView.render();
-layoutView.menu.show(new MenuView());
-layoutView.content.show(new MainContentView());
+layoutView.getRegion('menu').show(new MenuView());
+// or with a more concise syntax
+layoutView.showChildView('content', new MainContentView())
 ```
 
 ### Region Configuration Types

@@ -58,12 +58,10 @@ A common pattern in Backbone apps is the following:
 var app = {};
 ```
 
-Two notable examples of this pattern are
-[DocumentCloud's source](https://github.com/documentcloud/documentcloud/blob/master/public/javascripts/application.js#L3) and
-[Backbone Boilerplate](https://github.com/backbone-boilerplate/backbone-boilerplate/blob/master/app/app.js#L1-L6). DocumentCloud
+The most notable example of this pattern is
+[DocumentCloud's source](https://github.com/documentcloud/documentcloud/blob/master/public/javascripts/application.js#L3). DocumentCloud
 is notable because it is the codebase that Backbone was abstracted from. If such a thing as a quintessential Backbone application
-existed, then that app would certainly be a candidate. Backbone Boilerplate is notable as perhaps the most popular library
-for bootstrapping a Backbone application. Do note that in the Backbone Boilerplate code the exported object is implicit.
+existed, then that app would certainly be a candidate.
 
 The pattern of creating a Javascript object is so popular because it provides you with a location to
 put the pieces of your application. For instance, attaching a Router to this object is common practice.

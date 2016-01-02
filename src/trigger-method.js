@@ -46,11 +46,11 @@ export function triggerMethod(event, ...args) {
 // will trigger a "show" event or invoke onShow the view.
 export function triggerMethodOn(context, ...args) {
   var fnc = _.isFunction(context.triggerMethod) ? context.triggerMethod : triggerMethod;
-  return fnc.call(context, ...args);
+  return fnc.apply(context, args);
 }
 
 // Conditional triggerMethodOn; `condition` is the predicate.
-export function triggerMethodOnCond(condition, ...args) {
+export function triggerMethodOnCondition(condition, ...args) {
   if (condition) {
     triggerMethodOn(...args);
   }
@@ -67,4 +67,11 @@ export function triggerMethodMany(targets, source, eventName, ...args) {
   _.each(targets, function(target) {
     triggerMethodOn(target, eventName, target, source, ...args);
   });
+}
+
+// Conditional triggerMethodOn; `condition` is the predicate.
+export function triggerMethodManyCondition(condition, ...args) {
+  if (condition) {
+    triggerMethodMany(...args);
+  }
 }

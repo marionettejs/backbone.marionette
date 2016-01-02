@@ -168,8 +168,10 @@ describe('composite view', function() {
   });
 
   describe('when a composite view triggers render in initialize', function() {
+    var onAttachCalls;
+
     beforeEach(function() {
-      var suite = this;
+      onAttachCalls = [];
 
       this.collectionTemplateFn = _.template('');
       this.collectionItemTemplateFn = _.template('<% _.each(items, function(item){ %><span><%= item.foo %></span><% }) %>');
@@ -178,8 +180,8 @@ describe('composite view', function() {
       this.EmptyView = Backbone.Marionette.View.extend({
         template: this.emptyTemplateFn,
         tagName: 'hr',
-        onShow: function() {
-          suite.onShow.push('EMPTY');
+        onAttach: function() {
+          onAttachCalls.push('EMPTY');
         }
       });
 
@@ -188,7 +190,9 @@ describe('composite view', function() {
         tagName: 'span'
       });
 
+      this.setFixtures('<div id="composite-view"></div>');
       this.CompositeView = Backbone.Marionette.CompositeView.extend({
+        el: '#composite-view',
         childView: this.ChildView,
         emptyView: this.EmptyView,
         template: this.collectionTemplateFn,
@@ -205,13 +209,11 @@ describe('composite view', function() {
         collection: new this.Collection()
       });
 
-      this.onShow = [];
-
       this.compositeView.trigger('show');
     });
 
-    it('should call "onShowCallbacks.add"', function() {
-      expect(this.onShow.length === 1).to.be.ok;
+    it('should call onAttach on its empty view', function() {
+      expect(onAttachCalls.length).to.equal(1);
     });
   });
 
@@ -369,8 +371,8 @@ describe('composite view', function() {
     });
 
     it('should destroy all of the child collection child views', function() {
-      expect(this.compositeView.destroyChildren).to.have.been.called;
-      expect(this.compositeView.destroyChildren.callCount).to.equal(2);
+      expect(this.compositeView._destroyChildren).to.have.been.called;
+      expect(this.compositeView._destroyChildren.callCount).to.equal(2);
     });
 
     it('should re-render the collections items', function() {

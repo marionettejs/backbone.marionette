@@ -18,22 +18,30 @@ function MonitorViewEvents(view) {
   view._areViewEventsMonitored = true;
 
   function handleBeforeAttach() {
-    triggerMethodChildren(view, 'before:attach');
+    if (view.triggerAttach !== false) {
+      triggerMethodChildren(view, 'before:attach');
+    }
   }
 
   function handleAttach() {
     view._isAttached = true;
-    triggerMethodChildren(view, 'attach');
+    if (view.triggerAttach !== false) {
+      triggerMethodChildren(view, 'attach');
+    }
     triggerDOMRefresh();
   }
 
   function handleBeforeDetach() {
-    triggerMethodChildren(view, 'before:detach');
+    if (view.triggerDetach !== false) {
+      triggerMethodChildren(view, 'before:detach');
+    }
   }
 
   function handleDetach() {
     view._isAttached = false;
-    triggerMethodChildren(view, 'detach');
+    if (view.triggerDetach !== false) {
+      triggerMethodChildren(view, 'detach');
+    }
   }
 
   function handleRender() {

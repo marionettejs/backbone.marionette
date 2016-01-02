@@ -3,10 +3,8 @@
 
 import Backbone           from 'backbone';
 import _                  from 'underscore';
-import getValue           from '../utils/getValue';
 import getUniqueEventName from '../utils/getUniqueEventName';
 import MarionetteError    from '../error';
-import Renderer           from '../renderer';
 import View               from '../view';
 import { triggerMethod }  from '../trigger-method';
 

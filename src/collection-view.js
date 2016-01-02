@@ -7,9 +7,6 @@ import ChildViewContainer   from 'backbone.babysitter';
 import isNodeAttached       from './utils/isNodeAttached';
 import MarionetteError      from './error';
 import ViewMixin            from './mixins/view';
-import BehaviorsMixin       from './mixins/behaviors';
-import UIMixin              from './mixins/ui';
-import CommonMixin          from './mixins/common';
 import MonitorDOMRefresh    from './dom-refresh';
 import {
   triggerMethodMany,
@@ -742,8 +739,5 @@ var CollectionView = Backbone.View.extend({
 });
 
 _.extend(CollectionView.prototype, ViewMixin);
-_.extend(CollectionView.prototype, BehaviorsMixin);
-_.extend(CollectionView.prototype, UIMixin);
-_.extend(CollectionView.prototype, CommonMixin);
 
 export default CollectionView;

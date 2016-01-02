@@ -75,7 +75,7 @@ export default {
     // destroying the view.
     // This unbinds event listeners
     // that behaviors have registered for.
-    _.invoke(this._behaviors, 'destroy', args);
+    _.invoke(this._behaviors, 'destroy', ...args);
   },
 
   _bindBehaviorUIElements: function() {

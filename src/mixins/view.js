@@ -1,16 +1,19 @@
 // ViewMixin
 //  ---------
 
-import Backbone                 from 'backbone';
-import _                        from 'underscore';
-import getValue                 from '../utils/getValue';
-import getUniqueEventName       from '../utils/getUniqueEventName';
-import MarionetteError          from '../error';
-import Renderer                 from '../renderer';
-import View                     from '../view';
-import { triggerMethod }        from '../trigger-method';
+import Backbone from 'backbone';
+import _ from 'underscore';
+import MarionetteError from '../error';
+import BehaviorsMixin from './behaviors';
+import CommonMixin from './common';
+import DelegateEntityEventsMixin from './delegate-entity-events';
+import TriggersMixin from './triggers';
+import UIMixin from './ui';
+import Renderer from '../renderer';
+import View from '../view';
+import { triggerMethod } from '../trigger-method';
 
-export default {
+var ViewMixin = {
   supportsRenderLifecycle: true,
   supportsDestroyLifecycle: true,
 
@@ -43,7 +46,7 @@ export default {
     this._proxyBehaviorViewProperties();
     this._buildEventProxies();
 
-    var viewEvents = this._getEvents(eventsArg);
+    var viewEvents = this.getEvents(eventsArg);
 
     if (typeof eventsArg === 'undefined') {
       this.events = viewEvents;
@@ -53,7 +56,7 @@ export default {
       this._getBehaviorEvents(),
       viewEvents,
       this._getBehaviorTriggers(),
-      this._getTriggers()
+      this.getTriggers()
     );
 
     Backbone.View.prototype.delegateEvents.call(this, combinedEvents);
@@ -61,7 +64,7 @@ export default {
     return this;
   },
 
-  _getEvents: function(eventsArg) {
+  getEvents: function(eventsArg) {
     var events = this.getValue(eventsArg || this.events);
 
     return this.normalizeUIKeys(events);
@@ -69,7 +72,7 @@ export default {
 
   // Configure `triggers` to forward DOM events to view
   // events. `triggers: {"click .foo": "do:foo"}`
-  _getTriggers: function() {
+  getTriggers: function() {
     if (!this.triggers) { return; }
 
     // Allow `triggers` to be configured as a function
@@ -77,44 +80,12 @@ export default {
 
     // Configure the triggers, prevent default
     // action and stop propagation of DOM events
-    return _.reduce(triggers, function(events, value, key) {
-      key = getUniqueEventName(key);
-      events[key] = this._buildViewTrigger(value);
-      return events;
-    }, {}, this);
-  },
-
-  // Internal method to create an event handler for a given `triggerDef` like
-  // 'click:foo'
-  _buildViewTrigger: function(triggerDef) {
-    if (_.isString(triggerDef)) {
-      triggerDef = {event: triggerDef};
-    }
-
-    const eventName = triggerDef.event;
-    const shouldPreventDefault = triggerDef.preventDefault !== false;
-    const shouldStopPropagation = triggerDef.stopPropagation !== false;
-
-    return function(e) {
-      if (shouldPreventDefault) {
-        e.preventDefault();
-      }
-
-      if (shouldStopPropagation) {
-        e.stopPropagation();
-      }
-
-      this.triggerMethod(eventName, this);
-    };
+    return this._getViewTriggers(this, triggers);
   },
 
   // Handle `modelEvents`, and `collectionEvents` configuration
   delegateEntityEvents: function() {
-    var modelEvents = this.getValue(this.getOption('modelEvents'));
-    this.bindEntityEvents(this.model, modelEvents);
-
-    var collectionEvents = this.getValue(this.getOption('collectionEvents'));
-    this.bindEntityEvents(this.collection, collectionEvents);
+    this._delegateEntityEvents(this.model, this.collection);
 
     // bind each behaviors model and collection events
     this._delegateBehaviorEntityEvents();
@@ -124,11 +95,7 @@ export default {
 
   // Handle unbinding `modelEvents`, and `collectionEvents` configuration
   undelegateEntityEvents: function() {
-    var modelEvents = this.getValue(this.getOption('modelEvents'));
-    this.unbindEntityEvents(this.model, modelEvents);
-
-    var collectionEvents = this.getValue(this.getOption('collectionEvents'));
-    this.unbindEntityEvents(this.collection, collectionEvents);
+    this._undelegateEntityEvents(this.model, this.collection);
 
     // unbind each behaviors model and collection events
     this._undelegateBehaviorEntityEvents();
@@ -270,3 +237,7 @@ export default {
     }
   }
 };
+
+_.extend(ViewMixin, BehaviorsMixin, CommonMixin, DelegateEntityEventsMixin, TriggersMixin,  UIMixin);
+
+export default ViewMixin;

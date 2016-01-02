@@ -177,13 +177,6 @@ export default {
 
   getChildView: function(name) {
     return this.getRegion(name).currentView;
-  },
-
-  _getImmediateChildren: function() {
-    return _.chain(this.getRegions())
-      .pluck('currentView')
-      .compact()
-      .value();
   }
 
 };

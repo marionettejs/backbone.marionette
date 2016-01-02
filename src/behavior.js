@@ -8,6 +8,8 @@
 
 import _                  from 'underscore';
 import MarionetteObject   from './object';
+import DelegateEntityEventsMixin      from './mixins/delegate-entity-events';
+import TriggersMixin      from './mixins/triggers';
 import UIMixin            from './mixins/ui';
 import getUniqueEventName from './utils/getUniqueEventName';
 
@@ -76,23 +78,13 @@ var Behavior = MarionetteObject.extend({
 
   // Handle `modelEvents`, and `collectionEvents` configuration
   delegateEntityEvents: function() {
-    this.undelegateEntityEvents();
-
-    var modelEvents = this.getValue(this.getOption('modelEvents'));
-    this.bindEntityEvents(this.view.model, modelEvents);
-
-    var collectionEvents = this.getValue(this.getOption('collectionEvents'));
-    this.bindEntityEvents(this.view.collection, collectionEvents);
+    this._delegateEntityEvents(this.view.model, this.view.collection);
 
     return this;
   },
 
   undelegateEntityEvents: function() {
-    var modelEvents = this.getValue(this.getOption('modelEvents'));
-    this.unbindEntityEvents(this.view.model, modelEvents);
-
-    var collectionEvents = this.getValue(this.getOption('collectionEvents'));
-    this.unbindEntityEvents(this.view.collection, collectionEvents);
+    this._undelegateEntityEvents(this.view.model, this.view.collection);
 
     return this;
   },
@@ -122,15 +114,11 @@ var Behavior = MarionetteObject.extend({
     // a user to use the @ui. syntax.
     var behaviorTriggers = this.normalizeUIKeys(_.result(this, 'triggers'));
 
-    return _.reduce(behaviorTriggers, function(events, eventName, key) {
-      key = getUniqueEventName(key);
-      events[key] = this.view._buildViewTrigger(eventName);
-      return events;
-    } , {}, this);
+    return this._getViewTriggers(this.view, behaviorTriggers);
   }
 
 });
 
-_.extend(Behavior.prototype, UIMixin);
+_.extend(Behavior.prototype, DelegateEntityEventsMixin, TriggersMixin, UIMixin);
 
 export default Behavior;

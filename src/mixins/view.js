@@ -88,7 +88,7 @@ export default {
   // 'click:foo'
   _buildViewTrigger: function(triggerDef) {
     if (_.isString(triggerDef)) {
-      triggerDef = { event: triggerDef };
+      triggerDef = {event: triggerDef};
     }
 
     const eventName = triggerDef.event;

@@ -42,12 +42,12 @@ export default {
   bindRadioEvents: bindRadioEvents,
 
   // Proxy `unbindRadioEvents`
-  unbindEntityEvents: unbindRadioEvents,
+  unbindRadioEvents: unbindRadioEvents,
 
   // Proxy `bindRadioRequests`
   bindRadioRequests: bindRadioRequests,
 
   // Proxy `unbindRadioRequests`
-  unbindEntityRequests: unbindRadioRequests
+  unbindRadioRequests: unbindRadioRequests
 
 };

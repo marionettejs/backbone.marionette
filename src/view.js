@@ -5,9 +5,6 @@ import _                  from 'underscore';
 import Backbone           from 'backbone';
 import ViewMixin          from './mixins/view';
 import RegionsMixin       from './mixins/regions';
-import BehaviorsMixin     from './mixins/behaviors';
-import UIMixin            from './mixins/ui';
-import CommonMixin        from './mixins/common';
 import MonitorDOMRefresh  from './dom-refresh';
 import Renderer           from './renderer';
 
@@ -139,13 +136,16 @@ var View = Backbone.View.extend({
   // called by ViewMixin destroy
   _removeChildren: function() {
     this.removeRegions();
+  },
+
+  _getImmediateChildren: function() {
+    return _.chain(this.getRegions())
+      .pluck('currentView')
+      .compact()
+      .value();
   }
 });
 
-_.extend(View.prototype, ViewMixin);
-_.extend(View.prototype, RegionsMixin);
-_.extend(View.prototype, BehaviorsMixin);
-_.extend(View.prototype, UIMixin);
-_.extend(View.prototype, CommonMixin);
+_.extend(View.prototype, ViewMixin, RegionsMixin);
 
 export default View;

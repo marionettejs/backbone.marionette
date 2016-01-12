@@ -17,7 +17,7 @@ var Region = MarionetteObject.extend({
 
   constructor: function(options) {
     this._setOptions(options);
-    this.el = this.getOption('el');
+    this._initEl = this.el = this.getOption('el');
 
     // Handle when this.el is passed in as a $ wrapped element.
     this.el = this.el instanceof Backbone.$ ? this.el[0] : this.el;
@@ -354,11 +354,16 @@ var Region = MarionetteObject.extend({
     this.empty();
 
     if (this.$el) {
-      this.el = this.$el.selector;
+      this.el = this._initEl;
     }
 
     delete this.$el;
     return this;
+  },
+
+  destroy: function() {
+    this.reset();
+    return MarionetteObject.prototype.destroy.apply(this, arguments);
   }
 
 });

@@ -190,9 +190,7 @@ describe('composite view', function() {
         tagName: 'span'
       });
 
-      this.setFixtures('<div id="composite-view"></div>');
       this.CompositeView = Backbone.Marionette.CompositeView.extend({
-        el: '#composite-view',
         childView: this.ChildView,
         emptyView: this.EmptyView,
         template: this.collectionTemplateFn,
@@ -209,7 +207,9 @@ describe('composite view', function() {
         collection: new this.Collection()
       });
 
-      this.compositeView.trigger('show');
+      this.setFixtures('<div id="region"></div>');
+      var region = new Backbone.Marionette.Region({el: '#region'});
+      region.show(this.compositeView);
     });
 
     it('should call onAttach on its empty view', function() {

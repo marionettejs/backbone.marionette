@@ -7,12 +7,10 @@ import isNodeAttached from './utils/isNodeAttached';
 import MarionetteObject from './object';
 import MarionetteError from './error';
 import MonitorViewEvents from './monitor-view-events';
-import { triggerMethodOnCondition } from './trigger-method';
+import { triggerMethodOn } from './trigger-method';
 
 const Region = MarionetteObject.extend({
   cidPrefix: 'mnr',
-  triggerAttach: true,
-  triggerDetach: true,
   replaceElement: false,
   _isReplaced: false,
 
@@ -73,22 +71,33 @@ const Region = MarionetteObject.extend({
       return;
     }
 
-    triggerMethodOnCondition(!view.supportsRenderLifecycle, view, 'before:render', view);
+    if (!view.supportsRenderLifecycle) {
+      triggerMethodOn(view, 'before:render', view);
+    }
 
     view.render();
 
-    triggerMethodOnCondition(!view.supportsRenderLifecycle, view, 'render', view);
+    if (!view.supportsRenderLifecycle) {
+      view._isRendered = true;
+      triggerMethodOn(view, 'render', view);
+    }
   },
 
   _attachView(view) {
-    const shouldTriggerAttach = this.triggerAttach !== false && isNodeAttached(this.el);
+    const shouldTriggerAttach = !view._isAttached && isNodeAttached(this.el);
     const shouldReplaceEl = !!this.replaceElement;
 
-    triggerMethodOnCondition(shouldTriggerAttach, view, 'before:attach', view);
+    if (shouldTriggerAttach) {
+      triggerMethodOn(view, 'before:attach', view);
+    }
 
     this.attachHtml(view, shouldReplaceEl);
 
-    triggerMethodOnCondition(shouldTriggerAttach, view, 'attach', view);
+    if (shouldTriggerAttach) {
+      view._isAttached = true;
+      triggerMethodOn(view, 'attach', view);
+    }
+
     this.currentView = view;
   },
 
@@ -168,9 +177,6 @@ const Region = MarionetteObject.extend({
       // replace the region's node with the view's node
       this._replaceEl(view);
     } else {
-      // empty the node and append new view
-      this.$el.contents().detach();
-
       this.el.appendChild(view.el);
     }
   },
@@ -205,13 +211,18 @@ const Region = MarionetteObject.extend({
   },
 
   _detachView(view) {
-    const shouldTriggerDetach = this.triggerDetach !== false && view._isAttached;
+    const shouldTriggerDetach = !!view._isAttached;
 
-    triggerMethodOnCondition(shouldTriggerDetach, view, 'before:detach', view);
+    if (shouldTriggerDetach) {
+      triggerMethodOn(view, 'before:detach', view);
+    }
 
     this.$el.contents().detach();
 
-    triggerMethodOnCondition(shouldTriggerDetach, view, 'detach', view);
+    if (shouldTriggerDetach) {
+      view._isAttached = false;
+      triggerMethodOn(view, 'detach', view);
+    }
   },
 
   // Call 'destroy' or 'remove', depending on which is found on the view (if showing a raw
@@ -219,23 +230,33 @@ const Region = MarionetteObject.extend({
   _destroyView(view) {
     if (view._isDestroyed) { return; }
 
-    const shouldTriggerDetach = this.triggerDetach !== false && view._isAttached;
-
-    triggerMethodOnCondition(!view.supportsDestroyLifecycle, view, 'before:destroy', view);
-    triggerMethodOnCondition(shouldTriggerDetach, view, 'before:detach', view);
-
+    if (!view.supportsDestroyLifecycle) {
+      triggerMethodOn(view, 'before:destroy', view);
+    }
     if (view.destroy) {
       view.destroy();
     } else {
+      const shouldTriggerDetach = !!view._isAttached;
+
+      if (shouldTriggerDetach) {
+        triggerMethodOn(view, 'before:detach', view);
+      }
+
       view.remove();
 
-      // appending _isDestroyed to raw Backbone View allows regions to throw a ViewDestroyedError
-      // for this view
+      if (shouldTriggerDetach) {
+        view._isAttached = false;
+        triggerMethodOn(view, 'detach', view);
+      }
+
+      // appending _isDestroyed to raw Backbone View allows regions to throw a
+      // ViewDestroyedError for this view
       view._isDestroyed = true;
     }
 
-    triggerMethodOnCondition(shouldTriggerDetach, view, 'detach', view);
-    triggerMethodOnCondition(!view.supportsDestroyLifecycle, view, 'destroy', view);
+    if (!view.supportsDestroyLifecycle) {
+      triggerMethodOn(view, 'destroy', view);
+    }
   },
 
   // Checks whether a view is currently present within the region. Returns `true` if there is

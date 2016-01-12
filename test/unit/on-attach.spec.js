@@ -9,18 +9,6 @@ describe('onAttach', function() {
     this.el = $('#region')[0];
     this.region = new Marionette.Region({el: this.el});
 
-    // A view we can use as nested child views
-    // this.ChildView = Backbone.View.extend({
-    //   template: false,
-    //   constructor: function(options) {
-    //     Backbone.View.prototype.constructor.call(this, options);
-    //     spec.sinon.spy(this, 'onAttach');
-    //     spec.sinon.spy(this, 'onBeforeAttach');
-    //   },
-    //   onAttach: function() {},
-    //   onBeforeAttach: function() {}
-    // });
-
     this.BasicView = Marionette.View.extend({
       template: _.template('<header></header><main></main><footer></footer>'),
       regions: {
@@ -33,8 +21,8 @@ describe('onAttach', function() {
         spec.sinon.spy(this, 'onBeforeAttach');
         spec.sinon.spy(this, 'onAttach');
       },
-      onAttach: function() {},
-      onBeforeAttach: function() {}
+      onBeforeAttach: function() {},
+      onAttach: function() {}
     });
 
     this.EmptyView = Backbone.View.extend({
@@ -49,9 +37,11 @@ describe('onAttach', function() {
       template: false,
       constructor: function(options) {
         Backbone.View.prototype.constructor.call(this, options);
-        this.onAttach = spec.sinon.stub();
-        this.onBeforeAttach = spec.sinon.stub();
-      }
+        spec.sinon.spy(this, 'onBeforeAttach');
+        spec.sinon.spy(this, 'onAttach');
+      },
+      onBeforeAttach: function() {},
+      onAttach: function() {}
     });
     this.BasicCollectionView = Marionette.CollectionView.extend({
       childView: this.ChildView,
@@ -98,21 +88,6 @@ describe('onAttach', function() {
         .to.have.been.calledOnce
         .and.to.have.been.calledWithExactly(this.view)
         .and.to.be.calledAfter(this.region.attachHtml);
-    });
-  });
-
-  describe('when showing a region that is attached to the document & has triggerAttach set to false', function() {
-    beforeEach(function() {
-      this.view = new this.ChildView();
-      this.view.onAttach = this.sinon.stub();
-      this.region.triggerAttach = false;
-
-      this.region.show(this.view);
-    });
-
-    it('should not call onBeforeAttach or onAttach on the view', function() {
-      expect(this.view.onBeforeAttach).to.not.have.been.called;
-      expect(this.view.onAttach).to.not.have.been.called;
     });
   });
 
@@ -371,40 +346,6 @@ describe('onAttach', function() {
     });
   });
 
-  describe('when showing an empty CollectionView with triggerAttach set to false', function() {
-    beforeEach(function() {
-      this.collection = new Backbone.Collection();
-      this.collectionView = new this.BasicCollectionView({
-        collection: this.collection
-      });
-      this.collectionView.triggerAttach = false;
-      this.region.show(this.collectionView);
-      this.childView = this.collectionView.children.findByIndex(0);
-    });
-
-    it('should not trigger onAttach on the emptyView a single time', function() {
-      expect(this.childView).to.be.an.instanceof(this.EmptyView);
-      expect(this.childView.onAttach)
-        .and.to.not.have.been.called
-        .and.to.not.have.been.calledOn(this.childView)
-        .and.to.not.have.been.calledWith(this.childView);
-    });
-
-    describe('when adding a new element to the collection', function() {
-      beforeEach(function() {
-        this.collection.add({id: 1});
-        this.childView = this.collectionView.children.findByIndex(0);
-      });
-      it('should not trigger onAttach on the childView a single time', function() {
-        expect(this.childView).to.be.an.instanceof(this.ChildView);
-        expect(this.childView.onAttach)
-          .and.to.not.have.been.called
-          .and.to.not.have.been.calledOn(this.childView)
-          .and.to.not.have.been.calledWith(this.childView);
-      });
-    });
-  });
-
   describe('when showing a non-empty CollectionView', function() {
     beforeEach(function() {
       this.collection = new Backbone.Collection([{id: 1}, {id: 2}]);
@@ -475,81 +416,6 @@ describe('onAttach', function() {
           .and.to.have.been.calledOnce
           .and.to.have.been.calledOn(this.childView)
           .and.to.have.been.calledWith(this.childView);
-      });
-    });
-  });
-
-  describe('when showing a non-empty CollectionView with triggerAttach set to false', function() {
-    beforeEach(function() {
-      this.collection = new Backbone.Collection([{id: 1}, {id: 2}]);
-      this.collectionView = new this.BasicCollectionView({
-        collection: this.collection
-      });
-      this.collectionView.triggerAttach = false;
-      this.region.show(this.collectionView);
-      this.childView1 = this.collectionView.children.findByIndex(0);
-      this.childView2 = this.collectionView.children.findByIndex(1);
-    });
-
-    it('should not trigger onBeforeAttach or onAttach on each of its childViews a single time', function() {
-      expect(this.childView1.onBeforeAttach)
-        .and.to.not.have.been.calledOnce
-        .and.to.not.have.been.calledOn(this.childView1)
-        .and.to.not.have.been.calledWith(this.childView1);
-      expect(this.childView1.onAttach)
-        .and.to.not.have.been.calledOnce
-        .and.to.not.have.been.calledOn(this.childView1)
-        .and.to.not.have.been.calledWith(this.childView1);
-      expect(this.childView2.onBeforeAttach)
-        .and.to.not.have.been.calledOnce
-        .and.to.not.have.been.calledOn(this.childView2)
-        .and.to.not.have.been.calledWith(this.childView2);
-      expect(this.childView2.onAttach)
-        .and.to.not.have.been.calledOnce
-        .and.to.not.have.been.calledOn(this.childView2)
-        .and.to.not.have.been.calledWith(this.childView2);
-    });
-
-    describe('when re-rendering the CollectionView', function() {
-      beforeEach(function() {
-        this.collectionView.render();
-      });
-
-      it('should not trigger onBeforeAttach or onAttach on each of its childViews a single time', function() {
-        expect(this.childView1.onBeforeAttach)
-          .and.to.not.have.been.calledOnce
-          .and.to.not.have.been.calledOn(this.childView1)
-          .and.to.not.have.been.calledWith(this.childView1);
-        expect(this.childView1.onAttach)
-          .and.to.not.have.been.calledOnce
-          .and.to.not.have.been.calledOn(this.childView1)
-          .and.to.not.have.been.calledWith(this.childView1);
-        expect(this.childView2.onBeforeAttach)
-          .and.to.not.have.been.calledOnce
-          .and.to.not.have.been.calledOn(this.childView2)
-          .and.to.not.have.been.calledWith(this.childView2);
-        expect(this.childView2.onAttach)
-          .and.to.not.have.been.calledOnce
-          .and.to.not.have.been.calledOn(this.childView2)
-          .and.to.not.have.been.calledWith(this.childView2);
-      });
-    });
-
-    describe('when emptying the collection', function() {
-      beforeEach(function() {
-        this.collection.reset();
-        this.childView = this.collectionView.children.findByIndex(0);
-      });
-      it('should not trigger onBeforeAttach or onAttach on the emptyView a single time', function() {
-        expect(this.childView).to.be.an.instanceof(this.EmptyView);
-        expect(this.childView.onBeforeAttach)
-          .and.to.not.have.been.calledOnce
-          .and.to.not.have.been.calledOn(this.childView)
-          .and.to.not.have.been.calledWith(this.childView);
-        expect(this.childView.onAttach)
-          .and.to.not.have.been.calledOnce
-          .and.to.not.have.been.calledOn(this.childView)
-          .and.to.not.have.been.calledWith(this.childView);
       });
     });
   });

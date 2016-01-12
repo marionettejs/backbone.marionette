@@ -1,13 +1,25 @@
 // DOM Refresh
 // -----------
 
-import { triggerMethodOn, triggerMethodMany } from './trigger-method';
+import { triggerMethodOn } from './trigger-method';
 
 // Trigger method on children unless a pure Backbone.View
-function triggerMethodChildren(view, event) {
-  if (view._getImmediateChildren) {
-    triggerMethodMany(view._getImmediateChildren(), view, event);
-  }
+function triggerMethodChildren(view, event, beforeEachTrigger) {
+  if (!view._getImmediateChildren) { return; }
+  _.each(view._getImmediateChildren(), child => {
+    if (beforeEachTrigger) {
+      beforeEachTrigger(child);
+    }
+    triggerMethodOn(child, event, child);
+  });
+}
+
+function setIsAttached(view) {
+  view._isAttached = true;
+}
+
+function unsetIsAttached(view) {
+  view._isAttached = false;
 }
 
 // Monitor a view's state, propagating attach/detach events to children and firing dom:refresh
@@ -18,34 +30,23 @@ function MonitorViewEvents(view) {
   view._areViewEventsMonitored = true;
 
   function handleBeforeAttach() {
-    if (view.triggerAttach !== false) {
-      triggerMethodChildren(view, 'before:attach');
-    }
+    triggerMethodChildren(view, 'before:attach');
   }
 
   function handleAttach() {
-    view._isAttached = true;
-    if (view.triggerAttach !== false) {
-      triggerMethodChildren(view, 'attach');
-    }
+    triggerMethodChildren(view, 'attach', setIsAttached);
     triggerDOMRefresh();
   }
 
   function handleBeforeDetach() {
-    if (view.triggerDetach !== false) {
-      triggerMethodChildren(view, 'before:detach');
-    }
+    triggerMethodChildren(view, 'before:detach');
   }
 
   function handleDetach() {
-    view._isAttached = false;
-    if (view.triggerDetach !== false) {
-      triggerMethodChildren(view, 'detach');
-    }
+    triggerMethodChildren(view, 'detach', unsetIsAttached);
   }
 
   function handleRender() {
-    view._isRendered = true;
     triggerDOMRefresh();
   }
 

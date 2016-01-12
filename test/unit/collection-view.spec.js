@@ -1362,21 +1362,23 @@ describe('collection view', function() {
           suite.sinon.spy(this, 'onRender');
         },
         onRender: function() {
-          isBufferingOnChildRender = collectionView.isBuffering;
+          isBufferingOnChildRender = collectionView._isBuffering;
         },
         onAttach: function() {
-          isBufferingOnChildAttach = collectionView.isBuffering;
+          isBufferingOnChildAttach = collectionView._isBuffering;
         }
       });
 
-      this.setFixtures('<div id="collection-view"></div>');
       var collection = new Backbone.Collection([{}]);
       collectionView = new this.CollectionView({
-        el: '#collection-view',
         childView: ChildView,
         collection: collection
       });
-      collectionView.render();
+
+      this.setFixtures('<div id="region"></div>');
+      var region = new Marionette.Region({el: '#region'});
+      region.show(collectionView);
+
       collection.reset([{}]);
       childView = collectionView.children.findByIndex(0);
     });

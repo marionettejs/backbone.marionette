@@ -196,12 +196,12 @@ describe('trigger event and method name', function() {
       }, this);
 
       this.context = {};
-      Marionette.triggerMethodMany(this.views, this.context, 'foo', 'bar', 'baz');
+      Marionette.triggerMethodMany(this.views, 'foo', 'bar', 'baz');
     });
 
     it('should trigger the event', function() {
-      expect(this.views[0].onFoo).to.have.been.calledOnce.and.calledWith(this.views[0], this.context, 'bar', 'baz');
-      expect(this.views[1].onFoo).to.have.been.calledOnce.and.calledWith(this.views[1], this.context, 'bar', 'baz');
+      expect(this.views[0].onFoo).to.have.been.calledOnce.and.calledWith(this.views[0], 'bar', 'baz');
+      expect(this.views[1].onFoo).to.have.been.calledOnce.and.calledWith(this.views[1], 'bar', 'baz');
     });
   });
 });

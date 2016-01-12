@@ -366,16 +366,18 @@ describe('Behaviors', function() {
     describe('should call onAttach when inside a CollectionView', function() {
 
       beforeEach(function() {
-        this.setFixtures('<div id="collection-view"></div>');
-        this.CollectionView = Marionette.CollectionView.extend({
-          el: '#collection-view',
+        var CollectionView = Marionette.CollectionView.extend({
           childView: this.View
         });
 
         this.collection     = new Backbone.Collection([{}]);
-        this.collectionView = new this.CollectionView({collection: this.collection});
+        this.collectionView = new CollectionView({collection: this.collection});
 
-        this.collectionView.render();
+        this.setFixtures('<div id="region"></div>');
+        var region = new Marionette.Region({
+          el: '#region'
+        });
+        region.show(this.collectionView);
       });
 
       it('should call onAttach when inside a CollectionView', function() {

@@ -20,7 +20,7 @@ var CompositeView = CollectionView.extend({
   // option to pass '{sort: false}' to prevent the CompositeView from
   // maintaining the sorted order of the collection.
   // This will fallback onto appending childView's to the end.
-  constructor: function() {
+  constructor() {
     deprecate('CompositeView is deprecated. Convert to View at your earliest convenience');
     CollectionView.prototype.constructor.apply(this, arguments);
   },
@@ -28,7 +28,7 @@ var CompositeView = CollectionView.extend({
   // Configured the initial events that the composite view
   // binds to. Override this method to prevent the initial
   // events, or to add your own initial events.
-  _initialEvents: function() {
+  _initialEvents() {
 
     // Bind only after composite view is rendered to avoid adding child views
     // to nonexistent childViewContainer
@@ -49,7 +49,7 @@ var CompositeView = CollectionView.extend({
   // `this.childView` or Marionette.CompositeView if no `childView`
   // has been defined. As happens in CollectionView, `childView` can
   // be a function (which should return a view class).
-  _getChildView: function(child) {
+  _getChildView(child) {
     var childView = this.getOption('childView');
 
     // for CompositeView, if `childView` is not specified, we'll get the same
@@ -72,12 +72,12 @@ var CompositeView = CollectionView.extend({
   },
 
   // Return the serialized model
-  serializeData: function() {
+  serializeData() {
     return this.serializeModel();
   },
 
   // Renders the model and the collection.
-  render: function() {
+  render() {
     this._ensureViewIsIntact();
     this._isRendering = true;
     this.resetChildViewContainer();
@@ -94,14 +94,14 @@ var CompositeView = CollectionView.extend({
     return this;
   },
 
-  renderChildren: function() {
+  renderChildren() {
     if (this._isRendered || this._isRendering) {
       CollectionView.prototype._renderChildren.call(this);
     }
   },
 
   // You might need to override this if you've overridden attachHtml
-  attachBuffer: function(compositeView, buffer) {
+  attachBuffer(compositeView, buffer) {
     var $container = this.getChildViewContainer(compositeView);
     $container.append(buffer);
   },
@@ -109,7 +109,7 @@ var CompositeView = CollectionView.extend({
   // Internal method. Append a view to the end of the $el.
   // Overidden from CollectionView to ensure view is appended to
   // childViewContainer
-  _insertAfter: function(childView) {
+  _insertAfter(childView) {
     var $container = this.getChildViewContainer(this, childView);
     $container.append(childView.el);
   },
@@ -117,14 +117,14 @@ var CompositeView = CollectionView.extend({
   // Internal method. Append reordered childView'.
   // Overidden from CollectionView to ensure reordered views
   // are appended to childViewContainer
-  _appendReorderedChildren: function(children) {
+  _appendReorderedChildren(children) {
     var $container = this.getChildViewContainer(this);
     $container.append(children);
   },
 
   // Internal method to ensure an `$childViewContainer` exists, for the
   // `attachHtml` method to use.
-  getChildViewContainer: function(containerView, childView) {
+  getChildViewContainer(containerView, childView) {
     if (!!containerView.$childViewContainer) {
       return containerView.$childViewContainer;
     }
@@ -157,7 +157,7 @@ var CompositeView = CollectionView.extend({
   },
 
   // Internal method to reset the `$childViewContainer` on render
-  resetChildViewContainer: function() {
+  resetChildViewContainer() {
     if (this.$childViewContainer) {
       this.$childViewContainer = undefined;
     }

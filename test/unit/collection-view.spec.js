@@ -75,7 +75,7 @@ describe('collection view', function() {
         childView: undefined
       });
 
-      this.collection = new Backbone.Collection([{foo:'bar'}, {foo: 'baz'}]);
+      this.collection = new Backbone.Collection([{foo: 'bar'}, {foo: 'baz'}]);
       this.collectionView = new this.NoChildView({
         collection: this.collection
       });

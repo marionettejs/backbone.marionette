@@ -63,8 +63,12 @@ var AppLayoutView = Marionette.LayoutView.extend({
 });
 var layoutView = new AppLayoutView();
 layoutView.render();
+// you can access your region by its name
 layoutView.menu.show(new MenuView());
-layoutView.content.show(new MainContentView());
+// also with the getRegion method
+layoutView.getRegion('menu').show(new MenuView());
+// or in this case reference and show it with the showChildView method
+layoutView.showChildView('content', new MainContentView())
 ```
 
 ### Region Configuration Types
@@ -231,13 +235,14 @@ and `empty` methods to display and shut-down a view:
 var myView = new MyView();
 
 // render and display the view
-MyApp.mainRegion.show(myView, options);
+MyApp.getRegion('mainRegion').show(myView, options);
+
 
 // empties the current view
-MyApp.mainRegion.empty();
+MyApp.getRegion('mainRegion').empty();
 ```
 
-The `options` object is optional. If provided, it will be passed to the [events raised during `show`](#events-raised-during-show) (except for `before:empty` and `empty`). Special properties that change the behavior of `show` include `preventDestroy` and `forceShow`.
+The `options` object is optional. If provided, it will be passed to the [events raised during `show`](#events-raised-on-the-region-during-show) (except for `before:empty` and `empty`). Special properties that change the behavior of `show` include `preventDestroy` and `forceShow`.
 
 #### preventDestroy
 
@@ -250,17 +255,17 @@ parameter. Several events will also be triggered on the views; see
 ```js
 // Show the first view.
 var myView = new MyView();
-MyApp.mainRegion.show(myView);
+MyApp.getRegion('mainRegion').show(myView);
 
 // Replace the view with another. The
 // `destroy` method is called for you
 var anotherView = new AnotherView();
-MyApp.mainRegion.show(anotherView);
+MyApp.getRegion('mainRegion').show(anotherView);
 
 // Replace the view with another.
 // Prevent `destroy` from being called
 var anotherView2 = new AnotherView();
-MyApp.mainRegion.show(anotherView2, { preventDestroy: true });
+MyApp.getRegion('mainRegion').show(anotherView2, { preventDestroy: true });
 ```
 
 NOTE: When using `preventDestroy: true` you must be careful to cleanup your old views
@@ -274,10 +279,10 @@ by passing in `{forceShow: true}` in the options parameter.
 
 ```js
 var myView = new MyView();
-MyApp.mainRegion.show(myView);
+MyApp.getRegion('mainRegion').show(myView);
 
 // the second show call will re-show the view
-MyApp.mainRegion.show(myView, {forceShow: true});
+MyApp.getRegion('mainRegion').show(myView, {forceShow: true});
 ```
 
 #### Emptying a region
@@ -386,6 +391,8 @@ MyApp.addRegions({
 })
 ```
 
+If you are interested in region animations and looking for a performant and more advanced solution, check out  [marionette-animated-region](https://github.com/maratfakhreev/marionette-animated-region).
+
 ### Attach Existing View
 
 There are some scenarios where it's desirable to attach an existing
@@ -423,7 +430,7 @@ var myView = new MyView({
   el: $("#existing-view-stuff")
 });
 
-MyApp.someRegion.attachView(myView);
+MyApp.getRegion('someRegion').attachView(myView);
 ```
 
 ## Region Events And Callbacks
@@ -463,43 +470,43 @@ view.supportsDestroyLifecycle = true;
 ### Example Event Handlers
 
 ```js
-MyApp.mainRegion.on("before:show", function(view, region, options){
+MyApp.getRegion('mainRegion').on("before:show", function(view, region, options){
   // manipulate the `view` or do something extra
   // with the `region`
   // you also have access to the `options` that were passed to the Region.show call
 });
 
-MyApp.mainRegion.on("show", function(view, region, options){
+MyApp.getRegion('mainRegion').on("show", function(view, region, options){
   // manipulate the `view` or do something extra
   // with the `region`
   // you also have access to the `options` that were passed to the Region.show call
 });
 
-MyApp.mainRegion.on("before:swap", function(view, region, options){
+MyApp.getRegion('mainRegion').on("before:swap", function(view, region, options){
   // manipulate the `view` or do something extra
   // with the `region`
   // you also have access to the `options` that were passed to the Region.show call
 });
 
-MyApp.mainRegion.on("swap", function(view, region, options){
+MyApp.getRegion('mainRegion').on("swap", function(view, region, options){
   // manipulate the `view` or do something extra
   // with the `region`
   // you also have access to the `options` that were passed to the Region.show call
 });
 
-MyApp.mainRegion.on("before:swapOut", function(view, region, options){
+MyApp.getRegion('mainRegion').on("before:swapOut", function(view, region, options){
   // manipulate the `view` or do something extra
   // with the `region`
   // you also have access to the `options` that were passed to the Region.show call
 });
 
-MyApp.mainRegion.on("swapOut", function(view, region, options){
+MyApp.getRegion('mainRegion').on("swapOut", function(view, region, options){
   // manipulate the `view` or do something extra
   // with the `region`
   // you also have access to the `options` that were passed to the Region.show call
 });
 
-MyApp.mainRegion.on("empty", function(view, region){
+MyApp.getRegion('mainRegion').on("empty", function(view, region){
   // manipulate the `view` or do something extra
   // with the `region`
 });
@@ -607,7 +614,7 @@ var SomeRegion = Marionette.Region.extend({
 
 MyApp.someRegion = new SomeRegion();
 
-MyApp.someRegion.show(someView, options);
+MyApp.getRegion('someRegion').show(someView, options);
 ```
 
 You can optionally add an `initialize` function to your Region

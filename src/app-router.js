@@ -62,9 +62,9 @@ var AppRouter = Backbone.Router.extend({
 
     var routeNames = _.keys(appRoutes).reverse(); // Backbone requires reverted order of routes
 
-    _.each(routeNames, function(route) {
+    _.each(routeNames, route => {
       this._addAppRoute(controller, route, appRoutes[route]);
-    }, this);
+    });
   },
 
   _getController: function() {

@@ -12,6 +12,7 @@ import unwrapper  from 'gulp-unwrapper';
 import { rollup } from 'rollup';
 import babel      from 'rollup-plugin-babel';
 import json       from 'rollup-plugin-json';
+import preset     from 'babel-preset-es2015-rollup';
 
 import banner     from  './_banner';
 import {name, version} from '../package.json';
@@ -72,7 +73,9 @@ function bundle(type) {
     plugins: [
       json(),
       babel({
-        sourceMaps: true
+        sourceMaps: true,
+        presets: [ preset ],
+        babelrc: false
       })
     ]
   }).then(bundle => {

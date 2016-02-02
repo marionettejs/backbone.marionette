@@ -22,5 +22,5 @@ if (!global.document || !global.window) {
 
 }
 
-require('babel-core/register');
+require('babel-register');
 require('./setup')();

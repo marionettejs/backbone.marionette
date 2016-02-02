@@ -3,8 +3,9 @@ import livereload from 'gulp-livereload';
 import plumber from 'gulp-plumber';
 
 import babelify  from 'babelify';
+import preset from 'babel-preset-es2015';
 import browserify from 'browserify';
-import buffer  from 'vinyl-buffer';
+import buffer from 'vinyl-buffer';
 import glob from 'glob';
 import source from 'vinyl-source-stream';
 
@@ -29,7 +30,8 @@ function bundle() {
 
   // Set up Babelify so that ES6 works in the tests
   bundler.transform(babelify.configure({
-    sourceMapRelative: __dirname + '/src'
+    sourceMapRelative: __dirname + '/src',
+    presets: [ preset ]
   }));
 
   return _runBrowserifyBundle(bundler);

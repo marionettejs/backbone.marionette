@@ -12,15 +12,14 @@ global.sinon = sinon;
 
 if (!global.document || !global.window) {
   var jsdom = require('jsdom').jsdom;
-
-  global.document = jsdom('<html><head><script></script></head><body></body></html>', null, {
+  global.document = jsdom('<html><head><script></script></head><body></body></html>', {
     FetchExternalResources   : ['script'],
     ProcessExternalResources : ['script'],
     MutationEvents           : '2.0',
     QuerySelector            : false
   });
 
-  global.window = document.parentWindow;
+  global.window = document.defaultView;
   global.navigator = global.window.navigator;
 
   global.window.Node.prototype.contains = function (node) {

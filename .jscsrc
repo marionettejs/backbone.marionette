@@ -1,4 +1,5 @@
 {
   "preset": "google",
-  "maximumLineLength": 120
+  "maximumLineLength": 120,
+  "disallowSpaceAfterObjectKeys": false
 }

@@ -315,7 +315,7 @@ describe('Behaviors', function() {
       });
 
       it('should call onShow when already shown and reset', function() {
-        this.collection.reset([{id:1}, {id: 2}]);
+        this.collection.reset([{id: 1}, {id: 2}]);
 
         expect(this.onShowStub.callCount).to.equal(3);
       });

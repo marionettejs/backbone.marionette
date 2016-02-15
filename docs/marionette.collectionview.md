@@ -949,7 +949,7 @@ var cv = new Marionette.CollectionView({
 CollectionView allows for a custom `viewComparator` option if you want your CollectionView's children to be rendered with a different sort order than the underlying Backbone collection uses.
 
 ```js
-  var cv = new MarionetteCollectionView({
+  var cv = new Marionette.CollectionView({
     collection: someCollection,
     viewComparator: 'otherFieldToSortOn'
   });

@@ -186,22 +186,4 @@ describe('trigger event and method name', function() {
       });
     });
   });
-
-  describe('when triggering an event on many other contexts', function() {
-    beforeEach(function() {
-      this.views = _.times(2, function() {
-        var view = new Backbone.View();
-        view.onFoo = this.sinon.stub();
-        return view;
-      }, this);
-
-      this.context = {};
-      Marionette.triggerMethodMany(this.views, 'foo', 'bar', 'baz');
-    });
-
-    it('should trigger the event', function() {
-      expect(this.views[0].onFoo).to.have.been.calledOnce.and.calledWith(this.views[0], 'bar', 'baz');
-      expect(this.views[1].onFoo).to.have.been.calledOnce.and.calledWith(this.views[1], 'bar', 'baz');
-    });
-  });
 });

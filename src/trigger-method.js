@@ -48,16 +48,3 @@ export function triggerMethodOn(context, ...args) {
   var fnc = _.isFunction(context.triggerMethod) ? context.triggerMethod : triggerMethod;
   return fnc.apply(context, args);
 }
-
-// triggerMethodMany invokes triggerMethod on many targets from a source
-// it's useful for standardizing a pattern where we propagate an event from a source
-// to many targets.
-//
-// For each target we want to follow the pattern
-// target.triggerMethod(event, target, ...args)
-// e.g childview.triggerMethod('attach', childView, ...args)
-export function triggerMethodMany(targets, eventName, ...args) {
-  _.each(targets, function(target) {
-    triggerMethodOn(target, eventName, target, ...args);
-  });
-}

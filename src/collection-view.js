@@ -6,10 +6,8 @@ import Backbone           from 'backbone';
 import ChildViewContainer from 'backbone.babysitter';
 import MarionetteError    from './error';
 import ViewMixin          from './mixins/view';
-import BehaviorsMixin     from './mixins/behaviors';
-import UIMixin            from './mixins/ui';
-import CommonMixin        from './mixins/common';
 import MonitorViewEvents  from './monitor-view-events';
+import destroyBackboneView from './utils/destroyBackboneView';
 import { triggerMethodOn } from './trigger-method';
 
 // A view that iterates over a Backbone.Collection
@@ -51,23 +49,20 @@ const CollectionView = Backbone.View.extend({
 
   _endBuffering() {
     const shouldTriggerAttach = !!this._isAttached;
+    const triggerOnChildren = shouldTriggerAttach ? this._getImmediateChildren() : [];
 
     this._isBuffering = false;
 
-    if (shouldTriggerAttach) {
-      _.each(this._getImmediateChildren(), child => {
-        triggerMethodOn(child, 'before:attach', child);
-      });
-    }
+    _.each(triggerOnChildren, child => {
+      triggerMethodOn(child, 'before:attach', child);
+    });
 
     this.attachBuffer(this, this._createBuffer());
 
-    if (shouldTriggerAttach) {
-      _.each(this._getImmediateChildren(), child => {
-        child._isAttached = true;
-        triggerMethodOn(child, 'attach', child);
-      });
-    }
+    _.each(triggerOnChildren, child => {
+      child._isAttached = true;
+      triggerMethodOn(child, 'attach', child);
+    });
 
     this._bufferedChildren = [];
   },
@@ -123,13 +118,11 @@ const CollectionView = Backbone.View.extend({
   // An efficient rendering used for filtering. Instead of modifying the whole DOM for the
   // collection view, we are only adding or removing the related childrenViews.
   setFilter(filter, {preventRender} = {}) {
-    const viewCanBeRendered = this._isRendered && !this._isDestroyed;
-    // The same filter or a `prevent` option won't render the filter.
-    // Nevertheless, a `prevent` option will modify the value.
-    if (!viewCanBeRendered || this.filter === filter) {
-      return;
-    }
-    if (!preventRender) {
+    const canBeRendered = this._isRendered && !this._isDestroyed;
+    const filterChanged = this.filter !== filter;
+    const shouldRender = canBeRendered && filterChanged && !preventRender;
+
+    if (shouldRender) {
       this.triggerMethod('before:apply:filter', this);
       const previousModels = this._filteredSortedModels();
       this.filter = filter;
@@ -475,36 +468,16 @@ const CollectionView = Backbone.View.extend({
   // Remove the child view and destroy it. This function also updates the indices of later views
   // in the collection in order to keep the children in sync with the collection.
   _removeChildView(view) {
-    if (!view) { return view; }
+    if (!view || view._isDestroyed) {
+      return;
+    }
 
     this.triggerMethod('before:remove:child', this, view);
 
-    if (!view.supportsDestroyLifecycle) {
-      triggerMethodOn(view, 'before:destroy', view);
-    }
-
-    // call 'destroy' or 'remove', depending on which is found
     if (view.destroy) {
       view.destroy();
     } else {
-      const shouldTriggerDetach = !!view._isAttached;
-
-      if (shouldTriggerDetach) {
-        triggerMethodOn(view, 'before:detach', view);
-      }
-
-      view.remove();
-
-      if (shouldTriggerDetach) {
-        view._isAttached = false;
-        triggerMethodOn(view, 'detach', view);
-      }
-
-      view._isDestroyed = true;
-    }
-
-    if (!view.supportsDestroyLifecycle) {
-      triggerMethodOn(view, 'destroy', view);
+      destroyBackboneView(view);
     }
 
     delete view._parent;
@@ -514,8 +487,6 @@ const CollectionView = Backbone.View.extend({
 
     // decrement the index of views after this one
     this._updateIndices(view, false);
-
-    return view;
   },
 
   // check if the collection is empty or optionally whether an array of pre-processed models is empty

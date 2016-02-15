@@ -1,12 +1,16 @@
 // ViewMixin
 //  ---------
 
-import Backbone           from 'backbone';
-import _                  from 'underscore';
-import getUniqueEventName from '../utils/getUniqueEventName';
-import MarionetteError    from '../error';
-import View               from '../view';
-import { triggerMethod }  from '../trigger-method';
+import Backbone from 'backbone';
+import _ from 'underscore';
+import MarionetteError from '../error';
+import BehaviorsMixin from './behaviors';
+import CommonMixin from './common';
+import DelegateEntityEventsMixin from './delegate-entity-events';
+import TriggersMixin from './triggers';
+import UIMixin from './ui';
+import View from '../view';
+import { triggerMethod } from '../trigger-method';
 
 var ViewMixin = {
   supportsRenderLifecycle: true,

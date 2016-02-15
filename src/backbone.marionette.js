@@ -42,8 +42,7 @@ import {
 
 import {
   triggerMethod,
-  triggerMethodOn,
-  triggerMethodMany
+  triggerMethodOn
 } from './trigger-method';
 
 var previousMarionette = Backbone.Marionette;
@@ -73,7 +72,6 @@ Marionette.isNodeAttached = isNodeAttached;
 Marionette.deprecate = deprecate;
 Marionette.triggerMethod = proxy(triggerMethod);
 Marionette.triggerMethodOn = triggerMethodOn;
-Marionette.triggerMethodMany = triggerMethodMany;
 Marionette.isEnabled = isEnabled;
 Marionette.setEnabled = setEnabled;
 Marionette.MonitorViewEvents = MonitorViewEvents;

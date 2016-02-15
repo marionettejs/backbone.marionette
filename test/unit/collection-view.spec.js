@@ -851,26 +851,21 @@ describe('collection view', function() {
 
   describe('when removing a childView that does not have a "destroy" method', function() {
     beforeEach(function() {
+      const collection = new Backbone.Collection([{id: 1}]);
       this.collectionView = new this.CollectionView({
         childView: Backbone.View,
-        collection: new Backbone.Collection([{id: 1}])
+        collection
       });
 
       this.collectionView.render();
 
       this.childView = this.collectionView.children.findByIndex(0);
       this.sinon.spy(this.childView, 'remove');
-
-      this.sinon.spy(this.collectionView, '_removeChildView');
-      this.collectionView._removeChildView(this.childView);
+      collection.reset();
     });
 
     it('should call the "remove" method', function() {
       expect(this.childView.remove).to.have.been.called;
-    });
-
-    it('should return the childView', function() {
-      expect(this.collectionView._removeChildView).to.have.returned(this.childView);
     });
   });
 

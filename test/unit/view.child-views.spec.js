@@ -197,64 +197,56 @@ describe('layoutView', function() {
 
   describe('when destroying', function() {
 
-    before(function() {
-      this.setup = function(viewOptions) {
-        this.layoutViewManager = new this.View(viewOptions);
-        $('<span id="parent">').append(this.layoutViewManager.el);
-        this.layoutViewManager.render();
+    beforeEach(function() {
+      this.layoutViewManager = new this.View();
+      $('<span id="parent">').append(this.layoutViewManager.el);
+      this.layoutViewManager.render();
 
-        this.regionOne = this.layoutViewManager.getRegion('regionOne');
-        this.regionTwo = this.layoutViewManager.getRegion('regionTwo');
+      this.regionOne = this.layoutViewManager.getRegion('regionOne');
+      this.regionTwo = this.layoutViewManager.getRegion('regionTwo');
 
-        var View = Marionette.View.extend({
-          template: false,
-          destroy: function() {
-            this.hadParent = this.$el.closest('#parent').length > 0;
-            return View.__super__.destroy.call(this);
-          }
-        });
+      var View = Marionette.View.extend({
+        template: false,
+        destroy: function() {
+          this.hadParent = this.$el.closest('#parent').length > 0;
+          return View.__super__.destroy.call(this);
+        }
+      });
 
-        this.regionOneView = new View();
-        this.regionOne.show(this.regionOneView);
+      this.regionOneView = new View();
+      this.sinon.spy(this.regionOne, 'empty');
+      this.sinon.spy(this.regionTwo, 'empty');
 
-        this.sinon.spy(this.regionOne, 'empty');
-        this.sinon.spy(this.regionTwo, 'empty');
+      this.regionOne.show(this.regionOneView);
 
-        this.sinon.spy(this.layoutViewManager, 'destroy');
-        this.layoutViewManager.destroy();
-        this.layoutViewManager.destroy();
-      };
+      this.sinon.spy(this.layoutViewManager, 'destroy');
+      this.layoutViewManager.destroy();
+      this.layoutViewManager.destroy();
     });
 
     it('should empty the region managers', function() {
-      this.setup();
-      expect(this.regionOne.empty).to.have.been.calledOnce;
+      expect(this.regionOne.empty).to.have.been.calledTwice;
       expect(this.regionTwo.empty).to.have.been.calledOnce;
     });
 
     it('should delete the region managers', function() {
-      this.setup();
       expect(this.layoutViewManager.getRegion('regionOne')).to.be.undefined;
       expect(this.layoutViewManager.getRegion('regionTwo')).to.be.undefined;
     });
 
     it('should return the view', function() {
-      this.setup();
       expect(this.layoutViewManager.destroy).to.have.always.returned(this.layoutViewManager);
     });
 
     it('should remove itself from the DOM before destroying child regions by default', function() {
-      this.setup();
       expect(this.regionOneView.hadParent).to.be.false;
     });
 
     it('should be marked destroyed', function() {
-      this.setup();
       expect(this.layoutViewManager).to.have.property('_isDestroyed', true);
     });
 
     it('should be marked not rendered', function() {
-      this.setup();
       expect(this.layoutViewManager).to.have.property('_isRendered', false);
     });
   });
@@ -572,7 +564,7 @@ describe('layoutView', function() {
           'sam': '.and-max'
         },
 
-        onShow: function() {
+        onRender: function() {
           this.getRegion('sam').show(new suite.LucasArts({collection: new Backbone.Collection([{}])}));
         }
       });
@@ -582,11 +574,11 @@ describe('layoutView', function() {
       this.region.show(new this.Layout());
     });
 
-    it('should call onDomRefresh on region views when shown within the parents onShow', function() {
+    it('should call onDomRefresh on region views when shown within the parent\'s onRender', function() {
       expect(this.spy).to.have.been.called;
     });
 
-    it('should call onDomRefresh on region view children when shown within the parents onShow', function() {
+    it('should call onDomRefresh on region view children when shown within the parent\'s onRender', function() {
       expect(this.spy2).to.have.been.called;
     });
   });

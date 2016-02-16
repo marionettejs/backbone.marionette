@@ -328,12 +328,12 @@ describe('Behaviors', function() {
   describe('behavior UI', function() {
     beforeEach(function() {
       var suite = this;
-      this.onRenderStub     = this.sinon.stub();
-      this.onBeforeShowStub = this.sinon.stub();
-      this.onShowStub       = this.sinon.stub();
-      this.onDestroyStub    = this.sinon.stub();
-      this.onFooClickStub   = this.sinon.stub();
-      this.onBarClickStub   = this.sinon.stub();
+      this.onRenderStub       = this.sinon.stub();
+      this.onBeforeAttachStub = this.sinon.stub();
+      this.onAttachStub       = this.sinon.stub();
+      this.onDestroyStub      = this.sinon.stub();
+      this.onFooClickStub     = this.sinon.stub();
+      this.onBarClickStub     = this.sinon.stub();
 
       this.behaviors = {
         foo: Marionette.Behavior.extend({
@@ -347,8 +347,8 @@ describe('Behaviors', function() {
           testViewUI:     function() { this.ui.bar.trigger('test'); },
           testBehaviorUI: function() { this.ui.foo.trigger('test'); },
           onRender:       this.onRenderStub,
-          onBeforeShow:   this.onBeforeShowStub,
-          onShow:         this.onShowStub,
+          onBeforeAttach: this.onBeforeAttachStub,
+          onAttach:       this.onAttachStub,
           onDestroy:      this.onDestroyStub,
           onFooClick:     this.onFooClickStub,
           onBarClick:     this.onBarClickStub
@@ -363,34 +363,37 @@ describe('Behaviors', function() {
       });
     });
 
-    describe('should call onShow when inside a CollectionView', function() {
+    describe('should call onAttach when inside a CollectionView', function() {
 
       beforeEach(function() {
-        this.CollectionView = Marionette.CollectionView.extend({
+        var CollectionView = Marionette.CollectionView.extend({
           childView: this.View
         });
 
         this.collection     = new Backbone.Collection([{}]);
-        this.collectionView = new this.CollectionView({collection: this.collection});
+        this.collectionView = new CollectionView({collection: this.collection});
 
-        this.collectionView.render();
-        this.collectionView.triggerMethod('show');
+        this.setFixtures('<div id="region"></div>');
+        var region = new Marionette.Region({
+          el: '#region'
+        });
+        region.show(this.collectionView);
       });
 
-      it('should call onShow when inside a CollectionView', function() {
-        expect(this.onShowStub).to.have.been.called;
+      it('should call onAttach when inside a CollectionView', function() {
+        expect(this.onAttachStub).to.have.been.called;
       });
 
-      it('should call onShow when already shown and reset', function() {
+      it('should call onAttach when already shown and reset', function() {
         this.collection.reset([{id: 1}, {id: 2}]);
 
-        expect(this.onShowStub.callCount).to.equal(3);
+        expect(this.onAttachStub.callCount).to.equal(3);
       });
 
-      it('should call onShow when a single model is added and the collectionView is already shown', function() {
+      it('should call onAttach when a single model is added and the collectionView is already shown', function() {
         this.collection.add({id: 3});
 
-        expect(this.onShowStub.callCount).to.equal(2);
+        expect(this.onAttachStub.callCount).to.equal(2);
       });
     });
 
@@ -484,7 +487,9 @@ describe('Behaviors', function() {
 
     describe('within a layout', function() {
       beforeEach(function() {
+        this.setFixtures('<div id="layout"></div>');
         this.ItemView = Marionette.View.extend({
+          el: '#layout',
           template: _.template('<div class="baz"></div>'),
           regions: {bazRegion: '.baz'}
         });
@@ -495,12 +500,12 @@ describe('Behaviors', function() {
         this.layoutView.destroy();
       });
 
-      it('should call onBeforeShow', function() {
-        expect(this.onBeforeShowStub).to.have.been.calledOnce;
+      it('should call onBeforeAttach', function() {
+        expect(this.onBeforeAttachStub).to.have.been.calledOnce;
       });
 
-      it('should call onShow', function() {
-        expect(this.onShowStub).to.have.been.calledOnce;
+      it('should call onAttach', function() {
+        expect(this.onAttachStub).to.have.been.calledOnce;
       });
 
       it('should call onDestroy', function() {
@@ -511,12 +516,12 @@ describe('Behaviors', function() {
 
   describe('showing a view in a layout', function() {
     beforeEach(function() {
-      this.onShowStub = this.sinon.stub();
+      this.onAttachStub = this.sinon.stub();
       this.onDestroyStub = this.sinon.stub();
 
       this.behaviors = {
         foo: Marionette.Behavior.extend({
-          onShow:    this.onShowStub,
+          onAttach:  this.onAttachStub,
           onDestroy: this.onDestroyStub
         })
       };
@@ -527,15 +532,16 @@ describe('Behaviors', function() {
         behaviors: {foo: {}}
       });
 
-      this.region = new Backbone.Marionette.Region({el: $('<div>')});
+      this.setFixtures('<div id="region"></div>');
+      this.region = new Backbone.Marionette.Region({el: '#region'});
       this.view = new this.View();
 
       this.region.show(this.view);
       this.region.empty();
     });
 
-    it('behavior onShow is called once', function() {
-      expect(this.onShowStub).to.have.been.calledOnce;
+    it('behavior onAttach is called once', function() {
+      expect(this.onAttachStub).to.have.been.calledOnce;
     });
 
     it('behavior onClose is called once', function() {

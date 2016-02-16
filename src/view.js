@@ -5,19 +5,19 @@ import _                  from 'underscore';
 import Backbone           from 'backbone';
 import ViewMixin          from './mixins/view';
 import RegionsMixin       from './mixins/regions';
-import MonitorDOMRefresh  from './dom-refresh';
+import MonitorViewEvents  from './monitor-view-events';
 import Renderer           from './renderer';
 
 // The standard view. Includes view events, automatic rendering
 // of Underscore templates, nested views, and more.
 var View = Backbone.View.extend({
 
-  constructor: function(options) {
+  constructor(options) {
     this.render = _.bind(this.render, this);
 
     this._setOptions(options);
 
-    MonitorDOMRefresh(this);
+    MonitorViewEvents(this);
 
     this._initBehaviors();
     this._initRegions();
@@ -29,7 +29,7 @@ var View = Backbone.View.extend({
 
   // Serialize the view's model *or* collection, if
   // it exists, for the template
-  serializeData: function() {
+  serializeData() {
     if (!this.model && !this.collection) {
       return {};
     }
@@ -50,14 +50,14 @@ var View = Backbone.View.extend({
   // for being displayed in the template. By default
   // we simply clone the attributes. Override this if
   // you need a custom transformation for your view's model
-  serializeModel: function() {
+  serializeModel() {
     if (!this.model) { return {}; }
     return _.clone(this.model.attributes);
   },
 
   // Serialize a collection by cloning each of
   // its model's attributes
-  serializeCollection: function() {
+  serializeCollection() {
     if (!this.collection) { return {}; }
     return this.collection.map(function(model) { return _.clone(model.attributes); });
   },
@@ -69,7 +69,7 @@ var View = Backbone.View.extend({
   // change how Marionette renders views.
   // Subsequent renders after the first will re-render all nested
   // views.
-  render: function() {
+  render() {
     this._ensureViewIsIntact();
 
     this.triggerMethod('before:render', this);
@@ -81,9 +81,9 @@ var View = Backbone.View.extend({
     }
 
     this._renderTemplate();
-    this._isRendered = true;
     this.bindUIElements();
 
+    this._isRendered = true;
     this.triggerMethod('render', this);
 
     return this;
@@ -91,7 +91,7 @@ var View = Backbone.View.extend({
 
   // Internal method to render the template with the serialized data
   // and template context via the `Marionette.Renderer` object.
-  _renderTemplate: function() {
+  _renderTemplate() {
     var template = this.getTemplate();
 
     // Allow template-less views
@@ -111,7 +111,7 @@ var View = Backbone.View.extend({
   // instance. You can set a `template` attribute in the view
   // definition or pass a `template: "whatever"` parameter in
   // to the constructor options.
-  getTemplate: function() {
+  getTemplate() {
     return this.getOption('template');
   },
 
@@ -122,19 +122,19 @@ var View = Backbone.View.extend({
   // For example, using `innerHTML` instead of `$el.html`
   //
   // ```js
-  // attachElContent: function(html) {
+  // attachElContent(html) {
   //   this.el.innerHTML = html;
   //   return this;
   // }
   // ```
-  attachElContent: function(html) {
+  attachElContent(html) {
     this.$el.html(html);
 
     return this;
   },
 
   // called by ViewMixin destroy
-  _removeChildren: function() {
+  _removeChildren() {
     this.removeRegions();
   },
 

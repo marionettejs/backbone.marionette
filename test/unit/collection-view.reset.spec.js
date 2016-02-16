@@ -14,7 +14,7 @@ describe('collection view - reset', function() {
     this.CollectionView = Backbone.Marionette.CollectionView.extend({
       childView: this.View,
       onRender: this.onRenderStub,
-      destroyChildren: this.destroyChildrenStub
+      _destroyChildren: this.destroyChildrenStub
     });
 
     this.collectionView = new this.CollectionView({

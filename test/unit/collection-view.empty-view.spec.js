@@ -20,8 +20,8 @@ describe('collectionview - emptyView', function() {
       onRenderEmpty: function() {},
       onBeforeRemoveEmpty: function() {},
       onRemoveEmpty: function() {},
-      onBeforeShow: function() {},
-      onShow: function() {}
+      onBeforeAttach: function() {},
+      onAttach: function() {}
     });
   });
 
@@ -199,9 +199,9 @@ describe('collectionview - emptyView', function() {
     beforeEach(function() {
       this.data = [{foo: 'bar'}, {foo: 'baz'}];
       this.collection = new Backbone.Collection(this.data);
-      this.el = $('<div></div>');
+      this.setFixtures('<div id="region"></div>');
       this.region = new Backbone.Marionette.Region({
-        el: this.el
+        el: '#region'
       });
 
       this.collectionView = new this.EmptyCollectionView({
@@ -209,21 +209,21 @@ describe('collectionview - emptyView', function() {
         emptyView: this.EmptyView
       });
 
-      this.beforeShowEmptySpy = this.sinon.spy(this.collectionView, 'onBeforeShow');
-      this.showEmptySpy = this.sinon.spy(this.collectionView, 'onShow');
+      this.beforeAttachEmptySpy = this.sinon.spy(this.collectionView, 'onBeforeAttach');
+      this.attachEmptySpy = this.sinon.spy(this.collectionView, 'onAttach');
 
       this.region.show(this.collectionView);
       this.collection.reset();
     });
 
-    it('should call "onBeforeShow"', function() {
-      expect(this.beforeShowEmptySpy)
+    it('should call "onBeforeAttach"', function() {
+      expect(this.beforeAttachEmptySpy)
         .to.have.been.calledOnce
         .and.calledOn(this.collectionView);
     });
 
-    it('should call "onShow"', function() {
-      expect(this.showEmptySpy)
+    it('should call "onAttach"', function() {
+      expect(this.attachEmptySpy)
         .to.have.been.calledOnce
         .and.calledOn(this.collectionView);
     });

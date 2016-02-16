@@ -325,11 +325,14 @@ describe('item view', function() {
         onDomRefresh: this.onDomRefreshStub
       });
 
-      this.view = new this.View();
-      this.setFixtures(this.view.$el);
+      this.setFixtures('<div id="region"></div>');
+      this.Region = Marionette.Region.extend({
+        el: '#region'
+      });
 
-      this.view.render();
-      this.view.triggerMethod('show');
+      this.view = new this.View();
+      this.region = new this.Region();
+      this.region.show(this.view);
       this.view.render();
     });
 

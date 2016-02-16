@@ -1,947 +1,423 @@
 describe('onAttach', function() {
-  'use strict';
+  const expectTriggerMethod = (method, target, retval, before = null) => {
+    expect(method)
+      .to.have.been.calledOnce
+      .and.to.have.been.calledOn(target)
+      .and.to.have.been.calledWithExactly(target)
+      .and.to.have.returned(retval);
+    if (before) {
+      expect(method).to.have.been.calledBefore(before);
+    }
+  };
+
+  const extendAttachMethods = superConstructor => target => Object.assign(target, {
+    constructor(options) {
+      superConstructor.call(this, options);
+      sinon.spy(this, 'onAttach');
+      sinon.spy(this, 'onBeforeAttach');
+      sinon.spy(this, 'onDetach');
+      sinon.spy(this, 'onBeforeDetach');
+    },
+    onAttach() {
+      return !!this._isAttached;
+    },
+    onBeforeAttach() {
+      return !!this._isAttached;
+    },
+    onDetach() {
+      return !!this._isAttached;
+    },
+    onBeforeDetach() {
+      return !!this._isAttached;
+    }
+  });
+
+  let sinon;
+  let View;
+  let EmptyView;
+  let ChildView;
+  let CollectionView;
+  let regionEl;
+  let region;  // A Region to show our View within
 
   beforeEach(function() {
-    var spec = this;
-
-    // A Region to show our View within
-    this.setFixtures('<div id="region"></div>');
-    this.el = $('#region')[0];
-    this.region = new Marionette.Region({el: this.el});
-
-    // A view we can use as nested child views
-    // this.ChildView = Backbone.View.extend({
-    //   template: false,
-    //   constructor: function(options) {
-    //     Backbone.View.prototype.constructor.call(this, options);
-    //     spec.sinon.spy(this, 'onAttach');
-    //     spec.sinon.spy(this, 'onBeforeAttach');
-    //   },
-    //   onAttach: function() {},
-    //   onBeforeAttach: function() {}
-    // });
-
-    this.BasicView = Marionette.View.extend({
+    sinon = this.sinon;
+    View = Marionette.View.extend(extendAttachMethods(Marionette.View)({
       template: _.template('<header></header><main></main><footer></footer>'),
       regions: {
         header: 'header',
         main: 'main',
         footer: 'footer'
-      },
-      constructor: function() {
-        Marionette.View.prototype.constructor.apply(this, arguments);
-        spec.sinon.spy(this, 'onBeforeAttach');
-        spec.sinon.spy(this, 'onAttach');
-      },
-      onAttach: function() {},
-      onBeforeAttach: function() {}
-    });
-
-    this.EmptyView = Backbone.View.extend({
-      template: false,
-      constructor: function(options) {
-        Backbone.View.prototype.constructor.call(this, options);
-        this.onAttach = spec.sinon.stub();
-        this.onBeforeAttach = spec.sinon.stub();
       }
+    }));
+    EmptyView = Backbone.View.extend(extendAttachMethods(Backbone.View)({
+      template: false
+    }));
+    ChildView = Backbone.View.extend(extendAttachMethods(Backbone.View)({
+      template: false
+    }));
+    CollectionView = Marionette.CollectionView.extend({
+      childView: ChildView,
+      emptyView: EmptyView
     });
-    this.ChildView = Backbone.View.extend({
-      template: false,
-      constructor: function(options) {
-        Backbone.View.prototype.constructor.call(this, options);
-        this.onAttach = spec.sinon.stub();
-        this.onBeforeAttach = spec.sinon.stub();
-      }
+    // A Region to show our View within
+    this.setFixtures('<div id="region"></div>');
+    regionEl = document.getElementById('region');
+    region = new Marionette.Region({el: regionEl});
+  });
+
+  describe('when showing a view into a region not attached to the document', function() {
+    let detachedRegion;
+    let view;
+
+    beforeEach(function() {
+      view = new ChildView();
+      detachedRegion = new Marionette.Region({el: document.createElement('div')});
+      detachedRegion.show(view);
     });
-    this.BasicCollectionView = Marionette.CollectionView.extend({
-      childView: this.ChildView,
-      emptyView: this.EmptyView
+
+    it('should not call onAttach/onBeforeAttach methods on the view', function() {
+      expect(view.onAttach).to.not.have.been.called;
+      expect(view.onBeforeAttach).to.not.have.been.called;
+    });
+
+    describe('when removing a view from a region not attached to the document', function() {
+      beforeEach(function() {
+        detachedRegion.empty();
+      });
+
+      it('should not call onDetach/onBeforeDetach methods on the view', function() {
+        expect(view.onDetach).to.not.have.been.called;
+        expect(view.onBeforeDetach).to.not.have.been.called;
+      });
     });
   });
 
-  describe('when showing a region that is not attached to the document', function() {
+  describe('when showing a view into a region attached to the document', function() {
+    let view;
+
     beforeEach(function() {
-      this.detachedRegion = new Marionette.Region({el: $('<div></div>')});
-
-      this.view = new this.ChildView();
-      this.view.onAttach = this.sinon.stub();
-      this.view.onBeforeAttach = this.sinon.stub();
-
-      this.detachedRegion.show(new this.ChildView());
-    });
-
-    it('should not call either trigger method on the view', function() {
-      expect(this.view.onAttach).to.not.have.been.called;
-      expect(this.view.onBeforeAttach).to.not.have.been.called;
-    });
-  });
-
-  describe('when showing a region that is attached to the document', function() {
-    beforeEach(function() {
-      this.view = new this.ChildView();
-      this.view.onAttach = this.sinon.stub();
-      this.view.onBeforeAttach = this.sinon.stub();
-
-      this.sinon.spy(this.region, 'attachHtml');
-      this.region.show(this.view);
+      view = new ChildView();
+      region.show(view);
     });
 
     it('should call onBeforeAttach on the view', function() {
-      expect(this.view.onBeforeAttach)
-        .to.have.been.calledOnce
-        .and.to.have.been.calledWithExactly(this.view, this.region)
-        .and.to.be.calledBefore(this.region.attachHtml);
-
+      expectTriggerMethod(view.onBeforeAttach, view, false, view.onAttach);
     });
 
     it('should call onAttach on the view', function() {
-      expect(this.view.onAttach)
-        .to.have.been.calledOnce
-        .and.to.have.been.calledWithExactly(this.view, this.region)
-        .and.to.be.calledAfter(this.region.attachHtml);
-    });
-  });
-
-  describe('when showing a region that is attached to the document & has triggerBeforeAttach set to false', function() {
-    beforeEach(function() {
-      this.view = new this.ChildView();
-      this.view.onAttach = this.sinon.stub();
-      this.view.onBeforeAttach = this.sinon.stub();
-      this.region.triggerBeforeAttach = false;
-
-      this.region.show(this.view);
+      expectTriggerMethod(view.onAttach, view, true);
     });
 
-    it('should not call onBeforeAttach on the view', function() {
-      expect(this.view.onBeforeAttach).to.not.have.been.called;
+    describe('when destroying a view from a region attached to the document', function() {
+      beforeEach(function() {
+        region.empty();
+      });
+
+      it('should call onBeforeDetach on the view', function() {
+        expectTriggerMethod(view.onBeforeDetach, view, true, view.onDetach);
+      });
+
+      it('should call onDetach on the view', function() {
+        expectTriggerMethod(view.onDetach, view, false);
+      });
     });
 
-    it('should call onBeforeAttach on the view', function() {
-      expect(this.view.onAttach)
-        .to.have.been.calledOnce
-        .and.to.have.been.calledWithExactly(this.view, this.region);
-    });
-  });
+    describe('when detaching a view from a region attached to the document', function() {
+      beforeEach(function() {
+        region.empty({preventDestroy: true});
+      });
 
-  describe('when showing a region that is attached to the document & has triggerBeforeAttach set to false, but the option is passed as true', function() {
-    beforeEach(function() {
-      this.view = new this.ChildView();
-      this.view.onAttach = this.sinon.stub();
-      this.view.onBeforeAttach = this.sinon.stub();
-      this.region.triggerBeforeAttach = false;
+      it('should call onBeforeDetach on the view', function() {
+        expectTriggerMethod(view.onBeforeDetach, view, true, view.onDetach);
+      });
 
-      this.region.show(this.view, {triggerBeforeAttach: true});
-    });
-
-    it('should call onBeforeAttach on the view', function() {
-      expect(this.view.onBeforeAttach)
-        .to.have.been.calledOnce
-        .and.to.have.been.calledWithExactly(this.view, this.region);
-    });
-
-    it('should call onAttach on the view', function() {
-      expect(this.view.onAttach)
-        .to.have.been.calledOnce
-        .and.to.have.been.calledWithExactly(this.view, this.region);
-    });
-  });
-
-  describe('when showing a region that is attached to the document & triggerBeforeAttach defaults to true, but the option is passed as false', function() {
-    beforeEach(function() {
-      this.view = new this.ChildView();
-      this.view.onAttach = this.sinon.stub();
-      this.view.onBeforeAttach = this.sinon.stub();
-
-      this.region.show(this.view, {triggerBeforeAttach: false});
-    });
-
-    it('should not call onBeforeAttach on the view', function() {
-      expect(this.view.onBeforeAttach).to.not.have.been.called;
-    });
-
-    it('should call onAttach on the view', function() {
-      expect(this.view.onAttach)
-        .to.have.been.calledOnce
-        .and.to.have.been.calledWithExactly(this.view, this.region);
-    });
-  });
-
-  describe('when showing a region that is attached to the document & has triggerAttach set to false', function() {
-    beforeEach(function() {
-      this.view = new this.ChildView();
-      this.view.onAttach = this.sinon.stub();
-      this.view.onBeforeAttach = this.sinon.stub();
-      this.region.triggerAttach = false;
-
-      this.region.show(this.view);
-    });
-
-    it('should call onBeforeAttach on the view', function() {
-      expect(this.view.onBeforeAttach)
-        .to.have.been.calledOnce
-        .and.to.have.been.calledWithExactly(this.view, this.region);
-    });
-
-    it('should not call onAttach on the view', function() {
-      expect(this.view.onAttach).to.not.have.been.called;
-    });
-  });
-
-  describe('when showing a region that is attached to the document & has triggerAttach set to false, but the option is passed as true', function() {
-    beforeEach(function() {
-      this.view = new this.ChildView();
-      this.view.onAttach = this.sinon.stub();
-      this.view.onBeforeAttach = this.sinon.stub();
-      this.region.triggerAttach = false;
-
-      this.region.show(this.view, {triggerAttach: true});
-    });
-
-    it('should call onBeforeAttach on the view', function() {
-      expect(this.view.onBeforeAttach)
-        .to.have.been.calledOnce
-        .and.to.have.been.calledWithExactly(this.view, this.region);
-    });
-
-    it('should call onAttach on the view', function() {
-      expect(this.view.onAttach)
-        .to.have.been.calledOnce
-        .and.to.have.been.calledWithExactly(this.view, this.region);
-    });
-  });
-
-  describe('when showing a region that is attached to the document & triggerAttach defaults to true, but the option is passed as false', function() {
-    beforeEach(function() {
-      this.view = new this.ChildView();
-      this.view.onAttach = this.sinon.stub();
-      this.view.onBeforeAttach = this.sinon.stub();
-
-      this.region.show(this.view, {triggerAttach: false});
-    });
-
-    it('should call onBeforeAttach on the view', function() {
-      expect(this.view.onBeforeAttach)
-        .to.have.been.calledOnce
-        .and.to.have.been.calledWithExactly(this.view, this.region);
-    });
-
-    it('should not call onAttach on the view', function() {
-      expect(this.view.onAttach).to.not.have.been.called;
-    });
-  });
-
-  describe('when a view is shown in a region', function() {
-    beforeEach(function() {
-      this.childView = new this.ChildView();
-      this.childView.onBeforeAttach = function() {
-        this.beforeAttached = Marionette.isNodeAttached(this.el);
-      };
-      this.childView.onAttach = function() {
-        this.attached = Marionette.isNodeAttached(this.el);
-      };
-      this.region.show(this.childView);
-    });
-
-    it('should be detached in onBeforeAttach', function() {
-      expect(this.childView.beforeAttached).to.be.false;
-    });
-
-    it('should be attached in onAttach', function() {
-      expect(this.childView.attached).to.be.true;
+      it('should call onDetach on the view', function() {
+        expectTriggerMethod(view.onDetach, view, false);
+      });
     });
   });
 
   describe('when the parent view is initially detached', function() {
-    describe('When showing a View in a Region', function() {
+    describe('When showing a View with a single level of nested views', function() {
+      let parentView;
+      let mainView;
+      let footerView;
+
       beforeEach(function() {
-        this.myView = new this.ChildView();
-        this.region.show(this.myView);
+        const ParentView = View.extend({
+          onRender: function() {
+            mainView = new ChildView();
+            footerView = new ChildView();
+            this.showChildView('main', mainView);
+            this.showChildView('footer', footerView);
+          }
+        });
+
+        parentView = new ParentView();
+        region.show(parentView);
       });
 
-      it('should trigger onAttach on the View a single time', function() {
-        expect(this.myView.onAttach).to.have.been.calledOnce;
+      it('should trigger onBeforeAttach & onAttach on the mainView', function() {
+        expectTriggerMethod(mainView.onBeforeAttach, mainView, false, mainView.onAttach);
+        expectTriggerMethod(mainView.onAttach, mainView, true);
       });
 
-      it('should trigger onBeforeAttach on the View a single time', function() {
-        expect(this.myView.onBeforeAttach).to.have.been.calledOnce;
+      it('should trigger onBeforeAttach & onAttach on the footerView', function() {
+        expectTriggerMethod(footerView.onBeforeAttach, footerView, false, footerView.onAttach);
+        expectTriggerMethod(footerView.onAttach, footerView, true);
       });
 
-      it('should trigger onBeforeAttach before onAttach', function() {
-        expect(this.myView.onBeforeAttach).to.have.been.calledBefore(this.myView.onAttach);
+      describe('When destroying a View with a single level of nested view', function() {
+        beforeEach(function() {
+          region.empty();
+        });
+
+        it('should call onBeforeDetach & onDetach on the mainView', function() {
+          expectTriggerMethod(mainView.onBeforeDetach, mainView, true, mainView.onDetach);
+          expectTriggerMethod(mainView.onDetach, mainView, false);
+        });
+
+        it('should call onBeforeDetach & onDetach on the footerView', function() {
+          expectTriggerMethod(footerView.onBeforeDetach, footerView, true, footerView.onDetach);
+          expectTriggerMethod(footerView.onDetach, footerView, false);
+        });
       });
     });
 
-    describe('When showing a View with a single level of nested views that are attached within onBeforeShow', function() {
+    describe('When showing a View with two levels of nested views', function() {
+      let grandparentView;
+      let parentView;
+      let childView;
+
       beforeEach(function() {
-        this.mainView = new this.ChildView();
-        this.footerView = new this.ChildView();
-
-        var suite = this;
-
-        this.CustomView = this.BasicView.extend({
-          onBeforeShow: function() {
-            this.getRegion('main').show(suite.mainView);
-            this.getRegion('footer').show(suite.footerView);
+        const GrandparentView = View.extend({
+          onRender: function() {
+            parentView = new ParentView();
+            this.showChildView('main', parentView);
           }
         });
 
-        this.layoutView = new this.CustomView();
-
-        this.region.show(this.layoutView);
-      });
-
-      it('should trigger onBeforeAttach & onAttach on the layoutView a single time', function() {
-        expect(this.layoutView.onBeforeAttach).to.have.been.calledOnce;
-        expect(this.layoutView.onAttach).to.have.been.calledOnce;
-      });
-
-      it('should trigger onBeforeAttach & onAttach on the mainView a single time', function() {
-        expect(this.mainView.onBeforeAttach).to.have.been.calledOnce;
-        expect(this.mainView.onAttach).to.have.been.calledOnce;
-      });
-
-      it('should trigger onBeforeAttach & onAttach on the footerView a single time', function() {
-        expect(this.footerView.onBeforeAttach).to.have.been.calledOnce;
-        expect(this.footerView.onAttach).to.have.been.calledOnce;
-      });
-    });
-
-    describe('When showing a View with a single level of nested views that are attached within onBeforeAttach', function() {
-      beforeEach(function() {
-        this.mainView = new this.ChildView();
-        this.footerView = new this.ChildView();
-
-        var suite = this;
-
-        this.CustomView = this.BasicView.extend({
-          onBeforeAttach: function() {
-            this.getRegion('main').show(suite.mainView);
-            this.getRegion('footer').show(suite.footerView);
+        const ParentView = View.extend({
+          onRender: function() {
+            childView = new ChildView();
+            this.showChildView('main', childView);
           }
         });
 
-        this.layoutView = new this.CustomView();
-
-        this.region.show(this.layoutView);
+        grandparentView = new GrandparentView();
+        region.show(grandparentView);
       });
 
-      it('should trigger onBeforeAttach & onAttach on the layoutView a single time', function() {
-        expect(this.layoutView.onBeforeAttach).to.have.been.calledOnce;
-        expect(this.layoutView.onAttach).to.have.been.calledOnce;
+      it('should trigger onBeforeAttach & onAttach on the grandparent view', function() {
+        expect(grandparentView.onAttach).to.have.been.calledOnce;
+        expect(grandparentView.onBeforeAttach).to.have.been.calledOnce;
       });
 
-      it('should trigger onAttach on the mainView a single time, but not onBeforeAttach', function() {
-        expect(this.mainView.onBeforeAttach).to.not.have.been.calledOnce;
-        expect(this.mainView.onAttach).to.have.been.calledOnce;
+      it('should trigger onBeforeAttach & onAttach on the parent view', function() {
+        expect(parentView.onBeforeAttach).to.have.been.calledOnce;
+        expect(parentView.onAttach).to.have.been.calledOnce;
       });
 
-      it('should trigger onAttach on the footerView a single time, but not onBeforeAttach', function() {
-        expect(this.footerView.onBeforeAttach).to.not.have.been.calledOnce;
-        expect(this.footerView.onAttach).to.have.been.calledOnce;
+      it('should trigger onBeforeAttach & onAttach on the child view', function() {
+        expectTriggerMethod(childView.onBeforeAttach, childView, false, childView.onAttach);
+        expectTriggerMethod(childView.onAttach, childView, true);
       });
-    });
 
-    describe('When showing a View with two levels of nested views; with onBeforeShow for the first and second level', function() {
-      beforeEach(function() {
-        var suite = this;
-        this.headerView = new this.ChildView();
-
-        this.MainView = this.BasicView.extend({
-          template: _.template('<header></header>'),
-          regions: {
-            header: 'header'
-          },
-          onBeforeShow: function() {
-            this.getRegion('header').show(suite.headerView);
-          }
-        });
-        this.mainView = new this.MainView();
-
-        this.CustomView = this.BasicView.extend({
-          onBeforeShow: function() {
-            this.getRegion('main').show(suite.mainView);
-          }
+      describe('When destroying a View with two levels of nested views', function() {
+        beforeEach(function() {
+          region.empty();
         });
 
-        this.layoutView = new this.CustomView();
-
-        this.region.show(this.layoutView);
-      });
-
-      it('should trigger onBeforeAttach & onAttach on the layoutView a single time', function() {
-        expect(this.layoutView.onAttach).to.have.been.calledOnce;
-        expect(this.layoutView.onBeforeAttach).to.have.been.calledOnce;
-      });
-
-      it('should trigger onBeforeAttach & onAttach on the mainView a single time', function() {
-        expect(this.mainView.onBeforeAttach).to.have.been.calledOnce;
-        expect(this.mainView.onAttach).to.have.been.calledOnce;
-      });
-
-      it('should trigger onBeforeAttach & onAttach on the headerView a single time', function() {
-        expect(this.headerView.onBeforeAttach).to.have.been.calledOnce;
-        expect(this.headerView.onAttach).to.have.been.calledOnce;
-      });
-    });
-
-    describe('When showing a View with two levels of nested views; onBeforeShow for the first level, then onShow for the second', function() {
-      beforeEach(function() {
-        var suite = this;
-        this.headerView = new this.ChildView();
-
-        this.MainView = this.BasicView.extend({
-          template: _.template('<header></header>'),
-          regions: {
-            header: 'header'
-          },
-          onShow: function() {
-            this.getRegion('header').show(suite.headerView);
-          }
-        });
-        this.mainView = new this.MainView();
-
-        this.CustomView = this.BasicView.extend({
-          onBeforeShow: function() {
-            this.getRegion('main').show(suite.mainView);
-          }
+        it('should trigger onBeforeDetach & onDetach on the grandparent view', function() {
+          expect(grandparentView.onDetach).to.have.been.calledOnce;
+          expect(grandparentView.onBeforeDetach).to.have.been.calledOnce;
         });
 
-        this.layoutView = new this.CustomView();
-
-        this.region.show(this.layoutView);
-      });
-
-      it('should trigger onBeforeAttach & onAttach on the layoutView a single time', function() {
-        expect(this.layoutView.onBeforeAttach).to.have.been.calledOnce;
-        expect(this.layoutView.onAttach).to.have.been.calledOnce;
-      });
-
-      it('should trigger onBeforeAttach & onAttach on the mainView a single time', function() {
-        expect(this.mainView.onBeforeAttach).to.have.been.calledOnce;
-        expect(this.mainView.onAttach).to.have.been.calledOnce;
-      });
-
-      it('should trigger onBeforeAttach & onAttach on the headerView a single time', function() {
-        expect(this.headerView.onBeforeAttach).to.have.been.calledOnce;
-        expect(this.headerView.onAttach).to.have.been.calledOnce;
-      });
-    });
-
-    describe('When showing a View with two levels of nested views; with onShow for the first level, onBeforeShow for the second', function() {
-      beforeEach(function() {
-        var suite = this;
-        this.headerView = new this.ChildView();
-
-        this.MainView = this.BasicView.extend({
-          onBeforeShow: function() {
-            this.getRegion('header').show(suite.headerView);
-          }
-        });
-        this.mainView = new this.MainView();
-
-        this.CustomView = this.BasicView.extend({
-          onShow: function() {
-            this.getRegion('main').show(suite.mainView);
-          }
+        it('should trigger onBeforeDetach & onDetach on the parent view', function() {
+          expect(parentView.onBeforeDetach).to.have.been.calledOnce;
+          expect(parentView.onDetach).to.have.been.calledOnce;
         });
 
-        this.layoutView = new this.CustomView();
-
-        this.region.show(this.layoutView);
-      });
-
-      it('should trigger onBeforeAttach & onAttach on the layoutView a single time', function() {
-        expect(this.layoutView.onBeforeAttach).to.have.been.calledOnce;
-        expect(this.layoutView.onAttach).to.have.been.calledOnce;
-      });
-
-      it('should trigger onBeforeAttach & onAttach on the mainView a single time', function() {
-        expect(this.mainView.onBeforeAttach).to.have.been.calledOnce;
-        expect(this.mainView.onAttach).to.have.been.calledOnce;
-      });
-
-      it('should trigger onBeforeAttach & onAttach on the headerView a single time', function() {
-        expect(this.headerView.onBeforeAttach).to.have.been.calledOnce;
-        expect(this.headerView.onAttach).to.have.been.calledOnce;
-      });
-    });
-
-    describe('When showing a View with a single level of nested views that are attached within onShow', function() {
-      beforeEach(function() {
-        this.mainView = new this.ChildView();
-        this.footerView = new this.ChildView();
-
-        var suite = this;
-
-        this.CustomView = this.BasicView.extend({
-          onShow: function() {
-            this.getRegion('main').show(suite.mainView);
-            this.getRegion('footer').show(suite.footerView);
-          }
+        it('should trigger onBeforeDetach & onDetach on the child view', function() {
+          expectTriggerMethod(childView.onBeforeDetach, childView, true, childView.onDetach);
+          expectTriggerMethod(childView.onDetach, childView, false);
         });
-
-        this.layoutView = new this.CustomView();
-
-        this.region.show(this.layoutView);
-      });
-
-      it('should trigger onBeforeAttach & onAttach on the layoutView a single time', function() {
-        expect(this.layoutView.onBeforeAttach).to.have.been.calledOnce;
-        expect(this.layoutView.onAttach).to.have.been.calledOnce;
-      });
-
-      it('should trigger onBeforeAttach & onAttach on the mainView a single time', function() {
-        expect(this.mainView.onBeforeAttach).to.have.been.calledOnce;
-        expect(this.mainView.onAttach).to.have.been.calledOnce;
-      });
-
-      it('should trigger onBeforeAttach & onAttach on the footerView a single time', function() {
-        expect(this.footerView.onBeforeAttach).to.have.been.calledOnce;
-        expect(this.footerView.onAttach).to.have.been.calledOnce;
       });
     });
   });
 
   describe('when the parent view is initially attached', function() {
-    beforeEach(function() {
-      this.setFixtures('<div class="layout-view"></div>');
+    describe('When showing a View with a single level of nested views', function() {
+      let parentView;
+      let mainView;
+      let footerView;
 
-      // A View class that we can use for all of our tests
-      this.View = this.BasicView.extend({
-        el: '.layout-view'
+      beforeEach(function() {
+        parentView = new View();
+        region.show(parentView);
+
+        mainView = new ChildView();
+        footerView = new ChildView();
+        parentView.showChildView('main', mainView);
+        parentView.showChildView('footer', footerView);
+      });
+
+      it('should trigger onBeforeAttach & onAttach on the mainView', function() {
+        expectTriggerMethod(mainView.onBeforeAttach, mainView, false, mainView.onAttach);
+        expectTriggerMethod(mainView.onAttach, mainView, true);
+      });
+
+      it('should trigger onBeforeAttach & onAttach on the footerView', function() {
+        expectTriggerMethod(footerView.onBeforeAttach, footerView, false, footerView.onAttach);
+        expect(footerView.onAttach, footerView, true);
       });
     });
 
-    describe('When showing a View in a Region', function() {
+    describe('When showing a View with two levels of nested views', function() {
+      let grandparentView;
+      let parentView;
+      let childView;
+
       beforeEach(function() {
-        this.myView = new this.ChildView();
-        this.region.show(this.myView);
-      });
-
-      it('should trigger onBeforeAttach & onAttach on the View a single time', function() {
-        expect(this.myView.onBeforeAttach).to.have.been.calledOnce;
-        expect(this.myView.onAttach).to.have.been.calledOnce;
-      });
-    });
-
-    describe('When showing a View with a single level of nested views that are attached within onBeforeShow', function() {
-      beforeEach(function() {
-        this.mainView = new this.ChildView();
-        this.footerView = new this.ChildView();
-
-        var suite = this;
-
-        this.CustomView = this.View.extend({
-          onBeforeShow: function() {
-            this.getRegion('main').show(suite.mainView);
-            this.getRegion('footer').show(suite.footerView);
+        const ParentView = View.extend({
+          onRender: function() {
+            childView = new ChildView();
+            this.showChildView('main', childView);
           }
         });
 
-        this.layoutView = new this.CustomView();
+        grandparentView = new View();
+        region.show(grandparentView);
 
-        this.region.show(this.layoutView);
+        parentView = new ParentView();
+        grandparentView.showChildView('main', parentView);
       });
 
-      it('should trigger onBeforeAttach & onAttach on the layoutView a single time', function() {
-        expect(this.layoutView.onBeforeAttach).to.have.been.calledOnce;
-        expect(this.layoutView.onAttach).to.have.been.calledOnce;
+      it('should trigger onBeforeAttach & onAttach on the grandparent view', function() {
+        expect(grandparentView.onAttach).to.have.been.calledOnce;
+        expect(grandparentView.onBeforeAttach).to.have.been.calledOnce;
       });
 
-      it('should trigger onBeforeAttach & onAttach on the mainView twice', function() {
-        expect(this.mainView.onBeforeAttach).to.have.been.calledTwice;
-        expect(this.mainView.onAttach).to.have.been.calledTwice;
+      it('should trigger onBeforeAttach & onAttach on the parent view', function() {
+        expect(parentView.onBeforeAttach).to.have.been.calledOnce;
+        expect(parentView.onAttach).to.have.been.calledOnce;
       });
 
-      it('should trigger onBeforeAttach & onAttach on the footerView twice', function() {
-        expect(this.footerView.onBeforeAttach).to.have.been.calledTwice;
-        expect(this.footerView.onAttach).to.have.been.calledTwice;
-      });
-    });
-
-    describe('When showing a View with two levels of nested views; with onBeforeShow for the first and second level', function() {
-      beforeEach(function() {
-        var suite = this;
-        this.headerView = new this.ChildView();
-
-        this.MainView = this.BasicView.extend({
-          onBeforeShow: function() {
-            this.getRegion('header').show(suite.headerView);
-          }
-        });
-        this.mainView = new this.MainView();
-
-        this.CustomView = this.View.extend({
-          onBeforeShow: function() {
-            this.getRegion('main').show(suite.mainView);
-          }
-        });
-
-        this.layoutView = new this.CustomView();
-
-        this.region.show(this.layoutView);
-      });
-
-      it('should trigger onBeforeAttach & onAttach on the layoutView a single time', function() {
-        expect(this.layoutView.onBeforeAttach).to.have.been.calledOnce;
-        expect(this.layoutView.onAttach).to.have.been.calledOnce;
-      });
-
-      it('should trigger onBeforeAttach & onAttach on the mainView twice', function() {
-        expect(this.mainView.onBeforeAttach).to.have.been.calledTwice;
-        expect(this.mainView.onAttach).to.have.been.calledTwice;
-      });
-
-      it('should trigger onBeforeAttach & onAttach on the headerView twice', function() {
-        expect(this.headerView.onBeforeAttach).to.have.been.calledTwice;
-        expect(this.headerView.onAttach).to.have.been.calledTwice;
-      });
-    });
-
-    describe('When showing a View with two levels of nested views; onBeforeShow for the first level, then onShow for the second', function() {
-      beforeEach(function() {
-        var suite = this;
-        this.headerView = new this.ChildView();
-
-        this.MainView = this.BasicView.extend({
-          onShow: function() {
-            this.getRegion('header').show(suite.headerView);
-          }
-        });
-        this.mainView = new this.MainView();
-
-        this.CustomView = this.View.extend({
-          onBeforeShow: function() {
-            this.getRegion('main').show(suite.mainView);
-          }
-        });
-
-        this.layoutView = new this.CustomView();
-
-        this.region.show(this.layoutView);
-      });
-
-      it('should trigger onBeforeAttach & onAttach on the layoutView a single time', function() {
-        expect(this.layoutView.onBeforeAttach).to.have.been.calledOnce;
-        expect(this.layoutView.onAttach).to.have.been.calledOnce;
-      });
-
-      it('should trigger onBeforeAttach & onAttach on the mainView twice', function() {
-        expect(this.mainView.onBeforeAttach).to.have.been.calledTwice;
-        expect(this.mainView.onAttach).to.have.been.calledTwice;
-      });
-
-      it('should trigger onBeforeAttach & onAttach on the headerView twice', function() {
-        expect(this.headerView.onBeforeAttach).to.have.been.calledTwice;
-        expect(this.headerView.onAttach).to.have.been.calledTwice;
-      });
-    });
-
-    describe('When showing a View with two levels of nested views; with onShow for the first level, onBeforeShow for the second', function() {
-      beforeEach(function() {
-        var suite = this;
-        this.headerView = new this.ChildView();
-
-        this.MainView = this.BasicView.extend({
-          onBeforeShow: function() {
-            this.getRegion('header').show(suite.headerView);
-          }
-        });
-        this.mainView = new this.MainView();
-
-        this.CustomView = this.View.extend({
-          onShow: function() {
-            this.getRegion('main').show(suite.mainView);
-          }
-        });
-
-        this.layoutView = new this.CustomView();
-
-        this.region.show(this.layoutView);
-      });
-
-      it('should trigger onBeforeAttach & onAttach on the layoutView a single time', function() {
-        expect(this.layoutView.onBeforeAttach).to.have.been.calledOnce;
-        expect(this.layoutView.onAttach).to.have.been.calledOnce;
-      });
-
-      it('should trigger onBeforeAttach & onAttach on the mainView a single time', function() {
-        expect(this.mainView.onBeforeAttach).to.have.been.calledOnce;
-        expect(this.mainView.onAttach).to.have.been.calledOnce;
-      });
-
-      it('should trigger onBeforeAttach & onAttach on the headerView a single time', function() {
-        expect(this.headerView.onBeforeAttach).to.have.been.calledOnce;
-        expect(this.headerView.onAttach).to.have.been.calledOnce;
-      });
-    });
-
-    describe('When showing a View with a single level of nested views that are attached within onShow', function() {
-      beforeEach(function() {
-        this.mainView = new this.ChildView();
-        this.footerView = new this.ChildView();
-
-        var suite = this;
-
-        this.CustomView = this.View.extend({
-          onShow: function() {
-            this.getRegion('main').show(suite.mainView);
-            this.getRegion('footer').show(suite.footerView);
-          }
-        });
-
-        this.layoutView = new this.CustomView();
-
-        this.region.show(this.layoutView);
-      });
-
-      it('should trigger onBeforeAttach & onAttach on the layoutView a single time', function() {
-        expect(this.layoutView.onBeforeAttach).to.have.been.calledOnce;
-        expect(this.layoutView.onAttach).to.have.been.calledOnce;
-      });
-
-      it('should trigger onBeforeAttach & onAttach on the mainView a single time', function() {
-        expect(this.mainView.onBeforeAttach).to.have.been.calledOnce;
-        expect(this.mainView.onAttach).to.have.been.calledOnce;
-      });
-
-      it('should trigger onBeforeAttach & onAttach on the footerView a single time', function() {
-        expect(this.footerView.onBeforeAttach).to.have.been.calledOnce;
-        expect(this.footerView.onAttach).to.have.been.calledOnce;
+      it('should trigger onBeforeAttach & onAttach on the child view', function() {
+        expectTriggerMethod(childView.onBeforeAttach, childView, false, childView.onAttach);
+        expect(childView.onAttach, childView, true);
       });
     });
   });
 
   describe('when showing an empty CollectionView', function() {
+    let emptyView;
+    let childView;
+    let collection;
+    let collectionView;
+
     beforeEach(function() {
-      this.collection = new Backbone.Collection();
-      this.collectionView = new this.BasicCollectionView({
-        collection: this.collection
+      collection = new Backbone.Collection();
+      collectionView = new CollectionView({
+        collection
       });
-      this.region.show(this.collectionView);
-      this.childView = this.collectionView.children.findByIndex(0);
+
+      region.show(collectionView);
+      emptyView = collectionView.children.findByIndex(0);
     });
 
-    it('should trigger onBeforeAttach and onAttach on the emptyView a single time', function() {
-      expect(this.childView).to.be.an.instanceof(this.EmptyView);
-      expect(this.childView.onBeforeAttach)
-        .and.to.have.been.calledOnce
-        .and.to.have.been.calledOn(this.childView)
-        .and.to.have.been.calledWith(this.childView);
-      expect(this.childView.onAttach)
-        .and.to.have.been.calledOnce
-        .and.to.have.been.calledOn(this.childView)
-        .and.to.have.been.calledWith(this.childView);
+    it('should trigger onBeforeAttach and onAttach on the emptyView', function() {
+      expect(emptyView).to.be.an.instanceof(EmptyView);
+      expectTriggerMethod(emptyView.onBeforeAttach, emptyView, false, emptyView.onAttach);
+      expectTriggerMethod(emptyView.onAttach, emptyView, true);
     });
 
     describe('when adding a new element to the collection', function() {
       beforeEach(function() {
-        this.collection.add({id: 1});
-        this.childView = this.collectionView.children.findByIndex(0);
+        collection.add({id: 1});
+        childView = collectionView.children.findByIndex(0);
       });
-      it('should trigger onBeforeAttach and onAttach on the childView a single time', function() {
-        expect(this.childView).to.be.an.instanceof(this.ChildView);
-        expect(this.childView.onBeforeAttach)
-          .and.to.have.been.calledOnce
-          .and.to.have.been.calledOn(this.childView)
-          .and.to.have.been.calledWith(this.childView);
-        expect(this.childView.onAttach)
-          .and.to.have.been.calledOnce
-          .and.to.have.been.calledOn(this.childView)
-          .and.to.have.been.calledWith(this.childView);
-      });
-    });
-  });
 
-  describe('when showing an empty CollectionView with triggerBeforeAttach and triggerAttach set to false on the region', function() {
-    beforeEach(function() {
-      this.collection = new Backbone.Collection();
-      this.collectionView = new this.BasicCollectionView({
-        collection: this.collection
+      it('should trigger onBeforeDetach and onDetach on the emptyView', function() {
+        expectTriggerMethod(emptyView.onBeforeDetach, emptyView, true, emptyView.onDetach);
+        expectTriggerMethod(emptyView.onDetach, emptyView, false);
       });
-      this.region.triggerAttach = false;
-      this.region.triggerBeforeAttach = false;
-      this.region.show(this.collectionView);
-      this.childView = this.collectionView.children.findByIndex(0);
-    });
 
-    it('should not trigger onAttach or onBeforeAttach on the emptyView a single time', function() {
-      expect(this.childView).to.be.an.instanceof(this.EmptyView);
-      expect(this.childView.onBeforeAttach)
-        .and.to.not.have.been.calledOnce
-        .and.to.not.have.been.calledOn(this.childView)
-        .and.to.not.have.been.calledWith(this.childView);
-      expect(this.childView.onAttach)
-        .and.to.not.have.been.calledOnce
-        .and.to.not.have.been.calledOn(this.childView)
-        .and.to.not.have.been.calledWith(this.childView);
-    });
-
-    describe('when adding a new element to the collection', function() {
-      beforeEach(function() {
-        this.collection.add({id: 1});
-        this.childView = this.collectionView.children.findByIndex(0);
-      });
-      it('should not trigger onBeforeAttach or onAttach on the childView a single time', function() {
-        expect(this.childView).to.be.an.instanceof(this.ChildView);
-        expect(this.childView.onBeforeAttach)
-          .and.to.not.have.been.calledOnce
-          .and.to.not.have.been.calledOn(this.childView)
-          .and.to.not.have.been.calledWith(this.childView);
-        expect(this.childView.onAttach)
-          .and.to.not.have.been.calledOnce
-          .and.to.not.have.been.calledOn(this.childView)
-          .and.to.not.have.been.calledWith(this.childView);
+      it('should trigger onBeforeAttach and onAttach on the childView', function() {
+        expect(childView).to.be.an.instanceof(ChildView);
+        expectTriggerMethod(childView.onBeforeAttach, childView, false, childView.onAttach);
+        expect(childView.onAttach, childView, true);
       });
     });
   });
 
   describe('when showing a non-empty CollectionView', function() {
+    let collection;
+    let collectionView;
+    let childView1;
+    let childView2;
+
     beforeEach(function() {
-      this.collection = new Backbone.Collection([{id: 1}, {id: 2}]);
-      this.collectionView = new this.BasicCollectionView({
-        collection: this.collection
+      collection = new Backbone.Collection([{id: 1}, {id: 2}]);
+      collectionView = new CollectionView({
+        collection
       });
-      this.region.show(this.collectionView);
-      this.childView1 = this.collectionView.children.findByIndex(0);
-      this.childView2 = this.collectionView.children.findByIndex(1);
+      region.show(collectionView);
+      childView1 = collectionView.children.findByIndex(0);
+      childView2 = collectionView.children.findByIndex(1);
     });
 
-    it('should trigger onBeforeAttach and onAttach on each of its childViews a single time', function() {
-      expect(this.childView1.onBeforeAttach)
-        .and.to.have.been.calledOnce
-        .and.to.have.been.calledOn(this.childView1)
-        .and.to.have.been.calledWith(this.childView1);
-      expect(this.childView1.onAttach)
-        .and.to.have.been.calledOnce
-        .and.to.have.been.calledOn(this.childView1)
-        .and.to.have.been.calledWith(this.childView1);
-      expect(this.childView2.onBeforeAttach)
-        .and.to.have.been.calledOnce
-        .and.to.have.been.calledOn(this.childView2)
-        .and.to.have.been.calledWith(this.childView2);
-      expect(this.childView2.onAttach)
-        .and.to.have.been.calledOnce
-        .and.to.have.been.calledOn(this.childView2)
-        .and.to.have.been.calledWith(this.childView2);
+    it('should trigger onBeforeAttach and onAttach on each of its childViews', function() {
+      expectTriggerMethod(childView1.onBeforeAttach, childView1, false, childView1.onAttach);
+      expectTriggerMethod(childView1.onAttach, childView1, true);
+
+      expectTriggerMethod(childView2.onBeforeAttach, childView2, false, childView2.onAttach);
+      expectTriggerMethod(childView2.onAttach, childView2, true);
     });
 
     describe('when re-rendering the CollectionView', function() {
       beforeEach(function() {
-        this.collectionView.render();
+        collectionView.render();
       });
 
-      it('should trigger onBeforeAttach and onAttach on each of its childViews a single time', function() {
-        expect(this.childView1.onBeforeAttach)
-          .and.to.have.been.calledOnce
-          .and.to.have.been.calledOn(this.childView1)
-          .and.to.have.been.calledWith(this.childView1);
-        expect(this.childView1.onAttach)
-          .and.to.have.been.calledOnce
-          .and.to.have.been.calledOn(this.childView1)
-          .and.to.have.been.calledWith(this.childView1);
-        expect(this.childView2.onBeforeAttach)
-          .and.to.have.been.calledOnce
-          .and.to.have.been.calledOn(this.childView2)
-          .and.to.have.been.calledWith(this.childView2);
-        expect(this.childView2.onAttach)
-          .and.to.have.been.calledOnce
-          .and.to.have.been.calledOn(this.childView2)
-          .and.to.have.been.calledWith(this.childView2);
+      it('should trigger onBeforeDetach and onDetach on each of its childViews', function() {
+        expectTriggerMethod(childView1.onBeforeDetach, childView1, true, childView1.onDetach);
+        expectTriggerMethod(childView1.onDetach, childView1, false);
+
+        expectTriggerMethod(childView2.onBeforeDetach, childView2, true, childView2.onDetach);
+        expectTriggerMethod(childView2.onDetach, childView2, false);
+      });
+
+      it('should trigger onBeforeAttach and onAttach on each of its childViews', function() {
+        expectTriggerMethod(childView1.onBeforeAttach, childView1, false, childView1.onAttach);
+        expect(childView1.onAttach, childView1, true);
+
+        expectTriggerMethod(childView2.onBeforeAttach, childView2, false, childView2.onAttach);
+        expectTriggerMethod(childView2.onAttach, childView2, true);
       });
     });
 
     describe('when emptying the collection', function() {
+      let emptyView;
+
       beforeEach(function() {
-        this.collection.reset();
-        this.childView = this.collectionView.children.findByIndex(0);
-      });
-      it('should trigger onBeforeAttach and onAttach on the emptyView a single time', function() {
-        expect(this.childView).to.be.an.instanceof(this.EmptyView);
-        expect(this.childView.onBeforeAttach)
-          .and.to.have.been.calledOnce
-          .and.to.have.been.calledOn(this.childView)
-          .and.to.have.been.calledWith(this.childView);
-        expect(this.childView.onAttach)
-          .and.to.have.been.calledOnce
-          .and.to.have.been.calledOn(this.childView)
-          .and.to.have.been.calledWith(this.childView);
-      });
-    });
-  });
-
-  describe('when showing a non-empty CollectionView with triggerBeforeAttach and triggerAttach set to false on the region', function() {
-    beforeEach(function() {
-      this.collection = new Backbone.Collection([{id: 1}, {id: 2}]);
-      this.collectionView = new this.BasicCollectionView({
-        collection: this.collection
-      });
-      this.region.triggerAttach = false;
-      this.region.triggerBeforeAttach = false;
-      this.region.show(this.collectionView);
-      this.childView1 = this.collectionView.children.findByIndex(0);
-      this.childView2 = this.collectionView.children.findByIndex(1);
-    });
-
-    it('should not trigger onBeforeAttach or onAttach on each of its childViews a single time', function() {
-      expect(this.childView1.onBeforeAttach)
-        .and.to.not.have.been.calledOnce
-        .and.to.not.have.been.calledOn(this.childView1)
-        .and.to.not.have.been.calledWith(this.childView1);
-      expect(this.childView1.onAttach)
-        .and.to.not.have.been.calledOnce
-        .and.to.not.have.been.calledOn(this.childView1)
-        .and.to.not.have.been.calledWith(this.childView1);
-      expect(this.childView2.onBeforeAttach)
-        .and.to.not.have.been.calledOnce
-        .and.to.not.have.been.calledOn(this.childView2)
-        .and.to.not.have.been.calledWith(this.childView2);
-      expect(this.childView2.onAttach)
-        .and.to.not.have.been.calledOnce
-        .and.to.not.have.been.calledOn(this.childView2)
-        .and.to.not.have.been.calledWith(this.childView2);
-    });
-
-    describe('when re-rendering the CollectionView', function() {
-      beforeEach(function() {
-        this.collectionView.render();
+        collection.reset();
+        emptyView = collectionView.children.findByIndex(0);
       });
 
-      it('should not trigger onBeforeAttach or onAttach on each of its childViews a single time', function() {
-        expect(this.childView1.onBeforeAttach)
-          .and.to.not.have.been.calledOnce
-          .and.to.not.have.been.calledOn(this.childView1)
-          .and.to.not.have.been.calledWith(this.childView1);
-        expect(this.childView1.onAttach)
-          .and.to.not.have.been.calledOnce
-          .and.to.not.have.been.calledOn(this.childView1)
-          .and.to.not.have.been.calledWith(this.childView1);
-        expect(this.childView2.onBeforeAttach)
-          .and.to.not.have.been.calledOnce
-          .and.to.not.have.been.calledOn(this.childView2)
-          .and.to.not.have.been.calledWith(this.childView2);
-        expect(this.childView2.onAttach)
-          .and.to.not.have.been.calledOnce
-          .and.to.not.have.been.calledOn(this.childView2)
-          .and.to.not.have.been.calledWith(this.childView2);
-      });
-    });
+      it('should trigger onBeforeDetach and onDetach on each of its childViews', function() {
+        expectTriggerMethod(childView1.onBeforeDetach, childView1, true, childView1.onDetach);
+        expectTriggerMethod(childView1.onDetach, childView1, false);
 
-    describe('when emptying the collection', function() {
-      beforeEach(function() {
-        this.collection.reset();
-        this.childView = this.collectionView.children.findByIndex(0);
+        expectTriggerMethod(childView2.onBeforeDetach, childView2, true, childView2.onDetach);
+        expectTriggerMethod(childView2.onDetach, childView2, false);
       });
-      it('should not trigger onBeforeAttach or onAttach on the emptyView a single time', function() {
-        expect(this.childView).to.be.an.instanceof(this.EmptyView);
-        expect(this.childView.onBeforeAttach)
-          .and.to.not.have.been.calledOnce
-          .and.to.not.have.been.calledOn(this.childView)
-          .and.to.not.have.been.calledWith(this.childView);
-        expect(this.childView.onAttach)
-          .and.to.not.have.been.calledOnce
-          .and.to.not.have.been.calledOn(this.childView)
-          .and.to.not.have.been.calledWith(this.childView);
+
+      it('should trigger onBeforeAttach and onAttach on the emptyView', function() {
+        expect(emptyView).to.be.an.instanceof(EmptyView);
+        expectTriggerMethod(emptyView.onBeforeAttach, emptyView, false, emptyView.onAttach);
+        expectTriggerMethod(emptyView.onAttach, emptyView, true);
       });
     });
   });

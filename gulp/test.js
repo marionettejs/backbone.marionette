@@ -7,7 +7,7 @@ import coveralls from 'gulp-coveralls';
 const mochaGlobals = ['stub', 'spy', 'expect'];
 
 function _registerBabel() {
-  require('babel-core/register');
+  require('babel-register');
 }
 
 function _mocha() {

@@ -5,7 +5,7 @@ module.exports = function() {
   Backbone.$ = jQuery;
   Backbone.ChildViewContainer = require('backbone.babysitter');
   Backbone.Radio = require('backbone.radio');
-  var Marionette = require('../../src/backbone.marionette');
+  var Marionette = require('../../src/backbone.marionette').default;
 
   global.$ = global.jQuery = jQuery;
   global._ = _;

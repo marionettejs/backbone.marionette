@@ -1,3 +1,8 @@
+### v3.0.0-rc1
+
+This is a "family and friends" release. The documentation is still mostly for 2.4.4.
+Please let us know if you run into any issues. Also, [please help us finish v3](https://github.com/marionettejs/backbone.marionette/milestones/v3.0.0)!
+
 ### v2.4.4 [view commit logs](https://github.com/marionettejs/backbone.marionette/compare/v2.4.3...v2.4.4)
 
 #### Fixes

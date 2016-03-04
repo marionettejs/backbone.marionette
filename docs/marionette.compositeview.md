@@ -3,7 +3,7 @@
 # Marionette.CompositeView
 
 **_DEPRECATED: `CompositeView` is deprecated. See
-[CollectionView](./marionette.collectionview.md#building-collectionviews]
+[CollectionView](./marionette.collectionview.md#building-collectionviews)
 to see how to build equivalent views in Marionette 3_**
 
 A `CompositeView` extends from `CollectionView` to be used as a

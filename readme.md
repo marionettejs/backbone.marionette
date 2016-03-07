@@ -1,8 +1,8 @@
-<h1 align="center">Backbone.Marionette</h1>
+<h1 align="center">Marionette.js</h1>
 <p align="center">
-  <img title="backbone marionette" src='https://cdn.mediacru.sh/6sNqngKFuqft.svg' />
+  <img title="backbone marionette" src='marionette-logo.png' />
 </p>
-<p align="center">The Backbone framework</p>
+<p align="center">The Backbone Framework</p>
 <p align="center">
   <a title='Build Status' href="https://travis-ci.org/marionettejs/backbone.marionette">
     <img src='https://secure.travis-ci.org/marionettejs/backbone.marionette.svg?branch=master' />
@@ -14,6 +14,11 @@
     <img src='https://badges.gitter.im/Join%20Chat.svg' alt='Gitter Chat' />
   </a>
 </p>
+
+## Release Candidate v3.0.0-rc1
+
+This is a "family and friends" release. The documentation is still mostly for 2.4.4.
+Please let us know if you run into any issues. Also, [please help us finish v3](https://github.com/marionettejs/backbone.marionette/milestones/v3.0.0)!
 
 ## About Marionette
 

@@ -25,32 +25,25 @@ By creating an Application you get three important things:
 
 ## Documentation Index
 
-* [Getting Started](#getting-started)
-* [initialize](#initialize)
+* [What is the Application?](#what-is-the-application)
+* [Root Layout](#root-layout)
+* [Initialize](#initialize)
 * [Application Events](#application-events)
 * [Starting An Application](#starting-an-application)
 * [Application.getOption](#applicationgetoption)
-* [Adding Initializers (deprecated)](#adding-initializers)
 
-### Getting Started
+## What is the Application?
 
-A common pattern in Backbone apps is the following:
+The `Application` is used to model your Marionette application under a single
+entry point. The application provides:
 
-```js
-var app = {};
-```
+* An obvious entry point to your app
+* A clear hook for global events e.g. the `AppRouter`
+* An interface to let you inject variables from the wider context into your app
 
-The most notable example of this pattern is
-[DocumentCloud's source](https://github.com/documentcloud/documentcloud/blob/master/public/javascripts/application.js#L3). DocumentCloud
-is notable because it is the codebase that Backbone was abstracted from. If such a thing as a quintessential Backbone application
-existed, then that app would certainly be a candidate.
-
-The pattern of creating a Javascript object is so popular because it provides you with a location to
-put the pieces of your application. For instance, attaching a Router to this object is common practice.
-
-Using a raw Javascript object is great, but Marionette provides a light wrapper for a plain Javascript object, which is the
-Application. One benefit to using the Application is that it comes with a `start` method. This can be used to accomplish
-tasks before the rest of your application begins. Let's take a quick look at an example:
+The Application is that it comes with a `start` method. This can be used to
+accomplish tasks before the rest of your application begins. Let's take a quick
+look at an example:
 
 ```js
 // Create our Application
@@ -65,19 +58,47 @@ app.on('start', function() {
 loadInitialData().then(app.start);
 ```
 
-In the simple example above, we could have just as easily started history after our initial data had loaded. This
-pattern becomes more useful as the startup phase of your application becomes more complex.
+In the simple example above, we could have just as easily started history after
+our initial data had loaded. This pattern becomes more useful as the startup
+phase of your application becomes more complex.
 
-### Initialize
+## Root Layout
 
-Like other objects in Backbone and Marionette, Applications have an `initialize` method.
-It is called immediately after the Application has been instantiated, and is invoked with
-the same arguments that the constructor received.
+As the `Application` is the entry point to your app, it makes sense that it will
+hold a reference to the root entry of your View tree. Marionette 3 has added
+this with the `region` attribute and `showView`. This example demonstrates how
+we can use this:
 
 ```js
-var app = Marionette.Application.extend({
+var RootView = require('./views/root');
+
+
+var App = Marionette.Application.extend({
+  region: '#root-element',
+
+  onStart: function() {
+    this.showView(new RootView());
+  }
+});
+
+var myApp = new App();
+myApp.start();
+```
+
+This will immediately render `RootView` and fire the usual triggers such as
+`before:attach` and `attach` in addition to the `before:render` and `render`
+triggers.
+
+## Initialize
+
+Like other objects in Backbone and Marionette, Applications have an `initialize`
+method. It is called immediately after the Application has been instantiated,
+and is invoked with the same arguments that the constructor received.
+
+```js
+var App = Marionette.Application.extend({
   initialize: function(options) {
-    console.log('My container:', options.container);
+    console.log('My value:', options.model.get('key'));
   }
 });
 
@@ -85,7 +106,7 @@ var app = Marionette.Application.extend({
 // with a `container` option out-of-the-box, you
 // could build an Application Class that does use
 // such an option.
-var app = new app({container: '#app'});
+var app = new App({model: new Backbone.Model({key: 'value'})});
 ```
 
 ## Application Events

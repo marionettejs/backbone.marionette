@@ -2,8 +2,9 @@
 
 # Marionette.CompositeView
 
-**_DEPRECATED: `CompositeView` is deprecated. You should use the `replaceElement` option on `Region.show` and
-render a `CollectionView` into a `region` inside a `View` to achieve this functionality._**
+**_DEPRECATED: `CompositeView` is deprecated. See
+[CollectionView](./marionette.collectionview.md#building-collectionviews)
+to see how to build equivalent views in Marionette 3_**
 
 A `CompositeView` extends from `CollectionView` to be used as a
 composite view for scenarios where it should represent both a

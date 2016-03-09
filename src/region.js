@@ -112,7 +112,7 @@ const Region = MarionetteObject.extend({
       if (this.getOption('allowMissingEl')) {
         return false;
       } else {
-        throw new MarionetteError('An "el" ' + this.$el.selector + ' must exist in DOM');
+        throw new MarionetteError(`An "el" must exist in DOM for this region ${this.cid}`);
       }
     }
     return true;

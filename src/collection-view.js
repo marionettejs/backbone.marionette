@@ -6,13 +6,13 @@ import Backbone           from 'backbone';
 import ChildViewContainer from 'backbone.babysitter';
 import MarionetteError    from './error';
 import ViewMixin          from './mixins/view';
-import MonitorViewEvents  from './monitor-view-events';
+import monitorViewEvents  from './monitor-view-events';
 import destroyBackboneView from './utils/destroyBackboneView';
 import { triggerMethodOn } from './trigger-method';
 
 // A view that iterates over a Backbone.Collection
 // and renders an individual child view for each model.
-const CollectionView = Backbone.View.extend({
+let CollectionView = Backbone.View.extend({
 
   // flag for maintaining the sorted order of the collection
   sort: true,
@@ -29,7 +29,7 @@ const CollectionView = Backbone.View.extend({
 
     this._setOptions(options);
 
-    MonitorViewEvents(this);
+    monitorViewEvents(this);
 
     this._initBehaviors();
     this.once('render', this._initialEvents);
@@ -461,7 +461,7 @@ const CollectionView = Backbone.View.extend({
   _buildChildView(child, ChildViewClass, childViewOptions) {
     const options = _.extend({model: child}, childViewOptions);
     const childView = new ChildViewClass(options);
-    MonitorViewEvents(childView);
+    monitorViewEvents(childView);
     return childView;
   },
 
@@ -618,7 +618,7 @@ const CollectionView = Backbone.View.extend({
       }
 
       // use the parent view's proxyEvent handlers
-      var childViewTriggers = this._childViewTriggers;
+      let childViewTriggers = this._childViewTriggers;
 
       // Call the event with the proxy name on the parent layout
       if (childViewTriggers && _.isString(childViewTriggers[eventName])) {

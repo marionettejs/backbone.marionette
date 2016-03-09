@@ -9,7 +9,7 @@ import getOption          from './utils/getOption';
 import normalizeMethods   from './utils/normalizeMethods';
 import deprecate          from './utils/deprecate';
 
-import MonitorViewEvents  from './monitor-view-events';
+import monitorViewEvents  from './monitor-view-events';
 import MarionetteObject   from './object';
 import Renderer           from './renderer';
 import TemplateCache      from './template-cache';
@@ -74,7 +74,7 @@ Marionette.triggerMethod = proxy(triggerMethod);
 Marionette.triggerMethodOn = triggerMethodOn;
 Marionette.isEnabled = isEnabled;
 Marionette.setEnabled = setEnabled;
-Marionette.MonitorViewEvents = MonitorViewEvents;
+Marionette.monitorViewEvents = monitorViewEvents;
 
 Marionette.Behaviors = {};
 Marionette.Behaviors.behaviorsLookup = behaviorsLookup;

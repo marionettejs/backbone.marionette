@@ -90,6 +90,10 @@ describe('marionette object', function() {
     it('shouldn\'t pass any options to the onDestroy method', function() {
       expect(this.onDestroyHandler).to.have.been.calledWith();
     });
+
+    it('should return intantly when calling destroy and its already destroyed', function() {
+      expect(this.object.destroy()).to.be.deep.equal(this.object);
+    });
   });
 
   describe('when destroying a object with arguments', function() {

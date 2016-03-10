@@ -77,6 +77,7 @@
     "isparta": "^4.0.0",
     "jquery": "^2.1.4",
     "jsdom": "^8.0.2",
+    "mocha": "^2.4.5",
     "rollup": "^0.25.2",
     "rollup-plugin-babel": "^2.3.9",
     "rollup-plugin-json": "^2.0.0",

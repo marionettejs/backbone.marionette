@@ -54,6 +54,7 @@ describe('marionette object', function() {
 
     it('should have `isDestroyed()` set to `false`', function() {
       expect(this.object._isDestroyed).to.be.false;
+      expect(this.object.isDestroyed()).to.be.false;
     });
   });
 

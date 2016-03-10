@@ -9,6 +9,12 @@ describe('mergeOptions', function() {
         this.mergeOptions(options, this.myViewOptions);
       }
     });
+
+    this.MyUndefinedMergeOptionsView = Marionette.View.extend({
+      initialize: function(options) {
+        this.mergeOptions(undefined);
+      }
+    });
   });
 
   describe('when instantiating a view with no options', function() {
@@ -17,6 +23,13 @@ describe('mergeOptions', function() {
       expect(function() {
         suite.myView = new suite.MyView();
       }).to.not.throw(Error);
+    });
+  });
+
+  describe('when calling mergeOptions with an undefined', function() {
+    it('should return instantly without merging anything', function() {
+      this.view = new this.MyUndefinedMergeOptionsView();
+      expect(this.view.options).to.deep.equal({});
     });
   });
 

@@ -467,6 +467,10 @@ describe('Behaviors', function() {
         it('should handle view ui click event', function() {
           expect(this.onBarClickStub).to.have.been.calledOnce.and.calledOn(this.fooBehavior);
         });
+
+        it('has a getUI method which returns the selector', function() {
+          expect(this.fooBehavior.getUI('foo')).to.have.length(1);
+        });
       });
 
       describe('the el', function() {

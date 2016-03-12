@@ -2,38 +2,6 @@
 
 # Marionette.Application
 
-The **Application** is a container for the rest of your code. It is recommended
-that every Marionette app have at least one instance of Application.
-
-By creating an Application you get three important things:
-
-- A `start` method to kick off your application.
-  This allows you an opportunity to do things that may need to occur before, say, you
-  begin routing. An example would be making an AJAX call to request data that your app
-  needs before starting.
-
-- A namespace to keep things off of the `window`.
-  If you are not using a module loader like ES6 modules, CommonJS, or AMD, then
-  you can use the Application to store your Javascript objects. And if you are
-  using one of those module systems, then you can still attach things to the
-  application to aid in debugging.
-
-- Integration with the Marionette Inspector. The Marionette Inspector is a fantastic tool
-  that makes it easy to understand and debug your application. Using the Application Class
-  will automatically hook up your application to that extension.
-
-
-## Documentation Index
-
-* [What is the Application?](#what-is-the-application)
-* [Root Layout](#root-layout)
-* [Initialize](#initialize)
-* [Application Events](#application-events)
-* [Starting An Application](#starting-an-application)
-* [Application.getOption](#applicationgetoption)
-
-## What is the Application?
-
 The `Application` is used to model your Marionette application under a single
 entry point. The application provides:
 
@@ -41,9 +9,9 @@ entry point. The application provides:
 * A clear hook for global events e.g. the `AppRouter`
 * An interface to let you inject variables from the wider context into your app
 
-The Application is that it comes with a `start` method. This can be used to
-accomplish tasks before the rest of your application begins. Let's take a quick
-look at an example:
+The Application comes with a `start` method. This can be used to accomplish
+tasks before the rest of your application begins. Let's take a quick look at an
+example:
 
 ```js
 // Create our Application
@@ -61,6 +29,14 @@ loadInitialData().then(app.start);
 In the simple example above, we could have just as easily started history after
 our initial data had loaded. This pattern becomes more useful as the startup
 phase of your application becomes more complex.
+
+## Documentation Index
+
+* [Root Layout](#root-layout)
+* [Initialize](#initialize)
+* [Application Events](#application-events)
+* [Starting An Application](#starting-an-application)
+* [Application.getOption](#applicationgetoption)
 
 ## Root Layout
 
@@ -102,10 +78,8 @@ var App = Marionette.Application.extend({
   }
 });
 
-// Although applications will not do anything
-// with a `container` option out-of-the-box, you
-// could build an Application Class that does use
-// such an option.
+// The application won't attach a model by default - this merely passes it into
+// the options object to be, potentially, passed into views.
 var app = new App({model: new Backbone.Model({key: 'value'})});
 ```
 

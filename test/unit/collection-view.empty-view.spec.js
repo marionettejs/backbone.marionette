@@ -325,10 +325,6 @@ describe('collectionview - emptyView', function() {
       it('should reference each of the rendered view items', function() {
         expect(this.collectionView.children).to.have.lengthOf(1);
       });
-
-      it('should pass the collection as an argument to isEmpty', function() {
-        expect(this.isEmptyStub).to.have.been.calledWith(this.collection);
-      });
     });
 
     describe('with a filter', function() {

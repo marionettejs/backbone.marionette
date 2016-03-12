@@ -240,7 +240,7 @@ const CollectionView = Backbone.View.extend({
     this._destroyChildren({checkEmpty: false});
 
     const models = this._filteredSortedModels();
-    if (this.isEmpty(this.collection, {processedModels: models})) {
+    if (this.isEmpty({processedModels: models})) {
       this._showEmptyView();
     } else {
       this.triggerMethod('before:render:children', this);
@@ -490,7 +490,7 @@ const CollectionView = Backbone.View.extend({
   },
 
   // check if the collection is empty or optionally whether an array of pre-processed models is empty
-  isEmpty(collection, options) {
+  isEmpty(options) {
     let models;
     if (_.result(options, 'processedModels')) {
       models = options.processedModels;
@@ -503,7 +503,7 @@ const CollectionView = Backbone.View.extend({
 
   // If empty, show the empty view
   _checkEmpty() {
-    if (this.isEmpty(this.collection)) {
+    if (this.isEmpty()) {
       this._showEmptyView();
     }
   },

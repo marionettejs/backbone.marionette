@@ -36,27 +36,19 @@ gulp.task('unwrap', function(){
     }));
 });
 
-const attachBundles = `
-
-// Attach bundled libraries to expected local vars
-Radio = Backbone.Radio;
-ChildViewContainer = Backbone.ChildViewContainer;
-`;
-
 function _generate(bundle, type){
-  let intro = '';
+  let intro = banner[type];
 
   // adds unwrapped  bundled libs
   if(type === 'bundled'){
-    intro = unwrappedBundledLibs + attachBundles;
+    intro += unwrappedBundledLibs;
   }
 
   return bundle.generate({
-    format: 'umd',
+    format: (type === 'bundled') ? 'iife' : 'umd',
     moduleName: 'Marionette  = global[\'Mn\']',
     sourceMap: true,
-    banner: banner[type],
-    intro: intro,
+    banner: intro,
     globals: {
       'backbone': 'Backbone',
       'underscore': '_',

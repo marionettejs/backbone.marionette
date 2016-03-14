@@ -156,6 +156,9 @@ describe('Behaviors', function() {
         baz: Marionette.Behavior.extend({
           events: {'click': 'handleClick'},
           handleClick: this.bazClickStub
+        }),
+        qux: Marionette.Behavior.extend({
+          events: {'click': 'noHandler'}
         })
       };
 
@@ -184,6 +187,19 @@ describe('Behaviors', function() {
     it('should call the view click handler', function() {
       expect(this.viewClickStub).to.have.been.calledOnce.and.calledOn(this.view);
     });
+
+    describe('when the event handler does not exist', function() {
+      beforeEach(function() {
+        this.View = Marionette.ItemView.extend({
+          behaviors: {qux: {}}
+        });
+      });
+
+      it('should not throw an error on instantiation', function() {
+        expect(function() { Object.create(this.View.prototype); }.bind(this)).to.not.throw(Error);
+      });
+    });
+
   });
 
   describe('behavior triggers', function() {

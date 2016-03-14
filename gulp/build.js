@@ -53,7 +53,7 @@ function _generate(bundle, type){
 
   return bundle.generate({
     format: 'umd',
-    moduleName: 'Marionette  = global.Mn',
+    moduleName: 'Marionette  = global[\'Mn\']',
     sourceMap: true,
     banner: banner[type],
     intro: intro,

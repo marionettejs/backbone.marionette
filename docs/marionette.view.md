@@ -2,13 +2,7 @@
 
 # Marionette.View
 
-An `View` is a view that represents a single item. That item may be a
-`Backbone.Model` or may be a `Backbone.Collection`. Whichever it is though, it
-will be treated as a single item.
-
-View extends directly from Marionette.AbstractView. Please see
-[the Marionette.AbstractView documentation](marionette.abstractview.md)
-for more information on available features and functionality.
+An `View` is a view that, most of the time, represents a single item. That item may be a`Backbone.Model` or may be a `Backbone.Collection`. Whichever it is though, itwill be treated as a single item. It’s also possible to create Views that do not represent items, but just contain regions (which can be filled with views as well).View extends directly from `Backbone.View`, which means you’re free to use Backbone’s methods in your Marionette Views.
 
 Additionally, interactions with Marionette.Region
 will provide features such as `onShow` callbacks, etc. Please see

@@ -2,11 +2,13 @@
 
 # Marionette.View
 
-An `View` is a view that, most of the time, represents a single item. That item may be a`Backbone.Model` or may be a `Backbone.Collection`. Whichever it is though, itwill be treated as a single item. It’s also possible to create Views that do not represent items, but just contain regions (which can be filled with views as well).View extends directly from `Backbone.View`, which means you’re free to use Backbone’s methods in your Marionette Views.
+An `View` is a view that, most of the time, represents a single item. That item may be a`Backbone.Model` or may be a `Backbone.Collection`. Whichever it is though, itwill be treated as a single item. It’s also possible to create Views that do not represent items, but just contain regions (which can be filled with View elements as well).View extends directly from `Backbone.View`, which means you’re free to use Backbone’s methods in your Marionette Views.
 
 Additionally, interactions with Marionette.Region
 will provide features such as `onShow` callbacks, etc. Please see
 [the Region documentation](./marionette.region.md) for more information.
+
+Note: Since Marionette v3.x, `Marionette.View` will replace `Marionette.LayoutView` and `Marionette.ItemView`.
 
 ## Documentation Index
 
@@ -61,10 +63,10 @@ new MyView().render();
 Using a template function allows passing custom arguments into the `_.template` function and allows for more control over how the `_.template` function is called.
 
 ```js
-var my_template_html = '<div><%= args.name %></div>'
-var MyView = Marionette.View.extend({
+let my_template_html = '<div><%= args.name %></div>';
+let MyView = Marionette.View.extend({
   template: function(serialized_model) {
-    var name = serialized_model.name;
+    let name = serialized_model.name;
     return _.template(my_template_html)({
         name : name,
         some_custom_attribute : some_custom_key
@@ -75,19 +77,55 @@ var MyView = Marionette.View.extend({
 new MyView().render();
 ```
 
+For more information on the _.template function see the [Underscore docs](http://underscorejs.org/#template).
+
 **Templateless views**
 
-A template, however, is not required. If you set the `template` attribute to `false`, your view will not be looking for a template.
+An `View` can be attached to existing elements as well. The primary benefit of this is to attach behavior and events to static content that has been rendered by your server (typically for SEO purposes). To set up a template-less `View`, your `template` attribute must be `false`.
 
-For more information on the _.template function see the [Underscore docs](http://underscorejs.org/#template).
+```html
+<div id="my-element">
+  <p>Hello World</p>
+  <button class="my-button">Click Me</button>
+</div>
+```
+
+```js
+let MyView = Marionette.View.extend({
+  el: '#my-element',
+
+  template: false,
+
+  ui: {
+    paragraph: 'p',
+    button: '.my-button'
+  },
+
+  events: {
+    'click @ui.button': 'clickedButton'
+  },
+
+  clickedButton: function() {
+    console.log('I clicked the button!');
+  }
+});
+
+let view = new MyView();
+view.render();
+
+view.ui.paragraph.text();        // returns 'Hello World'
+view.ui.button.trigger('click'); // logs 'I clicked the button!'
+```
+
+Another use case is when you want to attach a `Marionette.View` to a SVG graphic or canvas element, to provide a uniform view layer interface to non-standard DOM nodes. By not having a template this allows you to also use a view on pre-rendered DOM nodes, such as complex graphic elements.
 
 ## Rendering A Collection In An View
 
-While the most common way to render a Backbone.Collection is to use
-a `CollectionView` or `CompositeView`, if you just need to render a
+The most common way to render a Backbone.Collection is to use
+a `CollectionView`. If you just need to render a
 simple list that does not need a lot of interaction, it does not
-always make sense to use these. A Backbone.Collection can be
-rendered with a simple View, using the templates to iterate
+always make sense to use these. A `Backbone.Collection` can be
+rendered with a simple `View`, using the templates to iterate
 over an `items` array.
 
 ```js
@@ -108,11 +146,11 @@ Then, from JavaScript, you can define and use an View with this
 template, like this:
 
 ```js
-var MyItemsView = Marionette.View.extend({
+let MyItemsView = Marionette.View.extend({
   template: "#some-template"
 });
 
-var view = new MyItemsView({
+let view = new MyItemsView({
   collection: someCollection
 });
 
@@ -126,46 +164,6 @@ For more information on when you would want to do this, and what options
 you have for retrieving an individual item that was clicked or
 otherwise interacted with, see the blog post on
 [Getting The Model For A Clicked Element](http://lostechies.com/derickbailey/2011/10/11/backbone-js-getting-the-model-for-a-clicked-element/).
-
-## Template-less View
-
-An `View` can be attached to existing elements as well. The primary benefit of this is to attach behavior and events to static content that has been rendered by your server (typically for SEO purposes). To set up a template-less `View`, your `template` attribute must be `false`.
-
-```html
-<div id="my-element">
-  <p>Hello World</p>
-  <button class="my-button">Click Me</button>
-</div>
-```
-
-```js
-var MyView = Marionette.View.extend({
-  el: '#my-element',
-
-  template: false,
-
-  ui: {
-    paragraph: 'p',
-    button: '.my-button'
-  },
-
-  events: {
-    'click @ui.button': 'clickedButton'
-  },
-
-  clickedButton: function() {
-    console.log('I clicked the button!');
-  }
-});
-
-var view = new MyView();
-view.render();
-
-view.ui.paragraph.text();        // returns 'Hello World'
-view.ui.button.trigger('click'); // logs 'I clicked the button!'
-```
-
-Another use case is when you want to attach a `Marionette.View` to a SVG graphic or canvas element, to provide a uniform view layer interface to non-standard DOM nodes. By not having a template this allows you to also use a view on pre-rendered DOM nodes, such as complex graphic elements.
 
 ## Events and Callback Methods
 
@@ -229,6 +227,22 @@ Marionette.View.extend({
 });
 ```
 
+### "before:add:region" / onBeforeAddRegion event
+
+
+### "add:region" / onAddRegion event
+
+### "before:remove:region" / onBeforeRemoveRegion event
+
+### "remove:region" / onRemoveRegion event
+
+### "detach" / onDetach event
+
+### "before:detach" / onBeforeDetach event
+
+### "dom:refresh" / onDomRefresh
+Triggered just after the view has been attached **and** the view has been rendered.
+
 ## View serializeData
 
 This method is used to convert a View's `model` or `collection`
@@ -256,7 +270,7 @@ the view's template.
 Let's take a look at some examples of how serializing data works.
 
 ```js
-var myModel = new MyModel({foo: "bar"});
+let myModel = new MyModel({foo: "bar"});
 
 new MyView({
   template: "#myItemTemplate",
@@ -276,7 +290,7 @@ If the serialization is a collection, the results are passed in as an
 `items` array:
 
 ```js
-var myCollection = new MyCollection([{foo: "bar"}, {foo: "baz"}]);
+let myCollection = new MyCollection([{foo: "bar"}, {foo: "baz"}]);
 
 new MyView({
   template: "#myCollectionTemplate",

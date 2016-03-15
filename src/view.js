@@ -103,7 +103,7 @@ const View = Backbone.View.extend({
     const data = this.mixinTemplateContext(this.serializeData());
 
     // Render and add to el
-    const html = Renderer.render(template, data);
+    const html = Renderer.render(template, data, this);
     this.attachElContent(html);
   },
 

@@ -22,7 +22,7 @@ will provide features such as `onShow` callbacks, etc. Please see
 * [Organizing ui elements](#organizing-ui-elements)
 * [modelEvents and collectionEvents](#modelevents-and-collectionevents)
 
-## View render
+## Rendering
 
 Unlike Backbone Views, all Marionette views come with a powerful render method.
 In fact, the primary differences between the views are the differences in their
@@ -33,27 +33,37 @@ to layer in additional functionality to the rendering of your view.
 The `View` defers to the `Marionette.Renderer` object to do the actual
 rendering of the template.
 
-The item view instance is passed as the third argument to the
+The view instance is passed as the third argument to the
 `Renderer` object's `render` method, which is useful in custom
 `Renderer` implementations.
 
-You should provide a `template` attribute on the item view, which
-will be either a jQuery selector:
+### Templates
+A Marionette view usually consists of a template. You can set a `template` attribute in the definition or pass a `template: "#tpl-product-layout"` parameter to the constructor options.
+
+The passed template will be used whenever your view will be rendered. Most of the times your views will have templates, which will help you display the data you want.
+
+**Passing a template**
+
+Your template can be passed to your view in two ways:
+
+1) A jQuery selector (`#tpl-template`) referring to the DOM element passed as a string:
 
 ```js
-var MyView = Marionette.View.extend({
-  template: "#some-template"
+let MyView = new Marionette.View({
+	template: "#tpl-product-layout"
 });
 
 new MyView().render();
 ```
 
-.. or a function taking a single argument: the object returned by [View.serializeData](#itemview-serializedata):
+2) A function taking a single argument: the object returned by [View.serializeData](#itemview-serializedata). 
+
+Using a template function allows passing custom arguments into the `_.template` function and allows for more control over how the `_.template` function is called.
 
 ```js
 var my_template_html = '<div><%= args.name %></div>'
 var MyView = Marionette.View.extend({
-  template : function(serialized_model) {
+  template: function(serialized_model) {
     var name = serialized_model.name;
     return _.template(my_template_html)({
         name : name,
@@ -65,7 +75,9 @@ var MyView = Marionette.View.extend({
 new MyView().render();
 ```
 
-Note that using a template function allows passing custom arguments into the _.template function and allows for more control over how the _.template function is called.
+**Templateless views**
+
+A template, however, is not required. If you set the `template` attribute to `false`, your view will not be looking for a template.
 
 For more information on the _.template function see the [Underscore docs](http://underscorejs.org/#template).
 

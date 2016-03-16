@@ -1,3 +1,16 @@
+### v2.4.5 [view commit logs](https://github.com/marionettejs/backbone.marionette/compare/v2.4.4...v2.4.5)
+
+#### Fixes
+
+* `Marionette.View#ui` will now bind events when names are hyphenated.
+* Nonexistent event handlers now fail silently.
+
+#### Misc
+
+* Updated Backbone dependency to 1.3.2.
+* devDependencies updated.
+* Updated uglify to fix deprecated sourcemap pragma //@ replaced with //#.
+
 ### v2.4.4 [view commit logs](https://github.com/marionettejs/backbone.marionette/compare/v2.4.3...v2.4.4)
 
 #### Fixes

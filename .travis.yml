@@ -15,6 +15,8 @@ matrix:
     - env: UNDERSCORE=1.7 BACKBONE=1.2.3
     - node_js: "0.10"
       env: UNDERSCORE=1.8 BACKBONE=1.2.3
+    - env: UNDERSCORE=1.8 BACKBONE=1.3.2
+    - env: LODASH=3.1 BACKBONE=1.3.2
     - env: LODASH=2.4 BACKBONE=1.1
     - env: LODASH=3.0 BACKBONE=1.1
     - env: LODASH=3.1 BACKBONE=1.0

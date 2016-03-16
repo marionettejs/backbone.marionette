@@ -59,7 +59,7 @@ Marionette.Behaviors = (function(Marionette, _) {
 
           var eventKey  = eventName + selector;
           var handler   = _.isFunction(behaviour) ? behaviour : b[behaviour];
-
+          if (!handler) { return; }
           _events[eventKey] = _.bind(handler, b);
         }, this);
 

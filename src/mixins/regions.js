@@ -1,4 +1,5 @@
 import _                    from 'underscore';
+import _invoke              from '../utils/_invoke';
 import Region               from '../region';
 import MarionetteError      from '../error';
 
@@ -19,7 +20,7 @@ export default {
   // Internal method to re-initialize all of the regions by updating
   // the `el` that they point to
   _reInitRegions: function() {
-    _.invoke(this._regions, 'reset');
+    _invoke(this._regions, 'reset');
   },
 
   // Add a single region, by name, to the View
@@ -48,11 +49,11 @@ export default {
 
   // internal method to build and add regions
   _addRegions: function(regionDefinitions) {
-    return _.reduce(regionDefinitions, function(regions, definition, name) {
+    return _.reduce(regionDefinitions, (regions, definition, name) => {
       regions[name] = this._buildRegion(definition);
       this._addRegion(regions[name], name);
       return regions;
-    }, {}, this);
+    }, {});
   },
 
   // return the region instance from the definition
@@ -126,7 +127,7 @@ export default {
   removeRegions: function() {
     var regions = this.getRegions();
 
-    _.each(this._regions, this._removeRegion, this);
+    _.each(this._regions, _.bind(this._removeRegion, this));
 
     return regions;
   },
@@ -147,7 +148,7 @@ export default {
   // leave them attached
   emptyRegions: function() {
     var regions = this.getRegions();
-    _.invoke(regions, 'empty');
+    _invoke(regions, 'empty');
     return regions;
   },
 

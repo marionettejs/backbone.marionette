@@ -482,7 +482,7 @@ describe('collection view', function() {
       this.model6 = new Backbone.Model({foo: 4});
       this.collection.add([this.model5, this.model6], {at: 2});
 
-      this.order = _.pluck(this.collectionView.$el.find('span'), 'innerHTML');
+      this.order = _.map(this.collectionView.$el.find('span'), 'innerHTML');
     });
 
     it('should add models and render views in right order', function() {
@@ -497,11 +497,11 @@ describe('collection view', function() {
 
         this.collectionView.render();
         this.collection.add([new Backbone.Model({foo: 10})], {at: 1});
-        this.orderWithFilter = _.pluck(this.collectionView.$el.find('span'), 'innerHTML');
+        this.orderWithFilter = _.map(this.collectionView.$el.find('span'), 'innerHTML');
 
         this.collectionView.filter = null;
         this.collectionView.render();
-        this.orderWithoutFilter = _.pluck(this.collectionView.$el.find('span'), 'innerHTML');
+        this.orderWithoutFilter = _.map(this.collectionView.$el.find('span'), 'innerHTML');
       });
 
       it('should render views in the right order', function() {
@@ -519,10 +519,10 @@ describe('collection view', function() {
 
         this.collectionView.render();
         this.collection.add([new Backbone.Model({foo: 10})], {at: 1});
-        this.orderBeforeRerender = _.pluck(this.collectionView.$el.find('span'), 'innerHTML');
+        this.orderBeforeRerender = _.map(this.collectionView.$el.find('span'), 'innerHTML');
 
         this.collectionView.render();
-        this.orderAfterRerender = _.pluck(this.collectionView.$el.find('span'), 'innerHTML');
+        this.orderAfterRerender = _.map(this.collectionView.$el.find('span'), 'innerHTML');
       });
 
       it('should render views in comparator order overridden by `at` model adds since the last `render()`', function() {
@@ -543,14 +543,14 @@ describe('collection view', function() {
 
         this.collectionView.render();
         this.collection.add([new Backbone.Model({foo: 10})], {at: 1});
-        this.orderBeforeRerender = _.pluck(this.collectionView.$el.find('span'), 'innerHTML');
+        this.orderBeforeRerender = _.map(this.collectionView.$el.find('span'), 'innerHTML');
 
         this.collectionView.render();
-        this.orderAfterRerender = _.pluck(this.collectionView.$el.find('span'), 'innerHTML');
+        this.orderAfterRerender = _.map(this.collectionView.$el.find('span'), 'innerHTML');
 
         this.collectionView.filter = null;
         this.collectionView.render();
-        this.orderWithoutFilter = _.pluck(this.collectionView.$el.find('span'), 'innerHTML');
+        this.orderWithoutFilter = _.map(this.collectionView.$el.find('span'), 'innerHTML');
       });
 
       it('should render views in comparator order overriden by `at` model adds and, lastly, filtered', function() {
@@ -578,7 +578,7 @@ describe('collection view', function() {
       this.collection.add({foo: 2}, {at: 1, silent: true});
       var model = this.collection.at(1);
       this.collection.trigger('add', model, this.collection, {at: 1});
-      this.order = _.pluck(this.collectionView.$el.find('span'), 'innerHTML').join('');
+      this.order = _.map(this.collectionView.$el.find('span'), 'innerHTML').join('');
     });
 
     it('should render views in `at` order', function() {
@@ -1063,7 +1063,7 @@ describe('collection view', function() {
     it('should not retain any bindings to this view', function() {
       var suite = this;
       var bindings = this.collectionView.bindings || {};
-      expect(_.any(bindings, function(binding) {
+      expect(_.some(bindings, function(binding) {
         return binding.obj === suite.childView;
       })).to.be.false;
     });
@@ -1101,7 +1101,7 @@ describe('collection view', function() {
     it('should not retain any bindings to the previous views', function() {
       var suite = this;
       var bindings = this.collectionView.bindings || {};
-      expect(_.any(bindings, function(binding) {
+      expect(_.some(bindings, function(binding) {
         return binding.obj === suite.childView;
       })).to.be.false;
     });

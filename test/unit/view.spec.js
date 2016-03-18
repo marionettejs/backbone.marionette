@@ -137,6 +137,10 @@ describe('item view', function() {
       this.view.render();
     });
 
+    it('should have an isAttached method which returns if the view is attached or not', function() {
+      expect(this.view.isAttached()).to.be.equal(false);
+    });
+
     it('should call a "onBeforeRender" method on the view', function() {
       expect(this.onBeforeRenderStub).to.have.been.calledOnce;
     });

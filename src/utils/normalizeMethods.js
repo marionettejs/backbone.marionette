@@ -6,7 +6,7 @@ import _ from 'underscore';
 // Pass in a mapping of events => functions or function names
 // and return a mapping of events => functions
 var normalizeMethods = function(hash) {
-  return _.reduce(hash, function(normalizedHash, method, name) {
+  return _.reduce(hash, (normalizedHash, method, name) => {
     if (!_.isFunction(method)) {
       method = this[method];
     }
@@ -14,7 +14,7 @@ var normalizeMethods = function(hash) {
       normalizedHash[name] = method;
     }
     return normalizedHash;
-  }, {}, this);
+  }, {});
 };
 
 export default normalizeMethods;

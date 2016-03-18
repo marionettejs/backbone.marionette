@@ -30,7 +30,7 @@ _.extend(MarionetteObject.prototype, Backbone.Events, CommonMixin, RadioMixin, {
   _isDestroyed: false,
 
   isDestroyed: function() {
-    return this._isDestroyed();
+    return this._isDestroyed;
   },
 
   //this is a noop method intended to be overridden by classes that extend from this base

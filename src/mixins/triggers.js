@@ -32,11 +32,11 @@ export default {
   _getViewTriggers: function(view, triggers) {
     // Configure the triggers, prevent default
     // action and stop propagation of DOM events
-    return _.reduce(triggers, function(events, value, key) {
+    return _.reduce(triggers, (events, value, key) => {
       key = getUniqueEventName(key);
       events[key] = buildViewTrigger(view, value);
       return events;
-    }, {}, this);
+    }, {});
   }
 
 };

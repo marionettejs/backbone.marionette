@@ -54,6 +54,7 @@ describe('marionette object', function() {
 
     it('should have `isDestroyed()` set to `false`', function() {
       expect(this.object._isDestroyed).to.be.false;
+      expect(this.object.isDestroyed()).to.be.false;
     });
   });
 
@@ -88,6 +89,10 @@ describe('marionette object', function() {
 
     it('shouldn\'t pass any options to the onDestroy method', function() {
       expect(this.onDestroyHandler).to.have.been.calledWith();
+    });
+
+    it('should return intantly when calling destroy and its already destroyed', function() {
+      expect(this.object.destroy()).to.be.deep.equal(this.object);
     });
   });
 

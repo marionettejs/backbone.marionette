@@ -41,4 +41,34 @@ describe('marionette application', function() {
       expect(this.app.cid).to.exist;
     });
   });
+
+  describe('when initializing with regions', function() {
+    beforeEach(function() {
+      this.fooOptions = {
+        region: '#fixtures'
+      };
+      this.view = new Marionette.View({
+        template: _.template('ohai')
+      });
+
+      this.app = new Marionette.Application(this.fooOptions);
+      this.app.showView(this.view);
+    });
+    it('should be able to define region selectors as strings', function() {
+      expect(this.app._region.$el).to.have.length(1);
+    });
+
+    it('should get the region selector with getRegion', function() {
+      expect(this.app.getRegion().$el).to.have.length(1);
+    });
+
+    it('can show a view in its region', function() {
+      expect(this.app._region.el.innerHTML).to.contain('ohai');
+    });
+
+    it('can use the getView function', function() {
+      expect(this.app.getView()).to.deep.equal(this.view);
+    });
+
+  });
 });

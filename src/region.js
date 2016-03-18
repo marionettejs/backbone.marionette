@@ -6,7 +6,7 @@ import Backbone from 'backbone';
 import isNodeAttached from './utils/isNodeAttached';
 import MarionetteObject from './object';
 import MarionetteError from './error';
-import MonitorViewEvents from './monitor-view-events';
+import monitorViewEvents from './monitor-view-events';
 import destroyBackboneView from './utils/destroyBackboneView';
 import { triggerMethodOn } from './trigger-method';
 
@@ -45,7 +45,7 @@ const Region = MarionetteObject.extend({
 
     this.triggerMethod('before:show', this, view, options);
 
-    MonitorViewEvents(view);
+    monitorViewEvents(view);
 
     this.empty(options);
 

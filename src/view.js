@@ -5,19 +5,19 @@ import _                  from 'underscore';
 import Backbone           from 'backbone';
 import ViewMixin          from './mixins/view';
 import RegionsMixin       from './mixins/regions';
-import MonitorViewEvents  from './monitor-view-events';
+import monitorViewEvents  from './monitor-view-events';
 import Renderer           from './renderer';
 
 // The standard view. Includes view events, automatic rendering
 // of Underscore templates, nested views, and more.
-var View = Backbone.View.extend({
+const View = Backbone.View.extend({
 
   constructor(options) {
     this.render = _.bind(this.render, this);
 
     this._setOptions(options);
 
-    MonitorViewEvents(this);
+    monitorViewEvents(this);
 
     this._initBehaviors();
     this._initRegions();
@@ -92,7 +92,7 @@ var View = Backbone.View.extend({
   // Internal method to render the template with the serialized data
   // and template context via the `Marionette.Renderer` object.
   _renderTemplate() {
-    var template = this.getTemplate();
+    const template = this.getTemplate();
 
     // Allow template-less views
     if (template === false) {
@@ -100,10 +100,10 @@ var View = Backbone.View.extend({
     }
 
     // Add in entity data and template context
-    var data = this.mixinTemplateContext(this.serializeData());
+    const data = this.mixinTemplateContext(this.serializeData());
 
     // Render and add to el
-    var html = Renderer.render(template, data, this);
+    const html = Renderer.render(template, data, this);
     this.attachElContent(html);
   },
 
@@ -140,7 +140,7 @@ var View = Backbone.View.extend({
 
   _getImmediateChildren: function() {
     return _.chain(this.getRegions())
-      .pluck('currentView')
+      .map('currentView')
       .compact()
       .value();
   }

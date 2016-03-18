@@ -83,34 +83,47 @@ var App = Marionette.Application.extend({
 var app = new App({model: new Backbone.Model({key: 'value'})});
 ```
 
-## Application Events
+## Application Triggers
 
-The `Application` object raises a few events during its lifecycle, using the
-[Marionette.triggerMethod](./marionette.functions.md#marionettetriggermethod) function. These events
-can be used to do additional processing of your application. For example, you
-may want to pre-process some data just before initialization happens. Or you may
-want to wait until your entire application is initialized to start
-`Backbone.history`.
+The `Application` object will fire two triggers:
 
-The events that are currently triggered, are:
+### `before:start`
 
-* **"before:start" / `onBeforeStart`**: fired just before the `Application` starts and before the initializers are executed.
-* **"start" / `onStart`**: fires after the `Application` has started and after the initializers have been executed.
+Fired just before the application is started. Use this to prepare the
+application with anything it will need to start, for example setting up
+routers, models, and collections.
+
+### `start`
+
+Fired as part of the application startup. This is where you should be showing
+your views and starting `Backbone.history`.
+
+### Application Lifecycle
 
 ```js
-MyApp.on("before:start", function(options){
-  options.moreData = "Yo dawg, I heard you like options so I put some options in your options!";
-});
+var Backbone = require('backbone');
 
-MyApp.on("start", function(options){
-  if (Backbone.history){
+var MyModel = require('./mymodel');
+var MyView = require('./myview');
+
+var App = Marionette.Application.extend({
+  initialize: function(options) {
+    console.log('My value:', options.model.get('key'));
+  },
+
+  onBeforeStart: function(options) {
+    this.model = new MyModel(options.data);
+  },
+
+  onStart: function(options) {
+    this.showView(new MyView({model: this.model}));
     Backbone.history.start();
   }
 });
 ```
 
-The `options` parameter is passed through the `start` method of the application
-object (see below).
+As we'll see below, the `options` object is passed into the Application as an
+argument to `start`.
 
 ## Starting An Application
 
@@ -123,12 +136,14 @@ allows you to provide extra configuration for various parts of your app througho
 initialization sequence.
 
 ```js
-var options = {
-  something: "some value",
-  another: "#some-selector"
-};
+var app = new App();
 
-MyApp.start(options);
+app.start({
+  data: {
+    id: 1,
+    text: 'value'
+  }
+});
 ```
 
 ## Method Reference

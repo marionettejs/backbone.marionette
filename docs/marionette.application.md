@@ -36,7 +36,7 @@ phase of your application becomes more complex.
 * [Initialize](#initialize)
 * [Application Events](#application-events)
 * [Starting An Application](#starting-an-application)
-* [Application.getOption](#applicationgetoption)
+* [Application Methods](#application-methods)
 
 ## Root Layout
 
@@ -131,22 +131,28 @@ var options = {
 MyApp.start(options);
 ```
 
-### Application.mergeOptions
-Merge keys from the `options` object directly onto the Application instance.
+## Method Reference
 
-```js
-var MyApp = Marionette.Application.extend({
-  initialize: function(options) {
-    this.mergeOptions(options, ['myOption']);
+The Marionette Application provides helper methods for managing its attached
+region.
 
-    console.log('The option is:', this.myOption);
-  }
-})
-```
+### `getRegion()`
 
-More information at [mergeOptions](./marionette.functions.md#marionettemergeoptions)
+Return the attached [region object](./marionette.region.md) for the Application.
 
-### Application.getOption
-Retrieve an object's attribute either directly from the object, or from the object's this.options, with this.options taking precedence.
+### `showView(View)`
 
-More information [getOption](./marionette.functions.md#marionettegetoption)
+Display `View` in the region attached to the Application. This runs the same
+view lifecycle as [`View.showChildView`]('./marionette.view.md').
+
+### `getView()`
+
+Return the view currently being displayed in the Application's attached
+`region`. If the Application is not currently displaying a view, this method
+returns `undefined`.
+
+### Marionette.Object Methods
+
+`Marionette.Application` extends `Marionette.Object` and, as such, implements
+the same method interface. See the [`Object`](./marionette.object.md)
+reference for the full list.

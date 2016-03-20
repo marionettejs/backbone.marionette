@@ -4,10 +4,6 @@
 
 An `View` is a view that, most of the time, represents a single item. That item may be a`Backbone.Model` or may be a `Backbone.Collection`. Whichever it is though, itwill be treated as a single item. It’s also possible to create Views that do not represent items, but just contain regions (which can be filled with View elements as well).View extends directly from `Backbone.View`, which means you’re free to use Backbone’s methods in your Marionette Views.
 
-Additionally, interactions with Marionette.Region
-will provide features such as `onShow` callbacks, etc. Please see
-[the Region documentation](./marionette.region.md) for more information.
-
 Note: Since Marionette v3.x, `Marionette.View` will replace `Marionette.LayoutView` and `Marionette.ItemView`.
 
 ## Documentation Index
@@ -44,7 +40,7 @@ A Marionette view usually consists of a template. You can set a `template` attri
 
 The passed template will be used whenever your view will be rendered. Most of the times your views will have templates, which will help you display the data you want.
 
-**Passing a template**
+#### Passing a template
 
 Your template can be passed to your view in two ways:
 
@@ -79,7 +75,7 @@ new MyView().render();
 
 For more information on the _.template function see the [Underscore docs](http://underscorejs.org/#template).
 
-**Templateless views**
+#### Templateless views
 
 An `View` can be attached to existing elements as well. The primary benefit of this is to attach behavior and events to static content that has been rendered by your server (typically for SEO purposes). To set up a template-less `View`, your `template` attribute must be `false`.
 
@@ -306,8 +302,8 @@ managed by specified region managers.
 
 Each Region added to a View will become a `Region` instance. 
 
-Additionally, interactions with Marionette.Region
-will provide features such as onShow callbacks, etc. Please see
+Additionally, interactions with `Marionette.Region`
+will provide features such as `onRender` callbacks, etc. Please see
 the Region documentation for more information.
 
 ### Basic usage

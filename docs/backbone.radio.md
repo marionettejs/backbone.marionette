@@ -16,12 +16,13 @@ Let's look at a simplified example in Marionette:
 
 ```javascript
 var Mn = require('backbone.marionette');
-var Radio = require('backbone.radio');
-
-var notifyChannel = Radio.channel('notify');
 
 var NotificationView = Mn.View.extend({
+  channelName: 'notify',
+
   initialize: function() {
+    var notifyChannel = this.getChannel();
+
     this.listenTo(notifyChannel, 'show:success', this.showSuccessMessage);
     this.listenTo(notifyChannel, 'show:error', this.showErrorMessage);
   },
@@ -52,12 +53,79 @@ In addition to this documentation, the Radio documentation can be found on
 
 ## Documentation Index
 
+* [Channel](#channel)
+  * [Assigning Channels to Objects](#assigning-channels-to-objects)
 * [Event](#event)
 * [Request](#request)
-* [Channel](#channel)
+
+## Channel
+
+The `channel` is the biggest reason to use `Radio` as our event aggregator - it
+provides a clean point for dividing global events. To retrieve a channel, use
+`Radio.channel(channelName)`:
+
+```javascript
+var Radio = require('backbone.radio');
+
+var myChannel = Radio.channel('basic');
+
+myChannel.on('some:event', function() {
+  // ...
+});
+```
+
+The channel is accessible everywhere in your application. Simply import Radio
+and call `channel()` to add listeners, fire callbacks, or send requests.
+
+```javascript
+var Radio = require('backbone.radio');
+
+var someChannel = Radio.channel('basic');  // Exactly the same channel as above
+
+someChannel.trigger('some:event');  // Will fire the function call above
+```
+
+### Assigning Channels to Objects
+
+As of Marionette 3, it is now possible to assign Radio channels directly to
+instances of `Marionette.Object` and assign listeners. To assign a channel, we
+use the `channelName` attribute. We then retrieve the channel instance with
+`getChannel()`:
+
+```javascript
+var Mn = require('backbone.marionette');
+
+var ChannelView = Mn.View.extend({
+  channelName: 'basic',
+
+  initialize: function() {
+    var channel = this.getChannel();
+    this.listenTo(channel, 'log', this.logMsg);
+  },
+
+  showAlertMessage: function(msg) {
+    console.log(msg);
+  }
+})
+```
 
 ## Event
 
-## Request
+The `Radio Event` works almost exactly the same way as regular `Backbone Events`
+like model/collection events. They also expose exactly the same API:
 
-## Channel
+* `radio.on('event', callback, context)` - when `event` fires, call `callback`
+* `radio.off('event')` - stop listening to event
+* `radio.trigger('event', ..args)` - fires `event` and passes  args into the
+  resulting `callback`
+
+As the Radio can be imported anywhere, we can use it as a global event
+aggregator as such:
+
+```javascript
+var Radio = require('backbone.radio');
+
+
+```
+
+## Request

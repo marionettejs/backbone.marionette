@@ -72,7 +72,9 @@ In addition to this documentation, the Radio documentation can be found on
 * [Channel](#channel)
   * [Assigning Channels to Objects](#assigning-channels-to-objects)
 * [Event](#event)
+  * [Listening to Events on Objects](#listening-to-events-on-objects)
 * [Request](#request)
+  * [Listening to Requests on Objects](#listening-to-requests-on-objects)
 
 ## Channel
 
@@ -130,10 +132,14 @@ var ChannelView = Mn.View.extend({
 The `Radio Event` works almost exactly the same way as regular `Backbone Events`
 like model/collection events. They also expose exactly the same API:
 
-* `radio.on('event', callback, context)` - when `event` fires, call `callback`
-* `radio.off('event')` - stop listening to event
-* `radio.trigger('event', ..args)` - fires `event` and passes  args into the
+* `channel.on('event', callback, context)` - when `event` fires, call `callback`
+* `channel.off('event')` - stop listening to event
+* `channel.trigger('event', ..args)` - fires `event` and passes  args into the
   resulting `callback`
+
+Events are typically used to alert other parts of the system that something
+happened. For example, a user login expired or the user performed a specific
+action.
 
 As the Radio can be imported anywhere, we can use it as a global event
 aggregator as such:
@@ -141,7 +147,45 @@ aggregator as such:
 ```javascript
 var Radio = require('backbone.radio');
 
+var myChannel = Radio.channel('star');
 
+myChannel.on('left:building', function(person) {
+  console.log(person.get('name') + ' has left the building!');
+});
+
+var elvis = new Backbone.Model({name: 'Elvis'});
+myChannel.trigger('left:building', elvis);
+
+myChannel.off('left:building');
 ```
 
+Just like Backbone Events, the Radio respects the `listenTo` handler as well:
+
+```javascript
+var Mn = require('backbone.marionette');
+var Radio = require('backbone.radio');
+
+
+var Star = Mn.Object.extend({
+  initialize: function() {
+    var starChannel = Radio.channel('star');
+
+    this.listenTo(starChannel, 'left:building', this.leftBuilding);
+  },
+
+  leftBuilding: function(person) {
+    console.log(person.get('name') + ' has left the building!');
+  }
+});
+```
+
+As with Backbone, this will bind `this` to our `Star` instance.
+
+### Listening to Events on Objects
+
+The `Marionette.Object` class provides bindings to provide automatic event
+listeners on your object instances.
+
 ## Request
+
+### Listening to Requests on Objects

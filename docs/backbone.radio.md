@@ -20,11 +20,14 @@ var Mn = require('backbone.marionette');
 var NotificationView = Mn.View.extend({
   channelName: 'notify',
 
-  initialize: function() {
-    var notifyChannel = this.getChannel();
+  radioRequests: {
+    'show:success': 'showSuccessMessage',
+    'show:error': 'showErrorMessage'
+  },
 
-    this.listenTo(notifyChannel, 'show:success', this.showSuccessMessage);
-    this.listenTo(notifyChannel, 'show:error', this.showErrorMessage);
+  radioEvents: {
+    'user:logged:in': 'showProfileButton',
+    'user:logged:out': 'hideProfileButton'
   },
 
   showSuccessMessage: function(message) {
@@ -32,6 +35,14 @@ var NotificationView = Mn.View.extend({
   },
 
   showErrorMessage: function(message) {
+    // ...
+  },
+
+  showProfileButton: function(user) {
+    // ...
+  },
+
+  hideProfileButton: function(user) {
     // ...
   }
 });
@@ -41,11 +52,16 @@ In an unrelated module:
 
 ```javascript
 var Radio = require('backbone.radio');
+var User = require('./models/user');
 
 var notifyChannel = Radio.channel('notify');
+var userModel = new User();
 
 // The following will call NotificationView.showErrorMessage(message)
-notifyChannel.trigger('show:error', 'A generic error occurred!');
+notifyChannel.request('show:error', 'A generic error occurred!');
+
+// The following will call NotificationView.showProfileButton(user)
+notifyChannel.trigger('user:logged:in', userModel);
 ```
 
 In addition to this documentation, the Radio documentation can be found on

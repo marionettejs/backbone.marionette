@@ -68,8 +68,8 @@ In addition to this documentation, the Radio documentation can be found on
 
 In addition to the standard documentation, the Radio has been integrated in
 Marionette 3 to provide clearer interfaces to the existing API. This is detailed
-in the documentation below. As always, anything that extends from
-`Marionette.Object` has access to this API.
+in the documentation below. Anything that extends from `Marionette.Object` has
+access to this API.
 
 ## Documentation Index
 

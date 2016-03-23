@@ -10,8 +10,8 @@ Using the `LayoutView` class you can create nested regions.
 
 ## Documentation Index
 
-* [Defining An Application Region](#defining-an-application-region)
-  * [Region Configuration Types](#region-configuration-types)
+* [Defining the Application Region](#defining-the-application-region)
+* [Region Configuration Types](#region-configuration-types)
 * [Initialize A Region With An `el`](#initialize-a-region-with-an-el)
 * [Basic Use](#basic-use)
 * [Showing a view](#showing-a-view)
@@ -29,81 +29,67 @@ Using the `LayoutView` class you can create nested regions.
   * [Attaching Custom Region Classes](#attaching-custom-region-classes)
   * [Instantiate Your Own Region](#instantiate-your-own-region)
 
-## Defining An Application Region
+## Defining the Application Region
 
-You can add regions to your applications by calling the `addRegions` method on
-your application instance. This method expects a single hash parameter, with
-named regions and either jQuery selectors or `Region` objects. You may
-call this method as many times as you like, and it will continue adding regions
-to the app.
+The Application defines a single region using the `region` attribute, and access
+it using `getRegion`, or `showView`. Below is a short example:
 
 ```js
-MyApp.addRegions({
-  mainRegion: "#main-content",
-  navigationRegion: "#navigation"
-});
-```
+var Marionette = require('backbone.marionette');
 
-As soon as you call `addRegions`, your regions are available on your
-app object. In the above, example `MyApp.mainRegion` and `MyApp.navigationRegion`
-would be available for use immediately.
+var App = Marionette.Application.extend({
+  region: '#main-content',
 
-If you specify the same region name twice, the last one in wins.
-
-You can also add regions via `LayoutView`s:
-
-```js
-var AppLayoutView = Marionette.LayoutView.extend({
-  template: "#layout-view-template",
-
-  regions: {
-    menu: "#menu",
-    content: "#content"
+  onStart: function() {
+    var main = this.getRegion();
   }
 });
-var layoutView = new AppLayoutView();
-layoutView.render();
-// you can access your region by its name
-layoutView.menu.show(new MenuView());
-// also with the getRegion method
-layoutView.getRegion('menu').show(new MenuView());
-// or in this case reference and show it with the showChildView method
-layoutView.showChildView('content', new MainContentView())
 ```
 
-### Region Configuration Types
+For more information, see the
+[Application docs](./marionette.application.md#root-layout).
 
-Marionette supports multiple ways to define regions on your `Application` or `LayoutView`.
+## Region Configuration Types
 
-#### String Selector
+Marionette supports multiple ways to define regions on your `Application` or
+`View`. This section will document the different types as applied to `View`,
+although they will work for `Application` as well - just replace `regions` with
+`region` in your definition.
+
+### String Selector
 
 You can use a jQuery string selector to define regions.
 
 ```js
-App.addRegions({
-  mainRegion: '#main'
+var Marionette = require('backbone.marionette');
+
+var MyView = Marionette.View.extend({
+  regions: {
+    mainRegion: '#main'
+  }
 });
 ```
 
-#### Region Class
+### Region Class
 
-If you've created a custom region class, you can use it to
-define your region.
-
-**NOTE:** Make sure the region class has an `el`
-property set or it won't work!
+If you've created a custom region class with an `el` property set, you can pass
+it in as an argument to your `regions` constructor.
 
 ```js
+var Marionette = require('backbone.marionette');
+
 var MyRegion = Marionette.Region.extend({
-  el: '#main-nav'
+  el: '#main-nav'  // This is mandatory
 });
 
-App.addRegions({
-  navigationRegion: MyRegion
+var MyView = Marionette.View.extend({
+  regions: {
+    mainRegion: MyRegion
+  }
 });
 ```
 
-#### Object Literal
+### Object Literal
 
 Finally, you can define regions with an object literal. Object
 literal definitions normally expect a `selector` or `el`
@@ -129,28 +115,33 @@ subclasses. In these instances, the region can be defined with the
 causing `show` calls to the region to be treated as no-ops.
 
 ```js
-var MyRegion      = Marionette.Region.extend();
+var Marionette = require('backbone.marionette');
+
+var MyRegion = Marionette.Region.extend();
 var MyOtherRegion = Marionette.Region.extend();
-var MyElRegion    = Marionette.Region.extend({ el: '#footer' });
+var MyElRegion = Marionette.Region.extend({ el: '#footer' });
 
-App.addRegions({
-  contentRegion: {
-    el: '#content',
-    regionClass: MyRegion
-  },
 
-  navigationRegion: {
-    el: '#navigation',
-    regionClass: MyOtherRegion,
+var MyView = Marionette.View.extend({
+  regions: {
+    contentRegion: {
+      el: '#content',
+      regionClass: MyRegion
+    },
 
-    // Options passed to instance of `MyOtherRegion` for
-    // the `navigationRegion` on `App`
-    navigationOption: 42,
-    anotherNavigationOption: 'foo'
-  },
+    navigationRegion: {
+      el: '#navigation',
+      regionClass: MyOtherRegion,
 
-  footerRegion: {
-    regionClass: MyElRegion
+      // Options passed to instance of `MyOtherRegion` for
+      // the `navigationRegion` on `App`
+      navigationOption: 42,
+      anotherNavigationOption: 'foo'
+    },
+
+    footerRegion: {
+      regionClass: MyElRegion
+    }
   }
 });
 ```
@@ -161,38 +152,46 @@ instance. This isn't possible when using the region class directly
 like earlier.
 
 ```js
+var Marionette = require('backbone.marionette');
+
 var MyRegion = Marionette.Region.extend({
   el: '#content',
 });
 
-App.addRegions({
-  contentRegion: {
-    regionClass: MyRegion,
-    myRegionOption: 'bar',
-    myOtherRegionOption: 'baz'
+var MyView = Marionette.View.extend({
+  regions: {
+    contentRegion: {
+      regionClass: MyRegion,
+      myRegionOption: 'bar',
+      myOtherRegionOption: 'baz'
+    }    
   }
 });
 ```
 
-#### Mix-and-match
+### Mix-and-match
 
 Of course you can mix-and-match the region configuration types.
 
 ```js
+var Marionette = require('backbone.marionette');
+
 var MyRegion = Marionette.Region.extend({
   el: '#content'
 });
 
 var MyOtherRegion = Marionette.Region.extend();
 
-App.addRegions({
-  contentRegion: MyRegion,
+var MyView = Marionette.View.extend({
+  regions: {
+    contentRegion: MyRegion,
 
-  navigationRegion: '#navigation',
+    navigationRegion: '#navigation',
 
-  footerRegion: {
-    el: '#footer',
-    regionClass: MyOtherRegion
+    footerRegion: {
+      el: '#footer',
+      regionClass: MyOtherRegion
+    }
   }
 });
 ```
@@ -203,6 +202,8 @@ You can specify an `el` for the region to manage at the time
 that the region is instantiated:
 
 ```js
+var Marionette = require('backbone.marionette');
+
 var mgr = new Marionette.Region({
   el: "#someElement"
 });
@@ -233,13 +234,14 @@ and `empty` methods to display and shut-down a view:
 
 ```js
 var myView = new MyView();
+var childView = new MyChildView();
 
 // render and display the view
-MyApp.getRegion('mainRegion').show(myView, options);
+myView.getRegion('mainRegion').show(childView, options);
 
 
 // empties the current view
-MyApp.getRegion('mainRegion').empty();
+myView.getRegion('mainRegion').empty();
 ```
 
 The `options` object is optional. If provided, it will be passed to the [events raised during `show`](#events-raised-during-show) (except for `before:empty` and `empty`). Special properties that change the behavior of `show` include `preventDestroy` and `forceShow`.
@@ -255,21 +257,23 @@ parameter. Several events will also be triggered on the views; see
 ```js
 // Show the first view.
 var myView = new MyView();
-MyApp.mainRegion.show(myView);
+var childView = new MyChildView();
+
+myView.mainRegion.show(childView);
 
 // Replace the view with another. The
 // `destroy` method is called for you
 var anotherView = new AnotherView();
-MyApp.mainRegion.show(anotherView);
+myView.mainRegion.show(anotherView);
 
 // Replace the view with another.
 // Prevent `destroy` from being called
 var anotherView2 = new AnotherView();
-MyApp.mainRegion.show(anotherView2, { preventDestroy: true });
+myView.mainRegion.show(anotherView2, { preventDestroy: true });
 ```
 
-NOTE: When using `preventDestroy: true` you must be careful to cleanup your old views
-manually to prevent memory leaks.
+NOTE: When using `preventDestroy: true` you must be careful to cleanup your old
+views manually to prevent memory leaks.
 
 #### forceShow
 
@@ -279,10 +283,12 @@ by passing in `{forceShow: true}` in the options parameter.
 
 ```js
 var myView = new MyView();
-MyApp.mainRegion.show(myView);
+var childView = new MyChildView();
+
+myView.mainRegion.show(childView);
 
 // the second show call will re-show the view
-MyApp.mainRegion.show(myView, {forceShow: true});
+myView.mainRegion.show(childView, {forceShow: true});
 ```
 
 #### Emptying a region
@@ -398,21 +404,25 @@ This example will make a view slide down from the top of the screen instead of j
 appearing in place:
 
 ```js
+var Marionette = require('backbone.marionette');
+
 var ModalRegion = Marionette.Region.extend({
   attachHtml: function(view){
     // Some effect to show the view:
     this.$el.empty().append(view.el);
     this.$el.hide().slideDown('fast');
   }
-})
+});
 
-MyApp.addRegions({
-  mainRegion: '#main-region',
-  modalRegion: {
-    regionClass: ModalRegion,
-    selector: '#modal-region'
+var MyView = Marionette.View.extend({
+  regions: {
+    mainRegion: '#main-region',
+    modalRegion: {
+      regionClass: ModalRegion,
+      selector: '#modal-region'
+    }
   }
-})
+});
 ```
 
 ### Attach Existing View
@@ -444,15 +454,19 @@ var region = new Marionette.Region({
 #### Call `attachView` On Region
 
 ```js
-MyApp.addRegions({
-  someRegion: "#content"
-});
+var Marionette = require('backbone.marionette');
 
-var myView = new MyView({
+var MyView = Marionette.View.extend({
+  regions: {
+    someRegion: "#content"
+  }
+})
+
+var childView = new MyChildView({
   el: $("#existing-view-stuff")
 });
 
-MyApp.someRegion.attachView(myView);
+myView.someRegion.attachView(childView);
 ```
 
 ## Region Events And Callbacks
@@ -492,43 +506,45 @@ view.supportsDestroyLifecycle = true;
 ### Example Event Handlers
 
 ```js
-MyApp.mainRegion.on("before:show", function(view, region, options){
+var mainRegion = myView.getRegion('mainRegion');
+
+mainRegion.on("before:show", function(view, region, options){
   // manipulate the `view` or do something extra
   // with the `region`
   // you also have access to the `options` that were passed to the Region.show call
 });
 
-MyApp.mainRegion.on("show", function(view, region, options){
+mainRegion.on("show", function(view, region, options){
   // manipulate the `view` or do something extra
   // with the `region`
   // you also have access to the `options` that were passed to the Region.show call
 });
 
-MyApp.mainRegion.on("before:swapIn", function(view, region, options){
+mainRegion.on("before:swapIn", function(view, region, options){
   // manipulate the `view` or do something extra
   // with the `region`
   // you also have access to the `options` that were passed to the Region.show call
 });
 
-MyApp.mainRegion.on("swapIn", function(view, region, options){
+mainRegion.on("swapIn", function(view, region, options){
   // manipulate the `view` or do something extra
   // with the `region`
   // you also have access to the `options` that were passed to the Region.show call
 });
 
-MyApp.mainRegion.on("before:swapOut", function(view, region, options){
+mainRegion.on("before:swapOut", function(view, region, options){
   // manipulate the `view` or do something extra
   // with the `region`
   // you also have access to the `options` that were passed to the Region.show call
 });
 
-MyApp.mainRegion.on("swapOut", function(view, region, options){
+mainRegion.on("swapOut", function(view, region, options){
   // manipulate the `view` or do something extra
   // with the `region`
   // you also have access to the `options` that were passed to the Region.show call
 });
 
-MyApp.mainRegion.on("empty", function(view, region){
+mainRegion.on("empty", function(view, region){
   // manipulate the `view` or do something extra
   // with the `region`
 });
@@ -588,12 +604,16 @@ new region class by specifying the region class as the
 value. In this case, `addRegions` expects the constructor itself, not an instance.
 
 ```js
+var Marionette = require('backbone.marionette');
+
 var FooterRegion = Marionette.Region.extend({
   el: "#footer"
 });
 
-MyApp.addRegions({
-  footerRegion: FooterRegion
+var MyView = Marionette.View.extend({
+  regions: {
+    footerRegion: FooterRegion
+  }
 });
 ```
 
@@ -601,14 +621,18 @@ You can also specify a selector for the region by using
 an object literal for the configuration.
 
 ```js
+var Marionette = require('backbone.marionette');
+
 var FooterRegion = Marionette.Region.extend({
   el: "#footer"
 });
 
-MyApp.addRegions({
-  footerRegion: {
-    selector: "#footer",
-    regionClass: FooterRegion
+var MyView = Marionette.View.extend({
+  regions: {
+    footerRegion: {
+      selector: "#footer",
+      regionClass: FooterRegion
+    }
   }
 });
 ```
@@ -621,7 +645,7 @@ definition or constructor options.
 ### Instantiate Your Own Region
 
 There may be times when you want to add a region to your
-application after your app is up and running. To do this, you'll
+view after your app is up and running. To do this, you'll
 need to extend from `Region` as shown above and then use
 that constructor function on your own:
 
@@ -634,9 +658,9 @@ var SomeRegion = Marionette.Region.extend({
   }
 });
 
-MyApp.someRegion = new SomeRegion();
+myView.someRegion = new SomeRegion();
 
-MyApp.someRegion.show(someView, options);
+myView.someRegion.show(someView, options);
 ```
 
 You can optionally add an `initialize` function to your Region

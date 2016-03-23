@@ -2,6 +2,7 @@
 // -----------
 
 import { triggerMethodOn } from './trigger-method';
+import _ from 'underscore';
 
 // Trigger method on children unless a pure Backbone.View
 function triggerMethodChildren(view, event, beforeEachTrigger) {

@@ -77,9 +77,11 @@ access to this API.
   * [Assigning Channels to Objects](#assigning-channels-to-objects)
 * [Event](#event)
   * [Listening to Events on Objects](#listening-to-events-on-objects)
+  * [When to use Events](#when-to-use-events)
 * [Request](#request)
   * [Returning Values from Reply](#returning-values-from-reply)
   * [Listening to Requests on Objects](#listening-to-requests-on-objects)
+  * [When to use Requests](#when-to-use-requests)
 
 ## Channel
 
@@ -214,6 +216,20 @@ var Star = Mn.Object.extend({
 This gives us a clear definition of how this object interacts with the `star`
 radio channel.
 
+### When to use Events
+
+The Event is a simple notification that _something happened_ and you may or may
+not want other objects in your application to react to that. A few key
+principles to bear in mind are:
+
+* If you don't know what could act on the event, or don't care, use an `Event`
+* If you find yourself calling it an action that occurred, use an `Event`
+* If it's fine for many objects to perform an action, use an `Event`
+* If you don't mind that no objects react, use an `Event`
+
+If your use case isn't covered here, consider whether you want to
+[use a request](#when-to-use-requests) instead.
+
 ## Request
 
 The Request API provides a uniform way for unrelated parts of the system to
@@ -333,7 +349,7 @@ We now have a clear API for communicating with the `NotificationView` across the
 application. Don't forget to define the `channelName` on your `Object`
 definition.
 
-We can also return values from these handlers:
+As with a normal request/reply, we can return values from these bound handlers:
 
 ```javascript
 var Mn = require('backbone.marionette');
@@ -354,3 +370,12 @@ var App = Mn.Application.extend({
 As above, define your `channelName` attribute, then simply add the `reply`
 handler to `radioRequests` to bind it to your `Object` (`Application` in this
 case).
+
+### When to use Requests
+
+A Request is, as you might guess, a request for information or for something to
+happen. You will probably want to use requests when:
+
+* You call the request an action to perform e.g. `show:notification`
+* You want to get the return value of the request
+* You want to call _exactly one_ function

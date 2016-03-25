@@ -80,9 +80,9 @@ export default {
     this._ui = {};
 
     // bind each of the selectors
-    _.each(bindings, function(selector, key) {
+    _.each(bindings, (selector, key) => {
       this._ui[key] = this.$(selector);
-    }, this);
+    });
 
     this.ui = this._ui;
   },
@@ -91,9 +91,9 @@ export default {
     if (!this.ui || !this._uiBindings) { return; }
 
     // delete all of the existing ui bindings
-    _.each(this.ui, function($el, name) {
+    _.each(this.ui, ($el, name) => {
       delete this.ui[name];
-    }, this);
+    });
 
     // reset the ui element to the original bindings configuration
     this.ui = this._uiBindings;

@@ -32,6 +32,14 @@ will provide features such as `onShow` callbacks, etc. Please see
   * [CollectionView's `isEmpty`](#collectionviews-isempty)
   * [CollectionView's `emptyViewOptions`](#collectionviews-emptyviewoptions)
   * [CollectionView's `destroyChildren`](#collectionviews-destroychildren)
+* [Building `CollectionView`s](#building-collectionviews)
+  * [Rendering Lists][#rendering-lists]
+  * [Rendering Tables][#rendering-tables]
+    * [Tables Using Marionette 2][#tables-using-marionette-2]
+    * [Tables Using Marionette 3][#tables-using-marionette3]
+  * [Rendering Trees][#rendering-trees]
+    * [Trees Using Marionette 2][#trees-using-marionette-2]
+    * [Trees Using Marionette 3][#trees-using-marionette3]
 * [Callback Methods](#callback-methods)
   * [onBeforeRender callback](#onbeforerender-callback)
   * [onRender callback](#onrender-callback)
@@ -456,6 +464,295 @@ myView.destroyChildren(); // will show emptyView
 myView.destroyChildren({checkEmpty: false}); // will not show emptyView
 
 ```
+
+## Rendering `CollectionView`s
+
+Marionette 3 has completely removed the `CompositeView` in favor making the
+`View` and `CollectionView` a lot more flexible. This section will cover the
+most common use cases for `CollectionView` and how to replace `CompositeView`.
+
+### Rendering Lists
+
+Lists are possibly the simplest use of `CollectionView` - simply set a
+`childView` option:
+
+```javascript
+var ListItemView = Marionette.View.extend({
+  tagName: 'li',
+  template: '#list-item-text'
+});
+
+var ListView = Marionette.View.extend({
+  tagName: 'ul',
+  className: 'list-unstyled',
+
+  childView: ListItemView
+});
+
+var list = new Backbone.Collection([
+  {id: 1, text: 'My text'},
+  {id: 2, text: 'Another Item'}
+]);
+
+var listView = new ListView({
+  collection: list
+});
+
+listview.render();
+```
+
+With the template:
+
+```
+<%- text %>
+```
+
+This will render the following:
+
+```html
+<ul class="list-unstyled">
+  <li>My text</li>
+  <li>Another Item</li>
+</ul>
+```
+
+### Rendering Tables
+
+Marionette 3 introduced a major improvement to `View` to make it possible to
+implement tables using only `View` and `CollectionView`. This section will
+demonstrate how to build a table in Marionette 3, with the equivalent in
+Marionette 2 using `CompositeView`.
+
+#### Tables Using Marionette 2
+
+**_The following code is deprecated and for demonstration purposes only _**
+
+To build a table in Marionette 2 requires the `CompositeView` which we'll build
+as such:
+
+```javascript
+var RowView = Marionette.LayoutView.extend({
+  tagName: 'tr',
+  template: '#table-row'
+});
+
+var TableView = Marionette.CompositeView.extend({
+  tagName: 'table',
+  className: 'table table-hover',
+  template: '#table',
+  childView: RowView,
+  childViewContainer: 'tbody'
+});
+
+var list = new Backbone.Collection([
+  {id: 1, text: 'My text'},
+  {id: 2, text: 'Another Item'}
+]);
+
+var myTable = new TableView({
+  collection: list
+});
+
+myTable.render();
+```
+
+Given the following `#table` and `#table-row` templates:
+
+```html
+<thead>
+  <tr>
+  <th>ID</th>
+  <th>Body</th>
+  </tr>
+</thead>
+<tbody></tbody>
+```
+
+```html
+<td><%- id %></td>
+<td><%- text %></td>
+```
+
+Will render the following:
+
+```html
+<table class="table table-hover">
+<thead>
+  <tr>
+  <th>ID</th>
+  <th>Body</th>
+  </tr>
+</thead>
+<tbody>
+  <tr>
+    <td>1</td>
+    <td>My text</td>
+  </tr>
+  <tr>
+    <td>2</td>
+    <td>Another Item</td>
+  </tr>
+</tbody>
+</table>
+```
+
+A major downside of this method was that it was impossible to add extra regions
+inside the `CompositeView` - if a header item needed to be re-rendered based on
+user input, then the entire table must be re-rendered, or the DOM must be
+manipulated with `ui` items.
+
+To resolve this issue, Marionette 3 improves the `View` to make it possible to
+build tables without `CompositeView`.
+
+#### Tables Using Marionette 3
+
+Marionette 3 doesn't use `CompositeView` any more. We now build tables using
+`View`s and `regions`. The following code will render the same table as in
+[Marionette 2][#tables-using-marionette-2-compositeview]:
+
+```javascript
+var RowView = Marionette.View.extend({
+  tagName: 'tr',
+  template: '#row-template'
+});
+
+var TableBody = Marionette.CollectionView.extend({
+  tagName: 'tbody',
+  childView: RowView
+});
+
+var TableView = Marionette.View.extend({
+  tagName: 'table',
+  className: 'table table-hover',
+  template: '#table',
+
+  regions: {
+    body: {
+      selector: 'tbody',
+      replaceElement: true
+    }
+  },
+
+  onRender: function() {
+    this.showChildView('body', new TableBody({
+      collection: this.collection
+    }));
+  }
+});
+
+var list = new Backbone.Collection([
+  {id: 1, text: 'My text'},
+  {id: 2, text: 'Another Item'}
+]);
+
+var myTable = new TableView({
+  collection: list
+});
+
+myTable.render();
+```
+
+We can leave the templates as-is for this example. The major advantage of this
+style is that we can create a region in any part of `TableView` as well as in
+`RowView` and treat it just as any independent widget.
+
+### Rendering Trees
+
+Tree structures are extremely useful layouts for nesting the same type of data
+over and over. A common example of this would be the Windows Explorer file
+picker.
+
+#### Trees in Marionette 2
+
+```javascript
+var TreeView = Marionette.CompositeView.extend({
+  tagName: 'ul',
+  template: '#tree-template'
+});
+
+var TreeRoot = Marionette.CollectionView.extend({
+  tagName: 'ul',
+  childView: TreeView
+});
+
+
+var tree = new Backbone.Collection([
+  {
+    id: 5,
+    nodes: [
+      {id: 9, nodes: []},
+      {id: 1, nodes: [...]}
+    ],
+  },
+  {
+    id: 12,
+    nodes: []
+  }
+]);
+
+new TreeRoot({
+  collection: tree
+});
+```
+
+In Marionette 2, the `CompositeView` defaults to setting `childView` to itself.
+While good for building tree structures, this behavior changed for Marionette 3
+with the introduction of a more general view.
+
+#### Trees in Marionette 3
+
+As in tables, trees in Marionette 3 require us to combine `View` and
+`CollectionView` to build up the tree in a more explicit manner than the
+implicit version provided by Marionette 2.
+
+```javascript
+var TreeNode = Marionette.View.extend({
+  tagName: 'li',
+  template: '#tree-template',
+
+  regions: {
+    tree: {
+      selector: 'ul',
+      replaceElement: true
+    }
+  },
+
+  onRender: function() {
+    this.showChildView('tree', new TreeView({
+      collection: new Backbone.Collection(this.model.get('nodes'))
+    }));
+  }
+});
+
+var TreeView = Marionette.CollectionView.extend({
+  tagName: 'ul',
+  childView: TreeNode
+});
+
+var tree = new Backbone.Collection([
+  {
+    id: 5,
+    nodes: [
+      {id: 9, nodes: []},
+      {id: 1, nodes: [...]}
+    ],
+  },
+  {
+    id: 12,
+    nodes: []
+  }
+]);
+
+new TreeView({
+  collection: tree
+});
+```
+
+This more explicit style gives us two major benefits:
+
+* Fewer bugs - it's no longer possible to accidentally create a tree structure
+* More regions to hook different views in, something that's impossible with
+  `CompositeView`
 
 ## Callback Methods
 
@@ -1105,7 +1402,7 @@ var cv = new Marionette.CollectionView({
 CollectionView allows for a custom `viewComparator` option if you want your CollectionView's children to be rendered with a different sort order than the underlying Backbone collection uses.
 
 ```js
-  var cv = new MarionetteCollectionView({
+  var cv = new Marionette.CollectionView({
     collection: someCollection,
     viewComparator: 'otherFieldToSortOn'
   });

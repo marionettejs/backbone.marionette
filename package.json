@@ -1,7 +1,7 @@
 {
   "name": "backbone.marionette",
   "description": "The Backbone Framework",
-  "version": "2.4.1",
+  "version": "3.0.0-pre.2",
   "homepage": "https://github.com/marionettejs/backbone.marionette",
   "main": "lib/core/backbone.marionette.js",
   "keywords": [
@@ -43,8 +43,9 @@
     "underscore": "1.8 - 1.8.3"
   },
   "devDependencies": {
-    "babel-core": "^6.4.5",
+    "babel-core": "^6.7.0",
     "babel-eslint": "^4.1.7",
+    "babel-polyfill": "^6.6.1",
     "babel-preset-es2015": "^6.3.13",
     "babel-preset-es2015-rollup": "^1.1.1",
     "babel-register": "^6.4.3",
@@ -53,6 +54,7 @@
     "chai": "^3.4.0",
     "chai-jq": "0.0.9",
     "dox": "git://github.com/jasonLaster/dox.git#marked",
+    "eslint": "2.2.0",
     "glob": "^7.0.0",
     "gulp": "^3.9.0",
     "gulp-coveralls": "^0.1.4",
@@ -77,6 +79,7 @@
     "isparta": "^4.0.0",
     "jquery": "^2.1.4",
     "jsdom": "^8.0.2",
+    "mocha": "^2.4.5",
     "rollup": "^0.25.2",
     "rollup-plugin-babel": "^2.3.9",
     "rollup-plugin-json": "^2.0.0",

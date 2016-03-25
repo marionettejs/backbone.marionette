@@ -51,7 +51,7 @@ For a PR, we need at least the first 2 items to understand why you are changing
 the code. If not, we will ask that you add the necessary information.
 
 Please refrain from giving code examples in altJS languages like CoffeeScript,
-etc. Marionette is written in plain-old JavaScript and is generally easier all
+etc. Marionette is written in plain-old JavaScript and is generally easier for all
 members in the community to read.
 
 ### When you have a patch

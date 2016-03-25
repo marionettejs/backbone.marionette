@@ -1,5 +1,6 @@
 import _                        from 'underscore';
 import getValue                 from '../utils/getValue';
+import _invoke                  from '../utils/_invoke';
 import { triggerMethod }        from '../trigger-method';
 import Marionette               from '../backbone.marionette';
 
@@ -46,28 +47,28 @@ export default {
   },
 
   _getBehaviorTriggers: function() {
-    var triggers = _.invoke(this._behaviors, 'getTriggers');
+    var triggers = _invoke(this._behaviors, 'getTriggers');
     return _.extend({}, ...triggers);
   },
 
   _getBehaviorEvents: function() {
-    var events = _.invoke(this._behaviors, 'getEvents');
+    var events = _invoke(this._behaviors, 'getEvents');
     return _.extend({}, ...events);
   },
 
   // proxy behavior $el to the view's $el.
   _proxyBehaviorViewProperties: function() {
-    _.invoke(this._behaviors, 'proxyViewProperties');
+    _invoke(this._behaviors, 'proxyViewProperties');
   },
 
   // delegate modelEvents and collectionEvents
   _delegateBehaviorEntityEvents: function() {
-    _.invoke(this._behaviors, 'delegateEntityEvents');
+    _invoke(this._behaviors, 'delegateEntityEvents');
   },
 
   // undelegate modelEvents and collectionEvents
   _undelegateBehaviorEntityEvents: function() {
-    _.invoke(this._behaviors, 'undelegateEntityEvents');
+    _invoke(this._behaviors, 'undelegateEntityEvents');
   },
 
   _destroyBehaviors: function(args) {
@@ -75,15 +76,15 @@ export default {
     // destroying the view.
     // This unbinds event listeners
     // that behaviors have registered for.
-    _.invoke(this._behaviors, 'destroy', ...args);
+    _invoke(this._behaviors, 'destroy', ...args);
   },
 
   _bindBehaviorUIElements: function() {
-    _.invoke(this._behaviors, 'bindUIElements');
+    _invoke(this._behaviors, 'bindUIElements');
   },
 
   _unbindBehaviorUIElements: function() {
-    _.invoke(this._behaviors, 'unbindUIElements');
+    _invoke(this._behaviors, 'unbindUIElements');
   },
 
   _triggerEventOnBehaviors: function(...args) {

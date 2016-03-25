@@ -125,7 +125,7 @@ var MyLayoutView = Marionette.LayoutView.extend({
 
   childViewEvents: function() {
     return {
-      render: this.onChildRender
+      render: this.onChildRendered
     }
   },
 

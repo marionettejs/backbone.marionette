@@ -6,7 +6,7 @@ import Backbone from 'backbone';
 import isNodeAttached from './utils/isNodeAttached';
 import MarionetteObject from './object';
 import MarionetteError from './error';
-import MonitorViewEvents from './monitor-view-events';
+import monitorViewEvents from './monitor-view-events';
 import destroyBackboneView from './utils/destroyBackboneView';
 import { triggerMethodOn } from './trigger-method';
 
@@ -45,7 +45,7 @@ const Region = MarionetteObject.extend({
 
     this.triggerMethod('before:show', this, view, options);
 
-    MonitorViewEvents(view);
+    monitorViewEvents(view);
 
     this.empty(options);
 
@@ -112,7 +112,7 @@ const Region = MarionetteObject.extend({
       if (this.getOption('allowMissingEl')) {
         return false;
       } else {
-        throw new MarionetteError('An "el" ' + this.$el.selector + ' must exist in DOM');
+        throw new MarionetteError(`An "el" must exist in DOM for this region ${this.cid}`);
       }
     }
     return true;

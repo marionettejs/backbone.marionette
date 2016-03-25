@@ -2,6 +2,7 @@
 // -----------
 
 import { triggerMethodOn } from './trigger-method';
+import _ from 'underscore';
 
 // Trigger method on children unless a pure Backbone.View
 function triggerMethodChildren(view, event, beforeEachTrigger) {
@@ -24,7 +25,7 @@ function unsetIsAttached(view) {
 
 // Monitor a view's state, propagating attach/detach events to children and firing dom:refresh
 // whenever a rendered view is attached or an attached view is rendered.
-function MonitorViewEvents(view) {
+function monitorViewEvents(view) {
   if (view._areViewEventsMonitored) { return; }
 
   view._areViewEventsMonitored = true;
@@ -65,4 +66,4 @@ function MonitorViewEvents(view) {
   });
 }
 
-export default MonitorViewEvents;
+export default monitorViewEvents;

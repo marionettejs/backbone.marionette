@@ -63,8 +63,12 @@ var AppLayoutView = Marionette.LayoutView.extend({
 });
 var layoutView = new AppLayoutView();
 layoutView.render();
+// you can access your region by its name
 layoutView.menu.show(new MenuView());
-layoutView.content.show(new MainContentView());
+// also with the getRegion method
+layoutView.getRegion('menu').show(new MenuView());
+// or in this case reference and show it with the showChildView method
+layoutView.showChildView('content', new MainContentView())
 ```
 
 ### Region Configuration Types
@@ -231,10 +235,11 @@ and `empty` methods to display and shut-down a view:
 var myView = new MyView();
 
 // render and display the view
-MyApp.mainRegion.show(myView, options);
+MyApp.getRegion('mainRegion').show(myView, options);
+
 
 // empties the current view
-MyApp.mainRegion.empty();
+MyApp.getRegion('mainRegion').empty();
 ```
 
 The `options` object is optional. If provided, it will be passed to the [events raised during `show`](#events-raised-during-show) (except for `before:empty` and `empty`). Special properties that change the behavior of `show` include `preventDestroy` and `forceShow`.

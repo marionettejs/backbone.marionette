@@ -97,7 +97,7 @@ new Marionette.LayoutView({
  regions: {
    "cat": ".doge",
    "wow": {
-     selector: ".such",
+     el: ".such",
      regionClass: Coin
    }
  }
@@ -388,11 +388,11 @@ var AppLayoutView = Marionette.LayoutView.extend({
 
   regions: {
     menu: {
-      selector: "#menu",
+      el: "#menu",
       regionClass: CustomRegionClassReference
     },
     content: {
-      selector: "#content",
+      el: "#content",
       regionClass: CustomRegionClass2Reference
     }
   }

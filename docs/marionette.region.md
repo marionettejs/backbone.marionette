@@ -419,7 +419,7 @@ var MyView = Marionette.View.extend({
     mainRegion: '#main-region',
     modalRegion: {
       regionClass: ModalRegion,
-      selector: '#modal-region'
+      el: '#modal-region'
     }
   }
 });
@@ -630,8 +630,8 @@ var FooterRegion = Marionette.Region.extend({
 var MyView = Marionette.View.extend({
   regions: {
     footerRegion: {
-      selector: "#footer",
       regionClass: FooterRegion
+      el: "#footer",
     }
   }
 });

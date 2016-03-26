@@ -103,7 +103,7 @@ var rm = new Marionette.RegionManager();
 var regions = rm.addRegions({
   main: '#main-content',
   navigation: {
-    selector: '#navigation',
+    el: '#navigation',
     regionClass: MyNavRegion
   }
 });

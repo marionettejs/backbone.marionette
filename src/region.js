@@ -84,9 +84,9 @@ const Region = MarionetteObject.extend({
     }
   },
 
-  _attachView(view) {
+  _attachView(view, {replaceElement} = {}) {
     const shouldTriggerAttach = !view._isAttached && isNodeAttached(this.el);
-    const shouldReplaceEl = !!this.getOption('replaceElement');
+    const shouldReplaceEl = !!replaceElement || !!this.getOption('replaceElement');
 
     if (shouldTriggerAttach) {
       triggerMethodOn(view, 'before:attach', view);
@@ -102,14 +102,14 @@ const Region = MarionetteObject.extend({
     this.currentView = view;
   },
 
-  _ensureElement() {
+  _ensureElement({allowMissingEl} = {}) {
     if (!_.isObject(this.el)) {
       this.$el = this.getEl(this.el);
       this.el = this.$el[0];
     }
 
     if (!this.$el || this.$el.length === 0) {
-      if (this.getOption('allowMissingEl')) {
+      if (!!allowMissingEl || this.getOption('allowMissingEl')) {
         return false;
       } else {
         throw new MarionetteError(`An "el" must exist in DOM for this region ${this.cid}`);

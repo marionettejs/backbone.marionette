@@ -2,6 +2,10 @@
 
 # Marionette.RegionManager
 
+**_DEPRECATED: The Marionette `RegionManager` class has been removed from
+Marionette 3.0. See the [Region](./marionette.region.md) documentation for the
+most up-to-date information about Marionette Regions. _**
+
 Region managers provide a consistent way to manage
 a number of Marionette.Region objects within an
 application. The RegionManager is intended to be

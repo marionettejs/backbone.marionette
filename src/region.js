@@ -84,7 +84,7 @@ const Region = MarionetteObject.extend({
     }
   },
 
-  _attachView(view, options) {
+  _attachView(view, options = {}) {
     const shouldTriggerAttach = !view._isAttached && isNodeAttached(this.el);
     const shouldReplaceEl = _.defaults(options, {
       replaceElement: !!this.getOption('replaceElement')
@@ -104,7 +104,7 @@ const Region = MarionetteObject.extend({
     this.currentView = view;
   },
 
-  _ensureElement(options) {
+  _ensureElement(options = {}) {
     if (!_.isObject(this.el)) {
       this.$el = this.getEl(this.el);
       this.el = this.$el[0];

@@ -36,9 +36,7 @@
     "upgradeGuide.md"
   ],
   "dependencies": {
-    "backbone": "1.2.1 - 1.2.3",
-    "underscore": "1.8 - 1.8.3",
-    "backbone.babysitter": "^0.1.0",
-    "backbone.radio": "^1.0.0"
+    "backbone.babysitter": "1.0.0-pre.1",
+    "backbone.radio": "2.0.0-pre.1"
   }
 }

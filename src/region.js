@@ -87,7 +87,7 @@ const Region = MarionetteObject.extend({
   _attachView(view, options) {
     const shouldTriggerAttach = !view._isAttached && isNodeAttached(this.el);
     const shouldReplaceEl = _.defaults(options, {
-      replaceElement: !!this.getOption('replaceElement');
+      replaceElement: !!this.getOption('replaceElement')
     }).replaceElement;
 
     if (shouldTriggerAttach) {
@@ -112,7 +112,7 @@ const Region = MarionetteObject.extend({
 
     if (!this.$el || this.$el.length === 0) {
       const allowMissingEl = _.defaults(options, {
-        allowMissingEl: !!this.getOption('allowMissingEl');
+        allowMissingEl: !!this.getOption('allowMissingEl')
       }).allowMissingEl;
       
       if (allowMissingEl) {

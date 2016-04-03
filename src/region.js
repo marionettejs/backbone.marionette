@@ -37,7 +37,7 @@ const Region = MarionetteObject.extend({
   // method for you. Reads content directly from the `el` attribute. The `preventDestroy`
   // option can be used to prevent a view from the old view being destroyed on show.
   show(view, options) {
-    if (!this._ensureElement()) {
+    if (!this._ensureElement(options)) {
       return;
     }
     this._ensureView(view);
@@ -86,9 +86,7 @@ const Region = MarionetteObject.extend({
 
   _attachView(view, options = {}) {
     const shouldTriggerAttach = !view._isAttached && isNodeAttached(this.el);
-    const shouldReplaceEl = _.defaults(options, {
-      replaceElement: !!this.getOption('replaceElement')
-    }).replaceElement;
+    const shouldReplaceEl = _.isUndefined(options.replaceElement) ? !!this.getOption('replaceElement') : !!options.replaceElement;
 
     if (shouldTriggerAttach) {
       triggerMethodOn(view, 'before:attach', view);
@@ -111,10 +109,8 @@ const Region = MarionetteObject.extend({
     }
 
     if (!this.$el || this.$el.length === 0) {
-      const allowMissingEl = _.defaults(options, {
-        allowMissingEl: !!this.getOption('allowMissingEl')
-      }).allowMissingEl;
-      
+      const allowMissingEl = _.isUndefined(options.allowMissingEl) ? !!this.getOption('allowMissingEl') : !!options.allowMissingEl;
+
       if (allowMissingEl) {
         return false;
       } else {

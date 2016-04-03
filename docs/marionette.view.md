@@ -240,7 +240,7 @@ Collections are serialized into an object of this form:
 {
   items: [modelOne, modelTwo]
 }
-``
+```
 
 where each model in the collection will have its attributes cloned.
 

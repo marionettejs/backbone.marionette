@@ -2,12 +2,9 @@
 
 # Marionette.AbstractView
 
-The `Marionette.AbstractView` is a base view class that other views extend from.
-This base view provides some common and core functionality for other views to take
-advantage of.
+The `Marionette.AbstractView` is a base view class that other views extend from. This base view provides some common and core functionality for other views to take advantage of.
 
-Unlike the other views, it is unlikely that you will need to interface with the
-AbstractView directly.
+Unlike the other views, it is unlikely that you will need to interface with the AbstractView directly.
 
 ## Documentation Index
 
@@ -36,9 +33,7 @@ AbstractView directly.
 
 ## Binding To View Events
 
-Marionette.AbstractView extends `Backbone.View`. It is recommended that you use
-the `listenTo` method to bind model, collection, or other events from Backbone
-and Marionette objects.
+Marionette.AbstractView extends `Backbone.View`. It is recommended that you use the `listenTo` method to bind model, collection, or other events from Backbone and Marionette objects.
 
 ```js
 var MyView = Marionette.View.extend({
@@ -55,8 +50,7 @@ var MyView = Marionette.View.extend({
 });
 ```
 
-The context (`this`) will automatically be set to the view. You can
-optionally set the context by using `_.bind`.
+The context (`this`) will automatically be set to the view. You can optionally set the context by using `_.bind`.
 
 ```js
 // Force the context of the "reconcileCollection" callback method to be the collection
@@ -69,8 +63,7 @@ this.listenTo(this.collection, "add", _.bind(this.reconcileCollection, this.coll
 
 * "show" / `onShow` - Called on the view instance when the view has been rendered and displayed.
 
-This event can be used to react to when a view has been shown via a [region](marionette.region.md).
-All `views` that inherit from the base `Marionette.AbstractView` class have this functionality, notably `View`, `CollectionView`, `CompositeView`, and `LayoutView`.
+This event can be used to react to when a view has been shown via a [region](marionette.region.md). All `views` that inherit from the base `Marionette.AbstractView` class have this functionality, notably `View`, `CollectionView`, `CompositeView`, and `LayoutView`.
 
 ```js
 Marionette.View.extend({
@@ -97,23 +90,17 @@ var LayoutView = Marionette.LayoutView.extend({
 
 ## AbstractView destroy
 
-View implements a `destroy` method, which is called by the region
-managers automatically. As part of the implementation, the following
-are performed:
+View implements a `destroy` method, which is called by the region managers automatically. As part of the implementation, the following are performed:
 
-* call an `onBeforeDestroy` event on the view, if one is provided
-* call an `onDestroy` event on the view, if one is provided
-* unbind all custom view events
-* unbind all DOM events
-* remove `this.el` from the DOM
-* unbind all `listenTo` events
-* returns the view.
+ * call an `onBeforeDestroy` event on the view, if one is provided
+ * call an `onDestroy` event on the view, if one is provided
+ * unbind all custom view events
+ * unbind all DOM events
+ * remove `this.el` from the DOM
+ * unbind all `listenTo` events
+ * returns the view.
 
-By providing an `onDestroy` method in your view definition, you can
-run custom code for your view that is fired after your view has been
-destroyed and cleaned up. The `onDestroy` method will be passed any arguments
-that `destroy` was invoked with. This lets you handle any additional clean
-up code without having to override the `destroy` method.
+By providing an `onDestroy` method in your view definition, you can run custom code for your view that is fired after your view has been destroyed and cleaned up. The `onDestroy` method will be passed any arguments that `destroy` was invoked with. This lets you handle any additional clean up code without having to override the `destroy` method.
 
 ```js
 var MyView = Marionette.View.extend({
@@ -128,39 +115,27 @@ v.destroy(arg1, arg2);
 
 ## AbstractView onBeforeDestroy
 
-When destroying a view, an `onBeforeDestroy` method will be called, if it
-has been provided, just before the view destroys. It will be passed any arguments
-that `destroy` was invoked with.
+When destroying a view, an `onBeforeDestroy` method will be called, if it has been provided, just before the view destroys. It will be passed any arguments that `destroy` was invoked with.
 
 ### AbstractView "attach" / onAttach event
 
-Every view in Marionette has a special event called "attach," which is triggered anytime that showing
-the view in a Region causes it to be attached to the `document`. Like other Marionette events, it also
-executes a callback method, `onAttach`, if you've specified one. The `"attach"` event is great for jQuery
-plugins or other logic that must be executed *after* the view is attached to the `document`.
+Every view in Marionette has a special event called "attach," which is triggered anytime that showing the view in a Region causes it to be attached to the `document`. Like other Marionette events, it also executes a callback method, `onAttach`, if you've specified one. The `"attach"` event is great for jQuery plugins or other logic that must be executed *after* the view is attached to the `document`.
 
 The `attach` event is only fired when the view becomes a child of the `document`. If the Region you're showing the view in is not a child of the `document` at the time that you call `show` then the `attach` event will not fire until the Region is a child of the `document`.
 
-This event is unique in that it propagates down the view tree. For instance, when a CollectionView's
-`attach` event is fired, all of its children views will have the `attach` event fired as well. In
-addition, deeply nested Layout View structures will all have their `attach` event fired at the proper
-time, too.
+This event is unique in that it propagates down the view tree. For instance, when a CollectionView's `attach` event is fired, all of its children views will have the `attach` event fired as well. In addition, deeply nested Layout View structures will all have their `attach` event fired at the proper time, too.
 
 For more on efficient, deeply-nested view structures, refer to the LayoutView docs.
 
 ### AbstractView "before:attach" / onBeforeAttach event
 
-This is just like the attach event described above, but it's triggered right before the view is
-attached to the document.
+This is just like the attach event described above, but it's triggered right before the view is attached to the document.
 
 ### AbstractView "dom:refresh" / onDomRefresh event
 
-Triggered after the view has been rendered, has been shown in the DOM via a Marionette.Region, and has been
-re-rendered.
+Triggered after the view has been rendered, has been shown in the DOM via a Marionette.Region, and has been re-rendered.
 
-This event / callback is useful for
-[DOM-dependent UI plugins](http://lostechies.com/derickbailey/2012/02/20/using-jquery-plugins-and-ui-controls-with-backbone/) such as
-[jQueryUI](http://jqueryui.com/) or [KendoUI](http://kendoui.com).
+This event / callback is useful for [DOM-dependent UI plugins](http://lostechies.com/derickbailey/2012/02/20/using-jquery-plugins-and-ui-controls-with-backbone/) such as [jQueryUI](http://jqueryui.com/) or [KendoUI](http://kendoui.com).
 
 ```js
 Marionette.View.extend({
@@ -172,10 +147,10 @@ Marionette.View.extend({
 });
 ```
 
-For more information about integration Marionette w/ KendoUI (also applicable to jQueryUI and other UI
-widget suites), see [this blog post on KendoUI + Backbone](http://www.kendoui.com/blogs/teamblog/posts/12-11-26/backbone_and_kendo_ui_a_beautiful_combination.aspx).
+For more information about integration Marionette w/ KendoUI (also applicable to jQueryUI and other UI widget suites), see [this blog post on KendoUI + Backbone](http://www.kendoui.com/blogs/teamblog/posts/12-11-26/backbone_and_kendo_ui_a_beautiful_combination.aspx).
 
 ## AbstractView.events
+
 Since Views extend from backbone`s view class, you gain the benefits of the [events hash](http://backbonejs.org/#View-delegateEvents).
 
 Some preprocessing sugar is added on top to add the ability to cross utilize the ```ui``` hash.
@@ -196,13 +171,9 @@ var MyView = Marionette.View.extend({
 
 ## AbstractView.triggers
 
-Views can define a set of `triggers` as a hash, which will
-convert a DOM event into a
-[`view.triggerMethod`](./marionette.functions.md#marionettetriggermethod) call.
+Views can define a set of `triggers` as a hash, which will convert a DOM event into a [`view.triggerMethod`](./marionette.functions.md#marionettetriggermethod) call.
 
-The left side of the hash is a standard Backbone.View DOM
-event configuration, while the right side of the hash is the
-view event that you want to trigger from the view.
+The left side of the hash is a standard Backbone.View DOM event configuration, while the right side of the hash is the view event that you want to trigger from the view.
 
 ```js
 var MyView = Marionette.View.extend({
@@ -225,13 +196,9 @@ view.on("something:do:it", function(args){
 view.$(".do-something").trigger("click");
 ```
 
-The result of this is an alert box that says, "I DID IT!" Triggers can also be
-executed using the 'on{EventName}' attribute.
+The result of this is an alert box that says, "I DID IT!" Triggers can also be executed using the 'on{EventName}' attribute.
 
-By default all triggers are stopped with `preventDefault` and
-`stopPropagation` methods. But you can manually configure the triggers using
-hash instead of event name. Example below triggers an event and prevents
-default browser behaviour using `preventDefault` method.
+By default all triggers are stopped with `preventDefault` and `stopPropagation` methods. But you can manually configure the triggers using hash instead of event name. Example below triggers an event and prevents default browser behaviour using `preventDefault` method.
 
 ```js
 Marionette.CompositeView.extend({
@@ -245,8 +212,7 @@ Marionette.CompositeView.extend({
 });
 ```
 
-You can also specify the `triggers` as a function that
-returns a hash of trigger configurations
+You can also specify the `triggers` as a function that returns a hash of trigger configurations
 
 ```js
 Marionette.CompositeView.extend({
@@ -276,12 +242,11 @@ Marionette.AbstractView.
 
 ### Trigger Handler Arguments
 
-A `trigger` event handler will receive a single argument that
-includes the following:
+A `trigger` event handler will receive a single argument that includes the following:
 
-* view
-* model
-* collection
+ * view
+ * model
+ * collection
 
 These properties match the `view`, `model`, and `collection` properties of the view that triggered the event.
 
@@ -303,17 +268,11 @@ view.on("some:event", function(args){
 });
 ```
 
-Having access to these allows more flexibility in handling events from
-multiple views. For example, a tab control or expand/collapse widget such
-as a panel bar could trigger the same event from many different views
-and be handled with a single function.
+Having access to these allows more flexibility in handling events from multiple views. For example, a tab control or expand/collapse widget such as a panel bar could trigger the same event from many different views and be handled with a single function.
 
-## AbstractView.modelEvents and View.collectionEvents
+## AbstractView.modelEvents and AbstractView.collectionEvents
 
-Similar to the `events` hash, views can specify a configuration
-hash for collections and models. The left side is the event on
-the model or collection, and the right side is the name of the
-method on the view.
+Similar to the `events` hash, views can specify a configuration hash for collections and models. The left side is the event on the model or collection, and the right side is the name of the method on the view.
 
 ```js
 Marionette.CompositeView.extend({
@@ -333,20 +292,13 @@ Marionette.CompositeView.extend({
 })
 ```
 
-These will use the memory safe `listenTo`, and will set the context
-(the value of `this`) in the handler to be the view. Events are
-bound at the time of instantiation, and an exception will be thrown
-if the handlers on the view do not exist.
+These will use the memory safe `listenTo`, and will set the context (the value of `this`) in the handler to be the view. Events are bound at the time of instantiation, and an exception will be thrown if the handlers on the view do not exist.
 
-The `modelEvents` and `collectionEvents` will be bound and
-unbound with the Backbone.View `delegateEntityEvents` and `undelegateEntityEvents`
-method calls. `delegateEntityEvents` is called in the View's `constructor` and
-entity events are unbound during the View's `destroy`.
+The `modelEvents` and `collectionEvents` will be bound and unbound with the Backbone.View `delegateEntityEvents` and `undelegateEntityEvents` method calls. `delegateEntityEvents` is called in the View's `constructor` and entity events are unbound during the View's `destroy`.
 
 ### Multiple Callbacks
 
-Multiple callback functions can be specified by separating them with a
-space.
+Multiple callback functions can be specified by separating them with a space.
 
 ```js
 Marionette.CompositeView.extend({
@@ -365,8 +317,7 @@ This works in both `modelEvents` and `collectionEvents`.
 
 ### Callbacks As Function
 
-A single function can be declared directly in-line instead of specifying a
-callback via a string method name.
+A single function can be declared directly in-line instead of specifying a callback via a string method name.
 
 ```js
 Marionette.CompositeView.extend({
@@ -384,8 +335,7 @@ This works for both `modelEvents` and `collectionEvents`.
 
 ### Event Configuration As Function
 
-A function can be used to declare the event configuration as long as
-that function returns a hash that fits the above configuration options.
+A function can be used to declare the event configuration as long as that function returns a hash that fits the above configuration options.
 
 ```js
 Marionette.CompositeView.extend({
@@ -401,41 +351,22 @@ This works for both `modelEvents` and `collectionEvents`.
 
 ## AbstractView.serializeModel
 
-This method is used internally during a view's rendering phase. It
-will serialize the View's `model` property, adding it to the data
-that is ultimately passed to the template.
+This method is used internally during a view's rendering phase. It will serialize the View's `model` property, adding it to the data that is ultimately passed to the template.
 
-If you would like to serialize the View's `model` in a special way,
-then you should override this method. With that said, **do not** override
-this if you're simply adding additional data to your template, like computed
-fields. Use [templateContext](#viewtemplatecontext) instead.
+If you would like to serialize the View's `model` in a special way, then you should override this method. With that said, **do not** override this if you're simply adding additional data to your template, like computed fields. Use [templateContext](#viewtemplatecontext) instead.
 
 ## AbstractView.bindUIElements
 
-In several cases you need to access ui elements inside the view
-to retrieve their data or manipulate them. For example you have a
-certain div element you need to show/hide based on some state,
-or other ui element that you wish to set a css class to it.
-Instead of having jQuery selectors hanging around in the view's code
-you can define a `ui` hash that contains a mapping between the
-ui element's name and its jQuery selector. Afterwards you can simply
-access it via `this.getUI('elementName')`.
-See View documentation for examples.
+In several cases you need to access ui elements inside the view to retrieve their data or manipulate them. For example you have a certain div element you need to show/hide based on some state, or other ui element that you wish to set a css class to it. Instead of having jQuery selectors hanging around in the view's code you can define a `ui` hash that contains a mapping between the ui element's name and its jQuery selector. Afterwards you can simply access it via `this.getUI('elementName')`. See View documentation for examples.
 
-This functionality is provided via the `bindUIElements` method.
-Since View doesn't implement the render method, then if you directly extend
-from View you will need to invoke this method from your render method.
-In View and CompositeView this is already taken care of.
+This functionality is provided via the `bindUIElements` method. Since View doesn't implement the render method, then if you directly extend from View you will need to invoke this method from your render method. In View and CompositeView this is already taken care of.
 
 ## AbstractView.getUI
 
-The `getUI` method is is a “stable” interface to the `ui` hash, this helps when
-attempting to gain access a `ui` property when the view is in a destroyed state. Doing
-so will throw a `ViewDestroyedError`.
+The `getUI` method is is a “stable” interface to the `ui` hash, this helps when attempting to gain access a `ui` property when the view is in a destroyed state. Doing so will throw a `ViewDestroyedError`.
 
-## View.mergeOptions
-The preferred way to manage your view's options is with `mergeOptions`. It accepts two arguments: the `options` object
-and the keys to merge onto the instance directly.
+## AbstractView.mergeOptions
+The preferred way to manage your view's options is with `mergeOptions`. It accepts two arguments: the `options` object and the keys to merge onto the instance directly.
 
 ```js
 var ProfileView = Marionette.View.extend({
@@ -452,6 +383,7 @@ var ProfileView = Marionette.View.extend({
 More information [mergeOptions](./marionette.functions.md#marionettemergeoptions)
 
 ## AbstractView.getOption
+
 Retrieve an object's attribute either directly from the object, or from the object's this.options, with this.options taking precedence.
 
 More information [getOption](./marionette.functions.md#marionettegetoption)
@@ -463,18 +395,9 @@ More information [bindEntityEvents](./marionette.functions.md#marionettebindenti
 
 ## AbstractView.templateContext
 
-There are times when a view's template needs to have some
-logic in it and the view engine itself will not provide an
-easy way to accomplish this. For example, Underscore templates
-do not provide a context method mechanism while Handlebars
-templates do.
+There are times when a view's template needs to have some logic in it and the view engine itself will not provide an easy way to accomplish this. For example, Underscore templates do not provide a context method mechanism while Handlebars templates do.
 
-A `templateContext` attribute can be applied to any View object that
-renders a template. When this attribute is present its contents
-will be mixed in to the data object that comes back from the
-`serializeData` method. This will allow you to create context methods
-that can be called from within your templates. This is also a good place
-to add data not returned from `serializeData`, such as calculated values.
+A `templateContext` attribute can be applied to any View object that renders a template. When this attribute is present its contents will be mixed in to the data object that comes back from the `serializeData` method. This will allow you to create context methods that can be called from within your templates. This is also a good place to add data not returned from `serializeData`, such as calculated values.
 
 ### Basic Example
 
@@ -510,8 +433,7 @@ var view = new MyView({
 view.render(); //=> "I 100% think that Marionette is the coolest!";
 ```
 
-The `templateContext` can also be provided as a constructor parameter
-for any Marionette view class that supports the context methods.
+The `templateContext` can also be provided as a constructor parameter for any Marionette view class that supports the context methods.
 
 ```js
 var MyView = Marionette.View.extend({
@@ -527,10 +449,7 @@ new MyView({
 
 ### Accessing Data Within The Template Context
 
-In order to access data from within the context methods, you
-need to prefix the data you need with `this`. Doing that will
-give you all of the methods and attributes of the serialized
-data object, including the other context methods.
+In order to access data from within the context methods, you need to prefix the data you need with `this`. Doing that will give you all of the methods and attributes of the serialized data object, including the other context methods.
 
 ```js
 templateContext: {
@@ -542,13 +461,9 @@ templateContext: {
 
 ### Object Or Function As `templateContext`
 
-You can specify an object literal (as shown above), a reference
-to an object literal, or a function as the `templateContext`.
+You can specify an object literal (as shown above), a reference to an object literal, or a function as the `templateContext`.
 
-If you specify a function, the function will be invoked
-with the current view instance as the context of the
-function. The function must return an object that can be
-mixed in to the data for the view.
+If you specify a function, the function will be invoked with the current view instance as the context of the function. The function must return an object that can be mixed in to the data for the view.
 
 ```js
 Marionette.View.extend({
@@ -562,11 +477,7 @@ Marionette.View.extend({
 
 ## Change Which Template Is Rendered For A View
 
-There may be some cases where you need to change the template that is
-used for a view, based on some simple logic such as the value of a
-specific attribute in the view's model. To do this, you can provide
-a `getTemplate` function on your views and use this to return the
-template that you need.
+There may be some cases where you need to change the template that is used for a view, based on some simple logic such as the value of a specific attribute in the view's model. To do this, you can provide a `getTemplate` function on your views and use this to return the template that you need.
 
 ```js
 var MyView = Marionette.View.extend({
@@ -584,11 +495,9 @@ This applies to all view classes.
 
 ## UI Interpolation
 
-Marionette UI offers a convenient way to reference jQuery elements.
-UI elements can also be interpolated into event and region selectors.
+Marionette UI offers a convenient way to reference jQuery elements. UI elements can also be interpolated into event and region selectors.
 
 In this example, the buy button is referenced in a DOM event and the checkout section is referenced in the region selector.
-
 
 ```js
 var MyView = Marionette.ItemView.extend({

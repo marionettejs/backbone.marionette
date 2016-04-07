@@ -32,14 +32,14 @@ will provide features such as `onShow` callbacks, etc. Please see
   * [CollectionView's `isEmpty`](#collectionviews-isempty)
   * [CollectionView's `emptyViewOptions`](#collectionviews-emptyviewoptions)
   * [CollectionView's `destroyChildren`](#collectionviews-destroychildren)
-* [Building `CollectionView`s](#building-collectionviews)
-  * [Rendering Lists][#rendering-lists]
-  * [Rendering Tables][#rendering-tables]
-    * [Tables Using Marionette 2][#tables-using-marionette-2]
-    * [Tables Using Marionette 3][#tables-using-marionette3]
-  * [Rendering Trees][#rendering-trees]
-    * [Trees Using Marionette 2][#trees-using-marionette-2]
-    * [Trees Using Marionette 3][#trees-using-marionette3]
+* [Rendering `CollectionView`s](#rendering-collectionviews)
+  * [Rendering Lists](#rendering-lists)
+  * [Rendering Tables](#rendering-tables)
+    * [Tables Using Marionette 2](#tables-using-marionette-2)
+    * [Tables Using Marionette 3](#tables-using-marionette-3)
+  * [Rendering Trees](#rendering-trees)
+    * [Trees in Marionette 2](#trees-in-marionette-2)
+    * [Trees in Marionette 3](#trees-in-marionette-3)
 * [Callback Methods](#callback-methods)
   * [onBeforeRender callback](#onbeforerender-callback)
   * [onRender callback](#onrender-callback)
@@ -608,7 +608,7 @@ build tables without `CompositeView`.
 
 Marionette 3 doesn't use `CompositeView` any more. We now build tables using
 `View`s and `regions`. The following code will render the same table as in
-[Marionette 2][#tables-using-marionette-2-compositeview]:
+[Marionette 2](#tables-using-marionette-2):
 
 ```javascript
 var RowView = Marionette.View.extend({

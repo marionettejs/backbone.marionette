@@ -1,4 +1,36 @@
-### v3.0.0-rc1
+### v3.0.0-pre3
+
+#### Dependency Updates
+
+* Backbone and Underscore moved to peerDependencies to solve dependency conflicts for browserify and webpack users.
+* Added support for Lodash 4.
+
+#### Documentation
+
+* Application documentation updates.
+
+#### API Changes
+
+* Removed unused `collection` parameter from `CollectionView.isEmpty`.
+
+#### Bug fixes
+
+* `replaceElement` and `allowMissingEl` are now able to be overridden in `Region.show`.
+
+#### Misc
+
+* Gulp test-browser task fixed.
+* es-lint fixes.
+* Added more es6 syntax.
+* Fixed the UMD exported build.
+
+Also, [please help us finish v3](https://github.com/marionettejs/backbone.marionette/milestones/v3.0.0)!
+
+### v3.0.0-pre2
+
+Extra release to remove public release of v3.0.0-pre.1, this release is available via the `prerelease` tag on npm.
+
+### v3.0.0-pre.1
 
 This is a "family and friends" release. The documentation is still mostly for 2.4.4.
 Please let us know if you run into any issues. Also, [please help us finish v3](https://github.com/marionettejs/backbone.marionette/milestones/v3.0.0)!

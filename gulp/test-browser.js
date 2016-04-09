@@ -1,40 +1,39 @@
 import gulp from 'gulp';
 import livereload from 'gulp-livereload';
-import plumber from 'gulp-plumber';
 
-import babelify  from 'babelify';
-import preset from 'babel-preset-es2015';
-import browserify from 'browserify';
-import buffer from 'vinyl-buffer';
-import glob from 'glob';
-import source from 'vinyl-source-stream';
-
-const testFiles = glob.sync('./test/unit/**/*.js');
-const allFiles = ['./test/setup/browserify.js'].concat(testFiles);
-
-function _runBrowserifyBundle(bundler) {
-  return bundler.bundle()
-    .on('error', function(err) {
-      console.log(err);
-      this.emit('end');
-    })
-    .pipe(plumber())
-    .pipe(source('./tmp/__spec-build.js'))
-    .pipe(buffer())
-    .pipe(gulp.dest(''))
-    .pipe(livereload());
-}
+import { rollup } from 'rollup';
+import babel from 'rollup-plugin-babel';
+import multiEntry from 'rollup-plugin-multi-entry';
+import nodeResolve from 'rollup-plugin-node-resolve';
+import nodeGlobals from 'rollup-plugin-node-globals';
+import commonjs from 'rollup-plugin-commonjs';
+import json from 'rollup-plugin-json';
+import preset from 'babel-preset-es2015-rollup';
 
 function bundle() {
-  var bundler = browserify(allFiles, { debug: true });
-
-  // Set up Babelify so that ES6 works in the tests
-  bundler.transform(babelify.configure({
-    sourceMapRelative: __dirname + '/src',
-    presets: [ preset ]
-  }));
-
-  return _runBrowserifyBundle(bundler);
+  return rollup({
+    entry: ['./test/setup/browser.js', './test/unit/**/*.js'],
+    plugins: [
+      multiEntry.default(),
+      nodeResolve({ main: true }),
+      commonjs(),
+      nodeGlobals(),
+      json(),
+      babel({
+        sourceMaps: true,
+        presets: [ preset ],
+        babelrc: false,
+        exclude: 'node_modules/**'
+      })
+    ]
+  }).then(function (bundle) {
+    return bundle.write({
+      format: 'iife',
+      sourceMap: true,
+      moduleName: 'MnTests',
+      dest: './tmp/__spec-build.js'
+    });
+  }).then(livereload.changed('./tmp/__spec-build.js'));
 }
 
 function browserWatch() {

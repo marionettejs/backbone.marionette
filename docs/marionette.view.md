@@ -16,15 +16,15 @@ will provide features such as `onShow` callbacks, etc. Please see
 
 ## Documentation Index
 
-* [View render](#itemview-render)
-* [Rendering A Collection In An View](#rendering-a-collection-in-an-itemview)
-* [Template-less View](#template-less-itemview)
+* [View render](#view-render)
+* [Rendering A Collection In A View](#rendering-a-collection-in-a-view)
+* [Template-less View](#template-less-view)
 * [Events and Callback Methods](#events-and-callback-methods)
   * ["before:render" / onBeforeRender event](#beforerender--onbeforerender-event)
   * ["render" / onRender event](#render--onrender-event)
   * ["before:destroy" / onBeforeDestroy event](#beforedestroy--onbeforedestroy-event)
   * ["destroy" / onDestroy event](#destroy--ondestroy-event)
-* [View serializeData](#itemview-serializedata)
+* [View serializeData](#view-serializedata)
 * [Organizing ui elements](#organizing-ui-elements)
 * [modelEvents and collectionEvents](#modelevents-and-collectionevents)
 

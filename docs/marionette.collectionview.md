@@ -616,7 +616,7 @@ myView.on("render", function(){
   alert("the collection view was rendered!");
 });
 
-myView.on("collection:rendered", function(){
+myView.on("render:collection", function(){
   alert("the collection view was rendered!");
 });
 

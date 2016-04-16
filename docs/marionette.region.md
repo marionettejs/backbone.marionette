@@ -1,12 +1,13 @@
 ## [View the new docs](http://marionettejs.com/docs/marionette.region.html)
 
-# Marionette.Region
+# Regions
 
 Regions provide consistent methods to manage, show and destroy
-views in your applications and layouts. They use a jQuery selector
-to show your views in the correct place.
+views in your applications and layouts. You can use a jQuery selector to
+identify where your region must be displayed.
 
-Using the `LayoutView` class you can create nested regions.
+See the documentation for [View](./marionette.view.md) for an introduction in
+managing regions throughout your application.
 
 ## Documentation Index
 

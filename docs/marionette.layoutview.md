@@ -2,6 +2,10 @@
 
 # Marionette.LayoutView
 
+**_DEPRECATED The `LayoutView` has been removed from Marionette 3. See
+the [documentation for View](./marionette.view.md) for the latest documentation
+for managing layouts._**
+
 A `LayoutView` is a hybrid of an `ItemView` and a collection of `Region` objects. They
 are ideal for rendering application layouts with multiple sub-regions
 managed by specified region managers.

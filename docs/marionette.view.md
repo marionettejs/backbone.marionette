@@ -2,25 +2,29 @@
 
 # Marionette.View
 
-An `View` is a view that, most of the time, represents a single item. That item may be a`Backbone.Model` or may be a `Backbone.Collection`. Whichever it is though, itwill be treated as a single item. It’s also possible to create Views that do not represent items, but just contain regions (which can be filled with View elements as well).View extends directly from `Backbone.View`, which means you’re free to use Backbone’s methods in your Marionette Views.
-
-Note: Since Marionette v3.x, `Marionette.View` will replace `Marionette.LayoutView` and `Marionette.ItemView`.
+A `View` is a view that represents an item to be displayed with a template.This is typically a `Backbone.Model`, `Backbone.Collection`, or nothing at all.Views are also used to build up your application hierarchy - you can easily nestmultiple views through the `regions` attribute.**Note:** From Marionette v3.x, `Marionette.View` replaces
+`Marionette.LayoutView` and `Marionette.ItemView`.
 
 ## Documentation Index
 
-* [View render](#itemview-render)
-* [Rendering A Collection In An View](#rendering-a-collection-in-an-itemview)
-* [Template-less View](#template-less-itemview)
+* [Rendering a Template](#rendering-a-template)
+  * [Using a Model](#using-a-model)
+  * [Using a Collection](#using-a-collection)
+  * [Advanced Rendering Techniques](#advanced-rendering-techniques)
+* [Managing an Existing Page](#managing-an-existing-page)
+* [Laying out Views](#laying-out-views)
+* [Organising your View](#organising-your-view)
 * [Events and Callback Methods](#events-and-callback-methods)
-  * ["before:render" / onBeforeRender event](#beforerender--onbeforerender-event)
-  * ["render" / onRender event](#render--onrender-event)
-  * ["before:destroy" / onBeforeDestroy event](#beforedestroy--onbeforedestroy-event)
-  * ["destroy" / onDestroy event](#destroy--ondestroy-event)
+  * [modelEvents and collectionEvents](#modelevents-and-collectionevents)
+  * [Lifecycle Events](#lifecycle-events)
+    * ["before:render" / onBeforeRender event](#beforerender--onbeforerender-event)
+    * ["render" / onRender event](#render--onrender-event)
+    * ["before:destroy" / onBeforeDestroy event](#beforedestroy--onbeforedestroy-event)
+    * ["destroy" / onDestroy event](#destroy--ondestroy-event)
 * [View serializeData](#itemview-serializedata)
 * [Organizing ui elements](#organizing-ui-elements)
-* [modelEvents and collectionEvents](#modelevents-and-collectionevents)
 
-## Rendering
+## Rendering a Template
 
 Unlike Backbone Views, all Marionette views come with a powerful render method.
 In fact, the primary differences between the views are the differences in their
@@ -54,7 +58,7 @@ let MyView = new Marionette.View({
 new MyView().render();
 ```
 
-2) A function taking a single argument: the object returned by [View.serializeData](#itemview-serializedata). 
+2) A function taking a single argument: the object returned by [View.serializeData](#itemview-serializedata).
 
 Using a template function allows passing custom arguments into the `_.template` function and allows for more control over how the `_.template` function is called.
 
@@ -300,7 +304,7 @@ Regions provide consistent methods to manage, show and destroy views in your app
 are ideal for rendering application layouts with multiple sub-regions
 managed by specified region managers.
 
-Each Region added to a View will become a `Region` instance. 
+Each Region added to a View will become a `Region` instance.
 
 Additionally, interactions with `Marionette.Region`
 will provide features such as `onRender` callbacks, etc. Please see
@@ -314,7 +318,7 @@ Regions can be added to a `View` in two ways:
 ```javascript
 let view = new Marionette.View({
 	template: "#tpl-view-with-regions",
-	
+
 	regions: {
 		firstRegion: "#first-region",
 		secondRegion: "#second-region"
@@ -324,7 +328,7 @@ let view = new Marionette.View({
 
 2) Using the `Region` API:
 
- 
+
 ```
 let view = new Marionette.View();
 

@@ -10,6 +10,7 @@ A `View` is a view that represents an item to be displayed with a template.This
 * [Rendering a Template](#rendering-a-template)
   * [Using a Model](#using-a-model)
   * [Using a Collection](#using-a-collection)
+  * [Template context](#template-context)
   * [Advanced Rendering Techniques](#advanced-rendering-techniques)
 * [Managing an Existing Page](#managing-an-existing-page)
 * [Laying out Views](#laying-out-views)
@@ -26,58 +27,101 @@ A `View` is a view that represents an item to be displayed with a template.This
 
 ## Rendering a Template
 
-Unlike Backbone Views, all Marionette views come with a powerful render method.
-In fact, the primary differences between the views are the differences in their
-render methods. It goes without saying that it is unwise to override the `render`
-method of any Marionette view. Instead, you should use the [`onBeforeRender` and `onRender` callbacks](#events-and-callback-methods)
-to layer in additional functionality to the rendering of your view.
+The Marionette View implements a powerful render method which, given a template,
+will build your HTML from that template, mixing in model information and any
+extra template context.
 
-The `View` defers to the `Marionette.Renderer` object to do the actual
-rendering of the template.
+**Overriding `render`** If you want to add extra behavior to your view's render,
+you would be best off doing your logic in the
+[`onBeforeRender` or `onRender` handlers](#lifecycle-events).
 
-The view instance is passed as the third argument to the
-`Renderer` object's `render` method, which is useful in custom
-`Renderer` implementations.
+### Passing a Template
 
-### Templates
-A Marionette view usually consists of a template. You can set a `template` attribute in the definition or pass a `template: "#tpl-product-layout"` parameter to the constructor options.
+The `Marionette.View` looks for the attached template on the `template`
+attribute. Like most attributes in Backbone and Marionette, this takes a string
+(selector) or function.
 
-The passed template will be used whenever your view will be rendered. Most of the times your views will have templates, which will help you display the data you want.
+#### Template Selector
 
-#### Passing a template
+If your index page contains a pre-formatted template, you can simply pass in the
+jQuery selector for it to `template` and Marionette will look it up:
 
-Your template can be passed to your view in two ways:
+```javascript
+var Mn = require('backbone.marionette');
 
-1) A jQuery selector (e.g.: `#tpl-template`) referring to the DOM element passed as a string:
-
-```js
-let MyView = new Marionette.View({
-	template: "#tpl-product-layout"
+export.MyView = Mn.View.extend({
+  template: '#template-layout'
 });
-
-new MyView().render();
 ```
 
-2) A function taking a single argument: the object returned by [View.serializeData](#itemview-serializedata).
+```html
+<script id="template-layout" type="x-template/underscore">
+<h1>Hello, world</h1>
+</script>
+```
 
-Using a template function allows passing custom arguments into the `_.template` function and allows for more control over how the `_.template` function is called.
+Marionette will look up the template above and render it for you when `MyView`
+gets rendered.
 
-```js
-let my_template_html = '<div><%= args.name %></div>';
-let MyView = Marionette.View.extend({
-  template: function(serialized_model) {
-    let name = serialized_model.name;
-    return _.template(my_template_html)({
-        name : name,
-        some_custom_attribute : some_custom_key
-    });
+#### Template Function
+
+A more common way of setting a template is to assign a function to `template`
+that renders its argument. This will commonly be the `_.template` function:
+
+```javascript
+var _ = require('underscore');
+var Mn = require('backbone.marionette');
+
+export.MyView = Mn.View.extend({
+  template: _.template('<h1>Hello, world</h1>')
+});
+```
+
+This doesn't have to be an underscore template, you can pass your own rendering
+function:
+
+```javascript
+var Mn = require('backbone.marionette');
+
+export.MyView = Mn.View.extend({
+  template: function(data) {
+    if (data.name) {
+      return _.template('<h1>Hello, <%- name %></h1>')(data);
+    }
+    return '<h1>Hello, world</h1>';
+  }
+});
+```
+
+Using a custom function can give you a lot of control over the output of your
+view, let you switch templates, or just add extra data to the context passed
+into your template.
+
+### Rendering a Model
+
+Marionette will happily render a template without a model. This won't give us a
+particularly interesting result. As with Backbone, we can attach a model to our
+views and render the data they represent:
+
+```javascript
+var Backbone = require('backbone');
+var Mn = require('backbone.marionette');
+
+var MyModel = Backbone.Model.extend({
+  defaults: {
+    name: 'world'
   }
 });
 
-new MyView().render();
+var MyView = Mn.View.extend({
+  template: _.template('<h1>Hello, <%- name %></h1>')
+});
+
+var myView = new MyView({model: new MyModel()});
 ```
 
-For more information on the _.template function see the [Underscore docs](http://underscorejs.org/#template).
+Now our template has full access to the attributes on the model passed into the
+view.
 
 #### Templateless views
 

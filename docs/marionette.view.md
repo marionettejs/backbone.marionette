@@ -2,8 +2,8 @@
 
 # Marionette.View
 
-A `View` is a view that represents an item to be displayed with a template.This is typically a `Backbone.Model`, `Backbone.Collection`, or nothing at all.Views are also used to build up your application hierarchy - you can easily nestmultiple views through the `regions` attribute.**Note:** From Marionette v3.x, `Marionette.View` replaces
-`Marionette.LayoutView` and `Marionette.ItemView`.
+A `View` is a view that represents an item to be displayed with a template.This is typically a `Backbone.Model`, `Backbone.Collection`, or nothing at all.Views are also used to build up your application hierarchy - you can easily nestmultiple views through the `regions` attribute.**_Note: From Marionette v3.x, `Marionette.View` replaces
+`Marionette.LayoutView` and `Marionette.ItemView`._**
 
 ## Documentation Index
 
@@ -97,7 +97,7 @@ Using a custom function can give you a lot of control over the output of your
 view, let you switch templates, or just add extra data to the context passed
 into your template.
 
-### Rendering a Model
+### Using a Model
 
 Marionette will happily render a template without a model. This won't give us a
 particularly interesting result. As with Backbone, we can attach a model to our
@@ -123,9 +123,145 @@ var myView = new MyView({model: new MyModel()});
 Now our template has full access to the attributes on the model passed into the
 view.
 
-#### Templateless views
+### Using a Collection
 
-An `View` can be attached to existing elements as well. The primary benefit of this is to attach behavior and events to static content that has been rendered by your server (typically for SEO purposes). To set up a template-less `View`, your `template` attribute must be `false`.
+The `Marionette.View` also provides a simple tool for rendering collections into
+a template. Simply pass in the collection as `collection` and Marionette will
+provide an `items` attribute to render:
+
+```javascript
+var Backbone = require('backbone');
+var Mn = require('backbone.marionette');
+
+var MyCollection = Backbone.Collection.extend({
+});
+
+var MyView = Mn.View.extend({
+  template: '#hello-template'
+});
+
+var collection = new MyCollection([
+  {name: 'Steve'}, {name: 'Helen'}
+]);
+
+var myView = new MyView({collection: collection});
+```
+
+For clarity, we've moved the template into this script tag:
+
+```html
+<script id="hello-template" type="x-template/underscore">
+<ul>
+  <% _.each(items, function(item) { %>
+  <li><%- item.name %></li>
+  <% }) %>
+</ul>
+</script>
+```
+
+As you can see, `items` is provided to the template representing each record in
+the collection.
+
+### Model or Collection
+
+Marionette uses a simple method to determine whether to make a model or
+collection available to the template:
+
+1. If `view.model` is set, the attributes from `model`
+2. If `view.model` is not set, but `view.collection` is, set `items` to the
+  individual items in the collection
+3. If neither are set, an empty object is used
+
+The result of this is mixed into the
+[`templateContext` object](#template-context) and made available to your
+template.
+
+### Template Context
+
+The `Marionette.View` provides a `templateContext` attribute that is used to add
+extra information to your templates. This can be either an object, or a function
+returning an object. The keys on the returned object will be mixed into the
+model or collection keys and made available to the template.
+
+#### Context Object
+
+Using the context object, simply attach an object to `templateContext` as so:
+
+```javascript
+var _ = require('underscore');
+var Mn = require('backbone.marionette');
+
+var MyView = Mn.View.extend({
+  template: _.template('<h1>Hello, <%- contextKey %></h1>'),
+
+  templateContext: {
+    contextKey: 'world'
+  }
+});
+
+var myView = new MyView();
+```
+
+The `myView` instance will be rendered without errors even though we have no
+model or collection - `contextKey` is provided by `templateContext`.
+
+#### Context Function
+
+The `templateContext` object can also be a function returning an object. This is
+useful when you want to access
+[information from the surrounding view](#binding-of-this) (e.g. model methods).
+
+To use a `templateContext`, simply assign a function:
+
+```javascript
+var _ = require('underscore');
+var Mn = require('backbone.marionette');
+
+var MyView = Mn.View.extend({
+  template: _.template('<h1>Hello, <%- contextKey %></h1>'),
+
+  templateContext: function() {
+    return {
+      contextKey: this.getOption('contextKey')
+    }
+  }
+});
+
+var myView = new MyView({contextKey: 'world'});
+```
+
+Here, we've passed an option that can be accessed from the `templateContext`
+function using `getOption()`. More information on `getOption` can be found in
+the [documentation for `Marionette.Object`](./marionette.object.md#getoption).
+
+#### Binding of `this`
+
+When using functions in the `templateContext` it's important to know that `this`
+is _bound to the `data` object and **not the view**_. An illustrative example:
+
+```javascript
+var _ = require('underscore');
+var Mn = require('backbone.marionette');
+
+var MyView = Mn.View.extend({
+  template: _.template('<h1>Hello, <%- contextKey() %></h1>'),
+
+  templateContext: {
+    contextKey: function() {
+      return this.getOption('contextKey');  // ERROR
+    }
+  }
+});
+
+var myView = new MyView({contextKey: 'world'});
+```
+
+The above code will fail because the context (`data`) object in the template
+_cannot see_ the view's `getOption`.
+
+## Managing an Existing Page
+
+A `View` can be attached to existing elements as well. The primary benefit of this is to attach behavior and events to static content that has been rendered by your server (typically for SEO purposes). To set up a template-less `View`, your `template` attribute must be `false`.
 
 ```html
 <div id="my-element">

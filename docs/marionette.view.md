@@ -162,7 +162,14 @@ For clarity, we've moved the template into this script tag:
 As you can see, `items` is provided to the template representing each record in
 the collection.
 
-### Model or Collection
+### User interaction with Collection records
+
+While possible, reacting to user interaction with individual items in your
+collection is tricky with just a `View`. If you want to act on individual items,
+it's recommended that you use [`CollectionView`](./marionette.collectionview.md)
+and handle the behavior at the individual item level.
+
+### Rendering a Model or Collection
 
 Marionette uses a simple method to determine whether to make a model or
 collection available to the template:
@@ -174,7 +181,9 @@ collection available to the template:
 
 The result of this is mixed into the
 [`templateContext` object](#template-context) and made available to your
-template.
+template. Using this means you can setup a wrapper `View` that can act on
+`collectionEvents` but will render its `model` attribute - if your `model` has
+and `items` attribute then that will always be used.
 
 ### Template Context
 
@@ -261,89 +270,31 @@ _cannot see_ the view's `getOption`.
 
 ## Managing an Existing Page
 
-A `View` can be attached to existing elements as well. The primary benefit of this is to attach behavior and events to static content that has been rendered by your server (typically for SEO purposes). To set up a template-less `View`, your `template` attribute must be `false`.
+Marionette is able to manage pre-generated pages - either static or
+server-generated - and treat them as though they were generated from Marionette.
 
-```html
-<div id="my-element">
-  <p>Hello World</p>
-  <button class="my-button">Click Me</button>
-</div>
-```
+To use the existing page, set the `template` attribute to `false`:
 
-```js
-let MyView = Marionette.View.extend({
-  el: '#my-element',
+```javascript
+var Mn = require('backbone.marionette');
 
-  template: false,
-
-  ui: {
-    paragraph: 'p',
-    button: '.my-button'
-  },
-
-  events: {
-    'click @ui.button': 'clickedButton'
-  },
-
-  clickedButton: function() {
-    console.log('I clicked the button!');
-  }
+var MyView = Mn.View({
+  el: '#base-element',
+  template: false
 });
-
-let view = new MyView();
-view.render();
-
-view.ui.paragraph.text();        // returns 'Hello World'
-view.ui.button.trigger('click'); // logs 'I clicked the button!'
 ```
 
-Another use case is when you want to attach a `Marionette.View` to a SVG graphic or canvas element, to provide a uniform view layer interface to non-standard DOM nodes. By not having a template this allows you to also use a view on pre-rendered DOM nodes, such as complex graphic elements.
+Marionette will then attach all the usual
+[`event`](#events-and-callback-methods) and [`ui`](#organising-your-view)
+handlers to the view using the existing HTML. Though the View has no template,
+you can still listen to the `before:render` and `render` events that will fire
+as usual when `render` is called - or when you execute `region.show(view)`.
 
-## Rendering A Collection In An View
+### Setting a falsy `template` value
 
-The most common way to render a Backbone.Collection is to use
-a `CollectionView`. If you just need to render a
-simple list that does not need a lot of interaction, it does not
-always make sense to use these. A `Backbone.Collection` can be
-rendered with a simple `View`, using the templates to iterate
-over an `items` array.
-
-```js
-<script id="some-template" type="text/html">
-  <ul>
-    <% _.each(items, function(item){ %>
-    <li> <%= item.someAttribute %> </li>
-    <% }); %>
-  </ul>
-</script>
-```
-
-The important thing to note here, is the use of `items` as the
-variable to iterate in the `_.each` call. This will always be the
-name of the variable that contains your collection's items.
-
-Then, from JavaScript, you can define and use an View with this
-template, like this:
-
-```js
-let MyItemsView = Marionette.View.extend({
-  template: "#some-template"
-});
-
-let view = new MyItemsView({
-  collection: someCollection
-});
-
-// show the view via a region or calling the .render method directly
-```
-
-Rendering this view will convert the `someCollection` collection in to
-the `items` array for your template to use.
-
-For more information on when you would want to do this, and what options
-you have for retrieving an individual item that was clicked or
-otherwise interacted with, see the blog post on
-[Getting The Model For A Clicked Element](http://lostechies.com/derickbailey/2011/10/11/backbone-js-getting-the-model-for-a-clicked-element/).
+When using an existing page, Marionette explicitly looks for `false` - any other
+falsy value will cause Marionette to raise an error when attempting to render
+the template.
 
 ## Events and Callback Methods
 

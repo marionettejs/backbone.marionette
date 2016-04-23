@@ -482,6 +482,93 @@ In this example, the doubly-nested view structure will be rendered in a single p
 This system is recursive, so it works for any deeply nested structure. The child views
 you show can render their own child views within their onBeforeShow callbacks!
 
+## Organising your View
+
+The `View` provides a mechanism to name parts of your template to be used
+throughout the view with the `ui` attribute. This provides a number of benefits:
+
+1. Provide a reference to commonly used UI elements
+2. Cache the jQuery selector
+3. Change the selector later in only one place in your view
+
+### Defining `ui`
+
+To define your `ui` hash, just set an object of key to jQuery selectors to the
+`ui` attribute of your View:
+
+```javascript
+var Mn = require('backbone.marionette');
+
+var MyView = Mn.View.extend({
+  template: '#my-template',
+  ui: {
+    save: '#save-button',
+    close: '.close-button'
+  }
+});
+```
+
+Inside your view, the `save` and `close` references will point to the jQuery
+selectors `#save-button` and `.close-button` respectively.
+
+### Accessing UI elements
+
+To get the handles to your UI elements, use the `getUI(ui)` method:
+
+```javascript
+var Mn = require('backbone.marionette');
+
+var MyView = Mn.View.extend({
+  template: '#my-template',
+  ui: {
+    save: '#save-button',
+    close: '.close-button'
+  },
+
+  onDoSomething: function() {
+    var saveButton = this.getUI('save');
+    saveButton.addClass('disabled');
+    saveButton.attr('disabled', 'disabled');
+  }
+});
+```
+
+As `saveButton` here is a jQuery selector, you can call any jQuery methods on
+it, according to the jQuery documentation.
+
+#### Referencing UI in events
+
+The UI attribute is especially useful when setting handlers in the
+[`events`](#events-and-callback-methods) object, simply use the `@ui.*` prefix:
+
+```javascript
+var Mn = require('backbone.marionette');
+
+var MyView = Mn.View.extend({
+  template: '#my-template',
+  ui: {
+    save: '#save-button',
+    close: '.close-button'
+  },
+
+  events: {
+    'click @ui.save': 'handleSave'
+  },
+
+  triggers: {
+    'click @ui.close': 'close:view'
+  },
+
+  handleSave: function() {
+    this.model.save();
+  }
+});
+```
+
+By prefixing with `@ui`, we can change the underlying template without having to
+hunt through our view for every place where that selector is referenced - just
+update the `ui` object.
+
 ## Listening to childEvents
 A childEvents hash or method permits handling of child view events without manually setting bindings. The values of the hash can either be a function or a string method name on the collection view.
 
@@ -757,29 +844,6 @@ to your template. Instead, use [View.templateContext](./marionette.abstractview.
 
 ## Organizing UI Elements
 
-As documented in [Marionette.AbstractView](./marionette.abstractview.md), you can specify a `ui` hash in your `view` that
-maps UI elements by their jQuery selectors. This is especially useful if you access the
-same UI element more than once in your view's code. Instead of
-duplicating the selector, you can simply reference it by
-`this.getUI('elementName')`:
-
-You can also use the ui hash values from within events and trigger keys using the ```"@ui.elementName"```: syntax
-
-```js
-Marionette.View.extend({
-  tagName: "tr",
-
-  ui: {
-    checkbox: "input[type=checkbox]"
-  },
-
-  onRender: function() {
-    if (this.model.get('selected')) {
-      this.getUI('checkbox').addClass('checked');
-    }
-  }
-});
-```
 
 ## modelEvents and collectionEvents
 

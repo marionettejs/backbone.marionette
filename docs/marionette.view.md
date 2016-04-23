@@ -13,7 +13,7 @@ A `View` is a view that represents an item to be displayed with a template.This
   * [Template context](#template-context)
   * [Advanced Rendering Techniques](#advanced-rendering-techniques)
 * [Managing an Existing Page](#managing-an-existing-page)
-* [Laying out Views](#laying-out-views)
+* [Laying out Views - Regions](#laying-out-views-regions)
 * [Organising your View](#organising-your-view)
 * [Events and Callback Methods](#events-and-callback-methods)
   * [modelEvents and collectionEvents](#modelevents-and-collectionevents)
@@ -296,6 +296,262 @@ When using an existing page, Marionette explicitly looks for `false` - any other
 falsy value will cause Marionette to raise an error when attempting to render
 the template.
 
+## Laying out Views - Regions
+
+The `Marionette.View` class lets us manage a hierarchy of views using `regions`.
+Regions are a hook point that lets us show views inside views, manage the
+show/hide lifecycles, and act on events inside the children.
+
+**This Section only covers the basics. For more information on regions, see the
+[Regions Documentation.](./marionette.region.md)**
+
+
+Regions are ideal for rendering application layouts by isolating concerns inside
+another view. This is especially useful for independently re-rendering chunks
+of your application without having to completely re-draw the entire screen every
+time some data is updated.
+
+Regions can be added to a View at class definition, with `regions`, or at
+runtime using  `addRegion`.
+
+### Class Definition
+
+When you extend `View`, we use the `regions` attribute to point to the  selector
+where the new view will be displayed:
+
+```javascript
+var Mn = require('backbone.marionette');
+
+var MyView = Mn.View.extend({
+	template: '#tpl-view-with-regions',
+
+	regions: {
+		firstRegion: '#first-region',
+		secondRegion: '#second-region'
+	}
+});
+```
+
+If we have the following template:
+
+```html
+<script type="x-template/underscore" id="tpl-view-with-regions">
+  <div id="first-region"></div>
+  <div id="second-region"></div>
+  <div id="third-region"></div>
+</script>
+```
+
+When we show views in the region, the contents of `#first-region` and
+`#second-region` will be replaced with the contents of the view we show. The
+value in the `regions` hash is just a jQuery selector, and any valid jQuery
+syntax will suffice.
+
+#### Specifying regions as functions
+
+Regions can be specified on a View using a function that returns an object with
+the region definitions. The returned object follow the same rules for defining a
+region:
+
+```javascript
+var Mn = require('backbone.marionette');
+
+var MyView = Mn.View.extend({
+  regions: function(options){
+    return {
+      firstRegion: '#first-region'
+    };
+  }
+});
+```
+
+The `options` argument contains the options passed to the view on instantiation.
+As the view has not been constructed yet, `this.getOption()` is not able to
+return any options from the view - use `options` instead.
+
+### Adding Regions
+
+To add regions to a view after it has been instantiated, simply use the
+`addRegion` method:
+
+```javascript
+var MyView = require('./myview');
+
+myView = new MyView();
+myView.addRegion('thirdRegion', '#third-region');
+```
+
+Now we can access `thirdRegion` as we would the others.
+
+### Managing Sub-views
+
+`View` provides a simple interface for managing sub-views with `showChildView`
+and `getChildView`:
+
+
+#### Showing a view
+
+To show a view inside a region, simply call `showChildView(region, view)`. This
+will handle rendering the view's HTML and attaching it to the DOM for you:
+
+```javascript
+var Mn = require('backbone.marionette');
+var SubView = require('./subview');
+
+var MyView = Mn.View.extend({
+  template: '#tpl-view-with-regions',
+
+  regions: {
+    firstRegion: '#first-region'
+  },
+
+  onRender: function() {
+    this.showChildView('firstRegion', new SubView());
+  }
+});
+```
+
+#### Accessing a child view
+
+To access the child view of a `View` - use the `getChildView(region)` method.
+This will return the view instance that is current being displayed at that
+region, or `null`:
+
+```javascript
+var Mn = require('backbone.marionette');
+var SubView = require('./subview');
+
+var MyView = Mn.View.extend({
+  template: '#tpl-view-with-regions',
+
+  regions: {
+    firstRegion: '#first-region'
+  },
+
+  onRender: function() {
+    this.showChildView('firstRegion', new SubView());
+  },
+
+  onSomeEvent: function() {
+    var first = this.getChildView('firstRegion');
+    first.doSomething();
+  }
+});
+```
+
+If no view is available, `getChildView` returns `null`.
+
+### Region options
+A `View` can take a `regions` hash that allows you to specify regions per `View` instance.
+
+```javascript
+new Marionette.View({
+ regions: {
+   "cat": ".doge",
+   "wow": {
+     selector: ".such",
+     regionClass: Coin
+   }
+ }
+});
+```
+
+### Region availability
+Any defined regions within a `View` will be available to the `View` or any calling code immediately after instantiating the `View`. This allows a View to be attached to an existing DOM element in an HTML page, without the need to call a render method or anything else, to create the regions.
+
+However, a region will only be able to populate itself if the `View` has access to the elements specified within the region definitions. That is, if your view has not yet rendered, your regions may not be able to find the element that you've specified for them to manage. In that scenario, using the region will result in no changes to the DOM.
+
+### Efficient nested view structures
+When your views get some more regions, you may want to think of the most efficient way to render your views. Since manipulating the DOM is performany heavy, it's best practice to render most of your views at once.
+
+Marionette provides a simple mechanism to infinitely nest views in a single paint: just render all
+of the children in the onBeforeShow callback.
+
+```javascript
+var ParentView = Marionette.View.extend({
+  onBeforeShow: function() {
+    this.showChildView('header', new HeaderView());
+    this.showChildView('footer', new FooterView());
+  }
+});
+
+myRegion.show(new ParentView(), options);
+```
+In this example, the doubly-nested view structure will be rendered in a single paint.
+
+This system is recursive, so it works for any deeply nested structure. The child views
+you show can render their own child views within their onBeforeShow callbacks!
+
+## Listening to childEvents
+A childEvents hash or method permits handling of child view events without manually setting bindings. The values of the hash can either be a function or a string method name on the collection view.
+
+```javascript
+// childEvents can be specified as a hash...
+let MyView = Marionette.View.extend({
+
+  childEvents: {
+    // This callback will be called whenever a child is rendered or emits a `render` event
+    render: function() {
+      console.log('A child view has been rendered.');
+    }
+  }
+});
+
+// ...or as a function that returns a hash.
+let MyView = Marionette.View.extend({
+
+  childEvents: function() {
+    return {
+      render: this.onChildRendered
+    }
+  },
+
+  onChildRendered: function () {
+    console.log('A child view has been rendered.');
+  }
+});
+```
+
+childEvents also catches custom events fired by a child view. Take note that the first argument to a childEvents handler is the child view itself.
+
+```javascript
+// The child view fires a custom event, `show:message`
+var ChildView = Marionette.View.extend({
+
+  // Events hash defines local event handlers that in turn may call `triggerMethod`.
+  events: {
+    'click .button': 'onClickButton'
+  },
+
+  // Triggers hash converts DOM events directly to view events catchable on the parent.
+  triggers: {
+    'submit form': 'submit:form'
+  },
+
+  onClickButton: function () {
+    this.triggerMethod('show:message', 'foo');
+  }
+});
+
+// The parent uses childEvents to catch that custom event on the child view
+var ParentView = Marionette.View.extend({
+
+  childEvents: {
+    'show:message': 'onChildShowMessage',
+    'submit:form': 'onChildSubmitForm'
+  },
+
+  onChildShowMessage: function (childView, message) {
+    console.log('A child view fired show:message with ' + message);
+  },
+  // Methods called from the triggers hash do not have access to DOM events
+  // Any logic requiring the original DOM event should be handled in it's respective view
+  onChildSubmitForm: function (childView) {
+    console.log('A child view fired submit:form');
+  }
+});
+```
+
 ## Events and Callback Methods
 
 There are several events and callback methods that are called
@@ -427,181 +683,6 @@ If the view has not been rendered before, this event will not be fired.
 
 ### `dom:refresh` / `onDomRefresh`
 Triggered just after the view has been attached **and** the view has been rendered.
-
-## Regions
-A `View` can be used to hold a collection of regions. Each `Region` could display another `View` or `CollectionView`.
-
-Regions provide consistent methods to manage, show and destroy views in your applications and layouts. They
-are ideal for rendering application layouts with multiple sub-regions
-managed by specified region managers.
-
-Each Region added to a View will become a `Region` instance.
-
-Additionally, interactions with `Marionette.Region`
-will provide features such as `onRender` callbacks, etc. Please see
-the Region documentation for more information.
-
-### Basic usage
-Regions can be added to a `View` in two ways:
-
-1) Passing a regions hash to to the View's constructor:
-
-```javascript
-let view = new Marionette.View({
-	template: "#tpl-view-with-regions",
-
-	regions: {
-		firstRegion: "#first-region",
-		secondRegion: "#second-region"
-	}
-});
-```
-
-2) Using the `Region` API:
-
-
-```javascript
-let view = new Marionette.View();
-
-view.addRegion("foo", "#foo");
-view.getRegion('foo').show(new someView(), options);
-```
-
-There are also helpful shortcuts for more concise syntax.
-
-```javascript
-view.showChildView('menu', new MenuView(), options);
-```
-
-```javascript
-view.showChildView('content', new MainContentView(), options);
-```
-
-### Specifying regions as functions
-Regions can be specified on a View using a function that returns an object with the region definitions. The returned object follow the same rules for defining a region, as outlined above.
-
-```javascript
-Marionette.View.extend({
-  regions: function(options){
-    return {
-      fooRegion: "#foo-element"
-    };
-  }
-});
-```
-
-Note that the function receives the view's options arguments that were passed in to the view's constructor. this.options is not yet available when the regions are first initialized, so the options must be accessed through this parameter.
-
-### Region options
-A `View` can take a `regions` hash that allows you to specify regions per `View` instance.
-
-```javascript
-new Marionette.View({
- regions: {
-   "cat": ".doge",
-   "wow": {
-     selector: ".such",
-     regionClass: Coin
-   }
- }
-});
-```
-
-### Region availability
-Any defined regions within a `View` will be available to the `View` or any calling code immediately after instantiating the `View`. This allows a View to be attached to an existing DOM element in an HTML page, without the need to call a render method or anything else, to create the regions.
-
-However, a region will only be able to populate itself if the `View` has access to the elements specified within the region definitions. That is, if your view has not yet rendered, your regions may not be able to find the element that you've specified for them to manage. In that scenario, using the region will result in no changes to the DOM.
-
-### Efficient nested view structures
-When your views get some more regions, you may want to think of the most efficient way to render your views. Since manipulating the DOM is performany heavy, it's best practice to render most of your views at once.
-
-Marionette provides a simple mechanism to infinitely nest views in a single paint: just render all
-of the children in the onBeforeShow callback.
-
-```javascript
-var ParentView = Marionette.View.extend({
-  onBeforeShow: function() {
-    this.showChildView('header', new HeaderView());
-    this.showChildView('footer', new FooterView());
-  }
-});
-
-myRegion.show(new ParentView(), options);
-```
-In this example, the doubly-nested view structure will be rendered in a single paint.
-
-This system is recursive, so it works for any deeply nested structure. The child views
-you show can render their own child views within their onBeforeShow callbacks!
-
-## Listening to childEvents
-A childEvents hash or method permits handling of child view events without manually setting bindings. The values of the hash can either be a function or a string method name on the collection view.
-
-```javascript
-// childEvents can be specified as a hash...
-let MyView = Marionette.View.extend({
-
-  childEvents: {
-    // This callback will be called whenever a child is rendered or emits a `render` event
-    render: function() {
-      console.log('A child view has been rendered.');
-    }
-  }
-});
-
-// ...or as a function that returns a hash.
-let MyView = Marionette.View.extend({
-
-  childEvents: function() {
-    return {
-      render: this.onChildRendered
-    }
-  },
-
-  onChildRendered: function () {
-    console.log('A child view has been rendered.');
-  }
-});
-```
-
-childEvents also catches custom events fired by a child view. Take note that the first argument to a childEvents handler is the child view itself.
-
-```javascript
-// The child view fires a custom event, `show:message`
-var ChildView = Marionette.View.extend({
-
-  // Events hash defines local event handlers that in turn may call `triggerMethod`.
-  events: {
-    'click .button': 'onClickButton'
-  },
-
-  // Triggers hash converts DOM events directly to view events catchable on the parent.
-  triggers: {
-    'submit form': 'submit:form'
-  },
-
-  onClickButton: function () {
-    this.triggerMethod('show:message', 'foo');
-  }
-});
-
-// The parent uses childEvents to catch that custom event on the child view
-var ParentView = Marionette.View.extend({
-
-  childEvents: {
-    'show:message': 'onChildShowMessage',
-    'submit:form': 'onChildSubmitForm'
-  },
-
-  onChildShowMessage: function (childView, message) {
-    console.log('A child view fired show:message with ' + message);
-  },
-  // Methods called from the triggers hash do not have access to DOM events
-  // Any logic requiring the original DOM event should be handled in it's respective view
-  onChildSubmitForm: function (childView) {
-    console.log('A child view fired submit:form');
-  }
-});
-```
 
 ## View serializeData
 

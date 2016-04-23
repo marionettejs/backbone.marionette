@@ -300,10 +300,10 @@ the template.
 
 There are several events and callback methods that are called
 for an View. These events and methods are triggered with the
-[Marionette.triggerMethod](./marionette.functions.md#marionettetriggermethod) function, which
-triggers the event and a corresponding "on{EventName}" method.
+[Marionette.triggerMethod](./marionette.functions.md#marionettetriggermethod)
+function which triggers the event and a corresponding `on{EventName}` method.
 
-### "before:render" / onBeforeRender event
+### `before:render` / `onBeforeRender` event
 
 Triggered before an View is rendered.
 
@@ -315,7 +315,7 @@ Marionette.View.extend({
 });
 ```
 
-### "render" / onRender event
+### `render` / `onRender` event
 
 Triggered after the view has been rendered.
 You can implement this in your view to provide custom code for dealing
@@ -331,7 +331,7 @@ Marionette.View.extend({
 });
 ```
 
-### "before:destroy" / onBeforeDestroy event
+### `before:destroy` / `onBeforeDestroy` event
 
 Triggered just prior to destroying the view, when the view's `destroy()` method has been called.
 
@@ -345,7 +345,7 @@ Marionette.View.extend({
 });
 ```
 
-### "destroy" / onDestroy event
+### `destroy` / `onDestroy` event
 
 Triggered just after the view has been destroyed.
 
@@ -357,12 +357,12 @@ Marionette.View.extend({
 });
 ```
 
-### "before:add:region" / onBeforeAddRegion event
+### `before:add:region` / `onBeforeAddRegion` event
 The `View` will trigger a "before:add:region"
 event before a region is added to the manager. This
 allows you to perform some actions on the region before it is added.
 
-### "add:region" / onAddRegion event
+### `add:region` / `onAddRegion` event
 The `RegionsMixin` will trigger an "add:region"
 event when a region is added to the view. This
 allows you to use the region instance immediately,
@@ -381,7 +381,7 @@ view.on("add:region", function(name, region) {
 view.addRegion("foo", "#bar");
 ```
 
-### "before:remove:region" / onBeforeRemoveRegion event
+### `before:remove:region` / `onBeforeRemoveRegion` event
 The `View` will trigger a "before:remove:region"
 event before a region is removed from the view.
 This allows you to perform any cleanup operations before the region is removed.
@@ -398,7 +398,7 @@ view.addRegion("foo", "#bar");
 view.removeRegion("foo");
 ```
 
-### "remove:region" / onRemoveRegion event
+### `remove:region` / `onRemoveRegion` event
 The `View` will trigger a "remove:region"
 event when a region is removed from the view.
 This allows you to use the region instance one last
@@ -418,14 +418,14 @@ view.addRegion("foo", "#bar");
 view.removeRegion("foo");
 ```
 
-### "detach" / onDetach event
+### `detach` / `onDetach` event
 The `View` will trigger the "detach" event when the view was rendered and has just been destroyed.
 
-### "before:detach" / onBeforeDetach event
+### `before:detach` / `onBeforeDetach` event
 The `View` will trigger the "before:detach" event when the view is rendered and is about to be destroyed.
 If the view has not been rendered before, this event will not be fired.
 
-### "dom:refresh" / onDomRefresh
+### `dom:refresh` / `onDomRefresh`
 Triggered just after the view has been attached **and** the view has been rendered.
 
 ## Regions
@@ -460,7 +460,7 @@ let view = new Marionette.View({
 2) Using the `Region` API:
 
 
-```
+```javascript
 let view = new Marionette.View();
 
 view.addRegion("foo", "#foo");
@@ -469,18 +469,18 @@ view.getRegion('foo').show(new someView(), options);
 
 There are also helpful shortcuts for more concise syntax.
 
-```
+```javascript
 view.showChildView('menu', new MenuView(), options);
 ```
 
-```
+```javascript
 view.showChildView('content', new MainContentView(), options);
 ```
 
 ### Specifying regions as functions
 Regions can be specified on a View using a function that returns an object with the region definitions. The returned object follow the same rules for defining a region, as outlined above.
 
-```
+```javascript
 Marionette.View.extend({
   regions: function(options){
     return {
@@ -495,7 +495,7 @@ Note that the function receives the view's options arguments that were passed in
 ### Region options
 A `View` can take a `regions` hash that allows you to specify regions per `View` instance.
 
-```
+```javascript
 new Marionette.View({
  regions: {
    "cat": ".doge",
@@ -518,8 +518,8 @@ When your views get some more regions, you may want to think of the most efficie
 Marionette provides a simple mechanism to infinitely nest views in a single paint: just render all
 of the children in the onBeforeShow callback.
 
-```
-let ParentView = Marionette.View.extend({
+```javascript
+var ParentView = Marionette.View.extend({
   onBeforeShow: function() {
     this.showChildView('header', new HeaderView());
     this.showChildView('footer', new FooterView());
@@ -536,7 +536,7 @@ you show can render their own child views within their onBeforeShow callbacks!
 ## Listening to childEvents
 A childEvents hash or method permits handling of child view events without manually setting bindings. The values of the hash can either be a function or a string method name on the collection view.
 
-```
+```javascript
 // childEvents can be specified as a hash...
 let MyView = Marionette.View.extend({
 
@@ -565,7 +565,7 @@ let MyView = Marionette.View.extend({
 
 childEvents also catches custom events fired by a child view. Take note that the first argument to a childEvents handler is the child view itself.
 
-```
+```javascript
 // The child view fires a custom event, `show:message`
 var ChildView = Marionette.View.extend({
 

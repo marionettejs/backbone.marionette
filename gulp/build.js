@@ -81,10 +81,6 @@ function bundle(type) {
 function buildLib(type, dest) {
   return bundle(type).then(gen => {
     return file(name + '.js', gen.code, {src: true})
-      .on('error', function(err) {
-        console.log(err);
-        this.emit('end');
-      })
       .pipe(plumber())
       .pipe(sourcemaps.init({loadMaps: true}))
       .pipe(sourcemaps.write('./'))

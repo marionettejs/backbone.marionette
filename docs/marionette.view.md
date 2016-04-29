@@ -771,6 +771,141 @@ If the view has not been rendered before, this event will not be fired.
 ### `dom:refresh` / `onDomRefresh`
 Triggered just after the view has been attached **and** the view has been rendered.
 
+### modelEvents and collectionEvents
+
+The Marionette View can bind to events that occur on attached models and
+collections - this includes both [standard][backbone-events] and custom events.
+
+### Model Events
+
+For example, to listen to a model's events:
+
+```javascript
+var MyView = Marionette.View.extend({
+  modelEvents: {
+    'change:attribute': 'actOnChange'
+  },
+
+  actOnChange: function(value, model) {
+    console.log('New value: ' + value);
+  }
+});
+```
+
+The `modelEvents` attribute passes through all the arguments that are passed
+to `model.trigger('event', arguments)`.
+
+#### Function callback
+
+You can also bind a function callback directly in the `modelEvents` attribute:
+
+```javascript
+var MyView = Marionette.View.extend({
+  modelEvents: {
+    'change:attribute': function() {
+      console.log('attribute was changed');
+    }
+  }
+})
+```
+
+#### Attaching a function
+
+As with most things in Backbone and Marionette, you can attach a function that
+returns the object to to attach to `modelEvents`. This is particularly handy for
+binding to events based on options passed into the view:
+
+```javascript
+var MyView = Marionette.View.extend({
+  modelEvents: function() {
+    var events = {};
+    var fieldToListenTo = this.getOption('customField');
+    events['change:' + fieldToListenTo] = 'customHandler';
+    return events;
+  },
+
+  customHandler: function() {
+    console.log('I will be called based on the value passed into customField');
+  }
+});
+```
+
+### Collection Events
+
+```javascript
+var MyView = Marionette.View.extend({
+  collectionEvents: {
+    sync: 'actOnSync'
+  },
+
+  actOnSync: function(collection) {
+    console.log('Collection was synchronised with the server');
+  }
+});
+```
+
+#### Function callback
+
+You can also bind a function callback directly in the `modelEvents` attribute:
+
+```javascript
+var MyView = Marionette.View.extend({
+  collectionEvents: {
+    'update': function() {
+      console.log('the collection was updated');
+    }
+  }
+})
+```
+
+#### Attaching a function
+
+As with most things in Backbone and Marionette, you can attach a function that
+returns the object to to attach to `modelEvents`. This is particularly handy for
+binding to events based on options passed into the view:
+
+```javascript
+var MyView = Marionette.View.extend({
+  collectionEvents: function() {
+    var events = {};
+    var eventToListenTo = this.getOption('customListener');
+    events[eventToListenTo] = 'customHandler';
+    return events;
+  },
+
+  customHandler: function() {
+    console.log('I will be called based on the value passed into customListener');
+  }
+})
+```
+
+### Listening to both
+
+If your view has a `model` and `collection` attached, it will listen for events
+on both:
+
+```javascript
+var MyView = Marionette.View.extend({
+  modelEvents: {
+    'change:someattribute': 'changeMyAttribute'
+  },
+
+  collectionEvents: {
+    update: 'modelsChanged'
+  },
+
+  changeMyAttribute: function() {
+    console.log('someattribute was changed');
+  },
+
+  modelsChanged: function() {
+    console.log('models were added or removed in the collection');
+  }
+})
+```
+
+In this case, Marionette will bind event handlers to both.
+
 ## View serializeData
 
 This method is used to convert a View's `model` or `collection`
@@ -841,25 +976,3 @@ then you should override either `serializeModel` or `serializeCollection`.
 
 On the other hand, you should not use this method to add arbitrary extra data
 to your template. Instead, use [View.templateContext](./marionette.abstractview.md#viewtemplatecontext).
-
-## Organizing UI Elements
-
-
-## modelEvents and collectionEvents
-
-Views can bind directly to model events and collection events
-in a declarative manner:
-
-```js
-Marionette.View.extend({
-  modelEvents: {
-    "change": "modelChanged"
-  },
-
-  collectionEvents: {
-    "add": "modelAdded"
-  }
-});
-```
-
-For more information, see the [Marionette.AbstractView](./marionette.abstractview.md) documentation.

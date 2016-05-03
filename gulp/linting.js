@@ -1,6 +1,5 @@
 import gulp from 'gulp';
 import eslint from 'gulp-eslint';
-import jscs from 'gulp-jscs';
 import lintspaces from 'gulp-lintspaces';
 import plumber from 'gulp-plumber';
 import util from 'gulp-util';
@@ -10,7 +9,7 @@ function onError() {
   util.beep();
 }
 
-function lint(files, options) {
+function lint(files) {
   return gulp.src(files)
     .pipe(plumber())
     .pipe(lintspaces({editorconfig: '.editorconfig'}))
@@ -18,17 +17,15 @@ function lint(files, options) {
     .pipe(eslint())
     .pipe(eslint.format())
     .pipe(eslint.failOnError())
-    .pipe(jscs(options))
-    .pipe(jscs.reporter())
     .on('error', onError);
 }
 
 function lintSrc() {
- return lint(['src/**/*.js']);
+  return lint(['src/**/*.js']);
 }
 
 function lintTest() {
- return lint(['test/**/*.js'], { configPath: './test/.jscsrc' });
+  return lint(['test/**/*.js']);
 }
 
 function lintMd() {

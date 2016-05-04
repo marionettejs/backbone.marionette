@@ -128,7 +128,7 @@ describe('view ui elements', function() {
       };
 
       this.View = Marionette.View.extend({
-        ui:     this.uiHash,
+        ui: this.uiHash,
         events: {}
       });
 

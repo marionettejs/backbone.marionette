@@ -106,11 +106,11 @@ describe('Marionette.Error', function() {
     beforeEach(function() {
       this.props = {
         description: 'myDescription',
-        fileName:    'myFileName',
-        lineNumber:  'myLineNumber',
-        name:        'myName',
-        message:     'myMessage',
-        number:      'myNumber'
+        fileName: 'myFileName',
+        lineNumber: 'myLineNumber',
+        name: 'myName',
+        message: 'myMessage',
+        number: 'myNumber'
       };
       this.error = new Marionette.Error(this.props);
     });

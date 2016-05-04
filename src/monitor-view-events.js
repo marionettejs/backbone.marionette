@@ -59,10 +59,10 @@ function monitorViewEvents(view) {
 
   view.on({
     'before:attach': handleBeforeAttach,
-    'attach':        handleAttach,
+    'attach': handleAttach,
     'before:detach': handleBeforeDetach,
-    'detach':        handleDetach,
-    'render':        handleRender
+    'detach': handleDetach,
+    'render': handleRender
   });
 }
 

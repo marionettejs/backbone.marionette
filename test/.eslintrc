@@ -2,5 +2,8 @@
   "extends": ["../.eslintrc", "./.globals.json"],
   "env": {
     "mocha": true
+  },
+  "rules": {
+    "new-cap": 0
   }
 }

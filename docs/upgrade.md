@@ -64,3 +64,11 @@ before modifying the DOM.
 Replace all instances of `show` and `before:show` with `render` and
 `before:render`. If you want the view to be visible in the DOM, then listen to
 the `attach` event.
+
+## Modules
+
+Marionette Modules have been completely removed in favor of using the more
+standard JavaScript module loaders e.g.
+[Webpack](./installation.md#quick-start-using-npm-and-webpack) or
+[Browserify](./installation.md#quick-start-using-npm-and-browserify). See the
+[installation](./installation.md) documentation for a list of potential options.

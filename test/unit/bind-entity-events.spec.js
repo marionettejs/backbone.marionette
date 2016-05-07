@@ -10,7 +10,7 @@ describe('Marionette.bindEntityEvents', function() {
     this.target = {
       handleFoo: this.handleFooStub,
       handleBar: this.handleBarStub,
-      listenTo:  this.listenToStub
+      listenTo: this.listenToStub
     };
 
     this.entity = this.entityStub;

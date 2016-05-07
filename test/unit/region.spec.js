@@ -1054,14 +1054,14 @@ describe('region', function() {
 
     it('should prefer passed options over initial options', function() {
       this.region.options.allowMissingEl = false;
-      
+
       expect(this.region._ensureElement({allowMissingEl: true})).to.be.false;
     });
-    
+
     it('should fallback to initial options when not passed options', function() {
       this.region.options.allowMissingEl = false;
-      
-      expect(function(){
+
+      expect(function() {
         this.region._ensureElement();
       }.bind(this)).to.throw;
     });

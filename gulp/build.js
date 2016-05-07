@@ -1,54 +1,31 @@
-import gulp       from 'gulp';
-import header     from 'gulp-header';
-import plumber    from 'gulp-plumber';
-import file       from 'gulp-file';
-import filter     from 'gulp-filter';
-import rename     from 'gulp-rename';
+import gulp from 'gulp';
+import plumber from 'gulp-plumber';
+import file from 'gulp-file';
+import filter from 'gulp-filter';
+import rename from 'gulp-rename';
 import sourcemaps from 'gulp-sourcemaps';
-import tap        from 'gulp-tap';
-import uglify     from 'gulp-uglify';
-import unwrapper  from 'gulp-unwrapper';
+import uglify from 'gulp-uglify';
+import runSequence from 'run-sequence';
 
 import { rollup } from 'rollup';
-import babel      from 'rollup-plugin-babel';
-import json       from 'rollup-plugin-json';
-import preset     from 'babel-preset-es2015-rollup';
+import babel from 'rollup-plugin-babel';
+import json from 'rollup-plugin-json';
+import preset from 'babel-preset-es2015-rollup';
+import commonjs from 'rollup-plugin-commonjs';
+import nodeResolve from 'rollup-plugin-node-resolve';
 
 import banner     from  './_banner';
-import {name, version} from '../package.json';
+import {name} from '../package.json';
 
 const srcPath = 'src/';
 const buildPath = 'lib/';
 
-const unwrapConfig = [
-  './node_modules/backbone.babysitter/lib/backbone.babysitter.js',
-  './node_modules/backbone.radio/build/backbone.radio.js',
-];
-
-let unwrappedBundledLibs = '';
-
-gulp.task('unwrap', function(){
-  return gulp.src(unwrapConfig)
-    .pipe(unwrapper())
-    .pipe(tap(file => {
-      // save the file contents in memory
-      unwrappedBundledLibs += file.contents.toString();
-    }));
-});
-
-function _generate(bundle, type){
-  let intro = banner[type];
-
-  // adds unwrapped  bundled libs
-  if(type === 'bundled'){
-    intro += unwrappedBundledLibs;
-  }
-
+function _generate(bundle, opts){
   return bundle.generate({
-    format: (type === 'bundled') ? 'iife' : 'umd',
-    moduleName: 'Marionette  = global[\'Mn\']',
+    format: 'umd',
+    moduleName: 'Marionette = global[\'Mn\']',
     sourceMap: true,
-    banner: intro,
+    banner: banner[opts.type],
     globals: {
       'backbone': 'Backbone',
       'underscore': '_',
@@ -58,9 +35,41 @@ function _generate(bundle, type){
   });
 }
 
-function bundle(type) {
+function bundle(opts) {
   return rollup({
     entry: srcPath + name + '.js',
+    external: opts.external,
+    plugins: opts.plugins
+  }).then(bundle => {
+    return _generate(bundle, opts);
+  }).then(gen => {
+    gen.code += '\n//# sourceMappingURL=' + gen.map.toUrl();
+    return gen;
+  });
+}
+
+function buildLib(opts) {
+  return bundle(opts).then(gen => {
+    return file(name + '.js', gen.code, {src: true})
+      .pipe(plumber())
+      .pipe(sourcemaps.init({loadMaps: true}))
+      .pipe(sourcemaps.write('./'))
+      .pipe(gulp.dest(opts.dest))
+      .pipe(filter(['*', '!**/*.js.map']))
+      .pipe(rename(name + '.min.js'))
+      .pipe(sourcemaps.init({loadMaps: true}))
+      .pipe(uglify({
+        preserveComments: 'license'
+      }))
+      .pipe(sourcemaps.write('./'))
+      .pipe(gulp.dest(opts.dest));
+  });
+}
+
+function buildCore(){
+  return buildLib({
+    type: 'core',
+    dest: buildPath + 'core/',
     external: ['underscore', 'backbone', 'backbone.babysitter', 'backbone.radio'],
     plugins: [
       json(),
@@ -70,43 +79,39 @@ function bundle(type) {
         babelrc: false
       })
     ]
-  }).then(bundle => {
-    return _generate(bundle, type);
-  }).then(gen => {
-    gen.code += '\n//# sourceMappingURL=' + gen.map.toUrl();
-    return gen;
   });
-}
-
-function buildLib(type, dest) {
-  return bundle(type).then(gen => {
-    return file(name + '.js', gen.code, {src: true})
-      .pipe(plumber())
-      .pipe(sourcemaps.init({loadMaps: true}))
-      .pipe(sourcemaps.write('./'))
-      .pipe(gulp.dest(dest))
-      .pipe(filter(['*', '!**/*.js.map']))
-      .pipe(rename(name + '.min.js'))
-      .pipe(sourcemaps.init({loadMaps: true}))
-      .pipe(uglify({
-        preserveComments: 'license'
-      }))
-      .pipe(sourcemaps.write('./'))
-      .pipe(gulp.dest(dest));
-  });
-}
-
-function buildCore(){
-  return buildLib('core', buildPath + 'core/');
 }
 
 function buildBundled(){
-  return buildLib('bundled', buildPath);
+  return buildLib({
+    type: 'bundled',
+    dest: buildPath,
+    external: ['underscore', 'backbone'],
+    plugins: [
+      nodeResolve(),
+      commonjs({
+        namedExports: {
+          'backbone.babysitter': [ 'ChildViewContainer' ],
+          'backbone.radio': ['Radio']
+        }
+      }),
+      json(),
+      babel({
+        sourceMaps: true,
+        presets: [ preset ],
+        babelrc: false,
+        exclude: 'node_modules/**'
+      })
+    ]
+  });
 }
 
 gulp.task('build-core', ['lint-src'], buildCore);
 
-gulp.task('build-bundled', ['lint-src', 'unwrap'], buildBundled);
+gulp.task('build-bundled', ['lint-src'], buildBundled);
 
-gulp.task('build', ['build-core', 'build-bundled']);
+gulp.task('build', function(done) {
+  runSequence(['build-core', 'build-bundled'], 'test-build', done);
+});
+
 

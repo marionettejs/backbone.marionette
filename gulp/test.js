@@ -3,16 +3,17 @@ import mocha from 'gulp-mocha';
 import istanbul from 'gulp-istanbul';
 import { Instrumenter } from 'isparta';
 import coveralls from 'gulp-coveralls';
+import runSequence from 'run-sequence';
 
-const mochaGlobals = ['stub', 'spy', 'expect'];
+const mochaGlobals = ['stub', 'spy', 'expect', 'Mn'];
 
 function _registerBabel() {
   require('babel-register');
 }
 
-function _mocha() {
+function _mocha(setupFile) {
   return gulp.src(
-      ['test/setup/node.js', 'test/unit/**/*.js'],
+    [setupFile, 'test/unit/**/*.js'],
       {read: false}
     )
     .pipe(mocha({
@@ -24,7 +25,7 @@ function _mocha() {
 
 function test() {
   _registerBabel();
-  return _mocha();
+  return _mocha('test/setup/node.js');
 }
 
 function coverage(done) {
@@ -39,11 +40,29 @@ function coverage(done) {
     });
 }
 
+function testBuildCore() {
+  _registerBabel();
+  return _mocha('test/setup/build.js');
+}
+
+function testBuildBundled() {
+  _registerBabel();
+  return _mocha('test/setup/build-bundled.js');
+}
+
 gulp.task('coveralls', ['coverage'], function(){
-    return gulp.src('coverage/lcov.info')
-      .pipe(coveralls());
+  return gulp.src('coverage/lcov.info')
+    .pipe(coveralls());
 });
 
 gulp.task('coverage', ['lint-code'], coverage);
+
+gulp.task('test-build-core', testBuildCore);
+
+gulp.task('test-build-bundled', testBuildBundled);
+
+gulp.task('test-build', function(done) {
+  runSequence('test-build-core', 'test-build-bundled', done);
+});
 
 gulp.task('test', test);

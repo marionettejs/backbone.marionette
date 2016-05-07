@@ -1,3 +1,6 @@
+**_These docs are for Marionette 3 which is still in pre-release. Some parts may
+not be accurate or up-to-date_**
+
 # Installing Marionette
 
 As with all JavaScript libraries, there are a number of ways to get started with
@@ -10,18 +13,18 @@ a Marionette application. In this section we'll cover the most common ways.
 together into a single bundle to be delivered to your browser's `<script>` tag.
 It works particularly well with Marionette and jQuery.
 
-[Here](https://github.com/marionettejs/marionette-integrations/tree/master/webpack) 
+[Here](https://github.com/marionettejs/marionette-integrations/tree/master/webpack)
 we prepared simple marionettejs skeleton with Webpack.
 
 
 ## Quick start using NPM and Brunch
 
-[Brunch][brunch] is fast front-end web app build tool with simple declarative config, 
-seamless incremental compilation for rapid development, an opinionated pipeline 
+[Brunch][brunch] is fast front-end web app build tool with simple declarative config,
+seamless incremental compilation for rapid development, an opinionated pipeline
 and workflow, and core support for source maps.
 
 [Here](https://github.com/marionettejs/marionette-integrations/tree/master/brunch)
-we prepared simple marionettejs skeleton with Brunch. 
+we prepared simple marionettejs skeleton with Brunch.
 
 
 ## Quick start using NPM and Browserify
@@ -31,7 +34,7 @@ modules into your application, so you can `require` them as you would import
 dependencies in any other language.
 
 [Here](https://github.com/marionettejs/marionette-integrations/tree/master/browserify)
-we prepared simple marionettejs skeleton with Browserify. 
+we prepared simple marionettejs skeleton with Browserify.
 
 
 [browserify]: http://browserify.org/

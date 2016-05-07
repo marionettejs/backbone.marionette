@@ -1,4 +1,5 @@
-## [View the new docs](http://marionettejs.com/docs/marionette.renderer.html)
+**_These docs are for Marionette 3 which is still in pre-release. Some parts may
+not be accurate or up-to-date_**
 
 # Marionette.Renderer
 

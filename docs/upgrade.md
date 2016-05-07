@@ -33,11 +33,17 @@ unchanged.
 
 ### Removing `CompositeView`
 
-The `CompositeView` was removed in favor of using `View` and `CollectionView`.
+The `CompositeView` was deprecated in favor of using `View` and
+`CollectionView`. The `CompositeView` will be completely removed in Marionette
+4.
 
 See [`CollectionView`](./marionette.collectionview.md#rendering-collectionviews)
 for detail on upgrading to Marionette 3. This technique works in both Marionette
 2.4.5 and Marionette 3.
+
+### Child event handlers
+
+The `childEvents` attribute was renamed to `childViewEvents`.
 
 ## Events
 
@@ -64,6 +70,65 @@ before modifying the DOM.
 Replace all instances of `show` and `before:show` with `render` and
 `before:render`. If you want the view to be visible in the DOM, then listen to
 the `attach` event.
+
+## Templates
+
+The biggest change to templates is renaming `templateHelpers` to
+`templateContext` - the aim is to be more in-line with terminology from other
+frameworks.
+
+### Upgrading to Marionette 3
+
+Simply replace all instances of `templateHelpers` with `templateContext`
+
+## Regions
+
+There are a number of changes to how regions behave - the biggest change being
+the removal of the ability to access regions as attributes
+
+### Removing `view.region`
+
+The `view.<region_name>` syntax has been removed in favor of `view.getRegion()`,
+`view.getChildView()` and `view.showChildView()`.
+
+#### Upgrading for Marionette 2.4.5 and 3
+
+Change all references to `view.region` to `view.getRegion('region')`. For
+example, in Mn 2.4 and below:
+
+```javascript
+var AnotherView = require('./anotherview');
+
+var MyView = Mn.LayoutView.extend({
+  regions: {
+    myregion: '.regionname'
+  },
+
+  onRender: function() {
+    this.myregion.show(new AnotherView());
+  }
+});
+```
+
+This does not work in Mn 3 - instead do:
+
+```javascript
+var AnotherView = require('./anotherview');
+
+/* In Mn 2.4 we can just use LayoutView */
+var MyView = Mn.View.extend({
+  regions: {
+    myregion: '.regionname'
+  },
+
+  onRender: function() {
+    this.showChildView('myregion', new AnotherView());
+  }
+});
+```
+
+See the documentation for [views](marionette.view.md#laying-out-views---regions)
+to learn more about how to manage regions in Marionette 3.
 
 ## Modules
 

@@ -15,15 +15,17 @@ A `View` is a view that represents an item to be displayed with a template.This
 * [Managing an Existing Page](#managing-an-existing-page)
 * [Laying out Views - Regions](#laying-out-views-regions)
 * [Organising your View](#organising-your-view)
-* [Events and Callback Methods](#events-and-callback-methods)
-  * [modelEvents and collectionEvents](#modelevents-and-collectionevents)
+* [Events](#events)
+  * [onEvent Listeners](#onevent-listeners)
   * [Lifecycle Events](#lifecycle-events)
     * ["before:render" / onBeforeRender event](#beforerender--onbeforerender-event)
     * ["render" / onRender event](#render--onrender-event)
     * ["before:destroy" / onBeforeDestroy event](#beforedestroy--onbeforedestroy-event)
     * ["destroy" / onDestroy event](#destroy--ondestroy-event)
-* [View serializeData](#itemview-serializedata)
-* [Organizing ui elements](#organizing-ui-elements)
+* [Model and Collection Events](#model-and-collection-events)
+  * [Model Events](#model-events)
+  * [Collection Events](#collection-events)
+* [Advanced View Topics](#advanced-view-topics)
 
 ## Rendering a Template
 
@@ -639,14 +641,74 @@ var ParentView = Marionette.View.extend({
 });
 ```
 
-## Events and Callback Methods
+## Events
 
-There are several events and callback methods that are called
-for an View. These events and methods are triggered with the
-[Marionette.triggerMethod](./marionette.functions.md#marionettetriggermethod)
-function which triggers the event and a corresponding `on{EventName}` method.
+Firing events on views allows you to communicate that something has happened
+on that view and allowing it to decide whether to act on it or not.
 
-### `before:render` / `onBeforeRender` event
+During the create/destroy lifecycle for a `View`, Marionette will call a number
+of events on the view being created and attached. You can listen to these events
+and act on them in two ways:
+
+  1. The typical Backbone manner: `view.on('render', function() {})`
+  2. Overriding the onEvent listener methods: `onRender: function() {}`
+
+### onEvent Listeners
+
+Marionette creates onEvent listeners for all events fired using
+`view.triggerMethod('event')` - if there is an `onEvent` method, Marionette will
+call it for you. An example:
+
+```javascript
+var Mn = require('backbone.marionette');
+
+var MyView = Mn.View.extend({
+  onRender: function() {
+    console.log("Fired whenever view.triggerMethod('render') is called.");
+  },
+
+  onOtherEvent: function(argument) {
+    console.log("Fired other:event with '" + argument + "' as an argument");
+  }
+});
+
+var view = new MyView();
+
+view.triggerMethod('other:event', 'test argument');
+```
+
+This will display in the console:
+`Fired other:event with 'test argument' as an argument`
+
+#### Rules for onEvent listeners
+
+The onEvent listeners follow clearly defined rules for determining whether they
+should be called:
+
+  1. Split the event name around `:`
+  2. Capitalize the first letter of each "word"
+  3. Prepend `on` to the event name
+  4. If the associated method exists, call it
+  5. Any extra arguments passed to `triggerMethod` get passed in
+
+A few simple examples:
+
+  1. `triggerMethod('render')` calls `onRender()`
+  2. `triggerMethod('before:render')` calls `onBeforeRender()`
+  3. `triggerMethod('before:sync', model)` calls `onBeforeSync(model)`
+
+### Lifecycle Events
+
+Marionette views defined a number of events during the creation and destruction
+lifecycle - when the view is displayed in and emptied from a region.
+
+#### View creation Lifecycle
+
+When a view is initialized and then displayed inside a region, a set of events
+will be called in a specific order. When `region.empty()` is called, the view
+will be destroyed and a number of events will be called during this process.
+
+#### `before:render` / `onBeforeRender` event
 
 Triggered before an View is rendered.
 
@@ -658,7 +720,7 @@ Marionette.View.extend({
 });
 ```
 
-### `render` / `onRender` event
+#### `render` / `onRender` event
 
 Triggered after the view has been rendered.
 You can implement this in your view to provide custom code for dealing
@@ -674,7 +736,7 @@ Marionette.View.extend({
 });
 ```
 
-### `before:destroy` / `onBeforeDestroy` event
+#### `before:destroy` / `onBeforeDestroy` event
 
 Triggered just prior to destroying the view, when the view's `destroy()` method has been called.
 
@@ -688,7 +750,7 @@ Marionette.View.extend({
 });
 ```
 
-### `destroy` / `onDestroy` event
+#### `destroy` / `onDestroy` event
 
 Triggered just after the view has been destroyed.
 
@@ -700,12 +762,12 @@ Marionette.View.extend({
 });
 ```
 
-### `before:add:region` / `onBeforeAddRegion` event
+#### `before:add:region` / `onBeforeAddRegion` event
 The `View` will trigger a "before:add:region"
 event before a region is added to the manager. This
 allows you to perform some actions on the region before it is added.
 
-### `add:region` / `onAddRegion` event
+#### `add:region` / `onAddRegion` event
 The `RegionsMixin` will trigger an "add:region"
 event when a region is added to the view. This
 allows you to use the region instance immediately,
@@ -724,7 +786,7 @@ view.on("add:region", function(name, region) {
 view.addRegion("foo", "#bar");
 ```
 
-### `before:remove:region` / `onBeforeRemoveRegion` event
+#### `before:remove:region` / `onBeforeRemoveRegion` event
 The `View` will trigger a "before:remove:region"
 event before a region is removed from the view.
 This allows you to perform any cleanup operations before the region is removed.
@@ -741,7 +803,7 @@ view.addRegion("foo", "#bar");
 view.removeRegion("foo");
 ```
 
-### `remove:region` / `onRemoveRegion` event
+#### `remove:region` / `onRemoveRegion` event
 The `View` will trigger a "remove:region"
 event when a region is removed from the view.
 This allows you to use the region instance one last
@@ -761,17 +823,17 @@ view.addRegion("foo", "#bar");
 view.removeRegion("foo");
 ```
 
-### `detach` / `onDetach` event
+#### `detach` / `onDetach` event
 The `View` will trigger the "detach" event when the view was rendered and has just been destroyed.
 
-### `before:detach` / `onBeforeDetach` event
+#### `before:detach` / `onBeforeDetach` event
 The `View` will trigger the "before:detach" event when the view is rendered and is about to be destroyed.
 If the view has not been rendered before, this event will not be fired.
 
-### `dom:refresh` / `onDomRefresh`
+#### `dom:refresh` / `onDomRefresh`
 Triggered just after the view has been attached **and** the view has been rendered.
 
-### modelEvents and collectionEvents
+## Model and Collection events
 
 The Marionette View can bind to events that occur on attached models and
 collections - this includes both [standard][backbone-events] and custom events.
@@ -906,7 +968,7 @@ var MyView = Marionette.View.extend({
 
 In this case, Marionette will bind event handlers to both.
 
-## View serializeData
+## Advanced View Topics
 
 This method is used to convert a View's `model` or `collection`
 into a usable form for a template.

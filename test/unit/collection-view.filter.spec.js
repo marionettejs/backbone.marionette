@@ -71,7 +71,7 @@ describe('collection view - filter', function() {
       this.collection.add(this.passModel);
       this.collection.add(this.failModel);
       this.collectionView = new this.CollectionView();
-      this.sinon.spy(this.collectionView, '_removeChildView');
+      this.sinon.spy(this.collectionView, 'removeChildView');
       this.collectionView.render();
     });
 
@@ -123,7 +123,7 @@ describe('collection view - filter', function() {
       });
 
       it('should remove the child view', function() {
-        expect(this.collectionView._removeChildView).to.have.been.calledOnce
+        expect(this.collectionView.removeChildView).to.have.been.calledOnce
           .and.calledOn(this.collectionView)
           .and.calledWith(this.passView);
       });

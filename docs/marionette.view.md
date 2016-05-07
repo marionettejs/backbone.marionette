@@ -484,6 +484,63 @@ In this example, the doubly-nested view structure will be rendered in a single p
 This system is recursive, so it works for any deeply nested structure. The child views
 you show can render their own child views within their onBeforeShow callbacks!
 
+### Listening to events on children
+
+Using regions lets you listen to the events that fire on child views - views
+attached inside a region. This lets a parent view take action depending on what
+is happening in views it directly owns.
+
+**To see more information about events, see the [events](#events) section**
+
+#### Defining `childViewEvents`
+
+The `childViewEvents` hash defines the events to listen to on a view's children
+mapped to the method to call. The method will receive a `child` object
+referencing the view that triggered the event.
+
+```javascript
+var Mn = require('backbone.marionette');
+
+let MyView = Mn.View.extend({
+  regions: {
+    product: '.product-hook'
+  },
+
+  childViewEvents: {
+    'add:item': 'updateBasketValue'
+  },
+
+  /** Assume item is the model belonging to the child */
+  updateBasketValue: function(child, item) {
+    var initialValue = this.model.get('value');
+    this.model.set({
+      value: item.get('value') * item.get('quantity')
+    });
+  }
+});
+```
+
+You can also directly define a function to call in `childViewEvents` like so:
+
+```javascript
+var Mn = require('backbone.marionette');
+
+let MyView = Mn.View.extend({
+  regions: {
+    product: '.product-hook'
+  },
+
+  childViewEvents: {
+    'add:item': function(child, item) {
+      var initialValue = this.model.get('value');
+      this.model.set({
+        value: item.get('value') * item.get('quantity')
+      });
+    }
+  }
+});
+```
+
 ## Organising your View
 
 The `View` provides a mechanism to name parts of your template to be used
@@ -570,76 +627,6 @@ var MyView = Mn.View.extend({
 By prefixing with `@ui`, we can change the underlying template without having to
 hunt through our view for every place where that selector is referenced - just
 update the `ui` object.
-
-## Listening to childEvents
-A childEvents hash or method permits handling of child view events without manually setting bindings. The values of the hash can either be a function or a string method name on the collection view.
-
-```javascript
-// childEvents can be specified as a hash...
-let MyView = Marionette.View.extend({
-
-  childEvents: {
-    // This callback will be called whenever a child is rendered or emits a `render` event
-    render: function() {
-      console.log('A child view has been rendered.');
-    }
-  }
-});
-
-// ...or as a function that returns a hash.
-let MyView = Marionette.View.extend({
-
-  childEvents: function() {
-    return {
-      render: this.onChildRendered
-    }
-  },
-
-  onChildRendered: function () {
-    console.log('A child view has been rendered.');
-  }
-});
-```
-
-childEvents also catches custom events fired by a child view. Take note that the first argument to a childEvents handler is the child view itself.
-
-```javascript
-// The child view fires a custom event, `show:message`
-var ChildView = Marionette.View.extend({
-
-  // Events hash defines local event handlers that in turn may call `triggerMethod`.
-  events: {
-    'click .button': 'onClickButton'
-  },
-
-  // Triggers hash converts DOM events directly to view events catchable on the parent.
-  triggers: {
-    'submit form': 'submit:form'
-  },
-
-  onClickButton: function () {
-    this.triggerMethod('show:message', 'foo');
-  }
-});
-
-// The parent uses childEvents to catch that custom event on the child view
-var ParentView = Marionette.View.extend({
-
-  childEvents: {
-    'show:message': 'onChildShowMessage',
-    'submit:form': 'onChildSubmitForm'
-  },
-
-  onChildShowMessage: function (childView, message) {
-    console.log('A child view fired show:message with ' + message);
-  },
-  // Methods called from the triggers hash do not have access to DOM events
-  // Any logic requiring the original DOM event should be handled in it's respective view
-  onChildSubmitForm: function (childView) {
-    console.log('A child view fired submit:form');
-  }
-});
-```
 
 ## Events
 

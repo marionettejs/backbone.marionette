@@ -69,7 +69,7 @@ before modifying the DOM.
 
 Replace all instances of `show` and `before:show` with `render` and
 `before:render`. If you want the view to be visible in the DOM, then listen to
-the `attach` event.
+the `dom:refresh` event.
 
 ## Templates
 

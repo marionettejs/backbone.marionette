@@ -687,15 +687,35 @@ A few simple examples:
 ### Lifecycle Events
 
 Marionette views defined a number of events during the creation and destruction
-lifecycle - when the view is displayed in and emptied from a region.
+lifecycle - when the view is displayed in and emptied from a region. In the
+documentation, we will reference the event name, however every event here
+respect the [rules for onEvent listeners](rules-for-onevent-listeners).
 
-#### View creation Lifecycle
+#### View Creation Lifecycle
 
-When a view is initialized and then displayed inside a region, a set of events
-will be called in a specific order. When `region.empty()` is called, the view
-will be destroyed and a number of events will be called during this process.
+When a view is initialized and then displayed inside a region (using
+`showChildView()`) a set of events will be called in a specific order.
 
-#### `before:render` / `onBeforeRender` event
+| Order |      Event      |
+| :---: |-----------------|
+|   1   | `before:render` |
+|   2   | `render`        |
+|   3   | `before:attach` |
+|   4   | `attach`        |
+|   5   | `dom:refresh`   |
+
+#### View Destruction Lifecycle
+
+When  `region.empty()` is called, the view will be destroyed, calling events as
+part of the destruction lifecycle.
+
+| Order |      Event      |
+| :---: |-----------------|
+|   1   | `before:detach` |
+|   2   | `detach`        |
+|   3   | `destroy`       |
+
+#### View `before:render`
 
 Triggered before an View is rendered.
 
@@ -707,7 +727,7 @@ Marionette.View.extend({
 });
 ```
 
-#### `render` / `onRender` event
+#### View `render`
 
 Triggered after the view has been rendered.
 You can implement this in your view to provide custom code for dealing
@@ -716,14 +736,34 @@ with the view's `el` after it has been rendered.
 ```js
 Marionette.View.extend({
   onRender: function() {
-    // manipulate the `el` here. it's already
-    // been rendered, and is full of the view's
-    // HTML, ready to go.
+    console.log('el exists but is not visible in the DOM');
   }
 });
 ```
 
-#### `before:destroy` / `onBeforeDestroy` event
+#### View `before:attach`
+
+Triggered after the View has been rendered but just before it is first bound
+into the page DOM. This will only be triggered once per `region.show()` - if
+you want something that will be triggered every time the DOM changes,
+you may want `render` or `before:render`.
+
+#### View `attach`
+
+Triggered once the View has been bound into the DOM. This is only triggered
+once - the first time the View is attached to the DOM. If you want an event that
+triggers every time the DOM changes visibly, you may want `dom:refresh`
+
+#### View `dom:refresh`
+
+Triggered after the first `attach` event fires _and_ every time the visible DOM
+changes.
+
+**Note for upgrading from Marionette 2** If you were using the `show` event -
+the `dom:refresh` event may be a better event than `attach` when you want to be
+sure something will run once your `el` has been attached to the DOM and updates.
+
+#### View `before:destroy`
 
 Triggered just prior to destroying the view, when the view's `destroy()` method has been called.
 
@@ -737,7 +777,14 @@ Marionette.View.extend({
 });
 ```
 
-#### `destroy` / `onDestroy` event
+#### View `detach`
+The `View` will trigger the "detach" event when the view was rendered and has just been destroyed.
+
+#### View `before:detach`
+The `View` will trigger the "before:detach" event when the view is rendered and is about to be destroyed.
+If the view has not been rendered before, this event will not be fired.
+
+#### View `destroy`
 
 Triggered just after the view has been destroyed.
 
@@ -809,16 +856,6 @@ view.addRegion("foo", "#bar");
 
 view.removeRegion("foo");
 ```
-
-#### `detach` / `onDetach` event
-The `View` will trigger the "detach" event when the view was rendered and has just been destroyed.
-
-#### `before:detach` / `onBeforeDetach` event
-The `View` will trigger the "before:detach" event when the view is rendered and is about to be destroyed.
-If the view has not been rendered before, this event will not be fired.
-
-#### `dom:refresh` / `onDomRefresh`
-Triggered just after the view has been attached **and** the view has been rendered.
 
 ## Model and Collection events
 

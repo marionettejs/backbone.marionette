@@ -709,13 +709,18 @@ When a view is initialized and then displayed inside a region (using
 When  `region.empty()` is called, the view will be destroyed, calling events as
 part of the destruction lifecycle.
 
-| Order |      Event      |
-| :---: |-----------------|
-|   1   | `before:detach` |
-|   2   | `detach`        |
-|   3   | `destroy`       |
+| Order |       Event       |
+| :---: |-------------------|
+|   1   |  `before:destroy` |
+|   2   |  `before:detach`  |
+|   3   |  `detach`         |
+|   4   |  `destroy`        |
 
-#### View `before:render`
+#### View Creation Events
+
+These events are fired during the view's creation and rendering in a region.
+
+##### View `before:render`
 
 Triggered before an View is rendered.
 
@@ -727,7 +732,7 @@ Marionette.View.extend({
 });
 ```
 
-#### View `render`
+##### View `render`
 
 Triggered after the view has been rendered.
 You can implement this in your view to provide custom code for dealing
@@ -741,20 +746,20 @@ Marionette.View.extend({
 });
 ```
 
-#### View `before:attach`
+##### View `before:attach`
 
 Triggered after the View has been rendered but just before it is first bound
 into the page DOM. This will only be triggered once per `region.show()` - if
 you want something that will be triggered every time the DOM changes,
 you may want `render` or `before:render`.
 
-#### View `attach`
+##### View `attach`
 
 Triggered once the View has been bound into the DOM. This is only triggered
 once - the first time the View is attached to the DOM. If you want an event that
 triggers every time the DOM changes visibly, you may want `dom:refresh`
 
-#### View `dom:refresh`
+##### View `dom:refresh`
 
 Triggered after the first `attach` event fires _and_ every time the visible DOM
 changes.
@@ -763,7 +768,11 @@ changes.
 the `dom:refresh` event may be a better event than `attach` when you want to be
 sure something will run once your `el` has been attached to the DOM and updates.
 
-#### View `before:destroy`
+#### View Destruction Events
+
+These events are fired during the view's destruction and removal from a region.
+
+##### View `before:destroy`
 
 Triggered just prior to destroying the view, when the view's `destroy()` method has been called.
 
@@ -777,16 +786,20 @@ Marionette.View.extend({
 });
 ```
 
-#### View `detach`
-The `View` will trigger the "detach" event when the view was rendered and has just been destroyed.
+##### View `before:detach`
 
-#### View `before:detach`
-The `View` will trigger the "before:detach" event when the view is rendered and is about to be destroyed.
+The `View` will trigger the "before:detach" event when the view is rendered and
+is about to be removed from the DOM.
 If the view has not been rendered before, this event will not be fired.
 
-#### View `destroy`
+##### View `detach`
+The `View` will trigger the "detach" event when the view was rendered and has
+just been destroyed.
 
-Triggered just after the view has been destroyed.
+##### View `destroy`
+
+Triggered just after the view has been destroyed. At this point, the view has
+been completely removed from the DOM.
 
 ```js
 Marionette.View.extend({
@@ -796,12 +809,16 @@ Marionette.View.extend({
 });
 ```
 
-#### `before:add:region` / `onBeforeAddRegion` event
+#### Other View Events
+
+These events are fired on specific actions performed on the view.
+
+##### `before:add:region` / `onBeforeAddRegion` event
 The `View` will trigger a "before:add:region"
 event before a region is added to the manager. This
 allows you to perform some actions on the region before it is added.
 
-#### `add:region` / `onAddRegion` event
+##### `add:region` / `onAddRegion` event
 The `RegionsMixin` will trigger an "add:region"
 event when a region is added to the view. This
 allows you to use the region instance immediately,
@@ -820,7 +837,7 @@ view.on("add:region", function(name, region) {
 view.addRegion("foo", "#bar");
 ```
 
-#### `before:remove:region` / `onBeforeRemoveRegion` event
+##### `before:remove:region` / `onBeforeRemoveRegion` event
 The `View` will trigger a "before:remove:region"
 event before a region is removed from the view.
 This allows you to perform any cleanup operations before the region is removed.
@@ -837,7 +854,7 @@ view.addRegion("foo", "#bar");
 view.removeRegion("foo");
 ```
 
-#### `remove:region` / `onRemoveRegion` event
+##### `remove:region` / `onRemoveRegion` event
 The `View` will trigger a "remove:region"
 event when a region is removed from the view.
 This allows you to use the region instance one last

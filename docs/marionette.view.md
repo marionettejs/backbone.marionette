@@ -813,48 +813,54 @@ Marionette.View.extend({
 
 These events are fired on specific actions performed on the view.
 
-##### `before:add:region` / `onBeforeAddRegion` event
-The `View` will trigger a "before:add:region"
-event before a region is added to the manager. This
-allows you to perform some actions on the region before it is added.
+##### View `before:add:region`
 
-##### `add:region` / `onAddRegion` event
-The `RegionsMixin` will trigger an "add:region"
-event when a region is added to the view. This
-allows you to use the region instance immediately,
-or attach the region to an object that needs a
-reference to it:
+When you add a region to a view - through `addRegion()` - the
+`before:add:region` event will fire just before the region is actually added.
+
+##### View `add:region`
+
+When a region is added to a view - through `addRegion()` - the `add:region`
+event will be fired. This happens just after the region is added and is
+available to use on the view.
 
 ```javascript
-let view = new Marionette.View(),
-	 myObject = {};
+var Mn = require('backbone.marionette');
 
-view.on("add:region", function(name, region) {
-  // add the region instance to an object
-  myObject[name] = region;
+var MyView = Mn.View.extend({
+  onAddRegion: function(name, region) {
+    console.log('Region called ' + name + ' was added');
+  }
 });
 
-view.addRegion("foo", "#bar");
+var myView = new MyView();
+myView.addRegion('regionName', '#selector');
 ```
 
-##### `before:remove:region` / `onBeforeRemoveRegion` event
+##### View `before:remove:region`
+
 The `View` will trigger a "before:remove:region"
 event before a region is removed from the view.
 This allows you to perform any cleanup operations before the region is removed.
 
 ```javascript
-let view = new Marionette.View();
+var Mn = require('backbone.marionette');
 
-view.on("before:remove:region", function(name, region) {
-  // do something with the region instance here
+var MyView = Mn.View.extend({
+  onBeforeRemoveRegion: function(name) {
+    console.log('Region called ' + name + ' is about to be removed');
+  },
+
+  regions: {
+    regionName: '#selector'
+  }
 });
 
-view.addRegion("foo", "#bar");
-
-view.removeRegion("foo");
+var myView = new MyView();
+myView.removeRegion("foo");
 ```
 
-##### `remove:region` / `onRemoveRegion` event
+##### View `remove:region`
 The `View` will trigger a "remove:region"
 event when a region is removed from the view.
 This allows you to use the region instance one last

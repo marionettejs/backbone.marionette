@@ -173,6 +173,9 @@ All arguments that are passed to the triggerMethod call are passed along to both
 
 `triggerMethod("foo", bar)` will call `onFoo: function(bar){...})`
 
+To trigger several events and corresponding methods split the events by the space. Example:
+* `triggerMethod("render ready")` fires the "onRender" ans the "onReady" functions
+
 Note that `triggerMethod` can be called on objects that do not have
 `Backbone.Events` mixed in to them. These objects will not have a `trigger`
 method, and no attempt to call `.trigger()` will be made. The `on{Name}`

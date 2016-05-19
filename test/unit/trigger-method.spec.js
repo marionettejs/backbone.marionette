@@ -3,13 +3,16 @@ describe('trigger event and method name', function() {
 
   beforeEach(function() {
     this.returnValue = 'foo';
+    this.secondReturnValue = 'qux';
     this.argumentOne = 'bar';
     this.argumentTwo = 'baz';
 
     this.view = new Marionette.View();
 
     this.eventHandler = this.sinon.stub();
+    this.secondEventHandler = this.sinon.stub();
     this.methodHandler = this.sinon.stub().returns(this.returnValue);
+    this.secondMethodHandler = this.sinon.stub().returns(this.secondReturnValue);
     this.triggerMethodSpy = this.sinon.spy(this.view, 'triggerMethod');
   });
 
@@ -114,6 +117,30 @@ describe('trigger event and method name', function() {
 
     it('should not call a method named with each segment of the event name capitalized', function() {
       expect(this.methodHandler).not.to.have.been.calledOnce;
+    });
+  });
+
+  describe('when triggering a space-delimited list of events', function() {
+    beforeEach(function() {
+      this.view.onFoo = this.methodHandler;
+      this.view.onQux = this.secondMethodHandler;
+      this.view.on('foo', this.eventHandler);
+      this.view.on('qux', this.secondEventHandler);
+      this.view.triggerMethod('foo qux');
+    });
+
+    it('should trigger all the events', function() {
+      expect(this.eventHandler).to.have.been.calledOnce;
+      expect(this.secondEventHandler).to.have.been.calledOnce;
+    });
+
+    it('should call all the methods named as on{Event}', function() {
+      expect(this.methodHandler).to.have.been.calledOnce;
+      expect(this.secondMethodHandler).to.have.been.calledOnce;
+    });
+
+    it('returns an array of the values returned by the on{Event} methods', function() {
+      expect(this.triggerMethodSpy).to.have.been.calledOnce.and.returned([this.returnValue, this.secondReturnValue]);
     });
   });
 

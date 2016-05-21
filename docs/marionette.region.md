@@ -100,7 +100,7 @@ var MyView = Mn.View.extend({
   },
 
   onRender: function() {
-    this.showChildView('tooverwrite', new OverWriteView());
+    this.showChildView('main', new OverWriteView());
   }
 });
 new MyView().render();

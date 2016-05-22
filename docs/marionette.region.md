@@ -15,7 +15,7 @@ managing regions throughout your application.
 * [Defining Regions](#defining-regions)
   * [String Selector](#string-selector)
   * [Additional Options](#additional-options)
-* [Showing a view](#showing-a-view)
+* [Showing a View](#showing-a-view)
 * [Checking whether a region is showing a view](#checking-whether-a-region-is-showing-a-view)
 * [`reset` A Region](#reset-a-region)
 * [Set How View's `el` Is Attached](#set-how-views-el-is-attached)
@@ -97,13 +97,18 @@ var MyView = Mn.View.extend({
       el: '.overwrite-me',
       replaceElement: true
     }
-  },
-
-  onRender: function() {
-    this.showChildView('main', new OverWriteView());
   }
 });
-new MyView().render();
+var view = new MyView();
+view.render();
+
+console.log(view.$('.overwrite-me').length); // 1
+console.log(view.$('.new-class').length); // 0
+
+view.showChildView('main', new OverWriteView());
+
+console.log(view.$('.overwrite-me').length); // 0
+console.log(view.$('.new-class').length); // 1
 ```
 
 When the instance of `MyView` is rendered, the `.overwrite-me` element will be
@@ -138,10 +143,10 @@ myView.showChildView('main', childView);
 Both forms take an `options` object that will be passed to the
 [events fired during `show`](#events-raised-during-show).
 
-### Unshowing a View
+### Removing a View
 
-You can remove a view from a region (effectively unshowing it) with
-`region.empty()` on a region like so:
+You can remove a view from a region (effectively "unshowing" it) with
+`region.empty()` on a region:
 
 ```javascript
 var myView = new MyView();
@@ -183,8 +188,8 @@ mainRegion.show(anotherView2, {preventDestroy: true});
 mainRegion.empty({preventDestroy: true});
 ```
 
-**NOTE** When using `preventDestroy: true` you must be careful to cleanup your old
-views manually to prevent memory leaks.
+**NOTE** When using `preventDestroy: true` you must be careful to cleanup your
+old views manually to prevent memory leaks.
 
 #### onBeforeAttach & onAttach
 
@@ -250,7 +255,7 @@ is showing a view.
 
 ```javascript
 var myView = new MyView();
-mainRegion = myView.getRegion('main');
+var mainRegion = myView.getRegion('main');
 
 mainRegion.hasView() // false
 mainRegion.show(new OtherView());
@@ -265,11 +270,13 @@ region shows a view, the region's `el` is queried from
 the DOM.
 
 ```js
+var myView = new MyView();
+myView.showChildView('main', new OtherView());
+var mainRegion = myView.getRegion('main');
 myRegion.reset();
 ```
 
-This is useful when regions are re-used across view
-instances, and in unit testing.
+This can be useful in unit testing your views.
 
 ### Set How View's `el` Is Attached
 
@@ -334,67 +341,9 @@ A region will raise a few events on itself and on the target view when showing a
 * `before:empty` / `onBeforeEmpty` - Called before the view has been emptied.
 * `empty` / `onEmpty` - Called when the view has been emptied.
 
-### Events Raised on the View During `show()`
-
-* `before:render` / `onBeforeRender` - Called before the view is rendered.
-* `render` / `onRender` - Called after the view is rendered, but before it is attached to the DOM.
-* `before:show` / `onBeforeShow` - Called after the view has been rendered, but before it has been bound to the region.
-* `before:attach` / `onBeforeAttach` - Called before the view is attached to the DOM.  This will not fire if the Region itself is not attached.
-* `attach` / `onAttach` - Called after the view is attached to the DOM.  This will not fire if the Region itself is not attached.
-* `show` / `onShow` - Called when the view has been rendered and bound to the region.
-* `dom:refresh` / `onDomRefresh` - Called when the view is both rendered and shown, but only if it is attached to the DOM.  This will not fire if the Region itself is not attached.
-* `before:destroy` / `onBeforeDestroy` - Called before destroying a view.
-* `destroy` / `onDestroy` - Called after destroying a view.
-
-Note: `render`, `destroy`, and `dom:refresh` are triggered on pure Backbone Views during a show, but for a complete implementation of these events the Backbone View should fire `render` within `render()` and `destroy` within `remove()` as well as set the following flags:
-
 ```js
 view.supportsRenderLifecycle = true;
 view.supportsDestroyLifecycle = true;
-```
-
-### Example Event Handlers
-
-```js
-var mainRegion = myView.getRegion('mainRegion');
-
-mainRegion.on("before:show", function(view, region, options){
-  // manipulate the `view` or do something extra
-  // with the `region`
-  // you also have access to the `options` that were passed to the Region.show call
-});
-
-mainRegion.on("show", function(view, region, options){
-  // manipulate the `view` or do something extra
-  // with the `region`
-  // you also have access to the `options` that were passed to the Region.show call
-});
-
-mainRegion.on("empty", function(view, region){
-  // manipulate the `view` or do something extra
-  // with the `region`
-});
-
-var MyRegion = Marionette.Region.extend({
-  // ...
-
-  onBeforeShow: function(view, region, options) {
-    // the `view` has not been shown yet
-  },
-
-  onShow: function(view, region, options){
-    // the `view` has been shown
-  }
-});
-
-var MyView = Marionette.View.extend({
-  onBeforeShow: function(view, region, options) {
-    // called before the `view` has been shown
-  },
-  onShow: function(view, region, options){
-    // called when the `view` has been shown
-  }
-});
 ```
 
 ## Custom Region Classes

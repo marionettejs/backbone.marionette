@@ -1,3 +1,9 @@
+### v2.4.6 [view commit logs](https://github.com/marionettejs/backbone.marionette/compare/v2.4.5...v2.4.6)
+
+#### Misc
+
+* Updated Backbone dependency to 1.3.x.
+
 ### v2.4.5 [view commit logs](https://github.com/marionettejs/backbone.marionette/compare/v2.4.4...v2.4.5)
 
 #### Fixes

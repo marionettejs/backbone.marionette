@@ -114,7 +114,7 @@ PR. That would at least get us started on creating the failing test in the code.
 
 * via command-line by running `npm test`
 
-* in the browser by opening `test/runner.html`
+* in the browser by running `npm run test-browser`
 
 To see test matrix - run `npm run coverage`
 

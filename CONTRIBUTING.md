@@ -17,6 +17,8 @@ the process of getting changes merged in and released.
 
 * Run `npm install` to make sure you have all Marionette dependencies locally.
 
+* Run `npm run build` to build source files.
+
 ## Reporting a bug
 
 In order to best help out with bugs, we need to know the following information
@@ -110,14 +112,11 @@ PR. That would at least get us started on creating the failing test in the code.
 
 ## Running Tests
 
-There are 3 ways you can run the tests.
-
 * via command-line by running `npm test`
 
-* in the browser by opening `SpecRunner.html`
+* in the browser by opening `test/runner.html`
 
-* via Grunt by running `grunt` to run tests once or `grunt watch` to rerun on
-each change
+To see test matrix - run `npm run coverage`
 
 ## Updating docs
 

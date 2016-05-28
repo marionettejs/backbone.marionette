@@ -13,10 +13,10 @@ managing regions throughout your application.
 ## Documentation Index
 
 * [Defining the Application Region](#defining-the-application-region)
-* [Region Configuration Types](#region-configuration-types)
-* [Initialize A Region With An `el`](#initialize-a-region-with-an-el)
-* [Basic Use](#basic-use)
-* [Showing a view](#showing-a-view)
+* [Defining Regions](#defining-regions)
+  * [String Selector](#string-selector)
+  * [Additional Options](#additional-options)
+* [Showing a View](#showing-a-view)
 * [Checking whether a region is showing a view](#checking-whether-a-region-is-showing-a-view)
 * [`reset` A Region](#reset-a-region)
 * [Set How View's `el` Is Attached](#set-how-views-el-is-attached)
@@ -54,7 +54,7 @@ var App = Marionette.Application.extend({
 For more information, see the
 [Application docs](./marionette.application.md#root-layout).
 
-## Region Configuration Types
+## Defining Regions
 
 Marionette supports multiple ways to define regions on your `Application` or
 `View`. This section will document the different types as applied to `View`,
@@ -75,164 +75,49 @@ var MyView = Marionette.View.extend({
 });
 ```
 
-### Region Class
+### Additional Options
 
-If you've created a custom region class with an `el` property set, you can pass
-it in as an argument to your `regions` constructor.
+You can define regions with an object literal. Object literal definitions expect
+an `el` property - the jQuery selector string to hook the region into. The
+object literal is the most common way to define whether showing the region
+overwrites the `el` or just overwrites the content (the default behavior).
 
-```js
-var Marionette = require('backbone.marionette');
+To overwrite the parent `el` of the region with the rendered contents of the
+inner View, use `replaceElement` as so:
 
-var MyRegion = Marionette.Region.extend({
-  el: '#main-nav'  // This is mandatory
+```javascript
+var Mn = require('backbone.marionette');
+
+var OverWriteView = Mn.View.extend({
+  className: '.new-class'
 });
 
-var MyView = Marionette.View.extend({
+var MyView = Mn.View.extend({
   regions: {
-    mainRegion: MyRegion
-  }
-});
-```
-
-### Object Literal
-
-Finally, you can define regions with an object literal. Object
-literal definitions normally expect a `selector` or `el`
-property.  The `selector` property is a selector string, and
-the `el` property can be a selector string, a jQuery object,
-or an HTML node.
-
-You may also supply a `regionClass` property for a custom region
-class. If your `regionClass` already has `el` set, then you do
-not need to supply a `selector` or `el` property on the object
-literal.
-
-Any other properties you set on the object literal will be
-used as options passed to the region instance, including the
-`allowMissingEl` option.
-
-Ordinarily regions enforce the presence of a backing DOM element.
-In some instances it may be desirable to allow regions to be
-instantiated and used without an element, such as when regions
-defined by a parent `LayoutView` class are used by only some of its
-subclasses. In these instances, the region can be defined with the
-`allowMissingEl` option, suppressing the missing element error and
-causing `show` calls to the region to be treated as no-ops.
-
-```js
-var Marionette = require('backbone.marionette');
-
-var MyRegion = Marionette.Region.extend();
-var MyOtherRegion = Marionette.Region.extend();
-var MyElRegion = Marionette.Region.extend({ el: '#footer' });
-
-
-var MyView = Marionette.View.extend({
-  regions: {
-    contentRegion: {
-      el: '#content',
-      regionClass: MyRegion
-    },
-
-    navigationRegion: {
-      el: '#navigation',
-      regionClass: MyOtherRegion,
-
-      // Options passed to instance of `MyOtherRegion` for
-      // the `navigationRegion` on `App`
-      navigationOption: 42,
-      anotherNavigationOption: 'foo'
-    },
-
-    footerRegion: {
-      regionClass: MyElRegion
+    main: {
+      el: '.overwrite-me',
+      replaceElement: true
     }
   }
 });
+var view = new MyView();
+view.render();
+
+console.log(view.$('.overwrite-me').length); // 1
+console.log(view.$('.new-class').length); // 0
+
+view.showChildView('main', new OverWriteView());
+
+console.log(view.$('.overwrite-me').length); // 0
+console.log(view.$('.new-class').length); // 1
 ```
 
-Take note that one of the primary benefits of using `regionClass`
-with an `el` already set is to also provide options to the region
-instance. This isn't possible when using the region class directly
-like earlier.
+When the instance of `MyView` is rendered, the `.overwrite-me` element will be
+removed from the DOM and replaced with an element of `.new-class` - this lets
+us do things like rendering views inside `table` or `select` more easily -
+these elements are usually very strict on what content they will allow.
 
-```js
-var Marionette = require('backbone.marionette');
-
-var MyRegion = Marionette.Region.extend({
-  el: '#content',
-});
-
-var MyView = Marionette.View.extend({
-  regions: {
-    contentRegion: {
-      regionClass: MyRegion,
-      myRegionOption: 'bar',
-      myOtherRegionOption: 'baz'
-    }    
-  }
-});
-```
-
-### Mix-and-match
-
-Of course you can mix-and-match the region configuration types.
-
-```js
-var Marionette = require('backbone.marionette');
-
-var MyRegion = Marionette.Region.extend({
-  el: '#content'
-});
-
-var MyOtherRegion = Marionette.Region.extend();
-
-var MyView = Marionette.View.extend({
-  regions: {
-    contentRegion: MyRegion,
-
-    navigationRegion: '#navigation',
-
-    footerRegion: {
-      el: '#footer',
-      regionClass: MyOtherRegion
-    }
-  }
-});
-```
-
-## Initialize A Region With An `el`
-
-You can specify an `el` for the region to manage at the time
-that the region is instantiated:
-
-```js
-var Marionette = require('backbone.marionette');
-
-var mgr = new Marionette.Region({
-  el: "#someElement"
-});
-```
-
-The `el` option can also be a raw DOM node reference:
-
-```js
-var mgr = new Marionette.Region({
-  el: document.querySelector("body")
-});
-```
-
-Or the `el` can also be a `jQuery` wrapped DOM node:
-
-```js
-var mgr = new Marionette.Region({
-  el: $("body")
-});
-```
-
-## Basic Use
-
-### Showing a View
+## Showing a View
 
 Once a region is defined, you can call its `show`
 and `empty` methods to display and shut-down a view:
@@ -240,18 +125,42 @@ and `empty` methods to display and shut-down a view:
 ```js
 var myView = new MyView();
 var childView = new MyChildView();
+var mainRegion = myView.getRegion('main');
 
 // render and display the view
-myView.getRegion('mainRegion').show(childView, options);
-
-
-// empties the current view
-myView.getRegion('mainRegion').empty();
+mainRegion.show(childView);
 ```
 
-The `options` object is optional. If provided, it will be passed to the [events raised during `show`](#events-raised-during-show) (except for `before:empty` and `empty`). Special properties that change the behavior of `show` include `preventDestroy`.
+This is equivalent to a view's `showChildView` which can be used as:
 
-#### preventDestroy
+```javascript
+var myView = new MyView();
+var childView = new MyChildView();
+
+// render and display the view
+myView.showChildView('main', childView);
+```
+
+Both forms take an `options` object that will be passed to the
+[events fired during `show`](#events-raised-during-show).
+
+### Removing a View
+
+You can remove a view from a region (effectively "unshowing" it) with
+`region.empty()` on a region:
+
+```javascript
+var myView = new MyView();
+
+myView.showChildView('main', new OtherView());
+var mainRegion = myView.getRegion('main');
+mainRegion.empty();
+```
+
+This will destroy the view, cleaning up any event handlers and remove it from
+the DOM.
+
+### Preserving Existing Views
 
 If you replace the current view with a new view by calling `show`,
 by default it will automatically destroy the previous view.
@@ -264,27 +173,24 @@ parameter. Several events will also be triggered on the views; see
 var myView = new MyView();
 var childView = new MyChildView();
 
-myView.mainRegion.show(childView);
+var mainRegion = myView.getRegion('main');
+
+mainRegion.show(childView);
 
 // Replace the view with another. The
 // `destroy` method is called for you
 var anotherView = new AnotherView();
-myView.mainRegion.show(anotherView);
+mainRegion.show(anotherView);
 
 // Replace the view with another.
 // Prevent `destroy` from being called
 var anotherView2 = new AnotherView();
-myView.mainRegion.show(anotherView2, { preventDestroy: true });
+mainRegion.show(anotherView2, {preventDestroy: true});
+mainRegion.empty({preventDestroy: true});
 ```
 
-NOTE: When using `preventDestroy: true` you must be careful to cleanup your old
-views manually to prevent memory leaks.
-
-#### Emptying a region
-
-You can empty a region of its view and contents by invoking `.empty()` on the region instance.
-If you would like to prevent the view currently shown in the region from being `destroyed` you can pass `{preventDestroy: true}` to the empty method to prevent the default destroy behavior.
-The empty method returns the region instance from the invocation of the method.
+**NOTE** When using `preventDestroy: true` you must be careful to cleanup your
+old views manually to prevent memory leaks.
 
 #### onBeforeAttach & onAttach
 
@@ -348,6 +254,15 @@ If you wish to check whether a region has a view, you can use the `hasView`
 function. This will return a boolean value depending whether or not the region
 is showing a view.
 
+```javascript
+var myView = new MyView();
+var mainRegion = myView.getRegion('main');
+
+mainRegion.hasView() // false
+mainRegion.show(new OtherView());
+mainRegion.hasView() // true
+```
+
 ### `reset` A Region
 
 A region can be `reset` at any time. This destroys any existing view
@@ -356,11 +271,13 @@ region shows a view, the region's `el` is queried from
 the DOM.
 
 ```js
+var myView = new MyView();
+myView.showChildView('main', new OtherView());
+var mainRegion = myView.getRegion('main');
 myRegion.reset();
 ```
 
-This is useful when regions are re-used across view
-instances, and in unit testing.
+This can be useful in unit testing your views.
 
 ### Set How View's `el` Is Attached
 
@@ -425,67 +342,9 @@ A region will raise a few events on itself and on the target view when showing a
 * `before:empty` / `onBeforeEmpty` - Called before the view has been emptied.
 * `empty` / `onEmpty` - Called when the view has been emptied.
 
-### Events Raised on the View During `show()`
-
-* `before:render` / `onBeforeRender` - Called before the view is rendered.
-* `render` / `onRender` - Called after the view is rendered, but before it is attached to the DOM.
-* `before:show` / `onBeforeShow` - Called after the view has been rendered, but before it has been bound to the region.
-* `before:attach` / `onBeforeAttach` - Called before the view is attached to the DOM.  This will not fire if the Region itself is not attached.
-* `attach` / `onAttach` - Called after the view is attached to the DOM.  This will not fire if the Region itself is not attached.
-* `show` / `onShow` - Called when the view has been rendered and bound to the region.
-* `dom:refresh` / `onDomRefresh` - Called when the view is both rendered and shown, but only if it is attached to the DOM.  This will not fire if the Region itself is not attached.
-* `before:destroy` / `onBeforeDestroy` - Called before destroying a view.
-* `destroy` / `onDestroy` - Called after destroying a view.
-
-Note: `render`, `destroy`, and `dom:refresh` are triggered on pure Backbone Views during a show, but for a complete implementation of these events the Backbone View should fire `render` within `render()` and `destroy` within `remove()` as well as set the following flags:
-
 ```js
 view.supportsRenderLifecycle = true;
 view.supportsDestroyLifecycle = true;
-```
-
-### Example Event Handlers
-
-```js
-var mainRegion = myView.getRegion('mainRegion');
-
-mainRegion.on("before:show", function(view, region, options){
-  // manipulate the `view` or do something extra
-  // with the `region`
-  // you also have access to the `options` that were passed to the Region.show call
-});
-
-mainRegion.on("show", function(view, region, options){
-  // manipulate the `view` or do something extra
-  // with the `region`
-  // you also have access to the `options` that were passed to the Region.show call
-});
-
-mainRegion.on("empty", function(view, region){
-  // manipulate the `view` or do something extra
-  // with the `region`
-});
-
-var MyRegion = Marionette.Region.extend({
-  // ...
-
-  onBeforeShow: function(view, region, options) {
-    // the `view` has not been shown yet
-  },
-
-  onShow: function(view, region, options){
-    // the `view` has been shown
-  }
-});
-
-var MyView = Marionette.View.extend({
-  onBeforeShow: function(view, region, options) {
-    // called before the `view` has been shown
-  },
-  onShow: function(view, region, options){
-    // called when the `view` has been shown
-  }
-});
 ```
 
 ## Custom Region Classes

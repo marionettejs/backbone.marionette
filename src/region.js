@@ -43,7 +43,7 @@ const Region = MarionetteObject.extend({
     this._ensureView(view);
     if (view === this.currentView) { return this; }
 
-    this.triggerMethod('before:show', this, view, options);
+    this.triggerMethod('before:show', view, options);
 
     MonitorViewEvents(view);
 
@@ -63,7 +63,7 @@ const Region = MarionetteObject.extend({
 
     this._attachView(view, options);
 
-    this.triggerMethod('show', this, view, options);
+    this.triggerMethod('show', view, options);
     return this;
   },
 

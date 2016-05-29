@@ -6,16 +6,15 @@ describe('trigger event and method name', function() {
     this.argumentOne = 'bar';
     this.argumentTwo = 'baz';
 
-    this.view = new Marionette.View();
-
     this.eventHandler = this.sinon.stub();
     this.methodHandler = this.sinon.stub().returns(this.returnValue);
-    this.triggerMethodSpy = this.sinon.spy(this.view, 'triggerMethod');
   });
 
   describe('triggering an event when passed options', function() {
     beforeEach(function() {
-      this.view.options.onFoo = this.methodHandler;
+      this.view = new Marionette.View({
+        onFoo: this.methodHandler
+      });
       this.view.triggerMethod('foo');
     });
 
@@ -26,6 +25,9 @@ describe('trigger event and method name', function() {
 
   describe('when triggering an event', function() {
     beforeEach(function() {
+      this.view = new Marionette.View();
+      this.triggerMethodSpy = this.sinon.spy(this.view, 'triggerMethod');
+
       this.view.onFoo = this.methodHandler;
       this.view.on('foo', this.eventHandler);
       this.view.triggerMethod('foo');
@@ -56,6 +58,7 @@ describe('trigger event and method name', function() {
 
   describe('when triggering an event with arguments', function() {
     beforeEach(function() {
+      this.view = new Marionette.View();
       this.view.onFoo = this.methodHandler;
       this.view.on('foo', this.eventHandler);
       this.view.triggerMethod('foo', this.argumentOne, this.argumentTwo);
@@ -72,6 +75,7 @@ describe('trigger event and method name', function() {
 
   describe('when triggering an event with : separated name', function() {
     beforeEach(function() {
+      this.view = new Marionette.View();
       this.view.onFooBar = this.methodHandler;
       this.view.on('foo:bar', this.eventHandler);
       this.view.triggerMethod('foo:bar', this.argumentOne, this.argumentTwo);
@@ -88,6 +92,7 @@ describe('trigger event and method name', function() {
 
   describe('when triggering an event and no handler method exists', function() {
     beforeEach(function() {
+      this.view = new Marionette.View();
       this.view.on('foo:bar', this.eventHandler);
       this.view.triggerMethod('foo:bar', this.argumentOne, this.argumentTwo);
     });
@@ -103,6 +108,7 @@ describe('trigger event and method name', function() {
 
   describe('when triggering an event and the attribute for that event is not a function', function() {
     beforeEach(function() {
+      this.view = new Marionette.View();
       this.view.onFooBar = 'baz';
       this.view.on('foo:bar', this.eventHandler);
       this.view.triggerMethod('foo:bar', this.argumentOne, this.argumentTwo);
@@ -149,6 +155,8 @@ describe('trigger event and method name', function() {
   describe('when triggering an event on another context', function() {
     describe('when the context has triggerMethod defined', function() {
       beforeEach(function() {
+        this.view = new Marionette.View();
+        this.triggerMethodSpy = this.sinon.spy(this.view, 'triggerMethod');
         this.view.onFoo = this.methodHandler;
         this.view.on('foo', this.eventHandler);
         Marionette.triggerMethodOn(this.view, 'foo');

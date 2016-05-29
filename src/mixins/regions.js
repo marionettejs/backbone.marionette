@@ -3,6 +3,10 @@ import _invoke              from '../utils/_invoke';
 import Region               from '../region';
 import MarionetteError      from '../error';
 
+// MixinOptions
+// - regions
+// - regionClass
+
 export default {
   regionClass: Region,
 
@@ -14,7 +18,7 @@ export default {
     this.regions =  this.regions || {};
     this._regions = {};
 
-    this.addRegions(this.getValue(this.getOption('regions')));
+    this.addRegions(_.result(this, 'regions'));
   },
 
   // Internal method to re-initialize all of the regions by updating
@@ -85,7 +89,7 @@ export default {
   },
 
   _buildRegionFromObject: function(definition) {
-    var RegionClass = definition.regionClass || this.getOption('regionClass');
+    var RegionClass = definition.regionClass || this.regionClass;
 
     var options = _.omit(definition, 'regionClass');
 

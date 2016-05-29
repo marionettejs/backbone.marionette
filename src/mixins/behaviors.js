@@ -1,8 +1,10 @@
 import _                        from 'underscore';
-import getValue                 from '../utils/getValue';
 import _invoke                  from '../utils/_invoke';
 import { triggerMethod }        from '../trigger-method';
 import Marionette               from '../backbone.marionette';
+
+// MixinOptions
+// - behaviors
 
 // Takes care of getting the behavior class
 // given options and a key.
@@ -19,7 +21,11 @@ function getBehaviorClass(options, key) {
   }
 
   // behaviorsLookup can be either a flat object or a method
-  return getValue(Marionette.Behaviors.behaviorsLookup, options, key)[key];
+  if (_.isFunction(Marionette.Behaviors.behaviorsLookup)) {
+    return Marionette.Behaviors.behaviorsLookup(options, key)[key];
+  }
+
+  return Marionette.Behaviors.behaviorsLookup[key];
 }
 
 // Iterate over the behaviors object, for each behavior
@@ -39,7 +45,7 @@ function parseBehaviors(view, behaviors) {
 
 export default {
   _initBehaviors: function() {
-    var behaviors = this.getValue(this.getOption('behaviors'));
+    var behaviors = _.result(this, 'behaviors');
 
     // Behaviors defined on a view can be a flat object literal
     // or it can be a function that returns an object.

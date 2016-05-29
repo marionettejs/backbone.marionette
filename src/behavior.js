@@ -13,6 +13,14 @@ import TriggersMixin      from './mixins/triggers';
 import UIMixin            from './mixins/ui';
 import getUniqueEventName from './utils/getUniqueEventName';
 
+const ClassOptions = [
+  'collectionEvents',
+  'events',
+  'modelEvents',
+  'triggers',
+  'ui'
+];
+
 var Behavior = MarionetteObject.extend({
   cidPrefix: 'mnb',
 
@@ -24,6 +32,8 @@ var Behavior = MarionetteObject.extend({
     this.view = view;
     this.defaults = _.clone(_.result(this, 'defaults', {}));
     this._setOptions(this.defaults, options);
+    this.mergeOptions(this.options, ClassOptions);
+
     // Construct an internal UI hash using
     // the behaviors UI hash and then the view UI hash.
     // This allows the user to use UI hash elements

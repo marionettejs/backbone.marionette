@@ -8,10 +8,17 @@ import CommonMixin from './mixins/common';
 import RadioMixin from './mixins/radio';
 import { triggerMethod } from './trigger-method';
 
+const ClassOptions = [
+  'channelName',
+  'radioEvents',
+  'radioRequests'
+];
+
 // A Base Class that other Classes should descend from.
 // Object borrows many conventions and utilities from Backbone.
 var MarionetteObject = function(options) {
   this._setOptions(options);
+  this.mergeOptions(options, ClassOptions);
   this.cid = _.uniqueId(this.cidPrefix);
   this._initRadio();
   this.initialize.apply(this, arguments);

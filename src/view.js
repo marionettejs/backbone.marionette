@@ -8,6 +8,22 @@ import RegionsMixin       from './mixins/regions';
 import monitorViewEvents  from './monitor-view-events';
 import Renderer           from './renderer';
 
+const ClassOptions = [
+  'behaviors',
+  'childViewEventPrefix',
+  'childViewEvents',
+  'childViewTriggers',
+  'collectionEvents',
+  'events',
+  'modelEvents',
+  'regionClass',
+  'regions',
+  'template',
+  'templateContext',
+  'triggers',
+  'ui'
+];
+
 // The standard view. Includes view events, automatic rendering
 // of Underscore templates, nested views, and more.
 const View = Backbone.View.extend({
@@ -16,6 +32,8 @@ const View = Backbone.View.extend({
     this.render = _.bind(this.render, this);
 
     this._setOptions(options);
+
+    this.mergeOptions(options, ClassOptions);
 
     monitorViewEvents(this);
 
@@ -114,7 +132,17 @@ const View = Backbone.View.extend({
   // definition or pass a `template: "whatever"` parameter in
   // to the constructor options.
   getTemplate() {
-    return this.getOption('template');
+    return this.template;
+  },
+
+  // Mix in template context methods. Looks for a
+  // `templateContext` attribute, which can either be an
+  // object literal, or a function that returns an object
+  // literal. All methods and attributes from this object
+  // are copies to the object passed in.
+  mixinTemplateContext: function(target = {}) {
+    const templateContext = _.result(this, 'templateContext');
+    return _.extend(target, templateContext);
   },
 
   // Attaches the content of a given view.

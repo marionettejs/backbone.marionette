@@ -1,3 +1,4 @@
+import _ from 'underscore';
 import Radio from 'backbone.radio';
 
 import {
@@ -10,10 +11,15 @@ import {
   unbindEntityEvents as unbindRadioEvents
 } from '../bind-entity-events';
 
+// MixinOptions
+// - channelName
+// - radioEvents
+// - radioRequests
+
 export default {
 
   _initRadio: function() {
-    var channelName = this.getValue(this.getOption('channelName'));
+    var channelName = _.result(this, 'channelName');
 
     if (!channelName) {
       return;
@@ -21,10 +27,10 @@ export default {
 
     var channel = this._channel = Radio.channel(channelName);
 
-    var radioEvents = this.getValue(this.getOption('radioEvents'));
+    var radioEvents = _.result(this, 'radioEvents');
     this.bindRadioEvents(channel, radioEvents);
 
-    var radioRequests = this.getValue(this.getOption('radioRequests'));
+    var radioRequests = _.result(this, 'radioRequests');
     this.bindRadioRequests(channel, radioRequests);
 
     this.on('destroy', this._destroyRadio);

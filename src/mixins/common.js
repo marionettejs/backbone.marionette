@@ -1,5 +1,4 @@
 import getOption                from '../utils/getOption';
-import getValue                 from '../utils/getValue';
 import mergeOptions             from '../utils/mergeOptions';
 import normalizeMethods         from '../utils/normalizeMethods';
 import _setOptions              from '../utils/_setOptions';
@@ -9,7 +8,6 @@ import {
 }                               from '../bind-entity-events';
 
 export default {
-  getValue: getValue,
 
   // Imports the "normalizeMethods" to transform hashes of
   // events=>function references/names to a hash of events=>function references

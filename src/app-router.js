@@ -23,14 +23,21 @@ import MarionetteError         from './error';
 import CommonMixin             from './mixins/common';
 import { triggerMethod }       from './trigger-method';
 
-var AppRouter = Backbone.Router.extend({
+const ClassOptions = [
+  'appRoutes',
+  'controller'
+];
+
+const AppRouter = Backbone.Router.extend({
 
   constructor: function(options) {
     this._setOptions(options);
 
+    this.mergeOptions(options, ClassOptions);
+
     Backbone.Router.apply(this, arguments);
 
-    var appRoutes = this.getOption('appRoutes');
+    var appRoutes = this.appRoutes;
     var controller = this._getController();
     this.processAppRoutes(controller, appRoutes);
     this.on('route', this._processOnRoute, this);
@@ -50,7 +57,7 @@ var AppRouter = Backbone.Router.extend({
     // make sure an onRoute before trying to call it
     if (_.isFunction(this.onRoute)) {
       // find the path that matches the current route
-      var routePath = _.invert(this.getOption('appRoutes'))[routeName];
+      var routePath = _.invert(this.appRoutes)[routeName];
       this.onRoute(routeName, routePath, routeArgs);
     }
   },
@@ -71,7 +78,7 @@ var AppRouter = Backbone.Router.extend({
   },
 
   _getController: function() {
-    return this.getOption('controller');
+    return this.controller;
   },
 
   _addAppRoute: function(controller, route, methodName) {

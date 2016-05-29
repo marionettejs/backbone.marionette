@@ -10,6 +10,12 @@ import monitorViewEvents from './monitor-view-events';
 import destroyBackboneView from './utils/destroyBackboneView';
 import { triggerMethodOn } from './trigger-method';
 
+const ClassOptions = [
+  'allowMissingEl',
+  'parentEl',
+  'replaceElement'
+];
+
 const Region = MarionetteObject.extend({
   cidPrefix: 'mnr',
   replaceElement: false,
@@ -17,6 +23,10 @@ const Region = MarionetteObject.extend({
 
   constructor(options) {
     this._setOptions(options);
+
+    this.mergeOptions(options, ClassOptions);
+
+    // getOption necessary because options.el may be passed as undefined
     this._initEl = this.el = this.getOption('el');
 
     // Handle when this.el is passed in as a $ wrapped element.
@@ -86,7 +96,7 @@ const Region = MarionetteObject.extend({
 
   _attachView(view, options = {}) {
     const shouldTriggerAttach = !view._isAttached && isNodeAttached(this.el);
-    const shouldReplaceEl = typeof options.replaceElement === 'undefined' ? !!this.getOption('replaceElement') : !!options.replaceElement;
+    const shouldReplaceEl = typeof options.replaceElement === 'undefined' ? !!_.result(this, 'replaceElement') : !!options.replaceElement;
 
     if (shouldTriggerAttach) {
       triggerMethodOn(view, 'before:attach', view);
@@ -109,7 +119,7 @@ const Region = MarionetteObject.extend({
     }
 
     if (!this.$el || this.$el.length === 0) {
-      const allowMissingEl = typeof options.allowMissingEl === 'undefined' ? !!this.getOption('allowMissingEl') : !!options.allowMissingEl;
+      const allowMissingEl = typeof options.allowMissingEl === 'undefined' ? !!_.result(this, 'allowMissingEl') : !!options.allowMissingEl;
 
       if (allowMissingEl) {
         return false;
@@ -139,7 +149,7 @@ const Region = MarionetteObject.extend({
   // Override this method to change how the region finds the DOM element that it manages. Return
   // a jQuery selector object scoped to a provided parent el or the document if none exists.
   getEl(el) {
-    return Backbone.$(el, this.getValue(this.getOption('parentEl')));
+    return Backbone.$(el, _.result(this, 'parentEl'));
   },
 
   _replaceEl(view) {

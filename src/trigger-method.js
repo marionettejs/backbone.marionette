@@ -1,5 +1,3 @@
-/* jshint maxstatements: 14, maxcomplexity: 7 */
-
 // Trigger Method
 // --------------
 

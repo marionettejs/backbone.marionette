@@ -652,12 +652,12 @@ describe('layoutView', function() {
       expect(this.beforeAddRegionSpy)
         .to.have.been.calledOnce
         .and.calledOn(this.layout)
-        .and.calledWith(this.regionName);
+        .and.calledWith(this.layout, this.regionName);
 
       expect(this.addRegionSpy)
         .to.have.been.calledOnce
         .and.calledOn(this.layout)
-        .and.calledWith(this.regionName);
+        .and.calledWith(this.layout, this.regionName);
     });
 
     it('should trigger correct region remove events', function() {
@@ -666,12 +666,12 @@ describe('layoutView', function() {
       expect(this.beforeRegionRemoveSpy)
         .to.have.been.calledOnce
         .and.calledOn(this.layout)
-        .and.calledWith(this.regionName);
+        .and.calledWith(this.layout, this.regionName);
 
       expect(this.removeRegionSpy)
         .to.have.been.calledOnce
         .and.calledOn(this.layout)
-        .and.calledWith(this.regionName);
+        .and.calledWith(this.layout, this.regionName);
     });
   });
 

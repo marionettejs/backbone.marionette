@@ -39,9 +39,10 @@ _.extend(MarionetteObject.prototype, Backbone.Events, CommonMixin, RadioMixin, {
   destroy: function(...args) {
     if (this._isDestroyed) { return this; }
 
-    this.triggerMethod('before:destroy', ...args);
+    this.triggerMethod('before:destroy', this, ...args);
+
     this._isDestroyed = true;
-    this.triggerMethod('destroy', ...args);
+    this.triggerMethod('destroy', this, ...args);
     this.stopListening();
 
     return this;

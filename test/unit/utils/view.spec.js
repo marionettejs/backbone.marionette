@@ -60,7 +60,7 @@ describe('view mixin', function() {
     it('should call an onDestroy method with any arguments passed to destroy', function() {
       expect(this.onDestroyStub)
         .to.have.been.calledOnce
-        .and.calledWith(this.argumentOne, this.argumentTwo);
+        .and.calledWith(this.view, this.argumentOne, this.argumentTwo);
     });
 
     it('should remove the view', function() {
@@ -149,7 +149,7 @@ describe('view mixin', function() {
     });
 
     it('should trigger the destroy event', function() {
-      expect(this.destroyStub).to.have.been.calledOnce.and.calledWith(this.argumentOne, this.argumentTwo);
+      expect(this.destroyStub).to.have.been.calledOnce.and.calledWith(this.view, this.argumentOne, this.argumentTwo);
     });
 
     it('should remove the view', function() {

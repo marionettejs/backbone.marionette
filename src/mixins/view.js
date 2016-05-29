@@ -123,7 +123,7 @@ var ViewMixin = {
     if (this._isDestroyed) { return this; }
     const shouldTriggerDetach = !!this._isAttached;
 
-    this.triggerMethod('before:destroy', ...args);
+    this.triggerMethod('before:destroy', this, ...args);
     if (shouldTriggerDetach) {
       this.triggerMethod('before:detach', this);
     }
@@ -147,7 +147,7 @@ var ViewMixin = {
 
     this._isDestroyed = true;
     this._isRendered = false;
-    this.triggerMethod('destroy', ...args);
+    this.triggerMethod('destroy', this, ...args);
 
     this.stopListening();
 

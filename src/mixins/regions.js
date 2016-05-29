@@ -105,13 +105,13 @@ export default {
   },
 
   _addRegion: function(region, name) {
-    this.triggerMethod('before:add:region', name, region);
+    this.triggerMethod('before:add:region', this, name, region);
 
     region._parent = this;
 
     this._regions[name] = region;
 
-    this.triggerMethod('add:region', name, region);
+    this.triggerMethod('add:region', this, name, region);
   },
 
   // Remove a single region from the View, by name
@@ -133,7 +133,7 @@ export default {
   },
 
   _removeRegion: function(region, name) {
-    this.triggerMethod('before:remove:region', name, region);
+    this.triggerMethod('before:remove:region', this, name, region);
 
     region.empty();
     region.stopListening();
@@ -141,7 +141,7 @@ export default {
     delete this.regions[name];
     delete this._regions[name];
 
-    this.triggerMethod('remove:region', name, region);
+    this.triggerMethod('remove:region', this, name, region);
   },
 
   // Empty all regions in the region manager, but

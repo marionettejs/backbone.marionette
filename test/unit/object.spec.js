@@ -115,11 +115,11 @@ describe('marionette object', function() {
 
     it('should pass the arguments down to the onBeforeDestroy method', function() {
       expect(this.beforeDestroyHandler)
-      .to.have.been.calledWithExactly(destroyArgs);
+      .to.have.been.calledWithExactly(this.object, destroyArgs);
     });
 
     it('should pass the arguments down to the onDestroy method', function() {
-      expect(this.onDestroyHandler).to.have.been.calledWithExactly(destroyArgs);
+      expect(this.onDestroyHandler).to.have.been.calledWithExactly(this.object, destroyArgs);
     });
   });
 });

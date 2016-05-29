@@ -40,9 +40,6 @@ _.extend(MarionetteObject.prototype, Backbone.Events, CommonMixin, RadioMixin, {
     if (this._isDestroyed) { return this; }
 
     this.triggerMethod('before:destroy', ...args);
-
-    // mark as destroyed before doing the actual destroy, to
-    // prevent infinite loops within "destroy" event handlers
     this._isDestroyed = true;
     this.triggerMethod('destroy', ...args);
     this.stopListening();

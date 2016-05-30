@@ -163,6 +163,9 @@ const CollectionView = Backbone.View.extend({
   reorder() {
     const children = this.children;
     const models = this._filteredSortedModels();
+
+    if (!models.length && this._showingEmptyView) { return this; }
+
     const anyModelsAdded = _.some(models, function(model) {
       return !children.findByModel(model);
     });

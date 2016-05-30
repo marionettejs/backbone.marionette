@@ -209,6 +209,16 @@ describe('view mixin', function() {
       this.myView = new this.MyView();
       expect(this.myView.className).to.equal('.some-class');
     });
+
+    it('should attach the viewOptions to the view if options are on the collectionview', function() {
+      this.MyCollectionView = Marionette.CollectionView.extend({
+        options: {
+          className: '.some-class'
+        }
+      });
+      this.myCollectionView = new this.MyCollectionView();
+      expect(this.myCollectionView.className).to.equal('.some-class');
+    });
   });
 
   describe('should expose its options in the constructor', function() {

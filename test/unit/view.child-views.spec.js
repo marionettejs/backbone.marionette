@@ -613,7 +613,6 @@ describe('layoutView', function() {
           }
         });
         this.layoutViewInstance = new this.View();
-        this.layoutViewInstance.render();
         var $specNode = $('.region-hash-no-template-spec');
         this.$inScopeRegion =  $specNode.find('.some-layout-view .region-one');
         this.$outOfScopeRegion = $specNode.children('.region-one');

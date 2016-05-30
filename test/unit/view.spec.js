@@ -11,6 +11,27 @@ describe('item view', function() {
     this.templateStub = this.sinon.stub().returns(this.template);
   });
 
+  describe('when instantiating a view with a DOM element', function() {
+    beforeEach(function() {
+      this.setFixtures('<div id="foo">bar</div>');
+      this.view = new Marionette.View({
+        el: '#foo'
+      });
+    });
+
+    it('should be rendered', function() {
+      expect(this.view.isRendered()).to.be.true;
+    });
+
+    it('should be attached', function() {
+      expect(this.view.isAttached()).to.be.true;
+    });
+
+    it('should contain the DOM content', function() {
+      expect(this.view.el.innerHTML).to.contain('bar');
+    });
+  });
+
   describe('when rendering without a valid template', function() {
     beforeEach(function() {
       this.view = new Marionette.View();

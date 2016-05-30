@@ -58,10 +58,12 @@ function iterateEvents(target, entity, bindings, actionName) {
 
 function bindEntityEvents(entity, bindings) {
   iterateEvents(this, entity, bindings, 'listenTo');
+  return this;
 }
 
 function unbindEntityEvents(entity, bindings) {
   iterateEvents(this, entity, bindings, 'stopListening');
+  return this;
 }
 
 // Export Public API

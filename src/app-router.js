@@ -41,6 +41,7 @@ var AppRouter = Backbone.Router.extend({
   appRoute: function(route, methodName) {
     var controller = this._getController();
     this._addAppRoute(controller, route, methodName);
+    return this;
   },
 
   // process the route event and trigger the onRoute
@@ -58,13 +59,15 @@ var AppRouter = Backbone.Router.extend({
   // router, and turn them in to routes that trigger the
   // specified method on the specified `controller`.
   processAppRoutes: function(controller, appRoutes) {
-    if (!appRoutes) { return; }
+    if (!appRoutes) { return this; }
 
     var routeNames = _.keys(appRoutes).reverse(); // Backbone requires reverted order of routes
 
     _.each(routeNames, route => {
       this._addAppRoute(controller, route, appRoutes[route]);
     });
+
+    return this;
   },
 
   _getController: function() {

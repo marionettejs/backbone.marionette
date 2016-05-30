@@ -33,10 +33,12 @@ function iterateReplies(target, channel, bindings, actionName) {
 
 function bindRadioRequests(channel, bindings) {
   iterateReplies(this, channel, bindings, 'reply');
+  return this;
 }
 
 function unbindRadioRequests(channel, bindings) {
   iterateReplies(this, channel, bindings, 'stopReplying');
+  return this;
 }
 
 export {

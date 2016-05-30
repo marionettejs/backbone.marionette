@@ -132,11 +132,13 @@ const CollectionView = Backbone.View.extend({
     } else {
       this.filter = filter;
     }
+    return this;
   },
 
   // `removeFilter` is actually an alias for removing filters.
   removeFilter(options) {
     this.setFilter(null, options);
+    return this;
   },
 
   // Calculate and apply difference by cid between `models` and `previousModels`.
@@ -196,6 +198,7 @@ const CollectionView = Backbone.View.extend({
 
       this.triggerMethod('reorder', this);
     }
+    return this;
   },
 
   // Render view after sorting. Override this method to change how the view renders
@@ -206,6 +209,7 @@ const CollectionView = Backbone.View.extend({
     } else {
       this._renderChildren();
     }
+    return this;
   },
 
   // Internal method. This checks for any changes in the order of the collection.

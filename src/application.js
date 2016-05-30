@@ -51,6 +51,7 @@ var Application = MarionetteObject.extend({
   start: function(options) {
     this.triggerMethod('before:start', this, options);
     this.triggerMethod('start', this, options);
+    return this;
   }
 
 });

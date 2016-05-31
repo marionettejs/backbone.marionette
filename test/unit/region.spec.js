@@ -1066,4 +1066,29 @@ describe('region', function() {
       }.bind(this)).to.throw;
     });
   });
+
+  // This is a terrible example of an edge-case where something related to the view's destroy
+  // may also want to empty the same region.
+  describe('when emptying a region destroys a view that empties the same region', function() {
+    it('should only empty once', function() {
+      this.setFixtures('<div id="region"></div>');
+
+      var MyRegion = Marionette.Region.extend({
+        el: '#region',
+        onEmpty: this.sinon.stub(),
+      });
+
+      var region = new MyRegion();
+      var MyView = Marionette.View.extend({
+        template: false,
+        onDestroy: function() {
+          region.empty();
+        }
+      });
+      region.show(new MyView());
+      region.empty();
+
+      expect(region.onEmpty).to.have.been.calledOnce;
+    });
+  });
 });

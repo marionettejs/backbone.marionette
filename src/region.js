@@ -199,12 +199,13 @@ const Region = MarionetteObject.extend({
       this._restoreEl();
     }
 
+    delete this.currentView;
+
     if (!view._isDestroyed) {
       this._removeView(view, options);
     }
 
-    delete this.currentView._parent;
-    delete this.currentView;
+    delete view._parent;
 
     this.triggerMethod('empty', this, view);
     return this;

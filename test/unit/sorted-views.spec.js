@@ -321,12 +321,12 @@ describe('collection/composite view sorting', function() {
 
     describe('when changing the comparator', function() {
       beforeEach(function() {
-        this.collectionView.options.viewComparator = function(a, b) {
+        this.collectionView.viewComparator = function(a, b) {
           if (a.get('foo') < b.get('foo')) { return -1; }
           if (a.get('foo') > b.get('foo')) { return 1; }
           return 0;
         };
-        this.compositeView.options.viewComparator = 'foo';
+        this.compositeView.viewComparator = 'foo';
       });
 
       describe('and triggering a sort', function() {
@@ -458,8 +458,8 @@ describe('collection/composite view sorting', function() {
 
           if (specOptions.viewComparator) {
             this.collection.comparator = 'foo';
-            this.collectionView.options.viewComparator = cmp;
-            this.compositeView.options.viewComparator = cmp;
+            this.collectionView.viewComparator = cmp;
+            this.compositeView.viewComparator = cmp;
           } else {
             this.collection.comparator = cmp;
           }
@@ -496,8 +496,8 @@ describe('collection/composite view sorting', function() {
             };
             if (specOptions.viewComparator) {
               this.collection.comparator = 'bar';
-              this.collectionView.options.viewComparator = cmp;
-              this.compositeView.options.viewComparator = cmp;
+              this.collectionView.viewComparator = cmp;
+              this.compositeView.viewComparator = cmp;
             } else {
               this.collection.comparator = cmp;
             }

@@ -4,12 +4,19 @@ import _                from 'underscore';
 import MarionetteObject from './object';
 import Region           from './region';
 
+const ClassOptions = [
+  'region',
+  'regionClass'
+];
+
 // A container for a Marionette application.
-var Application = MarionetteObject.extend({
+const Application = MarionetteObject.extend({
   cidPrefix: 'mna',
 
   constructor: function(options) {
     this._setOptions(options);
+
+    this.mergeOptions(options, ClassOptions);
 
     this._initRegion();
 
@@ -19,8 +26,8 @@ var Application = MarionetteObject.extend({
   regionClass: Region,
 
   _initRegion: function(options) {
-    var region = this.getOption('region');
-    var RegionClass = this.getOption('regionClass');
+    var region = this.region;
+    var RegionClass = this.regionClass;
 
     // if the region is a string expect an el or selector
     // and instantiate a region

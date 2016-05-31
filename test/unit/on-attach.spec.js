@@ -185,6 +185,36 @@ describe('onAttach', function() {
       });
     });
 
+    describe('When showing a View with a single level of nested views in onAttach', function() {
+      let parentView;
+      let mainView;
+      let footerView;
+
+      beforeEach(function() {
+        const ParentView = View.extend({
+          onAttach: function() {
+            mainView = new ChildView();
+            footerView = new ChildView();
+            this.showChildView('main', mainView);
+            this.showChildView('footer', footerView);
+          }
+        });
+
+        parentView = new ParentView();
+        region.show(parentView);
+      });
+
+      it('should trigger onBeforeAttach & onAttach on the mainView', function() {
+        expectTriggerMethod(mainView.onBeforeAttach, mainView, false, mainView.onAttach);
+        expectTriggerMethod(mainView.onAttach, mainView, true);
+      });
+
+      it('should trigger onBeforeAttach & onAttach on the footerView', function() {
+        expectTriggerMethod(footerView.onBeforeAttach, footerView, false, footerView.onAttach);
+        expectTriggerMethod(footerView.onAttach, footerView, true);
+      });
+    });
+
     describe('When showing a View with two levels of nested views', function() {
       let grandparentView;
       let parentView;

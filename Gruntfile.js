@@ -86,7 +86,7 @@ module.exports = function(grunt) {
         options : {
           banner: '<%= meta.core_bundle %>',
           sourceMap : true,
-          sourceMapName : 'lib/core/backbone.marionette.map',
+          sourceMapName : 'lib/core/backbone.marionette.min.js.map',
           sourceMappingURL : '<%= uglify.bundle.options.sourceMappingURL %>',
           sourceMapPrefix : 1
         }
@@ -98,7 +98,7 @@ module.exports = function(grunt) {
         options : {
           banner: '<%= meta.banner %>',
           sourceMap : true,
-          sourceMapName : 'lib/backbone.marionette.map',
+          sourceMapName : 'lib/backbone.marionette.min.js.map',
           sourceMappingURL : 'backbone.marionette.map',
           sourceMapPrefix : 2
         }

@@ -348,11 +348,14 @@ describe('item view', function() {
   describe('has a valid inheritance chain back to Backbone.View', function() {
     beforeEach(function() {
       this.constructor = this.sinon.spy(Backbone.View.prototype, 'constructor');
-      this.layoutView = new Marionette.View();
     });
 
-    it('calls the parent Backbone.Views constructor function on instantiation', function() {
-      expect(this.constructor).to.have.been.called;
+    it('calls the parent Backbone.Views constructor function on instantiation with the proper parameters', function() {
+      const options = {foo: 'bar'};
+      const customParam = {foo: 'baz'};
+
+      this.layoutView = new Marionette.View(options, customParam);
+      expect(this.constructor).to.have.been.calledWith(options, customParam);
     });
   });
 

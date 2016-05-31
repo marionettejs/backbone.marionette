@@ -1,3 +1,10 @@
+### v2.4.7 [view commit logs](https://github.com/marionettejs/backbone.marionette/compare/v2.4.6...v2.4.7)
+
+#### Fixes
+
+* CollectionView#reorder will no longer remove an already displayed emptyView.
+* Fixed build of sourcemap files.
+
 ### v2.4.6 [view commit logs](https://github.com/marionettejs/backbone.marionette/compare/v2.4.5...v2.4.6)
 
 #### Misc

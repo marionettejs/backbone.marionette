@@ -165,6 +165,9 @@ Marionette.CollectionView = Marionette.View.extend({
   reorder: function() {
     var children = this.children;
     var models = this._filteredSortedModels();
+
+    if (!models.length && this._showingEmptyView) { return this; }
+
     var anyModelsAdded = _.some(models, function(model) {
       return !children.findByModel(model);
     });

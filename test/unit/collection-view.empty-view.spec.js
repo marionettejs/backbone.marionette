@@ -332,6 +332,23 @@ describe('collectionview - emptyView', function() {
     });
   });
 
+  describe('when reorder is called with an emptyView', function() {
+    beforeEach(function() {
+      this.collection = new Backbone.Collection([]);
+      this.collectionView = new this.EmptyCollectionView({
+        collection: this.collection
+      });
+
+      this.collectionView.render();
+
+      this.collectionView.reorder();
+    });
+
+    it('should append the html for the emptyView', function() {
+      expect(this.collectionView.$el).to.have.$html('<span>empty</span>');
+    });
+  });
+
   describe('when rendering and an "emptyViewOptions" is provided', function() {
     beforeEach(function() {
       this.collection = new Backbone.Collection();

@@ -1,3 +1,37 @@
+### v3.0.0-pre4
+
+#### Documentation
+
+* Improved `View` documentation.
+* Added `Backbone.Radio` integration documentation.
+* Fixed broken links in `CollectionView` documentation.
+* Removed `Marionette.Module` documentation.
+* Add installation documentation.
+* Removed outdated API documentation.
+* Added Upgrade Guide.
+
+#### API Changes
+
+* return `this` from all functions that do not return anything, useful for chaining.
+* Removed `getValue` and internal `getOption`.
+
+#### Bug fixes
+
+* CollectionView#reorder will no longer remove an already displayed emptyView.
+* Calling `Backbone.View` constructor with arguments consistently across all views.
+* Monitor for child already attached.
+* When a view is attached to an existing element, `isRendered()` should reflect `true`.
+* Region empty edge-case fix that prevents view destroy handlers calling `empty`.
+* Region now detaches previous html if there is no view.
+
+#### Misc
+
+* Build browser tests with rollup.
+* Fix bundled build.
+* Linter fixes.
+
+Also, [please help us finish v3](https://github.com/marionettejs/backbone.marionette/milestones/v3.0.0)!
+
 ### v3.0.0-pre3
 
 #### Dependency Updates

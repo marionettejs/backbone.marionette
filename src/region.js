@@ -196,11 +196,16 @@ const Region = MarionetteObject.extend({
 
   // Destroy the current view, if there is one. If there is no current view, it does
   // nothing and returns immediately.
-  empty(options) {
+  empty(options = { allowMissingEl: true }) {
     const view = this.currentView;
 
-    // If there is no view in the region we should not remove anything
-    if (!view) { return this; }
+    // If there is no view in the region we should only detach current html
+    if (!view) {
+      if (this._ensureElement(options)) {
+        this.detachHtml();
+      }
+      return this;
+    }
 
     view.off('destroy', this.empty, this);
     this.triggerMethod('before:empty', this, view);
@@ -243,12 +248,17 @@ const Region = MarionetteObject.extend({
       triggerMethodOn(view, 'before:detach', view);
     }
 
-    this.$el.contents().detach();
+    this.detachHtml();
 
     if (shouldTriggerDetach) {
       view._isAttached = false;
       triggerMethodOn(view, 'detach', view);
     }
+  },
+
+  // Override this method to change how the region detaches current content
+  detachHtml() {
+    this.$el.contents().detach();
   },
 
   // Checks whether a view is currently present within the region. Returns `true` if there is
@@ -260,8 +270,8 @@ const Region = MarionetteObject.extend({
   // Reset the region by destroying any existing view and clearing out the cached `$el`.
   // The next time a view is shown via this region, the region will re-query the DOM for
   // the region's `el`.
-  reset() {
-    this.empty();
+  reset(options) {
+    this.empty(options);
 
     if (this.$el) {
       this.el = this._initEl;
@@ -271,8 +281,8 @@ const Region = MarionetteObject.extend({
     return this;
   },
 
-  destroy: function() {
-    this.reset();
+  destroy: function(options) {
+    this.reset(options);
     return MarionetteObject.prototype.destroy.apply(this, arguments);
   }
 });

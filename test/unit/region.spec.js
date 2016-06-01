@@ -1091,4 +1091,29 @@ describe('region', function() {
       expect(region.onEmpty).to.have.been.calledOnce;
     });
   });
+
+  describe('when emptying a region with no view and preexisting html', function() {
+    beforeEach(function() {
+      this.MyRegion = Marionette.Region.extend({
+        el: '#region',
+      });
+    });
+
+    it('should clear the region contents', function() {
+      this.setFixtures('<div id="region">Preexisting HTML</div>');
+      var region = new this.MyRegion();
+      region.empty();
+      expect(region.$el.html()).to.eql('');
+    });
+
+    // In the future, hopefully allowMissingEl can default to true
+    describe('when no el exists while passing allowMissingEl: false', function() {
+      it('should throw an error', function() {
+        var region = new this.MyRegion();
+        expect(function() {
+          region.empty({ allowMissingEl: false });
+        }).to.throw('An "el" must exist in DOM for this region ' + region.cid);
+      });
+    });
+  });
 });

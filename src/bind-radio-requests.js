@@ -26,7 +26,7 @@ function iterateReplies(target, channel, bindings, actionName) {
     });
   }
 
-  var normalizedRadioRequests = normalizeMethods.call(target, bindings);
+  const normalizedRadioRequests = normalizeMethods.call(target, bindings);
 
   channel[actionName](normalizedRadioRequests, target);
 }

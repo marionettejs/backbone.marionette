@@ -5,7 +5,7 @@ import _         from 'underscore';
 import getOption from './utils/getOption';
 
 // split the event name on the ":"
-var splitter = /(^|:)(\w)/gi;
+const splitter = /(^|:)(\w)/gi;
 
 // take the event section ("section1:section2:section3")
 // and turn it in to uppercase name onSection1Section2Section3
@@ -22,9 +22,9 @@ function getEventName(match, prefix, eventName) {
 // call the "onFooBar" method.
 export function triggerMethod(event, ...args) {
   // get the method name from the event name
-  var methodName = 'on' + event.replace(splitter, getEventName);
-  var method = getOption.call(this, methodName);
-  var result;
+  const methodName = 'on' + event.replace(splitter, getEventName);
+  const method = getOption.call(this, methodName);
+  let result;
 
   // call the onMethodName if it exists
   if (_.isFunction(method)) {
@@ -43,6 +43,6 @@ export function triggerMethod(event, ...args) {
 // e.g. `Marionette.triggerMethodOn(view, 'show')`
 // will trigger a "show" event or invoke onShow the view.
 export function triggerMethodOn(context, ...args) {
-  var fnc = _.isFunction(context.triggerMethod) ? context.triggerMethod : triggerMethod;
+  const fnc = _.isFunction(context.triggerMethod) ? context.triggerMethod : triggerMethod;
   return fnc.apply(context, args);
 }

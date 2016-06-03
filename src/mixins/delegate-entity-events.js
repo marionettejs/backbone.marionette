@@ -14,18 +14,18 @@ export default {
   _delegateEntityEvents: function(model, collection) {
     this._undelegateEntityEvents(model, collection);
 
-    var modelEvents = _.result(this, 'modelEvents');
+    const modelEvents = _.result(this, 'modelEvents');
     bindEntityEvents.call(this, model, modelEvents);
 
-    var collectionEvents = _.result(this, 'collectionEvents');
+    const collectionEvents = _.result(this, 'collectionEvents');
     bindEntityEvents.call(this, collection, collectionEvents);
   },
 
   _undelegateEntityEvents: function(model, collection) {
-    var modelEvents = _.result(this, 'modelEvents');
+    const modelEvents = _.result(this, 'modelEvents');
     unbindEntityEvents.call(this, model, modelEvents);
 
-    var collectionEvents = _.result(this, 'collectionEvents');
+    const collectionEvents = _.result(this, 'collectionEvents');
     unbindEntityEvents.call(this, collection, collectionEvents);
   }
 };

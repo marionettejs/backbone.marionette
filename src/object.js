@@ -16,7 +16,7 @@ const ClassOptions = [
 
 // A Base Class that other Classes should descend from.
 // Object borrows many conventions and utilities from Backbone.
-var MarionetteObject = function(options) {
+let MarionetteObject = function(options) {
   this._setOptions(options);
   this.mergeOptions(options, ClassOptions);
   this.cid = _.uniqueId(this.cidPrefix);

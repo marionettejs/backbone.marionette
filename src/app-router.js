@@ -37,8 +37,8 @@ const AppRouter = Backbone.Router.extend({
 
     Backbone.Router.apply(this, arguments);
 
-    var appRoutes = this.appRoutes;
-    var controller = this._getController();
+    const appRoutes = this.appRoutes;
+    const controller = this._getController();
     this.processAppRoutes(controller, appRoutes);
     this.on('route', this._processOnRoute, this);
   },
@@ -46,7 +46,7 @@ const AppRouter = Backbone.Router.extend({
   // Similar to route method on a Backbone Router but
   // method is called on the controller
   appRoute: function(route, methodName) {
-    var controller = this._getController();
+    const controller = this._getController();
     this._addAppRoute(controller, route, methodName);
     return this;
   },
@@ -57,7 +57,7 @@ const AppRouter = Backbone.Router.extend({
     // make sure an onRoute before trying to call it
     if (_.isFunction(this.onRoute)) {
       // find the path that matches the current route
-      var routePath = _.invert(this.appRoutes)[routeName];
+      const routePath = _.invert(this.appRoutes)[routeName];
       this.onRoute(routeName, routePath, routeArgs);
     }
   },
@@ -68,7 +68,7 @@ const AppRouter = Backbone.Router.extend({
   processAppRoutes: function(controller, appRoutes) {
     if (!appRoutes) { return this; }
 
-    var routeNames = _.keys(appRoutes).reverse(); // Backbone requires reverted order of routes
+    const routeNames = _.keys(appRoutes).reverse(); // Backbone requires reverted order of routes
 
     _.each(routeNames, route => {
       this._addAppRoute(controller, route, appRoutes[route]);
@@ -82,7 +82,7 @@ const AppRouter = Backbone.Router.extend({
   },
 
   _addAppRoute: function(controller, route, methodName) {
-    var method = controller[methodName];
+    const method = controller[methodName];
 
     if (!method) {
       throw new MarionetteError('Method "' + methodName + '" was not found on the controller');

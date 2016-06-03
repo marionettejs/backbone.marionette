@@ -1,6 +1,6 @@
 // Add Feature flags here
 // e.g. 'class' => false
-var FEATURES = {
+const FEATURES = {
 };
 
 function isEnabled(name) {

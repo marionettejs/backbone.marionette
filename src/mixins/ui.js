@@ -3,9 +3,9 @@ import _ from 'underscore';
 // a given key for triggers and events
 // swaps the @ui with the associated selector.
 // Returns a new, non-mutated, parsed events hash.
-var normalizeUIKeys = function(hash, ui) {
+const normalizeUIKeys = function(hash, ui) {
   return _.reduce(hash, function(memo, val, key) {
-    var normalizedKey = normalizeUIString(key, ui);
+    const normalizedKey = normalizeUIString(key, ui);
     memo[normalizedKey] = val;
     return memo;
   }, {});
@@ -13,7 +13,7 @@ var normalizeUIKeys = function(hash, ui) {
 
 // utility method for parsing @ui. syntax strings
 // into associated selector
-var normalizeUIString = function(uiString, ui) {
+const normalizeUIString = function(uiString, ui) {
   return uiString.replace(/@ui\.[a-zA-Z_$0-9]*/g, function(r) {
     return ui[r.slice(4)];
   });
@@ -22,7 +22,7 @@ var normalizeUIString = function(uiString, ui) {
 // allows for the use of the @ui. syntax within
 // a given value for regions
 // swaps the @ui with the associated selector
-var normalizeUIValues = function(hash, ui, properties) {
+const normalizeUIValues = function(hash, ui, properties) {
   _.each(hash, function(val, key) {
     if (_.isString(val)) {
       hash[key] = normalizeUIString(val, ui);
@@ -30,7 +30,7 @@ var normalizeUIValues = function(hash, ui, properties) {
       _.extend(val, normalizeUIValues(_.pick(val, properties), ui));
       /* Value is an object, and we got an array of embedded property names to normalize. */
       _.each(properties, function(property) {
-        var propertyVal = val[property];
+        const propertyVal = val[property];
         if (_.isString(propertyVal)) {
           val[property] = normalizeUIString(propertyVal, ui);
         }
@@ -45,20 +45,20 @@ export default {
   // normalize the keys of passed hash with the views `ui` selectors.
   // `{"@ui.foo": "bar"}`
   normalizeUIKeys: function(hash) {
-    var uiBindings = this._getUIBindings();
+    const uiBindings = this._getUIBindings();
     return normalizeUIKeys(hash, uiBindings);
   },
 
   // normalize the values of passed hash with the views `ui` selectors.
   // `{foo: "@ui.bar"}`
   normalizeUIValues: function(hash, properties) {
-    var uiBindings = this._getUIBindings();
+    const uiBindings = this._getUIBindings();
     return normalizeUIValues(hash, uiBindings, properties);
   },
 
   _getUIBindings: function() {
-    var uiBindings = _.result(this, '_uiBindings');
-    var ui = _.result(this, 'ui');
+    const uiBindings = _.result(this, '_uiBindings');
+    const ui = _.result(this, 'ui');
     return uiBindings || ui;
   },
 
@@ -74,7 +74,7 @@ export default {
     }
 
     // get the bindings result, as a function or otherwise
-    var bindings = _.result(this, '_uiBindings');
+    const bindings = _.result(this, '_uiBindings');
 
     // empty the ui so we don't have anything to start with
     this._ui = {};

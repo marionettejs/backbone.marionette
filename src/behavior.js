@@ -21,7 +21,7 @@ const ClassOptions = [
   'ui'
 ];
 
-var Behavior = MarionetteObject.extend({
+const Behavior = MarionetteObject.extend({
   cidPrefix: 'mnb',
 
   constructor: function(options, view) {
@@ -102,7 +102,7 @@ var Behavior = MarionetteObject.extend({
   getEvents: function() {
     // Normalize behavior events hash to allow
     // a user to use the @ui. syntax.
-    var behaviorEvents = this.normalizeUIKeys(_.result(this, 'events'));
+    const behaviorEvents = this.normalizeUIKeys(_.result(this, 'events'));
 
     // binds the handler to the behavior and builds a unique eventName
     return _.reduce(behaviorEvents, function(events, behaviorHandler, key) {
@@ -122,7 +122,7 @@ var Behavior = MarionetteObject.extend({
 
     // Normalize behavior triggers hash to allow
     // a user to use the @ui. syntax.
-    var behaviorTriggers = this.normalizeUIKeys(_.result(this, 'triggers'));
+    const behaviorTriggers = this.normalizeUIKeys(_.result(this, 'triggers'));
 
     return this._getViewTriggers(this.view, behaviorTriggers);
   }

@@ -58,7 +58,7 @@ const CompositeView = CollectionView.extend({
   // has been defined. As happens in CollectionView, `childView` can
   // be a function (which should return a view class).
   _getChildView(child) {
-    var childView = this.childView;
+    const childView = this.childView;
 
     // for CompositeView, if `childView` is not specified, we'll get the same
     // composite view class rendered for each child in the collection

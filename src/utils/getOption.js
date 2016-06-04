@@ -3,7 +3,7 @@
 
 // Retrieve an object, function or other value from the
 // object or its `options`, with `options` taking precedence.
-var getOption = function(optionName) {
+const getOption = function(optionName) {
   if (!optionName) { return; }
   if (this.options && (this.options[optionName] !== undefined)) {
     return this.options[optionName];

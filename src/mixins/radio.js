@@ -19,18 +19,18 @@ import {
 export default {
 
   _initRadio: function() {
-    var channelName = _.result(this, 'channelName');
+    const channelName = _.result(this, 'channelName');
 
     if (!channelName) {
       return;
     }
 
-    var channel = this._channel = Radio.channel(channelName);
+    const channel = this._channel = Radio.channel(channelName);
 
-    var radioEvents = _.result(this, 'radioEvents');
+    const radioEvents = _.result(this, 'radioEvents');
     this.bindRadioEvents(channel, radioEvents);
 
-    var radioRequests = _.result(this, 'radioRequests');
+    const radioRequests = _.result(this, 'radioRequests');
     this.bindRadioRequests(channel, radioRequests);
 
     this.on('destroy', this._destroyRadio);

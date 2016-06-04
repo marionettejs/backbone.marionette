@@ -5,9 +5,9 @@ import _      from 'underscore';
 import extend from './utils/extend';
 import {version} from '../package.json';
 
-var errorProps = ['description', 'fileName', 'lineNumber', 'name', 'message', 'number'];
+const errorProps = ['description', 'fileName', 'lineNumber', 'name', 'message', 'number'];
 
-var MarionetteError = extend.call(Error, {
+const MarionetteError = extend.call(Error, {
   urlRoot: 'http://marionettejs.com/docs/v' + version + '/',
 
   constructor: function MarionetteError(message, options) {
@@ -18,7 +18,7 @@ var MarionetteError = extend.call(Error, {
       options = {};
     }
 
-    var error = Error.call(this, message);
+    const error = Error.call(this, message);
     _.extend(this, _.pick(error, errorProps), _.pick(options, errorProps));
 
     this.captureStackTrace();

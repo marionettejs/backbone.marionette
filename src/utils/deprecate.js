@@ -4,7 +4,7 @@ import _ from 'underscore';
 
 import Marionette from '../backbone.marionette';
 
-var deprecate = function(message, test) {
+const deprecate = function(message, test) {
   if (_.isObject(message)) {
     message = (
       message.prev + ' is going to be removed in the future. ' +
@@ -25,7 +25,7 @@ var deprecate = function(message, test) {
 
 deprecate._console = typeof console !== 'undefined' ? console : {};
 deprecate._warn = function() {
-  var warn = deprecate._console.warn || deprecate._console.log || function() {};
+  const warn = deprecate._console.warn || deprecate._console.log || function() {};
   return warn.apply(deprecate._console, arguments);
 };
 deprecate._cache = {};

@@ -26,8 +26,8 @@ const Application = MarionetteObject.extend({
   regionClass: Region,
 
   _initRegion: function(options) {
-    var region = this.region;
-    var RegionClass = this.regionClass;
+    const region = this.region;
+    const RegionClass = this.regionClass;
 
     // if the region is a string expect an el or selector
     // and instantiate a region
@@ -46,7 +46,7 @@ const Application = MarionetteObject.extend({
   },
 
   showView: function(view, ...args) {
-    var region = this.getRegion();
+    const region = this.getRegion();
     return region.show(view, ...args);
   },
 

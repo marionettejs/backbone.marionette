@@ -29,7 +29,7 @@ export default {
 
   // Add a single region, by name, to the View
   addRegion: function(name, definition) {
-    var regions = {};
+    const regions = {};
     regions[name] = definition;
     return this.addRegions(regions)[name];
   },
@@ -89,9 +89,9 @@ export default {
   },
 
   _buildRegionFromObject: function(definition) {
-    var RegionClass = definition.regionClass || this.regionClass;
+    const RegionClass = definition.regionClass || this.regionClass;
 
-    var options = _.omit(definition, 'regionClass');
+    const options = _.omit(definition, 'regionClass');
 
     _.defaults(options, {
       el: definition.selector,
@@ -120,7 +120,7 @@ export default {
 
   // Remove a single region from the View, by name
   removeRegion: function(name) {
-    var region = this._regions[name];
+    const region = this._regions[name];
 
     this._removeRegion(region, name);
 
@@ -129,7 +129,7 @@ export default {
 
   // Remove all regions from the View
   removeRegions: function() {
-    var regions = this.getRegions();
+    const regions = this.getRegions();
 
     _.each(this._regions, _.bind(this._removeRegion, this));
 
@@ -151,7 +151,7 @@ export default {
   // Empty all regions in the region manager, but
   // leave them attached
   emptyRegions: function() {
-    var regions = this.getRegions();
+    const regions = this.getRegions();
     _invoke(regions, 'empty');
     return regions;
   },
@@ -176,7 +176,7 @@ export default {
   },
 
   showChildView: function(name, view, ...args) {
-    var region = this.getRegion(name);
+    const region = this.getRegion(name);
     return region.show(view, ...args);
   },
 

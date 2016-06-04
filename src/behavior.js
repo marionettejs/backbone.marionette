@@ -102,7 +102,7 @@ const Behavior = MarionetteObject.extend({
   getEvents: function() {
     // Normalize behavior events hash to allow
     // a user to use the @ui. syntax.
-    let behaviorEvents = this.normalizeUIKeys(_.result(this, 'events'));
+    const behaviorEvents = this.normalizeUIKeys(_.result(this, 'events'));
 
     // binds the handler to the behavior and builds a unique eventName
     return _.reduce(behaviorEvents, function(events, behaviorHandler, key) {

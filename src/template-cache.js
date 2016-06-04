@@ -7,7 +7,7 @@ import MarionetteError from './error';
 
 // Manage templates stored in `<script>` blocks,
 // caching them for faster access.
-let TemplateCache = function(templateId) {
+const TemplateCache = function(templateId) {
   this.templateId = templateId;
 };
 

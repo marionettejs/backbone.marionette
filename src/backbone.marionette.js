@@ -46,7 +46,7 @@ import {
 } from './trigger-method';
 
 const previousMarionette = Backbone.Marionette;
-let Marionette = Backbone.Marionette = {};
+const Marionette = Backbone.Marionette = {};
 
 // This allows you to run multiple instances of Marionette on the same
 // webapp. After loading the new version, call `noConflict()` to

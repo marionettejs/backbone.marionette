@@ -91,7 +91,7 @@ export default {
   _buildRegionFromObject: function(definition) {
     const RegionClass = definition.regionClass || this.regionClass;
 
-    let options = _.omit(definition, 'regionClass');
+    const options = _.omit(definition, 'regionClass');
 
     _.defaults(options, {
       el: definition.selector,
@@ -151,7 +151,7 @@ export default {
   // Empty all regions in the region manager, but
   // leave them attached
   emptyRegions: function() {
-    let regions = this.getRegions();
+    const regions = this.getRegions();
     _invoke(regions, 'empty');
     return regions;
   },

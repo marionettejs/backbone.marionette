@@ -7,7 +7,7 @@ import {version} from '../package.json';
 
 const errorProps = ['description', 'fileName', 'lineNumber', 'name', 'message', 'number'];
 
-let MarionetteError = extend.call(Error, {
+const MarionetteError = extend.call(Error, {
   urlRoot: 'http://marionettejs.com/docs/v' + version + '/',
 
   constructor: function MarionetteError(message, options) {

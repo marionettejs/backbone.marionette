@@ -257,14 +257,16 @@ describe('collectionview - emptyView', function() {
     });
   });
 
-  describe('when emptyView is specified with getEmptyView option', function() {
+  describe('when emptyView is specified as a function', function() {
     beforeEach(function() {
-      this.getEmptyViewStub = this.sinon.stub();
-      this.OtherEmptyView = Backbone.Marionette.View.extend();
+      this.OtherEmptyView = Marionette.View.extend({
+        template: _.template('other empty')
+      });
+      this.emptyViewStub = this.sinon.stub().returns(this.OtherEmptyView);
 
-      this.CollectionView = Backbone.Marionette.CollectionView.extend({
+      this.CollectionView = Marionette.CollectionView.extend({
         childView: this.View,
-        getEmptyView: this.getEmptyViewStub
+        emptyView: this.emptyViewStub
       });
     });
 
@@ -279,7 +281,7 @@ describe('collectionview - emptyView', function() {
       });
 
       it('renders other empty view instance', function() {
-        expect(this.getEmptyViewStub).to.have.been.called;
+        expect(this.collectionView.$el).to.have.$html('<div>other empty</div>');
       });
     });
   });

@@ -350,7 +350,7 @@ const CollectionView = Backbone.View.extend({
   // Internal method to show an empty view in place of a collection of child views,
   // when the collection is empty
   _showEmptyView() {
-    const EmptyView = this.getEmptyView();
+    const EmptyView = this._getEmptyView();
 
     if (EmptyView && !this._showingEmptyView) {
       this._showingEmptyView = true;
@@ -386,17 +386,20 @@ const CollectionView = Backbone.View.extend({
   },
 
   // Retrieve the empty view class
-  getEmptyView() {
-    return this.emptyView;
+  _getEmptyView() {
+    const emptyView = this.emptyView;
+
+    if (!emptyView) { return; }
+
+    return this._getView(emptyView);
   },
 
-  // Retrieve the `childView` class, either from `this.options.childView` or from
-  // the `childView` in the object definition. The "options" takes precedence.
+  // Retrieve the `childView` class
   // The `childView` property can be either a view class or a function that
   // returns a view class. If it is a function, it will receive the model that
   // will be passed to the view instance (created from the returned view class)
   _getChildView(child) {
-    const childView = this.childView;
+    let childView = this.childView;
 
     if (!childView) {
       throw new MarionetteError({
@@ -405,17 +408,25 @@ const CollectionView = Backbone.View.extend({
       });
     }
 
-    // first check if the `childView` is a view class (the common case)
-    // then check if it's a function (which we assume that returns a view class)
-    if (childView.prototype instanceof Backbone.View || childView === Backbone.View) {
-      return childView;
-    } else if (_.isFunction(childView)) {
-      return childView.call(this, child);
-    } else {
+    childView = this._getView(childView, child);
+
+    if (!childView) {
       throw new MarionetteError({
         name: 'InvalidChildViewError',
         message: '"childView" must be a view class or a function that returns a view class'
       });
+    }
+
+    return childView;
+  },
+
+  // First check if the `view` is a view class (the common case)
+  // Then check if it's a function (which we assume that returns a view class)
+  _getView(view, child) {
+    if (view.prototype instanceof Backbone.View || view === Backbone.View) {
+      return view;
+    } else if (_.isFunction(view)) {
+      return view.call(this, child);
     }
   },
 

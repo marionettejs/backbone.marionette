@@ -36,7 +36,17 @@ dependencies in any other language.
 [Here](https://github.com/marionettejs/marionette-integrations/tree/master/browserify)
 we prepared simple marionettejs skeleton with Browserify.
 
+### Browserify and Grunt
+
+[Grunt][grunt] is task runner. [Here](https://github.com/marionettejs/marionette-integrations/tree/master/browserify_grunt) is simple Browserify + Grunt skeleton.
+
+### Browserify and Gulp
+
+[Gulp][gulp] is streaming build system. [Here](https://github.com/marionettejs/marionette-integrations/tree/master/browserify_gulp) is simple Browserify + Gulp skeleton.
+
 
 [browserify]: http://browserify.org/
 [webpack]: https://webpack.github.io/
 [brunch]: http://brunch.io/
+[grunt]: http://gruntjs.com/
+[gulp]: http://gulpjs.com/

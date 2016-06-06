@@ -101,11 +101,20 @@ Marionette.CollectionView = Marionette.View.extend({
   _onCollectionAdd: function(child, collection, opts) {
     // `index` is present when adding with `at` since BB 1.2; indexOf fallback for < 1.2
     var index = opts.at !== undefined && (opts.index || collection.indexOf(child));
+    var models = collection.models;
 
     // When filtered or when there is no initial index, calculate index.
-    if (this.getOption('filter') || index === false) {
-      index = _.indexOf(this._filteredSortedModels(index), child);
+    if (this.getOption('filter') || this.getViewComparator() || index === false) {
+      models = this._filteredSortedModels(index);
     }
+
+    // find adjusted index
+    _.reduce(models, function(counter, model) {
+      var view = this.children.findByModel(model);
+      if (view) { return view._index; }
+
+      return model === child ? index = counter + 1 : counter;
+    }, -1, this);
 
     if (this._shouldAddChild(child, index)) {
       this.destroyEmptyView();

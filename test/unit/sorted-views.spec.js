@@ -55,6 +55,28 @@ describe('collection/composite view sorting', function() {
       });
     });
 
+    describe('when adding multiple models', function() {
+      beforeEach(function() {
+        this.sinon.spy(this.collectionView, 'render');
+        this.sinon.spy(this.compositeView, 'render');
+
+        this.collection.add([
+          new Backbone.Model({foo: 5, bar: 0}),
+          new Backbone.Model({foo: 4, bar: 1})
+        ]);
+      });
+
+      it('should have the order in the dom', function() {
+        expect(this.collectionView.$el).to.have.$text('12345');
+        expect(this.compositeView.$el).to.have.$text('12345');
+      });
+
+      it('should not require additional render', function() {
+        expect(this.collectionView.render.callCount).to.equal(0);
+        expect(this.compositeView.render.callCount).to.equal(0);
+      });
+    });
+
     describe('when adding a model with the "at" option', function() {
       beforeEach(function() {
         this.model = new Backbone.Model({foo: 0, bar: 1});

@@ -372,7 +372,7 @@ describe('composite view', function() {
 
     it('should destroy all of the child collection child views', function() {
       expect(this.compositeView._destroyChildren).to.have.been.called;
-      expect(this.compositeView._destroyChildren.callCount).to.equal(2);
+      expect(this.compositeView._destroyChildren.callCount).to.equal(1);
     });
 
     it('should re-render the collections items', function() {

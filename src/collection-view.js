@@ -42,7 +42,7 @@ const CollectionView = Backbone.View.extend({
   // maintaining the sorted order of the collection.
   // This will fallback onto appending childView's to the end.
   //
-  // option to pass `{comparator: compFunction()}` to allow the `CollectionView`
+  // option to pass `{viewComparator: compFunction()}` to allow the `CollectionView`
   // to use a custom sort order for the collection.
   constructor(options) {
     this.render = _.bind(this.render, this);

@@ -151,12 +151,10 @@ const CollectionView = Backbone.View.extend({
     const shouldRender = canBeRendered && filterChanged && !preventRender;
 
     if (shouldRender) {
-      this.triggerMethod('before:apply:filter', this);
       const previousModels = this._filteredSortedModels();
       this.filter = filter;
       const models = this._filteredSortedModels();
       this._applyModelDeltas(models, previousModels);
-      this.triggerMethod('apply:filter', this);
     } else {
       this.filter = filter;
     }

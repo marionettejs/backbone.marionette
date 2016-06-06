@@ -861,11 +861,17 @@ describe('collection view', function() {
 
       this.childView = this.collectionView.children.findByIndex(0);
       this.sinon.spy(this.childView, 'remove');
-      collection.reset();
+
+      this.sinon.spy(this.collectionView, 'removeChildView');
+      this.collectionView.removeChildView(this.childView);
     });
 
     it('should call the "remove" method', function() {
       expect(this.childView.remove).to.have.been.called;
+    });
+
+    it('should return the childView', function() {
+      expect(this.collectionView.removeChildView).to.have.returned(this.childView);
     });
   });
 

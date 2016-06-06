@@ -525,7 +525,7 @@ const CollectionView = Backbone.View.extend({
   // in the collection in order to keep the children in sync with the collection.
   removeChildView(view) {
     if (!view || view._isDestroyed) {
-      return;
+      return view;
     }
 
     this.triggerMethod('before:remove:child', this, view);
@@ -543,6 +543,8 @@ const CollectionView = Backbone.View.extend({
 
     // decrement the index of views after this one
     this._updateIndices(view, false);
+
+    return view;
   },
 
   // check if the collection is empty or optionally whether an array of pre-processed models is empty

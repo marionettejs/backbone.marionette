@@ -13,7 +13,7 @@ const ClassOptions = [
 const Application = MarionetteObject.extend({
   cidPrefix: 'mna',
 
-  constructor: function(options) {
+  constructor(options) {
     this._setOptions(options);
 
     this.mergeOptions(options, ClassOptions);
@@ -25,7 +25,7 @@ const Application = MarionetteObject.extend({
 
   regionClass: Region,
 
-  _initRegion: function(options) {
+  _initRegion(options) {
     const region = this.region;
     const RegionClass = this.regionClass;
 
@@ -41,21 +41,21 @@ const Application = MarionetteObject.extend({
     this._region = region;
   },
 
-  getRegion: function() {
+  getRegion() {
     return this._region;
   },
 
-  showView: function(view, ...args) {
+  showView(view, ...args) {
     const region = this.getRegion();
     return region.show(view, ...args);
   },
 
-  getView: function() {
+  getView() {
     return this.getRegion().currentView;
   },
 
   // kick off all of the application's processes.
-  start: function(options) {
+  start(options) {
     this.triggerMethod('before:start', this, options);
     this.triggerMethod('start', this, options);
     return this;

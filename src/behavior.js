@@ -24,7 +24,7 @@ const ClassOptions = [
 const Behavior = MarionetteObject.extend({
   cidPrefix: 'mnb',
 
-  constructor: function(options, view) {
+  constructor(options, view) {
     // Setup reference to the view.
     // this comes in handle when a behavior
     // wants to directly talk up the chain
@@ -50,56 +50,56 @@ const Behavior = MarionetteObject.extend({
   // proxy behavior $ method to the view
   // this is useful for doing jquery DOM lookups
   // scoped to behaviors view.
-  $: function() {
+  $() {
     return this.view.$.apply(this.view, arguments);
   },
 
   // Stops the behavior from listening to events.
   // Overrides Object#destroy to prevent additional events from being triggered.
-  destroy: function() {
+  destroy() {
     this.stopListening();
 
     return this;
   },
 
-  proxyViewProperties: function() {
+  proxyViewProperties() {
     this.$el = this.view.$el;
     this.el = this.view.el;
 
     return this;
   },
 
-  bindUIElements: function() {
+  bindUIElements() {
     this._bindUIElements();
 
     return this;
   },
 
-  unbindUIElements: function() {
+  unbindUIElements() {
     this._unbindUIElements();
 
     return this;
   },
 
-  getUI: function(name) {
+  getUI(name) {
     this.view._ensureViewIsIntact();
     return this._getUI(name);
   },
 
   // Handle `modelEvents`, and `collectionEvents` configuration
-  delegateEntityEvents: function() {
+  delegateEntityEvents() {
     this._delegateEntityEvents(this.view.model, this.view.collection);
 
     return this;
   },
 
-  undelegateEntityEvents: function() {
+  undelegateEntityEvents() {
     this._undelegateEntityEvents(this.view.model, this.view.collection);
 
     return this;
   },
 
-  getEvents: function() {
+  getEvents() {
     // Normalize behavior events hash to allow
     // a user to use the @ui. syntax.
     const behaviorEvents = this.normalizeUIKeys(_.result(this, 'events'));
@@ -117,7 +117,7 @@ const Behavior = MarionetteObject.extend({
   },
 
   // Internal method to build all trigger handlers for a given behavior
-  getTriggers: function() {
+  getTriggers() {
     if (!this.triggers) { return; }
 
     // Normalize behavior triggers hash to allow

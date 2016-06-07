@@ -13,7 +13,7 @@ const Renderer = {
   // passed to the `TemplateCache` object to retrieve the
   // template function. Override this method to provide your own
   // custom rendering and template handling for all of Marionette.
-  render: function(template, data) {
+  render(template, data) {
     if (!template) {
       throw new MarionetteError({
         name: 'TemplateNotFoundError',

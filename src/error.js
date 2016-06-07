@@ -10,7 +10,7 @@ const errorProps = ['description', 'fileName', 'lineNumber', 'name', 'message', 
 const MarionetteError = extend.call(Error, {
   urlRoot: 'http://marionettejs.com/docs/v' + version + '/',
 
-  constructor: function MarionetteError(message, options) {
+  constructor(message, options) {
     if (_.isObject(message)) {
       options = message;
       message = options.message;
@@ -28,13 +28,13 @@ const MarionetteError = extend.call(Error, {
     }
   },
 
-  captureStackTrace: function() {
+  captureStackTrace() {
     if (Error.captureStackTrace) {
       Error.captureStackTrace(this, MarionetteError);
     }
   },
 
-  toString: function() {
+  toString() {
     return this.name + ': ' + this.message + (this.url ? ' See: ' + this.url : '');
   }
 });

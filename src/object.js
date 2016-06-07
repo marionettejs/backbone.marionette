@@ -36,14 +36,14 @@ _.extend(MarionetteObject.prototype, Backbone.Events, CommonMixin, RadioMixin, {
   // for parity with Marionette.AbstractView lifecyle
   _isDestroyed: false,
 
-  isDestroyed: function() {
+  isDestroyed() {
     return this._isDestroyed;
   },
 
   //this is a noop method intended to be overridden by classes that extend from this base
-  initialize: function() {},
+  initialize() {},
 
-  destroy: function(...args) {
+  destroy(...args) {
     if (this._isDestroyed) { return this; }
 
     this.triggerMethod('before:destroy', this, ...args);

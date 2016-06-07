@@ -349,6 +349,33 @@ describe('layoutView', function() {
     });
   });
 
+  describe('when destroying a childView as a View', function() {
+    beforeEach(function() {
+      this.layoutView = new this.View();
+      this.childEventsHandler = this.sinon.spy();
+
+      // add child events to listen for
+      this.layoutView.childViewEvents = {
+        'destroy': this.childEventsHandler
+      };
+      this.layoutView.delegateEvents();
+      this.layoutView.render();
+
+      // create a child view which triggers an event on render
+      var ChildView = Marionette.View.extend({
+        template: false
+      });
+      this.childView = new ChildView();
+
+      this.layoutView.showChildView('regionOne', this.childView);
+      this.childView.destroy();
+    });
+
+    it('childViewEvents "destroy" method is triggered', function() {
+      expect(this.childEventsHandler).to.have.been.calledOnce;
+    });
+  });
+
   describe('when re-rendering an already rendered layoutView', function() {
     beforeEach(function() {
       this.ViewBoundRender = this.View.extend({

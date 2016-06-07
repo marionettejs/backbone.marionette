@@ -44,7 +44,7 @@ function parseBehaviors(view, behaviors) {
 }
 
 export default {
-  _initBehaviors: function() {
+  _initBehaviors() {
     const behaviors = _.result(this, 'behaviors');
 
     // Behaviors defined on a view can be a flat object literal
@@ -52,32 +52,32 @@ export default {
     this._behaviors = _.isObject(behaviors) ? parseBehaviors(this, behaviors) : {};
   },
 
-  _getBehaviorTriggers: function() {
+  _getBehaviorTriggers() {
     const triggers = _invoke(this._behaviors, 'getTriggers');
     return _.extend({}, ...triggers);
   },
 
-  _getBehaviorEvents: function() {
+  _getBehaviorEvents() {
     const events = _invoke(this._behaviors, 'getEvents');
     return _.extend({}, ...events);
   },
 
   // proxy behavior $el to the view's $el.
-  _proxyBehaviorViewProperties: function() {
+  _proxyBehaviorViewProperties() {
     _invoke(this._behaviors, 'proxyViewProperties');
   },
 
   // delegate modelEvents and collectionEvents
-  _delegateBehaviorEntityEvents: function() {
+  _delegateBehaviorEntityEvents() {
     _invoke(this._behaviors, 'delegateEntityEvents');
   },
 
   // undelegate modelEvents and collectionEvents
-  _undelegateBehaviorEntityEvents: function() {
+  _undelegateBehaviorEntityEvents() {
     _invoke(this._behaviors, 'undelegateEntityEvents');
   },
 
-  _destroyBehaviors: function(args) {
+  _destroyBehaviors(args) {
     // Call destroy on each behavior after
     // destroying the view.
     // This unbinds event listeners
@@ -85,15 +85,15 @@ export default {
     _invoke(this._behaviors, 'destroy', ...args);
   },
 
-  _bindBehaviorUIElements: function() {
+  _bindBehaviorUIElements() {
     _invoke(this._behaviors, 'bindUIElements');
   },
 
-  _unbindBehaviorUIElements: function() {
+  _unbindBehaviorUIElements() {
     _invoke(this._behaviors, 'unbindUIElements');
   },
 
-  _triggerEventOnBehaviors: function(...args) {
+  _triggerEventOnBehaviors(...args) {
     const behaviors = this._behaviors;
     // Use good ol' for as this is a very hot function
     for (let i = 0, length = behaviors && behaviors.length; i < length; i++) {

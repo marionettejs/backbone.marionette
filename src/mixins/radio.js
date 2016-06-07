@@ -18,7 +18,7 @@ import {
 
 export default {
 
-  _initRadio: function() {
+  _initRadio() {
     const channelName = _.result(this, 'channelName');
 
     if (!channelName) {
@@ -36,11 +36,11 @@ export default {
     this.on('destroy', this._destroyRadio);
   },
 
-  _destroyRadio: function() {
+  _destroyRadio() {
     this._channel.stopReplying(null, null, this);
   },
 
-  getChannel: function() {
+  getChannel() {
     return this._channel;
   },
 

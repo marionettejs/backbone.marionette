@@ -54,7 +54,7 @@
     "no-undef": 2,
     "no-unused-vars": [ 1, { "args": "none" } ],
     "no-with": 2,
-    "one-var": [ 2, "never" ],
+    "no-var": 2,
     "operator-linebreak": [ 2, "after" ],
     "quotes": [ 2, "single" ],
     "semi": [ 0, "never" ],
@@ -71,6 +71,7 @@
     "strict": 0,
     "valid-jsdoc": 2,
     "valid-typeof": 2,
-    "wrap-iife": [ 2, "inside" ]
+    "wrap-iife": [ 2, "inside" ],
+    "object-shorthand": [ 2, "methods" ]
   }
 }

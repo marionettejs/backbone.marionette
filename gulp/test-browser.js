@@ -9,6 +9,7 @@ import nodeGlobals from 'rollup-plugin-node-globals';
 import commonjs from 'rollup-plugin-commonjs';
 import json from 'rollup-plugin-json';
 import preset from 'babel-preset-es2015-rollup';
+import opn from 'opn';
 
 function bundle() {
   return rollup({
@@ -38,6 +39,7 @@ function bundle() {
 
 function browserWatch() {
   livereload.listen({port: 35729, host: 'localhost', start: true});
+  opn('./test/runner.html');
   gulp.watch(['src/**/*.js', 'test/**/*.js'], ['browser-bundle']);
 }
 

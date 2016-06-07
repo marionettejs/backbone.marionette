@@ -8,10 +8,17 @@ import CommonMixin from './mixins/common';
 import RadioMixin from './mixins/radio';
 import { triggerMethod } from './trigger-method';
 
+const ClassOptions = [
+  'channelName',
+  'radioEvents',
+  'radioRequests'
+];
+
 // A Base Class that other Classes should descend from.
 // Object borrows many conventions and utilities from Backbone.
-var MarionetteObject = function(options) {
+const MarionetteObject = function(options) {
   this._setOptions(options);
+  this.mergeOptions(options, ClassOptions);
   this.cid = _.uniqueId(this.cidPrefix);
   this._initRadio();
   this.initialize.apply(this, arguments);
@@ -39,12 +46,10 @@ _.extend(MarionetteObject.prototype, Backbone.Events, CommonMixin, RadioMixin, {
   destroy: function(...args) {
     if (this._isDestroyed) { return this; }
 
-    this.triggerMethod('before:destroy', ...args);
+    this.triggerMethod('before:destroy', this, ...args);
 
-    // mark as destroyed before doing the actual destroy, to
-    // prevent infinite loops within "destroy" event handlers
     this._isDestroyed = true;
-    this.triggerMethod('destroy', ...args);
+    this.triggerMethod('destroy', this, ...args);
     this.stopListening();
 
     return this;

@@ -4,11 +4,15 @@
 import _               from 'underscore';
 import Backbone        from 'backbone';
 import deprecate       from './utils/deprecate';
-import getValue        from './utils/getValue';
-import getOption       from './utils/getOption';
 import MarionetteError from './error';
 import CollectionView  from './collection-view';
 import View            from './view';
+
+const ClassOptions = [
+  'childViewContainer',
+  'template',
+  'templateContext'
+];
 
 // Used for rendering a branch-leaf, hierarchical structure.
 // Extends directly from CollectionView and also renders an
@@ -21,8 +25,11 @@ const CompositeView = CollectionView.extend({
   // option to pass '{sort: false}' to prevent the CompositeView from
   // maintaining the sorted order of the collection.
   // This will fallback onto appending childView's to the end.
-  constructor() {
+  constructor(options) {
     deprecate('CompositeView is deprecated. Convert to View at your earliest convenience');
+
+    this.mergeOptions(options, ClassOptions);
+
     CollectionView.prototype.constructor.apply(this, arguments);
   },
 
@@ -39,7 +46,7 @@ const CompositeView = CollectionView.extend({
       this.listenTo(this.collection, 'remove', this._onCollectionRemove);
       this.listenTo(this.collection, 'reset', this.renderChildren);
 
-      if (this.getOption('sort')) {
+      if (this.sort) {
         this.listenTo(this.collection, 'sort', this._sortViews);
       }
     }
@@ -51,7 +58,7 @@ const CompositeView = CollectionView.extend({
   // has been defined. As happens in CollectionView, `childView` can
   // be a function (which should return a view class).
   _getChildView(child) {
-    var childView = this.getOption('childView');
+    const childView = this.childView;
 
     // for CompositeView, if `childView` is not specified, we'll get the same
     // composite view class rendered for each child in the collection
@@ -131,10 +138,10 @@ const CompositeView = CollectionView.extend({
     }
 
     let container;
-    const childViewContainer = getOption.call(containerView, 'childViewContainer');
+    const childViewContainer = containerView.childViewContainer;
     if (childViewContainer) {
 
-      const selector = getValue.call(containerView, childViewContainer);
+      const selector = _.result(containerView, 'childViewContainer');
 
       if (selector.charAt(0) === '@' && containerView.ui) {
         container = containerView.ui[selector.substr(4)];
@@ -167,7 +174,7 @@ const CompositeView = CollectionView.extend({
 
 // To prevent duplication but allow the best View organization
 // Certain View methods are mixed directly into the deprecated CompositeView
-const MixinFromView = _.pick(View.prototype, 'serializeModel', 'getTemplate', '_renderTemplate', 'attachElContent');
+const MixinFromView = _.pick(View.prototype, 'serializeModel', 'getTemplate', '_renderTemplate', 'mixinTemplateContext', 'attachElContent');
 _.extend(CompositeView.prototype, MixinFromView);
 
 export default CompositeView;

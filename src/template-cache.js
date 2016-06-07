@@ -7,7 +7,7 @@ import MarionetteError from './error';
 
 // Manage templates stored in `<script>` blocks,
 // caching them for faster access.
-var TemplateCache = function(templateId) {
+const TemplateCache = function(templateId) {
   this.templateId = templateId;
 };
 
@@ -21,7 +21,7 @@ _.extend(TemplateCache, {
   // retrieves the cached version, or loads it
   // from the DOM.
   get: function(templateId, options) {
-    var cachedTemplate = this.templateCaches[templateId];
+    let cachedTemplate = this.templateCaches[templateId];
 
     if (!cachedTemplate) {
       cachedTemplate = new TemplateCache(templateId);
@@ -39,8 +39,8 @@ _.extend(TemplateCache, {
   // specified templates from the cache:
   // `clear("#t1", "#t2", "...")`
   clear: function(...args) {
-    var i;
-    var length = args.length;
+    let i;
+    const length = args.length;
 
     if (length > 0) {
       for (i = 0; i < length; i++) {
@@ -65,7 +65,7 @@ _.extend(TemplateCache.prototype, {
     }
 
     // Load the template and compile it
-    var template = this.loadTemplate(this.templateId, options);
+    const template = this.loadTemplate(this.templateId, options);
     this.compiledTemplate = this.compileTemplate(template, options);
 
     return this.compiledTemplate;
@@ -77,7 +77,7 @@ _.extend(TemplateCache.prototype, {
   // using a template-loader plugin as described here:
   // https://github.com/marionettejs/backbone.marionette/wiki/Using-marionette-with-requirejs
   loadTemplate: function(templateId, options) {
-    var $template = Backbone.$(templateId);
+    const $template = Backbone.$(templateId);
 
     if (!$template.length) {
       throw new MarionetteError({

@@ -13,7 +13,15 @@ import TriggersMixin      from './mixins/triggers';
 import UIMixin            from './mixins/ui';
 import getUniqueEventName from './utils/getUniqueEventName';
 
-var Behavior = MarionetteObject.extend({
+const ClassOptions = [
+  'collectionEvents',
+  'events',
+  'modelEvents',
+  'triggers',
+  'ui'
+];
+
+const Behavior = MarionetteObject.extend({
   cidPrefix: 'mnb',
 
   constructor: function(options, view) {
@@ -24,6 +32,8 @@ var Behavior = MarionetteObject.extend({
     this.view = view;
     this.defaults = _.clone(_.result(this, 'defaults', {}));
     this._setOptions(this.defaults, options);
+    this.mergeOptions(this.options, ClassOptions);
+
     // Construct an internal UI hash using
     // the behaviors UI hash and then the view UI hash.
     // This allows the user to use UI hash elements
@@ -92,7 +102,7 @@ var Behavior = MarionetteObject.extend({
   getEvents: function() {
     // Normalize behavior events hash to allow
     // a user to use the @ui. syntax.
-    var behaviorEvents = this.normalizeUIKeys(_.result(this, 'events'));
+    const behaviorEvents = this.normalizeUIKeys(_.result(this, 'events'));
 
     // binds the handler to the behavior and builds a unique eventName
     return _.reduce(behaviorEvents, function(events, behaviorHandler, key) {
@@ -112,7 +122,7 @@ var Behavior = MarionetteObject.extend({
 
     // Normalize behavior triggers hash to allow
     // a user to use the @ui. syntax.
-    var behaviorTriggers = this.normalizeUIKeys(_.result(this, 'triggers'));
+    const behaviorTriggers = this.normalizeUIKeys(_.result(this, 'triggers'));
 
     return this._getViewTriggers(this.view, behaviorTriggers);
   }

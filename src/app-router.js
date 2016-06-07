@@ -23,15 +23,22 @@ import MarionetteError         from './error';
 import CommonMixin             from './mixins/common';
 import { triggerMethod }       from './trigger-method';
 
-var AppRouter = Backbone.Router.extend({
+const ClassOptions = [
+  'appRoutes',
+  'controller'
+];
+
+const AppRouter = Backbone.Router.extend({
 
   constructor: function(options) {
     this._setOptions(options);
 
+    this.mergeOptions(options, ClassOptions);
+
     Backbone.Router.apply(this, arguments);
 
-    var appRoutes = this.getOption('appRoutes');
-    var controller = this._getController();
+    const appRoutes = this.appRoutes;
+    const controller = this._getController();
     this.processAppRoutes(controller, appRoutes);
     this.on('route', this._processOnRoute, this);
   },
@@ -39,8 +46,9 @@ var AppRouter = Backbone.Router.extend({
   // Similar to route method on a Backbone Router but
   // method is called on the controller
   appRoute: function(route, methodName) {
-    var controller = this._getController();
+    const controller = this._getController();
     this._addAppRoute(controller, route, methodName);
+    return this;
   },
 
   // process the route event and trigger the onRoute
@@ -49,7 +57,7 @@ var AppRouter = Backbone.Router.extend({
     // make sure an onRoute before trying to call it
     if (_.isFunction(this.onRoute)) {
       // find the path that matches the current route
-      var routePath = _.invert(this.getOption('appRoutes'))[routeName];
+      const routePath = _.invert(this.appRoutes)[routeName];
       this.onRoute(routeName, routePath, routeArgs);
     }
   },
@@ -58,21 +66,23 @@ var AppRouter = Backbone.Router.extend({
   // router, and turn them in to routes that trigger the
   // specified method on the specified `controller`.
   processAppRoutes: function(controller, appRoutes) {
-    if (!appRoutes) { return; }
+    if (!appRoutes) { return this; }
 
-    var routeNames = _.keys(appRoutes).reverse(); // Backbone requires reverted order of routes
+    const routeNames = _.keys(appRoutes).reverse(); // Backbone requires reverted order of routes
 
     _.each(routeNames, route => {
       this._addAppRoute(controller, route, appRoutes[route]);
     });
+
+    return this;
   },
 
   _getController: function() {
-    return this.getOption('controller');
+    return this.controller;
   },
 
   _addAppRoute: function(controller, route, methodName) {
-    var method = controller[methodName];
+    const method = controller[methodName];
 
     if (!method) {
       throw new MarionetteError('Method "' + methodName + '" was not found on the controller');

@@ -10,6 +10,12 @@ import monitorViewEvents from './monitor-view-events';
 import destroyBackboneView from './utils/destroyBackboneView';
 import { triggerMethodOn } from './trigger-method';
 
+const ClassOptions = [
+  'allowMissingEl',
+  'parentEl',
+  'replaceElement'
+];
+
 const Region = MarionetteObject.extend({
   cidPrefix: 'mnr',
   replaceElement: false,
@@ -17,6 +23,10 @@ const Region = MarionetteObject.extend({
 
   constructor(options) {
     this._setOptions(options);
+
+    this.mergeOptions(options, ClassOptions);
+
+    // getOption necessary because options.el may be passed as undefined
     this._initEl = this.el = this.getOption('el');
 
     // Handle when this.el is passed in as a $ wrapped element.
@@ -86,7 +96,7 @@ const Region = MarionetteObject.extend({
 
   _attachView(view, options = {}) {
     const shouldTriggerAttach = !view._isAttached && isNodeAttached(this.el);
-    const shouldReplaceEl = typeof options.replaceElement === 'undefined' ? !!this.getOption('replaceElement') : !!options.replaceElement;
+    const shouldReplaceEl = typeof options.replaceElement === 'undefined' ? !!_.result(this, 'replaceElement') : !!options.replaceElement;
 
     if (shouldTriggerAttach) {
       triggerMethodOn(view, 'before:attach', view);
@@ -109,7 +119,7 @@ const Region = MarionetteObject.extend({
     }
 
     if (!this.$el || this.$el.length === 0) {
-      const allowMissingEl = typeof options.allowMissingEl === 'undefined' ? !!this.getOption('allowMissingEl') : !!options.allowMissingEl;
+      const allowMissingEl = typeof options.allowMissingEl === 'undefined' ? !!_.result(this, 'allowMissingEl') : !!options.allowMissingEl;
 
       if (allowMissingEl) {
         return false;
@@ -139,7 +149,7 @@ const Region = MarionetteObject.extend({
   // Override this method to change how the region finds the DOM element that it manages. Return
   // a jQuery selector object scoped to a provided parent el or the document if none exists.
   getEl(el) {
-    return Backbone.$(el, this.getValue(this.getOption('parentEl')));
+    return Backbone.$(el, _.result(this, 'parentEl'));
   },
 
   _replaceEl(view) {
@@ -186,11 +196,16 @@ const Region = MarionetteObject.extend({
 
   // Destroy the current view, if there is one. If there is no current view, it does
   // nothing and returns immediately.
-  empty(options) {
+  empty(options = { allowMissingEl: true }) {
     const view = this.currentView;
 
-    // If there is no view in the region we should not remove anything
-    if (!view) { return this; }
+    // If there is no view in the region we should only detach current html
+    if (!view) {
+      if (this._ensureElement(options)) {
+        this.detachHtml();
+      }
+      return this;
+    }
 
     view.off('destroy', this.empty, this);
     this.triggerMethod('before:empty', this, view);
@@ -199,12 +214,12 @@ const Region = MarionetteObject.extend({
       this._restoreEl();
     }
 
+    delete this.currentView;
+
     if (!view._isDestroyed) {
       this._removeView(view, options);
+      delete view._parent;
     }
-
-    delete this.currentView._parent;
-    delete this.currentView;
 
     this.triggerMethod('empty', this, view);
     return this;
@@ -227,17 +242,21 @@ const Region = MarionetteObject.extend({
 
   _detachView(view) {
     const shouldTriggerDetach = !!view._isAttached;
-
     if (shouldTriggerDetach) {
       triggerMethodOn(view, 'before:detach', view);
     }
 
-    this.$el.contents().detach();
+    this.detachHtml();
 
     if (shouldTriggerDetach) {
       view._isAttached = false;
       triggerMethodOn(view, 'detach', view);
     }
+  },
+
+  // Override this method to change how the region detaches current content
+  detachHtml() {
+    this.$el.contents().detach();
   },
 
   // Checks whether a view is currently present within the region. Returns `true` if there is
@@ -249,8 +268,8 @@ const Region = MarionetteObject.extend({
   // Reset the region by destroying any existing view and clearing out the cached `$el`.
   // The next time a view is shown via this region, the region will re-query the DOM for
   // the region's `el`.
-  reset() {
-    this.empty();
+  reset(options) {
+    this.empty(options);
 
     if (this.$el) {
       this.el = this._initEl;
@@ -260,8 +279,8 @@ const Region = MarionetteObject.extend({
     return this;
   },
 
-  destroy: function() {
-    this.reset();
+  destroy: function(options) {
+    this.reset(options);
     return MarionetteObject.prototype.destroy.apply(this, arguments);
   }
 });

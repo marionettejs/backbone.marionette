@@ -1,8 +1,10 @@
 import _                        from 'underscore';
-import getValue                 from '../utils/getValue';
 import _invoke                  from '../utils/_invoke';
 import { triggerMethod }        from '../trigger-method';
 import Marionette               from '../backbone.marionette';
+
+// MixinOptions
+// - behaviors
 
 // Takes care of getting the behavior class
 // given options and a key.
@@ -19,7 +21,11 @@ function getBehaviorClass(options, key) {
   }
 
   // behaviorsLookup can be either a flat object or a method
-  return getValue(Marionette.Behaviors.behaviorsLookup, options, key)[key];
+  if (_.isFunction(Marionette.Behaviors.behaviorsLookup)) {
+    return Marionette.Behaviors.behaviorsLookup(options, key)[key];
+  }
+
+  return Marionette.Behaviors.behaviorsLookup[key];
 }
 
 // Iterate over the behaviors object, for each behavior
@@ -27,11 +33,11 @@ function getBehaviorClass(options, key) {
 // This accepts a list of behaviors in either an object or array form
 function parseBehaviors(view, behaviors) {
   return _.chain(behaviors).map(function(options, key) {
-    var BehaviorClass = getBehaviorClass(options, key);
+    const BehaviorClass = getBehaviorClass(options, key);
     //if we're passed a class directly instead of an object
-    var _options = options === BehaviorClass ? {} : options;
-    var behavior = new BehaviorClass(_options, view);
-    var nestedBehaviors = parseBehaviors(view, _.result(behavior, 'behaviors'));
+    const _options = options === BehaviorClass ? {} : options;
+    const behavior = new BehaviorClass(_options, view);
+    const nestedBehaviors = parseBehaviors(view, _.result(behavior, 'behaviors'));
 
     return [behavior].concat(nestedBehaviors);
   }).flatten().value();
@@ -39,7 +45,7 @@ function parseBehaviors(view, behaviors) {
 
 export default {
   _initBehaviors: function() {
-    var behaviors = this.getValue(this.getOption('behaviors'));
+    const behaviors = _.result(this, 'behaviors');
 
     // Behaviors defined on a view can be a flat object literal
     // or it can be a function that returns an object.
@@ -47,12 +53,12 @@ export default {
   },
 
   _getBehaviorTriggers: function() {
-    var triggers = _invoke(this._behaviors, 'getTriggers');
+    const triggers = _invoke(this._behaviors, 'getTriggers');
     return _.extend({}, ...triggers);
   },
 
   _getBehaviorEvents: function() {
-    var events = _invoke(this._behaviors, 'getEvents');
+    const events = _invoke(this._behaviors, 'getEvents');
     return _.extend({}, ...events);
   },
 
@@ -88,9 +94,9 @@ export default {
   },
 
   _triggerEventOnBehaviors: function(...args) {
-    var behaviors = this._behaviors;
+    const behaviors = this._behaviors;
     // Use good ol' for as this is a very hot function
-    for (var i = 0, length = behaviors && behaviors.length; i < length; i++) {
+    for (let i = 0, length = behaviors && behaviors.length; i < length; i++) {
       triggerMethod.apply(behaviors[i], args);
     }
   }

@@ -7,7 +7,7 @@ import TemplateCache   from './template-cache';
 
 // Render a template with data by passing in the template
 // selector and the data to render.
-var Renderer = {
+const Renderer = {
 
   // Render a template with data. The `template` parameter is
   // passed to the `TemplateCache` object to retrieve the
@@ -21,7 +21,7 @@ var Renderer = {
       });
     }
 
-    var templateFunc = _.isFunction(template) ? template : TemplateCache.get(template);
+    const templateFunc = _.isFunction(template) ? template : TemplateCache.get(template);
 
     return templateFunc(data);
   }

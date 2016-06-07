@@ -26,17 +26,19 @@ function iterateReplies(target, channel, bindings, actionName) {
     });
   }
 
-  var normalizedRadioRequests = normalizeMethods.call(target, bindings);
+  const normalizedRadioRequests = normalizeMethods.call(target, bindings);
 
   channel[actionName](normalizedRadioRequests, target);
 }
 
 function bindRadioRequests(channel, bindings) {
   iterateReplies(this, channel, bindings, 'reply');
+  return this;
 }
 
 function unbindRadioRequests(channel, bindings) {
   iterateReplies(this, channel, bindings, 'stopReplying');
+  return this;
 }
 
 export {

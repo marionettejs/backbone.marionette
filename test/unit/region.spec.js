@@ -1053,17 +1053,67 @@ describe('region', function() {
     });
 
     it('should prefer passed options over initial options', function() {
-      this.region.options.allowMissingEl = false;
+      this.region.allowMissingEl = false;
 
       expect(this.region._ensureElement({allowMissingEl: true})).to.be.false;
     });
 
     it('should fallback to initial options when not passed options', function() {
-      this.region.options.allowMissingEl = false;
+      this.region.allowMissingEl = false;
 
       expect(function() {
         this.region._ensureElement();
       }.bind(this)).to.throw;
+    });
+  });
+
+  // This is a terrible example of an edge-case where something related to the view's destroy
+  // may also want to empty the same region.
+  describe('when emptying a region destroys a view that empties the same region', function() {
+    it('should only empty once', function() {
+      this.setFixtures('<div id="region"></div>');
+
+      var MyRegion = Marionette.Region.extend({
+        el: '#region',
+        onEmpty: this.sinon.stub(),
+      });
+
+      var region = new MyRegion();
+      var MyView = Marionette.View.extend({
+        template: false,
+        onDestroy: function() {
+          region.empty();
+        }
+      });
+      region.show(new MyView());
+      region.empty();
+
+      expect(region.onEmpty).to.have.been.calledOnce;
+    });
+  });
+
+  describe('when emptying a region with no view and preexisting html', function() {
+    beforeEach(function() {
+      this.MyRegion = Marionette.Region.extend({
+        el: '#region',
+      });
+    });
+
+    it('should clear the region contents', function() {
+      this.setFixtures('<div id="region">Preexisting HTML</div>');
+      var region = new this.MyRegion();
+      region.empty();
+      expect(region.$el.html()).to.eql('');
+    });
+
+    // In the future, hopefully allowMissingEl can default to true
+    describe('when no el exists while passing allowMissingEl: false', function() {
+      it('should throw an error', function() {
+        var region = new this.MyRegion();
+        expect(function() {
+          region.empty({ allowMissingEl: false });
+        }).to.throw('An "el" must exist in DOM for this region ' + region.cid);
+      });
     });
   });
 });

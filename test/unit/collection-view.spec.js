@@ -861,11 +861,17 @@ describe('collection view', function() {
 
       this.childView = this.collectionView.children.findByIndex(0);
       this.sinon.spy(this.childView, 'remove');
-      collection.reset();
+
+      this.sinon.spy(this.collectionView, 'removeChildView');
+      this.collectionView.removeChildView(this.childView);
     });
 
     it('should call the "remove" method', function() {
       expect(this.childView.remove).to.have.been.called;
+    });
+
+    it('should return the childView', function() {
+      expect(this.collectionView.removeChildView).to.have.returned(this.childView);
     });
   });
 
@@ -1449,6 +1455,20 @@ describe('collection view', function() {
 
     it('should return the child view for the model', function() {
       expect(this.childView.$el).to.contain.$text('bar');
+    });
+  });
+
+  describe('has a valid inheritance chain back to Backbone.View', function() {
+    beforeEach(function() {
+      this.constructor = this.sinon.spy(Backbone.View.prototype, 'constructor');
+    });
+
+    it('calls the parent Backbone.Views constructor function on instantiation with the proper parameters', function() {
+      const options = {foo: 'bar'};
+      const customParam = {foo: 'baz'};
+
+      this.layoutView = new this.CollectionView(options, customParam);
+      expect(this.constructor).to.have.been.calledWith(options, customParam);
     });
   });
 });

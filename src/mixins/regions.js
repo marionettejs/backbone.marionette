@@ -3,6 +3,10 @@ import _invoke              from '../utils/_invoke';
 import Region               from '../region';
 import MarionetteError      from '../error';
 
+// MixinOptions
+// - regions
+// - regionClass
+
 export default {
   regionClass: Region,
 
@@ -14,7 +18,7 @@ export default {
     this.regions =  this.regions || {};
     this._regions = {};
 
-    this.addRegions(this.getValue(this.getOption('regions')));
+    this.addRegions(_.result(this, 'regions'));
   },
 
   // Internal method to re-initialize all of the regions by updating
@@ -25,7 +29,7 @@ export default {
 
   // Add a single region, by name, to the View
   addRegion: function(name, definition) {
-    var regions = {};
+    const regions = {};
     regions[name] = definition;
     return this.addRegions(regions)[name];
   },
@@ -85,9 +89,9 @@ export default {
   },
 
   _buildRegionFromObject: function(definition) {
-    var RegionClass = definition.regionClass || this.getOption('regionClass');
+    const RegionClass = definition.regionClass || this.regionClass;
 
-    var options = _.omit(definition, 'regionClass');
+    const options = _.omit(definition, 'regionClass');
 
     _.defaults(options, {
       el: definition.selector,
@@ -105,18 +109,18 @@ export default {
   },
 
   _addRegion: function(region, name) {
-    this.triggerMethod('before:add:region', name, region);
+    this.triggerMethod('before:add:region', this, name, region);
 
     region._parent = this;
 
     this._regions[name] = region;
 
-    this.triggerMethod('add:region', name, region);
+    this.triggerMethod('add:region', this, name, region);
   },
 
   // Remove a single region from the View, by name
   removeRegion: function(name) {
-    var region = this._regions[name];
+    const region = this._regions[name];
 
     this._removeRegion(region, name);
 
@@ -125,7 +129,7 @@ export default {
 
   // Remove all regions from the View
   removeRegions: function() {
-    var regions = this.getRegions();
+    const regions = this.getRegions();
 
     _.each(this._regions, _.bind(this._removeRegion, this));
 
@@ -133,7 +137,7 @@ export default {
   },
 
   _removeRegion: function(region, name) {
-    this.triggerMethod('before:remove:region', name, region);
+    this.triggerMethod('before:remove:region', this, name, region);
 
     region.empty();
     region.stopListening();
@@ -141,13 +145,13 @@ export default {
     delete this.regions[name];
     delete this._regions[name];
 
-    this.triggerMethod('remove:region', name, region);
+    this.triggerMethod('remove:region', this, name, region);
   },
 
   // Empty all regions in the region manager, but
   // leave them attached
   emptyRegions: function() {
-    var regions = this.getRegions();
+    const regions = this.getRegions();
     _invoke(regions, 'empty');
     return regions;
   },
@@ -172,7 +176,7 @@ export default {
   },
 
   showChildView: function(name, view, ...args) {
-    var region = this.getRegion(name);
+    const region = this.getRegion(name);
     return region.show(view, ...args);
   },
 

@@ -1,5 +1,3 @@
-/* jshint maxstatements: 14, maxcomplexity: 7 */
-
 // Trigger Method
 // --------------
 
@@ -7,7 +5,7 @@ import _         from 'underscore';
 import getOption from './utils/getOption';
 
 // split the event name on the ":"
-var splitter = /(^|:)(\w)/gi;
+const splitter = /(^|:)(\w)/gi;
 
 // split the list of events on the space
 var eventSplitter = /\s+/;
@@ -21,9 +19,9 @@ function getEventName(match, prefix, eventName) {
 // Trigger a single event and/or a corresponding method name.
 function execTriggerMethod(event, args) {
   // get the method name from the event name
-  var methodName = 'on' + event.replace(splitter, getEventName);
-  var method = getOption.call(this, methodName);
-  var result;
+  const methodName = 'on' + event.replace(splitter, getEventName);
+  const method = getOption.call(this, methodName);
+  let result;
 
   // call the onMethodName if it exists
   if (_.isFunction(method)) {
@@ -67,6 +65,6 @@ export function triggerMethod(events, ...args) {
 // e.g. `Marionette.triggerMethodOn(view, 'show')`
 // will trigger a "show" event or invoke onShow the view.
 export function triggerMethodOn(context, ...args) {
-  var fnc = _.isFunction(context.triggerMethod) ? context.triggerMethod : triggerMethod;
+  const fnc = _.isFunction(context.triggerMethod) ? context.triggerMethod : triggerMethod;
   return fnc.apply(context, args);
 }

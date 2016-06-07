@@ -19,10 +19,10 @@ import MarionetteError from './error';
 // Bind/unbind the event to handlers specified as a string of
 // handler names on the target object
 function bindFromStrings(target, entity, evt, methods, actionName) {
-  var methodNames = methods.split(/\s+/);
+  const methodNames = methods.split(/\s+/);
 
   _.each(methodNames, function(methodName) {
-    var method = target[methodName];
+    const method = target[methodName];
     if (!method) {
       throw new MarionetteError(`Method "${methodName}" was configured as an event handler, but does not exist.`);
     }
@@ -58,10 +58,12 @@ function iterateEvents(target, entity, bindings, actionName) {
 
 function bindEntityEvents(entity, bindings) {
   iterateEvents(this, entity, bindings, 'listenTo');
+  return this;
 }
 
 function unbindEntityEvents(entity, bindings) {
   iterateEvents(this, entity, bindings, 'stopListening');
+  return this;
 }
 
 // Export Public API

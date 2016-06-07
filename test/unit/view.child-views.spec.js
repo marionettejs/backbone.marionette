@@ -349,6 +349,32 @@ describe('layoutView', function() {
     });
   });
 
+  describe('when destroying a childView as a View', function() {
+    beforeEach(function() {
+      this.childEventsHandler = this.sinon.spy();
+      this.layoutView = new this.View({
+        childViewEvents: {
+          'destroy': this.childEventsHandler
+        }
+      });
+
+      this.layoutView.render();
+
+      // create a child view which triggers an event on render
+      var ChildView = Marionette.View.extend({
+        template: false
+      });
+      this.childView = new ChildView();
+
+      this.layoutView.showChildView('regionOne', this.childView);
+      this.childView.destroy();
+    });
+
+    it('childViewEvents "destroy" method is triggered', function() {
+      expect(this.childEventsHandler).to.have.been.calledOnce;
+    });
+  });
+
   describe('when re-rendering an already rendered layoutView', function() {
     beforeEach(function() {
       this.ViewBoundRender = this.View.extend({
@@ -613,7 +639,6 @@ describe('layoutView', function() {
           }
         });
         this.layoutViewInstance = new this.View();
-        this.layoutViewInstance.render();
         var $specNode = $('.region-hash-no-template-spec');
         this.$inScopeRegion =  $specNode.find('.some-layout-view .region-one');
         this.$outOfScopeRegion = $specNode.children('.region-one');
@@ -652,12 +677,12 @@ describe('layoutView', function() {
       expect(this.beforeAddRegionSpy)
         .to.have.been.calledOnce
         .and.calledOn(this.layout)
-        .and.calledWith(this.regionName);
+        .and.calledWith(this.layout, this.regionName);
 
       expect(this.addRegionSpy)
         .to.have.been.calledOnce
         .and.calledOn(this.layout)
-        .and.calledWith(this.regionName);
+        .and.calledWith(this.layout, this.regionName);
     });
 
     it('should trigger correct region remove events', function() {
@@ -666,12 +691,12 @@ describe('layoutView', function() {
       expect(this.beforeRegionRemoveSpy)
         .to.have.been.calledOnce
         .and.calledOn(this.layout)
-        .and.calledWith(this.regionName);
+        .and.calledWith(this.layout, this.regionName);
 
       expect(this.removeRegionSpy)
         .to.have.been.calledOnce
         .and.calledOn(this.layout)
-        .and.calledWith(this.regionName);
+        .and.calledWith(this.layout, this.regionName);
     });
   });
 

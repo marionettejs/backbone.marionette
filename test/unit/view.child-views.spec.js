@@ -351,14 +351,13 @@ describe('layoutView', function() {
 
   describe('when destroying a childView as a View', function() {
     beforeEach(function() {
-      this.layoutView = new this.View();
       this.childEventsHandler = this.sinon.spy();
+      this.layoutView = new this.View({
+        childViewEvents: {
+          'destroy': this.childEventsHandler
+        }
+      });
 
-      // add child events to listen for
-      this.layoutView.childViewEvents = {
-        'destroy': this.childEventsHandler
-      };
-      this.layoutView.delegateEvents();
       this.layoutView.render();
 
       // create a child view which triggers an event on render

@@ -173,6 +173,70 @@ describe('trigger event and method name', function() {
     });
   });
 
+  describe('triggering a space-delimited list of events through a child view (childview:*)', function() {
+    beforeEach(function() {
+      this.onChildviewFooStub = this.sinon.stub();
+      this.onChildviewBarStub = this.sinon.stub();
+
+      this.View = Marionette.View.extend({
+        template: _.template('foo')
+      });
+
+      this.CollectionView = Marionette.CollectionView.extend({
+        childView: this.View,
+        onChildviewFoo: this.onChildviewFooStub,
+        onChildviewBar: this.onChildviewBarStub
+      });
+
+      this.collection = new Backbone.Collection([{foo: 'bar'}]);
+      this.collectionView = new this.CollectionView({
+        collection: this.collection
+      });
+
+      this.collectionView.render();
+      this.childView = this.collectionView.children.findByModel(this.collection.at(0));
+      this.childView.trigger('foo bar');
+    });
+
+    it('should fire all event methods once', function() {
+      expect(this.onChildviewFooStub).to.have.been.calledOnce;
+      expect(this.onChildviewBarStub).to.have.been.calledOnce;
+    });
+  });
+
+  describe('triggering a space-delimited list of events through a child view (childViewEvents)', function() {
+    beforeEach(function() {
+      this.childViewEventsFooStub = this.sinon.stub();
+      this.childViewEventsBarStub = this.sinon.stub();
+
+      this.View = Marionette.View.extend({
+        template: _.template('foo')
+      });
+
+      this.CollectionView = Marionette.CollectionView.extend({
+        childView: this.View,
+        childViewEvents: {
+          'foo': this.childViewEventsFooStub,
+          'bar': this.childViewEventsBarStub
+        }
+      });
+
+      this.collection = new Backbone.Collection([{foo: 'bar'}]);
+      this.collectionView = new this.CollectionView({
+        collection: this.collection
+      });
+
+      this.collectionView.render();
+      this.childView = this.collectionView.children.findByModel(this.collection.at(0));
+      this.childView.trigger('foo bar');
+    });
+
+    it('should fire all event methods once', function() {
+      expect(this.childViewEventsFooStub).to.have.been.calledOnce;
+      expect(this.childViewEventsBarStub).to.have.been.calledOnce;
+    });
+  });
+
   describe('when triggering an event on another context', function() {
     describe('when the context has triggerMethod defined', function() {
       beforeEach(function() {

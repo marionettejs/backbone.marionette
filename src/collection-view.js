@@ -271,8 +271,10 @@ const CollectionView = Backbone.View.extend({
   // Internal method. Separated so that CompositeView can have more control over events
   // being triggered, around the rendering process
   _renderChildren() {
-    this._destroyEmptyView();
-    this._destroyChildren({checkEmpty: false});
+    if (this._isRendered) {
+      this._destroyEmptyView();
+      this._destroyChildren({checkEmpty: false});
+    }
 
     const models = this._filteredSortedModels();
     if (this.isEmpty({processedModels: models})) {

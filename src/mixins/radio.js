@@ -2,14 +2,14 @@ import _ from 'underscore';
 import Radio from 'backbone.radio';
 
 import {
-  bindRadioRequests,
-  unbindRadioRequests
-} from '../bind-radio-requests';
+  bindRequests,
+  unbindRequests
+} from '../bind-requests';
 
 import {
-  bindEntityEvents as bindRadioEvents,
-  unbindEntityEvents as unbindRadioEvents
-} from '../bind-entity-events';
+  bindEvents as bindRadioEvents,
+  unbindEvents as unbindRadioEvents
+} from '../bind-events';
 
 // MixinOptions
 // - channelName
@@ -31,7 +31,7 @@ export default {
     this.bindRadioEvents(channel, radioEvents);
 
     const radioRequests = _.result(this, 'radioRequests');
-    this.bindRadioRequests(channel, radioRequests);
+    this.bindRequests(channel, radioRequests);
 
     this.on('destroy', this._destroyRadio);
   },
@@ -50,10 +50,10 @@ export default {
   // Proxy `unbindRadioEvents`
   unbindRadioEvents: unbindRadioEvents,
 
-  // Proxy `bindRadioRequests`
-  bindRadioRequests: bindRadioRequests,
+  // Proxy `bindRequests`
+  bindRequests: bindRequests,
 
-  // Proxy `unbindRadioRequests`
-  unbindRadioRequests: unbindRadioRequests
+  // Proxy `unbindRequests`
+  unbindRequests: unbindRequests
 
 };

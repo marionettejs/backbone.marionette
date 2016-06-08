@@ -17,7 +17,7 @@ describe('Marionette.unbindEntityEvents', function() {
 
   describe('when entity isnt passed', function() {
     beforeEach(function() {
-      Marionette.unbindEntityEvents(this.target, false, {'foo': 'foo'});
+      Marionette.unbindEvents(this.target, false, {'foo': 'foo'});
     });
 
     it('shouldnt unbind any events', function() {
@@ -27,7 +27,7 @@ describe('Marionette.unbindEntityEvents', function() {
 
   describe('when bindings isnt passed', function() {
     beforeEach(function() {
-      Marionette.unbindEntityEvents(this.target, this.entity, null);
+      Marionette.unbindEvents(this.target, this.entity, null);
     });
 
     it('shouldnt unbind any events', function() {
@@ -38,7 +38,7 @@ describe('Marionette.unbindEntityEvents', function() {
   describe('when bindings is an object with one event-handler pair', function() {
     describe('when handler is a function', function() {
       beforeEach(function() {
-        Marionette.unbindEntityEvents(this.target, this.entity, {'foo': this.target.foo});
+        Marionette.unbindEvents(this.target, this.entity, {'foo': this.target.foo});
       });
 
       it('should unbind an event', function() {
@@ -49,7 +49,7 @@ describe('Marionette.unbindEntityEvents', function() {
     describe('when handler is a string', function() {
       describe('when one handler is passed', function() {
         beforeEach(function() {
-          Marionette.unbindEntityEvents(this.target, this.entity, {'foo': 'foo'});
+          Marionette.unbindEvents(this.target, this.entity, {'foo': 'foo'});
         });
 
         it('should unbind an event', function() {
@@ -59,7 +59,7 @@ describe('Marionette.unbindEntityEvents', function() {
 
       describe('when multiple handlers are passed', function() {
         beforeEach(function() {
-          Marionette.unbindEntityEvents(this.target, this.entity, {'baz': 'foo bar'});
+          Marionette.unbindEvents(this.target, this.entity, {'baz': 'foo bar'});
         });
 
         it('should unbind first event', function() {
@@ -75,7 +75,7 @@ describe('Marionette.unbindEntityEvents', function() {
 
   describe('when bindings is an object with multiple event-handler pairs', function() {
     beforeEach(function() {
-      Marionette.unbindEntityEvents(this.target, this.entity, {
+      Marionette.unbindEvents(this.target, this.entity, {
         'foo': 'foo',
         'bar': 'bar'
       });

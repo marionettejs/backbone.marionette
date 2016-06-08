@@ -3,9 +3,9 @@ import mergeOptions             from '../utils/mergeOptions';
 import normalizeMethods         from '../utils/normalizeMethods';
 import _setOptions              from '../utils/_setOptions';
 import {
-  bindEntityEvents,
-  unbindEntityEvents
-}                               from '../bind-entity-events';
+  bindEvents,
+  unbindEvents
+}                               from '../bind-events';
 
 export default {
 
@@ -22,8 +22,8 @@ export default {
   getOption: getOption,
 
   // Enable binding view's events from another entity.
-  bindEntityEvents: bindEntityEvents,
+  bindEvents: bindEvents,
 
   // Enable unbinding view's events from another entity.
-  unbindEntityEvents: unbindEntityEvents
+  unbindEvents: unbindEvents
 };

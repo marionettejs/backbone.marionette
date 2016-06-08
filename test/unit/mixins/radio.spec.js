@@ -9,7 +9,7 @@ describe('Radio Mixin on Marionette.Object', function() {
 
     this.sinon.spy(this.RadioObject.prototype, 'bindRadioEvents');
 
-    this.sinon.spy(this.RadioObject.prototype, 'bindRadioRequests');
+    this.sinon.spy(this.RadioObject.prototype, 'bindRequests');
 
     this.channelFoo = Backbone.Radio.channel('foo');
   });
@@ -28,7 +28,7 @@ describe('Radio Mixin on Marionette.Object', function() {
     });
 
     it('should not bind radioRequests', function() {
-      expect(this.radioObject.bindRadioRequests).to.not.have.been.called;
+      expect(this.radioObject.bindRequests).to.not.have.been.called;
     });
   });
 
@@ -120,7 +120,7 @@ describe('Radio Mixin on Marionette.Object', function() {
         this.RadioObject.prototype.radioRequests = this.radioRequests;
         this.radioObject = new this.RadioObject();
 
-        expect(this.radioObject.bindRadioRequests).to.have.been.calledOnce
+        expect(this.radioObject.bindRequests).to.have.been.calledOnce
           .and.to.have.been.calledWith(this.channelFoo, {'baz': 'getBaz'});
       });
     });
@@ -130,7 +130,7 @@ describe('Radio Mixin on Marionette.Object', function() {
         this.RadioObject.prototype.radioRequests = this.radioRequestsFunc;
         this.radioObject = new this.RadioObject();
 
-        expect(this.radioObject.bindRadioRequests).to.have.been.calledOnce
+        expect(this.radioObject.bindRequests).to.have.been.calledOnce
           .and.to.have.been.calledWith(this.channelFoo, {'baz': 'getBaz'});
       });
     });
@@ -141,7 +141,7 @@ describe('Radio Mixin on Marionette.Object', function() {
           radioRequests: this.radioRequests
         });
 
-        expect(this.radioObject.bindRadioRequests).to.have.been.calledOnce
+        expect(this.radioObject.bindRequests).to.have.been.calledOnce
           .and.to.have.been.calledWith(this.channelFoo, {'baz': 'getBaz'});
       });
     });

@@ -18,7 +18,7 @@ describe('Marionette.bindEntityEvents', function() {
 
   describe('when entity isnt passed', function() {
     beforeEach(function() {
-      Marionette.bindEntityEvents(this.target, false, {'foo': 'handleFoo'});
+      Marionette.bindEvents(this.target, false, {'foo': 'handleFoo'});
     });
 
     it('shouldnt bind any events', function() {
@@ -28,7 +28,7 @@ describe('Marionette.bindEntityEvents', function() {
 
   describe('when bindings isnt passed', function() {
     beforeEach(function() {
-      Marionette.bindEntityEvents(this.target, this.entity, null);
+      Marionette.bindEvents(this.target, this.entity, null);
     });
 
     it('shouldnt bind any events', function() {
@@ -39,7 +39,7 @@ describe('Marionette.bindEntityEvents', function() {
   describe('when bindings is an object with one event-handler pair', function() {
     describe('when handler is a function', function() {
       beforeEach(function() {
-        Marionette.bindEntityEvents(this.target, this.entity, {'foo': this.handleFooStub});
+        Marionette.bindEvents(this.target, this.entity, {'foo': this.handleFooStub});
       });
 
       it('should bind an event to targets handler', function() {
@@ -50,7 +50,7 @@ describe('Marionette.bindEntityEvents', function() {
     describe('when handler is a string', function() {
       describe('when one handler is passed', function() {
         beforeEach(function() {
-          Marionette.bindEntityEvents(this.target, this.entity, {'foo': 'handleFoo'});
+          Marionette.bindEvents(this.target, this.entity, {'foo': 'handleFoo'});
         });
 
         it('should bind an event to targets handler', function() {
@@ -60,7 +60,7 @@ describe('Marionette.bindEntityEvents', function() {
 
       describe('when multiple handlers are passed', function() {
         beforeEach(function() {
-          Marionette.bindEntityEvents(this.target, this.entity, {
+          Marionette.bindEvents(this.target, this.entity, {
             'baz': 'handleFoo handleBar'
           });
         });
@@ -78,7 +78,7 @@ describe('Marionette.bindEntityEvents', function() {
         it('should throw an exception', function() {
           var suite = this;
           expect(function() {
-            Marionette.bindEntityEvents(suite.target, suite.entity, {'baz': 'doesNotExist'});
+            Marionette.bindEvents(suite.target, suite.entity, {'baz': 'doesNotExist'});
           }).to.throw('Method "doesNotExist" was configured as an event handler, but does not exist.');
         });
       });
@@ -87,7 +87,7 @@ describe('Marionette.bindEntityEvents', function() {
 
   describe('when bindings is an object with multiple event-handler pairs', function() {
     beforeEach(function() {
-      Marionette.bindEntityEvents(this.target, this.entity, {
+      Marionette.bindEvents(this.target, this.entity, {
         'foo': 'handleFoo',
         'bar': 'handleBar'
       });
@@ -105,14 +105,14 @@ describe('Marionette.bindEntityEvents', function() {
   describe('when bindings is not an object', function() {
     beforeEach(function() {
       this.run = function() {
-        Marionette.bindEntityEvents(this.target, this.entity, 'handleFoo');
+        Marionette.bindEvents(this.target, this.entity, 'handleFoo');
       }.bind(this);
     });
 
     it('should error', function() {
       expect(this.run).to.throw(Marionette.Error, new Marionette.Error({
         message: 'Bindings must be an object.',
-        url: 'marionette.functions.html#marionettebindentityevents'
+        url: 'marionette.functions.html#marionettebindEvents'
       }));
     });
   });

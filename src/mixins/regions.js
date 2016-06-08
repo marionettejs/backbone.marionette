@@ -12,7 +12,7 @@ export default {
 
   // Internal method to initialize the regions that have been defined in a
   // `regions` attribute on this View.
-  _initRegions: function() {
+  _initRegions() {
 
     // init regions hash
     this.regions =  this.regions || {};
@@ -23,19 +23,19 @@ export default {
 
   // Internal method to re-initialize all of the regions by updating
   // the `el` that they point to
-  _reInitRegions: function() {
+  _reInitRegions() {
     _invoke(this._regions, 'reset');
   },
 
   // Add a single region, by name, to the View
-  addRegion: function(name, definition) {
+  addRegion(name, definition) {
     const regions = {};
     regions[name] = definition;
     return this.addRegions(regions)[name];
   },
 
   // Add multiple regions as a {name: definition, name2: def2} object literal
-  addRegions: function(regions) {
+  addRegions(regions) {
     // If there's nothing to add, stop here.
     if (_.isEmpty(regions)) {
       return;
@@ -52,7 +52,7 @@ export default {
   },
 
   // internal method to build and add regions
-  _addRegions: function(regionDefinitions) {
+  _addRegions(regionDefinitions) {
     return _.reduce(regionDefinitions, (regions, definition, name) => {
       regions[name] = this._buildRegion(definition);
       this._addRegion(regions[name], name);
@@ -61,7 +61,7 @@ export default {
   },
 
   // return the region instance from the definition
-  _buildRegion: function(definition) {
+  _buildRegion(definition) {
     if (definition instanceof Region) {
       return definition;
     }
@@ -69,7 +69,7 @@ export default {
     return this._buildRegionFromDefinition(definition);
   },
 
-  _buildRegionFromDefinition: function(definition) {
+  _buildRegionFromDefinition(definition) {
     if (_.isString(definition)) {
       return this._buildRegionFromObject({el: definition});
     }
@@ -88,7 +88,7 @@ export default {
     });
   },
 
-  _buildRegionFromObject: function(definition) {
+  _buildRegionFromObject(definition) {
     const RegionClass = definition.regionClass || this.regionClass;
 
     const options = _.omit(definition, 'regionClass');
@@ -102,13 +102,13 @@ export default {
   },
 
   // Build the region directly from a given `RegionClass`
-  _buildRegionFromRegionClass: function(RegionClass) {
+  _buildRegionFromRegionClass(RegionClass) {
     return new RegionClass({
       parentEl: _.partial(_.result, this, 'el')
     });
   },
 
-  _addRegion: function(region, name) {
+  _addRegion(region, name) {
     this.triggerMethod('before:add:region', this, name, region);
 
     region._parent = this;
@@ -119,7 +119,7 @@ export default {
   },
 
   // Remove a single region from the View, by name
-  removeRegion: function(name) {
+  removeRegion(name) {
     const region = this._regions[name];
 
     this._removeRegion(region, name);
@@ -128,7 +128,7 @@ export default {
   },
 
   // Remove all regions from the View
-  removeRegions: function() {
+  removeRegions() {
     const regions = this.getRegions();
 
     _.each(this._regions, _.bind(this._removeRegion, this));
@@ -136,7 +136,7 @@ export default {
     return regions;
   },
 
-  _removeRegion: function(region, name) {
+  _removeRegion(region, name) {
     this.triggerMethod('before:remove:region', this, name, region);
 
     region.empty();
@@ -150,7 +150,7 @@ export default {
 
   // Empty all regions in the region manager, but
   // leave them attached
-  emptyRegions: function() {
+  emptyRegions() {
     const regions = this.getRegions();
     _invoke(regions, 'empty');
     return regions;
@@ -159,28 +159,28 @@ export default {
   // Checks to see if view contains region
   // Accepts the region name
   // hasRegion('main')
-  hasRegion: function(name) {
+  hasRegion(name) {
     return !!this.getRegion(name);
   },
 
   // Provides access to regions
   // Accepts the region name
   // getRegion('main')
-  getRegion: function(name) {
+  getRegion(name) {
     return this._regions[name];
   },
 
   // Get all regions
-  getRegions: function() {
+  getRegions() {
     return _.clone(this._regions);
   },
 
-  showChildView: function(name, view, ...args) {
+  showChildView(name, view, ...args) {
     const region = this.getRegion(name);
     return region.show(view, ...args);
   },
 
-  getChildView: function(name) {
+  getChildView(name) {
     return this.getRegion(name).currentView;
   }
 

@@ -140,7 +140,7 @@ const View = Backbone.View.extend({
   // object literal, or a function that returns an object
   // literal. All methods and attributes from this object
   // are copies to the object passed in.
-  mixinTemplateContext: function(target = {}) {
+  mixinTemplateContext(target = {}) {
     const templateContext = _.result(this, 'templateContext');
     return _.extend(target, templateContext);
   },
@@ -168,7 +168,7 @@ const View = Backbone.View.extend({
     this.removeRegions();
   },
 
-  _getImmediateChildren: function() {
+  _getImmediateChildren() {
     return _.chain(this.getRegions())
       .map('currentView')
       .compact()

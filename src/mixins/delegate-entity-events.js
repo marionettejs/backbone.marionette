@@ -11,7 +11,7 @@ import {
 
 export default {
   // Handle `modelEvents`, and `collectionEvents` configuration
-  _delegateEntityEvents: function(model, collection) {
+  _delegateEntityEvents(model, collection) {
     this._undelegateEntityEvents(model, collection);
 
     const modelEvents = _.result(this, 'modelEvents');
@@ -21,7 +21,7 @@ export default {
     bindEntityEvents.call(this, collection, collectionEvents);
   },
 
-  _undelegateEntityEvents: function(model, collection) {
+  _undelegateEntityEvents(model, collection) {
     const modelEvents = _.result(this, 'modelEvents');
     unbindEntityEvents.call(this, model, modelEvents);
 

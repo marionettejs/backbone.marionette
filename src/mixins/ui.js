@@ -44,19 +44,19 @@ export default {
 
   // normalize the keys of passed hash with the views `ui` selectors.
   // `{"@ui.foo": "bar"}`
-  normalizeUIKeys: function(hash) {
+  normalizeUIKeys(hash) {
     const uiBindings = this._getUIBindings();
     return normalizeUIKeys(hash, uiBindings);
   },
 
   // normalize the values of passed hash with the views `ui` selectors.
   // `{foo: "@ui.bar"}`
-  normalizeUIValues: function(hash, properties) {
+  normalizeUIValues(hash, properties) {
     const uiBindings = this._getUIBindings();
     return normalizeUIValues(hash, uiBindings, properties);
   },
 
-  _getUIBindings: function() {
+  _getUIBindings() {
     const uiBindings = _.result(this, '_uiBindings');
     const ui = _.result(this, 'ui');
     return uiBindings || ui;
@@ -64,7 +64,7 @@ export default {
 
   // This method binds the elements specified in the "ui" hash inside the view's code with
   // the associated jQuery selectors.
-  _bindUIElements: function() {
+  _bindUIElements() {
     if (!this.ui) { return; }
 
     // store the ui hash in _uiBindings so they can be reset later
@@ -87,7 +87,7 @@ export default {
     this.ui = this._ui;
   },
 
-  _unbindUIElements: function() {
+  _unbindUIElements() {
     if (!this.ui || !this._uiBindings) { return; }
 
     // delete all of the existing ui bindings
@@ -101,7 +101,7 @@ export default {
     delete this._ui;
   },
 
-  _getUI: function(name) {
+  _getUI(name) {
     return this._ui[name];
   }
 };

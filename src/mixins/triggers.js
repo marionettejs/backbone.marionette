@@ -29,7 +29,7 @@ export default {
 
   // Configure `triggers` to forward DOM events to view
   // events. `triggers: {"click .foo": "do:foo"}`
-  _getViewTriggers: function(view, triggers) {
+  _getViewTriggers(view, triggers) {
     // Configure the triggers, prevent default
     // action and stop propagation of DOM events
     return _.reduce(triggers, (events, value, key) => {

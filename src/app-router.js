@@ -30,7 +30,7 @@ const ClassOptions = [
 
 const AppRouter = Backbone.Router.extend({
 
-  constructor: function(options) {
+  constructor(options) {
     this._setOptions(options);
 
     this.mergeOptions(options, ClassOptions);
@@ -45,7 +45,7 @@ const AppRouter = Backbone.Router.extend({
 
   // Similar to route method on a Backbone Router but
   // method is called on the controller
-  appRoute: function(route, methodName) {
+  appRoute(route, methodName) {
     const controller = this._getController();
     this._addAppRoute(controller, route, methodName);
     return this;
@@ -53,7 +53,7 @@ const AppRouter = Backbone.Router.extend({
 
   // process the route event and trigger the onRoute
   // method call, if it exists
-  _processOnRoute: function(routeName, routeArgs) {
+  _processOnRoute(routeName, routeArgs) {
     // make sure an onRoute before trying to call it
     if (_.isFunction(this.onRoute)) {
       // find the path that matches the current route
@@ -65,7 +65,7 @@ const AppRouter = Backbone.Router.extend({
   // Internal method to process the `appRoutes` for the
   // router, and turn them in to routes that trigger the
   // specified method on the specified `controller`.
-  processAppRoutes: function(controller, appRoutes) {
+  processAppRoutes(controller, appRoutes) {
     if (!appRoutes) { return this; }
 
     const routeNames = _.keys(appRoutes).reverse(); // Backbone requires reverted order of routes
@@ -77,11 +77,11 @@ const AppRouter = Backbone.Router.extend({
     return this;
   },
 
-  _getController: function() {
+  _getController() {
     return this.controller;
   },
 
-  _addAppRoute: function(controller, route, methodName) {
+  _addAppRoute(controller, route, methodName) {
     const method = controller[methodName];
 
     if (!method) {

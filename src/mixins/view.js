@@ -87,7 +87,7 @@ const ViewMixin = {
     return this;
   },
 
-  _getEvents: function(eventsArg) {
+  _getEvents(eventsArg) {
     const events = eventsArg || this.events;
 
     if (_.isFunction(events)) {
@@ -212,7 +212,7 @@ const ViewMixin = {
   },
 
   // Cache `childViewEvents` and `childViewTriggers`
-  _buildEventProxies: function() {
+  _buildEventProxies() {
     this._childViewEvents = _.result(this, 'childViewEvents');
     this._childViewTriggers = _.result(this, 'childViewTriggers');
   },

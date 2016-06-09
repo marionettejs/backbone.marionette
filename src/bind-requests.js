@@ -22,7 +22,7 @@ function iterateReplies(target, channel, bindings, actionName) {
   if (!_.isObject(bindings)) {
     throw new MarionetteError({
       message: 'Bindings must be an object.',
-      url: 'marionette.functions.html#marionettebindRequests'
+      url: 'marionette.functions.html#marionettebindrequests'
     });
   }
 

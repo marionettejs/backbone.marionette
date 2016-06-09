@@ -83,7 +83,7 @@ describe('Marionette.bindRequests', function() {
     it('should error', function() {
       expect(this.run).to.throw(Marionette.Error, new Marionette.Error({
         message: 'Bindings must be an object.',
-        url: 'marionette.functions.html#marionettebindRequests'
+        url: 'marionette.functions.html#marionettebindrequests'
       }));
     });
   });

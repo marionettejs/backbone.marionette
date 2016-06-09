@@ -2,7 +2,6 @@
 // --------------
 
 import _               from 'underscore';
-import Backbone        from 'backbone';
 import deprecate       from './utils/deprecate';
 import MarionetteError from './error';
 import CollectionView  from './collection-view';
@@ -58,7 +57,7 @@ const CompositeView = CollectionView.extend({
   // has been defined. As happens in CollectionView, `childView` can
   // be a function (which should return a view class).
   _getChildView(child) {
-    const childView = this.childView;
+    let childView = this.childView;
 
     // for CompositeView, if `childView` is not specified, we'll get the same
     // composite view class rendered for each child in the collection
@@ -66,17 +65,18 @@ const CompositeView = CollectionView.extend({
     // finally check if it's a function (which we assume that returns a view class)
     if (!childView) {
       return this.constructor;
-    } else if (childView.prototype instanceof Backbone.View || childView === Backbone.View) {
-      return childView;
-    } else if (_.isFunction(childView)) {
-      return childView.call(this, child);
-    } else {
+    }
+
+    childView = this._getView(childView, child);
+
+    if (!childView) {
       throw new MarionetteError({
         name: 'InvalidChildViewError',
         message: '"childView" must be a view class or a function that returns a view class'
       });
     }
 
+    return childView;
   },
 
   // Return the serialized model

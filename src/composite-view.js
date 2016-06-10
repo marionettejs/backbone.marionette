@@ -152,7 +152,7 @@ const CompositeView = CollectionView.extend({
       if (container.length <= 0) {
         throw new MarionetteError({
           name: 'ChildViewContainerMissingError',
-          message: 'The specified "childViewContainer" was not found: ' + containerView.childViewContainer
+          message: `The specified "childViewContainer" was not found: ${containerView.childViewContainer}`
         });
       }
 

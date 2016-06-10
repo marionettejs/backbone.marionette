@@ -135,7 +135,7 @@ const ViewMixin = {
     if (this._isDestroyed) {
       throw new MarionetteError({
         name: 'ViewDestroyedError',
-        message: 'View (cid: "' + this.cid + '") has already been destroyed and cannot be used.'
+        message: `View (cid: "${this.cid}") has already been destroyed and cannot be used.`
       });
     }
   },

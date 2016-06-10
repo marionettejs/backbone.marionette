@@ -4,7 +4,7 @@ import _ from 'underscore';
 // swaps the @ui with the associated selector.
 // Returns a new, non-mutated, parsed events hash.
 const normalizeUIKeys = function(hash, ui) {
-  return _.reduce(hash, function(memo, val, key) {
+  return _.reduce(hash, (memo, val, key) => {
     const normalizedKey = normalizeUIString(key, ui);
     memo[normalizedKey] = val;
     return memo;
@@ -14,7 +14,7 @@ const normalizeUIKeys = function(hash, ui) {
 // utility method for parsing @ui. syntax strings
 // into associated selector
 const normalizeUIString = function(uiString, ui) {
-  return uiString.replace(/@ui\.[a-zA-Z_$0-9]*/g, function(r) {
+  return uiString.replace(/@ui\.[a-zA-Z_$0-9]*/g, (r) => {
     return ui[r.slice(4)];
   });
 };
@@ -23,13 +23,13 @@ const normalizeUIString = function(uiString, ui) {
 // a given value for regions
 // swaps the @ui with the associated selector
 const normalizeUIValues = function(hash, ui, properties) {
-  _.each(hash, function(val, key) {
+  _.each(hash, (val, key) => {
     if (_.isString(val)) {
       hash[key] = normalizeUIString(val, ui);
     } else if (_.isObject(val) && _.isArray(properties)) {
       _.extend(val, normalizeUIValues(_.pick(val, properties), ui));
       /* Value is an object, and we got an array of embedded property names to normalize. */
-      _.each(properties, function(property) {
+      _.each(properties, (property) => {
         const propertyVal = val[property];
         if (_.isString(propertyVal)) {
           val[property] = normalizeUIString(propertyVal, ui);

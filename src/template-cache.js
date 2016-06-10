@@ -82,7 +82,7 @@ _.extend(TemplateCache.prototype, {
     if (!$template.length) {
       throw new MarionetteError({
         name: 'NoTemplateError',
-        message: 'Could not find template: "' + templateId + '"'
+        message: `Could not find template: "${templateId}"`
       });
     }
     return $template.html();

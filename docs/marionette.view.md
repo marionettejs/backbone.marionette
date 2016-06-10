@@ -687,7 +687,7 @@ should be called:
 3. Add a leading `on` - `on`, `Before`, `Dom`, `Refresh`
 4. Mash it into a single call - `onBeforeDomRefresh`
 
-For more detail, see the [events documentation](#marionette.events.md#magic-method-binding).
+For more detail, see the [events documentation](./marionette.events.md#magic-method-binding).
 
 ### Lifecycle Events
 
@@ -915,6 +915,8 @@ var MyView = Mn.View.extend({
 The DOM event gets passed in as the first argument, allowing you to see any
 information passed as part of the event.
 
+**When passing a method reference, the method must exist on the View.**
+
 ##### Defining Listeners
 
 Listeners are defined as:
@@ -965,6 +967,67 @@ As when passing a string reference to a view method, the `events` attribute
 passes in the `event` as the argument to the function called.
 
 #### View `triggers`
+
+The view `triggers` attribute binds DOM events to Marionette View events that
+can be responded to at the view or parent level. For more information on events,
+see the [events documentation](./marionette.events.md). This section will just
+cover how to bind these events to views.
+
+```javascript
+var Mn = require('backbone.marionette');
+
+var MyView = Mn.View.extend({
+  triggers: {
+    'click a': 'link:clicked'
+  },
+
+  onLinkClicked: function() {
+    console.log('Show the modal');
+  }
+});
+```
+
+When the `a` tag is clicked here, the `link:click` event is fired. This event
+can be listened to using the
+[Magic Method Binding](./marionette.events.md#magic-method-binding) technique
+discussed in the [events documentation](./marionette.events.md).
+
+##### Defining Listeners
+
+Listeners are defined as:
+
+```javascript
+eventname jqueryselector
+```
+
+* The `eventname` part refers to a jQuery DOM event e.g. `click` or `change`.
+* The `jqueryselector` part is a jQuery selector string e.g. `.myclass`
+
+You can also pass just the eventname part causing the event handler to fire on
+the entire view. This is especially useful for buttons and click handlers:
+
+```javascript
+var Mn = require('backbone.marionette');
+
+var ButtonView = Mn.View.extend({
+  tagName: 'button',
+
+  events: {
+    click: 'entire:view:clicked'
+  },
+
+  onEntireViewClicked: function() {
+    alert('Button was clicked');
+  }
+});
+```
+
+##### Event Bubbling
+
+The major benefit of the `triggers` attribute over `events` is that triggered
+events can bubble up to any parent views. For a full explanation of bubbling
+events and listening to child events, see the
+[event bubbling documentation](./marionette.events#child-view-events).
 
 ## Model and Collection events
 

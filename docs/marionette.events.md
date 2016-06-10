@@ -20,7 +20,8 @@ responding to events.
   * [View `triggerMethod`](#view-triggermethod)
   * [Listening to Events](#listening-to-events)
     * [Magic Method Binding](#magic-method-binding)
-* [Managing View Children](#managing-view-children)
+  * [View events and triggers](#view-events-and-triggers)
+* [Child View Events](#child-view-events)
   * [Event Bubbling](#event-bubbling)
   * [Explicit Event Listeners](#explicit-event-listeners)
 * [Lifecycle Events](#lifecycle-events)
@@ -147,4 +148,42 @@ As before, all arguments passed into `triggerMethod` will make their way into
 the event handler. Using this method ensures there will be no unexpected
 memory leaks.
 
-## Managing View Children
+### View events and triggers
+
+Using this,
+
+## Child View Events
+
+The [`View`](marionette.view.md) and [`CollectionView`](marionette.collectionview.md)
+are able to monitor and act on events on any children they own. Any events fired
+on a view are automatically propagated to their direct parents as well. Let's
+see a quick example:
+
+```javascript
+var Mn = require('backbone.marionette');
+
+var Item = Mn.View.extend({
+  tagName: 'li',
+
+  triggers: {
+    'click a': 'select:item'
+  }
+});
+
+var Collection = Mn.CollectionView.extend({
+  tagName: 'ul',
+
+  childEvents: {
+    'select:item': 'itemSelected'
+  },
+
+  itemSelected: function(view) {
+    console.log('item selected: ' + view.model.id);
+  }
+});
+```
+
+### Event Bubbling
+
+Events called on a view bubble up to their direct parent views, calling any
+methods

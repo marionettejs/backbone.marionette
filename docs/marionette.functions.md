@@ -16,10 +16,9 @@ a way to get the same behaviors and conventions from your own code.
 * [Marionette.getOption](#marionettegetoption)
 * [Marionette.proxyGetOption](#marionetteproxygetoption)
 * [Marionette.triggerMethod](#marionettetriggermethod)
-* [Marionette.bindEntityEvents](#marionettebindentityevents)
+* [Marionette.bindEvents](#marionettebindevents)
 * [Marionette.triggerMethodOn](#marionettetriggermethodon)
-* [Marionette.bindEntityEvent](#marionettebindentityevents)
-* [Marionette.unbindEntityEvents](#marionetteunbindentityevents)
+* [Marionette.unbindEvents](#marionetteunbindevents)
 * [Marionette.proxyBindEntityEvents](#marionetteproxybindentityevents)
 * [Marionette.proxyUnbindEntityEvents](#marionetteproxyunbindentityevents)
 * [Marionette.normalizeMethods](#marionettenormalizemethods)
@@ -205,7 +204,7 @@ Marionette.triggerMethodMany(views, context, "foo", bar);
 ```
 
 
-## Marionette.bindEntityEvents
+## Marionette.bindEvents
 
 This method is used to bind a backbone "entity" (e.g. collection/model)
 to methods on a target object.
@@ -218,7 +217,7 @@ Backbone.View.extend({
   },
 
   initialize: function(){
-    Marionette.bindEntityEvents(this, this.model, this.modelEvents);
+    Marionette.bindEvents(this, this.model, this.modelEvents);
   },
 
   doSomething: function(){
@@ -238,10 +237,10 @@ The third parameter is a hash of { "event:name": "eventHandler" }
 configuration. Multiple handlers can be separated by a space. A
 function can be supplied instead of a string handler name.
 
-## Marionette.unbindEntityEvents
+## Marionette.unbindEvents
 
 This method can be used to unbind callbacks from entities' (e.g. collection/model) events. It's
-the opposite of bindEntityEvents, described above. Consequently, the APIs are identical for each method.
+the opposite of bindEvents, described above. Consequently, the APIs are identical for each method.
 
 ```js
 // Just like the above example we bind our model events.
@@ -253,7 +252,7 @@ Backbone.View.extend({
   },
 
   initialize: function(){
-    Marionette.bindEntityEvents(this, this.model, this.modelEvents);
+    Marionette.bindEvents(this, this.model, this.modelEvents);
   },
 
   doSomething: function(){
@@ -262,7 +261,7 @@ Backbone.View.extend({
   },
 
   onClose: function() {
-    Marionette.unbindEntityEvents(this, this.model, this.modelEvents);
+    Marionette.unbindEvents(this, this.model, this.modelEvents);
   }
 
 });

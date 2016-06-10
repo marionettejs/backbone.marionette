@@ -9,7 +9,7 @@ describe('marionette object', function() {
         },
 
         initialize: function(options) {
-          this.bindEntityEvents(options.model, this.modelEvents);
+          this.bindEvents(options.model, this.modelEvents);
         },
 
         onBar: function() {}

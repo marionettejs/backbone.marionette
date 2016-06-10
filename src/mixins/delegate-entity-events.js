@@ -1,9 +1,9 @@
 import _ from 'underscore';
 
 import {
-  bindEntityEvents,
-  unbindEntityEvents
-} from '../bind-entity-events';
+  bindEvents,
+  unbindEvents
+} from '../bind-events';
 
 // MixinOptions
 // - collectionEvents
@@ -15,17 +15,17 @@ export default {
     this._undelegateEntityEvents(model, collection);
 
     const modelEvents = _.result(this, 'modelEvents');
-    bindEntityEvents.call(this, model, modelEvents);
+    bindEvents.call(this, model, modelEvents);
 
     const collectionEvents = _.result(this, 'collectionEvents');
-    bindEntityEvents.call(this, collection, collectionEvents);
+    bindEvents.call(this, collection, collectionEvents);
   },
 
   _undelegateEntityEvents(model, collection) {
     const modelEvents = _.result(this, 'modelEvents');
-    unbindEntityEvents.call(this, model, modelEvents);
+    unbindEvents.call(this, model, modelEvents);
 
     const collectionEvents = _.result(this, 'collectionEvents');
-    unbindEntityEvents.call(this, collection, collectionEvents);
+    unbindEvents.call(this, collection, collectionEvents);
   }
 };

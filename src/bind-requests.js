@@ -22,7 +22,7 @@ function iterateReplies(target, channel, bindings, actionName) {
   if (!_.isObject(bindings)) {
     throw new MarionetteError({
       message: 'Bindings must be an object.',
-      url: 'marionette.functions.html#marionettebindradiorequests'
+      url: 'marionette.functions.html#marionettebindrequests'
     });
   }
 
@@ -31,17 +31,17 @@ function iterateReplies(target, channel, bindings, actionName) {
   channel[actionName](normalizedRadioRequests, target);
 }
 
-function bindRadioRequests(channel, bindings) {
+function bindRequests(channel, bindings) {
   iterateReplies(this, channel, bindings, 'reply');
   return this;
 }
 
-function unbindRadioRequests(channel, bindings) {
+function unbindRequests(channel, bindings) {
   iterateReplies(this, channel, bindings, 'stopReplying');
   return this;
 }
 
 export {
-  bindRadioRequests,
-  unbindRadioRequests
+  bindRequests,
+  unbindRequests
 };

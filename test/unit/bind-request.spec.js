@@ -1,4 +1,4 @@
-describe('Marionette.bindRadioRequests', function() {
+describe('Marionette.bindRequests', function() {
   'use strict';
 
   beforeEach(function() {
@@ -18,7 +18,7 @@ describe('Marionette.bindRadioRequests', function() {
 
   describe('when channel isnt passed', function() {
     beforeEach(function() {
-      Marionette.bindRadioRequests(this.target, false, {'foo': 'replyFoo'});
+      Marionette.bindRequests(this.target, false, {'foo': 'replyFoo'});
     });
 
     it('shouldnt bind any requests', function() {
@@ -28,7 +28,7 @@ describe('Marionette.bindRadioRequests', function() {
 
   describe('when bindings isnt passed', function() {
     beforeEach(function() {
-      Marionette.bindRadioRequests(this.target, this.channel, null);
+      Marionette.bindRequests(this.target, this.channel, null);
     });
 
     it('shouldnt bind any requests', function() {
@@ -39,7 +39,7 @@ describe('Marionette.bindRadioRequests', function() {
   describe('when bindings is an object with one request-handler pair', function() {
     describe('when handler is a function', function() {
       beforeEach(function() {
-        Marionette.bindRadioRequests(this.target, this.channel, {'foo': this.replyFooStub});
+        Marionette.bindRequests(this.target, this.channel, {'foo': this.replyFooStub});
       });
 
       it('should bind a request to targets handler', function() {
@@ -50,7 +50,7 @@ describe('Marionette.bindRadioRequests', function() {
     describe('when handler is a string', function() {
       describe('when one handler is passed', function() {
         beforeEach(function() {
-          Marionette.bindRadioRequests(this.target, this.channel, {'foo': 'replyFoo'});
+          Marionette.bindRequests(this.target, this.channel, {'foo': 'replyFoo'});
         });
 
         it('should bind a request to targets handler', function() {
@@ -62,7 +62,7 @@ describe('Marionette.bindRadioRequests', function() {
 
   describe('when bindings is an object with multiple event-handler pairs', function() {
     beforeEach(function() {
-      Marionette.bindRadioRequests(this.target, this.channel, {
+      Marionette.bindRequests(this.target, this.channel, {
         'foo': 'replyFoo',
         'bar': 'replyBar'
       });
@@ -76,14 +76,14 @@ describe('Marionette.bindRadioRequests', function() {
   describe('when bindings is not an object', function() {
     beforeEach(function() {
       this.run = function() {
-        Marionette.bindRadioRequests(this.target, this.channel, 'replyFooStub');
+        Marionette.bindRequests(this.target, this.channel, 'replyFooStub');
       }.bind(this);
     });
 
     it('should error', function() {
       expect(this.run).to.throw(Marionette.Error, new Marionette.Error({
         message: 'Bindings must be an object.',
-        url: 'marionette.functions.html#marionettebindradiorequests'
+        url: 'marionette.functions.html#marionettebindrequests'
       }));
     });
   });

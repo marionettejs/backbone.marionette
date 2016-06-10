@@ -31,14 +31,14 @@ import {
 } from './config/features';
 
 import {
-  bindEntityEvents,
-  unbindEntityEvents
-} from './bind-entity-events';
+  bindEvents,
+  unbindEvents
+} from './bind-events';
 
 import {
-  bindRadioRequests,
-  unbindRadioRequests
-} from './bind-radio-requests';
+  bindRequests,
+  unbindRequests
+} from './bind-requests';
 
 import {
   triggerMethod,
@@ -58,12 +58,10 @@ Marionette.noConflict = function() {
 };
 
 // Utilities
-Marionette.bindEntityEvents = proxy(bindEntityEvents);
-Marionette.unbindEntityEvents = proxy(unbindEntityEvents);
-Marionette.bindRadioEvents = proxy(bindEntityEvents);
-Marionette.unbindRadioEvents = proxy(unbindEntityEvents);
-Marionette.bindRadioRequests = proxy(bindRadioRequests);
-Marionette.unbindRadioRequests = proxy(unbindRadioRequests);
+Marionette.bindEvents = proxy(bindEvents);
+Marionette.unbindEvents = proxy(unbindEvents);
+Marionette.bindRequests = proxy(bindRequests);
+Marionette.unbindRequests = proxy(unbindRequests);
 Marionette.mergeOptions = proxy(mergeOptions);
 Marionette.getOption = proxy(getOption);
 Marionette.normalizeMethods = proxy(normalizeMethods);

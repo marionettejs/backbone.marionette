@@ -1,4 +1,4 @@
-describe('Marionette.unbindRadioRequests', function() {
+describe('Marionette.unbindRequests', function() {
   'use strict';
 
   beforeEach(function() {
@@ -18,7 +18,7 @@ describe('Marionette.unbindRadioRequests', function() {
 
   describe('when channel isnt passed', function() {
     beforeEach(function() {
-      Marionette.unbindRadioRequests(this.target, false, {'foo': 'foo'});
+      Marionette.unbindRequests(this.target, false, {'foo': 'foo'});
     });
 
     it('shouldnt unbind any request', function() {
@@ -28,7 +28,7 @@ describe('Marionette.unbindRadioRequests', function() {
 
   describe('when bindings isnt passed', function() {
     beforeEach(function() {
-      Marionette.unbindRadioRequests(this.target, this.channel, null);
+      Marionette.unbindRequests(this.target, this.channel, null);
     });
 
     it('shouldnt unbind any requests', function() {
@@ -39,7 +39,7 @@ describe('Marionette.unbindRadioRequests', function() {
   describe('when bindings is an object with one request-handler pair', function() {
     describe('when handler is a function', function() {
       beforeEach(function() {
-        Marionette.unbindRadioRequests(this.target, this.channel, {'foo': this.target.replyFoo});
+        Marionette.unbindRequests(this.target, this.channel, {'foo': this.target.replyFoo});
       });
 
       it('should unbind an request', function() {
@@ -50,7 +50,7 @@ describe('Marionette.unbindRadioRequests', function() {
     describe('when handler is a string', function() {
       describe('when one handler is passed', function() {
         beforeEach(function() {
-          Marionette.unbindRadioRequests(this.target, this.channel, {'foo': 'replyFoo'});
+          Marionette.unbindRequests(this.target, this.channel, {'foo': 'replyFoo'});
         });
 
         it('should unbind an request', function() {
@@ -62,7 +62,7 @@ describe('Marionette.unbindRadioRequests', function() {
 
   describe('when bindings is an object with multiple request-handler pairs', function() {
     beforeEach(function() {
-      Marionette.unbindRadioRequests(this.target, this.channel, {
+      Marionette.unbindRequests(this.target, this.channel, {
         'foo': 'replyFoo',
         'bar': 'replyBar'
       });

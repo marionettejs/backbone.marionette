@@ -39,7 +39,7 @@ function iterateEvents(target, entity, bindings, actionName) {
   if (!_.isObject(bindings)) {
     throw new MarionetteError({
       message: 'Bindings must be an object.',
-      url: 'marionette.functions.html#marionettebindentityevents'
+      url: 'marionette.functions.html#marionettebindevents'
     });
   }
 
@@ -56,18 +56,18 @@ function iterateEvents(target, entity, bindings, actionName) {
   });
 }
 
-function bindEntityEvents(entity, bindings) {
+function bindEvents(entity, bindings) {
   iterateEvents(this, entity, bindings, 'listenTo');
   return this;
 }
 
-function unbindEntityEvents(entity, bindings) {
+function unbindEvents(entity, bindings) {
   iterateEvents(this, entity, bindings, 'stopListening');
   return this;
 }
 
 // Export Public API
 export {
-  bindEntityEvents,
-  unbindEntityEvents
+  bindEvents,
+  unbindEvents
 };

@@ -710,7 +710,7 @@ describe('Behaviors', function() {
       this.behavior = new Marionette.Behavior({}, {});
       this.model = new Backbone.Model();
 
-      Marionette.bindEntityEvents(this.behavior, this.model, {
+      Marionette.bindEvents(this.behavior, this.model, {
         'change': this.changeStub
       });
 

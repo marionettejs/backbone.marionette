@@ -60,8 +60,6 @@ Marionette.noConflict = function() {
 // Utilities
 Marionette.bindEvents = proxy(bindEvents);
 Marionette.unbindEvents = proxy(unbindEvents);
-Marionette.bindRadioEvents = proxy(bindEvents);
-Marionette.unbindRadioEvents = proxy(unbindEvents);
 Marionette.bindRequests = proxy(bindRequests);
 Marionette.unbindRequests = proxy(unbindRequests);
 Marionette.mergeOptions = proxy(mergeOptions);

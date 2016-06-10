@@ -7,7 +7,7 @@ describe('Radio Mixin on Marionette.Object', function() {
       getBaz: _.noop
     });
 
-    this.sinon.spy(this.RadioObject.prototype, 'bindRadioEvents');
+    this.sinon.spy(this.RadioObject.prototype, 'bindEvents');
 
     this.sinon.spy(this.RadioObject.prototype, 'bindRequests');
 
@@ -24,7 +24,7 @@ describe('Radio Mixin on Marionette.Object', function() {
     });
 
     it('should not bind radioEvents', function() {
-      expect(this.radioObject.bindRadioEvents).to.not.have.been.called;
+      expect(this.radioObject.bindEvents).to.not.have.been.called;
     });
 
     it('should not bind radioRequests', function() {
@@ -80,7 +80,7 @@ describe('Radio Mixin on Marionette.Object', function() {
         this.RadioObject.prototype.radioEvents = this.radioEvents;
         this.radioObject = new this.RadioObject();
 
-        expect(this.radioObject.bindRadioEvents).to.have.been.calledOnce
+        expect(this.radioObject.bindEvents).to.have.been.calledOnce
           .and.to.have.been.calledWith(this.channelFoo, {'bar': 'onBar'});
       });
     });
@@ -90,7 +90,7 @@ describe('Radio Mixin on Marionette.Object', function() {
         this.RadioObject.prototype.radioEvents = this.radioEventsFunc;
         this.radioObject = new this.RadioObject();
 
-        expect(this.radioObject.bindRadioEvents).to.have.been.calledOnce
+        expect(this.radioObject.bindEvents).to.have.been.calledOnce
           .and.to.have.been.calledWith(this.channelFoo, {'bar': 'onBar'});
       });
     });
@@ -101,7 +101,7 @@ describe('Radio Mixin on Marionette.Object', function() {
           radioEvents: this.radioEvents
         });
 
-        expect(this.radioObject.bindRadioEvents).to.have.been.calledOnce
+        expect(this.radioObject.bindEvents).to.have.been.calledOnce
           .and.to.have.been.calledWith(this.channelFoo, {'bar': 'onBar'});
       });
     });

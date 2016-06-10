@@ -7,8 +7,8 @@ import {
 } from '../bind-requests';
 
 import {
-  bindEvents as bindRadioEvents,
-  unbindEvents as unbindRadioEvents
+  bindEvents,
+  unbindEvents
 } from '../bind-events';
 
 // MixinOptions
@@ -28,7 +28,7 @@ export default {
     const channel = this._channel = Radio.channel(channelName);
 
     const radioEvents = _.result(this, 'radioEvents');
-    this.bindRadioEvents(channel, radioEvents);
+    this.bindEvents(channel, radioEvents);
 
     const radioRequests = _.result(this, 'radioRequests');
     this.bindRequests(channel, radioRequests);
@@ -44,11 +44,11 @@ export default {
     return this._channel;
   },
 
-  // Proxy `bindRadioEvents`
-  bindRadioEvents: bindRadioEvents,
+  // Proxy `bindEvents`
+  bindEvents: bindEvents,
 
-  // Proxy `unbindRadioEvents`
-  unbindRadioEvents: unbindRadioEvents,
+  // Proxy `unbindEvents`
+  unbindEvents: unbindEvents,
 
   // Proxy `bindRequests`
   bindRequests: bindRequests,

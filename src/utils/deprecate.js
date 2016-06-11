@@ -25,7 +25,7 @@ const deprecate = function(message, test) {
 
 deprecate._console = typeof console !== 'undefined' ? console : {};
 deprecate._warn = function() {
-  const warn = deprecate._console.warn || deprecate._console.log || function() {};
+  const warn = deprecate._console.warn || deprecate._console.log || _.noop;
   return warn.apply(deprecate._console, arguments);
 };
 deprecate._cache = {};

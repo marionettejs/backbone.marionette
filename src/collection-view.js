@@ -337,7 +337,7 @@ const CollectionView = Backbone.View.extend({
 
   _sortModelsBy(models, comparator) {
     if (typeof comparator === 'string') {
-      return _.sortBy(models, function(model) {
+      return _.sortBy(models, (model) => {
         return model.get(comparator);
       });
     } else if (comparator.length === 1) {
@@ -480,7 +480,7 @@ const CollectionView = Backbone.View.extend({
     }
 
     // update the indexes of views after this one
-    this.children.each(function(laterView) {
+    this.children.each((laterView) => {
       if (laterView._index >= view._index) {
         laterView._index += increment ? 1 : -1;
       }
@@ -585,7 +585,7 @@ const CollectionView = Backbone.View.extend({
   // Create a fragment buffer from the currently buffered children
   _createBuffer() {
     const elBuffer = document.createDocumentFragment();
-    _.each(this._bufferedChildren, function(b) {
+    _.each(this._bufferedChildren, (b) => {
       elBuffer.appendChild(b.el);
     });
     return elBuffer;
@@ -615,7 +615,7 @@ const CollectionView = Backbone.View.extend({
     const findPosition = this.sort && (index < this.children.length - 1);
     if (findPosition) {
       // Find the view after this one
-      currentView = this.children.find(function(view) {
+      currentView = this.children.find((view) => {
         return view._index === index + 1;
       });
     }
@@ -675,7 +675,7 @@ const CollectionView = Backbone.View.extend({
 
     // Forward all child view events through the parent,
     // prepending "childview:" to the event name
-    this.listenTo(view, 'all', function(eventName, ...args) {
+    this.listenTo(view, 'all', (eventName, ...args) => {
 
       const childEventName = prefix + ':' + eventName;
 

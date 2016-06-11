@@ -8,7 +8,7 @@ import {version} from '../package.json';
 const errorProps = ['description', 'fileName', 'lineNumber', 'name', 'message', 'number'];
 
 const MarionetteError = extend.call(Error, {
-  urlRoot: 'http://marionettejs.com/docs/v' + version + '/',
+  urlRoot: `http://marionettejs.com/docs/v${version}/`,
 
   constructor(message, options) {
     if (_.isObject(message)) {

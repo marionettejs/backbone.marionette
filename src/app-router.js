@@ -85,7 +85,7 @@ const AppRouter = Backbone.Router.extend({
     const method = controller[methodName];
 
     if (!method) {
-      throw new MarionetteError('Method "' + methodName + '" was not found on the controller');
+      throw new MarionetteError(`Method "${methodName}" was not found on the controller`);
     }
 
     this.route(route, methodName, _.bind(method, controller));

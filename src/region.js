@@ -141,7 +141,7 @@ const Region = MarionetteObject.extend({
     if (view._isDestroyed) {
       throw new MarionetteError({
         name: 'ViewDestroyedError',
-        message: 'View (cid: "' + view.cid + '") has already been destroyed and cannot be used.'
+        message: `View (cid: "${view.cid}") has already been destroyed and cannot be used.`
       });
     }
   },

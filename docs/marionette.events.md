@@ -408,3 +408,9 @@ var GrantParentView = Marionette.View.extend({
   }
 });
 ```
+
+## Lifecycle Events
+
+Marionette Views fire events during their creation and destruction lifecycle.
+For more information see [`View` Lifecycle](./marionette.view.md#lifecycle-events)
+and [`CollectionView` Lifecycle](./marionette.collectionview.md#collectionview-events-and-callbacks) events.

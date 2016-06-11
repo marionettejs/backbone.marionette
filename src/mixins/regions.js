@@ -1,5 +1,5 @@
 import _                    from 'underscore';
-import _invoke              from '../utils/_invoke';
+import _invoke              from '../utils/invoke';
 import Region               from '../region';
 import MarionetteError      from '../error';
 

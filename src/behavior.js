@@ -7,11 +7,11 @@
 // into portable logical chunks, keeping your views simple and your code DRY.
 
 import _                  from 'underscore';
+import getUniqueEventName from './utils/getUniqueEventName';
 import MarionetteObject   from './object';
 import DelegateEntityEventsMixin      from './mixins/delegate-entity-events';
 import TriggersMixin      from './mixins/triggers';
 import UIMixin            from './mixins/ui';
-import getUniqueEventName from './utils/getUniqueEventName';
 
 const ClassOptions = [
   'collectionEvents',

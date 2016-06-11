@@ -2,7 +2,7 @@
 // --------------
 
 import _         from 'underscore';
-import getOption from './utils/getOption';
+import getOption from './getOption';
 
 // split the event name on the ":"
 const splitter = /(^|:)(\w)/gi;

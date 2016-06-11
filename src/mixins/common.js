@@ -1,11 +1,11 @@
-import getOption                from '../utils/getOption';
-import mergeOptions             from '../utils/mergeOptions';
-import normalizeMethods         from '../utils/normalizeMethods';
-import _setOptions              from '../utils/_setOptions';
+import _setOptions              from '../utils/setOptions';
+import getOption                from '../common/getOption';
+import mergeOptions             from '../common/mergeOptions';
+import normalizeMethods         from '../common/normalizeMethods';
 import {
   bindEvents,
   unbindEvents
-}                               from '../bind-events';
+}                               from '../common/bind-events';
 
 export default {
 

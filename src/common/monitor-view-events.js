@@ -1,8 +1,8 @@
 // DOM Refresh
 // -----------
 
-import { triggerMethodOn } from './trigger-method';
 import _ from 'underscore';
+import { triggerMethodOn } from './trigger-method';
 
 // Trigger method on children unless a pure Backbone.View
 function triggerMethodChildren(view, event, shouldTrigger) {

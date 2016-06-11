@@ -4,12 +4,12 @@ import Radio from 'backbone.radio';
 import {
   bindRequests,
   unbindRequests
-} from '../bind-requests';
+} from '../common/bind-requests';
 
 import {
   bindEvents,
   unbindEvents
-} from '../bind-events';
+} from '../common/bind-events';
 
 // MixinOptions
 // - channelName

@@ -12,8 +12,8 @@
 // configuration. A function can be supplied instead of a string handler name.
 
 import _ from 'underscore';
-import normalizeMethods from './utils/normalizeMethods';
-import MarionetteError from './error';
+import normalizeMethods from './normalizeMethods';
+import MarionetteError from '../error';
 
 function iterateReplies(target, channel, bindings, actionName) {
   if (!channel || !bindings) { return; }

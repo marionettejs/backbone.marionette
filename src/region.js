@@ -3,12 +3,12 @@
 
 import _ from 'underscore';
 import Backbone from 'backbone';
-import isNodeAttached from './utils/isNodeAttached';
+import destroyBackboneView from './utils/destroyBackboneView';
+import monitorViewEvents from './common/monitor-view-events';
+import isNodeAttached from './common/isNodeAttached';
+import { triggerMethodOn } from './common/trigger-method';
 import MarionetteObject from './object';
 import MarionetteError from './error';
-import monitorViewEvents from './monitor-view-events';
-import destroyBackboneView from './utils/destroyBackboneView';
-import { triggerMethodOn } from './trigger-method';
 
 const ClassOptions = [
   'allowMissingEl',

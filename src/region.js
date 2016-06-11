@@ -3,9 +3,9 @@
 
 import _ from 'underscore';
 import Backbone from 'backbone';
-import destroyBackboneView from './utils/destroyBackboneView';
+import destroyBackboneView from './utils/destroy-backbone-view';
 import monitorViewEvents from './common/monitor-view-events';
-import isNodeAttached from './common/isNodeAttached';
+import isNodeAttached from './common/is-node-attached';
 import { triggerMethodOn } from './common/trigger-method';
 import MarionetteObject from './object';
 import MarionetteError from './error';

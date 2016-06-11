@@ -4,7 +4,7 @@
 import _                  from 'underscore';
 import Backbone           from 'backbone';
 import ChildViewContainer from 'backbone.babysitter';
-import destroyBackboneView from './utils/destroyBackboneView';
+import destroyBackboneView from './utils/destroy-backbone-view';
 import monitorViewEvents  from './common/monitor-view-events';
 import { triggerMethodOn } from './common/trigger-method';
 import MarionetteError    from './error';

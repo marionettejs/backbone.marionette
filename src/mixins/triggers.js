@@ -1,5 +1,5 @@
 import _ from 'underscore';
-import getUniqueEventName from '../utils/getUniqueEventName';
+import getUniqueEventName from '../utils/get-unique-event-name';
 
 // Internal method to create an event handler for a given `triggerDef` like
 // 'click:foo'

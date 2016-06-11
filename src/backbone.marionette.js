@@ -5,10 +5,10 @@ import proxy              from './utils/proxy';
 import extend             from './utils/extend';
 import deprecate          from './utils/deprecate';
 
-import isNodeAttached     from './common/isNodeAttached';
-import mergeOptions       from './common/mergeOptions';
-import getOption          from './common/getOption';
-import normalizeMethods   from './common/normalizeMethods';
+import isNodeAttached     from './common/is-node-attached';
+import mergeOptions       from './common/merge-options';
+import getOption          from './common/get-option';
+import normalizeMethods   from './common/normalize-methods';
 import monitorViewEvents  from './common/monitor-view-events';
 
 import {

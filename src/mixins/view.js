@@ -3,7 +3,7 @@
 
 import Backbone from 'backbone';
 import _ from 'underscore';
-import isNodeAttached from '../common/isNodeAttached';
+import isNodeAttached from '../common/is-node-attached';
 import { triggerMethod } from '../common/trigger-method';
 import BehaviorsMixin from './behaviors';
 import CommonMixin from './common';

@@ -24,6 +24,7 @@ responding to events.
 * [Child View Events](#child-view-events)
   * [Event Bubbling](#event-bubbling)
   * [Explicit Event Listeners](#explicit-event-listeners)
+  * [Triggering Events on Child Events](#triggering-events-on-child-events)
 * [Lifecycle Events](#lifecycle-events)
 
 ## Triggering and Listening to Events
@@ -173,7 +174,7 @@ var Item = Mn.View.extend({
 var Collection = Mn.CollectionView.extend({
   tagName: 'ul',
 
-  childEvents: {
+  childViewEvents: {
     'select:item': 'itemSelected'
   },
 
@@ -185,5 +186,140 @@ var Collection = Mn.CollectionView.extend({
 
 ### Event Bubbling
 
-Events called on a view bubble up to their direct parent views, calling any
-methods
+Events fired on a view bubble up to their direct parent views, calling any
+magic methods using the `childview:` prefix (more on that shortly) and any
+methods bound to the `childViewEvents` attribute. This works for built-in
+events, custom events fired with `triggerMethod` and bound events using
+`triggers`.
+
+When using implicit listeners, the `childview:*` event prefix is used which
+needs to be included as part of the handler:
+
+```javascript
+var Mn = require('backbone.marionette');
+
+var MyView = Mn.View.extend({
+  triggers: {
+    click: 'click:view'
+  },
+
+  doSomething: function() {
+    this.triggerMethod('did:something');
+  }
+});
+
+var ParentView = Mn.View.extend({
+  regions: {
+    foo: '.foo-hook'
+  },
+
+  onRender: function() {
+    this.showChildView('foo', new MyView());
+  },
+
+  onChildviewClickView: function(view) {
+    console.log('View clicked ' + view);
+  },
+
+  onChildviewDidSomething: function(view) {
+    console.log('Something was done to ' + view);
+  }
+})
+```
+
+The `view` gets passed into the handlers as the first argument.
+
+#### Using `CollectionView`
+
+This works exactly the same way for the `CollectionView` and `childView` list:
+
+```javascript
+var Mn = require('backbone.marionette');
+
+var MyChild = Mn.View.extend({
+  triggers: {
+    click: 'click:child'
+  }
+});
+
+var MyList = Mn.CollectionView.extend({
+  onChildviewClickChild: function(view) {
+    console.log('Childview ' + view + ' was clicked');
+  }
+});
+```
+
+Just like with the `View` and its regions, the event handler will receive the
+`view` that triggered the event as its first argument.
+
+### Explicit Event Listeners
+
+To call specific functions on event triggers, use the `childViewEvents`
+attribute to map child events to methods on the parent view. This takes events
+fired on child views - _without the `childview:` prefix_ - and calls the
+method referenced or attached function.
+
+```javascript
+var Mn = require('backbone.marionette');
+
+var MyView = Mn.View.extend({
+  triggers: {
+    click: 'view:clicked'
+  }
+});
+
+var ParentView = Mn.View.extend({
+  regions: {
+    foo: '.foo-hook'
+  },
+
+  childViewEvents: {
+    'view:clicked': 'displayMessage'
+  },
+
+  onRender: function() {
+    this.showChildView('foo', new MyView());
+  },
+
+  displayMessage: function(view) {
+    console.log('Displaying message for ' + view);
+  }
+});
+```
+
+#### Attaching Functions
+
+The `childViewEvents` attribute can also attach functions directly to be event
+handlers:
+
+```javascript
+var Mn = require('backbone.marionette');
+
+var MyView = Mn.View.extend({
+  triggers: {
+    click: 'view:clicked'
+  }
+});
+
+var ParentView = Mn.View.extend({
+  regions: {
+    foo: '.foo-hook'
+  },
+
+  childViewEvents: {
+    'view:clicked': function(view) {
+      console.log('Function called for ' + view);
+    }
+  },
+
+  onRender: function() {
+    this.showChildView('foo', new MyView());
+  }
+});
+```
+
+### Triggering Events on Child Events
+
+Marionette 3 adds a new feature that allows selected events to fire events
+directly, allowing them to be propagated up the view hierarchy more easily and
+explicitly.

@@ -14,8 +14,7 @@ const ClassOptions = [
 ];
 
 // Used for rendering a branch-leaf, hierarchical structure.
-// Extends directly from CollectionView and also renders an
-// a child view as `modelView`, for the top leaf
+// Extends directly from CollectionView
 // @deprecated
 const CompositeView = CollectionView.extend({
 

@@ -4,7 +4,7 @@ not be accurate or up-to-date_**
 # Marionette.CompositeView
 
 **_DEPRECATED: `CompositeView` is deprecated. See
-[CollectionView](./marionette.collectionview.md#building-collectionviews)
+[CollectionView](./marionette.collectionview.md#rendering-collectionviews)
 to see how to build equivalent views in Marionette 3_**
 
 A `CompositeView` extends from `CollectionView` to be used as a
@@ -18,18 +18,11 @@ Please see
 [the Marionette.CollectionView documentation](./marionette.collectionview.md)
 for more information on available features and functionality.
 
-Additionally, interactions with Marionette.Region
-will provide features such as `onShow` callbacks, etc. Please see
-[the Region documentation](./marionette.region.md) for more information.
-
 ## Example Usage: Tree View
 
 For example, if you're rendering a tree-view control, you may
 want to render a collection view with a model and template so
 that it will show a parent child with children in the tree.
-
-You can specify a `modelView` to use for the model. If you don't
-specify one, it will default to the `Marionette.View`.
 
 ```js
 var CompositeView = Marionette.CompositeView.extend({
@@ -42,8 +35,6 @@ new CompositeView({
 });
 ```
 
-For more examples, see my blog post on
-[using the composite view.](http://lostechies.com/derickbailey/2012/04/05/composite-views-tree-structures-tables-and-more/)
 
 ## Documentation Index
 
@@ -95,6 +86,10 @@ var CompView = Marionette.CompositeView.extend({
   childView: ChildView
 });
 ```
+You can also define `childView` as a function, which allows you to choose the view class
+to be rendered at runtime.
+
+For more information see the [CollectionView's documentation](./marionette.collectionview.md#collectionviews-childview).
 
 ## CompositeView's `childViewContainer`
 
@@ -204,10 +199,6 @@ For more information on this method, see the [CollectionView's documentation](./
 ## CompositeView's `childView` container selection
 
 The `getChildViewContainer` method is passed a second `childView` parameter which, when overridden, allows for a finer tuned container selection by being able to access the `childView` which is about to be appended to the `containerView` returned by `getChildViewContainer`.
-You can also define `childView` as a function, which allows you to choose the view class
-to be rendered at runtime.
-
-For more information see the [CollectionView's documentation](./marionette.collectionview.md#collectionviews-childview).
 
 ## CompositeView's `renderChildren`
 

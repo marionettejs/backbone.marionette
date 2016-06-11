@@ -27,7 +27,6 @@ for more information on available features and functionality.
   * [CollectionView's `removeChildView`](#collectionviews-removechildview)
 
 * [CollectionView's `emptyView`](#collectionviews-emptyview)
-  * [CollectionView's `getEmptyView`](#collectionviews-getemptyview)
   * [CollectionView's `emptyViewOptions`](#collectionviews-emptyviewoptions)
   * [CollectionView's `isEmpty`](#collectionviews-isempty)
 
@@ -463,7 +462,8 @@ Marionette.CollectionView.extend({
 
 When a collection has no children, and you need to render a view other than
 the list of childViews, you can specify an `emptyView` attribute on your
-collection view.
+collection view. The `emptyView` just like the [`childView`](#collectionviews-childview) can also be passed as an option on instantiation or can be a
+function that returns the `emptyView`.
 
 ```js
 var MyEmptyView = Marionette.View.extend({
@@ -474,24 +474,6 @@ Marionette.CollectionView.extend({
   // ...
 
   emptyView: MyEmptyView
-});
-```
-
-### CollectionView's `getEmptyView`
-
-If you need the `emptyView`'s class chosen dynamically, specify `getEmptyView`:
-
-```js
-Marionette.CollectionView.extend({
-  // ...
-
-  getEmptyView: function() {
-    if (this.hasSearchQuery) {
-      return NoResultsView
-    }
-
-    return NoChildrenView;
-  }
 });
 ```
 
@@ -562,7 +544,7 @@ When a model is removed from a collection (or destroyed / deleted), the collecti
 view will destroy and remove that model's child view.
 
 When the collection for the view is sorted, the view will automatically re-sort its child views.
-if the [`reorderOnSort`](#collectionviews-reorderonsort) option is set it will attempt to reorder the DOM and do this without a full re-render, otherwise it will re-render if the order has changed. Please Note that if you apply a filter to the collection view and the filtered views change during a sort then it will always re-render.
+If the [`reorderOnSort`](#collectionviews-reorderonsort) option is set it will attempt to reorder the DOM and do this without a full re-render, otherwise it will re-render if the order has changed. Please Note that if you apply a filter to the collection view and the filtered views change during a sort then it will always re-render.
 
 ```js
 var collection = new Backbone.Collection();
@@ -718,7 +700,7 @@ cv.removeFilter();
 The `setFilter` method modifies the `CollectionView`'s filter attribute, and
 renders the new `ChildViews` in a efficient way, instead of
 rendering the whole DOM structure again.
-A `preventRender` option will prevent the view to be rendered.
+Passing `{ preventRender: true }` in the options argument will prevent the view being rendered.
 
 ```js
 var cv = new Marionette.CollectionView({

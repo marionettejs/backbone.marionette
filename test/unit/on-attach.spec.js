@@ -17,6 +17,7 @@ describe('onAttach', function() {
       sinon.spy(this, 'onBeforeAttach');
       sinon.spy(this, 'onDetach');
       sinon.spy(this, 'onBeforeDetach');
+      sinon.spy(this, 'onDestroy');
     },
     onAttach() {
       return !!this._isAttached;
@@ -28,6 +29,9 @@ describe('onAttach', function() {
       return !!this._isAttached;
     },
     onBeforeDetach() {
+      return !!this._isAttached;
+    },
+    onDestroy() {
       return !!this._isAttached;
     }
   });
@@ -120,6 +124,10 @@ describe('onAttach', function() {
 
       it('should call onDetach on the view', function() {
         expectTriggerMethod(view.onDetach, view, false);
+      });
+
+      it('should call onDetach before destroying view', function() {
+        expect(view.onDestroy).to.have.been.calledAfter(view.onDetach);
       });
     });
 

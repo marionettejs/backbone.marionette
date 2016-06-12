@@ -3,6 +3,10 @@ not be accurate or up-to-date_**
 
 # Marionette.Behaviors
 
+**_DEPRECATED: The `behaviorsLookup` is deprecated pending removal. See the
+[documentation for Behavior](./marionette.behavior.md) to learn how to map
+behaviors to views in Marionette 3.**
+
 'Marionette.Behaviors' is a utility class that takes care of gluing your `Behavior` instances to their given `View`.
 The most important thing to understand when using this class is that you **MUST** override the class level `behaviorsLookup` method or set the option `behaviorClass` for things to work properly.
 

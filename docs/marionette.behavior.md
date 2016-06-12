@@ -4,12 +4,15 @@ not be accurate or up-to-date_**
 # Marionette.Behavior
 
 
-A `Behavior` is an  isolated set of DOM / user interactions that can be mixed into any `View` or another `Behavior`. Behaviors allow you to blackbox `View`-specific interactions into portable logical chunks, keeping your Views simple and your code DRY.
+A `Behavior` is an  isolated set of DOM / user interactions that can be mixed
+into any `View` or another `Behavior`. Behaviors allow you to blackbox
+`View`-specific interactions into portable logical chunks, keeping your Views
+simple and your code DRY.
 
 ## Documentation Index
 
 * [Motivation](#the-motivation)
-* [Using Behaviors](#using)
+* [Using Behaviors](#using-behaviors)
 * [API](#api)
   * [Event proxy](#the-event-proxy)
   * [Triggers](#triggers)
@@ -23,57 +26,151 @@ A `Behavior` is an  isolated set of DOM / user interactions that can be mixed in
 
 ## The Motivation
 
-As you build more and more complex Views, you will find that your `View` becomes less about displaying model data, and more about interactions.
+As you build more and more complex Views, you will find that your `View` becomes
+less about displaying model data, and more about interactions.
 
 These interactions tend to be chunks of logic that you want to use in multiple views.
 
-## Usage
+## Using Behaviors
 
-Here is an example of a simple `View`. Let's take a stab at simplifying it, and abstracting Behaviors from it.
+To see how to use the `Behavior` class, it's best to take a view and pull out
+potential common behavior that can be shared across views. Take the following
+view:
 
-```js
+```javascript
 var MyView = Marionette.View.extend({
   ui: {
-    "destroy": ".destroy-btn"
+    destroy: '.destroy-btn'
   },
 
   events: {
-    "click @ui.destroy": "warnBeforeDestroy"
+    'click @ui.destroy': 'warnBeforeDestroy'
   },
 
   warnBeforeDestroy: function() {
-    alert("You are about to destroy all your data!");
+    alert('You are about to destroy all your data!');
     this.destroy();
   },
 
   onShow: function() {
     this.ui.destroy.tooltip({
-      text: "What a nice mouse you have."
+      text: 'What a nice mouse you have.'
     });
   }
 });
 ```
 
-Interaction points, such as tooltips and warning messages, are generic concepts. There is no need to recode them within your Views. They are prime candidates for abstraction into a higher level, non-coupled concept, which is exactly what Behaviors provide you with.
+Interaction points, such as tooltips and warning messages, are generic concepts.
+There is no need to recode them within your Views so they are prime candidates
+to be extracted into `Behavior` classes.
+
+### Defining and Attaching Behaviors
+
+```javascript
+var DestroyWarn = Marionette.Behavior.extend({
+  // You can set default options
+  // just like you can in your Backbone Models.
+  // They will be overridden if you pass in an option with the same key.
+  defaults: {
+    message: 'You are destroying!'
+  },
+
+  // Behaviors have events that are bound to the views DOM.
+  events: {
+    'click @ui.destroy': 'warnBeforeDestroy'
+  },
+
+  warnBeforeDestroy: function() {
+    var message = this.getOption('message');
+    window.alert(message);
+    // Every Behavior has a hook into the
+    // view that it is attached to.
+    this.view.destroy();
+  }
+});
+
+var ToolTip = Marionette.Behavior.extend({
+  defaults: {
+    text: ''
+  }
+  ui: {
+    tooltip: '.tooltip'
+  },
+
+  onShow: function() {
+    this.ui.tooltip.tooltip({
+      text: this.getOption('text')
+    });
+  }
+});
+```
+
+We've passed in a `defaults` attribute that sets default options.
+[This will be covered in default soon](#defaults). With the warning and tooltip
+behaviors extracted, we just need to attach them to our view:
+
+```javascript
+var MyView = Marionette.View.extend({
+  behaviors: [DestroyWarn, ToolTip]
+});
+```
+
+Each behavior will now be able to respond to user interactions as though the
+event handlers were attached to the view directly. In addition to using array
+notation, Behaviors can be attached using an object:
+
+```javascript
+var MyView = Marionette.View.extend({
+  behaviors: {
+    destroy: DestroyWarn,
+    tooltip: ToolTip
+  }
+});
+```
+
+#### Behavior Options
+
+When we attach behaviors to views, we can also pass in options to add to the
+behavior. This tends to be static information relating to what the behavior
+should do. In our above example, we want to override the message to our
+`DestroyWarn` and `Tooltip` behaviors to match the original message on the View:
+
+```javascript
+var MyView = Marionette.View.extend({
+  behaviors: [
+    {
+      behaviorClass: DestroyWarn
+      message: 'You are about to destroy all your data!'
+    },
+    {
+      behaviorClass: ToolTip,
+      text: 'What a nice mouse you have.'
+    }
+  ]
+});
+```
+
+Using an object, we must define the `behaviorClass` attribute to refer to our
+behaviors and then add any extra options with keys matching the option we want
+to override. Any passed options will override the `defaults` passed.
 
 Here is the syntax for declaring which behaviors get used within a View.
 * You can pass behaviors either as a set of key-value pairs where the keys are used to lookup the behavior class, or as an array.
-* The keys in the hash are passed to `getBehaviorClass` which looks up the correct `Behavior` class.
 * The options for each `Behavior` are also passed through to the `Behavior` during initialization.
 * The options are then stored within each `Behavior` under `options`.
 
 ```js
 var MyView = Marionette.View.extend({
   ui: {
-    "destroy": ".destroy-btn"
+    destroy: '.destroy-btn'
   },
 
   behaviors: {
     DestroyWarn: {
-      message: "you are destroying all your data is now gone!"
+      message: 'you are destroying all your data is now gone!'
     },
     ToolTip: {
-      text: "what a nice mouse you have"
+      text: 'what a nice mouse you have'
     }
   }
 });
@@ -87,12 +184,12 @@ var DestroyWarn = Marionette.Behavior.extend({
   // just like you can in your Backbone Models.
   // They will be overridden if you pass in an option with the same key.
   defaults: {
-    "message": "You are destroying!"
+    message: 'You are destroying!'
   },
 
   // Behaviors have events that are bound to the views DOM.
   events: {
-    "click @ui.destroy": "warnBeforeDestroy"
+    'click @ui.destroy': 'warnBeforeDestroy'
   },
 
   warnBeforeDestroy: function() {
@@ -120,28 +217,14 @@ var ToolTip = Marionette.Behavior.extend({
 });
 ```
 
-Finally, the user must define a location where their Behaviors are stored. Here is a simple example:
-
-```js
-  Marionette.Behaviors.behaviorsLookup = function() {
-  	return window.Behaviors;
-  }
-```
-
-In this example, you would then store your Behaviors like this:
-
-```js
-window.Behaviors.ToolTip = ToolTip;
-window.Behaviors.DestroyWarn = DestroyWarn;
-```
-
-Note that in addition to extending a `View` with `Behavior`, a `Behavior` can itself use other Behaviors. The syntax is identical to that used for a `View`:
+Note that in addition to extending a `View` with `Behavior`, a `Behavior` can
+itself use other Behaviors. The syntax is identical to that used for a `View`:
 
 ```js
 var Modal = Marionette.Behavior.extend({
   behaviors: {
     DestroyWarn: {
-      message: "Whoa! You sure about this?"
+      message: 'Whoa! You sure about this?'
     }
   }
 });
@@ -156,7 +239,7 @@ Behaviors are powered by an event proxy. This means that any events that are tri
 
 As a real world example, whenever you would define a click event in your `View`'s `events` hash, you can define the same event listeners and callbacks in the `Behavior`'s `events` hash. The same follows for `modelEvents` and `collectionEvents`. Think of your `Behavior` as a receiver for all of the events on your `View` instance.
 
-This concept also allows for a nice decoupled method to communicate to Behaviors from your `View` instance. You can just call the following from within your `View`: `this.triggerMethod("SomeEvent", {some: "data"})`. Then your `Behavior` class would look like this:
+This concept also allows for a nice decoupled method to communicate to Behaviors from your `View` instance. You can just call the following from within your `View`: `this.triggerMethod('SomeEvent', {some: 'data'})`. Then your `Behavior` class would look like this:
 
 ```js
 Marionette.Behavior.extend({
@@ -165,7 +248,7 @@ Marionette.Behavior.extend({
     },
 
 	onClick: function(data) {
-		console.log("wow such data", data);
+		console.log('wow such data', data);
 	}
 });
 ```
@@ -177,7 +260,7 @@ Marionette.Behavior.extend({
 ```js
   Marionette.Behavior.extend({
     modelEvents: {
-      "change:doge": "onDogeChange"
+      'change:doge': 'onDogeChange'
     },
 
     onDogeChange: function() {
@@ -192,7 +275,7 @@ Marionette.Behavior.extend({
 ```js
   Marionette.Behavior.extend({
     collectionEvents: {
-      add: "onCollectionAdd"
+      add: 'onCollectionAdd'
     },
 
     onCollectionAdd: function() {
@@ -285,7 +368,7 @@ Given the example below:
 ```js
 var FirstView = Marionette.View.extend({
   ui: {
-    "foo": ".foo-btn"
+    foo: '.foo-btn'
   },
 
   behaviors: {

@@ -50,6 +50,15 @@ pass events further up the chain, you must explicitly using `childViewTriggers`
 to convert the event from the child into an event on the parent. These can be
 chained all the way up to the level you require them to be.
 
+Bubbled child events no longer pass the `childView` implicitly and only pass the
+arguments passed as part of `triggerMethod`. This means that the arguments
+passed to `onEvent` and `onChildviewEvent` are now identical.
+
+### View `triggers`
+
+The view `triggers` attribute no longer passes an `options` attribute to event
+handlers, instead passing the view instance that triggered the event.
+
 ## Events
 
 A number of lifecycle events were changed or removed from Marionette 3.

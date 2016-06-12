@@ -3,15 +3,15 @@
 
 import Backbone from 'backbone';
 import _ from 'underscore';
-import isNodeAttached from '../utils/isNodeAttached';
-import MarionetteError from '../error';
+import isNodeAttached from '../common/is-node-attached';
+import { triggerMethod } from '../common/trigger-method';
 import BehaviorsMixin from './behaviors';
 import CommonMixin from './common';
 import DelegateEntityEventsMixin from './delegate-entity-events';
 import TriggersMixin from './triggers';
 import UIMixin from './ui';
 import View from '../view';
-import { triggerMethod } from '../trigger-method';
+import MarionetteError from '../error';
 
 // MixinOptions
 // - behaviors

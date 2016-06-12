@@ -1,17 +1,33 @@
 import Backbone           from 'backbone';
 import {version}          from '../package.json';
 
-import proxy              from './utils/_proxy';
+import proxy              from './utils/proxy';
 import extend             from './utils/extend';
-import isNodeAttached     from './utils/isNodeAttached';
-import mergeOptions       from './utils/mergeOptions';
-import getOption          from './utils/getOption';
-import normalizeMethods   from './utils/normalizeMethods';
 import deprecate          from './utils/deprecate';
 
-import monitorViewEvents  from './monitor-view-events';
+import isNodeAttached     from './common/is-node-attached';
+import mergeOptions       from './common/merge-options';
+import getOption          from './common/get-option';
+import normalizeMethods   from './common/normalize-methods';
+import monitorViewEvents  from './common/monitor-view-events';
+
+import {
+  bindEvents,
+  unbindEvents
+} from './common/bind-events';
+
+import {
+  bindRequests,
+  unbindRequests
+} from './common/bind-requests';
+
+import {
+  triggerMethod,
+  triggerMethodOn
+} from './common/trigger-method';
+
+
 import MarionetteObject   from './object';
-import Renderer           from './renderer';
 import TemplateCache      from './template-cache';
 import View               from './view';
 import CollectionView     from './collection-view';
@@ -23,27 +39,13 @@ import AppRouter          from './app-router';
 import MarionetteError    from './error';
 
 import behaviorsLookup    from './config/behaviors-lookup';
+import Renderer           from './config/renderer';
 
 import {
   FEATURES,
   isEnabled,
   setEnabled
 } from './config/features';
-
-import {
-  bindEvents,
-  unbindEvents
-} from './bind-events';
-
-import {
-  bindRequests,
-  unbindRequests
-} from './bind-requests';
-
-import {
-  triggerMethod,
-  triggerMethodOn
-} from './trigger-method';
 
 const previousMarionette = Backbone.Marionette;
 const Marionette = Backbone.Marionette = {};

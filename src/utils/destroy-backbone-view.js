@@ -1,4 +1,4 @@
-import { triggerMethodOn } from '../trigger-method';
+import { triggerMethodOn } from '../common/trigger-method';
 
 export default function destroyBackboneView(view) {
   if (!view.supportsDestroyLifecycle) {

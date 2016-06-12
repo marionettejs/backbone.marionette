@@ -14,7 +14,7 @@
 // function can be supplied instead of a string handler name.
 
 import _               from 'underscore';
-import MarionetteError from './error';
+import MarionetteError from '../error';
 
 // Bind/unbind the event to handlers specified as a string of
 // handler names on the target object

@@ -3,10 +3,10 @@
 
 import _                  from 'underscore';
 import Backbone           from 'backbone';
+import monitorViewEvents  from './common/monitor-view-events';
 import ViewMixin          from './mixins/view';
 import RegionsMixin       from './mixins/regions';
-import monitorViewEvents  from './monitor-view-events';
-import Renderer           from './renderer';
+import Renderer           from './config/renderer';
 
 const ClassOptions = [
   'behaviors',

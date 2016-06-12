@@ -3,7 +3,7 @@ import _ from 'underscore';
 import {
   bindEvents,
   unbindEvents
-} from '../bind-events';
+} from '../common/bind-events';
 
 // MixinOptions
 // - collectionEvents

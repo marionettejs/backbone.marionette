@@ -4,11 +4,11 @@
 import _                  from 'underscore';
 import Backbone           from 'backbone';
 import ChildViewContainer from 'backbone.babysitter';
+import destroyBackboneView from './utils/destroy-backbone-view';
+import monitorViewEvents  from './common/monitor-view-events';
+import { triggerMethodOn } from './common/trigger-method';
 import MarionetteError    from './error';
 import ViewMixin          from './mixins/view';
-import monitorViewEvents  from './monitor-view-events';
-import destroyBackboneView from './utils/destroyBackboneView';
-import { triggerMethodOn } from './trigger-method';
 
 const ClassOptions = [
   'behaviors',

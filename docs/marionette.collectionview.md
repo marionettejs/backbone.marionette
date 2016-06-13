@@ -985,7 +985,7 @@ and a falsey value if it should not.
   cv.render();
 
   // change the filter
-  cv.filter = function (child, index, collection) {
+  cv.options.filter = function (child, index, collection) {
     return child.get('value') % 2 !== 0;
   };
 
@@ -993,9 +993,7 @@ and a falsey value if it should not.
   cv.render();
 
   // remove the filter
-  // note that using `delete cv.filter` will cause the prototype's filter to be used
-  // which may be undesirable
-  cv.filter = null;
+  cv.options.filter = null;
 
   // renders all views
   cv.render();

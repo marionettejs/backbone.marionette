@@ -18,7 +18,6 @@ a way to get the same behaviors and conventions from your own code.
 * [Marionette.bindEvents](#marionettebindevents)
 * [Marionette.bindRequests](#marionettebindrequests)
 * [Marionette.unbindRequests](#marionetteunbindrequests)
-* [Marionette.triggerMethodOn](#marionettetriggermethodon)
 * [Marionette.unbindEvents](#marionetteunbindevents)
 * [Marionette.normalizeMethods](#marionettenormalizemethods)
 

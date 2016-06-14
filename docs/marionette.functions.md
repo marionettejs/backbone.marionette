@@ -32,11 +32,13 @@ decide if you want to use Backbone.View or Backbone.Model or another
 Backbone object to grab the method from.
 
 ```js
+var Mn = require('backbone.marionette');
+
 var Foo = function(){};
 
 // use Marionette.extend to make Foo extendable, just like other
 // Backbone and Marionette objects
-Foo.extend = Marionette.extend;
+Foo.extend = Mn.extend;
 
 // Now Foo can be extended to create a new class, with methods
 var Bar = Foo.extend({
@@ -55,12 +57,14 @@ var b = new Bar();
 Determines whether the passed-in node is a child of the `document` or not.
 
 ```js
+var Mn = require('backbone.marionette');
+
 var div = document.createElement('div');
-Marionette.isNodeAttached(div);
+Mn.isNodeAttached(div);
 // => false
 
 $('body').append(div);
-Marionette.isNodeAttached(div);
+Mn.isNodeAttached(div);
 // => true
 ```
 
@@ -70,7 +74,9 @@ A handy function to pluck certain `options` and attach them directly to an insta
 Most Marionette Classes, such as the Views, come with this method.
 
 ```js
-var MyView = Marionette.View.extend({
+var Mn = require('backbone.marionette');
+
+var MyView = Mn.View.extend({
   myViewOptions: ['color', 'size', 'country'],
 
   initialize: function(options) {
@@ -90,12 +96,15 @@ Retrieve an object's attribute either directly from the object, or from
 the object's `this.options`, with `this.options` taking precedence.
 
 ```js
-var M = Backbone.Model.extend({
+var Bb = require('backbone');
+var Mn = require('backbone.marionette');
+
+var M = Bb.Model.extend({
   foo: "bar",
 
   initialize: function(attributes, options){
     this.options = options;
-    var f = Marionette.getOption(this, "foo");
+    var f = Mn.getOption(this, "foo");
     console.log(f);
   }
 });
@@ -117,11 +126,14 @@ attempt to read the value from the object directly.
 For example:
 
 ```js
-var M = Backbone.Model.extend({
+var Bb = require('backbone');
+var Mn = require('backbone.marionette');
+
+var M = Bb.Model.extend({
   foo: "bar",
 
   initialize: function(){
-    var f = Marionette.getOption(this, "foo");
+    var f = Mn.getOption(this, "foo");
     console.log(f);
   }
 });
@@ -162,25 +174,12 @@ Invoke `triggerMethod` on a specific context.
 This is useful when it's not clear that the object has `triggerMethod` defined. In the case of views, `Marionette.AbstractView` defines `triggerMethod`, but `Backbone.View` does not.
 
 ```js
-Marionette.triggerMethodOn(ctx, "foo", bar);
+var Mn = require('backbone.marionette');
+
+Mn.triggerMethodOn(ctx, "foo", bar);
 // will invoke `onFoo: function(bar){...})`
 // will trigger "foo" on ctx
 ```
-
-## Marionette.triggerMethodMany
-
-Invokes `triggerMethod` on many contexts.
-
-This is useful when you want to trigger an event on many different objects.
-
-```js
-var views = getManyViews();
-var context = this;
-Marionette.triggerMethodMany(views, context, "foo", bar);
-// will call `onFoo: function(view, context, bar){...})` for each view
-// will trigger "foo" on each of the views
-```
-
 
 ## Marionette.bindEvents
 
@@ -188,14 +187,17 @@ This method is used to bind a backbone "entity" (e.g. collection/model)
 to methods on a target object.
 
 ```js
-Backbone.View.extend({
+var Bb = require('backbone');
+var Mn = require('backbone.marionette');
+
+Bb.View.extend({
 
   modelEvents: {
     "change:foo": "doSomething"
   },
 
   initialize: function(){
-    Marionette.bindEvents(this, this.model, this.modelEvents);
+    Mn.bindEvents(this, this.model, this.modelEvents);
   },
 
   doSomething: function(){
@@ -223,14 +225,17 @@ the opposite of bindEvents, described above. Consequently, the APIs are identica
 ```js
 // Just like the above example we bind our model events.
 // This time, however, we unbind them on close.
-Backbone.View.extend({
+var Bb = require('backbone');
+var Mn = require('backbone.marionette');
+
+Bb.View.extend({
 
   modelEvents: {
     "change:foo": "doSomething"
   },
 
   initialize: function(){
-    Marionette.bindEvents(this, this.model, this.modelEvents);
+    Mn.bindEvents(this, this.model, this.modelEvents);
   },
 
   doSomething: function(){
@@ -239,7 +244,7 @@ Backbone.View.extend({
   },
 
   onClose: function() {
-    Marionette.unbindEvents(this, this.model, this.modelEvents);
+    Mn.unbindEvents(this, this.model, this.modelEvents);
   }
 
 });
@@ -294,7 +299,7 @@ var Mn = require('backbone.marionette');
 var Radio = require('backbone.radio');
 
 var MyView = Mn.View.extend({
-	channelName: 'myChannelName',
+  channelName: 'myChannelName',
 
   radioRequests: {
     'foo:bar': 'fooBar'
@@ -331,7 +336,9 @@ same hash with the function names replaced with the function references themselv
 This function is attached to the `Marionette.AbstractView` prototype by default. To use it from non-View classes you'll need to attach it yourself.
 
 ```js
-var View = Marionette.View.extend({
+var Mn = require('backbone.marionette');
+
+var View = Mn.View.extend({
 
   initialize: function() {
     this.someFn = function() {};

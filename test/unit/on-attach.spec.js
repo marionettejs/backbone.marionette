@@ -17,6 +17,7 @@ describe('onAttach', function() {
       sinon.spy(this, 'onBeforeAttach');
       sinon.spy(this, 'onDetach');
       sinon.spy(this, 'onBeforeDetach');
+      sinon.spy(this, 'onDestroy');
     },
     onAttach() {
       return !!this._isAttached;
@@ -28,6 +29,9 @@ describe('onAttach', function() {
       return !!this._isAttached;
     },
     onBeforeDetach() {
+      return !!this._isAttached;
+    },
+    onDestroy() {
       return !!this._isAttached;
     }
   });
@@ -120,6 +124,10 @@ describe('onAttach', function() {
 
       it('should call onDetach on the view', function() {
         expectTriggerMethod(view.onDetach, view, false);
+      });
+
+      it('should call onDetach before destroying view', function() {
+        expect(view.onDestroy).to.have.been.calledAfter(view.onDetach);
       });
     });
 
@@ -450,5 +458,50 @@ describe('onAttach', function() {
         expectTriggerMethod(emptyView.onAttach, emptyView, true);
       });
     });
+
+    describe('when destroying CollectionView tree', function() {
+      let detachView;
+      let collectionViewOnDetach;
+
+      beforeEach(function() {
+        detachView = new ChildView({
+          template: false
+        });
+        ChildView = View.extend({
+          template: _.template('<div id="child-region"></div>'),
+          regions: {
+            'region': '#child-region'
+          },
+          onAttach() {
+            this.showChildView('region', detachView);
+          }
+        });
+        collectionViewOnDetach = this.sinon.spy();
+        collectionView = new CollectionView({
+          collection: collection,
+          childView: ChildView,
+          onDetach: collectionViewOnDetach
+        });
+        region.show(collectionView);
+        childView1 = collectionView.children.findByIndex(0);
+        childView2 = collectionView.children.findByIndex(1);
+        region.empty();
+      });
+
+      it('should call onDetach for detachView before destroying parent view', function() {
+        expect(childView1.onDetach).to.have.been.calledBefore(detachView.onDestroy);
+        expect(childView2.onDetach).to.have.been.calledBefore(detachView.onDestroy);
+      });
+
+      it('should call onDetach for childView before destroying collectionView', function() {
+        expect(collectionViewOnDetach).to.have.been.calledBefore(childView1.onDestroy);
+        expect(collectionViewOnDetach).to.have.been.calledBefore(childView2.onDestroy);
+      });
+
+      it('should call onDetach for collectionView before destroying parent', function() {
+        expect(collectionViewOnDetach).to.have.been.calledBefore(detachView.onDestroy);
+      });
+    });
   });
 });
+

@@ -15,10 +15,9 @@ a way to get the same behaviors and conventions from your own code.
 * [Marionette.mergeOptions](#marionettemergeoptions)
 * [Marionette.getOption](#marionettegetoption)
 * [Marionette.triggerMethod](#marionettetriggermethod)
+* [Marionette.triggerMethodOn](#marionettetriggermethodon)
 * [Marionette.bindEvents](#marionettebindevents)
 * [Marionette.bindRequests](#marionettebindrequests)
-* [Marionette.unbindRequests](#marionetteunbindrequests)
-* [Marionette.unbindEvents](#marionetteunbindevents)
 * [Marionette.normalizeMethods](#marionettenormalizemethods)
 
 ## Marionette.extend
@@ -216,7 +215,7 @@ The third parameter is a hash of { "event:name": "eventHandler" }
 configuration. Multiple handlers can be separated by a space. A
 function can be supplied instead of a string handler name.
 
-## Marionette.unbindEvents
+### Marionette.unbindEvents
 
 This method can be used to unbind callbacks from entities' (e.g. collection/model) events. It's
 the opposite of bindEvents, described above. Consequently, the APIs are identical for each method.
@@ -288,7 +287,7 @@ The third parameter is a hash either { "event:name": "eventHandler" } or
 { "event:name": "eventHandler", "event:otherName": "otherEventHandler", ...} of
 configuration.
 
-## Marionette.unbindRequests
+### Marionette.unbindRequests
 
 This method is used to unbind a radio requests
 to methods on a target object.

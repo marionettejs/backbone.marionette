@@ -14,17 +14,13 @@ a way to get the same behaviors and conventions from your own code.
 * [Marionette.isNodeAttached](#marionetteisnodeattached)
 * [Marionette.mergeOptions](#marionettemergeoptions)
 * [Marionette.getOption](#marionettegetoption)
-* [Marionette.proxyGetOption](#marionetteproxygetoption)
 * [Marionette.triggerMethod](#marionettetriggermethod)
-* [Marionette.bindEvents](#marionettebindevents)
 * [Marionette.triggerMethodOn](#marionettetriggermethodon)
+* [Marionette.bindEvents](#marionettebindevents)
 * [Marionette.unbindEvents](#marionetteunbindevents)
-* [Marionette.proxyBindEntityEvents](#marionetteproxybindentityevents)
-* [Marionette.proxyUnbindEntityEvents](#marionetteproxyunbindentityevents)
+* [Marionette.bindRequests](#marionettebindrequests)
+* [Marionette.unbindRequests](#marionetteunbindrequests)
 * [Marionette.normalizeMethods](#marionettenormalizemethods)
-* [Marionette.normalizeUIKeys](#marionettenormalizeuikeys)
-* [Marionette.normalizeUIValues](#marionettenormalizeuivalues)
-* [Marionette.actAsCollection](#marionetteactascollection)
 
 ## Marionette.extend
 
@@ -36,11 +32,13 @@ decide if you want to use Backbone.View or Backbone.Model or another
 Backbone object to grab the method from.
 
 ```js
+var Mn = require('backbone.marionette');
+
 var Foo = function(){};
 
 // use Marionette.extend to make Foo extendable, just like other
 // Backbone and Marionette objects
-Foo.extend = Marionette.extend;
+Foo.extend = Mn.extend;
 
 // Now Foo can be extended to create a new class, with methods
 var Bar = Foo.extend({
@@ -59,12 +57,14 @@ var b = new Bar();
 Determines whether the passed-in node is a child of the `document` or not.
 
 ```js
+var Mn = require('backbone.marionette');
+
 var div = document.createElement('div');
-Marionette.isNodeAttached(div);
+Mn.isNodeAttached(div);
 // => false
 
 $('body').append(div);
-Marionette.isNodeAttached(div);
+Mn.isNodeAttached(div);
 // => true
 ```
 
@@ -74,7 +74,9 @@ A handy function to pluck certain `options` and attach them directly to an insta
 Most Marionette Classes, such as the Views, come with this method.
 
 ```js
-var MyView = Marionette.View.extend({
+var Mn = require('backbone.marionette');
+
+var MyView = Mn.View.extend({
   myViewOptions: ['color', 'size', 'country'],
 
   initialize: function(options) {
@@ -94,12 +96,15 @@ Retrieve an object's attribute either directly from the object, or from
 the object's `this.options`, with `this.options` taking precedence.
 
 ```js
-var M = Backbone.Model.extend({
+var Bb = require('backbone');
+var Mn = require('backbone.marionette');
+
+var M = Bb.Model.extend({
   foo: "bar",
 
   initialize: function(attributes, options){
     this.options = options;
-    var f = Marionette.getOption(this, "foo");
+    var f = Mn.getOption(this, "foo");
     console.log(f);
   }
 });
@@ -121,11 +126,14 @@ attempt to read the value from the object directly.
 For example:
 
 ```js
-var M = Backbone.Model.extend({
+var Bb = require('backbone');
+var Mn = require('backbone.marionette');
+
+var M = Bb.Model.extend({
   foo: "bar",
 
   initialize: function(){
-    var f = Marionette.getOption(this, "foo");
+    var f = Mn.getOption(this, "foo");
     console.log(f);
   }
 });
@@ -138,24 +146,6 @@ new M({}, { foo: f }); // => "bar"
 
 In this example, "bar" is returned both times because the second
 example has an undefined value for `f`.
-
-## Marionette.proxyGetOption
-
-This method proxies `Marionette.getOption` so that it can be easily added to an instance.
-
-Say you've written your own Pagination class and you always pass options to it.
-With `proxyGetOption`, you can easily give this class the `getOption` function.
-
-```js
-_.extend(Pagination.prototype, {
-
-  getFoo: function(){
-    return this.getOption("foo");
-  },
-
-  getOption: Marionette.proxyGetOption
-});
-```
 
 ## Marionette.triggerMethod
 
@@ -184,25 +174,12 @@ Invoke `triggerMethod` on a specific context.
 This is useful when it's not clear that the object has `triggerMethod` defined. In the case of views, `Marionette.AbstractView` defines `triggerMethod`, but `Backbone.View` does not.
 
 ```js
-Marionette.triggerMethodOn(ctx, "foo", bar);
+var Mn = require('backbone.marionette');
+
+Mn.triggerMethodOn(ctx, "foo", bar);
 // will invoke `onFoo: function(bar){...})`
 // will trigger "foo" on ctx
 ```
-
-## Marionette.triggerMethodMany
-
-Invokes `triggerMethod` on many contexts.
-
-This is useful when you want to trigger an event on many different objects.
-
-```js
-var views = getManyViews();
-var context = this;
-Marionette.triggerMethodMany(views, context, "foo", bar);
-// will call `onFoo: function(view, context, bar){...})` for each view
-// will trigger "foo" on each of the views
-```
-
 
 ## Marionette.bindEvents
 
@@ -210,14 +187,17 @@ This method is used to bind a backbone "entity" (e.g. collection/model)
 to methods on a target object.
 
 ```js
-Backbone.View.extend({
+var Bb = require('backbone');
+var Mn = require('backbone.marionette');
+
+Bb.View.extend({
 
   modelEvents: {
     "change:foo": "doSomething"
   },
 
   initialize: function(){
-    Marionette.bindEvents(this, this.model, this.modelEvents);
+    Mn.bindEvents(this, this.model, this.modelEvents);
   },
 
   doSomething: function(){
@@ -245,14 +225,17 @@ the opposite of bindEvents, described above. Consequently, the APIs are identica
 ```js
 // Just like the above example we bind our model events.
 // This time, however, we unbind them on close.
-Backbone.View.extend({
+var Bb = require('backbone');
+var Mn = require('backbone.marionette');
+
+Bb.View.extend({
 
   modelEvents: {
     "change:foo": "doSomething"
   },
 
   initialize: function(){
-    Marionette.bindEvents(this, this.model, this.modelEvents);
+    Mn.bindEvents(this, this.model, this.modelEvents);
   },
 
   doSomething: function(){
@@ -261,55 +244,89 @@ Backbone.View.extend({
   },
 
   onClose: function() {
-    Marionette.unbindEvents(this, this.model, this.modelEvents);
+    Mn.unbindEvents(this, this.model, this.modelEvents);
   }
 
 });
 ```
 
-## Marionette.proxyBindEntityEvents
-This method proxies `Marionette.bindEntityEvents` so that it can easily be added to an instance.
+## Marionette.bindRequests
 
-Say you've written your own Pagination class and you want to easily listen to some entities events.
-With `proxyBindEntityEvents`, you can easily give this class the `bindEntityEvents` function.
-
-```js
-_.extend(Pagination.prototype, {
-
-   bindSomething: function() {
-     this.bindEntityEvents(this.something, this.somethingEvents)
-   },
-
-   bindEntityEvents: Marionette.proxyBindEntityEvents
-
-});
-```
-
-## Marionette.proxyUnbindEntityEvents
-This method proxies `Marionette.unbindEntityEvents` so that it can easily be added to an instance.
-
-It's the opposite of proxyBindEntityEvents, described above. Consequently, the APIs are identical for each method.
-
-Say you've written your own Pagination class and you want to easily unbind callbacks from some entities events.
-With `proxyUnbindEntityEvents`, you can easily give this class the `unbindEntityEvents` function.
+This method is used to bind a radio requests
+to methods on a target object.
 
 ```js
-_.extend(Pagination.prototype, {
+var Mn = require('backbone.marionette');
+var Radio = require('backbone.radio');
 
-   bindSomething: function() {
-     this.bindEntityEvents(this.something, this.somethingEvents)
-   },
+var MyView = Mn.View.extend({
+  channelName: 'myChannelName',
 
-   unbindSomething: function() {
-     this.unbindEntityEvents(this.something, this.somethingEvents)
-   },
+  radioRequests: {
+    'foo:bar': 'fooBar'
+  },
 
-   bindEntityEvents: Marionette.proxyBindEntityEvents,
+  initialize: function() {
+    var channel = Radio.channel(this.channelName);
+    Mn.bindRequests(this, channel, this.radioRequests);
+  },
 
-   unbindEntityEvents: Marionette.proxyUnbindEntityEvents
+  fooBar: function() {
+  	console.log('foo:bar event was called')
+  }
+ });
 
-});
+var myView = new MyView();
+var channel = Radio.channel('myChannelName');
+channel.request('foo:bar'); // Logs 'foo:bar event was called'
 ```
+
+The first parameter, `this`, is a context of current entity.
+
+The second parameter, `channel`, reference to a channel by name.
+
+The third parameter is a hash either { "event:name": "eventHandler" } or
+{ "event:name": "eventHandler", "event:otherName": "otherEventHandler", ...} of
+configuration.
+
+## Marionette.unbindRequests
+
+This method is used to unbind a radio requests
+to methods on a target object.
+
+```js
+var Mn = require('backbone.marionette');
+var Radio = require('backbone.radio');
+
+var MyView = Mn.View.extend({
+  channelName: 'myChannelName',
+
+  radioRequests: {
+    'foo:bar': 'fooBar'
+  },
+
+  initialize: function() {
+    var channel = Radio.channel(this.channelName);
+    Mn.bindRadioRequests(this, channel, this.radioRequests);
+  },
+
+  onDestroy: function() {
+    var channel = Radio.channel(this.channelName);
+    Mn.unbindRequests(this, channel, this.radioRequests);
+  }
+ });
+
+var myView = new MyView();
+myView.destroy();
+```
+
+The first parameter, `this`, is a context of current entity.
+
+The second parameter, `channel`, reference to a channel by name.
+
+The third parameter is a hash either { "event:name": "eventHandler" } or
+{ "event:name": "eventHandler", "event:otherName": "otherEventHandler", ...} of
+configuration.
 
 ## Marionette.normalizeMethods
 
@@ -319,7 +336,9 @@ same hash with the function names replaced with the function references themselv
 This function is attached to the `Marionette.AbstractView` prototype by default. To use it from non-View classes you'll need to attach it yourself.
 
 ```js
-var View = Marionette.View.extend({
+var Mn = require('backbone.marionette');
+
+var View = Mn.View.extend({
 
   initialize: function() {
     this.someFn = function() {};
@@ -333,77 +352,3 @@ var View = Marionette.View.extend({
 
 });
 ```
-
-## Marionette.normalizeUIKeys
-
-This method allows you to use the `@ui.` syntax within a given key for triggers and events hashes. It
-swaps the `@ui.` reference with the associated selector.
-
-```js
-var hash = {
-  'click @ui.list': 'myCb'
-};
-
-var ui = {
-  'list': 'ul'
-};
-
-// This sets 'click @ui.list' to be 'click ul' in the newHash object
-var newHash = Marionette.normalizeUIKeys(hash, ui);
-```
-
-## Marionette.normalizeUIValues
-
-This method allows you to use the `@ui.` syntax within a given hash value (for example region hashes). It
-swaps the `@ui.` reference with the associated selector.
-
-```js
-var hash = {
-  'foo': '@ui.bar'
-};
-
-var ui = {
-  'bar': '.quux'
-};
-
-// This sets 'foo' to be '.quux' in the newHash object
-var newHash = Marionette.normalizeUIValues(hash, ui);
-```
-
-## Marionette.actAsCollection
-
-Utility function for mixing in underscore collection behavior to an object.
-
-It works by taking an object and a property field, in this example 'list',
-and appending collection functions to the object so that it can
-delegate collection calls to its list.
-
-#### Object Literal
-```js
-var obj = {
-  list: [1, 2, 3]
-}
-
-Marionette.actAsCollection(obj, 'list');
-
-var double = function(v){ return v*2};
-console.log(obj.map(double)); // [2, 4, 6]
-```
-
-#### Function Prototype
-```js
-var Func = function(list) {
-  this.list = list;
-};
-
-Marionette.actAsCollection(Func.prototype, 'list');
-var func = new Func([1,2,3]);
-
-
-var double = function(v){ return v*2};
-console.log(func.map(double)); // [2, 4, 6]
-```
-
-The first parameter is the object that will delegate underscore collection methods.
-
-The second parameter is the object field that will hold the list.

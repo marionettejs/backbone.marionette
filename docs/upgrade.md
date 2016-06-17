@@ -45,10 +45,11 @@ for detail on upgrading to Marionette 3. This technique works in both Marionette
 
 The `childEvents` attribute was renamed to `childViewEvents`.
 
-Child view events now only bubble a single level to their direct parent. To
-pass events further up the chain, you must explicitly using `childViewTriggers`
-to convert the event from the child into an event on the parent. These can be
-chained all the way up to the level you require them to be.
+Child event bubbling above one level is now removed in most instances and
+deprecated pending removal everywhere else. This can no longer be relied upon.
+To pass events further up the chain, you must explicitly using
+`childViewTriggers` to convert the event from the child into an event on the
+parent. These can be chained all the way up to the level you require them to be.
 
 Bubbled child events no longer pass the `childView` implicitly and only pass the
 arguments passed as part of `triggerMethod`. This means that the arguments

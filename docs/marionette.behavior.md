@@ -30,7 +30,9 @@ The easiest way to see how to use the `Behavior` class is to take an example
 view and factor out common behavior to be shared across other views.
 
 ```javascript
-var MyView = Marionette.View.extend({
+var Mn = require('backbone.marionette');
+
+var MyView = Mn.View.extend({
   ui: {
     destroy: '.destroy-btn'
   },
@@ -59,7 +61,9 @@ to be extracted into `Behavior` classes.
 ### Defining and Attaching Behaviors
 
 ```javascript
-var DestroyWarn = Marionette.Behavior.extend({
+var Mn = require('backbone.marionette');
+
+var DestroyWarn = Mn.Behavior.extend({
   // You can set default options
   // just like you can in your Backbone Models.
   // They will be overridden if you pass in an option with the same key.
@@ -81,7 +85,7 @@ var DestroyWarn = Marionette.Behavior.extend({
   }
 });
 
-var ToolTip = Marionette.Behavior.extend({
+var ToolTip = Mn.Behavior.extend({
   defaults: {
     text: ''
   }
@@ -102,7 +106,9 @@ We've passed in a `defaults` attribute that sets default options.
 behaviors extracted, we just need to attach them to our view:
 
 ```javascript
-var MyView = Marionette.View.extend({
+var Mn = require('backbone.marionette');
+
+var MyView = Mn.View.extend({
   behaviors: [DestroyWarn, ToolTip]
 });
 ```
@@ -112,7 +118,9 @@ event handlers were attached to the view directly. In addition to using array
 notation, Behaviors can be attached using an object:
 
 ```javascript
-var MyView = Marionette.View.extend({
+var Mn = require('backbone.marionette');
+
+var MyView = Mn.View.extend({
   behaviors: {
     destroy: DestroyWarn,
     tooltip: ToolTip
@@ -128,7 +136,9 @@ should do. In our above example, we want to override the message to our
 `DestroyWarn` and `Tooltip` behaviors to match the original message on the View:
 
 ```javascript
-var MyView = Marionette.View.extend({
+var Mn = require('backbone.marionette');
+
+var MyView = Mn.View.extend({
   behaviors: [
     {
       behaviorClass: DestroyWarn
@@ -151,8 +161,10 @@ Here is the syntax for declaring which behaviors get used within a View.
 * The options for each `Behavior` are also passed through to the `Behavior` during initialization.
 * The options are then stored within each `Behavior` under `options`.
 
-```js
-var MyView = Marionette.View.extend({
+```javascript
+var Mn = require('backbone.marionette');
+
+var MyView = Mn.View.extend({
   ui: {
     destroy: '.destroy-btn'
   },
@@ -171,7 +183,9 @@ var MyView = Marionette.View.extend({
 Now let's create the `DestroyWarn` `Behavior`.
 
 ```js
-var DestroyWarn = Marionette.Behavior.extend({
+var Mn = require('backbone.marionette');
+
+var DestroyWarn = Mn.Behavior.extend({
   // You can set default options
   // just like you can in your Backbone Models.
   // They will be overridden if you pass in an option with the same key.
@@ -195,8 +209,10 @@ var DestroyWarn = Marionette.Behavior.extend({
 
 And onto the `Tooltip` behavior.
 
-```js
-var ToolTip = Marionette.Behavior.extend({
+```javascript
+var Mn = require('backbone.marionette');
+
+var ToolTip = Mn.Behavior.extend({
   ui: {
     tooltip: '.tooltip'
   },
@@ -215,7 +231,9 @@ In addition to extending a `View` with `Behavior`, a `Behavior` can itself use
 other Behaviors. The syntax is identical to that used for a `View`:
 
 ```js
-var Modal = Marionette.Behavior.extend({
+var Mn = require('backbone.marionette');
+
+var Modal = Mn.Behavior.extend({
   behaviors: {
     DestroyWarn: {
       message: 'Whoa! You sure about this?'

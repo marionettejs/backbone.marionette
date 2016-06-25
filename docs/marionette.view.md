@@ -3,7 +3,13 @@ not be accurate or up-to-date_**
 
 # Marionette.View
 
-A `View` is a view that represents an item to be displayed with a template.This is typically a `Backbone.Model`, `Backbone.Collection`, or nothing at all.Views are also used to build up your application hierarchy - you can easily nestmultiple views through the `regions` attribute.**_Note: From Marionette v3.x, `Marionette.View` replaces
+A `View` is a view that represents an item to be displayed with a template.
+This is typically a `Backbone.Model`, `Backbone.Collection`, or nothing at all.
+
+Views are also used to build up your application hierarchy - you can easily nest
+multiple views through the `regions` attribute.
+
+**_Note: From Marionette v3.x, `Marionette.View` replaces
 `Marionette.LayoutView` and `Marionette.ItemView`._**
 
 ## Documentation Index
@@ -1086,4 +1092,4 @@ If you need to serialize the View's `model` or `collection` in a custom way,
 then you should override either `serializeModel` or `serializeCollection`.
 
 On the other hand, you should not use this method to add arbitrary extra data
-to your template. Instead, use [View.templateContext](./marionette.abstractview.md#viewtemplatecontext).
+to your template. Instead, use [View.templateContext](./marionette.renderer.md#templatecontext).

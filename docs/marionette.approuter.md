@@ -18,8 +18,10 @@ Have your routers configured to call the method on your object, directly.
 
 Configure an AppRouter with `appRoutes`. The route definition is passed on to Backbone's standard routing handlers. This means that you define routes like you normally would.  However, instead of providing a callback method that exists on the router, you provide a callback method that exists on the controller, which you specify for the router instance (see below.)
 
-```js
-var MyRouter = Marionette.AppRouter.extend({
+```javascript
+var Mn = require('backbone.marionette');
+
+var MyRouter = Mn.AppRouter.extend({
   // "someMethod" must exist at controller.someMethod
   appRoutes: {
     "some/route": "someMethod"
@@ -42,8 +44,10 @@ You can also add standard routes to an AppRouter with methods on the router.
 
 Routes can be defined through the constructor function options, as well.
 
-```js
-var MyRouter = new Marionette.AppRouter({
+```javascript
+var Mn = require('backbone.marionette');
+
+var MyRouter = new Mn.AppRouter({
   controller: myController,
   appRoutes: {
     "foo": "doFoo",
@@ -64,8 +68,10 @@ method call. It works the same as the built-in `router.route()` call from
 Backbone's Router, but has all the same semantics and behavior of the `appRoutes`
 configuration.
 
-```js
-var MyRouter = Marionette.AppRouter.extend({});
+```javascript
+var Mn = require('backbone.marionette');
+
+var MyRouter = Mn.AppRouter.extend({});
 
 var router = new MyRouter();
 router.appRoute("/foo", "fooThat");
@@ -73,8 +79,10 @@ router.appRoute("/foo", "fooThat");
 Also you can specify a controller with the multiple routes at runtime with method
 `processAppRoutes`. However, In this case the current controller of `AppRouter` will not change.
 
-```js
-var MyRouter = Marionette.AppRouter.extend({});
+```javascript
+var Mn = require('backbone.marionette');
+
+var MyRouter = Mn.AppRouter.extend({});
 
 var router = new MyRouter();
 router.processAppRoutes(myController, {
@@ -88,12 +96,14 @@ router.processAppRoutes(myController, {
 App routers can only use one `controller` object. You can either specify this
 directly in the router definition:
 
-```js
+```javascript
+var Mn = require('backbone.marionette');
+
 var someController = {
   someMethod: function(){ /*...*/ }
 };
 
-Marionette.AppRouter.extend({
+Mn.AppRouter.extend({
   controller: someController
 });
 ```

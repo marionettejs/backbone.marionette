@@ -46,11 +46,12 @@ hold a reference to the root entry of your View tree. Marionette 3 has added
 this with the `region` attribute and `showView`. This example demonstrates how
 we can use this:
 
-```js
+```javascript
+var Mn = require('backbone.marionette');
 var RootView = require('./views/root');
 
 
-var App = Marionette.Application.extend({
+var App = Mn.Application.extend({
   region: '#root-element',
 
   onStart: function() {
@@ -72,8 +73,10 @@ Like other objects in Backbone and Marionette, Applications have an `initialize`
 method. It is called immediately after the Application has been instantiated,
 and is invoked with the same arguments that the constructor received.
 
-```js
-var App = Marionette.Application.extend({
+```javascript
+var Mn = require('backbone.marionette');
+
+var App = Mn.Application.extend({
   initialize: function(options) {
     console.log('My value:', options.model.get('key'));
   }
@@ -103,11 +106,12 @@ your views and starting `Backbone.history`.
 
 ```js
 var Backbone = require('backbone');
+var Mn = require('backbone.marionette');
 
 var MyModel = require('./mymodel');
 var MyView = require('./myview');
 
-var App = Marionette.Application.extend({
+var App = Mn.Application.extend({
   initialize: function(options) {
     console.log('My value:', options.model.get('key'));
   },

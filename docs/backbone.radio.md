@@ -17,9 +17,9 @@ communicate and share information.
 Let's look at a simplified example in Marionette:
 
 ```javascript
-var Marionette = require('backbone.marionette');
+var Mn = require('backbone.marionette');
 
-var NotificationHandler = Marionette.Object.extend({
+var NotificationHandler = Mn.Object.extend({
   channelName: 'notify',
 
   radioRequests: {
@@ -71,7 +71,7 @@ In addition to this documentation, the Radio documentation can be found on
 
 In addition to the standard documentation, the Radio has been integrated in
 Marionette 3 to provide clearer interfaces to the existing API. This is detailed
-in the documentation below. Anything that extends from `Marionette.Object` has
+in the documentation below. Anything that extends from `Mn.Object` has
 access to this API.
 
 ## Documentation Index
@@ -121,9 +121,9 @@ use the `channelName` attribute. We then retrieve the channel instance with
 `getChannel()`:
 
 ```javascript
-var Marionette = require('backbone.marionette');
+var Mn = require('backbone.marionette');
 
-var ChannelHandler = Marionette.Object.extend({
+var ChannelHandler = Mn.Object.extend({
   channelName: 'basic',
 
   initialize: function() {
@@ -172,11 +172,11 @@ myChannel.off('left:building');
 Just like Backbone Events, the Radio respects the `listenTo` handler as well:
 
 ```javascript
-var Marionette = require('backbone.marionette');
+var Mn = require('backbone.marionette');
 var Radio = require('backbone.radio');
 
 
-var Star = Marionette.Object.extend({
+var Star = Mn.Object.extend({
   initialize: function() {
     var starChannel = Radio.channel('star');
 
@@ -200,10 +200,10 @@ listeners on your object instances. This works with a bound `channelName` to let
 us provide listeners using the `radioEvents` attributes.
 
 ```javascript
-var Marionette = require('backbone.marionette');
+var Mn = require('backbone.marionette');
 
 
-var Star = Marionette.Object.extend({
+var Star = Mn.Object.extend({
   channelName: 'star',
 
   radioEvents: {
@@ -244,12 +244,12 @@ As with request, any arguments passed in `channel.request` will be passed into
 the callback.
 
 ```javascript
-var Marionette = require('backbone.marionette');
+var Mn = require('backbone.marionette');
 var Radio = require('backbone.radio');
 
 var channel = Radio.channel('notify');
 
-var Notification = Marionette.Object.extend({
+var Notification = Mn.Object.extend({
   initialize: function() {
     channel.reply('show:success', this.showSuccessMessage);
     channel.reply('show:error', this.showErrorMessage);
@@ -268,12 +268,12 @@ var Notification = Marionette.Object.extend({
 So, for example, when a model sync fails:
 
 ```javascript
-var Marionette = require('backbone.marionette');
+var Mn = require('backbone.marionette');
 var Radio = require('backbone.radio');
 
 var channel = Radio.channel('notify');
 
-var ModelView = Marionette.View.extend({
+var ModelView = Mn.View.extend({
   modelEvents: {
     error: 'showErrorMessage'
   },
@@ -295,12 +295,12 @@ let's assume we attach the currently logged-in user to the `Application` object
 and we want to know if they're still logged-in.
 
 ```javascript
-var Marionette = require('backbone.marionette');
+var Mn = require('backbone.marionette');
 var Radio = require('backbone.radio');
 
 var channel = Radio.channel('user');
 
-var App = Marionette.Application.extend({
+var App = Mn.Application.extend({
   initialize: function() {
     channel.reply('user:logged:in', this.isLoggedIn);
   },
@@ -328,9 +328,9 @@ Marionette 3 integrates Request/Reply directly onto its `Object` class through
 `radioRequests`. This will simplify the `Notification` quite a bit:
 
 ```javascript
-var Marionette = require('backbone.marionette');
+var Mn = require('backbone.marionette');
 
-var Notification = Marionette.Object.extend({
+var Notification = Mn.Object.extend({
   channelName: 'notify',
 
   radioRequests: {
@@ -355,9 +355,9 @@ definition.
 As with a normal request/reply, we can return values from these bound handlers:
 
 ```javascript
-var Marionette = require('backbone.marionette');
+var Mn = require('backbone.marionette');
 
-var App = Marionette.Application.extend({
+var App = Mn.Application.extend({
   channelName: 'user',
 
   radioRequests: {

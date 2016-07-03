@@ -120,3 +120,41 @@ Marionette can set options when you instantiate a class. This lets you override
 many class-based attributes when you need to. You can also pass new information
 specific to the object in question that it can access through special helper
 methods.
+
+```javascript
+var Mn = require('backbone.marionette');
+
+var MyView = Mn.View.extend();
+
+var view = new MyView({
+  foo: 'some text'
+});
+
+view.checkOption();
+```
+
+### The `getOption` Method
+
+To access an option, we use the `getOption` method.
+
+```javascript
+var Mn = require('backbone.marionette');
+
+var MyView = Mn.View.extend({
+  className: function() {
+    var defaultClass = 'table';
+    var extraClasses = this.getOption('extraClasses') || '';
+    return defaultClass + ' ' + extraClasses;
+  }
+});
+
+var myView = new MyView({
+  model: new MyModel(),
+  extraClasses: 'table-striped'
+});
+```
+
+This only works for custom options - arguments that belong to the standard
+Backbone/Marionette attributes, such as `model` and `collection`, are not
+accessible via `getOption` and should be accessed as just `view.model` or
+`view.collection`.

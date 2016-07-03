@@ -13,6 +13,11 @@ rendering a template with or without data.
 * [Pre-compiled Templates](#pre-compiled-templates)
 * [Custom Template Selection And Rendering](#custom-template-selection-and-rendering)
 * [Using Pre-compiled Templates](#using-pre-compiled-templates)
+* [TemplateContext](#templatecontext)
+  * [Basic Example](#basic-example)
+  * [Accessing Data Within The Template Context](#accessing-data-within-the-template-context)
+  * [Object Or Function As `templateContext`](#object-or-function-as-templatecontext)
+* [Change Which Template Is Rendered For A View](#change-which-template-is-rendered-for-a-view)
 
 ## Basic Usage
 
@@ -21,9 +26,10 @@ This method returns a string containing the result of applying the
 template using the `data` object as the context.
 
 ```js
-var template = "#some-template";
-var data = {foo: "bar"};
-var html = Marionette.Renderer.render(template, data);
+var Mn = require('backbone.marionette');
+var template = '#some-template';
+var data = {foo: 'bar'};
+var html = Mn.Renderer.render(template, data);
 
 // do something with the HTML here
 ```
@@ -40,8 +46,10 @@ compile it again. This allows any view that supports a `template` parameter
 to specify a pre-compiled template function as the `template` setting.
 
 ```js
-var myTemplate = _.template("<div>foo</div>");
-Marionette.View.extend({
+var Mn = require('backbone.marionette');
+var myTemplate = _.template('<div>foo</div>');
+
+Mn.View.extend({
   template: myTemplate
 });
 ```
@@ -65,7 +73,9 @@ If you wish to override the template engine used, change the
 `render` method to work however you want:
 
 ```js
-Marionette.Renderer.render = function(template, data){
+var Mn = require('backbone.marionette');
+
+Mn.Renderer.render = function(template, data){
   return $(template).tmpl(data);
 };
 ```
@@ -78,8 +88,10 @@ If you override the `render` method and wish to use the
 fetch the template from the cache in your `render` method:
 
 ```js
-Marionette.Renderer.render = function(template, data){
-  var template = Marionette.TemplateCache.get(template);
+var Mn = require('backbone.marionette');
+
+Mn.Renderer.render = function(template, data){
+  var template = Mn.TemplateCache.get(template);
   // Do something with the template here
 };
 ```
@@ -94,7 +106,9 @@ To do this, just override the `render` method to return your executed
 template with the data.
 
 ```js
-Marionette.Renderer.render = function(template, data){
+var Mn = require('backbone.marionette');
+
+Mn.Renderer.render = function(template, data){
   return template(data);
 };
 ```
@@ -103,9 +117,132 @@ Then you can specify the pre-compiled template function as your view's
 `template` attribute:
 
 ```js
-var myPrecompiledTemplate = _.template("<div>some template</div>");
+var Mn = require('backbone.marionette');
+var myPrecompiledTemplate = _.template('<div>some template</div>');
 
-Marionette.View.extend({
+Mn.View.extend({
   template: myPrecompiledTemplate
 });
 ```
+
+## TemplateContext
+
+There are times when a view's template needs to have some logic in it and the view engine
+itself will not provide an easy way to accomplish this. For example, Underscore templates
+do not provide a context method mechanism while Handlebars templates do.
+
+A `templateContext` attribute can be applied to any View object that renders a template.
+When this attribute is present its contents will be mixed in to the data object that comes back
+from the `serializeData` method. This will allow you to create context methods that can be called
+from within your templates. This is also a good place to add data not returned from `serializeData`,
+such as calculated values.
+
+### Basic Example
+
+```html
+<script id="my-template" type="text/html">
+  I <%= percent %>% think that <%= showMessage() %>
+</script>
+```
+
+```js
+var Mn = require('backbone.marionette');
+var Bb = require('backbone');
+
+var MyView = Mn.View.extend({
+  template: '#my-template',
+
+  templateContext: function () {
+    return {
+      showMessage: function(){
+        return this.name + ' is the coolest!';
+      },
+
+      percent: this.model.get('decimal') * 100
+    };
+  }
+});
+
+var model = new Bb.Model({
+  name: 'Marionette',
+  decimal: 1
+});
+var view = new MyView({
+  model: model
+});
+
+view.render(); //=> "I 100% think that Marionette is the coolest!";
+```
+
+The `templateContext` can also be provided as a constructor parameter for any Marionette
+view class that supports the context methods.
+
+```js
+var Mn = require('backbone.marionette');
+var MyView = Mn.View.extend({
+  // ...
+});
+
+new MyView({
+  templateContext: {
+    doFoo: function(){ /* ... */ }
+  }
+});
+```
+
+### Accessing Data Within The Template Context
+
+In order to access data from within the context methods, you need to prefix the data you
+need with `this`. Doing that will give you all of the methods and attributes of the serialized
+data object, including the other context methods.
+
+```js
+templateContext: {
+  something: function(){
+    return 'Do stuff with ' + this.name + ' because it\'s awesome.';
+  }
+}
+```
+
+### Object Or Function As `templateContext`
+
+You can specify an object literal (as shown above), a reference to an object literal, or
+a function as the `templateContext`.
+
+If you specify a function, the function will be invoked with the current view instance
+as the context of the function. The function must return an object that can be mixed in to
+the data for the view.
+
+```js
+var Mn = require('backbone.marionette');
+
+Mn.View.extend({
+  templateContext: function(){
+    return {
+      foo: function(){ /* ... */ }
+    }
+  }
+});
+```
+
+## Change Which Template Is Rendered For A View
+
+There may be some cases where you need to change the template that is used for a view,
+ based on some simple logic such as the value of a specific attribute in the view's model.
+ To do this, you can provide a `getTemplate` function on your views and use this to return
+ the template that you need.
+
+```js
+var Mn = require('backbone.marionette');
+var MyView = Mn.View.extend({
+  getTemplate: function(){
+    if (this.model.get('foo')){
+      return '#some-template';
+    } else {
+      return '#a-different-template';
+    }
+  }
+});
+```
+
+This applies to all view classes.

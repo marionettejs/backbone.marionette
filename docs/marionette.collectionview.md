@@ -9,9 +9,7 @@ then append the results of the child view's `el` to the collection view's
 `el`. By default the `CollectionView` will maintain a sorted collection's order
 in the DOM. This behavior can be disabled by specifying `{sort: false}` on initialize.
 
-`CollectionView` has the base functionality provided by the View Mixin. Please see
-[the Marionette.AbstractView documentation](marionette.abstractview.md)
-for more information on available features and functionality.
+`CollectionView` has the base functionality provided by the View Mixin.
 
 ## Documentation Index
 

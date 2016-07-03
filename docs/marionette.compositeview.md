@@ -276,5 +276,3 @@ Marionette.CompositeView.extend({
   }
 });
 ```
-
-For more information, see the [Marionette.AbstractView](./marionette.abstractview.md) documentation.

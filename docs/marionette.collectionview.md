@@ -115,10 +115,10 @@ when a `Model` needs to be initially rendered. This method also gives you
 the ability to customize per `Model` `ChildViews`.
 
 ```js
-var Backbone = require('backbone');
+var Bb = require('backbone');
 var Mn = require('backbone.marionette');
 
-var FooBar = Backbone.Model.extend({
+var FooBar = Bb.Model.extend({
   defaults: {
     isFoo: false
   }
@@ -417,6 +417,7 @@ Override this method when you need a more complicated build, but use [`childView
 if you need to determine _which_ View class to instantiate.
 
 ```js
+var Bb = require('backbone');
 var Mn = require('backbone.marionette');
 
 var MyCollectionView = Mn.CollectionView.extend({
@@ -431,7 +432,7 @@ var MyCollectionView = Mn.CollectionView.extend({
     var options = {};
 
     if (child.get('type') === 'list') {
-      var childList = new Backbone.Collection(child.get('list'));
+      var childList = new Bb.Collection(child.get('list'));
       options = _.extend({collection: childList}, childViewOptions);
     } else {
       options = _.extend({model: child}, childViewOptions);
@@ -449,9 +450,13 @@ var MyCollectionView = Mn.CollectionView.extend({
 
 ### CollectionView's `addChildView`
 
-The `addChildView` method can be used to add a view that is independent of your Backbone.Collection. Note that this added view will be subject to filtering and ordering and may be difficult to manage in complex situations. Use with care.
+The `addChildView` method can be used to add a view that is independent of your
+`Backbone.Collection`. Note that this added view will be subject to filtering
+and ordering and may be difficult to manage in complex situations. Use with
+care.
 
-This method takes two parameters, the child view instance and the index for where it should be placed within the [CollectionView's children](#collectionviews-children).
+This method takes two parameters, the child view instance and the index for
+where it should be placed within the [CollectionView's children](#collectionviews-children).
 
 ```js
 var Mn = require('backbone.marionette');
@@ -582,10 +587,10 @@ When the collection for the view is sorted, the view will automatically re-sort 
 If the [`reorderOnSort`](#collectionviews-reorderonsort) option is set it will attempt to reorder the DOM and do this without a full re-render, otherwise it will re-render if the order has changed. Please Note that if you apply a filter to the collection view and the filtered views change during a sort then it will always re-render.
 
 ```js
-var Backbone = require('backbone');
+var Bb = require('backbone');
 var Mn = require('backbone.marionette');
 
-var collection = new Backbone.Collection();
+var collection = new Bb.Collection();
 
 var MyChildView = Mn.View.extend({
   template: false
@@ -683,6 +688,7 @@ destroys its children and cleans up listeners.
 
 
 ```js
+var Bb = require('backbone');
 var Mn = require('backbone.marionette');
 
 var MyChildView = Mn.View.extend({
@@ -694,7 +700,7 @@ var MyChildView = Mn.View.extend({
 
 var myCollectionView = new Mn.CollectionView({
   childView: MyChildView,
-  collection: new Backbone.Collection([{ id: 1 }])
+  collection: new Bb.Collection([{ id: 1 }])
 });
 
 myCollectionView.render();
@@ -710,13 +716,13 @@ The filter function takes a model from the collection and returns a truthy value
 and a falsey value if it should not.
 
 ```js
-var Backbone = require('backbone');
+var Bb = require('backbone');
 var Mn = require('backbone.marionette');
 
 var cv = new Mn.CollectionView({
   childView: SomeChildView,
   emptyView: SomeEmptyView,
-  collection: new Backbone.Collection([
+  collection: new Bb.Collection([
     { value: 1 },
     { value: 2 },
     { value: 3 },
@@ -792,11 +798,15 @@ cv.removeFilter({ preventRender: true });
 ```
 
 ## CollectionView's `sort`
+
 By default the `CollectionView` will maintain a sorted collection's order
 in the DOM. This behavior can be disabled by specifying `{sort: false}` on initialize. The `sort` flag cannot be changed after instantiation.
 
 ```js
-var myCollection = new Backbone.Collection([
+var Bb = require('backbone');
+var Mn = require('backbone.marionette');
+
+var myCollection = new Bb.Collection([
   { id: 1 },
   { id: 4 },
   { id: 3 },
@@ -837,7 +847,11 @@ var cv = new Mn.CollectionView({
 });
 ```
 
-The `viewComparator` can take any of the acceptable `Backbone.Collection` [comparator formats](http://backbonejs.org/#Collection-comparator) -- a sortBy (pass a function that takes a single argument), as a sort (pass a comparator function that expects two arguments), or as a string indicating the attribute to sort by.
+The `viewComparator` can take any of the acceptable `Backbone.Collection`
+[comparator formats](http://backbonejs.org/#Collection-comparator) -- a sortBy
+(pass a function that takes a single argument), as a sort (pass a comparator
+function that expects two arguments), or as a string indicating the attribute to
+sort by.
 
 ### CollectionView's `getViewComparator`
 
@@ -939,12 +953,13 @@ myView.render();
 The `render:children` event is triggered after a `collectionView`'s children have been rendered and buffered. It differs from the `collectionViews`'s `render` event in that it happens __only__ if the `collection` is not not empty. It may also happen when the children sort when [`reorderOnSort`](#collectionviews-reorderonsort) is false.
 
 ```js
+var Bb = require('backbone');
 var Mn = require('backbone.marionette');
 
 var MyView = Mn.CollectionView.extend({...});
 
 var myView = new MyView({
-  collection: new Backbone.Collection([{ id: 1 }]);
+  collection: new Bb.Collection([{ id: 1 }]);
 });
 
 myView.on({
@@ -1080,10 +1095,10 @@ myCollectionView.render()
 Triggered just after destroying the empty view from the DOM.
 
 ```js
-var Backbone = require('backbone');
+var Bb = require('backbone');
 var Mn = require('backbone.marionette');
 
-var collection = new Backbone.Collection();
+var collection = new Bb.Collection();
 
 var myChildView = Mn.View.extend({
   template: false
@@ -1119,11 +1134,12 @@ collection.add([{foo: 'bar'}])
 When [`reorderOnSort`](#collectionviews-resortview) is set to `true`, these events are fired for the reordering of the collection.
 
 ```js
+var Bb = require('backbone');
 var Mn = require('backbone.marionette');
 
 var MyView = Mn.CollectionView.extend({...});
 
-var myCol = new Backbone.Collection({ comparator: ... })
+var myCol = new Bb.Collection({ comparator: ... })
 var myView = new MyView({ reorderOnSort: true });
 
 myView.render();
@@ -1212,6 +1228,7 @@ Lists are possibly the simplest use of `CollectionView` - simply set a
 `childView` option:
 
 ```javascript
+var Bb = require('backbone');
 var Mn = require('backbone.marionette');
 
 var ListItemView = Mn.View.extend({
@@ -1226,7 +1243,7 @@ var ListView = Mn.View.extend({
   childView: ListItemView
 });
 
-var list = new Backbone.Collection([
+var list = new Bb.Collection([
   {id: 1, text: 'My text'},
   {id: 2, text: 'Another Item'}
 ]);
@@ -1268,6 +1285,7 @@ To build a table in Marionette 2 requires the `CompositeView` which we'll build
 as such:
 
 ```javascript
+var Bb = require('backbone');
 var Mn = require('backbone.marionette');
 
 var RowView = Mn.LayoutView.extend({
@@ -1283,7 +1301,7 @@ var TableView = Mn.CompositeView.extend({
   childViewContainer: 'tbody'
 });
 
-var list = new Backbone.Collection([
+var list = new Bb.Collection([
   {id: 1, text: 'My text'},
   {id: 2, text: 'Another Item'}
 ]);
@@ -1350,6 +1368,7 @@ Marionette 3 doesn't use `CompositeView` any more. We now build tables using
 [Marionette 2](#tables-using-marionette-2):
 
 ```javascript
+var Bb = require('backbone');
 var Mn = require('backbone.marionette');
 
 var RowView = Mn.View.extend({
@@ -1381,7 +1400,7 @@ var TableView = Mn.View.extend({
   }
 });
 
-var list = new Backbone.Collection([
+var list = new Bb.Collection([
   {id: 1, text: 'My text'},
   {id: 2, text: 'Another Item'}
 ]);
@@ -1406,6 +1425,7 @@ picker.
 #### Trees in Marionette 2
 
 ```javascript
+var Bb = require('backbone');
 var Mn = require('backbone.marionette');
 
 var TreeView = Mn.CompositeView.extend({
@@ -1419,7 +1439,7 @@ var TreeRoot = Mn.CollectionView.extend({
 });
 
 
-var tree = new Backbone.Collection([
+var tree = new Bb.Collection([
   {
     id: 5,
     nodes: [
@@ -1449,6 +1469,7 @@ As in tables, trees in Marionette 3 require us to combine `View` and
 implicit version provided by Marionette 2.
 
 ```javascript
+var Bb = require('backbone');
 var Mn = require('backbone.marionette');
 
 var TreeNode = Mn.View.extend({
@@ -1464,7 +1485,7 @@ var TreeNode = Mn.View.extend({
 
   onRender: function() {
     this.showChildView('tree', new TreeView({
-      collection: new Backbone.Collection(this.model.get('nodes'))
+      collection: new Bb.Collection(this.model.get('nodes'))
     }));
   }
 });
@@ -1474,7 +1495,7 @@ var TreeView = Mn.CollectionView.extend({
   childView: TreeNode
 });
 
-var tree = new Backbone.Collection([
+var tree = new Bb.Collection([
   {
     id: 5,
     nodes: [

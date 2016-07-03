@@ -20,7 +20,7 @@ var app = new Mn.Application();
 
 // Start history when our application is ready
 app.on('start', function() {
-  Backbone.history.start();
+  Bb.history.start();
 });
 
 // Load some initial data, and then start our application
@@ -74,6 +74,7 @@ method. It is called immediately after the Application has been instantiated,
 and is invoked with the same arguments that the constructor received.
 
 ```javascript
+var Bb = require('backbone');
 var Mn = require('backbone.marionette');
 
 var App = Mn.Application.extend({
@@ -84,7 +85,7 @@ var App = Mn.Application.extend({
 
 // The application won't attach a model by default - this merely passes it into
 // the options object to be, potentially, passed into views.
-var app = new App({model: new Backbone.Model({key: 'value'})});
+var app = new App({model: new Bb.Model({key: 'value'})});
 ```
 
 ## Application Triggers
@@ -105,7 +106,7 @@ your views and starting `Backbone.history`.
 ### Application Lifecycle
 
 ```js
-var Backbone = require('backbone');
+var Bb = require('backbone');
 var Mn = require('backbone.marionette');
 
 var MyModel = require('./mymodel');
@@ -122,7 +123,7 @@ var App = Mn.Application.extend({
 
   onStart: function(options) {
     this.showView(new MyView({model: this.model}));
-    Backbone.history.start();
+    Bb.history.start();
   }
 });
 ```

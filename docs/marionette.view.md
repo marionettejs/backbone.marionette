@@ -107,10 +107,10 @@ particularly interesting result. As with Backbone, we can attach a model to our
 views and render the data they represent:
 
 ```javascript
-var Backbone = require('backbone');
+var Bb = require('backbone');
 var Mn = require('backbone.marionette');
 
-var MyModel = Backbone.Model.extend({
+var MyModel = Bb.Model.extend({
   defaults: {
     name: 'world'
   }
@@ -133,10 +133,10 @@ a template. Simply pass in the collection as `collection` and Marionette will
 provide an `items` attribute to render:
 
 ```javascript
-var Backbone = require('backbone');
+var Bb = require('backbone');
 var Mn = require('backbone.marionette');
 
-var MyCollection = Backbone.Collection.extend({
+var MyCollection = Bb.Collection.extend({
 });
 
 var MyView = Mn.View.extend({

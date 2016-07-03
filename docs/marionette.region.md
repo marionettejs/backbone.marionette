@@ -431,4 +431,4 @@ myView.someRegion.show(someView, options);
 You can optionally add an `initialize` function to your Region
 definition as shown in this example. It receives the `options`
 that were passed to the constructor of the Region, similar to
-a Backbone.View.
+a `Backbone.View`.

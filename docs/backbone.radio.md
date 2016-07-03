@@ -163,7 +163,7 @@ myChannel.on('left:building', function(person) {
   console.log(person.get('name') + ' has left the building!');
 });
 
-var elvis = new Backbone.Model({name: 'Elvis'});
+var elvis = new Bb.Model({name: 'Elvis'});
 myChannel.trigger('left:building', elvis);
 
 myChannel.off('left:building');

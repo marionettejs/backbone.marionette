@@ -113,10 +113,10 @@ particularly interesting result. As with Backbone, we can attach a model to our
 views and render the data they represent:
 
 ```javascript
-var Backbone = require('backbone');
+var Bb = require('backbone');
 var Mn = require('backbone.marionette');
 
-var MyModel = Backbone.Model.extend({
+var MyModel = Bb.Model.extend({
   defaults: {
     name: 'world'
   }
@@ -139,10 +139,10 @@ a template. Simply pass in the collection as `collection` and Marionette will
 provide an `items` attribute to render:
 
 ```javascript
-var Backbone = require('backbone');
+var Bb = require('backbone');
 var Mn = require('backbone.marionette');
 
-var MyCollection = Backbone.Collection.extend({
+var MyCollection = Bb.Collection.extend({
 });
 
 var MyView = Mn.View.extend({
@@ -454,7 +454,9 @@ If no view is available, `getChildView` returns `null`.
 A `View` can take a `regions` hash that allows you to specify regions per `View` instance.
 
 ```javascript
-new Marionette.View({
+var Mn = require('backbone.marionette');
+
+new Mn.View({
  regions: {
    "cat": ".doge",
    "wow": {
@@ -477,7 +479,9 @@ Marionette provides a simple mechanism to infinitely nest views in a single pain
 of the children in the onBeforeShow callback.
 
 ```javascript
-var ParentView = Marionette.View.extend({
+var Mn = require('backbone.marionette');
+
+var ParentView = Mn.View.extend({
   onBeforeShow: function() {
     this.showChildView('header', new HeaderView());
     this.showChildView('footer', new FooterView());
@@ -732,7 +736,9 @@ These events are fired during the view's creation and rendering in a region.
 Triggered before a View is rendered.
 
 ```js
-Marionette.View.extend({
+var Mn = require('backbone.marionette');
+
+Mn.View.extend({
   onBeforeRender: function() {
     // set up final bits just before rendering the view's `el`
   }
@@ -746,7 +752,9 @@ You can implement this in your view to provide custom code for dealing
 with the view's `el` after it has been rendered.
 
 ```js
-Marionette.View.extend({
+var Mn = require('backbone.marionette');
+
+Mn.View.extend({
   onRender: function() {
     console.log('el exists but is not visible in the DOM');
   }
@@ -784,7 +792,9 @@ These events are fired during the view's destruction and removal from a region.
 Triggered just prior to destroying the view, when the view's `destroy()` method has been called.
 
 ```js
-Marionette.View.extend({
+var Mn = require('backbone.marionette');
+
+Mn.View.extend({
   onBeforeDestroy: function() {
     // manipulate the `el` here. it's already
     // been rendered, and is full of the view's
@@ -809,7 +819,9 @@ Triggered just after the view has been destroyed. At this point, the view has
 been completely removed from the DOM.
 
 ```js
-Marionette.View.extend({
+var Mn = require('backbone.marionette');
+
+Mn.View.extend({
   onDestroy: function() {
     // custom destroying and cleanup goes here
   }
@@ -876,7 +888,9 @@ time, or remove the region from an object that has a
 reference to it:
 
 ```javascript
-var view = new Marionette.View();
+var Mn = require('backbone.marionette');
+
+var view = new Mn.View();
 
 view.on("remove:region", function(name, region) {
   // add the region instance to an object
@@ -898,7 +912,9 @@ collections - this includes both [standard][backbone-events] and custom events.
 For example, to listen to a model's events:
 
 ```javascript
-var MyView = Marionette.View.extend({
+var Mn = require('backbone.marionette');
+
+var MyView = Mn.View.extend({
   modelEvents: {
     'change:attribute': 'actOnChange'
   },
@@ -917,7 +933,9 @@ to `model.trigger('event', arguments)`.
 You can also bind a function callback directly in the `modelEvents` attribute:
 
 ```javascript
-var MyView = Marionette.View.extend({
+var Mn = require('backbone.marionette');
+
+var MyView = Mn.View.extend({
   modelEvents: {
     'change:attribute': function() {
       console.log('attribute was changed');
@@ -933,7 +951,9 @@ returns the object to to attach to `modelEvents`. This is particularly handy for
 binding to events based on options passed into the view:
 
 ```javascript
-var MyView = Marionette.View.extend({
+var Mn = require('backbone.marionette');
+
+var MyView = Mn.View.extend({
   modelEvents: function() {
     var events = {};
     var fieldToListenTo = this.getOption('customField');
@@ -950,7 +970,9 @@ var MyView = Marionette.View.extend({
 ### Collection Events
 
 ```javascript
-var MyView = Marionette.View.extend({
+var Mn = require('backbone.marionette');
+
+var MyView = Mn.View.extend({
   collectionEvents: {
     sync: 'actOnSync'
   },
@@ -966,7 +988,9 @@ var MyView = Marionette.View.extend({
 You can also bind a function callback directly in the `modelEvents` attribute:
 
 ```javascript
-var MyView = Marionette.View.extend({
+var Mn = require('backbone.marionette');
+
+var MyView = Mn.View.extend({
   collectionEvents: {
     'update': function() {
       console.log('the collection was updated');
@@ -982,7 +1006,9 @@ returns the object to to attach to `modelEvents`. This is particularly handy for
 binding to events based on options passed into the view:
 
 ```javascript
-var MyView = Marionette.View.extend({
+var Mn = require('backbone.marionette');
+
+var MyView = Mn.View.extend({
   collectionEvents: function() {
     var events = {};
     var eventToListenTo = this.getOption('customListener');
@@ -1002,7 +1028,9 @@ If your view has a `model` and `collection` attached, it will listen for events
 on both:
 
 ```javascript
-var MyView = Marionette.View.extend({
+var Mn = require('backbone.marionette');
+
+var MyView = Mn.View.extend({
   modelEvents: {
     'change:someattribute': 'changeMyAttribute'
   },

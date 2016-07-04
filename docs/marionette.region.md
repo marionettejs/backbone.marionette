@@ -38,10 +38,10 @@ can be accessed through `getRegion()` or have a view displayed directly with
 `showView()`. Below is a short example:
 
 ```js
-var Marionette = require('backbone.marionette');
+var Mn = require('backbone.marionette');
 var SomeView = require('./view');
 
-var App = Marionette.Application.extend({
+var App = Mn.Application.extend({
   region: '#main-content',
 
   onStart: function() {
@@ -66,9 +66,9 @@ although they will work for `Application` as well - just replace `regions` with
 You can use a jQuery string selector to define regions.
 
 ```js
-var Marionette = require('backbone.marionette');
+var Mn = require('backbone.marionette');
 
-var MyView = Marionette.View.extend({
+var MyView = Mn.View.extend({
   regions: {
     mainRegion: '#main'
   }
@@ -229,8 +229,9 @@ myRegion.show(myView, {triggerBeforeAttach: false, triggerAttach: false});
 In order to add conditional logic when rendering a view you can override the `renderView` method. This could be useful if you don't want the region to re-render views that aren't destroyed. By default this method will call `view.render`.
 
 ```js
+var Mn = require('backbone.marionette');
 
-var CachingRegion = Marionette.Region.extend({
+var CachingRegion = Mn.Region.extend({
   shouldDestroyView: function(view, options) { return false; },
   renderView: function(view, options) {
     if (!view.isRendered) { view.render(); }
@@ -243,7 +244,9 @@ var CachingRegion = Marionette.Region.extend({
 In order to add conditional logic around whether the current view should be destroyed when showing a new one you can override the `shouldDestroyView` method. This is particularly useful as an alternative to the `preventDestroy` option when you wish to prevent destroy on all views that are shown in the region.
 
 ```js
-var CachingRegion = Marionette.Region.extend({
+var Mn = require('backbone.marionette');
+
+var CachingRegion = Mn.Region.extend({
   shouldDestroyView: function(view, options) { return false; }
 });
 ```
@@ -287,7 +290,9 @@ to the DOM. This method receives one parameter - the view to show.
 The default implementation of `attachHtml` is:
 
 ```js
-Marionette.Region.prototype.attachHtml = function(view){
+var Mn = require('backbone.marionette');
+
+Mn.Region.prototype.attachHtml = function(view){
   this.$el.empty().append(view.el);
 }
 ```
@@ -296,7 +301,9 @@ This replaces the contents of the region with the view's
 `el` / content. You can override `attachHtml` for transition effects and more.
 
 ```js
-Marionette.Region.prototype.attachHtml = function(view){
+var Mn = require('backbone.marionette');
+
+Mn.Region.prototype.attachHtml = function(view){
   this.$el.hide();
   this.$el.html(view.el);
   this.$el.slideDown("fast");
@@ -310,9 +317,9 @@ This example will make a view slide down from the top of the screen instead of j
 appearing in place:
 
 ```js
-var Marionette = require('backbone.marionette');
+var Mn = require('backbone.marionette');
 
-var ModalRegion = Marionette.Region.extend({
+var ModalRegion = Mn.Region.extend({
   attachHtml: function(view){
     // Some effect to show the view:
     this.$el.empty().append(view.el);
@@ -320,7 +327,7 @@ var ModalRegion = Marionette.Region.extend({
   }
 });
 
-var MyView = Marionette.View.extend({
+var MyView = Mn.View.extend({
   regions: {
     mainRegion: '#main-region',
     modalRegion: {
@@ -360,13 +367,13 @@ new region class by specifying the region class as the
 value. In this case, `addRegions` expects the constructor itself, not an instance.
 
 ```js
-var Marionette = require('backbone.marionette');
+var Mn = require('backbone.marionette');
 
-var FooterRegion = Marionette.Region.extend({
+var FooterRegion = Mn.Region.extend({
   el: "#footer"
 });
 
-var MyView = Marionette.View.extend({
+var MyView = Mn.View.extend({
   regions: {
     footerRegion: FooterRegion
   }
@@ -377,13 +384,13 @@ You can also specify a selector for the region by using
 an object literal for the configuration.
 
 ```js
-var Marionette = require('backbone.marionette');
+var Mn = require('backbone.marionette');
 
-var FooterRegion = Marionette.Region.extend({
+var FooterRegion = Mn.Region.extend({
   el: "#footer"
 });
 
-var MyView = Marionette.View.extend({
+var MyView = Mn.View.extend({
   regions: {
     footerRegion: {
       regionClass: FooterRegion
@@ -406,7 +413,9 @@ need to extend from `Region` as shown above and then use
 that constructor function on your own:
 
 ```js
-var SomeRegion = Marionette.Region.extend({
+var Mn = require('backbone.marionette');
+
+var SomeRegion = Mn.Region.extend({
   el: "#some-div",
 
   initialize: function(options){
@@ -422,4 +431,4 @@ myView.someRegion.show(someView, options);
 You can optionally add an `initialize` function to your Region
 definition as shown in this example. It receives the `options`
 that were passed to the constructor of the Region, similar to
-a Backbone.View.
+a `Backbone.View`.

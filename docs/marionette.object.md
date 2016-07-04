@@ -18,13 +18,15 @@ like `initialize` and `Backbone.Events`.
 * [Basic Use](#basic-use)
 
 
-### Initialize
+## Initialize
 Initialize is called immediately after the Object has been instantiated,
 and is invoked with the same arguments that the constructor received.
 
 
 ```js
-var Friend = Marionette.Object.extend({
+var Mn = require('backbone.marionette');
+
+var Friend = Mn.Object.extend({
   initialize: function(options){
     console.log(options.name);
   }
@@ -34,13 +36,15 @@ new Friend({name: 'John'});
 ```
 
 
-### Events
+## Events
 `Marionette.Object` extends `Backbone.Events` and includes `triggerMethod`.
 This makes it easy for Objects to emit events that other objects can listen for
 with `on` or `listenTo`.
 
 ```js
-var Friend = Marionette.Object.extend({
+var Mn = require('backbone.marionette');
+
+var Friend = Mn.Object.extend({
   graduate: function() {
     this.triggerMethod('announce', 'I graduated!!!');
   }
@@ -55,7 +59,7 @@ john.on('announce', function(message) {
 john.graduate();
 ```
 
-### Radio Events
+## Radio Events
 `Marionette.Object` integrates with `Backbone.Radio` to provide powerful messaging capabilities.  Objects can respond to both of Radio's message types; `Events` and `Requests`.  The syntax is similar to the `events` syntax from Backbone Views, and looks like this:
 
 ```js
@@ -79,21 +83,21 @@ radioRequests: {
 
 means that the object will listen for the `doFoo` request on the `app` channel, and run the 'executeFoo' method.  When using Radio Requests with Objects, the same rules and restrictions that normal Radio use implies also apply here: a single handler can be associated with a request, either through manual use of the reply functions, or through the Object API.
 
-### mergeOptions
+## mergeOptions
 Merge keys from the `options` object directly onto the instance. This is the preferred way to access options
 passed into the Object.
 
 More information at [mergeOptions](./marionette.functions.md#marionettemergeoptions)
 
-### getOption
+## getOption
 Retrieve an object's attribute either directly from the object, or from the object's this.options, with this.options taking precedence.
 
 More information [getOption](./marionette.functions.md#marionettegetoption).
 
-### bindEntityEvents
+## bindEntityEvents
 Helps bind a backbone "entity" to methods on a target object. More information [bindEntityEvents](./marionette.functions.md#marionettebindentityevents).
 
-### Destroying A Object
+## Destroying A Object
 
 Objects have a `destroy` method that unbind the events that are directly attached to the
 instance.
@@ -103,8 +107,10 @@ Invoking the `destroy` method will trigger a "before:destroy" event and correspo
 was invoked with. Invoking `destroy` will return the object, this can be useful for chaining.
 
 ```js
+var Mn = require('backbone.marionette');
+
 // define a object with an onDestroy method
-var MyObject = Marionette.Object.extend({
+var MyObject = Mn.Object.extend({
 
   onBeforeDestroy: function(arg1, arg2){
     // put custom code here, to destroy this object
@@ -126,14 +132,16 @@ obj.destroy(arg1, arg2);
 ```
 
 
-### Basic Use
+## Basic Use
 
 Selections is a simple Object that manages a selection of things.
 Because Selections extends from Object, it gets `initialize` and `Events`
 for free.
 
 ```js
-var Selections = Marionette.Object.extend({
+var Mn = require('backbone.marionette');
+
+var Selections = Mn.Object.extend({
 
   initialize: function(options){
     this.selections = {};

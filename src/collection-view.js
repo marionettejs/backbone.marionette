@@ -100,7 +100,7 @@ const CollectionView = Backbone.View.extend({
   _initialEvents() {
     if (this.collection) {
       this.listenTo(this.collection, 'add', this._onCollectionAdd);
-      this.listenTo(this.collection, 'remove', this._onCollectionRemove);
+      this.listenTo(this.collection, 'update', this._onCollectionUpdate);
       this.listenTo(this.collection, 'reset', this.render);
 
       if (this.sort) {
@@ -126,11 +126,89 @@ const CollectionView = Backbone.View.extend({
     }
   },
 
-  // get the child view by model it holds, and remove it
-  _onCollectionRemove(model) {
-    const view = this.children.findByModel(model);
-    this.removeChildView(view);
-    this._checkEmpty();
+  // Handle collection update model removals
+  _onCollectionUpdate(collection, options) {
+    const changes = options.changes;
+    this._removeChildViews(changes.removed);
+  },
+
+  // Remove the child views and destroy them.
+  // This function also updates the indices of later views
+  // in the collection in order to keep the children in sync with the collection.
+  // "modelsOrViews" can be an array of mixed models or views that
+  // will be removed and destroyed from the CollectionView
+  _removeChildViews(modelsOrViews, {checkEmpty} = {}) {
+    const shouldCheckEmpty = checkEmpty !== false;
+
+    // Used to determine where to update the remaining
+    // sibling view indices after these views are removed.
+    const removedViews = this._getRemovedViews(modelsOrViews);
+
+    if (!removedViews.length) {
+      return;
+    }
+
+    this.children._updateLength();
+
+    // decrement the index of views after this one
+    this._updateIndices(removedViews, false);
+
+    if (shouldCheckEmpty) {
+      this._checkEmpty();
+    }
+  },
+
+  // "modelsOrViews" can be an array of mixed models or views that
+  // will be removed and destroyed from the CollectionView
+  // Returns the views that will be used for re-indexing views
+  // through CollectionView#_updateIndices.
+  _getRemovedViews(modelsOrViews) {
+
+    // Returning a view means something was removed.
+    return _.reduce(modelsOrViews, (removingViews, modelOrView) => {
+      let view = modelOrView;
+
+      if (modelOrView instanceof Backbone.Model) {
+        view = this.children.findByModel(modelOrView);
+      }
+
+      if (!view || view._isDestroyed) {
+        return removingViews;
+      }
+
+      this._removeChildView(view);
+
+      removingViews.push(view);
+
+      return removingViews;
+    }, []);
+  },
+
+  _findGreatestIndexedView(views) {
+
+    return _.reduce(views, (greatestIndexedView, view) => {
+      // Even if the index is `undefined`, a view will get returned.
+      if (!greatestIndexedView || greatestIndexedView._index < view._index) {
+        return view;
+      }
+
+      return greatestIndexedView;
+    }, undefined);
+  },
+
+  _removeChildView(view) {
+    this.triggerMethod('before:remove:child', this, view);
+
+    this.children._remove(view);
+    if (view.destroy) {
+      view.destroy();
+    } else {
+      destroyBackboneView(view);
+    }
+
+    delete view._parent;
+    this.stopListening(view);
+    this.triggerMethod('remove:child', this, view);
   },
 
   // Overriding Backbone.View's `setElement` to handle
@@ -193,12 +271,12 @@ const CollectionView = Backbone.View.extend({
       }
       currentIds[model.cid] = true;
     });
-    _.each(previousModels, (prevModel) => {
-      const removedChildExists = !currentIds[prevModel.cid] && this.children.findByModel(prevModel);
-      if (removedChildExists) {
-        this._onCollectionRemove(prevModel);
-      }
+
+    const removeModels = _.filter(previousModels, (prevModel) => {
+      return !currentIds[prevModel.cid] && this.children.findByModel(prevModel);
     });
+
+    this._removeChildViews(removeModels);
   },
 
   // Reorder DOM after sorting. When your element's rendering do not use their index,
@@ -238,8 +316,7 @@ const CollectionView = Backbone.View.extend({
       this._appendReorderedChildren(elsToReorder);
 
       // remove any views that have been filtered out
-      _.each(filteredOutViews, _.bind(this.removeChildView, this));
-      this._checkEmpty();
+      this._removeChildViews(filteredOutViews);
 
       this.triggerMethod('reorder', this);
     }
@@ -485,10 +562,12 @@ const CollectionView = Backbone.View.extend({
 
   // Internal method. This decrements or increments the indices of views after the added/removed
   // view to keep in sync with the collection.
-  _updateIndices(view, increment, index) {
+  _updateIndices(views, increment, index) {
     if (!this.sort) {
       return;
     }
+
+    const view = _.isArray(views) ? this._findGreatestIndexedView(views) : views;
 
     if (increment) {
       // assign the index to the view
@@ -565,22 +644,10 @@ const CollectionView = Backbone.View.extend({
       return view;
     }
 
-    this.triggerMethod('before:remove:child', this, view);
-
-    if (view.destroy) {
-      view.destroy();
-    } else {
-      destroyBackboneView(view);
-    }
-
-    delete view._parent;
-    this.stopListening(view);
-    this.children.remove(view);
-    this.triggerMethod('remove:child', this, view);
-
+    this._removeChildView(view);
+    this.children._updateLength();
     // decrement the index of views after this one
     this._updateIndices(view, false);
-
     return view;
   },
 
@@ -670,18 +737,15 @@ const CollectionView = Backbone.View.extend({
   },
 
   // Destroy the child views that this collection view is holding on to, if any
-  _destroyChildren({checkEmpty} = {}) {
-    this.triggerMethod('before:destroy:children', this);
-    const shouldCheckEmpty = checkEmpty !== false;
+  _destroyChildren(options) {
     const childViews = this.children.map(_.identity);
 
-    this.children.each(_.bind(this.removeChildView, this));
-
-    if (shouldCheckEmpty) {
-      this._checkEmpty();
+    if (childViews.length) {
+      this.triggerMethod('before:destroy:children', this);
+      this._removeChildViews(childViews, options);
+      this.triggerMethod('destroy:children', this);
     }
 
-    this.triggerMethod('destroy:children', this);
     return childViews;
   },
 

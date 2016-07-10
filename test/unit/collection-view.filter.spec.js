@@ -71,7 +71,7 @@ describe('collection view - filter', function() {
       this.collection.add(this.passModel);
       this.collection.add(this.failModel);
       this.collectionView = new this.CollectionView();
-      this.sinon.spy(this.collectionView, 'removeChildView');
+      this.sinon.spy(this.collectionView, '_removeChildViews');
       this.collectionView.render();
     });
 
@@ -118,14 +118,15 @@ describe('collection view - filter', function() {
 
     describe('when all models passing the filter are removed from the collection', function() {
       beforeEach(function() {
-        this.passView = this.collectionView.children.first();
+        this.removedViews = this.collectionView.children.first();
+        this.removedModels = [this.passModel];
         this.collection.remove(this.passModel);
       });
 
       it('should remove the child view', function() {
-        expect(this.collectionView.removeChildView).to.have.been.calledOnce
+        expect(this.collectionView._removeChildViews).to.have.been.calledOnce
           .and.calledOn(this.collectionView)
-          .and.calledWith(this.passView);
+          .and.calledWith(this.removedModels);
       });
 
       it('should show the EmptyView', function() {

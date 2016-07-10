@@ -133,6 +133,11 @@ describe('collection/composite view sorting', function() {
         expect(this.compositeView.$el).to.have.$text('13');
       });
 
+      it('should have children view with correct _index', function() {
+        expect(this.collectionView.children.findByModel(this.collection.at(0))).to.have.property('_index', 0);
+        expect(this.collectionView.children.findByModel(this.collection.at(1))).to.have.property('_index', 1);
+      });
+
       describe('and then adding another', function() {
         beforeEach(function() {
           this.model = new Backbone.Model({foo: '4'});
@@ -271,6 +276,11 @@ describe('collection/composite view sorting', function() {
       it('should have the order in the dom', function() {
         expect(this.collectionView.$el).to.have.$text('31');
         expect(this.compositeView.$el).to.have.$text('31');
+      });
+
+      it('should have children view with correct _index', function() {
+        expect(this.collectionView.children.findByModel(this.collection.at(0))).to.have.property('_index', 1);
+        expect(this.collectionView.children.findByModel(this.collection.at(1))).to.have.property('_index', 0);
       });
 
       describe('and then adding another', function() {

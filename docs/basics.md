@@ -14,6 +14,7 @@ patterns etc.
   * [Functions Returning Values](#functions-returning-values)
 * [Setting Options](#setting-options)
   * [The `getOption` Method](#the-getoption-method)
+  * [The `mergeOptions` Method](#the-mergeoptions-method)
 
 ## Class-based Inheritance
 
@@ -158,3 +159,36 @@ This only works for custom options - arguments that belong to the standard
 Backbone/Marionette attributes, such as `model` and `collection`, are not
 accessible via `getOption` and should be accessed as just `view.model` or
 `view.collection`.
+
+### The `mergeOptions` Method
+
+The `mergeOptions` method takes two arguments: an `options` object and `keys` to
+pull from the options object. Any matching `keys` will be merged onto the
+object instance. For example:
+
+```javascript
+var Bb = require('backbone');
+var Mn = require('backbone.marionette');
+
+var MyObject = Mn.Object.extend({
+  initialize: function(options) {
+    this.mergeOptions(options, ['model', 'something']);
+    // this.model and this.something will now be available
+  }
+});
+
+var myObject = new MyObject({
+  model: new Backbone.Model(),
+  something: 'test',
+  another: 'value'
+});
+
+console.log(myObject.model);
+console.log(myObject.something);
+console.log(myObject.getOption('another'));
+```
+
+In this example, `model` and `something` are directly available on the
+`MyObject` instance, while `another` must be accessed via `getOption`. This is
+handy when you want to add extra keys that will be used heavily throughout the
+defined class.

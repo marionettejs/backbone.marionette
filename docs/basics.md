@@ -71,7 +71,7 @@ with a `myRegion` region created on the `.my-region` element.
 
 In almost every instance where we can set a value, we can also assign a function
 to figure out the value at runtime. In this case, Marionette will run the
-function on instantiating and use the returned value:
+function on instantiation and use the returned value:
 
 ```javascript
 var Mn = require('backbone.marionette');
@@ -114,6 +114,15 @@ documentation.
 
 There are some exceptions to this general rule that will be documented in the
 relevant places.
+
+### Function Context
+
+Each function call will receive the class instance as its `this` context - this
+gives you a handy way to access `this` in instances where it may have changed.
+For example, the value or result of
+[`templateContext`](./marionette.view.md#template-context) is
+[bound to its data object](./marionette.view.md#binding-of-this) so using a
+function is the only way to access the view's context directly.
 
 ## Setting Options
 

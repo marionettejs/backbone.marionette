@@ -5,6 +5,7 @@ describe('base view', function() {
     beforeEach(function() {
       this.initializeStub = this.sinon.stub();
       this.viewConstructorSpy = this.sinon.spy(Backbone, 'View');
+      this.viewInitializeSpy = this.sinon.spy(Marionette.View.prototype, 'initialize');
 
       this.View = Marionette.View.extend({
         initialize: this.initializeStub
@@ -17,12 +18,39 @@ describe('base view', function() {
       expect(this.viewConstructorSpy).to.have.been.calledOnce;
     });
 
+    it('should call the Marionette.View initialize', function() {
+      expect(this.viewInitializeSpy).to.have.been.calledOnce;
+    });
+
     it('should call initialize', function() {
       expect(this.initializeStub).to.have.been.calledOnce;
     });
 
     it('should set _behaviors', function() {
       expect(this.view._behaviors).to.be.eql({});
+    });
+
+    it('should reset isDestroyed', function() {
+      expect(this.view).to.be.have.property('isDestroyed', false);
+    });
+
+    describe('and re-initializing after destroying', function() {
+      beforeEach(function() {
+        this.view.destroy();
+        this.view.initialize();
+      });
+
+      it('should call the Marionette.View initialize', function() {
+        expect(this.viewInitializeSpy).to.have.been.calledTwice;
+      });
+
+      it('should call initialize', function() {
+        expect(this.initializeStub).to.have.been.calledTwice;
+      });
+
+      it('should reset isDestroyed', function() {
+        expect(this.view).to.be.have.property('isDestroyed', false);
+      });
     });
   });
 

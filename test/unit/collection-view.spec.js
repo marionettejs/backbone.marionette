@@ -951,11 +951,18 @@ describe('collection view', function() {
   describe('when a child view triggers an event', function() {
     beforeEach(function() {
       this.someEventSpy = this.sinon.stub();
-
+      this.CollectionViewTriggers = this.CollectionView.extend({
+        'onChildViewTriggerSomeEventStub': this.sinon.stub()
+      });
       this.model = new Backbone.Model({foo: 'bar'});
       this.collection = new Backbone.Collection([this.model]);
 
-      this.collectionView = new this.CollectionView({collection: this.collection});
+      this.collectionView = new this.CollectionViewTriggers({
+        collection: this.collection,
+        childViewTriggers: {
+          'some:event': 'child:view:trigger:some:event:stub'
+        }
+      });
       this.collectionView.on('childview:some:event', this.someEventSpy);
       this.collectionView.render();
 
@@ -970,6 +977,10 @@ describe('collection view', function() {
 
     it('should provide the relevant parameters', function() {
       expect(this.someEventSpy).to.have.been.calledWith('test', this.model);
+    });
+
+    it('should bubble up to the parent collection view childViewTriggers stub', function() {
+      expect(this.collectionView.onChildViewTriggerSomeEventStub).to.have.been.calledWith('test', this.model);
     });
   });
 
@@ -1196,7 +1207,7 @@ describe('collection view', function() {
         this.childViewAtIndex0 = this.collectionView.children.findByIndex(0);
 
         this.beforeModel = new Backbone.Model({foo: 0});
-        this.beforeView = this.collectionView._addChild(this.beforeModel, this.ChildView, 0);
+        this.collectionView._addChild(this.beforeModel, this.ChildView, 0);
       });
 
       it('should increment the later childView indexes', function() {

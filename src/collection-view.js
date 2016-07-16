@@ -158,13 +158,13 @@ const CollectionView = Backbone.View.extend({
     } else {
       this.filter = filter;
     }
+
     return this;
   },
 
   // `removeFilter` is actually an alias for removing filters.
   removeFilter(options) {
-    this.setFilter(null, options);
-    return this;
+    return this.setFilter(null, options);
   },
 
   // Calculate and apply difference by cid between `models` and `previousModels`.

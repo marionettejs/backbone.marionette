@@ -296,7 +296,7 @@ const CollectionView = Backbone.View.extend({
 
   // Allow the collection to be sorted by a custom view comparator
   _filteredSortedModels(addedAt) {
-    if (!this.collection) { return []; }
+    if (!this.collection || !this.collection.length) { return []; }
 
     const viewComparator = this.getViewComparator();
     let models = this.collection.models;

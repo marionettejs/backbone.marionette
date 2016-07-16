@@ -504,4 +504,3 @@ describe('onAttach', function() {
     });
   });
 });
-

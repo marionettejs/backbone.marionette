@@ -119,7 +119,7 @@ You can read the annotations for all the details of how Marionette works and adv
 
 MarionetteJS currently works with the following libraries:
 
-* [jQuery](http://jquery.com) v1.8+
+* [jQuery](http://jquery.com) v1.8 - 2.4.7
 * [Underscore](http://underscorejs.org) v1.4.4 - 1.8.3
 * [Backbone](http://backbonejs.org) v1.0.0 - 1.2.1 are preferred.
 * [Backbone.Wreqr](https://github.com/marionettejs/backbone.wreqr) Comes automatically with the bundled build.

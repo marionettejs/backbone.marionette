@@ -164,11 +164,17 @@ const Region = MarionetteObject.extend({
 
   // Restore the region's element in the DOM.
   _restoreEl() {
-    if (!this.currentView) {
+    // There is nothing to replace
+    if (!this._isReplaced) {
       return;
     }
 
     const view = this.currentView;
+
+    if (!view) {
+      return;
+    }
+
     const parent = view.el.parentNode;
 
     if (!parent) {
@@ -179,6 +185,7 @@ const Region = MarionetteObject.extend({
     this._isReplaced = false;
   },
 
+  // Check to see if the region's el was replaced.
   isReplaced() {
     return !!this._isReplaced;
   },
@@ -210,9 +217,7 @@ const Region = MarionetteObject.extend({
     view.off('destroy', this.empty, this);
     this.triggerMethod('before:empty', this, view);
 
-    if (this._isReplaced) {
-      this._restoreEl();
-    }
+    this._restoreEl();
 
     delete this.currentView;
 

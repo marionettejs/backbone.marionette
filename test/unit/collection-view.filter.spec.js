@@ -525,4 +525,26 @@ describe('collection view - filter', function() {
     });
   });
 
+  describe('when filter is removed', function() {
+    beforeEach(function() {
+      this.passedModels = [this.passModel];
+      this.models = [this.passModel, this.failModel];
+      this.collection.set(this.models);
+      this.collectionView = new this.CollectionView();
+      this.sinon.spy(this.collectionView, 'setFilter');
+      this.sinon.spy(this.collectionView, '_applyModelDeltas');
+      this.collectionView.render();
+    });
+
+    it('it should render unfiltered views', function() {
+      this.collectionView.removeFilter();
+      expect(this.collectionView._applyModelDeltas).to.have.been.calledOnce
+        .and.calledWith(this.models, this.passedModels);
+    });
+
+    it('it should not render views when "preventRender" option is true', function() {
+      this.collectionView.removeFilter({preventRender: true});
+      expect(this.collectionView._applyModelDeltas).to.not.have.been.called;
+    });
+  });
 });

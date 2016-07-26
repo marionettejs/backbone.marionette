@@ -480,13 +480,13 @@ However, a region will only be able to populate itself if the `View` has access 
 When your views get some more regions, you may want to think of the most efficient way to render your views. Since manipulating the DOM is performany heavy, it's best practice to render most of your views at once.
 
 Marionette provides a simple mechanism to infinitely nest views in a single paint: just render all
-of the children in the onBeforeShow callback.
+of the children in the onRender callback.
 
 ```javascript
 var Mn = require('backbone.marionette');
 
 var ParentView = Mn.View.extend({
-  onBeforeShow: function() {
+  onRender: function() {
     this.showChildView('header', new HeaderView());
     this.showChildView('footer', new FooterView());
   }
@@ -497,7 +497,7 @@ myRegion.show(new ParentView(), options);
 In this example, the doubly-nested view structure will be rendered in a single paint.
 
 This system is recursive, so it works for any deeply nested structure. The child views
-you show can render their own child views within their onBeforeShow callbacks!
+you show can render their own child views within their onRender callbacks!
 
 ### Listening to events on children
 

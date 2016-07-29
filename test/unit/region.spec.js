@@ -23,6 +23,10 @@ describe('region', function() {
       this.optionRegionJquery = new Backbone.Marionette.Region({el: $(this.el)});
     });
 
+    it('should not have been replaced', function() {
+      expect(this.customRegion.isReplaced()).to.be.false;
+    });
+
     it('should work when el is passed in as an option', function() {
       expect(this.optionRegionJquery.$el[0]).to.equal(this.el);
       expect(this.optionRegionJquery.el).to.equal(this.el);
@@ -300,6 +304,7 @@ describe('region', function() {
 
         describe('when setting the "replaceElement" class option', function() {
           beforeEach(function() {
+            this.sinon.spy(this.region, '_restoreEl');
             // empty region to clean existing view
             this.$parentEl = this.region.$el.parent();
             this.regionHtml = this.$parentEl.html();
@@ -308,12 +313,32 @@ describe('region', function() {
             this.region.show(this.view, this.showOptions);
           });
 
+          it('should have replaced the "el"', function() {
+            expect(this.region.isReplaced()).to.be.true;
+          });
+
           it('should append the view HTML to the parent "el"', function() {
             expect(this.$parentEl).to.contain.$html(this.view.$el.html());
           });
 
           it('should remove the region\'s "el" from the DOM', function() {
             expect(this.$parentEl).to.not.contain.$html(this.regionHtml);
+          });
+
+          it('should call _restoreEl', function() {
+            expect(this.region._restoreEl).to.have.been.called;
+          });
+
+          it('should not restore if the "currentView" has been deleted from the region', function() {
+            delete this.region.currentView;
+            this.region._restoreEl();
+            expect(this.region.currentView).to.be.undefined;
+          });
+
+          it('should not restore if the "currentView.el" has been remove from the DOM', function() {
+            this.view.remove();
+            this.region._restoreEl();
+            expect(this.region.currentView.el.parentNode).is.falsy;
           });
 
           describe('and then emptying the region', function() {
@@ -350,9 +375,9 @@ describe('region', function() {
 
     describe('when setting the "replaceElement" class option', function() {
       beforeEach(function() {
+        this.sinon.spy(this.region, '_restoreEl');
         // empty region to clean existing view
         this.region.empty();
-
         this.$parentEl = this.region.$el.parent();
         this.regionHtml = this.$parentEl.html();
         this.region.replaceElement = true;
@@ -365,6 +390,10 @@ describe('region', function() {
 
       it('should remove the region\'s "el" from the DOM', function() {
         expect(this.$parentEl).to.not.contain.$html(this.regionHtml);
+      });
+
+      it('should call _restoreEl', function() {
+        expect(this.region._restoreEl).to.have.been.called;
       });
 
       describe('and then emptying the region', function() {

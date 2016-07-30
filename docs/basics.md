@@ -39,8 +39,8 @@ var view = new MyView();
 
 ### Value Attributes
 
-When we extend classes, we can set a form of class attributes by setting new
-values to be a specific value by setting it when we extend our class:
+When we extend classes, we can provide class attributes with specific values by
+defining them in the object we pass as the `extend` parameter:
 
 ```javascript
 var Mn = require('backbone.marionette');
@@ -117,8 +117,9 @@ relevant places.
 
 ### Function Context
 
-Each function call will receive the class instance as its `this` context - this
-gives you a handy way to access `this` in instances where it may have changed.
+When using functions to set attributes, Marionette will assign the instance of
+your new class as `this`. You can use this feature to ensure you're able to
+access your object in cases where `this` isn't what you might expect it to be.
 For example, the value or result of
 [`templateContext`](./marionette.view.md#template-context) is
 [bound to its data object](./marionette.view.md#binding-of-this) so using a
@@ -134,13 +135,17 @@ methods.
 ```javascript
 var Mn = require('backbone.marionette');
 
-var MyView = Mn.View.extend();
+var MyView = Mn.View.extend({
+  checkOption: function() {
+    console.log(this.getOption('foo'));
+  }
+});
 
 var view = new MyView({
   foo: 'some text'
 });
 
-view.checkOption();
+view.checkOption();  // prints 'some text'
 ```
 
 ### The `getOption` Method
@@ -173,7 +178,7 @@ accessible via `getOption` and should be accessed as just `view.model` or
 
 The `mergeOptions` method takes two arguments: an `options` object and `keys` to
 pull from the options object. Any matching `keys` will be merged onto the
-object instance. For example:
+class instance. For example:
 
 ```javascript
 var Bb = require('backbone');

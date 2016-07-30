@@ -12,6 +12,7 @@ patterns etc.
 * [Class-based Inheritance](#class-based-inheritance)
   * [Value Attributes](#value-attributes)
   * [Functions Returning Values](#functions-returning-values)
+  * [Binding Attributes on Instantation](#binding-attributes-on-instantiation)
 * [Setting Options](#setting-options)
   * [The `getOption` Method](#the-getoption-method)
   * [The `mergeOptions` Method](#the-mergeoptions-method)
@@ -124,6 +125,52 @@ For example, the value or result of
 [`templateContext`](./marionette.view.md#template-context) is
 [bound to its data object](./marionette.view.md#binding-of-this) so using a
 function is the only way to access the view's context directly.
+
+### Binding Attributes on Instantiation
+
+In Marionette, most attributes can be bound on class instantiation in addition
+to being set when the [class is defined](#class-based-inheritance). You can use
+this to bind events, triggers, models, and collections at runtime:
+
+```javascript
+var Mn = require('backbone.marionette');
+
+var MyView = Mn.View.extend({
+  template: '#template-identifier'
+});
+
+var myView = new MyView({
+  triggers: {
+    'click a': 'show:link'
+  }
+});
+```
+
+This will set a trigger called `show:link` that will be fired whenever the user
+clicks an `<a>` inside the view.
+
+Options set here will override options set on class definition. So, for example:
+
+```javascript
+var Mn = require('backbone.marionette');
+
+var MyView = Mn.View.extend({
+  template: '#template-identifier',
+
+  triggers: {
+    'click @ui.save': 'save:form'
+  }
+});
+
+var myView = new MyView({
+  triggers: {
+    'click a': 'show:link'
+  }
+});
+```
+
+In this example, the trigger for `safe:form` will no longer be fired, as the
+trigger for `show:link` completely overrides it.
 
 ## Setting Options
 

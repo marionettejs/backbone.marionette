@@ -14,7 +14,7 @@ const normalizeUIKeys = function(hash, ui) {
 // utility method for parsing @ui. syntax strings
 // into associated selector
 const normalizeUIString = function(uiString, ui) {
-  return uiString.replace(/@ui\.[a-zA-Z_$0-9]*/g, (r) => {
+  return uiString.replace(/@ui\.[a-zA-Z-_$0-9]*/g, (r) => {
     return ui[r.slice(4)];
   });
 };

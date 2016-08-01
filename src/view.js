@@ -26,6 +26,10 @@ Marionette.View = Backbone.View.extend({
     Marionette.MonitorDOMRefresh(this);
   },
 
+  initialize: function() {
+    this.isDestroyed = false;
+  },
+
   // Get the template for this view
   // instance. You can set a `template` attribute in the view
   // definition or pass a `template: "whatever"` parameter in

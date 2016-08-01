@@ -16,6 +16,7 @@ your router's core logic readable.
   * [Add Routes At Runtime](#add-routes-at-runtime)
 * [Specify A Controller](#specify-a-controller)
   * [Using Marionette.Object](#using-marionette-object)
+* [Backbone History](#backbone-history)
 * [onRoute](#onroute)
 
 ## Using the AppRouter
@@ -45,55 +46,73 @@ var EmailRouter = Mn.AppRouter.extend({
 
 Assuming our application is served from the root, whenever the user accesses
 `http://ourapplication.com/#emails/email-subject-line-123`, the method
-`showEmail` will be called. This will be covered in more detail below.
+`showEmail` will be called with `email-subject-line-123` as its argument. This
+will be covered in more detail below.
 
 ## Configure Routes
 
-The AppRouter adds the `appRoutes` option that lets you determine actions to
-occur
-Configure an AppRouter with `appRoutes`. The route definition is passed on to Backbone's standard routing handlers. This means that you define routes like you normally would.  However, instead of providing a callback method that exists on the router, you provide a callback method that exists on the controller, which you specify for the router instance (see below.)
+The AppRouter uses the `appRoutes` option to define how we respond to routes
+being accessed. To define routes, set the route as your key and the method to
+call as a string referencing a method on your controller. For more information
+on route definitions, see the [Backbone documentation][#backbone-routes].
+
+The major difference between `appRoutes` and `routes` is that we provide
+callbacks on a controller instead of directly on the router itself. This allows
+you to define a simpler router and keep your controller logic closer to the
+modules it interacts directly with:
+
+```javascript
+var Mn = require('backbone.marionette');
+var EmailController = require('./emails/controller/email');
+
+var MyRouter = Mn.AppRouter.extend({
+  controller: EmailController,
+
+  // "someMethod" must exist at controller.someMethod
+  appRoutes: {
+    'email': 'listEmails',
+    'email/:email': 'showEmail'
+  }
+});
+```
+
+As the `AppRouter` extends `Backbone.Router`, you can also define a `routes`
+attribute whose callbacks must be present on the `AppRouter`:
 
 ```javascript
 var Mn = require('backbone.marionette');
 
 var MyRouter = Mn.AppRouter.extend({
-  // "someMethod" must exist at controller.someMethod
-  appRoutes: {
-    "some/route": "someMethod"
+  routes: {
+    'email/:email': 'showEmail'
   },
 
-  /* standard routes can be mixed with appRoutes/Controllers above */
-  routes : {
-	"some/otherRoute" : "someOtherMethod"
-  },
-  someOtherMethod : function(){
-	// do something here.
+  showEmail: function(email) {
+    // show the email
   }
-
-});
+})
 ```
 
-You can also add standard routes to an AppRouter with methods on the router.
+See the [Backbone documentation][backbone-routes] for more information about
+defining `routes`.
 
 ### Configure Routes In Constructor
 
-Routes can be defined through the constructor function options, as well.
+If you want more control when managing your routes, you can define your routes
+[on router instantiation][basics-instantiation]:
 
 ```javascript
 var Mn = require('backbone.marionette');
+var EmailController = require('./emails/controllers/email');
 
 var MyRouter = new Mn.AppRouter({
-  controller: myController,
+  controller: EmailController,
   appRoutes: {
-    "foo": "doFoo",
-    "bar/:id": "doBar"
+    'email/': 'listEmails',
+    'email/:email': 'showEmail'
   }
 });
 ```
-
-This allows you to create router instances without having to `.extend`
-from the AppRouter. You can just create the instance with the routes defined
-in the constructor, as shown.
 
 ### Add Routes At Runtime
 
@@ -169,7 +188,10 @@ you want to access the helper tools of the Object API.
 
 ## onRoute
 
-If it exists, AppRouters will call the `onRoute` method whenever a user navigates within your app. The
-callback receives three arguments: the name, path, and arguments of the route.
+If it exists, AppRouters will call the `onRoute` method whenever a user
+navigates within your app. The callback receives three arguments: the name,
+path, and arguments of the route.
 
 [backbone-router]: http://backbonejs.org/#Router
+[backbone-routes]: http://backbonejs.org/#Router-routes
+[basics-instantiation]: ./basics.md#binding-attributes-on-instantiation

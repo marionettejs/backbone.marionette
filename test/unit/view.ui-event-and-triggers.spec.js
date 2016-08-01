@@ -13,17 +13,18 @@ describe('view ui event trigger configuration', function() {
       this.uiHash = {
         foo: '#foo',
         bar: '#bar',
-        baz: '#baz'
+        'some-baz': '#baz'
       };
 
       this.triggersHash = {
-        'click @ui.foo': 'fooHandler'
+        'click @ui.foo': 'fooHandler',
+        'click @ui.some-baz': 'bazHandler'
       };
 
       this.eventsHash = {
         'click @ui.bar': this.barHandlerStub,
         'click div:not(@ui.bar)': this.notBarHandlerStub,
-        'click @ui.foo, @ui.bar, @ui.baz': this.fooBarBazHandlerStub
+        'click @ui.foo, @ui.bar, @ui.some-baz': this.fooBarBazHandlerStub
       };
     });
 
@@ -54,7 +55,7 @@ describe('view ui event trigger configuration', function() {
       });
 
       it('should correctly call an event', function() {
-        this.view.ui.baz.trigger('click');
+        this.view.ui['some-baz'].trigger('click');
         expect(this.notBarHandlerStub).to.have.been.calledOnce;
         expect(this.fooBarBazHandlerStub).to.have.been.calledOnce;
       });
@@ -87,7 +88,7 @@ describe('view ui event trigger configuration', function() {
       });
 
       it('should correctly call an event', function() {
-        this.view.ui.baz.trigger('click');
+        this.view.ui['some-baz'].trigger('click');
         expect(this.notBarHandlerStub).to.have.been.calledOnce;
         expect(this.fooBarBazHandlerStub).to.have.been.calledOnce;
       });

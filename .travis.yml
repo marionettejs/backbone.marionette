@@ -27,3 +27,12 @@ install:
   - curl -L https://rawgit.com/marionettejs/travis-ci-setup/master/ci.sh | bash
 after_success:
   - if [[ $MAINRUN == true ]]; then npm run-script coverage; fi
+before_deploy:
+  - npm install travis-ci
+deploy:
+  provider: releases
+  api_key: $GH_TOKEN
+  on:
+    tags: true
+after_deploy:
+  - node trigger-deploy-mn-com.js

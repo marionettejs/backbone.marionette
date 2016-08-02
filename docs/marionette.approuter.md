@@ -16,6 +16,7 @@ your router's core logic readable.
   * [Add Routes At Runtime](#add-routes-at-runtime)
 * [Specify A Controller](#specify-a-controller)
   * [Using Marionette.Object](#using-marionette-object)
+* [Multiple Routers](#multiple-routers)
 * [Backbone History](#backbone-history)
 * [onRoute](#onroute)
 
@@ -119,8 +120,8 @@ var MyRouter = new Mn.AppRouter({
 In addition to setting the `appRoutes` for an AppRouter, you can add app routes
 at runtime, to an instance of a router. This is done with the `appRoute()`
 method call. It works the same as the built-in `router.route()` call from
-Backbone's Router, but has all the same semantics and behavior of the `appRoutes`
-configuration.
+Backbone's Router, but has all the same semantics and behavior of the
+`appRoutes` configuration.
 
 ```javascript
 var Mn = require('backbone.marionette');
@@ -130,8 +131,9 @@ var MyRouter = Mn.AppRouter.extend({});
 var router = new MyRouter();
 router.appRoute("/foo", "fooThat");
 ```
-Also you can specify a controller with the multiple routes at runtime with method
-`processAppRoutes`. However, In this case the current controller of `AppRouter` will not change.
+
+Also you can specify a controller with the multiple routes at runtime with  the
+`processAppRoutes` method. This will preserve the existing controller as well:
 
 ```javascript
 var Mn = require('backbone.marionette');
@@ -162,29 +164,53 @@ Mn.AppRouter.extend({
 });
 ```
 
-... or in a parameter to the constructor:
-
-```js
-var myObj = {
-  someMethod: function(){ /*...*/ }
-};
-
-new MyRouter({
-  controller: myObj
-});
-```
-
-The object that is used as the `controller` has no requirements, other than it will
-contain the methods that you specified in the `appRoutes`.
-
-It is recommended that you divide your controller objects into smaller pieces of related functionality
-and have multiple routers / controllers, instead of just one giant router and controller.
+The object that is used as the `controller` has no requirements, other than it
+will contain the methods that you specified in the `appRoutes`.
 
 ### Using Marionette.Object
 
 A controller can also be an instance of
 [`Marionette.Object`](./marionette.object.md) - this is useful for cases where
-you want to access the helper tools of the Object API.
+you want to access the helper tools of the Object API and pass through
+information on instantiation.
+
+## Multiple Routers
+
+Marionette allows you to run multiple AppRouters in a single application. It's
+recommended that you break your routing into multiple sections, each with its
+own router and/or controller setting up the views for their own components. This
+will make it much easier to find and manage your route-handling logic as your
+application grows in complexity.
+
+## Backbone History
+
+The [Backbone History API][backbone-history] monitors the browser's location bar
+and triggers route changes on your app routers. It also provides a set of
+methods to change the contents of the location bar manually when you want to
+expose functionality to your user via a URL:
+
+```javascript
+var Bb = require('backbone');
+var Mn = require('backbone.marionette');
+
+var EmailView = require('./email/views/email');
+
+var EmailList = Mn.View.extend({
+  regions: {
+    layout: '.layout-hook'
+  },
+
+  showEmail: function(model) {
+    this.showChildView('layout', new EmailView({model: model}));
+    Bb.history.navigate('email/' + model.id);
+  }
+});
+```
+
+As stated in the Backbone documentation, `navigate` takes an `options` argument
+that lets you `trigger` on route change. We recommend against using this as it
+tends to cause side-effects like making it hard to ensure the route is only
+navigated to once, or unintentionally firing different route changes.
 
 ## onRoute
 
@@ -192,6 +218,7 @@ If it exists, AppRouters will call the `onRoute` method whenever a user
 navigates within your app. The callback receives three arguments: the name,
 path, and arguments of the route.
 
+[backbone-history]: http://backbonejs.org/#History
 [backbone-router]: http://backbonejs.org/#Router
 [backbone-routes]: http://backbonejs.org/#Router-routes
 [basics-instantiation]: ./basics.md#binding-attributes-on-instantiation

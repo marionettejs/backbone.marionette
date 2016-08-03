@@ -18,7 +18,7 @@ your router's core logic readable.
   * [Using Marionette.Object](#using-marionette-object)
 * [Multiple Routers](#multiple-routers)
 * [Backbone History](#backbone-history)
-* [onRoute](#onroute)
+* [Handling Route Changes](#handling-route-changes)
 
 ## Using the AppRouter
 
@@ -212,11 +212,34 @@ that lets you `trigger` on route change. We recommend against using this as it
 tends to cause side-effects like making it hard to ensure the route is only
 navigated to once, or unintentionally firing different route changes.
 
-## onRoute
+## Handling Route Changes
 
-If it exists, AppRouters will call the `onRoute` method whenever a user
-navigates within your app. The callback receives three arguments: the name,
-path, and arguments of the route.
+When the user navigates to a new route in your application that matches a route
+in your `AppRouter`, the `route` event will be fired. Listening to this will let
+you perform extra custom behavior:
+
+```javascript
+var Mn = require('backbone.marionette');
+var Controller = require('./email/controller');
+
+var MyRouter = Mn.AppRouter.extend({
+  controller: Controller,
+
+  appRoutes: {
+    'emails/:email': 'showEmail'
+  },
+
+  onRoute: function(name, path, args) {
+    console.log('User navigated to ' + path);
+  }
+});
+```
+
+This event handler takes three arguments:
+
+1. `name` - Name of the route
+2. `path` - Path that triggered this event
+3. `args` - Arguments passed into the route
 
 [backbone-history]: http://backbonejs.org/#History
 [backbone-router]: http://backbonejs.org/#Router

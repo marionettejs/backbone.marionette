@@ -55,6 +55,10 @@ Bubbled child events no longer pass the `childView` implicitly and only pass the
 arguments passed as part of `triggerMethod`. This means that the arguments
 passed to `onEvent` and `onChildviewEvent` are now identical.
 
+In Marionette 2, `childEvents` where bound on every event. In Marionette 3,
+`childViewEvents` are bound once and cached. This means that you cannot add new
+events after the view has been created.
+
 ### View `triggers`
 
 The view `triggers` attribute no longer passes an `options` attribute to event

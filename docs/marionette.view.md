@@ -25,10 +25,14 @@ multiple views through the `regions` attribute.
 * [Events](#events)
   * [onEvent Listeners](#onevent-listeners)
   * [Lifecycle Events](#lifecycle-events)
-    * ["before:render" / onBeforeRender event](#beforerender--onbeforerender-event)
-    * ["render" / onRender event](#render--onrender-event)
-    * ["before:destroy" / onBeforeDestroy event](#beforedestroy--onbeforedestroy-event)
-    * ["destroy" / onDestroy event](#destroy--ondestroy-event)
+    * [View Creation Lifecycle](#view-creation-lifecycle)
+    * [View Destruction Lifecycle](#view-destruction-lifecycle)
+    * [View Creation Events](#view-creation-events)
+    * [View Destruction Events](#view-destruction-events)
+    * [Other View Events](#other-view-events)
+  * [Binding To User Input](#binding-custom-events)
+    * [View `events`](#view-events)
+    * [View `triggers`](#view-triggers)
 * [Model and Collection Events](#model-and-collection-events)
   * [Model Events](#model-events)
   * [Collection Events](#collection-events)
@@ -609,7 +613,8 @@ it, according to the jQuery documentation.
 #### Referencing UI in events
 
 The UI attribute is especially useful when setting handlers in the
-[`events`](#events-and-callback-methods) object, simply use the `@ui.*` prefix:
+[`events`](#view-events) and [`triggers`](#view-triggers) objects - simply use
+the `@ui.` prefix:
 
 ```javascript
 var Mn = require('backbone.marionette');
@@ -634,6 +639,10 @@ var MyView = Mn.View.extend({
   }
 });
 ```
+
+In this example, when the user clicks on `#save-button`, `handleSave` will be
+called. If the user clicks on `.close-button`, then the event `close:view` will
+be fired on `MyView`.
 
 By prefixing with `@ui`, we can change the underlying template without having to
 hunt through our view for every place where that selector is referenced - just
@@ -683,17 +692,12 @@ This will display in the console:
 The onEvent listeners follow clearly defined rules for determining whether they
 should be called:
 
-  1. Split the event name around `:`
-  2. Capitalize the first letter of each "word"
-  3. Prepend `on` to the event name
-  4. If the associated method exists, call it
-  5. Any extra arguments passed to `triggerMethod` get passed in
+1. Split the words around the `:` characters - so `before`, `dom`, `refresh`
+2. Capitalize the first letter of each word - `Before`, `Dom`, `Refresh`
+3. Add a leading `on` - `on`, `Before`, `Dom`, `Refresh`
+4. Mash it into a single call - `onBeforeDomRefresh`
 
-A few simple examples:
-
-  1. `triggerMethod('render')` calls `onRender()`
-  2. `triggerMethod('before:render')` calls `onBeforeRender()`
-  3. `triggerMethod('before:sync', model)` calls `onBeforeSync(model)`
+For more detail, see the [events documentation](./marionette.events.md#magic-method-binding).
 
 ### Lifecycle Events
 
@@ -901,6 +905,149 @@ view.addRegion("foo", "#bar");
 
 view.removeRegion("foo");
 ```
+
+### Binding To User Input
+
+Views can bind custom events whenever users perform some interaction with the
+DOM. Using the view `events` and `triggers` handlers lets us either bind  user
+input directly to an action or fire a generic trigger that may or may not be
+handled.
+
+#### View `events`
+
+The view `events` attribute binds DOM events to functions or methods on the
+view. The simplest form is to reference a method on the view:
+
+```javascript
+var Mn = require('backbone.marionette');
+
+var MyView = Mn.View.extend({
+  events: {
+    'click a': 'showModal'
+  },
+
+  showModal: function(event) {
+    console.log('Show the modal');
+  }
+});
+```
+
+The DOM event gets passed in as the first argument, allowing you to see any
+information passed as part of the event.
+
+**When passing a method reference, the method must exist on the View.**
+
+##### Defining Listeners
+
+Listeners are defined as:
+
+```javascript
+eventname jqueryselector
+```
+
+* The `eventname` part refers to a jQuery DOM event e.g. `click` or `change`.
+* The `jqueryselector` part is a jQuery selector string e.g. `.myclass`
+
+You can also pass just the eventname part causing the event handler to fire on
+the entire view. This is especially useful for buttons and click handlers:
+
+```javascript
+var Mn = require('backbone.marionette');
+
+var ButtonView = Mn.View.extend({
+  tagName: 'button',
+
+  events: {
+    click: 'showAlert'
+  },
+
+  showAlert: function() {
+    alert('Button was clicked');
+  }
+});
+```
+
+##### Passing a Function
+
+The `events` attribute can also directly bind functions:
+
+```javascript
+var Mn = require('backbone.marionette');
+
+var MyView = Mn.View.extend({
+  events: {
+    'click a': function(event) {
+      console.log('Show the modal');
+    }
+  }
+});
+```
+
+As when passing a string reference to a view method, the `events` attribute
+passes in the `event` as the argument to the function called.
+
+#### View `triggers`
+
+The view `triggers` attribute binds DOM events to Marionette View events that
+can be responded to at the view or parent level. For more information on events,
+see the [events documentation](./marionette.events.md). This section will just
+cover how to bind these events to views.
+
+```javascript
+var Mn = require('backbone.marionette');
+
+var MyView = Mn.View.extend({
+  triggers: {
+    'click a': 'link:clicked'
+  },
+
+  onLinkClicked: function() {
+    console.log('Show the modal');
+  }
+});
+```
+
+When the `a` tag is clicked here, the `link:click` event is fired. This event
+can be listened to using the
+[Magic Method Binding](./marionette.events.md#magic-method-binding) technique
+discussed in the [events documentation](./marionette.events.md).
+
+##### Defining Listeners
+
+Listeners are defined as:
+
+```javascript
+eventname jqueryselector
+```
+
+* The `eventname` part refers to a jQuery DOM event e.g. `click` or `change`.
+* The `jqueryselector` part is a jQuery selector string e.g. `.myclass`
+
+You can also pass just the eventname part causing the event handler to fire on
+the entire view. This is especially useful for buttons and click handlers:
+
+```javascript
+var Mn = require('backbone.marionette');
+
+var ButtonView = Mn.View.extend({
+  tagName: 'button',
+
+  events: {
+    click: 'entire:view:clicked'
+  },
+
+  onEntireViewClicked: function() {
+    alert('Button was clicked');
+  }
+});
+```
+
+##### Event Bubbling
+
+The major benefit of the `triggers` attribute over `events` is that triggered
+events can bubble up to any parent views. For a full explanation of bubbling
+events and listening to child events, see the
+[event bubbling documentation](./marionette.events#child-view-events).
 
 ## Model and Collection events
 

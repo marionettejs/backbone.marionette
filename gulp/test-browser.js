@@ -15,7 +15,7 @@ function bundle() {
   return rollup({
     entry: ['./test/setup/browser.js', './test/unit/**/*.js'],
     plugins: [
-      multiEntry.default(),
+      multiEntry(),
       nodeResolve({ main: true }),
       commonjs(),
       nodeGlobals(),

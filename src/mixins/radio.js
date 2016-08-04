@@ -11,6 +11,8 @@ import {
   unbindEvents
 } from '../common/bind-events';
 
+import MarionetteError from '../error';
+
 // MixinOptions
 // - channelName
 // - radioEvents
@@ -23,6 +25,14 @@ export default {
 
     if (!channelName) {
       return;
+    }
+
+    /* istanbul ignore next */
+    if (!Radio) {
+      throw new MarionetteError({
+        name: 'BackboneRadioMissing',
+        message: 'The dependency "backbone.radio" is missing.'
+      });
     }
 
     const channel = this._channel = Radio.channel(channelName);

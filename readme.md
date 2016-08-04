@@ -79,23 +79,6 @@ We're happy to discuss design patterns and learn how you're using Marionette.
 * Flexible, "as-needed" architecture allowing you to pick and choose what you need
 * And much, much more
 
-
-## Marionette Inspector
-
-<a href="https://github.com/marionettejs/marionette.inspector"><img src="http://i.imgur.com/B1q9QXH.jpg" align="center" /></a>
-
-* **Visualize** the view hierarchy with the UI tree
-* **Visualize** application activity with a full history of actions
-* **Inspect** view ui, events, listeners, properties
-* **Inspect** model attributes, listeners, properties
-* **Explore** Radio channel events, requests, commands
-* **Explore** application with an inspector magnifying glass
-* **Jump** between the inspector elements and source panel with intelligent links
-
-Download from the
-[Chrome Web Store](https://chrome.google.com/webstore/detail/marionette-inspector/fbgfjlockdhidoaempmjcddibjklhpka)
-Explore the code at [Github](https://github.com/marionettejs/marionette.inspector)
-
 ## Source Code and Downloads
 
 You can
@@ -140,8 +123,7 @@ MarionetteJS currently works with the following libraries:
 * [jQuery](http://jquery.com) v1.8+
 * [Underscore](http://underscorejs.org) v1.8.3
 * [Backbone](http://backbonejs.org) v1.3.3
-* [Backbone.Radio](https://github.com/marionettejs/backbone.radio) Comes bundled (v1.0.0)
-* [Backbone.BabySitter](https://github.com/marionettejs/backbone.babysitter) Comes bundled (v1.0.0)
+* [Backbone.Radio](https://github.com/marionettejs/backbone.radio) v2.0.0+
 
 Marionette has not been tested against any other versions of these
 libraries. You may or may not have success if you use a version other

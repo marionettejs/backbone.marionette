@@ -38,7 +38,6 @@
   },
   "github": "https://github.com/marionettejs/backbone.marionette",
   "dependencies": {
-    "backbone.babysitter": "1.0.0-pre.1",
     "backbone.radio": "2.0.0-pre.1"
   },
   "peerDependencies": {

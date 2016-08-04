@@ -1,3 +1,8 @@
+## v2.x - v3.0.0
+A lot of changes were made between v2 and v3. Please see the
+[upgrade guide on the website](http://marionettejs.com/docs/v3.0.0/upgrade.html)
+for the full list of changes and how to migrate to Marionette 3.
+
 ## v2.0.0 - v2.x
 No breaking changes have been introduced between these versions
 

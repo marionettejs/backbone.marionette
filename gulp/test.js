@@ -40,16 +40,6 @@ function coverage(done) {
     });
 }
 
-function testBuildCore() {
-  _registerBabel();
-  return _mocha('test/setup/build.js');
-}
-
-function testBuildBundled() {
-  _registerBabel();
-  return _mocha('test/setup/build-bundled.js');
-}
-
 gulp.task('coveralls', ['coverage'], function(){
   return gulp.src('coverage/lcov.info')
     .pipe(coveralls());
@@ -57,12 +47,9 @@ gulp.task('coveralls', ['coverage'], function(){
 
 gulp.task('coverage', ['lint-code'], coverage);
 
-gulp.task('test-build-core', testBuildCore);
-
-gulp.task('test-build-bundled', testBuildBundled);
-
-gulp.task('test-build', function(done) {
-  runSequence('test-build-core', 'test-build-bundled', done);
+gulp.task('test-build', function() {
+  _registerBabel();
+  return _mocha('test/setup/build.js');
 });
 
 gulp.task('test', test);

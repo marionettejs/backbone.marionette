@@ -2,7 +2,7 @@
   "name": "backbone.marionette",
   "description": "The Backbone Framework",
   "homepage": "http://marionettejs.org",
-  "main": "./lib/core/backbone.marionette.js",
+  "main": "./lib/backbone.marionette.js",
   "version": "3.0.0-pre.4",
   "keywords": [
     "backbone",

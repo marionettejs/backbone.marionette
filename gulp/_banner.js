@@ -3,7 +3,7 @@ import {version} from '../package.json';
 const now = new Date();
 const year = now.getFullYear();
 
-const core = `// MarionetteJS (Backbone.Marionette)
+export default `// MarionetteJS (Backbone.Marionette)
 // ----------------------------------
 // v${version}
 //
@@ -11,17 +11,3 @@ const core = `// MarionetteJS (Backbone.Marionette)
 // Distributed under MIT license
 //
 // http://marionettejs.com\n\n`;
-
-const bundled = `${core}
-/*!
-* Includes BabySitter
-* https://github.com/marionettejs/backbone.babysitter/
-*
-* Includes Radio
-* https://github.com/marionettejs/backbone.radio/
-*/\n\n\n`;
-
-export default {
-  core,
-  bundled
-};

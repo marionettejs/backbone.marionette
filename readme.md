@@ -140,8 +140,7 @@ MarionetteJS currently works with the following libraries:
 * [jQuery](http://jquery.com) v1.8+
 * [Underscore](http://underscorejs.org) v1.8.3
 * [Backbone](http://backbonejs.org) v1.3.3
-* [Backbone.Radio](https://github.com/marionettejs/backbone.radio) Comes bundled (v1.0.0)
-* [Backbone.BabySitter](https://github.com/marionettejs/backbone.babysitter) Comes bundled (v1.0.0)
+* [Backbone.Radio](https://github.com/marionettejs/backbone.radio) v2.0.0+
 
 Marionette has not been tested against any other versions of these
 libraries. You may or may not have success if you use a version other

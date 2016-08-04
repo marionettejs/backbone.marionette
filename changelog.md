@@ -1,3 +1,37 @@
+### v3.0.0-pre5
+
+#### Documentation
+
+* Improved installation docs.
+* Updated `CollectionView` docs to reflect API changes.
+* Improved `Behavior` docs.
+* Improved functions docs.
+* Improved update guide.
+* Added "basics" docs.
+
+#### API Changes
+
+* `emptyView` now accepts a function as an arg.
+* Removed the `apply:filter` event from `CollectionView`.
+* `removeChildView` now returns the removed view.
+* `bindEntityEvents` renamed `bindEvents`.
+* Deprecated Behavior Lookups.
+* Added Backbone.Babysitter to Mn and removed the Babysitter dependency.
+
+#### Bug fixes
+
+* `CollectionView` now only triggers `destroy:children` if it has been rendered.
+* Parent views will now successfully listen for `destroy` in `childViewEvents`.
+
+#### Misc
+
+* Replaced `var` and `let` with `const`.
+* Added consistent function declarations and added rules to eslint.
+* Tweaked peerDependencies to only allow patch versions.
+* Directory structure changes and file naming consistency.
+* Improved test coverage.
+* Removed bundled build.
+
 ### v3.0.0-pre4
 
 #### Documentation

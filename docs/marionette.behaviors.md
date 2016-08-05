@@ -24,7 +24,7 @@ There are two class level methods that you can override on the `Behaviors` class
 
 This method defines where your Behavior classes are stored. A simple implementation might look something like this.
 
-```js
+```javascript
 Marionette.Behaviors.behaviorsLookup = function() {
     return window.Behaviors;
 }
@@ -34,7 +34,7 @@ There are 2 different syntaxes for attaching Behaviors to a View.  The first is 
 
 In this sample, which uses the object syntax, your code will expect the following Behaviors to be present in `window.Behaviors.DestroyWarn` and `window.Behaviors.ToolTip`
 
-```js
+```javascript
 var MyView = Marionette.View.extend({
 	behaviors: {
         ToolTip: {},
@@ -47,7 +47,7 @@ var MyView = Marionette.View.extend({
 
 If you use a module loader like [requirejs](http://requirejs.org/) or [browserify](http://browserify.org/) you can use the array based syntax, where you pass in a Behavior Class directly or include it as a behaviorClass property on your options object.
 
-```js
+```javascript
 var Tooltip = require('behaviors/tooltip');
 var DestroyWarn = require('behaviors/destroy-warn');
 
@@ -63,7 +63,7 @@ var MyView = Marionette.View.extend({
 
 This method has a default implementation that is simple to override. It is responsible for the lookup of single Behavior when given an options object and a key, and is used for both the array and object based notations.
 
-```js
+```javascript
 getBehaviorClass: function(options, key) {
     if (options.behaviorClass) {
         return options.behaviorClass;

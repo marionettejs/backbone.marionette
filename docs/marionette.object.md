@@ -23,7 +23,7 @@ Initialize is called immediately after the Object has been instantiated,
 and is invoked with the same arguments that the constructor received.
 
 
-```js
+```javascript
 var Mn = require('backbone.marionette');
 
 var Friend = Mn.Object.extend({
@@ -41,7 +41,7 @@ new Friend({name: 'John'});
 This makes it easy for Objects to emit events that other objects can listen for
 with `on` or `listenTo`.
 
-```js
+```javascript
 var Mn = require('backbone.marionette');
 
 var Friend = Mn.Object.extend({
@@ -62,7 +62,7 @@ john.graduate();
 ## Radio Events
 `Marionette.Object` integrates with `Backbone.Radio` to provide powerful messaging capabilities.  Objects can respond to both of Radio's message types; `Events` and `Requests`.  The syntax is similar to the `events` syntax from Backbone Views, and looks like this:
 
-```js
+```javascript
 radioEvents: {
   'app start': 'onAppStart',
   'books finish': 'onBooksFinish',
@@ -75,7 +75,7 @@ radioRequests: {
 
 where each hash value is in the form `'channel eventName' : 'handler'`.  So
 
-```js
+```javascript
 radioRequests: {
   'app doFoo': 'executeFoo',
 },
@@ -106,7 +106,7 @@ Invoking the `destroy` method will trigger a "before:destroy" event and correspo
 `onBeforeDestroy` method call. These calls will be passed any arguments `destroy`
 was invoked with. Invoking `destroy` will return the object, this can be useful for chaining.
 
-```js
+```javascript
 var Mn = require('backbone.marionette');
 
 // define a object with an onDestroy method
@@ -138,7 +138,7 @@ Selections is a simple Object that manages a selection of things.
 Because Selections extends from Object, it gets `initialize` and `Events`
 for free.
 
-```js
+```javascript
 var Mn = require('backbone.marionette');
 
 var Selections = Mn.Object.extend({

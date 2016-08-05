@@ -94,7 +94,7 @@ Child views must be defined before they are referenced by the
 Alternatively, you can specify a `childView` in the options for
 the constructor:
 
-```js
+```javascript
 var Mn = require('backbone.marionette');
 
 var MyCollectionView = Mn.CollectionView.extend({...});
@@ -112,7 +112,7 @@ returned by this method is the `ChildView` class that will be instantiated
 when a `Model` needs to be initially rendered. This method also gives you
 the ability to customize per `Model` `ChildViews`.
 
-```js
+```javascript
 var Bb = require('backbone');
 var Mn = require('backbone.marionette');
 
@@ -165,7 +165,7 @@ a `childViewOptions` definition on your collection view as an object
 literal. This will be passed to the constructor of your childView as part
 of the `options`.
 
-```js
+```javascript
 var Mn = require('backbone.marionette');
 
 var ChildView = Mn.View.extend({
@@ -189,7 +189,7 @@ the function should you need access to it when calculating
 `childViewOptions`. The function must return an object, and the attributes
 of the object will be copied to the `childView` instance's options.
 
-```js
+```javascript
 var Mn = require('backbone.marionette');
 
 var CollectionView = Mn.CollectionView.extend({
@@ -210,7 +210,7 @@ through the collection view. To do this, set the `childViewEventPrefix`
 on the collection view. For more information on the `childViewEventPrefix` see
 ["childview:*" event bubbling from child views](#childview-event-bubbling-from-child-views)
 
-```js
+```javascript
 var Mn = require('backbone.marionette');
 
 var CV = Mn.CollectionView.extend({
@@ -237,7 +237,7 @@ A `childViewEvents` hash or method permits handling of child view events without
 manually setting bindings. The values of the hash can either be a function or a string
 method name on the collection view.
 
-```js
+```javascript
 var Mn = require('backbone.marionette');
 
 // childViewEvents can be specified as a hash...
@@ -268,7 +268,7 @@ var MyCollectionView = Mn.CollectionView.extend({
 
 `childViewEvents` also catches custom events fired by a child view.
 
-```js
+```javascript
 var Mn = require('backbone.marionette');
 
 // The child view fires a custom event, `show:message`
@@ -320,7 +320,7 @@ setting bindings. The values of the hash should be a string of the event to trig
 `childViewTriggers` is sugar on top of [`childViewEvents`](#collectionviews-childviewevents) much
 in the same way that [View `triggers`](#abstractviewtriggers) are sugar for [View `events`](#abstractviewevents).
 
-```js
+```javascript
 var Mn = require('backbone.marionette');
 
 // The child view fires a custom event, `show:message`
@@ -371,7 +371,7 @@ to store and manage its child views. This allows you to easily access
 the views within the collection view, iterate them, find them by
 a given indexer such as the view's model or collection, and more.
 
-```js
+```javascript
 var Mn = require('backbone.marionette');
 
 var cv = new Mn.CollectionView({
@@ -401,7 +401,7 @@ The `buildChildView` is responsible for taking the ChildView class and
 instantiating it with the appropriate data. This method takes three
 parameters and returns a view instance to be used as thechild view.
 
-```js
+```javascript
 buildChildView: function(child, ChildViewClass, childViewOptions){
   // build the final list of options for the childView class
   var options = _.extend({model: child}, childViewOptions);
@@ -414,7 +414,7 @@ buildChildView: function(child, ChildViewClass, childViewOptions){
 Override this method when you need a more complicated build, but use [`childView`](#collectionviews-childview)
 if you need to determine _which_ View class to instantiate.
 
-```js
+```javascript
 var Bb = require('backbone');
 var Mn = require('backbone.marionette');
 
@@ -456,7 +456,7 @@ care.
 This method takes two parameters, the child view instance and the index for
 where it should be placed within the [CollectionView's children](#collectionviews-children).
 
-```js
+```javascript
 var Mn = require('backbone.marionette');
 
 Mn.CollectionView.extend({
@@ -473,7 +473,7 @@ The `removeChildView` method is useful if you need to remove a view from the `Co
 
 This method the child view instance to remove as its parameter.
 
-```js
+```javascript
 var Mn = require('backbone.marionette');
 
 Mn.CollectionView.extend({
@@ -495,7 +495,7 @@ the list of childViews, you can specify an `emptyView` attribute on your
 collection view. The `emptyView` just like the [`childView`](#collectionviews-childview) can also be passed as an option on instantiation or can be a
 function that returns the `emptyView`.
 
-```js
+```javascript
 var Mn = require('backbone.marionette');
 
 var MyEmptyView = Mn.View.extend({
@@ -515,7 +515,7 @@ Similar to [`childView`](#collectionviews-childview) and [`childViewOptions`](#c
 
 If `emptyViewOptions` aren't provided the `CollectionView` will default to passing the `childViewOptions` to the `emptyView`.
 
-```js
+```javascript
 var Mn = require('backbone.marionette');
 
 var EmptyView = Mn.View({
@@ -538,7 +538,7 @@ var CollectionView = Mn.CollectionView({
 If you want to control when the empty view is rendered, you can override
 `isEmpty`:
 
-```js
+```javascript
 var Mn = require('backbone.marionette');
 
 var MyCollectionView = Mn.CollectionView.extend({
@@ -556,7 +556,7 @@ rendering the entire collection. It loops through each of the
 children in the collection and renders them individually as a
 `childView`. By default when a `collectionView` is fully rendered it buffers the DOM changes for a single [`attachBuffer`](#collectionviews-attachbuffer)] DOM change.
 
-```js
+```javascript
 var Mn = require('backbone.marionette');
 
 var MyCollectionView = Mn.CollectionView.extend({...});
@@ -584,7 +584,7 @@ view will destroy and remove that model's child view.
 When the collection for the view is sorted, the view will automatically re-sort its child views.
 If the [`reorderOnSort`](#collectionviews-reorderonsort) option is set it will attempt to reorder the DOM and do this without a full re-render, otherwise it will re-render if the order has changed. Please Note that if you apply a filter to the collection view and the filtered views change during a sort then it will always re-render.
 
-```js
+```javascript
 var Bb = require('backbone');
 var Mn = require('backbone.marionette');
 
@@ -626,7 +626,7 @@ You can override this by specifying an `attachHtml` method in your
 view definition. This method takes three parameters and has no return
 value.
 
-```js
+```javascript
 var Mn = require('backbone.marionette');
 
 Mn.CollectionView.extend({
@@ -667,7 +667,7 @@ increase the buffer provides.
 
 When overriding [`attachHtml`](#collectionviews-attachhtml) it may be necessary to also override how the buffer is attached. This method receives two parameters. The `collectionView` and the buffer HTML of all of the child views.
 
-```js
+```javascript
 var Mn = require('backbone.marionette');
 
 var MyCollectionView = Mn.CollectionView.extend({
@@ -685,7 +685,7 @@ var MyCollectionView = Mn.CollectionView.extend({
 destroys its children and cleans up listeners.
 
 
-```js
+```javascript
 var Bb = require('backbone');
 var Mn = require('backbone.marionette');
 
@@ -713,7 +713,7 @@ underlying `collection`'s models from being rendered as child views.
 The filter function takes a model from the collection and returns a truthy value if the child should be rendered,
 and a falsey value if it should not.
 
-```js
+```javascript
 var Bb = require('backbone');
 var Mn = require('backbone.marionette');
 
@@ -753,7 +753,7 @@ renders the new `ChildViews` in a efficient way, instead of
 rendering the whole DOM structure again.
 Passing `{ preventRender: true }` in the options argument will prevent the view being rendered.
 
-```js
+```javascript
 var Mn = require('backbone.marionette');
 
 var cv = new Mn.CollectionView({
@@ -778,7 +778,7 @@ cv.render();
 This function is actually an alias of `setFilter(null, options)`. It is useful for removing filters.
 `removeFilter` also accepts `preventRender` as a option.
 
-```js
+```javascript
 var Mn = require('backbone.marionette');
 
 var cv = new Mn.CollectionView({
@@ -800,7 +800,7 @@ cv.removeFilter({ preventRender: true });
 By default the `CollectionView` will maintain a sorted collection's order
 in the DOM. This behavior can be disabled by specifying `{sort: false}` on initialize. The `sort` flag cannot be changed after instantiation.
 
-```js
+```javascript
 var Bb = require('backbone');
 var Mn = require('backbone.marionette');
 
@@ -836,7 +836,7 @@ myCollection.sort();
 
 `CollectionView` allows for a custom `viewComparator` option if you want your `CollectionView`'s children to be rendered with a different sort order than the underlying Backbone collection uses.
 
-```js
+```javascript
 var Mn = require('backbone.marionette');
 
 var cv = new Mn.CollectionView({
@@ -855,7 +855,7 @@ sort by.
 
 Override this method to determine which `viewComparator` to use.
 
-```js
+```javascript
 var Mn = require('backbone.marionette');
 
 var MyCollectionView = Mn.CollectionView.extend({
@@ -901,7 +901,7 @@ possible, for example if you were to change the comparator on the collection.
 The `CollectionView` will re-render its children or [`reorder`](#collectionviews-reorder) them depending on [`reorderOnSort`](#collectionviews-reorderonsort).
 Override this function if you need further customization.
 
-```js
+```javascript
 var Mn = require('backbone.marionette');
 
 var MyCollectionView = Mn.CollectionView.extend({
@@ -927,7 +927,7 @@ Triggers when the `CollectionView` is rendered.
 You can implement this in your view to provide custom code for dealing
 with the view's `el` after it has been rendered:
 
-```js
+```javascript
 var Mn = require('backbone.marionette');
 
 var MyView = Mn.CollectionView.extend({...});
@@ -950,7 +950,7 @@ myView.render();
 
 The `render:children` event is triggered after a `collectionView`'s children have been rendered and buffered. It differs from the `collectionViews`'s `render` event in that it happens __only__ if the `collection` is not not empty. It may also happen when the children sort when [`reorderOnSort`](#collectionviews-reorderonsort) is false.
 
-```js
+```javascript
 var Bb = require('backbone');
 var Mn = require('backbone.marionette');
 
@@ -976,7 +976,7 @@ myView.render();
 
 Triggered just after destroying the view.  `onBeforeDestroy` is the optimal function for any additional necessary cleanup within the `collectionView`.
 
-```js
+```javascript
 var Mn = require('backbone.marionette');
 
 var MyView = Mn.CollectionView.extend({...});
@@ -999,7 +999,7 @@ myView.destroy();
 
 Triggered when the `collectionView` is destroyed or before the `collectionView`'s children are re-rendered.
 
-```js
+```javascript
 var Mn = require('backbone.marionette');
 
 var MyView = Mn.CollectionView.extend({...});
@@ -1029,7 +1029,7 @@ myView.destroy();
 
 The "add:child" event is triggered after rendering the view and adding it to the view's DOM element.
 
-```js
+```javascript
 var cv = new MyCV({...});
 
 cv.on({
@@ -1048,7 +1048,7 @@ Triggered when a childView instance has been destroyed and
 removed, when its child was deleted or removed from the
 collection.
 
-```js
+```javascript
 cv.on({
   'remove:child': function() {
     console.log('this will be called for each child removed from the collectionView');
@@ -1063,7 +1063,7 @@ cv.on({
 
 The `"render:empty"` event is triggered when rendering the empty view and adding it to the view's DOM element.
 
-```js
+```javascript
 var Mn = require('backbone.marionette');
 
 var myEmptyView = Mn.View.extend({
@@ -1092,7 +1092,7 @@ myCollectionView.render()
 
 Triggered just after destroying the empty view from the DOM.
 
-```js
+```javascript
 var Bb = require('backbone');
 var Mn = require('backbone.marionette');
 
@@ -1131,7 +1131,7 @@ collection.add([{foo: 'bar'}])
 
 When [`reorderOnSort`](#collectionviews-resortview) is set to `true`, these events are fired for the reordering of the collection.
 
-```js
+```javascript
 var Bb = require('backbone');
 var Mn = require('backbone.marionette');
 
@@ -1165,7 +1165,7 @@ collection view with the [`childViewEventPrefix`](#collectionviews-childvieweven
 That is, if a child view triggers "do:something", the
 parent collection view will then trigger "childview:do:something".
 
-```js
+```javascript
 var Mn = require('backbone.marionette');
 
 // set up basic collection
@@ -1209,7 +1209,7 @@ The following events are raised on child views during rendering and destruction 
 
 Note: These events are triggered on pure Backbone Views during child view rendering, but for a complete implementation of these events the Backbone View should fire `render` within `render()` and `destroy` within `remove()` as well as set the following flags:
 
-```js
+```javascript
 view.supportsRenderLifecycle = true;
 view.supportsDestroyLifecycle = true;
 ```

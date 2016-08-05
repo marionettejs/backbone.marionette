@@ -41,7 +41,7 @@ objects.
 RegionManagers can be instantiated directly, and can
 have regions added and removed via several methods:
 
-```js
+```javascript
 var rm = new Marionette.RegionManager();
 
 var region = rm.addRegion("foo", "#bar");
@@ -60,7 +60,7 @@ rm.removeRegion("foo");
 
 The RegionManager take an optional `region` option in their constructor. the regions are passed directly into `addRegions` for the region manager instance.
 
-```js
+```javascript
 var mananger = new Marionette.RegionManager({
   regions: {
     "aRegion": "#bar"
@@ -76,7 +76,7 @@ Regions can be added individually using the `addRegion`
 method. This method takes two parameters: the region name
 and the region definition.
 
-```js
+```javascript
 var rm = new Marionette.RegionManager();
 
 var region = rm.addRegion("foo", "#bar");
@@ -101,7 +101,7 @@ The object literal must contain region names as keys
 and region definitions as values. The return value
 is an object literal with all the created regions.
 
-```js
+```javascript
 var rm = new Marionette.RegionManager();
 
 // With an object literal
@@ -129,7 +129,7 @@ If you supply a function to `addRegions`, it will be
 called with the `RegionManager` instance context and
 all the arguments passed to `addRegions`.
 
-```js
+```javascript
 var rm = new Marionette.RegionManager();
 
 var regionDefaults = {
@@ -154,7 +154,7 @@ the use of a `defaults` parameter. Specify this
 parameter as an object literal with `key: value`
 pairs that will be applied to every region added.
 
-```js
+```javascript
 var rm = new Marionette.RegionManager();
 
 var defaults = {
@@ -178,7 +178,7 @@ A region instance can be retrieved from the
 RegionManager instance using the `get` method and
 passing in the name of the region.
 
-```js
+```javascript
 var rm = new Marionette.RegionManager();
 rm.addRegion("foo", "#bar");
 
@@ -191,7 +191,7 @@ Get all the regions from the region manager.
 Returns an object literal with named regions
 as attributes.
 
-```js
+```javascript
 var rm = new Marionette.RegionManager();
 rm.addRegion("foo", "#foo");
 rm.addRegion("bar", "#bar");
@@ -207,7 +207,7 @@ regions.bar; //=> bar region
 A region can be removed by calling the `removeRegion`
 method and passing in the name of the region.
 
-```js
+```javascript
 var rm = new Marionette.RegionManager();
 rm.addRegion("foo", "#bar");
 
@@ -224,7 +224,7 @@ You can quickly remove all regions from the
 RegionManager instance by calling the `removeRegions`
 method.
 
-```js
+```javascript
 var rm = new Marionette.RegionManager();
 rm.addRegions({
   foo: "#foo",
@@ -242,7 +242,7 @@ This will empty all regions, and remove them.
 You can quickly empty all regions from the RegionManager
 instance by calling the `emptyRegions` method.
 
-```js
+```javascript
 var rm = new Marionette.RegionManager();
 rm.addRegions({
   foo: "#foo",
@@ -262,7 +262,7 @@ A RegionManager instance can be destroyed entirely by
 calling the `destroy` method. This will both destroy
 and remove all regions from the RegionManager instance.
 
-```js
+```javascript
 var rm = new Marionette.RegionManager();
 rm.addRegions({
   foo: "#foo",
@@ -284,7 +284,7 @@ The `RegionManager` will trigger a "before:add:region"
 event before a region is added to the manager. This
 allows you to perform some actions on the region before it is added.
 
-```js
+```javascript
 var rm = new Marionette.RegionManager();
 
 rm.on("before:add:region", function(name, region){
@@ -302,7 +302,7 @@ allows you to use the region instance immediately,
 or attach the region to an object that needs a
 reference to it:
 
-```js
+```javascript
 var rm = new Marionette.RegionManager();
 
 rm.on("add:region", function(name, region){
@@ -319,7 +319,7 @@ The `RegionManager` will trigger a "before:remove:region"
 event before a region is removed from the manager.
 This allows you to perform any cleanup operations before the region is removed.
 
-```js
+```javascript
 var rm = new Marionette.RegionManager();
 
 rm.on("before:remove:region", function(name, region){
@@ -339,7 +339,7 @@ This allows you to use the region instance one last
 time, or remove the region from an object that has a
 reference to it:
 
-```js
+```javascript
 var rm = new Marionette.RegionManager();
 
 rm.on("remove:region", function(name, region){
@@ -361,7 +361,7 @@ been imported. For example, you can easily iterate over
 the entire collection of region instances by calling
 the `each` method:
 
-```js
+```javascript
 var rm = new Marionette.RegionManager();
 
 rm.each(function(region){

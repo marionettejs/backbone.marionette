@@ -110,7 +110,7 @@ Mn.AppRouter.extend({
 
 ... or in a parameter to the constructor:
 
-```js
+```javascript
 var myObj = {
   someMethod: function(){ /*...*/ }
 };

@@ -31,7 +31,7 @@ you to get the extend functionality for your object without having to
 decide if you want to use Backbone.View or Backbone.Model or another
 Backbone object to grab the method from.
 
-```js
+```javascript
 var Mn = require('backbone.marionette');
 
 var Foo = function(){};
@@ -56,7 +56,7 @@ var b = new Bar();
 
 Determines whether the passed-in node is a child of the `document` or not.
 
-```js
+```javascript
 var Mn = require('backbone.marionette');
 
 var div = document.createElement('div');
@@ -73,7 +73,7 @@ Mn.isNodeAttached(div);
 A handy function to pluck certain `options` and attach them directly to an instance.
 Most Marionette Classes, such as the Views, come with this method.
 
-```js
+```javascript
 var Mn = require('backbone.marionette');
 
 var MyView = Mn.View.extend({
@@ -95,7 +95,7 @@ var MyView = Mn.View.extend({
 Retrieve an object's attribute either directly from the object, or from
 the object's `this.options`, with `this.options` taking precedence.
 
-```js
+```javascript
 var Bb = require('backbone');
 var Mn = require('backbone.marionette');
 
@@ -125,7 +125,7 @@ attempt to read the value from the object directly.
 
 For example:
 
-```js
+```javascript
 var Bb = require('backbone');
 var Mn = require('backbone.marionette');
 
@@ -173,7 +173,7 @@ Invoke `triggerMethod` on a specific context.
 
 This is useful when it's not clear that the object has `triggerMethod` defined. In the case of views, `Marionette.AbstractView` defines `triggerMethod`, but `Backbone.View` does not.
 
-```js
+```javascript
 var Mn = require('backbone.marionette');
 
 Mn.triggerMethodOn(ctx, "foo", bar);
@@ -186,7 +186,7 @@ Mn.triggerMethodOn(ctx, "foo", bar);
 This method is used to bind a backbone "entity" (e.g. collection/model)
 to methods on a target object.
 
-```js
+```javascript
 var Bb = require('backbone');
 var Mn = require('backbone.marionette');
 
@@ -222,7 +222,7 @@ function can be supplied instead of a string handler name.
 This method can be used to unbind callbacks from entities' (e.g. collection/model) events. It's
 the opposite of bindEvents, described above. Consequently, the APIs are identical for each method.
 
-```js
+```javascript
 // Just like the above example we bind our model events.
 // This time, however, we unbind them on close.
 var Bb = require('backbone');
@@ -255,7 +255,7 @@ Bb.View.extend({
 This method is used to bind a radio requests
 to methods on a target object.
 
-```js
+```javascript
 var Mn = require('backbone.marionette');
 var Radio = require('backbone.radio');
 
@@ -294,7 +294,7 @@ configuration.
 This method is used to unbind a radio requests
 to methods on a target object.
 
-```js
+```javascript
 var Mn = require('backbone.marionette');
 var Radio = require('backbone.radio');
 
@@ -335,7 +335,7 @@ same hash with the function names replaced with the function references themselv
 
 This function is attached to the `Marionette.AbstractView` prototype by default. To use it from non-View classes you'll need to attach it yourself.
 
-```js
+```javascript
 var Mn = require('backbone.marionette');
 
 var View = Mn.View.extend({

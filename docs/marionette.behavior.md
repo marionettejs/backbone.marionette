@@ -182,7 +182,7 @@ var MyView = Mn.View.extend({
 
 Now let's create the `DestroyWarn` `Behavior`.
 
-```js
+```javascript
 var Mn = require('backbone.marionette');
 
 var DestroyWarn = Mn.Behavior.extend({
@@ -230,7 +230,7 @@ var ToolTip = Mn.Behavior.extend({
 In addition to extending a `View` with `Behavior`, a `Behavior` can itself use
 other Behaviors. The syntax is identical to that used for a `View`:
 
-```js
+```javascript
 var Mn = require('backbone.marionette');
 
 var Modal = Mn.Behavior.extend({

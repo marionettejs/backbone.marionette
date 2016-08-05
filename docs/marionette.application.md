@@ -14,7 +14,7 @@ The Application comes with a `start` method. This can be used to accomplish
 tasks before the rest of your application begins. Let's take a quick look at an
 example:
 
-```js
+```javascript
 // Create our Application
 var app = new Mn.Application();
 
@@ -105,7 +105,7 @@ your views and starting `Backbone.history`.
 
 ### Application Lifecycle
 
-```js
+```javascript
 var Bb = require('backbone');
 var Mn = require('backbone.marionette');
 
@@ -141,7 +141,7 @@ to each of your initializer functions, as well as the initialize events. This
 allows you to provide extra configuration for various parts of your app throughout the
 initialization sequence.
 
-```js
+```javascript
 var app = new App();
 
 app.start({

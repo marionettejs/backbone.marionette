@@ -37,7 +37,7 @@ The Application defines a single region `el` using the `region` attribute. This
 can be accessed through `getRegion()` or have a view displayed directly with
 `showView()`. Below is a short example:
 
-```js
+```javascript
 var Mn = require('backbone.marionette');
 var SomeView = require('./view');
 
@@ -65,7 +65,7 @@ although they will work for `Application` as well - just replace `regions` with
 
 You can use a jQuery string selector to define regions.
 
-```js
+```javascript
 var Mn = require('backbone.marionette');
 
 var MyView = Mn.View.extend({
@@ -122,7 +122,7 @@ these elements are usually very strict on what content they will allow.
 Once a region is defined, you can call its `show`
 and `empty` methods to display and shut-down a view:
 
-```js
+```javascript
 var myView = new MyView();
 var childView = new MyChildView();
 var mainRegion = myView.getRegion('main');
@@ -168,7 +168,7 @@ You can prevent this behavior by passing `{preventDestroy: true}` in the options
 parameter. Several events will also be triggered on the views; see
 [Region Events And Callbacks](#region-events-and-callbacks) for details.
 
-```js
+```javascript
 // Show the first view.
 var myView = new MyView();
 var childView = new MyChildView();
@@ -202,14 +202,14 @@ rendering hundreds or thousands of views at once.
 If you think these events might be causing some lag in your app, you can selectively turn them off
 with the `triggerBeforeAttach` and `triggerAttach` properties or `show()` options.
 
-```js
+```javascript
 // No longer trigger attach
 myRegion.triggerAttach = false;
 ```
 
 You can override this on a per-show basis by passing it in as an option to show.
 
-```js
+```javascript
 // This region won't trigger beforeAttach...
 myRegion.triggerBeforeAttach = false;
 
@@ -219,7 +219,7 @@ myRegion.show(myView, {triggerBeforeAttach: true});
 
 Or you can leave the events on by default but disable them for a single show.
 
-```js
+```javascript
 // This region will trigger attach events by default but not for this particular show.
 myRegion.show(myView, {triggerBeforeAttach: false, triggerAttach: false});
 ```
@@ -228,7 +228,7 @@ myRegion.show(myView, {triggerBeforeAttach: false, triggerAttach: false});
 
 In order to add conditional logic when rendering a view you can override the `renderView` method. This could be useful if you don't want the region to re-render views that aren't destroyed. By default this method will call `view.render`.
 
-```js
+```javascript
 var Mn = require('backbone.marionette');
 
 var CachingRegion = Mn.Region.extend({
@@ -243,7 +243,7 @@ var CachingRegion = Mn.Region.extend({
 
 In order to add conditional logic around whether the current view should be destroyed when showing a new one you can override the `shouldDestroyView` method. This is particularly useful as an alternative to the `preventDestroy` option when you wish to prevent destroy on all views that are shown in the region.
 
-```js
+```javascript
 var Mn = require('backbone.marionette');
 
 var CachingRegion = Mn.Region.extend({
@@ -273,7 +273,7 @@ being displayed, and deletes the cached `el`. The next time the
 region shows a view, the region's `el` is queried from
 the DOM.
 
-```js
+```javascript
 var myView = new MyView();
 myView.showChildView('main', new OtherView());
 var mainRegion = myView.getRegion('main');
@@ -289,7 +289,7 @@ to the DOM. This method receives one parameter - the view to show.
 
 The default implementation of `attachHtml` is:
 
-```js
+```javascript
 var Mn = require('backbone.marionette');
 
 Mn.Region.prototype.attachHtml = function(view){
@@ -300,7 +300,7 @@ Mn.Region.prototype.attachHtml = function(view){
 This replaces the contents of the region with the view's
 `el` / content. You can override `attachHtml` for transition effects and more.
 
-```js
+```javascript
 var Mn = require('backbone.marionette');
 
 Mn.Region.prototype.attachHtml = function(view){
@@ -316,7 +316,7 @@ extending from the Region class and including a custom attachHtml method.
 This example will make a view slide down from the top of the screen instead of just
 appearing in place:
 
-```js
+```javascript
 var Mn = require('backbone.marionette');
 
 var ModalRegion = Mn.Region.extend({
@@ -349,7 +349,7 @@ A region will raise a few events on itself and on the target view when showing a
 * `before:empty` / `onBeforeEmpty` - Called before the view has been emptied.
 * `empty` / `onEmpty` - Called when the view has been emptied.
 
-```js
+```javascript
 view.supportsRenderLifecycle = true;
 view.supportsDestroyLifecycle = true;
 ```
@@ -366,7 +366,7 @@ Once you define a region class, you can attach the
 new region class by specifying the region class as the
 value. In this case, `addRegions` expects the constructor itself, not an instance.
 
-```js
+```javascript
 var Mn = require('backbone.marionette');
 
 var FooterRegion = Mn.Region.extend({
@@ -383,7 +383,7 @@ var MyView = Mn.View.extend({
 You can also specify a selector for the region by using
 an object literal for the configuration.
 
-```js
+```javascript
 var Mn = require('backbone.marionette');
 
 var FooterRegion = Mn.Region.extend({
@@ -412,7 +412,7 @@ view after your app is up and running. To do this, you'll
 need to extend from `Region` as shown above and then use
 that constructor function on your own:
 
-```js
+```javascript
 var Mn = require('backbone.marionette');
 
 var SomeRegion = Mn.Region.extend({

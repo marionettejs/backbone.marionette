@@ -21,7 +21,7 @@ multiple views through the `regions` attribute.
   * [Advanced Rendering Techniques](#advanced-rendering-techniques)
 * [Managing an Existing Page](#managing-an-existing-page)
 * [Laying out Views - Regions](#laying-out-views-regions)
-* [Organising your View](#organising-your-view)
+* [Organizing your View](#organizing-your-view)
 * [Events](#events)
   * [onEvent Listeners](#onevent-listeners)
   * [Lifecycle Events](#lifecycle-events)
@@ -259,7 +259,8 @@ the [documentation for `Marionette.Object`](./marionette.object.md#getoption).
 #### Binding of `this`
 
 When using functions in the `templateContext` it's important to know that `this`
-is _bound to the `data` object and **not the view**_. An illustrative example:
+is _bound to the result of `serializeData()` and **not the view**_. An
+illustrative example:
 
 ```javascript
 var _ = require('underscore');
@@ -278,8 +279,10 @@ var MyView = Mn.View.extend({
 var myView = new MyView({contextKey: 'world'});
 ```
 
-The above code will fail because the context (`data`) object in the template
-_cannot see_ the view's `getOption`.
+The above code will fail because the context object in the template
+_cannot see_ the view's `getOption`. This would also apply to functions
+returned by a `templateContext` function, even though the function itself is
+bound to the view context.
 
 ## Managing an Existing Page
 
@@ -298,7 +301,7 @@ var MyView = Mn.View({
 ```
 
 Marionette will then attach all the usual
-[`event`](#events-and-callback-methods) and [`ui`](#organising-your-view)
+[`event`](#events-and-callback-methods) and [`ui`](#organizing-your-view)
 handlers to the view using the existing HTML. Though the View has no template,
 you can still listen to the `before:render` and `render` events that will fire
 as usual when `render` is called - or when you execute `region.show(view)`.
@@ -556,7 +559,7 @@ var MyView = Mn.View.extend({
 });
 ```
 
-## Organising your View
+## Organizing your View
 
 The `View` provides a mechanism to name parts of your template to be used
 throughout the view with the `ui` attribute. This provides a number of benefits:
@@ -739,7 +742,7 @@ These events are fired during the view's creation and rendering in a region.
 
 Triggered before a View is rendered.
 
-```js
+```javascript
 var Mn = require('backbone.marionette');
 
 Mn.View.extend({
@@ -755,7 +758,7 @@ Triggered after the view has been rendered.
 You can implement this in your view to provide custom code for dealing
 with the view's `el` after it has been rendered.
 
-```js
+```javascript
 var Mn = require('backbone.marionette');
 
 Mn.View.extend({
@@ -795,7 +798,7 @@ These events are fired during the view's destruction and removal from a region.
 
 Triggered just prior to destroying the view, when the view's `destroy()` method has been called.
 
-```js
+```javascript
 var Mn = require('backbone.marionette');
 
 Mn.View.extend({
@@ -822,7 +825,7 @@ just been destroyed.
 Triggered just after the view has been destroyed. At this point, the view has
 been completely removed from the DOM.
 
-```js
+```javascript
 var Mn = require('backbone.marionette');
 
 Mn.View.extend({
@@ -1211,7 +1214,7 @@ By default, models are serialized by cloning the attributes of the model.
 
 Collections are serialized into an object of this form:
 
-```js
+```javascript
 {
   items: [modelOne, modelTwo]
 }
@@ -1224,7 +1227,7 @@ the view's template.
 
 Let's take a look at some examples of how serializing data works.
 
-```js
+```javascript
 var myModel = new MyModel({foo: "bar"});
 
 new MyView({
@@ -1244,7 +1247,7 @@ MyView.render();
 If the serialization is a collection, the results are passed in as an
 `items` array:
 
-```js
+```javascript
 var myCollection = new MyCollection([{foo: "bar"}, {foo: "baz"}]);
 
 new MyView({

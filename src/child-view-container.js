@@ -24,6 +24,13 @@ _.extend(Container.prototype, {
   // cid (and model itself). Optionally specify
   // a custom key to store an retrieve the view.
   add(view, customIndex) {
+    return this._add(view, customIndex)._updateLength();
+  },
+
+  // To be used when avoiding call _updateLength
+  // When you are done adding all your new views
+  // call _updateLength
+  _add(view, customIndex) {
     const viewCid = view.cid;
 
     // store the view
@@ -39,7 +46,6 @@ _.extend(Container.prototype, {
       this._indexByCustom[customIndex] = viewCid;
     }
 
-    this._updateLength();
     return this;
   },
 
@@ -76,6 +82,13 @@ _.extend(Container.prototype, {
 
   // Remove a view
   remove(view) {
+    return this._remove(view)._updateLength();
+  },
+
+  // To be used when avoiding call _updateLength
+  // When you are done adding all your new views
+  // call _updateLength
+  _remove(view) {
     const viewCid = view.cid;
 
     // delete model index
@@ -84,24 +97,24 @@ _.extend(Container.prototype, {
     }
 
     // delete custom index
-    _.any(this._indexByCustom, function(cid, key) {
+    _.some(this._indexByCustom, _.bind(function(cid, key) {
       if (cid === viewCid) {
         delete this._indexByCustom[key];
         return true;
       }
-    }, this);
+    }, this));
 
     // remove the view from the container
     delete this._views[viewCid];
 
-    // update the length
-    this._updateLength();
     return this;
   },
 
   // Update the `.length` attribute on this container
   _updateLength() {
     this.length = _.size(this._views);
+
+    return this;
   }
 });
 

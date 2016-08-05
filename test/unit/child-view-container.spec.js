@@ -8,7 +8,8 @@ describe('childview container', function() {
         new Backbone.View(),
         new Backbone.View(),
         new Backbone.View()
-      ]
+      ];
+
       container = new Marionette.ChildViewContainer(views);
     });
 
@@ -100,7 +101,7 @@ describe('childview container', function() {
 
     beforeEach(function() {
       model = new Backbone.Model();
-      cust = 'custome indexer';
+      cust = 'custom indexer';
 
       view = new Backbone.View({
         model: model
@@ -112,9 +113,9 @@ describe('childview container', function() {
       container.remove(view);
     });
 
-    it('should update the size of the chidren', function() {
+    it('should update the size of the children', function() {
       expect(container.length).to.equal(0);
-    })
+    });
 
     it('should remove the index by model', function() {
       var v = container.findByModel(model);
@@ -168,7 +169,7 @@ describe('childview container', function() {
       container = new Marionette.ChildViewContainer();
       container.add(view);
 
-      container.each(function(v, k) {
+      container.each(function(v) {
         views.push(v);
       });
     });

@@ -15,10 +15,13 @@
   </a>
 </p>
 
-## Release Candidate v3.0.0-rc1
+## Marionette v3
 
-This is a "family and friends" release. The documentation is still mostly for 2.4.4.
-Please let us know if you run into any issues. Also, [please help us finish v3](https://github.com/marionettejs/backbone.marionette/milestones/v3.0.0)!
+Marionette 3 is now available! See our
+[upgrade notes](http://marionettejs.com/docs/v3.0.0) for the differences between
+v2 and v3. Please let us know if you encounter any issues so we can resolve
+them and
+[help us continue work on Marionette!](https://github.com/marionettejs/backbone.marionette/milestones/v3.x)
 
 ## About Marionette
 
@@ -56,7 +59,8 @@ to engage in an all-or-nothing migration to begin using Marionette.
 
 ### Chat with us
 
-Find us [on gitter](https://gitter.im/marionettejs/backbone.marionette) or on IRC in the FreeNode.net [#marionette channel](http://freenode.net).
+Find us [on gitter](https://gitter.im/marionettejs/backbone.marionette) or on
+IRC in the FreeNode.net [#marionette channel](http://freenode.net).
 
 We're happy to discuss design patterns and learn how you're using Marionette.
 
@@ -68,42 +72,33 @@ We're happy to discuss design patterns and learn how you're using Marionette.
 * Easily modifiable: make it work with your application's specific needs
 * Reduce boilerplate for views, with specialized view types
 * Build on a modular architecture with an `Application` and modules that attach to it
-* Compose your application's visuals at runtime, with the `Region` and `LayoutView` objects
+* Compose your application's visuals at runtime with `View` and `regions`
 * Nested views and layouts within visual regions
-* Built-in memory management and zombie-killing in views, regions and layoutViews
+* Built-in memory management and zombie-killing in views and regions
 * Event-driven architecture with `Backbone.Radio`
 * Flexible, "as-needed" architecture allowing you to pick and choose what you need
 * And much, much more
 
-
-## Marionette Inspector
-
-<a href="https://github.com/marionettejs/marionette.inspector"><img src="http://i.imgur.com/B1q9QXH.jpg" align="center" /></a>
-
-+ **Visualize** the view hierarchy with the UI tree
-+ **Visualize** application activity with a full history of actions
-+ **Inspect** view ui, events, listeners, properties
-+ **Inspect** model attributes, listeners, properties
-+ **Explore** Radio channel events, requests, commands
-+ **Explore** application with an inspector magnifying glass
-+ **Jump** between the inspector elements and source panel with intelligent links
-
-Download at [Chrome Web Store](https://chrome.google.com/webstore/detail/marionette-inspector/fbgfjlockdhidoaempmjcddibjklhpka)
-Explore code at  [Github](https://github.com/marionettejs/marionette.inspector)
-
 ## Source Code and Downloads
 
-You can download the latest builds directly from the "lib" folder above.
-For more information about the files in this folder, or to obtain an archive
-containing all Marionette dependencies (including Underscore, Backbone, etc.),
-please visit [the downloads section on the website](http://marionettejs.com#download).
+You can
+[download the latest builds directly](https://github.com/marionettejs/backbone.marionette/tree/v3.0.0/lib)
+or visit the [downloads section on the Marionette website](http://marionettejs.com#download)
+for more downloading options.
 
 #### [MarionetteJS.com](http://marionettejs.com#download)
 
-### Available Packages
+### NPM and Bower
 
-Marionette is available via bower and npm. There are other channels that are maintained by the community.
+Marionette is available via bower and npm:
 
+```bash
+# NPM
+npm install backbone.marionette
+
+# Bower
+bower install marionette
+```
 
 ## Release Notes And Upgrade Guide
 
@@ -126,15 +121,13 @@ You can read the annotations for all the details of how Marionette works, and ad
 MarionetteJS currently works with the following libraries:
 
 * [jQuery](http://jquery.com) v1.8+
-* [Underscore](http://underscorejs.org) v1.4.4 - 1.6.0
-* [Backbone](http://backbonejs.org) v1.0.0 - 1.1.2 are preferred.
-* [Backbone.Radio](https://github.com/marionettejs/backbone.radio) Comes automatically with the bundled build.
-* [Backbone.BabySitter](https://github.com/marionettejs/backbone.babysitter) Comes automatically with the bundled build.
+* [Underscore](http://underscorejs.org) v1.8.3
+* [Backbone](http://backbonejs.org) v1.3.3
+* [Backbone.Radio](https://github.com/marionettejs/backbone.radio) v2.0.0+
 
 Marionette has not been tested against any other versions of these
 libraries. You may or may not have success if you use a version other
 than what is listed here.
-
 
 ## How to Contribute
 
@@ -143,7 +136,7 @@ the [guidelines for pull requests and contributions](CONTRIBUTING.md).
 Following these guidelines will help make your contributions easier to
 bring into the next release.
 
-### [Github Issues](//github.com/marionettejs/backbone.marionette/issues)
+### [Github Issues](https://github.com/marionettejs/backbone.marionette/issues)
 
 Report issues with Marionette, submit pull requests to fix problems, or to
 create summarized and documented feature requests (preferably with pull

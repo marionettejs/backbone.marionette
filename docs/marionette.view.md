@@ -21,6 +21,12 @@ multiple views through the `regions` attribute.
   * [Advanced Rendering Techniques](#advanced-rendering-techniques)
 * [Managing an Existing Page](#managing-an-existing-page)
 * [Laying out Views - Regions](#laying-out-views-regions)
+  * [Class Definition](#class-definition)
+    * [Specifying 'regions' as function](#specifying-regions-as-function)
+    * [Regions on View Instantiation](#regions-on-view-instantiation)
+  * [Managing Sub-views](#managing-sub-views)
+    * [Showing a view](#showing-a-view)
+    * [Accessing a child view](#accessing-a-child-view)
 * [Organizing your View](#organizing-your-view)
 * [Events](#events)
   * [onEvent Listeners](#onevent-listeners)
@@ -321,7 +327,6 @@ show/hide lifecycles, and act on events inside the children.
 **This Section only covers the basics. For more information on regions, see the
 [Regions Documentation.](./marionette.region.md)**
 
-
 Regions are ideal for rendering application layouts by isolating concerns inside
 another view. This is especially useful for independently re-rendering chunks
 of your application without having to completely re-draw the entire screen every
@@ -363,11 +368,11 @@ When we show views in the region, the contents of `#first-region` and
 value in the `regions` hash is just a jQuery selector, and any valid jQuery
 syntax will suffice.
 
+
 #### Specifying regions as functions
 
-Regions can be specified on a View using a function that returns an object with
-the region definitions. The returned object follow the same rules for defining a
-region:
+The `regions` attribute can also be a
+[function returning an object](./basics.md#functions-returning-values):
 
 ```javascript
 var Mn = require('backbone.marionette');
@@ -384,6 +389,24 @@ var MyView = Mn.View.extend({
 The `options` argument contains the options passed to the view on instantiation.
 As the view has not been constructed yet, `this.getOption()` is not able to
 return any options from the view - use `options` instead.
+
+#### Regions on View Instantiation
+
+A `View` can take a `regions` hash that allows you to specify regions per `View` instance.
+
+```javascript
+var Mn = require('backbone.marionette');
+
+new Mn.View({
+ regions: {
+   "cat": ".doge",
+   "wow": {
+     selector: ".such",
+     regionClass: Coin
+   }
+ }
+});
+```
 
 ### Adding Regions
 
@@ -456,23 +479,6 @@ var MyView = Mn.View.extend({
 ```
 
 If no view is available, `getChildView` returns `null`.
-
-### Region options
-A `View` can take a `regions` hash that allows you to specify regions per `View` instance.
-
-```javascript
-var Mn = require('backbone.marionette');
-
-new Mn.View({
- regions: {
-   "cat": ".doge",
-   "wow": {
-     selector: ".such",
-     regionClass: Coin
-   }
- }
-});
-```
 
 ### Region availability
 Any defined regions within a `View` will be available to the `View` or any calling code immediately after instantiating the `View`. This allows a View to be attached to an existing DOM element in an HTML page, without the need to call a render method or anything else, to create the regions.

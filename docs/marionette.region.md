@@ -194,13 +194,15 @@ old views manually to prevent memory leaks.
 
 #### onBeforeAttach & onAttach
 
-Regions that are attached to the document when you execute `show` are special in that the
-views that they show will also become attached to the document. These regions fire a pair of triggerMethods on *all*
-of the views that are about to be attached – even the nested ones. This can cause a performance issue if you're
+Regions that are attached to the document when you execute `show` are special in
+that the views that they show will also become attached to the document. These
+regions fire a pair of triggerMethods on *all* of the views that are about to be
+attached – even the nested ones. This can cause a performance issue if you're
 rendering hundreds or thousands of views at once.
 
-If you think these events might be causing some lag in your app, you can selectively turn them off
-with the `triggerBeforeAttach` and `triggerAttach` properties or `show()` options.
+If you think these events might be causing some lag in your app, you can
+selectively turn them off with the `triggerBeforeAttach` and `triggerAttach`
+properties or `show()` options.
 
 ```javascript
 // No longer trigger attach

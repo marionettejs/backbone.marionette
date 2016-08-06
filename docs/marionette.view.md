@@ -1038,6 +1038,9 @@ var MyView = Mn.View.extend({
 The `modelEvents` attribute passes through all the arguments that are passed
 to `model.trigger('event', arguments)`.
 
+The `modelEvents` attribute can also take a
+[function returning an object](basics.md#functions-returning-values).
+
 #### Function callback
 
 You can also bind a function callback directly in the `modelEvents` attribute:
@@ -1054,30 +1057,10 @@ var MyView = Mn.View.extend({
 })
 ```
 
-#### Attaching a function
-
-As with most things in Backbone and Marionette, you can attach a function that
-returns the object to to attach to `modelEvents`. This is particularly handy for
-binding to events based on options passed into the view:
-
-```javascript
-var Mn = require('backbone.marionette');
-
-var MyView = Mn.View.extend({
-  modelEvents: function() {
-    var events = {};
-    var fieldToListenTo = this.getOption('customField');
-    events['change:' + fieldToListenTo] = 'customHandler';
-    return events;
-  },
-
-  customHandler: function() {
-    console.log('I will be called based on the value passed into customField');
-  }
-});
-```
-
 ### Collection Events
+
+Collection events work exactly the same way as [`modelEvents`](#model-events)
+with their own `collectionEvents` key:
 
 ```javascript
 var Mn = require('backbone.marionette');
@@ -1093,9 +1076,11 @@ var MyView = Mn.View.extend({
 });
 ```
 
-#### Function callback
+The `collectionEvents` attribute can also take a
+[function returning an object](basics.md#functions-returning-values).
 
-You can also bind a function callback directly in the `modelEvents` attribute:
+Just as in `modelEvents`, you can bind function callbacks directly inside the
+`collectionEvents` object:
 
 ```javascript
 var Mn = require('backbone.marionette');
@@ -1105,29 +1090,6 @@ var MyView = Mn.View.extend({
     'update': function() {
       console.log('the collection was updated');
     }
-  }
-})
-```
-
-#### Attaching a function
-
-As with most things in Backbone and Marionette, you can attach a function that
-returns the object to to attach to `modelEvents`. This is particularly handy for
-binding to events based on options passed into the view:
-
-```javascript
-var Mn = require('backbone.marionette');
-
-var MyView = Mn.View.extend({
-  collectionEvents: function() {
-    var events = {};
-    var eventToListenTo = this.getOption('customListener');
-    events[eventToListenTo] = 'customHandler';
-    return events;
-  },
-
-  customHandler: function() {
-    console.log('I will be called based on the value passed into customListener');
   }
 })
 ```

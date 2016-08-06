@@ -16,7 +16,11 @@ managing regions throughout your application.
 * [Defining Regions](#defining-regions)
   * [String Selector](#string-selector)
   * [Additional Options](#additional-options)
+  * [Specifying regions as a Function](#specifying-regions-as-a-function)
+  * [Adding Regions](#adding-regions)
 * [Showing a View](#showing-a-view)
+  * [Hiding a View](#hiding-a-view)
+  * [Preserving Existing Views](#preserving-existing-views)
 * [Checking whether a region is showing a view](#checking-whether-a-region-is-showing-a-view)
 * [`reset` A Region](#reset-a-region)
 * [Set How View's `el` Is Attached](#set-how-views-el-is-attached)
@@ -117,6 +121,41 @@ removed from the DOM and replaced with an element of `.new-class` - this lets
 us do things like rendering views inside `table` or `select` more easily -
 these elements are usually very strict on what content they will allow.
 
+### Specifying regions as a Function
+
+The `regions` attribute on a view can be a
+[function returning an object](./basics.md#functions-returning-values):
+
+```javascript
+var Mn = require('backbone.marionette');
+
+var MyView = Mn.View.extend({
+  regions: function(options){
+    return {
+      firstRegion: '#first-region'
+    };
+  }
+});
+```
+
+The `options` argument contains the options passed to the view on instantiation.
+As the view has not been constructed yet, `this.getOption()` is not able to
+return any options from the view - use `options` instead.
+
+### Adding Regions
+
+To add regions to a view after it has been instantiated, simply use the
+`addRegion` method:
+
+```javascript
+var MyView = require('./myview');
+
+myView = new MyView();
+myView.addRegion('thirdRegion', '#third-region');
+```
+
+Now we can access `thirdRegion` as we would the others.
+
 ## Showing a View
 
 Once a region is defined, you can call its `show`
@@ -144,7 +183,10 @@ myView.showChildView('main', childView);
 Both forms take an `options` object that will be passed to the
 [events fired during `show`](#events-raised-during-show).
 
-### Removing a View
+For more information on `showChildView` and `getChildView`, see the
+[Documentation for Views](./marionette.view.md#managing-sub-views)
+
+### Hiding a View
 
 You can remove a view from a region (effectively "unshowing" it) with
 `region.empty()` on a region:

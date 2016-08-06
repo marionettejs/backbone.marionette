@@ -804,7 +804,7 @@ describe('region', function() {
     });
 
     it('should manage the specified el', function() {
-      expect(this.region.$el.selector).to.equal(this.el);
+      expect(this.region.el).to.equal(this.el);
     });
   });
 

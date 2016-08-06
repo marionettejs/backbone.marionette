@@ -21,7 +21,13 @@ multiple views through the `regions` attribute.
   * [Advanced Rendering Techniques](#advanced-rendering-techniques)
 * [Managing an Existing Page](#managing-an-existing-page)
 * [Laying out Views - Regions](#laying-out-views-regions)
-* [Organising your View](#organising-your-view)
+  * [Class Definition](#class-definition)
+    * [Specifying 'regions' as function](#specifying-regions-as-function)
+    * [Regions on View Instantiation](#regions-on-view-instantiation)
+  * [Managing Sub-views](#managing-sub-views)
+    * [Showing a view](#showing-a-view)
+    * [Accessing a child view](#accessing-a-child-view)
+* [Organizing your View](#organizing-your-view)
 * [Events](#events)
   * [onEvent Listeners](#onevent-listeners)
   * [Lifecycle Events](#lifecycle-events)
@@ -259,7 +265,8 @@ the [documentation for `Marionette.Object`](./marionette.object.md#getoption).
 #### Binding of `this`
 
 When using functions in the `templateContext` it's important to know that `this`
-is _bound to the `data` object and **not the view**_. An illustrative example:
+is _bound to the result of `serializeData()` and **not the view**_. An
+illustrative example:
 
 ```javascript
 var _ = require('underscore');
@@ -278,8 +285,10 @@ var MyView = Mn.View.extend({
 var myView = new MyView({contextKey: 'world'});
 ```
 
-The above code will fail because the context (`data`) object in the template
-_cannot see_ the view's `getOption`.
+The above code will fail because the context object in the template
+_cannot see_ the view's `getOption`. This would also apply to functions
+returned by a `templateContext` function, even though the function itself is
+bound to the view context.
 
 ## Managing an Existing Page
 
@@ -298,7 +307,7 @@ var MyView = Mn.View({
 ```
 
 Marionette will then attach all the usual
-[`event`](#events-and-callback-methods) and [`ui`](#organising-your-view)
+[`event`](#events-and-callback-methods) and [`ui`](#organizing-your-view)
 handlers to the view using the existing HTML. Though the View has no template,
 you can still listen to the `before:render` and `render` events that will fire
 as usual when `render` is called - or when you execute `region.show(view)`.
@@ -318,7 +327,6 @@ show/hide lifecycles, and act on events inside the children.
 **This Section only covers the basics. For more information on regions, see the
 [Regions Documentation.](./marionette.region.md)**
 
-
 Regions are ideal for rendering application layouts by isolating concerns inside
 another view. This is especially useful for independently re-rendering chunks
 of your application without having to completely re-draw the entire screen every
@@ -326,8 +334,6 @@ time some data is updated.
 
 Regions can be added to a View at class definition, with `regions`, or at
 runtime using  `addRegion`.
-
-### Class Definition
 
 When you extend `View`, we use the `regions` attribute to point to the  selector
 where the new view will be displayed:
@@ -360,47 +366,10 @@ When we show views in the region, the contents of `#first-region` and
 value in the `regions` hash is just a jQuery selector, and any valid jQuery
 syntax will suffice.
 
-#### Specifying regions as functions
-
-Regions can be specified on a View using a function that returns an object with
-the region definitions. The returned object follow the same rules for defining a
-region:
-
-```javascript
-var Mn = require('backbone.marionette');
-
-var MyView = Mn.View.extend({
-  regions: function(options){
-    return {
-      firstRegion: '#first-region'
-    };
-  }
-});
-```
-
-The `options` argument contains the options passed to the view on instantiation.
-As the view has not been constructed yet, `this.getOption()` is not able to
-return any options from the view - use `options` instead.
-
-### Adding Regions
-
-To add regions to a view after it has been instantiated, simply use the
-`addRegion` method:
-
-```javascript
-var MyView = require('./myview');
-
-myView = new MyView();
-myView.addRegion('thirdRegion', '#third-region');
-```
-
-Now we can access `thirdRegion` as we would the others.
-
 ### Managing Sub-views
 
 `View` provides a simple interface for managing sub-views with `showChildView`
 and `getChildView`:
-
 
 #### Showing a view
 
@@ -454,33 +423,25 @@ var MyView = Mn.View.extend({
 
 If no view is available, `getChildView` returns `null`.
 
-### Region options
-A `View` can take a `regions` hash that allows you to specify regions per `View` instance.
-
-```javascript
-var Mn = require('backbone.marionette');
-
-new Mn.View({
- regions: {
-   "cat": ".doge",
-   "wow": {
-     selector: ".such",
-     regionClass: Coin
-   }
- }
-});
-```
-
 ### Region availability
-Any defined regions within a `View` will be available to the `View` or any calling code immediately after instantiating the `View`. This allows a View to be attached to an existing DOM element in an HTML page, without the need to call a render method or anything else, to create the regions.
+Any defined regions within a `View` will be available to the `View` or any
+calling code immediately after instantiating the `View`. This allows a View to
+be attached to an existing DOM element in an HTML page, without the need to call
+a render method or anything else, to create the regions.
 
-However, a region will only be able to populate itself if the `View` has access to the elements specified within the region definitions. That is, if your view has not yet rendered, your regions may not be able to find the element that you've specified for them to manage. In that scenario, using the region will result in no changes to the DOM.
+However, a region will only be able to populate itself if the `View` has access
+to the elements specified within the region definitions. That is, if your view
+has not yet rendered, your regions may not be able to find the element that
+you've specified for them to manage. In that scenario, using the region will
+result in no changes to the DOM.
 
 ### Efficient nested view structures
-When your views get some more regions, you may want to think of the most efficient way to render your views. Since manipulating the DOM is performany heavy, it's best practice to render most of your views at once.
+When your views get some more regions, you may want to think of the most
+efficient way to render your views. Since manipulating the DOM is performance
+heavy, it's best practice to render most of your views at once.
 
-Marionette provides a simple mechanism to infinitely nest views in a single paint: just render all
-of the children in the onRender callback.
+Marionette provides a simple mechanism to infinitely nest views in a single
+paint: just render all of the children in the onRender callback.
 
 ```javascript
 var Mn = require('backbone.marionette');
@@ -494,10 +455,12 @@ var ParentView = Mn.View.extend({
 
 myRegion.show(new ParentView(), options);
 ```
-In this example, the doubly-nested view structure will be rendered in a single paint.
 
-This system is recursive, so it works for any deeply nested structure. The child views
-you show can render their own child views within their onRender callbacks!
+In this example, the doubly-nested view structure will be rendered in a single
+paint.
+
+This system is recursive, so it works for any deeply nested structure. The child
+views you show can render their own child views within their onRender callbacks!
 
 ### Listening to events on children
 
@@ -556,7 +519,7 @@ var MyView = Mn.View.extend({
 });
 ```
 
-## Organising your View
+## Organizing your View
 
 The `View` provides a mechanism to name parts of your template to be used
 throughout the view with the `ui` attribute. This provides a number of benefits:
@@ -739,7 +702,7 @@ These events are fired during the view's creation and rendering in a region.
 
 Triggered before a View is rendered.
 
-```js
+```javascript
 var Mn = require('backbone.marionette');
 
 Mn.View.extend({
@@ -755,7 +718,7 @@ Triggered after the view has been rendered.
 You can implement this in your view to provide custom code for dealing
 with the view's `el` after it has been rendered.
 
-```js
+```javascript
 var Mn = require('backbone.marionette');
 
 Mn.View.extend({
@@ -795,7 +758,7 @@ These events are fired during the view's destruction and removal from a region.
 
 Triggered just prior to destroying the view, when the view's `destroy()` method has been called.
 
-```js
+```javascript
 var Mn = require('backbone.marionette');
 
 Mn.View.extend({
@@ -822,7 +785,7 @@ just been destroyed.
 Triggered just after the view has been destroyed. At this point, the view has
 been completely removed from the DOM.
 
-```js
+```javascript
 var Mn = require('backbone.marionette');
 
 Mn.View.extend({
@@ -1075,6 +1038,9 @@ var MyView = Mn.View.extend({
 The `modelEvents` attribute passes through all the arguments that are passed
 to `model.trigger('event', arguments)`.
 
+The `modelEvents` attribute can also take a
+[function returning an object](basics.md#functions-returning-values).
+
 #### Function callback
 
 You can also bind a function callback directly in the `modelEvents` attribute:
@@ -1091,30 +1057,10 @@ var MyView = Mn.View.extend({
 })
 ```
 
-#### Attaching a function
-
-As with most things in Backbone and Marionette, you can attach a function that
-returns the object to to attach to `modelEvents`. This is particularly handy for
-binding to events based on options passed into the view:
-
-```javascript
-var Mn = require('backbone.marionette');
-
-var MyView = Mn.View.extend({
-  modelEvents: function() {
-    var events = {};
-    var fieldToListenTo = this.getOption('customField');
-    events['change:' + fieldToListenTo] = 'customHandler';
-    return events;
-  },
-
-  customHandler: function() {
-    console.log('I will be called based on the value passed into customField');
-  }
-});
-```
-
 ### Collection Events
+
+Collection events work exactly the same way as [`modelEvents`](#model-events)
+with their own `collectionEvents` key:
 
 ```javascript
 var Mn = require('backbone.marionette');
@@ -1130,9 +1076,11 @@ var MyView = Mn.View.extend({
 });
 ```
 
-#### Function callback
+The `collectionEvents` attribute can also take a
+[function returning an object](basics.md#functions-returning-values).
 
-You can also bind a function callback directly in the `modelEvents` attribute:
+Just as in `modelEvents`, you can bind function callbacks directly inside the
+`collectionEvents` object:
 
 ```javascript
 var Mn = require('backbone.marionette');
@@ -1142,29 +1090,6 @@ var MyView = Mn.View.extend({
     'update': function() {
       console.log('the collection was updated');
     }
-  }
-})
-```
-
-#### Attaching a function
-
-As with most things in Backbone and Marionette, you can attach a function that
-returns the object to to attach to `modelEvents`. This is particularly handy for
-binding to events based on options passed into the view:
-
-```javascript
-var Mn = require('backbone.marionette');
-
-var MyView = Mn.View.extend({
-  collectionEvents: function() {
-    var events = {};
-    var eventToListenTo = this.getOption('customListener');
-    events[eventToListenTo] = 'customHandler';
-    return events;
-  },
-
-  customHandler: function() {
-    console.log('I will be called based on the value passed into customListener');
   }
 })
 ```
@@ -1211,7 +1136,7 @@ By default, models are serialized by cloning the attributes of the model.
 
 Collections are serialized into an object of this form:
 
-```js
+```javascript
 {
   items: [modelOne, modelTwo]
 }
@@ -1224,7 +1149,7 @@ the view's template.
 
 Let's take a look at some examples of how serializing data works.
 
-```js
+```javascript
 var myModel = new MyModel({foo: "bar"});
 
 new MyView({
@@ -1244,7 +1169,7 @@ MyView.render();
 If the serialization is a collection, the results are passed in as an
 `items` array:
 
-```js
+```javascript
 var myCollection = new MyCollection([{foo: "bar"}, {foo: "baz"}]);
 
 new MyView({

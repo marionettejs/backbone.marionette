@@ -12,7 +12,7 @@ patterns etc.
 * [Class-based Inheritance](#class-based-inheritance)
   * [Value Attributes](#value-attributes)
   * [Functions Returning Values](#functions-returning-values)
-  * [Binding Attributes on Instantation](#binding-attributes-on-instantiation)
+  * [Binding Attributes on Instantiation](#binding-attributes-on-instantiation)
 * [Setting Options](#setting-options)
   * [The `getOption` Method](#the-getoption-method)
   * [The `mergeOptions` Method](#the-mergeoptions-method)

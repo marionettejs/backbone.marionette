@@ -24,7 +24,7 @@ For example, if you're rendering a tree-view control, you may
 want to render a collection view with a model and template so
 that it will show a parent child with children in the tree.
 
-```js
+```javascript
 var CompositeView = Marionette.CompositeView.extend({
   template: "#leaf-branch-template"
 });
@@ -55,7 +55,7 @@ When a `CompositeView` is rendered, the `model` will be rendered
 with the `template` that the view is configured with. You can
 override the template by passing it in as a constructor option:
 
-```js
+```javascript
 new MyComp({
   template: "#some-template"
 });
@@ -65,7 +65,7 @@ The `collection` option is not passed to the template context by
 default. If your `template` needs access to the collection, you'll
 need to pass it via `templateContext`:
 
-```js
+```javascript
 new MyComp({
   template: "#some-template",
   templateContext: function() {
@@ -79,7 +79,7 @@ new MyComp({
 Each childView will be rendered using the `childView`'s template. The `CompositeView`'s
 template is rendered and the childView's templates are added to this.
 
-```js
+```javascript
 var ChildView = Marionette.View.extend({});
 
 var CompView = Marionette.CompositeView.extend({
@@ -138,7 +138,7 @@ To get your childView instances to render within the `<tbody>` of this
 table structure, specify an `childViewContainer` in your composite view,
 like this:
 
-```js
+```javascript
 var RowView = Marionette.View.extend({
   tagName: "tr",
   template: "#row-template"
@@ -162,7 +162,7 @@ Alternatively, you can specify a function as the `childViewContainer`. This
 function needs to return a jQuery selector string, or a jQuery selector
 object.
 
-```js
+```javascript
 var TableView = Marionette.CompositeView.extend({
   // ...
 
@@ -180,7 +180,7 @@ instance' lifecycle.
 Alternatively, the `childViewContainer` can be supplied in the constructor
 function options:
 
-```js
+```javascript
 var myComp = new Marionette.CompositeView({
   // ...,
 
@@ -240,7 +240,7 @@ Additionally, after the composite view has been rendered, an
 your view to provide custom code for dealing with the view's
 `el` after it has been rendered:
 
-```js
+```javascript
 Marionette.CompositeView.extend({
   onRender: function(){
     // do stuff here
@@ -265,7 +265,7 @@ which means you can even access them in the `onBeforeRender` method.
 CompositeViews can bind directly to model events and collection events
 in a declarative manner:
 
-```js
+```javascript
 Marionette.CompositeView.extend({
   modelEvents: {
     "change": "modelChanged"

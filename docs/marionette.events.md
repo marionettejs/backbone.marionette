@@ -350,7 +350,7 @@ directly, allowing them to be propagated up the view hierarchy more easily and
 explicitly. The values of the hash should be a string of the event to trigger on
 the parent.
 
-```js
+```javascript
 // The child view fires a custom event, `show:message`
 var ChildView = Marionette.View.extend({
 

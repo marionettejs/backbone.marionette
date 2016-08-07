@@ -82,28 +82,27 @@ function:
 
 ```javascript
 var Mn = require('backbone.marionette');
+var Handlebars = require('handlebars');
 
-export.MyView = Mn.View.extend({
+var MyView = Mn.View.extend({
   template: function(data) {
-    if (data.name) {
-      return _.template('<h1>Hello, <%- name %></h1>')(data);
-    }
-    return '<h1>Hello, world</h1>';
+    return Handlebars.compile('<h1>Hello, {{ name }}')(data);
   }
 });
 ```
 
 Using a custom function can give you a lot of control over the output of your
-view, let you switch templates, or just add extra data to the context passed
-into your template.
+view after its context is calculated. If this logic is common, you may be best
+[overriding your renderer](./marionette.renderer.md) to change your default
+template renderer.
 
 ### The `getTemplate` function
 
 The `getTemplate` function is used to choose the template to render after the
 view has been instantiated. You can use this to change the template based on
 some simple logic such as the value of a specific attribute in the view's model.
-The returned value can be either a jQuery selector or a compiled template with a
-`render` function:
+The returned value can be either a jQuery selector or a compiled template
+function that will be called with the view's data and context.
 
 ```javascript
 var Mn = require('backbone.marionette');

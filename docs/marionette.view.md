@@ -15,10 +15,6 @@ multiple views through the `regions` attribute.
 ## Documentation Index
 
 * [Rendering a Template](#rendering-a-template)
-  * [Using a Model](#using-a-model)
-  * [Using a Collection](#using-a-collection)
-  * [Template context](#template-context)
-  * [Advanced Rendering Techniques](#advanced-rendering-techniques)
 * [Managing an Existing Page](#managing-an-existing-page)
 * [Laying out Views - Regions](#laying-out-views-regions)
   * [Class Definition](#class-definition)
@@ -54,241 +50,23 @@ extra template context.
 you would be best off doing your logic in the
 [`onBeforeRender` or `onRender` handlers](#lifecycle-events).
 
-### Passing a Template
-
-The `Marionette.View` looks for the attached template on the `template`
-attribute. Like most attributes in Backbone and Marionette, this takes a string
-(selector) or function.
-
-#### Template Selector
-
-If your index page contains a pre-formatted template, you can simply pass in the
-jQuery selector for it to `template` and Marionette will look it up:
+To render a template, set the `template` attribute on your view:
 
 ```javascript
 var Mn = require('backbone.marionette');
-
-export.MyView = Mn.View.extend({
-  template: '#template-layout'
-});
-```
-
-```html
-<script id="template-layout" type="x-template/underscore">
-<h1>Hello, world</h1>
-</script>
-```
-
-Marionette will look up the template above and render it for you when `MyView`
-gets rendered.
-
-#### Template Function
-
-A more common way of setting a template is to assign a function to `template`
-that renders its argument. This will commonly be the `_.template` function:
-
-```javascript
 var _ = require('underscore');
-var Mn = require('backbone.marionette');
-
-export.MyView = Mn.View.extend({
-  template: _.template('<h1>Hello, world</h1>')
-});
-```
-
-This doesn't have to be an underscore template, you can pass your own rendering
-function:
-
-```javascript
-var Mn = require('backbone.marionette');
-
-export.MyView = Mn.View.extend({
-  template: function(data) {
-    if (data.name) {
-      return _.template('<h1>Hello, <%- name %></h1>')(data);
-    }
-    return '<h1>Hello, world</h1>';
-  }
-});
-```
-
-Using a custom function can give you a lot of control over the output of your
-view, let you switch templates, or just add extra data to the context passed
-into your template.
-
-### Using a Model
-
-Marionette will happily render a template without a model. This won't give us a
-particularly interesting result. As with Backbone, we can attach a model to our
-views and render the data they represent:
-
-```javascript
-var Bb = require('backbone');
-var Mn = require('backbone.marionette');
-
-var MyModel = Bb.Model.extend({
-  defaults: {
-    name: 'world'
-  }
-});
 
 var MyView = Mn.View.extend({
-  template: _.template('<h1>Hello, <%- name %></h1>')
-});
-
-var myView = new MyView({model: new MyModel()});
-```
-
-Now our template has full access to the attributes on the model passed into the
-view.
-
-### Using a Collection
-
-The `Marionette.View` also provides a simple tool for rendering collections into
-a template. Simply pass in the collection as `collection` and Marionette will
-provide an `items` attribute to render:
-
-```javascript
-var Bb = require('backbone');
-var Mn = require('backbone.marionette');
-
-var MyCollection = Bb.Collection.extend({
-});
-
-var MyView = Mn.View.extend({
-  template: '#hello-template'
-});
-
-var collection = new MyCollection([
-  {name: 'Steve'}, {name: 'Helen'}
-]);
-
-var myView = new MyView({collection: collection});
-```
-
-For clarity, we've moved the template into this script tag:
-
-```html
-<script id="hello-template" type="x-template/underscore">
-<ul>
-  <% _.each(items, function(item) { %>
-  <li><%- item.name %></li>
-  <% }) %>
-</ul>
-</script>
-```
-
-As you can see, `items` is provided to the template representing each record in
-the collection.
-
-### User interaction with Collection records
-
-While possible, reacting to user interaction with individual items in your
-collection is tricky with just a `View`. If you want to act on individual items,
-it's recommended that you use [`CollectionView`](./marionette.collectionview.md)
-and handle the behavior at the individual item level.
-
-### Rendering a Model or Collection
-
-Marionette uses a simple method to determine whether to make a model or
-collection available to the template:
-
-1. If `view.model` is set, the attributes from `model`
-2. If `view.model` is not set, but `view.collection` is, set `items` to the
-  individual items in the collection
-3. If neither are set, an empty object is used
-
-The result of this is mixed into the
-[`templateContext` object](#template-context) and made available to your
-template. Using this means you can setup a wrapper `View` that can act on
-`collectionEvents` but will render its `model` attribute - if your `model` has
-and `items` attribute then that will always be used.
-
-### Template Context
-
-The `Marionette.View` provides a `templateContext` attribute that is used to add
-extra information to your templates. This can be either an object, or a function
-returning an object. The keys on the returned object will be mixed into the
-model or collection keys and made available to the template.
-
-#### Context Object
-
-Using the context object, simply attach an object to `templateContext` as so:
-
-```javascript
-var _ = require('underscore');
-var Mn = require('backbone.marionette');
-
-var MyView = Mn.View.extend({
-  template: _.template('<h1>Hello, <%- contextKey %></h1>'),
-
-  templateContext: {
-    contextKey: 'world'
-  }
+  tagName: 'h1',
+  template: _.template('Contents')
 });
 
 var myView = new MyView();
+myView.render();
 ```
 
-The `myView` instance will be rendered without errors even though we have no
-model or collection - `contextKey` is provided by `templateContext`.
-
-#### Context Function
-
-The `templateContext` object can also be a function returning an object. This is
-useful when you want to access
-[information from the surrounding view](#binding-of-this) (e.g. model methods).
-
-To use a `templateContext`, simply assign a function:
-
-```javascript
-var _ = require('underscore');
-var Mn = require('backbone.marionette');
-
-var MyView = Mn.View.extend({
-  template: _.template('<h1>Hello, <%- contextKey %></h1>'),
-
-  templateContext: function() {
-    return {
-      contextKey: this.getOption('contextKey')
-    }
-  }
-});
-
-var myView = new MyView({contextKey: 'world'});
-```
-
-Here, we've passed an option that can be accessed from the `templateContext`
-function using `getOption()`. More information on `getOption` can be found in
-the [documentation for `Marionette.Object`](./marionette.object.md#getoption).
-
-#### Binding of `this`
-
-When using functions in the `templateContext` it's important to know that `this`
-is _bound to the result of `serializeData()` and **not the view**_. An
-illustrative example:
-
-```javascript
-var _ = require('underscore');
-var Mn = require('backbone.marionette');
-
-var MyView = Mn.View.extend({
-  template: _.template('<h1>Hello, <%- contextKey() %></h1>'),
-
-  templateContext: {
-    contextKey: function() {
-      return this.getOption('contextKey');  // ERROR
-    }
-  }
-});
-
-var myView = new MyView({contextKey: 'world'});
-```
-
-The above code will fail because the context object in the template
-_cannot see_ the view's `getOption`. This would also apply to functions
-returned by a `templateContext` function, even though the function itself is
-bound to the view context.
+For more detail on how to render templates, see the
+[Template documentation](./template.md).
 
 ## Managing an Existing Page
 
@@ -1192,4 +970,4 @@ If you need to serialize the View's `model` or `collection` in a custom way,
 then you should override either `serializeModel` or `serializeCollection`.
 
 On the other hand, you should not use this method to add arbitrary extra data
-to your template. Instead, use [View.templateContext](./marionette.renderer.md#templatecontext).
+to your template. Instead, use [View.templateContext](./template.md#templatecontext).

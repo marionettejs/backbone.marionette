@@ -122,8 +122,8 @@ When using functions to set attributes, Marionette will assign the instance of
 your new class as `this`. You can use this feature to ensure you're able to
 access your object in cases where `this` isn't what you might expect it to be.
 For example, the value or result of
-[`templateContext`](./marionette.view.md#template-context) is
-[bound to its data object](./marionette.view.md#binding-of-this) so using a
+[`templateContext`](./template.md#template-context) is
+[bound to its data object](./template.md#binding-of-this) so using a
 function is the only way to access the view's context directly.
 
 ### Binding Attributes on Instantiation

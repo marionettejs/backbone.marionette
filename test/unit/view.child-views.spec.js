@@ -555,15 +555,12 @@ describe('layoutView', function() {
 
     it('should apply the relevant @ui. syntax selector to a simple string value', function() {
       expect(this.layoutView.getRegion('war')).to.exist;
-      expect(this.layoutView.getRegion('war').$el.selector).to.equal('.craft');
     });
     it('should apply the relevant @ui. syntax selector to selector in a region definition object', function() {
       expect(this.layoutView.getRegion('mario')).to.exist;
-      expect(this.layoutView.getRegion('mario').$el.selector).to.equal('.bros');
     });
     it('should apply the relevant @ui. syntax selector to el in a region definition object', function() {
       expect(this.layoutView.getRegion('princess')).to.exist;
-      expect(this.layoutView.getRegion('princess').$el.selector).to.equal('.toadstool');
     });
   });
 

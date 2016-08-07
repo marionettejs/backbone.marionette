@@ -946,10 +946,6 @@ describe('composite view', function() {
       expect(this.bindUIElementsSpy).to.have.been.calledOnce;
     });
 
-    it('should bind the ui hash to jQuery selectors', function() {
-      expect(this.compositeView.ui.testElement.selector).to.equal('.test-element');
-    });
-
     it('should trigger a before:render event', function() {
       expect(this.triggerSpy).to.have.been.calledWith('before:render', this.compositeView);
     });

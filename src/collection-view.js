@@ -382,6 +382,42 @@ const CollectionView = Backbone.View.extend({
     }
   },
 
+  _createView(model, index) {
+    const ChildView = this._getChildView(model);
+    const childViewOptions = this._getChildViewOptions(model, index);
+    const view = this.buildChildView(model, ChildView, childViewOptions);
+    return view;
+  },
+
+  _setupChildView(view, index) {
+    view._parent = this;
+
+    monitorViewEvents(view);
+
+    // set up the child view event forwarding
+    this._proxyChildEvents(view);
+
+    if (this.sort) {
+      view._index = index;
+    }
+  },
+
+  _renderChildView(view) {
+    if (!view.supportsRenderLifecycle) {
+      triggerMethodOn(view, 'before:render', view);
+    }
+
+    // Render view
+    view.render();
+
+    if (!view.supportsRenderLifecycle) {
+      view._isRendered = true;
+      triggerMethodOn(view, 'render', view);
+    }
+
+    return view;
+  },
+
   // Internal method to loop through collection and show each child view.
   _showCollection(models) {
     _.each(models, (child, index) => {

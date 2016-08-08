@@ -23,13 +23,13 @@ in the DOM. This behavior can be disabled by specifying `{sort: false}` on initi
   * [CollectionView's `buildChildView`](#collectionviews-buildchildview)
   * [CollectionView's `addChildView`](#collectionviews-addchildview)
   * [CollectionView: Retrieve Child Views](#collectionviews-retrievechildview)
-    * [CollectionView's: `findByCid`](#collectionviews-retrievechildview-findbycid)
-    * [CollectionView's: `findByModel`](#collectionviews-retrievechildview-findbymodel)
-    * [CollectionView's: `findByModelCid`](#collectionviews-retrievechildview-findbymodelcid)
-    * [CollectionView's: `findByCustom`](#collectionviews-retrievechildview-findbycustom)
-    * [CollectionView's: `findByIndex`](#collectionviews-retrievechildview-findbyindex)
+    * [CollectionView childView's: `findByCid`](#collectionviews-retrievechildview-findbycid)
+    * [CollectionView childView's: `findByModel`](#collectionviews-retrievechildview-findbymodel)
+    * [CollectionView childView's: `findByModelCid`](#collectionviews-retrievechildview-findbymodelcid)
+    * [CollectionView childView's: `findByCustom`](#collectionviews-retrievechildview-findbycustom)
+    * [CollectionView childView's: `findByIndex`](#collectionviews-retrievechildview-findbyindex)
   * [CollectionView's `removeChildView`](#collectionviews-removechildview)
-  * [CollectionView Child View Iterators And Collection Functions](#collectionviews-iteratorsandfunctions)
+  * [CollectionView childView Iterators And Collection Functions](#collectionview-childviews-iteratorsandfunctions)
 
 * [CollectionView's `emptyView`](#collectionviews-emptyview)
   * [CollectionView's `emptyViewOptions`](#collectionviews-emptyviewoptions)
@@ -456,35 +456,35 @@ myCollectionView.render();
 
 You can retrieve a view by any of the index. If the findBy* method cannot find the view, it will return undefined.
 
-#### CollectionView's: `findByCid`
+#### CollectionView childView's: `findByCid`
 Find a view by it's cid.
 
 ```javascript
 var bView = myCollectionView.children.findByCid(buttonView.cid);
 ```
     
-#### CollectionView's: `findByModel`
+#### CollectionView childView's: `findByModel`
 Find a view by model.
 
 ```javascript
 var bView = myCollectionView.children.findByModel(buttonView.model);
 ```
 
-#### CollectionView's: `findByModelCid`
+#### CollectionView childView's: `findByModelCid`
 Find a view by model cid.
 
 ```javascript
 var bView = myCollectionView.children.findByModelCid(buttonView.model.cid);
 ```
 
-#### CollectionView's: `findByCustom`
+#### CollectionView childView's: `findByCustom`
 Find by custom key.
 
 ```javascript
 var bView = myCollectionView.children.findByCustom('cutom_key');
 ```
 
-#### CollectionView's: `findByIndex`
+#### CollectionView childView's: `findByIndex`
 
 Find by numeric index (unstable)
 
@@ -513,7 +513,7 @@ Mn.CollectionView.extend({
 });
 ```
 
-### CollectionView Child View Iterators And Collection Functions
+### CollectionView childView Iterators And Collection Functions
 
 The container object borrows several functions from [Underscore.js](http://underscorejs.org/), to provide iterators and other collection functions, including:
 

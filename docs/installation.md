@@ -42,7 +42,7 @@ we prepared simple marionettejs skeleton with Browserify.
 
 ### Browserify and Gulp
 
-[Gulp][gulp] is streaming build system. [Here](https://github.com/marionettejs/marionette-integrations/tree/master/browserify_gulp) is simple Browserify + Gulp skeleton.
+[Gulp][gulp] is streaming build system. [Here](https://github.com/marionettejs/marionette-integrations/tree/master/browserify-gulp) is simple Browserify + Gulp skeleton.
 
 
 [browserify]: http://browserify.org/

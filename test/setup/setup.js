@@ -5,13 +5,17 @@ module.exports = function() {
   Backbone.$ = jQuery;
   Backbone.Radio = require('backbone.radio');
   var Marionette = require('../../src/backbone.marionette');
+  var ChildViewContainer = require('../../src/child-view-container');
 
   Marionette = 'default' in Marionette ? Marionette.default : Marionette;
+
+  ChildViewContainer = 'default' in ChildViewContainer ? ChildViewContainer.default : ChildViewContainer;
 
   global.$ = global.jQuery = jQuery;
   global._ = _;
   global.Backbone = Backbone;
   global.Marionette = Backbone.Marionette = Marionette;
+  global.ChildViewContainer = ChildViewContainer;
   global.expect = global.chai.expect;
 
   var $fixtures;

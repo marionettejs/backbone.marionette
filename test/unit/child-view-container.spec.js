@@ -10,7 +10,7 @@ describe('childview container', function() {
         new Backbone.View()
       ];
 
-      container = new Marionette.ChildViewContainer(views);
+      container = new ChildViewContainer(views);
     });
 
     it('should add all of the views', function() {
@@ -28,7 +28,7 @@ describe('childview container', function() {
     beforeEach(function() {
       view = new Backbone.View();
 
-      container = new Marionette.ChildViewContainer();
+      container = new ChildViewContainer();
 
       container.add(view);
 
@@ -61,7 +61,7 @@ describe('childview container', function() {
         model: model
       });
 
-      container = new Marionette.ChildViewContainer();
+      container = new ChildViewContainer();
 
       container.add(view);
 
@@ -81,7 +81,7 @@ describe('childview container', function() {
     beforeEach(function() {
       view = new Backbone.View();
 
-      container = new Marionette.ChildViewContainer();
+      container = new ChildViewContainer();
 
       container.add(view, 'custom indexer');
 
@@ -107,7 +107,7 @@ describe('childview container', function() {
         model: model
       });
 
-      container = new Marionette.ChildViewContainer();
+      container = new ChildViewContainer();
       container.add(view, cust);
 
       container.remove(view);
@@ -145,7 +145,7 @@ describe('childview container', function() {
         model: model
       });
 
-      container = new Marionette.ChildViewContainer();
+      container = new ChildViewContainer();
     });
 
     it('should return itself when adding, for chaining methods', function() {
@@ -166,7 +166,7 @@ describe('childview container', function() {
       views = [];
       view = new Backbone.View();
 
-      container = new Marionette.ChildViewContainer();
+      container = new ChildViewContainer();
       container.add(view);
 
       container.each(function(v) {

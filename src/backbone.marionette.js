@@ -30,7 +30,6 @@ import {
 import MarionetteObject   from './object';
 import TemplateCache      from './template-cache';
 import View               from './view';
-import ChildViewContainer from './child-view-container';
 import CollectionView     from './collection-view';
 import CompositeView      from './composite-view';
 import Behavior           from './behavior';
@@ -86,7 +85,6 @@ Marionette.AppRouter = AppRouter;
 Marionette.Renderer = Renderer;
 Marionette.TemplateCache = TemplateCache;
 Marionette.View = View;
-Marionette.ChildViewContainer = ChildViewContainer;
 Marionette.CollectionView = CollectionView;
 Marionette.CompositeView = CompositeView;
 Marionette.Behavior = Behavior;

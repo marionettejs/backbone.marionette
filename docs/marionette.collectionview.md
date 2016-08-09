@@ -22,7 +22,14 @@ in the DOM. This behavior can be disabled by specifying `{sort: false}` on initi
 * [CollectionView's children](#collectionviews-children)
   * [CollectionView's `buildChildView`](#collectionviews-buildchildview)
   * [CollectionView's `addChildView`](#collectionviews-addchildview)
+  * [CollectionView: Retrieve Child Views](#collectionview-retrieve-child-views)
+    * [CollectionView childView's: `findByCid`](#collectionview-childviews-findbycid)
+    * [CollectionView childView's: `findByModel`](#collectionview-childviews-findbymodel)
+    * [CollectionView childView's: `findByModelCid`](#collectionview-childviews-findbymodelcid)
+    * [CollectionView childView's: `findByCustom`](#collectionview-childviews-findbycustom)
+    * [CollectionView childView's: `findByIndex`](#collectionview-childviews-findbyindex)
   * [CollectionView's `removeChildView`](#collectionviews-removechildview)
+  * [CollectionView childView Iterators And Collection Functions](#collectionview-childview-iterators-and-collection-functions)
 
 * [CollectionView's `emptyView`](#collectionviews-emptyview)
   * [CollectionView's `emptyViewOptions`](#collectionviews-emptyviewoptions)
@@ -366,34 +373,9 @@ var ParentView = Mn.CollectionView.extend({
 
 ## CollectionView's children
 
-The `CollectionView` uses [Backbone.BabySitter](https://github.com/marionettejs/backbone.babysitter)
-to store and manage its child views. This allows you to easily access
+The `CollectionView` can store and manage its child views. This allows you to easily access
 the views within the collection view, iterate them, find them by
 a given indexer such as the view's model or collection, and more.
-
-```javascript
-var Mn = require('backbone.marionette');
-
-var cv = new Mn.CollectionView({
-  collection: someCollection
-});
-
-cv.render();
-
-
-// retrieve a view by model
-var v = cv.children.findByModel(someModel);
-
-// iterate over all of the views and process them
-cv.children.each(function(view){
-
-  // process the `view` here
-
-});
-```
-
-For more information on the available features and functionality of
-the `.children`, see the [Backbone.BabySitter documentation](https://github.com/marionettejs/backbone.babysitter).
 
 ### CollectionView's `buildChildView`
 
@@ -458,13 +440,56 @@ where it should be placed within the [CollectionView's children](#collectionview
 
 ```javascript
 var Mn = require('backbone.marionette');
-
-Mn.CollectionView.extend({
+var buttonView = new ButtonView();
+var MyCollectionView = Mn.CollectionView.extend({
   onRender: function() {
-    var buttonView = new ButtonView();
     this.addChildView(buttonView, this.collection.length);
   }
 });
+
+var myCollectionView = new MyCollectionView();
+
+myCollectionView.render();
+```
+
+### CollectionView: Retrieve Child Views
+
+You can retrieve a view by any of the index. If the findBy* method cannot find the view, it will return undefined.
+
+#### CollectionView childView's: `findByCid`
+Find a view by it's cid.
+
+```javascript
+var bView = myCollectionView.children.findByCid(buttonView.cid);
+```
+    
+#### CollectionView childView's: `findByModel`
+Find a view by model.
+
+```javascript
+var bView = myCollectionView.children.findByModel(buttonView.model);
+```
+
+#### CollectionView childView's: `findByModelCid`
+Find a view by model cid.
+
+```javascript
+var bView = myCollectionView.children.findByModelCid(buttonView.model.cid);
+```
+
+#### CollectionView childView's: `findByCustom`
+Find by custom key.
+
+```javascript
+var bView = myCollectionView.children.findByCustom('cutom_key');
+```
+
+#### CollectionView childView's: `findByIndex`
+
+Find by numeric index (unstable)
+
+```javascript
+var bView = myCollectionView.children.findByIndex(0);
 ```
 
 ### CollectionView's `removeChildView`
@@ -485,6 +510,47 @@ Mn.CollectionView.extend({
     // but go ahead and remove it visually
     this.removeChildView(childView);
   }
+});
+```
+
+### CollectionView childView Iterators And Collection Functions
+
+The container object borrows several functions from [Underscore.js](http://underscorejs.org/), to provide iterators and other collection functions, including:
+
+* [each](http://underscorejs.org/#each)
+* [map](http://underscorejs.org/#map)
+* [reduce](http://underscorejs.org/#reduce)
+* [find](http://underscorejs.org/#find)
+* [filter](http://underscorejs.org/#filter)
+* [reject](http://underscorejs.org/#reject)
+* [every](http://underscorejs.org/#every)
+* [some](http://underscorejs.org/#some)
+* [contains](http://underscorejs.org/#contains)
+* [invoke](http://underscorejs.org/#invoke)
+* [toArray](http://underscorejs.org/#toArray)
+* [first](http://underscorejs.org/#first)
+* [initial](http://underscorejs.org/#initial)
+* [rest](http://underscorejs.org/#rest)
+* [last](http://underscorejs.org/#last)
+* [without](http://underscorejs.org/#without)
+* [isEmpty](http://underscorejs.org/#isEmpty)
+* [pluck](http://underscorejs.org/#pluck)
+
+These methods can be called directly on the container, to iterate and process the views held by the container.
+
+```javascript
+var Bb = require('backbone');
+var Mn = require('backbone.marionette');
+
+var collectionView = new Mn.CollectionView({
+  collection: new Bb.Collection()
+});
+
+collectionView.render();
+
+// iterate over all of the views and process them
+collectionView.children.each(function(childView) {
+  // process the `childView` here
 });
 ```
 

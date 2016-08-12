@@ -1173,5 +1173,5 @@ This more explicit style gives us two major benefits:
 * More regions to hook different views in, something that's impossible with
 `CompositeView`
 
-For getting advanced information about filtering, sorting or managing `CollectionView` look at 
-[advanced CollectionView doc](./marionette.collectionviewadvanced.md) 
+For getting advanced information about filtering, sorting or managing `CollectionView` look at
+[advanced CollectionView doc](./marionette.collectionviewadvanced.md)

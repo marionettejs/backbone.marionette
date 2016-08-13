@@ -18,7 +18,6 @@ in the DOM. This behavior can be disabled by specifying `{sort: false}` on initi
   * [CollectionView's `childViewEventPrefix`](#collectionviews-childvieweventprefix)
   * [CollectionView's `childViewEvents`](#collectionviews-childviewevents)
   * [CollectionView's `childViewTriggers`](#collectionviews-childviewtriggers)
-
 * [CollectionView's children](#collectionviews-children)
   * [CollectionView's `buildChildView`](#collectionviews-buildchildview)
   * [CollectionView's `addChildView`](#collectionviews-addchildview)
@@ -30,30 +29,24 @@ in the DOM. This behavior can be disabled by specifying `{sort: false}` on initi
     * [CollectionView childView's: `findByIndex`](#collectionview-childviews-findbyindex)
   * [CollectionView's `removeChildView`](#collectionviews-removechildview)
   * [CollectionView childView Iterators And Collection Functions](#collectionview-childview-iterators-and-collection-functions)
-
 * [CollectionView's `emptyView`](#collectionviews-emptyview)
   * [CollectionView's `emptyViewOptions`](#collectionviews-emptyviewoptions)
   * [CollectionView's `isEmpty`](#collectionviews-isempty)
-
 * [CollectionView's `render`](#collectionviews-render)
   * [CollectionView: Automatic Rendering](#collectionview-automatic-rendering)
   * [CollectionView: Re-render Collection](#collectionview-re-render-collection)
   * [CollectionView's `attachHtml`](#collectionviews-attachhtml)
   * [CollectionView's `attachBuffer`](#collectionviews-attachbuffer)
-
 * [CollectionView's `destroy`](#collectionviews-destroy)
-
 * [CollectionView's `filter`](#collectionviews-filter)
   * [CollectionView's `setFilter`](#collectionviews-setfilter)
   * [CollectionView's `removeFilter`](#collectionviews-removefilter)
-
 * [CollectionView's `sort`](#collectionviews-sort)
   * [CollectionView's `viewComparator`](#collectionviews-viewcomparator)
   * [CollectionView's `getViewComparator`](#collectionviews-getviewcomparator)
   * [CollectionView's `reorderOnSort`](#collectionviews-reorderonsort)
   [CollectionView's `reorder`](#collectionviews-reorder)
   * [CollectionView's `resortView`](#collectionviews-resortview)
-
 * [CollectionView Events](#collectionview-events)
   * ["render" / "before:render" event](#render--beforerender-event)
   * ["render:children" / "before:render:children" event](#renderchildren--beforerenderchildren-event)
@@ -65,9 +58,7 @@ in the DOM. This behavior can be disabled by specifying `{sort: false}` on initi
   * ["remove:empty" / "before:remove:empty" event](#removeempty--beforerenderempty-event)
   * ["reorder" / "before:reorder" event](#reorder--beforereorder-event)
   * ["childview:\*" event bubbling from child views](#childview-event-bubbling-from-child-views)
-
 * [CollectionView Child View Events](#collectionview-child-view-events)
-
 * [Rendering `CollectionView`s](#rendering-collectionviews)
   * [Rendering Lists](#rendering-lists)
   * [Rendering Tables](#rendering-tables)
@@ -82,7 +73,7 @@ in the DOM. This behavior can be disabled by specifying `{sort: false}` on initi
 ## CollectionView's `childView`
 
 Specify a `childView` in your collection view definition. This must be
-a Backbone view object definition, not an instance. It can be any
+a Backbone view class definition, not an instance. It can be any
 `Backbone.View` or be derived from `Marionette.View`.
 
 ```javascript
@@ -462,7 +453,7 @@ Find a view by it's cid.
 ```javascript
 var bView = myCollectionView.children.findByCid(buttonView.cid);
 ```
-    
+
 #### CollectionView childView's: `findByModel`
 Find a view by model.
 

@@ -428,24 +428,15 @@ view.triggerMethod('other:event', 'test argument');
 This will display in the console:
 `Fired other:event with 'test argument' as an argument`
 
-#### Rules for onEvent listeners
-
-The onEvent listeners follow clearly defined rules for determining whether they
-should be called:
-
-1. Split the words around the `:` characters - so `before`, `dom`, `refresh`
-2. Capitalize the first letter of each word - `Before`, `Dom`, `Refresh`
-3. Add a leading `on` - `on`, `Before`, `Dom`, `Refresh`
-4. Mash it into a single call - `onBeforeDomRefresh`
-
-For more detail, see the [events documentation](./marionette.events.md#magic-method-binding).
+To set up handlers for events, see the rules in the
+[Documentation for Events](./events.md#magic-method-binding).
 
 ### Lifecycle Events
 
 Marionette views defined a number of events during the creation and destruction
 lifecycle - when the view is displayed in and emptied from a region. In the
-documentation, we will reference the event name, however every event here
-respect the [rules for onEvent listeners](rules-for-onevent-listeners).
+documentation, we will reference the event name, though `onEvent` handling can
+be used.
 
 #### View Creation Lifecycle
 
@@ -731,7 +722,7 @@ passes in the `event` as the argument to the function called.
 
 The view `triggers` attribute binds DOM events to Marionette View events that
 can be responded to at the view or parent level. For more information on events,
-see the [events documentation](./marionette.events.md). This section will just
+see the [events documentation](./events.md). This section will just
 cover how to bind these events to views.
 
 ```javascript
@@ -750,8 +741,8 @@ var MyView = Mn.View.extend({
 
 When the `a` tag is clicked here, the `link:click` event is fired. This event
 can be listened to using the
-[Magic Method Binding](./marionette.events.md#magic-method-binding) technique
-discussed in the [events documentation](./marionette.events.md).
+[Magic Method Binding](./events.md#magic-method-binding) technique
+discussed in the [events documentation](./events.md).
 
 ##### Defining Listeners
 

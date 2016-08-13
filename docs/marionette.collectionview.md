@@ -47,7 +47,7 @@ in the DOM. This behavior can be disabled by specifying `{sort: false}` on initi
   * [CollectionView's `reorderOnSort`](#collectionviews-reorderonsort)
   [CollectionView's `reorder`](#collectionviews-reorder)
   * [CollectionView's `resortView`](#collectionviews-resortview)
-* [CollectionView Events](#collectionview-events)
+* [Events](#collectionview-events)
   * ["render" / "before:render" event](#render--beforerender-event)
   * ["render:children" / "before:render:children" event](#renderchildren--beforerenderchildren-event)
   * ["destroy" / "before:destroy" event](#destroy--beforedestroy-event)
@@ -968,15 +968,41 @@ var MyCollectionView = Mn.CollectionView.extend({
 });
 ```
 
-## CollectionView Events and Callbacks
+## Events
 
-There are several events that will be triggered during the life
-of a collection view. Each of these events is called with the
-[Marionette.triggerMethod](./marionette.functions.md#marionettetriggermethod) function,
-which calls a corresponding "on{EventName}" method on the
-view instance. Additionally each event is triggered immediately after the action
-occurred and a before event is triggered immediately prior.
-The first argument passed to all event handlers is the triggering view.
+The `CollectionView`, like `View`, is able to trigger and respond to events
+occurring during their lifecycle. The [Documentation for Events](./events.md)
+has the complete documentation for how to set and handle events on views.
+
+### Child Event Bubbling
+
+When a child view triggers an event, that event will bubble up one level to the
+parent collection view. For an example:
+
+```javascript
+var Mn = require('backbone.marionette');
+
+var Item = Mn.View.extend({
+  tagName: 'li',
+
+  triggers: {
+    'click a': 'select:item'
+  }
+});
+
+var Collection = Mn.CollectionView.extend({
+  tagName: 'ul',
+
+  onChildviewSelectItem: function(childView) {
+    console.log('item selected: ' + childView.model.id);
+  }
+});
+```
+
+The event will receive a `childview:` prefix before going through the magic
+method binding logic. See the
+[Documentation for Child View Events](./events.md#child-view-events) for more
+information.
 
 ### "render" / "before:render" event
 
@@ -1211,49 +1237,6 @@ myView.on({
 
 myCol.sort()
 ```
-
-### "childview:\*" event bubbling from child views
-
-When a child view within a collection view triggers an
-event, that event will bubble up through the parent
-collection view with the [`childViewEventPrefix`](#collectionviews-childvieweventprefix)
-(which defaults to "childview:") prepended to the event name.
-
-That is, if a child view triggers "do:something", the
-parent collection view will then trigger "childview:do:something".
-
-```javascript
-var Mn = require('backbone.marionette');
-
-// set up basic collection
-var myModel = new MyModel();
-var myCollection = new MyCollection();
-
-myCollection.add(myModel);
-
-var MyView = Mn.View.extend({
-  triggers: {
-    'click button': 'do:something'
-  }
-});
-
-// get the collection view in place
-var colView = new CollectionView({
-  collection: myCollection,
-  childView: MyView,
-  onChildviewDoSomething: function() {
-    console.log('I said, "do something!"');
-  }
-});
-
-colView.render();
-```
-
-Now, whenever the button inside the attached childView is clicked, a console log
-will appear that says: I said, "do something!"
-
-It's also possible to attach the event manually using the usual
-`view.on('childview:do:something')`.
 
 ## CollectionView Child View Events
 

@@ -1,7 +1,7 @@
 module.exports = function() {
   var _ = require('underscore');
   var Backbone = require('backbone');
-  var jQuery = require('jquery')(window);
+  var jQuery = require('jquery');
   Backbone.$ = jQuery;
   Backbone.Radio = require('backbone.radio');
   var Marionette = require('../../src/backbone.marionette');

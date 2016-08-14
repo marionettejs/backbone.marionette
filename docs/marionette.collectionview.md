@@ -462,7 +462,7 @@ Find a view by it's cid.
 ```javascript
 var bView = myCollectionView.children.findByCid(buttonView.cid);
 ```
-    
+
 #### CollectionView childView's: `findByModel`
 Find a view by model.
 

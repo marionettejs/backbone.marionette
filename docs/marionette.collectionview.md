@@ -48,6 +48,18 @@ in the DOM. This behavior can be disabled by specifying `{sort: false}` on initi
   [CollectionView's `reorder`](#collectionviews-reorder)
   * [CollectionView's `resortView`](#collectionviews-resortview)
 * [Events](#collectionview-events)
+  * [Child Event Bubbling](#child-event-bubbling)
+  * [Lifecycle Events](#lifecycle-events)
+    * [View Creation Lifecycle](#view-creation-lifecycle)
+      * [Collection `before:render`](#collection-beforerender)
+      * [Collection `before:render:empty`](#collection-before-renderempty)
+      * [Collection `before:render:children`](#collection-before-renderchildren)
+      * [Collection `before:add:child`](#collection-beforeaddchild)
+      * [Collection `add:child`](#collection-addchild)
+      * [Collection `render:empty`](#collection-renderempty)
+      * [Collection `render:children`](#collection-renderchildren)
+      * [Collection `render`](#collection-render)
+    * [View Destruction Lifecycle](#view-destruction-lifecycle)
   * ["render" / "before:render" event](#render--beforerender-event)
   * ["render:children" / "before:render:children" event](#renderchildren--beforerenderchildren-event)
   * ["destroy" / "before:destroy" event](#destroy--beforedestroy-event)
@@ -57,7 +69,6 @@ in the DOM. This behavior can be disabled by specifying `{sort: false}` on initi
   * ["render:empty" / "before:render:empty" event](#renderempty--beforerenderempty-event)
   * ["remove:empty" / "before:remove:empty" event](#removeempty--beforerenderempty-event)
   * ["reorder" / "before:reorder" event](#reorder--beforereorder-event)
-  * ["childview:\*" event bubbling from child views](#childview-event-bubbling-from-child-views)
 * [CollectionView Child View Events](#collectionview-child-view-events)
 * [Rendering `CollectionView`s](#rendering-collectionviews)
   * [Rendering Lists](#rendering-lists)
@@ -1004,56 +1015,99 @@ method binding logic. See the
 [Documentation for Child View Events](./events.md#child-view-events) for more
 information.
 
-### "render" / "before:render" event
+### Lifecycle Events
 
-Triggers when the `CollectionView` is rendered.
-You can implement this in your view to provide custom code for dealing
-with the view's `el` after it has been rendered:
+The `CollectionView` has its own lifecycle around the standard `View` event
+rendering lifecycle. This section covers the events that get triggered and what
+they indicate.
 
-```javascript
-var Mn = require('backbone.marionette');
+#### View Creation Lifecycle
 
-var MyView = Mn.CollectionView.extend({...});
+The `CollectionView` creation lifecycle can go down two paths depending on
+whether the collection is populated or empty. The below table shows the order of
+rendering events firing:
 
-var myView = new MyView();
+| Order |           Event          |
+| :---: |--------------------------|
+|   1   |      `before:render`     |
+|  2*   |  `before:render:empty`   |
+|  2+   | `before:render:children` |
+|   3   |    `before:add:child`    |
+|   4   |       `add:child`        |
+|  5*   |      `render:empty`      |
+|  5+   |     `render:children`    |
+|   6   |          `render`        |
+|   7   |      `before:attach`     |
+|   8   |         `attach`         |
+|   9   |       `dom:refresh`      |
 
-myView.on({
-  'render': function() {
-    console.log('this collection view rendered');
-  },
-  'before:render': function(){
-    console.log('the collection view is about to be rendered');
-  }
-});
+The events marked with "\*" only fire on empty collections and events marked
+with "+" fire on collections with items.
 
-myView.render();
-```
+##### Collection `before:render`
 
-### "render:children" / "before:render:children" event
+Triggers before the `CollectionView` render process starts. See the
+[`before:render` Documentation](#marionette.view.md#view-before-render) for an
+example.
 
-The `render:children` event is triggered after a `collectionView`'s children have been rendered and buffered. It differs from the `collectionViews`'s `render` event in that it happens __only__ if the `collection` is not not empty. It may also happen when the children sort when [`reorderOnSort`](#collectionviews-reorderonsort) is false.
+##### Collection `before:render:empty`
+
+Triggers just before rendering a collection `emptyView`. This won't be fired if
+the collection has 1 or more elements in.
+
+##### Collection `before:render:children`
+
+This event fires just before rendering the children in the `CollectionView`.
+This only fires if the collection has at least one item.
+
+##### Collection `before:add:child`
+
+This event fires before each child is added to the view. If the collection is
+empty, this fires exactly once for the `emptyView`.
+
+##### Collection `add:child`
+
+This event fires after each child is added to the view. This fires once for each
+item in the attached collection.
+
+If the collection is empty, this event fires exactly once for the `emptyView`.
+
+##### Collection `render:empty`
+
+This event fires once the `emptyView` has been rendered. This will only fire if
+the attached collection is empty.
+
+##### Collection `render:children`
+
+This event fires once all the collection's child views have been rendered.  This
+only fires if the collection has at least one item. This may also fire when
+[`reorderOnSort`](#collectionviews-reorderonsort) is false:
 
 ```javascript
 var Bb = require('backbone');
 var Mn = require('backbone.marionette');
 
-var MyView = Mn.CollectionView.extend({...});
+var MyView = Mn.CollectionView.extend({
+  onRenderChildren: function({
+    console.log('The collectionview children have been rendered');
+  })
+});
 
 var myView = new MyView({
   collection: new Bb.Collection([{ id: 1 }]);
 });
 
-myView.on({
-  'render': function() {
-    console.log('this collection view childen were rendered');
-  },
-  'before:render': function(){
-    console.log('the collection view children are about to be rendered');
-  }
-});
-
 myView.render();
 ```
+
+##### Collection `render`
+
+Fires when the collection has completely finished rendering. See the
+[`render` Documentation](./marionette.view.md#view-render) for more information.
+
+### "render:children" / "before:render:children" event
+
+The `render:children` event is triggered after a `collectionView`'s children have been rendered and buffered. It differs from the `collectionViews`'s `render` event in that it happens __only__ if the `collection` is not not empty.
 
 ### "destroy" / "before:destroy" event
 
@@ -1236,22 +1290,6 @@ myView.on({
 });
 
 myCol.sort()
-```
-
-## CollectionView Child View Events
-
-The following events are raised on child views during rendering and destruction of child views, which is consistent with the view lifecycle experienced during `Region#show`.
-
-* `render` / `onRender` - Called after the view is rendered, but before it is attached to the DOM.
-* `attach` / `onAttach` - Called after the view is attached to the DOM.  This will not fire if the `CollectionView` itself is not attached.
-* `dom:refresh` / `onDomRefresh` - Called when the view is rendered but only if it is attached to the DOM.  This will not fire if the `CollectionView` itself is not attached.
-* `destroy` / `onDestroy` - Called after destroying a view.
-
-Note: These events are triggered on pure Backbone Views during child view rendering, but for a complete implementation of these events the Backbone View should fire `render` within `render()` and `destroy` within `remove()` as well as set the following flags:
-
-```javascript
-view.supportsRenderLifecycle = true;
-view.supportsDestroyLifecycle = true;
 ```
 
 ## Rendering `CollectionView`s

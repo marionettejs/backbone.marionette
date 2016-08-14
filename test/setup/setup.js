@@ -11,7 +11,7 @@ module.exports = function() {
 
   ChildViewContainer = 'default' in ChildViewContainer ? ChildViewContainer.default : ChildViewContainer;
 
-  global.$ = global.jQuery = jQuery;
+  global.window.jQuery = global.window.$ = global.$ = global.jQuery = jQuery;
   global._ = _;
   global.Backbone = Backbone;
   global.Marionette = Backbone.Marionette = Marionette;

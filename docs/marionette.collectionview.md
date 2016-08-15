@@ -1105,9 +1105,17 @@ myView.render();
 Fires when the collection has completely finished rendering. See the
 [`render` Documentation](./marionette.view.md#view-render) for more information.
 
-### "render:children" / "before:render:children" event
+#### View Destruction Lifecycle
 
-The `render:children` event is triggered after a `collectionView`'s children have been rendered and buffered. It differs from the `collectionViews`'s `render` event in that it happens __only__ if the `collection` is not not empty.
+When a `CollectionView` is destroyed it fires a series of events in order to
+reflect the different stages of the destruction process.
+
+| Order |       Event       |
+| :---: |-------------------|
+|   1   |  `before:destroy` |
+|   2   |  `before:detach`  |
+|   3   |  `detach`         |
+|   4   |  `destroy`        |
 
 ### "destroy" / "before:destroy" event
 

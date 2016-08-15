@@ -91,7 +91,7 @@ const ViewMixin = {
     const events = eventsArg || this.events;
 
     if (_.isFunction(events)) {
-      return this.normalizeUIKeys(events());
+      return this.normalizeUIKeys(events.call(this));
     }
 
     return this.normalizeUIKeys(events);

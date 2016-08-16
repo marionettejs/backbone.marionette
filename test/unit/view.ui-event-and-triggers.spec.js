@@ -75,6 +75,14 @@ describe('view ui event trigger configuration', function() {
         this.view.on('fooHandler', this.fooHandlerStub);
       });
 
+      it('should initialize events with context of the view', function() {
+        expect(this.View.prototype.events).to.have.been.calledOn(this.view);
+      });
+
+      it('should initialize triggers with context of the view', function() {
+        expect(this.View.prototype.triggers).to.have.been.calledOn(this.view);
+      });
+
       it('should correctly trigger an event', function() {
         this.view.ui.foo.trigger('click');
         expect(this.fooHandlerStub).to.have.been.calledOnce;

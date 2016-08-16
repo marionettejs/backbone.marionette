@@ -196,7 +196,7 @@ the DOM.
 If you replace the current view with a new view by calling `show`,
 by default it will automatically destroy the previous view.
 You can prevent this behavior by passing `{preventDestroy: true}` in the options
-parameter. Several events will also be triggered on the views;
+parameter. Several events will also be triggered on the views.
 
 ```javascript
 // Show the first view.

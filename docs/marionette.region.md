@@ -23,17 +23,6 @@ managing regions throughout your application.
   * [Preserving Existing Views](#preserving-existing-views)
 * [Checking whether a region is showing a view](#checking-whether-a-region-is-showing-a-view)
 * [`reset` A Region](#reset-a-region)
-* [Set How View's `el` Is Attached](#set-how-views-el-is-attached)
-* [Attach Existing View](#attach-existing-view)
-  * [Set `currentView` On Initialization](#set-currentview-on-initialization)
-  * [Call `attachView` On Region](#call-attachview-on-region)
-* [Region Events And Callbacks](#region-events-and-callbacks)
-  * [Events Raised on the Region During `show`](#events-raised-on-the-region-during-show)
-  * [Events Raised on the View During `show`](#events-raised-on-the-view-during-show)
-  * [Example Event Handlers](#example-event-handlers)
-* [Custom Region Classes](#custom-region-classes)
-  * [Attaching Custom Region Classes](#attaching-custom-region-classes)
-  * [Instantiate Your Own Region](#instantiate-your-own-region)
 
 ## Defining the Application Region
 
@@ -207,8 +196,7 @@ the DOM.
 If you replace the current view with a new view by calling `show`,
 by default it will automatically destroy the previous view.
 You can prevent this behavior by passing `{preventDestroy: true}` in the options
-parameter. Several events will also be triggered on the views; see
-[Region Events And Callbacks](#region-events-and-callbacks) for details.
+parameter. Several events will also be triggered on the views.
 
 ```javascript
 // Show the first view.
@@ -233,67 +221,6 @@ mainRegion.empty({preventDestroy: true});
 
 **NOTE** When using `preventDestroy: true` you must be careful to cleanup your
 old views manually to prevent memory leaks.
-
-#### onBeforeAttach & onAttach
-
-Regions that are attached to the document when you execute `show` are special in
-that the views that they show will also become attached to the document. These
-regions fire a pair of triggerMethods on *all* of the views that are about to be
-attached – even the nested ones. This can cause a performance issue if you're
-rendering hundreds or thousands of views at once.
-
-If you think these events might be causing some lag in your app, you can
-selectively turn them off with the `triggerBeforeAttach` and `triggerAttach`
-properties or `show()` options.
-
-```javascript
-// No longer trigger attach
-myRegion.triggerAttach = false;
-```
-
-You can override this on a per-show basis by passing it in as an option to show.
-
-```javascript
-// This region won't trigger beforeAttach...
-myRegion.triggerBeforeAttach = false;
-
-// Unless we tell it to
-myRegion.show(myView, {triggerBeforeAttach: true});
-```
-
-Or you can leave the events on by default but disable them for a single show.
-
-```javascript
-// This region will trigger attach events by default but not for this particular show.
-myRegion.show(myView, {triggerBeforeAttach: false, triggerAttach: false});
-```
-
-#### `renderView`
-
-In order to add conditional logic when rendering a view you can override the `renderView` method. This could be useful if you don't want the region to re-render views that aren't destroyed. By default this method will call `view.render`.
-
-```javascript
-var Mn = require('backbone.marionette');
-
-var CachingRegion = Mn.Region.extend({
-  shouldDestroyView: function(view, options) { return false; },
-  renderView: function(view, options) {
-    if (!view.isRendered) { view.render(); }
-  }
-});
-```
-
-#### `shouldDestroyView`
-
-In order to add conditional logic around whether the current view should be destroyed when showing a new one you can override the `shouldDestroyView` method. This is particularly useful as an alternative to the `preventDestroy` option when you wish to prevent destroy on all views that are shown in the region.
-
-```javascript
-var Mn = require('backbone.marionette');
-
-var CachingRegion = Mn.Region.extend({
-  shouldDestroyView: function(view, options) { return false; }
-});
-```
 
 ### Checking whether a region is showing a view
 
@@ -381,98 +308,3 @@ var MyView = Mn.View.extend({
   }
 });
 ```
-
-## Region Events And Callbacks
-
-A region will raise a few events on itself and on the target view when showing and destroying views.
-
-### Events Raised on the Region During `show()`
-
-* `before:show` / `onBeforeShow` - Called after the view has been rendered, but before its been displayed.
-* `show` / `onShow` - Called when the view has been rendered and displayed.
-* `before:empty` / `onBeforeEmpty` - Called before the view has been emptied.
-* `empty` / `onEmpty` - Called when the view has been emptied.
-
-```javascript
-view.supportsRenderLifecycle = true;
-view.supportsDestroyLifecycle = true;
-```
-
-## Custom Region Classes
-
-You can define a custom region by extending from
-`Region`. This allows you to create new functionality,
-or provide a base set of functionality for your app.
-
-### Attaching Custom Region Classes
-
-Once you define a region class, you can attach the
-new region class by specifying the region class as the
-value. In this case, `addRegions` expects the constructor itself, not an instance.
-
-```javascript
-var Mn = require('backbone.marionette');
-
-var FooterRegion = Mn.Region.extend({
-  el: "#footer"
-});
-
-var MyView = Mn.View.extend({
-  regions: {
-    footerRegion: FooterRegion
-  }
-});
-```
-
-You can also specify a selector for the region by using
-an object literal for the configuration.
-
-```javascript
-var Mn = require('backbone.marionette');
-
-var FooterRegion = Mn.Region.extend({
-  el: "#footer"
-});
-
-var MyView = Mn.View.extend({
-  regions: {
-    footerRegion: {
-      regionClass: FooterRegion
-      el: "#footer",
-    }
-  }
-});
-```
-
-Note that a region must have an element to attach itself to. If you
-do not specify a selector when attaching the region instance to your
-Application or LayoutView, the region must provide an `el` either in its
-definition or constructor options.
-
-### Instantiate Your Own Region
-
-There may be times when you want to add a region to your
-view after your app is up and running. To do this, you'll
-need to extend from `Region` as shown above and then use
-that constructor function on your own:
-
-```javascript
-var Mn = require('backbone.marionette');
-
-var SomeRegion = Mn.Region.extend({
-  el: "#some-div",
-
-  initialize: function(options){
-    // your init code, here
-  }
-});
-
-myView.someRegion = new SomeRegion();
-
-myView.someRegion.show(someView, options);
-```
-
-You can optionally add an `initialize` function to your Region
-definition as shown in this example. It receives the `options`
-that were passed to the constructor of the Region, similar to
-a `Backbone.View`.

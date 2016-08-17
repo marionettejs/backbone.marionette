@@ -1174,4 +1174,4 @@ This more explicit style gives us two major benefits:
 `CompositeView`
 
 For getting advanced information about filtering, sorting or managing `CollectionView` look at
-[advanced CollectionView doc](./marionette.collectionviewadvanced.md)
+[Advanced CollectionView usage](./marionette.collectionviewadvanced.md)

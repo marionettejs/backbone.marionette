@@ -1,7 +1,7 @@
 **_These docs are for Marionette 3 which is still in pre-release. Some parts may
 not be accurate or up-to-date_**
 
-# Advanced options for CollectionView
+# Advanced CollectionView Usage
 
 `CollectionView` provides a lot of possibilities to sort, filter and manages children.
 

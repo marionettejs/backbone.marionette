@@ -46,13 +46,15 @@ var MyView = Mn.View.extend({
     this.destroy();
   },
 
-  onShow: function() {
+  onRender: function() {
     this.ui.destroy.tooltip({
       text: 'What a nice mouse you have.'
     });
   }
 });
 ```
+
+[Live example](https://jsfiddle.net/denar90/3cy3nkqm/)
 
 Interaction points, such as tooltips and warning messages, are generic concepts.
 There is no need to recode them within your Views so they are prime candidates
@@ -69,6 +71,9 @@ var DestroyWarn = Mn.Behavior.extend({
   // They will be overridden if you pass in an option with the same key.
   defaults: {
     message: 'You are destroying!'
+  },
+  ui: {
+    destroy: '.destroy-btn'
   },
 
   // Behaviors have events that are bound to the views DOM.
@@ -88,12 +93,12 @@ var DestroyWarn = Mn.Behavior.extend({
 var ToolTip = Mn.Behavior.extend({
   defaults: {
     text: ''
-  }
+  },
   ui: {
     tooltip: '.tooltip'
   },
 
-  onShow: function() {
+  onRender: function() {
     this.ui.tooltip.tooltip({
       text: this.getOption('text')
     });
@@ -112,6 +117,8 @@ var MyView = Mn.View.extend({
   behaviors: [DestroyWarn, ToolTip]
 });
 ```
+
+[Live example](https://jsfiddle.net/denar90/50tk3j2w/)
 
 Each behavior will now be able to respond to user interactions as though the
 event handlers were attached to the view directly. In addition to using array
@@ -141,7 +148,7 @@ var Mn = require('backbone.marionette');
 var MyView = Mn.View.extend({
   behaviors: [
     {
-      behaviorClass: DestroyWarn
+      behaviorClass: DestroyWarn,
       message: 'You are about to destroy all your data!'
     },
     {
@@ -151,6 +158,8 @@ var MyView = Mn.View.extend({
   ]
 });
 ```
+
+[Live example](https://jsfiddle.net/denar90/50tk3j2w/)
 
 Using an object, we must define the `behaviorClass` attribute to refer to our
 behaviors and then add any extra options with keys matching the option we want
@@ -225,6 +234,8 @@ var ToolTip = Mn.Behavior.extend({
 });
 ```
 
+[Live example](https://jsfiddle.net/denar90/vef50h2a/)
+
 ## Nesting Behaviors
 
 In addition to extending a `View` with `Behavior`, a `Behavior` can itself use
@@ -241,6 +252,8 @@ var Modal = Mn.Behavior.extend({
   }
 });
 ```
+
+[Live example](https://jsfiddle.net/denar90/h67Lyym7/)
 
 Nested Behaviors act as if they were direct Behaviors of the parent `Behavior`'s
 view instance.
@@ -306,6 +319,8 @@ var MyBehavior = Mn.Behavior.extend({
 });
 ```
 
+[Live example](https://jsfiddle.net/denar90/96rp6t5r/)
+
 ### Template and View
 
 The `Behavior` has a number of proxies attributes that directly refer to the
@@ -332,6 +347,8 @@ var ViewBehavior = Mn.Behavior.extend({
   }
 });
 ```
+
+[Live example](https://jsfiddle.net/denar90/hvpbyjoy/)
 
 #### Referencing the DOM
 
@@ -377,3 +394,5 @@ var FirstView = Mn.View.extend({
   }
 });
 ```
+
+[Live example](https://jsfiddle.net/denar90/grb86nvz/)

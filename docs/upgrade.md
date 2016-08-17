@@ -4,7 +4,10 @@ Marionette 3 introduces a number of breaking changes. This upgrade guide will go
 through the major changes and describe how to change your application to
 accommodate them.
 
-Where possible, we will document how to make the changes in Marionette 2.4.5 so
+An [upgrade tool](https://github.com/marionettejs/marionette-v3-compat) is available
+and covers the breaking changes in detail.
+
+Where possible, we will document how to make the changes in Marionette 2.x so
 that your applications can continue to work and to ease the burden of upgrading
 to Marionette 3.
 
@@ -20,9 +23,9 @@ Using separate `View` `LayoutView` and `ItemView` was complicating the API for
 Marionette needlessly. The new `View` replaces all of this and sets a clear
 recommendation for building layout trees.
 
-#### Upgrading for Marionette 2.4.5
+#### Upgrading for Marionette 2.x
 
-For updating in Marionette 2.4.5, it is recommended you change all instances of
+For updating in Marionette 2.x, it is recommended you change all instances of
 `ItemView` to `LayoutView`.
 
 #### Upgrading to Marionette 3
@@ -39,7 +42,7 @@ The `CompositeView` was deprecated in favor of using `View` and
 
 See [`CollectionView`](./marionette.collectionview.md#rendering-collectionviews)
 for detail on upgrading to Marionette 3. This technique works in both Marionette
-2.4.5 and Marionette 3.
+2.x and Marionette 3.
 
 ### Child event handlers
 
@@ -77,7 +80,7 @@ used incorrectly to show child regions. The `show` event was fired after the
 view had been attached, meaning the DOM was being constantly updated, leading to
 deteriorated performance.
 
-#### Upgrading for Marionette 2.4.5
+#### Upgrading for Marionette 2.x
 
 Replace all instances of `onShow`, `on('show')`, `onBeforeShow` and
 `on('before:show')` to use the `render` and `before:render` events. This is the
@@ -110,10 +113,10 @@ the removal of the ability to access regions as attributes
 The `view.<region_name>` syntax has been removed in favor of `view.getRegion()`,
 `view.getChildView()` and `view.showChildView()`.
 
-#### Upgrading for Marionette 2.4.5 and 3
+#### Upgrading for Marionette 2.x
 
 Change all references to `view.region` to `view.getRegion('region')`. For
-example, in Mn 2.4 and below:
+example, in Mn 2.x and below:
 
 ```javascript
 var AnotherView = require('./anotherview');
@@ -134,7 +137,7 @@ This does not work in Mn 3 - instead do:
 ```javascript
 var AnotherView = require('./anotherview');
 
-/* In Mn 2.4 we can just use LayoutView */
+/* In Mn 2.x we can just use LayoutView */
 var MyView = Mn.View.extend({
   regions: {
     myregion: '.regionname'

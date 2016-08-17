@@ -226,7 +226,7 @@ var ToolTip = Mn.Behavior.extend({
     tooltip: '.tooltip'
   },
 
-  onShow: function() {
+  onRender: function() {
     this.ui.tooltip.tooltip({
       text: this.options.text
     });

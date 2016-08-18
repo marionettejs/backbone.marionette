@@ -61,24 +61,18 @@ john.graduate();
 [Live example](https://jsfiddle.net/marionettejs/cd0dodwr/)
 
 ## Radio Events
-`Marionette.Object` integrates with `Backbone.Radio` to provide powerful messaging capabilities.  Objects can respond to both of Radio's message types; `Events` and `Requests`.  The syntax is similar to the `events` syntax from Backbone Views, and looks like this:
+`Marionette.Object` integrates with `Backbone.Radio` to provide powerful messaging capabilities.  
+Objects can respond to both of Radio's message types: `Events` and `Requests`.
+If radio either `Events` or `Requests` wanted to be used then `channelName` property is required to be set.
 
 ```javascript
+channelName: 'myChannel',
 radioEvents: {
-  'app start': 'onAppStart',
-  'books finish': 'onBooksFinish',
+  'some:event': 'eventHandler'
 },
 
 radioRequests: {
-  'resources bar': 'getBar',
-},
-```
-
-where each hash value is in the form `'channel eventName' : 'handler'`.  So
-
-```javascript
-radioRequests: {
-  'app doFoo': 'executeFoo',
+  'some:request': 'requestHandler'
 },
 ```
 

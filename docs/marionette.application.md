@@ -26,7 +26,7 @@ app.on('start', function() {
 loadInitialData().then(app.start);
 ```
 
-[Live example](https://jsfiddle.net/denar90/twx4tuuq/)
+[Live example](https://jsfiddle.net/marionettejs/kk266551/)
 
 In the simple example above, we could have just as easily started history after
 our initial data had loaded. This pattern becomes more useful as the startup
@@ -64,7 +64,7 @@ var myApp = new App();
 myApp.start();
 ```
 
-[Live example](https://jsfiddle.net/denar90/e0pk0sgb/)
+[Live example](https://jsfiddle.net/marionettejs/uzc8or6u/)
 
 This will immediately render `RootView` and fire the usual triggers such as
 `before:attach` and `attach` in addition to the `before:render` and `render`
@@ -91,7 +91,7 @@ var App = Mn.Application.extend({
 var app = new App({model: new Bb.Model({key: 'value'})});
 ```
 
-[Live example](https://jsfiddle.net/denar90/et8ooy23/)
+[Live example](https://jsfiddle.net/marionettejs/5qsmsu2x/)
 
 ## Application Triggers
 
@@ -144,7 +144,7 @@ var app = new App(options);
 app.start();
 ```
 
-[Live example](https://jsfiddle.net/denar90/zxLxjotc/)
+[Live example](https://jsfiddle.net/marionettejs/yovad75L/)
 
 As we'll see below, the `options` object is passed into the Application as an
 argument to `start`.

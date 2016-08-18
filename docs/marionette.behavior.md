@@ -51,7 +51,7 @@ var MyView = Mn.View.extend({
 });
 ```
 
-[Live example](https://jsfiddle.net/denar90/3cy3nkqm/)
+[Live example](https://jsfiddle.net/marionettejs/pa8ryv03/)
 
 Interaction points, such as tooltips and warning messages, are generic concepts.
 There is no need to recode them within your Views so they are prime candidates
@@ -115,7 +115,7 @@ var MyView = Mn.View.extend({
 });
 ```
 
-[Live example](https://jsfiddle.net/denar90/50tk3j2w/)
+[Live example](https://jsfiddle.net/marionettejs/b1awta6u/)
 
 Each behavior will now be able to respond to user interactions as though the
 event handlers were attached to the view directly. In addition to using array
@@ -156,7 +156,7 @@ var MyView = Mn.View.extend({
 });
 ```
 
-[Live example](https://jsfiddle.net/denar90/50tk3j2w/)
+[Live example](https://jsfiddle.net/marionettejs/vq9k3c69/)
 
 Using an object, we must define the `behaviorClass` attribute to refer to our
 behaviors and then add any extra options with keys matching the option we want
@@ -231,7 +231,7 @@ var ToolTip = Mn.Behavior.extend({
 });
 ```
 
-[Live example](https://jsfiddle.net/denar90/vef50h2a/)
+[Live example](https://jsfiddle.net/marionettejs/p8vymo4j/)
 
 ## Nesting Behaviors
 
@@ -250,7 +250,7 @@ var Modal = Mn.Behavior.extend({
 });
 ```
 
-[Live example](https://jsfiddle.net/denar90/h67Lyym7/)
+[Live example](https://jsfiddle.net/marionettejs/7ffnqff3/)
 
 Nested Behaviors act as if they were direct Behaviors of the parent `Behavior`'s
 view instance.
@@ -316,7 +316,7 @@ var MyBehavior = Mn.Behavior.extend({
 });
 ```
 
-[Live example](https://jsfiddle.net/denar90/96rp6t5r/)
+[Live example](https://jsfiddle.net/marionettejs/6b8o3pmz/)
 
 ### Template and View
 
@@ -345,7 +345,7 @@ var ViewBehavior = Mn.Behavior.extend({
 });
 ```
 
-[Live example](https://jsfiddle.net/denar90/hvpbyjoy/)
+[Live example](https://jsfiddle.net/marionettejs/8dmk30Lq/)
 
 #### Referencing the DOM
 
@@ -392,4 +392,4 @@ var FirstView = Mn.View.extend({
 });
 ```
 
-[Live example](https://jsfiddle.net/denar90/grb86nvz/)
+[Live example](https://jsfiddle.net/marionettejs/xoy56gpv/)

@@ -1,6 +1,3 @@
-**_These docs are for Marionette 3 which is still in pre-release. Some parts may
-not be accurate or up-to-date_**
-
 # Common Marionette Concepts
 
 This document covers the basic usage patterns and concepts across Marionette.

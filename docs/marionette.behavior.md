@@ -1,6 +1,3 @@
-**_These docs are for Marionette 3 which is still in pre-release. Some parts may
-not be accurate or up-to-date_**
-
 # Marionette.Behavior
 
 A `Behavior` provides a clean separation of concerns to your view logic,

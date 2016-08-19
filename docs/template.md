@@ -1,6 +1,3 @@
-**_These docs are for Marionette 3 which is still in pre-release. Some parts may
-not be accurate or up-to-date_**
-
 # Template Rendering
 
 The Marionette View's primary purpose is to render your model and collection

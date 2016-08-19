@@ -1,6 +1,3 @@
-**_These docs are for Marionette 3 which is still in pre-release. Some parts may
-not be accurate or up-to-date_**
-
 # Backbone Radio
 
 The Backbone Radio provides easy support for a number of messaging patterns for

@@ -3,6 +3,7 @@
 
 import _                  from 'underscore';
 import Backbone           from 'backbone';
+import isNodeAttached     from './common/is-node-attached';
 import monitorViewEvents  from './common/monitor-view-events';
 import ViewMixin          from './mixins/view';
 import RegionsMixin       from './mixins/regions';
@@ -80,6 +81,22 @@ const View = Backbone.View.extend({
   serializeCollection() {
     if (!this.collection) { return {}; }
     return this.collection.map(function(model) { return _.clone(model.attributes); });
+  },
+
+  // Overriding Backbone.View's `setElement` to handle
+  // if an el was previously defined. If so, the view might be
+  // rendered or attached on setElement.
+  setElement() {
+    const hasEl = !!this.el;
+
+    Backbone.View.prototype.setElement.apply(this, arguments);
+
+    if (hasEl) {
+      this._isRendered = !!this.$el.length;
+      this._isAttached = isNodeAttached(this.el);
+    }
+
+    return this;
   },
 
   // Render the view, defaulting to underscore.js templates.

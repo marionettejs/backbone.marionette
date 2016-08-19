@@ -3,7 +3,6 @@
 
 import Backbone from 'backbone';
 import _ from 'underscore';
-import isNodeAttached from '../common/is-node-attached';
 import { triggerMethod } from '../common/trigger-method';
 import BehaviorsMixin from './behaviors';
 import CommonMixin from './common';
@@ -44,22 +43,6 @@ const ViewMixin = {
 
   isAttached() {
     return !!this._isAttached;
-  },
-
-  // Overriding Backbone.View's `setElement` to handle
-  // if an el was previously defined. If so, the view might be
-  // rendered or attached on setElement.
-  setElement() {
-    const hasEl = !!this.el;
-
-    Backbone.View.prototype.setElement.apply(this, arguments);
-
-    if (hasEl) {
-      this._isRendered = !!this.$el.length;
-      this._isAttached = isNodeAttached(this.el);
-    }
-
-    return this;
   },
 
   // Overriding Backbone.View's `delegateEvents` to handle

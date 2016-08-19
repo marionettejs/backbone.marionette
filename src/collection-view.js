@@ -489,10 +489,6 @@ const CollectionView = Backbone.View.extend({
 
   // Internal Method. Add the view to children and render it at the given index.
   _addChildView(view, index) {
-    // Only trigger attach if already attached and not buffering,
-    // otherwise _endBuffering() or Region#show() handles this.
-    const shouldTriggerAttach = !this._isBuffering && this._isAttached;
-
     monitorViewEvents(view);
 
     // set up the child view event forwarding
@@ -501,23 +497,37 @@ const CollectionView = Backbone.View.extend({
     // Store the child view itself so we can properly remove and/or destroy it later
     this.children.add(view);
 
+    this._renderView(view);
+
+    this._attachView(view, index);
+  },
+
+  _renderView(view) {
+    if (view._isRendered) {
+      return;
+    }
+
     if (!view.supportsRenderLifecycle) {
       triggerMethodOn(view, 'before:render', view);
     }
 
-    // Render view
     view.render();
 
     if (!view.supportsRenderLifecycle) {
       view._isRendered = true;
       triggerMethodOn(view, 'render', view);
     }
+  },
+
+  _attachView(view, index) {
+    // Only trigger attach if already attached and not buffering,
+    // otherwise _endBuffering() or Region#show() handles this.
+    const shouldTriggerAttach = !view._isAttached && !this._isBuffering && this._isAttached;
 
     if (shouldTriggerAttach) {
       triggerMethodOn(view, 'before:attach', view);
     }
 
-    // Attach view
     this.attachHtml(this, view, index);
 
     if (shouldTriggerAttach) {

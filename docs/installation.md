@@ -1,6 +1,3 @@
-**_These docs are for Marionette 3 which is still in pre-release. Some parts may
-not be accurate or up-to-date_**
-
 # Installing Marionette
 
 As with all JavaScript libraries, there are a number of ways to get started with

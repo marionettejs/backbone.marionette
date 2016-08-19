@@ -63,6 +63,8 @@ notifyChannel.request('show:error', 'A generic error occurred!');
 notifyChannel.trigger('user:logged:in', userModel);
 ```
 
+[Live example](https://jsfiddle.net/marionettejs/dv40a0t2/)
+
 In addition to this documentation, the Radio documentation can be found on
 [Github](https://github.com/marionettejs/backbone.radio).
 
@@ -110,6 +112,8 @@ var someChannel = Radio.channel('basic');  // Exactly the same channel as above
 someChannel.trigger('some:event');  // Will fire the function call above
 ```
 
+[Live example](https://jsfiddle.net/marionettejs/0bejfju0/)
+
 ### Assigning Channels to Objects
 
 As of Marionette 3, it is now possible to assign Radio channels directly to
@@ -128,11 +132,13 @@ var ChannelHandler = Mn.Object.extend({
     this.listenTo(channel, 'log', this.logMsg);
   },
 
-  showAlertMessage: function(msg) {
+  logMsg: function(msg) {
     console.log(msg);
   }
 })
 ```
+
+[Live example](https://jsfiddle.net/marionettejs/tmeraxd2/)
 
 ## Event
 
@@ -186,6 +192,8 @@ var Star = Mn.Object.extend({
 });
 ```
 
+[Live example](https://jsfiddle.net/marionettejs/s8nff8vz/)
+
 As with Backbone, this will bind `this` to our `Star` instance. See the
 [Backbone documentation](http://backbonejs.org/#Events) for the full list of
 Event handling methods.
@@ -212,6 +220,8 @@ var Star = Mn.Object.extend({
   }
 });
 ```
+
+[Live example](https://jsfiddle.net/marionettejs/tf9467x4/)
 
 This gives us a clear definition of how this object interacts with the `star`
 radio channel.
@@ -247,6 +257,8 @@ var Radio = require('backbone.radio');
 var channel = Radio.channel('notify');
 
 var Notification = Mn.Object.extend({
+  channelName: 'notify',
+  
   initialize: function() {
     channel.reply('show:success', this.showSuccessMessage);
     channel.reply('show:error', this.showErrorMessage);
@@ -280,6 +292,8 @@ var ModelView = Mn.View.extend({
   }
 });
 ```
+
+[Live example](https://jsfiddle.net/marionettejs/4uuyLe1q/)
 
 Now, whenever the model attached to this View is unable to sync with the server,
 we can display an error message to the user.
@@ -319,6 +333,8 @@ var channel = Radio.channel('user');
 var loggedIn = channel.request('user:logged:in');  // App.model.getLoggedIn()
 ```
 
+[Live example](https://jsfiddle.net/marionettejs/zaje1rLj/)
+
 ### Listening to Requests on Objects
 
 Marionette 3 integrates Request/Reply directly onto its `Object` class through
@@ -345,6 +361,8 @@ var Notification = Mn.Object.extend({
 });
 ```
 
+[Live example](https://jsfiddle.net/marionettejs/j2qgfk3s/)
+
 We now have a clear API for communicating with the `Notification` across the
 application. Don't forget to define the `channelName` on your `Object`
 definition.
@@ -366,6 +384,8 @@ var App = Mn.Application.extend({
   }
 });
 ```
+
+[Live example](https://jsfiddle.net/marionettejs/52rpd3zg/)
 
 As above, define your `channelName` attribute, then simply add the `reply`
 handler to `radioRequests` to bind it to your `Object` (`Application` in this

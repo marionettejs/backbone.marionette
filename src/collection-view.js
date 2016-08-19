@@ -4,6 +4,7 @@
 import _                  from 'underscore';
 import Backbone           from 'backbone';
 import destroyBackboneView from './utils/destroy-backbone-view';
+import isNodeAttached     from './common/is-node-attached';
 import monitorViewEvents  from './common/monitor-view-events';
 import { triggerMethodOn } from './common/trigger-method';
 import ChildViewContainer from './child-view-container';
@@ -130,6 +131,21 @@ const CollectionView = Backbone.View.extend({
     const view = this.children.findByModel(model);
     this.removeChildView(view);
     this._checkEmpty();
+  },
+
+  // Overriding Backbone.View's `setElement` to handle
+  // if an el was previously defined. If so, the view might be
+  // attached on setElement.
+  setElement() {
+    const hasEl = !!this.el;
+
+    Backbone.View.prototype.setElement.apply(this, arguments);
+
+    if (hasEl) {
+      this._isAttached = isNodeAttached(this.el);
+    }
+
+    return this;
   },
 
   // Render children views. Override this method to provide your own implementation of a

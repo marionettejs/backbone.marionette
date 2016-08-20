@@ -49,6 +49,8 @@ var Bar = Foo.extend({
 var b = new Bar();
 ```
 
+[Live example](https://jsfiddle.net/marionettejs/w5avq89r/)
+
 ## Marionette.isNodeAttached
 
 Determines whether the passed-in node is a child of the `document` or not.
@@ -64,6 +66,8 @@ $('body').append(div);
 Mn.isNodeAttached(div);
 // => true
 ```
+
+[Live example](https://jsfiddle.net/marionettejs/azn1fo3z/)
 
 ## Marionette.mergeOptions
 
@@ -87,6 +91,8 @@ var MyView = Mn.View.extend({
 });
 ```
 
+[Live example](https://jsfiddle.net/marionettejs/gv5psrdu/)
+
 ## Marionette.getOption
 
 Retrieve an object's attribute either directly from the object, or from
@@ -96,20 +102,22 @@ the object's `this.options`, with `this.options` taking precedence.
 var Bb = require('backbone');
 var Mn = require('backbone.marionette');
 
-var M = Bb.Model.extend({
-  foo: "bar",
+var Model = Bb.Model.extend({
+  foo: 'bar',
 
   initialize: function(attributes, options){
     this.options = options;
-    var f = Mn.getOption(this, "foo");
-    console.log(f);
+    var foo = Mn.getOption(this, 'foo');
+    console.log(foo);
   }
 });
 
-new M(); // => "bar"
+var model1 = new Model(); // => "bar"
 
-new M({}, { foo: "quux" }); // => "quux"
+var model2 = new Model({}, { foo: 'quux' }); // => "quux"
 ```
+
+[Live example](https://jsfiddle.net/marionettejs/4rt6exaq/)
 
 This is useful when building an object that can have configuration set
 in either the object definition or the object's constructor options.
@@ -126,20 +134,22 @@ For example:
 var Bb = require('backbone');
 var Mn = require('backbone.marionette');
 
-var M = Bb.Model.extend({
-  foo: "bar",
+var Model = Bb.Model.extend({
+  foo: 'bar',
 
   initialize: function(){
-    var f = Mn.getOption(this, "foo");
-    console.log(f);
+    var foo = Mn.getOption(this, 'foo');
+    console.log(foo);
   }
 });
 
-new M(); // => "bar"
+var model1 = new Model(); // => "bar"
 
-var f;
-new M({}, { foo: f }); // => "bar"
+var foo;
+var model2 = new Model({}, { foo: foo }); // => "bar"
 ```
+
+[Live example](https://jsfiddle.net/marionettejs/2ddk28ap/)
 
 In this example, "bar" is returned both times because the second
 example has an undefined value for `f`.
@@ -190,7 +200,7 @@ var Mn = require('backbone.marionette');
 Bb.View.extend({
 
   modelEvents: {
-    "change:foo": "doSomething"
+    'change:foo': 'doSomething'
   },
 
   initialize: function(){
@@ -204,6 +214,8 @@ Bb.View.extend({
 
 });
 ```
+
+[Live example](https://jsfiddle.net/marionettejs/L640ecac/)
 
 The first parameter, `target`, must have the Backbone.Events module mixed in.
 
@@ -228,7 +240,7 @@ var Mn = require('backbone.marionette');
 Bb.View.extend({
 
   modelEvents: {
-    "change:foo": "doSomething"
+    'change:foo': 'doSomething'
   },
 
   initialize: function(){
@@ -246,6 +258,8 @@ Bb.View.extend({
 
 });
 ```
+
+[Live example](https://jsfiddle.net/marionettejs/yvsfm65c/)
 
 ## Marionette.bindRequests
 
@@ -277,6 +291,8 @@ var myView = new MyView();
 var channel = Radio.channel('myChannelName');
 channel.request('foo:bar'); // Logs 'foo:bar event was called'
 ```
+
+[Live example](https://jsfiddle.net/marionettejs/hmjgkg7w/)
 
 The first parameter, `this`, is a context of current entity.
 
@@ -317,6 +333,8 @@ var myView = new MyView();
 myView.destroy();
 ```
 
+[Live examples](https://jsfiddle.net/marionettejs/r5kmwwke/)
+
 The first parameter, `this`, is a context of current entity.
 
 The second parameter, `channel`, reference to a channel by name.
@@ -330,22 +348,35 @@ configuration.
 Receives a hash of event names and functions and/or function names, and returns the
 same hash with the function names replaced with the function references themselves.
 
-This function is attached to the `Marionette.AbstractView` prototype by default. To use it from non-View classes you'll need to attach it yourself.
-
 ```javascript
 var Mn = require('backbone.marionette');
 
 var View = Mn.View.extend({
 
   initialize: function() {
-    this.someFn = function() {};
-    this.someOtherFn = function() {};
     var hash = {
-      eventOne: "someFn", // This will become a reference to `this.someFn`
-      eventTwo: this.someOtherFn
+      'event:one': 'handleEventOne', // This will become a reference to `this.someFn`
+      'event:two': this.someOtherFn
     };
+    
     this.normalizedHash = this.normalizeMethods(hash);
+    
+    Mn.bindEvents(this, this, this.normalizedHash);
+  },
+  
+  destroy: function() {
+      Mn.unbindEvents(this, this, this.normalizedHash);
+  },
+  
+  handleEventOne: function() {
+    console.log('event:one was fired');
+  },
+  
+  handleEventTwo: function() {
+    console.log('event:two was fired');
   }
 
 });
 ```
+
+[Live example](https://jsfiddle.net/marionettejs/zzjhm4p1/)

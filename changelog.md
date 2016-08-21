@@ -9,86 +9,81 @@ the upgrade. [Marionette Patch Tool] (https://github.com/marionettejs/marionette
 #### View
 * `LayoutView` + `ItemView` merge and rename to `View`.
 * `Marionette.View` -> `ViewMixin`
-* Add `LayoutView` shortcut methods
-* `isDestroyed` and `isRendered` need to be made private with a public accessor method.
-* Add `before:show` event to `ChildView` when added after show
+* Added `LayoutView` shortcut methods such as `showChildView`.
+* `isDestroyed` and `isRendered` made private with a public accessor method.
+* Now set `_isDestroyed` to false by default
 * Call `Backbone.View` with result of options (163188eeb8)
-* Make `CompositeView`'s `renderChildren` public.
-* Rename `childEvents` to `childViewEvents`.
-* View: set `isDestroyed` to false by default breaking
-* Remove passing view options as a function breaking
-* Rename `templateHelpers` to `templateContext`
-* Make sure `before:render` is triggered before emptying regions.
-* Regions are not attached directly to the layout. Use `getRegion` instead.
-* Allow `CompositeView` to attach to existing HTML with `template:false`
-* Add `hasRegion` for layouts
-* Make `getChildView` private
-* Enable passing `preventDestroy` to `region.empty`.
-* `LayoutView` should remove its element before destroying child regions. There's now an option to turn it on, but now it’s available by default. This helps remove all of the synchronous paints going up the tree.
+* `CompositeView`'s `renderChildren` is now public.
+* Renamed `childEvents` to `childViewEvents`.
+* Removed passing view options as a function
+* Renamed `templateHelpers` to `templateContext`
+* Made sure `before:render` is triggered before emptying regions.
+* Regions are not attached directly to the layout. Use `getRegion` to access the region or `showChildView` to show a `View` within it.
+* Allowed `CompositeView` to attach to existing HTML with `template:false`
+* Added `hasRegion` for layouts
+* Enabled passing `preventDestroy` to `region.empty`.
+* `View` now removes its element before destroying child regions. There was an option to turn it on, but now it’s available by default. This helps remove all of the synchronous paints going up the tree.
 
 #### CollectionView
-* Accept `ChildView` as a function
-* Check if filter is set
-* `CollectionView.destroyChildren` now triggers `destroy:children`
-* ChildView now accepts a function instead of using `getChildView` which was removed
-* Proxied events do not append “this” as an argument
+* The `childView` attribute now accepts a function
+* `getChildView` was removed
 * `emptyView` now accepts a function as an arg.
+* Proxied events do not append “this” as an argument
 * Removed the `apply:filter` event from `CollectionView`.
 * `removeChildView` now returns the removed view.
 
 #### Regions
-* Fix inconsistency in `addRegion`, it now behaves like `addRegions` and adds the region to internal this.regions.
+* Fixed inconsistency in `addRegion`, it now behaves like `addRegions` and adds the region to internal this.regions.
 * `View` can replace regions's el.
-* Replace region manager with `region-mixin`.
+* Replaced region manager with `region-mixin`.
 * Removed static `buildRegion`
 * Removed `swap` events.
 
 #### Application
-* Introduce region to `Application` (`rootRegion`)
-* Remove regions
-* Remove Initializers and Finalizers Callbacks
-* Remove Application `vent`, `commands`, `requests`
+* Introduced region to `Application` (`rootRegion`)
+* Removed regions
+* Removed Initializers and Finalizers Callbacks
+* Removed Application `vent`, `commands`, `requests`
 
 #### Object
 * Added support for `Object.isDestroyed`
 
 #### ES6
-* Add Rest & Spread ES6 syntax
-* Use ES6 Modules
+* Added Rest & Spread ES6 syntax
+* using ES6 Modules
 * Replaced `var` and `let` with `const`.
 
 #### General Enhancements
-* Add `DEV_MODE`
-* Add Marionette feature flags
-* Change _.rest multiple arg usage to drop for lodash 3 support.
+* Added `DEV_MODE`
+* Changed `_.rest` multiple arg usage to drop for lodash 3 support.
 * Behavior, View Mixins.
-* Add `cid` field to object, application, behavior, and region
-* Add `TemplateCache` options.
+* Added `cid` field to object, application, behavior, and region
+* Added `TemplateCache` options.
 * Allow a user to define trigger handlers in options.
 * Increased Lodash compatibility, (now supports upto lodash 4)
-* Add first class support for Backbone.Radio in Mn.Object
-* Update BB and _ deps to modern versions
-* Upgraded Radio from 0.9 to 2.0
+* Added first class support for Backbone.Radio in Mn.Object
+* Updated BB and _ deps to modern versions
+* Updated Radio from 0.9 to 2.0
 * `delegateEntityEvents`. Delegate Events used to set delegate entity events, it was extracted because now backbone calls delegateEvent everytime the element is set.
 * Added `Backbone.Babysitter` to `Mn` and removed the Babysitter dependency.
 
 #### Deprecations
-* Deprecate `CompositeView`
+* Deprecated `CompositeView`
 * Deprecated `Behavior` Lookups.
 
 #### Removed
-* Remove `Marionette.Module` - there’s a shim that you can pull in to get Module and Deferred
-* Remove `Marionette.Deferred`
-* Remove `component.json`
-* Remove `Controller`
-* Remove `Callbacks`
-* Remove `Wreqr` (replaced with `Radio`)
-* `actAsCollection`
-* Removed `getValue` and internal `getOption`.
+* Removed `Marionette.Module` - there’s a shim that you can pull in to get Module and Deferred
+* Removed `Marionette.Deferred`
+* Removed `component.json`
+* Removed `Controller`
+* Removed `Callbacks`
+* Removed `Wreqr` (replaced with `Radio`)
+* Removed `actAsCollection`
+* Removed `_getValue`.
 
 #### API Renames
-* Rename `render:collection` => `render:children`
-* `bindEntityEvents` renamed `bindEvents`.
+* Renamed `render:collection` => `render:children`
+* Renamed `bindEntityEvents` => `bindEvents`.
 
 ### v3.0.0-pre5
 
@@ -194,6 +189,32 @@ Extra release to remove public release of v3.0.0-pre.1, this release is availabl
 
 This is a "family and friends" release. The documentation is still mostly for 2.4.4.
 Please let us know if you run into any issues. Also, [please help us finish v3](https://github.com/marionettejs/backbone.marionette/milestones/v3.0.0)!
+
+### v2.4.7 [view commit logs](https://github.com/marionettejs/backbone.marionette/compare/v2.4.6...v2.4.7)
+
+#### Fixes
+
+* CollectionView#reorder will no longer remove an already displayed emptyView.
+* Fixed build of sourcemap files.
+
+### v2.4.6 [view commit logs](https://github.com/marionettejs/backbone.marionette/compare/v2.4.5...v2.4.6)
+
+#### Misc
+
+* Updated Backbone dependency to 1.3.x.
+
+### v2.4.5 [view commit logs](https://github.com/marionettejs/backbone.marionette/compare/v2.4.4...v2.4.5)
+
+#### Fixes
+
+* `Marionette.View#ui` will now bind events when names are hyphenated.
+* Nonexistent event handlers now fail silently.
+
+#### Misc
+
+* Updated Backbone dependency to 1.3.3.
+* devDependencies updated.
+* Updated uglify to fix deprecated sourcemap pragma //@ replaced with //#.
 
 ### v2.4.4 [view commit logs](https://github.com/marionettejs/backbone.marionette/compare/v2.4.3...v2.4.4)
 

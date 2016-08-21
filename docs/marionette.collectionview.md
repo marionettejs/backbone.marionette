@@ -36,16 +36,11 @@ in the DOM. This behavior can be disabled by specifying `{sort: false}` on initi
 * [Events](#collectionview-events)
   * [Child Event Bubbling](#child-event-bubbling)
   * [Lifecycle Events](#lifecycle-events)
-    * [View Creation Lifecycle](#view-creation-lifecycle)
-      * [Collection `before:render`](#collection-beforerender)
-      * [Collection `before:render:empty`](#collection-before-renderempty)
-      * [Collection `before:render:children`](#collection-before-renderchildren)
-      * [Collection `before:add:child`](#collection-beforeaddchild)
-      * [Collection `add:child`](#collection-addchild)
-      * [Collection `render:empty`](#collection-renderempty)
-      * [Collection `render:children`](#collection-renderchildren)
-      * [Collection `render`](#collection-render)
-    * [View Destruction Lifecycle](#view-destruction-lifecycle)
+    * [Creation Lifecycle](#creation-lifecycle)
+    * [Destruction Lifecycle](#destruction-lifecycle)
+    * [Creation Events](#creation-events)
+    * [Destruction Events](#destruction-events)
+    * [Other Events](#other-events)
 * [Rendering `CollectionView`s](#rendering-collectionviews)
   * [Rendering Lists](#rendering-lists)
   * [Rendering Tables](#rendering-tables)
@@ -567,7 +562,6 @@ myCollectionView.render();
 myCollectionView.destroy(); // logs "I will get destroyed"
 ```
 
-<<<<<<< HEAD
 ## CollectionView's `filter`
 
 `CollectionView` allows for a custom `filter` option if you want to prevent some of the
@@ -774,9 +768,6 @@ var MyCollectionView = Mn.CollectionView.extend({
 ```
 
 ## Events
-=======
-## CollectionView Events and Callbacks
->>>>>>> a01e094db2fb5a7765646db6a4e6b79144600d5e
 
 The `CollectionView`, like `View`, is able to trigger and respond to events
 occurring during their lifecycle. The [Documentation for Events](./events.md)
@@ -841,6 +832,28 @@ rendering events firing:
 The events marked with "\*" only fire on empty collections and events marked
 with "+" fire on collections with items.
 
+#### Destruction Lifecycle
+
+When a `CollectionView` is destroyed it fires a series of events in order to
+reflect the different stages of the destruction process.
+
+| Order |             Event            |
+| :---: |------------------------------|
+|   1   |        `before:destroy`      |
+|   2   |        `before:detach`       |
+|   3   |           `detach`           |
+|   4   |  `before:destroy:children`   |
+|  5*   |      `before:remove:empty`   |
+|  5+   |      `before:remove:child`   |
+|  6*   |         `remove:child`       |
+|  6+   |         `remove:empty`       |
+|   7   |           `destroy`          |
+
+The events marked with "\*" only fire on empty collections and events marked
+with "+" fire on collections with items.
+
+#### Creation Events
+
 ##### CollectionView `before:render`
 
 Triggers before the `CollectionView` render process starts. See the
@@ -902,25 +915,7 @@ myView.render();
 Fires when the collection has completely finished rendering. See the
 [`render` Documentation](./marionette.view.md#view-render) for more information.
 
-#### Destruction Lifecycle
-
-When a `CollectionView` is destroyed it fires a series of events in order to
-reflect the different stages of the destruction process.
-
-| Order |             Event            |
-| :---: |------------------------------|
-|   1   |        `before:destroy`      |
-|   2   |        `before:detach`       |
-|   3   |           `detach`           |
-|   4   |  `before:destroy:children`   |
-|  5*   |      `before:remove:empty`   |
-|  5+   |      `before:remove:child`   |
-|  6*   |         `remove:child`       |
-|  6+   |         `remove:empty`       |
-|   7   |           `destroy`          |
-
-The events marked with "\*" only fire on empty collections and events marked
-with "+" fire on collections with items.
+#### Destruction Events
 
 ##### CollectionView `before:destroy`
 
@@ -1023,7 +1018,7 @@ myCol.sort()
 
 ## Rendering `CollectionView`s
 
-Marionette 3 has completely removed the `CompositeView` in favor making the
+Marionette 3 has completely removed the `CompositeView` in favor of making the
 `View` and `CollectionView` a lot more flexible. This section will cover the
 most common use cases for `CollectionView` and how to replace `CompositeView`.
 

@@ -1,6 +1,3 @@
-**_These docs are for Marionette 3 which is still in pre-release. Some parts may
-not be accurate or up-to-date_**
-
 # Marionette.CollectionView
 
 The `CollectionView` will loop through all of the models in the
@@ -18,17 +15,6 @@ in the DOM. This behavior can be disabled by specifying `{sort: false}` on initi
   * [CollectionView's `childViewEventPrefix`](#collectionviews-childvieweventprefix)
   * [CollectionView's `childViewEvents`](#collectionviews-childviewevents)
   * [CollectionView's `childViewTriggers`](#collectionviews-childviewtriggers)
-* [CollectionView's children](#collectionviews-children)
-  * [CollectionView's `buildChildView`](#collectionviews-buildchildview)
-  * [CollectionView's `addChildView`](#collectionviews-addchildview)
-  * [CollectionView: Retrieve Child Views](#collectionview-retrieve-child-views)
-    * [CollectionView childView's: `findByCid`](#collectionview-childviews-findbycid)
-    * [CollectionView childView's: `findByModel`](#collectionview-childviews-findbymodel)
-    * [CollectionView childView's: `findByModelCid`](#collectionview-childviews-findbymodelcid)
-    * [CollectionView childView's: `findByCustom`](#collectionview-childviews-findbycustom)
-    * [CollectionView childView's: `findByIndex`](#collectionview-childviews-findbyindex)
-  * [CollectionView's `removeChildView`](#collectionviews-removechildview)
-  * [CollectionView childView Iterators And Collection Functions](#collectionview-childview-iterators-and-collection-functions)
 * [CollectionView's `emptyView`](#collectionviews-emptyview)
   * [CollectionView's `emptyViewOptions`](#collectionviews-emptyviewoptions)
   * [CollectionView's `isEmpty`](#collectionviews-isempty)
@@ -60,16 +46,6 @@ in the DOM. This behavior can be disabled by specifying `{sort: false}` on initi
       * [Collection `render:children`](#collection-renderchildren)
       * [Collection `render`](#collection-render)
     * [View Destruction Lifecycle](#view-destruction-lifecycle)
-  * ["render" / "before:render" event](#render--beforerender-event)
-  * ["render:children" / "before:render:children" event](#renderchildren--beforerenderchildren-event)
-  * ["destroy" / "before:destroy" event](#destroy--beforedestroy-event)
-  * ["destroy:children" / "before:destroy:children" event](#destroychildren--beforedestroychildren-event)
-  * ["add:child" / "before:add:child" event](#addchild--beforeaddchild-event)
-  * ["remove:child" / "before:remove:child" event](#removechild--beforeremovechild-event)
-  * ["render:empty" / "before:render:empty" event](#renderempty--beforerenderempty-event)
-  * ["remove:empty" / "before:remove:empty" event](#removeempty--beforerenderempty-event)
-  * ["reorder" / "before:reorder" event](#reorder--beforereorder-event)
-* [CollectionView Child View Events](#collectionview-child-view-events)
 * [Rendering `CollectionView`s](#rendering-collectionviews)
   * [Rendering Lists](#rendering-lists)
   * [Rendering Tables](#rendering-tables)
@@ -373,189 +349,6 @@ var ParentView = Mn.CollectionView.extend({
 });
 ```
 
-## CollectionView's children
-
-The `CollectionView` can store and manage its child views. This allows you to easily access
-the views within the collection view, iterate them, find them by
-a given indexer such as the view's model or collection, and more.
-
-### CollectionView's `buildChildView`
-
-The `buildChildView` is responsible for taking the ChildView class and
-instantiating it with the appropriate data. This method takes three
-parameters and returns a view instance to be used as thechild view.
-
-```javascript
-buildChildView: function(child, ChildViewClass, childViewOptions){
-  // build the final list of options for the childView class
-  var options = _.extend({model: child}, childViewOptions);
-  // create the child view instance
-  var view = new ChildViewClass(options);
-  // return it
-  return view;
-},
-```
-Override this method when you need a more complicated build, but use [`childView`](#collectionviews-childview)
-if you need to determine _which_ View class to instantiate.
-
-```javascript
-var Bb = require('backbone');
-var Mn = require('backbone.marionette');
-
-var MyCollectionView = Mn.CollectionView.extend({
-  childView: function(child) {
-    if (child.get('type') === 'list') {
-      return MyListView;
-    }
-
-    return MyView;
-  },
-  buildChildView: function(child, ChildViewClass, childViewOptions) {
-    var options = {};
-
-    if (child.get('type') === 'list') {
-      var childList = new Bb.Collection(child.get('list'));
-      options = _.extend({collection: childList}, childViewOptions);
-    } else {
-      options = _.extend({model: child}, childViewOptions);
-    }
-
-    // create the child view instance
-    var view = new ChildViewClass(options);
-    // return it
-    return view;
-  }
-
-});
-
-```
-
-### CollectionView's `addChildView`
-
-The `addChildView` method can be used to add a view that is independent of your
-`Backbone.Collection`. Note that this added view will be subject to filtering
-and ordering and may be difficult to manage in complex situations. Use with
-care.
-
-This method takes two parameters, the child view instance and the index for
-where it should be placed within the [CollectionView's children](#collectionviews-children).
-
-```javascript
-var Mn = require('backbone.marionette');
-var buttonView = new ButtonView();
-var MyCollectionView = Mn.CollectionView.extend({
-  onRender: function() {
-    this.addChildView(buttonView, this.collection.length);
-  }
-});
-
-var myCollectionView = new MyCollectionView();
-
-myCollectionView.render();
-```
-
-### CollectionView: Retrieve Child Views
-
-You can retrieve a view by any of the index. If the findBy* method cannot find the view, it will return undefined.
-
-#### CollectionView childView's: `findByCid`
-Find a view by it's cid.
-
-```javascript
-var bView = myCollectionView.children.findByCid(buttonView.cid);
-```
-
-#### CollectionView childView's: `findByModel`
-Find a view by model.
-
-```javascript
-var bView = myCollectionView.children.findByModel(buttonView.model);
-```
-
-#### CollectionView childView's: `findByModelCid`
-Find a view by model cid.
-
-```javascript
-var bView = myCollectionView.children.findByModelCid(buttonView.model.cid);
-```
-
-#### CollectionView childView's: `findByCustom`
-Find by custom key.
-
-```javascript
-var bView = myCollectionView.children.findByCustom('cutom_key');
-```
-
-#### CollectionView childView's: `findByIndex`
-
-Find by numeric index (unstable)
-
-```javascript
-var bView = myCollectionView.children.findByIndex(0);
-```
-
-### CollectionView's `removeChildView`
-
-The `removeChildView` method is useful if you need to remove a view from the `CollectionView` without affecting the view's collection.  In most cases it is better to use the data to determine what the `CollectionView` should display.
-
-This method the child view instance to remove as its parameter.
-
-```javascript
-var Mn = require('backbone.marionette');
-
-Mn.CollectionView.extend({
-  onChildViewClose: function(childView, model) {
-    // NOTE: we must wait for the server to confirm
-    // the destroy PRIOR to removing it from the collection
-    model.destroy({wait: true});
-
-    // but go ahead and remove it visually
-    this.removeChildView(childView);
-  }
-});
-```
-
-### CollectionView childView Iterators And Collection Functions
-
-The container object borrows several functions from [Underscore.js](http://underscorejs.org/), to provide iterators and other collection functions, including:
-
-* [each](http://underscorejs.org/#each)
-* [map](http://underscorejs.org/#map)
-* [reduce](http://underscorejs.org/#reduce)
-* [find](http://underscorejs.org/#find)
-* [filter](http://underscorejs.org/#filter)
-* [reject](http://underscorejs.org/#reject)
-* [every](http://underscorejs.org/#every)
-* [some](http://underscorejs.org/#some)
-* [contains](http://underscorejs.org/#contains)
-* [invoke](http://underscorejs.org/#invoke)
-* [toArray](http://underscorejs.org/#toArray)
-* [first](http://underscorejs.org/#first)
-* [initial](http://underscorejs.org/#initial)
-* [rest](http://underscorejs.org/#rest)
-* [last](http://underscorejs.org/#last)
-* [without](http://underscorejs.org/#without)
-* [isEmpty](http://underscorejs.org/#isEmpty)
-* [pluck](http://underscorejs.org/#pluck)
-
-These methods can be called directly on the container, to iterate and process the views held by the container.
-
-```javascript
-var Bb = require('backbone');
-var Mn = require('backbone.marionette');
-
-var collectionView = new Mn.CollectionView({
-  collection: new Bb.Collection()
-});
-
-collectionView.render();
-
-// iterate over all of the views and process them
-collectionView.children.each(function(childView) {
-  // process the `childView` here
-});
-```
-
 ## CollectionView's `emptyView`
 
 When a collection has no children, and you need to render a view other than
@@ -622,7 +415,7 @@ var MyCollectionView = Mn.CollectionView.extend({
 The `render` method of the collection view is responsible for
 rendering the entire collection. It loops through each of the
 children in the collection and renders them individually as a
-`childView`. By default when a `collectionView` is fully rendered it buffers the DOM changes for a single [`attachBuffer`](#collectionviews-attachbuffer)] DOM change.
+`childView`. By default when a `collectionView` is fully rendered it buffers the DOM changes for a single [`attachBuffer`](#collectionviews-attachbuffer) DOM change.
 
 ```javascript
 var Mn = require('backbone.marionette');
@@ -774,6 +567,7 @@ myCollectionView.render();
 myCollectionView.destroy(); // logs "I will get destroyed"
 ```
 
+<<<<<<< HEAD
 ## CollectionView's `filter`
 
 `CollectionView` allows for a custom `filter` option if you want to prevent some of the
@@ -980,6 +774,9 @@ var MyCollectionView = Mn.CollectionView.extend({
 ```
 
 ## Events
+=======
+## CollectionView Events and Callbacks
+>>>>>>> a01e094db2fb5a7765646db6a4e6b79144600d5e
 
 The `CollectionView`, like `View`, is able to trigger and respond to events
 occurring during their lifecycle. The [Documentation for Events](./events.md)
@@ -1527,3 +1324,6 @@ This more explicit style gives us two major benefits:
 * Fewer bugs - it's no longer possible to accidentally create a tree structure
 * More regions to hook different views in, something that's impossible with
 `CompositeView`
+
+For getting advanced information about filtering, sorting or managing `CollectionView` look at
+[Advanced CollectionView usage](./marionette.collectionviewadvanced.md)

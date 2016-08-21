@@ -1,6 +1,3 @@
-**_These docs are for Marionette 3 which is still in pre-release. Some parts may
-not be accurate or up-to-date_**
-
 # Marionette.Object
 
 A base class which other classes can extend from.
@@ -35,6 +32,8 @@ var Friend = Mn.Object.extend({
 new Friend({name: 'John'});
 ```
 
+[Live example](https://jsfiddle.net/marionettejs/1ytrwyog/)
+
 
 ## Events
 `Marionette.Object` extends `Backbone.Events` and includes `triggerMethod`.
@@ -59,27 +58,25 @@ john.on('announce', function(message) {
 john.graduate();
 ```
 
+[Live example](https://jsfiddle.net/marionettejs/cd0dodwr/)
+
 ## Radio Events
-`Marionette.Object` integrates with `Backbone.Radio` to provide powerful messaging capabilities.  Objects can respond to both of Radio's message types; `Events` and `Requests`.  The syntax is similar to the `events` syntax from Backbone Views, and looks like this:
+`Marionette.Object` integrates with `Backbone.Radio` to provide powerful messaging capabilities.  
+Objects can respond to both of Radio's message types: `Events` and `Requests`.
+If radio either `Events` or `Requests` wanted to be used then `channelName` property is required to be set.
 
 ```javascript
+channelName: 'myChannel',
 radioEvents: {
-  'app start': 'onAppStart',
-  'books finish': 'onBooksFinish',
+  'some:event': 'eventHandler'
 },
 
 radioRequests: {
-  'resources bar': 'getBar',
+  'some:request': 'requestHandler'
 },
 ```
 
-where each hash value is in the form `'channel eventName' : 'handler'`.  So
-
-```javascript
-radioRequests: {
-  'app doFoo': 'executeFoo',
-},
-```
+[Live example](https://jsfiddle.net/marionettejs/3seo87o1/)
 
 means that the object will listen for the `doFoo` request on the `app` channel, and run the 'executeFoo' method.  When using Radio Requests with Objects, the same rules and restrictions that normal Radio use implies also apply here: a single handler can be associated with a request, either through manual use of the reply functions, or through the Object API.
 

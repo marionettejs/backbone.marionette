@@ -1,6 +1,3 @@
-**_These docs are for Marionette 3 which is still in pre-release. Some parts may
-not be accurate or up-to-date_**
-
 # Marionette Events
 
 The Marionette Event system provides a system for objects to communicate with

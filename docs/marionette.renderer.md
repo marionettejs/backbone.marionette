@@ -1,6 +1,3 @@
-**_These docs are for Marionette 3 which is still in pre-release. Some parts may
-not be accurate or up-to-date_**
-
 # Marionette.Renderer
 
 The `Renderer` object was extracted from the `View` rendering process, in order
@@ -105,7 +102,7 @@ with the data.
 ```javascript
 var Mn = require('backbone.marionette');
 
-Mn.Renderer.render = function(template, data){
+Mn.Renderer.render = function(template, data) {
   return template(data);
 };
 ```
@@ -121,6 +118,8 @@ Mn.View.extend({
   template: myPrecompiledTemplate
 });
 ```
+
+[Live example](https://jsfiddle.net/marionettejs/kzths849/)
 
 For more information on templates in general, see the
 [Documentation for templates](./template.md).

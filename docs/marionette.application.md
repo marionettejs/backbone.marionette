@@ -1,6 +1,3 @@
-**_These docs are for Marionette 3 which is still in pre-release. Some parts may
-not be accurate or up-to-date_**
-
 # Marionette.Application
 
 The `Application` is used to model your Marionette application under a single
@@ -15,6 +12,8 @@ tasks before the rest of your application begins. Let's take a quick look at an
 example:
 
 ```javascript
+var Mn = require('backbone.marionette');
+
 // Create our Application
 var app = new Mn.Application();
 
@@ -26,6 +25,8 @@ app.on('start', function() {
 // Load some initial data, and then start our application
 loadInitialData().then(app.start);
 ```
+
+[Live example](https://jsfiddle.net/marionettejs/kk266551/)
 
 In the simple example above, we could have just as easily started history after
 our initial data had loaded. This pattern becomes more useful as the startup
@@ -63,6 +64,8 @@ var myApp = new App();
 myApp.start();
 ```
 
+[Live example](https://jsfiddle.net/marionettejs/uzc8or6u/)
+
 This will immediately render `RootView` and fire the usual triggers such as
 `before:attach` and `attach` in addition to the `before:render` and `render`
 triggers.
@@ -88,6 +91,8 @@ var App = Mn.Application.extend({
 var app = new App({model: new Bb.Model({key: 'value'})});
 ```
 
+[Live example](https://jsfiddle.net/marionettejs/5qsmsu2x/)
+
 ## Application Triggers
 
 The `Application` object will fire two triggers:
@@ -105,6 +110,14 @@ your views and starting `Backbone.history`.
 
 ### Application Lifecycle
 
+When `Application` was initialized and `start` method was called
+a set of events will be called in a specific order.
+
+| Order |      Event      |
+| :---: |-----------------|
+|   1   | `before:start`  |
+|   2   | `start`         |
+
 ```javascript
 var Bb = require('backbone');
 var Mn = require('backbone.marionette');
@@ -114,7 +127,7 @@ var MyView = require('./myview');
 
 var App = Mn.Application.extend({
   initialize: function(options) {
-    console.log('My value:', options.model.get('key'));
+    console.log('Initialize');
   },
 
   onBeforeStart: function(options) {
@@ -126,7 +139,12 @@ var App = Mn.Application.extend({
     Bb.history.start();
   }
 });
+
+var app = new App(options);
+app.start();
 ```
+
+[Live example](https://jsfiddle.net/marionettejs/yovad75L/)
 
 As we'll see below, the `options` object is passed into the Application as an
 argument to `start`.

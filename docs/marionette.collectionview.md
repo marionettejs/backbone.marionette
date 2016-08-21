@@ -15,33 +15,32 @@ in the DOM. This behavior can be disabled by specifying `{sort: false}` on initi
   * [CollectionView's `childViewEventPrefix`](#collectionviews-childvieweventprefix)
   * [CollectionView's `childViewEvents`](#collectionviews-childviewevents)
   * [CollectionView's `childViewTriggers`](#collectionviews-childviewtriggers)
-
 * [CollectionView's `emptyView`](#collectionviews-emptyview)
   * [CollectionView's `emptyViewOptions`](#collectionviews-emptyviewoptions)
   * [CollectionView's `isEmpty`](#collectionviews-isempty)
-
 * [CollectionView's `render`](#collectionviews-render)
   * [CollectionView: Automatic Rendering](#collectionview-automatic-rendering)
   * [CollectionView: Re-render Collection](#collectionview-re-render-collection)
   * [CollectionView's `attachHtml`](#collectionviews-attachhtml)
   * [CollectionView's `attachBuffer`](#collectionviews-attachbuffer)
-
 * [CollectionView's `destroy`](#collectionviews-destroy)
-
-* [CollectionView Events](#collectionview-events)
-  * ["render" / "before:render" event](#render--beforerender-event)
-  * ["render:children" / "before:render:children" event](#renderchildren--beforerenderchildren-event)
-  * ["destroy" / "before:destroy" event](#destroy--beforedestroy-event)
-  * ["destroy:children" / "before:destroy:children" event](#destroychildren--beforedestroychildren-event)
-  * ["add:child" / "before:add:child" event](#addchild--beforeaddchild-event)
-  * ["remove:child" / "before:remove:child" event](#removechild--beforeremovechild-event)
-  * ["render:empty" / "before:render:empty" event](#renderempty--beforerenderempty-event)
-  * ["remove:empty" / "before:remove:empty" event](#removeempty--beforerenderempty-event)
-  * ["reorder" / "before:reorder" event](#reorder--beforereorder-event)
-  * ["childview:\*" event bubbling from child views](#childview-event-bubbling-from-child-views)
-
-* [CollectionView Child View Events](#collectionview-child-view-events)
-
+* [CollectionView's `filter`](#collectionviews-filter)
+  * [CollectionView's `setFilter`](#collectionviews-setfilter)
+  * [CollectionView's `removeFilter`](#collectionviews-removefilter)
+* [CollectionView's `sort`](#collectionviews-sort)
+  * [CollectionView's `viewComparator`](#collectionviews-viewcomparator)
+  * [CollectionView's `getViewComparator`](#collectionviews-getviewcomparator)
+  * [CollectionView's `reorderOnSort`](#collectionviews-reorderonsort)
+  [CollectionView's `reorder`](#collectionviews-reorder)
+  * [CollectionView's `resortView`](#collectionviews-resortview)
+* [Events](#collectionview-events)
+  * [Child Event Bubbling](#child-event-bubbling)
+  * [Lifecycle Events](#lifecycle-events)
+    * [Creation Lifecycle](#creation-lifecycle)
+    * [Destruction Lifecycle](#destruction-lifecycle)
+    * [Creation Events](#creation-events)
+    * [Destruction Events](#destruction-events)
+    * [Other Events](#other-events)
 * [Rendering `CollectionView`s](#rendering-collectionviews)
   * [Rendering Lists](#rendering-lists)
   * [Rendering Tables](#rendering-tables)
@@ -56,7 +55,7 @@ in the DOM. This behavior can be disabled by specifying `{sort: false}` on initi
 ## CollectionView's `childView`
 
 Specify a `childView` in your collection view definition. This must be
-a Backbone view object definition, not an instance. It can be any
+a Backbone view class definition, not an instance. It can be any
 `Backbone.View` or be derived from `Marionette.View`.
 
 ```javascript
@@ -563,225 +562,435 @@ myCollectionView.render();
 myCollectionView.destroy(); // logs "I will get destroyed"
 ```
 
-## CollectionView Events and Callbacks
+## CollectionView's `filter`
 
-There are several events that will be triggered during the life
-of a collection view. Each of these events is called with the
-[Marionette.triggerMethod](./marionette.functions.md#marionettetriggermethod) function,
-which calls a corresponding "on{EventName}" method on the
-view instance. Additionally each event is triggered immediately after the action
-occurred and a before event is triggered immediately prior.
-The first argument passed to all event handlers is the triggering view.
-
-### "render" / "before:render" event
-
-Triggers when the `CollectionView` is rendered.
-You can implement this in your view to provide custom code for dealing
-with the view's `el` after it has been rendered:
-
-```javascript
-var Mn = require('backbone.marionette');
-
-var MyView = Mn.CollectionView.extend({...});
-
-var myView = new MyView();
-
-myView.on({
-  'render': function() {
-    console.log('this collection view rendered');
-  },
-  'before:render': function(){
-    console.log('the collection view is about to be rendered');
-  }
-});
-
-myView.render();
-```
-
-### "render:children" / "before:render:children" event
-
-The `render:children` event is triggered after a `collectionView`'s children have been rendered and buffered. It differs from the `collectionViews`'s `render` event in that it happens __only__ if the `collection` is not not empty. It may also happen when the children sort when [`reorderOnSort`](#collectionviews-reorderonsort) is false.
+`CollectionView` allows for a custom `filter` option if you want to prevent some of the
+underlying `collection`'s models from being rendered as child views.
+The filter function takes a model from the collection and returns a truthy value if the child should be rendered,
+and a falsey value if it should not.
 
 ```javascript
 var Bb = require('backbone');
 var Mn = require('backbone.marionette');
 
-var MyView = Mn.CollectionView.extend({...});
+var cv = new Mn.CollectionView({
+  childView: SomeChildView,
+  emptyView: SomeEmptyView,
+  collection: new Bb.Collection([
+    { value: 1 },
+    { value: 2 },
+    { value: 3 },
+    { value: 4 }
+  ]),
+
+  // Only show views with even values
+  filter: function (child, index, collection) {
+    return child.get('value') % 2 === 0;
+  }
+});
+
+// renders the views with values '2' and '4'
+cv.render();
+
+// change the filter
+// renders the views with values '1' and '3'
+cv.setFilter(function (child, index, collection) {
+  return child.get('value') % 2 !== 0;
+});
+
+// renders all views
+cv.removeFilter();
+```
+
+### CollectionView's `setFilter`
+
+The `setFilter` method modifies the `CollectionView`'s filter attribute, and
+renders the new `ChildViews` in a efficient way, instead of
+rendering the whole DOM structure again.
+Passing `{ preventRender: true }` in the options argument will prevent the view being rendered.
+
+```javascript
+var Mn = require('backbone.marionette');
+
+var cv = new Mn.CollectionView({
+  collection: someCollection
+});
+
+cv.render();
+
+var newFilter = function(child, index, collection) {
+  return child.get('value') % 2 === 0;
+};
+
+// Note: the setFilter is preventing the automatic re-render
+cv.setFilter(newFilter, { preventRender: true });
+
+//Render the new state of the ChildViews instead of the whole DOM.
+cv.render();
+```
+
+### CollectionView's `removeFilter`
+
+This function is actually an alias of `setFilter(null, options)`. It is useful for removing filters.
+`removeFilter` also accepts `preventRender` as a option.
+
+```javascript
+var Mn = require('backbone.marionette');
+
+var cv = new Mn.CollectionView({
+  collection: someCollection
+});
+
+cv.render();
+
+cv.setFilter(function(child, index, collection) {
+  return child.get('value') % 2 === 0;
+});
+
+//Remove the current filter without rendering again.
+cv.removeFilter({ preventRender: true });
+```
+
+## CollectionView's `sort`
+
+By default the `CollectionView` will maintain a sorted collection's order
+in the DOM. This behavior can be disabled by specifying `{sort: false}` on initialize. The `sort` flag cannot be changed after instantiation.
+
+```javascript
+var Bb = require('backbone');
+var Mn = require('backbone.marionette');
+
+var myCollection = new Bb.Collection([
+  { id: 1 },
+  { id: 4 },
+  { id: 3 },
+  { id: 2 }
+]);
+
+myCollection.comparator = 'id';
+
+var mySortedColView = new Mn.CollectionView({
+  //...
+  collection: myCollection
+});
+
+var myUnsortedColView = new Mn.CollectionView({
+  //...
+  collection: myCollection,
+  sort: false
+});
+
+mySortedColView.render(); // 1 4 3 2
+myUnsortedColView.render(); // 1 4 3 2
+
+// mySortedColView auto-renders 1 2 3 4
+// myUnsortedColView has no change
+myCollection.sort();
+```
+
+### CollectionView's `viewComparator`
+
+`CollectionView` allows for a custom `viewComparator` option if you want your `CollectionView`'s children to be rendered with a different sort order than the underlying Backbone collection uses.
+
+```javascript
+var Mn = require('backbone.marionette');
+
+var cv = new Mn.CollectionView({
+  collection: someCollection,
+  viewComparator: 'otherFieldToSortOn'
+});
+```
+
+The `viewComparator` can take any of the acceptable `Backbone.Collection`
+[comparator formats](http://backbonejs.org/#Collection-comparator) -- a sortBy
+(pass a function that takes a single argument), as a sort (pass a comparator
+function that expects two arguments), or as a string indicating the attribute to
+sort by.
+
+### CollectionView's `getViewComparator`
+
+Override this method to determine which `viewComparator` to use.
+
+```javascript
+var Mn = require('backbone.marionette');
+
+var MyCollectionView = Mn.CollectionView.extend({
+  sortAsc: function(model) {
+    return -model.get('order');
+  },
+  sortDesc: function(model) {
+    return model.get('order');
+  },
+  getViewComparator: function() {
+    // The collectionView's model
+    if (this.model.get('sorted') === 'ASC') {
+      return this.sortAsc;
+    }
+
+    return this.sortDesc;
+  }
+});
+```
+
+### CollectionView's `reorderOnSort`
+
+This option is useful when you have performance issues when you resort your `CollectionView`.
+Without this option, your `CollectionView` will be completely re-rendered, which can be
+costly if you have a large number of elements or if your `ChildView`s are complex. If this option
+is activated, when you sort your `Collection`, there will be no re-rendering, only the DOM nodes
+will be reordered. This can be a problem if your `ChildView`s use their collection's index
+in their rendering. In this case, you cannot use this option as you need to re-render each
+`ChildView`.
+
+If you combine this option with a [filter](#collectionviews-filter) that changes the views that are
+to be displayed, `reorderOnSort` will be bypassed to render new children and remove those that are rejected by the filter.
+
+### CollectionView's `reorder`
+
+If [`reorderOnSort`](#collectionviews-reorderonsort) is set to true, this function will be used instead of re-rendering all children.  It can be called directly to prevent the collection from being completely re-rendered. This may only be useful if models are added or removed silently or if [`sort`](#collectionviews-sort) was set to false on the `CollectionView`.
+
+### CollectionView's `resortView`
+
+[By default](#collectionviews-sort) the `CollectionView` will maintain the order of its `collection`
+in the DOM. However on occasions the view may need to re-render to make this
+possible, for example if you were to change the comparator on the collection.
+The `CollectionView` will re-render its children or [`reorder`](#collectionviews-reorder) them depending on [`reorderOnSort`](#collectionviews-reorderonsort).
+Override this function if you need further customization.
+
+```javascript
+var Mn = require('backbone.marionette');
+
+var MyCollectionView = Mn.CollectionView.extend({
+  resortView: function() {
+    // provide custom logic for rendering after sorting the collection
+  }
+});
+```
+
+## Events
+
+The `CollectionView`, like `View`, is able to trigger and respond to events
+occurring during their lifecycle. The [Documentation for Events](./events.md)
+has the complete documentation for how to set and handle events on views.
+
+### Child Event Bubbling
+
+When a child view triggers an event, that event will bubble up one level to the
+parent collection view. For an example:
+
+```javascript
+var Mn = require('backbone.marionette');
+
+var Item = Mn.View.extend({
+  tagName: 'li',
+
+  triggers: {
+    'click a': 'select:item'
+  }
+});
+
+var Collection = Mn.CollectionView.extend({
+  tagName: 'ul',
+
+  onChildviewSelectItem: function(childView) {
+    console.log('item selected: ' + childView.model.id);
+  }
+});
+```
+
+The event will receive a `childview:` prefix before going through the magic
+method binding logic. See the
+[Documentation for Child View Events](./events.md#child-view-events) for more
+information.
+
+### Lifecycle Events
+
+The `CollectionView` has its own lifecycle around the standard `View` event
+rendering lifecycle. This section covers the events that get triggered and what
+they indicate.
+
+#### Creation Lifecycle
+
+The `CollectionView` creation lifecycle can go down two paths depending on
+whether the collection is populated or empty. The below table shows the order of
+rendering events firing:
+
+| Order |           Event          |
+| :---: |--------------------------|
+|   1   |      `before:render`     |
+|  2*   |  `before:render:empty`   |
+|  2+   | `before:render:children` |
+|   3   |    `before:add:child`    |
+|   4   |       `add:child`        |
+|  5*   |      `render:empty`      |
+|  5+   |     `render:children`    |
+|   6   |          `render`        |
+|   7   |      `before:attach`     |
+|   8   |         `attach`         |
+|   9   |       `dom:refresh`      |
+
+The events marked with "\*" only fire on empty collections and events marked
+with "+" fire on collections with items.
+
+#### Destruction Lifecycle
+
+When a `CollectionView` is destroyed it fires a series of events in order to
+reflect the different stages of the destruction process.
+
+| Order |             Event            |
+| :---: |------------------------------|
+|   1   |        `before:destroy`      |
+|   2   |        `before:detach`       |
+|   3   |           `detach`           |
+|   4   |  `before:destroy:children`   |
+|  5*   |      `before:remove:empty`   |
+|  5+   |      `before:remove:child`   |
+|  6*   |         `remove:child`       |
+|  6+   |         `remove:empty`       |
+|   7   |           `destroy`          |
+
+The events marked with "\*" only fire on empty collections and events marked
+with "+" fire on collections with items.
+
+#### Creation Events
+
+##### CollectionView `before:render`
+
+Triggers before the `CollectionView` render process starts. See the
+[`before:render` Documentation](#marionette.view.md#view-before-render) for an
+example.
+
+##### CollectionView `before:render:empty`
+
+Triggers just before rendering a collection `emptyView`. This won't be fired if
+the collection has 1 or more elements in.
+
+##### CollectionView `before:render:children`
+
+This event fires just before rendering the children in the `CollectionView`.
+This only fires if the collection has at least one item.
+
+##### CollectionView `before:add:child`
+
+This event fires before each child is added to the view. If the collection is
+empty, this fires exactly once for the `emptyView`.
+
+##### CollectionView `add:child`
+
+This event fires after each child is added to the view. This fires once for each
+item in the attached collection.
+
+If the collection is empty, this event fires exactly once for the `emptyView`.
+
+##### CollectionView `render:empty`
+
+This event fires once the `emptyView` has been rendered. This will only fire if
+the attached collection is empty.
+
+##### CollectionView `render:children`
+
+This event fires once all the collection's child views have been rendered.  This
+only fires if the collection has at least one item. This may also fire when
+[`reorderOnSort`](#collectionviews-reorderonsort) is false:
+
+```javascript
+var Bb = require('backbone');
+var Mn = require('backbone.marionette');
+
+var MyView = Mn.CollectionView.extend({
+  onRenderChildren: function({
+    console.log('The collectionview children have been rendered');
+  })
+});
 
 var myView = new MyView({
   collection: new Bb.Collection([{ id: 1 }]);
 });
 
-myView.on({
-  'render': function() {
-    console.log('this collection view childen were rendered');
-  },
-  'before:render': function(){
-    console.log('the collection view children are about to be rendered');
-  }
-});
-
 myView.render();
 ```
 
-### "destroy" / "before:destroy" event
+##### CollectionView `render`
 
-Triggered just after destroying the view.  `onBeforeDestroy` is the optimal function for any additional necessary cleanup within the `collectionView`.
+Fires when the collection has completely finished rendering. See the
+[`render` Documentation](./marionette.view.md#view-render) for more information.
+
+#### Destruction Events
+
+##### CollectionView `before:destroy`
+
+Fires as the destruction process is beginning. This is best used to perform any
+necessary cleanup within the `CollectionView`.
 
 ```javascript
 var Mn = require('backbone.marionette');
 
-var MyView = Mn.CollectionView.extend({...});
-
-var myView = new MyView();
-
-myView.on({
-  'destroy': function() {
-    console.log('this collection view is destroyed');
-  },
-  'before:destroy': function(){
-    console.log('this is the best place to clean up additional listeners');
+var MyView = Mn.CollectionView.extend({
+  onBeforeDestroy: function() {
+    console.log('The CollectionView is about to be destroyed');
   }
 });
+
+var myView = new MyView();
 
 myView.destroy();
 ```
 
-### "destroy:children" / "before:destroy:children" event
+##### CollectionView `before:detach`
+
+Fires just before the `CollectionView` is removed from the DOM. If you need to
+remove any event handlers or UI modifications, this would be the best time to do
+that.
+
+##### CollectionView `detach`
+
+Fires just after the `CollectionView` is removed from the DOM. The view's
+elements will still exist in memory if you need to access them.
+
+##### CollectionView `before:destroy:children`
+
+This is triggered just before the `childView` items are destroyed.
 
 Triggered when the `collectionView` is destroyed or before the `collectionView`'s children are re-rendered.
 
-```javascript
-var Mn = require('backbone.marionette');
+##### CollectionView `before:remove:empty`
 
-var MyView = Mn.CollectionView.extend({...});
+This is triggered just before the `emptyView` is removed from the
+`CollectionView`. *This only fires if the attached `collection` has no items.*
 
-var myView = new MyView();
+The `emptyView` will then go through the its own
+[destruction lifecycle](./marionette.view.md#view-destruction-lifecycle)
 
-myView.on({
-  'destroy:children': function() {
-    console.log('this collection view is destroyed');
-  },
-  'before:destroy': function(){
-    console.log('this is the best place to clean up additional listeners');
-  }
-});
+##### CollectionView `before:remove:child`
 
-// destroy:children not triggered on first render
-myView.render();
+This is triggered for each `childView` that is removed from the
+`CollectionView`. This can *only* fire if the `collection` contains items.
 
-// destroy:children triggered
-myView.render();
+Each item in the `CollectionView` will undergo the
+[destruction lifecycle](./marionette.view.md#view-destruction-lifecycle)
 
-// destroy:children triggered
-myView.destroy();
-```
+##### CollectionView `remove:empty`
 
-### "before:add:child" / "add:child" event
+Fired after the `emptyView` has been removed and its destruction lifecycle has
+been completed. *This only fires if the attached `collection` has no items.*
 
-The "add:child" event is triggered after rendering the view and adding it to the view's DOM element.
+##### CollectionView `remove:child`
 
-```javascript
-var cv = new MyCV({...});
+Fired for each view that is removed from the `CollectionView`. This can only
+fire if the `collection` has items.
 
-cv.on({
-  'add:child': function() {
-    console.log('this will be called for each child added to the DOM');
-  },
-  'before:add:child': function(){
-    console.log('before each child is rendered and added to the DOM');
-  }
-});
-```
+##### CollectionView `destroy`
 
-### "remove:child" / "before:remove:child" event
+Fired once the `CollectionView` has been destroyed and no longer exists.
 
-Triggered when a childView instance has been destroyed and
-removed, when its child was deleted or removed from the
-collection.
+#### Other Events
 
-```javascript
-cv.on({
-  'remove:child': function() {
-    console.log('this will be called for each child removed from the collectionView');
-  },
-  'before:remove:child': function(){
-    console.log('before each child is destroyed and removed');
-  }
-});
-```
+Collection views can fire other events as part of their normal use.
 
-### "render:empty" / "before:render:empty" event
+##### "reorder" / "before:reorder" events
 
-The `"render:empty"` event is triggered when rendering the empty view and adding it to the view's DOM element.
-
-```javascript
-var Mn = require('backbone.marionette');
-
-var myEmptyView = Mn.View.extend({
-  template: false
-});
-
-var MyCollectionView = Mn.CollectionView.extend({
-  emptyView: myEmptyView
-});
-
-var myCollectionView = new MyCollectionView();
-
-myCollectionView.on({
-  'render:empty': function() {
-    console.log('the empty view has been rendered');
-  },
-  'before:render:empty': function() {
-    console.log('before the empty view has been rendered');
-  }
-});
-
-myCollectionView.render()
-```
-
-### "remove:empty" / "before:remove:empty" event
-
-Triggered just after destroying the empty view from the DOM.
-
-```javascript
-var Bb = require('backbone');
-var Mn = require('backbone.marionette');
-
-var collection = new Bb.Collection();
-
-var myChildView = Mn.View.extend({
-  template: false
-});
-
-var myEmptyView = Mn.View.extend({
-  template: false
-});
-
-var MyCollectionView = Mn.CollectionView.extend({
-  childView: myChildView,
-  collection: collection,
-  emptyView: myEmptyView
-});
-
-var myCollectionView = new MyCollectionView();
-
-myCollectionView.on({
-  'remove:empty': function() {
-    console.log('the empty view has been removed');
-  },
-  'before:remove:empty': function() {
-    console.log('before the empty view is removed');
-  }
-});
-
-myCollectionView.render()
-collection.add([{foo: 'bar'}])
-```
-
-### "reorder" / "before:reorder" events
-
-When [`reorderOnSort`](#collectionviews-resortview) is set to `true`, these events are fired for the reordering of the collection.
+When [`reorderOnSort`](#collectionviews-resortview) is set to `true`, these
+events are fired for the reordering of the collection.
 
 ```javascript
 var Bb = require('backbone');
@@ -807,68 +1016,9 @@ myView.on({
 myCol.sort()
 ```
 
-### "childview:\*" event bubbling from child views
-
-When a child view within a collection view triggers an
-event, that event will bubble up through the parent
-collection view with the [`childViewEventPrefix`](#collectionviews-childvieweventprefix)
-(which defaults to "childview:") prepended to the event name.
-
-That is, if a child view triggers "do:something", the
-parent collection view will then trigger "childview:do:something".
-
-```javascript
-var Mn = require('backbone.marionette');
-
-// set up basic collection
-var myModel = new MyModel();
-var myCollection = new MyCollection();
-
-myCollection.add(myModel);
-
-var MyView = Mn.View.extend({
-  triggers: {
-    'click button': 'do:something'
-  }
-});
-
-// get the collection view in place
-var colView = new CollectionView({
-  collection: myCollection,
-  childView: MyView,
-  onChildviewDoSomething: function() {
-    console.log('I said, "do something!"');
-  }
-});
-
-colView.render();
-```
-
-Now, whenever the button inside the attached childView is clicked, a console log
-will appear that says: I said, "do something!"
-
-It's also possible to attach the event manually using the usual
-`view.on('childview:do:something')`.
-
-## CollectionView Child View Events
-
-The following events are raised on child views during rendering and destruction of child views, which is consistent with the view lifecycle experienced during `Region#show`.
-
-* `render` / `onRender` - Called after the view is rendered, but before it is attached to the DOM.
-* `attach` / `onAttach` - Called after the view is attached to the DOM.  This will not fire if the `CollectionView` itself is not attached.
-* `dom:refresh` / `onDomRefresh` - Called when the view is rendered but only if it is attached to the DOM.  This will not fire if the `CollectionView` itself is not attached.
-* `destroy` / `onDestroy` - Called after destroying a view.
-
-Note: These events are triggered on pure Backbone Views during child view rendering, but for a complete implementation of these events the Backbone View should fire `render` within `render()` and `destroy` within `remove()` as well as set the following flags:
-
-```javascript
-view.supportsRenderLifecycle = true;
-view.supportsDestroyLifecycle = true;
-```
-
 ## Rendering `CollectionView`s
 
-Marionette 3 has completely removed the `CompositeView` in favor making the
+Marionette 3 has completely removed the `CompositeView` in favor of making the
 `View` and `CollectionView` a lot more flexible. This section will cover the
 most common use cases for `CollectionView` and how to replace `CompositeView`.
 

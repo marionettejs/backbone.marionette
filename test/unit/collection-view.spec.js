@@ -28,6 +28,34 @@ describe('collection view', function() {
   // Collection View Specs
   // ---------------------
 
+  describe('when a collection view is DOM', function() {
+    beforeEach(function() {
+      this.$fixtureEl = $('<div id="fixture-collectionview"></div>');
+    });
+
+    describe('and it\'s not attached to the document', function() {
+      beforeEach(function() {
+        this.collectionView = new this.CollectionView({el: '#fixture-collectionview'});
+      });
+
+      it('should have _isAttached set to false', function() {
+        expect(this.collectionView).to.have.property('_isAttached', false);
+      });
+    });
+
+    describe('and it\'s attached to the document', function() {
+      beforeEach(function() {
+        this.setFixtures(this.$fixtureEl);
+        this.collectionView = new this.CollectionView({el: '#fixture-collectionview'});
+      });
+
+      it('should have _isAttached set to true', function() {
+        expect(this.collectionView).to.have.property('_isAttached', true);
+      });
+    });
+
+  });
+
   describe('before rendering a collection view', function() {
     beforeEach(function() {
       var CollectionView = this.CollectionView.extend({
@@ -337,6 +365,12 @@ describe('collection view', function() {
 
     it('should call "render" on the childView', function() {
       expect(this.childView.render).to.have.been.calledOnce;
+    });
+
+    it('should not render childView twice', function() {
+      this.collectionView._renderView(this.childView);
+
+      expect(this.childView.render).to.not.have.been.calledTwice;
     });
   });
 

@@ -21,6 +21,8 @@ myView.render();
 This will cause the contents of the `template` attribute to be rendered inside
 a `<h1>` tag.
 
+[Live example](https://jsfiddle.net/marionettejs/h762zjua/)
+
 ## Documentation Index
 
 * [Rendering a Template](#rendering-a-template)
@@ -57,6 +59,8 @@ export.MyView = Mn.View.extend({
 </script>
 ```
 
+[Live example](https://jsfiddle.net/marionettejs/z4sd7ssh/)
+
 Marionette will look up the template above and render it for you when `MyView`
 gets rendered.
 
@@ -88,6 +92,8 @@ var MyView = Mn.View.extend({
 });
 ```
 
+[Live example](https://jsfiddle.net/marionettejs/ep0e4qkt/)
+
 Using a custom function can give you a lot of control over the output of your
 view after its context is calculated. If this logic is common, you may be best
 [overriding your renderer](./marionette.renderer.md) to change your default
@@ -103,6 +109,7 @@ function that will be called with the view's data and context.
 
 ```javascript
 var Mn = require('backbone.marionette');
+
 var MyView = Mn.View.extend({
   getTemplate: function(){
     if (this.model.get('is_active')){
@@ -113,6 +120,8 @@ var MyView = Mn.View.extend({
   }
 });
 ```
+
+[Live example](https://jsfiddle.net/marionettejs/9k5v4p92/)
 
 This differs from setting `template` as this method must be executed and
 calculated when the view is rendered. If your template is always the same, use
@@ -142,6 +151,8 @@ var MyView = Mn.View.extend({
 
 var myView = new MyView({model: new MyModel()});
 ```
+
+[Live example](https://jsfiddle.net/marionettejs/warfa6rL/)
 
 Now our template has full access to the attributes on the model passed into the
 view.
@@ -181,6 +192,8 @@ For clarity, we've moved the template into this script tag:
 </ul>
 </script>
 ```
+
+[Live example](https://jsfiddle.net/marionettejs/qyodkakf/)
 
 As you can see, `items` is provided to the template representing each record in
 the collection.
@@ -234,6 +247,8 @@ var MyView = Mn.View.extend({
 var myView = new MyView();
 ```
 
+[Live example](https://jsfiddle.net/marionettejs/rw09r7e6/)
+
 The `myView` instance will be rendered without errors even though we have no
 model or collection - `contextKey` is provided by `templateContext`.
 
@@ -264,6 +279,8 @@ var MyView = Mn.View.extend({
 
 var myView = new MyView({contextKey: 'world'});
 ```
+
+[Live example](https://jsfiddle.net/marionettejs/4qxk99ya/)
 
 Here, we've passed an option that can be accessed from the `templateContext`
 function using `getOption()`. More information on `getOption` can be found in

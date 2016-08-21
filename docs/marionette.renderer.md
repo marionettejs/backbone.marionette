@@ -102,7 +102,7 @@ with the data.
 ```javascript
 var Mn = require('backbone.marionette');
 
-Mn.Renderer.render = function(template, data){
+Mn.Renderer.render = function(template, data) {
   return template(data);
 };
 ```
@@ -118,6 +118,8 @@ Mn.View.extend({
   template: myPrecompiledTemplate
 });
 ```
+
+[Live example](https://jsfiddle.net/marionettejs/kzths849/)
 
 For more information on templates in general, see the
 [Documentation for templates](./template.md).

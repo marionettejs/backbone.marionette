@@ -62,6 +62,8 @@ var MyView = Mn.View.extend({
 });
 ```
 
+[Live example](https://jsfiddle.net/marionettejs/k93pejyb/)
+
 When we instantiate `MyView`, each instance will be given a `.bg-success` class
 with a `myRegion` region created on the `.my-region` element.
 
@@ -99,19 +101,18 @@ var MyView = Mn.View.extend({
   },
 
   alert: function() {
-    window.alert('model changed');
+    console.log('model changed');
   }
 });
 ```
+
+[Live example](https://jsfiddle.net/marionettejs/nn1754fc/)
 
 As we can see, almost all of the attributes here can be worked out dynamically.
 In most cases, Marionette will call the function once at instantiation, or first
 render, and preserve the value throughout the lifetime of the View. There are
 some exceptions to this rule - these will be referred to with their respective
 documentation.
-
-There are some exceptions to this general rule that will be documented in the
-relevant places.
 
 ### Function Context
 
@@ -189,8 +190,10 @@ var view = new MyView({
   foo: 'some text'
 });
 
-view.checkOption();  // prints 'some text'
+console.log(view.checkOption());  // prints 'some text'
 ```
+
+[Live example](https://jsfiddle.net/marionettejs/6n02ex1m/)
 
 ### The `getOption` Method
 
@@ -212,6 +215,8 @@ var myView = new MyView({
   extraClasses: 'table-striped'
 });
 ```
+
+[Live example](https://jsfiddle.net/marionettejs/ekvb8wwa/)
 
 This only works for custom options - arguments that belong to the standard
 Backbone/Marionette attributes, such as `model` and `collection`, are not
@@ -245,6 +250,8 @@ console.log(myObject.model);
 console.log(myObject.something);
 console.log(myObject.getOption('another'));
 ```
+
+[Live example](https://jsfiddle.net/marionettejs/ub510cbx/)
 
 In this example, `model` and `something` are directly available on the
 `MyObject` instance, while `another` must be accessed via `getOption`. This is

@@ -1,3 +1,90 @@
+### v3.0.0
+
+Version 3.0.0 of Marionette has arrived and contains many improvements over version
+2.x but also some API Changes. Below is a list of the changes made to each component.
+
+To help the community transition over we have released a v2 patch tool to assist
+the upgrade. [Marionette Patch Tool] (https://github.com/marionettejs/marionette-v3-compat)
+
+#### View
+* `LayoutView` + `ItemView` merge and rename to `View`.
+* `Marionette.View` -> `ViewMixin`
+* Added `LayoutView` shortcut methods such as `showChildView`.
+* `isDestroyed` and `isRendered` made private with a public accessor method.
+* Now set `_isDestroyed` to false by default
+* Call `Backbone.View` with result of options (163188eeb8)
+* `CompositeView`'s `renderChildren` is now public.
+* Renamed `childEvents` to `childViewEvents`.
+* Removed passing view options as a function
+* Renamed `templateHelpers` to `templateContext`
+* Made sure `before:render` is triggered before emptying regions.
+* Regions are not attached directly to the layout. Use `getRegion` to access the region or `showChildView` to show a `View` within it.
+* Allowed `CompositeView` to attach to existing HTML with `template:false`
+* Added `hasRegion` for layouts
+* Enabled passing `preventDestroy` to `region.empty`.
+* `View` now removes its element before destroying child regions. There was an option to turn it on, but now it’s available by default. This helps remove all of the synchronous paints going up the tree.
+
+#### CollectionView
+* The `childView` attribute now accepts a function
+* `getChildView` was removed
+* `emptyView` now accepts a function as an arg.
+* Proxied events do not append “this” as an argument
+* Removed the `apply:filter` event from `CollectionView`.
+* `removeChildView` now returns the removed view.
+
+#### Regions
+* Fixed inconsistency in `addRegion`, it now behaves like `addRegions` and adds the region to internal this.regions.
+* `View` can replace regions's el.
+* Replaced region manager with `region-mixin`.
+* Removed static `buildRegion`
+* Removed `swap` events.
+
+#### Application
+* Introduced region to `Application` (`rootRegion`)
+* Removed regions
+* Removed Initializers and Finalizers Callbacks
+* Removed Application `vent`, `commands`, `requests`
+
+#### Object
+* Added support for `Object.isDestroyed`
+
+#### ES6
+* Added Rest & Spread ES6 syntax
+* using ES6 Modules
+* Replaced `var` and `let` with `const`.
+
+#### General Enhancements
+* Added `DEV_MODE`
+* Changed `_.rest` multiple arg usage to drop for lodash 3 support.
+* Behavior, View Mixins.
+* Added `cid` field to object, application, behavior, and region
+* Added `TemplateCache` options.
+* Allow a user to define trigger handlers in options.
+* Increased Lodash compatibility, (now supports upto lodash 4)
+* Added first class support for Backbone.Radio in Mn.Object
+* Updated BB and _ deps to modern versions
+* Updated Radio from 0.9 to 2.0
+* `delegateEntityEvents`. Delegate Events used to set delegate entity events, it was extracted because now backbone calls delegateEvent everytime the element is set.
+* Added `Backbone.Babysitter` to `Mn` and removed the Babysitter dependency.
+
+#### Deprecations
+* Deprecated `CompositeView`
+* Deprecated `Behavior` Lookups.
+
+#### Removed
+* Removed `Marionette.Module` - there’s a shim that you can pull in to get Module and Deferred
+* Removed `Marionette.Deferred`
+* Removed `component.json`
+* Removed `Controller`
+* Removed `Callbacks`
+* Removed `Wreqr` (replaced with `Radio`)
+* Removed `actAsCollection`
+* Removed `_getValue`.
+
+#### API Renames
+* Renamed `render:collection` => `render:children`
+* Renamed `bindEntityEvents` => `bindEvents`.
+
 ### v3.0.0-pre5
 
 #### Documentation
@@ -102,6 +189,32 @@ Extra release to remove public release of v3.0.0-pre.1, this release is availabl
 
 This is a "family and friends" release. The documentation is still mostly for 2.4.4.
 Please let us know if you run into any issues. Also, [please help us finish v3](https://github.com/marionettejs/backbone.marionette/milestones/v3.0.0)!
+
+### v2.4.7 [view commit logs](https://github.com/marionettejs/backbone.marionette/compare/v2.4.6...v2.4.7)
+
+#### Fixes
+
+* CollectionView#reorder will no longer remove an already displayed emptyView.
+* Fixed build of sourcemap files.
+
+### v2.4.6 [view commit logs](https://github.com/marionettejs/backbone.marionette/compare/v2.4.5...v2.4.6)
+
+#### Misc
+
+* Updated Backbone dependency to 1.3.x.
+
+### v2.4.5 [view commit logs](https://github.com/marionettejs/backbone.marionette/compare/v2.4.4...v2.4.5)
+
+#### Fixes
+
+* `Marionette.View#ui` will now bind events when names are hyphenated.
+* Nonexistent event handlers now fail silently.
+
+#### Misc
+
+* Updated Backbone dependency to 1.3.3.
+* devDependencies updated.
+* Updated uglify to fix deprecated sourcemap pragma //@ replaced with //#.
 
 ### v2.4.4 [view commit logs](https://github.com/marionettejs/backbone.marionette/compare/v2.4.3...v2.4.4)
 

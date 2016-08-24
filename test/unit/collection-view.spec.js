@@ -30,16 +30,21 @@ describe('collection view', function() {
 
   describe('when a collection view is DOM', function() {
     beforeEach(function() {
-      this.$fixtureEl = $('<div id="fixture-collectionview"></div>');
+      this.$fixtureEl = $('<div id="fixture-collectionview"><span id="el1">1</span></div>');
     });
 
     describe('and it\'s not attached to the document', function() {
       beforeEach(function() {
-        this.collectionView = new this.CollectionView({el: '#fixture-collectionview'});
+        this.collectionView = new this.CollectionView({el: this.$fixtureEl[0]});
+        this.view1 = this.collectionView.addChildView(new Backbone.View({el: this.$fixtureEl.children()[0]}), 0);
       });
 
       it('should have _isAttached set to false', function() {
         expect(this.collectionView).to.have.property('_isAttached', false);
+      });
+
+      it('should have a child view without _isAttached', function() {
+        expect(this.view1).to.not.have.property('_isAttached');
       });
     });
 
@@ -47,10 +52,15 @@ describe('collection view', function() {
       beforeEach(function() {
         this.setFixtures(this.$fixtureEl);
         this.collectionView = new this.CollectionView({el: '#fixture-collectionview'});
+        this.view1 = this.collectionView.addChildView(new Backbone.View({el: '#el1'}), 0);
       });
 
       it('should have _isAttached set to true', function() {
         expect(this.collectionView).to.have.property('_isAttached', true);
+      });
+
+      it('should have a child view with _isAttached set to true', function() {
+        expect(this.view1).to.have.property('_isAttached', true);
       });
     });
 

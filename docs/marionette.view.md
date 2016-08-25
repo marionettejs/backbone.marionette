@@ -62,6 +62,8 @@ var myView = new MyView();
 myView.render();
 ```
 
+[Live example](https://jsfiddle.net/marionettejs/dhsjcka4/)
+
 For more detail on how to render templates, see the
 [Template documentation](./template.md).
 
@@ -80,6 +82,8 @@ var MyView = Mn.View({
   template: false
 });
 ```
+
+[Live example](https://jsfiddle.net/marionettejs/b2yz38gj/)
 
 Marionette will then attach all the usual
 [`event`](#events-and-callback-methods) and [`ui`](#organizing-your-view)
@@ -136,6 +140,8 @@ If we have the following template:
 </script>
 ```
 
+[Live example](https://jsfiddle.net/marionettejs/4e3qdgwr/)
+
 When we show views in the region, the contents of `#first-region` and
 `#second-region` will be replaced with the contents of the view we show. The
 value in the `regions` hash is just a jQuery selector, and any valid jQuery
@@ -168,6 +174,8 @@ var MyView = Mn.View.extend({
 });
 ```
 
+[Live example](https://jsfiddle.net/marionettejs/98u073m0/)
+
 #### Accessing a child view
 
 To access the child view of a `View` - use the `getChildView(region)` method.
@@ -195,6 +203,8 @@ var MyView = Mn.View.extend({
   }
 });
 ```
+
+[Live example](https://jsfiddle.net/marionettejs/b12kgq3t/)
 
 If no view is available, `getChildView` returns `null`.
 
@@ -294,6 +304,8 @@ var MyView = Mn.View.extend({
 });
 ```
 
+[Live example](https://jsfiddle.net/marionettejs/z8079srg/)
+
 ## Organizing your View
 
 The `View` provides a mechanism to name parts of your template to be used
@@ -345,6 +357,8 @@ var MyView = Mn.View.extend({
 });
 ```
 
+[Live example](https://jsfiddle.net/marionettejs/rpa58v0g/)
+
 As `saveButton` here is a jQuery selector, you can call any jQuery methods on
 it, according to the jQuery documentation.
 
@@ -377,6 +391,8 @@ var MyView = Mn.View.extend({
   }
 });
 ```
+
+[Live example](https://jsfiddle.net/marionettejs/f2k0wu05/)
 
 In this example, when the user clicks on `#save-button`, `handleSave` will be
 called. If the user clicks on `.close-button`, then the event `close:view` will
@@ -421,6 +437,8 @@ var view = new MyView();
 
 view.triggerMethod('other:event', 'test argument');
 ```
+
+[Live example](https://jsfiddle.net/marionettejs/wb95xd3m/)
 
 This will display in the console:
 `Fired other:event with 'test argument' as an argument`
@@ -661,6 +679,8 @@ var MyView = Mn.View.extend({
 });
 ```
 
+[Live example](https://jsfiddle.net/marionettejs/jfxwtmxj/)
+
 The DOM event gets passed in as the first argument, allowing you to see any
 information passed as part of the event.
 
@@ -696,6 +716,8 @@ var ButtonView = Mn.View.extend({
 });
 ```
 
+[Live example](https://jsfiddle.net/marionettejs/h7h0pnmj/)
+
 ##### Passing a Function
 
 The `events` attribute can also directly bind functions:
@@ -711,6 +733,8 @@ var MyView = Mn.View.extend({
   }
 });
 ```
+
+[Live example](https://jsfiddle.net/marionettejs/obt5vt09/)
 
 As when passing a string reference to a view method, the `events` attribute
 passes in the `event` as the argument to the function called.
@@ -735,6 +759,8 @@ var MyView = Mn.View.extend({
   }
 });
 ```
+
+[Live example](https://jsfiddle.net/marionettejs/exu2s3tL/)
 
 When the `a` tag is clicked here, the `link:click` event is fired. This event
 can be listened to using the
@@ -762,14 +788,16 @@ var ButtonView = Mn.View.extend({
   tagName: 'button',
 
   events: {
-    click: 'entire:view:clicked'
+    click: 'handleClick'
   },
 
-  onEntireViewClicked: function() {
+  handleClick: function() {
     alert('Button was clicked');
   }
 });
 ```
+
+[Live example](https://jsfiddle.net/marionettejs/psnokbjf/)
 
 ##### Event Bubbling
 
@@ -801,6 +829,8 @@ var MyView = Mn.View.extend({
 });
 ```
 
+[Live example](https://jsfiddle.net/marionettejs/auvk4hps/)
+
 The `modelEvents` attribute passes through all the arguments that are passed
 to `model.trigger('event', arguments)`.
 
@@ -823,6 +853,8 @@ var MyView = Mn.View.extend({
 })
 ```
 
+[Live example](https://jsfiddle.net/marionettejs/zaxLe6au/)
+
 ### Collection Events
 
 Collection events work exactly the same way as [`modelEvents`](#model-events)
@@ -842,6 +874,8 @@ var MyView = Mn.View.extend({
 });
 ```
 
+[Live example](https://jsfiddle.net/marionettejs/7qyfeh9r/)
+
 The `collectionEvents` attribute can also take a
 [function returning an object](basics.md#functions-returning-values).
 
@@ -859,6 +893,8 @@ var MyView = Mn.View.extend({
   }
 })
 ```
+
+[Live example](https://jsfiddle.net/marionettejs/ze8po0x5/)
 
 ### Listening to both
 
@@ -886,6 +922,8 @@ var MyView = Mn.View.extend({
   }
 })
 ```
+
+[Live example](https://jsfiddle.net/marionettejs/h9ub5hp3/)
 
 In this case, Marionette will bind event handlers to both.
 
@@ -932,6 +970,8 @@ MyView.render();
 </script>
 ```
 
+[Live example](https://jsfiddle.net/marionettejs/brp0t7pq/)
+
 If the serialization is a collection, the results are passed in as an
 `items` array:
 
@@ -953,6 +993,8 @@ MyView.render();
   <% }); %>
 </script>
 ```
+
+[Live example](https://jsfiddle.net/marionettejs/yv3hrvkf/)
 
 If you need to serialize the View's `model` or `collection` in a custom way,
 then you should override either `serializeModel` or `serializeCollection`.

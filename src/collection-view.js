@@ -31,6 +31,29 @@ const ClassOptions = [
   'viewComparator'
 ];
 
+function childViewEventHandle(eventName, ...args) {
+  const prefix = _.result(this, 'childViewEventPrefix');
+
+  const childEventName = prefix + ':' + eventName;
+
+  const childViewEvents = this.normalizeMethods(this._childViewEvents);
+
+  // call collectionView childViewEvent if defined
+  if (typeof childViewEvents !== 'undefined' && _.isFunction(childViewEvents[eventName])) {
+    childViewEvents[eventName].apply(this, args);
+  }
+
+  // use the parent view's proxyEvent handlers
+  const childViewTriggers = this._childViewTriggers;
+
+  // Call the event with the proxy name on the parent layout
+  if (childViewTriggers && _.isString(childViewTriggers[eventName])) {
+    this.triggerMethod(childViewTriggers[eventName], ...args);
+  }
+
+  this.triggerMethod(childEventName, ...args);
+};
+
 // A view that iterates over a Backbone.Collection
 // and renders an individual child view for each model.
 const CollectionView = Backbone.View.extend({
@@ -697,31 +720,9 @@ const CollectionView = Backbone.View.extend({
 
   // Set up the child view event forwarding. Uses a "childview:" prefix in front of all forwarded events.
   _proxyChildEvents(view) {
-    const prefix = _.result(this, 'childViewEventPrefix');
-
     // Forward all child view events through the parent,
     // prepending "childview:" to the event name
-    this.listenTo(view, 'all', (eventName, ...args) => {
-
-      const childEventName = prefix + ':' + eventName;
-
-      const childViewEvents = this.normalizeMethods(this._childViewEvents);
-
-      // call collectionView childViewEvent if defined
-      if (typeof childViewEvents !== 'undefined' && _.isFunction(childViewEvents[eventName])) {
-        childViewEvents[eventName].apply(this, args);
-      }
-
-      // use the parent view's proxyEvent handlers
-      const childViewTriggers = this._childViewTriggers;
-
-      // Call the event with the proxy name on the parent layout
-      if (childViewTriggers && _.isString(childViewTriggers[eventName])) {
-        this.triggerMethod(childViewTriggers[eventName], ...args);
-      }
-
-      this.triggerMethod(childEventName, ...args);
-    });
+    this.listenTo(view, 'all', childViewEventHandle);
   }
 });
 

@@ -185,11 +185,11 @@ const ViewMixin = {
 
   // import the `triggerMethod` to trigger events with corresponding
   // methods if the method exists
-  triggerMethod(...args) {
-    const ret = triggerMethod.apply(this, args);
+  triggerMethod() {
+    const ret = triggerMethod.apply(this, arguments);
 
-    this._triggerEventOnBehaviors(...args);
-    this._triggerEventOnParentLayout(...args);
+    this._triggerEventOnBehaviors(arguments);
+    this._triggerEventOnParentLayout.apply(this, arguments);
 
     return ret;
   },
@@ -215,16 +215,24 @@ const ViewMixin = {
     // use the parent view's childViewEvents handler
     const childViewEvents = layoutView.normalizeMethods(layoutView._childViewEvents);
 
-    if (!!childViewEvents && _.isFunction(childViewEvents[eventName])) {
-      childViewEvents[eventName].apply(layoutView, args);
+    if (!!childViewEvents) {
+      const childViewEvent = childViewEvents[eventName];
+
+      if (_.isFunction(childViewEvent)) {
+        childViewEvent.apply(layoutView, args);
+      }
     }
 
     // use the parent view's proxyEvent handlers
     const childViewTriggers = layoutView._childViewTriggers;
 
     // Call the event with the proxy name on the parent layout
-    if (childViewTriggers && _.isString(childViewTriggers[eventName])) {
-      layoutView.triggerMethod(childViewTriggers[eventName], ...args);
+    if (childViewTriggers) {
+      const childViewTrigger = childViewTriggers[eventName];
+
+      if (_.isString(childViewTrigger)) {
+        layoutView.triggerMethod(childViewTrigger, ...args);
+      }
     }
   },
 

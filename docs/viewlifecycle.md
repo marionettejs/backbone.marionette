@@ -87,24 +87,63 @@ Mn.View.extend({
 #### View `before:attach`
 
 Triggered after the View has been rendered but just before it is first bound
-into the page DOM. This will only be triggered once per `region.show()` - if
-you want something that will be triggered every time the DOM changes,
-you may want `render` or `before:render`.
+into the page DOM. This will only be triggered once per `region.show()`. If
+you are re-rendering your view after it has been shown, you most likely want to
+listen to the `render` or `dom:refresh` events.
 
 #### View `attach`
 
 Triggered once the View has been bound into the DOM. This is only triggered
-once - the first time the View is attached to the DOM. If you want an event that
-triggers every time the DOM changes visibly, you may want `dom:refresh`
+once - the first time the View is attached to the DOM. If you are re-rendering
+your view after it has been shown, you most likely want to listen to the
+`dom:refresh` event.
 
 #### View `dom:refresh`
 
-Triggered after the first `attach` event fires _and_ every time the visible DOM
-changes.
+The `dom:refresh` event is fired in two separate places:
 
-**Note for upgrading from Marionette 2** If you were using the `show` event -
-the `dom:refresh` event may be a better event than `attach` when you want to be
-sure something will run once your `el` has been attached to the DOM and updates.
+1. After the view is attached to the DOM (after the `attach` event)
+2. Every time the `render` method is called
+
+```javascript
+const myView = new Mn.View({
+  template: _.template('<span><%= count %><span>'),
+  templateContext: function() {
+    this.count = (this.count || 0) + 1;
+    return {
+      count: this.count
+    };
+  },
+
+  onRender: function() {
+    console.log('render');
+  },
+
+  onAttach: function() {
+    console.log('attach');
+  },
+
+  onDomRefresh: function() {
+    console.log('dom:refresh');
+  }
+});
+
+// some layout view
+layout.showChildView('myRegion', myView);
+/*
+  Output:
+  render
+  attach
+  dom:refreh
+*/
+
+myView.render();
+/*
+  Output:
+  render
+  dom:refresh
+*/
+```
 
 ### View Destruction Events
 

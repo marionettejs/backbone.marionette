@@ -3,6 +3,7 @@
 
 import Backbone from 'backbone';
 import _ from 'underscore';
+import childViewEventHandler from '../common/child-view-event-handler';
 import { triggerMethod } from '../common/trigger-method';
 import BehaviorsMixin from './behaviors';
 import CommonMixin from './common';
@@ -200,40 +201,13 @@ const ViewMixin = {
     this._childViewTriggers = _.result(this, 'childViewTriggers');
   },
 
-  _triggerEventOnParentLayout(eventName, ...args) {
+  _triggerEventOnParentLayout() {
     const layoutView = this._parentView();
     if (!layoutView) {
       return;
     }
 
-    // invoke triggerMethod on parent view
-    const eventPrefix = _.result(layoutView, 'childViewEventPrefix');
-    const prefixedEventName = eventPrefix + ':' + eventName;
-
-    layoutView.triggerMethod(prefixedEventName, ...args);
-
-    // use the parent view's childViewEvents handler
-    const childViewEvents = layoutView.normalizeMethods(layoutView._childViewEvents);
-
-    if (!!childViewEvents) {
-      const childViewEvent = childViewEvents[eventName];
-
-      if (_.isFunction(childViewEvent)) {
-        childViewEvent.apply(layoutView, args);
-      }
-    }
-
-    // use the parent view's proxyEvent handlers
-    const childViewTriggers = layoutView._childViewTriggers;
-
-    // Call the event with the proxy name on the parent layout
-    if (childViewTriggers) {
-      const childViewTrigger = childViewTriggers[eventName];
-
-      if (_.isString(childViewTrigger)) {
-        layoutView.triggerMethod(childViewTrigger, ...args);
-      }
-    }
+    childViewEventHandler.apply(layoutView, arguments);
   },
 
   // Walk the _parent tree until we find a view (if one exists).

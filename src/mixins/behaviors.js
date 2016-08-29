@@ -93,11 +93,11 @@ export default {
     _invoke(this._behaviors, 'unbindUIElements');
   },
 
-  _triggerEventOnBehaviors(args) {
+  _triggerEventOnBehaviors() {
     const behaviors = this._behaviors;
     // Use good ol' for as this is a very hot function
     for (let i = 0, length = behaviors && behaviors.length; i < length; i++) {
-      triggerMethod.apply(behaviors[i], args);
+      triggerMethod.apply(behaviors[i], arguments);
     }
   }
 };

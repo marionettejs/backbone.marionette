@@ -12,6 +12,7 @@ Tell us what you think should happen.
 ### Actual behavior
 
 If possible, please create a small demo that demonstrates the issue.
+You can fork https://jsfiddle.net/marionettejs/adhv48ky/ for quick demo setup.  
 Please refrain from giving code examples in altJS languages like CoffeeScript, etc. Marionette is written in plain-old JavaScript and is generally easier for all members in the community to read.
 
 ### Environment

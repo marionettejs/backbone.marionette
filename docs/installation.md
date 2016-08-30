@@ -5,6 +5,12 @@ a Marionette application. In this section we'll cover the most common ways.
 
 
 ## Quick start using NPM and Webpack
+[NPM](https://www.npmjs.com/) is the package manager for JavaScript.
+
+Installing with NPM through command-line interface
+```
+npm install backbone.marionette
+```
 
 [Webpack][webpack] is a build tool that makes it easy to pull your dependencies
 together into a single bundle to be delivered to your browser's `<script>` tag.

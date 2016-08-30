@@ -9,7 +9,7 @@ a Marionette application. In this section we'll cover the most common ways.
 
 Installing with NPM through command-line interface
 ```
-npm install backbone.marionette@3.0.0
+npm install backbone.marionette
 ```
 
 [Webpack][webpack] is a build tool that makes it easy to pull your dependencies

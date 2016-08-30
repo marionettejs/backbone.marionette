@@ -659,12 +659,12 @@ describe('collection view', function() {
 
       this.beforeRenderSpy = this.sinon.spy(this.collectionView, 'onBeforeRenderEmpty');
       this.renderSpy = this.sinon.spy(this.collectionView, 'onRenderEmpty');
-      this._removeChildViewsSpy = this.sinon.spy(this.collectionView, '_removeChildViews');
+      this._removeChildModelsSpy = this.sinon.spy(this.collectionView, '_removeChildModels');
 
       this.sinon.spy(this.childView, 'destroy');
       this.sinon.spy(this.EmptyView.prototype, 'render');
 
-      this.collectionView._removeChildViews([this.model]);
+      this.collectionView._removeChildModels([this.model]);
     });
 
     it('should destroy the models view', function() {
@@ -683,8 +683,8 @@ describe('collection view', function() {
       expect(this.renderSpy).to.have.been.called;
     });
 
-    it('should call "_removeChildViews"', function() {
-      expect(this._removeChildViewsSpy).to.have.been.called
+    it('should call "_removeChildModels"', function() {
+      expect(this._removeChildModelsSpy).to.have.been.called
                                         .and.to.have.been.calledWith([this.model]);
     });
   });
@@ -949,10 +949,6 @@ describe('collection view', function() {
     it('should call the "remove" method on each child', function() {
       expect(this.childView0.remove).to.have.been.called;
       expect(this.childView1.remove).to.have.been.called;
-    });
-
-    it('should return the child views', function() {
-      expect(this.collectionView._destroyChildren).to.have.returned(this.childrenViews);
     });
 
     it('should call checkEmpty', function() {

@@ -2,7 +2,7 @@
 // --------------
 
 import _ from 'underscore';
-import Backbone from 'backbone';
+import DomMixin from './mixins/dom';
 import MarionetteError from './error';
 
 // Manage templates stored in `<script>` blocks,
@@ -55,7 +55,7 @@ _.extend(TemplateCache, {
 // TemplateCache instance methods, allowing each
 // template cache object to manage its own state
 // and know whether or not it has been loaded
-_.extend(TemplateCache.prototype, {
+_.extend(TemplateCache.prototype, DomMixin, {
 
   // Internal method to load the template
   load(options) {
@@ -77,7 +77,7 @@ _.extend(TemplateCache.prototype, {
   // using a template-loader plugin as described here:
   // https://github.com/marionettejs/backbone.marionette/wiki/Using-marionette-with-requirejs
   loadTemplate(templateId, options) {
-    const $template = Backbone.$(templateId);
+    const $template = this.findEls(templateId);
 
     if (!$template.length) {
       throw new MarionetteError({

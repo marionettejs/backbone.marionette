@@ -3,6 +3,7 @@
 
 import Backbone from 'backbone';
 import _ from 'underscore';
+import childViewEventHandler from '../common/child-view-event-handler';
 import { triggerMethod } from '../common/trigger-method';
 import BehaviorsMixin from './behaviors';
 import CommonMixin from './common';
@@ -185,11 +186,11 @@ const ViewMixin = {
 
   // import the `triggerMethod` to trigger events with corresponding
   // methods if the method exists
-  triggerMethod(...args) {
-    const ret = triggerMethod.apply(this, args);
+  triggerMethod() {
+    const ret = triggerMethod.apply(this, arguments);
 
-    this._triggerEventOnBehaviors(...args);
-    this._triggerEventOnParentLayout(...args);
+    this._triggerEventOnBehaviors.apply(this, arguments);
+    this._triggerEventOnParentLayout.apply(this, arguments);
 
     return ret;
   },
@@ -200,32 +201,13 @@ const ViewMixin = {
     this._childViewTriggers = _.result(this, 'childViewTriggers');
   },
 
-  _triggerEventOnParentLayout(eventName, ...args) {
+  _triggerEventOnParentLayout() {
     const layoutView = this._parentView();
     if (!layoutView) {
       return;
     }
 
-    // invoke triggerMethod on parent view
-    const eventPrefix = _.result(layoutView, 'childViewEventPrefix');
-    const prefixedEventName = eventPrefix + ':' + eventName;
-
-    layoutView.triggerMethod(prefixedEventName, ...args);
-
-    // use the parent view's childViewEvents handler
-    const childViewEvents = layoutView.normalizeMethods(layoutView._childViewEvents);
-
-    if (!!childViewEvents && _.isFunction(childViewEvents[eventName])) {
-      childViewEvents[eventName].apply(layoutView, args);
-    }
-
-    // use the parent view's proxyEvent handlers
-    const childViewTriggers = layoutView._childViewTriggers;
-
-    // Call the event with the proxy name on the parent layout
-    if (childViewTriggers && _.isString(childViewTriggers[eventName])) {
-      layoutView.triggerMethod(childViewTriggers[eventName], ...args);
-    }
+    childViewEventHandler.apply(layoutView, arguments);
   },
 
   // Walk the _parent tree until we find a view (if one exists).

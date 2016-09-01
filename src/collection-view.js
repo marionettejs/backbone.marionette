@@ -5,6 +5,7 @@ import _                  from 'underscore';
 import Backbone           from 'backbone';
 import destroyBackboneView from './utils/destroy-backbone-view';
 import isNodeAttached     from './common/is-node-attached';
+import childViewEventHandler from './common/child-view-event-handler';
 import monitorViewEvents  from './common/monitor-view-events';
 import { triggerMethodOn } from './common/trigger-method';
 import ChildViewContainer from './child-view-container';
@@ -697,31 +698,7 @@ const CollectionView = Backbone.View.extend({
 
   // Set up the child view event forwarding. Uses a "childview:" prefix in front of all forwarded events.
   _proxyChildEvents(view) {
-    const prefix = _.result(this, 'childViewEventPrefix');
-
-    // Forward all child view events through the parent,
-    // prepending "childview:" to the event name
-    this.listenTo(view, 'all', (eventName, ...args) => {
-
-      const childEventName = prefix + ':' + eventName;
-
-      const childViewEvents = this.normalizeMethods(this._childViewEvents);
-
-      // call collectionView childViewEvent if defined
-      if (typeof childViewEvents !== 'undefined' && _.isFunction(childViewEvents[eventName])) {
-        childViewEvents[eventName].apply(this, args);
-      }
-
-      // use the parent view's proxyEvent handlers
-      const childViewTriggers = this._childViewTriggers;
-
-      // Call the event with the proxy name on the parent layout
-      if (childViewTriggers && _.isString(childViewTriggers[eventName])) {
-        this.triggerMethod(childViewTriggers[eventName], ...args);
-      }
-
-      this.triggerMethod(childEventName, ...args);
-    });
+    this.listenTo(view, 'all', childViewEventHandler);
   }
 });
 

@@ -13,6 +13,10 @@ function getEventName(match, prefix, eventName) {
   return eventName.toUpperCase();
 }
 
+const getOnMethodName = _.memoize(function(event) {
+  return 'on' + event.replace(splitter, getEventName);
+});
+
 // Trigger an event and/or a corresponding method name. Examples:
 //
 // `this.triggerMethod("foo")` will trigger the "foo" event and
@@ -22,7 +26,7 @@ function getEventName(match, prefix, eventName) {
 // call the "onFooBar" method.
 export function triggerMethod(event, ...args) {
   // get the method name from the event name
-  const methodName = 'on' + event.replace(splitter, getEventName);
+  const methodName = getOnMethodName(event);
   const method = getOption.call(this, methodName);
   let result;
 
@@ -33,7 +37,7 @@ export function triggerMethod(event, ...args) {
   }
 
   // trigger the event
-  this.trigger(event, ...args);
+  this.trigger.apply(this, arguments);
 
   return result;
 }
@@ -43,6 +47,9 @@ export function triggerMethod(event, ...args) {
 // e.g. `Marionette.triggerMethodOn(view, 'show')`
 // will trigger a "show" event or invoke onShow the view.
 export function triggerMethodOn(context, ...args) {
-  const fnc = _.isFunction(context.triggerMethod) ? context.triggerMethod : triggerMethod;
-  return fnc.apply(context, args);
+  if (_.isFunction(context.triggerMethod)) {
+    return context.triggerMethod.apply(context, args);
+  }
+
+  return triggerMethod.apply(context, args);
 }

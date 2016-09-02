@@ -234,67 +234,6 @@ mainRegion.empty({preventDestroy: true});
 **NOTE** When using `preventDestroy: true` you must be careful to cleanup your
 old views manually to prevent memory leaks.
 
-#### onBeforeAttach & onAttach
-
-Regions that are attached to the document when you execute `show` are special in
-that the views that they show will also become attached to the document. These
-regions fire a pair of triggerMethods on *all* of the views that are about to be
-attached – even the nested ones. This can cause a performance issue if you're
-rendering hundreds or thousands of views at once.
-
-If you think these events might be causing some lag in your app, you can
-selectively turn them off with the `triggerBeforeAttach` and `triggerAttach`
-properties or `show()` options.
-
-```javascript
-// No longer trigger attach
-myRegion.triggerAttach = false;
-```
-
-You can override this on a per-show basis by passing it in as an option to show.
-
-```javascript
-// This region won't trigger beforeAttach...
-myRegion.triggerBeforeAttach = false;
-
-// Unless we tell it to
-myRegion.show(myView, {triggerBeforeAttach: true});
-```
-
-Or you can leave the events on by default but disable them for a single show.
-
-```javascript
-// This region will trigger attach events by default but not for this particular show.
-myRegion.show(myView, {triggerBeforeAttach: false, triggerAttach: false});
-```
-
-#### `renderView`
-
-In order to add conditional logic when rendering a view you can override the `renderView` method. This could be useful if you don't want the region to re-render views that aren't destroyed. By default this method will call `view.render`.
-
-```javascript
-var Mn = require('backbone.marionette');
-
-var CachingRegion = Mn.Region.extend({
-  shouldDestroyView: function(view, options) { return false; },
-  renderView: function(view, options) {
-    if (!view.isRendered) { view.render(); }
-  }
-});
-```
-
-#### `shouldDestroyView`
-
-In order to add conditional logic around whether the current view should be destroyed when showing a new one you can override the `shouldDestroyView` method. This is particularly useful as an alternative to the `preventDestroy` option when you wish to prevent destroy on all views that are shown in the region.
-
-```javascript
-var Mn = require('backbone.marionette');
-
-var CachingRegion = Mn.Region.extend({
-  shouldDestroyView: function(view, options) { return false; }
-});
-```
-
 ### Checking whether a region is showing a view
 
 If you wish to check whether a region has a view, you can use the `hasView`

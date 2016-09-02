@@ -41,7 +41,7 @@ const CompositeView = CollectionView.extend({
 
     if (this.collection) {
       this.listenTo(this.collection, 'add', this._onCollectionAdd);
-      this.listenTo(this.collection, 'remove', this._onCollectionRemove);
+      this.listenTo(this.collection, 'update', this._onCollectionUpdate);
       this.listenTo(this.collection, 'reset', this.renderChildren);
 
       if (this.sort) {

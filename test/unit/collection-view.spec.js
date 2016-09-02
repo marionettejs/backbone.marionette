@@ -659,11 +659,12 @@ describe('collection view', function() {
 
       this.beforeRenderSpy = this.sinon.spy(this.collectionView, 'onBeforeRenderEmpty');
       this.renderSpy = this.sinon.spy(this.collectionView, 'onRenderEmpty');
+      this._removeChildModelsSpy = this.sinon.spy(this.collectionView, '_removeChildModels');
 
       this.sinon.spy(this.childView, 'destroy');
       this.sinon.spy(this.EmptyView.prototype, 'render');
 
-      this.collectionView._onCollectionRemove(this.model);
+      this.collectionView._removeChildModels([this.model]);
     });
 
     it('should destroy the models view', function() {
@@ -680,6 +681,11 @@ describe('collection view', function() {
 
     it('should call "onRenderEmpty"', function() {
       expect(this.renderSpy).to.have.been.called;
+    });
+
+    it('should call "_removeChildModels"', function() {
+      expect(this._removeChildModelsSpy).to.have.been.called
+                                        .and.to.have.been.calledWith([this.model]);
     });
   });
 
@@ -772,7 +778,6 @@ describe('collection view', function() {
       this.collectionView.listenTo(this.collectionView, 'item:foo', this.collectionView.someViewCallback);
 
       this.sinon.spy(this.childView, 'destroy');
-      this.sinon.spy(this.collectionView, '_onCollectionRemove');
       this.sinon.spy(this.collectionView, 'stopListening');
       this.sinon.spy(this.collectionView, '_removeElement');
       this.sinon.spy(this.collectionView, 'someCallback');
@@ -946,25 +951,27 @@ describe('collection view', function() {
       expect(this.childView1.remove).to.have.been.called;
     });
 
-    it('should return the child views', function() {
-      expect(this.collectionView._destroyChildren).to.have.returned(this.childrenViews);
-    });
-
     it('should call checkEmpty', function() {
       expect(this.collectionView._checkEmpty).to.have.been.calledOnce;
     });
 
     describe('with the checkEmpty flag set as false', function() {
-      it('should not call checkEmpty', function() {
+      it('should not call _checkEmpty', function() {
         this.collectionView._destroyChildren({checkEmpty: false});
         expect(this.collectionView._checkEmpty).to.have.been.calledOnce;
       });
     });
 
     describe('with the checkEmpty flag set as true', function() {
-      it('should call checkEmpty', function() {
+      it('should call _checkEmpty', function() {
+        this.collectionView.collection.add({id: 3});
         this.collectionView._destroyChildren({checkEmpty: true});
         expect(this.collectionView._checkEmpty).to.have.been.calledTwice;
+      });
+
+      it('should not call _checkEmpty when collection is empty', function() {
+        this.collectionView._destroyChildren({checkEmpty: true});
+        expect(this.collectionView._checkEmpty).to.have.been.calledOnce;
       });
     });
   });
@@ -1116,27 +1123,73 @@ describe('collection view', function() {
       });
 
       this.collectionView.render();
-
-      this.childView = this.collectionView.children[this.model.cid];
-      this.collection.remove(this.model);
     });
 
-    it('should not retain any bindings to this view', function() {
-      var suite = this;
-      var bindings = this.collectionView.bindings || {};
-      expect(_.some(bindings, function(binding) {
-        return binding.obj === suite.childView;
-      })).to.be.false;
+    describe('by model', function() {
+      beforeEach(function() {
+        this.collection.remove(this.model);
+        this.childView = this.collectionView.children[this.model.cid];
+      });
+
+      it('should not retain any bindings to this view', function() {
+        var suite = this;
+        var bindings = this.collectionView.bindings || {};
+        expect(_.some(bindings, function(binding) {
+          return binding.obj === suite.childView;
+        })).to.be.false;
+      });
+
+      it('should not retain any references to this view', function() {
+        expect(_.size(this.collectionView.children)).to.equal(0);
+      });
+
+      it('childView should be undefined', function() {
+        expect(this.childView).to.be.undefined;
+      });
     });
 
-    it('should not retain any references to this view', function() {
-      expect(_.size(this.collectionView.children)).to.equal(0);
+    describe('by view', function() {
+      beforeEach(function() {
+        this.childView = this.collectionView.children.findByModel(this.model);
+        this.removedChildView = this.collectionView.removeChildView(this.childView);
+        this.afterRemoveChildView = this.collectionView.children.findByModel(this.model);
+      });
+
+      it('should not retain any bindings to this view', function() {
+        var suite = this;
+        var bindings = this.collectionView.bindings || {};
+        expect(_.some(bindings, function(binding) {
+          return binding.obj === suite.childView;
+        })).to.be.false;
+      });
+
+      it('should not retain any references to this view', function() {
+        expect(this.collectionView.children.length).to.equal(0);
+      });
+
+      it('childView should be undefined', function() {
+        expect(this.afterRemoveChildView).to.be.undefined;
+      });
+
+      it('should be removed and returned', function() {
+        expect(this.childView).to.equal(this.removedChildView);
+      });
     });
 
-    it('childView should be undefined', function() {
-      expect(this.childView).to.be.undefined;
-    });
+    describe('and trying to remove a view that isn\'t a view', function() {
+      beforeEach(function() {
+        this.sinon.spy(this.collectionView, '_removeChildView');
+        this.removedChildView = this.collectionView.removeChildView(null);
+      });
 
+      it('should return null', function() {
+        expect(this.removedChildView).is.null;
+      });
+
+      it('should not call internal function', function() {
+        expect(this.collectionView._removeChildView).is.not.called;
+      });
+    });
   });
 
   describe('when the collection of a collection view is reset', function() {

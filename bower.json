@@ -36,6 +36,6 @@
     "upgradeGuide.md"
   ],
   "dependencies": {
-    "backbone.radio": "2.0.0-pre.1"
+    "backbone.radio": "^2.0.0"
   }
 }

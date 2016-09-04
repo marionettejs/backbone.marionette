@@ -30,6 +30,7 @@ multiple views through the `regions` attribute.
     * [View Destruction Events](#view-destruction-events)
     * [Other View Events](#other-view-events)
   * [Binding To User Input](#binding-custom-events)
+    * [Event and Trigger Mapping](#event-and-trigger-mapping)
     * [View `events`](#view-events)
     * [View `triggers`](#view-triggers)
 * [Model and Collection Events](#model-and-collection-events)

@@ -17,8 +17,9 @@ multiple views through the `regions` attribute.
   * [Setting a `template` to `false`](#setting-a-template-to-false)
 * [Laying Out Views - Regions](#laying-out-views---regions)
   * [Managing Sub-views](#managing-sub-views)
-    * [Showing a view](#showing-a-view)
-    * [Accessing a child view](#accessing-a-child-view)
+    * [Showing a View](#showing-a-view)
+    * [Accessing a Child View](#accessing-a-child-view)
+    * [Detaching a Child View](#detaching-a-child-view)
   * [Region Availability](#region-availability)
   * [Efficient Nested View Structures](#efficient-nested-view-structures)
   * [Listening to Events on Children](#listening-to-events-on-children)
@@ -181,7 +182,7 @@ syntax will suffice.
 `View` provides a simple interface for managing sub-views with `showChildView`
 and `getChildView`:
 
-#### Showing a view
+#### Showing a View
 
 To show a view inside a region, simply call `showChildView(region, view)`. This
 will handle rendering the view's HTML and attaching it to the DOM for you:
@@ -205,7 +206,7 @@ var MyView = Mn.View.extend({
 
 [Live example](https://jsfiddle.net/marionettejs/98u073m0/)
 
-#### Accessing a child view
+#### Accessing a Child View
 
 To access the child view of a `View` - use the `getChildView(region)` method.
 This will return the view instance that is current being displayed at that
@@ -236,6 +237,35 @@ var MyView = Mn.View.extend({
 [Live example](https://jsfiddle.net/marionettejs/b12kgq3t/)
 
 If no view is available, `getChildView` returns `null`.
+
+#### Detaching a Child View
+
+You can detach a child view from a region through `detachChildView(region)`
+
+```javascript
+
+var Mn = require('backbone.marionette');
+var SubView = require('./subview');
+
+var MyView = Mn.View.extend({
+  template: '#tpl-view-with-regions',
+
+  regions: {
+    firstRegion: '#first-region',
+    secondRegion: '#second-region'
+  },
+
+  onRender: function() {
+    this.showChildView('firstRegion', new SubView());
+  },
+
+  onMoveView: function() {
+    var view = this.detachChildView('firstRegion');
+    this.showChildView('secondRegion', view);
+  }
+});
+```
+This is a proxy for [region.detachView()](./marionette.region.md#detaching-existing-views)
 
 ### Region Availability
 

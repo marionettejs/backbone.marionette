@@ -25,6 +25,7 @@ Regions maintain the [View's lifecycle](./viewlifecycle.md#regions-and-the-view-
   * [Checking whether a region is showing a view](#checking-whether-a-region-is-showing-a-view)
 * [Emptying a Region](#emptying-a-region)
   * [Preserving Existing Views](#preserving-existing-views)
+  * [Detaching Existing Views](#detaching-existing-views)
 * [`reset` A Region](#reset-a-region)
 * [Set How View's `el` Is Attached](#set-how-views-el-is-attached)
 
@@ -284,6 +285,24 @@ mainRegion.empty({preventDestroy: true});
 
 **NOTE** When using `preventDestroy: true` you must be careful to cleanup your
 old views manually to prevent memory leaks.
+
+### Detaching Existing Views
+
+If you want to detach an existing view from a region, use `detachView`.
+
+```javascript
+var myView = new MyView();
+
+var myOtherView = new MyView();
+
+var childView = new MyChildView();
+
+// render and display the view
+myView.showChildView('main', childView);
+
+// ... somewhere down the line
+myOtherView.showChildView('main', myView.getRegion('main').detachView());
+```
 
 ## `reset` A Region
 

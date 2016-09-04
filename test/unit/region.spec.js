@@ -449,6 +449,20 @@ describe('region', function() {
       });
     });
 
+    describe('and the view is detached', function() {
+      beforeEach(function() {
+        this.detachedView = this.region.detachView();
+        this.noDetachedView = this.region.detachView();
+      });
+
+      it('should return the childView it was given', function() {
+        expect(this.detachedView).to.equal(this.view);
+      });
+
+      it('should not return a childView if it was already detached', function() {
+        expect(this.noDetachedView).to.be.undefined;
+      });
+    });
   });
 
   describe('when showing nested views', function() {

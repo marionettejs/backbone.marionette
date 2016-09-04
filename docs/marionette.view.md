@@ -460,6 +460,55 @@ DOM. Using the view `events` and `triggers` handlers lets us either bind  user
 input directly to an action or fire a generic trigger that may or may not be
 handled.
 
+#### Event and Trigger Mapping
+
+The `events` and `triggers` attributes bind DOM events to actions to perform on
+the view. They each take a DOM event key and a mapping to the handler.
+
+We'll cover a simple example:
+
+```javascript
+var Mn = require('backbone.marionette');
+
+var MyView = Mn.View.extend({
+  events: {
+    'click a': 'showModal',
+    'click @ui.save': 'saveForm'
+  },
+
+  triggers: {
+    'click @ui.close': 'cancel:entry'
+  },
+
+  ui: {
+    save: '.btn-save',
+    close: '.btn-cancel'
+  },
+
+  showModal: function() {
+    console.log('Show the modal');
+  },
+
+  saveForm: function() {
+    console.log('Save the form');
+  }
+});
+```
+
+Event listeners are constructed by:
+
+```javascript
+'<dom event> <dom node>': 'listener'
+```
+
+The `dom event` can be a jQuery DOM event - such as `click` - or another custom
+event, such as Bootstrap's `show.bs.modal`.
+
+The `dom node` represents a jQuery selector or a `ui` key prefixed by `@.`. This
+must exist inside the view once it has completed rendering. For more information
+about the `ui` object, and how it works, see 
+[the documentation on ui](#organizing-your-view).
+
 #### View `events`
 
 The view `events` attribute binds DOM events to functions or methods on the
@@ -485,40 +534,6 @@ The DOM event gets passed in as the first argument, allowing you to see any
 information passed as part of the event.
 
 **When passing a method reference, the method must exist on the View.**
-
-##### Defining Listeners
-
-Listeners are defined as:
-
-```javascript
-eventname jqueryselector
-```
-
-* The `eventname` part refers to a jQuery DOM event e.g. `click` or `change`.
-* The `jqueryselector` part is a jQuery selector string e.g. `.myclass`
-
-You can also pass just the eventname part causing the event handler to fire on
-the entire view. This is especially useful for buttons and click handlers:
-
-```javascript
-var Mn = require('backbone.marionette');
-
-var ButtonView = Mn.View.extend({
-  tagName: 'button',
-
-  events: {
-    click: 'showAlert'
-  },
-
-  showAlert: function() {
-    alert('Button was clicked');
-  }
-});
-```
-
-[Live example](https://jsfiddle.net/marionettejs/h7h0pnmj/)
-
-##### Passing a Function
 
 The `events` attribute can also directly bind functions:
 
@@ -566,40 +581,6 @@ When the `a` tag is clicked here, the `link:click` event is fired. This event
 can be listened to using the
 [Magic Method Binding](./events.md#magic-method-binding) technique
 discussed in the [events documentation](./events.md).
-
-##### Defining Listeners
-
-Listeners are defined as:
-
-```javascript
-eventname jqueryselector
-```
-
-* The `eventname` part refers to a jQuery DOM event e.g. `click` or `change`.
-* The `jqueryselector` part is a jQuery selector string e.g. `.myclass`
-
-You can also pass just the eventname part causing the event handler to fire on
-the entire view. This is especially useful for buttons and click handlers:
-
-```javascript
-var Mn = require('backbone.marionette');
-
-var ButtonView = Mn.View.extend({
-  tagName: 'button',
-
-  events: {
-    click: 'handleClick'
-  },
-
-  handleClick: function() {
-    alert('Button was clicked');
-  }
-});
-```
-
-[Live example](https://jsfiddle.net/marionettejs/psnokbjf/)
-
-##### Event Bubbling
 
 The major benefit of the `triggers` attribute over `events` is that triggered
 events can bubble up to any parent views. For a full explanation of bubbling

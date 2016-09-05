@@ -18,6 +18,7 @@ managing regions throughout your application.
 * [Showing a View](#showing-a-view)
   * [Hiding a View](#hiding-a-view)
   * [Preserving Existing Views](#preserving-existing-views)
+  * [Detaching Existing Views](#detaching-existing-views)
 * [Checking whether a region is showing a view](#checking-whether-a-region-is-showing-a-view)
 * [`reset` A Region](#reset-a-region)
 
@@ -218,6 +219,23 @@ mainRegion.empty({preventDestroy: true});
 
 **NOTE** When using `preventDestroy: true` you must be careful to cleanup your
 old views manually to prevent memory leaks.
+
+### Detaching Existing Views
+If you want to detach an existing view from a region, use `detachView`.
+
+```javascript
+var myView = new MyView();
+
+var myOtherView = new MyView();
+
+var childView = new MyChildView();
+
+// render and display the view
+myView.showChildView('main', childView);
+
+// ... somewhere down the line
+myOtherView.showChildView('main', myView.getRegion('main').detachView());
+```
 
 ### Checking whether a region is showing a view
 

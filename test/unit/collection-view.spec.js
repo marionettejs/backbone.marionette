@@ -149,7 +149,7 @@ describe('collection view', function() {
       this.sinon.spy(this.collectionView.$el, 'append');
       this.sinon.spy(this.collectionView, '_startBuffering');
       this.sinon.spy(this.collectionView, '_endBuffering');
-      this.sinon.spy(this.collectionView, '_addChild');
+      this.sinon.spy(this.collectionView, 'addChildView');
 
       this.collectionView.render();
     });
@@ -254,10 +254,12 @@ describe('collection view', function() {
       expect(this.collectionView.onChildViewRender.callCount).to.equal(2);
     });
 
-    it('should call `addChild` for each item in the collection', function() {
-      expect(this.collectionView._addChild).to.have.been.calledTwice.
-        and.calledWith(this.collection.models[0]).
-        and.calledWith(this.collection.models[1]);
+    it('should call `addChildView` for each item in the collection', function() {
+      var v1 = this.collectionView.children.findByIndex(0);
+      var v2 = this.collectionView.children.findByIndex(1);
+      expect(this.collectionView.addChildView).to.have.been.calledTwice.
+        and.calledWith(v1).
+        and.calledWith(v2);
     });
 
     it('should be marked rendered', function() {
@@ -370,7 +372,7 @@ describe('collection view', function() {
         collection: this.collection
       });
       this.collectionView.render();
-      this.childView = this.collectionView._addChild(this.model, ChildView, 0);
+      this.childView = this.collectionView._addChild(this.model, 0);
     });
 
     it('should call "render" on the childView', function() {
@@ -648,7 +650,7 @@ describe('collection view', function() {
         onRenderEmpty: function() {},
 
         render: function() {
-          this._addChild(suite.model, this.childView, 0);
+          this._addChild(suite.model, 0);
         }
       });
 
@@ -1277,7 +1279,7 @@ describe('collection view', function() {
     describe('when a child view is added to a collection view, after the collection view has been shown', function() {
       beforeEach(function() {
         this.sinon.spy(this.collectionView, 'attachBuffer');
-        this.sinon.spy(this.collectionView, '_addChild');
+        this.sinon.spy(this.collectionView, 'addChildView');
         this.model3 = new Backbone.Model({foo: 3});
         this.collection.add(this.model3);
         this.childView3 = this.collectionView.children.findByIndex(2);
@@ -1287,8 +1289,8 @@ describe('collection view', function() {
         expect(this.collectionView.attachBuffer).not.to.have.been.called;
       });
 
-      it('should call addChild with the new model', function() {
-        expect(this.collectionView._addChild).to.have.been.calledWith(this.model3);
+      it('should call addChildView with the new view', function() {
+        expect(this.collectionView.addChildView).to.have.been.calledWith(this.childView3);
       });
 
       it('should trigger events on the added child view in proper order', function() {
@@ -1304,7 +1306,7 @@ describe('collection view', function() {
         this.childViewAtIndex0 = this.collectionView.children.findByIndex(0);
 
         this.beforeModel = new Backbone.Model({foo: 0});
-        this.collectionView._addChild(this.beforeModel, this.ChildView, 0);
+        this.collectionView._addChild(this.beforeModel, 0);
       });
 
       it('should increment the later childView indexes', function() {
@@ -1558,7 +1560,7 @@ describe('collection view', function() {
     beforeEach(function() {
       this.model = new Backbone.Model({foo: 'bar'});
       this.collectionView = new this.CollectionView();
-      this.childView = this.collectionView._addChild(this.model, this.ChildView, 0);
+      this.childView = this.collectionView._addChild(this.model, 0);
     });
 
     it('should return the child view for the model', function() {

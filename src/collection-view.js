@@ -122,8 +122,7 @@ const CollectionView = Backbone.View.extend({
 
     if (this._shouldAddChild(child, index)) {
       this._destroyEmptyView();
-      const ChildView = this._getChildView(child);
-      this._addChild(child, ChildView, index);
+      this._addChild(child, index)
     }
   },
 
@@ -382,12 +381,30 @@ const CollectionView = Backbone.View.extend({
     }
   },
 
+  _createView(model, index) {
+    const ChildView = this._getChildView(model);
+    const childViewOptions = this._getChildViewOptions(model, index);
+    const view = this.buildChildView(model, ChildView, childViewOptions);
+    return view;
+  },
+
+  _setupChildView(view, index) {
+    view._parent = this;
+
+    monitorViewEvents(view);
+
+    // set up the child view event forwarding
+    this._proxyChildEvents(view);
+
+    if (this.sort) {
+      view._index = index;
+    }
+  },
+
   // Internal method to loop through collection and show each child view.
   _showCollection(models) {
-    _.each(models, (child, index) => {
-      const ChildView = this._getChildView(child);
-      this._addChild(child, ChildView, index);
-    });
+    _.each(models, _.bind(this._addChild, this));
+    this.children._updateLength();
   },
 
   // Allow the collection to be sorted by a custom view comparator
@@ -461,10 +478,8 @@ const CollectionView = Backbone.View.extend({
       const view = this.buildChildView(model, EmptyView, emptyViewOptions);
 
       this.triggerMethod('before:render:empty', this, view);
-      this._addChildView(view, 0);
+      this.addChildView(view, 0);
       this.triggerMethod('render:empty', this, view);
-
-      view._parent = this;
     }
   },
 
@@ -527,11 +542,8 @@ const CollectionView = Backbone.View.extend({
   },
 
   // Internal method for building and adding a child view
-  _addChild(child, ChildView, index) {
-    const childViewOptions = this._getChildViewOptions(child, index);
-
-    const view = this.buildChildView(child, ChildView, childViewOptions);
-
+  _addChild(child, index) {
+    const view = this._createView(child, index);
     this.addChildView(view, index);
 
     return view;
@@ -550,13 +562,21 @@ const CollectionView = Backbone.View.extend({
   // children in sync with the collection.
   addChildView(view, index) {
     this.triggerMethod('before:add:child', this, view);
+    this._setupChildView(view, index);
 
-    // increment indices of views after this one
-    this._updateIndices(view, true, index);
+    // Store the child view itself so we can properly remove and/or destroy it later
+    if (this._isBuffering) {
+      // Add to children, but don't update children's length.
+      this.children._add(view);
+    } else {
+      // increment indices of views after this one
+      this._updateIndices(view, true);
+      this.children.add(view);
+    }
 
-    view._parent = this;
+    this._renderView(view);
 
-    this._addChildView(view, index);
+    this._attachView(view, index);
 
     this.triggerMethod('add:child', this, view);
 
@@ -565,17 +585,12 @@ const CollectionView = Backbone.View.extend({
 
   // Internal method. This decrements or increments the indices of views after the added/removed
   // view to keep in sync with the collection.
-  _updateIndices(views, increment, index) {
+  _updateIndices(views, increment) {
     if (!this.sort) {
       return;
     }
 
     const view = _.isArray(views) ? this._findGreatestIndexedView(views) : views;
-
-    if (increment) {
-      // assign the index to the view
-      view._index = index;
-    }
 
     // update the indexes of views after this one
     this.children.each((laterView) => {
@@ -583,21 +598,6 @@ const CollectionView = Backbone.View.extend({
         laterView._index += increment ? 1 : -1;
       }
     });
-  },
-
-  // Internal Method. Add the view to children and render it at the given index.
-  _addChildView(view, index) {
-    monitorViewEvents(view);
-
-    // set up the child view event forwarding
-    this._proxyChildEvents(view);
-
-    // Store the child view itself so we can properly remove and/or destroy it later
-    this.children.add(view);
-
-    this._renderView(view);
-
-    this._attachView(view, index);
   },
 
   _renderView(view) {

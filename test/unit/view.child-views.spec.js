@@ -315,6 +315,21 @@ describe('layoutView', function() {
     it('childViewEvents are triggered', function() {
       expect(this.childEventsHandler).to.have.been.calledOnce;
     });
+
+    describe('and the view is detached', function() {
+      beforeEach(function() {
+        this.detachedView = this.layoutView.detachChildView('regionOne');
+        this.noDetachedView = this.layoutView.detachChildView('regionOne');
+      });
+
+      it('should return the childView it was given', function() {
+        expect(this.detachedView).to.equal(this.childView);
+      });
+
+      it('should not return a childView if it was already detached', function() {
+        expect(this.noDetachedView).to.be.undefined;
+      });
+    });
   });
 
   describe('when showing a layoutView via a region', function() {

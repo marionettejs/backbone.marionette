@@ -382,8 +382,8 @@ var MyCollectionView = Mn.CollectionView.extend({
 
 ### CollectionView's `emptyViewOptions`
 
-Similar to [`childView`](#collectionviews-childview) and [`childViewOptions`](#collectionviews-childviewoptions), 
-there is an `emptyViewOptions` property that will be passed to the `emptyView` constructor. 
+Similar to [`childView`](#collectionviews-childview) and [`childViewOptions`](#collectionviews-childviewoptions),
+there is an `emptyViewOptions` property that will be passed to the `emptyView` constructor.
 It can be provided as an object literal or as a function.
 
 If `emptyViewOptions` aren't provided the `CollectionView` will default to passing the `childViewOptions` to the `emptyView`.
@@ -725,7 +725,7 @@ myCollection.sort();
 
 ### CollectionView's `viewComparator`
 
-`CollectionView` allows for a custom `viewComparator` option if you want your `CollectionView`'s children to be rendered 
+`CollectionView` allows for a custom `viewComparator` option if you want your `CollectionView`'s children to be rendered
 with a different sort order than the underlying Backbone collection uses.
 
 ```javascript
@@ -1125,13 +1125,13 @@ var TreeNode = Mn.View.extend({
 
   onRender: function() {
     var nodes = this.model.get('nodes');
-    
+
     //show child nodes if they are present
     if (nodes.length) {
       var treeView = new TreeView({
         collection: new Bb.Collection(nodes)
       });
-      
+
       this.showChildView('tree', treeView);
     }
   }

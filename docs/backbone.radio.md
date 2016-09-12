@@ -258,7 +258,7 @@ var channel = Radio.channel('notify');
 
 var Notification = Mn.Object.extend({
   channelName: 'notify',
-  
+
   initialize: function() {
     channel.reply('show:success', this.showSuccessMessage);
     channel.reply('show:error', this.showErrorMessage);

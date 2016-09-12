@@ -358,20 +358,20 @@ var View = Mn.View.extend({
       'event:one': 'handleEventOne', // This will become a reference to `this.someFn`
       'event:two': this.someOtherFn
     };
-    
+
     this.normalizedHash = this.normalizeMethods(hash);
-    
+
     Mn.bindEvents(this, this, this.normalizedHash);
   },
-  
+
   destroy: function() {
       Mn.unbindEvents(this, this, this.normalizedHash);
   },
-  
+
   handleEventOne: function() {
     console.log('event:one was fired');
   },
-  
+
   handleEventTwo: function() {
     console.log('event:two was fired');
   }

@@ -42,8 +42,9 @@ a `<h1>` tag.
 
 ### jQuery Selector
 
-If your index page contains a pre-formatted template, you can simply pass in the
-jQuery selector for it to `template` and Marionette will look it up:
+If your index page contains a template element formatted for Underscore, you can
+simply pass in the jQuery selector for it to `template` and Marionette will look
+it up:
 
 ```javascript
 var Mn = require('backbone.marionette');
@@ -61,8 +62,8 @@ export.MyView = Mn.View.extend({
 
 [Live example](https://jsfiddle.net/marionettejs/z4sd7ssh/)
 
-Marionette will look up the template above and render it for you when `MyView`
-gets rendered.
+Marionette compiles the template above using `_.template` and renders it for
+you when `MyView` gets rendered.
 
 ### Template Function
 

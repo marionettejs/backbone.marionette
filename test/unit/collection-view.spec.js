@@ -28,6 +28,44 @@ describe('collection view', function() {
   // Collection View Specs
   // ---------------------
 
+  describe('when a collection view is DOM', function() {
+    beforeEach(function() {
+      this.$fixtureEl = $('<div id="fixture-collectionview"><span id="el1">1</span></div>');
+    });
+
+    describe('and it\'s not attached to the document', function() {
+      beforeEach(function() {
+        this.collectionView = new this.CollectionView({el: this.$fixtureEl[0]});
+        this.view1 = this.collectionView.addChildView(new Backbone.View({el: this.$fixtureEl.children()[0]}), 0);
+      });
+
+      it('should have _isAttached set to false', function() {
+        expect(this.collectionView).to.have.property('_isAttached', false);
+      });
+
+      it('should have a child view without _isAttached', function() {
+        expect(this.view1).to.not.have.property('_isAttached');
+      });
+    });
+
+    describe('and it\'s attached to the document', function() {
+      beforeEach(function() {
+        this.setFixtures(this.$fixtureEl);
+        this.collectionView = new this.CollectionView({el: '#fixture-collectionview'});
+        this.view1 = this.collectionView.addChildView(new Backbone.View({el: '#el1'}), 0);
+      });
+
+      it('should have _isAttached set to true', function() {
+        expect(this.collectionView).to.have.property('_isAttached', true);
+      });
+
+      it('should have a child view with _isAttached set to true', function() {
+        expect(this.view1).to.have.property('_isAttached', true);
+      });
+    });
+
+  });
+
   describe('before rendering a collection view', function() {
     beforeEach(function() {
       var CollectionView = this.CollectionView.extend({
@@ -111,7 +149,7 @@ describe('collection view', function() {
       this.sinon.spy(this.collectionView.$el, 'append');
       this.sinon.spy(this.collectionView, '_startBuffering');
       this.sinon.spy(this.collectionView, '_endBuffering');
-      this.sinon.spy(this.collectionView, '_addChild');
+      this.sinon.spy(this.collectionView, 'addChildView');
 
       this.collectionView.render();
     });
@@ -216,10 +254,12 @@ describe('collection view', function() {
       expect(this.collectionView.onChildViewRender.callCount).to.equal(2);
     });
 
-    it('should call `addChild` for each item in the collection', function() {
-      expect(this.collectionView._addChild).to.have.been.calledTwice.
-        and.calledWith(this.collection.models[0]).
-        and.calledWith(this.collection.models[1]);
+    it('should call `addChildView` for each item in the collection', function() {
+      var v1 = this.collectionView.children.findByIndex(0);
+      var v2 = this.collectionView.children.findByIndex(1);
+      expect(this.collectionView.addChildView).to.have.been.calledTwice.
+        and.calledWith(v1).
+        and.calledWith(v2);
     });
 
     it('should be marked rendered', function() {
@@ -332,11 +372,17 @@ describe('collection view', function() {
         collection: this.collection
       });
       this.collectionView.render();
-      this.childView = this.collectionView._addChild(this.model, ChildView, 0);
+      this.childView = this.collectionView._addChild(this.model, 0);
     });
 
     it('should call "render" on the childView', function() {
       expect(this.childView.render).to.have.been.calledOnce;
+    });
+
+    it('should not render childView twice', function() {
+      this.collectionView._renderView(this.childView);
+
+      expect(this.childView.render).to.not.have.been.calledTwice;
     });
   });
 
@@ -604,7 +650,7 @@ describe('collection view', function() {
         onRenderEmpty: function() {},
 
         render: function() {
-          this._addChild(suite.model, this.childView, 0);
+          this._addChild(suite.model, 0);
         }
       });
 
@@ -615,11 +661,12 @@ describe('collection view', function() {
 
       this.beforeRenderSpy = this.sinon.spy(this.collectionView, 'onBeforeRenderEmpty');
       this.renderSpy = this.sinon.spy(this.collectionView, 'onRenderEmpty');
+      this._removeChildModelsSpy = this.sinon.spy(this.collectionView, '_removeChildModels');
 
       this.sinon.spy(this.childView, 'destroy');
       this.sinon.spy(this.EmptyView.prototype, 'render');
 
-      this.collectionView._onCollectionRemove(this.model);
+      this.collectionView._removeChildModels([this.model]);
     });
 
     it('should destroy the models view', function() {
@@ -636,6 +683,11 @@ describe('collection view', function() {
 
     it('should call "onRenderEmpty"', function() {
       expect(this.renderSpy).to.have.been.called;
+    });
+
+    it('should call "_removeChildModels"', function() {
+      expect(this._removeChildModelsSpy).to.have.been.called
+                                        .and.to.have.been.calledWith([this.model]);
     });
   });
 
@@ -728,7 +780,6 @@ describe('collection view', function() {
       this.collectionView.listenTo(this.collectionView, 'item:foo', this.collectionView.someViewCallback);
 
       this.sinon.spy(this.childView, 'destroy');
-      this.sinon.spy(this.collectionView, '_onCollectionRemove');
       this.sinon.spy(this.collectionView, 'stopListening');
       this.sinon.spy(this.collectionView, '_removeElement');
       this.sinon.spy(this.collectionView, 'someCallback');
@@ -902,25 +953,27 @@ describe('collection view', function() {
       expect(this.childView1.remove).to.have.been.called;
     });
 
-    it('should return the child views', function() {
-      expect(this.collectionView._destroyChildren).to.have.returned(this.childrenViews);
-    });
-
     it('should call checkEmpty', function() {
       expect(this.collectionView._checkEmpty).to.have.been.calledOnce;
     });
 
     describe('with the checkEmpty flag set as false', function() {
-      it('should not call checkEmpty', function() {
+      it('should not call _checkEmpty', function() {
         this.collectionView._destroyChildren({checkEmpty: false});
         expect(this.collectionView._checkEmpty).to.have.been.calledOnce;
       });
     });
 
     describe('with the checkEmpty flag set as true', function() {
-      it('should call checkEmpty', function() {
+      it('should call _checkEmpty', function() {
+        this.collectionView.collection.add({id: 3});
         this.collectionView._destroyChildren({checkEmpty: true});
         expect(this.collectionView._checkEmpty).to.have.been.calledTwice;
+      });
+
+      it('should not call _checkEmpty when collection is empty', function() {
+        this.collectionView._destroyChildren({checkEmpty: true});
+        expect(this.collectionView._checkEmpty).to.have.been.calledOnce;
       });
     });
   });
@@ -1072,27 +1125,73 @@ describe('collection view', function() {
       });
 
       this.collectionView.render();
-
-      this.childView = this.collectionView.children[this.model.cid];
-      this.collection.remove(this.model);
     });
 
-    it('should not retain any bindings to this view', function() {
-      var suite = this;
-      var bindings = this.collectionView.bindings || {};
-      expect(_.some(bindings, function(binding) {
-        return binding.obj === suite.childView;
-      })).to.be.false;
+    describe('by model', function() {
+      beforeEach(function() {
+        this.collection.remove(this.model);
+        this.childView = this.collectionView.children[this.model.cid];
+      });
+
+      it('should not retain any bindings to this view', function() {
+        var suite = this;
+        var bindings = this.collectionView.bindings || {};
+        expect(_.some(bindings, function(binding) {
+          return binding.obj === suite.childView;
+        })).to.be.false;
+      });
+
+      it('should not retain any references to this view', function() {
+        expect(_.size(this.collectionView.children)).to.equal(0);
+      });
+
+      it('childView should be undefined', function() {
+        expect(this.childView).to.be.undefined;
+      });
     });
 
-    it('should not retain any references to this view', function() {
-      expect(_.size(this.collectionView.children)).to.equal(0);
+    describe('by view', function() {
+      beforeEach(function() {
+        this.childView = this.collectionView.children.findByModel(this.model);
+        this.removedChildView = this.collectionView.removeChildView(this.childView);
+        this.afterRemoveChildView = this.collectionView.children.findByModel(this.model);
+      });
+
+      it('should not retain any bindings to this view', function() {
+        var suite = this;
+        var bindings = this.collectionView.bindings || {};
+        expect(_.some(bindings, function(binding) {
+          return binding.obj === suite.childView;
+        })).to.be.false;
+      });
+
+      it('should not retain any references to this view', function() {
+        expect(this.collectionView.children.length).to.equal(0);
+      });
+
+      it('childView should be undefined', function() {
+        expect(this.afterRemoveChildView).to.be.undefined;
+      });
+
+      it('should be removed and returned', function() {
+        expect(this.childView).to.equal(this.removedChildView);
+      });
     });
 
-    it('childView should be undefined', function() {
-      expect(this.childView).to.be.undefined;
-    });
+    describe('and trying to remove a view that isn\'t a view', function() {
+      beforeEach(function() {
+        this.sinon.spy(this.collectionView, '_removeChildView');
+        this.removedChildView = this.collectionView.removeChildView(null);
+      });
 
+      it('should return null', function() {
+        expect(this.removedChildView).is.null;
+      });
+
+      it('should not call internal function', function() {
+        expect(this.collectionView._removeChildView).is.not.called;
+      });
+    });
   });
 
   describe('when the collection of a collection view is reset', function() {
@@ -1180,7 +1279,7 @@ describe('collection view', function() {
     describe('when a child view is added to a collection view, after the collection view has been shown', function() {
       beforeEach(function() {
         this.sinon.spy(this.collectionView, 'attachBuffer');
-        this.sinon.spy(this.collectionView, '_addChild');
+        this.sinon.spy(this.collectionView, 'addChildView');
         this.model3 = new Backbone.Model({foo: 3});
         this.collection.add(this.model3);
         this.childView3 = this.collectionView.children.findByIndex(2);
@@ -1190,8 +1289,8 @@ describe('collection view', function() {
         expect(this.collectionView.attachBuffer).not.to.have.been.called;
       });
 
-      it('should call addChild with the new model', function() {
-        expect(this.collectionView._addChild).to.have.been.calledWith(this.model3);
+      it('should call addChildView with the new view', function() {
+        expect(this.collectionView.addChildView).to.have.been.calledWith(this.childView3);
       });
 
       it('should trigger events on the added child view in proper order', function() {
@@ -1207,7 +1306,7 @@ describe('collection view', function() {
         this.childViewAtIndex0 = this.collectionView.children.findByIndex(0);
 
         this.beforeModel = new Backbone.Model({foo: 0});
-        this.collectionView._addChild(this.beforeModel, this.ChildView, 0);
+        this.collectionView._addChild(this.beforeModel, 0);
       });
 
       it('should increment the later childView indexes', function() {
@@ -1461,7 +1560,7 @@ describe('collection view', function() {
     beforeEach(function() {
       this.model = new Backbone.Model({foo: 'bar'});
       this.collectionView = new this.CollectionView();
-      this.childView = this.collectionView._addChild(this.model, this.ChildView, 0);
+      this.childView = this.collectionView._addChild(this.model, 0);
     });
 
     it('should return the child view for the model', function() {

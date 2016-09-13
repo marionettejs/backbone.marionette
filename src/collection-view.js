@@ -4,6 +4,8 @@
 import _                  from 'underscore';
 import Backbone           from 'backbone';
 import destroyBackboneView from './utils/destroy-backbone-view';
+import isNodeAttached     from './common/is-node-attached';
+import childViewEventHandler from './common/child-view-event-handler';
 import monitorViewEvents  from './common/monitor-view-events';
 import { triggerMethodOn } from './common/trigger-method';
 import ChildViewContainer from './child-view-container';
@@ -99,7 +101,7 @@ const CollectionView = Backbone.View.extend({
   _initialEvents() {
     if (this.collection) {
       this.listenTo(this.collection, 'add', this._onCollectionAdd);
-      this.listenTo(this.collection, 'remove', this._onCollectionRemove);
+      this.listenTo(this.collection, 'update', this._onCollectionUpdate);
       this.listenTo(this.collection, 'reset', this.render);
 
       if (this.sort) {
@@ -120,16 +122,102 @@ const CollectionView = Backbone.View.extend({
 
     if (this._shouldAddChild(child, index)) {
       this._destroyEmptyView();
-      const ChildView = this._getChildView(child);
-      this._addChild(child, ChildView, index);
+      this._addChild(child, index)
     }
   },
 
-  // get the child view by model it holds, and remove it
-  _onCollectionRemove(model) {
-    const view = this.children.findByModel(model);
-    this.removeChildView(view);
-    this._checkEmpty();
+  // Handle collection update model removals
+  _onCollectionUpdate(collection, options) {
+    const changes = options.changes;
+    this._removeChildModels(changes.removed);
+  },
+
+  // Remove the child views and destroy them.
+  // This function also updates the indices of later views
+  // in the collection in order to keep the children in sync with the collection.
+  // "models" is an array of models and the corresponding views
+  // will be removed and destroyed from the CollectionView
+  _removeChildModels(models, {checkEmpty} = {}) {
+    const shouldCheckEmpty = checkEmpty !== false;
+
+    // Used to determine where to update the remaining
+    // sibling view indices after these views are removed.
+    const removedViews = this._getRemovedViews(models);
+
+    if (!removedViews.length) {
+      return;
+    }
+
+    this.children._updateLength();
+
+    // decrement the index of views after this one
+    this._updateIndices(removedViews, false);
+
+    if (shouldCheckEmpty) {
+      this._checkEmpty();
+    }
+  },
+
+  // Returns the views that will be used for re-indexing
+  // through CollectionView#_updateIndices.
+  _getRemovedViews(models) {
+
+    // Returning a view means something was removed.
+    return _.reduce(models, (removingViews, model) => {
+      const view = this.children.findByModel(model);
+
+      if (!view || view._isDestroyed) {
+        return removingViews;
+      }
+
+      this._removeChildView(view);
+
+      removingViews.push(view);
+
+      return removingViews;
+    }, []);
+  },
+
+  _findGreatestIndexedView(views) {
+
+    return _.reduce(views, (greatestIndexedView, view) => {
+      // Even if the index is `undefined`, a view will get returned.
+      if (!greatestIndexedView || greatestIndexedView._index < view._index) {
+        return view;
+      }
+
+      return greatestIndexedView;
+    }, undefined);
+  },
+
+  _removeChildView(view) {
+    this.triggerMethod('before:remove:child', this, view);
+
+    this.children._remove(view);
+    if (view.destroy) {
+      view.destroy();
+    } else {
+      destroyBackboneView(view);
+    }
+
+    delete view._parent;
+    this.stopListening(view);
+    this.triggerMethod('remove:child', this, view);
+  },
+
+  // Overriding Backbone.View's `setElement` to handle
+  // if an el was previously defined. If so, the view might be
+  // attached on setElement.
+  setElement() {
+    const hasEl = !!this.el;
+
+    Backbone.View.prototype.setElement.apply(this, arguments);
+
+    if (hasEl) {
+      this._isAttached = isNodeAttached(this.el);
+    }
+
+    return this;
   },
 
   // Render children views. Override this method to provide your own implementation of a
@@ -177,12 +265,12 @@ const CollectionView = Backbone.View.extend({
       }
       currentIds[model.cid] = true;
     });
-    _.each(previousModels, (prevModel) => {
-      const removedChildExists = !currentIds[prevModel.cid] && this.children.findByModel(prevModel);
-      if (removedChildExists) {
-        this._onCollectionRemove(prevModel);
-      }
+
+    const removeModels = _.filter(previousModels, (prevModel) => {
+      return !currentIds[prevModel.cid] && this.children.findByModel(prevModel);
     });
+
+    this._removeChildModels(removeModels);
   },
 
   // Reorder DOM after sorting. When your element's rendering do not use their index,
@@ -203,17 +291,25 @@ const CollectionView = Backbone.View.extend({
     if (anyModelsAdded) {
       this.render();
     } else {
-      // Get the DOM nodes in the same order as the models.
-      const elsToReorder = _.map(models, function(model, index) {
-        const view = children.findByModel(model);
-        view._index = index;
-        return view.el;
-      });
 
-      // Find the views that were children before but aren't in this new ordering.
-      const filteredOutViews = children.filter(function(view) {
-        return !_.contains(elsToReorder, view.el);
-      });
+      const filteredOutModels = [];
+
+      // Get the DOM nodes in the same order as the models and
+      // find the model that were children before but aren't in this new order.
+      const elsToReorder = children.reduce(function(viewEls, view) {
+        const index = _.indexOf(models, view.model);
+
+        if (index === -1) {
+          filteredOutModels.push(view.model);
+          return viewEls;
+        }
+
+        view._index = index;
+
+        viewEls[index] = view.el;
+
+        return viewEls;
+      }, new Array(models.length));
 
       this.triggerMethod('before:reorder', this);
 
@@ -222,8 +318,7 @@ const CollectionView = Backbone.View.extend({
       this._appendReorderedChildren(elsToReorder);
 
       // remove any views that have been filtered out
-      _.each(filteredOutViews, _.bind(this.removeChildView, this));
-      this._checkEmpty();
+      this._removeChildModels(filteredOutModels);
 
       this.triggerMethod('reorder', this);
     }
@@ -286,12 +381,30 @@ const CollectionView = Backbone.View.extend({
     }
   },
 
+  _createView(model, index) {
+    const ChildView = this._getChildView(model);
+    const childViewOptions = this._getChildViewOptions(model, index);
+    const view = this.buildChildView(model, ChildView, childViewOptions);
+    return view;
+  },
+
+  _setupChildView(view, index) {
+    view._parent = this;
+
+    monitorViewEvents(view);
+
+    // set up the child view event forwarding
+    this._proxyChildEvents(view);
+
+    if (this.sort) {
+      view._index = index;
+    }
+  },
+
   // Internal method to loop through collection and show each child view.
   _showCollection(models) {
-    _.each(models, (child, index) => {
-      const ChildView = this._getChildView(child);
-      this._addChild(child, ChildView, index);
-    });
+    _.each(models, _.bind(this._addChild, this));
+    this.children._updateLength();
   },
 
   // Allow the collection to be sorted by a custom view comparator
@@ -365,10 +478,8 @@ const CollectionView = Backbone.View.extend({
       const view = this.buildChildView(model, EmptyView, emptyViewOptions);
 
       this.triggerMethod('before:render:empty', this, view);
-      this._addChildView(view, 0);
+      this.addChildView(view, 0);
       this.triggerMethod('render:empty', this, view);
-
-      view._parent = this;
     }
   },
 
@@ -431,11 +542,8 @@ const CollectionView = Backbone.View.extend({
   },
 
   // Internal method for building and adding a child view
-  _addChild(child, ChildView, index) {
-    const childViewOptions = this._getChildViewOptions(child, index);
-
-    const view = this.buildChildView(child, ChildView, childViewOptions);
-
+  _addChild(child, index) {
+    const view = this._createView(child, index);
     this.addChildView(view, index);
 
     return view;
@@ -454,13 +562,21 @@ const CollectionView = Backbone.View.extend({
   // children in sync with the collection.
   addChildView(view, index) {
     this.triggerMethod('before:add:child', this, view);
+    this._setupChildView(view, index);
 
-    // increment indices of views after this one
-    this._updateIndices(view, true, index);
+    // Store the child view itself so we can properly remove and/or destroy it later
+    if (this._isBuffering) {
+      // Add to children, but don't update children's length.
+      this.children._add(view);
+    } else {
+      // increment indices of views after this one
+      this._updateIndices(view, true);
+      this.children.add(view);
+    }
 
-    view._parent = this;
+    this._renderView(view);
 
-    this._addChildView(view, index);
+    this._attachView(view, index);
 
     this.triggerMethod('add:child', this, view);
 
@@ -469,15 +585,12 @@ const CollectionView = Backbone.View.extend({
 
   // Internal method. This decrements or increments the indices of views after the added/removed
   // view to keep in sync with the collection.
-  _updateIndices(view, increment, index) {
+  _updateIndices(views, increment) {
     if (!this.sort) {
       return;
     }
 
-    if (increment) {
-      // assign the index to the view
-      view._index = index;
-    }
+    const view = _.isArray(views) ? this._findGreatestIndexedView(views) : views;
 
     // update the indexes of views after this one
     this.children.each((laterView) => {
@@ -487,37 +600,32 @@ const CollectionView = Backbone.View.extend({
     });
   },
 
-  // Internal Method. Add the view to children and render it at the given index.
-  _addChildView(view, index) {
-    // Only trigger attach if already attached and not buffering,
-    // otherwise _endBuffering() or Region#show() handles this.
-    const shouldTriggerAttach = !this._isBuffering && this._isAttached;
-
-    monitorViewEvents(view);
-
-    // set up the child view event forwarding
-    this._proxyChildEvents(view);
-
-    // Store the child view itself so we can properly remove and/or destroy it later
-    this.children.add(view);
+  _renderView(view) {
+    if (view._isRendered) {
+      return;
+    }
 
     if (!view.supportsRenderLifecycle) {
       triggerMethodOn(view, 'before:render', view);
     }
 
-    // Render view
     view.render();
 
     if (!view.supportsRenderLifecycle) {
       view._isRendered = true;
       triggerMethodOn(view, 'render', view);
     }
+  },
+
+  _attachView(view, index) {
+    // Only trigger attach if already attached and not buffering,
+    // otherwise _endBuffering() or Region#show() handles this.
+    const shouldTriggerAttach = !view._isAttached && !this._isBuffering && this._isAttached;
 
     if (shouldTriggerAttach) {
       triggerMethodOn(view, 'before:attach', view);
     }
 
-    // Attach view
     this.attachHtml(this, view, index);
 
     if (shouldTriggerAttach) {
@@ -539,22 +647,10 @@ const CollectionView = Backbone.View.extend({
       return view;
     }
 
-    this.triggerMethod('before:remove:child', this, view);
-
-    if (view.destroy) {
-      view.destroy();
-    } else {
-      destroyBackboneView(view);
-    }
-
-    delete view._parent;
-    this.stopListening(view);
-    this.children.remove(view);
-    this.triggerMethod('remove:child', this, view);
-
+    this._removeChildView(view);
+    this.children._updateLength();
     // decrement the index of views after this one
     this._updateIndices(view, false);
-
     return view;
   },
 
@@ -644,19 +740,15 @@ const CollectionView = Backbone.View.extend({
   },
 
   // Destroy the child views that this collection view is holding on to, if any
-  _destroyChildren({checkEmpty} = {}) {
-    this.triggerMethod('before:destroy:children', this);
-    const shouldCheckEmpty = checkEmpty !== false;
-    const childViews = this.children.map(_.identity);
-
-    this.children.each(_.bind(this.removeChildView, this));
-
-    if (shouldCheckEmpty) {
-      this._checkEmpty();
+  _destroyChildren(options) {
+    if (!this.children.length) {
+      return;
     }
 
+    this.triggerMethod('before:destroy:children', this);
+    const childModels = this.children.map('model');
+    this._removeChildModels(childModels, options);
     this.triggerMethod('destroy:children', this);
-    return childViews;
   },
 
   // Return true if the given child should be shown. Return false otherwise.
@@ -671,31 +763,7 @@ const CollectionView = Backbone.View.extend({
 
   // Set up the child view event forwarding. Uses a "childview:" prefix in front of all forwarded events.
   _proxyChildEvents(view) {
-    const prefix = _.result(this, 'childViewEventPrefix');
-
-    // Forward all child view events through the parent,
-    // prepending "childview:" to the event name
-    this.listenTo(view, 'all', (eventName, ...args) => {
-
-      const childEventName = prefix + ':' + eventName;
-
-      const childViewEvents = this.normalizeMethods(this._childViewEvents);
-
-      // call collectionView childViewEvent if defined
-      if (typeof childViewEvents !== 'undefined' && _.isFunction(childViewEvents[eventName])) {
-        childViewEvents[eventName].apply(this, args);
-      }
-
-      // use the parent view's proxyEvent handlers
-      const childViewTriggers = this._childViewTriggers;
-
-      // Call the event with the proxy name on the parent layout
-      if (childViewTriggers && _.isString(childViewTriggers[eventName])) {
-        this.triggerMethod(childViewTriggers[eventName], ...args);
-      }
-
-      this.triggerMethod(childEventName, ...args);
-    });
+    this.listenTo(view, 'all', childViewEventHandler);
   }
 });
 

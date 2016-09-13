@@ -180,6 +180,10 @@ export default {
     return region.show(view, ...args);
   },
 
+  detachChildView(name) {
+    return this.getRegion(name).detachView();
+  },
+
   getChildView(name) {
     return this.getRegion(name).currentView;
   }

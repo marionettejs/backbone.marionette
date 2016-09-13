@@ -105,7 +105,7 @@ const Behavior = MarionetteObject.extend({
     const behaviorEvents = this.normalizeUIKeys(_.result(this, 'events'));
 
     // binds the handler to the behavior and builds a unique eventName
-    return _.reduce(behaviorEvents, function(events, behaviorHandler, key) {
+    return _.reduce(behaviorEvents, (events, behaviorHandler, key) => {
       if (!_.isFunction(behaviorHandler)) {
         behaviorHandler = this[behaviorHandler];
       }
@@ -113,7 +113,7 @@ const Behavior = MarionetteObject.extend({
       key = getUniqueEventName(key);
       events[key] = _.bind(behaviorHandler, this);
       return events;
-    } , {}, this);
+    }, {});
   },
 
   // Internal method to build all trigger handlers for a given behavior

@@ -20,6 +20,7 @@ multiple views through the `regions` attribute.
   * [Managing Sub-views](#managing-sub-views)
     * [Showing a view](#showing-a-view)
     * [Accessing a child view](#accessing-a-child-view)
+    * [Detaching a child view](#detaching-a-child-view)
 * [Organizing your View](#organizing-your-view)
 * [Events](#events)
   * [onEvent Listeners](#onevent-listeners)
@@ -208,6 +209,34 @@ var MyView = Mn.View.extend({
 [Live example](https://jsfiddle.net/marionettejs/b12kgq3t/)
 
 If no view is available, `getChildView` returns `null`.
+
+#### Detaching a child view
+You can detach a child view from a region through `detachChildView(region)`
+
+```javascript
+
+var Mn = require('backbone.marionette');
+var SubView = require('./subview');
+
+var MyView = Mn.View.extend({
+  template: '#tpl-view-with-regions',
+
+  regions: {
+    firstRegion: '#first-region',
+    secondRegion: '#second-region'
+  },
+
+  onRender: function() {
+    this.showChildView('firstRegion', new SubView());
+  },
+
+  onMoveView: function() {
+    var view = this.detachChildView('firstRegion');
+    this.showChildView('secondRegion', view);
+  }
+});
+```
+This is a proxy for [region.detachView()](./marionette.region.md#detaching-existing-views)
 
 ### Region availability
 Any defined regions within a `View` will be available to the `View` or any

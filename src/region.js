@@ -245,6 +245,19 @@ const Region = MarionetteObject.extend({
     }
   },
 
+  detachView() {
+    const view = this.currentView;
+
+    if (!view) {
+      return;
+    }
+
+    delete this.currentView;
+    this._detachView(view);
+    delete view._parent;
+    return view;
+  },
+
   _detachView(view) {
     const shouldTriggerDetach = !!view._isAttached;
     if (shouldTriggerDetach) {

@@ -57,6 +57,8 @@ myView.on('something:happened', myView.callMethod, myView);
 myView.triggerMethod('something:happened', 'foo');
 ```
 
+[Live example](https://jsfiddle.net/marionettejs/whvgao7o/)
+
 **The `triggerMethod` call comes from the `trigger-method` mixin that is also
 part of `Marionette.Object` and its subclasses like `Marionette.Application`.
 This documentation also applies.**
@@ -80,6 +82,8 @@ var MyView = Mn.View.extend({
 });
 ```
 
+[Live example](https://jsfiddle.net/marionettejs/90Larbty/)
+
 You can also use `listenTo` as in Backbone:
 
 ```javascript
@@ -101,6 +105,8 @@ var myView = new MyView();
 
 var otherView = new OtherView(myView);
 ```
+
+[Live examples](https://jsfiddle.net/marionettejs/cm2rczqz/)
 
 As in [Backbone](http://backbonejs.org/#Events), `listenTo` will pass the object
 it is called on in as the context variable. These behave exactly as in Backbone,
@@ -142,6 +148,8 @@ var myView = new MyView();
 myView.triggerMethod('my:event', 'someValue'); // Logs 'someValue'
 ```
 
+[Live example](https://jsfiddle.net/marionettejs/oc8wwcnx/)
+
 As before, all arguments passed into `triggerMethod` will make their way into
 the event handler. Using this method ensures there will be no unexpected
 memory leaks.
@@ -172,6 +180,8 @@ var MyView = Mn.View.extend({
   }
 });
 ```
+
+[Live example](https://jsfiddle.net/marionettejs/pq4xfchk/)
 
 For more information, see the [view documentation](./marionette.view.md#binding-to-user-input).
 
@@ -205,6 +215,8 @@ var Collection = Mn.CollectionView.extend({
   }
 });
 ```
+
+[Live example](https://jsfiddle.net/marionettejs/opyfvsfx/)
 
 ### Event Bubbling
 
@@ -249,6 +261,8 @@ var ParentView = Mn.View.extend({
 })
 ```
 
+[Live example](https://jsfiddle.net/marionettejs/oquea4uy/)
+
 The `view` gets passed into the handlers as the first argument.
 
 #### Using `CollectionView`
@@ -270,6 +284,8 @@ var MyList = Mn.CollectionView.extend({
   }
 });
 ```
+
+[Live examples](https://jsfiddle.net/marionettejs/za27jys1/)
 
 Just like with the `View` and its regions, the event handler will receive the
 `view` that triggered the event as its first argument.
@@ -309,6 +325,8 @@ var ParentView = Mn.View.extend({
 });
 ```
 
+[Live example](https://jsfiddle.net/marionettejs/y92r99p2/)
+
 #### Attaching Functions
 
 The `childViewEvents` attribute can also attach functions directly to be event
@@ -339,6 +357,8 @@ var ParentView = Mn.View.extend({
   }
 });
 ```
+
+[Live example](https://jsfiddle.net/marionettejs/pnp1dd8j/)
 
 ### Triggering Events on Child Events
 
@@ -397,7 +417,7 @@ var GrantParentView = Marionette.View.extend({
   },
 
   childViewEvents: {
-    'child:submit:message': 'showMessage'
+    'child:show:message': 'showMessage'
   },
 
   showMessage: function(childView) {
@@ -405,6 +425,8 @@ var GrantParentView = Marionette.View.extend({
   }
 });
 ```
+
+[Live example](https://jsfiddle.net/marionettejs/8eq7vca5/)
 
 ## Lifecycle Events
 

@@ -30,6 +30,7 @@ multiple views through the `regions` attribute.
     * [View Destruction Events](#view-destruction-events)
     * [Other View Events](#other-view-events)
   * [Binding To User Input](#binding-custom-events)
+    * [Event and Trigger Mapping](#event-and-trigger-mapping)
     * [View `events`](#view-events)
     * [View `triggers`](#view-triggers)
 * [Model and Collection Events](#model-and-collection-events)
@@ -506,7 +507,7 @@ event, such as Bootstrap's `show.bs.modal`.
 
 The `dom node` represents a jQuery selector or a `ui` key prefixed by `@.`. This
 must exist inside the view once it has completed rendering. For more information
-about the `ui` object, and how it works, see 
+about the `ui` object, and how it works, see
 [the documentation on ui](#organizing-your-view).
 
 #### View `events`

@@ -105,6 +105,7 @@ var BarView = Mn.View.extend({
 });
 
 var MyCollectionView = Mn.CollectionView.extend({
+  collection: new Bb.Collection(),
   childView: function(item) {
     // Choose which view class to render,
     // depending on the properties of the item model
@@ -132,6 +133,8 @@ collectionView.collection.add(foo);
 collectionView.collection.add(bar);
 ```
 
+[Live example](https://jsfiddle.net/marionettejs/woe8yo99/)
+
 ### CollectionView's `childViewOptions`
 
 There may be scenarios where you need to pass data from your parent
@@ -158,6 +161,8 @@ var CollectionView = Mn.CollectionView.extend({
 });
 ```
 
+[Live example](https://jsfiddle.net/marionettejs/7prtxfmu/)
+
 You can also specify the `childViewOptions` as a function, if you need to
 calculate the values to return at runtime. The model will be passed into
 the function should you need access to it when calculating
@@ -178,6 +183,8 @@ var CollectionView = Mn.CollectionView.extend({
 });
 ```
 
+[Live example](https://jsfiddle.net/marionettejs/cLrfdkvg/)
+
 ### CollectionView's `childViewEventPrefix`
 
 You can customize the event prefix for events that are forwarded
@@ -186,22 +193,27 @@ on the collection view. For more information on the `childViewEventPrefix` see
 ["childview:*" event bubbling from child views](#childview-event-bubbling-from-child-views)
 
 ```javascript
+var Bb = require('backbone');
 var Mn = require('backbone.marionette');
 
-var CV = Mn.CollectionView.extend({
+var myCollection = new Bb.Collection([{}]);
+
+var CollectionView = Mn.CollectionView.extend({
   childViewEventPrefix: 'some:prefix'
 });
 
-var c = new CV({
-  collection: myCol
+var collectionView = new CollectionView({
+  collection: myCollection
 });
 
-c.on('some:prefix:render', function(){
+collectionView.on('some:prefix:render', function(){
   // child view was rendered
 });
 
-c.render();
+collectionView.render();
 ```
+
+[Live example](https://jsfiddle.net/marionettejs/as33hnk1/)
 
 The `childViewEventPrefix` can be provided in the view definition or
 in the constructor function call, to get a view instance.
@@ -240,6 +252,8 @@ var MyCollectionView = Mn.CollectionView.extend({
   }
 });
 ```
+
+[Live example](https://jsfiddle.net/marionettejs/a2uvcfrp/)
 
 `childViewEvents` also catches custom events fired by a child view.
 
@@ -286,6 +300,8 @@ var ParentView = Mn.CollectionView.extend({
   }
 });
 ```
+
+[Live example](https://jsfiddle.net/marionettejs/fpg8auf5/)
 
 ### CollectionView's `childViewTriggers`
 
@@ -339,6 +355,8 @@ var ParentView = Mn.CollectionView.extend({
 });
 ```
 
+[Live example](https://jsfiddle.net/marionettejs/edhqd2h8/)
+
 ## CollectionView's `emptyView`
 
 When a collection has no children, and you need to render a view other than
@@ -360,9 +378,13 @@ var MyCollectionView = Mn.CollectionView.extend({
 });
 ```
 
+[Live example](https://jsfiddle.net/marionettejs/ydt01Lyq/)
+
 ### CollectionView's `emptyViewOptions`
 
-Similar to [`childView`](#collectionviews-childview) and [`childViewOptions`](#collectionviews-childviewoptions), there is an `emptyViewOptions` property that will be passed to the `emptyView` constructor. It can be provided as an object literal or as a function.
+Similar to [`childView`](#collectionviews-childview) and [`childViewOptions`](#collectionviews-childviewoptions),
+there is an `emptyViewOptions` property that will be passed to the `emptyView` constructor.
+It can be provided as an object literal or as a function.
 
 If `emptyViewOptions` aren't provided the `CollectionView` will default to passing the `childViewOptions` to the `emptyView`.
 
@@ -384,6 +406,8 @@ var CollectionView = Mn.CollectionView({
 });
 ```
 
+[Live example](https://jsfiddle.net/marionettejs/wu6u00sn/)
+
 ### CollectionView's `isEmpty`
 
 If you want to control when the empty view is rendered, you can override
@@ -400,6 +424,8 @@ var MyCollectionView = Mn.CollectionView.extend({
 });
 ```
 
+[Live example](https://jsfiddle.net/marionettejs/3t9hLfpu/)
+
 ## CollectionView's `render`
 
 The `render` method of the collection view is responsible for
@@ -415,6 +441,8 @@ var MyCollectionView = Mn.CollectionView.extend({...});
 // all of the children views will now be rendered.
 new MyCollectionView().render();
 ```
+
+[Live example](https://jsfiddle.net/marionettejs/1wkc0p7o/)
 
 For more information on rendering techiniques see: [Rendering `CollectionView`s](#rendering-collectionviews).
 
@@ -460,6 +488,8 @@ myCollectionView.render();
 // Collection view will re-render displaying the new model
 collection.reset([{foo: 'bar'}]);
 ```
+
+[Live example](https://jsfiddle.net/marionettejs/rk3x77ds/)
 
 ### CollectionView: Re-render Collection
 
@@ -557,6 +587,8 @@ myCollectionView.render();
 myCollectionView.destroy(); // logs "I will get destroyed"
 ```
 
+[Live example](https://jsfiddle.net/marionettejs/wnhd10jd/)
+
 ## CollectionView's `filter`
 
 `CollectionView` allows for a custom `filter` option if you want to prevent some of the
@@ -568,7 +600,7 @@ and a falsey value if it should not.
 var Bb = require('backbone');
 var Mn = require('backbone.marionette');
 
-var cv = new Mn.CollectionView({
+var collectionView = new Mn.CollectionView({
   childView: SomeChildView,
   emptyView: SomeEmptyView,
   collection: new Bb.Collection([
@@ -585,17 +617,19 @@ var cv = new Mn.CollectionView({
 });
 
 // renders the views with values '2' and '4'
-cv.render();
+collectionView.render();
 
 // change the filter
 // renders the views with values '1' and '3'
-cv.setFilter(function (child, index, collection) {
+collectionView.setFilter(function (child, index, collection) {
   return child.get('value') % 2 !== 0;
 });
 
 // renders all views
-cv.removeFilter();
+collectionView.removeFilter();
 ```
+
+[Live example](https://jsfiddle.net/marionettejs/mm9at7ep/)
 
 ### CollectionView's `setFilter`
 
@@ -607,22 +641,24 @@ Passing `{ preventRender: true }` in the options argument will prevent the view 
 ```javascript
 var Mn = require('backbone.marionette');
 
-var cv = new Mn.CollectionView({
+var collectionView = new Mn.CollectionView({
   collection: someCollection
 });
 
-cv.render();
+collectionView.render();
 
 var newFilter = function(child, index, collection) {
   return child.get('value') % 2 === 0;
 };
 
 // Note: the setFilter is preventing the automatic re-render
-cv.setFilter(newFilter, { preventRender: true });
+collectionView.setFilter(newFilter, { preventRender: true });
 
 //Render the new state of the ChildViews instead of the whole DOM.
-cv.render();
+collectionView.render();
 ```
+
+[Live example](https://jsfiddle.net/marionettejs/ogafwram/)
 
 ### CollectionView's `removeFilter`
 
@@ -632,19 +668,21 @@ This function is actually an alias of `setFilter(null, options)`. It is useful f
 ```javascript
 var Mn = require('backbone.marionette');
 
-var cv = new Mn.CollectionView({
+var collectionView = new Mn.CollectionView({
   collection: someCollection
 });
 
-cv.render();
+collectionView.render();
 
-cv.setFilter(function(child, index, collection) {
+collectionView.setFilter(function(child, index, collection) {
   return child.get('value') % 2 === 0;
 });
 
 //Remove the current filter without rendering again.
-cv.removeFilter({ preventRender: true });
+collectionView.removeFilter({ preventRender: true });
 ```
+
+[Live example](https://jsfiddle.net/marionettejs/9gr5rwqv/)
 
 ## CollectionView's `sort`
 
@@ -683,9 +721,12 @@ myUnsortedColView.render(); // 1 4 3 2
 myCollection.sort();
 ```
 
+[Live example](https://jsfiddle.net/marionettejs/sf0vL563/)
+
 ### CollectionView's `viewComparator`
 
-`CollectionView` allows for a custom `viewComparator` option if you want your `CollectionView`'s children to be rendered with a different sort order than the underlying Backbone collection uses.
+`CollectionView` allows for a custom `viewComparator` option if you want your `CollectionView`'s children to be rendered
+with a different sort order than the underlying Backbone collection uses.
 
 ```javascript
 var Mn = require('backbone.marionette');
@@ -695,6 +736,8 @@ var cv = new Mn.CollectionView({
   viewComparator: 'otherFieldToSortOn'
 });
 ```
+
+[Live example](https://jsfiddle.net/marionettejs/404tft3b/)
 
 The `viewComparator` can take any of the acceptable `Backbone.Collection`
 [comparator formats](http://backbonejs.org/#Collection-comparator) -- a sortBy
@@ -726,6 +769,8 @@ var MyCollectionView = Mn.CollectionView.extend({
   }
 });
 ```
+
+[Live example](https://jsfiddle.net/marionettejs/404tft3b/)
 
 ### CollectionView's `reorderOnSort`
 
@@ -793,6 +838,8 @@ var Collection = Mn.CollectionView.extend({
 });
 ```
 
+[Live example](https://jsfiddle.net/marionettejs/5z1qcr4z/)
+
 The event will receive a `childview:` prefix before going through the magic
 method binding logic. See the
 [documentation for Child View Events](./events.md#child-view-events) for more
@@ -858,6 +905,8 @@ This will render the following:
   <li>Another Item</li>
 </ul>
 ```
+
+[Live example](https://jsfiddle.net/marionettejs/u448nhr2/)
 
 ### Rendering Tables
 
@@ -1001,6 +1050,8 @@ var myTable = new TableView({
 myTable.render();
 ```
 
+[Live example](https://jsfiddle.net/marionettejs/zr8gn69g/)
+
 We can leave the templates as-is for this example. The major advantage of this
 style is that we can create a region in any part of `TableView` as well as in
 `RowView` and treat it just as any independent widget.
@@ -1073,9 +1124,16 @@ var TreeNode = Mn.View.extend({
   },
 
   onRender: function() {
-    this.showChildView('tree', new TreeView({
-      collection: new Bb.Collection(this.model.get('nodes'))
-    }));
+    var nodes = this.model.get('nodes');
+
+    //show child nodes if they are present
+    if (nodes.length) {
+      var treeView = new TreeView({
+        collection: new Bb.Collection(nodes)
+      });
+
+      this.showChildView('tree', treeView);
+    }
   }
 });
 
@@ -1102,6 +1160,8 @@ new TreeView({
   collection: tree
 });
 ```
+
+[Live example](https://jsfiddle.net/marionettejs/uyoe84n5/)
 
 This more explicit style gives us two major benefits:
 

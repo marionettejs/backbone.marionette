@@ -1,4 +1,3 @@
-api
 bower_components
 docs
 gulp
@@ -7,12 +6,16 @@ src
 tasks
 test
 tmp
+.babelrc
 .editorconfig
-.gitignore
 .eslintrc
-.jscsrc
+.gitignore
 .travis.yml
 bower.json
 CONTRIBUTING.md
 gulpfile.babel.js
+ISSUE_TEMPLATE.md
+marionette-logo.png
+PULL_REQUEST_TEMPLATE.md
+trigger-deploy-mn-com.js
 upgradeGuide.md

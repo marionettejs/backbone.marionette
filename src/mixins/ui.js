@@ -49,6 +49,13 @@ export default {
     return normalizeUIKeys(hash, uiBindings);
   },
 
+  // normalize the passed string with the views `ui` selectors.
+  // `"@ui.bar"`
+  normalizeUIString(uiString) {
+    const uiBindings = this._getUIBindings();
+    return normalizeUIString(uiString, uiBindings);
+  },
+
   // normalize the values of passed hash with the views `ui` selectors.
   // `{foo: "@ui.bar"}`
   normalizeUIValues(hash, properties) {

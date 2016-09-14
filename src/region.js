@@ -78,10 +78,6 @@ const Region = MarionetteObject.extend({
   },
 
   _renderView(view) {
-    if (view._isRendered) {
-      return;
-    }
-
     if (!view.supportsRenderLifecycle) {
       triggerMethodOn(view, 'before:render', view);
     }

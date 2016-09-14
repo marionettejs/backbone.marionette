@@ -1159,4 +1159,33 @@ describe('region', function() {
       });
     });
   });
+
+  describe('when showing a view with `template: false`', function() {
+    beforeEach(function() {
+      this.MyRegion = Marionette.Region.extend({
+        el: '#region'
+      });
+
+      this.MyView = Marionette.View.extend({
+        template: false,
+        el: '#existing',
+        onBeforeRender: this.sinon.stub(),
+        onRender: this.sinon.stub()
+      });
+
+      this.setFixtures('<div id="region"><div id="existing">Preexisting HTML</div></div>');
+      this.region = new this.MyRegion();
+      this.view = new this.MyView();
+      this.region.show(this.view);
+    });
+
+    it('should fire onBeforeRender on the view', function() {
+      expect(this.view.onBeforeRender).to.have.been.calledOnce;
+    });
+
+    it('should fire onRender on the view', function() {
+      expect(this.view.onRender).to.have.been.calledOnce;
+    });
+  });
+
 });

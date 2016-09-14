@@ -11,6 +11,25 @@ describe('view ui elements', function() {
     });
   });
 
+  describe('when normalizing a ui string', function() {
+    beforeEach(function() {
+      this.view = new this.View({model: this.model});
+      this.view.render();
+    });
+
+    it('should return the string unmodified if it does not begin with @ui.', function() {
+      expect(this.view.normalizeUIString('baz')).to.equal('baz');
+    })
+
+    it('should translate it if it can be found', function() {
+      expect(this.view.normalizeUIString('@ui.foo')).to.equal('#foo');
+    });
+
+    it('should return undefined if it begins with @ui. but can not be found', function() {
+      expect(this.view.normalizeUIString('@ui.baz')).to.equal('undefined');
+    });
+  });
+
   describe('when accessing a ui element from the hash', function() {
     beforeEach(function() {
       this.view = new this.View({model: this.model});

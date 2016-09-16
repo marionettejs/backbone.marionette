@@ -115,6 +115,23 @@ removed from the DOM and replaced with an element of `.new-class` - this lets
 us do things like rendering views inside `table` or `select` more easily -
 these elements are usually very strict on what content they will allow.
 
+**_DEPRECATED: The `selector` option of a region is deprecated in favor of using `el`_**
+
+```js
+var MyView = Mn.View.extend({
+  regions: {
+    deprecatedRegionDefinition: {
+      selector: '.foo',
+      replaceElement: true
+    },
+    regionDefinition: {
+      selector: '.bar',
+      replaceElement: true
+    }
+  }
+});
+```
+
 ### Specifying regions as a Function
 
 The `regions` attribute on a view can be a

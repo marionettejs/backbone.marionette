@@ -77,6 +77,27 @@ describe('Region', function() {
         it('uses the selector', function() {
           expect(this.region.el).to.equal(this.fooSelector);
         });
+
+        describe('when DEV_MODE is true', function() {
+          beforeEach(function() {
+            Marionette.DEV_MODE = true;
+            this.sinon.spy(Marionette.deprecate, '_warn');
+            this.sinon.stub(Marionette.deprecate, '_console', {
+              warn: this.sinon.stub()
+            });
+            Marionette.deprecate._cache = {};
+
+            this.region = this.view._buildRegion(this.definition);
+          });
+
+          it('should call Marionette.deprecate', function() {
+            expect(Marionette.deprecate._warn).to.be.calledWith('Deprecation warning: The selector option on a Region definition object is deprecated. Use el to pass a selector string');
+          });
+
+          afterEach(function() {
+            Marionette.DEV_MODE = false;
+          });
+        });
       });
 
       describe('with `el` defined', function() {

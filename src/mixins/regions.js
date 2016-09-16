@@ -1,4 +1,5 @@
 import _                    from 'underscore';
+import deprecate       from '../utils/deprecate';
 import _invoke              from '../utils/invoke';
 import Region               from '../region';
 import MarionetteError      from '../error';
@@ -92,6 +93,10 @@ export default {
     const RegionClass = definition.regionClass || this.regionClass;
 
     const options = _.omit(definition, 'regionClass');
+
+    if (definition.selector) {
+      deprecate('The selector option on a Region definition object is deprecated. Use el to pass a selector string');
+    }
 
     _.defaults(options, {
       el: definition.selector,

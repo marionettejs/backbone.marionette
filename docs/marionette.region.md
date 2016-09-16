@@ -18,8 +18,10 @@ managing regions throughout your application.
 * [Showing a View](#showing-a-view)
   * [Hiding a View](#hiding-a-view)
   * [Preserving Existing Views](#preserving-existing-views)
-* [Checking whether a region is showing a view](#checking-whether-a-region-is-showing-a-view)
-* [`reset` A Region](#reset-a-region)
+  * [Checking whether a region is showing a view](#checking-whether-a-region-is-showing-a-view)
+  * [`reset` A Region](#reset-a-region)
+  * [Set How View's `el` Is Attached](#set-how-views-el-is-attached)
+* [Region Events](#region-events)
 
 ## Defining the Application Region
 
@@ -305,3 +307,13 @@ var MyView = Mn.View.extend({
   }
 });
 ```
+
+## Region Events
+
+Like most Marionette classes, `Region` objects are able to fire and respond to
+events. The [Documentation for Events](./events.md) covers all the general
+event handling cases.
+
+Regions also have their own lifecycle as part of showing and rendering views.
+See the [Lifecycle Documentation](./viewlifecycle.md) for the list of events and
+when they fire.

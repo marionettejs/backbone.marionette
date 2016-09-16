@@ -48,34 +48,51 @@ const Region = MarionetteObject.extend({
   // method for you. Reads content directly from the `el` attribute. The `preventDestroy`
   // option can be used to prevent a view from the old view being destroyed on show.
   show(view, options) {
-    if (!this._ensureElement(options)) {
-      return;
-    }
+    if (!this._ensureElement(options)) { return this; }
+
     this._ensureView(view);
+
     if (view === this.currentView) { return this; }
 
     this.triggerMethod('before:show', this, view, options);
 
-    monitorViewEvents(view);
+    this.thenShow(view, options);
 
+    return this;
+  },
+
+  // Override this function to allow for async showing
+  // control when the view empties and when it finally shows
+  thenShow(view, options) {
     this.empty(options);
 
-    // We need to listen for if a view is destroyed in a way other than through the region.
-    // If this happens we need to remove the reference to the currentView since once a view
-    // has been destroyed we can not reuse it.
-    view.on('destroy', this.empty, this);
+    this.finallyShow(view, options);
+  },
 
-    // Make this region the view's parent.
-    // It's important that this parent binding happens before rendering so that any events
-    // the child may trigger during render can also be triggered on the child's ancestor views.
-    view._parent = this;
+  finallyShow(view, options) {
+    this._setupView(view);
 
     this._renderView(view);
 
     this._attachView(view, options);
 
     this.triggerMethod('show', this, view, options);
+
     return this;
+  },
+
+  _setupView(view) {
+    // Make this region the view's parent.
+    // It's important that this parent binding happens before rendering so that any events
+    // the child may trigger during render can also be triggered on the child's ancestor views.
+    view._parent = this;
+
+    monitorViewEvents(view);
+
+    // We need to listen for if a view is destroyed in a way other than through the region.
+    // If this happens we need to remove the reference to the currentView since once a view
+    // has been destroyed we can not reuse it.
+    view.on('destroy', this.empty, this);
   },
 
   _renderView(view) {

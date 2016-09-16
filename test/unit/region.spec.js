@@ -371,6 +371,27 @@ describe('region', function() {
           expect(this.view1._parent).to.be.undefined;
         });
       });
+
+
+      describe('when DEV_MODE is on', function() {
+        beforeEach(function() {
+          Marionette.DEV_MODE = true;
+          this.sinon.spy(Marionette.deprecate, '_warn');
+          this.sinon.stub(Marionette.deprecate, '_console', {
+            warn: this.sinon.stub()
+          });
+          Marionette.deprecate._cache = {};
+        });
+
+        it('should call Marionette.deprecate', function() {
+          this.region.show(this.view2, {preventDestroy: true}); expect(Marionette.deprecate._warn).to.be.calledWith('Deprecation warning: The preventDestroy option is deprecated. Use Region#detachView');
+        });
+
+        afterEach(function() {
+          Marionette.DEV_MODE = false;
+        });
+      });
+
     });
 
     describe('when setting the "replaceElement" class option', function() {

@@ -257,6 +257,10 @@ the DOM. When a region is emptied [empty events are triggered](./viewlifecycle.m
 
 ### Preserving Existing Views
 
+**_DEPRECATED: `preventDestroy` is deprecated. See
+[Detaching Existing Views](#detaching-existing-views)
+for how to preserve a shown view_**
+
 If you replace the current view with a new view by calling `show`,
 by default it will automatically destroy the previous view.
 You can prevent this behavior by passing `{preventDestroy: true}` in the options

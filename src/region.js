@@ -3,6 +3,7 @@
 
 import _ from 'underscore';
 import Backbone from 'backbone';
+import deprecate from './utils/deprecate';
 import destroyBackboneView from './utils/destroy-backbone-view';
 import monitorViewEvents from './common/monitor-view-events';
 import isNodeAttached from './common/is-node-attached';
@@ -234,6 +235,7 @@ const Region = MarionetteObject.extend({
     const shouldPreventDestroy = !!preventDestroy;
 
     if (shouldPreventDestroy) {
+      deprecate('The preventDestroy option is deprecated. Use Region#detachView');
       this._detachView(view);
       return;
     }

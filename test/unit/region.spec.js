@@ -431,6 +431,24 @@ describe('region', function() {
         });
       });
 
+      describe('and the view is detaching from region', function() {
+        beforeEach(function() {
+          this.detachedView = this.region.detachView();
+        });
+
+        it('should remove the view from the parent', function() {
+          expect(this.$parentEl).to.not.contain.$html(this.view.$el.html());
+        });
+
+        it('should restore the region\'s "el" to the DOM', function() {
+          expect(this.$parentEl).to.contain.$html('<div id="region"></div>');
+        });
+
+        it('should call _restoreEl', function() {
+          expect(this.region._restoreEl).to.have.been.called;
+        });
+      });
+
       describe('and showing another view', function() {
         beforeEach(function() {
           this.MyView2 = Marionette.View.extend({
@@ -472,6 +490,15 @@ describe('region', function() {
 
     describe('and the view is detached', function() {
       beforeEach(function() {
+        this.viewDestroyStub = this.sinon.stub();
+        this.view.on('destroy', this.viewDestroyStub);
+
+        this.viewDetachStub = this.sinon.stub();
+        this.view.on('detach', this.viewDetachStub);
+
+        this.regionEmptyStub = this.sinon.stub();
+        this.region.on('empty', this.regionEmptyStub);
+
         this.detachedView = this.region.detachView();
         this.noDetachedView = this.region.detachView();
       });
@@ -482,6 +509,26 @@ describe('region', function() {
 
       it('should not return a childView if it was already detached', function() {
         expect(this.noDetachedView).to.be.undefined;
+      });
+
+      it('should have _isDestroyed set to falsy', function() {
+        expect(this.detachedView._isDestroyed).to.not.be.ok;
+      });
+
+      it('should not have triggered destroy on the view', function() {
+        expect(this.viewDestroyStub).to.not.been.called;
+      });
+
+      it('should have triggered detach on the view', function() {
+        expect(this.viewDetachStub).to.been.called;
+      });
+
+      it('should have triggered empty on the region', function() {
+        expect(this.regionEmptyStub).to.been.called;
+      });
+
+      it('should not have a parent', function() {
+        expect(this.detachedView).to.not.have.property('_parent');
       });
     });
   });

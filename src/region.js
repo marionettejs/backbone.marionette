@@ -63,7 +63,7 @@ const Region = MarionetteObject.extend({
     // We need to listen for if a view is destroyed in a way other than through the region.
     // If this happens we need to remove the reference to the currentView since once a view
     // has been destroyed we can not reuse it.
-    view.on('destroy', this.empty, this);
+    view.on('destroy', this._empty, this);
 
     // Make this region the view's parent.
     // It's important that this parent binding happens before rendering so that any events
@@ -215,7 +215,18 @@ const Region = MarionetteObject.extend({
       return this;
     }
 
-    view.off('destroy', this.empty, this);
+    const shouldDestroy = !options.preventDestroy;
+
+    if (!shouldDestroy) {
+      deprecate('The preventDestroy option is deprecated. Use Region#detachView');
+    }
+
+    this._empty(view, shouldDestroy);
+    return this;
+  },
+
+  _empty(view, shouldDestroy) {
+    view.off('destroy', this._empty, this);
     this.triggerMethod('before:empty', this, view);
 
     this._restoreEl();
@@ -223,19 +234,15 @@ const Region = MarionetteObject.extend({
     delete this.currentView;
 
     if (!view._isDestroyed) {
-      this._removeView(view, options);
+      this._removeView(view, shouldDestroy);
       delete view._parent;
     }
 
     this.triggerMethod('empty', this, view);
-    return this;
   },
 
-  _removeView(view, {preventDestroy} = {}) {
-    const shouldPreventDestroy = !!preventDestroy;
-
-    if (shouldPreventDestroy) {
-      deprecate('The preventDestroy option is deprecated. Use Region#detachView');
+  _removeView(view, shouldDestroy) {
+    if (!shouldDestroy) {
       this._detachView(view);
       return;
     }
@@ -254,9 +261,8 @@ const Region = MarionetteObject.extend({
       return;
     }
 
-    delete this.currentView;
-    this._detachView(view);
-    delete view._parent;
+    this._empty(view);
+
     return view;
   },
 

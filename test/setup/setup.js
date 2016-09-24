@@ -1,4 +1,4 @@
-module.exports = function() {
+module.exports = function(mochaRunner) {
   var _ = require('underscore');
   var Backbone = require('backbone');
   var jQuery = require('jquery');
@@ -19,6 +19,26 @@ module.exports = function() {
   global.expect = global.chai.expect;
 
   var $fixtures;
+
+  function mochaResults(runner) {
+    var failedTests = [];
+
+    runner.on('end', function() {
+      global.mochaResults = runner.stats;
+      global.mochaResults.reports = failedTests;
+    });
+
+    runner.on('fail', function(test, err) {
+      failedTests.push({
+        title: test.title,
+        fullTitle: test.fullTitle(),
+        error: {
+          message: err.message,
+          stack: err.stack
+        }
+      });
+    });
+  }
 
   function setFixtures() {
     _.each(arguments, function(content) {
@@ -42,6 +62,8 @@ module.exports = function() {
     this.checkProperties = checkProperties;
     this.setFixtures   = setFixtures;
     this.clearFixtures = clearFixtures;
+
+    mochaResults(mochaRunner);
   });
 
   beforeEach(function() {

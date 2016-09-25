@@ -8,6 +8,6 @@ before_install:
 install:
   - npm install && npm install travis-ci
 after_success:
-  - npm run-script coveralls
+  - npm run-script coveralls && && npm run-script test-cross-browser
   - if [[ $TRAVIS_BRANCH = "master" ]] && [[ $TRAVIS_PULL_REQUEST = "false" ]]; then node trigger-deploy-mn-com.js; fi
-  
+

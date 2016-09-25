@@ -23,7 +23,7 @@
     "coveralls": "gulp coveralls",
     "test": "gulp",
     "test-browser": "gulp test-browser",
-    "test-cross-browser": "node sauce-runner.js"
+    "test-cross-browser": "gulp browser-bundle && node sauce-runner.js"
   },
   "author": {
     "name": "Derick Bailey",

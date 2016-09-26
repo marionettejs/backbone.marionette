@@ -72,10 +72,17 @@ Mn.isNodeAttached(div);
 ## Marionette.mergeOptions
 
 A handy function to pluck certain `options` and attach them directly to an instance.
-Most Marionette Classes, such as the Views, come with this method.
+All Marionette Classes, such as the Views, come with this method.
 
 ```javascript
 var Mn = require('backbone.marionette');
+
+var options = {
+  color: 'red',
+  size: 'small',
+  shape: 'square',
+  weight: 'light'
+}
 
 var MyView = Mn.View.extend({
   myViewOptions: ['color', 'size', 'country'],
@@ -89,6 +96,16 @@ var MyView = Mn.View.extend({
     this.$el.addClass(this.color);
   }
 });
+
+var myView = new MyView(options);
+
+Marionette.mergeOptions(myView, options, ['shape', 'weight']);
+
+myView.getOption('color');   // red
+myView.getOption('size');    // small
+myView.getOption('country'); // undefined
+myView.getOption('shape');   // square
+myView.getOption('weight');  // light
 ```
 
 [Live example](https://jsfiddle.net/marionettejs/gv5psrdu/)
@@ -97,24 +114,26 @@ var MyView = Mn.View.extend({
 
 Retrieve an object's attribute either directly from the object, or from
 the object's `this.options`, with `this.options` taking precedence.
+All Marionette Classes, such as the Views, come with this method.
 
 ```javascript
-var Bb = require('backbone');
 var Mn = require('backbone.marionette');
 
-var Model = Bb.Model.extend({
+var Obj = Mn.Object.extend({
   foo: 'bar',
 
   initialize: function(attributes, options){
     this.options = options;
     var foo = Mn.getOption(this, 'foo');
     console.log(foo);
+    var foo2 this.getOption('foo');
+    console.log(foo2);
   }
 });
 
-var model1 = new Model(); // => "bar"
+var obj1 = new Obj(); // => "bar"
 
-var model2 = new Model({}, { foo: 'quux' }); // => "quux"
+var obj2 = new Obj({}, { foo: 'quux' }); // => "quux"
 ```
 
 [Live example](https://jsfiddle.net/marionettejs/4rt6exaq/)
@@ -157,28 +176,44 @@ example has an undefined value for `f`.
 ## Marionette.triggerMethod
 
 Trigger an event and a corresponding method on the target object.
+All Marionette Classes, such as the Views, come with this method.
 
 When an event is triggered, the first letter of each section of the
 event name is capitalized, and the word "on" is tagged on to the front
 of it. Examples:
 
-* `triggerMethod("render")` fires the "onRender" function
-* `triggerMethod("before:destroy")` fires the "onBeforeDestroy" function
+* `triggerMethod('foo')` fires the "onFoo" function
+* `triggerMethod('before:foo')` fires the "onBeforeFoo" function
 
-All arguments that are passed to the triggerMethod call are passed along to both the event and the method, with the exception of the event name not being passed to the corresponding method.
+All arguments that are passed to the `triggerMethod` call are passed along to both the event and the method, with the exception of the event name not being passed to the corresponding method.
 
-`triggerMethod("foo", bar)` will call `onFoo: function(bar){...})`
+`triggerMethod('foo', bar)` will call `onFoo: function(bar){...})`
 
-Note that `triggerMethod` can be called on objects that do not have
-`Backbone.Events` mixed in to them. These objects will not have a `trigger`
-method, and no attempt to call `.trigger()` will be made. The `on{Name}`
-callback methods will still be called, though.
+
+```javascript
+var Mn = require('backbone.marionette');
+
+var MyObject = Mn.Object.extend({
+  initialize: function(){
+    this.triggerMethod('baz');
+  },
+  onFoo: function(bar){
+    console.log(bar);
+  }
+});
+
+var myObj = new MyObject(); // console.log "baz"
+
+Mn.triggerMethod(myObj, 'foo', 'qux'); // console.log "qux"
+```
+
+*Note*: Some Marionette classes such as Views have an overridden `triggerMethod`. Using `Mn.triggerMethod` with a view will break event proxying. If you need to run `triggerMethod` on a Marionette class [`triggerMethodOn`](#marionette-triggermethodon) is recommended.
 
 ## Marionette.triggerMethodOn
 
 Invoke `triggerMethod` on a specific context.
 
-This is useful when it's not clear that the object has `triggerMethod` defined. In the case of views, `Marionette.AbstractView` defines `triggerMethod`, but `Backbone.View` does not.
+This is useful when it's not clear that the object has `triggerMethod` defined. In the case of views, `Marionette.View` defines `triggerMethod`, but `Backbone.View` does not.
 
 ```javascript
 var Mn = require('backbone.marionette');
@@ -191,13 +226,15 @@ Mn.triggerMethodOn(ctx, "foo", bar);
 ## Marionette.bindEvents
 
 This method is used to bind a backbone "entity" (e.g. collection/model)
-to methods on a target object.
+to methods on a target object. This will work with any class that works
+with the `Backbone.Events` API.
+All Marionette Classes, such as the Views, come with this method.
 
 ```javascript
 var Bb = require('backbone');
 var Mn = require('backbone.marionette');
 
-Bb.View.extend({
+var MyView = Bb.View.extend({
 
   modelEvents: {
     'change:foo': 'doSomething'
@@ -210,9 +247,30 @@ Bb.View.extend({
   doSomething: function(){
     // the "change:foo" event was fired from the model
     // respond to it appropriately, here.
+    this.trigger('something');
   }
 
 });
+
+var model = new Bb.Model();
+
+var myView = new MyView({ model: model });
+
+var MyObject = Mn.Object.extend({
+  initialize: function() {
+    this.bindEvents(myView, myEvents);
+  },
+  myEvents: {
+    'something': 'onViewSomething'
+  },
+  onViewSomething: function() {
+    console.log('view something');
+  }
+});
+
+new MyObject();
+
+model.set('foo')
 ```
 
 [Live example](https://jsfiddle.net/marionettejs/L640ecac/)
@@ -230,6 +288,7 @@ function can be supplied instead of a string handler name.
 
 This method can be used to unbind callbacks from entities' (e.g. collection/model) events. It's
 the opposite of bindEvents, described above. Consequently, the APIs are identical for each method.
+All Marionette Classes, such as the Views, come with this method.
 
 ```javascript
 // Just like the above example we bind our model events.
@@ -263,8 +322,8 @@ Bb.View.extend({
 
 ## Marionette.bindRequests
 
-This method is used to bind a radio requests
-to methods on a target object.
+This method is used to bind a radio requests to methods on a target object.
+All Marionette Objects come with this method.
 
 ```javascript
 var Mn = require('backbone.marionette');
@@ -304,8 +363,8 @@ configuration.
 
 ## Marionette.unbindRequests
 
-This method is used to unbind a radio requests
-to methods on a target object.
+This method is used to unbind a radio requests to methods on a target object.
+All Marionette Objects come with this method.
 
 ```javascript
 var Mn = require('backbone.marionette');
@@ -318,19 +377,17 @@ var MyView = Mn.View.extend({
     'foo:bar': 'fooBar'
   },
 
-  initialize: function() {
+  onAttach: function() {
     var channel = Radio.channel(this.channelName);
-    Mn.bindRadioRequests(this, channel, this.radioRequests);
+    Mn.bindRequests(this, channel, this.radioRequests);
   },
 
-  onDestroy: function() {
+  onDetach: function() {
     var channel = Radio.channel(this.channelName);
     Mn.unbindRequests(this, channel, this.radioRequests);
   }
  });
 
-var myView = new MyView();
-myView.destroy();
 ```
 
 [Live examples](https://jsfiddle.net/marionettejs/r5kmwwke/)
@@ -347,6 +404,7 @@ configuration.
 
 Receives a hash of event names and functions and/or function names, and returns the
 same hash with the function names replaced with the function references themselves.
+All Marionette Classes, such as the Views, come with this method.
 
 ```javascript
 var Mn = require('backbone.marionette');
@@ -355,28 +413,31 @@ var View = Mn.View.extend({
 
   initialize: function() {
     var hash = {
-      'event:one': 'handleEventOne', // This will become a reference to `this.someFn`
-      'event:two': this.someOtherFn
+      'action:one': 'handleActionOne', // This will become a reference to `this.handleActionOne`
+      'action:two': this.handleActionTwo
     };
 
     this.normalizedHash = this.normalizeMethods(hash);
-
-    Mn.bindEvents(this, this, this.normalizedHash);
+    // or equivalent Mn.normalizeMethods(this, hash);
   },
 
-  destroy: function() {
-      Mn.unbindEvents(this, this, this.normalizedHash);
+  do: function(action) {
+    this.normalizedHash[action]();
   },
 
-  handleEventOne: function() {
-    console.log('event:one was fired');
+  handleActionOne: function() {
+    console.log('action:one was fired');
   },
 
-  handleEventTwo: function() {
-    console.log('event:two was fired');
+  handleActionTwo: function() {
+    console.log('action:two was fired');
   }
 
 });
+
+var myView = new MyView();
+myView.do('action:one');
+myView.do('action:two');
 ```
 
 [Live example](https://jsfiddle.net/marionettejs/zzjhm4p1/)

@@ -3,7 +3,6 @@
 
 import Backbone from 'backbone';
 import _ from 'underscore';
-import childViewEventHandler from '../common/child-view-event-handler';
 import { triggerMethod } from '../common/trigger-method';
 import BehaviorsMixin from './behaviors';
 import CommonMixin from './common';
@@ -207,7 +206,7 @@ const ViewMixin = {
       return;
     }
 
-    childViewEventHandler.apply(layoutView, arguments);
+    layoutView._childViewEventHandler.apply(layoutView, arguments);
   },
 
   // Walk the _parent tree until we find a view (if one exists).
@@ -221,6 +220,29 @@ const ViewMixin = {
       }
       parent = parent._parent;
     }
+  },
+
+  _childViewEventHandler(eventName, ...args) {
+    const prefix = _.result(this, 'childViewEventPrefix');
+
+    const childEventName = prefix + ':' + eventName;
+
+    const childViewEvents = this.normalizeMethods(this._childViewEvents);
+
+    // call collectionView childViewEvent if defined
+    if (typeof childViewEvents !== 'undefined' && _.isFunction(childViewEvents[eventName])) {
+      childViewEvents[eventName].apply(this, args);
+    }
+
+    // use the parent view's proxyEvent handlers
+    const childViewTriggers = this._childViewTriggers;
+
+    // Call the event with the proxy name on the parent layout
+    if (childViewTriggers && _.isString(childViewTriggers[eventName])) {
+      this.triggerMethod(childViewTriggers[eventName], ...args);
+    }
+
+    this.triggerMethod(childEventName, ...args);
   }
 };
 

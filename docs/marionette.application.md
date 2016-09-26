@@ -183,8 +183,7 @@ Return the attached [region object](./marionette.region.md) for the Application.
 
 ### `showView(View)`
 
-Display `View` in the region attached to the Application. This runs the same
-view lifecycle as [`View.showChildView`]('./marionette.view.md').
+Display `View` in the region attached to the Application. This runs the [`View lifecycle`](./viewlifecycle.md).
 
 ### `getView()`
 

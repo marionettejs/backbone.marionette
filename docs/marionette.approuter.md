@@ -12,7 +12,7 @@ your router's core logic readable.
   * [Configure Routes In Constructor](#configure-routes-in-constructor)
   * [Add Routes At Runtime](#add-routes-at-runtime)
 * [Specify A Controller](#specify-a-controller)
-  * [Using Marionette.Object](#using-marionette-object)
+  * [Using Marionette.Object](#using-marionetteobject)
 * [Multiple Routers](#multiple-routers)
 * [Backbone History](#backbone-history)
 * [Handling Route Changes](#handling-route-changes)

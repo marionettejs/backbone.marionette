@@ -197,17 +197,19 @@ console.log(view.checkOption());  // prints 'some text'
 
 ### The `getOption` Method
 
-To access an option, we use the `getOption` method.
+To access an option, we use the `getOption` method. `getOption` will fall back
+to the value defined on the instance of the same name if not defined in the options.
 
 ```javascript
 var Mn = require('backbone.marionette');
 
 var MyView = Mn.View.extend({
   className: function() {
-    var defaultClass = 'table';
-    var extraClasses = this.getOption('extraClasses') || '';
-    return defaultClass + ' ' + extraClasses;
-  }
+    var defaultClass = this.getOption('defaultClass');
+    var extraClasses = this.getOption('extraClasses');
+    return [defaultClass, extraClasses].join(' ');
+  },
+  defaultClass: 'table'
 });
 
 var myView = new MyView({
@@ -217,11 +219,6 @@ var myView = new MyView({
 ```
 
 [Live example](https://jsfiddle.net/marionettejs/ekvb8wwa/)
-
-This only works for custom options - arguments that belong to the standard
-Backbone/Marionette attributes, such as `model` and `collection`, are not
-accessible via `getOption` and should be accessed as just `view.model` or
-`view.collection`.
 
 ### The `mergeOptions` Method
 

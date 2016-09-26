@@ -33,7 +33,7 @@ a `<h1>` tag.
   * [Rendering a Model](#rendering-a-model)
   * [Rendering a Collection](#rendering-a-collection)
   * [User Interaction with Collections](#user-interaction-with-collections)
-  * [Model/Collection Rendering Rules](#model-collection-rendering-rules)
+  * [Model/Collection Rendering Rules](#modelcollection-rendering-rules)
 * [Template Context](#template-context)
   * [Context Object](#context-object)
   * [Binding of `this`](#binding-of-this)

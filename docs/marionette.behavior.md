@@ -11,15 +11,13 @@ collection interactions to be utilized across your application.
 * [Using Behaviors](#using-behaviors)
   * [Defining and Attaching Behaviors](#defining-and-attaching-behaviors)
   * [Behavior Options](#behavior-options)
+  * [Behavior Defaults](#behavior-defaults)
 * [Nesting Behaviors](#nesting-behaviors)
 * [View Proxy](#view-proxy)
   * [Listening to View Events](#listening-to-view-events)
   * [Proxy Handlers](#proxy-handlers)
-  * [Template and View](#template-and-view)
-  * [$](#$)
-  * [$el and el](#$el-and-el)
-  * [Defaults](#defaults)
-  * [View](#view)
+  * [View and el](#view-and-el)
+  * [Referencing the DOM](#referencing-the-dom)
 
 ## Using Behaviors
 
@@ -104,7 +102,7 @@ var ToolTip = Mn.Behavior.extend({
 ```
 
 We've passed in a `defaults` attribute that sets default options.
-[This will be covered in default soon](#defaults). With the warning and tooltip
+[This will be covered in default soon](#behavior-defaults). With the warning and tooltip
 behaviors extracted, we just need to attach them to our view:
 
 ```javascript
@@ -231,6 +229,39 @@ var ToolTip = Mn.Behavior.extend({
 });
 ```
 
+#### Behavior Defaults
+`defaults` can be a `hash` or `function` to define the default options for your `Behavior`. The default options will be overridden depending on what you set as the options per `Behavior`. (This works just like a `Backbone.Model`.)
+
+```javascript
+Marionette.Behavior.extend({
+  defaults: function() {
+    return {
+      'deepSpace': 9
+    }
+  }
+});
+```
+
+```javascript
+Marionette.Behavior.extend({
+  defaults: {
+    'dominion': 'invasion',
+    'doge': 'amaze'
+  }
+});
+```
+
+### view
+The `view` is a reference to the `View` instance that the `Behavior` is attached to.
+
+```javascript
+Marionette.Behavior.extend({
+handleDestroyClick: function() {
+this.view.destroy();
+}
+});
+```
+
 [Live example](https://jsfiddle.net/marionettejs/p8vymo4j/)
 
 ## Nesting Behaviors
@@ -318,7 +349,7 @@ var MyBehavior = Mn.Behavior.extend({
 
 [Live example](https://jsfiddle.net/marionettejs/6b8o3pmz/)
 
-### Template and View
+### View and el
 
 The `Behavior` has a number of proxies attributes that directly refer to the
 related attribute on a view:
@@ -347,11 +378,11 @@ var ViewBehavior = Mn.Behavior.extend({
 
 [Live example](https://jsfiddle.net/marionettejs/8dmk30Lq/)
 
-#### Referencing the DOM
+### Referencing the DOM
 
 Behaviors, like views, have a `ui` attribute that can reference and cache DOM
 elements, just as in the `View`. For more detail, see the
-[`ui` documentation for views](./marionette.view.md#organising-your-view).
+[`ui` documentation for views](./marionette.view.md#organizing-your-view).
 
 If your `ui` keys clash with keys on the attached view, references within the
 behavior will always use the definition on the behavior itself. As views are

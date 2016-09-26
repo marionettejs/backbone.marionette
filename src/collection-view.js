@@ -5,7 +5,6 @@ import _                  from 'underscore';
 import Backbone           from 'backbone';
 import destroyBackboneView from './utils/destroy-backbone-view';
 import isNodeAttached     from './common/is-node-attached';
-import childViewEventHandler from './common/child-view-event-handler';
 import monitorViewEvents  from './common/monitor-view-events';
 import { triggerMethodOn } from './common/trigger-method';
 import ChildViewContainer from './child-view-container';
@@ -763,7 +762,7 @@ const CollectionView = Backbone.View.extend({
 
   // Set up the child view event forwarding. Uses a "childview:" prefix in front of all forwarded events.
   _proxyChildEvents(view) {
-    this.listenTo(view, 'all', childViewEventHandler);
+    this.listenTo(view, 'all', this._childViewEventHandler);
   }
 });
 

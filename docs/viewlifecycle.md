@@ -10,13 +10,13 @@ their children.
   * [View Creation Lifecycle](#view-creation-lifecycle)
   * [View Destruction Lifecycle](#view-destruction-lifecycle)
   * [View Creation Events](#view-creation-events)
-  * [View Destruction Events](#view-destruction-events-events)
+  * [View Destruction Events](#view-destruction-events)
   * [Other View Events](#other-view-events)
 * [`CollectionView` Lifecycle](#collectionview-lifecycle)
   * [Collection Creation Lifecycle](#collection-creation-lifecycle)
   * [Collection Destruction Lifecycle](#collection-destruction-lifecycle)
   * [Collection Creation Events](#collection-creation-events)
-  * [Collection Destruction Events](#collection-destruction-events-events)
+  * [Collection Destruction Events](#collection-destruction-events)
   * [Other Collection Events](#other-collection-events)
 * [`Region` Lifecycle](#region-lifecycle)
   * [Show View Lifecycle](#show-view-lifecycle)
@@ -170,12 +170,12 @@ Mn.View.extend({
 
 #### View `before:detach`
 
-The `View` will trigger the "before:detach" event when the view is rendered and
+The `View` will trigger the `before:detach` event when the view is rendered and
 is about to be removed from the DOM.
 If the view has not been rendered before, this event will not be fired.
 
 #### View `detach`
-The `View` will trigger the "detach" event when the view was rendered and has
+The `View` will trigger the `detach` event when the view was rendered and has
 just been destroyed.
 
 #### View `destroy`
@@ -223,7 +223,7 @@ myView.addRegion('regionName', '#selector');
 
 #### View `before:remove:region`
 
-The `View` will trigger a "before:remove:region"
+The `View` will trigger a `before:remove:region`
 event before a region is removed from the view.
 This allows you to perform any cleanup operations before the region is removed.
 
@@ -241,12 +241,12 @@ var MyView = Mn.View.extend({
 });
 
 var myView = new MyView();
-myView.removeRegion("foo");
+myView.removeRegion('foo');
 ```
 
 #### View `remove:region`
 
-The `View` will trigger a "remove:region"
+The `View` will trigger a `remove:region`
 event when a region is removed from the view.
 This allows you to use the region instance one last
 time, or remove the region from an object that has a
@@ -257,14 +257,14 @@ var Mn = require('backbone.marionette');
 
 var view = new Mn.View();
 
-view.on("remove:region", function(name, region) {
+view.on('remove:region', function(name, region) {
   // add the region instance to an object
   delete myObject[name];
 });
 
-view.addRegion("foo", "#bar");
+view.addRegion('foo', '#bar');
 
-view.removeRegion("foo");
+view.removeRegion('foo');
 ```
 
 ## `CollectionView` Lifecycle
@@ -321,7 +321,7 @@ with "+" fire on collections with items.
 #### CollectionView `before:render`
 
 Triggers before the `CollectionView` render process starts. See the
-[`before:render` Documentation](#marionette.view.md#view-before-render) for an
+[`before:render` Documentation](#view-before-render) for an
 example.
 
 #### CollectionView `before:render:empty`
@@ -355,7 +355,7 @@ the attached collection is empty.
 
 This event fires once all the collection's child views have been rendered.  This
 only fires if the collection has at least one item. This may also fire when
-[`reorderOnSort`](#collectionviews-reorderonsort) is false:
+[`reorderOnSort`](./collectionviewadvanced.md#collectionviews-reorderonsort) is false:
 
 ```
 var Bb = require('backbone');
@@ -377,7 +377,7 @@ myView.render();
 #### CollectionView `render`
 
 Fires when the collection has completely finished rendering. See the
-[`render` Documentation](./marionette.view.md#view-render) for more information.
+[`render` Documentation](#view-render) for more information.
 
 ### Collection Destruction Events
 
@@ -423,7 +423,7 @@ This is triggered just before the `emptyView` is removed from the
 `CollectionView`. *This only fires if the attached `collection` has no items.*
 
 The `emptyView` will then go through the its own
-[destruction lifecycle](./marionette.view.md#view-destruction-lifecycle)
+[destruction lifecycle](#view-destruction-lifecycle)
 
 #### CollectionView `before:remove:child`
 
@@ -431,7 +431,7 @@ This is triggered for each `childView` that is removed from the
 `CollectionView`. This can *only* fire if the `collection` contains items.
 
 Each item in the `CollectionView` will undergo the
-[destruction lifecycle](./marionette.view.md#view-destruction-lifecycle)
+[destruction lifecycle](#view-destruction-lifecycle)
 
 #### CollectionView `remove:empty`
 
@@ -451,9 +451,9 @@ Fired once the `CollectionView` has been destroyed and no longer exists.
 
 Collection views can fire other events as part of their normal use.
 
-#### "reorder" / "before:reorder" events
+#### `reorder` / `before:reorder` events
 
-When [`reorderOnSort`](#collectionviews-resortview) is set to `true`, these
+When [`reorderOnSort`](./collectionviewadvanced.md#collectionviews-resortview) is set to `true`, these
 events are fired for the reordering of the collection.
 
 ```javascript

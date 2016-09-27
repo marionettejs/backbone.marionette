@@ -3,22 +3,19 @@
 A base class which other classes can extend from.
 Object incorporates many backbone conventions and utilities
 like `initialize` and `Backbone.Events`.
+Object has all of the [Common Marionette Functionality](./common.md).
 
 ## Documentation Index
 
-* [initialize](#initialize)
-* [events](#events)
+* [Initialize](#initialize)
+* [Events](#events)
+* [Radio Events](#radio-events)
 * [Destroying An Object](#destroying-a-object)
-* [mergeOptions](#mergeoptions)
-* [getOption](#getoption)
-* [bindEntityEvents](#bindentityevents)
 * [Basic Use](#basic-use)
 
-
 ## Initialize
-Initialize is called immediately after the Object has been instantiated,
+`initialize` is called immediately after the Object has been instantiated,
 and is invoked with the same arguments that the constructor received.
-
 
 ```javascript
 var Mn = require('backbone.marionette');
@@ -33,7 +30,6 @@ new Friend({name: 'John'});
 ```
 
 [Live example](https://jsfiddle.net/marionettejs/1ytrwyog/)
-
 
 ## Events
 `Marionette.Object` extends `Backbone.Events` and includes `triggerMethod`.
@@ -78,28 +74,14 @@ radioRequests: {
 
 [Live example](https://jsfiddle.net/marionettejs/3seo87o1/)
 
-means that the object will listen for the `doFoo` request on the `app` channel, and run the 'executeFoo' method.  When using Radio Requests with Objects, the same rules and restrictions that normal Radio use implies also apply here: a single handler can be associated with a request, either through manual use of the reply functions, or through the Object API.
-
-## mergeOptions
-Merge keys from the `options` object directly onto the instance. This is the preferred way to access options
-passed into the Object.
-
-More information at [mergeOptions](./marionette.functions.md#marionettemergeoptions)
-
-## getOption
-Retrieve an object's attribute either directly from the object, or from the object's this.options, with this.options taking precedence.
-
-More information [getOption](./marionette.functions.md#marionettegetoption).
-
-## bindEntityEvents
-Helps bind a backbone "entity" to methods on a target object. More information [bindEntityEvents](./marionette.functions.md#marionettebindentityevents).
+In this example the object will listen for the `some:request` request on the `myChannel` channel, and run the 'requestHandler' method.  When using Radio Requests with Objects, the same rules and restrictions that normal Radio use implies also apply here: a single handler can be associated with a request, either through manual use of the reply functions, or through the Object API.
 
 ## Destroying A Object
 
 Objects have a `destroy` method that unbind the events that are directly attached to the
 instance.
 
-Invoking the `destroy` method will trigger a "before:destroy" event and corresponding
+Invoking the `destroy` method will trigger a `before:destroy` event and corresponding
 `onBeforeDestroy` method call. These calls will be passed any arguments `destroy`
 was invoked with. Invoking `destroy` will return the object, this can be useful for chaining.
 
@@ -110,7 +92,7 @@ var Mn = require('backbone.marionette');
 var MyObject = Mn.Object.extend({
 
   onBeforeDestroy: function(arg1, arg2){
-    // put custom code here, to destroy this object
+    // put other custom clean-up code here
   }
 
 });
@@ -119,15 +101,14 @@ var MyObject = Mn.Object.extend({
 var obj = new MyObject();
 
 // add some event handlers
-obj.on("before:destroy", function(arg1, arg2){ ... });
-obj.listenTo(something, "bar", function(){...});
+obj.on('before:destroy', function(arg1, arg2){ ... });
+obj.listenTo(something, 'bar', function(){...});
 
 // destroy the object: unbind all of the
 // event handlers, trigger the "destroy" event and
 // call the onDestroy method
 obj.destroy(arg1, arg2);
 ```
-
 
 ## Basic Use
 
@@ -145,12 +126,12 @@ var Selections = Mn.Object.extend({
   },
 
   select: function(key, item){
-    this.triggerMethod("select", key, item);
+    this.triggerMethod('select', key, item);
     this.selections[key] = item;
   },
 
   deselect: function(key, item) {
-    this.triggerMethod("deselect", key, item);
+    this.triggerMethod('deselect', key, item);
     delete this.selections[key];
   }
 
@@ -161,7 +142,7 @@ var selections = new Selections({
 });
 
 // use the built in EventBinder
-selections.listenTo(selections, "select", function(key, item){
+selections.listenTo(selections, 'select', function(key, item){
   console.log(item);
 });
 

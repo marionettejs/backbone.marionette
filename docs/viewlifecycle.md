@@ -18,9 +18,13 @@ their children.
   * [Collection Creation Events](#collection-creation-events)
   * [Collection Destruction Events](#collection-destruction-events)
   * [Other Collection Events](#other-collection-events)
+* [Lifecycle State Methods](#lifecycle-state-methods)
+  * [`isRendered()`](#isrendered)
+  * [`isAttached()`](#isattached)
 * [`Region` Lifecycle](#region-lifecycle)
   * [Show View Lifecycle](#show-view-lifecycle)
   * [Region Lifecycle events](#region-lifecycle-events)
+* [Views associated with previously rendered or attached DOM](#views-associated-with-previously-rendered-or-attached-dom)
 
 ## `View` Lifecycle
 Marionette views defined a number of events during the creation and destruction
@@ -37,9 +41,11 @@ When a view is initialized and then displayed inside a region (using
 | :---: |-----------------|
 |   1   | `before:render` |
 |   2   | `render`        |
-|   3   | `before:attach` |
-|   4   | `attach`        |
-|   5   | `dom:refresh`   |
+|   3*  | `before:attach` |
+|   4*  | `attach`        |
+|   5*  | `dom:refresh`   |
+
+The events marked with "\*" only fire if/when the region's `el` is attached to the DOM.
 
 ### View Destruction Lifecycle
 
@@ -49,9 +55,27 @@ part of the destruction lifecycle.
 | Order |       Event       |
 | :---: |-------------------|
 |   1   |  `before:destroy` |
-|   2   |  `before:detach`  |
-|   3   |  `detach`         |
+|   2*  |  `before:detach`  |
+|   3*  |  `detach`         |
 |   4   |  `destroy`        |
+
+The events marked with "\*" only fire if/when the view was attached to the DOM.
+
+#### ChildView Destruction Lifecycle
+
+The order of the destruction events is dependent on when the view (or a parent view)
+is detached. When a parent attached view is destroyed it will receive the events
+as listed above, but its children will receive both detach events first when the parent
+is detached and the children will be destroyed after the detach is complete.
+
+| Order |       Event       |
+| :---: |-------------------|
+|   1   |  `before:detach`  |
+|   2*  |  `detach`         |
+|   3*  |  `before:destroy` |
+|   4   |  `destroy`        |
+
+The events marked with "\*" only fire if/when the view was attached to the DOM.
 
 ### View Creation Events
 
@@ -155,15 +179,14 @@ These events are fired during the view's destruction and removal from a region.
 #### View `before:destroy`
 
 Triggered just prior to destroying the view, when the view's `destroy()` method has been called.
+The view may or may not be in the DOM at this point.
 
 ```javascript
 var Mn = require('backbone.marionette');
 
 Mn.View.extend({
   onBeforeDestroy: function() {
-    // manipulate the `el` here. it's already
-    // been rendered, and is full of the view's
-    // HTML, ready to go.
+    // custom destroying and non-DOM related cleanup goes here
   }
 });
 ```
@@ -172,26 +195,27 @@ Mn.View.extend({
 
 The `View` will trigger the `before:detach` event when the view is rendered and
 is about to be removed from the DOM.
-If the view has not been rendered before, this event will not be fired.
-
-#### View `detach`
-The `View` will trigger the `detach` event when the view was rendered and has
-just been destroyed.
-
-#### View `destroy`
-
-Triggered just after the view has been destroyed. At this point, the view has
-been completely removed from the DOM.
+If the view has not been attached to the DOM, this event will not be fired.
 
 ```javascript
 var Mn = require('backbone.marionette');
 
 Mn.View.extend({
-  onDestroy: function() {
-    // custom destroying and cleanup goes here
+  onBeforeDetach: function() {
+    // custom destroying and DOM related cleanup goes here
   }
 });
 ```
+
+#### View `detach`
+
+The `View` will trigger the `detach` event when the view was rendered and has
+just been removed from the DOM.
+
+#### View `destroy`
+
+Triggered just after the view has been destroyed. At this point, the view has
+been completely removed from the DOM.
 
 ### Other View Events
 
@@ -480,6 +504,20 @@ myView.on({
 myCol.sort()
 ```
 
+## Lifecycle State Methods
+
+Both `View` and `CollectionView` share methods for checking if the view is attached or rendered.
+
+### `isRendered()`
+
+This function will return a boolean value reflecting if the view has been rendered.
+
+### `isAttached()`
+
+This function will return a boolean value reflecting if the view believes it is attached.
+This is maintained when attaching a view with a `Region` or during [View instantiation](#views-associated-with-previously-rendered-or-attached-dom).
+If a view is attached by other means this function may not reflect the actual state of attachment.
+To be certain use [`Marionette.isNodeAttached`](./marionette.functions.md#marionetteisnodeattached).
 
 ## `Region` Lifecycle
 
@@ -530,3 +568,13 @@ displaying another view.
 
 Fired after the entire destruction process is complete. At this point, the view
 has been removed from the DOM completely.
+
+## Views associated with previously rendered or attached DOM
+
+When a view is instantiated, if the View's `el` is set to an existing node
+the view's [`isRendered()`](#isrendered) will return `true` and `before:render`
+and `render` events will not be fired when the view is shown in a Region.
+
+Similarly if the `el` is attached to a node in the DOM the view's [`isAttached()`](#isattached)
+will return `true` and `before:attach`, `attach` and `dom:refresh` will not be fired
+when the view is shown in a Region.

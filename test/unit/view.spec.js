@@ -13,9 +13,12 @@ describe('item view', function() {
 
   describe('when instantiating a view with a DOM element', function() {
     beforeEach(function() {
-      this.setFixtures('<div id="foo">bar</div>');
+      this.setFixtures('<div id="foo"><span class="element">bar</span></div>');
       this.view = new Marionette.View({
-        el: '#foo'
+        el: '#foo',
+        ui: {
+          element: '.element'
+        }
       });
     });
 
@@ -28,7 +31,11 @@ describe('item view', function() {
     });
 
     it('should contain the DOM content', function() {
-      expect(this.view.el.innerHTML).to.contain('bar');
+      expect(this.view.el.innerHTML).to.contain('<span class="element">bar</span>');
+    });
+
+    it('should bind ui elements', function() {
+      expect(this.view.ui.element.text()).to.contain('bar');
     });
   });
 

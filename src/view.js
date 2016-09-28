@@ -96,6 +96,10 @@ const View = Backbone.View.extend({
       this._isAttached = isNodeAttached(this.el);
     }
 
+    if (this._isRendered) {
+      this.bindUIElements();
+    }
+
     return this;
   },
 

@@ -230,7 +230,7 @@ var ToolTip = Mn.Behavior.extend({
 ```
 
 #### Behavior Defaults
-`defaults` can be a `hash` or `function` to define the default options for your `Behavior`. The default options will be overridden depending on what you set as the options per `Behavior`. (This works just like a `Backbone.Model`.)
+`defaults` can be a [`hash` or `function`](./basics.md#functions-returning-values) to define the default options for your `Behavior`. The default options will be overridden depending on what you set as the options per `Behavior`. (This works just like a `Backbone.Model`.)
 
 ```javascript
 Marionette.Behavior.extend({
@@ -256,9 +256,9 @@ The `view` is a reference to the `View` instance that the `Behavior` is attached
 
 ```javascript
 Marionette.Behavior.extend({
-handleDestroyClick: function() {
-this.view.destroy();
-}
+  handleDestroyClick: function() {
+    this.view.destroy();
+  }
 });
 ```
 

@@ -10,7 +10,7 @@ Object has all of the [Common Marionette Functionality](./common.md).
 * [Initialize](#initialize)
 * [Events](#events)
 * [Radio Events](#radio-events)
-* [Destroying An Object](#destroying-a-object)
+* [Destroying An Object](#destroying-an-object)
 * [Basic Use](#basic-use)
 
 ## Initialize
@@ -76,14 +76,14 @@ radioRequests: {
 
 In this example the object will listen for the `some:request` request on the `myChannel` channel, and run the 'requestHandler' method.  When using Radio Requests with Objects, the same rules and restrictions that normal Radio use implies also apply here: a single handler can be associated with a request, either through manual use of the reply functions, or through the Object API.
 
-## Destroying A Object
+## Destroying an Object
 
 Objects have a `destroy` method that unbind the events that are directly attached to the
-instance.
+instance. `destroy` returns the object.
 
-Invoking the `destroy` method will trigger a `before:destroy` event and corresponding
-`onBeforeDestroy` method call. These calls will be passed any arguments `destroy`
-was invoked with. Invoking `destroy` will return the object, this can be useful for chaining.
+Invoking the `destroy` method will trigger `before:destroy` and `destroy` events and their [corresponding methods](./marionette.functions.md#marionettetriggermethod).
+
+**Note** The event handlers will be passed any arguments `destroy` was invoked with.
 
 ```javascript
 var Mn = require('backbone.marionette');

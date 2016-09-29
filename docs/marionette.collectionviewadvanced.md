@@ -25,7 +25,7 @@
   * [CollectionView's `viewComparator`](#collectionviews-viewcomparator)
   * [CollectionView's `getViewComparator`](#collectionviews-getviewcomparator)
   * [CollectionView's `reorderOnSort`](#collectionviews-reorderonsort)
-  [CollectionView's `reorder`](#collectionviews-reorder)
+  * [CollectionView's `reorder`](#collectionviews-reorder)
   * [CollectionView's `resortView`](#collectionviews-resortview)
 
 
@@ -51,7 +51,7 @@ buildChildView: function(child, ChildViewClass, childViewOptions){
   return view;
 },
 ```
-Override this method when you need a more complicated build, but use [`childView`](#collectionviews-childview)
+Override this method when you need a more complicated build, but use [`childView`](./marionette.collectionview.md#collectionviews-childview)
 if you need to determine _which_ View class to instantiate.
 
 ```javascript
@@ -139,7 +139,7 @@ var bView = myCollectionView.children.findByModelCid(buttonView.model.cid);
 Find by custom key.
 
 ```javascript
-var bView = myCollectionView.children.findByCustom('cutom_key');
+var bView = myCollectionView.children.findByCustom('custom_key');
 ```
 
 #### CollectionView childView's: `findByIndex`

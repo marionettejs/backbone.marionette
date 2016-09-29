@@ -13,30 +13,30 @@ multiple views through the `regions` attribute.
 
 * [Rendering a Template](#rendering-a-template)
 * [Managing an Existing Page](#managing-an-existing-page)
-* [Laying out Views - Regions](#laying-out-views-regions)
-  * [Class Definition](#class-definition)
-    * [Specifying 'regions' as function](#specifying-regions-as-function)
-    * [Regions on View Instantiation](#regions-on-view-instantiation)
+  * [Setting a `template` to `false`](#setting-a-template-to-false)
+* [Laying Out Views - Regions](#laying-out-views---regions)
   * [Managing Sub-views](#managing-sub-views)
     * [Showing a view](#showing-a-view)
     * [Accessing a child view](#accessing-a-child-view)
-* [Organizing your View](#organizing-your-view)
+  * [Region Availability](#region-availability)
+  * [Efficient Nested View Structures](#efficient-nested-view-structures)
+  * [Listening to Events on Children](#listening-to-events-on-children)
+* [Organizing Your View](#organizing-your-view)
+  * [Defining `ui`](#defining-ui)
+  * [Accessing UI Elements](#accessing-ui-elements)
+    * [Referencing UI in `events` and `triggers`](#referencing-ui-in-events-and-triggers)
 * [Events](#events)
   * [onEvent Listeners](#onevent-listeners)
   * [Lifecycle Events](#lifecycle-events)
-    * [View Creation Lifecycle](#view-creation-lifecycle)
-    * [View Destruction Lifecycle](#view-destruction-lifecycle)
-    * [View Creation Events](#view-creation-events)
-    * [View Destruction Events](#view-destruction-events)
-    * [Other View Events](#other-view-events)
-  * [Binding To User Input](#binding-custom-events)
+  * [Binding To User Input](#binding-to-user-input)
     * [Event and Trigger Mapping](#event-and-trigger-mapping)
     * [View `events`](#view-events)
     * [View `triggers`](#view-triggers)
 * [Model and Collection Events](#model-and-collection-events)
   * [Model Events](#model-events)
+    * [Function Callback](#function-callback)
   * [Collection Events](#collection-events)
-* [Advanced View Topics](#advanced-view-topics)
+  * [Listening to Both](#listening-to-both)
 
 ## Rendering a Template
 
@@ -73,7 +73,29 @@ For more detail on how to render templates, see the
 Marionette is able to manage pre-generated pages - either static or
 server-generated - and treat them as though they were generated from Marionette.
 
-To use the existing page, set the `template` attribute to `false`:
+To use the existing page, set the `el` to match the existing DOM element:
+
+```javascript
+var Mn = require('backbone.marionette');
+
+var MyView = Mn.View({
+  el: '#base-element'
+});
+
+new myView();
+myView.isRendered(); // true if '#base-element` exists
+myView.isAttached(); // true if '#base-element` is in the DOM
+```
+
+[Live example](https://jsfiddle.net/marionettejs/b2yz38gj/)
+
+
+
+Marionette will [set the appropriate state of the view](./viewlifecycle.md#views-associated-with-previously-rendered-or-attached-dom).
+
+### Setting a `template` to `false`
+
+Setting the `template` to `false` allows for the view to create all of the bindings and trigger all view events without re-rendering the el of the view. Any other falsy value will throw an exception.
 
 ```javascript
 var Mn = require('backbone.marionette');
@@ -82,23 +104,12 @@ var MyView = Mn.View({
   el: '#base-element',
   template: false
 });
+
+new myView();
+myView.render();
 ```
 
-[Live example](https://jsfiddle.net/marionettejs/b2yz38gj/)
-
-Marionette will then attach all the usual
-[`event`](#events-and-callback-methods) and [`ui`](#organizing-your-view)
-handlers to the view using the existing HTML. Though the View has no template,
-you can still listen to the `before:render` and `render` events that will fire
-as usual when `render` is called - or when you execute `region.show(view)`.
-
-### Setting a falsy `template` value
-
-When using an existing page, Marionette explicitly looks for `false` - any other
-falsy value will cause Marionette to raise an error when attempting to render
-the template.
-
-## Laying out Views - Regions
+## Laying Out Views - Regions
 
 The `Marionette.View` class lets us manage a hierarchy of views using `regions`.
 Regions are a hook point that lets us show views inside views, manage the
@@ -122,12 +133,12 @@ where the new view will be displayed:
 var Mn = require('backbone.marionette');
 
 var MyView = Mn.View.extend({
-	template: '#tpl-view-with-regions',
+  template: '#tpl-view-with-regions',
 
-	regions: {
-		firstRegion: '#first-region',
-		secondRegion: '#second-region'
-	}
+  regions: {
+    firstRegion: '#first-region',
+    secondRegion: '#second-region'
+  }
 });
 ```
 
@@ -209,7 +220,8 @@ var MyView = Mn.View.extend({
 
 If no view is available, `getChildView` returns `null`.
 
-### Region availability
+### Region Availability
+
 Any defined regions within a `View` will be available to the `View` or any
 calling code immediately after instantiating the `View`. This allows a View to
 be attached to an existing DOM element in an HTML page, without the need to call
@@ -221,7 +233,8 @@ has not yet rendered, your regions may not be able to find the element that
 you've specified for them to manage. In that scenario, using the region will
 result in no changes to the DOM.
 
-### Efficient nested view structures
+### Efficient Nested View Structures
+
 When your views get some more regions, you may want to think of the most
 efficient way to render your views. Since manipulating the DOM is performance
 heavy, it's best practice to render most of your views at once.
@@ -248,66 +261,15 @@ paint.
 This system is recursive, so it works for any deeply nested structure. The child
 views you show can render their own child views within their onRender callbacks!
 
-### Listening to events on children
+### Listening to Events on Children
 
 Using regions lets you listen to the events that fire on child views - views
 attached inside a region. This lets a parent view take action depending on what
 is happening in views it directly owns.
 
-**To see more information about events, see the [events](#events) section**
+**To see more information about events, see the [events documentation](./events.md#child-view-events)**
 
-#### Defining `childViewEvents`
-
-The `childViewEvents` hash defines the events to listen to on a view's children
-mapped to the method to call. The method will receive a `child` object
-referencing the view that triggered the event.
-
-```javascript
-var Mn = require('backbone.marionette');
-
-var MyView = Mn.View.extend({
-  regions: {
-    product: '.product-hook'
-  },
-
-  childViewEvents: {
-    'add:item': 'updateBasketValue'
-  },
-
-  /** Assume item is the model belonging to the child */
-  updateBasketValue: function(child, item) {
-    var initialValue = this.model.get('value');
-    this.model.set({
-      value: item.get('value') * item.get('quantity')
-    });
-  }
-});
-```
-
-You can also directly define a function to call in `childViewEvents` like so:
-
-```javascript
-var Mn = require('backbone.marionette');
-
-var MyView = Mn.View.extend({
-  regions: {
-    product: '.product-hook'
-  },
-
-  childViewEvents: {
-    'add:item': function(child, item) {
-      var initialValue = this.model.get('value');
-      this.model.set({
-        value: item.get('value') * item.get('quantity')
-      });
-    }
-  }
-});
-```
-
-[Live example](https://jsfiddle.net/marionettejs/z8079srg/)
-
-## Organizing your View
+## Organizing Your View
 
 The `View` provides a mechanism to name parts of your template to be used
 throughout the view with the `ui` attribute. This provides a number of benefits:
@@ -336,7 +298,7 @@ var MyView = Mn.View.extend({
 Inside your view, the `save` and `close` references will point to the jQuery
 selectors `#save-button` and `.close-button` respectively.
 
-### Accessing UI elements
+### Accessing UI Elements
 
 To get the handles to your UI elements, use the `getUI(ui)` method:
 
@@ -363,7 +325,7 @@ var MyView = Mn.View.extend({
 As `saveButton` here is a jQuery selector, you can call any jQuery methods on
 it, according to the jQuery documentation.
 
-#### Referencing UI in events
+#### Referencing UI in `events` and `triggers`
 
 The UI attribute is especially useful when setting handlers in the
 [`events`](#view-events) and [`triggers`](#view-triggers) objects - simply use
@@ -586,7 +548,7 @@ discussed in the [events documentation](./events.md).
 The major benefit of the `triggers` attribute over `events` is that triggered
 events can bubble up to any parent views. For a full explanation of bubbling
 events and listening to child events, see the
-[event bubbling documentation](./marionette.events#child-view-events).
+[event bubbling documentation](./events.md#child-view-events).
 
 ## Model and Collection events
 
@@ -619,7 +581,7 @@ to `model.trigger('event', arguments)`.
 The `modelEvents` attribute can also take a
 [function returning an object](basics.md#functions-returning-values).
 
-#### Function callback
+#### Function Callback
 
 You can also bind a function callback directly in the `modelEvents` attribute:
 
@@ -678,7 +640,7 @@ var MyView = Mn.View.extend({
 
 [Live example](https://jsfiddle.net/marionettejs/ze8po0x5/)
 
-### Listening to both
+### Listening to Both
 
 If your view has a `model` and `collection` attached, it will listen for events
 on both:
@@ -708,78 +670,3 @@ var MyView = Mn.View.extend({
 [Live example](https://jsfiddle.net/marionettejs/h9ub5hp3/)
 
 In this case, Marionette will bind event handlers to both.
-
-## Advanced View Topics
-
-This method is used to convert a View's `model` or `collection`
-into a usable form for a template.
-
-Item Views are called such because they process only a single item
-at a time. Consequently, only the `model` **or** the `collection` will
-be serialized. If both exist, only the `model` will be serialized.
-
-By default, models are serialized by cloning the attributes of the model.
-
-Collections are serialized into an object of this form:
-
-```javascript
-{
-  items: [modelOne, modelTwo]
-}
-```
-
-where each model in the collection will have its attributes cloned.
-
-The result of `serializeData` is included in the data passed to
-the view's template.
-
-Let's take a look at some examples of how serializing data works.
-
-```javascript
-var myModel = new MyModel({foo: "bar"});
-
-new MyView({
-  template: "#myItemTemplate",
-  model: myModel
-});
-
-MyView.render();
-```
-
-```html
-<script id="myItemTemplate" type="template">
-  Foo is: <%= foo %>
-</script>
-```
-
-[Live example](https://jsfiddle.net/marionettejs/brp0t7pq/)
-
-If the serialization is a collection, the results are passed in as an
-`items` array:
-
-```javascript
-var myCollection = new MyCollection([{foo: "bar"}, {foo: "baz"}]);
-
-new MyView({
-  template: "#myCollectionTemplate",
-  collection: myCollection
-});
-
-MyView.render();
-```
-
-```html
-<script id="myCollectionTemplate" type="template">
-  <% _.each(items, function(item){ %>
-    Foo is: <%= item.foo %>
-  <% }); %>
-</script>
-```
-
-[Live example](https://jsfiddle.net/marionettejs/yv3hrvkf/)
-
-If you need to serialize the View's `model` or `collection` in a custom way,
-then you should override either `serializeModel` or `serializeCollection`.
-
-On the other hand, you should not use this method to add arbitrary extra data
-to your template. Instead, use [View.templateContext](./template.md#templatecontext).

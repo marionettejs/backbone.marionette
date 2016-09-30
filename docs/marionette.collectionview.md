@@ -12,28 +12,16 @@ in the DOM. This behavior can be disabled by specifying `{sort: false}` on initi
 
 * [CollectionView's `childView`](#collectionviews-childview)
   * [CollectionView's `childViewOptions`](#collectionviews-childviewoptions)
-  * [CollectionView's `childViewEventPrefix`](#collectionviews-childvieweventprefix)
-  * [CollectionView's `childViewEvents`](#collectionviews-childviewevents)
-  * [CollectionView's `childViewTriggers`](#collectionviews-childviewtriggers)
 * [CollectionView's `emptyView`](#collectionviews-emptyview)
   * [CollectionView's `emptyViewOptions`](#collectionviews-emptyviewoptions)
   * [CollectionView's `isEmpty`](#collectionviews-isempty)
 * [CollectionView's `render`](#collectionviews-render)
-  * [CollectionView: Automatic Rendering](#collectionview-automatic-rendering)
-  * [CollectionView: Re-render Collection](#collectionview-re-render-collection)
+  * [Automatic Rendering](#automatic-rendering)
+  * [Re-render the CollectionView](#re-render-the-collectionview)
   * [CollectionView's `attachHtml`](#collectionviews-attachhtml)
   * [CollectionView's `attachBuffer`](#collectionviews-attachbuffer)
 * [CollectionView's `destroy`](#collectionviews-destroy)
-* [CollectionView's `filter`](#collectionviews-filter)
-  * [CollectionView's `setFilter`](#collectionviews-setfilter)
-  * [CollectionView's `removeFilter`](#collectionviews-removefilter)
-* [CollectionView's `sort`](#collectionviews-sort)
-  * [CollectionView's `viewComparator`](#collectionviews-viewcomparator)
-  * [CollectionView's `getViewComparator`](#collectionviews-getviewcomparator)
-  * [CollectionView's `reorderOnSort`](#collectionviews-reorderonsort)
-  [CollectionView's `reorder`](#collectionviews-reorder)
-  * [CollectionView's `resortView`](#collectionviews-resortview)
-* [Events](#collectionview-events)
+* [Events](#events)
   * [Child Event Bubbling](#child-event-bubbling)
   * [Lifecycle Events](#lifecycle-events)
 * [Rendering `CollectionView`s](#rendering-collectionviews)
@@ -44,7 +32,10 @@ in the DOM. This behavior can be disabled by specifying `{sort: false}` on initi
   * [Rendering Trees](#rendering-trees)
     * [Trees in Marionette 2](#trees-in-marionette-2)
     * [Trees in Marionette 3](#trees-in-marionette-3)
-
+* [Advanced CollectionView Usage](#advanced-collectionview-usage)
+  * [Managing Children](#managing-children)
+  * [Filtering](#filtering)
+  * [Sorting](#sorting)
 
 
 ## CollectionView's `childView`
@@ -185,178 +176,6 @@ var CollectionView = Mn.CollectionView.extend({
 
 [Live example](https://jsfiddle.net/marionettejs/cLrfdkvg/)
 
-### CollectionView's `childViewEventPrefix`
-
-You can customize the event prefix for events that are forwarded
-through the collection view. To do this, set the `childViewEventPrefix`
-on the collection view. For more information on the `childViewEventPrefix` see
-["childview:*" event bubbling from child views](#childview-event-bubbling-from-child-views)
-
-```javascript
-var Bb = require('backbone');
-var Mn = require('backbone.marionette');
-
-var myCollection = new Bb.Collection([{}]);
-
-var CollectionView = Mn.CollectionView.extend({
-  childViewEventPrefix: 'some:prefix'
-});
-
-var collectionView = new CollectionView({
-  collection: myCollection
-});
-
-collectionView.on('some:prefix:render', function(){
-  // child view was rendered
-});
-
-collectionView.render();
-```
-
-[Live example](https://jsfiddle.net/marionettejs/as33hnk1/)
-
-The `childViewEventPrefix` can be provided in the view definition or
-in the constructor function call, to get a view instance.
-
-### CollectionView's `childViewEvents`
-
-A `childViewEvents` hash or method permits handling of child view events without
-manually setting bindings. The values of the hash can either be a function or a string
-method name on the collection view.
-
-```javascript
-var Mn = require('backbone.marionette');
-
-// childViewEvents can be specified as a hash...
-var MyCollectionView = Mn.CollectionView.extend({
-
-  childViewEvents: {
-    // This callback will be called whenever a child is rendered or emits a `render` event
-    render: function() {
-      console.log('A child view has been rendered.');
-    }
-  }
-});
-
-// ...or as a function that returns a hash.
-var MyCollectionView = Mn.CollectionView.extend({
-
-  childViewEvents: function() {
-    return {
-      render: this.onChildRendered
-    }
-  },
-
-  onChildRendered: function () {
-    console.log('A child view has been rendered.');
-  }
-});
-```
-
-[Live example](https://jsfiddle.net/marionettejs/a2uvcfrp/)
-
-`childViewEvents` also catches custom events fired by a child view.
-
-```javascript
-var Mn = require('backbone.marionette');
-
-// The child view fires a custom event, `show:message`
-var ChildView = Mn.View.extend({
-
-  // Events hash defines local event handlers that in turn may call `triggerMethod`.
-  events: {
-    'click .button': 'onClickButton'
-  },
-
-  // Triggers hash converts DOM events directly to view events catchable on the parent.
-  // Note that `triggers` automatically pass the first argument as the child view.
-  triggers: {
-    'submit form': 'submit:form'
-  },
-
-  onClickButton: function () {
-    // Both `trigger` and `triggerMethod` events will be caught by parent.
-    this.trigger('show:message', 'foo');
-    this.triggerMethod('show:message', 'bar');
-  }
-});
-
-// The parent uses childViewEvents to catch the child view's custom event
-var ParentView = Mn.CollectionView.extend({
-
-  childView: ChildView,
-
-  childViewEvents: {
-    'show:message': 'onChildShowMessage',
-    'submit:form': 'onChildSubmitForm'
-  },
-
-  onChildShowMessage: function (message) {
-    console.log('A child view fired show:message with ' + message);
-  },
-
-  onChildSubmitForm: function (childView) {
-    console.log('A child view fired submit:form');
-  }
-});
-```
-
-[Live example](https://jsfiddle.net/marionettejs/fpg8auf5/)
-
-### CollectionView's `childViewTriggers`
-
-A `childViewTriggers` hash or method permits proxying of child view events without manually
-setting bindings. The values of the hash should be a string of the event to trigger on the parent.
-
-`childViewTriggers` is sugar on top of [`childViewEvents`](#collectionviews-childviewevents) much
-in the same way that [View `triggers`](#abstractviewtriggers) are sugar for [View `events`](#abstractviewevents).
-
-```javascript
-var Mn = require('backbone.marionette');
-
-// The child view fires a custom event, `show:message`
-var ChildView = Mn.View.extend({
-
-  // Events hash defines local event handlers that in turn may call `triggerMethod`.
-  events: {
-    'click .button': 'onClickButton'
-  },
-
-  // Triggers hash converts DOM events directly to view events catchable on the parent.
-  // Note that `triggers` automatically pass the first argument as the child view.
-  triggers: {
-    'submit form': 'submit:form'
-  },
-
-  onClickButton: function () {
-    // Both `trigger` and `triggerMethod` events will be caught by parent.
-    this.trigger('show:message', 'foo');
-    this.triggerMethod('show:message', 'bar');
-  }
-});
-
-// The parent uses childViewEvents to catch the child view's custom event
-var ParentView = Mn.CollectionView.extend({
-
-  childView: ChildView,
-
-  childViewTriggers: {
-    'show:message': 'child:show:message',
-    'submit:form': 'child:submit:form'
-  },
-
-  onChildShowMessage: function (message) {
-    console.log('A child view fired show:message with ' + message);
-  },
-
-  onChildSubmitForm: function (childView) {
-    console.log('A child view fired submit:form');
-  }
-});
-```
-
-[Live example](https://jsfiddle.net/marionettejs/edhqd2h8/)
-
 ## CollectionView's `emptyView`
 
 When a collection has no children, and you need to render a view other than
@@ -446,10 +265,10 @@ new MyCollectionView().render();
 
 For more information on rendering techiniques see: [Rendering `CollectionView`s](#rendering-collectionviews).
 
-### CollectionView: Automatic Rendering
+### Automatic Rendering
 
-After the initial render the collection view binds to the "add", "remove" and
-"reset" events of the collection that is specified.
+After the initial render the collection view binds to the `add`, `remove` and
+`reset` events of the collection that is specified.
 
 When the collection for the view is "reset", the view will call `render` on
 itself and re-render the entire collection.
@@ -461,7 +280,7 @@ When a model is removed from a collection (or destroyed / deleted), the collecti
 view will destroy and remove that model's child view.
 
 When the collection for the view is sorted, the view will automatically re-sort its child views.
-If the [`reorderOnSort`](#collectionviews-reorderonsort) option is set it will attempt to reorder the DOM and do this without a full re-render, otherwise it will re-render if the order has changed. Please Note that if you apply a filter to the collection view and the filtered views change during a sort then it will always re-render.
+If the [`reorderOnSort`](./marionette.collectionviewadvanced.md#collectionviews-reorderonsort) option is set it will attempt to reorder the DOM and do this without a full re-render, otherwise it will re-render if the order has changed. Please Note that if you apply a filter to the collection view and the filtered views change during a sort then it will always re-render.
 
 ```javascript
 var Bb = require('backbone');
@@ -491,7 +310,7 @@ collection.reset([{foo: 'bar'}]);
 
 [Live example](https://jsfiddle.net/marionettejs/rk3x77ds/)
 
-### CollectionView: Re-render Collection
+### Re-render the CollectionView
 
 If you need to re-render the entire collection, you can call the
 `view.render` method. This method takes care of destroying all of
@@ -589,224 +408,6 @@ myCollectionView.destroy(); // logs "I will get destroyed"
 
 [Live example](https://jsfiddle.net/marionettejs/wnhd10jd/)
 
-## CollectionView's `filter`
-
-`CollectionView` allows for a custom `filter` option if you want to prevent some of the
-underlying `collection`'s models from being rendered as child views.
-The filter function takes a model from the collection and returns a truthy value if the child should be rendered,
-and a falsey value if it should not.
-
-```javascript
-var Bb = require('backbone');
-var Mn = require('backbone.marionette');
-
-var collectionView = new Mn.CollectionView({
-  childView: SomeChildView,
-  emptyView: SomeEmptyView,
-  collection: new Bb.Collection([
-    { value: 1 },
-    { value: 2 },
-    { value: 3 },
-    { value: 4 }
-  ]),
-
-  // Only show views with even values
-  filter: function (child, index, collection) {
-    return child.get('value') % 2 === 0;
-  }
-});
-
-// renders the views with values '2' and '4'
-collectionView.render();
-
-// change the filter
-// renders the views with values '1' and '3'
-collectionView.setFilter(function (child, index, collection) {
-  return child.get('value') % 2 !== 0;
-});
-
-// renders all views
-collectionView.removeFilter();
-```
-
-[Live example](https://jsfiddle.net/marionettejs/mm9at7ep/)
-
-### CollectionView's `setFilter`
-
-The `setFilter` method modifies the `CollectionView`'s filter attribute, and
-renders the new `ChildViews` in a efficient way, instead of
-rendering the whole DOM structure again.
-Passing `{ preventRender: true }` in the options argument will prevent the view being rendered.
-
-```javascript
-var Mn = require('backbone.marionette');
-
-var collectionView = new Mn.CollectionView({
-  collection: someCollection
-});
-
-collectionView.render();
-
-var newFilter = function(child, index, collection) {
-  return child.get('value') % 2 === 0;
-};
-
-// Note: the setFilter is preventing the automatic re-render
-collectionView.setFilter(newFilter, { preventRender: true });
-
-//Render the new state of the ChildViews instead of the whole DOM.
-collectionView.render();
-```
-
-[Live example](https://jsfiddle.net/marionettejs/ogafwram/)
-
-### CollectionView's `removeFilter`
-
-This function is actually an alias of `setFilter(null, options)`. It is useful for removing filters.
-`removeFilter` also accepts `preventRender` as a option.
-
-```javascript
-var Mn = require('backbone.marionette');
-
-var collectionView = new Mn.CollectionView({
-  collection: someCollection
-});
-
-collectionView.render();
-
-collectionView.setFilter(function(child, index, collection) {
-  return child.get('value') % 2 === 0;
-});
-
-//Remove the current filter without rendering again.
-collectionView.removeFilter({ preventRender: true });
-```
-
-[Live example](https://jsfiddle.net/marionettejs/9gr5rwqv/)
-
-## CollectionView's `sort`
-
-By default the `CollectionView` will maintain a sorted collection's order
-in the DOM. This behavior can be disabled by specifying `{sort: false}` on initialize. The `sort` flag cannot be changed after instantiation.
-
-```javascript
-var Bb = require('backbone');
-var Mn = require('backbone.marionette');
-
-var myCollection = new Bb.Collection([
-  { id: 1 },
-  { id: 4 },
-  { id: 3 },
-  { id: 2 }
-]);
-
-myCollection.comparator = 'id';
-
-var mySortedColView = new Mn.CollectionView({
-  //...
-  collection: myCollection
-});
-
-var myUnsortedColView = new Mn.CollectionView({
-  //...
-  collection: myCollection,
-  sort: false
-});
-
-mySortedColView.render(); // 1 4 3 2
-myUnsortedColView.render(); // 1 4 3 2
-
-// mySortedColView auto-renders 1 2 3 4
-// myUnsortedColView has no change
-myCollection.sort();
-```
-
-[Live example](https://jsfiddle.net/marionettejs/sf0vL563/)
-
-### CollectionView's `viewComparator`
-
-`CollectionView` allows for a custom `viewComparator` option if you want your `CollectionView`'s children to be rendered
-with a different sort order than the underlying Backbone collection uses.
-
-```javascript
-var Mn = require('backbone.marionette');
-
-var cv = new Mn.CollectionView({
-  collection: someCollection,
-  viewComparator: 'otherFieldToSortOn'
-});
-```
-
-[Live example](https://jsfiddle.net/marionettejs/404tft3b/)
-
-The `viewComparator` can take any of the acceptable `Backbone.Collection`
-[comparator formats](http://backbonejs.org/#Collection-comparator) -- a sortBy
-(pass a function that takes a single argument), as a sort (pass a comparator
-function that expects two arguments), or as a string indicating the attribute to
-sort by.
-
-### CollectionView's `getViewComparator`
-
-Override this method to determine which `viewComparator` to use.
-
-```javascript
-var Mn = require('backbone.marionette');
-
-var MyCollectionView = Mn.CollectionView.extend({
-  sortAsc: function(model) {
-    return -model.get('order');
-  },
-  sortDesc: function(model) {
-    return model.get('order');
-  },
-  getViewComparator: function() {
-    // The collectionView's model
-    if (this.model.get('sorted') === 'ASC') {
-      return this.sortAsc;
-    }
-
-    return this.sortDesc;
-  }
-});
-```
-
-[Live example](https://jsfiddle.net/marionettejs/404tft3b/)
-
-### CollectionView's `reorderOnSort`
-
-This option is useful when you have performance issues when you resort your `CollectionView`.
-Without this option, your `CollectionView` will be completely re-rendered, which can be
-costly if you have a large number of elements or if your `ChildView`s are complex. If this option
-is activated, when you sort your `Collection`, there will be no re-rendering, only the DOM nodes
-will be reordered. This can be a problem if your `ChildView`s use their collection's index
-in their rendering. In this case, you cannot use this option as you need to re-render each
-`ChildView`.
-
-If you combine this option with a [filter](#collectionviews-filter) that changes the views that are
-to be displayed, `reorderOnSort` will be bypassed to render new children and remove those that are rejected by the filter.
-
-### CollectionView's `reorder`
-
-If [`reorderOnSort`](#collectionviews-reorderonsort) is set to true, this function will be used instead of re-rendering all children.  It can be called directly to prevent the collection from being completely re-rendered. This may only be useful if models are added or removed silently or if [`sort`](#collectionviews-sort) was set to false on the `CollectionView`.
-
-### CollectionView's `resortView`
-
-[By default](#collectionviews-sort) the `CollectionView` will maintain the order of its `collection`
-in the DOM. However on occasions the view may need to re-render to make this
-possible, for example if you were to change the comparator on the collection.
-The `CollectionView` will re-render its children or [`reorder`](#collectionviews-reorder) them depending on [`reorderOnSort`](#collectionviews-reorderonsort).
-Override this function if you need further customization.
-
-```javascript
-var Mn = require('backbone.marionette');
-
-var MyCollectionView = Mn.CollectionView.extend({
-  resortView: function() {
-    // provide custom logic for rendering after sorting the collection
-  }
-});
-```
-
 ## Events
 
 The `CollectionView`, like `View`, is able to trigger and respond to events
@@ -815,8 +416,10 @@ has the complete documentation for how to set and handle events on views.
 
 ### Child Event Bubbling
 
-When a child view triggers an event, that event will bubble up one level to the
-parent collection view. For an example:
+The collection view is able to monitor and act on events on any children they
+own using [`childViewEvents`](./events.md#explicit-event-listeners) and [`childViewTriggers`](./events.md#triggering-events-on-child-events). Additionally when a child
+view triggers an event, that [event will bubble up](./events.md#event-bubbling) one level to the parent
+collection view. For an example:
 
 ```javascript
 var Mn = require('backbone.marionette');
@@ -840,7 +443,7 @@ var Collection = Mn.CollectionView.extend({
 
 [Live example](https://jsfiddle.net/marionettejs/5z1qcr4z/)
 
-The event will receive a `childview:` prefix before going through the magic
+The event will receive a [`childview:` prefix](./events.md#a-child-views-event-prefix) before going through the magic
 method binding logic. See the
 [documentation for Child View Events](./events.md#child-view-events) for more
 information.
@@ -854,7 +457,7 @@ them, see the
 
 ## Rendering `CollectionView`s
 
-Marionette 3 has completely removed the `CompositeView` in favor of making the
+Marionette 3 has deprecated the `CompositeView` (for removal in v4) in favor of making the
 `View` and `CollectionView` a lot more flexible. This section will cover the
 most common use cases for `CollectionView` and how to replace `CompositeView`.
 
@@ -917,7 +520,7 @@ Marionette 2 using `CompositeView`.
 
 #### Tables Using Marionette 2
 
-**_The following code is deprecated and for demonstration purposes only _**
+**Note** _The following code is deprecated and for demonstration purposes only_
 
 To build a table in Marionette 2 requires the `CompositeView` which we'll build
 as such:
@@ -1169,5 +772,23 @@ This more explicit style gives us two major benefits:
 * More regions to hook different views in, something that's impossible with
 `CompositeView`
 
+## Advanced CollectionView Usage
+
 For getting advanced information about filtering, sorting or managing `CollectionView` look at
 [Advanced CollectionView usage](./marionette.collectionviewadvanced.md)
+
+### Managing Children
+
+The `CollectionView` can store and manage its child views. This allows you to easily access
+the views within the collection view, iterate them, find them by a given indexer such as the
+view's model or collection, and more. [Additional Information...](./marionette.collectionviewadvanced.md#collectionviews-children)
+
+### Filtering
+
+`CollectionView` allows for a custom `filter` option if you want to prevent some of the
+underlying `collection`'s models from being rendered as child views. [Additional Information...](./marionette.collectionviewadvanced.md#collectionviews-filter)
+
+### Sorting
+
+By default the `CollectionView` will maintain a sorted collection's order in the DOM.
+[Additional Information...](./marionette.collectionviewadvanced.md#collectionviews-sort)

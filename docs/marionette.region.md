@@ -256,6 +256,9 @@ mainRegion.show(new OtherView());
 mainRegion.hasView() // true
 ```
 
+If you show a view in a region with an existing view, Marionette will
+[remove the existing View](#emptying-a-region) before showing the new one.
+
 ## Emptying a Region
 
 You can remove a view from a region (effectively "unshowing" it) with
@@ -271,6 +274,10 @@ mainRegion.empty();
 
 This will destroy the view, clean up any event handlers and remove it from
 the DOM. When a region is emptied [empty events are triggered](./viewlifecycle.md#empty-region-events).
+
+**Note**: If the region does _not_ currently contain a View it will detach
+any HTML inside the region when emptying. If the region _does_ contain a
+View [any HTML that doesn't belong to the View will remain](./upgrade.md#changes-to-regionshow).
 
 ### Preserving Existing Views
 
@@ -353,19 +360,6 @@ var Mn = require('backbone.marionette');
 
 Mn.Region.prototype.attachHtml = function(view){
   this.el.appendChild(view.el);
-}
-```
-
-This replaces the contents of the region with the view's
-`el` / content. You can override `attachHtml` for transition effects and more.
-
-```javascript
-var Mn = require('backbone.marionette');
-
-Mn.Region.prototype.attachHtml = function(view){
-  this.$el.hide();
-  this.$el.html(view.el);
-  this.$el.slideDown("fast");
 }
 ```
 

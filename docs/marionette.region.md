@@ -174,6 +174,9 @@ Both forms take an `options` object that will be passed to the
 For more information on `showChildView` and `getChildView`, see the
 [Documentation for Views](./marionette.view.md#managing-sub-views)
 
+If you show a view in a region with an existing view, Marionette will
+[remove the existing View](#hiding-a-view) before showing the new one.
+
 ### Hiding a View
 
 You can remove a view from a region (effectively "unshowing" it) with
@@ -189,6 +192,7 @@ mainRegion.empty();
 
 This will destroy the view, cleaning up any event handlers and remove it from
 the DOM.
+[Howevever, any HTML that doesn't belong to the View will remain](./upgrade.md#changes-to-regionshow).
 
 ### Preserving Existing Views
 

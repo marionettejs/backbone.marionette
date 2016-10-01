@@ -102,6 +102,14 @@ Replace all instances of `show` and `before:show` with `render` and
 `before:render`. If you want the view to be visible in the DOM, then listen to
 the `dom:refresh` event.
 
+### Changes to `region.show()`
+
+The `region.show()` method (and by extension `showChildView()`) made a change to
+how it displays views. Any HTML inside the region that *isn't* in a View will
+not be removed from the region and the View's HTML will be appended after this
+HTML. In Marionette 2, the `region.show()` method would call `$el.empty()`
+before adding the new HTML.
+
 ## Templates
 
 The biggest change to templates is renaming `templateHelpers` to

@@ -44,6 +44,15 @@ See [`CollectionView`](./marionette.collectionview.md#rendering-collectionviews)
 for detail on upgrading to Marionette 3. This technique works in both Marionette
 2.x and Marionette 3.
 
+### Removing `CollectionView.getChildView()`
+
+The `getChildView` method has been removed in favor of the `childView` property,
+which now accepts a function.
+
+#### Upgrading to Marionette 3
+
+Simply replace all instances of `getChildView` with `childView`.
+
 ### Child event handlers
 
 The `childEvents` attribute was renamed to `childViewEvents`.

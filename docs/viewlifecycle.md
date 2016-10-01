@@ -18,6 +18,9 @@ their children.
   * [Collection Creation Events](#collection-creation-events)
   * [Collection Destruction Events](#collection-destruction-events-events)
   * [Other Collection Events](#other-collection-events)
+* [`Region` Lifecycle](#region-lifecycle)
+  * [Show View Lifecycle](#show-view-lifecycle)
+  * [Region Lifecycle events](#region-lifecycle-events)
 
 ## `View` Lifecycle
 Marionette views defined a number of events during the creation and destruction
@@ -476,3 +479,54 @@ myView.on({
 
 myCol.sort()
 ```
+
+
+## `Region` Lifecycle
+
+When you show a view inside a region - either using `region.show(view)` or
+`showChildView('region', view)` - the `Region` will emit events around the view
+events that you can hook into.
+
+### Show View Lifecycle
+
+When showing a view inside a region, the region emits a number of events:
+
+| Order |                   Event                    |
+| :---: |--------------------------------------------|
+|   1   |               `before:show`                |
+|   2   | [View Lifecycle](#view-creation-lifecycle) |
+|   3   |                   `show`                   |
+
+#### Empty Region Lifecycle
+
+When emptying a region, it will emit destruction events around the view's
+destruction lifecycle:
+
+| Order |                     Event                     |
+| :---: |-----------------------------------------------|
+|   1   |                `before:empty`                 |
+|   2   | [View Lifecycle](#view-destruction-lifecycle) |
+|   3   |                    `empty`                    |
+
+### Region Lifecycle Events
+
+#### Region `before:show`
+
+Emitted on `region.show(view)`, before the view lifecycle begins. At this point,
+none of the view rendering will have been performed.
+
+#### Region `show`
+
+Emitted after the view has been rendered and attached to the DOM. This can be
+used to handle any extra manipulation that needs to occur.
+
+#### Region `before:empty`
+
+Emitted before the view's destruction process begins. This can occur either by
+calling `region.empty()` or by running `region.show(view)` on a region that's
+displaying another view.
+
+#### Region `empty`
+
+Fired after the entire destruction process is complete. At this point, the view
+has been removed from the DOM completely.

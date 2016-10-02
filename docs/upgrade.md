@@ -104,11 +104,60 @@ the `dom:refresh` event.
 
 ### Changes to `region.show()`
 
-The `region.show()` method (and by extension `showChildView()`) made a change to
-how it displays views. Any HTML inside the region that *isn't* in a View will
-not be removed from the region and the View's HTML will be appended after this
-HTML. In Marionette 2, the `region.show()` method would call `$el.empty()`
-before adding the new HTML.
+The `region.show()` method (that also backs `showChildView()`) was changed to
+not remove HTML outside the `$el` of the displayed view. In Marionette 2,
+the `region.show()` method would call `region.$el.empty()` before showing the
+new HTML.
+
+In Marionette 3, this was changed to unhook `region.currentView` from the DOM,
+remove all event handlers, then delete it. Any HTML added to the region that
+isn't contained in the DOM of the View won't be removed.
+
+For example:
+
+```javascript
+var _ = require('underscore');
+var Mn = require('backbone.marionette');
+
+var app = require('./app');
+
+var MyView = Mn.View.extend({
+  template: _.template('View contents')
+});
+
+var ParentView = Mn.View.extend({
+  template: _.template('<div class="view-hook"></div>'),
+  regions: {
+    child: '.view-hook'
+  }
+});
+
+var parent = new ParentView();
+app.showView(parent);
+
+var child = new MyView();
+
+parent.showChildView('child', child);
+parent.getRegion('child').$el.append('<p>Not removed</p>');
+parent.showChildView('child', new MyView());
+```
+
+In Marionette 2, the HTML output will be:
+
+```html
+<div class="view-hook">
+  <div>View contents</div>
+</div>
+```
+
+In Marionette 3, the HTML will be:
+
+```html
+<div class="view-hook">
+  <p>Not Removed</p>
+  <div>View contents</div>
+</div>
+```
 
 ## Templates
 

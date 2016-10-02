@@ -192,7 +192,7 @@ mainRegion.empty();
 
 This will destroy the view, cleaning up any event handlers and remove it from
 the DOM.
-[Howevever, any HTML that doesn't belong to the View will remain](./upgrade.md#changes-to-regionshow).
+[However, any HTML that doesn't belong to the View will remain](./upgrade.md#changes-to-regionshow).
 
 ### Preserving Existing Views
 

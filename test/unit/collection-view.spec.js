@@ -613,25 +613,6 @@ describe('collection view', function() {
     });
   });
 
-  describe('when firing an `add` event on the collection with `at` but without `index`, BB < 1.2 style', function() {
-    beforeEach(function() {
-      this.collection = new Backbone.Collection([{foo: 1}, {foo: 3}]);
-      this.collectionView = new this.CollectionView({
-        collection: this.collection
-      });
-      this.collectionView.render();
-
-      this.collection.add({foo: 2}, {at: 1, silent: true});
-      var model = this.collection.at(1);
-      this.collection.trigger('add', model, this.collection, {at: 1});
-      this.order = _.map(this.collectionView.$el.find('span'), 'innerHTML').join('');
-    });
-
-    it('should render views in `at` order', function() {
-      expect(this.order).to.equal('123');
-    });
-  });
-
   describe('when providing a custom render that adds children, without a collection object to use, and removing a child', function() {
     beforeEach(function() {
       var suite = this;
@@ -1282,7 +1263,7 @@ describe('collection view', function() {
         this.sinon.spy(this.collectionView, 'addChildView');
         this.model3 = new Backbone.Model({foo: 3});
         this.collection.add(this.model3);
-        this.childView3 = this.collectionView.children.findByIndex(2);
+        this.childView3 = this.collectionView.children.findByModel(this.model3);
       });
 
       it('should not use the render buffer', function() {

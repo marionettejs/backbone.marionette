@@ -373,8 +373,8 @@ describe('onAttach', function() {
 
     describe('when adding a new element to the collection', function() {
       beforeEach(function() {
-        collection.add({id: 1});
-        childView = collectionView.children.findByIndex(0);
+        var model = collection.add({id: 1});
+        childView = collectionView.children.findByModel(model);
       });
 
       it('should trigger onBeforeDetach and onDetach on the emptyView', function() {

@@ -522,7 +522,7 @@ describe('composite view', function() {
         expect(this.compositeView.$el).to.contain.$text('quux');
       });
 
-      it('shound send childView to getChildViewContainer', function() {
+      it('should send childView to getChildViewContainer', function() {
         expect(this.compositeView.getChildViewContainer).to.have.been.called;
         expect(this.compositeView.getChildViewContainer.getCall(0).args[1].tagName).to.equal(this.childViewTagName);
       });

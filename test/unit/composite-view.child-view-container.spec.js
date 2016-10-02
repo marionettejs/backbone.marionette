@@ -180,14 +180,14 @@ describe('composite view - childViewContainer', function() {
       };
 
       this.compositeView = new this.CompositeView();
-      this.onCollectionAddSpy = this.sinon.spy(this.compositeView, '_onCollectionAdd');
+      this.onCollectionAddSpy = this.sinon.spy(this.compositeView, '_addChildModels');
     });
 
     it('should not raise any errors when item is added to collection', function() {
       expect(this.addModel).not.to.throw;
     });
 
-    it('should not call _onCollectionAdd when item is added to collection', function() {
+    it('should not call _addChildModels when item is added to collection', function() {
       this.addModel();
       expect(this.onCollectionAddSpy).not.to.have.been.called;
     });

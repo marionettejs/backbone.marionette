@@ -261,18 +261,22 @@ This can be useful in unit testing your views.
 Override the region's `attachHtml` method to change how the view is attached
 to the DOM. This method receives one parameter - the view to show.
 
-The default implementation of `attachHtml` is:
+The default implementation of `attachHtml` works a bit like the following:
 
 ```javascript
 var Mn = require('backbone.marionette');
 
 Mn.Region.prototype.attachHtml = function(view){
-  this.$el.empty().append(view.el);
+  if (this.isShowingAView()) {
+    this.removeRenderedView();
+  }
+  this.$el.append(view.el);
 }
 ```
 
-This replaces the contents of the region with the view's
-`el` / content. You can override `attachHtml` for transition effects and more.
+If there's a view being displayed, this code replaces it and renders then
+attaches the new view's HTML. You can override `attachHtml` for transition
+effects and more.
 
 ```javascript
 var Mn = require('backbone.marionette');

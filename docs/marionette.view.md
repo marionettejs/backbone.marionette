@@ -12,6 +12,7 @@ multiple views through the `regions` attribute.
 ## Documentation Index
 
 * [Rendering a Template](#rendering-a-template)
+  * [Set How Template is Attached to the `el`](#set-how-template-is-attached-to-the-el)
 * [Managing an Existing Page](#managing-an-existing-page)
   * [Setting a `template` to `false`](#setting-a-template-to-false)
 * [Laying Out Views - Regions](#laying-out-views---regions)
@@ -67,6 +68,22 @@ myView.render();
 
 For more detail on how to render templates, see the
 [Template documentation](./template.md).
+
+### Set How Template is Attached to the `el`
+
+Override the view's `attachElContent` method to change how the a rendered
+template is attached to the view's `el`.
+This method receives one parameter - the rendered html.
+
+The default implementation of `attachElContent` is:
+
+```javascript
+attachElContent(html) {
+  this.$el.html(html);
+
+  return this;
+},
+```
 
 ## Managing an Existing Page
 

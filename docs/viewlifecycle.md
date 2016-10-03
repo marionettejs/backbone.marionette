@@ -21,10 +21,10 @@ their children.
 * [Lifecycle State Methods](#lifecycle-state-methods)
   * [`isRendered()`](#isrendered)
   * [`isAttached()`](#isattached)
-* [`Region` Lifecycle](#region-lifecycle)
-  * [Show View Lifecycle](#show-view-lifecycle)
-  * [Region Lifecycle events](#region-lifecycle-events)
 * [Views associated with previously rendered or attached DOM](#views-associated-with-previously-rendered-or-attached-dom)
+* [`Region`s and the View Lifecycle](#regions-and-the-view-lifecycle)
+  * [Show View Events](#show-view-events)
+  * [Empty Region Events](#empty-region-events)
 
 ## `View` Lifecycle
 Marionette views defined a number of events during the creation and destruction
@@ -519,56 +519,6 @@ This is maintained when attaching a view with a `Region` or during [View instant
 If a view is attached by other means this function may not reflect the actual state of attachment.
 To be certain use [`Marionette.isNodeAttached`](./marionette.functions.md#marionetteisnodeattached).
 
-## `Region` Lifecycle
-
-When you show a view inside a region - either using `region.show(view)` or
-`showChildView('region', view)` - the `Region` will emit events around the view
-events that you can hook into.
-
-### Show View Lifecycle
-
-When showing a view inside a region, the region emits a number of events:
-
-| Order |                   Event                    |
-| :---: |--------------------------------------------|
-|   1   |               `before:show`                |
-|   2   | [View Lifecycle](#view-creation-lifecycle) |
-|   3   |                   `show`                   |
-
-#### Empty Region Lifecycle
-
-When emptying a region, it will emit destruction events around the view's
-destruction lifecycle:
-
-| Order |                     Event                     |
-| :---: |-----------------------------------------------|
-|   1   |                `before:empty`                 |
-|   2   | [View Lifecycle](#view-destruction-lifecycle) |
-|   3   |                    `empty`                    |
-
-### Region Lifecycle Events
-
-#### Region `before:show`
-
-Emitted on `region.show(view)`, before the view lifecycle begins. At this point,
-none of the view rendering will have been performed.
-
-#### Region `show`
-
-Emitted after the view has been rendered and attached to the DOM. This can be
-used to handle any extra manipulation that needs to occur.
-
-#### Region `before:empty`
-
-Emitted before the view's destruction process begins. This can occur either by
-calling `region.empty()` or by running `region.show(view)` on a region that's
-displaying another view.
-
-#### Region `empty`
-
-Fired after the entire destruction process is complete. At this point, the view
-has been removed from the DOM completely.
-
 ## Views associated with previously rendered or attached DOM
 
 When a view is instantiated, if the View's `el` is set to an existing node
@@ -578,3 +528,53 @@ and `render` events will not be fired when the view is shown in a Region.
 Similarly if the `el` is attached to a node in the DOM the view's [`isAttached()`](#isattached)
 will return `true` and `before:attach`, `attach` and `dom:refresh` will not be fired
 when the view is shown in a Region.
+
+## `Region`s and the View Lifecycle
+
+When you show a view inside a region - either using [`region.show(view)`](./marionette.region.md#showing-a-view) or
+[`showChildView('region', view)`](./marionette.view.md#showing-a-view) - the `Region` will emit events around the view
+events that you can hook into.
+
+### Show View Events
+
+When showing a view inside a region, the region emits a number of events:
+
+| Order |                   Event                    |
+| :---: |--------------------------------------------|
+|   1   |               `before:show`                |
+|   2   | [View Creation Lifecycle](#view-creation-lifecycle) |
+|   3   |                   `show`                   |
+
+#### Region `before:show`
+
+Emitted on `region.show(view)`, before the view lifecycle begins. At this point,
+none of the view rendering will have been performed.
+
+#### Region `show`
+
+Emitted after the view has been rendered and attached to the DOM (if this
+region is already attached to the DOM). This can be used to handle any
+extra manipulation that needs to occur.
+
+### Empty Region Events
+
+When [emptying a region](./marionette.region.md#emptying-a-region), it will emit destruction events around the view's
+destruction lifecycle:
+
+| Order |                     Event                     |
+| :---: |-----------------------------------------------|
+|   1   |                `before:empty`                 |
+|   2   | [View Destruction Lifecycle](#view-destruction-lifecycle) |
+|   3   |                    `empty`                    |
+
+#### Region `before:empty`
+
+Emitted before the view's destruction process begins. This can occur either by
+calling `region.empty()` or by running `region.show(view)` on a region that's
+displaying another view. It will also trigger if the view in the region is
+destroyed.
+
+#### Region `empty`
+
+Fired after the entire destruction process is complete. At this point, the view
+has been removed from the DOM completely.

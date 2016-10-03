@@ -4,8 +4,12 @@ Regions provide consistent methods to manage, show and destroy
 views in your applications and layouts. You can use a jQuery selector to
 identify where your region must be displayed.
 
-See the documentation for [View](./marionette.view.md) for an introduction in
+See the documentation for [laying out views](./marionette.view.md#laying-out-views---regions) for an introduction in
 managing regions throughout your application.
+
+A Region is a [`Marionette.Object`](./marionette.object.md) and has all of its functionality.
+
+Regions maintain the [View's lifecycle](./viewlifecycle.md#regions-and-the-view-lifecycle) while showing or emptying a view.
 
 ## Documentation Index
 
@@ -16,12 +20,11 @@ managing regions throughout your application.
   * [Specifying regions as a Function](#specifying-regions-as-a-function)
   * [Adding Regions](#adding-regions)
 * [Showing a View](#showing-a-view)
-  * [Hiding a View](#hiding-a-view)
-  * [Preserving Existing Views](#preserving-existing-views)
   * [Checking whether a region is showing a view](#checking-whether-a-region-is-showing-a-view)
-  * [`reset` A Region](#reset-a-region)
-  * [Set How View's `el` Is Attached](#set-how-views-el-is-attached)
-* [Region Events](#region-events)
+* [Emptying a Region](#emptying-a-region)
+  * [Preserving Existing Views](#preserving-existing-views)
+* [`reset` A Region](#reset-a-region)
+* [Set How View's `el` Is Attached](#set-how-views-el-is-attached)
 
 ## Defining the Application Region
 
@@ -118,17 +121,13 @@ The `regions` attribute on a view can be a
 var Mn = require('backbone.marionette');
 
 var MyView = Mn.View.extend({
-  regions: function(options){
+  regions: function(){
     return {
       firstRegion: '#first-region'
     };
   }
 });
 ```
-
-The `options` argument contains the options passed to the view on instantiation.
-As the view has not been constructed yet, `this.getOption()` is not able to
-return any options from the view - use `options` instead.
 
 ### Adding Regions
 
@@ -146,8 +145,7 @@ Now we can access `thirdRegion` as we would the others.
 
 ## Showing a View
 
-Once a region is defined, you can call its `show`
-and `empty` methods to display and shut-down a view:
+Once a region is defined, you can call its `show` method to display the view:
 
 ```javascript
 var myView = new MyView();
@@ -169,12 +167,27 @@ myView.showChildView('main', childView);
 ```
 
 Both forms take an `options` object that will be passed to the
-[events fired during `show`](#events-raised-during-show).
+[events fired during `show`](./viewlifecycle.md#show-view-events).
 
 For more information on `showChildView` and `getChildView`, see the
 [Documentation for Views](./marionette.view.md#managing-sub-views)
 
-### Hiding a View
+### Checking whether a region is showing a view
+
+If you wish to check whether a region has a view, you can use the `hasView`
+function. This will return a boolean value depending whether or not the region
+is showing a view.
+
+```javascript
+var myView = new MyView();
+var mainRegion = myView.getRegion('main');
+
+mainRegion.hasView() // false
+mainRegion.show(new OtherView());
+mainRegion.hasView() // true
+```
+
+## Emptying a Region
 
 You can remove a view from a region (effectively "unshowing" it) with
 `region.empty()` on a region:
@@ -187,8 +200,8 @@ var mainRegion = myView.getRegion('main');
 mainRegion.empty();
 ```
 
-This will destroy the view, cleaning up any event handlers and remove it from
-the DOM.
+This will destroy the view, clean up any event handlers and remove it from
+the DOM. When a region is emptied [empty events are triggered](./viewlifecycle.md#empty-region-events).
 
 ### Preserving Existing Views
 
@@ -221,22 +234,7 @@ mainRegion.empty({preventDestroy: true});
 **NOTE** When using `preventDestroy: true` you must be careful to cleanup your
 old views manually to prevent memory leaks.
 
-### Checking whether a region is showing a view
-
-If you wish to check whether a region has a view, you can use the `hasView`
-function. This will return a boolean value depending whether or not the region
-is showing a view.
-
-```javascript
-var myView = new MyView();
-var mainRegion = myView.getRegion('main');
-
-mainRegion.hasView() // false
-mainRegion.show(new OtherView());
-mainRegion.hasView() // true
-```
-
-### `reset` A Region
+## `reset` A Region
 
 A region can be `reset` at any time. This destroys any existing view
 being displayed, and deletes the cached `el`. The next time the
@@ -252,18 +250,18 @@ myRegion.reset();
 
 This can be useful in unit testing your views.
 
-### Set How View's `el` Is Attached
+## Set How View's `el` Is Attached
 
 Override the region's `attachHtml` method to change how the view is attached
 to the DOM. This method receives one parameter - the view to show.
 
-The default implementation of `attachHtml` is:
+The default implementation of `attachHtml` is essentially:
 
 ```javascript
 var Mn = require('backbone.marionette');
 
 Mn.Region.prototype.attachHtml = function(view){
-  this.$el.empty().append(view.el);
+  this.el.appendChild(view.el);
 }
 ```
 
@@ -280,8 +278,8 @@ Mn.Region.prototype.attachHtml = function(view){
 }
 ```
 
-It is also possible to define a custom render method for a single region by
-extending from the Region class and including a custom attachHtml method.
+It is also possible to define a custom attach method for a single region by
+extending from the Region class and including a custom `attachHtml` method.
 
 This example will make a view slide down from the top of the screen instead of just
 appearing in place:
@@ -307,13 +305,3 @@ var MyView = Mn.View.extend({
   }
 });
 ```
-
-## Region Events
-
-Like most Marionette classes, `Region` objects are able to fire and respond to
-events. The [Documentation for Events](./events.md) covers all the general
-event handling cases.
-
-Regions also have their own lifecycle as part of showing and rendering views.
-See the [Lifecycle Documentation](./viewlifecycle.md) for the list of events and
-when they fire.

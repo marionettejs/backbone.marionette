@@ -267,16 +267,12 @@ The default implementation of `attachHtml` works a bit like the following:
 var Mn = require('backbone.marionette');
 
 Mn.Region.prototype.attachHtml = function(view){
-  if (this.isShowingAView()) {
-    this.removeRenderedView();
-  }
-  this.$el.append(view.el);
+  this.el.appendChild(view.el);
 }
 ```
 
-If there's a view being displayed, this code replaces it and renders then
-attaches the new view's HTML. You can override `attachHtml` for transition
-effects and more.
+The existing `attachHtml` takes an extra `shouldReplace` argument, however if
+you are overriding `attachHtml`, you won't be able to use this argument.
 
 ```javascript
 var Mn = require('backbone.marionette');

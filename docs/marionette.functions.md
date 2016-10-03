@@ -195,7 +195,7 @@ var Mn = require('backbone.marionette');
 
 var MyObject = Mn.Object.extend({
   initialize: function(){
-    this.triggerMethod('baz');
+    this.triggerMethod('foo', 'baz');
   },
   onFoo: function(bar){
     console.log(bar);
@@ -218,7 +218,7 @@ This is useful when it's not clear that the object has `triggerMethod` defined. 
 ```javascript
 var Mn = require('backbone.marionette');
 
-Mn.triggerMethodOn(ctx, "foo", bar);
+Mn.triggerMethodOn(ctx, 'foo', bar);
 // will invoke `onFoo: function(bar){...})`
 // will trigger "foo" on ctx
 ```
@@ -280,7 +280,7 @@ The first parameter, `target`, must have the Backbone.Events module mixed in.
 The second parameter is the `entity` (Backbone.Model, Backbone.Collection or
 any object that has Backbone.Events mixed in) to bind the events from.
 
-The third parameter is a hash of { "event:name": "eventHandler" }
+The third parameter is a hash of { 'event:name': 'eventHandler' }
 configuration. Multiple handlers can be separated by a space. A
 function can be supplied instead of a string handler name.
 
@@ -357,8 +357,8 @@ The first parameter, `this`, is a context of current entity.
 
 The second parameter, `channel`, reference to a channel by name.
 
-The third parameter is a hash either { "event:name": "eventHandler" } or
-{ "event:name": "eventHandler", "event:otherName": "otherEventHandler", ...} of
+The third parameter is a hash either { 'event:name': 'eventHandler' } or
+{ 'event:name': 'eventHandler', 'event:otherName': 'otherEventHandler', ...} of
 configuration.
 
 ## Marionette.unbindRequests
@@ -396,8 +396,8 @@ The first parameter, `this`, is a context of current entity.
 
 The second parameter, `channel`, reference to a channel by name.
 
-The third parameter is a hash either { "event:name": "eventHandler" } or
-{ "event:name": "eventHandler", "event:otherName": "otherEventHandler", ...} of
+The third parameter is a hash either { 'event:name': 'eventHandler' } or
+{ 'event:name': 'eventHandler', 'event:otherName': 'otherEventHandler', ...} of
 configuration.
 
 ## Marionette.normalizeMethods

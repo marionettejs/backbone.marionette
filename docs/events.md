@@ -310,15 +310,15 @@ var Mn = require('backbone.marionette');
 var myCollection = new Bb.Collection([{}]);
 
 var CollectionView = Mn.CollectionView.extend({
-childViewEventPrefix: 'some:prefix'
+  childViewEventPrefix: 'some:prefix'
 });
 
 var collectionView = new CollectionView({
-collection: myCollection
+  collection: myCollection
 });
 
 collectionView.on('some:prefix:render', function(){
-// child view was rendered
+  // child view was rendered
 });
 
 collectionView.render();
@@ -412,20 +412,6 @@ var MyCollectionView = Mn.CollectionView.extend({
     render: function() {
       console.log('A child view has been rendered.');
     }
-  }
-});
-
-// ...or as a function that returns a hash.
-var MyCollectionView = Mn.CollectionView.extend({
-
-  childViewEvents: function() {
-    return {
-      render: this.onChildRendered
-    }
-  },
-
-  onChildRendered: function () {
-    console.log('A child view has been rendered.');
   }
 });
 ```

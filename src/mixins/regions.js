@@ -144,8 +144,7 @@ export default {
   _removeRegion(region, name) {
     this.triggerMethod('before:remove:region', this, name, region);
 
-    region.empty();
-    region.stopListening();
+    region.destroy();
 
     delete this.regions[name];
     delete this._regions[name];

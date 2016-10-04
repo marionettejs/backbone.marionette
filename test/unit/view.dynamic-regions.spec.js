@@ -167,6 +167,8 @@ describe('itemView - dynamic regions', function() {
       this.emptyHandler = this.sinon.spy();
       this.beforeRemoveHandler = this.sinon.spy();
       this.removeHandler = this.sinon.spy();
+      this.beforeDestroyHandler = this.sinon.spy();
+      this.destroyHandler = this.sinon.spy();
 
       this.layoutView = new this.View();
 
@@ -180,12 +182,21 @@ describe('itemView - dynamic regions', function() {
       this.region.on('empty', this.emptyHandler);
       this.layoutView.on('before:remove:region', this.beforeRemoveHandler);
       this.layoutView.on('remove:region', this.removeHandler);
-
+      this.region.on('before:destroy', this.beforeDestroyHandler);
+      this.region.on('destroy', this.destroyHandler);
       this.layoutView.removeRegion('foo');
     });
 
     it('should empty the region', function() {
       expect(this.emptyHandler).to.have.been.called;
+    });
+
+    it('should trigger a before:destroy event on the region', function() {
+      expect(this.beforeDestroyHandler).to.have.been.calledWith(this.region);
+    });
+
+    it('should trigger a destroy event on the region', function() {
+      expect(this.destroyHandler).to.have.been.calledWith(this.region);
     });
 
     it('should trigger a before:remove:region event', function() {

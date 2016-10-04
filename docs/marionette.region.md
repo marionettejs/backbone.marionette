@@ -19,6 +19,8 @@ Regions maintain the [View's lifecycle](./viewlifecycle.md#regions-and-the-view-
   * [Additional Options](#additional-options)
   * [Specifying regions as a Function](#specifying-regions-as-a-function)
   * [Adding Regions](#adding-regions)
+  * [Removing Regions](#removing-regions)
+  * [Using Regions on a view](#using-regions-on-a-view)
 * [Showing a View](#showing-a-view)
   * [Checking whether a region is showing a view](#checking-whether-a-region-is-showing-a-view)
 * [Emptying a Region](#emptying-a-region)
@@ -142,6 +144,55 @@ myView.addRegion('thirdRegion', '#third-region');
 ```
 
 Now we can access `thirdRegion` as we would the others.
+
+You can also add multiple regions using `addRegions`.
+
+```javascript
+var MyView = require('./myview');
+
+myView = new MyView();
+myView.addRegions({
+  main: {
+    el: '.overwrite-me',
+    replaceElement: true
+  },
+  sidebar: '.sidebar'
+});
+```
+
+### Removing Regions
+
+You can remove all of the regions from a view by calling `removeRegions` or you can remove a region by name using `removeRegion`.
+
+```javascript
+var Mn = require('backbone.marionette');
+
+var MyView = Mn.View.extend({
+  regions: {
+    main: '.main',
+    sidebar: '.sidebar',
+    header: '.header'
+  }
+});
+
+var myView = new MyView();
+
+// remove only the main region
+myView.removeRegion('main');
+
+// remove all regions
+myView.removeRegions();
+```
+
+### Using Regions on a view
+
+In addition to adding and removing regions there are a few
+methods to help utilize regions.
+
+- `getRegion(name)` - Request a region from a view by name.
+- `getRegions()` - Returns an object literal of all regions on the view organized by name.
+- `hasRegion(name)` - Check if a view has a region.
+- `emptyRegions()` - Empty all of the regions on a view.
 
 ## Showing a View
 

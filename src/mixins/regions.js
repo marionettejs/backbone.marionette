@@ -1,8 +1,7 @@
-import _                    from 'underscore';
-import deprecate       from '../utils/deprecate';
-import _invoke              from '../utils/invoke';
-import Region               from '../region';
-import MarionetteError      from '../error';
+import _ from 'underscore';
+import _invoke from '../utils/invoke';
+import buildRegion from '../common/build-region';
+import Region from '../region';
 
 // MixinOptions
 // - regions
@@ -54,63 +53,16 @@ export default {
 
   // internal method to build and add regions
   _addRegions(regionDefinitions) {
+    const defaults = {
+      regionClass: this.regionClass,
+      parentEl: _.partial(_.result, this, 'el')
+    };
+
     return _.reduce(regionDefinitions, (regions, definition, name) => {
-      regions[name] = this._buildRegion(definition);
+      regions[name] = buildRegion(definition, defaults);
       this._addRegion(regions[name], name);
       return regions;
     }, {});
-  },
-
-  // return the region instance from the definition
-  _buildRegion(definition) {
-    if (definition instanceof Region) {
-      return definition;
-    }
-
-    return this._buildRegionFromDefinition(definition);
-  },
-
-  _buildRegionFromDefinition(definition) {
-    if (_.isString(definition)) {
-      return this._buildRegionFromObject({el: definition});
-    }
-
-    if (_.isFunction(definition)) {
-      return this._buildRegionFromRegionClass(definition);
-    }
-
-    if (_.isObject(definition)) {
-      return this._buildRegionFromObject(definition);
-    }
-
-    throw new MarionetteError({
-      message: 'Improper region configuration type.',
-      url: 'marionette.region.html#region-configuration-types'
-    });
-  },
-
-  _buildRegionFromObject(definition) {
-    const RegionClass = definition.regionClass || this.regionClass;
-
-    const options = _.omit(definition, 'regionClass');
-
-    if (definition.selector) {
-      deprecate('The selector option on a Region definition object is deprecated. Use el to pass a selector string');
-    }
-
-    _.defaults(options, {
-      el: definition.selector,
-      parentEl: _.partial(_.result, this, 'el')
-    });
-
-    return new RegionClass(options);
-  },
-
-  // Build the region directly from a given `RegionClass`
-  _buildRegionFromRegionClass(RegionClass) {
-    return new RegionClass({
-      parentEl: _.partial(_.result, this, 'el')
-    });
   },
 
   _addRegion(region, name) {

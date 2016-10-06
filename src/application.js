@@ -1,8 +1,8 @@
 // Application
 // -----------
-import _                from 'underscore';
+import buildRegion from './common/build-region';
 import MarionetteObject from './object';
-import Region           from './region';
+import Region from './region';
 
 const ClassOptions = [
   'region',
@@ -25,20 +25,16 @@ const Application = MarionetteObject.extend({
 
   regionClass: Region,
 
-  _initRegion(options) {
+  _initRegion() {
     const region = this.region;
-    const RegionClass = this.regionClass;
 
-    // if the region is a string expect an el or selector
-    // and instantiate a region
-    if (_.isString(region)) {
-      this._region = new RegionClass({
-        el: region
-      });
-      return;
-    }
+    if (!region) { return; }
 
-    this._region = region;
+    const defaults = {
+      regionClass: this.regionClass
+    };
+
+    this._region = buildRegion(region, defaults);
   },
 
   getRegion() {

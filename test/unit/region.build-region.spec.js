@@ -21,7 +21,7 @@ describe('Region', function() {
 
     describe('with a selector string', function() {
       beforeEach(function() {
-        this.region = this.view._buildRegion(this.fooSelector);
+        this.region = this.view.addRegion(_.uniqueId('region_'), this.fooSelector);
       });
 
       it('uses the default region class', function() {
@@ -36,7 +36,7 @@ describe('Region', function() {
     describe('with a region class', function() {
       describe('with `el` defined', function() {
         beforeEach(function() {
-          this.region = this.view._buildRegion(this.BarRegion);
+          this.region = this.view.addRegion(_.uniqueId('region_'),this.BarRegion);
         });
 
         it('uses the passed in region class', function() {
@@ -53,7 +53,7 @@ describe('Region', function() {
           this.BarRegion = Marionette.Region.extend();
 
           this.buildRegion = function() {
-            this.view._buildRegion(this.BarRegion);
+            this.view.addRegion(_.uniqueId('region_'),this.BarRegion);
           }.bind(this);
         });
 
@@ -67,7 +67,7 @@ describe('Region', function() {
       describe('with `selector` defined', function() {
         beforeEach(function() {
           this.definition = {selector: this.fooSelector};
-          this.region = this.view._buildRegion(this.definition);
+          this.region = this.view.addRegion(_.uniqueId('region_'),this.definition);
         });
 
         it('uses the default region class', function() {
@@ -87,7 +87,7 @@ describe('Region', function() {
             });
             Marionette.deprecate._cache = {};
 
-            this.region = this.view._buildRegion(this.definition);
+            this.region = this.view.addRegion(_.uniqueId('region_'),this.definition);
           });
 
           it('should call Marionette.deprecate', function() {
@@ -104,7 +104,7 @@ describe('Region', function() {
         describe('when el is a selector string', function() {
           beforeEach(function() {
             this.definition = {el: this.fooSelector};
-            this.region = this.view._buildRegion(this.definition);
+            this.region = this.view.addRegion(_.uniqueId('region_'),this.definition);
           });
 
           it('uses the default region class', function() {
@@ -121,7 +121,7 @@ describe('Region', function() {
             this.el = $('<div id="baz-region">')[0];
             this.bazRegion = new this.DefaultRegionClass({el: this.el});
             this.definition = {el: this.el};
-            this.region = this.view._buildRegion(this.definition);
+            this.region = this.view.addRegion(_.uniqueId('region_'),this.definition);
           });
 
           it('uses the default region class', function() {
@@ -136,7 +136,7 @@ describe('Region', function() {
             beforeEach(function() {
               this.parentEl = $('<div id="not-actual-parent"></div>');
               this.definition = _.defaults({parentEl: this.parentEl}, this.definition);
-              this.region = this.view._buildRegion(this.definition);
+              this.region = this.view.addRegion(_.uniqueId('region_'),this.definition);
             });
 
             it('returns the jQuery(el)', function() {
@@ -151,7 +151,7 @@ describe('Region', function() {
             this.el = $('<div id="baz-region">');
             this.bazRegion = new this.DefaultRegionClass({el: this.el});
             this.definition = {el: this.el};
-            this.region = this.view._buildRegion(this.definition);
+            this.region = this.view.addRegion(_.uniqueId('region_'),this.definition);
           });
 
           it('uses the default region class', function() {
@@ -170,7 +170,7 @@ describe('Region', function() {
           this.definition = {el: this.el};
 
           this.buildRegion = function() {
-            this.view._buildRegion(this.definition);
+            this.view.addRegion(_.uniqueId('region_'),this.definition);
           }.bind(this);
         });
 
@@ -196,9 +196,9 @@ describe('Region', function() {
             this.baz2Region = new this.BazRegion({el: this.el});
             this.baz3Region = new this.BazRegion({el: this.$el});
 
-            this.region1 = this.view._buildRegion(this.region1Definition);
-            this.region2 = this.view._buildRegion(this.region2Definition);
-            this.region3 = this.view._buildRegion(this.region3Definition);
+            this.region1 = this.view.addRegion(_.uniqueId('region_'),this.region1Definition);
+            this.region2 = this.view.addRegion(_.uniqueId('region_'),this.region2Definition);
+            this.region3 = this.view.addRegion(_.uniqueId('region_'),this.region3Definition);
           });
 
           it('uses the region class', function() {
@@ -218,7 +218,7 @@ describe('Region', function() {
           describe('with `el` defined on `regionClass`', function() {
             beforeEach(function() {
               this.definition = {regionClass: this.BarRegion};
-              this.region = this.view._buildRegion(this.definition);
+              this.region = this.view.addRegion(_.uniqueId('region_'),this.definition);
             });
 
             it('uses the region class', function() {
@@ -231,7 +231,7 @@ describe('Region', function() {
               this.definition = {regionClass: this.BazRegion};
 
               this.buildRegion = function() {
-                this.view._buildRegion(this.definition);
+                this.view.addRegion(_.uniqueId('region_'),this.definition);
               }.bind(this);
             });
 
@@ -251,7 +251,7 @@ describe('Region', function() {
             myOtherRegionOption: 'foobar'
           };
 
-          this.region = this.view._buildRegion(this.definition);
+          this.region = this.view.addRegion(_.uniqueId('region_'),this.definition);
         });
 
         it('it sets the region options', function() {
@@ -263,7 +263,7 @@ describe('Region', function() {
 
     describe('with a instantiated region', function() {
       beforeEach(function() {
-        this.region = this.view._buildRegion(this.barRegion);
+        this.region = this.view.addRegion(_.uniqueId('region_'),this.barRegion);
       });
 
       it('uses the region class', function() {
@@ -274,7 +274,7 @@ describe('Region', function() {
     describe('with a missing regionConfig', function() {
       beforeEach(function() {
         this.buildRegion = function() {
-          this.view._buildRegion();
+          this.view.addRegion(_.uniqueId('region_'));
         }.bind(this);
       });
 

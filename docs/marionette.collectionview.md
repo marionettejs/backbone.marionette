@@ -872,7 +872,7 @@ var ListItemView = Mn.View.extend({
   template: '#list-item-text'
 });
 
-var ListView = Mn.View.extend({
+var ListView = Mn.CollectionView.extend({
   tagName: 'ul',
   className: 'list-unstyled',
 

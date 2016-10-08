@@ -47,7 +47,7 @@ for detail on upgrading to Marionette 3. This technique works in both Marionette
 ### Removing `CollectionView.getChildView()`
 
 The `getChildView` method has been removed in favor of the `childView` property,
-which now accepts a function.
+[which now accepts a function](basics.md#functions-returning-values).
 
 #### Upgrading to Marionette 3
 
@@ -56,7 +56,7 @@ Simply replace all instances of `getChildView` with `childView`.
 ### Removing `CollectionView.getEmptyView()`
 
 The `getEmptyView` method has been removed in favor of the `emptyView` property,
-which now accepts a function.
+[which now accepts a function](basics.md#functions-returning-values).
 
 #### Upgrading to Marionette 3
 

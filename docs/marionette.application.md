@@ -23,7 +23,9 @@ app.on('start', function() {
 });
 
 // Load some initial data, and then start our application
-loadInitialData().then(app.start);
+loadInitialData().then(function() {
+  app.start();
+});
 ```
 
 [Live example](https://jsfiddle.net/marionettejs/kk266551/)

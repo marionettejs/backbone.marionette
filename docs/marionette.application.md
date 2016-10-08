@@ -160,8 +160,6 @@ allows you to provide extra configuration for various parts of your app througho
 initialization sequence.
 
 ```javascript
-var app = new App();
-
 var App = Mn.Application.extend({
   initialize: function(options) {
     console.log('Initialize');
@@ -176,6 +174,8 @@ var App = Mn.Application.extend({
     Bb.history.start();
   }
 });
+
+var app = new App();
 
 app.start({
   data: {

@@ -144,7 +144,7 @@ var app = new App(options);
 app.start();
 ```
 
-[Live example](https://jsfiddle.net/marionettejs/ny59rs7b/)
+[Live example](https://jsfiddle.net/ny59rs7b/3/)
 
 As we'll see below, the `options` object is passed into the Application as an
 argument to `start`.
@@ -184,6 +184,8 @@ app.start({
   }
 });
 ```
+
+[Live example](https://jsfiddle.net/k05dctyt/4/)
 
 ## Method Reference
 

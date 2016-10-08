@@ -53,6 +53,15 @@ which now accepts a function.
 
 Simply replace all instances of `getChildView` with `childView`.
 
+### Removing `CollectionView.getEmptyView()`
+
+The `getEmptyView` method has been removed in favor of the `emptyView` property,
+which now accepts a function.
+
+#### Upgrading to Marionette 3
+
+Simply replace all instances of `getEmptyView` with `emptyView`.
+
 ### Child event handlers
 
 The `childEvents` attribute was renamed to `childViewEvents`.

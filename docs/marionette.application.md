@@ -55,7 +55,7 @@ var RootView = require('./views/root');
 var App = Mn.Application.extend({
   region: '#root-element',
 
-  onStart: function() {
+  onStart: function(app, options) {
     this.showView(new RootView());
   }
 });
@@ -130,11 +130,11 @@ var App = Mn.Application.extend({
     console.log('Initialize');
   },
 
-  onBeforeStart: function(options) {
-    this.model = new MyModel(options.data);
+  onBeforeStart: function(app, options) {
+    this.model = new MyModel(this.options.data);
   },
 
-  onStart: function(options) {
+  onStart: function(app, options) {
     this.showView(new MyView({model: this.model}));
     Bb.history.start();
   }
@@ -144,7 +144,7 @@ var app = new App(options);
 app.start();
 ```
 
-[Live example](https://jsfiddle.net/marionettejs/yovad75L/)
+[Live example](https://jsfiddle.net/yovad75L/16/)
 
 As we'll see below, the `options` object is passed into the Application as an
 argument to `start`.

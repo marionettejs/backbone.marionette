@@ -36,7 +36,7 @@ var SomeView = require('./view');
 var App = Mn.Application.extend({
   region: '#main-content',
 
-  onStart: function() {
+  onStart: function(app, options) {
     var main = this.getRegion();  // Has all the properties of a `Region`
     main.show(new SomeView());
   }

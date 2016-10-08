@@ -174,6 +174,9 @@ Both forms take an `options` object that will be passed to the
 For more information on `showChildView` and `getChildView`, see the
 [Documentation for Views](./marionette.view.md#managing-sub-views)
 
+If you show a view in a region with an existing view, Marionette will
+[remove the existing View](#hiding-a-view) before showing the new one.
+
 ### Hiding a View
 
 You can remove a view from a region (effectively "unshowing" it) with
@@ -189,6 +192,7 @@ mainRegion.empty();
 
 This will destroy the view, cleaning up any event handlers and remove it from
 the DOM.
+[However, any HTML that doesn't belong to the View will remain](./upgrade.md#changes-to-regionshow).
 
 ### Preserving Existing Views
 
@@ -257,18 +261,18 @@ This can be useful in unit testing your views.
 Override the region's `attachHtml` method to change how the view is attached
 to the DOM. This method receives one parameter - the view to show.
 
-The default implementation of `attachHtml` is:
+The default implementation of `attachHtml` works a bit like the following:
 
 ```javascript
 var Mn = require('backbone.marionette');
 
 Mn.Region.prototype.attachHtml = function(view){
-  this.$el.empty().append(view.el);
+  this.el.appendChild(view.el);
 }
 ```
 
-This replaces the contents of the region with the view's
-`el` / content. You can override `attachHtml` for transition effects and more.
+The existing `attachHtml` takes an extra `shouldReplace` argument, however if
+you are overriding `attachHtml`, you won't be able to use this argument.
 
 ```javascript
 var Mn = require('backbone.marionette');

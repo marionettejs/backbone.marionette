@@ -55,11 +55,7 @@ var RootView = require('./views/root');
 var App = Mn.Application.extend({
   region: '#root-element',
 
-<<<<<<< HEAD
   onStart: function() {
-=======
-  onStart: function(app, options) {
->>>>>>> fc36b2531b656617eb18788600fe8481cc4aae66
     this.showView(new RootView());
   }
 });

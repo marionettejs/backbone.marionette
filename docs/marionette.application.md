@@ -146,7 +146,7 @@ app.start();
 
 [Live example](https://jsfiddle.net/marionettejs/ny59rs7b/)
 
-As we'll see below, the `options` object can be passed into the Application as an
+As we'll see below, the `options` object is passed into the Application as an
 argument to `start`.
 
 ## Starting An Application

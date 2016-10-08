@@ -55,7 +55,7 @@ var RootView = require('./views/root');
 var App = Mn.Application.extend({
   region: '#root-element',
 
-  onStart: function(myApp, options) {
+  onStart: function(app, options) {
     this.showView(new RootView());
   }
 });
@@ -144,7 +144,7 @@ var app = new App(options);
 app.start();
 ```
 
-[Live example](https://jsfiddle.net/yovad75L/16/)
+[Live example](https://jsfiddle.net/marionettejs/ny59rs7b/)
 
 As we'll see below, the `options` object is passed into the Application as an
 argument to `start`.

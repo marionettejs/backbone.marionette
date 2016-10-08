@@ -55,7 +55,7 @@ var RootView = require('./views/root');
 var App = Mn.Application.extend({
   region: '#root-element',
 
-  onStart: function(app, options) {
+  onStart: function(myApp, options) {
     this.showView(new RootView());
   }
 });

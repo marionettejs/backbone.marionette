@@ -1066,6 +1066,35 @@ describe('collection view', function() {
     });
   });
 
+  describe('when setting childViewEventPrefix false', function() {
+    beforeEach(function() {
+      this.CollectionView = this.CollectionView.extend({
+        childViewEventPrefix: false
+      });
+
+      this.someEventSpy = this.sinon.stub();
+
+      this.model = new Backbone.Model({foo: 'bar'});
+      this.collection = new Backbone.Collection([this.model]);
+
+      this.collectionView = new this.CollectionView({collection: this.collection});
+      this.collectionView.on('childview:some:event', this.someEventSpy);
+      this.collectionView.render();
+
+      this.sinon.spy(this.collectionView, 'trigger');
+      this.childView = this.collectionView.children.findByIndex(0);
+      this.childView.trigger('some:event', 'test', this.model);
+    });
+
+    it('should not bubble up through the parent collection view', function() {
+      expect(this.collectionView.trigger).to.not.have.been.called;
+    });
+
+    it('should not trigger a childview event', function() {
+      expect(this.someEventSpy).to.not.have.been.called;
+    });
+  });
+
   describe('when a child view triggers the default', function() {
     beforeEach(function() {
       this.model = new Backbone.Model({foo: 'bar'});

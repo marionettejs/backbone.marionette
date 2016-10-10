@@ -403,5 +403,17 @@ describe('view mixin', function() {
           .and.CalledOnce;
       });
     });
+
+    describe('when childViewEventPrefix is false', function() {
+      beforeEach(function() {
+        this.layoutView.showChildView('child', this.childView);
+        this.layoutView.childViewEventPrefix = false;
+        this.childView.triggerMethod('boom', 'foo', 'bar');
+      });
+
+      it('should not emit the event on the layout', function() {
+        expect(this.layoutEventHandler).not.to.have.been.called;
+      });
+    });
   });
 });

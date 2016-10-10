@@ -591,7 +591,7 @@ events and listening to child events, see the
 ## Model and Collection events
 
 The Marionette View can bind to events that occur on attached models and
-collections - this includes both [standard][backbone-events] and custom events.
+collections - this includes both [standard backbone-events](http://backbonejs.org/#Events-catalog) and custom events.
 
 ### Model Events
 
@@ -771,7 +771,7 @@ MyView.render();
 ```html
 <script id="myCollectionTemplate" type="template">
   <% _.each(items, function(item){ %>
-    Foo is: <%= foo %>
+    Foo is: <%= item.foo %>
   <% }); %>
 </script>
 ```

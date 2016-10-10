@@ -709,12 +709,27 @@ const CollectionView = Backbone.View.extend({
     let currentView;
     const findPosition = this.sort && (index < this.children.length - 1);
     if (findPosition) {
+      //this will be updated if the next view is destroyed. 
+      let nextViewIndex = 1;
+      // we pass the current children's to an array
+      let children = 	this.children.toArray();
       // Find the view after this one
-      currentView = this.children.find((view) => {
-        return view._index === index + 1;
-      });
+      for(var i=0; i<children.length ;i++ ){
+        if(children[i]._index === index + nextViewIndex){
+        //if the view is destroyed
+          if(children[i]._isDestroyed){
+            //we increase this to the next view
+            nextViewIndex++;
+            //we reset the for
+            i = 0;
+          }else{
+            //if this view is not destroyed we return it.
+            currentView = children[i];
+            break;
+          }
+        }
+      }
     }
-
     if (currentView) {
       currentView.$el.before(childView.el);
       return true;

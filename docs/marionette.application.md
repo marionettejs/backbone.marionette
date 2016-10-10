@@ -95,9 +95,9 @@ var app = new App({model: new Bb.Model({key: 'value'})});
 
 [Live example](https://jsfiddle.net/marionettejs/5qsmsu2x/)
 
-## Application Triggers
+## Application Events
 
-The `Application` object will fire two triggers:
+The `Application` object will fire two events:
 
 ### `before:start`
 
@@ -172,7 +172,7 @@ app.start({
 });
 ```
 
-## Method Reference
+## Application Methods
 
 The Marionette Application provides helper methods for managing its attached
 region.
@@ -183,8 +183,7 @@ Return the attached [region object](./marionette.region.md) for the Application.
 
 ### `showView(View)`
 
-Display `View` in the region attached to the Application. This runs the same
-view lifecycle as [`View.showChildView`]('./marionette.view.md').
+Display `View` in the region attached to the Application. This runs the [`View lifecycle`](./viewlifecycle.md).
 
 ### `getView()`
 

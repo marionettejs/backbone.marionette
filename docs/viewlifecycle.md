@@ -10,17 +10,21 @@ their children.
   * [View Creation Lifecycle](#view-creation-lifecycle)
   * [View Destruction Lifecycle](#view-destruction-lifecycle)
   * [View Creation Events](#view-creation-events)
-  * [View Destruction Events](#view-destruction-events-events)
+  * [View Destruction Events](#view-destruction-events)
   * [Other View Events](#other-view-events)
 * [`CollectionView` Lifecycle](#collectionview-lifecycle)
   * [Collection Creation Lifecycle](#collection-creation-lifecycle)
   * [Collection Destruction Lifecycle](#collection-destruction-lifecycle)
   * [Collection Creation Events](#collection-creation-events)
-  * [Collection Destruction Events](#collection-destruction-events-events)
+  * [Collection Destruction Events](#collection-destruction-events)
   * [Other Collection Events](#other-collection-events)
-* [`Region` Lifecycle](#region-lifecycle)
-  * [Show View Lifecycle](#show-view-lifecycle)
-  * [Region Lifecycle events](#region-lifecycle-events)
+* [Lifecycle State Methods](#lifecycle-state-methods)
+  * [`isRendered()`](#isrendered)
+  * [`isAttached()`](#isattached)
+* [Views associated with previously rendered or attached DOM](#views-associated-with-previously-rendered-or-attached-dom)
+* [`Region`s and the View Lifecycle](#regions-and-the-view-lifecycle)
+  * [Show View Events](#show-view-events)
+  * [Empty Region Events](#empty-region-events)
 
 ## `View` Lifecycle
 Marionette views defined a number of events during the creation and destruction
@@ -37,9 +41,11 @@ When a view is initialized and then displayed inside a region (using
 | :---: |-----------------|
 |   1   | `before:render` |
 |   2   | `render`        |
-|   3   | `before:attach` |
-|   4   | `attach`        |
-|   5   | `dom:refresh`   |
+|   3*  | `before:attach` |
+|   4*  | `attach`        |
+|   5*  | `dom:refresh`   |
+
+The events marked with "\*" only fire if/when the region's `el` is attached to the DOM.
 
 ### View Destruction Lifecycle
 
@@ -49,9 +55,27 @@ part of the destruction lifecycle.
 | Order |       Event       |
 | :---: |-------------------|
 |   1   |  `before:destroy` |
-|   2   |  `before:detach`  |
-|   3   |  `detach`         |
+|   2*  |  `before:detach`  |
+|   3*  |  `detach`         |
 |   4   |  `destroy`        |
+
+The events marked with "\*" only fire if/when the view was attached to the DOM.
+
+#### ChildView Destruction Lifecycle
+
+The order of the destruction events is dependent on when the view (or a parent view)
+is detached. When a parent attached view is destroyed it will receive the events
+as listed above, but its children will receive both detach events first when the parent
+is detached and the children will be destroyed after the detach is complete.
+
+| Order |       Event       |
+| :---: |-------------------|
+|   1   |  `before:detach`  |
+|   2*  |  `detach`         |
+|   3*  |  `before:destroy` |
+|   4   |  `destroy`        |
+
+The events marked with "\*" only fire if/when the view was attached to the DOM.
 
 ### View Creation Events
 
@@ -155,43 +179,43 @@ These events are fired during the view's destruction and removal from a region.
 #### View `before:destroy`
 
 Triggered just prior to destroying the view, when the view's `destroy()` method has been called.
+The view may or may not be in the DOM at this point.
 
 ```javascript
 var Mn = require('backbone.marionette');
 
 Mn.View.extend({
   onBeforeDestroy: function() {
-    // manipulate the `el` here. it's already
-    // been rendered, and is full of the view's
-    // HTML, ready to go.
+    // custom destroying and non-DOM related cleanup goes here
   }
 });
 ```
 
 #### View `before:detach`
 
-The `View` will trigger the "before:detach" event when the view is rendered and
+The `View` will trigger the `before:detach` event when the view is rendered and
 is about to be removed from the DOM.
-If the view has not been rendered before, this event will not be fired.
-
-#### View `detach`
-The `View` will trigger the "detach" event when the view was rendered and has
-just been destroyed.
-
-#### View `destroy`
-
-Triggered just after the view has been destroyed. At this point, the view has
-been completely removed from the DOM.
+If the view has not been attached to the DOM, this event will not be fired.
 
 ```javascript
 var Mn = require('backbone.marionette');
 
 Mn.View.extend({
-  onDestroy: function() {
-    // custom destroying and cleanup goes here
+  onBeforeDetach: function() {
+    // custom destroying and DOM related cleanup goes here
   }
 });
 ```
+
+#### View `detach`
+
+The `View` will trigger the `detach` event when the view was rendered and has
+just been removed from the DOM.
+
+#### View `destroy`
+
+Triggered just after the view has been destroyed. At this point, the view has
+been completely removed from the DOM.
 
 ### Other View Events
 
@@ -223,7 +247,7 @@ myView.addRegion('regionName', '#selector');
 
 #### View `before:remove:region`
 
-The `View` will trigger a "before:remove:region"
+The `View` will trigger a `before:remove:region`
 event before a region is removed from the view.
 This allows you to perform any cleanup operations before the region is removed.
 
@@ -241,12 +265,12 @@ var MyView = Mn.View.extend({
 });
 
 var myView = new MyView();
-myView.removeRegion("foo");
+myView.removeRegion('foo');
 ```
 
 #### View `remove:region`
 
-The `View` will trigger a "remove:region"
+The `View` will trigger a `remove:region`
 event when a region is removed from the view.
 This allows you to use the region instance one last
 time, or remove the region from an object that has a
@@ -257,14 +281,14 @@ var Mn = require('backbone.marionette');
 
 var view = new Mn.View();
 
-view.on("remove:region", function(name, region) {
+view.on('remove:region', function(name, region) {
   // add the region instance to an object
   delete myObject[name];
 });
 
-view.addRegion("foo", "#bar");
+view.addRegion('foo', '#bar');
 
-view.removeRegion("foo");
+view.removeRegion('foo');
 ```
 
 ## `CollectionView` Lifecycle
@@ -321,7 +345,7 @@ with "+" fire on collections with items.
 #### CollectionView `before:render`
 
 Triggers before the `CollectionView` render process starts. See the
-[`before:render` Documentation](#marionette.view.md#view-before-render) for an
+[`before:render` Documentation](#view-before-render) for an
 example.
 
 #### CollectionView `before:render:empty`
@@ -355,7 +379,7 @@ the attached collection is empty.
 
 This event fires once all the collection's child views have been rendered.  This
 only fires if the collection has at least one item. This may also fire when
-[`reorderOnSort`](#collectionviews-reorderonsort) is false:
+[`reorderOnSort`](./collectionviewadvanced.md#collectionviews-reorderonsort) is false:
 
 ```
 var Bb = require('backbone');
@@ -377,7 +401,7 @@ myView.render();
 #### CollectionView `render`
 
 Fires when the collection has completely finished rendering. See the
-[`render` Documentation](./marionette.view.md#view-render) for more information.
+[`render` Documentation](#view-render) for more information.
 
 ### Collection Destruction Events
 
@@ -423,7 +447,7 @@ This is triggered just before the `emptyView` is removed from the
 `CollectionView`. *This only fires if the attached `collection` has no items.*
 
 The `emptyView` will then go through the its own
-[destruction lifecycle](./marionette.view.md#view-destruction-lifecycle)
+[destruction lifecycle](#view-destruction-lifecycle)
 
 #### CollectionView `before:remove:child`
 
@@ -431,7 +455,7 @@ This is triggered for each `childView` that is removed from the
 `CollectionView`. This can *only* fire if the `collection` contains items.
 
 Each item in the `CollectionView` will undergo the
-[destruction lifecycle](./marionette.view.md#view-destruction-lifecycle)
+[destruction lifecycle](#view-destruction-lifecycle)
 
 #### CollectionView `remove:empty`
 
@@ -451,9 +475,9 @@ Fired once the `CollectionView` has been destroyed and no longer exists.
 
 Collection views can fire other events as part of their normal use.
 
-#### "reorder" / "before:reorder" events
+#### `reorder` / `before:reorder` events
 
-When [`reorderOnSort`](#collectionviews-resortview) is set to `true`, these
+When [`reorderOnSort`](./collectionviewadvanced.md#collectionviews-resortview) is set to `true`, these
 events are fired for the reordering of the collection.
 
 ```javascript
@@ -480,35 +504,46 @@ myView.on({
 myCol.sort()
 ```
 
+## Lifecycle State Methods
 
-## `Region` Lifecycle
+Both `View` and `CollectionView` share methods for checking if the view is attached or rendered.
 
-When you show a view inside a region - either using `region.show(view)` or
-`showChildView('region', view)` - the `Region` will emit events around the view
+### `isRendered()`
+
+This function will return a boolean value reflecting if the view has been rendered.
+
+### `isAttached()`
+
+This function will return a boolean value reflecting if the view believes it is attached.
+This is maintained when attaching a view with a `Region` or during [View instantiation](#views-associated-with-previously-rendered-or-attached-dom).
+If a view is attached by other means this function may not reflect the actual state of attachment.
+To be certain use [`Marionette.isNodeAttached`](./marionette.functions.md#marionetteisnodeattached).
+
+## Views associated with previously rendered or attached DOM
+
+When a view is instantiated, if the View's `el` is set to an existing node
+the view's [`isRendered()`](#isrendered) will return `true` and `before:render`
+and `render` events will not be fired when the view is shown in a Region.
+
+Similarly if the `el` is attached to a node in the DOM the view's [`isAttached()`](#isattached)
+will return `true` and `before:attach`, `attach` and `dom:refresh` will not be fired
+when the view is shown in a Region.
+
+## `Region`s and the View Lifecycle
+
+When you show a view inside a region - either using [`region.show(view)`](./marionette.region.md#showing-a-view) or
+[`showChildView('region', view)`](./marionette.view.md#showing-a-view) - the `Region` will emit events around the view
 events that you can hook into.
 
-### Show View Lifecycle
+### Show View Events
 
 When showing a view inside a region, the region emits a number of events:
 
 | Order |                   Event                    |
 | :---: |--------------------------------------------|
 |   1   |               `before:show`                |
-|   2   | [View Lifecycle](#view-creation-lifecycle) |
+|   2   | [View Creation Lifecycle](#view-creation-lifecycle) |
 |   3   |                   `show`                   |
-
-#### Empty Region Lifecycle
-
-When emptying a region, it will emit destruction events around the view's
-destruction lifecycle:
-
-| Order |                     Event                     |
-| :---: |-----------------------------------------------|
-|   1   |                `before:empty`                 |
-|   2   | [View Lifecycle](#view-destruction-lifecycle) |
-|   3   |                    `empty`                    |
-
-### Region Lifecycle Events
 
 #### Region `before:show`
 
@@ -517,14 +552,27 @@ none of the view rendering will have been performed.
 
 #### Region `show`
 
-Emitted after the view has been rendered and attached to the DOM. This can be
-used to handle any extra manipulation that needs to occur.
+Emitted after the view has been rendered and attached to the DOM (if this
+region is already attached to the DOM). This can be used to handle any
+extra manipulation that needs to occur.
+
+### Empty Region Events
+
+When [emptying a region](./marionette.region.md#emptying-a-region), it will emit destruction events around the view's
+destruction lifecycle:
+
+| Order |                     Event                     |
+| :---: |-----------------------------------------------|
+|   1   |                `before:empty`                 |
+|   2   | [View Destruction Lifecycle](#view-destruction-lifecycle) |
+|   3   |                    `empty`                    |
 
 #### Region `before:empty`
 
 Emitted before the view's destruction process begins. This can occur either by
 calling `region.empty()` or by running `region.show(view)` on a region that's
-displaying another view.
+displaying another view. It will also trigger if the view in the region is
+destroyed.
 
 #### Region `empty`
 

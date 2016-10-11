@@ -14,7 +14,7 @@ without data.
 ## Basic Usage
 
 The basic usage of the `Renderer` is to call the `render` method. This method
-returns a string containing the result of applying the Underscore template 
+returns a string containing the result of applying the Underscore template
 using the `data` object as the context.
 
 ```javascript

@@ -20,9 +20,15 @@ responding to events.
   * [View events and triggers](#view-events-and-triggers)
 * [Child View Events](#child-view-events)
   * [Event Bubbling](#event-bubbling)
+    * [Using CollectionView](#using-collectionview)
+  * [A Child View's Event Prefix](#a-child-views-event-prefix)
   * [Explicit Event Listeners](#explicit-event-listeners)
+    * [Attaching Functions](#attaching-functions)
+    * [Using `CollectionView`'s `childViewEvents`](#using-collectionviews-childviewevents)
   * [Triggering Events on Child Events](#triggering-events-on-child-events)
+    * [Using `CollectionView`'s `childViewTriggers`](#using-collectionviews-childviewtriggers)
 * [Lifecycle Events](#lifecycle-events)
+
 
 ## Triggering and Listening to Events
 
@@ -154,10 +160,10 @@ As before, all arguments passed into `triggerMethod` will make their way into
 the event handler. Using this method ensures there will be no unexpected
 memory leaks.
 
-### View events and triggers
+### View `events` and `triggers`
 
-Views can automatically bind DOM events to methods and View events with `events`
-and `triggers` respectively:
+Views can automatically bind DOM events to methods and View events with [`events`](./marionette.view.md#view-events)
+and [`triggers`](./marionette.view.md#view-triggers) respectively:
 
 ```javascript
 var Mn = require('backbone.marionette');
@@ -226,7 +232,7 @@ methods bound to the `childViewEvents` attribute. This works for built-in
 events, custom events fired with `triggerMethod` and bound events using
 `triggers`.
 
-When using implicit listeners, the `childview:*` event prefix is used which
+When using implicit listeners, the [`childview:*` event prefix](#childvieweventprefix) is used which
 needs to be included as part of the handler:
 
 ```javascript
@@ -289,6 +295,39 @@ var MyList = Mn.CollectionView.extend({
 
 Just like with the `View` and its regions, the event handler will receive the
 `view` that triggered the event as its first argument.
+
+### A Child View's Event Prefix
+
+You can customize the event prefix for events that are forwarded
+through the view. To do this, set the `childViewEventPrefix`
+on the view or collectionview. For more information on the `childViewEventPrefix` see
+[Event bubbling](#childview-event-bubbling-from-child-views)
+
+```javascript
+var Bb = require('backbone');
+var Mn = require('backbone.marionette');
+
+var myCollection = new Bb.Collection([{}]);
+
+var CollectionView = Mn.CollectionView.extend({
+  childViewEventPrefix: 'some:prefix'
+});
+
+var collectionView = new CollectionView({
+  collection: myCollection
+});
+
+collectionView.on('some:prefix:render', function(){
+  // child view was rendered
+});
+
+collectionView.render();
+```
+
+[Live example](https://jsfiddle.net/marionettejs/as33hnk1/)
+
+The `childViewEventPrefix` can be provided in the view definition or
+in the constructor function call, to get a view instance.
 
 ### Explicit Event Listeners
 
@@ -360,12 +399,32 @@ var ParentView = Mn.View.extend({
 
 [Live example](https://jsfiddle.net/marionettejs/pnp1dd8j/)
 
+#### Using `CollectionView`'s `childViewEvents`
+
+```javascript
+var Mn = require('backbone.marionette');
+
+// childViewEvents can be specified as a hash...
+var MyCollectionView = Mn.CollectionView.extend({
+
+  childViewEvents: {
+    // This callback will be called whenever a child is rendered or emits a `render` event
+    render: function() {
+      console.log('A child view has been rendered.');
+    }
+  }
+});
+```
+
+[Live example](https://jsfiddle.net/marionettejs/a2uvcfrp/)
+
 ### Triggering Events on Child Events
 
-Marionette 3 adds a new feature that allows selected events to fire events
-directly, allowing them to be propagated up the view hierarchy more easily and
-explicitly. The values of the hash should be a string of the event to trigger on
-the parent.
+A `childViewTriggers` hash or method permits proxying of child view events without manually
+setting bindings. The values of the hash should be a string of the event to trigger on the parent.
+
+`childViewTriggers` is sugar on top of [`childViewEvents`](#explicit-event-listeners) much
+in the same way that [View `triggers`](./marionette.view.md#view-triggers) are sugar for [View `events`](./marionette.view.md#view-events).
 
 ```javascript
 // The child view fires a custom event, `show:message`
@@ -427,6 +486,54 @@ var GrantParentView = Marionette.View.extend({
 ```
 
 [Live example](https://jsfiddle.net/marionettejs/8eq7vca5/)
+
+#### Using `CollectionView`'s `childViewTriggers`
+
+```javascript
+var Mn = require('backbone.marionette');
+
+// The child view fires a custom event, `show:message`
+var ChildView = Mn.View.extend({
+
+  // Events hash defines local event handlers that in turn may call `triggerMethod`.
+  events: {
+    'click .button': 'onClickButton'
+  },
+
+  // Triggers hash converts DOM events directly to view events catchable on the parent.
+  // Note that `triggers` automatically pass the first argument as the child view.
+  triggers: {
+    'submit form': 'submit:form'
+  },
+
+  onClickButton: function () {
+    // Both `trigger` and `triggerMethod` events will be caught by parent.
+    this.trigger('show:message', 'foo');
+    this.triggerMethod('show:message', 'bar');
+  }
+});
+
+// The parent uses childViewEvents to catch the child view's custom event
+var ParentView = Mn.CollectionView.extend({
+
+  childView: ChildView,
+
+  childViewTriggers: {
+    'show:message': 'child:show:message',
+    'submit:form': 'child:submit:form'
+  },
+
+  onChildShowMessage: function (message) {
+    console.log('A child view fired show:message with ' + message);
+  },
+
+  onChildSubmitForm: function (childView) {
+    console.log('A child view fired submit:form');
+  }
+});
+```
+
+[Live example](https://jsfiddle.net/marionettejs/edhqd2h8/)
 
 ## Lifecycle Events
 

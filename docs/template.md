@@ -33,10 +33,11 @@ a `<h1>` tag.
   * [Rendering a Model](#rendering-a-model)
   * [Rendering a Collection](#rendering-a-collection)
   * [User Interaction with Collections](#user-interaction-with-collections)
-  * [Model/Collection Rendering Rules](#model-collection-rendering-rules)
+  * [Model/Collection Rendering Rules](#modelcollection-rendering-rules)
 * [Template Context](#template-context)
   * [Context Object](#context-object)
   * [Binding of `this`](#binding-of-this)
+* [Serializing Model and Collection Data](#serializing-model-and-collection-data)
 
 ## Rendering a Template
 
@@ -220,7 +221,8 @@ The result of this is mixed into the
 [`templateContext` object](#template-context) and made available to your
 template. Using this means you can setup a wrapper `View` that can act on
 `collectionEvents` but will render its `model` attribute - if your `model` has
-and `items` attribute then that will always be used.
+an `items` attribute then that will always be used. If your view needs to serialize
+by different rules override [`serializeData()`](#serializing-model-and-collection-data).
 
 ## Template Context
 
@@ -258,7 +260,7 @@ The `templateContext` attribute can also
 
 ### Context Function
 
-The `templateContext` object can also be a function returning an object. This is
+The `templateContext` object can also be a [function returning an object](basics.md#functions-returning-values). This is
 useful when you want to access
 [information from the surrounding view](#binding-of-this) (e.g. model methods).
 
@@ -290,7 +292,7 @@ the [documentation for `Marionette.Object`](./marionette.object.md#getoption).
 ### Binding of `this`
 
 When using functions in the `templateContext` it's important to know that `this`
-is _bound to the result of `serializeData()` and **not the view**_. An
+is _bound to the result of [`serializeData()`](#serializing-model-and-collection-data) and **not the view**_. An
 illustrative example:
 
 ```javascript
@@ -314,3 +316,63 @@ The above code will fail because the context object in the template
 _cannot see_ the view's `getOption`. This would also apply to functions
 returned by a `templateContext` function, even though the function itself is
 bound to the view context.
+
+## Serializing Model and Collection Data
+
+The `serializeData` method is used to convert a View's `model` or `collection`
+into a usable form for a template. It follows the [Model/Collection Rendering Rules](#modelcollection-rendering-rules)
+to determine how to serialize the data.
+
+The result of `serializeData` is included in the data passed to
+the view's template.
+
+Let's take a look at some examples of how serializing data works.
+
+```javascript
+var myModel = new MyModel({foo: 'bar'});
+
+new MyView({
+  template: '#myItemTemplate',
+  model: myModel
+});
+
+MyView.render();
+```
+
+```html
+<script id="myItemTemplate" type="template">
+  Foo is: <%= foo %>
+</script>
+```
+
+[Live example](https://jsfiddle.net/marionettejs/brp0t7pq/)
+
+If the serialization is a collection, the results are passed in as an
+`items` array:
+
+```javascript
+var myCollection = new MyCollection([{foo: 'bar'}, {foo: 'baz'}]);
+
+new MyView({
+  template: '#myCollectionTemplate',
+  collection: myCollection
+});
+
+MyView.render();
+```
+
+```html
+<script id="myCollectionTemplate" type="template">
+  <% _.each(items, function(item){ %>
+    Foo is: <%= foo %>
+  <% }); %>
+</script>
+```
+
+[Live example](https://jsfiddle.net/marionettejs/yv3hrvkf/)
+
+If you need to serialize the View's `model` or `collection` in a custom way,
+then you should override either `serializeModel` or `serializeCollection`.
+
+On the other hand, you should not use this method to add arbitrary extra data
+to your template. Instead, use [View.templateContext](./template.md#templatecontext).

@@ -223,10 +223,6 @@ const ViewMixin = {
   },
 
   _childViewEventHandler(eventName, ...args) {
-    const prefix = _.result(this, 'childViewEventPrefix');
-
-    const childEventName = prefix + ':' + eventName;
-
     const childViewEvents = this.normalizeMethods(this._childViewEvents);
 
     // call collectionView childViewEvent if defined
@@ -242,7 +238,13 @@ const ViewMixin = {
       this.triggerMethod(childViewTriggers[eventName], ...args);
     }
 
-    this.triggerMethod(childEventName, ...args);
+    const prefix = _.result(this, 'childViewEventPrefix');
+
+    if (prefix !== false) {
+      const childEventName = prefix + ':' + eventName;
+
+      this.triggerMethod(childEventName, ...args);
+    }
   }
 };
 

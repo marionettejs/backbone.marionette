@@ -472,20 +472,6 @@ describe('region', function() {
           expect(this.$parentEl).to.contain.$html(this.view2.$el.html());
         });
       });
-
-      describe('and calling attachHtml a second time', function() {
-        beforeEach(function() {
-          this.region.attachHtml(this.view, true);
-        });
-
-        it('should append the view HTML to the parent "el"', function() {
-          expect(this.$parentEl).to.contain.$html(this.view.$el.html());
-        });
-
-        it('should remove the region\'s "el" from the DOM', function() {
-          expect(this.$parentEl).to.not.contain.$html(this.regionHtml);
-        });
-      });
     });
 
     describe('and the view is detached', function() {

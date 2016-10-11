@@ -132,11 +132,11 @@ var App = Mn.Application.extend({
     console.log('Initialize');
   },
 
-  onBeforeStart: function(options) {
-    this.model = new MyModel(options.data);
+  onBeforeStart: function() {
+    this.model = new MyModel(this.options.data); 
   },
 
-  onStart: function(options) {
+  onStart: function() {
     this.showView(new MyView({model: this.model}));
     Bb.history.start();
   }
@@ -146,7 +146,7 @@ var app = new App(options);
 app.start();
 ```
 
-[Live example](https://jsfiddle.net/marionettejs/yovad75L/)
+[Live example](https://jsfiddle.net/marionettejs/ny59rs7b/)
 
 As we'll see below, the `options` object is passed into the Application as an
 argument to `start`.
@@ -162,6 +162,21 @@ allows you to provide extra configuration for various parts of your app througho
 initialization sequence.
 
 ```javascript
+var App = Mn.Application.extend({
+  initialize: function(options) {
+    console.log('Initialize');
+  },
+
+  onBeforeStart: function(app, options) {
+    this.model = new MyModel(options.data); 
+  },
+
+  onStart: function(app, options) {
+    this.showView(new MyView({model: this.model}));
+    Bb.history.start();
+  }
+});
+
 var app = new App();
 
 app.start({
@@ -171,6 +186,8 @@ app.start({
   }
 });
 ```
+
+[Live example](https://jsfiddle.net/marionettejs/k05dctyt/)
 
 ## Application Methods
 

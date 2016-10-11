@@ -12,7 +12,7 @@ const Container = function(views) {
   _.each(views, _.bind(this.add, this));
 };
 
-emulateCollection(Container.prototype, '_views');
+emulateCollection(Container, '_views');
 
 // Container Methods
 // -----------------

@@ -103,7 +103,11 @@ const Region = MarionetteObject.extend({
       triggerMethodOn(view, 'before:attach', view);
     }
 
-    this.attachHtml(view, shouldReplaceEl);
+    if (shouldReplaceEl) {
+      this._replaceEl(view);
+    } else {
+      this.attachHtml(view);
+    }
 
     if (shouldTriggerAttach) {
       view._isAttached = true;
@@ -193,13 +197,8 @@ const Region = MarionetteObject.extend({
 
   // Override this method to change how the new view is appended to the `$el` that the
   // region is managing
-  attachHtml(view, shouldReplace) {
-    if (shouldReplace) {
-      // replace the region's node with the view's node
-      this._replaceEl(view);
-    } else {
-      this.el.appendChild(view.el);
-    }
+  attachHtml(view) {
+    this.el.appendChild(view.el);
   },
 
   // Destroy the current view, if there is one. If there is no current view, it does

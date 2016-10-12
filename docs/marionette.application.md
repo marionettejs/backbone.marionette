@@ -133,7 +133,7 @@ var App = Mn.Application.extend({
   },
 
   onBeforeStart: function() {
-    this.model = new MyModel(this.options.data); 
+    this.model = new MyModel(this.options.data);
   },
 
   onStart: function() {
@@ -168,7 +168,7 @@ var App = Mn.Application.extend({
   },
 
   onBeforeStart: function(app, options) {
-    this.model = new MyModel(options.data); 
+    this.model = new MyModel(options.data);
   },
 
   onStart: function(app, options) {

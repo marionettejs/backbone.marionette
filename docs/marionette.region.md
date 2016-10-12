@@ -180,7 +180,7 @@ myView.addRegions({
 
 ### Removing Regions
 
-You can remove all of the regions from a view by calling `removeRegions` or you can remove a region by name using `removeRegion`.
+You can remove all of the regions from a view by calling `removeRegions` or you can remove a region by name using `removeRegion`. When a region is removed the region will be destroyed.
 
 ```javascript
 var Mn = require('backbone.marionette');
@@ -196,7 +196,9 @@ var MyView = Mn.View.extend({
 var myView = new MyView();
 
 // remove only the main region
-myView.removeRegion('main');
+var mainRegion = myView.removeRegion('main');
+
+mainRegion.isDestroyed(); // -> true
 
 // remove all regions
 myView.removeRegions();

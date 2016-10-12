@@ -232,7 +232,9 @@ methods bound to the `childViewEvents` attribute. This works for built-in
 events, custom events fired with `triggerMethod` and bound events using
 `triggers`.
 
-When using implicit listeners, the [`childview:*` event prefix](#childvieweventprefix) is used which
+**Note**: Automatic event bubbling can be disabled by setting [`childViewEventPrefix`](#a-child-views-event-prefix) to `false`.
+
+When using implicit listeners, the [`childview:*` event prefix](#a-child-views-event-prefix) is used which
 needs to be included as part of the handler:
 
 ```javascript
@@ -301,7 +303,10 @@ Just like with the `View` and its regions, the event handler will receive the
 You can customize the event prefix for events that are forwarded
 through the view. To do this, set the `childViewEventPrefix`
 on the view or collectionview. For more information on the `childViewEventPrefix` see
-[Event bubbling](#childview-event-bubbling-from-child-views)
+[Event bubbling](#event-bubbling).
+
+The default value for `childViewEventPrefix` is `childview`. Setting this property to
+`false` will disable [automatic event bubbling](#event-bubbling).
 
 ```javascript
 var Bb = require('backbone');

@@ -1,3 +1,28 @@
+### v3.1.0 [view commit logs](https://github.com/marionettejs/backbone.marionette/compare/v3.0.0...v3.1.0)
+
+#### General
+* Performance optimizations for `triggerMethod`, `mergeOptions` and other internal event handlers
+* Significant render and removal optimizations for CollectionView utilizing Backbone's `update` event
+
+#### Features
+* `Region.detachView` and `View.detachChildView` were added for removing a view from a region without destroying it. This is preferred to the now deprecated `preventDestroy` region show/empty option
+* `childViewEventPrefix: false` will disable auto-proxying of child events to the parent view
+* `Application` will now accept a region definition object literal as an instantiation option
+* Regions are now destroyed when removed from a View
+
+#### Fixes
+* Fixed an issue with Lodash 4 compatibility related to behavior events
+
+#### Deprecations
+* Region `empty`'s `preventDestroy` option was deprecated in favor of `detachView`
+* A region definition object literal's `selector` key was deprecated due to redundacy in favor of the existing key `el`
+
+#### Misc
+* Many documentation fixes for v3
+* Removed shouldReplace logic from `attachHtml` so overriding no longer breaks `replaceElement` functionality
+* Exposed `View.normalizeUIString` for external libraries
+* Improvements were made for Views initialized with existing DOM elements
+
 ### v3.0.0
 
 Version 3.0.0 of Marionette has arrived and contains many improvements over version

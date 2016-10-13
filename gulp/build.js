@@ -10,7 +10,8 @@ import runSequence from 'run-sequence';
 import { rollup } from 'rollup';
 import babel from 'rollup-plugin-babel';
 import json from 'rollup-plugin-json';
-import preset from 'babel-preset-es2015-rollup';
+import preset from 'babel-preset-es2015';
+// import transformRegenerator from 'babel-plugin-transform-regenerator';
 
 import banner from  './_banner';
 import {name} from '../package.json';
@@ -40,7 +41,7 @@ function bundle(opts) {
       json(),
       babel({
         sourceMaps: true,
-        presets: [ preset ],
+        presets: [['es2015', {modules: false}]],
         babelrc: false
       })
     ]

@@ -8,7 +8,6 @@ import nodeResolve from 'rollup-plugin-node-resolve';
 import nodeGlobals from 'rollup-plugin-node-globals';
 import commonjs from 'rollup-plugin-commonjs';
 import json from 'rollup-plugin-json';
-import preset from 'babel-preset-es2015-rollup';
 import opn from 'opn';
 
 function bundle() {
@@ -22,7 +21,7 @@ function bundle() {
       json(),
       babel({
         sourceMaps: true,
-        presets: [ preset ],
+        presets: [ ['es2015', {modules: false}] ],
         babelrc: false,
         exclude: 'node_modules/**'
       })

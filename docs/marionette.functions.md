@@ -126,14 +126,18 @@ var Obj = Mn.Object.extend({
     this.options = options;
     var foo = Mn.getOption(this, 'foo');
     console.log(foo);
-    var foo2 this.getOption('foo');
+    var foo2 = this.getOption('foo');
     console.log(foo2);
   }
 });
 
-var obj1 = new Obj(); // => "bar"
+var obj1 = new Obj();
+// => "bar"
+// => "bar"
 
-var obj2 = new Obj({}, { foo: 'quux' }); // => "quux"
+var obj2 = new Obj({}, { foo: 'quux' });
+// => "quux"
+// => "quux"
 ```
 
 [Live example](https://jsfiddle.net/marionettejs/4rt6exaq/)

@@ -136,8 +136,8 @@ describe('item view', function() {
       expect(this.attachElContentStub).to.have.been.calledOnce.and.calledWith(this.template);
     });
 
-    it('should pass template stub, data and view instance to `Marionette.Renderer.Render`', function() {
-      expect(Marionette.Renderer.render).to.have.been.calledWith(this.templateStub, {}, this.itemView);
+    it('should pass template stub and data to `Marionette.Renderer.Render`', function() {
+      expect(Marionette.Renderer.render).to.have.been.calledWith(this.templateStub, {});
     });
   });
 

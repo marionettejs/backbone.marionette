@@ -162,8 +162,8 @@ describe('composite view', function() {
       expect(this.compositeView.$el).to.contain.$text('baz');
     });
 
-    it('should pass template fn, data, and view instance to Marionette.Renderer.Render', function() {
-      expect(Marionette.Renderer.render).to.have.been.calledWith(this.templateFn, {foo: 'bar'}, this.compositeView);
+    it('should pass template fn and data to Marionette.Renderer.Render', function() {
+      expect(Marionette.Renderer.render).to.have.been.calledWith(this.templateFn, {foo: 'bar'});
     });
   });
 

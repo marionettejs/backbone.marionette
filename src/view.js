@@ -144,7 +144,7 @@ const View = Backbone.View.extend({
     const data = this.mixinTemplateContext(this.serializeData());
 
     // Render and add to el
-    const html = Renderer.render(template, data, this);
+    const html = Renderer.render(template, data);
     this.attachElContent(html);
   },
 

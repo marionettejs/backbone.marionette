@@ -124,20 +124,27 @@ var Obj = Mn.Object.extend({
 
   initialize: function(attributes, options){
     this.options = options;
-    var foo = Mn.getOption(this, 'foo');
+    var foo = this.getOption('foo');
     console.log(foo);
-    var foo2 = this.getOption('foo');
-    console.log(foo2);
   }
 });
 
-var obj1 = new Obj();
-// => "bar"
-// => "bar"
+var obj1 = new Obj(); // => 'bar'
+var obj2 = new Obj({}, { foo: 'quux' }); // => 'quux'
 
-var obj2 = new Obj({}, { foo: 'quux' });
-// => "quux"
-// => "quux"
+
+var Model = Backbone.Model.extend({
+  foo: 'bar',
+
+  initialize(attributes, options) {
+    this.options = options;
+    var foo = Mn.getOption(this, 'foo');
+    console.log(foo);
+  }
+});
+
+var model1 = new Model(); // => 'bar'
+var model2 = new Model({}, { foo: 'quux' }); // => 'quux'
 ```
 
 [Live example](https://jsfiddle.net/marionettejs/4rt6exaq/)

@@ -124,16 +124,14 @@ var Mn = require('backbone.marionette');
 var Obj = Mn.Object.extend({
   foo: 'bar',
 
-  initialize: function(attributes, options){
-    this.options = options;
+  initialize: function(){
     var foo = this.getOption('foo');
     console.log(foo);
   }
 });
 
 var obj1 = new Obj(); // => 'bar'
-var obj2 = new Obj({}, { foo: 'quux' }); // => 'quux'
-
+var obj2 = new Obj({ foo: 'quux' }); // => 'quux'
 ```
 
 [Live example](https://jsfiddle.net/marionettejs/271nn9ht/)

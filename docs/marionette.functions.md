@@ -115,6 +115,8 @@ myView.getOption('weight');  // light
 Retrieve an object's attribute either directly from the object, or from
 the object's `this.options`, with `this.options` taking precedence.
 All Marionette Classes, such as the Views, come with this method.
+`this.getOption` is used for instance of Marionette class.
+`Marionette.getOption` is used for instance of Backbone class.
 
 ```javascript
 var Mn = require('backbone.marionette');
@@ -124,16 +126,35 @@ var Obj = Mn.Object.extend({
 
   initialize: function(attributes, options){
     this.options = options;
-    var foo = Mn.getOption(this, 'foo');
+    var foo = this.getOption('foo');
     console.log(foo);
-    var foo2 this.getOption('foo');
-    console.log(foo2);
   }
 });
 
-var obj1 = new Obj(); // => "bar"
+var obj1 = new Obj(); // => 'bar'
+var obj2 = new Obj({}, { foo: 'quux' }); // => 'quux'
 
-var obj2 = new Obj({}, { foo: 'quux' }); // => "quux"
+```
+
+[Live example](https://jsfiddle.net/marionettejs/271nn9ht/)
+
+
+```javascript
+var Bb = require('backbone');
+var Mn = require('backbone.marionette');
+
+var Model = Bb.Model.extend({
+  foo: 'bar',
+
+  initialize(attributes, options) {
+    this.options = options;
+    var foo = Mn.getOption(this, 'foo');
+    console.log(foo);
+  }
+});
+
+var model1 = new Model(); // => 'bar'
+var model2 = new Model({}, { foo: 'quux' }); // => 'quux'
 ```
 
 [Live example](https://jsfiddle.net/marionettejs/4rt6exaq/)

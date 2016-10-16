@@ -53,7 +53,8 @@ only needs to be a function that returns valid HTML as a string from the
 ## Custom Template Selection And Rendering
 
 By default, the renderer will take a jQuery selector object as the first
-parameter, and a JSON data object as the optional second parameter. It then uses
+parameter, and a JSON data object as the optional second parameter, and View
+object or CompositeView object as the optional third parameter. It then uses
 the `TemplateCache` to load the template by the specified selector, and renders
 the template with the data provided (if any) using underscore templates.
 
@@ -66,7 +67,8 @@ work however you want:
 ```javascript
 var Mn = require('backbone.marionette');
 
-Mn.Renderer.render = function(template, data){
+Mn.Renderer.render = function(template, data, view){
+  template += view.getState();
   return $(template).tmpl(data);
 };
 ```

@@ -134,8 +134,16 @@ var Obj = Mn.Object.extend({
 var obj1 = new Obj(); // => 'bar'
 var obj2 = new Obj({}, { foo: 'quux' }); // => 'quux'
 
+```
 
-var Model = Backbone.Model.extend({
+[Live example](https://jsfiddle.net/marionettejs/271nn9ht/)
+
+
+```javascript
+var Bb = require('backbone');
+var Mn = require('backbone.marionette');
+
+var Model = Bb.Model.extend({
   foo: 'bar',
 
   initialize(attributes, options) {

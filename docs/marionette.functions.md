@@ -115,6 +115,8 @@ myView.getOption('weight');  // light
 Retrieve an object's attribute either directly from the object, or from
 the object's `this.options`, with `this.options` taking precedence.
 All Marionette Classes, such as the Views, come with this method.
+`this.getOption` is used for Marionette class instance.
+`Marionette.getOption` is used for Backbone class instance.
 
 ```javascript
 var Mn = require('backbone.marionette');

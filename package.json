@@ -75,7 +75,7 @@
     "mocha": "3.1.2",
     "opn": "4.0.2",
     "rollup": "0.36.3",
-    "rollup-plugin-babel": "2.6.1 ",
+    "rollup-plugin-babel": "2.6.1",
     "rollup-plugin-commonjs": "5.0.5",
     "rollup-plugin-json": "2.0.2",
     "rollup-plugin-multi-entry": "2.0.1",

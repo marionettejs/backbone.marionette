@@ -45,6 +45,7 @@
     "no-multi-str": 2,
     "no-multiple-empty-lines": 2,
     "no-new": 2,
+    "no-multi-spaces": "error",
     "no-proto": 2,
     "no-script-url": 2,
     "no-sequences": 2,

@@ -33,8 +33,7 @@
     "CONTRIBUTING.md",
     "gulpfile.babel.js",
     "SpecRunner.html",
-    "upgradeGuide.md",
-    "sauce-runner.js"
+    "upgradeGuide.md"
   ],
   "dependencies": {
     "backbone.radio": "^2.0.0"

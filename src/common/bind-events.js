@@ -13,7 +13,7 @@
 // configuration. Multiple handlers can be separated by a space. A
 // function can be supplied instead of a string handler name.
 
-import _               from 'underscore';
+import _ from 'underscore';
 import MarionetteError from '../error';
 
 // Bind/unbind the event to handlers specified as a string of

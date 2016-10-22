@@ -173,7 +173,7 @@ describe('view mixin', function() {
       this.presetsStub = sinon.stub().returns(this.presets);
 
       this.View = Marionette.View.extend();
-      this.ViewPresets   = Marionette.View.extend({options: this.presets});
+      this.ViewPresets = Marionette.View.extend({options: this.presets});
       this.ViewPresetsFn = Marionette.View.extend({options: this.presetsStub});
     });
 

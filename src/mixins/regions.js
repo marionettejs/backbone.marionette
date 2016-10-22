@@ -15,7 +15,7 @@ export default {
   _initRegions() {
 
     // init regions hash
-    this.regions =  this.regions || {};
+    this.regions = this.regions || {};
     this._regions = {};
 
     this.addRegions(_.result(this, 'regions'));

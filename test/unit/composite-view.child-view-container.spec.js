@@ -2,8 +2,8 @@ describe('composite view - childViewContainer', function() {
   'use strict';
 
   beforeEach(function() {
-    this.modelOne   = new Backbone.Model({foo: 'bar'});
-    this.modelTwo   = new Backbone.Model({foo: 'baz'});
+    this.modelOne = new Backbone.Model({foo: 'bar'});
+    this.modelTwo = new Backbone.Model({foo: 'baz'});
     this.collection = new Backbone.Collection([this.modelOne, this.modelTwo]);
 
     this.templateFn = _.template('<div id="foo"></div>');

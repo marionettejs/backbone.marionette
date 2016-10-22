@@ -907,7 +907,7 @@ describe('composite view', function() {
   describe('when rendering with a false template', function() {
     beforeEach(function() {
       this.onBeforeRenderStub = this.sinon.stub();
-      this.onRenderStub       = this.sinon.stub();
+      this.onRenderStub = this.sinon.stub();
 
       this.CompositeView = Marionette.CompositeView.extend({
         template: false,
@@ -921,12 +921,12 @@ describe('composite view', function() {
 
       this.compositeView = new this.CompositeView();
 
-      this.marionetteRendererSpy   = this.sinon.spy(Marionette.Renderer, 'render');
-      this.triggerSpy              = this.sinon.spy(this.compositeView, 'trigger');
-      this.serializeDataSpy        = this.sinon.spy(this.compositeView, 'serializeData');
+      this.marionetteRendererSpy = this.sinon.spy(Marionette.Renderer, 'render');
+      this.triggerSpy = this.sinon.spy(this.compositeView, 'trigger');
+      this.serializeDataSpy = this.sinon.spy(this.compositeView, 'serializeData');
       this.mixinTemplateContextSpy = this.sinon.spy(this.compositeView, 'mixinTemplateContext');
-      this.attachElContentSpy      = this.sinon.spy(this.compositeView, 'attachElContent');
-      this.bindUIElementsSpy       = this.sinon.spy(this.compositeView, 'bindUIElements');
+      this.attachElContentSpy = this.sinon.spy(this.compositeView, 'attachElContent');
+      this.bindUIElementsSpy = this.sinon.spy(this.compositeView, 'bindUIElements');
       this.compositeView.render();
     });
 

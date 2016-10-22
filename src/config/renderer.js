@@ -1,9 +1,9 @@
 // Renderer
 // --------
 
-import _               from 'underscore';
+import _ from 'underscore';
 import MarionetteError from '../error';
-import TemplateCache   from '../template-cache';
+import TemplateCache from '../template-cache';
 
 // Render a template with data by passing in the template
 // selector and the data to render.

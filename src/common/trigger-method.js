@@ -1,7 +1,7 @@
 // Trigger Method
 // --------------
 
-import _         from 'underscore';
+import _ from 'underscore';
 import getOption from './get-option';
 
 // split the event name on the ":"

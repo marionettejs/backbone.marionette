@@ -6,12 +6,12 @@
 // Behaviors allow you to blackbox View specific interactions
 // into portable logical chunks, keeping your views simple and your code DRY.
 
-import _                  from 'underscore';
+import _ from 'underscore';
 import getUniqueEventName from './utils/get-unique-event-name';
-import MarionetteObject   from './object';
-import DelegateEntityEventsMixin      from './mixins/delegate-entity-events';
-import TriggersMixin      from './mixins/triggers';
-import UIMixin            from './mixins/ui';
+import MarionetteObject from './object';
+import DelegateEntityEventsMixin from './mixins/delegate-entity-events';
+import TriggersMixin from './mixins/triggers';
+import UIMixin from './mixins/ui';
 
 const ClassOptions = [
   'collectionEvents',

@@ -4,8 +4,8 @@ describe('Marionette.bindEntityEvents', function() {
   beforeEach(function() {
     this.handleFooStub = this.sinon.stub();
     this.handleBarStub = this.sinon.stub();
-    this.listenToStub  = this.sinon.stub();
-    this.entityStub    = this.sinon.stub();
+    this.listenToStub = this.sinon.stub();
+    this.entityStub = this.sinon.stub();
 
     this.target = {
       handleFoo: this.handleFooStub,

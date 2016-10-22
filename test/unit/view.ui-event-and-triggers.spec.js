@@ -3,9 +3,9 @@ describe('view ui event trigger configuration', function() {
 
   describe('@ui syntax within events and triggers', function() {
     beforeEach(function() {
-      this.fooHandlerStub       = this.sinon.stub();
-      this.barHandlerStub       = this.sinon.stub();
-      this.notBarHandlerStub    = this.sinon.stub();
+      this.fooHandlerStub = this.sinon.stub();
+      this.barHandlerStub = this.sinon.stub();
+      this.notBarHandlerStub = this.sinon.stub();
       this.fooBarBazHandlerStub = this.sinon.stub();
 
       this.templateFn = _.template('<div id="foo"></div><div id="bar"></div><div id="baz"></div>');

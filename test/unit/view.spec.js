@@ -2,9 +2,9 @@ describe('item view', function() {
   'use strict';
 
   beforeEach(function() {
-    this.modelData      = {foo: 'bar'};
+    this.modelData = {foo: 'bar'};
     this.collectionData = [{foo: 'bar'}, {foo: 'baz'}];
-    this.model      = new Backbone.Model(this.modelData);
+    this.model = new Backbone.Model(this.modelData);
     this.collection = new Backbone.Collection(this.collectionData);
 
     this.template = 'foobar';
@@ -52,7 +52,7 @@ describe('item view', function() {
   describe('when rendering with a false template', function() {
     beforeEach(function() {
       this.onBeforeRenderStub = this.sinon.stub();
-      this.onRenderStub       = this.sinon.stub();
+      this.onRenderStub = this.sinon.stub();
 
       this.View = Marionette.View.extend({
         template: false,
@@ -66,12 +66,12 @@ describe('item view', function() {
 
       this.view = new this.View();
 
-      this.marionetteRendererSpy   = this.sinon.spy(Marionette.Renderer, 'render');
-      this.triggerSpy              = this.sinon.spy(this.view, 'trigger');
-      this.serializeDataSpy        = this.sinon.spy(this.view, 'serializeData');
+      this.marionetteRendererSpy = this.sinon.spy(Marionette.Renderer, 'render');
+      this.triggerSpy = this.sinon.spy(this.view, 'trigger');
+      this.serializeDataSpy = this.sinon.spy(this.view, 'serializeData');
       this.mixinTemplateContextSpy = this.sinon.spy(this.view, 'mixinTemplateContext');
-      this.attachElContentSpy      = this.sinon.spy(this.view, 'attachElContent');
-      this.bindUIElementsSpy       = this.sinon.spy(this.view, 'bindUIElements');
+      this.attachElContentSpy = this.sinon.spy(this.view, 'attachElContent');
+      this.bindUIElementsSpy = this.sinon.spy(this.view, 'bindUIElements');
 
       this.view.render();
     });
@@ -146,7 +146,7 @@ describe('item view', function() {
       this.onBeforeRenderStub = this.sinon.spy(function() {
         return this.isRendered();
       });
-      this.onRenderStub       = this.sinon.spy(function() {
+      this.onRenderStub = this.sinon.spy(function() {
         return this.isRendered();
       });
 
@@ -283,9 +283,9 @@ describe('item view', function() {
       this.view = new this.View();
       this.view.render();
 
-      this.removeSpy        = this.sinon.spy(this.view, '_removeElement');
+      this.removeSpy = this.sinon.spy(this.view, '_removeElement');
       this.stopListeningSpy = this.sinon.spy(this.view, 'stopListening');
-      this.triggerSpy       = this.sinon.spy(this.view, 'trigger');
+      this.triggerSpy = this.sinon.spy(this.view, 'trigger');
 
       this.sinon.spy(this.view, 'destroy');
       this.view.destroy();

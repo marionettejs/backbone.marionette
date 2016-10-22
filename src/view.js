@@ -1,13 +1,13 @@
 // View
 // ---------
 
-import _                  from 'underscore';
-import Backbone           from 'backbone';
-import isNodeAttached     from './common/is-node-attached';
-import monitorViewEvents  from './common/monitor-view-events';
-import ViewMixin          from './mixins/view';
-import RegionsMixin       from './mixins/regions';
-import Renderer           from './config/renderer';
+import _ from 'underscore';
+import Backbone from 'backbone';
+import isNodeAttached from './common/is-node-attached';
+import monitorViewEvents from './common/monitor-view-events';
+import ViewMixin from './mixins/view';
+import RegionsMixin from './mixins/regions';
+import Renderer from './config/renderer';
 
 const ClassOptions = [
   'behaviors',

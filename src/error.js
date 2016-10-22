@@ -1,7 +1,7 @@
 // Error
 // -----
 
-import _      from 'underscore';
+import _ from 'underscore';
 import extend from './utils/extend';
 import {version} from '../package.json';
 

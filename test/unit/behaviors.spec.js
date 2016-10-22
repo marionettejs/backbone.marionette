@@ -208,9 +208,9 @@ describe('Behaviors', function() {
 
   describe('behavior events', function() {
     beforeEach(function() {
-      this.fooClickStub  = this.sinon.stub();
-      this.barClickStub  = this.sinon.stub();
-      this.bazClickStub  = this.sinon.stub();
+      this.fooClickStub = this.sinon.stub();
+      this.barClickStub = this.sinon.stub();
+      this.bazClickStub = this.sinon.stub();
       this.viewClickStub = this.sinon.stub();
 
       this.behaviors = {
@@ -264,7 +264,7 @@ describe('Behaviors', function() {
         })
       };
 
-      this.model      = new Backbone.Model();
+      this.model = new Backbone.Model();
       this.collection = new Backbone.Collection();
 
       this.View = Marionette.View.extend({
@@ -328,12 +328,12 @@ describe('Behaviors', function() {
   describe('behavior UI', function() {
     beforeEach(function() {
       var suite = this;
-      this.onRenderStub       = this.sinon.stub();
+      this.onRenderStub = this.sinon.stub();
       this.onBeforeAttachStub = this.sinon.stub();
-      this.onAttachStub       = this.sinon.stub();
-      this.onDestroyStub      = this.sinon.stub();
-      this.onFooClickStub     = this.sinon.stub();
-      this.onBarClickStub     = this.sinon.stub();
+      this.onAttachStub = this.sinon.stub();
+      this.onDestroyStub = this.sinon.stub();
+      this.onFooClickStub = this.sinon.stub();
+      this.onBarClickStub = this.sinon.stub();
 
       this.behaviors = {
         foo: Marionette.Behavior.extend({
@@ -370,7 +370,7 @@ describe('Behaviors', function() {
           childView: this.View
         });
 
-        this.collection     = new Backbone.Collection([{}]);
+        this.collection = new Backbone.Collection([{}]);
         this.collectionView = new CollectionView({collection: this.collection});
 
         this.setFixtures('<div id="region"></div>');
@@ -589,9 +589,9 @@ describe('Behaviors', function() {
   describe('behavior model events', function() {
     beforeEach(function() {
       var suite = this;
-      this.handleModelChangeStub     = this.sinon.stub();
+      this.handleModelChangeStub = this.sinon.stub();
       this.handleCollectionResetStub = this.sinon.stub();
-      this.handleModelFooChangeStub  = this.sinon.stub();
+      this.handleModelFooChangeStub = this.sinon.stub();
 
       this.behaviors = {
         foo: Marionette.Behavior.extend({
@@ -736,15 +736,15 @@ describe('Behaviors', function() {
     beforeEach(function() {
       var suite = this;
 
-      this.initializeStub        = this.sinon.stub();
-      this.viewOnRenderStub      = this.sinon.stub();
-      this.fooClickStub          = this.sinon.stub();
-      this.barOnRenderStub       = this.sinon.stub();
-      this.barClickStub          = this.sinon.stub();
-      this.barModelChangeStub    = this.sinon.stub();
+      this.initializeStub = this.sinon.stub();
+      this.viewOnRenderStub = this.sinon.stub();
+      this.fooClickStub = this.sinon.stub();
+      this.barOnRenderStub = this.sinon.stub();
+      this.barClickStub = this.sinon.stub();
+      this.barModelChangeStub = this.sinon.stub();
       this.barCollectionSyncStub = this.sinon.stub();
-      this.viewOnRenderStub      = this.sinon.stub();
-      this.bazClickStub          = this.sinon.stub();
+      this.viewOnRenderStub = this.sinon.stub();
+      this.bazClickStub = this.sinon.stub();
 
       this.behaviors = {
         foo: Marionette.Behavior.extend({
@@ -786,7 +786,7 @@ describe('Behaviors', function() {
         }
       });
 
-      this.model      = new Backbone.Model();
+      this.model = new Backbone.Model();
       this.collection = new Backbone.Collection();
 
       this.view = new this.View({

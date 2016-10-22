@@ -17,11 +17,11 @@
 //
 // You can also add standard routes to an AppRouter.
 
-import Backbone                from 'backbone';
-import _                       from 'underscore';
-import { triggerMethod }       from './common/trigger-method';
-import MarionetteError         from './error';
-import CommonMixin             from './mixins/common';
+import Backbone from 'backbone';
+import _ from 'underscore';
+import { triggerMethod } from './common/trigger-method';
+import MarionetteError from './error';
+import CommonMixin from './mixins/common';
 
 const ClassOptions = [
   'appRoutes',

@@ -1537,8 +1537,8 @@ describe('collection view', function() {
   describe('when a collection view is not rendered', function() {
     beforeEach(function() {
       var suite = this;
-      this.Model       = Backbone.Model.extend({});
-      this.Collection  = Backbone.Collection.extend({model: this.Model});
+      this.Model = Backbone.Model.extend({});
+      this.Collection = Backbone.Collection.extend({model: this.Model});
       this.CollectionView = this.CollectionView.extend({
         tagName: 'ul'
       });
@@ -1559,8 +1559,8 @@ describe('collection view', function() {
         suite.collection.trigger('sync');
       };
 
-      this.model1     = new this.Model({monkey: 'island'});
-      this.model2     = new this.Model({lechuck: 'tours'});
+      this.model1 = new this.Model({monkey: 'island'});
+      this.model2 = new this.Model({lechuck: 'tours'});
       this.collection = new this.Collection([this.model1]);
 
       this.collectionView = new this.CollectionView({

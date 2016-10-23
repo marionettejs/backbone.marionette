@@ -44,14 +44,12 @@ function bundle() {
         exclude: 'node_modules/**'
       })
     ]
-  }).then(bundle => {
-    return bundle.write({
-      format: 'iife',
-      sourceMap: true,
-      moduleName: 'MnTests',
-      dest: './tmp/__spec-build.js'
-    }).then(livereload.reload('./tmp/__spec-build.js'));
-  });
+  }).then(bundle => bundle.write({
+    format: 'iife',
+    sourceMap: true,
+    moduleName: 'MnTests',
+    dest: './tmp/__spec-build.js'
+  }).then(livereload.reload('./tmp/__spec-build.js')));
 }
 
 function browserWatch() {

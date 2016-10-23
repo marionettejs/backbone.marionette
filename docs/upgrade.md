@@ -234,3 +234,35 @@ standard JavaScript module loaders e.g.
 [Webpack](./installation.md#quick-start-using-npm-and-webpack) or
 [Browserify](./installation.md#quick-start-using-npm-and-browserify). See the
 [installation](./installation.md) documentation for a list of potential options.
+
+## Backbone.Babysitter
+
+The dependency on `Backbone.Babysitter` has been removed in favour of an
+in-built implementation that is maintained within the main Marionette codebase.
+
+BabySitter provides a simple way to manage child views in Backbone/Marionette or
+any object that manages lists of views. The external Babysitter library was used
+in Marionette to manage the `CollectionView` children.
+
+### Main Differences
+
+The main difference between Babysitter and the Marionette implementation is the
+removal of `.call` and `.apply` on `CollectionView.children`. Instead you should
+use `.invoke` or
+[any of the methods provided](./marionette.collectionviewadvanced.md#collectionview-childview-iterators-and-collection-functions).
+
+For example:
+
+```javascript
+var MyCollectionView = require('./views');
+var MyCollection = require('./collections');
+
+var collection = new MyCollection();
+collection.fetch();
+
+var myView = new MyCollectionView({collection: collection});
+myView.children.invoke('render');
+myView.children.map(function(view) {
+  view.doMethod();
+});
+```

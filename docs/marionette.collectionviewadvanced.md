@@ -173,7 +173,9 @@ Mn.CollectionView.extend({
 
 ### CollectionView childView Iterators And Collection Functions
 
-The container object borrows several functions from [Underscore.js](http://underscorejs.org/), to provide iterators and other collection functions, including:
+The container object borrows several functions from
+[Underscore.js](http://underscorejs.org/), to provide iterators and other
+collection functions, including:
 
 * [each](http://underscorejs.org/#each)
 * [map](http://underscorejs.org/#map)
@@ -194,7 +196,8 @@ The container object borrows several functions from [Underscore.js](http://under
 * [isEmpty](http://underscorejs.org/#isEmpty)
 * [pluck](http://underscorejs.org/#pluck)
 
-These methods can be called directly on the container, to iterate and process the views held by the container.
+These methods can be called directly on the container, to iterate and process
+the views held by the container.
 
 ```javascript
 var Bb = require('backbone');

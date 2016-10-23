@@ -237,10 +237,12 @@ standard JavaScript module loaders e.g.
 
 ## Backbone.Babysitter
 
-The dependency on `Backbone.Babysitter` has been removed in favour of a
-merged-in implementation that is maintained within the main Marionette codebase.
+The dependency on `Backbone.Babysitter` has been removed in favour of an
+in-built implementation that is maintained within the main Marionette codebase.
 
-Babysitter is a utility library that manages the `CollectionView` child views.
+BabySitter provides a simple way to manage child views in Backbone/Marionette or
+any object that manages lists of views. The external Babysitter library was used
+in Marionette to manage the `CollectionView` children.
 
 ### Main Differences
 

@@ -1,4 +1,4 @@
-import MarionetteError          from '../error';
+import MarionetteError from '../error';
 
 // Placeholder method to be extended by the user.
 // The method should define the object that stores the behaviors.

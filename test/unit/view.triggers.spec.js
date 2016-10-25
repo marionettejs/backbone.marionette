@@ -14,7 +14,7 @@ describe('view triggers', function() {
 
   describe('when DOM events are configured to trigger a view event, and the DOM events are fired', function() {
     beforeEach(function() {
-      this.model      = new Backbone.Model();
+      this.model = new Backbone.Model();
       this.collection = new Backbone.Collection();
 
       this.View = Marionette.View.extend({triggers: this.triggersHash});

@@ -1,7 +1,7 @@
-import _                        from 'underscore';
-import _invoke                  from '../utils/invoke';
-import { triggerMethod }        from '../common/trigger-method';
-import Marionette               from '../backbone.marionette';
+import _ from 'underscore';
+import _invoke from '../utils/invoke';
+import { triggerMethod } from '../common/trigger-method';
+import Marionette from '../backbone.marionette';
 
 // MixinOptions
 // - behaviors

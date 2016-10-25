@@ -40,7 +40,7 @@ module.exports = function(mochaRunner) {
     $fixtures = $('<div id="fixtures">');
     $('body').append($fixtures);
     this.checkProperties = checkProperties;
-    this.setFixtures   = setFixtures;
+    this.setFixtures = setFixtures;
     this.clearFixtures = clearFixtures;
   });
 

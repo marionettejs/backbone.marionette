@@ -10,11 +10,11 @@ describe('Region', function() {
       });
 
       this.fooSelector = '#foo-region';
-      this.fooRegion   = new this.DefaultRegionClass({el: this.fooSelector});
+      this.fooRegion = new this.DefaultRegionClass({el: this.fooSelector});
 
       this.barSelector = '#bar-region';
-      this.BarRegion   = Marionette.Region.extend({el: this.barSelector});
-      this.barRegion   = new this.BarRegion();
+      this.BarRegion = Marionette.Region.extend({el: this.barSelector});
+      this.barRegion = new this.BarRegion();
 
       this.BazRegion = Marionette.Region.extend();
     });
@@ -189,8 +189,8 @@ describe('Region', function() {
           beforeEach(function() {
             this.baseDefinition = {regionClass: this.BazRegion};
             this.region1Definition = _.defaults({el: this.fooSelector}, this.baseDefinition);
-            this.region2Definition = _.defaults({el: this.el},          this.baseDefinition);
-            this.region3Definition = _.defaults({el: this.$el},         this.baseDefinition);
+            this.region2Definition = _.defaults({el: this.el}, this.baseDefinition);
+            this.region3Definition = _.defaults({el: this.$el}, this.baseDefinition);
 
             this.baz1Region = new this.BazRegion({el: this.fooSelector});
             this.baz2Region = new this.BazRegion({el: this.el});

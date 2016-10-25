@@ -1,11 +1,11 @@
 // Composite View
 // --------------
 
-import _               from 'underscore';
-import deprecate       from './utils/deprecate';
+import _ from 'underscore';
+import deprecate from './utils/deprecate';
 import MarionetteError from './error';
-import CollectionView  from './collection-view';
-import View            from './view';
+import CollectionView from './collection-view';
+import View from './view';
 
 const ClassOptions = [
   'childViewContainer',

@@ -1,8 +1,8 @@
 // Template Cache
 // --------------
 
-import _               from 'underscore';
-import Backbone        from 'backbone';
+import _ from 'underscore';
+import Backbone from 'backbone';
 import MarionetteError from './error';
 
 // Manage templates stored in `<script>` blocks,

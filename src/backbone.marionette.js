@@ -1,15 +1,15 @@
-import Backbone           from 'backbone';
-import {version}          from '../package.json';
+import Backbone from 'backbone';
+import {version} from '../package.json';
 
-import proxy              from './utils/proxy';
-import extend             from './utils/extend';
-import deprecate          from './utils/deprecate';
+import proxy from './utils/proxy';
+import extend from './utils/extend';
+import deprecate from './utils/deprecate';
 
-import isNodeAttached     from './common/is-node-attached';
-import mergeOptions       from './common/merge-options';
-import getOption          from './common/get-option';
-import normalizeMethods   from './common/normalize-methods';
-import monitorViewEvents  from './common/monitor-view-events';
+import isNodeAttached from './common/is-node-attached';
+import mergeOptions from './common/merge-options';
+import getOption from './common/get-option';
+import normalizeMethods from './common/normalize-methods';
+import monitorViewEvents from './common/monitor-view-events';
 
 import {
   bindEvents,
@@ -27,19 +27,19 @@ import {
 } from './common/trigger-method';
 
 
-import MarionetteObject   from './object';
-import TemplateCache      from './template-cache';
-import View               from './view';
-import CollectionView     from './collection-view';
-import CompositeView      from './composite-view';
-import Behavior           from './behavior';
-import Region             from './region';
-import Application        from './application';
-import AppRouter          from './app-router';
-import MarionetteError    from './error';
+import MarionetteObject from './object';
+import TemplateCache from './template-cache';
+import View from './view';
+import CollectionView from './collection-view';
+import CompositeView from './composite-view';
+import Behavior from './behavior';
+import Region from './region';
+import Application from './application';
+import AppRouter from './app-router';
+import MarionetteError from './error';
 
-import behaviorsLookup    from './config/behaviors-lookup';
-import Renderer           from './config/renderer';
+import behaviorsLookup from './config/behaviors-lookup';
+import Renderer from './config/renderer';
 
 import {
   FEATURES,

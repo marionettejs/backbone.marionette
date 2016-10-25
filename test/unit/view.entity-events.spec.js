@@ -2,13 +2,13 @@ describe('view entity events', function() {
   'use strict';
 
   beforeEach(function() {
-    this.model      = new Backbone.Model();
+    this.model = new Backbone.Model();
     this.collection = new Backbone.Collection();
 
     this.fooStub = this.sinon.stub();
     this.barStub = this.sinon.stub();
 
-    this.modelEventsStub      = this.sinon.stub().returns({'foo': this.fooStub});
+    this.modelEventsStub = this.sinon.stub().returns({'foo': this.fooStub});
     this.collectionEventsStub = this.sinon.stub().returns({'bar': this.barStub});
   });
 

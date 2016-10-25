@@ -119,10 +119,7 @@ const CollectionView = Backbone.View.extend({
       index = _.indexOf(this._filteredSortedModels(index), child);
     }
 
-    if (this._shouldAddChild(child, index)) {
-      this._destroyEmptyView();
-      this._addChild(child, index)
-    }
+    this._addChild(child, index)
   },
 
   // Handle collection update model removals
@@ -477,7 +474,8 @@ const CollectionView = Backbone.View.extend({
       const view = this.buildChildView(model, EmptyView, emptyViewOptions);
 
       this.triggerMethod('before:render:empty', this, view);
-      this.addChildView(view, 0);
+      this._setupChildView(view, 0);
+      this._addChildView(view, 0, true);
       this.triggerMethod('render:empty', this, view);
     }
   },
@@ -573,14 +571,26 @@ const CollectionView = Backbone.View.extend({
       this.children.add(view);
     }
 
-    this._renderView(view);
+    if (!view.model || this._shouldAttachChild(view.model, index)) {
+      this._destroyEmptyView();
 
-    this._attachView(view, index);
+      this._addChildView(view, index);
+    }
 
     this.triggerMethod('add:child', this, view);
 
     return view;
   },
+
+  _addChildView(view, index) {
+    this._renderView(view);
+
+    this._attachView(view, index);
+  },
+
+  _detachChildView(view, index) {
+    this._detachView(view, index);
+  }
 
   // Internal method. This decrements or increments the indices of views after the added/removed
   // view to keep in sync with the collection.
@@ -630,6 +640,20 @@ const CollectionView = Backbone.View.extend({
     if (shouldTriggerAttach) {
       view._isAttached = true;
       triggerMethodOn(view, 'attach', view);
+    }
+  },
+
+  _detachView(view, index) {
+    const shouldTriggerDetach = !!view._isAttached;
+    if (shouldTriggerDetach) {
+      triggerMethodOn(view, 'before:detach', view);
+    }
+
+    this.detachHtml(this, view, index);
+
+    if (shouldTriggerDetach) {
+      view._isAttached = false;
+      triggerMethodOn(view, 'detach', view);
     }
   },
 
@@ -704,6 +728,14 @@ const CollectionView = Backbone.View.extend({
     }
   },
 
+  detachHtml(collectionView, childView, index) {
+    if (collectionView._isBuffering) {
+      collectionView._bufferedChildren.splice(index, 1);
+    } else {
+      childView.$el.detach();
+    }
+  },
+
   // Internal method. Check whether we need to insert the view into the correct position.
   _insertBefore(childView, index) {
     let currentView;
@@ -756,6 +788,11 @@ const CollectionView = Backbone.View.extend({
   //  'index' is the index of that model in the collection
   //  'collection' is the collection referenced by this CollectionView
   _shouldAddChild(child, index) {
+    const filter = this.filter;
+    return !_.isFunction(filter) || filter.call(this, child, index, this.collection);
+  },
+
+  _shouldAttachChild(child, index) {
     const filter = this.filter;
     return !_.isFunction(filter) || filter.call(this, child, index, this.collection);
   },

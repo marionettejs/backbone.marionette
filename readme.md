@@ -14,6 +14,9 @@
     <img src='https://badges.gitter.im/Join%20Chat.svg' alt='Gitter Chat' />
   </a>
 </p>
+<p align="center">
+  <img src='https://saucelabs.com/browser-matrix/marionettejs.svg' alt'Cross Browser Tesing' />
+</p>
 
 ## Marionette v3
 

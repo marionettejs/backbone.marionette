@@ -1,4 +1,4 @@
-module.exports = function() {
+module.exports = function(mochaRunner) {
   var _ = require('underscore');
   var Backbone = require('backbone');
   var jQuery = require('jquery');

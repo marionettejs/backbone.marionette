@@ -74,7 +74,8 @@ parent. These can be chained all the way up to the level you require them to be.
 
 Bubbled child events no longer pass the `childView` implicitly and only pass the
 arguments passed as part of `triggerMethod`. This means that the arguments
-passed to `onEvent` and `onChildviewEvent` are now identical.
+passed to `onEvent` and `onChildviewEvent` are now identical. See the
+[documentation on event lifecycles](./viewlifecycle.md) for more information.
 
 In Marionette 2, `childEvents` where bound on every event. In Marionette 3,
 `childViewEvents` are bound once and cached. This means that you cannot add new
@@ -167,6 +168,13 @@ In Marionette 3, the HTML will be:
   <div>View contents</div>
 </div>
 ```
+
+### Arguments for Lifecycle Events
+
+The arguments to all lifecycle events were completely changed. All events will
+now receive the view that is emitting the event as the first argument. See the
+[documentation for view lifecycles](./viewlifecycle.md) for more complete
+information.
 
 ## Templates
 

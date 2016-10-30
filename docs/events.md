@@ -16,7 +16,7 @@ responding to events.
 * [Triggering and Listening to Events](#triggering-and-listening-to-events)
   * [View `triggerMethod`](#view-triggermethod)
   * [Listening to Events](#listening-to-events)
-    * [Magic Method Binding](#magic-method-binding)
+    * [`onEvent` Binding](#onevent-binding)
   * [View events and triggers](#view-events-and-triggers)
 * [Child View Events](#child-view-events)
   * [Event Bubbling](#event-bubbling)
@@ -119,9 +119,9 @@ it is called on in as the context variable. These behave exactly as in Backbone,
 so using `object.on` will require you to unhook any event handlers yourself to
 prevent memory leaks. Marionette, however, does provide extra helpers as part of
 the view lifecycle that bind and unbind event handlers for you. this is the
-core of Magic Method Binding.
+core of `onEvent` Binding.
 
-#### Magic Method Binding
+#### `onEvent` Binding
 
 The major difference between `Backbone.trigger` and `View.triggerMethod` is
 that `triggerMethod` can fire specially named events on the attached view. For
@@ -227,12 +227,13 @@ var Collection = Mn.CollectionView.extend({
 ### Event Bubbling
 
 Events fired on a view bubble up to their direct parent views, calling any
-magic methods using the `childview:` prefix (more on that shortly) and any
+event methods using the `childview:` prefix (more on that shortly) and any
 methods bound to the `childViewEvents` attribute. This works for built-in
 events, custom events fired with `triggerMethod` and bound events using
 `triggers`.
 
-**Note**: Automatic event bubbling can be disabled by setting [`childViewEventPrefix`](#a-child-views-event-prefix) to `false`.
+**Note**: Automatic event bubbling can be disabled by setting
+[`childViewEventPrefix`](#a-child-views-event-prefix) to `false`.
 
 When using implicit listeners, the [`childview:*` event prefix](#a-child-views-event-prefix) is used which
 needs to be included as part of the handler:

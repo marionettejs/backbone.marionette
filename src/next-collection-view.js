@@ -127,8 +127,9 @@ const CollectionView = Backbone.View.extend({
 
     this._addChildModels(changes.added);
 
-    // Removed views are passed to showChildren for detachment
-    this._showChildren(removedViews);
+    this._detachChildren(removedViews);
+
+    this._showChildren();
 
     // Destroy removed child views after all of the render is complete
     this._removeChildViews(removedViews);
@@ -292,34 +293,19 @@ const CollectionView = Backbone.View.extend({
 
   sort() {
     this._showChildren();
+
     return this;
   },
 
-  _showChildren(removedViews = []) {
+  _showChildren() {
     if (this.isEmpty()) {
       this._showEmptyView();
       return;
     }
 
-    this._destroyEmptyView();
-
-    this.triggerMethod('before:sort', this);
-
     this._sortChildren();
 
-    const filteredViews = this._filterChildren(removedViews);
-
-    this._detachChildren(filteredViews.detaching);
-
-    // Check if all views have been filtered out
-    if (this.isEmpty(!filteredViews.attaching.length)) {
-      this._showEmptyView()
-    } else {
-      this._renderChildren(filteredViews.attaching);
-    }
-
-    // Sort event reflects the DOM sort and not the children sort
-    this.triggerMethod('sort', this);
+    this._filterAndRender();
   },
 
   isEmpty(allViewsFiltered) {
@@ -370,14 +356,17 @@ const CollectionView = Backbone.View.extend({
 
   // Sorts views by viewComparator and sets the children to the new order
   _sortChildren() {
-    const viewComparator = this.getViewComparator();
+    this.triggerMethod('before:sort', this);
 
-    if(_.isFunction(viewComparator)) {
+    let viewComparator = this.getViewComparator();
+
+    if (_.isFunction(viewComparator)) {
       viewComparator = _.bind(viewComparator, this);
     }
 
     this.children._sort(viewComparator);
 
+    this.triggerMethod('sort', this);
   },
 
   // If viewComparator is overriden it will be returned here.
@@ -390,7 +379,30 @@ const CollectionView = Backbone.View.extend({
   // Default internal view comparator that order the views by
   // the order of the collection
   _viewComparator(view) {
+    if (!this.collection) { return; }
     return this.collection.indexOf(view.model);
+  },
+
+  _filterAndRender() {
+    const filteredViews = this._filterChildren();
+
+    this._renderChildren(filteredViews);
+  },
+
+  _filterChildren() {
+    if (!_.isFunction(this.filter)) {
+      return this.children._views;
+    }
+
+    this.triggerMethod('before:filter', this);
+
+    const filteredViews = this.children.partition(_.bind(this.filter, this));
+
+    this._detachChildren(filteredViews[1]);
+
+    this.triggerMethod('filter', this);
+
+    return filteredViews[0];
   },
 
   setFilter(filter, {preventRender} = {}) {
@@ -400,8 +412,8 @@ const CollectionView = Backbone.View.extend({
 
     this.filter = filter;
 
-    if (shouldRender) {
-      this._showChildren();
+    if (shouldRender && this.children.length) {
+      this._filterAndRender();
     }
 
     return this;
@@ -409,35 +421,6 @@ const CollectionView = Backbone.View.extend({
 
   removeFilter(options) {
     return this.setFilter(null, options);
-  },
-
-  _filterChildren(removedViews) {
-    const filteredViews = {
-      attaching: [],
-      detaching: removedViews
-    };
-
-    if (!_.isFunction(this.filter)) {
-      filteredViews.attaching = this.children._views;
-
-      return filteredViews;
-    }
-
-    const filterReducer = _.bind(this._filterReducer, this);
-
-    return this.children.reduce(filterReducer, filteredViews);
-  },
-
-  _filterReducer(filteredViews, view, index) {
-    const shouldAttach = this.filter.call(this, view, index, this.collection);
-
-    if (shouldAttach) {
-      filteredViews.attaching.push(view);
-    } else {
-      filteredViews.detaching.push(view);
-    }
-
-    return filteredViews;
   },
 
   _detachChildren(detachingViews) {
@@ -464,6 +447,13 @@ const CollectionView = Backbone.View.extend({
   },
 
   _renderChildren(views) {
+    if (this.isEmpty(!views.length)) {
+      this._showEmptyView();
+      return;
+    }
+
+    this._destroyEmptyView();
+
     this.triggerMethod('before:render:children', this);
 
     const els = this._getBuffer(views);

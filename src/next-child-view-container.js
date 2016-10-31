@@ -12,6 +12,10 @@ const Container = function() {
 
 emulateCollection(Container.prototype, '_views');
 
+function stringComparator(comparator, view) {
+  return view.model && view.model.get(comparator);
+}
+
 // Container Methods
 // -----------------
 
@@ -37,8 +41,27 @@ _.extend(Container.prototype, {
     this._views.splice(index, 0, view);
 
     this._updateLength();
+  },
 
-    return this;
+  _sort(comparator) {
+    if (typeof comparator === 'string') {
+      comparator = _.partial(stringComparator, comparator);
+      return this._sortBy(comparator);
+    }
+
+    if (comparator.length === 1) {
+      return this._sortBy(comparator);
+    }
+
+    return this._views.sort(comparator);
+  },
+
+  _sortBy(comparator) {
+    const sortedViews = _.sortBy(this._views, comparator);
+
+    this._set(sortedViews);
+
+    return sortedViews;
   },
 
   // Replace array contents without overwriting the reference.
@@ -46,8 +69,6 @@ _.extend(Container.prototype, {
     this._views.length = 0;
 
     this._views.push.apply(this._views, views.slice(0));
-
-    this._updateLength();
   },
 
   // Find a view by the model that was attached to it.
@@ -93,15 +114,11 @@ _.extend(Container.prototype, {
     this._views.splice(index, 1);
 
     this._updateLength();
-
-    return this;
   },
 
   // Update the `.length` attribute on this container
   _updateLength() {
     this.length = this._views.length;
-
-    return this;
   }
 });
 

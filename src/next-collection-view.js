@@ -356,9 +356,12 @@ const CollectionView = Backbone.View.extend({
   _sortChildren() {
     const viewComparator = this.getViewComparator();
 
-    const sortedViews = this._sortChildrenBy(viewComparator);
+    if(_.isFunction(viewComparator)) {
+      viewComparator = _.bind(viewComparator, this);
+    }
 
-    this.children._set(sortedViews);
+    this.children._sort(viewComparator);
+
   },
 
   // If viewComparator is overriden it will be returned here.
@@ -372,24 +375,6 @@ const CollectionView = Backbone.View.extend({
   // the order of the collection
   _viewComparator(view) {
     return this.collection.indexOf(view.model);
-  },
-
-  _sortChildrenBy(comparator) {
-    const views = this.children._views;
-
-    if (typeof comparator === 'string') {
-      return _.sortBy(views, (view) => {
-        return view.model.get(comparator);
-      });
-    }
-
-    comparator = _.bind(comparator, this);
-
-    if (comparator.length === 1) {
-      return _.sortBy(views, comparator);
-    }
-
-    return views.sort(comparator);
   },
 
   setFilter(filter, {preventRender} = {}) {

@@ -8,7 +8,7 @@ import _ from 'underscore';
 const methods = ['forEach', 'each', 'map', 'find', 'detect', 'filter',
                 'select', 'reject', 'every', 'all', 'some', 'any', 'include',
                 'contains', 'invoke', 'toArray', 'first', 'initial', 'rest',
-                'last', 'without', 'isEmpty', 'pluck', 'reduce'];
+                'last', 'without', 'isEmpty', 'pluck', 'reduce', 'partition'];
 
 const emulateCollection = function(object, listProperty) {
   _.each(methods, function(method) {

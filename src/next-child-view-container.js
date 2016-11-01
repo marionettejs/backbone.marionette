@@ -69,6 +69,8 @@ _.extend(Container.prototype, {
     this._views.length = 0;
 
     this._views.push.apply(this._views, views.slice(0));
+
+    this._updateLength();
   },
 
   // Find a view by the model that was attached to it.

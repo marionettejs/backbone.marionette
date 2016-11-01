@@ -23,12 +23,12 @@ const ClassOptions = [
   'emptyView',
   'emptyViewOptions',
   'events',
-  'filter',
   'modelEvents',
   'sortWithCollection',
   'triggers',
   'ui',
-  'viewComparator'
+  'viewComparator',
+  'viewFilter'
 ];
 
 // A view that iterates over a Backbone.Collection
@@ -305,7 +305,7 @@ const CollectionView = Backbone.View.extend({
 
     this._sortChildren();
 
-    this._filterAndRender();
+    this.filter();
   },
 
   isEmpty(allViewsFiltered) {
@@ -383,20 +383,20 @@ const CollectionView = Backbone.View.extend({
     return this.collection.indexOf(view.model);
   },
 
-  _filterAndRender() {
+  filter() {
     const filteredViews = this._filterChildren();
 
     this._renderChildren(filteredViews);
   },
 
   _filterChildren() {
-    if (!_.isFunction(this.filter)) {
+    if (!_.isFunction(this.viewFilter)) {
       return this.children._views;
     }
 
     this.triggerMethod('before:filter', this);
 
-    const filteredViews = this.children.partition(_.bind(this.filter, this));
+    const filteredViews = this.children.partition(_.bind(this.viewFilter, this));
 
     this._detachChildren(filteredViews[1]);
 
@@ -407,13 +407,13 @@ const CollectionView = Backbone.View.extend({
 
   setFilter(filter, {preventRender} = {}) {
     const canBeRendered = this._isRendered && !this._isDestroyed;
-    const filterChanged = this.filter !== filter;
+    const filterChanged = this.viewFilter !== filter;
     const shouldRender = canBeRendered && filterChanged && !preventRender;
 
-    this.filter = filter;
+    this.viewFilter = filter;
 
     if (shouldRender && this.children.length) {
-      this._filterAndRender();
+      this.filter();
     }
 
     return this;

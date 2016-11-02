@@ -1,4 +1,4 @@
-// Collection View
+// Next Collection View
 // ---------------
 
 import _                  from 'underscore';
@@ -38,12 +38,6 @@ const CollectionView = Backbone.View.extend({
   sortWithCollection: true,
 
   // constructor
-  // option to pass `{sort: false}` to prevent the `CollectionView` from
-  // maintaining the sorted order of the collection.
-  // This will fallback onto appending childView's to the end.
-  //
-  // option to pass `{viewComparator: compFunction()}` to allow the `CollectionView`
-  // to use a custom sort order for the collection.
   constructor(options) {
     this._setOptions(options);
 
@@ -90,7 +84,7 @@ const CollectionView = Backbone.View.extend({
   },
 
   // Internal method. This checks for any changes in the order of the collection.
-  // If the index of any view doesn't match, it will render.
+  // If the index of any view doesn't match, it will re-sort.
   _onCollectionSort() {
     if (!this.sortWithCollection) {
       return;
@@ -118,7 +112,7 @@ const CollectionView = Backbone.View.extend({
     this.render();
   },
 
-  // Handle collection update model removals
+  // Handle collection update model additions and  removals
   _onCollectionUpdate(collection, options) {
     const changes = options.changes;
 
@@ -251,7 +245,7 @@ const CollectionView = Backbone.View.extend({
     view._parent = this;
   },
 
-  // used by `_childViewEventHandler`
+  // used by ViewMixin's `_childViewEventHandler`
   _getImmediateChildren() {
     return this.children._views;
   },
@@ -291,6 +285,7 @@ const CollectionView = Backbone.View.extend({
     return this;
   },
 
+  // Sorts the children then filters and renders the results.
   sort() {
     this._showChildren();
 
@@ -308,6 +303,10 @@ const CollectionView = Backbone.View.extend({
     this.filter();
   },
 
+  // Returns true if the collectionView is considered empty.
+  // This is called twice during a render. Once to check the data,
+  // and again when views are filtered. Override this function to
+  // customize what empty means.
   isEmpty(allViewsFiltered) {
     return allViewsFiltered || !this.children.length;
   },
@@ -383,6 +382,7 @@ const CollectionView = Backbone.View.extend({
     return this.collection.indexOf(view.model);
   },
 
+  // This method re-filters the children views and re-renders the results
   filter() {
     const filteredViews = this._filterChildren();
 
@@ -405,6 +405,8 @@ const CollectionView = Backbone.View.extend({
     return filteredViews[0];
   },
 
+  // Sets the view's `viewFilter` and applies the filter if the view is ready.
+  // To prevent the render pass `{ preventRender: true } as the 2nd argument.
   setFilter(filter, {preventRender} = {}) {
     const canBeRendered = this._isRendered && !this._isDestroyed;
     const filterChanged = this.viewFilter !== filter;
@@ -419,6 +421,7 @@ const CollectionView = Backbone.View.extend({
     return this;
   },
 
+  // Clears the `viewFilter` and follows the same rules for rendering as `setFilter`.
   removeFilter(options) {
     return this.setFilter(null, options);
   },
@@ -512,6 +515,7 @@ const CollectionView = Backbone.View.extend({
   },
 
   // Override this method to do something other than `.append`.
+  // You can attach any HTML at this point including the els.
   attachHtml(collectionView, els) {
     collectionView.$el.append(els);
   },

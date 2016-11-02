@@ -23,7 +23,7 @@ _.extend(Container.prototype, {
 
   // Add a view to this container. Stores the view
   // by `cid` and makes it searchable by the model
-  // cid (and model itself). Additionally is stores
+  // cid (and model itself). Additionally it stores
   // the view by index in the _views array
   _add(view, index) {
     const viewCid = view.cid;
@@ -43,6 +43,7 @@ _.extend(Container.prototype, {
     this._updateLength();
   },
 
+  // Sort (mutate) and return the array of the child views.
   _sort(comparator) {
     if (typeof comparator === 'string') {
       comparator = _.partial(stringComparator, comparator);
@@ -56,6 +57,7 @@ _.extend(Container.prototype, {
     return this._views.sort(comparator);
   },
 
+  // Makes `_.sortBy` mutate the array to match `this._views.sort`
   _sortBy(comparator) {
     const sortedViews = _.sortBy(this._views, comparator);
 
@@ -102,7 +104,7 @@ _.extend(Container.prototype, {
     return this._viewsByCid[cid];
   },
 
-  // Remove a view
+  // Remove a view and clean up index references.
   _remove(view) {
     // delete model index
     if (view.model) {

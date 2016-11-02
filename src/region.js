@@ -71,12 +71,24 @@ const Region = MarionetteObject.extend({
     // the child may trigger during render can also be triggered on the child's ancestor views.
     view._parent = this;
 
+    this._proxyChildViewEvents(view);
+
     this._renderView(view);
 
     this._attachView(view, options);
 
     this.triggerMethod('show', this, view, options);
     return this;
+  },
+
+  _proxyChildViewEvents(view) {
+    const parentView = this._parent;
+
+    if (!parentView) {
+      return;
+    }
+
+    parentView.listenTo(view, 'all', parentView._childViewEventHandler);
   },
 
   _renderView(view) {
@@ -230,6 +242,9 @@ const Region = MarionetteObject.extend({
     if (!view._isDestroyed) {
       this._removeView(view, shouldDestroy);
       delete view._parent;
+      if (this._parent) {
+        this._parent.stopListening(view);
+      }
     }
 
     this.triggerMethod('empty', this, view);

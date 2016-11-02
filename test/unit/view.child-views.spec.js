@@ -287,11 +287,13 @@ describe('layoutView', function() {
   describe('when showing a childView as a View', function() {
     beforeEach(function() {
       this.layoutView = new this.View();
-      this.childEventsHandler = this.sinon.spy();
+      this.childEventsHandlerTrigger = this.sinon.spy();
+      this.childEventsHandlerTriggerMethod = this.sinon.spy();
 
       // add child events to listen for
       this.layoutView.childViewEvents = {
-        'content:rendered': this.childEventsHandler
+        'before:content:rendered': this.childEventsHandlerTrigger,
+        'content:rendered': this.childEventsHandlerTriggerMethod
       };
       this.layoutView.delegateEvents();
       this.layoutView.render();
@@ -299,6 +301,9 @@ describe('layoutView', function() {
       // create a child view which triggers an event on render
       var ChildView = Marionette.View.extend({
         template: false,
+        onBeforeRender: function() {
+          this.trigger('before:content:rendered');
+        },
         onRender: function() {
           this.triggerMethod('content:rendered');
         }
@@ -313,7 +318,11 @@ describe('layoutView', function() {
     });
 
     it('childViewEvents are triggered', function() {
-      expect(this.childEventsHandler).to.have.been.calledOnce;
+      expect(this.childEventsHandlerTrigger).to.have.been.calledOnce;
+    });
+
+    it('childViewEvents are triggered', function() {
+      expect(this.childEventsHandlerTriggerMethod).to.have.been.calledOnce;
     });
 
     describe('and the view is detached', function() {

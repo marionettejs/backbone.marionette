@@ -541,7 +541,7 @@ const CollectionView = Backbone.View.extend({
       return view;
     }
 
-    this._removeChildView(view, true);
+    this._removeChildView(view, { shouldDetach: true });
 
     this._removeChild(view);
 
@@ -570,7 +570,7 @@ const CollectionView = Backbone.View.extend({
     _.each(views, _.bind(this._removeChildView, this));
   },
 
-  _removeChildView(view, shouldDetach) {
+  _removeChildView(view, {shouldDetach} = {}) {
     view.off('destroy', this.removeChildView, this);
 
     if (shouldDetach) {

@@ -1,73 +1,103 @@
-describe('marionette application', function() {
-  'use strict';
+'use strict';
+
+import Application from '../../src/application';
+import View from '../../src/view';
+
+describe('Marionette Application', function() {
 
   describe('when instantiating an app with options specified', function() {
+    let app;
+    let fooOption;
+    let appOptions;
+    let initializeStub;
+
     beforeEach(function() {
-      this.fooOption = 'bar';
-      this.appOptions = {fooOption: this.fooOption};
-      this.initializeStub = this.sinon.stub(Marionette.Application.prototype, 'initialize');
-      this.app = new Marionette.Application(this.appOptions, 'fooArg');
+      fooOption = 'bar';
+      appOptions = {fooOption: fooOption};
+      initializeStub = this.sinon.stub(Application.prototype, 'initialize');
+
+      app = new Application(appOptions, 'fooArg');
     });
 
     it('should pass all arguments to the initialize method', function() {
-      expect(this.initializeStub).to.have.been.calledOn(this.app).and.calledWith(this.appOptions, 'fooArg');
+      expect(initializeStub).to.have.been.calledOn(app).and.calledWith(appOptions, 'fooArg');
     });
   });
 
   describe('when specifying an on start callback, and starting the app', function() {
+    let app;
+    let fooOptions;
+    let beforeStartStub;
+    let startStub;
+
     beforeEach(function() {
-      this.fooOptions = {foo: 'bar'};
-      this.app = new Marionette.Application();
+      beforeStartStub = this.sinon.stub();
+      startStub = this.sinon.stub();
+      fooOptions = {foo: 'bar'};
+      app = new Application();
 
-      this.startStub = this.sinon.stub();
-      this.app.on('start', this.startStub);
+      app.on('before:start', beforeStartStub);
+      app.on('start', startStub);
 
-      this.app.start(this.fooOptions);
+      app.start(fooOptions);
+    });
+
+    it('should run the onBeforeStart callback', function() {
+      expect(beforeStartStub).to.have.been.called;
+    });
+
+    it('should pass the startup option to the onBeforeStart callback', function() {
+      expect(beforeStartStub).to.have.been.calledOnce.and.calledWith(app, fooOptions);
     });
 
     it('should run the onStart callback', function() {
-      expect(this.startStub).to.have.been.called;
+      expect(startStub).to.have.been.called;
     });
 
     it('should pass the startup option to the callback', function() {
-      expect(this.startStub).to.have.been.calledOnce.and.calledWith(this.app, this.fooOptions);
+      expect(startStub).to.have.been.calledOnce.and.calledWith(app, fooOptions);
     });
 
     it('should have a cidPrefix', function() {
-      expect(this.app.cidPrefix).to.equal('mna');
+      expect(app.cidPrefix).to.equal('mna');
     });
 
     it('should have a cid', function() {
-      expect(this.app.cid).to.exist;
+      expect(app.cid).to.exist;
     });
   });
 
   describe('when initializing with regions', function() {
+    let app;
+    let view;
+    let fooOptions;
+
     beforeEach(function() {
-      this.fooOptions = {
+      fooOptions = {
         region: '#fixtures'
       };
-      this.view = new Marionette.View({
+      view = new View({
         template: _.template('ohai')
       });
 
-      this.app = new Marionette.Application(this.fooOptions);
-      this.app.showView(this.view);
+      app = new Application(fooOptions);
+      app.showView(view);
     });
+
     it('should be able to define region selectors as strings', function() {
-      expect(this.app._region.$el).to.have.length(1);
+      expect(app.getRegion().$el).to.have.length(1);
     });
 
     it('should get the region selector with getRegion', function() {
-      expect(this.app.getRegion().$el).to.have.length(1);
+      expect(app.getRegion().$el).to.have.length(1);
     });
 
     it('can show a view in its region', function() {
-      expect(this.app._region.el.innerHTML).to.contain('ohai');
+      expect(app.getRegion().el.innerHTML).to.contain('ohai');
     });
 
     it('can use the getView function', function() {
-      expect(this.app.getView()).to.deep.equal(this.view);
+      expect(app.getView()).to.equal(view);
     });
 
   });

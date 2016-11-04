@@ -42,11 +42,11 @@ When a view is initialized and then displayed inside a region (using
 
 | Order |      Event      |          Arguments           |
 | :---: |-----------------|------------------------------|
-|   1   | `before:render` | `this` - view being rendered |
-|   2   | `render`        | `this` - view being rendered |
-|   3*  | `before:attach` | `this` - view being attached |
-|   4*  | `attach`        | `this` - view being attached |
-|   5*  | `dom:refresh`   | `this` - view being rendered |
+|   1   | `before:render` | `view` - view being rendered |
+|   2   | `render`        | `view` - view being rendered |
+|   3*  | `before:attach` | `view` - view being attached |
+|   4*  | `attach`        | `view` - view being attached |
+|   5*  | `dom:refresh`   | `view` - view being rendered |
 
 The events marked with "\*" only fire if/when the region's `el` is attached to the DOM.
 
@@ -57,11 +57,11 @@ part of the destruction lifecycle.
 
 | Order |       Event       |                 Arguments                 |
 | :---: |-------------------|-------------------------------------------|
-|   1   |  `before:destroy` |       `this` - view being destroyed       |
+|   1   |  `before:destroy` |       `view` - view being destroyed       |
 |       |                   | `...args` - arguments passed to `destroy` |
-|   2*  |  `before:detach`  |       `this` - view being detached        |
-|   3*  |  `detach`         |       `this` - view being detached        |
-|   4   |  `destroy`        |       `this` - view being destroyed       |
+|   2*  |  `before:detach`  |       `view` - view being detached        |
+|   3*  |  `detach`         |       `view` - view being detached        |
+|   4   |  `destroy`        |       `view` - view being destroyed       |
 |       |                   | `...args` - arguments passed to `destroy` |
 
 The events marked with "\*" only fire if/when the view was attached to the DOM.
@@ -75,11 +75,11 @@ is detached and the children will be destroyed after the detach is complete.
 
 | Order |       Event       |                 Arguments                 |
 | :---: |-------------------|-------------------------------------------|
-|   1   |  `before:detach`  |       `this` - view being detached        |
-|   2*  |  `detach`         |       `this` - view being detached        |
-|   3*  |  `before:destroy` |       `this` - view being destroyed       |
+|   1   |  `before:detach`  |       `view` - view being detached        |
+|   2*  |  `detach`         |       `view` - view being detached        |
+|   3*  |  `before:destroy` |       `view` - view being destroyed       |
 |       |                   | `...args` - arguments passed to `destroy` |
-|   4   |  `destroy`        |       `this` - view being destroyed       |
+|   4   |  `destroy`        |       `view` - view being destroyed       |
 |       |                   | `...args` - arguments passed to `destroy` |
 
 The events marked with "\*" only fire if/when the view was attached to the DOM.
@@ -310,23 +310,23 @@ The `CollectionView` creation lifecycle can go down two paths depending on
 whether the collection is populated or empty. The below table shows the order of
 rendering events firing:
 
-| Order |           Event          |                Arguments                |
-| :---: |--------------------------|-----------------------------------------|
-|   1   |      `before:render`     | `this` - collection view being rendered |
-|  2*   |  `before:render:empty`   | `this` - collection view being rendered |
-|       |                          |    `view` - empty view being rendered   |
-|  2+   | `before:render:children` | `this` - collection view being rendered |
-|   3   |    `before:add:child`    | `this` - collection view being rendered |
-|       |                          |    `view` - child view being rendered   |
-|   4   |       `add:child`        | `this` - collection view being rendered |
-|       |                          |    `view` - child view being rendered   |
-|  5*   |      `render:empty`      | `this` - collection view being rendered |
-|       |                          |    `view` - empty view being rendered   |
-|  5+   |     `render:children`    | `this` - collection view being rendered |
-|   6   |          `render`        | `this` - collection view being rendered |
-|   7   |      `before:attach`     | `this` - collection view being rendered |
-|   8   |         `attach`         | `this` - collection view being rendered |
-|   9   |       `dom:refresh`      | `this` - collection view being rendered |
+| Order |           Event          |                     Arguments                     |
+| :---: |--------------------------|---------------------------------------------------|
+|   1   |      `before:render`     | `collectionview` - collection view being rendered |
+|  2*   |  `before:render:empty`   | `collectionview` - collection view being rendered |
+|       |                          |         `view` - empty view being rendered        |
+|  2+   | `before:render:children` | `collectionview` - collection view being rendered |
+|   3   |    `before:add:child`    | `collectionview` - collection view being rendered |
+|       |                          |         `child` - child view being rendered       |
+|   4   |       `add:child`        | `collectionview` - collection view being rendered |
+|       |                          |         `child` - child view being rendered       |
+|  5*   |      `render:empty`      | `collectionview` - collection view being rendered |
+|       |                          |         `view` - empty view being rendered        |
+|  5+   |     `render:children`    | `collectionview` - collection view being rendered |
+|   6   |          `render`        | `collectionview` - collection view being rendered |
+|   7   |      `before:attach`     | `collectionview` - collection view being rendered |
+|   8   |         `attach`         | `collectionview` - collection view being rendered |
+|   9   |       `dom:refresh`      | `collectionview` - collection view being rendered |
 
 The events marked with "\*" only fire on empty collections and events marked
 with "+" fire on collections with items.
@@ -336,21 +336,21 @@ with "+" fire on collections with items.
 When a `CollectionView` is destroyed it fires a series of events in order to
 reflect the different stages of the destruction process.
 
-| Order |             Event            |                  Arguments                |
-| :---: |------------------------------|-------------------------------------------|
-|   1   |        `before:destroy`      |  `this` - collection view being destroyed |
-|       |                              | `...args` - arguments passed to `destroy` |
-|   2   |        `before:detach`       |  `this` - collection view being destroyed |
-|   3   |           `detach`           |  `this` - collection view being destroyed |
-|   4   |  `before:destroy:children`   |  `this` - collection view being destroyed |
-|  5*   |      `before:remove:empty`   |  `this` - collection view being destroyed |
-|  5+   |      `before:remove:child`   |  `this` - collection view being destroyed |
-|       |                              |    `view` - child view being destroyed    |
-|  6*   |         `remove:child`       |  `this` - collection view being destroyed |
-|       |                              |    `view` - child view being destroyed    |
-|  6+   |         `remove:empty`       |  `this` - collection view being destroyed |
-|   7   |           `destroy`          |  `this` - collection view being destroyed |
-|       |                              | `...args` - arguments passed to `destroy` |
+| Order |             Event            |                       Arguments                     |
+| :---: |------------------------------|-----------------------------------------------------|
+|   1   |        `before:destroy`      |  `collectionview` - collection view being destroyed |
+|       |                              |      `...args` - arguments passed to `destroy`      |
+|   2   |        `before:detach`       |  `collectionview` - collection view being destroyed |
+|   3   |           `detach`           |  `collectionview` - collection view being destroyed |
+|   4   |  `before:destroy:children`   |  `collectionview` - collection view being destroyed |
+|  5*   |      `before:remove:empty`   |  `collectionview` - collection view being destroyed |
+|  5+   |      `before:remove:child`   |  `collectionview` - collection view being destroyed |
+|       |                              |         `view` - child view being destroyed         |
+|  6*   |         `remove:child`       |  `collectionview` - collection view being destroyed |
+|       |                              |         `view` - child view being destroyed         |
+|  6+   |         `remove:empty`       |  `collectionview` - collection view being destroyed |
+|   7   |           `destroy`          |  `collectionview` - collection view being destroyed |
+|       |                              |      `...args` - arguments passed to `destroy`      |
 
 The events marked with "\*" only fire on empty collections and events marked
 with "+" fire on collections with items.
@@ -508,10 +508,10 @@ myView.render();
 myCol.comparator = function () { return this.get('foo'); };
 
 myView.on({
-  'remove:empty': function() {
+  'reoder': function() {
     console.log('the collection view has been reordered following its collection');
   },
-  'before:remove:empty': function() {
+  'before:reoder': function() {
     console.log('the collection view is about to be reordered');
   }
 });
@@ -554,15 +554,15 @@ events that you can hook into.
 
 When showing a view inside a region, the region emits a number of events:
 
-| Order |                   Event                    |                Arguments                |
-| :---: |--------------------------------------------|-----------------------------------------|
-|   1   |               `before:show`                | `this` - region showing the child view  |
-|       |                                            | `view` - view being shown in the region |
-|       |                                            | `options` - options passed to `show()`  |
-|   2   | [View Creation Lifecycle](#view-creation-lifecycle) |                                |
-|   3   |                   `show`                   | `this` - region showing the child view  |
-|       |                                            | `view` - view being shown in the region |
-|       |                                            | `options` - options passed to `show()`  |
+| Order |                   Event                    |                 Arguments                 |
+| :---: |--------------------------------------------|-------------------------------------------|
+|   1   |               `before:show`                | `region` - region showing the child view  |
+|       |                                            |  `view` - view being shown in the region  |
+|       |                                            |  `options` - options passed to `show()`   |
+|   2   | [View Creation Lifecycle](#view-creation-lifecycle) |                                  |
+|   3   |                   `show`                   | `region` - region showing the child view  |
+|       |                                            |  `view` - view being shown in the region  |
+|       |                                            |  `options` - options passed to `show()`   |
 
 #### Region `before:show`
 
@@ -580,13 +580,13 @@ extra manipulation that needs to occur.
 When [emptying a region](./marionette.region.md#emptying-a-region), it will emit destruction events around the view's
 destruction lifecycle:
 
-| Order |                     Event                     |           Arguments           |
-| :---: |-----------------------------------------------|-------------------------------|
-|   1   |                `before:empty`                 | `this` - region being emptied |
-|       |                                               |  `view` - view being removed  |
-|   2   | [View Destruction Lifecycle](#view-destruction-lifecycle) |                   |
-|   3   |                    `empty`                    | `this` - region being emptied |
-|       |                                               |  `view` - view being removed  |
+| Order |                     Event                     |            Arguments            |
+| :---: |-----------------------------------------------|---------------------------------|
+|   1   |                `before:empty`                 | `region` - region being emptied |
+|       |                                               |   `view` - view being removed   |
+|   2   | [View Destruction Lifecycle](#view-destruction-lifecycle) |                     |
+|   3   |                    `empty`                    | `region` - region being emptied |
+|       |                                               |   `view` - view being removed   |
 
 #### Region `before:empty`
 

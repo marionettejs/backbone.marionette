@@ -171,10 +171,23 @@ In Marionette 3, the HTML will be:
 
 ### Arguments for Lifecycle Events
 
-The arguments to all lifecycle events were completely changed. All events will
-now receive the view that is emitting the event as the first argument. See the
-[documentation for view lifecycles](./viewlifecycle.md) for more complete
-information.
+The arguments for a number of lifecycle events were changed. For consistency,
+all events will now receive the view that is emitting the event as the first
+argument. See the [documentation for view lifecycles](./viewlifecycle.md) for
+more complete information.
+
+#### Upgrading to Marionette 3
+
+The following events, with their accompanying `before:` event were changed and
+may need to be updated:
+
+|      Class       |              Event               |
+|------------------|----------------------------------|
+|     `Object`     |           `destroy`              |
+|     `Region`     |            `show`                |
+|      `View`      | `add:region` and `remove:region` |
+| `CollectionView` |  `add:child` and `remove:child`  |
+|   `Application`  |            `start`               |
 
 ## Templates
 

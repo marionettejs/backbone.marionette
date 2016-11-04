@@ -275,7 +275,9 @@ const CollectionView = Backbone.View.extend({
     // After all children have been destroyed re-init the container
     this._initChildViewStorage();
 
-    this._addChildModels(this.collection.models);
+    if (this.collection) {
+      this._addChildModels(this.collection.models);
+    }
 
     this._showChildren();
 

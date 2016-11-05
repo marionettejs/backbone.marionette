@@ -16,8 +16,10 @@ collection interactions to be utilized across your application.
 * [View Proxy](#view-proxy)
   * [Listening to View Events](#listening-to-view-events)
   * [Proxy Handlers](#proxy-handlers)
+  * [Events Order](#events-order)
+  * [Using ui](#using-ui)  
   * [View and el](#view-and-el)
-  * [Referencing the DOM](#referencing-the-dom)
+
 
 ## Using Behaviors
 
@@ -306,6 +308,9 @@ triggered on a `View` are passed to all attached `behaviors`. This includes:
 These handlers work exactly as they do on `View` -
 [see the `View` documentation](./marionette.view.md#events)
 
+> Events triggered in behavior instance are not executed in view. To notify 
+> the view, the behavior must trigger an event in its view property, e.g, `this.view.trigger('my:event')`   
+
 ### Proxy Handlers
 
 Behaviors provide proxies to a number of the view event handling attributes
@@ -316,10 +321,23 @@ including:
 * [`modelEvents`](./marionette.view.md#model-events)
 * [`collectionEvents`](./marionette.view.md#collection-events)
 
+### Events Order
+
+If both view and behavior are listening for the same event, this will be executed
+first in the view than in the behavior. 
+
+Unlike events, the initialize method will 
+be called first in the behavior. 
+  
+> While initialize is called in behavior before than in view, the view property is already set, and can be accessed, inside behavior initialize 
+  
+[Live example](https://jsfiddle.net/9wtqgwgu/)  
+
 #### Using `ui`
 
 As in views, `events` and `triggers` can use the `ui` references in their
-listeners. These can be defined on either the Behavior or the View:
+listeners. For more details, see the [`ui` documentation for views](./marionette.view.md#organizing-your-view).
+These can be defined on either the Behavior or the View:
 
 ```javascript
 var Mn = require('backbone.marionette');
@@ -348,41 +366,6 @@ var MyBehavior = Mn.Behavior.extend({
 ```
 
 [Live example](https://jsfiddle.net/marionettejs/6b8o3pmz/)
-
-### View and el
-
-The `Behavior` has a number of proxies attributes that directly refer to the
-related attribute on a view:
-
-* `$`
-* `el`
-* `$el`
-
-In addition, each behavior is able to reference the view they are attached to
-through the `view` attribute:
-
-```javascript
-var Mn = require('backbone.marionette');
-
-var ViewBehavior = Mn.Behavior.extend({
-  onRender: function() {
-    if (this.view.model.get('selected')) {
-      this.$el.addClass('highlight');
-    }
-    else {
-      this.$el.removeClass('highlight');
-    }
-  }
-});
-```
-
-[Live example](https://jsfiddle.net/marionettejs/8dmk30Lq/)
-
-### Referencing the DOM
-
-Behaviors, like views, have a `ui` attribute that can reference and cache DOM
-elements, just as in the `View`. For more detail, see the
-[`ui` documentation for views](./marionette.view.md#organizing-your-view).
 
 If your `ui` keys clash with keys on the attached view, references within the
 behavior will always use the definition on the behavior itself. As views are
@@ -424,3 +407,33 @@ var FirstView = Mn.View.extend({
 ```
 
 [Live example](https://jsfiddle.net/marionettejs/xoy56gpv/)
+
+### View and el
+
+The `Behavior` has a number of proxies attributes that directly refer to the
+related attribute on a view:
+
+* `$`
+* `el`
+* `$el`
+
+In addition, each behavior is able to reference the view they are attached to
+through the `view` attribute:
+
+```javascript
+var Mn = require('backbone.marionette');
+
+var ViewBehavior = Mn.Behavior.extend({
+  onRender: function() {
+    if (this.view.model.get('selected')) {
+      this.$el.addClass('highlight');
+    }
+    else {
+      this.$el.removeClass('highlight');
+    }
+  }
+});
+```
+
+[Live example](https://jsfiddle.net/marionettejs/8dmk30Lq/)
+

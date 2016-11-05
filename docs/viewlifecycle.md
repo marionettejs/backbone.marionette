@@ -508,10 +508,10 @@ myView.render();
 myCol.comparator = function () { return this.get('foo'); };
 
 myView.on({
-  'reoder': function() {
+  'reorder': function() {
     console.log('the collection view has been reordered following its collection');
   },
-  'before:reoder': function() {
+  'before:reorder': function() {
     console.log('the collection view is about to be reordered');
   }
 });

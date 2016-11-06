@@ -16,7 +16,7 @@ collection interactions to be utilized across your application.
 * [View Proxy](#view-proxy)
   * [Listening to View Events](#listening-to-view-events)
   * [Proxy Handlers](#proxy-handlers)
-  * [Events Order](#events-order)
+  * [Events / Initialize Order](#events-initialize-order)
   * [Using `ui`](#using-ui)  
   * [View and el](#view-and-el)
 
@@ -321,17 +321,22 @@ including:
 * [`modelEvents`](./marionette.view.md#model-events)
 * [`collectionEvents`](./marionette.view.md#collection-events)
 
-### Events Order
+### Events / Initialize Order
 
 If both view and behavior are listening for the same event, this will be executed
-first in the view than in the behavior. 
+first in the view than in the behavior as below.
 
-Unlike events, the initialize method will 
-be called first in the behavior. 
+The View + Behavior initialize process is as follows:
+
+1. View is constructed
+2. Behavior is constructed
+3. Behavior is initialized with view property set
+4. View is initialized
+
+This means that the behavior can access the view during its own `initialize` method.
+The view `initialize` is called later with the information eventually injected by the behavior.
   
-> While initialize is called in behavior before than in view, the view property is already set, and can be accessed, inside behavior initialize 
-  
-[Live example](https://jsfiddle.net/9wtqgwgu/)  
+[Live example](https://jsfiddle.net/marionettejs/qb9go1y3/)  
 
 #### Using `ui`
 

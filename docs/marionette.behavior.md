@@ -17,7 +17,7 @@ collection interactions to be utilized across your application.
   * [Listening to View Events](#listening-to-view-events)
   * [Proxy Handlers](#proxy-handlers)
   * [Events Order](#events-order)
-  * [Using ui](#using-ui)  
+  * [Using `ui`](#using-ui)  
   * [View and el](#view-and-el)
 
 

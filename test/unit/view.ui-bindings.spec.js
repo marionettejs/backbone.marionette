@@ -124,18 +124,6 @@ describe('view ui elements', function() {
     it('should unbind UI elements and reset them to the selector', function() {
       expect(this.view.ui).to.deep.equal(this.uiHash);
     });
-
-    it('should throw ViewDestroyedError when accessing ui bindings through getUI', function() {
-      expect(
-        _.bind(function() { return this.view.getUI('foo');}, this)
-      ).to.throw(
-        Marionette.Error,
-        new Marionette.Error({
-          name: 'ViewDestroyedError',
-          message: 'View (cid: "' + this.view.id + '") has already been destroyed and cannot be used.'
-        })
-      );
-    });
   });
 
   describe('when calling delegateEvents', function() {

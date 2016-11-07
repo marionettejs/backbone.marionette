@@ -43,18 +43,6 @@ describe('destroying views', function() {
     });
   });
 
-  describe('when rendering a Marionette.View that was previously destroyed', function() {
-    beforeEach(function() {
-      this.itemView = new Marionette.View();
-      this.itemView.destroy();
-    });
-
-    it('should throw an error', function() {
-      expect(this.itemView.render).to.throw('View (cid: "' + this.itemView.cid +
-          '") has already been destroyed and cannot be used.');
-    });
-  });
-
   describe('when destroying a Marionette.CollectionView multiple times', function() {
     beforeEach(function() {
       this.onDestroyStub = this.sinon.stub();
@@ -75,18 +63,6 @@ describe('destroying views', function() {
     });
   });
 
-  describe('when rendering a Marionette.CollectionView that was previously destroyed', function() {
-    beforeEach(function() {
-      this.collectionView = new Marionette.CollectionView();
-      this.collectionView.destroy();
-    });
-
-    it('should throw an error', function() {
-      expect(this.collectionView.render).to.throw('View (cid: "' + this.collectionView.cid +
-          '") has already been destroyed and cannot be used.');
-    });
-  });
-
   describe('when destroying a Marionette.CompositeView multiple times', function() {
     beforeEach(function() {
       this.onDestroyStub = this.sinon.stub();
@@ -104,18 +80,6 @@ describe('destroying views', function() {
 
     it('should mark the view as destroyed', function() {
       expect(this.compositeView).to.have.property('_isDestroyed', true);
-    });
-  });
-
-  describe('when rendering a Marionette.CompositeView that was previously destroyed', function() {
-    beforeEach(function() {
-      this.compositeView = new Marionette.CompositeView();
-      this.compositeView.destroy();
-    });
-
-    it('should throw an error', function() {
-      expect(this.compositeView.render).to.throw('View (cid: "' + this.compositeView.cid +
-          '") has already been destroyed and cannot be used.');
     });
   });
 });

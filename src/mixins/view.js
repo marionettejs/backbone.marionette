@@ -7,10 +7,10 @@ import { triggerMethod } from '../common/trigger-method';
 import BehaviorsMixin from './behaviors';
 import CommonMixin from './common';
 import DelegateEntityEventsMixin from './delegate-entity-events';
+import DomMixin from './dom';
 import TriggersMixin from './triggers';
 import UIMixin from './ui';
 import MarionetteError from '../error';
-import DomMixin from './dom';
 
 // MixinOptions
 // - behaviors
@@ -113,16 +113,6 @@ const ViewMixin = {
     return this;
   },
 
-  // Internal helper method to verify whether the view hasn't been destroyed
-  _ensureViewIsIntact() {
-    if (this._isDestroyed) {
-      throw new MarionetteError({
-        name: 'ViewDestroyedError',
-        message: `View (cid: "${this.cid}") has already been destroyed and cannot be used.`
-      });
-    }
-  },
-
   // Handle destroying the view and its children.
   destroy(...args) {
     if (this._isDestroyed) { return this; }
@@ -174,7 +164,6 @@ const ViewMixin = {
   },
 
   getUI(name) {
-    this._ensureViewIsIntact();
     return this._getUI(name);
   },
 

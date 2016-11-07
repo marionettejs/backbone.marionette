@@ -456,30 +456,6 @@ describe('layoutView', function() {
     });
   });
 
-  describe('when re-rendering a destroyed layoutView', function() {
-    beforeEach(function() {
-      this.layoutView = new this.View();
-      this.layoutView.render();
-      this.region = this.layoutView.getRegion('regionOne');
-
-      this.view = new Backbone.View();
-      this.view.destroy = function() {};
-      this.layoutView.getRegion('regionOne').show(this.view);
-      this.layoutView.destroy();
-
-      this.sinon.spy(this.region, 'empty');
-      this.sinon.spy(this.view, 'destroy');
-
-      this.layoutView.onBeforeRender = this.sinon.stub();
-      this.layoutView.onRender = this.sinon.stub();
-    });
-
-    it('should throw an error', function() {
-      expect(this.layoutView.render).to.throw('View (cid: "' + this.layoutView.cid +
-          '") has already been destroyed and cannot be used.');
-    });
-  });
-
   describe('has a valid inheritance chain back to Backbone.View', function() {
     beforeEach(function() {
       this.constructor = this.sinon.spy(Backbone.View.prototype, 'constructor');

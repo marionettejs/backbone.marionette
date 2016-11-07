@@ -308,7 +308,7 @@ triggered on a `View` are passed to all attached `behaviors`. This includes:
 These handlers work exactly as they do on `View` -
 [see the `View` documentation](./marionette.view.md#events)
 
-> Events triggered in behavior instance are not executed in view. To notify 
+> Events triggered in the behavior instance are not executed in the view. To notify 
 > the view, the behavior must trigger an event in its view property, e.g, `this.view.trigger('my:event')`   
 
 ### Proxy Handlers
@@ -324,7 +324,7 @@ including:
 ### Events / Initialize Order
 
 If both view and behavior are listening for the same event, this will be executed
-first in the view than in the behavior as below.
+first in the view then in the behavior as below.
 
 The View + Behavior initialize process is as follows:
 

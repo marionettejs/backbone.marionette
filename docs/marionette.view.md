@@ -589,7 +589,7 @@ var MyView = Mn.View.extend({
 
 When the `a` tag is clicked here, the `link:click` event is fired. This event
 can be listened to using the
-[Magic Method Binding](./events.md#magic-method-binding) technique
+[`onEvent` Binding](./events.md#onevent-binding) technique
 discussed in the [events documentation](./events.md).
 
 The major benefit of the `triggers` attribute over `events` is that triggered

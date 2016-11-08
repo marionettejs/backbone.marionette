@@ -1,16 +1,16 @@
 // Next Collection View
 // ---------------
 
-import _                  from 'underscore';
-import Backbone           from 'backbone';
+import _ from 'underscore';
+import Backbone from 'backbone';
 import destroyBackboneView from './utils/destroy-backbone-view';
-import isNodeAttached     from './common/is-node-attached';
-import monitorViewEvents  from './common/monitor-view-events';
+import isNodeAttached from './common/is-node-attached';
+import monitorViewEvents from './common/monitor-view-events';
 import { triggerMethodOn } from './common/trigger-method';
 import ChildViewContainer from './next-child-view-container';
-import MarionetteError    from './error';
-import Region    from './region';
-import ViewMixin          from './mixins/view';
+import MarionetteError from './error';
+import Region from './region';
+import ViewMixin from './mixins/view';
 
 const ClassOptions = [
   'behaviors',

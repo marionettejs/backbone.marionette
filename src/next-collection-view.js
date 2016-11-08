@@ -389,22 +389,52 @@ const CollectionView = Backbone.View.extend({
     const filteredViews = this._filterChildren();
 
     this._renderChildren(filteredViews);
+
+    return this;
   },
 
   _filterChildren() {
-    if (!_.isFunction(this.viewFilter)) {
+    const viewFilter = this._getFilter();
+
+    if (!viewFilter) {
       return this.children._views;
     }
 
     this.triggerMethod('before:filter', this);
 
-    const filteredViews = this.children.partition(_.bind(this.viewFilter, this));
+    const filteredViews = this.children.partition(_.bind(viewFilter, this));
 
     this._detachChildren(filteredViews[1]);
 
     this.triggerMethod('filter', this);
 
     return filteredViews[0];
+  },
+
+  // This method returns a function for the viewFilter
+  _getFilter() {
+    const viewFilter = this.viewFilter;
+
+    if (_.isFunction(viewFilter)) {
+      return viewFilter;
+    }
+
+    // Support filter predicates `{ fooFlag: true }`
+    if (_.isObject(viewFilter)) {
+      const matcher = _.matches(viewFilter);
+      return function(view) {
+        return matcher(view.model && view.model.attributes);
+      };
+    }
+
+    // Filter by model attribute
+    if (_.isString(viewFilter)) {
+      return function(view) {
+        return view.model && view.model.get(viewFilter);
+      };
+    }
+
+    return false;
   },
 
   // Sets the view's `viewFilter` and applies the filter if the view is ready.

@@ -17,7 +17,7 @@ collection interactions to be utilized across your application.
   * [Listening to View Events](#listening-to-view-events)
   * [Proxy Handlers](#proxy-handlers)
   * [Events / Initialize Order](#events--initialize-order)
-  * [Using `ui`](#using-ui)  
+  * [Using `ui`](#using-ui)
   * [View and el](#view-and-el)
 
 
@@ -308,8 +308,8 @@ triggered on a `View` are passed to all attached `behaviors`. This includes:
 These handlers work exactly as they do on `View` -
 [see the `View` documentation](./marionette.view.md#events)
 
-> Events triggered in the behavior instance are not executed in the view. To notify 
-> the view, the behavior must trigger an event in its view property, e.g, `this.view.trigger('my:event')`   
+> Events triggered in the behavior instance are not executed in the view. To notify
+> the view, the behavior must trigger an event in its view property, e.g, `this.view.trigger('my:event')`
 
 ### Proxy Handlers
 
@@ -335,8 +335,8 @@ The View + Behavior initialize process is as follows:
 
 This means that the behavior can access the view during its own `initialize` method.
 The view `initialize` is called later with the information eventually injected by the behavior.
-  
-[Live example](https://jsfiddle.net/marionettejs/qb9go1y3/)  
+
+[Live example](https://jsfiddle.net/marionettejs/qb9go1y3/)
 
 #### Using `ui`
 
@@ -441,4 +441,3 @@ var ViewBehavior = Mn.Behavior.extend({
 ```
 
 [Live example](https://jsfiddle.net/marionettejs/8dmk30Lq/)
-

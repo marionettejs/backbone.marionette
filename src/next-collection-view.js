@@ -478,7 +478,7 @@ const CollectionView = Backbone.View.extend({
 
   // Override this method to change how the collectionView detaches a child view
   detachHtml(view) {
-    view.$el.detach();
+    this.detachEl(view.el);
   },
 
   _renderChildren(views) {
@@ -519,11 +519,11 @@ const CollectionView = Backbone.View.extend({
 
   // Renders each view in children and creates a fragment buffer from them
   _getBuffer(views) {
-    const elBuffer = document.createDocumentFragment();
+    const elBuffer = this.createBuffer();
 
     _.each(views, view => {
       this._renderChildView(view);
-      elBuffer.appendChild(view.el);
+      this.appendChildren(elBuffer, view.el);
     });
 
     return elBuffer;
@@ -549,7 +549,7 @@ const CollectionView = Backbone.View.extend({
   // Override this method to do something other than `.append`.
   // You can attach any HTML at this point including the els.
   attachHtml(collectionView, els) {
-    collectionView.$el.append(els);
+    this.appendChildren(collectionView.el, els);
   },
 
   // Render the child's view and add it to the HTML for the collection view at a given index, based on the current sort

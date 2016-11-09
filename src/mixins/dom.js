@@ -38,6 +38,10 @@ export default {
     Backbone.$(el).html(html);
   },
 
+  detachEl(el) {
+    Backbone.$(el).detach();
+  },
+
   removeEl(el) {
     Backbone.$(el).remove();
   },

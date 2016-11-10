@@ -56,7 +56,7 @@ describe('Behaviors', function() {
       Bar = Behavior.extend({});
       Baz = Behavior.extend({});
       behaviors = {
-        foo: this.sinon.spy('Behavior'),
+        foo: this.sinon.spy(Marionette, 'Behavior'),
         bar: this.sinon.spy(Bar),
         baz: this.sinon.spy(Baz)
       };
@@ -153,7 +153,7 @@ describe('Behaviors', function() {
     });
 
     afterEach(function() {
-      Behavior.restore();
+      Marionette.Behavior.restore();
       Marionette.Behaviors.behaviorsLookup.restore();
     });
   });

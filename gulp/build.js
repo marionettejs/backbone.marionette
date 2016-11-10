@@ -59,7 +59,7 @@ gulp.task('build-lib', ['lint-src'], function(){
       .pipe(sourcemaps.init({loadMaps: true}))
       .pipe(sourcemaps.write('./'))
       .pipe(gulp.dest(buildPath))
-      .pipe(filter(['*', '!**/*.js.map']))
+      .pipe(filter(['**', '!**/*.js.map']))
       .pipe(rename(name + '.min.js'))
       .pipe(sourcemaps.init({loadMaps: true}))
       .pipe(uglify({

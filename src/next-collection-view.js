@@ -386,6 +386,8 @@ const CollectionView = Backbone.View.extend({
 
   // This method re-filters the children views and re-renders the results
   filter() {
+    if (!this.children.length) { return this; }
+
     const filteredViews = this._filterChildren();
 
     this._renderChildren(filteredViews);
@@ -415,6 +417,8 @@ const CollectionView = Backbone.View.extend({
   _getFilter() {
     const viewFilter = this.viewFilter;
 
+    if (!viewFilter) { return false; }
+
     if (_.isFunction(viewFilter)) {
       return viewFilter;
     }
@@ -434,19 +438,21 @@ const CollectionView = Backbone.View.extend({
       };
     }
 
-    return false;
+    throw new MarionetteError({
+      name: 'InvalidViewFilterError',
+      message: '"viewFilter" must be a function, predicate object literal, a string indicating a model attribute, or falsy'
+    });
   },
 
   // Sets the view's `viewFilter` and applies the filter if the view is ready.
   // To prevent the render pass `{ preventRender: true } as the 2nd argument.
   setFilter(filter, {preventRender} = {}) {
-    const canBeRendered = this._isRendered && !this._isDestroyed;
     const filterChanged = this.viewFilter !== filter;
-    const shouldRender = canBeRendered && filterChanged && !preventRender;
+    const shouldRender = filterChanged && !preventRender;
 
     this.viewFilter = filter;
 
-    if (shouldRender && this.children.length) {
+    if (shouldRender) {
       this.filter();
     }
 

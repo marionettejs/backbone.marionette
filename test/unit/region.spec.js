@@ -166,15 +166,6 @@ describe('region', function() {
       expect(this.region.hasView()).to.equal(true);
     });
 
-    it('should reference region', function() {
-      expect(this.view._parent).to.deep.equal(this.region);
-    });
-
-    it('should reference region, when same view was passed', function() {
-      this.region.show(this.view);
-      expect(this.view._parent).to.deep.equal(this.region);
-    });
-
     it('should set $el and el', function() {
       expect(this.region.$el[0]).to.equal(this.region.el);
     });
@@ -228,14 +219,6 @@ describe('region', function() {
 
       it('should still have a view', function() {
         expect(this.region.hasView()).to.equal(true);
-      });
-
-      it('should reference region', function() {
-        expect(this.view2._parent).to.deep.equal(this.region);
-      });
-
-      it('old view should not reference region', function() {
-        expect(this.view._parent).to.be.undefined;
       });
     });
 

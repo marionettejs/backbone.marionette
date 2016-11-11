@@ -198,6 +198,10 @@ const ViewMixin = {
     this._childViewTriggers = _.result(this, 'childViewTriggers');
   },
 
+  _proxyChildViewEvents(view) {
+    this.listenTo(view, 'all', this._childViewEventHandler);
+  },
+
   _childViewEventHandler(eventName, ...args) {
     const childViewEvents = this.normalizeMethods(this._childViewEvents);
 

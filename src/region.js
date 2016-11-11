@@ -66,11 +66,6 @@ const Region = MarionetteObject.extend({
     // has been destroyed we can not reuse it.
     view.on('destroy', this._empty, this);
 
-    // Make this region the view's parent.
-    // It's important that this parent binding happens before rendering so that any events
-    // the child may trigger during render can also be triggered on the child's ancestor views.
-    view._parent = this;
-
     this._proxyChildViewEvents(view);
 
     this._renderView(view);
@@ -82,13 +77,11 @@ const Region = MarionetteObject.extend({
   },
 
   _proxyChildViewEvents(view) {
-    const parentView = this._parent;
+    const parentView = this._parentView;
 
-    if (!parentView) {
-      return;
-    }
+    if (!parentView) { return; }
 
-    parentView.listenTo(view, 'all', parentView._childViewEventHandler);
+    parentView._proxyChildViewEvents(view);
   },
 
   _renderView(view) {
@@ -241,13 +234,18 @@ const Region = MarionetteObject.extend({
 
     if (!view._isDestroyed) {
       this._removeView(view, shouldDestroy);
-      delete view._parent;
-      if (this._parent) {
-        this._parent.stopListening(view);
-      }
+      this._stopChildViewEvents(view);
     }
 
     this.triggerMethod('empty', this, view);
+  },
+
+  _stopChildViewEvents(view) {
+    const parentView = this._parentView;
+
+    if (!parentView) { return; }
+
+    this._parentView.stopListening(view);
   },
 
   _removeView(view, shouldDestroy) {

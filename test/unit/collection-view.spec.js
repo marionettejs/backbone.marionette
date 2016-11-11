@@ -186,12 +186,6 @@ describe('collection view', function() {
       expect(_.size(this.collectionView.children)).to.equal(2);
     });
 
-    it('children should reference collectionView', function() {
-      var children = this.collectionView._getImmediateChildren();
-      expect(children[0]._parent).to.deep.equal(this.collectionView);
-      expect(children[1]._parent).to.deep.equal(this.collectionView);
-    });
-
     it('should call "onBeforeRender" before rendering', function() {
       expect(this.collectionView.onBeforeRender).to.have.been.called;
     });
@@ -500,12 +494,6 @@ describe('collection view', function() {
 
     it('should trigger the childview:render event from the collectionView', function() {
       expect(this.childViewRender).to.have.been.called;
-    });
-
-    it('children should reference collectionView', function() {
-      var children = this.collectionView._getImmediateChildren();
-      expect(children[0]._parent).to.deep.equal(this.collectionView);
-      expect(children[1]._parent).to.deep.equal(this.collectionView);
     });
   });
 

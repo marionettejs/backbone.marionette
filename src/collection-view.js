@@ -199,7 +199,6 @@ const CollectionView = Backbone.View.extend({
       destroyBackboneView(view);
     }
 
-    delete view._parent;
     this.stopListening(view);
     this.triggerMethod('remove:child', this, view);
   },
@@ -388,12 +387,10 @@ const CollectionView = Backbone.View.extend({
   },
 
   _setupChildView(view, index) {
-    view._parent = this;
-
     monitorViewEvents(view);
 
     // set up the child view event forwarding
-    this._proxyChildEvents(view);
+    this._proxyChildViewEvents(view);
 
     if (this.sort) {
       view._index = index;
@@ -758,11 +755,6 @@ const CollectionView = Backbone.View.extend({
   _shouldAddChild(child, index) {
     const filter = this.filter;
     return !_.isFunction(filter) || filter.call(this, child, index, this.collection);
-  },
-
-  // Set up the child view event forwarding. Uses a "childview:" prefix in front of all forwarded events.
-  _proxyChildEvents(view) {
-    this.listenTo(view, 'all', this._childViewEventHandler);
   }
 });
 

@@ -370,6 +370,26 @@ const CollectionView = Backbone.View.extend({
     this.triggerMethod('sort', this);
   },
 
+  // Sets the view's `viewComparator` and applies the sort if the view is ready.
+  // To prevent the render pass `{ preventRender: true } as the 2nd argument.
+  setComparator(comparator, {preventRender} = {}) {
+    const comparatorChanged = this.viewComparator !== comparator;
+    const shouldSort = comparatorChanged && !preventRender;
+
+    this.viewComparator = comparator;
+
+    if (shouldSort) {
+      this.sort();
+    }
+
+    return this;
+  },
+
+  // Clears the `viewComparator` and follows the same rules for rendering as `setComparator`.
+  removeComparator(options) {
+    return this.setComparator(null, options);
+  },
+
   // If viewComparator is overriden it will be returned here.
   // Additionally override this function to provide custom
   // viewComparator logic
@@ -415,7 +435,7 @@ const CollectionView = Backbone.View.extend({
 
   // This method returns a function for the viewFilter
   _getFilter() {
-    const viewFilter = this.viewFilter;
+    const viewFilter = this.getViewFilter();
 
     if (!viewFilter) { return false; }
 
@@ -442,6 +462,12 @@ const CollectionView = Backbone.View.extend({
       name: 'InvalidViewFilterError',
       message: '"viewFilter" must be a function, predicate object literal, a string indicating a model attribute, or falsy'
     });
+  },
+
+  // Override this function to provide custom
+  // viewFilter logic
+  getViewFilter() {
+    return this.viewFilter;
   },
 
   // Sets the view's `viewFilter` and applies the filter if the view is ready.

@@ -69,9 +69,7 @@ const CollectionView = Backbone.View.extend({
 
   // Create an region to show the emptyView
   _initEmptyRegion() {
-    this.emptyRegion = new Region({ el: this.el })
-
-    this.emptyRegion._parent = this;
+    this.emptyRegion = new Region({ el: this.el });
   },
 
   // Configured the initial events that the collection view binds to.
@@ -660,6 +658,7 @@ const CollectionView = Backbone.View.extend({
   // called by ViewMixin destroy
   _removeChildren() {
     this._destroyChildren();
+    this.emptyRegion.destroy();
   },
 
   // Destroy the child views that this collection view is holding on to, if any

@@ -44,12 +44,18 @@ function parseBehaviors(view, behaviors) {
 }
 
 export default {
+  _behaviors: {},
+
   _initBehaviors() {
+    this._behaviors = this._getBehaviors();
+  },
+
+  _getBehaviors() {
     const behaviors = _.result(this, 'behaviors');
 
     // Behaviors defined on a view can be a flat object literal
     // or it can be a function that returns an object.
-    this._behaviors = _.isObject(behaviors) ? parseBehaviors(this, behaviors) : {};
+    return _.isObject(behaviors) ? parseBehaviors(this, behaviors) : {};
   },
 
   _getBehaviorTriggers() {

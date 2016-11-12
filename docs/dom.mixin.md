@@ -8,87 +8,60 @@ jQuery and integrate with the DOM using a custom mixin.
 The DOM mixin manages the DOM on behalf of `View` and `CollectionView`. It
 defines the methods that actually attach and remove views and children.
 
-The default mixin depends on Backbone's jQuery `$` object.
+The default mixin depends on Backbone's jQuery `$` object however it does not
+rely on jQuery-specific behavior. This should make it easier to develop your own
+API.
 
 ### `createBuffer()`
 
-Returns a HTML DOM node.
+Returns a new HTML DOM node instance. The resulting node can be passed into the
+other DOM functions.
 
 ### `appendChildren(el, children)`
 
-Takes the DOM node `el` and appends the rendered `children`. For example, given
-the following:
-
-```js
-var el = '<ul></ul>';
-var children = '<li>Item 1</li><li>Item 2</li>';
-
-appendChildren(el, children);
-```
-
-The output will be:
-
-```html
-<ul>
-  <li>Item 1</li>
-  <li>Item 2</li>
-</ul>
-```
+Takes the DOM node `el` and appends the rendered `children` to the end of the
+element's contents.
 
 ### `beforeEl(el, sibling)`
 
-Add `sibling` to the DOM immediately before the DOM node `el`. For example,
-given the following:
-
-```js
-var el = '<section></section';
-var sibling = '<div></div>';
-
-beforeEl(el, sibling);
-```
-
-The output will be:
-
-```html
-<div></div>
-<section></section>
-```
+Add `sibling` to the DOM immediately before the DOM node `el`. The `sibling`
+will be at the same level as `el`.
 
 ### `replaceEl(newEl, oldEl)`
 
-
-  replaceEl(newEl, oldEl) {
-    const parent = oldEl.parentNode;
-
-    if (!parent) {
-      return;
-    }
-
-    parent.replaceChild(newEl, oldEl);
-  },
+Remove `oldEl` from the DOM and put `newEl` in its place.
 
 ### `detachContents(el)`
-  detachContents(el) {
-    Backbone.$(el).contents().detach();
-  },
+
+Remove the inner contents of `el` from the DOM while leaving `el` itself in the
+DOM.
 
 ### `setInnerContent(el, html)`
 
-  setInnerContent(el, html) {
-    Backbone.$(el).html(html);
-  },
+Replace the contents of `el` with the HTML string of `html`. Unlike other DOM
+functions, this takes a literal string for its second argument.
 
 ### `removeEl(el)`
 
-  removeEl(el) {
-    Backbone.$(el).remove();
-  },
+Remove `el` from the DOM.
 
 ### `findEls(selector, context)`
 
-  findEls(selector, context) {
-    return Backbone.$(selector, context);
-  }
+Lookup the `selector` string within the DOM node for `context`. The `context`
+argument should be a DOM node reference.
 
-## Using the Mixin API
+## Providing Your Own DOM
 
+To implement your own DOM API for `View`, override the provided functions to
+provide the same functionality provided and mix it in using `_.extend` as such:
+
+```js
+var _ = require('underscore');
+var Mn = require('backbone.marionette');
+
+var MyDOMMixin = require('./mixins/mydom');
+
+_.extend(Mn.View, MyDOMMixin);
+
+module.exports = Mn.View;
+```

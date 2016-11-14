@@ -20,10 +20,13 @@ const ClassOptions = [
   'regionClass',
   'regions',
   'template',
+  'templateAsEl',
   'templateContext',
   'triggers',
   'ui'
 ];
+
+const TEMPLATE_AS_EL = 'TEMPLATE_AS_EL';
 
 // The standard view. Includes view events, automatic rendering
 // of Underscore templates, nested views, and more.
@@ -35,6 +38,10 @@ const View = Backbone.View.extend({
     this._setOptions(options);
 
     this.mergeOptions(options, ClassOptions);
+
+    if (this.templateAsEl) {
+      this.el = TEMPLATE_AS_EL;
+    }
 
     monitorViewEvents(this);
 
@@ -86,7 +93,9 @@ const View = Backbone.View.extend({
   // Overriding Backbone.View's `setElement` to handle
   // if an el was previously defined. If so, the view might be
   // rendered or attached on setElement.
-  setElement() {
+  setElement(el) {
+    if (el === TEMPLATE_AS_EL) { return this; }
+
     const hasEl = !!this.el;
 
     Backbone.View.prototype.setElement.apply(this, arguments);
@@ -145,6 +154,12 @@ const View = Backbone.View.extend({
 
     // Render and add to el
     const html = Renderer.render(template, data, this);
+
+    if (this.templateAsEl) {
+      this.setElement(html);
+      return;
+    }
+
     this.attachElContent(html);
   },
 

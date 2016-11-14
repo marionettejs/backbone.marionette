@@ -9,7 +9,6 @@ import CommonMixin from './common';
 import DelegateEntityEventsMixin from './delegate-entity-events';
 import TriggersMixin from './triggers';
 import UIMixin from './ui';
-import View from '../view';
 import MarionetteError from '../error';
 import DomMixin from './dom';
 
@@ -189,7 +188,6 @@ const ViewMixin = {
     const ret = triggerMethod.apply(this, arguments);
 
     this._triggerEventOnBehaviors.apply(this, arguments);
-    this._triggerEventOnParentLayout.apply(this, arguments);
 
     return ret;
   },
@@ -200,26 +198,8 @@ const ViewMixin = {
     this._childViewTriggers = _.result(this, 'childViewTriggers');
   },
 
-  _triggerEventOnParentLayout() {
-    const layoutView = this._parentView();
-    if (!layoutView) {
-      return;
-    }
-
-    layoutView._childViewEventHandler.apply(layoutView, arguments);
-  },
-
-  // Walk the _parent tree until we find a view (if one exists).
-  // Returns the parent view hierarchically closest to this view.
-  _parentView() {
-    let parent = this._parent;
-
-    while (parent) {
-      if (parent instanceof View) {
-        return parent;
-      }
-      parent = parent._parent;
-    }
+  _proxyChildViewEvents(view) {
+    this.listenTo(view, 'all', this._childViewEventHandler);
   },
 
   _childViewEventHandler(eventName, ...args) {

@@ -68,7 +68,7 @@ export default {
   _addRegion(region, name) {
     this.triggerMethod('before:add:region', this, name, region);
 
-    region._parent = this;
+    region._parentView = this;
 
     this._regions[name] = region;
 

@@ -85,7 +85,7 @@ const CompositeView = CollectionView.extend({
 
   // Renders the model and the collection.
   render() {
-    this._ensureViewIsIntact();
+    if (this._isDestroyed) { return this; }
     this._isRendering = true;
     this.resetChildViewContainer();
 

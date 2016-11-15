@@ -111,7 +111,7 @@ const View = Backbone.View.extend({
   // Subsequent renders after the first will re-render all nested
   // views.
   render() {
-    this._ensureViewIsIntact();
+    if (this._isDestroyed) { return this; }
 
     this.triggerMethod('before:render', this);
 

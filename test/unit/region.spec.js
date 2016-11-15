@@ -293,7 +293,7 @@ describe('region', function() {
             this.regionHtml = this.$parentEl.html();
             this.showOptions = {preventDestroy: true};
             this.region.replaceElement = true;
-            this.region.show(this.view, this.showOptions);
+            this.region.show(this.view1, this.showOptions);
           });
 
           it('should have replaced the "el"', function() {
@@ -301,7 +301,7 @@ describe('region', function() {
           });
 
           it('should append the view HTML to the parent "el"', function() {
-            expect(this.$parentEl).to.contain.$html(this.view.$el.html());
+            expect(this.$parentEl).to.contain.$html(this.view1.$el.html());
           });
 
           it('should remove the region\'s "el" from the DOM', function() {
@@ -319,7 +319,7 @@ describe('region', function() {
           });
 
           it('should not restore if the "currentView.el" has been remove from the DOM', function() {
-            this.view.remove();
+            this.view1.remove();
             this.region._restoreEl();
             expect(this.region.currentView.el.parentNode).is.falsy;
           });
@@ -330,7 +330,7 @@ describe('region', function() {
             });
 
             it('should remove the view from the parent', function() {
-              expect(this.$parentEl).to.not.contain.$html(this.view.$el.html());
+              expect(this.$parentEl).to.not.contain.$html(this.view1.$el.html());
             });
 
             it('should restore the region\'s "el" to the DOM', function() {
@@ -544,6 +544,22 @@ describe('region', function() {
 
     it('should call inner region render before attaching to DOM', function() {
       expect(this.innerRegionRenderSpy).to.have.been.calledBefore(this.attachHtmlSpy);
+    });
+  });
+
+  describe('when a view is already attached and shown in a region', function() {
+    beforeEach(function() {
+      this.setFixtures('<div id="region"><div id="view">Foo</div></div>');
+      this.myRegion = new Marionette.Region({
+        el: '#region'
+      });
+      this.sinon.spy(this.myRegion, 'empty');
+
+      this.myRegion.show(new Marionette.View({ el: '#view' }));
+    });
+
+    it('should not empty the region', function() {
+      expect(this.myRegion.empty).to.not.have.been.called;
     });
   });
 

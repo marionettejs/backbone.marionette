@@ -57,23 +57,32 @@ const Region = MarionetteObject.extend({
 
     this.triggerMethod('before:show', this, view, options);
 
-    monitorViewEvents(view);
+    // Assume an attached view is already in the region for pre-existing DOM
+    if (!view._isAttached) {
+      this.empty(options);
+    }
 
-    this.empty(options);
-
-    // We need to listen for if a view is destroyed in a way other than through the region.
-    // If this happens we need to remove the reference to the currentView since once a view
-    // has been destroyed we can not reuse it.
-    view.on('destroy', this._empty, this);
-
-    this._proxyChildViewEvents(view);
+    this._setupChildView(view);
 
     this._renderView(view);
 
     this._attachView(view, options);
 
+    this.currentView = view;
+
     this.triggerMethod('show', this, view, options);
     return this;
+  },
+
+  _setupChildView(view) {
+    monitorViewEvents(view);
+
+    this._proxyChildViewEvents(view);
+
+    // We need to listen for if a view is destroyed in a way other than through the region.
+    // If this happens we need to remove the reference to the currentView since once a view
+    // has been destroyed we can not reuse it.
+    view.on('destroy', this._empty, this);
   },
 
   _proxyChildViewEvents(view) {
@@ -119,8 +128,6 @@ const Region = MarionetteObject.extend({
       view._isAttached = true;
       triggerMethodOn(view, 'attach', view);
     }
-
-    this.currentView = view;
   },
 
   _ensureElement(options = {}) {

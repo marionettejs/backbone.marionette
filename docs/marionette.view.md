@@ -34,6 +34,7 @@ multiple views through the `regions` attribute.
     * [Event and Trigger Mapping](#event-and-trigger-mapping)
     * [View `events`](#view-events)
     * [View `triggers`](#view-triggers)
+    * [View `triggers` Event Object](#view-triggers-event-object)
 * [Model and Collection Events](#model-and-collection-events)
   * [Model Events](#model-events)
     * [Function Callback](#function-callback)
@@ -596,6 +597,27 @@ The major benefit of the `triggers` attribute over `events` is that triggered
 events can bubble up to any parent views. For a full explanation of bubbling
 events and listening to child events, see the
 [event bubbling documentation](./events.md#child-view-events).
+
+#### View `triggers` Event Object
+
+By default all trigger events are stopped with `preventDefault` and
+`stopPropagation` methods, but you can manually configure the triggers using
+a hash instead of event name. The example below triggers an event and prevents
+default browser behaviour using `preventDefault` method.
+
+```js
+var MyView = Mn.View.extend({
+  triggers: {
+    'click a': {
+      event: 'link:clicked',
+      preventDefault: true, // this param is optional and will default to true
+      stopPropagation: false
+    }
+  }
+});
+```
+
+The default behavior for calling `stopPropagation()` can be changed with the feature flag [`triggersStopPropagation`](./marionette.features.md).
 
 ## Model and Collection events
 

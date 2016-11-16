@@ -119,4 +119,51 @@ describe('view triggers', function() {
       expect(this.fooEvent.isPropagationStopped()).to.be.false;
     });
   });
+
+  describe('when triggersStopPropagation flag is set to false', function() {
+    beforeEach(function() {
+      Marionette.setEnabled('triggersStopPropagation', false);
+    });
+
+    describe('triggers should not stop propagation and events by default', function() {
+      beforeEach(function() {
+        this.View = Marionette.View.extend({triggers: this.triggersHash});
+        this.view = new this.View();
+        this.view.on('fooHandler', this.fooHandlerStub);
+
+        this.view.$el.trigger(this.fooEvent);
+      });
+
+      it('should stop propagation by default', function() {
+        expect(this.fooEvent.isPropagationStopped()).to.be.false;
+      });
+
+      it('should prevent default by default', function() {
+        expect(this.fooEvent.isDefaultPrevented()).to.be.true;
+      });
+    });
+
+    describe('when triggers items are manually configured', function() {
+      beforeEach(function() {
+        this.View = Marionette.View.extend({
+          triggers: {
+            'foo': {
+              event: 'fooHandler',
+              preventDefault: true,
+              stopPropagation: true
+            }
+          }
+        });
+        this.view = new this.View();
+        this.view.on('fooHandler', this.fooHandlerStub);
+
+        this.view.$el.trigger(this.fooEvent);
+      });
+
+      it('should prevent and stop the first view event', function() {
+        expect(this.fooEvent.isDefaultPrevented()).to.be.true;
+        expect(this.fooEvent.isPropagationStopped()).to.be.true;
+      });
+    });
+  });
 });

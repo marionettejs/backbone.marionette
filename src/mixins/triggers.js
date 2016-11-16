@@ -1,5 +1,6 @@
 import _ from 'underscore';
 import getUniqueEventName from '../utils/get-unique-event-name';
+import { isEnabled } from '../config/features';
 
 // Internal method to create an event handler for a given `triggerDef` like
 // 'click:foo'
@@ -10,15 +11,20 @@ function buildViewTrigger(view, triggerDef) {
 
   const eventName = triggerDef.event;
   const shouldPreventDefault = triggerDef.preventDefault !== false;
-  const shouldStopPropagation = triggerDef.stopPropagation !== false;
 
-  return function(e) {
+  let shouldStopPropagation = !!triggerDef.stopPropagation;
+
+  if (isEnabled('triggersStopPropagation')) {
+    shouldStopPropagation = triggerDef.stopPropagation !== false;
+  }
+
+  return function(event) {
     if (shouldPreventDefault) {
-      e.preventDefault();
+      event.preventDefault();
     }
 
     if (shouldStopPropagation) {
-      e.stopPropagation();
+      event.stopPropagation();
     }
 
     view.triggerMethod(eventName, view);

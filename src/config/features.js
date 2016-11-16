@@ -1,6 +1,7 @@
 // Add Feature flags here
 // e.g. 'class' => false
 const FEATURES = {
+  triggersStopPropagation: true
 };
 
 function isEnabled(name) {

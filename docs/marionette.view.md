@@ -580,7 +580,7 @@ var MyView = Mn.View.extend({
     'click a': 'link:clicked'
   },
 
-  onLinkClicked: function() {
+  onLinkClicked: function(view, event) {
     console.log('Show the modal');
   }
 });
@@ -599,6 +599,11 @@ events and listening to child events, see the
 [event bubbling documentation](./events.md#child-view-events).
 
 #### View `triggers` Event Object
+
+Event handlers will receive the triggering view as the first argument and the
+DOM Event object as the second. It is _strongly recommended_ that View's handle
+their own DOM event objects. It should be considered a best practice to not
+utilize the DOM event in external listeners.
 
 By default all trigger events are stopped with `preventDefault` and
 `stopPropagation` methods, but you can manually configure the triggers using

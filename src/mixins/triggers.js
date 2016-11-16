@@ -27,7 +27,7 @@ function buildViewTrigger(view, triggerDef) {
       event.stopPropagation();
     }
 
-    view.triggerMethod(eventName, view);
+    view.triggerMethod(eventName, view, event);
   };
 }
 

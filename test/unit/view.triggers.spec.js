@@ -34,6 +34,10 @@ describe('view triggers', function() {
     it('should include the view in the event', function() {
       expect(this.fooHandlerStub.lastCall.args[0]).to.contain(this.view);
     });
+
+    it('should include the event object in the event', function() {
+      expect(this.fooHandlerStub.lastCall.args[1]).to.be.an.instanceOf($.Event);
+    });
   });
 
   describe('when triggers and standard events are both configured', function() {
@@ -125,7 +129,11 @@ describe('view triggers', function() {
       Marionette.setEnabled('triggersStopPropagation', false);
     });
 
-    describe('triggers should not stop propagation and events by default', function() {
+    afterEach(function() {
+      Marionette.setEnabled('triggersStopPropagation', true);
+    });
+
+    describe('triggers should not stop propagation by default', function() {
       beforeEach(function() {
         this.View = Marionette.View.extend({triggers: this.triggersHash});
         this.view = new this.View();

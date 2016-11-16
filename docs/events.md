@@ -181,7 +181,7 @@ var MyView = Mn.View.extend({
     console.log('Show the modal');
   },
 
-  onDataEntered: function() {
+  onDataEntered: function(view, event) {
     console.log('Data was entered');
   }
 });

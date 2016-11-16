@@ -337,6 +337,22 @@ describe('region', function() {
               expect(this.$parentEl).to.contain.$html('<div id="region"></div>');
             });
           });
+
+          describe('and restore, when view was self destroyed', function() {
+            beforeEach(function() {
+              this.view.trigger('before:destroy', this.view);
+              this.view._removeElement();
+              this.view.trigger('destroy', this.view);
+            });
+
+            it('should remove the view from the parent', function() {
+              expect(this.$parentEl).to.not.contain.$html(this.view.$el.html());
+            });
+
+            it('should restore the region\'s "el" to the DOM', function() {
+              expect(this.$parentEl).to.contain.$html('<div id="region"></div>');
+            });
+          });
         });
 
       });

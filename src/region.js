@@ -8,9 +8,10 @@ import destroyBackboneView from './utils/destroy-backbone-view';
 import monitorViewEvents from './common/monitor-view-events';
 import isNodeAttached from './common/is-node-attached';
 import { triggerMethodOn } from './common/trigger-method';
+import DomMixin from './mixins/dom';
 import MarionetteObject from './object';
 import MarionetteError from './error';
-import DomMixin from './mixins/dom';
+import View from './view';
 
 const ClassOptions = [
   'allowMissingEl',
@@ -52,7 +53,9 @@ const Region = MarionetteObject.extend({
     if (!this._ensureElement(options)) {
       return;
     }
-    this._ensureView(view);
+
+    view = this._getView(view, options);
+
     if (view === this.currentView) { return this; }
 
     this.triggerMethod('before:show', this, view, options);
@@ -141,7 +144,7 @@ const Region = MarionetteObject.extend({
     return true;
   },
 
-  _ensureView(view) {
+  _getView(view, options) {
     if (!view) {
       throw new MarionetteError({
         name: 'ViewNotValid',
@@ -155,6 +158,26 @@ const Region = MarionetteObject.extend({
         message: `View (cid: "${view.cid}") has already been destroyed and cannot be used.`
       });
     }
+
+    if (view instanceof Backbone.View) {
+      return view;
+    }
+
+    const template = this._getTemplate(view);
+
+    const viewOptions = _.extend({ template }, options);
+
+    return new View(viewOptions);
+  },
+
+  // This allows for a template or a static string to be
+  // used as a template
+  _getTemplate(template) {
+    if (_.isFunction(template)) {
+      return template;
+    }
+
+    return function() { return template };
   },
 
   // Override this method to change how the region finds the DOM element that it manages. Return

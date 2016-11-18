@@ -10,7 +10,6 @@ import DelegateEntityEventsMixin from './delegate-entity-events';
 import DomMixin from './dom';
 import TriggersMixin from './triggers';
 import UIMixin from './ui';
-import MarionetteError from '../error';
 
 // MixinOptions
 // - behaviors

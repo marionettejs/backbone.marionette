@@ -4,6 +4,7 @@
   "homepage": "https://marionettejs.com/",
   "main": "./lib/backbone.marionette.js",
   "version": "3.1.0",
+  "license": "MIT",
   "keywords": [
     "backbone",
     "framework",

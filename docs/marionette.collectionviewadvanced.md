@@ -424,11 +424,10 @@ var MyCollectionView = Mn.CollectionView.extend({
 
 ## Binding `ui`
 
-By default, `CollectionView` will not bind anything defined in `ui`. As it has
-no direct `template` of its own to manage, this isn't a particular issue.
-There may be instances where you want to bind the `ui` element to listen to
-children on the collection directly. For example, to bind `triggers` or
-act on `behaviors`.
+By default, `CollectionView` will not bind the `ui` object. As it has no direct
+`template` of its own to manage, this isn't usually an issue. There may be
+instances where binding `ui` is helpful when you want to access elements inside
+`CollectionView`s children with `getUI()`.
 
 If you need to bind `ui` yourself, you can just run `bindUIElements` on the
 collection:

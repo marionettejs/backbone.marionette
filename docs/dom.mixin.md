@@ -1,5 +1,7 @@
 # The DOM Mixin API
 
+**Warning** *The DOM Mixin API is currently experimental and may change.*
+
 With the release of Marionette 3.2, developers can remove the dependency on
 jQuery and integrate with the DOM using a custom mixin.
 
@@ -61,7 +63,7 @@ var Mn = require('backbone.marionette');
 
 var MyDOMMixin = require('./mixins/mydom');
 
-_.extend(Mn.View, MyDOMMixin);
-
-module.exports = Mn.View;
+module.exports = Mn.View.extend(MyDOMMixin);
 ```
+
+This would need to be applied to `CollectionView`, `Region` and `TemplateCache`.

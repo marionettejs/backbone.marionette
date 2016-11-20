@@ -622,7 +622,7 @@ var MyView = Mn.View.extend({
 });
 ```
 
-The default behavior for calling `stopPropagation()` can be changed with the feature flag [`triggersStopPropagation`](./marionette.features.md).
+The default behavior for calling `preventDefault` can be changed with the feature flag [`triggersPreventDefault`](./marionette.features.md#triggerspreventdefault), and `stopPropagation` can be changed with the feature flag [`triggersStopPropagation`](./marionette.features.md#triggersstoppropagation).
 
 ## Model and Collection events
 

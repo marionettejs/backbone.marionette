@@ -10,7 +10,12 @@ function buildViewTrigger(view, triggerDef) {
   }
 
   const eventName = triggerDef.event;
-  const shouldPreventDefault = triggerDef.preventDefault !== false;
+
+  let shouldPreventDefault = !!triggerDef.preventDefault;
+
+  if (isEnabled('triggersPreventDefault')) {
+    shouldPreventDefault = triggerDef.preventDefault !== false;
+  }
 
   let shouldStopPropagation = !!triggerDef.stopPropagation;
 

@@ -11,68 +11,6 @@ namespaces for events and requests. In short, Radio is a global, namespaced,
 message bus system designed to allow two otherwise unrelated objects to
 communicate and share information.
 
-Let's look at a simplified example in Marionette:
-
-```javascript
-var Mn = require('backbone.marionette');
-
-var NotificationHandler = Mn.Object.extend({
-  channelName: 'notify',
-
-  radioRequests: {
-    'show:success': 'showSuccessMessage',
-    'show:error': 'showErrorMessage'
-  },
-
-  radioEvents: {
-    'user:logged:in': 'showProfileButton',
-    'user:logged:out': 'hideProfileButton'
-  },
-
-  showSuccessMessage: function(message) {
-    // ...
-  },
-
-  showErrorMessage: function(message) {
-    // ...
-  },
-
-  showProfileButton: function(user) {
-    // ...
-  },
-
-  hideProfileButton: function(user) {
-    // ...
-  }
-});
-```
-
-In an unrelated module:
-
-```javascript
-var Radio = require('backbone.radio');
-var User = require('./models/user');
-
-var notifyChannel = Radio.channel('notify');
-var userModel = new User();
-
-// The following will call Notification.showErrorMessage(message)
-notifyChannel.request('show:error', 'A generic error occurred!');
-
-// The following will call Notification.showProfileButton(user)
-notifyChannel.trigger('user:logged:in', userModel);
-```
-
-[Live example](https://jsfiddle.net/marionettejs/dv40a0t2/)
-
-In addition to this documentation, the Radio documentation can be found on
-[Github](https://github.com/marionettejs/backbone.radio).
-
-In addition to the standard documentation, the Radio has been integrated in
-Marionette 3 to provide clearer interfaces to the existing API. This is detailed
-in the documentation below. Anything that extends from `Mn.Object` has
-access to this API.
-
 ## Documentation Index
 
 * [Channel](#channel)
@@ -85,7 +23,9 @@ access to this API.
   * [Listening to Requests on Objects](#listening-to-requests-on-objects)
   * [When to use Requests](#when-to-use-requests)
 
-## Channel
+## Radio Concepts
+
+### Channel
 
 The `channel` is the biggest reason to use `Radio` as our event aggregator - it
 provides a clean point for dividing global events. To retrieve a channel, use
@@ -114,38 +54,15 @@ someChannel.trigger('some:event');  // Will fire the function call above
 
 [Live example](https://jsfiddle.net/marionettejs/0bejfju0/)
 
-### Assigning Channels to Objects
 
-As of Marionette 3, it is now possible to assign Radio channels directly to
-instances of `Marionette.Object` and assign listeners. To assign a channel, we
-use the `channelName` attribute. We then retrieve the channel instance with
-`getChannel()`:
+### Event
 
-```javascript
-var Mn = require('backbone.marionette');
+The `Radio Event` works exactly the same way as regular `Backbone Events`
+like model/collection events. In fact, it uses the `Backbone.Events` mixin 
+internally, exposing its API:
 
-var ChannelHandler = Mn.Object.extend({
-  channelName: 'basic',
-
-  initialize: function() {
-    var channel = this.getChannel();
-    this.listenTo(channel, 'log', this.logMsg);
-  },
-
-  logMsg: function(msg) {
-    console.log(msg);
-  }
-})
-```
-
-[Live example](https://jsfiddle.net/marionettejs/tmeraxd2/)
-
-## Event
-
-The `Radio Event` works almost exactly the same way as regular `Backbone Events`
-like model/collection events. They also expose exactly the same API:
-
-* `channel.on('event', callback, context)` - when `event` fires, call `callback`
+* `channel.on('event', callback, [context])` - when `event` fires, call `callback`
+* `channel.once('event', callback, [context])` - same as `on`, but triggered only once
 * `channel.off('event')` - stop listening to event
 * `channel.trigger('event', ..args)` - fires `event` and passes  args into the
   resulting `callback`
@@ -177,13 +94,16 @@ Just like Backbone Events, the Radio respects the `listenTo` handler as well:
 ```javascript
 var Mn = require('backbone.marionette');
 var Radio = require('backbone.radio');
-
-
+ 
+var starChannel = Radio.channel('star');
+ 
 var Star = Mn.Object.extend({
-  initialize: function() {
-    var starChannel = Radio.channel('star');
 
+  initialize: function() {    
     this.listenTo(starChannel, 'left:building', this.leftBuilding);
+    this.listenTo(starChannel, 'enter:building', function(person) {
+       console.log(person.get('name') + ' has entered the building!');
+    });
   },
 
   leftBuilding: function(person) {
@@ -191,42 +111,17 @@ var Star = Mn.Object.extend({
   }
 });
 ```
+
+Note that the event handler can be defined as a method like used for 
+'left:building' event or inline like used in 'enter:building'.
 
 [Live example](https://jsfiddle.net/marionettejs/s8nff8vz/)
 
-As with Backbone, this will bind `this` to our `Star` instance. See the
+As in Backbone, the event handler is called with `this` bound to the `Star` instance. See the
 [Backbone documentation](http://backbonejs.org/#Events) for the full list of
 Event handling methods.
 
-### Listening to Events on Objects
-
-The `Marionette.Object` class provides bindings to provide automatic event
-listeners on your object instances. This works with a bound `channelName` to let
-us provide listeners using the `radioEvents` attributes.
-
-```javascript
-var Mn = require('backbone.marionette');
-
-
-var Star = Mn.Object.extend({
-  channelName: 'star',
-
-  radioEvents: {
-    'left:building': 'leftBuilding'
-  },
-
-  leftBuilding: function(person) {
-    console.log(person.get('name') + ' has left the building!');
-  }
-});
-```
-
-[Live example](https://jsfiddle.net/marionettejs/tf9467x4/)
-
-This gives us a clear definition of how this object interacts with the `star`
-radio channel.
-
-### When to use Events
+#### When to use Events
 
 The Event is a simple notification that _something happened_ and you may or may
 not want other objects in your application to react to that. A few key
@@ -240,7 +135,7 @@ principles to bear in mind are:
 If your use case isn't covered here, consider whether you want to
 [use a request](#when-to-use-requests) instead.
 
-## Request
+### Request
 
 The Request API provides a uniform way for unrelated parts of the system to
 communicate with each other. For example, displaying notifications in response
@@ -256,19 +151,16 @@ var Radio = require('backbone.radio');
 
 var channel = Radio.channel('notify');
 
-var Notification = Mn.Object.extend({
-  channelName: 'notify',
+var Notification = Mn.Object.extend({  
 
   initialize: function() {
     channel.reply('show:success', this.showSuccessMessage);
-    channel.reply('show:error', this.showErrorMessage);
+    channel.reply('show:error', function(msg) {
+       // ...
+    });
   },
 
   showSuccessMessage: function(msg) {
-    // ...
-  },
-
-  showErrorMessage: function(msg) {
     // ...
   }
 });
@@ -335,10 +227,62 @@ var loggedIn = channel.request('user:logged:in');  // App.model.getLoggedIn()
 
 [Live example](https://jsfiddle.net/marionettejs/zaje1rLj/)
 
-### Listening to Requests on Objects
+### When to use Requests
 
-Marionette 3 integrates Request/Reply directly onto its `Object` class through
-`radioRequests`. This will simplify the `Notification` quite a bit:
+A Request is, as you might guess, a request for information or for something to
+happen. You will probably want to use requests when:
+
+* You call the request an action to perform e.g. `show:notification`
+* You want to get the return value of the request
+* You want to call _exactly one_ function
+
+
+In addition to this documentation, the Radio documentation can be found on
+[Github](https://github.com/marionettejs/backbone.radio).
+
+
+## Marionette Integration
+
+The `Marionette.Object` class provides bindings to provide automatic event
+listeners and / or request replies on your object instances. This works with 
+a bound `channelName` to let us provide listeners using the `radioEvents` and 
+`radioRequets` properties.  Anything that extends from `Mn.Object` has
+access to this API.
+
+### API
+ 
+ * `channelName` - defines the Radio channel that will be used for the requests and/or events
+ * `getChannel()` - returns a Radio.Channel instance using `channelName` 
+ * `radioEvents` - defines an events hash with the events to be listened and its respective handlers
+ * `radioRequets` - defines an events hash with the requests to be replied and its respective handlers 
+
+### Examples
+
+**Listening to events in an object**
+
+```javascript
+var Mn = require('backbone.marionette');
+
+var Star = Mn.Object.extend({
+  channelName: 'star',
+
+  radioEvents: {
+    'left:building': 'leftBuilding'
+  },
+
+  leftBuilding: function(person) {
+    console.log(person.get('name') + ' has left the building!');
+  }
+});
+```
+
+[Live example](https://jsfiddle.net/marionettejs/tf9467x4/)
+
+This gives us a clear definition of how this object interacts with the `star`
+radio channel.
+
+
+**Replying to requests in a object**
 
 ```javascript
 var Mn = require('backbone.marionette');
@@ -387,15 +331,57 @@ var App = Mn.Application.extend({
 
 [Live example](https://jsfiddle.net/marionettejs/52rpd3zg/)
 
-As above, define your `channelName` attribute, then simply add the `reply`
-handler to `radioRequests` to bind it to your `Object` (`Application` in this
-case).
 
-### When to use Requests
+**Events and requests in same object** 
 
-A Request is, as you might guess, a request for information or for something to
-happen. You will probably want to use requests when:
+```javascript
+var Mn = require('backbone.marionette');
 
-* You call the request an action to perform e.g. `show:notification`
-* You want to get the return value of the request
-* You want to call _exactly one_ function
+var NotificationHandler = Mn.Object.extend({
+  channelName: 'notify',
+
+  radioRequests: {
+    'show:success': 'showSuccessMessage',
+    'show:error': 'showErrorMessage'
+  },
+
+  radioEvents: {
+    'user:logged:in': 'showProfileButton',
+    'user:logged:out': 'hideProfileButton'
+  },
+
+  showSuccessMessage: function(message) {
+    // ...
+  },
+
+  showErrorMessage: function(message) {
+    // ...
+  },
+
+  showProfileButton: function(user) {
+    // ...
+  },
+
+  hideProfileButton: function(user) {
+    // ...
+  }
+});
+```
+
+In an unrelated module:
+
+```javascript
+var Radio = require('backbone.radio');
+var User = require('./models/user');
+
+var notifyChannel = Radio.channel('notify');
+var userModel = new User();
+
+// The following will call Notification.showErrorMessage(message)
+notifyChannel.request('show:error', 'A generic error occurred!');
+
+// The following will call Notification.showProfileButton(user)
+notifyChannel.trigger('user:logged:in', userModel);
+```
+
+[Live example](https://jsfiddle.net/marionettejs/dv40a0t2/)

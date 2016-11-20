@@ -28,6 +28,8 @@
   * [CollectionView's `reorder`](#collectionviews-reorder)
   * [CollectionView's `resortView`](#collectionviews-resortview)
 
+* [Binding `ui`](#binding-ui)
+
 
 ## CollectionView's children
 
@@ -418,4 +420,32 @@ var MyCollectionView = Mn.CollectionView.extend({
     // provide custom logic for rendering after sorting the collection
   }
 });
+```
+
+## Binding `ui`
+
+By default, `CollectionView` will not bind the `ui` object. As it has no direct
+`template` of its own to manage, this isn't usually an issue. There may be
+instances where binding `ui` is helpful when you want to access elements inside
+`CollectionView`s children with `getUI()`.
+
+If you need to bind `ui` yourself, you can just run `bindUIElements` on the
+collection:
+
+```javascript
+var Mn = require('backbone.marionette');
+
+var MyCollectionView = Mn.CollectionView.extend({
+  ...
+
+  ui: {
+    checkbox: 'input[type="checkbox"]'
+  }
+});
+
+var collectionView = new MyCollectionView();
+
+collectionView.bindUIElements();
+
+console.log(collectionView.getUI('checkbox')); // Output all checkboxes.
 ```

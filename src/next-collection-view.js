@@ -265,7 +265,7 @@ const CollectionView = Backbone.View.extend({
 
   // Render children views.
   render() {
-    this._ensureViewIsIntact();
+    if (this._isDestroyed) { return this; }
     this.triggerMethod('before:render', this);
 
     this._destroyChildren();
@@ -287,6 +287,8 @@ const CollectionView = Backbone.View.extend({
 
   // Sorts the children then filters and renders the results.
   sort() {
+    if (this._isDestroyed) { return this; }
+
     this._showChildren();
 
     return this;
@@ -404,6 +406,8 @@ const CollectionView = Backbone.View.extend({
 
   // This method re-filters the children views and re-renders the results
   filter() {
+    if (this._isDestroyed) { return this; }
+
     if (!this.children.length) { return this; }
 
     const filteredViews = this._filterChildren();

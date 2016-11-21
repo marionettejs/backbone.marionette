@@ -44,8 +44,6 @@ function parseBehaviors(view, behaviors) {
 }
 
 export default {
-  _behaviors: {},
-
   _initBehaviors() {
     this._behaviors = this._getBehaviors();
   },

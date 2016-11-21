@@ -36,7 +36,8 @@ describe('Behaviors', function() {
           behaviors: [FooBehavior]
         });
 
-        let fooView = new FooView();
+        /* eslint-disable no-new */
+        new FooView();
       });
 
       it('should instantiate the behavior', function() {
@@ -231,7 +232,9 @@ describe('Behaviors', function() {
       FooView = Marionette.View.extend({
         behaviors: {foo: behaviorOptions}
       });
-      let fooView = new FooView({behaviors: {bar: {}}});
+
+      /* eslint-disable no-new */
+      new FooView({behaviors: {bar: {}}});
     });
 
     it('should call initialize when a behavior is created', function() {

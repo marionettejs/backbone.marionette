@@ -122,7 +122,23 @@ describe('region', function() {
         el: '#region'
       });
 
-      this.myRegion.show(_.template('<b>Hello <%= who %>!</b>'), {
+      this.myRegion.show(_.template('<b>Hello World!</b>'));
+    });
+
+    it('should render the template in the region', function() {
+      expect(this.myRegion.$el).to.contain.$html('<b>Hello World!</b>');
+    });
+  });
+
+  describe('when showing a template with viewOptions', function() {
+    beforeEach(function() {
+      this.setFixtures('<div id="region"></div>');
+      this.myRegion = new Marionette.Region({
+        el: '#region'
+      });
+
+      this.myRegion.show({
+        template: _.template('<b>Hello <%- who %>!</b>'),
         model: new Backbone.Model({ who: 'World' })
       });
     });

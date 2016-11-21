@@ -144,7 +144,7 @@ const Region = MarionetteObject.extend({
     return true;
   },
 
-  _getView(view, options) {
+  _getView(view) {
     if (!view) {
       throw new MarionetteError({
         name: 'ViewNotValid',
@@ -163,21 +163,25 @@ const Region = MarionetteObject.extend({
       return view;
     }
 
-    const template = this._getTemplate(view);
-
-    const viewOptions = _.extend({ template }, options);
+    const viewOptions = this._getViewOptions(view);
 
     return new View(viewOptions);
   },
 
   // This allows for a template or a static string to be
   // used as a template
-  _getTemplate(template) {
-    if (_.isFunction(template)) {
-      return template;
+  _getViewOptions(viewOptions) {
+    if (_.isFunction(viewOptions)) {
+      return { template: viewOptions };
     }
 
-    return function() { return template };
+    if (_.isObject(viewOptions)) {
+      return viewOptions;
+    }
+
+    const template = function() { return viewOptions; };
+
+    return { template };
   },
 
   // Override this method to change how the region finds the DOM element that it manages. Return

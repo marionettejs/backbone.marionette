@@ -69,7 +69,9 @@ const CollectionView = Backbone.View.extend({
 
   // Create an region to show the emptyView
   _initEmptyRegion() {
-    this.emptyRegion = new Region({ el: this.el });
+    this.emptyRegion = new Region({ el: this.el })
+
+    this.emptyRegion._parentView = this;
   },
 
   // Configured the initial events that the collection view binds to.
@@ -231,16 +233,14 @@ const CollectionView = Backbone.View.extend({
   _setupChildView(view) {
     monitorViewEvents(view);
 
-    // set up the child view event forwarding
-    this.listenTo(view, 'all', this._childViewEventHandler);
-
     // We need to listen for if a view is destroyed in a way other
     // than through the CollectionView.
     // If this happens we need to remove the reference to the view
     // since once a view has been destroyed we can not reuse it.
     view.on('destroy', this.removeChildView, this);
 
-    view._parent = this;
+    // set up the child view event forwarding
+    this._proxyChildViewEvents(view);
   },
 
   // used by ViewMixin's `_childViewEventHandler`
@@ -643,7 +643,6 @@ const CollectionView = Backbone.View.extend({
       this._destroyChildView(view);
     }
 
-    delete view._parent;
     this.stopListening(view);
   },
 

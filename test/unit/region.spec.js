@@ -115,6 +115,54 @@ describe('region', function() {
     });
   });
 
+  describe('when showing a template', function() {
+    beforeEach(function() {
+      this.setFixtures('<div id="region"></div>');
+      this.myRegion = new Marionette.Region({
+        el: '#region'
+      });
+
+      this.myRegion.show(_.template('<b>Hello World!</b>'));
+    });
+
+    it('should render the template in the region', function() {
+      expect(this.myRegion.$el).to.contain.$html('<b>Hello World!</b>');
+    });
+  });
+
+  describe('when showing a template with viewOptions', function() {
+    beforeEach(function() {
+      this.setFixtures('<div id="region"></div>');
+      this.myRegion = new Marionette.Region({
+        el: '#region'
+      });
+
+      this.myRegion.show({
+        template: _.template('<b>Hello <%- who %>!</b>'),
+        model: new Backbone.Model({ who: 'World' })
+      });
+    });
+
+    it('should render the template in the region', function() {
+      expect(this.myRegion.$el).to.contain.$html('<b>Hello World!</b>');
+    });
+  });
+
+  describe('when showing an html string', function() {
+    beforeEach(function() {
+      this.setFixtures('<div id="region"></div>');
+      this.myRegion = new Marionette.Region({
+        el: '#region'
+      });
+
+      this.myRegion.show('<b>Hello World!</b>');
+    });
+
+    it('should render the string in the region', function() {
+      expect(this.myRegion.$el).to.contain.$html('<b>Hello World!</b>');
+    });
+  });
+
   describe('when showing an initial view', function() {
     beforeEach(function() {
       this.MyRegion = Backbone.Marionette.Region.extend({

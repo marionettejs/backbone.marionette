@@ -23,6 +23,7 @@ Regions maintain the [View's lifecycle](./viewlifecycle.md#regions-and-the-view-
   * [Using Regions on a view](#using-regions-on-a-view)
 * [Showing a View](#showing-a-view)
   * [Checking whether a region is showing a view](#checking-whether-a-region-is-showing-a-view)
+* [Showing a Template](#showing-a-template)
 * [Emptying a Region](#emptying-a-region)
   * [Preserving Existing Views](#preserving-existing-views)
   * [Detaching Existing Views](#detaching-existing-views)
@@ -260,6 +261,26 @@ mainRegion.hasView() // true
 
 If you show a view in a region with an existing view, Marionette will
 [remove the existing View](#emptying-a-region) before showing the new one.
+
+## Showing a Template
+
+You can show a template or a string directly into a region. Additionally you can pass an object literal containing a template and any other view options. Under the hood a `Marionette.View` is instantiated using the template.
+
+```javascript
+var myView = new MyView();
+
+var template = _.template('This is the <%- section %> page');
+var templateContext = templateContext: { section: 'main' };
+
+myView.showChildView('main', {
+  template: template,
+  templateContext: templateContext
+});
+
+myView.showChildView('header', _.template('Welcome to the site'));
+
+myView.getRegion('other').show('This text is in another region');
+```
 
 ## Emptying a Region
 

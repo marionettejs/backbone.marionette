@@ -60,7 +60,6 @@ To implement your own DOM API for `View`, override the provided functions to
 provide the same functionality provided and mix it in using `_.extend` as such:
 
 ```js
-var _ = require('underscore');
 var Mn = require('backbone.marionette');
 
 var MyDOMMixin = require('./mixins/mydom');

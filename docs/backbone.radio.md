@@ -13,17 +13,28 @@ communicate and share information.
 
 ## Documentation Index
 
-* [Channel](#channel)
-  * [Assigning Channels to Objects](#assigning-channels-to-objects)
-* [Event](#event)
-  * [Listening to Events on Objects](#listening-to-events-on-objects)
-  * [When to use Events](#when-to-use-events)
-* [Request](#request)
-  * [Returning Values from Reply](#returning-values-from-reply)
-  * [Listening to Requests on Objects](#listening-to-requests-on-objects)
-  * [When to use Requests](#when-to-use-requests)
+* [Radio Concepts](#radio-concepts)
+  * [Channel](#channel)
+  * [Event](#event)
+    * [When to use Events](#when-to-use-events)
+  * [Request](#request)
+    * [Returning Values from Reply](#returning-values-from-reply)
+    * [When to use Requests](#when-to-use-requests)
+* [Marionette Integration](#marionette-integration)
+  * [API](#api)
+  * [Examples](#examples)
+    * [Listening to Events on Objects](#listening-to-events-on-objects)
+    * [Replying to Requests on Objects](#replying-to-requests-on-objects)
+    * [Events and Requests in same Object](#events-and-requests-in-same-object)
+
 
 ## Radio Concepts
+
+The `Radio` message bus exposes some core concepts:
+
+* `Channel` - a namespace mechanism.
+* `Event` - alert other parts of your application that something happened.
+* `Request` - execute single functions in a different part of your application.
 
 ### Channel
 
@@ -58,7 +69,7 @@ someChannel.trigger('some:event');  // Will fire the function call above
 ### Event
 
 The `Radio Event` works exactly the same way as regular `Backbone Events`
-like model/collection events. In fact, it uses the `Backbone.Events` mixin 
+like model/collection events. In fact, it uses the `Backbone.Events` mixin
 internally, exposing its API:
 
 * `channel.on('event', callback, [context])` - when `event` fires, call `callback`
@@ -94,12 +105,12 @@ Just like Backbone Events, the Radio respects the `listenTo` handler as well:
 ```javascript
 var Mn = require('backbone.marionette');
 var Radio = require('backbone.radio');
- 
+
 var starChannel = Radio.channel('star');
- 
+
 var Star = Mn.Object.extend({
 
-  initialize: function() {    
+  initialize: function() {
     this.listenTo(starChannel, 'left:building', this.leftBuilding);
     this.listenTo(starChannel, 'enter:building', function(person) {
        console.log(person.get('name') + ' has entered the building!');
@@ -112,7 +123,7 @@ var Star = Mn.Object.extend({
 });
 ```
 
-Note that the event handler can be defined as a method like used for 
+Note that the event handler can be defined as a method like used for
 'left:building' event or inline like used in 'enter:building'.
 
 [Live example](https://jsfiddle.net/marionettejs/s8nff8vz/)
@@ -151,7 +162,7 @@ var Radio = require('backbone.radio');
 
 var channel = Radio.channel('notify');
 
-var Notification = Mn.Object.extend({  
+var Notification = Mn.Object.extend({
 
   initialize: function() {
     channel.reply('show:success', this.showSuccessMessage);
@@ -244,21 +255,21 @@ In addition to this documentation, the Radio documentation can be found on
 ## Marionette Integration
 
 The `Marionette.Object` class provides bindings to provide automatic event
-listeners and / or request replies on your object instances. This works with 
-a bound `channelName` to let us provide listeners using the `radioEvents` and 
+listeners and / or request replies on your object instances. This works with
+a bound `channelName` to let us provide listeners using the `radioEvents` and
 `radioRequets` properties.  Anything that extends from `Mn.Object` has
 access to this API.
 
 ### API
- 
+
  * `channelName` - defines the Radio channel that will be used for the requests and/or events
- * `getChannel()` - returns a Radio.Channel instance using `channelName` 
+ * `getChannel()` - returns a Radio.Channel instance using `channelName`
  * `radioEvents` - defines an events hash with the events to be listened and its respective handlers
- * `radioRequets` - defines an events hash with the requests to be replied and its respective handlers 
+ * `radioRequets` - defines an events hash with the requests to be replied and its respective handlers
 
 ### Examples
 
-**Listening to events in an object**
+#### Listening to events in an object
 
 ```javascript
 var Mn = require('backbone.marionette');
@@ -282,7 +293,7 @@ This gives us a clear definition of how this object interacts with the `star`
 radio channel.
 
 
-**Replying to requests in a object**
+#### Replying to requests in a object
 
 ```javascript
 var Mn = require('backbone.marionette');
@@ -332,7 +343,7 @@ var App = Mn.Application.extend({
 [Live example](https://jsfiddle.net/marionettejs/52rpd3zg/)
 
 
-**Events and requests in same object** 
+#### Events and requests in same object
 
 ```javascript
 var Mn = require('backbone.marionette');

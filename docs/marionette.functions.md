@@ -277,7 +277,7 @@ var myView = new MyView({ model: model });
 
 var MyObject = Mn.Object.extend({
   initialize: function() {
-    this.bindEvents(myView, myEvents);
+    this.bindEvents(myView, this.myEvents);
   },
   myEvents: {
     'something': 'onViewSomething'

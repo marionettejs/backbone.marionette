@@ -5,16 +5,14 @@ import View from '../../src/view';
 
 describe('Marionette Application', function() {
 
-  describe('#_initialize', () => {
-    describe('when instantiating an app with options specified', function() {
+  describe('#initialize', () => {
+    describe('when instantiating an app with specified options', function() {
       let app;
-      let fooOption;
       let appOptions;
       let initializeStub;
 
       beforeEach(function() {
-        fooOption = 'bar';
-        appOptions = {fooOption: fooOption};
+        appOptions = {fooOption: 'foo'};
         initializeStub = this.sinon.stub(Application.prototype, 'initialize');
       });
 
@@ -23,104 +21,106 @@ describe('Marionette Application', function() {
 
         expect(initializeStub).to.have.been.calledOn(app).and.calledWith(appOptions, 'fooArg');
       });
+
+      it('should have a cidPrefix', function() {
+        app = new Application(appOptions);
+
+        expect(app.cidPrefix).to.equal('mna');
+      });
+
+      it('should have a cid', function() {
+        app = new Application(appOptions);
+
+        expect(app.cid).to.exist;
+      });
     });
   });
 
-  describe('#_start', function() {
+  describe('#start', function() {
     let app;
     let fooOptions;
-    let triggerMethodSpy;
 
     beforeEach(function() {
       fooOptions = {foo: 'bar'};
       app = new Application();
-      triggerMethodSpy = this.sinon.stub(app, 'triggerMethod');
-    });
-
-    it('should trigger before:start event', function() {
-      app.start(fooOptions);
-
-      expect(triggerMethodSpy).to.have.been.calledWith('before:start', app, fooOptions);
-    });
-
-    it('should trigger start event', function() {
-      app.start(fooOptions);
-
-      expect(triggerMethodSpy).to.have.been.calledWith('start', app, fooOptions);
     });
 
     it('should return current application context', function() {
       const result = app.start(fooOptions);
 
-      expect(result).to.have.been.deep.equal(app);
+      expect(result).to.have.been.equal(app);
     });
   });
 
-  describe('#_onBeforeStart', function() {
-    let app;
+  describe('#onBeforeStart', function() {
+    let fooApp;
     let fooOptions;
     let beforeStartStub;
+    let onBeforeStartStub;
 
     beforeEach(function() {
-      beforeStartStub = this.sinon.stub();
       fooOptions = {foo: 'bar'};
-      app = new Application();
+      beforeStartStub = this.sinon.stub();
+      onBeforeStartStub = this.sinon.stub();
 
-      app.on('before:start', beforeStartStub);
+      const FooApp = Application.extend({
+        onBeforeStart: onBeforeStartStub
+      });
+
+      fooApp = new FooApp();
+      fooApp.on('before:start', beforeStartStub);
     });
 
     it('should run the onBeforeStart callback', function() {
-      app.start(fooOptions);
+      fooApp.start(fooOptions);
 
       expect(beforeStartStub).to.have.been.called;
+      expect(onBeforeStartStub).to.have.been.called;
     });
 
     it('should pass the startup option to the onBeforeStart callback', function() {
-      app.start(fooOptions);
+      fooApp.start(fooOptions);
 
-      expect(beforeStartStub).to.have.been.calledOnce.and.calledWith(app, fooOptions);
+      expect(beforeStartStub).to.have.been.calledOnce.and.calledWith(fooApp, fooOptions);
+      expect(onBeforeStartStub).to.have.been.calledOnce.and.calledWith(fooApp, fooOptions);
     });
   });
 
-  describe('#_onStart', function() {
-    let app;
+  describe('#onStart', function() {
+    let fooApp;
     let fooOptions;
     let startStub;
+    let onStartStub;
 
     beforeEach(function() {
-      startStub = this.sinon.stub();
       fooOptions = {foo: 'bar'};
-      app = new Application();
+      startStub = this.sinon.stub();
+      onStartStub = this.sinon.stub();
 
-      app.on('start', startStub);
+      const FooApp = Application.extend({
+        onStart: onStartStub
+      });
+
+      fooApp = new FooApp();
+      fooApp.on('start', startStub);
     });
 
     it('should run the onStart callback', function() {
-      app.start(fooOptions);
+      fooApp.start(fooOptions);
 
       expect(startStub).to.have.been.called;
+      expect(onStartStub).to.have.been.called;
     });
 
     it('should pass the startup option to the callback', function() {
-      app.start(fooOptions);
+      fooApp.start(fooOptions);
 
-      expect(startStub).to.have.been.calledOnce.and.calledWith(app, fooOptions);
-    });
-
-    it('should have a cidPrefix', function() {
-      app.start(fooOptions);
-
-      expect(app.cidPrefix).to.equal('mna');
-    });
-
-    it('should have a cid', function() {
-      app.start(fooOptions);
-
-      expect(app.cid).to.exist;
+      expect(startStub).to.have.been.calledOnce.and.calledWith(fooApp, fooOptions);
+      expect(onStartStub).to.have.been.calledOnce.and.calledWith(fooApp, fooOptions);
     });
   });
 
-  describe('#_getRegion', function() {
+  describe('#getRegion', function() {
     let app;
     let fooOptions;
 
@@ -131,18 +131,15 @@ describe('Marionette Application', function() {
       app = new Application(fooOptions);
     });
 
-    it('should be able to define region selectors as strings', function() {
-      expect(app.getRegion().$el).to.have.length(1);
-    });
-
     it('should get the region selector with getRegion', function() {
       expect(app.getRegion().$el).to.have.length(1);
     });
   });
 
-  describe('#_showView', function() {
+  describe('#showView', function() {
     let app;
     let view;
+    let appRegion;
     let fooOptions;
     let showViewInRegionSpy;
 
@@ -155,7 +152,7 @@ describe('Marionette Application', function() {
       });
       app = new Application(fooOptions);
 
-      const appRegion = app.getRegion();
+      appRegion = app.getRegion();
 
       showViewInRegionSpy = this.sinon.spy(appRegion, 'show');
     });
@@ -164,19 +161,19 @@ describe('Marionette Application', function() {
       let fooArgs;
 
       beforeEach(function() {
-        fooArgs = ['foo', 'bar'];
+        fooArgs = {foo: 'bar'};
       });
 
       it('should call show method in region with additional arguments', function() {
         app.showView(view, fooArgs);
 
-        expect(showViewInRegionSpy).to.have.been.called;
+        expect(showViewInRegionSpy).to.have.been.calledWith(view, fooArgs);
       });
 
       it('should show a view in its region', function() {
         app.showView(view, fooArgs);
 
-        expect(app.getRegion().el.innerHTML).to.contain('ohai');
+        expect(appRegion.el.innerHTML).to.contain('ohai');
       });
     });
 
@@ -184,7 +181,7 @@ describe('Marionette Application', function() {
       it('should show a view in its region', function() {
         app.showView(view);
 
-        expect(app.getRegion().el.innerHTML).to.contain('ohai');
+        expect(appRegion.el.innerHTML).to.contain('ohai');
       });
 
       it('should call show method in region', function() {
@@ -195,7 +192,7 @@ describe('Marionette Application', function() {
     });
   });
 
-  describe('#_getView', function() {
+  describe('#getView', function() {
     let app;
     let view;
     let fooOptions;
@@ -213,7 +210,7 @@ describe('Marionette Application', function() {
     it('should return View which was shown', function() {
       app.showView(view);
 
-      expect(app.getView()).to.have.been.deep.equal(view);
+      expect(app.getView()).to.have.deep.equal(view);
     });
   });
 });

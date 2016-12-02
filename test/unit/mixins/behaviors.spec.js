@@ -460,7 +460,4 @@ describe('Behaviors Mixin', function() {
       expect(BarBehavior.prototype.unbindUIElements).to.have.been.calledOnce;
     });
   });
-
-  //@todo
-  // _triggerEventOnBehaviors
 });

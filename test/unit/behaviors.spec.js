@@ -32,12 +32,12 @@ describe('Behaviors', function() {
 
     describe('when one behavior', function() {
       beforeEach(function() {
-        let FooView = View.extend({
+        const FooView = View.extend({
           behaviors: [FooBehavior]
         });
 
-        /* eslint-disable no-new */
-        new FooView();
+        /* eslint-disable no-unused-vars */
+        const fooView = new FooView();
       });
 
       it('should instantiate the behavior', function() {
@@ -73,6 +73,7 @@ describe('Behaviors', function() {
       });
 
       it('should instantiate the behavior', function() {
+        /* eslint-disable no-unused-vars */
         const fooView = new FooView();
 
         expect(behaviors.foo).to.have.been.calledOnce;
@@ -87,6 +88,7 @@ describe('Behaviors', function() {
       });
 
       it('should instantiate the behavior', function() {
+        /* eslint-disable no-unused-vars */
         const fooView = new FooView();
 
         expect(behaviors.foo).to.have.been.calledOnce;
@@ -107,6 +109,7 @@ describe('Behaviors', function() {
       });
 
       it('should instantiate the behavior', function() {
+        /* eslint-disable no-unused-vars */
         const fooView = new FooView();
 
         expect(behaviors.foo).to.have.been.calledOnce;
@@ -127,6 +130,7 @@ describe('Behaviors', function() {
       });
 
       it('should instantiate the behavior', function() {
+        /* eslint-disable no-unused-vars */
         const fooView = new FooView();
 
         expect(behaviors.foo).to.have.been.calledOnce;
@@ -143,6 +147,7 @@ describe('Behaviors', function() {
       });
 
       it('should instantiate behaviors passed directly as a class', function() {
+        /* eslint-disable no-unused-vars */
         const fooView = new FooView();
 
         expect(behaviors.foo).to.have.been.calledOnce;
@@ -150,6 +155,7 @@ describe('Behaviors', function() {
       });
 
       it('should instantiate behaviors passed with behaviorClass', function() {
+        /* eslint-disable no-unused-vars */
         const fooView = new FooView();
 
         expect(behaviors.baz).to.have.been.calledOnce;
@@ -181,6 +187,7 @@ describe('Behaviors', function() {
     });
 
     it('should have a cidPrefix', function() {
+      /* eslint-disable no-unused-vars */
       const fooView = new FooView();
       const fooBehavior = new behaviors.foo();
 
@@ -188,6 +195,7 @@ describe('Behaviors', function() {
     });
 
     it('should have a cid', function() {
+      /* eslint-disable no-unused-vars */
       const fooView = new FooView();
       const fooBehavior = new behaviors.foo();
 
@@ -195,6 +203,7 @@ describe('Behaviors', function() {
     });
 
     it('should call initialize when a behavior is created', function() {
+      /* eslint-disable no-unused-vars */
       const fooView = new FooView();
 
       expect(initializeStub).to.have.been.calledOnce;
@@ -232,6 +241,7 @@ describe('Behaviors', function() {
     });
 
     it('should call initialize when a behavior is created', function() {
+      /* eslint-disable no-unused-vars */
       const fooView = new FooView({behaviors: {bar: {}}});
 
       expect(barStub).to.have.been.calledOnce;
@@ -783,6 +793,7 @@ describe('Behaviors', function() {
     });
 
     it('should proxy model events', function() {
+      /* eslint-disable no-unused-vars */
       const fooView = new FooView({model: fooModel});
       fooModel.set('foo', 'baz');
 
@@ -790,6 +801,7 @@ describe('Behaviors', function() {
     });
 
     it('should proxy model events w/ string cbk', function() {
+      /* eslint-disable no-unused-vars */
       const fooView = new FooView({model: fooModel});
       fooModel.set('foo', 'baz');
 
@@ -797,6 +809,7 @@ describe('Behaviors', function() {
     });
 
     it('should proxy collection events', function() {
+      /* eslint-disable no-unused-vars */
       const fooCollectionView = new FooCollectionView({collection: fooCollection});
       fooCollection.reset();
 

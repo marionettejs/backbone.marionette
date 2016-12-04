@@ -12,7 +12,7 @@ defines the methods that actually attach and remove views and children.
 
 The default mixin depends on Backbone's jQuery `$` object however it does not
 rely on jQuery-specific behavior. This should make it easier to develop your own
-API. You will, however, [need to also override Backbone's jQuery integration](#backbone-jquery-integration).
+API. You will, however, [need to also handle Backbone's jQuery integration](#backbone-jquery-integration).
 
 ### `createBuffer()`
 
@@ -71,10 +71,17 @@ This would need to be applied to `CollectionView`, `Region` and `TemplateCache`.
 
 ### Backbone jQuery Integration
 
-Backbone.js is tied quite tightly to jQuery's API for managing DOM manipulation.
-If you want to completely remove jQuery from your Marionette app, you'll also
-have to provide your own versions of the following methods:
+Backbone.js is tied to jQuery's API for managing DOM manipulation. If you want
+to completely remove jQuery from your Marionette app, you'll also have to
+provide your own versions of the following methods:
 
 * [`_setAttributes`](http://backbonejs.org/docs/backbone.html#section-170)
 * [`delegate`](http://backbonejs.org/docs/backbone.html#section-165)
 * [`undelegate`](http://backbonejs.org/docs/backbone.html#section-167)
+
+#### See Also
+
+The DOM Mixin takes care of the other DOM manipulation methods for you. The
+[Backbone Wiki](https://github.com/jashkenas/backbone/wiki/using-backbone-without-jquery)
+has a good reference for removing jQuery from the app, including Browserify and
+Webpack configuration hooks.

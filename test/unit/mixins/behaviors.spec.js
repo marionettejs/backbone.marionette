@@ -245,7 +245,7 @@ describe('Behaviors Mixin', function() {
     });
   });
 
-  describe('#__getBehaviorEvents', function() {
+  describe('#_getBehaviorEvents', function() {
     let behaviorsInstance;
     let FooBehavior;
     let BarBehavior;

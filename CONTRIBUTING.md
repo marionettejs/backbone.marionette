@@ -128,3 +128,7 @@ to discuss further.
 * in the browser by running `npm run test-browser`
 
 To see the test matrix - run `npm run coverage`
+
+## Writing Tests and Code Style
+
+[More information]('test/unit/README.md')

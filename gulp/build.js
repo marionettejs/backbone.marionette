@@ -71,5 +71,5 @@ gulp.task('build-lib', ['lint-src'], function(){
 });
 
 gulp.task('build', function(done) {
-  runSequence('build-lib', 'test-build', done);
+  runSequence('build-lib', done);
 });

@@ -776,7 +776,7 @@ describe('collection view', function() {
       this.sinon.spy(this.collectionView, 'onDestroy');
       this.sinon.spy(this.collectionView, 'onBeforeDestroy');
       this.sinon.spy(this.collectionView, 'trigger');
-      this.sinon.spy(this.collectionView, '_checkEmpty');
+      this.sinon.spy(this.collectionView, 'isEmpty');
 
       this.collectionView.bind('destroy:children', this.destroyHandler);
 
@@ -865,7 +865,7 @@ describe('collection view', function() {
     });
 
     it('should not call checkEmpty', function() {
-      expect(this.collectionView._checkEmpty).to.have.not.been.called;
+      expect(this.collectionView.isEmpty).to.have.not.been.called;
     });
 
     it('should return the CollectionView', function() {
@@ -924,40 +924,12 @@ describe('collection view', function() {
       this.childView1 = this.collectionView.children.findByIndex(1);
       this.sinon.spy(this.childView1, 'remove');
 
-      this.childrenViews = this.collectionView.children.map(_.identity);
-
-      this.sinon.spy(this.collectionView, '_destroyChildren');
-      this.sinon.spy(this.collectionView, '_checkEmpty');
       this.collectionView._destroyChildren();
     });
 
     it('should call the "remove" method on each child', function() {
       expect(this.childView0.remove).to.have.been.called;
       expect(this.childView1.remove).to.have.been.called;
-    });
-
-    it('should call checkEmpty', function() {
-      expect(this.collectionView._checkEmpty).to.have.been.calledOnce;
-    });
-
-    describe('with the checkEmpty flag set as false', function() {
-      it('should not call _checkEmpty', function() {
-        this.collectionView._destroyChildren({checkEmpty: false});
-        expect(this.collectionView._checkEmpty).to.have.been.calledOnce;
-      });
-    });
-
-    describe('with the checkEmpty flag set as true', function() {
-      it('should call _checkEmpty', function() {
-        this.collectionView.collection.add({id: 3});
-        this.collectionView._destroyChildren({checkEmpty: true});
-        expect(this.collectionView._checkEmpty).to.have.been.calledTwice;
-      });
-
-      it('should not call _checkEmpty when collection is empty', function() {
-        this.collectionView._destroyChildren({checkEmpty: true});
-        expect(this.collectionView._checkEmpty).to.have.been.calledOnce;
-      });
     });
   });
 

@@ -175,18 +175,6 @@ const CollectionView = Backbone.View.extend({
     }, []);
   },
 
-  _findGreatestIndexedView(views) {
-
-    return _.reduce(views, (greatestIndexedView, view) => {
-      // Even if the index is `undefined`, a view will get returned.
-      if (!greatestIndexedView || greatestIndexedView._index < view._index) {
-        return view;
-      }
-
-      return greatestIndexedView;
-    }, undefined);
-  },
-
   _removeChildView(view) {
     this.triggerMethod('before:remove:child', this, view);
 
@@ -584,14 +572,16 @@ const CollectionView = Backbone.View.extend({
       return;
     }
 
-    const view = _.isArray(views) ? this._findGreatestIndexedView(views) : views;
+    const view = _.isArray(views) ? _.max(views, '_index') : views;
 
-    // update the indexes of views after this one
-    this.children.each((laterView) => {
-      if (laterView._index >= view._index) {
-        laterView._index += increment ? 1 : -1;
-      }
-    });
+    if (_.isObject(view)) {
+      // update the indexes of views after this one
+      this.children.each((laterView) => {
+        if (laterView._index >= view._index) {
+          laterView._index += increment ? 1 : -1;
+        }
+      });
+    }
   },
 
   _renderView(view) {

@@ -385,6 +385,23 @@ describe('region', function() {
               expect(this.$parentEl).to.contain.$html('<div id="region"></div>');
             });
           });
+
+          describe('when destroying the view', function() {
+            beforeEach(function() {
+              var view = new Marionette.View({ template: false });
+
+              this.region.show(view);
+              view.destroy();
+            });
+
+            it('should remove the view from the parent', function() {
+              expect(this.$parentEl).to.not.contain.$html(this.view.$el.html());
+            });
+
+            it('should restore the region\'s "el" to the DOM', function() {
+              expect(this.$parentEl).to.contain.$html('<div id="region"></div>');
+            });
+          });
         });
 
       });

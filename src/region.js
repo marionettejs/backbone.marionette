@@ -194,6 +194,8 @@ const Region = MarionetteObject.extend({
     // always restore the el to ensure the regions el is present before replacing
     this._restoreEl();
 
+    view.on('before:destroy', this._restoreEl, this);
+
     this.replaceEl(view.el, this.el);
 
     this._isReplaced = true;

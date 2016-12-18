@@ -75,6 +75,10 @@ const Region = MarionetteObject.extend({
 
     this._attachView(view, options);
 
+    if (this._isReplaced) {
+      view.on('before:destroy', this._empty, this);
+    }
+
     this.triggerMethod('show', this, view, options);
     return this;
   },
@@ -252,6 +256,10 @@ const Region = MarionetteObject.extend({
   },
 
   _empty(view, shouldDestroy) {
+    if (this._isReplaced) {
+      view.off('before:destroy', this._empty, this);
+    }
+
     view.off('destroy', this._empty, this);
     this.triggerMethod('before:empty', this, view);
 

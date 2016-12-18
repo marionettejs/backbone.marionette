@@ -9,27 +9,29 @@ describe('collection view - reset', function() {
     });
 
     this.onRenderStub = this.sinon.stub();
-    this.destroyChildrenStub = this.sinon.stub();
 
     this.CollectionView = Backbone.Marionette.CollectionView.extend({
       childView: this.View,
-      onRender: this.onRenderStub,
-      _destroyChildren: this.destroyChildrenStub
+      onRender: this.onRenderStub
     });
 
     this.collectionView = new this.CollectionView({
       collection: this.collection
     });
+
+    this.sinon.spy(this.collectionView, '_destroyChildren');
   });
 
   describe('when a collection is reset after the view is loaded', function() {
     beforeEach(function() {
       this.collectionView.render();
+      var childViewAtEnd = new Marionette.View({template: _.constant('END')});
+      this.collectionView.addChildView(childViewAtEnd, this.collection.length);
       this.collection.reset([{foo: 'bar'}, {foo: 'baz'}]);
     });
 
     it('should destroy all open child views', function() {
-      expect(this.destroyChildrenStub).to.have.been.called;
+      expect(this.collectionView._destroyChildren).to.have.been.called;
     });
 
     it('should append the html for each childView', function() {

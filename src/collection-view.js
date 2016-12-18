@@ -136,9 +136,7 @@ const CollectionView = Backbone.View.extend({
   // in the collection in order to keep the children in sync with the collection.
   // "models" is an array of models and the corresponding views
   // will be removed and destroyed from the CollectionView
-  _removeChildModels(models, {checkEmpty} = {}) {
-    const shouldCheckEmpty = checkEmpty !== false;
-
+  _removeChildModels(models) {
     // Used to determine where to update the remaining
     // sibling view indices after these views are removed.
     const removedViews = this._getRemovedViews(models);
@@ -152,8 +150,8 @@ const CollectionView = Backbone.View.extend({
     // decrement the index of views after this one
     this._updateIndices(removedViews, false);
 
-    if (shouldCheckEmpty) {
-      this._checkEmpty();
+    if (this.isEmpty()) {
+      this._showEmptyView();
     }
   },
 
@@ -163,7 +161,7 @@ const CollectionView = Backbone.View.extend({
 
     // Returning a view means something was removed.
     return _.reduce(models, (removingViews, model) => {
-      const view = this.children.findByModel(model);
+      const view = model && this.children.findByModel(model);
 
       if (!view || view._isDestroyed) {
         return removingViews;
@@ -175,18 +173,6 @@ const CollectionView = Backbone.View.extend({
 
       return removingViews;
     }, []);
-  },
-
-  _findGreatestIndexedView(views) {
-
-    return _.reduce(views, (greatestIndexedView, view) => {
-      // Even if the index is `undefined`, a view will get returned.
-      if (!greatestIndexedView || greatestIndexedView._index < view._index) {
-        return view;
-      }
-
-      return greatestIndexedView;
-    }, undefined);
   },
 
   _removeChildView(view) {
@@ -364,7 +350,7 @@ const CollectionView = Backbone.View.extend({
   _renderChildren() {
     if (this._isRendered) {
       this._destroyEmptyView();
-      this._destroyChildren({checkEmpty: false});
+      this._destroyChildren();
     }
 
     const models = this._filteredSortedModels();
@@ -586,14 +572,16 @@ const CollectionView = Backbone.View.extend({
       return;
     }
 
-    const view = _.isArray(views) ? this._findGreatestIndexedView(views) : views;
+    const view = _.isArray(views) ? _.max(views, '_index') : views;
 
-    // update the indexes of views after this one
-    this.children.each((laterView) => {
-      if (laterView._index >= view._index) {
-        laterView._index += increment ? 1 : -1;
-      }
-    });
+    if (_.isObject(view)) {
+      // update the indexes of views after this one
+      this.children.each((laterView) => {
+        if (laterView._index >= view._index) {
+          laterView._index += increment ? 1 : -1;
+        }
+      });
+    }
   },
 
   _renderView(view) {
@@ -662,13 +650,6 @@ const CollectionView = Backbone.View.extend({
     return models.length === 0;
   },
 
-  // If empty, show the empty view
-  _checkEmpty() {
-    if (this.isEmpty()) {
-      this._showEmptyView();
-    }
-  },
-
   // You might need to override this if you've overridden attachHtml
   attachBuffer(collectionView, buffer) {
     this.appendChildren(collectionView.el, buffer);
@@ -732,7 +713,7 @@ const CollectionView = Backbone.View.extend({
 
   // called by ViewMixin destroy
   _removeChildren() {
-    this._destroyChildren({checkEmpty: false});
+    this._destroyChildren();
   },
 
   // Destroy the child views that this collection view is holding on to, if any
@@ -742,8 +723,8 @@ const CollectionView = Backbone.View.extend({
     }
 
     this.triggerMethod('before:destroy:children', this);
-    const childModels = this.children.map('model');
-    this._removeChildModels(childModels, options);
+    this.children.each(_.bind(this._removeChildView, this));
+    this.children._updateLength();
     this.triggerMethod('destroy:children', this);
   },
 

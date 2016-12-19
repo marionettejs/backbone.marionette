@@ -34,6 +34,7 @@ multiple views through the `regions` attribute.
     * [Event and Trigger Mapping](#event-and-trigger-mapping)
     * [View `events`](#view-events)
     * [View `triggers`](#view-triggers)
+    * [View `triggers` Event Object](#view-triggers-event-object)
 * [Model and Collection Events](#model-and-collection-events)
   * [Model Events](#model-events)
     * [Function Callback](#function-callback)
@@ -579,7 +580,7 @@ var MyView = Mn.View.extend({
     'click a': 'link:clicked'
   },
 
-  onLinkClicked: function() {
+  onLinkClicked: function(view, event) {
     console.log('Show the modal');
   }
 });
@@ -596,6 +597,32 @@ The major benefit of the `triggers` attribute over `events` is that triggered
 events can bubble up to any parent views. For a full explanation of bubbling
 events and listening to child events, see the
 [event bubbling documentation](./events.md#child-view-events).
+
+#### View `triggers` Event Object
+
+Event handlers will receive the triggering view as the first argument and the
+DOM Event object as the second. It is _strongly recommended_ that View's handle
+their own DOM event objects. It should be considered a best practice to not
+utilize the DOM event in external listeners.
+
+By default all trigger events are stopped with `preventDefault` and
+`stopPropagation` methods, but you can manually configure the triggers using
+a hash instead of event name. The example below triggers an event and prevents
+default browser behaviour using `preventDefault` method.
+
+```js
+var MyView = Mn.View.extend({
+  triggers: {
+    'click a': {
+      event: 'link:clicked',
+      preventDefault: true, // this param is optional and will default to true
+      stopPropagation: false
+    }
+  }
+});
+```
+
+The default behavior for calling `preventDefault` can be changed with the feature flag [`triggersPreventDefault`](./marionette.features.md#triggerspreventdefault), and `stopPropagation` can be changed with the feature flag [`triggersStopPropagation`](./marionette.features.md#triggersstoppropagation).
 
 ## Model and Collection events
 

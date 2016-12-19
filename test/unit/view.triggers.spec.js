@@ -34,6 +34,10 @@ describe('view triggers', function() {
     it('should include the view in the event', function() {
       expect(this.fooHandlerStub.lastCall.args[0]).to.contain(this.view);
     });
+
+    it('should include the event object in the event', function() {
+      expect(this.fooHandlerStub.lastCall.args[1]).to.be.an.instanceOf($.Event);
+    });
   });
 
   describe('when triggers and standard events are both configured', function() {
@@ -117,6 +121,108 @@ describe('view triggers', function() {
     it('should prevent and dont stop the first view event', function() {
       expect(this.fooEvent.isDefaultPrevented()).to.be.true;
       expect(this.fooEvent.isPropagationStopped()).to.be.false;
+    });
+  });
+
+  describe('when triggersPreventDefault flag is set to false', function() {
+    beforeEach(function() {
+      Marionette.setEnabled('triggersPreventDefault', false);
+    });
+
+    afterEach(function() {
+      Marionette.setEnabled('triggersPreventDefault', true);
+    });
+
+    describe('triggers should not prevent events by default', function() {
+      beforeEach(function() {
+        this.View = Marionette.View.extend({triggers: this.triggersHash});
+        this.view = new this.View();
+        this.view.on('fooHandler', this.fooHandlerStub);
+
+        this.view.$el.trigger(this.fooEvent);
+      });
+
+      it('should stop propagation by default', function() {
+        expect(this.fooEvent.isPropagationStopped()).to.be.true;
+      });
+
+      it('should not prevent default by default', function() {
+        expect(this.fooEvent.isDefaultPrevented()).to.be.false;
+      });
+    });
+
+    describe('when triggers items are manually configured', function() {
+      beforeEach(function() {
+        this.View = Marionette.View.extend({
+          triggers: {
+            'foo': {
+              event: 'fooHandler',
+              preventDefault: true,
+              stopPropagation: true
+            }
+          }
+        });
+        this.view = new this.View();
+        this.view.on('fooHandler', this.fooHandlerStub);
+
+        this.view.$el.trigger(this.fooEvent);
+      });
+
+      it('should prevent and stop the first view event', function() {
+        expect(this.fooEvent.isDefaultPrevented()).to.be.true;
+        expect(this.fooEvent.isPropagationStopped()).to.be.true;
+      });
+    });
+  });
+
+  describe('when triggersStopPropagation flag is set to false', function() {
+    beforeEach(function() {
+      Marionette.setEnabled('triggersStopPropagation', false);
+    });
+
+    afterEach(function() {
+      Marionette.setEnabled('triggersStopPropagation', true);
+    });
+
+    describe('triggers should not stop propagation by default', function() {
+      beforeEach(function() {
+        this.View = Marionette.View.extend({triggers: this.triggersHash});
+        this.view = new this.View();
+        this.view.on('fooHandler', this.fooHandlerStub);
+
+        this.view.$el.trigger(this.fooEvent);
+      });
+
+      it('should stop propagation by default', function() {
+        expect(this.fooEvent.isPropagationStopped()).to.be.false;
+      });
+
+      it('should prevent default by default', function() {
+        expect(this.fooEvent.isDefaultPrevented()).to.be.true;
+      });
+    });
+
+    describe('when triggers items are manually configured', function() {
+      beforeEach(function() {
+        this.View = Marionette.View.extend({
+          triggers: {
+            'foo': {
+              event: 'fooHandler',
+              preventDefault: true,
+              stopPropagation: true
+            }
+          }
+        });
+        this.view = new this.View();
+        this.view.on('fooHandler', this.fooHandlerStub);
+
+        this.view.$el.trigger(this.fooEvent);
+      });
+
+      it('should prevent and stop the first view event', function() {
+        expect(this.fooEvent.isDefaultPrevented()).to.be.true;
+        expect(this.fooEvent.isPropagationStopped()).to.be.true;
+      });
     });
   });
 });

@@ -260,9 +260,9 @@ The `templateContext` attribute can also
 
 ### Context Function
 
-The `templateContext` object can also be a [function returning an object](basics.md#functions-returning-values). This is
-useful when you want to access
-[information from the surrounding view](#binding-of-this) (e.g. model methods).
+The `templateContext` object can also be a [function returning an object](basics.md#functions-returning-values).
+This is useful when you want to access [information from the surrounding view](#binding-of-this)
+(e.g. model methods).
 
 To use a `templateContext`, simply assign a function:
 
@@ -315,7 +315,30 @@ var myView = new MyView({contextKey: 'world'});
 The above code will fail because the context object in the template
 _cannot see_ the view's `getOption`. This would also apply to functions
 returned by a `templateContext` function, even though the function itself is
-bound to the view context.
+bound to the view context. The following example should provide some clarity:
+
+```javascript
+var _ = require('underscore');
+var Mn = require('backbone.marionette');
+
+var MyView = Mn.View.extend({
+  template: _.template('<h1>Hello, <%- contextKey() %></h1>'),
+
+  templateContext: function() {
+    return {
+      contextKeyVar: this.getOption('contextKey'),  // OK - "this" refers to view
+      contextKeyFunction: function() {
+        return this.getOption('contextKey');  // ERROR - "this" refers to data
+      }
+    };
+
+  }
+});
+
+var myView = new MyView({contextKey: 'world'});
+```
+
+[Live example](https://jsfiddle.net/scott_walton/g941km9u/1/)
 
 ## Serializing Model and Collection Data
 

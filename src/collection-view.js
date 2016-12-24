@@ -357,7 +357,7 @@ const CollectionView = Backbone.View.extend({
   // Internal method. Separated so that CompositeView can append to the childViewContainer
   // if necessary
   _appendReorderedChildren(children) {
-    this.$el.append(children);
+    this.appendChildren(this.el, children);
   },
 
   // Internal method. Separated so that CompositeView can have more control over events
@@ -674,14 +674,14 @@ const CollectionView = Backbone.View.extend({
 
   // You might need to override this if you've overridden attachHtml
   attachBuffer(collectionView, buffer) {
-    collectionView.$el.append(buffer);
+    this.appendChildren(collectionView.el, buffer);
   },
 
   // Create a fragment buffer from the currently buffered children
   _createBuffer() {
-    const elBuffer = document.createDocumentFragment();
+    const elBuffer = this.createBuffer();
     _.each(this._bufferedChildren, (b) => {
-      elBuffer.appendChild(b.el);
+      this.appendChildren(elBuffer, b.el);
     });
     return elBuffer;
   },
@@ -716,7 +716,7 @@ const CollectionView = Backbone.View.extend({
     }
 
     if (currentView) {
-      currentView.$el.before(childView.el);
+      this.beforeEl(currentView.el, childView.el);
       return true;
     }
 
@@ -725,7 +725,7 @@ const CollectionView = Backbone.View.extend({
 
   // Internal method. Append a view to the end of the $el
   _insertAfter(childView) {
-    this.$el.append(childView.el);
+    this.appendChildren(this.el, childView.el);
   },
 
   // Internal method to set up the `children` object for storing all of the child views

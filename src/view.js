@@ -179,7 +179,7 @@ const View = Backbone.View.extend({
   // }
   // ```
   attachElContent(html) {
-    this.$el.html(html);
+    this.setInnerContent(this.el, html);
 
     return this;
   },

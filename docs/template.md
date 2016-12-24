@@ -317,6 +317,8 @@ _cannot see_ the view's `getOption`. This would also apply to functions
 returned by a `templateContext` function, even though the function itself is
 bound to the view context.
 
+[Live example](https://jsfiddle.net/scott_walton/g941km9u/1/)
+
 ## Serializing Model and Collection Data
 
 The `serializeData` method is used to convert a View's `model` or `collection`

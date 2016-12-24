@@ -2,12 +2,19 @@ sudo: false
 language: node_js
 node_js:
   - "6"
+cache:
+  directories:
+  - /home/travis/.cypress/Cypress
 env: MAINRUN=true
 before_install:
   - npm config set ca ""
+  - npm install -g cypress-cli
 install:
   - npm install && npm install travis-ci
+script:
+  - npm run-script coveralls
+  - npm run-script test-cross-browser
+  - cypress ci $CYPRESS
 after_success:
-  - npm run-script coveralls && npm run-script test-cross-browser
   - if [[ $TRAVIS_BRANCH = "master" ]] && [[ $TRAVIS_PULL_REQUEST = "false" ]]; then node trigger-deploy-mn-com.js; fi
 

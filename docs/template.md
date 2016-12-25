@@ -338,7 +338,7 @@ var MyView = Mn.View.extend({
 var myView = new MyView({contextKey: 'world'});
 ```
 
-[Live example](https://jsfiddle.net/scott_walton/g941km9u/1/)
+[Live example](https://jsfiddle.net/marionettejs/cwt31k9p/1/)
 
 ## Serializing Model and Collection Data
 

@@ -24,7 +24,8 @@
     "coveralls": "gulp coveralls",
     "test": "gulp",
     "test-browser": "gulp test-browser",
-    "test-cross-browser": "gulp test-cross-browser"
+    "test-cross-browser": "gulp test-cross-browser",
+    "test-lodash": "USE_LODASH=1 gulp"
   },
   "author": {
     "name": "Derick Bailey",
@@ -76,6 +77,7 @@
     "isparta": "4.0.0",
     "jquery": "3.1.0",
     "jsdom": "9.6.0",
+    "lodash": "^4.17.3",
     "mocha": "3.1.2",
     "opn": "4.0.2",
     "rollup": "0.36.3",

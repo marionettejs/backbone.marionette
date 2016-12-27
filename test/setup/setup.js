@@ -1,5 +1,19 @@
 module.exports = function() {
+
+  if (process.env.USE_LODASH) {
+    var pathScore = require.resolve('underscore');
+    var pathDash = require.resolve('lodash');
+    require(pathDash);
+
+    require.cache[pathScore] = require.cache[pathDash];
+  }
+
+  var lib = process.env.USE_LODASH ? 'lodash' : 'underscore';
+
   var _ = require('underscore');
+
+  console.log('Using ' + lib + ': ' + _.VERSION);
+
   var Backbone = require('backbone');
   var jQuery = require('jquery');
   Backbone.$ = jQuery;

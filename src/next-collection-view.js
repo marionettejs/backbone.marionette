@@ -289,6 +289,8 @@ const CollectionView = Backbone.View.extend({
   sort() {
     if (this._isDestroyed) { return this; }
 
+    if (!this.children.length) { return this; }
+
     this._showChildren();
 
     return this;

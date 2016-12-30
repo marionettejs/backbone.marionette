@@ -364,7 +364,8 @@ const CollectionView = Backbone.View.extend({
     let viewComparator = this.getViewComparator();
 
     if (_.isFunction(viewComparator)) {
-      viewComparator = _.bind(viewComparator, this);
+      // Must use native bind to preserve length
+      viewComparator = viewComparator.bind(this);
     }
 
     this.children._sort(viewComparator);

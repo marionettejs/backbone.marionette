@@ -1,4 +1,6 @@
+require('coffee-script/register');
 import gulp from 'gulp';
+import connect from 'gulp-connect';
 import livereload from 'gulp-livereload';
 import easySauce from 'easy-sauce';
 
@@ -28,6 +30,17 @@ const sauceConf = {
   service: 'sauce-connect'
 };
 
+const TESTS_PORT = 35729;
+const INTEGRATION_TESTS_PORT = 2020;
+
+// becasue of issue with importing coffescript files with babel-register
+function _importCypressRun() {
+  delete require.cache[require.resolve('cypress-cli/lib/commands/run')];
+  return require('cypress-cli/lib/commands/run');
+}
+
+const cypressRun = _importCypressRun();
+
 function bundle() {
   return rollup({
     entry: ['./test/setup/browser.js', './test/unit/**/*.js'],
@@ -53,7 +66,11 @@ function bundle() {
 }
 
 function browserWatch() {
-  livereload.listen({port: 35729, host: 'localhost', start: true});
+  livereload.listen({
+    port: TESTS_PORT,
+    host: 'localhost',
+    start: true
+  });
   opn('./test/runner.html');
   gulp.watch(['src/**/*.js', 'test/**/*.js'], ['browser-bundle']);
 }
@@ -82,8 +99,19 @@ function sauceRunner() {
     });
 }
 
+function cypressRunner() {
+  connect.server({
+    root: ['integration-tests'],
+    port: INTEGRATION_TESTS_PORT,
+    livereload: true
+  });
+  cypressRun();
+}
+
 gulp.task('browser-bundle', ['lint-src', 'lint-test'], bundle);
 
 gulp.task('test-browser', ['browser-bundle'], browserWatch);
+
+gulp.task('test-integration', cypressRunner);
 
 gulp.task('test-cross-browser', ['browser-bundle'], sauceRunner);

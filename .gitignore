@@ -4,6 +4,7 @@
 *.orig
 .idea
 ext/
+yarn.lock
 
 # Logs
 logs

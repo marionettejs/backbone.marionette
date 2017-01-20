@@ -30,7 +30,7 @@ describe('Application', function() {
 
   it('should show a view with additional arguments', function() {
     app.showView(barView, {
-      selector: '.title',
+      el: '.title',
       replaceElement: true
     });
     cy.get('.title').should('contain', 'Application region content');

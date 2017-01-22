@@ -169,21 +169,9 @@ describe('Marionette Application', function() {
 
         expect(showViewInRegionSpy).to.have.been.calledWith(view, fooArgs);
       });
-
-      it('should show a view in its region', function() {
-        app.showView(view, fooArgs);
-
-        expect(appRegion.el.innerHTML).to.contain('ohai');
-      });
     });
 
     describe('when just view as argument was passed', function() {
-      it('should show a view in its region', function() {
-        app.showView(view);
-
-        expect(appRegion.el.innerHTML).to.contain('ohai');
-      });
-
       it('should call show method in region', function() {
         app.showView(view);
 

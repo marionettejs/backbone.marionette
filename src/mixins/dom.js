@@ -17,6 +17,10 @@ export default {
   },
 
   replaceEl(newEl, oldEl) {
+    if (newEl === oldEl) {
+      return;
+    }
+
     const parent = oldEl.parentNode;
 
     if (!parent) {

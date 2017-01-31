@@ -404,6 +404,23 @@ describe('region', function() {
           });
         });
 
+        describe('when setting the "replaceElement" class option and els are the same', function() {
+          beforeEach(function() {
+            this.$parentEl = this.region.$el.parent();
+            this.regionHtml = this.$parentEl.html();
+            this.region.replaceElement = true;
+            this.region.show(new this.MyView({ el: this.region.el }));
+          });
+
+          it('should have replaced the "el"', function() {
+            expect(this.region.isReplaced()).to.be.true;
+          });
+
+          it('should append the view HTML to the parent "el"', function() {
+            expect(this.$parentEl).to.contain.$html(this.region.currentView.$el.html());
+          });
+        });
+
       });
 
       describe('preventDestroy: false', function() {

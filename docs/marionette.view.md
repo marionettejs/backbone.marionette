@@ -614,7 +614,7 @@ var MyView = Mn.View.extend({
     'change:attribute': 'actOnChange'
   },
 
-  actOnChange: function(value, model) {
+  actOnChange: function(model, value) {
     console.log('New value: ' + value);
   }
 });

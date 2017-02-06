@@ -190,7 +190,7 @@ var view = new MyView({
   foo: 'some text'
 });
 
-console.log(view.checkOption());  // prints 'some text'
+view.checkOption();  // prints 'some text'
 ```
 
 [Live example](https://jsfiddle.net/marionettejs/6n02ex1m/)

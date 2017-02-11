@@ -572,13 +572,21 @@ const CollectionView = Backbone.View.extend({
       return;
     }
 
+    if (!increment) {
+      _.each(_.sortBy(this.children._views, '_index'), (view, index) => {
+        view._index = index;
+      });
+
+      return;
+    }
+
     const view = _.isArray(views) ? _.max(views, '_index') : views;
 
     if (_.isObject(view)) {
       // update the indexes of views after this one
       this.children.each((laterView) => {
         if (laterView._index >= view._index) {
-          laterView._index += increment ? 1 : -1;
+          laterView._index += 1;
         }
       });
     }

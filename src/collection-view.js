@@ -438,7 +438,7 @@ const CollectionView = Backbone.View.extend({
     } else if (comparator.length === 1) {
       return _.sortBy(models, _.bind(comparator, this));
     } else {
-      return models.sort(_.bind(comparator, this));
+      return _.clone(models).sort(_.bind(comparator, this));
     }
   },
 

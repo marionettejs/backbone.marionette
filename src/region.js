@@ -10,6 +10,7 @@ import isNodeAttached from './common/is-node-attached';
 import { triggerMethodOn } from './common/trigger-method';
 import MarionetteObject from './object';
 import MarionetteError from './error';
+import DomMixin from './mixins/dom';
 
 const ClassOptions = [
   'allowMissingEl',
@@ -154,16 +155,15 @@ const Region = MarionetteObject.extend({
   // Override this method to change how the region finds the DOM element that it manages. Return
   // a jQuery selector object scoped to a provided parent el or the document if none exists.
   getEl(el) {
-    return Backbone.$(el, _.result(this, 'parentEl'));
+    return this.findEls(el, _.result(this, 'parentEl'));
   },
 
   _replaceEl(view) {
     // always restore the el to ensure the regions el is present before replacing
     this._restoreEl();
 
-    const parent = this.el.parentNode;
+    this.replaceEl(view.el, this.el);
 
-    parent.replaceChild(view.el, this.el);
     this._isReplaced = true;
   },
 
@@ -180,13 +180,8 @@ const Region = MarionetteObject.extend({
       return;
     }
 
-    const parent = view.el.parentNode;
+    this.replaceEl(this.el, view.el);
 
-    if (!parent) {
-      return;
-    }
-
-    parent.replaceChild(this.el, view.el);
     this._isReplaced = false;
   },
 
@@ -198,7 +193,7 @@ const Region = MarionetteObject.extend({
   // Override this method to change how the new view is appended to the `$el` that the
   // region is managing
   attachHtml(view) {
-    this.el.appendChild(view.el);
+    this.appendChildren(this.el, view.el);
   },
 
   // Destroy the current view, if there is one. If there is no current view, it does
@@ -281,7 +276,7 @@ const Region = MarionetteObject.extend({
 
   // Override this method to change how the region detaches current content
   detachHtml() {
-    this.$el.contents().detach();
+    this.detachContents(this.el);
   },
 
   // Checks whether a view is currently present within the region. Returns `true` if there is
@@ -309,5 +304,7 @@ const Region = MarionetteObject.extend({
     return MarionetteObject.prototype.destroy.apply(this, arguments);
   }
 });
+
+_.extend(Region.prototype, DomMixin);
 
 export default Region;

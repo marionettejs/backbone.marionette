@@ -11,6 +11,7 @@ import TriggersMixin from './triggers';
 import UIMixin from './ui';
 import View from '../view';
 import MarionetteError from '../error';
+import DomMixin from './dom';
 
 // MixinOptions
 // - behaviors
@@ -137,8 +138,7 @@ const ViewMixin = {
     this.unbindUIElements();
 
     // remove the view from the DOM
-    // https://github.com/jashkenas/backbone/blob/1.2.3/backbone.js#L1235
-    this._removeElement();
+    this.removeEl(this.el);
 
     if (shouldTriggerDetach) {
       this._isAttached = false;
@@ -248,6 +248,6 @@ const ViewMixin = {
   }
 };
 
-_.extend(ViewMixin, BehaviorsMixin, CommonMixin, DelegateEntityEventsMixin, TriggersMixin, UIMixin);
+_.extend(ViewMixin, DomMixin, BehaviorsMixin, CommonMixin, DelegateEntityEventsMixin, TriggersMixin, UIMixin);
 
 export default ViewMixin;

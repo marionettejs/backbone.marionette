@@ -146,7 +146,7 @@ describe('collection view', function() {
       this.sinon.spy(this.collectionView, 'onRender');
       this.sinon.spy(this.collectionView, 'trigger');
       this.sinon.spy(this.collectionView, 'attachHtml');
-      this.sinon.spy(this.collectionView.$el, 'append');
+      this.sinon.spy(this.collectionView, 'attachBuffer');
       this.sinon.spy(this.collectionView, '_startBuffering');
       this.sinon.spy(this.collectionView, '_endBuffering');
       this.sinon.spy(this.collectionView, 'addChildView');
@@ -154,8 +154,8 @@ describe('collection view', function() {
       this.collectionView.render();
     });
 
-    it('should only call $el.append once', function() {
-      expect(this.collectionView.$el.append.callCount).to.equal(1);
+    it('should only call attachBuffer once', function() {
+      expect(this.collectionView.attachBuffer.callCount).to.equal(1);
     });
 
     it('should only call clear render buffer once', function() {
@@ -781,7 +781,7 @@ describe('collection view', function() {
 
       this.sinon.spy(this.childView, 'destroy');
       this.sinon.spy(this.collectionView, 'stopListening');
-      this.sinon.spy(this.collectionView, '_removeElement');
+      this.sinon.spy(this.collectionView, 'removeEl');
       this.sinon.spy(this.collectionView, 'someCallback');
       this.sinon.spy(this.collectionView, 'someViewCallback');
       this.sinon.spy(this.collectionView, 'destroy');
@@ -829,7 +829,7 @@ describe('collection view', function() {
     });
 
     it('should remove the views EL from the DOM', function() {
-      expect(this.collectionView._removeElement).to.have.been.called;
+      expect(this.collectionView.removeEl).to.have.been.called;
     });
 
     it('should call "onDestroy" if provided', function() {

@@ -205,6 +205,7 @@ describe('collection/composite view sorting', function() {
   describe('when working with collections with a custom view comparator', function() {
     beforeEach(function() {
       this.collection.comparator = 'foo';
+      this.startCollectionOrder = this.collection.map('foo').join();
 
       this.collectionView = new this.CollectionView({
         childView: this.ChildView,
@@ -215,7 +216,9 @@ describe('collection/composite view sorting', function() {
       this.compositeView = new this.CompositeView({
         childView: this.ChildView,
         collection: this.collection,
-        viewComparator: function(model) { return model.get('bar'); }
+        viewComparator: function(modelA, modelB) {
+          return modelA.get('bar') > modelB.get('bar') ? 1 : -1;
+        }
       });
 
       this.sinon.spy(this.collectionView, 'resortView');
@@ -223,6 +226,11 @@ describe('collection/composite view sorting', function() {
 
       this.collectionView.render();
       this.compositeView.render();
+      this.endCollectionOrder = this.collection.map('foo').join();
+    });
+
+    it('should not change collection order', function() {
+      expect(this.startCollectionOrder).to.equal(this.endCollectionOrder);
     });
 
     describe('when adding a model', function() {

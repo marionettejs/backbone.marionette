@@ -1,3 +1,22 @@
+### v3.2.0 [view commit logs](https://github.com/marionettejs/backbone.marionette/compare/v3.1.0...v3.2.0)
+
+#### Features
+* Separate Mn DOM interaction into a mixin for DOM plugin ease 
+* `View.childViewEvents` should support `trigger`
+* Allow showing a template or static string in a region
+* Feature/trigger method event args
+
+#### Fixes
+* Custom `CollectionView.viewComparator` no longer sorts `collection.models`
+* `CollectionView` re-indexes correctly when removing views.
+* `CollectionView.filter` can filter by `View` child index
+* `Region` will no longer detach pre-existing HTML when `View`'s el is already in the region 
+* Fix `Region` clean up when `View` is `destroy`ed
+* Destroy `CollectionView.children` by `View` and not `Model`
+
+#### Misc
+* Remove `MarionetteError` "ViewDestroyError" from `View`'s
+
 ### v3.1.0 [view commit logs](https://github.com/marionettejs/backbone.marionette/compare/v3.0.0...v3.1.0)
 
 #### General

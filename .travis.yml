@@ -8,7 +8,8 @@ env:
   - TEST_SUITE=browser
   - TEST_SUITE=lodash USE_LODASH=1
   - TEST_SUITE=browser USE_LODASH=1
-
+before_install:
+  - npm install -g yarn --cache-min 999999999
 after_install:
   - yarn install travis-ci
 script:

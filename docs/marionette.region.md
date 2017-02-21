@@ -18,9 +18,11 @@ Regions maintain the [View's lifecycle](./viewlifecycle.md#regions-and-the-view-
   * [String Selector](#string-selector)
   * [Additional Options](#additional-options)
   * [Specifying regions as a Function](#specifying-regions-as-a-function)
-  * [Adding Regions](#adding-regions)
-  * [Removing Regions](#removing-regions)
-  * [Using Regions on a view](#using-regions-on-a-view)
+  * [Using a RegionClass](#using-a-regionclass)
+  * [Referencing UI in `regions`](#referencing-ui-in-regions)
+* [Adding Regions](#adding-regions)
+* [Removing Regions](#removing-regions)
+* [Using Regions on a view](#using-regions-on-a-view)
 * [Showing a View](#showing-a-view)
   * [Checking whether a region is showing a view](#checking-whether-a-region-is-showing-a-view)
 * [Showing a Template](#showing-a-template)
@@ -126,7 +128,7 @@ var MyView = Mn.View.extend({
       replaceElement: true
     },
     regionDefinition: {
-      selector: '.bar',
+      el: '.bar',
       replaceElement: true
     }
   }
@@ -150,7 +152,55 @@ var MyView = Mn.View.extend({
 });
 ```
 
-### Adding Regions
+### Using a RegionClass
+
+If you've created a custom region class, you can use it to define your region.
+
+```javascript
+var Mn = require('backbone.marionette');
+
+var MyRegion = Mn.Region.extend({
+  onShow: function(){
+    // Scroll to the middle
+    this.$el.scrollTop(this.currentView.$el.height() / 2 - this.$el.height() / 2);
+  }
+});
+
+var MyView = Mn.View.extend({
+  regions: {
+    firstRegion: {
+      el: '#first-region',
+      regionClass: MyRegion
+    }
+  }
+});
+
+```
+
+[Live example](https://jsfiddle.net/marionettejs/oLLrzx8g/)
+
+### Referencing UI in `regions`
+
+The UI attribute can be useful when setting region selectors - simply use
+the `@ui.` prefix:
+
+```javascript
+var Mn = require('backbone.marionette');
+
+var MyView = Mn.View.extend({
+  ui: {
+    region: '#first-region'
+  },
+  regions: {
+    firstRegion: '@ui.region'
+  }
+});
+
+```
+
+[Live example](https://jsfiddle.net/marionettejs/ey1od1g8/)
+
+## Adding Regions
 
 To add regions to a view after it has been instantiated, simply use the
 `addRegion` method:
@@ -179,7 +229,7 @@ myView.addRegions({
 });
 ```
 
-### Removing Regions
+## Removing Regions
 
 You can remove all of the regions from a view by calling `removeRegions` or you can remove a region by name using `removeRegion`. When a region is removed the region will be destroyed.
 
@@ -205,7 +255,7 @@ mainRegion.isDestroyed(); // -> true
 myView.removeRegions();
 ```
 
-### Using Regions on a view
+## Using Regions on a view
 
 In addition to adding and removing regions there are a few
 methods to help utilize regions.

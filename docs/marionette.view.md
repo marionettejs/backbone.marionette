@@ -15,7 +15,7 @@ multiple views through the `regions` attribute.
   * [Set How Template is Attached to the `el`](#set-how-template-is-attached-to-the-el)
 * [Managing an Existing Page](#managing-an-existing-page)
   * [Setting a `template` to `false`](#setting-a-template-to-false)
-* [Laying Out Views - Regions](#laying-out-views---regions)
+* [Laying Out Views - Regions](#laying-out-views-regions)
   * [Managing Sub-views](#managing-sub-views)
     * [Showing a View](#showing-a-view)
     * [Accessing a Child View](#accessing-a-child-view)
@@ -641,7 +641,7 @@ var MyView = Mn.View.extend({
     'change:attribute': 'actOnChange'
   },
 
-  actOnChange: function(value, model) {
+  actOnChange: function(model, value) {
     console.log('New value: ' + value);
   }
 });

@@ -21,7 +21,7 @@ inheritance. All built-in classes, such as `Marionette.View`,
 `Marionette.Object` and everything that extend these provide an `extend` method
 for just this purpose.
 
-In the below example, we create a new pseudo-class called `MyView`:
+In the example below, we create a new pseudo-class called `MyView`:
 
 ```javascript
 var Mn = require('backbone.marionette');
@@ -190,7 +190,7 @@ var view = new MyView({
   foo: 'some text'
 });
 
-console.log(view.checkOption());  // prints 'some text'
+view.checkOption();  // prints 'some text'
 ```
 
 [Live example](https://jsfiddle.net/marionettejs/6n02ex1m/)

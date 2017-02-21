@@ -8,7 +8,6 @@ env:
   - TEST_SUITE=browser
   - TEST_SUITE=lodash USE_LODASH=1
   - TEST_SUITE=browser USE_LODASH=1
-
 after_install:
   - yarn install travis-ci
 script:

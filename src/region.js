@@ -270,7 +270,7 @@ const Region = MarionetteObject.extend({
 
     if (!view._isDestroyed) {
       if (shouldDestroy) {
-        this._removeView(view);
+        this.removeView(view);
       } else {
         this._detachView(view);
       }
@@ -288,7 +288,7 @@ const Region = MarionetteObject.extend({
     this._parentView.stopListening(view);
   },
 
-  _removeView(view) {
+  removeView(view) {
     if (view.destroy) {
       view.destroy();
     } else {

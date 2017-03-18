@@ -23,6 +23,7 @@ const Region = MarionetteObject.extend({
   cidPrefix: 'mnr',
   replaceElement: false,
   _isReplaced: false,
+  swappingView: false,
 
   constructor(options) {
     this._setOptions(options);
@@ -58,6 +59,8 @@ const Region = MarionetteObject.extend({
 
     if (view === this.currentView) { return this; }
 
+    this.swappingView = !!this.currentView;
+
     this.triggerMethod('before:show', this, view, options);
 
     // Assume an attached view is already in the region for pre-existing DOM
@@ -74,6 +77,9 @@ const Region = MarionetteObject.extend({
     this.currentView = view;
 
     this.triggerMethod('show', this, view, options);
+
+    this.swappingView = false;
+
     return this;
   },
 

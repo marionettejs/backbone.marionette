@@ -288,12 +288,16 @@ const Region = MarionetteObject.extend({
     this._parentView.stopListening(view);
   },
 
-  removeView(view) {
+  destroyView(view) {
     if (view.destroy) {
       view.destroy();
     } else {
       destroyBackboneView(view);
     }
+  },
+
+  removeView(view) {
+    this.destroyView(view)
   },
 
   detachView() {

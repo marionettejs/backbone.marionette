@@ -23,7 +23,7 @@ const Region = MarionetteObject.extend({
   cidPrefix: 'mnr',
   replaceElement: false,
   _isReplaced: false,
-  swappingView: false,
+  _isSwappingView: false,
 
   constructor(options) {
     this._setOptions(options);
@@ -59,7 +59,7 @@ const Region = MarionetteObject.extend({
 
     if (view === this.currentView) { return this; }
 
-    this.swappingView = !!this.currentView;
+    this._isSwappingView = !!this.currentView;
 
     this.triggerMethod('before:show', this, view, options);
 
@@ -78,7 +78,7 @@ const Region = MarionetteObject.extend({
 
     this.triggerMethod('show', this, view, options);
 
-    this.swappingView = false;
+    this._isSwappingView = false;
 
     return this;
   },
@@ -235,6 +235,11 @@ const Region = MarionetteObject.extend({
   // Check to see if the region's el was replaced.
   isReplaced() {
     return !!this._isReplaced;
+  },
+
+  // Check to see if a view is being swapped by another
+  isSwappingView() {
+    return !!this._isSwappingView;
   },
 
   // Override this method to change how the new view is appended to the `$el` that the

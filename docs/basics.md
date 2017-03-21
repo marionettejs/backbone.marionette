@@ -167,7 +167,7 @@ var myView = new MyView({
 });
 ```
 
-In this example, the trigger for `safe:form` will no longer be fired, as the
+In this example, the trigger for `save:form` will no longer be fired, as the
 trigger for `show:link` completely overrides it.
 
 ## Setting Options

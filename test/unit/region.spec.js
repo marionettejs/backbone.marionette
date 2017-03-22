@@ -56,6 +56,10 @@ describe('region', function() {
         (Backbone.Marionette.Region.extend({el: $('the-ghost-of-lechuck')[0]}))();
       }).to.throw;
     });
+
+    it('should not been swapping view', function() {
+      expect(this.customRegion.isSwappingView()).to.be.false;
+    });
   });
 
   describe('when creating a new region and the "el" does not exist in DOM', function() {
@@ -165,10 +169,13 @@ describe('region', function() {
 
   describe('when showing an initial view', function() {
     beforeEach(function() {
+      var self = this;
       this.MyRegion = Backbone.Marionette.Region.extend({
         el: '#region',
         onBeforeShow: this.sinon.stub(),
-        onShow: this.sinon.stub(),
+        onShow: this.sinon.spy(function() {
+          self.isSwappingOnShow = this.isSwappingView();
+        }),
         onBeforeEmpty: this.sinon.stub(),
         onEmpty: this.sinon.stub(),
       });
@@ -230,6 +237,10 @@ describe('region', function() {
       expect(this.region.onBeforeShow).to.have.been.calledWith(this.region, this.view, this.showOptions);
     });
 
+    it('should not been swapping view', function() {
+      expect(this.isSwappingOnShow).to.be.false;
+    });
+
     describe('region and view event ordering', function() {
       it('triggers before:show before before:render', function() {
         expect(this.region.onBeforeShow).to.have.been.calledBefore(this.view.onBeforeRender);
@@ -267,6 +278,10 @@ describe('region', function() {
 
       it('should still have a view', function() {
         expect(this.region.hasView()).to.equal(true);
+      });
+
+      it('should been swapping view', function() {
+        expect(this.isSwappingOnShow).to.be.true;
       });
     });
 
@@ -595,7 +610,7 @@ describe('region', function() {
 
       it('should not call removeView', function() {
         expect(this.region.removeView).not.to.have.been.called;
-      })
+      });
     });
   });
 
@@ -850,10 +865,13 @@ describe('region', function() {
 
   describe('when destroying the current view', function() {
     beforeEach(function() {
+      var self = this;
       this.MyRegion = Backbone.Marionette.Region.extend({
         el: '#region',
         onBeforeEmpty: this.sinon.stub(),
-        onEmpty: this.sinon.stub()
+        onEmpty: this.sinon.spy(function() {
+          self.isSwappingOnEmpty = this.isSwappingView();
+        })
       });
 
       this.MyView = Backbone.View.extend({
@@ -914,6 +932,10 @@ describe('region', function() {
 
     it('should not have a view', function() {
       expect(this.region.hasView()).to.equal(false);
+    });
+
+    it('should not been swapping view', function() {
+      expect(this.isSwappingOnEmpty).to.be.false;
     });
   });
 

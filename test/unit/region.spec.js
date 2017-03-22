@@ -57,7 +57,7 @@ describe('region', function() {
       }).to.throw;
     });
 
-    it('should not been swapping view', function() {
+    it('should not be swapping view', function() {
       expect(this.customRegion.isSwappingView()).to.be.false;
     });
   });
@@ -237,7 +237,7 @@ describe('region', function() {
       expect(this.region.onBeforeShow).to.have.been.calledWith(this.region, this.view, this.showOptions);
     });
 
-    it('should not been swapping view', function() {
+    it('should not be swapping view', function() {
       expect(this.isSwappingOnShow).to.be.false;
     });
 
@@ -280,7 +280,7 @@ describe('region', function() {
         expect(this.region.hasView()).to.equal(true);
       });
 
-      it('should been swapping view', function() {
+      it('should be swapping view', function() {
         expect(this.isSwappingOnShow).to.be.true;
       });
     });
@@ -934,7 +934,7 @@ describe('region', function() {
       expect(this.region.hasView()).to.equal(false);
     });
 
-    it('should not been swapping view', function() {
+    it('should not be swapping view', function() {
       expect(this.isSwappingOnEmpty).to.be.false;
     });
   });

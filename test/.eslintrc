@@ -7,6 +7,7 @@
     "object-shorthand": 0,
     "one-var": [ 2, "never" ],
     "new-cap": 0,
+    "no-new": 0,
     "no-var": 0
   }
 }

@@ -110,6 +110,10 @@ _.extend(Container.prototype, {
 
   // Remove a view and clean up index references.
   _remove(view) {
+    if (!this._viewsByCid[view.cid]) {
+      return;
+    }
+
     // delete model index
     if (view.model) {
       delete this._indexByModel[view.model.cid];

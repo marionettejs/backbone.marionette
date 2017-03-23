@@ -604,25 +604,20 @@ const CollectionView = Backbone.View.extend({
   // Detach a view from the children.  Best used when adding a
   // childView from `addChildView`
   detachChildView(view) {
-    if (!view || view._isDestroyed) {
-      return view;
-    }
-
-    this._removeChildView(view, { shouldDetach: true });
-
-    this._removeChild(view);
+    this.removeChildView(view, { shouldDetach: true });
 
     return view;
   },
 
   // Remove the child view and destroy it.  Best used when adding a
   // childView from `addChildView`
-  removeChildView(view) {
+  // The options argument is for internal use only
+  removeChildView(view, options) {
     if (!view) {
       return view;
     }
 
-    this._removeChildView(view);
+    this._removeChildView(view, options);
 
     this._removeChild(view);
 

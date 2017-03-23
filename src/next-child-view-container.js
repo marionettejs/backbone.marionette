@@ -4,10 +4,7 @@ import emulateCollection from './utils/emulate-collection';
 // Provide a container to store, retrieve and
 // shut down child views.
 const Container = function() {
-  this._views = [];
-  this._viewsByCid = {};
-  this._indexByModel = {};
-  this._updateLength();
+  this._init();
 };
 
 emulateCollection(Container.prototype, '_views');
@@ -21,11 +18,19 @@ function stringComparator(comparator, view) {
 
 _.extend(Container.prototype, {
 
+  // Initializes an empty container
+  _init() {
+    this._views = [];
+    this._viewsByCid = {};
+    this._indexByModel = {};
+    this._updateLength();
+  },
+
   // Add a view to this container. Stores the view
   // by `cid` and makes it searchable by the model
   // cid (and model itself). Additionally it stores
   // the view by index in the _views array
-  _add(view, index) {
+  _add(view, index = this._views.length) {
     const viewCid = view.cid;
 
     // store the view
@@ -37,7 +42,6 @@ _.extend(Container.prototype, {
     }
 
     // add to end by default
-    index = index || this._views.length;
     this._views.splice(index, 0, view);
 
     this._updateLength();

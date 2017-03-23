@@ -526,13 +526,13 @@ const CollectionView = Backbone.View.extend({
 
     this._destroyEmptyView();
 
-    this.triggerMethod('before:render:children', this);
+    this.triggerMethod('before:render:children', this, views);
 
     const els = this._getBuffer(views);
 
     this._attachChildren(els, views);
 
-    this.triggerMethod('render:children', this);
+    this.triggerMethod('render:children', this, views);
   },
 
   _attachChildren(els, views) {

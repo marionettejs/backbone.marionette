@@ -521,11 +521,12 @@ var AnimatedRegion = Mn.Region.extend({
   },
   
   removeView(view) {
-    view.$el.fadeOut('slow', () => {
-      this.destroyView(view); // or view.destroy() for Marionette.View
-      this.currentView.$el.fadeIn('slow');
+    var self = this;
+    view.$el.fadeOut('slow', function() {
+      self.destroyView(view);
+      if (self.currentView) self.currentView.$el.fadeIn('slow');
     })    
-  }  
+  }   
 });
 
 var MyView = Mn.View.extend({
@@ -538,9 +539,9 @@ var MyView = Mn.View.extend({
 });
 ```
 
-[Live example](https://jsfiddle.net/marionettejs/c1nacq0c/2/)
+[Live example](https://jsfiddle.net/marionettejs/c1nacq0c/3/)
 
 Using a similar approach is possible to create a region animated with CSS:
 
-[Live example](https://jsfiddle.net/marionettejs/9ys4d57x/1/)
+[Live example](https://jsfiddle.net/marionettejs/9ys4d57x/2/)
  

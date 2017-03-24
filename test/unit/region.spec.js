@@ -779,6 +779,17 @@ describe('region', function() {
       }).not.to.throw(new Error('View (cid: "' + this.view.cid +
           '") has already been destroyed and cannot be used.'));
     });
+
+    describe('and destroyView is called', function() {
+      beforeEach(function() {
+        this.region.destroyView(this.view);
+      });
+
+      it('should not call view.destroy', function() {
+        expect(this.view.destroy).to.have.not.been.called;
+      })
+    })
+
   });
 
   describe('when a view is already destroyed and showing another', function() {

@@ -300,11 +300,16 @@ const Region = MarionetteObject.extend({
   },
 
   destroyView(view) {
+    if (view._isDestroyed) {
+      return this;
+    }
+
     if (view.destroy) {
       view.destroy();
     } else {
       destroyBackboneView(view);
     }
+    return this;
   },
 
   removeView(view) {

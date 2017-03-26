@@ -443,8 +443,6 @@ var EmptyMsgRegion = Mn.Region.extend({
 ```
 [Live example](https://jsfiddle.net/marionettejs/c1nacq0c/1/)
 
-> `hasView` will not work reliably inside `onEmpty` because will always evaluate to false
-
 ## Set How View's `el` Is Attached
 
 Override the region's `attachHtml` method to change how the view is attached

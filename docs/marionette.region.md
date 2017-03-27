@@ -498,7 +498,7 @@ This can be useful in unit testing your views.
 The `isSwappingView` method returns if a view is being swapped by another one. It's useful
 inside region lifecycle events / methods.
 
-The example will show an message when the region is empty
+The example will show an message when the region is empty:
 
 ```javascript
 var Mn = require('backbone.marionette');

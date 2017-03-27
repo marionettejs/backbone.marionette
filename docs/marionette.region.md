@@ -30,7 +30,9 @@ Regions maintain the [View's lifecycle](./viewlifecycle.md#regions-and-the-view-
   * [Preserving Existing Views](#preserving-existing-views)
   * [Detaching Existing Views](#detaching-existing-views)
 * [`reset` A Region](#reset-a-region)
+* [Check If View Is Being Swapped By Another](#check-if-view-is-being-swapped-by-another)
 * [Set How View's `el` Is Attached](#set-how-views-el-is-attached)
+* [Configure How To Remove View](#configure-how-to-remove-view)
 
 ## Defining the Application Region
 
@@ -423,6 +425,26 @@ myRegion.reset();
 
 This can be useful in unit testing your views.
 
+## Check If View Is Being Swapped By Another
+
+The `isSwappingView` method returns if a view is being swapped by another one. It's useful
+inside region lifecycle events / methods.
+
+The example will show an message when the region is empty  
+
+```javascript
+var Mn = require('backbone.marionette');
+
+var EmptyMsgRegion = Mn.Region.extend({
+  onEmpty() {
+    if (!this.isSwappingView()) {
+      this.$el.append('Empty Region');
+    }    
+  }  
+});
+```
+[Live example](https://jsfiddle.net/marionettejs/c1nacq0c/1/)
+
 ## Set How View's `el` Is Attached
 
 Override the region's `attachHtml` method to change how the view is attached
@@ -465,3 +487,61 @@ var MyView = Mn.View.extend({
   }
 });
 ```
+
+## Configure How To Remove View
+
+Override the region's `removeView` method to change how and when the view is destroyed / removed
+from the DOM. This method receives one parameter - the view to remove.
+
+The default implementation of `removeView` is:
+
+```javascript
+var Mn = require('backbone.marionette');
+
+Mn.Region.prototype.removeView = function(view){
+  this.destroyView(view);
+}
+```
+
+> `destroyView` method destroys the view taking into consideration if is
+> a Marionette.View descendant or vanilla Backbone view. It can be replaced
+> by a `view.destroy()` call if is ensured that view descends from Marionette.View   
+
+This example will animate with a fade effect showing and hiding the view:
+
+```javascript
+var Mn = require('backbone.marionette');
+
+var AnimatedRegion = Mn.Region.extend({
+  attachHtml(view) {    
+    view.$el
+      .css({display: 'none'})
+      .appendTo(this.$el);      
+    if (!this.isSwappingView()) view.$el.fadeIn('slow');
+  },
+  
+  removeView(view) {
+    var self = this;
+    view.$el.fadeOut('slow', function() {
+      self.destroyView(view);
+      if (self.currentView) self.currentView.$el.fadeIn('slow');
+    })    
+  }   
+});
+
+var MyView = Mn.View.extend({
+  regions: {
+    animatedRegion: {
+      regionClass: AnimatedRegion,
+      el: '#animated-region'
+    }
+  }
+});
+```
+
+[Live example](https://jsfiddle.net/marionettejs/c1nacq0c/3/)
+
+Using a similar approach is possible to create a region animated with CSS:
+
+[Live example](https://jsfiddle.net/marionettejs/9ys4d57x/2/)
+ 

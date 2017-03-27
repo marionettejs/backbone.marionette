@@ -56,6 +56,10 @@ describe('region', function() {
         (Backbone.Marionette.Region.extend({el: $('the-ghost-of-lechuck')[0]}))();
       }).to.throw;
     });
+
+    it('should not be swapping view', function() {
+      expect(this.customRegion.isSwappingView()).to.be.false;
+    });
   });
 
   describe('when creating a new region and the "el" does not exist in DOM', function() {
@@ -165,10 +169,13 @@ describe('region', function() {
 
   describe('when showing an initial view', function() {
     beforeEach(function() {
+      var self = this;
       this.MyRegion = Backbone.Marionette.Region.extend({
         el: '#region',
         onBeforeShow: this.sinon.stub(),
-        onShow: this.sinon.stub(),
+        onShow: this.sinon.spy(function() {
+          self.isSwappingOnShow = this.isSwappingView();
+        }),
         onBeforeEmpty: this.sinon.stub(),
         onEmpty: this.sinon.stub(),
       });
@@ -230,6 +237,10 @@ describe('region', function() {
       expect(this.region.onBeforeShow).to.have.been.calledWith(this.region, this.view, this.showOptions);
     });
 
+    it('should not be swapping view', function() {
+      expect(this.isSwappingOnShow).to.be.false;
+    });
+
     describe('region and view event ordering', function() {
       it('triggers before:show before before:render', function() {
         expect(this.region.onBeforeShow).to.have.been.calledBefore(this.view.onBeforeRender);
@@ -268,6 +279,10 @@ describe('region', function() {
       it('should still have a view', function() {
         expect(this.region.hasView()).to.equal(true);
       });
+
+      it('should be swapping view', function() {
+        expect(this.isSwappingOnShow).to.be.true;
+      });
     });
 
     describe('when passing "preventDestroy" option', function() {
@@ -296,6 +311,7 @@ describe('region', function() {
         this.sinon.spy(this.view1, 'destroy');
         this.sinon.spy(this.view1, 'off');
         this.sinon.spy(this.view2, 'destroy');
+        this.sinon.spy(this.region, 'removeView');
 
         this.region.show(this.view1);
       });
@@ -331,6 +347,10 @@ describe('region', function() {
         // https://github.com/marionettejs/backbone.marionette/issues/2159#issue-52745401
         it('should still have view1\'s, event bindings', function() {
           expect(jQuery._data(this.view.el, 'events').click).to.be.defined;
+        });
+
+        it('should not call removeView', function() {
+          expect(this.region.removeView).not.to.have.been.called;
         });
 
         describe('when setting the "replaceElement" class option', function() {
@@ -445,6 +465,10 @@ describe('region', function() {
 
         it('view1 should not reference region', function() {
           expect(this.view1._parent).to.be.undefined;
+        });
+
+        it('should call removeView', function() {
+          expect(this.region.removeView).to.have.been.called;
         });
       });
 
@@ -561,6 +585,8 @@ describe('region', function() {
         this.regionEmptyStub = this.sinon.stub();
         this.region.on('empty', this.regionEmptyStub);
 
+        this.sinon.spy(this.region, 'removeView');
+
         this.detachedView = this.region.detachView();
         this.noDetachedView = this.region.detachView();
       });
@@ -591,6 +617,10 @@ describe('region', function() {
 
       it('should not have a parent', function() {
         expect(this.detachedView).to.not.have.property('_parent');
+      });
+
+      it('should not call removeView', function() {
+        expect(this.region.removeView).not.to.have.been.called;
       });
     });
   });
@@ -759,6 +789,17 @@ describe('region', function() {
       }).not.to.throw(new Error('View (cid: "' + this.view.cid +
           '") has already been destroyed and cannot be used.'));
     });
+
+    describe('and destroyView is called', function() {
+      beforeEach(function() {
+        this.region.destroyView(this.view);
+      });
+
+      it('should not call view.destroy', function() {
+        expect(this.view.destroy).to.have.not.been.called;
+      })
+    })
+
   });
 
   describe('when a view is already destroyed and showing another', function() {
@@ -845,10 +886,13 @@ describe('region', function() {
 
   describe('when destroying the current view', function() {
     beforeEach(function() {
+      var self = this;
       this.MyRegion = Backbone.Marionette.Region.extend({
         el: '#region',
         onBeforeEmpty: this.sinon.stub(),
-        onEmpty: this.sinon.stub()
+        onEmpty: this.sinon.spy(function() {
+          self.isSwappingOnEmpty = this.isSwappingView();
+        })
       });
 
       this.MyView = Backbone.View.extend({
@@ -909,6 +953,10 @@ describe('region', function() {
 
     it('should not have a view', function() {
       expect(this.region.hasView()).to.equal(false);
+    });
+
+    it('should not be swapping view', function() {
+      expect(this.isSwappingOnEmpty).to.be.false;
     });
   });
 

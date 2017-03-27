@@ -23,6 +23,7 @@ const Region = MarionetteObject.extend({
   cidPrefix: 'mnr',
   replaceElement: false,
   _isReplaced: false,
+  _isSwappingView: false,
 
   constructor(options) {
     this._setOptions(options);
@@ -58,6 +59,8 @@ const Region = MarionetteObject.extend({
 
     if (view === this.currentView) { return this; }
 
+    this._isSwappingView = !!this.currentView;
+
     this.triggerMethod('before:show', this, view, options);
 
     // Assume an attached view is already in the region for pre-existing DOM
@@ -74,6 +77,9 @@ const Region = MarionetteObject.extend({
     this.currentView = view;
 
     this.triggerMethod('show', this, view, options);
+
+    this._isSwappingView = false;
+
     return this;
   },
 
@@ -231,6 +237,11 @@ const Region = MarionetteObject.extend({
     return !!this._isReplaced;
   },
 
+  // Check to see if a view is being swapped by another
+  isSwappingView() {
+    return !!this._isSwappingView;
+  },
+
   // Override this method to change how the new view is appended to the `$el` that the
   // region is managing
   attachHtml(view) {
@@ -269,7 +280,11 @@ const Region = MarionetteObject.extend({
     delete this.currentView;
 
     if (!view._isDestroyed) {
-      this._removeView(view, shouldDestroy);
+      if (shouldDestroy) {
+        this.removeView(view);
+      } else {
+        this._detachView(view);
+      }
       this._stopChildViewEvents(view);
     }
 
@@ -284,10 +299,9 @@ const Region = MarionetteObject.extend({
     this._parentView.stopListening(view);
   },
 
-  _removeView(view, shouldDestroy) {
-    if (!shouldDestroy) {
-      this._detachView(view);
-      return;
+  destroyView(view) {
+    if (view._isDestroyed) {
+      return this;
     }
 
     if (view.destroy) {
@@ -295,6 +309,11 @@ const Region = MarionetteObject.extend({
     } else {
       destroyBackboneView(view);
     }
+    return this;
+  },
+
+  removeView(view) {
+    this.destroyView(view);
   },
 
   detachView() {

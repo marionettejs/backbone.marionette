@@ -173,7 +173,7 @@ const CompositeView = CollectionView.extend({
 
 // To prevent duplication but allow the best View organization
 // Certain View methods are mixed directly into the deprecated CompositeView
-const MixinFromView = _.pick(View.prototype, 'serializeModel', 'getTemplate', '_renderTemplate', 'mixinTemplateContext', 'attachElContent');
+const MixinFromView = _.pick(View.prototype, 'serializeModel', 'getTemplate', '_renderTemplate', '_renderHtml', 'mixinTemplateContext', 'attachElContent');
 _.extend(CompositeView.prototype, MixinFromView);
 
 export default CompositeView;

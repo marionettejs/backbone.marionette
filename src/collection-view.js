@@ -64,6 +64,8 @@ const CollectionView = Backbone.View.extend({
     Backbone.View.prototype.constructor.apply(this, args);
 
     this.delegateEntityEvents();
+
+    this._triggerEventOnBehaviors('initialize', this);
   },
 
   // Instead of inserting elements one by one into the page, it's much more performant to insert

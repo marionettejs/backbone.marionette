@@ -46,6 +46,8 @@ const View = Backbone.View.extend({
     Backbone.View.prototype.constructor.apply(this, args);
 
     this.delegateEntityEvents();
+
+    this._triggerEventOnBehaviors('initialize', this);
   },
 
   // Serialize the view's model *or* collection, if

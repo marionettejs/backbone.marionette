@@ -332,9 +332,11 @@ The View + Behavior initialize process is as follows:
 2. Behavior is constructed
 3. Behavior is initialized with view property set
 4. View is initialized
+5. View triggers an `initialize` event on the behavior.
 
 This means that the behavior can access the view during its own `initialize` method.
 The view `initialize` is called later with the information eventually injected by the behavior.
+The `initialize` event is triggered on the behavior indicating that the view is fully initialized.
 
 [Live example](https://jsfiddle.net/marionettejs/qb9go1y3/)
 

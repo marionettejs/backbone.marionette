@@ -101,6 +101,16 @@ describe('NextCollectionView', function() {
 
       expect(myCollectionView.initialize).to.be.calledBefore(myCollectionView.delegateEntityEvents);
     });
+
+    it('should trigger `initialize` on the behaviors', function() {
+      this.sinon.stub(MyCollectionView.prototype, '_triggerEventOnBehaviors');
+
+      const myCollectionView = new MyCollectionView();
+
+      // _triggerEventOnBehaviors comes from Behaviors mixin
+      expect(myCollectionView._triggerEventOnBehaviors)
+        .to.be.calledOnce.and.calledWith('initialize', myCollectionView);
+    });
   });
 
   describe('#childView', function() {

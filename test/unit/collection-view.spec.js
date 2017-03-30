@@ -28,6 +28,18 @@ describe('collection view', function() {
   // Collection View Specs
   // ---------------------
 
+  describe('when instantiating a CollectionView', function() {
+    it('should trigger `initialize` on the behaviors', function() {
+      this.sinon.stub(this.CollectionView.prototype, '_triggerEventOnBehaviors');
+
+      const myCollectionView = new this.CollectionView();
+
+      // _triggerEventOnBehaviors comes from Behaviors mixin
+      expect(myCollectionView._triggerEventOnBehaviors)
+        .to.be.calledOnce.and.calledWith('initialize', myCollectionView);
+    });
+  });
+
   describe('when a collection view is DOM', function() {
     beforeEach(function() {
       this.$fixtureEl = $('<div id="fixture-collectionview"><span id="el1">1</span></div>');

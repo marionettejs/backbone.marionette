@@ -383,6 +383,18 @@ describe('item view', function() {
     });
   });
 
+  describe('when instantiating a View', function() {
+    it('should trigger `initialize` on the behaviors', function() {
+      this.sinon.stub(Marionette.View.prototype, '_triggerEventOnBehaviors');
+
+      const myView = new Marionette.View();
+
+      // _triggerEventOnBehaviors comes from Behaviors mixin
+      expect(myView._triggerEventOnBehaviors)
+        .to.be.calledOnce.and.calledWith('initialize', myView);
+    });
+  });
+
   describe('when serializing view data', function() {
     beforeEach(function() {
       this.modelData = {foo: 'bar'};

@@ -146,12 +146,12 @@ describe('NextCollectionView - Sorting', function() {
     });
   });
 
-  describe('#getViewComparator', function() {
+  describe('#getComparator', function() {
     let myCollectionView;
 
     beforeEach(function() {
       MyCollectionView = MyCollectionView.extend({
-        getViewComparator() {
+        getComparator() {
           return 'altSort';
         }
       });
@@ -164,7 +164,7 @@ describe('NextCollectionView - Sorting', function() {
       myCollectionView.render();
     });
 
-    it('should sort by the return of getViewComparator', function() {
+    it('should sort by the return of getComparator', function() {
 
       expect(myCollectionView.$el.text()).to.equal(altSortText);
     });

@@ -361,7 +361,7 @@ const CollectionView = Backbone.View.extend({
   _sortChildren() {
     this.triggerMethod('before:sort', this);
 
-    let viewComparator = this.getViewComparator();
+    let viewComparator = this.getComparator();
 
     if (_.isFunction(viewComparator)) {
       // Must use native bind to preserve length
@@ -396,7 +396,7 @@ const CollectionView = Backbone.View.extend({
   // If viewComparator is overriden it will be returned here.
   // Additionally override this function to provide custom
   // viewComparator logic
-  getViewComparator() {
+  getComparator() {
     return this.viewComparator || this._viewComparator;
   },
 
@@ -440,7 +440,7 @@ const CollectionView = Backbone.View.extend({
 
   // This method returns a function for the viewFilter
   _getFilter() {
-    const viewFilter = this.getViewFilter();
+    const viewFilter = this.getFilter();
 
     if (!viewFilter) { return false; }
 
@@ -471,7 +471,7 @@ const CollectionView = Backbone.View.extend({
 
   // Override this function to provide custom
   // viewFilter logic
-  getViewFilter() {
+  getFilter() {
     return this.viewFilter;
   },
 

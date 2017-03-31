@@ -176,12 +176,12 @@ describe('#NextCollectionView - Filtering', function() {
     });
   });
 
-  describe('#getViewFilter', function() {
+  describe('#getFilter', function() {
     let myCollectionView;
 
     beforeEach(function() {
       MyCollectionView = MyCollectionView.extend({
-        getViewFilter() {
+        getFilter() {
           return { isOdd: false }
         }
       });

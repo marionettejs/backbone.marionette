@@ -20,13 +20,13 @@
 
 * [NextCollectionView's `filter`](#nextcollectionviews-filter)
   * [NextCollectionView's `viewFilter`](#nextcollectionviews-viewfilter)
-  * [NextCollectionView's `getViewFilter`](#nextcollectionviews-getviewfilter)
+  * [NextCollectionView's `getFilter`](#nextcollectionviews-getfilter)
   * [NextCollectionView's `setFilter`](#nextcollectionviews-setfilter)
   * [NextCollectionView's `removeFilter`](#nextcollectionviews-removefilter)
 
 * [NextCollectionView's `sort`](#nextcollectionviews-sort)
   * [NextCollectionView's `viewComparator`](#nextcollectionviews-viewcomparator)
-  * [NextCollectionView's `getViewComparator`](#nextcollectionviews-getviewcomparator)
+  * [NextCollectionView's `getComparator`](#nextcollectionviews-getcomparator)
   * [NextCollectionView's `setComparator`](#nextcollectionviews-setcomparator)
   * [NextCollectionView's `removeComparator`](#nextcollectionviews-removecomparator)
   * [NextCollectionView's `sortWithCollection`](#nextcollectionviews-sortwithcollection)
@@ -326,7 +326,7 @@ var cv = new Mn.NextCollectionView({
 cv.render();
 ```
 
-### NextCollectionView's `getViewFilter`
+### NextCollectionView's `getFilter`
 
 Override this function to programatically decide which
 `viewFilter` to use when `filter` is called.
@@ -338,7 +338,7 @@ var MyCollectionView = Mn.NextCollectionView.extend({
   summaryFilter: function(view) {
     return view.model.get('type') === 'summary';
   },
-  getViewFilter: function() {
+  getFilter: function() {
     if(this.collection.length > 100) {
       return this.summaryFilter;
     }
@@ -461,7 +461,7 @@ The `viewComparator` can take any of the acceptable `Backbone.Collection`
 function that expects two arguments), or as a string indicating the attribute to
 sort by.
 
-### NextCollectionView's `getViewComparator`
+### NextCollectionView's `getComparator`
 
 Override this method to determine which `viewComparator` to use.
 
@@ -475,7 +475,7 @@ var MyCollectionView = Mn.NextCollectionView.extend({
   sortDesc: function(model) {
     return model.get('order');
   },
-  getViewComparator: function() {
+  getComparator: function() {
     // The collectionView's model
     if (this.model.get('sorted') === 'ASC') {
       return this.sortAsc;

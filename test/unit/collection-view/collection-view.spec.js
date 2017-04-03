@@ -130,7 +130,8 @@ describe('collection view', function() {
     });
 
     it('should throw an error saying theres not child view', function() {
-      expect(this.collectionView.render).to.throw('A "childView" must be specified');
+      var self = this;
+      expect(function() {self.collectionView.render()}).to.throw('A "childView" must be specified');
     });
   });
 
@@ -314,7 +315,8 @@ describe('collection view', function() {
     });
 
     it('should throw an error saying the childView is invalid', function() {
-      expect(this.collectionView.render).to.throw('"childView" must be a view class or a function that returns a view class');
+      var self = this;
+      expect(function() {self.collectionView.render()}).to.throw('"childView" must be a view class or a function that returns a view class');
     });
   });
 

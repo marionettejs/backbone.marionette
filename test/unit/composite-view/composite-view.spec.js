@@ -242,7 +242,8 @@ describe('composite view', function() {
     });
 
     it('should throw an exception because there was no valid template', function() {
-      expect(this.compositeView.render).to.throw('Cannot render the template since its false, null or undefined.');
+      var self = this;
+      expect(function() {self.compositeView.render()}).to.throw('Cannot render the template since its false, null or undefined.');
     });
   });
 
@@ -560,7 +561,8 @@ describe('composite view', function() {
     });
 
     it('should throw an error saying the childView is invalid', function() {
-      expect(this.compositeView.render).to.throw('"childView" must be a view class or a function that returns a view class');
+      var self = this;
+      expect(function() {self.compositeView.render()}).to.throw('"childView" must be a view class or a function that returns a view class');
     });
   });
 

@@ -32,8 +32,6 @@ const ClassOptions = [
 const View = Backbone.View.extend({
 
   constructor(options) {
-    this.render = _.bind(this.render, this);
-
     this._setOptions(options);
 
     this.mergeOptions(options, ClassOptions);

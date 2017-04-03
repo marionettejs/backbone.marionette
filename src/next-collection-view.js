@@ -374,7 +374,7 @@ const CollectionView = Backbone.View.extend({
   },
 
   // Sets the view's `viewComparator` and applies the sort if the view is ready.
-  // To prevent the render pass `{ preventRender: true } as the 2nd argument.
+  // To prevent the render pass `{ preventRender: true }` as the 2nd argument.
   setComparator(comparator, {preventRender} = {}) {
     const comparatorChanged = this.viewComparator !== comparator;
     const shouldSort = comparatorChanged && !preventRender;
@@ -476,7 +476,7 @@ const CollectionView = Backbone.View.extend({
   },
 
   // Sets the view's `viewFilter` and applies the filter if the view is ready.
-  // To prevent the render pass `{ preventRender: true } as the 2nd argument.
+  // To prevent the render pass `{ preventRender: true }` as the 2nd argument.
   setFilter(filter, {preventRender} = {}) {
     const filterChanged = this.viewFilter !== filter;
     const shouldRender = filterChanged && !preventRender;

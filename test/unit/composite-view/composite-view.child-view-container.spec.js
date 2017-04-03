@@ -99,7 +99,8 @@ describe('composite view - childViewContainer', function() {
     });
 
     it('should throw an error', function() {
-      expect(this.compositeView.render).to.throw('The specified "childViewContainer" was not found: #bar');
+      var self = this;
+      expect(function() {self.compositeView.render()}).to.throw('The specified "childViewContainer" was not found: #bar');
     });
 
     describe('and referencing the @ui hash', function() {
@@ -112,7 +113,8 @@ describe('composite view - childViewContainer', function() {
       });
 
       it('should still throw an error', function() {
-        expect(this.compositeView.render).to.throw('The specified "childViewContainer" was not found: #bar');
+        var self = this;
+        expect(function() {self.compositeView.render()}).to.throw('The specified "childViewContainer" was not found: #bar');
       });
     });
   });

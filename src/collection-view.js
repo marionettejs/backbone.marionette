@@ -47,8 +47,6 @@ const CollectionView = Backbone.View.extend({
   // option to pass `{viewComparator: compFunction()}` to allow the `CollectionView`
   // to use a custom sort order for the collection.
   constructor(options) {
-    this.render = _.bind(this.render, this);
-
     this._setOptions(options);
 
     this.mergeOptions(options, ClassOptions);

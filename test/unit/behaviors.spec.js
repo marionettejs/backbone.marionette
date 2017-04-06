@@ -203,13 +203,6 @@ describe('Behaviors', function() {
     });
 
     it('should call initialize when a behavior is created', function() {
-      /* eslint-disable no-unused-vars */
-      const fooView = new FooView();
-
-      expect(initializeStub).to.have.been.calledOnce;
-    });
-
-    it('should call initialize when a behavior is created', function() {
       const fooView = new FooView();
 
       expect(initializeStub).to.have.been.calledOnce.and.calledWith(behaviorOptions, fooView);

@@ -1038,6 +1038,7 @@ describe('region', function() {
       this.itemView.template = function() {
         return 'content';
       };
+      this.itemView.render = sinon.stub();
       this.itemView.addRegions({
         MyRegion: '#region',
         anotherRegion: '#region2'
@@ -1048,6 +1049,11 @@ describe('region', function() {
 
     it('should return the region', function() {
       expect(this.itemView.getRegion('MyRegion')).to.equal(this.region);
+    });
+
+    it('should call render if getRegion is called without being rendered', function() {
+      this.itemView.getRegion('whoCares');
+      expect(this.itemView.render.called).to.be.true;
     });
   });
 

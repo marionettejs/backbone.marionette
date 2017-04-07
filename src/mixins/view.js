@@ -10,6 +10,7 @@ import DelegateEntityEventsMixin from './delegate-entity-events';
 import DomMixin from './dom';
 import TriggersMixin from './triggers';
 import UIMixin from './ui';
+import { isEnabled } from '../config/features';
 
 // MixinOptions
 // - behaviors
@@ -168,7 +169,9 @@ const ViewMixin = {
 
   // used as the prefix for child view events
   // that are forwarded through the layoutview
-  childViewEventPrefix: 'childview',
+  childViewEventPrefix() {
+    return isEnabled('childViewEventPrefix') ? 'childview' : false;
+  },
 
   // import the `triggerMethod` to trigger events with corresponding
   // methods if the method exists

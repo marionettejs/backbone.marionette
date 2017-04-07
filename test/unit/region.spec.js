@@ -374,7 +374,18 @@ describe('region', function() {
 
           describe('and then emptying the region', function() {
             beforeEach(function() {
+              this.view1.onBeforeDetach = this.sinon.spy(function(view) {
+                return Marionette.isNodeAttached(view.el);
+              });
+              this.view1.onDetach = this.sinon.spy(function(view) {
+                return Marionette.isNodeAttached(view.el);
+              });
               this.region.empty();
+            });
+
+            it('should trigger detach events while view is detaching', function() {
+              expect(this.view1.onBeforeDetach).to.have.returned(true);
+              expect(this.view1.onDetach).to.have.returned(false);
             });
 
             it('should remove the view from the parent', function() {

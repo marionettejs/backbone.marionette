@@ -221,7 +221,7 @@ const Region = MarionetteObject.extend({
       return;
     }
 
-    this.replaceEl(this.el, view.el);
+    this._detachView(view);
 
     this._isReplaced = false;
   },
@@ -297,6 +297,8 @@ const Region = MarionetteObject.extend({
     }
   },
 
+  // Empties the Region without destroying the view
+  // Returns the detached view
   detachView() {
     const view = this.currentView;
 
@@ -311,11 +313,16 @@ const Region = MarionetteObject.extend({
 
   _detachView(view) {
     const shouldTriggerDetach = !!view._isAttached;
+    const shouldRestoreEl = this._isReplaced;
     if (shouldTriggerDetach) {
       triggerMethodOn(view, 'before:detach', view);
     }
 
-    this.detachHtml();
+    if (shouldRestoreEl) {
+      this.replaceEl(this.el, view.el);
+    } else {
+      this.detachHtml();
+    }
 
     if (shouldTriggerDetach) {
       view._isAttached = false;

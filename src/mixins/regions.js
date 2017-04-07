@@ -123,6 +123,9 @@ export default {
   // Accepts the region name
   // getRegion('main')
   getRegion(name) {
+    if (!this.isRendered()) {
+      this.render();
+    }
     return this._regions[name];
   },
 

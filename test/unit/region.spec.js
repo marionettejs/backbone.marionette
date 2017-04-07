@@ -599,6 +599,7 @@ describe('region', function() {
 
         render: function() {
           $(this.el).html('<div class="sub-region"></div><div>some content</div>');
+          this._isRendered = true;
           this.triggerMethod('render');
         },
 
@@ -1008,6 +1009,9 @@ describe('region', function() {
       this.setFixtures('<div id="region"></div><div id="region2"></div>');
 
       this.itemView = new Backbone.Marionette.View();
+      this.itemView.template = function() {
+        return 'content';
+      };
       this.itemView.addRegions({
         MyRegion: '#region',
         anotherRegion: '#region2'
@@ -1031,6 +1035,9 @@ describe('region', function() {
   describe('when getting a region', function() {
     beforeEach(function() {
       this.itemView = new Backbone.Marionette.View();
+      this.itemView.template = function() {
+        return 'content';
+      };
       this.itemView.addRegions({
         MyRegion: '#region',
         anotherRegion: '#region2'

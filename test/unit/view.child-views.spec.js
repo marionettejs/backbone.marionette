@@ -412,9 +412,9 @@ describe('layoutView', function() {
       this.layoutView = new this.ViewBoundRender({
         model: new Backbone.Model()
       });
-      this.sinon.spy(this.layoutView.getRegion('regionOne'), 'empty');
       this.layoutView.render();
 
+      this.sinon.spy(this.layoutView.getRegion('regionOne'), 'empty');
       this.view = new Backbone.View();
       this.view.destroy = function() {};
       this.layoutView.getRegion('regionOne').show(this.view);

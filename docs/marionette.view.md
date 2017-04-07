@@ -720,7 +720,7 @@ var MyView = Mn.View.extend({
       console.log('the collection was updated');
     }
   }
-})
+});
 ```
 
 [Live example](https://jsfiddle.net/marionettejs/ze8po0x5/)
@@ -749,9 +749,30 @@ var MyView = Mn.View.extend({
   modelsChanged: function() {
     console.log('models were added or removed in the collection');
   }
-})
+});
 ```
 
 [Live example](https://jsfiddle.net/marionettejs/h9ub5hp3/)
 
 In this case, Marionette will bind event handlers to both.
+
+#### Destroying a View
+
+It's possible to manually destroy a view by calling the `destroy` method.
+The method unbinds the UI elements, removes the view and its children from
+the DOM and unbinds the listeners. It also triggers
+[lifecycle events](viewlifecycle.md#view-destruction-lifecycle). It can be
+useful in non-isolated test environments.
+
+```javascript
+var Mn = require('backbone.marionette');
+
+var MyView = Mn.View.extend({
+  onDestroy: function() {
+    console.log("Fired whenever view.destroy() is called.");
+  },
+});
+
+var myView = new MyView();
+myView.destroy();
+```

@@ -3,7 +3,7 @@ describe('_getImmediateChildren', function() {
 
     // A suitable view to use as a child
     this.BaseView = Marionette.View.extend({
-      template: false
+      template: _.noop
     });
   });
 
@@ -54,7 +54,7 @@ describe('_getImmediateChildren', function() {
     describe('without regions', function() {
       beforeEach(function() {
         this.layoutView = new Marionette.View({
-          template: false
+          template: _.noop
         });
       });
       it('should return an empty array for getImmediateChildren', function() {

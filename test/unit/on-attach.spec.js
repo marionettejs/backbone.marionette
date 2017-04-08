@@ -55,10 +55,10 @@ describe('onAttach', function() {
       }
     }));
     EmptyView = Backbone.View.extend(extendAttachMethods(Backbone.View)({
-      template: false
+      template: _.noop
     }));
     ChildView = Backbone.View.extend(extendAttachMethods(Backbone.View)({
-      template: false
+      template: _.noop
     }));
     CollectionView = Marionette.CollectionView.extend({
       childView: ChildView,
@@ -465,7 +465,7 @@ describe('onAttach', function() {
 
       beforeEach(function() {
         detachView = new ChildView({
-          template: false
+          template: _.noop
         });
         ChildView = View.extend({
           template: _.template('<div id="child-region"></div>'),

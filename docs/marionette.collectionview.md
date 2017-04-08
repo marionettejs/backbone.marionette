@@ -289,7 +289,7 @@ var Mn = require('backbone.marionette');
 var collection = new Bb.Collection();
 
 var MyChildView = Mn.View.extend({
-  template: false
+  template: _.noop
 });
 
 var MyCollectionView = Mn.CollectionView.extend({

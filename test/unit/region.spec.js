@@ -1033,7 +1033,7 @@ describe('region', function() {
   describe('when getting a region', function() {
     beforeEach(function() {
       this.itemView = new Backbone.Marionette.View();
-      this.itemView.render = sinon.stub();
+      this.itemView.render = this.sinon.stub();
       this.itemView.addRegions({
         MyRegion: '#region',
         anotherRegion: '#region2'

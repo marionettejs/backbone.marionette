@@ -49,9 +49,9 @@ describe('onAttach', function() {
     View = Marionette.View.extend(extendAttachMethods(Marionette.View)({
       template: _.template('<header></header><main></main><footer></footer>'),
       regions: {
-        header: 'header',
-        main: 'main',
-        footer: 'footer'
+        header: '> header',
+        main: '> main',
+        footer: '> footer'
       }
     }));
     EmptyView = Backbone.View.extend(extendAttachMethods(Backbone.View)({

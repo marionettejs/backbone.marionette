@@ -190,7 +190,7 @@ const View = Backbone.View.extend({
   },
 
   _getImmediateChildren() {
-    return _.chain(this.getRegions())
+    return _.chain(this._getRegions())
       .map('currentView')
       .compact()
       .value();

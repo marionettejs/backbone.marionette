@@ -275,7 +275,7 @@ describe('layoutView', function() {
 
       expect(function() {
         this.layoutView.showChildView('regionTwo', new Backbone.View());
-      }).to.throw;
+      }.bind(this)).to.throw(/Multiple DOM nodes found for region/);
     });
   });
 

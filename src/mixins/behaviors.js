@@ -89,6 +89,13 @@ export default {
     _invoke(this._behaviors, 'destroy', ...args);
   },
 
+  // Remove a behavior
+  _removeBehavior(behavior) {
+    // Don't worry about the clean up if the view is destroyed
+    if (this._isDestroyed) { return; }
+    this._behaviors = _.without(this._behaviors, behavior);
+  },
+
   _bindBehaviorUIElements() {
     _invoke(this._behaviors, 'bindUIElements');
   },

@@ -59,6 +59,8 @@ const Behavior = MarionetteObject.extend({
   destroy() {
     this.stopListening();
 
+    this.view._removeBehavior(this);
+
     return this;
   },
 

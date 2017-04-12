@@ -638,9 +638,8 @@ describe('region', function() {
           subRegion: '.sub-region'
         },
 
-        render: function() {
-          $(this.el).html('<div class="sub-region"></div><div>some content</div>');
-          this.triggerMethod('render');
+        template: function() {
+          return '<div class="sub-region"></div><div>some content</div>';
         },
 
         onRender: function() {
@@ -1067,6 +1066,9 @@ describe('region', function() {
       this.setFixtures('<div id="region"></div><div id="region2"></div>');
 
       this.itemView = new Backbone.Marionette.View();
+      this.itemView.template = function() {
+        return 'content';
+      };
       this.itemView.addRegions({
         MyRegion: '#region',
         anotherRegion: '#region2'
@@ -1090,6 +1092,7 @@ describe('region', function() {
   describe('when getting a region', function() {
     beforeEach(function() {
       this.itemView = new Backbone.Marionette.View();
+      this.itemView.render = this.sinon.stub();
       this.itemView.addRegions({
         MyRegion: '#region',
         anotherRegion: '#region2'
@@ -1100,6 +1103,11 @@ describe('region', function() {
 
     it('should return the region', function() {
       expect(this.itemView.getRegion('MyRegion')).to.equal(this.region);
+    });
+
+    it('should call render if getRegion is called without being rendered', function() {
+      this.itemView.getRegion('whoCares');
+      expect(this.itemView.render).to.be.calledOnce;
     });
   });
 

@@ -86,7 +86,7 @@ export default {
 
   // Remove all regions from the View
   removeRegions() {
-    const regions = this.getRegions();
+    const regions = this._getRegions();
 
     _.each(this._regions, _.bind(this._removeRegion, this));
 
@@ -123,12 +123,22 @@ export default {
   // Accepts the region name
   // getRegion('main')
   getRegion(name) {
+    if (!this._isRendered) {
+      this.render();
+    }
     return this._regions[name];
   },
 
   // Get all regions
-  getRegions() {
+  _getRegions() {
     return _.clone(this._regions);
+  },
+
+  getRegions() {
+    if (!this._isRendered) {
+      this.render();
+    }
+    return this._getRegions();
   },
 
   showChildView(name, view, ...args) {

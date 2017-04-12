@@ -265,7 +265,9 @@ In addition to adding and removing regions there are a few
 methods to help utilize regions.
 
 - `getRegion(name)` - Request a region from a view by name.
+ - Note: If the view hasn't been rendered at this point, it will be.
 - `getRegions()` - Returns an object literal of all regions on the view organized by name.
+ - Note: If the view hasn't been rendered at this point, it will be.
 - `hasRegion(name)` - Check if a view has a region.
 - `emptyRegions()` - Empty all of the regions on a view.
 

@@ -412,9 +412,9 @@ describe('layoutView', function() {
       this.layoutView = new this.ViewBoundRender({
         model: new Backbone.Model()
       });
-      this.sinon.spy(this.layoutView.getRegion('regionOne'), 'empty');
       this.layoutView.render();
 
+      this.sinon.spy(this.layoutView.getRegion('regionOne'), 'empty');
       this.view = new Backbone.View();
       this.view.destroy = function() {};
       this.layoutView.getRegion('regionOne').show(this.view);
@@ -609,13 +609,19 @@ describe('layoutView', function() {
   describe('when a layout has regions', function() {
     beforeEach(function() {
       this.layout = new this.View();
-      this.layout.render();
-      this.regions = this.layout.getRegions();
     });
 
     it('should be able to retrieve all regions', function() {
+      this.layout.render();
+      this.regions = this.layout.getRegions();
       expect(this.regions.regionOne).to.equal(this.layout.getRegion('regionOne'));
       expect(this.regions.regionTwo).to.equal(this.layout.getRegion('regionTwo'));
+    });
+
+    it('should render the view if it hasn\'t been yet', function() {
+      this.sinon.spy(this.layout, 'render');
+      this.layout.getRegions();
+      expect(this.layout.render).to.be.calledOnce;
     });
 
     describe('when the regions are specified via regions hash and the view has no template', function() {
@@ -628,6 +634,8 @@ describe('layoutView', function() {
             '</div>' +
           '</div>';
         this.setFixtures(fixture);
+        this.layout.render();
+        this.regions = this.layout.getRegions();
         this.View = Backbone.Marionette.View.extend({
           el: '.region-hash-no-template-spec .some-layout-view',
           template: false,

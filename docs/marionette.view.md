@@ -205,6 +205,8 @@ var MyView = Mn.View.extend({
 });
 ```
 
+Note: If `view.showChildView(region, subView)` is invoked before the `view` has been rendered, it will automatically render the `view` so the region's `el` exists in the DOM.
+
 [Live example](https://jsfiddle.net/marionettejs/98u073m0/)
 
 #### Accessing a Child View

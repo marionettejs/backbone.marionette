@@ -1,3 +1,5 @@
+import ChildViewContainer from '../../src/child-view-container';
+
 describe('childview container', function() {
 
   describe('when providing an array of views to the constructor', function() {

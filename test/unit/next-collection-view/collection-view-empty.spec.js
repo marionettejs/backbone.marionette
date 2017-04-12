@@ -1,6 +1,7 @@
 // Anything related to emptyView
 
 import _ from 'underscore';
+import Backbone from 'backbone';
 import CollectionView from '../../../src/next-collection-view';
 import View from '../../../src/view';
 

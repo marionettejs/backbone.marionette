@@ -114,13 +114,22 @@ Marionette will [set the appropriate state of the view](./viewlifecycle.md#views
 
 ### Setting a `template` to `false`
 
-Setting the `template` to `false` allows for the view to create all of the bindings and trigger all view events without re-rendering the el of the view. *Any other falsy value will throw an exception.*
+**Deprecated:** `template: false` is deprecated.  Use `template: _.noop`
+to render without adding html, or do not render the view. Pre-rendered
+views will instantiate `isRendered() === true`.
+
+Setting the `template` to `false` allows for the view to create all of
+the bindings and trigger all view events without re-rendering the el of
+the view. *Any other falsy value will throw an exception.*
 
 ```javascript
 var Mn = require('backbone.marionette');
 
 var MyView = Mn.View({
   el: '#base-element',
+
+  // template: false is deprecated
+  // Use template: _.noop instead
   template: false
 });
 

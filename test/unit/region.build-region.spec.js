@@ -5,7 +5,7 @@ describe('Region', function() {
       this.DefaultRegionClass = Marionette.Region.extend();
 
       this.view = new Marionette.View({
-        template: false,
+        template: _.noop,
         regionClass: this.DefaultRegionClass
       });
 

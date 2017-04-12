@@ -3,6 +3,7 @@
 
 import _ from 'underscore';
 import Backbone from 'backbone';
+import deprecate from './utils/deprecate';
 import isNodeAttached from './common/is-node-attached';
 import monitorViewEvents from './common/monitor-view-events';
 import ViewMixin from './mixins/view';
@@ -139,6 +140,7 @@ const View = Backbone.View.extend({
 
     // Allow template-less views
     if (template === false) {
+      deprecate('template:false is deprecated.  Use _.noop.');
       return;
     }
 

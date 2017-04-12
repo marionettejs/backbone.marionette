@@ -399,7 +399,7 @@ describe('region', function() {
 
           describe('when destroying the view', function() {
             beforeEach(function() {
-              var view = new Marionette.View({ template: false });
+              var view = new Marionette.View({ template: _.noop });
 
               this.region.show(view);
               view.destroy();
@@ -1277,7 +1277,7 @@ describe('region', function() {
 
       var region = new MyRegion();
       var MyView = Marionette.View.extend({
-        template: false,
+        template: _.noop,
         onDestroy: function() {
           region.empty();
         }

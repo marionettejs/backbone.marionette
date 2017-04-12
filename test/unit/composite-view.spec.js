@@ -930,6 +930,26 @@ describe('composite view', function() {
       this.compositeView.render();
     });
 
+    describe('when DEV_MODE is true', function() {
+      beforeEach(function() {
+        Marionette.DEV_MODE = true;
+        this.sinon.spy(Marionette.deprecate, '_warn');
+        this.sinon.stub(Marionette.deprecate, '_console', {
+          warn: this.sinon.stub()
+        });
+        Marionette.deprecate._cache = {};
+      });
+
+      it('should call Marionette.deprecate', function() {
+        this.compositeView.render();
+        expect(Marionette.deprecate._warn).to.be.calledWith('Deprecation warning: template:false is deprecated.  Use _.noop.');
+      });
+
+      afterEach(function() {
+        Marionette.DEV_MODE = false;
+      });
+    });
+
     it('should not throw an exception for a false template', function() {
       expect(this.compositeView.render).to.not.throw('Cannot render the template since it is null or undefined.');
     });

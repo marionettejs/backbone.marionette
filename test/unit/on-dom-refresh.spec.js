@@ -9,7 +9,7 @@ describe('onDomRefresh', function() {
       onDomRefresh: this.sinon.stub()
     });
     this.MnView = Marionette.View.extend({
-      template: false,
+      template: _.noop,
       onDomRefresh: this.sinon.stub()
     });
   });

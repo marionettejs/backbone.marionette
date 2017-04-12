@@ -294,7 +294,7 @@ describe('view mixin', function() {
       });
 
       this.ChildView = Marionette.View.extend({
-        template: false
+        template: _.noop
       });
 
       this.SuperView = Marionette.View.extend({

@@ -39,6 +39,12 @@ function triggerDOMRefresh(view) {
   }
 }
 
+function triggerDOMRemove(view) {
+  if (view._isAttached && view._isRendered) {
+    triggerMethodOn(view, 'dom:remove', view);
+  }
+}
+
 function handleBeforeAttach() {
   triggerMethodChildren(this, 'before:attach', shouldTriggerAttach);
 }
@@ -50,10 +56,15 @@ function handleAttach() {
 
 function handleBeforeDetach() {
   triggerMethodChildren(this, 'before:detach', shouldTriggerDetach);
+  triggerDOMRemove(this);
 }
 
 function handleDetach() {
   triggerMethodChildren(this, 'detach', shouldDetach);
+}
+
+function handleBeforeRender() {
+  triggerDOMRemove(this);
 }
 
 function handleRender() {
@@ -72,6 +83,7 @@ function monitorViewEvents(view) {
     'attach': handleAttach,
     'before:detach': handleBeforeDetach,
     'detach': handleDetach,
+    'before:render': handleBeforeRender,
     'render': handleRender
   });
 }

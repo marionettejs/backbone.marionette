@@ -66,8 +66,9 @@ part of the destruction lifecycle.
 |   1   |  `before:destroy` |       `view` - view being destroyed       |
 |       |                   | `...args` - arguments passed to `destroy` |
 |   2*  |  `before:detach`  |       `view` - view being detached        |
-|   3*  |  `detach`         |       `view` - view being detached        |
-|   4   |  `destroy`        |       `view` - view being destroyed       |
+|   3*  |  `dom:remove`     |       `view` - view being detached        |
+|   4*  |  `detach`         |       `view` - view being detached        |
+|   5   |  `destroy`        |       `view` - view being destroyed       |
 |       |                   | `...args` - arguments passed to `destroy` |
 
 The events marked with "\*" only fire if/when the view was attached to the DOM.
@@ -82,10 +83,11 @@ is detached and the children will be destroyed after the detach is complete.
 | Order |       Event       |                 Arguments                 |
 | :---: |-------------------|-------------------------------------------|
 |   1   |  `before:detach`  |       `view` - view being detached        |
-|   2*  |  `detach`         |       `view` - view being detached        |
-|   3*  |  `before:destroy` |       `view` - view being destroyed       |
+|   2*  |  `dom:remove`     |       `view` - view being detached        |
+|   3*  |  `detach`         |       `view` - view being detached        |
+|   4*  |  `before:destroy` |       `view` - view being destroyed       |
 |       |                   | `...args` - arguments passed to `destroy` |
-|   4   |  `destroy`        |       `view` - view being destroyed       |
+|   5   |  `destroy`        |       `view` - view being destroyed       |
 |       |                   | `...args` - arguments passed to `destroy` |
 
 The events marked with "\*" only fire if/when the view was attached to the DOM.
@@ -110,6 +112,8 @@ Mn.View.extend({
 
 #### View `render`
 
+This is the optimal event for handling child views.
+
 Triggered after the view has been rendered.
 You can implement this in your view to provide custom code for dealing
 with the view's `el` after it has been rendered.
@@ -133,12 +137,18 @@ listen to the `render` or `dom:refresh` events.
 
 #### View `attach`
 
+This is the optimal event to handle when the view's `el` must be in the DOM.
+Clean up any added handlers in [`before:detach`](#view-beforedetach).
+
 Triggered once the View has been bound into the DOM. This is only triggered
 once - the first time the View is attached to the DOM. If you are re-rendering
 your view after it has been shown, you most likely want to listen to the
 `dom:refresh` event.
 
 #### View `dom:refresh`
+
+This is the optimal event to handle when the view's contents must be in the DOM.
+Clean up any added handlers in [`dom:remove`](#view-domremove).
 
 The `dom:refresh` event is fired in two separate places:
 
@@ -174,7 +184,7 @@ layout.showChildView('myRegion', myView);
   Output:
   render
   attach
-  dom:refreh
+  dom:refresh
 */
 
 myView.render();
@@ -206,6 +216,8 @@ Mn.View.extend({
 
 #### View `before:detach`
 
+This is the optimal event for cleaning up anything added in [`onAttach`](#view-attach).
+
 The `View` will trigger the `before:detach` event when the view is rendered and
 is about to be removed from the DOM.
 If the view has not been attached to the DOM, this event will not be fired.
@@ -224,6 +236,66 @@ Mn.View.extend({
 
 The `View` will trigger the `detach` event when the view was rendered and has
 just been removed from the DOM.
+
+#### View `dom:remove`
+
+This is the optimal event for cleaning up anything added in [`onDomRefresh`](#view-domrefresh).
+
+The `dom:remove` event is fired in two separate places:
+
+1. Before the view is detached from the DOM (after the `before:detach` event)
+2. Each time the `render` method is called if the view is already rendered.
+
+```javascript
+const myView = new Mn.View({
+  template: _.template('<span><%= count %><span>'),
+  templateContext: function() {
+    this.count = (this.count || 0) + 1;
+    return {
+      count: this.count
+    };
+  },
+
+  onBeforeRender: function() {
+    console.log('before:render');
+  },
+
+  onRender: function() {
+    console.log('render');
+  },
+
+  onBeforeDetach: function() {
+    console.log('before:detach');
+  },
+
+  onDetach: function() {
+    console.log('detach');
+  },
+
+  onDomRemove: function() {
+    console.log('dom:remove');
+  }
+});
+
+// some layout view
+layout.showChildView('myRegion', myView);
+
+myView.render();
+/*
+  Output:
+  before:render
+  dom:remove
+  render
+*/
+
+myView.destroy();
+/*
+  Output:
+  before:detach
+  dom:remove
+  detach
+*/
+```
 
 #### View `destroy`
 

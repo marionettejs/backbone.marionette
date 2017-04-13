@@ -376,6 +376,12 @@ const Region = MarionetteObject.extend({
 
   destroy(options) {
     this.reset(options);
+
+    if (this._name) {
+      this._parentView._removeReferences(this._name);
+    }
+    delete this._parentView;
+
     return MarionetteObject.prototype.destroy.apply(this, arguments);
   }
 });

@@ -411,6 +411,44 @@ describe('Behaviors Mixin', function() {
     });
   });
 
+  describe('#_removeBehavior', function() {
+    let behaviorsInstance;
+    let FooBehavior;
+    let BarBehavior;
+
+    beforeEach(function() {
+      behaviorsInstance = new Behaviors();
+      FooBehavior = Behavior.extend({});
+      BarBehavior = Behavior.extend({});
+
+      behaviorsInstance.behaviors = {foo: FooBehavior, bar: BarBehavior};
+      behaviorsInstance._initBehaviors();
+    });
+
+    it('should remove the behavior from the view\'s behaviors', function() {
+      const behaviorInstance = behaviorsInstance._behaviors[0];
+
+      behaviorsInstance._removeBehavior(behaviorInstance);
+
+      expect(behaviorsInstance._behaviors).not.to.include(behaviorInstance);
+      expect(behaviorsInstance._behaviors.length).to.equal(1);
+    });
+
+    describe('when the view is destroyed', function() {
+      it('should not remove the behavior', function() {
+        // behaviorsInstance is not an actual view so simulate destroy
+        behaviorsInstance._isDestroyed = true;
+
+        const behaviorInstance = behaviorsInstance._behaviors[0];
+
+        behaviorsInstance._removeBehavior(behaviorInstance);
+
+        expect(behaviorsInstance._behaviors).to.include(behaviorInstance);
+        expect(behaviorsInstance._behaviors.length).to.equal(2);
+      });
+    });
+  });
+
   describe('#_bindBehaviorUIElements', function() {
     let behaviorsInstance;
     let FooBehavior;

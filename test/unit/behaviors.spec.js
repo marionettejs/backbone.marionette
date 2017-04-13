@@ -1142,7 +1142,7 @@ describe('Behaviors', function() {
     let behavior;
 
     beforeEach(function() {
-      behavior = new Behavior();
+      behavior = new Behavior({}, new View());
       this.sinon.spy(behavior, 'destroy');
     });
 

@@ -7,6 +7,7 @@
 // into portable logical chunks, keeping your views simple and your code DRY.
 
 import _ from 'underscore';
+import deprecate from './utils/deprecate';
 import getUniqueEventName from './utils/get-unique-event-name';
 import MarionetteObject from './object';
 import DelegateEntityEventsMixin from './mixins/delegate-entity-events';
@@ -31,6 +32,11 @@ const Behavior = MarionetteObject.extend({
     // to the view.
     this.view = view;
     this.defaults = _.clone(_.result(this, 'defaults', {}));
+
+    if (this.defaults) {
+      deprecate('Behavior defaults are deprecated. For similar functionality set options on the Behavior class.');
+    }
+
     this._setOptions(this.defaults, options);
     this.mergeOptions(this.options, ClassOptions);
 

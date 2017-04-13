@@ -69,6 +69,7 @@ export default {
     this.triggerMethod('before:add:region', this, name, region);
 
     region._parentView = this;
+    region._name = name;
 
     this._regions[name] = region;
 
@@ -102,6 +103,12 @@ export default {
     delete this._regions[name];
 
     this.triggerMethod('remove:region', this, name, region);
+  },
+
+  // Called in a region's destroy
+  _removeReferences(name) {
+    delete this.regions[name];
+    delete this._regions[name];
   },
 
   // Empty all regions in the region manager, but

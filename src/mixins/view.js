@@ -136,10 +136,12 @@ const ViewMixin = {
     // remove children after the remove to prevent extra paints
     this._removeChildren();
 
-    this._destroyBehaviors(args);
-
     this._isDestroyed = true;
     this._isRendered = false;
+
+    // Destory behaviors after _isDestroyed flag
+    this._destroyBehaviors(args);
+
     this.triggerMethod('destroy', this, ...args);
 
     this.stopListening();

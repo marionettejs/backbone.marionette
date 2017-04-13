@@ -16,7 +16,7 @@ const sauceConf = {
   username: process.env.SAUCE_USERNAME,
   key: process.env.SAUCE_ACCESS_KEY,
   testPath: '/test/runner.html',
-  port: '8080',
+  port: process.env.SAUCE_PORT || '8080',
   framework: 'mocha',
   platforms: [
     ['Windows 10', 'MicrosoftEdge', 'latest'],

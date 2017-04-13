@@ -232,6 +232,28 @@ var ToolTip = Mn.Behavior.extend({
 ```
 
 #### Behavior Defaults
+
+**Deprecated:** Defaults can be effectively set with an `options` hash defined on the Behavior.
+
+```javascript
+Marionette.Behavior.extend({
+  options: function() {
+    return {
+      deepSpace: 9
+    }
+  }
+});
+```
+
+```javascript
+Marionette.Behavior.extend({
+  options: {
+    dominion: 'invasion',
+    doge: 'amaze'
+  }
+});
+```
+
 `defaults` can be a [`hash` or `function`](./basics.md#functions-returning-values) to define the default options for your `Behavior`. The default options will be overridden depending on what you set as the options per `Behavior`. (This works just like a `Backbone.Model`.)
 
 ```javascript

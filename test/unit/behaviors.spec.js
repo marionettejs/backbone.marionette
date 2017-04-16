@@ -557,6 +557,12 @@ describe('Behaviors', function() {
         expect(fooView.ui.bar.click.bind(fooView.ui.bar)).to.not.throw(Error);
       });
 
+      it('should not throw an error after rendering, calling delegateEvents, then triggering an event', function() {
+        this.view.delegateEvents();
+        expect(this.fooBehavior.ui.foo.click.bind(this.view.ui.bar)).to.not.throw(Error);
+        expect(this.view.ui.bar.click.bind(this.view.ui.bar)).to.not.throw(Error);
+      });
+
       it('should set the behavior UI element', function() {
         fooView = new FooView();
         fooView.render();

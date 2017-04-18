@@ -16,7 +16,6 @@ import banner from  './_banner';
 import {name} from '../package.json';
 
 const srcPath = 'src/';
-const buildPath = 'lib/';
 
 function _generate(bundle){
   return bundle.generate({
@@ -52,7 +51,7 @@ function bundle(opts) {
   });
 }
 
-gulp.task('build-lib', ['lint-src'], function(){
+function build(buildPath){
   return bundle().then(gen => {
     return file(name + '.js', gen.code, {src: true})
       .pipe(plumber())
@@ -68,8 +67,16 @@ gulp.task('build-lib', ['lint-src'], function(){
       .pipe(sourcemaps.write('./'))
       .pipe(gulp.dest(buildPath));
   });
+}
+
+gulp.task('build-test', ['lint-test'], function() {
+  return build('tmp/lib/');
+});
+
+gulp.task('build-lib', ['lint-src'], function() {
+  return build('lib/');
 });
 
 gulp.task('build', function(done) {
-  runSequence('build-lib', 'test-build', done);
+  runSequence('build-lib', done);
 });

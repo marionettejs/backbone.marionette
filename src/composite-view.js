@@ -85,7 +85,7 @@ const CompositeView = CollectionView.extend({
 
   // Renders the model and the collection.
   render() {
-    this._ensureViewIsIntact();
+    if (this._isDestroyed) { return this; }
     this._isRendering = true;
     this.resetChildViewContainer();
 
@@ -110,7 +110,7 @@ const CompositeView = CollectionView.extend({
   // You might need to override this if you've overridden attachHtml
   attachBuffer(compositeView, buffer) {
     const $container = this.getChildViewContainer(compositeView);
-    $container.append(buffer);
+    this.appendChildren($container, buffer);
   },
 
   // Internal method. Append a view to the end of the $el.
@@ -118,7 +118,7 @@ const CompositeView = CollectionView.extend({
   // childViewContainer
   _insertAfter(childView) {
     const $container = this.getChildViewContainer(this, childView);
-    $container.append(childView.el);
+    this.appendChildren($container, childView.el);
   },
 
   // Internal method. Append reordered childView'.
@@ -126,7 +126,7 @@ const CompositeView = CollectionView.extend({
   // are appended to childViewContainer
   _appendReorderedChildren(children) {
     const $container = this.getChildViewContainer(this);
-    $container.append(children);
+    this.appendChildren($container, children);
   },
 
   // Internal method to ensure an `$childViewContainer` exists, for the
@@ -145,7 +145,7 @@ const CompositeView = CollectionView.extend({
       if (selector.charAt(0) === '@' && containerView.ui) {
         container = containerView.ui[selector.substr(4)];
       } else {
-        container = containerView.$(selector);
+        container = this.findEls(selector, containerView.$el);
       }
 
       if (container.length <= 0) {

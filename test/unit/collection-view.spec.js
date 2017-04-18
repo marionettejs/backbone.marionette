@@ -146,7 +146,7 @@ describe('collection view', function() {
       this.sinon.spy(this.collectionView, 'onRender');
       this.sinon.spy(this.collectionView, 'trigger');
       this.sinon.spy(this.collectionView, 'attachHtml');
-      this.sinon.spy(this.collectionView.$el, 'append');
+      this.sinon.spy(this.collectionView, 'attachBuffer');
       this.sinon.spy(this.collectionView, '_startBuffering');
       this.sinon.spy(this.collectionView, '_endBuffering');
       this.sinon.spy(this.collectionView, 'addChildView');
@@ -154,8 +154,8 @@ describe('collection view', function() {
       this.collectionView.render();
     });
 
-    it('should only call $el.append once', function() {
-      expect(this.collectionView.$el.append.callCount).to.equal(1);
+    it('should only call attachBuffer once', function() {
+      expect(this.collectionView.attachBuffer.callCount).to.equal(1);
     });
 
     it('should only call clear render buffer once', function() {
@@ -184,12 +184,6 @@ describe('collection view', function() {
 
     it('should reference each of the rendered view children', function() {
       expect(_.size(this.collectionView.children)).to.equal(2);
-    });
-
-    it('children should reference collectionView', function() {
-      var children = this.collectionView._getImmediateChildren();
-      expect(children[0]._parent).to.deep.equal(this.collectionView);
-      expect(children[1]._parent).to.deep.equal(this.collectionView);
     });
 
     it('should call "onBeforeRender" before rendering', function() {
@@ -501,12 +495,6 @@ describe('collection view', function() {
     it('should trigger the childview:render event from the collectionView', function() {
       expect(this.childViewRender).to.have.been.called;
     });
-
-    it('children should reference collectionView', function() {
-      var children = this.collectionView._getImmediateChildren();
-      expect(children[0]._parent).to.deep.equal(this.collectionView);
-      expect(children[1]._parent).to.deep.equal(this.collectionView);
-    });
   });
 
   describe('when a number of models are added to a non-empty collection with an "at" option', function() {
@@ -781,14 +769,14 @@ describe('collection view', function() {
 
       this.sinon.spy(this.childView, 'destroy');
       this.sinon.spy(this.collectionView, 'stopListening');
-      this.sinon.spy(this.collectionView, '_removeElement');
+      this.sinon.spy(this.collectionView, 'removeEl');
       this.sinon.spy(this.collectionView, 'someCallback');
       this.sinon.spy(this.collectionView, 'someViewCallback');
       this.sinon.spy(this.collectionView, 'destroy');
       this.sinon.spy(this.collectionView, 'onDestroy');
       this.sinon.spy(this.collectionView, 'onBeforeDestroy');
       this.sinon.spy(this.collectionView, 'trigger');
-      this.sinon.spy(this.collectionView, '_checkEmpty');
+      this.sinon.spy(this.collectionView, 'isEmpty');
 
       this.collectionView.bind('destroy:children', this.destroyHandler);
 
@@ -829,7 +817,7 @@ describe('collection view', function() {
     });
 
     it('should remove the views EL from the DOM', function() {
-      expect(this.collectionView._removeElement).to.have.been.called;
+      expect(this.collectionView.removeEl).to.have.been.called;
     });
 
     it('should call "onDestroy" if provided', function() {
@@ -864,11 +852,6 @@ describe('collection view', function() {
       expect(this.destroyHandler).to.have.been.called;
     });
 
-    it('should throw an error saying the views been destroyed if render is attempted again', function() {
-      expect(this.collectionView.render).to.throw('View (cid: "' + this.collectionView.cid +
-          '") has already been destroyed and cannot be used.');
-    });
-
     it('should return the collection view', function() {
       expect(this.collectionView.destroy).to.have.returned(this.collectionView);
     });
@@ -882,7 +865,7 @@ describe('collection view', function() {
     });
 
     it('should not call checkEmpty', function() {
-      expect(this.collectionView._checkEmpty).to.have.not.been.called;
+      expect(this.collectionView.isEmpty).to.have.not.been.called;
     });
 
     it('should return the CollectionView', function() {
@@ -941,40 +924,12 @@ describe('collection view', function() {
       this.childView1 = this.collectionView.children.findByIndex(1);
       this.sinon.spy(this.childView1, 'remove');
 
-      this.childrenViews = this.collectionView.children.map(_.identity);
-
-      this.sinon.spy(this.collectionView, '_destroyChildren');
-      this.sinon.spy(this.collectionView, '_checkEmpty');
       this.collectionView._destroyChildren();
     });
 
     it('should call the "remove" method on each child', function() {
       expect(this.childView0.remove).to.have.been.called;
       expect(this.childView1.remove).to.have.been.called;
-    });
-
-    it('should call checkEmpty', function() {
-      expect(this.collectionView._checkEmpty).to.have.been.calledOnce;
-    });
-
-    describe('with the checkEmpty flag set as false', function() {
-      it('should not call _checkEmpty', function() {
-        this.collectionView._destroyChildren({checkEmpty: false});
-        expect(this.collectionView._checkEmpty).to.have.been.calledOnce;
-      });
-    });
-
-    describe('with the checkEmpty flag set as true', function() {
-      it('should call _checkEmpty', function() {
-        this.collectionView.collection.add({id: 3});
-        this.collectionView._destroyChildren({checkEmpty: true});
-        expect(this.collectionView._checkEmpty).to.have.been.calledTwice;
-      });
-
-      it('should not call _checkEmpty when collection is empty', function() {
-        this.collectionView._destroyChildren({checkEmpty: true});
-        expect(this.collectionView._checkEmpty).to.have.been.calledOnce;
-      });
     });
   });
 

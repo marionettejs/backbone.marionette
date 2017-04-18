@@ -283,7 +283,7 @@ describe('item view', function() {
       this.view = new this.View();
       this.view.render();
 
-      this.removeSpy = this.sinon.spy(this.view, '_removeElement');
+      this.removeSpy = this.sinon.spy(this.view, 'removeEl');
       this.stopListeningSpy = this.sinon.spy(this.view, 'stopListening');
       this.triggerSpy = this.sinon.spy(this.view, 'trigger');
 
@@ -395,6 +395,7 @@ describe('item view', function() {
 
     it('should return an empty object without data', function() {
       expect(this.itemView.serializeData()).to.deep.equal({});
+      expect(this.itemView.serializeCollection()).to.deep.equal({});
     });
 
     describe('and the view has a model', function() {

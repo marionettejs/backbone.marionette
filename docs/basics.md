@@ -167,7 +167,7 @@ var myView = new MyView({
 });
 ```
 
-In this example, the trigger for `safe:form` will no longer be fired, as the
+In this example, the trigger for `save:form` will no longer be fired, as the
 trigger for `show:link` completely overrides it.
 
 ## Setting Options
@@ -190,7 +190,7 @@ var view = new MyView({
   foo: 'some text'
 });
 
-console.log(view.checkOption());  // prints 'some text'
+view.checkOption();  // prints 'some text'
 ```
 
 [Live example](https://jsfiddle.net/marionettejs/6n02ex1m/)

@@ -362,6 +362,20 @@ describe('collection view - filter', function() {
         expect(this.collectionView.$el).to.contain.$text('24');
       });
     });
+
+    describe('when the filter changes based on the view\'s index', function() {
+      beforeEach(function() {
+        this.collectionView.setFilter(function(view, index) {
+          return index < 1;
+        });
+        this.collectionView.render();
+        this.collection.add({foo: true, bar: 5});
+      });
+
+      it('should only have 1 view', function() {
+        expect(this.collectionView.children).to.have.property('length', 1);
+      });
+    });
   });
 
   describe('combined with a reorder', function() {

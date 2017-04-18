@@ -1,0 +1,8 @@
+{
+  "baseUrl": "/",
+  "fileServerFolder": "./",
+  "fixturesFolder": "test/fixtures",
+  "integrationFolder": "test/integration",
+  "supportFile": "test/cypress/support",
+  "projectId": "gx9qa7"
+}

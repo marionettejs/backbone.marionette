@@ -111,7 +111,7 @@ const View = Backbone.View.extend({
   // Subsequent renders after the first will re-render all nested
   // views.
   render() {
-    this._ensureViewIsIntact();
+    if (this._isDestroyed) { return this; }
 
     this.triggerMethod('before:render', this);
 
@@ -179,7 +179,7 @@ const View = Backbone.View.extend({
   // }
   // ```
   attachElContent(html) {
-    this.$el.html(html);
+    this.setInnerContent(this.el, html);
 
     return this;
   },

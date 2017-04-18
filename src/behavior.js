@@ -82,7 +82,6 @@ const Behavior = MarionetteObject.extend({
   },
 
   getUI(name) {
-    this.view._ensureViewIsIntact();
     return this._getUI(name);
   },
 

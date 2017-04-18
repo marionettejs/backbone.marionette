@@ -1,74 +1,204 @@
-describe('marionette application', function() {
-  'use strict';
+'use strict';
 
-  describe('when instantiating an app with options specified', function() {
-    beforeEach(function() {
-      this.fooOption = 'bar';
-      this.appOptions = {fooOption: this.fooOption};
-      this.initializeStub = this.sinon.stub(Marionette.Application.prototype, 'initialize');
-      this.app = new Marionette.Application(this.appOptions, 'fooArg');
-    });
+import Application from '../../src/application';
+import View from '../../src/view';
 
-    it('should pass all arguments to the initialize method', function() {
-      expect(this.initializeStub).to.have.been.calledOn(this.app).and.calledWith(this.appOptions, 'fooArg');
+describe('Marionette Application', function() {
+
+  describe('#initialize', () => {
+    describe('when instantiating an app with specified options', function() {
+      let app;
+      let appOptions;
+      let initializeStub;
+
+      beforeEach(function() {
+        appOptions = {fooOption: 'foo'};
+        initializeStub = this.sinon.stub(Application.prototype, 'initialize');
+      });
+
+      it('should pass all arguments to the initialize method', function() {
+        app = new Application(appOptions, 'fooArg');
+
+        expect(initializeStub).to.have.been.calledOn(app).and.calledWith(appOptions, 'fooArg');
+      });
+
+      it('should have a cidPrefix', function() {
+        app = new Application(appOptions);
+
+        expect(app.cidPrefix).to.equal('mna');
+      });
+
+      it('should have a cid', function() {
+        app = new Application(appOptions);
+
+        expect(app.cid).to.exist;
+      });
     });
   });
 
-  describe('when specifying an on start callback, and starting the app', function() {
+  describe('#start', function() {
+    let app;
+    let fooOptions;
+
     beforeEach(function() {
-      this.fooOptions = {foo: 'bar'};
-      this.app = new Marionette.Application();
+      fooOptions = {foo: 'bar'};
+      app = new Application();
+    });
 
-      this.startStub = this.sinon.stub();
-      this.app.on('start', this.startStub);
+    it('should return current application context', function() {
+      const result = app.start(fooOptions);
 
-      this.app.start(this.fooOptions);
+      expect(result).to.have.been.equal(app);
+    });
+  });
+
+  describe('#onBeforeStart', function() {
+    let fooApp;
+    let fooOptions;
+    let beforeStartStub;
+    let onBeforeStartStub;
+
+    beforeEach(function() {
+      fooOptions = {foo: 'bar'};
+      beforeStartStub = this.sinon.stub();
+      onBeforeStartStub = this.sinon.stub();
+
+      const FooApp = Application.extend({
+        onBeforeStart: onBeforeStartStub
+      });
+
+      fooApp = new FooApp();
+      fooApp.on('before:start', beforeStartStub);
+    });
+
+    it('should run the onBeforeStart callback', function() {
+      fooApp.start(fooOptions);
+
+      expect(beforeStartStub).to.have.been.called;
+      expect(onBeforeStartStub).to.have.been.called;
+    });
+
+    it('should pass the startup option to the onBeforeStart callback', function() {
+      fooApp.start(fooOptions);
+
+      expect(beforeStartStub).to.have.been.calledOnce.and.calledWith(fooApp, fooOptions);
+      expect(onBeforeStartStub).to.have.been.calledOnce.and.calledWith(fooApp, fooOptions);
+    });
+  });
+
+  describe('#onStart', function() {
+    let fooApp;
+    let fooOptions;
+    let startStub;
+    let onStartStub;
+
+    beforeEach(function() {
+      fooOptions = {foo: 'bar'};
+      startStub = this.sinon.stub();
+      onStartStub = this.sinon.stub();
+
+      const FooApp = Application.extend({
+        onStart: onStartStub
+      });
+
+      fooApp = new FooApp();
+      fooApp.on('start', startStub);
     });
 
     it('should run the onStart callback', function() {
-      expect(this.startStub).to.have.been.called;
+      fooApp.start(fooOptions);
+
+      expect(startStub).to.have.been.called;
+      expect(onStartStub).to.have.been.called;
     });
 
     it('should pass the startup option to the callback', function() {
-      expect(this.startStub).to.have.been.calledOnce.and.calledWith(this.app, this.fooOptions);
-    });
+      fooApp.start(fooOptions);
 
-    it('should have a cidPrefix', function() {
-      expect(this.app.cidPrefix).to.equal('mna');
-    });
-
-    it('should have a cid', function() {
-      expect(this.app.cid).to.exist;
+      expect(startStub).to.have.been.calledOnce.and.calledWith(fooApp, fooOptions);
+      expect(onStartStub).to.have.been.calledOnce.and.calledWith(fooApp, fooOptions);
     });
   });
 
-  describe('when initializing with regions', function() {
+  describe('#getRegion', function() {
+    let app;
+    let fooOptions;
+
     beforeEach(function() {
-      this.fooOptions = {
+      fooOptions = {
         region: '#fixtures'
       };
-      this.view = new Marionette.View({
-        template: _.template('ohai')
-      });
-
-      this.app = new Marionette.Application(this.fooOptions);
-      this.app.showView(this.view);
-    });
-    it('should be able to define region selectors as strings', function() {
-      expect(this.app._region.$el).to.have.length(1);
+      app = new Application(fooOptions);
     });
 
     it('should get the region selector with getRegion', function() {
-      expect(this.app.getRegion().$el).to.have.length(1);
+      expect(app.getRegion().$el).to.have.length(1);
+    });
+  });
+
+  describe('#showView', function() {
+    let app;
+    let view;
+    let appRegion;
+    let fooOptions;
+    let showViewInRegionSpy;
+
+    beforeEach(function() {
+      fooOptions = {
+        region: '#fixtures'
+      };
+      view = new View({
+        template: _.template('ohai')
+      });
+      app = new Application(fooOptions);
+
+      appRegion = app.getRegion();
+
+      showViewInRegionSpy = this.sinon.spy(appRegion, 'show');
     });
 
-    it('can show a view in its region', function() {
-      expect(this.app._region.el.innerHTML).to.contain('ohai');
+    describe('when additional arguments was passed', function() {
+      let fooArgs;
+
+      beforeEach(function() {
+        fooArgs = {foo: 'bar'};
+      });
+
+      it('should call show method in region with additional arguments', function() {
+        app.showView(view, fooArgs);
+
+        expect(showViewInRegionSpy).to.have.been.calledWith(view, fooArgs);
+      });
     });
 
-    it('can use the getView function', function() {
-      expect(this.app.getView()).to.deep.equal(this.view);
+    describe('when just view as argument was passed', function() {
+      it('should call show method in region', function() {
+        app.showView(view);
+
+        expect(showViewInRegionSpy).to.have.been.called;
+      });
+    });
+  });
+
+  describe('#getView', function() {
+    let app;
+    let view;
+    let fooOptions;
+
+    beforeEach(function() {
+      fooOptions = {
+        region: '#fixtures'
+      };
+      view = new View({
+        template: _.template('ohai')
+      });
+      app = new Application(fooOptions);
     });
 
+    it('should return View which was shown', function() {
+      app.showView(view);
+
+      expect(app.getView()).to.have.deep.equal(view);
+    });
   });
 });

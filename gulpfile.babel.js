@@ -3,6 +3,7 @@ import './gulp/build';
 import './gulp/linting';
 import './gulp/test';
 import './gulp/test-browser';
+import './gulp/test-cypress';
 
 gulp.task('watch-code', function() {
   gulp.watch(['src/**/*', 'test/**/*'], ['lint-code', 'test']);

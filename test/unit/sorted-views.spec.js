@@ -119,6 +119,17 @@ describe('collection/composite view sorting', function() {
           expect(this.collectionView.resortView).to.have.been.calledOnce;
           expect(this.compositeView.resortView).to.have.been.calledOnce;
         });
+
+        describe('and the first, middle, and last models are removed', function() {
+          beforeEach(function() {
+            this.collection.remove([this.collection.at(0), this.collection.at(2), this.collection.at(-1)]);
+          });
+
+          it('should have children view with correct _index', function() {
+            expect(this.collectionView.children.findByModel(this.collection.at(0))).to.have.property('_index', 0);
+            expect(this.collectionView.children.findByModel(this.collection.at(1))).to.have.property('_index', 1);
+          });
+        });
       });
     });
 
@@ -194,6 +205,7 @@ describe('collection/composite view sorting', function() {
   describe('when working with collections with a custom view comparator', function() {
     beforeEach(function() {
       this.collection.comparator = 'foo';
+      this.startCollectionOrder = this.collection.map('foo').join();
 
       this.collectionView = new this.CollectionView({
         childView: this.ChildView,
@@ -204,7 +216,9 @@ describe('collection/composite view sorting', function() {
       this.compositeView = new this.CompositeView({
         childView: this.ChildView,
         collection: this.collection,
-        viewComparator: function(model) { return model.get('bar'); }
+        viewComparator: function(modelA, modelB) {
+          return modelA.get('bar') > modelB.get('bar') ? 1 : -1;
+        }
       });
 
       this.sinon.spy(this.collectionView, 'resortView');
@@ -212,6 +226,11 @@ describe('collection/composite view sorting', function() {
 
       this.collectionView.render();
       this.compositeView.render();
+      this.endCollectionOrder = this.collection.map('foo').join();
+    });
+
+    it('should not change collection order', function() {
+      expect(this.startCollectionOrder).to.equal(this.endCollectionOrder);
     });
 
     describe('when adding a model', function() {

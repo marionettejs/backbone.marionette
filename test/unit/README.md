@@ -3,40 +3,129 @@
 
 ### Running unit tests
 
-1. via the command line
+1. Running just unit tests - `npm run test`
 
+2. Running coverage reporter - `npm run coverage`. 
+To check coverage, open `./coverage/lcov-report/index.html`.
+
+3. Running tests in browser - `npm run test-browser`.
+
+
+### Common concepts for writing tests
+
+1. Test suites should cover public API.
+
+> In most cases it will be public API testing,
+but sometimes we should test something like: When models added to collection,
+hence, in this case we are adding needed suites.
+
+2. Code style.
+
+- Each `describe` should have name of tested method.
+
+> If it's possible, there should be not more then one nested describe for one method.
+ 
+_Wrong way_
+ 
+```javascript
+  describe('#MyClass', function() {
+    describe('some events in myMethod', function() {
+      describe('some logic', function() {
+        it('do something', function() {
+          ...  
+        });
+         
+        describe('some other logic', function() {
+          // other nested describes
+        });
+      });
+    });
+  });
 ```
-grunt test
+
+
+**Correct way**
+
+```javascript
+  describe('#MyClass', function() {
+    describe('#myMethod', function() {
+      describe('when some logic', function() {
+        it('should do something', function() {
+          ...  
+        });
+      });
+   
+      describe('when some other logic', function() {
+        it('should do something', function() {
+          ...  
+        });
+      });
+    });
+  });
 ```
 
-2. in the browser
-```
-open SpecRunner.html
-```
+- In case of testing some behavior
 
+> behavior means not Marionette Behavior class
 
-### Adding a new test file
+**Correct way**
 
-New test files are added as a script tag to the SpecRunner.html
-
-```html
-<script src="test/unit/application.app-regions.spec.js"></script>
-<script src="test/unit/application.spec.js"></script>
-```
-
-
-### Adding a new source file
-
-When you want to add a new source file to be tested, the file needs to be added in two places
-
-1. SpecRunner.html
-
-```html
-<script src="src/item-view.js"></script>
+```javascript
+  describe('#MyClass', function() {
+    describe('when some data was changed', function() {
+      it('should do something', function() {
+        ...
+      });
+    });
+  });
 ```
 
-2. unit/setup/node.js file
+- `before/beforeEach` should consist only some preparation logic 
+but inside it should not present calling methods you expect to test.
 
-```js
-requireHelper('composite-view');
+_Wrong way_
+
+```javascript
+  describe('#MyClass', function() {
+    describe('#myMethod', function() {
+      let myInstance;
+    
+      beforeEach(function() {
+        myInstance = new MyClass({
+          render: this.sinon.spy
+        });
+        myInstance.render();
+      });
+
+      it('should do something', function() {
+        expect(myInstance.render).to.have.been.calledOnce;
+      });
+    });
+  });
+```
+
+
+**Correct way**
+
+```javascript
+  describe('#MyClass', function() {
+    describe('#myMethod', function() {
+      let myInstance;
+      let renderSpy;
+    
+      beforeEach(function() {
+        renderSpy = this.sinon.spy();
+      
+        myInstance = new MyClass({
+          render: renderSpy
+        });
+      });
+   
+      it('should do something', function() {
+        myInstance.render();
+      
+        expect(renderSpy).to.have.been.calledOnce;
+      });
+    });
+  });
 ```

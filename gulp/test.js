@@ -47,9 +47,4 @@ gulp.task('coveralls', ['coverage'], function(){
 
 gulp.task('coverage', ['lint-code'], coverage);
 
-gulp.task('test-build', function() {
-  _registerBabel();
-  return _mocha('test/setup/build.js');
-});
-
 gulp.task('test', test);

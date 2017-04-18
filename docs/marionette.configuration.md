@@ -9,9 +9,9 @@ Marionette provides a set of configuration options that dictate the behavior of 
 
 ## Marionette.VERSION
 
-Maintains a reference to the version of a Marionette instance. Marionette.VERSION is used by unit tests to direct users to the correctly versioned documentation when errors are thrown.
+Maintains a reference to the version of a Marionette instance. `Marionette.VERSION` is used by unit tests to direct users to the correctly versioned documentation when errors are thrown.
 
 
 ## Marionette.DEV_MODE
 
-A boolean flag (default is ```false```) used by unit tests to handle calls to ```Marionette.deprecate()```. If the flag is set to ```true```, deprecation console warnings are issued at runtime.
+A boolean flag (default is `false`) used by unit tests to handle calls to `Marionette.deprecate()`. If the flag is set to `true`, deprecation console warnings are issued at runtime.

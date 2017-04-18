@@ -472,6 +472,6 @@ var Mn = require('backbone.marionette');
 var MnV3 = require('backbone.marionette/v3');
 
 // Creates non-conflicting reference to secondary Marionette instance
-MnNew = MnNew.noConflict()
+MnV3 = MnV3.noConflict()
 
 ```

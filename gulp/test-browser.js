@@ -19,6 +19,7 @@ const sauceConf = {
   port: process.env.SAUCE_PORT || '8080',
   framework: 'mocha',
   platforms: [
+    ['Windows 10', 'internet explorer', 'latest'],
     ['Windows 10', 'MicrosoftEdge', 'latest'],
     ['Windows 10', 'chrome', 'latest'],
     ['OS X 10.11', 'chrome', 'latest'],

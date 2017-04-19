@@ -11,6 +11,8 @@ Where possible, we will document how to make the changes in Marionette 2.x so
 that your applications can continue to work and to ease the burden of upgrading
 to Marionette 3.
 
+You can run Marionette 3 alongside Marionette 2 with the Marionette.noConflict() function.
+
 ## Views
 
 The most noticeable change to Marionette 3 is the consolidation of `ItemView`

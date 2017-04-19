@@ -18,6 +18,7 @@ a way to get the same behaviors and conventions from your own code.
 * [Marionette.bindRequests](#marionettebindrequests)
 * [Marionette.unbindRequests](#marionetteunbindrequests)
 * [Marionette.normalizeMethods](#marionettenormalizemethods)
+* [Marionette.noConflict](#marionettenoconflict)
 
 ## Marionette.extend
 
@@ -460,3 +461,17 @@ myView.do('action:two');
 ```
 
 [Live example](https://jsfiddle.net/marionettejs/zzjhm4p1/)
+
+## Marionette.noConflict
+
+Allows you to run multiple instances of Marionette in the same application. After loading the new version, call `noConflict()` to get a reference to it. At the same time the old version will be returned to Backbone.Marionette.
+
+```javascript
+var Mn = require('backbone.marionette');
+
+var MnV3 = require('backbone.marionette/v3');
+
+// Creates non-conflicting reference to secondary Marionette instance
+MnV3 = MnV3.noConflict()
+
+```

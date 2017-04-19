@@ -301,7 +301,7 @@ const Region = MarionetteObject.extend({
 
   destroyView(view) {
     if (view._isDestroyed) {
-      return this;
+      return view;
     }
 
     if (view.destroy) {
@@ -309,7 +309,7 @@ const Region = MarionetteObject.extend({
     } else {
       destroyBackboneView(view);
     }
-    return this;
+    return view;
   },
 
   removeView(view) {

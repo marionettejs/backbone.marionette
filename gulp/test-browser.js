@@ -74,12 +74,12 @@ function sauceRunner() {
       if (passed) {
         console.log('All tests passed!');
       } else {
-        throw new Error('Oops, there were failures:\n' + JSON.stringify(jobs));
+        console.error('Oops, there were failures:\n' + JSON.stringify(jobs));
       }
     })
     .on('error', error => {
       // An error occurred at some point running the tests.
-      throw new Error(error.message);
+      console.error(error.message);
     });
 }
 

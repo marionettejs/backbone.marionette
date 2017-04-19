@@ -1,4 +1,5 @@
 import gulp from 'gulp';
+import util from 'gulp-util';
 import livereload from 'gulp-livereload';
 import easySauce from 'easy-sauce';
 
@@ -74,12 +75,14 @@ function sauceRunner() {
       if (passed) {
         console.log('All tests passed!');
       } else {
-        console.error('Oops, there were failures:\n' + JSON.stringify(jobs));
+        util.log(util.colors.red('Failures: ' + JSON.stringify(jobs, false, 2)));
+        process.exit(1);
       }
     })
     .on('error', error => {
       // An error occurred at some point running the tests.
-      console.error(error.message);
+      util.log(util.colors.red((error.message)));
+      process.exit(1);
     });
 }
 

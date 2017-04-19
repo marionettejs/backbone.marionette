@@ -182,7 +182,7 @@ describe('region', function() {
 
       this.MyView = Backbone.View.extend({
         events: {
-          'click': function() {}
+          'click': 'onClick'
         },
         render: function() {
           $(this.el).html('some content');
@@ -192,7 +192,8 @@ describe('region', function() {
         onRender: this.sinon.stub(),
         onBeforeAttach: this.sinon.stub(),
         onAttach: this.sinon.stub(),
-        onDomRefresh: this.sinon.stub()
+        onDomRefresh: this.sinon.stub(),
+        onClick: this.sinon.stub()
       });
 
       this.setFixtures('<div id="region"></div>');
@@ -344,13 +345,19 @@ describe('region', function() {
           expect(this.region.$el).not.to.contain.$text('some content');
         });
 
-        // https://github.com/marionettejs/backbone.marionette/issues/2159#issue-52745401
-        it('should still have view1\'s, event bindings', function() {
-          expect(jQuery._data(this.view.el, 'events').click).to.be.defined;
-        });
-
         it('should not call removeView', function() {
           expect(this.region.removeView).not.to.have.been.called;
+        });
+
+        describe('when an el event is triggered', function() {
+          beforeEach(function() {
+            $(this.view.el).trigger('click')
+          });
+
+          // https://github.com/marionettejs/backbone.marionette/issues/2159#issue-52745401
+          it('should catch the event', function() {
+            expect(this.view.onClick).to.be.calledOnce;
+          });
         });
 
         describe('when setting the "replaceElement" class option', function() {

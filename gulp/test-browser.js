@@ -1,4 +1,5 @@
 import gulp from 'gulp';
+import util from 'gulp-util';
 import livereload from 'gulp-livereload';
 import easySauce from 'easy-sauce';
 
@@ -19,6 +20,7 @@ const sauceConf = {
   port: process.env.SAUCE_PORT || '8080',
   framework: 'mocha',
   platforms: [
+    ['Windows 10', 'internet explorer', 'latest'],
     ['Windows 10', 'MicrosoftEdge', 'latest'],
     ['Windows 10', 'chrome', 'latest'],
     ['OS X 10.11', 'chrome', 'latest'],
@@ -73,12 +75,14 @@ function sauceRunner() {
       if (passed) {
         console.log('All tests passed!');
       } else {
-        console.log('Oops, there were failures:\n' + jobs);
+        util.log(util.colors.red('Failures: ' + JSON.stringify(jobs, false, 2)));
+        process.exit(1);
       }
     })
     .on('error', error => {
       // An error occurred at some point running the tests.
-      throw new Error(error.message);
+      util.log(util.colors.red((error.message)));
+      process.exit(1);
     });
 }
 

@@ -58,12 +58,16 @@ export default {
 
   _getBehaviorTriggers() {
     const triggers = _invoke(this._behaviors, 'getTriggers');
-    return _.extend({}, ...triggers);
+    return _.reduce(triggers, function(memo, _triggers) {
+      return _.extend(memo, _triggers);
+    }, {});
   },
 
   _getBehaviorEvents() {
     const events = _invoke(this._behaviors, 'getEvents');
-    return _.extend({}, ...events);
+    return _.reduce(events, function(memo, _events) {
+      return _.extend(memo, _events);
+    }, {});
   },
 
   // proxy behavior $el to the view's $el.
@@ -81,7 +85,7 @@ export default {
     _invoke(this._behaviors, 'undelegateEntityEvents');
   },
 
-  _destroyBehaviors(args) {
+  _destroyBehaviors(...args) {
     // Call destroy on each behavior after
     // destroying the view.
     // This unbinds event listeners

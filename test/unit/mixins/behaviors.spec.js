@@ -393,9 +393,7 @@ describe('Behaviors Mixin', function() {
     });
 
     it('should invoke destroy with arguments', function() {
-      let destroyArguments = ['foo', 'bar', 'baz'];
-
-      behaviorsInstance._destroyBehaviors(destroyArguments);
+      behaviorsInstance._destroyBehaviors('foo', 'bar', 'baz');
 
       expect(FooBehavior.prototype.destroy)
         .to.have.been.calledOnce.and.calledWith('foo', 'bar', 'baz');

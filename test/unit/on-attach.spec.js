@@ -10,7 +10,7 @@ describe('onAttach', function() {
     }
   };
 
-  const extendAttachMethods = superConstructor => target => Object.assign(target, {
+  const extendAttachMethods = superConstructor => target => _.assign(target, {
     constructor(options) {
       superConstructor.call(this, options);
       sinon.spy(this, 'onAttach');

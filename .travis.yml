@@ -5,9 +5,8 @@ node_js:
 cache: yarn
 env:
   - TEST_SUITE=coverage
-  - TEST_SUITE=browser SAUCE_PORT=8080
+  - TEST_SUITE=browser
   - TEST_SUITE=lodash USE_LODASH=1
-  - TEST_SUITE=browser USE_LODASH=1 SAUCE_PORT=8081
 after_install:
   - yarn install travis-ci
 script:

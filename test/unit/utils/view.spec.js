@@ -415,5 +415,22 @@ describe('view mixin', function() {
         expect(this.layoutEventHandler).not.to.have.been.called;
       });
     });
+
+    describe('when childViewEventPrefix flag is false', function() {
+      let myView;
+
+      beforeEach(function() {
+        Marionette.setEnabled('childViewEventPrefix', false);
+        myView = new Marionette.View();
+      });
+
+      afterEach(function() {
+        Marionette.setEnabled('childViewEventPrefix', true);
+      });
+
+      it('should set childViewEventPrefix to false', function() {
+        expect(_.result(myView, 'childViewEventPrefix')).to.be.false;
+      });
+    });
   });
 });

@@ -1,10 +1,29 @@
 # Features
 
 Marionette Features are opt-in functionality. That you can enable by setting `Marionette.FEATURES` in your app.
+It is a good practice to set these flags only once prior to instantiating any Marionette class.
+
+```javascript
+Marionette.setEnabled('fooFlag', true);
+
+var myApp = new MyApp({
+  region: '#app-hook'
+});
+
+myApp.start();
+```
 
 ##### Goals:
 + make it possible to add breaking changes in a minor release
 + give community members a chance to provide feedback for new functionality
+
+## `childViewEventPrefix`
+
+This flag is set to `true` by default.
+
+This flag indicates whether [`childViewEventPrefix`](./events.md#a-child-views-event-prefix)
+for all views will return the default value of `'childview'` or if it will return `false`
+disabling [automatic event bubbling](./events.md#event-bubbling).
 
 ## `triggersPreventDefault`
 

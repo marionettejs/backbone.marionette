@@ -255,14 +255,27 @@ describe('layoutView', function() {
     beforeEach(function() {
       this.layoutView = new this.View();
       this.layoutView.render();
-
-      // create a basic Backbone child view
-      this.childView = new Backbone.View();
-      this.layoutView.showChildView('regionOne', this.childView);
     });
 
     it('shows the childview in the region', function() {
-      expect(this.layoutView.getChildView('regionOne')).to.equal(this.childView);
+      var childView = new Backbone.View();
+      this.layoutView.showChildView('regionOne', childView);
+      expect(this.layoutView.getChildView('regionOne')).to.equal(childView);
+    });
+    it('emits a warning if multiple DOM nodes are found for a region', function() {
+      var ChildView = Marionette.View.extend({
+        template: function() {
+          return '<div id="regionTwo"></div>'
+        }
+      });
+      var childView = new ChildView();
+      this.sinon.spy(console, 'warn');
+
+      this.layoutView.showChildView('regionOne', childView);
+
+      expect(function() {
+        this.layoutView.showChildView('regionTwo', new Backbone.View());
+      }.bind(this)).to.throw(/Multiple DOM nodes found for region/);
     });
   });
 

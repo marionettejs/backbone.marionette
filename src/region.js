@@ -142,6 +142,9 @@ const Region = MarionetteObject.extend({
   _ensureElement(options = {}) {
     if (!_.isObject(this.el)) {
       this.$el = this.getEl(this.el);
+      if (this.$el.length > 1) {
+        throw new MarionetteError(`Multiple DOM nodes found for region: selector: ${this.el} cid: ${this.cid}`);
+      }
       this.el = this.$el[0];
     }
 

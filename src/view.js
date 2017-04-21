@@ -148,8 +148,13 @@ const View = Backbone.View.extend({
     const data = this.mixinTemplateContext(this.serializeData());
 
     // Render and add to el
-    const html = Renderer.render(template, data, this);
+    const html = this._renderHtml(template, data);
     this.attachElContent(html);
+  },
+
+  // Renders the data into the template
+  _renderHtml(template, data) {
+    return Renderer.render(template, data, this);
   },
 
   // Get the template for this view
@@ -198,6 +203,11 @@ const View = Backbone.View.extend({
       .map('currentView')
       .compact()
       .value();
+  }
+}, {
+  // Sets the renderer for the Marionette.View class
+  setRenderer(renderer) {
+    this.prototype._renderHtml = renderer;
   }
 });
 

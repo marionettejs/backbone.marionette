@@ -1,15 +1,68 @@
-# Marionette.Renderer
+# Marionette Renderer
+
+The renderer that Marionette uses to render data into a template can now be set
+per `Marionette.View` class via the [`Marionette.View.setRenderer` function](#setting-a-renderer).
+This feature supersedes modifying the external [`Marionette.Renderer`](#deprecated-marionette-renderer).
+The default renderer is still the `Marionette.Renderer.render` method so that
+documentation still applies.
+
+## Documentation Index
+
+* [Deprecated Marionette.Renderer](#deprecated-marionette-renderer)
+* [Setting a Renderer](#setting-a-renderer)
+* [Basic Usage](#basic-usage)
+* [Pre-compiled Templates](#pre-compiled-templates)
+* [Custom Template Selection And Rendering](#custom-template-selection-and-rendering)
+* [Using Pre-compiled Templates](#using-pre-compiled-templates)
+
+## Deprecated Marionette.Renderer
+
+Customizing the `Renderer` object has been deprecated in favor of the [`setRenderer` method](#setting-a-renderer).
 
 The `Renderer` object was extracted from the `View` rendering process, in order
 to create a consistent and re-usable method of rendering a template with or
 without data.
 
-## Documentation Index
+## Setting a Renderer
 
-* [Basic Usage](#basic-usage)
-* [Pre-compiled Templates](#pre-compiled-templates)
-* [Custom Template Selection And Rendering](#custom-template-selection-and-rendering)
-* [Using Pre-compiled Templates](#using-pre-compiled-templates)
+You can set the renderer for a View Class by using the class method `setRenderer`.
+The renderer accepts two arguments. The first is the template passed to the view,
+and the second argument is the data to be rendered into the template. The renderer
+should return a string containing the result of applying the data to the template.
+
+```javascript
+Marionette.View.setRenderer(function(template, data) {
+  return _.template(template)(data);
+});
+
+var myView = new Marionette.View({
+  template: 'Hello <%- name %>!',
+  model: new Backbone.Model({ name: 'World' })
+});
+
+myView.render();
+
+myView.el === '<div>Hello World!</div>';
+```
+
+The renderer can also be customized separately on any extended View.
+
+```javascript
+var MyHBSView = Marionette.View.extend();
+
+MyHBSView.setRenderer(function(template, data) {
+  return Handlebars.compile(template)(data);
+});
+
+var myHBSView = new MyHBSView({
+  template: 'Hello {{ name }}!',
+  model: new Backbone.Model({ name: 'World' })
+});
+
+myHBSView.render();
+
+myHBSView.el === '<div>Hello World!</div>';
+```
 
 ## Basic Usage
 
@@ -26,9 +79,8 @@ var html = Mn.Renderer.render(template, data);
 // do something with the HTML here
 ```
 
-If you pass a `template` that coerces to a falsy value -
-[but not false](./marionette.view.md#managing-an-existing-page) - the `render`
-method will  throw an exception stating that there was no template provided.
+If you pass a `template` that coerces to a falsy value the `render`
+method will throw an exception stating that there was no template provided.
 
 ## Pre-compiled Templates
 
@@ -52,11 +104,12 @@ only needs to be a function that returns valid HTML as a string from the
 
 ## Custom Template Selection And Rendering
 
-By default, the renderer will take a jQuery selector object as the first
-parameter, and a JSON data object as the optional second parameter, and View
-object or CompositeView object as the optional third parameter. It then uses
-the `TemplateCache` to load the template by the specified selector, and renders
-the template with the data provided (if any) using underscore templates.
+By default, the renderer will take either a [precompiled template](#pre-compiled-templates)
+or a jQuery selector object as the first parameter, and a JSON data object as the optional
+second parameter, and View object or CompositeView object as the optional third
+parameter. If the first parameter is not precompiled it then uses the `TemplateCache`
+to load the template by the specified selector, and renders the template with the
+data provided (if any) using underscore templates.
 
 If you wish to override the way the template is loaded, see the `TemplateCache`
 object.
@@ -91,37 +144,6 @@ Mn.Renderer.render = function(template, data){
 
 See the [Documentation for `TemplateCache`](./marionette.templatecache.md) for
 more detailed information.
-
-## Using Pre-compiled Templates
-
-You can easily replace the standard template rendering functionality with a
-pre-compiled template, such as those provided by the JST or TPL plugins for
-AMD/RequireJS.
-
-To do this, just override the `render` method to return your executed template
-with the data.
-
-```javascript
-var Mn = require('backbone.marionette');
-
-Mn.Renderer.render = function(template, data) {
-  return template(data);
-};
-```
-
-Then you can specify the pre-compiled template function as your view's
-`template` attribute:
-
-```javascript
-var Mn = require('backbone.marionette');
-var myPrecompiledTemplate = _.template('<div>some template</div>');
-
-Mn.View.extend({
-  template: myPrecompiledTemplate
-});
-```
-
-[Live example](https://jsfiddle.net/marionettejs/kzths849/)
 
 For more information on templates in general, see the
 [Documentation for templates](./template.md).

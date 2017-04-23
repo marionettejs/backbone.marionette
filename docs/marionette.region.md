@@ -25,8 +25,8 @@ Regions maintain the [View's lifecycle](./viewlifecycle.md#regions-and-the-view-
 * [Using Regions on a view](#using-regions-on-a-view)
 * [Showing a View](#showing-a-view)
   * [Checking whether a region is showing a view](#checking-whether-a-region-is-showing-a-view)
-  * [Non-Marionette Views](#showing-non-marionette-views)
-    * [Showing Backgrid Views](#showing-backgrid-views)
+  * [Non-Marionette Views](#non-marionette-views)
+    * [Partially-rendered Views](#partially-rendered-views)
 * [Showing a Template](#showing-a-template)
 * [Emptying a Region](#emptying-a-region)
   * [Preserving Existing Views](#preserving-existing-views)
@@ -331,6 +331,10 @@ var _ = require('underscore');
 var MyChildView = Bb.View.extend({
   render: function() {
     this.$el.append('<p>Some text</p>');
+  },
+
+  onRender: function() {
+    console.log('Regions also fire Lifecycle events on Backbone.View!');
   }
 });
 
@@ -347,12 +351,14 @@ var MyParentView = Mn.View.extend({
 });
 ```
 
-#### Showing Backgrid Views
+As you can see above, you can listen to [Lifecycle Events](./viewlifecycle.md)
+on `Backbone.View` and Marionette will fire the events for you.
 
-[Backgrid](http://backgridjs.com/) provides a set of components for building
-data grid widgets. As of 0.3.7 there are some compatibility issues between
-Marionette and Backgrid that require Backgrid components to be manually rendered
-before they can be shown:
+#### Partially-rendered Views
+
+Some libraries will partially "render" a view by setting their `$el`. This can
+cause issues with Marionette assuming it's already been rendered. To get around
+this, you must manually call `render` before showing the view:
 
 ```javascript
 var MyParentView = Mn.View.extend({
@@ -369,6 +375,12 @@ var MyParentView = Mn.View.extend({
   }
 });
 ```
+
+Libraries that are known to exhibit this behavior are:
+
+* [Backgrid 0.3.7](http://backgridjs.com)
+
+This behavior is part of [`Marionette.View#setElement()`](./marionette.view.md).
 
 ## Showing a Template
 
@@ -579,7 +591,7 @@ var AnimatedRegion = Mn.Region.extend({
     view.$el.fadeOut('slow', function() {
       self.destroyView(view);
       if (self.currentView) self.currentView.$el.fadeIn('slow');
-    })
+    });
   }
 });
 

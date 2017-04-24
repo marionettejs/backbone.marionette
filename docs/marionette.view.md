@@ -180,8 +180,10 @@ syntax will suffice.
 
 ### Managing Sub-views
 
-`View` provides a simple interface for managing sub-views with `showChildView`
-and `getChildView`:
+`View` provides a simple interface for managing sub-views with
+[`showChildView`](#showing-a-view) and [`getChildView`](#accessing-a-child-view).
+We will cover both here but for more advanced information, see the
+[documentation for regions](./marionette.region.md).
 
 #### Showing a View
 

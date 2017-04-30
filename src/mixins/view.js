@@ -140,7 +140,7 @@ const ViewMixin = {
     this._isDestroyed = true;
     this._isRendered = false;
 
-    // Destory behaviors after _isDestroyed flag
+    // Destroy behaviors after _isDestroyed flag
     this._destroyBehaviors(...args);
 
     this.triggerMethod('destroy', this, ...args);

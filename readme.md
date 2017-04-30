@@ -18,6 +18,12 @@
   <img src='https://saucelabs.com/browser-matrix/marionettejs.svg' alt'Cross Browser Tesing' />
 </p>
 
+## Why am I forking this?
+
+The original version of Marionette 2.4.7 contains a problematic implemenation of inheritance for Marionette.View and all its subclasses. It makes so-called "monkey patching" very difficult, something that my (and I imagine others') applications rely upon to mix in utility functions. So, rather than reworking Marionette 1.x apps for this 2.x paradigm, I'm forking this and replacing the 2.x-style calls with the old 1.x-style.
+
+The Marionette team realized this was an issue, and version 3.x has the same changes, however this doesn't help those of us who are late in migrating. This fork should do that.
+
 ## Marionette v3
 
 Marionette 3 is now available! See our

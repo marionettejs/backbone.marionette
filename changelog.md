@@ -1,7 +1,31 @@
+### v3.3.0 [view commit logs](https://github.com/marionettejs/backbone.marionette/compare/v3.2.0...v3.3.0)
+
+#### Features
+* Added `removeView` and `isSwapping` to `Region` to better support animation
+* `NextCollectionView` added as a potential replacement for `CollectionView` in v4
+* Added view `initialize` event to behaviors
+* `getRegion` will now render the region's view if it is currently not rendered
+* If a `behavior` or a `region` is destroyed it will now be removed from the view
+* Added `onDomRemove` event for better clean up of things added in `onDomRefresh`
+* `childViewEventPrefix` feature flag to allow for `false` by default
+* Support custom renderers per view prototype
+
+#### Fixes
+* Trigger `detach` events when restoring el
+
+#### Deprecations
+* `template: false` deprecated in favor of `template: _.noop`
+* Behavior `defaults` deprecated in favor of setting `options` on the Behavior definition
+* `Marionette.Renderer` in favor of new custom view renderer.
+
+#### Misc
+* Update babel and build tools
+* Fix tests runner for IE11
+
 ### v3.2.0 [view commit logs](https://github.com/marionettejs/backbone.marionette/compare/v3.1.0...v3.2.0)
 
 #### Features
-* Separate Mn DOM interaction into a mixin for DOM plugin ease 
+* Separate Mn DOM interaction into a mixin for DOM plugin ease
 * `View.childViewEvents` should support `trigger`
 * Allow showing a template or static string in a region
 * Feature/trigger method event args
@@ -10,7 +34,7 @@
 * Custom `CollectionView.viewComparator` no longer sorts `collection.models`
 * `CollectionView` re-indexes correctly when removing views.
 * `CollectionView.filter` can filter by `View` child index
-* `Region` will no longer detach pre-existing HTML when `View`'s el is already in the region 
+* `Region` will no longer detach pre-existing HTML when `View`'s el is already in the region
 * Fix `Region` clean up when `View` is `destroy`ed
 * Destroy `CollectionView.children` by `View` and not `Model`
 

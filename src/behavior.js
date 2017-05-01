@@ -31,11 +31,12 @@ const Behavior = MarionetteObject.extend({
     // wants to directly talk up the chain
     // to the view.
     this.view = view;
-    this.defaults = _.clone(_.result(this, 'defaults', {}));
 
     if (this.defaults) {
       deprecate('Behavior defaults are deprecated. For similar functionality set options on the Behavior class.');
     }
+
+    this.defaults = _.clone(_.result(this, 'defaults', {}));
 
     this._setOptions(this.defaults, options);
     this.mergeOptions(this.options, ClassOptions);

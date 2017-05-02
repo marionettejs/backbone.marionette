@@ -1,3 +1,9 @@
+### v3.3.1 [view commit logs](https://github.com/marionettejs/backbone.marionette/compare/v3.3.0...v3.3.1)
+
+#### Fixes
+* Behavior `defaults` deprecation notice was always triggering
+* Regions threw an error if a childview destroy resulted in a parent view destroy
+
 ### v3.3.0 [view commit logs](https://github.com/marionettejs/backbone.marionette/compare/v3.2.0...v3.3.0)
 
 #### Features

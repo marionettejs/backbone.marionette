@@ -399,6 +399,34 @@ describe('layoutView', function() {
     });
   });
 
+  describe('when destroying the childView destroys the parent', function() {
+    let layoutView;
+
+    beforeEach(function() {
+      const LayoutView = Marionette.View.extend({
+        childViewEvents: {
+          'destroy': 'destroy'
+        },
+        template: _.template('<div id="regionOne"></div>'),
+        regions: {
+          regionOne: '#regionOne'
+        }
+      });
+
+      layoutView = new LayoutView();
+
+      const childView = new Marionette.View({
+        template: _.noop
+      });
+
+      layoutView.showChildView('regionOne', childView);
+    });
+
+    it('should not throw any errors', function() {
+      expect(function() { layoutView.destroy(); }).to.not.throw(Error);
+    });
+  });
+
   describe('when re-rendering an already rendered layoutView', function() {
     beforeEach(function() {
       this.ViewBoundRender = this.View.extend({

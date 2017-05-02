@@ -1168,6 +1168,20 @@ describe('region', function() {
     it('should return the region', function() {
       expect(this.region.destroy).to.have.returned(this.region);
     });
+
+    describe('when the region is already destroyed', function() {
+      it('should not reset the region', function() {
+        this.region.reset.reset();
+        this.region.destroy();
+        expect(this.region.reset).to.not.have.been.called;
+      });
+
+      it('should return the region', function() {
+        this.region.destroy.reset();
+        this.region.destroy();
+        expect(this.region.destroy).to.have.returned(this.region);
+      });
+    });
   });
 
   describe('when destroying a Mn view in a region', function() {

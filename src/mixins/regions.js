@@ -99,9 +99,6 @@ export default {
 
     region.destroy();
 
-    delete this.regions[name];
-    delete this._regions[name];
-
     this.triggerMethod('remove:region', this, name, region);
   },
 

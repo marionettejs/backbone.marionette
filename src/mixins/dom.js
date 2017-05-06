@@ -9,11 +9,11 @@ export default {
   },
 
   appendChildren(el, children) {
-    Backbone.$(el).append(children);
+    this._getEl(el).append(children);
   },
 
   beforeEl(el, sibling) {
-    Backbone.$(el).before(sibling);
+    this._getEl(el).before(sibling);
   },
 
   replaceEl(newEl, oldEl) {
@@ -31,19 +31,23 @@ export default {
   },
 
   detachContents(el) {
-    Backbone.$(el).contents().detach();
+    this._getEl(el).contents().detach();
   },
 
   setInnerContent(el, html) {
-    Backbone.$(el).html(html);
+    this._getEl(el).html(html);
   },
 
   detachEl(el) {
-    Backbone.$(el).detach();
+    this._getEl(el).detach();
   },
 
   removeEl(el) {
-    Backbone.$(el).remove();
+    this._getEl(el).remove();
+  },
+
+  _getEl(el) {
+    return el instanceof Backbone.$ ? el : Backbone.$(el);
   },
 
   findEls(selector, context) {

@@ -43,9 +43,13 @@ DOM.
 Replace the contents of `el` with the HTML string of `html`. Unlike other DOM
 functions, this takes a literal string for its second argument.
 
+### `detachEl(el)`
+
+Detach `el` from the DOM without removing listeners.
+
 ### `removeEl(el)`
 
-Remove `el` from the DOM.
+Remove `el` from the DOM, removing listeners.
 
 ### `findEls(selector, context)`
 

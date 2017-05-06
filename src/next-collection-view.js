@@ -3,7 +3,7 @@
 
 import _ from 'underscore';
 import Backbone from 'backbone';
-import destroyBackboneView from './utils/destroy-backbone-view';
+import { renderView, destroyView } from './common/view';
 import isNodeAttached from './common/is-node-attached';
 import monitorViewEvents from './common/monitor-view-events';
 import { triggerMethodOn } from './common/trigger-method';
@@ -561,28 +561,11 @@ const CollectionView = Backbone.View.extend({
     const elBuffer = this.createBuffer();
 
     _.each(views, view => {
-      this._renderChildView(view);
+      renderView(view);
       this.appendChildren(elBuffer, view.el);
     });
 
     return elBuffer;
-  },
-
-  _renderChildView(view) {
-    if (view._isRendered) {
-      return;
-    }
-
-    if (!view.supportsRenderLifecycle) {
-      triggerMethodOn(view, 'before:render', view);
-    }
-
-    view.render();
-
-    if (!view.supportsRenderLifecycle) {
-      view._isRendered = true;
-      triggerMethodOn(view, 'render', view);
-    }
   },
 
   // Override this method to do something other than `.append`.
@@ -651,11 +634,7 @@ const CollectionView = Backbone.View.extend({
       return;
     }
 
-    if (view.destroy) {
-      view.destroy();
-    } else {
-      destroyBackboneView(view);
-    }
+    destroyView(view);
   },
 
   // called by ViewMixin destroy

@@ -384,12 +384,6 @@ describe('collection view', function() {
     it('should call "render" on the childView', function() {
       expect(this.childView.render).to.have.been.calledOnce;
     });
-
-    it('should not render childView twice', function() {
-      this.collectionView._renderView(this.childView);
-
-      expect(this.childView.render).to.not.have.been.calledTwice;
-    });
   });
 
   describe('when sorting a collection', function() {

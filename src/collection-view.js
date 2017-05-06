@@ -3,7 +3,7 @@
 
 import _ from 'underscore';
 import Backbone from 'backbone';
-import destroyBackboneView from './utils/destroy-backbone-view';
+import { renderView, destroyView } from './common/view';
 import isNodeAttached from './common/is-node-attached';
 import monitorViewEvents from './common/monitor-view-events';
 import { triggerMethodOn } from './common/trigger-method';
@@ -181,11 +181,7 @@ const CollectionView = Backbone.View.extend({
     this.triggerMethod('before:remove:child', this, view);
 
     this.children._remove(view);
-    if (view.destroy) {
-      view.destroy();
-    } else {
-      destroyBackboneView(view);
-    }
+    destroyView(view);
 
     this.stopListening(view);
     this.triggerMethod('remove:child', this, view);
@@ -558,7 +554,7 @@ const CollectionView = Backbone.View.extend({
       this.children.add(view);
     }
 
-    this._renderView(view);
+    renderView(view);
 
     this._attachView(view, index);
 
@@ -591,23 +587,6 @@ const CollectionView = Backbone.View.extend({
           laterView._index += 1;
         }
       });
-    }
-  },
-
-  _renderView(view) {
-    if (view._isRendered) {
-      return;
-    }
-
-    if (!view.supportsRenderLifecycle) {
-      triggerMethodOn(view, 'before:render', view);
-    }
-
-    view.render();
-
-    if (!view.supportsRenderLifecycle) {
-      view._isRendered = true;
-      triggerMethodOn(view, 'render', view);
     }
   },
 

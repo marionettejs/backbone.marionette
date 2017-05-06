@@ -4,7 +4,7 @@
 import _ from 'underscore';
 import Backbone from 'backbone';
 import deprecate from './utils/deprecate';
-import destroyBackboneView from './utils/destroy-backbone-view';
+import { renderView, destroyView } from './common/view';
 import monitorViewEvents from './common/monitor-view-events';
 import isNodeAttached from './common/is-node-attached';
 import { triggerMethodOn } from './common/trigger-method';
@@ -70,7 +70,7 @@ const Region = MarionetteObject.extend({
 
     this._setupChildView(view);
 
-    this._renderView(view);
+    renderView(view);
 
     this._attachView(view, options);
 
@@ -100,23 +100,6 @@ const Region = MarionetteObject.extend({
     if (!parentView) { return; }
 
     parentView._proxyChildViewEvents(view);
-  },
-
-  _renderView(view) {
-    if (view._isRendered) {
-      return;
-    }
-
-    if (!view.supportsRenderLifecycle) {
-      triggerMethodOn(view, 'before:render', view);
-    }
-
-    view.render();
-
-    if (!view.supportsRenderLifecycle) {
-      view._isRendered = true;
-      triggerMethodOn(view, 'render', view);
-    }
   },
 
   _attachView(view, options = {}) {
@@ -304,11 +287,7 @@ const Region = MarionetteObject.extend({
       return view;
     }
 
-    if (view.destroy) {
-      view.destroy();
-    } else {
-      destroyBackboneView(view);
-    }
+    destroyView(view);
     return view;
   },
 

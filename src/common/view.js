@@ -1,6 +1,28 @@
 import { triggerMethodOn } from '../common/trigger-method';
 
-export default function destroyBackboneView(view) {
+export function renderView(view) {
+  if (view._isRendered) {
+    return;
+  }
+
+  if (!view.supportsRenderLifecycle) {
+    triggerMethodOn(view, 'before:render', view);
+  }
+
+  view.render();
+
+  if (!view.supportsRenderLifecycle) {
+    view._isRendered = true;
+    triggerMethodOn(view, 'render', view);
+  }
+}
+
+export function destroyView(view) {
+  if (view.destroy) {
+    view.destroy();
+    return;
+  }
+
   if (!view.supportsDestroyLifecycle) {
     triggerMethodOn(view, 'before:destroy', view);
   }

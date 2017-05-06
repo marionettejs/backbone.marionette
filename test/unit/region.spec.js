@@ -111,9 +111,9 @@ describe('region', function() {
         });
 
         it('should not render the view', function() {
-          this.sinon.spy(this.region, '_renderView');
+          this.sinon.spy(this.myView, 'render');
           this.region.show(this.myView);
-          expect(this.region._renderView).not.to.have.been.called;
+          expect(this.myView.render).not.to.have.been.called;
         });
       });
     });
@@ -749,7 +749,6 @@ describe('region', function() {
 
       this.sinon.spy(this.view, 'destroy');
       this.sinon.spy(this.region, 'attachHtml');
-      this.sinon.spy(this.region, '_renderView');
       this.sinon.spy(this.view, 'render');
       this.region.show(this.view);
     });
@@ -762,8 +761,8 @@ describe('region', function() {
       expect(this.region.attachHtml).not.to.have.been.calledWith(this.view);
     });
 
-    it('should not call "_renderView"', function() {
-      expect(this.region._renderView).not.to.have.been.called;
+    it('should not call "render" on the view', function() {
+      expect(this.view.render).not.to.have.been.called;
     });
   });
 
@@ -1022,34 +1021,6 @@ describe('region', function() {
     });
   });
 
-  describe('when initializing a region with an existing view', function() {
-    beforeEach(function() {
-      this.View = Backbone.View.extend({
-        onShow: function() {}
-      });
-
-      this.view = new this.View();
-
-      this.sinon.spy(this.view, 'render');
-      this.sinon.spy(this.view, 'onShow');
-
-      this.region = new Backbone.Marionette.Region({
-        el: '#foo',
-        currentView: this.view
-      });
-
-      this.sinon.spy(this.region, '_renderView');
-    });
-
-    it('should not render the view', function() {
-      expect(this.region._renderView).not.to.have.been.called;
-    });
-
-    it('should not `show` the view', function() {
-      expect(this.view.onShow).not.to.have.been.called;
-    });
-  });
-
   describe('when creating a region instance with an initialize method', function() {
     beforeEach(function() {
       this.expectedOptions = {foo: 'bar'};
@@ -1287,27 +1258,6 @@ describe('region', function() {
           .and.to.have.been.calledOn(this.view)
           .and.to.have.been.calledWith(this.view);
       });
-    });
-  });
-
-  describe('when calling "_renderView"', function() {
-    beforeEach(function() {
-      this.region = new Backbone.Marionette.Region({
-        el: '#region'
-      });
-
-      this.View = Backbone.Marionette.View.extend({
-        template: _.template('')
-      });
-
-      this.view = new this.View();
-      this.sinon.spy(this.view, 'render');
-
-      this.region._renderView(this.view);
-    });
-
-    it('should call "render" on the view', function() {
-      expect(this.view.render).to.have.been.calledOnce;
     });
   });
 

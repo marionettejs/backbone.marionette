@@ -6,6 +6,7 @@ import Backbone from 'backbone';
 import deprecate from './utils/deprecate';
 import isNodeAttached from './common/is-node-attached';
 import monitorViewEvents from './common/monitor-view-events';
+import { setDomMixin } from './mixins/dom';
 import ViewMixin from './mixins/view';
 import RegionsMixin from './mixins/regions';
 import Renderer from './config/renderer';
@@ -188,7 +189,7 @@ const View = Backbone.View.extend({
   // }
   // ```
   attachElContent(html) {
-    this.setInnerContent(this.el, html);
+    this.Dom.setContents(this.el, html);
 
     return this;
   },
@@ -208,7 +209,9 @@ const View = Backbone.View.extend({
   // Sets the renderer for the Marionette.View class
   setRenderer(renderer) {
     this.prototype._renderHtml = renderer;
-  }
+  },
+
+  setDomMixin
 });
 
 _.extend(View.prototype, ViewMixin, RegionsMixin);

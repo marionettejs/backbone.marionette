@@ -3,17 +3,28 @@
 
 import Backbone from 'backbone';
 
+function getEl(el, context) {
+  return el instanceof Backbone.$ ? el : Backbone.$(el, context);
+}
+
+// Static setter
+export function setDomMixin(mixin) {
+  this.prototype.Dom = _.extend({}, this.prototype.Dom, mixin);
+}
+
 export default {
+  getEl,
+
   createBuffer() {
     return document.createDocumentFragment();
   },
 
-  appendChildren(el, children) {
-    this._getEl(el).append(children);
+  detachEl(el) {
+    getEl(el).detach();
   },
 
-  beforeEl(el, sibling) {
-    this._getEl(el).before(sibling);
+  removeEl(el) {
+    getEl(el).remove();
   },
 
   replaceEl(newEl, oldEl) {
@@ -30,27 +41,15 @@ export default {
     parent.replaceChild(newEl, oldEl);
   },
 
+  setContents(el, content) {
+    getEl(el).html(content);
+  },
+
+  appendContents(el, content) {
+    getEl(el).append(content);
+  },
+
   detachContents(el) {
-    this._getEl(el).contents().detach();
-  },
-
-  setInnerContent(el, html) {
-    this._getEl(el).html(html);
-  },
-
-  detachEl(el) {
-    this._getEl(el).detach();
-  },
-
-  removeEl(el) {
-    this._getEl(el).remove();
-  },
-
-  _getEl(el) {
-    return el instanceof Backbone.$ ? el : Backbone.$(el);
-  },
-
-  findEls(selector, context) {
-    return Backbone.$(selector, context);
+    getEl(el).contents().detach();
   }
 };

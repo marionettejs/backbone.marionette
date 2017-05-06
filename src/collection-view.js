@@ -9,6 +9,7 @@ import monitorViewEvents from './common/monitor-view-events';
 import { triggerMethodOn } from './common/trigger-method';
 import ChildViewContainer from './child-view-container';
 import MarionetteError from './error';
+import { setDomMixin } from './mixins/dom';
 import ViewMixin from './mixins/view';
 
 const ClassOptions = [
@@ -340,7 +341,7 @@ const CollectionView = Backbone.View.extend({
   // Internal method. Separated so that CompositeView can append to the childViewContainer
   // if necessary
   _appendReorderedChildren(children) {
-    this.appendChildren(this.el, children);
+    this.Dom.appendContents(this.el, children);
   },
 
   // Internal method. Separated so that CompositeView can have more control over events
@@ -641,14 +642,14 @@ const CollectionView = Backbone.View.extend({
 
   // You might need to override this if you've overridden attachHtml
   attachBuffer(collectionView, buffer) {
-    this.appendChildren(collectionView.el, buffer);
+    this.Dom.appendContents(collectionView.el, buffer);
   },
 
   // Create a fragment buffer from the currently buffered children
   _createBuffer() {
-    const elBuffer = this.createBuffer();
+    const elBuffer = this.Dom.createBuffer();
     _.each(this._bufferedChildren, (b) => {
-      this.appendChildren(elBuffer, b.el);
+      this.Dom.appendContents(elBuffer, b.el);
     });
     return elBuffer;
   },
@@ -690,9 +691,14 @@ const CollectionView = Backbone.View.extend({
     return false;
   },
 
+  // Override to handle DOM inserting differently
+  beforeEl(el, siblings) {
+    this.Dom.getEl(el).before(siblings);
+  },
+
   // Internal method. Append a view to the end of the $el
   _insertAfter(childView) {
-    this.appendChildren(this.el, childView.el);
+    this.Dom.appendContents(this.el, childView.el);
   },
 
   // Internal method to set up the `children` object for storing all of the child views
@@ -726,6 +732,8 @@ const CollectionView = Backbone.View.extend({
     const filter = this.filter;
     return !_.isFunction(filter) || filter.call(this, child, index, this.collection);
   }
+}, {
+  setDomMixin
 });
 
 _.extend(CollectionView.prototype, ViewMixin);

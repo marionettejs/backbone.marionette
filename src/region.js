@@ -8,7 +8,7 @@ import { renderView, destroyView } from './common/view';
 import monitorViewEvents from './common/monitor-view-events';
 import isNodeAttached from './common/is-node-attached';
 import { triggerMethodOn } from './common/trigger-method';
-import DomMixin from './mixins/dom';
+import DomMixin, { setDomMixin } from './mixins/dom';
 import MarionetteObject from './object';
 import MarionetteError from './error';
 import View from './view';
@@ -20,6 +20,8 @@ const ClassOptions = [
 ];
 
 const Region = MarionetteObject.extend({
+  Dom: DomMixin,
+
   cidPrefix: 'mnr',
   replaceElement: false,
   _isReplaced: false,
@@ -183,7 +185,7 @@ const Region = MarionetteObject.extend({
   // Override this method to change how the region finds the DOM element that it manages. Return
   // a jQuery selector object scoped to a provided parent el or the document if none exists.
   getEl(el) {
-    return this.findEls(el, _.result(this, 'parentEl'));
+    return this.Dom.getEl(el, _.result(this, 'parentEl'));
   },
 
   _replaceEl(view) {
@@ -192,7 +194,7 @@ const Region = MarionetteObject.extend({
 
     view.on('before:destroy', this._restoreEl, this);
 
-    this.replaceEl(view.el, this.el);
+    this.Dom.replaceEl(view.el, this.el);
 
     this._isReplaced = true;
   },
@@ -228,7 +230,7 @@ const Region = MarionetteObject.extend({
   // Override this method to change how the new view is appended to the `$el` that the
   // region is managing
   attachHtml(view) {
-    this.appendChildren(this.el, view.el);
+    this.Dom.appendContents(this.el, view.el);
   },
 
   // Destroy the current view, if there is one. If there is no current view, it does
@@ -317,7 +319,7 @@ const Region = MarionetteObject.extend({
     }
 
     if (shouldRestoreEl) {
-      this.replaceEl(this.el, view.el);
+      this.Dom.replaceEl(this.el, view.el);
     } else {
       this.detachHtml();
     }
@@ -330,7 +332,7 @@ const Region = MarionetteObject.extend({
 
   // Override this method to change how the region detaches current content
   detachHtml() {
-    this.detachContents(this.el);
+    this.Dom.detachContents(this.el);
   },
 
   // Checks whether a view is currently present within the region. Returns `true` if there is
@@ -366,8 +368,8 @@ const Region = MarionetteObject.extend({
 
     return MarionetteObject.prototype.destroy.apply(this, arguments);
   }
+}, {
+  setDomMixin
 });
-
-_.extend(Region.prototype, DomMixin);
 
 export default Region;

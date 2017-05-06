@@ -60,6 +60,15 @@ Marionette.noConflict = function() {
   return this;
 };
 
+Marionette.setDomMixin = function(mixin) {
+  CollectionView.setDomMixin(mixin);
+  CompositeView.setDomMixin(mixin);
+  NextCollectionView.setDomMixin(mixin);
+  Region.setDomMixin(mixin);
+  TemplateCache.setDomMixin(mixin);
+  View.setDomMixin(mixin);
+};
+
 // Utilities
 Marionette.bindEvents = proxy(bindEvents);
 Marionette.unbindEvents = proxy(unbindEvents);

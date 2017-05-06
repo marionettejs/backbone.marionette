@@ -24,6 +24,8 @@ import { isEnabled } from '../config/features';
 
 
 const ViewMixin = {
+  Dom: DomMixin,
+
   supportsRenderLifecycle: true,
   supportsDestroyLifecycle: true,
 
@@ -127,7 +129,7 @@ const ViewMixin = {
     this.unbindUIElements();
 
     // remove the view from the DOM
-    this.removeEl(this.el);
+    this.removeEl();
 
     if (shouldTriggerDetach) {
       this._isAttached = false;
@@ -148,6 +150,10 @@ const ViewMixin = {
     this.stopListening();
 
     return this;
+  },
+
+  removeEl() {
+    this.Dom.removeEl(this.el);
   },
 
   bindUIElements() {
@@ -221,6 +227,6 @@ const ViewMixin = {
   }
 };
 
-_.extend(ViewMixin, DomMixin, BehaviorsMixin, CommonMixin, DelegateEntityEventsMixin, TriggersMixin, UIMixin);
+_.extend(ViewMixin, BehaviorsMixin, CommonMixin, DelegateEntityEventsMixin, TriggersMixin, UIMixin);
 
 export default ViewMixin;

@@ -10,6 +10,7 @@ import { triggerMethodOn } from './common/trigger-method';
 import ChildViewContainer from './next-child-view-container';
 import MarionetteError from './error';
 import Region from './region';
+import { setDomMixin } from './mixins/dom';
 import ViewMixin from './mixins/view';
 
 const ClassOptions = [
@@ -517,7 +518,7 @@ const CollectionView = Backbone.View.extend({
 
   // Override this method to change how the collectionView detaches a child view
   detachHtml(view) {
-    this.detachEl(view.el);
+    this.Dom.detachEl(view.el);
   },
 
   _renderChildren(views) {
@@ -558,11 +559,11 @@ const CollectionView = Backbone.View.extend({
 
   // Renders each view in children and creates a fragment buffer from them
   _getBuffer(views) {
-    const elBuffer = this.createBuffer();
+    const elBuffer = this.Dom.createBuffer();
 
     _.each(views, view => {
       renderView(view);
-      this.appendChildren(elBuffer, view.el);
+      this.Dom.appendContents(elBuffer, view.el);
     });
 
     return elBuffer;
@@ -571,7 +572,7 @@ const CollectionView = Backbone.View.extend({
   // Override this method to do something other than `.append`.
   // You can attach any HTML at this point including the els.
   attachHtml(collectionView, els) {
-    this.appendChildren(collectionView.el, els);
+    this.Dom.appendContents(collectionView.el, els);
   },
 
   // Render the child's view and add it to the HTML for the collection view at a given index, based on the current sort
@@ -653,6 +654,8 @@ const CollectionView = Backbone.View.extend({
     this.children.each(_.bind(this._removeChildView, this));
     this.triggerMethod('destroy:children', this);
   }
+}, {
+  setDomMixin
 });
 
 _.extend(CollectionView.prototype, ViewMixin);

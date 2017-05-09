@@ -247,7 +247,7 @@ var MyView = Mn.View.extend({
   },
 
   doSomething: function() {
-    this.triggerMethod('did:something');
+    this.triggerMethod('did:something', this);
   }
 });
 
@@ -270,9 +270,9 @@ var ParentView = Mn.View.extend({
 })
 ```
 
-[Live example](https://jsfiddle.net/marionettejs/oquea4uy/)
+**Note**: `triggers` will automatically pass the child view as an argument to the parent view, however `triggerMethod` will not, and so notice that in the above example, the `triggerMethod` explicitly passes the child view.
 
-The `view` gets passed into the handlers as the first argument.
+[Live example](https://jsfiddle.net/marionettejs/oquea4uy/)
 
 #### Using `CollectionView`
 
@@ -295,9 +295,6 @@ var MyList = Mn.CollectionView.extend({
 ```
 
 [Live examples](https://jsfiddle.net/marionettejs/za27jys1/)
-
-Just like with the `View` and its regions, the event handler will receive the
-`view` that triggered the event as its first argument.
 
 ### A Child View's Event Prefix
 

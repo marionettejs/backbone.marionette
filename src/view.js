@@ -6,10 +6,10 @@ import Backbone from 'backbone';
 import deprecate from './utils/deprecate';
 import isNodeAttached from './common/is-node-attached';
 import monitorViewEvents from './common/monitor-view-events';
-import { setDomMixin } from './mixins/dom';
 import ViewMixin from './mixins/view';
 import RegionsMixin from './mixins/regions';
 import Renderer from './config/renderer';
+import { setDomApi } from './config/dom';
 
 const ClassOptions = [
   'behaviors',
@@ -189,7 +189,7 @@ const View = Backbone.View.extend({
   // }
   // ```
   attachElContent(html) {
-    this.Dom.setContents(this.el, html);
+    this.Dom.setContents(this.el, html, this.$el);
 
     return this;
   },
@@ -211,7 +211,7 @@ const View = Backbone.View.extend({
     this.prototype._renderHtml = renderer;
   },
 
-  setDomMixin
+  setDomApi
 });
 
 _.extend(View.prototype, ViewMixin, RegionsMixin);

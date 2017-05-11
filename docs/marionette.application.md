@@ -128,6 +128,8 @@ var MyModel = require('./mymodel');
 var MyView = require('./myview');
 
 var App = Mn.Application.extend({
+  region: '#root-element',
+
   initialize: function(options) {
     console.log('Initialize');
   },
@@ -163,6 +165,8 @@ initialization sequence.
 
 ```javascript
 var App = Mn.Application.extend({
+  region: '#root-element',
+
   initialize: function(options) {
     console.log('Initialize');
   },

@@ -2,8 +2,8 @@
 // --------------
 
 import _ from 'underscore';
-import DomMixin, { setDomMixin } from './mixins/dom';
 import MarionetteError from './error';
+import DomApi, { setDomApi } from './config/dom';
 
 // Manage templates stored in `<script>` blocks,
 // caching them for faster access.
@@ -15,7 +15,7 @@ const TemplateCache = function(templateId) {
 // caches from these method calls instead of creating
 // your own TemplateCache instances
 _.extend(TemplateCache, {
-  setDomMixin,
+  setDomApi,
 
   templateCaches: {},
 
@@ -58,7 +58,7 @@ _.extend(TemplateCache, {
 // template cache object to manage its own state
 // and know whether or not it has been loaded
 _.extend(TemplateCache.prototype, {
-  Dom: DomMixin,
+  Dom: DomApi,
 
   // Internal method to load the template
   load(options) {

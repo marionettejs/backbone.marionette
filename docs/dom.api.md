@@ -1,16 +1,16 @@
-# The DOM Mixin API
+# The DOM API
 
-**Warning** *The DOM Mixin API is currently experimental and may change.*
+**Warning** *The DOM API is currently experimental and may change.*
 
 With the release of Marionette 3.2, developers can remove the dependency on
-jQuery and integrate with the DOM using a custom mixin.
+jQuery and integrate with the DOM using a custom api.
 
 ## Mixin Methods
 
-The DOM mixin manages the DOM on behalf of `View` and `CollectionView`. It
+The DOM API manages the DOM on behalf of `View` and `CollectionView`. It
 defines the methods that actually attach and remove views and children.
 
-The default mixin depends on Backbone's jQuery `$` object however it does not
+The default API depends on Backbone's jQuery `$` object however it does not
 rely on jQuery-specific behavior. This should make it easier to develop your own
 API. You will, however, [need to also handle Backbone's jQuery integration](#backbone-jquery-integration).
 
@@ -19,29 +19,12 @@ API. You will, however, [need to also handle Backbone's jQuery integration](#bac
 Returns a new HTML DOM node instance. The resulting node can be passed into the
 other DOM functions.
 
-### `appendChildren(el, children)`
+### `getEl(selector, context)`
 
-Takes the DOM node `el` and appends the rendered `children` to the end of the
-element's contents.
-
-### `beforeEl(el, sibling)`
-
-Add `sibling` to the DOM immediately before the DOM node `el`. The `sibling`
-will be at the same level as `el`.
-
-### `replaceEl(newEl, oldEl)`
-
-Remove `oldEl` from the DOM and put `newEl` in its place.
-
-### `detachContents(el)`
-
-Remove the inner contents of `el` from the DOM while leaving `el` itself in the
-DOM.
-
-### `setInnerContent(el, html)`
-
-Replace the contents of `el` with the HTML string of `html`. Unlike other DOM
-functions, this takes a literal string for its second argument.
+Lookup the `selector` string within the DOM node for `context`. The optional
+`context` argument will come in as a DOM Node reference to run the `selector`
+search. If `context` hasn't been set, then `getEls` should search the entire
+`document` for the `selector`.
 
 ### `detachEl(el)`
 
@@ -51,24 +34,41 @@ Detach `el` from the DOM without removing listeners.
 
 Remove `el` from the DOM, removing listeners.
 
-### `findEls(selector, context)`
+### `replaceEl(newEl, oldEl)`
 
-Lookup the `selector` string within the DOM node for `context`. The optional
-`context` argument will come in as a DOM Node reference to run the `selector`
-search. If `context` hasn't been set, then `findEls` should search the entire
-`document` for the `selector`.
+Remove `oldEl` from the DOM and put `newEl` in its place.
+
+### `setContents(el, html)`
+
+Replace the contents of `el` with the HTML string of `html`. Unlike other DOM
+functions, this takes a literal string for its second argument.
+
+### `appendContents(el, contents)`
+
+Takes the DOM node `el` and appends the rendered `contents` to the end of the
+element's contents.
+
+### `detachContents(el)`
+
+Remove the inner contents of `el` from the DOM while leaving `el` itself in the
+DOM.
+
+### `beforeEl(el, sibling)`
+
+Add `sibling` to the DOM immediately before the DOM node `el`. The `sibling`
+will be at the same level as `el`.
 
 ## Providing Your Own DOM API
 
 To implement your own DOM API for `View`, override the provided functions to
-provide the same functionality provided and mix it in using `_.extend` as such:
+provide the same functionality provided and mix it in using `setDomApi` as such:
 
 ```js
 var Mn = require('backbone.marionette');
 
-var MyDOMMixin = require('./mixins/mydom');
+var MyDOMApi = require('./mydom');
 
-module.exports = Mn.View.extend(MyDOMMixin);
+module.exports = Mn.View.setDomApi(MyDOMApi);
 ```
 
 This would need to be applied to `CollectionView`, `Region` and `TemplateCache`.
@@ -85,7 +85,7 @@ provide your own versions of the following methods:
 
 #### See Also
 
-The DOM Mixin takes care of the other DOM manipulation methods for you. The
+The DOM API takes care of the other DOM manipulation methods for you. The
 [Backbone Wiki](https://github.com/jashkenas/backbone/wiki/using-backbone-without-jquery)
 has a good reference for removing jQuery from the app, including Browserify and
 Webpack configuration hooks.

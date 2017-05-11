@@ -60,13 +60,13 @@ Marionette.noConflict = function() {
   return this;
 };
 
-Marionette.setDomMixin = function(mixin) {
-  CollectionView.setDomMixin(mixin);
-  CompositeView.setDomMixin(mixin);
-  NextCollectionView.setDomMixin(mixin);
-  Region.setDomMixin(mixin);
-  TemplateCache.setDomMixin(mixin);
-  View.setDomMixin(mixin);
+Marionette.setDomApi = function(mixin) {
+  CollectionView.setDomApi(mixin);
+  CompositeView.setDomApi(mixin);
+  NextCollectionView.setDomApi(mixin);
+  Region.setDomApi(mixin);
+  TemplateCache.setDomApi(mixin);
+  View.setDomApi(mixin);
 };
 
 // Utilities

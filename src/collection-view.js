@@ -9,8 +9,8 @@ import monitorViewEvents from './common/monitor-view-events';
 import { triggerMethodOn } from './common/trigger-method';
 import ChildViewContainer from './child-view-container';
 import MarionetteError from './error';
-import { setDomMixin } from './mixins/dom';
 import ViewMixin from './mixins/view';
+import { setDomApi } from './config/dom';
 
 const ClassOptions = [
   'behaviors',
@@ -341,7 +341,7 @@ const CollectionView = Backbone.View.extend({
   // Internal method. Separated so that CompositeView can append to the childViewContainer
   // if necessary
   _appendReorderedChildren(children) {
-    this.Dom.appendContents(this.el, children);
+    this.Dom.appendContents(this.el, children, {_$el: this.$el});
   },
 
   // Internal method. Separated so that CompositeView can have more control over events
@@ -642,14 +642,14 @@ const CollectionView = Backbone.View.extend({
 
   // You might need to override this if you've overridden attachHtml
   attachBuffer(collectionView, buffer) {
-    this.Dom.appendContents(collectionView.el, buffer);
+    this.Dom.appendContents(collectionView.el, buffer, {_$el: collectionView.$el});
   },
 
   // Create a fragment buffer from the currently buffered children
   _createBuffer() {
     const elBuffer = this.Dom.createBuffer();
     _.each(this._bufferedChildren, (b) => {
-      this.Dom.appendContents(elBuffer, b.el);
+      this.Dom.appendContents(elBuffer, b.el, {_$contents: b.$el});
     });
     return elBuffer;
   },
@@ -698,7 +698,7 @@ const CollectionView = Backbone.View.extend({
 
   // Internal method. Append a view to the end of the $el
   _insertAfter(childView) {
-    this.Dom.appendContents(this.el, childView.el);
+    this.Dom.appendContents(this.el, childView.el, {_$el: this.$el, _$contents: childView.$el});
   },
 
   // Internal method to set up the `children` object for storing all of the child views
@@ -733,7 +733,7 @@ const CollectionView = Backbone.View.extend({
     return !_.isFunction(filter) || filter.call(this, child, index, this.collection);
   }
 }, {
-  setDomMixin
+  setDomApi
 });
 
 _.extend(CollectionView.prototype, ViewMixin);

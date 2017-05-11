@@ -7,10 +7,10 @@ import { triggerMethod } from '../common/trigger-method';
 import BehaviorsMixin from './behaviors';
 import CommonMixin from './common';
 import DelegateEntityEventsMixin from './delegate-entity-events';
-import DomMixin from './dom';
 import TriggersMixin from './triggers';
 import UIMixin from './ui';
 import { isEnabled } from '../config/features';
+import DomApi from '../config/dom';
 
 // MixinOptions
 // - behaviors
@@ -24,7 +24,7 @@ import { isEnabled } from '../config/features';
 
 
 const ViewMixin = {
-  Dom: DomMixin,
+  Dom: DomApi,
 
   supportsRenderLifecycle: true,
   supportsDestroyLifecycle: true,
@@ -153,7 +153,7 @@ const ViewMixin = {
   },
 
   removeEl() {
-    this.Dom.removeEl(this.el);
+    this.Dom.removeEl(this.el, this.$el);
   },
 
   bindUIElements() {

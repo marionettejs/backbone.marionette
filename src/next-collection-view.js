@@ -10,8 +10,8 @@ import { triggerMethodOn } from './common/trigger-method';
 import ChildViewContainer from './next-child-view-container';
 import MarionetteError from './error';
 import Region from './region';
-import { setDomMixin } from './mixins/dom';
 import ViewMixin from './mixins/view';
+import { setDomApi } from './config/dom';
 
 const ClassOptions = [
   'behaviors',
@@ -518,7 +518,7 @@ const CollectionView = Backbone.View.extend({
 
   // Override this method to change how the collectionView detaches a child view
   detachHtml(view) {
-    this.Dom.detachEl(view.el);
+    this.Dom.detachEl(view.el, view.$el);
   },
 
   _renderChildren(views) {
@@ -548,7 +548,7 @@ const CollectionView = Backbone.View.extend({
       triggerMethodOn(view, 'before:attach', view);
     });
 
-    this.attachHtml(this, els);
+    this.attachHtml(els);
 
     _.each(views, view => {
       if (view._isAttached) { return; }
@@ -563,7 +563,7 @@ const CollectionView = Backbone.View.extend({
 
     _.each(views, view => {
       renderView(view);
-      this.Dom.appendContents(elBuffer, view.el);
+      this.Dom.appendContents(elBuffer, view.el, {_$contents: view.$el});
     });
 
     return elBuffer;
@@ -571,8 +571,8 @@ const CollectionView = Backbone.View.extend({
 
   // Override this method to do something other than `.append`.
   // You can attach any HTML at this point including the els.
-  attachHtml(collectionView, els) {
-    this.Dom.appendContents(collectionView.el, els);
+  attachHtml(els) {
+    this.Dom.appendContents(this.el, els, {_$el: this.$el});
   },
 
   // Render the child's view and add it to the HTML for the collection view at a given index, based on the current sort
@@ -655,7 +655,7 @@ const CollectionView = Backbone.View.extend({
     this.triggerMethod('destroy:children', this);
   }
 }, {
-  setDomMixin
+  setDomApi
 });
 
 _.extend(CollectionView.prototype, ViewMixin);

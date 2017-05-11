@@ -302,12 +302,12 @@ the child views that may have previously been opened.
 
 ### NextCollectionView's `attachHtml`
 
-By default the NextCollectionView will append the HTML of each ChildView
-into the element buffer, and then calls the DOM Mixin's [appendChildren](./dom.mixin.md#appendchildrenel-children) once at the
+By default the `NextCollectionView` will append the HTML of each ChildView
+into the element buffer, and then calls the DOM API's [appendContents](./dom.api.md#appendcontentsel-contents) once at the
 end to move the HTML into the collection view's `el`.
 
 You can override this by specifying an `attachHtml` method in your
-view definition. This method takes two parameters and has no return
+view definition. This method takes one parameter and has no return
 value.
 
 ```javascript
@@ -316,8 +316,8 @@ var Mn = require('backbone.marionette');
 Mn.NextCollectionView.extend({
 
   // The default implementation:
-  attachHtml: function(collectionView, els){
-    this.appendChildren(collectionView.el, els);
+  attachHtml: function(els){
+    this.Dom.appendContents(this.el, els);
   }
 
 });

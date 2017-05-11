@@ -110,7 +110,7 @@ const CompositeView = CollectionView.extend({
   // You might need to override this if you've overridden attachHtml
   attachBuffer(compositeView, buffer) {
     const $container = this.getChildViewContainer(compositeView);
-    this.Dom.appendContents($container, buffer);
+    this.Dom.appendContents($container[0], buffer, {_$el: $container});
   },
 
   // Internal method. Append a view to the end of the $el.
@@ -118,7 +118,7 @@ const CompositeView = CollectionView.extend({
   // childViewContainer
   _insertAfter(childView) {
     const $container = this.getChildViewContainer(this, childView);
-    this.Dom.appendContents($container, childView.el);
+    this.Dom.appendContents($container[0], childView.el, {_$el: $container, _$contents: childView.$el});
   },
 
   // Internal method. Append reordered childView'.
@@ -126,7 +126,7 @@ const CompositeView = CollectionView.extend({
   // are appended to childViewContainer
   _appendReorderedChildren(children) {
     const $container = this.getChildViewContainer(this);
-    this.Dom.appendContents($container, children);
+    this.Dom.appendContents($container[0], children, {_$el: $container});
   },
 
   // Internal method to ensure an `$childViewContainer` exists, for the

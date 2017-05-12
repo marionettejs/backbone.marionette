@@ -693,7 +693,7 @@ const CollectionView = Backbone.View.extend({
 
   // Override to handle DOM inserting differently
   beforeEl(el, siblings) {
-    this.Dom.getEl(el).before(siblings);
+    this.$(el).before(siblings);
   },
 
   // Internal method. Append a view to the end of the $el

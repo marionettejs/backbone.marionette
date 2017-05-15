@@ -40,6 +40,7 @@ import AppRouter from './app-router';
 import MarionetteError from './error';
 
 import behaviorsLookup from './config/behaviors-lookup';
+import DomApi from './config/dom';
 import Renderer from './config/renderer';
 
 import {
@@ -58,15 +59,6 @@ const Marionette = Backbone.Marionette = {};
 Marionette.noConflict = function() {
   Backbone.Marionette = previousMarionette;
   return this;
-};
-
-Marionette.setDomApi = function(mixin) {
-  CollectionView.setDomApi(mixin);
-  CompositeView.setDomApi(mixin);
-  NextCollectionView.setDomApi(mixin);
-  Region.setDomApi(mixin);
-  TemplateCache.setDomApi(mixin);
-  View.setDomApi(mixin);
 };
 
 // Utilities
@@ -107,5 +99,14 @@ Marionette.Object = MarionetteObject;
 Marionette.DEV_MODE = false;
 Marionette.FEATURES = FEATURES;
 Marionette.VERSION = version;
+Marionette.DomApi = DomApi;
+Marionette.setDomApi = function(mixin) {
+  CollectionView.setDomApi(mixin);
+  CompositeView.setDomApi(mixin);
+  NextCollectionView.setDomApi(mixin);
+  Region.setDomApi(mixin);
+  TemplateCache.setDomApi(mixin);
+  View.setDomApi(mixin);
+};
 
 export default Marionette;

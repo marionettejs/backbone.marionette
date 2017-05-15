@@ -5,12 +5,12 @@
 With the release of Marionette 3.2, developers can remove the dependency on
 jQuery and integrate with the DOM using a custom api.
 
-## Mixin Methods
+## API Methods
 
-The DOM API manages the DOM on behalf of `View` and `CollectionView`. It
-defines the methods that actually attach and remove views and children.
+The DOM API manages the DOM on behalf of each view type, `Region`, and `TemplateCache`.
+It defines the methods that actually attach and remove views and children.
 
-The default API depends on Backbone's jQuery `$` object however it does not
+[The default API](#the-default-api) depends on Backbone's jQuery `$` object however it does not
 rely on jQuery-specific behavior. This should make it easier to develop your own
 API. You will, however, [need to also handle Backbone's jQuery integration](#backbone-jquery-integration).
 
@@ -23,7 +23,7 @@ other DOM functions.
 
 Lookup the `selector` string within the DOM node for `context`. The optional
 `context` argument will come in as a DOM Node reference to run the `selector`
-search. If `context` hasn't been set, then `getEls` should search the entire
+search. If `context` hasn't been set, then `getEl` should search the entire
 `document` for the `selector`.
 
 ### `detachEl(el)`
@@ -53,25 +53,70 @@ element's contents.
 Remove the inner contents of `el` from the DOM while leaving `el` itself in the
 DOM.
 
-### `beforeEl(el, sibling)`
+## The default API
 
-Add `sibling` to the DOM immediately before the DOM node `el`. The `sibling`
-will be at the same level as `el`.
+The API used by Marionette by default is attached as `Marionette.DomApi`.
+This is useful if you [change the API](#providing-your-own-dom-api) globally,
+but want to reuse the default in certain cases.
 
-## Providing Your Own DOM API
-
-To implement your own DOM API for `View`, override the provided functions to
-provide the same functionality provided and mix it in using `setDomApi` as such:
-
-```js
+```javascript
 var Mn = require('backbone.marionette');
 
 var MyDOMApi = require('./mydom');
 
-module.exports = Mn.View.setDomApi(MyDOMApi);
+Mn.setDomApi(MyDOMApi);
+
+// Use MyDOMApi everywhere but `Marionette.View`
+Mn.View.setDomApi(Mn.DomApi);
 ```
 
-This would need to be applied to `CollectionView`, `Region` and `TemplateCache`.
+## Providing Your Own DOM API
+
+To implement your own DOM API use `setDomApi`:
+
+```javascript
+var Mn = require('backbone.marionette');
+
+var MyDOMApi = require('./mydom');
+
+Mn.setDomApi(MyDOMApi);
+```
+
+You can also implement a different DOM API for a particular class:
+
+```javascript
+Mn.View.setDomApi(MyDOMApi);
+```
+
+`CollectionView`, `CompositeView`, `NextCollectionView`, `Region`, `TemplateCache`,
+and `View` all have `setDomApi`. Each extended class may have their own DOM API.
+
+Additionally a DOM API can be partially set:
+
+```javascript
+var MyView = Mn.View.extend();
+
+MyView.setDomApi({
+  setContents: function(el, html) {
+    el.innerHTML = html;
+  }
+});
+```
+
+### CollectionView `beforeEl(el, sibling)`
+
+The only DOM interaction not covered by the DOM API is `CollectionView.beforeEl`.
+That function should be overridden separately.
+
+Add `sibling` to the DOM immediately before the DOM node `el`. The `sibling`
+will be at the same level as `el`.
+
+```javascript
+// Current implementation
+Marionette.CollectionView.prototype.beforeEl = function(el, siblings) {
+  this.$(el).before(siblings);
+};
+```
 
 ### Backbone jQuery Integration
 

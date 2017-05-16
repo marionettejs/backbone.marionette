@@ -55,7 +55,7 @@ export default {
   },
 
   // Replace the contents of `el` with the HTML string of `html`
-  setContents(el, html, _$el = getEl(el)) {
+  setContents(el, html = '', _$el = getEl(el)) {
     _$el.html(html);
   },
 

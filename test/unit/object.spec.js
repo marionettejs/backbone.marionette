@@ -1,125 +1,174 @@
 describe('marionette object', function() {
 
   describe('when creating an object', function() {
+    let object;
+    let options;
 
     beforeEach(function() {
-      var Object = Marionette.Object.extend({
+      const Object = Marionette.Object.extend({
+        initialize(opts) {
+          this.bindEvents(opts.model, this.modelEvents);
+        },
+
         modelEvents: {
           'bar': 'onBar'
         },
 
-        initialize: function(options) {
-          this.bindEvents(options.model, this.modelEvents);
-        },
-
-        onBar: function() {}
+        onBar: this.sinon.stub()
       });
 
-      var model = new Backbone.Model();
-      this.options = {
-        model: model
+      this.sinon.spy(Object.prototype, '_initRadio');
+
+      const model = new Backbone.Model();
+
+      options = {
+        model,
+        channelName: 'foo',
+        radioEvents: {},
+        radioRequests: {}
       };
 
-      this.object = new Object(this.options);
-
-      this.fooHandler = sinon.spy();
-      this.object.on('foo', this.fooHandler);
-
-      this.barHandler = sinon.spy();
-      model.on('bar', this.barHandler);
-
-      this.object.trigger('foo', this.options);
-      model.trigger('bar', this.options);
+      object = new Object(options);
     });
 
-    it('should support triggering events on itself', function() {
-      expect(this.fooHandler).to.have.been.calledWith(this.options);
-    });
-
-    it('should support binding to evented objects', function() {
-      expect(this.barHandler).to.have.been.calledWith(this.options);
+    it('should merge the class options to the object', function() {
+      expect(object.channelName).to.equal(options.channelName);
+      expect(object.radioEvents).to.equal(options.radioEvents);
+      expect(object.radioRequests).to.equal(options.radioRequests);
     });
 
     it('should maintain a reference to the options', function() {
-      expect(this.object.options).to.deep.equal(this.options);
+      expect(object.options).to.deep.equal(options);
     });
 
     it('should have a cidPrefix', function() {
-      expect(this.object.cidPrefix).to.equal('mno');
+      expect(object.cidPrefix).to.equal('mno');
     });
 
     it('should have a cid', function() {
-      expect(this.object.cid).to.exist;
+      expect(object.cid).to.contain('mno');
+    });
+
+    it('should init the RadioMixin', function() {
+      expect(object._initRadio).to.have.been.called;
+    });
+
+    it('should support triggering events on itself', function() {
+      const fooHandler = this.sinon.spy();
+      object.on('foo', fooHandler);
+
+      object.trigger('foo', options);
+
+      expect(fooHandler).to.have.been.calledOnce.and.calledWith(options);
+    });
+
+    it('should support binding to evented objects', function() {
+      options.model.trigger('bar', options);
+
+      expect(object.onBar).to.have.been.calledOnce.and.calledWith(options);
     });
 
     it('should have `isDestroyed()` set to `false`', function() {
-      expect(this.object._isDestroyed).to.be.false;
-      expect(this.object.isDestroyed()).to.be.false;
+      expect(object.isDestroyed()).to.be.false;
     });
   });
 
   describe('when destroying a object', function() {
+    let object;
 
     beforeEach(function() {
-      this.object = new Marionette.Object();
+      const Object = Marionette.Object.extend({
+        onDestroy: this.sinon.stub()
+      });
 
-      sinon.spy(this.object, 'destroy');
-      this.beforeDestroyHandler = sinon.spy();
-      this.onDestroyHandler = sinon.spy();
-      this.object.on('before:destroy', this.beforeDestroyHandler);
-      this.object.on('destroy', this.onDestroyHandler);
-      this.object.destroy();
+      object = new Object();
+
+      this.sinon.spy(object, 'destroy');
     });
 
-    it('should hear the before:destroy event', function() {
-      expect(this.beforeDestroyHandler).to.have.been.calledOnce;
+    it('should trigger the before:destroy event', function() {
+      const onBeforeDestroyHandler = this.sinon.spy();
+      object.on('before:destroy', onBeforeDestroyHandler);
+
+      object.destroy('foo');
+
+      expect(onBeforeDestroyHandler).to.have.been.calledOnce.and.calledWith(object, 'foo');
+    });
+
+    it('should trigger the destroy events', function() {
+      object.destroy('foo');
+
+      expect(object.onDestroy).to.have.been.calledOnce.and.calledWith(object, 'foo');
     });
 
     it('should set `object.isDestroyed()` to `true`', function() {
-      expect(this.object._isDestroyed).to.be.true;
+      object.destroy();
+
+      expect(object.isDestroyed()).to.be.true;
     });
 
     it('should return the object', function() {
-      expect(this.object.destroy).to.have.returned(this.object);
+      object.destroy();
+
+      expect(object.destroy).to.have.returned(object);
     });
 
-    it('shouldn\'t pass any options to the onBeforeDestroy method', function() {
-      expect(this.beforeDestroyHandler).to.have.been.calledWith();
+    it('should stop listening to events after the destroy event', function() {
+      this.sinon.spy(object, 'stopListening');
+
+      object.destroy();
+
+      expect(object.stopListening).to.have.been.calledOnce.and.calledAfter(object.onDestroy);
     });
 
-    it('shouldn\'t pass any options to the onDestroy method', function() {
-      expect(this.onDestroyHandler).to.have.been.calledWith();
-    });
+    describe('when already destroyed', function() {
+      beforeEach(function() {
+        object.destroy();
+      });
 
-    it('should return intantly when calling destroy and its already destroyed', function() {
-      expect(this.object.destroy()).to.be.deep.equal(this.object);
+      it('should return the object', function() {
+        object.destroy();
+
+        expect(object.destroy).to.have.returned(object);
+      });
+
+      it('should not trigger any events', function() {
+        const onAllHandler = this.sinon.stub();
+        object.on('all', onAllHandler);
+
+        object.destroy();
+
+        expect(onAllHandler).to.not.have.been.called;
+      });
     });
   });
 
-  describe('when destroying a object with arguments', function() {
-
-    var destroyArgs = {
-      foo: 'bar'
-    };
+  // Testing internal use cases.
+  describe('when extending an object', function() {
+    let Object;
 
     beforeEach(function() {
-      this.object = new Marionette.Object();
-
-      this.sinon.spy(this.object, 'destroy');
-      this.beforeDestroyHandler = sinon.spy();
-      this.onDestroyHandler = sinon.spy();
-      this.object.on('before:destroy', this.beforeDestroyHandler);
-      this.object.on('destroy', this.onDestroyHandler);
-      this.object.destroy(destroyArgs);
+      Object = Marionette.Object.extend({
+        constructor(options) {
+          this.options = {};
+          this.cid = 'foo';
+          Marionette.Object.apply(this, arguments);
+        }
+      });
     });
 
-    it('should pass the arguments down to the onBeforeDestroy method', function() {
-      expect(this.beforeDestroyHandler)
-      .to.have.been.calledWithExactly(this.object, destroyArgs);
+    it('should not re-set the options', function() {
+      this.sinon.spy(Object.prototype, '_setOptions');
+
+      const object = new Object();
+
+      expect(object._setOptions).to.not.have.been.called;
     });
 
-    it('should pass the arguments down to the onDestroy method', function() {
-      expect(this.onDestroyHandler).to.have.been.calledWithExactly(this.object, destroyArgs);
+    it('should not re-set the cid', function() {
+      const object = new Object();
+
+      expect(object.cid).to.equal('foo');
     });
   });
 });

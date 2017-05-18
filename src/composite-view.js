@@ -145,7 +145,7 @@ const CompositeView = CollectionView.extend({
       if (selector.charAt(0) === '@' && containerView.ui) {
         container = containerView.ui[selector.substr(4)];
       } else {
-        container = this.Dom.getEl(selector, containerView.$el);
+        container = this.$(selector);
       }
 
       if (container.length <= 0) {

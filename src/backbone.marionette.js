@@ -105,7 +105,6 @@ Marionette.setDomApi = function(mixin) {
   CompositeView.setDomApi(mixin);
   NextCollectionView.setDomApi(mixin);
   Region.setDomApi(mixin);
-  TemplateCache.setDomApi(mixin);
   View.setDomApi(mixin);
 };
 

@@ -17,9 +17,11 @@ const ClassOptions = [
 // A Base Class that other Classes should descend from.
 // Object borrows many conventions and utilities from Backbone.
 const MarionetteObject = function(options) {
-  this._setOptions(options);
+  if (!this.hasOwnProperty('options')) {
+    this._setOptions(options);
+  }
   this.mergeOptions(options, ClassOptions);
-  this.cid = _.uniqueId(this.cidPrefix);
+  this._setCid();
   this._initRadio();
   this.initialize.apply(this, arguments);
 };
@@ -43,6 +45,11 @@ _.extend(MarionetteObject.prototype, Backbone.Events, CommonMixin, RadioMixin, {
   //this is a noop method intended to be overridden by classes that extend from this base
   initialize() {},
 
+  _setCid() {
+    if (this.cid) { return; }
+    this.cid = _.uniqueId(this.cidPrefix);
+  },
+
   destroy(...args) {
     if (this._isDestroyed) { return this; }
 
@@ -55,7 +62,7 @@ _.extend(MarionetteObject.prototype, Backbone.Events, CommonMixin, RadioMixin, {
     return this;
   },
 
-  triggerMethod: triggerMethod
+  triggerMethod
 });
 
 export default MarionetteObject;

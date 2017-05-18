@@ -2,8 +2,8 @@
 // --------------
 
 import _ from 'underscore';
+import Backbone from 'backbone';
 import MarionetteError from './error';
-import DomApi, { setDomApi } from './config/dom';
 
 // Manage templates stored in `<script>` blocks,
 // caching them for faster access.
@@ -15,7 +15,6 @@ const TemplateCache = function(templateId) {
 // caches from these method calls instead of creating
 // your own TemplateCache instances
 _.extend(TemplateCache, {
-  setDomApi,
 
   templateCaches: {},
 
@@ -58,7 +57,6 @@ _.extend(TemplateCache, {
 // template cache object to manage its own state
 // and know whether or not it has been loaded
 _.extend(TemplateCache.prototype, {
-  Dom: DomApi,
 
   // Internal method to load the template
   load(options) {
@@ -80,7 +78,7 @@ _.extend(TemplateCache.prototype, {
   // using a template-loader plugin as described here:
   // https://github.com/marionettejs/backbone.marionette/wiki/Using-marionette-with-requirejs
   loadTemplate(templateId, options) {
-    const $template = this.Dom.getEl(templateId);
+    const $template = Backbone.$(templateId);
 
     if (!$template.length) {
       throw new MarionetteError({

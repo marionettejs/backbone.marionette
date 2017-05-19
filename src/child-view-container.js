@@ -12,12 +12,16 @@ const Container = function(views) {
   _.each(views, _.bind(this.add, this));
 };
 
-emulateCollection(Container.prototype, '_views');
+emulateCollection(Container.prototype, '_getViews');
 
 // Container Methods
 // -----------------
 
 _.extend(Container.prototype, {
+
+  _getViews() {
+    return _.values(this._views);
+  },
 
   // Add a view to this container. Stores the view
   // by `cid` and makes it searchable by the model

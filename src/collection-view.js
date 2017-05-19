@@ -279,7 +279,7 @@ const CollectionView = Backbone.View.extend({
 
       // Get the DOM nodes in the same order as the models and
       // find the model that were children before but aren't in this new order.
-      const elsToReorder = children.reduce(function(viewEls, view) {
+      const elsToReorder = _.reduce(this.children._views, function(viewEls, view) {
         const index = _.indexOf(models, view.model);
 
         if (index === -1) {
@@ -583,7 +583,7 @@ const CollectionView = Backbone.View.extend({
 
     if (_.isObject(view)) {
       // update the indexes of views after this one
-      this.children.each((laterView) => {
+      _.each(this.children._views, (laterView) => {
         if (laterView._index >= view._index) {
           laterView._index += 1;
         }
@@ -678,7 +678,7 @@ const CollectionView = Backbone.View.extend({
     const findPosition = this.sort && (index < this.children.length - 1);
     if (findPosition) {
       // Find the view after this one
-      currentView = this.children.find((view) => {
+      currentView = _.find(this.children._views, (view) => {
         return view._index === index + 1;
       });
     }
@@ -718,7 +718,7 @@ const CollectionView = Backbone.View.extend({
     }
 
     this.triggerMethod('before:destroy:children', this);
-    this.children.each(_.bind(this._removeChildView, this));
+    _.each(this.children._views, _.bind(this._removeChildView, this));
     this.children._updateLength();
     this.triggerMethod('destroy:children', this);
   },

@@ -432,7 +432,7 @@ const CollectionView = Backbone.View.extend({
 
     this.triggerMethod('before:filter', this);
 
-    const filteredViews = this.children.partition(_.bind(viewFilter, this));
+    const filteredViews = _.partition(this.children._views, _.bind(viewFilter, this));
 
     this._detachChildren(filteredViews[1]);
 
@@ -651,7 +651,7 @@ const CollectionView = Backbone.View.extend({
     }
 
     this.triggerMethod('before:destroy:children', this);
-    this.children.each(_.bind(this._removeChildView, this));
+    _.each(this.children._views, _.bind(this._removeChildView, this));
     this.triggerMethod('destroy:children', this);
   }
 }, {

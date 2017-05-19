@@ -303,7 +303,7 @@ describe('item view', function() {
       this.view = new this.View();
       this.view.render();
 
-      this.removeSpy = this.sinon.spy(this.view, 'removeEl');
+      this.removeSpy = this.sinon.spy(this.view, '_removeElement');
       this.stopListeningSpy = this.sinon.spy(this.view, 'stopListening');
       this.triggerSpy = this.sinon.spy(this.view, 'trigger');
 

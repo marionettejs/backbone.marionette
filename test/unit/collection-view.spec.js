@@ -775,7 +775,7 @@ describe('collection view', function() {
 
       this.sinon.spy(this.childView, 'destroy');
       this.sinon.spy(this.collectionView, 'stopListening');
-      this.sinon.spy(this.collectionView, 'removeEl');
+      this.sinon.spy(this.collectionView, '_removeElement');
       this.sinon.spy(this.collectionView, 'someCallback');
       this.sinon.spy(this.collectionView, 'someViewCallback');
       this.sinon.spy(this.collectionView, 'destroy');
@@ -823,7 +823,7 @@ describe('collection view', function() {
     });
 
     it('should remove the views EL from the DOM', function() {
-      expect(this.collectionView.removeEl).to.have.been.called;
+      expect(this.collectionView._removeElement).to.have.been.called;
     });
 
     it('should call "onDestroy" if provided', function() {

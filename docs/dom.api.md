@@ -30,10 +30,6 @@ search. If `context` hasn't been set, then `getEl` should search the entire
 
 Detach `el` from the DOM without removing listeners.
 
-### `removeEl(el)`
-
-Remove `el` from the DOM, removing listeners.
-
 ### `replaceEl(newEl, oldEl)`
 
 Remove `oldEl` from the DOM and put `newEl` in its place.

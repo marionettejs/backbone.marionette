@@ -34,12 +34,8 @@ export default {
   },
 
   // Detach `el` from the DOM without removing listeners
-  detachEl(el, _$el = getEl(el), _useRemove) {
-    if (_useRemove) {
-      _$el.remove();
-    } else {
-      _$el.detach();
-    }
+  detachEl(el, _$el = getEl(el)) {
+    _$el.detach();
   },
 
   // Remove `oldEl` from the DOM and put `newEl` in its place
@@ -58,7 +54,7 @@ export default {
   },
 
   // Replace the contents of `el` with the HTML string of `html`
-  setContents(el, html = '', _$el = getEl(el)) {
+  setContents(el, html, _$el = getEl(el)) {
     _$el.html(html);
   },
 

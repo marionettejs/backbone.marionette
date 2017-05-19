@@ -13,9 +13,9 @@ const methods = ['forEach', 'each', 'map', 'find', 'detect', 'filter',
 const emulateCollection = function(object, listProperty) {
   _.each(methods, function(method) {
     object[method] = function() {
-      const list = _.values(_.result(this, listProperty));
-      const args = [list].concat(_.toArray(arguments));
-      return _[method].apply(_, args);
+      const list = _.result(this, listProperty);
+      const args = Array.prototype.slice.call(arguments);
+      return _[method].apply(_, [list].concat(args));
     };
   });
 };

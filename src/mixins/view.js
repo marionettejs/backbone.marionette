@@ -128,11 +128,8 @@ const ViewMixin = {
     // unbind UI elements
     this.unbindUIElements();
 
-    // undelegate events and triggers
-    this.undelegateEvents();
-
     // remove the view from the DOM
-    this.removeElement();
+    this._removeElement();
 
     if (shouldTriggerDetach) {
       this._isAttached = false;
@@ -155,8 +152,10 @@ const ViewMixin = {
     return this;
   },
 
-  removeElement() {
-    this.Dom.detachEl(this.el, this.$el, true);
+  // Equates to this.$el.remove
+  _removeElement() {
+    this.$el.off().removeData();
+    this.Dom.detachEl(this.el, this.$el);
   },
 
   bindUIElements() {

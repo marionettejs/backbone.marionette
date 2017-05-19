@@ -34,13 +34,12 @@ export default {
   },
 
   // Detach `el` from the DOM without removing listeners
-  detachEl(el, _$el = getEl(el)) {
-    _$el.detach();
-  },
-
-  // Remove `el` from the DOM, removing listeners
-  removeEl(el, _$el = getEl(el)) {
-    _$el.remove();
+  detachEl(el, _$el = getEl(el), _useRemove) {
+    if (_useRemove) {
+      _$el.remove();
+    } else {
+      _$el.detach();
+    }
   },
 
   // Remove `oldEl` from the DOM and put `newEl` in its place

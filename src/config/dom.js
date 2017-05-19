@@ -20,13 +20,17 @@ export default {
     return document.createDocumentFragment();
   },
 
-  // Lookup the `selector` string within the DOM node for `context`
-  getEl(el, context) {
-    if (context) {
-      return Backbone.$(el, context);
-    }
+  // Lookup the `selector` string
+  // Selector may also be a DOM element
+  // Returns an array-like object of nodes
+  getEl(selector) {
+    return getEl(selector);
+  },
 
-    return getEl(el);
+  // Finds the `selector` string with the el
+  // Returns an array-like object of nodes
+  findEl(el, selector, _$el = getEl(el)) {
+    return _$el.find(selector);
   },
 
   // Detach `el` from the DOM without removing listeners

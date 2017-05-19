@@ -185,7 +185,14 @@ const Region = MarionetteObject.extend({
   // Override this method to change how the region finds the DOM element that it manages. Return
   // a jQuery selector object scoped to a provided parent el or the document if none exists.
   getEl(el) {
-    return this.Dom.getEl(el, _.result(this, 'parentEl'));
+    const context = _.result(this, 'parentEl');
+
+    if (context && _.isString(el)) {
+      const $el = this.Dom.findEl(context, el);
+      if ($el.length) { return $el; }
+    }
+
+    return this.Dom.getEl(el);
   },
 
   _replaceEl(view) {

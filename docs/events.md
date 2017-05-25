@@ -467,7 +467,7 @@ var ParentView = Marionette.CollectionView.extend({
   }
 });
 
-var GrantParentView = Marionette.View.extend({
+var GrandParentView = Marionette.View.extend({
   regions: {
     list: '.list'
   },

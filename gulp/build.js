@@ -12,12 +12,26 @@ import babel from 'rollup-plugin-babel';
 import json from 'rollup-plugin-json';
 import preset from 'babel-preset-es2015';
 
-import banner from  './_banner';
-import {name} from '../package.json';
+import banner from './_banner';
+import pkg from '../package.json';
 
 const srcPath = 'src/';
 
-function _generate(bundle){
+function makeESModule(bundle) {
+  bundle.write({
+    format: 'es',
+    dest: pkg.module,
+    sourceMap: true,
+    banner: banner,
+    globals: {
+      'backbone': 'Backbone',
+      'underscore': '_',
+      'backbone.radio': 'Backbone.Radio'
+    }
+  });
+}
+
+function generateBundle(bundle) {
   return bundle.generate({
     format: 'umd',
     moduleName: 'Marionette = global[\'Mn\']',
@@ -31,9 +45,11 @@ function _generate(bundle){
   });
 }
 
-function bundle(opts) {
+function makeBundle(buildPath) {
+  const buildFile = buildPath + pkg.name + '.js';
+
   return rollup({
-    entry: srcPath + name + '.js',
+    entry: srcPath + pkg.name + '.js',
     external: ['underscore', 'backbone', 'backbone.radio'],
     plugins: [
       json(),
@@ -44,22 +60,26 @@ function bundle(opts) {
       })
     ]
   }).then(bundle => {
-    return _generate(bundle);
+    // Only build the ES6 module if this is the main build
+    if (buildFile === pkg.main) {
+      makeESModule(bundle);
+    }
+    return generateBundle(bundle);
   }).then(gen => {
     gen.code += '\n//# sourceMappingURL=' + gen.map.toUrl();
     return gen;
   });
 }
 
-function build(buildPath){
-  return bundle().then(gen => {
-    return file(name + '.js', gen.code, {src: true})
+function build(buildPath) {
+  return makeBundle(buildPath).then(gen => {
+    return file(pkg.name + '.js', gen.code, {src: true})
       .pipe(plumber())
       .pipe(sourcemaps.init({loadMaps: true}))
       .pipe(sourcemaps.write('./'))
       .pipe(gulp.dest(buildPath))
       .pipe(filter(['**', '!**/*.js.map']))
-      .pipe(rename(name + '.min.js'))
+      .pipe(rename(pkg.name + '.min.js'))
       .pipe(sourcemaps.init({loadMaps: true}))
       .pipe(uglify({
         preserveComments: 'license'

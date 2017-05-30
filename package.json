@@ -4,7 +4,7 @@
   "version": "3.3.1",
   "homepage": "https://marionettejs.com/",
   "main": "lib/backbone.marionette.js",
-  "module": "lib/backbone.marionette.es.js",
+  "module": "lib/backbone.marionette.esm.js",
   "keywords": [
     "backbone",
     "plugin",

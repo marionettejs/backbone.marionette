@@ -17,17 +17,19 @@ import pkg from '../package.json';
 
 const srcPath = 'src/';
 
+const rollupGlobals = {
+  'backbone': 'Backbone',
+  'underscore': '_',
+  'backbone.radio': 'Backbone.Radio'
+};
+
 function makeESModule(bundle) {
   bundle.write({
     format: 'es',
     dest: pkg.module,
     sourceMap: true,
     banner: banner,
-    globals: {
-      'backbone': 'Backbone',
-      'underscore': '_',
-      'backbone.radio': 'Backbone.Radio'
-    }
+    globals: rollupGlobals
   });
 }
 
@@ -37,11 +39,7 @@ function generateBundle(bundle) {
     moduleName: 'Marionette = global[\'Mn\']',
     sourceMap: true,
     banner: banner,
-    globals: {
-      'backbone': 'Backbone',
-      'underscore': '_',
-      'backbone.radio': 'Backbone.Radio'
-    }
+    globals: rollupGlobals
   });
 }
 

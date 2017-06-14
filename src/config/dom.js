@@ -58,7 +58,7 @@ export default {
     _$el.html(html);
   },
 
-  // Takes the DOM node `el` and appends the rendered `contents`
+  // Takes the DOM node `el` and appends the DOM node `contents`
   // to the end of the element's contents.
   appendContents(el, contents, {_$el = getEl(el), _$contents = getEl(contents)} = {}) {
     _$el.append(_$contents);

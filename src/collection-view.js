@@ -296,9 +296,15 @@ const CollectionView = Backbone.View.extend({
 
       this.triggerMethod('before:reorder', this);
 
+      const elBuffer = this.Dom.createBuffer();
+
+      _.each(elsToReorder, (el) => {
+        this.Dom.appendContents(elBuffer, el);
+      });
+
       // Since append moves elements that are already in the DOM, appending the elements
       // will effectively reorder them.
-      this._appendReorderedChildren(elsToReorder);
+      this._appendReorderedChildren(elBuffer);
 
       // remove any views that have been filtered out
       this._removeChildModels(filteredOutModels);

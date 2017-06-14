@@ -7,7 +7,7 @@ jQuery and integrate with the DOM using a custom api.
 
 ## API Methods
 
-The DOM API manages the DOM on behalf of each view type, `Region`, and `TemplateCache`.
+The DOM API manages the DOM on behalf of each view type and `Region`.
 It defines the methods that actually attach and remove views and children.
 
 [The default API](#the-default-api) depends on Backbone's jQuery `$` object however it does not
@@ -19,12 +19,14 @@ API. You will, however, [need to also handle Backbone's jQuery integration](#bac
 Returns a new HTML DOM node instance. The resulting node can be passed into the
 other DOM functions.
 
-### `getEl(selector, context)`
+### `getEl(selector)`
 
-Lookup the `selector` string within the DOM node for `context`. The optional
-`context` argument will come in as a DOM Node reference to run the `selector`
-search. If `context` hasn't been set, then `getEl` should search the entire
-`document` for the `selector`.
+Lookup the `selector` string withing the DOM. The `selector` may also be a DOM element.
+It should return an array-like object of the node.
+
+### `findEl(el, selector)`
+
+Lookup the `selector` string within the DOM node `el`. It should return an array-like object of nodes.
 
 ### `detachEl(el)`
 
@@ -37,11 +39,11 @@ Remove `oldEl` from the DOM and put `newEl` in its place.
 ### `setContents(el, html)`
 
 Replace the contents of `el` with the HTML string of `html`. Unlike other DOM
-functions, this takes a literal string for its second argument.
+functions, this only takes a literal string for its second argument.
 
 ### `appendContents(el, contents)`
 
-Takes the DOM node `el` and appends the rendered `contents` to the end of the
+Takes the DOM node `el` and appends the DOM node `contents` to the end of the
 element's contents.
 
 ### `detachContents(el)`
@@ -84,8 +86,8 @@ You can also implement a different DOM API for a particular class:
 Mn.View.setDomApi(MyDOMApi);
 ```
 
-`CollectionView`, `CompositeView`, `NextCollectionView`, `Region`, `TemplateCache`,
-and `View` all have `setDomApi`. Each extended class may have their own DOM API.
+`CollectionView`, `CompositeView`, `NextCollectionView`, `Region`, and `View`
+all have `setDomApi`. Each extended class may have their own DOM API.
 
 Additionally a DOM API can be partially set:
 

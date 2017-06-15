@@ -43,7 +43,8 @@ const Application = MarionetteObject.extend({
 
   showView(view, ...args) {
     const region = this.getRegion();
-    return region.show(view, ...args);
+    region.show(view, ...args);
+    return view;
   },
 
   getView() {

@@ -147,7 +147,8 @@ export default {
 
   showChildView(name, view, ...args) {
     const region = this.getRegion(name);
-    return region.show(view, ...args);
+    region.show(view, ...args);
+    return view;
   },
 
   detachChildView(name) {

@@ -9,6 +9,7 @@ import monitorViewEvents from './common/monitor-view-events';
 import ViewMixin from './mixins/view';
 import RegionsMixin from './mixins/regions';
 import Renderer from './config/renderer';
+import { setDomApi } from './config/dom';
 
 const ClassOptions = [
   'behaviors',
@@ -188,7 +189,7 @@ const View = Backbone.View.extend({
   // }
   // ```
   attachElContent(html) {
-    this.setInnerContent(this.el, html);
+    this.Dom.setContents(this.el, html, this.$el);
 
     return this;
   },
@@ -208,7 +209,9 @@ const View = Backbone.View.extend({
   // Sets the renderer for the Marionette.View class
   setRenderer(renderer) {
     this.prototype._renderHtml = renderer;
-  }
+  },
+
+  setDomApi
 });
 
 _.extend(View.prototype, ViewMixin, RegionsMixin);

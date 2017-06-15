@@ -1,5 +1,6 @@
 {
   "globals": {
+    "chai": true,
     "sinon": true,
     "spy": true,
     "expect": true,

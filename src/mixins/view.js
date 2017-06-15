@@ -7,10 +7,10 @@ import { triggerMethod } from '../common/trigger-method';
 import BehaviorsMixin from './behaviors';
 import CommonMixin from './common';
 import DelegateEntityEventsMixin from './delegate-entity-events';
-import DomMixin from './dom';
 import TriggersMixin from './triggers';
 import UIMixin from './ui';
 import { isEnabled } from '../config/features';
+import DomApi from '../config/dom';
 
 // MixinOptions
 // - behaviors
@@ -24,6 +24,8 @@ import { isEnabled } from '../config/features';
 
 
 const ViewMixin = {
+  Dom: DomApi,
+
   supportsRenderLifecycle: true,
   supportsDestroyLifecycle: true,
 
@@ -127,7 +129,7 @@ const ViewMixin = {
     this.unbindUIElements();
 
     // remove the view from the DOM
-    this.removeEl(this.el);
+    this._removeElement();
 
     if (shouldTriggerDetach) {
       this._isAttached = false;
@@ -148,6 +150,12 @@ const ViewMixin = {
     this.stopListening();
 
     return this;
+  },
+
+  // Equates to this.$el.remove
+  _removeElement() {
+    this.$el.off().removeData();
+    this.Dom.detachEl(this.el, this.$el);
   },
 
   bindUIElements() {
@@ -221,6 +229,6 @@ const ViewMixin = {
   }
 };
 
-_.extend(ViewMixin, DomMixin, BehaviorsMixin, CommonMixin, DelegateEntityEventsMixin, TriggersMixin, UIMixin);
+_.extend(ViewMixin, BehaviorsMixin, CommonMixin, DelegateEntityEventsMixin, TriggersMixin, UIMixin);
 
 export default ViewMixin;

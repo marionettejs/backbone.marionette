@@ -41,7 +41,7 @@ describe('view mixin', function() {
 
       this.view = new Marionette.View();
 
-      sinon.spy(this.view, 'removeEl');
+      sinon.spy(this.view, '_removeElement');
       sinon.spy(this.view, 'destroy');
 
       this.onDestroyStub = sinon.stub();
@@ -64,7 +64,7 @@ describe('view mixin', function() {
     });
 
     it('should remove the view', function() {
-      expect(this.view.removeEl).to.have.been.calledOnce;
+      expect(this.view._removeElement).to.have.been.calledOnce;
     });
 
     it('should set the view _isDestroyed to true', function() {
@@ -105,7 +105,7 @@ describe('view mixin', function() {
     beforeEach(function() {
       this.view = new Marionette.View();
 
-      this.removeSpy = sinon.spy(this.view, 'removeEl');
+      this.removeSpy = sinon.spy(this.view, '_removeElement');
 
       this.destroyStub = sinon.stub();
       this.view.on('destroy', this.destroyStub);
@@ -136,7 +136,7 @@ describe('view mixin', function() {
 
       this.view = new Marionette.View();
 
-      this.removeSpy = sinon.spy(this.view, 'removeEl');
+      this.removeSpy = sinon.spy(this.view, '_removeElement');
 
       this.destroyStub = sinon.stub();
       this.view.on('destroy', this.destroyStub);
@@ -236,7 +236,7 @@ describe('view mixin', function() {
     beforeEach(function() {
       this.view = new Marionette.View();
 
-      this.removeSpy = sinon.spy(this.view, 'removeEl');
+      this.removeSpy = sinon.spy(this.view, '_removeElement');
       this.destroyStub = sinon.stub();
       this.view.on('destroy', this.destroyStub);
 

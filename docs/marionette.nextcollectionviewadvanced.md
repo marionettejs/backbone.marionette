@@ -400,13 +400,14 @@ cv.removeFilter({ preventRender: true });
 The `sort` method will loop through the `NextCollectionView` `children`
 and sort them with the [`viewComparator`](#nextcollectionviews-viewcomparator).
 By default, if a `viewComparator` is not set, the `NextCollectionView` will sort
-the views by the order of the models in the collection.
+the views by the order of the models in the collection. If set to `false` view
+sorting will be disabled.
 This method is also triggered internally when rendering and `before:sort` and
 `sort` events will be triggered before and after sorting.
 
 By default the `NextCollectionView` will maintain a sorted collection's order
-in the DOM. This behavior can be disabled by specifying `{sort: false}` on
-initialize. The `sort` flag cannot be changed after instantiation.
+in the DOM. This behavior can be disabled by specifying `{sortWithCollection: false}`
+on initialize.
 
 ### NextCollectionView's `viewComparator`
 

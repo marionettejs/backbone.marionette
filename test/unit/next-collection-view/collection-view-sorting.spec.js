@@ -53,7 +53,51 @@ describe('NextCollectionView - Sorting', function() {
       });
     });
 
-    describe('when viewComparator is falsy', function() {
+    describe('when viewComparator is false', function() {
+      let myCollectionView;
+
+      beforeEach(function() {
+        myCollectionView = new MyCollectionView({
+          viewComparator: false,
+          collection
+        });
+
+        myCollectionView.render();
+      });
+
+
+      it('should not sort the collection', function() {
+        expect(myCollectionView.$el.text()).to.equal(noSortText);
+      });
+
+      it('should not call "before:sort" event', function() {
+        expect(myCollectionView.onBeforeSort).to.not.be.called;
+      });
+
+      it('should not call "sort" event', function() {
+        expect(myCollectionView.onSort).to.not.be.called;
+      });
+
+      describe('when resorting the collection', function() {
+        beforeEach(function() {
+          this.sinon.spy(myCollectionView, 'sort');
+          collection.comparator = 'sort';
+          collection.sort();
+        });
+
+        it('should not call sort', function() {
+          expect(myCollectionView.sort).to.not.be.called;
+        });
+
+        it('should not resort the children on sort', function() {
+          myCollectionView.sort();
+
+          expect(myCollectionView.$el.text()).to.equal(noSortText);
+        });
+      });
+    });
+
+    describe('when viewComparator is falsy but not false', function() {
       let myCollectionView;
 
       beforeEach(function() {

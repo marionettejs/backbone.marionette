@@ -89,7 +89,7 @@ const CollectionView = Backbone.View.extend({
   // Internal method. This checks for any changes in the order of the collection.
   // If the index of any view doesn't match, it will re-sort.
   _onCollectionSort() {
-    if (!this.sortWithCollection) {
+    if (!this.sortWithCollection || this.viewComparator === false) {
       return;
     }
 
@@ -362,6 +362,8 @@ const CollectionView = Backbone.View.extend({
 
   // Sorts views by viewComparator and sets the children to the new order
   _sortChildren() {
+    if (this.viewComparator === false) { return; }
+
     this.triggerMethod('before:sort', this);
 
     let viewComparator = this.getComparator();

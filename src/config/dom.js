@@ -1,6 +1,6 @@
 // DomApi
 //  ---------
-
+import _ from 'underscore';
 import Backbone from 'backbone';
 
 // Performant method for returning the jQuery instance

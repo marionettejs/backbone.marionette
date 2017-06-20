@@ -36,9 +36,10 @@ function makeESModule(bundle) {
 function generateBundle(bundle) {
   return bundle.generate({
     format: 'umd',
-    moduleName: 'Marionette = global[\'Mn\']',
+    moduleName: 'Marionette',
     sourceMap: true,
     banner: banner,
+    footer: 'this.Marionette && this.Mn = this.Marionette;',
     globals: rollupGlobals
   });
 }

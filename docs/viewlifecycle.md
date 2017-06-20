@@ -31,6 +31,7 @@ their children.
 * [`Region`s and the View Lifecycle](#regions-and-the-view-lifecycle)
   * [Show View Events](#show-view-events)
   * [Empty Region Events](#empty-region-events)
+* [Advanced Event Settings](#advanced-event-settings)
 
 ## `View` Lifecycle
 Marionette views define a number of events during the creation and destruction
@@ -896,3 +897,21 @@ destroyed.
 
 Fired after the entire destruction process is complete. At this point, the view
 has been removed from the DOM completely.
+
+
+## Advanced Event Settings
+Marionette is able to trigger `attach`/`detach` events down the view tree along with
+triggering the `dom:refresh`/`dom:remove` events because of the view event monitor.
+This monitor starts when a view is created or shown in a region (to handle non-Marionette views).
+
+In some cases it may be a useful performance improvement to disable this functionality.
+Doing so is as easy as setting `monitorViewEvents: false` on the view class.
+
+```javascript
+const NonMonitoredView = Mn.View.extend({
+  monitorViewEvents: false
+});
+```
+
+**Important Note**: Disabling the view monitor will break the monitor generated
+events for this view _and all child views_ of this view. Disabling should be done carefully.

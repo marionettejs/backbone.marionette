@@ -27,7 +27,7 @@ export function destroyView(view) {
     triggerMethodOn(view, 'before:destroy', view);
   }
 
-  const shouldTriggerDetach = !!view._isAttached;
+  const shouldTriggerDetach = view._isAttached && !view._shouldDisableEvents;
 
   if (shouldTriggerDetach) {
     triggerMethodOn(view, 'before:detach', view);

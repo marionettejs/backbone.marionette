@@ -549,6 +549,51 @@ describe('next CollectionView Children', function() {
           });
         });
       });
+
+      describe('when the collectionView is not monitoring events', function() {
+        beforeEach(function() {
+          const myRegion = new Region({ el: '#fixtures' });
+          myRegion.show(myCollectionView);
+          myCollectionView.monitorViewEvents = false;
+          myCollectionView.addChildView(childView);
+        });
+
+        it('should not trigger "before:attach" event on the childView', function() {
+          expect(childView.onBeforeAttach).to.not.be.called;
+        });
+
+        it('should not trigger "attach" event on the childView', function() {
+          expect(childView.onAttach).to.not.be.called;
+        });
+
+        describe('when removing the childview', function() {
+          beforeEach(function() {
+            myCollectionView.removeChildView(childView);
+          });
+
+          it('should not trigger "before:detach" event on the childView', function() {
+            expect(childView.onBeforeDetach).to.not.be.called;
+          });
+
+          it('should not trigger "detach" event on the childView', function() {
+            expect(childView.onDetach).to.not.be.called;
+          });
+        });
+
+        describe('when detaching the childview', function() {
+          beforeEach(function() {
+            myCollectionView.detachChildView(childView);
+          });
+
+          it('should not trigger "before:detach" event on the childView', function() {
+            expect(childView.onBeforeDetach).to.not.be.called;
+          });
+
+          it('should not trigger "detach" event on the childView', function() {
+            expect(childView.onDetach).to.not.be.called;
+          });
+        });
+      });
     });
 
     describe('when the collectionView is not attached', function() {

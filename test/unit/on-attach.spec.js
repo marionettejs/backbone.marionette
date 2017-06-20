@@ -70,6 +70,64 @@ describe('onAttach', function() {
     region = new Marionette.Region({el: regionEl});
   });
 
+  describe('when showing a view into a region of a view without events monitored', function() {
+    let layoutView;
+    let view;
+
+    beforeEach(function() {
+      const LayoutView = Marionette.View.extend({
+        monitorViewEvents: false,
+        el: '#region',
+        template: _.template('<div id="child"></div>'),
+        regions: {
+          child: '#child'
+        }
+      });
+
+      layoutView = new LayoutView();
+      layoutView.render();
+
+      view = new ChildView();
+      layoutView.showChildView('child', view);
+    });
+
+    it('should not trigger onBeforeAttach on the view', function() {
+      expect(view.onBeforeAttach).to.not.be.called;
+    });
+
+    it('should not trigger onAttach on the view', function() {
+      expect(view.onAttach).to.not.be.called;
+    });
+
+    describe('when destroying the view', function() {
+      beforeEach(function() {
+        layoutView.getRegion('child').destroyView(view);
+      });
+
+      it('should not trigger onBeforeDetach on the view', function() {
+        expect(view.onBeforeDetach).to.not.be.called;
+      });
+
+      it('should not trigger onDetach on the view', function() {
+        expect(view.onDetach).to.not.be.called;
+      });
+    });
+
+    describe('when detaching the view', function() {
+      beforeEach(function() {
+        layoutView.getRegion('child').detachView();
+      });
+
+      it('should not trigger onBeforeDetach on the view', function() {
+        expect(view.onBeforeDetach).to.not.be.called;
+      });
+
+      it('should not trigger onDetach on the view', function() {
+        expect(view.onDetach).to.not.be.called;
+      });
+    });
+  });
+
   describe('when showing a view into a region not attached to the document', function() {
     let detachedRegion;
     let view;

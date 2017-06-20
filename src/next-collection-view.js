@@ -505,7 +505,7 @@ const CollectionView = Backbone.View.extend({
   },
 
   _detachChildView(view) {
-    const shouldTriggerDetach = !!view._isAttached;
+    const shouldTriggerDetach = view._isAttached && this.monitorViewEvents !== false;
     if (shouldTriggerDetach) {
       triggerMethodOn(view, 'before:detach', view);
     }
@@ -541,7 +541,7 @@ const CollectionView = Backbone.View.extend({
   },
 
   _attachChildren(els, views) {
-    const shouldTriggerAttach = !!this._isAttached;
+    const shouldTriggerAttach = this._isAttached && this.monitorViewEvents !== false;
 
     views = shouldTriggerAttach ? views : [];
 
@@ -637,6 +637,7 @@ const CollectionView = Backbone.View.extend({
       return;
     }
 
+    view._shouldDisableEvents = this.monitorViewEvents === false;
     destroyView(view);
   },
 

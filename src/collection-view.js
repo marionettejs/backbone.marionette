@@ -76,7 +76,7 @@ const CollectionView = Backbone.View.extend({
   },
 
   _endBuffering() {
-    const shouldTriggerAttach = !!this._isAttached;
+    const shouldTriggerAttach = this._isAttached && this.monitorViewEvents !== false;
     const triggerOnChildren = shouldTriggerAttach ? this._getImmediateChildren() : [];
 
     this._isBuffering = false;
@@ -182,6 +182,7 @@ const CollectionView = Backbone.View.extend({
     this.triggerMethod('before:remove:child', this, view);
 
     this.children._remove(view);
+    view._shouldDisableEvents = this.monitorViewEvents === false;
     destroyView(view);
 
     this.stopListening(view);
@@ -600,7 +601,7 @@ const CollectionView = Backbone.View.extend({
   _attachView(view, index) {
     // Only trigger attach if already attached and not buffering,
     // otherwise _endBuffering() or Region#show() handles this.
-    const shouldTriggerAttach = !view._isAttached && !this._isBuffering && this._isAttached;
+    const shouldTriggerAttach = !view._isAttached && !this._isBuffering && this._isAttached && this.monitorViewEvents !== false;
 
     if (shouldTriggerAttach) {
       triggerMethodOn(view, 'before:attach', view);

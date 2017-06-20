@@ -104,8 +104,13 @@ const Region = MarionetteObject.extend({
     parentView._proxyChildViewEvents(view);
   },
 
+  // If the regions parent view is not monitoring its attach/detach events
+  _shouldDisableMonitoring() {
+    return this._parentView && this._parentView.monitorViewEvents === false;
+  },
+
   _attachView(view, options = {}) {
-    const shouldTriggerAttach = !view._isAttached && isNodeAttached(this.el);
+    const shouldTriggerAttach = !view._isAttached && isNodeAttached(this.el) && !this._shouldDisableMonitoring();
     const shouldReplaceEl = typeof options.replaceElement === 'undefined' ? !!_.result(this, 'replaceElement') : !!options.replaceElement;
 
     if (shouldTriggerAttach) {
@@ -296,6 +301,7 @@ const Region = MarionetteObject.extend({
       return view;
     }
 
+    view._shouldDisableEvents = this._shouldDisableMonitoring();
     destroyView(view);
     return view;
   },
@@ -319,7 +325,7 @@ const Region = MarionetteObject.extend({
   },
 
   _detachView(view) {
-    const shouldTriggerDetach = !!view._isAttached;
+    const shouldTriggerDetach = view._isAttached && !this._shouldDisableMonitoring();;
     const shouldRestoreEl = this._isReplaced;
     if (shouldTriggerDetach) {
       triggerMethodOn(view, 'before:detach', view);

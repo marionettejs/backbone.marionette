@@ -5,12 +5,7 @@
     "node": true
   },
   "globals": {
-    "define"     : true,
-    "$"          : true,
-    "jQuery"     : true,
-    "_"          : true,
-    "Backbone"   : true,
-    "Marionette" : true
+    "define"     : true
   },
   "rules": {
     "array-bracket-spacing": [ 2, "never" ],

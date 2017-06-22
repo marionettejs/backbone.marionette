@@ -185,13 +185,10 @@ const View = Backbone.View.extend({
   // ```js
   // attachElContent(html) {
   //   this.el.innerHTML = html;
-  //   return this;
   // }
   // ```
   attachElContent(html) {
     this.Dom.setContents(this.el, html, this.$el);
-
-    return this;
   },
 
   // called by ViewMixin destroy

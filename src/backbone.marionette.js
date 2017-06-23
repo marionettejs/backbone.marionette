@@ -88,4 +88,6 @@ Marionette.setRenderer = function(renderer) {
   View.setRenderer(renderer);
 };
 
+export {View, CompositeView, CollectionView, NextCollectionView, Region, Behavior,
+  Application, AppRouter, Renderer, TemplateCache}
 export default Marionette;

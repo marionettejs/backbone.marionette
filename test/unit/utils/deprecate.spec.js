@@ -1,37 +1,63 @@
-describe('Marionette.deprecate', function() {
+import deprecate from '../../../src/utils/deprecate';
+
+import Marionette from '../../../src/backbone.marionette';
+
+describe('deprecate', function() {
   beforeEach(function() {
     Marionette.DEV_MODE = true;
-    this.sinon.spy(Marionette.deprecate, '_warn');
-    this.sinon.stub(Marionette.deprecate, '_console', {
-      warn: this.sinon.stub()
+    this.sinon.spy(deprecate, '_warn');
+    this.sinon.stub(deprecate, '_console', {
+      warn: this.sinon.stub(),
+      log: this.sinon.stub()
     });
-    Marionette.deprecate._cache = {};
+    deprecate._cache = {};
   });
 
   afterEach(function() {
     Marionette.DEV_MODE = false;
   });
 
-  describe('Marionette.deprecate._warn', function() {
-    beforeEach(function() {
-      Marionette.deprecate._warn('foo');
+  describe('#_warn', function() {
+    it('should `console.warn` the message', function() {
+      deprecate._warn('foo');
+      expect(deprecate._console.warn)
+        .to.have.been.calledOnce
+        .and.calledOn(deprecate._console)
+        .and.calledWith('foo');
     });
 
-    it('should `console.warn` the message', function() {
-      expect(Marionette.deprecate._console.warn)
-        .to.have.been.calledOnce
-        .and.calledOn(Marionette.deprecate._console)
-        .and.calledWith('foo');
+    describe('when `console.warn` does not exist', function() {
+      beforeEach(function() {
+        deprecate._console.warn = null;
+      });
+
+      it('should `console.log` the message', function() {
+        deprecate._warn('foo');
+        expect(deprecate._console.log)
+          .to.have.been.calledOnce
+          .and.calledOn(deprecate._console)
+          .and.calledWith('foo');
+      });
+
+      describe('when `console.log` does not exist', function() {
+        it('should call `_.noop`', function() {
+          deprecate._console.log = null;
+          this.sinon.spy(_, 'noop');
+          deprecate._warn('foo');
+
+          expect(_.noop).to.have.been.calledOnce;
+        });
+      });
     });
   });
 
   describe('when calling with a message', function() {
     beforeEach(function() {
-      Marionette.deprecate('foo');
+      deprecate('foo');
     });
 
     it('should `console.warn` the message', function() {
-      expect(Marionette.deprecate._warn)
+      expect(deprecate._warn)
         .to.have.been.calledOnce
         .and.calledWith('Deprecation warning: foo');
     });
@@ -39,14 +65,14 @@ describe('Marionette.deprecate', function() {
 
   describe('when calling with an object', function() {
     beforeEach(function() {
-      Marionette.deprecate({
+      deprecate({
         prev: 'foo',
         next: 'bar'
       });
     });
 
     it('should `console.warn` the message', function() {
-      expect(Marionette.deprecate._warn)
+      expect(deprecate._warn)
         .to.have.been.calledOnce
         .and.calledWith('Deprecation warning: foo is going to be removed in the future. Please use bar instead.');
     });
@@ -54,7 +80,7 @@ describe('Marionette.deprecate', function() {
 
   describe('when calling with an object with a url', function() {
     beforeEach(function() {
-      Marionette.deprecate({
+      deprecate({
         prev: 'foo',
         next: 'bar',
         url: 'baz'
@@ -62,7 +88,7 @@ describe('Marionette.deprecate', function() {
     });
 
     it('should `console.warn` the message', function() {
-      expect(Marionette.deprecate._warn)
+      expect(deprecate._warn)
         .to.have.been.calledOnce
         .and.calledWith('Deprecation warning: foo is going to be removed in the future. Please use bar instead. See: baz');
     });
@@ -70,11 +96,11 @@ describe('Marionette.deprecate', function() {
 
   describe('when calling with a message and a falsy test', function() {
     beforeEach(function() {
-      Marionette.deprecate('bar', false);
+      deprecate('bar', false);
     });
 
     it('should `console.warn` the message', function() {
-      expect(Marionette.deprecate._warn)
+      expect(deprecate._warn)
         .to.have.been.calledOnce
         .and.calledWith('Deprecation warning: bar');
     });
@@ -82,22 +108,22 @@ describe('Marionette.deprecate', function() {
 
   describe('when calling with a message and a truthy test', function() {
     beforeEach(function() {
-      Marionette.deprecate('Foo', true);
+      deprecate('Foo', true);
     });
 
     it('should not `console.warn` the message', function() {
-      expect(Marionette.deprecate._warn).not.to.have.been.called;
+      expect(deprecate._warn).not.to.have.been.called;
     });
   });
 
   describe('when calling with the same message twice', function() {
     beforeEach(function() {
-      Marionette.deprecate('baz');
-      Marionette.deprecate('baz');
+      deprecate('baz');
+      deprecate('baz');
     });
 
     it('should `console.warn` the message', function() {
-      expect(Marionette.deprecate._warn)
+      expect(deprecate._warn)
         .to.have.been.calledOnce
         .and.calledWith('Deprecation warning: baz');
     });
@@ -106,11 +132,11 @@ describe('Marionette.deprecate', function() {
   describe('when calling in production mode', function() {
     beforeEach(function() {
       Marionette.DEV_MODE = false;
-      Marionette.deprecate('baz');
+      deprecate('baz');
     });
 
     it('should `console.warn` the message', function() {
-      expect(Marionette.deprecate._warn).to.not.have.been.called;
+      expect(deprecate._warn).to.not.have.been.called;
     });
   });
 });

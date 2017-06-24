@@ -4,7 +4,7 @@ import _ from 'underscore';
 const delegateEventSplitter = /^(\S+)\s*(.*)$/;
 
 function uniqueName(eventName, selector) {
-  return [eventName + _.uniqueId('.evt'), selector].join(' ');
+  return `${ eventName }${ _.uniqueId('.evt') } ${ selector }`;
 }
 
 // Set event name to be namespaced using a unique index

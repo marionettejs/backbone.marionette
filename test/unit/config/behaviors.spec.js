@@ -1,11 +1,11 @@
 'use strict';
 
-import Error from '../../src/error';
-import Behavior from '../../src/behavior';
-import Region from '../../src/region';
-import View from '../../src/view';
-import CollectionView from '../../src/collection-view';
-import behaviorsLookup from '../../src/config/behaviors-lookup';
+import Error from '../../../src/error';
+import Behavior from '../../../src/behavior';
+import Region from '../../../src/region';
+import View from '../../../src/view';
+import CollectionView from '../../../src/collection-view';
+import behaviorsLookup from '../../../src/config/behaviors-lookup';
 
 describe('Behaviors', function() {
 

@@ -185,6 +185,20 @@ describe('DomApi', function() {
     });
   });
 
+  describe('#hasContents', function() {
+    it('should return true when el has contents', function() {
+      this.setFixtures('<div id="foo">Existing Html</div>');
+      const domEl = $('#foo')[0];
+      expect(DomApi.hasContents(domEl)).to.be.true;
+    });
+
+    it('should return false when el has no contents', function() {
+      this.setFixtures('<div id="foo"></div>');
+      const domEl = $('#foo')[0];
+      expect(DomApi.hasContents(domEl)).to.be.false;
+    });
+  });
+
   describe('#detachContents', function() {
     let domEl;
     let $detachEl;

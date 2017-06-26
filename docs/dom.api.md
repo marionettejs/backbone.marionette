@@ -46,6 +46,10 @@ functions, this only takes a literal string for its second argument.
 Takes the DOM node `el` and appends the DOM node `contents` to the end of the
 element's contents.
 
+### `hasContents(el)`
+
+Returns a boolean indicating if the `el` has child nodes.
+
 ### `detachContents(el)`
 
 Remove the inner contents of `el` from the DOM while leaving `el` itself in the

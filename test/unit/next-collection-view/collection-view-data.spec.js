@@ -1,5 +1,6 @@
 // Anything related to Bb.collection events
 
+import $ from 'jquery';
 import _ from 'underscore';
 import Backbone from 'backbone';
 import CollectionView from '../../../src/next-collection-view';
@@ -201,6 +202,33 @@ describe('next CollectionView Data', function() {
       it('should destroy the child', function() {
         expect(removingViewDestroyStub).to.have.been.calledOnce;
       });
+    });
+  });
+
+  describe('when adding models only to the end of the collection', function() {
+    let myCollectionView;
+    let collection;
+
+    beforeEach(function() {
+      collection = new Backbone.Collection([{ id: 1 }, { id: 2 }, { id: 3 }]);
+
+      myCollectionView = new MyCollectionView({ collection });
+      myCollectionView.render();
+    });
+
+    it('should only append the added children', function() {
+      this.sinon.stub(myCollectionView, 'attachHtml');
+      collection.add([{ id: 4 }, { id: 5 }]);
+
+      const callArgs = myCollectionView.attachHtml.args[0];
+      const attachHtmlEls = callArgs[0];
+      expect($(attachHtmlEls).children()).to.have.lengthOf(2);
+    });
+
+    it('should still have all children attached', function() {
+      collection.add([{ id: 4 }, { id: 5 }]);
+
+      expect(myCollectionView.$el.children()).to.have.lengthOf(5);
     });
   });
 });

@@ -64,6 +64,11 @@ export default {
     _$el.append(_$contents);
   },
 
+  // Does the el have child nodes
+  hasContents(el) {
+    return el.hasChildNodes();
+  },
+
   // Remove the inner contents of `el` from the DOM while leaving
   // `el` itself in the DOM.
   detachContents(el, _$el = getEl(el)) {

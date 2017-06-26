@@ -96,7 +96,7 @@ const View = Backbone.View.extend({
     Backbone.View.prototype.setElement.apply(this, arguments);
 
     if (hasEl) {
-      this._isRendered = !!this.$el.length;
+      this._isRendered = this.Dom.hasContents(this.el);
       this._isAttached = isNodeAttached(this.el);
     }
 

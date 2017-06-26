@@ -1,5 +1,6 @@
 // Tests for the children container integration
 
+import $ from 'jquery';
 import _ from 'underscore';
 import Backbone from 'backbone';
 import CollectionView from '../../../src/next-collection-view';
@@ -355,6 +356,38 @@ describe('next CollectionView Children', function() {
             anotherView = new AnotherView();
             childView.onBeforeAttach.reset();
             childView.onAttach.reset();
+            myCollectionView.addChildView(anotherView, 0);
+          });
+
+          it('should not trigger "before:attach" event on the childView', function() {
+            expect(childView.onBeforeAttach).to.not.be.called;
+          });
+
+          it('should not trigger "attach" event on the childView', function() {
+            expect(childView.onAttach).to.not.be.called;
+          });
+
+          it('should trigger "before:attach" event on anotherView', function() {
+            expect(anotherView.onBeforeAttach).to.have.been.calledOnce.and.calledWith(anotherView);
+          });
+
+          it('should trigger "attach" event on anotherView', function() {
+            expect(anotherView.onAttach).to.have.been.calledOnce.and.calledWith(anotherView);
+          });
+        });
+
+        describe('when attaching another childview at the end', function() {
+          let anotherView;
+
+          beforeEach(function() {
+            const AnotherView = View.extend({
+              template: _.noop,
+              onBeforeAttach: this.sinon.stub(),
+              onAttach: this.sinon.stub()
+            })
+            anotherView = new AnotherView();
+            childView.onBeforeAttach.reset();
+            childView.onAttach.reset();
             myCollectionView.addChildView(anotherView);
           });
 
@@ -372,6 +405,18 @@ describe('next CollectionView Children', function() {
 
           it('should trigger "attach" event on anotherView', function() {
             expect(anotherView.onAttach).to.have.been.calledOnce.and.calledWith(anotherView);
+          });
+
+          it('should only append the added child', function() {
+            this.sinon.stub(myCollectionView, 'attachHtml');
+            myCollectionView.addChildView(anotherView);
+            const callArgs = myCollectionView.attachHtml.args[0];
+            const attachHtmlEls = callArgs[0];
+            expect($(attachHtmlEls).children()).to.have.lengthOf(1);
+          });
+
+          it('should still have all children attached', function() {
+            expect(myCollectionView.$el.children()).to.have.lengthOf(2);
           });
         });
 

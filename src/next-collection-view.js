@@ -122,7 +122,7 @@ const CollectionView = Backbone.View.extend({
     // Remove first since it'll be a shorter array lookup.
     const removedViews = this._removeChildModels(changes.removed);
 
-    this._addChildModels(changes.added);
+    this._addedViews = this._addChildModels(changes.added);
 
     this._detachChildren(removedViews);
 
@@ -425,10 +425,22 @@ const CollectionView = Backbone.View.extend({
     return this;
   },
 
+  _isAddedAtEnd(addedView, index, addedViews) {
+    const viewIndex = this.children._views.length - addedViews.length + index;
+    return addedView === this.children._views[viewIndex];
+  },
+
   _filterChildren() {
     const viewFilter = this._getFilter();
+    const addedViews = this._addedViews;
+
+    delete this._addedViews;
 
     if (!viewFilter) {
+      if (addedViews && _.every(addedViews, _.bind(this._isAddedAtEnd, this))) {
+        return addedViews;
+      }
+
       return this.children._views;
     }
 
@@ -584,6 +596,7 @@ const CollectionView = Backbone.View.extend({
     }
 
     this._addChild(view, index);
+    this._addedViews = [view];
     this._showChildren();
 
     return view;
@@ -644,6 +657,7 @@ const CollectionView = Backbone.View.extend({
   _removeChildren() {
     this._destroyChildren();
     this.emptyRegion.destroy();
+    delete this._addedViews;
   },
 
   // Destroy the child views that this collection view is holding on to, if any

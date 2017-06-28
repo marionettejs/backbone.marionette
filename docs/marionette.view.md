@@ -534,7 +534,7 @@ event, such as Bootstrap's `show.bs.modal`.
 
 The `dom node` represents a jQuery selector or a `ui` key prefixed by `@.`. This
 must exist inside the view once it has completed rendering. The `dom node` is 
-optional, and if omitted, the the view's `$el` will be used as the 
+optional, and if omitted, the view's `$el` will be used as the 
 selector.  For more information about the `ui` object, and how it works, see
 [the documentation on ui](#organizing-your-view).
 

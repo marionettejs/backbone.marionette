@@ -53,6 +53,26 @@ export default {
     parent.replaceChild(newEl, oldEl);
   },
 
+  // Swaps the location of `el1` and `el2` in the DOM
+  swapEl(el1, el2) {
+    if (el1 === el2) {
+      return;
+    }
+
+    const parent1 = el1.parentNode;
+    const parent2 = el2.parentNode;
+
+    if (!parent1 || !parent2) {
+      return;
+    }
+
+    const next1 = el1.nextSibling;
+    const next2 = el2.nextSibling;
+
+    parent1.insertBefore(el2, next1);
+    parent2.insertBefore(el1, next2);
+  },
+
   // Replace the contents of `el` with the HTML string of `html`
   setContents(el, html, _$el = getEl(el)) {
     _$el.html(html);

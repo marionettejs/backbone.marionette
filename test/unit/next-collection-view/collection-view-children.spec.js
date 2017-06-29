@@ -92,6 +92,69 @@ describe('next CollectionView Children', function() {
     });
   });
 
+  describe('#swapChildViews', function() {
+    let collectionView;
+
+    beforeEach(function() {
+      collectionView = new MyCollectionView({ collection });
+      collectionView.render();
+    });
+
+    describe('when both children are in the collectionview', function() {
+      let view1;
+      let view2;
+
+      beforeEach(function() {
+        view1 = collectionView.children.first();
+        view2 = collectionView.children.last();
+      });
+
+      it('should swap the children', function() {
+        this.sinon.spy(collectionView.children, '_swap');
+
+        collectionView.swapChildViews(view1, view2);
+
+        expect(collectionView.children._swap).to.have.been.calledOnce
+          .and.calledWith(view1, view2);
+      });
+
+      it('should swap the els in the DOM', function() {
+        this.sinon.spy(collectionView.Dom, 'swapEl');
+
+        collectionView.swapChildViews(view1, view2);
+
+        expect(collectionView.Dom.swapEl).to.have.been.calledOnce
+          .and.calledWith(view1.el, view2.el);
+      });
+
+      it('should return the collectionView', function() {
+        expect(collectionView.swapChildViews(view1, view2)).to.equal(collectionView);
+      });
+    });
+
+    describe('when the first child is not in the collectionview', function() {
+      it('should throw an error', function() {
+        const view1 = new View();
+        const view2 = collectionView.children.first();
+
+        expect(function() {
+          collectionView.swapChildViews(view1, view2);
+        }).to.throw();
+      });
+    });
+
+    describe('when the second child is not in the collectionview', function() {
+      it('should throw an error', function() {
+        const view1 = collectionView.children.first();
+        const view2 = new View();
+
+        expect(function() {
+          collectionView.swapChildViews(view1, view2);
+        }).to.throw();
+      });
+    });
+  });
+
   describe('#addChildView', function() {
     let myCollectionView;
     let addView;

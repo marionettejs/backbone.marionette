@@ -496,6 +496,7 @@ var Mn = require('backbone.marionette');
 
 var MyView = Mn.View.extend({
   events: {
+    'drop': 'coversEntireElement',
     'click a': 'showModal',
     'click @ui.save': 'saveForm'
   },
@@ -516,21 +517,25 @@ var MyView = Mn.View.extend({
   saveForm: function() {
     console.log('Save the form');
   }
+  coversEntireElement: function() {
+    console.log('Handle a drop event anywhere in the element');
+  }
 });
 ```
 
 Event listeners are constructed by:
 
 ```javascript
-'<dom event> <dom node>': 'listener'
+'<dom event> [dom node]': 'listener'
 ```
 
 The `dom event` can be a jQuery DOM event - such as `click` - or another custom
 event, such as Bootstrap's `show.bs.modal`.
 
 The `dom node` represents a jQuery selector or a `ui` key prefixed by `@.`. This
-must exist inside the view once it has completed rendering. For more information
-about the `ui` object, and how it works, see
+must exist inside the view once it has completed rendering. The `dom node` is 
+optional, and if omitted, the view's `$el` will be used as the 
+selector.  For more information about the `ui` object, and how it works, see
 [the documentation on ui](#organizing-your-view).
 
 #### View `events`

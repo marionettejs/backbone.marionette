@@ -589,6 +589,20 @@ const CollectionView = Backbone.View.extend({
     this.Dom.appendContents(this.el, els, {_$el: this.$el});
   },
 
+  swapChildViews(view1, view2) {
+    if (!this.children.hasView(view1) || !this.children.hasView(view2)) {
+      throw new MarionetteError({
+        name: 'ChildSwapError',
+        message: 'Both views must be children of the collection view'
+      });
+    }
+
+    this.children._swap(view1, view2);
+    this.Dom.swapEl(view1.el, view2.el);
+
+    return this;
+  },
+
   // Render the child's view and add it to the HTML for the collection view at a given index, based on the current sort
   addChildView(view, index) {
     if (!view || view._isDestroyed) {

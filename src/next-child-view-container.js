@@ -79,6 +79,20 @@ _.extend(Container.prototype, {
     this._updateLength();
   },
 
+  // Swap views by index
+  _swap(view1, view2) {
+    const view1Index = this.findIndexByView(view1);
+    const view2Index = this.findIndexByView(view2);
+
+    if (view1Index === -1 || view2Index === -1) {
+      return;
+    }
+
+    const swapView = this._views[view1Index];
+    this._views[view1Index] = this._views[view2Index];
+    this._views[view2Index] = swapView;
+  },
+
   // Find a view by the model that was attached to it.
   // Uses the model's `cid` to find it.
   findByModel(model) {
@@ -106,6 +120,10 @@ _.extend(Container.prototype, {
   // Retrieve a view by its `cid` directly
   findByCid(cid) {
     return this._viewsByCid[cid];
+  },
+
+  hasView(view) {
+    return !!this.findByCid(view.cid);
   },
 
   // Remove a view and clean up index references.

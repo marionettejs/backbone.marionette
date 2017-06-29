@@ -36,6 +36,11 @@ Detach `el` from the DOM without removing listeners.
 
 Remove `oldEl` from the DOM and put `newEl` in its place.
 
+### `swapEl(el1, el2)`
+
+Swaps the location of `el1` and `el2` in the DOM.
+Both els must have a parentNode to be able to swap.
+
 ### `setContents(el, html)`
 
 Replace the contents of `el` with the HTML string of `html`. Unlike other DOM

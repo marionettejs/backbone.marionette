@@ -386,11 +386,77 @@ describe('#NextChildViewContainer', function() {
         });
       });
 
-      it('should should re-sort the container', function() {
+      it('should re-sort the container', function() {
         expect(container.findByIndex(0).model).to.equal(collection.models[0]);
         expect(container.findByIndex(1).model).to.equal(collection.models[2]);
         expect(container.findByIndex(2).model).to.equal(collection.models[1]);
       });
+    });
+  });
+
+  describe('#_swap', function() {
+    let container;
+    let collection;
+
+    beforeEach(function() {
+      collection = new Backbone.Collection([
+        { id: 1 },
+        { id: 2 },
+        { id: 3 }
+      ]);
+
+      container = new NextChildViewContainer();
+
+      collection.each(model => {
+        const view = new Backbone.View({ model });
+        container._add(view);
+      });
+
+    });
+
+    describe('when both views are in the container', function() {
+      it('should swap the views', function() {
+        container._swap(container.findByIndex(0), container.findByIndex(2));
+
+        expect(container.findByIndex(0).model).to.equal(collection.get(3));
+        expect(container.findByIndex(1).model).to.equal(collection.get(2));
+        expect(container.findByIndex(2).model).to.equal(collection.get(1));
+      });
+    });
+
+    describe('when the first view is not in the container', function() {
+      it('should not swap views', function() {
+        container._swap(new Backbone.View(), container.findByIndex(2));
+
+        expect(container.findByIndex(0).model).to.equal(collection.get(1));
+        expect(container.findByIndex(1).model).to.equal(collection.get(2));
+        expect(container.findByIndex(2).model).to.equal(collection.get(3));
+      });
+    });
+
+    describe('when the second view is not in the container', function() {
+      it('should not swap views', function() {
+        container._swap(container.findByIndex(0), new Backbone.View());
+
+        expect(container.findByIndex(0).model).to.equal(collection.get(1));
+        expect(container.findByIndex(1).model).to.equal(collection.get(2));
+        expect(container.findByIndex(2).model).to.equal(collection.get(3));
+      });
+    });
+  });
+
+  describe('#hasView', function() {
+    it('should return true if a view exists in the container', function() {
+      const container = new NextChildViewContainer();
+      const view = new Backbone.View();
+      container._add(view);
+      expect(container.hasView(view)).to.be.true;
+    });
+
+    it('should return false if a view does not exist in the container', function() {
+      const container = new NextChildViewContainer();
+      const view = new Backbone.View();
+      expect(container.hasView(view)).to.be.false;
     });
   });
 });

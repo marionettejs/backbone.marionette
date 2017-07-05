@@ -80,7 +80,9 @@ const CompositeView = CollectionView.extend({
 
   // Return the serialized model
   serializeData() {
-    return this.serializeModel();
+    if (this.model) {
+      return this.serializeModel();
+    }
   },
 
   // Renders the model and the collection.

@@ -55,10 +55,6 @@ const View = Backbone.View.extend({
   // Serialize the view's model *or* collection, if
   // it exists, for the template
   serializeData() {
-    if (!this.model && !this.collection) {
-      return {};
-    }
-
     // If we have a model, we serialize that
     if (this.model) {
       return this.serializeModel();
@@ -66,25 +62,23 @@ const View = Backbone.View.extend({
 
     // Otherwise, we serialize the collection,
     // making it available under the `items` property
-    return {
-      items: this.serializeCollection()
-    };
+    if (this.collection) {
+      return {
+        items: this.serializeCollection()
+      };
+    }
   },
 
   // Prepares the special `model` property of a view
-  // for being displayed in the template. By default
-  // we simply clone the attributes. Override this if
+  // for being displayed in the template. Override this if
   // you need a custom transformation for your view's model
   serializeModel() {
-    if (!this.model) { return {}; }
-    return _.clone(this.model.attributes);
+    return this.model.attributes;
   },
 
-  // Serialize a collection by cloning each of
-  // its model's attributes
+  // Serialize a collection
   serializeCollection() {
-    if (!this.collection) { return {}; }
-    return this.collection.map(function(model) { return _.clone(model.attributes); });
+    return _.map(this.collection.models, model => model.attributes);
   },
 
   // Overriding Backbone.View's `setElement` to handle
@@ -171,9 +165,9 @@ const View = Backbone.View.extend({
   // object literal, or a function that returns an object
   // literal. All methods and attributes from this object
   // are copies to the object passed in.
-  mixinTemplateContext(target = {}) {
+  mixinTemplateContext(target) {
     const templateContext = _.result(this, 'templateContext');
-    return _.extend(target, templateContext);
+    return _.extend({}, target, templateContext);
   },
 
   // Attaches the content of a given view.

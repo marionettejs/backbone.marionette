@@ -588,6 +588,11 @@ const CollectionView = Backbone.View.extend({
     this.children._swap(view1, view2);
     this.Dom.swapEl(view1.el, view2.el);
 
+    // If the views are not filtered the same, refilter
+    if (this.Dom.hasEl(this.el, view1.el) !== this.Dom.hasEl(this.el, view2.el)) {
+      this.filter();
+    }
+
     return this;
   },
 

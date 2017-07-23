@@ -129,6 +129,28 @@ describe('next CollectionView Children', function() {
       it('should return the collectionView', function() {
         expect(collectionView.swapChildViews(view1, view2)).to.equal(collectionView);
       });
+
+      it('should not re-filter the collectionView', function() {
+        this.sinon.spy(collectionView, 'filter');
+
+        collectionView.swapChildViews(view1, view2);
+
+        expect(collectionView.filter).to.not.be.called;
+      });
+
+      describe('when one of the children is attached but the other is not', function() {
+        it('should re-filter the collectionView', function() {
+          collectionView.setFilter(view => {
+            return view.model.id !== 1;
+          });
+
+          this.sinon.spy(collectionView, 'filter');
+
+          collectionView.swapChildViews(view1, view2);
+
+          expect(collectionView.filter).to.have.been.calledOnce;
+        });
+      });
     });
 
     describe('when the first child is not in the collectionview', function() {

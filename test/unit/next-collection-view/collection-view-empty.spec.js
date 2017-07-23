@@ -4,6 +4,7 @@ import _ from 'underscore';
 import Backbone from 'backbone';
 import CollectionView from '../../../src/next-collection-view';
 import View from '../../../src/view';
+import Region from '../../../src/region';
 
 describe('NextCollectionView -  Empty', function() {
   let MyEmptyView;
@@ -29,6 +30,12 @@ describe('NextCollectionView -  Empty', function() {
 
     beforeEach(function() {
       myCollectionView = new MyCollectionView();
+    });
+
+    it('should be replaceElement: false', function() {
+      Region.prototype.replaceElement = true;
+      expect(myCollectionView.emptyRegion.replaceElement).to.be.false;
+      Region.prototype.replaceElement = false;
     });
 
     it('should instantiate the emptyRegion', function() {

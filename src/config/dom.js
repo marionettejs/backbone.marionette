@@ -33,6 +33,11 @@ export default {
     return _$el.find(selector);
   },
 
+  // Returns true if the el contains the node childEl
+  hasEl(el, childEl) {
+    return el.contains(childEl && childEl.parentNode);
+  },
+
   // Detach `el` from the DOM without removing listeners
   detachEl(el, _$el = getEl(el)) {
     _$el.detach();

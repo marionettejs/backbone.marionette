@@ -88,6 +88,27 @@ describe('DomApi', function() {
     });
   });
 
+  describe('#hasEl', function() {
+    let domEl;
+
+    beforeEach(function() {
+      this.setFixtures('<div id="foo"><div id="bar"></div></div>');
+      domEl = $('#foo')[0];
+    });
+
+    describe('when the node is within the el', function() {
+      it('should return true', function() {
+        expect(DomApi.hasEl(domEl, $('#bar')[0])).to.be.true;
+      });
+    });
+
+    describe('when the node is not within the el', function() {
+      it('should return false', function() {
+        expect(DomApi.hasEl(domEl, $('<div>')[0])).to.be.false;
+      });
+    });
+  });
+
   describe('#detachEl', function() {
     let $domEl;
     let domEl;

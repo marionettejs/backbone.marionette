@@ -72,7 +72,7 @@ const CollectionView = Backbone.View.extend({
 
   // Create an region to show the emptyView
   _initEmptyRegion() {
-    this.emptyRegion = new Region({ el: this.el })
+    this.emptyRegion = new Region({ el: this.el, replaceElement: false });
 
     this.emptyRegion._parentView = this;
   },

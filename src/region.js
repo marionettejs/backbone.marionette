@@ -72,11 +72,11 @@ const Region = MarionetteObject.extend({
 
     this._setupChildView(view);
 
+    this.currentView = view;
+
     renderView(view);
 
     this._attachView(view, options);
-
-    this.currentView = view;
 
     this.triggerMethod('show', this, view, options);
 

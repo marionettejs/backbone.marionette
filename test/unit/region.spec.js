@@ -188,13 +188,15 @@ describe('region', function() {
           $(this.el).html('some content');
         },
         destroy: function() {},
-        onBeforeRender: this.sinon.stub(),
+        onBeforeRender: function() {},
         onRender: this.sinon.stub(),
         onBeforeAttach: this.sinon.stub(),
         onAttach: this.sinon.stub(),
         onDomRefresh: this.sinon.stub(),
         onClick: this.sinon.stub()
       });
+
+      this.sinon.stub(this.MyView.prototype, 'onBeforeRender', _.bind(function() { return this.region.currentView; }, this));
 
       this.setFixtures('<div id="region"></div>');
       this.view = new this.MyView();
@@ -240,6 +242,10 @@ describe('region', function() {
 
     it('should not be swapping view', function() {
       expect(this.isSwappingOnShow).to.be.false;
+    });
+
+    it('should have the currentView set before rendering', function() {
+      expect(this.view.onBeforeRender).to.have.returned(this.view);
     });
 
     describe('region and view event ordering', function() {

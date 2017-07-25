@@ -39,7 +39,7 @@ function generateBundle(bundle) {
     moduleName: 'Marionette',
     sourceMap: true,
     banner: banner,
-    footer: 'this.Marionette && this.Mn = this.Marionette;',
+    footer: 'this && this.Marionette && (this.Mn = this.Marionette);',
     globals: rollupGlobals
   });
 }

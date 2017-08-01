@@ -16,6 +16,7 @@
     * [NextCollectionView children's: `findIndexByView`](#nextcollectionview-children-findindexbyview)
   * [NextCollectionView's `removeChildView`](#nextcollectionviews-removechildview)
   * [NextCollectionView's `detachChildView`](#nextcollectionviews-detachchildview)
+  * [NextCollectionView's `swapChildViews`](#nextcollectionviews-swapchildviews)
   * [NextCollectionView childView Iterators And Collection Functions](#nextcollectionview-childview-iterators-and-collection-functions)
 
 * [NextCollectionView's `filter`](#nextcollectionviews-filter)
@@ -181,6 +182,35 @@ Mn.NextCollectionView.extend({
 
 This method is the same as [`removeChildView`](#nextcollectionviews-removechildview)
 with the exception that the removed view is not destroyed.
+
+### NextCollectionView's `swapChildViews`
+
+Swap the location of two views in the `NextCollectionView` `children` and in the `el`.
+This can be useful when sorting is arbitrary or is not performant.
+
+If either of the two views aren't part of the `NextCollectionView` an error will be thrown.
+
+If one child is in the `el` but the other is not, [filter](#nextcollectionviews-filter) will be called.
+
+```javascript
+var Mn = require('backbone.marionette');
+
+var collection = new Backbone.Collection([
+  { name: 'first' },
+  { name: 'middle' },
+  { name: 'last' }
+]);
+
+var myCollection = new Mn.NextCollectionView({
+  collection: collection,
+  childView: MyChildView
+});
+
+myCollection.swapChildViews(myCollection.children.first(), myCollection.children.last());
+
+myCollection.children.first().model.get('name'); // "last"
+myCollection.children.last().model.get('name'); // "first"
+```
 
 ### NextCollectionView childView Iterators And Collection Functions
 

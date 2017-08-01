@@ -173,7 +173,7 @@ const View = Backbone.View.extend({
   // are copies to the object passed in.
   mixinTemplateContext(target = {}) {
     const templateContext = _.result(this, 'templateContext');
-    return _.extend(target, templateContext);
+    return _.extend(target, this._templateContext, templateContext);
   },
 
   // Attaches the content of a given view.
@@ -206,6 +206,30 @@ const View = Backbone.View.extend({
       .value();
   }
 }, {
+
+  // Sets the templateContext for this view class including
+  // the current templateContext of its prototypes
+  setTemplateContext(context) {
+    const templateContext = {};
+    let ViewClass = this.prototype;
+
+    while (ViewClass.prototype !== Backbone.View) {
+      ViewClass = ViewClass.prototype;
+      if (ViewClass._templateContext) {
+        _.extend(templateContext, ViewClass._templateContext);
+      }
+    }
+    _.extend(templateContext, context);
+    this.prototype._templateContext = templateContext;
+
+    return templateContext;
+  },
+
+  // Returns the view class' current templateContext
+  getTemplateContext() {
+    return this.prototype._templateContext;
+  },
+
   // Sets the renderer for the Marionette.View class
   setRenderer(renderer) {
     this.prototype._renderHtml = renderer;

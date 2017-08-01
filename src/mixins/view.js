@@ -115,6 +115,9 @@ const ViewMixin = {
     return this;
   },
 
+  // By default element is removed through the DOMApi
+  _removeElement: _.noop,
+
   // Handle destroying the view and its children.
   destroy(...args) {
     if (this._isDestroyed) { return this; }
@@ -147,7 +150,7 @@ const ViewMixin = {
 
     this.triggerMethod('destroy', this, ...args);
 
-    this.stopListening();
+    this.remove();
 
     return this;
   },

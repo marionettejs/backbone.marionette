@@ -645,23 +645,36 @@ describe('next CollectionView Children', function() {
       myCollectionView.onDestroyChildren = this.sinon.stub();
 
       myCollectionView.render();
-      myCollectionView.destroy();
     });
 
     it('should destroy each view', function() {
+      myCollectionView.destroy();
       myCollectionView.children.each(view => {
         expect(view.isDestroyed()).to.be.true;
       });
     });
 
     it('should trigger "before:destroy:children"', function() {
+      myCollectionView.destroy();
       expect(myCollectionView.onBeforeDestroyChildren)
         .to.be.calledOnce.and.calledWith(myCollectionView);
     });
 
     it('should trigger "destroy:children"', function() {
+      myCollectionView.destroy();
       expect(myCollectionView.onDestroyChildren)
         .to.be.calledOnce.and.calledWith(myCollectionView);
+    });
+
+    describe('when view events are not monitored', function() {
+      it('should detach the contents from the dom prior to destroying', function() {
+        this.sinon.spy(myCollectionView.Dom, 'detachContents');
+        myCollectionView.monitorViewEvents = false;
+        myCollectionView.destroy();
+        expect(myCollectionView.Dom.detachContents).to.have.been.calledOnce
+          .and.calledAfter(myCollectionView.onBeforeDestroyChildren)
+          .and.calledBefore(myCollectionView.onDestroyChildren);
+      });
     });
   });
 

@@ -1,3 +1,24 @@
+### v3.4.0 [view commit logs](https://github.com/marionettejs/backbone.marionette/compare/v3.3.1...v3.4.0)
+
+#### Features
+* A new build of Marionette supporting ES6 modules was added
+* Added DOM API to encapsulate DOM interactions in the views and region
+* `monitorViewEvents` was added as an option to all Views to disable DOM lifecycle events
+* Added `swapChildViews` to `NextCollectionView`
+* Added `viewComparator: false` option to `NextCollectionView` for disabling the default sort
+
+#### Experimental API Breaking Changes
+* DOM Mixin was removed (replaced with DOM API)
+* `NextCollectionView` `attachHtml` no longer receives the view as the first argument
+
+#### Fixes
+* A region's currentView will now be set during that view's initial `dom:refresh` event
+* A view will now be considered rendered if its `el` has contents and not only if it has an `el`
+
+#### Misc
+* While `Backbone.Radio` is still a dependency, it will no longer cause Marionette to error if nonexistent
+* Various performance improvements
+
 ### v3.3.1 [view commit logs](https://github.com/marionettejs/backbone.marionette/compare/v3.3.0...v3.3.1)
 
 #### Fixes

@@ -1,3 +1,18 @@
+### v3.4.0 [view commit logs](https://github.com/marionettejs/backbone.marionette/compare/v3.3.1...v3.4.0)
+
+#### Features
+
+ES6 pkg.module
+DOM API
+- CollectionView.beforeEl
+TemplateCache
+NextCollectionView.attachHtml
+Backbone.Radio no longer required (but still a dependency)
+NextCollectionView viewComparator: false
+NextCollectionView swapChildViews
+Misc perf improvements
+NextCollectionView monitorViewEvents opt-out
+
 ### v3.3.1 [view commit logs](https://github.com/marionettejs/backbone.marionette/compare/v3.3.0...v3.3.1)
 
 #### Fixes

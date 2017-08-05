@@ -672,6 +672,7 @@ describe('next CollectionView Children', function() {
         myCollectionView.monitorViewEvents = false;
         myCollectionView.destroy();
         expect(myCollectionView.Dom.detachContents).to.have.been.calledOnce
+          .and.calledWith(myCollectionView.el, myCollectionView.$el)
           .and.calledAfter(myCollectionView.onBeforeDestroyChildren)
           .and.calledBefore(myCollectionView.onDestroyChildren);
       });

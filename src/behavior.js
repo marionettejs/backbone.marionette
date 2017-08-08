@@ -38,7 +38,7 @@ const Behavior = MarionetteObject.extend({
 
     this.defaults = _.clone(_.result(this, 'defaults', {}));
 
-    this._setOptions(this.defaults, options);
+    this._setOptions(_.extend({}, this.defaults, options));
     this.mergeOptions(this.options, ClassOptions);
 
     // Construct an internal UI hash using

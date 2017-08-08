@@ -1,16 +1,11 @@
 import gulp from 'gulp';
-import plumber from 'gulp-plumber';
-import file from 'gulp-file';
-import filter from 'gulp-filter';
-import rename from 'gulp-rename';
-import sourcemaps from 'gulp-sourcemaps';
-import uglify from 'gulp-uglify';
+import uglifyjs from 'uglify-js';
 import runSequence from 'run-sequence';
+import fs from 'fs';
 
 import { rollup } from 'rollup';
 import babel from 'rollup-plugin-babel';
 import json from 'rollup-plugin-json';
-import preset from 'babel-preset-es2015';
 
 import banner from './_banner';
 import pkg from '../package.json';
@@ -28,6 +23,7 @@ function makeESModule(bundle) {
     format: 'es',
     dest: 'lib/backbone.marionette.esm.js',
     sourceMap: true,
+    sourceMapFile: 'backbone.marionette.esm.js',
     banner: banner,
     globals: rollupGlobals
   });
@@ -38,6 +34,7 @@ function generateBundle(bundle) {
     format: 'umd',
     moduleName: 'Marionette',
     sourceMap: true,
+    sourceMapFile: 'backbone.marionette.js',
     banner: banner,
     footer: 'this && this.Marionette && (this.Mn = this.Marionette);',
     globals: rollupGlobals
@@ -64,27 +61,27 @@ function makeBundle(buildPath) {
       makeESModule(bundle);
     }
     return generateBundle(bundle);
-  }).then(gen => {
-    gen.code += '\n//# sourceMappingURL=' + gen.map.toUrl();
-    return gen;
   });
 }
 
 function build(buildPath) {
   return makeBundle(buildPath).then(gen => {
-    return file(pkg.name + '.js', gen.code, {src: true})
-      .pipe(plumber())
-      .pipe(sourcemaps.init({loadMaps: true}))
-      .pipe(sourcemaps.write('./'))
-      .pipe(gulp.dest(buildPath))
-      .pipe(filter(['**', '!**/*.js.map']))
-      .pipe(rename(pkg.name + '.min.js'))
-      .pipe(sourcemaps.init({loadMaps: true}))
-      .pipe(uglify({
-        preserveComments: 'license'
-      }))
-      .pipe(sourcemaps.write('./'))
-      .pipe(gulp.dest(buildPath));
+    fs.writeFileSync(buildPath + pkg.name + '.js', gen.code  +
+      '//# sourceMappingURL=' + pkg.name + '.js.map\n' );
+    fs.writeFileSync(buildPath + pkg.name + '.js.map', gen.map.toString());
+    var minified = uglifyjs.minify(gen.code, {sourceMap: {
+        content: gen.map,
+        filename: 'backbone.marionette.min.js',
+        url: 'backbone.marionette.min.js.map'
+      }
+    });
+
+    if (minified.error) {
+      throw 'uglify-js error: ' + minified.error
+    }
+
+    fs.writeFileSync(buildPath + pkg.name + '.min.js', minified.code);
+    fs.writeFileSync(buildPath + pkg.name + '.min.js.map', minified.map);
   });
 }
 

@@ -26,7 +26,7 @@ const rollupGlobals = {
 function makeESModule(bundle) {
   bundle.write({
     format: 'es',
-    dest: pkg.module,
+    dest: 'lib/backbone.marionette.esm.js',
     sourceMap: true,
     banner: banner,
     globals: rollupGlobals

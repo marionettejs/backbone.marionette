@@ -1,3 +1,10 @@
+### v3.4.1 [view commit logs](https://github.com/marionettejs/backbone.marionette/compare/v3.4.0...v3.4.1)
+
+#### Fixes
+* Options passed to a behavior are now correctly passed to the behavior
+* The ES6 module is no longer exposed in `package.json` as this was breaking for some builds
+* The `detachContents` will now correctly detach when using `monitorViewEvents: false` on a `NextCollectionView`
+
 ### v3.4.0 [view commit logs](https://github.com/marionettejs/backbone.marionette/compare/v3.3.1...v3.4.0)
 
 #### Features

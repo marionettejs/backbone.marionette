@@ -242,7 +242,7 @@ const Region = MarionetteObject.extend({
   // Override this method to change how the new view is appended to the `$el` that the
   // region is managing
   attachHtml(view) {
-    this.Dom.appendContents(this.el, view.el, {_$el: this.$el, _$contents: view.$el});
+    this.Dom.appendContents(this.el, view.el, {_$contents: view.$el});
   },
 
   // Destroy the current view, if there is one. If there is no current view, it does

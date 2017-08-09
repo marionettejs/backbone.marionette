@@ -73,6 +73,9 @@ function build(buildPath) {
         content: gen.map,
         filename: 'backbone.marionette.min.js',
         url: 'backbone.marionette.min.js.map'
+      },
+      output: {
+        comments: 'some'
       }
     });
 

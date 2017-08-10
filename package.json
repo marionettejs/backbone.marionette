@@ -63,17 +63,12 @@
     "gulp": "3.9.1",
     "gulp-coveralls": "0.1.4",
     "gulp-eslint": "3.0.1",
-    "gulp-file": "0.3.0",
-    "gulp-filter": "4.0.0",
     "gulp-if": "^2.0.1",
     "gulp-istanbul": "1.1.1",
     "gulp-lintspaces": "0.5.0",
     "gulp-livereload": "3.8.1",
     "gulp-mocha": "3.0.1",
     "gulp-plumber": "1.1.0",
-    "gulp-rename": "1.2.2",
-    "gulp-sourcemaps": "2.6.0",
-    "gulp-uglify": "2.0.0",
     "gulp-util": "3.0.7",
     "isparta": "4.0.0",
     "jquery": "3.1.0",
@@ -91,6 +86,7 @@
     "run-sequence": "1.2.2",
     "sinon": "1.17.6",
     "sinon-chai": "2.8.0",
+    "uglify-js": "^3.0.27",
     "underscore": "1.8 - 1.8.3"
   }
 }

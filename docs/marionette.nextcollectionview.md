@@ -159,11 +159,10 @@ of the object will be copied to the `childView` instance's options.
 var Mn = require('backbone.marionette');
 
 var NextCollectionView = Mn.NextCollectionView.extend({
-  childViewOptions: function(model, index) {
+  childViewOptions: function(model) {
     // do some calculations based on the model
     return {
-      foo: 'bar',
-      childIndex: index
+      foo: 'bar'
     }
   }
 });

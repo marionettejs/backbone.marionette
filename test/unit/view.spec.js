@@ -189,8 +189,26 @@ describe('item view', function() {
       expect(this.onBeforeRenderStub).to.have.been.calledOnce;
     });
 
+    it('should call a "onBeforeRender" with parameter on true if this is the 1st render', function() {
+      expect(this.onBeforeRenderStub).to.have.been.calledWith(this.view, true);
+    });
+
+    it('should call a "onBeforeRender" with parameter on false if this is not the 1st render', function() {
+      this.view.render();
+      expect(this.onBeforeRenderStub).to.have.been.calledWith(this.view, false);
+    });
+
     it('should call an "onRender" method on the view', function() {
       expect(this.onRenderStub).to.have.been.calledOnce;
+    });
+
+    it('should call a "onRender" with parameter on true if this is the 1st render', function() {
+      expect(this.onRenderStub).to.have.been.calledWith(this.view, true);
+    });
+
+    it('should call a "onRender" with parameter on false if this is not the 1st render', function() {
+      this.view.render();
+      expect(this.onRenderStub).to.have.been.calledWith(this.view, false);
     });
 
     it('should call "onBeforeRender" before "onRender"', function() {

@@ -11,6 +11,7 @@ function getEl(el) {
 // Static setter
 export function setDomApi(mixin) {
   this.prototype.Dom = _.extend({}, this.prototype.Dom, mixin);
+  return this;
 }
 
 export default {

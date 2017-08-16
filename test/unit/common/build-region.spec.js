@@ -114,6 +114,32 @@ describe('Region', function() {
           it('uses the el', function() {
             expect(this.region.el).to.equal(this.fooSelector);
           });
+
+          describe('with `parentEl` also defined including the selector', function() {
+            beforeEach(function() {
+              this.setFixtures('<div id="parent"><div id="child">text</div></div>');
+              this.parentEl = $('#parent');
+              this.definition = _.defaults({parentEl: this.parentEl, el: '#child' }, this.definition);
+              this.region = this.view.addRegion(_.uniqueId('region_'),this.definition);
+            });
+
+            it('returns the jQuery(el)', function() {
+              expect(this.region.getEl(this.region.el).text()).to.equal($(this.region.el).text());
+            });
+          });
+
+          describe('with `parentEl` also defined excluding the selector', function() {
+            beforeEach(function() {
+              this.setFixtures('<div id="parent"></div><div id="not-child">text</div>');
+              this.parentEl = $('#parent');
+              this.definition = _.defaults({parentEl: this.parentEl, el: '#not-child' }, this.definition);
+              this.region = this.view.addRegion(_.uniqueId('region_'),this.definition);
+            });
+
+            it('returns the jQuery(el)', function() {
+              expect(this.region.getEl(this.region.el).text()).to.not.equal($(this.region.el).text());
+            });
+          });
         });
 
         describe('when el is an HTML node', function() {

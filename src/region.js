@@ -193,8 +193,7 @@ const Region = MarionetteObject.extend({
     const context = _.result(this, 'parentEl');
 
     if (context && _.isString(el)) {
-      const $el = this.Dom.findEl(context, el);
-      if ($el.length) { return $el; }
+      return this.Dom.findEl(context, el);
     }
 
     return this.Dom.getEl(el);

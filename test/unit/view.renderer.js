@@ -16,6 +16,12 @@ describe('View.setRenderer', function() {
     model = new Backbone.Model(data);
   });
 
+  describe('when setting a renderer on a View class', function() {
+    it('should return the View class', function() {
+      expect(ViewClass.setRenderer()).to.be.eq(ViewClass);
+    });
+  });
+
   describe('when changing a renderer on a View class', function() {
     let rendererStub;
 

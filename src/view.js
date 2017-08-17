@@ -209,6 +209,7 @@ const View = Backbone.View.extend({
   // Sets the renderer for the Marionette.View class
   setRenderer(renderer) {
     this.prototype._renderHtml = renderer;
+    return this;
   },
 
   setDomApi

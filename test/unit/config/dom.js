@@ -1,6 +1,6 @@
 import $ from 'jquery';
 import _ from 'underscore';
-import DomApi from '../../../src/config/dom';
+import DomApi, { setDomApi } from '../../../src/config/dom';
 
 // Copied from https://github.com/jashkenas/underscore/blob/1.8.3/underscore.js#L137
 const MAX_ARRAY_INDEX = Math.pow(2, 53) - 1;
@@ -22,6 +22,14 @@ chai.use(function(_chai, utils) {
 
 
 describe('DomApi', function() {
+  describe('#setDomApi', function() {
+    it('should return the current class', function() {
+      const MyObject = function() {};
+      MyObject.setDomApi = setDomApi;
+      expect(MyObject.setDomApi()).to.be.eq(MyObject);
+    });
+  });
+
   describe('#createBuffer', function() {
     it('should return an appendable node', function() {
       expect(DomApi.createBuffer().appendChild).to.be.a('function');

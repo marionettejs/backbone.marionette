@@ -115,29 +115,46 @@ describe('Region', function() {
             expect(this.region.el).to.equal(this.fooSelector);
           });
 
-          describe('with `parentEl` also defined including the selector', function() {
-            beforeEach(function() {
-              this.setFixtures('<div id="parent"><div id="child">text</div></div>');
-              this.parentEl = $('#parent');
-              this.definition = _.defaults({parentEl: this.parentEl, el: '#child' }, this.definition);
-              this.region = this.view.addRegion(_.uniqueId('region_'),this.definition);
+          describe('with `parentEl` also defined', function() {
+            describe('including the selector', function() {
+              beforeEach(function() {
+                this.setFixtures('<div id="parent"><div id="child">text</div></div>');
+                this.parentEl = $('#parent');
+                this.definition = _.defaults({parentEl: this.parentEl, el: '#child' }, this.definition);
+                this.region = this.view.addRegion(_.uniqueId('region_'),this.definition);
+              });
+
+              it('returns the jQuery(el)', function() {
+                expect(this.region.getEl(this.region.el).text()).to.equal($(this.region.el).text());
+              });
             });
 
-            it('returns the jQuery(el)', function() {
-              expect(this.region.getEl(this.region.el).text()).to.equal($(this.region.el).text());
-            });
-          });
+            describe('excluding the selector', function() {
+              beforeEach(function() {
+                this.setFixtures('<div id="parent"></div><div id="not-child">text</div>');
+                this.parentEl = $('#parent');
+                this.definition = _.defaults({parentEl: this.parentEl, el: '#not-child' }, this.definition);
+                this.region = this.view.addRegion(_.uniqueId('region_'),this.definition);
+              });
 
-          describe('with `parentEl` also defined excluding the selector', function() {
-            beforeEach(function() {
-              this.setFixtures('<div id="parent"></div><div id="not-child">text</div>');
-              this.parentEl = $('#parent');
-              this.definition = _.defaults({parentEl: this.parentEl, el: '#not-child' }, this.definition);
-              this.region = this.view.addRegion(_.uniqueId('region_'),this.definition);
+              it('returns the jQuery(el)', function() {
+                expect(this.region.getEl(this.region.el).text()).to.not.equal($(this.region.el).text());
+              });
             });
 
-            it('returns the jQuery(el)', function() {
-              expect(this.region.getEl(this.region.el).text()).to.not.equal($(this.region.el).text());
+            describe('including multiple instances of the selector', function() {
+              beforeEach(function() {
+                this.setFixtures('<div id="parent"><div class="child">text</div><div class="child">text</div></div>');
+                this.parentEl = $('#parent');
+                this.definition = _.defaults({parentEl: this.parentEl, el: '.child' }, this.definition);
+                this.region = this.view.addRegion(_.uniqueId('region_'),this.definition);
+              });
+
+              it('should ensure a jQuery(el) of length 1', function() {
+                // calls _ensureElement
+                this.region.empty();
+                expect(this.region.$el.length).to.equal(1);
+              });
             });
           });
         });

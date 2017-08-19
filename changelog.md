@@ -1,3 +1,10 @@
+### v3.4.2 [view commit logs](https://github.com/marionettejs/backbone.marionette/compare/v3.4.1...v3.4.2)
+
+#### Fixes
+* Regions will now ensure there is only one node in its `$el`
+* Regions will not query outside of the parent view if the selector is not found in its context
+* The `setDomApi` and `setRenderer` class methods now correctly return the prototype when called
+
 ### v3.4.1 [view commit logs](https://github.com/marionettejs/backbone.marionette/compare/v3.4.0...v3.4.1)
 
 #### Fixes

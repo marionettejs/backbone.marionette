@@ -231,4 +231,24 @@ describe('next CollectionView Data', function() {
       expect(myCollectionView.$el.children()).to.have.lengthOf(5);
     });
   });
+
+  describe('when only removing models from a collection', function() {
+    let myCollectionView;
+    let collection;
+
+    beforeEach(function() {
+      const emptyView = View.extend({ template: _.template('empty') });
+
+      collection = new Backbone.Collection([{ id: 1 }, { id: 2 }, { id: 3 }]);
+
+      myCollectionView = new MyCollectionView({ collection, emptyView });
+      myCollectionView.render();
+    });
+
+    it('should still have the originally added children in the el', function() {
+      collection.remove({ id: 1 });
+
+      expect(myCollectionView.$el.children()).to.have.lengthOf(2);
+    });
+  });
 });

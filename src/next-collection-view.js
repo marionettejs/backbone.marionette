@@ -120,9 +120,9 @@ const CollectionView = Backbone.View.extend({
     const changes = options.changes;
 
     // Remove first since it'll be a shorter array lookup.
-    const removedViews = this._removeChildModels(changes.removed);
+    const removedViews = changes.removed.length && this._removeChildModels(changes.removed);
 
-    this._addedViews = this._addChildModels(changes.added);
+    this._addedViews = changes.added.length && this._addChildModels(changes.added);
 
     this._detachChildren(removedViews);
 

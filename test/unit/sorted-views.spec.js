@@ -1,6 +1,6 @@
 import _ from 'underscore';
 
-describe('collection/composite view sorting', function() {
+describe.skip('collection/composite view sorting', function() {
   'use strict';
 
   beforeEach(function() {

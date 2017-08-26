@@ -189,6 +189,19 @@ var MyNextCollectionView = Mn.NextCollectionView.extend({
 });
 ```
 
+### NextCollectionView's `getEmptyRegion`
+
+When a `NextCollectionView` is instantiated it creates a region for showing the [`emptyView`](#nextcollectionviews-emptyview).
+This region can be requested using the `getEmptyRegion` method. The region will share the `el` with the `NextCollectionView`
+and is shown with [`replaceElement: false`](./marionette.region.md#additional-options).
+
+**Note** The `NextCollectionView` expects to be the only entity managing the region.
+Showing things in this region directly is not advised.
+
+```javascript
+const isEmptyShowing = myNextCollectionView.getEmptyRegion().hasView();
+```
+
 ### NextCollectionView's `emptyViewOptions`
 
 Similar to [`childView`](#nextcollectionviews-childview) and [`childViewOptions`](#nextcollectionviews-childviewoptions),

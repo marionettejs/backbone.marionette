@@ -29,27 +29,44 @@ describe('NextCollectionView -  Empty', function() {
     let myCollectionView;
 
     beforeEach(function() {
+      this.sinon.spy(MyCollectionView.prototype, 'getEmptyRegion');
       myCollectionView = new MyCollectionView();
     });
 
     it('should be replaceElement: false', function() {
       Region.prototype.replaceElement = true;
-      expect(myCollectionView.emptyRegion.replaceElement).to.be.false;
+      expect(myCollectionView.getEmptyRegion().replaceElement).to.be.false;
       Region.prototype.replaceElement = false;
     });
 
     it('should instantiate the emptyRegion', function() {
-      expect(myCollectionView.emptyRegion.el).to.equal(myCollectionView.el);
+      expect(myCollectionView.getEmptyRegion).to.have.been.calledOnce;
     });
 
     describe('when destroying the collectionView', function() {
       it('should destroy the region', function() {
+        const emptyRegion = myCollectionView.getEmptyRegion();
         myCollectionView.destroy();
-        expect(myCollectionView.emptyRegion.isDestroyed()).to.be.true;
+        expect(emptyRegion.isDestroyed()).to.be.true;
       });
     });
   });
 
+  describe('when rendering an empty collectionview during instantiation', function() {
+    it('should show the view in the emptyRegion', function() {
+      const collection = new Backbone.Collection();
+
+      const MyInitCollectionView = MyCollectionView.extend({
+        initialize() {
+          this.render();
+        }
+      });
+
+      const myCollectionView = new MyInitCollectionView({ collection });
+
+      expect(myCollectionView.getEmptyRegion().hasView()).to.be.true;
+    });
+  });
 
   describe('when an emptyView is rendered', function() {
     let emptyViewRenderStub;
@@ -77,10 +94,43 @@ describe('NextCollectionView -  Empty', function() {
     describe('when the collection is no longer empty', function() {
       it('should empty the emptyRegion', function() {
         const emptyRegionEmptyStub = this.sinon.stub();
-        myCollectionView.emptyRegion.on('empty', emptyRegionEmptyStub);
+        myCollectionView.getEmptyRegion().on('empty', emptyRegionEmptyStub);
         myCollectionView.collection.add({ id: 1 });
         expect(emptyRegionEmptyStub).to.have.been.calledOnce;
       });
+    });
+  });
+
+  describe('#getEmptyRegion', function() {
+    let collection;
+    let myCollectionView;
+
+    beforeEach(function() {
+      collection = new Backbone.Collection();
+      myCollectionView = new MyCollectionView({ collection });
+    });
+
+    it('should return the empty region for the collectionView el', function() {
+      expect(myCollectionView.getEmptyRegion().el).to.equal(myCollectionView.el);
+    });
+
+    it('should return the same region on subsequent calls', function() {
+      const emptyRegion = myCollectionView.getEmptyRegion();
+
+      expect(myCollectionView.getEmptyRegion()).to.equal(emptyRegion);
+    });
+
+    // Internal implementation detail, but needs to be tested
+    it('should set the parentView', function() {
+      expect(myCollectionView.getEmptyRegion()._parentView).to.equal(myCollectionView);
+    });
+
+    it('should return a new emptyRegion instance if the current is destroyed', function() {
+      const emptyRegion = myCollectionView.getEmptyRegion();
+      emptyRegion.destroy();
+
+      expect(myCollectionView.getEmptyRegion()).to.not.equal(emptyRegion);
+      expect(myCollectionView.getEmptyRegion().el).to.equal(myCollectionView.el);
     });
   });
 
@@ -94,10 +144,10 @@ describe('NextCollectionView -  Empty', function() {
           emptyView: false
         });
 
-        this.sinon.spy(myCollectionView.emptyRegion, 'show');
+        this.sinon.spy(myCollectionView.getEmptyRegion(), 'show');
         myCollectionView.render();
 
-        expect(myCollectionView.emptyRegion.show).to.not.have.been.called;
+        expect(myCollectionView.getEmptyRegion().show).to.not.have.been.called;
       });
     });
 
@@ -109,10 +159,10 @@ describe('NextCollectionView -  Empty', function() {
           emptyView: MyView
         });
 
-        this.sinon.spy(myCollectionView.emptyRegion, 'show');
+        this.sinon.spy(myCollectionView.getEmptyRegion(), 'show');
         myCollectionView.render();
 
-        expect(myCollectionView.emptyRegion.show)
+        expect(myCollectionView.getEmptyRegion().show)
           .to.be.calledOnce
           .and.calledWith(sinon.match.instanceOf(MyView));
       });
@@ -125,10 +175,10 @@ describe('NextCollectionView -  Empty', function() {
           emptyView: Backbone.View
         });
 
-        this.sinon.spy(myCollectionView.emptyRegion, 'show');
+        this.sinon.spy(myCollectionView.getEmptyRegion(), 'show');
         myCollectionView.render();
 
-        expect(myCollectionView.emptyRegion.show)
+        expect(myCollectionView.getEmptyRegion().show)
           .to.be.calledOnce
           .and.calledWith(sinon.match.instanceOf(Backbone.View));
       });
@@ -144,10 +194,10 @@ describe('NextCollectionView -  Empty', function() {
           emptyView: emptyViewStub
         });
 
-        this.sinon.spy(myCollectionView.emptyRegion, 'show');
+        this.sinon.spy(myCollectionView.getEmptyRegion(), 'show');
         myCollectionView.render();
 
-        expect(myCollectionView.emptyRegion.show)
+        expect(myCollectionView.getEmptyRegion().show)
           .to.be.calledOnce
           .and.calledWith(sinon.match.instanceOf(Backbone.View));
       });
@@ -160,10 +210,10 @@ describe('NextCollectionView -  Empty', function() {
           emptyView: 'foo'
         });
 
-        this.sinon.spy(myCollectionView.emptyRegion, 'show');
+        this.sinon.spy(myCollectionView.getEmptyRegion(), 'show');
         myCollectionView.render();
 
-        expect(myCollectionView.emptyRegion.show).to.not.have.been.called;
+        expect(myCollectionView.getEmptyRegion().show).to.not.have.been.called;
       });
     });
   });
@@ -191,7 +241,7 @@ describe('NextCollectionView -  Empty', function() {
       });
 
       it('should show an emptyView with the emptyViewOptions', function() {
-        const emptyView = myCollectionView.emptyRegion.currentView;
+        const emptyView = myCollectionView.getEmptyRegion().currentView;
         expect(emptyView.options).to.deep.equal(emptyViewOptions);
       });
 
@@ -222,7 +272,7 @@ describe('NextCollectionView -  Empty', function() {
       });
 
       it('should show an emptyView with the emptyViewOptions', function() {
-        const emptyView = myCollectionView.emptyRegion.currentView;
+        const emptyView = myCollectionView.getEmptyRegion().currentView;
         expect(emptyView.options).to.deep.equal(childViewOptions);
       });
 
@@ -249,7 +299,7 @@ describe('NextCollectionView -  Empty', function() {
       });
 
       it('should not show the emptyView', function() {
-        expect(myCollectionView.emptyRegion.hasView()).to.be.false;
+        expect(myCollectionView.getEmptyRegion().hasView()).to.be.false;
       });
 
       describe('when removing one child', function() {
@@ -263,7 +313,7 @@ describe('NextCollectionView -  Empty', function() {
         });
 
         it('should not show the emptyView', function() {
-          expect(myCollectionView.emptyRegion.hasView()).to.be.false;
+          expect(myCollectionView.getEmptyRegion().hasView()).to.be.false;
         });
       });
 
@@ -279,7 +329,7 @@ describe('NextCollectionView -  Empty', function() {
         });
 
         it('should show the emptyView', function() {
-          expect(myCollectionView.emptyRegion.hasView()).to.be.true;
+          expect(myCollectionView.getEmptyRegion().hasView()).to.be.true;
         });
       });
     });
@@ -299,7 +349,7 @@ describe('NextCollectionView -  Empty', function() {
       });
 
       it('should show the emptyView', function() {
-        expect(myCollectionView.emptyRegion.hasView()).to.be.true;
+        expect(myCollectionView.getEmptyRegion().hasView()).to.be.true;
       });
     });
 
@@ -321,7 +371,7 @@ describe('NextCollectionView -  Empty', function() {
       });
 
       it('should not show the emptyView', function() {
-        expect(myCollectionView.emptyRegion.hasView()).to.be.false;
+        expect(myCollectionView.getEmptyRegion().hasView()).to.be.false;
       });
     });
 
@@ -341,7 +391,7 @@ describe('NextCollectionView -  Empty', function() {
       });
 
       it('should show the emptyView', function() {
-        expect(myCollectionView.emptyRegion.hasView()).to.be.true;
+        expect(myCollectionView.getEmptyRegion().hasView()).to.be.true;
       });
     });
   });

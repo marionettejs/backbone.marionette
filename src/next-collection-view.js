@@ -58,7 +58,8 @@ const CollectionView = Backbone.View.extend({
     args[0] = this.options;
     Backbone.View.prototype.constructor.apply(this, args);
 
-    this._initEmptyRegion();
+    // Init empty region
+    this.getEmptyRegion();
 
     this.delegateEntityEvents();
 
@@ -71,10 +72,16 @@ const CollectionView = Backbone.View.extend({
   },
 
   // Create an region to show the emptyView
-  _initEmptyRegion() {
-    this.emptyRegion = new Region({ el: this.el, replaceElement: false });
+  getEmptyRegion() {
+    if (this._emptyRegion && !this._emptyRegion.isDestroyed()) {
+      return this._emptyRegion;
+    }
 
-    this.emptyRegion._parentView = this;
+    this._emptyRegion = new Region({ el: this.el, replaceElement: false });
+
+    this._emptyRegion._parentView = this;
+
+    return this._emptyRegion;
   },
 
   // Configured the initial events that the collection view binds to.
@@ -327,7 +334,9 @@ const CollectionView = Backbone.View.extend({
 
     const options = this._getEmptyViewOptions();
 
-    this.emptyRegion.show(new EmptyView(options));
+    const emptyRegion = this.getEmptyRegion();
+
+    emptyRegion.show(new EmptyView(options));
   },
 
   // Retrieve the empty view class
@@ -341,11 +350,11 @@ const CollectionView = Backbone.View.extend({
 
   // Remove the emptyView
   _destroyEmptyView() {
-
+    const emptyRegion = this.getEmptyRegion();
     // Only empty if a view is show so the region
     // doesn't detach any other unrelated HTML
-    if (this.emptyRegion.hasView()) {
-      this.emptyRegion.empty();
+    if (emptyRegion.hasView()) {
+      emptyRegion.empty();
     }
   },
 
@@ -676,7 +685,8 @@ const CollectionView = Backbone.View.extend({
   // called by ViewMixin destroy
   _removeChildren() {
     this._destroyChildren();
-    this.emptyRegion.destroy();
+    const emptyRegion = this.getEmptyRegion();
+    emptyRegion.destroy();
     delete this._addedViews;
   },
 

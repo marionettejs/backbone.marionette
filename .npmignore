@@ -1,4 +1,5 @@
 bower_components
+coverage
 docs
 gulp
 jsdoc
@@ -12,6 +13,7 @@ tmp
 .gitignore
 .travis.yml
 bower.json
+cypress.json
 CONTRIBUTING.md
 gulpfile.babel.js
 ISSUE_TEMPLATE.md

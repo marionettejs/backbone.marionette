@@ -7,8 +7,11 @@
 // into portable logical chunks, keeping your views simple and your code DRY.
 
 import _ from 'underscore';
+import Backbone from 'backbone';
+import extend from './utils/extend';
 import getNamespacedEventName from './utils/get-namespaced-event-name';
-import MarionetteObject from './object';
+import triggerMethod from './common/trigger-method';
+import CommonMixin from './mixins/common';
 import DelegateEntityEventsMixin from './mixins/delegate-entity-events';
 import TriggersMixin from './mixins/triggers';
 import UIMixin from './mixins/ui';
@@ -21,31 +24,41 @@ const ClassOptions = [
   'ui'
 ];
 
-const Behavior = MarionetteObject.extend({
+const Behavior = function(options, view) {
+  // Setup reference to the view.
+  // this comes in handle when a behavior
+  // wants to directly talk up the chain
+  // to the view.
+  this.view = view;
+
+  this._setOptions(options);
+  this.mergeOptions(this.options, ClassOptions);
+  this.cid = _.uniqueId(this.cidPrefix);
+
+  // Construct an internal UI hash using
+  // the behaviors UI hash and then the view UI hash.
+  // This allows the user to use UI hash elements
+  // defined in the parent view as well as those
+  // defined in the given behavior.
+  // This order will help the reuse and share of a behavior
+  // between multiple views, while letting a view override a
+  // selector under an UI key.
+  this.ui = _.extend({}, _.result(this, 'ui'), _.result(view, 'ui'));
+
+  this.initialize.apply(this, arguments);
+};
+
+Behavior.extend = extend;
+
+// Behavior Methods
+// --------------
+
+// Ensure it can trigger events with Backbone.Events
+_.extend(Behavior.prototype, Backbone.Events, CommonMixin, DelegateEntityEventsMixin, TriggersMixin, UIMixin, {
   cidPrefix: 'mnb',
 
-  constructor(options, view) {
-    // Setup reference to the view.
-    // this comes in handle when a behavior
-    // wants to directly talk up the chain
-    // to the view.
-    this.view = view;
-
-    this._setOptions(options);
-    this.mergeOptions(this.options, ClassOptions);
-
-    // Construct an internal UI hash using
-    // the behaviors UI hash and then the view UI hash.
-    // This allows the user to use UI hash elements
-    // defined in the parent view as well as those
-    // defined in the given behavior.
-    // This order will help the reuse and share of a behavior
-    // between multiple views, while letting a view override a
-    // selector under an UI key.
-    this.ui = _.extend({}, _.result(this, 'ui'), _.result(view, 'ui'));
-
-    MarionetteObject.apply(this, arguments);
-  },
+  // This is a noop method intended to be overridden
+  initialize() {},
 
   // proxy behavior $ method to the view
   // this is useful for doing jquery DOM lookups
@@ -55,7 +68,6 @@ const Behavior = MarionetteObject.extend({
   },
 
   // Stops the behavior from listening to events.
-  // Overrides Object#destroy to prevent additional events from being triggered.
   destroy() {
     this.stopListening();
 
@@ -126,10 +138,9 @@ const Behavior = MarionetteObject.extend({
     const behaviorTriggers = this.normalizeUIKeys(_.result(this, 'triggers'));
 
     return this._getViewTriggers(this.view, behaviorTriggers);
-  }
+  },
 
+  triggerMethod
 });
-
-_.extend(Behavior.prototype, DelegateEntityEventsMixin, TriggersMixin, UIMixin);
 
 export default Behavior;

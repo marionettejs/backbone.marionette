@@ -1,5 +1,6 @@
 import * as Marionette from '../../../src/backbone.marionette';
 import MarionetteError from '../../../src/error';
+import deprecate from '../../../src/utils/deprecate';
 
 describe('Marionette.bindEvents', function() {
   'use strict';
@@ -101,11 +102,11 @@ describe('Marionette.bindEvents', function() {
   describe('when bindings is an object with multiple event-handler pairs', function() {
     beforeEach(function() {
       Marionette.setEnabled('DEV_MODE', true);
-      this.sinon.spy(Marionette.deprecate, '_warn');
-      this.sinon.stub(Marionette.deprecate, '_console', {
+      this.sinon.spy(deprecate, '_warn');
+      this.sinon.stub(deprecate, '_console', {
         warn: this.sinon.stub()
       });
-      Marionette.deprecate._cache = {};
+      deprecate._cache = {};
       Marionette.bindEvents(this.target, this.entity, {
         'foo': 'handleFoo handleMulti',
         'bar': 'handleBar'
@@ -116,8 +117,8 @@ describe('Marionette.bindEvents', function() {
       Marionette.setEnabled('DEV_MODE', false);
     });
 
-    it('should call Marionette.deprecate', function() {
-      expect(Marionette.deprecate._warn).to.be.calledWith('Deprecation warning: Multiple handlers for a single event are deprecated. If needed, use a single handler to call multiple methods.');
+    it('should call deprecate', function() {
+      expect(deprecate._warn).to.be.calledWith('Deprecation warning: Multiple handlers for a single event are deprecated. If needed, use a single handler to call multiple methods.');
     });
 
     it('should bind first event to targets handlers', function() {

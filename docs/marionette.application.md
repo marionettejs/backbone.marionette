@@ -198,6 +198,10 @@ app.start({
 The Marionette Application provides helper methods for managing its attached
 region.
 
+### `initialize`
+
+### `triggerMethod`
+
 ### `getRegion()`
 
 Return the attached [region object](./marionette.region.md) for the Application.
@@ -212,8 +216,6 @@ Return the view currently being displayed in the Application's attached
 `region`. If the Application is not currently displaying a view, this method
 returns `undefined`.
 
-### Marionette.Object Methods
+### `isDestroyed`
 
-`Marionette.Application` extends `Marionette.Object` and, as such, implements
-the same method interface. See the [`Object`](./marionette.object.md)
-reference for the full list.
+### `destroy`

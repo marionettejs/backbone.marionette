@@ -144,33 +144,4 @@ describe('marionette object', function() {
       });
     });
   });
-
-  // Testing internal use cases.
-  describe('when extending an object', function() {
-    let Object;
-
-    beforeEach(function() {
-      Object = MnObject.extend({
-        constructor(options) {
-          this.options = {};
-          this.cid = 'foo';
-          MnObject.apply(this, arguments);
-        }
-      });
-    });
-
-    it('should not re-set the options', function() {
-      this.sinon.spy(Object.prototype, '_setOptions');
-
-      const object = new Object();
-
-      expect(object._setOptions).to.not.have.been.called;
-    });
-
-    it('should not re-set the cid', function() {
-      const object = new Object();
-
-      expect(object.cid).to.equal('foo');
-    });
-  });
 });

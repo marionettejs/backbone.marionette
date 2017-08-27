@@ -7,8 +7,6 @@ identify where your region must be displayed.
 See the documentation for [laying out views](./marionette.view.md#laying-out-views---regions) for an introduction in
 managing regions throughout your application.
 
-A Region is a [`Marionette.Object`](./marionette.object.md) and has all of its functionality.
-
 Regions maintain the [View's lifecycle](./viewlifecycle.md#regions-and-the-view-lifecycle) while showing or emptying a view.
 
 ## Documentation Index

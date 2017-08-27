@@ -1,8 +1,6 @@
 # Marionette.Object
 
-A base class which other classes can extend from.
-Object incorporates many backbone conventions and utilities
-like `initialize` and `Backbone.Events`.
+Object incorporates backbone conventions `initialize` and `Backbone.Events`.
 Object has all of the [Common Marionette Functionality](./common.md).
 
 ## Documentation Index

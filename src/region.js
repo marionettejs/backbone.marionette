@@ -3,9 +3,11 @@
 
 import _ from 'underscore';
 import Backbone from 'backbone';
+import extend from './utils/extend';
 import { renderView, destroyView } from './common/view';
 import monitorViewEvents from './common/monitor-view-events';
-import MarionetteObject from './object';
+import triggerMethod from './common/trigger-method';
+import CommonMixin from './mixins/common';
 import MarionetteError from './error';
 import View from './view';
 import DomApi, { setDomApi } from './config/dom';
@@ -16,7 +18,37 @@ const ClassOptions = [
   'replaceElement'
 ];
 
-const Region = MarionetteObject.extend({
+const Region = function(options) {
+  this._setOptions(options);
+  this.mergeOptions(options, ClassOptions);
+  this.cid = _.uniqueId(this.cidPrefix);
+
+  // getOption necessary because options.el may be passed as undefined
+  this._initEl = this.el = this.getOption('el');
+
+  // Handle when this.el is passed in as a $ wrapped element.
+  this.el = this.el instanceof Backbone.$ ? this.el[0] : this.el;
+
+  if (!this.el) {
+    throw new MarionetteError({
+      name: 'NoElError',
+      message: 'An "el" must be specified for a region.'
+    });
+  }
+
+  this.$el = this.getEl(this.el);
+
+  this.initialize.apply(this, arguments);
+};
+
+Region.extend = extend;
+Region.setDomApi = setDomApi;
+
+// Region Methods
+// --------------
+
+// Ensure it can trigger events with Backbone.Events
+_.extend(Region.prototype, Backbone.Events, CommonMixin, {
   Dom: DomApi,
 
   cidPrefix: 'mnr',
@@ -24,27 +56,8 @@ const Region = MarionetteObject.extend({
   _isReplaced: false,
   _isSwappingView: false,
 
-  constructor(options) {
-    this._setOptions(options);
-
-    this.mergeOptions(options, ClassOptions);
-
-    // getOption necessary because options.el may be passed as undefined
-    this._initEl = this.el = this.getOption('el');
-
-    // Handle when this.el is passed in as a $ wrapped element.
-    this.el = this.el instanceof Backbone.$ ? this.el[0] : this.el;
-
-    if (!this.el) {
-      throw new MarionetteError({
-        name: 'NoElError',
-        message: 'An "el" must be specified for a region.'
-      });
-    }
-
-    this.$el = this.getEl(this.el);
-    MarionetteObject.call(this, options);
-  },
+  // This is a noop method intended to be overridden
+  initialize() {},
 
   // Displays a backbone view instance inside of the region. Handles calling the `render`
   // method for you. Reads content directly from the `el` attribute. The `preventDestroy`
@@ -360,10 +373,19 @@ const Region = MarionetteObject.extend({
     return this;
   },
 
-  destroy(options) {
+  _isDestroyed: false,
+
+  isDestroyed() {
+    return this._isDestroyed;
+  },
+
+  destroy(...args) {
     if (this._isDestroyed) { return this; }
 
-    this.reset(options);
+    this.triggerMethod('before:destroy', this, ...args);
+    this._isDestroyed = true;
+
+    this.reset(...args);
 
     if (this._name) {
       this._parentView._removeReferences(this._name);
@@ -371,10 +393,13 @@ const Region = MarionetteObject.extend({
     delete this._parentView;
     delete this._name;
 
-    return MarionetteObject.prototype.destroy.apply(this, arguments);
-  }
-}, {
-  setDomApi
+    this.triggerMethod('destroy', this, ...args);
+    this.stopListening();
+
+    return this;
+  },
+
+  triggerMethod
 });
 
 export default Region;

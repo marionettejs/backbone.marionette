@@ -15,6 +15,7 @@ describe('Marionette Application', function() {
       beforeEach(function() {
         appOptions = {fooOption: 'foo'};
         initializeStub = this.sinon.stub(Application.prototype, 'initialize');
+        this.sinon.spy(Application.prototype, '_initRadio');
       });
 
       it('should pass all arguments to the initialize method', function() {
@@ -33,6 +34,12 @@ describe('Marionette Application', function() {
         app = new Application(appOptions);
 
         expect(app.cid).to.exist;
+      });
+
+      it('should init the RadioMixin', function() {
+        app = new Application(appOptions);
+
+        expect(app._initRadio).to.have.been.called;
       });
     });
   });
@@ -200,6 +207,76 @@ describe('Marionette Application', function() {
       app.showView(view);
 
       expect(app.getView()).to.have.deep.equal(view);
+    });
+  });
+
+  describe('#destroy', function() {
+    let app;
+
+    beforeEach(function() {
+      const App = Application.extend({
+        onDestroy: this.sinon.stub()
+      });
+
+      app = new App();
+
+      this.sinon.spy(app, 'destroy');
+    });
+
+    it('should trigger the before:destroy event', function() {
+      const onBeforeDestroyHandler = this.sinon.spy();
+      app.on('before:destroy', onBeforeDestroyHandler);
+
+      app.destroy('foo');
+
+      expect(onBeforeDestroyHandler).to.have.been.calledOnce.and.calledWith(app, 'foo');
+    });
+
+    it('should trigger the destroy events', function() {
+      app.destroy('foo');
+
+      expect(app.onDestroy).to.have.been.calledOnce.and.calledWith(app, 'foo');
+    });
+
+    it('should set `app.isDestroyed()` to `true`', function() {
+      app.destroy();
+
+      expect(app.isDestroyed()).to.be.true;
+    });
+
+    it('should return the app', function() {
+      app.destroy();
+
+      expect(app.destroy).to.have.returned(app);
+    });
+
+    it('should stop listening to events after the destroy event', function() {
+      this.sinon.spy(app, 'stopListening');
+
+      app.destroy();
+
+      expect(app.stopListening).to.have.been.calledOnce.and.calledAfter(app.onDestroy);
+    });
+
+    describe('when already destroyed', function() {
+      beforeEach(function() {
+        app.destroy();
+      });
+
+      it('should return the app', function() {
+        app.destroy();
+
+        expect(app.destroy).to.have.returned(app);
+      });
+
+      it('should not trigger any events', function() {
+        const onAllHandler = this.sinon.stub();
+        app.on('all', onAllHandler);
+
+        app.destroy();
+
+        expect(onAllHandler).to.not.have.been.called;
+      });
     });
   });
 });

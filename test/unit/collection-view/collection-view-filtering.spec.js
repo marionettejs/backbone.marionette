@@ -2,7 +2,7 @@
 
 import _ from 'underscore';
 import Backbone from 'backbone';
-import CollectionView from '../../../src/next-collection-view';
+import CollectionView from '../../../src/collection-view';
 import View from '../../../src/view';
 
 function renderModels(models) {
@@ -13,7 +13,7 @@ function isOdd(num) {
   return !!(num % 2);
 }
 
-describe('#NextCollectionView - Filtering', function() {
+describe('CollectionView - Filtering', function() {
   let collection;
   let collectionOddModels;
   let collectionEvenModels;

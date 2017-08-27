@@ -2,12 +2,12 @@
 
 import _ from 'underscore';
 import Backbone from 'backbone';
-import CollectionView from '../../../src/next-collection-view';
+import CollectionView from '../../../src/collection-view';
 import View from '../../../src/view';
 import Region from '../../../src/region';
 import BackboneViewMixin from '../../../src/mixins/backboneview';
 
-describe('NextCollectionView -  Empty', function() {
+describe('CollectionView -  Empty', function() {
   let MyEmptyView;
   let MyCollectionView;
 

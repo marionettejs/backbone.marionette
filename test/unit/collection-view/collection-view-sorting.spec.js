@@ -2,10 +2,10 @@
 
 import _ from 'underscore';
 import Backbone from 'backbone';
-import CollectionView from '../../../src/next-collection-view';
+import CollectionView from '../../../src/collection-view';
 import View from '../../../src/view';
 
-describe('NextCollectionView - Sorting', function() {
+describe('CollectionView - Sorting', function() {
   let collection;
   let MyChildView;
   let MyCollectionView;

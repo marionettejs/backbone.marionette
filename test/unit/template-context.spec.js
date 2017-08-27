@@ -9,25 +9,7 @@ describe('template context methods', function() {
     this.model = new Backbone.Model(this.modelData);
   });
 
-  describe('composite view', function() {
-    describe('when rendering with no model or collection and a templateContext is found', function() {
-      beforeEach(function() {
-        this.View = Marionette.CompositeView.extend({
-          templateContext: this.templateContext,
-          template: this.templateStub
-        });
-
-        this.view = new this.View();
-        this.view.render();
-      });
-
-      it('should include the template context in the data object', function() {
-        expect(this.templateStub).to.have.been.calledOnce.and.calledWith(this.templateContext);
-      });
-    });
-  });
-
-  describe('item view', function() {
+  describe('view', function() {
     describe('when rendering with no model or collection and a templateContext is found', function() {
       beforeEach(function() {
         this.View = Marionette.View.extend({

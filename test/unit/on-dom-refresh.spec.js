@@ -59,37 +59,4 @@ describe('onDomRefresh', function() {
     });
   });
 
-  describe('when a CollectionView attached to the DOM renders a Backbone child view', function() {
-    beforeEach(function() {
-      var collection = new Backbone.Collection();
-      var collectionView = new Marionette.CollectionView({
-        childView: this.BbView,
-        collection: collection
-      });
-      this.attachedRegion.show(collectionView);
-      collection.add({id: 1});
-      this.bbView = collectionView.children.findByIndex(0);
-    });
-
-    it('should trigger onDomRefresh on the child view', function() {
-      expect(this.bbView.onDomRefresh).to.have.been.calledOnce;
-    });
-  });
-
-  describe('when a CollectionView attached to the DOM renders a Marionette child view', function() {
-    beforeEach(function() {
-      var collection = new Backbone.Collection();
-      var collectionView = new Marionette.CollectionView({
-        childView: this.MnView,
-        collection: collection
-      });
-      this.attachedRegion.show(collectionView);
-      collection.add({id: 1});
-      this.mnView = collectionView.children.findByIndex(0);
-    });
-
-    it('should trigger onDomRefresh on the child view', function() {
-      expect(this.mnView.onDomRefresh).to.have.been.calledOnce;
-    });
-  });
 });

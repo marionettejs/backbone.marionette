@@ -24,8 +24,6 @@ import BackboneViewMixin from './mixins/backboneview';
 import MarionetteObject from './object';
 import View from './view';
 import CollectionView from './collection-view';
-import NextCollectionView from './next-collection-view';
-import CompositeView from './composite-view';
 import Behavior from './behavior';
 import Region from './region';
 import Application from './application';
@@ -73,8 +71,6 @@ Marionette.Application = Application;
 Marionette.AppRouter = AppRouter;
 Marionette.View = View;
 Marionette.CollectionView = CollectionView;
-Marionette.NextCollectionView = NextCollectionView;
-Marionette.CompositeView = CompositeView;
 Marionette.Behavior = Behavior;
 Marionette.Region = Region;
 Marionette.Error = MarionetteError;
@@ -87,13 +83,10 @@ Marionette.VERSION = version;
 Marionette.DomApi = DomApi;
 Marionette.setDomApi = function(mixin) {
   CollectionView.setDomApi(mixin);
-  CompositeView.setDomApi(mixin);
-  NextCollectionView.setDomApi(mixin);
   Region.setDomApi(mixin);
   View.setDomApi(mixin);
 };
 Marionette.setRenderer = function(renderer) {
-  CompositeView.setRenderer(renderer);
   View.setRenderer(renderer);
 };
 

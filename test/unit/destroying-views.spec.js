@@ -42,44 +42,4 @@ describe('destroying views', function() {
       expect(this.itemView).to.have.property('_isDestroyed', true);
     });
   });
-
-  describe('when destroying a Marionette.CollectionView multiple times', function() {
-    beforeEach(function() {
-      this.onDestroyStub = this.sinon.stub();
-
-      this.collectionView = new Marionette.CollectionView();
-      this.collectionView.onDestroy = this.onDestroyStub;
-
-      this.collectionView.destroy();
-      this.collectionView.destroy();
-    });
-
-    it('should only run the destroying code once', function() {
-      expect(this.onDestroyStub).to.have.been.calledOnce;
-    });
-
-    it('should mark the view as destroyed', function() {
-      expect(this.collectionView).to.have.property('_isDestroyed', true);
-    });
-  });
-
-  describe('when destroying a Marionette.CompositeView multiple times', function() {
-    beforeEach(function() {
-      this.onDestroyStub = this.sinon.stub();
-
-      this.compositeView = new Marionette.CompositeView();
-      this.compositeView.onDestroy = this.onDestroyStub;
-
-      this.compositeView.destroy();
-      this.compositeView.destroy();
-    });
-
-    it('should only run the destroying code once', function() {
-      expect(this.onDestroyStub).to.have.been.calledOnce;
-    });
-
-    it('should mark the view as destroyed', function() {
-      expect(this.compositeView).to.have.property('_isDestroyed', true);
-    });
-  });
 });

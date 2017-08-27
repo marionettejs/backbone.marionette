@@ -3,12 +3,12 @@
 import $ from 'jquery';
 import _ from 'underscore';
 import Backbone from 'backbone';
-import CollectionView from '../../../src/next-collection-view';
-import ChildViewContainer from '../../../src/next-child-view-container';
+import CollectionView from '../../../src/collection-view';
+import ChildViewContainer from '../../../src/child-view-container';
 import View from '../../../src/view';
 import Region from '../../../src/region';
 
-describe('next CollectionView Children', function() {
+describe('CollectionView Children', function() {
   const collection = new Backbone.Collection([
     { id: 1 },
     { id: 2 },

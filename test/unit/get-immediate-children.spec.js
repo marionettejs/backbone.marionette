@@ -16,41 +16,7 @@ describe('_getImmediateChildren', function() {
         .to.be.instanceof(Array)
         .and.to.have.length(0);
     });
-  });
 
-  describe('Marionette.CollectionView', function() {
-    describe('when empty', function() {
-      beforeEach(function() {
-        this.collectionView = new Marionette.CollectionView();
-      });
-      it('should return an empty array for getImmediateChildren', function() {
-        expect(this.collectionView._getImmediateChildren())
-          .to.be.instanceof(Array)
-          .and.to.have.length(0);
-      });
-    });
-
-    describe('when there are children', function() {
-      beforeEach(function() {
-        this.collectionView = new Marionette.CollectionView({
-          collection: new Backbone.Collection([{}, {}]),
-          childView: this.BaseView
-        });
-        this.collectionView.render();
-        this.childOne = this.collectionView.children.findByIndex(0);
-        this.childTwo = this.collectionView.children.findByIndex(1);
-      });
-      it('should return an empty array for getImmediateChildren', function() {
-        expect(this.collectionView._getImmediateChildren())
-          .to.be.instanceof(Array)
-          .and.to.have.length(2)
-          .and.to.contain(this.childOne)
-          .and.to.contain(this.childTwo);
-      });
-    });
-  });
-
-  describe('Marionette.View', function() {
     describe('without regions', function() {
       beforeEach(function() {
         this.layoutView = new Marionette.View({

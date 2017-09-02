@@ -4,7 +4,7 @@
 import _ from 'underscore';
 import MarionetteError from './error';
 import CollectionView from './next-collection-view';
-import View from './view';
+import TemplateRenderMixin from './mixins/template-render';
 
 const ClassOptions = [
   'childViewContainer',
@@ -23,11 +23,6 @@ const CompositeView = CollectionView.extend({
 
   childView() {
     return this.constructor;
-  },
-
-  // Return the serialized model
-  serializeData() {
-    return this.serializeModel();
   },
 
   attachHtml(els) {
@@ -52,10 +47,13 @@ const CompositeView = CollectionView.extend({
       });
     }
   }
+}, {
+  setRenderer(renderer) {
+    this.prototype._renderHtml = renderer;
+    return this;
+  }
 });
 
-// TODO: Extract to a TemplateRenderMixin
-const MixinFromView = _.pick(View.prototype, 'serializeModel', 'getTemplate', '_renderTemplate', '_renderHtml', 'mixinTemplateContext', 'attachElContent');
-_.extend(CompositeView.prototype, MixinFromView);
+_.extend(CompositeView.prototype, TemplateRenderMixin);
 
 export default CompositeView;

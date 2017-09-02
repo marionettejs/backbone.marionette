@@ -112,7 +112,14 @@ const CollectionView = Backbone.View.extend({
   },
 
   _onCollectionReset() {
-    this.render();
+    this._destroyChildren();
+
+    // After all children have been destroyed re-init the container
+    this.children._init();
+
+    this._addChildModels(this.collection.models);
+
+    this._showChildren();
   },
 
   // Handle collection update model additions and  removals
@@ -280,12 +287,17 @@ const CollectionView = Backbone.View.extend({
       this._addChildModels(this.collection.models);
     }
 
-    this._showChildren();
+    this._render();
 
     this._isRendered = true;
 
     this.triggerMethod('render', this);
     return this;
+  },
+
+  // For overriding in CompositeView
+  _render() {
+    this._showChildren();
   },
 
   // Sorts the children then filters and renders the results.

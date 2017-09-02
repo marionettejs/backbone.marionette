@@ -493,7 +493,7 @@ describe('composite view', function() {
         this.collection.reset([this.m3, this.m4]);
       });
 
-      it.skip('should not re-render the template with the model', function() {
+      it('should not re-render the template with the model', function() {
         expect(this.compositeView._renderTemplate).not.to.have.been.called;
       });
 

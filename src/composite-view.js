@@ -18,8 +18,6 @@ const CompositeView = CollectionView.extend({
   constructor(options) {
     this.mergeOptions(options, ClassOptions);
 
-    this.on('before:render', this._onBeforeRender);
-
     CollectionView.prototype.constructor.apply(this, arguments);
   },
 
@@ -36,10 +34,11 @@ const CompositeView = CollectionView.extend({
     this.Dom.appendContents(this.$container[0], els, {_$el: this.$container});
   },
 
-  _onBeforeRender() {
+  _render() {
     this._renderTemplate();
     this.bindUIElements();
     this._getChildViewContainer();
+    this._showChildren();
   },
 
   _getChildViewContainer() {

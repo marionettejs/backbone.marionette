@@ -1,3 +1,9 @@
+### v3.4.3 [view commit logs](https://github.com/marionettejs/backbone.marionette/compare/v3.4.2...v3.4.3)
+
+#### Fixes
+* `NextCollectionView` collection single model remove no longer incorrectly removes all children
+* `EmptyView` will correctly display if a `NextCollectionView` is rendered in `initialize`
+
 ### v3.4.2 [view commit logs](https://github.com/marionettejs/backbone.marionette/compare/v3.4.1...v3.4.2)
 
 #### Fixes

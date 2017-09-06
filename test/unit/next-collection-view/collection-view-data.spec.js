@@ -99,21 +99,47 @@ describe('next CollectionView Data', function() {
 
     describe('when the collection resets', function() {
       let myCollectionView;
+      let renderChildrenStub;
+      let destroyChildrenStub;
 
       beforeEach(function() {
+        renderChildrenStub = this.sinon.stub();
+        destroyChildrenStub = this.sinon.stub();
+
         myCollectionView = new MyCollectionView({
-          collection: new Backbone.Collection()
+          collection: new Backbone.Collection([{ id: 1 }], { id: 2 })
         });
 
         myCollectionView.render();
 
-        this.sinon.spy(myCollectionView, 'render');
+        this.sinon.spy(myCollectionView.children, '_init');
 
-        myCollectionView.collection.reset([{ id: 1 }]);
+        myCollectionView.on({
+          'render:children': renderChildrenStub,
+          'destroy:children': destroyChildrenStub
+        });
+
+        myCollectionView.collection.reset([{ id: 3 }]);
       });
 
-      it('should call the render method', function() {
-        expect(myCollectionView.render).to.have.been.called;
+      it('should destroy the children', function() {
+        expect(destroyChildrenStub).to.have.been.calledOnce;
+      });
+
+      it('should re init the children', function() {
+        expect(myCollectionView.children._init).to.have.been.calledOnce;
+      });
+
+      it('should only contain the new children', function() {
+        const myModel = myCollectionView.collection.get(3);
+        const childView = myCollectionView.children.findByModel(myModel);
+
+        expect(childView).to.not.be.undefined;
+        expect(myCollectionView.children).to.have.lengthOf(1);
+      });
+
+      it('should render the new children', function() {
+        expect(renderChildrenStub).to.have.been.calledOnce;
       });
     });
   });

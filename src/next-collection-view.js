@@ -95,22 +95,13 @@ const CollectionView = Backbone.View.extend({
 
   // Internal method. This checks for any changes in the order of the collection.
   // If the index of any view doesn't match, it will re-sort.
-  _onCollectionSort() {
+  _onCollectionSort(collection, { add, merge, remove }) {
     if (!this.sortWithCollection || this.viewComparator === false) {
       return;
     }
 
-    // If the data is changing we will handle the sort later
-    if (this.collection.length !== this.children.length) {
-      return;
-    }
-
-    // Additional check if the data is changing
-    const hasAddedModel = this.collection.some(model => {
-      return !this.children.findByModel(model);
-    });
-
-    if (hasAddedModel) {
+    // If the data is changing we will handle the sort later in `_onCollectionUpdate`
+    if (add || remove || merge) {
       return;
     }
 

@@ -13,6 +13,7 @@ patterns etc.
 * [Setting Options](#setting-options)
   * [The `getOption` Method](#the-getoption-method)
   * [The `mergeOptions` Method](#the-mergeoptions-method)
+  * [The `options` Property](#the-options-property)
 
 ## Class-based Inheritance
 
@@ -254,3 +255,35 @@ In this example, `model` and `something` are directly available on the
 `MyObject` instance, while `another` must be accessed via `getOption`. This is
 handy when you want to add extra keys that will be used heavily throughout the
 defined class.
+
+### The `options` Property
+
+Is possible to define an `options` property in the class definition that will
+be used as default values. The `options` argument passed at class instantiation
+has precedence over the property.
+
+> The `options` argument passed in `initialize` method is equal to the passed at 
+> class instantiation. To get the option inside initialize considering the 
+> `options` property is necessary to use `getOption`  
+
+```javascript
+var Bb = require('backbone');
+var Mn = require('backbone.marionette');
+
+var MyObject = Mn.Object.extend({
+  options: {
+    foo: 'bar',
+    another: 'thing'
+  },
+  
+  initialize: function(options) {
+    console.log(options.foo) // undefined
+    console.log(this.getOption('foo')) // 'bar'
+    console.log(this.getOption('another')) // 'value'            
+  }
+});
+
+var myObject = new MyObject({    
+  another: 'value'
+});
+```

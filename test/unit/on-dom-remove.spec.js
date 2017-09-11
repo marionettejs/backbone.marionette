@@ -8,6 +8,7 @@ describe('onDomRemove', function() {
     this.BbView = Backbone.View.extend({
       onDomRemove: this.sinon.stub()
     });
+    _.extend(this.BbView.prototype, Marionette.BackboneViewMixin);
     this.MnView = Marionette.View.extend({
       template: _.noop,
       onDomRemove: this.sinon.stub()

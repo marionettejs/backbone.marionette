@@ -136,6 +136,8 @@ describe('NextCollectionView -  Empty', function() {
 
   describe('#emptyView', function() {
     const collection = new Backbone.Collection();
+    const BBView = Backbone.View.extend();
+    _.extend(BBView.prototype, Marionette.BackboneViewMixin);
 
     describe('when emptyView is falsey', function() {
       it('should not show an emptyView', function() {
@@ -172,7 +174,7 @@ describe('NextCollectionView -  Empty', function() {
       it('should show an emptyView from the defined view', function() {
         const myCollectionView = new CollectionView({
           collection,
-          emptyView: Backbone.View
+          emptyView: BBView
         });
 
         this.sinon.spy(myCollectionView.getEmptyRegion(), 'show');
@@ -180,14 +182,14 @@ describe('NextCollectionView -  Empty', function() {
 
         expect(myCollectionView.getEmptyRegion().show)
           .to.be.calledOnce
-          .and.calledWith(sinon.match.instanceOf(Backbone.View));
+          .and.calledWith(sinon.match.instanceOf(BBView));
       });
     });
 
     describe('when emptyView is a function returning a view', function() {
       it('should show an emptyView from the returned view', function() {
         const emptyViewStub = this.sinon.stub();
-        emptyViewStub.returns(Backbone.View);
+        emptyViewStub.returns(BBView);
 
         const myCollectionView = new CollectionView({
           collection,
@@ -199,7 +201,7 @@ describe('NextCollectionView -  Empty', function() {
 
         expect(myCollectionView.getEmptyRegion().show)
           .to.be.calledOnce
-          .and.calledWith(sinon.match.instanceOf(Backbone.View));
+          .and.calledWith(sinon.match.instanceOf(BBView));
       });
     });
 

@@ -151,47 +151,4 @@ describe('trigger event and method name', function() {
       expect(this.onChildviewFooClickStub).to.have.been.calledOnce;
     });
   });
-
-  describe('when triggering an event on another context', function() {
-    describe('when the context has triggerMethod defined', function() {
-      beforeEach(function() {
-        this.view = new Marionette.View();
-        this.triggerMethodSpy = this.sinon.spy(this.view, 'triggerMethod');
-        this.view.onFoo = this.methodHandler;
-        this.view.on('foo', this.eventHandler);
-        Marionette.triggerMethodOn(this.view, 'foo');
-      });
-
-      it('should trigger the event', function() {
-        expect(this.eventHandler).to.have.been.calledOnce;
-      });
-
-      it('should call a method named on{Event}', function() {
-        expect(this.methodHandler).to.have.been.calledOnce;
-      });
-
-      it('should return the value returned by the on{Event} method', function() {
-        expect(this.triggerMethodSpy)
-          .to.have.been.calledOnce
-          .and.returned(this.returnValue);
-      });
-    });
-
-    describe('when the context does not have triggerMethod defined', function() {
-      beforeEach(function() {
-        this.obj = _.extend({}, Backbone.Events);
-        this.obj.onFoo = this.methodHandler;
-        this.obj.on('foo', this.eventHandler);
-        Marionette.triggerMethodOn(this.obj, 'foo');
-      });
-
-      it('should trigger the event', function() {
-        expect(this.eventHandler).to.have.been.calledOnce;
-      });
-
-      it('should call a method named on{Event}', function() {
-        expect(this.methodHandler).to.have.been.calledOnce;
-      });
-    });
-  });
 });

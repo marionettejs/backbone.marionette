@@ -6,7 +6,6 @@ import Backbone from 'backbone';
 import { renderView, destroyView } from './common/view';
 import isNodeAttached from './common/is-node-attached';
 import monitorViewEvents from './common/monitor-view-events';
-import { triggerMethodOn } from './common/trigger-method';
 import ChildViewContainer from './next-child-view-container';
 import MarionetteError from './error';
 import Region from './region';
@@ -528,14 +527,14 @@ const CollectionView = Backbone.View.extend({
   _detachChildView(view) {
     const shouldTriggerDetach = view._isAttached && this.monitorViewEvents !== false;
     if (shouldTriggerDetach) {
-      triggerMethodOn(view, 'before:detach', view);
+      view.triggerMethod('before:detach', view);
     }
 
     this.detachHtml(view);
 
     if (shouldTriggerDetach) {
       view._isAttached = false;
-      triggerMethodOn(view, 'detach', view);
+      view.triggerMethod('detach', view);
     }
   },
 
@@ -568,7 +567,7 @@ const CollectionView = Backbone.View.extend({
 
     _.each(views, view => {
       if (view._isAttached) { return; }
-      triggerMethodOn(view, 'before:attach', view);
+      view.triggerMethod('before:attach', view);
     });
 
     this.attachHtml(els);
@@ -576,7 +575,7 @@ const CollectionView = Backbone.View.extend({
     _.each(views, view => {
       if (view._isAttached) { return; }
       view._isAttached = true;
-      triggerMethodOn(view, 'attach', view);
+      view.triggerMethod('attach', view);
     });
   },
 

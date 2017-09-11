@@ -7,7 +7,6 @@ import deprecate from './utils/deprecate';
 import { renderView, destroyView } from './common/view';
 import monitorViewEvents from './common/monitor-view-events';
 import isNodeAttached from './common/is-node-attached';
-import { triggerMethodOn } from './common/trigger-method';
 import MarionetteObject from './object';
 import MarionetteError from './error';
 import View from './view';
@@ -114,7 +113,7 @@ const Region = MarionetteObject.extend({
     const shouldReplaceEl = typeof options.replaceElement === 'undefined' ? !!_.result(this, 'replaceElement') : !!options.replaceElement;
 
     if (shouldTriggerAttach) {
-      triggerMethodOn(view, 'before:attach', view);
+      view.triggerMethod('before:attach', view);
     }
 
     if (shouldReplaceEl) {
@@ -125,7 +124,7 @@ const Region = MarionetteObject.extend({
 
     if (shouldTriggerAttach) {
       view._isAttached = true;
-      triggerMethodOn(view, 'attach', view);
+      view.triggerMethod('attach', view);
     }
   },
 
@@ -329,7 +328,7 @@ const Region = MarionetteObject.extend({
     const shouldTriggerDetach = view._isAttached && !this._shouldDisableMonitoring();;
     const shouldRestoreEl = this._isReplaced;
     if (shouldTriggerDetach) {
-      triggerMethodOn(view, 'before:detach', view);
+      view.triggerMethod('before:detach', view);
     }
 
     if (shouldRestoreEl) {
@@ -340,7 +339,7 @@ const Region = MarionetteObject.extend({
 
     if (shouldTriggerDetach) {
       view._isAttached = false;
-      triggerMethodOn(view, 'detach', view);
+      view.triggerMethod('detach', view);
     }
   },
 

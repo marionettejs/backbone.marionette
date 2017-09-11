@@ -8,6 +8,7 @@ describe('onDomRefresh', function() {
     this.BbView = Backbone.View.extend({
       onDomRefresh: this.sinon.stub()
     });
+    _.extend(this.BbView.prototype, Marionette.BackboneViewMixin);
     this.MnView = Marionette.View.extend({
       template: _.noop,
       onDomRefresh: this.sinon.stub()

@@ -11,6 +11,8 @@ import getOption from './common/get-option';
 import normalizeMethods from './common/normalize-methods';
 import monitorViewEvents from './common/monitor-view-events';
 
+import BackboneViewMixin from './mixins/backboneview';
+
 import {
   bindEvents,
   unbindEvents
@@ -77,6 +79,7 @@ Marionette.triggerMethodOn = triggerMethodOn;
 Marionette.isEnabled = isEnabled;
 Marionette.setEnabled = setEnabled;
 Marionette.monitorViewEvents = monitorViewEvents;
+Marionette.BackboneViewMixin = BackboneViewMixin;
 
 Marionette.Behaviors = {};
 Marionette.Behaviors.behaviorsLookup = behaviorsLookup;

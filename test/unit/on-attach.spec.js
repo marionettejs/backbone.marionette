@@ -57,9 +57,11 @@ describe('onAttach', function() {
     EmptyView = Backbone.View.extend(extendAttachMethods(Backbone.View)({
       template: _.noop
     }));
+    _.extend(EmptyView.prototype, Marionette.BackboneViewMixin);
     ChildView = Backbone.View.extend(extendAttachMethods(Backbone.View)({
       template: _.noop
     }));
+    _.extend(ChildView.prototype, Marionette.BackboneViewMixin);
     CollectionView = Marionette.CollectionView.extend({
       childView: ChildView,
       emptyView: EmptyView

@@ -6,7 +6,6 @@ import Backbone from 'backbone';
 import { renderView, destroyView } from './common/view';
 import isNodeAttached from './common/is-node-attached';
 import monitorViewEvents from './common/monitor-view-events';
-import { triggerMethodOn } from './common/trigger-method';
 import ChildViewContainer from './child-view-container';
 import MarionetteError from './error';
 import ViewMixin from './mixins/view';
@@ -80,14 +79,14 @@ const CollectionView = Backbone.View.extend({
     this._isBuffering = false;
 
     _.each(triggerOnChildren, child => {
-      triggerMethodOn(child, 'before:attach', child);
+      child.triggerMethod('before:attach', child);
     });
 
     this.attachBuffer(this, this._createBuffer());
 
     _.each(triggerOnChildren, child => {
       child._isAttached = true;
-      triggerMethodOn(child, 'attach', child);
+      child.triggerMethod('attach', child);
     });
 
     this._bufferedChildren = [];
@@ -602,14 +601,14 @@ const CollectionView = Backbone.View.extend({
     const shouldTriggerAttach = !view._isAttached && !this._isBuffering && this._isAttached && this.monitorViewEvents !== false;
 
     if (shouldTriggerAttach) {
-      triggerMethodOn(view, 'before:attach', view);
+      view.triggerMethod('before:attach', view);
     }
 
     this.attachHtml(this, view, index);
 
     if (shouldTriggerAttach) {
       view._isAttached = true;
-      triggerMethodOn(view, 'attach', view);
+      view.triggerMethod('attach', view);
     }
   },
 

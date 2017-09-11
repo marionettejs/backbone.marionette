@@ -41,15 +41,3 @@ export function triggerMethod(event, ...args) {
 
   return result;
 }
-
-// triggerMethodOn invokes triggerMethod on a specific context
-//
-// e.g. `Marionette.triggerMethodOn(view, 'show')`
-// will trigger a "show" event or invoke onShow the view.
-export function triggerMethodOn(context, ...args) {
-  if (_.isFunction(context.triggerMethod)) {
-    return context.triggerMethod.apply(context, args);
-  }
-
-  return triggerMethod.apply(context, args);
-}

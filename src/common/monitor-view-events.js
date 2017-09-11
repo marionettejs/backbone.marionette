@@ -2,14 +2,13 @@
 // -----------
 
 import _ from 'underscore';
-import { triggerMethodOn } from './trigger-method';
 
 // Trigger method on children unless a pure Backbone.View
 function triggerMethodChildren(view, event, shouldTrigger) {
   if (!view._getImmediateChildren) { return; }
   _.each(view._getImmediateChildren(), child => {
     if (!shouldTrigger(child)) { return; }
-    triggerMethodOn(child, event, child);
+    child.triggerMethod(event, child);
   });
 }
 
@@ -35,13 +34,13 @@ function shouldDetach(view) {
 
 function triggerDOMRefresh(view) {
   if (view._isAttached && view._isRendered) {
-    triggerMethodOn(view, 'dom:refresh', view);
+    view.triggerMethod('dom:refresh', view);
   }
 }
 
 function triggerDOMRemove(view) {
   if (view._isAttached && view._isRendered) {
-    triggerMethodOn(view, 'dom:remove', view);
+    view.triggerMethod('dom:remove', view);
   }
 }
 

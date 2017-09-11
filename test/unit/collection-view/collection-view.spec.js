@@ -11,6 +11,8 @@ describe('collection view', function() {
       }
     });
 
+    _.extend(this.ChildView.prototype, Marionette.BackboneViewMixin);
+
     this.MnChildView = Marionette.View.extend({
       tagName: 'span',
       render: function() {
@@ -46,9 +48,11 @@ describe('collection view', function() {
     });
 
     describe('and it\'s not attached to the document', function() {
+      const BBView = Backbone.View.extend();
+      _.extend(BBView.prototype, Marionette.BackboneViewMixin);
       beforeEach(function() {
         this.collectionView = new this.CollectionView({el: this.$fixtureEl[0]});
-        this.view1 = this.collectionView.addChildView(new Backbone.View({el: this.$fixtureEl.children()[0]}), 0);
+        this.view1 = this.collectionView.addChildView(new BBView({el: this.$fixtureEl.children()[0]}), 0);
       });
 
       it('should have _isAttached set to false', function() {
@@ -62,9 +66,11 @@ describe('collection view', function() {
 
     describe('and it\'s attached to the document', function() {
       beforeEach(function() {
+        var BBView = Backbone.View.extend({});
+        _.extend(BBView.prototype, Marionette.BackboneViewMixin);
         this.setFixtures(this.$fixtureEl);
         this.collectionView = new this.CollectionView({el: '#fixture-collectionview'});
-        this.view1 = this.collectionView.addChildView(new Backbone.View({el: '#el1'}), 0);
+        this.view1 = this.collectionView.addChildView(new BBView({el: '#el1'}), 0);
       });
 
       it('should have _isAttached set to true', function() {
@@ -637,6 +643,7 @@ describe('collection view', function() {
       this.EmptyView = Backbone.View.extend({
         render: function() {}
       });
+      _.extend(this.EmptyView.prototype, Marionette.BackboneViewMixin);
 
       this.CollectionView = this.CollectionView.extend({
         emptyView: this.EmptyView,
@@ -892,10 +899,12 @@ describe('collection view', function() {
   });
 
   describe('when removing a childView that does not have a "destroy" method', function() {
+    const BBView = Backbone.View.extend();
+    _.extend(BBView.prototype, Marionette.BackboneViewMixin);
     beforeEach(function() {
       const collection = new Backbone.Collection([{id: 1}]);
       this.collectionView = new this.CollectionView({
-        childView: Backbone.View,
+        childView: BBView,
         collection
       });
 
@@ -918,9 +927,11 @@ describe('collection view', function() {
   });
 
   describe('when destroying all children', function() {
+    const BBView = Backbone.View.extend();
+    _.extend(BBView.prototype, Marionette.BackboneViewMixin);
     beforeEach(function() {
       this.collectionView = new this.CollectionView({
-        childView: Backbone.View,
+        childView: BBView,
         collection: new Backbone.Collection([{id: 1}, {id: 2}])
       });
 

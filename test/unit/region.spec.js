@@ -196,6 +196,8 @@ describe('region', function() {
         onClick: this.sinon.stub()
       });
 
+      _.extend(this.MyView.prototype, Marionette.BackboneViewMixin);
+
       this.sinon.stub(this.MyView.prototype, 'onBeforeRender', _.bind(function() { return this.region.currentView; }, this));
 
       this.setFixtures('<div id="region"></div>');
@@ -310,6 +312,8 @@ describe('region', function() {
             $(this.el).addClass('onShowClass');
           }
         });
+
+        _.extend(this.MyView2.prototype, Marionette.BackboneViewMixin);
 
         this.view1 = new this.MyView();
         this.view2 = new this.MyView2();
@@ -671,6 +675,8 @@ describe('region', function() {
         }
       });
 
+      _.extend(this.SubView.prototype, Marionette.BackboneViewMixin);
+
       this.setFixtures('<div id="region"></div>');
       this.region = new this.MyRegion();
       this.attachHtmlSpy = this.sinon.spy(this.region, 'attachHtml');
@@ -712,6 +718,8 @@ describe('region', function() {
         destroy: function() {}
       });
 
+      _.extend(this.MyView.prototype, Marionette.BackboneViewMixin);
+
       this.setFixtures('<div id="region"></div>');
 
       this.view1 = new this.MyView();
@@ -746,6 +754,8 @@ describe('region', function() {
         destroy: function() {},
         attachHtml: function() {}
       });
+
+      _.extend(this.MyView.prototype, Marionette.BackboneViewMixin);
 
       this.setFixtures('<div id="region"></div>');
 
@@ -859,6 +869,8 @@ describe('region', function() {
         destroy: function() {}
       });
 
+      _.extend(this.MyView.prototype, Marionette.BackboneViewMixin);
+
       this.region = new this.MyRegion();
       this.view = new this.MyView();
       this.sinon.spy(this.view, 'destroy');
@@ -914,6 +926,8 @@ describe('region', function() {
 
         destroy: function() {}
       });
+
+      _.extend(this.MyView.prototype, Marionette.BackboneViewMixin);
 
       this.setFixtures('<div id="region"></div>');
 
@@ -983,6 +997,7 @@ describe('region', function() {
           $(this.el).html('some content');
         }
       });
+      _.extend(this.MyView.prototype, Marionette.BackboneViewMixin);
 
       this.view = new this.MyView();
       this.sinon.spy(this.view, '_removeElement');
@@ -1231,6 +1246,8 @@ describe('region', function() {
         onBeforeDestroy: this.sinon.stub(),
         onDestroy: this.sinon.stub()
       });
+      _.extend(BbView.prototype, Marionette.BackboneViewMixin);
+
       this.region = new Marionette.Region({
         el: $('<div></div>')
       });

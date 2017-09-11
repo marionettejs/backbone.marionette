@@ -25,6 +25,7 @@ describe('NextCollectionView', function() {
       onBeforeDestroy: this.sinon.stub(),
       onDestroy: this.sinon.stub(),
     });
+    _.extend(MyBbChildView.prototype, Marionette.BackboneViewMixin);
   });
 
   describe('#constructor', function() {
@@ -144,22 +145,26 @@ describe('NextCollectionView', function() {
 
     describe('when childView is a Backbone.View', function() {
       it('should build children from the defined view', function() {
+        let BBView = Backbone.View.extend();
+        _.extend(BBView.prototype, Marionette.BackboneViewMixin);
         const myCollectionView = new CollectionView({
           collection,
-          childView: Backbone.View
+          childView: BBView
         });
         myCollectionView.render();
 
-        expect(myCollectionView.buildChildView).to.be.calledWith(model, Backbone.View);
+        expect(myCollectionView.buildChildView).to.be.calledWith(model, BBView);
       });
     });
 
     describe('when childView is a function returning a view', function() {
       let myCollectionView;
       let childViewStub;
+      let BBView = Backbone.View.extend();
+      _.extend(BBView.prototype, Marionette.BackboneViewMixin);
       beforeEach(function() {
         childViewStub = this.sinon.stub();
-        childViewStub.returns(Backbone.View);
+        childViewStub.returns(BBView);
 
         myCollectionView = new CollectionView({
           collection,
@@ -169,7 +174,7 @@ describe('NextCollectionView', function() {
       });
 
       it('should build children from the returned view', function() {
-        expect(myCollectionView.buildChildView).to.be.calledWith(model, Backbone.View);
+        expect(myCollectionView.buildChildView).to.be.calledWith(model, BBView);
       });
 
       it('should call childView with the model', function() {

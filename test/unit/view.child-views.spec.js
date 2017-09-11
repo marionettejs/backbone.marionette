@@ -1,6 +1,9 @@
 describe('layoutView', function() {
   'use strict';
 
+  const BBView = Backbone.View.extend();
+  _.extend(BBView.prototype, Marionette.BackboneViewMixin);
+
   beforeEach(function() {
     this.layoutViewManagerTemplateFn = _.template('<div id="regionOne"></div><div id="regionTwo"></div>');
     this.template = function() {
@@ -257,7 +260,7 @@ describe('layoutView', function() {
       this.layoutView.render();
 
       // create a basic Backbone child view
-      this.childView = new Backbone.View();
+      this.childView = new BBView();
       this.layoutView.showChildView('regionOne', this.childView);
     });
 
@@ -272,7 +275,7 @@ describe('layoutView', function() {
     beforeEach(function() {
       this.layoutView = new this.View().render();
       this.regionOne = this.layoutView.getRegion('regionOne');
-      this.childView = new Backbone.View();
+      this.childView = new BBView();
       this.sinon.spy(this.regionOne, 'show');
       this.layoutView.showChildView('regionOne', this.childView, options);
     });
@@ -443,7 +446,7 @@ describe('layoutView', function() {
       this.layoutView.render();
 
       this.sinon.spy(this.layoutView.getRegion('regionOne'), 'empty');
-      this.view = new Backbone.View();
+      this.view = new BBView();
       this.view.destroy = function() {};
       this.layoutView.getRegion('regionOne').show(this.view);
 

@@ -484,17 +484,6 @@ describe('layoutView', function() {
     });
   });
 
-  describe('has a valid inheritance chain back to Backbone.View', function() {
-    beforeEach(function() {
-      this.constructor = this.sinon.spy(Backbone.View.prototype, 'constructor');
-      this.layoutView = new Marionette.View();
-    });
-
-    it('calls the parent Backbone.Views constructor function on instantiation', function() {
-      expect(this.constructor).to.have.been.called;
-    });
-  });
-
   describe('when getting a region', function() {
     beforeEach(function() {
       this.layoutView = new this.View();

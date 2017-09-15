@@ -267,8 +267,6 @@ describe('itemView - dynamic regions', function() {
   });
 
   describe('when calling emptyRegions', function() {
-    let BBView = Backbone.View.extend();
-    _.extend(BBView.prototype, Marionette.BackboneViewMixin);
     beforeEach(function() {
 
       this.view = new Marionette.View({

@@ -40,7 +40,6 @@ import Application from './application';
 import AppRouter from './app-router';
 import MarionetteError from './error';
 
-import behaviorsLookup from './config/behaviors-lookup';
 import DomApi from './config/dom';
 import Renderer from './config/renderer';
 
@@ -78,9 +77,6 @@ Marionette.isEnabled = isEnabled;
 Marionette.setEnabled = setEnabled;
 Marionette.monitorViewEvents = monitorViewEvents;
 Marionette.BackboneViewMixin = BackboneViewMixin;
-
-Marionette.Behaviors = {};
-Marionette.Behaviors.behaviorsLookup = behaviorsLookup;
 
 // Classes
 Marionette.Application = Application;

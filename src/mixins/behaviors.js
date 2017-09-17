@@ -1,7 +1,7 @@
 import _ from 'underscore';
 import _invoke from '../utils/invoke';
 import { triggerMethod } from '../common/trigger-method';
-import Marionette from '../backbone.marionette';
+import MarionetteError from '../error';
 
 // MixinOptions
 // - behaviors
@@ -11,29 +11,24 @@ import Marionette from '../backbone.marionette';
 // If a user passes in options.behaviorClass
 // default to using that.
 // If a user passes in a Behavior Class directly, use that
-// Otherwise delegate the lookup to the users `behaviorsLookup` implementation.
-function getBehaviorClass(options, key) {
+// Otherwise an error is throw
+function getBehaviorClass(options) {
   if (options.behaviorClass) {
     return options.behaviorClass;
     //treat functions as a Behavior constructor
   } else if (_.isFunction(options)) {
     return options;
+  } else {
+    throw new MarionetteError('Unable to get behavior class. An Behavior constructor should be passed directly or as behaviorClass property of options');
   }
-
-  // behaviorsLookup can be either a flat object or a method
-  if (_.isFunction(Marionette.Behaviors.behaviorsLookup)) {
-    return Marionette.Behaviors.behaviorsLookup(options, key)[key];
-  }
-
-  return Marionette.Behaviors.behaviorsLookup[key];
 }
 
 // Iterate over the behaviors object, for each behavior
 // instantiate it and get its grouped behaviors.
 // This accepts a list of behaviors in either an object or array form
 function parseBehaviors(view, behaviors) {
-  return _.chain(behaviors).map(function(options, key) {
-    const BehaviorClass = getBehaviorClass(options, key);
+  return _.chain(behaviors).map(function(options) {
+    const BehaviorClass = getBehaviorClass(options);
     //if we're passed a class directly instead of an object
     const _options = options === BehaviorClass ? {} : options;
     const behavior = new BehaviorClass(_options, view);

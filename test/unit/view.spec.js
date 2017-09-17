@@ -39,6 +39,23 @@ describe('item view', function() {
     });
   });
 
+  describe('when instantiating a view with a non existing DOM element', function() {
+    beforeEach(function() {
+      this.setFixtures('<div id="foo"><span class="element">bar</span></div>');
+      this.view = new Marionette.View({
+        el: '#nonexistent'
+      });
+    });
+
+    it('should not be rendered', function() {
+      expect(this.view.isRendered()).to.be.false;
+    });
+
+    it('should not be attached', function() {
+      expect(this.view.isAttached()).to.be.false;
+    });
+  });
+
   describe('when rendering without a valid template', function() {
     beforeEach(function() {
       this.view = new Marionette.View();

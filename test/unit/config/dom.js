@@ -274,6 +274,11 @@ describe('DomApi', function() {
       const domEl = $('#foo')[0];
       expect(DomApi.hasContents(domEl)).to.be.false;
     });
+
+    it('should return false when el is undefined or null', function() {
+      expect(DomApi.hasContents(undefined)).to.be.false;
+      expect(DomApi.hasContents(null)).to.be.false;
+    });
   });
 
   describe('#detachContents', function() {

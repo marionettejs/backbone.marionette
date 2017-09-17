@@ -36,7 +36,6 @@ function generateBundle(bundle) {
     sourceMap: true,
     sourceMapFile: 'backbone.marionette.js',
     banner: banner,
-    footer: 'this && this.Marionette && (this.Mn = this.Marionette);',
     globals: rollupGlobals
   });
 }

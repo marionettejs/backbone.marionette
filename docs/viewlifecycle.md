@@ -830,7 +830,6 @@ This function will return a boolean value reflecting if the view has been render
 This function will return a boolean value reflecting if the view believes it is attached.
 This is maintained when attaching a view with a `Region` or during [View instantiation](#views-associated-with-previously-rendered-or-attached-dom).
 If a view is attached by other means this function may not reflect the actual state of attachment.
-To be certain use [`Marionette.isNodeAttached`](./marionette.functions.md#marionetteisnodeattached).
 
 ## Views associated with previously rendered or attached DOM
 

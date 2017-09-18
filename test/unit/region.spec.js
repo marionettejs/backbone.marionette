@@ -411,11 +411,11 @@ describe('region', function() {
 
           describe('and then emptying the region', function() {
             beforeEach(function() {
-              this.view1.onBeforeDetach = this.sinon.spy(function(view) {
-                return Marionette.isNodeAttached(view.el);
+              this.view1.onBeforeDetach = this.sinon.spy((view) => {
+                return this.region.Dom.hasEl(document.documentElement, view.el);
               });
-              this.view1.onDetach = this.sinon.spy(function(view) {
-                return Marionette.isNodeAttached(view.el);
+              this.view1.onDetach = this.sinon.spy((view) => {
+                return this.region.Dom.hasEl(document.documentElement, view.el);
               });
               this.region.empty();
             });

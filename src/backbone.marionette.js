@@ -5,7 +5,6 @@ import proxy from './utils/proxy';
 import extend from './utils/extend';
 import deprecate from './utils/deprecate';
 
-import isNodeAttached from './common/is-node-attached';
 import mergeOptions from './common/merge-options';
 import getOption from './common/get-option';
 import normalizeMethods from './common/normalize-methods';
@@ -72,7 +71,6 @@ Marionette.mergeOptions = proxy(mergeOptions);
 Marionette.getOption = proxy(getOption);
 Marionette.normalizeMethods = proxy(normalizeMethods);
 Marionette.extend = extend;
-Marionette.isNodeAttached = isNodeAttached;
 Marionette.deprecate = deprecate;
 Marionette.triggerMethod = proxy(triggerMethod);
 Marionette.triggerMethodOn = triggerMethodOn;

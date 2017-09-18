@@ -4,7 +4,6 @@
 import _ from 'underscore';
 import Backbone from 'backbone';
 import { renderView, destroyView } from './common/view';
-import isNodeAttached from './common/is-node-attached';
 import monitorViewEvents from './common/monitor-view-events';
 import ChildViewContainer from './next-child-view-container';
 import MarionetteError from './error';
@@ -266,7 +265,7 @@ const CollectionView = Backbone.View.extend({
     Backbone.View.prototype.setElement.apply(this, arguments);
 
     if (hasEl) {
-      this._isAttached = isNodeAttached(this.el);
+      this._isAttached = this.Dom.hasEl(document.documentElement, this.el);
     }
 
     return this;

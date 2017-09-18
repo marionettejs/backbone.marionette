@@ -4,7 +4,6 @@
 import _ from 'underscore';
 import Backbone from 'backbone';
 import deprecate from './utils/deprecate';
-import isNodeAttached from './common/is-node-attached';
 import monitorViewEvents from './common/monitor-view-events';
 import ViewMixin from './mixins/view';
 import RegionsMixin from './mixins/regions';
@@ -95,7 +94,7 @@ const View = Backbone.View.extend({
 
     if (hasEl) {
       this._isRendered = this.Dom.hasContents(this.el);
-      this._isAttached = isNodeAttached(this.el);
+      this._isAttached = this.Dom.hasEl(document.documentElement, this.el);
     }
 
     if (this._isRendered) {

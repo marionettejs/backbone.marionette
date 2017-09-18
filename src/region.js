@@ -6,7 +6,6 @@ import Backbone from 'backbone';
 import deprecate from './utils/deprecate';
 import { renderView, destroyView } from './common/view';
 import monitorViewEvents from './common/monitor-view-events';
-import isNodeAttached from './common/is-node-attached';
 import MarionetteObject from './object';
 import MarionetteError from './error';
 import View from './view';
@@ -109,7 +108,8 @@ const Region = MarionetteObject.extend({
   },
 
   _attachView(view, options = {}) {
-    const shouldTriggerAttach = !view._isAttached && isNodeAttached(this.el) && !this._shouldDisableMonitoring();
+    const isNodeAttached = this.Dom.hasEl(document.documentElement, this.el);
+    const shouldTriggerAttach = !view._isAttached && isNodeAttached && !this._shouldDisableMonitoring();
     const shouldReplaceEl = typeof options.replaceElement === 'undefined' ? !!_.result(this, 'replaceElement') : !!options.replaceElement;
 
     if (shouldTriggerAttach) {

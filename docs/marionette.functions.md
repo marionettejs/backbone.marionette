@@ -208,6 +208,10 @@ var myObj = new MyObject(); // console.log "baz"
 Mn.triggerMethod(myObj, 'foo', 'qux'); // console.log "qux"
 ```
 
+To trigger several events and corresponding methods split the events by the space. Example:
+
+* `triggerMethod('foo bar')` fires the `onFoo` and the `onBar` functions
+
 *Note*: Some Marionette classes such as Views have an overridden `triggerMethod`. Using `Mn.triggerMethod` with a view will break event proxying. If you need to run `triggerMethod` on a Marionette class [`triggerMethodOn`](#marionette-triggermethodon) is recommended.
 
 ## Marionette.triggerMethodOn

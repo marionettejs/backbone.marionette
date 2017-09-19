@@ -193,13 +193,9 @@ const CollectionView = Backbone.View.extend({
   // if an el was previously defined. If so, the view might be
   // attached on setElement.
   setElement() {
-    const hasEl = !!this.el;
-
     Backbone.View.prototype.setElement.apply(this, arguments);
 
-    if (hasEl) {
-      this._isAttached = isNodeAttached(this.el);
-    }
+    this._isAttached = isNodeAttached(this.el);
 
     return this;
   },

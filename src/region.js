@@ -108,8 +108,7 @@ const Region = MarionetteObject.extend({
   },
 
   _attachView(view, options = {}) {
-    const isNodeAttached = this.Dom.hasEl(document.documentElement, this.el);
-    const shouldTriggerAttach = !view._isAttached && isNodeAttached && !this._shouldDisableMonitoring();
+    const shouldTriggerAttach = !view._isAttached && this.Dom.hasEl(document.documentElement, this.el) && !this._shouldDisableMonitoring();
     const shouldReplaceEl = typeof options.replaceElement === 'undefined' ? !!_.result(this, 'replaceElement') : !!options.replaceElement;
 
     if (shouldTriggerAttach) {

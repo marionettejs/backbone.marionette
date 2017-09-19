@@ -8,7 +8,6 @@ a way to get the same behaviors and conventions from your own code.
 ## Documentation Index
 
 * [Marionette.extend](#marionetteextend)
-* [Marionette.isNodeAttached](#marionetteisnodeattached)
 * [Marionette.mergeOptions](#marionettemergeoptions)
 * [Marionette.getOption](#marionettegetoption)
 * [Marionette.triggerMethod](#marionettetriggermethod)
@@ -51,24 +50,6 @@ var b = new Bar();
 ```
 
 [Live example](https://jsfiddle.net/marionettejs/w5avq89r/)
-
-## Marionette.isNodeAttached
-
-Determines whether the passed-in node is a child of the `document` or not.
-
-```javascript
-var Mn = require('backbone.marionette');
-
-var div = document.createElement('div');
-Mn.isNodeAttached(div);
-// => false
-
-$('body').append(div);
-Mn.isNodeAttached(div);
-// => true
-```
-
-[Live example](https://jsfiddle.net/marionettejs/azn1fo3z/)
 
 ## Marionette.mergeOptions
 

@@ -258,9 +258,9 @@ defined class.
 
 ### The `options` Property
 
-Is possible to define an `options` property in the class definition that will
-be used as default values. The `options` argument passed at class instantiation
-has precedence over the property.
+The Marionette classes accept an `options` property in the class definition
+which is merged with the `options` argument passed at instantiation. The 
+values from the passed in `options` overrides the property values.
 
 > The `options` argument passed in `initialize` method is equal to the passed at 
 > class instantiation. To get the option inside initialize considering the 

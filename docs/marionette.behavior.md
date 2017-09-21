@@ -11,7 +11,6 @@ collection interactions to be utilized across your application.
 * [Using Behaviors](#using-behaviors)
   * [Defining and Attaching Behaviors](#defining-and-attaching-behaviors)
   * [Behavior Options](#behavior-options)
-  * [Behavior Defaults](#behavior-defaults)
 * [Nesting Behaviors](#nesting-behaviors)
 * [View Proxy](#view-proxy)
   * [Listening to View Events](#listening-to-view-events)
@@ -66,7 +65,7 @@ var DestroyWarn = Mn.Behavior.extend({
   // You can set default options
   // just like you can in your Backbone Models.
   // They will be overridden if you pass in an option with the same key.
-  defaults: {
+  options: {
     message: 'You are destroying!'
   },
   ui: {
@@ -88,7 +87,7 @@ var DestroyWarn = Mn.Behavior.extend({
 });
 
 var ToolTip = Mn.Behavior.extend({
-  defaults: {
+  options: {
     text: ''
   },
   ui: {
@@ -103,9 +102,7 @@ var ToolTip = Mn.Behavior.extend({
 });
 ```
 
-We've passed in a `defaults` attribute that sets default options.
-[This will be covered in default soon](#behavior-defaults). With the warning and tooltip
-behaviors extracted, we just need to attach them to our view:
+We've passed in a `options` attribute that sets default options.
 
 ```javascript
 var Mn = require('backbone.marionette');
@@ -160,7 +157,7 @@ var MyView = Mn.View.extend({
 
 Using an object, we must define the `behaviorClass` attribute to refer to our
 behaviors and then add any extra options with keys matching the option we want
-to override. Any passed options will override the `defaults` passed.
+to override. Any passed options will override the values from `options` property.
 
 Here is the syntax for declaring which behaviors get used within a View.
 * You can pass behaviors either as a set of key-value pairs where the keys are used to lookup the behavior class, or as an array.
@@ -195,7 +192,7 @@ var DestroyWarn = Mn.Behavior.extend({
   // You can set default options
   // just like you can in your Backbone Models.
   // They will be overridden if you pass in an option with the same key.
-  defaults: {
+  options: {
     message: 'You are destroying!'
   },
 
@@ -227,50 +224,6 @@ var ToolTip = Mn.Behavior.extend({
     this.ui.tooltip.tooltip({
       text: this.options.text
     });
-  }
-});
-```
-
-#### Behavior Defaults
-
-**Deprecated:** Defaults can be effectively set with an `options` hash defined on the Behavior.
-
-```javascript
-Marionette.Behavior.extend({
-  options: function() {
-    return {
-      deepSpace: 9
-    }
-  }
-});
-```
-
-```javascript
-Marionette.Behavior.extend({
-  options: {
-    dominion: 'invasion',
-    doge: 'amaze'
-  }
-});
-```
-
-`defaults` can be a [`hash` or `function`](./basics.md#functions-returning-values) to define the default options for your `Behavior`. The default options will be overridden depending on what you set as the options per `Behavior`. (This works just like a `Backbone.Model`.)
-
-```javascript
-Marionette.Behavior.extend({
-  defaults: function() {
-    return {
-      'deepSpace': 9
-    }
-  }
-});
-```
-
-```javascript
-Marionette.Behavior.extend({
-  defaults: {
-    'dominion': 'invasion',
-    'doge': 'amaze'
   }
 });
 ```

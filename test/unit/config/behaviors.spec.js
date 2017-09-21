@@ -355,6 +355,7 @@ describe('Behaviors', function() {
 
   describe('behavior triggers', function() {
     let onClickFooStub;
+    let triggerMethodViewSpy;
     let triggerMethodSpy;
     let behaviors;
     let fooView;
@@ -370,6 +371,9 @@ describe('Behaviors', function() {
       };
 
       const FooView = Marionette.View.extend({
+        triggers: {
+          'click': 'click:foo:view'
+        },
         behaviors: {foo: {}}
       });
 
@@ -386,8 +390,10 @@ describe('Behaviors', function() {
       });
 
       triggerMethodSpy = this.sinon.spy();
+      triggerMethodViewSpy = this.sinon.spy();
 
       fooView.on('click:foo', triggerMethodSpy);
+      fooView.on('click:foo:view', triggerMethodViewSpy);
     });
 
     it('should call `triggerMethod` with the triggered event', function() {
@@ -404,6 +410,14 @@ describe('Behaviors', function() {
       expect(onClickFooStub)
         .to.have.been.calledOnce
         .and.have.been.calledOn(this.sinon.match.instanceOf(behaviors.foo));
+    });
+
+    it('should not collide with view triggers with same event', function() {
+      fooView.$el.click();
+
+      expect(triggerMethodViewSpy)
+        .to.have.been.calledOnce
+        .and.calledOn(fooView);
     });
   });
 

@@ -175,8 +175,7 @@ describe('Behaviors', function() {
 
       behaviors = {
         foo: Behavior.extend({
-          initialize: initializeStub,
-          defaults: {baz: true}
+          initialize: initializeStub
         })
       };
 
@@ -195,37 +194,6 @@ describe('Behaviors', function() {
       const fooBehavior = new behaviors.foo();
 
       expect(fooBehavior.cidPrefix).to.equal('mnb');
-    });
-
-    it('should set defaults on the options', function() {
-      /* eslint-disable no-unused-vars */
-      const fooView = new FooView();
-      const fooBehavior = new behaviors.foo();
-
-      expect(fooBehavior.getOption('baz')).to.be.true;
-    });
-
-    describe('when DEV_MODE is on', function() {
-      beforeEach(function() {
-        Marionette.DEV_MODE = true;
-        this.sinon.spy(Marionette.deprecate, '_warn');
-        this.sinon.stub(Marionette.deprecate, '_console', {
-          warn: this.sinon.stub()
-        });
-        Marionette.deprecate._cache = {};
-      });
-
-      it('should call Marionette.deprecate', function() {
-        /* eslint-disable no-unused-vars */
-        const fooView = new FooView();
-        const fooBehavior = new behaviors.foo();
-
-        expect(Marionette.deprecate._warn).to.be.calledWith('Deprecation warning: Behavior defaults are deprecated. For similar functionality set options on the Behavior class.');
-      });
-
-      afterEach(function() {
-        Marionette.DEV_MODE = false;
-      });
     });
 
     it('should have a cid', function() {

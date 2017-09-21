@@ -32,13 +32,7 @@ const Behavior = MarionetteObject.extend({
     // to the view.
     this.view = view;
 
-    if (this.defaults) {
-      deprecate('Behavior defaults are deprecated. For similar functionality set options on the Behavior class.');
-    }
-
-    this.defaults = _.clone(_.result(this, 'defaults', {}));
-
-    this._setOptions(_.extend({}, this.defaults, options));
+    this._setOptions(options);
     this.mergeOptions(this.options, ClassOptions);
 
     // Construct an internal UI hash using

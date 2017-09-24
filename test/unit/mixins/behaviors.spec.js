@@ -80,28 +80,6 @@ describe('Behaviors Mixin', function() {
       });
     });
 
-    describe('with behaviorsLookup as object', function() {
-      beforeEach(function() {
-        let behaviorOptions = {foo: {}};
-
-        Marionette.Behaviors.behaviorsLookup = {
-          'foo': FooBehavior
-        };
-
-        behaviorsInstance.behaviors = {foo: behaviorOptions};
-      });
-
-      it('should call initialize when a behavior is created', function() {
-        behaviorsInstance._getBehaviors();
-
-        expect(fooInitializeStub).to.be.calledOnce;
-      });
-
-      it('should have behaviors', function() {
-        expect(behaviorsInstance._getBehaviors().length).to.be.equal(1);
-      });
-    });
-
     describe('with nested behaviors', function() {
       let barInitializeStub;
       let bazInitializeStub;
@@ -120,20 +98,10 @@ describe('Behaviors Mixin', function() {
 
         FooBehavior = Behavior.extend({
           initialize: fooInitializeStub,
-          behaviors: {bar: {}}
+          behaviors: [BarBehavior]
         });
 
-        let behaviors = {
-          'foo': FooBehavior,
-          'bar': BarBehavior,
-          'baz': BazBehavior
-        };
-
-        this.sinon.stub(Marionette.Behaviors, 'behaviorsLookup', function() {
-          return behaviors;
-        });
-
-        behaviorsInstance.behaviors = {foo: 'foo'};
+        behaviorsInstance.behaviors = [FooBehavior];
       });
 
       it('should call initialize when a behavior is created', function() {

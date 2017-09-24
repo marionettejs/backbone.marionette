@@ -16,13 +16,13 @@ function buildRegionFromDefinition(definition, defaults) {
   const opts = _.extend({}, defaults);
 
   if (_.isString(definition)) {
-    _.extend(opts, { el: definition });
+    opts.el = definition;
 
     return buildRegionFromObject(opts);
   }
 
   if (_.isFunction(definition)) {
-    _.extend(opts, { regionClass: definition });
+    opts.regionClass = definition;
 
     return buildRegionFromObject(opts);
   }

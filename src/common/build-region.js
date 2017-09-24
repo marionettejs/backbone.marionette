@@ -1,5 +1,4 @@
 import _ from 'underscore';
-import deprecate from '../utils/deprecate';
 import MarionetteError from '../error';
 import Region from '../region';
 

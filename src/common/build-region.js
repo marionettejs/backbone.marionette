@@ -28,11 +28,7 @@ function buildRegionFromDefinition(definition, defaults) {
   }
 
   if (_.isObject(definition)) {
-    if (definition.selector) {
-      deprecate('The selector option on a Region definition object is deprecated. Use el to pass a selector string');
-    }
-
-    _.extend(opts, { el: definition.selector }, definition);
+    _.extend(opts, definition);
 
     return buildRegionFromObject(opts);
   }

@@ -83,9 +83,9 @@ var MyView = Mn.View.extend({
 ### Additional Options
 
 You can define regions with an object literal. Object literal definitions expect
-an `el` property - the jQuery selector string to hook the region into. The
-object literal is the most common way to define whether showing the region
-overwrites the `el` or just overwrites the content (the default behavior).
+an `el` property - the CSS selector string to hook the region into. With this
+format is possible to define whether showing the region overwrites the `el` or
+just overwrites the content (the default behavior).
 
 To overwrite the parent `el` of the region with the rendered contents of the
 inner View, use `replaceElement` as so:
@@ -122,15 +122,10 @@ removed from the DOM and replaced with an element of `.new-class` - this lets
 us do things like rendering views inside `table` or `select` more easily -
 these elements are usually very strict on what content they will allow.
 
-**_DEPRECATED: The `selector` option of a region is deprecated in favor of using `el`_**
 
 ```js
 var MyView = Mn.View.extend({
   regions: {
-    deprecatedRegionDefinition: {
-      selector: '.foo',
-      replaceElement: true
-    },
     regionDefinition: {
       el: '.bar',
       replaceElement: true

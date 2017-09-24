@@ -23,8 +23,7 @@ import {
 } from './common/bind-requests';
 
 import {
-  triggerMethod,
-  triggerMethodOn
+  triggerMethod
 } from './common/trigger-method';
 
 
@@ -73,7 +72,6 @@ Marionette.normalizeMethods = proxy(normalizeMethods);
 Marionette.extend = extend;
 Marionette.deprecate = deprecate;
 Marionette.triggerMethod = proxy(triggerMethod);
-Marionette.triggerMethodOn = triggerMethodOn;
 Marionette.isEnabled = isEnabled;
 Marionette.setEnabled = setEnabled;
 Marionette.monitorViewEvents = monitorViewEvents;

@@ -87,16 +87,16 @@ describe('layoutView', function() {
         regionClass: this.CustomRegion1,
         regions: {
           regionOne: {
-            selector: '#regionOne',
+            el: '#regionOne',
             regionClass: this.CustomRegion1
           },
           regionTwo: {
-            selector: '#regionTwo',
+            el: '#regionTwo',
             regionClass: this.CustomRegion2,
             specialOption: true
           },
           regionThree: {
-            selector: '#regionThree'
+            el: '#regionThree'
           },
           regionFour: '#regionFour'
         }
@@ -558,7 +558,7 @@ describe('layoutView', function() {
         regions: {
           war: '@ui.war',
           mario: {
-            selector: '@ui.mario'
+            el: '@ui.mario'
           },
           princess: {
             el: '@ui.princess'

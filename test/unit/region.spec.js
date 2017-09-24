@@ -294,40 +294,6 @@ describe('region', function() {
       });
     });
 
-    describe('when passing "preventDestroy" option', function() {
-      beforeEach(function() {
-        this.MyRegion = Backbone.Marionette.Region.extend({
-          el: '#region',
-          onShow: function() {}
-        });
-
-        this.MyView2 = Backbone.View.extend({
-          render: function() {
-            $(this.el).html('some more content');
-          },
-
-          destroy: function() {},
-
-          onShow: function() {
-            $(this.el).addClass('onShowClass');
-          }
-        });
-
-        _.extend(this.MyView2.prototype, Marionette.BackboneViewMixin);
-
-        this.view1 = new this.MyView();
-        this.view2 = new this.MyView2();
-        this.region = new this.MyRegion();
-
-        this.sinon.spy(this.view1, 'destroy');
-        this.sinon.spy(this.view1, 'off');
-        this.sinon.spy(this.view2, 'destroy');
-        this.sinon.spy(this.region, 'removeView');
-
-        this.region.show(this.view1);
-      });
-    });
-
     describe('when setting the "replaceElement" class option', function() {
       beforeEach(function() {
         this.sinon.spy(this.region, '_restoreEl');
@@ -671,7 +637,7 @@ describe('region', function() {
     });
   });
 
-  describe('when passing options to empty', function() {
+  describe('when calling empty', function() {
     beforeEach(function() {
       this.MyRegion = Backbone.Marionette.Region.extend({
         el: '#region'
@@ -694,9 +660,9 @@ describe('region', function() {
       this.region.show(this.view);
     });
 
-    describe('preventDestroy undefined', function() {
+    describe('without arguments', function() {
       beforeEach(function() {
-        this.region.empty({});
+        this.region.empty();
       });
       it('should destroy view', function() {
         expect(this.view.destroy).to.have.been.called;

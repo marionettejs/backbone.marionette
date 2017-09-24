@@ -160,6 +160,21 @@ describe('Behaviors', function() {
         });
       });
     });
+
+    describe('with invalid option', function() {
+      beforeEach(function() {
+        FooView = View.extend({
+          behaviors: [{foo: 'bar'}]
+        });
+      });
+
+      it('should throw an error', function() {
+        expect(function() {
+          /* eslint-disable no-unused-vars */
+          const fooView = new FooView();
+        }).to.throw;
+      });
+    })
   });
 
   describe('behavior initialize', function() {

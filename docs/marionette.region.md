@@ -83,7 +83,7 @@ var MyView = Mn.View.extend({
 ### Additional Options
 
 You can define regions with an object literal. Object literal definitions expect
-an `el` property - the CSS selector string to hook the region into. With this
+an `el` property - the selector string to hook the region into. With this
 format is possible to define whether showing the region overwrites the `el` or
 just overwrites the content (the default behavior).
 

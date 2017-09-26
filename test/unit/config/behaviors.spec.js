@@ -172,7 +172,10 @@ describe('Behaviors', function() {
         expect(function() {
           /* eslint-disable no-unused-vars */
           const fooView = new FooView();
-        }).to.throw;
+        }).to.throw(
+          Error,
+          new Error('Unable to get behavior class. An Behavior constructor should be passed directly or as behaviorClass property of options')
+        );
       });
     })
   });

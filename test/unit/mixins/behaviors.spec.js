@@ -92,10 +92,6 @@ describe('Behaviors Mixin', function() {
           initialize: barInitializeStub,
         });
 
-        let BazBehavior = Behavior.extend({
-          initialize: bazInitializeStub,
-        });
-
         FooBehavior = Behavior.extend({
           initialize: fooInitializeStub,
           behaviors: [BarBehavior]

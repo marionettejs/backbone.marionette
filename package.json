@@ -70,6 +70,7 @@
     "gulp-mocha": "3.0.1",
     "gulp-plumber": "1.1.0",
     "gulp-util": "3.0.7",
+    "gulp-write-good": "^1.0.0",
     "isparta": "4.0.0",
     "jquery": "3.1.0",
     "jsdom": "9.6.0",

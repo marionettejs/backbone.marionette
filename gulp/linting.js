@@ -4,6 +4,7 @@ import lintspaces from 'gulp-lintspaces';
 import plumber from 'gulp-plumber';
 import util from 'gulp-util';
 import gulpIf from 'gulp-if';
+import gulpWriteGood from 'gulp-write-good';
 
 function onError() {
   util.beep();
@@ -52,6 +53,8 @@ function lintMd() {
     .pipe(plumber())
     .pipe(lintspaces({editorconfig: '.editorconfig'}))
     .pipe(lintspaces.reporter())
+    .pipe(gulpWriteGood())
+    .pipe(gulpWriteGood.reporter())
     .on('error', onError);
 }
 

@@ -317,6 +317,18 @@ describe('region', function() {
         expect(this.region._restoreEl).to.have.been.called;
       });
 
+      it('should not restore if the "currentView" has been deleted from the region', function() {
+        delete this.region.currentView;
+        this.region._restoreEl();
+        expect(this.region.currentView).to.be.undefined;
+      });
+
+      it('should not restore if the "currentView.el" has been remove from the DOM', function() {
+        this.view.remove();
+        this.region._restoreEl();
+        expect(this.region.currentView.el.parentNode).is.falsy;
+      });
+
       describe('and then emptying the region', function() {
         beforeEach(function() {
           this.region.empty();

@@ -119,7 +119,7 @@ describe('composite view', function() {
     });
 
     it('should render according to the custom attachElContent logic', function() {
-      expect(this.attachElContentStub).to.have.been.calledOnce.and.calledWith(undefined);
+      expect(this.attachElContentStub).to.not.have.been.called;
     });
   });
 

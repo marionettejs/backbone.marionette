@@ -147,7 +147,9 @@ const View = Backbone.View.extend({
 
     // Render and add to el
     const html = this._renderHtml(template, data);
-    this.attachElContent(html);
+    if (typeof html !== 'undefined') {
+      this.attachElContent(html);
+    }
   },
 
   // Renders the data into the template

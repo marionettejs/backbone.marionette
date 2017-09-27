@@ -179,6 +179,7 @@ describe('item view', function() {
 
       this.view = new this.View();
       this.triggerSpy = this.sinon.spy(this.view, 'trigger');
+      this.attachElContentSpy = this.sinon.spy(this.view, 'attachElContent');
       this.view.render();
     });
 
@@ -216,6 +217,38 @@ describe('item view', function() {
 
     it('should mark as rendered', function() {
       expect(this.view).to.have.property('_isRendered', true);
+    });
+
+    it('should call attachElContent', function() {
+      expect(this.attachElContentSpy).to.have.been.calledOnce.and.calledWith(this.template);
+    });
+  });
+
+  describe('when rendering with a template that returns an empty string', function() {
+    beforeEach(function() {
+      this.view = new Marionette.View({
+        template: function() { return '' }
+      });
+      this.attachElContentSpy = this.sinon.spy(this.view, 'attachElContent');
+      this.view.render();
+    });
+
+    it('should call attachElContent', function() {
+      expect(this.attachElContentSpy).to.have.been.calledOnce.and.calledWith('');
+    });
+  });
+
+  describe('when rendering with a template that returns undefined', function() {
+    beforeEach(function() {
+      this.view = new Marionette.View({
+        template: _.noop
+      });
+      this.attachElContentSpy = this.sinon.spy(this.view, 'attachElContent');
+      this.view.render();
+    });
+
+    it('should not call attachElContent', function() {
+      expect(this.attachElContentSpy).to.not.have.been.called;
     });
   });
 

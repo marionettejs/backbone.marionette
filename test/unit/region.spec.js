@@ -294,223 +294,6 @@ describe('region', function() {
       });
     });
 
-    describe('when passing "preventDestroy" option', function() {
-      beforeEach(function() {
-        this.MyRegion = Backbone.Marionette.Region.extend({
-          el: '#region',
-          onShow: function() {}
-        });
-
-        this.MyView2 = Backbone.View.extend({
-          render: function() {
-            $(this.el).html('some more content');
-          },
-
-          destroy: function() {},
-
-          onShow: function() {
-            $(this.el).addClass('onShowClass');
-          }
-        });
-
-        _.extend(this.MyView2.prototype, Marionette.BackboneViewMixin);
-
-        this.view1 = new this.MyView();
-        this.view2 = new this.MyView2();
-        this.region = new this.MyRegion();
-
-        this.sinon.spy(this.view1, 'destroy');
-        this.sinon.spy(this.view1, 'off');
-        this.sinon.spy(this.view2, 'destroy');
-        this.sinon.spy(this.region, 'removeView');
-
-        this.region.show(this.view1);
-      });
-
-      describe('preventDestroy: true', function() {
-        beforeEach(function() {
-          this.region.show(this.view2, {preventDestroy: true});
-        });
-
-        it('shouldnt "destroy" the old view', function() {
-          expect(this.view1.destroy.callCount).to.equal(0);
-        });
-
-        it('view1 should not reference region', function() {
-          expect(this.view1._parent).to.be.undefined;
-        });
-
-        it('should remove destroy listener from old view', function() {
-          expect(this.view1.off).to.be.calledOnce;
-        });
-
-        it('should not empty region after destorying old view', function() {
-          expect(this.view1.off).to.be.calledOnce;
-          this.view1.destroy();
-          expect(this.view2.destroy).not.to.have.been.called;
-        });
-
-        it('should replace the content in the DOM', function() {
-          expect(this.region.$el).to.contain.$text('some more content');
-          expect(this.region.$el).not.to.contain.$text('some content');
-        });
-
-        it('should not call removeView', function() {
-          expect(this.region.removeView).not.to.have.been.called;
-        });
-
-        describe('when an el event is triggered', function() {
-          beforeEach(function() {
-            $(this.view.el).trigger('click')
-          });
-
-          // https://github.com/marionettejs/backbone.marionette/issues/2159#issue-52745401
-          it('should catch the event', function() {
-            expect(this.view.onClick).to.be.calledOnce;
-          });
-        });
-
-        describe('when setting the "replaceElement" class option', function() {
-          beforeEach(function() {
-            this.sinon.spy(this.region, '_restoreEl');
-            // empty region to clean existing view
-            this.$parentEl = this.region.$el.parent();
-            this.regionHtml = this.$parentEl.html();
-            this.showOptions = {preventDestroy: true};
-            this.region.replaceElement = true;
-            this.region.show(this.view1, this.showOptions);
-          });
-
-          it('should have replaced the "el"', function() {
-            expect(this.region.isReplaced()).to.be.true;
-          });
-
-          it('should append the view HTML to the parent "el"', function() {
-            expect(this.$parentEl).to.contain.$html(this.view1.$el.html());
-          });
-
-          it('should remove the region\'s "el" from the DOM', function() {
-            expect(this.$parentEl).to.not.contain.$html(this.regionHtml);
-          });
-
-          it('should call _restoreEl', function() {
-            expect(this.region._restoreEl).to.have.been.called;
-          });
-
-          it('should not restore if the "currentView" has been deleted from the region', function() {
-            delete this.region.currentView;
-            this.region._restoreEl();
-            expect(this.region.currentView).to.be.undefined;
-          });
-
-          it('should not restore if the "currentView.el" has been remove from the DOM', function() {
-            this.view1.remove();
-            this.region._restoreEl();
-            expect(this.region.currentView.el.parentNode).is.falsy;
-          });
-
-          describe('and then emptying the region', function() {
-            beforeEach(function() {
-              this.view1.onBeforeDetach = this.sinon.spy((view) => {
-                return this.region.Dom.hasEl(document.documentElement, view.el);
-              });
-              this.view1.onDetach = this.sinon.spy((view) => {
-                return this.region.Dom.hasEl(document.documentElement, view.el);
-              });
-              this.region.empty();
-            });
-
-            it('should trigger detach events while view is detaching', function() {
-              expect(this.view1.onBeforeDetach).to.have.returned(true);
-              expect(this.view1.onDetach).to.have.returned(false);
-            });
-
-            it('should remove the view from the parent', function() {
-              expect(this.$parentEl).to.not.contain.$html(this.view1.$el.html());
-            });
-
-            it('should restore the region\'s "el" to the DOM', function() {
-              expect(this.$parentEl).to.contain.$html('<div id="region"></div>');
-            });
-          });
-
-          describe('when destroying the view', function() {
-            beforeEach(function() {
-              var view = new Marionette.View({ template: _.noop });
-
-              this.region.show(view);
-              view.destroy();
-            });
-
-            it('should remove the view from the parent', function() {
-              expect(this.$parentEl).to.not.contain.$html(this.view.$el.html());
-            });
-
-            it('should restore the region\'s "el" to the DOM', function() {
-              expect(this.$parentEl).to.contain.$html('<div id="region"></div>');
-            });
-          });
-        });
-
-        describe('when setting the "replaceElement" class option and els are the same', function() {
-          beforeEach(function() {
-            this.$parentEl = this.region.$el.parent();
-            this.regionHtml = this.$parentEl.html();
-            this.region.replaceElement = true;
-            this.region.show(new this.MyView({ el: this.region.el }));
-          });
-
-          it('should have replaced the "el"', function() {
-            expect(this.region.isReplaced()).to.be.true;
-          });
-
-          it('should append the view HTML to the parent "el"', function() {
-            expect(this.$parentEl).to.contain.$html(this.region.currentView.$el.html());
-          });
-        });
-
-      });
-
-      describe('preventDestroy: false', function() {
-        beforeEach(function() {
-          this.region.show(this.view2, {preventDestroy: false});
-        });
-
-        it('should "destroy" the old view', function() {
-          expect(this.view1.destroy).to.have.been.called;
-        });
-
-        it('view1 should not reference region', function() {
-          expect(this.view1._parent).to.be.undefined;
-        });
-
-        it('should call removeView', function() {
-          expect(this.region.removeView).to.have.been.called;
-        });
-      });
-
-
-      describe('when DEV_MODE is on', function() {
-        beforeEach(function() {
-          Marionette.DEV_MODE = true;
-          this.sinon.spy(Marionette.deprecate, '_warn');
-          this.sinon.stub(Marionette.deprecate, '_console', {
-            warn: this.sinon.stub()
-          });
-          Marionette.deprecate._cache = {};
-        });
-
-        it('should call Marionette.deprecate', function() {
-          this.region.show(this.view2, {preventDestroy: true}); expect(Marionette.deprecate._warn).to.be.calledWith('Deprecation warning: The preventDestroy option is deprecated. Use Region#detachView');
-        });
-
-        afterEach(function() {
-          Marionette.DEV_MODE = false;
-        });
-      });
-
-    });
-
     describe('when setting the "replaceElement" class option', function() {
       beforeEach(function() {
         this.sinon.spy(this.region, '_restoreEl');
@@ -532,6 +315,18 @@ describe('region', function() {
 
       it('should call _restoreEl', function() {
         expect(this.region._restoreEl).to.have.been.called;
+      });
+
+      it('should not restore if the "currentView" has been deleted from the region', function() {
+        delete this.region.currentView;
+        this.region._restoreEl();
+        expect(this.region.currentView).to.be.undefined;
+      });
+
+      it('should not restore if the "currentView.el" has been remove from the DOM', function() {
+        this.view.remove();
+        this.region._restoreEl();
+        expect(this.region.currentView.el.parentNode).is.falsy;
       });
 
       describe('and then emptying the region', function() {
@@ -854,7 +649,7 @@ describe('region', function() {
     });
   });
 
-  describe('when passing options to empty', function() {
+  describe('when calling empty', function() {
     beforeEach(function() {
       this.MyRegion = Backbone.Marionette.Region.extend({
         el: '#region'
@@ -877,30 +672,9 @@ describe('region', function() {
       this.region.show(this.view);
     });
 
-    describe('preventDestroy: true', function() {
+    describe('without arguments', function() {
       beforeEach(function() {
-        this.region.empty({preventDestroy: true});
-      });
-      it('should not destroy view', function() {
-        expect(this.view.destroy).to.have.been.not.called;
-      });
-
-      it('should clear region contents', function() {
-        expect(this.region.$el.html()).to.eql('');
-      });
-    });
-
-    describe('preventDestroy: false', function() {
-      beforeEach(function() {
-        this.region.empty({preventDestroy: false});
-      });
-      it('should destroy view', function() {
-        expect(this.view.destroy).to.have.been.called;
-      });
-    });
-    describe('preventDestroy undefined', function() {
-      beforeEach(function() {
-        this.region.empty({});
+        this.region.empty();
       });
       it('should destroy view', function() {
         expect(this.view.destroy).to.have.been.called;

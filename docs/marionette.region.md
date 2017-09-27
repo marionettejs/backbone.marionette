@@ -421,38 +421,9 @@ View [any HTML that doesn't belong to the View will remain](./upgrade.md#changes
 
 ### Preserving Existing Views
 
-**_DEPRECATED: `preventDestroy` is deprecated. See
-[Detaching Existing Views](#detaching-existing-views)
-for how to preserve a shown view_**
-
-If you replace the current view with a new view by calling `show`,
-by default it will automatically destroy the previous view.
-You can prevent this behavior by passing `{preventDestroy: true}` in the options
-parameter. Several events will also be triggered on the views.
-
-```javascript
-// Show the first view.
-var myView = new MyView();
-var childView = new MyChildView();
-
-var mainRegion = myView.getRegion('main');
-
-mainRegion.show(childView);
-
-// Replace the view with another. The
-// `destroy` method is called for you
-var anotherView = new AnotherView();
-mainRegion.show(anotherView);
-
-// Replace the view with another.
-// Prevent `destroy` from being called
-var anotherView2 = new AnotherView();
-mainRegion.show(anotherView2, {preventDestroy: true});
-mainRegion.empty({preventDestroy: true});
-```
-
-**NOTE** When using `preventDestroy: true` you must be careful to cleanup your
-old views manually to prevent memory leaks.
+If you replace the current view with a new view by calling `show`, it will
+automatically destroy the previous view. You can prevent this behavior by 
+[detaching the view](#detaching-existing-views) before showing another one.
 
 ### Detaching Existing Views
 
@@ -471,6 +442,9 @@ myView.showChildView('main', childView);
 // ... somewhere down the line
 myOtherView.showChildView('main', myView.getRegion('main').detachView());
 ```
+
+**NOTE** When detaching a view you must pass it to a new region so Marionette
+can handle its life cycle automatically or destroy it manually to prevent memory leaks.
 
 ## `reset` A Region
 

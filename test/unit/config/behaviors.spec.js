@@ -174,7 +174,7 @@ describe('Behaviors', function() {
           const fooView = new FooView();
         }).to.throw(
           Error,
-          new Error('Unable to get behavior class. An Behavior constructor should be passed directly or as behaviorClass property of options')
+          new Error('Unable to get behavior class. A Behavior constructor should be passed directly or as behaviorClass property of options')
         );
       });
     })

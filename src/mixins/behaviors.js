@@ -11,7 +11,7 @@ import MarionetteError from '../error';
 // If a user passes in options.behaviorClass
 // default to using that.
 // If a user passes in a Behavior Class directly, use that
-// Otherwise an error is throw
+// Otherwise an error is thrown
 function getBehaviorClass(options) {
   if (options.behaviorClass) {
     return options.behaviorClass;
@@ -19,7 +19,7 @@ function getBehaviorClass(options) {
   } else if (_.isFunction(options)) {
     return options;
   } else {
-    throw new MarionetteError('Unable to get behavior class. An Behavior constructor should be passed directly or as behaviorClass property of options');
+    throw new MarionetteError('Unable to get behavior class. A Behavior constructor should be passed directly or as behaviorClass property of options');
   }
 }
 

@@ -14,7 +14,7 @@ multiple views through the `regions` attribute.
 * [Rendering a Template](#rendering-a-template)
   * [Set How Template is Attached to the `el`](#set-how-template-is-attached-to-the-el)
 * [Managing an Existing Page](#managing-an-existing-page)
-  * [Setting a `template` to `false`](#setting-a-template-to-false)
+  * [Avoiding `el` re-rendering](#avoiding-el-re-rendering)
 * [Laying Out Views - Regions](#laying-out-views-regions)
   * [Managing Sub-views](#managing-sub-views)
     * [Showing a View](#showing-a-view)
@@ -110,25 +110,23 @@ myView.isAttached(); // true if '#base-element` is in the DOM
 
 Marionette will [set the appropriate state of the view](./viewlifecycle.md#views-associated-with-previously-rendered-or-attached-dom).
 
-### Setting a `template` to `false`
+### Avoiding `el` re-rendering
 
-**Deprecated:** `template: false` is deprecated.  Use `template: _.noop`
-to render without adding html, or do not render the view. Pre-rendered
-views will instantiate `isRendered() === true`.
+Use `template: _.noop` to render without changing html, or do not render the view. 
+Pre-rendered views will instantiate `isRendered() === true`.
 
-Setting the `template` to `false` allows for the view to create all of
+Setting the `template` to `_.noop` allows for the view to create all of
 the bindings and trigger all view events without re-rendering the el of
-the view. *Any other falsy value will throw an exception.*
+the view. *Any non function value will throw an exception.*
 
 ```javascript
 var Mn = require('backbone.marionette');
+var _ = require('underscore');
 
 var MyView = Mn.View({
   el: '#base-element',
 
-  // template: false is deprecated
-  // Use template: _.noop instead
-  template: false
+  template: _.noop
 });
 
 new myView();

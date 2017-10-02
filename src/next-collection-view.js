@@ -131,13 +131,19 @@ const CollectionView = Backbone.View.extend({
   },
 
   _removeChildModels(models) {
-    return _.map(models, _.bind(this._removeChildModel, this));
+    return _.reduce(models, (views, model) => {
+      const removeView = this._removeChildModel(model);
+
+      if (removeView) { views.push(removeView); }
+
+      return views;
+    }, []);
   },
 
   _removeChildModel(model) {
     const view = this.children.findByModel(model);
 
-    this._removeChild(view);
+    if (view) { this._removeChild(view); }
 
     return view;
   },

@@ -251,4 +251,26 @@ describe('next CollectionView Data', function() {
       expect(myCollectionView.$el.children()).to.have.lengthOf(2);
     });
   });
+
+  describe('when removing a model that does not match a children view model', function() {
+    let myCollectionView;
+    let collection;
+
+    beforeEach(function() {
+      collection = new Backbone.Collection([{ id: 1 }, { id: 2 }, { id: 3 }]);
+
+      const BuildCollectionView = MyCollectionView.extend({
+        buildChildView(child, ChildViewClass) {
+          return new ChildViewClass({ model: new Backbone.Model() });
+        }
+      });
+
+      myCollectionView = new BuildCollectionView({ collection });
+      myCollectionView.render();
+    });
+
+    it('should not throw an error', function() {
+      expect(collection.remove({ id: 1 })).to.not.throw;
+    });
+  });
 });

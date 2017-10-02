@@ -494,6 +494,9 @@ describe('next CollectionView Children', function() {
 
           it('should only append the added child', function() {
             this.sinon.stub(myCollectionView, 'attachHtml');
+
+            // Only true if not maintaining collection sort
+            myCollectionView.sortWithCollection = false;
             myCollectionView.addChildView(anotherView);
             const callArgs = myCollectionView.attachHtml.args[0];
             const attachHtmlEls = callArgs[0];

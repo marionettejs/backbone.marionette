@@ -1,10 +1,10 @@
 describe('layoutView', function() {
   'use strict';
 
-  const BBView = Backbone.View.extend();
-  _.extend(BBView.prototype, Marionette.BackboneViewMixin);
-
   beforeEach(function() {
+    const BBView = Backbone.View.extend();
+    _.extend(BBView.prototype, Marionette.BackboneViewMixin);
+
     this.layoutViewManagerTemplateFn = _.template('<div id="regionOne"></div><div id="regionTwo"></div>');
     this.template = function() {
       return '<span class=".craft"></span><h1 id="#a-fun-game"></h1>';
@@ -256,6 +256,9 @@ describe('layoutView', function() {
 
   describe('when showing a childView as a basic Backbone.View', function() {
     beforeEach(function() {
+      const BBView = Backbone.View.extend();
+      _.extend(BBView.prototype, Marionette.BackboneViewMixin);
+
       this.layoutView = new this.View();
       this.layoutView.render();
 
@@ -273,6 +276,9 @@ describe('layoutView', function() {
     var options = {myOption: 'some value'};
 
     beforeEach(function() {
+      const BBView = Backbone.View.extend();
+      _.extend(BBView.prototype, Marionette.BackboneViewMixin);
+
       this.layoutView = new this.View().render();
       this.regionOne = this.layoutView.getRegion('regionOne');
       this.childView = new BBView();
@@ -432,6 +438,9 @@ describe('layoutView', function() {
 
   describe('when re-rendering an already rendered layoutView', function() {
     beforeEach(function() {
+      const BBView = Backbone.View.extend();
+      _.extend(BBView.prototype, Marionette.BackboneViewMixin);
+
       this.ViewBoundRender = this.View.extend({
         initialize: function() {
           if (this.model) {

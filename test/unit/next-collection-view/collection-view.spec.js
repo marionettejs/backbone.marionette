@@ -5,6 +5,7 @@ import _ from 'underscore';
 import Backbone from 'backbone';
 import CollectionView from '../../../src/next-collection-view';
 import View from '../../../src/view';
+import BackboneViewMixin from '../../../src/mixins/backboneview';
 
 describe('NextCollectionView', function() {
   let MyChildView;
@@ -25,7 +26,7 @@ describe('NextCollectionView', function() {
       onBeforeDestroy: this.sinon.stub(),
       onDestroy: this.sinon.stub(),
     });
-    _.extend(MyBbChildView.prototype, Marionette.BackboneViewMixin);
+    _.extend(MyBbChildView.prototype, BackboneViewMixin);
   });
 
   describe('#constructor', function() {
@@ -146,7 +147,7 @@ describe('NextCollectionView', function() {
     describe('when childView is a Backbone.View', function() {
       it('should build children from the defined view', function() {
         let BBView = Backbone.View.extend();
-        _.extend(BBView.prototype, Marionette.BackboneViewMixin);
+        _.extend(BBView.prototype, BackboneViewMixin);
         const myCollectionView = new CollectionView({
           collection,
           childView: BBView
@@ -161,7 +162,7 @@ describe('NextCollectionView', function() {
       let myCollectionView;
       let childViewStub;
       let BBView = Backbone.View.extend();
-      _.extend(BBView.prototype, Marionette.BackboneViewMixin);
+      _.extend(BBView.prototype, BackboneViewMixin);
       beforeEach(function() {
         childViewStub = this.sinon.stub();
         childViewStub.returns(BBView);

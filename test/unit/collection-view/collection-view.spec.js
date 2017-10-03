@@ -48,9 +48,10 @@ describe('collection view', function() {
     });
 
     describe('and it\'s not attached to the document', function() {
-      const BBView = Backbone.View.extend();
-      _.extend(BBView.prototype, Marionette.BackboneViewMixin);
       beforeEach(function() {
+        const BBView = Backbone.View.extend();
+        _.extend(BBView.prototype, Marionette.BackboneViewMixin);
+
         this.collectionView = new this.CollectionView({el: this.$fixtureEl[0]});
         this.view1 = this.collectionView.addChildView(new BBView({el: this.$fixtureEl.children()[0]}), 0);
       });
@@ -66,7 +67,7 @@ describe('collection view', function() {
 
     describe('and it\'s attached to the document', function() {
       beforeEach(function() {
-        var BBView = Backbone.View.extend({});
+        const BBView = Backbone.View.extend({});
         _.extend(BBView.prototype, Marionette.BackboneViewMixin);
         this.setFixtures(this.$fixtureEl);
         this.collectionView = new this.CollectionView({el: '#fixture-collectionview'});
@@ -899,9 +900,10 @@ describe('collection view', function() {
   });
 
   describe('when removing a childView that does not have a "destroy" method', function() {
-    const BBView = Backbone.View.extend();
-    _.extend(BBView.prototype, Marionette.BackboneViewMixin);
     beforeEach(function() {
+      const BBView = Backbone.View.extend();
+      _.extend(BBView.prototype, Marionette.BackboneViewMixin);
+
       const collection = new Backbone.Collection([{id: 1}]);
       this.collectionView = new this.CollectionView({
         childView: BBView,
@@ -927,9 +929,10 @@ describe('collection view', function() {
   });
 
   describe('when destroying all children', function() {
-    const BBView = Backbone.View.extend();
-    _.extend(BBView.prototype, Marionette.BackboneViewMixin);
     beforeEach(function() {
+      const BBView = Backbone.View.extend();
+      _.extend(BBView.prototype, Marionette.BackboneViewMixin);
+
       this.collectionView = new this.CollectionView({
         childView: BBView,
         collection: new Backbone.Collection([{id: 1}, {id: 2}])

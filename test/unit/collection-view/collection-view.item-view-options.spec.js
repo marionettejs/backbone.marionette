@@ -63,9 +63,10 @@ describe('collection view - childViewOptions', function() {
   });
 
   describe('when rendering with an empty collection and emptyView', function() {
-    let BBView = Backbone.View.extend();
-    _.extend(BBView.prototype, Marionette.BackboneViewMixin);
     beforeEach(function() {
+      const BBView = Backbone.View.extend();
+      _.extend(BBView.prototype, Marionette.BackboneViewMixin);
+
       this.EmptyCollectionView = Marionette.CollectionView.extend({
         emptyView: BBView,
         childViewOptions: this.childViewOptionsStub

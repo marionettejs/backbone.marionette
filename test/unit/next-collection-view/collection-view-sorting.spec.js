@@ -100,40 +100,58 @@ describe('NextCollectionView - Sorting', function() {
     describe('when viewComparator is falsy but not false', function() {
       let myCollectionView;
 
-      beforeEach(function() {
-        myCollectionView = new MyCollectionView({
-          sortWithCollection: false,
-          collection
-        });
-
-        myCollectionView.render();
-      });
-
-
-      it('should sort the collection by the collection index', function() {
-        expect(myCollectionView.$el.text()).to.equal(noSortText);
-      });
-
-      it('should call "before:sort" event', function() {
-        expect(myCollectionView.onBeforeSort)
-          .to.have.been.calledOnce
-          .and.calledWith(myCollectionView);
-      });
-
-      it('should call "sort" event', function() {
-        expect(myCollectionView.onSort)
-          .to.have.been.calledOnce
-          .and.calledWith(myCollectionView);
-      });
-
-      describe('when resorting the collection', function() {
-        it('should sort the collectionView by the collection index', function() {
-          collection.comparator = 'sort';
-          collection.sort();
+      describe('when sortWithCollection is true', function() {
+        beforeEach(function() {
+          myCollectionView = new MyCollectionView({ collection });
 
           myCollectionView.render();
+        });
 
-          expect(myCollectionView.$el.text()).to.equal(sortText);
+
+        it('should sort the collection by the collection index', function() {
+          expect(myCollectionView.$el.text()).to.equal(noSortText);
+        });
+
+        it('should call "before:sort" event', function() {
+          expect(myCollectionView.onBeforeSort)
+            .to.have.been.calledOnce
+            .and.calledWith(myCollectionView);
+        });
+
+        it('should call "sort" event', function() {
+          expect(myCollectionView.onSort)
+            .to.have.been.calledOnce
+            .and.calledWith(myCollectionView);
+        });
+
+        describe('when resorting the collection', function() {
+          it('should sort the collectionView by the collection index', function() {
+            collection.comparator = 'sort';
+            collection.sort();
+
+            myCollectionView.render();
+
+            expect(myCollectionView.$el.text()).to.equal(sortText);
+          });
+        });
+      });
+
+      describe('when sortWithCollection is false', function() {
+        beforeEach(function() {
+          myCollectionView = new MyCollectionView({
+            sortWithCollection: false,
+            collection
+          });
+
+          myCollectionView.render();
+        });
+
+        it('should not call "before:sort" event', function() {
+          expect(myCollectionView.onBeforeSort).to.not.be.called;
+        });
+
+        it('should not call "sort" event', function() {
+          expect(myCollectionView.onSort).to.not.be.called;
         });
       });
     });

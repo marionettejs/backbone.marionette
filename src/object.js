@@ -4,7 +4,7 @@
 import _ from 'underscore';
 import Backbone from 'backbone';
 import extend from './utils/extend';
-import { triggerMethod } from './common/trigger-method';
+import triggerMethod from './common/trigger-method';
 import CommonMixin from './mixins/common';
 import RadioMixin from './mixins/radio';
 

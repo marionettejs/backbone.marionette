@@ -209,26 +209,52 @@ describe('next CollectionView Data', function() {
     let myCollectionView;
     let collection;
 
-    beforeEach(function() {
-      collection = new Backbone.Collection([{ id: 1 }, { id: 2 }, { id: 3 }]);
+    describe('when sortWithCollection is true', function() {
+      beforeEach(function() {
+        collection = new Backbone.Collection([{ id: 1 }, { id: 2 }, { id: 3 }]);
 
-      myCollectionView = new MyCollectionView({ collection });
-      myCollectionView.render();
+        myCollectionView = new MyCollectionView({ collection });
+        myCollectionView.render();
+      });
+
+      it('should append all of the children', function() {
+        this.sinon.stub(myCollectionView, 'attachHtml');
+        collection.add([{ id: 4 }, { id: 5 }]);
+
+        const callArgs = myCollectionView.attachHtml.args[0];
+        const attachHtmlEls = callArgs[0];
+        expect($(attachHtmlEls).children()).to.have.lengthOf(5);
+      });
+
+      it('should still have all children attached', function() {
+        collection.add([{ id: 4 }, { id: 5 }]);
+
+        expect(myCollectionView.$el.children()).to.have.lengthOf(5);
+      });
     });
 
-    it('should only append the added children', function() {
-      this.sinon.stub(myCollectionView, 'attachHtml');
-      collection.add([{ id: 4 }, { id: 5 }]);
+    describe('when sortWithCollection is false', function() {
+      beforeEach(function() {
+        collection = new Backbone.Collection([{ id: 1 }, { id: 2 }, { id: 3 }]);
 
-      const callArgs = myCollectionView.attachHtml.args[0];
-      const attachHtmlEls = callArgs[0];
-      expect($(attachHtmlEls).children()).to.have.lengthOf(2);
-    });
+        myCollectionView = new MyCollectionView({ collection, sortWithCollection: false });
+        myCollectionView.render();
+      });
 
-    it('should still have all children attached', function() {
-      collection.add([{ id: 4 }, { id: 5 }]);
+      it('should only append the added children', function() {
+        this.sinon.stub(myCollectionView, 'attachHtml');
+        collection.add([{ id: 4 }, { id: 5 }]);
 
-      expect(myCollectionView.$el.children()).to.have.lengthOf(5);
+        const callArgs = myCollectionView.attachHtml.args[0];
+        const attachHtmlEls = callArgs[0];
+        expect($(attachHtmlEls).children()).to.have.lengthOf(2);
+      });
+
+      it('should still have all children attached', function() {
+        collection.add([{ id: 4 }, { id: 5 }]);
+
+        expect(myCollectionView.$el.children()).to.have.lengthOf(5);
+      });
     });
   });
 
@@ -249,6 +275,28 @@ describe('next CollectionView Data', function() {
       collection.remove({ id: 1 });
 
       expect(myCollectionView.$el.children()).to.have.lengthOf(2);
+    });
+  });
+
+  describe('when removing a model that does not match a children view model', function() {
+    let myCollectionView;
+    let collection;
+
+    beforeEach(function() {
+      collection = new Backbone.Collection([{ id: 1 }, { id: 2 }, { id: 3 }]);
+
+      const BuildCollectionView = MyCollectionView.extend({
+        buildChildView(child, ChildViewClass) {
+          return new ChildViewClass({ model: new Backbone.Model() });
+        }
+      });
+
+      myCollectionView = new BuildCollectionView({ collection });
+      myCollectionView.render();
+    });
+
+    it('should not throw an error', function() {
+      expect(collection.remove({ id: 1 })).to.not.throw;
     });
   });
 });

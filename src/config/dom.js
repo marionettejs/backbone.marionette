@@ -92,7 +92,7 @@ export default {
 
   // Does the el have child nodes
   hasContents(el) {
-    return el.hasChildNodes();
+    return !!el && el.hasChildNodes();
   },
 
   // Remove the inner contents of `el` from the DOM while leaving

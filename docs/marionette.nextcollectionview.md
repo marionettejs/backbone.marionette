@@ -245,7 +245,7 @@ var MyNextCollectionView = Mn.NextCollectionView.extend({
 ```
 
 In the normal lifecycle of a `NextCollectionView`, `isEmpty` will be called
-twice. Once when a render begins, and twice after the [`viewFilter`](#filtering) is run. For the call after filtering, a boolean will be passed indicating if all
+twice. Once when a render begins, and again after the [`viewFilter`](#filtering) is run. For the call after filtering, a boolean will be passed indicating if all
 of the NextCollectionView's `children` were filtered.
 
 ## NextCollectionView's `render`

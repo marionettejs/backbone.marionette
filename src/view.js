@@ -88,14 +88,10 @@ const View = Backbone.View.extend({
   // if an el was previously defined. If so, the view might be
   // rendered or attached on setElement.
   setElement() {
-    const hasEl = !!this.el;
-
     Backbone.View.prototype.setElement.apply(this, arguments);
 
-    if (hasEl) {
-      this._isRendered = this.Dom.hasContents(this.el);
-      this._isAttached = this.Dom.hasEl(document.documentElement, this.el);
-    }
+    this._isRendered = this.Dom.hasContents(this.el);
+    this._isAttached = this.Dom.hasEl(document.documentElement, this.el);
 
     if (this._isRendered) {
       this.bindUIElements();

@@ -93,22 +93,13 @@ const CollectionView = Backbone.View.extend({
 
   // Internal method. This checks for any changes in the order of the collection.
   // If the index of any view doesn't match, it will re-sort.
-  _onCollectionSort() {
+  _onCollectionSort(collection, { add, merge, remove }) {
     if (!this.sortWithCollection || this.viewComparator === false) {
       return;
     }
 
-    // If the data is changing we will handle the sort later
-    if (this.collection.length !== this.children.length) {
-      return;
-    }
-
-    // Additional check if the data is changing
-    const hasAddedModel = this.collection.some(model => {
-      return !this.children.findByModel(model);
-    });
-
-    if (hasAddedModel) {
+    // If the data is changing we will handle the sort later in `_onCollectionUpdate`
+    if (add || remove || merge) {
       return;
     }
 
@@ -138,13 +129,19 @@ const CollectionView = Backbone.View.extend({
   },
 
   _removeChildModels(models) {
-    return _.map(models, _.bind(this._removeChildModel, this));
+    return _.reduce(models, (views, model) => {
+      const removeView = this._removeChildModel(model);
+
+      if (removeView) { views.push(removeView); }
+
+      return views;
+    }, []);
   },
 
   _removeChildModel(model) {
     const view = this.children.findByModel(model);
 
-    this._removeChild(view);
+    if (view) { this._removeChild(view); }
 
     return view;
   },
@@ -260,13 +257,9 @@ const CollectionView = Backbone.View.extend({
   // if an el was previously defined. If so, the view might be
   // attached on setElement.
   setElement() {
-    const hasEl = !!this.el;
-
     Backbone.View.prototype.setElement.apply(this, arguments);
 
-    if (hasEl) {
-      this._isAttached = this.Dom.hasEl(document.documentElement, this.el);
-    }
+    this._isAttached = this.Dom.hasEl(document.documentElement, this.el);
 
     return this;
   },
@@ -369,11 +362,11 @@ const CollectionView = Backbone.View.extend({
 
   // Sorts views by viewComparator and sets the children to the new order
   _sortChildren() {
-    if (this.viewComparator === false) { return; }
+    let viewComparator = this.getComparator();
+
+    if (!viewComparator) { return; }
 
     this.triggerMethod('before:sort', this);
-
-    let viewComparator = this.getComparator();
 
     if (_.isFunction(viewComparator)) {
       // Must use native bind to preserve length
@@ -409,13 +402,18 @@ const CollectionView = Backbone.View.extend({
   // Additionally override this function to provide custom
   // viewComparator logic
   getComparator() {
-    return this.viewComparator || this._viewComparator;
+    if (this.viewComparator) { return this.viewComparator }
+
+    if (!this.sortWithCollection || this.viewComparator === false || !this.collection) {
+      return false;
+    }
+
+    return this._viewComparator;
   },
 
   // Default internal view comparator that order the views by
   // the order of the collection
   _viewComparator(view) {
-    if (!this.collection) { return; }
     return this.collection.indexOf(view.model);
   },
 
@@ -444,7 +442,7 @@ const CollectionView = Backbone.View.extend({
     delete this._addedViews;
 
     if (!viewFilter) {
-      if (addedViews && _.every(addedViews, _.bind(this._isAddedAtEnd, this))) {
+      if (!this.sortWithCollection && addedViews && _.every(addedViews, _.bind(this._isAddedAtEnd, this))) {
         return addedViews;
       }
 

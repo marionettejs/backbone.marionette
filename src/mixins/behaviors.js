@@ -1,6 +1,6 @@
 import _ from 'underscore';
 import _invoke from '../utils/invoke';
-import { triggerMethod } from '../common/trigger-method';
+import triggerMethod from '../common/trigger-method';
 import MarionetteError from '../error';
 
 // MixinOptions

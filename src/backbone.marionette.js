@@ -5,27 +5,21 @@ import proxy from './utils/proxy';
 import extend from './utils/extend';
 import deprecate from './utils/deprecate';
 
-import mergeOptions from './common/merge-options';
-import getOption from './common/get-option';
-import normalizeMethods from './common/normalize-methods';
-import monitorViewEvents from './common/monitor-view-events';
-
-import BackboneViewMixin from './mixins/backboneview';
-
 import {
   bindEvents,
   unbindEvents
 } from './common/bind-events';
-
 import {
   bindRequests,
   unbindRequests
 } from './common/bind-requests';
+import getOption from './common/get-option';
+import mergeOptions from './common/merge-options';
+import monitorViewEvents from './common/monitor-view-events';
+import normalizeMethods from './common/normalize-methods';
+import triggerMethod from './common/trigger-method';
 
-import {
-  triggerMethod
-} from './common/trigger-method';
-
+import BackboneViewMixin from './mixins/backboneview';
 
 import MarionetteObject from './object';
 import TemplateCache from './template-cache';

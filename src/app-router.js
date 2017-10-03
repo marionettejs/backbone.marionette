@@ -19,7 +19,7 @@
 
 import Backbone from 'backbone';
 import _ from 'underscore';
-import { triggerMethod } from './common/trigger-method';
+import triggerMethod from './common/trigger-method';
 import MarionetteError from './error';
 import CommonMixin from './mixins/common';
 

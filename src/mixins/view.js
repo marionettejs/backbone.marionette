@@ -3,7 +3,7 @@
 
 import Backbone from 'backbone';
 import _ from 'underscore';
-import { triggerMethod } from '../common/trigger-method';
+import triggerMethod from '../common/trigger-method';
 import BehaviorsMixin from './behaviors';
 import CommonMixin from './common';
 import DelegateEntityEventsMixin from './delegate-entity-events';

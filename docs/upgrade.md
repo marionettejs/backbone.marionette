@@ -79,7 +79,7 @@ arguments passed as part of `triggerMethod`. This means that the arguments
 passed to `onEvent` and `onChildviewEvent` are now identical. See the
 [documentation on event lifecycles](./viewlifecycle.md) for more information.
 
-In Marionette 2, `childEvents` where bound on every event. In Marionette 3,
+In Marionette 2, `childEvents` were bound on every event. In Marionette 3,
 `childViewEvents` are bound once and cached. This means that you cannot add new
 events after the view has been created.
 

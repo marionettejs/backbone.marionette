@@ -1,3 +1,14 @@
+### v3.4.4 [view commit logs](https://github.com/marionettejs/backbone.marionette/compare/v3.4.3...v3.4.4)
+
+#### Fixes
+* Prevent exception when a view is instantiated with a non-existing selector `el`.
+* When a collection defines the `NextCollectionView` sort order, the add at end performance improvement was removed to prevent edge case errors.
+* `NextCollectionView` no longer sorts according to the collection if `sortWithCollection` is set to false.
+* When views added to `NextCollectionView` from a collection don't have a matching model, removing the model no longer throws an error.
+
+#### Misc
+* `NextCollectionView` now uses backbone update flags instead of calculating changes for sorting
+
 ### v3.4.3 [view commit logs](https://github.com/marionettejs/backbone.marionette/compare/v3.4.2...v3.4.3)
 
 #### Fixes

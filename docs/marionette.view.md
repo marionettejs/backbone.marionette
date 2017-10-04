@@ -221,7 +221,7 @@ Note: If `view.showChildView(region, subView)` is invoked before the `view` has 
 #### Accessing a Child View
 
 To access the child view of a `View` - use the `getChildView(region)` method.
-This will return the view instance that is current being displayed at that
+This will return the view instance that is currently being displayed at that
 region, or `null`:
 
 ```javascript

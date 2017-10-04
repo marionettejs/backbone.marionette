@@ -129,24 +129,21 @@ describe('layoutView', function() {
 
   describe('when regions are defined as a function', function() {
     beforeEach(function() {
-      var suite = this;
-      this.View = Marionette.View.extend({
-        template: '#foo',
-        regions: function(opts) {
-          suite.options = opts;
+      const View = this.View.extend({
+        regions: function() {
           return {
-            'foo': '#bar'
+            regionOne: '#regionOne',
+            regionTwo: '#regionTwo'
           };
         }
       });
 
-      this.setFixtures('<div id="foo"><div id="bar"></div></div>');
-      this.layoutView = new this.View();
+      this.layoutView = new View();
       this.layoutView.render();
     });
 
     it('should build the regions from the returns object literal', function() {
-      expect(this.layoutView.getRegion('foo')).to.be.instanceof(Backbone.Marionette.Region);
+      expect(this.layoutView.getRegion('regionOne')).to.be.instanceof(Backbone.Marionette.Region);
     });
   });
 

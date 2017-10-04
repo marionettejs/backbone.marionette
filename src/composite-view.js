@@ -6,6 +6,7 @@ import deprecate from './utils/deprecate';
 import MarionetteError from './error';
 import CollectionView from './collection-view';
 import View from './view';
+import { setRenderer } from './config/renderer';
 
 const ClassOptions = [
   'childViewContainer',
@@ -171,6 +172,8 @@ const CompositeView = CollectionView.extend({
       this.$childViewContainer = undefined;
     }
   }
+}, {
+  setRenderer
 });
 
 // To prevent duplication but allow the best View organization

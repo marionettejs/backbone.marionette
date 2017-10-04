@@ -22,7 +22,6 @@ import triggerMethod from './common/trigger-method';
 import BackboneViewMixin from './mixins/backboneview';
 
 import MarionetteObject from './object';
-import TemplateCache from './template-cache';
 import View from './view';
 import CollectionView from './collection-view';
 import NextCollectionView from './next-collection-view';
@@ -34,7 +33,6 @@ import AppRouter from './app-router';
 import MarionetteError from './error';
 
 import DomApi from './config/dom';
-import Renderer from './config/renderer';
 
 import {
   FEATURES,
@@ -73,8 +71,6 @@ Marionette.BackboneViewMixin = BackboneViewMixin;
 // Classes
 Marionette.Application = Application;
 Marionette.AppRouter = AppRouter;
-Marionette.Renderer = Renderer;
-Marionette.TemplateCache = TemplateCache;
 Marionette.View = View;
 Marionette.CollectionView = CollectionView;
 Marionette.NextCollectionView = NextCollectionView;
@@ -95,6 +91,10 @@ Marionette.setDomApi = function(mixin) {
   NextCollectionView.setDomApi(mixin);
   Region.setDomApi(mixin);
   View.setDomApi(mixin);
+};
+Marionette.setRenderer = function(renderer) {
+  CompositeView.setRenderer(renderer);
+  View.setRenderer(renderer);
 };
 
 export default Marionette;

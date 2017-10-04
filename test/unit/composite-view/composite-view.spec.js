@@ -149,7 +149,7 @@ describe('composite view', function() {
         collection: this.collection
       });
 
-      this.sinon.spy(Marionette.Renderer, 'render');
+      this.sinon.spy(this.compositeView, '_renderHtml');
 
       this.compositeView.render();
     });
@@ -162,8 +162,8 @@ describe('composite view', function() {
       expect(this.compositeView.$el).to.contain.$text('baz');
     });
 
-    it('should pass template fn, data, and view instance to Marionette.Renderer.Render', function() {
-      expect(Marionette.Renderer.render).to.have.been.calledWith(this.templateFn, {foo: 'bar'}, this.compositeView);
+    it('should pass template fn, data, and view instance to renderer', function() {
+      expect(this.compositeView._renderHtml).to.have.been.calledWith(this.templateFn, {foo: 'bar'});
     });
   });
 
@@ -243,7 +243,7 @@ describe('composite view', function() {
 
     it('should throw an exception because there was no valid template', function() {
       var self = this;
-      expect(function() {self.compositeView.render()}).to.throw('Cannot render the template since its false, null or undefined.');
+      expect(function() {self.compositeView.render()}).to.throw('template is not a function');
     });
   });
 
@@ -360,7 +360,7 @@ describe('composite view', function() {
 
       this.sinon.spy(this.compositeView, 'render');
       this.sinon.spy(this.compositeView, '_destroyChildren');
-      this.sinon.spy(Backbone.Marionette.Renderer, 'render');
+      this.sinon.spy(this.compositeView, '_renderHtml');
       this.compositeRenderSpy = this.compositeView.render;
 
       this.compositeView.render();
@@ -368,7 +368,7 @@ describe('composite view', function() {
     });
 
     it('should re-render the template view', function() {
-      expect(Backbone.Marionette.Renderer.render.callCount).to.equal(2);
+      expect(this.compositeView._renderHtml.callCount).to.equal(2);
     });
 
     it('should destroy all of the child collection child views', function() {
@@ -923,7 +923,7 @@ describe('composite view', function() {
 
       this.compositeView = new this.CompositeView();
 
-      this.marionetteRendererSpy = this.sinon.spy(Marionette.Renderer, 'render');
+      this.marionetteRendererSpy = this.sinon.spy(this.compositeView, '_renderHtml');
       this.triggerSpy = this.sinon.spy(this.compositeView, 'trigger');
       this.serializeDataSpy = this.sinon.spy(this.compositeView, 'serializeData');
       this.mixinTemplateContextSpy = this.sinon.spy(this.compositeView, 'mixinTemplateContext');
@@ -953,7 +953,7 @@ describe('composite view', function() {
     });
 
     it('should not throw an exception for a false template', function() {
-      expect(this.compositeView.render).to.not.throw('Cannot render the template since it is null or undefined.');
+      expect(_.bind(this.compositeView.render, this.compositeView)).to.not.throw();
     });
 
     it('should call an "onBeforeRender" method on the view', function() {

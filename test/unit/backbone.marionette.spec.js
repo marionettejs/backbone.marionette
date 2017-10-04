@@ -44,4 +44,31 @@ describe('backbone.marionette', function() {
       });
     });
   });
+
+  describe('#setRenderer', function() {
+    let renderer;
+
+    beforeEach(function() {
+      renderer = Marionette.View.prototype._renderHtml;
+    });
+
+    afterEach(function() {
+      Marionette.setRenderer(renderer);
+    });
+
+    const RendererClasses = {
+      CompositeView,
+      View
+    };
+
+    const fakeRenderer = function() {};
+
+    _.each(RendererClasses, function(Class, key) {
+      it(`should setRenderer on ${ key }`, function() {
+        this.sinon.spy(Class, 'setRenderer');
+        Marionette.setRenderer(fakeRenderer);
+        expect(Class.setRenderer).to.be.calledOnce.and.calledWith(fakeRenderer);
+      });
+    });
+  });
 });

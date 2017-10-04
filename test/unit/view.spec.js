@@ -477,8 +477,7 @@ describe('item view', function() {
     });
 
     it('should return an empty object without data', function() {
-      expect(this.itemView.serializeData()).to.deep.equal({});
-      expect(this.itemView.serializeCollection()).to.deep.equal({});
+      expect(this.itemView.serializeData()).to.be.undefined;
     });
 
     describe('and the view has a model', function() {

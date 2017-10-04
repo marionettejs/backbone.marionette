@@ -838,8 +838,8 @@ describe('composite view', function() {
       this.sinon.spy(this.view, 'serializeModel');
     });
 
-    it('should return an empty object without data', function() {
-      expect(this.view.serializeData()).to.deep.equal({});
+    it('should return undefined', function() {
+      expect(this.view.serializeData()).to.be.undefined;
     });
 
     describe('and the view has a model', function() {

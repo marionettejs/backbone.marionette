@@ -3,31 +3,29 @@ import {version} from '../package.json';
 
 import proxy from './utils/proxy';
 import extend from './utils/extend';
-import deprecate from './utils/deprecate';
 
 import {
-  bindEvents,
-  unbindEvents
+  bindEvents as _bindEvents,
+  unbindEvents as _unbindEvents
 } from './common/bind-events';
 import {
-  bindRequests,
-  unbindRequests
+  bindRequests as _bindRequests,
+  unbindRequests as _unbindRequests
 } from './common/bind-requests';
-import getOption from './common/get-option';
-import mergeOptions from './common/merge-options';
+import _getOption from './common/get-option';
+import _mergeOptions from './common/merge-options';
 import monitorViewEvents from './common/monitor-view-events';
-import normalizeMethods from './common/normalize-methods';
-import triggerMethod from './common/trigger-method';
+import _normalizeMethods from './common/normalize-methods';
+import _triggerMethod from './common/trigger-method';
 
 import BackboneViewMixin from './mixins/backboneview';
 
-import MarionetteObject from './object';
+import MnObject from './object';
 import View from './view';
 import CollectionView from './collection-view';
 import Behavior from './behavior';
 import Region from './region';
 import Application from './application';
-import MarionetteError from './error';
 
 import DomApi from './config/dom';
 
@@ -38,56 +36,50 @@ import {
 } from './config/features';
 
 const previousMarionette = Backbone.Marionette;
-const Marionette = Backbone.Marionette = {};
 
 // This allows you to run multiple instances of Marionette on the same
 // webapp. After loading the new version, call `noConflict()` to
 // get a reference to it. At the same time the old version will be
 // returned to Backbone.Marionette.
-Marionette.noConflict = function() {
+export const noConflict = function() {
   Backbone.Marionette = previousMarionette;
   return this;
 };
 
 // Utilities
-Marionette.bindEvents = proxy(bindEvents);
-Marionette.unbindEvents = proxy(unbindEvents);
-Marionette.bindRequests = proxy(bindRequests);
-Marionette.unbindRequests = proxy(unbindRequests);
-Marionette.mergeOptions = proxy(mergeOptions);
-Marionette.getOption = proxy(getOption);
-Marionette.normalizeMethods = proxy(normalizeMethods);
-Marionette.extend = extend;
-Marionette.deprecate = deprecate;
-Marionette.triggerMethod = proxy(triggerMethod);
-Marionette.isEnabled = isEnabled;
-Marionette.setEnabled = setEnabled;
-Marionette.monitorViewEvents = monitorViewEvents;
-Marionette.BackboneViewMixin = BackboneViewMixin;
+export const bindEvents = proxy(_bindEvents);
+export const unbindEvents = proxy(_unbindEvents);
+export const bindRequests = proxy(_bindRequests);
+export const unbindRequests = proxy(_unbindRequests);
+export const mergeOptions = proxy(_mergeOptions);
+export const getOption = proxy(_getOption);
+export const normalizeMethods = proxy(_normalizeMethods);
+export const triggerMethod = proxy(_triggerMethod);
 
-// Classes
-Marionette.Application = Application;
-Marionette.View = View;
-Marionette.CollectionView = CollectionView;
-Marionette.Behavior = Behavior;
-Marionette.Region = Region;
-Marionette.Error = MarionetteError;
-Marionette.Object = MarionetteObject;
 
-// Configuration
-Marionette.FEATURES = FEATURES;
-Marionette.VERSION = version;
-Marionette.DomApi = DomApi;
-Marionette.setDomApi = function(mixin) {
+export const setDomApi = function(mixin) {
   CollectionView.setDomApi(mixin);
   Region.setDomApi(mixin);
   View.setDomApi(mixin);
 };
-Marionette.setRenderer = function(renderer) {
+export const setRenderer = function(renderer) {
   CollectionView.setRenderer(renderer);
   View.setRenderer(renderer);
 };
 
-export {View, CompositeView, CollectionView, NextCollectionView, Region, Behavior,
-  Application, AppRouter, Renderer, TemplateCache}
-export default Marionette;
+export {
+  View,
+  CollectionView,
+  MnObject,
+  Region,
+  Behavior,
+  Application,
+  isEnabled,
+  setEnabled,
+  monitorViewEvents,
+  BackboneViewMixin,
+  extend,
+  DomApi,
+  version as VERSION,
+  FEATURES
+}

@@ -95,7 +95,7 @@ You can also implement a different DOM API for a particular class:
 Mn.View.setDomApi(MyDOMApi);
 ```
 
-`CollectionView`, `CompositeView`, `NextCollectionView`, `Region`, and `View`
+`CollectionView`, `Region`, and `View`
 all have `setDomApi`. Each extended class may have their own DOM API.
 
 Additionally a DOM API can be partially set:

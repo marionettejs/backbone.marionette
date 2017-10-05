@@ -9,24 +9,28 @@
   * [CollectionView's `buildChildView`](#collectionviews-buildchildview)
   * [CollectionView's `addChildView`](#collectionviews-addchildview)
   * [CollectionView: Retrieve Child Views](#collectionview-retrieve-child-views)
-    * [CollectionView childView's: `findByCid`](#collectionview-childviews-findbycid)
-    * [CollectionView childView's: `findByModel`](#collectionview-childviews-findbymodel)
-    * [CollectionView childView's: `findByModelCid`](#collectionview-childviews-findbymodelcid)
-    * [CollectionView childView's: `findByCustom`](#collectionview-childviews-findbycustom)
-    * [CollectionView childView's: `findByIndex`](#collectionview-childviews-findbyindex)
+    * [CollectionView children's: `findByCid`](#collectionview-children-findbycid)
+    * [CollectionView children's: `findByModel`](#collectionview-children-findbymodel)
+    * [CollectionView children's: `findByModelCid`](#collectionview-children-findbymodelcid)
+    * [CollectionView children's: `findByIndex`](#collectionview-children-findbyindex)
+    * [CollectionView children's: `findIndexByView`](#collectionview-children-findindexbyview)
   * [CollectionView's `removeChildView`](#collectionviews-removechildview)
+  * [CollectionView's `detachChildView`](#collectionviews-detachchildview)
+  * [CollectionView's `swapChildViews`](#collectionviews-swapchildviews)
   * [CollectionView childView Iterators And Collection Functions](#collectionview-childview-iterators-and-collection-functions)
 
 * [CollectionView's `filter`](#collectionviews-filter)
+  * [CollectionView's `viewFilter`](#collectionviews-viewfilter)
+  * [CollectionView's `getFilter`](#collectionviews-getfilter)
   * [CollectionView's `setFilter`](#collectionviews-setfilter)
   * [CollectionView's `removeFilter`](#collectionviews-removefilter)
 
 * [CollectionView's `sort`](#collectionviews-sort)
   * [CollectionView's `viewComparator`](#collectionviews-viewcomparator)
-  * [CollectionView's `getViewComparator`](#collectionviews-getviewcomparator)
-  * [CollectionView's `reorderOnSort`](#collectionviews-reorderonsort)
-  * [CollectionView's `reorder`](#collectionviews-reorder)
-  * [CollectionView's `resortView`](#collectionviews-resortview)
+  * [CollectionView's `getComparator`](#collectionviews-getcomparator)
+  * [CollectionView's `setComparator`](#collectionviews-setcomparator)
+  * [CollectionView's `removeComparator`](#collectionviews-removecomparator)
+  * [CollectionView's `sortWithCollection`](#collectionviews-sortwithcollection)
 
 * [Binding `ui`](#binding-ui)
 
@@ -96,7 +100,7 @@ and ordering and may be difficult to manage in complex situations. Use with
 care.
 
 This method takes two parameters, the child view instance and the index for
-where it should be placed within the [CollectionView's children](#collectionviews-children).
+where it should be placed within the [CollectionView's children](#collectionviews-children). It returns the added view.
 
 ```javascript
 var Mn = require('backbone.marionette');
@@ -116,35 +120,28 @@ myCollectionView.render();
 
 You can retrieve a view by any of the index. If the findBy* method cannot find the view, it will return undefined.
 
-#### CollectionView childView's: `findByCid`
+#### CollectionView children's: `findByCid`
 Find a view by it's cid.
 
 ```javascript
 var bView = myCollectionView.children.findByCid(buttonView.cid);
 ```
 
-#### CollectionView childView's: `findByModel`
+#### CollectionView children's: `findByModel`
 Find a view by model.
 
 ```javascript
 var bView = myCollectionView.children.findByModel(buttonView.model);
 ```
 
-#### CollectionView childView's: `findByModelCid`
+#### CollectionView children's: `findByModelCid`
 Find a view by model cid.
 
 ```javascript
 var bView = myCollectionView.children.findByModelCid(buttonView.model.cid);
 ```
 
-#### CollectionView childView's: `findByCustom`
-Find by custom key.
-
-```javascript
-var bView = myCollectionView.children.findByCustom('custom_key');
-```
-
-#### CollectionView childView's: `findByIndex`
+#### CollectionView children's: `findByIndex`
 
 Find by numeric index (unstable)
 
@@ -152,11 +149,19 @@ Find by numeric index (unstable)
 var bView = myCollectionView.children.findByIndex(0);
 ```
 
+#### CollectionView children's: `findIndexByView`
+
+Find the index of the view inside the children
+
+```javascript
+var index = myCollectionView.children.findIndexByView(bView);
+```
+
 ### CollectionView's `removeChildView`
 
-The `removeChildView` method is useful if you need to remove a view from the `CollectionView` without affecting the view's collection.  In most cases it is better to use the data to determine what the `CollectionView` should display.
+The `removeChildView` method is useful if you need to remove and destroy a view from the `CollectionView` without affecting the view's collection.  In most cases it is better to use the data to determine what the `CollectionView` should display.
 
-This method the child view instance to remove as its parameter.
+This method accepts the child view instance to remove as its parameter. It returns the removed view;
 
 ```javascript
 var Mn = require('backbone.marionette');
@@ -171,6 +176,40 @@ Mn.CollectionView.extend({
     this.removeChildView(childView);
   }
 });
+```
+
+### CollectionView's `detachChildView`
+
+This method is the same as [`removeChildView`](#collectionviews-removechildview)
+with the exception that the removed view is not destroyed.
+
+### CollectionView's `swapChildViews`
+
+Swap the location of two views in the `CollectionView` `children` and in the `el`.
+This can be useful when sorting is arbitrary or is not performant.
+
+If either of the two views aren't part of the `CollectionView` an error will be thrown.
+
+If one child is in the `el` but the other is not, [filter](#collectionviews-filter) will be called.
+
+```javascript
+var Mn = require('backbone.marionette');
+
+var collection = new Backbone.Collection([
+  { name: 'first' },
+  { name: 'middle' },
+  { name: 'last' }
+]);
+
+var myCollection = new Mn.CollectionView({
+  collection: collection,
+  childView: MyChildView
+});
+
+myCollection.swapChildViews(myCollection.children.first(), myCollection.children.last());
+
+myCollection.children.first().model.get('name'); // "last"
+myCollection.children.last().model.get('name'); // "first"
 ```
 
 ### CollectionView childView Iterators And Collection Functions
@@ -197,6 +236,7 @@ collection functions, including:
 * [without](http://underscorejs.org/#without)
 * [isEmpty](http://underscorejs.org/#isEmpty)
 * [pluck](http://underscorejs.org/#pluck)
+* [partition](http://underscorejs.org/#partition)
 
 These methods can be called directly on the container, to iterate and process
 the views held by the container.
@@ -219,10 +259,24 @@ collectionView.children.each(function(childView) {
 
 ## CollectionView's `filter`
 
-`CollectionView` allows for a custom `filter` option if you want to prevent some of the
-underlying `collection`'s models from being rendered as child views.
-The filter function takes a model from the collection and returns a truthy value if the child should be rendered,
-and a falsey value if it should not.
+The `filter` method will loop through the `CollectionView` `children`
+and test them against the [`viewFilter`](#collectionviews-viewfilter).
+The views that pass the `viewFilter`are rendered if necessary and attached
+to the CollectionView and the views that are filtered out will be detached.
+If a `viewFilter` exists the `before:filter` and `filter` events will be triggered.
+By default the CollectionView will refilter when views change or when the
+CollectionView is sorted.
+
+### CollectionView's `viewFilter`
+
+`CollectionView` allows for a custom `viewFilter` option if you want to prevent
+some of the underlying `children` from being attached to the DOM.
+A `viewFilter` can be a function, predicate object. or string.
+
+#### CollectionView's `viewFilter` as a function
+
+The `viewFilter` function takes a view from the `children` and returns a truthy
+value if the child should be attached, and a falsey value if it should not.
 
 ```javascript
 var Bb = require('backbone');
@@ -239,30 +293,95 @@ var cv = new Mn.CollectionView({
   ]),
 
   // Only show views with even values
-  filter: function (child, index, collection) {
-    return child.get('value') % 2 === 0;
+  viewFilter: function (view, index, children) {
+    return view.model.get('value') % 2 === 0;
   }
 });
 
 // renders the views with values '2' and '4'
 cv.render();
+```
 
-// change the filter
-// renders the views with values '1' and '3'
-cv.setFilter(function (child, index, collection) {
-  return child.get('value') % 2 !== 0;
+#### CollectionView's `viewFilter` as a predicate object
+
+The `viewFilter` predicate object will filter against the view's model attributes.
+
+```javascript
+var Bb = require('backbone');
+var Mn = require('backbone.marionette');
+
+var cv = new Mn.CollectionView({
+  childView: SomeChildView,
+  emptyView: SomeEmptyView,
+  collection: new Bb.Collection([
+    { value: 1 },
+    { value: 2 },
+    { value: 3 },
+    { value: 4 }
+  ]),
+
+  // Only show views with even values
+  viewFilter: { value: 2 }
 });
 
-// renders all views
-cv.removeFilter();
+// renders the view with values '2'
+cv.render();
+```
+
+#### CollectionView's `viewFilter` as a predicate object
+
+The `viewFilter` string represents the view's model attribute and will filter
+truthy values.
+
+```javascript
+var Bb = require('backbone');
+var Mn = require('backbone.marionette');
+
+var cv = new Mn.CollectionView({
+  childView: SomeChildView,
+  emptyView: SomeEmptyView,
+  collection: new Bb.Collection([
+    { value: 0 },
+    { value: 1 },
+    { value: 2 },
+    { value: null },
+    { value: 4 }
+  ]),
+
+   // Only show views 1,2, and 4
+  viewFilter: 'value'
+});
+
+// renders the view with values '2'
+cv.render();
+```
+
+### CollectionView's `getFilter`
+
+Override this function to programatically decide which
+`viewFilter` to use when `filter` is called.
+
+```javascript
+var Mn = require('backbone.marionette');
+
+var MyCollectionView = Mn.CollectionView.extend({
+  summaryFilter: function(view) {
+    return view.model.get('type') === 'summary';
+  },
+  getFilter: function() {
+    if(this.collection.length > 100) {
+      return this.summaryFilter;
+    }
+    return this.viewFilter;
+  }
+});
 ```
 
 ### CollectionView's `setFilter`
 
-The `setFilter` method modifies the `CollectionView`'s filter attribute, and
-renders the new `ChildViews` in a efficient way, instead of
-rendering the whole DOM structure again.
-Passing `{ preventRender: true }` in the options argument will prevent the view being rendered.
+The `setFilter` method modifies the `CollectionView`'s `viewFilter` attribute and filters.
+Passing `{ preventRender: true }` in the options argument will prevent the view
+being rendered.
 
 ```javascript
 var Mn = require('backbone.marionette');
@@ -273,8 +392,8 @@ var cv = new Mn.CollectionView({
 
 cv.render();
 
-var newFilter = function(child, index, collection) {
-  return child.get('value') % 2 === 0;
+var newFilter = function(view, index, children) {
+  return view.model.get('value') % 2 === 0;
 };
 
 // Note: the setFilter is preventing the automatic re-render
@@ -286,8 +405,8 @@ cv.render();
 
 ### CollectionView's `removeFilter`
 
-This function is actually an alias of `setFilter(null, options)`. It is useful for removing filters.
-`removeFilter` also accepts `preventRender` as a option.
+This function is actually an alias of `setFilter(null, options)`. It is useful
+for removing filters. `removeFilter` also accepts `preventRender` as a option.
 
 ```javascript
 var Mn = require('backbone.marionette');
@@ -298,8 +417,8 @@ var cv = new Mn.CollectionView({
 
 cv.render();
 
-cv.setFilter(function(child, index, collection) {
-  return child.get('value') % 2 === 0;
+cv.setFilter(function(view, index, children) {
+  return view.model.get('value') % 2 === 0;
 });
 
 //Remove the current filter without rendering again.
@@ -308,8 +427,32 @@ cv.removeFilter({ preventRender: true });
 
 ## CollectionView's `sort`
 
+The `sort` method will loop through the `CollectionView` `children`
+and sort them with the [`viewComparator`](#collectionviews-viewcomparator).
+By default, if a `viewComparator` is not set, the `CollectionView` will sort
+the views by the order of the models in the collection. If set to `false` view
+sorting will be disabled.
+This method is also triggered internally when rendering and `before:sort` and
+`sort` events will be triggered before and after sorting.
+
 By default the `CollectionView` will maintain a sorted collection's order
-in the DOM. This behavior can be disabled by specifying `{sort: false}` on initialize. The `sort` flag cannot be changed after instantiation.
+in the DOM. This behavior can be disabled by specifying `{sortWithCollection: false}`
+on initialize.
+
+### CollectionView's `viewComparator`
+
+`CollectionView` allows for a custom `viewComparator` option if you want your
+`CollectionView`'s children to be rendered with a different sort order than the
+underlying Backbone collection uses.
+
+```javascript
+var Mn = require('backbone.marionette');
+
+var cv = new Mn.CollectionView({
+  collection: someCollection,
+  viewComparator: 'otherFieldToSortOn'
+});
+```
 
 ```javascript
 var Bb = require('backbone');
@@ -343,26 +486,13 @@ myUnsortedColView.render(); // 1 4 3 2
 myCollection.sort();
 ```
 
-### CollectionView's `viewComparator`
-
-`CollectionView` allows for a custom `viewComparator` option if you want your `CollectionView`'s children to be rendered with a different sort order than the underlying Backbone collection uses.
-
-```javascript
-var Mn = require('backbone.marionette');
-
-var cv = new Mn.CollectionView({
-  collection: someCollection,
-  viewComparator: 'otherFieldToSortOn'
-});
-```
-
 The `viewComparator` can take any of the acceptable `Backbone.Collection`
 [comparator formats](http://backbonejs.org/#Collection-comparator) -- a sortBy
 (pass a function that takes a single argument), as a sort (pass a comparator
 function that expects two arguments), or as a string indicating the attribute to
 sort by.
 
-### CollectionView's `getViewComparator`
+### CollectionView's `getComparator`
 
 Override this method to determine which `viewComparator` to use.
 
@@ -376,7 +506,7 @@ var MyCollectionView = Mn.CollectionView.extend({
   sortDesc: function(model) {
     return model.get('order');
   },
-  getViewComparator: function() {
+  getComparator: function() {
     // The collectionView's model
     if (this.model.get('sorted') === 'ASC') {
       return this.sortAsc;
@@ -387,39 +517,83 @@ var MyCollectionView = Mn.CollectionView.extend({
 });
 ```
 
-### CollectionView's `reorderOnSort`
+### CollectionView's `setComparator`
 
-This option is useful when you have performance issues when you resort your `CollectionView`.
-Without this option, your `CollectionView` will be completely re-rendered, which can be
-costly if you have a large number of elements or if your `ChildView`s are complex. If this option
-is activated, when you sort your `Collection`, there will be no re-rendering, only the DOM nodes
-will be reordered. This can be a problem if your `ChildView`s use their collection's index
-in their rendering. In this case, you cannot use this option as you need to re-render each
-`ChildView`.
-
-If you combine this option with a [filter](#collectionviews-filter) that changes the views that are
-to be displayed, `reorderOnSort` will be bypassed to render new children and remove those that are rejected by the filter.
-
-### CollectionView's `reorder`
-
-If [`reorderOnSort`](#collectionviews-reorderonsort) is set to true, this function will be used instead of re-rendering all children.  It can be called directly to prevent the collection from being completely re-rendered. This may only be useful if models are added or removed silently or if [`sort`](#collectionviews-sort) was set to false on the `CollectionView`.
-
-### CollectionView's `resortView`
-
-[By default](#collectionviews-sort) the `CollectionView` will maintain the order of its `collection`
-in the DOM. However on occasions the view may need to re-render to make this
-possible, for example if you were to change the comparator on the collection.
-The `CollectionView` will re-render its children or [`reorder`](#collectionviews-reorder) them depending on [`reorderOnSort`](#collectionviews-reorderonsort).
-Override this function if you need further customization.
+The `setComparator` method modifies the `CollectionView`'s `viewComparator`
+attribute and re-sorts. Passing `{ preventRender: true }` in the options argument
+will prevent the view being rendered.
 
 ```javascript
 var Mn = require('backbone.marionette');
 
-var MyCollectionView = Mn.CollectionView.extend({
-  resortView: function() {
-    // provide custom logic for rendering after sorting the collection
-  }
+var cv = new Mn.CollectionView({
+  collection: someCollection
 });
+
+cv.render();
+
+// Note: the setComparator is preventing the automatic re-render
+cv.setComparator('orderBy', { preventRender: true });
+
+// Render the children ordered by the orderBy attribute
+cv.render();
+```
+
+### CollectionView's `removeComparator`
+
+This function is actually an alias of `setComparator(null, options)`. It is useful
+for removing the comparator. `removeComparator` also accepts `preventRender` as a option.
+
+```javascript
+var Mn = require('backbone.marionette');
+
+var cv = new Mn.CollectionView({
+  collection: someCollection
+});
+
+cv.render();
+
+cv.setComparator('orderBy');
+
+//Remove the current comparator without rendering again.
+cv.removeComparator({ preventRender: true });
+```
+
+### CollectionView's `sortWithCollection`
+
+By default the `CollectionView` will maintain a sorted collection's order
+in the DOM. This behavior can be disabled by specifying `{sortWithCollection: false}` on initialize or on the view definiton
+
+```javascript
+var Bb = require('backbone');
+var Mn = require('backbone.marionette');
+
+var myCollection = new Bb.Collection([
+  { id: 1 },
+  { id: 4 },
+  { id: 3 },
+  { id: 2 }
+]);
+
+myCollection.comparator = 'id';
+
+var mySortedColView = new Mn.CollectionView({
+  //...
+  collection: myCollection
+});
+
+var myUnsortedColView = new Mn.CollectionView({
+  //...
+  collection: myCollection,
+  sortWithCollection: false
+});
+
+mySortedColView.render(); // 1 4 3 2
+myUnsortedColView.render(); // 1 4 3 2
+
+// mySortedColView auto-renders 1 2 3 4
+// myUnsortedColView has no change
+myCollection.sort();
 ```
 
 ## Binding `ui`

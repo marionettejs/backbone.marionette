@@ -2,8 +2,6 @@ import _ from 'underscore';
 import Backbone from 'backbone';
 import Marionette from '../../src/backbone.marionette';
 import CollectionView from '../../src/collection-view';
-import CompositeView from '../../src/composite-view';
-import NextCollectionView from '../../src/next-collection-view';
 import Region from '../../src/region';
 import View from '../../src/view';
 
@@ -26,8 +24,6 @@ describe('backbone.marionette', function() {
   describe('#setDomApi', function() {
     const DomClasses = {
       CollectionView,
-      CompositeView,
-      NextCollectionView,
       Region,
       View
     };
@@ -57,7 +53,6 @@ describe('backbone.marionette', function() {
     });
 
     const RendererClasses = {
-      CompositeView,
       View
     };
 

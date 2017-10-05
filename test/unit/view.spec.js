@@ -63,7 +63,7 @@ describe('item view', function() {
 
     it('should throw an exception because there was no valid template', function() {
       var self = this;
-      expect(function() {self.view.render()}).to.throw('Cannot render the template since its false, null or undefined.');
+      expect(function() {self.view.render()}).to.throw('template is not a function');
     });
   });
 
@@ -84,7 +84,7 @@ describe('item view', function() {
 
       this.view = new this.View();
 
-      this.marionetteRendererSpy = this.sinon.spy(Marionette.Renderer, 'render');
+      this.marionetteRendererSpy = this.sinon.spy(this.view, '_renderHtml');
       this.triggerSpy = this.sinon.spy(this.view, 'trigger');
       this.serializeDataSpy = this.sinon.spy(this.view, 'serializeData');
       this.mixinTemplateContextSpy = this.sinon.spy(this.view, 'mixinTemplateContext');
@@ -115,7 +115,7 @@ describe('item view', function() {
     });
 
     it('should not throw an exception for a false template', function() {
-      expect(this.view.render).to.not.throw('Cannot render the template since it is null or undefined.');
+      expect(_.bind(this.view.render, this.view)).to.not.throw();
     });
 
     it('should call an "onBeforeRender" method on the view', function() {
@@ -164,7 +164,7 @@ describe('item view', function() {
         template: this.templateStub,
         attachElContent: this.attachElContentStub
       });
-      this.sinon.spy(Marionette.Renderer, 'render');
+      this.sinon.spy(this.View.prototype, '_renderHtml');
 
       this.itemView = new this.View();
       this.itemView.render();
@@ -174,8 +174,8 @@ describe('item view', function() {
       expect(this.attachElContentStub).to.have.been.calledOnce.and.calledWith(this.template);
     });
 
-    it('should pass template stub, data and view instance to `Marionette.Renderer.Render`', function() {
-      expect(Marionette.Renderer.render).to.have.been.calledWith(this.templateStub, {}, this.itemView);
+    it('should pass template stub, data and view renderer`', function() {
+      expect(this.itemView._renderHtml).to.have.been.calledWith(this.templateStub, {});
     });
   });
 

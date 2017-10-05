@@ -3,12 +3,12 @@
 
 import _ from 'underscore';
 import Backbone from 'backbone';
-import deprecate from './utils/deprecate';
 import monitorViewEvents from './common/monitor-view-events';
 import ViewMixin from './mixins/view';
 import RegionsMixin from './mixins/regions';
-import Renderer from './config/renderer';
+import TemplateRenderMixin from './mixins/template-render';
 import { setDomApi } from './config/dom';
+import { setRenderer } from './config/renderer';
 
 const ClassOptions = [
   'behaviors',
@@ -47,35 +47,6 @@ const View = Backbone.View.extend({
     this.delegateEntityEvents();
 
     this._triggerEventOnBehaviors('initialize', this);
-  },
-
-  // Serialize the view's model *or* collection, if
-  // it exists, for the template
-  serializeData() {
-    // If we have a model, we serialize that
-    if (this.model) {
-      return this.serializeModel();
-    }
-
-    // Otherwise, we serialize the collection,
-    // making it available under the `items` property
-    if (this.collection) {
-      return {
-        items: this.serializeCollection()
-      };
-    }
-  },
-
-  // Prepares the special `model` property of a view
-  // for being displayed in the template. Override this if
-  // you need a custom transformation for your view's model
-  serializeModel() {
-    return this.model.attributes;
-  },
-
-  // Serialize a collection
-  serializeCollection() {
-    return _.map(this.collection.models, model => model.attributes);
   },
 
   // Overriding Backbone.View's `setElement` to handle
@@ -121,65 +92,6 @@ const View = Backbone.View.extend({
     return this;
   },
 
-  // Internal method to render the template with the serialized data
-  // and template context via the `Marionette.Renderer` object.
-  _renderTemplate() {
-    const template = this.getTemplate();
-
-    // Allow template-less views
-    if (template === false) {
-      deprecate('template:false is deprecated.  Use _.noop.');
-      return;
-    }
-
-    // Add in entity data and template context
-    const data = this.mixinTemplateContext(this.serializeData());
-
-    // Render and add to el
-    const html = this._renderHtml(template, data);
-    if (typeof html !== 'undefined') {
-      this.attachElContent(html);
-    }
-  },
-
-  // Renders the data into the template
-  _renderHtml(template, data) {
-    return Renderer.render(template, data, this);
-  },
-
-  // Get the template for this view
-  // instance. You can set a `template` attribute in the view
-  // definition or pass a `template: "whatever"` parameter in
-  // to the constructor options.
-  getTemplate() {
-    return this.template;
-  },
-
-  // Mix in template context methods. Looks for a
-  // `templateContext` attribute, which can either be an
-  // object literal, or a function that returns an object
-  // literal. All methods and attributes from this object
-  // are copies to the object passed in.
-  mixinTemplateContext(target) {
-    const templateContext = _.result(this, 'templateContext');
-    return _.extend({}, target, templateContext);
-  },
-
-  // Attaches the content of a given view.
-  // This method can be overridden to optimize rendering,
-  // or to render in a non standard way.
-  //
-  // For example, using `innerHTML` instead of `$el.html`
-  //
-  // ```js
-  // attachElContent(html) {
-  //   this.el.innerHTML = html;
-  // }
-  // ```
-  attachElContent(html) {
-    this.Dom.setContents(this.el, html, this.$el);
-  },
-
   // called by ViewMixin destroy
   _removeChildren() {
     this.removeRegions();
@@ -192,15 +104,10 @@ const View = Backbone.View.extend({
       .value();
   }
 }, {
-  // Sets the renderer for the Marionette.View class
-  setRenderer(renderer) {
-    this.prototype._renderHtml = renderer;
-    return this;
-  },
-
+  setRenderer,
   setDomApi
 });
 
-_.extend(View.prototype, ViewMixin, RegionsMixin);
+_.extend(View.prototype, ViewMixin, RegionsMixin, TemplateRenderMixin);
 
 export default View;

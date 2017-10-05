@@ -63,7 +63,7 @@ describe('item view', function() {
 
     it('should throw an exception because there was no valid template', function() {
       var self = this;
-      expect(function() {self.view.render()}).to.throw('template is not a function');
+      expect(function() {self.view.render()}).to.throw();
     });
   });
 

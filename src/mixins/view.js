@@ -7,6 +7,7 @@ import triggerMethod from '../common/trigger-method';
 import BehaviorsMixin from './behaviors';
 import CommonMixin from './common';
 import DelegateEntityEventsMixin from './delegate-entity-events';
+import TemplateRenderMixin from './template-render';
 import TriggersMixin from './triggers';
 import UIMixin from './ui';
 import { isEnabled } from '../config/features';
@@ -229,6 +230,6 @@ const ViewMixin = {
   }
 };
 
-_.extend(ViewMixin, BehaviorsMixin, CommonMixin, DelegateEntityEventsMixin, TriggersMixin, UIMixin);
+_.extend(ViewMixin, BehaviorsMixin, CommonMixin, DelegateEntityEventsMixin, TemplateRenderMixin, TriggersMixin, UIMixin);
 
 export default ViewMixin;

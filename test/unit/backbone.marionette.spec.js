@@ -53,6 +53,7 @@ describe('backbone.marionette', function() {
     });
 
     const RendererClasses = {
+      CollectionView,
       View
     };
 

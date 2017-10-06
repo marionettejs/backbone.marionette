@@ -87,6 +87,7 @@ Marionette.setDomApi = function(mixin) {
   View.setDomApi(mixin);
 };
 Marionette.setRenderer = function(renderer) {
+  CollectionView.setRenderer(renderer);
   View.setRenderer(renderer);
 };
 

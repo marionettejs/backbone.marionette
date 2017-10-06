@@ -44,6 +44,7 @@ describe('CollectionView', function() {
       const mergeOptions = {
         behaviors: {},
         childView: {},
+        childViewContainer: {},
         childViewEventPrefix: 'child',
         childViewEvents: {},
         childViewOptions: {},
@@ -53,6 +54,8 @@ describe('CollectionView', function() {
         emptyViewOptions: {},
         modelEvents: {},
         sortWithCollection: {},
+        template: {},
+        templateContext: {},
         triggers: {},
         ui: {},
         viewComparator: {},

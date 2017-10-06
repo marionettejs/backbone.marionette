@@ -10,10 +10,12 @@ import MarionetteError from './error';
 import Region from './region';
 import ViewMixin from './mixins/view';
 import { setDomApi } from './config/dom';
+import { setRenderer } from './config/renderer';
 
 const ClassOptions = [
   'behaviors',
   'childView',
+  'childViewContainer',
   'childViewEventPrefix',
   'childViewEvents',
   'childViewOptions',
@@ -24,6 +26,8 @@ const ClassOptions = [
   'events',
   'modelEvents',
   'sortWithCollection',
+  'template',
+  'templateContext',
   'triggers',
   'ui',
   'viewComparator',
@@ -106,7 +110,13 @@ const CollectionView = Backbone.View.extend({
   },
 
   _onCollectionReset() {
-    this.render();
+    this._destroyChildren();
+
+    this.children._init();
+
+    this._addChildModels(this.collection.models);
+
+    this._showChildren();
   },
 
   // Handle collection update model additions and  removals
@@ -276,12 +286,32 @@ const CollectionView = Backbone.View.extend({
       this._addChildModels(this.collection.models);
     }
 
+    const template = this.getTemplate();
+
+    if (template) {
+      this._renderTemplate(template);
+      this.bindUIElements();
+    }
+    this._getChildViewContainer();
     this._showChildren();
 
     this._isRendered = true;
 
     this.triggerMethod('render', this);
     return this;
+  },
+
+  // Get a container within the template to add the children within
+  _getChildViewContainer() {
+    const childViewContainer = _.result(this, 'childViewContainer');
+    this.$container = childViewContainer ? this.$(childViewContainer) : this.$el;
+
+    if (!this.$container.length) {
+      throw new MarionetteError({
+        name: 'ChildViewContainerMissingError',
+        message: `The specified "childViewContainer" was not found: ${childViewContainer}`
+      });
+    }
   },
 
   // Sorts the children then filters and renders the results.
@@ -589,7 +619,7 @@ const CollectionView = Backbone.View.extend({
   // Override this method to do something other than `.append`.
   // You can attach any HTML at this point including the els.
   attachHtml(els) {
-    this.Dom.appendContents(this.el, els, {_$el: this.$el});
+    this.Dom.appendContents(this.$container[0], els, {_$el: this.$container});
   },
 
   swapChildViews(view1, view2) {
@@ -615,6 +645,10 @@ const CollectionView = Backbone.View.extend({
   addChildView(view, index) {
     if (!view || view._isDestroyed) {
       return view;
+    }
+
+    if (!this._isRendered) {
+      this.render();
     }
 
     this._addChild(view, index);
@@ -698,7 +732,8 @@ const CollectionView = Backbone.View.extend({
     this.triggerMethod('destroy:children', this);
   }
 }, {
-  setDomApi
+  setDomApi,
+  setRenderer
 });
 
 _.extend(CollectionView.prototype, ViewMixin);

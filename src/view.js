@@ -6,7 +6,6 @@ import Backbone from 'backbone';
 import monitorViewEvents from './common/monitor-view-events';
 import ViewMixin from './mixins/view';
 import RegionsMixin from './mixins/regions';
-import TemplateRenderMixin from './mixins/template-render';
 import { setDomApi } from './config/dom';
 import { setRenderer } from './config/renderer';
 
@@ -108,6 +107,6 @@ const View = Backbone.View.extend({
   setDomApi
 });
 
-_.extend(View.prototype, ViewMixin, RegionsMixin, TemplateRenderMixin);
+_.extend(View.prototype, ViewMixin, RegionsMixin);
 
 export default View;

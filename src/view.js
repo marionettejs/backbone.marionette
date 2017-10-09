@@ -40,9 +40,7 @@ const View = Backbone.View.extend({
     this._initBehaviors();
     this._initRegions();
 
-    const args = Array.prototype.slice.call(arguments);
-    args[0] = this.options;
-    Backbone.View.prototype.constructor.apply(this, args);
+    Backbone.View.prototype.constructor.apply(this, arguments);
 
     this.delegateEntityEvents();
 

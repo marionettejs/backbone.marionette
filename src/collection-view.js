@@ -52,9 +52,7 @@ const CollectionView = Backbone.View.extend({
     this._initChildViewStorage();
     this._initBehaviors();
 
-    const args = Array.prototype.slice.call(arguments);
-    args[0] = this.options;
-    Backbone.View.prototype.constructor.apply(this, args);
+    Backbone.View.prototype.constructor.apply(this, arguments);
 
     // Init empty region
     this.getEmptyRegion();

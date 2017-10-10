@@ -425,7 +425,7 @@ describe('view mixin', function() {
         Marionette.setEnabled('childViewEventPrefix', false);
       });
 
-      it('should set childViewEventPrefix to false', function() {
+      it('should set childViewEventPrefix to "childview"', function() {
         expect(_.result(myView, 'childViewEventPrefix')).to.equal('childview');
       });
     });

@@ -1,5 +1,4 @@
 import _ from 'underscore';
-import deprecate from '../utils/deprecate';
 
 // MixinOptions
 // - template
@@ -11,12 +10,6 @@ export default {
   // and template context
   _renderTemplate() {
     const template = this.getTemplate();
-
-    // Allow template-less views
-    if (template === false) {
-      deprecate('template:false is deprecated.  Use _.noop.');
-      return;
-    }
 
     // Add in entity data and template context
     const data = this.mixinTemplateContext(this.serializeData());

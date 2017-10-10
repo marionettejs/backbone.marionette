@@ -94,48 +94,28 @@ describe('item view', function() {
       this.view.render();
     });
 
-    describe('when DEV_MODE is true', function() {
-      beforeEach(function() {
-        Marionette.DEV_MODE = true;
-        this.sinon.spy(Marionette.deprecate, '_warn');
-        this.sinon.stub(Marionette.deprecate, '_console', {
-          warn: this.sinon.stub()
-        });
-        Marionette.deprecate._cache = {};
-      });
-
-      it('should call Marionette.deprecate', function() {
-        this.view.render();
-        expect(Marionette.deprecate._warn).to.be.calledWith('Deprecation warning: template:false is deprecated.  Use _.noop.');
-      });
-
-      afterEach(function() {
-        Marionette.DEV_MODE = false;
-      });
-    });
-
     it('should not throw an exception for a false template', function() {
       expect(_.bind(this.view.render, this.view)).to.not.throw();
     });
 
-    it('should call an "onBeforeRender" method on the view', function() {
-      expect(this.onBeforeRenderStub).to.have.been.calledOnce;
+    it('should not call an "onBeforeRender" method on the view', function() {
+      expect(this.onBeforeRenderStub).to.not.have.been.called;
     });
 
-    it('should call an "onRender" method on the view', function() {
-      expect(this.onRenderStub).to.have.been.calledOnce;
+    it('should not call an "onRender" method on the view', function() {
+      expect(this.onRenderStub).to.not.have.been.called;
     });
 
-    it('should call bindUIElements', function() {
-      expect(this.bindUIElementsSpy).to.have.been.calledOnce;
+    it('should not call bindUIElements', function() {
+      expect(this.bindUIElementsSpy).to.not.have.been.called;
     });
 
-    it('should trigger a before:render event', function() {
-      expect(this.triggerSpy).to.have.been.calledWith('before:render', this.view);
+    it('should not trigger a before:render event', function() {
+      expect(this.triggerSpy).to.not.have.been.calledWith('before:render', this.view);
     });
 
-    it('should trigger a rendered event', function() {
-      expect(this.triggerSpy).to.have.been.calledWith('render', this.view);
+    it('should not trigger a rendered event', function() {
+      expect(this.triggerSpy).to.not.have.been.calledWith('render', this.view);
     });
 
     it('should not add in data or template context', function() {
@@ -151,8 +131,8 @@ describe('item view', function() {
       expect(this.attachElContentSpy).to.not.have.been.called;
     });
 
-    it('should claim isRendered', function() {
-      expect(this.view.isRendered()).to.be.true;
+    it('should not claim isRendered', function() {
+      expect(this.view.isRendered()).to.be.false;
     });
   });
 

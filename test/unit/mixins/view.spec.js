@@ -262,6 +262,8 @@ describe('view mixin', function() {
           'child': '.child',
         },
 
+        childViewEventPrefix: 'childview',
+
         childViewEvents: {
           'boom': 'onBoom'
         },
@@ -408,6 +410,23 @@ describe('view mixin', function() {
 
       it('should set childViewEventPrefix to false', function() {
         expect(_.result(myView, 'childViewEventPrefix')).to.be.false;
+      });
+    });
+
+    describe('when childViewEventPrefix flag is true', function() {
+      let myView;
+
+      beforeEach(function() {
+        Marionette.setEnabled('childViewEventPrefix', true);
+        myView = new Marionette.View();
+      });
+
+      afterEach(function() {
+        Marionette.setEnabled('childViewEventPrefix', false);
+      });
+
+      it('should set childViewEventPrefix to "childview"', function() {
+        expect(_.result(myView, 'childViewEventPrefix')).to.equal('childview');
       });
     });
   });

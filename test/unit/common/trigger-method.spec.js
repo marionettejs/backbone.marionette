@@ -134,6 +134,7 @@ describe('trigger event and method name', function() {
 
       this.CollectionView = Marionette.CollectionView.extend({
         childView: this.View,
+        childViewEventPrefix: 'childview',
         onChildviewFooClick: this.onChildviewFooClickStub
       });
 

@@ -11,7 +11,8 @@
 
 Cypress.addParentCommand('visitMn', function(runApp) {
   cy.visit('test/cypress/index.html')
-    .window().then(function(win) {
+    .window()
+    .then(function(win) {
       runApp({
         $: win.$,
         _: win._,
@@ -20,5 +21,8 @@ Cypress.addParentCommand('visitMn', function(runApp) {
         Marionette: win.Marionette,
         window: win
       });
+    })
+    .then(function() {
+      cy.get('#app-hook').as('app-hook');
     });
 });

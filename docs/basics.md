@@ -259,12 +259,12 @@ defined class.
 ### The `options` Property
 
 The Marionette classes accept an `options` property in the class definition
-which is merged with the `options` argument passed at instantiation. The 
+which is merged with the `options` argument passed at instantiation. The
 values from the passed in `options` overrides the property values.
 
-> The `options` argument passed in `initialize` method is equal to the passed at 
-> class instantiation. To get the option inside initialize considering the 
-> `options` property is necessary to use `getOption`  
+> The `options` argument passed in `initialize` method is equal to the passed at
+> class instantiation. To get the option inside initialize considering the
+> `options` property is necessary to use `getOption`
 
 ```javascript
 var Bb = require('backbone');
@@ -275,15 +275,15 @@ var MyObject = Mn.Object.extend({
     foo: 'bar',
     another: 'thing'
   },
-  
+
   initialize: function(options) {
     console.log(options.foo) // undefined
     console.log(this.getOption('foo')) // 'bar'
-    console.log(this.getOption('another')) // 'value'            
+    console.log(this.getOption('another')) // 'value'
   }
 });
 
-var myObject = new MyObject({    
+var myObject = new MyObject({
   another: 'value'
 });
 ```

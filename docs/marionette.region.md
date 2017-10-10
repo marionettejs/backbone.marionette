@@ -422,7 +422,7 @@ View [any HTML that doesn't belong to the View will remain](./upgrade.md#changes
 ### Preserving Existing Views
 
 If you replace the current view with a new view by calling `show`, it will
-automatically destroy the previous view. You can prevent this behavior by 
+automatically destroy the previous view. You can prevent this behavior by
 [detaching the view](#detaching-existing-views) before showing another one.
 
 ### Detaching Existing Views

@@ -1,7 +1,5 @@
 # The DOM API
 
-**Warning** *The DOM API is currently experimental and may change.*
-
 With the release of Marionette 3.2, developers can remove the dependency on
 jQuery and integrate with the DOM using a custom api.
 

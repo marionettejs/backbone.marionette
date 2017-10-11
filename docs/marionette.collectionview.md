@@ -14,6 +14,7 @@ sorted collection's order in the DOM. This behavior can be disabled by specifyin
 * [CollectionView's `childView`](#collectionviews-childview)
   * [CollectionView's `childViewOptions`](#collectionviews-childviewoptions)
 * [CollectionView's `emptyView`](#collectionviews-emptyview)
+  * [CollectionView's `getEmptyRegion`](#collectionviews-getemptyregion)
   * [CollectionView's `emptyViewOptions`](#collectionviews-emptyviewoptions)
   * [CollectionView's `isEmpty`](#collectionviews-isempty)
 * [CollectionView's `render`](#collectionviews-render)
@@ -182,6 +183,19 @@ var MyCollectionView = Mn.CollectionView.extend({
 });
 ```
 
+### CollectionView's `getEmptyRegion`
+
+When a `CollectionView` is instantiated it creates a region for showing the [`emptyView`](#collectionviews-emptyview).
+This region can be requested using the `getEmptyRegion` method. The region will share the `el` with the `CollectionView`
+and is shown with [`replaceElement: false`](./marionette.region.md#additional-options).
+
+**Note** The `CollectionView` expects to be the only entity managing the region.
+Showing things in this region directly is not advised.
+
+```javascript
+const isEmptyShowing = myCollectionView.getEmptyRegion().hasView();
+```
+
 ### CollectionView's `emptyViewOptions`
 
 Similar to [`childView`](#collectionviews-childview) and [`childViewOptions`](#collectionviews-childviewoptions),
@@ -225,7 +239,7 @@ var MyCollectionView = Mn.CollectionView.extend({
 ```
 
 In the normal lifecycle of a `CollectionView`, `isEmpty` will be called
-twice. Once when a render begins, and twice after the [`viewFilter`](#filtering) is run. For the call after filtering, a boolean will be passed indicating if all
+twice. Once when a render begins, and again after the [`viewFilter`](#filtering) is run. For the call after filtering, a boolean will be passed indicating if all
 of the CollectionView's `children` were filtered.
 
 ## CollectionView's `render`

@@ -73,7 +73,7 @@ const View = Backbone.View.extend({
   render() {
     const template = this.getTemplate();
 
-    if (this._isDestroyed || template === false) { return this; }
+    if (template === false || this._isDestroyed) { return this; }
 
     this.triggerMethod('before:render', this);
 
@@ -83,7 +83,7 @@ const View = Backbone.View.extend({
       this._reInitRegions();
     }
 
-    this._renderTemplate();
+    this._renderTemplate(template);
     this.bindUIElements();
 
     this._isRendered = true;

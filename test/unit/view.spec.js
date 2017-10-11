@@ -85,7 +85,6 @@ describe('item view', function() {
       this.view = new this.View();
 
       this.marionetteRendererSpy = this.sinon.spy(this.view, '_renderHtml');
-      this.triggerSpy = this.sinon.spy(this.view, 'trigger');
       this.serializeDataSpy = this.sinon.spy(this.view, 'serializeData');
       this.mixinTemplateContextSpy = this.sinon.spy(this.view, 'mixinTemplateContext');
       this.attachElContentSpy = this.sinon.spy(this.view, 'attachElContent');
@@ -110,14 +109,6 @@ describe('item view', function() {
       expect(this.bindUIElementsSpy).to.not.have.been.called;
     });
 
-    it('should not trigger a before:render event', function() {
-      expect(this.triggerSpy).to.not.have.been.calledWith('before:render', this.view);
-    });
-
-    it('should not trigger a rendered event', function() {
-      expect(this.triggerSpy).to.not.have.been.calledWith('render', this.view);
-    });
-
     it('should not add in data or template context', function() {
       expect(this.serializeDataSpy).to.not.have.been.called;
       expect(this.mixinTemplateContextSpy).to.not.have.been.called;
@@ -133,6 +124,17 @@ describe('item view', function() {
 
     it('should not claim isRendered', function() {
       expect(this.view.isRendered()).to.be.false;
+    });
+
+    describe('and there is prerendered content', function() {
+      beforeEach(function() {
+        this.setFixtures('<div id="foo">bar</div>');
+        this.elView = new this.View({ el: '#foo' });
+      });
+
+      it('should stay rendered', function() {
+        expect(this.elView.isRendered()).to.be.true;
+      });
     });
   });
 

@@ -8,9 +8,7 @@ export default {
 
   // Internal method to render the template with the serialized data
   // and template context
-  _renderTemplate() {
-    const template = this.getTemplate();
-
+  _renderTemplate(template) {
     // Add in entity data and template context
     const data = this.mixinTemplateContext(this.serializeData());
 

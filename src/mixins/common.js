@@ -6,6 +6,10 @@ import {
   bindEvents,
   unbindEvents
 } from '../common/bind-events';
+import {
+  bindRequests,
+  unbindRequests
+} from '../common/bind-requests';
 
 export default {
 
@@ -25,5 +29,11 @@ export default {
   bindEvents,
 
   // Enable unbinding view's events from another entity.
-  unbindEvents
+  unbindEvents,
+
+  // Enable binding view's requests.
+  bindRequests,
+
+  // Enable unbinding view's requests.
+  unbindRequests
 };

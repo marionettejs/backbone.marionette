@@ -3,7 +3,8 @@
 const FEATURES = {
   childViewEventPrefix: false,
   triggersStopPropagation: true,
-  triggersPreventDefault: true
+  triggersPreventDefault: true,
+  DEV_MODE: false
 };
 
 function isEnabled(name) {

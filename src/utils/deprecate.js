@@ -2,7 +2,7 @@
 
 import _ from 'underscore';
 
-import Marionette from '../backbone.marionette';
+import {isEnabled} from '../config/features';
 
 const deprecate = function(message, test) {
   if (_.isObject(message)) {
@@ -13,7 +13,7 @@ const deprecate = function(message, test) {
     );
   }
 
-  if (!Marionette.DEV_MODE) {
+  if (!isEnabled('DEV_MODE')) {
     return;
   }
 

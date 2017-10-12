@@ -1,10 +1,10 @@
 import deprecate from '../../../src/utils/deprecate';
 
-import Marionette from '../../../src/backbone.marionette';
+import {setEnabled} from '../../../src/config/features';
 
 describe('deprecate', function() {
   beforeEach(function() {
-    Marionette.DEV_MODE = true;
+    setEnabled('DEV_MODE', true);
     this.sinon.spy(deprecate, '_warn');
     this.sinon.stub(deprecate, '_console', {
       warn: this.sinon.stub(),
@@ -14,7 +14,7 @@ describe('deprecate', function() {
   });
 
   afterEach(function() {
-    Marionette.DEV_MODE = false;
+    setEnabled('DEV_MODE', false);
   });
 
   describe('#_warn', function() {
@@ -131,7 +131,7 @@ describe('deprecate', function() {
 
   describe('when calling in production mode', function() {
     beforeEach(function() {
-      Marionette.DEV_MODE = false;
+      setEnabled('DEV_MODE', false);
       deprecate('baz');
     });
 

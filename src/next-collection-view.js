@@ -368,6 +368,9 @@ const CollectionView = Backbone.View.extend({
 
     if (!viewComparator) { return; }
 
+    // If children are sorted prevent added to end perf
+    delete this._addedViews;
+
     this.triggerMethod('before:sort', this);
 
     this.children._sort(viewComparator, this);
@@ -427,11 +430,6 @@ const CollectionView = Backbone.View.extend({
     return this;
   },
 
-  _isAddedAtEnd(addedView, index, addedViews) {
-    const viewIndex = this.children._views.length - addedViews.length + index;
-    return addedView === this.children._views[viewIndex];
-  },
-
   _filterChildren() {
     const viewFilter = this._getFilter();
     const addedViews = this._addedViews;
@@ -439,9 +437,7 @@ const CollectionView = Backbone.View.extend({
     delete this._addedViews;
 
     if (!viewFilter) {
-      if (!this.sortWithCollection && addedViews && _.every(addedViews, _.bind(this._isAddedAtEnd, this))) {
-        return addedViews;
-      }
+      if (addedViews) { return addedViews; }
 
       return this.children._views;
     }
@@ -621,8 +617,11 @@ const CollectionView = Backbone.View.extend({
       return view;
     }
 
+    // Only cache views if added to the end
+    if (!index || index >= this.children.length) {
+      this._addedViews = [view];
+    }
     this._addChild(view, index);
-    this._addedViews = [view];
     this._showChildren();
 
     return view;

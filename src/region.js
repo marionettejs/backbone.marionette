@@ -3,14 +3,16 @@
 
 import _ from 'underscore';
 import Backbone from 'backbone';
+import MarionetteError from './utils/error';
 import extend from './utils/extend';
 import { renderView, destroyView } from './common/view';
 import monitorViewEvents from './common/monitor-view-events';
 import triggerMethod from './common/trigger-method';
 import CommonMixin from './mixins/common';
-import MarionetteError from './error';
 import View from './view';
 import DomApi, { setDomApi } from './config/dom';
+
+const classErrorName = 'RegionError';
 
 const ClassOptions = [
   'allowMissingEl',
@@ -31,8 +33,9 @@ const Region = function(options) {
 
   if (!this.el) {
     throw new MarionetteError({
-      name: 'NoElError',
-      message: 'An "el" must be specified for a region.'
+      name: classErrorName,
+      message: 'An "el" must be specified for a region.',
+      url: 'marionette.region.html#additional-options'
     });
   }
 
@@ -153,7 +156,11 @@ _.extend(Region.prototype, Backbone.Events, CommonMixin, {
       if (allowMissingEl) {
         return false;
       } else {
-        throw new MarionetteError(`An "el" must exist in DOM for this region ${this.cid}`);
+        throw new MarionetteError({
+          name: classErrorName,
+          message: `An "el" must exist in DOM for this region ${this.cid}`,
+          url: 'marionette.region.html#additional-options'
+        });
       }
     }
     return true;
@@ -162,15 +169,17 @@ _.extend(Region.prototype, Backbone.Events, CommonMixin, {
   _getView(view) {
     if (!view) {
       throw new MarionetteError({
-        name: 'ViewNotValid',
-        message: 'The view passed is undefined and therefore invalid. You must pass a view instance to show.'
+        name: classErrorName,
+        message: 'The view passed is undefined and therefore invalid. You must pass a view instance to show.',
+        url: 'marionette.region.html#showing-a-view'
       });
     }
 
     if (view._isDestroyed) {
       throw new MarionetteError({
-        name: 'ViewDestroyedError',
-        message: `View (cid: "${view.cid}") has already been destroyed and cannot be used.`
+        name: classErrorName,
+        message: `View (cid: "${view.cid}") has already been destroyed and cannot be used.`,
+        url: 'marionette.region.html#showing-a-view'
       });
     }
 

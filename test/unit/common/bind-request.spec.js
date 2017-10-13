@@ -1,8 +1,7 @@
 import * as Marionette from '../../../src/backbone.marionette';
-import MarionetteError from '../../../src/error';
+import MarionetteError from '../../../src/utils/error';
 
 describe('Marionette.bindRequests', function() {
-  'use strict';
 
   beforeEach(function() {
     this.replyFooStub = this.sinon.stub();

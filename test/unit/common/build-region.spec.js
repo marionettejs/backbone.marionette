@@ -1,5 +1,5 @@
 import * as Marionette from '../../../src/backbone.marionette';
-import MarionetteError from '../../../src/error';
+import MarionetteError from '../../../src/utils/error';
 
 describe('Region', function() {
   describe('.buildRegion', function() {

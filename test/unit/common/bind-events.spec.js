@@ -1,10 +1,8 @@
 import * as Marionette from '../../../src/backbone.marionette';
-import MarionetteError from '../../../src/error';
+import MarionetteError from '../../../src/utils/error';
 import deprecate from '../../../src/utils/deprecate';
 
 describe('Marionette.bindEvents', function() {
-  'use strict';
-
   beforeEach(function() {
     this.handleFooStub = this.sinon.stub();
     this.handleBarStub = this.sinon.stub();

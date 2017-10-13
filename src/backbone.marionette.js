@@ -34,6 +34,7 @@ import {
 } from './config/features';
 
 // Utilities
+
 export const bindEvents = proxy(_bindEvents);
 export const unbindEvents = proxy(_unbindEvents);
 export const bindRequests = proxy(_bindRequests);
@@ -42,6 +43,7 @@ export const mergeOptions = proxy(_mergeOptions);
 export const getOption = proxy(_getOption);
 export const normalizeMethods = proxy(_normalizeMethods);
 export const triggerMethod = proxy(_triggerMethod);
+
 
 // Configuration
 

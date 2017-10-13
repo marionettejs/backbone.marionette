@@ -13,7 +13,7 @@
 
 import _ from 'underscore';
 import normalizeMethods from './normalize-methods';
-import MarionetteError from '../error';
+import MarionetteError from '../utils/error';
 
 function iterateReplies(target, channel, bindings, actionName) {
   // type-check bindings

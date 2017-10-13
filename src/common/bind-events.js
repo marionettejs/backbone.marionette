@@ -15,7 +15,7 @@
 
 import _ from 'underscore';
 import deprecate from '../utils/deprecate';
-import MarionetteError from '../error';
+import MarionetteError from '../utils/error';
 
 // Bind/unbind the event to handlers specified as a string of
 // handler names on the target object
@@ -29,7 +29,10 @@ function bindFromStrings(target, entity, evt, methods, actionName) {
   _.each(methodNames, function(methodName) {
     const method = target[methodName];
     if (!method) {
-      throw new MarionetteError(`Method "${methodName}" was configured as an event handler, but does not exist.`);
+      throw new MarionetteError({
+        message: `Method "${methodName}" was configured as an event handler, but does not exist.`,
+        url: 'marionette.functions.html#marionettebindevents'
+      });
     }
 
     target[actionName](entity, evt, method);

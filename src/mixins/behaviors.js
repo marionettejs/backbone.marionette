@@ -1,7 +1,7 @@
 import _ from 'underscore';
+import MarionetteError from '../utils/error';
 import _invoke from '../utils/invoke';
 import triggerMethod from '../common/trigger-method';
-import MarionetteError from '../error';
 
 // MixinOptions
 // - behaviors
@@ -22,7 +22,10 @@ function getBehaviorClass(options) {
     return { BehaviorClass: options, options: {} };
   }
 
-  throw new MarionetteError('Unable to get behavior class. A Behavior constructor should be passed directly or as behaviorClass property of options');
+  throw new MarionetteError({
+    message: 'Unable to get behavior class. A Behavior constructor should be passed directly or as behaviorClass property of options',
+    url: 'marionette.behavior.html#defining-and-attaching-behaviors'
+  });
 }
 
 // Iterate over the behaviors object, for each behavior

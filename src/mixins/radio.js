@@ -1,7 +1,6 @@
 import _ from 'underscore';
 import Radio from 'backbone.radio';
-
-import MarionetteError from '../error';
+import MarionetteError from '../utils/error';
 
 // MixinOptions
 // - channelName
@@ -20,8 +19,8 @@ export default {
     /* istanbul ignore next */
     if (!Radio) {
       throw new MarionetteError({
-        name: 'BackboneRadioMissing',
-        message: 'The dependency "backbone.radio" is missing.'
+        message: 'The dependency "backbone.radio" is missing.',
+        url: 'backbone.radio.html#backbone-radio'
       });
     }
 

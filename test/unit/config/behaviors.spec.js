@@ -1,6 +1,6 @@
 'use strict';
 
-import Error from '../../../src/error';
+import Error from '../../../src/utils/error';
 import Behavior from '../../../src/behavior';
 import Region from '../../../src/region';
 import View from '../../../src/view';

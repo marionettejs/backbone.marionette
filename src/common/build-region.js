@@ -1,5 +1,5 @@
 import _ from 'underscore';
-import MarionetteError from '../error';
+import MarionetteError from '../utils/error';
 import Region from '../region';
 
 // return the region instance from the definition
@@ -22,7 +22,7 @@ export default function(definition, defaults) {
 
   throw new MarionetteError({
     message: 'Improper region configuration type.',
-    url: 'marionette.region.html#region-configuration-types'
+    url: 'marionette.region.html#defining-regions'
   });
 }
 

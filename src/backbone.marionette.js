@@ -77,7 +77,6 @@ Marionette.Error = MarionetteError;
 Marionette.Object = MarionetteObject;
 
 // Configuration
-Marionette.DEV_MODE = false;
 Marionette.FEATURES = FEATURES;
 Marionette.VERSION = version;
 Marionette.DomApi = DomApi;

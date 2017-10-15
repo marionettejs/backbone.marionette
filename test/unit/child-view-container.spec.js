@@ -4,6 +4,24 @@ import ChildViewContainer from '../../src/child-view-container';
 
 describe('#ChildViewContainer', function() {
 
+  describe('emulate collection', function() {
+    let container;
+
+    beforeEach(function() {
+      container = new ChildViewContainer();
+
+      container._set([
+        new Backbone.View({ id: 1 }),
+        new Backbone.View({ id: 2 }),
+        new Backbone.View({ id: 3 })
+      ]);
+    });
+
+    it('should be able to map over list', function() {
+      expect(container.map('id')).to.eql([1, 2, 3]);
+    });
+  });
+
   describe('#_init', function() {
     let container;
 

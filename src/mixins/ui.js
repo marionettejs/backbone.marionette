@@ -11,10 +11,12 @@ const normalizeUIKeys = function(hash, ui) {
   }, {});
 };
 
+const uiRegEx = /@ui\.[a-zA-Z-_$0-9]*/g;
+
 // utility method for parsing @ui. syntax strings
 // into associated selector
 const normalizeUIString = function(uiString, ui) {
-  return uiString.replace(/@ui\.[a-zA-Z-_$0-9]*/g, (r) => {
+  return uiString.replace(uiRegEx, (r) => {
     return ui[r.slice(4)];
   });
 };

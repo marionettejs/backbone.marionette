@@ -27,7 +27,6 @@ import CollectionView from './collection-view';
 import Behavior from './behavior';
 import Region from './region';
 import Application from './application';
-import AppRouter from './app-router';
 import MarionetteError from './error';
 
 import DomApi from './config/dom';
@@ -68,7 +67,6 @@ Marionette.BackboneViewMixin = BackboneViewMixin;
 
 // Classes
 Marionette.Application = Application;
-Marionette.AppRouter = AppRouter;
 Marionette.View = View;
 Marionette.CollectionView = CollectionView;
 Marionette.Behavior = Behavior;

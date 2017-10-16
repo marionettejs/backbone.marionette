@@ -8,28 +8,16 @@ export default function(definition, defaults) {
     return definition;
   }
 
-  return buildRegionFromDefinition(definition, defaults);
-}
-
-function buildRegionFromDefinition(definition, defaults) {
-  const opts = _.extend({}, defaults);
-
   if (_.isString(definition)) {
-    opts.el = definition;
-
-    return buildRegionFromObject(opts);
+    return buildRegionFromObject(defaults, { el: definition });
   }
 
   if (_.isFunction(definition)) {
-    opts.regionClass = definition;
-
-    return buildRegionFromObject(opts);
+    return buildRegionFromObject(defaults, { regionClass: definition });
   }
 
   if (_.isObject(definition)) {
-    _.extend(opts, definition);
-
-    return buildRegionFromObject(opts);
+    return buildRegionFromObject(defaults, definition);
   }
 
   throw new MarionetteError({
@@ -38,10 +26,12 @@ function buildRegionFromDefinition(definition, defaults) {
   });
 }
 
-function buildRegionFromObject(definition) {
-  const RegionClass = definition.regionClass
+function buildRegionFromObject(defaults, definition) {
+  const options = _.extend({}, defaults, definition);
 
-  const options = _.omit(definition, 'regionClass');
+  const RegionClass = options.regionClass
+
+  delete options.regionClass;
 
   return new RegionClass(options);
 }

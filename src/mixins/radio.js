@@ -1,16 +1,6 @@
 import _ from 'underscore';
 import Radio from 'backbone.radio';
 
-import {
-  bindRequests,
-  unbindRequests
-} from '../common/bind-requests';
-
-import {
-  bindEvents,
-  unbindEvents
-} from '../common/bind-events';
-
 import MarionetteError from '../error';
 
 // MixinOptions
@@ -52,18 +42,5 @@ export default {
 
   getChannel() {
     return this._channel;
-  },
-
-  // Proxy `bindEvents`
-  bindEvents: bindEvents,
-
-  // Proxy `unbindEvents`
-  unbindEvents: unbindEvents,
-
-  // Proxy `bindRequests`
-  bindRequests: bindRequests,
-
-  // Proxy `unbindRequests`
-  unbindRequests: unbindRequests
-
+  }
 };

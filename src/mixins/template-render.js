@@ -10,7 +10,7 @@ export default {
   // and template context
   _renderTemplate(template) {
     // Add in entity data and template context
-    const data = this.mixinTemplateContext(this.serializeData());
+    const data = this.mixinTemplateContext(this.serializeData()) || {};
 
     // Render and add to el
     const html = this._renderHtml(template, data);
@@ -32,9 +32,11 @@ export default {
   // object literal, or a function that returns an object
   // literal. All methods and attributes from this object
   // are copies to the object passed in.
-  mixinTemplateContext(target) {
+  mixinTemplateContext(serializedData) {
     const templateContext = _.result(this, 'templateContext');
-    return _.extend({}, target, templateContext);
+    if (!templateContext) { return serializedData; };
+    if (!serializedData) { return templateContext; };
+    return _.extend({}, serializedData, templateContext);
   },
 
   // Serialize the view's model *or* collection, if

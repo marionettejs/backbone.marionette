@@ -317,7 +317,7 @@ const Region = MarionetteObject.extend({
   },
 
   _detachView(view) {
-    const shouldTriggerDetach = view._isAttached && !this._shouldDisableMonitoring();;
+    const shouldTriggerDetach = view._isAttached && !this._shouldDisableMonitoring();
     const shouldRestoreEl = this._isReplaced;
     if (shouldTriggerDetach) {
       view.triggerMethod('before:detach', view);

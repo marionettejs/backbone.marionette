@@ -1,3 +1,5 @@
+import MnObject from '../../src/object';
+
 describe('marionette object', function() {
 
   describe('when creating an object', function() {
@@ -5,7 +7,7 @@ describe('marionette object', function() {
     let options;
 
     beforeEach(function() {
-      const Object = Marionette.Object.extend({
+      const Object = MnObject.extend({
         initialize(opts) {
           this.bindEvents(opts.model, this.modelEvents);
         },
@@ -77,7 +79,7 @@ describe('marionette object', function() {
     let object;
 
     beforeEach(function() {
-      const Object = Marionette.Object.extend({
+      const Object = MnObject.extend({
         onDestroy: this.sinon.stub()
       });
 
@@ -148,11 +150,11 @@ describe('marionette object', function() {
     let Object;
 
     beforeEach(function() {
-      Object = Marionette.Object.extend({
+      Object = MnObject.extend({
         constructor(options) {
           this.options = {};
           this.cid = 'foo';
-          Marionette.Object.apply(this, arguments);
+          MnObject.apply(this, arguments);
         }
       });
     });

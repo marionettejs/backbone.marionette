@@ -1,3 +1,6 @@
+import * as Marionette from '../../../src/backbone.marionette';
+import MarionetteError from '../../../src/error';
+
 describe('Marionette.bindRequests', function() {
   'use strict';
 
@@ -81,7 +84,7 @@ describe('Marionette.bindRequests', function() {
     });
 
     it('should error', function() {
-      expect(this.run).to.throw(Marionette.Error, new Marionette.Error({
+      expect(this.run).to.throw(MarionetteError, new MarionetteError({
         message: 'Bindings must be an object.',
         url: 'marionette.functions.html#marionettebindrequests'
       }));

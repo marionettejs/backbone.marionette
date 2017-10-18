@@ -1,3 +1,6 @@
+import * as Marionette from '../../../src/backbone.marionette';
+import MarionetteError from '../../../src/error';
+
 describe('Region', function() {
   describe('.buildRegion', function() {
     beforeEach(function() {
@@ -286,7 +289,7 @@ describe('Region', function() {
       });
 
       it('throws an error', function() {
-        expect(this.buildRegion).to.throw(Marionette.Error, new Marionette.Error({
+        expect(this.buildRegion).to.throw(MarionetteError, new MarionetteError({
           message: 'Improper region configuration type.',
           url: 'marionette.region.html#region-configuration-types'
         }));

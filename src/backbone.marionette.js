@@ -30,7 +30,6 @@ import Application from './application';
 import DomApi from './config/dom';
 
 import {
-  FEATURES,
   isEnabled,
   setEnabled
 } from './config/features';
@@ -56,6 +55,7 @@ export const getOption = proxy(_getOption);
 export const normalizeMethods = proxy(_normalizeMethods);
 export const triggerMethod = proxy(_triggerMethod);
 
+// Configuration
 
 export const setDomApi = function(mixin) {
   CollectionView.setDomApi(mixin);
@@ -80,6 +80,5 @@ export {
   BackboneViewMixin,
   extend,
   DomApi,
-  version as VERSION,
-  FEATURES
-}
+  version as VERSION
+};

@@ -1,6 +1,6 @@
 import _ from 'underscore';
 import Backbone from 'backbone';
-import Marionette from '../../src/backbone.marionette';
+import * as Marionette from '../../src/backbone.marionette';
 import CollectionView from '../../src/collection-view';
 import Region from '../../src/region';
 import View from '../../src/view';

@@ -1,8 +1,11 @@
+import MnObject from '../../../src/object';
+
+
 describe('Radio Mixin on Marionette.Object', function() {
   'use strict';
 
   beforeEach(function() {
-    this.RadioObject = Marionette.Object.extend({
+    this.RadioObject = MnObject.extend({
       onBar: _.noop,
       getBaz: _.noop
     });

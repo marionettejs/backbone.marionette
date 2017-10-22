@@ -25,6 +25,15 @@ const ClassOptions = [
   'ui'
 ];
 
+// Used by _getImmediateChildren
+function childReducer(children, region) {
+  if (region.currentView) {
+    children.push(region.currentView);
+  }
+
+  return children;
+}
+
 // The standard view. Includes view events, automatic rendering
 // of Underscore templates, nested views, and more.
 const View = Backbone.View.extend({
@@ -97,10 +106,7 @@ const View = Backbone.View.extend({
   },
 
   _getImmediateChildren() {
-    return _.chain(this._getRegions())
-      .map('currentView')
-      .compact()
-      .value();
+    return _.reduce(this._regions, childReducer, []);
   }
 }, {
   setRenderer,

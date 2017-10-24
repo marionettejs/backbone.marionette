@@ -1,5 +1,5 @@
 import _ from 'underscore';
-import getUniqueEventName from '../utils/get-unique-event-name';
+import getNamespacedEventName from '../utils/get-namespaced-event-name';
 import { isEnabled } from '../config/features';
 
 // Internal method to create an event handler for a given `triggerDef` like
@@ -44,7 +44,7 @@ export default {
     // Configure the triggers, prevent default
     // action and stop propagation of DOM events
     return _.reduce(triggers, (events, value, key) => {
-      key = getUniqueEventName(key);
+      key = getNamespacedEventName(key, `trig${ this.cid }`);
       events[key] = buildViewTrigger(view, value);
       return events;
     }, {});

@@ -453,13 +453,18 @@ const CollectionView = Backbone.View.extend({
 
     this.triggerMethod('before:filter', this);
 
-    const filteredViews = _.partition(this.children._views, _.bind(viewFilter, this));
+    const attachViews = [];
+    const detachViews = [];
 
-    this._detachChildren(filteredViews[1]);
+    _.each(this.children._views, (view, key, children) => {
+      (viewFilter.call(this, view, key, children) ? attachViews : detachViews).push(view);
+    });
 
-    this.triggerMethod('filter', this);
+    this._detachChildren(detachViews);
 
-    return filteredViews[0];
+    this.triggerMethod('filter', this, attachViews, detachViews);
+
+    return attachViews;
   },
 
   // This method returns a function for the viewFilter

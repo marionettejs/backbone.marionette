@@ -370,12 +370,7 @@ const CollectionView = Backbone.View.extend({
 
     this.triggerMethod('before:sort', this);
 
-    if (_.isFunction(viewComparator)) {
-      // Must use native bind to preserve length
-      viewComparator = viewComparator.bind(this);
-    }
-
-    this.children._sort(viewComparator);
+    this.children._sort(viewComparator, this);
 
     this.triggerMethod('sort', this);
   },

@@ -334,6 +334,7 @@ describe('#NextChildViewContainer', function() {
     describe('when using a sortBy iterator', function() {
       let container;
       let collection;
+      let comparator;
 
       beforeEach(function() {
         collection = new Backbone.Collection([
@@ -349,9 +350,17 @@ describe('#NextChildViewContainer', function() {
           container._add(view);
         });
 
-        container._sort(view => {
+        this.comparator = function(view) {
           return view.model.get('text').substring(1);
-        });
+        };
+
+        comparator = this.sinon.spy(this, 'comparator');
+
+        container._sort(this.comparator, this);
+      });
+
+      it('should call the comparator with context', function() {
+        expect(comparator).to.have.been.calledOn(this);
       });
 
       it('should should re-sort the container', function() {
@@ -364,6 +373,7 @@ describe('#NextChildViewContainer', function() {
     describe('when using a sort iterator', function() {
       let container;
       let collection;
+      let comparator;
 
       beforeEach(function() {
         collection = new Backbone.Collection([
@@ -379,11 +389,19 @@ describe('#NextChildViewContainer', function() {
           container._add(view);
         });
 
-        container._sort((viewa, viewb) => {
+        this.comparator = function(viewa, viewb) {
           const aText = viewa.model.get('text');
           const bText = viewb.model.get('text');
           return bText.localeCompare(aText);
-        });
+        };
+
+        comparator = this.sinon.spy(this, 'comparator');
+
+        container._sort(this.comparator, this);
+      });
+
+      it('should call the comparator with context', function() {
+        expect(comparator).to.have.been.calledOn(this);
       });
 
       it('should re-sort the container', function() {

@@ -48,17 +48,17 @@ _.extend(Container.prototype, {
   },
 
   // Sort (mutate) and return the array of the child views.
-  _sort(comparator) {
+  _sort(comparator, context) {
     if (typeof comparator === 'string') {
       comparator = _.partial(stringComparator, comparator);
       return this._sortBy(comparator);
     }
 
     if (comparator.length === 1) {
-      return this._sortBy(comparator);
+      return this._sortBy(_.bind(comparator, context));
     }
 
-    return this._views.sort(comparator);
+    return this._views.sort(_.bind(comparator, context));
   },
 
   // Makes `_.sortBy` mutate the array to match `this._views.sort`

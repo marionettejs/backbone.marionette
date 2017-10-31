@@ -89,7 +89,7 @@ export default {
   removeRegions() {
     const regions = this._getRegions();
 
-    _.each(this._regions, _.bind(this._removeRegion, this));
+    _.each(this._regions, this._removeRegion.bind(this));
 
     return regions;
   },

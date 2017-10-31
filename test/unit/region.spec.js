@@ -198,7 +198,7 @@ describe('region', function() {
 
       _.extend(this.MyView.prototype, Marionette.BackboneViewMixin);
 
-      this.sinon.stub(this.MyView.prototype, 'onBeforeRender', _.bind(function() { return this.region.currentView; }, this));
+      this.sinon.stub(this.MyView.prototype, 'onBeforeRender', (function() { return this.region.currentView; }).bind(this));
 
       this.setFixtures('<div id="region"></div>');
       this.view = new this.MyView();

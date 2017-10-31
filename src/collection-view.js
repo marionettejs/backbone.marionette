@@ -164,7 +164,7 @@ const CollectionView = Backbone.View.extend({
 
   // Added views are returned for consistency with _removeChildModels
   _addChildModels(models) {
-    return _.map(models, _.bind(this._addChildModel, this));
+    return _.map(models, this._addChildModel.bind(this));
   },
 
   _addChildModel(model) {
@@ -470,7 +470,7 @@ const CollectionView = Backbone.View.extend({
     delete this._addedViews;
 
     if (!viewFilter) {
-      if (!this.sortWithCollection && addedViews && _.every(addedViews, _.bind(this._isAddedAtEnd, this))) {
+      if (!this.sortWithCollection && addedViews && _.every(addedViews, this._isAddedAtEnd.bind(this))) {
         return addedViews;
       }
 
@@ -479,7 +479,7 @@ const CollectionView = Backbone.View.extend({
 
     this.triggerMethod('before:filter', this);
 
-    const filteredViews = _.partition(this.children._views, _.bind(viewFilter, this));
+    const filteredViews = _.partition(this.children._views, viewFilter.bind(this));
 
     this._detachChildren(filteredViews[1]);
 
@@ -546,7 +546,7 @@ const CollectionView = Backbone.View.extend({
   },
 
   _detachChildren(detachingViews) {
-    _.each(detachingViews, _.bind(this._detachChildView, this));
+    _.each(detachingViews, this._detachChildView.bind(this));
   },
 
   _detachChildView(view) {
@@ -686,7 +686,7 @@ const CollectionView = Backbone.View.extend({
   },
 
   _removeChildViews(views) {
-    _.each(views, _.bind(this._removeChildView, this));
+    _.each(views, this._removeChildView.bind(this));
   },
 
   _removeChildView(view, {shouldDetach} = {}) {
@@ -728,7 +728,7 @@ const CollectionView = Backbone.View.extend({
     if (this.monitorViewEvents === false) {
       this.Dom.detachContents(this.el, this.$el);
     }
-    _.each(this.children._views, _.bind(this._removeChildView, this));
+    _.each(this.children._views, this._removeChildView.bind(this));
     this.triggerMethod('destroy:children', this);
   }
 }, {

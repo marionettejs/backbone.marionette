@@ -94,7 +94,7 @@ describe('item view', function() {
     });
 
     it('should not throw an exception for a false template', function() {
-      expect(_.bind(this.view.render, this.view)).to.not.throw();
+      expect(this.view.render.bind(this.view)).to.not.throw();
     });
 
     it('should not call an "onBeforeRender" method on the view', function() {

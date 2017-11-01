@@ -26,6 +26,10 @@ describe('Marionette.bindEntityEvents', function() {
     it('shouldnt bind any events', function() {
       expect(this.listenToStub).not.to.have.been.called;
     });
+
+    it('should return the target', function() {
+      expect(Marionette.bindEvents(this.target, false, {'foo': 'foo'})).to.equal(this.target);
+    });
   });
 
   describe('when bindings isnt passed', function() {
@@ -35,6 +39,10 @@ describe('Marionette.bindEntityEvents', function() {
 
     it('shouldnt bind any events', function() {
       expect(this.listenToStub).not.to.have.been.called;
+    });
+
+    it('should return the target', function() {
+      expect(Marionette.bindEvents(this.target, this.entity, null)).to.equal(this.target);
     });
   });
 

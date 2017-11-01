@@ -23,6 +23,10 @@ describe('Marionette.unbindEntityEvents', function() {
     it('shouldnt unbind any events', function() {
       expect(this.stopListeningStub).not.to.have.been.called;
     });
+
+    it('should return the target', function() {
+      expect(Marionette.unbindEvents(this.target, false, {'foo': 'foo'})).to.equal(this.target);
+    });
   });
 
   describe('when bindings isnt passed', function() {
@@ -30,8 +34,12 @@ describe('Marionette.unbindEntityEvents', function() {
       Marionette.unbindEvents(this.target, this.entity, null);
     });
 
-    it('shouldnt unbind any events', function() {
-      expect(this.stopListeningStub).not.to.have.been.called;
+    it('should unbind all events', function() {
+      expect(this.stopListeningStub).to.have.been.calledOnce.and.calledWith(this.entity);
+    });
+
+    it('should return the target', function() {
+      expect(Marionette.unbindEvents(this.target, this.entity, null)).to.equal(this.target);
     });
   });
 

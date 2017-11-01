@@ -16,8 +16,6 @@ import normalizeMethods from './normalize-methods';
 import MarionetteError from '../error';
 
 function iterateReplies(target, channel, bindings, actionName) {
-  if (!channel || !bindings) { return; }
-
   // type-check bindings
   if (!_.isObject(bindings)) {
     throw new MarionetteError({
@@ -32,11 +30,20 @@ function iterateReplies(target, channel, bindings, actionName) {
 }
 
 function bindRequests(channel, bindings) {
+  if (!channel || !bindings) { return this; }
+
   iterateReplies(this, channel, bindings, 'reply');
   return this;
 }
 
 function unbindRequests(channel, bindings) {
+  if (!channel) { return this; }
+
+  if (!bindings) {
+    channel.stopReplying(null, null, this);
+    return this;
+  }
+
   iterateReplies(this, channel, bindings, 'stopReplying');
   return this;
 }

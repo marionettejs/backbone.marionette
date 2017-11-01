@@ -38,8 +38,6 @@ function bindFromStrings(target, entity, evt, methods, actionName) {
 
 // generic looping function
 function iterateEvents(target, entity, bindings, actionName) {
-  if (!entity || !bindings) { return; }
-
   // type-check bindings
   if (!_.isObject(bindings)) {
     throw new MarionetteError({
@@ -62,11 +60,20 @@ function iterateEvents(target, entity, bindings, actionName) {
 }
 
 function bindEvents(entity, bindings) {
+  if (!entity || !bindings) { return this; }
+
   iterateEvents(this, entity, bindings, 'listenTo');
   return this;
 }
 
 function unbindEvents(entity, bindings) {
+  if (!entity) { return this; }
+
+  if (!bindings) {
+    this.stopListening(entity);
+    return this;
+  }
+
   iterateEvents(this, entity, bindings, 'stopListening');
   return this;
 }

@@ -24,6 +24,10 @@ describe('Marionette.bindRequests', function() {
     it('shouldnt bind any requests', function() {
       expect(this.replyStub).not.to.have.been.called;
     });
+
+    it('should return the target', function() {
+      expect(Marionette.bindRequests(this.target, false, {'foo': 'replyFoo'})).to.equal(this.target);
+    });
   });
 
   describe('when bindings isnt passed', function() {
@@ -33,6 +37,10 @@ describe('Marionette.bindRequests', function() {
 
     it('shouldnt bind any requests', function() {
       expect(this.replyStub).not.to.have.been.called;
+    });
+
+    it('should return the target', function() {
+      expect(Marionette.bindRequests(this.target, this.channel, null)).to.equal(this.target);
     });
   });
 

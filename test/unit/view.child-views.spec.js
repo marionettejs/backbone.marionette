@@ -469,7 +469,7 @@ describe('layoutView', function() {
       var cb = function() {
         expect(this.region.$el).to.exist;
       };
-      this.layoutView.listenTo(this.layoutView, 'before:render', _.bind(cb, this));
+      this.layoutView.listenTo(this.layoutView, 'before:render', cb.bind(this));
       this.layoutView.render();
     });
 

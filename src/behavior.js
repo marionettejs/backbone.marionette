@@ -112,7 +112,7 @@ const Behavior = MarionetteObject.extend({
       }
       if (!behaviorHandler) { return; }
       key = getUniqueEventName(key);
-      events[key] = _.bind(behaviorHandler, this);
+      events[key] = behaviorHandler.bind(this);
       return events;
     }, {});
   },

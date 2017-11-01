@@ -307,11 +307,11 @@ describe('view mixin', function() {
       this.superViewOnRattleHandler = this.sinon.spy();
       this.superView.onRattle = this.superViewOnRattleHandler;
 
-      this.childEventsFunction = _.bind(function() {
+      this.childEventsFunction = (function() {
         return {
           'boom': this.layoutViewOnBoomHandler
         };
-      }, this);
+      }).bind(this);
     });
 
     describe('when there is not a containing layout', function() {

@@ -8,7 +8,7 @@
 
 import _ from 'underscore';
 import deprecate from './utils/deprecate';
-import getUniqueEventName from './utils/get-unique-event-name';
+import getNamespacedEventName from './utils/get-namespaced-event-name';
 import MarionetteObject from './object';
 import DelegateEntityEventsMixin from './mixins/delegate-entity-events';
 import TriggersMixin from './mixins/triggers';
@@ -117,8 +117,8 @@ const Behavior = MarionetteObject.extend({
       if (!_.isFunction(behaviorHandler)) {
         behaviorHandler = this[behaviorHandler];
       }
-      if (!behaviorHandler) { return; }
-      key = getUniqueEventName(key);
+      if (!behaviorHandler) { return events; }
+      key = getNamespacedEventName(key, this.cid);
       events[key] = _.bind(behaviorHandler, this);
       return events;
     }, {});

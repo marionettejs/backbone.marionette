@@ -1,4 +1,3 @@
-import Backbone from 'backbone';
 import {version} from '../package.json';
 
 import proxy from './utils/proxy';
@@ -33,17 +32,6 @@ import {
   isEnabled,
   setEnabled
 } from './config/features';
-
-const previousMarionette = Backbone.Marionette;
-
-// This allows you to run multiple instances of Marionette on the same
-// webapp. After loading the new version, call `noConflict()` to
-// get a reference to it. At the same time the old version will be
-// returned to Backbone.Marionette.
-export const noConflict = function() {
-  Backbone.Marionette = previousMarionette;
-  return this;
-};
 
 // Utilities
 export const bindEvents = proxy(_bindEvents);

@@ -300,7 +300,7 @@ The first parameter, `target`, must have the Backbone.Events module mixed in.
 The second parameter is the `entity` (Backbone.Model, Backbone.Collection or
 any object that has Backbone.Events mixed in) to bind the events from.
 
-The third parameter is a hash of { 'event:name': 'eventHandler' }
+The third parameter is a hash of `{ 'event:name': 'eventHandler' }`
 configuration. A function can be supplied instead of a string handler name.
 
 **Note** Multiple handlers are deprecated
@@ -345,7 +345,7 @@ Bb.View.extend({
 
 ## Marionette.bindRequests
 
-This method is used to bind a radio requests to methods on a target object.
+This method is used to bind radio requests to methods on a target object.
 All Marionette Objects come with this method.
 
 ```javascript
@@ -380,14 +380,20 @@ The first parameter, `this`, is a context of current entity.
 
 The second parameter, `channel`, reference to a channel by name.
 
-The third parameter is a hash either { 'event:name': 'eventHandler' } or
-{ 'event:name': 'eventHandler', 'event:otherName': 'otherEventHandler', ...} of
+The third parameter is a hash either `{ 'event:name': 'eventHandler' }` or
+`{ 'event:name': 'eventHandler', 'event:otherName': 'otherEventHandler', ...}` of
 configuration.
 
 ## Marionette.unbindRequests
 
-This method is used to unbind a radio requests to methods on a target object.
+This method is used to unbind radio requests to methods on a target object.
 All Marionette Objects come with this method.
+
+Calling this method without a radio requests hash will unbind all requests
+from the channel.
+
+**NOTE: To avoid memory leaks, `unbindRequests` should be called
+in or before `onBeforeDestroy`.**
 
 ```javascript
 var Mn = require('backbone.marionette');
@@ -419,8 +425,8 @@ The first parameter, `this`, is a context of current entity.
 
 The second parameter, `channel`, reference to a channel by name.
 
-The third parameter is a hash either { 'event:name': 'eventHandler' } or
-{ 'event:name': 'eventHandler', 'event:otherName': 'otherEventHandler', ...} of
+The third parameter is a hash either `{ 'event:name': 'eventHandler' }` or
+`{ 'event:name': 'eventHandler', 'event:otherName': 'otherEventHandler', ...}` of
 configuration.
 
 ## Marionette.normalizeMethods

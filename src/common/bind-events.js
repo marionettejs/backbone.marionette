@@ -14,12 +14,17 @@
 // function can be supplied instead of a string handler name.
 
 import _ from 'underscore';
+import deprecate from '../utils/deprecate';
 import MarionetteError from '../error';
 
 // Bind/unbind the event to handlers specified as a string of
 // handler names on the target object
 function bindFromStrings(target, entity, evt, methods, actionName) {
   const methodNames = methods.split(/\s+/);
+
+  if (methodNames.length > 1) {
+    deprecate('Multiple handlers for a single event are deprecated. If needed, use a single handler to call multiple methods.')
+  }
 
   _.each(methodNames, function(methodName) {
     const method = target[methodName];

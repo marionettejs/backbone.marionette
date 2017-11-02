@@ -301,8 +301,11 @@ The second parameter is the `entity` (Backbone.Model, Backbone.Collection or
 any object that has Backbone.Events mixed in) to bind the events from.
 
 The third parameter is a hash of { 'event:name': 'eventHandler' }
-configuration. Multiple handlers can be separated by a space. A
-function can be supplied instead of a string handler name.
+configuration. A function can be supplied instead of a string handler name.
+
+**Note** Multiple handlers are deprecated
+
+Multiple handlers can be separated by a space.
 
 ## Marionette.unbindEvents
 

@@ -97,6 +97,10 @@ export default {
   _removeBehavior(behavior) {
     // Don't worry about the clean up if the view is destroyed
     if (this._isDestroyed) { return; }
+
+    // Remove behavior-only triggers and events
+    this.undelegate(`.trig${ behavior.cid } .${ behavior.cid }`);
+
     this._behaviors = _.without(this._behaviors, behavior);
   },
 

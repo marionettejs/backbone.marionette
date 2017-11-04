@@ -1,3 +1,18 @@
+### v3.5.0 [view commit logs](https://github.com/marionettejs/backbone.marionette/compare/v3.4.4...v3.5.0)
+
+#### Features
+* `NextCollectionView`'s `filter` event now returns the attaching and detached views.
+* `unbindEvents` and `unbindRequests` can now be called without handlers to remove all handlers from an entity.
+
+#### Fixes
+* If an event handler on a behavior was undefined it would remove any prior defined handler.
+* When a behavior is destroyed it will now undelegate the behavior events and triggers.
+* When a view was added a performance check on `NextCollectionView` would sometimes prevent existing views from sorting correctly.
+* `NextCollectionView` `viewFilter` will now be called with the same arguments with underscore or lodash.
+
+#### Deprecations
+* Multiple handlers for a single event. If needed, use a single handler to call multiple methods.
+
 ### v3.4.4 [view commit logs](https://github.com/marionettejs/backbone.marionette/compare/v3.4.3...v3.4.4)
 
 #### Fixes

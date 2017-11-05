@@ -9,8 +9,8 @@ describe('Behaviors Mixin', function() {
   let Behaviors;
 
   beforeEach(function() {
-    Behaviors = function() {};
-    _.extend(Behaviors.prototype, Backbone.View, BehaviorsMixin);
+    Behaviors = Backbone.View.extend();
+    _.extend(Behaviors.prototype, BehaviorsMixin);
   });
 
   describe('#_initBehaviors', function() {

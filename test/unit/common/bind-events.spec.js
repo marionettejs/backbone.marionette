@@ -4,12 +4,14 @@ describe('Marionette.bindEntityEvents', function() {
   beforeEach(function() {
     this.handleFooStub = this.sinon.stub();
     this.handleBarStub = this.sinon.stub();
+    this.handleMultiStub = this.sinon.stub();
     this.listenToStub = this.sinon.stub();
     this.entityStub = this.sinon.stub();
 
     this.target = {
       handleFoo: this.handleFooStub,
       handleBar: this.handleBarStub,
+      handleMulti: this.handleMultiStub,
       listenTo: this.listenToStub
     };
 
@@ -24,6 +26,10 @@ describe('Marionette.bindEntityEvents', function() {
     it('shouldnt bind any events', function() {
       expect(this.listenToStub).not.to.have.been.called;
     });
+
+    it('should return the target', function() {
+      expect(Marionette.bindEvents(this.target, false, {'foo': 'foo'})).to.equal(this.target);
+    });
   });
 
   describe('when bindings isnt passed', function() {
@@ -33,6 +39,10 @@ describe('Marionette.bindEntityEvents', function() {
 
     it('shouldnt bind any events', function() {
       expect(this.listenToStub).not.to.have.been.called;
+    });
+
+    it('should return the target', function() {
+      expect(Marionette.bindEvents(this.target, this.entity, null)).to.equal(this.target);
     });
   });
 
@@ -87,18 +97,34 @@ describe('Marionette.bindEntityEvents', function() {
 
   describe('when bindings is an object with multiple event-handler pairs', function() {
     beforeEach(function() {
+      Marionette.setEnabled('DEV_MODE', true);
+      this.sinon.spy(Marionette.deprecate, '_warn');
+      this.sinon.stub(Marionette.deprecate, '_console', {
+        warn: this.sinon.stub()
+      });
+      Marionette.deprecate._cache = {};
       Marionette.bindEvents(this.target, this.entity, {
-        'foo': 'handleFoo',
+        'foo': 'handleFoo handleMulti',
         'bar': 'handleBar'
       });
     });
 
-    it('should bind first event to targets handler', function() {
-      expect(this.listenToStub).to.have.been.calledTwice.and.calledWith(this.entity, 'foo', this.handleFooStub);
+    afterEach(function() {
+      Marionette.setEnabled('DEV_MODE', false);
+    });
+
+    it('should call Marionette.deprecate', function() {
+      expect(Marionette.deprecate._warn).to.be.calledWith('Deprecation warning: Multiple handlers for a single event are deprecated. If needed, use a single handler to call multiple methods.');
+    });
+
+    it('should bind first event to targets handlers', function() {
+      expect(this.listenToStub).to.have.been.calledThrice
+        .and.calledWith(this.entity, 'foo', this.handleFooStub)
+        .and.calledWith(this.entity, 'foo', this.handleMultiStub);
     });
 
     it('should bind second event to targets handler', function() {
-      expect(this.listenToStub).to.have.been.calledTwice.and.calledWith(this.entity, 'bar', this.handleBarStub);
+      expect(this.listenToStub).to.have.been.calledThrice.and.calledWith(this.entity, 'bar', this.handleBarStub);
     });
   });
 

@@ -235,7 +235,7 @@ describe('CollectionView Data', function() {
     let myCollectionView;
     let collection;
 
-    describe('when sortWithCollection is true', function() {
+    describe('when children are sorted', function() {
       beforeEach(function() {
         collection = new Backbone.Collection([{ id: 1 }, { id: 2 }, { id: 3 }]);
 
@@ -259,11 +259,11 @@ describe('CollectionView Data', function() {
       });
     });
 
-    describe('when sortWithCollection is false', function() {
+    describe('when children are not sorted', function() {
       beforeEach(function() {
         collection = new Backbone.Collection([{ id: 1 }, { id: 2 }, { id: 3 }]);
 
-        myCollectionView = new MyCollectionView({ collection, sortWithCollection: false });
+        myCollectionView = new MyCollectionView({ collection, viewComparator: false });
         myCollectionView.render();
       });
 

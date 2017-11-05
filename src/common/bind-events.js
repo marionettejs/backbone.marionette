@@ -14,12 +14,17 @@
 // function can be supplied instead of a string handler name.
 
 import _ from 'underscore';
+import deprecate from '../utils/deprecate';
 import MarionetteError from '../error';
 
 // Bind/unbind the event to handlers specified as a string of
 // handler names on the target object
 function bindFromStrings(target, entity, evt, methods, actionName) {
   const methodNames = methods.split(/\s+/);
+
+  if (methodNames.length > 1) {
+    deprecate('Multiple handlers for a single event are deprecated. If needed, use a single handler to call multiple methods.')
+  }
 
   _.each(methodNames, function(methodName) {
     const method = target[methodName];
@@ -33,8 +38,6 @@ function bindFromStrings(target, entity, evt, methods, actionName) {
 
 // generic looping function
 function iterateEvents(target, entity, bindings, actionName) {
-  if (!entity || !bindings) { return; }
-
   // type-check bindings
   if (!_.isObject(bindings)) {
     throw new MarionetteError({
@@ -57,11 +60,20 @@ function iterateEvents(target, entity, bindings, actionName) {
 }
 
 function bindEvents(entity, bindings) {
+  if (!entity || !bindings) { return this; }
+
   iterateEvents(this, entity, bindings, 'listenTo');
   return this;
 }
 
 function unbindEvents(entity, bindings) {
+  if (!entity) { return this; }
+
+  if (!bindings) {
+    this.stopListening(entity);
+    return this;
+  }
+
   iterateEvents(this, entity, bindings, 'stopListening');
   return this;
 }

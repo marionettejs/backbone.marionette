@@ -24,6 +24,10 @@ describe('Marionette.unbindRequests', function() {
     it('shouldnt unbind any request', function() {
       expect(this.stopReplyingStub).not.to.have.been.called;
     });
+
+    it('should return the target', function() {
+      expect(Marionette.unbindRequests(this.target, false, {'foo': 'foo'})).to.equal(this.target);
+    });
   });
 
   describe('when bindings isnt passed', function() {
@@ -31,8 +35,12 @@ describe('Marionette.unbindRequests', function() {
       Marionette.unbindRequests(this.target, this.channel, null);
     });
 
-    it('shouldnt unbind any requests', function() {
-      expect(this.stopReplyingStub).not.to.have.been.called;
+    it('should unbind all requests', function() {
+      expect(this.stopReplyingStub).to.have.been.calledOnce.and.calledWith(null, null, this.target);
+    });
+
+    it('should return the target', function() {
+      expect(Marionette.unbindRequests(this.target, this.channel, null)).to.equal(this.target);
     });
   });
 

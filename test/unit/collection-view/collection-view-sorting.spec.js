@@ -195,7 +195,9 @@ describe('CollectionView - Sorting', function() {
         viewComparator.returns('sort');
 
         myCollectionView = new MyCollectionView({
-          viewComparator,
+          viewComparator: function(val) {
+            return viewComparator.call(this, val);
+          },
           collection
         });
 

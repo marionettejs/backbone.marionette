@@ -394,14 +394,12 @@ const CollectionView = Backbone.View.extend({
 
     if (!viewComparator) { return; }
 
+    // If children are sorted prevent added to end perf
+    delete this._addedViews;
+
     this.triggerMethod('before:sort', this);
 
-    if (_.isFunction(viewComparator)) {
-      // Must use native bind to preserve length
-      viewComparator = viewComparator.bind(this);
-    }
-
-    this.children._sort(viewComparator);
+    this.children._sort(viewComparator, this);
 
     this.triggerMethod('sort', this);
   },
@@ -458,11 +456,6 @@ const CollectionView = Backbone.View.extend({
     return this;
   },
 
-  _isAddedAtEnd(addedView, index, addedViews) {
-    const viewIndex = this.children._views.length - addedViews.length + index;
-    return addedView === this.children._views[viewIndex];
-  },
-
   _filterChildren() {
     const viewFilter = this._getFilter();
     const addedViews = this._addedViews;
@@ -470,22 +463,25 @@ const CollectionView = Backbone.View.extend({
     delete this._addedViews;
 
     if (!viewFilter) {
-      if (!this.sortWithCollection && addedViews && _.every(addedViews, this._isAddedAtEnd.bind(this))) {
-        return addedViews;
-      }
+      if (addedViews) { return addedViews; }
 
       return this.children._views;
     }
 
     this.triggerMethod('before:filter', this);
 
-    const filteredViews = _.partition(this.children._views, viewFilter.bind(this));
+    const attachViews = [];
+    const detachViews = [];
 
-    this._detachChildren(filteredViews[1]);
+    _.each(this.children._views, (view, key, children) => {
+      (viewFilter.call(this, view, key, children) ? attachViews : detachViews).push(view);
+    });
 
-    this.triggerMethod('filter', this);
+    this._detachChildren(detachViews);
 
-    return filteredViews[0];
+    this.triggerMethod('filter', this, attachViews, detachViews);
+
+    return attachViews;
   },
 
   // This method returns a function for the viewFilter
@@ -651,8 +647,11 @@ const CollectionView = Backbone.View.extend({
       this.render();
     }
 
+    // Only cache views if added to the end
+    if (!index || index >= this.children.length) {
+      this._addedViews = [view];
+    }
     this._addChild(view, index);
-    this._addedViews = [view];
     this._showChildren();
 
     return view;

@@ -17,7 +17,7 @@ describe('view mixin', function() {
     });
 
     it('should set _behaviors', function() {
-      expect(this.view._behaviors).to.be.eql({});
+      expect(this.view._behaviors).to.be.eql([]);
     });
   });
 

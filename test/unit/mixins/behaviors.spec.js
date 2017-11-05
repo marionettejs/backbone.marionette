@@ -14,24 +14,6 @@ describe('Behaviors Mixin', function() {
   });
 
   describe('#_initBehaviors', function() {
-    let behaviors;
-
-    beforeEach(function() {
-      behaviors = new Behaviors();
-      this.sinon.spy(behaviors, '_getBehaviors');
-      behaviors._initBehaviors();
-    });
-
-    it('should call _getBehaviors', function() {
-      expect(behaviors._getBehaviors).to.be.calledOnce;
-    });
-
-    it('should not have behaviors', function() {
-      expect(behaviors._getBehaviors()).to.be.deep.equal({});
-    });
-  });
-
-  describe('#_getBehaviors', function() {
     let behaviorsInstance;
     let fooInitializeStub;
     let FooBehavior;
@@ -42,6 +24,14 @@ describe('Behaviors Mixin', function() {
       FooBehavior = Behavior.extend({initialize: fooInitializeStub});
     });
 
+    describe('with no behaviors', function() {
+      it('should not have behaviors', function() {
+        behaviorsInstance._initBehaviors();
+
+        expect(behaviorsInstance._behaviors).to.be.deep.equal([]);
+      });
+    });
+
     describe('with behaviorClass option', function() {
       beforeEach(function() {
         behaviorsInstance.behaviors = [
@@ -49,34 +39,30 @@ describe('Behaviors Mixin', function() {
             behaviorClass: FooBehavior
           }
         ];
+        behaviorsInstance._initBehaviors();
       });
 
       it('should call initialize when a behavior is created', function() {
-        behaviorsInstance._getBehaviors();
-
         expect(fooInitializeStub).to.be.calledOnce;
       });
 
       it('should have behaviors', function() {
-        behaviorsInstance._getBehaviors();
-
-        expect(behaviorsInstance._getBehaviors().length).to.be.equal(1);
+        expect(behaviorsInstance._behaviors).to.have.lengthOf(1);
       });
     });
 
     describe('without behaviorClass option', function() {
       beforeEach(function() {
         behaviorsInstance.behaviors = [FooBehavior];
+        behaviorsInstance._initBehaviors();
       });
 
       it('should call initialize when a behavior is created', function() {
-        behaviorsInstance._getBehaviors();
-
         expect(fooInitializeStub).to.be.calledOnce;
       });
 
       it('should have behaviors', function() {
-        expect(behaviorsInstance._getBehaviors().length).to.be.equal(1);
+        expect(behaviorsInstance._behaviors).to.have.lengthOf(1);
       });
     });
 
@@ -98,23 +84,21 @@ describe('Behaviors Mixin', function() {
         });
 
         behaviorsInstance.behaviors = [FooBehavior];
+
+        behaviorsInstance._initBehaviors();
       });
 
       it('should call initialize when a behavior is created', function() {
-        behaviorsInstance._getBehaviors();
-
         expect(fooInitializeStub).to.be.calledOnce;
         expect(bazInitializeStub).not.to.have.been.called;
       });
 
       it('should call initialize when a nested behavior is created', function() {
-        behaviorsInstance._getBehaviors();
-
         expect(barInitializeStub).to.be.calledOnce;
       });
 
       it('should have behaviors', function() {
-        expect(behaviorsInstance._getBehaviors().length).to.be.equal(2);
+        expect(behaviorsInstance._behaviors).to.have.lengthOf(2);
       });
     });
 
@@ -134,22 +118,19 @@ describe('Behaviors Mixin', function() {
         });
 
         behaviorsInstance.behaviors = {foo: FooBehavior};
+        behaviorsInstance._initBehaviors();
       });
 
       it('should call initialize when a behavior is created', function() {
-        behaviorsInstance._getBehaviors();
-
         expect(fooInitializeStub).to.be.calledOnce;
       });
 
       it('should call initialize when a nested behavior is created', function() {
-        behaviorsInstance._getBehaviors();
-
         expect(barInitializeStub).to.be.calledOnce;
       });
 
       it('should have behaviors', function() {
-        expect(behaviorsInstance._getBehaviors().length).to.be.equal(2);
+        expect(behaviorsInstance._behaviors).to.have.lengthOf(2);
       });
     });
   });
@@ -392,8 +373,7 @@ describe('Behaviors Mixin', function() {
 
       behaviorsInstance._removeBehavior(behaviorInstance);
 
-      expect(behaviorsInstance._behaviors).not.to.include(behaviorInstance);
-      expect(behaviorsInstance._behaviors.length).to.equal(1);
+      expect(behaviorsInstance._behaviors).to.have.lengthOf(1).and.not.to.include(behaviorInstance);
     });
 
     describe('when the view is destroyed', function() {
@@ -405,8 +385,7 @@ describe('Behaviors Mixin', function() {
 
         behaviorsInstance._removeBehavior(behaviorInstance);
 
-        expect(behaviorsInstance._behaviors).to.include(behaviorInstance);
-        expect(behaviorsInstance._behaviors.length).to.equal(2);
+        expect(behaviorsInstance._behaviors).to.have.lengthOf(2).to.include(behaviorInstance);
       });
     });
   });

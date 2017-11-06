@@ -14,41 +14,33 @@ import MarionetteError from '../error';
 // Otherwise an error is thrown
 function getBehaviorClass(options) {
   if (options.behaviorClass) {
-    return options.behaviorClass;
-    //treat functions as a Behavior constructor
-  } else if (_.isFunction(options)) {
-    return options;
-  } else {
-    throw new MarionetteError('Unable to get behavior class. A Behavior constructor should be passed directly or as behaviorClass property of options');
+    return { BehaviorClass: options.behaviorClass, options };
   }
+
+  //treat functions as a Behavior constructor
+  if (_.isFunction(options)) {
+    return { BehaviorClass: options, options: {} };
+  }
+
+  throw new MarionetteError('Unable to get behavior class. A Behavior constructor should be passed directly or as behaviorClass property of options');
 }
 
 // Iterate over the behaviors object, for each behavior
 // instantiate it and get its grouped behaviors.
 // This accepts a list of behaviors in either an object or array form
-function parseBehaviors(view, behaviors) {
-  return _.chain(behaviors).map(function(options) {
-    const BehaviorClass = getBehaviorClass(options);
-    //if we're passed a class directly instead of an object
-    const _options = options === BehaviorClass ? {} : options;
-    const behavior = new BehaviorClass(_options, view);
-    const nestedBehaviors = parseBehaviors(view, _.result(behavior, 'behaviors'));
+function parseBehaviors(view, behaviors, allBehaviors) {
+  return _.reduce(behaviors, (reducedBehaviors, behaviorDefiniton) => {
+    const { BehaviorClass, options } = getBehaviorClass(behaviorDefiniton);
+    const behavior = new BehaviorClass(options, view);
+    reducedBehaviors.push(behavior);
 
-    return [behavior].concat(nestedBehaviors);
-  }).flatten().value();
+    return parseBehaviors(view, _.result(behavior, 'behaviors'), reducedBehaviors);
+  }, allBehaviors);
 }
 
 export default {
   _initBehaviors() {
-    this._behaviors = this._getBehaviors();
-  },
-
-  _getBehaviors() {
-    const behaviors = _.result(this, 'behaviors');
-
-    // Behaviors defined on a view can be a flat object literal
-    // or it can be a function that returns an object.
-    return _.isObject(behaviors) ? parseBehaviors(this, behaviors) : {};
+    this._behaviors = parseBehaviors(this, _.result(this, 'behaviors'), []);
   },
 
   _getBehaviorTriggers() {

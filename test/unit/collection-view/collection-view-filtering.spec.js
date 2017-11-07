@@ -115,9 +115,11 @@ describe('CollectionView - Filtering', function() {
       });
 
       it('should call "filter" event', function() {
-        expect(myCollectionView.onFilter)
-          .to.have.been.calledOnce
-          .and.calledWith(myCollectionView);
+        const calledWith = myCollectionView.onFilter.firstCall.args;
+        expect(myCollectionView.onFilter).to.have.been.calledOnce;
+        expect(calledWith[0]).to.equal(myCollectionView);
+        expect(_.map(calledWith[1], 'model')).to.have.same.members(collectionOddModels);
+        expect(_.map(calledWith[2], 'model')).to.have.same.members(collectionEvenModels);
       });
     });
 

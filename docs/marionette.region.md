@@ -56,6 +56,8 @@ var App = Mn.Application.extend({
 });
 ```
 
+[Live example](http://jsfiddle.net/marionettejs/9fburmb8/)
+
 For more information, see the
 [Application docs](./marionette.application.md#root-layout).
 

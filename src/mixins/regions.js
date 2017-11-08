@@ -1,6 +1,7 @@
 import _ from 'underscore';
 import _invoke from '../utils/invoke';
 import buildRegion from '../common/build-region';
+import MarionetteError from '../error';
 import Region from '../region';
 
 // MixinOptions
@@ -126,11 +127,11 @@ export default {
   // Provides access to regions
   // Accepts the region name
   // getRegion('main')
-  getRegion(name) {
+  getRegion(name, options) {
     if (!this._isRendered) {
       this.render();
     }
-    return this._regions[name];
+    return this._regions[name] || this.autoAddRegion(name, options);
   },
 
   // Get all regions
@@ -146,7 +147,7 @@ export default {
   },
 
   showChildView(name, view, ...args) {
-    const region = this.getRegion(name);
+    const region = this.getRegion(name, ...args);
     region.show(view, ...args);
     return view;
   },
@@ -157,6 +158,46 @@ export default {
 
   getChildView(name) {
     return this.getRegion(name).currentView;
-  }
+  },
+
+  // allow the user to provide its own selector
+  getRegionsSelector() {
+    return '[data-region]';
+  },
+
+  // allow the user to provide its own selector
+  getRegionSelector(name) {
+    return `[data-region="${name}"]`;
+  },
+
+  findRegionElement(name) {
+    return this.Dom.findEl(`[data-view-cid="${this.cid}"]${this.getRegionSelector(name)}`);
+  },
+
+  // allow the user to add more
+  // default options from el data attribute
+  getRegionDefaultOption(name, el) {
+    return {el};
+  },
+
+  idRegionElements() {
+    const regionEls = this.Dom.findEl(this.el, this.getRegionSelector());
+    if (regionEls.length > 0) {
+      regionEls.forEach(el => el.setAttribute('data-view-cid', this.cid));
+    }
+  },
+
+  autoAddRegion(name, options) {
+    let regionEl = this.findRegionElement(name);
+
+    if (!regionEl || regionEl.length === 0) {
+      throw new MarionetteError({
+        name: 'NoMatchingRegion',
+        message: 'Cannot find a region named ${name} in the view ${this.cid}'
+      });
+    }
+
+    return this.addRegion(name, _.extend({}, this.getRegionDefaultOption(name, regionEl), options));
+  },
 
 };

@@ -93,6 +93,7 @@ const View = Backbone.View.extend({
 
     this._renderTemplate(template);
     this.bindUIElements();
+    this.idRegionElements();
 
     this._isRendered = true;
     this.triggerMethod('render', this);

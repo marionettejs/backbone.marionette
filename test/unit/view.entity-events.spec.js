@@ -217,4 +217,25 @@ describe('view entity events', function() {
       expect(this.barStub).to.have.been.calledOnce;
     });
   });
+
+  // Fixes https://github.com/marionettejs/backbone.marionette/issues/3527
+  describe('when entity events are added in initialize', function() {
+    it('should not undelegate them', function() {
+      const View = Marionette.View.extend({
+        template: false,
+        initialize() {
+          this.listenTo(this.model, 'foo', this.onFoo);
+        },
+        onFoo: this.sinon.stub()
+      });
+
+      const model = new Backbone.Model();
+
+      const view = new View({ model });
+
+      model.trigger('foo');
+
+      expect(view.onFoo).to.have.been.calledOnce;
+    });
+  });
 });

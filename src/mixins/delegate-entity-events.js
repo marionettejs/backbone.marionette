@@ -7,13 +7,19 @@ import _ from 'underscore';
 export default {
   // Handle `modelEvents`, and `collectionEvents` configuration
   _delegateEntityEvents(model, collection) {
-    this._undelegateEntityEvents(model, collection);
-
     const modelEvents = _.result(this, 'modelEvents');
-    this.bindEvents(model, modelEvents);
+
+    if (modelEvents) {
+      this.unbindEvents(model, modelEvents);
+      this.bindEvents(model, modelEvents);
+    }
 
     const collectionEvents = _.result(this, 'collectionEvents');
-    this.bindEvents(collection, collectionEvents);
+
+    if (collectionEvents) {
+      this.unbindEvents(collection, collectionEvents);
+      this.bindEvents(collection, collectionEvents);
+    }
   },
 
   _undelegateEntityEvents(model, collection) {

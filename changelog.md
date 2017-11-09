@@ -1,3 +1,8 @@
+### v3.5.1 [view commit logs](https://github.com/marionettejs/backbone.marionette/compare/v3.5.0...v3.5.1)
+
+#### Fixes
+* `View` entity events set in `initialize` were being undelegated if `modelEvents` or `collectionEvents` were undefined.
+
 ### v3.5.0 [view commit logs](https://github.com/marionettejs/backbone.marionette/compare/v3.4.4...v3.5.0)
 
 #### Features

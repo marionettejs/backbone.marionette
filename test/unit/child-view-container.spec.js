@@ -31,42 +31,6 @@ describe('#ChildViewContainer', function() {
     });
   });
 
-  describe('#_set', function() {
-    let container;
-    let views;
-    let originalViews;
-
-    beforeEach(function() {
-      views = [
-        new Backbone.View(),
-        new Backbone.View()
-      ];
-
-      container = new ChildViewContainer();
-
-      container._add(new Backbone.View());
-      container._add(new Backbone.View());
-      container._add(new Backbone.View());
-
-      originalViews = container._views;
-
-      container._set(views);
-    });
-
-    it('should replace the contents of _views', function() {
-      expect(container._views[0]).to.equal(views[0]);
-    });
-
-    it('should keep the _views array reference', function() {
-      expect(container._views).to.equal(originalViews);
-    });
-
-    it('should update the container length', function() {
-      expect(container.length).to.equal(2);
-    });
-
-  });
-
   describe('#_add', function() {
     describe('when adding a view that does not have a model', function() {
       let container;
@@ -147,6 +111,42 @@ describe('#ChildViewContainer', function() {
       it('should make the view retrievable by the index', function() {
         expect(foundView).to.equal(view);
       });
+    });
+
+  });
+
+  describe('#_set', function() {
+    let container;
+    let views;
+    let originalViews;
+
+    beforeEach(function() {
+      views = [
+        new Backbone.View(),
+        new Backbone.View()
+      ];
+
+      container = new ChildViewContainer();
+
+      container._add(new Backbone.View());
+      container._add(new Backbone.View());
+      container._add(new Backbone.View());
+
+      originalViews = container._views;
+
+      container._set(views);
+    });
+
+    it('should replace the contents of _views', function() {
+      expect(container._views[0]).to.equal(views[0]);
+    });
+
+    it('should keep the _views array reference', function() {
+      expect(container._views).to.equal(originalViews);
+    });
+
+    it('should update the container length', function() {
+      expect(container.length).to.equal(2);
     });
 
   });

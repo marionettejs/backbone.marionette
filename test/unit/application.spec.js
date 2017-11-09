@@ -1,5 +1,6 @@
 'use strict';
 
+import _ from 'underscore';
 import Application from '../../src/application';
 import View from '../../src/view';
 

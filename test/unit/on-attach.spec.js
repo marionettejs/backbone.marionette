@@ -1,3 +1,7 @@
+import _ from 'underscore';
+import View from '../../src/view';
+import Region from '../../src/region';
+
 describe('onAttach', function() {
   const expectTriggerMethod = (method, target, retval, before = null) => {
     expect(method)
@@ -37,13 +41,12 @@ describe('onAttach', function() {
   });
 
   let sinon;
-  let View;
-  let regionEl;
+  let TestView;
   let region;  // A Region to show our View within
 
   beforeEach(function() {
     sinon = this.sinon;
-    View = Marionette.View.extend(extendAttachMethods(Marionette.View)({
+    TestView = View.extend(extendAttachMethods(View)({
       template: _.template('<header></header><main></main><footer></footer>'),
       regions: {
         header: 'header',
@@ -53,8 +56,8 @@ describe('onAttach', function() {
     }));
     // A Region to show our View within
     this.setFixtures('<div id="region"></div>');
-    regionEl = document.getElementById('region');
-    region = new Marionette.Region({el: regionEl});
+    const regionEl = document.getElementById('region');
+    region = new Region({el: regionEl});
   });
 
   describe('when showing a view into a region of a view without events monitored', function() {
@@ -62,7 +65,7 @@ describe('onAttach', function() {
     let view;
 
     beforeEach(function() {
-      const LayoutView = Marionette.View.extend({
+      const LayoutView = View.extend({
         monitorViewEvents: false,
         el: '#region',
         template: _.template('<div id="child"></div>'),
@@ -74,7 +77,7 @@ describe('onAttach', function() {
       layoutView = new LayoutView();
       layoutView.render();
 
-      view = new View();
+      view = new TestView();
       layoutView.showChildView('child', view);
     });
 
@@ -120,8 +123,8 @@ describe('onAttach', function() {
     let view;
 
     beforeEach(function() {
-      view = new View();
-      detachedRegion = new Marionette.Region({el: document.createElement('div')});
+      view = new TestView();
+      detachedRegion = new Region({el: document.createElement('div')});
       detachedRegion.show(view);
     });
 
@@ -146,7 +149,7 @@ describe('onAttach', function() {
     let view;
 
     beforeEach(function() {
-      view = new View();
+      view = new TestView();
       region.show(view);
     });
 
@@ -193,21 +196,20 @@ describe('onAttach', function() {
 
   describe('when the parent view is initially detached', function() {
     describe('When showing a View with a single level of nested views', function() {
-      let parentView;
       let mainView;
       let footerView;
 
       beforeEach(function() {
-        const ParentView = View.extend({
+        const ParentView = TestView.extend({
           onRender: function() {
-            mainView = new View();
-            footerView = new View();
+            mainView = new TestView();
+            footerView = new TestView();
             this.showChildView('main', mainView);
             this.showChildView('footer', footerView);
           }
         });
 
-        parentView = new ParentView();
+        const parentView = new ParentView();
         region.show(parentView);
       });
 
@@ -239,21 +241,20 @@ describe('onAttach', function() {
     });
 
     describe('When showing a View with a single level of nested views in onAttach', function() {
-      let parentView;
       let mainView;
       let footerView;
 
       beforeEach(function() {
-        const ParentView = View.extend({
+        const ParentView = TestView.extend({
           onAttach: function() {
-            mainView = new View();
-            footerView = new View();
+            mainView = new TestView();
+            footerView = new TestView();
             this.showChildView('main', mainView);
             this.showChildView('footer', footerView);
           }
         });
 
-        parentView = new ParentView();
+        const parentView = new ParentView();
         region.show(parentView);
       });
 
@@ -274,16 +275,16 @@ describe('onAttach', function() {
       let childView;
 
       beforeEach(function() {
-        const GrandparentView = View.extend({
+        const GrandparentView = TestView.extend({
           onRender: function() {
             parentView = new ParentView();
             this.showChildView('main', parentView);
           }
         });
 
-        const ParentView = View.extend({
+        const ParentView = TestView.extend({
           onRender: function() {
-            childView = new View();
+            childView = new TestView();
             this.showChildView('main', childView);
           }
         });
@@ -332,16 +333,15 @@ describe('onAttach', function() {
 
   describe('when the parent view is initially attached', function() {
     describe('When showing a View with a single level of nested views', function() {
-      let parentView;
       let mainView;
       let footerView;
 
       beforeEach(function() {
-        parentView = new View();
+        const parentView = new TestView();
         region.show(parentView);
 
-        mainView = new View();
-        footerView = new View();
+        mainView = new TestView();
+        footerView = new TestView();
         parentView.showChildView('main', mainView);
         parentView.showChildView('footer', footerView);
       });
@@ -363,14 +363,14 @@ describe('onAttach', function() {
       let childView;
 
       beforeEach(function() {
-        const ParentView = View.extend({
+        const ParentView = TestView.extend({
           onRender: function() {
-            childView = new View();
+            childView = new TestView();
             this.showChildView('main', childView);
           }
         });
 
-        grandparentView = new View();
+        grandparentView = new TestView();
         region.show(grandparentView);
 
         parentView = new ParentView();

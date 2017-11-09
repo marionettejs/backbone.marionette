@@ -7,7 +7,7 @@ describe('marionette object', function() {
     let options;
 
     beforeEach(function() {
-      const Object = MnObject.extend({
+      const Obj = MnObject.extend({
         initialize(opts) {
           this.bindEvents(opts.model, this.modelEvents);
         },
@@ -19,7 +19,7 @@ describe('marionette object', function() {
         onBar: this.sinon.stub()
       });
 
-      this.sinon.spy(Object.prototype, '_initRadio');
+      this.sinon.spy(Obj.prototype, '_initRadio');
 
       const model = new Backbone.Model();
 
@@ -30,7 +30,7 @@ describe('marionette object', function() {
         radioRequests: {}
       };
 
-      object = new Object(options);
+      object = new Obj(options);
     });
 
     it('should merge the class options to the object', function() {
@@ -79,11 +79,11 @@ describe('marionette object', function() {
     let object;
 
     beforeEach(function() {
-      const Object = MnObject.extend({
+      const Obj = MnObject.extend({
         onDestroy: this.sinon.stub()
       });
 
-      object = new Object();
+      object = new Obj();
 
       this.sinon.spy(object, 'destroy');
     });

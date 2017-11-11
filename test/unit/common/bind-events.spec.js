@@ -1,5 +1,4 @@
 import * as Marionette from '../../../src/backbone.marionette';
-import MarionetteError from '../../../src/utils/error';
 import deprecate from '../../../src/utils/deprecate';
 
 describe('Marionette.bindEvents', function() {
@@ -138,10 +137,7 @@ describe('Marionette.bindEvents', function() {
     });
 
     it('should error', function() {
-      expect(this.run).to.throw(MarionetteError, new MarionetteError({
-        message: 'Bindings must be an object.',
-        url: 'marionette.functions.html#marionettebindevents'
-      }));
+      expect(this.run).to.throw('Bindings must be an object.');
     });
   });
 });

@@ -1,6 +1,3 @@
-'use strict';
-
-import Error from '../../../src/utils/error';
 import Behavior from '../../../src/behavior';
 import Region from '../../../src/region';
 import View from '../../../src/view';
@@ -172,10 +169,7 @@ describe('Behaviors', function() {
         expect(function() {
           /* eslint-disable no-unused-vars */
           const fooView = new FooView();
-        }).to.throw(
-          Error,
-          new Error('Unable to get behavior class. A Behavior constructor should be passed directly or as behaviorClass property of options')
-        );
+        }).to.throw('Unable to get behavior class. A Behavior constructor should be passed directly or as behaviorClass property of options');
       });
     })
   });
@@ -554,8 +548,8 @@ describe('Behaviors', function() {
         fooView.render();
         fooView.delegateEvents();
 
-        expect(fooBehavior.ui.foo.click.bind(fooView.ui.bar)).to.not.throw(Error);
-        expect(fooView.ui.bar.click.bind(fooView.ui.bar)).to.not.throw(Error);
+        expect(fooBehavior.ui.foo.click.bind(fooView.ui.bar)).to.not.throw();
+        expect(fooView.ui.bar.click.bind(fooView.ui.bar)).to.not.throw();
       });
 
       it('should set the behavior UI element', function() {
@@ -567,14 +561,16 @@ describe('Behaviors', function() {
 
       it('should make the view\'s ui hash available to callbacks', function() {
         fooView = new FooView();
+        fooView.render();
 
-        expect(fooBehavior.testViewUI.bind(fooBehavior)).to.not.throw(Error);
+        expect(fooBehavior.testViewUI.bind(fooBehavior)).to.not.throw();
       });
 
       it('should make the behavior\'s ui hash available to callbacks', function() {
         fooView = new FooView();
+        fooView.render();
 
-        expect(fooBehavior.testBehaviorUI.bind(fooBehavior)).to.not.throw(Error);
+        expect(fooBehavior.testBehaviorUI.bind(fooBehavior)).to.not.throw();
       });
 
       describe('the $el', function() {

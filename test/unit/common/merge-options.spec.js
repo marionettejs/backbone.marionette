@@ -22,7 +22,7 @@ describe('mergeOptions', function() {
       var suite = this;
       expect(function() {
         suite.myView = new suite.MyView();
-      }).to.not.throw(Error);
+      }).to.not.throw();
     });
   });
 

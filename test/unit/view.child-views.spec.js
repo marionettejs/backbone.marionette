@@ -429,7 +429,7 @@ describe('layoutView', function() {
     });
 
     it('should not throw any errors', function() {
-      expect(function() { layoutView.destroy(); }).to.not.throw(Error);
+      expect(function() { layoutView.destroy(); }).to.not.throw();
     });
   });
 

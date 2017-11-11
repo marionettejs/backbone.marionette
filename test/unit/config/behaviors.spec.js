@@ -17,7 +17,7 @@ describe('Behaviors', function() {
       const Baz = Behavior.extend({});
 
       behaviorSpies = {
-        foo: this.sinon.spy(Marionette, 'Behavior'),
+        foo: this.sinon.spy(Behavior),
         bar: this.sinon.spy(Bar),
         baz: this.sinon.spy(Baz)
       };

@@ -36,9 +36,6 @@ describe('view mixin', function() {
 
   describe('when destroying a view', function() {
     beforeEach(function() {
-      this.argumentOne = 'foo';
-      this.argumentTwo = 'bar';
-
       this.view = new Marionette.View();
 
       sinon.spy(this.view, '_removeElement');
@@ -50,17 +47,17 @@ describe('view mixin', function() {
       this.destroyStub = sinon.stub();
       this.view.on('destroy', this.destroyStub);
 
-      this.view.destroy(this.argumentOne, this.argumentTwo);
+      this.view.destroy({foo: 'bar'});
     });
 
     it('should trigger the destroy event', function() {
       expect(this.destroyStub).to.have.been.calledOnce;
     });
 
-    it('should call an onDestroy method with any arguments passed to destroy', function() {
+    it('should call an onDestroy method with options argument passed to destroy', function() {
       expect(this.onDestroyStub)
         .to.have.been.calledOnce
-        .and.calledWith(this.view, this.argumentOne, this.argumentTwo);
+        .and.calledWith(this.view, {foo: 'bar'});
     });
 
     it('should remove the view', function() {
@@ -98,70 +95,6 @@ describe('view mixin', function() {
         this.view.destroy();
         expect(this.view).to.be.have.property('_isDestroyed', true);
       });
-    });
-  });
-
-  describe('when destroying a view and returning false from the onBeforeDestroy method', function() {
-    beforeEach(function() {
-      this.view = new Marionette.View();
-
-      this.removeSpy = sinon.spy(this.view, '_removeElement');
-
-      this.destroyStub = sinon.stub();
-      this.view.on('destroy', this.destroyStub);
-
-      this.onBeforeDestroyStub = sinon.stub().returns(false);
-      this.view.onBeforeDestroy = this.onDestroyStub;
-
-      this.view.destroy();
-    });
-
-    it('should not trigger the destroy event', function() {
-      expect(this.destroyStub).to.have.been.calledOnce;
-    });
-
-    it('should not remove the view', function() {
-      expect(this.removeSpy).to.have.been.calledOnce;
-    });
-
-    it('should not set the view _isDestroyed to true', function() {
-      expect(this.view).to.be.have.property('_isDestroyed', true);
-    });
-  });
-
-  describe('when destroying a view and returning undefined from the onBeforeDestroy method', function() {
-    beforeEach(function() {
-      this.argumentOne = 'foo';
-      this.argumentTwo = 'bar';
-
-      this.view = new Marionette.View();
-
-      this.removeSpy = sinon.spy(this.view, '_removeElement');
-
-      this.destroyStub = sinon.stub();
-      this.view.on('destroy', this.destroyStub);
-
-      this.onBeforeDestroyStub = sinon.stub().returns(false);
-      this.view.onBeforeDestroy = this.onBeforeDestroyStub;
-      sinon.spy(this.view, 'destroy');
-
-      this.view.destroy(this.argumentOne, this.argumentTwo);
-    });
-
-    it('should trigger the destroy event', function() {
-      expect(this.destroyStub).to.have.been.calledOnce.and.calledWith(this.view, this.argumentOne, this.argumentTwo);
-    });
-
-    it('should remove the view', function() {
-      expect(this.removeSpy).to.have.been.calledOnce;
-    });
-
-    it('should set the view _isDestroyed to true', function() {
-      expect(this.view).to.have.property('_isDestroyed', true);
-    });
-
-    it('should return the view', function() {
-      expect(this.view.destroy).to.have.returned(this.view);
     });
   });
 

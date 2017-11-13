@@ -337,17 +337,17 @@ describe('Behaviors Mixin', function() {
       behaviorsInstance._initBehaviors();
     });
 
-    it('should invoke destroy with arguments', function() {
-      behaviorsInstance._destroyBehaviors('foo', 'bar', 'baz');
+    it('should invoke destroy with options argument', function() {
+      behaviorsInstance._destroyBehaviors({foo: 'bar'});
 
       expect(FooBehavior.prototype.destroy)
-        .to.have.been.calledOnce.and.calledWith('foo', 'bar', 'baz');
+        .to.have.been.calledOnce.and.calledWith({foo: 'bar'});
       expect(BarBehavior.prototype.destroy)
-        .to.have.been.calledOnce.and.calledWith('foo', 'bar', 'baz');
+        .to.have.been.calledOnce.and.calledWith({foo: 'bar'});
     });
 
     it('should invoke destroy without arguments', function() {
-      behaviorsInstance._destroyBehaviors([]);
+      behaviorsInstance._destroyBehaviors();
 
       expect(FooBehavior.prototype.destroy).to.have.been.calledOnce;
       expect(BarBehavior.prototype.destroy).to.have.been.calledOnce;

@@ -117,11 +117,11 @@ const ViewMixin = {
   },
 
   // Handle destroying the view and its children.
-  destroy(...args) {
+  destroy(options) {
     if (this._isDestroyed) { return this; }
     const shouldTriggerDetach = this._isAttached && !this._shouldDisableEvents;
 
-    this.triggerMethod('before:destroy', this, ...args);
+    this.triggerMethod('before:destroy', this, options);
     if (shouldTriggerDetach) {
       this.triggerMethod('before:detach', this);
     }
@@ -144,9 +144,9 @@ const ViewMixin = {
     this._isRendered = false;
 
     // Destroy behaviors after _isDestroyed flag
-    this._destroyBehaviors(...args);
+    this._destroyBehaviors(options);
 
-    this.triggerMethod('destroy', this, ...args);
+    this.triggerMethod('destroy', this, options);
 
     this.stopListening();
 

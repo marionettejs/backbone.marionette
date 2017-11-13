@@ -388,13 +388,13 @@ _.extend(Region.prototype, Backbone.Events, CommonMixin, {
     return this._isDestroyed;
   },
 
-  destroy(...args) {
+  destroy(options) {
     if (this._isDestroyed) { return this; }
 
-    this.triggerMethod('before:destroy', this, ...args);
+    this.triggerMethod('before:destroy', this, options);
     this._isDestroyed = true;
 
-    this.reset(...args);
+    this.reset(options);
 
     if (this._name) {
       this._parentView._removeReferences(this._name);
@@ -402,7 +402,7 @@ _.extend(Region.prototype, Backbone.Events, CommonMixin, {
     delete this._parentView;
     delete this._name;
 
-    this.triggerMethod('destroy', this, ...args);
+    this.triggerMethod('destroy', this, options);
     this.stopListening();
 
     return this;

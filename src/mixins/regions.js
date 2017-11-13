@@ -145,9 +145,9 @@ export default {
     return this._getRegions();
   },
 
-  showChildView(name, view, ...args) {
+  showChildView(name, view, options) {
     const region = this.getRegion(name);
-    region.show(view, ...args);
+    region.show(view, options);
     return view;
   },
 

@@ -131,7 +131,12 @@ export default {
     if (!this._isRendered) {
       this.render();
     }
-    return this._regions[name] || this.autoAddRegion(name, options);
+    const region = this._regions[name];
+    if (region && region.el) {
+      return region;
+    } else {
+      return this.autoAddRegion(region, name, options);
+    }
   },
 
   // Get all regions
@@ -187,7 +192,7 @@ export default {
     }
   },
 
-  autoAddRegion(name, options) {
+  autoAddRegion(region, name, options) {
     let regionEl = this.findRegionElement(name);
 
     if (!regionEl || regionEl.length === 0) {
@@ -197,7 +202,21 @@ export default {
       });
     }
 
-    return this.addRegion(name, _.extend({}, this.getRegionDefaultOption(name, regionEl), options));
+    if (region) {
+      region._initEl = region.el = region.options.el = regionEl;
+      region.$el = region.getEl(regionEl);
+    } else {
+      region = this.addRegion(name, _.extend({}, this.getRegionDefaultOption(name, regionEl), options));
+      // temporary fixes missing aggressive reset
+      // https://github.com/marionettejs/backbone.marionette/issues/3540
+      const superReset = region.reset;
+      region.reset = function reset(opts) {
+        superReset.call(region, opts);
+        region.el = null;
+        return region;
+      };
+      return region;
+    }
   },
 
 };

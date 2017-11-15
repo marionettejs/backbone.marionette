@@ -1,69 +1,74 @@
-import * as Marionette from '../../../src/backbone.marionette';
+import { bindRequests } from '../../../src/backbone.marionette';
 
-describe('Marionette.bindRequests', function() {
+describe('bindRequests', function() {
+  let replyFooStub;
+  let replyBarStub;
+  let replyStub;
+  let target;
+  let channel;
 
   beforeEach(function() {
-    this.replyFooStub = this.sinon.stub();
-    this.replyBarStub = this.sinon.stub();
-    this.replyStub = this.sinon.stub();
+    replyFooStub = this.sinon.stub();
+    replyBarStub = this.sinon.stub();
+    replyStub = this.sinon.stub();
 
-    this.target = {
-      replyFoo: this.replyFooStub,
-      replyBar: this.replyBarStub
+    target = {
+      replyFoo: replyFooStub,
+      replyBar: replyBarStub
     };
 
-    this.channel = {
-      reply: this.replyStub
+    channel = {
+      reply: replyStub
     };
   });
 
   describe('when channel isnt passed', function() {
     beforeEach(function() {
-      Marionette.bindRequests(this.target, false, {'foo': 'replyFoo'});
+      bindRequests(target, false, {'foo': 'replyFoo'});
     });
 
     it('shouldnt bind any requests', function() {
-      expect(this.replyStub).not.to.have.been.called;
+      expect(replyStub).not.to.have.been.called;
     });
 
     it('should return the target', function() {
-      expect(Marionette.bindRequests(this.target, false, {'foo': 'replyFoo'})).to.equal(this.target);
+      expect(bindRequests(target, false, {'foo': 'replyFoo'})).to.equal(target);
     });
   });
 
   describe('when bindings isnt passed', function() {
     beforeEach(function() {
-      Marionette.bindRequests(this.target, this.channel, null);
+      bindRequests(target, channel, null);
     });
 
     it('shouldnt bind any requests', function() {
-      expect(this.replyStub).not.to.have.been.called;
+      expect(replyStub).not.to.have.been.called;
     });
 
     it('should return the target', function() {
-      expect(Marionette.bindRequests(this.target, this.channel, null)).to.equal(this.target);
+      expect(bindRequests(target, channel, null)).to.equal(target);
     });
   });
 
   describe('when bindings is an object with one request-handler pair', function() {
     describe('when handler is a function', function() {
       beforeEach(function() {
-        Marionette.bindRequests(this.target, this.channel, {'foo': this.replyFooStub});
+        bindRequests(target, channel, {'foo': replyFooStub});
       });
 
       it('should bind a request to targets handler', function() {
-        expect(this.replyStub).to.have.been.calledOnce.and.calledWith({'foo': this.replyFooStub});
+        expect(replyStub).to.have.been.calledOnce.and.calledWith({'foo': replyFooStub});
       });
     });
 
     describe('when handler is a string', function() {
       describe('when one handler is passed', function() {
         beforeEach(function() {
-          Marionette.bindRequests(this.target, this.channel, {'foo': 'replyFoo'});
+          bindRequests(target, channel, {'foo': 'replyFoo'});
         });
 
         it('should bind a request to targets handler', function() {
-          expect(this.replyStub).to.have.been.calledOnce.and.calledWith({'foo': this.replyFooStub});
+          expect(replyStub).to.have.been.calledOnce.and.calledWith({'foo': replyFooStub});
         });
       });
     });
@@ -71,26 +76,28 @@ describe('Marionette.bindRequests', function() {
 
   describe('when bindings is an object with multiple event-handler pairs', function() {
     beforeEach(function() {
-      Marionette.bindRequests(this.target, this.channel, {
+      bindRequests(target, channel, {
         'foo': 'replyFoo',
         'bar': 'replyBar'
       });
     });
 
     it('should bind both requests to target handlers', function() {
-      expect(this.replyStub).to.have.been.calledOnce.and.calledWith({bar: this.replyBarStub, foo: this.replyFooStub});
+      expect(replyStub).to.have.been.calledOnce.and.calledWith({bar: replyBarStub, foo: replyFooStub});
     });
   });
 
   describe('when bindings is not an object', function() {
+    let run;
+
     beforeEach(function() {
-      this.run = function() {
-        Marionette.bindRequests(this.target, this.channel, 'replyFooStub');
+      run = function() {
+        bindRequests(target, channel, 'replyFooStub');
       }.bind(this);
     });
 
     it('should error', function() {
-      expect(this.run).to.throw('Bindings must be an object.');
+      expect(run).to.throw('Bindings must be an object.');
     });
   });
 

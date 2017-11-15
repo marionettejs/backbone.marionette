@@ -24,7 +24,7 @@ const getOnMethodName = _.memoize(function(event) {
 //
 // `this.triggerMethod("foo:bar")` will trigger the "foo:bar" event and
 // call the "onFooBar" method.
-export default function triggerMethod(event, ...args) {
+export default function triggerMethod(event) {
   // get the method name from the event name
   const methodName = getOnMethodName(event);
   const method = getOption.call(this, methodName);
@@ -33,7 +33,7 @@ export default function triggerMethod(event, ...args) {
   // call the onMethodName if it exists
   if (_.isFunction(method)) {
     // pass all args, except the event name
-    result = method.apply(this, args);
+    result = method.apply(this, _.rest(arguments));
   }
 
   // trigger the event

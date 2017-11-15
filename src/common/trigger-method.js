@@ -33,7 +33,7 @@ export default function triggerMethod(event) {
   // call the onMethodName if it exists
   if (_.isFunction(method)) {
     // pass all args, except the event name
-    result = method.apply(this, _.rest(arguments));
+    result = method.apply(this, _.drop(arguments));
   }
 
   // trigger the event

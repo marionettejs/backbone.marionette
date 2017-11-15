@@ -2,6 +2,7 @@ import Behavior from '../../../src/behavior';
 import Region from '../../../src/region';
 import View from '../../../src/view';
 import CollectionView from '../../../src/collection-view';
+import { bindEvents } from '../../../src/backbone.marionette';
 
 describe('Behaviors', function() {
 
@@ -233,7 +234,7 @@ describe('Behaviors', function() {
         bar: Behavior.extend({initialize: barStub})
       };
 
-      FooView = Marionette.View.extend({
+      FooView = View.extend({
         behaviors: [behaviorSpies.foo]
       });
     });
@@ -263,17 +264,17 @@ describe('Behaviors', function() {
       viewClickStub = this.sinon.stub();
 
       behaviorSpies = {
-        foo: Marionette.Behavior.extend({
+        foo: Behavior.extend({
           events: {
             'click': fooClickStub
           }
         }),
-        bar: Marionette.Behavior.extend({
+        bar: Behavior.extend({
           events: {
             'click': barClickStub
           }
         }),
-        baz: Marionette.Behavior.extend({
+        baz: Behavior.extend({
           events: {
             'click': 'handleClick'
           },
@@ -281,7 +282,7 @@ describe('Behaviors', function() {
         })
       };
 
-      FooView = Marionette.View.extend({
+      FooView = View.extend({
         events: {
           'click': viewClickStub
         },
@@ -337,7 +338,7 @@ describe('Behaviors', function() {
         })
       };
 
-      const FooView = Marionette.View.extend({
+      const FooView = View.extend({
         triggers: {
           'click': 'click:foo:view'
         },
@@ -390,14 +391,14 @@ describe('Behaviors', function() {
 
     beforeEach(function() {
       const behaviorSpies = {
-        foo: Marionette.Behavior.extend({
+        foo: Behavior.extend({
           initialize: function() {
             fooBehavior = this;
           }
         })
       };
 
-      const FooView = Marionette.View.extend({
+      const FooView = View.extend({
         behaviors: [behaviorSpies.foo]
       });
 
@@ -751,7 +752,7 @@ describe('Behaviors', function() {
       handleModelFooChangeStub = this.sinon.stub();
 
       const behaviorSpies = {
-        foo: Marionette.Behavior.extend({
+        foo: Behavior.extend({
           initialize: function() {
             fooBehavior = this;
           },
@@ -826,7 +827,7 @@ describe('Behaviors', function() {
       onRenderStub = this.sinon.stub();
 
       const behaviorSpies = {
-        foo: Marionette.Behavior.extend({
+        foo: Behavior.extend({
           onRender: onRenderStub
         })
       };
@@ -850,7 +851,7 @@ describe('Behaviors', function() {
 
     beforeEach(function() {
       const behaviorSpies = {
-        foo: Marionette.Behavior.extend({
+        foo: Behavior.extend({
           onFoo: function() {
             return 'behavior foo';
           }
@@ -883,10 +884,10 @@ describe('Behaviors', function() {
       listenToStub = this.sinon.stub();
       changeStub = this.sinon.stub();
 
-      behavior = new Marionette.Behavior({}, {});
+      behavior = new Behavior({}, {});
       fooModel = new Backbone.Model();
 
-      Marionette.bindEvents(behavior, fooModel, {
+      bindEvents(behavior, fooModel, {
         'change': changeStub
       });
 
@@ -938,7 +939,7 @@ describe('Behaviors', function() {
       barCollectionSyncStub = this.sinon.stub();
       bazClickStub = this.sinon.stub();
 
-      const BarBehavior = Marionette.Behavior.extend({
+      const BarBehavior = Behavior.extend({
         initialize: function() {
           initializeStub();
           barBehavior = this;
@@ -959,7 +960,7 @@ describe('Behaviors', function() {
       });
 
       const behaviorSpies = {
-        foo: Marionette.Behavior.extend({
+        foo: Behavior.extend({
           initialize: function() {
             fooBehavior = this;
           },

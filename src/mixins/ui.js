@@ -24,19 +24,15 @@ const normalizeUIString = function(uiString, ui) {
 // allows for the use of the @ui. syntax within
 // a given value for regions
 // swaps the @ui with the associated selector
-const normalizeUIValues = function(hash, ui, properties) {
+const normalizeUIValues = function(hash, ui, property) {
   _.each(hash, (val, key) => {
     if (_.isString(val)) {
       hash[key] = normalizeUIString(val, ui);
-    } else if (_.isObject(val) && _.isArray(properties)) {
-      _.extend(val, normalizeUIValues(_.pick(val, properties), ui));
-      /* Value is an object, and we got an array of embedded property names to normalize. */
-      _.each(properties, (property) => {
-        const propertyVal = val[property];
-        if (_.isString(propertyVal)) {
-          val[property] = normalizeUIString(propertyVal, ui);
-        }
-      });
+    } else if (val) {
+      const propertyVal = val[property];
+      if (_.isString(propertyVal)) {
+        val[property] = normalizeUIString(propertyVal, ui);
+      }
     }
   });
   return hash;
@@ -60,9 +56,9 @@ export default {
 
   // normalize the values of passed hash with the views `ui` selectors.
   // `{foo: "@ui.bar"}`
-  normalizeUIValues(hash, properties) {
+  normalizeUIValues(hash, property) {
     const uiBindings = this._getUIBindings();
-    return normalizeUIValues(hash, uiBindings, properties);
+    return normalizeUIValues(hash, uiBindings, property);
   },
 
   _getUIBindings() {

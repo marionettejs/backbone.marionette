@@ -67,8 +67,7 @@ export default {
 
   _getUIBindings() {
     const uiBindings = _.result(this, '_uiBindings');
-    const ui = _.result(this, 'ui');
-    return uiBindings || ui;
+    return uiBindings || _.result(this, 'ui');
   },
 
   // This method binds the elements specified in the "ui" hash inside the view's code with

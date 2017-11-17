@@ -238,7 +238,7 @@ describe('Behaviors Mixin', function() {
       });
 
       it('should return empty object', function() {
-        let result = behaviorsInstance._getBehaviorEvents();
+        const result = behaviorsInstance._getBehaviorEvents();
 
         expect(result).to.have.been.deep.equal({});
       });

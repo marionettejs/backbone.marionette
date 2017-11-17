@@ -3,169 +3,187 @@ import MnObject from '../../../src/object';
 
 describe('Radio Mixin on Marionette.Object', function() {
   'use strict';
+  let RadioObject;
+  let channelFoo;
 
   beforeEach(function() {
-    this.RadioObject = MnObject.extend({
+    RadioObject = MnObject.extend({
       onBar: _.noop,
       getBaz: _.noop
     });
 
-    this.sinon.spy(this.RadioObject.prototype, 'bindEvents');
+    this.sinon.spy(RadioObject.prototype, 'bindEvents');
 
-    this.sinon.spy(this.RadioObject.prototype, 'bindRequests');
+    this.sinon.spy(RadioObject.prototype, 'bindRequests');
 
-    this.channelFoo = Backbone.Radio.channel('foo');
+    channelFoo = Backbone.Radio.channel('foo');
   });
 
   describe('when a channelName is not defined', function() {
+    let radioObject;
+
     beforeEach(function() {
-      this.radioObject = new this.RadioObject();
+      radioObject = new RadioObject();
     });
 
     it('should not have a Radio channel', function() {
-      expect(this.radioObject.getChannel()).to.be.undefined;
+      expect(radioObject.getChannel()).to.be.undefined;
     });
 
     it('should not bind radioEvents', function() {
-      expect(this.radioObject.bindEvents).to.not.have.been.called;
+      expect(radioObject.bindEvents).to.not.have.been.called;
     });
 
     it('should not bind radioRequests', function() {
-      expect(this.radioObject.bindRequests).to.not.have.been.called;
+      expect(radioObject.bindRequests).to.not.have.been.called;
     });
   });
 
   describe('when a channelName is defined', function() {
+    let channelName;
+    let channelNameFunc;
+
     beforeEach(function() {
-      this.channelName = 'foo';
-      this.channelNameFunc = this.sinon.stub().returns(this.channelName);
+      channelName = 'foo';
+      channelNameFunc = this.sinon.stub().returns(channelName);
     });
 
     describe('on the prototype', function() {
-      it('should have the named Radio channel', function() {
-        this.RadioObject.prototype.channelName = this.channelName;
-        this.radioObject = new this.RadioObject();
+      let radioObject;
 
-        expect(this.radioObject.getChannel()).to.eql(this.channelFoo);
+      it('should have the named Radio channel', function() {
+        RadioObject.prototype.channelName = channelName;
+        radioObject = new RadioObject();
+
+        expect(radioObject.getChannel()).to.eql(channelFoo);
       });
     });
 
     describe('as a function', function() {
       it('should have the named Radio channel', function() {
-        this.RadioObject.prototype.channelName = this.channelNameFunc;
-        this.radioObject = new this.RadioObject();
+        RadioObject.prototype.channelName = channelNameFunc;
+        const radioObject = new RadioObject();
 
-        expect(this.radioObject.getChannel()).to.eql(this.channelFoo);
+        expect(radioObject.getChannel()).to.eql(channelFoo);
       });
     });
 
     describe('as an option at instantation', function() {
       it('should have the named Radio channel', function() {
-        this.radioObject = new this.RadioObject({
-          channelName: this.channelName
+        const radioObject = new RadioObject({
+          channelName: channelName
         });
 
-        expect(this.radioObject.getChannel()).to.eql(this.channelFoo);
+        expect(radioObject.getChannel()).to.eql(channelFoo);
       });
     });
   });
 
   describe('when a radioEvents is defined', function() {
-    beforeEach(function() {
-      this.RadioObject.prototype.channelName = 'foo';
+    let radioEvents;
+    let radioEventsFunc;
 
-      this.radioEvents = {'bar': 'onBar'};
-      this.radioEventsFunc = this.sinon.stub().returns(this.radioEvents);
+    beforeEach(function() {
+      RadioObject.prototype.channelName = 'foo';
+
+      radioEvents = {'bar': 'onBar'};
+      radioEventsFunc = this.sinon.stub().returns(radioEvents);
     });
 
     describe('on the prototype', function() {
       it('should bind events to the channel', function() {
-        this.RadioObject.prototype.radioEvents = this.radioEvents;
-        this.radioObject = new this.RadioObject();
+        RadioObject.prototype.radioEvents = radioEvents;
+        const radioObject = new RadioObject();
 
-        expect(this.radioObject.bindEvents).to.have.been.calledOnce
-          .and.to.have.been.calledWith(this.channelFoo, {'bar': 'onBar'});
+        expect(radioObject.bindEvents).to.have.been.calledOnce
+          .and.to.have.been.calledWith(channelFoo, {'bar': 'onBar'});
       });
     });
 
     describe('as a function', function() {
       it('should bind events to the channel', function() {
-        this.RadioObject.prototype.radioEvents = this.radioEventsFunc;
-        this.radioObject = new this.RadioObject();
+        RadioObject.prototype.radioEvents = radioEventsFunc;
+        const radioObject = new RadioObject();
 
-        expect(this.radioObject.bindEvents).to.have.been.calledOnce
-          .and.to.have.been.calledWith(this.channelFoo, {'bar': 'onBar'});
+        expect(radioObject.bindEvents).to.have.been.calledOnce
+          .and.to.have.been.calledWith(channelFoo, {'bar': 'onBar'});
       });
     });
 
     describe('as an option at instantation', function() {
       it('should bind events to the channel', function() {
-        this.radioObject = new this.RadioObject({
-          radioEvents: this.radioEvents
+        const radioObject = new RadioObject({
+          radioEvents: radioEvents
         });
 
-        expect(this.radioObject.bindEvents).to.have.been.calledOnce
-          .and.to.have.been.calledWith(this.channelFoo, {'bar': 'onBar'});
+        expect(radioObject.bindEvents).to.have.been.calledOnce
+          .and.to.have.been.calledWith(channelFoo, {'bar': 'onBar'});
       });
     });
   });
 
   describe('when a radioRequests is defined', function() {
-    beforeEach(function() {
-      this.RadioObject.prototype.channelName = 'foo';
+    let radioRequests;
+    let radioRequestsFunc;
 
-      this.radioRequests = {'baz': 'getBaz'};
-      this.radioRequestsFunc = this.sinon.stub().returns(this.radioRequests);
+    beforeEach(function() {
+      RadioObject.prototype.channelName = 'foo';
+
+      radioRequests = {'baz': 'getBaz'};
+      radioRequestsFunc = this.sinon.stub().returns(radioRequests);
     });
 
     describe('on the prototype', function() {
       it('should bind requests to the channel', function() {
-        this.RadioObject.prototype.radioRequests = this.radioRequests;
-        this.radioObject = new this.RadioObject();
+        RadioObject.prototype.radioRequests = radioRequests;
+        const radioObject = new RadioObject();
 
-        expect(this.radioObject.bindRequests).to.have.been.calledOnce
-          .and.to.have.been.calledWith(this.channelFoo, {'baz': 'getBaz'});
+        expect(radioObject.bindRequests).to.have.been.calledOnce
+          .and.to.have.been.calledWith(channelFoo, {'baz': 'getBaz'});
       });
     });
 
     describe('as a function', function() {
       it('should bind requests to the channel', function() {
-        this.RadioObject.prototype.radioRequests = this.radioRequestsFunc;
-        this.radioObject = new this.RadioObject();
+        RadioObject.prototype.radioRequests = radioRequestsFunc;
+        const radioObject = new RadioObject();
 
-        expect(this.radioObject.bindRequests).to.have.been.calledOnce
-          .and.to.have.been.calledWith(this.channelFoo, {'baz': 'getBaz'});
+        expect(radioObject.bindRequests).to.have.been.calledOnce
+          .and.to.have.been.calledWith(channelFoo, {'baz': 'getBaz'});
       });
     });
 
     describe('as an option at instantation', function() {
       it('should bind requests to the channel', function() {
-        this.radioObject = new this.RadioObject({
-          radioRequests: this.radioRequests
+        const radioObject = new RadioObject({
+          radioRequests: radioRequests
         });
 
-        expect(this.radioObject.bindRequests).to.have.been.calledOnce
-          .and.to.have.been.calledWith(this.channelFoo, {'baz': 'getBaz'});
+        expect(radioObject.bindRequests).to.have.been.calledOnce
+          .and.to.have.been.calledWith(channelFoo, {'baz': 'getBaz'});
       });
     });
   });
 
   describe('when an Object is destroyed', function() {
+    let radioObject;
+    let fooChannel;
+
     beforeEach(function() {
-      this.radioObject = new this.RadioObject({
+      radioObject = new RadioObject({
         channelName: 'foo'
       });
 
-      this.fooChannel = this.radioObject.getChannel();
+      fooChannel = radioObject.getChannel();
 
-      this.sinon.spy(this.fooChannel, 'stopReplying');
+      this.sinon.spy(fooChannel, 'stopReplying');
 
-      this.radioObject.destroy();
+      radioObject.destroy();
     });
 
     it('should stopReplying to the object', function() {
-      expect(this.fooChannel.stopReplying).to.have.been.calledOnce
-        .and.to.have.been.calledWith(null, null, this.radioObject);
+      expect(fooChannel.stopReplying).to.have.been.calledOnce
+        .and.to.have.been.calledWith(null, null, radioObject);
     });
   });
 });

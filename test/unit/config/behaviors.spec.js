@@ -1120,12 +1120,16 @@ describe('Behaviors', function() {
 
     beforeEach(function() {
       behavior = new Behavior({}, new View());
+      this.sinon.spy(behavior, '_deleteEntityEventHandlers');
       this.sinon.spy(behavior, 'destroy');
+      behavior.destroy();
+    });
+
+    it('should delete entity event handlers', function() {
+      expect(behavior._deleteEntityEventHandlers).to.have.been.calledOnce;
     });
 
     it('should return the behavior', function() {
-      behavior.destroy();
-
       expect(behavior.destroy).to.have.returned(behavior);
     });
   });

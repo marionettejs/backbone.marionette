@@ -72,6 +72,8 @@ _.extend(Behavior.prototype, Backbone.Events, CommonMixin, DelegateEntityEventsM
 
     this.view._removeBehavior(this);
 
+    this._deleteEntityEventHandlers();
+
     return this;
   },
 

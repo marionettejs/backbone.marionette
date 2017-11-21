@@ -39,6 +39,7 @@ describe('view mixin', function() {
       this.view = new Marionette.View();
 
       sinon.spy(this.view, '_removeElement');
+      sinon.spy(this.view, '_deleteEntityEventHandlers');
       sinon.spy(this.view, 'destroy');
 
       this.onDestroyStub = sinon.stub();
@@ -62,6 +63,10 @@ describe('view mixin', function() {
 
     it('should remove the view', function() {
       expect(this.view._removeElement).to.have.been.calledOnce;
+    });
+
+    it('should delete entity event handlers', function() {
+      expect(this.view._deleteEntityEventHandlers).to.have.been.calledOnce;
     });
 
     it('should set the view _isDestroyed to true', function() {

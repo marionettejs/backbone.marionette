@@ -146,6 +146,8 @@ const ViewMixin = {
     // Destroy behaviors after _isDestroyed flag
     this._destroyBehaviors(options);
 
+    this._deleteEntityEventHandlers();
+
     this.triggerMethod('destroy', this, options);
 
     this.stopListening();

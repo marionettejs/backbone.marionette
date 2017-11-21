@@ -7,26 +7,33 @@ import _ from 'underscore';
 export default {
   // Handle `modelEvents`, and `collectionEvents` configuration
   _delegateEntityEvents(model, collection) {
-    const modelEvents = _.result(this, 'modelEvents');
-
-    if (modelEvents) {
-      this.unbindEvents(model, modelEvents);
-      this.bindEvents(model, modelEvents);
+    if (model) {
+      this._modelEvents = _.result(this, 'modelEvents');
+      this.bindEvents(model, this._modelEvents);
     }
 
-    const collectionEvents = _.result(this, 'collectionEvents');
-
-    if (collectionEvents) {
-      this.unbindEvents(collection, collectionEvents);
-      this.bindEvents(collection, collectionEvents);
+    if (collection) {
+      this._collectionEvents = _.result(this, 'collectionEvents');
+      this.bindEvents(collection, this._collectionEvents);
     }
   },
 
+  // Remove any previously delegate entity events
   _undelegateEntityEvents(model, collection) {
-    const modelEvents = _.result(this, 'modelEvents');
-    this.unbindEvents(model, modelEvents);
+    if (this._modelEvents) {
+      this.unbindEvents(model, this._modelEvents);
+      delete this._modelEvents;
+    }
 
-    const collectionEvents = _.result(this, 'collectionEvents');
-    this.unbindEvents(collection, collectionEvents);
+    if (this._collectionEvents) {
+      this.unbindEvents(collection, this._collectionEvents);
+      delete this._collectionEvents;
+    }
+  },
+
+  // Remove cached event handlers
+  _deleteEntityEventHandlers() {
+    delete this._modelEvents;
+    delete this._collectionEvents;
   }
 };

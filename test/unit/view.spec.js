@@ -11,6 +11,27 @@ describe('item view', function() {
     this.templateStub = this.sinon.stub().returns(this.template);
   });
 
+  // Fixes https://github.com/marionettejs/backbone.marionette/issues/3527
+  describe('when entity events are added in initialize', function() {
+    it('should not undelegate them', function() {
+      const model = new Backbone.Model();
+
+      const TestView = Marionette.View.extend({
+        template: false,
+        initialize() {
+          this.listenTo(model, 'foo', this.onFoo);
+        },
+        onFoo: this.sinon.stub()
+      });
+
+      const view = new TestView({ model });
+
+      model.trigger('foo');
+
+      expect(view.onFoo).to.have.been.calledOnce;
+    });
+  });
+
   describe('when instantiating a view with a DOM element', function() {
     beforeEach(function() {
       this.setFixtures('<div id="foo"><span class="element">bar</span></div>');

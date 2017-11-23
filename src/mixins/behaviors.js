@@ -47,14 +47,14 @@ export default {
   },
 
   _getBehaviorTriggers() {
-    const triggers = _invoke(this._behaviors, 'getTriggers');
+    const triggers = _invoke(this._behaviors, '_getTriggers');
     return _.reduce(triggers, function(memo, _triggers) {
       return _.extend(memo, _triggers);
     }, {});
   },
 
   _getBehaviorEvents() {
-    const events = _invoke(this._behaviors, 'getEvents');
+    const events = _invoke(this._behaviors, '_getEvents');
     return _.reduce(events, function(memo, _events) {
       return _.extend(memo, _events);
     }, {});

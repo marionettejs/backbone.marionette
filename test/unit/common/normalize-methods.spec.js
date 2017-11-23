@@ -3,24 +3,33 @@ import View from '../../../src/view';
 describe('normalizeMethods', function() {
   'use strict';
 
-  let MyView;
   let view;
-  let hash;
-  let normalizedHash;
 
   beforeEach(function() {
-    MyView = View.extend({
+    const MyView = View.extend({
       foo: this.sinon.stub()
     });
     view = new MyView();
-    hash = {
-      'foo': 'foo',
-      'bar': 'bar'
-    };
-    normalizedHash = view.normalizeMethods(hash);
   });
 
-  describe('when normalizeMethods is called with a hash of functions and strings', function() {
+  describe('when called with no value', function() {
+    it('should return nothing', function() {
+      expect(view.normalizeMethods()).to.be.undefined;
+    });
+  });
+
+  describe('when called with a hash of functions and strings', function() {
+    let normalizedHash;
+    let hash;
+
+    beforeEach(function() {
+      hash = {
+        'foo': 'foo',
+        'bar': 'bar'
+      };
+      normalizedHash = view.normalizeMethods(hash);
+    });
+
     it('should convert the strings that exist as functions to functions', function() {
       expect(normalizedHash).to.have.property('foo');
     });

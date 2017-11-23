@@ -198,6 +198,40 @@ describe('view mixin', function() {
     });
   });
 
+  describe('#delegateEvents', function() {
+    describe('when passing events', function() {
+      let events;
+      let view;
+
+      beforeEach(function() {
+        const View = Marionette.View.extend({
+          events: {
+            'click': 'onClick'
+          },
+          onClick: this.sinon.stub()
+        });
+
+        view = new View();
+
+        events = {
+          'click': this.sinon.stub()
+        };
+
+        view.delegateEvents(events);
+
+        view.$el.trigger('click');
+      });
+
+      it('should delegate the passed events', function() {
+        expect(events.click).to.have.been.calledOnce;
+      });
+
+      it('should not delegate instance events', function() {
+        expect(view.onClick).to.not.have.been.called;
+      });
+    });
+  });
+
   describe('when serializing a model', function() {
     const modelData = {foo: 'bar'};
     let view;
@@ -238,6 +272,8 @@ describe('view mixin', function() {
           'boom': 'onBoom'
         },
 
+        onBoom: this.sinon.stub(),
+
         childViewTriggers: {
           'whack': 'rattle'
         }
@@ -256,7 +292,9 @@ describe('view mixin', function() {
 
         childViewEvents: {
           rattle: 'onRattle'
-        }
+        },
+
+        onRattle: this.sinon.stub()
       });
 
       superView = new SuperView();
@@ -271,11 +309,9 @@ describe('view mixin', function() {
       layoutEventOnHandler = sinon.spy();
       layoutView.onChildviewBoom = layoutEventOnHandler;
 
-      layoutViewOnBoomHandler = sinon.spy();
-      layoutView.onBoom = layoutViewOnBoomHandler;
+      layoutViewOnBoomHandler = layoutView.onBoom;
 
-      superViewOnRattleHandler = this.sinon.spy();
-      superView.onRattle = superViewOnRattleHandler;
+      superViewOnRattleHandler = superView.onRattle;
 
       childEventsFunction = (function() {
         return {
@@ -358,6 +394,7 @@ describe('view mixin', function() {
       beforeEach(function() {
         layoutView.showChildView('child', childView);
         layoutView.childViewEventPrefix = false;
+        layoutView.delegateEvents();
         childView.triggerMethod('boom', 'foo', 'bar');
       });
 
@@ -379,7 +416,7 @@ describe('view mixin', function() {
       });
 
       it('should set childViewEventPrefix to false', function() {
-        expect(_.result(myView, 'childViewEventPrefix')).to.be.false;
+        expect(myView._eventPrefix).to.be.false;
       });
     });
 
@@ -396,7 +433,57 @@ describe('view mixin', function() {
       });
 
       it('should set childViewEventPrefix to "childview"', function() {
-        expect(_.result(myView, 'childViewEventPrefix')).to.equal('childview');
+        expect(myView._eventPrefix).to.equal('childview:');
+      });
+    });
+
+    describe('return values of wrapped methods', function() {
+      let fooView;
+
+      beforeEach(function() {
+        fooView = new Marionette.View();
+      });
+
+      it('destroy should return the view', function() {
+        this.sinon.spy(fooView, 'destroy');
+        fooView.destroy();
+
+        expect(fooView.destroy).to.have.returned(fooView);
+      });
+
+      it('setElement should return the view', function() {
+        this.sinon.spy(fooView, 'setElement');
+        fooView.setElement(fooView.$el);
+
+        expect(fooView.setElement).to.have.returned(fooView);
+      });
+
+      it('delegateEvents should return the view', function() {
+        this.sinon.spy(fooView, 'delegateEvents');
+        fooView.delegateEvents();
+
+        expect(fooView.delegateEvents).to.have.returned(fooView);
+      });
+
+      it('undelegateEvents should return the view', function() {
+        this.sinon.spy(fooView, 'undelegateEvents');
+        fooView.undelegateEvents({});
+
+        expect(fooView.undelegateEvents).to.have.returned(fooView);
+      });
+
+      it('delegateEntityEvents should return the view', function() {
+        this.sinon.spy(fooView, 'delegateEntityEvents');
+        fooView.delegateEntityEvents();
+
+        expect(fooView.delegateEntityEvents).to.have.returned(fooView);
+      });
+
+      it('undelegateEntityEvents should return the view', function() {
+        this.sinon.spy(fooView, 'undelegateEntityEvents');
+        fooView.undelegateEntityEvents({});
+
+        expect(fooView.undelegateEntityEvents).to.have.returned(fooView);
       });
     });
   });

@@ -15,28 +15,24 @@ const ClassOptions = [
   'radioRequests'
 ];
 
-// Object borrows many conventions and utilities from Backbone.
-const MarionetteObject = function(options) {
-  this._setOptions(options);
-  this.mergeOptions(options, ClassOptions);
-  this.cid = _.uniqueId(this.cidPrefix);
-  this._initRadio();
-  this.initialize.apply(this, arguments);
-};
+const MnObject = extend.call(Object, {
+  constructor(options) {
+    Object.prototype.constructor.apply(this, arguments);
+    this._setOptions(options);
+    this.mergeOptions(options, ClassOptions);
+    this.cid = _.uniqueId(this.cidPrefix);
+    this._initRadio();
+    this.initialize.apply(this, arguments);
+  },
 
-MarionetteObject.extend = extend;
-
-// Object Methods
-// --------------
-
-// Ensure it can trigger events with Backbone.Events
-_.extend(MarionetteObject.prototype, Backbone.Events, CommonMixin, DestroyMixin, RadioMixin, {
   cidPrefix: 'mno',
 
   // This is a noop method intended to be overridden
   initialize() {},
 
   triggerMethod
-});
+}, { extend });
 
-export default MarionetteObject;
+_.extend(MnObject.prototype, Backbone.Events, CommonMixin, DestroyMixin, RadioMixin);
+
+export default MnObject;

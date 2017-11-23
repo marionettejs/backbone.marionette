@@ -61,6 +61,7 @@ export {
   View,
   CollectionView,
   MnObject,
+  MnObject as Object,
   Region,
   Behavior,
   Application,

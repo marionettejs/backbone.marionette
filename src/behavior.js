@@ -31,8 +31,7 @@ const Behavior = function(options, view) {
   // to the view.
   this.view = view;
 
-  this._setOptions(options);
-  this.mergeOptions(this.options, ClassOptions);
+  this._setOptions(options, ClassOptions);
   this.cid = _.uniqueId(this.cidPrefix);
 
   // Construct an internal UI hash using

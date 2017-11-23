@@ -44,9 +44,7 @@ const CollectionView = Backbone.View.extend({
 
   // constructor
   constructor(options) {
-    this._setOptions(options);
-
-    this.mergeOptions(options, ClassOptions);
+    this._setOptions(options, ClassOptions);
 
     monitorViewEvents(this);
 

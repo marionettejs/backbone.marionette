@@ -133,6 +133,18 @@ describe('Behaviors Mixin', function() {
         expect(behaviorsInstance._behaviors).to.have.lengthOf(2);
       });
     });
+
+    describe('with invalid option', function() {
+      beforeEach(function() {
+        behaviorsInstance.behaviors = [{foo: 'bar'}];
+      });
+
+      it('should throw an error', function() {
+        expect(function() {
+          behaviorsInstance._initBehaviors()
+        }).to.throw('Unable to get behavior class. A Behavior constructor should be passed directly or as behaviorClass property of options');
+      });
+    })
   });
 
   describe('#_getBehaviorTriggers', function() {
@@ -148,7 +160,7 @@ describe('Behaviors Mixin', function() {
       };
       FooBehavior = Behavior.extend({});
 
-      this.sinon.stub(FooBehavior.prototype, 'getTriggers', function() {
+      this.sinon.stub(FooBehavior.prototype, '_getTriggers', function() {
         if (this.triggers) {
           return this.triggers;
         } else {
@@ -203,7 +215,7 @@ describe('Behaviors Mixin', function() {
       };
       FooBehavior = Behavior.extend({});
 
-      this.sinon.stub(FooBehavior.prototype, 'getEvents', function() {
+      this.sinon.stub(FooBehavior.prototype, '_getEvents', function() {
         if (this.events) {
           return this.events;
         } else {
@@ -437,6 +449,36 @@ describe('Behaviors Mixin', function() {
 
       expect(FooBehavior.prototype.unbindUIElements).to.have.been.calledOnce;
       expect(BarBehavior.prototype.unbindUIElements).to.have.been.calledOnce;
+    });
+  });
+
+  describe('#_triggerEventOnBehaviors', function() {
+    let behaviorsInstance;
+    let FooBehavior;
+    let BarBehavior;
+
+    beforeEach(function() {
+      behaviorsInstance = new Behaviors();
+      FooBehavior = Behavior.extend({
+        onFoo: this.sinon.stub()
+      });
+      BarBehavior = Behavior.extend({
+        onFoo: this.sinon.stub()
+      });
+
+      behaviorsInstance.behaviors = {foo: FooBehavior, bar: BarBehavior};
+      behaviorsInstance._initBehaviors();
+    });
+
+    it('should invoke unbindUIElements', function() {
+      behaviorsInstance._triggerEventOnBehaviors('foo', 'bar');
+
+      expect(FooBehavior.prototype.onFoo)
+        .to.have.been.calledOnce
+        .and.calledWith('bar');
+      expect(BarBehavior.prototype.onFoo)
+        .to.have.been.calledOnce
+        .and.calledWith('bar');
     });
   });
 });

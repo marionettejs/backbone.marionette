@@ -204,14 +204,14 @@ describe('view mixin', function() {
       let view;
 
       beforeEach(function() {
-        const View = Marionette.View.extend({
+        const FooView = View.extend({
           events: {
             'click': 'onClick'
           },
           onClick: this.sinon.stub()
         });
 
-        view = new View();
+        view = new FooView();
 
         events = {
           'click': this.sinon.stub()

@@ -26,8 +26,6 @@ describe('item view', function() {
   // Fixes https://github.com/marionettejs/backbone.marionette/issues/3527
   describe('when entity events are added in initialize', function() {
     it('should not undelegate them', function() {
-      const model = new Backbone.Model();
-
       const TestView = Marionette.View.extend({
         template: false,
         initialize() {

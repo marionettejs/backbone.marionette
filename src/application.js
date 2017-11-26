@@ -20,8 +20,7 @@ const ClassOptions = [
 ];
 
 const Application = function(options) {
-  this._setOptions(options);
-  this.mergeOptions(options, ClassOptions);
+  this._setOptions(options, ClassOptions);
   this.cid = _.uniqueId(this.cidPrefix);
   this._initRegion();
   this._initRadio();

@@ -1,4 +1,5 @@
-import _setOptions from '../utils/set-options';
+import _ from 'underscore';
+
 import getOption from '../common/get-option';
 import mergeOptions from '../common/merge-options';
 import normalizeMethods from '../common/normalize-methods';
@@ -17,7 +18,10 @@ export default {
   // events=>function references/names to a hash of events=>function references
   normalizeMethods,
 
-  _setOptions,
+  _setOptions(options, classOptions) {
+    this.options = _.extend({}, _.result(this, 'options'), options);
+    this.mergeOptions(options, classOptions);
+  },
 
   // A handy way to merge passed-in options onto the instance
   mergeOptions,

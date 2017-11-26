@@ -17,8 +17,7 @@ const ClassOptions = [
 
 // Object borrows many conventions and utilities from Backbone.
 const MarionetteObject = function(options) {
-  this._setOptions(options);
-  this.mergeOptions(options, ClassOptions);
+  this._setOptions(options, ClassOptions);
   this.cid = _.uniqueId(this.cidPrefix);
   this._initRadio();
   this.initialize.apply(this, arguments);

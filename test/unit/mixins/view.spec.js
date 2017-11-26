@@ -51,6 +51,7 @@ describe('view mixin', function() {
       view = new View();
 
       sinon.spy(view, '_removeElement');
+      sinon.spy(view, '_deleteEntityEventHandlers');
       sinon.spy(view, 'destroy');
 
       onDestroyStub = sinon.stub();
@@ -74,6 +75,10 @@ describe('view mixin', function() {
 
     it('should remove the view', function() {
       expect(view._removeElement).to.have.been.calledOnce;
+    });
+
+    it('should delete entity event handlers', function() {
+      expect(view._deleteEntityEventHandlers).to.have.been.calledOnce;
     });
 
     it('should set the view _isDestroyed to true', function() {

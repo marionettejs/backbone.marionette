@@ -21,8 +21,8 @@ const ClassOptions = [
 ];
 
 const Region = function(options) {
-  this._setOptions(options);
-  this.mergeOptions(options, ClassOptions);
+  this._setOptions(options, ClassOptions);
+
   this.cid = _.uniqueId(this.cidPrefix);
 
   // getOption necessary because options.el may be passed as undefined

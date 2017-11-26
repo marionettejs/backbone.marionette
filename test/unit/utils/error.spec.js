@@ -7,28 +7,32 @@ describe('MarionetteError', function() {
   });
 
   describe('when passed options', function() {
+    let error;
+
     beforeEach(function() {
-      this.error = new MarionetteError({
+      error = new MarionetteError({
         name: 'Foo',
         message: 'Bar'
       });
     });
 
     it('should contain the correct properties', function() {
-      expect(this.error).to.contain({
+      expect(error).to.contain({
         name: 'Foo',
         message: 'Bar'
       });
     });
 
     it('should output the correct string', function() {
-      expect(this.error.toString()).to.equal('Foo: Bar See: http://marionettejs.com/docs/v' + VERSION + '/');
+      expect(error.toString()).to.equal('Foo: Bar See: http://marionettejs.com/docs/v' + VERSION + '/');
     });
   });
 
   describe('when passed options with a url', function() {
+    let error;
+
     beforeEach(function() {
-      this.error = new MarionetteError({
+      error = new MarionetteError({
         name: 'Foo',
         message: 'Bar',
         url: 'Baz'
@@ -36,7 +40,7 @@ describe('MarionetteError', function() {
     });
 
     it('should contain the correct properties', function() {
-      expect(this.error).to.contain({
+      expect(error).to.contain({
         name: 'Foo',
         message: 'Bar',
         url: 'http://marionettejs.com/docs/v' + VERSION + '/Baz'
@@ -44,13 +48,16 @@ describe('MarionetteError', function() {
     });
 
     it('should output the correct string', function() {
-      expect(this.error.toString()).to.equal('Foo: Bar See: http://marionettejs.com/docs/v' + VERSION + '/Baz');
+      expect(error.toString()).to.equal('Foo: Bar See: http://marionettejs.com/docs/v' + VERSION + '/Baz');
     });
   });
 
   describe('when passed valid error properties', function() {
+    let props;
+    let error;
+
     beforeEach(function() {
-      this.props = {
+      props = {
         description: 'myDescription',
         fileName: 'myFileName',
         lineNumber: 'myLineNumber',
@@ -58,26 +65,29 @@ describe('MarionetteError', function() {
         message: 'myMessage',
         number: 'myNumber'
       };
-      this.error = new MarionetteError(this.props);
+      error = new MarionetteError(props);
     });
 
     it('should contain all the valid error properties', function() {
-      expect(this.error).to.contain(this.props);
+      expect(error).to.contain(props);
     });
   });
 
   describe('when passed invalid error properties', function() {
+    let props;
+    let error;
+
     beforeEach(function() {
-      this.props = {
+      props = {
         foo: 'myFoo',
         bar: 'myBar',
         baz: 'myBaz'
       };
-      this.error = new MarionetteError(this.props);
+      error = new MarionetteError(props);
     });
 
     it('should not contain invalid properties', function() {
-      expect(this.error).not.to.contain(this.props);
+      expect(error).not.to.contain(props);
     });
   });
 

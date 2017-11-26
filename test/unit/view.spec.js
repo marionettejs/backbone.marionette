@@ -1,20 +1,53 @@
+import _ from 'underscore';
+import Backbone from 'backbone';
+import Region from '../../src/region';
+import View from '../../src/view';
+
 describe('item view', function() {
   'use strict';
 
-  beforeEach(function() {
-    this.modelData = {foo: 'bar'};
-    this.collectionData = [{foo: 'bar'}, {foo: 'baz'}];
-    this.model = new Backbone.Model(this.modelData);
-    this.collection = new Backbone.Collection(this.collectionData);
+  let modelData;
+  let collectionData;
+  let model;
+  let collection;
+  let template;
+  let templateStub;
 
-    this.template = 'foobar';
-    this.templateStub = this.sinon.stub().returns(this.template);
+  beforeEach(function() {
+    modelData = {foo: 'bar'};
+    collectionData = [{foo: 'bar'}, {foo: 'baz'}];
+    model = new Backbone.Model(modelData);
+    collection = new Backbone.Collection(collectionData);
+
+    template = 'foobar';
+    templateStub = this.sinon.stub().returns(template);
+  });
+
+  // Fixes https://github.com/marionettejs/backbone.marionette/issues/3527
+  describe('when entity events are added in initialize', function() {
+    it('should not undelegate them', function() {
+      const TestView = Marionette.View.extend({
+        template: false,
+        initialize() {
+          this.listenTo(model, 'foo', this.onFoo);
+        },
+        onFoo: this.sinon.stub()
+      });
+
+      const view = new TestView({ model });
+
+      model.trigger('foo');
+
+      expect(view.onFoo).to.have.been.calledOnce;
+    });
   });
 
   describe('when instantiating a view with a DOM element', function() {
+    let view;
+
     beforeEach(function() {
       this.setFixtures('<div id="foo"><span class="element">bar</span></div>');
-      this.view = new Marionette.View({
+      view = new View({
         el: '#foo',
         ui: {
           element: '.element'
@@ -23,424 +56,481 @@ describe('item view', function() {
     });
 
     it('should be rendered', function() {
-      expect(this.view.isRendered()).to.be.true;
+      expect(view.isRendered()).to.be.true;
     });
 
     it('should be attached', function() {
-      expect(this.view.isAttached()).to.be.true;
+      expect(view.isAttached()).to.be.true;
     });
 
     it('should contain the DOM content', function() {
-      expect(this.view.el.innerHTML).to.contain('<span class="element">bar</span>');
+      expect(view.el.innerHTML).to.contain('<span class="element">bar</span>');
     });
 
     it('should bind ui elements', function() {
-      expect(this.view.ui.element.text()).to.contain('bar');
+      expect(view.ui.element.text()).to.contain('bar');
     });
   });
 
   describe('when instantiating a view with a non existing DOM element', function() {
+    let view;
+
     beforeEach(function() {
       this.setFixtures('<div id="foo"><span class="element">bar</span></div>');
-      this.view = new Marionette.View({
+      view = new View({
         el: '#nonexistent'
       });
     });
 
     it('should not be rendered', function() {
-      expect(this.view.isRendered()).to.be.false;
+      expect(view.isRendered()).to.be.false;
     });
 
     it('should not be attached', function() {
-      expect(this.view.isAttached()).to.be.false;
+      expect(view.isAttached()).to.be.false;
     });
   });
 
   describe('when rendering without a valid template', function() {
+    let view;
+
     beforeEach(function() {
-      this.view = new Marionette.View();
+      view = new View();
     });
 
     it('should throw an exception because there was no valid template', function() {
-      var self = this;
-      expect(function() {self.view.render()}).to.throw();
+      expect(function() {view.render()}).to.throw();
     });
   });
 
   describe('when rendering with a false template', function() {
-    beforeEach(function() {
-      this.onBeforeRenderStub = this.sinon.stub();
-      this.onRenderStub = this.sinon.stub();
+    let onBeforeRenderStub;
+    let onRenderStub;
+    let TestView;
+    let marionetteRendererSpy;
+    let serializeDataSpy;
+    let mixinTemplateContextSpy;
+    let attachElContentSpy;
+    let bindUIElementsSpy;
+    let view;
 
-      this.View = Marionette.View.extend({
+    beforeEach(function() {
+      onBeforeRenderStub = this.sinon.stub();
+      onRenderStub = this.sinon.stub();
+
+      TestView = View.extend({
         template: false,
-        onBeforeRender: this.onBeforeRenderStub,
-        onRender: this.onRenderStub,
+        onBeforeRender: onBeforeRenderStub,
+        onRender: onRenderStub,
 
         ui: {
           testElement: '.test-element'
         }
       });
 
-      this.view = new this.View();
+      view = new TestView();
 
-      this.marionetteRendererSpy = this.sinon.spy(this.view, '_renderHtml');
-      this.serializeDataSpy = this.sinon.spy(this.view, 'serializeData');
-      this.mixinTemplateContextSpy = this.sinon.spy(this.view, 'mixinTemplateContext');
-      this.attachElContentSpy = this.sinon.spy(this.view, 'attachElContent');
-      this.bindUIElementsSpy = this.sinon.spy(this.view, 'bindUIElements');
+      marionetteRendererSpy = this.sinon.spy(view, '_renderHtml');
+      serializeDataSpy = this.sinon.spy(view, 'serializeData');
+      mixinTemplateContextSpy = this.sinon.spy(view, 'mixinTemplateContext');
+      attachElContentSpy = this.sinon.spy(view, 'attachElContent');
+      bindUIElementsSpy = this.sinon.spy(view, 'bindUIElements');
 
-      this.view.render();
+      view.render();
     });
 
     it('should not throw an exception for a false template', function() {
-      expect(this.view.render.bind(this.view)).to.not.throw();
+      expect(view.render.bind(view)).to.not.throw();
     });
 
     it('should not call an "onBeforeRender" method on the view', function() {
-      expect(this.onBeforeRenderStub).to.not.have.been.called;
+      expect(onBeforeRenderStub).to.not.have.been.called;
     });
 
     it('should not call an "onRender" method on the view', function() {
-      expect(this.onRenderStub).to.not.have.been.called;
+      expect(onRenderStub).to.not.have.been.called;
     });
 
     it('should not call bindUIElements', function() {
-      expect(this.bindUIElementsSpy).to.not.have.been.called;
+      expect(bindUIElementsSpy).to.not.have.been.called;
     });
 
     it('should not add in data or template context', function() {
-      expect(this.serializeDataSpy).to.not.have.been.called;
-      expect(this.mixinTemplateContextSpy).to.not.have.been.called;
+      expect(serializeDataSpy).to.not.have.been.called;
+      expect(mixinTemplateContextSpy).to.not.have.been.called;
     });
 
     it('should not render a template', function() {
-      expect(this.marionetteRendererSpy).to.not.have.been.called;
+      expect(marionetteRendererSpy).to.not.have.been.called;
     });
 
     it('should not attach any html content', function() {
-      expect(this.attachElContentSpy).to.not.have.been.called;
+      expect(attachElContentSpy).to.not.have.been.called;
     });
 
     it('should not claim isRendered', function() {
-      expect(this.view.isRendered()).to.be.false;
+      expect(view.isRendered()).to.be.false;
     });
 
     describe('and there is prerendered content', function() {
+      let elView;
+
       beforeEach(function() {
         this.setFixtures('<div id="foo">bar</div>');
-        this.elView = new this.View({ el: '#foo' });
+        elView = new TestView({ el: '#foo' });
       });
 
       it('should stay rendered', function() {
-        expect(this.elView.isRendered()).to.be.true;
+        expect(elView.isRendered()).to.be.true;
       });
     });
   });
 
   describe('when rendering with a overridden attachElContent', function() {
+    let attachElContentStub;
+    let TestView;
+    let itemView;
+
     beforeEach(function() {
-      this.attachElContentStub = this.sinon.stub();
+      attachElContentStub = this.sinon.stub();
 
-      this.View = Marionette.View.extend({
-        template: this.templateStub,
-        attachElContent: this.attachElContentStub
+      TestView = View.extend({
+        template: templateStub,
+        attachElContent: attachElContentStub
       });
-      this.sinon.spy(this.View.prototype, '_renderHtml');
+      this.sinon.spy(TestView.prototype, '_renderHtml');
 
-      this.itemView = new this.View();
-      this.itemView.render();
+      itemView = new TestView();
+      itemView.render();
     });
 
     it('should render according to the custom attachElContent logic', function() {
-      expect(this.attachElContentStub).to.have.been.calledOnce.and.calledWith(this.template);
+      expect(attachElContentStub).to.have.been.calledOnce.and.calledWith(template);
     });
 
     it('should pass template stub, data and view renderer`', function() {
-      expect(this.itemView._renderHtml).to.have.been.calledWith(this.templateStub, {});
+      expect(itemView._renderHtml).to.have.been.calledWith(templateStub, {});
     });
   });
 
   describe('when rendering', function() {
+    let onBeforeRenderStub;
+    let onRenderStub;
+    let TestView;
+    let view;
+    let triggerSpy;
+    let attachElContentSpy;
+
     beforeEach(function() {
-      this.onBeforeRenderStub = this.sinon.spy(function() {
+      onBeforeRenderStub = this.sinon.spy(function() {
         return this.isRendered();
       });
-      this.onRenderStub = this.sinon.spy(function() {
+      onRenderStub = this.sinon.spy(function() {
         return this.isRendered();
       });
 
-      this.View = Marionette.View.extend({
-        template: this.templateStub,
-        onBeforeRender: this.onBeforeRenderStub,
-        onRender: this.onRenderStub
+      TestView = View.extend({
+        template: templateStub,
+        onBeforeRender: onBeforeRenderStub,
+        onRender: onRenderStub
       });
 
-      this.view = new this.View();
-      this.triggerSpy = this.sinon.spy(this.view, 'trigger');
-      this.attachElContentSpy = this.sinon.spy(this.view, 'attachElContent');
-      this.view.render();
+      view = new TestView();
+      triggerSpy = this.sinon.spy(view, 'trigger');
+      attachElContentSpy = this.sinon.spy(view, 'attachElContent');
+      view.render();
     });
 
     it('should have an isAttached method which returns if the view is attached or not', function() {
-      expect(this.view.isAttached()).to.be.equal(false);
+      expect(view.isAttached()).to.be.equal(false);
     });
 
     it('should call a "onBeforeRender" method on the view', function() {
-      expect(this.onBeforeRenderStub).to.have.been.calledOnce;
+      expect(onBeforeRenderStub).to.have.been.calledOnce;
     });
 
     it('should call an "onRender" method on the view', function() {
-      expect(this.onRenderStub).to.have.been.calledOnce;
+      expect(onRenderStub).to.have.been.calledOnce;
     });
 
     it('should call "onBeforeRender" before "onRender"', function() {
-      expect(this.onBeforeRenderStub).to.have.been.calledBefore(this.onRenderStub);
+      expect(onBeforeRenderStub).to.have.been.calledBefore(onRenderStub);
     });
 
     it('should not be rendered when "onBeforeRender" is called', function() {
-      expect(this.onBeforeRenderStub.lastCall.returnValue).not.to.be.ok;
+      expect(onBeforeRenderStub.lastCall.returnValue).not.to.be.ok;
     });
 
     it('should be rendered when "onRender" is called', function() {
-      expect(this.onRenderStub.lastCall.returnValue).to.be.true;
+      expect(onRenderStub.lastCall.returnValue).to.be.true;
     });
 
     it('should trigger a before:render event', function() {
-      expect(this.triggerSpy).to.have.been.calledWith('before:render', this.view);
+      expect(triggerSpy).to.have.been.calledWith('before:render', view);
     });
 
     it('should trigger a rendered event', function() {
-      expect(this.triggerSpy).to.have.been.calledWith('render', this.view);
+      expect(triggerSpy).to.have.been.calledWith('render', view);
     });
 
     it('should mark as rendered', function() {
-      expect(this.view).to.have.property('_isRendered', true);
+      expect(view).to.have.property('_isRendered', true);
     });
 
     it('should call attachElContent', function() {
-      expect(this.attachElContentSpy).to.have.been.calledOnce.and.calledWith(this.template);
+      expect(attachElContentSpy).to.have.been.calledOnce.and.calledWith(template);
     });
   });
 
   describe('when rendering with a template that returns an empty string', function() {
+    let view;
+    let attachElContentSpy;
+
     beforeEach(function() {
-      this.view = new Marionette.View({
+      view = new View({
         template: function() { return '' }
       });
-      this.attachElContentSpy = this.sinon.spy(this.view, 'attachElContent');
-      this.view.render();
+      attachElContentSpy = this.sinon.spy(view, 'attachElContent');
+      view.render();
     });
 
     it('should call attachElContent', function() {
-      expect(this.attachElContentSpy).to.have.been.calledOnce.and.calledWith('');
+      expect(attachElContentSpy).to.have.been.calledOnce.and.calledWith('');
     });
   });
 
   describe('when rendering with a template that returns undefined', function() {
+    let view;
+    let attachElContentSpy;
+
     beforeEach(function() {
-      this.view = new Marionette.View({
+      view = new View({
         template: _.noop
       });
-      this.attachElContentSpy = this.sinon.spy(this.view, 'attachElContent');
-      this.view.render();
+      attachElContentSpy = this.sinon.spy(view, 'attachElContent');
+      view.render();
     });
 
     it('should not call attachElContent', function() {
-      expect(this.attachElContentSpy).to.not.have.been.called;
+      expect(attachElContentSpy).to.not.have.been.called;
     });
   });
 
   describe('when an item view has a model and is rendered', function() {
+    let view;
+    let serializeDataSpy;
+
     beforeEach(function() {
-      this.view = new Marionette.View({
-        template: this.templateStub,
-        model: this.model
+      view = new View({
+        template: templateStub,
+        model: model
       });
 
-      this.serializeDataSpy = this.sinon.spy(this.view, 'serializeData');
-      this.view.render();
+      serializeDataSpy = this.sinon.spy(view, 'serializeData');
+      view.render();
     });
 
     it('should serialize the model', function() {
-      expect(this.serializeDataSpy).to.have.been.calledOnce;
+      expect(serializeDataSpy).to.have.been.calledOnce;
     });
 
     it('should render the template with the serialized model', function() {
-      expect(this.templateStub).to.have.been.calledWith(this.modelData);
+      expect(templateStub).to.have.been.calledWith(modelData);
     });
   });
 
   describe('when an item view has a collection and is rendered', function() {
+    let view;
+    let serializeDataSpy;
+
     beforeEach(function() {
-      this.view = new Marionette.View({
-        template: this.templateStub,
-        collection: this.collection
+      view = new View({
+        template: templateStub,
+        collection: collection
       });
 
-      this.serializeDataSpy = this.sinon.spy(this.view, 'serializeData');
-      this.view.render();
+      serializeDataSpy = this.sinon.spy(view, 'serializeData');
+      view.render();
     });
 
     it('should serialize the collection', function() {
-      expect(this.serializeDataSpy).to.have.been.calledOnce;
+      expect(serializeDataSpy).to.have.been.calledOnce;
     });
 
     it('should render the template with the serialized collection', function() {
-      expect(this.templateStub).to.have.been.calledWith({items: this.collectionData});
+      expect(templateStub).to.have.been.calledWith({items: collectionData});
     });
   });
 
   describe('when an item view has a model and collection, and is rendered', function() {
+    let view;
+    let serializeDataSpy;
+
     beforeEach(function() {
-      this.view = new Marionette.View({
-        template: this.templateStub,
-        model: this.model,
-        collection: this.collection
+      view = new View({
+        template: templateStub,
+        model: model,
+        collection: collection
       });
 
-      this.serializeDataSpy = this.sinon.spy(this.view, 'serializeData');
-      this.view.render();
+      serializeDataSpy = this.sinon.spy(view, 'serializeData');
+      view.render();
     });
 
     it('should serialize the model', function() {
-      expect(this.serializeDataSpy).to.have.been.calledOnce;
+      expect(serializeDataSpy).to.have.been.calledOnce;
     });
 
     it('should render the template with the serialized model', function() {
-      expect(this.templateStub).to.have.been.calledWith(this.modelData);
+      expect(templateStub).to.have.been.calledWith(modelData);
     });
   });
 
   describe('when destroying an item view', function() {
+    let onBeforeDestroyStub;
+    let onDestroyStub;
+    let TestView;
+    let view;
+    let removeSpy;
+    let stopListeningSpy;
+    let triggerSpy;
+
     beforeEach(function() {
-      this.onBeforeDestroyStub = this.sinon.spy(function() {
+      onBeforeDestroyStub = this.sinon.spy(function() {
         return {
           isRendered: this.isRendered(),
           isDestroyed: this.isDestroyed()
         };
       });
-      this.onDestroyStub = this.sinon.spy(function() {
+      onDestroyStub = this.sinon.spy(function() {
         return {
           isRendered: this.isRendered(),
           isDestroyed: this.isDestroyed()
         };
       });
 
-      this.View = Marionette.View.extend({
-        template: this.templateStub,
-        onBeforeDestroy: this.onBeforeDestroyStub,
-        onDestroy: this.onDestroyStub
+      TestView = View.extend({
+        template: templateStub,
+        onBeforeDestroy: onBeforeDestroyStub,
+        onDestroy: onDestroyStub
       });
 
-      this.view = new this.View();
-      this.view.render();
+      view = new TestView();
+      view.render();
 
-      this.removeSpy = this.sinon.spy(this.view, '_removeElement');
-      this.stopListeningSpy = this.sinon.spy(this.view, 'stopListening');
-      this.triggerSpy = this.sinon.spy(this.view, 'trigger');
+      removeSpy = this.sinon.spy(view, '_removeElement');
+      stopListeningSpy = this.sinon.spy(view, 'stopListening');
+      triggerSpy = this.sinon.spy(view, 'trigger');
 
-      this.sinon.spy(this.view, 'destroy');
-      this.view.destroy();
+      this.sinon.spy(view, 'destroy');
+      view.destroy();
     });
 
     it('should remove the views EL from the DOM', function() {
-      expect(this.removeSpy).to.have.been.calledOnce;
+      expect(removeSpy).to.have.been.calledOnce;
     });
 
     it('should unbind any listener to custom view events', function() {
-      expect(this.stopListeningSpy).to.have.been.calledOnce;
+      expect(stopListeningSpy).to.have.been.calledOnce;
     });
 
     it('should trigger "before:destroy"', function() {
-      expect(this.triggerSpy).to.have.been.calledWith('before:destroy');
+      expect(triggerSpy).to.have.been.calledWith('before:destroy');
     });
 
     it('should trigger "destroy"', function() {
-      expect(this.triggerSpy).to.have.been.calledWith('destroy');
+      expect(triggerSpy).to.have.been.calledWith('destroy');
     });
 
     it('should call "onBeforeDestroy" if provided', function() {
-      expect(this.onBeforeDestroyStub).to.have.been.called;
+      expect(onBeforeDestroyStub).to.have.been.called;
     });
 
     it('should call "onDestroy" if provided', function() {
-      expect(this.onDestroyStub).to.have.been.called;
+      expect(onDestroyStub).to.have.been.called;
     });
 
     it('should return the view', function() {
-      expect(this.view.destroy).to.have.returned(this.view);
+      expect(view.destroy).to.have.returned(view);
     });
 
     it('should not be destroyed when "onBeforeDestroy" is called', function() {
-      expect(this.onBeforeDestroyStub.lastCall.returnValue.isDestroyed).not.to.be.ok;
+      expect(onBeforeDestroyStub.lastCall.returnValue.isDestroyed).not.to.be.ok;
     });
 
     it('should be rendered when "onBeforeDestroy" is called', function() {
-      expect(this.onBeforeDestroyStub.lastCall.returnValue.isRendered).to.be.true;
+      expect(onBeforeDestroyStub.lastCall.returnValue.isRendered).to.be.true;
     });
 
     it('should be destroyed when "onDestroy" is called', function() {
-      expect(this.onDestroyStub.lastCall.returnValue.isDestroyed).to.be.true;
+      expect(onDestroyStub.lastCall.returnValue.isDestroyed).to.be.true;
     });
 
     it('should not be rendered when "onDestroy" is called', function() {
-      expect(this.onDestroyStub.lastCall.returnValue.isRendered).to.be.false;
+      expect(onDestroyStub.lastCall.returnValue.isRendered).to.be.false;
     });
 
     it('should be marked destroyed', function() {
-      expect(this.view).to.have.property('_isDestroyed', true);
+      expect(view).to.have.property('_isDestroyed', true);
     });
 
     it('should be marked not rendered', function() {
-      expect(this.view).to.have.property('_isRendered', false);
+      expect(view).to.have.property('_isRendered', false);
     });
   });
 
   describe('when re-rendering an View that is already shown', function() {
-    beforeEach(function() {
-      this.onDomRefreshStub = this.sinon.stub();
+    let onDomRefreshStub;
+    let TestView;
+    let view;
+    let region;
+    let TestRegion;
 
-      this.View = Marionette.View.extend({
-        template: this.templateStub,
-        onDomRefresh: this.onDomRefreshStub
+    beforeEach(function() {
+      onDomRefreshStub = this.sinon.stub();
+
+      TestView = View.extend({
+        template: templateStub,
+        onDomRefresh: onDomRefreshStub
       });
 
       this.setFixtures('<div id="region"></div>');
-      this.Region = Marionette.Region.extend({
+      TestRegion = Region.extend({
         el: '#region'
       });
 
-      this.view = new this.View();
-      this.region = new this.Region();
-      this.region.show(this.view);
-      this.view.render();
+      view = new TestView();
+      region = new TestRegion();
+      region.show(view);
+      view.render();
     });
 
     it('should trigger a dom:refresh event', function() {
-      expect(this.onDomRefreshStub).to.have.been.calledTwice;
+      expect(onDomRefreshStub).to.have.been.calledTwice;
     });
   });
 
   describe('has a valid inheritance chain back to Backbone.View', function() {
+    let constructor;
+
     beforeEach(function() {
-      this.constructor = this.sinon.spy(Backbone.View.prototype, 'constructor');
+      constructor = this.sinon.spy(Backbone.View.prototype, 'constructor');
     });
 
     it('calls the parent Backbone.Views constructor function on instantiation with the proper parameters', function() {
       const options = {foo: 'bar'};
       const customParam = {foo: 'baz'};
 
-      this.layoutView = new Marionette.View(options, customParam);
-      expect(this.constructor).to.have.been.calledWith(options, customParam);
+      new View(options, customParam);
+      expect(constructor).to.have.been.calledWith(options, customParam);
     });
   });
 
   describe('when instantiating a View', function() {
     it('should trigger `initialize` on the behaviors', function() {
-      this.sinon.stub(Marionette.View.prototype, '_triggerEventOnBehaviors');
+      this.sinon.stub(View.prototype, '_triggerEventOnBehaviors');
 
-      const myView = new Marionette.View();
+      const myView = new View();
 
       // _triggerEventOnBehaviors comes from Behaviors mixin
       expect(myView._triggerEventOnBehaviors)
@@ -449,80 +539,84 @@ describe('item view', function() {
   });
 
   describe('when serializing view data', function() {
-    beforeEach(function() {
-      this.modelData = {foo: 'bar'};
-      this.collectionData = [{foo: 'bar'}, {foo: 'baz'}];
+    let itemView;
 
-      this.itemView = new Marionette.View();
-      this.sinon.spy(this.itemView, 'serializeModel');
-      this.sinon.spy(this.itemView, 'serializeCollection');
+    beforeEach(function() {
+      modelData = {foo: 'bar'};
+      collectionData = [{foo: 'bar'}, {foo: 'baz'}];
+
+      itemView = new View();
+      this.sinon.spy(itemView, 'serializeModel');
+      this.sinon.spy(itemView, 'serializeCollection');
     });
 
     it('should return an empty object without data', function() {
-      expect(this.itemView.serializeData()).to.be.undefined;
+      expect(itemView.serializeData()).to.be.undefined;
     });
 
     describe('and the view has a model', function() {
       beforeEach(function() {
-        this.itemView.model = new Backbone.Model(this.modelData);
-        this.itemView.serializeData();
+        itemView.model = new Backbone.Model(modelData);
+        itemView.serializeData();
       });
 
       it('should call serializeModel', function() {
-        expect(this.itemView.serializeModel).to.have.been.calledOnce;
+        expect(itemView.serializeModel).to.have.been.calledOnce;
       });
 
       it('should not call serializeCollection', function() {
-        expect(this.itemView.serializeCollection).to.not.have.been.called;
+        expect(itemView.serializeCollection).to.not.have.been.called;
       });
     });
 
     describe('and the view only has a collection', function() {
       beforeEach(function() {
-        this.itemView.collection = new Backbone.Collection(this.collectionData);
-        this.itemView.serializeData();
+        itemView.collection = new Backbone.Collection(collectionData);
+        itemView.serializeData();
       });
 
       it('should call serializeCollection', function() {
-        expect(this.itemView.serializeCollection).to.have.been.calledOnce;
+        expect(itemView.serializeCollection).to.have.been.calledOnce;
       });
 
       it('should not call serializeModel', function() {
-        expect(this.itemView.serializeModel).to.not.have.been.called;
+        expect(itemView.serializeModel).to.not.have.been.called;
       });
     });
 
     describe('and the view has a collection and a model', function() {
       beforeEach(function() {
-        this.itemView.model = new Backbone.Model(this.modelData);
-        this.itemView.collection = new Backbone.Collection(this.collectionData);
-        this.itemView.serializeData();
+        itemView.model = new Backbone.Model(modelData);
+        itemView.collection = new Backbone.Collection(collectionData);
+        itemView.serializeData();
       });
 
       it('should call serializeModel', function() {
-        expect(this.itemView.serializeModel).to.have.been.calledOnce;
+        expect(itemView.serializeModel).to.have.been.calledOnce;
       });
 
       it('should not call serializeCollection', function() {
-        expect(this.itemView.serializeCollection).to.not.have.been.called;
+        expect(itemView.serializeCollection).to.not.have.been.called;
       });
     });
   });
 
   describe('when serializing a collection', function() {
+    let itemView;
+
     beforeEach(function() {
-      this.collectionData = [{foo: 'bar'}, {foo: 'baz'}];
-      this.itemView = new Marionette.View({
-        collection: new Backbone.Collection(this.collectionData)
+      collectionData = [{foo: 'bar'}, {foo: 'baz'}];
+      itemView = new View({
+        collection: new Backbone.Collection(collectionData)
       });
     });
 
     it('should serialize to an items attribute', function() {
-      expect(this.itemView.serializeData().items).to.be.defined;
+      expect(itemView.serializeData().items).to.be.defined;
     });
 
     it('should serialize all models', function() {
-      expect(this.itemView.serializeData().items).to.deep.equal(this.collectionData);
+      expect(itemView.serializeData().items).to.deep.equal(collectionData);
     });
   });
 });

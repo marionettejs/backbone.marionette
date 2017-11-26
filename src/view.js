@@ -39,9 +39,7 @@ function childReducer(children, region) {
 const View = Backbone.View.extend({
 
   constructor(options) {
-    this._setOptions(options);
-
-    this.mergeOptions(options, ClassOptions);
+    this._setOptions(options, ClassOptions);
 
     monitorViewEvents(this);
 

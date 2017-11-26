@@ -59,5 +59,24 @@ describe('backbone.marionette', function() {
         expect(Class.setRenderer).to.be.calledOnce.and.calledWith(fakeRenderer);
       });
     });
+
+    describe('when destructive option is set to false', function() {
+      const TestView = View.extend({
+        template: _.noop
+      });
+      let view;
+
+      beforeEach(function() {
+        TestView.setRenderer(renderer, {destructive: false});
+        view = new TestView();
+        view.render();
+        this.sinon.spy(view, '_reInitRegions');
+        view.render();
+      });
+
+      it('should not re-init regions on view re-render', function() {
+        expect(view._reInitRegions).to.not.be.called;
+      });
+    });
   });
 });

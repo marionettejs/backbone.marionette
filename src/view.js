@@ -85,7 +85,7 @@ const View = Backbone.View.extend({
 
     // If this is not the first render call, then we need to
     // re-initialize the `el` for each region
-    if (this._isRendered) {
+    if (this._isRendered && !this._preventRegionReInit) {
       this._reInitRegions();
     }
 

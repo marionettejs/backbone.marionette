@@ -1,75 +1,66 @@
-import { getOption } from '../../../src/backbone.marionette';
+import getOption from '../../../src/common/get-option';
 
 describe('get option', function() {
-  'use strict';
+  describe('when calling without arguments', function() {
+    it('should return undefined', function() {
+      expect(getOption()).to.be.undefined;
+    });
+  });
 
   describe('when an object only has the option set on the definition', function() {
-    let target;
-    let value;
-
-    beforeEach(function() {
-      target = {foo: 'bar'};
-      value = getOption(target, 'foo');
-    });
-
     it('should return that definitions option', function() {
-      expect(value).to.equal(target.foo);
+      const target = {
+        foo: 'bar',
+        getOption
+      };
+
+      expect(target.getOption('foo')).to.equal(target.foo);
     });
   });
 
   describe('when an object only has the option set on the options', function() {
-    let target;
-    let value;
-
-    beforeEach(function() {
-      target = {options: {foo: 'bar'}};
-      value = getOption(target, 'foo');
-    });
-
     it('should return value from the options', function() {
-      expect(value).to.equal(target.options.foo);
+      const target = {
+        options: {foo: 'bar'},
+        getOption
+      };
+
+      expect(target.getOption('foo')).to.equal(target.options.foo);
     });
   });
 
   describe('when an object has the option set on the options, and it is a "falsey" value', function() {
-    let target;
-    let value;
-
-    beforeEach(function() {
-      target = {options: {foo: false}};
-      value = getOption(target, 'foo');
-    });
-
     it('should return value from the options', function() {
-      expect(value).to.equal(target.options.foo);
+      const target = {
+        options: {foo: false},
+        getOption
+      };
+
+      expect(target.getOption('foo')).to.equal(target.options.foo);
     });
   });
 
   describe('when an object has the option set on the options, and it is a "undefined" value', function() {
-    let target;
-    let value;
-
-    beforeEach(function() {
-      target = {foo: 'bar', options: {foo: undefined}};
-      value = getOption(target, 'foo');
-    });
-
     it('should return the objects value', function() {
-      expect(value).to.equal(target.foo);
+      const target = {
+        foo: 'bar',
+        options: {foo: undefined},
+        getOption
+      };
+
+      expect(target.getOption('foo')).to.equal(target.foo);
     });
   });
 
-  describe('when an object has the option set on both the defininition and options', function() {
-    let target;
-    let value;
-
-    beforeEach(function() {
-      target = {foo: 'bar', options: {foo: 'baz'}};
-      value = getOption(target, 'foo');
-    });
-
+  describe('when an object has the option set on both the definition and options', function() {
     it('should return that value from the options', function() {
-      expect(value).to.equal(target.options.foo);
+      const target = {
+        foo: 'bar',
+        options: {foo: 'baz'},
+        getOption
+      };
+
+      expect(target.getOption('foo')).to.equal(target.options.foo);
     });
   });
 });

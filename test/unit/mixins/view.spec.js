@@ -1,4 +1,5 @@
 import { setEnabled } from '../../../src/backbone.marionette';
+import CollectionView from '../../../src/collection-view';
 import View from '../../../src/view';
 
 describe('view mixin', function() {
@@ -211,6 +212,43 @@ describe('view mixin', function() {
 
     it('should return all attributes', function() {
       expect(view.serializeModel()).to.be.eql(modelData);
+    });
+  });
+
+  describe('triggering events through a child view', function() {
+    let onChildviewFooClickStub;
+    let MyView;
+    let MyCollectionView;
+    let collection;
+    let collectionView;
+    let childView;
+
+    beforeEach(function() {
+      onChildviewFooClickStub = this.sinon.stub();
+
+      MyView = View.extend({
+        template: _.template('foo'),
+        triggers: {'click': 'foo:click'}
+      });
+
+      MyCollectionView = CollectionView.extend({
+        childView: MyView,
+        childViewEventPrefix: 'childview',
+        onChildviewFooClick: onChildviewFooClickStub
+      });
+
+      collection = new Backbone.Collection([{foo: 'bar'}]);
+      collectionView = new MyCollectionView({
+        collection: collection
+      });
+
+      collectionView.render();
+      childView = collectionView.children.findByModel(collection.at(0));
+      childView.$el.click();
+    });
+
+    it('should fire the event method once', function() {
+      expect(onChildviewFooClickStub).to.have.been.calledOnce;
     });
   });
 

@@ -67,7 +67,7 @@ describe('CollectionView - ViewMixin', function() {
       });
       const collection = new Backbone.Collection([{}, {}]);
 
-      collectionView = new MyCollectionView({ collection });
+      collectionView = new MyCollectionView({ collection, childViewEventPrefix: 'childview' });
 
       handlerSpy = this.sinon.spy(collectionView, '_childViewEventHandler');
 

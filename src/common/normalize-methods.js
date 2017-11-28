@@ -6,6 +6,8 @@ import _ from 'underscore';
 // Pass in a mapping of events => functions or function names
 // and return a mapping of events => functions
 const normalizeMethods = function(hash) {
+  if (!hash) { return }
+
   return _.reduce(hash, (normalizedHash, method, name) => {
     if (!_.isFunction(method)) {
       method = this[method];

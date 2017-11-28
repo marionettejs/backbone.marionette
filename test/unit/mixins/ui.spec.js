@@ -28,10 +28,6 @@ describe('normalizeUIKeys', function() {
     });
 
     describe('the 1st generic view subclass instance', function() {
-      it('should have its events hash parsed correctly', function() {
-        expect(genericViewSubclass1Instance.events).to.eql({'change .subclass-1-ui': 'onSomeUiChange'});
-      });
-
       it('should have its registered event handler called when the ui DOM event is triggered', function() {
         genericViewSubclass1Instance.ui.someUi.trigger('change');
         expect(genericViewSubclass1Instance.onSomeUiChange).to.be.calledOnce;
@@ -39,10 +35,6 @@ describe('normalizeUIKeys', function() {
     });
 
     describe('the 2nd generic view subclass instance', function() {
-      it('should have its events hash parsed correctly', function() {
-        expect(genericViewSubclass2Instance.events).to.eql({'change .subclass-2-ui': 'onSomeUiChange'});
-      });
-
       it('should have its registered event handler called when the ui DOM event is triggered', function() {
         genericViewSubclass2Instance.ui.someUi.trigger('change');
         expect(genericViewSubclass2Instance.onSomeUiChange).to.be.calledOnce;

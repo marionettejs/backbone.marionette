@@ -113,7 +113,9 @@ _.extend(Behavior.prototype, Backbone.Events, CommonMixin, DelegateEntityEventsM
     return this;
   },
 
-  getEvents() {
+  _getEvents() {
+    if (!this.events) { return; }
+
     // Normalize behavior events hash to allow
     // a user to use the @ui. syntax.
     const behaviorEvents = this.normalizeUIKeys(_.result(this, 'events'));
@@ -131,7 +133,7 @@ _.extend(Behavior.prototype, Backbone.Events, CommonMixin, DelegateEntityEventsM
   },
 
   // Internal method to build all trigger handlers for a given behavior
-  getTriggers() {
+  _getTriggers() {
     if (!this.triggers) { return; }
 
     // Normalize behavior triggers hash to allow

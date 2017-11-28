@@ -50,22 +50,15 @@ const ViewMixin = {
 
   // Overriding Backbone.View's `delegateEvents` to handle
   // `events` and `triggers`
-  delegateEvents(eventsArg) {
-
+  delegateEvents(events) {
     this._proxyBehaviorViewProperties();
     this._buildEventProxies();
 
-    const viewEvents = this._getEvents(eventsArg);
-
-    if (typeof eventsArg === 'undefined') {
-      this.events = viewEvents;
-    }
-
     const combinedEvents = _.extend({},
       this._getBehaviorEvents(),
-      viewEvents,
+      this._getEvents(events),
       this._getBehaviorTriggers(),
-      this.getTriggers()
+      this._getTriggers()
     );
 
     Backbone.View.prototype.delegateEvents.call(this, combinedEvents);
@@ -73,19 +66,19 @@ const ViewMixin = {
     return this;
   },
 
-  _getEvents(eventsArg) {
-    const events = eventsArg || this.events;
-
-    if (_.isFunction(events)) {
-      return this.normalizeUIKeys(events.call(this));
+  _getEvents(events) {
+    if (events) {
+      return this.normalizeUIKeys(events);
     }
 
-    return this.normalizeUIKeys(events);
+    if (!this.events) { return; }
+
+    return this.normalizeUIKeys(_.result(this, 'events'));
   },
 
   // Configure `triggers` to forward DOM events to view
   // events. `triggers: {"click .foo": "do:foo"}`
-  getTriggers() {
+  _getTriggers() {
     if (!this.triggers) { return; }
 
     // Allow `triggers` to be configured as a function
@@ -180,12 +173,6 @@ const ViewMixin = {
     return this._getUI(name);
   },
 
-  // used as the prefix for child view events
-  // that are forwarded through the layoutview
-  childViewEventPrefix() {
-    return isEnabled('childViewEventPrefix') ? 'childview' : false;
-  },
-
   // import the `triggerMethod` to trigger events with corresponding
   // methods if the method exists
   triggerMethod() {
@@ -198,19 +185,29 @@ const ViewMixin = {
 
   // Cache `childViewEvents` and `childViewTriggers`
   _buildEventProxies() {
-    this._childViewEvents = _.result(this, 'childViewEvents');
+    this._childViewEvents = this.normalizeMethods(_.result(this, 'childViewEvents'));
     this._childViewTriggers = _.result(this, 'childViewTriggers');
+    this._eventPrefix = this._getEventPrefix();
+  },
+
+  _getEventPrefix() {
+    const defaultPrefix = isEnabled('childViewEventPrefix') ? 'childview' : false;
+    const prefix = _.result(this, 'childViewEventPrefix', defaultPrefix);
+
+    return (prefix === false) ? prefix : prefix + ':';
   },
 
   _proxyChildViewEvents(view) {
-    this.listenTo(view, 'all', this._childViewEventHandler);
+    if (this._childViewEvents || this._childViewTriggers || this._eventPrefix) {
+      this.listenTo(view, 'all', this._childViewEventHandler);
+    }
   },
 
   _childViewEventHandler(eventName, ...args) {
-    const childViewEvents = this.normalizeMethods(this._childViewEvents);
+    const childViewEvents = this._childViewEvents;
 
     // call collectionView childViewEvent if defined
-    if (typeof childViewEvents !== 'undefined' && _.isFunction(childViewEvents[eventName])) {
+    if (childViewEvents && childViewEvents[eventName]) {
       childViewEvents[eventName].apply(this, args);
     }
 
@@ -218,16 +215,12 @@ const ViewMixin = {
     const childViewTriggers = this._childViewTriggers;
 
     // Call the event with the proxy name on the parent layout
-    if (childViewTriggers && _.isString(childViewTriggers[eventName])) {
+    if (childViewTriggers && childViewTriggers[eventName]) {
       this.triggerMethod(childViewTriggers[eventName], ...args);
     }
 
-    const prefix = _.result(this, 'childViewEventPrefix');
-
-    if (prefix !== false) {
-      const childEventName = prefix + ':' + eventName;
-
-      this.triggerMethod(childEventName, ...args);
+    if (this._eventPrefix) {
+      this.triggerMethod(this._eventPrefix + eventName, ...args);
     }
   }
 };

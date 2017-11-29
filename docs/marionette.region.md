@@ -235,6 +235,8 @@ myView.addRegions({
 });
 ```
 
+[Live example](http://jsfiddle.net/charlyjazz/gze5ykov/49/)
+
 ## Removing Regions
 
 You can remove all of the regions from a view by calling `removeRegions` or you can remove a region by name using `removeRegion`. When a region is removed the region will be destroyed.

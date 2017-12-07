@@ -394,7 +394,7 @@ You can show a template or a string directly into a region. Additionally you can
 var myView = new MyView();
 
 var template = _.template('This is the <%- section %> page');
-var templateContext = templateContext: { section: 'main' };
+var templateContext = { section: 'main' };
 
 myView.showChildView('main', {
   template: template,

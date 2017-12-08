@@ -326,11 +326,11 @@ describe('item view', function() {
     it('should trigger `initialize` on the behaviors', function() {
       this.sinon.stub(View.prototype, '_triggerEventOnBehaviors');
 
-      const myView = new View();
+      const myView = new View({ foo: 'bar' });
 
       // _triggerEventOnBehaviors comes from Behaviors mixin
       expect(myView._triggerEventOnBehaviors)
-        .to.be.calledOnce.and.calledWith('initialize', myView);
+        .to.be.calledOnce.and.calledWith('initialize', myView, { foo: 'bar' });
     });
   });
 

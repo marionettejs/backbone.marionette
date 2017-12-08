@@ -3,7 +3,6 @@
 
 import Backbone from 'backbone';
 import _ from 'underscore';
-import triggerMethod from '../common/trigger-method';
 import BehaviorsMixin from './behaviors';
 import CommonMixin from './common';
 import DelegateEntityEventsMixin from './delegate-entity-events';
@@ -142,6 +141,7 @@ const ViewMixin = {
     this._deleteEntityEventHandlers();
 
     this.triggerMethod('destroy', this, options);
+    this._triggerEventOnBehaviors('destroy', this, options);
 
     this.stopListening();
 
@@ -171,16 +171,6 @@ const ViewMixin = {
 
   getUI(name) {
     return this._getUI(name);
-  },
-
-  // import the `triggerMethod` to trigger events with corresponding
-  // methods if the method exists
-  triggerMethod() {
-    const ret = triggerMethod.apply(this, arguments);
-
-    this._triggerEventOnBehaviors.apply(this, arguments);
-
-    return ret;
   },
 
   // Cache `childViewEvents` and `childViewTriggers`

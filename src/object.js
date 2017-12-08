@@ -2,9 +2,7 @@
 // ------
 
 import _ from 'underscore';
-import Backbone from 'backbone';
 import extend from './utils/extend';
-import triggerMethod from './common/trigger-method';
 import CommonMixin from './mixins/common';
 import DestroyMixin from './mixins/destroy';
 import RadioMixin from './mixins/radio';
@@ -28,14 +26,11 @@ MarionetteObject.extend = extend;
 // Object Methods
 // --------------
 
-// Ensure it can trigger events with Backbone.Events
-_.extend(MarionetteObject.prototype, Backbone.Events, CommonMixin, DestroyMixin, RadioMixin, {
+_.extend(MarionetteObject.prototype, CommonMixin, DestroyMixin, RadioMixin, {
   cidPrefix: 'mno',
 
   // This is a noop method intended to be overridden
-  initialize() {},
-
-  triggerMethod
+  initialize() {}
 });
 
 export default MarionetteObject;

@@ -5,9 +5,8 @@ import _ from 'underscore';
 import Backbone from 'backbone';
 import MarionetteError from './utils/error';
 import extend from './utils/extend';
-import { renderView, destroyView } from './common/view';
 import monitorViewEvents from './common/monitor-view-events';
-import triggerMethod from './common/trigger-method';
+import { renderView, destroyView } from './common/view';
 import CommonMixin from './mixins/common';
 import View from './view';
 import DomApi, { setDomApi } from './config/dom';
@@ -50,8 +49,7 @@ Region.setDomApi = setDomApi;
 // Region Methods
 // --------------
 
-// Ensure it can trigger events with Backbone.Events
-_.extend(Region.prototype, Backbone.Events, CommonMixin, {
+_.extend(Region.prototype, CommonMixin, {
   Dom: DomApi,
 
   cidPrefix: 'mnr',
@@ -406,9 +404,7 @@ _.extend(Region.prototype, Backbone.Events, CommonMixin, {
     this.stopListening();
 
     return this;
-  },
-
-  triggerMethod
+  }
 });
 
 export default Region;

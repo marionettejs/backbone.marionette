@@ -110,11 +110,11 @@ describe('CollectionView', function() {
     it('should trigger `initialize` on the behaviors', function() {
       this.sinon.stub(MyCollectionView.prototype, '_triggerEventOnBehaviors');
 
-      const myCollectionView = new MyCollectionView();
+      const myCollectionView = new MyCollectionView({ foo: 'bar' });
 
       // _triggerEventOnBehaviors comes from Behaviors mixin
       expect(myCollectionView._triggerEventOnBehaviors)
-        .to.be.calledOnce.and.calledWith('initialize', myCollectionView);
+        .to.be.calledOnce.and.calledWith('initialize', myCollectionView, { foo: 'bar' });
     });
   });
 

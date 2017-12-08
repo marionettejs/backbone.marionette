@@ -172,46 +172,31 @@ describe('Behavior', function() {
   });
 
   describe('behavior initialize', function() {
-    let behaviorSpies;
-    let behaviorOptions;
-    let initializeStub;
-    let FooView;
+    let behavior;
+    let view;
 
     beforeEach(function() {
-      behaviorOptions = {foo: 'bar'};
-      initializeStub = this.sinon.stub();
-
-      behaviorSpies = {
-        foo: Behavior.extend({
-          initialize: initializeStub
-        })
-      };
-
-      FooView = View.extend({
-        behaviors: [_.extend({}, behaviorOptions, {behaviorClass: behaviorSpies.foo})]
+      const TestBehavior = Behavior.extend({
+        initialize: this.sinon.stub()
       });
+
+      view = new View();
+
+      behavior = new TestBehavior({ foo: 'bar' }, view);
     });
 
     it('should have a cidPrefix', function() {
-      /* eslint-disable no-unused-vars */
-      const fooView = new FooView();
-      const fooBehavior = new behaviorSpies.foo();
-
-      expect(fooBehavior.cidPrefix).to.equal('mnb');
+      expect(behavior.cidPrefix).to.equal('mnb');
     });
 
     it('should have a cid', function() {
-      /* eslint-disable no-unused-vars */
-      const fooView = new FooView();
-      const fooBehavior = new behaviorSpies.foo();
-
-      expect(fooBehavior.cid).to.exist;
+      expect(behavior.cid).to.exist;
     });
 
     it('should call initialize when a behavior is created', function() {
-      const fooView = new FooView();
-
-      expect(initializeStub).to.have.been.calledOnce.and.calledWithMatch(behaviorOptions, fooView);
+      expect(behavior.initialize)
+        .to.have.been.calledOnce
+        .and.calledWith({ foo: 'bar' }, view);
     });
   });
 
@@ -681,12 +666,6 @@ describe('Behavior', function() {
       fooModel.set('bar', 'baz');
 
       expect(listenToChangeStub).not.to.have.been.calledOnce;
-    });
-
-    it('should still be bound to "on" on destroy', function() {
-      fooView.triggerMethod('foo');
-
-      expect(onFooStub).to.have.been.calledOnce;
     });
   });
 

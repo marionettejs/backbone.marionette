@@ -2,10 +2,8 @@
 // -----------
 
 import _ from 'underscore';
-import Backbone from 'backbone';
 import extend from './utils/extend';
 import buildRegion from './common/build-region';
-import triggerMethod from './common/trigger-method';
 import CommonMixin from './mixins/common';
 import DestroyMixin from './mixins/destroy';
 import RadioMixin from './mixins/radio';
@@ -32,14 +30,11 @@ Application.extend = extend;
 // Application Methods
 // --------------
 
-// Ensure it can trigger events with Backbone.Events
-_.extend(Application.prototype, Backbone.Events, CommonMixin, DestroyMixin, RadioMixin, {
+_.extend(Application.prototype, CommonMixin, DestroyMixin, RadioMixin, {
   cidPrefix: 'mna',
 
   // This is a noop method intended to be overridden
   initialize() {},
-
-  triggerMethod,
 
   // Kick off all of the application's processes.
   start(options) {

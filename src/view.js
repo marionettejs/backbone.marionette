@@ -50,7 +50,7 @@ const View = Backbone.View.extend({
 
     this.delegateEntityEvents();
 
-    this._triggerEventOnBehaviors('initialize', this);
+    this._triggerEventOnBehaviors('initialize', this, options);
   },
 
   // Overriding Backbone.View's `setElement` to handle

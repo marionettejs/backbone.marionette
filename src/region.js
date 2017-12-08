@@ -315,8 +315,7 @@ _.extend(Region.prototype, Backbone.Events, CommonMixin, {
       return view;
     }
 
-    view._shouldDisableEvents = this._shouldDisableMonitoring();
-    destroyView(view);
+    destroyView(view, this._shouldDisableMonitoring());
     return view;
   },
 

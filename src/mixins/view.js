@@ -111,7 +111,7 @@ const ViewMixin = {
   // Handle destroying the view and its children.
   destroy(options) {
     if (this._isDestroyed) { return this; }
-    const shouldTriggerDetach = this._isAttached && !this._shouldDisableEvents;
+    const shouldTriggerDetach = this._isAttached && !this._disableDetachEvents;
 
     this.triggerMethod('before:destroy', this, options);
     if (shouldTriggerDetach) {

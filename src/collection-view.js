@@ -709,8 +709,8 @@ const CollectionView = Backbone.View.extend({
       return;
     }
 
-    view._shouldDisableEvents = this.monitorViewEvents === false;
-    destroyView(view);
+    const shouldDisableEvents = this.monitorViewEvents === false;
+    destroyView(view, shouldDisableEvents);
   },
 
   // called by ViewMixin destroy

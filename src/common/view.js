@@ -8,24 +8,27 @@ export function renderView(view) {
   }
 
   view.render();
+  view._isRendered = true;
 
   if (!view.supportsRenderLifecycle) {
-    view._isRendered = true;
     view.triggerMethod('render', view);
   }
 }
 
-export function destroyView(view) {
+export function destroyView(view, disableDetachEvents) {
   if (view.destroy) {
+    // Attach flag for public destroy function internal check
+    view._disableDetachEvents = disableDetachEvents;
     view.destroy();
     return;
   }
 
+  // Destroy for non-Marionette Views
   if (!view.supportsDestroyLifecycle) {
     view.triggerMethod('before:destroy', view);
   }
 
-  const shouldTriggerDetach = view._isAttached && !view._shouldDisableEvents;
+  const shouldTriggerDetach = view._isAttached && !disableDetachEvents;
 
   if (shouldTriggerDetach) {
     view.triggerMethod('before:detach', view);

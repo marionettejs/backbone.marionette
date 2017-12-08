@@ -63,7 +63,7 @@ const CollectionView = Backbone.View.extend({
 
     this.delegateEntityEvents();
 
-    this._triggerEventOnBehaviors('initialize', this);
+    this._triggerEventOnBehaviors('initialize', this, options);
   },
 
   // Internal method to set up the `children` object for storing all of the child views

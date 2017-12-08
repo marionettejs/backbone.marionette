@@ -7,10 +7,8 @@
 // into portable logical chunks, keeping your views simple and your code DRY.
 
 import _ from 'underscore';
-import Backbone from 'backbone';
 import extend from './utils/extend';
 import getNamespacedEventName from './utils/get-namespaced-event-name';
-import triggerMethod from './common/trigger-method';
 import CommonMixin from './mixins/common';
 import DelegateEntityEventsMixin from './mixins/delegate-entity-events';
 import TriggersMixin from './mixins/triggers';
@@ -44,6 +42,9 @@ const Behavior = function(options, view) {
   // selector under an UI key.
   this.ui = _.extend({}, _.result(this, 'ui'), _.result(view, 'ui'));
 
+  // Proxy view triggers
+  this.listenTo(view, 'all', this.triggerMethod);
+
   this.initialize.apply(this, arguments);
 };
 
@@ -52,8 +53,7 @@ Behavior.extend = extend;
 // Behavior Methods
 // --------------
 
-// Ensure it can trigger events with Backbone.Events
-_.extend(Behavior.prototype, Backbone.Events, CommonMixin, DelegateEntityEventsMixin, TriggersMixin, UIMixin, {
+_.extend(Behavior.prototype, CommonMixin, DelegateEntityEventsMixin, TriggersMixin, UIMixin, {
   cidPrefix: 'mnb',
 
   // This is a noop method intended to be overridden
@@ -141,9 +141,7 @@ _.extend(Behavior.prototype, Backbone.Events, CommonMixin, DelegateEntityEventsM
     const behaviorTriggers = this.normalizeUIKeys(_.result(this, 'triggers'));
 
     return this._getViewTriggers(this.view, behaviorTriggers);
-  },
-
-  triggerMethod
+  }
 });
 
 export default Behavior;

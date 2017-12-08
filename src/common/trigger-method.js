@@ -7,15 +7,22 @@ import getOption from './get-option';
 // split the event name on the ":"
 const splitter = /(^|:)(\w)/gi;
 
+// Only calc getOnMethodName once
+const methodCache = {};
+
 // take the event section ("section1:section2:section3")
 // and turn it in to uppercase name onSection1Section2Section3
 function getEventName(match, prefix, eventName) {
   return eventName.toUpperCase();
 }
 
-const getOnMethodName = _.memoize(function(event) {
-  return 'on' + event.replace(splitter, getEventName);
-});
+const getOnMethodName = function(event) {
+  if (!methodCache[event]) {
+    methodCache[event] = 'on' + event.replace(splitter, getEventName);
+  }
+
+  return methodCache[event];
+};
 
 // Trigger an event and/or a corresponding method name. Examples:
 //

@@ -2,9 +2,6 @@ describe('layoutView', function() {
   'use strict';
 
   beforeEach(function() {
-    const BBView = Backbone.View.extend();
-    _.extend(BBView.prototype, Marionette.BackboneViewMixin);
-
     this.layoutViewManagerTemplateFn = _.template('<div id="regionOne"></div><div id="regionTwo"></div>');
     this.template = function() {
       return '<span class=".craft"></span><h1 id="#a-fun-game"></h1>';

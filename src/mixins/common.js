@@ -1,8 +1,10 @@
 import _ from 'underscore';
+import Backbone from 'backbone';
 
 import getOption from '../common/get-option';
 import mergeOptions from '../common/merge-options';
 import normalizeMethods from '../common/normalize-methods';
+import triggerMethod from '../common/trigger-method';
 import {
   bindEvents,
   unbindEvents
@@ -12,7 +14,7 @@ import {
   unbindRequests
 } from '../common/bind-requests';
 
-export default {
+const CommonMixin = {
 
   // Imports the "normalizeMethods" to transform hashes of
   // events=>function references/names to a hash of events=>function references
@@ -39,5 +41,11 @@ export default {
   bindRequests,
 
   // Enable unbinding view's requests.
-  unbindRequests
+  unbindRequests,
+
+  triggerMethod
 };
+
+_.extend(CommonMixin, Backbone.Events);
+
+export default CommonMixin;

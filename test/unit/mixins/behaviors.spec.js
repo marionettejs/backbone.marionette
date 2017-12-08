@@ -470,15 +470,15 @@ describe('Behaviors Mixin', function() {
       behaviorsInstance._initBehaviors();
     });
 
-    it('should invoke unbindUIElements', function() {
-      behaviorsInstance._triggerEventOnBehaviors('foo', 'bar');
+    it('should invoke events', function() {
+      behaviorsInstance._triggerEventOnBehaviors('foo', 'view', 'options');
 
       expect(FooBehavior.prototype.onFoo)
         .to.have.been.calledOnce
-        .and.calledWith('bar');
+        .and.calledWith('view', 'options');
       expect(BarBehavior.prototype.onFoo)
         .to.have.been.calledOnce
-        .and.calledWith('bar');
+        .and.calledWith('view', 'options');
     });
   });
 });

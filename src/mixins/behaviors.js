@@ -1,7 +1,6 @@
 import _ from 'underscore';
 import MarionetteError from '../utils/error';
 import _invoke from '../utils/invoke';
-import triggerMethod from '../common/trigger-method';
 
 // MixinOptions
 // - behaviors
@@ -102,11 +101,7 @@ export default {
     _invoke(this._behaviors, 'unbindUIElements');
   },
 
-  _triggerEventOnBehaviors() {
-    const behaviors = this._behaviors;
-    // Use good ol' for as this is a very hot function
-    for (let i = 0, length = behaviors && behaviors.length; i < length; i++) {
-      triggerMethod.apply(behaviors[i], arguments);
-    }
+  _triggerEventOnBehaviors(eventName, view, options) {
+    _invoke(this._behaviors, 'triggerMethod', eventName, view, options);
   }
 };

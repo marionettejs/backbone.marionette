@@ -1,4 +1,4 @@
-# Marionette functions
+# Marionette Utility Functions
 
 Marionette provides a set of utility / helper functions that are used to
 facilitate common behaviors throughout the framework. These functions may
@@ -7,19 +7,18 @@ a way to get the same behaviors and conventions from your own code.
 
 ## Documentation Index
 
-* [Marionette.extend](#marionetteextend)
-* [Marionette.mergeOptions](#marionettemergeoptions)
-* [Marionette.getOption](#marionettegetoption)
-* [Marionette.triggerMethod](#marionettetriggermethod)
-* [Marionette.triggerMethodOn](#marionettetriggermethodon)
-* [Marionette.bindEvents](#marionettebindevents)
-* [Marionette.unbindEvents](#marionetteunbindevents)
-* [Marionette.bindRequests](#marionettebindrequests)
-* [Marionette.unbindRequests](#marionetteunbindrequests)
-* [Marionette.normalizeMethods](#marionettenormalizemethods)
-* [Marionette.noConflict](#marionettenoconflict)
+* [extend](#extend)
+* [mergeOptions](#mergeoptions)
+* [getOption](#getoption)
+* [triggerMethod](#triggermethod)
+* [bindEvents](#bindevents)
+* [unbindEvents](#unbindevents)
+* [bindRequests](#bindrequests)
+* [unbindRequests](#unbindrequests)
+* [normalizeMethods](#normalizemethods)
+* [VERSION](#version)
 
-## Marionette.extend
+## extend
 
 Backbone's `extend` function is a useful utility to have, and is used in
 various places in Marionette. To make the use of this method more consistent,
@@ -29,29 +28,29 @@ decide if you want to use Backbone.View or Backbone.Model or another
 Backbone object to grab the method from.
 
 ```javascript
-var Mn = require('backbone.marionette');
+import { extend } from 'backbone.marionette';
 
-var Foo = function(){};
+const Foo = function(){};
 
 // use Marionette.extend to make Foo extendable, just like other
 // Backbone and Marionette objects
-Foo.extend = Mn.extend;
+Foo.extend = extend;
 
 // Now Foo can be extended to create a new class, with methods
-var Bar = Foo.extend({
+const Bar = Foo.extend({
 
-  someMethod: function(){ ... }
+  someMethod(){ ... }
 
   // ...
 });
 
 // Create an instance of Bar
-var b = new Bar();
+const b = new Bar();
 ```
 
 [Live example](https://jsfiddle.net/marionettejs/w5avq89r/)
 
-## Marionette.mergeOptions
+## mergeOptions
 
 A handy function to pluck certain `options` and attach them directly to an instance.
 All Marionette Classes, such as the Views, come with this method.
@@ -92,7 +91,7 @@ myView.getOption('weight');  // light
 
 [Live example](https://jsfiddle.net/marionettejs/gv5psrdu/)
 
-## Marionette.getOption
+## getOption
 
 Retrieve an object's attribute either directly from the object, or from
 the object's `this.options`, with `this.options` taking precedence.
@@ -174,7 +173,7 @@ var model2 = new Model({}, { foo: foo }); // => "bar"
 In this example, "bar" is returned both times because the second
 example has an undefined value for `f`.
 
-## Marionette.triggerMethod
+## triggerMethod
 
 Trigger an event and a corresponding method on the target object.
 All Marionette Classes, such as the Views, come with this method.
@@ -210,7 +209,7 @@ Mn.triggerMethod(myObj, 'foo', 'qux'); // console.log "qux"
 
 *Note*: Some Marionette classes such as Views have an overridden `triggerMethod`. Using `Mn.triggerMethod` with a view will break event proxying. If you need to run `triggerMethod` on a Marionette class [`triggerMethodOn`](#marionette-triggermethodon) is recommended.
 
-## Marionette.triggerMethodOn
+## triggerMethodOn
 
 Invoke `triggerMethod` on a specific context.
 
@@ -224,7 +223,7 @@ Mn.triggerMethodOn(ctx, 'foo', bar);
 // will trigger "foo" on ctx
 ```
 
-## Marionette.bindEvents
+## bindEvents
 
 This method is used to bind a backbone "entity" (e.g. collection/model)
 to methods on a target object. This will work with any class that works
@@ -288,7 +287,7 @@ configuration. A function can be supplied instead of a string handler name.
 
 Multiple handlers can be separated by a space.
 
-## Marionette.unbindEvents
+## unbindEvents
 
 This method can be used to unbind callbacks from entities' (e.g. collection/model) events. It's
 the opposite of bindEvents, described above. Consequently, the APIs are identical for each method.
@@ -324,7 +323,7 @@ Bb.View.extend({
 
 [Live example](https://jsfiddle.net/marionettejs/yvsfm65c/)
 
-## Marionette.bindRequests
+## bindRequests
 
 This method is used to bind radio requests to methods on a target object.
 All Marionette Objects come with this method.
@@ -365,7 +364,7 @@ The third parameter is a hash either `{ 'event:name': 'eventHandler' }` or
 `{ 'event:name': 'eventHandler', 'event:otherName': 'otherEventHandler', ...}` of
 configuration.
 
-## Marionette.unbindRequests
+## unbindRequests
 
 This method is used to unbind radio requests to methods on a target object.
 All Marionette Objects come with this method.
@@ -410,7 +409,7 @@ The third parameter is a hash either `{ 'event:name': 'eventHandler' }` or
 `{ 'event:name': 'eventHandler', 'event:otherName': 'otherEventHandler', ...}` of
 configuration.
 
-## Marionette.normalizeMethods
+## normalizeMethods
 
 Receives a hash of event names and functions and/or function names, and returns the
 same hash with the function names replaced with the function references themselves.
@@ -452,16 +451,8 @@ myView.do('action:two');
 
 [Live example](https://jsfiddle.net/marionettejs/zzjhm4p1/)
 
-## Marionette.noConflict
+## VERSION
 
-Allows you to run multiple instances of Marionette in the same application. After loading the new version, call `noConflict()` to get a reference to it. At the same time the old version will be returned to Backbone.Marionette.
+Maintains a reference to the version of a Marionette instance.
+`VERSION` is used to direct users to the correctly versioned documentation when errors are thrown.
 
-```javascript
-var Mn = require('backbone.marionette');
-
-var MnV3 = require('backbone.marionette/v3');
-
-// Creates non-conflicting reference to secondary Marionette instance
-MnV3 = MnV3.noConflict()
-
-```

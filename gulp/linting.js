@@ -12,8 +12,6 @@ function onError() {
 function lint(files) {
   return gulp.src(files)
     .pipe(plumber())
-    .pipe(lintspaces({editorconfig: '.editorconfig'}))
-    .pipe(lintspaces.reporter())
     .pipe(eslint())
     .pipe(eslint.format())
     .pipe(eslint.failOnError())
@@ -21,7 +19,7 @@ function lint(files) {
 }
 
 function isFixed(file) {
-	return file.eslint && file.eslint.fixed;
+  return file.eslint && file.eslint.fixed;
 }
 
 function lintFix(folder) {

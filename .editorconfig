@@ -9,8 +9,6 @@ trim_trailing_whitespace = true
 insert_final_newline = true
 
 [*.js]
-# Unix-style newlines
-end_of_line = lf
 charset = utf-8
 indent_style = space
 indent_size = 2

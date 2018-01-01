@@ -42,7 +42,7 @@ describe('onAttach', function() {
 
   let sinon;
   let TestView;
-  let region;  // A Region to show our View within
+  let region; // A Region to show our View within
 
   beforeEach(function() {
     sinon = this.sinon;

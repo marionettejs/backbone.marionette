@@ -11,9 +11,9 @@ const Container = function() {
 // Borrowing this code from Backbone.Collection:
 // https://github.com/jashkenas/backbone/blob/1.1.2/backbone.js#L962
 const methods = ['forEach', 'each', 'map', 'find', 'detect', 'filter',
-                  'select', 'reject', 'every', 'all', 'some', 'any', 'include',
-                  'contains', 'invoke', 'toArray', 'first', 'initial', 'rest',
-                  'last', 'without', 'isEmpty', 'pluck', 'reduce', 'partition'];
+  'select', 'reject', 'every', 'all', 'some', 'any', 'include',
+  'contains', 'invoke', 'toArray', 'first', 'initial', 'rest',
+  'last', 'without', 'isEmpty', 'pluck', 'reduce', 'partition'];
 
 _.each(methods, function(method) {
   Container.prototype[method] = function(...args) {

@@ -494,7 +494,7 @@ describe('Behavior', function() {
           template: _.template('<div class="zip"></div><div class="bar"></div>'),
           ui: {
             bar: '.bar',
-            foo: '.zip'  // override foo selector behavior
+            foo: '.zip' // override foo selector behavior
           },
           behaviors: [behaviorSpies.foo]
         });

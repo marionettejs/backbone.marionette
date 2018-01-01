@@ -5,6 +5,7 @@
   "homepage": "https://marionettejs.com/",
   "main": "lib/backbone.marionette.js",
   "module": "lib/backbone.marionette.esm.js",
+  "sideEffects": false,
   "keywords": [
     "backbone",
     "plugin",

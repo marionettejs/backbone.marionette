@@ -10,30 +10,27 @@ patterns etc.
   * [Value Attributes](#value-attributes)
   * [Functions Returning Values](#functions-returning-values)
   * [Binding Attributes on Instantiation](#binding-attributes-on-instantiation)
-* [Setting Options](#setting-options)
-  * [The `getOption` Method](#the-getoption-method)
-  * [The `mergeOptions` Method](#the-mergeoptions-method)
-  * [The `options` Property](#the-options-property)
+* [Common Marionette Functionality](./common.md)
 
 ## Class-based Inheritance
 
-Backbone and Marionette utilize the `_.extend` function to simulate class-based
-inheritance. All built-in classes, such as `Marionette.View`,
-`Marionette.Object` and everything that extend these provide an `extend` method
-for just this purpose.
+Like [Backbone](http://backbonejs.org/#Model-extend), Marionette utilizes the
+[`_.extend`](http://underscorejs.org/#extend) function to simulate class-based
+inheritance. All built-in classes, such as `Marionette.View`, `Marionette.MnObject`
+and everything that extend these provide an `extend` method for just this purpose.
 
 In the example below, we create a new pseudo-class called `MyView`:
 
 ```javascript
-var Mn = require('backbone.marionette');
+import { View } from 'backbone.marionette';
 
-var MyView = Mn.View.extend({});
+const MyView = View.extend({});
 ```
 
 You can now create instances of `MyView` with JavaScript's `new` keyword:
 
 ```javascript
-var view = new MyView();
+const view = new MyView();
 ```
 
 ### Value Attributes
@@ -42,9 +39,9 @@ When we extend classes, we can provide class attributes with specific values by
 defining them in the object we pass as the `extend` parameter:
 
 ```javascript
-var Mn = require('backbone.marionette');
+import { View } from 'backbone.marionette';
 
-var MyView = Mn.View.extend({
+const MyView = View.extend({
   className: 'bg-success',
 
   template: '#template-identifier',
@@ -57,7 +54,7 @@ var MyView = Mn.View.extend({
     change: 'removeBackground'
   },
 
-  removeBackground: function() {
+  removeBackground() {
     this.$el.removeClass('bg-success');
   }
 });
@@ -75,33 +72,33 @@ to figure out the value at runtime. In this case, Marionette will run the
 function on instantiation and use the returned value:
 
 ```javascript
-var Mn = require('backbone.marionette');
+import { View } from 'backbone.marionette';
 
-var MyView = Mn.View.extend({
-  className: function() {
+const MyView = View.extend({
+  className() {
     return this.model.successful() ? 'bg-success' : 'bg-error';
   },
 
   template: '#template-identifier',
 
-  regions: function() {
+  regions() {
     return {
       myRegion: '.my-region'
     };
   },
 
-  modelEvents: function() {
-    var wasSuccessful = this.model.successful();
+  modelEvents() {
+    const wasSuccessful = this.model.successful();
     return {
       change: wasSuccessful ? 'removeBackground' : 'alert'
     };
   },
 
-  removeBackground: function() {
+  removeBackground() {
     this.$el.removeClass('bg-success');
   },
 
-  alert: function() {
+  alert() {
     console.log('model changed');
   }
 });
@@ -132,13 +129,13 @@ to being set when the [class is defined](#class-based-inheritance). You can use
 this to bind events, triggers, models, and collections at runtime:
 
 ```javascript
-var Mn = require('backbone.marionette');
+import { View } from 'backbone.marionette';
 
-var MyView = Mn.View.extend({
+const MyView = View.extend({
   template: '#template-identifier'
 });
 
-var myView = new MyView({
+const myView = new MyView({
   triggers: {
     'click a': 'show:link'
   }
@@ -151,9 +148,9 @@ clicks an `<a>` inside the view.
 Options set here will override options set on class definition. So, for example:
 
 ```javascript
-var Mn = require('backbone.marionette');
+import { View } from 'backbone.marionette';
 
-var MyView = Mn.View.extend({
+const MyView = View.extend({
   template: '#template-identifier',
 
   triggers: {
@@ -161,7 +158,7 @@ var MyView = Mn.View.extend({
   }
 });
 
-var myView = new MyView({
+const myView = new MyView({
   triggers: {
     'click a': 'show:link'
   }
@@ -179,15 +176,15 @@ specific to the object in question that it can access through special helper
 methods.
 
 ```javascript
-var Mn = require('backbone.marionette');
+import { View } from 'backbone.marionette';
 
-var MyView = Mn.View.extend({
-  checkOption: function() {
+const MyView = View.extend({
+  checkOption() {
     console.log(this.getOption('foo'));
   }
 });
 
-var view = new MyView({
+const view = new MyView({
   foo: 'some text'
 });
 
@@ -196,94 +193,7 @@ view.checkOption();  // prints 'some text'
 
 [Live example](https://jsfiddle.net/marionettejs/6n02ex1m/)
 
-### The `getOption` Method
+## Common Marionette Functionality
 
-To access an option, we use the `getOption` method. `getOption` will fall back
-to the value defined on the instance of the same name if not defined in the options.
-
-```javascript
-var Mn = require('backbone.marionette');
-
-var MyView = Mn.View.extend({
-  className: function() {
-    var defaultClass = this.getOption('defaultClass');
-    var extraClasses = this.getOption('extraClasses');
-    return [defaultClass, extraClasses].join(' ');
-  },
-  defaultClass: 'table'
-});
-
-var myView = new MyView({
-  model: new MyModel(),
-  extraClasses: 'table-striped'
-});
-```
-
-[Live example](https://jsfiddle.net/marionettejs/ekvb8wwa/)
-
-### The `mergeOptions` Method
-
-The `mergeOptions` method takes two arguments: an `options` object and `keys` to
-pull from the options object. Any matching `keys` will be merged onto the
-class instance. For example:
-
-```javascript
-var Bb = require('backbone');
-var Mn = require('backbone.marionette');
-
-var MyObject = Mn.Object.extend({
-  initialize: function(options) {
-    this.mergeOptions(options, ['model', 'something']);
-    // this.model and this.something will now be available
-  }
-});
-
-var myObject = new MyObject({
-  model: new Backbone.Model(),
-  something: 'test',
-  another: 'value'
-});
-
-console.log(myObject.model);
-console.log(myObject.something);
-console.log(myObject.getOption('another'));
-```
-
-[Live example](https://jsfiddle.net/marionettejs/ub510cbx/)
-
-In this example, `model` and `something` are directly available on the
-`MyObject` instance, while `another` must be accessed via `getOption`. This is
-handy when you want to add extra keys that will be used heavily throughout the
-defined class.
-
-### The `options` Property
-
-The Marionette classes accept an `options` property in the class definition
-which is merged with the `options` argument passed at instantiation. The
-values from the passed in `options` overrides the property values.
-
-> The `options` argument passed in `initialize` method is equal to the passed at
-> class instantiation. To get the option inside initialize considering the
-> `options` property is necessary to use `getOption`
-
-```javascript
-var Bb = require('backbone');
-var Mn = require('backbone.marionette');
-
-var MyObject = Mn.Object.extend({
-  options: {
-    foo: 'bar',
-    another: 'thing'
-  },
-
-  initialize: function(options) {
-    console.log(options.foo) // undefined
-    console.log(this.getOption('foo')) // 'bar'
-    console.log(this.getOption('another')) // 'value'
-  }
-});
-
-var myObject = new MyObject({
-  another: 'value'
-});
-```
+Marionette has a few methods and core functionality that are common to all classes.
+[Continue Reading...](./common.md).

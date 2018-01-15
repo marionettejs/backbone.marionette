@@ -2,7 +2,17 @@
 
 As with all JavaScript libraries, there are a number of ways to get started with
 a Marionette application. In this section we'll cover the most common ways.
+While some integrations are listed here, more resources are available in the integrations repo:
+[marionette-integrations](https://github.com/marionettejs/marionette-integrations)
 
+## Documentation Index
+
+* [NPM and Webpack](#quick-start-using-npm-and-webpack)
+* [NPM and Brunch](#quick-start-using-npm-and-brunch)
+* [NPM and Browserify](#quick-start-using-npm-and-browserify)
+* [Browserify and Grunt](#browserify-and-grunt)
+* [Browserify and Gulp](#browserify-and-gulp)
+* [Getting Started](./basics.md)
 
 ## Quick start using NPM and Webpack
 [NPM](https://www.npmjs.com/) is the package manager for JavaScript.
@@ -53,3 +63,8 @@ we prepared simple marionettejs skeleton with Browserify.
 [brunch]: http://brunch.io/
 [grunt]: http://gruntjs.com/
 [gulp]: http://gulpjs.com/
+
+## Getting Started
+
+After installing Marionette you might want to check out the basics.
+[Continue Reading...](./basics.md).

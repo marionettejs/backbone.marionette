@@ -1,7 +1,7 @@
 # Marionette.MnObject
 
-Object incorporates backbone conventions `initialize`, `cid` and `extend`.
-Object includes:
+`MnObject` incorporates backbone conventions `initialize`, `cid` and `extend`.
+`MnObject` includes:
 - [Common Marionette Functionality](./common.md).
 - [Radio API](./backbone.radio.md#marionette-integration).
 

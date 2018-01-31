@@ -298,8 +298,10 @@ describe('CollectionView - Sorting', function() {
         expect(myCollectionView.onBeforeSort).to.not.have.been.called;
       });
 
-      it('should not render the children', function() {
-        expect(myCollectionView.onRenderChildren).to.not.have.been.called;
+      it('should render no children', function() {
+        expect(myCollectionView.onRenderChildren)
+          .to.have.been.calledOnce
+          .and.calledWith(myCollectionView, []);
       });
 
       it('should return the collectionView', function() {
@@ -390,40 +392,5 @@ describe('CollectionView - Sorting', function() {
     it('should return the collectionView instance', function() {
       expect(myCollectionView.removeComparator).to.have.returned(myCollectionView);
     });
-  });
-
-  describe('#isEmpty', function() {
-    describe('when isEmpty is true', function() {
-      it('should not sort', function() {
-        const EmptyCollectionView = MyCollectionView.extend({
-          isEmpty: _.constant(true)
-        });
-
-        const myCollectionView = new EmptyCollectionView({
-          collection
-        });
-
-        myCollectionView.render();
-
-        expect(myCollectionView.onSort).to.not.have.been.called;
-      });
-    });
-
-    describe('when isEmpty is false', function() {
-      it('should not sort', function() {
-        const NotEmptyCollectionView = MyCollectionView.extend({
-          isEmpty: _.constant(false)
-        });
-
-        const myCollectionView = new NotEmptyCollectionView({
-          collection
-        });
-
-        myCollectionView.render();
-
-        expect(myCollectionView.onSort).to.have.been.calledOnce;
-      });
-    });
-
   });
 });

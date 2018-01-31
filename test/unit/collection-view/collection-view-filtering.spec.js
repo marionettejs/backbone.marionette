@@ -3,6 +3,7 @@
 import _ from 'underscore';
 import Backbone from 'backbone';
 import CollectionView from '../../../src/collection-view';
+import Region from '../../../src/region';
 import View from '../../../src/view';
 
 function renderModels(models) {
@@ -246,8 +247,10 @@ describe('CollectionView - Filtering', function() {
         expect(myCollectionView.onBeforeFilter).to.not.have.been.called;
       });
 
-      it('should not render the children', function() {
-        expect(myCollectionView.onRenderChildren).to.not.have.been.called;
+      it('should render no children', function() {
+        expect(myCollectionView.onRenderChildren)
+          .to.have.been.calledOnce
+          .and.calledWith(myCollectionView, []);
       });
 
       it('should return the collectionView', function() {
@@ -276,8 +279,10 @@ describe('CollectionView - Filtering', function() {
           expect(myCollectionView.onBeforeFilter).to.not.have.been.called;
         });
 
-        it('should not render the children', function() {
-          expect(myCollectionView.onRenderChildren).to.not.have.been.called;
+        it('should render no children', function() {
+          expect(myCollectionView.onRenderChildren)
+            .to.have.been.calledOnce
+            .and.calledWith(myCollectionView, []);
         });
 
         it('should return the collectionView', function() {
@@ -298,11 +303,18 @@ describe('CollectionView - Filtering', function() {
             return isOdd(view.model.get('num'));
           });
 
+          this.sinon.spy(myCollectionView.children, '_set');
+
           myCollectionView.filter();
         });
 
         it('should filter the children', function() {
           expect(myCollectionView.onBeforeFilter).to.have.been.calledOnce;
+        });
+
+        it('should set the children', function() {
+          expect(myCollectionView.children._set)
+            .to.have.been.calledOnce.and.calledWith(filteredViews);
         });
 
         it('should render the children', function() {
@@ -422,10 +434,8 @@ describe('CollectionView - Filtering', function() {
         myCollectionView.setFilter(view => { return false; });
       });
 
-      it('should pass isEmpty true in the 1st argument', function() {
-        expect(myCollectionView.isEmpty)
-          .to.have.been.calledOnce
-          .and.calledWith(true);
+      it('should call isEmpty', function() {
+        expect(myCollectionView.isEmpty).to.have.been.calledOnce;
       });
 
       it('should show the empty view', function() {
@@ -439,14 +449,46 @@ describe('CollectionView - Filtering', function() {
       });
 
       it('should pass isEmpty false in the 1st argument', function() {
-        expect(myCollectionView.isEmpty)
-          .to.have.been.calledOnce
-          .and.calledWith(false);
+        expect(myCollectionView.isEmpty).to.have.been.calledOnce;
       });
 
       it('should not show the empty view', function() {
         expect(myCollectionView.$el.text()).to.not.equal('Empty');
       });
+    });
+  });
+
+  describe('when attaching a collectionview with filtered children', function() {
+    let myCollectionView;
+    let myRegion;
+
+    beforeEach(function() {
+      const viewFilter = 'isOdd';
+      myRegion = new Region({ el: '#fixtures' });
+
+      myCollectionView = new MyCollectionView({ collection, viewFilter });
+
+      myCollectionView.render();
+    });
+
+    it('should trigger attach on attached children', function() {
+      const attachedChild = myCollectionView._children.findByIndex(1);
+
+      attachedChild.onAttach = this.sinon.stub();
+
+      myRegion.show(myCollectionView);
+
+      expect(attachedChild.onAttach).to.have.been.calledOnce;
+    });
+
+    it('should not trigger attach on children filtered out', function() {
+      const detachedChild = myCollectionView._children.findByIndex(2);
+
+      detachedChild.onAttach = this.sinon.stub();
+
+      myRegion.show(myCollectionView);
+
+      expect(detachedChild.onAttach).to.not.have.been.called;
     });
   });
 });

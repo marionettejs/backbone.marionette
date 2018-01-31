@@ -36,6 +36,10 @@ describe('CollectionView Children', function() {
     it('should instantiate the children container', function() {
       expect(myCollectionView.children).to.be.instanceOf(ChildViewContainer);
     });
+
+    it('should instantiate the children container', function() {
+      expect(myCollectionView.children).to.be.instanceOf(ChildViewContainer);
+    });
   });
 
   describe('when rendering a CollectionView', function() {
@@ -48,13 +52,8 @@ describe('CollectionView Children', function() {
       myCollectionView.onBeforeAddChild = this.sinon.stub();
       myCollectionView.onAddChild = this.sinon.stub();
 
-      this.sinon.spy(myCollectionView.children, '_init');
       this.sinon.spy(myCollectionView.children, '_add');
       myCollectionView.render();
-    });
-
-    it('should reinit the children container', function() {
-      expect(myCollectionView.children._init).to.have.been.calledOnce;
     });
 
     it('should add children to match the collection', function() {
@@ -110,6 +109,15 @@ describe('CollectionView Children', function() {
       });
 
       it('should swap the children', function() {
+        this.sinon.spy(collectionView.children, '_swap');
+
+        collectionView.swapChildViews(view1, view2);
+
+        expect(collectionView.children._swap).to.have.been.calledOnce
+          .and.calledWith(view1, view2);
+      });
+
+      it('should swap the filtered children', function() {
         this.sinon.spy(collectionView.children, '_swap');
 
         collectionView.swapChildViews(view1, view2);
@@ -649,6 +657,7 @@ describe('CollectionView Children', function() {
       myCollectionView.onBeforeDestroyChildren = this.sinon.stub();
       myCollectionView.onDestroyChildren = this.sinon.stub();
 
+      this.sinon.spy(myCollectionView.children, '_init');
       myCollectionView.render();
     });
 
@@ -663,6 +672,11 @@ describe('CollectionView Children', function() {
       myCollectionView.destroy();
       expect(myCollectionView.onBeforeDestroyChildren)
         .to.be.calledOnce.and.calledWith(myCollectionView);
+    });
+
+    it('should reinit the children container', function() {
+      myCollectionView.destroy();
+      expect(myCollectionView.children._init).to.be.calledOnce;
     });
 
     it('should trigger "destroy:children"', function() {

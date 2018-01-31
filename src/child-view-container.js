@@ -43,20 +43,22 @@ _.extend(Container.prototype, {
   // cid (and model itself). Additionally it stores
   // the view by index in the _views array
   _add(view, index = this._views.length) {
-    const viewCid = view.cid;
-
-    // store the view
-    this._viewsByCid[viewCid] = view;
-
-    // index it by model
-    if (view.model) {
-      this._indexByModel[view.model.cid] = viewCid;
-    }
+    this._addViewIndexes(view);
 
     // add to end by default
     this._views.splice(index, 0, view);
 
     this._updateLength();
+  },
+
+  _addViewIndexes(view) {
+    // store the view
+    this._viewsByCid[view.cid] = view;
+
+    // index it by model
+    if (view.model) {
+      this._indexByModel[view.model.cid] = view;
+    }
   },
 
   // Sort (mutate) and return the array of the child views.
@@ -83,12 +85,20 @@ _.extend(Container.prototype, {
   },
 
   // Replace array contents without overwriting the reference.
-  _set(views) {
+  // Should not add/remove views
+  _set(views, shouldReset) {
     this._views.length = 0;
 
     this._views.push.apply(this._views, views.slice(0));
 
-    this._updateLength();
+    if (shouldReset) {
+      this._viewsByCid = {};
+      this._indexByModel = {};
+
+      _.each(views, this._addViewIndexes.bind(this));
+
+      this._updateLength();
+    }
   },
 
   // Swap views by index
@@ -112,11 +122,8 @@ _.extend(Container.prototype, {
   },
 
   // Find a view by the `cid` of the model that was attached to it.
-  // Uses the model's `cid` to find the view `cid` and
-  // retrieve the view using it.
   findByModelCid(modelCid) {
-    const viewCid = this._indexByModel[modelCid];
-    return this.findByCid(viewCid);
+    return this._indexByModel[modelCid];
   },
 
   // Find a view by index.

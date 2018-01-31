@@ -297,8 +297,7 @@ describe('CollectionView -  Empty', function() {
       });
 
       it('should call isEmpty', function() {
-        // Once for render and once for filter
-        expect(myCollectionView.isEmpty).to.be.calledTwice;
+        expect(myCollectionView.isEmpty).to.be.calledOnce;
       });
 
       it('should not show the emptyView', function() {
@@ -370,7 +369,7 @@ describe('CollectionView -  Empty', function() {
       });
 
       it('should call isEmpty', function() {
-        expect(myCollectionView.isEmpty).to.be.calledOnce.and.calledWith(false);
+        expect(myCollectionView.isEmpty).to.be.calledOnce;
       });
 
       it('should not show the emptyView', function() {
@@ -390,7 +389,7 @@ describe('CollectionView -  Empty', function() {
       });
 
       it('should call isEmpty', function() {
-        expect(myCollectionView.isEmpty).to.be.calledOnce.and.calledWith(true);
+        expect(myCollectionView.isEmpty).to.be.calledOnce;
       });
 
       it('should show the emptyView', function() {

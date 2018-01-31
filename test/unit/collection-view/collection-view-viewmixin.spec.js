@@ -163,11 +163,8 @@ describe('CollectionView - ViewMixin', function() {
       collectionView._removeChildren();
     });
 
-    // Since the collectionView is destroyed we
-    // don't need to worry about emptying the children
-    it('should not empty the children', function() {
-
-      expect(collectionView.children.length).to.equal(2);
+    it('should empty the children', function() {
+      expect(collectionView.children).to.have.lengthOf(0);
     });
 
     it('should have destroyed all of the children', function() {

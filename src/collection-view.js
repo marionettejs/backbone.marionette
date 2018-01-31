@@ -48,11 +48,6 @@ const CollectionView = Backbone.View.extend({
 
     monitorViewEvents(this);
 
-    this.once('render', this._initialEvents);
-
-    // This children container isn't really used by a render, but it provides
-    // the ability to check `this.children.length` prior to rendering
-    // It also allows for cases where only addChildView is used
     this._initChildViewStorage();
     this._initBehaviors();
 
@@ -67,7 +62,10 @@ const CollectionView = Backbone.View.extend({
   },
 
   // Internal method to set up the `children` object for storing all of the child views
+  // `_children` represents all child views
+  // `children` represents only views filtered to be shown
   _initChildViewStorage() {
+    this._children = new ChildViewContainer();
     this.children = new ChildViewContainer();
   },
 
@@ -86,6 +84,8 @@ const CollectionView = Backbone.View.extend({
 
   // Configured the initial events that the collection view binds to.
   _initialEvents() {
+    if (this._isRendered) { return; }
+
     this.listenTo(this.collection, {
       'sort': this._onCollectionSort,
       'reset': this._onCollectionReset,
@@ -112,11 +112,9 @@ const CollectionView = Backbone.View.extend({
   _onCollectionReset() {
     this._destroyChildren();
 
-    this.children._init();
-
     this._addChildModels(this.collection.models);
 
-    this._showChildren();
+    this.sort();
   },
 
   // Handle collection update model additions and  removals
@@ -130,7 +128,7 @@ const CollectionView = Backbone.View.extend({
 
     this._detachChildren(removedViews);
 
-    this._showChildren();
+    this.sort();
 
     // Destroy removed child views after all of the render is complete
     this._removeChildViews(removedViews);
@@ -147,7 +145,7 @@ const CollectionView = Backbone.View.extend({
   },
 
   _removeChildModel(model) {
-    const view = this.children.findByModel(model);
+    const view = this._children.findByModel(model);
 
     if (view) { this._removeChild(view); }
 
@@ -158,6 +156,7 @@ const CollectionView = Backbone.View.extend({
     this.triggerMethod('before:remove:child', this, view);
 
     this.children._remove(view);
+    this._children._remove(view);
 
     this.triggerMethod('remove:child', this, view);
   },
@@ -187,6 +186,7 @@ const CollectionView = Backbone.View.extend({
     this.triggerMethod('before:add:child', this, view);
 
     this._setupChildView(view);
+    this._children._add(view, index);
     this.children._add(view, index);
 
     this.triggerMethod('add:child', this, view);
@@ -281,11 +281,9 @@ const CollectionView = Backbone.View.extend({
 
     this._destroyChildren();
 
-    // After all children have been destroyed re-init the container
-    this.children._init();
-
     if (this.collection) {
       this._addChildModels(this.collection.models);
+      this._initialEvents();
     }
 
     const template = this.getTemplate();
@@ -295,7 +293,7 @@ const CollectionView = Backbone.View.extend({
       this.bindUIElements();
     }
     this._getChildViewContainer();
-    this._showChildren();
+    this.sort();
 
     this._isRendered = true;
 
@@ -319,80 +317,17 @@ const CollectionView = Backbone.View.extend({
 
   // Sorts the children then filters and renders the results.
   sort() {
-    if (this._isDestroyed) { return this; }
+    this._sortChildren();
 
-    if (!this.children.length) { return this; }
-
-    this._showChildren();
+    this.filter();
 
     return this;
   },
 
-  _showChildren() {
-    if (this.isEmpty()) {
-      this._showEmptyView();
-      return;
-    }
-
-    this._sortChildren();
-
-    this.filter();
-  },
-
-  // Returns true if the collectionView is considered empty.
-  // This is called twice during a render. Once to check the data,
-  // and again when views are filtered. Override this function to
-  // customize what empty means.
-  isEmpty(allViewsFiltered) {
-    return allViewsFiltered || !this.children.length;
-  },
-
-  _showEmptyView() {
-    const EmptyView = this._getEmptyView();
-
-    if (!EmptyView) {
-      return;
-    }
-
-    const options = this._getEmptyViewOptions();
-
-    const emptyRegion = this.getEmptyRegion();
-
-    emptyRegion.show(new EmptyView(options));
-  },
-
-  // Retrieve the empty view class
-  _getEmptyView() {
-    const emptyView = this.emptyView;
-
-    if (!emptyView) { return; }
-
-    return this._getView(emptyView);
-  },
-
-  // Remove the emptyView
-  _destroyEmptyView() {
-    const emptyRegion = this.getEmptyRegion();
-    // Only empty if a view is show so the region
-    // doesn't detach any other unrelated HTML
-    if (emptyRegion.hasView()) {
-      emptyRegion.empty();
-    }
-  },
-
-  //
-  _getEmptyViewOptions() {
-    const emptyViewOptions = this.emptyViewOptions || this.childViewOptions;
-
-    if (_.isFunction(emptyViewOptions)) {
-      return emptyViewOptions.call(this);
-    }
-
-    return emptyViewOptions;
-  },
-
   // Sorts views by viewComparator and sets the children to the new order
   _sortChildren() {
+    if (!this._children.length) { return; }
+
     let viewComparator = this.getComparator();
 
     if (!viewComparator) { return; }
@@ -402,7 +337,7 @@ const CollectionView = Backbone.View.extend({
 
     this.triggerMethod('before:sort', this);
 
-    this.children._sort(viewComparator, this);
+    this._children._sort(viewComparator, this);
 
     this.triggerMethod('sort', this);
   },
@@ -446,45 +381,48 @@ const CollectionView = Backbone.View.extend({
     return this.collection.indexOf(view.model);
   },
 
-  // This method re-filters the children views and re-renders the results
+  // This method filters the children views and renders the results
   filter() {
     if (this._isDestroyed) { return this; }
 
-    if (!this.children.length) { return this; }
+    this._filterChildren();
 
-    const filteredViews = this._filterChildren();
-
-    this._renderChildren(filteredViews);
+    this._renderChildren();
 
     return this;
   },
 
   _filterChildren() {
-    const viewFilter = this._getFilter();
-    const addedViews = this._addedViews;
+    if (!this._children.length) { return; }
 
-    delete this._addedViews;
+    const viewFilter = this._getFilter();
 
     if (!viewFilter) {
-      if (addedViews) { return addedViews; }
+      const shouldReset = this.children.length !== this._children.length;
 
-      return this.children._views;
+      this.children._set(this._children._views, shouldReset);
+
+      return;
     }
+
+    // If children are filtered prevent added to end perf
+    delete this._addedViews;
 
     this.triggerMethod('before:filter', this);
 
     const attachViews = [];
     const detachViews = [];
 
-    _.each(this.children._views, (view, key, children) => {
+    _.each(this._children._views, (view, key, children) => {
       (viewFilter.call(this, view, key, children) ? attachViews : detachViews).push(view);
     });
 
     this._detachChildren(detachViews);
 
-    this.triggerMethod('filter', this, attachViews, detachViews);
+    // reset children
+    this.children._set(attachViews, true);
 
-    return attachViews;
+    this.triggerMethod('filter', this, attachViews, detachViews);
   },
 
   // This method returns a function for the viewFilter
@@ -567,21 +505,36 @@ const CollectionView = Backbone.View.extend({
     this.Dom.detachEl(view.el, view.$el);
   },
 
-  _renderChildren(views) {
-    if (this.isEmpty(!views.length)) {
-      this._showEmptyView();
-      return;
-    }
-
-    this._destroyEmptyView();
+  _renderChildren() {
+    const views = this._addedViews || this.children._views;
 
     this.triggerMethod('before:render:children', this, views);
 
-    const els = this._getBuffer(views);
+    if (this.isEmpty()) {
+      this._showEmptyView();
+    } else {
+      this._destroyEmptyView();
 
-    this._attachChildren(els, views);
+      const els = this._getBuffer(views);
+
+      this._attachChildren(els, views);
+    }
+
+    delete this._addedViews;
 
     this.triggerMethod('render:children', this, views);
+  },
+
+  // Renders each view and creates a fragment buffer from them
+  _getBuffer(views) {
+    const elBuffer = this.Dom.createBuffer();
+
+    _.each(views, view => {
+      renderView(view);
+      this.Dom.appendContents(elBuffer, view.el, {_$contents: view.$el});
+    });
+
+    return elBuffer;
   },
 
   _attachChildren(els, views) {
@@ -603,26 +556,62 @@ const CollectionView = Backbone.View.extend({
     });
   },
 
-  // Renders each view in children and creates a fragment buffer from them
-  _getBuffer(views) {
-    const elBuffer = this.Dom.createBuffer();
-
-    _.each(views, view => {
-      renderView(view);
-      this.Dom.appendContents(elBuffer, view.el, {_$contents: view.$el});
-    });
-
-    return elBuffer;
-  },
-
   // Override this method to do something other than `.append`.
   // You can attach any HTML at this point including the els.
   attachHtml(els) {
     this.Dom.appendContents(this.$container[0], els, {_$el: this.$container});
   },
 
+  isEmpty() {
+    return !this.children.length;
+  },
+
+  _showEmptyView() {
+    const EmptyView = this._getEmptyView();
+
+    if (!EmptyView) {
+      return;
+    }
+
+    const options = this._getEmptyViewOptions();
+
+    const emptyRegion = this.getEmptyRegion();
+
+    emptyRegion.show(new EmptyView(options));
+  },
+
+  // Retrieve the empty view class
+  _getEmptyView() {
+    const emptyView = this.emptyView;
+
+    if (!emptyView) { return; }
+
+    return this._getView(emptyView);
+  },
+
+  // Remove the emptyView
+  _destroyEmptyView() {
+    const emptyRegion = this.getEmptyRegion();
+    // Only empty if a view is show so the region
+    // doesn't detach any other unrelated HTML
+    if (emptyRegion.hasView()) {
+      emptyRegion.empty();
+    }
+  },
+
+  //
+  _getEmptyViewOptions() {
+    const emptyViewOptions = this.emptyViewOptions || this.childViewOptions;
+
+    if (_.isFunction(emptyViewOptions)) {
+      return emptyViewOptions.call(this);
+    }
+
+    return emptyViewOptions;
+  },
+
   swapChildViews(view1, view2) {
-    if (!this.children.hasView(view1) || !this.children.hasView(view2)) {
+    if (!this._children.hasView(view1) || !this._children.hasView(view2)) {
       throw new MarionetteError({
         name: classErrorName,
         message: 'Both views must be children of the collection view to swap.',
@@ -630,12 +619,14 @@ const CollectionView = Backbone.View.extend({
       });
     }
 
-    this.children._swap(view1, view2);
+    this._children._swap(view1, view2);
     this.Dom.swapEl(view1.el, view2.el);
 
     // If the views are not filtered the same, refilter
-    if (this.Dom.hasEl(this.el, view1.el) !== this.Dom.hasEl(this.el, view2.el)) {
+    if (this.children.hasView(view1) !== this.children.hasView(view2)) {
       this.filter();
+    } else {
+      this.children._swap(view1, view2);
     }
 
     return this;
@@ -652,11 +643,11 @@ const CollectionView = Backbone.View.extend({
     }
 
     // Only cache views if added to the end
-    if (!index || index >= this.children.length) {
+    if (!index || index >= this._children.length) {
       this._addedViews = [view];
     }
     this._addChild(view, index);
-    this._showChildren();
+    this.sort();
 
     return view;
   },
@@ -723,7 +714,7 @@ const CollectionView = Backbone.View.extend({
 
   // Destroy the child views that this collection view is holding on to, if any
   _destroyChildren() {
-    if (!this.children || !this.children.length) {
+    if (!this._children.length) {
       return;
     }
 
@@ -731,7 +722,12 @@ const CollectionView = Backbone.View.extend({
     if (this.monitorViewEvents === false) {
       this.Dom.detachContents(this.el, this.$el);
     }
-    _.each(this.children._views, this._removeChildView.bind(this));
+    _.each(this._children._views, this._removeChildView.bind(this));
+
+    // After all children have been destroyed re-init the container
+    this._children._init();
+    this.children._init();
+
     this.triggerMethod('destroy:children', this);
   }
 }, {

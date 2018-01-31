@@ -80,20 +80,8 @@ describe('CollectionView Data', function() {
         myCollectionView.collection.add({ id: 5 });
       });
 
-      it('should not call the sort method', function() {
-        expect(myCollectionView.sort).to.not.have.been.called;
-      });
-
-      describe('when the collection changes but the length does not', function() {
-        beforeEach(function() {
-          const models = _.take(collection.models, 3);
-          models.push(new Backbone.Model({ id: 4 }));
-          collection.set(models);
-        });
-
-        it('should not call the sort method', function() {
-          expect(myCollectionView.sort).to.not.have.been.called;
-        });
+      it('should only sort once', function() {
+        expect(myCollectionView.sort).to.have.been.calledOnce;
       });
     });
 

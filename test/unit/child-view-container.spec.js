@@ -14,7 +14,7 @@ describe('#ChildViewContainer', function() {
         new Backbone.View({ id: 1 }),
         new Backbone.View({ id: 2 }),
         new Backbone.View({ id: 3 })
-      ]);
+      ], true);
     });
 
     it('should be able to map over list', function() {
@@ -33,7 +33,7 @@ describe('#ChildViewContainer', function() {
         new Backbone.View(),
         new Backbone.View(),
         new Backbone.View()
-      ]);
+      ], true);
 
       container._init();
     });
@@ -45,7 +45,7 @@ describe('#ChildViewContainer', function() {
     });
 
     it('should update length to 0', function() {
-      expect(container.length).to.equal(0);
+      expect(container).to.have.lengthOf(0);
     });
   });
 
@@ -76,7 +76,7 @@ describe('#ChildViewContainer', function() {
       });
 
       it('should update the size of the chidren', function() {
-        expect(container.length).to.equal(1);
+        expect(container).to.have.lengthOf(1);
       })
     });
 
@@ -119,7 +119,7 @@ describe('#ChildViewContainer', function() {
           new Backbone.View(),
           new Backbone.View(),
           new Backbone.View()
-        ]);
+        ], true);
 
         container._add(view, 3);
 
@@ -137,6 +137,7 @@ describe('#ChildViewContainer', function() {
     let container;
     let views;
     let originalViews;
+    let originalView;
 
     beforeEach(function() {
       views = [
@@ -151,22 +152,36 @@ describe('#ChildViewContainer', function() {
       container._add(new Backbone.View());
 
       originalViews = container._views;
-
-      container._set(views);
+      originalView = container._views[0];
     });
 
     it('should replace the contents of _views', function() {
+      container._set(views);
       expect(container._views[0]).to.equal(views[0]);
     });
 
     it('should keep the _views array reference', function() {
+      container._set(views);
       expect(container._views).to.equal(originalViews);
     });
 
-    it('should update the container length', function() {
-      expect(container.length).to.equal(2);
-    });
+    describe('when resetting', function() {
+      beforeEach(function() {
+        container._set(views, true);
+      });
 
+      it('should not have an old view', function() {
+        expect(container.hasView(originalView)).to.be.false;
+      });
+
+      it('should have a new view', function() {
+        expect(container.hasView(views[0])).to.be.true;
+      });
+
+      it('should update the length', function() {
+        expect(container).to.have.lengthOf(2);
+      });
+    });
   });
 
   describe('#_remove', function() {
@@ -189,7 +204,7 @@ describe('#ChildViewContainer', function() {
           new Backbone.View(),
           new Backbone.View(),
           new Backbone.View()
-        ]);
+        ], true);
 
         container._add(view, 1);
 
@@ -197,7 +212,7 @@ describe('#ChildViewContainer', function() {
       });
 
       it('should update the size of the children', function() {
-        expect(container.length).to.equal(4);
+        expect(container).to.have.lengthOf(4);
       });
 
       it('should remove the index by model', function() {
@@ -230,7 +245,7 @@ describe('#ChildViewContainer', function() {
           new Backbone.View(),
           new Backbone.View(),
           new Backbone.View()
-        ]);
+        ], true);
 
         container._add(view, 1);
 
@@ -238,7 +253,7 @@ describe('#ChildViewContainer', function() {
       });
 
       it('should update the size of the children', function() {
-        expect(container.length).to.equal(4);
+        expect(container).to.have.lengthOf(4);
       });
 
       it('should remove the index', function() {
@@ -266,13 +281,13 @@ describe('#ChildViewContainer', function() {
           new Backbone.View(),
           new Backbone.View(),
           new Backbone.View()
-        ]);
+        ], true);
 
         container._remove(view);
       });
 
       it('should not remove a view from the container', function() {
-        expect(container.length).to.equal(4);
+        expect(container).to.have.lengthOf(4);
       });
     });
   });

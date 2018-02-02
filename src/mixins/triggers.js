@@ -23,7 +23,7 @@ function buildViewTrigger(view, triggerDef) {
     shouldStopPropagation = triggerDef.stopPropagation !== false;
   }
 
-  return function(event) {
+  return function(event, ...args) {
     if (shouldPreventDefault) {
       event.preventDefault();
     }
@@ -32,7 +32,7 @@ function buildViewTrigger(view, triggerDef) {
       event.stopPropagation();
     }
 
-    view.triggerMethod(eventName, view, event);
+    view.triggerMethod(eventName, view, event, ...args);
   };
 }
 

@@ -40,7 +40,7 @@ describe('view triggers', function() {
       });
 
       view.on('fooHandler', fooHandlerStub);
-      view.$el.trigger(fooEvent);
+      view.$el.trigger(fooEvent, ['foo', 'bar']);
     });
 
     it('should trigger the first view event', function() {
@@ -53,6 +53,11 @@ describe('view triggers', function() {
 
     it('should include the event object in the event', function() {
       expect(fooHandlerStub.lastCall.args[1]).to.be.an.instanceOf($.Event);
+    });
+
+    it('should include additional triggered event arguments', function() {
+      expect(fooHandlerStub.lastCall.args[2]).to.equal('foo');
+      expect(fooHandlerStub.lastCall.args[3]).to.equal('bar');
     });
   });
 

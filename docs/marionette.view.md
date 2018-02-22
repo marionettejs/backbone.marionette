@@ -73,7 +73,7 @@ For more detail on how to render templates, see the
 
 ### Set How Template is Attached to the `el`
 
-Override the view's `attachElContent` method to change how the a rendered
+Override the view's `attachElContent` method to change how the rendered
 template is attached to the view's `el`.
 This method receives one parameter - the rendered html.
 
@@ -533,8 +533,8 @@ The `dom event` can be a jQuery DOM event - such as `click` - or another custom
 event, such as Bootstrap's `show.bs.modal`.
 
 The `dom node` represents a jQuery selector or a `ui` key prefixed by `@.`. This
-must exist inside the view once it has completed rendering. The `dom node` is 
-optional, and if omitted, the view's `$el` will be used as the 
+must exist inside the view once it has completed rendering. The `dom node` is
+optional, and if omitted, the view's `$el` will be used as the
 selector.  For more information about the `ui` object, and how it works, see
 [the documentation on ui](#organizing-your-view).
 

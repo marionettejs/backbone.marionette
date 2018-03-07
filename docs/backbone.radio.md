@@ -257,7 +257,7 @@ In addition to this documentation, the Radio documentation can be found on
 The `Marionette.Object` class provides bindings to provide automatic event
 listeners and / or request replies on your object instances. This works with
 a bound `channelName` to let us provide listeners using the `radioEvents` and
-`radioRequets` properties.  Anything that extends from `Mn.Object` has
+`radioRequests` properties.  Anything that extends from `Mn.Object` has
 access to this API.
 
 ### API
@@ -265,7 +265,7 @@ access to this API.
  * `channelName` - defines the Radio channel that will be used for the requests and/or events
  * `getChannel()` - returns a Radio.Channel instance using `channelName`
  * `radioEvents` - defines an events hash with the events to be listened and its respective handlers
- * `radioRequets` - defines an events hash with the requests to be replied and its respective handlers
+ * `radioRequests` - defines an events hash with the requests to be replied and its respective handlers
 
 ### Examples
 

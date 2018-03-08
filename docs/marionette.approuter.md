@@ -52,7 +52,7 @@ will be covered in more detail below.
 The AppRouter uses the `appRoutes` option to define how we respond to routes
 being accessed. To define routes, set the route as your key and the method to
 call as a string referencing a method on your controller. For more information
-on route definitions, see the [Backbone documentation][#backbone-routes].
+on route definitions, see the [Backbone documentation][backbone-routes].
 
 The major difference between `appRoutes` and `routes` is that we provide
 callbacks on a controller instead of directly on the router itself. This allows

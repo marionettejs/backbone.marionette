@@ -283,9 +283,11 @@ const CollectionView = Backbone.View.extend({
     // After all children have been destroyed re-init the container
     this.children._init();
 
+    //this line was before 281: this._destroyChildren();
+    //so, adding child views in before:render hook was useless
+    //now its possible, because children container is ready
     this.triggerMethod('before:render', this);
-    
-    
+
     if (this.collection) {
       this._addChildModels(this.collection.models);
     }
@@ -644,14 +646,17 @@ const CollectionView = Backbone.View.extend({
   },
 
   addChildViews(views, opts = {}) {
-    if(!_.isArray(view)) return;
-    
-    _.each(views, (view) => this.addChildView(view, opts.index, false));
-    
-    if(this.isRendered() && opts.shouldTriggerShow !== false)
+    if (!_.isArray(views)) {
+      return;
+    }
+
+    _.each(views, (view, index) => this.addChildView(view, (opts.index == null ? null : opts.index + index), false));
+
+    if (this.isRendered() && opts.shouldTriggerShow !== false) {
       this._showChildren();
+    }
   },
-  
+
   // Render the child's view and add it to the HTML for the collection view at a given index, based on the current sort
   addChildView(view, index, shouldTriggerShow = true) {
     if (!view || view._isDestroyed) {
@@ -665,8 +670,9 @@ const CollectionView = Backbone.View.extend({
     }
     this._addChild(view, index);
 
-    if(this.isRendered() && shouldTriggerShow !== false)
+    if (this.isRendered() && shouldTriggerShow !== false) {
       this._showChildren();
+    }
 
     return view;
   },

@@ -184,8 +184,8 @@ var Model = Bb.Model.extend({
 
 var model1 = new Model(); // => "bar"
 
-var foo;
-var model2 = new Model({}, { foo: foo }); // => "bar"
+var f;
+var model2 = new Model({}, { foo: f }); // => "bar"
 ```
 
 [Live example](https://jsfiddle.net/marionettejs/2ddk28ap/)

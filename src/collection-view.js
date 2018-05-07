@@ -277,13 +277,15 @@ const CollectionView = Backbone.View.extend({
   // Render children views.
   render() {
     if (this._isDestroyed) { return this; }
-    this.triggerMethod('before:render', this);
 
     this._destroyChildren();
 
     // After all children have been destroyed re-init the container
     this.children._init();
 
+    this.triggerMethod('before:render', this);
+    
+    
     if (this.collection) {
       this._addChildModels(this.collection.models);
     }
@@ -641,22 +643,29 @@ const CollectionView = Backbone.View.extend({
     return this;
   },
 
+  addChildViews(views, opts = {}) {
+    if(!_.isArray(view)) return;
+    
+    _.each(views, (view) => this.addChildView(view, opts.index, false));
+    
+    if(this.isRendered() && opts.shouldTriggerShow !== false)
+      this._showChildren();
+  }
   // Render the child's view and add it to the HTML for the collection view at a given index, based on the current sort
-  addChildView(view, index) {
+  addChildView(view, index, shouldTriggerShow = true) {
     if (!view || view._isDestroyed) {
       return view;
     }
 
-    if (!this._isRendered) {
-      this.render();
-    }
-
     // Only cache views if added to the end
-    if (!index || index >= this.children.length) {
-      this._addedViews = [view];
+    if (index == null || index >= this.children.length) {
+      this._addedViews || (this._addedViews = []);
+      this._addedViews.push(view);
     }
     this._addChild(view, index);
-    this._showChildren();
+
+    if(this.isRendered() && shouldTriggerShow !== false)
+      this._showChildren();
 
     return view;
   },

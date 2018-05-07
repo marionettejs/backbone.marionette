@@ -650,7 +650,8 @@ const CollectionView = Backbone.View.extend({
     
     if(this.isRendered() && opts.shouldTriggerShow !== false)
       this._showChildren();
-  }
+  },
+  
   // Render the child's view and add it to the HTML for the collection view at a given index, based on the current sort
   addChildView(view, index, shouldTriggerShow = true) {
     if (!view || view._isDestroyed) {

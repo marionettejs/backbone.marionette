@@ -5,7 +5,7 @@ import Backbone from 'backbone';
 import CollectionView from '../../../src/collection-view';
 import View from '../../../src/view';
 import Region from '../../../src/region';
-import BackboneViewMixin from '../../../src/mixins/backboneview';
+import Events from '../../../src/mixins/events';
 
 describe('CollectionView -  Empty', function() {
   let MyEmptyView;
@@ -138,7 +138,7 @@ describe('CollectionView -  Empty', function() {
   describe('#emptyView', function() {
     const collection = new Backbone.Collection();
     const BBView = Backbone.View.extend();
-    _.extend(BBView.prototype, BackboneViewMixin);
+    _.extend(BBView.prototype, Events);
 
     describe('when emptyView is falsey', function() {
       it('should not show an emptyView', function() {

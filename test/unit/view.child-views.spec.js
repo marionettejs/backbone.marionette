@@ -251,7 +251,7 @@ describe('layoutView', function() {
   describe('when showing a childView as a basic Backbone.View', function() {
     beforeEach(function() {
       const BBView = Backbone.View.extend();
-      _.extend(BBView.prototype, Marionette.BackboneViewMixin);
+      _.extend(BBView.prototype, Marionette.Events);
 
       this.layoutView = new this.View();
       this.layoutView.render();
@@ -271,7 +271,7 @@ describe('layoutView', function() {
 
     beforeEach(function() {
       const BBView = Backbone.View.extend();
-      _.extend(BBView.prototype, Marionette.BackboneViewMixin);
+      _.extend(BBView.prototype, Marionette.Events);
 
       this.layoutView = new this.View().render();
       this.regionOne = this.layoutView.getRegion('regionOne');
@@ -433,7 +433,7 @@ describe('layoutView', function() {
   describe('when re-rendering an already rendered layoutView', function() {
     beforeEach(function() {
       const BBView = Backbone.View.extend();
-      _.extend(BBView.prototype, Marionette.BackboneViewMixin);
+      _.extend(BBView.prototype, Marionette.Events);
 
       this.ViewBoundRender = this.View.extend({
         initialize: function() {

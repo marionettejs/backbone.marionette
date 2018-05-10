@@ -401,7 +401,7 @@ describe('CollectionView Children', function() {
         onDestroy: this.sinon.stub()
       });
 
-      _.extend(ChildView.prototype, Marionette.BackboneViewMixin);
+      _.extend(ChildView.prototype, Marionette.Events);
 
       childView = new ChildView();
     });

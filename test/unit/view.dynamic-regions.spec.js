@@ -5,7 +5,7 @@ describe('itemView - dynamic regions', function() {
 
   beforeEach(function() {
     BBView = Backbone.View.extend();
-    _.extend(BBView.prototype, Marionette.BackboneViewMixin);
+    _.extend(BBView.prototype, Marionette.Events);
 
     this.template = function() {
       return '<div id="foo"></div><div id="bar"></div>';

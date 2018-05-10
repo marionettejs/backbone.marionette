@@ -1,6 +1,6 @@
 import _ from 'underscore';
 import Backbone from 'backbone';
-import BackboneViewMixin from '../../src/mixins/backboneview';
+import Events from '../../src/mixins/events';
 import View from '../../src/view';
 import Region from '../../src/region';
 
@@ -19,7 +19,7 @@ describe('onDomRefresh', function() {
     BbView = Backbone.View.extend({
       onDomRefresh: this.sinon.stub()
     });
-    _.extend(BbView.prototype, BackboneViewMixin);
+    _.extend(BbView.prototype, Events);
     MnView = View.extend({
       template: _.noop,
       onDomRefresh: this.sinon.stub()

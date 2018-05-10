@@ -8,7 +8,7 @@ import extend from '../../src/utils/extend';
 
 import monitorViewEvents from '../../src/common/monitor-view-events';
 
-import BackboneViewMixin from '../../src/mixins/backboneview';
+import Events from '../../src/mixins/events';
 
 import MnObject from '../../src/object';
 import View from '../../src/view';
@@ -37,7 +37,7 @@ describe('backbone.marionette', function() {
       isEnabled,
       setEnabled,
       monitorViewEvents,
-      BackboneViewMixin,
+      Events,
       extend,
       DomApi,
     };

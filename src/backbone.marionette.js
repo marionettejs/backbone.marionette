@@ -17,7 +17,7 @@ import monitorViewEvents from './common/monitor-view-events';
 import _normalizeMethods from './common/normalize-methods';
 import _triggerMethod from './common/trigger-method';
 
-import BackboneViewMixin from './mixins/backboneview';
+import Events from './mixins/events';
 
 import MnObject from './object';
 import View from './view';
@@ -67,7 +67,7 @@ export {
   isEnabled,
   setEnabled,
   monitorViewEvents,
-  BackboneViewMixin,
+  Events,
   extend,
   DomApi,
   version as VERSION

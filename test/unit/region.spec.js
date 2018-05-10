@@ -1,6 +1,6 @@
 import _ from 'underscore';
 import Backbone from 'backbone';
-import BackboneViewMixin from '../../src/mixins/backboneview';
+import Events from '../../src/mixins/events';
 import Region from '../../src/region';
 import View from '../../src/view';
 
@@ -228,7 +228,7 @@ describe('region', function() {
         onClick: sinon.stub()
       });
 
-      _.extend(MyView.prototype, BackboneViewMixin);
+      _.extend(MyView.prototype, Events);
 
       sinon.stub(MyView.prototype, 'onBeforeRender', (function() { return region.currentView; }).bind(this));
 
@@ -524,7 +524,7 @@ describe('region', function() {
         }
       });
 
-      _.extend(SubView.prototype, BackboneViewMixin);
+      _.extend(SubView.prototype, Events);
 
       this.setFixtures('<div id="region"></div>');
       region = new MyRegion();
@@ -575,7 +575,7 @@ describe('region', function() {
         destroy: function() {}
       });
 
-      _.extend(MyView.prototype, BackboneViewMixin);
+      _.extend(MyView.prototype, Events);
 
       this.setFixtures('<div id="region"></div>');
 
@@ -617,7 +617,7 @@ describe('region', function() {
         attachHtml: function() {}
       });
 
-      _.extend(MyView.prototype, BackboneViewMixin);
+      _.extend(MyView.prototype, Events);
 
       this.setFixtures('<div id="region"></div>');
 
@@ -748,7 +748,7 @@ describe('region', function() {
         destroy: function() {}
       });
 
-      _.extend(MyView.prototype, BackboneViewMixin);
+      _.extend(MyView.prototype, Events);
 
       region = new MyRegion();
       view = new MyView();
@@ -792,7 +792,7 @@ describe('region', function() {
         destroy: function() {}
       });
 
-      _.extend(MyView.prototype, BackboneViewMixin);
+      _.extend(MyView.prototype, Events);
 
       this.setFixtures('<div id="region"></div>');
 
@@ -867,7 +867,7 @@ describe('region', function() {
           $(this.el).html('some content');
         }
       });
-      _.extend(MyView.prototype, BackboneViewMixin);
+      _.extend(MyView.prototype, Events);
 
       view = new MyView();
       this.sinon.spy(view, '_removeElement');
@@ -1148,7 +1148,7 @@ describe('region', function() {
         onBeforeDestroy: this.sinon.stub(),
         onDestroy: this.sinon.stub()
       });
-      _.extend(BbView.prototype, BackboneViewMixin);
+      _.extend(BbView.prototype, Events);
 
       region = new Region({
         el: $('<div></div>')

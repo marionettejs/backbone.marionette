@@ -642,12 +642,19 @@ const CollectionView = Backbone.View.extend({
       this.render();
     }
 
+    const hasIndex = (typeof index !== 'undefined');
+
     // Only cache views if added to the end
-    if (!index || index >= this._children.length) {
+    if (!hasIndex || index >= this._children.length) {
       this._addedViews = [view];
     }
     this._addChild(view, index);
-    this.sort();
+
+    if (hasIndex) {
+      this._renderChildren();
+    } else {
+      this.sort();
+    }
 
     return view;
   },
@@ -722,7 +729,8 @@ const CollectionView = Backbone.View.extend({
     if (this.monitorViewEvents === false) {
       this.Dom.detachContents(this.el, this.$el);
     }
-    _.each(this._children._views, this._removeChildView.bind(this));
+
+    this._removeChildViews(this._children._views);
 
     // After all children have been destroyed re-init the container
     this._children._init();

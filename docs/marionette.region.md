@@ -54,6 +54,8 @@ var App = Mn.Application.extend({
 });
 ```
 
+[Live example](http://jsfiddle.net/marionettejs/9fburmb8/)
+
 For more information, see the
 [Application docs](./marionette.application.md#root-layout).
 
@@ -385,7 +387,7 @@ You can show a template or a string directly into a region. Additionally you can
 var myView = new MyView();
 
 var template = _.template('This is the <%- section %> page');
-var templateContext = templateContext: { section: 'main' };
+var templateContext = { section: 'main' };
 
 myView.showChildView('main', {
   template: template,

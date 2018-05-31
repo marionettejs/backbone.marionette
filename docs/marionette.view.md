@@ -73,7 +73,7 @@ For more detail on how to render templates, see the
 
 ### Set How Template is Attached to the `el`
 
-Override the view's `attachElContent` method to change how the a rendered
+Override the view's `attachElContent` method to change how the rendered
 template is attached to the view's `el`.
 This method receives one parameter - the rendered html.
 

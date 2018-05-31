@@ -1,186 +1,218 @@
+import _ from 'underscore';
+import Backbone from 'backbone';
+import Events from '../../src/mixins/events';
+import Region from '../../src/region';
+import View from '../../src/view';
+
 describe('region', function() {
   'use strict';
 
   describe('when creating a new region and no configuration has been provided', function() {
     it('should throw an exception saying an "el" is required', function() {
       expect(function() {
-        return new Backbone.Marionette.Region();
+        return new Region();
       }).to.throw('An "el" must be specified for a region.');
     });
   });
 
   describe('when passing an el DOM reference in directly', function() {
+    let el;
+    let customRegion;
+    let optionRegion;
+    let optionRegionJquery;
+
     beforeEach(function() {
       this.setFixtures('<div id="region"></div>');
-      this.el = $('#region')[0];
+      el = $('#region')[0];
 
-      this.customRegion = new (Backbone.Marionette.Region.extend({
-        el: this.el
+      customRegion = new (Region.extend({
+        el: el
       }))();
 
-      this.optionRegion = new Backbone.Marionette.Region({el: this.el});
+      optionRegion = new Region({el: el});
 
-      this.optionRegionJquery = new Backbone.Marionette.Region({el: $(this.el)});
+      optionRegionJquery = new Region({el: $(el)});
     });
 
     it('should not have been replaced', function() {
-      expect(this.customRegion.isReplaced()).to.be.false;
+      expect(customRegion.isReplaced()).to.be.false;
     });
 
     it('should work when el is passed in as an option', function() {
-      expect(this.optionRegionJquery.$el[0]).to.equal(this.el);
-      expect(this.optionRegionJquery.el).to.equal(this.el);
+      expect(optionRegionJquery.$el[0]).to.equal(el);
+      expect(optionRegionJquery.el).to.equal(el);
     });
 
     it('should handle when the el option is passed in as a jquery selector', function() {
-      expect(this.optionRegion.$el[0]).to.equal(this.el);
+      expect(optionRegion.$el[0]).to.equal(el);
     });
 
     it('should work when el is set in the region extend', function() {
-      expect(this.customRegion.$el[0]).to.equal(this.el);
+      expect(customRegion.$el[0]).to.equal(el);
     });
 
     it('should not have a view', function() {
-      expect(this.customRegion.hasView()).to.equal(false);
-      expect(this.optionRegion.hasView()).to.equal(false);
+      expect(customRegion.hasView()).to.equal(false);
+      expect(optionRegion.hasView()).to.equal(false);
     });
 
     it('should complain if the el passed in as an option is invalid', function() {
       expect(function() {
-        Backbone.Marionette.Region({el: $('the-ghost-of-lechuck')[0]});
+        Region({el: $('the-ghost-of-lechuck')[0]});
       }).to.throw;
     });
 
     it('should complain if the el passed in via an extended region is invalid', function() {
       expect(function() {
-        (Backbone.Marionette.Region.extend({el: $('the-ghost-of-lechuck')[0]}))();
+        (Region.extend({el: $('the-ghost-of-lechuck')[0]}))();
       }).to.throw;
     });
 
     it('should not be swapping view', function() {
-      expect(this.customRegion.isSwappingView()).to.be.false;
+      expect(customRegion.isSwappingView()).to.be.false;
     });
   });
 
   describe('when creating a new region and the "el" does not exist in DOM', function() {
+    let MyRegion;
+    let MyView;
+    let myView;
+
     beforeEach(function() {
-      this.MyRegion = Backbone.Marionette.Region.extend({
+      MyRegion = Region.extend({
         el: '#not-existed-region'
       });
 
-      this.MyView = Backbone.View.extend({
+      MyView = Backbone.View.extend({
         render: function() {
           $(this.el).html('some content');
         }
       });
-      this.myView = new this.MyView();
+      myView = new MyView();
 
       this.setFixtures('<div id="region"></div>');
     });
 
     describe('when showing a view', function() {
       describe('when allowMissingEl is not set', function() {
+        let region;
+
         beforeEach(function() {
-          this.region = new this.MyRegion();
+          region = new MyRegion();
         });
 
         it('should throw an exception saying an "el" doesnt exist in DOM', function() {
           expect(function() {
-            this.region.show(new this.MyView());
-          }.bind(this)).to.throw('An "el" must exist in DOM for this region ' + this.region.cid);
+            region.show(new MyView());
+          }.bind(this)).to.throw('An "el" must exist in DOM for this region ' + region.cid);
         });
 
         it('should not have a view', function() {
-          expect(this.region.hasView()).to.be.false;
+          expect(region.hasView()).to.be.false;
         });
       });
 
       describe('when allowMissingEl is set', function() {
+        let region;
+
         beforeEach(function() {
-          this.region = new this.MyRegion({allowMissingEl: true});
+          region = new MyRegion({allowMissingEl: true});
         });
 
         it('should not throw an exception', function() {
           expect(function() {
-            this.region.show(new this.MyView());
+            region.show(new MyView());
           }.bind(this)).not.to.throw();
         });
 
         it('should not have a view', function() {
-          expect(this.region.hasView()).to.be.false;
+          expect(region.hasView()).to.be.false;
         });
 
         it('should not render the view', function() {
-          this.sinon.spy(this.myView, 'render');
-          this.region.show(this.myView);
-          expect(this.myView.render).not.to.have.been.called;
+          this.sinon.spy(myView, 'render');
+          region.show(myView);
+          expect(myView.render).not.to.have.been.called;
         });
       });
     });
   });
 
   describe('when showing a template', function() {
+    let myRegion;
+
     beforeEach(function() {
       this.setFixtures('<div id="region"></div>');
-      this.myRegion = new Marionette.Region({
+      myRegion = new Region({
         el: '#region'
       });
 
-      this.myRegion.show(_.template('<b>Hello World!</b>'));
+      myRegion.show(_.template('<b>Hello World!</b>'));
     });
 
     it('should render the template in the region', function() {
-      expect(this.myRegion.$el).to.contain.$html('<b>Hello World!</b>');
+      expect(myRegion.$el).to.contain.$html('<b>Hello World!</b>');
     });
   });
 
   describe('when showing a template with viewOptions', function() {
+    let myRegion;
+
     beforeEach(function() {
       this.setFixtures('<div id="region"></div>');
-      this.myRegion = new Marionette.Region({
+      myRegion = new Region({
         el: '#region'
       });
 
-      this.myRegion.show({
+      myRegion.show({
         template: _.template('<b>Hello <%- who %>!</b>'),
         model: new Backbone.Model({ who: 'World' })
       });
     });
 
     it('should render the template in the region', function() {
-      expect(this.myRegion.$el).to.contain.$html('<b>Hello World!</b>');
+      expect(myRegion.$el).to.contain.$html('<b>Hello World!</b>');
     });
   });
 
   describe('when showing an html string', function() {
+    let myRegion;
+
     beforeEach(function() {
       this.setFixtures('<div id="region"></div>');
-      this.myRegion = new Marionette.Region({
+      myRegion = new Region({
         el: '#region'
       });
 
-      this.myRegion.show('<b>Hello World!</b>');
+      myRegion.show('<b>Hello World!</b>');
     });
 
     it('should render the string in the region', function() {
-      expect(this.myRegion.$el).to.contain.$html('<b>Hello World!</b>');
+      expect(myRegion.$el).to.contain.$html('<b>Hello World!</b>');
     });
   });
 
   describe('when showing an initial view', function() {
+    let MyView;
+    let showOptions;
+    let isSwappingOnShow;
+    let view;
+    let region;
+
     beforeEach(function() {
-      var self = this;
-      this.MyRegion = Backbone.Marionette.Region.extend({
+      const sinon = this.sinon;
+
+      const MyRegion = Region.extend({
         el: '#region',
-        onBeforeShow: this.sinon.stub(),
-        onShow: this.sinon.spy(function() {
-          self.isSwappingOnShow = this.isSwappingView();
+        onBeforeShow: sinon.stub(),
+        onShow: sinon.spy(function() {
+          isSwappingOnShow = this.isSwappingView();
         }),
-        onBeforeEmpty: this.sinon.stub(),
-        onEmpty: this.sinon.stub(),
+        onBeforeEmpty: sinon.stub(),
+        onEmpty: sinon.stub(),
       });
 
-      this.MyView = Backbone.View.extend({
+      MyView = Backbone.View.extend({
         events: {
           'click': 'onClick'
         },
@@ -189,382 +221,190 @@ describe('region', function() {
         },
         destroy: function() {},
         onBeforeRender: function() {},
-        onRender: this.sinon.stub(),
-        onBeforeAttach: this.sinon.stub(),
-        onAttach: this.sinon.stub(),
-        onDomRefresh: this.sinon.stub(),
-        onClick: this.sinon.stub()
+        onRender: sinon.stub(),
+        onBeforeAttach: sinon.stub(),
+        onAttach: sinon.stub(),
+        onDomRefresh: sinon.stub(),
+        onClick: sinon.stub()
       });
 
-      this.sinon.stub(this.MyView.prototype, 'onBeforeRender', _.bind(function() { return this.region.currentView; }, this));
+      _.extend(MyView.prototype, Events);
+
+      sinon.stub(MyView.prototype, 'onBeforeRender', (function() { return region.currentView; }).bind(this));
 
       this.setFixtures('<div id="region"></div>');
-      this.view = new this.MyView();
-      this.region = new this.MyRegion();
+      view = new MyView();
+      region = new MyRegion();
 
-      this.sinon.spy(this.region, 'show');
+      sinon.spy(region, 'show');
 
-      this.showOptions = {foo: 'bar'};
-      this.region.show(this.view, this.showOptions);
+      showOptions = {foo: 'bar'};
+      region.show(view, showOptions);
     });
 
     it('should have a cidPrefix', function() {
-      expect(this.region.cidPrefix).to.equal('mnr');
+      expect(region.cidPrefix).to.equal('mnr');
     });
 
     it('should have a cid', function() {
-      expect(this.region.cid).to.exist;
+      expect(region.cid).to.exist;
     });
 
     it('should render the view', function() {
-      expect(this.view.onRender).to.have.been.called;
+      expect(view.onRender).to.have.been.called;
     });
 
     it('should have a view', function() {
-      expect(this.region.hasView()).to.equal(true);
+      expect(region.hasView()).to.equal(true);
     });
 
     it('should set $el and el', function() {
-      expect(this.region.$el[0]).to.equal(this.region.el);
+      expect(region.$el[0]).to.equal(region.el);
     });
 
     it('should append the rendered HTML to the managers "el"', function() {
-      expect(this.region.$el).to.contain.$html(this.view.$el.html());
+      expect(region.$el).to.contain.$html(view.$el.html());
     });
 
     it('should pass the proper arguments to the region "onShow"', function() {
-      expect(this.region.onShow).to.have.been.calledWith(this.region, this.view, this.showOptions);
+      expect(region.onShow).to.have.been.calledWith(region, view, showOptions);
     });
 
     it('should pass the proper arguments to the region "onBeforeShow"', function() {
-      expect(this.region.onBeforeShow).to.have.been.calledWith(this.region, this.view, this.showOptions);
+      expect(region.onBeforeShow).to.have.been.calledWith(region, view, showOptions);
     });
 
     it('should not be swapping view', function() {
-      expect(this.isSwappingOnShow).to.be.false;
+      expect(isSwappingOnShow).to.be.false;
     });
 
     it('should have the currentView set before rendering', function() {
-      expect(this.view.onBeforeRender).to.have.returned(this.view);
+      expect(view.onBeforeRender).to.have.returned(view);
     });
 
     describe('region and view event ordering', function() {
       it('triggers before:show before before:render', function() {
-        expect(this.region.onBeforeShow).to.have.been.calledBefore(this.view.onBeforeRender);
-        expect(this.view.onBeforeRender).to.have.been.calledBefore(this.view.onRender);
-        expect(this.view.onRender).to.have.been.calledBefore(this.view.onBeforeAttach);
-        expect(this.view.onBeforeAttach).to.have.been.calledBefore(this.view.onAttach);
-        expect(this.view.onAttach).to.have.been.calledBefore(this.view.onDomRefresh);
-        expect(this.view.onDomRefresh).to.have.been.calledBefore(this.region.onShow);
-        expect(this.region.onShow).to.have.been.called;
+        expect(region.onBeforeShow).to.have.been.calledBefore(view.onBeforeRender);
+        expect(view.onBeforeRender).to.have.been.calledBefore(view.onRender);
+        expect(view.onRender).to.have.been.calledBefore(view.onBeforeAttach);
+        expect(view.onBeforeAttach).to.have.been.calledBefore(view.onAttach);
+        expect(view.onAttach).to.have.been.calledBefore(view.onDomRefresh);
+        expect(view.onDomRefresh).to.have.been.calledBefore(region.onShow);
+        expect(region.onShow).to.have.been.called;
       });
     });
 
     it('should return the region', function() {
-      expect(this.region.show).to.have.returned(this.region);
+      expect(region.show).to.have.returned(region);
     });
 
     describe('and then showing a different view', function() {
+      let view2;
+      let otherOptions;
+
       beforeEach(function() {
-        this.view = this.region.currentView;
+        view = region.currentView;
 
-        this.region.onEmpty.reset();
-        this.region.onBeforeEmpty.reset();
+        region.onEmpty.reset();
+        region.onBeforeEmpty.reset();
 
-        this.view2 = new this.MyView();
-        this.otherOptions = {
+        view2 = new MyView();
+        otherOptions = {
           bar: 'foo'
         };
-        this.region.show(this.view2, this.otherOptions);
+        region.show(view2, otherOptions);
       });
 
       it('should trigger empty once', function() {
-        expect(this.region.onEmpty).to.have.been.calledOnce;
-        expect(this.region.onBeforeEmpty).to.have.been.calledOnce;
+        expect(region.onEmpty).to.have.been.calledOnce;
+        expect(region.onBeforeEmpty).to.have.been.calledOnce;
       });
 
       it('should still have a view', function() {
-        expect(this.region.hasView()).to.equal(true);
+        expect(region.hasView()).to.equal(true);
       });
 
       it('should be swapping view', function() {
-        expect(this.isSwappingOnShow).to.be.true;
+        expect(isSwappingOnShow).to.be.true;
       });
-    });
-
-    describe('when passing "preventDestroy" option', function() {
-      beforeEach(function() {
-        this.MyRegion = Backbone.Marionette.Region.extend({
-          el: '#region',
-          onShow: function() {}
-        });
-
-        this.MyView2 = Backbone.View.extend({
-          render: function() {
-            $(this.el).html('some more content');
-          },
-
-          destroy: function() {},
-
-          onShow: function() {
-            $(this.el).addClass('onShowClass');
-          }
-        });
-
-        this.view1 = new this.MyView();
-        this.view2 = new this.MyView2();
-        this.region = new this.MyRegion();
-
-        this.sinon.spy(this.view1, 'destroy');
-        this.sinon.spy(this.view1, 'off');
-        this.sinon.spy(this.view2, 'destroy');
-        this.sinon.spy(this.region, 'removeView');
-
-        this.region.show(this.view1);
-      });
-
-      describe('preventDestroy: true', function() {
-        beforeEach(function() {
-          this.region.show(this.view2, {preventDestroy: true});
-        });
-
-        it('shouldnt "destroy" the old view', function() {
-          expect(this.view1.destroy.callCount).to.equal(0);
-        });
-
-        it('view1 should not reference region', function() {
-          expect(this.view1._parent).to.be.undefined;
-        });
-
-        it('should remove destroy listener from old view', function() {
-          expect(this.view1.off).to.be.calledOnce;
-        });
-
-        it('should not empty region after destorying old view', function() {
-          expect(this.view1.off).to.be.calledOnce;
-          this.view1.destroy();
-          expect(this.view2.destroy).not.to.have.been.called;
-        });
-
-        it('should replace the content in the DOM', function() {
-          expect(this.region.$el).to.contain.$text('some more content');
-          expect(this.region.$el).not.to.contain.$text('some content');
-        });
-
-        it('should not call removeView', function() {
-          expect(this.region.removeView).not.to.have.been.called;
-        });
-
-        describe('when an el event is triggered', function() {
-          beforeEach(function() {
-            $(this.view.el).trigger('click')
-          });
-
-          // https://github.com/marionettejs/backbone.marionette/issues/2159#issue-52745401
-          it('should catch the event', function() {
-            expect(this.view.onClick).to.be.calledOnce;
-          });
-        });
-
-        describe('when setting the "replaceElement" class option', function() {
-          beforeEach(function() {
-            this.sinon.spy(this.region, '_restoreEl');
-            // empty region to clean existing view
-            this.$parentEl = this.region.$el.parent();
-            this.regionHtml = this.$parentEl.html();
-            this.showOptions = {preventDestroy: true};
-            this.region.replaceElement = true;
-            this.region.show(this.view1, this.showOptions);
-          });
-
-          it('should have replaced the "el"', function() {
-            expect(this.region.isReplaced()).to.be.true;
-          });
-
-          it('should append the view HTML to the parent "el"', function() {
-            expect(this.$parentEl).to.contain.$html(this.view1.$el.html());
-          });
-
-          it('should remove the region\'s "el" from the DOM', function() {
-            expect(this.$parentEl).to.not.contain.$html(this.regionHtml);
-          });
-
-          it('should call _restoreEl', function() {
-            expect(this.region._restoreEl).to.have.been.called;
-          });
-
-          it('should not restore if the "currentView" has been deleted from the region', function() {
-            delete this.region.currentView;
-            this.region._restoreEl();
-            expect(this.region.currentView).to.be.undefined;
-          });
-
-          it('should not restore if the "currentView.el" has been remove from the DOM', function() {
-            this.view1.remove();
-            this.region._restoreEl();
-            expect(this.region.currentView.el.parentNode).is.falsy;
-          });
-
-          describe('and then emptying the region', function() {
-            beforeEach(function() {
-              this.view1.onBeforeDetach = this.sinon.spy(function(view) {
-                return Marionette.isNodeAttached(view.el);
-              });
-              this.view1.onDetach = this.sinon.spy(function(view) {
-                return Marionette.isNodeAttached(view.el);
-              });
-              this.region.empty();
-            });
-
-            it('should trigger detach events while view is detaching', function() {
-              expect(this.view1.onBeforeDetach).to.have.returned(true);
-              expect(this.view1.onDetach).to.have.returned(false);
-            });
-
-            it('should remove the view from the parent', function() {
-              expect(this.$parentEl).to.not.contain.$html(this.view1.$el.html());
-            });
-
-            it('should restore the region\'s "el" to the DOM', function() {
-              expect(this.$parentEl).to.contain.$html('<div id="region"></div>');
-            });
-          });
-
-          describe('when destroying the view', function() {
-            beforeEach(function() {
-              var view = new Marionette.View({ template: _.noop });
-
-              this.region.show(view);
-              view.destroy();
-            });
-
-            it('should remove the view from the parent', function() {
-              expect(this.$parentEl).to.not.contain.$html(this.view.$el.html());
-            });
-
-            it('should restore the region\'s "el" to the DOM', function() {
-              expect(this.$parentEl).to.contain.$html('<div id="region"></div>');
-            });
-          });
-        });
-
-        describe('when setting the "replaceElement" class option and els are the same', function() {
-          beforeEach(function() {
-            this.$parentEl = this.region.$el.parent();
-            this.regionHtml = this.$parentEl.html();
-            this.region.replaceElement = true;
-            this.region.show(new this.MyView({ el: this.region.el }));
-          });
-
-          it('should have replaced the "el"', function() {
-            expect(this.region.isReplaced()).to.be.true;
-          });
-
-          it('should append the view HTML to the parent "el"', function() {
-            expect(this.$parentEl).to.contain.$html(this.region.currentView.$el.html());
-          });
-        });
-
-      });
-
-      describe('preventDestroy: false', function() {
-        beforeEach(function() {
-          this.region.show(this.view2, {preventDestroy: false});
-        });
-
-        it('should "destroy" the old view', function() {
-          expect(this.view1.destroy).to.have.been.called;
-        });
-
-        it('view1 should not reference region', function() {
-          expect(this.view1._parent).to.be.undefined;
-        });
-
-        it('should call removeView', function() {
-          expect(this.region.removeView).to.have.been.called;
-        });
-      });
-
-
-      describe('when DEV_MODE is on', function() {
-        beforeEach(function() {
-          Marionette.DEV_MODE = true;
-          this.sinon.spy(Marionette.deprecate, '_warn');
-          this.sinon.stub(Marionette.deprecate, '_console', {
-            warn: this.sinon.stub()
-          });
-          Marionette.deprecate._cache = {};
-        });
-
-        it('should call Marionette.deprecate', function() {
-          this.region.show(this.view2, {preventDestroy: true}); expect(Marionette.deprecate._warn).to.be.calledWith('Deprecation warning: The preventDestroy option is deprecated. Use Region#detachView');
-        });
-
-        afterEach(function() {
-          Marionette.DEV_MODE = false;
-        });
-      });
-
     });
 
     describe('when setting the "replaceElement" class option', function() {
+      let regionHtml;
+      let $parentEl;
+
       beforeEach(function() {
-        this.sinon.spy(this.region, '_restoreEl');
+        this.sinon.spy(region, '_restoreEl');
         // empty region to clean existing view
-        this.region.empty();
-        this.$parentEl = this.region.$el.parent();
-        this.regionHtml = this.$parentEl.html();
-        this.region.replaceElement = true;
-        this.region.show(this.view);
+        region.empty();
+        $parentEl = region.$el.parent();
+        regionHtml = $parentEl.html();
+        region.replaceElement = true;
+        region.show(view);
       });
 
       it('should append the view HTML to the parent "el"', function() {
-        expect(this.$parentEl).to.contain.$html(this.view.$el.html());
+        expect($parentEl).to.contain.$html(view.$el.html());
       });
 
       it('should remove the region\'s "el" from the DOM', function() {
-        expect(this.$parentEl).to.not.contain.$html(this.regionHtml);
+        expect($parentEl).to.not.contain.$html(regionHtml);
       });
 
       it('should call _restoreEl', function() {
-        expect(this.region._restoreEl).to.have.been.called;
+        expect(region._restoreEl).to.have.been.called;
+      });
+
+      it('should not restore if the "currentView" has been deleted from the region', function() {
+        delete region.currentView;
+        region._restoreEl();
+        expect(region.currentView).to.be.undefined;
+      });
+
+      it('should not restore if the "currentView.el" has been remove from the DOM', function() {
+        view.remove();
+        region._restoreEl();
+        expect(region.currentView.el.parentNode).is.falsy;
       });
 
       describe('and then emptying the region', function() {
         beforeEach(function() {
-          this.region.empty();
+          region.empty();
         });
 
         it('should remove the view from the parent', function() {
-          expect(this.$parentEl).to.not.contain.$html(this.view.$el.html());
+          expect($parentEl).to.not.contain.$html(view.$el.html());
         });
 
         it('should restore the region\'s "el" to the DOM', function() {
-          expect(this.$parentEl).to.contain.$html('<div id="region"></div>');
+          expect($parentEl).to.contain.$html('<div id="region"></div>');
         });
       });
 
       describe('and the view is detaching from region', function() {
         beforeEach(function() {
-          this.detachedView = this.region.detachView();
+          region.detachView();
         });
 
         it('should remove the view from the parent', function() {
-          expect(this.$parentEl).to.not.contain.$html(this.view.$el.html());
+          expect($parentEl).to.not.contain.$html(view.$el.html());
         });
 
         it('should restore the region\'s "el" to the DOM', function() {
-          expect(this.$parentEl).to.contain.$html('<div id="region"></div>');
+          expect($parentEl).to.contain.$html('<div id="region"></div>');
         });
 
         it('should call _restoreEl', function() {
-          expect(this.region._restoreEl).to.have.been.called;
+          expect(region._restoreEl).to.have.been.called;
         });
       });
 
       describe('and showing another view', function() {
+        let MyView2;
+        let view2;
+
         beforeEach(function() {
-          this.MyView2 = Marionette.View.extend({
+          MyView2 = View.extend({
             events: {
               'click': function() {}
             },
@@ -577,76 +417,89 @@ describe('region', function() {
             onBeforeRender: function() {},
           });
 
-          this.view2 = new this.MyView2();
-          this.region.show(this.view2, this.showOptions);
+          view2 = new MyView2();
+          region.show(view2, showOptions);
         });
 
         it('should append the view HTML to the parent "el"', function() {
-          expect(this.$parentEl).to.contain.$html(this.view2.$el.html());
+          expect($parentEl).to.contain.$html(view2.$el.html());
         });
       });
     });
 
     describe('and the view is detached', function() {
+      let viewDestroyStub;
+      let viewDetachStub;
+      let regionEmptyStub;
+      let detachedView;
+      let noDetachedView;
+
       beforeEach(function() {
-        this.viewDestroyStub = this.sinon.stub();
-        this.view.on('destroy', this.viewDestroyStub);
+        viewDestroyStub = this.sinon.stub();
+        view.on('destroy', viewDestroyStub);
 
-        this.viewDetachStub = this.sinon.stub();
-        this.view.on('detach', this.viewDetachStub);
+        viewDetachStub = this.sinon.stub();
+        view.on('detach', viewDetachStub);
 
-        this.regionEmptyStub = this.sinon.stub();
-        this.region.on('empty', this.regionEmptyStub);
+        regionEmptyStub = this.sinon.stub();
+        region.on('empty', regionEmptyStub);
 
-        this.sinon.spy(this.region, 'removeView');
+        this.sinon.spy(region, 'removeView');
 
-        this.detachedView = this.region.detachView();
-        this.noDetachedView = this.region.detachView();
+        detachedView = region.detachView();
+        noDetachedView = region.detachView();
       });
 
       it('should return the childView it was given', function() {
-        expect(this.detachedView).to.equal(this.view);
+        expect(detachedView).to.equal(view);
       });
 
       it('should not return a childView if it was already detached', function() {
-        expect(this.noDetachedView).to.be.undefined;
+        expect(noDetachedView).to.be.undefined;
       });
 
       it('should have _isDestroyed set to falsy', function() {
-        expect(this.detachedView._isDestroyed).to.not.be.ok;
+        expect(detachedView._isDestroyed).to.not.be.ok;
       });
 
       it('should not have triggered destroy on the view', function() {
-        expect(this.viewDestroyStub).to.not.been.called;
+        expect(viewDestroyStub).to.not.been.called;
       });
 
       it('should have triggered detach on the view', function() {
-        expect(this.viewDetachStub).to.been.called;
+        expect(viewDetachStub).to.been.called;
       });
 
       it('should have triggered empty on the region', function() {
-        expect(this.regionEmptyStub).to.been.called;
+        expect(regionEmptyStub).to.been.called;
       });
 
       it('should not have a parent', function() {
-        expect(this.detachedView).to.not.have.property('_parent');
+        expect(detachedView).to.not.have.property('_parent');
       });
 
       it('should not call removeView', function() {
-        expect(this.region.removeView).not.to.have.been.called;
+        expect(region.removeView).not.to.have.been.called;
       });
     });
   });
 
   describe('when showing nested views', function() {
-    beforeEach(function() {
-      var suite = this;
+    let MyRegion;
+    let MyView;
+    let SubView;
+    let innerRegionRenderSpy;
+    let region;
+    let attachHtmlSpy;
 
-      this.MyRegion = Backbone.Marionette.Region.extend({
+    beforeEach(function() {
+      const sinon = this.sinon;
+
+      MyRegion = Region.extend({
         el: '#region'
       });
 
-      this.View = Backbone.Marionette.View.extend({
+      MyView = View.extend({
         regions: {
           subRegion: '.sub-region'
         },
@@ -656,55 +509,65 @@ describe('region', function() {
         },
 
         onRender: function() {
-          this.getRegion('subRegion').show(new suite.SubView());
+          this.getRegion('subRegion').show(new SubView());
         }
       });
 
-      this.SubView = Backbone.View.extend({
+      SubView = Backbone.View.extend({
         render: function() {
           $(this.el).html('some content');
         },
 
         initialize: function() {
-          suite.innerRegionRenderSpy = suite.sinon.stub();
-          this.on('render', suite.innerRegionRenderSpy);
+          innerRegionRenderSpy = sinon.stub();
+          this.on('render', innerRegionRenderSpy);
         }
       });
 
+      _.extend(SubView.prototype, Events);
+
       this.setFixtures('<div id="region"></div>');
-      this.region = new this.MyRegion();
-      this.attachHtmlSpy = this.sinon.spy(this.region, 'attachHtml');
-      this.region.show(new this.View());
+      region = new MyRegion();
+      attachHtmlSpy = sinon.spy(region, 'attachHtml');
+      region.show(new MyView());
     });
 
     it('should call inner region render before attaching to DOM', function() {
-      expect(this.innerRegionRenderSpy).to.have.been.calledBefore(this.attachHtmlSpy);
+      expect(innerRegionRenderSpy).to.have.been.calledBefore(attachHtmlSpy);
     });
   });
 
   describe('when a view is already attached and shown in a region', function() {
+    let myRegion;
+
     beforeEach(function() {
       this.setFixtures('<div id="region"><div id="view">Foo</div></div>');
-      this.myRegion = new Marionette.Region({
+      myRegion = new Region({
         el: '#region'
       });
-      this.sinon.spy(this.myRegion, 'empty');
+      this.sinon.spy(myRegion, 'empty');
 
-      this.myRegion.show(new Marionette.View({ el: '#view' }));
+      myRegion.show(new View({ el: '#view' }));
     });
 
     it('should not empty the region', function() {
-      expect(this.myRegion.empty).to.not.have.been.called;
+      expect(myRegion.empty).to.not.have.been.called;
     });
   });
 
   describe('when a view is already shown and showing another', function() {
+    let MyRegion;
+    let MyView;
+    let view1;
+    let view2;
+    let region;
+
     beforeEach(function() {
-      this.MyRegion = Backbone.Marionette.Region.extend({
+      MyRegion = Region.extend({
         el: '#region'
       });
 
-      this.MyView = Backbone.View.extend({
+      MyView = Backbone.View.extend({
         render: function() {
           $(this.el).html('some content');
         },
@@ -712,34 +575,41 @@ describe('region', function() {
         destroy: function() {}
       });
 
+      _.extend(MyView.prototype, Events);
+
       this.setFixtures('<div id="region"></div>');
 
-      this.view1 = new this.MyView();
-      this.view2 = new this.MyView();
-      this.region = new this.MyRegion();
+      view1 = new MyView();
+      view2 = new MyView();
+      region = new MyRegion();
 
-      this.sinon.spy(this.view1, 'destroy');
+      this.sinon.spy(view1, 'destroy');
 
-      this.region.show(this.view1);
-      this.region.show(this.view2);
+      region.show(view1);
+      region.show(view2);
     });
 
     it('should call "destroy" on the already open view', function() {
-      expect(this.view1.destroy).to.have.been.called;
+      expect(view1.destroy).to.have.been.called;
     });
 
     it('should reference the new view as the current view', function() {
-      expect(this.region.currentView).to.equal(this.view2);
+      expect(region.currentView).to.equal(view2);
     });
   });
 
   describe('when a view is already shown and showing the same one', function() {
+    let MyRegion;
+    let MyView;
+    let view;
+    let region;
+
     beforeEach(function() {
-      this.MyRegion = Backbone.Marionette.Region.extend({
+      MyRegion = Region.extend({
         el: '#region'
       });
 
-      this.MyView = Backbone.View.extend({
+      MyView = Backbone.View.extend({
         render: function() {
           $(this.el).html('some content');
         },
@@ -747,80 +617,94 @@ describe('region', function() {
         attachHtml: function() {}
       });
 
+      _.extend(MyView.prototype, Events);
+
       this.setFixtures('<div id="region"></div>');
 
-      this.view = new this.MyView();
-      this.region = new this.MyRegion();
-      this.region.show(this.view);
+      view = new MyView();
+      region = new MyRegion();
+      region.show(view);
 
-      this.sinon.spy(this.view, 'destroy');
-      this.sinon.spy(this.region, 'attachHtml');
-      this.sinon.spy(this.view, 'render');
-      this.region.show(this.view);
+      this.sinon.spy(view, 'destroy');
+      this.sinon.spy(region, 'attachHtml');
+      this.sinon.spy(view, 'render');
+      region.show(view);
     });
 
     it('should not call "destroy" on the view', function() {
-      expect(this.view.destroy).not.to.have.been.called;
+      expect(view.destroy).not.to.have.been.called;
     });
 
     it('should not call "attachHtml" on the view', function() {
-      expect(this.region.attachHtml).not.to.have.been.calledWith(this.view);
+      expect(region.attachHtml).not.to.have.been.calledWith(view);
     });
 
     it('should not call "render" on the view', function() {
-      expect(this.view.render).not.to.have.been.called;
+      expect(view.render).not.to.have.been.called;
     });
   });
 
   describe('when a Mn view is already shown but destroyed externally', function() {
+    let MyRegion;
+    let MyView;
+    let view;
+    let region;
+
+
     beforeEach(function() {
-      this.MyRegion = Backbone.Marionette.Region.extend({
+      MyRegion = Region.extend({
         el: '#region'
       });
 
-      this.MyView = Backbone.Marionette.View.extend({
+      MyView = View.extend({
         template: _.template('<div></div>'),
         open: function() {}
       });
 
       this.setFixtures('<div id="region"></div>');
 
-      this.view = new this.MyView();
-      this.region = new this.MyRegion();
-      this.region.show(this.view);
-      this.view.destroy();
+      view = new MyView();
+      region = new MyRegion();
+      region.show(view);
+      view.destroy();
 
-      this.sinon.spy(this.view, 'destroy');
-      this.sinon.spy(this.region, 'attachHtml');
-      this.sinon.spy(this.view, 'render');
+      this.sinon.spy(view, 'destroy');
+      this.sinon.spy(region, 'attachHtml');
+      this.sinon.spy(view, 'render');
     });
 
     it('should not throw an error saying the views been destroyed if a destroyed view is passed in', function() {
       expect(function() {
-        this.region.show();
-      }).not.to.throw(new Error('View (cid: "' + this.view.cid +
+        region.show();
+      }).not.to.throw(new Error('View (cid: "' + view.cid +
           '") has already been destroyed and cannot be used.'));
     });
 
     describe('and destroyView is called', function() {
       beforeEach(function() {
-        this.region.destroyView(this.view);
+        region.destroyView(view);
       });
 
       it('should not call view.destroy', function() {
-        expect(this.view.destroy).to.have.not.been.called;
+        expect(view.destroy).to.have.not.been.called;
       })
     })
 
   });
 
   describe('when a view is already destroyed and showing another', function() {
+    let MyRegion;
+    let MyView;
+    let view1;
+    let view2;
+    let region;
+
     beforeEach(function() {
-      this.MyRegion = Backbone.Marionette.Region.extend({
+      MyRegion = Region.extend({
         el: '#region'
       });
 
-      this.MyView = Backbone.Marionette.View.extend({
+      MyView = View.extend({
         render: function() {
           $(this.el).html('some content');
         }
@@ -828,30 +712,35 @@ describe('region', function() {
 
       this.setFixtures('<div id="region"></div>');
 
-      this.view1 = new this.MyView();
-      this.view2 = new this.MyView();
-      this.region = new this.MyRegion();
+      view1 = new MyView();
+      view2 = new MyView();
+      region = new MyRegion();
 
-      this.sinon.spy(this.view1, 'destroy');
+      this.sinon.spy(view1, 'destroy');
     });
 
     it('shouldnt call "destroy" on an already destroyed view', function() {
-      this.region.show(this.view1);
-      this.view1.destroy();
-      this.region.show(this.view2);
+      region.show(view1);
+      view1.destroy();
+      region.show(view2);
 
-      expect(this.view1.destroy.callCount).to.equal(1);
+      expect(view1.destroy.callCount).to.equal(1);
     });
   });
 
-  describe('when passing options to empty', function() {
+  describe('when calling empty', function() {
+    let MyRegion;
+    let MyView;
+    let view;
+    let region;
+
     beforeEach(function() {
-      this.MyRegion = Backbone.Marionette.Region.extend({
+      MyRegion = Region.extend({
         el: '#region'
       });
 
       this.setFixtures('<div id="region"></div>');
-      this.MyView = Backbone.View.extend({
+      MyView = Backbone.View.extend({
         render: function() {
           $(this.el).html('some content');
         },
@@ -859,55 +748,43 @@ describe('region', function() {
         destroy: function() {}
       });
 
-      this.region = new this.MyRegion();
-      this.view = new this.MyView();
-      this.sinon.spy(this.view, 'destroy');
-      this.region.show(this.view);
+      _.extend(MyView.prototype, Events);
+
+      region = new MyRegion();
+      view = new MyView();
+      this.sinon.spy(view, 'destroy');
+      region.show(view);
     });
 
-    describe('preventDestroy: true', function() {
+    describe('without arguments', function() {
       beforeEach(function() {
-        this.region.empty({preventDestroy: true});
-      });
-      it('should not destroy view', function() {
-        expect(this.view.destroy).to.have.been.not.called;
-      });
-
-      it('should clear region contents', function() {
-        expect(this.region.$el.html()).to.eql('');
-      });
-    });
-
-    describe('preventDestroy: false', function() {
-      beforeEach(function() {
-        this.region.empty({preventDestroy: false});
+        region.empty();
       });
       it('should destroy view', function() {
-        expect(this.view.destroy).to.have.been.called;
-      });
-    });
-    describe('preventDestroy undefined', function() {
-      beforeEach(function() {
-        this.region.empty({});
-      });
-      it('should destroy view', function() {
-        expect(this.view.destroy).to.have.been.called;
+        expect(view.destroy).to.have.been.called;
       });
     });
   });
 
   describe('when destroying the current view', function() {
+    let MyRegion;
+    let MyView;
+    let view;
+    let region;
+    let isSwappingOnEmpty;
+
     beforeEach(function() {
-      var self = this;
-      this.MyRegion = Backbone.Marionette.Region.extend({
+      const sinon = this.sinon;
+
+      MyRegion = Region.extend({
         el: '#region',
-        onBeforeEmpty: this.sinon.stub(),
-        onEmpty: this.sinon.spy(function() {
-          self.isSwappingOnEmpty = this.isSwappingView();
+        onBeforeEmpty: sinon.stub(),
+        onEmpty: sinon.spy(function() {
+          isSwappingOnEmpty = this.isSwappingView();
         })
       });
 
-      this.MyView = Backbone.View.extend({
+      MyView = Backbone.View.extend({
         render: function() {
           $(this.el).html('some content');
         },
@@ -915,376 +792,420 @@ describe('region', function() {
         destroy: function() {}
       });
 
+      _.extend(MyView.prototype, Events);
+
       this.setFixtures('<div id="region"></div>');
 
-      this.view = new this.MyView();
-      this.sinon.spy(this.view, 'destroy');
-      this.sinon.spy(this.view, '_removeElement');
+      view = new MyView();
+      sinon.spy(view, 'destroy');
+      sinon.spy(view, '_removeElement');
 
-      this.region = new this.MyRegion();
-      this.sinon.spy(this.region, 'empty');
-      this.region.show(this.view);
-      this.region.empty();
+      region = new MyRegion();
+      sinon.spy(region, 'empty');
+      region.show(view);
+      region.empty();
     });
 
     it('should trigger a "before:empty" event with the view thats being destroyed', function() {
-      expect(this.region.onBeforeEmpty)
+      expect(region.onBeforeEmpty)
         .to.have.been.calledOnce
-        .and.to.have.been.calledWith(this.region, this.view)
-        .and.to.have.been.calledOn(this.region);
+        .and.to.have.been.calledWith(region, view)
+        .and.to.have.been.calledOn(region);
     });
 
     it('should trigger a empty event', function() {
-      expect(this.region.onEmpty)
+      expect(region.onEmpty)
         .to.have.been.calledOnce
-        .and.to.have.been.calledWith(this.region, this.view)
-        .and.to.have.been.calledOn(this.region);
+        .and.to.have.been.calledWith(region, view)
+        .and.to.have.been.calledOn(region);
     });
 
     it('should call "destroy" on the already show view', function() {
-      expect(this.view.destroy).to.have.been.called;
+      expect(view.destroy).to.have.been.called;
     });
 
     it('should not call "_removeElement" directly, on the view', function() {
-      expect(this.view._removeElement).not.to.have.been.called;
+      expect(view._removeElement).not.to.have.been.called;
     });
 
     it('should delete the current view reference', function() {
-      expect(this.region.currentView).to.be.undefined;
+      expect(region.currentView).to.be.undefined;
     });
 
     it('should return the region', function() {
-      expect(this.region.empty).to.have.returned(this.region);
+      expect(region.empty).to.have.returned(region);
     });
 
     it('should return the region even when there was not a view to destroy', function() {
       // The first empty() should have removed the view, this empty() call would be when there isn't a view
-      this.region.empty();
-      expect(this.region.empty.thirdCall).to.have.returned(this.region);
+      region.empty();
+      expect(region.empty.thirdCall).to.have.returned(region);
     });
 
     it('should not have a view', function() {
-      expect(this.region.hasView()).to.equal(false);
+      expect(region.hasView()).to.equal(false);
     });
 
     it('should not be swapping view', function() {
-      expect(this.isSwappingOnEmpty).to.be.false;
+      expect(isSwappingOnEmpty).to.be.false;
     });
   });
 
   describe('when destroying the current view and it does not have a "destroy" method', function() {
+    let MyRegion;
+    let MyView;
+    let view;
+    let region;
+
     beforeEach(function() {
-      this.MyRegion = Backbone.Marionette.Region.extend({
+      MyRegion = Region.extend({
         el: '<div></div>'
       });
 
-      this.MyView = Backbone.View.extend({
+      MyView = Backbone.View.extend({
         render: function() {
           $(this.el).html('some content');
         }
       });
+      _.extend(MyView.prototype, Events);
 
-      this.view = new this.MyView();
-      this.sinon.spy(this.view, '_removeElement');
-      this.region = new this.MyRegion();
-      this.region.show(this.view);
-      this.region.empty();
+      view = new MyView();
+      this.sinon.spy(view, '_removeElement');
+      region = new MyRegion();
+      region.show(view);
+      region.empty();
     });
 
     it('should call "_removeElement" on the view', function() {
-      expect(this.view._removeElement).to.have.been.called;
+      expect(view._removeElement).to.have.been.called;
     });
 
     it('should set "_isDestroyed" on the view', function() {
-      expect(this.view._isDestroyed).to.be.true;
+      expect(view._isDestroyed).to.be.true;
     });
 
     describe('and then attempting to show the view again in the Region', function() {
+      let showFunction;
+
       beforeEach(function() {
-        var suite = this;
-        this.showFunction = function() {
-          suite.region.show(suite.view);
+        showFunction = function() {
+          region.show(view);
         };
       });
 
       it('should throw an error.', function() {
-        var errorMessage = 'View (cid: "' + this.view.cid + '") has already been destroyed and cannot be used.';
-        expect(this.showFunction).to.throw(errorMessage);
+        const errorMessage = 'View (cid: "' + view.cid + '") has already been destroyed and cannot be used.';
+        expect(showFunction).to.throw(errorMessage);
       });
     });
   });
 
   describe('when initializing a region and passing an "el" option', function() {
+    let el;
+    let region;
+
     beforeEach(function() {
-      this.el = '#foo';
-      this.region = new Backbone.Marionette.Region({
-        el: this.el
+      el = '#foo';
+      region = new Region({
+        el: el
       });
     });
 
     it('should manage the specified el', function() {
-      expect(this.region.el).to.equal(this.el);
+      expect(region.el).to.equal(el);
     });
   });
 
   describe('when creating a region instance with an initialize method', function() {
+    let expectedOptions;
+    let MyRegion;
+
     beforeEach(function() {
-      this.expectedOptions = {foo: 'bar'};
-      this.Region = Backbone.Marionette.Region.extend({
+      expectedOptions = {foo: 'bar'};
+      MyRegion = Region.extend({
         el: '#foo',
         initialize: function() {}
       });
 
-      this.sinon.spy(this.Region.prototype, 'initialize');
+      this.sinon.spy(MyRegion.prototype, 'initialize');
 
-      this.region = new this.Region(this.expectedOptions);
+      new MyRegion(expectedOptions);
     });
 
     it('should call the initialize method with the options from the constructor', function() {
-      expect(this.Region.prototype.initialize).to.have.been.calledWith(this.expectedOptions);
+      expect(MyRegion.prototype.initialize).to.have.been.calledWith(expectedOptions);
     });
   });
 
   describe('when removing a region', function() {
+    let itemView;
+    let region;
+
     beforeEach(function() {
       this.setFixtures('<div id="region"></div><div id="region2"></div>');
 
-      this.itemView = new Backbone.Marionette.View();
-      this.itemView.template = function() {
+      itemView = new View();
+      itemView.template = function() {
         return 'content';
       };
-      this.itemView.addRegions({
+      itemView.addRegions({
         MyRegion: '#region',
         anotherRegion: '#region2'
       });
 
-      this.region = this.itemView.getRegion('MyRegion');
-      this.sinon.spy(this.region, 'empty');
+      region = itemView.getRegion('MyRegion');
+      this.sinon.spy(region, 'empty');
 
-      this.itemView.removeRegion('MyRegion');
+      itemView.removeRegion('MyRegion');
     });
 
     it('should be removed from the view', function() {
-      expect(this.itemView.getRegion('MyRegion')).to.be.undefined;
+      expect(itemView.getRegion('MyRegion')).to.be.undefined;
     });
 
     it('should call "empty" of the region', function() {
-      expect(this.region.empty).to.have.been.called;
+      expect(region.empty).to.have.been.called;
     });
   });
 
   describe('when getting a region', function() {
+    let itemView;
+    let region;
+
     beforeEach(function() {
-      this.itemView = new Backbone.Marionette.View();
-      this.itemView.render = this.sinon.stub();
-      this.itemView.addRegions({
+      itemView = new View();
+      itemView.render = this.sinon.stub();
+      itemView.addRegions({
         MyRegion: '#region',
         anotherRegion: '#region2'
       });
 
-      this.region = this.itemView._regions.MyRegion;
+      region = itemView._regions.MyRegion;
     });
 
     it('should return the region', function() {
-      expect(this.itemView.getRegion('MyRegion')).to.equal(this.region);
+      expect(itemView.getRegion('MyRegion')).to.equal(region);
     });
 
     it('should call render if getRegion is called without being rendered', function() {
-      this.itemView.getRegion('whoCares');
-      expect(this.itemView.render).to.be.calledOnce;
+      itemView.getRegion('whoCares');
+      expect(itemView.render).to.be.calledOnce;
     });
   });
 
   describe('when resetting a region', function() {
+    let region;
+
     beforeEach(function() {
       this.setFixtures('<div id="region"></div>');
 
-      this.region = new Backbone.Marionette.Region({
+      region = new Region({
         el: '#region'
       });
 
-      this.sinon.spy(this.region, 'empty');
+      this.sinon.spy(region, 'empty');
 
-      this.region._ensureElement();
+      region._ensureElement();
 
-      this.sinon.spy(this.region, 'reset');
-      this.region.reset();
+      this.sinon.spy(region, 'reset');
+      region.reset();
     });
 
     it('should not hold on to the regions previous "el"', function() {
-      expect(this.region.$el).not.to.exist;
+      expect(region.$el).not.to.exist;
     });
 
     it('should empty any existing view', function() {
-      expect(this.region.empty).to.have.been.called;
+      expect(region.empty).to.have.been.called;
     });
 
     it('should return the region', function() {
-      expect(this.region.reset).to.have.returned(this.region);
+      expect(region.reset).to.have.returned(region);
     });
   });
 
   describe('when destroying a region', function() {
+    let region;
+
     beforeEach(function() {
       this.setFixtures('<div id="region"></div>');
 
-      this.region = new Backbone.Marionette.Region({
+      region = new Region({
         el: '#region'
       });
 
-      this.sinon.spy(this.region, 'reset');
+      this.sinon.spy(region, 'reset');
 
-      this.sinon.spy(this.region, 'destroy');
-      this.region.destroy();
+      this.sinon.spy(region, 'destroy');
+      region.destroy();
     });
 
     it('should reset the region', function() {
-      expect(this.region.reset).to.have.been.called;
+      expect(region.reset).to.have.been.called;
     });
 
     it('should return the region', function() {
-      expect(this.region.destroy).to.have.returned(this.region);
+      expect(region.destroy).to.have.returned(region);
     });
 
     describe('when the region is already destroyed', function() {
       it('should not reset the region', function() {
-        this.region.reset.reset();
-        this.region.destroy();
-        expect(this.region.reset).to.not.have.been.called;
+        region.reset.reset();
+        region.destroy();
+        expect(region.reset).to.not.have.been.called;
       });
 
       it('should return the region', function() {
-        this.region.destroy.reset();
-        this.region.destroy();
-        expect(this.region.destroy).to.have.returned(this.region);
+        region.destroy.reset();
+        region.destroy();
+        expect(region.destroy).to.have.returned(region);
       });
     });
   });
 
   describe('when destroying a Mn view in a region', function() {
+    let beforeEmptySpy;
+    let emptySpy;
+    let onBeforeDestroy;
+    let onDestroy;
+    let MyView;
+    let region;
+    let view;
+
     beforeEach(function() {
       this.setFixtures('<div id="region"></div>');
-      this.beforeEmptySpy = new sinon.spy();
-      this.emptySpy = new sinon.spy();
-      this.onBeforeDestroy = this.sinon.stub();
-      this.onDestroy = this.sinon.stub();
+      beforeEmptySpy = new sinon.spy();
+      emptySpy = new sinon.spy();
+      onBeforeDestroy = this.sinon.stub();
+      onDestroy = this.sinon.stub();
 
-      this.region = new Backbone.Marionette.Region({
+      region = new Region({
         el: '#region'
       });
 
-      this.region.on('before:empty', this.beforeEmptySpy);
-      this.region.on('empty', this.emptySpy);
+      region.on('before:empty', beforeEmptySpy);
+      region.on('empty', emptySpy);
 
-      this.View = Backbone.Marionette.View.extend({
+      MyView = View.extend({
         template: _.template('')
       });
 
-      this.view = new this.View();
+      view = new MyView();
 
-      this.view.on('before:destroy', this.onBeforeDestroy);
-      this.view.on('destroy', this.onDestroy);
+      view.on('before:destroy', onBeforeDestroy);
+      view.on('destroy', onDestroy);
 
-      this.region.show(this.view);
-      this.region.currentView.destroy();
+      region.show(view);
+      region.currentView.destroy();
     });
 
     it('should remove the view from the region after being destroyed', function() {
-      expect(this.beforeEmptySpy).to.have.been.calledOnce.and.calledWith(this.region, this.view);
-      expect(this.emptySpy).to.have.been.calledOnce.calledWith(this.region, this.view);
-      expect(this.region.currentView).to.be.undefined;
+      expect(beforeEmptySpy).to.have.been.calledOnce.and.calledWith(region, view);
+      expect(emptySpy).to.have.been.calledOnce.calledWith(region, view);
+      expect(region.currentView).to.be.undefined;
     });
 
     it('view "before:destroy" event is triggered once', function() {
-      expect(this.onBeforeDestroy).to.have.been.calledOnce;
+      expect(onBeforeDestroy).to.have.been.calledOnce;
     });
 
     it('view "destroy" event is triggered once', function() {
-      expect(this.onDestroy).to.have.been.calledOnce;
+      expect(onDestroy).to.have.been.calledOnce;
     });
   });
 
   describe('when showing undefined in a region', function() {
+    let insertUndefined;
+    let region;
+
     beforeEach(function() {
       this.setFixtures('<div id="region"></div>');
 
-      this.region = new Backbone.Marionette.Region({
+      region = new Region({
         el: '#region'
       });
 
-      this.insertUndefined = function() {
-        this.region.show(undefined);
+      insertUndefined = function() {
+        region.show(undefined);
       }.bind(this);
     });
 
     it('should throw an error', function() {
-      var errorMessage = 'The view passed is undefined and therefore invalid. You must pass a view instance to show.';
-      expect(this.insertUndefined).to.throw(errorMessage);
+      const errorMessage = 'The view passed is undefined and therefore invalid. You must pass a view instance to show.';
+      expect(insertUndefined).to.throw(errorMessage);
     });
   });
 
   describe('when showing a Backbone.View child view', function() {
+    let BbView;
+    let region;
+    let view;
+
     beforeEach(function() {
-      var BbView = Backbone.View.extend({
+      BbView = Backbone.View.extend({
         onBeforeRender: this.sinon.stub(),
         onRender: this.sinon.stub(),
         onBeforeDestroy: this.sinon.stub(),
         onDestroy: this.sinon.stub()
       });
-      this.region = new Marionette.Region({
+      _.extend(BbView.prototype, Events);
+
+      region = new Region({
         el: $('<div></div>')
       });
-      this.view = new BbView();
-      this.region.show(this.view);
+      view = new BbView();
+      region.show(view);
     });
 
     it('should fire before:render and render on the child view on show', function() {
-      expect(this.view.onBeforeRender)
+      expect(view.onBeforeRender)
         .to.have.been.calledOnce
-        .and.to.have.been.calledOn(this.view)
-        .and.to.have.been.calledWith(this.view);
-      expect(this.view.onRender)
+        .and.to.have.been.calledOn(view)
+        .and.to.have.been.calledWith(view);
+      expect(view.onRender)
         .to.have.been.calledOnce
-        .and.to.have.been.calledOn(this.view)
-        .and.to.have.been.calledWith(this.view);
+        .and.to.have.been.calledOn(view)
+        .and.to.have.been.calledWith(view);
     });
 
     describe('when emptying while containing the Backbone.View', function() {
       beforeEach(function() {
-        this.region.empty();
+        region.empty();
       });
 
       it('should fire before:destroy and destroy on the child view on show', function() {
-        expect(this.view.onBeforeDestroy)
+        expect(view.onBeforeDestroy)
           .to.have.been.calledOnce
-          .and.to.have.been.calledOn(this.view)
-          .and.to.have.been.calledWith(this.view);
-        expect(this.view.onDestroy)
+          .and.to.have.been.calledOn(view)
+          .and.to.have.been.calledWith(view);
+        expect(view.onDestroy)
           .to.have.been.calledOnce
-          .and.to.have.been.calledOn(this.view)
-          .and.to.have.been.calledWith(this.view);
+          .and.to.have.been.calledOn(view)
+          .and.to.have.been.calledWith(view);
       });
     });
   });
 
   describe('when calling "_ensureElement"', function() {
+    let region;
+
     beforeEach(function() {
-      this.region = new Backbone.Marionette.Region({
+      region = new Region({
         el: '#region'
       });
     });
 
     it('should prefer passed options over initial options', function() {
-      this.region.allowMissingEl = false;
+      region.allowMissingEl = false;
 
-      expect(this.region._ensureElement({allowMissingEl: true})).to.be.false;
+      expect(region._ensureElement({allowMissingEl: true})).to.be.false;
     });
 
     it('should fallback to initial options when not passed options', function() {
-      this.region.allowMissingEl = false;
+      region.allowMissingEl = false;
 
       expect(function() {
-        this.region._ensureElement();
+        region._ensureElement();
       }.bind(this)).to.throw;
     });
   });
@@ -1292,16 +1213,20 @@ describe('region', function() {
   // This is a terrible example of an edge-case where something related to the view's destroy
   // may also want to empty the same region.
   describe('when emptying a region destroys a view that empties the same region', function() {
+    let MyRegion;
+    let region;
+    let MyView;
+
     it('should only empty once', function() {
       this.setFixtures('<div id="region"></div>');
 
-      var MyRegion = Marionette.Region.extend({
+      MyRegion = Region.extend({
         el: '#region',
         onEmpty: this.sinon.stub(),
       });
 
-      var region = new MyRegion();
-      var MyView = Marionette.View.extend({
+      region = new MyRegion();
+      MyView = View.extend({
         template: _.noop,
         onDestroy: function() {
           region.empty();
@@ -1315,15 +1240,18 @@ describe('region', function() {
   });
 
   describe('when emptying a region with no view and preexisting html', function() {
+    let MyRegion;
+    let region;
+
     beforeEach(function() {
-      this.MyRegion = Marionette.Region.extend({
+      MyRegion = Region.extend({
         el: '#region',
       });
     });
 
     it('should clear the region contents', function() {
       this.setFixtures('<div id="region">Preexisting HTML</div>');
-      var region = new this.MyRegion();
+      region = new MyRegion();
       region.empty();
       expect(region.$el.html()).to.eql('');
     });
@@ -1331,7 +1259,7 @@ describe('region', function() {
     // In the future, hopefully allowMissingEl can default to true
     describe('when no el exists while passing allowMissingEl: false', function() {
       it('should throw an error', function() {
-        var region = new this.MyRegion();
+        region = new MyRegion();
         expect(function() {
           region.empty({ allowMissingEl: false });
         }).to.throw('An "el" must exist in DOM for this region ' + region.cid);

@@ -1,10 +1,11 @@
 # Marionette.CollectionView
 
-The `CollectionView` will loop through all of the models in the
-specified collection, render each of them using a specified `childView`,
-then append the results of the child view's `el` to the collection view's
-`el`. By default the `CollectionView` will maintain a sorted collection's order
-in the DOM. This behavior can be disabled by specifying `{sort: false}` on initialize.
+The `CollectionView` will loop through all of the models in the specified collection,
+instantiating a view for each of them using a specified `childView`, and adding them to the `children`.
+It will then sort the `children` by the `viewComparator` and filter them by the `viewFilter`.
+The `el` of the child views that pass the filter will be rendered and appended to
+the collection view's `el`. By default the `CollectionView` will maintain a
+sorted collection's order in the DOM. This behavior can be disabled by specifying `{sortWithCollection: false}` on initialize.
 
 `CollectionView` has the base functionality provided by the View Mixin.
 
@@ -13,25 +14,17 @@ in the DOM. This behavior can be disabled by specifying `{sort: false}` on initi
 * [CollectionView's `childView`](#collectionviews-childview)
   * [CollectionView's `childViewOptions`](#collectionviews-childviewoptions)
 * [CollectionView's `emptyView`](#collectionviews-emptyview)
+  * [CollectionView's `getEmptyRegion`](#collectionviews-getemptyregion)
   * [CollectionView's `emptyViewOptions`](#collectionviews-emptyviewoptions)
   * [CollectionView's `isEmpty`](#collectionviews-isempty)
 * [CollectionView's `render`](#collectionviews-render)
   * [Automatic Rendering](#automatic-rendering)
   * [Re-render the CollectionView](#re-render-the-collectionview)
   * [CollectionView's `attachHtml`](#collectionviews-attachhtml)
-  * [CollectionView's `attachBuffer`](#collectionviews-attachbuffer)
 * [CollectionView's `destroy`](#collectionviews-destroy)
 * [Events](#events)
   * [Child Event Bubbling](#child-event-bubbling)
   * [Lifecycle Events](#lifecycle-events)
-* [Rendering `CollectionView`s](#rendering-collectionviews)
-  * [Rendering Lists](#rendering-lists)
-  * [Rendering Tables](#rendering-tables)
-    * [Tables Using Marionette 2](#tables-using-marionette-2)
-    * [Tables Using Marionette 3](#tables-using-marionette-3)
-  * [Rendering Trees](#rendering-trees)
-    * [Trees in Marionette 2](#trees-in-marionette-2)
-    * [Trees in Marionette 3](#trees-in-marionette-3)
 * [Advanced CollectionView Usage](#advanced-collectionview-usage)
   * [Managing Children](#managing-children)
   * [Filtering](#filtering)
@@ -124,8 +117,6 @@ collectionView.collection.add(foo);
 collectionView.collection.add(bar);
 ```
 
-[Live example](https://jsfiddle.net/marionettejs/woe8yo99/)
-
 ### CollectionView's `childViewOptions`
 
 There may be scenarios where you need to pass data from your parent
@@ -152,8 +143,6 @@ var CollectionView = Mn.CollectionView.extend({
 });
 ```
 
-[Live example](https://jsfiddle.net/marionettejs/7prtxfmu/)
-
 You can also specify the `childViewOptions` as a function, if you need to
 calculate the values to return at runtime. The model will be passed into
 the function should you need access to it when calculating
@@ -164,17 +153,14 @@ of the object will be copied to the `childView` instance's options.
 var Mn = require('backbone.marionette');
 
 var CollectionView = Mn.CollectionView.extend({
-  childViewOptions: function(model, index) {
+  childViewOptions: function(model) {
     // do some calculations based on the model
     return {
-      foo: 'bar',
-      childIndex: index
+      foo: 'bar'
     }
   }
 });
 ```
-
-[Live example](https://jsfiddle.net/marionettejs/cLrfdkvg/)
 
 ## CollectionView's `emptyView`
 
@@ -197,7 +183,18 @@ var MyCollectionView = Mn.CollectionView.extend({
 });
 ```
 
-[Live example](https://jsfiddle.net/marionettejs/ydt01Lyq/)
+### CollectionView's `getEmptyRegion`
+
+When a `CollectionView` is instantiated it creates a region for showing the [`emptyView`](#collectionviews-emptyview).
+This region can be requested using the `getEmptyRegion` method. The region will share the `el` with the `CollectionView`
+and is shown with [`replaceElement: false`](./marionette.region.md#additional-options).
+
+**Note** The `CollectionView` expects to be the only entity managing the region.
+Showing things in this region directly is not advised.
+
+```javascript
+const isEmptyShowing = myCollectionView.getEmptyRegion().hasView();
+```
 
 ### CollectionView's `emptyViewOptions`
 
@@ -225,8 +222,6 @@ var CollectionView = Mn.CollectionView({
 });
 ```
 
-[Live example](https://jsfiddle.net/marionettejs/wu6u00sn/)
-
 ### CollectionView's `isEmpty`
 
 If you want to control when the empty view is rendered, you can override
@@ -236,21 +231,23 @@ If you want to control when the empty view is rendered, you can override
 var Mn = require('backbone.marionette');
 
 var MyCollectionView = Mn.CollectionView.extend({
-  isEmpty: function(options) {
+  isEmpty: function(allViewsFiltered) {
     // some logic to calculate if the view should be rendered as empty
     return this.collection.length < 2;
   }
 });
 ```
 
-[Live example](https://jsfiddle.net/marionettejs/3t9hLfpu/)
+In the normal lifecycle of a `CollectionView`, `isEmpty` will be called
+twice. Once when a render begins, and again after the [`viewFilter`](#filtering) is run. For the call after filtering, a boolean will be passed indicating if all
+of the CollectionView's `children` were filtered.
 
 ## CollectionView's `render`
 
 The `render` method of the collection view is responsible for
 rendering the entire collection. It loops through each of the
 children in the collection and renders them individually as a
-`childView`. By default when a `collectionView` is fully rendered it buffers the DOM changes for a single [`attachBuffer`](#collectionviews-attachbuffer) DOM change.
+`childView`.
 
 ```javascript
 var Mn = require('backbone.marionette');
@@ -261,26 +258,21 @@ var MyCollectionView = Mn.CollectionView.extend({...});
 new MyCollectionView().render();
 ```
 
-[Live example](https://jsfiddle.net/marionettejs/1wkc0p7o/)
-
-For more information on rendering techiniques see: [Rendering `CollectionView`s](#rendering-collectionviews).
-
 ### Automatic Rendering
 
-After the initial render the collection view binds to the `add`, `remove` and
+After the initial render the collection view binds to the `update` and
 `reset` events of the collection that is specified.
 
 When the collection for the view is "reset", the view will call `render` on
 itself and re-render the entire collection.
 
 When a model is added to the collection, the collection view will render that
-one model in to the collection of child views.
+one model into the children.
 
 When a model is removed from a collection (or destroyed / deleted), the collection
 view will destroy and remove that model's child view.
 
-When the collection for the view is sorted, the view will automatically re-sort its child views.
-If the [`reorderOnSort`](./marionette.collectionviewadvanced.md#collectionviews-reorderonsort) option is set it will attempt to reorder the DOM and do this without a full re-render, otherwise it will re-render if the order has changed. Please Note that if you apply a filter to the collection view and the filtered views change during a sort then it will always re-render.
+When the collection for the view is sorted, the view will automatically re-sort its child views unless the `sortWithCollection` attribute on the CollectionView is set to `false`.
 
 ```javascript
 var Bb = require('backbone');
@@ -308,8 +300,6 @@ myCollectionView.render();
 collection.reset([{foo: 'bar'}]);
 ```
 
-[Live example](https://jsfiddle.net/marionettejs/rk3x77ds/)
-
 ### Re-render the CollectionView
 
 If you need to re-render the entire collection, you can call the
@@ -318,12 +308,12 @@ the child views that may have previously been opened.
 
 ### CollectionView's `attachHtml`
 
-By default the collection view will append the HTML of each ChildView
-into the element buffer, and then call jQuery's `.append` once at the
+By default the `CollectionView` will append the HTML of each ChildView
+into the element buffer, and then calls the DOM API's [appendContents](./dom.api.md#appendcontentsel-contents) once at the
 end to move the HTML into the collection view's `el`.
 
 You can override this by specifying an `attachHtml` method in your
-view definition. This method takes three parameters and has no return
+view definition. This method takes one parameter and has no return
 value.
 
 ```javascript
@@ -332,58 +322,20 @@ var Mn = require('backbone.marionette');
 Mn.CollectionView.extend({
 
   // The default implementation:
-  attachHtml: function(collectionView, childView, index){
-    if (collectionView._isBuffering) {
-      // buffering happens on reset events and initial renders
-      // in order to reduce the number of inserts into the
-      // document, which are expensive.
-      collectionView._bufferedChildren.splice(index, 0, childView);
-    } else {
-      // If we've already rendered the main collection, append
-      // the new child into the correct order if we need to. Otherwise
-      // append to the end.
-      if (!collectionView._insertBefore(childView, index)){
-        collectionView._insertAfter(childView);
-      }
-    }
+  attachHtml: function(els){
+    this.Dom.appendContents(this.el, els);
   }
 
 });
 ```
 
-The first parameter is the instance of the collection view that
-will receive the HTML from the second parameter, the current child
-view instance.
-
-The third parameter, `index`, is the index of the
-model that this `childView` instance represents, in the collection
-that the model came from. This is useful for understanding the sort order of the children.
-
-Overrides of `attachHtml` that don't take into account the element
-buffer will work fine, but won't take advantage of the 60x performance
-increase the buffer provides.
-
-### CollectionView's `attachBuffer`
-
-When overriding [`attachHtml`](#collectionviews-attachhtml) it may be necessary to also override how the buffer is attached. This method receives two parameters. The `collectionView` and the buffer HTML of all of the child views.
-
-```javascript
-var Mn = require('backbone.marionette');
-
-var MyCollectionView = Mn.CollectionView.extend({
-  // The default implementation:
-  // Called after all children have been appended into the buffer
-  attachBuffer: function(collectionView, buffer) {
-    collectionView.$el.append(buffer);
-  }
-});
-```
+The first parameter is the instance of the CollectionView that
+will receive the HTML from the second parameter, the HTML buffer.
 
 ## CollectionView's `destroy`
 
 `CollectionView` implements a `destroy` method which automatically
 destroys its children and cleans up listeners.
-
 
 ```javascript
 var Bb = require('backbone');
@@ -405,8 +357,6 @@ myCollectionView.render();
 
 myCollectionView.destroy(); // logs "I will get destroyed"
 ```
-
-[Live example](https://jsfiddle.net/marionettejs/wnhd10jd/)
 
 ## Events
 
@@ -441,8 +391,6 @@ var Collection = Mn.CollectionView.extend({
 });
 ```
 
-[Live example](https://jsfiddle.net/marionettejs/5z1qcr4z/)
-
 The event will receive a [`childview:` prefix](./events.md#a-child-views-event-prefix) before going through the magic
 method binding logic. See the
 [documentation for Child View Events](./events.md#child-view-events) for more
@@ -454,323 +402,6 @@ The `CollectionView` contains its own lifecycle events, on top of the regular
 `View` event lifecycle. For more information on what these are, and how to use
 them, see the
 [Documentation on `CollectionView` lifecycle events](./viewlifecycle.md#collectionview-lifecycle)
-
-## Rendering `CollectionView`s
-
-Marionette 3 has deprecated the `CompositeView` (for removal in v4) in favor of making the
-`View` and `CollectionView` a lot more flexible. This section will cover the
-most common use cases for `CollectionView` and how to replace `CompositeView`.
-
-### Rendering Lists
-
-Lists are possibly the simplest use of `CollectionView` - simply set a
-`childView` option:
-
-```javascript
-var Bb = require('backbone');
-var Mn = require('backbone.marionette');
-
-var ListItemView = Mn.View.extend({
-  tagName: 'li',
-  template: '#list-item-text'
-});
-
-var ListView = Mn.CollectionView.extend({
-  tagName: 'ul',
-  className: 'list-unstyled',
-
-  childView: ListItemView
-});
-
-var list = new Bb.Collection([
-  {id: 1, text: 'My text'},
-  {id: 2, text: 'Another Item'}
-]);
-
-var listView = new ListView({
-  collection: list
-});
-
-listview.render();
-```
-
-With the template:
-
-```
-<%- text %>
-```
-
-This will render the following:
-
-```html
-<ul class="list-unstyled">
-  <li>My text</li>
-  <li>Another Item</li>
-</ul>
-```
-
-[Live example](https://jsfiddle.net/marionettejs/u448nhr2/)
-
-### Rendering Tables
-
-Marionette 3 introduced a major improvement to `View` to make it possible to
-implement tables using only `View` and `CollectionView`. This section will
-demonstrate how to build a table in Marionette 3, with the equivalent in
-Marionette 2 using `CompositeView`.
-
-#### Tables Using Marionette 2
-
-**Note** _The following code is deprecated and for demonstration purposes only_
-
-To build a table in Marionette 2 requires the `CompositeView` which we'll build
-as such:
-
-```javascript
-var Bb = require('backbone');
-var Mn = require('backbone.marionette');
-
-var RowView = Mn.LayoutView.extend({
-  tagName: 'tr',
-  template: '#table-row'
-});
-
-var TableView = Mn.CompositeView.extend({
-  tagName: 'table',
-  className: 'table table-hover',
-  template: '#table',
-  childView: RowView,
-  childViewContainer: 'tbody'
-});
-
-var list = new Bb.Collection([
-  {id: 1, text: 'My text'},
-  {id: 2, text: 'Another Item'}
-]);
-
-var myTable = new TableView({
-  collection: list
-});
-
-myTable.render();
-```
-
-Given the following `#table` and `#table-row` templates:
-
-```html
-<thead>
-  <tr>
-    <th>ID</th>
-    <th>Body</th>
-  </tr>
-</thead>
-<tbody></tbody>
-```
-
-```html
-<td><%- id %></td>
-<td><%- text %></td>
-```
-
-Will render the following:
-
-```html
-<table class="table table-hover">
-  <thead>
-    <tr>
-      <th>ID</th>
-      <th>Body</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td>1</td>
-      <td>My text</td>
-    </tr>
-    <tr>
-      <td>2</td>
-      <td>Another Item</td>
-    </tr>
-  </tbody>
-</table>
-```
-###
-A major downside of this method was that it was impossible to add extra regions
-inside the `CompositeView` - if a header item needed to be re-rendered based on
-user input, then the entire table must be re-rendered, or the DOM must be
-manipulated with `ui` items.
-
-To resolve this issue, Marionette 3 improves the `View` to make it possible to
-build tables without `CompositeView`.
-
-#### Tables Using Marionette 3
-
-Marionette 3 doesn't use `CompositeView` any more. We now build tables using
-`View`s and `regions`. The following code will render the same table as in
-[Marionette 2](#tables-using-marionette-2):
-
-```javascript
-var Bb = require('backbone');
-var Mn = require('backbone.marionette');
-
-var RowView = Mn.View.extend({
-  tagName: 'tr',
-  template: '#row-template'
-});
-
-var TableBody = Mn.CollectionView.extend({
-  tagName: 'tbody',
-  childView: RowView
-});
-
-var TableView = Mn.View.extend({
-  tagName: 'table',
-  className: 'table table-hover',
-  template: '#table',
-
-  regions: {
-    body: {
-      el: 'tbody',
-      replaceElement: true
-    }
-  },
-
-  onRender: function() {
-    this.showChildView('body', new TableBody({
-      collection: this.collection
-    }));
-  }
-});
-
-var list = new Bb.Collection([
-  {id: 1, text: 'My text'},
-  {id: 2, text: 'Another Item'}
-]);
-
-var myTable = new TableView({
-  collection: list
-});
-
-myTable.render();
-```
-
-[Live example](https://jsfiddle.net/marionettejs/zr8gn69g/)
-
-We can leave the templates as-is for this example. The major advantage of this
-style is that we can create a region in any part of `TableView` as well as in
-`RowView` and treat it just as any independent widget.
-
-### Rendering Trees
-
-Tree structures are extremely useful layouts for nesting the same type of data
-over and over. A common example of this would be the Windows Explorer file
-picker.
-
-#### Trees in Marionette 2
-
-```javascript
-var Bb = require('backbone');
-var Mn = require('backbone.marionette');
-
-var TreeView = Mn.CompositeView.extend({
-  tagName: 'ul',
-  template: '#tree-template'
-});
-
-var TreeRoot = Mn.CollectionView.extend({
-  tagName: 'ul',
-  childView: TreeView
-});
-
-
-var tree = new Bb.Collection([
-  {
-    id: 5,
-    nodes: [
-      {id: 9, nodes: []},
-      {id: 1, nodes: [...]}
-    ],
-  },
-  {
-    id: 12,
-    nodes: []
-  }
-]);
-
-new TreeRoot({
-  collection: tree
-});
-```
-
-In Marionette 2, the `CompositeView` defaults to setting `childView` to itself.
-While good for building tree structures, this behavior changed for Marionette 3
-with the introduction of a more general view.
-
-#### Trees in Marionette 3
-
-As in tables, trees in Marionette 3 require us to combine `View` and
-`CollectionView` to build up the tree in a more explicit manner than the
-implicit version provided by Marionette 2.
-
-```javascript
-var Bb = require('backbone');
-var Mn = require('backbone.marionette');
-
-var TreeNode = Mn.View.extend({
-  tagName: 'li',
-  template: '#tree-template',
-
-  regions: {
-    tree: {
-      el: 'ul',
-      replaceElement: true
-    }
-  },
-
-  onRender: function() {
-    var nodes = this.model.get('nodes');
-
-    //show child nodes if they are present
-    if (nodes.length) {
-      var treeView = new TreeView({
-        collection: new Bb.Collection(nodes)
-      });
-
-      this.showChildView('tree', treeView);
-    }
-  }
-});
-
-var TreeView = Mn.CollectionView.extend({
-  tagName: 'ul',
-  childView: TreeNode
-});
-
-var tree = new Bb.Collection([
-  {
-    id: 5,
-    nodes: [
-      {id: 9, nodes: []},
-      {id: 1, nodes: [...]}
-    ],
-  },
-  {
-    id: 12,
-    nodes: []
-  }
-]);
-
-new TreeView({
-  collection: tree
-});
-```
-
-[Live example](https://jsfiddle.net/marionettejs/uyoe84n5/)
-
-This more explicit style gives us two major benefits:
-
-* Fewer bugs - it's no longer possible to accidentally create a tree structure
-* More regions to hook different views in, something that's impossible with
-`CompositeView`
 
 ## Advanced CollectionView Usage
 
@@ -785,8 +416,8 @@ view's model or collection, and more. [Additional Information...](./marionette.c
 
 ### Filtering
 
-`CollectionView` allows for a custom `filter` option if you want to prevent some of the
-underlying `collection`'s models from being rendered as child views. [Additional Information...](./marionette.collectionviewadvanced.md#collectionviews-filter)
+`CollectionView` allows for a custom `viewFilter` option if you want to prevent some of the
+child views from being rendered inside the CollectionView. [Additional Information...](./marionette.collectionviewadvanced.md#collectionviews-filter)
 
 ### Sorting
 

@@ -14,31 +14,10 @@
 // function can be supplied instead of a string handler name.
 
 import _ from 'underscore';
-import deprecate from '../utils/deprecate';
-import MarionetteError from '../error';
+import normalizeMethods from './normalize-methods';
+import MarionetteError from '../utils/error';
 
-// Bind/unbind the event to handlers specified as a string of
-// handler names on the target object
-function bindFromStrings(target, entity, evt, methods, actionName) {
-  const methodNames = methods.split(/\s+/);
-
-  if (methodNames.length > 1) {
-    deprecate('Multiple handlers for a single event are deprecated. If needed, use a single handler to call multiple methods.')
-  }
-
-  _.each(methodNames, function(methodName) {
-    const method = target[methodName];
-    if (!method) {
-      throw new MarionetteError(`Method "${methodName}" was configured as an event handler, but does not exist.`);
-    }
-
-    target[actionName](entity, evt, method);
-  });
-}
-
-// generic looping function
-function iterateEvents(target, entity, bindings, actionName) {
-  // type-check bindings
+function normalizeBindings(context, bindings) {
   if (!_.isObject(bindings)) {
     throw new MarionetteError({
       message: 'Bindings must be an object.',
@@ -46,23 +25,14 @@ function iterateEvents(target, entity, bindings, actionName) {
     });
   }
 
-  // iterate the bindings and bind/unbind them
-  _.each(bindings, function(method, evt) {
-
-    // allow for a list of method names as a string
-    if (_.isString(method)) {
-      bindFromStrings(target, entity, evt, method, actionName);
-      return;
-    }
-
-    target[actionName](entity, evt, method);
-  });
+  return normalizeMethods.call(context, bindings);
 }
 
 function bindEvents(entity, bindings) {
   if (!entity || !bindings) { return this; }
 
-  iterateEvents(this, entity, bindings, 'listenTo');
+  this.listenTo(entity, normalizeBindings(this, bindings));
+
   return this;
 }
 
@@ -74,7 +44,8 @@ function unbindEvents(entity, bindings) {
     return this;
   }
 
-  iterateEvents(this, entity, bindings, 'stopListening');
+  this.stopListening(entity, normalizeBindings(this, bindings));
+
   return this;
 }
 

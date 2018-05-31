@@ -2,10 +2,10 @@
 
 import _ from 'underscore';
 import Backbone from 'backbone';
-import CollectionView from '../../../src/next-collection-view';
+import CollectionView from '../../../src/collection-view';
 import View from '../../../src/view';
 
-describe('NextCollectionView - ViewMixin', function() {
+describe('CollectionView - ViewMixin', function() {
 
   describe('when initializing a CollectionView', function() {
     let collectionView;
@@ -67,7 +67,7 @@ describe('NextCollectionView - ViewMixin', function() {
       });
       const collection = new Backbone.Collection([{}, {}]);
 
-      collectionView = new MyCollectionView({ collection });
+      collectionView = new MyCollectionView({ collection, childViewEventPrefix: 'childview' });
 
       handlerSpy = this.sinon.spy(collectionView, '_childViewEventHandler');
 
@@ -163,11 +163,8 @@ describe('NextCollectionView - ViewMixin', function() {
       collectionView._removeChildren();
     });
 
-    // Since the collectionView is destroyed we
-    // don't need to worry about emptying the children
-    it('should not empty the children', function() {
-
-      expect(collectionView.children.length).to.equal(2);
+    it('should empty the children', function() {
+      expect(collectionView.children).to.have.lengthOf(0);
     });
 
     it('should have destroyed all of the children', function() {

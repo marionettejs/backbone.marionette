@@ -3,13 +3,11 @@
 
 import _ from 'underscore';
 import Backbone from 'backbone';
-import deprecate from './utils/deprecate';
-import isNodeAttached from './common/is-node-attached';
 import monitorViewEvents from './common/monitor-view-events';
 import ViewMixin from './mixins/view';
 import RegionsMixin from './mixins/regions';
-import Renderer from './config/renderer';
 import { setDomApi } from './config/dom';
+import { setRenderer } from './config/renderer';
 
 const ClassOptions = [
   'behaviors',
@@ -27,64 +25,32 @@ const ClassOptions = [
   'ui'
 ];
 
+// Used by _getImmediateChildren
+function childReducer(children, region) {
+  if (region.currentView) {
+    children.push(region.currentView);
+  }
+
+  return children;
+}
+
 // The standard view. Includes view events, automatic rendering
 // of Underscore templates, nested views, and more.
 const View = Backbone.View.extend({
 
   constructor(options) {
-    this.render = _.bind(this.render, this);
-
-    this._setOptions(options);
-
-    this.mergeOptions(options, ClassOptions);
+    this._setOptions(options, ClassOptions);
 
     monitorViewEvents(this);
 
     this._initBehaviors();
     this._initRegions();
 
-    const args = Array.prototype.slice.call(arguments);
-    args[0] = this.options;
-    Backbone.View.prototype.constructor.apply(this, args);
+    Backbone.View.prototype.constructor.apply(this, arguments);
 
     this.delegateEntityEvents();
 
-    this._triggerEventOnBehaviors('initialize', this);
-  },
-
-  // Serialize the view's model *or* collection, if
-  // it exists, for the template
-  serializeData() {
-    if (!this.model && !this.collection) {
-      return {};
-    }
-
-    // If we have a model, we serialize that
-    if (this.model) {
-      return this.serializeModel();
-    }
-
-    // Otherwise, we serialize the collection,
-    // making it available under the `items` property
-    return {
-      items: this.serializeCollection()
-    };
-  },
-
-  // Prepares the special `model` property of a view
-  // for being displayed in the template. By default
-  // we simply clone the attributes. Override this if
-  // you need a custom transformation for your view's model
-  serializeModel() {
-    if (!this.model) { return {}; }
-    return _.clone(this.model.attributes);
-  },
-
-  // Serialize a collection by cloning each of
-  // its model's attributes
-  serializeCollection() {
-    if (!this.collection) { return {}; }
-    return this.collection.map(function(model) { return _.clone(model.attributes); });
+    this._triggerEventOnBehaviors('initialize', this, options);
   },
 
   // Overriding Backbone.View's `setElement` to handle
@@ -94,7 +60,7 @@ const View = Backbone.View.extend({
     Backbone.View.prototype.setElement.apply(this, arguments);
 
     this._isRendered = this.Dom.hasContents(this.el);
-    this._isAttached = isNodeAttached(this.el);
+    this._isAttached = this.Dom.hasEl(document.documentElement, this.el);
 
     if (this._isRendered) {
       this.bindUIElements();
@@ -111,7 +77,9 @@ const View = Backbone.View.extend({
   // Subsequent renders after the first will re-render all nested
   // views.
   render() {
-    if (this._isDestroyed) { return this; }
+    const template = this.getTemplate();
+
+    if (template === false || this._isDestroyed) { return this; }
 
     this.triggerMethod('before:render', this);
 
@@ -121,71 +89,11 @@ const View = Backbone.View.extend({
       this._reInitRegions();
     }
 
-    this._renderTemplate();
+    this._renderTemplate(template);
     this.bindUIElements();
 
     this._isRendered = true;
     this.triggerMethod('render', this);
-
-    return this;
-  },
-
-  // Internal method to render the template with the serialized data
-  // and template context via the `Marionette.Renderer` object.
-  _renderTemplate() {
-    const template = this.getTemplate();
-
-    // Allow template-less views
-    if (template === false) {
-      deprecate('template:false is deprecated.  Use _.noop.');
-      return;
-    }
-
-    // Add in entity data and template context
-    const data = this.mixinTemplateContext(this.serializeData());
-
-    // Render and add to el
-    const html = this._renderHtml(template, data);
-    this.attachElContent(html);
-  },
-
-  // Renders the data into the template
-  _renderHtml(template, data) {
-    return Renderer.render(template, data, this);
-  },
-
-  // Get the template for this view
-  // instance. You can set a `template` attribute in the view
-  // definition or pass a `template: "whatever"` parameter in
-  // to the constructor options.
-  getTemplate() {
-    return this.template;
-  },
-
-  // Mix in template context methods. Looks for a
-  // `templateContext` attribute, which can either be an
-  // object literal, or a function that returns an object
-  // literal. All methods and attributes from this object
-  // are copies to the object passed in.
-  mixinTemplateContext(target = {}) {
-    const templateContext = _.result(this, 'templateContext');
-    return _.extend(target, templateContext);
-  },
-
-  // Attaches the content of a given view.
-  // This method can be overridden to optimize rendering,
-  // or to render in a non standard way.
-  //
-  // For example, using `innerHTML` instead of `$el.html`
-  //
-  // ```js
-  // attachElContent(html) {
-  //   this.el.innerHTML = html;
-  //   return this;
-  // }
-  // ```
-  attachElContent(html) {
-    this.Dom.setContents(this.el, html, this.$el);
 
     return this;
   },
@@ -196,18 +104,10 @@ const View = Backbone.View.extend({
   },
 
   _getImmediateChildren() {
-    return _.chain(this._getRegions())
-      .map('currentView')
-      .compact()
-      .value();
+    return _.reduce(this._regions, childReducer, []);
   }
 }, {
-  // Sets the renderer for the Marionette.View class
-  setRenderer(renderer) {
-    this.prototype._renderHtml = renderer;
-    return this;
-  },
-
+  setRenderer,
   setDomApi
 });
 

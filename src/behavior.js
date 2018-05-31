@@ -7,9 +7,9 @@
 // into portable logical chunks, keeping your views simple and your code DRY.
 
 import _ from 'underscore';
-import deprecate from './utils/deprecate';
+import extend from './utils/extend';
 import getNamespacedEventName from './utils/get-namespaced-event-name';
-import MarionetteObject from './object';
+import CommonMixin from './mixins/common';
 import DelegateEntityEventsMixin from './mixins/delegate-entity-events';
 import TriggersMixin from './mixins/triggers';
 import UIMixin from './mixins/ui';
@@ -22,37 +22,42 @@ const ClassOptions = [
   'ui'
 ];
 
-const Behavior = MarionetteObject.extend({
+const Behavior = function(options, view) {
+  // Setup reference to the view.
+  // this comes in handle when a behavior
+  // wants to directly talk up the chain
+  // to the view.
+  this.view = view;
+
+  this._setOptions(options, ClassOptions);
+  this.cid = _.uniqueId(this.cidPrefix);
+
+  // Construct an internal UI hash using
+  // the behaviors UI hash and then the view UI hash.
+  // This allows the user to use UI hash elements
+  // defined in the parent view as well as those
+  // defined in the given behavior.
+  // This order will help the reuse and share of a behavior
+  // between multiple views, while letting a view override a
+  // selector under an UI key.
+  this.ui = _.extend({}, _.result(this, 'ui'), _.result(view, 'ui'));
+
+  // Proxy view triggers
+  this.listenTo(view, 'all', this.triggerMethod);
+
+  this.initialize.apply(this, arguments);
+};
+
+Behavior.extend = extend;
+
+// Behavior Methods
+// --------------
+
+_.extend(Behavior.prototype, CommonMixin, DelegateEntityEventsMixin, TriggersMixin, UIMixin, {
   cidPrefix: 'mnb',
 
-  constructor(options, view) {
-    // Setup reference to the view.
-    // this comes in handle when a behavior
-    // wants to directly talk up the chain
-    // to the view.
-    this.view = view;
-
-    if (this.defaults) {
-      deprecate('Behavior defaults are deprecated. For similar functionality set options on the Behavior class.');
-    }
-
-    this.defaults = _.clone(_.result(this, 'defaults', {}));
-
-    this._setOptions(_.extend({}, this.defaults, options));
-    this.mergeOptions(this.options, ClassOptions);
-
-    // Construct an internal UI hash using
-    // the behaviors UI hash and then the view UI hash.
-    // This allows the user to use UI hash elements
-    // defined in the parent view as well as those
-    // defined in the given behavior.
-    // This order will help the reuse and share of a behavior
-    // between multiple views, while letting a view override a
-    // selector under an UI key.
-    this.ui = _.extend({}, _.result(this, 'ui'), _.result(view, 'ui'));
-
-    MarionetteObject.apply(this, arguments);
-  },
+  // This is a noop method intended to be overridden
+  initialize() {},
 
   // proxy behavior $ method to the view
   // this is useful for doing jquery DOM lookups
@@ -62,11 +67,12 @@ const Behavior = MarionetteObject.extend({
   },
 
   // Stops the behavior from listening to events.
-  // Overrides Object#destroy to prevent additional events from being triggered.
   destroy() {
     this.stopListening();
 
     this.view._removeBehavior(this);
+
+    this._deleteEntityEventHandlers();
 
     return this;
   },
@@ -107,7 +113,9 @@ const Behavior = MarionetteObject.extend({
     return this;
   },
 
-  getEvents() {
+  _getEvents() {
+    if (!this.events) { return; }
+
     // Normalize behavior events hash to allow
     // a user to use the @ui. syntax.
     const behaviorEvents = this.normalizeUIKeys(_.result(this, 'events'));
@@ -119,13 +127,13 @@ const Behavior = MarionetteObject.extend({
       }
       if (!behaviorHandler) { return events; }
       key = getNamespacedEventName(key, this.cid);
-      events[key] = _.bind(behaviorHandler, this);
+      events[key] = behaviorHandler.bind(this);
       return events;
     }, {});
   },
 
   // Internal method to build all trigger handlers for a given behavior
-  getTriggers() {
+  _getTriggers() {
     if (!this.triggers) { return; }
 
     // Normalize behavior triggers hash to allow
@@ -134,9 +142,6 @@ const Behavior = MarionetteObject.extend({
 
     return this._getViewTriggers(this.view, behaviorTriggers);
   }
-
 });
-
-_.extend(Behavior.prototype, DelegateEntityEventsMixin, TriggersMixin, UIMixin);
 
 export default Behavior;

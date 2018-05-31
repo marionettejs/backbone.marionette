@@ -1,124 +1,173 @@
 import _ from 'underscore';
-import emulateCollection from './utils/emulate-collection';
 
 // Provide a container to store, retrieve and
 // shut down child views.
-const Container = function(views) {
-  this._views = {};
-  this._indexByModel = {};
-  this._indexByCustom = {};
-  this._updateLength();
-
-  _.each(views, _.bind(this.add, this));
+const Container = function() {
+  this._init();
 };
 
-emulateCollection(Container.prototype, '_getViews');
+// Mix in methods from Underscore, for iteration, and other
+// collection related features.
+// Borrowing this code from Backbone.Collection:
+// https://github.com/jashkenas/backbone/blob/1.1.2/backbone.js#L962
+const methods = ['forEach', 'each', 'map', 'find', 'detect', 'filter',
+  'select', 'reject', 'every', 'all', 'some', 'any', 'include',
+  'contains', 'invoke', 'toArray', 'first', 'initial', 'rest',
+  'last', 'without', 'isEmpty', 'pluck', 'reduce', 'partition'];
+
+_.each(methods, function(method) {
+  Container.prototype[method] = function(...args) {
+    return _[method].apply(_, [this._views].concat(args));
+  };
+});
+
+function stringComparator(comparator, view) {
+  return view.model && view.model.get(comparator);
+}
 
 // Container Methods
 // -----------------
 
 _.extend(Container.prototype, {
 
-  _getViews() {
-    return _.values(this._views);
+  // Initializes an empty container
+  _init() {
+    this._views = [];
+    this._viewsByCid = {};
+    this._indexByModel = {};
+    this._updateLength();
   },
 
   // Add a view to this container. Stores the view
   // by `cid` and makes it searchable by the model
-  // cid (and model itself). Optionally specify
-  // a custom key to store an retrieve the view.
-  add(view, customIndex) {
-    return this._add(view, customIndex)._updateLength();
+  // cid (and model itself). Additionally it stores
+  // the view by index in the _views array
+  _add(view, index = this._views.length) {
+    this._addViewIndexes(view);
+
+    // add to end by default
+    this._views.splice(index, 0, view);
+
+    this._updateLength();
   },
 
-  // To be used when avoiding call _updateLength
-  // When you are done adding all your new views
-  // call _updateLength
-  _add(view, customIndex) {
-    const viewCid = view.cid;
-
+  _addViewIndexes(view) {
     // store the view
-    this._views[viewCid] = view;
+    this._viewsByCid[view.cid] = view;
 
     // index it by model
     if (view.model) {
-      this._indexByModel[view.model.cid] = viewCid;
+      this._indexByModel[view.model.cid] = view;
     }
-
-    // index by custom
-    if (customIndex) {
-      this._indexByCustom[customIndex] = viewCid;
-    }
-
-    return this;
   },
 
-  // Find a view by the model that was attached to
-  // it. Uses the model's `cid` to find it.
+  // Sort (mutate) and return the array of the child views.
+  _sort(comparator, context) {
+    if (typeof comparator === 'string') {
+      comparator = _.partial(stringComparator, comparator);
+      return this._sortBy(comparator);
+    }
+
+    if (comparator.length === 1) {
+      return this._sortBy(comparator.bind(context));
+    }
+
+    return this._views.sort(comparator.bind(context));
+  },
+
+  // Makes `_.sortBy` mutate the array to match `this._views.sort`
+  _sortBy(comparator) {
+    const sortedViews = _.sortBy(this._views, comparator);
+
+    this._set(sortedViews);
+
+    return sortedViews;
+  },
+
+  // Replace array contents without overwriting the reference.
+  // Should not add/remove views
+  _set(views, shouldReset) {
+    this._views.length = 0;
+
+    this._views.push.apply(this._views, views.slice(0));
+
+    if (shouldReset) {
+      this._viewsByCid = {};
+      this._indexByModel = {};
+
+      _.each(views, this._addViewIndexes.bind(this));
+
+      this._updateLength();
+    }
+  },
+
+  // Swap views by index
+  _swap(view1, view2) {
+    const view1Index = this.findIndexByView(view1);
+    const view2Index = this.findIndexByView(view2);
+
+    if (view1Index === -1 || view2Index === -1) {
+      return;
+    }
+
+    const swapView = this._views[view1Index];
+    this._views[view1Index] = this._views[view2Index];
+    this._views[view2Index] = swapView;
+  },
+
+  // Find a view by the model that was attached to it.
+  // Uses the model's `cid` to find it.
   findByModel(model) {
     return this.findByModelCid(model.cid);
   },
 
-  // Find a view by the `cid` of the model that was attached to
-  // it. Uses the model's `cid` to find the view `cid` and
-  // retrieve the view using it.
+  // Find a view by the `cid` of the model that was attached to it.
   findByModelCid(modelCid) {
-    const viewCid = this._indexByModel[modelCid];
-    return this.findByCid(viewCid);
+    return this._indexByModel[modelCid];
   },
 
-  // Find a view by a custom indexer.
-  findByCustom(index) {
-    const viewCid = this._indexByCustom[index];
-    return this.findByCid(viewCid);
-  },
-
-  // Find by index. This is not guaranteed to be a
-  // stable index.
+  // Find a view by index.
   findByIndex(index) {
-    return _.values(this._views)[index];
+    return this._views[index];
   },
 
-  // retrieve a view by its `cid` directly
+  // Find the index of a view instance
+  findIndexByView(view) {
+    return this._views.indexOf(view);
+  },
+
+  // Retrieve a view by its `cid` directly
   findByCid(cid) {
-    return this._views[cid];
+    return this._viewsByCid[cid];
   },
 
-  // Remove a view
-  remove(view) {
-    return this._remove(view)._updateLength();
+  hasView(view) {
+    return !!this.findByCid(view.cid);
   },
 
-  // To be used when avoiding call _updateLength
-  // When you are done adding all your new views
-  // call _updateLength
+  // Remove a view and clean up index references.
   _remove(view) {
-    const viewCid = view.cid;
+    if (!this._viewsByCid[view.cid]) {
+      return;
+    }
 
     // delete model index
     if (view.model) {
       delete this._indexByModel[view.model.cid];
     }
 
-    // delete custom index
-    _.some(this._indexByCustom, _.bind(function(cid, key) {
-      if (cid === viewCid) {
-        delete this._indexByCustom[key];
-        return true;
-      }
-    }, this));
-
     // remove the view from the container
-    delete this._views[viewCid];
+    delete this._viewsByCid[view.cid];
 
-    return this;
+    const index = this.findIndexByView(view);
+    this._views.splice(index, 1);
+
+    this._updateLength();
   },
 
   // Update the `.length` attribute on this container
   _updateLength() {
-    this.length = _.size(this._views);
-
-    return this;
+    this.length = this._views.length;
   }
 });
 

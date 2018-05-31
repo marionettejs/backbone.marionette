@@ -14,24 +14,6 @@ describe('Behaviors Mixin', function() {
   });
 
   describe('#_initBehaviors', function() {
-    let behaviors;
-
-    beforeEach(function() {
-      behaviors = new Behaviors();
-      this.sinon.spy(behaviors, '_getBehaviors');
-      behaviors._initBehaviors();
-    });
-
-    it('should call _getBehaviors', function() {
-      expect(behaviors._getBehaviors).to.be.calledOnce;
-    });
-
-    it('should not have behaviors', function() {
-      expect(behaviors._getBehaviors()).to.be.deep.equal({});
-    });
-  });
-
-  describe('#_getBehaviors', function() {
     let behaviorsInstance;
     let fooInitializeStub;
     let FooBehavior;
@@ -42,6 +24,14 @@ describe('Behaviors Mixin', function() {
       FooBehavior = Behavior.extend({initialize: fooInitializeStub});
     });
 
+    describe('with no behaviors', function() {
+      it('should not have behaviors', function() {
+        behaviorsInstance._initBehaviors();
+
+        expect(behaviorsInstance._behaviors).to.be.deep.equal([]);
+      });
+    });
+
     describe('with behaviorClass option', function() {
       beforeEach(function() {
         behaviorsInstance.behaviors = [
@@ -49,56 +39,30 @@ describe('Behaviors Mixin', function() {
             behaviorClass: FooBehavior
           }
         ];
+        behaviorsInstance._initBehaviors();
       });
 
       it('should call initialize when a behavior is created', function() {
-        behaviorsInstance._getBehaviors();
-
         expect(fooInitializeStub).to.be.calledOnce;
       });
 
       it('should have behaviors', function() {
-        behaviorsInstance._getBehaviors();
-
-        expect(behaviorsInstance._getBehaviors().length).to.be.equal(1);
+        expect(behaviorsInstance._behaviors).to.have.lengthOf(1);
       });
     });
 
     describe('without behaviorClass option', function() {
       beforeEach(function() {
         behaviorsInstance.behaviors = [FooBehavior];
+        behaviorsInstance._initBehaviors();
       });
 
       it('should call initialize when a behavior is created', function() {
-        behaviorsInstance._getBehaviors();
-
         expect(fooInitializeStub).to.be.calledOnce;
       });
 
       it('should have behaviors', function() {
-        expect(behaviorsInstance._getBehaviors().length).to.be.equal(1);
-      });
-    });
-
-    describe('with behaviorsLookup as object', function() {
-      beforeEach(function() {
-        let behaviorOptions = {foo: {}};
-
-        Marionette.Behaviors.behaviorsLookup = {
-          'foo': FooBehavior
-        };
-
-        behaviorsInstance.behaviors = {foo: behaviorOptions};
-      });
-
-      it('should call initialize when a behavior is created', function() {
-        behaviorsInstance._getBehaviors();
-
-        expect(fooInitializeStub).to.be.calledOnce;
-      });
-
-      it('should have behaviors', function() {
-        expect(behaviorsInstance._getBehaviors().length).to.be.equal(1);
+        expect(behaviorsInstance._behaviors).to.have.lengthOf(1);
       });
     });
 
@@ -114,43 +78,27 @@ describe('Behaviors Mixin', function() {
           initialize: barInitializeStub,
         });
 
-        let BazBehavior = Behavior.extend({
-          initialize: bazInitializeStub,
-        });
-
         FooBehavior = Behavior.extend({
           initialize: fooInitializeStub,
-          behaviors: {bar: {}}
+          behaviors: [BarBehavior]
         });
 
-        let behaviors = {
-          'foo': FooBehavior,
-          'bar': BarBehavior,
-          'baz': BazBehavior
-        };
+        behaviorsInstance.behaviors = [FooBehavior];
 
-        this.sinon.stub(Marionette.Behaviors, 'behaviorsLookup', function() {
-          return behaviors;
-        });
-
-        behaviorsInstance.behaviors = {foo: 'foo'};
+        behaviorsInstance._initBehaviors();
       });
 
       it('should call initialize when a behavior is created', function() {
-        behaviorsInstance._getBehaviors();
-
         expect(fooInitializeStub).to.be.calledOnce;
         expect(bazInitializeStub).not.to.have.been.called;
       });
 
       it('should call initialize when a nested behavior is created', function() {
-        behaviorsInstance._getBehaviors();
-
         expect(barInitializeStub).to.be.calledOnce;
       });
 
       it('should have behaviors', function() {
-        expect(behaviorsInstance._getBehaviors().length).to.be.equal(2);
+        expect(behaviorsInstance._behaviors).to.have.lengthOf(2);
       });
     });
 
@@ -170,24 +118,33 @@ describe('Behaviors Mixin', function() {
         });
 
         behaviorsInstance.behaviors = {foo: FooBehavior};
+        behaviorsInstance._initBehaviors();
       });
 
       it('should call initialize when a behavior is created', function() {
-        behaviorsInstance._getBehaviors();
-
         expect(fooInitializeStub).to.be.calledOnce;
       });
 
       it('should call initialize when a nested behavior is created', function() {
-        behaviorsInstance._getBehaviors();
-
         expect(barInitializeStub).to.be.calledOnce;
       });
 
       it('should have behaviors', function() {
-        expect(behaviorsInstance._getBehaviors().length).to.be.equal(2);
+        expect(behaviorsInstance._behaviors).to.have.lengthOf(2);
       });
     });
+
+    describe('with invalid option', function() {
+      beforeEach(function() {
+        behaviorsInstance.behaviors = [{foo: 'bar'}];
+      });
+
+      it('should throw an error', function() {
+        expect(function() {
+          behaviorsInstance._initBehaviors()
+        }).to.throw('Unable to get behavior class. A Behavior constructor should be passed directly or as behaviorClass property of options');
+      });
+    })
   });
 
   describe('#_getBehaviorTriggers', function() {
@@ -203,7 +160,7 @@ describe('Behaviors Mixin', function() {
       };
       FooBehavior = Behavior.extend({});
 
-      this.sinon.stub(FooBehavior.prototype, 'getTriggers', function() {
+      this.sinon.stub(FooBehavior.prototype, '_getTriggers', function() {
         if (this.triggers) {
           return this.triggers;
         } else {
@@ -258,7 +215,7 @@ describe('Behaviors Mixin', function() {
       };
       FooBehavior = Behavior.extend({});
 
-      this.sinon.stub(FooBehavior.prototype, 'getEvents', function() {
+      this.sinon.stub(FooBehavior.prototype, '_getEvents', function() {
         if (this.events) {
           return this.events;
         } else {
@@ -293,7 +250,7 @@ describe('Behaviors Mixin', function() {
       });
 
       it('should return empty object', function() {
-        let result = behaviorsInstance._getBehaviorEvents();
+        const result = behaviorsInstance._getBehaviorEvents();
 
         expect(result).to.have.been.deep.equal({});
       });
@@ -392,17 +349,17 @@ describe('Behaviors Mixin', function() {
       behaviorsInstance._initBehaviors();
     });
 
-    it('should invoke destroy with arguments', function() {
-      behaviorsInstance._destroyBehaviors('foo', 'bar', 'baz');
+    it('should invoke destroy with options argument', function() {
+      behaviorsInstance._destroyBehaviors({foo: 'bar'});
 
       expect(FooBehavior.prototype.destroy)
-        .to.have.been.calledOnce.and.calledWith('foo', 'bar', 'baz');
+        .to.have.been.calledOnce.and.calledWith({foo: 'bar'});
       expect(BarBehavior.prototype.destroy)
-        .to.have.been.calledOnce.and.calledWith('foo', 'bar', 'baz');
+        .to.have.been.calledOnce.and.calledWith({foo: 'bar'});
     });
 
     it('should invoke destroy without arguments', function() {
-      behaviorsInstance._destroyBehaviors([]);
+      behaviorsInstance._destroyBehaviors();
 
       expect(FooBehavior.prototype.destroy).to.have.been.calledOnce;
       expect(BarBehavior.prototype.destroy).to.have.been.calledOnce;
@@ -428,8 +385,7 @@ describe('Behaviors Mixin', function() {
 
       behaviorsInstance._removeBehavior(behaviorInstance);
 
-      expect(behaviorsInstance._behaviors).not.to.include(behaviorInstance);
-      expect(behaviorsInstance._behaviors.length).to.equal(1);
+      expect(behaviorsInstance._behaviors).to.have.lengthOf(1).and.not.to.include(behaviorInstance);
     });
 
     describe('when the view is destroyed', function() {
@@ -441,8 +397,7 @@ describe('Behaviors Mixin', function() {
 
         behaviorsInstance._removeBehavior(behaviorInstance);
 
-        expect(behaviorsInstance._behaviors).to.include(behaviorInstance);
-        expect(behaviorsInstance._behaviors.length).to.equal(2);
+        expect(behaviorsInstance._behaviors).to.have.lengthOf(2).to.include(behaviorInstance);
       });
     });
   });
@@ -494,6 +449,36 @@ describe('Behaviors Mixin', function() {
 
       expect(FooBehavior.prototype.unbindUIElements).to.have.been.calledOnce;
       expect(BarBehavior.prototype.unbindUIElements).to.have.been.calledOnce;
+    });
+  });
+
+  describe('#_triggerEventOnBehaviors', function() {
+    let behaviorsInstance;
+    let FooBehavior;
+    let BarBehavior;
+
+    beforeEach(function() {
+      behaviorsInstance = new Behaviors();
+      FooBehavior = Behavior.extend({
+        onFoo: this.sinon.stub()
+      });
+      BarBehavior = Behavior.extend({
+        onFoo: this.sinon.stub()
+      });
+
+      behaviorsInstance.behaviors = {foo: FooBehavior, bar: BarBehavior};
+      behaviorsInstance._initBehaviors();
+    });
+
+    it('should invoke events', function() {
+      behaviorsInstance._triggerEventOnBehaviors('foo', 'view', 'options');
+
+      expect(FooBehavior.prototype.onFoo)
+        .to.have.been.calledOnce
+        .and.calledWith('view', 'options');
+      expect(BarBehavior.prototype.onFoo)
+        .to.have.been.calledOnce
+        .and.calledWith('view', 'options');
     });
   });
 });

@@ -23,9 +23,9 @@ communicate and share information.
 * [Marionette Integration](#marionette-integration)
   * [API](#api)
   * [Examples](#examples)
-    * [Listening to Events on Objects](#listening-to-events-on-objects)
-    * [Replying to Requests on Objects](#replying-to-requests-on-objects)
-    * [Events and Requests in same Object](#events-and-requests-in-same-object)
+    * [Listening to Events](#listening-to-events)
+    * [Replying to Requests](#replying-to-requests)
+    * [Events and Requests](#events-and-requests)
 
 
 ## Radio Concepts
@@ -43,9 +43,9 @@ provides a clean point for dividing global events. To retrieve a channel, use
 `Radio.channel(channelName)`:
 
 ```javascript
-var Radio = require('backbone.radio');
+import Radio from 'backbone.radio';
 
-var myChannel = Radio.channel('basic');
+const myChannel = Radio.channel('basic');
 
 myChannel.on('some:event', function() {
   // ...
@@ -56,9 +56,9 @@ The channel is accessible everywhere in your application. Simply import Radio
 and call `channel()` to add listeners, fire callbacks, or send requests.
 
 ```javascript
-var Radio = require('backbone.radio');
+import Radio from 'backbone.radio';
 
-var someChannel = Radio.channel('basic');  // Exactly the same channel as above
+const someChannel = Radio.channel('basic');  // Exactly the same channel as above
 
 someChannel.trigger('some:event');  // Will fire the function call above
 ```
@@ -86,15 +86,15 @@ As the Radio can be imported anywhere, we can use it as a global event
 aggregator as such:
 
 ```javascript
-var Radio = require('backbone.radio');
+import Radio from 'backbone.radio';
 
-var myChannel = Radio.channel('star');
+const myChannel = Radio.channel('star');
 
 myChannel.on('left:building', function(person) {
   console.log(person.get('name') + ' has left the building!');
 });
 
-var elvis = new Bb.Model({name: 'Elvis'});
+const elvis = new Bb.Model({name: 'Elvis'});
 myChannel.trigger('left:building', elvis);
 
 myChannel.off('left:building');
@@ -103,28 +103,28 @@ myChannel.off('left:building');
 Just like Backbone Events, the Radio respects the `listenTo` handler as well:
 
 ```javascript
-var Mn = require('backbone.marionette');
-var Radio = require('backbone.radio');
+import { MnObject } from 'backbone.marionette';
+import Radio from 'backbone.radio';
 
-var starChannel = Radio.channel('star');
+const starChannel = Radio.channel('star');
 
-var Star = Mn.Object.extend({
+const Star = MnObject.extend({
 
-  initialize: function() {
+  initialize() {
     this.listenTo(starChannel, 'left:building', this.leftBuilding);
     this.listenTo(starChannel, 'enter:building', function(person) {
        console.log(person.get('name') + ' has entered the building!');
     });
   },
 
-  leftBuilding: function(person) {
+  leftBuilding(person) {
     console.log(person.get('name') + ' has left the building!');
   }
 });
 ```
 
 Note that the event handler can be defined as a method like used for
-'left:building' event or inline like used in 'enter:building'.
+`'left:building'` event or inline like used in `'enter:building'`.
 
 [Live example](https://jsfiddle.net/marionettejs/s8nff8vz/)
 
@@ -157,21 +157,21 @@ As with request, any arguments passed in `channel.request` will be passed into
 the callback.
 
 ```javascript
-var Mn = require('backbone.marionette');
-var Radio = require('backbone.radio');
+import { MnObject } from 'backbone.marionette';
+import Radio from 'backbone.radio';
 
-var channel = Radio.channel('notify');
+const channel = Radio.channel('notify');
 
-var Notification = Mn.Object.extend({
+const Notification = MnObject.extend({
 
-  initialize: function() {
+  initialize() {
     channel.reply('show:success', this.showSuccessMessage);
     channel.reply('show:error', function(msg) {
        // ...
     });
   },
 
-  showSuccessMessage: function(msg) {
+  showSuccessMessage(msg) {
     // ...
   }
 });
@@ -180,17 +180,17 @@ var Notification = Mn.Object.extend({
 So, for example, when a model sync fails:
 
 ```javascript
-var Mn = require('backbone.marionette');
-var Radio = require('backbone.radio');
+import { View } from 'backbone.marionette';
+import Radio from 'backbone.radio';
 
-var channel = Radio.channel('notify');
+const channel = Radio.channel('notify');
 
-var ModelView = Mn.View.extend({
+const ModelView = View.extend({
   modelEvents: {
     error: 'showErrorMessage'
   },
 
-  showErrorMessage: function() {
+  showErrorMessage() {
     channel.request('show:error', 'An error occurred contacting the server');
   }
 });
@@ -209,17 +209,17 @@ let's assume we attach the currently logged-in user to the `Application` object
 and we want to know if they're still logged-in.
 
 ```javascript
-var Mn = require('backbone.marionette');
-var Radio = require('backbone.radio');
+import { Application } from 'backbone.marionette';
+import Radio from 'backbone.radio';
 
-var channel = Radio.channel('user');
+const channel = Radio.channel('user');
 
-var App = Mn.Application.extend({
-  initialize: function() {
-    channel.reply('user:logged:in', this.isLoggedIn);
+const App = Application.extend({
+  initialize() {
+    channel.reply('user:loggedIn', this.isLoggedIn);
   },
 
-  isLoggedIn: function() {
+  isLoggedIn() {
     return this.model.getLoggedIn();
   }
 });
@@ -229,11 +229,11 @@ Then, from another view, instead of trying to find the User model. we simply
 `request` it:
 
 ```javascript
-var Radio = require('backbone.radio');
+const Radio = require('backbone.radio');
 
-var channel = Radio.channel('user');
+const channel = Radio.channel('user');
 
-var loggedIn = channel.request('user:logged:in');  // App.model.getLoggedIn()
+const loggedIn = channel.request('user:loggedIn');  // App.model.getLoggedIn()
 ```
 
 [Live example](https://jsfiddle.net/marionettejs/zaje1rLj/)
@@ -254,34 +254,33 @@ In addition to this documentation, the Radio documentation can be found on
 
 ## Marionette Integration
 
-The `Marionette.Object` class provides bindings to provide automatic event
-listeners and / or request replies on your object instances. This works with
-a bound `channelName` to let us provide listeners using the `radioEvents` and
-`radioRequests` properties.  Anything that extends from `Mn.Object` has
-access to this API.
+The [`Application`](./marionette.application.md) and [`MnObject`](./marionette.mnobject.md) classes
+provide bindings to provide automatic event listeners and / or request handlers on your object
+instances. This works with a bound `channelName` to let us provide listeners using the `radioEvents`
+and `radioRequests` properties.
 
 ### API
 
  * `channelName` - defines the Radio channel that will be used for the requests and/or events
  * `getChannel()` - returns a Radio.Channel instance using `channelName`
  * `radioEvents` - defines an events hash with the events to be listened and its respective handlers
- * `radioRequests` - defines an events hash with the requests to be replied and its respective handlers
+ * `radioRequets` - defines an events hash with the requests to be replied and its respective handlers
 
 ### Examples
 
-#### Listening to events in an object
+#### Listening to events
 
 ```javascript
-var Mn = require('backbone.marionette');
+import { MnObject } from 'backbone.marionette';
 
-var Star = Mn.Object.extend({
+const Star = MnObject.extend({
   channelName: 'star',
 
   radioEvents: {
     'left:building': 'leftBuilding'
   },
 
-  leftBuilding: function(person) {
+  leftBuilding(person) {
     console.log(person.get('name') + ' has left the building!');
   }
 });
@@ -293,12 +292,12 @@ This gives us a clear definition of how this object interacts with the `star`
 radio channel.
 
 
-#### Replying to requests in a object
+#### Replying to requests
 
 ```javascript
-var Mn = require('backbone.marionette');
+import { MnObject } from 'backbone.marionette';
 
-var Notification = Mn.Object.extend({
+const Notification = MnObject.extend({
   channelName: 'notify',
 
   radioRequests: {
@@ -306,11 +305,11 @@ var Notification = Mn.Object.extend({
     'show:error': 'showErrorMessage'
   },
 
-  showSuccessMessage: function(msg) {
+  showSuccessMessage(msg) {
     // ...
   },
 
-  showErrorMessage: function(msg) {
+  showErrorMessage(msg) {
     // ...
   }
 });
@@ -319,22 +318,22 @@ var Notification = Mn.Object.extend({
 [Live example](https://jsfiddle.net/marionettejs/j2qgfk3s/)
 
 We now have a clear API for communicating with the `Notification` across the
-application. Don't forget to define the `channelName` on your `Object`
+application. Don't forget to define the `channelName` on your `MnObject`
 definition.
 
 As with a normal request/reply, we can return values from these bound handlers:
 
 ```javascript
-var Mn = require('backbone.marionette');
+import { Application } from 'backbone.marionette';
 
-var App = Mn.Application.extend({
+const App = Application.extend({
   channelName: 'user',
 
   radioRequests: {
-    'user:logged:in': 'isLoggedIn'
+    'user:loggedIn': 'isLoggedIn'
   },
 
-  isLoggedIn: function() {
+  isLoggedIn() {
     return this.model.getLoggedIn();
   }
 });
@@ -343,12 +342,12 @@ var App = Mn.Application.extend({
 [Live example](https://jsfiddle.net/marionettejs/52rpd3zg/)
 
 
-#### Events and requests in same object
+#### Events and requests
 
 ```javascript
-var Mn = require('backbone.marionette');
+import { MnObject } from 'backbone.marionette';
 
-var NotificationHandler = Mn.Object.extend({
+const NotificationHandler = MnObject.extend({
   channelName: 'notify',
 
   radioRequests: {
@@ -357,23 +356,23 @@ var NotificationHandler = Mn.Object.extend({
   },
 
   radioEvents: {
-    'user:logged:in': 'showProfileButton',
-    'user:logged:out': 'hideProfileButton'
+    'login:user': 'showProfileButton',
+    'logout:user': 'hideProfileButton'
   },
 
-  showSuccessMessage: function(message) {
+  showSuccessMessage(message) {
     // ...
   },
 
-  showErrorMessage: function(message) {
+  showErrorMessage(message) {
     // ...
   },
 
-  showProfileButton: function(user) {
+  showProfileButton(user) {
     // ...
   },
 
-  hideProfileButton: function(user) {
+  hideProfileButton(user) {
     // ...
   }
 });
@@ -382,17 +381,17 @@ var NotificationHandler = Mn.Object.extend({
 In an unrelated module:
 
 ```javascript
-var Radio = require('backbone.radio');
-var User = require('./models/user');
+import Radio from 'backbone.radio';
+import User from './models/user';
 
-var notifyChannel = Radio.channel('notify');
-var userModel = new User();
+const notifyChannel = Radio.channel('notify');
+const userModel = new User();
 
 // The following will call Notification.showErrorMessage(message)
 notifyChannel.request('show:error', 'A generic error occurred!');
 
 // The following will call Notification.showProfileButton(user)
-notifyChannel.trigger('user:logged:in', userModel);
+notifyChannel.trigger('login:user', userModel);
 ```
 
 [Live example](https://jsfiddle.net/marionettejs/dv40a0t2/)

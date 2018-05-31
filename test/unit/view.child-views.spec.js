@@ -84,16 +84,16 @@ describe('layoutView', function() {
         regionClass: this.CustomRegion1,
         regions: {
           regionOne: {
-            selector: '#regionOne',
+            el: '#regionOne',
             regionClass: this.CustomRegion1
           },
           regionTwo: {
-            selector: '#regionTwo',
+            el: '#regionTwo',
             regionClass: this.CustomRegion2,
             specialOption: true
           },
           regionThree: {
-            selector: '#regionThree'
+            el: '#regionThree'
           },
           regionFour: '#regionFour'
         }
@@ -126,24 +126,21 @@ describe('layoutView', function() {
 
   describe('when regions are defined as a function', function() {
     beforeEach(function() {
-      var suite = this;
-      this.View = Marionette.View.extend({
-        template: '#foo',
-        regions: function(opts) {
-          suite.options = opts;
+      const View = this.View.extend({
+        regions: function() {
           return {
-            'foo': '#bar'
+            regionOne: '#regionOne',
+            regionTwo: '#regionTwo'
           };
         }
       });
 
-      this.setFixtures('<div id="foo"><div id="bar"></div></div>');
-      this.layoutView = new this.View();
+      this.layoutView = new View();
       this.layoutView.render();
     });
 
     it('should build the regions from the returns object literal', function() {
-      expect(this.layoutView.getRegion('foo')).to.be.instanceof(Backbone.Marionette.Region);
+      expect(this.layoutView.getRegion('regionOne')).to.be.instanceof(Backbone.Marionette.Region);
     });
   });
 
@@ -253,11 +250,14 @@ describe('layoutView', function() {
 
   describe('when showing a childView as a basic Backbone.View', function() {
     beforeEach(function() {
+      const BBView = Backbone.View.extend();
+      _.extend(BBView.prototype, Marionette.Events);
+
       this.layoutView = new this.View();
       this.layoutView.render();
 
       // create a basic Backbone child view
-      this.childView = new Backbone.View();
+      this.childView = new BBView();
       this.layoutView.showChildView('regionOne', this.childView);
     });
 
@@ -270,9 +270,12 @@ describe('layoutView', function() {
     var options = {myOption: 'some value'};
 
     beforeEach(function() {
+      const BBView = Backbone.View.extend();
+      _.extend(BBView.prototype, Marionette.Events);
+
       this.layoutView = new this.View().render();
       this.regionOne = this.layoutView.getRegion('regionOne');
-      this.childView = new Backbone.View();
+      this.childView = new BBView();
       this.sinon.spy(this.regionOne, 'show');
       this.layoutView.showChildView('regionOne', this.childView, options);
     });
@@ -423,12 +426,15 @@ describe('layoutView', function() {
     });
 
     it('should not throw any errors', function() {
-      expect(function() { layoutView.destroy(); }).to.not.throw(Error);
+      expect(function() { layoutView.destroy(); }).to.not.throw();
     });
   });
 
   describe('when re-rendering an already rendered layoutView', function() {
     beforeEach(function() {
+      const BBView = Backbone.View.extend();
+      _.extend(BBView.prototype, Marionette.Events);
+
       this.ViewBoundRender = this.View.extend({
         initialize: function() {
           if (this.model) {
@@ -443,7 +449,7 @@ describe('layoutView', function() {
       this.layoutView.render();
 
       this.sinon.spy(this.layoutView.getRegion('regionOne'), 'empty');
-      this.view = new Backbone.View();
+      this.view = new BBView();
       this.view.destroy = function() {};
       this.layoutView.getRegion('regionOne').show(this.view);
 
@@ -460,7 +466,7 @@ describe('layoutView', function() {
       var cb = function() {
         expect(this.region.$el).to.exist;
       };
-      this.layoutView.listenTo(this.layoutView, 'before:render', _.bind(cb, this));
+      this.layoutView.listenTo(this.layoutView, 'before:render', cb.bind(this));
       this.layoutView.render();
     });
 
@@ -481,17 +487,6 @@ describe('layoutView', function() {
       it('should re-bind the regions correctly', function() {
         expect(this.layoutView.$('#regionOne')).not.to.equal();
       });
-    });
-  });
-
-  describe('has a valid inheritance chain back to Backbone.View', function() {
-    beforeEach(function() {
-      this.constructor = this.sinon.spy(Backbone.View.prototype, 'constructor');
-      this.layoutView = new Marionette.View();
-    });
-
-    it('calls the parent Backbone.Views constructor function on instantiation', function() {
-      expect(this.constructor).to.have.been.called;
     });
   });
 
@@ -566,7 +561,7 @@ describe('layoutView', function() {
         regions: {
           war: '@ui.war',
           mario: {
-            selector: '@ui.mario'
+            el: '@ui.mario'
           },
           princess: {
             el: '@ui.princess'
@@ -589,48 +584,6 @@ describe('layoutView', function() {
     });
     it('should apply the relevant @ui. syntax selector to el in a region definition object', function() {
       expect(this.layoutView.getRegion('princess')).to.exist;
-    });
-  });
-
-  describe('childView get onDomRefresh from parent', function() {
-    beforeEach(function() {
-      var suite = this;
-      this.setFixtures('<div id="james-kyle"></div>');
-      this.spy = this.sinon.spy();
-      this.spy2 = this.sinon.spy();
-
-      this.View = Marionette.View.extend({
-        template: _.template('<yes><my><lord></lord></my></yes>'),
-        onDomRefresh: this.spy2
-      });
-
-      this.LucasArts = Marionette.CollectionView.extend({
-        onDomRefresh: this.spy,
-        childView: this.View
-      });
-
-      this.Layout = Marionette.View.extend({
-        template: _.template('<sam class="and-max"></sam>'),
-        regions: {
-          'sam': '.and-max'
-        },
-
-        onRender: function() {
-          this.getRegion('sam').show(new suite.LucasArts({collection: new Backbone.Collection([{}])}));
-        }
-      });
-
-      this.region = new Marionette.Region({el: '#james-kyle'});
-
-      this.region.show(new this.Layout());
-    });
-
-    it('should call onDomRefresh on region views when shown within the parent\'s onRender', function() {
-      expect(this.spy).to.have.been.called;
-    });
-
-    it('should call onDomRefresh on region view children when shown within the parent\'s onRender', function() {
-      expect(this.spy2).to.have.been.called;
     });
   });
 

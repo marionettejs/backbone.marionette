@@ -1,108 +1,87 @@
-describe('_getImmediateChildren', function() {
-  beforeEach(function() {
+import View from '../../src/view';
 
+describe('_getImmediateChildren', function() {
+  let BaseView;
+
+  beforeEach(function() {
     // A suitable view to use as a child
-    this.BaseView = Marionette.View.extend({
+    BaseView = View.extend({
       template: _.noop
     });
   });
 
   describe('Marionette.View', function() {
+    let view;
+
     beforeEach(function() {
-      this.view = new Marionette.View();
+      view = new View();
     });
     it('should return an empty array for getImmediateChildren', function() {
-      expect(this.view._getImmediateChildren())
+      expect(view._getImmediateChildren())
         .to.be.instanceof(Array)
         .and.to.have.length(0);
     });
-  });
 
-  describe('Marionette.CollectionView', function() {
-    describe('when empty', function() {
-      beforeEach(function() {
-        this.collectionView = new Marionette.CollectionView();
-      });
-      it('should return an empty array for getImmediateChildren', function() {
-        expect(this.collectionView._getImmediateChildren())
-          .to.be.instanceof(Array)
-          .and.to.have.length(0);
-      });
-    });
-
-    describe('when there are children', function() {
-      beforeEach(function() {
-        this.collectionView = new Marionette.CollectionView({
-          collection: new Backbone.Collection([{}, {}]),
-          childView: this.BaseView
-        });
-        this.collectionView.render();
-        this.childOne = this.collectionView.children.findByIndex(0);
-        this.childTwo = this.collectionView.children.findByIndex(1);
-      });
-      it('should return an empty array for getImmediateChildren', function() {
-        expect(this.collectionView._getImmediateChildren())
-          .to.be.instanceof(Array)
-          .and.to.have.length(2)
-          .and.to.contain(this.childOne)
-          .and.to.contain(this.childTwo);
-      });
-    });
-  });
-
-  describe('Marionette.View', function() {
     describe('without regions', function() {
+      let layoutView;
+
       beforeEach(function() {
-        this.layoutView = new Marionette.View({
+        layoutView = new View({
           template: _.noop
         });
       });
       it('should return an empty array for getImmediateChildren', function() {
-        expect(this.layoutView._getImmediateChildren())
+        expect(layoutView._getImmediateChildren())
           .to.be.instanceof(Array)
           .and.to.have.length(0);
       });
     });
 
     describe('when there are empty regions', function() {
+      let layoutView;
+
       beforeEach(function() {
-        this.layoutView = new Marionette.View({
+        layoutView = new View({
           template: _.template('<main></main><footer></footer>'),
           regions: {
             main: '.main',
             footer: '.footer'
           }
         });
-        this.layoutView.render();
+        layoutView.render();
       });
       it('should return an empty array for getImmediateChildren', function() {
-        expect(this.layoutView._getImmediateChildren())
+        expect(layoutView._getImmediateChildren())
           .to.be.instanceof(Array)
           .and.to.have.length(0);
       });
     });
 
     describe('when there are non-empty regions', function() {
+      let layoutView;
+      let childOne;
+      let childTwo;
+
       beforeEach(function() {
-        this.layoutView = new Marionette.View({
+        layoutView = new View({
           template: _.template('<main></main><footer></footer>'),
           regions: {
             main: 'main',
             footer: 'footer'
           }
         });
-        this.layoutView.render();
-        this.childOne = new this.BaseView();
-        this.childTwo = new this.BaseView();
-        this.layoutView.getRegion('main').show(this.childOne);
-        this.layoutView.getRegion('footer').show(this.childTwo);
+        layoutView.render();
+        childOne = new BaseView();
+        childTwo = new BaseView();
+        layoutView.getRegion('main').show(childOne);
+        layoutView.getRegion('footer').show(childTwo);
       });
       it('should return an empty array for getImmediateChildren', function() {
-        expect(this.layoutView._getImmediateChildren())
+        expect(layoutView._getImmediateChildren())
           .to.be.instanceof(Array)
           .and.to.have.length(2)
-          .and.to.contain(this.childOne)
-          .and.to.contain(this.childTwo);
+          .and.to.contain(childOne)
+          .and.to.contain(childTwo);
       });
     });
   });

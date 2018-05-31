@@ -1,331 +1,325 @@
+import View from '../../../src/view';
+import Region from '../../../src/region';
+
 describe('Region', function() {
   describe('.buildRegion', function() {
+    let DefaultRegionClass;
+    let view;
+    let fooSelector;
+    let barSelector;
+    let BarRegion;
+    let BazRegion;
+
     beforeEach(function() {
 
-      this.DefaultRegionClass = Marionette.Region.extend();
+      DefaultRegionClass = Region.extend();
 
-      this.view = new Marionette.View({
+      view = new View({
         template: _.noop,
-        regionClass: this.DefaultRegionClass
+        regionClass: DefaultRegionClass
       });
 
-      this.fooSelector = '#foo-region';
-      this.fooRegion = new this.DefaultRegionClass({el: this.fooSelector});
+      fooSelector = '#foo-region';
 
-      this.barSelector = '#bar-region';
-      this.BarRegion = Marionette.Region.extend({el: this.barSelector});
-      this.barRegion = new this.BarRegion();
+      barSelector = '#bar-region';
+      BarRegion = Region.extend({el: barSelector});
 
-      this.BazRegion = Marionette.Region.extend();
+      BazRegion = Region.extend();
     });
 
     describe('with a selector string', function() {
+      let region;
+
       beforeEach(function() {
-        this.region = this.view.addRegion(_.uniqueId('region_'), this.fooSelector);
+        region = view.addRegion(_.uniqueId('region_'), fooSelector);
       });
 
       it('uses the default region class', function() {
-        expect(this.region).to.be.an.instanceof(this.DefaultRegionClass);
+        expect(region).to.be.an.instanceof(DefaultRegionClass);
       });
 
       it('uses the selector', function() {
-        expect(this.region.el).to.equal(this.fooSelector);
+        expect(region.el).to.equal(fooSelector);
       });
     });
 
     describe('with a region class', function() {
       describe('with `el` defined', function() {
+        let region;
+
         beforeEach(function() {
-          this.region = this.view.addRegion(_.uniqueId('region_'),this.BarRegion);
+          region = view.addRegion(_.uniqueId('region_'), BarRegion);
         });
 
         it('uses the passed in region class', function() {
-          expect(this.region).to.be.an.instanceof(this.BarRegion);
+          expect(region).to.be.an.instanceof(BarRegion);
         });
 
         it('uses the defined el', function() {
-          expect(this.region.el).to.equal(this.barSelector);
+          expect(region.el).to.equal(barSelector);
         });
       });
 
       describe('without `el` defined', function() {
-        beforeEach(function() {
-          this.BarRegion = Marionette.Region.extend();
+        let buildRegion;
 
-          this.buildRegion = function() {
-            this.view.addRegion(_.uniqueId('region_'),this.BarRegion);
-          }.bind(this);
+        beforeEach(function() {
+          buildRegion = function() {
+            view.addRegion(_.uniqueId('region_'), BazRegion);
+          };
         });
 
         it('throws a `NoElError`', function() {
-          expect(this.buildRegion).to.throw('An "el" must be specified for a region.');
+          expect(buildRegion).to.throw('An "el" must be specified for a region.');
         });
       });
     });
 
     describe('with an object literal', function() {
-      describe('with `selector` defined', function() {
-        beforeEach(function() {
-          this.definition = {selector: this.fooSelector};
-          this.region = this.view.addRegion(_.uniqueId('region_'),this.definition);
-        });
-
-        it('uses the default region class', function() {
-          expect(this.region).to.be.an.instanceof(this.DefaultRegionClass);
-        });
-
-        it('uses the selector', function() {
-          expect(this.region.el).to.equal(this.fooSelector);
-        });
-
-        describe('when DEV_MODE is true', function() {
-          beforeEach(function() {
-            Marionette.DEV_MODE = true;
-            this.sinon.spy(Marionette.deprecate, '_warn');
-            this.sinon.stub(Marionette.deprecate, '_console', {
-              warn: this.sinon.stub()
-            });
-            Marionette.deprecate._cache = {};
-
-            this.region = this.view.addRegion(_.uniqueId('region_'),this.definition);
-          });
-
-          it('should call Marionette.deprecate', function() {
-            expect(Marionette.deprecate._warn).to.be.calledWith('Deprecation warning: The selector option on a Region definition object is deprecated. Use el to pass a selector string');
-          });
-
-          afterEach(function() {
-            Marionette.DEV_MODE = false;
-          });
-        });
-      });
-
       describe('with `el` defined', function() {
         describe('when el is a selector string', function() {
+          let definition;
+          let region;
+
           beforeEach(function() {
-            this.definition = {el: this.fooSelector};
-            this.region = this.view.addRegion(_.uniqueId('region_'),this.definition);
+            definition = {el: fooSelector};
+            region = view.addRegion(_.uniqueId('region_'),definition);
           });
 
           it('uses the default region class', function() {
-            expect(this.region).to.be.an.instanceof(this.DefaultRegionClass);
+            expect(region).to.be.an.instanceof(DefaultRegionClass);
           });
 
           it('uses the el', function() {
-            expect(this.region.el).to.equal(this.fooSelector);
+            expect(region.el).to.equal(fooSelector);
           });
 
           describe('with `parentEl` also defined', function() {
             describe('including the selector', function() {
               beforeEach(function() {
                 this.setFixtures('<div id="parent"><div id="child">text</div></div>');
-                this.parentEl = $('#parent');
-                this.definition = _.defaults({parentEl: this.parentEl, el: '#child' }, this.definition);
-                this.region = this.view.addRegion(_.uniqueId('region_'),this.definition);
+                const parentEl = $('#parent');
+                definition = _.defaults({parentEl: parentEl, el: '#child' }, definition);
+                region = view.addRegion(_.uniqueId('region_'), definition);
               });
 
               it('returns the jQuery(el)', function() {
-                expect(this.region.getEl(this.region.el).text()).to.equal($(this.region.el).text());
+                expect(region.getEl(region.el).text()).to.equal($(region.el).text());
               });
             });
 
             describe('excluding the selector', function() {
               beforeEach(function() {
                 this.setFixtures('<div id="parent"></div><div id="not-child">text</div>');
-                this.parentEl = $('#parent');
-                this.definition = _.defaults({parentEl: this.parentEl, el: '#not-child' }, this.definition);
-                this.region = this.view.addRegion(_.uniqueId('region_'),this.definition);
+                const parentEl = $('#parent');
+                definition = _.defaults({parentEl: parentEl, el: '#not-child' }, definition);
+                region = view.addRegion(_.uniqueId('region_'), definition);
               });
 
               it('returns the jQuery(el)', function() {
-                expect(this.region.getEl(this.region.el).text()).to.not.equal($(this.region.el).text());
+                expect(region.getEl(region.el).text()).to.not.equal($(region.el).text());
               });
             });
 
             describe('including multiple instances of the selector', function() {
               beforeEach(function() {
                 this.setFixtures('<div id="parent"><div class="child">text</div><div class="child">text</div></div>');
-                this.parentEl = $('#parent');
-                this.definition = _.defaults({parentEl: this.parentEl, el: '.child' }, this.definition);
-                this.region = this.view.addRegion(_.uniqueId('region_'),this.definition);
+                const parentEl = $('#parent');
+                definition = _.defaults({parentEl: parentEl, el: '.child' }, definition);
+                region = view.addRegion(_.uniqueId('region_'), definition);
               });
 
               it('should ensure a jQuery(el) of length 1', function() {
                 // calls _ensureElement
-                this.region.empty();
-                expect(this.region.$el.length).to.equal(1);
+                region.empty();
+                expect(region.$el.length).to.equal(1);
               });
             });
           });
         });
 
         describe('when el is an HTML node', function() {
+          let el;
+          let definition;
+          let region;
+
           beforeEach(function() {
-            this.el = $('<div id="baz-region">')[0];
-            this.bazRegion = new this.DefaultRegionClass({el: this.el});
-            this.definition = {el: this.el};
-            this.region = this.view.addRegion(_.uniqueId('region_'),this.definition);
+            el = $('<div id="baz-region">')[0];
+            new DefaultRegionClass({el: el});
+            definition = {el: el};
+            region = view.addRegion(_.uniqueId('region_'), definition);
           });
 
           it('uses the default region class', function() {
-            expect(this.region).to.be.an.instanceof(this.DefaultRegionClass);
+            expect(region).to.be.an.instanceof(DefaultRegionClass);
           });
 
           it('uses the el', function() {
-            expect(this.region.el).to.equal(this.el);
+            expect(region.el).to.equal(el);
           });
 
           describe('with `parentEl` also defined', function() {
             beforeEach(function() {
-              this.parentEl = $('<div id="not-actual-parent"></div>');
-              this.definition = _.defaults({parentEl: this.parentEl}, this.definition);
-              this.region = this.view.addRegion(_.uniqueId('region_'),this.definition);
+              const parentEl = $('<div id="not-actual-parent"></div>');
+              definition = _.defaults({parentEl: parentEl}, definition);
+              region = view.addRegion(_.uniqueId('region_'), definition);
             });
 
             it('returns the jQuery(el)', function() {
-              expect(this.region.getEl(this.el)).to.deep.equal($(this.el));
+              expect(region.getEl(el)).to.deep.equal($(el));
             });
 
           });
         });
 
         describe('when el is a jQuery object', function() {
+          let el;
+          let region;
+
           beforeEach(function() {
-            this.el = $('<div id="baz-region">');
-            this.bazRegion = new this.DefaultRegionClass({el: this.el});
-            this.definition = {el: this.el};
-            this.region = this.view.addRegion(_.uniqueId('region_'),this.definition);
+            el = $('<div id="baz-region">');
+            new DefaultRegionClass({el: el});
+            const definition = {el: el};
+            region = view.addRegion(_.uniqueId('region_'), definition);
           });
 
           it('uses the default region class', function() {
-            expect(this.region).to.be.an.instanceof(this.DefaultRegionClass);
+            expect(region).to.be.an.instanceof(DefaultRegionClass);
           });
 
           it('uses the el', function() {
-            expect(this.region.el).to.equal(this.el[0]);
+            expect(region.el).to.equal(el[0]);
           });
         });
       });
 
       describe('when el is an empty jQuery object', function() {
-        beforeEach(function() {
-          this.el = $('i-am-not-real');
-          this.definition = {el: this.el};
+        let buildRegion;
 
-          this.buildRegion = function() {
-            this.view.addRegion(_.uniqueId('region_'),this.definition);
-          }.bind(this);
+        beforeEach(function() {
+          const el = $('i-am-not-real');
+          const definition = {el: el};
+
+          buildRegion = function() {
+            view.addRegion(_.uniqueId('region_'), definition);
+          };
         });
 
         it('throws a `NoElError`', function() {
-          expect(this.buildRegion).to.throw('An "el" must be specified for a region.');
+          expect(buildRegion).to.throw('An "el" must be specified for a region.');
         });
       });
 
       describe('with `regionClass` defined', function() {
-        beforeEach(function() {
-          this.$el = $('<div id="baz-region">');
-          this.el = this.$el[0];
-        });
-
         describe('with `el` also defined', function() {
+          let el;
+          let region1;
+          let region2;
+          let region3;
+
           beforeEach(function() {
-            this.baseDefinition = {regionClass: this.BazRegion};
-            this.region1Definition = _.defaults({el: this.fooSelector}, this.baseDefinition);
-            this.region2Definition = _.defaults({el: this.el}, this.baseDefinition);
-            this.region3Definition = _.defaults({el: this.$el}, this.baseDefinition);
+            const $el = $('<div id="baz-region">');
+            el = $el[0];
 
-            this.baz1Region = new this.BazRegion({el: this.fooSelector});
-            this.baz2Region = new this.BazRegion({el: this.el});
-            this.baz3Region = new this.BazRegion({el: this.$el});
+            const baseDefinition = {regionClass: BazRegion};
+            const region1Definition = _.defaults({el: fooSelector}, baseDefinition);
+            const region2Definition = _.defaults({el: el}, baseDefinition);
+            const region3Definition = _.defaults({el: $el}, baseDefinition);
 
-            this.region1 = this.view.addRegion(_.uniqueId('region_'),this.region1Definition);
-            this.region2 = this.view.addRegion(_.uniqueId('region_'),this.region2Definition);
-            this.region3 = this.view.addRegion(_.uniqueId('region_'),this.region3Definition);
+            region1 = view.addRegion(_.uniqueId('region_'), region1Definition);
+            region2 = view.addRegion(_.uniqueId('region_'), region2Definition);
+            region3 = view.addRegion(_.uniqueId('region_'), region3Definition);
           });
 
           it('uses the region class', function() {
-            expect(this.region1).to.be.an.instanceof(this.BazRegion);
-            expect(this.region2).to.be.an.instanceof(this.BazRegion);
-            expect(this.region3).to.be.an.instanceof(this.BazRegion);
+            expect(region1).to.be.an.instanceof(BazRegion);
+            expect(region2).to.be.an.instanceof(BazRegion);
+            expect(region3).to.be.an.instanceof(BazRegion);
           });
 
           it('uses the el', function() {
-            expect(this.region1.el).to.equal(this.fooSelector);
-            expect(this.region2.el).to.equal(this.el);
-            expect(this.region3.el).to.equal(this.el);
+            expect(region1.el).to.equal(fooSelector);
+            expect(region2.el).to.equal(el);
+            expect(region3.el).to.equal(el);
           });
         });
 
         describe('without `selector` or `el` defined on `regionConfig`', function() {
           describe('with `el` defined on `regionClass`', function() {
+            let region;
+
             beforeEach(function() {
-              this.definition = {regionClass: this.BarRegion};
-              this.region = this.view.addRegion(_.uniqueId('region_'),this.definition);
+              const definition = {regionClass: BarRegion};
+              region = view.addRegion(_.uniqueId('region_'), definition);
             });
 
             it('uses the region class', function() {
-              expect(this.region).to.be.an.instanceof(this.BarRegion);
+              expect(region).to.be.an.instanceof(BarRegion);
             });
           });
 
           describe('without `el` defined on `regionClass`', function() {
-            beforeEach(function() {
-              this.definition = {regionClass: this.BazRegion};
+            let buildRegion;
 
-              this.buildRegion = function() {
-                this.view.addRegion(_.uniqueId('region_'),this.definition);
-              }.bind(this);
+            beforeEach(function() {
+              const definition = {regionClass: BazRegion};
+
+              buildRegion = function() {
+                view.addRegion(_.uniqueId('region_'), definition);
+              };
             });
 
             it('throws a `NoElError`', function() {
-              expect(this.buildRegion).to.throw('An "el" must be specified for a region.');
+              expect(buildRegion).to.throw('An "el" must be specified for a region.');
             });
           });
         });
       });
 
       describe('with additional region options', function() {
+        let region;
+
         beforeEach(function() {
-          this.definition = {
-            el: this.fooSelector,
-            regionClass: this.BazRegion,
+          const definition = {
+            el: fooSelector,
+            regionClass: BazRegion,
             myRegionOption: 42,
             myOtherRegionOption: 'foobar'
           };
 
-          this.region = this.view.addRegion(_.uniqueId('region_'),this.definition);
+          region = view.addRegion(_.uniqueId('region_'), definition);
         });
 
         it('it sets the region options', function() {
-          expect(this.region.getOption('myRegionOption')).to.equal(42);
-          expect(this.region.getOption('myOtherRegionOption')).to.equal('foobar');
+          expect(region.getOption('myRegionOption')).to.equal(42);
+          expect(region.getOption('myOtherRegionOption')).to.equal('foobar');
         });
       });
     });
 
     describe('with a instantiated region', function() {
+      let region;
+
       beforeEach(function() {
-        this.region = this.view.addRegion(_.uniqueId('region_'),this.barRegion);
+        region = view.addRegion(_.uniqueId('region_'), new BarRegion());
       });
 
       it('uses the region class', function() {
-        expect(this.region).to.be.an.instanceof(this.BarRegion);
+        expect(region).to.be.an.instanceof(BarRegion);
       });
     });
 
     describe('with a missing regionConfig', function() {
+      let buildRegion;
+
       beforeEach(function() {
-        this.buildRegion = function() {
-          this.view.addRegion(_.uniqueId('region_'));
-        }.bind(this);
+        buildRegion = function() {
+          view.addRegion(_.uniqueId('region_'));
+        };
       });
 
       it('throws an error', function() {
-        expect(this.buildRegion).to.throw(Marionette.Error, new Marionette.Error({
-          message: 'Improper region configuration type.',
-          url: 'marionette.region.html#region-configuration-types'
-        }));
+        expect(buildRegion).to.throw('Improper region configuration type.');
       });
     });
   });

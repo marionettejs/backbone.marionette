@@ -1,7 +1,5 @@
 # The DOM API
 
-**Warning** *The DOM API is currently experimental and may change.*
-
 With the release of Marionette 3.2, developers can remove the dependency on
 jQuery and integrate with the DOM using a custom api.
 
@@ -27,6 +25,10 @@ It should return an array-like object of the node.
 ### `findEl(el, selector)`
 
 Lookup the `selector` string within the DOM node `el`. It should return an array-like object of nodes.
+
+### `hasEl(el, childEl)`
+
+Returns true if the el contains the node childEl
 
 ### `detachEl(el)`
 
@@ -67,14 +69,14 @@ This is useful if you [change the API](#providing-your-own-dom-api) globally,
 but want to reuse the default in certain cases.
 
 ```javascript
-var Mn = require('backbone.marionette');
+import { setDomApi, DomApi } from 'backbone.marionette';
 
-var MyDOMApi = require('./mydom');
+import MyDOMApi from './mydom';
 
-Mn.setDomApi(MyDOMApi);
+setDomApi(MyDOMApi);
 
 // Use MyDOMApi everywhere but `Marionette.View`
-Mn.View.setDomApi(Mn.DomApi);
+View.setDomApi(DomApi);
 ```
 
 ## Providing Your Own DOM API
@@ -82,47 +84,35 @@ Mn.View.setDomApi(Mn.DomApi);
 To implement your own DOM API use `setDomApi`:
 
 ```javascript
-var Mn = require('backbone.marionette');
+import { setDomApi } from 'backbone.marionette';
+import MyDOMApi from './mydom';
 
-var MyDOMApi = require('./mydom');
-
-Mn.setDomApi(MyDOMApi);
+setDomApi(MyDOMApi);
 ```
 
 You can also implement a different DOM API for a particular class:
 
 ```javascript
-Mn.View.setDomApi(MyDOMApi);
+import { View } from 'backbone.marionette';
+
+View.setDomApi(MyDOMApi);
 ```
 
-`CollectionView`, `CompositeView`, `NextCollectionView`, `Region`, and `View`
+`CollectionView`, `Region`, and `View`
 all have `setDomApi`. Each extended class may have their own DOM API.
 
 Additionally a DOM API can be partially set:
 
 ```javascript
-var MyView = Mn.View.extend();
+import { View } from 'backbone.marionette';
+
+const MyView = View.extend();
 
 MyView.setDomApi({
   setContents: function(el, html) {
     el.innerHTML = html;
   }
 });
-```
-
-### CollectionView `beforeEl(el, sibling)`
-
-The only DOM interaction not covered by the DOM API is `CollectionView.beforeEl`.
-That function should be overridden separately.
-
-Add `sibling` to the DOM immediately before the DOM node `el`. The `sibling`
-will be at the same level as `el`.
-
-```javascript
-// Current implementation
-Marionette.CollectionView.prototype.beforeEl = function(el, siblings) {
-  this.$(el).before(siblings);
-};
 ```
 
 ### Backbone jQuery Integration

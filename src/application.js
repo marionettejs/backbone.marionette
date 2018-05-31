@@ -1,26 +1,46 @@
 // Application
 // -----------
+
+import _ from 'underscore';
+import extend from './utils/extend';
 import buildRegion from './common/build-region';
-import MarionetteObject from './object';
+import CommonMixin from './mixins/common';
+import DestroyMixin from './mixins/destroy';
+import RadioMixin from './mixins/radio';
 import Region from './region';
 
 const ClassOptions = [
+  'channelName',
+  'radioEvents',
+  'radioRequests',
   'region',
   'regionClass'
 ];
 
-// A container for a Marionette application.
-const Application = MarionetteObject.extend({
+const Application = function(options) {
+  this._setOptions(options, ClassOptions);
+  this.cid = _.uniqueId(this.cidPrefix);
+  this._initRegion();
+  this._initRadio();
+  this.initialize.apply(this, arguments);
+};
+
+Application.extend = extend;
+
+// Application Methods
+// --------------
+
+_.extend(Application.prototype, CommonMixin, DestroyMixin, RadioMixin, {
   cidPrefix: 'mna',
 
-  constructor(options) {
-    this._setOptions(options);
+  // This is a noop method intended to be overridden
+  initialize() {},
 
-    this.mergeOptions(options, ClassOptions);
-
-    this._initRegion();
-
-    MarionetteObject.prototype.constructor.apply(this, arguments);
+  // Kick off all of the application's processes.
+  start(options) {
+    this.triggerMethod('before:start', this, options);
+    this.triggerMethod('start', this, options);
+    return this;
   },
 
   regionClass: Region,
@@ -43,20 +63,13 @@ const Application = MarionetteObject.extend({
 
   showView(view, ...args) {
     const region = this.getRegion();
-    return region.show(view, ...args);
+    region.show(view, ...args);
+    return view;
   },
 
   getView() {
     return this.getRegion().currentView;
-  },
-
-  // kick off all of the application's processes.
-  start(options) {
-    this.triggerMethod('before:start', this, options);
-    this.triggerMethod('start', this, options);
-    return this;
   }
-
 });
 
 export default Application;

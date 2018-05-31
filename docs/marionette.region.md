@@ -7,8 +7,6 @@ identify where your region must be displayed.
 See the documentation for [laying out views](./marionette.view.md#laying-out-views---regions) for an introduction in
 managing regions throughout your application.
 
-A Region is a [`Marionette.Object`](./marionette.object.md) and has all of its functionality.
-
 Regions maintain the [View's lifecycle](./viewlifecycle.md#regions-and-the-view-lifecycle) while showing or emptying a view.
 
 ## Documentation Index
@@ -85,9 +83,9 @@ var MyView = Mn.View.extend({
 ### Additional Options
 
 You can define regions with an object literal. Object literal definitions expect
-an `el` property - the jQuery selector string to hook the region into. The
-object literal is the most common way to define whether showing the region
-overwrites the `el` or just overwrites the content (the default behavior).
+an `el` property - the selector string to hook the region into. With this
+format is possible to define whether showing the region overwrites the `el` or
+just overwrites the content (the default behavior).
 
 To overwrite the parent `el` of the region with the rendered contents of the
 inner View, use `replaceElement` as so:
@@ -124,15 +122,10 @@ removed from the DOM and replaced with an element of `.new-class` - this lets
 us do things like rendering views inside `table` or `select` more easily -
 these elements are usually very strict on what content they will allow.
 
-**_DEPRECATED: The `selector` option of a region is deprecated in favor of using `el`_**
 
 ```js
 var MyView = Mn.View.extend({
   regions: {
-    deprecatedRegionDefinition: {
-      selector: '.foo',
-      replaceElement: true
-    },
     regionDefinition: {
       el: '.bar',
       replaceElement: true
@@ -428,38 +421,9 @@ View [any HTML that doesn't belong to the View will remain](./upgrade.md#changes
 
 ### Preserving Existing Views
 
-**_DEPRECATED: `preventDestroy` is deprecated. See
-[Detaching Existing Views](#detaching-existing-views)
-for how to preserve a shown view_**
-
-If you replace the current view with a new view by calling `show`,
-by default it will automatically destroy the previous view.
-You can prevent this behavior by passing `{preventDestroy: true}` in the options
-parameter. Several events will also be triggered on the views.
-
-```javascript
-// Show the first view.
-var myView = new MyView();
-var childView = new MyChildView();
-
-var mainRegion = myView.getRegion('main');
-
-mainRegion.show(childView);
-
-// Replace the view with another. The
-// `destroy` method is called for you
-var anotherView = new AnotherView();
-mainRegion.show(anotherView);
-
-// Replace the view with another.
-// Prevent `destroy` from being called
-var anotherView2 = new AnotherView();
-mainRegion.show(anotherView2, {preventDestroy: true});
-mainRegion.empty({preventDestroy: true});
-```
-
-**NOTE** When using `preventDestroy: true` you must be careful to cleanup your
-old views manually to prevent memory leaks.
+If you replace the current view with a new view by calling `show`, it will
+automatically destroy the previous view. You can prevent this behavior by
+[detaching the view](#detaching-existing-views) before showing another one.
 
 ### Detaching Existing Views
 
@@ -478,6 +442,9 @@ myView.showChildView('main', childView);
 // ... somewhere down the line
 myOtherView.showChildView('main', myView.getRegion('main').detachView());
 ```
+
+**NOTE** When detaching a view you must pass it to a new region so Marionette
+can handle its life cycle automatically or destroy it manually to prevent memory leaks.
 
 ## `reset` A Region
 

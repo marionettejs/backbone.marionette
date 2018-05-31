@@ -1,54 +1,38 @@
+import mergeOptions from '../../../src/common/merge-options';
+
 describe('mergeOptions', function() {
-  'use strict';
+  let target;
 
   beforeEach(function() {
-    this.MyView = Marionette.View.extend({
-      myViewOptions: ['color', 'size'],
-
-      initialize: function(options) {
-        this.mergeOptions(options, this.myViewOptions);
+    target = {
+      myOptions: ['color', 'size'],
+      mergeOptions,
+      initialize(options) {
+        this.mergeOptions(options, this.myOptions);
       }
-    });
-
-    this.MyUndefinedMergeOptionsView = Marionette.View.extend({
-      initialize: function(options) {
-        this.mergeOptions(undefined);
-      }
-    });
+    };
   });
 
-  describe('when instantiating a view with no options', function() {
-    it('should not throw an Error', function() {
-      var suite = this;
-      expect(function() {
-        suite.myView = new suite.MyView();
-      }).to.not.throw(Error);
-    });
-  });
-
-  describe('when calling mergeOptions with an undefined', function() {
+  describe('when calling with undefined options', function() {
     it('should return instantly without merging anything', function() {
-      this.view = new this.MyUndefinedMergeOptionsView();
-      expect(this.view.options).to.deep.equal({});
+      expect(mergeOptions()).to.be.undefined;
     });
   });
 
-  describe('when instantiating a view with options, none matching the keys', function() {
-    beforeEach(function() {
-      this.myView = new this.MyView({
+  describe('when no matching the keys', function() {
+    it('should not merge any of those options', function() {
+      target.initialize({
         hungry: true,
         country: 'USA'
       });
-    });
 
-    it('should not merge any of those options', function() {
-      expect(this.myView).to.not.contain.keys('hungry', 'country');
+      expect(target).to.not.contain.keys('hungry', 'country');
     });
   });
 
-  describe('when instantiating a view with options, some matching the keys', function() {
+  describe('when some matching the keys', function() {
     beforeEach(function() {
-      this.myView = new this.MyView({
+      target.initialize({
         hungry: true,
         country: 'USA',
         color: 'blue'
@@ -56,24 +40,22 @@ describe('mergeOptions', function() {
     });
 
     it('should not merge the ones that do not match', function() {
-      expect(this.myView).to.not.contain.keys('hungry', 'country');
+      expect(target).to.not.contain.keys('hungry', 'country');
     });
 
     it('should merge the ones that match', function() {
-      expect(this.myView).to.contain.keys('color');
+      expect(target).to.contain.keys('color');
     });
   });
 
-  describe('when instantiating a view with options, all matching the keys', function() {
-    beforeEach(function() {
-      this.myView = new this.MyView({
+  describe('when all matching the keys', function() {
+    it('should merge all of the options', function() {
+      target.initialize({
         size: 'large',
         color: 'blue'
       });
-    });
 
-    it('should merge all of the options', function() {
-      expect(this.myView).to.contain.keys('color', 'size');
+      expect(target).to.contain.keys('color', 'size');
     });
   });
 });

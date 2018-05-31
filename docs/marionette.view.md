@@ -82,8 +82,6 @@ The default implementation of `attachElContent` is:
 ```javascript
 attachElContent(html) {
   this.$el.html(html);
-
-  return this;
 },
 ```
 
@@ -114,27 +112,22 @@ Marionette will [set the appropriate state of the view](./viewlifecycle.md#views
 
 ### Setting a `template` to `false`
 
-**Deprecated:** `template: false` is deprecated.  Use `template: _.noop`
-to render without adding html, or do not render the view. Pre-rendered
-views will instantiate `isRendered() === true`.
-
-Setting the `template` to `false` allows for the view to create all of
-the bindings and trigger all view events without re-rendering the el of
-the view. *Any other falsy value will throw an exception.*
+Setting the `template` to `false` prevents the creation of view bindings and
+does not trigger any view events.
 
 ```javascript
 var Mn = require('backbone.marionette');
 
 var MyView = Mn.View({
   el: '#base-element',
-
-  // template: false is deprecated
-  // Use template: _.noop instead
   template: false
 });
 
 new myView();
 myView.render();
+
+// logs as false
+myView.isRendered();
 ```
 
 ## Laying Out Views - Regions

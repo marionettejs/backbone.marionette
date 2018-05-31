@@ -13,17 +13,11 @@ their children.
   * [View Destruction Events](#view-destruction-events)
   * [Other View Events](#other-view-events)
 * [`CollectionView` Lifecycle](#collectionview-lifecycle)
-  * [Collection Creation Lifecycle](#collection-creation-lifecycle)
-  * [Collection Destruction Lifecycle](#collection-destruction-lifecycle)
-  * [Collection Creation Events](#collection-creation-events)
-  * [Collection Destruction Events](#collection-destruction-events)
-  * [Other Collection Events](#other-collection-events)
-* [`NextCollectionView` Lifecycle](#nextcollectionview-lifecycle)
-  * [NextCollectionView Creation Lifecycle](#nextcollectionview-creation-lifecycle)
-  * [NextCollectionView Destruction Lifecycle](#nextcollectionview-destruction-lifecycle)
-  * [NextCollectionView Creation Events](#nextcollectionview-creation-events)
-  * [NextCollectionView Destruction Events](#nextcollectionview-destruction-events)
-  * [NextCollectionView EmptyView Events](#nextcollectionview-emptyview-events)
+  * [CollectionView Creation Lifecycle](#collectionview-creation-lifecycle)
+  * [CollectionView Destruction Lifecycle](#collectionview-destruction-lifecycle)
+  * [CollectionView Creation Events](#collectionview-creation-events)
+  * [CollectionView Destruction Events](#collectionview-destruction-events)
+  * [CollectionView EmptyView Events](#collectionview-emptyview-events)
 * [Lifecycle State Methods](#lifecycle-state-methods)
   * [`isRendered()`](#isrendered)
   * [`isAttached()`](#isattached)
@@ -383,7 +377,7 @@ The `CollectionView` has its own lifecycle around the standard `View` event
 rendering lifecycle. This section covers the events that get triggered and what
 they indicate.
 
-### Collection Creation Lifecycle
+### CollectionView Creation Lifecycle
 
 The `CollectionView` creation lifecycle can go down two paths depending on
 whether the collection is populated or empty. The below table shows the order of
@@ -391,26 +385,35 @@ rendering events firing:
 
 | Order |           Event          |                     Arguments                     |
 | :---: |--------------------------|---------------------------------------------------|
-|   1   |      `before:render`     | `collectionview` - collection view being rendered |
-|  2*   |  `before:render:empty`   | `collectionview` - collection view being rendered |
-|       |                          |         `view` - empty view being rendered        |
-|  2+   | `before:render:children` | `collectionview` - collection view being rendered |
-|   3   |    `before:add:child`    | `collectionview` - collection view being rendered |
+|   1*  |      `before:render`     | `collectionview` - collection view being rendered |
+|   2   |  `before:remove:child`   | `collectionview` - collection view being rendered |
 |       |                          |         `child` - child view being rendered       |
-|   4   |       `add:child`        | `collectionview` - collection view being rendered |
+|   3   |     `remove:child`       | `collectionview` - collection view being rendered |
 |       |                          |         `child` - child view being rendered       |
-|  5*   |      `render:empty`      | `collectionview` - collection view being rendered |
+|   4   |    `before:add:child`    | `collectionview` - collection view being rendered |
+|       |                          |         `child` - child view being rendered       |
+|   5   |       `add:child`        | `collectionview` - collection view being rendered |
+|       |                          |         `child` - child view being rendered       |
 |       |                          |         `view` - empty view being rendered        |
-|  5+   |     `render:children`    | `collectionview` - collection view being rendered |
-|   6   |          `render`        | `collectionview` - collection view being rendered |
-|   7   |      `before:attach`     | `collectionview` - collection view being rendered |
-|   8   |         `attach`         | `collectionview` - collection view being rendered |
-|   9   |       `dom:refresh`      | `collectionview` - collection view being rendered |
+|   6+  |       `before:sort `     | `collectionview` - collection view being rendered |
+|   7   |          `sort`          | `collectionview` - collection view being rendered |
+|   8#  |      `before:filter`     | `collectionview` - collection view being rendered |
+|   9#  |         `filter`         | `collectionview` - collection view being rendered |
+|  10   | `before:render:children` | `collectionview` - collection view being rendered |
+|  11   |     `render:children`    | `collectionview` - collection view being rendered |
+|  12*  |          `render`        | `collectionview` - collection view being rendered |
+|  13** |      `before:attach`     | `collectionview` - collection view being rendered |
+|  14** |         `attach`         | `collectionview` - collection view being rendered |
+|  15** |       `dom:refresh`      | `collectionview` - collection view being rendered |
 
-The events marked with "\*" only fire on empty collections and events marked
-with "+" fire on collections with items.
+"\*" only fire if the `CollectionView` is fully rendering from either `collectionView.render()` or `collectionView.collection.reset()`.
+"+" including and after this point only occur if there are some children to render.
+"#" only fires if a `viewFilter` is defined.
+"\*\*" fires from use in the parent when a CollectionView is shown in a Region or
+as a childView of another CollectionView.
 
-### Collection Destruction Lifecycle
+
+### CollectionView Destruction Lifecycle
 
 When a `CollectionView` is destroyed it fires a series of events in order to
 reflect the different stages of the destruction process.
@@ -422,19 +425,17 @@ reflect the different stages of the destruction process.
 |   2   |        `before:detach`       |  `collectionview` - collection view being destroyed |
 |   3   |           `detach`           |  `collectionview` - collection view being destroyed |
 |   4   |  `before:destroy:children`   |  `collectionview` - collection view being destroyed |
-|  5*   |      `before:remove:empty`   |  `collectionview` - collection view being destroyed |
-|  5+   |      `before:remove:child`   |  `collectionview` - collection view being destroyed |
+|   5+  |      `before:remove:child`   |  `collectionview` - collection view being destroyed |
 |       |                              |         `view` - child view being destroyed         |
-|  6*   |         `remove:child`       |  `collectionview` - collection view being destroyed |
+|   6+  |         `remove:child`       |  `collectionview` - collection view being destroyed |
 |       |                              |         `view` - child view being destroyed         |
-|  6+   |         `remove:empty`       |  `collectionview` - collection view being destroyed |
-|   7   |           `destroy`          |  `collectionview` - collection view being destroyed |
+|   7   |      `destroy:children`      |  `collectionview` - collection view being destroyed |
+|   8   |           `destroy`          |  `collectionview` - collection view being destroyed |
 |       |                              |      `...args` - arguments passed to `destroy`      |
 
-The events marked with "\*" only fire on empty collections and events marked
-with "+" fire on collections with items.
+The events marked with "+" only fire  on collections with children.
 
-### Collection Creation Events
+### CollectionView Creation Events
 
 #### CollectionView `before:render`
 
@@ -442,38 +443,44 @@ Triggers before the `CollectionView` render process starts. See the
 [`before:render` Documentation](#view-before-render) for an
 example.
 
-#### CollectionView `before:render:empty`
+#### CollectionView `before:add:child`
 
-Triggers just before rendering a collection `emptyView`. This won't be fired if
-the collection has 1 or more elements in.
+This event fires before each child is added to the children.
+
+#### CollectionView `add:child`
+
+This event fires after each child is added to the children. This fires once for each
+item in the attached collection.
+
+#### CollectionView `before:sort`
+
+This event fires just before sorting the children in the `CollectionView`.
+By default this only fires if the collectionView has at least one child.
+
+#### CollectionView `sort`
+
+This event fires after sorting the children in the `CollectionView`.
+By default this only fires if the collectionView has at least one child.
+
+#### CollectionView `before:filter`
+
+This event fires just before filtering the children in the `CollectionView`.
+By default this only fires if the collectionView has at least one child and has a `viewFilter`.
+
+#### CollectionView `filter`
+
+This event fires after filtering the children in the `CollectionView`.
+By default this only fires if the collectionView has at least one child and has a `viewFilter`.
 
 #### CollectionView `before:render:children`
 
 This event fires just before rendering the children in the `CollectionView`.
-This only fires if the collection has at least one item.
-
-#### CollectionView `before:add:child`
-
-This event fires before each child is added to the view. If the collection is
-empty, this fires exactly once for the `emptyView`.
-
-#### CollectionView `add:child`
-
-This event fires after each child is added to the view. This fires once for each
-item in the attached collection.
-
-If the collection is empty, this event fires exactly once for the `emptyView`.
-
-#### CollectionView `render:empty`
-
-This event fires once the `emptyView` has been rendered. This will only fire if
-the attached collection is empty.
+By default this only fires if the collectionView has at least one view not filtered out.
 
 #### CollectionView `render:children`
 
-This event fires once all the collection's child views have been rendered.  This
-only fires if the collection has at least one item. This may also fire when
-[`reorderOnSort`](./collectionviewadvanced.md#collectionviews-reorderonsort) is false:
+This event fires once all the collection's child views have been rendered.
+By default this only fires if the collectionView has at least one view not filtered out.
 
 ```
 var Bb = require('backbone');
@@ -497,7 +504,7 @@ myView.render();
 Fires when the collection has completely finished rendering. See the
 [`render` Documentation](#view-render) for more information.
 
-### Collection Destruction Events
+### CollectionView Destruction Events
 
 #### CollectionView `before:destroy`
 
@@ -533,15 +540,7 @@ elements will still exist in memory if you need to access them.
 
 This is triggered just before the `childView` items are destroyed.
 
-Triggered when the `collectionView` is destroyed or before the `collectionView`'s children are re-rendered.
-
-#### CollectionView `before:remove:empty`
-
-This is triggered just before the `emptyView` is removed from the
-`CollectionView`. *This only fires if the attached `collection` has no items.*
-
-The `emptyView` will then go through the its own
-[destruction lifecycle](#view-destruction-lifecycle)
+Triggered when the `CollectionView` is destroyed or before the `CollectionView`'s children are re-rendered.
 
 #### CollectionView `before:remove:child`
 
@@ -551,255 +550,29 @@ This is triggered for each `childView` that is removed from the
 Each item in the `CollectionView` will undergo the
 [destruction lifecycle](#view-destruction-lifecycle)
 
-#### CollectionView `remove:empty`
-
-Fired after the `emptyView` has been removed and its destruction lifecycle has
-been completed. *This only fires if the attached `collection` has no items.*
-
 #### CollectionView `remove:child`
 
 Fired for each view that is removed from the `CollectionView`. This can only
 fire if the `collection` has items.
 
+#### CollectionView `destroy:children`
+
+This is triggered just after the `childView` items are destroyed.
+
+Triggered when the `CollectionView` is destroyed or before the `CollectionView`'s children are re-rendered.
+
 #### CollectionView `destroy`
 
 Fired once the `CollectionView` has been destroyed and no longer exists.
 
-### Other Collection Events
+### CollectionView EmptyView Events
 
-Collection views can fire other events as part of their normal use.
-
-#### `reorder` / `before:reorder` events
-
-When [`reorderOnSort`](./collectionviewadvanced.md#collectionviews-resortview) is set to `true`, these
-events are fired for the reordering of the collection.
-
-```javascript
-var Bb = require('backbone');
-var Mn = require('backbone.marionette');
-
-var MyView = Mn.CollectionView.extend({...});
-
-var myCol = new Bb.Collection({ comparator: ... })
-var myView = new MyView({ reorderOnSort: true });
-
-myView.render();
-myCol.comparator = function () { return this.get('foo'); };
-
-myView.on({
-  'reorder': function() {
-    console.log('the collection view has been reordered following its collection');
-  },
-  'before:reorder': function() {
-    console.log('the collection view is about to be reordered');
-  }
-});
-
-myCol.sort()
-```
-
-## `NextCollectionView` Lifecycle
-
-The `NextCollectionView` has its own lifecycle around the standard `View` event
-rendering lifecycle. This section covers the events that get triggered and what
-they indicate.
-
-### NextCollectionView Creation Lifecycle
-
-The `NextCollectionView` creation lifecycle can go down two paths depending on
-whether the collection is populated or empty. The below table shows the order of
-rendering events firing:
-
-| Order |           Event          |                     Arguments                     |
-| :---: |--------------------------|---------------------------------------------------|
-|   1*  |      `before:render`     | `collectionview` - collection view being rendered |
-|   2   |  `before:remove:child`   | `collectionview` - collection view being rendered |
-|       |                          |         `child` - child view being rendered       |
-|   3   |     `remove:child`       | `collectionview` - collection view being rendered |
-|       |                          |         `child` - child view being rendered       |
-|   4   |    `before:add:child`    | `collectionview` - collection view being rendered |
-|       |                          |         `child` - child view being rendered       |
-|   5   |       `add:child`        | `collectionview` - collection view being rendered |
-|       |                          |         `child` - child view being rendered       |
-|       |                          |         `view` - empty view being rendered        |
-|   6+  |       `before:sort `     | `collectionview` - collection view being rendered |
-|   7   |          `sort`          | `collectionview` - collection view being rendered |
-|   8#  |      `before:filter`     | `collectionview` - collection view being rendered |
-|   9#  |         `filter`         | `collectionview` - collection view being rendered |
-|  10   | `before:render:children` | `collectionview` - collection view being rendered |
-|  11   |     `render:children`    | `collectionview` - collection view being rendered |
-|  12*  |          `render`        | `collectionview` - collection view being rendered |
-|  13** |      `before:attach`     | `collectionview` - collection view being rendered |
-|  14** |         `attach`         | `collectionview` - collection view being rendered |
-|  15** |       `dom:refresh`      | `collectionview` - collection view being rendered |
-
-"\*" only fire if the `NextCollectionView` is fully rendering from either `collectionView.render()` or `collectionView.collection.reset()`.
-"+" including and after this point only occur if there are some children to render.
-"#" only fires if a `viewFilter` is defined.
-"\*\*" fires from use in the parent when a CollectionView is shown in a Region or
-as a childView of another CollectionView.
-
-
-### NextCollectionView Destruction Lifecycle
-
-When a `NextCollectionView` is destroyed it fires a series of events in order to
-reflect the different stages of the destruction process.
-
-| Order |             Event            |                       Arguments                     |
-| :---: |------------------------------|-----------------------------------------------------|
-|   1   |        `before:destroy`      |  `collectionview` - collection view being destroyed |
-|       |                              |      `...args` - arguments passed to `destroy`      |
-|   2   |        `before:detach`       |  `collectionview` - collection view being destroyed |
-|   3   |           `detach`           |  `collectionview` - collection view being destroyed |
-|   4   |  `before:destroy:children`   |  `collectionview` - collection view being destroyed |
-|   5+  |      `before:remove:child`   |  `collectionview` - collection view being destroyed |
-|       |                              |         `view` - child view being destroyed         |
-|   6+  |         `remove:child`       |  `collectionview` - collection view being destroyed |
-|       |                              |         `view` - child view being destroyed         |
-|   7   |      `destroy:children`      |  `collectionview` - collection view being destroyed |
-|   8   |           `destroy`          |  `collectionview` - collection view being destroyed |
-|       |                              |      `...args` - arguments passed to `destroy`      |
-
-The events marked with "+" only fire  on collections with children.
-
-### NextCollectionView Creation Events
-
-#### NextCollectionView `before:render`
-
-Triggers before the `NextCollectionView` render process starts. See the
-[`before:render` Documentation](#view-before-render) for an
-example.
-
-#### NextCollectionView `before:add:child`
-
-This event fires before each child is added to the children.
-
-#### NextCollectionView `add:child`
-
-This event fires after each child is added to the children. This fires once for each
-item in the attached collection.
-
-#### NextCollectionView `before:sort`
-
-This event fires just before sorting the children in the `NextCollectionView`.
-By default this only fires if the collectionView has at least one child.
-
-#### NextCollectionView `sort`
-
-This event fires after sorting the children in the `NextCollectionView`.
-By default this only fires if the collectionView has at least one child.
-
-#### NextCollectionView `before:filter`
-
-This event fires just before filtering the children in the `NextCollectionView`.
-By default this only fires if the collectionView has at least one child and has a `viewFilter`.
-
-#### NextCollectionView `filter`
-
-This event fires after filtering the children in the `NextCollectionView`.
-By default this only fires if the collectionView has at least one child and has a `viewFilter`.
-
-#### NextCollectionView `before:render:children`
-
-This event fires just before rendering the children in the `NextCollectionView`.
-By default this only fires if the collectionView has at least one view not filtered out.
-
-#### NextCollectionView `render:children`
-
-This event fires once all the collection's child views have been rendered.
-By default this only fires if the collectionView has at least one view not filtered out.
-
-```
-var Bb = require('backbone');
-var Mn = require('backbone.marionette');
-
-var MyView = Mn.NextCollectionView.extend({
-  onRenderChildren: function({
-    console.log('The collectionview children have been rendered');
-  })
-});
-
-var myView = new MyView({
-  collection: new Bb.Collection([{ id: 1 }]);
-});
-
-myView.render();
-```
-
-#### NextCollectionView `render`
-
-Fires when the collection has completely finished rendering. See the
-[`render` Documentation](#view-render) for more information.
-
-### NextCollectionView Destruction Events
-
-#### NextCollectionView `before:destroy`
-
-Fires as the destruction process is beginning. This is best used to perform any
-necessary cleanup within the `NextCollectionView`.
+The `CollectionView` uses a region internally that can be used to know when the empty view is show or destroyed.
 
 ```javascript
 var Mn = require('backbone.marionette');
 
-var MyView = Mn.NextCollectionView.extend({
-  onBeforeDestroy: function() {
-    console.log('The CollectionView is about to be destroyed');
-  }
-});
-
-var myView = new MyView();
-
-myView.destroy();
-```
-
-#### NextCollectionView `before:detach`
-
-Fires just before the `NextCollectionView` is removed from the DOM. If you need to
-remove any event handlers or UI modifications, this would be the best time to do
-that.
-
-#### NextCollectionView `detach`
-
-Fires just after the `NextCollectionView` is removed from the DOM. The view's
-elements will still exist in memory if you need to access them.
-
-#### NextCollectionView `before:destroy:children`
-
-This is triggered just before the `childView` items are destroyed.
-
-Triggered when the `NextCollectionView` is destroyed or before the `NextCollectionView`'s children are re-rendered.
-
-#### NextCollectionView `before:remove:child`
-
-This is triggered for each `childView` that is removed from the
-`NextCollectionView`. This can *only* fire if the `collection` contains items.
-
-Each item in the `NextCollectionView` will undergo the
-[destruction lifecycle](#view-destruction-lifecycle)
-
-#### NextCollectionView `remove:child`
-
-Fired for each view that is removed from the `NextCollectionView`. This can only
-fire if the `collection` has items.
-
-#### NextCollectionView `destroy:children`
-
-This is triggered just after the `childView` items are destroyed.
-
-Triggered when the `NextCollectionView` is destroyed or before the `NextCollectionView`'s children are re-rendered.
-
-#### NextCollectionView `destroy`
-
-Fired once the `NextCollectionView` has been destroyed and no longer exists.
-
-### NextCollectionView EmptyView Events
-
-The `NextCollectionView` uses a region internally that can be used to know when the empty view is show or destroyed.
-
-```javascript
-var Mn = require('backbone.marionette');
-
-var MyView = Mn.NextCollectionView.extend({
+var MyView = Mn.CollectionView.extend({
   emptyView: MyEmptyView
 });
 
@@ -830,7 +603,6 @@ This function will return a boolean value reflecting if the view has been render
 This function will return a boolean value reflecting if the view believes it is attached.
 This is maintained when attaching a view with a `Region` or during [View instantiation](#views-associated-with-previously-rendered-or-attached-dom).
 If a view is attached by other means this function may not reflect the actual state of attachment.
-To be certain use [`Marionette.isNodeAttached`](./marionette.functions.md#marionetteisnodeattached).
 
 ## Views associated with previously rendered or attached DOM
 

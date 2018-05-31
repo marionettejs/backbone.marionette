@@ -1,6 +1,5 @@
 import _ from 'underscore';
-import deprecate from '../utils/deprecate';
-import MarionetteError from '../error';
+import MarionetteError from '../utils/error';
 import Region from '../region';
 
 // return the region instance from the definition
@@ -9,44 +8,30 @@ export default function(definition, defaults) {
     return definition;
   }
 
-  return buildRegionFromDefinition(definition, defaults);
-}
-
-function buildRegionFromDefinition(definition, defaults) {
-  const opts = _.extend({}, defaults);
-
   if (_.isString(definition)) {
-    _.extend(opts, { el: definition });
-
-    return buildRegionFromObject(opts);
+    return buildRegionFromObject(defaults, { el: definition });
   }
 
   if (_.isFunction(definition)) {
-    _.extend(opts, { regionClass: definition });
-
-    return buildRegionFromObject(opts);
+    return buildRegionFromObject(defaults, { regionClass: definition });
   }
 
   if (_.isObject(definition)) {
-    if (definition.selector) {
-      deprecate('The selector option on a Region definition object is deprecated. Use el to pass a selector string');
-    }
-
-    _.extend(opts, { el: definition.selector }, definition);
-
-    return buildRegionFromObject(opts);
+    return buildRegionFromObject(defaults, definition);
   }
 
   throw new MarionetteError({
     message: 'Improper region configuration type.',
-    url: 'marionette.region.html#region-configuration-types'
+    url: 'marionette.region.html#defining-regions'
   });
 }
 
-function buildRegionFromObject(definition) {
-  const RegionClass = definition.regionClass
+function buildRegionFromObject(defaults, definition) {
+  const options = _.extend({}, defaults, definition);
 
-  const options = _.omit(definition, 'regionClass');
+  const RegionClass = options.regionClass
+
+  delete options.regionClass;
 
   return new RegionClass(options);
 }

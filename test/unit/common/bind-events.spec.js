@@ -1,145 +1,153 @@
-describe('Marionette.bindEntityEvents', function() {
-  'use strict';
+import { bindEvents, unbindEvents } from '../../../src/common/bind-events';
+
+describe('bind-events', function() {
+  let entity;
+  let target;
 
   beforeEach(function() {
-    this.handleFooStub = this.sinon.stub();
-    this.handleBarStub = this.sinon.stub();
-    this.handleMultiStub = this.sinon.stub();
-    this.listenToStub = this.sinon.stub();
-    this.entityStub = this.sinon.stub();
+    entity = this.sinon.stub();
 
-    this.target = {
-      handleFoo: this.handleFooStub,
-      handleBar: this.handleBarStub,
-      handleMulti: this.handleMultiStub,
-      listenTo: this.listenToStub
+    target = {
+      handleFoo: this.sinon.stub(),
+      listenTo: this.sinon.stub(),
+      stopListening: this.sinon.stub(),
+      bindEvents,
+      unbindEvents
     };
 
-    this.entity = this.entityStub;
+    this.sinon.spy(target, 'bindEvents');
+    this.sinon.spy(target, 'unbindEvents');
   });
 
-  describe('when entity isnt passed', function() {
-    beforeEach(function() {
-      Marionette.bindEvents(this.target, false, {'foo': 'handleFoo'});
-    });
-
-    it('shouldnt bind any events', function() {
-      expect(this.listenToStub).not.to.have.been.called;
-    });
-
-    it('should return the target', function() {
-      expect(Marionette.bindEvents(this.target, false, {'foo': 'foo'})).to.equal(this.target);
-    });
-  });
-
-  describe('when bindings isnt passed', function() {
-    beforeEach(function() {
-      Marionette.bindEvents(this.target, this.entity, null);
-    });
-
-    it('shouldnt bind any events', function() {
-      expect(this.listenToStub).not.to.have.been.called;
-    });
-
-    it('should return the target', function() {
-      expect(Marionette.bindEvents(this.target, this.entity, null)).to.equal(this.target);
-    });
-  });
-
-  describe('when bindings is an object with one event-handler pair', function() {
-    describe('when handler is a function', function() {
+  describe('bindEvents', function() {
+    describe('when entity isnt passed', function() {
       beforeEach(function() {
-        Marionette.bindEvents(this.target, this.entity, {'foo': this.handleFooStub});
+        target.bindEvents(false, { 'foo': 'handleFoo' });
       });
 
-      it('should bind an event to targets handler', function() {
-        expect(this.listenToStub).to.have.been.calledOnce.and.calledWith(this.entity, 'foo', this.handleFooStub);
+      it('shouldnt bind any events', function() {
+        expect(target.listenTo).not.to.have.been.called;
+      });
+
+      it('should return the target', function() {
+        expect(target.bindEvents).to.have.returned(target);
       });
     });
 
-    describe('when handler is a string', function() {
-      describe('when one handler is passed', function() {
-        beforeEach(function() {
-          Marionette.bindEvents(this.target, this.entity, {'foo': 'handleFoo'});
-        });
+    describe('when bindings isnt passed', function() {
+      beforeEach(function() {
+        target.bindEvents(entity, null);
+      });
 
+      it('shouldnt bind any events', function() {
+        expect(target.listenTo).not.to.have.been.called;
+      });
+
+      it('should return the target', function() {
+        expect(target.bindEvents).to.have.returned(target);
+      });
+    });
+
+    describe('when bindings is an object with an event handler hash', function() {
+      it('should return the target', function() {
+        target.bindEvents(entity, { 'foo': 'handleFoo' });
+        expect(target.bindEvents).to.have.returned(target);
+      });
+
+      describe('when handler is a function', function() {
         it('should bind an event to targets handler', function() {
-          expect(this.listenToStub).to.have.been.calledOnce.and.calledWith(this.entity, 'foo', this.handleFooStub);
+          const handleBar = this.sinon.stub();
+          target.bindEvents(entity, { 'bar': handleBar });
+          expect(target.listenTo)
+            .to.have.been.calledOnce
+            .and.calledWith(entity, { 'bar': handleBar });
         });
       });
 
-      describe('when multiple handlers are passed', function() {
-        beforeEach(function() {
-          Marionette.bindEvents(this.target, this.entity, {
-            'baz': 'handleFoo handleBar'
+      describe('when handler is a string', function() {
+        it('should bind an event to targets handler', function() {
+          target.bindEvents(entity, { 'foo': 'handleFoo' });
+          expect(target.listenTo)
+            .to.have.been.calledOnce
+            .and.calledWith(entity, { 'foo': target.handleFoo });
+        });
+      });
+    });
+
+    describe('when bindings is not an object', function() {
+      it('should error', function() {
+        expect(function() {
+          target.bindEvents(entity, 'handleFoo');
+        }).to.throw('Bindings must be an object.');
+      });
+    });
+  });
+
+  describe('unbindEvents', function() {
+    describe('when entity isnt passed', function() {
+      beforeEach(function() {
+        target.unbindEvents(false, { 'foo': 'handleFoo' });
+      });
+
+      it('shouldnt unbind any events', function() {
+        expect(target.stopListening).not.to.have.been.called;
+      });
+
+      it('should return the target', function() {
+        expect(target.unbindEvents).to.have.returned(target);
+      });
+    });
+
+    describe('when bindings isnt passed', function() {
+      beforeEach(function() {
+        target.unbindEvents(entity, null);
+      });
+
+      it('should unbind all events', function() {
+        expect(target.stopListening)
+          .to.have.been.calledOnce
+          .and.calledWith(entity);
+      });
+
+      it('should return the target', function() {
+        expect(target.unbindEvents).to.have.returned(target);
+      });
+    });
+
+    describe('when bindings is an object with an event handler hash', function() {
+      it('should return the target', function() {
+        target.unbindEvents(entity, { 'foo': 'handleFoo' })
+        expect(target.unbindEvents).to.have.returned(target);
+      });
+
+      describe('when handler is a function', function() {
+        it('should unbind an event', function() {
+          const handleBar = this.sinon.stub();
+          target.unbindEvents(entity, { 'bar': handleBar });
+          expect(target.stopListening)
+            .to.have.been.calledOnce
+            .and.calledWith(entity, { 'bar': handleBar });
+        });
+      });
+
+      describe('when handler is a string', function() {
+        describe('when one handler is passed', function() {
+          it('should unbind an event', function() {
+            target.unbindEvents(entity, { 'foo': 'handleFoo' });
+            expect(target.stopListening)
+              .to.have.been.calledOnce
+              .and.calledWith(entity, { 'foo': target.handleFoo });
           });
         });
-
-        it('should bind first event to targets handler', function() {
-          expect(this.listenToStub).to.have.been.calledTwice.and.calledWith(this.entity, 'baz', this.handleFooStub);
-        });
-
-        it('should bind second event to targets handler', function() {
-          expect(this.listenToStub).to.have.been.calledTwice.and.calledWith(this.entity, 'baz', this.handleBarStub);
-        });
-      });
-
-      describe('when handler method doesnt exist', function() {
-        it('should throw an exception', function() {
-          var suite = this;
-          expect(function() {
-            Marionette.bindEvents(suite.target, suite.entity, {'baz': 'doesNotExist'});
-          }).to.throw('Method "doesNotExist" was configured as an event handler, but does not exist.');
-        });
-      });
-    });
-  });
-
-  describe('when bindings is an object with multiple event-handler pairs', function() {
-    beforeEach(function() {
-      Marionette.DEV_MODE = true;
-      this.sinon.spy(Marionette.deprecate, '_warn');
-      this.sinon.stub(Marionette.deprecate, '_console', {
-        warn: this.sinon.stub()
-      });
-      Marionette.deprecate._cache = {};
-      Marionette.bindEvents(this.target, this.entity, {
-        'foo': 'handleFoo handleMulti',
-        'bar': 'handleBar'
       });
     });
 
-    afterEach(function() {
-      Marionette.DEV_MODE = false;
-    });
-
-    it('should call Marionette.deprecate', function() {
-      expect(Marionette.deprecate._warn).to.be.calledWith('Deprecation warning: Multiple handlers for a single event are deprecated. If needed, use a single handler to call multiple methods.');
-    });
-
-    it('should bind first event to targets handlers', function() {
-      expect(this.listenToStub).to.have.been.calledThrice
-        .and.calledWith(this.entity, 'foo', this.handleFooStub)
-        .and.calledWith(this.entity, 'foo', this.handleMultiStub);
-    });
-
-    it('should bind second event to targets handler', function() {
-      expect(this.listenToStub).to.have.been.calledThrice.and.calledWith(this.entity, 'bar', this.handleBarStub);
-    });
-  });
-
-  describe('when bindings is not an object', function() {
-    beforeEach(function() {
-      this.run = function() {
-        Marionette.bindEvents(this.target, this.entity, 'handleFoo');
-      }.bind(this);
-    });
-
-    it('should error', function() {
-      expect(this.run).to.throw(Marionette.Error, new Marionette.Error({
-        message: 'Bindings must be an object.',
-        url: 'marionette.functions.html#marionettebindevents'
-      }));
+    describe('when bindings is not an object', function() {
+      it('should error', function() {
+        expect(function() {
+          target.unbindEvents(entity, 'handleFoo');
+        }).to.throw('Bindings must be an object.');
+      });
     });
   });
 });

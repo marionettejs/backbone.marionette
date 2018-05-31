@@ -3,15 +3,15 @@
 
 import _ from 'underscore';
 import Backbone from 'backbone';
-import deprecate from './utils/deprecate';
-import { renderView, destroyView } from './common/view';
+import MarionetteError from './utils/error';
+import extend from './utils/extend';
 import monitorViewEvents from './common/monitor-view-events';
-import isNodeAttached from './common/is-node-attached';
-import { triggerMethodOn } from './common/trigger-method';
-import MarionetteObject from './object';
-import MarionetteError from './error';
+import { renderView, destroyView } from './common/view';
+import CommonMixin from './mixins/common';
 import View from './view';
 import DomApi, { setDomApi } from './config/dom';
+
+const classErrorName = 'RegionError';
 
 const ClassOptions = [
   'allowMissingEl',
@@ -19,7 +19,37 @@ const ClassOptions = [
   'replaceElement'
 ];
 
-const Region = MarionetteObject.extend({
+const Region = function(options) {
+  this._setOptions(options, ClassOptions);
+
+  this.cid = _.uniqueId(this.cidPrefix);
+
+  // getOption necessary because options.el may be passed as undefined
+  this._initEl = this.el = this.getOption('el');
+
+  // Handle when this.el is passed in as a $ wrapped element.
+  this.el = this.el instanceof Backbone.$ ? this.el[0] : this.el;
+
+  if (!this.el) {
+    throw new MarionetteError({
+      name: classErrorName,
+      message: 'An "el" must be specified for a region.',
+      url: 'marionette.region.html#additional-options'
+    });
+  }
+
+  this.$el = this.getEl(this.el);
+
+  this.initialize.apply(this, arguments);
+};
+
+Region.extend = extend;
+Region.setDomApi = setDomApi;
+
+// Region Methods
+// --------------
+
+_.extend(Region.prototype, CommonMixin, {
   Dom: DomApi,
 
   cidPrefix: 'mnr',
@@ -27,27 +57,8 @@ const Region = MarionetteObject.extend({
   _isReplaced: false,
   _isSwappingView: false,
 
-  constructor(options) {
-    this._setOptions(options);
-
-    this.mergeOptions(options, ClassOptions);
-
-    // getOption necessary because options.el may be passed as undefined
-    this._initEl = this.el = this.getOption('el');
-
-    // Handle when this.el is passed in as a $ wrapped element.
-    this.el = this.el instanceof Backbone.$ ? this.el[0] : this.el;
-
-    if (!this.el) {
-      throw new MarionetteError({
-        name: 'NoElError',
-        message: 'An "el" must be specified for a region.'
-      });
-    }
-
-    this.$el = this.getEl(this.el);
-    MarionetteObject.call(this, options);
-  },
+  // This is a noop method intended to be overridden
+  initialize() {},
 
   // Displays a backbone view instance inside of the region. Handles calling the `render`
   // method for you. Reads content directly from the `el` attribute. The `preventDestroy`
@@ -110,11 +121,11 @@ const Region = MarionetteObject.extend({
   },
 
   _attachView(view, options = {}) {
-    const shouldTriggerAttach = !view._isAttached && isNodeAttached(this.el) && !this._shouldDisableMonitoring();
+    const shouldTriggerAttach = !view._isAttached && this.Dom.hasEl(document.documentElement, this.el) && !this._shouldDisableMonitoring();
     const shouldReplaceEl = typeof options.replaceElement === 'undefined' ? !!_.result(this, 'replaceElement') : !!options.replaceElement;
 
     if (shouldTriggerAttach) {
-      triggerMethodOn(view, 'before:attach', view);
+      view.triggerMethod('before:attach', view);
     }
 
     if (shouldReplaceEl) {
@@ -125,7 +136,7 @@ const Region = MarionetteObject.extend({
 
     if (shouldTriggerAttach) {
       view._isAttached = true;
-      triggerMethodOn(view, 'attach', view);
+      view.triggerMethod('attach', view);
     }
   },
 
@@ -143,7 +154,11 @@ const Region = MarionetteObject.extend({
       if (allowMissingEl) {
         return false;
       } else {
-        throw new MarionetteError(`An "el" must exist in DOM for this region ${this.cid}`);
+        throw new MarionetteError({
+          name: classErrorName,
+          message: `An "el" must exist in DOM for this region ${this.cid}`,
+          url: 'marionette.region.html#additional-options'
+        });
       }
     }
     return true;
@@ -152,15 +167,17 @@ const Region = MarionetteObject.extend({
   _getView(view) {
     if (!view) {
       throw new MarionetteError({
-        name: 'ViewNotValid',
-        message: 'The view passed is undefined and therefore invalid. You must pass a view instance to show.'
+        name: classErrorName,
+        message: 'The view passed is undefined and therefore invalid. You must pass a view instance to show.',
+        url: 'marionette.region.html#showing-a-view'
       });
     }
 
     if (view._isDestroyed) {
       throw new MarionetteError({
-        name: 'ViewDestroyedError',
-        message: `View (cid: "${view.cid}") has already been destroyed and cannot be used.`
+        name: classErrorName,
+        message: `View (cid: "${view.cid}") has already been destroyed and cannot be used.`,
+        url: 'marionette.region.html#showing-a-view'
       });
     }
 
@@ -259,13 +276,7 @@ const Region = MarionetteObject.extend({
       return this;
     }
 
-    const shouldDestroy = !options.preventDestroy;
-
-    if (!shouldDestroy) {
-      deprecate('The preventDestroy option is deprecated. Use Region#detachView');
-    }
-
-    this._empty(view, shouldDestroy);
+    this._empty(view, true);
     return this;
   },
 
@@ -302,8 +313,7 @@ const Region = MarionetteObject.extend({
       return view;
     }
 
-    view._shouldDisableEvents = this._shouldDisableMonitoring();
-    destroyView(view);
+    destroyView(view, this._shouldDisableMonitoring());
     return view;
   },
 
@@ -326,10 +336,10 @@ const Region = MarionetteObject.extend({
   },
 
   _detachView(view) {
-    const shouldTriggerDetach = view._isAttached && !this._shouldDisableMonitoring();;
+    const shouldTriggerDetach = view._isAttached && !this._shouldDisableMonitoring();
     const shouldRestoreEl = this._isReplaced;
     if (shouldTriggerDetach) {
-      triggerMethodOn(view, 'before:detach', view);
+      view.triggerMethod('before:detach', view);
     }
 
     if (shouldRestoreEl) {
@@ -340,7 +350,7 @@ const Region = MarionetteObject.extend({
 
     if (shouldTriggerDetach) {
       view._isAttached = false;
-      triggerMethodOn(view, 'detach', view);
+      view.triggerMethod('detach', view);
     }
   },
 
@@ -369,8 +379,17 @@ const Region = MarionetteObject.extend({
     return this;
   },
 
+  _isDestroyed: false,
+
+  isDestroyed() {
+    return this._isDestroyed;
+  },
+
   destroy(options) {
     if (this._isDestroyed) { return this; }
+
+    this.triggerMethod('before:destroy', this, options);
+    this._isDestroyed = true;
 
     this.reset(options);
 
@@ -380,10 +399,11 @@ const Region = MarionetteObject.extend({
     delete this._parentView;
     delete this._name;
 
-    return MarionetteObject.prototype.destroy.apply(this, arguments);
+    this.triggerMethod('destroy', this, options);
+    this.stopListening();
+
+    return this;
   }
-}, {
-  setDomApi
 });
 
 export default Region;

@@ -43,7 +43,7 @@ export default {
 
     // Normalize region selectors hash to allow
     // a user to use the @ui. syntax.
-    regions = this.normalizeUIValues(regions, ['selector', 'el']);
+    regions = this.normalizeUIValues(regions, 'el');
 
     // Add the regions definitions to the regions property
     this.regions = _.extend({}, this.regions, regions);
@@ -89,7 +89,7 @@ export default {
   removeRegions() {
     const regions = this._getRegions();
 
-    _.each(this._regions, _.bind(this._removeRegion, this));
+    _.each(this._regions, this._removeRegion.bind(this));
 
     return regions;
   },
@@ -145,9 +145,10 @@ export default {
     return this._getRegions();
   },
 
-  showChildView(name, view, ...args) {
+  showChildView(name, view, options) {
     const region = this.getRegion(name);
-    return region.show(view, ...args);
+    region.show(view, options);
+    return view;
   },
 
   detachChildView(name) {

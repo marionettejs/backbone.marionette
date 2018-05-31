@@ -1,5 +1,6 @@
 'use strict';
 
+import _ from 'underscore';
 import Application from '../../src/application';
 import View from '../../src/view';
 
@@ -14,6 +15,7 @@ describe('Marionette Application', function() {
       beforeEach(function() {
         appOptions = {fooOption: 'foo'};
         initializeStub = this.sinon.stub(Application.prototype, 'initialize');
+        this.sinon.spy(Application.prototype, '_initRadio');
       });
 
       it('should pass all arguments to the initialize method', function() {
@@ -32,6 +34,12 @@ describe('Marionette Application', function() {
         app = new Application(appOptions);
 
         expect(app.cid).to.exist;
+      });
+
+      it('should init the RadioMixin', function() {
+        app = new Application(appOptions);
+
+        expect(app._initRadio).to.have.been.called;
       });
     });
   });

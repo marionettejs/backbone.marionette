@@ -1,10 +1,5 @@
 import _ from 'underscore';
 
-import {
-  bindEvents,
-  unbindEvents
-} from '../common/bind-events';
-
 // MixinOptions
 // - collectionEvents
 // - modelEvents
@@ -12,27 +7,33 @@ import {
 export default {
   // Handle `modelEvents`, and `collectionEvents` configuration
   _delegateEntityEvents(model, collection) {
-    const modelEvents = _.result(this, 'modelEvents');
-
-    if (modelEvents) {
-      unbindEvents.call(this, model, modelEvents);
-      bindEvents.call(this, model, modelEvents);
+    if (model) {
+      this._modelEvents = _.result(this, 'modelEvents');
+      this.bindEvents(model, this._modelEvents);
     }
 
-
-    const collectionEvents = _.result(this, 'collectionEvents');
-
-    if (collectionEvents) {
-      unbindEvents.call(this, collection, collectionEvents);
-      bindEvents.call(this, collection, collectionEvents);
+    if (collection) {
+      this._collectionEvents = _.result(this, 'collectionEvents');
+      this.bindEvents(collection, this._collectionEvents);
     }
   },
 
+  // Remove any previously delegate entity events
   _undelegateEntityEvents(model, collection) {
-    const modelEvents = _.result(this, 'modelEvents');
-    unbindEvents.call(this, model, modelEvents);
+    if (this._modelEvents) {
+      this.unbindEvents(model, this._modelEvents);
+      delete this._modelEvents;
+    }
 
-    const collectionEvents = _.result(this, 'collectionEvents');
-    unbindEvents.call(this, collection, collectionEvents);
+    if (this._collectionEvents) {
+      this.unbindEvents(collection, this._collectionEvents);
+      delete this._collectionEvents;
+    }
+  },
+
+  // Remove cached event handlers
+  _deleteEntityEventHandlers() {
+    delete this._modelEvents;
+    delete this._collectionEvents;
   }
 };

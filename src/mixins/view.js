@@ -65,6 +65,7 @@ const ViewMixin = {
     return this;
   },
 
+  // Allows Backbone.View events to utilize `@ui.` selectors
   _getEvents(events) {
     if (events) {
       return this.normalizeUIKeys(events);
@@ -154,6 +155,7 @@ const ViewMixin = {
     this.Dom.detachEl(this.el, this.$el);
   },
 
+  // This method binds the elements specified in the "ui" hash
   bindUIElements() {
     this._bindUIElements();
     this._bindBehaviorUIElements();

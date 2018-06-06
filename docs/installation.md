@@ -67,4 +67,7 @@ we prepared simple marionettejs skeleton with Browserify.
 ## Getting Started
 
 After installing Marionette you might want to check out the basics.
+
 [Continue Reading...](./basics.md).
+
+Additionally check out [features](./features.md) for some configurable options.

@@ -310,7 +310,7 @@ const CollectionView = Backbone.View.extend({
       throw new MarionetteError({
         name: classErrorName,
         message: `The specified "childViewContainer" was not found: ${childViewContainer}`,
-        url: 'marionette.collectionview.html#collectionviews-childviewcontainer'
+        url: 'marionette.collectionview.html#defining-the-childviewcontainer'
       });
     }
   },
@@ -452,7 +452,8 @@ const CollectionView = Backbone.View.extend({
 
     throw new MarionetteError({
       name: classErrorName,
-      message: '"viewFilter" must be a function, predicate object literal, a string indicating a model attribute, or falsy'
+      message: '"viewFilter" must be a function, predicate object literal, a string indicating a model attribute, or falsy',
+      url: 'marionette.collectionview.html#defining-the-viewfilter'
     });
   },
 
@@ -615,7 +616,7 @@ const CollectionView = Backbone.View.extend({
       throw new MarionetteError({
         name: classErrorName,
         message: 'Both views must be children of the collection view to swap.',
-        url: 'marionette.collectionviewadvanced.html#collectionviews-swapchildviews'
+        url: 'marionette.collectionview.html#swapping-child-views'
       });
     }
 

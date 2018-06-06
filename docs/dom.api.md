@@ -5,7 +5,7 @@ jQuery and integrate with the DOM using a custom api.
 
 ## API Methods
 
-The DOM API manages the DOM on behalf of each view type and `Region`.
+The DOM API manages the DOM on behalf of [each view class and `Region`](./classes.md).
 It defines the methods that actually attach and remove views and children.
 
 [The default API](#the-default-api) depends on Backbone's jQuery `$` object however it does not
@@ -109,7 +109,7 @@ import { View } from 'backbone.marionette';
 const MyView = View.extend();
 
 MyView.setDomApi({
-  setContents: function(el, html) {
+  setContents(el, html) {
     el.innerHTML = html;
   }
 });

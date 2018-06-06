@@ -15,7 +15,7 @@
   </a>
 </p>
 <p align="center">
-  <img src='https://saucelabs.com/browser-matrix/marionettejs.svg' alt'Cross Browser Tesing' />
+  <img src='https://saucelabs.com/browser-matrix/marionettejs.svg' alt='Cross Browser Testing' />
 </p>
 
 ## Marionette v3
@@ -62,8 +62,7 @@ to engage in an all-or-nothing migration to begin using Marionette.
 
 ### Chat with us
 
-Find us [on gitter](https://gitter.im/marionettejs/backbone.marionette) or on
-IRC in the FreeNode.net [#marionette channel](http://freenode.net).
+Find us [on gitter](https://gitter.im/marionettejs/backbone.marionette).
 
 We're happy to discuss design patterns and learn how you're using Marionette.
 

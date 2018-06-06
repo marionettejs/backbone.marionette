@@ -56,14 +56,14 @@ disabling [automatic event bubbling](./events.md#event-bubbling).
 
 *Default:* `true`
 
-It indicates the whether or not [`View.triggers` will call `event.preventDefault()`](./marionette.view.md#view-triggers-event-object) if not explicitly defined by the trigger.
+It indicates the whether or not [`View.triggers` will call `event.preventDefault()`](./dom.interactions.md#view-triggers-event-object) if not explicitly defined by the trigger.
 The default has been true, but for a future version [`false` is being considered](https://github.com/marionettejs/backbone.marionette/issues/2926).
 
 ### `triggersStopPropagating`
 
 *Default:* `true`
 
-It indicates the whether or not [`View.triggers` will call `event.stopPropagating()`](./marionette.view.md#view-triggers-event-object) if not explicitly defined by the trigger.
+It indicates the whether or not [`View.triggers` will call `event.stopPropagating()`](./dom.interactions.md#view-triggers-event-object) if not explicitly defined by the trigger.
 The default has been true, but for a future version [`false` is being considered](https://github.com/marionettejs/backbone.marionette/issues/2926).
 
 ### DEV_MODE

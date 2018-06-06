@@ -133,11 +133,11 @@ export default {
     return this._regions[name];
   },
 
-  // Get all regions
   _getRegions() {
     return _.clone(this._regions);
   },
 
+  // Get all regions
   getRegions() {
     if (!this._isRendered) {
       this.render();

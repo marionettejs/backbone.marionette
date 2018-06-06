@@ -19,7 +19,7 @@ function normalizeBindings(context, bindings) {
   if (!_.isObject(bindings)) {
     throw new MarionetteError({
       message: 'Bindings must be an object.',
-      url: 'marionette.functions.html#marionettebindrequests'
+      url: 'common.html#bindrequests'
     });
   }
 

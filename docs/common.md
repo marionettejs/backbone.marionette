@@ -1,9 +1,10 @@
 # Common Marionette Functionality
 
-Marionette has a few methods that are common to all classes.
+Marionette has a few methods that are common to [all classes](./classes.md).
 
 ## Documentation Index
 
+* [initialize](#initialize)
 * [extend](#extend)
 * [Events API](#events-api)
 * [triggerMethod](#triggermethod)
@@ -16,6 +17,27 @@ Marionette has a few methods that are common to all classes.
 * [mergeOptions](#mergeoptions)
 * [The `options` Property](#the-options-property)
 
+### `initialize`
+
+Like the backbone classes, `initialize` is a method you can define on any Marionette class
+that will be called when the class is instantiated and will be passed any arguments passed
+at instantiation.  The first argument may contain [options](#getoption) the class attaches
+to the instance.
+
+```js
+import { MnObject } from 'backbone.marionette';
+
+const MyObject = MnObject.extend({
+  initialize(options, arg2) {
+    console.log(options.foo, this.getOption('foo'), arg2);
+  }
+});
+
+const myObject = new MyObject({ foo: 'bar' }, 'baz'); // logs "bar" "bar" "baz"
+```
+
+[Live example](https://jsfiddle.net/marionettejs/1ytrwyog/)
+
 ### `extend`
 
 Borrowed from backbone, `extend` is available on all class definitions for
@@ -27,12 +49,12 @@ The [Backbone.Events API](http://backbonejs.org/#Events) is available to all cla
 Each Marionette class can both `listenTo` any object with this API and have events
 triggered on the instance.
 
-**Note** The events API should not be confused with [`View` `events`](/.marionette.view.md#events)
+**Note** The events API should not be confused with [view `events`](/.dom.interactions.md#view-events)
 which capture DOM events.
 
 ### `triggerMethod`
 
-Trigger an event and a corresponding method on the object.
+Trigger an event and [a corresponding method](./events.md#onevent-binding) on the object.
 It is the same as `Backbone`'s [`trigger`](http://backbonejs.org/#Events-trigger)
 but with the additional method handler.
 
@@ -67,6 +89,8 @@ const myObj = new MyObject(); // console.log "baz"
 myObj.triggerMethod('foo', 'qux'); // console.log "qux"
 ```
 
+More information on `triggerMethod` can be found in the [Marionette events documentation](./events.md#triggermethod).
+
 ### `bindEvents`
 
 This method is used to bind any object that works with the [`Backbone.Events` API](#events-api).
@@ -98,6 +122,8 @@ any object that has Backbone.Events mixed in) to bind the events from.
 
 The second parameter is a hash of `{ 'event:name': 'eventHandler' }`
 configuration. A function can be supplied instead of a string handler name.
+
+**Errors** An error will be thrown if the second parameter is not an object.
 
 ### `unbindEvents`
 
@@ -181,6 +207,8 @@ The first parameter, `channel`, is an instance from `Radio`.
 The second parameter is a hash of `{ 'request:name': 'replyHandler' }`
 configuration. A function can be supplied instead of a string handler name.
 
+**Errors** An error will be thrown if the second parameter is not an object.
+
 ### `unbindRequests`
 
 This method is used to unbind any object that works with the [`Backbone.Radio` Request API](https://github.com/marionettejs/backbone.radio#backboneradiorequests).
@@ -228,7 +256,7 @@ same hash with the function names replaced with the function references themselv
 import { View } from 'backbone.marionette';
 
 const MyView = View.extend({
-  initialize: function() {
+  initialize() {
     const hash = {
       'action:one': 'handleActionOne', // This will become a reference to `this.handleActionOne`
       'action:two': this.handleActionTwo
@@ -237,15 +265,15 @@ const MyView = View.extend({
     this.normalizedHash = this.normalizeMethods(hash);
   },
 
-  do: function(action) {
+  do(action) {
     this.normalizedHash[action]();
   },
 
-  handleActionOne: function() {
+  handleActionOne() {
     console.log('action:one was fired');
   },
 
-  handleActionTwo: function() {
+  handleActionTwo() {
     console.log('action:two was fired');
   }
 
@@ -261,24 +289,29 @@ myView.do('action:two');
 ### `getOption`
 
 To access an option, we use the `getOption` method. `getOption` will fall back
-to the value defined on the instance of the same name if not defined in the options.
+to the value of the same name defined on the instance if not defined in the options.
 
 ```javascript
 import { View } from 'backbone.marionette';
 
-const MyView = View.extend({
-  className() {
-    const defaultClass = this.getOption('defaultClass');
-    const extraClasses = this.getOption('extraClasses');
-    return [defaultClass, extraClasses].join(' ');
-  },
-  defaultClass: 'table'
+const View = View.extend({
+  classVal: 'class value',
+  initialize(){
+    this.instanceVal = 'instance value'
+  }
 });
 
-const myView = new MyView({
-  model: new MyModel(),
-  extraClasses: 'table-striped'
-});
+const view = new View({ optVal: 'option value' });
+
+view.getOption('instanceVal'); // instance value
+view.getOption('classVal'); // class value
+view.getOption('optVal'); // option value
+
+const view2 = new View({ instanceVal: 'foo', classVal: 'bar', optVal: 'baz' });
+
+view.getOption('instanceVal'); // foo
+view.getOption('classVal'); // bar
+view.getOption('optVal'); // baz
 ```
 
 [Live example](https://jsfiddle.net/marionettejs/ekvb8wwa/)
@@ -304,8 +337,9 @@ const MyObject = MnObject.extend({
 
 const model1 = new MyObject(); // => "bar"
 
-const foo;
-const model2 = new MyObject({ foo: foo }); // => "bar"
+const myObj = {};
+console.log(myObj.foo); // undefined
+const model2 = new MyObject({ foo: myObj.foo }); // => "bar"
 ```
 
 [Live example](https://jsfiddle.net/marionettejs/2ddk28ap/)
@@ -377,3 +411,10 @@ const myObject = new MyObject({
   another: 'value'
 });
 ```
+
+## Marionette Classes
+
+Marionette provides a few classes for building your view tree and
+application structure.
+
+[Continue Reading...](./classes.md).

@@ -32,14 +32,13 @@ const Behavior = function(options, view) {
   this._setOptions(options, ClassOptions);
   this.cid = _.uniqueId(this.cidPrefix);
 
-  // Construct an internal UI hash using
-  // the behaviors UI hash and then the view UI hash.
-  // This allows the user to use UI hash elements
-  // defined in the parent view as well as those
-  // defined in the given behavior.
+  // Construct an internal UI hash using the behaviors UI
+  // hash combined and overridden by the view UI hash.
+  // This allows the user to use UI hash elements defined
+  // in the parent view as well as those defined in the behavior.
   // This order will help the reuse and share of a behavior
-  // between multiple views, while letting a view override a
-  // selector under an UI key.
+  // between multiple views, while letting a view override
+  // a selector under an UI key.
   this.ui = _.extend({}, _.result(this, 'ui'), _.result(view, 'ui'));
 
   // Proxy view triggers

@@ -240,6 +240,15 @@ describe('CollectionView Data', function() {
         expect($(attachHtmlEls).children()).to.have.lengthOf(5);
       });
 
+      it('should append to the el', function() {
+        this.sinon.stub(myCollectionView, 'attachHtml');
+        collection.add([{ id: 4 }, { id: 5 }]);
+
+        const callArgs = myCollectionView.attachHtml.args[0];
+        const $el = callArgs[1];
+        expect($el).to.equal(myCollectionView.$el);
+      });
+
       it('should still have all children attached', function() {
         collection.add([{ id: 4 }, { id: 5 }]);
 

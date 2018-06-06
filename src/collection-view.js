@@ -547,7 +547,7 @@ const CollectionView = Backbone.View.extend({
       view.triggerMethod('before:attach', view);
     });
 
-    this.attachHtml(els);
+    this.attachHtml(els, this.$container);
 
     _.each(views, view => {
       if (view._isAttached) { return; }
@@ -558,8 +558,8 @@ const CollectionView = Backbone.View.extend({
 
   // Override this method to do something other than `.append`.
   // You can attach any HTML at this point including the els.
-  attachHtml(els) {
-    this.Dom.appendContents(this.$container[0], els, {_$el: this.$container});
+  attachHtml(els, $container) {
+    this.Dom.appendContents($container[0], els, {_$el: $container});
   },
 
   isEmpty() {

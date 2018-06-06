@@ -60,9 +60,8 @@ _.extend(Region.prototype, CommonMixin, {
   // This is a noop method intended to be overridden
   initialize() {},
 
-  // Displays a backbone view instance inside of the region. Handles calling the `render`
-  // method for you. Reads content directly from the `el` attribute. The `preventDestroy`
-  // option can be used to prevent a view from the old view being destroyed on show.
+  // Displays a view instance inside of the region. If necessary handles calling the `render`
+  // method for you. Reads content directly from the `el` attribute.
   show(view, options) {
     if (!this._ensureElement(options)) {
       return;
@@ -263,8 +262,8 @@ _.extend(Region.prototype, CommonMixin, {
     this.Dom.appendContents(this.el, view.el, {_$el: this.$el, _$contents: view.$el});
   },
 
-  // Destroy the current view, if there is one. If there is no current view, it does
-  // nothing and returns immediately.
+  // Destroy the current view, if there is one. If there is no current view,
+  // it will detach any html inside the region's `el`.
   empty(options = { allowMissingEl: true }) {
     const view = this.currentView;
 
@@ -308,6 +307,7 @@ _.extend(Region.prototype, CommonMixin, {
     this._parentView.stopListening(view);
   },
 
+  // Non-Marionette safe view.destroy
   destroyView(view) {
     if (view._isDestroyed) {
       return view;
@@ -317,6 +317,8 @@ _.extend(Region.prototype, CommonMixin, {
     return view;
   },
 
+  // Override this method to determine what happens when the view
+  // is removed from the region when the view is not being detached
   removeView(view) {
     this.destroyView(view);
   },
@@ -385,6 +387,8 @@ _.extend(Region.prototype, CommonMixin, {
     return this._isDestroyed;
   },
 
+  // Destroy the region, remove any child view
+  // and remove the region from any associated view
   destroy(options) {
     if (this._isDestroyed) { return this; }
 

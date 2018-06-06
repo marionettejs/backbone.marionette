@@ -35,7 +35,7 @@ function childReducer(children, region) {
 }
 
 // The standard view. Includes view events, automatic rendering
-// of Underscore templates, nested views, and more.
+// templates, nested views, and more.
 const View = Backbone.View.extend({
 
   constructor(options) {
@@ -69,13 +69,8 @@ const View = Backbone.View.extend({
     return this;
   },
 
-  // Render the view, defaulting to underscore.js templates.
-  // You can override this in your view definition to provide
-  // a very specific rendering for your view. In general, though,
-  // you should override the `Marionette.Renderer` object to
-  // change how Marionette renders views.
-  // Subsequent renders after the first will re-render all nested
-  // views.
+  // If a template is available, renders it into the view's `el`
+  // Re-inits regions and binds UI.
   render() {
     const template = this.getTemplate();
 

@@ -77,7 +77,7 @@ parent. These can be chained all the way up to the level you require them to be.
 Bubbled child events no longer pass the `childView` implicitly and only pass the
 arguments passed as part of `triggerMethod`. This means that the arguments
 passed to `onEvent` and `onChildviewEvent` are now identical. See the
-[documentation on event lifecycles](./viewlifecycle.md) for more information.
+[documentation on event lifecycles](./view.lifecycle.md) for more information.
 
 In Marionette 2, `childEvents` were bound on every event. In Marionette 3,
 `childViewEvents` are bound once and cached. This means that you cannot add new
@@ -175,7 +175,7 @@ In Marionette 3, the HTML will be:
 
 The arguments for a number of lifecycle events were changed. For consistency,
 all events will now receive the view that is emitting the event as the first
-argument. See the [documentation for view lifecycles](./viewlifecycle.md) for
+argument. See the [documentation for view lifecycles](./view.lifecycle.md) for
 more complete information.
 
 #### Upgrading to Marionette 3
@@ -272,7 +272,7 @@ in Marionette to manage the `CollectionView` children.
 The main difference between Babysitter and the Marionette implementation is the
 removal of `.call` and `.apply` on `CollectionView.children`. Instead you should
 use `.invoke` or
-[any of the methods provided](./marionette.collectionviewadvanced.md#collectionview-childview-iterators-and-collection-functions).
+[any of the methods provided](./marionette.collectionview.md#collectionview-childview-iterators-and-collection-functions).
 
 For example:
 

@@ -20,7 +20,7 @@ export default {
     if (!Radio) {
       throw new MarionetteError({
         message: 'The dependency "backbone.radio" is missing.',
-        url: 'backbone.radio.html#backbone-radio'
+        url: 'backbone.radio.html#marionette-integration'
       });
     }
 

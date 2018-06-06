@@ -259,6 +259,9 @@ provide bindings to provide automatic event listeners and / or request handlers 
 instances. This works with a bound `channelName` to let us provide listeners using the `radioEvents`
 and `radioRequests` properties.
 
+**Errors** An error will be thrown if using the radio integration unless `backbone.radio` is setup
+as a dependency.
+
 ### API
 
  * `channelName` - defines the Radio channel that will be used for the requests and/or events

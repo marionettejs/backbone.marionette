@@ -2,15 +2,28 @@
 
 `MnObject` incorporates backbone conventions `initialize`, `cid` and `extend`.
 `MnObject` includes:
-- [Common Marionette Functionality](./common.md).
-- [Radio API](./backbone.radio.md#marionette-integration).
+- [Common Marionette Functionality](./common.md)
+- [Class Events](./events.class.md#mnobject-events)
+- [Radio API](./backbone.radio.md#marionette-integration)
 
 ## Documentation Index
 
+* [Instantiating a MnObject](#instantiating-a-mnobject)
 * [Unique Client ID](#unique-client-id)
-* [Initialize](#initialize)
 * [Destroying a MnObject](#destroying-a-mnobject)
 * [Basic Use](#basic-use)
+
+## Instantiating a MnObject
+
+When instantiating a `MnObject` there are several properties, if passed,
+that will be attached directly to the instance:
+`channelName`, `radioEvents`, `radioRequests`
+
+```javascript
+import { MnObject } from 'backbone.marionette';
+
+const myObject = new MnObject({ ... });
+```
 
 ## Unique Client ID
 The `cid` or client id is a unique identifier automatically assigned to MnObjects
@@ -28,24 +41,6 @@ const foo = new MyFoo();
 
 console.log(foo.cid); // foo1234
 ```
-
-## Initialize
-`initialize` is called immediately after the MnObject has been instantiated,
-and is invoked with the same arguments that the constructor received.
-
-```javascript
-import { MnObject } from 'backbone.marionette';
-
-const Friend = MnObject.extend({
-  initialize(options){
-    console.log(options.name);
-  }
-});
-
-new Friend({name: 'John'});
-```
-
-[Live example](https://jsfiddle.net/marionettejs/1ytrwyog/)
 
 ## Destroying a MnObject
 

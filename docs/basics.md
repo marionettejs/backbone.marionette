@@ -16,7 +16,7 @@ patterns etc.
 
 Like [Backbone](http://backbonejs.org/#Model-extend), Marionette utilizes the
 [`_.extend`](http://underscorejs.org/#extend) function to simulate class-based
-inheritance. All built-in classes, such as `Marionette.View`, `Marionette.MnObject`
+inheritance. [All built-in classes](./classes.md), such as `Marionette.View`, `Marionette.MnObject`
 and everything that extend these provide an `extend` method for just this purpose.
 
 In the example below, we create a new pseudo-class called `MyView`:
@@ -117,10 +117,6 @@ documentation.
 When using functions to set attributes, Marionette will assign the instance of
 your new class as `this`. You can use this feature to ensure you're able to
 access your object in cases where `this` isn't what you might expect it to be.
-For example, the value or result of
-[`templateContext`](./template.md#template-context) is
-[bound to its data object](./template.md#binding-of-this) so using a
-function is the only way to access the view's context directly.
 
 ### Binding Attributes on Instantiation
 
@@ -195,5 +191,6 @@ view.checkOption();  // prints 'some text'
 
 ## Common Marionette Functionality
 
-Marionette has a few methods and core functionality that are common to all classes.
+Marionette has a few methods and core functionality that are common to [all classes](./classes.md).
+
 [Continue Reading...](./common.md).

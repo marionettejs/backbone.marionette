@@ -75,6 +75,8 @@ const MyApp = Application.extend({
 });
 ```
 
+[Live example](http://jsfiddle.net/marionettejs/9fburmb8/)
+
 For more information, see the
 [Application docs](./marionette.application.md#application-region).
 
@@ -258,6 +260,8 @@ myView.addRegions({
   sidebar: '.sidebar'
 });
 ```
+
+[Live example](http://jsfiddle.net/marionettejs/kjvzdyd6/)
 
 ## Removing Regions
 

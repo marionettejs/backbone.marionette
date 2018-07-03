@@ -21,3 +21,4 @@ marionette-logo.png
 PULL_REQUEST_TEMPLATE.md
 trigger-deploy-mn-com.js
 upgradeGuide.md
+yarn.lock

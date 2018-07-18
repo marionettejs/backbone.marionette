@@ -143,4 +143,3 @@ Display a `View` instance in the region attached to the Application. This runs t
 Return the view currently being displayed in the Application's attached
 `region`. If the Application is not currently displaying a view, this method
 returns `undefined`.
-

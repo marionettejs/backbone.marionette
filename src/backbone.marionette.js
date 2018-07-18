@@ -1,4 +1,4 @@
-import {version} from '../package.json';
+import {version as VERSION} from '../package.json';
 
 import proxy from './utils/proxy';
 import extend from './utils/extend';
@@ -70,5 +70,22 @@ export {
   Events,
   extend,
   DomApi,
-  version as VERSION
+  VERSION
+};
+
+export default {
+  View,
+  CollectionView,
+  MnObject,
+  Object: MnObject,
+  Region,
+  Behavior,
+  Application,
+  isEnabled,
+  setEnabled,
+  monitorViewEvents,
+  Events,
+  extend,
+  DomApi,
+  VERSION
 };

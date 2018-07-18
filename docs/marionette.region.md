@@ -397,12 +397,9 @@ instantiated using the template.
 ```javascript
 const myView = new MyView();
 
-const template = _.template('This is the <%- section %> page');
-const templateContext = templateContext: { section: 'main' };
-
 myView.showChildView('main', {
-  template: template,
-  templateContext: templateContext
+  template: _.template('This is the <%- section %> page'),
+  templateContext: { section: 'main' }
 });
 
 myView.showChildView('header', _.template('Welcome to the site'));

@@ -267,7 +267,7 @@ as a dependency.
  * `channelName` - defines the Radio channel that will be used for the requests and/or events
  * `getChannel()` - returns a Radio.Channel instance using `channelName`
  * `radioEvents` - defines an events hash with the events to be listened and its respective handlers
- * `radioRequets` - defines an events hash with the requests to be replied and its respective handlers
+ * `radioRequests` - defines an events hash with the requests to be replied and its respective handlers
 
 ### Examples
 

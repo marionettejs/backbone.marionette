@@ -1,6 +1,7 @@
 import _ from 'underscore';
 
 import * as Mn from '../../src/backbone.marionette';
+import Marionette from '../../src/backbone.marionette';
 
 import {version} from '../../package.json';
 
@@ -46,6 +47,33 @@ describe('backbone.marionette', function() {
       it(`should have named export ${ key }`, function() {
         expect(Mn[key]).to.equal(val);
       });
+    });
+  });
+
+  describe('Default Export', function() {
+    const namedExports = {
+      View,
+      CollectionView,
+      MnObject,
+      Region,
+      Behavior,
+      Application,
+      isEnabled,
+      setEnabled,
+      monitorViewEvents,
+      Events,
+      extend,
+      DomApi,
+    };
+
+    _.each(namedExports, (val, key) => {
+      it(`should have key ${ key }`, function() {
+        expect(Marionette[key]).to.equal(val);
+      });
+    });
+
+    it('should have key Object', function() {
+      expect(Marionette.Object).to.equal(MnObject);
     });
   });
 

@@ -6,11 +6,42 @@ patterns etc.
 
 ## Documentation Index
 
+* [Using ES6 Modules](#using-es6-modules)
 * [Class-based Inheritance](#class-based-inheritance)
   * [Value Attributes](#value-attributes)
   * [Functions Returning Values](#functions-returning-values)
   * [Binding Attributes on Instantiation](#binding-attributes-on-instantiation)
 * [Common Marionette Functionality](./common.md)
+
+## Using ES6 Modules
+
+Marionette still supports using the library via an inline script.
+
+```html
+<script src="./backbone.marionette.js"></script>
+<script>new Marionette.View({ el: 'body' });</script>
+```
+
+The recommended solution is to choose a solution like a [package manager](./installation.md)
+to allow for ES6 module importing of the library. The best way to import is using name imports.
+
+```javascript
+import { View } from 'backbone.marionette';
+import * as Mn from 'backbone.marionette';
+
+new View({ el: 'body' });
+new Mn.Application();
+```
+
+However to support backwards compatibility Marionette exports all of its classes and
+functions on a default object. This default export may be removed in a future version of
+Marionette and it is recommend to migrate to a named imports.
+
+```javascript
+import Marionette from 'backbone.marionette';
+
+new Marionette.Application();
+```
 
 ## Class-based Inheritance
 

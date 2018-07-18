@@ -12,6 +12,7 @@
 * [Unique Client ID](#unique-client-id)
 * [Destroying a MnObject](#destroying-a-mnobject)
 * [Basic Use](#basic-use)
+* [Backwards Compatibility](#backwards-compatibility)
 
 ## Instantiating a MnObject
 
@@ -126,4 +127,18 @@ selections.listenTo(selections, 'select', function(key, item){
 });
 
 selections.select('toy', Truck);
+```
+
+## Backwards Compatibility
+
+In versions previous to v4, `MnObject` was simply named `Object`. This naming is still supported
+via the default export of the library, but should be considered **deprecated** and is scheduled for
+removal in an upcoming version.
+
+
+```javascript
+import { MnObject } from 'backbone.marionette';
+import Marionette from 'backbone.marionette';
+
+console.log(MnObject === Marionette.Object === Marionette.MnObject); // true
 ```

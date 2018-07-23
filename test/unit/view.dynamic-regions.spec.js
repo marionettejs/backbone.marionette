@@ -27,8 +27,6 @@ describe('itemView - dynamic regions', function() {
       this.addHandler = this.sinon.spy();
       this.onBeforeAddSpy = this.sinon.spy(this.layoutView, 'onBeforeAddRegion');
       this.onAddSpy = this.sinon.spy(this.layoutView, 'onAddRegion');
-      this.layoutView.on('before:add:region', this.beforeAddHandler);
-      this.layoutView.on('add:region', this.addHandler);
 
       this.layoutView.render();
 
@@ -42,26 +40,12 @@ describe('itemView - dynamic regions', function() {
       expect(this.layoutView.getRegion('foo')).to.equal(this.region);
     });
 
-    it('should add the region definition to the regions property', function() {
-      expect(this.layoutView.regions.foo).to.equal('#foo');
-    });
-
     it('should set the parent of the region to the layoutView', function() {
       expect(this.region.$el.parent()[0]).to.equal(this.layoutView.el);
     });
 
     it('should be able to show a view in the region', function() {
       expect(this.layoutView.getRegion('foo').$el.children().length).to.equal(1);
-    });
-
-    it('should trigger a before:add:region event', function() {
-      expect(this.beforeAddHandler).to.have.been.calledWith(this.layoutView, 'foo');
-      expect(this.onBeforeAddSpy).to.have.been.calledWith(this.layoutView, 'foo');
-    });
-
-    it('should trigger a add:region event', function() {
-      expect(this.addHandler).to.have.been.calledWith(this.layoutView, 'foo', this.region);
-      expect(this.onAddSpy).to.have.been.calledWith(this.layoutView, 'foo', this.region);
     });
   });
 
@@ -185,8 +169,6 @@ describe('itemView - dynamic regions', function() {
       this.region = this.layoutView.getRegion('foo');
 
       this.region.on('empty', this.emptyHandler);
-      this.layoutView.on('before:remove:region', this.beforeRemoveHandler);
-      this.layoutView.on('remove:region', this.removeHandler);
       this.region.on('before:destroy', this.beforeDestroyHandler);
       this.region.on('destroy', this.destroyHandler);
       this.layoutView.removeRegion('foo');
@@ -204,19 +186,8 @@ describe('itemView - dynamic regions', function() {
       expect(this.destroyHandler).to.have.been.calledWith(this.region);
     });
 
-    it('should trigger a before:remove:region event', function() {
-      expect(this.onBeforeRemoveSpy).to.have.been.calledWith(this.layoutView, 'foo');
-      expect(this.beforeRemoveHandler).to.have.been.calledWith(this.layoutView, 'foo');
-    });
-
-    it('should trigger a remove:region event', function() {
-      expect(this.onRemoveSpy).to.have.been.calledWith(this.layoutView, 'foo', this.region);
-      expect(this.removeHandler).to.have.been.calledWith(this.layoutView, 'foo', this.region);
-    });
-
     it('should remove the region', function() {
       expect(this.layoutView.getRegion('foo')).to.be.undefined;
-      expect(this.layoutView.regions.foo).to.be.undefined;
     });
   });
 

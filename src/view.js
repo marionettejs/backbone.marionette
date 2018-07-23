@@ -78,14 +78,13 @@ const View = Backbone.View.extend({
 
     this.triggerMethod('before:render', this);
 
-    // If this is not the first render call, then we need to
-    // re-initialize the `el` for each region
     if (this._isRendered) {
-      this._reInitRegions();
+      this.emptyRegions();
     }
 
     this._renderTemplate(template);
     this.bindUIElements();
+    this._setRegionElements();
 
     this._isRendered = true;
     this.triggerMethod('render', this);

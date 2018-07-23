@@ -3,21 +3,21 @@ import MarionetteError from '../utils/error';
 import Region from '../region';
 
 // return the region instance from the definition
-export default function(definition, defaults) {
+export default function(definition, RegionClass) {
   if (definition instanceof Region) {
     return definition;
   }
 
   if (_.isString(definition)) {
-    return buildRegionFromObject(defaults, { el: definition });
+    return buildRegionFromObject({ el: definition }, RegionClass);
   }
 
   if (_.isFunction(definition)) {
-    return buildRegionFromObject(defaults, { regionClass: definition });
+    return buildRegionFromObject({ regionClass: definition });
   }
 
   if (_.isObject(definition)) {
-    return buildRegionFromObject(defaults, definition);
+    return buildRegionFromObject(_.clone(definition), RegionClass);
   }
 
   throw new MarionetteError({
@@ -26,10 +26,8 @@ export default function(definition, defaults) {
   });
 }
 
-function buildRegionFromObject(defaults, definition) {
-  const options = _.extend({}, defaults, definition);
-
-  const RegionClass = options.regionClass
+function buildRegionFromObject(options, defaultRegionClass) {
+  const RegionClass = options.regionClass || defaultRegionClass;
 
   delete options.regionClass;
 

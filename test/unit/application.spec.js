@@ -137,6 +137,7 @@ describe('Marionette Application', function() {
         region: '#fixtures'
       };
       app = new Application(fooOptions);
+      app.getRegion().setElement(app.getRegion().el);
     });
 
     it('should get the region selector with getRegion', function() {

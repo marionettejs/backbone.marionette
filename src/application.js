@@ -50,11 +50,7 @@ _.extend(Application.prototype, CommonMixin, DestroyMixin, RadioMixin, {
 
     if (!region) { return; }
 
-    const defaults = {
-      regionClass: this.regionClass
-    };
-
-    this._region = buildRegion(region, defaults);
+    this._region = buildRegion(region, this.regionClass);
   },
 
   getRegion() {

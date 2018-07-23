@@ -77,25 +77,6 @@ describe('DomApi', function() {
     });
   });
 
-  describe('#findEl', function() {
-    let domEl;
-    let findEl;
-
-    beforeEach(function() {
-      this.setFixtures('<div id="foo"><div id="bar"></div></div>');
-      domEl = $('#foo')[0];
-      findEl = $('#bar')[0];
-    });
-
-    it('should return an array-like object', function() {
-      expect(DomApi.findEl(domEl, '#bar')).to.be.arrayLike;
-    });
-
-    it('should return the DOM element', function() {
-      expect(DomApi.findEl(domEl, '#bar')[0]).to.eql(findEl)
-    });
-  });
-
   describe('#hasEl', function() {
     let domEl;
 

@@ -15,16 +15,21 @@ export default {
   _initRegions() {
 
     // init regions hash
-    this.regions = this.regions || {};
     this._regions = {};
 
-    this.addRegions(_.result(this, 'regions'));
+    this.addRegions(_.result(this, 'regions', {}));
   },
 
-  // Internal method to re-initialize all of the regions by updating
-  // the `el` that they point to
-  _reInitRegions() {
-    _invoke(this._regions, 'reset');
+  // Internal method to update the `el` that they point to after rendering
+  _setRegionElements() {
+    _.each(this._regions, this._setRegionElement.bind(this));
+  },
+
+  _setRegionElement(region) {
+    if (!region._selector) { return; }
+
+    const el = this.$(region._selector)[0];
+    if (el) { region.setElement(el); }
   },
 
   // Add a single region, by name, to the View
@@ -45,42 +50,32 @@ export default {
     // a user to use the @ui. syntax.
     regions = this.normalizeUIValues(regions, 'el');
 
-    // Add the regions definitions to the regions property
-    this.regions = _.extend({}, this.regions, regions);
-
     return this._addRegions(regions);
   },
 
   // internal method to build and add regions
   _addRegions(regionDefinitions) {
-    const defaults = {
-      regionClass: this.regionClass,
-      parentEl: _.partial(_.result, this, 'el')
-    };
-
     return _.reduce(regionDefinitions, (regions, definition, name) => {
-      regions[name] = buildRegion(definition, defaults);
-      this._addRegion(regions[name], name);
+      const region = buildRegion(definition, this.regionClass);
+
+      region._parentView = this;
+      region._name = name;
+
+      if (this._isRendered) {
+        this._setRegionElement(region);
+      }
+
+      regions[name] = this._regions[name] = region;
+
       return regions;
     }, {});
-  },
-
-  _addRegion(region, name) {
-    this.triggerMethod('before:add:region', this, name, region);
-
-    region._parentView = this;
-    region._name = name;
-
-    this._regions[name] = region;
-
-    this.triggerMethod('add:region', this, name, region);
   },
 
   // Remove a single region from the View, by name
   removeRegion(name) {
     const region = this._regions[name];
 
-    this._removeRegion(region, name);
+    region.destroy();
 
     return region;
   },
@@ -89,22 +84,13 @@ export default {
   removeRegions() {
     const regions = this._getRegions();
 
-    _.each(this._regions, this._removeRegion.bind(this));
+    _.each(this._regions, region => region.destroy());
 
     return regions;
   },
 
-  _removeRegion(region, name) {
-    this.triggerMethod('before:remove:region', this, name, region);
-
-    region.destroy();
-
-    this.triggerMethod('remove:region', this, name, region);
-  },
-
   // Called in a region's destroy
   _removeReferences(name) {
-    delete this.regions[name];
     delete this._regions[name];
   },
 

@@ -9,7 +9,6 @@ import { View } from 'backbone.marionette';
 
 const myView = new View({ el: $('#foo-selector') });
 
-const myView = new MyView();
 myView.isRendered(); // true if '#foo-selector` exists and has content
 myView.isAttached(); // true if '#foo-selector` is in the DOM
 ```

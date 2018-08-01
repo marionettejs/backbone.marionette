@@ -1,3 +1,18 @@
+### v4.0.0 [view commit logs](https://github.com/marionettejs/backbone.marionette/compare/v3.5.1...v4.0.0)
+
+#### Breaking Changes
+The breaking changes are documented in the [upgrade guide](https://marionettejs.com/docs/v4.0.0/upgrade-v3-v4.html).
+
+#### Features
+* `CollectionView` can now render a template in the same fashion of the removed `CompositeView`.
+* `View#triggers` now passes the originating DOM event object as the final argument of the triggered Mn event.
+* View classes now have the `bindRequests` and `unbindRequests` API.
+* The ES6 package was exposed in `package.json` on `jsnext:main`
+* The underscore dependency was updated to include 1.8.3 - 1.9.x.
+
+#### Documentation
+The documentation structure was overhauled to provide a flow to reading through the docs.
+
 ### v3.5.1 [view commit logs](https://github.com/marionettejs/backbone.marionette/compare/v3.5.0...v3.5.1)
 
 #### Fixes

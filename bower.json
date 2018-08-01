@@ -3,7 +3,7 @@
   "description": "The Backbone Framework",
   "homepage": "https://marionettejs.com/",
   "main": "./lib/backbone.marionette.js",
-  "version": "3.5.1",
+  "version": "4.0.0",
   "license": "MIT",
   "keywords": [
     "backbone",

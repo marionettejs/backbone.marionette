@@ -18,13 +18,13 @@
   <img src='https://saucelabs.com/browser-matrix/marionettejs.svg' alt='Cross Browser Testing' />
 </p>
 
-## Marionette v3
+## Marionette v4
 
-Marionette 3 is now available! See our
-[upgrade notes](http://marionettejs.com/docs/v3.0.0) for the differences between
-v2 and v3. Please let us know if you encounter any issues so we can resolve
+Marionette 4 is now available! See our
+[upgrade notes](https://marionettejs.com/docs/v4.0.0/upgrade-v3-v4.html) for the differences between
+v3 and v4. Please let us know if you encounter any issues so we can resolve
 them and
-[help us continue work on Marionette!](https://github.com/marionettejs/backbone.marionette/milestones/v3.x)
+[help us continue work on Marionette!](https://github.com/marionettejs/backbone.marionette/milestones/v4.x)
 
 ## About Marionette
 
@@ -83,7 +83,7 @@ We're happy to discuss design patterns and learn how you're using Marionette.
 ## Source Code and Downloads
 
 You can
-[download the latest builds directly](https://github.com/marionettejs/backbone.marionette/tree/v3.0.0/lib)
+[download the latest builds directly](https://github.com/marionettejs/backbone.marionette/tree/master/lib)
 or visit the [downloads section on the Marionette website](http://marionettejs.com#download)
 for more downloading options.
 
@@ -122,7 +122,7 @@ You can read the annotations for all the details of how Marionette works and adv
 MarionetteJS currently works with the following libraries:
 
 * [jQuery](http://jquery.com) v1.8+
-* [Underscore](http://underscorejs.org) v1.8.3
+* [Underscore](http://underscorejs.org) v1.8.3 - v1.9.x
 * [Backbone](http://backbonejs.org) v1.3.3
 * [Backbone.Radio](https://github.com/marionettejs/backbone.radio) v2.0.0+
 

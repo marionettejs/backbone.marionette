@@ -514,7 +514,7 @@ const EmptyMsgRegion = Region.extend({
   }
 });
 ```
-[Live example](https://jsfiddle.net/marionettejs/c1nacq0c/1/)
+[Live example](https://jsfiddle.net/marionettejs/c1nacq0c/)
 
 ## Set How View's `el` Is Attached and Detached
 
@@ -615,8 +615,8 @@ const MyView = View.extend({
 });
 ```
 
-[Live example](https://jsfiddle.net/marionettejs/c1nacq0c/3/)
+[Live example](https://jsfiddle.net/marionettejs/qtvjLu70/)
 
 Using a similar approach is possible to create a region animated with CSS:
 
-[Live example](https://jsfiddle.net/marionettejs/9ys4d57x/2/)
+[Live example](https://jsfiddle.net/marionettejs/8uoabg7c/)

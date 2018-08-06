@@ -1,4 +1,4 @@
-# Regions
+# Marionette.Region
 
 Regions provide consistent methods to manage, show and destroy
 views in your applications and views.

@@ -1,4 +1,4 @@
-# Upgrade Guide
+# Upgrade Guide from v2 to v3
 
 Marionette 3 introduces a number of breaking changes. This upgrade guide will go
 through the major changes and describe how to change your application to

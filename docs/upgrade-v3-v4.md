@@ -120,7 +120,7 @@ One of the required changes is to explicitly define the `childView` when impleme
  * **Old behavior:** `Backbone.View` instances were supported as is
  * **New behavior:** To support `Backbone.View` is necessary to apply `Marionette.Events` mixin
  * **Reason:** Improve performance
- * **Remedy:** If vanilla `Backbone.View` is not used there's no required change, otherwise, apply the `Marionette.Events` mixin` to the
+ * **Remedy:** If vanilla `Backbone.View` is not used there's no required change, otherwise, apply the `Marionette.Events` mixin to the
    prototype of the view class intended to be used with `Marionette`. Example:
    ```javascript
    // once, in the application start

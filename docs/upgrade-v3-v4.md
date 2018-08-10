@@ -225,7 +225,7 @@ These changes are optional, although recommended to make future upgrades easy
  * **Old behavior:** The package was exported as an UMD module with all classes / functions as a property of the default export
  * **New behavior:** Package is exported as a ECMAScript module using named exports. The default export with all classes still
  * **Reason:** Align with current JS standard practice, allow tree shaking
- * **Remedy:** Import each Marionette classses / functions separatedly or with * keyword
+ * **Remedy:** Import each Marionette classses / functions separatedly or with `*` keyword
    Examples:
    ```javascript
    // using ES module syntax

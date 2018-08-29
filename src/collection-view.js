@@ -652,7 +652,7 @@ const CollectionView = Backbone.View.extend({
       this.render();
     }
 
-    let hasIndex = (typeof index !== 'undefined');
+    const hasIndex = (typeof index !== 'undefined');
 
     // Only cache views if added to the end and there is no awaiting views
     if (!preventRender && !this._addingMultipleViews && (!hasIndex || index >= this._children.length)) {

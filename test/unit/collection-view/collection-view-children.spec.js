@@ -253,6 +253,50 @@ describe('CollectionView Children', function() {
 
     });
 
+    describe('when called with an index in options', function() {
+      const addIndex = 1;
+      beforeEach(function() {
+        myCollectionView.viewComparator = false;
+        myCollectionView.addChildView(addView, 0, { preventRender: true, index: 1 });
+      });
+
+      it('should add to the children container at the index from options', function() {
+        expect(myCollectionView.children._add)
+          .to.have.been.calledOnce.and.calledWith(addView, addIndex);
+      });
+
+      it('should set _addingMultipleIndexedViews to true', function() {
+        expect(myCollectionView._addingMultipleIndexedViews)
+          .to.have.been.equal(true);
+      });
+
+    });
+
+    describe('when called without preventRender after preventReder calls', function() {
+      beforeEach(function() {
+        myCollectionView.viewComparator = false;
+        myCollectionView.addChildView(addView, { preventRender: true, index: 1 });
+        myCollectionView.addChildView(addView);
+      });
+
+      it('should delete internal flag _addingMultipleIndexedViews', function() {
+        expect(myCollectionView._addingMultipleIndexedViews)
+          .to.have.been.undefined;
+      });
+
+      it('should delete internal flag _addingMultipleViews', function() {
+        expect(myCollectionView._addingMultipleViews)
+          .to.have.been.undefined;
+      });
+
+      it('should delete _addedViews if _addingMultipleIndexViews is true', function() {
+        expect(myCollectionView._addedViews)
+          .to.have.been.undefined;
+      });
+
+
+    });
+
     describe('when called without an index', function() {
       beforeEach(function() {
 

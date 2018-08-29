@@ -634,7 +634,17 @@ const CollectionView = Backbone.View.extend({
   },
 
   // Render the child's view and add it to the HTML for the collection view at a given index, based on the current sort
-  addChildView(view, index) {
+  addChildView(view, index, options = {}) {
+    if (_.isObject(index)) {
+      options = index;
+    }
+
+    let preventRender = options.preventRender;
+    //if options has defined index we should use it
+    if (options.index != null) {
+      index = options.index;
+    }
+
     if (!view || view._isDestroyed) {
       return view;
     }
@@ -643,13 +653,40 @@ const CollectionView = Backbone.View.extend({
       this.render();
     }
 
-    const hasIndex = (typeof index !== 'undefined');
+    //const -> let, because value may be changed later
+    let hasIndex = (typeof index !== 'undefined');
+
+    if (preventRender) {
+      //setting flag that we are waiting addChildView without `preventRender`
+      this._addingMultipleViews = true;
+
+      //if we added atleast one indexed view _addedViews perf should be skiped
+      if (!this._addingMultipleIndexedViews && hasIndex) {
+        this._addingMultipleIndexedViews = true;
+      }
+    }
 
     // Only cache views if added to the end
     if (!hasIndex || index >= this._children.length) {
       this._addedViews = [view];
     }
     this._addChild(view, index);
+
+    //if there was atleast one indexed view we should act as there an index exist
+    hasIndex = this._addingMultipleIndexedViews || hasIndex;
+
+    if (preventRender) {
+      //preventRender passed, so we are waiting another addChildView
+      return view;
+    } else {
+      //if we added atleast one indexed view _addedViews perf should be skiped
+      if (this._addingMultipleIndexedViews) {
+        delete this._addedViews;
+      }
+      //clearing after
+      delete this._addingMultipleViews;
+      delete this._addingMultipleIndexedViews;
+    }
 
     if (hasIndex) {
       this._renderChildren();

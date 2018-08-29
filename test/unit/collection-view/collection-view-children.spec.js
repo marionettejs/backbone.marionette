@@ -204,6 +204,55 @@ describe('CollectionView Children', function() {
       this.sinon.spy(myCollectionView, 'sort');
     });
 
+    describe('when called with preventRender option', function() {
+
+      beforeEach(function() {
+        this.sinon.spy(myCollectionView, '_renderChildren');
+        myCollectionView.viewComparator = false;
+        myCollectionView.addChildView(addView, { preventRender: true });
+      });
+
+      it('should return the added view', function() {
+        expect(myCollectionView.addChildView).to.have.returned(addView);
+      });
+
+      it('should add to the children container', function() {
+        expect(myCollectionView.children._add)
+          .to.have.been.calledOnce.and.calledWith(addView);
+      });
+
+      it('should not call sort', function() {
+        expect(myCollectionView.sort)
+          .to.be.not.called;
+      });
+
+      it('should not call _renderChildren', function() {
+        expect(myCollectionView._renderChildren)
+          .to.be.not.called;
+      });
+
+      it('should not trigger "before:render:children"', function() {
+        expect(myCollectionView.onBeforeRenderChildren)
+          .to.be.not.called;
+      });
+
+      it('should not trigger "render:children"', function() {
+        expect(myCollectionView.onRenderChildren)
+          .to.be.not.called;
+      });
+
+      it('should trigger "add:child"', function() {
+        expect(myCollectionView.onAddChild)
+          .to.be.calledOnce.and.calledWith(myCollectionView, addView);
+      });
+
+      it('should trigger "before:add:child"', function() {
+        expect(myCollectionView.onBeforeAddChild)
+          .to.be.calledOnce.and.calledWith(myCollectionView, addView);
+      });
+
+    });
+
     describe('when called without an index', function() {
       beforeEach(function() {
 

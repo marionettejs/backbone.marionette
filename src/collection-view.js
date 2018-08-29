@@ -507,6 +507,12 @@ const CollectionView = Backbone.View.extend({
   },
 
   _renderChildren() {
+    // If there are unrendered views prevent add to end perf
+    if (this._hasUnrenderedViews) {
+      delete this._addedViews;
+      delete this._hasUnrenderedViews;
+    }
+
     const views = this._addedViews || this.children._views;
 
     this.triggerMethod('before:render:children', this, views);
@@ -635,36 +641,37 @@ const CollectionView = Backbone.View.extend({
 
   // Render the child's view and add it to the HTML for the collection view at a given index, based on the current sort
   addChildView(view, index, options = {}) {
+    if (!view || view._isDestroyed) {
+      return view;
+    }
+
     if (_.isObject(index)) {
       options = index;
     }
 
-    const preventRender = options.preventRender;
-
-    //if options has defined index we should use it
-    index = options.index || index;
-
-    if (!view || view._isDestroyed) {
-      return view;
+    // If options has defined index we should use it
+    if (options.index != null) {
+      index = options.index;
     }
 
     if (!this._isRendered) {
       this.render();
     }
 
-    const hasIndex = (typeof index !== 'undefined');
-
-    // Only cache views if added to the end and there is no awaiting views
-    if (!preventRender && !this._addingMultipleViews && (!hasIndex || index >= this._children.length)) {
-      this._addedViews = [view];
-    }
     this._addChild(view, index);
 
-
-    //preventRender passed, so we are waiting another addChildView
-    if (preventRender) {
-      this._addingMultipleViews = true;
+    // `preventRender` passed, so we are waiting another `addChildView`
+    if (options.preventRender) {
+      this._hasUnrenderedViews = true;
       return view;
+    }
+
+    const hasIndex = (typeof index !== 'undefined');
+    const isAddedToEnd = !hasIndex || index >= this._children.length;
+
+    // Only cache views if added to the end and there is no unrendered views
+    if (isAddedToEnd && !this._hasUnrenderedViews) {
+      this._addedViews = [view];
     }
 
     if (hasIndex) {
@@ -672,7 +679,7 @@ const CollectionView = Backbone.View.extend({
     } else {
       this.sort();
     }
-    delete this._addingMultipleViews;
+
     return view;
   },
 

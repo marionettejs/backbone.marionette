@@ -207,7 +207,6 @@ describe('CollectionView Children', function() {
     describe('when called with preventRender option', function() {
 
       beforeEach(function() {
-        myCollectionView.viewComparator = false;
         myCollectionView.addChildView(addView, { preventRender: true });
       });
 
@@ -250,8 +249,7 @@ describe('CollectionView Children', function() {
     describe('when called with an index in options', function() {
       const addIndex = 1;
       beforeEach(function() {
-        myCollectionView.viewComparator = false;
-        myCollectionView.addChildView(addView, 0, { preventRender: true, index: 1 });
+        myCollectionView.addChildView(addView, 0, { preventRender: true, index: addIndex });
       });
 
       it('should add to the children container at the index from options', function() {
@@ -262,11 +260,10 @@ describe('CollectionView Children', function() {
     });
 
     describe('when called without preventRender after preventReder calls', function() {
-      const addViewIndex = 1;
+      const addIndex = 1;
       beforeEach(function() {
         const addView2 = new View({ template: _.noop });
-        myCollectionView.viewComparator = false;
-        myCollectionView.addChildView(addView, { preventRender: true, index: addViewIndex });
+        myCollectionView.addChildView(addView, { preventRender: true, index: addIndex });
         myCollectionView.addChildView(addView2);
       });
 

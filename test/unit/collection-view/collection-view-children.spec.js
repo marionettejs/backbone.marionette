@@ -284,16 +284,10 @@ describe('CollectionView Children', function() {
           .to.have.been.undefined;
       });
 
-      it('should delete internal flag _addingMultipleViews', function() {
-        expect(myCollectionView._addingMultipleViews)
-          .to.have.been.undefined;
-      });
-
       it('should delete _addedViews if _addingMultipleIndexViews is true', function() {
         expect(myCollectionView._addedViews)
           .to.have.been.undefined;
       });
-
 
     });
 

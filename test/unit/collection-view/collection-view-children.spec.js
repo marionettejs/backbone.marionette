@@ -207,7 +207,6 @@ describe('CollectionView Children', function() {
     describe('when called with preventRender option', function() {
 
       beforeEach(function() {
-        this.sinon.spy(myCollectionView, '_renderChildren');
         myCollectionView.viewComparator = false;
         myCollectionView.addChildView(addView, { preventRender: true });
       });
@@ -223,11 +222,6 @@ describe('CollectionView Children', function() {
 
       it('should not call sort', function() {
         expect(myCollectionView.sort)
-          .to.be.not.called;
-      });
-
-      it('should not call _renderChildren', function() {
-        expect(myCollectionView._renderChildren)
           .to.be.not.called;
       });
 
@@ -265,28 +259,19 @@ describe('CollectionView Children', function() {
           .to.have.been.calledOnce.and.calledWith(addView, addIndex);
       });
 
-      it('should set _addingMultipleIndexedViews to true', function() {
-        expect(myCollectionView._addingMultipleIndexedViews)
-          .to.have.been.equal(true);
-      });
-
     });
 
     describe('when called without preventRender after preventReder calls', function() {
+      const addViewIndex = 1;
       beforeEach(function() {
+        const addView2 = new View({ template: _.noop });
         myCollectionView.viewComparator = false;
-        myCollectionView.addChildView(addView, { preventRender: true, index: 1 });
-        myCollectionView.addChildView(addView);
+        myCollectionView.addChildView(addView, { preventRender: true, index: addViewIndex });
+        myCollectionView.addChildView(addView2);
       });
 
-      it('should delete internal flag _addingMultipleIndexedViews', function() {
-        expect(myCollectionView._addingMultipleIndexedViews)
-          .to.have.been.undefined;
-      });
-
-      it('should delete _addedViews if _addingMultipleIndexViews is true', function() {
-        expect(myCollectionView._addedViews)
-          .to.have.been.undefined;
+      it('should not use the _addedViews perf', function() {
+        expect(myCollectionView.onRenderChildren.args[0][1]).to.have.lengthOf(myCollectionView.children.length);
       });
 
     });

@@ -639,11 +639,10 @@ const CollectionView = Backbone.View.extend({
       options = index;
     }
 
-    let preventRender = options.preventRender;
+    const preventRender = options.preventRender;
+
     //if options has defined index we should use it
-    if (options.index != null) {
-      index = options.index;
-    }
+    index = options.index || index;
 
     if (!view || view._isDestroyed) {
       return view;
@@ -653,16 +652,10 @@ const CollectionView = Backbone.View.extend({
       this.render();
     }
 
-    //const -> let, because value may be changed later
     let hasIndex = (typeof index !== 'undefined');
 
-    //if we added atleast one indexed view _addedViews perf should be skiped
-    if (preventRender && hasIndex) {
-      this._addingMultipleIndexedViews = true;
-    }
-
-    // Only cache views if added to the end
-    if (!hasIndex || index >= this._children.length) {
+    // Only cache views if added to the end and there is no awaiting views
+    if (!preventRender && !this._addingMultipleViews && (!hasIndex || index >= this._children.length)) {
       this._addedViews = [view];
     }
     this._addChild(view, index);
@@ -670,26 +663,16 @@ const CollectionView = Backbone.View.extend({
 
     //preventRender passed, so we are waiting another addChildView
     if (preventRender) {
+      this._addingMultipleViews = true;
       return view;
     }
-
-    //if there was atleast one indexed view we should act as there an index exist
-    hasIndex = this._addingMultipleIndexedViews || hasIndex;
-
-    //if we added atleast one indexed view _addedViews perf should be skiped
-    if (this._addingMultipleIndexedViews) {
-      delete this._addedViews;
-    }
-    //clearing after
-    delete this._addingMultipleIndexedViews;
-
 
     if (hasIndex) {
       this._renderChildren();
     } else {
       this.sort();
     }
-
+    delete this._addingMultipleViews;
     return view;
   },
 

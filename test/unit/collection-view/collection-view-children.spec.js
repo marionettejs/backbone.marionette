@@ -273,6 +273,24 @@ describe('CollectionView Children', function() {
 
     });
 
+    describe('when collection changed having unrendered views', function() {
+      let onRender;
+      beforeEach(function() {
+        onRender = this.sinon.stub();
+        let addView1 = new View({ template: _.noop, onRender });
+        let addView2 = new View({ template: _.noop, onRender });
+        myCollectionView.addChildView(addView1, { preventRender: true, index: 0 });
+        myCollectionView.addChildView(addView2, { preventRender: true });
+        collection.add({id: 4});
+      });
+      afterEach(function() {
+        collection.remove(collection.last());
+      });
+      it('should render all unrendered views', function() {
+        expect(onRender).to.have.been.calledTwice;
+      });
+    });
+
     describe('when called without an index', function() {
       beforeEach(function() {
 

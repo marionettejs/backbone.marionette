@@ -660,7 +660,6 @@ const CollectionView = Backbone.View.extend({
 
     this._addChild(view, index);
 
-    // `preventRender` passed, so we are waiting another `addChildView`
     if (options.preventRender) {
       this._hasUnrenderedViews = true;
       return view;

@@ -204,6 +204,93 @@ describe('CollectionView Children', function() {
       this.sinon.spy(myCollectionView, 'sort');
     });
 
+    describe('when called with preventRender option', function() {
+
+      beforeEach(function() {
+        myCollectionView.addChildView(addView, { preventRender: true });
+      });
+
+      it('should return the added view', function() {
+        expect(myCollectionView.addChildView).to.have.returned(addView);
+      });
+
+      it('should add to the children container', function() {
+        expect(myCollectionView.children._add)
+          .to.have.been.calledOnce.and.calledWith(addView);
+      });
+
+      it('should not call sort', function() {
+        expect(myCollectionView.sort)
+          .to.be.not.called;
+      });
+
+      it('should not trigger "before:render:children"', function() {
+        expect(myCollectionView.onBeforeRenderChildren)
+          .to.be.not.called;
+      });
+
+      it('should not trigger "render:children"', function() {
+        expect(myCollectionView.onRenderChildren)
+          .to.be.not.called;
+      });
+
+      it('should trigger "add:child"', function() {
+        expect(myCollectionView.onAddChild)
+          .to.be.calledOnce.and.calledWith(myCollectionView, addView);
+      });
+
+      it('should trigger "before:add:child"', function() {
+        expect(myCollectionView.onBeforeAddChild)
+          .to.be.calledOnce.and.calledWith(myCollectionView, addView);
+      });
+
+    });
+
+    describe('when called with an index in options', function() {
+      const addIndex = 1;
+      beforeEach(function() {
+        myCollectionView.addChildView(addView, 0, { preventRender: true, index: addIndex });
+      });
+
+      it('should add to the children container at the index from options', function() {
+        expect(myCollectionView.children._add)
+          .to.have.been.calledOnce.and.calledWith(addView, addIndex);
+      });
+
+    });
+
+    describe('when called without preventRender after preventReder calls', function() {
+      const addIndex = 1;
+      beforeEach(function() {
+        const addView2 = new View({ template: _.noop });
+        myCollectionView.addChildView(addView, { preventRender: true, index: addIndex });
+        myCollectionView.addChildView(addView2);
+      });
+
+      it('should not use the _addedViews perf', function() {
+        expect(myCollectionView.onRenderChildren.args[0][1]).to.have.lengthOf(myCollectionView.children.length);
+      });
+
+    });
+
+    describe('when collection changed having unrendered views', function() {
+      let onRender;
+      beforeEach(function() {
+        onRender = this.sinon.stub();
+        let addView1 = new View({ template: _.noop, onRender });
+        let addView2 = new View({ template: _.noop, onRender });
+        myCollectionView.addChildView(addView1, { preventRender: true, index: 0 });
+        myCollectionView.addChildView(addView2, { preventRender: true });
+        collection.add({id: 4});
+      });
+      afterEach(function() {
+        collection.remove(collection.last());
+      });
+      it('should render all unrendered views', function() {
+        expect(onRender).to.have.been.calledTwice;
+      });
+    });
+
     describe('when called without an index', function() {
       beforeEach(function() {
 

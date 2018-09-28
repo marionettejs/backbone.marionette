@@ -116,6 +116,51 @@ describe('view mixin', function() {
     });
   });
 
+  describe('when destroying a view with listeners for destroy', function() {
+    let view;
+    let destroyStub;
+    let beforeDestroyStub;
+    let onDestroyStub;
+    let onBeforeDestroyStub;
+
+    beforeEach(function() {
+
+      view = new View({
+        template: () => '<div></div>',
+        regions: {'child': 'div'},
+        onRender() {
+          const childView = new View({ template: false });
+          this.listenTo(childView, 'destroy', this.destroy);
+          this.showChildView('child', childView);
+        }
+      });
+
+      destroyStub = sinon.stub();
+      view.on('destroy', destroyStub);
+
+      beforeDestroyStub = sinon.stub();
+      view.on('before:destroy', beforeDestroyStub);
+
+      onDestroyStub = sinon.stub();
+      view.onDestroy = onDestroyStub;
+
+      onBeforeDestroyStub = sinon.stub();
+      view.onBeforeDestroy = onBeforeDestroyStub;
+
+      view.render();
+      view.destroy();
+
+    });
+    it('should trigger the destroy event once', function() {
+      expect(destroyStub).to.have.been.calledOnce;
+      expect(onDestroyStub).to.have.been.calledOnce;
+    });
+    it('should trigger the before:destroy event once', function() {
+      expect(beforeDestroyStub).to.have.been.calledOnce;
+      expect(onBeforeDestroyStub).to.have.been.calledOnce;
+    });
+  });
+
   describe('constructing a view with default options', function() {
     let presets;
     let options;

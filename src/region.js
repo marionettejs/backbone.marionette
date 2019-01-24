@@ -71,6 +71,14 @@ _.extend(Region.prototype, CommonMixin, {
 
     if (view === this.currentView) { return this; }
 
+    if (view._isAttached && view._attachedTo) {
+      throw new MarionetteError({
+        name: classErrorName,
+        message: 'A "view" can be attached to the DOM only if it prerendered on backend',
+        url: 'marionette.collectionview.html#region-showAttachedView'
+      });
+    }
+
     this._isSwappingView = !!this.currentView;
 
     this.triggerMethod('before:show', this, view, options);
@@ -137,6 +145,10 @@ _.extend(Region.prototype, CommonMixin, {
       view._isAttached = true;
       view.triggerMethod('attach', view);
     }
+
+    //corresponds that view is not a pre-rendered one
+    view._attachedTo = true;
+
   },
 
   _ensureElement(options = {}) {

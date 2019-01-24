@@ -538,6 +538,8 @@ const CollectionView = Backbone.View.extend({
 
     _.each(views, view => {
       renderView(view);
+      // corresponds that this view is not a pre-rendered one
+      view._attachedTo = true;
       this.Dom.appendContents(elBuffer, view.el, {_$contents: view.$el});
     });
 

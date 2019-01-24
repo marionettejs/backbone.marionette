@@ -3,6 +3,7 @@ import Backbone from 'backbone';
 import Events from '../../src/mixins/events';
 import Region from '../../src/region';
 import View from '../../src/view';
+import CollectionView from '../../src/collection-view';
 
 describe('region', function() {
   'use strict';
@@ -340,6 +341,8 @@ describe('region', function() {
         $parentEl = region.$el.parent();
         regionHtml = $parentEl.html();
         region.replaceElement = true;
+        //have to redefine view, because its already in a region and can not be tested
+        view = new MyView();
         region.show(view);
       });
 
@@ -482,6 +485,39 @@ describe('region', function() {
         expect(region.removeView).not.to.have.been.called;
       });
     });
+  });
+
+  describe('when showing an attached view', function() {
+    let testView;
+    let region;
+    let anotherRegion;
+    let collectionView;
+    beforeEach(function() {
+      this.setFixtures('<div id="reg1"></div><div id="reg2"></div><div id="cv"></div><div id="view"></div>')
+      region = new Region({ el: '#reg1' });
+      anotherRegion = new Region({ el: '#reg2' });
+      collectionView = new CollectionView({ el: '#cv' });
+      testView = new View({ el: '#view', template: _.noop });
+    });
+
+    it('should not throw an error if view is a prerendered one', function() {
+      expect(region.show.bind(region, testView)).to.not.throw;
+    });
+
+    it('should throw an error if view is attached in another region', function() {
+      anotherRegion.show(testView);
+      expect(region.show.bind(region, testView)).to.throw;
+    });
+
+    it('should throw an error if view is attached in a collection view', function() {
+      collectionView
+        .render()
+        .addChildView(testView);
+
+      expect(region.show.bind(region, testView)).to.throw;
+
+    });
+
   });
 
   describe('when showing nested views', function() {

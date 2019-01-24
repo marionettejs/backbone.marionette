@@ -572,16 +572,16 @@ describe('region', function() {
           $(this.el).html('some content');
         },
 
-        destroy: function() {}
+        destroy: function() {},
       });
 
       _.extend(MyView.prototype, Events);
 
-      this.setFixtures('<div id="region"></div>');
+      this.setFixtures('<div id="region"></div><div id="pre-rendered"></div>');
 
       view1 = new MyView();
       view2 = new MyView();
-      region = new MyRegion();
+      region = new MyRegion({});
 
       this.sinon.spy(view1, 'destroy');
 
@@ -593,9 +593,19 @@ describe('region', function() {
       expect(view1.destroy).to.have.been.called;
     });
 
+    it('should call "empty" even if a new view is attached to the DOM', function() {
+
+      this.sinon.spy(region, 'empty');
+      const preRenderedView = new View({ el: '#pre-rendered', template: _.noop});
+
+      region.show(preRenderedView);
+      expect(region.empty).to.have.been.called;
+    });
+
     it('should reference the new view as the current view', function() {
       expect(region.currentView).to.equal(view2);
     });
+
   });
 
   describe('when a view is already shown and showing the same one', function() {
@@ -642,6 +652,7 @@ describe('region', function() {
     it('should not call "render" on the view', function() {
       expect(view.render).not.to.have.been.called;
     });
+
   });
 
   describe('when a Mn view is already shown but destroyed externally', function() {

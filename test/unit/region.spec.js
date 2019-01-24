@@ -492,6 +492,7 @@ describe('region', function() {
     let region;
     let anotherRegion;
     let collectionView;
+
     beforeEach(function() {
       this.setFixtures('<div id="reg1"></div><div id="reg2"></div><div id="cv"></div><div id="view"></div>')
       region = new Region({ el: '#reg1' });
@@ -501,21 +502,19 @@ describe('region', function() {
     });
 
     it('should not throw an error if view is a prerendered one', function() {
-      expect(region.show.bind(region, testView)).to.not.throw;
+      expect(region.show.bind(region, testView)).to.not.throw();
     });
 
     it('should throw an error if view is attached in another region', function() {
       anotherRegion.show(testView);
-      expect(region.show.bind(region, testView)).to.throw;
+      expect(region.show.bind(region, testView)).to.throw();
     });
 
     it('should throw an error if view is attached in a collection view', function() {
       collectionView
         .render()
         .addChildView(testView);
-
-      expect(region.show.bind(region, testView)).to.throw;
-
+      expect(region.show.bind(region, testView)).to.throw();
     });
 
   });

@@ -572,7 +572,7 @@ describe('region', function() {
           $(this.el).html('some content');
         },
 
-        destroy: function() {},
+        destroy: function() {}
       });
 
       _.extend(MyView.prototype, Events);
@@ -581,7 +581,7 @@ describe('region', function() {
 
       view1 = new MyView();
       view2 = new MyView();
-      region = new MyRegion({});
+      region = new MyRegion();
 
       this.sinon.spy(view1, 'destroy');
 
@@ -596,7 +596,7 @@ describe('region', function() {
     it('should call "empty" even if a new view is attached to the DOM', function() {
 
       this.sinon.spy(region, 'empty');
-      const preRenderedView = new View({ el: '#pre-rendered', template: _.noop});
+      const preRenderedView = new View({ el: '#pre-rendered', template: _.template('some content') });
 
       region.show(preRenderedView);
       expect(region.empty).to.have.been.called;

@@ -341,8 +341,6 @@ describe('region', function() {
         $parentEl = region.$el.parent();
         regionHtml = $parentEl.html();
         region.replaceElement = true;
-        //have to redefine view, because its already in a region and can not be tested
-        view = new MyView();
         region.show(view);
       });
 
@@ -494,11 +492,11 @@ describe('region', function() {
     let collectionView;
 
     beforeEach(function() {
-      this.setFixtures('<div id="reg1"></div><div id="reg2"></div><div id="cv"></div><div id="view"></div>')
+      this.setFixtures('<div id="reg1"></div><div id="reg2"></div><div id="cv"></div><div id="view">content</div>')
       region = new Region({ el: '#reg1' });
       anotherRegion = new Region({ el: '#reg2' });
       collectionView = new CollectionView({ el: '#cv' });
-      testView = new View({ el: '#view', template: _.noop });
+      testView = new View({ el: '#view' });
     });
 
     it('should not throw an error if view is a prerendered one', function() {

@@ -71,11 +71,11 @@ _.extend(Region.prototype, CommonMixin, {
 
     if (view === this.currentView) { return this; }
 
-    if (view._isAttached && view._attachedTo) {
+    if (view._isShown) {
       throw new MarionetteError({
         name: classErrorName,
-        message: 'A "view" can be attached to the DOM only if it prerendered on backend',
-        url: 'marionette.collectionview.html#region-showAttachedView'
+        message: 'View is already shown in a Region or CollectionView',
+        url: 'marionette.collectionview.html#region-viewAlreadyShown'
       });
     }
 
@@ -146,8 +146,8 @@ _.extend(Region.prototype, CommonMixin, {
       view.triggerMethod('attach', view);
     }
 
-    //corresponds that view is not a pre-rendered one
-    view._attachedTo = true;
+    //corresponds that view is shown in a marionette Region or CollectionView
+    view._isShown = true;
 
   },
 
@@ -300,6 +300,8 @@ _.extend(Region.prototype, CommonMixin, {
     delete this.currentView;
 
     if (!view._isDestroyed) {
+      view._isShown = false;
+
       if (shouldDestroy) {
         this.removeView(view);
       } else {

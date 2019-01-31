@@ -499,6 +499,8 @@ const CollectionView = Backbone.View.extend({
       view._isAttached = false;
       view.triggerMethod('detach', view);
     }
+
+    view._isShown = false;
   },
 
   // Override this method to change how the collectionView detaches a child view
@@ -538,8 +540,8 @@ const CollectionView = Backbone.View.extend({
 
     _.each(views, view => {
       renderView(view);
-      // corresponds that this view is not a pre-rendered one
-      view._attachedTo = true;
+      // corresponds that view is shown in a Region or CollectionView
+      view._isShown = true;
       this.Dom.appendContents(elBuffer, view.el, {_$contents: view.$el});
     });
 
@@ -645,6 +647,14 @@ const CollectionView = Backbone.View.extend({
   addChildView(view, index, options = {}) {
     if (!view || view._isDestroyed) {
       return view;
+    }
+
+    if (view._isShown) {
+      throw new MarionetteError({
+        name: classErrorName,
+        message: 'View is already shown in a Region or CollectionView',
+        url: 'marionette.collectionview.html#region-viewAlreadyShown'
+      });
     }
 
     if (_.isObject(index)) {

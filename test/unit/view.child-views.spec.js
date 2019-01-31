@@ -450,8 +450,9 @@ describe('layoutView', function() {
 
       this.sinon.spy(this.layoutView.getRegion('regionOne'), 'empty');
       this.view = new BBView();
-      this.view.destroy = function() { };
+      this.view.destroy = function() {};
       this.layoutView.getRegion('regionOne').show(this.view);
+
       this.layoutView.render();
       this.layoutView.getRegion('regionOne').show(this.view);
       this.region = this.layoutView.getRegion('regionOne');

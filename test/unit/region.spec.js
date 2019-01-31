@@ -499,10 +499,6 @@ describe('region', function() {
       testView = new View({ el: '#view' });
     });
 
-    it('should not throw an error if view is a prerendered one', function() {
-      expect(region.show.bind(region, testView)).to.not.throw();
-    });
-
     it('should throw an error if view is attached in another region', function() {
       anotherRegion.show(testView);
       expect(region.show.bind(region, testView)).to.throw();

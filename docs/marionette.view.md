@@ -206,7 +206,7 @@ import { View } from 'backbone.marionette'
 import SubView from './subview';
 
 const MyView = View.extend({
-  _.template('<h1>Title</h1><div id="first-region"></div>'),
+  template: _.template('<h1>Title</h1><div id="first-region"></div>'),
 
   regions: {
     firstRegion: '#first-region'

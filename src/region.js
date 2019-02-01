@@ -300,13 +300,12 @@ _.extend(Region.prototype, CommonMixin, {
     delete this.currentView;
 
     if (!view._isDestroyed) {
-      view._isShown = false;
-
       if (shouldDestroy) {
         this.removeView(view);
       } else {
         this._detachView(view);
       }
+      view._isShown = false;
       this._stopChildViewEvents(view);
     }
 

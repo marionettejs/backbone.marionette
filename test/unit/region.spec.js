@@ -482,6 +482,7 @@ describe('region', function() {
       it('should not call removeView', function() {
         expect(region.removeView).not.to.have.been.called;
       });
+
     });
   });
 
@@ -511,6 +512,33 @@ describe('region', function() {
       expect(region.show.bind(region, testView)).to.throw();
     });
 
+  });
+
+  describe('when showing detached view', function() {
+    let collectionView;
+    let anotherRegion;
+    let region;
+    let view;
+
+    beforeEach(function() {
+      this.setFixtures('<div id="region"></div><div id="another-region"></div>');
+      collectionView = new CollectionView();
+      region = new Region({ el: '#region' });
+      anotherRegion = new Region({ el: '#another-region' });
+      view = new View({ template: _.noop });
+    });
+
+    it('should not throw an error if a view was detached from CollectionView',function() {
+      collectionView.addChildView(view);
+      collectionView.detachChildView(view);
+      expect(region.show.bind(region, view)).to.not.throw();
+    });
+
+    it('should not throw an error if a view was detached from Region',function() {
+      anotherRegion.show(view);
+      anotherRegion.detachView(view);
+      expect(region.show.bind(region, view)).to.not.throw();
+    });
   });
 
   describe('when showing nested views', function() {

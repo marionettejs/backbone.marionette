@@ -3,6 +3,7 @@ import Backbone from 'backbone';
 import Events from '../../src/mixins/events';
 import Region from '../../src/region';
 import View from '../../src/view';
+import CollectionView from '../../src/collection-view';
 
 describe('region', function() {
   'use strict';
@@ -481,6 +482,62 @@ describe('region', function() {
       it('should not call removeView', function() {
         expect(region.removeView).not.to.have.been.called;
       });
+
+    });
+  });
+
+  describe('when showing an attached view', function() {
+    let testView;
+    let region;
+    let anotherRegion;
+    let collectionView;
+
+    beforeEach(function() {
+      this.setFixtures('<div id="reg1"></div><div id="reg2"></div><div id="cv"></div><div id="view">content</div>')
+      region = new Region({ el: '#reg1' });
+      anotherRegion = new Region({ el: '#reg2' });
+      collectionView = new CollectionView({ el: '#cv' });
+      testView = new View({ el: '#view' });
+    });
+
+    it('should throw an error if view is attached in another region', function() {
+      anotherRegion.show(testView);
+      expect(region.show.bind(region, testView)).to.throw();
+    });
+
+    it('should throw an error if view is attached in a collection view', function() {
+      collectionView
+        .render()
+        .addChildView(testView);
+      expect(region.show.bind(region, testView)).to.throw();
+    });
+
+  });
+
+  describe('when showing detached view', function() {
+    let collectionView;
+    let anotherRegion;
+    let region;
+    let view;
+
+    beforeEach(function() {
+      this.setFixtures('<div id="region"></div><div id="another-region"></div>');
+      collectionView = new CollectionView();
+      region = new Region({ el: '#region' });
+      anotherRegion = new Region({ el: '#another-region' });
+      view = new View({ template: _.noop });
+    });
+
+    it('should not throw an error if a view was detached from CollectionView',function() {
+      collectionView.addChildView(view);
+      collectionView.detachChildView(view);
+      expect(region.show.bind(region, view)).to.not.throw();
+    });
+
+    it('should not throw an error if a view was detached from Region',function() {
+      anotherRegion.show(view);
+      anotherRegion.detachView(view);
+      expect(region.show.bind(region, view)).to.not.throw();
     });
   });
 

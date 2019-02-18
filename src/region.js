@@ -71,6 +71,14 @@ _.extend(Region.prototype, CommonMixin, {
 
     if (view === this.currentView) { return this; }
 
+    if (view._isShown) {
+      throw new MarionetteError({
+        name: classErrorName,
+        message: 'View is already shown in a Region or CollectionView',
+        url: 'marionette.collectionview.html#region-viewAlreadyShown'
+      });
+    }
+
     this._isSwappingView = !!this.currentView;
 
     this.triggerMethod('before:show', this, view, options);
@@ -137,6 +145,10 @@ _.extend(Region.prototype, CommonMixin, {
       view._isAttached = true;
       view.triggerMethod('attach', view);
     }
+
+    //corresponds that view is shown in a marionette Region or CollectionView
+    view._isShown = true;
+
   },
 
   _ensureElement(options = {}) {
@@ -293,6 +305,7 @@ _.extend(Region.prototype, CommonMixin, {
       } else {
         this._detachView(view);
       }
+      view._isShown = false;
       this._stopChildViewEvents(view);
     }
 

@@ -8,6 +8,7 @@ import ChildViewContainer from '../../../src/child-view-container';
 import View from '../../../src/view';
 import Region from '../../../src/region';
 
+
 describe('CollectionView Children', function() {
   const collection = new Backbone.Collection([
     { id: 1 },
@@ -421,6 +422,45 @@ describe('CollectionView Children', function() {
         expect(myCollectionView.addChildView).to.have.returned(destroyedView);
       });
     });
+
+    describe('when called with showed view', function() {
+      let anotherCollectionView;
+
+      beforeEach(function() {
+        anotherCollectionView = new MyCollectionView();
+        addView = new View({ template: _.noop });
+        anotherCollectionView.addChildView(addView);
+      });
+
+      it('should throw an error', function() {
+        expect(myCollectionView.addChildView.bind(myCollectionView, addView)).to.throw();
+      });
+
+    });
+
+    describe('when adding detached view', function() {
+      let anotherCollectionView;
+      let region;
+      beforeEach(function() {
+        anotherCollectionView = new MyCollectionView();
+        this.setFixtures('<div id="region"></div>');
+        region = new Region({ el: '#region' });
+        addView = new View({ template: _.noop });
+      });
+
+      it('should not throw an error if view was detached from CollectionView',function() {
+        anotherCollectionView.addChildView(addView);
+        anotherCollectionView.detachChildView(addView);
+        expect(myCollectionView.addChildView.bind(myCollectionView, addView)).to.not.throw();
+      });
+
+      it('should not throw an error if view was detached from Region',function() {
+        region.show(addView);
+        region.detachView(addView);
+        expect(myCollectionView.addChildView.bind(myCollectionView, addView)).to.not.throw();
+      });
+
+    });
   });
 
   describe('#detachChildView', function() {
@@ -446,6 +486,7 @@ describe('CollectionView Children', function() {
       expect(myCollectionView.removeChildView)
         .to.have.been.calledOnce.and.calledWith(detachView, { shouldDetach: true });
     });
+
   });
 
   describe('#removeChildView', function() {
@@ -627,9 +668,9 @@ describe('CollectionView Children', function() {
 
         describe('when attaching another childview at the end', function() {
           let anotherView;
-
+          let AnotherView;
           beforeEach(function() {
-            const AnotherView = View.extend({
+            AnotherView = View.extend({
               template: _.noop,
               onBeforeAttach: this.sinon.stub(),
               onAttach: this.sinon.stub()
@@ -661,7 +702,7 @@ describe('CollectionView Children', function() {
 
             // Only true if not maintaining collection sort
             myCollectionView.sortWithCollection = false;
-            myCollectionView.addChildView(anotherView);
+            myCollectionView.addChildView(new AnotherView());
             const callArgs = myCollectionView.attachHtml.args[0];
             const attachHtmlEls = callArgs[0];
             expect($(attachHtmlEls).children()).to.have.lengthOf(1);

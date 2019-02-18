@@ -76,7 +76,7 @@ _.extend(Region.prototype, CommonMixin, {
     this.triggerMethod('before:show', this, view, options);
 
     // Assume an attached view is already in the region for pre-existing DOM
-    if (!view._isAttached) {
+    if (this.currentView || !view._isAttached) {
       this.empty(options);
     }
 

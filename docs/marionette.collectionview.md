@@ -118,7 +118,7 @@ const MyCollectionView = CollectionView.extend({
 ### Re-rendering the CollectionView
 
 If you need to re-render the entire collection or the template, you can call the
-`collectionView.render` method. This method will destroying all of
+`collectionView.render` method. This method will destroy all of
 the child views that may have previously been added.
 
 ## View Lifecycle and Events
@@ -201,7 +201,7 @@ one model into the `children`.
 When a model is removed from the `collection` (or destroyed / deleted), the `CollectionView`
 will destroy and remove that model's child view.
 
-When the `collection` for the view is sorted, the view by default automatically re-sort
+When the `collection` for the view is sorted, the view by default automatically re-sorts
 its child views unless the `sortWithCollection` attribute on the `CollectionView` is set
 to `false`, or the `viewComparator` is `false`.
 
@@ -211,7 +211,7 @@ import { View, CollectionView } from 'backbone.marionette';
 
 const collection = new Backbone.Collection();
 
-const MyChildView = View.extend({:
+const MyChildView = View.extend({
   template: false
 });
 
@@ -314,7 +314,7 @@ import _ from 'underscore';
 import Backbone from 'backbone';
 import { View, CollectionView } from 'backbone.marionette';
 
-const FooView =View.extend({
+const FooView = View.extend({
   template: _.template('foo')
 });
 
@@ -554,11 +554,11 @@ const MyCollectionView = CollectionView.extend({
 You can retrieve a view by a number of methods. If the findBy* method cannot find the view,
 it will return `undefined`.
 
-**Note** That children represents the views rendered that are or will be
+**Note** That `children` represents the views rendered that are or will be
 attached within the view's `el`.
 
 #### CollectionView `children`'s: `findByCid`
-Find a view by it's cid.
+Find a view by its cid.
 
 ```javascript
 const bView = myCollectionView.children.findByCid(buttonView.cid);
@@ -647,7 +647,7 @@ events are triggered in its `children`.
 Read More:
 - [Child Event Bubbling](./events.md#event-bubbling)
 
-## Self Managed `children`
+## Self-Managed `children`
 
 In addition to children added by Marionette matching the model of a `collection`,
 the `children` of the `CollectionView` can be manually managed.
@@ -684,7 +684,7 @@ the `CollectionView` without affecting the view's collection.  In most cases it 
 better to use the data to determine what the `CollectionView` should display.
 
 This method accepts the child view instance to remove as its parameter. It returns
-the removed view;
+the removed view.
 
 ```javascript
 import { CollectionView } from 'backbone.marionette';
@@ -703,7 +703,7 @@ const MyCollectionView = CollectionView.extend({
 
 ### Detaching a Child View
 
-This method is the same as [`removeChildView`](#removing-a-child-view)
+The `detachChildView` method is the same as [`removeChildView`](#removing-a-child-view)
 with the exception that the removed view is not destroyed.
 
 ### Swapping Child Views
@@ -1065,7 +1065,7 @@ const newFilter = function(view, index, children) {
 // Note: the setFilter is preventing the automatic re-render
 cv.setFilter(newFilter, { preventRender: true });
 
-//Render the new state of the ChildViews instead of the whole DOM.
+// Render the new state of the ChildViews instead of the whole DOM.
 cv.render();
 ```
 
@@ -1087,6 +1087,6 @@ cv.setFilter(function(view, index, children) {
   return view.model.get('value') % 2 === 0;
 });
 
-//Remove the current filter without rendering again.
+// Remove the current filter without rendering again.
 cv.removeFilter({ preventRender: true });
 ```

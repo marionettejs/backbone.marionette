@@ -127,9 +127,13 @@ _.extend(Region.prototype, CommonMixin, {
     return this._parentView && this._parentView.monitorViewEvents === false;
   },
 
-  _attachView(view, options = {}) {
-    const shouldTriggerAttach = !view._isAttached && this.Dom.hasEl(document.documentElement, this.el) && !this._shouldDisableMonitoring();
-    const shouldReplaceEl = typeof options.replaceElement === 'undefined' ? !!_.result(this, 'replaceElement') : !!options.replaceElement;
+  _isElAttached() {
+    return this.Dom.hasEl(this.Dom.getDocumentEl(this.el), this.el);
+  },
+
+  _attachView(view, { replaceElement } = {}) {
+    const shouldTriggerAttach = !view._isAttached && this._isElAttached() && !this._shouldDisableMonitoring();
+    const shouldReplaceEl = typeof replaceElement === 'undefined' ? !!_.result(this, 'replaceElement') : !!replaceElement;
 
     if (shouldTriggerAttach) {
       view.triggerMethod('before:attach', view);
@@ -146,9 +150,8 @@ _.extend(Region.prototype, CommonMixin, {
       view.triggerMethod('attach', view);
     }
 
-    //corresponds that view is shown in a marionette Region or CollectionView
+    // Corresponds that view is shown in a marionette Region or CollectionView
     view._isShown = true;
-
   },
 
   _ensureElement(options = {}) {
@@ -230,7 +233,7 @@ _.extend(Region.prototype, CommonMixin, {
   },
 
   _replaceEl(view) {
-    // always restore the el to ensure the regions el is present before replacing
+    // Always restore the el to ensure the regions el is present before replacing
     this._restoreEl();
 
     view.on('before:destroy', this._restoreEl, this);

@@ -264,9 +264,9 @@ describe('CollectionView', function() {
       const myCollectionView = new CollectionView();
       const bBSetElement = this.sinon.spy(Backbone.View.prototype, 'setElement');
 
-      myCollectionView.setElement(1,2,3,4);
+      myCollectionView.setElement('#foo',2,3,4);
 
-      expect(bBSetElement).to.be.calledWith(1,2,3,4);
+      expect(bBSetElement).to.be.calledWith('#foo',2,3,4);
     });
 
     it('should return the collectionView instance', function() {

@@ -21,6 +21,11 @@ export default {
     return document.createDocumentFragment();
   },
 
+  // Returns the document element for a given DOM element
+  getDocumentEl(el) {
+    return el.ownerDocument.documentElement;
+  },
+
   // Lookup the `selector` string
   // Selector may also be a DOM element
   // Returns an array-like object of nodes

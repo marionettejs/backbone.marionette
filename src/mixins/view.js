@@ -26,6 +26,10 @@ import DomApi from '../config/dom';
 const ViewMixin = {
   Dom: DomApi,
 
+  _isElAttached() {
+    return !!this.el && this.Dom.hasEl(this.Dom.getDocumentEl(this.el), this.el);
+  },
+
   supportsRenderLifecycle: true,
   supportsDestroyLifecycle: true,
 

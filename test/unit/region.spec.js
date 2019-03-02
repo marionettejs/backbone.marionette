@@ -139,6 +139,72 @@ describe('region', function() {
     });
   });
 
+  describe('when setting the region element', function() {
+    let TestView;
+    let region;
+    let oneEl;
+    let twoEl;
+
+    beforeEach(function() {
+      TestView = View.extend({ id: 'view', template: _.template('foo') });
+      this.setFixtures('<div id="region1"></div><div id="region2"></div>');
+      oneEl = $('#region1')[0];
+      twoEl = $('#region2')[0];
+
+      region = new Region({ el: oneEl });
+    });
+
+    it('should return the region', function() {
+      expect(region.setElement(twoEl)).to.equal(region);
+    });
+
+    it('should set the el', function() {
+      region.show(new TestView());
+      region.setElement(twoEl);
+      expect(region.el).to.equal(twoEl);
+    });
+
+    it('should set the $el', function() {
+      region.show(new TestView());
+      region.setElement(twoEl);
+      expect(region.$el[0]).to.equal($(twoEl)[0]);
+    });
+
+    it('should throw an error if the `el` is not specified', function() {
+      expect(region.setElement.bind(region)).to.throw();
+    });
+
+    describe('when setting the `el` to the same element', function() {
+      it('should not requery the el', function() {
+        this.sinon.spy(region, 'getEl');
+        expect(region.setElement(oneEl)).to.equal(region);
+        expect(region.getEl).to.not.be.called;
+      });
+    });
+
+    describe('when there is a replaceElement:true view', function() {
+      it('should replace the el of the region with the view el', function() {
+        const view = new TestView();
+        region.show(view, { replaceElement: true });
+        region.setElement(twoEl);
+        expect($('#region1')).to.be.lengthOf(1);
+        expect($('#view')).to.be.lengthOf(1);
+        expect($('#region2')).to.be.lengthOf(0);
+      });
+    });
+
+    describe('when there is a replaceElement:false view', function() {
+      it('should attach the view html to the region', function() {
+        const view = new TestView();
+        region.show(view, { replaceElement: false });
+        region.setElement(twoEl);
+        expect($('#region1')).to.be.lengthOf(1);
+        expect($('#region1 #view')).to.be.lengthOf(0);
+        expect($('#region2 #view')).to.be.lengthOf(1);
+      });
+    });
+  });
+
   describe('when showing a template', function() {
     let myRegion;
 
@@ -1073,7 +1139,7 @@ describe('region', function() {
 
       this.sinon.spy(region, 'empty');
 
-      region._ensureElement();
+      region.show(new View({ template: false }));
 
       this.sinon.spy(region, 'reset');
       region.reset();

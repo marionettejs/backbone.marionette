@@ -30,15 +30,7 @@ const Region = function(options) {
   // Handle when this.el is passed in as a $ wrapped element.
   this.el = this.el instanceof Backbone.$ ? this.el[0] : this.el;
 
-  if (!this.el) {
-    throw new MarionetteError({
-      name: classErrorName,
-      message: 'An "el" must be specified for a region.',
-      url: 'marionette.region.html#additional-options'
-    });
-  }
-
-  this.$el = this.getEl(this.el);
+  this._setElement();
 
   this.initialize.apply(this, arguments);
 };
@@ -103,6 +95,52 @@ _.extend(Region.prototype, CommonMixin, {
     return this;
   },
 
+  _setElement() {
+    if (!this.el) {
+      throw new MarionetteError({
+        name: classErrorName,
+        message: 'An "el" must be specified for a region.',
+        url: 'marionette.region.html#additional-options'
+      });
+    }
+
+    this.$el = this.getEl(this.el);
+
+    if (this.$el.length) {
+      this.el = this.$el[0];
+    }
+
+    // Make sure the $el contains only the el
+    if (this.$el.length > 1) {
+      this.$el = this.Dom.getEl(this.el);
+    }
+  },
+
+  // Set the `el` of the region and move any current view to the new `el`.
+  setElement(el) {
+    if (el === this.el) { return this; }
+
+    const shouldReplace = this._isReplaced;
+
+    this._restoreEl();
+
+    this.el = el;
+
+    this._setElement();
+
+    if (this.currentView) {
+      const view = this.currentView;
+
+      if (shouldReplace) {
+        this._replaceEl(view);
+      } else {
+        this.attachHtml(view);
+      }
+    }
+
+    return this;
+  },
+
   _setupChildView(view) {
     monitorViewEvents(view);
 
@@ -153,10 +191,7 @@ _.extend(Region.prototype, CommonMixin, {
 
   _ensureElement(options = {}) {
     if (!_.isObject(this.el)) {
-      this.$el = this.getEl(this.el);
-      this.el = this.$el[0];
-      // Make sure the $el contains only the el
-      this.$el = this.Dom.getEl(this.el);
+      this._setElement();
     }
 
     if (!this.$el || this.$el.length === 0) {
@@ -386,9 +421,7 @@ _.extend(Region.prototype, CommonMixin, {
   reset(options) {
     this.empty(options);
 
-    if (this.$el) {
-      this.el = this._initEl;
-    }
+    this.el = this._initEl;
 
     delete this.$el;
     return this;

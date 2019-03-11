@@ -27,7 +27,6 @@ function shouldTriggerDetach(view) {
 }
 
 function shouldDetach(view) {
-  if (!shouldTriggerDetach(view)) { return false; }
   view._isAttached = false;
   return true;
 }

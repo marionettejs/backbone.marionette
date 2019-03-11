@@ -389,9 +389,7 @@ _.extend(Region.prototype, CommonMixin, {
   reset(options) {
     this.empty(options);
 
-    if (this.$el) {
-      this.el = this._initEl;
-    }
+    this.el = this._initEl;
 
     delete this.$el;
     return this;

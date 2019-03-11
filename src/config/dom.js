@@ -35,8 +35,8 @@ export default {
 
   // Finds the `selector` string with the el
   // Returns an array-like object of nodes
-  findEl(el, selector, _$el = getEl(el)) {
-    return _$el.find(selector);
+  findEl(el, selector) {
+    return getEl(el).find(selector);
   },
 
   // Returns true if the el contains the node childEl

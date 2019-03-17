@@ -60,7 +60,7 @@ const View = Backbone.View.extend({
     Backbone.View.prototype.setElement.apply(this, arguments);
 
     this._isRendered = this.Dom.hasContents(this.el);
-    this._isAttached = this.Dom.hasEl(document.documentElement, this.el);
+    this._isAttached = this._isElAttached();
 
     if (this._isRendered) {
       this.bindUIElements();

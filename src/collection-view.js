@@ -272,7 +272,7 @@ const CollectionView = Backbone.View.extend({
   setElement() {
     Backbone.View.prototype.setElement.apply(this, arguments);
 
-    this._isAttached = this.Dom.hasEl(document.documentElement, this.el);
+    this._isAttached = this._isElAttached();
 
     return this;
   },

@@ -472,24 +472,20 @@ describe('region', function() {
 
         beforeEach(function() {
           MyView2 = View.extend({
-            events: {
-              'click': function() {}
-            },
             template: _.template('some different content'),
-            destroy: function() {},
-            onBeforeShow: function() {},
-            onShow: function() {
-              $(this.el).addClass('onShowClass');
-            },
-            onBeforeRender: function() {},
+            onAttach: this.sinon.stub()
           });
 
           view2 = new MyView2();
-          region.show(view2, showOptions);
+          region.show(view2, { replaceElement: true });
         });
 
         it('should append the view HTML to the parent "el"', function() {
           expect($parentEl).to.contain.$html(view2.$el.html());
+        });
+
+        it('should trigger attach events', function() {
+          expect(view2.onAttach).to.be.calledOnce;
         });
       });
     });

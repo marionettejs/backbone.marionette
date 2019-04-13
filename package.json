@@ -22,9 +22,9 @@
   "license": "MIT",
   "scripts": {
     "build": "gulp build",
-    "esfix": "gulp esfix",
     "coverage": "gulp coverage",
     "coveralls": "gulp coveralls",
+    "lint": "eslint --fix src/ && eslint --fix test/unit/",
     "test": "gulp",
     "test-browser": "gulp test-browser",
     "test-cross-browser": "gulp test-cross-browser",
@@ -58,7 +58,6 @@
     "chai": "3.5.0",
     "chai-jq": "0.0.9",
     "easy-sauce": "0.4.1",
-    "eslint": "4.14.0",
     "gulp": "3.9.1",
     "gulp-coveralls": "0.1.4",
     "gulp-eslint": "4.0.0",
@@ -87,5 +86,6 @@
     "sinon-chai": "2.8.0",
     "uglify-js": "^3.0.27",
     "underscore": "1.8.3 - 1.9.x"
+    "eslint": "5.16.0",
   }
 }

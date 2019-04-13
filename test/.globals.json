@@ -8,8 +8,6 @@
     "jQuery": true,
     "_": true,
     "Backbone": true,
-    "Marionette": true,
-    "Cypress": true,
-    "cy": true
+    "Marionette": true
   }
 }

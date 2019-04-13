@@ -1,4 +1,5 @@
 {
+  "extends": "eslint:recommended",
   "parserOptions": {
     "ecmaVersion": 6,
     "sourceType": "module"
@@ -6,9 +7,6 @@
   "env": {
     "browser": true,
     "node": true
-  },
-  "globals": {
-    "define": true
   },
   "rules": {
     "array-bracket-spacing": [ 2, "never" ],
@@ -31,26 +29,20 @@
     "new-cap": 2,
     "no-bitwise": 2,
     "no-caller": 2,
-    "no-cond-assign": [ 2, "except-parens" ],
-    "no-debugger": 2,
-    "no-empty": 2,
     "no-eval": 2,
     "no-extend-native": 2,
-    "no-irregular-whitespace": 2,
     "no-iterator": 2,
     "no-loop-func": 2,
-    "no-mixed-spaces-and-tabs": 2,
+    "no-multi-spaces": "error",
     "no-multi-str": 2,
     "no-multiple-empty-lines": 2,
     "no-new": 2,
-    "no-multi-spaces": "error",
     "no-proto": 2,
     "no-script-url": 2,
     "no-sequences": 2,
     "no-shadow": 2,
     "no-spaced-func": 2,
     "no-trailing-spaces": 2,
-    "no-undef": 2,
     "no-unused-vars": [ 1, { "args": "none" } ],
     "no-var": 2,
     "no-with": 2,
@@ -70,7 +62,6 @@
     ],
     "strict": 0,
     "valid-jsdoc": 2,
-    "valid-typeof": 2,
     "wrap-iife": [ 2, "inside" ]
   }
 }

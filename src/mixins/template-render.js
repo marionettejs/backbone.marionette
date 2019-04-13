@@ -34,8 +34,8 @@ export default {
   // are copies to the object passed in.
   mixinTemplateContext(serializedData) {
     const templateContext = _.result(this, 'templateContext');
-    if (!templateContext) { return serializedData; };
-    if (!serializedData) { return templateContext; };
+    if (!templateContext) { return serializedData; }
+    if (!serializedData) { return templateContext; }
     return _.extend({}, serializedData, templateContext);
   },
 

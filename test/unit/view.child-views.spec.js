@@ -43,7 +43,7 @@ describe('layoutView', function() {
 
   describe('on instantiation', function() {
     beforeEach(function() {
-      var suite = this;
+      let suite = this;
       this.ViewInitialize = this.View.extend({
         initialize: function() {
           suite.regionOne = this.getRegion('regionOne');
@@ -66,7 +66,7 @@ describe('layoutView', function() {
 
   describe('on instantiation with no regions defined', function() {
     beforeEach(function() {
-      var suite = this;
+      let suite = this;
       this.NoRegions = Marionette.View.extend({});
       this.init = function() {
         suite.layoutViewManager = new suite.NoRegions();
@@ -113,7 +113,7 @@ describe('layoutView', function() {
     });
 
     it('should instantiate marionette regions is no regionClass is specified', function() {
-      var layoutViewManagerNoDefault = new this.ViewNoDefaultRegion();
+      let layoutViewManagerNoDefault = new this.ViewNoDefaultRegion();
       expect(layoutViewManagerNoDefault.getRegion('regionTwo')).to.be.instanceof(Backbone.Marionette.Region);
     });
 
@@ -155,7 +155,7 @@ describe('layoutView', function() {
 
     it('should find the region scoped within the rendered template', function() {
       this.layoutViewManager.getRegion('regionOne')._ensureElement();
-      var el = this.layoutViewManager.$('#regionOne');
+      let el = this.layoutViewManager.$('#regionOne');
       expect(this.layoutViewManager.getRegion('regionOne').$el[0]).to.equal(el[0]);
     });
 
@@ -202,7 +202,7 @@ describe('layoutView', function() {
       this.regionOne = this.layoutViewManager.getRegion('regionOne');
       this.regionTwo = this.layoutViewManager.getRegion('regionTwo');
 
-      var View = Marionette.View.extend({
+      const View = Marionette.View.extend({
         template: _.noop,
         destroy: function() {
           this.hadParent = this.$el.closest('#parent').length > 0;
@@ -267,7 +267,7 @@ describe('layoutView', function() {
   });
 
   describe('when using showChildView with options', function() {
-    var options = {myOption: 'some value'};
+    let options = {myOption: 'some value'};
 
     beforeEach(function() {
       const BBView = Backbone.View.extend();
@@ -302,7 +302,7 @@ describe('layoutView', function() {
       this.layoutView.render();
 
       // create a child view which triggers an event on render
-      var ChildView = Marionette.View.extend({
+      let ChildView = Marionette.View.extend({
         template: _.noop,
         onBeforeRender: function() {
           this.trigger('before:content:rendered');
@@ -346,7 +346,7 @@ describe('layoutView', function() {
 
   describe('when showing a layoutView via a region', function() {
     beforeEach(function() {
-      var suite = this;
+      let suite = this;
 
       this.setFixtures('<div id="mgr"></div>');
 
@@ -388,7 +388,7 @@ describe('layoutView', function() {
       this.layoutView.render();
 
       // create a child view which triggers an event on render
-      var ChildView = Marionette.View.extend({
+      let ChildView = Marionette.View.extend({
         template: _.noop
       });
       this.childView = new ChildView();
@@ -463,7 +463,7 @@ describe('layoutView', function() {
     });
 
     it('triggers "before:render" before emptying the regions', function() {
-      var cb = function() {
+      let cb = function() {
         expect(this.region.$el).to.exist;
       };
       this.layoutView.listenTo(this.layoutView, 'before:render', cb.bind(this));
@@ -476,7 +476,7 @@ describe('layoutView', function() {
 
     describe('and the views "render" function is bound to an event in the "initialize" function', function() {
       beforeEach(function() {
-        var suite = this;
+        let suite = this;
         this.layoutView.onRender = function() {
           this.getRegion('regionOne').show(suite.view);
         };
@@ -515,7 +515,7 @@ describe('layoutView', function() {
 
   describe('when adding regions in a layoutViews options', function() {
     beforeEach(function() {
-      var suite = this;
+      let suite = this;
 
       this.CustomRegion = this.sinon.spy();
       this.regionOptions = {
@@ -556,7 +556,7 @@ describe('layoutView', function() {
 
   describe('when defining region selectors using @ui. syntax', function() {
     beforeEach(function() {
-      var UIView = Backbone.Marionette.View.extend({
+      let UIView = Backbone.Marionette.View.extend({
         template: this.template,
         regions: {
           war: '@ui.war',
@@ -607,7 +607,7 @@ describe('layoutView', function() {
 
     describe('when the regions are specified via regions hash and the view has no template', function() {
       beforeEach(function() {
-        var fixture =
+        let fixture =
           '<div class="region-hash-no-template-spec">' +
             '<div class="region-one">Out-of-scope region</div>' +
             '<div class="some-layout-view">' +
@@ -625,7 +625,7 @@ describe('layoutView', function() {
           }
         });
         this.layoutViewInstance = new this.View();
-        var $specNode = $('.region-hash-no-template-spec');
+        let $specNode = $('.region-hash-no-template-spec');
         this.$inScopeRegion = $specNode.find('.some-layout-view .region-one');
         this.$outOfScopeRegion = $specNode.children('.region-one');
       });

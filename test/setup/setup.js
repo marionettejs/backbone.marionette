@@ -49,7 +49,7 @@ module.exports = function() {
   });
 
   beforeEach(function() {
-    this.sinon = global.sinon.sandbox.create();
+    this.sinon = global.sinon.createSandbox();
   });
 
   afterEach(function() {

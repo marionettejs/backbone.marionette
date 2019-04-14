@@ -48,7 +48,6 @@ describe('Destroy Mixin', function() {
     beforeEach(function() {
       obj.destroy();
       obj.triggerMethod.reset();
-      obj.destroy.reset();
       obj.destroy();
     });
 

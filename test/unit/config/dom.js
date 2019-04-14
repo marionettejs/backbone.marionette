@@ -6,7 +6,7 @@ import DomApi, { setDomApi } from '../../../src/config/dom';
 const MAX_ARRAY_INDEX = Math.pow(2, 53) - 1;
 const getLength = _.property('length');
 function isArrayLike(collection) {
-  var length = getLength(collection);
+  let length = getLength(collection);
   return typeof length === 'number' && length >= 0 && length <= MAX_ARRAY_INDEX;
 }
 

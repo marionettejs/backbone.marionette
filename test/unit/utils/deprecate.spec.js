@@ -6,10 +6,9 @@ describe('deprecate', function() {
   beforeEach(function() {
     setEnabled('DEV_MODE', true);
     this.sinon.spy(deprecate, '_warn');
-    this.sinon.stub(deprecate, '_console', {
-      warn: this.sinon.stub(),
-      log: this.sinon.stub()
-    });
+    this.sinon.stub(deprecate._console, 'warn');
+    this.sinon.stub(deprecate._console, 'log');
+
     deprecate._cache = {};
   });
 

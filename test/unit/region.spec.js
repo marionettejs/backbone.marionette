@@ -297,7 +297,7 @@ describe('region', function() {
 
       _.extend(MyView.prototype, Events);
 
-      sinon.stub(MyView.prototype, 'onBeforeRender', (function() { return region.currentView; }).bind(this));
+      sinon.stub(MyView.prototype, 'onBeforeRender').callsFake(() => { return region.currentView; });
 
       this.setFixtures('<div id="region"></div>');
       view = new MyView();
@@ -431,7 +431,7 @@ describe('region', function() {
       it('should not restore if the "currentView.el" has been remove from the DOM', function() {
         view.remove();
         region._restoreEl();
-        expect(region.currentView.el.parentNode).is.falsy;
+        expect(region.currentView.el.parentNode).is.null;
       });
 
       describe('and then emptying the region', function() {
@@ -805,8 +805,8 @@ describe('region', function() {
 
     it('should not throw an error saying the views been destroyed if a destroyed view is passed in', function() {
       expect(function() {
-        region.show();
-      }).not.to.throw(new Error('View (cid: "' + view.cid +
+        region.show(view);
+      }).not.to.throw(new RegExp('View (cid: "' + view.cid +
           '") has already been destroyed and cannot be used.'));
     });
 
@@ -1180,13 +1180,13 @@ describe('region', function() {
 
     describe('when the region is already destroyed', function() {
       it('should not reset the region', function() {
-        region.reset.reset();
+        region.reset.resetHistory();
         region.destroy();
         expect(region.reset).to.not.have.been.called;
       });
 
       it('should return the region', function() {
-        region.destroy.reset();
+        region.destroy.resetHistory();
         region.destroy();
         expect(region.destroy).to.have.returned(region);
       });

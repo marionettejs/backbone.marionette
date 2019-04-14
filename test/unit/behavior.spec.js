@@ -789,7 +789,7 @@ describe('Behavior', function() {
       listenToStub = this.sinon.stub();
       changeStub = this.sinon.stub();
 
-      behavior = new Behavior({}, {});
+      behavior = new Behavior({}, new View());
       fooModel = new Backbone.Model();
 
       bindEvents(behavior, fooModel, {

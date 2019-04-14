@@ -423,21 +423,21 @@ describe('view mixin', function() {
         expect(layoutEventHandler)
           .to.have.been.calledWith('foo', 'bar')
           .and.to.have.been.calledOn(layoutView)
-          .and.CalledOnce;
+          .and.calledOnce;
       });
 
       it('invokes the layout on handler', function() {
         expect(layoutEventOnHandler)
           .to.have.been.calledWith('foo', 'bar')
           .and.to.have.been.calledOn(layoutView)
-          .and.CalledOnce;
+          .and.calledOnce;
       });
 
       it('invokes the layout childViewEvents handler', function() {
         expect(layoutViewOnBoomHandler)
           .to.have.been.calledWith('foo', 'bar')
           .and.to.have.been.calledOn(layoutView)
-          .and.CalledOnce;
+          .and.calledOnce;
       });
     });
 
@@ -454,7 +454,7 @@ describe('view mixin', function() {
         expect(layoutViewOnBoomHandler)
           .to.have.been.calledWith('foo', 'bar')
           .and.to.have.been.calledOn(layoutView)
-          .and.CalledOnce;
+          .and.calledOnce;
       });
     });
 
@@ -469,7 +469,7 @@ describe('view mixin', function() {
         expect(superViewOnRattleHandler)
           .to.have.been.calledWith('foo', 'bar')
           .to.have.been.calledOn(superView)
-          .and.CalledOnce;
+          .and.calledOnce;
       });
     });
 

@@ -3,12 +3,12 @@
 
 ### Running unit tests
 
-1. Running just unit tests - `npm run test`
+1. Running just unit tests - `yarn test`
 
-2. Running coverage reporter - `npm run coverage`. 
+2. Running coverage reporter - `yarn coverage`.
 To check coverage, open `./coverage/lcov-report/index.html`.
 
-3. Running tests in browser - `npm run test-browser`.
+3. Running tests in browser - `yarn test-browser`.
 
 
 ### Common concepts for writing tests
@@ -24,17 +24,17 @@ hence, in this case we are adding needed suites.
 - Each `describe` should have name of tested method.
 
 > If it's possible, there should be not more then one nested describe for one method.
- 
+
 _Wrong way_
- 
+
 ```javascript
   describe('#MyClass', function() {
     describe('some events in myMethod', function() {
       describe('some logic', function() {
         it('do something', function() {
-          ...  
+          ...
         });
-         
+
         describe('some other logic', function() {
           // other nested describes
         });
@@ -51,13 +51,13 @@ _Wrong way_
     describe('#myMethod', function() {
       describe('when some logic', function() {
         it('should do something', function() {
-          ...  
+          ...
         });
       });
-   
+
       describe('when some other logic', function() {
         it('should do something', function() {
-          ...  
+          ...
         });
       });
     });
@@ -80,7 +80,7 @@ _Wrong way_
   });
 ```
 
-- `before/beforeEach` should consist only some preparation logic 
+- `before/beforeEach` should consist only some preparation logic
 but inside it should not present calling methods you expect to test.
 
 _Wrong way_
@@ -89,7 +89,7 @@ _Wrong way_
   describe('#MyClass', function() {
     describe('#myMethod', function() {
       let myInstance;
-    
+
       beforeEach(function() {
         myInstance = new MyClass({
           render: this.sinon.spy
@@ -112,18 +112,18 @@ _Wrong way_
     describe('#myMethod', function() {
       let myInstance;
       let renderSpy;
-    
+
       beforeEach(function() {
         renderSpy = this.sinon.spy();
-      
+
         myInstance = new MyClass({
           render: renderSpy
         });
       });
-   
+
       it('should do something', function() {
         myInstance.render();
-      
+
         expect(renderSpy).to.have.been.calledOnce;
       });
     });

@@ -160,7 +160,7 @@ describe('Behaviors Mixin', function() {
       };
       FooBehavior = Behavior.extend({});
 
-      this.sinon.stub(FooBehavior.prototype, '_getTriggers', function() {
+      this.sinon.stub(FooBehavior.prototype, '_getTriggers').callsFake(function() {
         if (this.triggers) {
           return this.triggers;
         } else {
@@ -215,7 +215,7 @@ describe('Behaviors Mixin', function() {
       };
       FooBehavior = Behavior.extend({});
 
-      this.sinon.stub(FooBehavior.prototype, '_getEvents', function() {
+      this.sinon.stub(FooBehavior.prototype, '_getEvents').callsFake(function() {
         if (this.events) {
           return this.events;
         } else {

@@ -533,7 +533,7 @@ describe('CollectionView Children', function() {
     describe('when called without a view', function() {
       beforeEach(function() {
         myCollectionView.onRemoveChild.reset();
-        myCollectionView.removeChildView.reset();
+        myCollectionView.removeChildView.resetHistory();
         myCollectionView.removeChildView();
       });
 
@@ -548,7 +548,7 @@ describe('CollectionView Children', function() {
 
       beforeEach(function() {
         myCollectionView.onRemoveChild.reset();
-        myCollectionView.removeChildView.reset();
+        myCollectionView.removeChildView.resetHistory();
         this.sinon.spy(myCollectionView, 'detachHtml');
 
         detachView = myCollectionView.children.first();
@@ -882,7 +882,8 @@ describe('CollectionView Children', function() {
 
     describe('when view events are not monitored', function() {
       it('should detach the contents from the dom prior to destroying', function() {
-        this.sinon.spy(myCollectionView.Dom, 'detachContents');
+        myCollectionView.Dom = _.clone(myCollectionView.Dom);
+        myCollectionView.Dom.detachContents = this.sinon.stub();
         myCollectionView.monitorViewEvents = false;
         myCollectionView.destroy();
         expect(myCollectionView.Dom.detachContents).to.have.been.calledOnce

@@ -77,7 +77,7 @@ describe('CollectionView - ViewMixin', function() {
     it('should call _childViewEventHandler', function() {
       const childView = collectionView.children.findByIndex(0);
 
-      handlerSpy.reset();
+      handlerSpy.resetHistory();
 
       childView.triggerMethod(eventArg, dataArg);
 
@@ -92,7 +92,7 @@ describe('CollectionView - ViewMixin', function() {
 
         collectionView.removeChildView(childView);
 
-        handlerSpy.reset();
+        handlerSpy.resetHistory();
 
         childView.triggerMethod(eventArg, dataArg);
 

@@ -11,8 +11,8 @@ the process of getting changes merged in and released.
 
 * Fork the Marionette repo.
 * `git clone` your fork onto your computer.
-* Run `npm install` to make sure you have all Marionette dependencies locally.
-* Run `npm run build` to build source files.
+* Run `yarn install` to make sure you have all Marionette dependencies locally.
+* Run `yarn build` to build source files.
 
 ## Reporting a bug
 

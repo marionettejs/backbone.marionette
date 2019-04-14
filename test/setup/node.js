@@ -10,14 +10,22 @@ global.chai = chai;
 global.sinon = sinon;
 
 if (!global.document || !global.window) {
-  var jsdom = require('jsdom').jsdom;
+  const JSDOM = require('jsdom').JSDOM;
 
-  global.document = jsdom('<html><head><script></script></head><body></body></html>', {
-    FetchExternalResources: ['script'],
-    ProcessExternalResources: ['script']
-  });
+  const opts = {
+    runScripts: 'dangerously',
+    url: 'http://localhost'
+  };
 
-  global.window = document.defaultView;
+  const dom = new JSDOM(`
+    <html>
+      <head><script></script></head>
+      <body></body>
+    </html>
+  `, opts);
+
+  global.window = dom.window;
+  global.document = global.window.document;
   global.navigator = global.window.navigator;
 
 }

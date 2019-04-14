@@ -323,7 +323,7 @@ describe('CollectionView -  Empty', function() {
 
       describe('when removing one child', function() {
         beforeEach(function() {
-          myCollectionView.isEmpty.reset();
+          myCollectionView.isEmpty.resetHistory();
           myCollectionView.removeChildView(myCollectionView.children.first());
         });
 
@@ -339,7 +339,7 @@ describe('CollectionView -  Empty', function() {
       describe('when removing the only child', function() {
         beforeEach(function() {
           myCollectionView.removeChildView(myCollectionView.children.first());
-          myCollectionView.isEmpty.reset();
+          myCollectionView.isEmpty.resetHistory();
           myCollectionView.removeChildView(myCollectionView.children.first());
         });
 

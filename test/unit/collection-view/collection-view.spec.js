@@ -81,7 +81,7 @@ describe('CollectionView', function() {
     });
 
     it('should setup the lifecycle monitor before initialize', function() {
-      this.sinon.stub(MyCollectionView.prototype, 'initialize', function() {
+      this.sinon.stub(MyCollectionView.prototype, 'initialize').callsFake(function() {
         expect(this._areViewEventsMonitored).to.be.true;
       });
 
@@ -89,13 +89,16 @@ describe('CollectionView', function() {
     });
 
     it('should have a valid inheritance chain back to Backbone.View', function() {
-      const bBConstructor = this.sinon.spy(Backbone.View.prototype, 'constructor');
       const options = {foo: 'bar'};
       const customParam = {foo: 'baz'};
 
-      new MyCollectionView(options, customParam);
+      const TestView = MyCollectionView.extend({
+        initialize: this.sinon.stub()
+      })
 
-      expect(bBConstructor).to.have.been.calledWith(options, customParam);
+      const testView = new TestView(options, customParam);
+
+      expect(testView.initialize).to.have.been.calledOnce.and.calledWith(options, customParam);
     });
 
     it('should call initialize prior to delegateEntityEvents', function() {

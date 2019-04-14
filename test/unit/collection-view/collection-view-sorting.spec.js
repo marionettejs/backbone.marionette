@@ -342,7 +342,7 @@ describe('CollectionView - Sorting', function() {
 
       describe('when setting with the same viewComparator', function() {
         it('should not sort the collectionView', function() {
-          myCollectionView.sort.reset();
+          myCollectionView.sort.resetHistory();
           myCollectionView.setComparator('altSort');
           expect(myCollectionView.sort).to.not.be.called;
         });

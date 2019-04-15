@@ -2,8 +2,8 @@
   "name": "backbone.marionette",
   "description": "The Backbone Framework",
   "homepage": "https://marionettejs.com/",
-  "main": "./lib/backbone.marionette.js",
   "version": "4.0.0",
+  "main": "./dist/backbone.marionette.js",
   "license": "MIT",
   "keywords": [
     "backbone",
@@ -17,12 +17,8 @@
     "email": "derickbailey@gmail.com"
   },
   "ignore": [
-    "api",
     "docs",
-    "gulp",
-    "jsdoc",
     "src",
-    "tasks",
     "test",
     ".babelrc",
     ".editorconfig",
@@ -32,8 +28,6 @@
     ".npmignore",
     ".travis.yml",
     "CONTRIBUTING.md",
-    "gulpfile.babel.js",
-    "SpecRunner.html",
     "upgradeGuide.md"
   ],
   "dependencies": {

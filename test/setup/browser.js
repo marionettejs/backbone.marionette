@@ -1,18 +1,18 @@
-var mochaGlobals = require('../.globals.json').globals;
+const mochaGlobals = require('../.globals.json').globals;
 
 global.mocha.setup('bdd');
 global.onload = function() {
   global.mocha.checkLeaks();
   global.mocha.globals(Object.keys(mochaGlobals));
 
-  var runner = global.mocha.run();
+  const runner = global.mocha.run();
 
   mochaResults(runner);
   require('./setup')();
 };
 
-var mochaResults = function(runner) {
-  var failedTests = [];
+const mochaResults = function(runner) {
+  const failedTests = [];
 
   runner.on('end', function() {
     global.mochaResults = runner.stats;

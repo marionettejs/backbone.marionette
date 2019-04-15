@@ -1,24 +1,25 @@
 module.exports = function() {
 
   if (process.env.USE_LODASH) {
-    var pathScore = require.resolve('underscore');
-    var pathDash = require.resolve('lodash');
+    const pathScore = require.resolve('underscore');
+    const pathDash = require.resolve('lodash');
     require(pathDash);
 
     require.cache[pathScore] = require.cache[pathDash];
   }
 
-  var lib = process.env.USE_LODASH ? 'lodash' : 'underscore';
+  const lib = process.env.USE_LODASH ? 'lodash' : 'underscore';
 
-  var _ = require('underscore');
+  const _ = require('underscore');
 
+  // eslint-disable-next-line
   console.log('Using ' + lib + ': ' + _.VERSION);
 
-  var Backbone = require('backbone');
-  var jQuery = require('jquery');
+  const Backbone = require('backbone');
+  const jQuery = require('jquery');
   Backbone.$ = jQuery;
   Backbone.Radio = require('backbone.radio');
-  var Marionette = require('../../src/backbone.marionette');
+  let Marionette = require('../../src/backbone.marionette');
 
   Marionette = 'default' in Marionette ? Marionette.default : Marionette;
 
@@ -29,7 +30,7 @@ module.exports = function() {
 
   global.expect = global.chai.expect;
 
-  var $fixtures;
+  let $fixtures;
 
   function setFixtures() {
     _.each(arguments, function(content) {

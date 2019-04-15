@@ -74,4 +74,4 @@ export default [
       terser({ output: { comments: /@license/ }})
     ]
   }
-];
+]

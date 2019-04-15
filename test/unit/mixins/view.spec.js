@@ -126,8 +126,8 @@ describe('view mixin', function() {
     beforeEach(function() {
 
       view = new View({
-        template: () => '<div></div>',
-        regions: {'child': 'div'},
+        template: () => '<div data-foo-region></div>',
+        regions: {child: '[data-foo-region]'},
         onRender() {
           const childView = new View({ template: false });
           this.listenTo(childView, 'destroy', this.destroy);

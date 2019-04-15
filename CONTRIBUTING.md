@@ -124,10 +124,10 @@ to discuss further.
 
 ## Running Tests
 
-* via command-line by running `npm test`
-* in the browser by running `npm run test-browser`
+* via command-line by running `yarn test`
+* in the browser by running `yarn test-browser`
 
-To see the test matrix - run `npm run coverage`
+To see the test matrix - run `yarn coverage`
 
 ## Writing Tests and Code Style
 

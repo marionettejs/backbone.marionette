@@ -19,7 +19,8 @@ node_modules
 
 # Testing
 coverage
-tmp
+test/tmp
+.nyc_output
 
 # Users Environment Variables
 .lock-wscript

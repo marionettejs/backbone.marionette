@@ -12,6 +12,6 @@ after_install:
 script:
   - if [[ $TEST_SUITE = "coverage" ]]; then yarn run coveralls; fi
   - if [[ $TEST_SUITE = "browser" ]]  && [[ $SAUCE_USERNAME ]]; then yarn run test-cross-browser; fi
-  - if [[ $TEST_SUITE = "lodash" ]]; then yarn run test; fi
+  - if [[ $TEST_SUITE = "lodash" ]]; then yarn run test-lodash; fi
 after_success:
   - if [[ $TRAVIS_BRANCH = "master" ]] && [[ $TRAVIS_PULL_REQUEST = "false" ]]; then node trigger-deploy-mn-com.js; fi

@@ -74,7 +74,7 @@ const CollectionView = Backbone.View.extend({
     const $emptyEl = this.$container || this.$el;
 
     if (this._emptyRegion && !this._emptyRegion.isDestroyed()) {
-      this._emptyRegion.setElement($emptyEl[0]);
+      this._emptyRegion._setElement($emptyEl[0]);
       return this._emptyRegion;
     }
 

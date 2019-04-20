@@ -139,6 +139,7 @@ describe('region', function() {
     });
   });
 
+  // NOTE: Currently an internal API with potential for public release
   describe('when setting the region element', function() {
     let TestView;
     let region;
@@ -155,29 +156,29 @@ describe('region', function() {
     });
 
     it('should return the region', function() {
-      expect(region.setElement(twoEl)).to.equal(region);
+      expect(region._setElement(twoEl)).to.equal(region);
     });
 
     it('should set the el', function() {
       region.show(new TestView());
-      region.setElement(twoEl);
+      region._setElement(twoEl);
       expect(region.el).to.equal(twoEl);
     });
 
     it('should set the $el', function() {
       region.show(new TestView());
-      region.setElement(twoEl);
+      region._setElement(twoEl);
       expect(region.$el[0]).to.equal($(twoEl)[0]);
     });
 
     it('should throw an error if the `el` is not specified', function() {
-      expect(region.setElement.bind(region)).to.throw();
+      expect(region._setElement.bind(region)).to.throw();
     });
 
     describe('when setting the `el` to the same element', function() {
       it('should not requery the el', function() {
         this.sinon.spy(region, 'getEl');
-        expect(region.setElement(oneEl)).to.equal(region);
+        expect(region._setElement(oneEl)).to.equal(region);
         expect(region.getEl).to.not.be.called;
       });
     });
@@ -186,7 +187,7 @@ describe('region', function() {
       it('should replace the el of the region with the view el', function() {
         const view = new TestView();
         region.show(view, { replaceElement: true });
-        region.setElement(twoEl);
+        region._setElement(twoEl);
         expect($('#region1')).to.be.lengthOf(1);
         expect($('#view')).to.be.lengthOf(1);
         expect($('#region2')).to.be.lengthOf(0);
@@ -197,7 +198,7 @@ describe('region', function() {
       it('should attach the view html to the region', function() {
         const view = new TestView();
         region.show(view, { replaceElement: false });
-        region.setElement(twoEl);
+        region._setElement(twoEl);
         expect($('#region1')).to.be.lengthOf(1);
         expect($('#region1 #view')).to.be.lengthOf(0);
         expect($('#region2 #view')).to.be.lengthOf(1);

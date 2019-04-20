@@ -330,7 +330,9 @@ Both forms take an `options` object that will be passed to the
 For more information on `showChildView` and `getChildView`, see the
 [Documentation for Views](./marionette.view.md#managing-children)
 
-**Errors** An error will be thrown if the view is falsy or destroyed.
+**Errors**
+- An error will be thrown if the view is falsy or destroyed.
+- An error will be thrown if the view is already shown in a Region or CollectionView.
 
 ### Checking whether a region is showing a view
 

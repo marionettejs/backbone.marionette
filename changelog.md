@@ -1,3 +1,20 @@
+### v4.1.0 [view commit logs](https://github.com/marionettejs/backbone.marionette/compare/v4.0.0...v4.1.0)
+
+#### Features
+* `CollectionView#addChildView` now accepts a `preventRender` option.
+* Marionette now uses `el.ownerDocument.documentElement;` by default instead of `document.documentElement` for querying, customizable via `DomApi.getDocumentEl`.
+* The UMD build now reinstates `noConflict` for using multiple versions on the global scope.
+
+#### Fixes
+* Fixed a case where a child view could potentially get multiple `destroy` events.
+* Pre-rendered views from outside of a region will now correctly empty an current view in a region if shown.
+* `CollectionView`'s `emptyView` will now respect the `childViewContainer` for attachment.
+
+#### Misc
+* Updated backbone dependency to allow for 1.4 without a warning.
+* Tooling and testing was updated and improved removing gulp.
+* `Region._setElement` was added for internal use, but may be made public in a future release.
+
 ### v4.0.0 [view commit logs](https://github.com/marionettejs/backbone.marionette/compare/v3.5.1...v4.0.0)
 
 #### Breaking Changes

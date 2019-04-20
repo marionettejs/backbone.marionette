@@ -67,7 +67,7 @@ _.extend(Region.prototype, CommonMixin, {
       throw new MarionetteError({
         name: classErrorName,
         message: 'View is already shown in a Region or CollectionView',
-        url: 'marionette.collectionview.html#region-viewAlreadyShown'
+        url: 'marionette.region.html#showing-a-view'
       });
     }
 

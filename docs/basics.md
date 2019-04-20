@@ -16,10 +16,12 @@ patterns etc.
 ## Using ES6 Modules
 
 Marionette still supports using the library via an inline script.
+The UMD build supports `noConflict()`.
 
 ```html
 <script src="./backbone.marionette.js"></script>
-<script>new Marionette.View({ el: 'body' });</script>
+<script>const MyMarionette = Marionette.noConflict();</script>
+<script>new MyMarionette.View({ el: 'body' });</script>
 ```
 
 The recommended solution is to choose a solution like a [package manager](./installation.md)

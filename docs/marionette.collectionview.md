@@ -655,9 +655,10 @@ the `children` of the `CollectionView` can be manually managed.
 ### Adding a Child View
 
 The `addChildView` method can be used to add a view that is independent of your
-`Backbone.Collection`. This method takes two parameters, the child view instance
-and optionally the index for where it should be placed within the
-[CollectionView's `children`](#managing-children). It returns the added view.
+`Backbone.Collection`. This method takes three parameters, the child view instance,
+optionally the index for where it should be placed within the
+[CollectionView's `children`](#managing-children), and an options hash.
+It returns the added view.
 
 ```javascript
 import { CollectionView } from 'backbone.marionette';
@@ -676,6 +677,26 @@ myCollectionView.render();
 ```
 **Note** Unless an index is specified, this added view will be subject to filtering
 and sorting and may be difficult to manage in complex situations. Use with care.
+
+**Errors** An error will be thrown if the view is already shown in a Region or CollectionView.
+
+#### `preventRender` option
+
+If you wish to add a child view to the children without the collectionview rendering
+the children use the `preventRender` option.
+
+```javascript
+import { CollectionView } from 'backbone.marionette';
+import ButtonView from './button-view';
+
+const myCollectionView = new CollectionView({...});
+
+const insertIndex = 0; // Add to the top
+
+myCollectionView.addChildView(new ButtonView(), { preventRender: true, index: insertIndex });
+myCollectionView.addChildView(new ButtonView(), insertIndex, { preventRender: true });
+myCollectionView.addChildView(new ButtonView());  // renders all three children
+```
 
 ### Removing a Child View
 

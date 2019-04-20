@@ -2,8 +2,8 @@
   "name": "backbone.marionette",
   "description": "The Backbone Framework",
   "homepage": "https://marionettejs.com/",
-  "version": "4.0.0",
-  "main": "./dist/backbone.marionette.js",
+  "version": "4.1.0",
+  "main": "./lib/backbone.marionette.js",
   "license": "MIT",
   "keywords": [
     "backbone",

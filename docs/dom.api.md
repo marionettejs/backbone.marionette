@@ -17,6 +17,14 @@ API. You will, however, [need to also handle Backbone's jQuery integration](#bac
 Returns a new HTML DOM node instance. The resulting node can be passed into the
 other DOM functions.
 
+### `getDocumentEl(el)`
+
+Look up the top level element of `el`. Used by Marionette to determine attachment.
+
+```javascript
+const elIsAttached = this.Dom.hasEl(this.Dom.getDocumentEl(this.el), this.el);
+```
+
 ### `getEl(selector)`
 
 Lookup the `selector` string withing the DOM. The `selector` may also be a DOM element.

@@ -33,7 +33,7 @@ export default [
     external: ['underscore', 'backbone', 'backbone.radio'],
     output: [
       {
-        file: 'dist/backbone.marionette.js',
+        file: 'lib/backbone.marionette.js',
         format: 'umd',
         name: 'Marionette',
         exports: 'named',
@@ -43,7 +43,7 @@ export default [
         footer
       },
       {
-        file: 'dist/backbone.marionette.es6.js',
+        file: 'lib/backbone.marionette.esm.js',
         format: 'es'
       }
     ],
@@ -58,7 +58,7 @@ export default [
     external: ['underscore', 'backbone', 'backbone.radio'],
     output: [
       {
-        file: 'dist/backbone.marionette.min.js',
+        file: 'lib/backbone.marionette.min.js',
         format: 'umd',
         name: 'Marionette',
         exports: 'named',

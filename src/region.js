@@ -30,7 +30,7 @@ const Region = function(options) {
   // Handle when this.el is passed in as a $ wrapped element.
   this.el = this.el instanceof Backbone.$ ? this.el[0] : this.el;
 
-  this._setElement();
+  this.$el = this._getEl(this.el);
 
   this.initialize.apply(this, arguments);
 };
@@ -95,8 +95,8 @@ _.extend(Region.prototype, CommonMixin, {
     return this;
   },
 
-  _setElement() {
-    if (!this.el) {
+  _getEl(el) {
+    if (!el) {
       throw new MarionetteError({
         name: classErrorName,
         message: 'An "el" must be specified for a region.',
@@ -104,7 +104,11 @@ _.extend(Region.prototype, CommonMixin, {
       });
     }
 
-    this.$el = this.getEl(this.el);
+    return this.getEl(el);
+  },
+
+  _setEl() {
+    this.$el = this._getEl(this.el);
 
     if (this.$el.length) {
       this.el = this.$el[0];
@@ -117,7 +121,7 @@ _.extend(Region.prototype, CommonMixin, {
   },
 
   // Set the `el` of the region and move any current view to the new `el`.
-  setElement(el) {
+  _setElement(el) {
     if (el === this.el) { return this; }
 
     const shouldReplace = this._isReplaced;
@@ -126,7 +130,7 @@ _.extend(Region.prototype, CommonMixin, {
 
     this.el = el;
 
-    this._setElement();
+    this._setEl();
 
     if (this.currentView) {
       const view = this.currentView;
@@ -194,7 +198,7 @@ _.extend(Region.prototype, CommonMixin, {
 
   _ensureElement(options = {}) {
     if (!_.isObject(this.el)) {
-      this._setElement();
+      this._setEl();
     }
 
     if (!this.$el || this.$el.length === 0) {

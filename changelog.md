@@ -1,3 +1,8 @@
+### v4.1.2 [view commit logs](https://github.com/marionettejs/backbone.marionette/compare/v4.1.1...v4.1.2)
+
+#### Fixes
+* Error in the build's version number.
+
 ### v4.1.1 [view commit logs](https://github.com/marionettejs/backbone.marionette/compare/v4.1.0...v4.1.1)
 
 #### Fixes

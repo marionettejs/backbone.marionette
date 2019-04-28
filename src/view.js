@@ -57,6 +57,8 @@ const View = Backbone.View.extend({
   // if an el was previously defined. If so, the view might be
   // rendered or attached on setElement.
   setElement() {
+    const wasRendered = this._isRendered;
+
     Backbone.View.prototype.setElement.apply(this, arguments);
 
     this._isRendered = this.Dom.hasContents(this.el);
@@ -64,6 +66,11 @@ const View = Backbone.View.extend({
 
     if (this._isRendered) {
       this.bindUIElements();
+      this._bindRegions();
+    }
+
+    if (!wasRendered && (this._isRendered || this.getTemplate() === false)) {
+      this.triggerMethod('ready', this);
     }
 
     return this;
@@ -78,17 +85,18 @@ const View = Backbone.View.extend({
 
     this.triggerMethod('before:render', this);
 
-    // If this is not the first render call, then we need to
-    // re-initialize the `el` for each region
-    if (this._isRendered) {
-      this._reInitRegions();
-    }
-
+    const wasRendered = this._isRendered;
     this._renderTemplate(template);
-    this.bindUIElements();
-
     this._isRendered = true;
+
+    this.bindUIElements();
+    this._bindRegions();
+
     this.triggerMethod('render', this);
+
+    if (!wasRendered && this._isRendered) {
+      this.triggerMethod('ready', this);
+    }
 
     return this;
   },

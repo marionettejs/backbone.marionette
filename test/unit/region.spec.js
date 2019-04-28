@@ -8,19 +8,10 @@ import CollectionView from '../../src/collection-view';
 describe('region', function() {
   'use strict';
 
-  describe('when creating a new region and no configuration has been provided', function() {
-    it('should throw an exception saying an "el" is required', function() {
-      expect(function() {
-        return new Region();
-      }).to.throw('An "el" must be specified for a region.');
-    });
-  });
-
   describe('when passing an el DOM reference in directly', function() {
     let el;
     let customRegion;
     let optionRegion;
-    let optionRegionJquery;
 
     beforeEach(function() {
       this.setFixtures('<div id="region"></div>');
@@ -31,17 +22,10 @@ describe('region', function() {
       }))();
 
       optionRegion = new Region({el: el});
-
-      optionRegionJquery = new Region({el: $(el)});
     });
 
     it('should not have been replaced', function() {
       expect(customRegion.isReplaced()).to.be.false;
-    });
-
-    it('should work when el is passed in as an option', function() {
-      expect(optionRegionJquery.$el[0]).to.equal(el);
-      expect(optionRegionJquery.el).to.equal(el);
     });
 
     it('should handle when the el option is passed in as a jquery selector', function() {
@@ -77,7 +61,6 @@ describe('region', function() {
   describe('when creating a new region and the "el" does not exist in DOM', function() {
     let MyRegion;
     let MyView;
-    let myView;
 
     beforeEach(function() {
       MyRegion = Region.extend({
@@ -89,52 +72,25 @@ describe('region', function() {
           $(this.el).html('some content');
         }
       });
-      myView = new MyView();
 
       this.setFixtures('<div id="region"></div>');
     });
 
     describe('when showing a view', function() {
-      describe('when allowMissingEl is not set', function() {
-        let region;
+      let region;
 
-        beforeEach(function() {
-          region = new MyRegion();
-        });
-
-        it('should throw an exception saying an "el" doesnt exist in DOM', function() {
-          expect(function() {
-            region.show(new MyView());
-          }.bind(this)).to.throw('An "el" must exist in DOM for this region ' + region.cid);
-        });
-
-        it('should not have a view', function() {
-          expect(region.hasView()).to.be.false;
-        });
+      beforeEach(function() {
+        region = new MyRegion();
       });
 
-      describe('when allowMissingEl is set', function() {
-        let region;
+      it('should throw an exception saying an "el" doesnt exist in DOM', function() {
+        expect(function() {
+          region.show(new MyView());
+        }.bind(this)).to.throw('A region el is required. Region cid:' + region.cid);
+      });
 
-        beforeEach(function() {
-          region = new MyRegion({allowMissingEl: true});
-        });
-
-        it('should not throw an exception', function() {
-          expect(function() {
-            region.show(new MyView());
-          }.bind(this)).not.to.throw();
-        });
-
-        it('should not have a view', function() {
-          expect(region.hasView()).to.be.false;
-        });
-
-        it('should not render the view', function() {
-          this.sinon.spy(myView, 'render');
-          region.show(myView);
-          expect(myView.render).not.to.have.been.called;
-        });
+      it('should not have a view', function() {
+        expect(region.hasView()).to.be.false;
       });
     });
   });
@@ -156,30 +112,28 @@ describe('region', function() {
     });
 
     it('should return the region', function() {
-      expect(region._setElement(twoEl)).to.equal(region);
+      expect(region.setElement(twoEl)).to.equal(region);
     });
 
     it('should set the el', function() {
       region.show(new TestView());
-      region._setElement(twoEl);
+      region.setElement(twoEl);
       expect(region.el).to.equal(twoEl);
     });
 
-    it('should set the $el', function() {
-      region.show(new TestView());
-      region._setElement(twoEl);
-      expect(region.$el[0]).to.equal($(twoEl)[0]);
+    it('should not throw an error if the `el` is not specified', function() {
+      expect(region.setElement.bind(region)).to.not.throw();
     });
 
-    it('should throw an error if the `el` is not specified', function() {
-      expect(region._setElement.bind(region)).to.throw();
+    it('should throw an error if the `el` is not specified with currentView', function() {
+      region.currentView = true;
+      expect(region.setElement.bind(region)).to.throw();
     });
 
     describe('when setting the `el` to the same element', function() {
       it('should not requery the el', function() {
         this.sinon.spy(region, 'getEl');
-        expect(region._setElement(oneEl)).to.equal(region);
-        expect(region.getEl).to.not.be.called;
+        expect(region.setElement(oneEl)).to.equal(region);
       });
     });
 
@@ -187,7 +141,7 @@ describe('region', function() {
       it('should replace the el of the region with the view el', function() {
         const view = new TestView();
         region.show(view, { replaceElement: true });
-        region._setElement(twoEl);
+        region.setElement(twoEl);
         expect($('#region1')).to.be.lengthOf(1);
         expect($('#view')).to.be.lengthOf(1);
         expect($('#region2')).to.be.lengthOf(0);
@@ -198,7 +152,7 @@ describe('region', function() {
       it('should attach the view html to the region', function() {
         const view = new TestView();
         region.show(view, { replaceElement: false });
-        region._setElement(twoEl);
+        region.setElement(twoEl);
         expect($('#region1')).to.be.lengthOf(1);
         expect($('#region1 #view')).to.be.lengthOf(0);
         expect($('#region2 #view')).to.be.lengthOf(1);
@@ -212,7 +166,7 @@ describe('region', function() {
     beforeEach(function() {
       this.setFixtures('<div id="region"></div>');
       myRegion = new Region({
-        el: '#region'
+        el: $('#region')[0]
       });
 
       myRegion.show(_.template('<b>Hello World!</b>'));
@@ -1031,22 +985,6 @@ describe('region', function() {
     });
   });
 
-  describe('when initializing a region and passing an "el" option', function() {
-    let el;
-    let region;
-
-    beforeEach(function() {
-      el = '#foo';
-      region = new Region({
-        el: el
-      });
-    });
-
-    it('should manage the specified el', function() {
-      expect(region.el).to.equal(el);
-    });
-  });
-
   describe('when creating a region instance with an initialize method', function() {
     let expectedOptions;
     let MyRegion;
@@ -1104,12 +1042,14 @@ describe('region', function() {
     let region;
 
     beforeEach(function() {
-      itemView = new View();
-      itemView.render = this.sinon.stub();
-      itemView.addRegions({
-        MyRegion: '#region',
-        anotherRegion: '#region2'
+      itemView = new View({
+        regions: {
+          MyRegion: '#region',
+          anotherRegion: '#region2'
+        },
+        template: false
       });
+      this.sinon.spy(itemView, 'render');
 
       region = itemView._regions.MyRegion;
     });
@@ -1124,7 +1064,7 @@ describe('region', function() {
     });
   });
 
-  describe('when resetting a region', function() {
+  describe('when destroying a region', function() {
     let region;
 
     beforeEach(function() {
@@ -1136,43 +1076,12 @@ describe('region', function() {
 
       this.sinon.spy(region, 'empty');
 
-      region.show(new View({ template: false }));
-
-      this.sinon.spy(region, 'reset');
-      region.reset();
-    });
-
-    it('should not hold on to the regions previous "el"', function() {
-      expect(region.$el).not.to.exist;
-    });
-
-    it('should empty any existing view', function() {
-      expect(region.empty).to.have.been.called;
-    });
-
-    it('should return the region', function() {
-      expect(region.reset).to.have.returned(region);
-    });
-  });
-
-  describe('when destroying a region', function() {
-    let region;
-
-    beforeEach(function() {
-      this.setFixtures('<div id="region"></div>');
-
-      region = new Region({
-        el: '#region'
-      });
-
-      this.sinon.spy(region, 'reset');
-
       this.sinon.spy(region, 'destroy');
       region.destroy();
     });
 
-    it('should reset the region', function() {
-      expect(region.reset).to.have.been.called;
+    it('should empty the region', function() {
+      expect(region.empty).to.have.been.called;
     });
 
     it('should return the region', function() {
@@ -1180,10 +1089,10 @@ describe('region', function() {
     });
 
     describe('when the region is already destroyed', function() {
-      it('should not reset the region', function() {
-        region.reset.resetHistory();
+      it('should not empty the region', function() {
+        region.empty.resetHistory();
         region.destroy();
-        expect(region.reset).to.not.have.been.called;
+        expect(region.empty).to.not.have.been.called;
       });
 
       it('should return the region', function() {
@@ -1317,30 +1226,6 @@ describe('region', function() {
     });
   });
 
-  describe('when calling "_ensureElement"', function() {
-    let region;
-
-    beforeEach(function() {
-      region = new Region({
-        el: '#region'
-      });
-    });
-
-    it('should prefer passed options over initial options', function() {
-      region.allowMissingEl = false;
-
-      expect(region._ensureElement({allowMissingEl: true})).to.be.false;
-    });
-
-    it('should fallback to initial options when not passed options', function() {
-      region.allowMissingEl = false;
-
-      expect(function() {
-        region._ensureElement();
-      }.bind(this)).to.throw;
-    });
-  });
-
   // This is a terrible example of an edge-case where something related to the view's destroy
   // may also want to empty the same region.
   describe('when emptying a region destroys a view that empties the same region', function() {
@@ -1385,16 +1270,6 @@ describe('region', function() {
       region = new MyRegion();
       region.empty();
       expect(region.$el.html()).to.eql('');
-    });
-
-    // In the future, hopefully allowMissingEl can default to true
-    describe('when no el exists while passing allowMissingEl: false', function() {
-      it('should throw an error', function() {
-        region = new MyRegion();
-        expect(function() {
-          region.empty({ allowMissingEl: false });
-        }).to.throw('An "el" must exist in DOM for this region ' + region.cid);
-      });
     });
   });
 });

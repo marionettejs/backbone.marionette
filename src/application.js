@@ -3,7 +3,7 @@
 
 import _ from 'underscore';
 import extend from './utils/extend';
-import buildRegion from './common/build-region';
+import normalizeRegion from './common/normalize-region';
 import CommonMixin from './mixins/common';
 import DestroyMixin from './mixins/destroy';
 import RadioMixin from './mixins/radio';
@@ -50,11 +50,25 @@ _.extend(Application.prototype, CommonMixin, DestroyMixin, RadioMixin, {
 
     if (!region) { return; }
 
-    const defaults = {
-      regionClass: this.regionClass
-    };
+    this._region = this._buildRegion(region);
+  },
 
-    this._region = buildRegion(region, defaults);
+  _buildRegion(definition) {
+    if (definition instanceof Region) {
+      return definition;
+    }
+
+    if (_.isFunction(definition)) {
+      return this._buildRegion(definition.call(this));
+    }
+
+    const options = normalizeRegion(definition, this.regionClass);
+
+    const RegionClass = options.regionClass;
+
+    delete options.regionClass;
+
+    return new RegionClass(options);
   },
 
   getRegion() {

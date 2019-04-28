@@ -33,7 +33,7 @@ describe('layoutView', function() {
     this.ViewNoDefaultRegion = this.View.extend({
       regions: {
         regionOne: {
-          selector: '#regionOne',
+          el: '#regionOne',
           regionClass: this.CustomRegion1
         },
         regionTwo: '#regionTwo'
@@ -470,8 +470,8 @@ describe('layoutView', function() {
       this.layoutView.render();
     });
 
-    it('should call empty twice', function() {
-      expect(this.region.empty).to.have.been.calledThrice;
+    it('should call empty once', function() {
+      expect(this.region.empty).to.be.calledOnce;
     });
 
     describe('and the views "render" function is bound to an event in the "initialize" function', function() {
@@ -522,7 +522,7 @@ describe('layoutView', function() {
         war: '.craft',
         is: {
           regionClass: this.CustomRegion,
-          selector: '#a-fun-game'
+          el: '#a-fun-game'
         }
       };
 
@@ -550,6 +550,7 @@ describe('layoutView', function() {
     });
 
     it('should set custom region classes', function() {
+      this.layoutView.render();
       expect(this.CustomRegion).to.have.been.called;
     });
   });
@@ -637,53 +638,4 @@ describe('layoutView', function() {
       });
     });
   });
-
-  describe('manipulating regions', function() {
-    beforeEach(function() {
-      this.beforeAddRegionSpy = this.sinon.spy();
-      this.addRegionSpy = this.sinon.spy();
-      this.beforeRegionRemoveSpy = this.sinon.spy();
-      this.removeRegionSpy = this.sinon.spy();
-
-      this.Layout = Marionette.View.extend({
-        template: _.noop,
-        onBeforeAddRegion: this.beforeAddRegionSpy,
-        onAddRegion: this.addRegionSpy,
-        onBeforeRemoveRegion: this.beforeRegionRemoveSpy,
-        onRemoveRegion: this.removeRegionSpy
-      });
-
-      this.layout = new this.Layout();
-
-      this.regionName = 'myRegion';
-      this.layout.addRegion(this.regionName, '.region-selector');
-    });
-
-    it('should trigger correct region add events', function() {
-      expect(this.beforeAddRegionSpy)
-        .to.have.been.calledOnce
-        .and.calledOn(this.layout)
-        .and.calledWith(this.layout, this.regionName);
-
-      expect(this.addRegionSpy)
-        .to.have.been.calledOnce
-        .and.calledOn(this.layout)
-        .and.calledWith(this.layout, this.regionName);
-    });
-
-    it('should trigger correct region remove events', function() {
-      this.layout.removeRegion(this.regionName);
-
-      expect(this.beforeRegionRemoveSpy)
-        .to.have.been.calledOnce
-        .and.calledOn(this.layout)
-        .and.calledWith(this.layout, this.regionName);
-
-      expect(this.removeRegionSpy)
-        .to.have.been.calledOnce
-        .and.calledOn(this.layout)
-        .and.calledWith(this.layout, this.regionName);
-    });
-  });
-
 });

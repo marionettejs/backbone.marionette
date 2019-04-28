@@ -14,21 +14,11 @@ describe('itemView - dynamic regions', function() {
 
   describe('when adding a region to a layoutView, after it has been rendered', function() {
     beforeEach(function() {
-      this.MyView = Marionette.View.extend({
-        onAddRegion: function() {},
-        onBeforeAddRegion: function() {}
-      });
+      this.MyView = Marionette.View.extend();
 
       this.layoutView = new this.MyView({
         template: this.template
       });
-
-      this.beforeAddHandler = this.sinon.spy();
-      this.addHandler = this.sinon.spy();
-      this.onBeforeAddSpy = this.sinon.spy(this.layoutView, 'onBeforeAddRegion');
-      this.onAddSpy = this.sinon.spy(this.layoutView, 'onAddRegion');
-      this.layoutView.on('before:add:region', this.beforeAddHandler);
-      this.layoutView.on('add:region', this.addHandler);
 
       this.layoutView.render();
 
@@ -43,7 +33,10 @@ describe('itemView - dynamic regions', function() {
     });
 
     it('should add the region definition to the regions property', function() {
-      expect(this.layoutView.regions.foo).to.equal('#foo');
+      expect(this.layoutView.regions.foo).to.eql({
+        el: '#foo',
+        regionClass: this.layoutView.regionClass
+      });
     });
 
     it('should set the parent of the region to the layoutView', function() {
@@ -52,16 +45,6 @@ describe('itemView - dynamic regions', function() {
 
     it('should be able to show a view in the region', function() {
       expect(this.layoutView.getRegion('foo').$el.children().length).to.equal(1);
-    });
-
-    it('should trigger a before:add:region event', function() {
-      expect(this.beforeAddHandler).to.have.been.calledWith(this.layoutView, 'foo');
-      expect(this.onBeforeAddSpy).to.have.been.calledWith(this.layoutView, 'foo');
-    });
-
-    it('should trigger a add:region event', function() {
-      expect(this.addHandler).to.have.been.calledWith(this.layoutView, 'foo', this.region);
-      expect(this.onAddSpy).to.have.been.calledWith(this.layoutView, 'foo', this.region);
     });
   });
 
@@ -164,29 +147,20 @@ describe('itemView - dynamic regions', function() {
         template: this.template,
         regions: {
           foo: '#foo'
-        },
-        onBeforeRemoveRegion: function() {},
-        onRemoveRegion: function() {}
+        }
       });
 
       this.emptyHandler = this.sinon.spy();
-      this.beforeRemoveHandler = this.sinon.spy();
-      this.removeHandler = this.sinon.spy();
       this.beforeDestroyHandler = this.sinon.spy();
       this.destroyHandler = this.sinon.spy();
 
       this.layoutView = new this.View();
-
-      this.onBeforeRemoveSpy = this.sinon.spy(this.layoutView, 'onBeforeRemoveRegion');
-      this.onRemoveSpy = this.sinon.spy(this.layoutView, 'onRemoveRegion');
 
       this.layoutView.render();
       this.layoutView.getRegion('foo').show(new BBView());
       this.region = this.layoutView.getRegion('foo');
 
       this.region.on('empty', this.emptyHandler);
-      this.layoutView.on('before:remove:region', this.beforeRemoveHandler);
-      this.layoutView.on('remove:region', this.removeHandler);
       this.region.on('before:destroy', this.beforeDestroyHandler);
       this.region.on('destroy', this.destroyHandler);
       this.layoutView.removeRegion('foo');
@@ -202,16 +176,6 @@ describe('itemView - dynamic regions', function() {
 
     it('should trigger a destroy event on the region', function() {
       expect(this.destroyHandler).to.have.been.calledWith(this.region);
-    });
-
-    it('should trigger a before:remove:region event', function() {
-      expect(this.onBeforeRemoveSpy).to.have.been.calledWith(this.layoutView, 'foo');
-      expect(this.beforeRemoveHandler).to.have.been.calledWith(this.layoutView, 'foo');
-    });
-
-    it('should trigger a remove:region event', function() {
-      expect(this.onRemoveSpy).to.have.been.calledWith(this.layoutView, 'foo', this.region);
-      expect(this.removeHandler).to.have.been.calledWith(this.layoutView, 'foo', this.region);
     });
 
     it('should remove the region', function() {

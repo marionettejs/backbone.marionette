@@ -14,8 +14,8 @@ import DomApi, { setDomApi } from './config/dom';
 const classErrorName = 'RegionError';
 
 const ClassOptions = [
-  'allowMissingEl',
-  'parentEl',
+  'currentView',
+  'el',
   'replaceElement'
 ];
 
@@ -24,13 +24,8 @@ const Region = function(options) {
 
   this.cid = _.uniqueId(this.cidPrefix);
 
-  // getOption necessary because options.el may be passed as undefined
-  this._initEl = this.el = this.getOption('el');
-
-  // Handle when this.el is passed in as a $ wrapped element.
-  this.el = this.el instanceof Backbone.$ ? this.el[0] : this.el;
-
-  this.$el = this._getEl(this.el);
+  this.$el = this.getEl(this.el);
+  this.el = this.$el[0];
 
   this.initialize.apply(this, arguments);
 };
@@ -52,12 +47,48 @@ _.extend(Region.prototype, CommonMixin, {
   // This is a noop method intended to be overridden
   initialize() {},
 
+  // Override this method to change how the region finds the DOM element that it manages. Return
+  // a jQuery selector object scoped to a provided parent el or the document if none exists.
+  getEl(el) {
+    return this.Dom.getEl(el);
+  },
+
+  // Set the `el` of the region and move any current view to the new `el`.
+  setElement(el) {
+    const $el = this.getEl(el);
+
+    if ($el[0] === this.el) { return this; }
+
+    const replaceElement = this._isReplaced;
+
+    this._restoreEl();
+
+    this.$el = $el;
+    this.el = $el[0];
+
+    if (this.currentView) {
+      this._ensureElement();
+
+      this._attachView(this.currentView, { replaceElement });
+    }
+
+    return this;
+  },
+
+  _ensureElement() {
+    if (!this.el) {
+      throw new MarionetteError({
+        name: classErrorName,
+        message: `A region el is required. Region cid:${this.cid}`,
+        url: 'marionette.region.html#additional-options'
+      });
+    }
+  },
+
   // Displays a view instance inside of the region. If necessary handles calling the `render`
   // method for you. Reads content directly from the `el` attribute.
   show(view, options) {
-    if (!this._ensureElement(options)) {
-      return;
-    }
+    this._ensureElement();
 
     view = this._getView(view, options);
 
@@ -95,56 +126,6 @@ _.extend(Region.prototype, CommonMixin, {
     return this;
   },
 
-  _getEl(el) {
-    if (!el) {
-      throw new MarionetteError({
-        name: classErrorName,
-        message: 'An "el" must be specified for a region.',
-        url: 'marionette.region.html#additional-options'
-      });
-    }
-
-    return this.getEl(el);
-  },
-
-  _setEl() {
-    this.$el = this._getEl(this.el);
-
-    if (this.$el.length) {
-      this.el = this.$el[0];
-    }
-
-    // Make sure the $el contains only the el
-    if (this.$el.length > 1) {
-      this.$el = this.Dom.getEl(this.el);
-    }
-  },
-
-  // Set the `el` of the region and move any current view to the new `el`.
-  _setElement(el) {
-    if (el === this.el) { return this; }
-
-    const shouldReplace = this._isReplaced;
-
-    this._restoreEl();
-
-    this.el = el;
-
-    this._setEl();
-
-    if (this.currentView) {
-      const view = this.currentView;
-
-      if (shouldReplace) {
-        this._replaceEl(view);
-      } else {
-        this.attachHtml(view);
-      }
-    }
-
-    return this;
-  },
-
   _setupChildView(view) {
     monitorViewEvents(view);
 
@@ -170,7 +151,7 @@ _.extend(Region.prototype, CommonMixin, {
   },
 
   _isElAttached() {
-    return this.Dom.hasEl(this.Dom.getDocumentEl(this.el), this.el);
+    return !!this.el && this.Dom.hasEl(this.Dom.getDocumentEl(this.el), this.el);
   },
 
   _attachView(view, { replaceElement } = {}) {
@@ -194,27 +175,6 @@ _.extend(Region.prototype, CommonMixin, {
 
     // Corresponds that view is shown in a marionette Region or CollectionView
     view._isShown = true;
-  },
-
-  _ensureElement(options = {}) {
-    if (!_.isObject(this.el)) {
-      this._setEl();
-    }
-
-    if (!this.$el || this.$el.length === 0) {
-      const allowMissingEl = typeof options.allowMissingEl === 'undefined' ? !!_.result(this, 'allowMissingEl') : !!options.allowMissingEl;
-
-      if (allowMissingEl) {
-        return false;
-      } else {
-        throw new MarionetteError({
-          name: classErrorName,
-          message: `An "el" must exist in DOM for this region ${this.cid}`,
-          url: 'marionette.region.html#additional-options'
-        });
-      }
-    }
-    return true;
   },
 
   _getView(view) {
@@ -259,18 +219,6 @@ _.extend(Region.prototype, CommonMixin, {
     return { template };
   },
 
-  // Override this method to change how the region finds the DOM element that it manages. Return
-  // a jQuery selector object scoped to a provided parent el or the document if none exists.
-  getEl(el) {
-    const context = _.result(this, 'parentEl');
-
-    if (context && _.isString(el)) {
-      return this.Dom.findEl(context, el);
-    }
-
-    return this.Dom.getEl(el);
-  },
-
   _replaceEl(view) {
     // Always restore the el to ensure the regions el is present before replacing
     this._restoreEl();
@@ -285,17 +233,11 @@ _.extend(Region.prototype, CommonMixin, {
   // Restore the region's element in the DOM.
   _restoreEl() {
     // There is nothing to replace
-    if (!this._isReplaced) {
+    if (!this._isReplaced || !this.currentView) {
       return;
     }
 
-    const view = this.currentView;
-
-    if (!view) {
-      return;
-    }
-
-    this._detachView(view);
+    this._detachView(this.currentView);
 
     this._isReplaced = false;
   },
@@ -318,14 +260,15 @@ _.extend(Region.prototype, CommonMixin, {
 
   // Destroy the current view, if there is one. If there is no current view,
   // it will detach any html inside the region's `el`.
-  empty(options = { allowMissingEl: true }) {
+  empty() {
+    if (!this.el) { return this; }
+
     const view = this.currentView;
 
     // If there is no view in the region we should only detach current html
     if (!view) {
-      if (this._ensureElement(options)) {
-        this.detachHtml();
-      }
+      this.detachHtml();
+
       return this;
     }
 
@@ -422,18 +365,6 @@ _.extend(Region.prototype, CommonMixin, {
     return !!this.currentView;
   },
 
-  // Reset the region by destroying any existing view and clearing out the cached `$el`.
-  // The next time a view is shown via this region, the region will re-query the DOM for
-  // the region's `el`.
-  reset(options) {
-    this.empty(options);
-
-    this.el = this._initEl;
-
-    delete this.$el;
-    return this;
-  },
-
   _isDestroyed: false,
 
   isDestroyed() {
@@ -448,7 +379,7 @@ _.extend(Region.prototype, CommonMixin, {
     this.triggerMethod('before:destroy', this, options);
     this._isDestroyed = true;
 
-    this.reset(options);
+    this.empty();
 
     if (this._name) {
       this._parentView._removeReferences(this._name);

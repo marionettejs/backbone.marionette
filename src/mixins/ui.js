@@ -1,15 +1,4 @@
 import _ from 'underscore';
-// allows for the use of the @ui. syntax within
-// a given key for triggers and events
-// swaps the @ui with the associated selector.
-// Returns a new, non-mutated, parsed events hash.
-const normalizeUIKeys = function(hash, ui) {
-  return _.reduce(hash, (memo, val, key) => {
-    const normalizedKey = normalizeUIString(key, ui);
-    memo[normalizedKey] = val;
-    return memo;
-  }, {});
-};
 
 const uiRegEx = /@ui\.[a-zA-Z-_$0-9]*/g;
 
@@ -21,30 +10,19 @@ const normalizeUIString = function(uiString, ui) {
   });
 };
 
-// allows for the use of the @ui. syntax within
-// a given value for regions
-// swaps the @ui with the associated selector
-const normalizeUIValues = function(hash, ui, property) {
-  _.each(hash, (val, key) => {
-    if (_.isString(val)) {
-      hash[key] = normalizeUIString(val, ui);
-    } else if (val) {
-      const propertyVal = val[property];
-      if (_.isString(propertyVal)) {
-        val[property] = normalizeUIString(propertyVal, ui);
-      }
-    }
-  });
-  return hash;
-};
-
 export default {
 
-  // normalize the keys of passed hash with the views `ui` selectors.
-  // `{"@ui.foo": "bar"}`
+  // allows for the use of the @ui. syntax within
+  // a given key for triggers and events
+  // swaps the @ui with the associated selector.
+  // Returns a new, non-mutated, parsed events hash.
   normalizeUIKeys(hash) {
     const uiBindings = this._getUIBindings();
-    return normalizeUIKeys(hash, uiBindings);
+    return _.reduce(hash, (memo, val, key) => {
+      const normalizedKey = normalizeUIString(key, uiBindings);
+      memo[normalizedKey] = val;
+      return memo;
+    }, {});
   },
 
   // normalize the passed string with the views `ui` selectors.
@@ -52,13 +30,6 @@ export default {
   normalizeUIString(uiString) {
     const uiBindings = this._getUIBindings();
     return normalizeUIString(uiString, uiBindings);
-  },
-
-  // normalize the values of passed hash with the views `ui` selectors.
-  // `{foo: "@ui.bar"}`
-  normalizeUIValues(hash, property) {
-    const uiBindings = this._getUIBindings();
-    return normalizeUIValues(hash, uiBindings, property);
   },
 
   _getUIBindings() {

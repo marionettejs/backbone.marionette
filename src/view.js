@@ -47,17 +47,22 @@ const View = Backbone.View.extend({
     this._initRegions();
 
     Backbone.View.prototype.constructor.apply(this, arguments);
+    this._isInited = true;
 
     this.delegateEntityEvents();
 
     this._triggerEventOnBehaviors('initialize', this, options);
+
+    if (this._isRendered || this.getTemplate() === false) {
+      this.triggerMethod('ready', this);
+    }
   },
 
   // Overriding Backbone.View's `setElement` to handle
   // if an el was previously defined. If so, the view might be
   // rendered or attached on setElement.
   setElement() {
-    const wasRendered = this._isRendered;
+    const canReady = !this._isRendered && this._isInited;
 
     Backbone.View.prototype.setElement.apply(this, arguments);
 
@@ -69,7 +74,7 @@ const View = Backbone.View.extend({
       this._bindRegions();
     }
 
-    if (!wasRendered && (this._isRendered || this.getTemplate() === false)) {
+    if (canReady && this._isRendered) {
       this.triggerMethod('ready', this);
     }
 

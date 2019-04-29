@@ -34,15 +34,6 @@ export default {
     this.triggerMethod('bind:regions', this, regions);
   },
 
-  // Finds an existing ui with `@ui.` or finds the `el` on the DOM
-  _findEl(el) {
-    if (_.isString(el) && startsWithUi(el)) {
-      return this.ui[el.slice(4)];
-    }
-
-    return this.Dom.findEl(this.el, el);
-  },
-
   _buildRegion(name, RegionClass, options) {
     const region = new RegionClass(options);
 
@@ -54,15 +45,8 @@ export default {
     return region;
   },
 
-  // Add a single region, by name, to the View
-  addRegion(name, definition) {
+  _addRegion(options, name) {
     const currentRegion = this.getRegion(name);
-    definition = normalizeRegion(definition, this.regionClass);
-
-    this.regions[name] = definition;
-
-    const options = _.extend({}, definition);
-    options.el = this._findEl(options.el);
 
     if (currentRegion) {
       return currentRegion.setElement(options.el);
@@ -74,11 +58,48 @@ export default {
     return this._buildRegion(name, RegionClass, options);
   },
 
+  // Finds an existing ui with `@ui.` or finds the `el` on the DOM
+  _findEl(el) {
+    if (_.isString(el) && startsWithUi(el)) {
+      return this.ui[el.slice(4)];
+    }
+
+    return this.Dom.findEl(this.el, el);
+  },
+
+  _buildOptions(definition, name) {
+    const options = normalizeRegion(definition, this.regionClass);
+
+    this.regions[name] = options;
+
+    return _.extend({}, options, {
+      el: this._findEl(options.el)
+    });
+  },
+
+  // Add a single region, by name, to the View
+  addRegion(name, definition) {
+    if (!this._isRendered) {
+      this.render();
+    }
+    const options = this._buildOptions(definition, name);
+
+    return this._addRegion(options, name);
+  },
+
   // Add multiple region definitions
   addRegions(regionDefinitions) {
-    return _.map(regionDefinitions, (definition, name) => {
-      return this.addRegion(name, definition);
-    });
+    if (!this._isRendered) {
+      this.render();
+    }
+    // Building the options first prevents querying regions
+    // from already attached children
+    const regionOptions = _.reduce(regionDefinitions, (opts, definition, name) => {
+      opts[name] = this._buildOptions(definition, name);
+      return opts;
+    }, {});
+
+    return _.map(regionOptions, this._addRegion.bind(this));
   },
 
   // Remove a single region from the View, by name

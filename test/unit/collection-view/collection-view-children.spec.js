@@ -259,6 +259,18 @@ describe('CollectionView Children', function() {
 
     });
 
+    describe('when called with options as second argument and without an index in it', function() {
+      beforeEach(function() {
+        myCollectionView.addChildView(addView, { });
+      });
+
+      it('should add to the children container with undefined index', function() {
+        expect(myCollectionView.children._add)
+          .to.have.been.calledOnce.and.calledWith(addView, void 0);
+      });
+
+    });
+
     describe('when called without preventRender after preventReder calls', function() {
       const addIndex = 1;
       beforeEach(function() {

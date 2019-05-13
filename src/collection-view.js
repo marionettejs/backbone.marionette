@@ -647,10 +647,8 @@ const CollectionView = Backbone.View.extend({
 
     if (_.isObject(index)) {
       options = index;
-    }
-
-    // If options has defined index we should use it
-    if (options.index != null) {
+      index = options.index;
+    } else if (options.index != null) {
       index = options.index;
     }
 

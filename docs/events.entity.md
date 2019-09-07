@@ -41,7 +41,7 @@ import { View } from 'backbone.marionette';
 
 const MyView = View.extend({
   modelEvents: {
-    'change:attribute': () {
+    'change:attribute'() {
       console.log('attribute was changed');
     }
   }

@@ -367,7 +367,7 @@ should use `initialize` for attaching child views and the `render` event if the 
 
 ### `attach` and `before:attach` events
 
-Relects when the `el` of a view is attached to the DOM. These events will not trigger when
+Reflects when the `el` of a view is attached to the DOM. These events will not trigger when
 a view is re-rendered as the `el` itself does not change.
 
 `attach` is the ideal event to setup any external DOM listeners such as `jQuery` plugins
@@ -375,7 +375,7 @@ that use the view's `el`, but _not_ its contents.
 
 ### `detach` and `before:detach` events
 
-Relects when the `el` of a view is detached from the DOM. These events will not trigger when
+Reflects when the `el` of a view is detached from the DOM. These events will not trigger when
 a view is re-rendered as the `el` itself does not change.
 
 `before:detach` is the ideal event to clean up any external DOM listeners such as `jQuery` plugins
@@ -383,7 +383,7 @@ that use the view's `el`, but _not_ its contents.
 
 ### `dom:refresh` event
 
-Relects when the _contents_ of a view's `el` change in the DOM.
+Reflects when the _contents_ of a view's `el` change in the DOM.
 This event will fire when the view is first [`attach`ed](#attach-and-beforeattach-events).
 It will also fire if an attached view is re-rendered.
 
@@ -395,7 +395,7 @@ prerendered html.
 
 ### `dom:remove` event
 
-Relects when the _contents_ of a view's `el` are about to change in the DOM.
+Reflects when the _contents_ of a view's `el` are about to change in the DOM.
 This event will fire when the view is about to be [`detach`ed](#detach-and-beforedetach-events).
 It will also fire before an attached view is re-rendered.
 

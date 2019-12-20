@@ -329,7 +329,7 @@ through the view. To do this, set the `childViewEventPrefix`
 on the view or collectionview. For more information on the `childViewEventPrefix` see
 [Event bubbling](#event-bubbling).
 
-The default value for `childViewEventPrefix` is `childview`. Setting this property to
+The default value for `childViewEventPrefix` is `false`. Setting this property to
 `false` will disable [automatic event bubbling](#event-bubbling).
 
 ```javascript

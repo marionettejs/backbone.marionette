@@ -365,7 +365,7 @@ const CollectionView = Backbone.View.extend({
     return this.setComparator(null, options);
   },
 
-  // If viewComparator is overriden it will be returned here.
+  // If viewComparator is overridden it will be returned here.
   // Additionally override this function to provide custom
   // viewComparator logic
   getComparator() {

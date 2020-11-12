@@ -18,6 +18,11 @@
   <img src='https://saucelabs.com/browser-matrix/marionettejs.svg' alt='Cross Browser Testing' />
 </p>
 
+# Marionette v5
+
+Marionette is dropping its dependency on Backbone. That library is available here: https://github.com/marionettejs/marionette
+Until further notices changes to `backbone.marionette` will be limited to fixes.  All new feature work will take place on `marionette`.
+
 ## Marionette v4
 
 Marionette 4 is now available! See our

@@ -1,3 +1,8 @@
+### v4.1.3 [view commit logs](https://github.com/marionettejs/backbone.marionette/compare/v4.1.2...v4.1.3)
+
+#### Fixes
+* unbindRequests now passes context.
+
 ### v4.1.2 [view commit logs](https://github.com/marionettejs/backbone.marionette/compare/v4.1.1...v4.1.2)
 
 #### Fixes

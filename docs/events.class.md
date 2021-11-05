@@ -271,9 +271,9 @@ const MyCollectionView = CollectionView.extend({
   onBeforeFilter(myCollectionView) {
    console.log('Nothing has changed yet!');
   },
-  onFilter(myCollectionView, attachViews, detachedView) {
-    console.log('Array of attached views', attachedView);
-    console.log('Array of detached views', attachedView);
+  onFilter(myCollectionView, attachedViews, detachedViews) {
+    console.log('Array of attached views', attachedViews);
+    console.log('Array of detached views', detachedViews);
   }
 });
 ```

@@ -88,6 +88,16 @@ events after the view has been created.
 The view `triggers` attribute no longer passes an `options` attribute to event
 handlers, instead passing the view instance that triggered the event.
 
+### View `isRendered`
+
+The view `isRendered` attribute is no longer a boolean, but a function that
+returns a boolean.
+
+### View `isDestroyed`
+
+The view `isDestroyed` attribute is no longer a boolean, but a function that
+returns a boolean.
+
 ## Events
 
 A number of lifecycle events were changed or removed from Marionette 3.

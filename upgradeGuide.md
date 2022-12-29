@@ -150,7 +150,7 @@ versions).
 ### Backbone.EventBinder is now obsolete
 
 With Backbone v0.9.9, the Backbone.EventBinder pre-requisite is now
-osbsolete. It will be kept around for backward compatibility with
+obsolete. It will be kept around for backward compatibility with
 older versions of Marionette and Backbone, but it is no longer used
 by Marionette directly. Unless you have a significant investment in
 its use, you should discontinue its use when ugprading to Marionette

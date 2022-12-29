@@ -48,7 +48,7 @@ One of the required changes is to explicitly define the `childView` when impleme
    Even better explictly define the proxies via `childViewEvents` and `childViewTriggers`.
 
 #### Marionette global instance is not attached to Backbone global instance
- * **Old behavior:** Marionette could be acessed using `Backbone.Marionette`
+ * **Old behavior:** Marionette could be accessed using `Backbone.Marionette`
  * **New behavior:** Marionette is not attached to `Backbone` global instance
  * **Reason:** Support named exports
  * **Remedy:** Import Marionette classes directly or use global Marionette instance (when using as a standalone script)

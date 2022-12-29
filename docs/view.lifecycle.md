@@ -56,7 +56,7 @@ For more information on instanting a view with pre-rendered DOM see: [Prerendere
 
 ### Using `setElement`
 
-`Backbone.View` allows the user to change the view's `el` after instantiaton using
+`Backbone.View` allows the user to change the view's `el` after instantiation using
 [`setElement`](http://backbonejs.org/#View-setElement). This method can be used in Marionette
 as well, but should be done with caution. `setElement` will redelegate view events, but it will
 essentially ignore children of the view, whether through `regions` or through `children` and the

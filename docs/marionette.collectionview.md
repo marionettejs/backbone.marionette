@@ -898,7 +898,7 @@ cv.removeComparator({ preventRender: true });
 
 By default the `CollectionView` will maintain a sorted collection's order
 in the DOM. This behavior can be disabled by specifying `{sortWithCollection: false}`
-on initialize or on the view definiton.
+on initialize or on the view definition.
 
 ```javascript
 import Backbone from 'backbone';

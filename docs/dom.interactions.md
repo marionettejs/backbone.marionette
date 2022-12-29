@@ -122,7 +122,7 @@ As when passing a string reference to a view method, the `events` attribute
 passes in the `event` as the argument to the function called.
 
 **Note** Backbone `events` are delegated to the view's `el`. This means that
-events with a dom node selector will be handled for the view and any decendants.
+events with a dom node selector will be handled for the view and any descendants.
 So if you attach a child with the same selector as the parent event handler, the
 parent will handle the event for both views.
 

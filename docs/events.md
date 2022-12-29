@@ -120,7 +120,7 @@ core of `onEvent` Binding.
 
 The major difference between `Backbone.trigger` and `triggerMethod` is
 that `triggerMethod` can fire specially named events on the instance. For
-example, a view that has been rendered will iternally fire `view.triggerMethod('render')`
+example, a view that has been rendered will internally fire `view.triggerMethod('render')`
 and call `onRender` - providing a handy way to add behavior to your views.
 
 Determining what method an event will call is easy, we will outline this with an

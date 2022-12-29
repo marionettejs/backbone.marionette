@@ -214,7 +214,7 @@ The `MnObject` class triggers [Destroy Events](#destroy-and-beforedestroy-events
 
 These events fire before (`before:add:region`) and after (`add:region`) a region is added to a view.
 This event handler will receive the view instance, the region name string, and the region instance as
-event arguments. The region is fully instantated for both events.
+event arguments. The region is fully instantiated for both events.
 
 ### `remove:region` and `before:remove:region` events
 

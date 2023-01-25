@@ -1,6 +1,6 @@
-import _ from 'underscore';
-import Backbone from 'backbone';
+import { extend, result } from 'underscore';
 
+import EventsMixin from './events';
 import getOption from '../common/get-option';
 import mergeOptions from '../common/merge-options';
 import normalizeMethods from '../common/normalize-methods';
@@ -16,12 +16,15 @@ import {
 
 const CommonMixin = {
 
+  // This is a noop method intended to be overridden
+  initialize() {},
+
   // Imports the "normalizeMethods" to transform hashes of
   // events=>function references/names to a hash of events=>function references
   normalizeMethods,
 
   _setOptions(options, classOptions) {
-    this.options = _.extend({}, _.result(this, 'options'), options);
+    this.options = extend({}, result(this, 'options'), options);
     this.mergeOptions(options, classOptions);
   },
 
@@ -46,6 +49,6 @@ const CommonMixin = {
   triggerMethod
 };
 
-_.extend(CommonMixin, Backbone.Events);
+extend(CommonMixin, EventsMixin);
 
 export default CommonMixin;

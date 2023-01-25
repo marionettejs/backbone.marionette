@@ -1,20 +1,22 @@
 // Collection View
 // ---------------
 
-import _ from 'underscore';
-import Backbone from 'backbone';
+import { extend as _extend, uniqueId, result, map, isFunction, isObject, isString, matches, each, reduce } from 'underscore';
+import extend from './utils/extend';
 import MarionetteError from './utils/error';
-import { renderView, destroyView } from './common/view';
+import { renderView, destroyView, isViewClass } from './common/view';
 import monitorViewEvents from './common/monitor-view-events';
 import ChildViewContainer from './child-view-container';
 import Region from './region';
 import ViewMixin from './mixins/view';
 import { setDomApi } from './config/dom';
+import { setEventDelegator } from './config/event-delegator';
 import { setRenderer } from './config/renderer';
 
 const classErrorName = 'CollectionViewError';
 
 const ClassOptions = [
+  'attributes',
   'behaviors',
   'childView',
   'childViewContainer',
@@ -22,12 +24,18 @@ const ClassOptions = [
   'childViewEvents',
   'childViewOptions',
   'childViewTriggers',
+  'className',
+  'collection',
   'collectionEvents',
+  'el',
   'emptyView',
   'emptyViewOptions',
   'events',
+  'id',
+  'model',
   'modelEvents',
   'sortWithCollection',
+  'tagName',
   'template',
   'templateContext',
   'triggers',
@@ -38,28 +46,38 @@ const ClassOptions = [
 
 // A view that iterates over a Backbone.Collection
 // and renders an individual child view for each model.
-const CollectionView = Backbone.View.extend({
+const CollectionView = function(options) {
+  this.cid = uniqueId(this.cidPrefix);
+  this._setOptions(options, ClassOptions);
+
+  this.preinitialize.apply(this, arguments);
+
+  this._initViewEvents();
+  this.setElement(this._getEl());
+
+  monitorViewEvents(this);
+
+  this._initChildViewStorage();
+  this._initBehaviors();
+  this._buildEventProxies();
+
+  // Init empty region
+  this.getEmptyRegion();
+
+  this.initialize.apply(this, arguments);
+
+  this.delegateEntityEvents();
+
+  this._triggerEventOnBehaviors('initialize', this, options);
+};
+
+_extend(CollectionView, { extend, setRenderer, setDomApi, setEventDelegator });
+
+_extend(CollectionView.prototype, ViewMixin, {
+  cidPrefix: 'mncv',
+
   // flag for maintaining the sorted order of the collection
   sortWithCollection: true,
-
-  // constructor
-  constructor(options) {
-    this._setOptions(options, ClassOptions);
-
-    monitorViewEvents(this);
-
-    this._initChildViewStorage();
-    this._initBehaviors();
-
-    Backbone.View.prototype.constructor.apply(this, arguments);
-
-    // Init empty region
-    this.getEmptyRegion();
-
-    this.delegateEntityEvents();
-
-    this._triggerEventOnBehaviors('initialize', this, options);
-  },
 
   // Internal method to set up the `children` object for storing all of the child views
   // `_children` represents all child views
@@ -71,14 +89,14 @@ const CollectionView = Backbone.View.extend({
 
   // Create an region to show the emptyView
   getEmptyRegion() {
-    const $emptyEl = this.$container || this.$el;
+    const emptyEl = this.container || this.el;
 
     if (this._emptyRegion && !this._emptyRegion.isDestroyed()) {
-      this._emptyRegion._setElement($emptyEl[0]);
+      this._emptyRegion._setElement(emptyEl);
       return this._emptyRegion;
     }
 
-    this._emptyRegion = new Region({ el: $emptyEl[0], replaceElement: false });
+    this._emptyRegion = new Region({ el: emptyEl, replaceElement: false });
 
     this._emptyRegion._parentView = this;
 
@@ -138,7 +156,7 @@ const CollectionView = Backbone.View.extend({
   },
 
   _removeChildModels(models) {
-    return _.reduce(models, (views, model) => {
+    return reduce(models, (views, model) => {
       const removeView = this._removeChildModel(model);
 
       if (removeView) { views.push(removeView); }
@@ -166,7 +184,7 @@ const CollectionView = Backbone.View.extend({
 
   // Added views are returned for consistency with _removeChildModels
   _addChildModels(models) {
-    return _.map(models, this._addChildModel.bind(this));
+    return map(models, this._addChildModel.bind(this));
   },
 
   _addChildModel(model) {
@@ -226,15 +244,15 @@ const CollectionView = Backbone.View.extend({
   // First check if the `view` is a view class (the common case)
   // Then check if it's a function (which we assume that returns a view class)
   _getView(view, child) {
-    if (view.prototype instanceof Backbone.View || view === Backbone.View) {
+    if (isViewClass(view)) {
       return view;
-    } else if (_.isFunction(view)) {
+    } else if (isFunction(view)) {
       return view.call(this, child);
     }
   },
 
   _getChildViewOptions(child) {
-    if (_.isFunction(this.childViewOptions)) {
+    if (isFunction(this.childViewOptions)) {
       return this.childViewOptions(child);
     }
 
@@ -244,7 +262,7 @@ const CollectionView = Backbone.View.extend({
   // Build a `childView` for a model in the collection.
   // Override to customize the build
   buildChildView(child, ChildViewClass, childViewOptions) {
-    const options = _.extend({model: child}, childViewOptions);
+    const options = _extend({model: child}, childViewOptions);
     return new ChildViewClass(options);
   },
 
@@ -269,10 +287,14 @@ const CollectionView = Backbone.View.extend({
   // Overriding Backbone.View's `setElement` to handle
   // if an el was previously defined. If so, the view might be
   // attached on setElement.
-  setElement() {
-    Backbone.View.prototype.setElement.apply(this, arguments);
+  setElement(element) {
+    this._undelegateViewEvents();
+    this.el = element;
+    this._setBehaviorElements();
 
     this._isAttached = this._isElAttached();
+
+    this._delegateViewEvents();
 
     return this;
   },
@@ -306,10 +328,10 @@ const CollectionView = Backbone.View.extend({
 
   // Get a container within the template to add the children within
   _getChildViewContainer() {
-    const childViewContainer = _.result(this, 'childViewContainer');
-    this.$container = childViewContainer ? this.$(childViewContainer) : this.$el;
+    const childViewContainer = result(this, 'childViewContainer');
+    this.container = childViewContainer ? this.$(childViewContainer)[0] : this.el;
 
-    if (!this.$container.length) {
+    if (!this.container) {
       throw new MarionetteError({
         name: classErrorName,
         message: `The specified "childViewContainer" was not found: ${childViewContainer}`,
@@ -416,7 +438,7 @@ const CollectionView = Backbone.View.extend({
     const attachViews = [];
     const detachViews = [];
 
-    _.each(this._children._views, (view, key, children) => {
+    each(this._children._views, (view, key, children) => {
       (viewFilter.call(this, view, key, children) ? attachViews : detachViews).push(view);
     });
 
@@ -434,20 +456,20 @@ const CollectionView = Backbone.View.extend({
 
     if (!viewFilter) { return false; }
 
-    if (_.isFunction(viewFilter)) {
+    if (isFunction(viewFilter)) {
       return viewFilter;
     }
 
     // Support filter predicates `{ fooFlag: true }`
-    if (_.isObject(viewFilter)) {
-      const matcher = _.matches(viewFilter);
+    if (isObject(viewFilter)) {
+      const matcher = matches(viewFilter);
       return function(view) {
         return matcher(view.model && view.model.attributes);
       };
     }
 
     // Filter by model attribute
-    if (_.isString(viewFilter)) {
+    if (isString(viewFilter)) {
       return function(view) {
         return view.model && view.model.get(viewFilter);
       };
@@ -487,7 +509,7 @@ const CollectionView = Backbone.View.extend({
   },
 
   _detachChildren(detachingViews) {
-    _.each(detachingViews, this._detachChildView.bind(this));
+    each(detachingViews, this._detachChildView.bind(this));
   },
 
   _detachChildView(view) {
@@ -508,7 +530,7 @@ const CollectionView = Backbone.View.extend({
 
   // Override this method to change how the collectionView detaches a child view
   detachHtml(view) {
-    this.Dom.detachEl(view.el, view.$el);
+    this.Dom.detachEl(view.el);
   },
 
   _renderChildren() {
@@ -541,11 +563,11 @@ const CollectionView = Backbone.View.extend({
   _getBuffer(views) {
     const elBuffer = this.Dom.createBuffer();
 
-    _.each(views, view => {
+    each(views, view => {
       renderView(view);
       // corresponds that view is shown in a Region or CollectionView
       view._isShown = true;
-      this.Dom.appendContents(elBuffer, view.el, {_$contents: view.$el});
+      this.Dom.appendContents(elBuffer, view.el);
     });
 
     return elBuffer;
@@ -556,14 +578,14 @@ const CollectionView = Backbone.View.extend({
 
     views = shouldTriggerAttach ? views : [];
 
-    _.each(views, view => {
+    each(views, view => {
       if (view._isAttached) { return; }
       view.triggerMethod('before:attach', view);
     });
 
-    this.attachHtml(els, this.$container);
+    this.attachHtml(els, this.container);
 
-    _.each(views, view => {
+    each(views, view => {
       if (view._isAttached) { return; }
       view._isAttached = true;
       view.triggerMethod('attach', view);
@@ -572,8 +594,8 @@ const CollectionView = Backbone.View.extend({
 
   // Override this method to do something other than `.append`.
   // You can attach any HTML at this point including the els.
-  attachHtml(els, $container) {
-    this.Dom.appendContents($container[0], els, {_$el: $container});
+  attachHtml(els, container) {
+    this.Dom.appendContents(container, els);
   },
 
   isEmpty() {
@@ -617,7 +639,7 @@ const CollectionView = Backbone.View.extend({
   _getEmptyViewOptions() {
     const emptyViewOptions = this.emptyViewOptions || this.childViewOptions;
 
-    if (_.isFunction(emptyViewOptions)) {
+    if (isFunction(emptyViewOptions)) {
       return emptyViewOptions.call(this);
     }
 
@@ -660,7 +682,7 @@ const CollectionView = Backbone.View.extend({
       });
     }
 
-    if (_.isObject(index)) {
+    if (isObject(index)) {
       options = index;
     }
 
@@ -725,7 +747,7 @@ const CollectionView = Backbone.View.extend({
   },
 
   _removeChildViews(views) {
-    _.each(views, this._removeChildView.bind(this));
+    each(views, this._removeChildView.bind(this));
   },
 
   _removeChildView(view, {shouldDetach} = {}) {
@@ -765,7 +787,7 @@ const CollectionView = Backbone.View.extend({
 
     this.triggerMethod('before:destroy:children', this);
     if (this.monitorViewEvents === false) {
-      this.Dom.detachContents(this.el, this.$el);
+      this.Dom.detachContents(this.el);
     }
 
     this._removeChildViews(this._children._views);
@@ -776,11 +798,7 @@ const CollectionView = Backbone.View.extend({
 
     this.triggerMethod('destroy:children', this);
   }
-}, {
-  setDomApi,
-  setRenderer
 });
 
-_.extend(CollectionView.prototype, ViewMixin);
 
 export default CollectionView;

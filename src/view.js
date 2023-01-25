@@ -1,24 +1,32 @@
 // View
 // ---------
 
-import _ from 'underscore';
-import Backbone from 'backbone';
+import { extend as _extend, uniqueId, reduce } from 'underscore';
+import extend from './utils/extend';
 import monitorViewEvents from './common/monitor-view-events';
 import ViewMixin from './mixins/view';
 import RegionsMixin from './mixins/regions';
 import { setDomApi } from './config/dom';
+import { setEventDelegator } from './config/event-delegator';
 import { setRenderer } from './config/renderer';
 
 const ClassOptions = [
+  'attributes',
   'behaviors',
   'childViewEventPrefix',
   'childViewEvents',
   'childViewTriggers',
+  'className',
+  'collection',
   'collectionEvents',
+  'el',
   'events',
+  'id',
+  'model',
   'modelEvents',
   'regionClass',
   'regions',
+  'tagName',
   'template',
   'templateContext',
   'triggers',
@@ -36,28 +44,37 @@ function childReducer(children, region) {
 
 // The standard view. Includes view events, automatic rendering
 // templates, nested views, and more.
-const View = Backbone.View.extend({
+const View = function(options) {
+  this.cid = uniqueId(this.cidPrefix);
+  this._setOptions(options, ClassOptions);
 
-  constructor(options) {
-    this._setOptions(options, ClassOptions);
+  this.preinitialize.apply(this, arguments);
 
-    monitorViewEvents(this);
+  this._initViewEvents();
+  this.setElement(this._getEl());
 
-    this._initBehaviors();
-    this._initRegions();
+  monitorViewEvents(this);
 
-    Backbone.View.prototype.constructor.apply(this, arguments);
+  this._initBehaviors();
+  this._initRegions();
+  this._buildEventProxies();
 
-    this.delegateEntityEvents();
+  this.initialize.apply(this, arguments);
 
-    this._triggerEventOnBehaviors('initialize', this, options);
-  },
+  this.delegateEntityEvents();
 
-  // Overriding Backbone.View's `setElement` to handle
-  // if an el was previously defined. If so, the view might be
-  // rendered or attached on setElement.
-  setElement() {
-    Backbone.View.prototype.setElement.apply(this, arguments);
+  this._triggerEventOnBehaviors('initialize', this, options);
+};
+
+_extend(View, { extend, setRenderer, setDomApi, setEventDelegator });
+
+_extend(View.prototype, ViewMixin, RegionsMixin, {
+  cidPrefix: 'mnv',
+
+  setElement(element) {
+    this._undelegateViewEvents();
+    this.el = element;
+    this._setBehaviorElements();
 
     this._isRendered = this.Dom.hasContents(this.el);
     this._isAttached = this._isElAttached();
@@ -65,6 +82,8 @@ const View = Backbone.View.extend({
     if (this._isRendered) {
       this.bindUIElements();
     }
+
+    this._delegateViewEvents();
 
     return this;
   },
@@ -99,13 +118,8 @@ const View = Backbone.View.extend({
   },
 
   _getImmediateChildren() {
-    return _.reduce(this._regions, childReducer, []);
+    return reduce(this._regions, childReducer, []);
   }
-}, {
-  setRenderer,
-  setDomApi
 });
-
-_.extend(View.prototype, ViewMixin, RegionsMixin);
 
 export default View;

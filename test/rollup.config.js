@@ -31,27 +31,22 @@ function runSauce() {
     service: 'sauce-connect'
   })
     .on('message', message => {
-      // eslint-disable-next-line
-      console.log(message);
+      // Message handling without console.log
     })
     .on('update', job => {
-      // eslint-disable-next-line
-      console.log(job.status);
+      // Job status update without console.log
     })
     .on('done', (passed, jobs) => {
       if (passed) {
-        // eslint-disable-next-line
-        console.log('All tests passed!');
+        // All tests passed handling without console.log
         process.exit(0);
       } else {
-        // eslint-disable-next-line
-        console.error('Failures: ' + JSON.stringify(jobs, false, 2));
+        // Test failures handling without console.error
         process.exit(1);
       }
     })
     .on('error', error => {
-      // eslint-disable-next-line
-      console.error(error.message);
+      // Error handling without console.error
       process.exit(1);
     });
 }

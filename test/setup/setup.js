@@ -12,8 +12,7 @@ module.exports = function() {
 
   const _ = require('underscore');
 
-  // eslint-disable-next-line
-  console.log('Using ' + lib + ': ' + _.VERSION);
+  // Using underscore/lodash library version: _.VERSION
 
   const Backbone = require('backbone');
   const jQuery = require('jquery');

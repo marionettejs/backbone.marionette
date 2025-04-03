@@ -28,13 +28,13 @@ travis.authenticate({
   github_token: process.env.GH_TOKEN
 }, function (err, res) {
   if (err) {
-    return console.error(err);
+    return;
   }
 
   //get repo builds
   travis.repos(repo.split('/')[0], repo.split('/')[1]).builds.get(function (err, res) {
     if (err) {
-      return console.error(err);
+      return;
     }
     
     //rebuild latest build
@@ -42,9 +42,8 @@ travis.authenticate({
       build_id: getLastMainBuildId(res.builds)
     }, function (err, res) {
       if (err) {
-        return console.error(err);
+        return;
       }
-      console.log(res.flash[0].notice);
     });
   });
 });

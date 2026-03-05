@@ -167,7 +167,7 @@ any object that has Backbone.Events mixed in) to bind the events from.
 
 The second parameter is a hash of `{ 'event:name': 'eventHandler' }`
 configuration. A function can be supplied instead of a string handler name.
-If the second paramater is not supplied, all listeners are removed.
+If the second parameter is not supplied, all listeners are removed.
 
 [Live example](https://jsfiddle.net/marionettejs/yvsfm65c/)
 
@@ -245,7 +245,7 @@ The first parameter, `channel`, is an instance from `Radio`.
 
 The second parameter is a hash of `{ 'request:name': 'replyHandler' }`
 configuration. A function can be supplied instead of a string handler name.
-If the second paramater is not supplied, all handlers are removed.
+If the second parameter is not supplied, all handlers are removed.
 
 ### `normalizeMethods`
 

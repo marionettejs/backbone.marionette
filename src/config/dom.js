@@ -1,20 +1,18 @@
 // DomApi
 //  ---------
-import _ from 'underscore';
-import Backbone from 'backbone';
-
-// Performant method for returning the jQuery instance
-function getEl(el) {
-  return el instanceof Backbone.$ ? el : Backbone.$(el);
-}
+import { extend, each, keys } from 'underscore';
 
 // Static setter
 export function setDomApi(mixin) {
-  this.prototype.Dom = _.extend({}, this.prototype.Dom, mixin);
+  this.prototype.Dom = extend({}, this.prototype.Dom, mixin);
   return this;
 }
 
 export default {
+  // Returns a new HTML DOM node of tagName
+  createElement(tagName) {
+    return document.createElement(tagName);
+  },
 
   // Returns a new HTML DOM node instance
   createBuffer() {
@@ -26,17 +24,10 @@ export default {
     return el.ownerDocument.documentElement;
   },
 
-  // Lookup the `selector` string
-  // Selector may also be a DOM element
-  // Returns an array-like object of nodes
-  getEl(selector) {
-    return getEl(selector);
-  },
-
   // Finds the `selector` string with the el
   // Returns an array-like object of nodes
   findEl(el, selector) {
-    return getEl(el).find(selector);
+    return el.querySelectorAll(selector);
   },
 
   // Returns true if the el contains the node childEl
@@ -45,8 +36,8 @@ export default {
   },
 
   // Detach `el` from the DOM without removing listeners
-  detachEl(el, _$el = getEl(el)) {
-    _$el.detach();
+  detachEl(el) {
+    if (el.parentNode) {el.parentNode.removeChild(el);}
   },
 
   // Remove `oldEl` from the DOM and put `newEl` in its place
@@ -84,15 +75,22 @@ export default {
     parent2.insertBefore(el1, next2);
   },
 
-  // Replace the contents of `el` with the HTML string of `html`
-  setContents(el, html, _$el = getEl(el)) {
-    _$el.html(html);
+  // Replace the contents of `el` with the `html`
+  setContents(el, html) {
+    el.innerHTML = html
+  },
+
+  // Sets attributes on a DOM node
+  setAttributes(el, attrs) {
+    each(keys(attrs), attr => {
+      attr in el ? el[attr] = attrs[attr] : el.setAttribute(attr, attrs[attr]);
+    });
   },
 
   // Takes the DOM node `el` and appends the DOM node `contents`
   // to the end of the element's contents.
-  appendContents(el, contents, {_$el = getEl(el), _$contents = getEl(contents)} = {}) {
-    _$el.append(_$contents);
+  appendContents(el, contents) {
+    el.appendChild(contents);
   },
 
   // Does the el have child nodes
@@ -102,7 +100,7 @@ export default {
 
   // Remove the inner contents of `el` from the DOM while leaving
   // `el` itself in the DOM.
-  detachContents(el, _$el = getEl(el)) {
-    _$el.contents().detach();
+  detachContents(el) {
+    el.textContent = '';
   }
 };

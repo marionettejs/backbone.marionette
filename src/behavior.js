@@ -6,13 +6,12 @@
 // Behaviors allow you to blackbox View specific interactions
 // into portable logical chunks, keeping your views simple and your code DRY.
 
-import _ from 'underscore';
+import { extend as _extend, uniqueId, result } from 'underscore';
 import extend from './utils/extend';
-import getNamespacedEventName from './utils/get-namespaced-event-name';
 import CommonMixin from './mixins/common';
 import DelegateEntityEventsMixin from './mixins/delegate-entity-events';
-import TriggersMixin from './mixins/triggers';
 import UIMixin from './mixins/ui';
+import ViewEventsMixin from './mixins/view-events';
 
 const ClassOptions = [
   'collectionEvents',
@@ -29,8 +28,12 @@ const Behavior = function(options, view) {
   // to the view.
   this.view = view;
 
+
   this._setOptions(options, ClassOptions);
-  this.cid = _.uniqueId(this.cidPrefix);
+  this.cid = uniqueId(this.cidPrefix);
+
+  this._initViewEvents();
+  this.setElement();
 
   // Construct an internal UI hash using the behaviors UI
   // hash combined and overridden by the view UI hash.
@@ -39,7 +42,7 @@ const Behavior = function(options, view) {
   // This order will help the reuse and share of a behavior
   // between multiple views, while letting a view override
   // a selector under an UI key.
-  this.ui = _.extend({}, _.result(this, 'ui'), _.result(view, 'ui'));
+  this.ui = _extend({}, result(this, 'ui'), result(view, 'ui'));
 
   // Proxy view triggers
   this.listenTo(view, 'all', this.triggerMethod);
@@ -52,11 +55,8 @@ Behavior.extend = extend;
 // Behavior Methods
 // --------------
 
-_.extend(Behavior.prototype, CommonMixin, DelegateEntityEventsMixin, TriggersMixin, UIMixin, {
+_extend(Behavior.prototype, CommonMixin, DelegateEntityEventsMixin, UIMixin, ViewEventsMixin, {
   cidPrefix: 'mnb',
-
-  // This is a noop method intended to be overridden
-  initialize() {},
 
   // proxy behavior $ method to the view
   // this is useful for doing jquery DOM lookups
@@ -67,6 +67,8 @@ _.extend(Behavior.prototype, CommonMixin, DelegateEntityEventsMixin, TriggersMix
 
   // Stops the behavior from listening to events.
   destroy() {
+    this._undelegateViewEvents();
+
     this.stopListening();
 
     this.view._removeBehavior(this);
@@ -76,9 +78,12 @@ _.extend(Behavior.prototype, CommonMixin, DelegateEntityEventsMixin, TriggersMix
     return this;
   },
 
-  proxyViewProperties() {
-    this.$el = this.view.$el;
+  setElement() {
+    this._undelegateViewEvents();
+
     this.el = this.view.el;
+
+    this._delegateViewEvents(this.view);
 
     return this;
   },
@@ -110,36 +115,6 @@ _.extend(Behavior.prototype, CommonMixin, DelegateEntityEventsMixin, TriggersMix
     this._undelegateEntityEvents(this.view.model, this.view.collection);
 
     return this;
-  },
-
-  _getEvents() {
-    if (!this.events) { return; }
-
-    // Normalize behavior events hash to allow
-    // a user to use the @ui. syntax.
-    const behaviorEvents = this.normalizeUIKeys(_.result(this, 'events'));
-
-    // binds the handler to the behavior and builds a unique eventName
-    return _.reduce(behaviorEvents, (events, behaviorHandler, key) => {
-      if (!_.isFunction(behaviorHandler)) {
-        behaviorHandler = this[behaviorHandler];
-      }
-      if (!behaviorHandler) { return events; }
-      key = getNamespacedEventName(key, this.cid);
-      events[key] = behaviorHandler.bind(this);
-      return events;
-    }, {});
-  },
-
-  // Internal method to build all trigger handlers for a given behavior
-  _getTriggers() {
-    if (!this.triggers) { return; }
-
-    // Normalize behavior triggers hash to allow
-    // a user to use the @ui. syntax.
-    const behaviorTriggers = this.normalizeUIKeys(_.result(this, 'triggers'));
-
-    return this._getViewTriggers(this.view, behaviorTriggers);
   }
 });
 

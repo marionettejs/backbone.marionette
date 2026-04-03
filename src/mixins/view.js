@@ -1,30 +1,61 @@
 // ViewMixin
 //  ---------
 
-import Backbone from 'backbone';
-import _ from 'underscore';
+import { extend, result } from 'underscore';
 import BehaviorsMixin from './behaviors';
 import CommonMixin from './common';
 import DelegateEntityEventsMixin from './delegate-entity-events';
 import TemplateRenderMixin from './template-render';
-import TriggersMixin from './triggers';
 import UIMixin from './ui';
+import ViewEvents from './view-events';
 import { isEnabled } from '../config/features';
 import DomApi from '../config/dom';
 
+
 // MixinOptions
+// - attributes
 // - behaviors
 // - childViewEventPrefix
 // - childViewEvents
 // - childViewTriggers
+// - className
+// - collection
 // - collectionEvents
+// - el
+// - events
+// - id
+// - model
 // - modelEvents
+// - tagName
 // - triggers
 // - ui
 
 
 const ViewMixin = {
+  tagName: 'div',
+
+  // This is a noop method intended to be overridden
+  preinitialize() {},
+
   Dom: DomApi,
+
+  // Create an element from the `id`, `className` and `tagName` properties.
+  _getEl() {
+    if (!this.el) {
+      const el = this.Dom.createElement(result(this, 'tagName'));
+      const attrs = extend({}, result(this, 'attributes'));
+      if (this.id) {attrs.id = result(this, 'id');}
+      if (this.className) {attrs.class = result(this, 'className');}
+      this.Dom.setAttributes(el, attrs);
+      return el;
+    }
+
+    return result(this, 'el');
+  },
+
+  $(selector) {
+    return this.Dom.findEl(this.el, selector)
+  },
 
   _isElAttached() {
     return !!this.el && this.Dom.hasEl(this.Dom.getDocumentEl(this.el), this.el);
@@ -49,48 +80,6 @@ const ViewMixin = {
 
   isAttached() {
     return !!this._isAttached;
-  },
-
-  // Overriding Backbone.View's `delegateEvents` to handle
-  // `events` and `triggers`
-  delegateEvents(events) {
-    this._proxyBehaviorViewProperties();
-    this._buildEventProxies();
-
-    const combinedEvents = _.extend({},
-      this._getBehaviorEvents(),
-      this._getEvents(events),
-      this._getBehaviorTriggers(),
-      this._getTriggers()
-    );
-
-    Backbone.View.prototype.delegateEvents.call(this, combinedEvents);
-
-    return this;
-  },
-
-  // Allows Backbone.View events to utilize `@ui.` selectors
-  _getEvents(events) {
-    if (events) {
-      return this.normalizeUIKeys(events);
-    }
-
-    if (!this.events) { return; }
-
-    return this.normalizeUIKeys(_.result(this, 'events'));
-  },
-
-  // Configure `triggers` to forward DOM events to view
-  // events. `triggers: {"click .foo": "do:foo"}`
-  _getTriggers() {
-    if (!this.triggers) { return; }
-
-    // Allow `triggers` to be configured as a function
-    const triggers = this.normalizeUIKeys(_.result(this, 'triggers'));
-
-    // Configure the triggers, prevent default
-    // action and stop propagation of DOM events
-    return this._getViewTriggers(this, triggers);
   },
 
   // Handle `modelEvents`, and `collectionEvents` configuration
@@ -126,9 +115,10 @@ const ViewMixin = {
 
     // unbind UI elements
     this.unbindUIElements();
+    this._undelegateViewEvents();
 
     // remove the view from the DOM
-    this._removeElement();
+    this.Dom.detachEl(this.el);
 
     if (shouldTriggerDetach) {
       this._isAttached = false;
@@ -154,12 +144,6 @@ const ViewMixin = {
     return this;
   },
 
-  // Equates to this.$el.remove
-  _removeElement() {
-    this.$el.off().removeData();
-    this.Dom.detachEl(this.el, this.$el);
-  },
-
   // This method binds the elements specified in the "ui" hash
   bindUIElements() {
     this._bindUIElements();
@@ -182,14 +166,14 @@ const ViewMixin = {
 
   // Cache `childViewEvents` and `childViewTriggers`
   _buildEventProxies() {
-    this._childViewEvents = this.normalizeMethods(_.result(this, 'childViewEvents'));
-    this._childViewTriggers = _.result(this, 'childViewTriggers');
+    this._childViewEvents = this.normalizeMethods(result(this, 'childViewEvents'));
+    this._childViewTriggers = result(this, 'childViewTriggers');
     this._eventPrefix = this._getEventPrefix();
   },
 
   _getEventPrefix() {
     const defaultPrefix = isEnabled('childViewEventPrefix') ? 'childview' : false;
-    const prefix = _.result(this, 'childViewEventPrefix', defaultPrefix);
+    const prefix = result(this, 'childViewEventPrefix', defaultPrefix);
 
     return (prefix === false) ? prefix : prefix + ':';
   },
@@ -222,6 +206,6 @@ const ViewMixin = {
   }
 };
 
-_.extend(ViewMixin, BehaviorsMixin, CommonMixin, DelegateEntityEventsMixin, TemplateRenderMixin, TriggersMixin, UIMixin);
+extend(ViewMixin, BehaviorsMixin, CommonMixin, DelegateEntityEventsMixin, TemplateRenderMixin, UIMixin, ViewEvents);
 
 export default ViewMixin;

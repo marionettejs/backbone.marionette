@@ -26,7 +26,11 @@ if (!global.document || !global.window) {
 
   global.window = dom.window;
   global.document = global.window.document;
-  global.navigator = global.window.navigator;
+  Object.defineProperty(global, 'navigator', {
+    configurable: true,
+    value: global.window.navigator
+  });
 
 }
+global.HTMLElement = global.window.HTMLElement;
 require('./setup')();

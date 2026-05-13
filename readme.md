@@ -4,8 +4,8 @@
 </p>
 <p align="center">The Backbone Framework</p>
 <p align="center">
-  <a title='Build Status' href="https://travis-ci.org/marionettejs/backbone.marionette">
-    <img src='https://secure.travis-ci.org/marionettejs/backbone.marionette.svg?branch=master' />
+  <a title='Build Status' href="https://github.com/marionettejs/backbone.marionette/actions/workflows/ci.yml">
+    <img src='https://github.com/marionettejs/backbone.marionette/actions/workflows/ci.yml/badge.svg?branch=master' />
   </a>
   <a href='https://coveralls.io/r/marionettejs/backbone.marionette'>
     <img src='https://img.shields.io/coveralls/marionettejs/backbone.marionette.svg' alt='Coverage Status' />
@@ -14,10 +14,6 @@
     <img src='https://badges.gitter.im/Join%20Chat.svg' alt='Gitter Chat' />
   </a>
 </p>
-<p align="center">
-  <img src='https://saucelabs.com/browser-matrix/marionettejs.svg' alt='Cross Browser Testing' />
-</p>
-
 # Marionette v5
 
 Marionette is dropping its dependency on Backbone. That library is available here: https://github.com/marionettejs/marionette

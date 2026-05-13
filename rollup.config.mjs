@@ -1,8 +1,12 @@
-import babel from 'rollup-plugin-babel';
-import { eslint } from 'rollup-plugin-eslint';
-import json from 'rollup-plugin-json';
-import { terser } from 'rollup-plugin-terser';
-import { version } from './package.json';
+import fs from 'node:fs';
+import babel from '@rollup/plugin-babel';
+import eslint from '@rollup/plugin-eslint';
+import json from '@rollup/plugin-json';
+import terser from '@rollup/plugin-terser';
+
+const { version } = JSON.parse(
+  fs.readFileSync(new URL('./package.json', import.meta.url), 'utf8')
+);
 
 const globals = {
   'backbone': 'Backbone',
@@ -50,7 +54,7 @@ export default [
     plugins: [
       eslint({ exclude: ['package.json'] }),
       json(),
-      babel()
+      babel({ babelHelpers: 'bundled' })
     ]
   },
   {
@@ -70,7 +74,7 @@ export default [
     ],
     plugins: [
       json(),
-      babel(),
+      babel({ babelHelpers: 'bundled' }),
       terser({ output: { comments: /@license/ }})
     ]
   }

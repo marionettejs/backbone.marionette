@@ -271,6 +271,9 @@ is the expected container for the children which by default equates
 to the view's `el` unless a [`childViewContainer`](#defining-the-childViewContainer)
 is set.
 
+`attachHtml` is called on initial render and on full re-render. It is not called
+when only the order of existing children changes.
+
 ### Destroying All `children`
 
 `CollectionView` implements a `destroy` method which automatically
@@ -773,6 +776,15 @@ will trigger.
 By default the `CollectionView` will maintain a sorted collection's order
 in the DOM. This behavior can be disabled by specifying `{sortWithCollection: false}`
 on initialize.
+
+A sort that only changes the order of existing child views moves those views in
+place with the DOM API's [`insertContents`](./dom.api.md#insertcontentsparent-child-beforenode).
+This avoids rebuilding the child buffer and preserves state on the existing
+child elements, including focus and scroll position.
+
+The in-place path is skipped when filtering changes which children are shown or
+when children are added or removed. Those cases continue to use the full buffer
+path and call `attachHtml`.
 
 ### Defining the `viewComparator`
 

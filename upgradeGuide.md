@@ -3,6 +3,18 @@
 Upgrade information for newer versions are available in the changelog or upgrade guides
 found on [marionettejs.com](http://marionettejs.com/docs/current).
 
+## Future 4.x
+
+### CollectionView child reordering
+
+`CollectionView` sorts that only reorder existing children now move the existing
+child elements with `DomApi.insertContents` instead of rebuilding the child
+buffer.
+
+This preserves element state such as focus and scroll position during pure
+reorders. It also means `CollectionView#attachHtml` is not called for those
+pure reorder renders.
+
 ## v2.x - v3.0.0
 A lot of changes were made between v2 and v3. Please see the
 [upgrade guide on the website](http://marionettejs.com/docs/v3.0.0/upgrade-v2-v3.html)

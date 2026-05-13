@@ -1,3 +1,9 @@
+### Next
+
+#### Features
+* Added `DomApi.insertContents` for adapter-level child insertion and moves.
+* `CollectionView` now moves existing child elements in place when only their order changes.
+
 ### v4.1.3 [view commit logs](https://github.com/marionettejs/backbone.marionette/compare/v4.1.2...v4.1.3)
 
 #### Fixes

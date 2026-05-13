@@ -160,6 +160,7 @@ const CollectionView = Backbone.View.extend({
 
     this.children._remove(view);
     this._children._remove(view);
+    this._filterChangedMembership = true;
 
     this.triggerMethod('remove:child', this, view);
   },
@@ -191,6 +192,7 @@ const CollectionView = Backbone.View.extend({
     this._setupChildView(view);
     this._children._add(view, index);
     this.children._add(view, index);
+    this._filterChangedMembership = true;
 
     this.triggerMethod('add:child', this, view);
   },
@@ -396,13 +398,17 @@ const CollectionView = Backbone.View.extend({
   },
 
   _filterChildren() {
-    if (!this._children.length) { return; }
+    if (!this._children.length) {
+      this._filterChangedMembership = false;
+      return;
+    }
 
     const viewFilter = this._getFilter();
 
     if (!viewFilter) {
       const shouldReset = this.children.length !== this._children.length;
 
+      this._filterChangedMembership = this._filterChangedMembership || shouldReset;
       this.children._set(this._children._views, shouldReset);
 
       return;
@@ -423,6 +429,7 @@ const CollectionView = Backbone.View.extend({
     this._detachChildren(detachViews);
 
     // reset children
+    this._filterChangedMembership = this._filterChangedMembership || detachViews.length > 0 || attachViews.length !== this.children.length;
     this.children._set(attachViews, true);
 
     this.triggerMethod('filter', this, attachViews, detachViews);
@@ -527,11 +534,20 @@ const CollectionView = Backbone.View.extend({
     } else {
       this._destroyEmptyView();
 
-      const els = this._getBuffer(views);
+      if (
+        this._isRendered &&
+        !this._addedViews &&
+        !this._filterChangedMembership
+      ) {
+        this._reorderInPlace(views);
+      } else {
+        const els = this._getBuffer(views);
 
-      this._attachChildren(els, views);
+        this._attachChildren(els, views);
+      }
     }
 
+    this._filterChangedMembership = false;
     delete this._addedViews;
 
     this.triggerMethod('render:children', this, views);
@@ -572,8 +588,26 @@ const CollectionView = Backbone.View.extend({
 
   // Override this method to do something other than `.append`.
   // You can attach any HTML at this point including the els.
+  // Called on initial render and on full re-render. Not called when only
+  // the order of existing children changes.
   attachHtml(els, $container) {
     this.Dom.appendContents($container[0], els, {_$el: $container});
+  },
+
+  _reorderInPlace(views) {
+    const container = this.$container[0];
+    let prev = null;
+
+    _.each(views, view => {
+      const el = view.el;
+      const expectedNext = prev ? prev.nextSibling : container.firstChild;
+
+      if (el !== expectedNext) {
+        this.Dom.insertContents(container, el, expectedNext);
+      }
+
+      prev = el;
+    });
   },
 
   isEmpty() {

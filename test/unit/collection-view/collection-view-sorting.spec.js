@@ -393,4 +393,194 @@ describe('CollectionView - Sorting', function() {
       expect(myCollectionView.removeComparator).to.have.returned(myCollectionView);
     });
   });
+
+  describe('reorder in place', function() {
+    let myCollectionView;
+
+    function renderCollectionView(options = {}) {
+      myCollectionView = new MyCollectionView(_.extend({
+        collection
+      }, options));
+
+      myCollectionView.render();
+      return myCollectionView;
+    }
+
+    function sortCollection(sortKey = 'sort') {
+      collection.comparator = sortKey;
+      collection.sort();
+    }
+
+    it('should move children in place when only the order changes', function() {
+      renderCollectionView();
+
+      this.sinon.spy(myCollectionView.Dom, 'insertContents');
+      this.sinon.spy(myCollectionView.Dom, 'appendContents');
+      this.sinon.spy(myCollectionView.Dom, 'detachEl');
+      this.sinon.spy(myCollectionView.Dom, 'detachContents');
+      this.sinon.spy(myCollectionView.Dom, 'replaceEl');
+      this.sinon.spy(myCollectionView.Dom, 'setContents');
+      this.sinon.spy(myCollectionView.Dom, 'swapEl');
+      this.sinon.spy(myCollectionView, 'attachHtml');
+
+      sortCollection();
+
+      expect(myCollectionView.Dom.insertContents).to.have.been.called;
+      expect(myCollectionView.attachHtml).to.not.have.been.called;
+      expect(myCollectionView.Dom.appendContents).to.not.have.been.called;
+      expect(myCollectionView.Dom.detachEl).to.not.have.been.called;
+      expect(myCollectionView.Dom.detachContents).to.not.have.been.called;
+      expect(myCollectionView.Dom.replaceEl).to.not.have.been.called;
+      expect(myCollectionView.Dom.setContents).to.not.have.been.called;
+      expect(myCollectionView.Dom.swapEl).to.not.have.been.called;
+      expect(myCollectionView.$el.text()).to.equal(sortText);
+    });
+
+    it('should use the buffer path when filtering changes membership', function() {
+      renderCollectionView({
+        viewFilter(view) {
+          return view.model.get('visible') !== false;
+        }
+      });
+
+      this.sinon.spy(myCollectionView.Dom, 'insertContents');
+      this.sinon.spy(myCollectionView, 'attachHtml');
+
+      collection.at(0).set('visible', false);
+      sortCollection();
+
+      expect(myCollectionView.attachHtml).to.have.been.calledOnce;
+      expect(myCollectionView.Dom.insertContents).to.not.have.been.called;
+    });
+
+    it('should use the buffer path when sorting after adding a child', function() {
+      collection.comparator = 'sort';
+      renderCollectionView();
+
+      this.sinon.spy(myCollectionView.Dom, 'insertContents');
+      this.sinon.spy(myCollectionView, 'attachHtml');
+
+      collection.add({ index: 5, sort: 0, altSort: 6 }, { sort: true });
+
+      expect(myCollectionView.attachHtml).to.have.been.calledOnce;
+      expect(myCollectionView.Dom.insertContents).to.not.have.been.called;
+    });
+
+    it('should preserve focused child elements when sorting', function() {
+      const InputView = View.extend({
+        tagName: 'li',
+        template: _.template('<input value="<%- index %>">')
+      });
+
+      const InputCollectionView = CollectionView.extend({
+        tagName: 'ul',
+        childView: InputView
+      });
+
+      myCollectionView = new InputCollectionView({ collection });
+      myCollectionView.render();
+      this.setFixtures(myCollectionView.el);
+
+      const focusedInput = myCollectionView.children.findByIndex(0).$('input')[0];
+      focusedInput.focus();
+
+      sortCollection();
+
+      expect(document.activeElement).to.equal(focusedInput);
+    });
+
+    it('should preserve child scroll state when sorting', function() {
+      const ScrollingView = View.extend({
+        tagName: 'li',
+        template: _.template('<div class="scrolling" style="height: 10px; overflow: auto;"><div style="height: 100px;"></div></div>')
+      });
+
+      const ScrollingCollectionView = CollectionView.extend({
+        tagName: 'ul',
+        childView: ScrollingView
+      });
+
+      myCollectionView = new ScrollingCollectionView({ collection });
+      myCollectionView.render();
+
+      const scrollingEl = myCollectionView.children.findByIndex(0).$('.scrolling')[0];
+      scrollingEl.scrollTop = 20;
+
+      sortCollection();
+
+      expect(scrollingEl.scrollTop).to.equal(20);
+    });
+
+    it('should preserve child element identity when sorting', function() {
+      renderCollectionView();
+
+      const childView = myCollectionView.children.findByIndex(0);
+      const childEl = childView.el;
+
+      sortCollection();
+
+      expect(childView.el).to.equal(childEl);
+    });
+
+    it('should not reconnect custom elements when sorting', function() {
+      if (!window.customElements) {
+        this.skip();
+      }
+
+      const tagName = `mn-reorder-${ _.uniqueId() }`;
+      const lifecycle = {
+        connected: 0,
+        disconnected: 0
+      };
+
+      class ReorderElement extends HTMLElement {
+        connectedCallback() {
+          lifecycle.connected++;
+        }
+
+        disconnectedCallback() {
+          lifecycle.disconnected++;
+        }
+      }
+
+      window.customElements.define(tagName, ReorderElement);
+
+      const CustomElementView = View.extend({
+        tagName,
+        template: false
+      });
+
+      const CustomElementCollectionView = CollectionView.extend({
+        childView: CustomElementView
+      });
+
+      myCollectionView = new CustomElementCollectionView({ collection });
+      myCollectionView.render();
+      this.setFixtures(myCollectionView.el);
+
+      expect(lifecycle.connected).to.equal(collection.length);
+      expect(lifecycle.disconnected).to.equal(0);
+
+      sortCollection();
+
+      expect(lifecycle.connected).to.equal(collection.length);
+      expect(lifecycle.disconnected).to.equal(0);
+    });
+
+    it('should use the configured Dom.insertContents override', function() {
+      const insertContents = this.sinon.spy(function(parent, child, beforeNode) {
+        parent.insertBefore(child, beforeNode || null);
+      });
+      const CustomDomCollectionView = MyCollectionView.extend();
+      CustomDomCollectionView.setDomApi({ insertContents });
+
+      myCollectionView = new CustomDomCollectionView({ collection });
+      myCollectionView.render();
+
+      sortCollection();
+
+      expect(insertContents).to.have.been.called;
+      expect(myCollectionView.$el.text()).to.equal(sortText);
+    });
+  });
 });

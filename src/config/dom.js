@@ -95,6 +95,12 @@ export default {
     _$el.append(_$contents);
   },
 
+  // Insert the DOM node `child` into `parent` before the DOM node `beforeNode`.
+  // If `beforeNode` is null or undefined, append `child` to the end.
+  insertContents(parent, child, beforeNode) {
+    parent.insertBefore(child, beforeNode || null);
+  },
+
   // Does the el have child nodes
   hasContents(el) {
     return !!el && el.hasChildNodes();

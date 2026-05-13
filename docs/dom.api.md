@@ -27,7 +27,7 @@ const elIsAttached = this.Dom.hasEl(this.Dom.getDocumentEl(this.el), this.el);
 
 ### `getEl(selector)`
 
-Lookup the `selector` string withing the DOM. The `selector` may also be a DOM element.
+Lookup the `selector` string within the DOM. The `selector` may also be a DOM element.
 It should return an array-like object of the node.
 
 ### `findEl(el, selector)`
@@ -60,6 +60,13 @@ functions, this only takes a literal string for its second argument.
 
 Takes the DOM node `el` and appends the DOM node `contents` to the end of the
 element's contents.
+
+### `insertContents(parent, child, beforeNode)`
+
+Inserts the DOM node `child` into `parent` before the DOM node `beforeNode`.
+If `beforeNode` is `null` or `undefined`, `child` is appended to the end.
+When `child` is already in `parent`, this moves the existing node instead of
+creating a replacement.
 
 ### `hasContents(el)`
 

@@ -262,6 +262,45 @@ describe('DomApi', function() {
     });
   });
 
+  describe('#insertContents', function() {
+    let domEl;
+    let first;
+    let second;
+    let third;
+
+    beforeEach(function() {
+      this.setFixtures('<div id="foo"><div id="first"></div><div id="second"></div></div>');
+      domEl = $('#foo')[0];
+      first = $('#first')[0];
+      second = $('#second')[0];
+      third = $('<div id="third"></div>')[0];
+    });
+
+    it('should append the contents when beforeNode is null', function() {
+      DomApi.insertContents(domEl, third);
+
+      expect(domEl.lastChild).to.equal(third);
+    });
+
+    it('should insert the contents before a sibling', function() {
+      DomApi.insertContents(domEl, third, second);
+
+      expect(domEl.children[1]).to.equal(third);
+    });
+
+    it('should move contents within the same parent', function() {
+      const observer = new window.MutationObserver(this.sinon.spy());
+      observer.observe(domEl, { childList: true });
+
+      DomApi.insertContents(domEl, second, first);
+      observer.disconnect();
+
+      expect(domEl.children[0]).to.equal(second);
+      expect(domEl.children[1]).to.equal(first);
+      expect(domEl.children).to.have.lengthOf(2);
+    });
+  });
+
   describe('#hasContents', function() {
     it('should return true when el has contents', function() {
       this.setFixtures('<div id="foo">Existing Html</div>');

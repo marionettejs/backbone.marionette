@@ -1,3 +1,11 @@
+export function isView(view) {
+  return view.render && (view.destroy || view.remove);
+}
+
+export function isViewClass(ViewClass) {
+  return ViewClass.prototype.render && (ViewClass.prototype.destroy || ViewClass.prototype.remove);
+}
+
 export function renderView(view) {
   if (view._isRendered) {
     return;

@@ -1,12 +1,11 @@
 // Region
 // ------
 
-import _ from 'underscore';
-import Backbone from 'backbone';
+import { extend as _extend, uniqueId, isObject, isFunction, result } from 'underscore';
 import MarionetteError from './utils/error';
 import extend from './utils/extend';
 import monitorViewEvents from './common/monitor-view-events';
-import { renderView, destroyView } from './common/view';
+import { renderView, destroyView, isView } from './common/view';
 import CommonMixin from './mixins/common';
 import View from './view';
 import DomApi, { setDomApi } from './config/dom';
@@ -22,15 +21,10 @@ const ClassOptions = [
 const Region = function(options) {
   this._setOptions(options, ClassOptions);
 
-  this.cid = _.uniqueId(this.cidPrefix);
+  this.cid = uniqueId(this.cidPrefix);
 
   // getOption necessary because options.el may be passed as undefined
   this._initEl = this.el = this.getOption('el');
-
-  // Handle when this.el is passed in as a $ wrapped element.
-  this.el = this.el instanceof Backbone.$ ? this.el[0] : this.el;
-
-  this.$el = this._getEl(this.el);
 
   this.initialize.apply(this, arguments);
 };
@@ -41,16 +35,13 @@ Region.setDomApi = setDomApi;
 // Region Methods
 // --------------
 
-_.extend(Region.prototype, CommonMixin, {
+_extend(Region.prototype, CommonMixin, {
   Dom: DomApi,
 
   cidPrefix: 'mnr',
   replaceElement: false,
   _isReplaced: false,
   _isSwappingView: false,
-
-  // This is a noop method intended to be overridden
-  initialize() {},
 
   // Displays a view instance inside of the region. If necessary handles calling the `render`
   // method for you. Reads content directly from the `el` attribute.
@@ -95,7 +86,12 @@ _.extend(Region.prototype, CommonMixin, {
     return this;
   },
 
-  _getEl(el) {
+  _setEl(el) {
+    if (isObject(el)) {
+      this.el = el;
+      return;
+    }
+
     if (!el) {
       throw new MarionetteError({
         name: classErrorName,
@@ -104,20 +100,7 @@ _.extend(Region.prototype, CommonMixin, {
       });
     }
 
-    return this.getEl(el);
-  },
-
-  _setEl() {
-    this.$el = this._getEl(this.el);
-
-    if (this.$el.length) {
-      this.el = this.$el[0];
-    }
-
-    // Make sure the $el contains only the el
-    if (this.$el.length > 1) {
-      this.$el = this.Dom.getEl(this.el);
-    }
+    this.el = this.getEl(el);
   },
 
   // Set the `el` of the region and move any current view to the new `el`.
@@ -128,9 +111,7 @@ _.extend(Region.prototype, CommonMixin, {
 
     this._restoreEl();
 
-    this.el = el;
-
-    this._setEl();
+    this._setEl(el);
 
     if (this.currentView) {
       const view = this.currentView;
@@ -175,7 +156,7 @@ _.extend(Region.prototype, CommonMixin, {
 
   _attachView(view, { replaceElement } = {}) {
     const shouldTriggerAttach = !view._isAttached && this._isElAttached() && !this._shouldDisableMonitoring();
-    const shouldReplaceEl = typeof replaceElement === 'undefined' ? !!_.result(this, 'replaceElement') : !!replaceElement;
+    const shouldReplaceEl = typeof replaceElement === 'undefined' ? !!result(this, 'replaceElement') : !!replaceElement;
 
     if (shouldTriggerAttach) {
       view.triggerMethod('before:attach', view);
@@ -197,12 +178,10 @@ _.extend(Region.prototype, CommonMixin, {
   },
 
   _ensureElement(options = {}) {
-    if (!_.isObject(this.el)) {
-      this._setEl();
-    }
+    this._setEl(this.el);
 
-    if (!this.$el || this.$el.length === 0) {
-      const allowMissingEl = typeof options.allowMissingEl === 'undefined' ? !!_.result(this, 'allowMissingEl') : !!options.allowMissingEl;
+    if (!this.el) {
+      const allowMissingEl = typeof options.allowMissingEl === 'undefined' ? !!result(this, 'allowMissingEl') : !!options.allowMissingEl;
 
       if (allowMissingEl) {
         return false;
@@ -234,7 +213,7 @@ _.extend(Region.prototype, CommonMixin, {
       });
     }
 
-    if (view instanceof Backbone.View) {
+    if (isView(view)) {
       return view;
     }
 
@@ -246,11 +225,11 @@ _.extend(Region.prototype, CommonMixin, {
   // This allows for a template or a static string to be
   // used as a template
   _getViewOptions(viewOptions) {
-    if (_.isFunction(viewOptions)) {
+    if (isFunction(viewOptions)) {
       return { template: viewOptions };
     }
 
-    if (_.isObject(viewOptions)) {
+    if (isObject(viewOptions)) {
       return viewOptions;
     }
 
@@ -262,13 +241,9 @@ _.extend(Region.prototype, CommonMixin, {
   // Override this method to change how the region finds the DOM element that it manages. Return
   // a jQuery selector object scoped to a provided parent el or the document if none exists.
   getEl(el) {
-    const context = _.result(this, 'parentEl');
+    const context = result(this, 'parentEl');
 
-    if (context && _.isString(el)) {
-      return this.Dom.findEl(context, el);
-    }
-
-    return this.Dom.getEl(el);
+    return this.Dom.findEl(context || document, el)[0];
   },
 
   _replaceEl(view) {
@@ -313,7 +288,7 @@ _.extend(Region.prototype, CommonMixin, {
   // Override this method to change how the new view is appended to the `$el` that the
   // region is managing
   attachHtml(view) {
-    this.Dom.appendContents(this.el, view.el, {_$el: this.$el, _$contents: view.$el});
+    this.Dom.appendContents(this.el, view.el);
   },
 
   // Destroy the current view, if there is one. If there is no current view,
@@ -413,7 +388,7 @@ _.extend(Region.prototype, CommonMixin, {
 
   // Override this method to change how the region detaches current content
   detachHtml() {
-    this.Dom.detachContents(this.el, this.$el);
+    this.Dom.detachContents(this.el);
   },
 
   // Checks whether a view is currently present within the region. Returns `true` if there is

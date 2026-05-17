@@ -1,6 +1,5 @@
-import _ from 'underscore';
+import { isFunction, extend, reduce, result, without, map } from 'underscore';
 import MarionetteError from '../utils/error';
-import _invoke from '../utils/invoke';
 
 // MixinOptions
 // - behaviors
@@ -17,7 +16,7 @@ function getBehaviorClass(options) {
   }
 
   //treat functions as a Behavior constructor
-  if (_.isFunction(options)) {
+  if (isFunction(options)) {
     return { BehaviorClass: options, options: {} };
   }
 
@@ -31,47 +30,47 @@ function getBehaviorClass(options) {
 // instantiate it and get its grouped behaviors.
 // This accepts a list of behaviors in either an object or array form
 function parseBehaviors(view, behaviors, allBehaviors) {
-  return _.reduce(behaviors, (reducedBehaviors, behaviorDefiniton) => {
+  return reduce(behaviors, (reducedBehaviors, behaviorDefiniton) => {
     const { BehaviorClass, options } = getBehaviorClass(behaviorDefiniton);
     const behavior = new BehaviorClass(options, view);
     reducedBehaviors.push(behavior);
 
-    return parseBehaviors(view, _.result(behavior, 'behaviors'), reducedBehaviors);
+    return parseBehaviors(view, result(behavior, 'behaviors'), reducedBehaviors);
   }, allBehaviors);
 }
 
 export default {
   _initBehaviors() {
-    this._behaviors = parseBehaviors(this, _.result(this, 'behaviors'), []);
+    this._behaviors = parseBehaviors(this, result(this, 'behaviors'), []);
   },
 
   _getBehaviorTriggers() {
-    const triggers = _invoke(this._behaviors, '_getTriggers');
-    return _.reduce(triggers, function(memo, _triggers) {
-      return _.extend(memo, _triggers);
+    const triggers = map(this._behaviors, behavior => behavior._getTriggers());
+    return reduce(triggers, function(memo, _triggers) {
+      return extend(memo, _triggers);
     }, {});
   },
 
   _getBehaviorEvents() {
-    const events = _invoke(this._behaviors, '_getEvents');
-    return _.reduce(events, function(memo, _events) {
-      return _.extend(memo, _events);
+    const events = map(this._behaviors, behavior => behavior._getEvents());
+    return reduce(events, function(memo, _events) {
+      return extend(memo, _events);
     }, {});
   },
 
-  // proxy behavior $el to the view's $el.
-  _proxyBehaviorViewProperties() {
-    _invoke(this._behaviors, 'proxyViewProperties');
+  // proxy behavior el to the view's el.
+  _setBehaviorElements() {
+    map(this._behaviors, behavior => behavior.setElement());
   },
 
   // delegate modelEvents and collectionEvents
   _delegateBehaviorEntityEvents() {
-    _invoke(this._behaviors, 'delegateEntityEvents');
+    map(this._behaviors, behavior => behavior.delegateEntityEvents());
   },
 
   // undelegate modelEvents and collectionEvents
   _undelegateBehaviorEntityEvents() {
-    _invoke(this._behaviors, 'undelegateEntityEvents');
+    map(this._behaviors, behavior => behavior.undelegateEntityEvents());
   },
 
   _destroyBehaviors(options) {
@@ -79,7 +78,7 @@ export default {
     // destroying the view.
     // This unbinds event listeners
     // that behaviors have registered for.
-    _invoke(this._behaviors, 'destroy', options);
+    map(this._behaviors, behavior => behavior.destroy(options));
   },
 
   // Remove a behavior
@@ -90,18 +89,18 @@ export default {
     // Remove behavior-only triggers and events
     this.undelegate(`.trig${ behavior.cid } .${ behavior.cid }`);
 
-    this._behaviors = _.without(this._behaviors, behavior);
+    this._behaviors = without(this._behaviors, behavior);
   },
 
   _bindBehaviorUIElements() {
-    _invoke(this._behaviors, 'bindUIElements');
+    map(this._behaviors, behavior => behavior.bindUIElements());
   },
 
   _unbindBehaviorUIElements() {
-    _invoke(this._behaviors, 'unbindUIElements');
+    map(this._behaviors, behavior => behavior.unbindUIElements());
   },
 
   _triggerEventOnBehaviors(eventName, view, options) {
-    _invoke(this._behaviors, 'triggerMethod', eventName, view, options);
+    map(this._behaviors, behavior => behavior.triggerMethod(eventName, view, options));
   }
 };

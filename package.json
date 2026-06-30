@@ -63,7 +63,7 @@
     "underscore": "^1.8.3"
   },
   "devDependencies": {
-    "@babel/core": "7.29.0",
+    "@babel/core": "7.29.6",
     "@babel/preset-env": "7.29.5",
     "@babel/register": "7.29.3",
     "@rollup/plugin-babel": "6.1.0",
